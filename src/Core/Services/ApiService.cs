@@ -35,7 +35,7 @@ namespace Bit.Core.Services
             _tokenService = tokenService;
             _platformUtilsService = platformUtilsService;
             _logoutCallbackAsync = logoutCallbackAsync;
-            var device = _platformUtilsService.GetDevice();
+            var device = (int)_platformUtilsService.GetDevice();
             _httpClient.DefaultRequestHeaders.Add("Device-Type", device.ToString());
             if(!string.IsNullOrWhiteSpace(customUserAgent))
             {
