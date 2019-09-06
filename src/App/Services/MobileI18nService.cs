@@ -1,6 +1,7 @@
 ﻿using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 using System.Resources;
@@ -18,6 +19,7 @@ namespace Bit.App.Services
         private readonly CultureInfo _defaultCulture = new CultureInfo("en-US");
         private bool _inited;
         private StringComparer _stringComparer;
+        private Dictionary<string, string> _localeNames;
 
         public MobileI18nService(CultureInfo systemCulture)
         {
@@ -34,6 +36,57 @@ namespace Bit.App.Services
                     _stringComparer = StringComparer.Create(Culture, false);
                 }
                 return _stringComparer;
+            }
+        }
+        public Dictionary<string, string> LocaleNames
+        {
+            get
+            {
+                if(_localeNames == null)
+                {
+                    _localeNames = new Dictionary<string, string>
+                    {
+                        ["af"] = "Afrikaans",
+                        ["bg"] = "български",
+                        ["ca"] = "català",
+                        ["cs"] = "čeština",
+                        ["da"] = "dansk",
+                        ["de"] = "Deutsch",
+                        ["el"] = "Ελληνικά",
+                        ["en"] = "English",
+                        ["en-GB"] = "English (British)",
+                        ["eo"] = "Esperanto",
+                        ["es"] = "español",
+                        ["et"] = "eesti",
+                        ["fa"] = "فارسی",
+                        ["fi"] = "suomi",
+                        ["fr"] = "français",
+                        ["he"] = "עברית",
+                        ["hi"] = "हिन्दी",
+                        ["hr"] = "hrvatski",
+                        ["hu"] = "magyar",
+                        ["id"] = "Bahasa Indonesia",
+                        ["it"] = "italiano",
+                        ["ja"] = "日本語",
+                        ["ko"] = "한국어",
+                        ["nb"] = "norsk (bokmål)",
+                        ["nl"] = "Nederlands",
+                        ["pl"] = "polski",
+                        ["pt-BR"] = "português do Brasil",
+                        ["pt-PT"] = "português",
+                        ["ro"] = "română",
+                        ["ru"] = "русский",
+                        ["sk"] = "slovenčina",
+                        ["sv"] = "svenska",
+                        ["th"] = "ไทย",
+                        ["tr"] = "Türkçe",
+                        ["uk"] = "українська",
+                        ["vi"] = "Tiếng Việt",
+                        ["zh-CN"] = "中文（中国大陆）",
+                        ["zh-TW"] = "中文（台灣）"
+                    };
+                }
+                return _localeNames;
             }
         }
 
