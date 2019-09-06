@@ -406,8 +406,8 @@ namespace Bit.App.Pages
             if(Cipher.Login != null)
             {
                 Cipher.Login.Uris = Uris?.ToList();
-                if(!EditMode && Cipher.Type == CipherType.Login && (Cipher.Login.Uris?.Count ?? 0) == 1 &&
-                    string.IsNullOrWhiteSpace(Cipher.Login.Uris.First()?.Uri))
+                if(!EditMode && Cipher.Type == CipherType.Login && Cipher.Login.Uris != null &&
+                    Cipher.Login.Uris.Count == 1 && string.IsNullOrWhiteSpace(Cipher.Login.Uris[0].Uri))
                 {
                     Cipher.Login.Uris = null;
                 }
@@ -415,7 +415,7 @@ namespace Bit.App.Pages
 
             if(!EditMode && Cipher.OrganizationId != null)
             {
-                if(!Collections?.Any(c => c?.Checked ?? false) ?? true)
+                if(Collections == null || !Collections.Any(c => c != null && c.Checked))
                 {
                     await Page.DisplayAlert(AppResources.AnErrorHasOccurred, AppResources.SelectOneCollection,
                         AppResources.Ok);
@@ -423,8 +423,8 @@ namespace Bit.App.Pages
                 }
 
                 Cipher.CollectionIds = Collections.Any() ?
-                    new HashSet<string>(Collections.Where(c => c?.Checked ?? false &&
-                        c.Collection != null).Select(c => c.Collection.Id)) : null;
+                    new HashSet<string>(Collections.Where(c => c != null && c.Checked && c.Collection?.Id != null)
+                        .Select(c => c.Collection.Id)) : null;
             }
 
             var cipher = await _cipherService.EncryptAsync(Cipher);
