@@ -60,6 +60,7 @@ namespace Bit.Droid.Autofill
             "org.mozilla.fenix.nightly",
             "org.mozilla.reference.browser",
             "org.mozilla.rocket",
+            "com.vivaldi.browser",
         };
 
         // The URLs are blacklisted from autofilling

@@ -90,4 +90,7 @@
   <compatibility-package
     android:name="com.ecosia.android"
     android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
+    android:name="com.vivaldi.browser"
+    android:maxLongVersionCode="10000000000"/>
 </autofill-service>

@@ -66,6 +66,7 @@ namespace Bit.Droid.Accessibility
             new Browser("jp.co.fenrir.android.sleipnir", "url_text"),
             new Browser("jp.co.fenrir.android.sleipnir_black", "url_text"),
             new Browser("jp.co.fenrir.android.sleipnir_test", "url_text"),
+            new Browser("com.vivaldi.browser", "url_bar"),
         }.ToDictionary(n => n.PackageName);
 
         // Known packages to skip
