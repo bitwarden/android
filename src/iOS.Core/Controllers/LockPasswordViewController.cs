@@ -23,7 +23,6 @@ namespace Bit.iOS.Core.Controllers
         private IStorageService _secureStorageService;
         private IPlatformUtilsService _platformUtilsService;
         private Tuple<bool, bool> _pinSet;
-        private bool _hasKey;
         private bool _pinLock;
         private bool _fingerprintLock;
         private int _invalidPinAttempts;
@@ -52,8 +51,7 @@ namespace Bit.iOS.Core.Controllers
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
 
             _pinSet = _lockService.IsPinLockSetAsync().GetAwaiter().GetResult();
-            _hasKey = _cryptoService.HasKeyAsync().GetAwaiter().GetResult();
-            _pinLock = (_pinSet.Item1 && _hasKey) || _pinSet.Item2;
+            _pinLock = (_pinSet.Item1 && _lockService.PinProtectedKey != null) || _pinSet.Item2;
             _fingerprintLock = _lockService.IsFingerprintLockSetAsync().GetAwaiter().GetResult();
 
             BaseNavItem.Title = _pinLock ? AppResources.VerifyPIN : AppResources.VerifyMasterPassword;
@@ -125,13 +123,16 @@ namespace Bit.iOS.Core.Controllers
                 {
                     if(_pinSet.Item1)
                     {
+                        var key = await _cryptoService.MakeKeyFromPinAsync(inputtedValue, email,
+                            kdf.GetValueOrDefault(KdfType.PBKDF2_SHA256), kdfIterations.GetValueOrDefault(5000),
+                            _lockService.PinProtectedKey);
+                        var encKey = await _cryptoService.GetEncKeyAsync(key);
                         var protectedPin = await _storageService.GetAsync<string>(Bit.Core.Constants.ProtectedPin);
-                        var decPin = await _cryptoService.DecryptToUtf8Async(new CipherString(protectedPin));
+                        var decPin = await _cryptoService.DecryptToUtf8Async(new CipherString(protectedPin), encKey);
                         failed = decPin != inputtedValue;
-                        _lockService.PinLocked = failed;
                         if(!failed)
                         {
-                            DoContinue();
+                            await SetKeyAndContinueAsync(key);
                         }
                     }
                     else
@@ -174,6 +175,15 @@ namespace Bit.iOS.Core.Controllers
                 }
                 if(storedKeyHash != null && keyHash != null && storedKeyHash == keyHash)
                 {
+                    if(_pinSet.Item1)
+                    {
+                        var protectedPin = await _storageService.GetAsync<string>(Bit.Core.Constants.ProtectedPin);
+                        var encKey = await _cryptoService.GetEncKeyAsync(key2);
+                        var decPin = await _cryptoService.DecryptToUtf8Async(new CipherString(protectedPin), encKey);
+                        var pinKey = await _cryptoService.MakePinKeyAysnc(decPin, email,
+                            kdf.GetValueOrDefault(KdfType.PBKDF2_SHA256), kdfIterations.GetValueOrDefault(5000));
+                        _lockService.PinProtectedKey = await _cryptoService.EncryptAsync(key2.Key, pinKey);
+                    }
                     await SetKeyAndContinueAsync(key2);
                 }
                 else
@@ -185,7 +195,8 @@ namespace Bit.iOS.Core.Controllers
 
         private async Task SetKeyAndContinueAsync(SymmetricCryptoKey key)
         {
-            if(!_hasKey)
+            var hasKey = await _cryptoService.HasKeyAsync();
+            if(!hasKey)
             {
                 await _cryptoService.SetKeyAsync(key);
             }
@@ -194,7 +205,6 @@ namespace Bit.iOS.Core.Controllers
 
         private void DoContinue()
         {
-            _lockService.PinLocked = false;
             _lockService.FingerprintLocked = false;
             MasterPasswordCell.TextField.ResignFirstResponder();
             Success();

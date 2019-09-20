@@ -22,7 +22,7 @@ namespace Bit.Core.Abstractions
         Task<CipherString> EncryptAsync(byte[] plainValue, SymmetricCryptoKey key = null);
         Task<CipherString> EncryptAsync(string plainValue, SymmetricCryptoKey key = null);
         Task<byte[]> EncryptToBytesAsync(byte[] plainValue, SymmetricCryptoKey key = null);
-        Task<SymmetricCryptoKey> GetEncKeyAsync();
+        Task<SymmetricCryptoKey> GetEncKeyAsync(SymmetricCryptoKey key = null);
         Task<List<string>> GetFingerprintAsync(string userId, byte[] publicKey = null);
         Task<SymmetricCryptoKey> GetKeyAsync();
         Task<string> GetKeyHashAsync();
@@ -35,7 +35,8 @@ namespace Bit.Core.Abstractions
         Task<bool> HasKeyAsync();
         Task<Tuple<SymmetricCryptoKey, CipherString>> MakeEncKeyAsync(SymmetricCryptoKey key);
         Task<SymmetricCryptoKey> MakeKeyAsync(string password, string salt, KdfType? kdf, int? kdfIterations);
-        Task<SymmetricCryptoKey> MakeKeyFromPinAsync(string pin, string salt, KdfType kdf, int kdfIterations);
+        Task<SymmetricCryptoKey> MakeKeyFromPinAsync(string pin, string salt, KdfType kdf, int kdfIterations,
+            CipherString protectedKeyCs = null);
         Task<Tuple<string, CipherString>> MakeKeyPairAsync(SymmetricCryptoKey key = null);
         Task<SymmetricCryptoKey> MakePinKeyAysnc(string pin, string salt, KdfType kdf, int kdfIterations);
         Task<Tuple<CipherString, SymmetricCryptoKey>> MakeShareKeyAsync();

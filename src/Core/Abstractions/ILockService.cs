@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Bit.Core.Models.Domain;
 
 namespace Bit.Core.Abstractions
 {
     public interface ILockService
     {
-        bool PinLocked { get; set; }
+        CipherString PinProtectedKey { get; set; }
         bool FingerprintLocked { get; set; }
 
         Task CheckLockAsync();

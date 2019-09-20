@@ -214,21 +214,24 @@ namespace Bit.App.Pages
                     var masterPassOnRestart = await _platformUtilsService.ShowDialogAsync(
                        AppResources.PINRequireMasterPasswordRestart, AppResources.UnlockWithPIN,
                        AppResources.Yes, AppResources.No);
+
+                    var kdf = await _userService.GetKdfAsync();
+                    var kdfIterations = await _userService.GetKdfIterationsAsync();
+                    var email = await _userService.GetEmailAsync();
+                    var pinKey = await _cryptoService.MakePinKeyAysnc(pin, email,
+                        kdf.GetValueOrDefault(Core.Enums.KdfType.PBKDF2_SHA256),
+                        kdfIterations.GetValueOrDefault(5000));
+                    var key = await _cryptoService.GetKeyAsync();
+                    var pinProtectedKey = await _cryptoService.EncryptAsync(key.Key, pinKey);
+
                     if(masterPassOnRestart)
                     {
                         var encPin = await _cryptoService.EncryptAsync(pin);
                         await _storageService.SaveAsync(Constants.ProtectedPin, encPin.EncryptedString);
+                        _lockService.PinProtectedKey = pinProtectedKey;
                     }
                     else
                     {
-                        var kdf = await _userService.GetKdfAsync();
-                        var kdfIterations = await _userService.GetKdfIterationsAsync();
-                        var email = await _userService.GetEmailAsync();
-                        var pinKey = await _cryptoService.MakePinKeyAysnc(pin, email,
-                            kdf.GetValueOrDefault(Core.Enums.KdfType.PBKDF2_SHA256),
-                            kdfIterations.GetValueOrDefault(5000));
-                        var key = await _cryptoService.GetKeyAsync();
-                        var pinProtectedKey = await _cryptoService.EncryptAsync(key.Key, pinKey);
                         await _storageService.SaveAsync(Constants.PinProtectedKey, pinProtectedKey.EncryptedString);
                     }
                 }
@@ -239,8 +242,8 @@ namespace Bit.App.Pages
             }
             if(!_pin)
             {
-                await _storageService.RemoveAsync(Constants.PinProtectedKey);
-                await _storageService.RemoveAsync(Constants.ProtectedPin);
+                await _cryptoService.ClearPinProtectedKeyAsync();
+                await _lockService.ClearAsync();
             }
             BuildList();
         }

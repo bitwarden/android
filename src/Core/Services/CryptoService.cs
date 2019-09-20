@@ -118,7 +118,7 @@ namespace Bit.Core.Services
             return _keyHash;
         }
 
-        public Task<SymmetricCryptoKey> GetEncKeyAsync()
+        public Task<SymmetricCryptoKey> GetEncKeyAsync(SymmetricCryptoKey key = null)
         {
             if(_encKey != null)
             {
@@ -138,7 +138,10 @@ namespace Bit.Core.Services
                         return null;
                     }
 
-                    var key = await GetKeyAsync();
+                    if(key == null)
+                    {
+                        key = await GetKeyAsync();
+                    }
                     if(key == null)
                     {
                         return null;
@@ -386,14 +389,17 @@ namespace Bit.Core.Services
         }
 
         public async Task<SymmetricCryptoKey> MakeKeyFromPinAsync(string pin, string salt,
-            KdfType kdf, int kdfIterations)
+            KdfType kdf, int kdfIterations, CipherString protectedKeyCs = null)
         {
-            var pinProtectedKey = await _storageService.GetAsync<string>(Constants.PinProtectedKey);
-            if(pinProtectedKey == null)
+            if(protectedKeyCs == null)
             {
-                throw new Exception("No PIN protected key found.");
+                var pinProtectedKey = await _storageService.GetAsync<string>(Constants.PinProtectedKey);
+                if(pinProtectedKey == null)
+                {
+                    throw new Exception("No PIN protected key found.");
+                }
+                protectedKeyCs = new CipherString(pinProtectedKey);
             }
-            var protectedKeyCs = new CipherString(pinProtectedKey);
             var pinKey = await MakePinKeyAysnc(pin, salt, kdf, kdfIterations);
             var decKey = await DecryptToBytesAsync(protectedKeyCs, pinKey);
             return new SymmetricCryptoKey(decKey);

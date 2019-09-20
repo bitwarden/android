@@ -1,4 +1,5 @@
 ﻿using Bit.Core.Abstractions;
+using Bit.Core.Models.Domain;
 using System;
 using System.Threading.Tasks;
 
@@ -41,7 +42,7 @@ namespace Bit.Core.Services
             _lockedCallback = lockedCallback;
         }
 
-        public bool PinLocked { get; set; }
+        public CipherString PinProtectedKey { get; set; } = null;
         public bool FingerprintLocked { get; set; } = true;
 
         public async Task<bool> IsLockedAsync()
@@ -49,17 +50,10 @@ namespace Bit.Core.Services
             var hasKey = await _cryptoService.HasKeyAsync();
             if(hasKey)
             {
-                if(PinLocked)
+                var fingerprintSet = await IsFingerprintLockSetAsync();
+                if(fingerprintSet && FingerprintLocked)
                 {
                     return true;
-                }
-                else
-                {
-                    var fingerprintSet = await IsFingerprintLockSetAsync();
-                    if(fingerprintSet && FingerprintLocked)
-                    {
-                        return true;
-                    }
                 }
             }
             return !hasKey;
@@ -111,13 +105,8 @@ namespace Bit.Core.Services
             }
             if(allowSoftLock)
             {
-                var pinSet = await IsPinLockSetAsync();
-                if(pinSet.Item1)
-                {
-                    PinLocked = true;
-                }
                 FingerprintLocked = await IsFingerprintLockSetAsync();
-                if(FingerprintLocked || PinLocked)
+                if(FingerprintLocked)
                 {
                     _messagingService.Send("locked", userInitiated);
                     _lockedCallback?.Invoke(userInitiated);
@@ -159,6 +148,7 @@ namespace Bit.Core.Services
 
         public async Task ClearAsync()
         {
+            PinProtectedKey = null;
             await _storageService.RemoveAsync(Constants.ProtectedPin);
         }
     }

@@ -25,7 +25,6 @@ namespace Bit.App.Pages
         private readonly IEnvironmentService _environmentService;
         private readonly IStateService _stateService;
 
-        private bool _hasKey;
         private string _email;
         private bool _showPassword;
         private bool _pinLock;
@@ -104,8 +103,7 @@ namespace Bit.App.Pages
         public async Task InitAsync(bool autoPromptFingerprint)
         {
             _pinSet = await _lockService.IsPinLockSetAsync();
-            _hasKey = await _cryptoService.HasKeyAsync();
-            PinLock = (_pinSet.Item1 && _hasKey) || _pinSet.Item2;
+            PinLock = (_pinSet.Item1 && _lockService.PinProtectedKey != null) || _pinSet.Item2;
             FingerprintLock = await _lockService.IsFingerprintLockSetAsync();
             _email = await _userService.GetEmailAsync();
             var webVault = _environmentService.GetWebVaultUrl();
@@ -169,14 +167,17 @@ namespace Bit.App.Pages
                 {
                     if(_pinSet.Item1)
                     {
+                        var key = await _cryptoService.MakeKeyFromPinAsync(Pin, _email,
+                            kdf.GetValueOrDefault(KdfType.PBKDF2_SHA256), kdfIterations.GetValueOrDefault(5000),
+                            _lockService.PinProtectedKey);
+                        var encKey = await _cryptoService.GetEncKeyAsync(key);
                         var protectedPin = await _storageService.GetAsync<string>(Constants.ProtectedPin);
-                        var decPin = await _cryptoService.DecryptToUtf8Async(new CipherString(protectedPin));
+                        var decPin = await _cryptoService.DecryptToUtf8Async(new CipherString(protectedPin), encKey);
                         failed = decPin != Pin;
-                        _lockService.PinLocked = failed;
                         if(!failed)
                         {
                             Pin = string.Empty;
-                            await DoContinueAsync();
+                            await SetKeyAndContinueAsync(key);
                         }
                     }
                     else
@@ -221,6 +222,15 @@ namespace Bit.App.Pages
                 }
                 if(storedKeyHash != null && keyHash != null && storedKeyHash == keyHash)
                 {
+                    if(_pinSet.Item1)
+                    {
+                        var protectedPin = await _storageService.GetAsync<string>(Constants.ProtectedPin);
+                        var encKey = await _cryptoService.GetEncKeyAsync(key);
+                        var decPin = await _cryptoService.DecryptToUtf8Async(new CipherString(protectedPin), encKey);
+                        var pinKey = await _cryptoService.MakePinKeyAysnc(decPin, _email,
+                            kdf.GetValueOrDefault(KdfType.PBKDF2_SHA256), kdfIterations.GetValueOrDefault(5000));
+                        _lockService.PinProtectedKey = await _cryptoService.EncryptAsync(key.Key, pinKey);
+                    }
                     MasterPassword = string.Empty;
                     await SetKeyAndContinueAsync(key);
                 }
@@ -278,7 +288,8 @@ namespace Bit.App.Pages
 
         private async Task SetKeyAndContinueAsync(SymmetricCryptoKey key)
         {
-            if(!_hasKey)
+            var hasKey = await _cryptoService.HasKeyAsync();
+            if(!hasKey)
             {
                 await _cryptoService.SetKeyAsync(key);
             }
@@ -287,7 +298,6 @@ namespace Bit.App.Pages
 
         private async Task DoContinueAsync()
         {
-            _lockService.PinLocked = false;
             _lockService.FingerprintLocked = false;
             var disableFavicon = await _storageService.GetAsync<bool?>(Constants.DisableFaviconKey);
             await _stateService.SaveAsync(Constants.DisableFaviconKey, disableFavicon.GetValueOrDefault());
