@@ -1560,7 +1560,7 @@
     <value>As alterações do seu tema serão aplicadas quando o aplicativo for reiniciado.</value>
   </data>
   <data name="Capitalize" xml:space="preserve">
-    <value>Letras Iniciais em Maiúsculas</value>
+    <value>Iniciais em Maiúsculas</value>
     <comment>ex. Uppercase the first character of a word.</comment>
   </data>
   <data name="IncludeNumber" xml:space="preserve">
