@@ -1272,7 +1272,7 @@
     <value>自動入力を使うには、まず Bitwarden アプリでログインしてください。</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
-    <value>Your logins are now easily accessable right from your keyboard while logging into apps and websites.</value>
+    <value>アプリやサイトにログインするときに、ログイン情報に簡単にキーボードでアクセス可能となります。</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
     <value>使う予定が無い場合は、設定で他の自動入力アプリを無効化することをおすすめします。</value>
@@ -1426,11 +1426,11 @@
     <value>表示するフォルダーがありません。</value>
   </data>
   <data name="FingerprintPhrase" xml:space="preserve">
-    <value>指紋句</value>
+    <value>パスフレーズ</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="YourAccountsFingerprint" xml:space="preserve">
-    <value>アカウントの指紋句</value>
+    <value>アカウントのパスフレーズ</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="ShareVaultConfirmation" xml:space="preserve">
@@ -1458,7 +1458,7 @@
     <value>Bitwarden のロックを解除するための PIN コードを設定します。アプリから完全にログアウトすると、PIN 設定はリセットされます。</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
-    <value>{1} で {0} としてログインしました。</value>
+    <value>{0} として {1} にログインしました。</value>
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
@@ -1532,7 +1532,7 @@
     <value>Bitwarden を終了しますか？</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
-    <value>You you want to require unlocking with your master password when the application is restarted?</value>
+    <value>アプリを再起動したときにマスターパスワードでのロック解除を必須としますか？</value>
   </data>
   <data name="Black" xml:space="preserve">
     <value>ブラック</value>
@@ -1548,23 +1548,23 @@
     <value>保存プロンプトを無効化</value>
   </data>
   <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>保存プロンプトは、新しいアイテムが入力された場合に自動的に表示され、保管庫に保存するよう促します。</value>
+    <value>新しいアイテムを入力したとき、保管庫に保存するかどうか尋ねるためのプロンプトを自動的に表示します。</value>
   </data>
   <data name="LockOptionOnRestart" xml:space="preserve">
     <value>アプリ再起動時</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>自動入力を使えば、他のウェブサイトやアプリから Bitwardenの保管庫に簡単に安全にアクセスできます。いまのところ自動入力は有効になっていないようです。自動入力を有効にするには設定画面に行ってください。</value>
+    <value>自動入力を使うと、他のウェブサイトやアプリから Bitwarden 保管庫に、より安全・簡単にアクセスできます。現在 Bitwarden の自動入力サービスを有効にしていないようです。設定画面で自動入力を有効化できます。</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
-    <value>アプリを再起動するとテーマの変更が反映されます。</value>
+    <value>テーマの変更はアプリを再起動すると反映されます。</value>
   </data>
   <data name="Capitalize" xml:space="preserve">
-    <value>先頭を大文字</value>
+    <value>英単語の先頭を大文字にする</value>
     <comment>ex. Uppercase the first character of a word.</comment>
   </data>
   <data name="IncludeNumber" xml:space="preserve">
-    <value>数字を含む</value>
+    <value>数字を付ける</value>
   </data>
   <data name="Download" xml:space="preserve">
     <value>ダウンロード</value>
