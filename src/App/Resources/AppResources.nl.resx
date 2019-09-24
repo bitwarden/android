@@ -394,7 +394,7 @@
     <value>Uw account is gecreëerd! U kunt nu inloggen.</value>
   </data>
   <data name="AddAnItem" xml:space="preserve">
-    <value>Voeg een item toe</value>
+    <value>Item toevoegen</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
     <value>App-extensie</value>
@@ -579,7 +579,7 @@
     <value>Nooit</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>Nieuw item gecreëerd.</value>
+    <value>Nieuw item aangemaakt.</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>Er zijn geen favorieten in uw kluis.</value>
@@ -588,7 +588,7 @@
     <value>Er zijn geen items in uw kluis.</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>Er zijn geen items in uw kluis voor deze website. Klik om gegevens toe te voegen.</value>
+    <value>Er zijn geen items in uw kluis voor deze website. Tik om gegevens toe te voegen.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
     <value>Deze login bevat geen gebruikersnaam of wachtwoord.</value>
@@ -656,7 +656,7 @@
     <value>Item-informatie</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Item geüpdatet.</value>
+    <value>Item bijgewerkt.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Bezig met versturen...</value>
@@ -729,7 +729,7 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
-    <value>Als u een Bitwarden auto-invullen-melding ziet, dan kunt u deze aanraken om de auto-invullen-dienst te starten.</value>
+    <value>Als u een Bitwarden auto-invullen-melding ziet, dan kunt u deze tikken om de auto-invullen-dienst te starten.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Tik deze melding om een aanmelding automatisch in te vullen d.m.v. uw kluis.</value>
@@ -753,22 +753,22 @@
     <value>Status</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
-    <value>De eenvoudigste manier om nieuwe logins aan uw kluis toe te voegen is via de Bitwarden Auto-fill Service. Leer meer over het gebruik van de Bitwarden Auto-fill Service door te navigeren naar het "Instellingen" scherm.</value>
+    <value>De eenvoudigste manier om nieuwe logins aan uw kluis toe te voegen is via de Bitwarden Auto-invullen-dienst. Leer meer over het gebruik van de Bitwarden Auto-invullen-dienst door te navigeren naar het "Instellingen" scherm.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Auto-invullen</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
-    <value>Wilt u deze login auto-invullen of weergeven?</value>
+    <value>Wilt u dit item automatisch invullen of bekijken?</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>Weet u zeker dat u deze login automatisch wilt invullen? Er is geen volledige overeenkomst voor "{0}".</value>
+    <value>Weet u zeker dat u dit item automatisch wilt invullen? Het is geen volledige match voor "{0}".</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
-    <value>Overeenkomende items</value>
+    <value>Overeenkomstige items</value>
   </data>
   <data name="PossibleMatchingItems" xml:space="preserve">
-    <value>Mogelijke overeenkomende items</value>
+    <value>Mogelijke overeenkomstige items</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Zoeken</value>
@@ -850,7 +850,7 @@
     <value>Houdt uw YubiKey NEO tegen de achterkant van het apparaat om door te gaan.</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
-    <value>YubiKey NEO-beveiligingssleute</value>
+    <value>YubiKey beveiligingssleutel</value>
     <comment>"YubiKey" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
@@ -953,7 +953,7 @@
     <value>Aangepaste omgeving</value>
   </data>
   <data name="CustomEnvironmentFooter" xml:space="preserve">
-    <value>Voor gevorderde gebruikers. Je kan de basis-URL van iedere service afzonderlijk instellen.</value>
+    <value>Voor geavanceerde gebruikers. U kunt de basis-URL van elke dienst onafhankelijk opgeven.</value>
   </data>
   <data name="EnvironmentSaved" xml:space="preserve">
     <value>De omgeving URL's zijn opgeslagen.</value>
@@ -1153,10 +1153,10 @@
     <value>Auto-invullen Toegankelijkheidsservice</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>De Bitwarden automatische invulservice gebruikt Android Autofill Framework om u te helpen bij het invullen van inloggegevens, creditcards en identiteitsgegevens in andere apps op uw apparaat.</value>
+    <value>Bitwarden's automatische invulservice gebruikt Android Autofill Framework om u te helpen bij het invullen van inloggegevens, creditcards en identiteitsinformatie in andere apps op uw apparaat.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Gebruik de Bitwarden-toegankelijkheidsdienst om uw inloggevens automatisch in te laten vullen.</value>
+    <value>Gebruik de Bitwarden-toegankelijkheidsdienst om uw inloggevens automatisch in laten invullen.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Open instellingen voor automatisch invullen</value>
@@ -1166,10 +1166,10 @@
     <comment>What Apple calls their facial recognition reader.</comment>
   </data>
   <data name="FaceIDDirection" xml:space="preserve">
-    <value>Gebruik Face ID om te verifiëren.</value>
+    <value>Gebruik Face ID voor verificatie.</value>
   </data>
   <data name="UseFaceIDToUnlock" xml:space="preserve">
-    <value>Gebruik Face ID om te ontgrendelen</value>
+    <value>Gebruik Face ID voor ontgrendeling</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
     <value>Verifieer Face ID</value>
@@ -1532,7 +1532,7 @@
     <value>Weet u zeker dat u Bitwarden wilt afsluiten?</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
-    <value>You you want to require unlocking with your master password when the application is restarted?</value>
+    <value>Wilt u verplicht ontgrendelen met uw hoofdwachtwoord wanneer de applicatie opnieuw wordt gestart?</value>
   </data>
   <data name="Black" xml:space="preserve">
     <value>Zwart</value>
@@ -1573,6 +1573,6 @@
     <value>Gedeeld</value>
   </data>
   <data name="ToggleVisibility" xml:space="preserve">
-    <value>Toggle Visiblity</value>
+    <value>Zichtbaarheid wisselen</value>
   </data>
 </root>
