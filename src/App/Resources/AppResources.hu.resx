@@ -409,7 +409,7 @@
     <value>Félreérthető karakterek mellőzése</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>Bitwarden alkalmazás kiterjesztés</value>
+    <value>Bitwarden alkalmazás bővítmény</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
     <value>A legkönnyebb módja új bejelentkezések széfbe helyezéséhez a Bitwarden alkalmazás kiegészítőből. További információ olvasható a Bitwarden alkalmazás kiegészítő használatáról a  "Beállítások" képernyőn.</value>
@@ -421,7 +421,7 @@
     <value>Bitwarden automatikus kitöltő szolgáltatás</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>A bitwarden kisegítő szolgáltatás használata bejelentkezések automatikus kitöltéséhez.</value>
+    <value>A Bitwarden kisegítő szolgáltatás használata bejelentkezések automatikus kitöltéséhez.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>E-mail cím módosítása</value>
@@ -467,7 +467,7 @@
     <value>Bővítmény engedélyezése</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
-    <value>A Safari-ban a bitwarden-t a megosztás ikon alatt találod (Tipp: a menü alsó sorában gördítsd jobbra).</value>
+    <value>A Safariban keressük meg a Bitwardent a megosztás ikon használatával (tipp: gördítés a menü alsó sorának jobb oldalára).</value>
     <comment>Safari is the name of apple's web browser</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
@@ -477,16 +477,16 @@
     <value>Készen állsz a bejelentkezéshez!</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
-    <value>A bejelentkezéseid mostantól könnyen hozzáférhetők a Safari-ból, Chrome-ból és más támogatott alkalmazásból.</value>
+    <value>A bejelentkezések mostantól könnyen hozzáférhetők a Safariból, a Chrome-ból és más támogatott alkalmazásból.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
-    <value>A Safari-ban és a Chrome-ban a bitwarden-t a megosztás ikon alatt találod (Tipp: a menü alsó sorában gördítsd jobbra).</value>
+    <value>A Safariban és a Chrome-ban keressük meg a Bitwardent a megosztás ikon használatával (tipp: gördítés a menü alsó sorának jobb oldalára).</value>
   </data>
   <data name="ExtensionTapIcon" xml:space="preserve">
-    <value>A bővítmény elindításához bökj a bitwarden ikonra a menüben.</value>
+    <value>Koppintás a Bitwarden ikonra a menüben a bővítmény elindításához.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>A bitwarden Safari-ban és más alkalmazásokban való bekapcsolásához bökj az "Egyéb" ikonra a menü alsó sorában.</value>
+    <value>A Safariban és más alkalmazásban a Bitwarden bekapcsolásához koppintsunk az "egyéb" ikonra a menü alsó sorában.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
     <value>Kedvenc</value>
