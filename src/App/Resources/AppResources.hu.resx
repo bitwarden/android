@@ -412,7 +412,7 @@
     <value>bitwarden alkalmazás</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the Bitwarden App Extension. Learn more about using the Bitwarden App Extension by navigating to the "Settings" screen.</value>
+    <value>A legkönnyebb módja új bejelentkezések széfbe helyezéséhez a Bitwarden alkalmazás kiegészítőből. További információ olvasható a Bitwarden alkalmazás kiegészítő használatáról a  "Beállítások" képernyőn.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
     <value>Használd a bitwarden automatikus kitöltő szolgáltatását a Safari-ban és más alkalmazásokban.</value>
@@ -753,7 +753,7 @@
     <value>Állapot</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
+    <value>A legkönnyebb módja új bejelentkezések széfbe helyezéséhez a Bitwarden automatikus kitöltés szolgáltatásból. További információ olvasható a Bitwarden automatikus kitöltés szolgáltatás használatáról a  "Beállítások" képernyőn.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Automatikus kitöltés</value>
@@ -1302,7 +1302,7 @@
     <value>Jelszó Automatikus kitöltése</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the "Settings" screen.</value>
+    <value>A legkönnyebb módja új bejelentkezések széfbe helyezéséhez a Bitwarden automatikus jelszó kitöltés bővítmény. További információ olvasható a Bitwarden automatikus jelszó kitöltés bővítmény használatáról a  "Beállítások" képernyőn.</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
     <value>Érvénytelen e-mail cím.</value>
@@ -1403,7 +1403,7 @@
     <value>Nincs megjeleníthető szervezet.</value>
   </data>
   <data name="ShareDesc" xml:space="preserve">
-    <value>Choose an organization that you wish to share this item with. Sharing transfers ownership of the item to the organization. You will no longer be the direct owner of this item once it has been shared.</value>
+    <value>Szervezet választása az elem megosztásához. Az elemtulajdon átadása a szervezetnek. Innentől nem közvetlen tulajdonosa leszünk az elemnek a megosztás után.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
     <value>Szavak száma</value>
@@ -1455,7 +1455,7 @@
     <value>5 perc</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
-    <value>Set your PIN code for unlocking Bitwarden. Your PIN settings will be reset if you ever fully log out of the application.</value>
+    <value>A pinkód beállítása a Bitwarden feloldásához. A pinkód beállítás alaphelyzetbe kerül, ha teljesen kijelentkezünk az alkalmazásból.</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
     <value>Bejelentkezve, mint {0} - {1}.</value>
@@ -1539,16 +1539,16 @@
     <comment>The color black</comment>
   </data>
   <data name="BlacklistedUris" xml:space="preserve">
-    <value>Blacklisted URIs</value>
+    <value>Feketelistán levő URI elemek</value>
   </data>
   <data name="BlacklistedUrisDescription" xml:space="preserve">
     <value>URIs that are blacklisted will not offer auto-fill. The list of apps should be comma separated. Ex: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
   <data name="DisableSavePrompt" xml:space="preserve">
-    <value>Disable Save Prompt</value>
+    <value>Mentés felkérés letiltása</value>
   </data>
   <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>The "Save Prompt" automatically prompts you to save new items to your vault whenever you enter them for the first time.</value>
+    <value>A "Bejelentkezés felkérés hozzáadása" automatikusan felajánlja a bejelentkezés széfbe mentését az első bejelentkezéskor.</value>
   </data>
   <data name="LockOptionOnRestart" xml:space="preserve">
     <value>Újraindításkor</value>
