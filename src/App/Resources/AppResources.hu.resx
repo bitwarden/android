@@ -323,7 +323,7 @@
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>Elem törölve.</value>
+    <value>Az elem törlésre került.</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
@@ -378,7 +378,7 @@
     <value>Látogasd meg a weboldalunkat</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Látogasd meg a weboldalunkat segítség kéréshez, hírekért, küldj nekünk e-mailt és/vagy tanuld meg hogyan használd a bitwarden-t.</value>
+    <value>A fejlesztői webhely felkeresése segítségért, hírekért, email küldése a fejlesztőknek és/vagy további információk a Bitwarden használatáról.</value>
   </data>
   <data name="Website" xml:space="preserve">
     <value>Weboldal</value>
@@ -400,7 +400,7 @@
     <value>App kiterjesztés</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>A bitwarden kisegítő szolgáltatás használata, mely automatikusan kitölti a bejelentkezési adataidat akár egy app-ban, akár webes felületeken.</value>
+    <value>A Bitwarden kisegítő szolgáltatás használata bejelentkezések automatikus kitöltéséhez alkalmazásból és weben.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Automatikus kitöltő szolgáltatás</value>
@@ -409,13 +409,13 @@
     <value>Félreérthető karakterek mellőzése</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>bitwarden alkalmazás</value>
+    <value>Bitwarden alkalmazás kiterjesztés</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
     <value>A legkönnyebb módja új bejelentkezések széfbe helyezéséhez a Bitwarden alkalmazás kiegészítőből. További információ olvasható a Bitwarden alkalmazás kiegészítő használatáról a  "Beállítások" képernyőn.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>Használd a bitwarden automatikus kitöltő szolgáltatását a Safari-ban és más alkalmazásokban.</value>
+    <value>A Bitwarden használata Safariban és más alkalmazásokban a bejelentkezések automatikus kitöltéséhez.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
     <value>Bitwarden automatikus kitöltő szolgáltatás</value>
@@ -1506,7 +1506,7 @@
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
-    <value>Choose the default way that URI match detection is handled for logins when performing actions such as auto-fill.</value>
+    <value>Az URI egyezés érzékelés alapértelmezett módjának kiválasztása a bejelentkezéseknél olyan műveletek esetében mint az automatikus kitöltés.</value>
   </data>
   <data name="Theme" xml:space="preserve">
     <value>Téma</value>
@@ -1554,10 +1554,10 @@
     <value>Újraindításkor</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>Auto-fill makes it easy to securely access your Bitwarden vault from other websites and apps. It looks like you have not enabled an auto-fill service for Bitwarden. Enable auto-fill for Bitwarden from the "Settings" screen.</value>
+    <value>Az automatikus kitöltés megkönnyíti a Bitwarden széf biztonságos elérését más webhelyekről és alkalmazásokból. Úgy tűnik, hogy nem engedélyezett az automatikus kitöltés a Bitwardennél. Az automatikus kitöltés a Bitwardennél a "Beállítások" képernyőn engedélyezhető.</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
-    <value>Your theme changes will apply when the app is restarted.</value>
+    <value>A témaváltás az alkalmazás újraindítása után lép életbe.</value>
   </data>
   <data name="Capitalize" xml:space="preserve">
     <value>Nagy kezdőbetű</value>
