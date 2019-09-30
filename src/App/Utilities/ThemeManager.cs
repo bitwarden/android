@@ -9,6 +9,8 @@ namespace Bit.App.Utilities
 {
     public static class ThemeManager
     {
+        public static bool UsingLightTheme = true;
+
         public static void SetThemeStyle(string name)
         {
             // Reset styles
@@ -22,18 +24,22 @@ namespace Bit.App.Utilities
             if(name == "dark")
             {
                 Application.Current.Resources.MergedDictionaries.Add(new Dark());
+                UsingLightTheme = false;
             }
             else if(name == "black")
             {
                 Application.Current.Resources.MergedDictionaries.Add(new Black());
+                UsingLightTheme = false;
             }
             else if(name == "nord")
             {
                 Application.Current.Resources.MergedDictionaries.Add(new Nord());
+                UsingLightTheme = false;
             }
             else if(name == "light")
             {
                 Application.Current.Resources.MergedDictionaries.Add(new Nord());
+                UsingLightTheme = true;
             }
             else
             {
@@ -41,10 +47,12 @@ namespace Bit.App.Utilities
                 if(deviceActionService?.UsingDarkTheme() ?? false)
                 {
                     Application.Current.Resources.MergedDictionaries.Add(new Dark());
+                    UsingLightTheme = false;
                 }
                 else
                 {
                     Application.Current.Resources.MergedDictionaries.Add(new Light());
+                    UsingLightTheme = true;
                 }
             }
 

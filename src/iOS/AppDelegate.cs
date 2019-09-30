@@ -189,9 +189,7 @@ namespace Bit.iOS
                 BackgroundColor = ((Color)Xamarin.Forms.Application.Current.Resources["SplashBackgroundColor"])
                     .ToUIColor()
             };
-            var theme = ThemeManager.GetTheme(false);
-            var darkbasedTheme = theme == "dark" || theme == "black" || theme == "nord";
-            var logo = new UIImage(darkbasedTheme ? "logo_white.png" : "logo.png");
+            var logo = new UIImage(!ThemeManager.UsingLightTheme ? "logo_white.png" : "logo.png");
             var imageView = new UIImageView(logo)
             {
                 Center = new CoreGraphics.CGPoint(view.Center.X, view.Center.Y - 30)

@@ -16,9 +16,7 @@ namespace Bit.App.Pages
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _messagingService.Send("showStatusBar", false);
             InitializeComponent();
-            var theme = ThemeManager.GetTheme(Device.RuntimePlatform == Device.Android);
-            var darkbasedTheme = theme == "dark" || theme == "black" || theme == "nord";
-            _logo.Source = darkbasedTheme ? "logo_white.png" : "logo.png";
+            _logo.Source = !ThemeManager.UsingLightTheme ? "logo_white.png" : "logo.png";
         }
 
         public async Task DismissRegisterPageAndLogInAsync(string email)
