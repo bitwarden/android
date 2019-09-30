@@ -39,7 +39,7 @@
         <Setter Property="BackgroundColor"
                 Value="{StaticResource ListHeaderBackgroundColor}" />
         <Setter Property="TextColor"
-                Value="Black" />
+                Value="{StaticResource TextColor}" />
         <Setter Property="CancelButtonColor"
                 Value="{StaticResource PrimaryColor}" />
         <Setter Property="PlaceholderColor"

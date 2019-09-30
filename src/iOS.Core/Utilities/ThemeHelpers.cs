@@ -39,7 +39,6 @@ namespace Bit.iOS.Core.Utilities
             UITextView.Appearance.TintColor = TextColor;
             UITextField.Appearance.BackgroundColor = BackgroundColor;
             UITextView.Appearance.BackgroundColor = BackgroundColor;
-            UISearchBar.Appearance.TintColor = TextColor;
             UITableView.Appearance.BackgroundColor = BackgroundColor;
             UITableView.Appearance.SeparatorColor = SeparatorColor;
             UINavigationBar.Appearance.BackgroundColor = NavBarBackgroundColor;
