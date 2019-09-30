@@ -47,14 +47,11 @@ namespace Bit.iOS.Services
         public void OnRegisteredSuccess(NSData token)
         {
             Debug.WriteLine("{0} - Successfully Registered.", DomainName);
-            var trimmedDeviceToken = token.Description;
-            if(!string.IsNullOrWhiteSpace(trimmedDeviceToken))
-            {
-                trimmedDeviceToken = trimmedDeviceToken.Trim('<').Trim('>').Trim().Replace(" ", string.Empty);
-            }
-            Console.WriteLine("{0} - Token: {1}", DomainName, trimmedDeviceToken);
-            _pushNotificationListenerService.OnRegisteredAsync(trimmedDeviceToken, Device.iOS);
-            NSUserDefaults.StandardUserDefaults.SetString(trimmedDeviceToken, TokenSetting);
+            var hexDeviceToken = BitConverter.ToString(token.ToArray())
+                .Replace("-", string.Empty).ToLowerInvariant();
+            Console.WriteLine("{0} - Token: {1}", DomainName, hexDeviceToken);
+            _pushNotificationListenerService.OnRegisteredAsync(hexDeviceToken, Device.iOS);
+            NSUserDefaults.StandardUserDefaults.SetString(hexDeviceToken, TokenSetting);
             NSUserDefaults.StandardUserDefaults.Synchronize();
         }
 
