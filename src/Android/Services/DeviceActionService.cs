@@ -612,6 +612,11 @@ namespace Bit.Droid.Services
             }
         }
 
+        public bool UsingDarkTheme()
+        {
+            return false;
+        }
+
         private bool DeleteDir(Java.IO.File dir)
         {
             if(dir != null && dir.IsDirectory)

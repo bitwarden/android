@@ -1,6 +1,8 @@
-﻿using Bit.App.Services;
+﻿using Bit.App.Abstractions;
+using Bit.App.Services;
 using Bit.App.Styles;
 using Bit.Core;
+using Bit.Core.Utilities;
 using Xamarin.Forms;
 
 namespace Bit.App.Utilities
@@ -29,9 +31,21 @@ namespace Bit.App.Utilities
             {
                 Application.Current.Resources.MergedDictionaries.Add(new Nord());
             }
+            else if(name == "light")
+            {
+                Application.Current.Resources.MergedDictionaries.Add(new Nord());
+            }
             else
             {
-                Application.Current.Resources.MergedDictionaries.Add(new Light());
+                var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService", true);
+                if(deviceActionService?.UsingDarkTheme() ?? false)
+                {
+                    Application.Current.Resources.MergedDictionaries.Add(new Dark());
+                }
+                else
+                {
+                    Application.Current.Resources.MergedDictionaries.Add(new Light());
+                }
             }
 
             // Base styles

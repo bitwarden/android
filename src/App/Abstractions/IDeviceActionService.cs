@@ -35,5 +35,6 @@ namespace Bit.App.Abstractions
         string GetBuildNumber();
         void OpenAccessibilitySettings();
         void OpenAutofillSettings();
+        bool UsingDarkTheme();
     }
 }

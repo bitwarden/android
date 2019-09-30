@@ -351,6 +351,11 @@ namespace Bit.iOS.Core.Services
             throw new NotImplementedException();
         }
 
+        public bool UsingDarkTheme()
+        {
+            return false;
+        }
+
         private void ImagePicker_FinishedPickingMedia(object sender, UIImagePickerMediaPickedEventArgs e)
         {
             if(sender is UIImagePickerController picker)
