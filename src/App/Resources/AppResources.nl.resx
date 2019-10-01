@@ -168,11 +168,11 @@
     <comment>Delete an entity (verb).</comment>
   </data>
   <data name="Deleting" xml:space="preserve">
-    <value>Bezig met verwijderen...</value>
+    <value>Verwijderen…</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="DoYouReallyWantToDelete" xml:space="preserve">
-    <value>Weet u zeker dat u dit wilt verwijderen? Dit kan niet ongedaan worden gemaakt.</value>
+    <value>Weet je zeker dat je wilt verwijderen? Je kunt dit niet ongedaan maken.</value>
     <comment>Confirmation alert message when deleteing something.</comment>
   </data>
   <data name="Edit" xml:space="preserve">
@@ -190,33 +190,33 @@
     <comment>Full label for a email address.</comment>
   </data>
   <data name="EmailUs" xml:space="preserve">
-    <value>E-mail ons</value>
+    <value>Stuur ons een e-mail</value>
   </data>
   <data name="EmailUsDescription" xml:space="preserve">
-    <value>Verstuur ons een e-mail om hulp te krijgen of feedback te geven.</value>
+    <value>Stuur ons direct een e-mail om hulp te krijgen of feedback te geven.</value>
   </data>
   <data name="EnterPIN" xml:space="preserve">
-    <value>Voer uw PIN-code in.</value>
+    <value>Voer je PIN-code in.</value>
   </data>
   <data name="Favorites" xml:space="preserve">
     <value>Favorieten</value>
     <comment>Title for your favorite items in the vault.</comment>
   </data>
   <data name="FileBugReport" xml:space="preserve">
-    <value>Meld een fout (bug)</value>
+    <value>Rapporteer een fout (bug)</value>
   </data>
   <data name="FileBugReportDescription" xml:space="preserve">
-    <value>Open een issue op onze GitHub-pagina.</value>
+    <value>Open een probleem op onze GitHub repository.</value>
   </data>
   <data name="FingerprintDirection" xml:space="preserve">
-    <value>Gebruik uw vingerafdruk om te verifiëren.</value>
+    <value>Gebruik je vingerafdruk om in te loggen.</value>
   </data>
   <data name="Folder" xml:space="preserve">
     <value>Map</value>
     <comment>Label for a folder.</comment>
   </data>
   <data name="FolderCreated" xml:space="preserve">
-    <value>Nieuwe map is gecreëerd.</value>
+    <value>Nieuwe map is aangemaakt.</value>
   </data>
   <data name="FolderDeleted" xml:space="preserve">
     <value>Map is verwijderd.</value>
@@ -236,14 +236,14 @@
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="HelpAndFeedback" xml:space="preserve">
-    <value>Hulp en feedback</value>
+    <value>Help en feedback</value>
   </data>
   <data name="Hide" xml:space="preserve">
     <value>Verbergen</value>
     <comment>Hide a secret value that is currently shown (password).</comment>
   </data>
   <data name="InternetConnectionRequiredMessage" xml:space="preserve">
-    <value>Verbindt met het internet alvorens door te gaan.</value>
+    <value>Maak verbinding met het internet voordat u doorgaat.</value>
     <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
@@ -273,7 +273,7 @@
     <comment>The log out button text (verb).</comment>
   </data>
   <data name="LogoutConfirmation" xml:space="preserve">
-    <value>Weet u zeker dat u wilt uitloggen?</value>
+    <value>Weet je zeker dat je wilt uitloggen?</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Hoofdwachtwoord</value>
@@ -299,7 +299,7 @@
     <comment>Label for notes.</comment>
   </data>
   <data name="Ok" xml:space="preserve">
-    <value>Oké</value>
+    <value>Ok</value>
     <comment>Acknowledgement.</comment>
   </data>
   <data name="Password" xml:space="preserve">
@@ -311,7 +311,7 @@
     <comment>Button text for a save operation (verb).</comment>
   </data>
   <data name="Saving" xml:space="preserve">
-    <value>Bezig met opslaan...</value>
+    <value>Opslaan...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Settings" xml:space="preserve">
@@ -378,7 +378,7 @@
     <value>Bezoek onze website</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Bezoek onze website voor hulp, nieuws, om ons een mail te sturen en/of meer te weten te komen over het gebruik van Bitwarden.</value>
+    <value>Bezoek onze website voor hulp, nieuws, om ons een e-mail te sturen en/of om meer te weten te komen over het gebruik van Bitwarden.</value>
   </data>
   <data name="Website" xml:space="preserve">
     <value>Website</value>
@@ -391,49 +391,49 @@
     <value>Account</value>
   </data>
   <data name="AccountCreated" xml:space="preserve">
-    <value>Uw account is gecreëerd! U kunt nu inloggen.</value>
+    <value>Je account is aangemaakt! Je kunt nu inloggen.</value>
   </data>
   <data name="AddAnItem" xml:space="preserve">
-    <value>Voeg een item toe</value>
+    <value>Item toevoegen</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
     <value>App-extensie</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Gebruik de Bitwarden-toegankelijkheidsdienst om uw inloggegevens automatisch in te laten vullen in de apps en op het internet.</value>
+    <value>Gebruik de Bitwarden-toegankelijkheidsdienst voor het automatisch invullen van je inloggegevens in apps en op het internet.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
-    <value>Auto-invullen-dienst</value>
+    <value>Auto-invullendienst</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
-    <value>Onduidelijke tekens vermijden</value>
+    <value>Dubbelzinnige tekens vermijden</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
     <value>Bitwarden app-extensie</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
-    <value>De eenvoudigste manier om nieuwe logins toe te voegen aan uw kluis is van de Bitwarden App Extensie. Leer meer over het gebruik van de Bitwarden App Extensie door naar het "Instellingen" scherm te navigeren.</value>
+    <value>De eenvoudigste manier om nieuwe logins toe te voegen aan je kluis is via de Bitwarden-app-extensie. Leer meer over het gebruik van de Bitwarden-app-extensie via "Instellingen".</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>Gebruik Bitwarden in Safari en andere apps om uw inloggegevens automatisch in te vullen.</value>
+    <value>Gebruik Bitwarden in Safari en andere apps om je inloggegevens automatisch in te vullen.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>Bitwarden auto-invullen-dienst</value>
+    <value>Bitwarden auto-invullendienst</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Gebruik de Bitwarden-toegankelijkheidsdienst om uw inloggegevens automatisch in te laten vullen.</value>
+    <value>Gebruik de Bitwarden-toegankelijkheidsdienst voor het automatisch invullen van je inloggegevens.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>E-mailadres wijzigen</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
-    <value>U kunt uw e-mailadres wijzigen in de kluis op bitwarden.com Wilt u de website nu bezoeken?</value>
+    <value>Je kunt je e-mailadres wijzigen in de kluis op bitwarden.com. Wil je de website nu bezoeken?</value>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
     <value>Hoofdwachtwoord wijzigen</value>
   </data>
   <data name="ChangePasswordConfirmation" xml:space="preserve">
-    <value>U kunt uw hoofdwachtwoord wijzigen in de kluis op bitwarden.com Wilt u de website nu bezoeken?</value>
+    <value>Je kunt je hoofdwachtwoord wijzigen in de kluis op bitwarden.com. Wil je de website nu bezoeken?</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Sluiten</value>
@@ -442,10 +442,10 @@
     <value>Doorgaan</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
-    <value>Account creëren</value>
+    <value>Account aanmaken</value>
   </data>
   <data name="CreatingAccount" xml:space="preserve">
-    <value>Bezig met creëren van account...</value>
+    <value>Account aanmaken...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="EditItem" xml:space="preserve">
@@ -455,7 +455,7 @@
     <value>Automatische synchronisatie inschakelen</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
-    <value>Voer het e-mailadres van uw account in om uw hoofdwachwoord-hint te ontvangen.</value>
+    <value>Voer het e-mailadres van je account in om je hoofdwachwoordhint te ontvangen.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
     <value>App-extensie opnieuw inschakelen</value>
@@ -467,26 +467,26 @@
     <value>App-extensie inschakelen</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
-    <value>In Safari vindt u Bitwarden onder het deel-pictogram (hint: scroll naar rechts op de onderste rij van het menu).</value>
+    <value>In Safari vind je Bitwarden onder het pictogram Delen (hint: scroll naar rechts op de onderste rij van het menu).</value>
     <comment>Safari is the name of apple's web browser</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
-    <value>Verkrijg onmiddellijke toegang tot uw wachtwoorden!</value>
+    <value>Krijg onmiddellijke toegang tot je wachtwoorden!</value>
   </data>
   <data name="ExtensionReady" xml:space="preserve">
-    <value>U bent klaar om in te loggen!</value>
+    <value>Je bent klaar om in te loggen!</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
-    <value>Uw inloggevens zijn nu gemakkelijk bereikbaar vanuit Safari, Chrome en ondersteunde apps.</value>
+    <value>Je inloggevens zijn nu gemakkelijk bereikbaar vanuit Safari, Chrome en ondersteunde apps.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
-    <value>In Safari en Chrome vindt u Bitwarden onder het deel-pictogram (hint: scroll naar rechts op de onderste rij van het menu).</value>
+    <value>In Safari en Chrome vind je Bitwarden onder het pictogram Delen (hint: scroll naar rechts op de onderste rij van het menu).</value>
   </data>
   <data name="ExtensionTapIcon" xml:space="preserve">
-    <value>Raak het Bitwarden-pictogram in het menu aan om de extensie te starten.</value>
+    <value>Tik op het Bitwarden-pictogram in het menu om de extensie te starten.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>Raak het "meer"-pictogram op de onderste rij van het menu aan om Bitwarden in te schakelen in Safari en andere apps.</value>
+    <value>Tik op het "meer"-pictogram op de onderste rij van het menu om Bitwarden in te schakelen in Safari en andere apps.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
     <value>Favoriet</value>
@@ -498,13 +498,13 @@
     <value>Wachtwoord genereren</value>
   </data>
   <data name="GetPasswordHint" xml:space="preserve">
-    <value>Verkrijg hoofdwachtwoord-hint</value>
+    <value>Hoofdwachtwoordhint opvragen</value>
   </data>
   <data name="ImportItems" xml:space="preserve">
     <value>Items importeren</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
-    <value>U kunt een bulk import van items doen vanuit de bitwarden.com webkluis. Wilt u de website nu bezoeken?</value>
+    <value>Je kunt items in bulk importeren via de bitwarden.com webkluis. Wil je de website nu bezoeken?</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
     <value>Importeer snel meerdere items uit andere wachtwoordbeheer-apps.</value>
@@ -531,38 +531,38 @@
     <value>4 uur</value>
   </data>
   <data name="LockOptionImmediately" xml:space="preserve">
-    <value>Onmiddelijk</value>
+    <value>Onmiddellijk</value>
   </data>
   <data name="LockOptions" xml:space="preserve">
-    <value>Vergrendelopties</value>
+    <value>Vergrendelingsopties</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
-    <value>Bezig met inloggen...</value>
+    <value>Inloggen...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="LoginOrCreateNewAccount" xml:space="preserve">
-    <value>Log in of creëer een nieuw account om toegang te krijgen tot uw beveiligde kluis.</value>
+    <value>Log in of maak een nieuw account aan om toegang te krijgen tot je beveiligde kluis.</value>
   </data>
   <data name="Manage" xml:space="preserve">
-    <value>Beheren</value>
+    <value>Beheer</value>
   </data>
   <data name="MasterPasswordConfirmationValMessage" xml:space="preserve">
     <value>De wachtwoorden komen niet overeen.</value>
   </data>
   <data name="MasterPasswordDescription" xml:space="preserve">
-    <value>Het hoofdwachtwoord is het wachtwoord waarmee u toegang krijgt tot uw kluis. Het is belangrijk dat u het hoofdwachtwoord niet vergeet want er is geen manier om het te herstellen.</value>
+    <value>Het hoofdwachtwoord is het wachtwoord waarmee je toegang krijgt tot je beveiligde kluis. Het is belangrijk dat je het hoofdwachtwoord niet vergeet, want er is geen manier om het te herstellen.</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
-    <value>Hoofdwachtwoord-hint (optioneel)</value>
+    <value>Hoofdwachtwoordhint (optioneel)</value>
   </data>
   <data name="MasterPasswordHintDescription" xml:space="preserve">
-    <value>Een hoofdwachtwoord-hint kan u helpen uw wachtwoord te herinneren als u hem vergeten bent.</value>
+    <value>Een hoofdwachtwoordhint kan je helpen je wachtwoord te herinneren als je het vergeten bent.</value>
   </data>
   <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Het hoofdwachtwoord moet minimaal 8 tekens bevatten.</value>
+    <value>Het hoofdwachtwoord moet minimaal 8 tekens lang zijn.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
-    <value>Minimum aantal getallen</value>
+    <value>Minimum aantal cijfers</value>
     <comment>Minimum numeric characters for password generator settings</comment>
   </data>
   <data name="MinSpecial" xml:space="preserve">
@@ -573,32 +573,32 @@
     <value>Meer instellingen</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>U moet inloggen op de Bitwarden-app voordat u de extensie kunt gebruiken.</value>
+    <value>Je moet inloggen op de Bitwarden-app voordat je de extensie kunt gebruiken.</value>
   </data>
   <data name="Never" xml:space="preserve">
     <value>Nooit</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>Nieuw item gecreëerd.</value>
+    <value>Nieuw item aangemaakt.</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
-    <value>Er zijn geen favorieten in uw kluis.</value>
+    <value>Er zijn geen favorieten in je kluis.</value>
   </data>
   <data name="NoItems" xml:space="preserve">
-    <value>Er zijn geen items in uw kluis.</value>
+    <value>Er zijn geen items in je kluis.</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>Er zijn geen items in uw kluis voor deze website. Klik om gegevens toe te voegen.</value>
+    <value>Er zijn geen items in je kluis voor deze website. Tik om er een toe te voegen.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
     <value>Deze login bevat geen gebruikersnaam of wachtwoord.</value>
   </data>
   <data name="OkGotIt" xml:space="preserve">
-    <value>Oké, ik begrijp het!</value>
+    <value>Ok, ik snap het!</value>
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>De standaardwaarden van de optie kunnen worden ingesteld met het wachtwoordgenerator-hulpmiddel in de app.</value>
+    <value>De standaardwaarden zijn instelbaar vanaf de wachtwoordgenerator in de hoofdapplicatie.</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>Opties</value>
@@ -616,17 +616,17 @@
     <value>Wachtwoordhint</value>
   </data>
   <data name="PasswordHintAlert" xml:space="preserve">
-    <value>We hebben u een e-mail gestuurd met uw hoofdwachtwoord-hint.</value>
+    <value>We hebben je een e-mail gestuurd met je hoofdwachtwoordhint.</value>
   </data>
   <data name="PasswordOverrideAlert" xml:space="preserve">
-    <value>Weet u zeker dat het huidige wachtwoord wilt overschrijven?</value>
+    <value>Weet je zeker dat je het huidige wachtwoord wilt overschrijven?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>Bitwarden houdt uw kluis automatisch gesynchroniseerd d.m.v. push-meldingen. Druk in het volgende dialoogvenster op "Oké" om push-meldingen in te schakelen.</value>
+    <value>Bitwarden gebruikt pushberichten om je kluis automatisch te synchroniseren. Druk in het volgende dialoogvenster op "Toestaan" om pushberichten in te schakelen.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
-    <value>De app waarderen</value>
+    <value>De app beoordelen</value>
   </data>
   <data name="RateTheAppDescription" xml:space="preserve">
     <value>Help ons door een goede recensie te schrijven!</value>
@@ -650,20 +650,20 @@
     <value>PIN-code instellen</value>
   </data>
   <data name="SetPINDirection" xml:space="preserve">
-    <value>Voer een PIN-code in van 4 tekens om de app mee te ontgrendelen.</value>
+    <value>Voer een PIN-code van 4 tekens in om de app mee te ontgrendelen.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
     <value>Item-informatie</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Item geüpdatet.</value>
+    <value>Item bijgewerkt.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
-    <value>Bezig met versturen...</value>
+    <value>Versturen...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Syncing" xml:space="preserve">
-    <value>Bezig met synchroniseren...</value>
+    <value>Synchroniseren...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="SyncingComplete" xml:space="preserve">
@@ -680,10 +680,10 @@
     <comment>What Apple calls their fingerprint reader.</comment>
   </data>
   <data name="TwoStepLogin" xml:space="preserve">
-    <value>Inloggen in twee stappen</value>
+    <value>Tweestapsaanmelding</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Inloggen in twee stappen beveiligt uw account beter doordat u uw inlogpoging moet bevestigen met een ander apparaat. Dit kan bijv. een beveiligingssleutel zijn, maar een verificatie-app, SMS, spraakoproep of e-mail. Inloggen in twee stappen kan worden ingeschakeld in de kluis op bitwarden.com Wilt u de website nu bezoeken?</value>
+    <value>Tweestapsaanmelding beschermt je account door je inlogpoging te bevestigen met een ander apparaat zoals een beveiligingssleutel, authenticatie-app, SMS, spraakoproep of e-mail. Je kunt Tweestapsaanmelding inschakelen in de webkluis op bitwarden.com. Wil je de website nu bezoeken?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Ontgrendelen met {0}</value>
@@ -702,7 +702,7 @@
     <value>Item weergeven</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>Bitwarden-webkluis</value>
+    <value>Bitwarden Webkluis</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Authenticatie-app kwijt?</value>
@@ -712,7 +712,7 @@
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">
-    <value>Extensie is geactiveerd!</value>
+    <value>Extensie geactiveerd!</value>
   </data>
   <data name="Icons" xml:space="preserve">
     <value>Pictogrammen</value>
@@ -725,23 +725,23 @@
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>
   <data name="NoItemsForUri" xml:space="preserve">
-    <value>Er zijn geen items in uw kluis voor {0}.</value>
+    <value>Er zijn geen items in je kluis voor {0}.</value>
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
-    <value>Als u een Bitwarden auto-invullen-melding ziet, dan kunt u deze aanraken om de auto-invullen-dienst te starten.</value>
+    <value>Als je een Bitwarden auto-invullen-melding ziet, kun je deze aantikken om het auto-invullen te starten.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
-    <value>Tik deze melding om een aanmelding automatisch in te vullen d.m.v. uw kluis.</value>
+    <value>Tik deze melding voor het automatisch invullen van een item uit je kluis.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
     <value>Toegankelijkheidsinstellingen openen</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
-    <value>1. Raak op het Android-toegankelijkheidsinstellingen-scherm "Bitwarden" aan onder de kop Diensten.</value>
+    <value>1. Tik op het Android-toegankelijkheidsinstellingen-scherm "Bitwarden" aan onder de kop Diensten.</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
-    <value>2. Raak de schuifknop aan en druk op Oké om te accepteren.</value>
+    <value>2. Tik op de schuifknop en druk op Oké om te accepteren.</value>
   </data>
   <data name="Disabled" xml:space="preserve">
     <value>Uitgeschakeld</value>
@@ -753,40 +753,40 @@
     <value>Status</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
-    <value>De eenvoudigste manier om nieuwe logins aan uw kluis toe te voegen is via de Bitwarden Auto-fill Service. Leer meer over het gebruik van de Bitwarden Auto-fill Service door te navigeren naar het "Instellingen" scherm.</value>
+    <value>De eenvoudigste manier om nieuwe logins aan je kluis toe te voegen is via de Bitwarden Auto-invullen-dienst. Leer meer over het gebruik van de Bitwarden Auto-invullen-dienst via "Instellingen".</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Auto-invullen</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
-    <value>Wilt u deze login auto-invullen of weergeven?</value>
+    <value>Wilt je dit item automatisch invullen of bekijken?</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>Weet u zeker dat u deze login automatisch wilt invullen? Er is geen volledige overeenkomst voor "{0}".</value>
+    <value>Weet je zeker dat je dit item automatisch wilt invullen? Het komt niet volledig overeen met "{0}".</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
-    <value>Overeenkomende items</value>
+    <value>Overeenkomstige items</value>
   </data>
   <data name="PossibleMatchingItems" xml:space="preserve">
-    <value>Mogelijke overeenkomende items</value>
+    <value>Mogelijke overeenkomstige items</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Zoeken</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
-    <value>U zoekt een auto-invullen voor "{0}".</value>
+    <value>Je zoekt een auto-invullen voor "{0}".</value>
   </data>
   <data name="ShareVault" xml:space="preserve">
-    <value>Deel uw kluis</value>
+    <value>Je kluis delen</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
-    <value>Scannen als wachtwoordveld gefocust is</value>
+    <value>Scannen als wachtwoordveld de focus heeft</value>
   </data>
   <data name="AutofillPasswordFieldDescription" xml:space="preserve">
-    <value>Alleen zoeken naar velden en een auto-invul-melding weergeven zodra u een wachtwoordveld selecteert. Deze instelling kan accubesparend werken.</value>
+    <value>Alleen zoeken naar velden en een auto-invul-melding weergeven als je een wachtwoordveld selecteert. Deze instelling kan accubesparend werken.</value>
   </data>
   <data name="AutofillPersistNotification" xml:space="preserve">
-    <value>Aanhoudende melding</value>
+    <value>Melding aanhouden</value>
   </data>
   <data name="AutofillPersistNotificationDescription" xml:space="preserve">
     <value>Altijd een auto-invul-melding weergeven en alleen zoeken naar velden na het proberen van automatisch invullen. Deze instelling kan accubesparend werken.</value>
@@ -795,10 +795,10 @@
     <value>Altijd scannen</value>
   </data>
   <data name="AutofillAlwaysDescription" xml:space="preserve">
-    <value>Altijd zoeken naar velden en alleen een auto-invul-melding weergeven als er wachtwoordvelden gevonden zijn. Dit is de standaard instelling.</value>
+    <value>Altijd zoeken naar velden en alleen een auto-invul-melding weergeven als er wachtwoordvelden gevonden zijn. Dit is de standaardinstelling.</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
-    <value>De app "{0}" kan niet worden geopend.</value>
+    <value>Kan de app "{0}" niet openen.</value>
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
   </data>
   <data name="AuthenticatorAppTitle" xml:space="preserve">
@@ -806,19 +806,19 @@
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeApp" xml:space="preserve">
-    <value>Voer de 6-cijferige verificatiecode in die in uw authenticatie-app staat.</value>
+    <value>Voer de 6-cijferige verificatiecode uit je authenticatie-app in.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeEmail" xml:space="preserve">
-    <value>Voer de 6-cijferige verificatiecode in die gemaild is naar {0}.</value>
+    <value>Voer de 6-cijferige verificatiecode in die via e-mail is verstuurd naar {0}.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
-    <value>Login niet beschikbaar</value>
+    <value>Inloggen niet beschikbaar</value>
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>Dit account heeft inloggen in twee stappen ingeschakeld, maar geen van de ingestelde diensten worden ondersteund op dit apparaat. Gebruik een ondersteund apparaat en/of extra diensten die beter worden ondersteund op apparaten, zoals een authenticatie-app.</value>
+    <value>Dit account heeft tweestapsaanmelding ingeschakeld, maar dit apparaat ondersteunt geen van de geconfigureerde aanbieders. Gebruik een ondersteund apparaat en/of voeg aanbieders toe die betere ondersteuning bieden voor meerdere apparaten (zoals een authenticatie-app).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
     <value>Herstelcode</value>
@@ -829,28 +829,28 @@
     <comment>Remember my two-step login</comment>
   </data>
   <data name="SendVerificationCodeAgain" xml:space="preserve">
-    <value>Verificatiecode-e-mail opnieuw versturen</value>
+    <value>E-mail met verificatiecode opnieuw versturen</value>
     <comment>For 2FA</comment>
   </data>
   <data name="TwoStepLoginOptions" xml:space="preserve">
-    <value>Inloggen in twee stappen-opties</value>
+    <value>Opties voor tweestapsaanmelding</value>
   </data>
   <data name="UseAnotherTwoStepMethod" xml:space="preserve">
-    <value>Andere methode gebruiken voor inloggen in twee stappen</value>
+    <value>Gebruik een andere methode voor tweestapsaanmelding</value>
   </data>
   <data name="VerificationEmailNotSent" xml:space="preserve">
-    <value>De verificatie-e-mail kan niet worden verstuurd. Probeer het opnieuw.</value>
+    <value>Kon de verificatie-e-mail niet versturen. Probeer het opnieuw.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
-    <value>Verificatie-e-mail is verstuurd.</value>
+    <value>E-mail met verificatiecode verzonden.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
-    <value>Houdt uw YubiKey NEO tegen de achterkant van het apparaat om door te gaan.</value>
+    <value>Houd je YubiKey NEO tegen de achterkant van het apparaat om door te gaan of plaats je YubiKey in de USB-poort van je apparaat en druk dan op de knop.</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
-    <value>YubiKey NEO-beveiligingssleute</value>
+    <value>YubiKey beveiligingssleutel</value>
     <comment>"YubiKey" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
@@ -860,37 +860,37 @@
     <value>Bijlagen</value>
   </data>
   <data name="UnableToDownloadFile" xml:space="preserve">
-    <value>Bestand kan niet worden gedownload.</value>
+    <value>Kon bestand niet downloaden.</value>
   </data>
   <data name="UnableToOpenFile" xml:space="preserve">
-    <value>Uw apparaat kan dit type bestand niet openen.</value>
+    <value>Je apparaat kan dit type bestand niet openen.</value>
   </data>
   <data name="Downloading" xml:space="preserve">
-    <value>Bezig met downloaden...</value>
+    <value>Downloaden...</value>
     <comment>Message shown when downloading a file</comment>
   </data>
   <data name="AttachmentLargeWarning" xml:space="preserve">
-    <value>Deze bijlage heeft een grootte van {0}. Weet u zeker dat u deze wilt downloaden naar uw apparaat?</value>
+    <value>Deze bijlage heeft een omvang van {0}. Weet je zeker dat je deze naar je apparaat wilt downloaden?</value>
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
   <data name="AuthenticatorKey" xml:space="preserve">
-    <value>Authenticatie-sleutel (TOTP)</value>
+    <value>Authenticatiesleutel (TOTP)</value>
   </data>
   <data name="VerificationCodeTotp" xml:space="preserve">
     <value>Verificatiecode (TOTP)</value>
     <comment>Totp code label</comment>
   </data>
   <data name="AuthenticatorKeyAdded" xml:space="preserve">
-    <value>Authenticatie-sleutel is toegevoegd.</value>
+    <value>Authenticatiesleutel is toegevoegd.</value>
   </data>
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
-    <value>De authenticatie-sleutel kan niet worden gelezen.</value>
+    <value>Kan de authenticatiesleutel niet lezen.</value>
   </data>
   <data name="CameraInstructionBottom" xml:space="preserve">
     <value>Het scannen gaat automatisch.</value>
   </data>
   <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Richt uw camera op de QR-code.</value>
+    <value>Richt je camera op de QR-code.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>QR-code scannen</value>
@@ -905,13 +905,13 @@
     <value>TOTP kopiëren</value>
   </data>
   <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>Als uw login beschikt over een sleutel van de verificator, dan wordt de TOTP-verificatiecode automatisch gekopieerd naar uw klembord wanneer de login automatisch wordt ingevuld.</value>
+    <value>Als je login gekoppeld is met een authenticatiesleutel, wordt de TOTP-verificatiecode automatisch naar je klembord gekopieerd bij het automatisch invullen van de login.</value>
   </data>
   <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>TOTP automatisch kopiëren uitschakelen</value>
+    <value>Automatisch kopiëren TOTP uitschakelen</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
-    <value>U heeft een Premium-lidmaatschap nodig om deze functie te kunnen gebruiken.</value>
+    <value>Je hebt een Premium-abonnement nodig om deze functionaliteit te kunnen gebruiken.</value>
   </data>
   <data name="AttachementAdded" xml:space="preserve">
     <value>Bijlage is toegevoegd</value>
@@ -935,13 +935,13 @@
     <value>Bestandsbron</value>
   </data>
   <data name="FeatureUnavailable" xml:space="preserve">
-    <value>Functie niet beschikbaar</value>
+    <value>Functionaliteit niet beschikbaar</value>
   </data>
   <data name="MaxFileSize" xml:space="preserve">
     <value>De maximale bestandsgrootte is 100 MB.</value>
   </data>
   <data name="UpdateKey" xml:space="preserve">
-    <value>U kunt deze functie niet gebruiken zolang u uw encryptiesleutel niet hebt bijgewerkt.</value>
+    <value>Je kunt deze functie pas gebruiken als je je encryptiesleutel bijwerkt.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Meer informatie</value>
@@ -953,24 +953,24 @@
     <value>Aangepaste omgeving</value>
   </data>
   <data name="CustomEnvironmentFooter" xml:space="preserve">
-    <value>Voor gevorderde gebruikers. Je kan de basis-URL van iedere service afzonderlijk instellen.</value>
+    <value>Voor gevorderde gebruikers. Je kunt de basis-URL van elke dienst onafhankelijk instellen.</value>
   </data>
   <data name="EnvironmentSaved" xml:space="preserve">
-    <value>De omgeving URL's zijn opgeslagen.</value>
+    <value>De omgeving-URL's zijn opgeslagen.</value>
   </data>
   <data name="FormattedIncorrectly" xml:space="preserve">
-    <value>{0} is niet correct opgemaakt.</value>
+    <value>{0} is niet juist opgemaakt.</value>
     <comment>Validation error when something is not formatted correctly, such as a URL or email address.</comment>
   </data>
   <data name="IdentityUrl" xml:space="preserve">
-    <value>Gebruikersbeheer server-URL</value>
+    <value>Identiteitserver-URL</value>
     <comment>"Identity" refers to an identity server. See more context here https://en.wikipedia.org/wiki/Identity_management</comment>
   </data>
   <data name="SelfHostedEnvironment" xml:space="preserve">
     <value>Zelfgehoste omgeving</value>
   </data>
   <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
-    <value>Specificeer de basis-URL van uw op locatie gehoste Bitwarden-installatie.</value>
+    <value>Geef de basis-URL van je zelfgehoste Bitwarden-installatie op.</value>
   </data>
   <data name="ServerUrl" xml:space="preserve">
     <value>Server-URL</value>
@@ -979,13 +979,13 @@
     <value>Webkluis server-URL</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
-    <value>Raak deze melding aan om logins te bekijken uit uw kluis.</value>
+    <value>Tik deze melding aan om logins uit je kluis te bekijken.</value>
   </data>
   <data name="CustomFields" xml:space="preserve">
     <value>Aangepaste velden</value>
   </data>
   <data name="CopyNumber" xml:space="preserve">
-    <value>Nummer Kopiëren</value>
+    <value>Nummer kopiëren</value>
   </data>
   <data name="CopySecurityCode" xml:space="preserve">
     <value>Beveiligingscode kopiëren</value>
@@ -1018,19 +1018,19 @@
     <value>Adres 3</value>
   </data>
   <data name="April" xml:space="preserve">
-    <value>April</value>
+    <value>april</value>
   </data>
   <data name="August" xml:space="preserve">
-    <value>Augustus</value>
+    <value>augustus</value>
   </data>
   <data name="Brand" xml:space="preserve">
-    <value>Soort</value>
+    <value>Merk</value>
   </data>
   <data name="CardholderName" xml:space="preserve">
-    <value>Naam van kaarthouder</value>
+    <value>Naam kaarthouder</value>
   </data>
   <data name="CityTown" xml:space="preserve">
-    <value>Stad / Dorp</value>
+    <value>Stad / gemeente</value>
   </data>
   <data name="Company" xml:space="preserve">
     <value>Bedrijf</value>
@@ -1039,7 +1039,7 @@
     <value>Land</value>
   </data>
   <data name="December" xml:space="preserve">
-    <value>December</value>
+    <value>december</value>
   </data>
   <data name="Dr" xml:space="preserve">
     <value>Dr.</value>
@@ -1051,19 +1051,19 @@
     <value>Vervaljaar</value>
   </data>
   <data name="February" xml:space="preserve">
-    <value>Februari</value>
+    <value>februari</value>
   </data>
   <data name="FirstName" xml:space="preserve">
     <value>Voornaam</value>
   </data>
   <data name="January" xml:space="preserve">
-    <value>Januari</value>
+    <value>januari</value>
   </data>
   <data name="July" xml:space="preserve">
-    <value>Juli</value>
+    <value>juli</value>
   </data>
   <data name="June" xml:space="preserve">
-    <value>Juni</value>
+    <value>juni</value>
   </data>
   <data name="LastName" xml:space="preserve">
     <value>Achternaam</value>
@@ -1072,28 +1072,28 @@
     <value>Rijbewijsnummer</value>
   </data>
   <data name="March" xml:space="preserve">
-    <value>Maart</value>
+    <value>maart</value>
   </data>
   <data name="May" xml:space="preserve">
-    <value>Mei</value>
+    <value>mei</value>
   </data>
   <data name="MiddleName" xml:space="preserve">
-    <value>Tweede voornaam</value>
+    <value>Tweede naam</value>
   </data>
   <data name="Mr" xml:space="preserve">
     <value>Dhr.</value>
   </data>
   <data name="Mrs" xml:space="preserve">
-    <value>mevr.</value>
+    <value>Mevr.</value>
   </data>
   <data name="Ms" xml:space="preserve">
     <value>Mej.</value>
   </data>
   <data name="November" xml:space="preserve">
-    <value>November</value>
+    <value>november</value>
   </data>
   <data name="October" xml:space="preserve">
-    <value>Oktober</value>
+    <value>oktober</value>
   </data>
   <data name="PassportNumber" xml:space="preserve">
     <value>Paspoortnummer</value>
@@ -1102,13 +1102,13 @@
     <value>Telefoonnummer</value>
   </data>
   <data name="September" xml:space="preserve">
-    <value>September</value>
+    <value>september</value>
   </data>
   <data name="SSN" xml:space="preserve">
     <value>Burgerservicenummer</value>
   </data>
   <data name="StateProvince" xml:space="preserve">
-    <value>Staat / Provincie</value>
+    <value>Staat / provincie</value>
   </data>
   <data name="Title" xml:space="preserve">
     <value>Titel</value>
@@ -1126,10 +1126,10 @@
     <value>Websitepictogrammen uitschakelen</value>
   </data>
   <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Websitepictogrammen bieden een herkenbare afbeelding naast elk item in uw kluis.</value>
+    <value>Websitepictogrammen geven een herkenbare afbeelding naast elk item in je kluis.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
-    <value>Pictogrammen server-URL</value>
+    <value>Pictogrammenserver-URL</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
     <value>Automatisch invullen met Bitwarden</value>
@@ -1150,13 +1150,13 @@
     <value>Er zijn geen items in deze map.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
-    <value>Auto-invullen Toegankelijkheidsservice</value>
+    <value>Auto-invullen-toegankelijkheidsdienst</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>De Bitwarden automatische invulservice gebruikt Android Autofill Framework om u te helpen bij het invullen van inloggegevens, creditcards en identiteitsgegevens in andere apps op uw apparaat.</value>
+    <value>De automatische invuldienst van Bitwarden gebruikt het Android Autofill Framework om je te helpen met het invullen van inloggegevens, creditcards en identiteitsinformatie in andere apps op je apparaat.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Gebruik de Bitwarden-toegankelijkheidsdienst om uw inloggevens automatisch in te laten vullen.</value>
+    <value>Gebruik de Bitwarden automatische invuldienst voor het automatisch invullen van je inloggevens.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Open instellingen voor automatisch invullen</value>
@@ -1166,19 +1166,19 @@
     <comment>What Apple calls their facial recognition reader.</comment>
   </data>
   <data name="FaceIDDirection" xml:space="preserve">
-    <value>Gebruik Face ID om te verifiëren.</value>
+    <value>Gebruik Face ID voor verificatie.</value>
   </data>
   <data name="UseFaceIDToUnlock" xml:space="preserve">
-    <value>Gebruik Face ID om te ontgrendelen</value>
+    <value>Gebruik Face ID voor ontgrendeling</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
-    <value>Verifieer Face ID</value>
+    <value>Face ID verifiëren</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
-    <value>Het automatisch openen van het Android automatisch invullen-instellingenmenu is mislukt. U kunt het menu handmatig openen via Android-instellingen &gt; Systeem &gt; Taal en invoer &gt; Geavanceerd &gt; Automatisch aanvullen-dienst.</value>
+    <value>Het automatisch openen van het Android automatisch invullen-instellingenmenu is mislukt. Je kunt het menu handmatig openen via Android-instellingen &gt; Systeem &gt; Taal en invoer &gt; Geavanceerd &gt; Automatisch aanvullen-dienst.</value>
   </data>
   <data name="CustomFieldName" xml:space="preserve">
     <value>Naam van aangepast veld</value>
@@ -1196,7 +1196,7 @@
     <value>Nieuw aangepast veld</value>
   </data>
   <data name="SelectTypeField" xml:space="preserve">
-    <value>Wat voor soort aangepast veld wilt u toevoegen?</value>
+    <value>Welk type aangepast veld wil je toevoegen?</value>
   </data>
   <data name="Remove" xml:space="preserve">
     <value>Verwijderen</value>
@@ -1246,16 +1246,16 @@
     <comment>An entity of multiple related people (ex. a team or business organization).</comment>
   </data>
   <data name="HoldYubikeyNearTop" xml:space="preserve">
-    <value>Houd uw Yubikey bij de bovenkant van het apparaat.</value>
+    <value>Houd je Yubikey bij de bovenkant van het apparaat.</value>
   </data>
   <data name="TryAgain" xml:space="preserve">
-    <value>Probeer het opnieuw</value>
+    <value>Opnieuw proberen</value>
   </data>
   <data name="YubiKeyInstructionIos" xml:space="preserve">
-    <value>Houd uw YubiKey NEO bij de achterkant van het apparaat om door te gaan.</value>
+    <value>Houd je YubiKey NEO bij de achterkant van het apparaat om door te gaan.</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
-    <value>De toegankelijkheidsdienst kan nuttig zijn wanneer apps het reguliere automatisch invullen niet ondersteunen.</value>
+    <value>De toegankelijkheidsdienst kan nuttig zijn wanneer apps automatisch invullen niet ondersteunen.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
     <value>Wachtwoord bijgewerkt</value>
@@ -1269,31 +1269,31 @@
     <value>Automatisch invullen geactiveerd!</value>
   </data>
   <data name="MustLogInMainAppAutofill" xml:space="preserve">
-    <value>U moet inloggen op de Bitwarden-app voordat u Automatisch invullen kunt gebruiken.</value>
+    <value>Je moet inloggen op de Bitwarden-app om Automatisch invullen te gebruiken.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
-    <value>Uw inloggevens zijn nu gemakkelijk bereikbaar vanaf het toetsenbord bij het inloggen op apps en websites.</value>
+    <value>Je inloggevens zijn nu gemakkelijk vanaf het toetsenbord bereikbaar bij het inloggen op apps en websites.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
-    <value>Het is raadzaam Automatisch invullen door andere apps uit te schakelen als u niet van plan bent om deze te gebruiken.</value>
+    <value>We adviseren Automatisch invullen door andere apps uit te schakelen als je niet van plan bent om deze te gebruiken.</value>
   </data>
   <data name="BitwardenAutofillDescription" xml:space="preserve">
-    <value>Open uw kluis rechtstreeks vanaf uw toetsenbord om wachtwoorden snel automatisch te laten invullen.</value>
+    <value>Open je kluis rechtstreeks vanaf je toetsenbord om wachtwoorden snel automatisch te laten invullen.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
-    <value>Voer de volgende stappen uit om Automatisch invullen van wachtwoorden in te schakelen:</value>
+    <value>Voer de volgende stappen uit voor het inschakelen van Automatisch invullen van wachtwoorden:</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
     <value>1. Ga naar de iOS-app "Instellingen"</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Tik op "Wachtwoorden &amp; Accounts"</value>
+    <value>2. Tik op "Wachtwoorden en accounts"</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
-    <value>3. Tik op "Wachtwoorden automatisch invullen"</value>
+    <value>3. Tik op "Vul automatisch in"</value>
   </data>
   <data name="AutofillTurnOn4" xml:space="preserve">
-    <value>4. Activeer Automatisch invullen</value>
+    <value>4. Activeer "Vul automatisch in"</value>
   </data>
   <data name="AutofillTurnOn5" xml:space="preserve">
     <value>5. Selecteer "Bitwarden"</value>
@@ -1302,7 +1302,7 @@
     <value>Wachtwoord automatisch invullen</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
-    <value>De eenvoudigste manier om nieuwe logins aan uw kluis toe te voegen is door gebruik te maken van de Bitwarden Password AutoFill extensie. Leer meer over het gebruik van de Bitwarden Password AutoFill extensie door te navigeren naar het "Instellingen" scherm.</value>
+    <value>De eenvoudigste manier om nieuwe logins aan je kluis toe te voegen is door gebruik te maken van de Bitwarden Password AutoFill extensie. Leer meer over het gebruik van de Bitwarden Password AutoFill extensie via "Instellingen".</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
     <value>Ongeldig e-mailadres.</value>
@@ -1320,7 +1320,7 @@
     <value>Veilige notities</value>
   </data>
   <data name="AllItems" xml:space="preserve">
-    <value>Alle Items</value>
+    <value>Alle items</value>
   </data>
   <data name="URIs" xml:space="preserve">
     <value>URI's</value>
@@ -1334,10 +1334,10 @@
     <value>Controleer of wachtwoord is gelekt.</value>
   </data>
   <data name="PasswordExposed" xml:space="preserve">
-    <value>Dit wachtwoord is {0} keer aangetroffen in datalekken. U zou het moeten veranderen.</value>
+    <value>Dit wachtwoord is {0} keer gelekt. Je zou het moeten veranderen.</value>
   </data>
   <data name="PasswordSafe" xml:space="preserve">
-    <value>Dit wachtwoord is niet gevonden in bekende datalekken. Het zou veilig te gebruiken moeten zijn.</value>
+    <value>Dit wachtwoord is niet gevonden in de bekende datalekken. Het kan veilig gebruikt worden.</value>
   </data>
   <data name="IdentityName" xml:space="preserve">
     <value>Identiteitsnaam</value>
@@ -1391,19 +1391,19 @@
     <value>Item is gedeeld.</value>
   </data>
   <data name="SelectOneCollection" xml:space="preserve">
-    <value>U moet ten minste één collectie selecteren.</value>
+    <value>Je moet ten minste één collectie selecteren.</value>
   </data>
   <data name="Share" xml:space="preserve">
     <value>Delen</value>
   </data>
   <data name="ShareItem" xml:space="preserve">
-    <value>Object delen</value>
+    <value>Item delen</value>
   </data>
   <data name="NoOrgsToList" xml:space="preserve">
     <value>Geen organisaties om weer te geven.</value>
   </data>
   <data name="ShareDesc" xml:space="preserve">
-    <value>Kies een organisatie waarmee u dit item wil delen. Door het delen krijgt de organisatie de eigendomsrechten van het item. U bent niet langer meer de directe eigenaar van het item wanneer u deze deelt.</value>
+    <value>Kies een organisatie waarmee je dit item wil delen. Door het delen krijgt de organisatie de eigendomsrechten van het item. Je bent niet langer meer de directe eigenaar van het item wanneer je deze deelt.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
     <value>Aantal woorden</value>
@@ -1412,7 +1412,7 @@
     <value>Wachtwoordzin</value>
   </data>
   <data name="WordSeparator" xml:space="preserve">
-    <value>Woordscheidingsteken</value>
+    <value>Scheidingsteken</value>
   </data>
   <data name="Clear" xml:space="preserve">
     <value>Wissen</value>
@@ -1426,15 +1426,15 @@
     <value>Er zijn geen mappen om weer te geven.</value>
   </data>
   <data name="FingerprintPhrase" xml:space="preserve">
-    <value>Vingerafdrukfrase</value>
+    <value>Vingerafdrukzin</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="YourAccountsFingerprint" xml:space="preserve">
-    <value>Uw account's vingerafdrukfrase</value>
+    <value>Vingerafdrukzin van je account</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="ShareVaultConfirmation" xml:space="preserve">
-    <value>Met een organisatie-account kunt u een Bitwarden-kluis met anderen delen. Wilt u op de website bitwarden.com meer informatie lezen?</value>
+    <value>Met een organisatie-account kunt je een Bitwarden-kluis met anderen delen. Wil je naar de website bitwarden.com om meer informatie te lezen?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
     <value>Kluis exporteren</value>
@@ -1462,10 +1462,10 @@
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
-    <value>Uw kluis is vergrendeld. Controleer uw hoofdwachtwoord om door te gaan.</value>
+    <value>Je kluis is vergrendeld. Voor je hoofdwachtwoord in om door te gaan.</value>
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
-    <value>Uw kluis is vergrendeld. Verifieer uw PIN-code om door te gaan.</value>
+    <value>Je kluis is vergrendeld. Voer je PIN-code in om door te gaan.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Donker</value>
@@ -1498,7 +1498,7 @@
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="ClearClipboardDescription" xml:space="preserve">
-    <value>Automatisch gekopieerde waarden van uw klembord wissen.</value>
+    <value>Automatisch gekopieerde waarden van je klembord wissen.</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="DefaultUriMatchDetection" xml:space="preserve">
@@ -1506,14 +1506,14 @@
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
-    <value>Kies de standaardmethode voor detectie van URI-overeenkomsten voor aanmeldingen, voor acties zoals automatisch aanvullen.</value>
+    <value>Kies de standaardmethode voor detectie van URI-overeenkomsten voor logins bij acties, zoals automatisch invullen.</value>
   </data>
   <data name="Theme" xml:space="preserve">
     <value>Thema</value>
     <comment>Color theme</comment>
   </data>
   <data name="ThemeDescription" xml:space="preserve">
-    <value>Het kleurenthema wijzigen.</value>
+    <value>Het kleurenthema van de applicatie wijzigen.</value>
   </data>
   <data name="RestartIsRequired" xml:space="preserve">
     <value>Herstart vereist.</value>
@@ -1529,10 +1529,10 @@
     <value>Afsluiten</value>
   </data>
   <data name="ExitConfirmation" xml:space="preserve">
-    <value>Weet u zeker dat u Bitwarden wilt afsluiten?</value>
+    <value>Weet je zeker dat je Bitwarden wilt afsluiten?</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
-    <value>You you want to require unlocking with your master password when the application is restarted?</value>
+    <value>Wil je verplicht ontgrendelen met je hoofdwachtwoord zodra de applicatie opnieuw wordt gestart?</value>
   </data>
   <data name="Black" xml:space="preserve">
     <value>Zwart</value>
@@ -1542,29 +1542,29 @@
     <value>Geblokkeerde URI's</value>
   </data>
   <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>URI's die op de zwarte lijst staan, worden niet automatisch ingevuld. De lijst moet met komma's gescheiden zijn. Bijv: "https://twitter.com, androidapp://com.twitter.android".</value>
+    <value>Geblokkeerde URI's worden niet automatisch ingevuld. De lijst moet met komma's gescheiden zijn. Bijv: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
   <data name="DisableSavePrompt" xml:space="preserve">
-    <value>"Notificatie bij Nieuwe Site" deactiveren</value>
+    <value>"Notificatie bij nieuwe site" uitschakelen</value>
   </data>
   <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>De "Notificatie bij Nieuwe Site" vraagt automatisch om nieuwe sites op te slaan in je kluis wanneer je voor de eerste keer inlogt.</value>
+    <value>De "Notificatie bij nieuwe site" vraagt automatisch om nieuwe sites op te slaan in je kluis wanneer je voor de eerste keer inlogt.</value>
   </data>
   <data name="LockOptionOnRestart" xml:space="preserve">
-    <value>Na Herstart</value>
+    <value>Na herstarten van de app</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>Automatisch invullen maakt het gemakkelijk om veilig toegang te krijgen tot uw Bitwarden kluis van andere websites en apps. Het lijkt erop dat u de auto-invullen service voor Bitwarden niet hebt ingeschakeld. Schakel automatisch invullen voor Bitwarden in vanuit het "Instellingen" scherm.</value>
+    <value>Automatisch invullen maakt het gemakkelijk om veilig toegang te krijgen tot je Bitwarden-kluis vanuit andere websites en apps. Het lijkt erop dat je de auto-invullen service voor Bitwarden niet hebt ingeschakeld. Schakel automatisch invullen voor Bitwarden in via "Instellingen".</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
-    <value>Uw themawijzigingen worden toegepast wanneer de app opnieuw wordt gestart.</value>
+    <value>Je themawijzigingen worden toegepast wanneer de app opnieuw wordt gestart.</value>
   </data>
   <data name="Capitalize" xml:space="preserve">
     <value>Beginhoofdletters</value>
     <comment>ex. Uppercase the first character of a word.</comment>
   </data>
   <data name="IncludeNumber" xml:space="preserve">
-    <value>Nummer opnemen</value>
+    <value>Cijfer toevoegen</value>
   </data>
   <data name="Download" xml:space="preserve">
     <value>Downloaden</value>
@@ -1573,6 +1573,6 @@
     <value>Gedeeld</value>
   </data>
   <data name="ToggleVisibility" xml:space="preserve">
-    <value>Toggle Visiblity</value>
+    <value>Zichtbaarheid wisselen</value>
   </data>
 </root>

@@ -1542,7 +1542,7 @@
     <value>黑名单 URI</value>
   </data>
   <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>URIs that are blacklisted will not offer auto-fill. The list of apps should be comma separated. Ex: "https://twitter.com, androidapp://com.twitter.android".</value>
+    <value>列入黑名单的URI将不提供自动填充。列表应以逗号分隔。例如："https://twitter.com, androidapp://com.twitter.android"。</value>
   </data>
   <data name="DisableSavePrompt" xml:space="preserve">
     <value>禁用保存提示</value>

@@ -128,7 +128,7 @@ Passwortdiebstahl ist ein echtes Problem. Die von dir verwendeten Webseiten und 
 
 Sicherheitsexperten empfehlen daher, dass für jeden Account ein anderes, zufällig generiertes Passwort verwendet wird. Aber wie sollst du dir all diese Passwörter merken? Bitwarden hilft dir dabei, deine Passwörter zu erstellen, speichern und zu verwalten.
 
-Bitwarden speichert all deine Zugangsdaten in einem verschlüsselten Tresor, der mit allen Geräten synchronisiert wird. Da er komplett verschlüsselt ist, bevor er überhaupt dein Gerät verlässt, hast nur du Zugriff auf deine Daten. Nicht einmal Bitwarden kann deine Daten lesen, selbst, wenn wir es wollten. Deine Daten sind mit einer AES-256-Bit-Verschlüsselung, sowie Salted Hashing und PBKDR2 SHA-256 abgesichert.
+Bitwarden speichert all deine Zugangsdaten in einem verschlüsselten Tresor, der mit allen Geräten synchronisiert wird. Da er komplett verschlüsselt ist, bevor er überhaupt dein Gerät verlässt, hast nur du Zugriff auf deine Daten. Nicht einmal Bitwarden kann deine Daten lesen, selbst, wenn wir es wollten. Deine Daten sind mit einer AES-256-Bit-Verschlüsselung, sowie Salted Hashing und PBKDF2 SHA-256 abgesichert.
 
 Bitwarden ist zu 100% Open Source. Der Source-Code ist auf GitHub verfügbar - jeder kann den Code einsehen, überprüfen und zum Projekt beitragen.</value>
     <comment>Max 4000 characters</comment>
