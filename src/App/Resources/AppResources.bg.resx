@@ -501,7 +501,7 @@
     <value>Получаване на подсказка за главната парола</value>
   </data>
   <data name="ImportItems" xml:space="preserve">
-    <value>Внасяне на записи</value>
+    <value>Импортиране на елементи</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
     <value>Можете да внасяте записи в трезора си през уеб сайта bitwarden.com. Искате ли да се отвори?</value>
