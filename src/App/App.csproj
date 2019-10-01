@@ -18,7 +18,7 @@
     <PackageReference Include="Refractored.FloatingActionButtonForms" Version="2.1.0" />
     <PackageReference Include="Xamarin.Essentials" Version="1.1.0" />
     <PackageReference Include="Xamarin.FFImageLoading.Forms" Version="2.4.11.982" />
-    <PackageReference Include="Xamarin.Forms" Version="3.6.0.344457" />
+    <PackageReference Include="Xamarin.Forms" Version="3.6.0.709228" />
     <PackageReference Include="ZXing.Net.Mobile.Forms" Version="2.1.47" />
   </ItemGroup>
 
