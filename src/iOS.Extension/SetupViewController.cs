@@ -11,7 +11,9 @@ namespace Bit.iOS.Extension
     {
         public SetupViewController(IntPtr handle)
             : base(handle)
-        { }
+        {
+            ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
+        }
 
         public Context Context { get; set; }
         public LoadingViewController LoadingController { get; set; }

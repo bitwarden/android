@@ -19,7 +19,9 @@ namespace Bit.iOS.Autofill
 
         public CredentialProviderViewController(IntPtr handle)
             : base(handle)
-        { }
+        {
+            ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
+        }
 
         public override void ViewDidLoad()
         {

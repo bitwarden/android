@@ -8,7 +8,9 @@ namespace Bit.iOS.Core.Controllers
     {
         public ExtendedUIViewController(IntPtr handle)
             : base(handle)
-        { }
+        {
+            ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
+        }
 
         public override void ViewWillAppear(bool animated)
         {
