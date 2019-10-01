@@ -118,42 +118,44 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Title" xml:space="preserve">
-    <value>Bitwarden - Gratis wachtwoordbeheerder</value>
+    <value>Bitwarden - Wachtwoordbeheer</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="ShortDescription" xml:space="preserve">
-    <value>Bitwarden is een login- en wachtwoordbeheerder waardoor u online veilig blijft.</value>
+    <value>Bitwarden is een oplossing voor login- en wachtwoordbeheer waardoor je online veilig blijft.</value>
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>Bitwarden is de makkelijkste en veiligste manier om al uw logins en wachtwoorden op te slaan en deze te synchroniseren tussen al uw apparaten.
+    <value>Bitwarden is de meest eenvoudige en veilige manier voor het opslaan van al je logins en wachtwoorden die ze ook nog eens synchroniseert tussen al je apparaten.
 
-Diefstal van wachtwoorden is een ernstig probleem. De websites en apps die u gebruikt worden dagelijks aangevallen. Beveiligingslekken komen voor en wachtwoorden worden gestolen. Als u dezelfde wachtwoorden gebruikt voor meerdere apps en websites, kunnen hackers makkelijk toegang krijgen tot uw e-mail, bankgegevens en andere belangrijke accounts.
+Diefstal van wachtwoorden is een ernstig probleem. De websites en apps die je gebruikt worden dagelijks aangevallen. Beveiligingslekken komen voor en wachtwoorden worden gestolen. Als je hetzelfde wachtwoord gebruikt voor meerdere apps en websites, kunnen hackers gemakkelijk toegang verkrijgen tot je e-mail, bankgegevens en andere belangrijke accounts.
 
-Beveiligingsexperts bevelen aan dat u een verschillend, willekeurig gegenereerd wachtwoord gebruikt voor ieder account. Maar hoe beheer je al die wachtwoorden? Bitwarden maakt het voor u gemakkelijk om ze te genereren, op te slaan en te gebruiken.
+Beveiligingsexperts raden aan om voor lek account een verschillend, willekeurig gegenereerd wachtwoord te gebruiken. Maar hoe beheer je al die wachtwoorden? Bitwarden maakt het je gemakkelijk om deze te genereren, op te slaan en te gebruiken.
 
-Bitwarden slaat al uw logins op in een versleutelde kluis die gesynchroniseerd wordt tussen al uw apparaten. Omdat het volledig versleuteld is voor het zelfs maar het internet opgaat, heeft alleen u toegang tot uw gegevens. Zelfs het Bitwarden-team kan niets uitlezen, zelfs al zouden we dat willen. Uw gegevens zijn beveiligd met AES-256 bit encryptie, salted hashing en PBKDF2 SHA-256.</value>
+Bitwarden slaat al jouw logins op in een versleutelde kluis en synchroniseert deze tussen al je apparaten. Omdat je kluis volledig versleuteld is voor deze zelfs maar het internet opgaat, heb alleen jij toegang tot je gegevens. Zelfs het Bitwarden-team kan het niet lezen, al zouden we dat willen. Jouw gegevens zijn beveiligd met AES-256 bit-versleuteling, salted hashing en PBKDF2 SHA-256.
+
+Bitwarden is 100% open source software. De broncode voor Bitwarden staat op GitHub en iedereen kan het bekijken, beoordelen en een bijdrage leveren.</value>
     <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
-    <value>Een veilige en gratis wachtwoordbeheerder voor al uw apparaten</value>
+    <value>Een veilige en gratis oplossing voor wachtwoordbeheer voor al je apparaten</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Beheer al uw logins en wachtwoorden vanuit een beveiligde kluis</value>
+    <value>Al je logins en wachtwoorden vanuit een beveiligde kluis beheren</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Genereer automatisch sterke, willekeurige en veilige wachtwoorden</value>
+    <value>Automatische sterke, willekeurige en veilige wachtwoorden genereren</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Bescherm uw kluis met een vingerafdruk, PIN-code of hoofdwachtwoord</value>
+    <value>Bescherm je kluis met een vingerafdruk, PIN-code of hoofdwachtwoord</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Automatische invulling van uw logins in uw webbrowser en andere apps</value>
+    <value>Automatisch invullen van logingegevens vanuit webbrowser en andere apps</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Synchroniseer en krijg toegang tot uw kluis op meerdere apparaten
+    <value>Synchronisatie en toegang tot je kluis op verschillende apparaten
 
-- Telefoon
+- Smartphone
 - Tablet
 - Computer
 - Web (internet)</value>
