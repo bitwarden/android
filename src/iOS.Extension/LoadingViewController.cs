@@ -395,7 +395,7 @@ namespace Bit.iOS.Extension
                 _initedHockeyApp = true;
             }
             iOSCoreHelpers.Bootstrap();
-            iOSCoreHelpers.AppearanceAdjustments();
+            iOSCoreHelpers.AppearanceAdjustments(deviceActionService);
         }
 
         private bool IsLocked()

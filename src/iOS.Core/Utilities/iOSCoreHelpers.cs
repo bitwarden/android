@@ -72,9 +72,9 @@ namespace Bit.iOS.Core.Utilities
             var bootstrapTask = BootstrapAsync();
         }
 
-        public static void AppearanceAdjustments()
+        public static void AppearanceAdjustments(IDeviceActionService deviceActionService)
         {
-            ThemeHelpers.SetAppearance(ThemeManager.GetTheme(false));
+            ThemeHelpers.SetAppearance(ThemeManager.GetTheme(false), deviceActionService.UsingDarkTheme());
             UIApplication.SharedApplication.StatusBarHidden = false;
             UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.LightContent;
         }

@@ -59,7 +59,7 @@ namespace Bit.iOS
             _eventService = ServiceContainer.Resolve<IEventService>("eventService");
 
             LoadApplication(new App.App(null));
-            iOSCoreHelpers.AppearanceAdjustments();
+            iOSCoreHelpers.AppearanceAdjustments(_deviceActionService);
             ZXing.Net.Mobile.Forms.iOS.Platform.Init();
 
             _broadcasterService.Subscribe(nameof(AppDelegate), async (message) =>

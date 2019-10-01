@@ -6,6 +6,7 @@ namespace Bit.iOS.Core.Utilities
     public static class ThemeHelpers
     {
         public static bool LightTheme = true;
+        public static bool UsingOsDarkTheme = false;
         public static UIColor SplashBackgroundColor = Xamarin.Forms.Color.FromHex("#efeff4").ToUIColor();
         public static UIColor BackgroundColor = Xamarin.Forms.Color.FromHex("#ffffff").ToUIColor();
         public static UIColor MutedColor = Xamarin.Forms.Color.FromHex("#777777").ToUIColor();
@@ -18,8 +19,9 @@ namespace Bit.iOS.Core.Utilities
         public static UIColor NavBarBackgroundColor = Xamarin.Forms.Color.FromHex("#3c8dbc").ToUIColor();
         public static UIColor NavBarTextColor = Xamarin.Forms.Color.FromHex("#ffffff").ToUIColor();
 
-        public static void SetAppearance(string theme)
+        public static void SetAppearance(string theme, bool usingOsDarkTheme)
         {
+            UsingOsDarkTheme = usingOsDarkTheme;
             SetThemeVariables(theme);
             UINavigationBar.Appearance.ShadowImage = new UIImage();
             UINavigationBar.Appearance.SetBackgroundImage(new UIImage(), UIBarMetrics.Default);
@@ -30,9 +32,9 @@ namespace Bit.iOS.Core.Utilities
             }
         }
 
-        public static void SetExtensionAppearance(string theme)
+        public static void SetExtensionAppearance(string theme, bool usingOsDarkTheme)
         {
-            SetAppearance(theme);
+            SetAppearance(theme, usingOsDarkTheme);
             UIView.Appearance.BackgroundColor = BackgroundColor;
             UILabel.Appearance.TextColor = TextColor;
             UITextField.Appearance.TintColor = TextColor;
@@ -57,6 +59,11 @@ namespace Bit.iOS.Core.Utilities
         private static void SetThemeVariables(string theme)
         {
             LightTheme = false;
+            if(string.IsNullOrWhiteSpace(theme) && UsingOsDarkTheme)
+            {
+                theme = "dark";
+            }
+
             if(theme == "dark")
             {
                 var whiteColor = Xamarin.Forms.Color.FromHex("#ffffff").ToUIColor();

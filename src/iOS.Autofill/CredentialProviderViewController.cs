@@ -276,7 +276,7 @@ namespace Bit.iOS.Autofill
                 _initedHockeyApp = true;
             }
             iOSCoreHelpers.Bootstrap();
-            iOSCoreHelpers.AppearanceAdjustments();
+            iOSCoreHelpers.AppearanceAdjustments(deviceActionService);
         }
 
         private void InitAppIfNeeded()
