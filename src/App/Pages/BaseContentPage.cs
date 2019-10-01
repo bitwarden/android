@@ -4,6 +4,8 @@ using Bit.Core.Utilities;
 using System;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using Xamarin.Forms.PlatformConfiguration;
+using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
 
 namespace Bit.App.Pages
 {
@@ -13,6 +15,14 @@ namespace Bit.App.Pages
 
         protected int ShowModalAnimationDelay = 400;
         protected int ShowPageAnimationDelay = 100;
+
+        public BaseContentPage()
+        {
+            if (Device.RuntimePlatform == Device.iOS)
+            {
+                On<iOS>().SetModalPresentationStyle(UIModalPresentationStyle.FullScreen);
+            }
+        }
 
         public DateTime? LastPageAction { get; set; }
 
