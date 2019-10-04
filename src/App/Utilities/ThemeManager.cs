@@ -38,7 +38,7 @@ namespace Bit.App.Utilities
             }
             else if(name == "light")
             {
-                Application.Current.Resources.MergedDictionaries.Add(new Nord());
+                Application.Current.Resources.MergedDictionaries.Add(new Light());
                 UsingLightTheme = true;
             }
             else
