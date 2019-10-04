@@ -35,7 +35,8 @@
         <Setter Property="OnColor"
                 Value="{StaticResource SwitchOnColor}" />
     </Style>
-    <Style TargetType="SearchBar">
+    <Style TargetType="SearchBar"
+           ApplyToDerivedTypes="True">
         <Setter Property="BackgroundColor"
                 Value="{StaticResource ListHeaderBackgroundColor}" />
         <Setter Property="TextColor"

@@ -34,7 +34,7 @@
                     VerticalOptions="CenterAndExpand"
                     Clicked="BackButton_Clicked"
                     x:Name="_backButton" />
-                <SearchBar
+                <controls:ExtendedSearchBar
                     x:Name="_searchBar"
                     HorizontalOptions="FillAndExpand"
                     TextChanged="SearchBar_TextChanged"

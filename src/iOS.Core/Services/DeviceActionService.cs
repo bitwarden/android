@@ -353,7 +353,15 @@ namespace Bit.iOS.Core.Services
 
         public bool UsingDarkTheme()
         {
-            return UIScreen.MainScreen.TraitCollection.UserInterfaceStyle == UIUserInterfaceStyle.Dark;
+            try
+            {
+                if(SystemMajorVersion() > 12)
+                {
+                    return UIScreen.MainScreen.TraitCollection.UserInterfaceStyle == UIUserInterfaceStyle.Dark;
+                }
+            }
+            catch { }
+            return false;
         }
 
         private void ImagePicker_FinishedPickingMedia(object sender, UIImagePickerMediaPickedEventArgs e)
