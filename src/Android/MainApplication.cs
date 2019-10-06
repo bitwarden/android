@@ -42,11 +42,6 @@ namespace Bit.Droid
                 RegisterLocalServices();
                 var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
                 ServiceContainer.Init(deviceActionService.DeviceUserAgent);
-                if(App.Migration.MigrationHelpers.NeedsMigration())
-                {
-                    var task = App.Migration.MigrationHelpers.PerformMigrationAsync();
-                    Task.Delay(2000).Wait();
-                }
             }
 #if !FDROID
             if(Build.VERSION.SdkInt <= BuildVersionCodes.Kitkat)
@@ -74,12 +69,6 @@ namespace Bit.Droid
         private void RegisterLocalServices()
         {
             ServiceContainer.Register<ILogService>("logService", new AndroidLogService());
-            ServiceContainer.Register("settingsShim", new App.Migration.SettingsShim());
-            if(App.Migration.MigrationHelpers.NeedsMigration())
-            {
-                ServiceContainer.Register<App.Migration.Abstractions.IOldSecureStorageService>(
-                    "oldSecureStorageService", new Migration.AndroidKeyStoreStorageService());
-            }
 
             Refractored.FabControl.Droid.FloatingActionButtonViewRenderer.Init();
             // Note: This might cause a race condition. Investigate more.

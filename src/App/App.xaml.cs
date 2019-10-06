@@ -97,10 +97,6 @@ namespace Bit.App
                 }
                 else if(message.Command == "logout")
                 {
-                    if(Migration.MigrationHelpers.Migrating)
-                    {
-                        return;
-                    }
                     Device.BeginInvokeOnMainThread(async () => await LogOutAsync(false));
                 }
                 else if(message.Command == "loggedOut")
@@ -355,10 +351,6 @@ namespace Bit.App
 
         private void SyncIfNeeded()
         {
-            if(Migration.MigrationHelpers.Migrating)
-            {
-                return;
-            }
             if(Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
             {
                 return;

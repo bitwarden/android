@@ -124,22 +124,19 @@ namespace Bit.App.Utilities
         {
             var currentBuild = deviceActionService.GetBuildNumber();
             var lastBuild = await storageService.GetAsync<string>(Constants.LastBuildKey);
-            if(!Migration.MigrationHelpers.NeedsMigration())
+            if(lastBuild == null)
             {
-                if(lastBuild == null)
+                // Installed
+                var currentLock = await storageService.GetAsync<int?>(Constants.LockOptionKey);
+                if(currentLock == null)
                 {
-                    // Installed
-                    var currentLock = await storageService.GetAsync<int?>(Constants.LockOptionKey);
-                    if(currentLock == null)
-                    {
-                        await storageService.SaveAsync(Constants.LockOptionKey, 15);
-                    }
+                    await storageService.SaveAsync(Constants.LockOptionKey, 15);
                 }
-                else if(lastBuild != currentBuild)
-                {
-                    // Updated
-                    var tasks = Task.Run(() => syncService.FullSyncAsync(true));
-                }
+            }
+            else if(lastBuild != currentBuild)
+            {
+                // Updated
+                var tasks = Task.Run(() => syncService.FullSyncAsync(true));
             }
             if(lastBuild != currentBuild)
             {

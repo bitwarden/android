@@ -45,11 +45,6 @@ namespace Bit.iOS
         {
             Forms.Init();
             InitApp();
-            if(App.Migration.MigrationHelpers.NeedsMigration())
-            {
-                var task = App.Migration.MigrationHelpers.PerformMigrationAsync();
-                Task.Delay(5000).Wait();
-            }
 
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
@@ -265,12 +260,6 @@ namespace Bit.iOS
 
             // Migration services
             ServiceContainer.Register<ILogService>("logService", new ConsoleLogService());
-            ServiceContainer.Register("settingsShim", new App.Migration.SettingsShim(iOSCoreHelpers.AppGroupId));
-            if(App.Migration.MigrationHelpers.NeedsMigration())
-            {
-                ServiceContainer.Register<App.Migration.Abstractions.IOldSecureStorageService>(
-                    "oldSecureStorageService", new Migration.KeyChainStorageService());
-            }
 
             // Note: This might cause a race condition. Investigate more.
             Task.Run(() =>

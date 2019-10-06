@@ -116,7 +116,6 @@
     <Compile Include="Effects\FixedSizeEffect.cs" />
     <Compile Include="Effects\SelectableLabelEffect.cs" />
     <Compile Include="Effects\TabBarEffect.cs" />
-    <Compile Include="Migration\AndroidKeyStoreStorageService.cs" />
     <Compile Include="Push\FirebaseInstanceIdService.cs" />
     <Compile Include="Push\FirebaseMessagingService.cs" />
     <Compile Include="Receivers\ClearClipboardAlarmReceiver.cs" />

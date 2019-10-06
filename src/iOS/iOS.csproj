@@ -134,7 +134,6 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <Compile Include="Migration\KeyChainStorageService.cs" />
     <Compile Include="NFCReaderDelegate.cs" />
     <Compile Include="Renderers\CustomButtonRenderer.cs" />
     <Compile Include="Renderers\CustomSearchBarRenderer.cs" />
