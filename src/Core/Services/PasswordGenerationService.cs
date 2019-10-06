@@ -51,17 +51,36 @@ namespace Bit.Core.Services
             {
                 options.MinUppercase = 1;
             }
+            else if(!options.Uppercase.GetValueOrDefault())
+            {
+                options.MinUppercase = 0;
+            }
+
             if(options.Lowercase.GetValueOrDefault() && options.MinLowercase.GetValueOrDefault() <= 0)
             {
                 options.MinLowercase = 1;
             }
+            else if(!options.Lowercase.GetValueOrDefault())
+            {
+                options.MinLowercase = 0;
+            }
+
             if(options.Number.GetValueOrDefault() && options.MinNumber.GetValueOrDefault() <= 0)
             {
                 options.MinNumber = 1;
             }
+            else if(!options.Number.GetValueOrDefault())
+            {
+                options.MinNumber = 0;
+            }
+
             if(options.Special.GetValueOrDefault() && options.MinSpecial.GetValueOrDefault() <= 0)
             {
                 options.MinSpecial = 1;
+            }
+            else if(!options.Special.GetValueOrDefault())
+            {
+                options.MinSpecial = 0;
             }
 
             if(options.Length.GetValueOrDefault() < 1)
@@ -69,7 +88,7 @@ namespace Bit.Core.Services
                 options.Length = 10;
             }
             var minLength = options.MinSpecial.GetValueOrDefault() + options.MinLowercase.GetValueOrDefault() +
-                options.MinNumber.GetValueOrDefault() + options.MinSpecial.GetValueOrDefault();
+                options.MinNumber.GetValueOrDefault() + options.MinUppercase.GetValueOrDefault();
             if(options.Length < minLength)
             {
                 options.Length = minLength;
