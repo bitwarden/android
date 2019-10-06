@@ -39,7 +39,7 @@ namespace Bit.App.Pages
                 }
                 catch(Exception e) when(e.Message.Contains("No key."))
                 {
-                    await Task.Delay(5000);
+                    await Task.Delay(1000);
                     await _vm.LoadAsync();
                 }
             }, _mainContent);
