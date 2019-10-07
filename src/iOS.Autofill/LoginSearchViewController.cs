@@ -39,6 +39,12 @@ namespace Bit.iOS.Autofill
             await ((TableSource)TableView.Source).LoadItemsAsync(false, SearchBar.Text);
         }
 
+        public override void ViewDidAppear(bool animated)
+        {
+            base.ViewDidAppear(animated);
+            SearchBar?.BecomeFirstResponder();
+        }
+
         partial void CancelBarButton_Activated(UIBarButtonItem sender)
         {
             if(FromList)
