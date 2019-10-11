@@ -67,6 +67,7 @@ namespace Bit.Droid.Accessibility
             new Browser("jp.co.fenrir.android.sleipnir_black", "url_text"),
             new Browser("jp.co.fenrir.android.sleipnir_test", "url_text"),
             new Browser("com.vivaldi.browser", "url_bar"),
+            new Browser("com.feedback.browser.wjbrowser", "addressbar_url"),
         }.ToDictionary(n => n.PackageName);
 
         // Known packages to skip
@@ -93,6 +94,10 @@ namespace Bit.Droid.Accessibility
         {
             var testNodes = GetWindowNodes(root, e, n => n.ViewIdResourceName != null && n.Text != null, false);
             var testNodesData = testNodes.Select(n => new { id = n.ViewIdResourceName, text = n.Text });
+            foreach(var node in testNodesData)
+            {
+                System.Diagnostics.Debug.WriteLine("Node: {0} = {1}", node.id, node.text);
+            }
         }
 
         public static string GetUri(AccessibilityNodeInfo root)
