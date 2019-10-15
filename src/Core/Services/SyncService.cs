@@ -71,7 +71,7 @@ namespace Bit.Core.Services
             await _storageService.SaveAsync(string.Format(Keys_LastSyncFormat, userId), date);
         }
 
-        public async Task<bool> FullSyncAsync(bool forceSync)
+        public async Task<bool> FullSyncAsync(bool forceSync, bool allowThrowOnError = false)
         {
             SyncStarted();
             var isAuthenticated = await _userService.IsAuthenticatedAsync();
@@ -106,7 +106,14 @@ namespace Bit.Core.Services
             }
             catch
             {
-                return SyncCompleted(false);
+                if(allowThrowOnError)
+                {
+                    throw;
+                }
+                else
+                {
+                    return SyncCompleted(false);
+                }
             }
         }
 

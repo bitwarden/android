@@ -305,9 +305,17 @@ namespace Bit.App.Pages
                 return;
             }
             await _deviceActionService.ShowLoadingAsync(AppResources.Syncing);
-            await _syncService.FullSyncAsync(false);
-            await _deviceActionService.HideLoadingAsync();
-            _platformUtilsService.ShowToast("success", null, AppResources.SyncingComplete);
+            try
+            {
+                await _syncService.FullSyncAsync(false, true);
+                await _deviceActionService.HideLoadingAsync();
+                _platformUtilsService.ShowToast("success", null, AppResources.SyncingComplete);
+            }
+            catch
+            {
+                await _deviceActionService.HideLoadingAsync();
+                _platformUtilsService.ShowToast("error", null, AppResources.SyncingFailed);
+            }
         }
 
         private async Task LoadDataAsync()

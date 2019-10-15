@@ -8,7 +8,7 @@ namespace Bit.Core.Abstractions
     {
         bool SyncInProgress { get; set; }
 
-        Task<bool> FullSyncAsync(bool forceSync);
+        Task<bool> FullSyncAsync(bool forceSync, bool allowThrowOnError = false);
         Task<DateTime?> GetLastSyncAsync();
         Task SetLastSyncAsync(DateTime date);
         Task<bool> SyncDeleteCipherAsync(SyncCipherNotification notification);
