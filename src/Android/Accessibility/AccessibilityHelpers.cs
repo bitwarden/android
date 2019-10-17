@@ -87,7 +87,8 @@ namespace Bit.Droid.Accessibility
             "com.teslacoilsw.launcher.prime",
             "is.shortcut",
             "me.craftsapp.nlauncher",
-            "com.ss.squarehome2"
+            "com.ss.squarehome2",
+            "com.treydev.pns"
         };
 
         public static void PrintTestData(AccessibilityNodeInfo root, AccessibilityEvent e)
