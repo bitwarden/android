@@ -93,7 +93,11 @@ namespace Bit.App.Pages
             catch(ApiException e)
             {
                 await _deviceActionService.HideLoadingAsync();
-                await Page.DisplayAlert(AppResources.AnErrorHasOccurred, e.Error.GetSingleMessage(), AppResources.Ok);
+                if(e?.Error != null)
+                {
+                    await _platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(),
+                        AppResources.AnErrorHasOccurred);
+                }
             }
             return false;
         }
@@ -128,7 +132,11 @@ namespace Bit.App.Pages
             catch(ApiException e)
             {
                 await _deviceActionService.HideLoadingAsync();
-                await Page.DisplayAlert(AppResources.AnErrorHasOccurred, e.Error.GetSingleMessage(), AppResources.Ok);
+                if(e?.Error != null)
+                {
+                    await _platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(),
+                        AppResources.AnErrorHasOccurred);
+                }
             }
             return false;
         }

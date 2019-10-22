@@ -213,8 +213,11 @@ namespace Bit.App.Pages
             catch(ApiException e)
             {
                 await _deviceActionService.HideLoadingAsync();
-                await _platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(),
-                    AppResources.AnErrorHasOccurred);
+                if(e?.Error != null)
+                {
+                    await _platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(),
+                        AppResources.AnErrorHasOccurred);
+                }
             }
         }
 

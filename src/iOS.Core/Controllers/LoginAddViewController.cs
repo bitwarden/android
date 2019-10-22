@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Bit.App.Resources;
@@ -191,7 +191,10 @@ namespace Bit.iOS.Core.Controllers
             }
             catch(ApiException e)
             {
-                DisplayAlert(AppResources.AnErrorHasOccurred, e.Error.GetSingleMessage(), AppResources.Ok);
+                if(e?.Error != null)
+                {
+                    DisplayAlert(AppResources.AnErrorHasOccurred, e.Error.GetSingleMessage(), AppResources.Ok);
+                }
             }
         }
 
