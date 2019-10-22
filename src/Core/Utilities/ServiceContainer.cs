@@ -31,8 +31,11 @@ namespace Bit.Core.Utilities
             var cryptoFunctionService = new PclCryptoFunctionService(cryptoPrimitiveService);
             var cryptoService = new CryptoService(storageService, secureStorageService, cryptoFunctionService);
             var tokenService = new TokenService(storageService);
-            var apiService = new ApiService(tokenService, platformUtilsService, (bool expired) => Task.FromResult(0),
-                customUserAgent);
+            var apiService = new ApiService(tokenService, platformUtilsService, (bool expired) =>
+            {
+                messagingService.Send("logout", expired);
+                return Task.FromResult(0);
+            }, customUserAgent);
             var appIdService = new AppIdService(storageService);
             var userService = new UserService(storageService, tokenService);
             var settingsService = new SettingsService(userService, storageService);
@@ -45,8 +48,11 @@ namespace Bit.Core.Utilities
             var lockService = new LockService(cryptoService, userService, platformUtilsService, storageService,
                 folderService, cipherService, collectionService, searchService, messagingService, null);
             var syncService = new SyncService(userService, apiService, settingsService, folderService,
-                cipherService, cryptoService, collectionService, storageService, messagingService,
-                () => messagingService.Send("logout"));
+                cipherService, cryptoService, collectionService, storageService, messagingService, (bool expired) =>
+                {
+                    messagingService.Send("logout", expired);
+                    return Task.FromResult(0);
+                });
             var passwordGenerationService = new PasswordGenerationService(cryptoService, storageService,
                 cryptoFunctionService);
             var totpService = new TotpService(storageService, cryptoFunctionService);

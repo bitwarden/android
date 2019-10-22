@@ -2275,6 +2275,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your login session has expired..
+        /// </summary>
+        public static string LoginExpired {
+            get {
+                return ResourceManager.GetString("LoginExpired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Login.
         /// </summary>
         public static string LogInNoun {

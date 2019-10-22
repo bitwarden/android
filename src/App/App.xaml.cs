@@ -97,7 +97,8 @@ namespace Bit.App
                 }
                 else if(message.Command == "logout")
                 {
-                    Device.BeginInvokeOnMainThread(async () => await LogOutAsync(false));
+                    Device.BeginInvokeOnMainThread(async () =>
+                        await LogOutAsync((message.Data as bool?).GetValueOrDefault()));
                 }
                 else if(message.Command == "loggedOut")
                 {
@@ -240,6 +241,10 @@ namespace Bit.App
             _authService.LogOut(() =>
             {
                 Current.MainPage = new HomePage();
+                if(expired)
+                {
+                    _platformUtilsService.ShowToast("warning", null, AppResources.LoginExpired);
+                }
             });
         }
 
