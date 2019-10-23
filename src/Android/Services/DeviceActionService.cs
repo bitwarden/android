@@ -9,6 +9,7 @@ using Android.App.Assist;
 using Android.Content;
 using Android.Content.PM;
 using Android.Hardware.Biometrics;
+using Android.Hardware.Fingerprints;
 using Android.Nfc;
 using Android.OS;
 using Android.Provider;
@@ -350,11 +351,16 @@ namespace Bit.Droid.Services
 
         public async Task<bool> BiometricAvailableAsync()
         {
-            if(UseNativeBiometric())
+            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            if((int)Build.VERSION.SdkInt >= 29)
             {
-                var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
                 var manager = activity.GetSystemService(Context.BiometricService) as BiometricManager;
                 return manager.CanAuthenticate() == BiometricCode.Success;
+            }
+            else if((int)Build.VERSION.SdkInt == 28)
+            {
+                var manager = activity.GetSystemService(Context.FingerprintService) as FingerprintManager;
+                return manager.IsHardwareDetected && manager.HasEnrolledFingerprints;
             }
             else
             {
