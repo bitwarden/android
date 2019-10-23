@@ -145,6 +145,10 @@ namespace Bit.App.Pages
                     var supportsFace = await _deviceActionService.SupportsFaceBiometricAsync();
                     fingerprintName = supportsFace ? AppResources.FaceID : AppResources.TouchID;
                 }
+                else if(Device.RuntimePlatform == Device.Android && _deviceActionService.UseNativeBiometric())
+                {
+                    fingerprintName = AppResources.Biometrics;
+                }
                 if(item.Name == string.Format(AppResources.UnlockWith, fingerprintName))
                 {
                     await _vm.UpdateFingerprintAsync();

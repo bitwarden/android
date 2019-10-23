@@ -378,7 +378,7 @@ namespace Bit.Droid.Services
         {
             if(string.IsNullOrWhiteSpace(text))
             {
-                text = AppResources.BiometricDirection;
+                text = AppResources.BiometricsDirection;
             }
 
             var activity = (MainActivity)CrossCurrentActivity.Current.Activity;

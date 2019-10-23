@@ -538,11 +538,20 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Biometrics.
+        /// </summary>
+        public static string Biometrics {
+            get {
+                return ResourceManager.GetString("Biometrics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use biometrics to verify..
         /// </summary>
-        public static string BiometricDirection {
+        public static string BiometricsDirection {
             get {
-                return ResourceManager.GetString("BiometricDirection", resourceCulture);
+                return ResourceManager.GetString("BiometricsDirection", resourceCulture);
             }
         }
         
@@ -3828,6 +3837,15 @@ namespace Bit.App.Resources {
         public static string UseAnotherTwoStepMethod {
             get {
                 return ResourceManager.GetString("UseAnotherTwoStepMethod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use Biometrics To Unlock.
+        /// </summary>
+        public static string UseBiometricsToUnlock {
+            get {
+                return ResourceManager.GetString("UseBiometricsToUnlock", resourceCulture);
             }
         }
         

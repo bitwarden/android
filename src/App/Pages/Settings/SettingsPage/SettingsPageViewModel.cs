@@ -331,6 +331,10 @@ namespace Bit.App.Pages
                     fingerprintName = _deviceActionService.SupportsFaceBiometric() ? AppResources.FaceID :
                         AppResources.TouchID;
                 }
+                else if(Device.RuntimePlatform == Device.Android && _deviceActionService.UseNativeBiometric())
+                {
+                    fingerprintName = AppResources.Biometrics;
+                }
                 var item = new SettingsPageListItem
                 {
                     Name = string.Format(AppResources.UnlockWith, fingerprintName),

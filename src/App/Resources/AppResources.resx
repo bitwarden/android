@@ -1578,7 +1578,13 @@
   <data name="LoginExpired" xml:space="preserve">
     <value>Your login session has expired.</value>
   </data>
-  <data name="BiometricDirection" xml:space="preserve">
+  <data name="BiometricsDirection" xml:space="preserve">
     <value>Use biometrics to verify.</value>
+  </data>
+  <data name="Biometrics" xml:space="preserve">
+    <value>Biometrics</value>
+  </data>
+  <data name="UseBiometricsToUnlock" xml:space="preserve">
+    <value>Use Biometrics To Unlock</value>
   </data>
 </root>

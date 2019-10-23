@@ -127,8 +127,18 @@ namespace Bit.App.Pages
             if(FingerprintLock)
             {
                 var supportsFace = await _deviceActionService.SupportsFaceBiometricAsync();
-                FingerprintButtonText = supportsFace ? AppResources.UseFaceIDToUnlock :
-                    AppResources.UseFingerprintToUnlock;
+                if(Device.RuntimePlatform == Device.iOS && supportsFace)
+                {
+                    FingerprintButtonText = AppResources.UseFaceIDToUnlock;
+                }
+                else if(Device.RuntimePlatform == Device.Android && _deviceActionService.UseNativeBiometric())
+                {
+                    FingerprintButtonText = AppResources.UseBiometricsToUnlock;
+                }
+                else
+                {
+                    FingerprintButtonText = AppResources.UseFingerprintToUnlock;
+                }
                 if(autoPromptFingerprint)
                 {
                     var tasks = Task.Run(async () =>
