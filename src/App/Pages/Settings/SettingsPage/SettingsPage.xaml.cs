@@ -142,8 +142,8 @@ namespace Bit.App.Pages
                 var fingerprintName = AppResources.Fingerprint;
                 if(Device.RuntimePlatform == Device.iOS)
                 {
-                    fingerprintName = _deviceActionService.SupportsFaceId() ?
-                        AppResources.FaceID : AppResources.TouchID;
+                    var supportsFace = await _deviceActionService.SupportsFaceBiometricAsync();
+                    fingerprintName = supportsFace ? AppResources.FaceID : AppResources.TouchID;
                 }
                 if(item.Name == string.Format(AppResources.UnlockWith, fingerprintName))
                 {

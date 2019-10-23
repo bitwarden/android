@@ -26,7 +26,7 @@ namespace Bit.Core.Abstractions
         void ShowToast(string type, string title, string[] text, Dictionary<string, object> options = null);
         bool SupportsU2f();
         bool SupportsDuo();
-        Task<bool> SupportsFingerprintAsync();
-        Task<bool> AuthenticateFingerprintAsync(string text = null, string fallbackText = null, Action fallback = null);
+        Task<bool> SupportsBiometricAsync();
+        Task<bool> AuthenticateBiometricAsync(string text = null, string fallbackText = null, Action fallback = null);
     }
 }

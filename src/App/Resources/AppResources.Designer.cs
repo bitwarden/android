@@ -538,6 +538,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use biometrics to verify..
+        /// </summary>
+        public static string BiometricDirection {
+            get {
+                return ResourceManager.GetString("BiometricDirection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Bitwarden.
         /// </summary>
         public static string Bitwarden {

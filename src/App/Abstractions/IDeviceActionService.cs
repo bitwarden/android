@@ -20,7 +20,11 @@ namespace Bit.App.Abstractions
             string okButtonText = null, string cancelButtonText = null, bool numericKeyboard = false,
             bool autofocus = true);
         void RateApp();
-        bool SupportsFaceId();
+        bool SupportsFaceBiometric();
+        Task<bool> SupportsFaceBiometricAsync();
+        Task<bool> BiometricAvailableAsync();
+        bool UseNativeBiometric();
+        Task<bool> AuthenticateBiometricAsync(string text = null);
         bool SupportsNfc();
         bool SupportsCamera();
         bool SupportsAutofillService();

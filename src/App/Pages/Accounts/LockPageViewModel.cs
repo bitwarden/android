@@ -126,7 +126,8 @@ namespace Bit.App.Pages
 
             if(FingerprintLock)
             {
-                FingerprintButtonText = _deviceActionService.SupportsFaceId() ? AppResources.UseFaceIDToUnlock :
+                var supportsFace = await _deviceActionService.SupportsFaceBiometricAsync();
+                FingerprintButtonText = supportsFace ? AppResources.UseFaceIDToUnlock :
                     AppResources.UseFingerprintToUnlock;
                 if(autoPromptFingerprint)
                 {
@@ -266,7 +267,7 @@ namespace Bit.App.Pages
             {
                 return;
             }
-            var success = await _platformUtilsService.AuthenticateFingerprintAsync(null,
+            var success = await _platformUtilsService.AuthenticateBiometricAsync(null,
             PinLock ? AppResources.PIN : AppResources.MasterPassword, () =>
             {
                 var page = Page as LockPage;

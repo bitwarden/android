@@ -62,7 +62,7 @@ namespace Bit.App.Pages
 
         public async Task InitAsync()
         {
-            _supportsFingerprint = await _platformUtilsService.SupportsFingerprintAsync();
+            _supportsFingerprint = await _platformUtilsService.SupportsBiometricAsync();
             var lastSync = await _syncService.GetLastSyncAsync();
             if(lastSync != null)
             {
@@ -255,9 +255,9 @@ namespace Bit.App.Pages
             {
                 _fingerprint = false;
             }
-            else if(await _platformUtilsService.SupportsFingerprintAsync())
+            else if(await _platformUtilsService.SupportsBiometricAsync())
             {
-                _fingerprint = await _platformUtilsService.AuthenticateFingerprintAsync(null,
+                _fingerprint = await _platformUtilsService.AuthenticateBiometricAsync(null,
                     _deviceActionService.DeviceType == Core.Enums.DeviceType.Android ? "." : null);
             }
             if(_fingerprint == current)
@@ -328,8 +328,8 @@ namespace Bit.App.Pages
                 var fingerprintName = AppResources.Fingerprint;
                 if(Device.RuntimePlatform == Device.iOS)
                 {
-                    fingerprintName = _deviceActionService.SupportsFaceId() ?
-                        AppResources.FaceID : AppResources.TouchID;
+                    fingerprintName = _deviceActionService.SupportsFaceBiometric() ? AppResources.FaceID :
+                        AppResources.TouchID;
                 }
                 var item = new SettingsPageListItem
                 {

@@ -216,7 +216,7 @@ namespace Bit.iOS.Core.Controllers
             {
                 return;
             }
-            var success = await _platformUtilsService.AuthenticateFingerprintAsync(null,
+            var success = await _platformUtilsService.AuthenticateBiometricAsync(null,
                 _pinLock ? AppResources.PIN : AppResources.MasterPassword,
                 () => MasterPasswordCell.TextField.BecomeFirstResponder());
             _lockService.FingerprintLocked = !success;
@@ -261,7 +261,7 @@ namespace Bit.iOS.Core.Controllers
                 {
                     if(indexPath.Row == 0)
                     {
-                        var fingerprintButtonText = _controller._deviceActionService.SupportsFaceId() ?
+                        var fingerprintButtonText = _controller._deviceActionService.SupportsFaceBiometric() ?
                             AppResources.UseFaceIDToUnlock : AppResources.UseFingerprintToUnlock;
                         var cell = new ExtendedUITableViewCell();
                         cell.TextLabel.TextColor = ThemeHelpers.PrimaryColor;
