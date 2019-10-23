@@ -351,16 +351,11 @@ namespace Bit.Droid.Services
 
         public async Task<bool> BiometricAvailableAsync()
         {
-            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
-            if((int)Build.VERSION.SdkInt >= 29)
+            if(UseNativeBiometric())
             {
+                var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
                 var manager = activity.GetSystemService(Context.BiometricService) as BiometricManager;
                 return manager.CanAuthenticate() == BiometricCode.Success;
-            }
-            else if((int)Build.VERSION.SdkInt == 28)
-            {
-                var manager = activity.GetSystemService(Context.FingerprintService) as FingerprintManager;
-                return manager.IsHardwareDetected && manager.HasEnrolledFingerprints;
             }
             else
             {
@@ -377,7 +372,7 @@ namespace Bit.Droid.Services
 
         public bool UseNativeBiometric()
         {
-            return (int)Build.VERSION.SdkInt >= 28;
+            return (int)Build.VERSION.SdkInt >= 29;
         }
 
         public Task<bool> AuthenticateBiometricAsync(string text = null)
