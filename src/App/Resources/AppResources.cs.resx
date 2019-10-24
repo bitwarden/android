@@ -997,7 +997,7 @@
     <value>Bezpečnostní kód</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
-    <value>Kreditní karta</value>
+    <value>Karta</value>
   </data>
   <data name="TypeIdentity" xml:space="preserve">
     <value>Identita</value>
@@ -1458,7 +1458,7 @@
     <value>Nastavte svůj PIN kód pro odemknutí trezoru. Pokud se zcela odhlásíte z aplikace bude váš současný PIN bude resetován.</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
-    <value>Přihlášen jako {0} na {1}.</value>
+    <value>Přihlášen jako {0} na {1}.</value>
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
@@ -1542,13 +1542,13 @@
     <value>URI na černé listině</value>
   </data>
   <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>URIs that are blacklisted will not offer auto-fill. The list of apps should be comma separated. Ex: "https://twitter.com, androidapp://com.twitter.android".</value>
+    <value>Pro URI na černé listině nebude nabízeno automatické vyplnění. Záznamy oddělujte čárkou. Např.: „https://twitter.com, androidapp://com.twitter.android“.</value>
   </data>
   <data name="DisableSavePrompt" xml:space="preserve">
     <value>Zakázat výzvu o uložení</value>
   </data>
   <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>"Výzva k uložení" vás automaticky vyzve k uložení nových položek do trezoru, kdykoli je zadáte poprvé.</value>
+    <value>„Výzva k uložení“ vás automaticky vyzve k uložení nových položek do trezoru, kdykoli je poprvé zadáte.</value>
   </data>
   <data name="LockOptionOnRestart" xml:space="preserve">
     <value>Při restartu aplikace</value>
@@ -1574,5 +1574,17 @@
   </data>
   <data name="ToggleVisibility" xml:space="preserve">
     <value>Přepnout viditelnost</value>
+  </data>
+  <data name="LoginExpired" xml:space="preserve">
+    <value>Your login session has expired.</value>
+  </data>
+  <data name="BiometricsDirection" xml:space="preserve">
+    <value>Use biometrics to verify.</value>
+  </data>
+  <data name="Biometrics" xml:space="preserve">
+    <value>Biometrics</value>
+  </data>
+  <data name="UseBiometricsToUnlock" xml:space="preserve">
+    <value>Use Biometrics To Unlock</value>
   </data>
 </root>
