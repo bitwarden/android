@@ -403,7 +403,7 @@
     <value>使用 Bitwarden 无障碍服务在应用和网站自动填写您的登录项目。</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
-    <value>自动填充</value>
+    <value>自动填写服务</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>避免模棱两可</value>
@@ -756,10 +756,10 @@
     <value>向您的密码库中添加新登录项目的最简单方法，就是 Bitwarden 自动填写服务。转到 “设置” 屏幕了解更多有关使用 Bitwarden 自动填写服务的方法。</value>
   </data>
   <data name="Autofill" xml:space="preserve">
-    <value>自动填充</value>
+    <value>自动填写</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
-    <value>你想要自动填充还是查看此登录项目？</value>
+    <value>您要自动填写还是查看此登录项目？</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
     <value>确定要自动登录？并不完全匹配 "{0}" 。</value>
@@ -783,13 +783,13 @@
     <value>当焦点在密码字段时扫描</value>
   </data>
   <data name="AutofillPasswordFieldDescription" xml:space="preserve">
-    <value>当你选择一个密码字段时，只扫描屏幕字段并提供自动填充通知。此设置可帮助延长电池寿命。</value>
+    <value>当你选择一个密码字段时，只扫描屏幕字段并提供自动填充通知。此设置可帮助延长电池寿命。 </value>
   </data>
   <data name="AutofillPersistNotification" xml:space="preserve">
     <value>始终通知</value>
   </data>
   <data name="AutofillPersistNotificationDescription" xml:space="preserve">
-    <value>始终提供自动填充通知，并且在试图自动填充后只扫描字段。此设置可帮助延长电池寿命。</value>
+    <value>始终提供自动填写通知，并且只在尝试自动填写后扫描字段。此设置可帮助延长电池寿命。</value>
   </data>
   <data name="AutofillAlways" xml:space="preserve">
     <value>始终扫描</value>
@@ -1574,5 +1574,17 @@
   </data>
   <data name="ToggleVisibility" xml:space="preserve">
     <value>切换可见性</value>
+  </data>
+  <data name="LoginExpired" xml:space="preserve">
+    <value>Your login session has expired.</value>
+  </data>
+  <data name="BiometricsDirection" xml:space="preserve">
+    <value>Use biometrics to verify.</value>
+  </data>
+  <data name="Biometrics" xml:space="preserve">
+    <value>Biometrics</value>
+  </data>
+  <data name="UseBiometricsToUnlock" xml:space="preserve">
+    <value>Use Biometrics To Unlock</value>
   </data>
 </root>
