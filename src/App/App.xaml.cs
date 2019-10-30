@@ -396,6 +396,11 @@ namespace Bit.App
                     autoPromptFingerprint = false;
                 }
             }
+            else if(autoPromptFingerprint && Device.RuntimePlatform == Device.Android &&
+                _deviceActionService.UseNativeBiometric())
+            {
+                autoPromptFingerprint = false;
+            }
             PreviousPageInfo lastPageBeforeLock = null;
             if(Current.MainPage is TabbedPage tabbedPage && tabbedPage.Navigation.ModalStack.Count > 0)
             {
