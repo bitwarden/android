@@ -112,7 +112,7 @@
            Class="list-icon-platform"
            ApplyToDerivedTypes="True">
         <Setter Property="FontSize"
-                Value="10" />
+                Value="23" />
     </Style>
     <Style TargetType="Button"
            ApplyToDerivedTypes="True"
@@ -139,6 +139,8 @@
            Class="box-row-button-platform">
         <Setter Property="WidthRequest"
                 Value="37" />
+        <Setter Property="HeightRequest"
+                Value="45" />
         <Setter Property="FontSize"
                 Value="25" />
     </Style>

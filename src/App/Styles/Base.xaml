@@ -126,9 +126,9 @@
     <Style TargetType="Label"
            Class="list-header">
         <Setter Property="HorizontalOptions"
-                Value="StartAndExpand" />
+                Value="FillAndExpand" />
         <Setter Property="VerticalOptions"
-                Value="CenterAndExpand" />
+                Value="FillAndExpand" />
         <Setter Property="VerticalTextAlignment"
                 Value="Center" />
     </Style>

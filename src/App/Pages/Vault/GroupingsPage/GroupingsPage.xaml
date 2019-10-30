@@ -59,7 +59,7 @@
                         </controls:FaLabel>
                         <Label Text="{Binding Name, Mode=OneWay}"
                                LineBreakMode="TailTruncation"
-                               HorizontalOptions="StartAndExpand"
+                               HorizontalOptions="FillAndExpand"
                                VerticalOptions="CenterAndExpand"
                                StyleClass="list-title"/>
                         <Label Text="{Binding ItemCount, Mode=OneWay}"
