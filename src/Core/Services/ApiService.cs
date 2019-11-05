@@ -85,6 +85,7 @@ namespace Bit.Core.Services
         {
             var requestMessage = new HttpRequestMessage
             {
+                Version = new Version(1, 0),
                 RequestUri = new Uri(string.Concat(IdentityBaseUrl, "/connect/token")),
                 Method = HttpMethod.Post,
                 Content = new FormUrlEncodedContent(request.ToIdentityToken(_platformUtilsService.IdentityClientId))
@@ -305,6 +306,7 @@ namespace Bit.Core.Services
         {
             using(var requestMessage = new HttpRequestMessage())
             {
+                requestMessage.Version = new Version(1, 0);
                 requestMessage.Method = HttpMethod.Post;
                 requestMessage.RequestUri = new Uri(string.Concat(EventsBaseUrl, "/collect"));
                 var authHeader = await GetActiveBearerTokenAsync();
@@ -358,6 +360,7 @@ namespace Bit.Core.Services
         {
             using(var requestMessage = new HttpRequestMessage())
             {
+                requestMessage.Version = new Version(1, 0);
                 requestMessage.Method = method;
                 requestMessage.RequestUri = new Uri(string.Concat(ApiBaseUrl, path));
                 if(body != null)
@@ -423,6 +426,7 @@ namespace Bit.Core.Services
             var decodedToken = _tokenService.DecodeToken();
             var requestMessage = new HttpRequestMessage
             {
+                Version = new Version(1, 0),
                 RequestUri = new Uri(string.Concat(IdentityBaseUrl, "/connect/token")),
                 Method = HttpMethod.Post,
                 Content = new FormUrlEncodedContent(new Dictionary<string, string>
