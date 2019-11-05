@@ -19,6 +19,7 @@ namespace Bit.Core.Services
         private readonly II18nService _i18nService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IMessagingService _messagingService;
+        private readonly ILockService _lockService;
         private readonly bool _setCryptoKeys;
 
         private SymmetricCryptoKey _key;
@@ -34,6 +35,7 @@ namespace Bit.Core.Services
             II18nService i18nService,
             IPlatformUtilsService platformUtilsService,
             IMessagingService messagingService,
+            ILockService lockService,
             bool setCryptoKeys = true)
         {
             _cryptoService = cryptoService;
@@ -44,6 +46,7 @@ namespace Bit.Core.Services
             _i18nService = i18nService;
             _platformUtilsService = platformUtilsService;
             _messagingService = messagingService;
+            _lockService = lockService;
             _setCryptoKeys = setCryptoKeys;
 
             TwoFactorProviders = new Dictionary<TwoFactorProviderType, TwoFactorProvider>();
@@ -312,6 +315,7 @@ namespace Bit.Core.Services
                 await _cryptoService.SetEncPrivateKeyAsync(tokenResponse.PrivateKey);
             }
 
+            _lockService.FingerprintLocked = false;
             _messagingService.Send("loggedIn");
             return result;
         }
