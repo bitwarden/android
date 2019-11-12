@@ -48,7 +48,7 @@ namespace Bit.Core.Models.View
                     _subTitle = Brand;
                     if(Number != null && Number.Length >= 4)
                     {
-                        if(string.IsNullOrWhiteSpace(_subTitle))
+                        if(!string.IsNullOrWhiteSpace(_subTitle))
                         {
                             _subTitle += ", ";
                         }
