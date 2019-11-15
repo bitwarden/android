@@ -97,9 +97,9 @@ namespace Bit.Core.Services
             {
                 response = await _httpClient.SendAsync(requestMessage);
             }
-            catch
+            catch (Exception e)
             {
-                throw new ApiException(HandleWebError());
+                throw new ApiException(HandleWebError(e));
             }
             JObject responseJObject = null;
             if(IsJsonResponse(response))
@@ -318,9 +318,9 @@ namespace Bit.Core.Services
                 {
                     response = await _httpClient.SendAsync(requestMessage);
                 }
-                catch
+                catch (Exception e)
                 {
-                    throw new ApiException(HandleWebError());
+                    throw new ApiException(HandleWebError(e));
                 }
                 if(!response.IsSuccessStatusCode)
                 {
@@ -397,9 +397,9 @@ namespace Bit.Core.Services
                 {
                     response = await _httpClient.SendAsync(requestMessage);
                 }
-                catch
+                catch (Exception e)
                 {
-                    throw new ApiException(HandleWebError());
+                    throw new ApiException(HandleWebError(e));
                 }
                 if(hasResponse && response.IsSuccessStatusCode)
                 {
@@ -443,9 +443,9 @@ namespace Bit.Core.Services
             {
                 response = await _httpClient.SendAsync(requestMessage);
             }
-            catch
+            catch (Exception e)
             {
-                throw new ApiException(HandleWebError());
+                throw new ApiException(HandleWebError(e));
             }
             if(response.IsSuccessStatusCode)
             {
@@ -461,12 +461,12 @@ namespace Bit.Core.Services
             }
         }
 
-        private ErrorResponse HandleWebError()
+        private ErrorResponse HandleWebError(Exception e)
         {
             return new ErrorResponse
             {
                 StatusCode = HttpStatusCode.BadGateway,
-                Message = "There is a problem connecting to the server."
+                Message = "Exception message: " + e.Message
             };
         }
 
