@@ -70,7 +70,7 @@ namespace Bit.iOS.Core.Utilities
             {
                 return null;
             }
-            var uri = cipher.Login.Uris.FirstOrDefault()?.Uri;
+            var uri = cipher.Login.Uris.FirstOrDefault(u => u.Match != Bit.Core.Enums.UriMatchType.Never)?.Uri;
             if(string.IsNullOrWhiteSpace(uri))
             {
                 return null;
