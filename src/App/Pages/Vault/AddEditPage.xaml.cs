@@ -73,6 +73,8 @@ namespace Bit.App.Pages
             _folderPicker.ItemDisplayBinding = new Binding("Key");
             _ownershipPicker.ItemDisplayBinding = new Binding("Key");
 
+            _loginPasswordEntry.Keyboard = Keyboard.Create(KeyboardFlags.None);
+
             _nameEntry.ReturnType = ReturnType.Next;
             _nameEntry.ReturnCommand = new Command(() =>
             {

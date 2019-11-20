@@ -563,7 +563,15 @@
                                         IsVisible="{Binding IsHiddenType}"
                                         IsPassword="{Binding ShowHiddenValue, Converter={StaticResource inverseBool}}"
                                         IsSpellCheckEnabled="False"
-                                        IsTextPredictionEnabled="False" />
+                                        IsTextPredictionEnabled="False">
+                                        <Entry.Keyboard>
+                                            <Keyboard x:FactoryMethod="Create">
+                                                <x:Arguments>
+                                                    <KeyboardFlags>None</KeyboardFlags>
+                                                </x:Arguments>
+                                            </Keyboard>
+                                        </Entry.Keyboard>
+                                    </controls:MonoEntry>
                                     <Switch
                                         IsToggled="{Binding BooleanValue}"
                                         Grid.Row="0"
