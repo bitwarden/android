@@ -1,5 +1,5 @@
-﻿using Google.Apis.AndroidPublisher.v2;
-using Google.Apis.AndroidPublisher.v2.Data;
+﻿using Google.Apis.AndroidPublisher.v3;
+using Google.Apis.AndroidPublisher.v3.Data;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Services;
 using System;
@@ -104,7 +104,10 @@ namespace Bit.Publisher
 
             var trackRequest = service.Edits.Tracks.Update(new Track
             {
-                VersionCodes = new List<int?> { apk.VersionCode }
+                Releases = new List<TrackRelease>
+                {
+                    new TrackRelease { VersionCodes = new List<long?> { apk.VersionCode } }
+                }
             }, Package, edit.Id, _track);
 
             var updatedTrack = await trackRequest.ExecuteAsync();
