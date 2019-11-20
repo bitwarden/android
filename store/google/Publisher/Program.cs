@@ -106,7 +106,7 @@ namespace Bit.Publisher
             {
                 Releases = new List<TrackRelease>
                 {
-                    new TrackRelease { VersionCodes = new List<long?> { apk.VersionCode } }
+                    new TrackRelease { VersionCodes = new List<long?> { apk.VersionCode }, Status = "completed" }
                 }
             }, Package, edit.Id, _track);
 
