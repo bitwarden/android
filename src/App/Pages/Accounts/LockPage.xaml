@@ -20,7 +20,7 @@
     </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="{u:I18n Unlock}" Clicked="Unlock_Clicked" />
+        <ToolbarItem Text="{u:I18n LogOut}" Clicked="LogOut_Clicked" />        
     </ContentPage.ToolbarItems>
 
     <ScrollView>
@@ -108,7 +108,7 @@
             <StackLayout Padding="10, 0">
                 <Button Text="{Binding FingerprintButtonText}" Clicked="Fingerprint_Clicked"
                         IsVisible="{Binding FingerprintLock}"></Button>
-                <Button Text="{u:I18n LogOut}" Clicked="LogOut_Clicked"></Button>
+                <Button Text="{u:I18n Unlock}" Clicked="Unlock_Clicked"></Button>                
             </StackLayout>
         </StackLayout>
     </ScrollView>
