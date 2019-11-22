@@ -7,6 +7,7 @@ using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Utilities;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -19,6 +20,7 @@ namespace Bit.App.Pages
         private readonly IPushNotificationService _pushNotificationService;
         private readonly IStorageService _storageService;
         private readonly ILockService _lockService;
+        private readonly ICipherService _cipherService;
         private readonly IDeviceActionService _deviceActionService;
         private readonly GroupingsPageViewModel _vm;
         private readonly string _pageName;
@@ -37,6 +39,7 @@ namespace Bit.App.Pages
             _pushNotificationService = ServiceContainer.Resolve<IPushNotificationService>("pushNotificationService");
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _lockService = ServiceContainer.Resolve<ILockService>("lockService");
+            _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _vm = BindingContext as GroupingsPageViewModel;
             _vm.Page = this;
@@ -97,7 +100,7 @@ namespace Bit.App.Pages
             var migratedFromV1 = await _storageService.GetAsync<bool?>(Constants.MigratedFromV1);
             await LoadOnAppearedAsync(_mainLayout, false, async () =>
             {
-                if(!_syncService.SyncInProgress)
+                if(!_syncService.SyncInProgress || (await _cipherService.GetAllAsync()).Any())
                 {
                     try
                     {
