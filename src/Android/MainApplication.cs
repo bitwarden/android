@@ -16,7 +16,6 @@ using Bit.Droid.Utilities;
 using Plugin.CurrentActivity;
 using Plugin.Fingerprint;
 using Xamarin.Android.Net;
-using System.Net.Http;
 #if !FDROID
 using Android.Gms.Security;
 #endif
@@ -79,8 +78,7 @@ namespace Bit.Droid
                 FFImageLoading.ImageService.Instance.Initialize(new FFImageLoading.Config.Configuration
                 {
                     FadeAnimationEnabled = false,
-                    FadeAnimationForCachedImages = false,
-                    HttpClient = new HttpClient(new AndroidHttpImageClientHandler())
+                    FadeAnimationForCachedImages = false
                 });
                 ZXing.Net.Mobile.Forms.Android.Platform.Init();
             });
@@ -145,16 +143,6 @@ namespace Bit.Droid
             await ServiceContainer.Resolve<IStateService>("stateService").SaveAsync(
                 Constants.DisableFaviconKey, disableFavicon);
             await ServiceContainer.Resolve<IEnvironmentService>("environmentService").SetUrlsFromStorageAsync();
-        }
-
-        public class AndroidHttpImageClientHandler : HttpClientHandler
-        {
-            protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
-                System.Threading.CancellationToken cancellationToken)
-            {
-                request.Version = new Version(1, 0);
-                return await base.SendAsync(request, cancellationToken);
-            }
         }
     }
 }
