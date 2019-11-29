@@ -61,6 +61,9 @@ namespace Bit.Droid.Autofill
             "org.mozilla.reference.browser",
             "org.mozilla.rocket",
             "com.vivaldi.browser",
+            "jp.co.fenrir.android.sleipnir",
+            "jp.co.fenrir.android.sleipnir_black",
+            "jp.co.fenrir.android.sleipnir_test",
         };
 
         // The URLs are blacklisted from autofilling
