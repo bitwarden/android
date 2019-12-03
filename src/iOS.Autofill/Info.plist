@@ -11,9 +11,9 @@
 	<key>CFBundleIdentifier</key>
 	<string>com.8bit.bitwarden.autofill</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.2.6</string>
+	<string>2.2.7</string>
 	<key>CFBundleVersion</key>
-	<string>59</string>
+	<string>61</string>
 	<key>CFBundleLocalizations</key>
 	<array>
 		<string>en</string>
