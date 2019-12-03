@@ -1576,15 +1576,15 @@
     <value>Toggle Visiblity</value>
   </data>
   <data name="LoginExpired" xml:space="preserve">
-    <value>Your login session has expired.</value>
+    <value>Sesiunea de autentificare a expirat.</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
-    <value>Use biometrics to verify.</value>
+    <value>Folosiți datele biometrice pentru a verifica.</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
-    <value>Biometrics</value>
+    <value>Biometrice</value>
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
-    <value>Use Biometrics To Unlock</value>
+    <value>Utilizați datele biometrice pentru a debloca</value>
   </data>
 </root>
