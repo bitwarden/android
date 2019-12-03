@@ -1576,15 +1576,15 @@
     <value>Изменить видимость</value>
   </data>
   <data name="LoginExpired" xml:space="preserve">
-    <value>Your login session has expired.</value>
+    <value>Истек срок действия вашей сессии.</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
-    <value>Use biometrics to verify.</value>
+    <value>Использовать биометрию для верификации.</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
-    <value>Biometrics</value>
+    <value>Биометрия</value>
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
-    <value>Use Biometrics To Unlock</value>
+    <value>Использовать биометрию для разблокировки</value>
   </data>
 </root>

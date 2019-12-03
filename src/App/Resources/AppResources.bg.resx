@@ -1024,7 +1024,7 @@
     <value>август</value>
   </data>
   <data name="Brand" xml:space="preserve">
-    <value>Оператор</value>
+    <value>Вид</value>
   </data>
   <data name="CardholderName" xml:space="preserve">
     <value>Име на притежателя на картата</value>
@@ -1262,7 +1262,7 @@
     <comment>ex. Date this password was updated</comment>
   </data>
   <data name="DateUpdated" xml:space="preserve">
-    <value>Обновена</value>
+    <value>Обновено</value>
     <comment>ex. Date this item was updated</comment>
   </data>
   <data name="AutofillActivated" xml:space="preserve">
@@ -1576,15 +1576,15 @@
     <value>Превключване на видимостта</value>
   </data>
   <data name="LoginExpired" xml:space="preserve">
-    <value>Your login session has expired.</value>
+    <value>Сесията ви изтече.</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
-    <value>Use biometrics to verify.</value>
+    <value>Потвърждаване с биометрични данни.</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
-    <value>Biometrics</value>
+    <value>Биометрични данни</value>
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
-    <value>Use Biometrics To Unlock</value>
+    <value>Отключване с биометрични данни</value>
   </data>
 </root>

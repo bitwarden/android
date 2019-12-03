@@ -1576,15 +1576,15 @@
     <value>Commuta la visibilitat</value>
   </data>
   <data name="LoginExpired" xml:space="preserve">
-    <value>Your login session has expired.</value>
+    <value>La vostra sessió ha caducat.</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
-    <value>Use biometrics to verify.</value>
+    <value>Utilitzeu dades biomètriques per verificar.</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
-    <value>Biometrics</value>
+    <value>Dades biomètriques</value>
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
-    <value>Use Biometrics To Unlock</value>
+    <value>Utilitzeu dades biomètriques per desbloquejar</value>
   </data>
 </root>

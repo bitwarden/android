@@ -1576,15 +1576,15 @@
     <value>Pokaż / Ukryj</value>
   </data>
   <data name="LoginExpired" xml:space="preserve">
-    <value>Your login session has expired.</value>
+    <value>Twoja sesja wygasła.</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
-    <value>Use biometrics to verify.</value>
+    <value>Użyj danych biometrycznych do weryfikacji.</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
-    <value>Biometrics</value>
+    <value>Dane biometryczne</value>
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
-    <value>Use Biometrics To Unlock</value>
+    <value>Użyj danych biometrycznych do odblokowania</value>
   </data>
 </root>

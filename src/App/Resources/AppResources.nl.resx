@@ -193,7 +193,7 @@
     <value>Stuur ons een e-mail</value>
   </data>
   <data name="EmailUsDescription" xml:space="preserve">
-    <value>Stuur ons direct een e-mail om hulp te krijgen of feedback te geven.</value>
+    <value>Stuur ons direct een e-mail om hulp te krijgen of om een reactie te geven.</value>
   </data>
   <data name="EnterPIN" xml:space="preserve">
     <value>PIN-code invoeren.</value>
@@ -1462,7 +1462,7 @@
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
-    <value>Je kluis is vergrendeld. Voor je hoofdwachtwoord in om door te gaan.</value>
+    <value>Je kluis is vergrendeld. Voer je hoofdwachtwoord in om door te gaan.</value>
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Je kluis is vergrendeld. Voer je PIN-code in om door te gaan.</value>
@@ -1576,15 +1576,15 @@
     <value>Zichtbaarheid wisselen</value>
   </data>
   <data name="LoginExpired" xml:space="preserve">
-    <value>Your login session has expired.</value>
+    <value>Je inlogsessie is verlopen.</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
-    <value>Use biometrics to verify.</value>
+    <value>Biometrie-verificatie.</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
-    <value>Biometrics</value>
+    <value>Biometrie</value>
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
-    <value>Use Biometrics To Unlock</value>
+    <value>Biometrie gebruiken om te ontgrendelen</value>
   </data>
 </root>
