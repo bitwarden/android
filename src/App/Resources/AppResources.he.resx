@@ -1577,15 +1577,15 @@ Bitwarden בעזרת פתיחת חלון "הגדרות".</value>
     <value>הצג או הסתר</value>
   </data>
   <data name="LoginExpired" xml:space="preserve">
-    <value>Your login session has expired.</value>
+    <value>תוקף החיבור שלך הסתיים.</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
-    <value>Use biometrics to verify.</value>
+    <value>השתמש בזיהוי ביומטרי כדי לאשר.</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
-    <value>Biometrics</value>
+    <value>זיהוי ביומטרי</value>
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
-    <value>Use Biometrics To Unlock</value>
+    <value>השתמש בזיהוי ביומטרי לפתיחת הנעילה</value>
   </data>
 </root>
