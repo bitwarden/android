@@ -400,7 +400,7 @@
     <value>Uygulama uzantısı</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Uygulamalarınızdaki ve internetteki oturumlarınızı otomatik olarak doldurmak için bitwarden erişilebilirlik hizmetini kullanın.</value>
+    <value>Uygulamalarınızdaki ve internetteki oturumlarınızı otomatik olarak doldurmak için Bitwarden erişilebilirlik hizmetini kullanın.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Otomatik doldurma servisi</value>
@@ -1532,7 +1532,7 @@
     <value>Bitwarden'den çıkmak istediğinize emin misiniz?</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
-    <value>You you want to require unlocking with your master password when the application is restarted?</value>
+    <value>Uygulama kapatılıp açıldıktan sonra kilidi PIN yerine ana şifre ile açmak istiyor musunuz?</value>
   </data>
   <data name="Black" xml:space="preserve">
     <value>Siyah</value>
@@ -1576,15 +1576,15 @@
     <value>Toggle Visiblity</value>
   </data>
   <data name="LoginExpired" xml:space="preserve">
-    <value>Your login session has expired.</value>
+    <value>Oturumunuzun süresi doldu.</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
-    <value>Use biometrics to verify.</value>
+    <value>Doğrulama için biometrikleri kullan</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
-    <value>Biometrics</value>
+    <value>Biyometrik</value>
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
-    <value>Use Biometrics To Unlock</value>
+    <value>Kilidi açmak için Biometrikleri Kullan</value>
   </data>
 </root>
