@@ -1585,6 +1585,6 @@
     <value>Biometrics</value>
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
-    <value>Use Biometrics To Unlock</value>
+    <value>Use biometrics to unlock</value>
   </data>
 </root>
