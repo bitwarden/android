@@ -537,11 +537,11 @@
     <value>Možnosti zamknutí</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
-    <value>Přihlašování...</value>
+    <value>Přihlašování…</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="LoginOrCreateNewAccount" xml:space="preserve">
-    <value>Pro přístup do vašeho bezpečného trezoru se přihlašte nebo si vytvořte nový účet.</value>
+    <value>Pro přístup do vašeho bezpečného trezoru se přihlaste nebo si vytvořte nový účet.</value>
   </data>
   <data name="Manage" xml:space="preserve">
     <value>Správa</value>
@@ -650,7 +650,7 @@
     <value>Nastavit PIN</value>
   </data>
   <data name="SetPINDirection" xml:space="preserve">
-    <value>Zadejte 4-místný PIN kód pro odemknutí aplikace.</value>
+    <value>Zadejte 4místný PIN kód pro odemknutí aplikace.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
     <value>Informace o položce</value>
@@ -762,7 +762,7 @@
     <value>Chcete automaticky vyplnit nebo zobrazit tyto přihlašovací údaje?</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>Opravdu chcete tyto přihlašovací údaje automaticky vyplnit? Nejsou úplně shodné s "{0}".</value>
+    <value>Opravdu chcete tyto přihlašovací údaje automaticky vyplnit? Nejsou úplně shodné s „{0}“.</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
     <value>Odpovídající položky</value>
@@ -774,7 +774,7 @@
     <value>Hledat</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
-    <value>Hledáte přihlašovací údaje k automatickému vyplnění pro "{0}".</value>
+    <value>Hledáte přihlašovací údaje k automatickému vyplnění pro „{0}“.</value>
   </data>
   <data name="ShareVault" xml:space="preserve">
     <value>Sdílet trezor</value>
@@ -798,7 +798,7 @@
     <value>Vždy prohledávat pole obrazovky a pouze v případě nalezení pole s heslem zobrazit oznámení automatického vyplnění. Toto je výchozí nastavení.</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
-    <value>Nelze otevřít aplikaci "{0}".</value>
+    <value>Aplikaci „{0}“ nelze otevřít.</value>
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
   </data>
   <data name="AuthenticatorAppTitle" xml:space="preserve">
@@ -806,7 +806,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeApp" xml:space="preserve">
-    <value>Zadejte 6-místný kód z ověřovací aplikace.</value>
+    <value>Zadejte 6místný kód z ověřovací aplikace.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeEmail" xml:space="preserve">
@@ -947,7 +947,7 @@
     <value>Dozvědět se více</value>
   </data>
   <data name="ApiUrl" xml:space="preserve">
-    <value>URL serveru API</value>
+    <value>URL API serveru</value>
   </data>
   <data name="CustomEnvironment" xml:space="preserve">
     <value>Vlastní prostředí</value>
@@ -1554,7 +1554,7 @@
     <value>Při restartu aplikace</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>Automatické vyplňování usnadňuje bezpečný přístup k trezoru Bitwarden z jiných webových stránek a aplikací. Vypadá to, že jste službu Bitwarden nepovolili. Povolte automatické vyplnění pro Bitwarden z obrazovky "Nastavení".</value>
+    <value>Automatické vyplňování usnadňuje bezpečný přístup k trezoru Bitwarden z jiných webových stránek a aplikací. Vypadá to, že jste službu Bitwarden nepovolili. Povolte automatické vyplnění pro Bitwarden z obrazovky „Nastavení“.</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
     <value>Změna motivu se projeví po restartování aplikace.</value>
@@ -1576,15 +1576,15 @@
     <value>Přepnout viditelnost</value>
   </data>
   <data name="LoginExpired" xml:space="preserve">
-    <value>Your login session has expired.</value>
+    <value>Platnost přihlášení vypršela.</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
-    <value>Use biometrics to verify.</value>
+    <value>Použít biometrii k ověření.</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
-    <value>Biometrics</value>
+    <value>Biometrie</value>
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
-    <value>Use Biometrics To Unlock</value>
+    <value>Použít biometrii k odemknutí</value>
   </data>
 </root>
