@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Google.Apis.AndroidPublisher.v3" Version="1.42.0.1766" />
+    <PackageReference Include="Google.Apis.AndroidPublisher.v3" Version="1.42.0.1796" />
   </ItemGroup>
 
 </Project>
