@@ -209,6 +209,13 @@ namespace Bit.App
             SyncIfNeeded();
             if(Current.MainPage is NavigationPage navPage && navPage.CurrentPage is LockPage lockPage)
             {
+                if(Device.RuntimePlatform == Device.Android)
+                {
+                    // Workaround for https://github.com/xamarin/Xamarin.Forms/issues/7478
+                    await Task.Delay(100);
+                    Current.MainPage = new NavigationPage(lockPage);
+                    // End workaround
+                }
                 await lockPage.PromptFingerprintAfterResumeAsync();
             }
         }
