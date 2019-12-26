@@ -11,7 +11,7 @@
 	<key>CFBundleIdentifier</key>
 	<string>com.8bit.bitwarden.find-login-action-extension</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.2.7</string>
+	<string>2.2.8</string>
 	<key>CFBundleLocalizations</key>
 	<array>
 		<string>en</string>
@@ -104,6 +104,6 @@
 		<string>com.apple.ui-services</string>
 	</dict>
 	<key>CFBundleVersion</key>
-	<string>61</string>
+	<string>62</string>
 </dict>
 </plist>
