@@ -10,7 +10,11 @@
     <ContentPage.BindingContext>
         <pages:SettingsPageViewModel />
     </ContentPage.BindingContext>
-
+    
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{u:I18n LogOut}" Clicked="LogOut_Clicked" />
+    </ContentPage.ToolbarItems>
+    
     <ContentPage.Resources>
         <ResourceDictionary>
             <u:InverseBoolConverter x:Key="inverseBool" />

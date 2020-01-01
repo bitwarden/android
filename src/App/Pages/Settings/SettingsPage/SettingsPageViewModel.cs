@@ -345,8 +345,7 @@ namespace Bit.App.Pages
             var accountItems = new List<SettingsPageListItem>
             {
                 new SettingsPageListItem { Name = AppResources.ChangeMasterPassword },
-                new SettingsPageListItem { Name = AppResources.FingerprintPhrase },
-                new SettingsPageListItem { Name = AppResources.LogOut }
+                new SettingsPageListItem { Name = AppResources.FingerprintPhrase }
             };
             var toolsItems = new List<SettingsPageListItem>
             {
@@ -367,9 +366,9 @@ namespace Bit.App.Pages
                 new SettingsPageListGroup(autofillItems, AppResources.Autofill, doUpper, true),
                 new SettingsPageListGroup(manageItems, AppResources.Manage, doUpper),
                 new SettingsPageListGroup(securityItems, AppResources.Security, doUpper),
-                new SettingsPageListGroup(accountItems, AppResources.Account, doUpper),
                 new SettingsPageListGroup(toolsItems, AppResources.Tools, doUpper),
-                new SettingsPageListGroup(otherItems, AppResources.Other, doUpper)
+                new SettingsPageListGroup(accountItems, AppResources.Account, doUpper),
+                new SettingsPageListGroup(otherItems, AppResources.Other, doUpper),
             });
         }
     }

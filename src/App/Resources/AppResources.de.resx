@@ -363,7 +363,7 @@
     <value>Fingerabdruck überprüfen</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
-    <value>Masterpasswort überprüfen</value>
+    <value>Tresor entsperren</value>
   </data>
   <data name="VerifyPIN" xml:space="preserve">
     <value>PIN überprüfen</value>

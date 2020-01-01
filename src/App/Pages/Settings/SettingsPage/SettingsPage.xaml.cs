@@ -1,6 +1,7 @@
 ﻿using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Bit.Core.Utilities;
+using System;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -39,6 +40,14 @@ namespace Bit.App.Pages
                 return true;
             }
             return base.OnBackButtonPressed();
+        }
+
+        private async void LogOut_Clicked(object sender, EventArgs e)
+        {
+            if (DoOnce())
+            {
+                await _vm.LogOutAsync();
+            }
         }
 
         private async void RowSelected(object sender, SelectedItemChangedEventArgs e)
@@ -120,10 +129,6 @@ namespace Bit.App.Pages
             else if(item.Name == AppResources.TwoStepLogin)
             {
                 await _vm.TwoStepAsync();
-            }
-            else if(item.Name == AppResources.LogOut)
-            {
-                await _vm.LogOutAsync();
             }
             else if(item.Name == AppResources.LockNow)
             {
