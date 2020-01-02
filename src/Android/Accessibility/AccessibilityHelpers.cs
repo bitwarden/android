@@ -114,6 +114,12 @@ namespace Bit.Droid.Accessibility
                     uri = ExtractUri(uri, addressNode, browser);
                     addressNode.Dispose();
                 }
+                else
+                {
+                    // Return null to prevent overwriting notification pendingIntent uri with browser packageName
+                    // (we login to pages, not browsers)
+                    return null;
+                }
             }
             return uri;
         }
