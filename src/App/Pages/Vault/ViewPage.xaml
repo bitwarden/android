@@ -118,7 +118,8 @@
                                     Grid.Column="0"
                                     IsVisible="{Binding ShowPassword, Converter={StaticResource inverseBool}}" />
                                 <controls:MonoLabel
-                                    FormattedText="{Binding ColoredPassword, Mode=OneWay}"
+                                    Text="{Binding ColoredPassword, Mode=OneWay}"
+                                    TextType="Html"
                                     StyleClass="box-value"
                                     Grid.Row="1"
                                     Grid.Column="0"
