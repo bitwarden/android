@@ -53,7 +53,7 @@ namespace Bit.App.Pages
                 });
         }
 
-        public FormattedString ColoredPassword => PasswordFormatter.FormatPassword(Password);
+        public string ColoredPassword => PasswordFormatter.FormatPassword(Password);
 
         public bool IsPassword
         {

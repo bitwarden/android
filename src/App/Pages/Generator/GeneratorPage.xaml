@@ -40,7 +40,8 @@
         <StackLayout Spacing="0" Padding="0">
             <StackLayout StyleClass="box">
                 <controls:MonoLabel
-                    Text="{Binding Password}"
+                    Text="{Binding ColoredPassword, Mode=OneWay}"
+                    TextType="Html"
                     Margin="0, 20"
                     StyleClass="text-lg"
                     HorizontalTextAlignment="Center"
