@@ -59,7 +59,7 @@ namespace Bit.App.Utilities
                 if(charType != currentType)
                 {
                     // Close off previous span.
-                    if (currentType != CharType.None || currentType != CharType.Normal)
+                    if (currentType != CharType.None && currentType != CharType.Normal)
                     {
                         result += "</span>";
                     }
@@ -83,7 +83,7 @@ namespace Bit.App.Utilities
             }
 
             // Close off last span.
-            if (currentType != CharType.None || currentType != CharType.Normal)
+            if (currentType != CharType.None && currentType != CharType.Normal)
             {
                 result += "</span>";
             }
