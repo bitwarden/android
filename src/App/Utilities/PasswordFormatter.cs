@@ -25,10 +25,14 @@ namespace Bit.App.Utilities
         {
             if(password == null)
             {
-                return "";
+                return string.Empty;
             }
 
-            var result = "";
+            // First two digits of returned hex code contains the alpha,
+            // which is not supported in HTML color, so we need to cut those out.
+            var numberColor = $"<span style=\"color:#{((Color)Application.Current.Resources["PasswordNumberColor"]).ToHex().Substring(2)}\">";
+            var specialColor = $"<span style=\"color:#{((Color)Application.Current.Resources["PasswordSpecialColor"]).ToHex().Substring(2)}\">";
+            var result = string.Empty;
 
             // Start with an otherwise uncovered case so we will definitely enter the "something changed"
             // state.
@@ -55,7 +59,7 @@ namespace Bit.App.Utilities
                 if(charType != currentType)
                 {
                     // Close off previous span.
-                    if (currentType != CharType.None)
+                    if (currentType != CharType.None || currentType != CharType.Normal)
                     {
                         result += "</span>";
                     }
@@ -67,14 +71,11 @@ namespace Bit.App.Utilities
                     switch(currentType)
                     {
                         // Apply color style to span.
-                        // First two digits of returned hex code contains the alpha,
-                        // which is not supported in HTML color,
-                        // so we need to cut those out.
                         case CharType.Number:
-                            result += $"<span style=\"color:#{((Color)Application.Current.Resources["PasswordNumberColor"]).ToHex().Substring(2)}\">";
+                            result += numberColor;
                             break;
                         case CharType.Special:
-                            result += $"<span style=\"color:#{((Color)Application.Current.Resources["PasswordSpecialColor"]).ToHex().Substring(2)}\">";
+                            result += specialColor;
                             break;
                     }
                 }
@@ -82,7 +83,7 @@ namespace Bit.App.Utilities
             }
 
             // Close off last span.
-            if (currentType != CharType.Normal)
+            if (currentType != CharType.None || currentType != CharType.Normal)
             {
                 result += "</span>";
             }
