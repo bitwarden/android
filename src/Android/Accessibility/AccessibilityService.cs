@@ -100,11 +100,11 @@ namespace Bit.Droid.Accessibility
                                 break;
                             }
                             var uri = AccessibilityHelpers.GetUri(root);
-                            if(uri != _lastNotificationUri)
+                            if(uri != null && uri != _lastNotificationUri)
                             {
                                 CancelNotification(notificationManager);
                             }
-                            else if(uri.StartsWith(Constants.AndroidAppProtocol))
+                            else if(uri != null && uri.StartsWith(Constants.AndroidAppProtocol))
                             {
                                 CancelNotification(notificationManager, 30000);
                             }
