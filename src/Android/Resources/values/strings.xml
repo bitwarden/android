@@ -16,4 +16,13 @@
   <string name="PasswordGenerator">
     Password Generator
   </string>
+  <string name="AccessibilityOverlayLine1">
+    Bitwarden
+  </string>
+  <string name="AccessibilityOverlayLine2">
+    Select to auto-fill
+  </string>
+  <string name="AccessibilityOverlayPermission">
+    Bitwarden requires additional accessibility configuration. Open the app for more info.
+  </string>
 </resources>
