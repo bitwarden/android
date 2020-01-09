@@ -1,9 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Android.Content;
+using Android.Content.Res;
+using Android.Graphics;
 using Android.OS;
+using Android.Provider;
+using Android.Views;
 using Android.Views.Accessibility;
+using Android.Widget;
+using Bit.App.Resources;
 using Bit.Core;
+using Plugin.CurrentActivity;
 
 namespace Bit.Droid.Accessibility
 {
@@ -259,6 +267,89 @@ namespace Bit.Droid.Accessibility
         public static AccessibilityNodeInfo GetUsernameEditText(IEnumerable<AccessibilityNodeInfo> allEditTexts)
         {
             return allEditTexts.TakeWhile(n => !n.Password).LastOrDefault();
+        }
+
+        public static Boolean OverlayPermitted(Context context)
+        {
+            if(Build.VERSION.SdkInt >= BuildVersionCodes.M)
+            {
+                return Settings.CanDrawOverlays(context.ApplicationContext);
+            }
+            else
+            {
+                // TODO do older android versions require a check?
+                return true;
+            }
+        }
+
+        public static Boolean OpenOverlaySettings(Context context, string packageName)
+        {
+            try
+            {
+                var intent = new Intent(Settings.ActionManageOverlayPermission);
+                intent.SetPackage(packageName);
+                intent.SetFlags(ActivityFlags.NewTask);
+                context.StartActivity(intent);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public static LinearLayout GetOverlayView(Context context)
+        {
+            var inflater = (LayoutInflater)context.GetSystemService(Context.LayoutInflaterService);
+            var view = (LinearLayout)inflater.Inflate(Resource.Layout.autofill_listitem, null);
+            var text1 = (TextView)view.FindViewById(Resource.Id.text1);
+            var text2 = (TextView)view.FindViewById(Resource.Id.text2);
+            var icon = (ImageView)view.FindViewById(Resource.Id.icon);
+            text1.Text = AppResources.AutofillWithBitwarden;
+            text2.Text = AppResources.GoToMyVault;
+            icon.SetImageResource(Resource.Drawable.icon);
+            return view;
+        }
+
+        public static Point GetOverlayAnchorPosition(AccessibilityNodeInfo root, AccessibilityEvent e)
+        {
+            var rootRect = new Rect();
+            root.GetBoundsInScreen(rootRect);
+            var rootRectHeight = rootRect.Height();
+
+            var eSrcRect = new Rect();
+            e.Source.GetBoundsInScreen(eSrcRect);
+            var eSrcRectLeft = eSrcRect.Left;
+            var eSrcRectTop = eSrcRect.Top;
+
+            var navBarHeight = GetNavigationBarHeight();
+
+            var calculatedTop = rootRectHeight - eSrcRectTop - navBarHeight;
+
+            return new Point(eSrcRectLeft, calculatedTop);
+        }
+
+        private static int GetStatusBarHeight()
+        {
+            return GetSystemResourceDimenPx("status_bar_height");
+        }
+
+        private static int GetNavigationBarHeight()
+        {
+            return GetSystemResourceDimenPx("navigation_bar_height");
+        }
+
+        private static int GetSystemResourceDimenPx(String resName)
+        {
+            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+
+            var barHeight = 0;
+            var resourceId = activity.Resources.GetIdentifier(resName, "dimen", "android");
+            if(resourceId > 0)
+            {
+                barHeight = activity.Resources.GetDimensionPixelSize(resourceId);
+            }
+            return barHeight;
         }
     }
 }

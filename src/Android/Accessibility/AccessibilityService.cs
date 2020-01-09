@@ -1,12 +1,16 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
+using Android.Graphics;
 using Android.OS;
+using Android.Provider;
 using Android.Runtime;
+using Android.Views;
 using Android.Views.Accessibility;
+using Android.Widget;
 using Bit.App.Resources;
 using Bit.Core;
 using Bit.Core.Abstractions;
@@ -20,22 +24,17 @@ namespace Bit.Droid.Accessibility
     [Register("com.x8bit.bitwarden.Accessibility.AccessibilityService")]
     public class AccessibilityService : Android.AccessibilityServices.AccessibilityService
     {
-        private NotificationChannel _notificationChannel;
-
-        private const int AutoFillNotificationId = 34573;
         private const string BitwardenPackage = "com.x8bit.bitwarden";
         private const string BitwardenWebsite = "vault.bitwarden.com";
 
-        private IStorageService _storageService;
-        private bool _settingAutofillPasswordField;
-        private bool _settingAutofillPersistNotification;
-        private DateTime? _lastSettingsReload = null;
-        private TimeSpan _settingsReloadSpan = TimeSpan.FromMinutes(1);
-        private long _lastNotificationTime = 0;
         private string _lastNotificationUri = null;
+
         private HashSet<string> _launcherPackageNames = null;
         private DateTime? _lastLauncherSetBuilt = null;
         private TimeSpan _rebuildLauncherSpan = TimeSpan.FromHours(1);
+
+        private IWindowManager _windowManager = null;
+        private LinearLayout _overlayView = null;
 
         public override void OnAccessibilityEvent(AccessibilityEvent e)
         {
@@ -53,6 +52,7 @@ namespace Bit.Droid.Accessibility
 
                 if(SkipPackage(e?.PackageName))
                 {
+                    CancelOverlayPrompt();
                     return;
                 }
 
@@ -62,107 +62,85 @@ namespace Bit.Droid.Accessibility
                     return;
                 }
 
-                // AccessibilityHelpers.PrintTestData(root, e);
-                LoadServices();
-                var settingsTask = LoadSettingsAsync();
+                var isKnownBroswer = AccessibilityHelpers.SupportedBrowsers.ContainsKey(root.PackageName);
 
-                var notificationManager = GetSystemService(NotificationService) as NotificationManager;
-                var cancelNotification = true;
+                // AccessibilityHelpers.PrintTestData(root, e);
 
                 switch(e.EventType)
                 {
                     case EventTypes.ViewFocused:
-                        if(e.Source == null || !e.Source.Password || !_settingAutofillPasswordField)
+                    case EventTypes.ViewClicked:
+                        if (e.EventType == EventTypes.ViewClicked && isKnownBroswer)
                         {
+                            break;
+                        }
+                        if (e.Source == null || !e.Source.Password)
+                        {
+                            CancelOverlayPrompt();
                             break;
                         }
                         if(e.PackageName == BitwardenPackage)
                         {
-                            CancelNotification(notificationManager);
+                            CancelOverlayPrompt();
                             break;
                         }
-                        if(ScanAndAutofill(root, e, notificationManager, cancelNotification))
+                        if(ScanAndAutofill(root, e))
                         {
-                            CancelNotification(notificationManager);
+                            CancelOverlayPrompt();
+                        }
+                        else
+                        {
+                            OverlayPromptToAutofill(root, e);
                         }
                         break;
                     case EventTypes.WindowContentChanged:
                     case EventTypes.WindowStateChanged:
-                        if(_settingAutofillPasswordField && e.Source.Password)
+                        if (e.Source == null || e.Source.Password)
                         {
                             break;
                         }
-                        else if(_settingAutofillPasswordField && AccessibilityHelpers.LastCredentials == null)
+                        else if(AccessibilityHelpers.LastCredentials == null)
                         {
                             if(string.IsNullOrWhiteSpace(_lastNotificationUri))
                             {
-                                CancelNotification(notificationManager);
+                                CancelOverlayPrompt();
                                 break;
                             }
                             var uri = AccessibilityHelpers.GetUri(root);
                             if(uri != null && uri != _lastNotificationUri)
                             {
-                                CancelNotification(notificationManager);
+                                CancelOverlayPrompt();
                             }
                             else if(uri != null && uri.StartsWith(Constants.AndroidAppProtocol))
                             {
-                                CancelNotification(notificationManager, 30000);
+                                CancelOverlayPrompt();
                             }
                             break;
                         }
 
                         if(e.PackageName == BitwardenPackage)
                         {
-                            CancelNotification(notificationManager);
+                            CancelOverlayPrompt();
                             break;
                         }
 
-                        if(_settingAutofillPersistNotification)
+                        if(ScanAndAutofill(root, e))
                         {
-                            var uri = AccessibilityHelpers.GetUri(root);
-                            if(uri != null && !uri.Contains(BitwardenWebsite))
-                            {
-                                var needToFill = AccessibilityHelpers.NeedToAutofill(
-                                    AccessibilityHelpers.LastCredentials, uri);
-                                if(needToFill)
-                                {
-                                    var passwordNodes = AccessibilityHelpers.GetWindowNodes(root, e,
-                                        n => n.Password, false);
-                                    needToFill = passwordNodes.Any();
-                                    if(needToFill)
-                                    {
-                                        AccessibilityHelpers.GetNodesAndFill(root, e, passwordNodes);
-                                    }
-                                    passwordNodes.Dispose();
-                                }
-                                if(!needToFill)
-                                {
-                                    NotifyToAutofill(uri, notificationManager);
-                                    cancelNotification = false;
-                                }
-                            }
-                            AccessibilityHelpers.LastCredentials = null;
-                        }
-                        else
-                        {
-                            cancelNotification = ScanAndAutofill(root, e, notificationManager, cancelNotification);
-                        }
-
-                        if(cancelNotification)
-                        {
-                            CancelNotification(notificationManager);
+                            CancelOverlayPrompt();
                         }
                         break;
                     default:
                         break;
                 }
 
-                notificationManager?.Dispose();
                 root.Dispose();
                 e.Dispose();
             }
             // Suppress exceptions so that service doesn't crash.
-            catch { }
+            catch(Exception ex) 
+            {
+                System.Diagnostics.Debug.WriteLine(">>> Exception: " + ex.StackTrace);
+            }
         }
 
         public override void OnInterrupt()
@@ -170,9 +148,9 @@ namespace Bit.Droid.Accessibility
             // Do nothing.
         }
 
-        public bool ScanAndAutofill(AccessibilityNodeInfo root, AccessibilityEvent e,
-            NotificationManager notificationManager, bool cancelNotification)
+        public bool ScanAndAutofill(AccessibilityNodeInfo root, AccessibilityEvent e)
         {
+            var filled = false;
             var passwordNodes = AccessibilityHelpers.GetWindowNodes(root, e, n => n.Password, false);
             if(passwordNodes.Count > 0)
             {
@@ -182,12 +160,9 @@ namespace Bit.Droid.Accessibility
                     if(AccessibilityHelpers.NeedToAutofill(AccessibilityHelpers.LastCredentials, uri))
                     {
                         AccessibilityHelpers.GetNodesAndFill(root, e, passwordNodes);
+                        filled = true;
                     }
-                    else
-                    {
-                        NotifyToAutofill(uri, notificationManager);
-                        cancelNotification = false;
-                    }
+
                 }
                 AccessibilityHelpers.LastCredentials = null;
             }
@@ -200,69 +175,94 @@ namespace Bit.Droid.Accessibility
                 });
             }
             passwordNodes.Dispose();
-            return cancelNotification;
+            return filled;
         }
 
-        public void CancelNotification(NotificationManager notificationManager, long limit = 250)
+        private void CancelOverlayPrompt()
         {
-            if(Java.Lang.JavaSystem.CurrentTimeMillis() - _lastNotificationTime < limit)
+            if(_windowManager == null || _overlayView == null)
             {
                 return;
             }
+
+            _windowManager.RemoveViewImmediate(_overlayView);
+            System.Diagnostics.Debug.WriteLine(">>> Accessibility Overlay View Removed");
+
+            _overlayView = null;
             _lastNotificationUri = null;
-            notificationManager?.Cancel(AutoFillNotificationId);
         }
 
-        private void NotifyToAutofill(string uri, NotificationManager notificationManager)
+        private void OverlayPromptToAutofill(AccessibilityNodeInfo root, AccessibilityEvent e)
         {
-            if(notificationManager == null || string.IsNullOrWhiteSpace(uri))
+            if(!AccessibilityHelpers.OverlayPermitted(this))
+            {
+                System.Diagnostics.Debug.WriteLine(">>> Overlay Permission not granted");
+                Toast.MakeText(this, AppResources.AccessibilityOverlayPermissionAlert, ToastLength.Long).Show();
+                return;
+            }
+
+            var uri = AccessibilityHelpers.GetUri(root);
+            if (string.IsNullOrWhiteSpace(uri))
             {
                 return;
             }
 
-            var now = Java.Lang.JavaSystem.CurrentTimeMillis();
+            WindowManagerTypes windowManagerType;
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
+            {
+                windowManagerType = WindowManagerTypes.ApplicationOverlay;
+            }
+            else
+            {
+                windowManagerType = WindowManagerTypes.Phone;
+            }
+
+            var layoutParams = new WindowManagerLayoutParams(
+                ViewGroup.LayoutParams.WrapContent,
+                ViewGroup.LayoutParams.WrapContent,
+                windowManagerType,
+                WindowManagerFlags.NotFocusable | WindowManagerFlags.NotTouchModal,
+                Android.Graphics.Format.Transparent);
+
+            var anchorPosition = AccessibilityHelpers.GetOverlayAnchorPosition(root, e);
+
+            layoutParams.Gravity = GravityFlags.Bottom | GravityFlags.Left;
+            layoutParams.X = anchorPosition.X;
+            layoutParams.Y = anchorPosition.Y;
+
             var intent = new Intent(this, typeof(AccessibilityActivity));
             intent.PutExtra("uri", uri);
             intent.SetFlags(ActivityFlags.NewTask | ActivityFlags.SingleTop | ActivityFlags.ClearTop);
-            var pendingIntent = PendingIntent.GetActivity(this, 0, intent, PendingIntentFlags.UpdateCurrent);
 
-            var notificationContent = Build.VERSION.SdkInt > BuildVersionCodes.KitkatWatch ?
-                AppResources.BitwardenAutofillServiceNotificationContent :
-                AppResources.BitwardenAutofillServiceNotificationContentOld;
-
-            var builder = new Notification.Builder(this);
-            builder.SetSmallIcon(Resource.Drawable.shield)
-                   .SetContentTitle(AppResources.BitwardenAutofillService)
-                   .SetContentText(notificationContent)
-                   .SetTicker(notificationContent)
-                   .SetWhen(now)
-                   .SetContentIntent(pendingIntent);
-
-            if(Build.VERSION.SdkInt > BuildVersionCodes.KitkatWatch)
+            if (_windowManager == null)
             {
-                builder.SetVisibility(NotificationVisibility.Secret)
-                    .SetColor(Android.Support.V4.Content.ContextCompat.GetColor(ApplicationContext,
-                        Resource.Color.primary));
-            }
-            if(Build.VERSION.SdkInt >= BuildVersionCodes.O)
-            {
-                if(_notificationChannel == null)
-                {
-                    _notificationChannel = new NotificationChannel("bitwarden_autofill_service",
-                        AppResources.AutofillService, NotificationImportance.Low);
-                    notificationManager.CreateNotificationChannel(_notificationChannel);
-                }
-                builder.SetChannelId(_notificationChannel.Id);
-            }
-            if(/*Build.VERSION.SdkInt <= BuildVersionCodes.N && */_settingAutofillPersistNotification)
-            {
-                builder.SetPriority(-2);
+                _windowManager = GetSystemService(WindowService).JavaCast<IWindowManager>();
             }
 
-            _lastNotificationTime = now;
+            var updateView = false;
+            if (_overlayView != null)
+            {
+                updateView = true;
+            }
+
+            _overlayView = AccessibilityHelpers.GetOverlayView(this);
+            _overlayView.Click += (sender, eventArgs) => {
+                CancelOverlayPrompt();
+                StartActivity(intent);
+            };
+
             _lastNotificationUri = uri;
-            notificationManager.Notify(AutoFillNotificationId, builder.Build());
-            builder.Dispose();
+
+            if (updateView)
+            {
+                _windowManager.UpdateViewLayout(_overlayView, layoutParams);
+            }
+            else
+            {
+                _windowManager.AddView(_overlayView, layoutParams);
+            }
+
+            System.Diagnostics.Debug.WriteLine(">>> Accessibility Overlay View " + (updateView ? "Updated to" : "Added at") + " X:{0} Y:{1}", layoutParams.X, layoutParams.Y);
         }
 
         private bool SkipPackage(string eventPackageName)
@@ -284,27 +284,6 @@ namespace Bit.Droid.Accessibility
                 _launcherPackageNames = resolveInfo.Select(ri => ri.ActivityInfo.PackageName).ToHashSet();
             }
             return _launcherPackageNames.Contains(eventPackageName);
-        }
-
-        private void LoadServices()
-        {
-            if(_storageService == null)
-            {
-                _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
-            }
-        }
-
-        private async Task LoadSettingsAsync()
-        {
-            var now = DateTime.UtcNow;
-            if(_lastSettingsReload == null || (now - _lastSettingsReload.Value) > _settingsReloadSpan)
-            {
-                _lastSettingsReload = now;
-                _settingAutofillPasswordField = await _storageService.GetAsync<bool>(
-                    Constants.AccessibilityAutofillPasswordFieldKey);
-                _settingAutofillPersistNotification = await _storageService.GetAsync<bool>(
-                    Constants.AccessibilityAutofillPersistNotificationKey);
-            }
         }
     }
 }
