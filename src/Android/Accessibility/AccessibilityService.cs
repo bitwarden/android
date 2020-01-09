@@ -246,7 +246,7 @@ namespace Bit.Droid.Accessibility
             }
 
             _overlayView = AccessibilityHelpers.GetOverlayView(this);
-            _overlayView.Click += (sender, e) => {
+            _overlayView.Click += (sender, eventArgs) => {
                 CancelOverlayPrompt();
                 StartActivity(intent);
             };
