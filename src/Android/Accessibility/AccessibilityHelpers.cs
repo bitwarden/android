@@ -187,7 +187,6 @@ namespace Bit.Droid.Accessibility
             return n?.ClassName?.Contains("EditText") ?? false;
         }
 
-
         public static void FillCredentials(AccessibilityNodeInfo usernameNode,
             IEnumerable<AccessibilityNodeInfo> passwordNodes)
         {
@@ -269,7 +268,7 @@ namespace Bit.Droid.Accessibility
             return allEditTexts.TakeWhile(n => !n.Password).LastOrDefault();
         }
 
-        public static Boolean OverlayPermitted(Context context)
+        public static bool OverlayPermitted(Context context)
         {
             if(Build.VERSION.SdkInt >= BuildVersionCodes.M)
             {
@@ -282,7 +281,7 @@ namespace Bit.Droid.Accessibility
             }
         }
 
-        public static Boolean OpenOverlaySettings(Context context, string packageName)
+        public static bool OpenOverlaySettings(Context context, string packageName)
         {
             try
             {
@@ -323,9 +322,7 @@ namespace Bit.Droid.Accessibility
             var eSrcRectTop = eSrcRect.Top;
 
             var navBarHeight = GetNavigationBarHeight();
-
             var calculatedTop = rootRectHeight - eSrcRectTop - navBarHeight;
-
             return new Point(eSrcRectLeft, calculatedTop);
         }
 
@@ -339,10 +336,9 @@ namespace Bit.Droid.Accessibility
             return GetSystemResourceDimenPx("navigation_bar_height");
         }
 
-        private static int GetSystemResourceDimenPx(String resName)
+        private static int GetSystemResourceDimenPx(string resName)
         {
             var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
-
             var barHeight = 0;
             var resourceId = activity.Resources.GetIdentifier(resName, "dimen", "android");
             if(resourceId > 0)

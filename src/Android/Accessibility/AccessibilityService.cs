@@ -62,19 +62,18 @@ namespace Bit.Droid.Accessibility
                     return;
                 }
 
-                var isKnownBroswer = AccessibilityHelpers.SupportedBrowsers.ContainsKey(root.PackageName);
-
                 // AccessibilityHelpers.PrintTestData(root, e);
 
                 switch(e.EventType)
                 {
                     case EventTypes.ViewFocused:
                     case EventTypes.ViewClicked:
-                        if (e.EventType == EventTypes.ViewClicked && isKnownBroswer)
+                        var isKnownBroswer = AccessibilityHelpers.SupportedBrowsers.ContainsKey(root.PackageName);
+                        if(e.EventType == EventTypes.ViewClicked && isKnownBroswer)
                         {
                             break;
                         }
-                        if (e.Source == null || !e.Source.Password)
+                        if(e.Source == null || !e.Source.Password)
                         {
                             CancelOverlayPrompt();
                             break;
@@ -95,7 +94,7 @@ namespace Bit.Droid.Accessibility
                         break;
                     case EventTypes.WindowContentChanged:
                     case EventTypes.WindowStateChanged:
-                        if (e.Source == null || e.Source.Password)
+                        if(e.Source == null || e.Source.Password)
                         {
                             break;
                         }
@@ -137,7 +136,7 @@ namespace Bit.Droid.Accessibility
                 e.Dispose();
             }
             // Suppress exceptions so that service doesn't crash.
-            catch(Exception ex) 
+            catch(Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(">>> Exception: " + ex.StackTrace);
             }
@@ -202,13 +201,13 @@ namespace Bit.Droid.Accessibility
             }
 
             var uri = AccessibilityHelpers.GetUri(root);
-            if (string.IsNullOrWhiteSpace(uri))
+            if(string.IsNullOrWhiteSpace(uri))
             {
                 return;
             }
 
             WindowManagerTypes windowManagerType;
-            if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
+            if(Build.VERSION.SdkInt >= BuildVersionCodes.O)
             {
                 windowManagerType = WindowManagerTypes.ApplicationOverlay;
             }
@@ -222,7 +221,7 @@ namespace Bit.Droid.Accessibility
                 ViewGroup.LayoutParams.WrapContent,
                 windowManagerType,
                 WindowManagerFlags.NotFocusable | WindowManagerFlags.NotTouchModal,
-                Android.Graphics.Format.Transparent);
+                Format.Transparent);
 
             var anchorPosition = AccessibilityHelpers.GetOverlayAnchorPosition(root, e);
 
@@ -234,26 +233,27 @@ namespace Bit.Droid.Accessibility
             intent.PutExtra("uri", uri);
             intent.SetFlags(ActivityFlags.NewTask | ActivityFlags.SingleTop | ActivityFlags.ClearTop);
 
-            if (_windowManager == null)
+            if(_windowManager == null)
             {
                 _windowManager = GetSystemService(WindowService).JavaCast<IWindowManager>();
             }
 
             var updateView = false;
-            if (_overlayView != null)
+            if(_overlayView != null)
             {
                 updateView = true;
             }
 
             _overlayView = AccessibilityHelpers.GetOverlayView(this);
-            _overlayView.Click += (sender, eventArgs) => {
+            _overlayView.Click += (sender, eventArgs) =>
+            {
                 CancelOverlayPrompt();
                 StartActivity(intent);
             };
 
             _lastNotificationUri = uri;
 
-            if (updateView)
+            if(updateView)
             {
                 _windowManager.UpdateViewLayout(_overlayView, layoutParams);
             }
@@ -262,7 +262,8 @@ namespace Bit.Droid.Accessibility
                 _windowManager.AddView(_overlayView, layoutParams);
             }
 
-            System.Diagnostics.Debug.WriteLine(">>> Accessibility Overlay View " + (updateView ? "Updated to" : "Added at") + " X:{0} Y:{1}", layoutParams.X, layoutParams.Y);
+            System.Diagnostics.Debug.WriteLine(">>> Accessibility Overlay View {0} X:{1} Y:{2}",
+                updateView ? "Updated to" : "Added at", layoutParams.X, layoutParams.Y);
         }
 
         private bool SkipPackage(string eventPackageName)
