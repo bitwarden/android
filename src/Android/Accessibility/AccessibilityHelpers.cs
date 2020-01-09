@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using Android.Content;
+using Android.Content.Res;
 using Android.Graphics;
 using Android.OS;
 using Android.Provider;
 using Android.Views;
 using Android.Views.Accessibility;
 using Android.Widget;
+using Bit.App.Resources;
 using Bit.Core;
 using Plugin.CurrentActivity;
 
@@ -289,7 +291,7 @@ namespace Bit.Droid.Accessibility
                 intent.SetFlags(ActivityFlags.NewTask);
                 context.StartActivity(intent);
                 return true;
-            } 
+            }
             catch
             {
                 return false;
@@ -298,25 +300,31 @@ namespace Bit.Droid.Accessibility
 
         public static LinearLayout GetOverlayView(Context context)
         {
-            LayoutInflater inflater = (LayoutInflater)context.GetSystemService(Context.LayoutInflaterService);
-            LinearLayout view = (LinearLayout)inflater.Inflate(Resource.Layout.accessibility_overlay, null);
+            var inflater = (LayoutInflater)context.GetSystemService(Context.LayoutInflaterService);
+            var view = (LinearLayout)inflater.Inflate(Resource.Layout.autofill_listitem, null);
+            var text1 = (TextView)view.FindViewById(Resource.Id.text1);
+            var text2 = (TextView)view.FindViewById(Resource.Id.text2);
+            var icon = (ImageView)view.FindViewById(Resource.Id.icon);
+            text1.Text = AppResources.AutofillWithBitwarden;
+            text2.Text = AppResources.GoToMyVault;
+            icon.SetImageResource(Resource.Drawable.icon);
             return view;
         }
 
         public static Point GetOverlayAnchorPosition(AccessibilityNodeInfo root, AccessibilityEvent e)
         {
-            Rect rootRect = new Rect();
+            var rootRect = new Rect();
             root.GetBoundsInScreen(rootRect);
-            int rootRectHeight = rootRect.Height();
+            var rootRectHeight = rootRect.Height();
 
-            Rect eSrcRect = new Rect();
+            var eSrcRect = new Rect();
             e.Source.GetBoundsInScreen(eSrcRect);
-            int eSrcRectLeft = eSrcRect.Left;
-            int eSrcRectTop = eSrcRect.Top;
+            var eSrcRectLeft = eSrcRect.Left;
+            var eSrcRectTop = eSrcRect.Top;
 
-            int navBarHeight = GetNavigationBarHeight();
+            var navBarHeight = GetNavigationBarHeight();
 
-            int calculatedTop = rootRectHeight - eSrcRectTop - navBarHeight;
+            var calculatedTop = rootRectHeight - eSrcRectTop - navBarHeight;
 
             return new Point(eSrcRectLeft, calculatedTop);
         }
@@ -335,9 +343,9 @@ namespace Bit.Droid.Accessibility
         {
             var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
 
-            int barHeight = 0;
-            int resourceId = activity.Resources.GetIdentifier(resName, "dimen", "android");
-            if (resourceId > 0)
+            var barHeight = 0;
+            var resourceId = activity.Resources.GetIdentifier(resName, "dimen", "android");
+            if(resourceId > 0)
             {
                 barHeight = activity.Resources.GetDimensionPixelSize(resourceId);
             }

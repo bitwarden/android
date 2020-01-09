@@ -194,11 +194,10 @@ namespace Bit.Droid.Accessibility
 
         private void OverlayPromptToAutofill(AccessibilityNodeInfo root, AccessibilityEvent e)
         {
-            if (!AccessibilityHelpers.OverlayPermitted(this))
+            if(!AccessibilityHelpers.OverlayPermitted(this))
             {
                 System.Diagnostics.Debug.WriteLine(">>> Overlay Permission not granted");
-                string toastText = Resources.GetString(Resource.String.AccessibilityOverlayPermission);
-                Toast.MakeText(this, toastText, ToastLength.Long).Show();
+                Toast.MakeText(this, AppResources.AccessibilityOverlayPermissionAlert, ToastLength.Long).Show();
                 return;
             }
 
@@ -225,7 +224,7 @@ namespace Bit.Droid.Accessibility
                 WindowManagerFlags.NotFocusable | WindowManagerFlags.NotTouchModal,
                 Android.Graphics.Format.Transparent);
 
-            Point anchorPosition = AccessibilityHelpers.GetOverlayAnchorPosition(root, e);
+            var anchorPosition = AccessibilityHelpers.GetOverlayAnchorPosition(root, e);
 
             layoutParams.Gravity = GravityFlags.Bottom | GravityFlags.Left;
             layoutParams.X = anchorPosition.X;
@@ -240,7 +239,7 @@ namespace Bit.Droid.Accessibility
                 _windowManager = GetSystemService(WindowService).JavaCast<IWindowManager>();
             }
 
-            Boolean updateView = false;
+            var updateView = false;
             if (_overlayView != null)
             {
                 updateView = true;

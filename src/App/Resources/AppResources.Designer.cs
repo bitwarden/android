@@ -70,6 +70,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bitwarden requires additional accessibility configuration. Open the app for more info..
+        /// </summary>
+        public static string AccessibilityOverlayPermissionAlert {
+            get {
+                return ResourceManager.GetString("AccessibilityOverlayPermissionAlert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Account.
         /// </summary>
         public static string Account {

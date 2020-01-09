@@ -1587,4 +1587,7 @@
   <data name="UseBiometricsToUnlock" xml:space="preserve">
     <value>Use Biometrics To Unlock</value>
   </data>
+  <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
+    <value>Bitwarden requires additional accessibility configuration. Open the app for more info.</value>
+  </data>
 </root>
