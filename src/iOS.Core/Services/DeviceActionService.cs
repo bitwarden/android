@@ -516,6 +516,16 @@ namespace Bit.iOS.Core.Services
             url.StopAccessingSecurityScopedResource();
         }
 
+        public bool AutofillAccessibilityOverlayPermitted()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OpenAccessibilityOverlayPermissionSettings()
+        {
+            throw new NotImplementedException();
+        }
+
         public class PickerDelegate : UIDocumentPickerDelegate
         {
             private readonly DeviceActionService _deviceActionService;

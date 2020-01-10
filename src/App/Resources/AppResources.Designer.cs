@@ -70,7 +70,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Bitwarden requires additional accessibility configuration. Open the app for more info..
+        ///   Looks up a localized string similar to Bitwarden needs attention - See &quot;Auto-fill Accessibility Service&quot; from Bitwarden Settings.
         /// </summary>
         public static string AccessibilityOverlayPermissionAlert {
             get {
@@ -682,15 +682,6 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When you see a Bitwarden auto-fill notification, you can tap it to launch the auto-fill service..
-        /// </summary>
-        public static string BitwardenAutofillServiceNotification {
-            get {
-                return ResourceManager.GetString("BitwardenAutofillServiceNotification", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Tap this notification to auto-fill an item from your vault..
         /// </summary>
         public static string BitwardenAutofillServiceNotificationContent {
@@ -727,6 +718,33 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open Overlay Permission Settings.
+        /// </summary>
+        public static string BitwardenAutofillServiceOpenOverlayPermissionSettings {
+            get {
+                return ResourceManager.GetString("BitwardenAutofillServiceOpenOverlayPermissionSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When you select an input field and see a Bitwarden auto-fill overlay, you can tap it to launch the auto-fill service..
+        /// </summary>
+        public static string BitwardenAutofillServiceOverlay {
+            get {
+                return ResourceManager.GetString("BitwardenAutofillServiceOverlay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 3. On the Android App Settings screen for Bitwarden, go to the &quot;Display over other apps&quot; options (under Advanced) and tap the toggle to enable overlay support..
+        /// </summary>
+        public static string BitwardenAutofillServiceOverlayPermission {
+            get {
+                return ResourceManager.GetString("BitwardenAutofillServiceOverlayPermission", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You are searching for an auto-fill item for &quot;{0}&quot;..
         /// </summary>
         public static string BitwardenAutofillServiceSearch {
@@ -750,6 +768,15 @@ namespace Bit.App.Resources {
         public static string BitwardenAutofillServiceStep2 {
             get {
                 return ResourceManager.GetString("BitwardenAutofillServiceStep2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 3. On the Android App Settings screen for Bitwarden, select &quot;Display over other apps&quot; (under &quot;Advanced&quot;) and switch on the toggle to allow the overlay..
+        /// </summary>
+        public static string BitwardenAutofillServiceStep3 {
+            get {
+                return ResourceManager.GetString("BitwardenAutofillServiceStep3", resourceCulture);
             }
         }
         
@@ -1209,6 +1236,15 @@ namespace Bit.App.Resources {
         public static string Deleting {
             get {
                 return ResourceManager.GetString("Deleting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Denied.
+        /// </summary>
+        public static string Denied {
+            get {
+                return ResourceManager.GetString("Denied", resourceCulture);
             }
         }
         
@@ -1866,6 +1902,15 @@ namespace Bit.App.Resources {
         public static string GoToWebsite {
             get {
                 return ResourceManager.GetString("GoToWebsite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Granted.
+        /// </summary>
+        public static string Granted {
+            get {
+                return ResourceManager.GetString("Granted", resourceCulture);
             }
         }
         
@@ -2901,6 +2946,15 @@ namespace Bit.App.Resources {
         public static string Other {
             get {
                 return ResourceManager.GetString("Other", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Permission.
+        /// </summary>
+        public static string OverlayPermission {
+            get {
+                return ResourceManager.GetString("OverlayPermission", resourceCulture);
             }
         }
         

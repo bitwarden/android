@@ -625,6 +625,40 @@ namespace Bit.Droid.Services
             }
         }
 
+        public bool AutofillAccessibilityOverlayPermitted()
+        {
+            return Accessibility.AccessibilityHelpers.OverlayPermitted();
+        }
+
+        public void OpenAccessibilityOverlayPermissionSettings()
+        {
+            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            try
+            {
+                var intent = new Intent(Settings.ActionManageOverlayPermission);
+                intent.SetData(Android.Net.Uri.Parse("package:com.x8bit.bitwarden"));
+                activity.StartActivity(intent);
+            }
+            catch(ActivityNotFoundException)
+            {
+                // can't open overlay permission management, fall back to app settings
+                var intent = new Intent(Settings.ActionApplicationDetailsSettings);
+                intent.SetData(Android.Net.Uri.Parse("package:com.x8bit.bitwarden"));
+                activity.StartActivity(intent);
+            }
+            catch
+            {
+                var alertBuilder = new AlertDialog.Builder(activity);
+                alertBuilder.SetMessage(AppResources.BitwardenAutofillGoToSettings);
+                alertBuilder.SetCancelable(true);
+                alertBuilder.SetPositiveButton(AppResources.Ok, (sender, args) =>
+                {
+                    (sender as AlertDialog)?.Cancel();
+                });
+                alertBuilder.Create().Show();
+            }
+        }
+
         public bool AutofillServiceEnabled()
         {
             if(Build.VERSION.SdkInt < BuildVersionCodes.O)

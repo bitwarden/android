@@ -295,7 +295,8 @@ namespace Bit.App.Pages
                 autofillItems.Add(new SettingsPageListItem
                 {
                     Name = AppResources.AutofillAccessibilityService,
-                    SubLabel = _deviceActionService.AutofillAccessibilityServiceRunning() ?
+                    SubLabel = (_deviceActionService.AutofillAccessibilityServiceRunning() 
+                    && _deviceActionService.AutofillAccessibilityOverlayPermitted()) ?
                         AppResources.Enabled : AppResources.Disabled
                 });
             }

@@ -193,7 +193,7 @@ namespace Bit.Droid.Accessibility
 
         private void OverlayPromptToAutofill(AccessibilityNodeInfo root, AccessibilityEvent e)
         {
-            if(!AccessibilityHelpers.OverlayPermitted(this))
+            if(!AccessibilityHelpers.OverlayPermitted())
             {
                 System.Diagnostics.Debug.WriteLine(">>> Overlay Permission not granted");
                 Toast.MakeText(this, AppResources.AccessibilityOverlayPermissionAlert, ToastLength.Long).Show();
