@@ -21,6 +21,7 @@ namespace Bit.App.Pages
         protected override void OnAppearing()
         {
             _vm.UpdateEnabled();
+            _vm.UpdatePermitted();
             _timerStarted = DateTime.UtcNow;
             Device.StartTimer(new TimeSpan(0, 0, 3), () =>
             {
@@ -29,6 +30,7 @@ namespace Bit.App.Pages
                     return false;
                 }
                 _vm.UpdateEnabled();
+                _vm.UpdatePermitted();
                 return true;
             });
             base.OnAppearing();
@@ -46,6 +48,14 @@ namespace Bit.App.Pages
             if(DoOnce())
             {
                 _vm.OpenSettings();
+            }
+        }
+
+        private void OverlayPermissionSettings_Clicked(object sender, EventArgs e)
+        {
+            if(DoOnce())
+            {
+                _vm.OpenOverlayPermissionSettings();
             }
         }
     }

@@ -268,32 +268,16 @@ namespace Bit.Droid.Accessibility
             return allEditTexts.TakeWhile(n => !n.Password).LastOrDefault();
         }
 
-        public static bool OverlayPermitted(Context context)
+        public static bool OverlayPermitted()
         {
             if(Build.VERSION.SdkInt >= BuildVersionCodes.M)
             {
-                return Settings.CanDrawOverlays(context.ApplicationContext);
+                return Settings.CanDrawOverlays(Android.App.Application.Context);
             }
             else
             {
                 // TODO do older android versions require a check?
                 return true;
-            }
-        }
-
-        public static bool OpenOverlaySettings(Context context, string packageName)
-        {
-            try
-            {
-                var intent = new Intent(Settings.ActionManageOverlayPermission);
-                intent.SetPackage(packageName);
-                intent.SetFlags(ActivityFlags.NewTask);
-                context.StartActivity(intent);
-                return true;
-            }
-            catch
-            {
-                return false;
             }
         }
 

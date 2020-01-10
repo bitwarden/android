@@ -292,10 +292,13 @@ namespace Bit.App.Pages
                             AppResources.Enabled : AppResources.Disabled
                     });
                 }
+
+                var accessibilityEnabled = _deviceActionService.AutofillAccessibilityServiceRunning() &&
+                    _deviceActionService.AutofillAccessibilityOverlayPermitted();
                 autofillItems.Add(new SettingsPageListItem
                 {
                     Name = AppResources.AutofillAccessibilityService,
-                    SubLabel = _deviceActionService.AutofillAccessibilityServiceRunning() ?
+                    SubLabel = accessibilityEnabled ?
                         AppResources.Enabled : AppResources.Disabled
                 });
             }
