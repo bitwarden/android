@@ -18,8 +18,6 @@ namespace Bit.App.Services
             Constants.DisableAutoTotpCopyKey,
             Constants.DisableFaviconKey,
             Constants.ClearClipboardKey,
-            Constants.AccessibilityAutofillPasswordFieldKey,
-            Constants.AccessibilityAutofillPersistNotificationKey,
             Constants.AutofillDisableSavePromptKey,
             Constants.LastActiveKey,
             Constants.PushInitialPromptShownKey,
