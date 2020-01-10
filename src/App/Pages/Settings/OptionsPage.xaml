@@ -132,55 +132,6 @@
                     Text="{u:I18n BlacklistedUrisDescription}"
                     StyleClass="box-footer-label" />
             </StackLayout>
-            <StackLayout StyleClass="box" IsVisible="{Binding ShowAndroidAccessibilitySettings}">
-                <StackLayout StyleClass="box-row-header">
-                    <Label Text="{u:I18n AutofillAccessibilityService, Header=True}"
-                            StyleClass="box-header, box-header-platform" />
-                </StackLayout>
-                <StackLayout StyleClass="box-row, box-row-switch">
-                    <Label
-                        Text="{u:I18n AutofillAlways}"
-                        StyleClass="box-label, box-label-regular"
-                        HorizontalOptions="StartAndExpand" />
-                    <Switch
-                        IsToggled="{Binding AutofillAlwaysScan}"
-                        StyleClass="box-value"
-                        HorizontalOptions="End" />
-                </StackLayout>
-                <Label
-                    Text="{u:I18n AutofillAlwaysDescription}"
-                    StyleClass="box-footer-label, box-footer-label-switch" />
-            </StackLayout>
-            <StackLayout StyleClass="box" IsVisible="{Binding ShowAndroidAccessibilitySettings}">
-                <StackLayout StyleClass="box-row, box-row-switch">
-                    <Label
-                        Text="{u:I18n AutofillPersistNotification}"
-                        StyleClass="box-label, box-label-regular"
-                        HorizontalOptions="StartAndExpand" />
-                    <Switch
-                        IsToggled="{Binding AutofillPersistNotification}"
-                        StyleClass="box-value"
-                        HorizontalOptions="End" />
-                </StackLayout>
-                <Label
-                    Text="{u:I18n AutofillPersistNotificationDescription}"
-                    StyleClass="box-footer-label, box-footer-label-switch" />
-            </StackLayout>
-            <StackLayout StyleClass="box" IsVisible="{Binding ShowAndroidAccessibilitySettings}">
-                <StackLayout StyleClass="box-row, box-row-switch">
-                    <Label
-                        Text="{u:I18n AutofillPasswordField}"
-                        StyleClass="box-label, box-label-regular"
-                        HorizontalOptions="StartAndExpand" />
-                    <Switch
-                        IsToggled="{Binding AutofillPasswordField}"
-                        StyleClass="box-value"
-                        HorizontalOptions="End" />
-                </StackLayout>
-                <Label
-                    Text="{u:I18n AutofillPasswordFieldDescription}"
-                    StyleClass="box-footer-label, box-footer-label-switch" />
-            </StackLayout>
         </StackLayout>
     </ScrollView>
 
