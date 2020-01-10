@@ -39,9 +39,9 @@ namespace Bit.App.Pages
                 });
         }
 
-        public bool EnabledWithoutPermission => _enabled && !_permitted;
+        public bool EnabledWithoutPermission => Enabled && !Permitted;
 
-        public bool EnabledAndPermitted => _enabled && _permitted;
+        public bool EnabledAndPermitted => Enabled && Permitted;
 
         public void OpenSettings()
         {
