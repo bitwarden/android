@@ -257,24 +257,33 @@ namespace Bit.Droid.Accessibility
             IEnumerable<AccessibilityNodeInfo> passwordNodes)
         {
             var allEditTexts = GetWindowNodes(root, e, n => EditText(n), false);
-            var usernameEditText = GetUsernameEditText(allEditTexts);
+            var usernameEditText = GetUsernameEditTextIfPasswordExists(allEditTexts);
             FillCredentials(usernameEditText, passwordNodes);
             allEditTexts.Dispose();
             usernameEditText = null;
         }
 
-        public static AccessibilityNodeInfo GetUsernameEditText(IEnumerable<AccessibilityNodeInfo> allEditTexts)
+        public static AccessibilityNodeInfo GetUsernameEditTextIfPasswordExists(
+            IEnumerable<AccessibilityNodeInfo> allEditTexts)
         {
-            return allEditTexts.TakeWhile(n => !n.Password).LastOrDefault();
+            AccessibilityNodeInfo previousEditText = null;
+            foreach(var editText in allEditTexts)
+            {
+                if(editText.Password)
+                {
+                    return previousEditText;
+                }
+                previousEditText = editText;
+            }
+            return null;
         }
 
         public static bool IsUsernameEditText(AccessibilityNodeInfo root, AccessibilityEvent e)
         {
-            var passwordNodes = AccessibilityHelpers.GetWindowNodes(root, e, n => n.Password, false);
-            if(passwordNodes.Count > 0)
-            {
-                var allEditTexts = GetWindowNodes(root, e, n => EditText(n), false);
-                var usernameEditText = GetUsernameEditText(allEditTexts);
+            var allEditTexts = GetWindowNodes(root, e, n => EditText(n), false);
+            var usernameEditText = GetUsernameEditTextIfPasswordExists(allEditTexts);
+            if(usernameEditText != null)
+            { 
                 var isUsernameEditText = IsSameNode(usernameEditText, e.Source);
                 allEditTexts.Dispose();
                 usernameEditText = null;
@@ -285,7 +294,8 @@ namespace Bit.Droid.Accessibility
 
         public static bool IsSameNode(AccessibilityNodeInfo info1, AccessibilityNodeInfo info2)
         {
-            if(info1 != null && info2 != null) {
+            if(info1 != null && info2 != null) 
+            {
                 return info1.Equals(info2) || info1.GetHashCode() == info2.GetHashCode();
             }
             return false;
@@ -360,7 +370,7 @@ namespace Bit.Droid.Accessibility
         {
             Point point = null;
             var allEditTexts = GetWindowNodes(root, e, n => EditText(n), false);
-            foreach(AccessibilityNodeInfo node in allEditTexts)
+            foreach(var node in allEditTexts)
             {
                 if(node.GetHashCode() == nodeHash)
                 {

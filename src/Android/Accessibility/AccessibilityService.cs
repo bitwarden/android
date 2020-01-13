@@ -64,9 +64,6 @@ namespace Bit.Droid.Accessibility
                     return;
                 }
 
-                var isUsernameEditText = AccessibilityHelpers.IsUsernameEditText(root, e);
-                var isPasswordEditText = e.Source != null && e.Source.Password;
-
                 // AccessibilityHelpers.PrintTestData(root, e);
 
                 switch(e.EventType)
@@ -84,14 +81,16 @@ namespace Bit.Droid.Accessibility
                             CancelOverlayPrompt();
                             break;
                         }
-                        if (e.EventType == EventTypes.ViewScrolled)
+                        if(e.EventType == EventTypes.ViewScrolled)
                         {
                             AdjustOverlayForScroll(root, e);
                             break;
                         }
                         else
                         {
-                            if(!isUsernameEditText && !isPasswordEditText)
+                            var isUsernameEditText1 = AccessibilityHelpers.IsUsernameEditText(root, e);
+                            var isPasswordEditText1 = e.Source?.Password ?? false;
+                            if(!isUsernameEditText1 && !isPasswordEditText1)
                             {
                                 CancelOverlayPrompt();
                                 break;
@@ -108,7 +107,9 @@ namespace Bit.Droid.Accessibility
                         break;
                     case EventTypes.WindowContentChanged:
                     case EventTypes.WindowStateChanged:
-                        if(e.Source == null || isUsernameEditText || isPasswordEditText)
+                        var isUsernameEditText2 = AccessibilityHelpers.IsUsernameEditText(root, e);
+                        var isPasswordEditText2 = e.Source?.Password ?? false;
+                        if(e.Source == null || isUsernameEditText2 || isPasswordEditText2)
                         {
                             break;
                         }
@@ -273,7 +274,7 @@ namespace Bit.Droid.Accessibility
                 return;
             }
 
-            Point anchorPosition = AccessibilityHelpers.GetOverlayAnchorPosition(_anchorViewHash, root, e);
+            var anchorPosition = AccessibilityHelpers.GetOverlayAnchorPosition(_anchorViewHash, root, e);
             if(anchorPosition == null)
             {
                 return;
