@@ -257,15 +257,48 @@ namespace Bit.Droid.Accessibility
             IEnumerable<AccessibilityNodeInfo> passwordNodes)
         {
             var allEditTexts = GetWindowNodes(root, e, n => EditText(n), false);
-            var usernameEditText = GetUsernameEditText(allEditTexts);
+            var usernameEditText = GetUsernameEditTextIfPasswordExists(allEditTexts);
             FillCredentials(usernameEditText, passwordNodes);
             allEditTexts.Dispose();
             usernameEditText = null;
         }
 
-        public static AccessibilityNodeInfo GetUsernameEditText(IEnumerable<AccessibilityNodeInfo> allEditTexts)
+        public static AccessibilityNodeInfo GetUsernameEditTextIfPasswordExists(
+            IEnumerable<AccessibilityNodeInfo> allEditTexts)
         {
-            return allEditTexts.TakeWhile(n => !n.Password).LastOrDefault();
+            AccessibilityNodeInfo previousEditText = null;
+            foreach(var editText in allEditTexts)
+            {
+                if(editText.Password)
+                {
+                    return previousEditText;
+                }
+                previousEditText = editText;
+            }
+            return null;
+        }
+
+        public static bool IsUsernameEditText(AccessibilityNodeInfo root, AccessibilityEvent e)
+        {
+            var allEditTexts = GetWindowNodes(root, e, n => EditText(n), false);
+            var usernameEditText = GetUsernameEditTextIfPasswordExists(allEditTexts);
+            if(usernameEditText != null)
+            { 
+                var isUsernameEditText = IsSameNode(usernameEditText, e.Source);
+                allEditTexts.Dispose();
+                usernameEditText = null;
+                return isUsernameEditText;
+            }
+            return false;
+        }
+
+        public static bool IsSameNode(AccessibilityNodeInfo info1, AccessibilityNodeInfo info2)
+        {
+            if(info1 != null && info2 != null) 
+            {
+                return info1.Equals(info2) || info1.GetHashCode() == info2.GetHashCode();
+            }
+            return false;
         }
 
         public static bool OverlayPermitted()
@@ -294,20 +327,59 @@ namespace Bit.Droid.Accessibility
             return view;
         }
 
-        public static Point GetOverlayAnchorPosition(AccessibilityNodeInfo root, AccessibilityEvent e)
+        public static WindowManagerLayoutParams GetOverlayLayoutParams()
+        {
+            WindowManagerTypes windowManagerType;
+            if(Build.VERSION.SdkInt >= BuildVersionCodes.O)
+            {
+                windowManagerType = WindowManagerTypes.ApplicationOverlay;
+            }
+            else
+            {
+                windowManagerType = WindowManagerTypes.Phone;
+            }
+
+            var layoutParams = new WindowManagerLayoutParams(
+                ViewGroup.LayoutParams.WrapContent,
+                ViewGroup.LayoutParams.WrapContent,
+                windowManagerType,
+                WindowManagerFlags.NotFocusable | WindowManagerFlags.NotTouchModal,
+                Format.Transparent);
+            layoutParams.Gravity = GravityFlags.Bottom | GravityFlags.Left;
+
+            return layoutParams;
+        }
+
+        public static Point GetOverlayAnchorPosition(AccessibilityNodeInfo root, AccessibilityNodeInfo anchorView)
         {
             var rootRect = new Rect();
             root.GetBoundsInScreen(rootRect);
             var rootRectHeight = rootRect.Height();
 
-            var eSrcRect = new Rect();
-            e.Source.GetBoundsInScreen(eSrcRect);
-            var eSrcRectLeft = eSrcRect.Left;
-            var eSrcRectTop = eSrcRect.Top;
+            var anchorViewRect = new Rect();
+            anchorView.GetBoundsInScreen(anchorViewRect);
+            var anchorViewRectLeft = anchorViewRect.Left;
+            var anchorViewRectTop = anchorViewRect.Top;
 
             var navBarHeight = GetNavigationBarHeight();
-            var calculatedTop = rootRectHeight - eSrcRectTop - navBarHeight;
-            return new Point(eSrcRectLeft, calculatedTop);
+            var calculatedTop = rootRectHeight - anchorViewRectTop - navBarHeight;
+            return new Point(anchorViewRectLeft, calculatedTop);
+        }
+
+        public static Point GetOverlayAnchorPosition(int nodeHash, AccessibilityNodeInfo root, AccessibilityEvent e)
+        {
+            Point point = null;
+            var allEditTexts = GetWindowNodes(root, e, n => EditText(n), false);
+            foreach(var node in allEditTexts)
+            {
+                if(node.GetHashCode() == nodeHash)
+                {
+                    point = GetOverlayAnchorPosition(root, node);
+                    break;
+                }
+            }
+            allEditTexts.Dispose();
+            return point;
         }
 
         private static int GetStatusBarHeight()

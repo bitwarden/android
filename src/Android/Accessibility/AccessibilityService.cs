@@ -35,6 +35,8 @@ namespace Bit.Droid.Accessibility
 
         private IWindowManager _windowManager = null;
         private LinearLayout _overlayView = null;
+        private int _anchorViewHash = 0;
+        private int _lastAnchorX, _lastAnchorY = 0;
 
         public override void OnAccessibilityEvent(AccessibilityEvent e)
         {
@@ -68,33 +70,46 @@ namespace Bit.Droid.Accessibility
                 {
                     case EventTypes.ViewFocused:
                     case EventTypes.ViewClicked:
+                    case EventTypes.ViewScrolled:
                         var isKnownBroswer = AccessibilityHelpers.SupportedBrowsers.ContainsKey(root.PackageName);
                         if(e.EventType == EventTypes.ViewClicked && isKnownBroswer)
                         {
                             break;
                         }
-                        if(e.Source == null || !e.Source.Password)
+                        if(e.Source == null || e.PackageName == BitwardenPackage)
                         {
                             CancelOverlayPrompt();
                             break;
                         }
-                        if(e.PackageName == BitwardenPackage)
+                        if(e.EventType == EventTypes.ViewScrolled)
                         {
-                            CancelOverlayPrompt();
+                            AdjustOverlayForScroll(root, e);
                             break;
-                        }
-                        if(ScanAndAutofill(root, e))
-                        {
-                            CancelOverlayPrompt();
                         }
                         else
                         {
-                            OverlayPromptToAutofill(root, e);
+                            var isUsernameEditText1 = AccessibilityHelpers.IsUsernameEditText(root, e);
+                            var isPasswordEditText1 = e.Source?.Password ?? false;
+                            if(!isUsernameEditText1 && !isPasswordEditText1)
+                            {
+                                CancelOverlayPrompt();
+                                break;
+                            }
+                            if(ScanAndAutofill(root, e))
+                            {
+                                CancelOverlayPrompt();
+                            }
+                            else
+                            {
+                                OverlayPromptToAutofill(root, e);
+                            }
                         }
                         break;
                     case EventTypes.WindowContentChanged:
                     case EventTypes.WindowStateChanged:
-                        if(e.Source == null || e.Source.Password)
+                        var isUsernameEditText2 = AccessibilityHelpers.IsUsernameEditText(root, e);
+                        var isPasswordEditText2 = e.Source?.Password ?? false;
+                        if(e.Source == null || isUsernameEditText2 || isPasswordEditText2)
                         {
                             break;
                         }
@@ -188,7 +203,10 @@ namespace Bit.Droid.Accessibility
             System.Diagnostics.Debug.WriteLine(">>> Accessibility Overlay View Removed");
 
             _overlayView = null;
+            _anchorViewHash = 0;
             _lastNotificationUri = null;
+            _lastAnchorX = 0;
+            _lastAnchorY = 0;
         }
 
         private void OverlayPromptToAutofill(AccessibilityNodeInfo root, AccessibilityEvent e)
@@ -206,64 +224,78 @@ namespace Bit.Droid.Accessibility
                 return;
             }
 
-            WindowManagerTypes windowManagerType;
-            if(Build.VERSION.SdkInt >= BuildVersionCodes.O)
-            {
-                windowManagerType = WindowManagerTypes.ApplicationOverlay;
-            }
-            else
-            {
-                windowManagerType = WindowManagerTypes.Phone;
-            }
-
-            var layoutParams = new WindowManagerLayoutParams(
-                ViewGroup.LayoutParams.WrapContent,
-                ViewGroup.LayoutParams.WrapContent,
-                windowManagerType,
-                WindowManagerFlags.NotFocusable | WindowManagerFlags.NotTouchModal,
-                Format.Transparent);
-
-            var anchorPosition = AccessibilityHelpers.GetOverlayAnchorPosition(root, e);
-
-            layoutParams.Gravity = GravityFlags.Bottom | GravityFlags.Left;
+            var layoutParams = AccessibilityHelpers.GetOverlayLayoutParams();
+            var anchorPosition = AccessibilityHelpers.GetOverlayAnchorPosition(root, e.Source);
             layoutParams.X = anchorPosition.X;
             layoutParams.Y = anchorPosition.Y;
-
-            var intent = new Intent(this, typeof(AccessibilityActivity));
-            intent.PutExtra("uri", uri);
-            intent.SetFlags(ActivityFlags.NewTask | ActivityFlags.SingleTop | ActivityFlags.ClearTop);
 
             if(_windowManager == null)
             {
                 _windowManager = GetSystemService(WindowService).JavaCast<IWindowManager>();
             }
 
-            var updateView = false;
-            if(_overlayView != null)
+            if(_overlayView == null)
             {
-                updateView = true;
-            }
+                var intent = new Intent(this, typeof(AccessibilityActivity));
+                intent.PutExtra("uri", uri);
+                intent.SetFlags(ActivityFlags.NewTask | ActivityFlags.SingleTop | ActivityFlags.ClearTop);
 
-            _overlayView = AccessibilityHelpers.GetOverlayView(this);
-            _overlayView.Click += (sender, eventArgs) =>
-            {
-                CancelOverlayPrompt();
-                StartActivity(intent);
-            };
+                _overlayView = AccessibilityHelpers.GetOverlayView(this);
+                _overlayView.Click += (sender, eventArgs) =>
+                {
+                    CancelOverlayPrompt();
+                    StartActivity(intent);
+                };
 
-            _lastNotificationUri = uri;
+                _lastNotificationUri = uri;
 
-            if(updateView)
-            {
-                _windowManager.UpdateViewLayout(_overlayView, layoutParams);
+                _windowManager.AddView(_overlayView, layoutParams);
+
+                System.Diagnostics.Debug.WriteLine(">>> Accessibility Overlay View Added at X:{0} Y:{1}",
+                    layoutParams.X, layoutParams.Y);
             }
             else
             {
-                _windowManager.AddView(_overlayView, layoutParams);
+                _windowManager.UpdateViewLayout(_overlayView, layoutParams);
+
+                System.Diagnostics.Debug.WriteLine(">>> Accessibility Overlay View Updated to X:{0} Y:{1}",
+                    layoutParams.X, layoutParams.Y);
             }
 
-            System.Diagnostics.Debug.WriteLine(">>> Accessibility Overlay View {0} X:{1} Y:{2}",
-                updateView ? "Updated to" : "Added at", layoutParams.X, layoutParams.Y);
+            _anchorViewHash = e.Source.GetHashCode();
+            _lastAnchorX = anchorPosition.X;
+            _lastAnchorY = anchorPosition.Y;
+        }
+
+        private void AdjustOverlayForScroll(AccessibilityNodeInfo root, AccessibilityEvent e)
+        {
+            if(_overlayView == null || _anchorViewHash <= 0)
+            {
+                return;
+            }
+
+            var anchorPosition = AccessibilityHelpers.GetOverlayAnchorPosition(_anchorViewHash, root, e);
+            if(anchorPosition == null)
+            {
+                return;
+            }
+
+            if(anchorPosition.X == _lastAnchorX && anchorPosition.Y == _lastAnchorY)
+            {
+                return;
+            }
+
+            var layoutParams = AccessibilityHelpers.GetOverlayLayoutParams();
+            layoutParams.X = anchorPosition.X;
+            layoutParams.Y = anchorPosition.Y;
+
+            _windowManager.UpdateViewLayout(_overlayView, layoutParams);
+
+            _lastAnchorX = anchorPosition.X;
+            _lastAnchorY = anchorPosition.Y;
+
+            System.Diagnostics.Debug.WriteLine(">>> Accessibility Overlay View Updated to X:{0} Y:{1}",
+                    layoutParams.X, layoutParams.Y);
         }
 
         private bool SkipPackage(string eventPackageName)
