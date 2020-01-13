@@ -73,12 +73,12 @@ namespace Bit.Droid.Accessibility
                         {
                             break;
                         }
-                        if(e.Source == null || !e.Source.Password)
+                        if(e.PackageName == BitwardenPackage)
                         {
                             CancelOverlayPrompt();
                             break;
                         }
-                        if(e.PackageName == BitwardenPackage)
+                        if(e.Source == null || (!e.Source.Password && !AccessibilityHelpers.IsUsernameEditText(root, e)))
                         {
                             CancelOverlayPrompt();
                             break;
@@ -94,7 +94,7 @@ namespace Bit.Droid.Accessibility
                         break;
                     case EventTypes.WindowContentChanged:
                     case EventTypes.WindowStateChanged:
-                        if(e.Source == null || e.Source.Password)
+                        if(e.Source == null || e.Source.Password || AccessibilityHelpers.IsUsernameEditText(root, e))
                         {
                             break;
                         }
@@ -126,6 +126,11 @@ namespace Bit.Droid.Accessibility
                         if(ScanAndAutofill(root, e))
                         {
                             CancelOverlayPrompt();
+                        }
+
+                        if(_overlayView != null)
+                        {
+                            OverlayPromptToAutofill(root, e);
                         }
                         break;
                     default:
@@ -229,41 +234,38 @@ namespace Bit.Droid.Accessibility
             layoutParams.X = anchorPosition.X;
             layoutParams.Y = anchorPosition.Y;
 
-            var intent = new Intent(this, typeof(AccessibilityActivity));
-            intent.PutExtra("uri", uri);
-            intent.SetFlags(ActivityFlags.NewTask | ActivityFlags.SingleTop | ActivityFlags.ClearTop);
-
             if(_windowManager == null)
             {
                 _windowManager = GetSystemService(WindowService).JavaCast<IWindowManager>();
             }
 
-            var updateView = false;
-            if(_overlayView != null)
+            if(_overlayView == null)
             {
-                updateView = true;
-            }
+                var intent = new Intent(this, typeof(AccessibilityActivity));
+                intent.PutExtra("uri", uri);
+                intent.SetFlags(ActivityFlags.NewTask | ActivityFlags.SingleTop | ActivityFlags.ClearTop);
 
-            _overlayView = AccessibilityHelpers.GetOverlayView(this);
-            _overlayView.Click += (sender, eventArgs) =>
-            {
-                CancelOverlayPrompt();
-                StartActivity(intent);
-            };
+                _overlayView = AccessibilityHelpers.GetOverlayView(this);
+                _overlayView.Click += (sender, eventArgs) =>
+                {
+                    CancelOverlayPrompt();
+                    StartActivity(intent);
+                };
 
-            _lastNotificationUri = uri;
+                _lastNotificationUri = uri;
 
-            if(updateView)
-            {
-                _windowManager.UpdateViewLayout(_overlayView, layoutParams);
+                _windowManager.AddView(_overlayView, layoutParams);
+
+                System.Diagnostics.Debug.WriteLine(">>> Accessibility Overlay View Added at X:{0} Y:{1}",
+                    layoutParams.X, layoutParams.Y);
             }
             else
             {
-                _windowManager.AddView(_overlayView, layoutParams);
-            }
+                _windowManager.UpdateViewLayout(_overlayView, layoutParams);
 
-            System.Diagnostics.Debug.WriteLine(">>> Accessibility Overlay View {0} X:{1} Y:{2}",
-                updateView ? "Updated to" : "Added at", layoutParams.X, layoutParams.Y);
+                System.Diagnostics.Debug.WriteLine(">>> Accessibility Overlay View Updated to X:{0} Y:{1}",
+                    layoutParams.X, layoutParams.Y);
+            }
         }
 
         private bool SkipPackage(string eventPackageName)

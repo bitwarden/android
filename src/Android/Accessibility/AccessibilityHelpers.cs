@@ -268,6 +268,29 @@ namespace Bit.Droid.Accessibility
             return allEditTexts.TakeWhile(n => !n.Password).LastOrDefault();
         }
 
+        public static bool IsUsernameEditText(AccessibilityNodeInfo root, AccessibilityEvent e)
+        {
+            var passwordNodes = AccessibilityHelpers.GetWindowNodes(root, e, n => n.Password, false);
+            if(passwordNodes.Count > 0)
+            {
+                var allEditTexts = GetWindowNodes(root, e, n => EditText(n), false);
+                var usernameEditText = GetUsernameEditText(allEditTexts);
+                var isUsernameEditText = IsSameNode(usernameEditText, e.Source);
+                allEditTexts.Dispose();
+                usernameEditText = null;
+                return isUsernameEditText;
+            }
+            return false;
+        }
+
+        public static bool IsSameNode(AccessibilityNodeInfo info1, AccessibilityNodeInfo info2)
+        {
+            if(info1 != null && info2 != null) {
+                return info1.Equals(info2) || info1.GetHashCode() == info2.GetHashCode();
+            }
+            return false;
+        }
+
         public static bool OverlayPermitted()
         {
             if(Build.VERSION.SdkInt >= BuildVersionCodes.M)
