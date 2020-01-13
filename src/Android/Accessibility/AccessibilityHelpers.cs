@@ -317,20 +317,59 @@ namespace Bit.Droid.Accessibility
             return view;
         }
 
-        public static Point GetOverlayAnchorPosition(AccessibilityNodeInfo root, AccessibilityEvent e)
+        public static WindowManagerLayoutParams GetOverlayLayoutParams()
+        {
+            WindowManagerTypes windowManagerType;
+            if(Build.VERSION.SdkInt >= BuildVersionCodes.O)
+            {
+                windowManagerType = WindowManagerTypes.ApplicationOverlay;
+            }
+            else
+            {
+                windowManagerType = WindowManagerTypes.Phone;
+            }
+
+            var layoutParams = new WindowManagerLayoutParams(
+                ViewGroup.LayoutParams.WrapContent,
+                ViewGroup.LayoutParams.WrapContent,
+                windowManagerType,
+                WindowManagerFlags.NotFocusable | WindowManagerFlags.NotTouchModal,
+                Format.Transparent);
+            layoutParams.Gravity = GravityFlags.Bottom | GravityFlags.Left;
+
+            return layoutParams;
+        }
+
+        public static Point GetOverlayAnchorPosition(AccessibilityNodeInfo root, AccessibilityNodeInfo anchorView)
         {
             var rootRect = new Rect();
             root.GetBoundsInScreen(rootRect);
             var rootRectHeight = rootRect.Height();
 
-            var eSrcRect = new Rect();
-            e.Source.GetBoundsInScreen(eSrcRect);
-            var eSrcRectLeft = eSrcRect.Left;
-            var eSrcRectTop = eSrcRect.Top;
+            var anchorViewRect = new Rect();
+            anchorView.GetBoundsInScreen(anchorViewRect);
+            var anchorViewRectLeft = anchorViewRect.Left;
+            var anchorViewRectTop = anchorViewRect.Top;
 
             var navBarHeight = GetNavigationBarHeight();
-            var calculatedTop = rootRectHeight - eSrcRectTop - navBarHeight;
-            return new Point(eSrcRectLeft, calculatedTop);
+            var calculatedTop = rootRectHeight - anchorViewRectTop - navBarHeight;
+            return new Point(anchorViewRectLeft, calculatedTop);
+        }
+
+        public static Point GetOverlayAnchorPosition(int nodeHash, AccessibilityNodeInfo root, AccessibilityEvent e)
+        {
+            Point point = null;
+            var allEditTexts = GetWindowNodes(root, e, n => EditText(n), false);
+            foreach(AccessibilityNodeInfo node in allEditTexts)
+            {
+                if(node.GetHashCode() == nodeHash)
+                {
+                    point = GetOverlayAnchorPosition(root, node);
+                    break;
+                }
+            }
+            allEditTexts.Dispose();
+            return point;
         }
 
         private static int GetStatusBarHeight()
