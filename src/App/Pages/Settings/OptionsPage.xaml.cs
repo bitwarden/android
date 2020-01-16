@@ -24,7 +24,6 @@ namespace Bit.App.Pages
             if(Device.RuntimePlatform == Device.Android)
             {
                 ToolbarItems.RemoveAt(0);
-                _vm.ShowAndroidAccessibilitySettings = true;
                 _vm.ShowAndroidAutofillSettings = _deviceActionService.SupportsAutofillService();
                 _themeDescriptionLabel.Text = string.Concat(_themeDescriptionLabel.Text, " ",
                     AppResources.RestartIsRequired);

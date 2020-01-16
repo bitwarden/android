@@ -13,8 +13,6 @@
         public static string DisableAutoTotpCopyKey = "disableAutoTotpCopy";
         public static string EnvironmentUrlsKey = "environmentUrls";
         public static string LastFileCacheClearKey = "lastFileCacheClear";
-        public static string AccessibilityAutofillPasswordFieldKey = "accessibilityAutofillPasswordField";
-        public static string AccessibilityAutofillPersistNotificationKey = "accessibilityAutofillPersistNotification";
         public static string AutofillDisableSavePromptKey = "autofillDisableSavePrompt";
         public static string AutofillBlacklistedUrisKey = "autofillBlacklistedUris";
         public static string DisableFaviconKey = "disableFavicon";

@@ -21,9 +21,6 @@ namespace Bit.App.Pages
         private readonly IMessagingService _messagingService;
 
 
-        private bool _autofillAlwaysScan;
-        private bool _autofillPersistNotification;
-        private bool _autofillPasswordField;
         private bool _autofillDisableSavePrompt;
         private string _autofillBlacklistedUris;
         private bool _disableFavicon;
@@ -33,7 +30,6 @@ namespace Bit.App.Pages
         private int _uriMatchSelectedIndex;
         private bool _inited;
         private bool _updatingAutofill;
-        private bool _showAndroidAccessibilitySettings;
         private bool _showAndroidAutofillSettings;
 
         public OptionsPageViewModel()
@@ -144,42 +140,6 @@ namespace Bit.App.Pages
             }
         }
 
-        public bool AutofillAlwaysScan
-        {
-            get => _autofillAlwaysScan;
-            set
-            {
-                if(SetProperty(ref _autofillAlwaysScan, value))
-                {
-                    var task = UpdateAutofillAsync(false, false);
-                }
-            }
-        }
-
-        public bool AutofillPersistNotification
-        {
-            get => _autofillPersistNotification;
-            set
-            {
-                if(SetProperty(ref _autofillPersistNotification, value))
-                {
-                    var task = UpdateAutofillAsync(value, false);
-                }
-            }
-        }
-
-        public bool AutofillPasswordField
-        {
-            get => _autofillPasswordField;
-            set
-            {
-                if(SetProperty(ref _autofillPasswordField, value))
-                {
-                    var task = UpdateAutofillAsync(false, value);
-                }
-            }
-        }
-
         public bool AutofillDisableSavePrompt
         {
             get => _autofillDisableSavePrompt;
@@ -198,12 +158,6 @@ namespace Bit.App.Pages
             set => SetProperty(ref _autofillBlacklistedUris, value);
         }
 
-        public bool ShowAndroidAccessibilitySettings
-        {
-            get => _showAndroidAccessibilitySettings;
-            set => SetProperty(ref _showAndroidAccessibilitySettings, value);
-        }
-
         public bool ShowAndroidAutofillSettings
         {
             get => _showAndroidAutofillSettings;
@@ -217,11 +171,6 @@ namespace Bit.App.Pages
             var blacklistedUrisList = await _storageService.GetAsync<List<string>>(
                 Constants.AutofillBlacklistedUrisKey);
             AutofillBlacklistedUris = blacklistedUrisList != null ? string.Join(", ", blacklistedUrisList) : null;
-            AutofillPersistNotification = (await _storageService.GetAsync<bool?>(
-                Constants.AccessibilityAutofillPersistNotificationKey)).GetValueOrDefault();
-            AutofillPasswordField = (await _storageService.GetAsync<bool?>(
-                Constants.AccessibilityAutofillPasswordFieldKey)).GetValueOrDefault();
-            AutofillAlwaysScan = !AutofillPersistNotification && !AutofillPasswordField;
             DisableAutoTotpCopy = !(await _totpService.IsAutoCopyEnabledAsync());
             DisableFavicon = (await _storageService.GetAsync<bool?>(Constants.DisableFaviconKey)).GetValueOrDefault();
             var theme = await _storageService.GetAsync<string>(Constants.ThemeKey);
@@ -232,35 +181,6 @@ namespace Bit.App.Pages
             var clearClipboard = await _storageService.GetAsync<int?>(Constants.ClearClipboardKey);
             ClearClipboardSelectedIndex = ClearClipboardOptions.FindIndex(k => k.Key == clearClipboard);
             _inited = true;
-        }
-
-        private async Task UpdateAutofillAsync(bool persistNotification, bool passwordField)
-        {
-            if(_inited && !_updatingAutofill)
-            {
-                _updatingAutofill = true;
-                if(persistNotification)
-                {
-                    AutofillAlwaysScan = false;
-                    AutofillPasswordField = false;
-                }
-                else if(passwordField)
-                {
-                    AutofillAlwaysScan = false;
-                    AutofillPersistNotification = false;
-                }
-                else
-                {
-                    AutofillAlwaysScan = true;
-                    AutofillPersistNotification = false;
-                    AutofillPasswordField = false;
-                }
-                await _storageService.SaveAsync(Constants.AccessibilityAutofillPersistNotificationKey,
-                    AutofillPersistNotification);
-                await _storageService.SaveAsync(Constants.AccessibilityAutofillPasswordFieldKey,
-                    AutofillPasswordField);
-                _updatingAutofill = false;
-            }
         }
 
         private async Task UpdateAutoTotpCopyAsync()

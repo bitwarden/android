@@ -1,9 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Android.Content;
+using Android.Content.Res;
+using Android.Graphics;
 using Android.OS;
+using Android.Provider;
+using Android.Views;
 using Android.Views.Accessibility;
+using Android.Widget;
+using Bit.App.Resources;
 using Bit.Core;
+using Plugin.CurrentActivity;
 
 namespace Bit.Droid.Accessibility
 {
@@ -114,6 +122,12 @@ namespace Bit.Droid.Accessibility
                     uri = ExtractUri(uri, addressNode, browser);
                     addressNode.Dispose();
                 }
+                else
+                {
+                    // Return null to prevent overwriting notification pendingIntent uri with browser packageName
+                    // (we login to pages, not browsers)
+                    return null;
+                }
             }
             return uri;
         }
@@ -172,7 +186,6 @@ namespace Bit.Droid.Accessibility
         {
             return n?.ClassName?.Contains("EditText") ?? false;
         }
-
 
         public static void FillCredentials(AccessibilityNodeInfo usernameNode,
             IEnumerable<AccessibilityNodeInfo> passwordNodes)
@@ -244,15 +257,151 @@ namespace Bit.Droid.Accessibility
             IEnumerable<AccessibilityNodeInfo> passwordNodes)
         {
             var allEditTexts = GetWindowNodes(root, e, n => EditText(n), false);
-            var usernameEditText = GetUsernameEditText(allEditTexts);
+            var usernameEditText = GetUsernameEditTextIfPasswordExists(allEditTexts);
             FillCredentials(usernameEditText, passwordNodes);
             allEditTexts.Dispose();
             usernameEditText = null;
         }
 
-        public static AccessibilityNodeInfo GetUsernameEditText(IEnumerable<AccessibilityNodeInfo> allEditTexts)
+        public static AccessibilityNodeInfo GetUsernameEditTextIfPasswordExists(
+            IEnumerable<AccessibilityNodeInfo> allEditTexts)
         {
-            return allEditTexts.TakeWhile(n => !n.Password).LastOrDefault();
+            AccessibilityNodeInfo previousEditText = null;
+            foreach(var editText in allEditTexts)
+            {
+                if(editText.Password)
+                {
+                    return previousEditText;
+                }
+                previousEditText = editText;
+            }
+            return null;
+        }
+
+        public static bool IsUsernameEditText(AccessibilityNodeInfo root, AccessibilityEvent e)
+        {
+            var allEditTexts = GetWindowNodes(root, e, n => EditText(n), false);
+            var usernameEditText = GetUsernameEditTextIfPasswordExists(allEditTexts);
+            if(usernameEditText != null)
+            { 
+                var isUsernameEditText = IsSameNode(usernameEditText, e.Source);
+                allEditTexts.Dispose();
+                usernameEditText = null;
+                return isUsernameEditText;
+            }
+            return false;
+        }
+
+        public static bool IsSameNode(AccessibilityNodeInfo info1, AccessibilityNodeInfo info2)
+        {
+            if(info1 != null && info2 != null) 
+            {
+                return info1.Equals(info2) || info1.GetHashCode() == info2.GetHashCode();
+            }
+            return false;
+        }
+
+        public static bool OverlayPermitted()
+        {
+            if(Build.VERSION.SdkInt >= BuildVersionCodes.M)
+            {
+                return Settings.CanDrawOverlays(Android.App.Application.Context);
+            }
+            else
+            {
+                // TODO do older android versions require a check?
+                return true;
+            }
+        }
+
+        public static LinearLayout GetOverlayView(Context context)
+        {
+            var inflater = (LayoutInflater)context.GetSystemService(Context.LayoutInflaterService);
+            var view = (LinearLayout)inflater.Inflate(Resource.Layout.autofill_listitem, null);
+            var text1 = (TextView)view.FindViewById(Resource.Id.text1);
+            var text2 = (TextView)view.FindViewById(Resource.Id.text2);
+            var icon = (ImageView)view.FindViewById(Resource.Id.icon);
+            text1.Text = AppResources.AutofillWithBitwarden;
+            text2.Text = AppResources.GoToMyVault;
+            icon.SetImageResource(Resource.Drawable.icon);
+            return view;
+        }
+
+        public static WindowManagerLayoutParams GetOverlayLayoutParams()
+        {
+            WindowManagerTypes windowManagerType;
+            if(Build.VERSION.SdkInt >= BuildVersionCodes.O)
+            {
+                windowManagerType = WindowManagerTypes.ApplicationOverlay;
+            }
+            else
+            {
+                windowManagerType = WindowManagerTypes.Phone;
+            }
+
+            var layoutParams = new WindowManagerLayoutParams(
+                ViewGroup.LayoutParams.WrapContent,
+                ViewGroup.LayoutParams.WrapContent,
+                windowManagerType,
+                WindowManagerFlags.NotFocusable | WindowManagerFlags.NotTouchModal,
+                Format.Transparent);
+            layoutParams.Gravity = GravityFlags.Bottom | GravityFlags.Left;
+
+            return layoutParams;
+        }
+
+        public static Point GetOverlayAnchorPosition(AccessibilityNodeInfo root, AccessibilityNodeInfo anchorView)
+        {
+            var rootRect = new Rect();
+            root.GetBoundsInScreen(rootRect);
+            var rootRectHeight = rootRect.Height();
+
+            var anchorViewRect = new Rect();
+            anchorView.GetBoundsInScreen(anchorViewRect);
+            var anchorViewRectLeft = anchorViewRect.Left;
+            var anchorViewRectTop = anchorViewRect.Top;
+
+            var navBarHeight = GetNavigationBarHeight();
+            var calculatedTop = rootRectHeight - anchorViewRectTop - navBarHeight;
+            return new Point(anchorViewRectLeft, calculatedTop);
+        }
+
+        public static Point GetOverlayAnchorPosition(int nodeHash, AccessibilityNodeInfo root, AccessibilityEvent e)
+        {
+            Point point = null;
+            var allEditTexts = GetWindowNodes(root, e, n => EditText(n), false);
+            foreach(var node in allEditTexts)
+            {
+                if(node.GetHashCode() == nodeHash)
+                {
+                    point = GetOverlayAnchorPosition(root, node);
+                    break;
+                }
+            }
+            allEditTexts.Dispose();
+            return point;
+        }
+
+        private static int GetStatusBarHeight()
+        {
+            return GetSystemResourceDimenPx("status_bar_height");
+        }
+
+        private static int GetNavigationBarHeight()
+        {
+            return GetSystemResourceDimenPx("navigation_bar_height");
+        }
+
+        private static int GetSystemResourceDimenPx(string resName)
+        {
+            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            var barHeight = 0;
+            var resourceId = activity.Resources.GetIdentifier(resName, "dimen", "android");
+            if(resourceId > 0)
+            {
+                barHeight = activity.Resources.GetDimensionPixelSize(resourceId);
+            }
+            return barHeight;
         }
     }
 }

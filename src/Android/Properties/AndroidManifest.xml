@@ -3,7 +3,7 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   android:versionCode="1"
-  android:versionName="2.2.7"
+  android:versionName="2.2.8"
   package="com.x8bit.bitwarden">
 
   <uses-sdk android:minSdkVersion="19" android:targetSdkVersion="29" />
@@ -15,6 +15,7 @@
   <uses-permission android:name="android.permission.USE_FINGERPRINT" />
   <uses-permission android:name="android.permission.USE_BIOMETRIC" />
   <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+  <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
   <uses-permission android:name="com.samsung.android.providers.context.permission.WRITE_USE_APP_FEATURE_SURVEY" />
 
   <uses-feature android:name="android.hardware.camera" android:required="false" />

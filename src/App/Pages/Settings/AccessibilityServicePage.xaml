@@ -25,18 +25,40 @@
                    VerticalOptions="Start"
                    HorizontalTextAlignment="Center"
                    LineBreakMode="WordWrap" />
-            <StackLayout IsVisible="{Binding Enabled, Converter={StaticResource inverseBool}}"
-                         VerticalOptions="CenterAndExpand"
+            <StackLayout VerticalOptions="CenterAndExpand"
                          HorizontalOptions="Center"
-                         Spacing="20">
-                <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+                         Spacing="10">
+                <StackLayout IsVisible="{Binding Enabled, Converter={StaticResource inverseBool}}"
+                             Orientation="Horizontal" HorizontalOptions="Center">
                     <Label Text="{u:I18n Status}" />
                     <Label Text="{u:I18n Disabled}"
                            StyleClass="text-danger, text-bold" />
                 </StackLayout>
+                <StackLayout IsVisible="{Binding Enabled}"
+                             Orientation="Horizontal" HorizontalOptions="Center">
+                    <Label Text="{u:I18n Status}" />
+                    <Label Text="{u:I18n Enabled}"
+                           StyleClass="text-success, text-bold" />
+                </StackLayout>
+                <StackLayout IsVisible="{Binding Permitted, Converter={StaticResource inverseBool}}"
+                             Orientation="Horizontal" HorizontalOptions="Center">
+                    <Label Text="{u:I18n OverlayPermission}" />
+                    <Label Text="{u:I18n Denied}"
+                           StyleClass="text-danger, text-bold" />
+                </StackLayout>
+                <StackLayout IsVisible="{Binding Permitted}"
+                             Orientation="Horizontal" HorizontalOptions="Center">
+                    <Label Text="{u:I18n OverlayPermission}" />
+                    <Label Text="{u:I18n Granted}"
+                           StyleClass="text-success, text-bold" />
+                </StackLayout>
+            </StackLayout>
+            <StackLayout IsVisible="{Binding Enabled, Converter={StaticResource inverseBool}}"
+                         VerticalOptions="CenterAndExpand"
+                         HorizontalOptions="Center"
+                         Spacing="10">
                 <Image Source="accessibility_step1.png"
                        HorizontalOptions="Center"
-                       Margin="0, 20, 0, 0"
                        WidthRequest="300"
                        HeightRequest="98" />
                 <Label Text="{u:I18n BitwardenAutofillServiceStep1}"
@@ -45,7 +67,7 @@
                        StyleClass="text-sm" />
                 <Image Source="accessibility_step2.png"
                        HorizontalOptions="Center"
-                       Margin="0, 20, 0, 0"
+                       Margin="0, 10, 0, 0"
                        WidthRequest="300"
                        HeightRequest="67" />
                 <Label Text="{u:I18n BitwardenAutofillServiceStep2}"
@@ -53,34 +75,42 @@
                        LineBreakMode="WordWrap"
                        StyleClass="text-sm" />
             </StackLayout>
-            <StackLayout IsVisible="{Binding Enabled}"
+            <StackLayout IsVisible="{Binding EnabledWithoutPermission}"
                          VerticalOptions="CenterAndExpand"
                          HorizontalOptions="Center"
-                         Spacing="20">
-                <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
-                    <Label Text="{u:I18n Status}" />
-                    <Label Text="{u:I18n Enabled}"
-                           StyleClass="text-success, text-bold" />
-                </StackLayout>
-                <Image Source="accessibility_notification_icon.png"
+                         Spacing="10">
+                <Image Source="accessibility_permission.png"
                        HorizontalOptions="Center"
-                       Margin="0, 20, 0, 0"
                        WidthRequest="300"
-                       HeightRequest="54" />
-                <Image Source="accessibility_notification.png"
-                       HorizontalOptions="Center"
-                       Margin="0, 20, 0, 0"
-                       WidthRequest="300"
-                       HeightRequest="74" />
-                <Label Text="{u:I18n BitwardenAutofillServiceNotification}"
+                       HeightRequest="142" />
+                <Label Text="{u:I18n BitwardenAutofillServiceStep3}"
                        HorizontalTextAlignment="Center"
                        LineBreakMode="WordWrap"
                        StyleClass="text-sm" />
             </StackLayout>
-            <Button Text="{u:I18n BitwardenAutofillServiceOpenAccessibilitySettings}"
+            <StackLayout IsVisible="{Binding EnabledAndPermitted}"
+                         VerticalOptions="CenterAndExpand"
+                         HorizontalOptions="Center"
+                         Spacing="10">
+                <Image Source="accessibility_overlay.png"
+                       HorizontalOptions="Center"
+                       WidthRequest="300"
+                       HeightRequest="172" />
+                <Label Text="{u:I18n BitwardenAutofillServiceOverlay}"
+                       HorizontalTextAlignment="Center"
+                       LineBreakMode="WordWrap"
+                       StyleClass="text-sm" />
+            </StackLayout>
+            <StackLayout Spacing="10">
+                <Button Text="{u:I18n BitwardenAutofillServiceOpenAccessibilitySettings}"
                     Clicked="Settings_Clicked"
                     HorizontalOptions="Fill"
                     VerticalOptions="End"></Button>
+                <Button Text="{u:I18n BitwardenAutofillServiceOpenOverlayPermissionSettings}"
+                    Clicked="OverlayPermissionSettings_Clicked"
+                    HorizontalOptions="Fill"
+                    VerticalOptions="End"></Button>
+            </StackLayout>
         </StackLayout>
     </ScrollView>
 

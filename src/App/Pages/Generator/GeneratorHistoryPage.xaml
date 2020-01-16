@@ -19,6 +19,7 @@
         <ResourceDictionary>
             <u:InverseBoolConverter x:Key="inverseBool" />
             <u:DateTimeConverter x:Key="dateTime" />
+            <u:ColoredPasswordConverter x:Key="coloredPassword" />
             <ToolbarItem Text="{u:I18n Close}" Clicked="Close_Clicked" Order="Primary" Priority="-1"
                          x:Name="_closeItem" x:Key="closeItem" />
             <ToolbarItem Text="{u:I18n Clear}"
@@ -71,7 +72,8 @@
                                 Grid.Column="0"
                                 Grid.Row="0"
                                 StyleClass="list-title, list-title-platform"
-                                Text="{Binding Password, Mode=OneWay}" />
+                                TextType="Html"
+                                Text="{Binding Password, Mode=OneWay, Converter={StaticResource coloredPassword}}" />
                             <Label LineBreakMode="TailTruncation"
                                 Grid.Column="0"
                                 Grid.Row="1"
