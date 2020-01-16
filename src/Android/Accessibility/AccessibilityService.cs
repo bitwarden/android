@@ -274,10 +274,21 @@ namespace Bit.Droid.Accessibility
                 return;
             }
 
-            var anchorPosition = AccessibilityHelpers.GetOverlayAnchorPosition(_anchorViewHash, root, e);
+            var anchorPosition = AccessibilityHelpers.GetOverlayAnchorPosition(_anchorViewHash, root, e, Windows);
             if(anchorPosition == null)
             {
+                if(_overlayView.Visibility != ViewStates.Gone)
+                {
+                    _overlayView.Visibility = ViewStates.Gone;
+                }
                 return;
+            }
+            else
+            {
+                if(_overlayView.Visibility != ViewStates.Visible)
+                {
+                    _overlayView.Visibility = ViewStates.Visible;
+                }
             }
 
             if(anchorPosition.X == _lastAnchorX && anchorPosition.Y == _lastAnchorY)

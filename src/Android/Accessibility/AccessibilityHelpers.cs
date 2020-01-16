@@ -187,6 +187,11 @@ namespace Bit.Droid.Accessibility
             return n?.ClassName?.Contains("EditText") ?? false;
         }
 
+        public static bool HashMatch(AccessibilityNodeInfo n, int hashCode)
+        {
+            return n?.GetHashCode() == hashCode;
+        }
+
         public static void FillCredentials(AccessibilityNodeInfo usernameNode,
             IEnumerable<AccessibilityNodeInfo> passwordNodes)
         {
@@ -350,39 +355,93 @@ namespace Bit.Droid.Accessibility
             return layoutParams;
         }
 
-        public static Point GetOverlayAnchorPosition(AccessibilityNodeInfo root, AccessibilityNodeInfo anchorView)
+        public static Point GetOverlayAnchorPosition(AccessibilityNodeInfo root, AccessibilityNodeInfo anchorView,
+            int rootRectHeight = 0)
         {
-            var rootRect = new Rect();
-            root.GetBoundsInScreen(rootRect);
-            var rootRectHeight = rootRect.Height();
+            if(rootRectHeight == 0)
+            {
+                rootRectHeight = GetNodeHeight(root);
+            }
 
             var anchorViewRect = new Rect();
             anchorView.GetBoundsInScreen(anchorViewRect);
             var anchorViewRectLeft = anchorViewRect.Left;
             var anchorViewRectTop = anchorViewRect.Top;
+            anchorViewRect.Dispose();
 
-            var navBarHeight = GetNavigationBarHeight();
-            var calculatedTop = rootRectHeight - anchorViewRectTop - navBarHeight;
+            var calculatedTop = rootRectHeight - anchorViewRectTop - GetNavigationBarHeight();
             return new Point(anchorViewRectLeft, calculatedTop);
         }
 
-        public static Point GetOverlayAnchorPosition(int nodeHash, AccessibilityNodeInfo root, AccessibilityEvent e)
+        public static Point GetOverlayAnchorPosition(int nodeHash, AccessibilityNodeInfo root, AccessibilityEvent e,
+            IList<AccessibilityWindowInfo> windows)
         {
+            var rootNodeHeight = GetNodeHeight(root);
+
             Point point = null;
-            var allEditTexts = GetWindowNodes(root, e, n => EditText(n), false);
-            foreach(var node in allEditTexts)
+            var hashMatchNodes = GetWindowNodes(root, e, n => HashMatch(n, nodeHash), false);
+            foreach(var node in hashMatchNodes) // should only be one
             {
-                if(node.GetHashCode() == nodeHash)
+                if(!node.VisibleToUser)
                 {
-                    point = GetOverlayAnchorPosition(root, node);
+                    // return null to hide active overlay
                     break;
                 }
+
+                // node.VisibleToUser isn't 100% reliable so attempt to establish visibility
+                int limitLowY = 0;
+                int limitHighY = rootNodeHeight - GetNodeHeight(node);
+                Rect inputWindowRect = GetInputMethodWindowRect(windows);
+                if(inputWindowRect != null)
+                {
+                    limitLowY += inputWindowRect.Height() + GetNavigationBarHeight() + GetStatusBarHeight();
+                }
+                inputWindowRect.Dispose();
+
+                point = GetOverlayAnchorPosition(root, node, rootNodeHeight);
+
+                System.Diagnostics.Debug.WriteLine(">>> Overlay: limitLowY:{0} | pointY:{1} | limitHighY:{2} | hide:{3}",
+                    limitLowY, point.Y, limitHighY, (point.Y <= limitLowY || point.Y >= limitHighY || !node.VisibleToUser));
+
+                if(point.Y < limitLowY || point.Y > limitHighY || !node.VisibleToUser)
+                {
+                    // return null to hide active overlay
+                    point = null;
+                }
+                break;
             }
-            allEditTexts.Dispose();
+            hashMatchNodes.Dispose();
             return point;
         }
 
-        private static int GetStatusBarHeight()
+        public static Rect GetInputMethodWindowRect(IList<AccessibilityWindowInfo> windows)
+        {
+            Rect windowRect = null;
+            if(windows != null)
+            {
+                foreach(var window in windows)
+                {
+                    if(window.Type == AccessibilityWindowType.InputMethod)
+                    {
+                        windowRect = new Rect();
+                        window.GetBoundsInScreen(windowRect);
+                        break;
+                    }
+                }
+            }
+            return windowRect;
+        }
+
+        public static int GetNodeHeight(AccessibilityNodeInfo node)
+        {
+            var nodeRect = new Rect();
+            node.GetBoundsInScreen(nodeRect);
+            var nodeRectHeight = nodeRect.Height();
+            nodeRect.Dispose();
+            return nodeRectHeight;
+        }
+
+            private static int GetStatusBarHeight()
         {
             return GetSystemResourceDimenPx("status_bar_height");
         }
