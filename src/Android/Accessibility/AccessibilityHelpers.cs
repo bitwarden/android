@@ -120,7 +120,7 @@ namespace Bit.Droid.Accessibility
                 if(addressNode != null)
                 {
                     uri = ExtractUri(uri, addressNode, browser);
-                    addressNode.Dispose();
+                    addressNode.Recycle();
                 }
                 else
                 {
@@ -187,11 +187,6 @@ namespace Bit.Droid.Accessibility
             return n?.ClassName?.Contains("EditText") ?? false;
         }
 
-        public static bool HashMatch(AccessibilityNodeInfo n, int hashCode)
-        {
-            return n?.GetHashCode() == hashCode;
-        }
-
         public static void FillCredentials(AccessibilityNodeInfo usernameNode,
             IEnumerable<AccessibilityNodeInfo> passwordNodes)
         {
@@ -253,7 +248,7 @@ namespace Bit.Droid.Accessibility
             }
             if(dispose)
             {
-                n?.Dispose();
+                n?.Recycle();
             }
             return nodes;
         }
@@ -287,21 +282,23 @@ namespace Bit.Droid.Accessibility
         {
             var allEditTexts = GetWindowNodes(root, e, n => EditText(n), false);
             var usernameEditText = GetUsernameEditTextIfPasswordExists(allEditTexts);
+
+            var isUsernameEditText = false;
             if(usernameEditText != null)
-            { 
-                var isUsernameEditText = IsSameNode(usernameEditText, e.Source);
-                allEditTexts.Dispose();
-                usernameEditText = null;
-                return isUsernameEditText;
+            {
+                isUsernameEditText = IsSameNode(usernameEditText, e.Source);
+                usernameEditText.Recycle();
             }
-            return false;
+            allEditTexts.Dispose();
+
+            return isUsernameEditText;
         }
 
-        public static bool IsSameNode(AccessibilityNodeInfo info1, AccessibilityNodeInfo info2)
+        public static bool IsSameNode(AccessibilityNodeInfo node1, AccessibilityNodeInfo node2)
         {
-            if(info1 != null && info2 != null) 
+            if(node1 != null && node2 != null)
             {
-                return info1.Equals(info2) || info1.GetHashCode() == info2.GetHashCode();
+                return node1.Equals(node2) || node1.GetHashCode() == node2.GetHashCode();
             }
             return false;
         }
@@ -373,48 +370,49 @@ namespace Bit.Droid.Accessibility
             return new Point(anchorViewRectLeft, calculatedTop);
         }
 
-        public static Point GetOverlayAnchorPosition(int nodeHash, AccessibilityNodeInfo root, AccessibilityEvent e,
-            IList<AccessibilityWindowInfo> windows)
+        public static Point GetOverlayAnchorPosition(AccessibilityNodeInfo anchorNode, AccessibilityNodeInfo root,
+            IEnumerable<AccessibilityWindowInfo> windows)
         {
-            var rootNodeHeight = GetNodeHeight(root);
-
             Point point = null;
-            var hashMatchNodes = GetWindowNodes(root, e, n => HashMatch(n, nodeHash), false);
-            foreach(var node in hashMatchNodes) // should only be one
+            if(anchorNode != null)
             {
-                if(!node.VisibleToUser)
+                anchorNode.Refresh(); // update node's info since this is still a reference from an older event
+                if(!anchorNode.VisibleToUser)
                 {
-                    // return null to hide active overlay
-                    break;
+                    return new Point(-1, -1); ;
                 }
 
-                // node.VisibleToUser isn't 100% reliable so attempt to establish visibility
+                // node.VisibleToUser doesn't always give us exactly what we want, so attempt to tighten up the range
+                // of visibility
+                var rootNodeHeight = GetNodeHeight(root);
                 int limitLowY = 0;
-                int limitHighY = rootNodeHeight - GetNodeHeight(node);
-                Rect inputWindowRect = GetInputMethodWindowRect(windows);
-                if(inputWindowRect != null)
+                int limitHighY = rootNodeHeight - GetNodeHeight(anchorNode);
+                if(windows != null)
                 {
-                    limitLowY += inputWindowRect.Height() + GetNavigationBarHeight() + GetStatusBarHeight();
+                    Rect inputWindowRect = GetInputMethodWindowRect(windows);
+                    if(inputWindowRect != null)
+                    {
+                        limitLowY += inputWindowRect.Height();
+                        if(Build.VERSION.SdkInt >= BuildVersionCodes.Q)
+                        {
+                            limitLowY += GetNavigationBarHeight() + GetStatusBarHeight();
+                        }
+                        inputWindowRect.Dispose();
+                    }
                 }
-                inputWindowRect.Dispose();
 
-                point = GetOverlayAnchorPosition(root, node, rootNodeHeight);
+                point = GetOverlayAnchorPosition(root, anchorNode, rootNodeHeight);
 
-                System.Diagnostics.Debug.WriteLine(">>> Overlay: limitLowY:{0} | pointY:{1} | limitHighY:{2} | hide:{3}",
-                    limitLowY, point.Y, limitHighY, (point.Y <= limitLowY || point.Y >= limitHighY || !node.VisibleToUser));
-
-                if(point.Y < limitLowY || point.Y > limitHighY || !node.VisibleToUser)
+                if(point.Y < limitLowY || point.Y > limitHighY)
                 {
-                    // return null to hide active overlay
-                    point = null;
+                    point.X = -1;
+                    point.Y = -1;
                 }
-                break;
             }
-            hashMatchNodes.Dispose();
             return point;
         }
 
-        public static Rect GetInputMethodWindowRect(IList<AccessibilityWindowInfo> windows)
+        public static Rect GetInputMethodWindowRect(IEnumerable<AccessibilityWindowInfo> windows)
         {
             Rect windowRect = null;
             if(windows != null)
@@ -425,8 +423,10 @@ namespace Bit.Droid.Accessibility
                     {
                         windowRect = new Rect();
                         window.GetBoundsInScreen(windowRect);
+                        window.Recycle();
                         break;
                     }
+                    window.Recycle();
                 }
             }
             return windowRect;
@@ -441,7 +441,7 @@ namespace Bit.Droid.Accessibility
             return nodeRectHeight;
         }
 
-            private static int GetStatusBarHeight()
+        private static int GetStatusBarHeight()
         {
             return GetSystemResourceDimenPx("status_bar_height");
         }
