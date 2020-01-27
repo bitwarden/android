@@ -217,7 +217,7 @@ namespace Bit.Droid.Accessibility
                 nodes = new NodeList();
             }
             var dispose = disposeIfUnused;
-            if(n != null && recursionDepth < 50)
+            if(n != null && recursionDepth < 100)
             {
                 var add = n.WindowId == e.WindowId &&
                     !(n.ViewIdResourceName?.StartsWith(SystemUiPackage) ?? false) &&
@@ -231,7 +231,11 @@ namespace Bit.Droid.Accessibility
                 for(var i = 0; i < n.ChildCount; i++)
                 {
                     var childNode = n.GetChild(i);
-                    if(i > 100)
+                    if(childNode == null)
+                    {
+                        continue;
+                    }
+                    else if(i > 100)
                     {
                         Android.Util.Log.Info(BitwardenTag, "Too many child iterations.");
                         break;

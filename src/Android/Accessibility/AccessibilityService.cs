@@ -98,8 +98,8 @@ namespace Bit.Droid.Accessibility
                         }
                         if(!(e.Source?.Password ?? false) && !AccessibilityHelpers.IsUsernameEditText(root, e))
                         {
-                            e.Recycle();
                             CancelOverlayPrompt();
+                            e.Recycle();
                             break;
                         }
                         if(ScanAndAutofill(root, e))
@@ -116,9 +116,9 @@ namespace Bit.Droid.Accessibility
                     case EventTypes.WindowStateChanged:
                         if(AccessibilityHelpers.LastCredentials == null)
                         {
+                            e.Recycle();
                             break;
                         }
-
                         if(e.PackageName == BitwardenPackage)
                         {
                             CancelOverlayPrompt();
