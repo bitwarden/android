@@ -383,7 +383,7 @@ namespace Bit.Droid.Accessibility
                 anchorNode.Refresh(); // update node's info since this is still a reference from an older event
                 if(!anchorNode.VisibleToUser)
                 {
-                    return new Point(-1, -1); ;
+                    return new Point(-1, -1);
                 }
 
                 // node.VisibleToUser doesn't always give us exactly what we want, so attempt to tighten up the range
@@ -393,6 +393,10 @@ namespace Bit.Droid.Accessibility
                 var limitHighY = rootNodeHeight - GetNodeHeight(anchorNode);
                 if(windows != null)
                 {
+                    if(IsStatusBarExpanded(windows))
+                    {
+                        return new Point(-1, -1);
+                    }
                     Rect inputWindowRect = GetInputMethodWindowRect(windows);
                     if(inputWindowRect != null)
                     {
@@ -414,6 +418,24 @@ namespace Bit.Droid.Accessibility
                 }
             }
             return point;
+        }
+
+        public static bool IsStatusBarExpanded(IEnumerable<AccessibilityWindowInfo> windows)
+        {
+            if(windows != null && windows.Count() > 0)
+            {
+                var isSystemWindowsOnly = true;
+                foreach(var window in windows)
+                {
+                    if(window.Type != AccessibilityWindowType.System)
+                    {
+                        isSystemWindowsOnly = false;
+                        break;
+                    }
+                }
+                return isSystemWindowsOnly;
+            }
+            return false;
         }
 
         public static Rect GetInputMethodWindowRect(IEnumerable<AccessibilityWindowInfo> windows)

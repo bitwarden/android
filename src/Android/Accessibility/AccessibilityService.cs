@@ -318,6 +318,10 @@ namespace Bit.Droid.Accessibility
             }
             else if(anchorPosition.X == _lastAnchorX && anchorPosition.Y == _lastAnchorY)
             {
+                if(_overlayView.Visibility != ViewStates.Visible)
+                {
+                    _overlayView.Visibility = ViewStates.Visible;
+                }
                 return;
             }
 
