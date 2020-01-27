@@ -422,7 +422,7 @@ namespace Bit.Droid.Accessibility
 
         public static bool IsStatusBarExpanded(IEnumerable<AccessibilityWindowInfo> windows)
         {
-            if(windows != null && windows.Count() > 0)
+            if(windows != null && windows.Any())
             {
                 var isSystemWindowsOnly = true;
                 foreach(var window in windows)
