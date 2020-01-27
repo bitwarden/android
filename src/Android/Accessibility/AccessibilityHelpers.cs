@@ -389,8 +389,8 @@ namespace Bit.Droid.Accessibility
                 // node.VisibleToUser doesn't always give us exactly what we want, so attempt to tighten up the range
                 // of visibility
                 var rootNodeHeight = GetNodeHeight(root);
-                int limitLowY = 0;
-                int limitHighY = rootNodeHeight - GetNodeHeight(anchorNode);
+                var limitLowY = 0;
+                var limitHighY = rootNodeHeight - GetNodeHeight(anchorNode);
                 if(windows != null)
                 {
                     Rect inputWindowRect = GetInputMethodWindowRect(windows);

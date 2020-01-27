@@ -80,12 +80,7 @@ namespace Bit.Droid.Accessibility
                         }
 
                         root = RootInActiveWindow;
-                        if(root == null)
-                        {
-                            e.Recycle();
-                            return;
-                        }
-                        if(root.PackageName != e.PackageName)
+                        if(root == null || root.PackageName != e.PackageName)
                         {
                             e.Recycle();
                             break;
@@ -127,6 +122,11 @@ namespace Bit.Droid.Accessibility
                         }
 
                         root = RootInActiveWindow;
+                        if(root == null || root.PackageName != e.PackageName)
+                        {
+                            e.Recycle();
+                            break;
+                        }
                         if(ScanAndAutofill(root, e))
                         {
                             CancelOverlayPrompt();
