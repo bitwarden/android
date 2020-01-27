@@ -120,7 +120,7 @@ namespace Bit.Droid.Accessibility
                 if(addressNode != null)
                 {
                     uri = ExtractUri(uri, addressNode, browser);
-                    addressNode.Dispose();
+                    addressNode.Recycle();
                 }
                 else
                 {
@@ -217,7 +217,7 @@ namespace Bit.Droid.Accessibility
                 nodes = new NodeList();
             }
             var dispose = disposeIfUnused;
-            if(n != null && recursionDepth < 50)
+            if(n != null && recursionDepth < 100)
             {
                 var add = n.WindowId == e.WindowId &&
                     !(n.ViewIdResourceName?.StartsWith(SystemUiPackage) ?? false) &&
@@ -231,7 +231,11 @@ namespace Bit.Droid.Accessibility
                 for(var i = 0; i < n.ChildCount; i++)
                 {
                     var childNode = n.GetChild(i);
-                    if(i > 100)
+                    if(childNode == null)
+                    {
+                        continue;
+                    }
+                    else if(i > 100)
                     {
                         Android.Util.Log.Info(BitwardenTag, "Too many child iterations.");
                         break;
@@ -248,7 +252,7 @@ namespace Bit.Droid.Accessibility
             }
             if(dispose)
             {
-                n?.Dispose();
+                n?.Recycle();
             }
             return nodes;
         }
@@ -282,21 +286,23 @@ namespace Bit.Droid.Accessibility
         {
             var allEditTexts = GetWindowNodes(root, e, n => EditText(n), false);
             var usernameEditText = GetUsernameEditTextIfPasswordExists(allEditTexts);
+
+            var isUsernameEditText = false;
             if(usernameEditText != null)
-            { 
-                var isUsernameEditText = IsSameNode(usernameEditText, e.Source);
-                allEditTexts.Dispose();
-                usernameEditText = null;
-                return isUsernameEditText;
+            {
+                isUsernameEditText = IsSameNode(usernameEditText, e.Source);
+                usernameEditText.Recycle();
             }
-            return false;
+            allEditTexts.Dispose();
+
+            return isUsernameEditText;
         }
 
-        public static bool IsSameNode(AccessibilityNodeInfo info1, AccessibilityNodeInfo info2)
+        public static bool IsSameNode(AccessibilityNodeInfo node1, AccessibilityNodeInfo node2)
         {
-            if(info1 != null && info2 != null) 
+            if(node1 != null && node2 != null)
             {
-                return info1.Equals(info2) || info1.GetHashCode() == info2.GetHashCode();
+                return node1.Equals(node2) || node1.GetHashCode() == node2.GetHashCode();
             }
             return false;
         }
@@ -350,36 +356,115 @@ namespace Bit.Droid.Accessibility
             return layoutParams;
         }
 
-        public static Point GetOverlayAnchorPosition(AccessibilityNodeInfo root, AccessibilityNodeInfo anchorView)
+        public static Point GetOverlayAnchorPosition(AccessibilityNodeInfo root, AccessibilityNodeInfo anchorView,
+            int rootRectHeight = 0)
         {
-            var rootRect = new Rect();
-            root.GetBoundsInScreen(rootRect);
-            var rootRectHeight = rootRect.Height();
+            if(rootRectHeight == 0)
+            {
+                rootRectHeight = GetNodeHeight(root);
+            }
 
             var anchorViewRect = new Rect();
             anchorView.GetBoundsInScreen(anchorViewRect);
             var anchorViewRectLeft = anchorViewRect.Left;
             var anchorViewRectTop = anchorViewRect.Top;
+            anchorViewRect.Dispose();
 
-            var navBarHeight = GetNavigationBarHeight();
-            var calculatedTop = rootRectHeight - anchorViewRectTop - navBarHeight;
+            var calculatedTop = rootRectHeight - anchorViewRectTop - GetNavigationBarHeight();
             return new Point(anchorViewRectLeft, calculatedTop);
         }
 
-        public static Point GetOverlayAnchorPosition(int nodeHash, AccessibilityNodeInfo root, AccessibilityEvent e)
+        public static Point GetOverlayAnchorPosition(AccessibilityNodeInfo anchorNode, AccessibilityNodeInfo root,
+            IEnumerable<AccessibilityWindowInfo> windows)
         {
             Point point = null;
-            var allEditTexts = GetWindowNodes(root, e, n => EditText(n), false);
-            foreach(var node in allEditTexts)
+            if(anchorNode != null)
             {
-                if(node.GetHashCode() == nodeHash)
+                anchorNode.Refresh(); // update node's info since this is still a reference from an older event
+                if(!anchorNode.VisibleToUser)
                 {
-                    point = GetOverlayAnchorPosition(root, node);
-                    break;
+                    return new Point(-1, -1);
+                }
+
+                // node.VisibleToUser doesn't always give us exactly what we want, so attempt to tighten up the range
+                // of visibility
+                var rootNodeHeight = GetNodeHeight(root);
+                var limitLowY = 0;
+                var limitHighY = rootNodeHeight - GetNodeHeight(anchorNode);
+                if(windows != null)
+                {
+                    if(IsStatusBarExpanded(windows))
+                    {
+                        return new Point(-1, -1);
+                    }
+                    Rect inputWindowRect = GetInputMethodWindowRect(windows);
+                    if(inputWindowRect != null)
+                    {
+                        limitLowY += inputWindowRect.Height();
+                        if(Build.VERSION.SdkInt >= BuildVersionCodes.Q)
+                        {
+                            limitLowY += GetNavigationBarHeight() + GetStatusBarHeight();
+                        }
+                        inputWindowRect.Dispose();
+                    }
+                }
+
+                point = GetOverlayAnchorPosition(root, anchorNode, rootNodeHeight);
+
+                if(point.Y < limitLowY || point.Y > limitHighY)
+                {
+                    point.X = -1;
+                    point.Y = -1;
                 }
             }
-            allEditTexts.Dispose();
             return point;
+        }
+
+        public static bool IsStatusBarExpanded(IEnumerable<AccessibilityWindowInfo> windows)
+        {
+            if(windows != null && windows.Any())
+            {
+                var isSystemWindowsOnly = true;
+                foreach(var window in windows)
+                {
+                    if(window.Type != AccessibilityWindowType.System)
+                    {
+                        isSystemWindowsOnly = false;
+                        break;
+                    }
+                }
+                return isSystemWindowsOnly;
+            }
+            return false;
+        }
+
+        public static Rect GetInputMethodWindowRect(IEnumerable<AccessibilityWindowInfo> windows)
+        {
+            Rect windowRect = null;
+            if(windows != null)
+            {
+                foreach(var window in windows)
+                {
+                    if(window.Type == AccessibilityWindowType.InputMethod)
+                    {
+                        windowRect = new Rect();
+                        window.GetBoundsInScreen(windowRect);
+                        window.Recycle();
+                        break;
+                    }
+                    window.Recycle();
+                }
+            }
+            return windowRect;
+        }
+
+        public static int GetNodeHeight(AccessibilityNodeInfo node)
+        {
+            var nodeRect = new Rect();
+            node.GetBoundsInScreen(nodeRect);
+            var nodeRectHeight = nodeRect.Height();
+            nodeRect.Dispose();
+            return nodeRectHeight;
         }
 
         private static int GetStatusBarHeight()
