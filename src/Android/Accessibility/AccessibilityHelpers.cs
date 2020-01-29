@@ -40,7 +40,7 @@ namespace Bit.Droid.Accessibility
             new Browser("org.iron.srware", "url_bar"),
             new Browser("com.sec.android.app.sbrowser", "location_bar_edit_text"),
             new Browser("com.sec.android.app.sbrowser.beta", "location_bar_edit_text"),
-            new Browser("com.yandex.browser", "bro_omnibar_address_title_text",
+            new Browser("com.yandex.browser", "bro_omnibar_address_title_text,bro_omnibox_collapsed_title",
                 (s) => s.Split(new char[]{' ', ' '}).FirstOrDefault()), // 0 = Regular Space, 1 = No-break space (00A0)
             new Browser("org.mozilla.firefox", "url_bar_title"),
             new Browser("org.mozilla.firefox_beta", "url_bar_title"),
@@ -115,8 +115,25 @@ namespace Bit.Droid.Accessibility
             if(SupportedBrowsers.ContainsKey(root.PackageName))
             {
                 var browser = SupportedBrowsers[root.PackageName];
-                var addressNode = root.FindAccessibilityNodeInfosByViewId(
-                    $"{root.PackageName}:id/{browser.UriViewId}").FirstOrDefault();
+                AccessibilityNodeInfo addressNode = null;
+                if(browser.UriViewId.Contains(","))
+                {
+                    foreach(var uriViewId in browser.UriViewId.Split(","))
+                    {
+                        addressNode = root.FindAccessibilityNodeInfosByViewId(
+                            $"{root.PackageName}:id/{uriViewId}").FirstOrDefault();
+                        if(addressNode != null)
+                        {
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    addressNode = root.FindAccessibilityNodeInfosByViewId(
+                        $"{root.PackageName}:id/{browser.UriViewId}").FirstOrDefault();
+                }
+
                 if(addressNode != null)
                 {
                     uri = ExtractUri(uri, addressNode, browser);
