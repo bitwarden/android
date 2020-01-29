@@ -29,7 +29,8 @@ namespace Bit.Droid.Accessibility
         private const string BitwardenWebsite = "vault.bitwarden.com";
 
         private AccessibilityNodeInfo _anchorNode = null;
-        private int _lastAnchorX, _lastAnchorY = 0;
+        private int _lastAnchorX = 0;
+        private int _lastAnchorY = 0;
         private static bool _overlayAnchorObserverRunning = false;
         private IWindowManager _windowManager = null;
         private LinearLayout _overlayView = null;
@@ -64,7 +65,7 @@ namespace Bit.Droid.Accessibility
                     return;
                 }
 
-                // AccessibilityHelpers.PrintTestData(root, e);
+                // AccessibilityHelpers.PrintTestData(RootInActiveWindow, e);
 
                 AccessibilityNodeInfo root = null;
 
@@ -83,6 +84,7 @@ namespace Bit.Droid.Accessibility
                         {
                             break;
                         }
+
                         var isKnownBroswer = AccessibilityHelpers.SupportedBrowsers.ContainsKey(root.PackageName);
                         if(e.EventType == EventTypes.ViewClicked && isKnownBroswer)
                         {
@@ -255,8 +257,8 @@ namespace Bit.Droid.Accessibility
             {
                 return;
             }
-            _overlayAnchorObserverRunning = true;
 
+            _overlayAnchorObserverRunning = true;
             _overlayAnchorObserverRunnable = new Java.Lang.Runnable(() =>
             {
                 if(_overlayAnchorObserverRunning)
@@ -283,8 +285,8 @@ namespace Bit.Droid.Accessibility
             {
                 windows = Windows;
             }
-            var anchorPosition = AccessibilityHelpers.GetOverlayAnchorPosition(_anchorNode, root, windows);
 
+            var anchorPosition = AccessibilityHelpers.GetOverlayAnchorPosition(_anchorNode, root, windows);
             if(anchorPosition == null)
             {
                 CancelOverlayPrompt();

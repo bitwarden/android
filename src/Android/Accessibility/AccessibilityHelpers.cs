@@ -370,7 +370,7 @@ namespace Bit.Droid.Accessibility
             var anchorViewRectTop = anchorViewRect.Top;
             anchorViewRect.Dispose();
 
-            int calculatedTop = rootRectHeight - anchorViewRectTop;
+            var calculatedTop = rootRectHeight - anchorViewRectTop;
             if((int)Build.VERSION.SdkInt >= 24)
             {
                 calculatedTop -= GetNavigationBarHeight();
@@ -385,7 +385,8 @@ namespace Bit.Droid.Accessibility
             Point point = null;
             if(anchorNode != null)
             {
-                anchorNode.Refresh(); // update node's info since this is still a reference from an older event
+                // Update node's info since this is still a reference from an older event
+                anchorNode.Refresh();
                 if(!anchorNode.VisibleToUser)
                 {
                     return new Point(-1, -1);
@@ -406,7 +407,7 @@ namespace Bit.Droid.Accessibility
                     {
                         return new Point(-1, -1);
                     }
-                    Rect inputWindowRect = GetInputMethodWindowRect(windows);
+                    var inputWindowRect = GetInputMethodWindowRect(windows);
                     if(inputWindowRect != null)
                     {
                         limitLowY += inputWindowRect.Height();
@@ -419,7 +420,6 @@ namespace Bit.Droid.Accessibility
                 }
 
                 point = GetOverlayAnchorPosition(root, anchorNode, rootNodeHeight);
-
                 if(point.Y < limitLowY || point.Y > limitHighY)
                 {
                     point.X = -1;
