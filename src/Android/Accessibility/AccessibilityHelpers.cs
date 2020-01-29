@@ -116,22 +116,14 @@ namespace Bit.Droid.Accessibility
             {
                 var browser = SupportedBrowsers[root.PackageName];
                 AccessibilityNodeInfo addressNode = null;
-                if(browser.UriViewId.Contains(","))
-                {
-                    foreach(var uriViewId in browser.UriViewId.Split(","))
-                    {
-                        addressNode = root.FindAccessibilityNodeInfosByViewId(
-                            $"{root.PackageName}:id/{uriViewId}").FirstOrDefault();
-                        if(addressNode != null)
-                        {
-                            break;
-                        }
-                    }
-                }
-                else
+                foreach(var uriViewId in browser.UriViewId.Split(","))
                 {
                     addressNode = root.FindAccessibilityNodeInfosByViewId(
-                        $"{root.PackageName}:id/{browser.UriViewId}").FirstOrDefault();
+                        $"{root.PackageName}:id/{uriViewId}").FirstOrDefault();
+                    if(addressNode != null)
+                    {
+                        break;
+                    }
                 }
 
                 if(addressNode != null)
