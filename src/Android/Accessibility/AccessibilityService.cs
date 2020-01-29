@@ -75,32 +75,27 @@ namespace Bit.Droid.Accessibility
                         if(e.Source == null || e.PackageName == BitwardenPackage)
                         {
                             CancelOverlayPrompt();
-                            e.Recycle();
                             break;
                         }
 
                         root = RootInActiveWindow;
                         if(root == null || root.PackageName != e.PackageName)
                         {
-                            e.Recycle();
                             break;
                         }
                         var isKnownBroswer = AccessibilityHelpers.SupportedBrowsers.ContainsKey(root.PackageName);
                         if(e.EventType == EventTypes.ViewClicked && isKnownBroswer)
                         {
-                            e.Recycle();
                             break;
                         }
                         if(!(e.Source?.Password ?? false) && !AccessibilityHelpers.IsUsernameEditText(root, e))
                         {
                             CancelOverlayPrompt();
-                            e.Recycle();
                             break;
                         }
                         if(ScanAndAutofill(root, e))
                         {
                             CancelOverlayPrompt();
-                            e.Recycle();
                         }
                         else
                         {
@@ -111,35 +106,26 @@ namespace Bit.Droid.Accessibility
                     case EventTypes.WindowStateChanged:
                         if(AccessibilityHelpers.LastCredentials == null)
                         {
-                            e.Recycle();
                             break;
                         }
                         if(e.PackageName == BitwardenPackage)
                         {
                             CancelOverlayPrompt();
-                            e.Recycle();
                             break;
                         }
 
                         root = RootInActiveWindow;
                         if(root == null || root.PackageName != e.PackageName)
                         {
-                            e.Recycle();
                             break;
                         }
                         if(ScanAndAutofill(root, e))
                         {
                             CancelOverlayPrompt();
                         }
-                        e.Recycle();
                         break;
                     default:
                         break;
-                }
-
-                if(root != null)
-                {
-                    root.Recycle();
                 }
             }
             // Suppress exceptions so that service doesn't crash.
@@ -211,7 +197,6 @@ namespace Bit.Droid.Accessibility
             {
                 System.Diagnostics.Debug.WriteLine(">>> Overlay Permission not granted");
                 Toast.MakeText(this, AppResources.AccessibilityOverlayPermissionAlert, ToastLength.Long).Show();
-                e.Recycle();
                 return;
             }
 
@@ -222,14 +207,12 @@ namespace Bit.Droid.Accessibility
 
             if(Java.Lang.JavaSystem.CurrentTimeMillis() - _lastAutoFillTime < 1000)
             {
-                e.Recycle();
                 return;
             }
 
             var uri = AccessibilityHelpers.GetUri(root);
             if(string.IsNullOrWhiteSpace(uri))
             {
-                e.Recycle();
                 return;
             }
 
@@ -301,7 +284,6 @@ namespace Bit.Droid.Accessibility
                 windows = Windows;
             }
             var anchorPosition = AccessibilityHelpers.GetOverlayAnchorPosition(_anchorNode, root, windows);
-            root.Recycle();
 
             if(anchorPosition == null)
             {
