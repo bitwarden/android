@@ -10,6 +10,7 @@ namespace Bit.Droid.Accessibility
         {
             foreach(var item in this)
             {
+                item.Recycle();
                 item.Dispose();
             }
         }

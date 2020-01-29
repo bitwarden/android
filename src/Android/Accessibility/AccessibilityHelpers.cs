@@ -253,6 +253,7 @@ namespace Bit.Droid.Accessibility
             if(dispose)
             {
                 n?.Recycle();
+                n?.Dispose();
             }
             return nodes;
         }
@@ -291,7 +292,6 @@ namespace Bit.Droid.Accessibility
             if(usernameEditText != null)
             {
                 isUsernameEditText = IsSameNode(usernameEditText, e.Source);
-                usernameEditText.Recycle();
             }
             allEditTexts.Dispose();
 
@@ -370,7 +370,12 @@ namespace Bit.Droid.Accessibility
             var anchorViewRectTop = anchorViewRect.Top;
             anchorViewRect.Dispose();
 
-            var calculatedTop = rootRectHeight - anchorViewRectTop - GetNavigationBarHeight();
+            int calculatedTop = rootRectHeight - anchorViewRectTop;
+            if((int)Build.VERSION.SdkInt >= 24)
+            {
+                calculatedTop -= GetNavigationBarHeight();
+            }
+
             return new Point(anchorViewRectLeft, calculatedTop);
         }
 
@@ -384,6 +389,10 @@ namespace Bit.Droid.Accessibility
                 if(!anchorNode.VisibleToUser)
                 {
                     return new Point(-1, -1);
+                }
+                if(!anchorNode.Focused)
+                {
+                    return null;
                 }
 
                 // node.VisibleToUser doesn't always give us exactly what we want, so attempt to tighten up the range
