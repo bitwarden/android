@@ -85,11 +85,6 @@ namespace Bit.Droid.Accessibility
                             break;
                         }
 
-                        var isKnownBroswer = AccessibilityHelpers.SupportedBrowsers.ContainsKey(root.PackageName);
-                        if(e.EventType == EventTypes.ViewClicked && isKnownBroswer)
-                        {
-                            break;
-                        }
                         if(!(e.Source?.Password ?? false) && !AccessibilityHelpers.IsUsernameEditText(root, e))
                         {
                             CancelOverlayPrompt();
