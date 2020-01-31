@@ -103,7 +103,7 @@ namespace Bit.App.Pages
             }
             else if(item.Name == AppResources.ExportVault)
             {
-                _vm.Export();
+                await Navigation.PushModalAsync(new NavigationPage(new ExportVaultPage()));
             }
             else if(item.Name == AppResources.ShareVault)
             {

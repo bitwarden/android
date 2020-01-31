@@ -1492,6 +1492,24 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter your master password to export your vault data..
+        /// </summary>
+        public static string ExportVaultMasterPasswordDescription {
+            get {
+                return ResourceManager.GetString("ExportVaultMasterPasswordDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This export contains your vault data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it..
+        /// </summary>
+        public static string ExportVaultWarning {
+            get {
+                return ResourceManager.GetString("ExportVaultWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Extension Activated!.
         /// </summary>
         public static string ExtensionActivated {
@@ -1686,6 +1704,15 @@ namespace Bit.App.Resources {
         public static string FileBugReportDescription {
             get {
                 return ResourceManager.GetString("FileBugReportDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File Format.
+        /// </summary>
+        public static string FileFormat {
+            get {
+                return ResourceManager.GetString("FileFormat", resourceCulture);
             }
         }
         
@@ -4062,6 +4089,15 @@ namespace Bit.App.Resources {
         public static string VisitOurWebsiteDescription {
             get {
                 return ResourceManager.GetString("VisitOurWebsiteDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warning.
+        /// </summary>
+        public static string Warning {
+            get {
+                return ResourceManager.GetString("Warning", resourceCulture);
             }
         }
         

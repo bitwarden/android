@@ -127,11 +127,6 @@ namespace Bit.App.Pages
             _platformUtilsService.LaunchUri("https://help.bitwarden.com/article/import-data/");
         }
 
-        public void Export()
-        {
-            _platformUtilsService.LaunchUri("https://help.bitwarden.com/article/export-your-data/");
-        }
-
         public void WebVault()
         {
             var url = _environmentService.GetWebVaultUrl();
