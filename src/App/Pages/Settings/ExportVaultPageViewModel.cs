@@ -14,9 +14,11 @@ namespace Bit.App.Pages
     public class ExportVaultPageViewModel : BaseViewModel
     {
         //private readonly IDeviceActionService _deviceActionService;
-        //private readonly IPlatformUtilsService _platformUtilsService;
+        private readonly IPlatformUtilsService _platformUtilsService;
         //private readonly IStorageService _storageService;
         //private readonly IStateService _stateService;
+        private readonly II18nService _i18nService;
+        private readonly ICryptoService _cryptoService;
 
         private int _fileFormatSelectedIndex;
         private bool _showPassword;
@@ -25,9 +27,11 @@ namespace Bit.App.Pages
         public ExportVaultPageViewModel()
         {
             //_deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
-            //_platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
+            _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             //_storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             //_stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            _i18nService = ServiceContainer.Resolve<II18nService>("i18nService");
+            _cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
 
             PageTitle = AppResources.ExportVault;
             TogglePasswordCommand = new Command(TogglePassword);
@@ -86,9 +90,34 @@ namespace Bit.App.Pages
 
         public async Task ExportVaultAsync()
         {
-            // TODO validate password first
+            if (string.IsNullOrEmpty(_masterPassword))
+            {
+                _platformUtilsService.ShowToast("error", _i18nService.T("AnErrorHasOccurred"),
+                    _i18nService.T("InvalidMasterPassword"));
+                return;
+            }
 
-            System.Diagnostics.Debug.WriteLine("ExportVaultAsync() formatIndex: {0} / password: {1}", FileFormatSelectedIndex, _masterPassword);
+            var keyHash = await _cryptoService.HashPasswordAsync(_masterPassword, null);
+            var storedKeyHash = await _cryptoService.GetKeyHashAsync();
+            if (storedKeyHash != null && keyHash != null && storedKeyHash == keyHash)
+            {
+                try
+                {
+                    // await _deviceActionService.ShowLoadingAsync(_i18nService.T("ExportingVault"));
+
+                    // TODO perform export
+
+                    // await _deviceActionService.HideLoadingAsync();
+                }
+                catch
+                {
+                }
+            }
+            else
+            {
+                _platformUtilsService.ShowToast("error", _i18nService.T("AnErrorHasOccurred"),
+                    _i18nService.T("InvalidMasterPassword"));
+            }
         }
     }
 }
