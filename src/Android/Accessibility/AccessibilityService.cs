@@ -31,9 +31,11 @@ namespace Bit.Droid.Accessibility
         private AccessibilityNodeInfo _anchorNode = null;
         private int _lastAnchorX = 0;
         private int _lastAnchorY = 0;
+        private bool _isOverlayAboveAnchor = false;
         private static bool _overlayAnchorObserverRunning = false;
         private IWindowManager _windowManager = null;
         private LinearLayout _overlayView = null;
+        private int _overlayViewHeight = 0;
         private long _lastAutoFillTime = 0;
         private Java.Lang.Runnable _overlayAnchorObserverRunnable = null;
         private Handler _handler = new Handler(Looper.MainLooper);
@@ -180,6 +182,7 @@ namespace Bit.Droid.Accessibility
             _overlayView = null;
             _lastAnchorX = 0;
             _lastAnchorY = 0;
+            _isOverlayAboveAnchor = false;
 
             if(_anchorNode != null)
             {
@@ -212,9 +215,24 @@ namespace Bit.Droid.Accessibility
             {
                 return;
             }
+            
+            var intent = new Intent(this, typeof(AccessibilityActivity));
+            intent.PutExtra("uri", uri);
+            intent.SetFlags(ActivityFlags.NewTask | ActivityFlags.SingleTop | ActivityFlags.ClearTop);
+
+            _overlayView = AccessibilityHelpers.GetOverlayView(this);
+            _overlayView.Measure(View.MeasureSpec.MakeMeasureSpec(0, 0), 
+                View.MeasureSpec.MakeMeasureSpec(0, 0));
+            _overlayViewHeight = _overlayView.MeasuredHeight;
+            _overlayView.Click += (sender, eventArgs) =>
+            {
+                CancelOverlayPrompt();
+                StartActivity(intent);
+            };
 
             var layoutParams = AccessibilityHelpers.GetOverlayLayoutParams();
-            var anchorPosition = AccessibilityHelpers.GetOverlayAnchorPosition(root, e.Source);
+            var anchorPosition = AccessibilityHelpers.GetOverlayAnchorPosition(e.Source, _overlayViewHeight,
+                _isOverlayAboveAnchor);
             layoutParams.X = anchorPosition.X;
             layoutParams.Y = anchorPosition.Y;
 
@@ -222,17 +240,6 @@ namespace Bit.Droid.Accessibility
             {
                 _windowManager = GetSystemService(WindowService).JavaCast<IWindowManager>();
             }
-
-            var intent = new Intent(this, typeof(AccessibilityActivity));
-            intent.PutExtra("uri", uri);
-            intent.SetFlags(ActivityFlags.NewTask | ActivityFlags.SingleTop | ActivityFlags.ClearTop);
-
-            _overlayView = AccessibilityHelpers.GetOverlayView(this);
-            _overlayView.Click += (sender, eventArgs) =>
-            {
-                CancelOverlayPrompt();
-                StartActivity(intent);
-            };
 
             _anchorNode = e.Source;
             _lastAnchorX = anchorPosition.X;
@@ -281,7 +288,8 @@ namespace Bit.Droid.Accessibility
                 windows = Windows;
             }
 
-            var anchorPosition = AccessibilityHelpers.GetOverlayAnchorPosition(_anchorNode, root, windows);
+            var anchorPosition = AccessibilityHelpers.GetOverlayAnchorPosition(_anchorNode, root, windows, 
+                _overlayViewHeight, _isOverlayAboveAnchor);
             if(anchorPosition == null)
             {
                 CancelOverlayPrompt();
@@ -292,7 +300,20 @@ namespace Bit.Droid.Accessibility
                 if(_overlayView.Visibility != ViewStates.Gone)
                 {
                     _overlayView.Visibility = ViewStates.Gone;
+                    System.Diagnostics.Debug.WriteLine(">>> Accessibility Overlay View Hidden");
                 }
+                return;
+            }
+            else if(anchorPosition.X == -1)
+            {
+                _isOverlayAboveAnchor = false;
+                System.Diagnostics.Debug.WriteLine(">>> Accessibility Overlay View Below Anchor");
+                return;
+            }
+            else if(anchorPosition.Y == -1)
+            {
+                _isOverlayAboveAnchor = true;
+                System.Diagnostics.Debug.WriteLine(">>> Accessibility Overlay View Above Anchor");
                 return;
             }
             else if(anchorPosition.X == _lastAnchorX && anchorPosition.Y == _lastAnchorY)
