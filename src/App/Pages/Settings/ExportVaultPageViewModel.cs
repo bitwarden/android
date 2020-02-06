@@ -1,9 +1,6 @@
 ﻿using Bit.App.Abstractions;
 using Bit.App.Resources;
-using Bit.App.Utilities;
-using Bit.Core;
 using Bit.Core.Abstractions;
-using Bit.Core.Enums;
 using Bit.Core.Utilities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -13,12 +10,11 @@ namespace Bit.App.Pages
 {
     public class ExportVaultPageViewModel : BaseViewModel
     {
-        //private readonly IDeviceActionService _deviceActionService;
+        private readonly IDeviceActionService _deviceActionService;
         private readonly IPlatformUtilsService _platformUtilsService;
-        //private readonly IStorageService _storageService;
-        //private readonly IStateService _stateService;
         private readonly II18nService _i18nService;
         private readonly ICryptoService _cryptoService;
+        private readonly IExportService _exportService;
 
         private int _fileFormatSelectedIndex;
         private bool _showPassword;
@@ -26,12 +22,11 @@ namespace Bit.App.Pages
 
         public ExportVaultPageViewModel()
         {
-            //_deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
-            //_storageService = ServiceContainer.Resolve<IStorageService>("storageService");
-            //_stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _i18nService = ServiceContainer.Resolve<II18nService>("i18nService");
             _cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
+            _exportService = ServiceContainer.Resolve<IExportService>("exportService");
 
             PageTitle = AppResources.ExportVault;
             TogglePasswordCommand = new Command(TogglePassword);
@@ -105,7 +100,10 @@ namespace Bit.App.Pages
                 {
                     // await _deviceActionService.ShowLoadingAsync(_i18nService.T("ExportingVault"));
 
-                    // TODO perform export
+                    var data = _exportService.GetExport(FileFormatOptions[FileFormatSelectedIndex].Key);
+                    
+                    System.Diagnostics.Debug.WriteLine("ExportVault format: {0} / data: {1}", 
+                        FileFormatOptions[FileFormatSelectedIndex].Key, data);
 
                     // await _deviceActionService.HideLoadingAsync();
                 }
