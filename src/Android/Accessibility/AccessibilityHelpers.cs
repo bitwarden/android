@@ -360,36 +360,31 @@ namespace Bit.Droid.Accessibility
                 windowManagerType,
                 WindowManagerFlags.NotFocusable | WindowManagerFlags.NotTouchModal,
                 Format.Transparent);
-            layoutParams.Gravity = GravityFlags.Bottom | GravityFlags.Left;
+            layoutParams.Gravity = GravityFlags.Top | GravityFlags.Left;
 
             return layoutParams;
         }
 
-        public static Point GetOverlayAnchorPosition(AccessibilityNodeInfo root, AccessibilityNodeInfo anchorView,
-            int rootRectHeight = 0)
+        public static Point GetOverlayAnchorPosition(AccessibilityNodeInfo anchorView, int overlayViewHeight, 
+            bool isOverlayAboveAnchor)
         {
-            if(rootRectHeight == 0)
-            {
-                rootRectHeight = GetNodeHeight(root);
-            }
-
             var anchorViewRect = new Rect();
             anchorView.GetBoundsInScreen(anchorViewRect);
-            var anchorViewRectLeft = anchorViewRect.Left;
-            var anchorViewRectTop = anchorViewRect.Top;
+            var anchorViewX = anchorViewRect.Left;
+            var anchorViewY = isOverlayAboveAnchor ? anchorViewRect.Top : anchorViewRect.Bottom;
             anchorViewRect.Dispose();
-
-            var calculatedTop = rootRectHeight - anchorViewRectTop;
-            if((int)Build.VERSION.SdkInt >= 24)
+            
+            if(isOverlayAboveAnchor)
             {
-                calculatedTop -= GetNavigationBarHeight();
+                anchorViewY -= overlayViewHeight;
             }
+            anchorViewY -= GetStatusBarHeight();
 
-            return new Point(anchorViewRectLeft, calculatedTop);
+            return new Point(anchorViewX, anchorViewY);
         }
 
         public static Point GetOverlayAnchorPosition(AccessibilityNodeInfo anchorNode, AccessibilityNodeInfo root,
-            IEnumerable<AccessibilityWindowInfo> windows)
+            IEnumerable<AccessibilityWindowInfo> windows, int overlayViewHeight, bool isOverlayAboveAnchor)
         {
             Point point = null;
             if(anchorNode != null)
@@ -407,32 +402,64 @@ namespace Bit.Droid.Accessibility
 
                 // node.VisibleToUser doesn't always give us exactly what we want, so attempt to tighten up the range
                 // of visibility
-                var rootNodeHeight = GetNodeHeight(root);
-                var limitLowY = 0;
-                var limitHighY = rootNodeHeight - GetNodeHeight(anchorNode);
+                var minY = 0;
+                int maxY;
                 if(windows != null)
                 {
                     if(IsStatusBarExpanded(windows))
                     {
                         return new Point(-1, -1);
                     }
-                    var inputWindowRect = GetInputMethodWindowRect(windows);
-                    if(inputWindowRect != null)
+                    maxY = GetApplicationVisibleHeight(windows);
+                }
+                else
+                {
+                    var rootNodeHeight = GetNodeHeight(root);
+                    if(rootNodeHeight == -1)
                     {
-                        limitLowY += inputWindowRect.Height();
-                        if(Build.VERSION.SdkInt >= BuildVersionCodes.Q)
-                        {
-                            limitLowY += GetNavigationBarHeight() + GetStatusBarHeight();
-                        }
-                        inputWindowRect.Dispose();
+                        return null;
                     }
+                    maxY = rootNodeHeight - GetNavigationBarHeight();
                 }
 
-                point = GetOverlayAnchorPosition(root, anchorNode, rootNodeHeight);
-                if(point.Y < limitLowY || point.Y > limitHighY)
+                point = GetOverlayAnchorPosition(anchorNode, overlayViewHeight, isOverlayAboveAnchor);
+                if(point.Y < minY)
                 {
+                    if(isOverlayAboveAnchor)
+                    {
+                        // view nearing bounds, anchor to bottom
+                        point.X = -1;
+                        point.Y = 0;
+                    }
+                    else
+                    {
+                        // view out of bounds, hide overlay
+                        point.X = -1;
+                        point.Y = -1;
+                    }
+                } 
+                else if(point.Y > maxY)
+                {
+                    if(isOverlayAboveAnchor)
+                    {
+                        // view out of bounds, hide overlay
+                        point.X = -1;
+                        point.Y = -1;
+                    }
+                    else
+                    {
+                        // view nearing bounds, anchor to top
+                        point.X = 0;
+                        point.Y = -1;
+                    }
+                } 
+                else if(isOverlayAboveAnchor && point.Y < (maxY - overlayViewHeight - GetNodeHeight(anchorNode)))
+                {
+                    // This else block forces the overlay to return to bottom alignment as soon as space is available
+                    // below the anchor view. Removing this will change the behavior to wait until there isn't enough
+                    // space above the anchor view before returning to bottom alignment.
                     point.X = -1;
-                    point.Y = -1;
+                    point.Y = 0;
                 }
             }
             return point;
@@ -456,28 +483,35 @@ namespace Bit.Droid.Accessibility
             return false;
         }
 
-        public static Rect GetInputMethodWindowRect(IEnumerable<AccessibilityWindowInfo> windows)
+        public static int GetApplicationVisibleHeight(IEnumerable<AccessibilityWindowInfo> windows)
         {
-            Rect windowRect = null;
+            var appWindowHeight = 0;
+            var nonAppWindowHeight = 0;
             if(windows != null)
             {
                 foreach(var window in windows)
                 {
-                    if(window.Type == AccessibilityWindowType.InputMethod)
+                    var windowRect = new Rect();
+                    window.GetBoundsInScreen(windowRect);
+                    if(window.Type == AccessibilityWindowType.Application)
                     {
-                        windowRect = new Rect();
-                        window.GetBoundsInScreen(windowRect);
-                        window.Recycle();
-                        break;
+                        appWindowHeight += windowRect.Height();
                     }
-                    window.Recycle();
+                    else
+                    {
+                        nonAppWindowHeight += windowRect.Height();
+                    }
                 }
             }
-            return windowRect;
+            return appWindowHeight - nonAppWindowHeight;
         }
 
         public static int GetNodeHeight(AccessibilityNodeInfo node)
         {
+            if(node == null)
+            {
+                return -1;
+            }
             var nodeRect = new Rect();
             node.GetBoundsInScreen(nodeRect);
             var nodeRectHeight = nodeRect.Height();
