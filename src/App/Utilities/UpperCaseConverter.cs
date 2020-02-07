@@ -12,10 +12,12 @@ namespace Bit.App.Utilities
             {
                 throw new InvalidOperationException("The target must be a string.");
             }
+
             if(value == null)
             {
                 return string.Empty;
             }
+
             return parameter.ToString().ToUpper();
         }
 

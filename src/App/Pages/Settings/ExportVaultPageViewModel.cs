@@ -34,8 +34,7 @@ namespace Bit.App.Pages
 
             FileFormatOptions = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>("json", ".json"),
-                new KeyValuePair<string, string>("csv", ".csv"),
+                new KeyValuePair<string, string>("json", ".json"), new KeyValuePair<string, string>("csv", ".csv"),
             };
         }
 
@@ -49,20 +48,14 @@ namespace Bit.App.Pages
         public int FileFormatSelectedIndex
         {
             get => _fileFormatSelectedIndex;
-            set
-            {
-                SetProperty(ref _fileFormatSelectedIndex, value);
-            }
+            set { SetProperty(ref _fileFormatSelectedIndex, value); }
         }
 
         public bool ShowPassword
         {
             get => _showPassword;
             set => SetProperty(ref _showPassword, value,
-                additionalPropertyNames: new string[]
-                {
-                    nameof(ShowPasswordIcon)
-                });
+                additionalPropertyNames: new string[] {nameof(ShowPasswordIcon)});
         }
 
         public string MasterPassword
@@ -85,7 +78,7 @@ namespace Bit.App.Pages
 
         public async Task ExportVaultAsync()
         {
-            if (string.IsNullOrEmpty(_masterPassword))
+            if(string.IsNullOrEmpty(_masterPassword))
             {
                 _platformUtilsService.ShowToast("error", _i18nService.T("AnErrorHasOccurred"),
                     _i18nService.T("InvalidMasterPassword"));
@@ -94,18 +87,21 @@ namespace Bit.App.Pages
 
             var keyHash = await _cryptoService.HashPasswordAsync(_masterPassword, null);
             var storedKeyHash = await _cryptoService.GetKeyHashAsync();
-            if (storedKeyHash != null && keyHash != null && storedKeyHash == keyHash)
+            if(storedKeyHash != null && keyHash != null && storedKeyHash == keyHash)
             {
                 try
                 {
                     // await _deviceActionService.ShowLoadingAsync(_i18nService.T("ExportingVault"));
 
                     var data = _exportService.GetExport(FileFormatOptions[FileFormatSelectedIndex].Key);
-                    
-                    System.Diagnostics.Debug.WriteLine("ExportVault format: {0} / data: {1}", 
-                        FileFormatOptions[FileFormatSelectedIndex].Key, data);
+                    var fileFormat = FileFormatOptions[FileFormatSelectedIndex].Key;
+                    var filename = _exportService.GetFileName(null, fileFormat);
 
                     // await _deviceActionService.HideLoadingAsync();
+
+                    // TODO trigger platform-specific file handling
+                    System.Diagnostics.Debug.WriteLine(data.Result);
+                    System.Diagnostics.Debug.WriteLine(filename);
                 }
                 catch
                 {
