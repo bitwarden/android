@@ -34,7 +34,8 @@ namespace Bit.App.Pages
 
             FileFormatOptions = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>("json", ".json"), new KeyValuePair<string, string>("csv", ".csv"),
+                new KeyValuePair<string, string>("json", ".json"),
+                new KeyValuePair<string, string>("csv", ".csv")
             };
         }
 

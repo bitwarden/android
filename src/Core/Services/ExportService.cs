@@ -1,11 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Export;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
+using CsvHelper;
+using CsvHelper.Configuration;
+using CsvHelper.Configuration.Attributes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -36,6 +42,11 @@ namespace Bit.Core.Services
                 var foldersMap = new Dictionary<string, FolderView>();
                 foreach(var f in _decryptedFolders)
                 {
+                    if(f.Id == null)
+                    {
+                        continue;
+                    }
+
                     foldersMap.Add(f.Id, f);
                 }
 
@@ -62,12 +73,22 @@ namespace Bit.Core.Services
                     exportCiphers.Add(cipher);
                 }
 
-                // TODO return csvLib.unparse(exportCiphers);
-                throw new NotImplementedException();
+                using (var writer = new StringWriter())
+                using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+                {
+                    csv.Configuration.NewLine = NewLine.CRLF;
+                    csv.WriteRecords(exportCiphers);
+                    csv.Flush();
+                    return writer.ToString();
+                }
             }
             else
             {
-                var jsonDoc = new {Folders = new List<FolderWithId>(), Items = new List<CipherWithId>()};
+                var jsonDoc = new
+                {
+                    Folders = new List<FolderWithId>(),
+                    Items = new List<CipherWithId>()
+                };
 
                 foreach(var f in _decryptedFolders)
                 {
@@ -126,7 +147,7 @@ namespace Bit.Core.Services
             cipher.LoginPassword = null;
             cipher.LoginTotp = null;
 
-            if(c.Fields != null)
+            if(c.Fields?.Any() ?? false)
             {
                 foreach(var f in c.Fields)
                 {
@@ -151,12 +172,20 @@ namespace Bit.Core.Services
                     cipher.LoginPassword = c.Login.Password;
                     cipher.LoginTotp = c.Login.Totp;
 
-                    if(c.Login.Uris != null)
+                    if(c.Login.Uris?.Any() ?? false)
                     {
-                        cipher.LoginUris = new List<String>();
                         foreach(var u in c.Login.Uris)
                         {
-                            cipher.LoginUris.Add(u.Uri);
+                            if(cipher.LoginUris == null)
+                            {
+                                cipher.LoginUris = "";
+                            }
+                            else
+                            {
+                                cipher.LoginUris += ",";
+                            }
+
+                            cipher.LoginUris += u.Uri;
                         }
                     }
 
@@ -171,15 +200,25 @@ namespace Bit.Core.Services
 
         private class ExportCipher
         {
+            [Name("folder")]
             public string Folder { get; set; }
+            [Name("favorite")]
             public string Favorite { get; set; }
+            [Name("type")]
             public string Type { get; set; }
+            [Name("name")]
             public string Name { get; set; }
+            [Name("notes")]
             public string Notes { get; set; }
+            [Name("fields")]
             public string Fields { get; set; }
-            public List<string> LoginUris { get; set; }
+            [Name("login_uri")]
+            public string LoginUris { get; set; }
+            [Name("login_username")]
             public string LoginUsername { get; set; }
+            [Name("login_password")]
             public string LoginPassword { get; set; }
+            [Name("login_totp")]
             public string LoginTotp { get; set; }
         }
     }
