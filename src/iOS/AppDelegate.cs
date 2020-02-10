@@ -282,7 +282,7 @@ namespace Bit.iOS
             _nfcDelegate = new NFCReaderDelegate((success, message) =>
                 _messagingService.Send("gotYubiKeyOTP", message));
 
-            iOSCoreHelpers.Bootstrap();
+            iOSCoreHelpers.Bootstrap(async () => await ApplyManagedSettingsAsync());
         }
 
         private void RegisterPush()
@@ -474,6 +474,21 @@ namespace Bit.iOS
             await _eventService.UploadEventsAsync();
             UIApplication.SharedApplication.EndBackgroundTask(_eventBackgroundTaskId);
             _eventBackgroundTaskId = 0;
+        }
+
+        private async Task ApplyManagedSettingsAsync()
+        {
+            var userDefaults = NSUserDefaults.StandardUserDefaults;
+            var managedSettings = userDefaults.DictionaryForKey("com.apple.configuration.managed");
+            if(managedSettings != null && managedSettings.Count > 0)
+            {
+                var dict = new Dictionary<string, string>();
+                foreach(var setting in managedSettings)
+                {
+                    dict.Add(setting.Key.ToString(), setting.Value?.ToString());
+                }
+                await AppHelpers.SetPreconfiguredSettingsAsync(dict);
+            }
         }
     }
 }
