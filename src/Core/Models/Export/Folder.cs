@@ -4,10 +4,14 @@ namespace Bit.Core.Models.Export
 {
     public class Folder
     {
-        public Folder()
+        public Folder() { }
+
+        public Folder(FolderView obj)
         {
-            Name = "Folder name";
+            Name = obj.Name;
         }
+
+        public string Name { get; set; }
 
         public FolderView ToView(Folder req, FolderView view = null)
         {
@@ -18,13 +22,6 @@ namespace Bit.Core.Models.Export
 
             view.Name = req.Name;
             return view;
-        }
-
-        public string Name { get; set; }
-
-        public Folder(FolderView obj)
-        {
-            Name = obj.Name;
         }
     }
 }

@@ -19,10 +19,11 @@ namespace Bit.Core.Services
 {
     public class ExportService : IExportService
     {
-        private List<FolderView> _decryptedFolders;
-        private List<CipherView> _decryptedCiphers;
         private readonly IFolderService _folderService;
         private readonly ICipherService _cipherService;
+
+        private List<FolderView> _decryptedFolders;
+        private List<CipherView> _decryptedCiphers;
 
         public ExportService(
             IFolderService folderService,
@@ -39,16 +40,7 @@ namespace Bit.Core.Services
 
             if(format == "csv")
             {
-                var foldersMap = new Dictionary<string, FolderView>();
-                foreach(var f in _decryptedFolders)
-                {
-                    if(f.Id == null)
-                    {
-                        continue;
-                    }
-
-                    foldersMap.Add(f.Id, f);
-                }
+                var foldersMap = _decryptedFolders.Where(f => f.Id != null).ToDictionary(f => f.Id);
 
                 var exportCiphers = new List<ExportCipher>();
                 foreach(var c in _decryptedCiphers)
@@ -76,7 +68,6 @@ namespace Bit.Core.Services
                 using (var writer = new StringWriter())
                 using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
                 {
-                    csv.Configuration.NewLine = NewLine.CRLF;
                     csv.WriteRecords(exportCiphers);
                     csv.Flush();
                     return writer.ToString();
@@ -86,32 +77,10 @@ namespace Bit.Core.Services
             {
                 var jsonDoc = new
                 {
-                    Folders = new List<FolderWithId>(),
-                    Items = new List<CipherWithId>()
+                    Folders = _decryptedFolders.Where(f => f.Id != null).Select(f => new FolderWithId(f)),
+                    Items = _decryptedCiphers.Where(c => c.OrganizationId == null)
+                        .Select(c => new CipherWithId(c) {CollectionIds = null})
                 };
-
-                foreach(var f in _decryptedFolders)
-                {
-                    if(f.Id == null)
-                    {
-                        continue;
-                    }
-
-                    var folder = new FolderWithId(f);
-                    jsonDoc.Folders.Add(folder);
-                }
-
-                foreach(var c in _decryptedCiphers)
-                {
-                    if(c.OrganizationId != null)
-                    {
-                        continue;
-                    }
-
-                    var cipher = new CipherWithId(c);
-                    cipher.CollectionIds = null;
-                    jsonDoc.Items.Add(cipher);
-                }
 
                 return CoreHelpers.SerializeJson(jsonDoc,
                     new JsonSerializerSettings
@@ -131,8 +100,8 @@ namespace Bit.Core.Services
         {
             var dateString = DateTime.Now.ToString("yyyyMMddHHmmss");
 
-            return "bitwarden" + (!string.IsNullOrEmpty(prefix) ? ("_" + prefix) : "") + "_export_" + dateString + "."
-                   + extension;
+            return string.Format("bitwarden{0}_export_{1}.{2}",
+                !string.IsNullOrEmpty(prefix) ? ("_" + prefix) : string.Empty, dateString, extension);
         }
 
         private void BuildCommonCipher(ExportCipher cipher, CipherView c)

@@ -5,10 +5,19 @@ namespace Bit.Core.Models.Export
 {
     public class SecureNote
     {
-        public SecureNote()
+        public SecureNote() { }
+
+        public SecureNote(SecureNoteView obj)
         {
-            Type = SecureNoteType.Generic;
+            if(obj == null)
+            {
+                return;
+            }
+
+            Type = obj.Type;
         }
+
+        public SecureNoteType Type { get; set; }
 
         public SecureNoteView ToView(SecureNote req, SecureNoteView view = null)
         {
@@ -19,18 +28,6 @@ namespace Bit.Core.Models.Export
 
             view.Type = req.Type;
             return view;
-        }
-
-        public SecureNoteType Type { get; set; }
-
-        public SecureNote(SecureNoteView obj)
-        {
-            if(obj == null)
-            {
-                return;
-            }
-
-            Type = obj.Type;
         }
     }
 }

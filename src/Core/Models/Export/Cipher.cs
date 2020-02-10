@@ -8,20 +8,55 @@ namespace Bit.Core.Models.Export
 {
     public class Cipher
     {
-        public Cipher()
+        public Cipher() { }
+
+        public Cipher(CipherView obj)
         {
-            OrganizationId = null;
-            FolderId = null;
-            Type = CipherType.Login;
-            Name = "Item name";
-            Notes = "Some notes about this item.";
-            Favorite = false;
-            Fields = null;
-            Login = null;
-            SecureNote = null;
-            Card = null;
-            Identity = null;
+            OrganizationId = obj.OrganizationId;
+            FolderId = obj.FolderId;
+            Type = obj.Type;
+            Name = obj.Name;
+            Notes = obj.Notes;
+            Favorite = obj.Favorite;
+
+            if(obj.Fields != null)
+            {
+                Fields = obj.Fields.Select(f => new Field(f)).ToList();
+            }
+
+            switch(obj.Type)
+            {
+                case CipherType.Login:
+                    Login = new Login(obj.Login);
+                    break;
+                case CipherType.SecureNote:
+                    SecureNote = new SecureNote(obj.SecureNote);
+                    break;
+                case CipherType.Card:
+                    Card = new Card(obj.Card);
+                    break;
+                case CipherType.Identity:
+                    Identity = new Identity(obj.Identity);
+                    break;
+            }
         }
+
+        public string OrganizationId { get; set; }
+        public string FolderId { get; set; }
+        public CipherType Type { get; set; }
+        public string Name { get; set; }
+        public string Notes { get; set; }
+        public bool Favorite { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public List<Field> Fields { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public Login Login { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public SecureNote SecureNote { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public Card Card { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public Identity Identity { get; set; }
 
         public CipherView ToView(Cipher req, CipherView view = null)
         {
@@ -41,7 +76,7 @@ namespace Bit.Core.Models.Export
             view.Notes = req.Notes;
             view.Favorite = req.Favorite;
 
-            if(req.Fields?.Any() ?? false)
+            if(req.Fields != null)
             {
                 view.Fields = req.Fields.Select(f => Field.ToView(f)).ToList();
             }
@@ -63,54 +98,6 @@ namespace Bit.Core.Models.Export
             }
 
             return view;
-        }
-
-        public string OrganizationId { get; set; }
-        public string FolderId { get; set; }
-        public CipherType Type { get; set; }
-        public string Name { get; set; }
-        public string Notes { get; set; }
-        public bool Favorite { get; set; }
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public List<Field> Fields { get; set; }
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public Login Login { get; set; }
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public SecureNote SecureNote { get; set; }
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public Card Card { get; set; }
-        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public Identity Identity { get; set; }
-
-        public Cipher(CipherView obj)
-        {
-            OrganizationId = obj.OrganizationId;
-            FolderId = obj.FolderId;
-            Type = obj.Type;
-            Name = obj.Name;
-            Notes = obj.Notes;
-            Favorite = obj.Favorite;
-
-            if(obj.Fields?.Any() ?? false)
-            {
-                Fields = obj.Fields.Select(f => new Field(f)).ToList();
-            }
-
-            switch(obj.Type)
-            {
-                case CipherType.Login:
-                    Login = new Login(obj.Login);
-                    break;
-                case CipherType.SecureNote:
-                    SecureNote = new SecureNote(obj.SecureNote);
-                    break;
-                case CipherType.Card:
-                    Card = new Card(obj.Card);
-                    break;
-                case CipherType.Identity:
-                    Identity = new Identity(obj.Identity);
-                    break;
-            }
         }
     }
 }
