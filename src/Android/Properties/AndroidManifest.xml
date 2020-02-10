@@ -54,5 +54,6 @@
     </receiver>
 
     <meta-data android:name="android.max_aspect" android:value="2.1" />
+    <meta-data android:name="android.content.APP_RESTRICTIONS" android:resource="@xml/app_restrictions" />
   </application>
 </manifest>

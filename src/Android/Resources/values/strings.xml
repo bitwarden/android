@@ -16,4 +16,10 @@
   <string name="PasswordGenerator">
     Password Generator
   </string>
+  <string name="SelfHostedServerUrl">
+    Self-hosted server URL
+  </string>
+  <string name="ServerUrl">
+    Server URL
+  </string>
 </resources>

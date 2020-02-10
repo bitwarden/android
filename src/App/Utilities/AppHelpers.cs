@@ -6,6 +6,7 @@ using Bit.Core.Abstractions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -144,6 +145,36 @@ namespace Bit.App.Utilities
                 return true;
             }
             return false;
+        }
+
+        public static async Task SetPreconfiguredSettingsAsync(IDictionary<string, string> configSettings)
+        {
+            if(configSettings?.Any() ?? true)
+            {
+                return;
+            }
+            foreach(var setting in configSettings)
+            {
+                switch(setting.Key)
+                {
+                    case "baseEnvironmentUrl":
+                        var environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
+                        if(environmentService.BaseUrl != setting.Value)
+                        {
+                            await environmentService.SetUrlsAsync(new Core.Models.Data.EnvironmentUrlData
+                            {
+                                Base = setting.Value,
+                                Api = environmentService.ApiUrl,
+                                Identity = environmentService.IdentityUrl,
+                                WebVault = environmentService.WebVaultUrl,
+                                Icons = environmentService.IconsUrl
+                            });
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
         }
     }
 }
