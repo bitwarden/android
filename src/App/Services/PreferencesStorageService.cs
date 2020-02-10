@@ -13,7 +13,8 @@ namespace Bit.App.Services
         private readonly string _sharedName;
         private readonly JsonSerializerSettings _jsonSettings = new JsonSerializerSettings
         {
-            ContractResolver = new CamelCasePropertyNamesContractResolver()
+            ContractResolver = new CamelCasePropertyNamesContractResolver(),
+            NullValueHandling = NullValueHandling.Ignore
         };
 
         public PreferencesStorageService(string sharedName)
