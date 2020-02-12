@@ -786,7 +786,7 @@ namespace Bit.Core.Services
             var okm = new byte[size];
             var previousT = new byte[0];
             var n = (int)Math.Ceiling((double)size / hashLen);
-            for(int i = 0; i < n; i++)
+            for(var i = 0; i < n; i++)
             {
                 var t = new byte[previousT.Length + info.Length + 1];
                 previousT.CopyTo(t, 0);
