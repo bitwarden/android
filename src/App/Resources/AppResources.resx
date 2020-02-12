@@ -1602,4 +1602,10 @@
   <data name="Warning" xml:space="preserve">
     <value>Warning</value>
   </data>
+  <data name="ExportVaultFailure" xml:space="preserve">
+    <value>There was a problem exporting your vault.  If the problem persists, you'll need to export from the web vault.</value>
+  </data>
+  <data name="ExportVaultSuccess" xml:space="preserve">
+    <value>Vault exported successfully</value>
+  </data>
 </root>

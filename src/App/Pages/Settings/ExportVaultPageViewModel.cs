@@ -1,8 +1,10 @@
-﻿using Bit.App.Abstractions;
+﻿using System;
+using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -19,6 +21,8 @@ namespace Bit.App.Pages
         private int _fileFormatSelectedIndex;
         private bool _showPassword;
         private string _masterPassword;
+        private byte[] _exportResult;
+        private string _defaultFilename;
 
         public ExportVaultPageViewModel()
         {
@@ -87,25 +91,28 @@ namespace Bit.App.Pages
             }
 
             var keyHash = await _cryptoService.HashPasswordAsync(_masterPassword, null);
+            MasterPassword = string.Empty;
+            
             var storedKeyHash = await _cryptoService.GetKeyHashAsync();
             if(storedKeyHash != null && keyHash != null && storedKeyHash == keyHash)
             {
                 try
                 {
-                    // await _deviceActionService.ShowLoadingAsync(_i18nService.T("ExportingVault"));
-
                     var data = _exportService.GetExport(FileFormatOptions[FileFormatSelectedIndex].Key);
                     var fileFormat = FileFormatOptions[FileFormatSelectedIndex].Key;
-                    var filename = _exportService.GetFileName(null, fileFormat);
+                    _defaultFilename = _exportService.GetFileName(null, fileFormat);
+                    _exportResult = Encoding.ASCII.GetBytes(data.Result);
 
-                    // await _deviceActionService.HideLoadingAsync();
-
-                    // TODO trigger platform-specific file handling
-                    System.Diagnostics.Debug.WriteLine(data.Result);
-                    System.Diagnostics.Debug.WriteLine(filename);
+                    if(!_deviceActionService.SaveFile(_exportResult, null, _defaultFilename, null))
+                    {
+                        ClearResult();
+                        await _platformUtilsService.ShowDialogAsync(_i18nService.T("ExportVaultFailure"));
+                    }
                 }
-                catch
+                catch(Exception ex)
                 {
+                    ClearResult();
+                    System.Diagnostics.Debug.WriteLine(">>> {0}: {1}", ex.GetType(), ex.StackTrace);
                 }
             }
             else
@@ -113,6 +120,25 @@ namespace Bit.App.Pages
                 _platformUtilsService.ShowToast("error", _i18nService.T("AnErrorHasOccurred"),
                     _i18nService.T("InvalidMasterPassword"));
             }
+        }
+
+        public async void SaveFileSelected(string contentUri, string filename)
+        {
+            if(_deviceActionService.SaveFile(_exportResult, null, filename ?? _defaultFilename, contentUri))
+            {
+                ClearResult();
+                _platformUtilsService.ShowToast("success", null, _i18nService.T("ExportVaultSuccess"));
+                return;
+            }
+
+            ClearResult();
+            await _platformUtilsService.ShowDialogAsync(_i18nService.T("ExportVaultFailure"));
+        }
+
+        private void ClearResult()
+        {
+            _defaultFilename = null;
+            _exportResult = null;
         }
     }
 }

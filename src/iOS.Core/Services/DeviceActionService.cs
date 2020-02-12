@@ -133,6 +133,12 @@ namespace Bit.iOS.Core.Services
             return true;
         }
 
+        public bool SaveFile(byte[] fileData, string id, string fileName, string contentUri)
+        {
+            // OpenFile behavior is appropriate here as iOS prompts to save file
+            return OpenFile(fileData, id, fileName);
+        }
+
         public async Task ClearCacheAsync()
         {
             var url = new NSUrl(GetTempPath());

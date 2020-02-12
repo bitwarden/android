@@ -1,4 +1,6 @@
 ﻿using System;
+using Bit.Core.Abstractions;
+using Bit.Core.Utilities;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -6,10 +8,12 @@ namespace Bit.App.Pages
     public partial class ExportVaultPage : BaseContentPage
     {
         private readonly ExportVaultPageViewModel _vm;
+        private readonly IBroadcasterService _broadcasterService;
 
         public ExportVaultPage()
         {
             InitializeComponent();
+            _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _vm = BindingContext as ExportVaultPageViewModel;
             _vm.Page = this;
             _fileFormatPicker.ItemDisplayBinding = new Binding("Value");
@@ -20,6 +24,21 @@ namespace Bit.App.Pages
         {
             base.OnAppearing();
             await _vm.InitAsync();
+            _broadcasterService.Subscribe(nameof(AttachmentsPage), (message) =>
+            {
+                if(message.Command == "selectSaveFileResult")
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        var data = message.Data as Tuple<string, string>;
+                        if(data == null)
+                        {
+                            return;
+                        }
+                        _vm.SaveFileSelected(data.Item1, data.Item2);
+                    });
+                }
+            });
             RequestFocus(_masterPassword);
         }
 

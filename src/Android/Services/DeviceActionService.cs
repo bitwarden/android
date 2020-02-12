@@ -200,6 +200,61 @@ namespace Bit.Droid.Services
             catch { }
             return null;
         }
+        
+        public bool SaveFile(byte[] fileData, string id, string fileName, string contentUri)
+        {
+            try
+            {
+                var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+                
+                if(contentUri != null)
+                {
+                    var uri = Android.Net.Uri.Parse(contentUri);
+                    var stream = activity.ContentResolver.OpenOutputStream(uri);
+                    // Using java bufferedOutputStream due to this issue:
+                    // https://github.com/xamarin/xamarin-android/issues/3498
+                    var javaStream = new Java.IO.BufferedOutputStream(stream);
+                    javaStream.Write(fileData);
+                    javaStream.Flush();
+                    javaStream.Close();
+                    return true;
+                }
+                
+                // Prompt for location to save file
+                var extension = MimeTypeMap.GetFileExtensionFromUrl(fileName.Replace(' ', '_').ToLower());
+                if(extension == null)
+                {
+                    return false;
+                }
+
+                string mimeType = MimeTypeMap.Singleton.GetMimeTypeFromExtension(extension);
+                if(mimeType == null)
+                {
+                    if(extension == "json")
+                    {
+                        // Explicit support for json since older versions of Android don't recognize the extension
+                        mimeType = "text/json";
+                    }
+                    else
+                    {
+                        return false; 
+                    }
+                }
+
+                var intent = new Intent(Intent.ActionCreateDocument);
+                intent.SetType(mimeType);
+                intent.AddCategory(Intent.CategoryOpenable);
+                intent.PutExtra(Intent.ExtraTitle, fileName);
+                
+                activity.StartActivityForResult(intent, Constants.SaveFileRequestCode);
+                return true;
+            }
+            catch(Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(">>> {0}: {1}", ex.GetType(), ex.StackTrace);
+            }
+            return false;
+        }
 
         public async Task ClearCacheAsync()
         {
