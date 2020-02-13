@@ -28,6 +28,10 @@ namespace Bit.Droid.Accessibility
         private const string BitwardenPackage = "com.x8bit.bitwarden";
         private const string BitwardenWebsite = "vault.bitwarden.com";
 
+        private IStorageService _storageService;
+        private DateTime? _lastSettingsReload = null;
+        private TimeSpan _settingsReloadSpan = TimeSpan.FromMinutes(1);
+        private HashSet<string> _blacklistedUris;
         private AccessibilityNodeInfo _anchorNode = null;
         private int _lastAnchorX = 0;
         private int _lastAnchorY = 0;
@@ -69,6 +73,8 @@ namespace Bit.Droid.Accessibility
 
                 // AccessibilityHelpers.PrintTestData(RootInActiveWindow, e);
 
+                LoadServices();
+                var settingsTask = LoadSettingsAsync();
                 AccessibilityNodeInfo root = null;
 
                 switch(e.EventType)
@@ -211,17 +217,33 @@ namespace Bit.Droid.Accessibility
             }
 
             var uri = AccessibilityHelpers.GetUri(root);
-            if(string.IsNullOrWhiteSpace(uri))
+            var fillable = !string.IsNullOrWhiteSpace(uri);
+            if(fillable)
+            {
+                if(_blacklistedUris != null && _blacklistedUris.Any())
+                {
+                    if(Uri.TryCreate(uri, UriKind.Absolute, out var parsedUri) && parsedUri.Scheme.StartsWith("http"))
+                    {
+                        fillable = !_blacklistedUris.Contains(
+                            string.Format("{0}://{1}", parsedUri.Scheme, parsedUri.Host));
+                    }
+                    else
+                    {
+                        fillable = !_blacklistedUris.Contains(uri);
+                    }
+                }
+            }
+            if(!fillable)
             {
                 return;
             }
-            
+
             var intent = new Intent(this, typeof(AccessibilityActivity));
             intent.PutExtra("uri", uri);
             intent.SetFlags(ActivityFlags.NewTask | ActivityFlags.SingleTop | ActivityFlags.ClearTop);
 
             _overlayView = AccessibilityHelpers.GetOverlayView(this);
-            _overlayView.Measure(View.MeasureSpec.MakeMeasureSpec(0, 0), 
+            _overlayView.Measure(View.MeasureSpec.MakeMeasureSpec(0, 0),
                 View.MeasureSpec.MakeMeasureSpec(0, 0));
             _overlayViewHeight = _overlayView.MeasuredHeight;
             _overlayView.Click += (sender, eventArgs) =>
@@ -288,7 +310,7 @@ namespace Bit.Droid.Accessibility
                 windows = Windows;
             }
 
-            var anchorPosition = AccessibilityHelpers.GetOverlayAnchorPosition(_anchorNode, root, windows, 
+            var anchorPosition = AccessibilityHelpers.GetOverlayAnchorPosition(_anchorNode, root, windows,
                 _overlayViewHeight, _isOverlayAboveAnchor);
             if(anchorPosition == null)
             {
@@ -362,6 +384,28 @@ namespace Bit.Droid.Accessibility
                 _launcherPackageNames = resolveInfo.Select(ri => ri.ActivityInfo.PackageName).ToHashSet();
             }
             return _launcherPackageNames.Contains(eventPackageName);
+        }
+
+        private void LoadServices()
+        {
+            if(_storageService == null)
+            {
+                _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+            }
+        }
+
+        private async Task LoadSettingsAsync()
+        {
+            var now = DateTime.UtcNow;
+            if(_lastSettingsReload == null || (now - _lastSettingsReload.Value) > _settingsReloadSpan)
+            {
+                _lastSettingsReload = now;
+                var uris = await _storageService.GetAsync<List<string>>(Constants.AutofillBlacklistedUrisKey);
+                if(uris != null)
+                {
+                    _blacklistedUris = new HashSet<string>(uris);
+                }
+            }
         }
     }
 }
