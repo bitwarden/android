@@ -8,11 +8,6 @@ namespace Bit.Core.Models.Export
 
         public Card(CardView obj)
         {
-            if(obj == null)
-            {
-                return;
-            }
-
             CardholderName = obj.CardholderName;
             Brand = obj.Brand;
             Number = obj.Number;

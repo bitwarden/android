@@ -1,5 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<pages:BaseContentPage 
+﻿<?xml version="1.0" encoding="utf-8"?>
+<pages:BaseContentPage
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="Bit.App.Pages.ExportVaultPage"
@@ -21,7 +21,7 @@
     </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="{u:I18n Close}" Clicked="Close_Clicked"/>
+        <ToolbarItem Text="{u:I18n Close}" Clicked="Close_Clicked" />
     </ContentPage.ToolbarItems>
 
     <ScrollView>
@@ -47,30 +47,30 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <Label
-                            Text="{u:I18n MasterPassword}"
-                            StyleClass="box-label"
-                            Grid.Row="0"
-                            Grid.Column="0" />
+                        Text="{u:I18n MasterPassword}"
+                        StyleClass="box-label"
+                        Grid.Row="0"
+                        Grid.Column="0" />
                     <controls:MonoEntry
-                            x:Name="_masterPassword"
-                            Text="{Binding MasterPassword}"
-                            StyleClass="box-value"
-                            IsSpellCheckEnabled="False"
-                            IsTextPredictionEnabled="False"
-                            IsPassword="{Binding ShowPassword, Converter={StaticResource inverseBool}}"
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            ReturnType="Go"
-                            ReturnCommand="{Binding ExportVaultCommand}" />
+                        x:Name="_masterPassword"
+                        Text="{Binding MasterPassword}"
+                        StyleClass="box-value"
+                        IsSpellCheckEnabled="False"
+                        IsTextPredictionEnabled="False"
+                        IsPassword="{Binding ShowPassword, Converter={StaticResource inverseBool}}"
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        ReturnType="Go"
+                        ReturnCommand="{Binding ExportVaultCommand}" />
                     <controls:FaButton
-                            StyleClass="box-row-button, box-row-button-platform"
-                            Text="{Binding ShowPasswordIcon}"
-                            Command="{Binding TogglePasswordCommand}"
-                            Grid.Row="0"
-                            Grid.Column="1"
-                            Grid.RowSpan="2"
-                            AutomationProperties.IsInAccessibleTree="True"
-                            AutomationProperties.Name="{u:I18n ToggleVisibility}" />
+                        StyleClass="box-row-button, box-row-button-platform"
+                        Text="{Binding ShowPasswordIcon}"
+                        Command="{Binding TogglePasswordCommand}"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Grid.RowSpan="2"
+                        AutomationProperties.IsInAccessibleTree="True"
+                        AutomationProperties.Name="{u:I18n ToggleVisibility}" />
                 </Grid>
                 <Label
                     Text="{u:I18n ExportVaultMasterPasswordDescription}"
@@ -80,7 +80,9 @@
                     Margin="0, 20">
                     <Label.FormattedText>
                         <FormattedString>
-                            <Span Text="{Binding Converter={StaticResource toUpper}, ConverterParameter={u:I18n Warning}}" FontAttributes="Bold"/>
+                            <Span
+                                Text="{Binding Converter={StaticResource toUpper}, ConverterParameter={u:I18n Warning}}"
+                                FontAttributes="Bold" />
                             <Span Text=": " FontAttributes="Bold" />
                             <Span Text="{u:I18n ExportVaultWarning}" />
                         </FormattedString>
@@ -88,9 +90,9 @@
                 </Label>
                 <StackLayout Spacing="20">
                     <Button Text="{u:I18n ExportVault}"
-                        Clicked="ExportVault_Clicked"
-                        HorizontalOptions="Fill"
-                        VerticalOptions="End"></Button>
+                            Clicked="ExportVault_Clicked"
+                            HorizontalOptions="Fill"
+                            VerticalOptions="End" />
                 </StackLayout>
             </StackLayout>
         </StackLayout>

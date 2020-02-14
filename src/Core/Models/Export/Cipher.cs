@@ -19,10 +19,7 @@ namespace Bit.Core.Models.Export
             Notes = obj.Notes;
             Favorite = obj.Favorite;
 
-            if(obj.Fields != null)
-            {
-                Fields = obj.Fields.Select(f => new Field(f)).ToList();
-            }
+            Fields = obj.Fields?.Select(f => new Field(f)).ToList();
 
             switch(obj.Type)
             {
@@ -76,10 +73,7 @@ namespace Bit.Core.Models.Export
             view.Notes = req.Notes;
             view.Favorite = req.Favorite;
 
-            if(req.Fields != null)
-            {
-                view.Fields = req.Fields.Select(f => Field.ToView(f)).ToList();
-            }
+            view.Fields = req.Fields?.Select(f => Field.ToView(f)).ToList();
 
             switch(req.Type)
             {

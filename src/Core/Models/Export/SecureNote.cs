@@ -9,11 +9,6 @@ namespace Bit.Core.Models.Export
 
         public SecureNote(SecureNoteView obj)
         {
-            if(obj == null)
-            {
-                return;
-            }
-
             Type = obj.Type;
         }
 

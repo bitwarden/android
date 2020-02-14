@@ -9,11 +9,6 @@ namespace Bit.Core.Models.Export
 
         public Field(FieldView obj)
         {
-            if(obj == null)
-            {
-                return;
-            }
-
             Name = obj.Name;
             Value = obj.Value;
             Type = obj.Type;

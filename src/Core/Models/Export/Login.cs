@@ -10,15 +10,7 @@ namespace Bit.Core.Models.Export
 
         public Login(LoginView obj)
         {
-            if(obj == null)
-            {
-                return;
-            }
-
-            if(obj.Uris != null)
-            {
-                Uris = obj.Uris.Select(u => new LoginUri(u)).ToList();
-            }
+            Uris = obj.Uris?.Select(u => new LoginUri(u)).ToList();
 
             Username = obj.Username;
             Password = obj.Password;
@@ -37,10 +29,7 @@ namespace Bit.Core.Models.Export
                 view = new LoginView();
             }
 
-            if(req.Uris != null)
-            {
-                view.Uris = req.Uris.Select(u => LoginUri.ToView(u)).ToList();
-            }
+            view.Uris = req.Uris?.Select(u => LoginUri.ToView(u)).ToList();
 
             view.Username = req.Username;
             view.Password = req.Password;

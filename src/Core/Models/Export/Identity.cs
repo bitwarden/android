@@ -8,11 +8,6 @@ namespace Bit.Core.Models.Export
 
         public Identity(IdentityView obj)
         {
-            if(obj == null)
-            {
-                return;
-            }
-
             Title = obj.Title;
             FirstName = obj.FirstName;
             MiddleName = obj.MiddleName;

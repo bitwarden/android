@@ -9,11 +9,6 @@ namespace Bit.Core.Models.Export
 
         public LoginUri(LoginUriView obj)
         {
-            if(obj == null)
-            {
-                return;
-            }
-
             Match = obj.Match;
             Uri = obj.Uri;
         }

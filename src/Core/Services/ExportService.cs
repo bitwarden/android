@@ -58,8 +58,7 @@ namespace Bit.Core.Services
 
                     var cipher = new ExportCipher();
                     cipher.Folder = c.FolderId != null && foldersMap.ContainsKey(c.FolderId)
-                        ? foldersMap[c.FolderId].Name
-                        : null;
+                        ? foldersMap[c.FolderId].Name : null;
                     cipher.Favorite = c.Favorite ? "1" : null;
                     BuildCommonCipher(cipher, c);
                     exportCiphers.Add(cipher);
@@ -116,7 +115,7 @@ namespace Bit.Core.Services
             cipher.LoginPassword = null;
             cipher.LoginTotp = null;
 
-            if(c.Fields?.Any() ?? false)
+            if(c.Fields != null)
             {
                 foreach(var f in c.Fields)
                 {
@@ -141,7 +140,7 @@ namespace Bit.Core.Services
                     cipher.LoginPassword = c.Login.Password;
                     cipher.LoginTotp = c.Login.Totp;
 
-                    if(c.Login.Uris?.Any() ?? false)
+                    if(c.Login.Uris != null)
                     {
                         foreach(var u in c.Login.Uris)
                         {
