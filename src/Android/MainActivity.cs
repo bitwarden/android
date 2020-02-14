@@ -201,7 +201,8 @@ namespace Bit.Droid
 
         protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
         {
-            if(requestCode == Constants.SelectFileRequestCode && resultCode == Result.Ok)
+            if(resultCode == Result.Ok &&
+               (requestCode == Constants.SelectFileRequestCode || requestCode == Constants.SaveFileRequestCode))
             {
                 Android.Net.Uri uri = null;
                 string fileName = null;
@@ -222,6 +223,14 @@ namespace Bit.Droid
                 {
                     return;
                 }
+
+                if(requestCode == Constants.SaveFileRequestCode)
+                {
+                    _messagingService.Send("selectSaveFileResult",
+                        new Tuple<string, string>(uri.ToString(), fileName));
+                    return;
+                }
+                
                 try
                 {
                     using(var stream = ContentResolver.OpenInputStream(uri))

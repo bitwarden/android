@@ -190,6 +190,11 @@ namespace Bit.Core.Utilities
             }
             return JsonConvert.SerializeObject(obj, jsonSerializationSettings);
         }
+        
+        public static string SerializeJson(object obj, JsonSerializerSettings jsonSerializationSettings)
+        {
+            return JsonConvert.SerializeObject(obj, jsonSerializationSettings);
+        }
 
         public static T DeserializeJson<T>(string json, bool ignoreNulls = false)
         {

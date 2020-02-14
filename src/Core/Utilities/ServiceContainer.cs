@@ -58,7 +58,7 @@ namespace Bit.Core.Utilities
             var totpService = new TotpService(storageService, cryptoFunctionService);
             var authService = new AuthService(cryptoService, apiService, userService, tokenService, appIdService,
                 i18nService, platformUtilsService, messagingService, lockService);
-            // TODO: export service
+            var exportService = new ExportService(folderService, cipherService);
             var auditService = new AuditService(cryptoFunctionService, apiService);
             var environmentService = new EnvironmentService(apiService, storageService);
             var eventService = new EventService(storageService, apiService, userService, cipherService);
@@ -80,6 +80,7 @@ namespace Bit.Core.Utilities
             Register<IPasswordGenerationService>("passwordGenerationService", passwordGenerationService);
             Register<ITotpService>("totpService", totpService);
             Register<IAuthService>("authService", authService);
+            Register<IExportService>("exportService", exportService);
             Register<IAuditService>("auditService", auditService);
             Register<IEnvironmentService>("environmentService", environmentService);
             Register<IEventService>("eventService", eventService);
