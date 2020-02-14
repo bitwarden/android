@@ -85,8 +85,7 @@ namespace Bit.App.Pages
         {
             if(string.IsNullOrEmpty(_masterPassword))
             {
-                _platformUtilsService.ShowToast("error", _i18nService.T("AnErrorHasOccurred"),
-                    _i18nService.T("InvalidMasterPassword"));
+                await _platformUtilsService.ShowDialogAsync(_i18nService.T("InvalidMasterPassword"));
                 return;
             }
 
@@ -117,8 +116,7 @@ namespace Bit.App.Pages
             }
             else
             {
-                _platformUtilsService.ShowToast("error", _i18nService.T("AnErrorHasOccurred"),
-                    _i18nService.T("InvalidMasterPassword"));
+                await _platformUtilsService.ShowDialogAsync(_i18nService.T("InvalidMasterPassword"));
             }
         }
 
