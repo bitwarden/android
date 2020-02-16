@@ -149,14 +149,33 @@ namespace Bit.App.Pages
             }
         }
 
+        private async void Clone_Clicked(object sender, System.EventArgs e)
+        {
+            if(DoOnce())
+            {
+                var page = new AddEditPage(_vm.CipherId, cloneMode: true, viewPage: this);
+                await Navigation.PushModalAsync(new NavigationPage(page));
+            }
+        }
+
         private async void More_Clicked(object sender, System.EventArgs e)
         {
             if(!DoOnce())
             {
                 return;
             }
-            var options = new List<string> { AppResources.Attachments };
-            options.Add(_vm.Cipher.OrganizationId == null ? AppResources.Share : AppResources.Collections);
+
+            var options = new List<string> {AppResources.Attachments};
+            if(_vm.Cipher.OrganizationId == null)
+            {
+                options.Add(AppResources.Clone);
+                options.Add(AppResources.Share);
+            }
+            else
+            {
+                options.Add(AppResources.Collections);
+            }
+
             var selection = await DisplayActionSheet(AppResources.Options, AppResources.Cancel,
                 AppResources.Delete, options.ToArray());
             if(selection == AppResources.Delete)
@@ -181,6 +200,11 @@ namespace Bit.App.Pages
                 var page = new SharePage(_vm.CipherId);
                 await Navigation.PushModalAsync(new NavigationPage(page));
             }
+            else if(selection == AppResources.Clone)
+            {
+                var page = new AddEditPage(_vm.CipherId, cloneMode: true, viewPage: this);
+                await Navigation.PushModalAsync(new NavigationPage(page));
+            }
         }
 
         private async void Close_Clicked(object sender, System.EventArgs e)
@@ -197,23 +221,36 @@ namespace Bit.App.Pages
             {
                 return;
             }
+
             if(_vm.Cipher.OrganizationId == null)
             {
                 if(ToolbarItems.Contains(_collectionsItem))
                 {
                     ToolbarItems.Remove(_collectionsItem);
                 }
+
+                if(!ToolbarItems.Contains(_cloneItem))
+                {
+                    ToolbarItems.Insert(1, _cloneItem);
+                }
+
                 if(!ToolbarItems.Contains(_shareItem))
                 {
-                    ToolbarItems.Insert(1, _shareItem);
+                    ToolbarItems.Insert(2, _shareItem);
                 }
             }
             else
             {
+                if(ToolbarItems.Contains(_cloneItem))
+                {
+                    ToolbarItems.Remove(_cloneItem);
+                }
+
                 if(ToolbarItems.Contains(_shareItem))
                 {
                     ToolbarItems.Remove(_shareItem);
                 }
+
                 if(!ToolbarItems.Contains(_collectionsItem))
                 {
                     ToolbarItems.Insert(1, _collectionsItem);

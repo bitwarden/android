@@ -1,5 +1,6 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<pages:BaseContentPage 
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<pages:BaseContentPage
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="Bit.App.Pages.ViewPage"
@@ -22,17 +23,17 @@
             <u:StringHasValueConverter x:Key="stringHasValue" />
             <u:IsNotNullConverter x:Key="notNull" />
             <ToolbarItem Text="{u:I18n Collections}"
-                     x:Key="collectionsItem"
-                     x:Name="_collectionsItem"
-                     Clicked="Collections_Clicked"
-                     Order="Secondary" />
+                         x:Key="collectionsItem"
+                         x:Name="_collectionsItem"
+                         Clicked="Collections_Clicked"
+                         Order="Secondary" />
             <ToolbarItem Text="{u:I18n Share}"
-                     x:Key="shareItem"
-                     x:Name="_shareItem"
-                     Clicked="Share_Clicked"
-                     Order="Secondary" />
+                         x:Key="shareItem"
+                         x:Name="_shareItem"
+                         Clicked="Share_Clicked"
+                         Order="Secondary" />
             <ToolbarItem Text="{u:I18n Close}" Clicked="Close_Clicked" Order="Primary" Priority="-1"
-                         x:Name="_closeItem" x:Key="closeItem"  />
+                         x:Name="_closeItem" x:Key="closeItem" />
             <ToolbarItem Text="{u:I18n Edit}" Clicked="EditToolbarItem_Clicked" Order="Primary"
                          x:Name="_editItem" x:Key="editItem" />
             <ToolbarItem Icon="more_vert.png" Clicked="More_Clicked" Order="Primary"
@@ -43,6 +44,8 @@
                          x:Name="_attachmentsItem" x:Key="attachmentsItem" />
             <ToolbarItem Text="{u:I18n Delete}" Clicked="Delete_Clicked" Order="Secondary" IsDestructive="True"
                          x:Name="_deleteItem" x:Key="deleteItem" />
+            <ToolbarItem Text="{u:I18n Clone}" Clicked="Clone_Clicked" Order="Secondary"
+                         x:Name="_cloneItem" x:Key="cloneItem" />
 
             <ScrollView x:Key="scrollView" x:Name="_scrollView">
                 <StackLayout Spacing="20" x:Name="_mainLayout">
@@ -81,7 +84,7 @@
                                     StyleClass="box-value"
                                     Grid.Row="1"
                                     Grid.Column="0" />
-                                <controls:FaButton 
+                                <controls:FaButton
                                     StyleClass="box-row-button, box-row-button-platform"
                                     Text="&#xf0ea;"
                                     Command="{Binding CopyCommand}"
@@ -94,7 +97,7 @@
                             </Grid>
                             <BoxView StyleClass="box-row-separator"
                                      IsVisible="{Binding Cipher.Login.Username, Converter={StaticResource stringHasValue}}" />
-                            <Grid StyleClass="box-row" 
+                            <Grid StyleClass="box-row"
                                   IsVisible="{Binding Cipher.Login.Password, Converter={StaticResource stringHasValue}}">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
@@ -125,7 +128,7 @@
                                     Grid.Column="0"
                                     LineBreakMode="CharacterWrap"
                                     IsVisible="{Binding ShowPassword}" />
-                                <controls:FaButton 
+                                <controls:FaButton
                                     StyleClass="box-row-button, box-row-button-platform"
                                     Text="&#xf058;"
                                     Command="{Binding CheckPasswordCommand}"
@@ -134,7 +137,7 @@
                                     Grid.RowSpan="2"
                                     AutomationProperties.IsInAccessibleTree="True"
                                     AutomationProperties.Name="{u:I18n CheckPassword}" />
-                                <controls:FaButton 
+                                <controls:FaButton
                                     StyleClass="box-row-button, box-row-button-platform"
                                     Text="{Binding ShowPasswordIcon}"
                                     Command="{Binding TogglePasswordCommand}"
@@ -143,7 +146,7 @@
                                     Grid.RowSpan="2"
                                     AutomationProperties.IsInAccessibleTree="True"
                                     AutomationProperties.Name="{u:I18n ToggleVisibility}" />
-                                <controls:FaButton 
+                                <controls:FaButton
                                     StyleClass="box-row-button, box-row-button-platform"
                                     Text="&#xf0ea;"
                                     Command="{Binding CopyCommand}"
@@ -185,8 +188,8 @@
                                     Grid.RowSpan="2"
                                     HorizontalOptions="End"
                                     HorizontalTextAlignment="End"
-                                    VerticalOptions="CenterAndExpand"/>
-                                <controls:FaButton 
+                                    VerticalOptions="CenterAndExpand" />
+                                <controls:FaButton
                                     StyleClass="box-row-button, box-row-button-platform"
                                     Text="&#xf0ea;"
                                     Command="{Binding CopyCommand}"
@@ -210,7 +213,7 @@
                                     StyleClass="box-value" />
                             </StackLayout>
                             <BoxView StyleClass="box-row-separator"
-                                     IsVisible="{Binding Cipher.Card.CardholderName, Converter={StaticResource stringHasValue}}"/>
+                                     IsVisible="{Binding Cipher.Card.CardholderName, Converter={StaticResource stringHasValue}}" />
                             <Grid StyleClass="box-row"
                                   IsVisible="{Binding Cipher.Card.Number, Converter={StaticResource stringHasValue}}">
                                 <Grid.RowDefinitions>
@@ -231,7 +234,7 @@
                                     StyleClass="box-value"
                                     Grid.Row="1"
                                     Grid.Column="0" />
-                                <controls:FaButton 
+                                <controls:FaButton
                                     StyleClass="box-row-button, box-row-button-platform"
                                     Text="&#xf0ea;"
                                     Command="{Binding CopyCommand}"
@@ -294,7 +297,7 @@
                                     Grid.Row="1"
                                     Grid.Column="0"
                                     IsVisible="{Binding ShowCardCode}" />
-                                <controls:FaButton 
+                                <controls:FaButton
                                     StyleClass="box-row-button, box-row-button-platform"
                                     Text="{Binding ShowCardCodeIcon}"
                                     Command="{Binding ToggleCardCodeCommand}"
@@ -303,7 +306,7 @@
                                     Grid.RowSpan="2"
                                     AutomationProperties.IsInAccessibleTree="True"
                                     AutomationProperties.Name="{u:I18n ToggleVisibility}" />
-                                <controls:FaButton 
+                                <controls:FaButton
                                     StyleClass="box-row-button, box-row-button-platform"
                                     Text="&#xf0ea;"
                                     Command="{Binding CopyCommand}"
@@ -361,7 +364,7 @@
                                     StyleClass="box-value" />
                             </StackLayout>
                             <BoxView StyleClass="box-row-separator"
-                                     IsVisible="{Binding Cipher.Identity.SSN, Converter={StaticResource stringHasValue}}"/>
+                                     IsVisible="{Binding Cipher.Identity.SSN, Converter={StaticResource stringHasValue}}" />
                             <StackLayout StyleClass="box-row"
                                          IsVisible="{Binding Cipher.Identity.PassportNumber, Converter={StaticResource stringHasValue}}">
                                 <Label
@@ -565,7 +568,7 @@
                                                     StyleClass="box-value"
                                                     IsVisible="{Binding ShowHiddenValue, Converter={StaticResource inverseBool}}" />
                                             </StackLayout>
-                                            <controls:FaButton 
+                                            <controls:FaButton
                                                 StyleClass="box-row-button, box-row-button-platform"
                                                 Text="{Binding ShowHiddenValueIcon}"
                                                 Command="{Binding ToggleHiddenValueCommand}"
@@ -613,7 +616,7 @@
                                                 StyleClass="box-sub-label"
                                                 HorizontalTextAlignment="End"
                                                 VerticalTextAlignment="Center" />
-                                            <controls:FaButton 
+                                            <controls:FaButton
                                                 StyleClass="box-row-button, box-row-button-platform"
                                                 Text="&#xf019;"
                                                 Command="{Binding BindingContext.DownloadAttachmentCommand, Source={x:Reference _page}}"
@@ -659,16 +662,14 @@
         <ContentView
             x:Name="_mainContent"
             AbsoluteLayout.LayoutFlags="All"
-            AbsoluteLayout.LayoutBounds="0, 0, 1, 1">
-        </ContentView>
+            AbsoluteLayout.LayoutBounds="0, 0, 1, 1" />
         <fab:FloatingActionButtonView
             x:Name="_fab"
             ImageName="pencil.png"
             AbsoluteLayout.LayoutFlags="PositionProportional"
             AbsoluteLayout.LayoutBounds="1, 1, AutoSize, AutoSize"
             AutomationProperties.IsInAccessibleTree="True"
-            AutomationProperties.Name="{u:I18n EditItem}">
-        </fab:FloatingActionButtonView>
+            AutomationProperties.Name="{u:I18n EditItem}" />
     </AbsoluteLayout>
 
 </pages:BaseContentPage>
