@@ -41,7 +41,7 @@ namespace Bit.App.Pages
 
         public ViewPageViewModel ViewModel => _vm;
 
-        public void updateCipherId(string cipherId)
+        public void UpdateCipherId(string cipherId)
         {
             _vm.CipherId = cipherId;
         }
