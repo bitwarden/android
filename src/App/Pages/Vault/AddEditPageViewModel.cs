@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using View = Xamarin.Forms.View;
 
 namespace Bit.App.Pages
 {
@@ -260,8 +261,11 @@ namespace Bit.App.Pages
                     nameof(ShowCollections)
                 });
         }
-        public bool ShowCollections => !EditMode && Cipher.OrganizationId != null;
+        public bool ShowCollections => (!EditMode || CloneMode) && Cipher.OrganizationId != null;
         public bool EditMode => !string.IsNullOrWhiteSpace(CipherId);
+        public bool ShowOwnershipOptions => !EditMode || CloneMode;
+        public bool CloneMode { get; set; }
+        public ViewPage ViewPage { get; set; }
         public bool IsLogin => Cipher?.Type == CipherType.Login;
         public bool IsIdentity => Cipher?.Type == CipherType.Identity;
         public bool IsCard => Cipher?.Type == CipherType.Card;
@@ -273,7 +277,7 @@ namespace Bit.App.Pages
 
         public void Init()
         {
-            PageTitle = EditMode ? AppResources.EditItem : AppResources.AddItem;
+            PageTitle = EditMode && !CloneMode ? AppResources.EditItem : AppResources.AddItem;
         }
 
         public async Task<bool> LoadAsync(AppOptions appOptions = null)
@@ -310,6 +314,10 @@ namespace Bit.App.Pages
                         return false;
                     }
                     Cipher = await cipher.DecryptAsync();
+                    if(CloneMode)
+                    {
+                        Cipher.Name += " - " + AppResources.Clone;
+                    }
                 }
                 else
                 {
@@ -355,7 +363,7 @@ namespace Bit.App.Pages
                 OwnershipSelectedIndex = string.IsNullOrWhiteSpace(Cipher.OrganizationId) ? 0 :
                     OwnershipOptions.FindIndex(k => k.Value == Cipher.OrganizationId);
 
-                if(!EditMode && (CollectionIds?.Any() ?? false))
+                if((!EditMode || CloneMode) && (CollectionIds?.Any() ?? false))
                 {
                     foreach(var col in Collections)
                     {
@@ -406,14 +414,14 @@ namespace Bit.App.Pages
             if(Cipher.Login != null)
             {
                 Cipher.Login.Uris = Uris?.ToList();
-                if(!EditMode && Cipher.Type == CipherType.Login && Cipher.Login.Uris != null &&
-                    Cipher.Login.Uris.Count == 1 && string.IsNullOrWhiteSpace(Cipher.Login.Uris[0].Uri))
+                if((!EditMode || CloneMode) && Cipher.Type == CipherType.Login && Cipher.Login.Uris != null &&
+                   Cipher.Login.Uris.Count == 1 && string.IsNullOrWhiteSpace(Cipher.Login.Uris[0].Uri))
                 {
                     Cipher.Login.Uris = null;
                 }
             }
 
-            if(!EditMode && Cipher.OrganizationId != null)
+            if((!EditMode || CloneMode) && Cipher.OrganizationId != null)
             {
                 if(Collections == null || !Collections.Any(c => c != null && c.Checked))
                 {
@@ -427,6 +435,10 @@ namespace Bit.App.Pages
                         .Select(c => c.Collection.Id)) : null;
             }
 
+            if(CloneMode)
+            {
+                Cipher.Id = null;
+            }
             var cipher = await _cipherService.EncryptAsync(Cipher);
             if(cipher == null)
             {
@@ -439,8 +451,8 @@ namespace Bit.App.Pages
                 Cipher.Id = cipher.Id;
                 await _deviceActionService.HideLoadingAsync();
                 _platformUtilsService.ShowToast("success", null,
-                    EditMode ? AppResources.ItemUpdated : AppResources.NewItemCreated);
-                _messagingService.Send(EditMode ? "editedCipher" : "addedCipher", Cipher.Id);
+                    EditMode && !CloneMode ? AppResources.ItemUpdated : AppResources.NewItemCreated);
+                _messagingService.Send(EditMode && !CloneMode ? "editedCipher" : "addedCipher", Cipher.Id);
 
                 if(Page is AddEditPage page && page.FromAutofillFramework)
                 {
@@ -449,6 +461,10 @@ namespace Bit.App.Pages
                 }
                 else
                 {
+                    if(CloneMode)
+                    {
+                        ViewPage?.UpdateCipherId(this.Cipher.Id);
+                    }
                     await Page.Navigation.PopModalAsync();
                 }
                 return true;

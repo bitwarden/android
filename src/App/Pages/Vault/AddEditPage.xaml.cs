@@ -30,7 +30,9 @@ namespace Bit.App.Pages
             string name = null,
             string uri = null,
             bool fromAutofill = false,
-            AppOptions appOptions = null)
+            AppOptions appOptions = null,
+            bool cloneMode = false,
+            ViewPage viewPage = null)
         {
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
@@ -46,9 +48,11 @@ namespace Bit.App.Pages
             _vm.Type = type;
             _vm.DefaultName = name ?? appOptions?.SaveName;
             _vm.DefaultUri = uri ?? appOptions?.Uri;
+            _vm.CloneMode = cloneMode;
+            _vm.ViewPage = viewPage;
             _vm.Init();
             SetActivityIndicator();
-            if(_vm.EditMode && Device.RuntimePlatform == Device.Android)
+            if(_vm.EditMode && !_vm.CloneMode && Device.RuntimePlatform == Device.Android)
             {
                 ToolbarItems.Add(_attachmentsItem);
                 ToolbarItems.Add(_deleteItem);
@@ -56,7 +60,7 @@ namespace Bit.App.Pages
             if(Device.RuntimePlatform == Device.iOS)
             {
                 ToolbarItems.Add(_closeItem);
-                if(_vm.EditMode)
+                if(_vm.EditMode && !_vm.CloneMode)
                 {
                     ToolbarItems.Add(_moreItem);
                 }
@@ -263,7 +267,7 @@ namespace Bit.App.Pages
                 options.Add(_vm.Cipher.OrganizationId == null ? AppResources.Share : AppResources.Collections);
             }
             var selection = await DisplayActionSheet(AppResources.Options, AppResources.Cancel,
-                _vm.EditMode ? AppResources.Delete : null, options.ToArray());
+                (_vm.EditMode && !_vm.CloneMode) ? AppResources.Delete : null, options.ToArray());
             if(selection == AppResources.Delete)
             {
                 if(await _vm.DeleteAsync())
@@ -334,7 +338,7 @@ namespace Bit.App.Pages
 
         private void AdjustToolbar()
         {
-            if(_vm.EditMode && Device.RuntimePlatform == Device.Android)
+            if((_vm.EditMode || _vm.CloneMode) && Device.RuntimePlatform == Device.Android)
             {
                 if(_vm.Cipher == null)
                 {
@@ -346,7 +350,7 @@ namespace Bit.App.Pages
                     {
                         ToolbarItems.Remove(_collectionsItem);
                     }
-                    if(!ToolbarItems.Contains(_shareItem))
+                    if(!ToolbarItems.Contains(_shareItem) && !_vm.CloneMode)
                     {
                         ToolbarItems.Insert(2, _shareItem);
                     }

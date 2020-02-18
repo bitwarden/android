@@ -1608,4 +1608,8 @@
   <data name="ExportVaultSuccess" xml:space="preserve">
     <value>Vault exported successfully</value>
   </data>
+  <data name="Clone" xml:space="preserve">
+    <value>Clone</value>
+    <comment>Clone an entity (verb).</comment>
+  </data>
 </root>

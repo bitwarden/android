@@ -32,7 +32,7 @@
                      Clicked="Share_Clicked"
                      Order="Secondary" />
             <ToolbarItem Text="{u:I18n Close}" Clicked="Close_Clicked" Order="Primary" Priority="-1"
-                         x:Name="_closeItem" x:Key="closeItem"  />
+                         x:Name="_closeItem" x:Key="closeItem" />
             <ToolbarItem Text="{u:I18n Edit}" Clicked="EditToolbarItem_Clicked" Order="Primary"
                          x:Name="_editItem" x:Key="editItem" />
             <ToolbarItem Icon="more_vert.png" Clicked="More_Clicked" Order="Primary"
@@ -43,6 +43,8 @@
                          x:Name="_attachmentsItem" x:Key="attachmentsItem" />
             <ToolbarItem Text="{u:I18n Delete}" Clicked="Delete_Clicked" Order="Secondary" IsDestructive="True"
                          x:Name="_deleteItem" x:Key="deleteItem" />
+            <ToolbarItem Text="{u:I18n Clone}" Clicked="Clone_Clicked" Order="Secondary"
+                         x:Name="_cloneItem" x:Key="cloneItem" />
 
             <ScrollView x:Key="scrollView" x:Name="_scrollView">
                 <StackLayout Spacing="20" x:Name="_mainLayout">
@@ -185,7 +187,7 @@
                                     Grid.RowSpan="2"
                                     HorizontalOptions="End"
                                     HorizontalTextAlignment="End"
-                                    VerticalOptions="CenterAndExpand"/>
+                                    VerticalOptions="CenterAndExpand" />
                                 <controls:FaButton 
                                     StyleClass="box-row-button, box-row-button-platform"
                                     Text="&#xf0ea;"
@@ -210,7 +212,7 @@
                                     StyleClass="box-value" />
                             </StackLayout>
                             <BoxView StyleClass="box-row-separator"
-                                     IsVisible="{Binding Cipher.Card.CardholderName, Converter={StaticResource stringHasValue}}"/>
+                                     IsVisible="{Binding Cipher.Card.CardholderName, Converter={StaticResource stringHasValue}}" />
                             <Grid StyleClass="box-row"
                                   IsVisible="{Binding Cipher.Card.Number, Converter={StaticResource stringHasValue}}">
                                 <Grid.RowDefinitions>
@@ -361,7 +363,7 @@
                                     StyleClass="box-value" />
                             </StackLayout>
                             <BoxView StyleClass="box-row-separator"
-                                     IsVisible="{Binding Cipher.Identity.SSN, Converter={StaticResource stringHasValue}}"/>
+                                     IsVisible="{Binding Cipher.Identity.SSN, Converter={StaticResource stringHasValue}}" />
                             <StackLayout StyleClass="box-row"
                                          IsVisible="{Binding Cipher.Identity.PassportNumber, Converter={StaticResource stringHasValue}}">
                                 <Label

@@ -607,7 +607,7 @@
                 <Button Text="{u:I18n NewCustomField}" StyleClass="box-button-row"
                         Clicked="NewField_Clicked"></Button>
             </StackLayout>
-            <StackLayout StyleClass="box" IsVisible="{Binding EditMode, Converter={StaticResource inverseBool}}">
+            <StackLayout StyleClass="box" IsVisible="{Binding ShowOwnershipOptions}">
                 <StackLayout StyleClass="box-row-header">
                     <Label Text="{u:I18n Ownership, Header=True}"
                            StyleClass="box-header, box-header-platform" />
