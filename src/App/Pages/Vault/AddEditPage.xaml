@@ -1,6 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-
-<pages:BaseContentPage
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:BaseContentPage 
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="Bit.App.Pages.AddEditPage"
@@ -116,7 +115,7 @@
                             IsPassword="{Binding ShowPassword, Converter={StaticResource inverseBool}}"
                             IsSpellCheckEnabled="False"
                             IsTextPredictionEnabled="False" />
-                        <controls:FaButton
+                        <controls:FaButton 
                             StyleClass="box-row-button, box-row-button-platform"
                             Text="&#xf058;"
                             Command="{Binding CheckPasswordCommand}"
@@ -125,7 +124,7 @@
                             Grid.RowSpan="2"
                             AutomationProperties.IsInAccessibleTree="True"
                             AutomationProperties.Name="{u:I18n CheckPassword}" />
-                        <controls:FaButton
+                        <controls:FaButton 
                             StyleClass="box-row-button, box-row-button-platform"
                             Text="{Binding ShowPasswordIcon}"
                             Command="{Binding TogglePasswordCommand}"
@@ -134,7 +133,7 @@
                             Grid.RowSpan="2"
                             AutomationProperties.IsInAccessibleTree="True"
                             AutomationProperties.Name="{u:I18n ToggleVisibility}" />
-                        <controls:FaButton
+                        <controls:FaButton 
                             StyleClass="box-row-button, box-row-button-platform"
                             Text="&#xf021;"
                             Command="{Binding GeneratePasswordCommand}"
@@ -167,7 +166,7 @@
                             StyleClass="box-value"
                             Grid.Row="1"
                             Grid.Column="0" />
-                        <controls:FaButton
+                        <controls:FaButton 
                             StyleClass="box-row-button, box-row-button-platform"
                             Text="&#xf030;"
                             Clicked="ScanTotp_Clicked"
@@ -252,7 +251,7 @@
                             IsPassword="{Binding ShowCardCode, Converter={StaticResource inverseBool}}"
                             IsSpellCheckEnabled="False"
                             IsTextPredictionEnabled="False" />
-                        <controls:FaButton
+                        <controls:FaButton 
                             StyleClass="box-row-button, box-row-button-platform"
                             Text="{Binding ShowCardCodeIcon}"
                             Command="{Binding ToggleCardCodeCommand}"
@@ -473,7 +472,7 @@
                     </controls:RepeaterView.ItemTemplate>
                 </controls:RepeaterView>
                 <Button Text="{u:I18n NewUri}" StyleClass="box-button-row"
-                        Clicked="NewUri_Clicked" />
+                        Clicked="NewUri_Clicked"></Button>
             </StackLayout>
             <StackLayout StyleClass="box">
                 <StackLayout StyleClass="box-row-header">
@@ -579,7 +578,7 @@
                                         Grid.Column="1"
                                         Grid.RowSpan="2"
                                         IsVisible="{Binding IsBooleanType}" />
-                                    <controls:FaButton
+                                    <controls:FaButton 
                                         StyleClass="box-row-button, box-row-button-platform"
                                         Text="{Binding ShowHiddenValueIcon}"
                                         Command="{Binding ToggleHiddenValueCommand}"
@@ -589,7 +588,7 @@
                                         Grid.RowSpan="2"
                                         AutomationProperties.IsInAccessibleTree="True"
                                         AutomationProperties.Name="{u:I18n ToggleVisibility}" />
-                                    <controls:FaButton
+                                    <controls:FaButton 
                                         StyleClass="box-row-button, box-row-button-platform"
                                         Text="&#xf013;"
                                         Command="{Binding BindingContext.FieldOptionsCommand, Source={x:Reference _page}}"
@@ -606,7 +605,7 @@
                     </controls:RepeaterView.ItemTemplate>
                 </controls:RepeaterView>
                 <Button Text="{u:I18n NewCustomField}" StyleClass="box-button-row"
-                        Clicked="NewField_Clicked" />
+                        Clicked="NewField_Clicked"></Button>
             </StackLayout>
             <StackLayout StyleClass="box" IsVisible="{Binding ShowOwnershipOptions}">
                 <StackLayout StyleClass="box-row-header">
@@ -630,7 +629,7 @@
                            StyleClass="box-header, box-header-platform" />
                 </StackLayout>
                 <StackLayout Spacing="0" Padding="0"
-                             IsVisible="{Binding HasCollections, Converter={StaticResource inverseBool}}">
+                                IsVisible="{Binding HasCollections, Converter={StaticResource inverseBool}}">
                     <StackLayout StyleClass="box-row, box-row-switch">
                         <Label Text="{u:I18n NoCollectionsToList}" />
                     </StackLayout>
