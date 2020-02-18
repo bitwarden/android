@@ -463,7 +463,7 @@ namespace Bit.App.Pages
                 {
                     if(CloneMode)
                     {
-                        ViewPage?.updateCipherId(this.Cipher.Id);
+                        ViewPage?.UpdateCipherId(this.Cipher.Id);
                     }
                     await Page.Navigation.PopModalAsync();
                 }
