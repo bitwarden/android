@@ -461,9 +461,9 @@ namespace Bit.App.Pages
                 }
                 else
                 {
-                    if(CloneMode && ViewPage != null)
+                    if(CloneMode)
                     {
-                        ViewPage.ViewModel.CipherId = this.Cipher.Id;
+                        ViewPage?.updateCipherId(this.Cipher.Id);
                     }
                     await Page.Navigation.PopModalAsync();
                 }

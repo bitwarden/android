@@ -41,6 +41,11 @@ namespace Bit.App.Pages
 
         public ViewPageViewModel ViewModel => _vm;
 
+        public void updateCipherId(string cipherId)
+        {
+            _vm.CipherId = cipherId;
+        }
+
         protected override async void OnAppearing()
         {
             base.OnAppearing();
@@ -221,19 +226,16 @@ namespace Bit.App.Pages
             {
                 return;
             }
-
             if(_vm.Cipher.OrganizationId == null)
             {
                 if(ToolbarItems.Contains(_collectionsItem))
                 {
                     ToolbarItems.Remove(_collectionsItem);
                 }
-
                 if(!ToolbarItems.Contains(_cloneItem))
                 {
                     ToolbarItems.Insert(1, _cloneItem);
                 }
-
                 if(!ToolbarItems.Contains(_shareItem))
                 {
                     ToolbarItems.Insert(2, _shareItem);
@@ -245,12 +247,10 @@ namespace Bit.App.Pages
                 {
                     ToolbarItems.Remove(_cloneItem);
                 }
-
                 if(ToolbarItems.Contains(_shareItem))
                 {
                     ToolbarItems.Remove(_shareItem);
                 }
-
                 if(!ToolbarItems.Contains(_collectionsItem))
                 {
                     ToolbarItems.Insert(1, _collectionsItem);
