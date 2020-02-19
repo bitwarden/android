@@ -17,7 +17,6 @@ namespace Bit.Core.Utilities
             {
                 return;
             }
-
             Inited = true;
 
             var platformUtilsService = Resolve<IPlatformUtilsService>("platformUtilsService");
@@ -96,7 +95,6 @@ namespace Bit.Core.Utilities
             {
                 throw new Exception($"Service {serviceName} has already been registered.");
             }
-
             RegisteredServices.Add(serviceName, obj);
         }
 
@@ -104,14 +102,12 @@ namespace Bit.Core.Utilities
         {
             if(RegisteredServices.ContainsKey(serviceName))
             {
-                return (T) RegisteredServices[serviceName];
+                return (T)RegisteredServices[serviceName];
             }
-
             if(dontThrow)
             {
-                return (T) (object) null;
+                return (T)(object)null;
             }
-
             throw new Exception($"Service {serviceName} is not registered.");
         }
 
