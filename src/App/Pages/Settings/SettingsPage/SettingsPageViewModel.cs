@@ -82,7 +82,7 @@ namespace Bit.App.Pages
         {
             var debugText = string.Format("{0}: {1} ({2})", AppResources.Version,
                 _platformUtilsService.GetApplicationVersion(), _deviceActionService.GetBuildNumber());
-            var text = string.Format("© 8bit Solutions LLC 2015-{0}\n\n{1}", DateTime.Now.Year, debugText);
+            var text = string.Format("© Bitwarden Inc. 2015-{0}\n\n{1}", DateTime.Now.Year, debugText);
             var copy = await _platformUtilsService.ShowDialogAsync(text, AppResources.Bitwarden, AppResources.Copy,
                 AppResources.Close);
             if(copy)

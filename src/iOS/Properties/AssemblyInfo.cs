@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("BitwardeniOS")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("8bit Solutions LLC")]
+[assembly: AssemblyCompany("Bitwarden Inc.")]
 [assembly: AssemblyProduct("Bitwarden")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
