@@ -23,6 +23,7 @@ namespace Bit.Core.Services
         private readonly ICollectionService _collectionService;
         private readonly IStorageService _storageService;
         private readonly IMessagingService _messagingService;
+        private readonly IPolicyService _policyService;
         private readonly Func<bool, Task> _logoutCallbackAsync;
 
         public SyncService(
@@ -35,6 +36,7 @@ namespace Bit.Core.Services
             ICollectionService collectionService,
             IStorageService storageService,
             IMessagingService messagingService,
+            IPolicyService policyService,
             Func<bool, Task> logoutCallbackAsync)
         {
             _userService = userService;
@@ -46,6 +48,7 @@ namespace Bit.Core.Services
             _collectionService = collectionService;
             _storageService = storageService;
             _messagingService = messagingService;
+            _policyService = policyService;
             _logoutCallbackAsync = logoutCallbackAsync;
         }
 
@@ -101,6 +104,7 @@ namespace Bit.Core.Services
                 await SyncCollectionsAsync(response.Collections);
                 await SyncCiphersAsync(userId, response.Ciphers);
                 await SyncSettingsAsync(userId, response.Domains);
+                await SyncPolicies(response.Policies);
                 await SetLastSyncAsync(now);
                 return SyncCompleted(true);
             }
@@ -357,6 +361,12 @@ namespace Bit.Core.Services
                 }
             }
             await _settingsService.SetEquivalentDomainsAsync(eqDomains);
+        }
+
+        private async Task SyncPolicies(List<PolicyResponse> response)
+        {
+            var policies = response.ToDictionary(p => p.Id, p => new PolicyData(p));
+            await _policyService.Replace(policies);
         }
     }
 }

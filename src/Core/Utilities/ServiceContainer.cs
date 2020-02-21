@@ -47,8 +47,10 @@ namespace Bit.Core.Utilities
             searchService = new SearchService(cipherService);
             var lockService = new LockService(cryptoService, userService, platformUtilsService, storageService,
                 folderService, cipherService, collectionService, searchService, messagingService, null);
+            var policyService = new PolicyService(storageService, userService);
             var syncService = new SyncService(userService, apiService, settingsService, folderService,
-                cipherService, cryptoService, collectionService, storageService, messagingService, (bool expired) =>
+                cipherService, cryptoService, collectionService, storageService, messagingService, policyService,
+                (bool expired) =>
                 {
                     messagingService.Send("logout", expired);
                     return Task.FromResult(0);
@@ -75,6 +77,7 @@ namespace Bit.Core.Utilities
             Register<IFolderService>("folderService", folderService);
             Register<ICollectionService>("collectionService", collectionService);
             Register<ISearchService>("searchService", searchService);
+            Register<IPolicyService>("policyService", policyService);
             Register<ISyncService>("syncService", syncService);
             Register<ILockService>("lockService", lockService);
             Register<IPasswordGenerationService>("passwordGenerationService", passwordGenerationService);
