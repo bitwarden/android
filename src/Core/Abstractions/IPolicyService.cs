@@ -9,7 +9,7 @@ namespace Bit.Core.Abstractions
     public interface IPolicyService
     {
         void ClearCache();
-        Task<List<Policy>> GetAll(PolicyType? type);
+        Task<IEnumerable<Policy>> GetAll(PolicyType? type);
         Task Replace(Dictionary<string, PolicyData> policies);
         Task Clear(string userId);
     }

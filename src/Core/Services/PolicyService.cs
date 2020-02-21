@@ -10,10 +10,12 @@ namespace Bit.Core.Services
 {
     public class PolicyService : IPolicyService
     {
+        private const string Keys_PoliciesPrefix = "policies_{0}";
+        
         private readonly IStorageService _storageService;
         private readonly IUserService _userService;
 
-        private List<Policy> _policyCache;
+        private IEnumerable<Policy> _policyCache;
 
         public PolicyService(
             IStorageService storageService,
@@ -22,34 +24,20 @@ namespace Bit.Core.Services
             _storageService = storageService;
             _userService = userService;
         }
-
-        private class Keys
-        {
-            public static string PoliciesPrefix = "policies_";
-        }
-
+        
         public void ClearCache()
         {
             _policyCache = null;
         }
 
-        public async Task<List<Policy>> GetAll(PolicyType? type)
+        public async Task<IEnumerable<Policy>> GetAll(PolicyType? type)
         {
             if(_policyCache == null)
             {
                 var userId = await _userService.GetUserIdAsync();
-                var policies =
-                    await _storageService.GetAsync<Dictionary<string, PolicyData>>(Keys.PoliciesPrefix + userId);
-                var response = new List<Policy>();
-                foreach(var id in policies)
-                {
-                    if(policies.GetType().GetProperty(id.Key) != null)
-                    {
-                        response.Add(new Policy(policies[id.Key]));
-                    }
-                }
-
-                _policyCache = response;
+                var policies = await _storageService.GetAsync<Dictionary<string, PolicyData>>(
+                    string.Format(Keys_PoliciesPrefix, userId));
+                _policyCache = policies.Select(p => new Policy(policies[p.Key]));
             }
 
             if(type != null)
@@ -65,13 +53,13 @@ namespace Bit.Core.Services
         public async Task Replace(Dictionary<string, PolicyData> policies)
         {
             var userId = await _userService.GetUserIdAsync();
-            await _storageService.SaveAsync(Keys.PoliciesPrefix + userId, policies);
+            await _storageService.SaveAsync(string.Format(Keys_PoliciesPrefix, userId), policies);
             _policyCache = null;
         }
 
         public async Task Clear(string userId)
         {
-            await _storageService.RemoveAsync(Keys.PoliciesPrefix + userId);
+            await _storageService.RemoveAsync(string.Format(Keys_PoliciesPrefix, userId));
             _policyCache = null;
         }
     }

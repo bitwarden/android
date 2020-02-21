@@ -20,7 +20,7 @@ namespace Bit.Core.Models.Data
         public string Id { get; set; }
         public string OrganizationId { get; set; }
         public PolicyType Type { get; set; }
-        public Dictionary<string, PolicyData> Data { get; set; }
+        public Dictionary<string, object> Data { get; set; }
         public bool Enabled { get; set; }
     }
 }
