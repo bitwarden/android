@@ -138,10 +138,10 @@ namespace Bit.App.Pages
                     var host = WebUtility.UrlEncode(providerData["Host"] as string);
                     var req = WebUtility.UrlEncode(providerData["Signature"] as string);
                     page.DuoWebView.Uri = $"{_webVaultUrl}/duo-connector.html?host={host}&request={req}";
-                    page.DuoWebView.RegisterAction(async sig =>
+                    page.DuoWebView.RegisterAction(sig =>
                     {
                         Token = sig;
-                        await SubmitAsync();
+                        Device.BeginInvokeOnMainThread(async() => await SubmitAsync());
                     });
                     break;
                 case TwoFactorProviderType.Email:
@@ -208,7 +208,7 @@ namespace Bit.App.Pages
                 _broadcasterService.Unsubscribe(nameof(TwoFactorPage));
                 var disableFavicon = await _storageService.GetAsync<bool?>(Constants.DisableFaviconKey);
                 await _stateService.SaveAsync(Constants.DisableFaviconKey, disableFavicon.GetValueOrDefault());
-                Device.BeginInvokeOnMainThread(() => { Application.Current.MainPage = new TabsPage(); });
+                Application.Current.MainPage = new TabsPage();
             }
             catch(ApiException e)
             {
