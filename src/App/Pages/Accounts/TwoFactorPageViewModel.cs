@@ -208,7 +208,7 @@ namespace Bit.App.Pages
                 _broadcasterService.Unsubscribe(nameof(TwoFactorPage));
                 var disableFavicon = await _storageService.GetAsync<bool?>(Constants.DisableFaviconKey);
                 await _stateService.SaveAsync(Constants.DisableFaviconKey, disableFavicon.GetValueOrDefault());
-                Application.Current.MainPage = new TabsPage();
+                Device.BeginInvokeOnMainThread(() => { Application.Current.MainPage = new TabsPage(); });
             }
             catch(ApiException e)
             {
