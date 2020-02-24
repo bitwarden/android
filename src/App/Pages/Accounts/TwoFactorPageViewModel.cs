@@ -141,7 +141,7 @@ namespace Bit.App.Pages
                     page.DuoWebView.RegisterAction(sig =>
                     {
                         Token = sig;
-                        Device.BeginInvokeOnMainThread(async() => await SubmitAsync());
+                        Device.BeginInvokeOnMainThread(async () => await SubmitAsync());
                     });
                     break;
                 case TwoFactorProviderType.Email:
