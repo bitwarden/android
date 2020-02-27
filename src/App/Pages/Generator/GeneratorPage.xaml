@@ -152,6 +152,8 @@
                             HorizontalOptions="StartAndExpand" />
                         <Switch
                             IsToggled="{Binding Uppercase}"
+                            IsEnabled="{Binding EnforcedPolicyOptions.UseUppercase,
+                                Converter={StaticResource inverseBool}}"
                             StyleClass="box-value"
                             HorizontalOptions="End" />
                     </StackLayout>
@@ -163,6 +165,8 @@
                             HorizontalOptions="StartAndExpand" />
                         <Switch
                             IsToggled="{Binding Lowercase}"
+                            IsEnabled="{Binding EnforcedPolicyOptions.UseLowercase,
+                                Converter={StaticResource inverseBool}}"
                             StyleClass="box-value"
                             HorizontalOptions="End" />
                     </StackLayout>
@@ -174,6 +178,8 @@
                             HorizontalOptions="StartAndExpand" />
                         <Switch
                             IsToggled="{Binding Number}"
+                            IsEnabled="{Binding EnforcedPolicyOptions.UseNumbers,
+                                Converter={StaticResource inverseBool}}"
                             StyleClass="box-value"
                             HorizontalOptions="End" />
                     </StackLayout>
@@ -185,6 +191,8 @@
                             HorizontalOptions="StartAndExpand" />
                         <Switch
                             IsToggled="{Binding Special}"
+                            IsEnabled="{Binding EnforcedPolicyOptions.UseSpecial,
+                                Converter={StaticResource inverseBool}}"
                             StyleClass="box-value"
                             HorizontalOptions="End" />
                     </StackLayout>

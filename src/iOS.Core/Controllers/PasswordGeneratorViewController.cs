@@ -71,7 +71,7 @@ namespace Bit.iOS.Core.Controllers
                 OptionsTableViewController.TableView.SeparatorColor = ThemeHelpers.SeparatorColor;
             }
 
-            var options = await _passwordGenerationService.GetOptionsAsync();
+            var (options, enforcedPolicyOptions) = await _passwordGenerationService.GetOptionsAsync();
             UppercaseCell.Switch.On = options.Uppercase.GetValueOrDefault();
             LowercaseCell.Switch.On = options.Lowercase.GetValueOrDefault(true);
             SpecialCell.Switch.On = options.Special.GetValueOrDefault();

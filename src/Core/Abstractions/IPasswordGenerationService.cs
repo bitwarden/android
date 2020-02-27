@@ -12,9 +12,9 @@ namespace Bit.Core.Abstractions
         Task<string> GeneratePassphraseAsync(PasswordGenerationOptions options);
         Task<string> GeneratePasswordAsync(PasswordGenerationOptions options);
         Task<List<GeneratedPasswordHistory>> GetHistoryAsync();
-        Task<PasswordGenerationOptions> GetOptionsAsync();
+        Task<(PasswordGenerationOptions, PasswordGeneratorPolicyOptions)> GetOptionsAsync();
         Task<object> PasswordStrength(string password, List<string> userInputs = null);
         Task SaveOptionsAsync(PasswordGenerationOptions options);
-        void NormalizeOptions(PasswordGenerationOptions options);
+        void NormalizeOptions(PasswordGenerationOptions options, PasswordGeneratorPolicyOptions enforcedPolicyOptions);
     }
 }
