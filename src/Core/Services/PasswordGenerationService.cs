@@ -337,47 +337,47 @@ namespace Bit.Core.Services
 
                 var currentPolicyMinLength = currentPolicy.Data["minLength"];
                 if(currentPolicyMinLength != null &&
-                   Convert.ToInt32(currentPolicyMinLength) > enforcedOptions.MinLength)
+                   (int)(long)currentPolicyMinLength > enforcedOptions.MinLength)
                 {
-                    enforcedOptions.MinLength = Convert.ToInt32(currentPolicyMinLength);
+                    enforcedOptions.MinLength = (int)(long)currentPolicyMinLength;
                 }
 
                 var currentPolicyUseUpper = currentPolicy.Data["useUpper"];
-                if(currentPolicyUseUpper != null && Convert.ToBoolean(currentPolicyUseUpper))
+                if(currentPolicyUseUpper != null && (bool)currentPolicyUseUpper)
                 {
                     enforcedOptions.UseUppercase = true;
                 }
 
                 var currentPolicyUseLower = currentPolicy.Data["useLower"];
-                if(currentPolicyUseLower != null && Convert.ToBoolean(currentPolicyUseLower))
+                if(currentPolicyUseLower != null && (bool)currentPolicyUseLower)
                 {
                     enforcedOptions.UseLowercase = true;
                 }
 
                 var currentPolicyUseNumbers = currentPolicy.Data["useNumbers"];
-                if(currentPolicyUseNumbers != null && Convert.ToBoolean(currentPolicyUseNumbers))
+                if(currentPolicyUseNumbers != null && (bool)currentPolicyUseNumbers)
                 {
                     enforcedOptions.UseNumbers = true;
                 }
 
                 var currentPolicyMinNumbers = currentPolicy.Data["minNumbers"];
                 if(currentPolicyMinNumbers != null &&
-                   Convert.ToInt32(currentPolicyMinNumbers) > enforcedOptions.NumberCount)
+                   (int)(long)currentPolicyMinNumbers > enforcedOptions.NumberCount)
                 {
-                    enforcedOptions.NumberCount = Convert.ToInt32(currentPolicyMinNumbers);
+                    enforcedOptions.NumberCount = (int)(long)currentPolicyMinNumbers;
                 }
 
                 var currentPolicyUseSpecial = currentPolicy.Data["useSpecial"];
-                if(currentPolicyUseSpecial != null && Convert.ToBoolean(currentPolicyUseSpecial))
+                if(currentPolicyUseSpecial != null && (bool)currentPolicyUseSpecial)
                 {
                     enforcedOptions.UseSpecial = true;
                 }
 
                 var currentPolicyMinSpecial = currentPolicy.Data["minSpecial"];
                 if(currentPolicyMinSpecial != null &&
-                   Convert.ToInt32(currentPolicyMinSpecial) > enforcedOptions.SpecialCount)
+                   (int)(long)currentPolicyMinSpecial > enforcedOptions.SpecialCount)
                 {
-                    enforcedOptions.SpecialCount = Convert.ToInt32(currentPolicyMinSpecial);
+                    enforcedOptions.SpecialCount = (int)(long)currentPolicyMinSpecial;
                 }
             }
 
