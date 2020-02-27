@@ -2835,5 +2835,11 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("Clone", resourceCulture);
             }
         }
+        
+        public static string PasswordGeneratorPolicyInEffect {
+            get {
+                return ResourceManager.GetString("PasswordGeneratorPolicyInEffect", resourceCulture);
+            }
+        }
     }
 }

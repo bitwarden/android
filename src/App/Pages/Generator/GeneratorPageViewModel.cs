@@ -226,9 +226,30 @@ namespace Bit.App.Pages
         public PasswordGeneratorPolicyOptions EnforcedPolicyOptions
         {
             get => _enforcedPolicyOptions;
-            set => SetProperty(ref _enforcedPolicyOptions, value);
+            set => SetProperty(ref _enforcedPolicyOptions, value,
+                additionalPropertyNames: new[]
+                {
+                    nameof(IsPolicyInEffect),
+                    nameof(IsUppercaseSwitchEnabled),
+                    nameof(IsLowercaseSwitchEnabled),
+                    nameof(IsNumberSwitchEnabled),
+                    nameof(IsSpecialSwitchEnabled)
+                });
         }
 
+        public bool IsPolicyInEffect => _enforcedPolicyOptions.MinLength > 0 || _enforcedPolicyOptions.UseUppercase ||
+                                        _enforcedPolicyOptions.UseLowercase || _enforcedPolicyOptions.UseNumbers ||
+                                        _enforcedPolicyOptions.NumberCount > 0 || _enforcedPolicyOptions.UseSpecial ||
+                                        _enforcedPolicyOptions.SpecialCount > 0;
+
+        public bool IsUppercaseSwitchEnabled => !IsPolicyInEffect || !EnforcedPolicyOptions.UseUppercase;
+
+        public bool IsLowercaseSwitchEnabled => !IsPolicyInEffect || !EnforcedPolicyOptions.UseLowercase;
+
+        public bool IsNumberSwitchEnabled => !IsPolicyInEffect || !EnforcedPolicyOptions.UseNumbers;
+
+        public bool IsSpecialSwitchEnabled => !IsPolicyInEffect || !EnforcedPolicyOptions.UseSpecial;
+        
         public int TypeSelectedIndex
         {
             get => _typeSelectedIndex;
