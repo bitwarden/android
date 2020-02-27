@@ -263,58 +263,68 @@ namespace Bit.Core.Services
             var enforcedPolicyOptions = await GetPasswordGeneratorPolicyOptions();
             if(enforcedPolicyOptions != null)
             {
-                if (_optionsCache.Length < enforcedPolicyOptions.MinLength) {
+                if(_optionsCache.Length < enforcedPolicyOptions.MinLength)
+                {
                     _optionsCache.Length = enforcedPolicyOptions.MinLength;
                 }
 
-                if (enforcedPolicyOptions.UseUppercase) {
+                if(enforcedPolicyOptions.UseUppercase)
+                {
                     _optionsCache.Uppercase = true;
                 }
 
-                if (enforcedPolicyOptions.UseLowercase) {
+                if(enforcedPolicyOptions.UseLowercase)
+                {
                     _optionsCache.Lowercase = true;
                 }
 
-                if (enforcedPolicyOptions.UseNumbers) {
+                if(enforcedPolicyOptions.UseNumbers)
+                {
                     _optionsCache.Number = true;
                 }
 
-                if (_optionsCache.MinNumber < enforcedPolicyOptions.NumberCount) {
+                if(_optionsCache.MinNumber < enforcedPolicyOptions.NumberCount)
+                {
                     _optionsCache.MinNumber = enforcedPolicyOptions.NumberCount;
                 }
 
-                if (enforcedPolicyOptions.UseSpecial) {
+                if(enforcedPolicyOptions.UseSpecial)
+                {
                     _optionsCache.Special = true;
                 }
 
-                if (_optionsCache.MinSpecial < enforcedPolicyOptions.SpecialCount) {
+                if(_optionsCache.MinSpecial < enforcedPolicyOptions.SpecialCount)
+                {
                     _optionsCache.MinSpecial = enforcedPolicyOptions.SpecialCount;
                 }
 
                 // Must normalize these fields because the receiving call expects all options to pass the current rules
-                if (_optionsCache.MinSpecial + _optionsCache.MinNumber > _optionsCache.Length) {
+                if(_optionsCache.MinSpecial + _optionsCache.MinNumber > _optionsCache.Length)
+                {
                     _optionsCache.MinSpecial = _optionsCache.Length - _optionsCache.MinNumber;
                 }
-            } 
-            else 
-            { 
+            }
+            else
+            {
                 // UI layer expects an instantiated object to prevent more explicit null checks
                 enforcedPolicyOptions = new PasswordGeneratorPolicyOptions();
             }
-            
+
             return (_optionsCache, enforcedPolicyOptions);
         }
-        
+
         public async Task<PasswordGeneratorPolicyOptions> GetPasswordGeneratorPolicyOptions()
         {
             var policies = await _policyService.GetAll(PolicyType.PasswordGenerator);
             PasswordGeneratorPolicyOptions enforcedOptions = null;
-            
-            if (policies == null || !policies.Any()) {
+
+            if(policies == null || !policies.Any())
+            {
                 return enforcedOptions;
             }
-            
-            foreach(var currentPolicy in policies) {
+
+            foreach(var currentPolicy in policies)
+            {
                 if(!currentPolicy.Enabled || currentPolicy.Data == null)
                 {
                     continue;
@@ -324,9 +334,10 @@ namespace Bit.Core.Services
                 {
                     enforcedOptions = new PasswordGeneratorPolicyOptions();
                 }
-                
+
                 var currentPolicyMinLength = currentPolicy.Data["minLength"];
-                if(currentPolicyMinLength != null && Convert.ToInt32(currentPolicyMinLength) > enforcedOptions.MinLength)
+                if(currentPolicyMinLength != null &&
+                   Convert.ToInt32(currentPolicyMinLength) > enforcedOptions.MinLength)
                 {
                     enforcedOptions.MinLength = Convert.ToInt32(currentPolicyMinLength);
                 }
@@ -350,7 +361,8 @@ namespace Bit.Core.Services
                 }
 
                 var currentPolicyMinNumbers = currentPolicy.Data["minNumbers"];
-                if(currentPolicyMinNumbers != null && Convert.ToInt32(currentPolicyMinNumbers) > enforcedOptions.NumberCount)
+                if(currentPolicyMinNumbers != null &&
+                   Convert.ToInt32(currentPolicyMinNumbers) > enforcedOptions.NumberCount)
                 {
                     enforcedOptions.NumberCount = Convert.ToInt32(currentPolicyMinNumbers);
                 }
@@ -362,7 +374,8 @@ namespace Bit.Core.Services
                 }
 
                 var currentPolicyMinSpecial = currentPolicy.Data["minSpecial"];
-                if(currentPolicyMinSpecial != null && Convert.ToInt32(currentPolicyMinSpecial) > enforcedOptions.SpecialCount)
+                if(currentPolicyMinSpecial != null &&
+                   Convert.ToInt32(currentPolicyMinSpecial) > enforcedOptions.SpecialCount)
                 {
                     enforcedOptions.SpecialCount = Convert.ToInt32(currentPolicyMinSpecial);
                 }
@@ -449,8 +462,9 @@ namespace Bit.Core.Services
             {
                 options.Length = 128;
             }
-            
-            if (options.Length < enforcedPolicyOptions.MinLength) {
+
+            if(options.Length < enforcedPolicyOptions.MinLength)
+            {
                 options.Length = enforcedPolicyOptions.MinLength;
             }
 
@@ -467,7 +481,8 @@ namespace Bit.Core.Services
                 options.MinNumber = 9;
             }
             
-            if (options.MinNumber < enforcedPolicyOptions.NumberCount) {
+            if(options.MinNumber < enforcedPolicyOptions.NumberCount)
+            {
                 options.MinNumber = enforcedPolicyOptions.NumberCount;
             }
 
@@ -483,8 +498,9 @@ namespace Bit.Core.Services
             {
                 options.MinSpecial = 9;
             }
-            
-            if (options.MinSpecial < enforcedPolicyOptions.SpecialCount) {
+
+            if(options.MinSpecial < enforcedPolicyOptions.SpecialCount)
+            {
                 options.MinSpecial = enforcedPolicyOptions.SpecialCount;
             }
 
