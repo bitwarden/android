@@ -15,6 +15,7 @@ namespace Bit.App.Pages
         private readonly IPlatformUtilsService _platformUtilsService;
 
         private PasswordGenerationOptions _options;
+        private PasswordGeneratorPolicyOptions _enforcedPolicyOptions;
         private string _password;
         private bool _isPassword;
         private bool _uppercase;
@@ -221,7 +222,34 @@ namespace Bit.App.Pages
                 }
             }
         }
+        
+        public PasswordGeneratorPolicyOptions EnforcedPolicyOptions
+        {
+            get => _enforcedPolicyOptions;
+            set => SetProperty(ref _enforcedPolicyOptions, value,
+                additionalPropertyNames: new[]
+                {
+                    nameof(IsPolicyInEffect),
+                    nameof(IsUppercaseSwitchEnabled),
+                    nameof(IsLowercaseSwitchEnabled),
+                    nameof(IsNumberSwitchEnabled),
+                    nameof(IsSpecialSwitchEnabled)
+                });
+        }
 
+        public bool IsPolicyInEffect => _enforcedPolicyOptions.MinLength > 0 || _enforcedPolicyOptions.UseUppercase ||
+                                        _enforcedPolicyOptions.UseLowercase || _enforcedPolicyOptions.UseNumbers ||
+                                        _enforcedPolicyOptions.NumberCount > 0 || _enforcedPolicyOptions.UseSpecial ||
+                                        _enforcedPolicyOptions.SpecialCount > 0;
+
+        public bool IsUppercaseSwitchEnabled => !IsPolicyInEffect || !EnforcedPolicyOptions.UseUppercase;
+
+        public bool IsLowercaseSwitchEnabled => !IsPolicyInEffect || !EnforcedPolicyOptions.UseLowercase;
+
+        public bool IsNumberSwitchEnabled => !IsPolicyInEffect || !EnforcedPolicyOptions.UseNumbers;
+
+        public bool IsSpecialSwitchEnabled => !IsPolicyInEffect || !EnforcedPolicyOptions.UseSpecial;
+        
         public int TypeSelectedIndex
         {
             get => _typeSelectedIndex;
@@ -237,7 +265,7 @@ namespace Bit.App.Pages
 
         public async Task InitAsync()
         {
-            _options = await _passwordGenerationService.GetOptionsAsync();
+            (_options, EnforcedPolicyOptions) = await _passwordGenerationService.GetOptionsAsync();
             LoadFromOptions();
             await RegenerateAsync();
             _doneIniting = true;
@@ -256,7 +284,7 @@ namespace Bit.App.Pages
                 return;
             }
             SetOptions();
-            _passwordGenerationService.NormalizeOptions(_options);
+            _passwordGenerationService.NormalizeOptions(_options, _enforcedPolicyOptions);
             await _passwordGenerationService.SaveOptionsAsync(_options);
             LoadFromOptions();
             if(regenerate)
@@ -274,7 +302,7 @@ namespace Bit.App.Pages
         public async Task SliderInputAsync()
         {
             SetOptions();
-            _passwordGenerationService.NormalizeOptions(_options);
+            _passwordGenerationService.NormalizeOptions(_options, _enforcedPolicyOptions);
             Password = await _passwordGenerationService.GeneratePasswordAsync(_options);
         }
 

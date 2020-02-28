@@ -1612,4 +1612,7 @@
     <value>Clone</value>
     <comment>Clone an entity (verb).</comment>
   </data>
+  <data name="PasswordGeneratorPolicyInEffect" xml:space="preserve">
+    <value>One or more organization policies are affecting your generator settings</value>
+  </data>
 </root>

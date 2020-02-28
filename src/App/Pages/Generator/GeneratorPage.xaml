@@ -39,6 +39,29 @@
     <ScrollView Padding="0, 0, 0, 20">
         <StackLayout Spacing="0" Padding="0">
             <StackLayout StyleClass="box">
+                <Grid IsVisible="{Binding IsPolicyInEffect}"
+                      Margin="0, 12, 0, 0"
+                      RowSpacing="0"
+                      ColumnSpacing="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Frame Padding="10"
+                           Margin="0"
+                           HasShadow="False"
+                           BackgroundColor="Transparent"
+                           BorderColor="Accent">
+                        <Label
+                            Text="{u:I18n PasswordGeneratorPolicyInEffect}"
+                            StyleClass="text-muted, text-sm, text-bold"
+                            HorizontalTextAlignment="Center" />
+                    </Frame>
+                </Grid>
                 <controls:MonoLabel
                     Text="{Binding ColoredPassword, Mode=OneWay}"
                     TextType="Html"
@@ -152,6 +175,7 @@
                             HorizontalOptions="StartAndExpand" />
                         <Switch
                             IsToggled="{Binding Uppercase}"
+                            IsEnabled="{Binding IsUppercaseSwitchEnabled}"
                             StyleClass="box-value"
                             HorizontalOptions="End" />
                     </StackLayout>
@@ -163,6 +187,7 @@
                             HorizontalOptions="StartAndExpand" />
                         <Switch
                             IsToggled="{Binding Lowercase}"
+                            IsEnabled="{Binding IsLowercaseSwitchEnabled}"
                             StyleClass="box-value"
                             HorizontalOptions="End" />
                     </StackLayout>
@@ -174,6 +199,7 @@
                             HorizontalOptions="StartAndExpand" />
                         <Switch
                             IsToggled="{Binding Number}"
+                            IsEnabled="{Binding IsNumberSwitchEnabled}"
                             StyleClass="box-value"
                             HorizontalOptions="End" />
                     </StackLayout>
@@ -185,6 +211,7 @@
                             HorizontalOptions="StartAndExpand" />
                         <Switch
                             IsToggled="{Binding Special}"
+                            IsEnabled="{Binding IsSpecialSwitchEnabled}"
                             StyleClass="box-value"
                             HorizontalOptions="End" />
                     </StackLayout>
