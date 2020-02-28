@@ -229,11 +229,7 @@ namespace Bit.App.Pages
             set => SetProperty(ref _enforcedPolicyOptions, value,
                 additionalPropertyNames: new[]
                 {
-                    nameof(IsPolicyInEffect),
-                    nameof(IsUppercaseSwitchEnabled),
-                    nameof(IsLowercaseSwitchEnabled),
-                    nameof(IsNumberSwitchEnabled),
-                    nameof(IsSpecialSwitchEnabled)
+                    nameof(IsPolicyInEffect)
                 });
         }
 
@@ -242,14 +238,6 @@ namespace Bit.App.Pages
                                         _enforcedPolicyOptions.NumberCount > 0 || _enforcedPolicyOptions.UseSpecial ||
                                         _enforcedPolicyOptions.SpecialCount > 0;
 
-        public bool IsUppercaseSwitchEnabled => !IsPolicyInEffect || !EnforcedPolicyOptions.UseUppercase;
-
-        public bool IsLowercaseSwitchEnabled => !IsPolicyInEffect || !EnforcedPolicyOptions.UseLowercase;
-
-        public bool IsNumberSwitchEnabled => !IsPolicyInEffect || !EnforcedPolicyOptions.UseNumbers;
-
-        public bool IsSpecialSwitchEnabled => !IsPolicyInEffect || !EnforcedPolicyOptions.UseSpecial;
-        
         public int TypeSelectedIndex
         {
             get => _typeSelectedIndex;
