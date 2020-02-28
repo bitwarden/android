@@ -45,6 +45,7 @@
                     Margin="0, 20"
                     StyleClass="text-lg"
                     HorizontalTextAlignment="Center"
+                    HorizontalOptions="CenterAndExpand"
                     LineBreakMode="CharacterWrap" />
                 <Button Text="{u:I18n RegeneratePassword}"
                         HorizontalOptions="FillAndExpand"
