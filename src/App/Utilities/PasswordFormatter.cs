@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web;
 using Xamarin.Forms;
 
 namespace Bit.App.Utilities
@@ -35,6 +36,13 @@ namespace Bit.App.Utilities
             var specialColor = $"<span style=\"color:#{((Color)Application.Current.Resources["PasswordSpecialColor"]).ToHex().Substring(3)}\">";
             var result = string.Empty;
 
+            // iOS won't hide the zero-width space char without these div attrs, but Android won't respect
+            // display:inline-block and adds a newline after the password.  Hence, only iOS gets the div.
+            if(Device.RuntimePlatform == Device.iOS)
+            {
+                result += "<div style=\"display:inline-block; align-items:center; justify-content:center; text-align:center; word-break:break-all; white-space:pre-wrap; min-width:0\">";
+            }
+            
             // Start with an otherwise uncovered case so we will definitely enter the "something changed"
             // state.
             var currentType = CharType.None;
@@ -83,7 +91,18 @@ namespace Bit.App.Utilities
                             break;
                     }
                 }
-                result += c;
+
+                if(currentType == CharType.Special)
+                {
+                    result += HttpUtility.HtmlEncode(c);
+                }
+                else
+                {
+                    result += c;
+                }
+
+                // Add zero-width space after every char so per-char wrapping works consistently 
+                result += "&#8203;";
             }
 
             // Close off last span.
@@ -91,7 +110,13 @@ namespace Bit.App.Utilities
             {
                 result += "</span>";
             }
-
+            
+            // Close off iOS div
+            if(Device.RuntimePlatform == Device.iOS)
+            {
+                result += "</div>";
+            }
+            
             return result;
         }
     }
