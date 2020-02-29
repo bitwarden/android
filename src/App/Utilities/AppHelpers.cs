@@ -159,11 +159,12 @@ namespace Bit.App.Utilities
                 {
                     case "baseEnvironmentUrl":
                         var environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
-                        if(environmentService.BaseUrl != setting.Value)
+                        var settingValue = string.IsNullOrWhiteSpace(setting.Value) ? null : setting.Value;
+                        if(environmentService.BaseUrl != settingValue)
                         {
                             await environmentService.SetUrlsAsync(new Core.Models.Data.EnvironmentUrlData
                             {
-                                Base = string.IsNullOrWhiteSpace(setting.Value) ? null : setting.Value,
+                                Base = settingValue,
                                 Api = environmentService.ApiUrl,
                                 Identity = environmentService.IdentityUrl,
                                 WebVault = environmentService.WebVaultUrl,
