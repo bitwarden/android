@@ -5,5 +5,5 @@
     android:title="@string/SelfHostedServerUrl"
     android:restrictionType="string"
     android:description="@string/ServerUrl"
-    android:defaultValue="@null" />
+    android:defaultValue="" />
 </restrictions>

@@ -163,7 +163,7 @@ namespace Bit.App.Utilities
                         {
                             await environmentService.SetUrlsAsync(new Core.Models.Data.EnvironmentUrlData
                             {
-                                Base = setting.Value,
+                                Base = string.IsNullOrWhiteSpace(setting.Value) ? null : setting.Value,
                                 Api = environmentService.ApiUrl,
                                 Identity = environmentService.IdentityUrl,
                                 WebVault = environmentService.WebVaultUrl,
