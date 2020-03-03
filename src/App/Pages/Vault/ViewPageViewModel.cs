@@ -459,25 +459,15 @@ namespace Bit.App.Pages
 
         public async void PromptOpenOrSave(byte[] data, AttachmentView attachment)
         {
-            var options = new List<KeyValuePair<string, string>>
-            {
-                new KeyValuePair<string, string>("open", AppResources.Open),
-                new KeyValuePair<string, string>("save", AppResources.Save)
-            };
             var selection = await Page.DisplayActionSheet(attachment.FileName, AppResources.Cancel, null,
-                options.Select(o => o.Value).ToArray());
-            if(selection != null && selection != AppResources.Cancel)
+                AppResources.Open, AppResources.Save);
+            if(selection == AppResources.Open)
             {
-                switch(options.FirstOrDefault(f => f.Value == selection).Key)
-                {
-                    case "open":
-                        OpenAttachment(data, attachment);
-                        break;
-
-                    case "save":
-                        SaveAttachment(data, attachment);
-                        break;
-                }
+                OpenAttachment(data, attachment);
+            }
+            else if(selection == AppResources.Save)
+            {
+                SaveAttachment(data, attachment);
             }
         }
 
