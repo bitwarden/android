@@ -2841,5 +2841,23 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("PasswordGeneratorPolicyInEffect", resourceCulture);
             }
         }
+        
+        public static string Open {
+            get {
+                return ResourceManager.GetString("Open", resourceCulture);
+            }
+        }
+        
+        public static string UnableToSaveAttachment {
+            get {
+                return ResourceManager.GetString("UnableToSaveAttachment", resourceCulture);
+            }
+        }
+        
+        public static string SaveAttachmentSuccess {
+            get {
+                return ResourceManager.GetString("SaveAttachmentSuccess", resourceCulture);
+            }
+        }
     }
 }

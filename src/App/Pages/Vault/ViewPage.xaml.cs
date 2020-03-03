@@ -1,4 +1,5 @@
-﻿using Bit.App.Resources;
+﻿using System;
+using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using System.Collections.Generic;
@@ -74,6 +75,18 @@ namespace Bit.App.Pages
                                 var task = _vm.LoadAsync(() => AdjustToolbar());
                             }
                         }
+                    });
+                }
+                else if(message.Command == "selectSaveFileResult")
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        var data = message.Data as Tuple<string, string>;
+                        if(data == null)
+                        {
+                            return;
+                        }
+                        _vm.SaveFileSelected(data.Item1, data.Item2);
                     });
                 }
             });

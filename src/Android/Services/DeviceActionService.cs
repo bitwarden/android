@@ -230,15 +230,8 @@ namespace Bit.Droid.Services
                 string mimeType = MimeTypeMap.Singleton.GetMimeTypeFromExtension(extension);
                 if(mimeType == null)
                 {
-                    if(extension == "json")
-                    {
-                        // Explicit support for json since older versions of Android don't recognize the extension
-                        mimeType = "text/json";
-                    }
-                    else
-                    {
-                        return false; 
-                    }
+                    // Unable to identify so fall back to generic "any" type
+                    mimeType = "*/*";
                 }
 
                 var intent = new Intent(Intent.ActionCreateDocument);

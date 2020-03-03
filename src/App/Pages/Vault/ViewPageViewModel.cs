@@ -34,6 +34,8 @@ namespace Bit.App.Pages
         private bool _totpLow;
         private DateTime? _totpInterval = null;
         private string _previousCipherId;
+        private byte[] _attachmentData;
+        private string _attachmentFilename;
 
         public ViewPageViewModel()
         {
@@ -405,10 +407,19 @@ namespace Bit.App.Pages
                     return;
                 }
             }
+
+            var canOpenFile = true;
             if(!_deviceActionService.CanOpenFile(attachment.FileName))
             {
-                await _platformUtilsService.ShowDialogAsync(AppResources.UnableToOpenFile);
-                return;
+                if(Device.RuntimePlatform == Device.iOS)
+                {
+                    // iOS is currently hardcoded to always return CanOpenFile == true, but should it ever return false
+                    // for any reason we want to be sure to catch it here.
+                    await _platformUtilsService.ShowDialogAsync(AppResources.UnableToOpenFile);
+                    return;
+                }
+
+                canOpenFile = false;
             }
 
             await _deviceActionService.ShowLoadingAsync(AppResources.Downloading);
@@ -421,10 +432,23 @@ namespace Bit.App.Pages
                     await _platformUtilsService.ShowDialogAsync(AppResources.UnableToDownloadFile);
                     return;
                 }
-                if(!_deviceActionService.OpenFile(data, attachment.Id, attachment.FileName))
+
+                if(Device.RuntimePlatform == Device.Android)
                 {
-                    await _platformUtilsService.ShowDialogAsync(AppResources.UnableToOpenFile);
-                    return;
+                    if(canOpenFile)
+                    {
+                        // We can open this attachment directly, so give the user the option to open or save
+                        PromptOpenOrSave(data, attachment);
+                    }
+                    else
+                    {
+                        // We can't open this attachment so go directly to save
+                        SaveAttachment(data, attachment);
+                    }
+                }
+                else
+                {
+                    OpenAttachment(data, attachment);
                 }
             }
             catch
@@ -433,6 +457,59 @@ namespace Bit.App.Pages
             }
         }
 
+        public async void PromptOpenOrSave(byte[] data, AttachmentView attachment)
+        {
+            var selection = await Page.DisplayActionSheet(attachment.FileName, AppResources.Cancel, null,
+                AppResources.Open, AppResources.Save);
+            if(selection == AppResources.Open)
+            {
+                OpenAttachment(data, attachment);
+            }
+            else if(selection == AppResources.Save)
+            {
+                SaveAttachment(data, attachment);
+            }
+        }
+
+        public async void OpenAttachment(byte[] data, AttachmentView attachment)
+        {
+            if(!_deviceActionService.OpenFile(data, attachment.Id, attachment.FileName))
+            {
+                await _platformUtilsService.ShowDialogAsync(AppResources.UnableToOpenFile);
+                return;
+            }
+        }
+
+        public async void SaveAttachment(byte[] data, AttachmentView attachment)
+        {
+            _attachmentData = data;
+            _attachmentFilename = attachment.FileName;
+            if(!_deviceActionService.SaveFile(_attachmentData, null, _attachmentFilename, null))
+            {
+                ClearAttachmentData();
+                await _platformUtilsService.ShowDialogAsync(AppResources.UnableToSaveAttachment);
+            }
+        }
+
+        public async void SaveFileSelected(string contentUri, string filename)
+        {
+            if(_deviceActionService.SaveFile(_attachmentData, null, filename ?? _attachmentFilename, contentUri))
+            {
+                ClearAttachmentData();
+                _platformUtilsService.ShowToast("success", null, AppResources.SaveAttachmentSuccess);
+                return;
+            }
+
+            ClearAttachmentData();
+            await _platformUtilsService.ShowDialogAsync(AppResources.UnableToSaveAttachment);
+        }
+
+        private void ClearAttachmentData()
+        {
+            _attachmentData = null;
+            _attachmentFilename = null;
+        }
+        
         private async void CopyAsync(string id, string text = null)
         {
             string name = null;
