@@ -37,6 +37,10 @@ namespace Bit.Core.Services
                 var userId = await _userService.GetUserIdAsync();
                 var policies = await _storageService.GetAsync<Dictionary<string, PolicyData>>(
                     string.Format(Keys_PoliciesPrefix, userId));
+                if(policies == null)
+                {
+                    return null;
+                }
                 _policyCache = policies.Select(p => new Policy(policies[p.Key]));
             }
 
