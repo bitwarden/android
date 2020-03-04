@@ -20,13 +20,14 @@ A clear and concise description of what you expected to happen.
 **Actual Result**
 A clear and concise description of what is happening.
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+**Screenshots or Videos**
+If applicable, add screenshots and/or a short video to help explain your problem.
 
 **Mobile**
  - Device: [e.g. iPhone6]
  - OS: [e.g. iOS8.1]
- - App Version [e.g. 2.3.0]
+ - Build Version (This can be found under "Settings" > "About" [e.g. 2.3.0 (2221)]
+ - Is this a Beta release: [Y/N]
 
 **Additional context**
 Add any other context about the problem here.
