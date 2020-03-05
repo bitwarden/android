@@ -728,8 +728,8 @@
     <value>保管庫に{0}用のアイテムはありません。</value>
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
-  <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
-    <value>Bitwarden 自動入力通知が表示されたら、タップして自動入力サービスを起動できます。</value>
+  <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
+    <value>When you select an input field and see a Bitwarden auto-fill overlay, you can tap it to launch the auto-fill service.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>この通知をタップすると保管庫から自動入力します。</value>
@@ -778,24 +778,6 @@
   </data>
   <data name="ShareVault" xml:space="preserve">
     <value>保管庫の共有</value>
-  </data>
-  <data name="AutofillPasswordField" xml:space="preserve">
-    <value>パスワードフィールドのフォーカス時にスキャン</value>
-  </data>
-  <data name="AutofillPasswordFieldDescription" xml:space="preserve">
-    <value>パスワードフィールドを選択したときだけフィールドをスキャンして、自動入力通知を表示します。バッテリー消費を抑えられるかもしれません。</value>
-  </data>
-  <data name="AutofillPersistNotification" xml:space="preserve">
-    <value>通知を常に表示</value>
-  </data>
-  <data name="AutofillPersistNotificationDescription" xml:space="preserve">
-    <value>自動入力通知を常に表示して、自動入力しようとした時だけフィールドをスキャンします。バッテリー消費を抑えられるかもしれません。</value>
-  </data>
-  <data name="AutofillAlways" xml:space="preserve">
-    <value>常にスキャン</value>
-  </data>
-  <data name="AutofillAlwaysDescription" xml:space="preserve">
-    <value>常に画面をスキャンして、パスワードフィールドが見つかった時だけ自動入力通知を表示します。これがデフォルト設定です。</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
     <value>{0} を開けません。</value>
@@ -1564,7 +1546,7 @@
     <comment>ex. Uppercase the first character of a word.</comment>
   </data>
   <data name="IncludeNumber" xml:space="preserve">
-    <value>数字を付ける</value>
+    <value>数字を含める</value>
   </data>
   <data name="Download" xml:space="preserve">
     <value>ダウンロード</value>
@@ -1586,5 +1568,61 @@
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
     <value>生体認証でロック解除</value>
+  </data>
+  <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
+    <value>Bitwarden needs attention - See "Auto-fill Accessibility Service" from Bitwarden Settings</value>
+  </data>
+  <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
+    <value>3. On the Android App Settings screen for Bitwarden, go to the "Display over other apps" options (under Advanced) and tap the toggle to enable overlay support.</value>
+  </data>
+  <data name="OverlayPermission" xml:space="preserve">
+    <value>Permission</value>
+  </data>
+  <data name="BitwardenAutofillServiceOpenOverlayPermissionSettings" xml:space="preserve">
+    <value>Open Overlay Permission Settings</value>
+  </data>
+  <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
+    <value>3. On the Android App Settings screen for Bitwarden, select "Display over other apps" (under "Advanced") and switch on the toggle to allow the overlay.</value>
+  </data>
+  <data name="Denied" xml:space="preserve">
+    <value>Denied</value>
+  </data>
+  <data name="Granted" xml:space="preserve">
+    <value>Granted</value>
+  </data>
+  <data name="FileFormat" xml:space="preserve">
+    <value>File Format</value>
+  </data>
+  <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
+    <value>Enter your master password to export your vault data.</value>
+  </data>
+  <data name="ExportVaultWarning" xml:space="preserve">
+    <value>This export contains your vault data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it.</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+  <data name="ExportVaultFailure" xml:space="preserve">
+    <value>There was a problem exporting your vault.  If the problem persists, you'll need to export from the web vault.</value>
+  </data>
+  <data name="ExportVaultSuccess" xml:space="preserve">
+    <value>Vault exported successfully</value>
+  </data>
+  <data name="Clone" xml:space="preserve">
+    <value>Clone</value>
+    <comment>Clone an entity (verb).</comment>
+  </data>
+  <data name="PasswordGeneratorPolicyInEffect" xml:space="preserve">
+    <value>One or more organization policies are affecting your generator settings</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Open</value>
+    <comment>Button text for an open operation (verb).</comment>
+  </data>
+  <data name="UnableToSaveAttachment" xml:space="preserve">
+    <value>There was a problem saving this attachment. If the problem persists, you can save it from the web vault.</value>
+  </data>
+  <data name="SaveAttachmentSuccess" xml:space="preserve">
+    <value>Attachment saved successfully</value>
   </data>
 </root>
