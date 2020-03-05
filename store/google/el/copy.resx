@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Title" xml:space="preserve">
+    <value>Bitwarden διαχειριστής κωδικών</value>
+    <comment>Max 30 characters</comment>
+  </data>
+  <data name="ShortDescription" xml:space="preserve">
+    <value>Το Bitwarden είναι ένας διαχειριστής συνδέσεων και κωδικών πρόσβασης που σας βοηθά να τα αποθηκεύετε με ασφάλεια στο διαδίκτυο.</value>
+    <comment>Max 80 characters</comment>
+  </data>
+  <data name="FullDesciption" xml:space="preserve">
+    <value>Το Bitwarden είναι ο ευκολότερος και ασφαλέστερος τρόπος για να αποθηκεύσετε όλες τις συνδέσεις και τους κωδικούς πρόσβασης σας, διατηρώντας παράλληλα το συγχρονισμό μεταξύ όλων των συσκευών σας. Η επέκταση της εφαρμογής Bitwarden σάς επιτρέπει να συνδεθείτε γρήγορα σε οποιαδήποτε ιστοσελίδα μέσω του Safari ή του Chrome και υποστηρίζεται από εκατοντάδες άλλες δημοφιλείς εφαρμογές.
+
+Η κλοπή κωδικού πρόσβασης είναι ένα σοβαρό πρόβλημα. Οι ιστοσελίδες και οι εφαρμογές που χρησιμοποιείτε υποβάλλονται σε επίθεση κάθε μέρα. Παραβιάσεις ασφαλείας συμβαίνουν και οι κωδικοί ίσως κλαπούν. Όταν επαναχρησιμοποιείτε τους ίδιους κωδικούς πρόσβασης σε εφαρμογές και ιστοσελίδες, οι χάκερ μπορούν εύκολα να έχουν πρόσβαση στο ηλεκτρονικό σας ταχυδρομείο, στην τράπεζα σας και σε άλλους σημαντικούς λογαριασμούς.
+
+Οι ειδικοί ασφαλείας συστήνουν να χρησιμοποιείτε διαφορετικό, τυχαία δημιουργημένο κωδικό πρόσβασης για κάθε λογαριασμό που δημιουργείτε. Αλλά πώς διαχειρίζεστε όλους αυτούς τους κωδικούς πρόσβασης; Το Bitwarden σας διευκολύνει να δημιουργείτε, να αποθηκεύετε και να έχετε πρόσβαση στους κωδικούς πρόσβασης σας.
+
+Το Bitwarden αποθηκεύει όλες τις συνδέσεις σας σε κρυπτογραφημένη μορφή που συγχρονίζεται σε όλες τις συσκευές σας. Δεδομένου ότι είναι πλήρως κρυπτογραφημένο, μόνο εσείς έχετε πρόσβαση στα δεδομένα σας. Ούτε η ομάδα του Bitwarden μπορεί να διαβάσει τα δεδομένα σας, ακόμα κι αν θέλουμε. Τα δεδομένα σας είναι σφραγισμένα με κρυπτογράφηση AES-256 bit, salted hashing και PBKDF2 SHA-256.
+
+Το Bitwarden είναι 100% λογισμικό ανοικτού κώδικα. Ο πηγαίος κώδικας για το Bitwarden φιλοξενείται στο GitHub και ο καθένας είναι ελεύθερος να επανεξετάσει, να ελέγξει και να συνεισφέρει στον κώδικα βάσης του Bitwarden.</value>
+    <comment>Max 4000 characters</comment>
+  </data>
+  <data name="FeatureGraphic" xml:space="preserve">
+    <value>Ένας ασφαλής και δωρεάν διαχειριστής κωδικών για όλες τις συσκευές σας</value>
+  </data>
+  <data name="Screenshot1" xml:space="preserve">
+    <value>Διαχειριστείτε όλες τις συνδέσεις και τους κωδικούς σας με ασφάλεια</value>
+  </data>
+  <data name="Screenshot2" xml:space="preserve">
+    <value>Δημιουργήστε αυτόματα ισχυρούς, τυχαίους και ασφαλείς κωδικούς</value>
+  </data>
+  <data name="Screenshot3" xml:space="preserve">
+    <value>Προστατέψετε τη λίστα σας μέσω δαχτυλικού αποτυπώματος, κωδικό PIN ή με κωδικό πρόσβασης</value>
+  </data>
+  <data name="Screenshot4" xml:space="preserve">
+    <value>Γρήγορη αυτόματη συμπλήρωση των συνδέσεων σας από το πρόγραμμα περιήγησης και άλλες εφαρμογές</value>
+  </data>
+  <data name="Screenshot5" xml:space="preserve">
+    <value>Συγχρονισμός και απόκτηση πρόσβαση στη λίστα σας από πολλές συσκευές
+
+- Τηλέφωνο
+- Τάμπλετ
+- Υπολογιστή
+- Διαδίκτυο</value>
+  </data>
+</root>
