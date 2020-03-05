@@ -24,7 +24,7 @@ namespace Bit.App.Pages
         {
             base.OnAppearing();
             await _vm.InitAsync();
-            _broadcasterService.Subscribe(nameof(AttachmentsPage), (message) =>
+            _broadcasterService.Subscribe(nameof(ExportVaultPage), (message) =>
             {
                 if(message.Command == "selectSaveFileResult")
                 {
@@ -45,6 +45,7 @@ namespace Bit.App.Pages
         protected async override void OnDisappearing()
         {
             base.OnDisappearing();
+            _broadcasterService.Unsubscribe(nameof(ExportVaultPage));
         }
 
         public Entry MasterPasswordEntry { get; set; }
