@@ -335,53 +335,76 @@ namespace Bit.Core.Services
                     enforcedOptions = new PasswordGeneratorPolicyOptions();
                 }
 
-                var currentPolicyMinLength = currentPolicy.Data["minLength"];
-                if(currentPolicyMinLength != null &&
-                   (int)(long)currentPolicyMinLength > enforcedOptions.MinLength)
+                var minLength = GetPolicyInt(currentPolicy, "minLength");
+                if(minLength != null && (int)(long)minLength > enforcedOptions.MinLength)
                 {
-                    enforcedOptions.MinLength = (int)(long)currentPolicyMinLength;
+                    enforcedOptions.MinLength = (int)(long)minLength;
                 }
 
-                var currentPolicyUseUpper = currentPolicy.Data["useUpper"];
-                if(currentPolicyUseUpper != null && (bool)currentPolicyUseUpper)
+                var useUpper = GetPolicyBool(currentPolicy, "useUpper");
+                if(useUpper != null && (bool)useUpper)
                 {
                     enforcedOptions.UseUppercase = true;
                 }
 
-                var currentPolicyUseLower = currentPolicy.Data["useLower"];
-                if(currentPolicyUseLower != null && (bool)currentPolicyUseLower)
+                var useLower = GetPolicyBool(currentPolicy, "useLower");
+                if(useLower != null && (bool)useLower)
                 {
                     enforcedOptions.UseLowercase = true;
                 }
 
-                var currentPolicyUseNumbers = currentPolicy.Data["useNumbers"];
-                if(currentPolicyUseNumbers != null && (bool)currentPolicyUseNumbers)
+                var useNumbers = GetPolicyBool(currentPolicy, "useNumbers");
+                if(useNumbers != null && (bool)useNumbers)
                 {
                     enforcedOptions.UseNumbers = true;
                 }
 
-                var currentPolicyMinNumbers = currentPolicy.Data["minNumbers"];
-                if(currentPolicyMinNumbers != null &&
-                   (int)(long)currentPolicyMinNumbers > enforcedOptions.NumberCount)
+                var minNumbers = GetPolicyInt(currentPolicy, "minNumbers");
+                if(minNumbers != null && (int)(long)minNumbers > enforcedOptions.NumberCount)
                 {
-                    enforcedOptions.NumberCount = (int)(long)currentPolicyMinNumbers;
+                    enforcedOptions.NumberCount = (int)(long)minNumbers;
                 }
 
-                var currentPolicyUseSpecial = currentPolicy.Data["useSpecial"];
-                if(currentPolicyUseSpecial != null && (bool)currentPolicyUseSpecial)
+                var useSpecial = GetPolicyBool(currentPolicy, "useSpecial");
+                if(useSpecial != null && (bool)useSpecial)
                 {
                     enforcedOptions.UseSpecial = true;
                 }
 
-                var currentPolicyMinSpecial = currentPolicy.Data["minSpecial"];
-                if(currentPolicyMinSpecial != null &&
-                   (int)(long)currentPolicyMinSpecial > enforcedOptions.SpecialCount)
+                var minSpecial = GetPolicyInt(currentPolicy, "minSpecial");
+                if(minSpecial != null && (int)(long)minSpecial > enforcedOptions.SpecialCount)
                 {
-                    enforcedOptions.SpecialCount = (int)(long)currentPolicyMinSpecial;
+                    enforcedOptions.SpecialCount = (int)(long)minSpecial;
                 }
             }
 
             return enforcedOptions;
+        }
+
+        private int? GetPolicyInt(Policy policy, string key)
+        {
+            if(policy.Data.ContainsKey(key))
+            {
+                var value = policy.Data[key];
+                if(value != null)
+                {
+                    return (int)(long)value;
+                }
+            }
+            return null;
+        }
+
+        private bool? GetPolicyBool(Policy policy, string key)
+        {
+            if(policy.Data.ContainsKey(key))
+            {
+                var value = policy.Data[key];
+                if(value != null)
+                {
+                    return (bool)value;
+                }
+            }
+            return null;
         }
 
         public async Task SaveOptionsAsync(PasswordGenerationOptions options)
