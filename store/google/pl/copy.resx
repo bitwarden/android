@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Title" xml:space="preserve">
-    <value>Bitwarden - Menedżer Haseł</value>
+    <value>Bitwarden - menedżer haseł</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="ShortDescription" xml:space="preserve">
@@ -126,38 +126,38 @@
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>Bitwarden to najłatwiejszy i najbezpieczniejszy sposób przechowywania wszystkich Twoich loginów i haseł, umożliwiający ich wygodną synchronizację pomiędzy wszystkimi Twoimi urządzeniami. 
+    <value>Aplikacja Bitwarden to najłatwiejszy i najbezpieczniejszy sposób przechowywania wszystkich danych logowania i haseł, umożliwiający ich wygodną synchronizację między urządzeniami.
 
-Kradzież hasła to poważny problem. Witryny i aplikacje, których używasz są atakowane każdego dnia. Twoje hasła mogą zostać skradzione w wyniku złamania zabezpieczeń. Gdy używasz tego samego hasła dla różnych aplikacji i stron internetowych, hakerzy mogą z łatwością uzyskać dostęp do twojego konta e-mail, banku i innych ważnych kont.
+Kradzież hasła to poważny problem. Strony internetowe i aplikacje są atakowane każdego dnia. W wyniku złamania zabezpieczeń, hasła mogą zostać skradzione. Jeśli używasz tego samego hasła dla różnych aplikacji i stron, hakerzy mogą uzyskać dostęp do Twojego konta pocztowego, bankowego i innych ważnych kont.
 
-Eksperci od bezpieczeństwa zalecają używanie różnych, losowo wygenerowanych haseł dla każdego nowo tworzonego konta. Ale jak można zarządzać wszystkimi tymi hasłami? Bitwarden sprawia, że tworzenie, przechowywanie i dostęp do Twoich haseł jest naprawdę łatwy. 
+Eksperci od bezpieczeństwa zalecają używanie różnych, losowo wygenerowanych haseł dla każdego konta. Tylko jak można zarządzać wszystkimi hasłami? Aplikacja Bitwarden sprawia, że tworzenie, przechowywanie i dostęp do haseł jest łatwy.
 
-Bitwarden przechowuje wszystkie Twoje dane logowania w zaszyfrowanym sejfie, który jest synchronizowany pomiędzy wszystkimi Twoimi urządzeniami. Dzięki temu, że dane są w pełni zaszyfrowane zanim opuszczą Twoje urządzenie, tylko masz do nich dostęp. Nawet zespół Bitwarden nie ma dostępu do Twoich danych. Dane są zabezpieczone za pomocą szyfrowania metodą AES-256, stosowania ciągów zaburzających i algorytmu PBKDF2 SHA-256.
+Bitwarden przechowuje wszystkie Twoje dane logowania w zaszyfrowanym sejfie, który jest synchronizowany pomiędzy Twoimi urządzeniami. Dzięki temu, że dane są w pełni zaszyfrowane, zanim opuszczą urządzenie, tylko Ty masz do nich dostęp. Nawet zespół Bitwarden nie ma dostępu do Twoich danych. Dane są zabezpieczone za pomocą szyfrowania AES-256 i kryptograficznej funkcji skrótu PBKDF2 SHA-256.
 
-Bitwarden jest w 100% aplikacją otwartoźródłową. Kod źródłowy Bitwarden jest hostowany na Github i każdy może go przeglądać, audytować oraz wnosić wkład do bazy kodu Bitwarden.</value>
+Bitwarden jest oprogramowaniem otwartoźródłowym. Kod źródłowy Bitwarden jest dostępny w serwisie GitHub i każdy może go sprawdzić oraz ulepszyć.</value>
     <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
     <value>Bezpieczny i darmowy menedżer haseł dla wszystkich Twoich urządzeń</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Przechowuj wszystkie swoje loginy i hasła w bezpiecznym sejfie</value>
+    <value>Przechowuj wszystkie dane logowania i hasła w bezpiecznym sejfie</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
     <value>Automatycznie generuj silne, losowe i bezpieczne hasła</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Zabezpiecz swój skarbiec odciskiem palca, kodem PIN lub głównym hasłem</value>
+    <value>Zabezpiecz sejf z użyciem odcisku palca, kodu PIN lub hasła głównego</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Szybko i automatycznie loguj się na stronach internetowych i w aplikacjach</value>
+    <value>Szybko i automatycznie uzupełniaj dane logowania na stronach internetowych i w innych aplikacjach</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Synchronizacja i dostęp do Twojego skarbca z wielu urządzeń
+    <value>Synchronizacja i dostęp do sejfu z różnych urządzeń
 
-- Telefonu
-- Tabletu
-- Komputera
-- Przeglądarki internetowej</value>
+- telefonu
+- tabletu
+- komputera
+- przeglądarki internetowej</value>
   </data>
 </root>
