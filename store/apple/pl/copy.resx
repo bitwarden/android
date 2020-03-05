@@ -118,17 +118,19 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Name" xml:space="preserve">
-    <value>Bitwarden - Menedżer Haseł</value>
+    <value>Bitwarden - menedżer haseł</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Bitwarden to najłatwiejszy i najbezpieczniejszy sposób przechowywania wszystkich Twoich loginów i haseł, umożliwiający ich wygodną synchronizację pomiędzy wszystkimi Twoimi urządzeniami. Rozszerzenie aplikacji Bitwarden umożliwia Ci szybkie logowanie w Safari lub Chrome i jest wspierane przez setki innych popularnych aplikacji.
+    <value>Aplikacja Bitwarden to najłatwiejszy i najbezpieczniejszy sposób przechowywania wszystkich danych logowania i haseł, umożliwiający ich wygodną synchronizację między urządzeniami. Rozszerzenie aplikacji Bitwarden pozwala szybko zalogować się na dowolnej stronie za pośrednictwem przeglądarki Safari lub Chrome i jest obsługiwane przez setki innych popularnych aplikacji.
 
-Kradzież hasła to poważny problem. Witryny i aplikacje, których używasz są atakowane każdego dnia. Twoje hasła mogą zostać skradzione w wyniku złamania zabezpieczeń. Gdy używasz tego samego hasła dla różnych aplikacji i stron internetowych, hakerzy mogą z łatwością uzyskać dostęp do twojego konta e-mail, banku i innych ważnych kont.
+Kradzież hasła to poważny problem. Strony internetowe i aplikacje są atakowane każdego dnia. W wyniku złamania zabezpieczeń, hasła mogą zostać skradzione. Jeśli używasz tego samego hasła dla różnych aplikacji i stron, hakerzy mogą uzyskać dostęp do Twojego konta pocztowego, bankowego i innych ważnych kont.
 
-Eksperci od bezpieczeństwa zalecają używanie różnych, losowo wygenerowanych haseł dla każdego nowo tworzonego konta. Ale jak można zarządzać wszystkimi tymi hasłami? bitwarden sprawia, że tworzenie, przechowywanie i dostęp do Twoich haseł jest naprawdę łatwy. 
+Eksperci od bezpieczeństwa zalecają używanie różnych, losowo wygenerowanych haseł dla każdego konta. Tylko jak można zarządzać wszystkimi hasłami? Aplikacja Bitwarden sprawia, że tworzenie, przechowywanie i dostęp do haseł jest łatwy.
 
-Bitwarden przechowuje wszystkie Twoje dane logowania w zaszyfrowanym sejfie, który jest synchronizowany pomiędzy wszystkimi Twoimi urządzeniami. Dzięki temu, że dane są w pełni zaszyfrowane zanim opuszczą Twoje urządzenie, tylko masz do nich dostęp. Nawet zespół Bitwarden nie ma dostępu do Twoich danych. Dane są zabezpieczone za pomocą szyfrowania metodą AES-256, stosowania ciągów zaburzających i algorytmu PBKDF2 SHA-256.</value>
+Bitwarden przechowuje wszystkie Twoje dane logowania w zaszyfrowanym sejfie, który jest synchronizowany pomiędzy Twoimi urządzeniami. Dzięki temu, że dane są w pełni zaszyfrowane, zanim opuszczą urządzenie, tylko Ty masz do nich dostęp. Nawet zespół Bitwarden nie ma dostępu do Twoich danych. Dane są zabezpieczone za pomocą szyfrowania AES-256 i kryptograficznej funkcji skrótu PBKDF2 SHA-256.
+
+Bitwarden jest oprogramowaniem otwartoźródłowym. Kod źródłowy Bitwarden jest dostępny w serwisie GitHub i każdy może go sprawdzić oraz ulepszyć.</value>
     <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
@@ -136,16 +138,16 @@ Bitwarden przechowuje wszystkie Twoje dane logowania w zaszyfrowanym sejfie, kt�
     <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Przechowuj wszystkie swoje loginy i hasła w bezpiecznym sejfie</value>
+    <value>Przechowuj wszystkie dane logowania i hasła w bezpiecznym sejfie</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
     <value>Automatycznie generuj silne, losowe i bezpieczne hasła</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Zabezpiecz swój skarbiec z użyciem Touch ID, kodu PIN lub głównego hasła</value>
+    <value>Zabezpiecz sejf z użyciem funkcji Touch ID, kodu PIN lub hasła głównego</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Automatycznie wypełniaj dane logowania w Safari, Chrome i innych aplikacjach</value>
+    <value>Automatycznie uzupełniaj dane logowania w przeglądarce Safari, Chrome i innych aplikacjach</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
     <value>Synchronizacja i dostęp do sejfu z różnych urządzeń</value>
