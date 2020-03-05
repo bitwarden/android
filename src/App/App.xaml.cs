@@ -39,6 +39,8 @@ namespace Bit.App
         private readonly IDeviceActionService _deviceActionService;
         private readonly AppOptions _appOptions;
 
+        private static bool _isResumed;
+
         public App(AppOptions appOptions)
         {
             _appOptions = appOptions ?? new AppOptions();
@@ -150,6 +152,27 @@ namespace Bit.App
                 }
             });
         }
+        
+        // Workaround for https://github.com/xamarin/Xamarin.Forms/issues/7478
+        // Fixed in last Xamarin.Forms 4.4.0.x - remove this hack after updating
+        public static void WaitForResume()
+        {
+            var checkFrequencyInMillis = 100;
+            var maxTimeInMillis = 5000;
+            
+            var count = 0;
+            while(!_isResumed)
+            {
+                Task.Delay(checkFrequencyInMillis).Wait();
+                count += checkFrequencyInMillis;
+                
+                // don't let this run forever
+                if(count >= maxTimeInMillis)
+                {
+                    break;
+                }
+            }
+        }
 
         protected async override void OnStart()
         {
@@ -172,6 +195,7 @@ namespace Bit.App
         protected async override void OnSleep()
         {
             System.Diagnostics.Debug.WriteLine("XF App: OnSleep");
+            _isResumed = false;
             if(Device.RuntimePlatform == Device.Android)
             {
                 var isLocked = await _lockService.IsLockedAsync();
@@ -187,6 +211,7 @@ namespace Bit.App
         protected override void OnResume()
         {
             System.Diagnostics.Debug.WriteLine("XF App: OnResume");
+            _isResumed = true;
             if(Device.RuntimePlatform == Device.Android)
             {
                 ResumedAsync();
