@@ -118,25 +118,25 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="About" xml:space="preserve">
-    <value>אודות</value>
+    <value>Пра Bitwarden</value>
   </data>
   <data name="Add" xml:space="preserve">
-    <value>הוסף</value>
+    <value>Дадаць</value>
     <comment>Add/create a new entity (verb).</comment>
   </data>
   <data name="AddFolder" xml:space="preserve">
-    <value>הוסף תיקיה</value>
+    <value>Дадаць папку</value>
   </data>
   <data name="AddItem" xml:space="preserve">
-    <value>הוסף פריט</value>
+    <value>Дадаць элемент</value>
     <comment>The title for the add item page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
-    <value>אירעה שגיאה.</value>
+    <value>Адбылася памылка.</value>
     <comment>Alert title when something goes wrong.</comment>
   </data>
   <data name="Back" xml:space="preserve">
-    <value>הקודם</value>
+    <value>Назад</value>
     <comment>Navigate back to the previous screen.</comment>
   </data>
   <data name="Bitwarden" xml:space="preserve">
@@ -144,1431 +144,1430 @@
     <comment>App name. Shouldn't ever change.</comment>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>ביטול</value>
+    <value>Скасаваць</value>
     <comment>Cancel an operation.</comment>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>העתק</value>
+    <value>Капіяваць</value>
     <comment>Copy some value to your clipboard.</comment>
   </data>
   <data name="CopyPassword" xml:space="preserve">
-    <value>העתק סיסמה</value>
+    <value>Капіяваць пароль</value>
     <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
   </data>
   <data name="CopyUsername" xml:space="preserve">
-    <value>העתק שם משתמש</value>
+    <value>Капіяваць імя карыстальніка</value>
     <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
   </data>
   <data name="Credits" xml:space="preserve">
-    <value>תודות</value>
+    <value>Падзякі</value>
     <comment>Title for page that we use to give credit to resources that we use.</comment>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>מחק</value>
+    <value>Выдаліць</value>
     <comment>Delete an entity (verb).</comment>
   </data>
   <data name="Deleting" xml:space="preserve">
-    <value>מוחק...</value>
+    <value>Выдаленне...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="DoYouReallyWantToDelete" xml:space="preserve">
-    <value>האם אתה בטוח שברצונך למחוק? זוהי פעולה בלתי הפיכה.</value>
+    <value>Вы сапраўды хочаце выдаліць? Гэта дзеянне немагчыма адрабіць.</value>
     <comment>Confirmation alert message when deleteing something.</comment>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>ערוך</value>
+    <value>Рэдагаваць</value>
   </data>
   <data name="EditFolder" xml:space="preserve">
-    <value>ערוך תיקייה</value>
+    <value>Рэдагаваць папку</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>אימייל</value>
+    <value>Электронная пошта</value>
     <comment>Short label for an email address.</comment>
   </data>
   <data name="EmailAddress" xml:space="preserve">
-    <value>כתובת אימייל</value>
+    <value>Адрас эл. пошты</value>
     <comment>Full label for a email address.</comment>
   </data>
   <data name="EmailUs" xml:space="preserve">
-    <value>שלח לנו אימייל</value>
+    <value>Напішыце нам</value>
   </data>
   <data name="EmailUsDescription" xml:space="preserve">
-    <value>שלח לנו מייל ישירות לקבלת עזרה או לשליחת משוב.</value>
+    <value>Каб атрымаць дапамогу ці пакінуць водгук, адпраўце нам ліст.</value>
   </data>
   <data name="EnterPIN" xml:space="preserve">
-    <value>הזן קוד PIN.</value>
+    <value>Увядзіце PIN-код.</value>
   </data>
   <data name="Favorites" xml:space="preserve">
-    <value>מועדפים</value>
+    <value>Абраныя</value>
     <comment>Title for your favorite items in the vault.</comment>
   </data>
   <data name="FileBugReport" xml:space="preserve">
-    <value>דווח על באג</value>
+    <value>Паведаміць аб памылцы</value>
   </data>
   <data name="FileBugReportDescription" xml:space="preserve">
-    <value>דווח על באג בGitHub repository שלנו.</value>
+    <value>Open an issue at our GitHub repository.</value>
   </data>
   <data name="FingerprintDirection" xml:space="preserve">
-    <value>השתמש בטביעת האצבע שלך לאימות.</value>
+    <value>Выкарыстоўвайце свой адбітак пальца для верыфікацыі.</value>
   </data>
   <data name="Folder" xml:space="preserve">
-    <value>תיקייה</value>
+    <value>Папка</value>
     <comment>Label for a folder.</comment>
   </data>
   <data name="FolderCreated" xml:space="preserve">
-    <value>תיקייה חדשה נוצרה.</value>
+    <value>Новая папка створана.</value>
   </data>
   <data name="FolderDeleted" xml:space="preserve">
-    <value>תיקייה נמחקה.</value>
+    <value>Папка выдалена.</value>
   </data>
   <data name="FolderNone" xml:space="preserve">
-    <value>ללא תיקיה</value>
+    <value>Без папкі</value>
     <comment>Items that have no folder specified go in this special "catch-all" folder.</comment>
   </data>
   <data name="Folders" xml:space="preserve">
-    <value>תיקיות</value>
+    <value>Папкі</value>
   </data>
   <data name="FolderUpdated" xml:space="preserve">
-    <value>תיקיה עודכנה.</value>
+    <value>Папка абноўлена.</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
-    <value>עבור לאתר</value>
+    <value>Перайсці на вэб-сайт</value>
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="HelpAndFeedback" xml:space="preserve">
-    <value>עזרה ומשוב</value>
+    <value>Дапамога і зваротная сувязь</value>
   </data>
   <data name="Hide" xml:space="preserve">
-    <value>הסתר</value>
+    <value>Схаваць</value>
     <comment>Hide a secret value that is currently shown (password).</comment>
   </data>
   <data name="InternetConnectionRequiredMessage" xml:space="preserve">
-    <value>אנא התחבר לאינטרנט לפני שתמשיך.</value>
+    <value>Please connect to the internet before continuing.</value>
     <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
-    <value>דרוש חיבור אינטרנט</value>
+    <value>Патрабуецца доступ да інтэрнэту</value>
     <comment>Title for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InvalidMasterPassword" xml:space="preserve">
-    <value>סיסמה ראשית שגויה. נסה שוב.</value>
+    <value>Памылковы майстар-пароль. Паспрабуйце яшчэ раз.</value>
   </data>
   <data name="InvalidPIN" xml:space="preserve">
-    <value>קוד PIN שגוי. נסה שוב.</value>
+    <value>Памылковы PIN-код. Паспрабуйце яшчэ раз.</value>
   </data>
   <data name="Launch" xml:space="preserve">
-    <value>הפעל</value>
+    <value>Запусціць</value>
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="LogIn" xml:space="preserve">
-    <value>התחבר</value>
+    <value>Увайсці</value>
     <comment>The login button text (verb).</comment>
   </data>
   <data name="LogInNoun" xml:space="preserve">
-    <value>כניסה</value>
+    <value>Імя карыстальніка</value>
     <comment>Title for login page. (noun)</comment>
   </data>
   <data name="LogOut" xml:space="preserve">
-    <value>התנתק</value>
+    <value>Выйсці</value>
     <comment>The log out button text (verb).</comment>
   </data>
   <data name="LogoutConfirmation" xml:space="preserve">
-    <value>האם אתה בטוח שברצונך להתנתק?</value>
+    <value>Вы ўпэўнены, што хочаце выйсці?</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
-    <value>סיסמה ראשית</value>
+    <value>Майстар-пароль</value>
     <comment>Label for a master password.</comment>
   </data>
   <data name="More" xml:space="preserve">
-    <value>הגדרות נוספות</value>
+    <value>Яшчэ</value>
     <comment>Text to define that there are more options things to see.</comment>
   </data>
   <data name="MyVault" xml:space="preserve">
-    <value>הכספת שלי</value>
+    <value>Маё сховішча</value>
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>שם</value>
+    <value>Назва</value>
     <comment>Label for an entity name.</comment>
   </data>
   <data name="No" xml:space="preserve">
-    <value>לא</value>
+    <value>Не</value>
   </data>
   <data name="Notes" xml:space="preserve">
-    <value>הערות</value>
+    <value>Нататкі</value>
     <comment>Label for notes.</comment>
   </data>
   <data name="Ok" xml:space="preserve">
-    <value>אישור</value>
+    <value>ОК</value>
     <comment>Acknowledgement.</comment>
   </data>
   <data name="Password" xml:space="preserve">
-    <value>סיסמה</value>
+    <value>Пароль</value>
     <comment>Label for a password.</comment>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>שמור</value>
+    <value>Захаваць</value>
     <comment>Button text for a save operation (verb).</comment>
   </data>
   <data name="Saving" xml:space="preserve">
-    <value>שומר...</value>
+    <value>Захаванне...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>הגדרות</value>
+    <value>Налады</value>
     <comment>The title for the settings page.</comment>
   </data>
   <data name="Show" xml:space="preserve">
-    <value>הצג</value>
+    <value>Паказаць</value>
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>הפריט נמחק.</value>
+    <value>Элемент быў выдалены.</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
-    <value>שלח</value>
+    <value>Адправіць</value>
   </data>
   <data name="Sync" xml:space="preserve">
-    <value>סנכרן</value>
+    <value>Сінхранізаваць</value>
     <comment>The title for the sync page.</comment>
   </data>
   <data name="ThankYou" xml:space="preserve">
-    <value>תודה</value>
+    <value>Дзякуй</value>
   </data>
   <data name="Tools" xml:space="preserve">
-    <value>כלים</value>
+    <value>Інструменты</value>
     <comment>The title for the tools page.</comment>
   </data>
   <data name="URI" xml:space="preserve">
-    <value>כתובת</value>
+    <value>URI</value>
     <comment>Label for a uri/url.</comment>
   </data>
   <data name="UseFingerprintToUnlock" xml:space="preserve">
-    <value>השתמש בטביעת אצבע לפתיחה</value>
+    <value>Выкарыстоўваць адбітак пальца для разблакіроўкі</value>
   </data>
   <data name="Username" xml:space="preserve">
-    <value>שם משתמש</value>
+    <value>Імя карыстальніка</value>
     <comment>Label for a username.</comment>
   </data>
   <data name="ValidationFieldRequired" xml:space="preserve">
-    <value>השדה {0} נחוץ.</value>
+    <value>Поле {0} абавязковае.</value>
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
-    <value>{0} הועתק.</value>
+    <value>{0} скапіявана.</value>
     <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
-    <value>אמת טביעת אצבע</value>
+    <value>Verify Fingerprint</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
-    <value>אמת סיסמה ראשית</value>
+    <value>Verify Master Password</value>
   </data>
   <data name="VerifyPIN" xml:space="preserve">
-    <value>אמת PIN</value>
+    <value>Verify PIN</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>גירסה</value>
+    <value>Версія</value>
   </data>
   <data name="View" xml:space="preserve">
-    <value>תצוגה</value>
+    <value>Выгляд</value>
   </data>
   <data name="VisitOurWebsite" xml:space="preserve">
-    <value>בקרו באתר שלנו</value>
+    <value>Наведайце наш вэб-сайт</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>בקר באתר שלנו לקבלת עזרה, חדשות, פניות במייל, ו\או עבור הסברים כיצד להשתמש בBitwarden.</value>
+    <value>Visit our website to get help, news, email us, and/or learn more about how to use Bitwarden.</value>
   </data>
   <data name="Website" xml:space="preserve">
-    <value>אתר</value>
+    <value>Вэб-сайт</value>
     <comment>Label for a website.</comment>
   </data>
   <data name="Yes" xml:space="preserve">
-    <value>כן</value>
+    <value>Так</value>
   </data>
   <data name="Account" xml:space="preserve">
-    <value>חשבון</value>
+    <value>Уліковы запіс</value>
   </data>
   <data name="AccountCreated" xml:space="preserve">
-    <value>החשבון שלך נוצר בהצלחה! כעת ניתן להכנס למערכת.</value>
+    <value>Ваш уліковы запіс створаны! Вы можаце ўвайсці.</value>
   </data>
   <data name="AddAnItem" xml:space="preserve">
-    <value>הוסף פריט</value>
+    <value>Дадаць элемент</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
-    <value>הרחבת אפליקציה</value>
+    <value>Дадаць пашырэнне</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>השתמש בשירות הנגישות של Bitwarden עבור השלמה אוטמטית של פרטי כניסה לאפליקציות ולאתרים באינטרנט.</value>
+    <value>Use the Bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
-    <value>שירות השלמה אוטומטית</value>
+    <value>Auto-fill Service</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
-    <value>המנע מאותיות ותוים דומים</value>
+    <value>Пазбягаць неадназначных сімвалаў</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>תוסף האפליקציה של Bitwarden</value>
+    <value>Bitwarden App Extension</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
-    <value>הדרך הקלה ביותר להוספת סיסמאות לכספת היא דרך התוסף של Bitwarden. למד עוד אודות השימוש בתוסף של Bitwarden בעזרת פתיחת חלון "הגדרות".</value>
+    <value>The easiest way to add new logins to your vault is from the Bitwarden App Extension. Learn more about using the Bitwarden App Extension by navigating to the "Settings" screen.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>השתמש בBitwarden בדפדפן Safari ואפליקציות נוספות כדי לבצע כתיבה אוטומטית של הסיסמאות שלך.</value>
+    <value>Use Bitwarden in Safari and other apps to auto-fill your logins.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>שירות השלמה אוטומטית של Bitwarden</value>
+    <value>Bitwarden Auto-fill Service</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>השתמש בשירות הנגישות של Bitwarden כדי למלא בצורה אוטומטית את פרטי החיבור שלך.</value>
+    <value>Use the Bitwarden accessibility service to auto-fill your logins.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
-    <value>החלף אימייל</value>
+    <value>Змяніць адрас электроннай пошты</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
-    <value>באפשרותך לשנות את כתובת האימייל שלך דרך הכספת באתר bitwarden.com. האם ברצונך לפתוח את האתר כעת?</value>
+    <value>You can change your email address on the bitwarden.com web vault. Do you want to visit the website now?</value>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
-    <value>החלף סיסמה ראשית</value>
+    <value>Change Master Password</value>
   </data>
   <data name="ChangePasswordConfirmation" xml:space="preserve">
-    <value>באפשרותך לשנות את הסיסמה הראשית שלך דרך הכספת באתר bitwarden.com. האם ברצונך לפתוח את האתר כעת?</value>
+    <value>You can change your master password on the bitwarden.com web vault. Do you want to visit the website now?</value>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>סגירה</value>
+    <value>Закрыць</value>
   </data>
   <data name="Continue" xml:space="preserve">
-    <value>המשך</value>
+    <value>Працягнуць</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
-    <value>צור חשבון</value>
+    <value>Стварыць уліковы запіс</value>
   </data>
   <data name="CreatingAccount" xml:space="preserve">
-    <value>יוצר חשבון...</value>
+    <value>Стварыць уліковы запіс...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="EditItem" xml:space="preserve">
-    <value>ערוך פריט</value>
+    <value>Рэдагаванне элемента</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
-    <value>הפעל סנכרון אוטומטי</value>
+    <value>Enable Automatic Syncing</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
-    <value>הכנס את פרטי האימייל שלך לקבלת רמז עבור הסיסמה הראשית.</value>
+    <value>Увядзіце адрас электроннай пошты ўліковага запісу для атрымання падказкі для пароля.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
-    <value>הפעל מחדש הרחבת אפליקציה</value>
+    <value>Re-enable App Extension</value>
   </data>
   <data name="ExtensionAlmostDone" xml:space="preserve">
-    <value>כמעט סיימנו!</value>
+    <value>Амаль гатова!</value>
   </data>
   <data name="ExtensionEnable" xml:space="preserve">
-    <value>הפעל הרחבת אפליקציה</value>
+    <value>Enable App Extension</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
-    <value>בדפדפן Safari, חפש את Bitwarden בעזרת לחצן השיתוף (רמז: גלול לצד ימין בשורה התחתונה של התפריט).</value>
+    <value>In Safari, find Bitwarden using the share icon (hint: scroll to the right on the bottom row of the menu).</value>
     <comment>Safari is the name of apple's web browser</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
-    <value>קבל גישה מיידית לסיסמאות שלך!</value>
+    <value>Get instant access to your passwords!</value>
   </data>
   <data name="ExtensionReady" xml:space="preserve">
-    <value>הכל מוכן לכניסה למערכת!</value>
+    <value>You're ready to log in!</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
-    <value>כל הסיסמאות שלך נגישות דרך הדפדפנים Safari, כרום, ואפליקציות נוספות שאנו תומכים בהם.</value>
+    <value>Your logins are now easily accessible from Safari, Chrome, and other supported apps.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
-    <value>בדפדפנים ספארי וכרום, חפש את Bitwarden בעזרת לחצן השיתוף (רמז: גלול לצד ימין בשורה התחתונה של תפריט השיתוף).</value>
+    <value>In Safari and Chrome, find Bitwarden using the share icon (hint: scroll to the right on the bottom row of the share menu).</value>
   </data>
   <data name="ExtensionTapIcon" xml:space="preserve">
-    <value>לחץ על האייקון של Bitwarden בתפריט כדי לפתוח את התוסף.</value>
+    <value>Tap the Bitwarden icon in the menu to launch the extension.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>בכדי להפעיל את Bitwarden בדפדפן Safari ובאפליקציות נוספות, לחץ על האייקון "עוד" בשורה התחתונה של התפריט.</value>
+    <value>To turn on Bitwarden in Safari and other apps, tap the "more" icon on the bottom row of the menu.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
-    <value>מועדף</value>
+    <value>Абраны</value>
   </data>
   <data name="Fingerprint" xml:space="preserve">
-    <value>טביעת אצבע</value>
+    <value>Адбітак пальца</value>
   </data>
   <data name="GeneratePassword" xml:space="preserve">
-    <value>צור סיסמה</value>
+    <value>Згенерыраваць пароль</value>
   </data>
   <data name="GetPasswordHint" xml:space="preserve">
-    <value>השג רמז לסיסמה הראשית</value>
+    <value>Атрымаць падказку для майстра-пароля</value>
   </data>
   <data name="ImportItems" xml:space="preserve">
-    <value>יבא פריטים</value>
+    <value>Імпарт элементаў</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
-    <value>באפשרותך ליבא פריטים מרובים דרך הכספת שבאתר bitwarden.com. האם ברצונך לבקר באתר כעת?</value>
+    <value>Вы можаце імпартаваць свае элементы ў сваё вэб-сховішча. Перайсці на сайт зараз?</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
-    <value>יבא במהירות את הפריטים שלך מתוכנות אחרות לניהול סיסמאות.</value>
+    <value>Хуткі імпарт вашых элементаў з іншых менеджараў пароляў.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
-    <value>סינכרון אחרון:</value>
+    <value>Апошняя сінхранізацыя:</value>
   </data>
   <data name="Length" xml:space="preserve">
-    <value>אורך</value>
+    <value>Даўжыня</value>
   </data>
   <data name="Lock" xml:space="preserve">
-    <value>נעל</value>
+    <value>Заблакіраваць</value>
   </data>
   <data name="LockOption15Minutes" xml:space="preserve">
-    <value>15 דקות</value>
+    <value>15 хвілін</value>
   </data>
   <data name="LockOption1Hour" xml:space="preserve">
-    <value>שעה</value>
+    <value>1 гадзіна</value>
   </data>
   <data name="LockOption1Minute" xml:space="preserve">
-    <value>דקה</value>
+    <value>1 хвіліна</value>
   </data>
   <data name="LockOption4Hours" xml:space="preserve">
-    <value>4 שעות</value>
+    <value>4 гадзіны</value>
   </data>
   <data name="LockOptionImmediately" xml:space="preserve">
-    <value>באופן מיידי</value>
+    <value>Адразу</value>
   </data>
   <data name="LockOptions" xml:space="preserve">
-    <value>אפשרויות נעילה</value>
+    <value>Параметры блакіроўкі</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
-    <value>מתחבר...</value>
+    <value>Уваход...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="LoginOrCreateNewAccount" xml:space="preserve">
-    <value>היכנס או צור חשבון חדש כדי לגשת לכספת המאובטחת שלך.</value>
+    <value>Увайдзіце або стварыце новы ўліковы запіс для доступу да бяспечнага сховішча.</value>
   </data>
   <data name="Manage" xml:space="preserve">
-    <value>נהל</value>
+    <value>Кіраваць</value>
   </data>
   <data name="MasterPasswordConfirmationValMessage" xml:space="preserve">
-    <value>שדה אימות סיסמה שגוי.</value>
+    <value>Памылковае пацвярджэнне пароля.</value>
   </data>
   <data name="MasterPasswordDescription" xml:space="preserve">
-    <value>הסיסמה הראשית היא הסיסמה שבאמצעותה תיגש לכספת שלך. חשוב מאוד שלא תשכח את הסיסמה הזו. אין שום דרך לשחזר אותה במקרה ושכחת אותה.</value>
+    <value>Майстар-пароль — ключ да вашага бяспечнага сховішча. Ён вельмі важны, таму не забывайце яго. Аднавіць майстар-пароль немагчыма.</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
-    <value>רמז לסיסמה ראשית (אופציונאלי)</value>
+    <value>Падказка да майстра-пароля (неабавязкова)</value>
   </data>
   <data name="MasterPasswordHintDescription" xml:space="preserve">
-    <value>רמז לסיסמה הראשית יכול לעזור במקרה ושכחת את הסיסמה.</value>
+    <value>Падказка да майстра-пароля можа дапамагчы вам яго ўспомніць.</value>
   </data>
   <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>הסיסמה הראשית חייבת להיות לפחות באורך 8 תווים.</value>
+    <value>Майстар-пароль павінен быць даўжынёй не менш за 8 сімвалаў.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
-    <value>מינימום ספרות</value>
+    <value>Мін. колькасць лічбаў</value>
     <comment>Minimum numeric characters for password generator settings</comment>
   </data>
   <data name="MinSpecial" xml:space="preserve">
-    <value>מינימום תוים מיוחדים</value>
+    <value>Мін. колькасць сімвалаў</value>
     <comment>Minimum special characters for password generator settings</comment>
   </data>
   <data name="MoreSettings" xml:space="preserve">
-    <value>הגדרות נוספות</value>
+    <value>Дадатковыя налады</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>חובה להתחבר לאפליקציה הראשית של Bitwarden לפני שתוכל להשתמש בהרחבה זו.</value>
+    <value>You must log into the main Bitwarden app before you can use the extension.</value>
   </data>
   <data name="Never" xml:space="preserve">
-    <value>לעולם לא</value>
+    <value>Ніколі</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>פריט חדש נוצר.</value>
+    <value>Новая папка створана.</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
-    <value>אין מועדפים בכספת שלך.</value>
+    <value>У вашым сховішчы няма абранага.</value>
   </data>
   <data name="NoItems" xml:space="preserve">
-    <value>אין פריטים בכספת שלך.</value>
+    <value>У вашым сховішчы няма элементаў.</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>אין פרטים בכספת שלך עבור אתר/אפליקציה זו. לחץ כאן להוספת פריט.</value>
+    <value>У вашым заданні няма элементаў для гэтага сайта/праграмы. Націсніце, каб дадаць.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
-    <value>פרטי הכניסה הללו לא מכילים שם משתמש או סיסמה.</value>
+    <value>This login does not have a username or password configured.</value>
   </data>
   <data name="OkGotIt" xml:space="preserve">
-    <value>אוקי, הבנתי!</value>
+    <value>ОК, зразумела!</value>
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>ברירות המחדל נקבעו דרך הגדרות כלי מחולל הסיסמאות של Bitwarden.</value>
+    <value>Option defaults are set from the main Bitwarden app's password generator tool.</value>
   </data>
   <data name="Options" xml:space="preserve">
-    <value>אפשרויות</value>
+    <value>Options</value>
   </data>
   <data name="Other" xml:space="preserve">
-    <value>אחר</value>
+    <value>Other</value>
   </data>
   <data name="PasswordGenerated" xml:space="preserve">
-    <value>הסיסמה נוצרה.</value>
+    <value>Password generated.</value>
   </data>
   <data name="PasswordGenerator" xml:space="preserve">
-    <value>יוצר הסיסמאות</value>
+    <value>Password Generator</value>
   </data>
   <data name="PasswordHint" xml:space="preserve">
-    <value>רמז לסיסמה</value>
+    <value>Password Hint</value>
   </data>
   <data name="PasswordHintAlert" xml:space="preserve">
-    <value>שלחנו לך אימייל עם רמז לסיסמה הראשית.</value>
+    <value>We've sent you an email with your master password hint.</value>
   </data>
   <data name="PasswordOverrideAlert" xml:space="preserve">
-    <value>האם אתה בטוח שברצונך לדרוס את הסיסמה הקיימת?</value>
+    <value>Are you sure you want to overwrite the current password?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>תוכנת Bitwarden מסנכרנת את הכספת שלך בעזרת הודעות push. לחוויה הטובה ביותר, אנא בחר "התר" או "אפשר" בחלון הבא אם תתבקש לאפשר את הרשאת "הודעות push".</value>
+    <value>Bitwarden keeps your vault automatically synced by using push notifications. For the best possible experience, please select "Allow" on the following prompt when asked to enable push notifications.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
-    <value>דרג את האפליקציה</value>
+    <value>Rate the App</value>
   </data>
   <data name="RateTheAppDescription" xml:space="preserve">
-    <value>אם נהנית מהתוכנה, בבקשה דרג את התוכנה וכתוב דירוג עם חוות דעת טובה!</value>
+    <value>Please consider helping us out with a good review!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
-    <value>צור סיסמה חדשה</value>
+    <value>Regenerate Password</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
-    <value>הקלד שוב סיסמה הראשית</value>
+    <value>Re-type Master Password</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
-    <value>חיפוש בכספת</value>
+    <value>Search vault</value>
   </data>
   <data name="Security" xml:space="preserve">
-    <value>אבטחה</value>
+    <value>Security</value>
   </data>
   <data name="Select" xml:space="preserve">
-    <value>בחר</value>
+    <value>Select</value>
   </data>
   <data name="SetPIN" xml:space="preserve">
-    <value>קבע קוד PIN</value>
+    <value>Set PIN</value>
   </data>
   <data name="SetPINDirection" xml:space="preserve">
-    <value>הזן קוד PIN של 4 ספרות בכדי לבטל את נעילת האפליקציה.</value>
+    <value>Enter a 4 digit PIN code to unlock the app with.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
-    <value>מידע על הפריט</value>
+    <value>Item Information</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>הפריט עודכן.</value>
+    <value>Item updated.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
-    <value>שולח...</value>
+    <value>Submitting...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Syncing" xml:space="preserve">
-    <value>מסנכרן...</value>
+    <value>Syncing...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="SyncingComplete" xml:space="preserve">
-    <value>הסינכרון הושלם.</value>
+    <value>Сінхранізацыя завершана.</value>
   </data>
   <data name="SyncingFailed" xml:space="preserve">
-    <value>הסינכרון נכשל.</value>
+    <value>Памылка сінхранізацыі.</value>
   </data>
   <data name="SyncVaultNow" xml:space="preserve">
-    <value>סנכרן את הכספת עכשיו</value>
+    <value>Сінхранізаваць сховішча зараз.</value>
   </data>
   <data name="TouchID" xml:space="preserve">
-    <value>טביעת אצבע Touch ID</value>
+    <value>Touch ID</value>
     <comment>What Apple calls their fingerprint reader.</comment>
   </data>
   <data name="TwoStepLogin" xml:space="preserve">
-    <value>התחברות בשני-שלבים</value>
+    <value>Двухэтапны ўваход</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>התחברות בשני-שלבים הופכת את החשבון שלך למאובטח יותר בכך שאתה נדרש לוודא בכל כניסה בעזרת מכשיר אחר כדוגמת מפתח אבטחה, תוכנת אימות, SMS, שיחת טלפון, או אימייל. ניתן להפעיל את "התחברות בשני-שלבים" בכספת שבאתר bitwarden.com. האם ברצונך לפתוח את האתר כעת?</value>
+    <value>Двухэтапны ўваход робіць ваш уліковы запіс больш бяспечным, патрабуючы пацвярджэння ўваходу на іншай прыладзе, напрыклад, ключом бяспекі, праграмай для праверкі бяспекі, SMS, тэлефонным выклікам або электроннай поштай. Двухэтапны ўваход уключаецца на bitwarden.com. Перайсці на сайт зараз?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
-    <value>בטל נעילה עם {0}</value>
+    <value>Разблакіраваць з {0}</value>
   </data>
   <data name="UnlockWithPIN" xml:space="preserve">
-    <value>בטל נעילה עם קוד PIN</value>
+    <value>Разблакіраваць PIN-кодам</value>
   </data>
   <data name="Validating" xml:space="preserve">
-    <value>מאמת</value>
+    <value>Праверка</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="VerificationCode" xml:space="preserve">
-    <value>קוד אימות</value>
+    <value>Код праверкі</value>
   </data>
   <data name="ViewItem" xml:space="preserve">
-    <value>צפה בפריט</value>
+    <value>Прагляд элемента</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>כספת באתר Bitwarden</value>
+    <value>Вэб-сховішча Bitwarden</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
-    <value>הסרת את אפליקצית האימות?</value>
+    <value>Згубілі праграму праверкі сапраўднасці?</value>
   </data>
   <data name="Items" xml:space="preserve">
-    <value> פריטים </value>
+    <value>Элементы</value>
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">
-    <value>ההרחבה הופעלה!</value>
+    <value>Extension Activated!</value>
   </data>
   <data name="Icons" xml:space="preserve">
-    <value>אייקונים</value>
+    <value>Значкі</value>
   </data>
   <data name="Translations" xml:space="preserve">
-    <value>תרגומים</value>
+    <value>Пераклады</value>
   </data>
   <data name="ItemsForUri" xml:space="preserve">
-    <value>פריטים עבור {0}</value>
+    <value>Элементы для {0}</value>
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>
   <data name="NoItemsForUri" xml:space="preserve">
-    <value>אין פריטים בכספת שלך עבור {0}.</value>
+    <value>У вашым сховішчы няма элементаў для {0}.</value>
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
     <value>When you select an input field and see a Bitwarden auto-fill overlay, you can tap it to launch the auto-fill service.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
-    <value>לחץ על הודעה זו בכדי למלא את הטופס לפי הפרטים השמורים בכספת שלך.</value>
+    <value>Tap this notification to auto-fill an item from your vault.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
-    <value>פתח הגדרות נגישות</value>
+    <value>Open Accessibility Settings</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
-    <value>1. בחלון מצב הנגישות של אנדרואיד, לחץ על "Bitwarden" תחת הכותרת "שירותים".</value>
+    <value>1. On the Android Accessibility Settings screen, touch "Bitwarden" under the Services heading.</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
-    <value>2. הפעל את האפשרות ולחץ אישור.</value>
+    <value>2. Switch on the toggle and press OK to accept.</value>
   </data>
   <data name="Disabled" xml:space="preserve">
-    <value>מבוטל</value>
+    <value>Адключана</value>
   </data>
   <data name="Enabled" xml:space="preserve">
-    <value>מופעל</value>
+    <value>Уключана</value>
   </data>
   <data name="Status" xml:space="preserve">
-    <value>סטטוס</value>
+    <value>Стан</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
-    <value>הדרך הקלה ביותר להוספת סיסמאות לכספת היא דרך שירות ההשלמה האוטומטי של Bitwarden. למד עוד אודות השימוש ביכולת ההשלמה האוטומטית של 
-Bitwarden בעזרת פתיחת חלון "הגדרות".</value>
+    <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
-    <value>השלמה אוטומטית</value>
+    <value>Auto-fill</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
-    <value>האם ברצונך להפעיל את ההשלמה האוטומטית או לצפות בפריט זה?</value>
+    <value>Do you want to auto-fill or view this item?</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>האם אתה בטוח שברצונך לבצע השלמה אוטומטית בעזרת פריט זה? יתכן שפריט זה לא מותאם עבור "{0}" במלואו.</value>
+    <value>Are you sure you want to auto-fill this item? It is not a complete match for "{0}".</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
-    <value>פריטים תואמים</value>
+    <value>Matching Items</value>
   </data>
   <data name="PossibleMatchingItems" xml:space="preserve">
-    <value>פריטים תואמים אך לא במלואם</value>
+    <value>Possible Matching Items</value>
   </data>
   <data name="Search" xml:space="preserve">
-    <value>חיפוש</value>
+    <value>Пошук</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
-    <value>אתה מחפש פריט להשלמה אוטומטית עבור "{0}".</value>
+    <value>You are searching for an auto-fill item for "{0}".</value>
   </data>
   <data name="ShareVault" xml:space="preserve">
-    <value>שתף את הכספת שלך</value>
+    <value>Share Your Vault</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
-    <value>לא ניתן לפתוח את האפליקציה "{0}".</value>
+    <value>Cannot open the app "{0}".</value>
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
   </data>
   <data name="AuthenticatorAppTitle" xml:space="preserve">
-    <value>אפליקציית אימות</value>
+    <value>Праграма праверкі сапраўднасці</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeApp" xml:space="preserve">
-    <value>הכנס את קוד האימות בן 6 הספרות מאפליקציית האימות שלך.</value>
+    <value>Увядзіце 6 лічбаў кода праверкі з вашай праграмы праверкі сапраўднасці.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeEmail" xml:space="preserve">
-    <value>הכנס את קוד האימות בן 6 הספרות שנשלח לכתובת המייל {0}.</value>
+    <value>Увядзіце 6 лічбаў кода праверкі, які быў адпраўлены на {0}.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
-    <value>פרטי כניסה לא זמינים</value>
+    <value>Уваход недаступны</value>
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>בחשבון זה הופעלה האפשרות לכניסה דו שלבית, אך אף אחד מהספקים עבור כניסה הדו שלבית לא נתמך במכשיר זה. אנא השתמש במכשיר אחר ו\או הוסף ספקים אחרים שנתמכים במכשירים נוספים (לדוגמא - אפליקציית אימות).</value>
+    <value>This account has two-step login enabled, however, none of the configured two-step providers are supported on this device. Please use a supported device and/or add additional providers that are better supported across devices (such as an authenticator app).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
-    <value>שחזור קוד</value>
+    <value>Код аднаўлення</value>
     <comment>For 2FA</comment>
   </data>
   <data name="RememberMe" xml:space="preserve">
-    <value>זכור אותי</value>
+    <value>Запомніць мяне</value>
     <comment>Remember my two-step login</comment>
   </data>
   <data name="SendVerificationCodeAgain" xml:space="preserve">
-    <value>שלח שוב קוד אימות לאימייל</value>
+    <value>Адправіць код пацвярджэння зноў</value>
     <comment>For 2FA</comment>
   </data>
   <data name="TwoStepLoginOptions" xml:space="preserve">
-    <value>אפשרויות כניסה דו שלבית</value>
+    <value>Параметры двухэтапнага ўваходу</value>
   </data>
   <data name="UseAnotherTwoStepMethod" xml:space="preserve">
-    <value>השתמש בשיטה אחרת עבור כניסה דו שלבית</value>
+    <value>Выкарыстоўваць іншы метад двухэтапнага ўваходу</value>
   </data>
   <data name="VerificationEmailNotSent" xml:space="preserve">
-    <value>לא ניתן לשלוח אימייל לאימות. נסה שוב.</value>
+    <value>Could not send verification email. Try again.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
-    <value>מייל אימות נשלח.</value>
+    <value>Адпраўлены ліст з пацвярджэннем.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
-    <value>להמשך, קרב את מפתח הYubiKey NEO שלך כנגד גב המכשיר שלך או הכנס את מפתח YubiKey לחיבור הUSB של המכשיר שלך, ואז לחץ על הכפתור שלו.</value>
+    <value>To continue, hold your YubiKey NEO against the back of the device or insert your YubiKey into your device's USB port, then touch its button.</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
-    <value>מפתח אבטחה של YubiKey</value>
+    <value>Ключ бяспекі YubiKey</value>
     <comment>"YubiKey" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
-    <value>צרף קובץ חדש</value>
+    <value>Дадаць новае далучэнне</value>
   </data>
   <data name="Attachments" xml:space="preserve">
-    <value>קבצים מצורפים</value>
+    <value>Далучэнні</value>
   </data>
   <data name="UnableToDownloadFile" xml:space="preserve">
-    <value>לא ניתן להוריד את הקובץ.</value>
+    <value>Немагчыма спампаваць файл.</value>
   </data>
   <data name="UnableToOpenFile" xml:space="preserve">
-    <value>המכשיר שלך לא יכול לפתוח סוג זה של קובץ.</value>
+    <value>Your device cannot open this type of file.</value>
   </data>
   <data name="Downloading" xml:space="preserve">
-    <value>מוריד...</value>
+    <value>Спампоўванне...</value>
     <comment>Message shown when downloading a file</comment>
   </data>
   <data name="AttachmentLargeWarning" xml:space="preserve">
-    <value>גודל הקובץ המצורף הוא {0}. האם אתה בטוח שברצונך להוריד אותו למכשירך?</value>
+    <value>This attachment is {0} in size. Are you sure you want to download it onto your device?</value>
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
   <data name="AuthenticatorKey" xml:space="preserve">
-    <value>מפתח אימות (TOTP)</value>
+    <value>Ключ праверкі сапраўднасці (TOTP)</value>
   </data>
   <data name="VerificationCodeTotp" xml:space="preserve">
-    <value>קוד אימות (TOTP)</value>
+    <value>Код праверкі (TOTP)</value>
     <comment>Totp code label</comment>
   </data>
   <data name="AuthenticatorKeyAdded" xml:space="preserve">
-    <value>מפתח אימות נוסף.</value>
+    <value>Ключ праверкі сапраўднасці дададзены.</value>
   </data>
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
-    <value>קריאת מפתח האימות נכשלה.</value>
+    <value>Cannot read authenticator key.</value>
   </data>
   <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>הסריקה מתבצעת אוטומטית.</value>
+    <value>Scanning will happen automatically.</value>
   </data>
   <data name="CameraInstructionTop" xml:space="preserve">
-    <value>כוון את המצלמה לכיוון קוד הQR.</value>
+    <value>Point your camera at the QR code.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
-    <value>סרוק קוד QR</value>
+    <value>Сканаваць QR -код</value>
   </data>
   <data name="Camera" xml:space="preserve">
-    <value>מצלמה</value>
+    <value>Камера</value>
   </data>
   <data name="Photos" xml:space="preserve">
-    <value>תמונות</value>
+    <value>Фота</value>
   </data>
   <data name="CopyTotp" xml:space="preserve">
-    <value>העתק TOTP</value>
+    <value>Капіяваць TOTP</value>
   </data>
   <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>אם פרטי הכניסה שלך מקושרים לאפליקציית אימות, קוד האימות TOTP מועתק אוטומטית לזיכרון שלך ברגע שמתבצעת ההשלמה האוטומטית לטופס הכניסה.</value>
+    <value>If your login has an authenticator key attached to it, the TOTP verification code is automatically copied to your clipboard whenever you auto-fill the login.</value>
   </data>
   <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>בטל העתקה אוטומטית של קוד TOTP</value>
+    <value>Disable Automatic TOTP Copy</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
-    <value>בכדי להשתמש ביכולת זו יש צורך במנוי פרמיום.</value>
+    <value>A premium membership is required to use this feature.</value>
   </data>
   <data name="AttachementAdded" xml:space="preserve">
-    <value>קובץ מצורף התווסף</value>
+    <value>Attachment added</value>
   </data>
   <data name="AttachmentDeleted" xml:space="preserve">
-    <value>קובץ מצורף נמחק</value>
+    <value>Attachment deleted</value>
   </data>
   <data name="ChooseFile" xml:space="preserve">
-    <value>בחר קובץ</value>
+    <value>Choose File</value>
   </data>
   <data name="File" xml:space="preserve">
-    <value>קובץ</value>
+    <value>File</value>
   </data>
   <data name="NoFileChosen" xml:space="preserve">
-    <value>לא נבחר קובץ</value>
+    <value>No file chosen</value>
   </data>
   <data name="NoAttachments" xml:space="preserve">
-    <value>אין קבצים מצורפים.</value>
+    <value>There are no attachments.</value>
   </data>
   <data name="FileSource" xml:space="preserve">
-    <value>מקור הקובץ</value>
+    <value>File Source</value>
   </data>
   <data name="FeatureUnavailable" xml:space="preserve">
-    <value>יכולת זו לא זמינה</value>
+    <value>Feature Unavailable</value>
   </data>
   <data name="MaxFileSize" xml:space="preserve">
-    <value>גודל הקובץ המירבי הוא 100 מגה.</value>
+    <value>Maximum file size is 100 MB.</value>
   </data>
   <data name="UpdateKey" xml:space="preserve">
-    <value>לא ניתן להשתמש ביכולת זו עד שתעדכן את מפתח ההצפנה שלך.</value>
+    <value>You cannot use this feature until you update your encryption key.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
-    <value>למידע נוסף</value>
+    <value>Learn More</value>
   </data>
   <data name="ApiUrl" xml:space="preserve">
-    <value>כתובת שרת הAPI</value>
+    <value>API Server URL</value>
   </data>
   <data name="CustomEnvironment" xml:space="preserve">
-    <value>סביבה מותאמת אישית</value>
+    <value>Custom Environment</value>
   </data>
   <data name="CustomEnvironmentFooter" xml:space="preserve">
-    <value>למשתמשים מתקדמים. באפשרותך לציין את כתובת השרת עבור כל שירות בנפרד.</value>
+    <value>Для вопытных карыстальнікаў. Можна ўвесці URL-адрасы асобна для кжонай службы.</value>
   </data>
   <data name="EnvironmentSaved" xml:space="preserve">
-    <value>כתובות הסביבה נשמרו.</value>
+    <value>URL-адрас сервера асяроддзя захаваны.</value>
   </data>
   <data name="FormattedIncorrectly" xml:space="preserve">
-    <value>{0} לא כתוב בצורה תקינה.</value>
+    <value>{0} is not correctly formatted.</value>
     <comment>Validation error when something is not formatted correctly, such as a URL or email address.</comment>
   </data>
   <data name="IdentityUrl" xml:space="preserve">
-    <value>כתובת שרת הזהות</value>
+    <value>URL-адрас сервера ідэнтыфікацыі</value>
     <comment>"Identity" refers to an identity server. See more context here https://en.wikipedia.org/wiki/Identity_management</comment>
   </data>
   <data name="SelfHostedEnvironment" xml:space="preserve">
-    <value>סביבה על שרתים מקומיים</value>
+    <value>Асяроддзе ўласнага хостынгу</value>
   </data>
   <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
-    <value>הזן את כתובת השרת המקומי של Bitwarden.</value>
+    <value>Увядзіце асноўны URL-адрас на вашым серверы.</value>
   </data>
   <data name="ServerUrl" xml:space="preserve">
-    <value>כתובת שרת</value>
+    <value>URL-адрас сервера</value>
   </data>
   <data name="WebVaultUrl" xml:space="preserve">
-    <value>כתובת שרת הכספת</value>
+    <value>URL-адрас сервера вэб-сховішча</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
-    <value>לחץ על הודעה זו בכדי לצפות בפרטים השמורים בכספת שלך.</value>
+    <value>Tap this notification to view items from your vault.</value>
   </data>
   <data name="CustomFields" xml:space="preserve">
-    <value>שדות מותאמים אישית</value>
+    <value>Карыстальніцкія палі</value>
   </data>
   <data name="CopyNumber" xml:space="preserve">
-    <value>העתק מספר</value>
+    <value>Капіяваць нумар</value>
   </data>
   <data name="CopySecurityCode" xml:space="preserve">
-    <value>העתק קוד אבטחה</value>
+    <value>Капіяваць код бяспекі</value>
   </data>
   <data name="Number" xml:space="preserve">
-    <value>מספר</value>
+    <value>Нумар</value>
   </data>
   <data name="SecurityCode" xml:space="preserve">
-    <value>קוד האבטחה</value>
+    <value>Код бяспекі</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
-    <value>כרטיס</value>
+    <value>Картка</value>
   </data>
   <data name="TypeIdentity" xml:space="preserve">
-    <value>זהות</value>
+    <value>Пасведчанне</value>
   </data>
   <data name="TypeLogin" xml:space="preserve">
-    <value>כניסה</value>
+    <value>Імя карыстальніка</value>
   </data>
   <data name="TypeSecureNote" xml:space="preserve">
-    <value>פתק מאובטח</value>
+    <value>Бяспечныя нататкі</value>
   </data>
   <data name="Address1" xml:space="preserve">
-    <value>כתובת 1</value>
+    <value>Радок адрасу 1</value>
   </data>
   <data name="Address2" xml:space="preserve">
-    <value>כתובת 2</value>
+    <value>Радок адрасу 2</value>
   </data>
   <data name="Address3" xml:space="preserve">
-    <value>כתובת 3</value>
+    <value>Радок адрасу 3</value>
   </data>
   <data name="April" xml:space="preserve">
-    <value>אפריל</value>
+    <value>Красавік</value>
   </data>
   <data name="August" xml:space="preserve">
-    <value>אוגוסט</value>
+    <value>Жнівень</value>
   </data>
   <data name="Brand" xml:space="preserve">
-    <value>מותג</value>
+    <value>Тып карткі</value>
   </data>
   <data name="CardholderName" xml:space="preserve">
-    <value>שם בעל הכרטיס</value>
+    <value>Імя ўладальніка карткі</value>
   </data>
   <data name="CityTown" xml:space="preserve">
-    <value>עיר \ ישוב</value>
+    <value>Горад / Пасёлак</value>
   </data>
   <data name="Company" xml:space="preserve">
-    <value>חברה</value>
+    <value>Кампанія</value>
   </data>
   <data name="Country" xml:space="preserve">
-    <value>מדינה</value>
+    <value>Краіна</value>
   </data>
   <data name="December" xml:space="preserve">
-    <value>דצמבר</value>
+    <value>Снежань</value>
   </data>
   <data name="Dr" xml:space="preserve">
-    <value>דוקטור</value>
+    <value>Док.</value>
   </data>
   <data name="ExpirationMonth" xml:space="preserve">
-    <value>תוקף אשראי - חודש</value>
+    <value>Месяц заканчэння</value>
   </data>
   <data name="ExpirationYear" xml:space="preserve">
-    <value>תוקף אשראי - שנה</value>
+    <value>Год заканчэння</value>
   </data>
   <data name="February" xml:space="preserve">
-    <value>פברואר</value>
+    <value>Люты</value>
   </data>
   <data name="FirstName" xml:space="preserve">
-    <value>שם פרטי</value>
+    <value>Імя</value>
   </data>
   <data name="January" xml:space="preserve">
-    <value>ינואר</value>
+    <value>Студзень</value>
   </data>
   <data name="July" xml:space="preserve">
-    <value>יולי</value>
+    <value>Ліпень</value>
   </data>
   <data name="June" xml:space="preserve">
-    <value>יוני</value>
+    <value>Чэрвень</value>
   </data>
   <data name="LastName" xml:space="preserve">
-    <value>שם משפחה</value>
+    <value>Прозвішча</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
-    <value>מספר רשיון</value>
+    <value>Нумар ліцэнзіі</value>
   </data>
   <data name="March" xml:space="preserve">
-    <value>מרץ</value>
+    <value>Сакавік</value>
   </data>
   <data name="May" xml:space="preserve">
-    <value>מאי</value>
+    <value>Май</value>
   </data>
   <data name="MiddleName" xml:space="preserve">
-    <value>שם אמצעי</value>
+    <value>Імя па бацьку</value>
   </data>
   <data name="Mr" xml:space="preserve">
-    <value>מר</value>
+    <value>С-р</value>
   </data>
   <data name="Mrs" xml:space="preserve">
-    <value>גברת</value>
+    <value>С-ня</value>
   </data>
   <data name="Ms" xml:space="preserve">
-    <value>העלמה</value>
+    <value>Пані</value>
   </data>
   <data name="November" xml:space="preserve">
-    <value>נובמבר</value>
+    <value>Лістапад</value>
   </data>
   <data name="October" xml:space="preserve">
-    <value>אוקטובר</value>
+    <value>Кастрычнік</value>
   </data>
   <data name="PassportNumber" xml:space="preserve">
-    <value>מספר דרכון</value>
+    <value>Нумар пашпарта</value>
   </data>
   <data name="Phone" xml:space="preserve">
-    <value>טלפון</value>
+    <value>Тэлефон</value>
   </data>
   <data name="September" xml:space="preserve">
-    <value>ספטמבר</value>
+    <value>Верасень</value>
   </data>
   <data name="SSN" xml:space="preserve">
-    <value>מספר ביטוח לאומי</value>
+    <value>Social Security Number</value>
   </data>
   <data name="StateProvince" xml:space="preserve">
-    <value>מדינה \ מחוז</value>
+    <value>State / Province</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>תואר</value>
+    <value>Title</value>
   </data>
   <data name="ZipPostalCode" xml:space="preserve">
-    <value>מיקוד</value>
+    <value>Паштовы індэкс</value>
   </data>
   <data name="Address" xml:space="preserve">
-    <value>כתובת</value>
+    <value>Адрас</value>
   </data>
   <data name="Expiration" xml:space="preserve">
-    <value>תוקף</value>
+    <value>Тэрмін дзеяння</value>
   </data>
   <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>בטל אייקונים של האתר</value>
+    <value>Адключыць значкі вэб-сайтаў</value>
   </data>
   <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>האייקונים של האתר מציג תמונה או אייקון מוכר ליד פרטי הכניסה שבכספת שלך.</value>
+    <value>Значкі вэб-сайтаў паказваюцца з кожным элементам у вашым сховішчы.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
-    <value>כתובת השרת עבור האייקון</value>
+    <value>URL-адрас сервера значкоў</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>השלמה אוטומטית עם Bitwarden</value>
+    <value>Auto-fill with Bitwarden</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
-    <value>הכספת נעולה</value>
+    <value>Vault is locked</value>
   </data>
   <data name="GoToMyVault" xml:space="preserve">
-    <value>עבור לכספת שלי</value>
+    <value>Go to my vault</value>
   </data>
   <data name="Collections" xml:space="preserve">
-    <value>אוספים</value>
+    <value>Калекцыі</value>
   </data>
   <data name="NoItemsCollection" xml:space="preserve">
-    <value>אין פרטים באוסף זה.</value>
+    <value>There are no items in this collection.</value>
   </data>
   <data name="NoItemsFolder" xml:space="preserve">
-    <value>אין פריטים בתיקיה זו.</value>
+    <value>There are no items in this folder.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
-    <value>שירות נגישות עבור ההשלמה האוטומטית</value>
+    <value>Auto-fill Accessibility Service</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>שירות ההשלמה האוטומטית משתמש ביכולת ההשלמה האוטומטית של מערכת ההפעלה אנדרואיד בכדי לעזור לך בהשלמת פרטי הכניסה, כרטיסי אשראי, ופרטי זהות לתוך אפליקציות שונות במכשירך.</value>
+    <value>The Bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>השתמש בשירות ההשלמה האוטומטי של Bitwarden בכדי למלא טפסי כניסה, פרטי כרטיס אשראי, ופרטי זהות בצורה מאובטחת לתוך אפליקציות אחרות.</value>
+    <value>Use the Bitwarden auto-fill service to fill logins, credit cards, and identity information into other apps.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
-    <value>פתח את הגדרות ההשלמה האוטומטית</value>
+    <value>Open Autofill Settings</value>
   </data>
   <data name="FaceID" xml:space="preserve">
-    <value>מזהה פנים של Apple</value>
+    <value>Face ID</value>
     <comment>What Apple calls their facial recognition reader.</comment>
   </data>
   <data name="FaceIDDirection" xml:space="preserve">
-    <value>השתמש בזיהוי פנים של Apple עבור זיהוי.</value>
+    <value>Use Face ID to verify.</value>
   </data>
   <data name="UseFaceIDToUnlock" xml:space="preserve">
-    <value>השתמש בזיהוי פנים של Apple עבור פתיחת המכשיר</value>
+    <value>Use Face ID To Unlock</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
-    <value>ודא זיהוי פנים</value>
+    <value>Verify Face ID</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
-    <value>לא הצלחנו לפתוח את הגדרות ההשלמה האוטומטית של אנדרואיד עבורך. באפשרותך לפתוח את הגדרות ההשלמה האוטומטית בצורה ידנית דרך הגדרות אנדרואיד &lt; מערכת &lt; שפה וקלט &lt; מתקדם &lt; שירות השלמה אוטומטית</value>
+    <value>We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings &gt; System &gt; Languages and input &gt; Advanced &gt; Autofill service.</value>
   </data>
   <data name="CustomFieldName" xml:space="preserve">
-    <value>שם שדה מותאם אישית</value>
+    <value>Custom Field Name</value>
   </data>
   <data name="FieldTypeBoolean" xml:space="preserve">
-    <value>אמת או שקר</value>
+    <value>Boolean</value>
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
-    <value>מוסתר</value>
+    <value>Hidden</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
-    <value>טקסט</value>
+    <value>Text</value>
   </data>
   <data name="NewCustomField" xml:space="preserve">
-    <value>שדה מותאם אישית חדש</value>
+    <value>New Custom Field</value>
   </data>
   <data name="SelectTypeField" xml:space="preserve">
-    <value>איזה סוג של שדה מותאם אישית ברצונך להוסיף?</value>
+    <value>What type of custom field do you want to add?</value>
   </data>
   <data name="Remove" xml:space="preserve">
-    <value>הסר</value>
+    <value>Remove</value>
   </data>
   <data name="NewUri" xml:space="preserve">
-    <value>כתובת חדשה</value>
+    <value>New URI</value>
   </data>
   <data name="URIPosition" xml:space="preserve">
-    <value>כתובת {0}</value>
+    <value>URI {0}</value>
     <comment>Label for a uri/url with position. i.e. URI 1, URI 2, etc</comment>
   </data>
   <data name="BaseDomain" xml:space="preserve">
-    <value>שם בסיס הדומיין</value>
+    <value>Base domain</value>
   </data>
   <data name="Default" xml:space="preserve">
-    <value>ברירת המחדל</value>
+    <value>Default</value>
   </data>
   <data name="Exact" xml:space="preserve">
-    <value>מדויק</value>
+    <value>Exact</value>
   </data>
   <data name="Host" xml:space="preserve">
-    <value>שרת</value>
+    <value>Host</value>
     <comment>A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'.</comment>
   </data>
   <data name="RegEx" xml:space="preserve">
-    <value>ביטוי רגולרי</value>
+    <value>Regular expression</value>
     <comment>A programming term, also known as 'RegEx'.</comment>
   </data>
   <data name="StartsWith" xml:space="preserve">
-    <value>מתחיל עם</value>
+    <value>Starts with</value>
   </data>
   <data name="URIMatchDetection" xml:space="preserve">
-    <value>זיהוי התאמת כתובות</value>
+    <value>URI Match Detection</value>
   </data>
   <data name="MatchDetection" xml:space="preserve">
-    <value>זיהוי התאמה</value>
+    <value>Match Detection</value>
     <comment>URI match detection for auto-fill.</comment>
   </data>
   <data name="YesAndSave" xml:space="preserve">
-    <value>כן, ושמור</value>
+    <value>Yes, and Save</value>
   </data>
   <data name="AutofillAndSave" xml:space="preserve">
-    <value>השלמה אוטומטית ושמירה</value>
+    <value>Auto-fill and save</value>
   </data>
   <data name="Organization" xml:space="preserve">
-    <value>ארגון</value>
+    <value>Organization</value>
     <comment>An entity of multiple related people (ex. a team or business organization).</comment>
   </data>
   <data name="HoldYubikeyNearTop" xml:space="preserve">
-    <value>קרב את מפתח הYubikey למכשיר.</value>
+    <value>Hold your Yubikey near the top of the device.</value>
   </data>
   <data name="TryAgain" xml:space="preserve">
-    <value>נסה שוב</value>
+    <value>Try again</value>
   </data>
   <data name="YubiKeyInstructionIos" xml:space="preserve">
-    <value>להמשך, קרב את מפתח הYubiKey NEO לגב המכשיר.</value>
+    <value>To continue, hold your YubiKey NEO against the back of the device.</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
-    <value>שירות הנגישות יכול להיות שימושי כשאפליקציות לא תומכות בשירות ההשלמה אוטומטית הרגיל.</value>
+    <value>The accessibility service may be helpful to use when apps do not support the standard auto-fill service.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
-    <value>הסיסמה עודכנה</value>
+    <value>Пароль абноўлены</value>
     <comment>ex. Date this password was updated</comment>
   </data>
   <data name="DateUpdated" xml:space="preserve">
-    <value>עודכן</value>
+    <value>Абноўлена</value>
     <comment>ex. Date this item was updated</comment>
   </data>
   <data name="AutofillActivated" xml:space="preserve">
-    <value>השלמה אוטומטית הופעלה!</value>
+    <value>AutoFill Activated!</value>
   </data>
   <data name="MustLogInMainAppAutofill" xml:space="preserve">
-    <value>חובה להתחבר לאפליקציה הראשית של Bitwarden לפני שתוכל להשתמש בהשלמה האוטומטית.</value>
+    <value>You must log into the main Bitwarden app before you can use AutoFill.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
-    <value>כל פרטי הכניסה שלך נגישים ישירות מהמקלדת ברגע החיבור לאפליקציות ולאתרים.</value>
+    <value>Your logins are now easily accessible right from your keyboard while logging into apps and websites.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
-    <value>אנו ממליצים לבטל את כל שאר שירותי ההשלמה האוטומטית בהגדרות המערכת בפרט אם אינך מעוניין להשתמש בהם.</value>
+    <value>We recommend disabling any other AutoFill apps under Settings if you do not plan to use them.</value>
   </data>
   <data name="BitwardenAutofillDescription" xml:space="preserve">
-    <value>גש לכספת שלך ישירות מהמקלדת עבור השלמה אוטומטית של סיסמאות.</value>
+    <value>Access your vault directly from your keyboard to quickly autofill passwords.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
-    <value>להפעלת השלמה אוטומטית במכשירך, עקוב אחר ההוראות:</value>
+    <value>To enable password autofill on your device, follow these instructions:</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
-    <value>1. עבור לאפליקציית "הגדרות" של iOS</value>
+    <value>1. Go to the iOS "Settings" app</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. לחץ על "סיסמאות וחשבונות"</value>
+    <value>2. Tap "Passwords &amp; Accounts"</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
-    <value>3. לחץ על "השלם סיסמאות באופן אוטומטי"</value>
+    <value>3. Tap "AutoFill Passwords"</value>
   </data>
   <data name="AutofillTurnOn4" xml:space="preserve">
-    <value>4. הפעל השלמה אוטומטית</value>
+    <value>4. Turn on AutoFill</value>
   </data>
   <data name="AutofillTurnOn5" xml:space="preserve">
-    <value>5. בחר את "Bitwarden"</value>
+    <value>5. Select "Bitwarden"</value>
   </data>
   <data name="PasswordAutofill" xml:space="preserve">
-    <value>השלמת סיסמאות אוטומטית</value>
+    <value>Password AutoFill</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
-    <value>הדרך הקלה ביותר להוספת פרטי כניסה לכספת שלך היא בעזרת התוסף של Bitwarden להשלמת סיסמאות. למד עוד אודות השימוש בתוסף של Bitwarden להשלמת סיסמאות בעזרת פתיחת חלון "הגדרות".</value>
+    <value>The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the "Settings" screen.</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
-    <value>כתובת אימייל לא תקינה.</value>
+    <value>Памылковы адрас электроннай пошты.</value>
   </data>
   <data name="Cards" xml:space="preserve">
-    <value>כרטיסים</value>
+    <value>Карткі</value>
   </data>
   <data name="Identities" xml:space="preserve">
-    <value>זהויות</value>
+    <value>Пасведчанні</value>
   </data>
   <data name="Logins" xml:space="preserve">
-    <value>פרטי התחברות</value>
+    <value>Імёны карыстальніка</value>
   </data>
   <data name="SecureNotes" xml:space="preserve">
-    <value>פתקים מאובטחים</value>
+    <value>Бяспечныя нататкі</value>
   </data>
   <data name="AllItems" xml:space="preserve">
-    <value>כל הפריטים</value>
+    <value>Усе элементы</value>
   </data>
   <data name="URIs" xml:space="preserve">
-    <value>כתובות</value>
+    <value>URIs</value>
     <comment>Plural form of a URI</comment>
   </data>
   <data name="CheckingPassword" xml:space="preserve">
-    <value>בודק סיסמה...</value>
+    <value>Праверка пароля...</value>
     <comment>A loading message when doing an exposed password check.</comment>
   </data>
   <data name="CheckPassword" xml:space="preserve">
-    <value>בדוק אם הסיסמה נחשפה.</value>
+    <value>Праверце, ці не скампраметаваны пароль.</value>
   </data>
   <data name="PasswordExposed" xml:space="preserve">
-    <value>הסיסמה הזו נחשפה {0} פעמים בפריצות אבטחה. כדאי לשנות אותה.</value>
+    <value>Гэты пароль быў скампраметаваны {0} раз(-ы/-оў). Вы павінны змяніць яго.</value>
   </data>
   <data name="PasswordSafe" xml:space="preserve">
-    <value>הסיסמה לא נמצאה בפריצות אבטחה ידועות. היא בטוחה לשימוש.</value>
+    <value>Гэты пароль не быў знойдзены ў вядомых базах уцечак. Можна працягваць яго выкарыстоўваць.</value>
   </data>
   <data name="IdentityName" xml:space="preserve">
-    <value>שם הזהות</value>
+    <value>Імя</value>
   </data>
   <data name="Value" xml:space="preserve">
-    <value>ערך</value>
+    <value>Значэнне</value>
   </data>
   <data name="PasswordHistory" xml:space="preserve">
-    <value>היסטוריית סיסמאות</value>
+    <value>Гісторыя пароляў</value>
   </data>
   <data name="Types" xml:space="preserve">
-    <value>סוגים</value>
+    <value>Тыпы</value>
   </data>
   <data name="NoPasswordsToList" xml:space="preserve">
-    <value>אין סיסמאות להצגה.</value>
+    <value>No passwords to list.</value>
   </data>
   <data name="NoItemsToList" xml:space="preserve">
-    <value>אין פריטים להצגה ברשימה.</value>
+    <value>Няма элементаў для паказу.</value>
   </data>
   <data name="SearchCollection" xml:space="preserve">
-    <value>חפש אוסף</value>
+    <value>Пошук у калекцыі</value>
   </data>
   <data name="SearchFolder" xml:space="preserve">
-    <value>חפש תיקייה</value>
+    <value>Пошук у папцы</value>
   </data>
   <data name="SearchType" xml:space="preserve">
-    <value>חפש סוג</value>
+    <value>Пошук па тыпу</value>
   </data>
   <data name="Type" xml:space="preserve">
-    <value>סוג</value>
+    <value>Тып</value>
   </data>
   <data name="MoveDown" xml:space="preserve">
-    <value>הזז למטה</value>
+    <value>Перамясціць ніжэй</value>
   </data>
   <data name="MoveUp" xml:space="preserve">
-    <value>הזז למעלה</value>
+    <value>Перамясціць вышэй</value>
   </data>
   <data name="Miscellaneous" xml:space="preserve">
-    <value>שונות</value>
+    <value>Іншае</value>
   </data>
   <data name="Ownership" xml:space="preserve">
-    <value>בעלות</value>
+    <value>Уладальнік</value>
   </data>
   <data name="WhoOwnsThisItem" xml:space="preserve">
-    <value>מי הבעלים של הפריט הזה?</value>
+    <value>Каму належыць гэты элемент?</value>
   </data>
   <data name="NoCollectionsToList" xml:space="preserve">
-    <value>אין אוספים להציג ברשימה.</value>
+    <value>Няма калекцый для паказу.</value>
   </data>
   <data name="ItemShared" xml:space="preserve">
-    <value>הפריט שותף.</value>
+    <value>Элемент быў абагулены.</value>
   </data>
   <data name="SelectOneCollection" xml:space="preserve">
-    <value>עליך לבחור לפחות אוסף אחד.</value>
+    <value>Вы павінны выбраць прынамсі адну калекцыю.</value>
   </data>
   <data name="Share" xml:space="preserve">
-    <value>שתף</value>
+    <value>Абагуліць</value>
   </data>
   <data name="ShareItem" xml:space="preserve">
-    <value>שתף פריט</value>
+    <value>Абагуліць элемент</value>
   </data>
   <data name="NoOrgsToList" xml:space="preserve">
-    <value>אין ארגונים להצגה ברשימה.</value>
+    <value>Няма арганізацый для паказу.</value>
   </data>
   <data name="ShareDesc" xml:space="preserve">
-    <value>בחר ארגון שאיתו תרצה לשתף פריט זה. השיתוף מעביר את הבעלות על הפריט לארגון. אתה לא תהיה הבעלים הישיר של הפריט לאחר השיתוף.</value>
+    <value>Выберыце арганізацыю, якой вы хочаце даць доступ да гэтага элемента. Пасля выканання гэтай аперацыі, правы на элемент будуць перададзены арганізацыі і вы не будзеце з'яўляцца непасрэдным уладальнікам гэтага элемента.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
-    <value>מספר מילים</value>
+    <value>Колькасць слоў</value>
   </data>
   <data name="Passphrase" xml:space="preserve">
-    <value>משפט סיסמה</value>
+    <value>Passphrase</value>
   </data>
   <data name="WordSeparator" xml:space="preserve">
-    <value>מפריד מילים</value>
+    <value>Word Separator</value>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>נקה</value>
+    <value>Clear</value>
     <comment>To clear something out. example: To clear browser history.</comment>
   </data>
   <data name="Generator" xml:space="preserve">
-    <value>מחולל</value>
+    <value>Generator</value>
     <comment>Short for "Password Generator"</comment>
   </data>
   <data name="NoFoldersToList" xml:space="preserve">
-    <value>אין תיקיות להצגה ברשימה.</value>
+    <value>There are no folders to list.</value>
   </data>
   <data name="FingerprintPhrase" xml:space="preserve">
-    <value>סיסמת טביעת אצבע</value>
+    <value>Fingerprint Phrase</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="YourAccountsFingerprint" xml:space="preserve">
-    <value>הסיסמה של טביעת האצבעות בחשבון שלך</value>
+    <value>Your account's fingerprint phrase</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="ShareVaultConfirmation" xml:space="preserve">
-    <value>תוכנת Bitwarden מאפשרת לך לשתף את הכספת עם אחרים בעזרת חשבון ארגון. האם תרצה לבקר באתר bitwarden.com ללמוד עוד בנושא זה?</value>
+    <value>Bitwarden allows you to share your vault with others by using an organization account. Would you like to visit the bitwarden.com website to learn more?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
-    <value>יצוא כספת</value>
+    <value>Export Vault</value>
   </data>
   <data name="LockNow" xml:space="preserve">
-    <value>נעל עכשיו</value>
+    <value>Lock Now</value>
   </data>
   <data name="PIN" xml:space="preserve">
-    <value>קוד PIN</value>
+    <value>PIN</value>
   </data>
   <data name="Unlock" xml:space="preserve">
-    <value>בטל נעילה</value>
+    <value>Unlock</value>
   </data>
   <data name="LockOption30Minutes" xml:space="preserve">
-    <value>30 דקות</value>
+    <value>30 minutes</value>
   </data>
   <data name="LockOption5Minutes" xml:space="preserve">
-    <value>5 דקות</value>
+    <value>5 minutes</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
-    <value>קבע קוד PIN לביטול נעילת Bitwarden. הגדרות הPIN יאופסו אם תבצע יציאה מהתוכנה.</value>
+    <value>Set your PIN code for unlocking Bitwarden. Your PIN settings will be reset if you ever fully log out of the application.</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
-    <value>התחברת כ-{0} ל {1}.</value>
+    <value>Logged in as {0} on {1}.</value>
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
-    <value>הכספת שלך נעולה. הזן את הסיסמה הראשית שלך כדי להמשיך.</value>
+    <value>Your vault is locked. Verify your master password to continue.</value>
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
-    <value>הכספת שלך נעולה. הזן את קוד הPIN שלך כדי להמשיך.</value>
+    <value>Your vault is locked. Verify your PIN code to continue.</value>
   </data>
   <data name="Dark" xml:space="preserve">
-    <value>כהה</value>
+    <value>Dark</value>
     <comment>A dark color</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>בהיר</value>
+    <value>Light</value>
     <comment>A light color</comment>
   </data>
   <data name="FiveMinutes" xml:space="preserve">
-    <value>5 דקות</value>
+    <value>5 minutes</value>
   </data>
   <data name="OneMinute" xml:space="preserve">
-    <value>דקה אחת</value>
+    <value>1 minute</value>
   </data>
   <data name="TenSeconds" xml:space="preserve">
-    <value>10 שניות</value>
+    <value>10 seconds</value>
   </data>
   <data name="ThirtySeconds" xml:space="preserve">
-    <value>30 שניות</value>
+    <value>30 seconds</value>
   </data>
   <data name="TwentySeconds" xml:space="preserve">
-    <value>20 שניות</value>
+    <value>20 seconds</value>
   </data>
   <data name="TwoMinutes" xml:space="preserve">
-    <value>2 דקות</value>
+    <value>2 minutes</value>
   </data>
   <data name="ClearClipboard" xml:space="preserve">
-    <value>נקה לוח העתקות</value>
+    <value>Clear Clipboard</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="ClearClipboardDescription" xml:space="preserve">
-    <value>נקה אוטומטית ערכים שהועתקו ללוח ההעתקות (clipboard).</value>
+    <value>Automatically clear copied values from your clipboard.</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="DefaultUriMatchDetection" xml:space="preserve">
-    <value>ברירת מחדל לזיהוי התאמת כתובות</value>
+    <value>Default URI Match Detection</value>
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
-    <value>בחר את דרך ברירת המחדל עבור זיהוי התאמת כתובות כשמבצעים פעולות השלמה אוטומטית.</value>
+    <value>Choose the default way that URI match detection is handled for logins when performing actions such as auto-fill.</value>
   </data>
   <data name="Theme" xml:space="preserve">
-    <value>ערכת נושא</value>
+    <value>Theme</value>
     <comment>Color theme</comment>
   </data>
   <data name="ThemeDescription" xml:space="preserve">
-    <value>שנה את ערכת הצבע של האפליקציה.</value>
+    <value>Change the application's color theme.</value>
   </data>
   <data name="RestartIsRequired" xml:space="preserve">
-    <value>דרושה הפעלה מחדש.</value>
+    <value>Restart is required.</value>
     <comment>Referring to restarting the application.</comment>
   </data>
   <data name="Restarting" xml:space="preserve">
-    <value>מפעיל מחדש...</value>
+    <value>Restarting...</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
-    <value>העתק פתקים</value>
+    <value>Капіяваць нататк</value>
   </data>
   <data name="Exit" xml:space="preserve">
-    <value>יציאה</value>
+    <value>Выхад</value>
   </data>
   <data name="ExitConfirmation" xml:space="preserve">
-    <value>האם את/ה בטוח/ה שברצונך לצאת מ-Bitwarden?</value>
+    <value>Вы сапраўды хочаце выйсці з Bitwarden?</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
-    <value>האם ברצונך לחייב הזנת סיסמה ראשית כשהאפליקציה מופעלת מחדש?</value>
+    <value>Do you want to require unlocking with your master password when the application is restarted?</value>
   </data>
   <data name="Black" xml:space="preserve">
-    <value>שחור</value>
+    <value>Чорная</value>
     <comment>The color black</comment>
   </data>
   <data name="BlacklistedUris" xml:space="preserve">
-    <value>כתובות ברשימה שחורה</value>
+    <value>Blacklisted URIs</value>
   </data>
   <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>כתובות או אפליקציות המופיעות ברשימה לא יוצעו בתהליך ההשלמה האוטומטית. הרשימה צריכה להיות מופרדת בפסיקים. לדוגמא: "https://twitter.com, androidapp://com.twitter.android".</value>
+    <value>URIs that are blacklisted will not offer auto-fill. The list should be comma separated. Ex: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
   <data name="DisableSavePrompt" xml:space="preserve">
-    <value>בטל את הבקשה לשמירה</value>
+    <value>Disable Save Prompt</value>
   </data>
   <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>החלון "שמור" מופיע כשאתה מזין פרטי כניסה בפעם הראשונה.</value>
+    <value>The "Save Prompt" automatically prompts you to save new items to your vault whenever you enter them for the first time.</value>
   </data>
   <data name="LockOptionOnRestart" xml:space="preserve">
-    <value>באתחול האפליקציה</value>
+    <value>Пры перазапуску</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>השלמה אוטומטית הופכת את תהליך הכניסה לאתרים לקל ומאובטח בעת גישה לאתרים ואפליקציות. נראה שלא הפעלת את שירות ההשלמה האוטומטית עבור Bitwarden. אנא הפעל את השירות דרך חלון "הגדרות".</value>
+    <value>Auto-fill makes it easy to securely access your Bitwarden vault from other websites and apps. It looks like you have not enabled an auto-fill service for Bitwarden. Enable auto-fill for Bitwarden from the "Settings" screen.</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
-    <value>שינוי בערכת הנושא יוחל בהפעלה הבאה של האפליקציה.</value>
+    <value>Your theme changes will apply when the app is restarted.</value>
   </data>
   <data name="Capitalize" xml:space="preserve">
-    <value>הפוך לאותיות גדולות</value>
+    <value>З вялікай літары</value>
     <comment>ex. Uppercase the first character of a word.</comment>
   </data>
   <data name="IncludeNumber" xml:space="preserve">
-    <value>כלול מספרים</value>
+    <value>Уключыць лічбу</value>
   </data>
   <data name="Download" xml:space="preserve">
-    <value>הורד</value>
+    <value>Спампаваць</value>
   </data>
   <data name="Shared" xml:space="preserve">
-    <value>משותף</value>
+    <value>Абагуленыя</value>
   </data>
   <data name="ToggleVisibility" xml:space="preserve">
-    <value>הצג או הסתר</value>
+    <value>Пераключыць бачнасць</value>
   </data>
   <data name="LoginExpired" xml:space="preserve">
-    <value>תוקף החיבור שלך הסתיים.</value>
+    <value>Скончыўся тэрмін дзеяння вашага сеансу.</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
-    <value>השתמש בזיהוי ביומטרי כדי לאשר.</value>
+    <value>Выкарыстоўваць біяметрычныя даныя для верыфікацыі.</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
-    <value>זיהוי ביומטרי</value>
+    <value>Біяметрычныя даныя</value>
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
-    <value>השתמש בזיהוי ביומטרי לפתיחת הנעילה</value>
+    <value>Выкарыстоўваць біяметрычныя даныя для разблакіроўкі</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
     <value>Bitwarden needs attention - See "Auto-fill Accessibility Service" from Bitwarden Settings</value>

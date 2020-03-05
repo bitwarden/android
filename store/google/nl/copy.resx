@@ -130,7 +130,7 @@
 
 Diefstal van wachtwoorden is een ernstig probleem. De websites en apps die je gebruikt worden dagelijks aangevallen. Beveiligingslekken komen voor en wachtwoorden worden gestolen. Als je hetzelfde wachtwoord gebruikt voor meerdere apps en websites, kunnen hackers gemakkelijk toegang verkrijgen tot je e-mail, bankgegevens en andere belangrijke accounts.
 
-Beveiligingsexperts raden aan om voor lek account een verschillend, willekeurig gegenereerd wachtwoord te gebruiken. Maar hoe beheer je al die wachtwoorden? Bitwarden maakt het je gemakkelijk om deze te genereren, op te slaan en te gebruiken.
+Beveiligingsexperts raden aan om voor elk account een verschillend, willekeurig gegenereerd wachtwoord te gebruiken. Maar hoe beheer je al die wachtwoorden? Bitwarden maakt het je gemakkelijk om deze te genereren, op te slaan en te gebruiken.
 
 Bitwarden slaat al jouw logins op in een versleutelde kluis en synchroniseert deze tussen al je apparaten. Omdat je kluis volledig versleuteld is voor deze zelfs maar het internet opgaat, heb alleen jij toegang tot je gegevens. Zelfs het Bitwarden-team kan het niet lezen, al zouden we dat willen. Jouw gegevens zijn beveiligd met AES-256 bit-versleuteling, salted hashing en PBKDF2 SHA-256.
 

@@ -265,7 +265,7 @@
     <comment>The login button text (verb).</comment>
   </data>
   <data name="LogInNoun" xml:space="preserve">
-    <value>Inloggen</value>
+    <value>Login</value>
     <comment>Title for login page. (noun)</comment>
   </data>
   <data name="LogOut" xml:space="preserve">
@@ -330,7 +330,7 @@
     <value>Opslaan</value>
   </data>
   <data name="Sync" xml:space="preserve">
-    <value>Synchronisatie</value>
+    <value>Synchroniseren</value>
     <comment>The title for the sync page.</comment>
   </data>
   <data name="ThankYou" xml:space="preserve">
@@ -534,7 +534,7 @@
     <value>Onmiddellijk</value>
   </data>
   <data name="LockOptions" xml:space="preserve">
-    <value>Vergrendelingsopties</value>
+    <value>Vergrendeling</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>Inloggen...</value>
@@ -562,11 +562,11 @@
     <value>Het hoofdwachtwoord moet minimaal 8 tekens lang zijn.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
-    <value>Minimum aantal cijfers</value>
+    <value>Min. aantal cijfers</value>
     <comment>Minimum numeric characters for password generator settings</comment>
   </data>
   <data name="MinSpecial" xml:space="preserve">
-    <value>Minimum aantal speciale tekens</value>
+    <value>Min. aantal speciaal</value>
     <comment>Minimum special characters for password generator settings</comment>
   </data>
   <data name="MoreSettings" xml:space="preserve">
@@ -607,7 +607,7 @@
     <value>Overig</value>
   </data>
   <data name="PasswordGenerated" xml:space="preserve">
-    <value>Wachtwoord is gegenereerd.</value>
+    <value>Wachtwoord gegenereerd.</value>
   </data>
   <data name="PasswordGenerator" xml:space="preserve">
     <value>Wachtwoordgenerator</value>
@@ -629,7 +629,7 @@
     <value>Deze app beoordelen</value>
   </data>
   <data name="RateTheAppDescription" xml:space="preserve">
-    <value>Help ons door een goede recensie te schrijven!</value>
+    <value>Help ons met een goede recensie!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>Opnieuw genereren</value>
@@ -705,7 +705,7 @@
     <value>Bitwarden Webkluis</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
-    <value>Authenticatie-app kwijt?</value>
+    <value>Geen Authenticatie-app?</value>
   </data>
   <data name="Items" xml:space="preserve">
     <value>Items</value>
@@ -728,8 +728,8 @@
     <value>Er zijn geen items in je kluis voor {0}.</value>
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
-  <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
-    <value>Als je een Bitwarden auto-invullen-melding ziet, kun je deze aantikken om het auto-invullen te starten.</value>
+  <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
+    <value>When you select an input field and see a Bitwarden auto-fill overlay, you can tap it to launch the auto-fill service.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Tik deze melding voor het automatisch invullen van een item uit je kluis.</value>
@@ -778,24 +778,6 @@
   </data>
   <data name="ShareVault" xml:space="preserve">
     <value>Kluis delen</value>
-  </data>
-  <data name="AutofillPasswordField" xml:space="preserve">
-    <value>Scannen als wachtwoordveld de focus heeft</value>
-  </data>
-  <data name="AutofillPasswordFieldDescription" xml:space="preserve">
-    <value>Alleen zoeken naar velden en een auto-invul-melding weergeven als je een wachtwoordveld selecteert. Deze instelling kan accubesparend werken.</value>
-  </data>
-  <data name="AutofillPersistNotification" xml:space="preserve">
-    <value>Melding aanhouden</value>
-  </data>
-  <data name="AutofillPersistNotificationDescription" xml:space="preserve">
-    <value>Altijd een auto-invul-melding weergeven en alleen zoeken naar velden na het proberen van automatisch invullen. Deze instelling kan accubesparend werken.</value>
-  </data>
-  <data name="AutofillAlways" xml:space="preserve">
-    <value>Altijd scannen</value>
-  </data>
-  <data name="AutofillAlwaysDescription" xml:space="preserve">
-    <value>Altijd zoeken naar velden en alleen een auto-invul-melding weergeven als er wachtwoordvelden gevonden zijn. Dit is de standaardinstelling.</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
     <value>Kan de app "{0}" niet openen.</value>
@@ -1586,5 +1568,61 @@
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
     <value>Biometrie gebruiken om te ontgrendelen</value>
+  </data>
+  <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
+    <value>Bitwarden needs attention - See "Auto-fill Accessibility Service" from Bitwarden Settings</value>
+  </data>
+  <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
+    <value>3. On the Android App Settings screen for Bitwarden, go to the "Display over other apps" options (under Advanced) and tap the toggle to enable overlay support.</value>
+  </data>
+  <data name="OverlayPermission" xml:space="preserve">
+    <value>Permission</value>
+  </data>
+  <data name="BitwardenAutofillServiceOpenOverlayPermissionSettings" xml:space="preserve">
+    <value>Open Overlay Permission Settings</value>
+  </data>
+  <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
+    <value>3. On the Android App Settings screen for Bitwarden, select "Display over other apps" (under "Advanced") and switch on the toggle to allow the overlay.</value>
+  </data>
+  <data name="Denied" xml:space="preserve">
+    <value>Denied</value>
+  </data>
+  <data name="Granted" xml:space="preserve">
+    <value>Granted</value>
+  </data>
+  <data name="FileFormat" xml:space="preserve">
+    <value>File Format</value>
+  </data>
+  <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
+    <value>Enter your master password to export your vault data.</value>
+  </data>
+  <data name="ExportVaultWarning" xml:space="preserve">
+    <value>This export contains your vault data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it.</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Waarschuwing</value>
+  </data>
+  <data name="ExportVaultFailure" xml:space="preserve">
+    <value>There was a problem exporting your vault.  If the problem persists, you'll need to export from the web vault.</value>
+  </data>
+  <data name="ExportVaultSuccess" xml:space="preserve">
+    <value>Vault exported successfully</value>
+  </data>
+  <data name="Clone" xml:space="preserve">
+    <value>Kopiëren</value>
+    <comment>Clone an entity (verb).</comment>
+  </data>
+  <data name="PasswordGeneratorPolicyInEffect" xml:space="preserve">
+    <value>One or more organization policies are affecting your generator settings</value>
+  </data>
+  <data name="Open" xml:space="preserve">
+    <value>Openen</value>
+    <comment>Button text for an open operation (verb).</comment>
+  </data>
+  <data name="UnableToSaveAttachment" xml:space="preserve">
+    <value>There was a problem saving this attachment. If the problem persists, you can save it from the web vault.</value>
+  </data>
+  <data name="SaveAttachmentSuccess" xml:space="preserve">
+    <value>Attachment saved successfully</value>
   </data>
 </root>
