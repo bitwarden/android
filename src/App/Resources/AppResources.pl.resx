@@ -729,7 +729,7 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
-    <value>When you select an input field and see a Bitwarden auto-fill overlay, you can tap it to launch the auto-fill service.</value>
+    <value>Kiedy wybierzesz pole formularza i zobaczysz usługę autouzupełniania Bitwarden, możesz ją dotknąć, aby ją uruchomić.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Dotknij to powiadomienie, aby automatycznie uzupełnić dane z sejfu.</value>
@@ -1570,59 +1570,59 @@
     <value>Użyj danych biometrycznych do odblokowania</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
-    <value>Bitwarden needs attention - See "Auto-fill Accessibility Service" from Bitwarden Settings</value>
+    <value>Aplikacja Bitwarden wymaga uwagi - patrz "Usługa autouzupełniania" w ustawieniach aplikacji</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
-    <value>3. On the Android App Settings screen for Bitwarden, go to the "Display over other apps" options (under Advanced) and tap the toggle to enable overlay support.</value>
+    <value>3. Na ekranie ustawień aplikacji Bitwarden przejdź do opcji "Wyświetlanie nad innymi aplikacjami" (w sekcji zaawansowane) i dotknij przełącznika, aby włączyć obsługę nakładki.</value>
   </data>
   <data name="OverlayPermission" xml:space="preserve">
-    <value>Permission</value>
+    <value>Uprawnienie</value>
   </data>
   <data name="BitwardenAutofillServiceOpenOverlayPermissionSettings" xml:space="preserve">
-    <value>Open Overlay Permission Settings</value>
+    <value>Otwórz ustawienia uprawnienia</value>
   </data>
   <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
-    <value>3. On the Android App Settings screen for Bitwarden, select "Display over other apps" (under "Advanced") and switch on the toggle to allow the overlay.</value>
+    <value>3. Na ekranie ustawień aplikacji Bitwarden przejdź do opcji "Wyświetlanie nad innymi aplikacjami" (w sekcji "zaawansowane") i włącz obsługę nakładki.</value>
   </data>
   <data name="Denied" xml:space="preserve">
-    <value>Denied</value>
+    <value>Odmowa</value>
   </data>
   <data name="Granted" xml:space="preserve">
-    <value>Granted</value>
+    <value>Przyznano</value>
   </data>
   <data name="FileFormat" xml:space="preserve">
-    <value>File Format</value>
+    <value>Format pliku</value>
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
-    <value>Enter your master password to export your vault data.</value>
+    <value>Wpisz hasło główne, aby wyeksportować dane z sejfu.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
-    <value>This export contains your vault data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it.</value>
+    <value>Plik zawiera dane sejfu w niezaszyfrowanym formacie. Nie powinieneś go przechowywać, ani przesyłać poprzez niezabezpieczone kanały (takie jak poczta e-mail). Skasuj go natychmiast po użyciu.</value>
   </data>
   <data name="Warning" xml:space="preserve">
-    <value>Warning</value>
+    <value>Ostrzeżenie</value>
   </data>
   <data name="ExportVaultFailure" xml:space="preserve">
-    <value>There was a problem exporting your vault.  If the problem persists, you'll need to export from the web vault.</value>
+    <value>Wystąpił problem z wyeksportowaniem sejfu. Jeśli problem nadal występuje, musisz wyeksportować dane z sejfu internetowego.</value>
   </data>
   <data name="ExportVaultSuccess" xml:space="preserve">
-    <value>Vault exported successfully</value>
+    <value>Sejf został wyeksportowany</value>
   </data>
   <data name="Clone" xml:space="preserve">
-    <value>Clone</value>
+    <value>Klonuj</value>
     <comment>Clone an entity (verb).</comment>
   </data>
   <data name="PasswordGeneratorPolicyInEffect" xml:space="preserve">
-    <value>One or more organization policies are affecting your generator settings</value>
+    <value>Co najmniej jedna zasada organizacji wpływa na ustawienia generatora</value>
   </data>
   <data name="Open" xml:space="preserve">
-    <value>Open</value>
+    <value>Otwórz</value>
     <comment>Button text for an open operation (verb).</comment>
   </data>
   <data name="UnableToSaveAttachment" xml:space="preserve">
-    <value>There was a problem saving this attachment. If the problem persists, you can save it from the web vault.</value>
+    <value>Wystąpił problem z zapisaniem załącznika. Jeśli problem nadal występuje, musisz zapisać plik w sejfie internetowym.</value>
   </data>
   <data name="SaveAttachmentSuccess" xml:space="preserve">
-    <value>Attachment saved successfully</value>
+    <value>Załącznik został zapisany</value>
   </data>
 </root>
