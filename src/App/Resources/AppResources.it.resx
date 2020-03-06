@@ -729,7 +729,7 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
-    <value>Quando scegli un campo di inserimento e vedi un overlay di autoriempimento di Bitwarden, puoi toccarlo per lanciare il servizio di riempimento automatico.</value>
+    <value>Quando selezioni un campo di input e vedi un overlay di autocompletamento di Bitwarden, puoi toccarlo per lanciare il servizio di completamento automatico.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Tocca questa notifica per auto-completare un login dal tuo vault.</value>
@@ -1524,7 +1524,7 @@
     <value>URI nella lista nera</value>
   </data>
   <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>URIs that are blacklisted will not offer auto-fill. The list of apps should be comma separated. Ex: "https://twitter.com, androidapp://com.twitter.android".</value>
+    <value>Gli URI nella lista nera non forniranno auto-completamento. La lista di apps deve essrere separata da virgole. Ad es: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
   <data name="DisableSavePrompt" xml:space="preserve">
     <value>Disabilita Richiesta di Salvataggio</value>
@@ -1570,25 +1570,25 @@
     <value>Usa Dati Biometrici Per Sbloccare</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
-    <value>Bitwarden vuole attenzione - Vedi "Servizio di Accessibilità di Auto Riempimento" dalle Impostazioni di Bitwarden</value>
+    <value>Bitwarden richiede la tua attenzione - Vedi "Servizio di Accessibilità dell'Auto Completameno" dalle Impostazioni di Bitwarden</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
     <value>3. Sulla schermata di Impostazioni dell'App Android per Bitwarden, vai alle opzioni "Mostra sulle altre app" (sotto Avanzate) e tocca l'interruttore per abilitare il supporto overlay.</value>
   </data>
   <data name="OverlayPermission" xml:space="preserve">
-    <value>Permesso</value>
+    <value>Permessi</value>
   </data>
   <data name="BitwardenAutofillServiceOpenOverlayPermissionSettings" xml:space="preserve">
-    <value>Apri Impostazioni Permesso Sovrapposizione</value>
+    <value>Apri Impostazioni D'Accessibilità</value>
   </data>
   <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
-    <value>3. Sulla schermata delle Impostazioni App Android per Bitwarden, seleziona "Mostra sulle altre app" (sotto "Avanzate") e scambia sull'interruttore per consentire la sovrapposizione.</value>
+    <value>3. Sulla schermata delle Impostazioni App per Bitwarden, seleziona "Visualizzazione in primo piano" (sotto "Avanzate") e attiva l'opzione per consentire la sovrapposizione.</value>
   </data>
   <data name="Denied" xml:space="preserve">
     <value>Negato</value>
   </data>
   <data name="Granted" xml:space="preserve">
-    <value>Garantito</value>
+    <value>Concesso</value>
   </data>
   <data name="FileFormat" xml:space="preserve">
     <value>Formato del File</value>
@@ -1597,7 +1597,7 @@
     <value>Inserisci la tua password principale per esportare i dati della tua cassaforte.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
-    <value>Questa esportazione contiene i dati della tua cassaforte in un formato decrittografato. Non dovresti archiviare o inviare i file esportati sotto canali non sicuri (come via email). Eliminali immediatamente dopo che hai finito di usarli.</value>
+    <value>Questa esportazione contiene i dati della tua cassaforte in formato non crittografato. Non dovresti archiviare o inviare i file esportati attraverso canali non sicuri (come l'email). Eliminali immediatamente dopo che hai finito di usarli.</value>
   </data>
   <data name="Warning" xml:space="preserve">
     <value>Avviso</value>
@@ -1623,6 +1623,6 @@
     <value>Si è verificato un problema salvando questo allegato. Se il problema persiste, puoi salvarlo dalla cassaforte web.</value>
   </data>
   <data name="SaveAttachmentSuccess" xml:space="preserve">
-    <value>Attachment saved successfully</value>
+    <value>Allegato salvato con successo</value>
   </data>
 </root>
