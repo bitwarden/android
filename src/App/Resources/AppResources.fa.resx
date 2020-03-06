@@ -729,7 +729,7 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
-    <value>When you select an input field and see a Bitwarden auto-fill overlay, you can tap it to launch the auto-fill service.</value>
+    <value>هنگامی که یک فیلد ورودی را انتخاب می کنید و یک لایه پر کردن خودکار Bitwarden را مشاهده می کنید، می توانید برای راه اندازی سرویس پر کردن خودکار روی آن ضربه بزنید.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>برای پر کردن خودکار یک اطلاع رسانی در گاوصندوقتان این اطلاع رسانی را ضربه بزنید.</value>
@@ -1570,10 +1570,10 @@
     <value>برای قفل گشایی از بیومتریک استفاده کنید</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
-    <value>Bitwarden needs attention - See "Auto-fill Accessibility Service" from Bitwarden Settings</value>
+    <value>Bitwarden نیاز به توجه دارد - از "سرویس دستیابی خودکار" در تنظیمات Bitwarden دیدن کنید</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
-    <value>3. On the Android App Settings screen for Bitwarden, go to the "Display over other apps" options (under Advanced) and tap the toggle to enable overlay support.</value>
+    <value>3. در صفحه تنظیمات برنامه اندروید برای Bitwarden، به گزینه های "نمایش روی سایر برنامه ها" (زیر گزینه پیشرفته) بروید و برای فعال کردن پشتیبانی روی هم، روی ضامن ضربه بزنید.</value>
   </data>
   <data name="OverlayPermission" xml:space="preserve">
     <value>مجوز</value>

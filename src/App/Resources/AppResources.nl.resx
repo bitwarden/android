@@ -729,7 +729,7 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
-    <value>When you select an input field and see a Bitwarden auto-fill overlay, you can tap it to launch the auto-fill service.</value>
+    <value>Als je een invoerveld aantikt en de overlay van Bitwarden ziet, kun je erop tikken om de auto-invuldienst te openen.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Tik deze melding voor het automatisch invullen van een item uit je kluis.</value>
@@ -1570,59 +1570,59 @@
     <value>Biometrie gebruiken om te ontgrendelen</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
-    <value>Bitwarden needs attention - See "Auto-fill Accessibility Service" from Bitwarden Settings</value>
+    <value>Bitwarden heeft je aandacht nodig - Zie "Auto-invuldienst" in de instellingen van Bitwarden</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
-    <value>3. On the Android App Settings screen for Bitwarden, go to the "Display over other apps" options (under Advanced) and tap the toggle to enable overlay support.</value>
+    <value>3. Op het Android App instellingenscherm voor Bitwarden, ga naar de opties "Toon over andere apps" (onder geavanceerd) en tik op de schakelaar om overlay-ondersteuning in te schakelen.</value>
   </data>
   <data name="OverlayPermission" xml:space="preserve">
-    <value>Permission</value>
+    <value>Machtiging</value>
   </data>
   <data name="BitwardenAutofillServiceOpenOverlayPermissionSettings" xml:space="preserve">
-    <value>Open Overlay Permission Settings</value>
+    <value>Open Overlay permissie instellingen</value>
   </data>
   <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
-    <value>3. On the Android App Settings screen for Bitwarden, select "Display over other apps" (under "Advanced") and switch on the toggle to allow the overlay.</value>
+    <value>3. Op het Android App Instellingen scherm voor Bitwarden, selecteer "Weergeven over andere apps" (onder "Geavanceerd") en schakel de schakelaar in om de overlap toe te staan.</value>
   </data>
   <data name="Denied" xml:space="preserve">
-    <value>Denied</value>
+    <value>Afgewezen</value>
   </data>
   <data name="Granted" xml:space="preserve">
-    <value>Granted</value>
+    <value>Verleend</value>
   </data>
   <data name="FileFormat" xml:space="preserve">
-    <value>File Format</value>
+    <value>Bestandsformaat</value>
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
-    <value>Enter your master password to export your vault data.</value>
+    <value>Voer je hoofdwachtwoord in om de kluisgegevens te exporteren.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
-    <value>This export contains your vault data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it.</value>
+    <value>Deze export bevat jouw kluisgegevens in een niet-versleutelde opmaak. Je moet het geëxporteerde bestand niet opslaan of verzenden over onbeveiligde kanalen (zoals e-mail). Verwijder het exportbestand direct na gebruik.</value>
   </data>
   <data name="Warning" xml:space="preserve">
     <value>Waarschuwing</value>
   </data>
   <data name="ExportVaultFailure" xml:space="preserve">
-    <value>There was a problem exporting your vault.  If the problem persists, you'll need to export from the web vault.</value>
+    <value>Er was een probleem met het exporteren van je kluis. Als het probleem aanhoudt, moet je exporteren vanuit de webkluis.</value>
   </data>
   <data name="ExportVaultSuccess" xml:space="preserve">
-    <value>Vault exported successfully</value>
+    <value>Kluis met succes geëxporteerd</value>
   </data>
   <data name="Clone" xml:space="preserve">
     <value>Kopiëren</value>
     <comment>Clone an entity (verb).</comment>
   </data>
   <data name="PasswordGeneratorPolicyInEffect" xml:space="preserve">
-    <value>One or more organization policies are affecting your generator settings</value>
+    <value>Een of meer organisatiebeleidseisen heeft invloed op de instellingen van je generator.</value>
   </data>
   <data name="Open" xml:space="preserve">
     <value>Openen</value>
     <comment>Button text for an open operation (verb).</comment>
   </data>
   <data name="UnableToSaveAttachment" xml:space="preserve">
-    <value>There was a problem saving this attachment. If the problem persists, you can save it from the web vault.</value>
+    <value>Erwas een probleem bij het opslaan van deze bijlage. Als het probleem aanhoudt, kun je het opslaan via de webkluis.</value>
   </data>
   <data name="SaveAttachmentSuccess" xml:space="preserve">
-    <value>Attachment saved successfully</value>
+    <value>Bijlage succesvol opgeslagen</value>
   </data>
 </root>

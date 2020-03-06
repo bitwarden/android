@@ -729,7 +729,7 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
-    <value>When you select an input field and see a Bitwarden auto-fill overlay, you can tap it to launch the auto-fill service.</value>
+    <value>Lorsque vous sélectionnez un champ de saisie et que vous voyez une proposition de remplissage automatique de Bitwarden, vous pouvez appuyer dessus pour lancer le service de remplissage automatique.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Touchez cette notification pour remplir automatiquement vos informations de connexion à partir de votre coffre.</value>
@@ -1570,59 +1570,59 @@
     <value>Utiliser une empreinte biométrique pour déverrouiller</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
-    <value>Bitwarden needs attention - See "Auto-fill Accessibility Service" from Bitwarden Settings</value>
+    <value>Bitwarden requiert votre attention - Voir "Service d'accessibilité pour le remplissage automatique" dans les paramètres de Bitwarden</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
-    <value>3. On the Android App Settings screen for Bitwarden, go to the "Display over other apps" options (under Advanced) and tap the toggle to enable overlay support.</value>
+    <value>3. Sur l'écran des paramètres d'application Android pour Bitwarden, sélectionnez "Superposer aux autres applications" (sous "Avancé") et appuyez sur le bouton pour permettre la superposition.</value>
   </data>
   <data name="OverlayPermission" xml:space="preserve">
     <value>Permission</value>
   </data>
   <data name="BitwardenAutofillServiceOpenOverlayPermissionSettings" xml:space="preserve">
-    <value>Open Overlay Permission Settings</value>
+    <value>Ouvrir les paramètres d'autorisation de superposition</value>
   </data>
   <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
-    <value>3. On the Android App Settings screen for Bitwarden, select "Display over other apps" (under "Advanced") and switch on the toggle to allow the overlay.</value>
+    <value>3. Sur l'écran des paramètres d'application Android pour Bitwarden, sélectionnez "Superposer aux autres applications" (sous "Avancé") et appuyez sur le bouton pour permettre la superposition.</value>
   </data>
   <data name="Denied" xml:space="preserve">
-    <value>Denied</value>
+    <value>Interdit</value>
   </data>
   <data name="Granted" xml:space="preserve">
-    <value>Granted</value>
+    <value>Autorisé</value>
   </data>
   <data name="FileFormat" xml:space="preserve">
-    <value>File Format</value>
+    <value>Format de fichier</value>
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
-    <value>Enter your master password to export your vault data.</value>
+    <value>Saisissez votre mot de passe maître pour exporter les données de votre coffre.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
-    <value>This export contains your vault data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it.</value>
+    <value>Cet export contient les données de votre coffre dans un format non chiffré. Vous ne devriez ni le stocker ni l'envoyer via des canaux non sécurisés (tel que par e-mail). Supprimez-le immédiatement après l'avoir utilisé.</value>
   </data>
   <data name="Warning" xml:space="preserve">
-    <value>Warning</value>
+    <value>Avertissement</value>
   </data>
   <data name="ExportVaultFailure" xml:space="preserve">
-    <value>There was a problem exporting your vault.  If the problem persists, you'll need to export from the web vault.</value>
+    <value>Un problème est survenu lors de l'exportation de votre coffre. Si le problème persiste, vous devrez l'exporter depuis le coffre web.</value>
   </data>
   <data name="ExportVaultSuccess" xml:space="preserve">
-    <value>Vault exported successfully</value>
+    <value>Le coffre a été exporté avec succès</value>
   </data>
   <data name="Clone" xml:space="preserve">
-    <value>Clone</value>
+    <value>Cloner</value>
     <comment>Clone an entity (verb).</comment>
   </data>
   <data name="PasswordGeneratorPolicyInEffect" xml:space="preserve">
-    <value>One or more organization policies are affecting your generator settings</value>
+    <value>Une ou plusieurs politiques d'organisation affectent les paramètres de votre générateur</value>
   </data>
   <data name="Open" xml:space="preserve">
-    <value>Open</value>
+    <value>Ouvrir</value>
     <comment>Button text for an open operation (verb).</comment>
   </data>
   <data name="UnableToSaveAttachment" xml:space="preserve">
-    <value>There was a problem saving this attachment. If the problem persists, you can save it from the web vault.</value>
+    <value>Un problème est survenu lors de l'enregistrement de cette pièce jointe. Si le problème persiste, vous pouvez l'enregistrer depuis le coffre web.</value>
   </data>
   <data name="SaveAttachmentSuccess" xml:space="preserve">
-    <value>Attachment saved successfully</value>
+    <value>La pièce jointe a été enregistrée avec succès</value>
   </data>
 </root>

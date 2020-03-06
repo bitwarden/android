@@ -729,7 +729,7 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
-    <value>When you select an input field and see a Bitwarden auto-fill overlay, you can tap it to launch the auto-fill service.</value>
+    <value>Wenn Sie ein Eingabefeld auswählen und ein Auto-Fill-Overlay von Bitwarden sehen, können Sie darauf tippen, um den Dienst zum automatischen Ausfüllen zu starten.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Tippe auf diese Benachrichtigung, um automatisch Zugangsdaten aus deinem Tresor einzufügen.</value>
@@ -1570,10 +1570,10 @@
     <value>Biometrische Daten zum entsperren verwenden</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
-    <value>Bitwarden needs attention - See "Auto-fill Accessibility Service" from Bitwarden Settings</value>
+    <value>Bitwarden braucht Aufmerksamkeit - Siehe "Auto-Fill-Bedienungshilfe" in den Bitwarden-Einstellungen</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
-    <value>3. On the Android App Settings screen for Bitwarden, go to the "Display over other apps" options (under Advanced) and tap the toggle to enable overlay support.</value>
+    <value>3. Gehen Sie unter Android in den App-Einstellungen für Bitwarden zur Option "Über anderen Apps einblenden" (unter Erweitert) und tippen Sie auf den Schalter, um die Overlay-Unterstützung zu aktivieren.</value>
   </data>
   <data name="OverlayPermission" xml:space="preserve">
     <value>Berechtigung</value>
@@ -1582,7 +1582,7 @@
     <value>Overlay-Berechtigungseinstellungen öffnen</value>
   </data>
   <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
-    <value>3. On the Android App Settings screen for Bitwarden, select "Display over other apps" (under "Advanced") and switch on the toggle to allow the overlay.</value>
+    <value>3. Wählen Sie unter Android in den App-Einstellungen für Bitwarden "Über anderen Apps einblenden" (unter "Erweitert") und aktivieren Sie den Schalter, um das Overlay zu erlauben.</value>
   </data>
   <data name="Denied" xml:space="preserve">
     <value>Abgelehnt</value>

@@ -1576,53 +1576,53 @@
     <value>3. On the Android App Settings screen for Bitwarden, go to the "Display over other apps" options (under Advanced) and tap the toggle to enable overlay support.</value>
   </data>
   <data name="OverlayPermission" xml:space="preserve">
-    <value>Permission</value>
+    <value>İzin</value>
   </data>
   <data name="BitwardenAutofillServiceOpenOverlayPermissionSettings" xml:space="preserve">
-    <value>Open Overlay Permission Settings</value>
+    <value>Doldurma İzni Ayarlarını Aç</value>
   </data>
   <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
     <value>3. On the Android App Settings screen for Bitwarden, select "Display over other apps" (under "Advanced") and switch on the toggle to allow the overlay.</value>
   </data>
   <data name="Denied" xml:space="preserve">
-    <value>Denied</value>
+    <value>Reddedildi</value>
   </data>
   <data name="Granted" xml:space="preserve">
-    <value>Granted</value>
+    <value>İzin verildi</value>
   </data>
   <data name="FileFormat" xml:space="preserve">
-    <value>File Format</value>
+    <value>Dosya Formatı</value>
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
-    <value>Enter your master password to export your vault data.</value>
+    <value>Kasadaki verilerinizi dışa aktarmak için ana parolanızı girin.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
-    <value>This export contains your vault data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it.</value>
+    <value>Bu dışa aktarımda kasanızdaki ögeler şifrelenmemiş olacak. Çıkan dosyayı güvensiz yöntemlerle depolamayın veya yollamayın (örneğin e-posta ile). Dosyayı ise kullandıktan sonra hemen silin.</value>
   </data>
   <data name="Warning" xml:space="preserve">
-    <value>Warning</value>
+    <value>Uyarı</value>
   </data>
   <data name="ExportVaultFailure" xml:space="preserve">
-    <value>There was a problem exporting your vault.  If the problem persists, you'll need to export from the web vault.</value>
+    <value>Kasanızı dışa aktarırken bir sorun oluştu. Sorun devam ederse, web kasasından dışa aktarmanız gerekir.</value>
   </data>
   <data name="ExportVaultSuccess" xml:space="preserve">
-    <value>Vault exported successfully</value>
+    <value>Kasa başarıyla dışa aktarıldı</value>
   </data>
   <data name="Clone" xml:space="preserve">
-    <value>Clone</value>
+    <value>Klonla</value>
     <comment>Clone an entity (verb).</comment>
   </data>
   <data name="PasswordGeneratorPolicyInEffect" xml:space="preserve">
-    <value>One or more organization policies are affecting your generator settings</value>
+    <value>Bir ya da daha fazla organizasyon ilkesi oluşturucu ayarlarınızı etkiliyor.</value>
   </data>
   <data name="Open" xml:space="preserve">
-    <value>Open</value>
+    <value>Aç</value>
     <comment>Button text for an open operation (verb).</comment>
   </data>
   <data name="UnableToSaveAttachment" xml:space="preserve">
-    <value>There was a problem saving this attachment. If the problem persists, you can save it from the web vault.</value>
+    <value>Bu ek kaydedilirken bir sorun oluştu. Sorun devam ederse, web kasasından kaydedebilirsiniz.</value>
   </data>
   <data name="SaveAttachmentSuccess" xml:space="preserve">
-    <value>Attachment saved successfully</value>
+    <value>Dosya eki başarıyla kaydedildi</value>
   </data>
 </root>
