@@ -77,7 +77,7 @@ namespace Bit.App.Pages
                 .GetValueOrDefault();
             if(!string.IsNullOrWhiteSpace((Page as CiphersPage).SearchBar.Text))
             {
-                Search((Page as CiphersPage).SearchBar.Text, 500);
+                Search((Page as CiphersPage).SearchBar.Text, 200);
             }
         }
 
@@ -117,9 +117,12 @@ namespace Bit.App.Pages
                 {
                     ciphers = new List<CipherView>();
                 }
-                Ciphers.ResetWithRange(ciphers);
-                ShowNoData = searchable && Ciphers.Count == 0;
-                ShowList = searchable && !ShowNoData;
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    Ciphers.ResetWithRange(ciphers);
+                    ShowNoData = searchable && Ciphers.Count == 0;
+                    ShowList = searchable && !ShowNoData;
+                });
             }, cts.Token);
             _searchCancellationTokenSource = cts;
         }
