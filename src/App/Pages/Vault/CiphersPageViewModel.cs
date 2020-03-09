@@ -110,7 +110,7 @@ namespace Bit.App.Pages
                     }
                     catch(OperationCanceledException)
                     {
-                        ciphers = new List<CipherView>();
+                        return;
                     }
                 }
                 if(ciphers == null)
