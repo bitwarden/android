@@ -7,7 +7,6 @@
     xmlns:u="clr-namespace:Bit.App.Utilities"
     xmlns:controls="clr-namespace:Bit.App.Controls"
     xmlns:effects="clr-namespace:Bit.App.Effects"
-    xmlns:fab="clr-namespace:Refractored.FabControl;assembly=Refractored.FabControl"
     xmlns:views="clr-namespace:Bit.Core.Models.View;assembly=BitwardenCore"
     x:DataType="pages:ViewPageViewModel"
     x:Name="_page"
@@ -663,14 +662,19 @@
             AbsoluteLayout.LayoutFlags="All"
             AbsoluteLayout.LayoutBounds="0, 0, 1, 1">
         </ContentView>
-        <fab:FloatingActionButtonView
+        <Button
             x:Name="_fab"
-            ImageName="pencil.png"
+            Image="pencil.png"
+            Clicked="EditButton_Clicked"
+            Style="{StaticResource floating-action-button}"
             AbsoluteLayout.LayoutFlags="PositionProportional"
             AbsoluteLayout.LayoutBounds="1, 1, AutoSize, AutoSize"
             AutomationProperties.IsInAccessibleTree="True"
             AutomationProperties.Name="{u:I18n EditItem}">
-        </fab:FloatingActionButtonView>
+            <Button.Effects>
+                <effects:FabShadowEffect />
+            </Button.Effects>
+        </Button>
     </AbsoluteLayout>
 
 </pages:BaseContentPage>
