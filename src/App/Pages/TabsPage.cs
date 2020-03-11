@@ -15,21 +15,21 @@ namespace Bit.App.Pages
             _groupingsPage = new NavigationPage(new GroupingsPage(true, previousPage: previousPage))
             {
                 Title = AppResources.MyVault,
-                Icon = "lock.png"
+                IconImageSource = "lock.png"
             };
             Children.Add(_groupingsPage);
 
             _generatorPage = new NavigationPage(new GeneratorPage(true, null, this))
             {
                 Title = AppResources.Generator,
-                Icon = "refresh.png"
+                IconImageSource = "refresh.png"
             };
             Children.Add(_generatorPage);
 
             var settingsPage = new NavigationPage(new SettingsPage(this))
             {
                 Title = AppResources.Settings,
-                Icon = "cog.png"
+                IconImageSource = "cog.png"
             };
             Children.Add(settingsPage);
 
@@ -41,10 +41,6 @@ namespace Bit.App.Pages
                     Xamarin.Forms.PlatformConfiguration.AndroidSpecific.ToolbarPlacement.Bottom);
                 Xamarin.Forms.PlatformConfiguration.AndroidSpecific.TabbedPage.SetIsSwipePagingEnabled(this, false);
                 Xamarin.Forms.PlatformConfiguration.AndroidSpecific.TabbedPage.SetIsSmoothScrollEnabled(this, false);
-                Xamarin.Forms.PlatformConfiguration.AndroidSpecific.TabbedPage.SetBarSelectedItemColor(this,
-                    (Color)Application.Current.Resources["TabBarSelectedItemColor"]);
-                Xamarin.Forms.PlatformConfiguration.AndroidSpecific.TabbedPage.SetBarItemColor(this,
-                    (Color)Application.Current.Resources["TabBarItemColor"]);
             }
 
             if(appOptions?.GeneratorTile ?? false)

@@ -65,6 +65,10 @@
            ApplyToDerivedTypes="True">
         <Setter Property="BarBackgroundColor"
                 Value="{StaticResource TabBarBackgroundColor}" />
+        <Setter Property="SelectedTabColor"
+                Value="{StaticResource TabBarSelectedItemColor}" />
+        <Setter Property="UnselectedTabColor"
+                Value="{StaticResource TabBarItemColor}" />
     </Style>
   <Style TargetType="NavigationPage"
          ApplyToDerivedTypes="True">
