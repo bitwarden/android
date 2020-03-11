@@ -116,7 +116,7 @@
     <MtouchArch>ARM64</MtouchArch>
     <MtouchSdkVersion>10.2</MtouchSdkVersion>
     <CodesignKey>iPhone Distribution</CodesignKey>
-    <CodesignProvision>Dist: Autofill</CodesignProvision>
+    <CodesignProvision>Automatic:AppStore</CodesignProvision>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhoneSimulator'">
@@ -150,8 +150,8 @@
     <MtouchExtraArgs>--http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSAutofill --linkskip=BitwardenApp --linkskip=BitwardenCore</MtouchExtraArgs>
     <OptimizePNGs>true</OptimizePNGs>
     <CodesignKey>iPhone Distribution</CodesignKey>
-    <CodesignProvision>Adhoc: Autofill</CodesignProvision>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <CodesignProvision>Automatic:AdHoc</CodesignProvision>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CredentialProviderViewController.cs" />
