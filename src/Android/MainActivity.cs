@@ -17,7 +17,7 @@ using Bit.Core.Enums;
 using Android.Nfc;
 using Bit.App.Utilities;
 using System.Threading.Tasks;
-using Android.Support.V4.Content;
+using AndroidX.Core.Content;
 
 namespace Bit.Droid
 {
