@@ -70,7 +70,6 @@ namespace Bit.Droid
         {
             ServiceContainer.Register<ILogService>("logService", new AndroidLogService());
 
-            Refractored.FabControl.Droid.FloatingActionButtonViewRenderer.Init();
             // Note: This might cause a race condition. Investigate more.
             Task.Run(() =>
             {

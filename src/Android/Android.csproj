@@ -115,6 +115,7 @@
     <Compile Include="Autofill\SavedItem.cs" />
     <Compile Include="Effects\FixedSizeEffect.cs" />
     <Compile Include="Effects\SelectableLabelEffect.cs" />
+    <Compile Include="Effects\FabShadowEffect.cs" />
     <Compile Include="Effects\TabBarEffect.cs" />
     <Compile Include="Push\FirebaseInstanceIdService.cs" />
     <Compile Include="Push\FirebaseMessagingService.cs" />

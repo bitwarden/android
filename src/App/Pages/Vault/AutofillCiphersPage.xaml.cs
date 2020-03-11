@@ -22,7 +22,6 @@ namespace Bit.App.Pages
             InitializeComponent();
             _vm = BindingContext as AutofillCiphersPageViewModel;
             _vm.Page = this;
-            _fab.Clicked = AddButton_Clicked;
             _vm.Init(appOptions);
 
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");

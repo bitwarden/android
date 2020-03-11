@@ -33,7 +33,6 @@ namespace Bit.App.Pages
             }
             else
             {
-                _fab.Clicked = EditButton_Clicked;
                 _mainLayout.Padding = new Thickness(0, 0, 0, 75);
                 ToolbarItems.Add(_attachmentsItem);
                 ToolbarItems.Add(_deleteItem);
