@@ -1,7 +1,6 @@
-﻿using Android.Support.Design.BottomNavigation;
-using Android.Support.Design.Widget;
-using Android.Views;
+﻿using Android.Views;
 using Bit.Droid.Effects;
+using Google.Android.Material.BottomNavigation;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
