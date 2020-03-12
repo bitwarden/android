@@ -365,7 +365,8 @@ namespace Bit.Core.Services
 
         private async Task SyncPolicies(List<PolicyResponse> response)
         {
-            var policies = response.ToDictionary(p => p.Id, p => new PolicyData(p));
+            var policies = response?.ToDictionary(p => p.Id, p => new PolicyData(p)) ??
+                           new Dictionary<string, PolicyData>();
             await _policyService.Replace(policies);
         }
     }
