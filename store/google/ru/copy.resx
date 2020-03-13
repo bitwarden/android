@@ -122,7 +122,7 @@
     <comment>Max 30 characters</comment>
   </data>
   <data name="ShortDescription" xml:space="preserve">
-    <value>Bitwarden - менеджер паролей, помогающий обеспечить безопасность в интернете.</value>
+    <value>Bitwarden - менеджер логинов и паролей, помогающий обезопасить вас в интернете.</value>
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
@@ -144,7 +144,7 @@ Bitwarden - это программное обеспечение с открыт
     <value>Управляйте всеми своими логинами и паролями из защищенного хранилища</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Автоматически генерируйте сильные, случайные и надежные пароли</value>
+    <value>Генерируйте сильные, случайные и надежные пароли</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
     <value>Защитите ваше хранилище при помощи отпечатка пальца, PIN-кода или мастер-пароля</value>
