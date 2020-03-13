@@ -510,7 +510,7 @@
     <value>Kiire viis oma konto- ja muude andmete importimiseks teistest paroolihalduritest.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
-    <value>Viimane sünkronisatsioon:</value>
+    <value>Viimane sünkroniseerimine:</value>
   </data>
   <data name="Length" xml:space="preserve">
     <value>Pikkus</value>
@@ -1564,25 +1564,25 @@
     <value>Kinnita läbi biomeetria.</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
-    <value>Biomeetria</value>
+    <value>biomeetriaga</value>
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
     <value>Kasuta lahtilukustamiseks biomeetriat</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
-    <value>Bitwarden needs attention - See "Auto-fill Accessibility Service" from Bitwarden Settings</value>
+    <value>Bitwarden vajab tähelepanu! Vaata Seaded - Juurdepääsetavuse teenuse seaded.</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
-    <value>3. On the Android App Settings screen for Bitwarden, go to the "Display over other apps" options (under Advanced) and tap the toggle to enable overlay support.</value>
+    <value>3. Ava Androidi rakenduste seaded. Leia üles Bitwarden, liigu sektsiooni "Täpsemalt" ning vajuta "Kuva peal" valikule ning lülita see sisse.</value>
   </data>
   <data name="OverlayPermission" xml:space="preserve">
     <value>Õigus</value>
   </data>
   <data name="BitwardenAutofillServiceOpenOverlayPermissionSettings" xml:space="preserve">
-    <value>Open Overlay Permission Settings</value>
+    <value>Ava Kuva peal seaded</value>
   </data>
   <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
-    <value>3. On the Android App Settings screen for Bitwarden, select "Display over other apps" (under "Advanced") and switch on the toggle to allow the overlay.</value>
+    <value>3. Ava Androidi rakenduste seaded. Leia üles Bitwarden, liigu sektsiooni "Täpsemalt" ning vajuta "Kuva peal" valikule ning lülita see sisse.</value>
   </data>
   <data name="Denied" xml:space="preserve">
     <value>Keelatud</value>
