@@ -104,6 +104,7 @@ namespace Bit.Publisher
 
             var trackRequest = service.Edits.Tracks.Update(new Track
             {
+                TrackValue = _track,
                 Releases = new List<TrackRelease>
                 {
                     new TrackRelease { VersionCodes = new List<long?> { apk.VersionCode }, Status = "completed" }
