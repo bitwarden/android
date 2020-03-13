@@ -1591,13 +1591,13 @@
     <value>Granted</value>
   </data>
   <data name="FileFormat" xml:space="preserve">
-    <value>File Format</value>
+    <value>File format</value>
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Enter your master password to export your vault data.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
-    <value>This export contains your vault data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it.</value>
+    <value>This export contains your vault data in an unencrypted format. You should not store or send the exported file over insecure channels (such as email). Delete it immediately after you are done using it.</value>
   </data>
   <data name="Warning" xml:space="preserve">
     <value>Warning</value>
@@ -1613,7 +1613,7 @@
     <comment>Clone an entity (verb).</comment>
   </data>
   <data name="PasswordGeneratorPolicyInEffect" xml:space="preserve">
-    <value>One or more organization policies are affecting your generator settings</value>
+    <value>One or more organisation policies are affecting your generator settings</value>
   </data>
   <data name="Open" xml:space="preserve">
     <value>Open</value>

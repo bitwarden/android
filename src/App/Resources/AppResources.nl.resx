@@ -1573,16 +1573,16 @@
     <value>Bitwarden heeft je aandacht nodig - Zie "Auto-invuldienst" in de instellingen van Bitwarden</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
-    <value>3. Op het Android App instellingenscherm voor Bitwarden, ga naar de opties "Toon over andere apps" (onder geavanceerd) en tik op de schakelaar om overlay-ondersteuning in te schakelen.</value>
+    <value>3. Tik op de schakelaar in Bitwarden - Instellingen - Opties -  "Weergeven over andere apps" om overlay-ondersteuning in te schakelen.</value>
   </data>
   <data name="OverlayPermission" xml:space="preserve">
     <value>Machtiging</value>
   </data>
   <data name="BitwardenAutofillServiceOpenOverlayPermissionSettings" xml:space="preserve">
-    <value>Open Overlay permissie instellingen</value>
+    <value>Overlay-machtigingen instellen</value>
   </data>
   <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
-    <value>3. Op het Android App Instellingen scherm voor Bitwarden, selecteer "Weergeven over andere apps" (onder "Geavanceerd") en schakel de schakelaar in om de overlap toe te staan.</value>
+    <value>3. Tik op de schakelaar in Bitwarden - Instellingen - Opties -  "Weergeven over andere apps" om overlay-ondersteuning in te schakelen.</value>
   </data>
   <data name="Denied" xml:space="preserve">
     <value>Afgewezen</value>
@@ -1603,13 +1603,13 @@
     <value>Waarschuwing</value>
   </data>
   <data name="ExportVaultFailure" xml:space="preserve">
-    <value>Er was een probleem met het exporteren van je kluis. Als het probleem aanhoudt, moet je exporteren vanuit de webkluis.</value>
+    <value>Er ging iets mis met het exporteren van je kluis. Als het probleem aanhoudt, moet je exporteren via de webkluis.</value>
   </data>
   <data name="ExportVaultSuccess" xml:space="preserve">
     <value>Kluis met succes geëxporteerd</value>
   </data>
   <data name="Clone" xml:space="preserve">
-    <value>Kopiëren</value>
+    <value>Dupliceren</value>
     <comment>Clone an entity (verb).</comment>
   </data>
   <data name="PasswordGeneratorPolicyInEffect" xml:space="preserve">
@@ -1620,7 +1620,7 @@
     <comment>Button text for an open operation (verb).</comment>
   </data>
   <data name="UnableToSaveAttachment" xml:space="preserve">
-    <value>Erwas een probleem bij het opslaan van deze bijlage. Als het probleem aanhoudt, kun je het opslaan via de webkluis.</value>
+    <value>Er ging iets mis met het bewaren van deze bijlage. Als het probleem aanhoudt, kun je het bewaren via de webkluis.</value>
   </data>
   <data name="SaveAttachmentSuccess" xml:space="preserve">
     <value>Bijlage succesvol opgeslagen</value>

@@ -148,15 +148,15 @@
     <comment>Cancel an operation.</comment>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>Копировать</value>
+    <value>Скопировать</value>
     <comment>Copy some value to your clipboard.</comment>
   </data>
   <data name="CopyPassword" xml:space="preserve">
-    <value>Копировать пароль</value>
+    <value>Скопировать пароль</value>
     <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
   </data>
   <data name="CopyUsername" xml:space="preserve">
-    <value>Копировать имя пользователя</value>
+    <value>Скопировать имя пользователя</value>
     <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
   </data>
   <data name="Credits" xml:space="preserve">
@@ -323,7 +323,7 @@
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>Элемент был удален.</value>
+    <value>Элемент удален.</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
@@ -352,11 +352,11 @@
     <comment>Label for a username.</comment>
   </data>
   <data name="ValidationFieldRequired" xml:space="preserve">
-    <value>Поле {0} является обязательным.</value>
+    <value>Поле {0} обязательно.</value>
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
-    <value>{0} скопирован(-о).</value>
+    <value>{0} скопирован(о).</value>
     <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
@@ -412,7 +412,7 @@
     <value>Расширение Bitwarden</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
-    <value>Самый простой способ добавить новые логины в ваше хранилище это расширение Bitwarden. Дополнительные сведения об использовании расширения Bitwarden в разделе 'Настройки'.</value>
+    <value>Самый простой способ добавить новые логины в ваше хранилище - это расширение Bitwarden. Дополнительные сведения об использовании расширения Bitwarden находятся в разделе 'Настройки'.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
     <value>Используйте Bitwarden в Safari и других приложениях для автозаполнения логинов.</value>
@@ -455,7 +455,7 @@
     <value>Включить автоматическую синхронизацию</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
-    <value>Введите email учетной записи для получения подсказки к мастер-паролю.</value>
+    <value>Введите email аккаунта для получения подсказки к мастер-паролю.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
     <value>Повторно включить расширение</value>
@@ -467,26 +467,26 @@
     <value>Включить расширение</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
-    <value>В Safari, найдите Bitwarden, используя значок Поделиться (прокрутите вправо в нижней строке меню).</value>
+    <value>В Safari, используя значок 'Поделиться' найдите Bitwarden (прокрутите вправо в нижней строке меню).</value>
     <comment>Safari is the name of apple's web browser</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
     <value>Получите мгновенный доступ к вашим паролям!</value>
   </data>
   <data name="ExtensionReady" xml:space="preserve">
-    <value>Вы готовы войти!</value>
+    <value>Все готово для входа!</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
     <value>Теперь ваши логины легко доступны из Safari, Chrome и других поддерживаемых приложений.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
-    <value>В Safari и Chrome, найдите Bitwarden, используя значок Поделиться (прокрутите вправо в нижней строке меню).</value>
+    <value>В Safari и Chrome, используя значок 'Поделиться' найдите Bitwarden (прокрутите вправо в нижней строке меню).</value>
   </data>
   <data name="ExtensionTapIcon" xml:space="preserve">
     <value>Нажмите значок Bitwarden в меню, чтобы запустить расширение.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>Чтобы включить Bitwarden в Safari и других приложениях, нажмите Еще в нижней строке меню.</value>
+    <value>Чтобы включить Bitwarden в Safari и других приложениях, нажмите 'Еще' в нижней строке меню.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
     <value>Избранный</value>
@@ -504,7 +504,7 @@
     <value>Импорт элементов</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
-    <value>Вы можете импортировать свои элементы в свое веб-хранилище на bitwarden.com. Перейти на сайт сейчас?</value>
+    <value>Вы можете импортировать элементы в свое веб-хранилище на bitwarden.com. Перейти на сайт сейчас?</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
     <value>Быстрый импорт ваших элементов из других менеджеров паролей.</value>
@@ -550,7 +550,7 @@
     <value>Неверное подтверждение пароля.</value>
   </data>
   <data name="MasterPasswordDescription" xml:space="preserve">
-    <value>Мастер-пароль - ключ к вашему защищенному хранилищу. Он очень важен, поэтому не забывайте его. Восстановить мастер-пароль невозможно.</value>
+    <value>Мастер-пароль это ключ к вашему защищенному хранилищу. Он очень важен, поэтому не забывайте его. Восстановить мастер-пароль невозможно.</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
     <value>Подсказка к мастер-паролю (необяз.)</value>
@@ -562,11 +562,11 @@
     <value>Мастер-пароль должен содержать не менее 8 символов.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
-    <value>Мин. кол-во цифр</value>
+    <value>Минимум цифр</value>
     <comment>Minimum numeric characters for password generator settings</comment>
   </data>
   <data name="MinSpecial" xml:space="preserve">
-    <value>Мин. кол-во символов</value>
+    <value>Минимум символов</value>
     <comment>Minimum special characters for password generator settings</comment>
   </data>
   <data name="MoreSettings" xml:space="preserve">
@@ -594,7 +594,7 @@
     <value>У логина не заданы имя пользователя и пароль.</value>
   </data>
   <data name="OkGotIt" xml:space="preserve">
-    <value>Ok, понятно!</value>
+    <value>Понятно!</value>
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
@@ -616,7 +616,7 @@
     <value>Подсказка к паролю</value>
   </data>
   <data name="PasswordHintAlert" xml:space="preserve">
-    <value>Мы отправили вам email с подсказкой к мастер-паролю.</value>
+    <value>Мы отправили вам письмо с подсказкой к мастер-паролю.</value>
   </data>
   <data name="PasswordOverrideAlert" xml:space="preserve">
     <value>Вы хотите перезаписать текущий пароль?</value>
@@ -683,7 +683,7 @@
     <value>Двухфакторная аутентификация</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Двухфакторная аутентификация делает ваш аккаунт более защищенным, требуя подтверждения входа на другом устройстве, например, ключом безопасности, приложением-аутентификатором, SMS, телефонным звонком или email. Двухфакторная аутентификация включается на bitwarden.com. Перейти на сайт сейчас?</value>
+    <value>Двухфакторная аутентификация делает ваш аккаунт более защищенным, требуя подтверждения входа на другом устройстве, например, ключом безопасности, приложением-аутентификатором, SMS, телефонным звонком или письмом. Двухфакторная аутентификация включается на bitwarden.com. Перейти на сайт сейчас?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Разблокировка {0}</value>
@@ -729,7 +729,7 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
-    <value>Когда вы выбираете поле ввода и видите наложение автозаполнения Bitwarden, вы можете нажать на него, чтобы запустить службу автозаполнения.</value>
+    <value>Если при выборе поля ввода вы видите панель автозаполнения Bitwarden, вы можете нажать на нее, чтобы запустить службу автозаполнения.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Коснитесь этого уведомления для автоматического заполнения.</value>
@@ -738,7 +738,7 @@
     <value>Открыть настройки специальных возможностей</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
-    <value>1. На экране настроек специальных возможностей Android под заголовком Сервисы коснитесь Bitwarden.</value>
+    <value>1. На экране настроек специальных возможностей Android под заголовком 'Сервисы' коснитесь 'Bitwarden'.</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
     <value>2. Активируйте переключатель и нажмите OK для подтверждения.</value>
@@ -759,7 +759,7 @@
     <value>Автозаполнение</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
-    <value>Выполнить автоматическое заполнение или просмотреть этот элемент?</value>
+    <value>Выполнить автозаполнение или просмотреть этот элемент?</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
     <value>Вы действительно хотите использовать этот элемент? Это неточное соответствие для "{0}".</value>
@@ -1284,7 +1284,7 @@
     <value>Автозаполнение паролей</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
-    <value>Самый простой способ добавить новые логины в хранилище - использовать расширение автозаполнения паролей Bitwarden. Дополнительные сведения об использовании расширения автозаполнения паролей Bitwarden в разделе 'Настройки'.</value>
+    <value>Самый простой способ добавлять новые логины в хранилище - использовать расширение автозаполнения паролей Bitwarden. Дополнительные сведения об использовании расширения автозаполнения паролей Bitwarden находятся в разделе 'Настройки'.</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
     <value>Неверный адрес email.</value>
@@ -1316,10 +1316,10 @@
     <value>Проверьте, не скомпрометирован ли пароль.</value>
   </data>
   <data name="PasswordExposed" xml:space="preserve">
-    <value>Этот пароль был найден в базах утечек {0} раз(-а). Вы должны изменить его.</value>
+    <value>Этот пароль был скомпрометирован $VALUE$ раз(а). Вам следует его изменить.</value>
   </data>
   <data name="PasswordSafe" xml:space="preserve">
-    <value>Этот пароль не был найден в известных базах утечек. Можно продолжать его использовать.</value>
+    <value>Этот пароль не обнаружен в известных базах утечек. Можно продолжать его использовать.</value>
   </data>
   <data name="IdentityName" xml:space="preserve">
     <value>Имя</value>
@@ -1352,10 +1352,10 @@
     <value>Тип</value>
   </data>
   <data name="MoveDown" xml:space="preserve">
-    <value>Переместить вниз</value>
+    <value>Переместить ниже</value>
   </data>
   <data name="MoveUp" xml:space="preserve">
-    <value>Переместить вверх</value>
+    <value>Переместить выше</value>
   </data>
   <data name="Miscellaneous" xml:space="preserve">
     <value>Прочее</value>
@@ -1382,10 +1382,10 @@
     <value>Поделиться элементом</value>
   </data>
   <data name="NoOrgsToList" xml:space="preserve">
-    <value>Нет организаций для отоображения.</value>
+    <value>Нет организаций для отображения.</value>
   </data>
   <data name="ShareDesc" xml:space="preserve">
-    <value>Выберите организацию, которой вы хотите предоставить доступ к этому элементу. Совместное использование передает права на элемент организации. Вы больше не будете являться непосредственным владельцем этого элемента после его совместного использования.</value>
+    <value>Выберите организацию, которой хотите предоставить доступ к этому элементу. После выполнения этой операции права на элемент будут переданы организации и вы не будете являться непосредственным владельцем этого элемента.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
     <value>Количество слов</value>
@@ -1416,7 +1416,7 @@
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="ShareVaultConfirmation" xml:space="preserve">
-    <value>Bitwarden позволяет делиться своим хранилищем с другими пользователями, используя учетную запись организации. Хотите посетить сайт bitwarden.com, чтобы узнать больше?</value>
+    <value>Bitwarden позволяет делиться своим хранилищем с другими пользователями, используя аккаунт организации. Хотите посетить сайт bitwarden.com, чтобы узнать больше?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
     <value>Экспортировать хранилище</value>
@@ -1488,7 +1488,7 @@
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
-    <value>Выберите способ по умолчанию, используемый при определении соответствия URI для логинов при выполнении таких действий, как автоматическое заполнение.</value>
+    <value>Выберите стандартный способ определения соответствия URI для логинов при выполнении таких действий, как автоматическое заполнение.</value>
   </data>
   <data name="Theme" xml:space="preserve">
     <value>Тема</value>
@@ -1505,13 +1505,13 @@
     <value>Перезапуск...</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
-    <value>Копировать заметки</value>
+    <value>Скопировать заметки</value>
   </data>
   <data name="Exit" xml:space="preserve">
     <value>Выход</value>
   </data>
   <data name="ExitConfirmation" xml:space="preserve">
-    <value>Вы уверены, что хотите выйти из Bitwarden?</value>
+    <value>Вы действительно хотите выйти из Bitwarden?</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
     <value>Вы хотите, чтобы при перезапуске приложения требовалась разблокировка с помощью мастер-пароля?</value>
@@ -1530,7 +1530,7 @@
     <value>Отключить запрос на сохранение</value>
   </data>
   <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>Уведомление о сохранении автоматически предложит вам сохранить новые элементы в ваше хранилище, когда вы введете их первый раз.</value>
+    <value>Уведомление о сохранении автоматически предложит вам сохранить новые элементы в ваше хранилище.</value>
   </data>
   <data name="LockOptionOnRestart" xml:space="preserve">
     <value>При перезапуске приложения</value>
@@ -1570,7 +1570,7 @@
     <value>Использовать биометрию для разблокировки</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
-    <value>Bitwarden нуждается во внимании - см. раздел " Служба специальных возможностей автозаполнения" в настройках Bitwarden.</value>
+    <value>Bitwarden требует внимания - см. раздел 'Служба специальных возможностей автозаполнения' в настройках Bitwarden.</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
     <value>3. На экране настроек приложений Android для Bitwarden перейдите в раздел "Отображение поверх других приложений" (в разделе "Дополнительно") и коснитесь переключателя, чтобы включить поддержку наложения.</value>
@@ -1597,13 +1597,13 @@
     <value>Для экспорта данных из хранилища введите мастер-пароль.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
-    <value>Экспортируемый файл содержит данные вашего хранилища в незашифрованном формате. Его не следует хранить или отправлять по небезопасным каналам (например, по электронной почте). Удалите его сразу после использования.</value>
+    <value>Экспортируемый файл содержит данные вашего хранилища в незашифрованном формате. Его не следует хранить или отправлять по небезопасным каналам (например по электронной почте). Удалите его сразу после использования.</value>
   </data>
   <data name="Warning" xml:space="preserve">
     <value>Предупреждение</value>
   </data>
   <data name="ExportVaultFailure" xml:space="preserve">
-    <value>Возникла проблема с экспортом вашего хранилища.  Если проблема не исчезнет, вам необходимо экспортировать данные из веб-хранилища.</value>
+    <value>Возникла проблема с экспортом хранилища.  Если проблема не исчезнет, экспортируйте данные из веб-хранилища.</value>
   </data>
   <data name="ExportVaultSuccess" xml:space="preserve">
     <value>Хранилище успешно экспортировано</value>
@@ -1613,7 +1613,7 @@
     <comment>Clone an entity (verb).</comment>
   </data>
   <data name="PasswordGeneratorPolicyInEffect" xml:space="preserve">
-    <value>Одна или несколько политик организации влияют на настройки генератора</value>
+    <value>На настройки генератора влияют одна или несколько политик организации</value>
   </data>
   <data name="Open" xml:space="preserve">
     <value>Открыть</value>

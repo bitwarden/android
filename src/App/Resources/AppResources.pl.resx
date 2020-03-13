@@ -182,7 +182,7 @@
     <value>Edytuj Folder</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>E-mail</value>
+    <value>Adres e-mail</value>
     <comment>Short label for an email address.</comment>
   </data>
   <data name="EmailAddress" xml:space="preserve">
@@ -363,7 +363,7 @@
     <value>Zweryfikuj odcisk palca</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
-    <value>Sprawdź hasło główne</value>
+    <value>Zweryfikuj hasło główne</value>
   </data>
   <data name="VerifyPIN" xml:space="preserve">
     <value>Zweryfikuj kod PIN</value>
@@ -433,7 +433,7 @@
     <value>Zmień hasło główne</value>
   </data>
   <data name="ChangePasswordConfirmation" xml:space="preserve">
-    <value>Swoje hasło główne możesz zmienić na stronie sejfu bitwarden.com. Czy chcesz przejść do tej strony?</value>
+    <value>Hasło główne możesz zmienić na stronie sejfu bitwarden.com. Czy chcesz przejść do tej strony?</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Zamknij</value>
@@ -519,16 +519,16 @@
     <value>Blokada</value>
   </data>
   <data name="LockOption15Minutes" xml:space="preserve">
-    <value>po 15 minutach</value>
+    <value>15 minut</value>
   </data>
   <data name="LockOption1Hour" xml:space="preserve">
-    <value>po 1 godzinie</value>
+    <value>1 godzina</value>
   </data>
   <data name="LockOption1Minute" xml:space="preserve">
-    <value>po 1 minucie</value>
+    <value>1 minuta</value>
   </data>
   <data name="LockOption4Hours" xml:space="preserve">
-    <value>po 4 godzinach</value>
+    <value>4 godziny</value>
   </data>
   <data name="LockOptionImmediately" xml:space="preserve">
     <value>Natychmiast</value>
@@ -729,13 +729,13 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
-    <value>Kiedy wybierzesz pole formularza i zobaczysz usługę autouzupełniania Bitwarden, możesz ją dotknąć, aby ją uruchomić.</value>
+    <value>Kiedy wybierzesz pole formularza i zobaczysz usługę autouzupełniania Bitwarden, dotknij ją, aby ją uruchomić.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Dotknij to powiadomienie, aby automatycznie uzupełnić dane z sejfu.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
-    <value>Otwórz ustawienia usługi ułatwienia dostępu</value>
+    <value>Otwórz ustawienia ułatwienia dostępu</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
     <value>1. Na ekranie ustawień usługi ułatwienia dostępu dotknij "Bitwarden" na liście usług.</value>
@@ -825,7 +825,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
-    <value>E-mail weryfikacyjny wysłany.</value>
+    <value>Kod weryfikacyjny został wysłany.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
@@ -945,7 +945,7 @@
     <comment>Validation error when something is not formatted correctly, such as a URL or email address.</comment>
   </data>
   <data name="IdentityUrl" xml:space="preserve">
-    <value>URL serwera tożsamości</value>
+    <value>Adres URL serwera tożsamości</value>
     <comment>"Identity" refers to an identity server. See more context here https://en.wikipedia.org/wiki/Identity_management</comment>
   </data>
   <data name="SelfHostedEnvironment" xml:space="preserve">
@@ -955,7 +955,7 @@
     <value>Wpisz podstawowy adres URL hostowanej instalacji Bitwarden.</value>
   </data>
   <data name="ServerUrl" xml:space="preserve">
-    <value>URL serwera</value>
+    <value>Adres URL serwera</value>
   </data>
   <data name="WebVaultUrl" xml:space="preserve">
     <value>Adres URL serwera sejfu internetowego</value>
@@ -967,7 +967,7 @@
     <value>Pola niestandardowe</value>
   </data>
   <data name="CopyNumber" xml:space="preserve">
-    <value>Skopiuj numer</value>
+    <value>Kopiuj numer karty</value>
   </data>
   <data name="CopySecurityCode" xml:space="preserve">
     <value>Kopiuj kod zabezpieczający</value>
@@ -1006,7 +1006,7 @@
     <value>Sierpień</value>
   </data>
   <data name="Brand" xml:space="preserve">
-    <value>Marka</value>
+    <value>Wydawca</value>
   </data>
   <data name="CardholderName" xml:space="preserve">
     <value>Właściciel karty</value>
@@ -1087,7 +1087,7 @@
     <value>September</value>
   </data>
   <data name="SSN" xml:space="preserve">
-    <value>PESEL</value>
+    <value>Numer PESEL</value>
   </data>
   <data name="StateProvince" xml:space="preserve">
     <value>Województwo</value>
@@ -1102,7 +1102,7 @@
     <value>Adres</value>
   </data>
   <data name="Expiration" xml:space="preserve">
-    <value>Wygaśnięcie</value>
+    <value>Data wygaśnięcia</value>
   </data>
   <data name="DisableWebsiteIcons" xml:space="preserve">
     <value>Wyłącz ikony stron</value>
@@ -1111,7 +1111,7 @@
     <value>Wyświetlaj rozpoznawalną ikonę serwisu obok danych logowania w sejfie.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
-    <value>URL serwera ikon</value>
+    <value>Adres URL serwera ikon</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
     <value>Autouzupełnij z Bitwarden</value>
@@ -1132,16 +1132,16 @@
     <value>Brak elementów w tym folderze.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
-    <value>Autouzupełnianie – usługa ułatwienia dostępu</value>
+    <value>Usługa ułatwienia dostępu</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
     <value>Usługa autouzupełniania Bitwarden wykorzystuje funkcję Androida, aby wypełniać dane logowania, kart kredytowych i osobistych informacji w aplikacjach na Twoim urządzeniu.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Użyj usługi autouzupełniania Bitwarden, aby wypełnić dane logowania, dane kart kredytowych i informacje osobiste w innych aplikacjach.</value>
+    <value>Użyj usługi autouzupełniania Bitwarden, aby wypełniać dane logowania, kart kredytowych i informacje osobiste w innych aplikacjach.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
-    <value>Otwórz ustawienia usługi autouzupełniania</value>
+    <value>Otwórz ustawienia autouzupełniania</value>
   </data>
   <data name="FaceID" xml:space="preserve">
     <value>Face ID</value>
@@ -1194,7 +1194,7 @@
     <value>Domena nadrzędna</value>
   </data>
   <data name="Default" xml:space="preserve">
-    <value>Domyślne</value>
+    <value>Domyślny</value>
   </data>
   <data name="Exact" xml:space="preserve">
     <value>Dokładnie</value>
@@ -1346,7 +1346,7 @@
     <value>Szukaj w folderze</value>
   </data>
   <data name="SearchType" xml:space="preserve">
-    <value>Typ wyszukiwania</value>
+    <value>Szukaj elementu</value>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Typ</value>
@@ -1412,7 +1412,7 @@
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="YourAccountsFingerprint" xml:space="preserve">
-    <value>Unikalny identyfikator dla Twojego konta</value>
+    <value>Unikalny identyfikator Twojego konta</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="ShareVaultConfirmation" xml:space="preserve">
@@ -1461,7 +1461,7 @@
     <value>5 minut</value>
   </data>
   <data name="OneMinute" xml:space="preserve">
-    <value>po 1 minucie</value>
+    <value>1 minuta</value>
   </data>
   <data name="TenSeconds" xml:space="preserve">
     <value>10 sekund</value>
@@ -1579,10 +1579,10 @@
     <value>Uprawnienie</value>
   </data>
   <data name="BitwardenAutofillServiceOpenOverlayPermissionSettings" xml:space="preserve">
-    <value>Otwórz ustawienia uprawnienia</value>
+    <value>Otwórz uprawnienia aplikacji</value>
   </data>
   <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
-    <value>3. Na ekranie ustawień aplikacji Bitwarden przejdź do opcji "Wyświetlanie nad innymi aplikacjami" (w sekcji "zaawansowane") i włącz obsługę nakładki.</value>
+    <value>3. Na ekranie ustawień aplikacji Bitwarden przejdź do opcji "Wyświetlanie nad innymi aplikacjami" (w sekcji "zaawansowane") i dotknij przełącznika, aby włączyć obsługę nakładki.</value>
   </data>
   <data name="Denied" xml:space="preserve">
     <value>Odmowa</value>

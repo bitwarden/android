@@ -206,7 +206,7 @@
     <value>Паведаміць аб памылцы</value>
   </data>
   <data name="FileBugReportDescription" xml:space="preserve">
-    <value>Open an issue at our GitHub repository.</value>
+    <value>Стварыце тэму з праблемай у нашым рэпазіторыі GitHub.</value>
   </data>
   <data name="FingerprintDirection" xml:space="preserve">
     <value>Выкарыстоўвайце свой адбітак пальца для верыфікацыі.</value>
@@ -243,7 +243,7 @@
     <comment>Hide a secret value that is currently shown (password).</comment>
   </data>
   <data name="InternetConnectionRequiredMessage" xml:space="preserve">
-    <value>Please connect to the internet before continuing.</value>
+    <value>Злучыцеся з інтэрнэтам, каб працягнуць.</value>
     <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
@@ -360,13 +360,13 @@
     <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
-    <value>Verify Fingerprint</value>
+    <value>Праверка адбітка пальца</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
-    <value>Verify Master Password</value>
+    <value>Праверыць майстар-пароль</value>
   </data>
   <data name="VerifyPIN" xml:space="preserve">
-    <value>Verify PIN</value>
+    <value>Праверыць PIN-код</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>Версія</value>
@@ -378,7 +378,7 @@
     <value>Наведайце наш вэб-сайт</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Visit our website to get help, news, email us, and/or learn more about how to use Bitwarden.</value>
+    <value>Наведайце наш вэб-сайт, каб атрымаць дапамогу, прачытаць навіны, звязацца з намі і/або даведацца больш пра тое, як карыстацца Bitwarden.</value>
   </data>
   <data name="Website" xml:space="preserve">
     <value>Вэб-сайт</value>
@@ -400,40 +400,40 @@
     <value>Дадаць пашырэнне</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Use the Bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
+    <value>Выкарыстоўвайце службу спецыяльных магчымасцяў Bitwarden для аўтазапаўнення вашых імён карыстальніка ў праграмах і інтэрнэце.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
-    <value>Auto-fill Service</value>
+    <value>Служба аўтазапаўнення</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>Пазбягаць неадназначных сімвалаў</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>Bitwarden App Extension</value>
+    <value>Пашырэнне Bitwarden</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the Bitwarden App Extension. Learn more about using the Bitwarden App Extension by navigating to the "Settings" screen.</value>
+    <value>Самы просты спосаб дадаць новыя імёны карыстальніка ў ваша сховішча — гэта служба аўтаўапаўнення Bitwarden. Дадатковыя звесткі аб выкарыстанні службы аўтазапаўнення Bitwarden у раздзеле "Налады".</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>Use Bitwarden in Safari and other apps to auto-fill your logins.</value>
+    <value>Выкарыстоўвайце Bitwarden у Safari і іншых праграмах для аўтазапаўнення імён карыстальніка.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>Bitwarden Auto-fill Service</value>
+    <value>Служба аўтазапаўнення Bitwarden</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Use the Bitwarden accessibility service to auto-fill your logins.</value>
+    <value>Выкарыстоўвайце службу спецыяльных магчымасцяў Bitwarden для аўтазапаўнення вашых імён карыстальніка ў праграмах і інтэрнэце.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Змяніць адрас электроннай пошты</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
-    <value>You can change your email address on the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>Вы можаце змяніць сваю электронную пошту на bitwarden.com. Перайсці на сайт зараз?</value>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
-    <value>Change Master Password</value>
+    <value>Змяніць майстар-пароль</value>
   </data>
   <data name="ChangePasswordConfirmation" xml:space="preserve">
-    <value>You can change your master password on the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>Вы можаце змяніць свой майстар-пароль на bitwarden.com. Перайсці на сайт зараз?</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Закрыць</value>
@@ -452,7 +452,7 @@
     <value>Рэдагаванне элемента</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
-    <value>Enable Automatic Syncing</value>
+    <value>Уключыць аўтаматычную сінхранізацыю</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
     <value>Увядзіце адрас электроннай пошты ўліковага запісу для атрымання падказкі для пароля.</value>
@@ -601,69 +601,69 @@
     <value>Option defaults are set from the main Bitwarden app's password generator tool.</value>
   </data>
   <data name="Options" xml:space="preserve">
-    <value>Options</value>
+    <value>Параметры</value>
   </data>
   <data name="Other" xml:space="preserve">
-    <value>Other</value>
+    <value>Iншае</value>
   </data>
   <data name="PasswordGenerated" xml:space="preserve">
-    <value>Password generated.</value>
+    <value>Пароль створаны.</value>
   </data>
   <data name="PasswordGenerator" xml:space="preserve">
-    <value>Password Generator</value>
+    <value>Генератар пароляў</value>
   </data>
   <data name="PasswordHint" xml:space="preserve">
-    <value>Password Hint</value>
+    <value>Падказка да пароля</value>
   </data>
   <data name="PasswordHintAlert" xml:space="preserve">
-    <value>We've sent you an email with your master password hint.</value>
+    <value>Мы адправілі вам на электронную пошту падказку для майстра-пароля.</value>
   </data>
   <data name="PasswordOverrideAlert" xml:space="preserve">
-    <value>Are you sure you want to overwrite the current password?</value>
+    <value>Вы ўпэўнены, што хочаце перазапісаць бягучы пароль?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
     <value>Bitwarden keeps your vault automatically synced by using push notifications. For the best possible experience, please select "Allow" on the following prompt when asked to enable push notifications.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
-    <value>Rate the App</value>
+    <value>Ацаніць праграму</value>
   </data>
   <data name="RateTheAppDescription" xml:space="preserve">
-    <value>Please consider helping us out with a good review!</value>
+    <value>Падумайце аб тым, каб дапамагчы нам, напісаўшы добрым водгукам!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
-    <value>Regenerate Password</value>
+    <value>Стварыць новы пароль</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
-    <value>Re-type Master Password</value>
+    <value>Увядзіце майстар-пароль паўторна</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
-    <value>Search vault</value>
+    <value>Пошук у сховішчы</value>
   </data>
   <data name="Security" xml:space="preserve">
-    <value>Security</value>
+    <value>Бяспека</value>
   </data>
   <data name="Select" xml:space="preserve">
-    <value>Select</value>
+    <value>Выбраць</value>
   </data>
   <data name="SetPIN" xml:space="preserve">
-    <value>Set PIN</value>
+    <value>Задаць PIN-код</value>
   </data>
   <data name="SetPINDirection" xml:space="preserve">
-    <value>Enter a 4 digit PIN code to unlock the app with.</value>
+    <value>Увядзіце чатырохлічбавы PIN-код, каб разблакіраваць ім праграму.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
-    <value>Item Information</value>
+    <value>Звесткі аб элеменце</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Item updated.</value>
+    <value>Элемент абноўлены.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Submitting...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Syncing" xml:space="preserve">
-    <value>Syncing...</value>
+    <value>Сінхранізацыя...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="SyncingComplete" xml:space="preserve">
@@ -890,49 +890,49 @@
     <value>If your login has an authenticator key attached to it, the TOTP verification code is automatically copied to your clipboard whenever you auto-fill the login.</value>
   </data>
   <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>Disable Automatic TOTP Copy</value>
+    <value>Адключыць аўтаматычнае капіяванне TOTP</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
-    <value>A premium membership is required to use this feature.</value>
+    <value>Для выкарыстання гэтай функцыі патрабуецца прэміяльны статус.</value>
   </data>
   <data name="AttachementAdded" xml:space="preserve">
-    <value>Attachment added</value>
+    <value>Далучэнне дададзена</value>
   </data>
   <data name="AttachmentDeleted" xml:space="preserve">
-    <value>Attachment deleted</value>
+    <value>Далучэнне выдалена</value>
   </data>
   <data name="ChooseFile" xml:space="preserve">
-    <value>Choose File</value>
+    <value>Выбраць файл</value>
   </data>
   <data name="File" xml:space="preserve">
-    <value>File</value>
+    <value>Файл</value>
   </data>
   <data name="NoFileChosen" xml:space="preserve">
-    <value>No file chosen</value>
+    <value>Файл не выбраны</value>
   </data>
   <data name="NoAttachments" xml:space="preserve">
-    <value>There are no attachments.</value>
+    <value>Няма далучэнняў.</value>
   </data>
   <data name="FileSource" xml:space="preserve">
-    <value>File Source</value>
+    <value>Крыніца файла</value>
   </data>
   <data name="FeatureUnavailable" xml:space="preserve">
-    <value>Feature Unavailable</value>
+    <value>Функцыя недаступна</value>
   </data>
   <data name="MaxFileSize" xml:space="preserve">
-    <value>Maximum file size is 100 MB.</value>
+    <value>Максімальны памер файла 100 МБ.</value>
   </data>
   <data name="UpdateKey" xml:space="preserve">
-    <value>You cannot use this feature until you update your encryption key.</value>
+    <value>Вы не можаце выкарыстоўваць гэту функцыю, пакуль не абнавіце свой ключ шыфравання.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
-    <value>Learn More</value>
+    <value>Даведацца больш</value>
   </data>
   <data name="ApiUrl" xml:space="preserve">
-    <value>API Server URL</value>
+    <value>API URL-адраса сервера</value>
   </data>
   <data name="CustomEnvironment" xml:space="preserve">
-    <value>Custom Environment</value>
+    <value>Налады асяроддзя</value>
   </data>
   <data name="CustomEnvironmentFooter" xml:space="preserve">
     <value>Для вопытных карыстальнікаў. Можна ўвесці URL-адрасы асобна для кжонай службы.</value>
@@ -941,7 +941,7 @@
     <value>URL-адрас сервера асяроддзя захаваны.</value>
   </data>
   <data name="FormattedIncorrectly" xml:space="preserve">
-    <value>{0} is not correctly formatted.</value>
+    <value>{0} гэта няправільны фармат.</value>
     <comment>Validation error when something is not formatted correctly, such as a URL or email address.</comment>
   </data>
   <data name="IdentityUrl" xml:space="preserve">
@@ -961,7 +961,7 @@
     <value>URL-адрас сервера вэб-сховішча</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
-    <value>Tap this notification to view items from your vault.</value>
+    <value>Націсніце на гэта апавяшчэнне, каб праглядзець элементы з вашага сховішча.</value>
   </data>
   <data name="CustomFields" xml:space="preserve">
     <value>Карыстальніцкія палі</value>
@@ -1087,13 +1087,13 @@
     <value>Верасень</value>
   </data>
   <data name="SSN" xml:space="preserve">
-    <value>Social Security Number</value>
+    <value>Нумар сацыяльнага страхавання</value>
   </data>
   <data name="StateProvince" xml:space="preserve">
-    <value>State / Province</value>
+    <value>Рэгіён / Вобласць</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Title</value>
+    <value>Зварот</value>
   </data>
   <data name="ZipPostalCode" xml:space="preserve">
     <value>Паштовы індэкс</value>
@@ -1114,25 +1114,25 @@
     <value>URL-адрас сервера значкоў</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Auto-fill with Bitwarden</value>
+    <value>Аўтазапаўненне Bitwarden</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
-    <value>Vault is locked</value>
+    <value>Сховішча заблакіравана</value>
   </data>
   <data name="GoToMyVault" xml:space="preserve">
-    <value>Go to my vault</value>
+    <value>Перайсці ў сховішча</value>
   </data>
   <data name="Collections" xml:space="preserve">
     <value>Калекцыі</value>
   </data>
   <data name="NoItemsCollection" xml:space="preserve">
-    <value>There are no items in this collection.</value>
+    <value>Няма элементаў у гэтай калекцыі.</value>
   </data>
   <data name="NoItemsFolder" xml:space="preserve">
-    <value>There are no items in this folder.</value>
+    <value>Няма элементаў у гэтай папцы.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
-    <value>Auto-fill Accessibility Service</value>
+    <value>Служба спецыяльных магчымасцяў аўтаўапаўнення</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
     <value>The Bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device.</value>
@@ -1148,10 +1148,10 @@
     <comment>What Apple calls their facial recognition reader.</comment>
   </data>
   <data name="FaceIDDirection" xml:space="preserve">
-    <value>Use Face ID to verify.</value>
+    <value>Выкарыстоўваць Face ID для праверкі.</value>
   </data>
   <data name="UseFaceIDToUnlock" xml:space="preserve">
-    <value>Use Face ID To Unlock</value>
+    <value>Выкарыстоўваць Face ID для разблакіроўкі</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
     <value>Verify Face ID</value>
@@ -1166,52 +1166,52 @@
     <value>Custom Field Name</value>
   </data>
   <data name="FieldTypeBoolean" xml:space="preserve">
-    <value>Boolean</value>
+    <value>Лагічнае</value>
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
-    <value>Hidden</value>
+    <value>Схавана</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
-    <value>Text</value>
+    <value>Тэкст</value>
   </data>
   <data name="NewCustomField" xml:space="preserve">
-    <value>New Custom Field</value>
+    <value>Новае карыстальніцкае поле</value>
   </data>
   <data name="SelectTypeField" xml:space="preserve">
     <value>What type of custom field do you want to add?</value>
   </data>
   <data name="Remove" xml:space="preserve">
-    <value>Remove</value>
+    <value>Выдаліць</value>
   </data>
   <data name="NewUri" xml:space="preserve">
-    <value>New URI</value>
+    <value>Новы URI</value>
   </data>
   <data name="URIPosition" xml:space="preserve">
     <value>URI {0}</value>
     <comment>Label for a uri/url with position. i.e. URI 1, URI 2, etc</comment>
   </data>
   <data name="BaseDomain" xml:space="preserve">
-    <value>Base domain</value>
+    <value>Асноўны дамен</value>
   </data>
   <data name="Default" xml:space="preserve">
-    <value>Default</value>
+    <value>Па змаўчанні</value>
   </data>
   <data name="Exact" xml:space="preserve">
-    <value>Exact</value>
+    <value>Дакладна</value>
   </data>
   <data name="Host" xml:space="preserve">
-    <value>Host</value>
+    <value>Хост</value>
     <comment>A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'.</comment>
   </data>
   <data name="RegEx" xml:space="preserve">
-    <value>Regular expression</value>
+    <value>Рэгулярны выраз</value>
     <comment>A programming term, also known as 'RegEx'.</comment>
   </data>
   <data name="StartsWith" xml:space="preserve">
-    <value>Starts with</value>
+    <value>Пачынаецца з</value>
   </data>
   <data name="URIMatchDetection" xml:space="preserve">
-    <value>URI Match Detection</value>
+    <value>Выяўленне супадзення URI</value>
   </data>
   <data name="MatchDetection" xml:space="preserve">
     <value>Match Detection</value>
@@ -1305,7 +1305,7 @@
     <value>Усе элементы</value>
   </data>
   <data name="URIs" xml:space="preserve">
-    <value>URIs</value>
+    <value>URI</value>
     <comment>Plural form of a URI</comment>
   </data>
   <data name="CheckingPassword" xml:space="preserve">
@@ -1334,7 +1334,7 @@
     <value>Тыпы</value>
   </data>
   <data name="NoPasswordsToList" xml:space="preserve">
-    <value>No passwords to list.</value>
+    <value>Няма пароляў для паказу.</value>
   </data>
   <data name="NoItemsToList" xml:space="preserve">
     <value>Няма элементаў для паказу.</value>
@@ -1391,118 +1391,118 @@
     <value>Колькасць слоў</value>
   </data>
   <data name="Passphrase" xml:space="preserve">
-    <value>Passphrase</value>
+    <value>Парольная фраза</value>
   </data>
   <data name="WordSeparator" xml:space="preserve">
-    <value>Word Separator</value>
+    <value>Раздзяляльнік слоў</value>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>Clear</value>
+    <value>Ачысціць</value>
     <comment>To clear something out. example: To clear browser history.</comment>
   </data>
   <data name="Generator" xml:space="preserve">
-    <value>Generator</value>
+    <value>Генератар</value>
     <comment>Short for "Password Generator"</comment>
   </data>
   <data name="NoFoldersToList" xml:space="preserve">
-    <value>There are no folders to list.</value>
+    <value>Няма папак для паказу.</value>
   </data>
   <data name="FingerprintPhrase" xml:space="preserve">
-    <value>Fingerprint Phrase</value>
+    <value>Фраза адбітка пальца</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="YourAccountsFingerprint" xml:space="preserve">
-    <value>Your account's fingerprint phrase</value>
+    <value>Фраза адбітка пальца вашага ўліковага запісу</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="ShareVaultConfirmation" xml:space="preserve">
-    <value>Bitwarden allows you to share your vault with others by using an organization account. Would you like to visit the bitwarden.com website to learn more?</value>
+    <value>Bitwarden дазваляе абагуліць сваё сховішча з іншымі карыстальнікамі, выкарыстоўваючы ўліковы запіс арганізацыі. Хочаце наведаць сайт bitwarden.com, каб даведацца больш?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
-    <value>Export Vault</value>
+    <value>Экспарт сховішча</value>
   </data>
   <data name="LockNow" xml:space="preserve">
-    <value>Lock Now</value>
+    <value>Заблакіраваць</value>
   </data>
   <data name="PIN" xml:space="preserve">
-    <value>PIN</value>
+    <value>PIN-код</value>
   </data>
   <data name="Unlock" xml:space="preserve">
-    <value>Unlock</value>
+    <value>Разблакіраваць</value>
   </data>
   <data name="LockOption30Minutes" xml:space="preserve">
-    <value>30 minutes</value>
+    <value>30 хвілін</value>
   </data>
   <data name="LockOption5Minutes" xml:space="preserve">
-    <value>5 minutes</value>
+    <value>5 хвілін</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
-    <value>Set your PIN code for unlocking Bitwarden. Your PIN settings will be reset if you ever fully log out of the application.</value>
+    <value>Задайце PIN-код для разблакіроўкі Bitwarden. Налады PIN-кода будуць скінуты, калі вы калі-небудзь цалкам выйдзеце з праграмы.</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
     <value>Logged in as {0} on {1}.</value>
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
-    <value>Your vault is locked. Verify your master password to continue.</value>
+    <value>Ваша сховішча заблакіравана. Каб працягнуць, увядзіце майстар-пароль.</value>
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
-    <value>Your vault is locked. Verify your PIN code to continue.</value>
+    <value>Ваша сховішча заблакіравана. Каб працягнуць, увядзіце PIN-код.</value>
   </data>
   <data name="Dark" xml:space="preserve">
-    <value>Dark</value>
+    <value>Цёмная</value>
     <comment>A dark color</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>Light</value>
+    <value>Светлая</value>
     <comment>A light color</comment>
   </data>
   <data name="FiveMinutes" xml:space="preserve">
-    <value>5 minutes</value>
+    <value>5 хвілін</value>
   </data>
   <data name="OneMinute" xml:space="preserve">
-    <value>1 minute</value>
+    <value>1 хвіліна</value>
   </data>
   <data name="TenSeconds" xml:space="preserve">
-    <value>10 seconds</value>
+    <value>10 секунд</value>
   </data>
   <data name="ThirtySeconds" xml:space="preserve">
-    <value>30 seconds</value>
+    <value>30 секунд</value>
   </data>
   <data name="TwentySeconds" xml:space="preserve">
-    <value>20 seconds</value>
+    <value>20 секунд</value>
   </data>
   <data name="TwoMinutes" xml:space="preserve">
-    <value>2 minutes</value>
+    <value>2 хвіліны</value>
   </data>
   <data name="ClearClipboard" xml:space="preserve">
-    <value>Clear Clipboard</value>
+    <value>Ачыстка буфера абмену</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="ClearClipboardDescription" xml:space="preserve">
-    <value>Automatically clear copied values from your clipboard.</value>
+    <value>Аўтаматычна ачышчаць скапіяваныя значэнні з вашага буфера абмену.</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="DefaultUriMatchDetection" xml:space="preserve">
-    <value>Default URI Match Detection</value>
+    <value>Выяўленне супадзення URI па змаўчанні</value>
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
-    <value>Choose the default way that URI match detection is handled for logins when performing actions such as auto-fill.</value>
+    <value>Выберыце спосаб па змаўчанні, які выкарыстоўваецца пры вызначэнні адпаведнасці URI для імён карыстальніка пры выкананні такіх дзеянняў, як аўтаматычнае запаўненне.</value>
   </data>
   <data name="Theme" xml:space="preserve">
-    <value>Theme</value>
+    <value>Тэма</value>
     <comment>Color theme</comment>
   </data>
   <data name="ThemeDescription" xml:space="preserve">
-    <value>Change the application's color theme.</value>
+    <value>Змена колеравай тэмы праграмы.</value>
   </data>
   <data name="RestartIsRequired" xml:space="preserve">
-    <value>Restart is required.</value>
+    <value>Патрабуецца перазапуск.</value>
     <comment>Referring to restarting the application.</comment>
   </data>
   <data name="Restarting" xml:space="preserve">
-    <value>Restarting...</value>
+    <value>Перазапуск...</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Капіяваць нататк</value>
@@ -1585,44 +1585,44 @@
     <value>3. On the Android App Settings screen for Bitwarden, select "Display over other apps" (under "Advanced") and switch on the toggle to allow the overlay.</value>
   </data>
   <data name="Denied" xml:space="preserve">
-    <value>Denied</value>
+    <value>Адмоўлена</value>
   </data>
   <data name="Granted" xml:space="preserve">
-    <value>Granted</value>
+    <value>Дазволена</value>
   </data>
   <data name="FileFormat" xml:space="preserve">
-    <value>File Format</value>
+    <value>Фармат файла</value>
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
-    <value>Enter your master password to export your vault data.</value>
+    <value>Увядзіце ваш майстар-пароль для экспарту даных са сховішча.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
-    <value>This export contains your vault data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it.</value>
+    <value>Экспартуемы файл утрымлівае даныя вашага сховішча ў незашыфраваным фармаце. Яго не варта захоўваць ці адпраўляць па небяспечным каналам (напрыклад, па электроннай пошце). Выдаліце яго адразу пасля выкарыстання.</value>
   </data>
   <data name="Warning" xml:space="preserve">
-    <value>Warning</value>
+    <value>Увага</value>
   </data>
   <data name="ExportVaultFailure" xml:space="preserve">
-    <value>There was a problem exporting your vault.  If the problem persists, you'll need to export from the web vault.</value>
+    <value>Узнікла праблема падчас экспартавання сховішча. Калі праблема застанецца, экспартуйце яго з выб-сховішча.</value>
   </data>
   <data name="ExportVaultSuccess" xml:space="preserve">
-    <value>Vault exported successfully</value>
+    <value>Сховішча паспяхова экспартавана</value>
   </data>
   <data name="Clone" xml:space="preserve">
-    <value>Clone</value>
+    <value>Кланіраваць</value>
     <comment>Clone an entity (verb).</comment>
   </data>
   <data name="PasswordGeneratorPolicyInEffect" xml:space="preserve">
-    <value>One or more organization policies are affecting your generator settings</value>
+    <value>На налады генератара ўплываюць адна або некалькі палітык арганізацый</value>
   </data>
   <data name="Open" xml:space="preserve">
-    <value>Open</value>
+    <value>Адкрыць</value>
     <comment>Button text for an open operation (verb).</comment>
   </data>
   <data name="UnableToSaveAttachment" xml:space="preserve">
-    <value>There was a problem saving this attachment. If the problem persists, you can save it from the web vault.</value>
+    <value>Узнікла праблема падчас захавання гэтага далучэння. Калі праблема застанецца, вы можаце захаваць яго з вэб-сховішча.</value>
   </data>
   <data name="SaveAttachmentSuccess" xml:space="preserve">
-    <value>Attachment saved successfully</value>
+    <value>Далучэнне паспяхова захавана</value>
   </data>
 </root>
