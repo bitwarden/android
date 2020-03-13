@@ -312,6 +312,27 @@ namespace Bit.Core.Services
                 {
                     options.MinSpecial = options.Length - options.MinNumber;
                 }
+
+                if(options.NumWords < enforcedPolicyOptions.MinNumberOfWords)
+                {
+                    options.NumWords = enforcedPolicyOptions.MinNumberOfWords;
+                }
+
+                if(enforcedPolicyOptions.Capitalize)
+                {
+                    options.Capitalize = true;
+                }
+
+                if(enforcedPolicyOptions.IncludeNumber)
+                {
+                    options.IncludeNumber = true;
+                }
+
+                // Force default type if password/passphrase selected via policy
+                if(enforcedPolicyOptions.DefaultType == "password" || enforcedPolicyOptions.DefaultType == "passphrase")
+                {
+                    options.Type = enforcedPolicyOptions.DefaultType;
+                }
             }
             else
             {
@@ -342,6 +363,12 @@ namespace Bit.Core.Services
                 if(enforcedOptions == null)
                 {
                     enforcedOptions = new PasswordGeneratorPolicyOptions();
+                }
+
+                var defaultType = GetPolicyString(currentPolicy, "defaultType");
+                if(defaultType != null && enforcedOptions.DefaultType != "password")
+                {
+                    enforcedOptions.DefaultType = defaultType;
                 }
 
                 var minLength = GetPolicyInt(currentPolicy, "minLength");
@@ -385,6 +412,24 @@ namespace Bit.Core.Services
                 {
                     enforcedOptions.SpecialCount = (int)(long)minSpecial;
                 }
+
+                var minNumberWords = GetPolicyInt(currentPolicy, "minNumberWords");
+                if(minNumberWords != null && (int)(long)minNumberWords > enforcedOptions.MinNumberOfWords)
+                {
+                    enforcedOptions.MinNumberOfWords = (int)(long)minNumberWords;
+                }
+
+                var capitalize = GetPolicyBool(currentPolicy, "capitalize");
+                if(capitalize != null && (bool)capitalize)
+                {
+                    enforcedOptions.Capitalize = true;
+                }
+                
+                var includeNumber = GetPolicyBool(currentPolicy, "includeNumber");
+                if(includeNumber != null && (bool)includeNumber)
+                {
+                    enforcedOptions.IncludeNumber = true;
+                }
             }
 
             return enforcedOptions;
@@ -411,6 +456,19 @@ namespace Bit.Core.Services
                 if(value != null)
                 {
                     return (bool)value;
+                }
+            }
+            return null;
+        }
+        
+        private string GetPolicyString(Policy policy, string key)
+        {
+            if(policy.Data.ContainsKey(key))
+            {
+                var value = policy.Data[key];
+                if(value != null)
+                {
+                    return (string)value;
                 }
             }
             return null;
@@ -548,6 +606,11 @@ namespace Bit.Core.Services
             else if(options.NumWords > 20)
             {
                 options.NumWords = 20;
+            }
+
+            if(options.NumWords < enforcedPolicyOptions.MinNumberOfWords)
+            {
+                options.NumWords = enforcedPolicyOptions.MinNumberOfWords;
             }
 
             if(options.WordSeparator != null && options.WordSeparator.Length > 1)
