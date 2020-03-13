@@ -111,6 +111,7 @@ namespace Bit.App.Pages
                 catch(Exception ex)
                 {
                     ClearResult();
+                    await _platformUtilsService.ShowDialogAsync(_i18nService.T("ExportVaultFailure"));
                     System.Diagnostics.Debug.WriteLine(">>> {0}: {1}", ex.GetType(), ex.StackTrace);
                 }
             }
