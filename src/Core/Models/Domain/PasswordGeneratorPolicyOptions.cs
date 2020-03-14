@@ -16,17 +16,17 @@
         
         public bool InEffect()
         {
-            return DefaultType != ""
-                   || MinLength > 0
-                   || NumberCount > 0
-                   || SpecialCount > 0
-                   || UseUppercase
-                   || UseLowercase
-                   || UseNumbers
-                   || UseSpecial
-                   || MinNumberOfWords > 0
-                   || Capitalize
-                   || IncludeNumber;
+            return DefaultType != "" || 
+                   MinLength > 0 ||
+                   NumberCount > 0 ||
+                   SpecialCount > 0 ||
+                   UseUppercase ||
+                   UseLowercase ||
+                   UseNumbers ||
+                   UseSpecial ||
+                   MinNumberOfWords > 0 ||
+                   Capitalize ||
+                   IncludeNumber;
         }
     }
 }
