@@ -233,10 +233,7 @@ namespace Bit.App.Pages
                 });
         }
 
-        public bool IsPolicyInEffect => _enforcedPolicyOptions.MinLength > 0 || _enforcedPolicyOptions.UseUppercase ||
-                                        _enforcedPolicyOptions.UseLowercase || _enforcedPolicyOptions.UseNumbers ||
-                                        _enforcedPolicyOptions.NumberCount > 0 || _enforcedPolicyOptions.UseSpecial ||
-                                        _enforcedPolicyOptions.SpecialCount > 0;
+        public bool IsPolicyInEffect => _enforcedPolicyOptions.InEffect();
 
         public int TypeSelectedIndex
         {

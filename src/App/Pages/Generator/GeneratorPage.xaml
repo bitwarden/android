@@ -132,6 +132,8 @@
                             HorizontalOptions="StartAndExpand" />
                         <Switch
                             IsToggled="{Binding Capitalize}"
+                            IsEnabled="{Binding EnforcedPolicyOptions.Capitalize,
+                                Converter={StaticResource inverseBool}}"
                             StyleClass="box-value"
                             HorizontalOptions="End" />
                     </StackLayout>
@@ -143,6 +145,8 @@
                             HorizontalOptions="StartAndExpand" />
                         <Switch
                             IsToggled="{Binding IncludeNumber}"
+                            IsEnabled="{Binding EnforcedPolicyOptions.IncludeNumber,
+                                Converter={StaticResource inverseBool}}"
                             StyleClass="box-value"
                             HorizontalOptions="End" />
                     </StackLayout>
