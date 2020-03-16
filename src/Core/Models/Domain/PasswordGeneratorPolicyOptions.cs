@@ -2,7 +2,7 @@
 {
     public class PasswordGeneratorPolicyOptions
     {
-        public string DefaultType { get; set; }
+        public string DefaultType { get; set; } = "";
         public int MinLength { get; set; }
         public bool UseUppercase { get; set; }
         public bool UseLowercase { get; set; }
