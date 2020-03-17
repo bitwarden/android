@@ -12065,7 +12065,10 @@ namespace Bit.Droid
 			public const int path_password_strike_through = 2131558584;
 			
 			// aapt resource value: 0x7F0D00B9
-			public const int search_menu_title = 2131558585;
+			public const int project_id = 2131558585;
+			
+			// aapt resource value: 0x7F0D00BA
+			public const int search_menu_title = 2131558586;
 			
 			// aapt resource value: 0x7F0D0006
 			public const int SelfHostedServerUrl = 2131558406;
@@ -12073,8 +12076,8 @@ namespace Bit.Droid
 			// aapt resource value: 0x7F0D0007
 			public const int ServerUrl = 2131558407;
 			
-			// aapt resource value: 0x7F0D00BA
-			public const int status_bar_notification_info_overflow = 2131558586;
+			// aapt resource value: 0x7F0D00BB
+			public const int status_bar_notification_info_overflow = 2131558587;
 			
 			static String()
 			{
