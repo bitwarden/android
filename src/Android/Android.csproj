@@ -76,7 +76,7 @@
       <Version>2.1.0.4</Version>
     </PackageReference>
     <PackageReference Include="Portable.BouncyCastle">
-      <Version>1.8.5.2</Version>
+      <Version>1.8.6</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Essentials">
       <Version>1.5.1</Version>
