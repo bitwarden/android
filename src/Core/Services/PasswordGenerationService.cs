@@ -656,43 +656,54 @@ namespace Bit.Core.Services
             var minNumberCalc = options.MinNumber;
             var minSpecialCalc = options.MinNumber;
 
-            if (options.Uppercase.GetValueOrDefault() && options.MinUppercase.GetValueOrDefault() <= 0) {
+            if(options.Uppercase.GetValueOrDefault() && options.MinUppercase.GetValueOrDefault() <= 0)
+            {
                 minUppercaseCalc = 1;
-            } else if (!options.Uppercase.GetValueOrDefault()) {
+            } else if(!options.Uppercase.GetValueOrDefault())
+            {
                 minUppercaseCalc = 0;
             }
 
-            if (options.Lowercase.GetValueOrDefault() && options.MinLowercase.GetValueOrDefault() <= 0) {
+            if(options.Lowercase.GetValueOrDefault() && options.MinLowercase.GetValueOrDefault() <= 0) 
+            {
                 minLowercaseCalc = 1;
-            } else if (!options.Lowercase.GetValueOrDefault()) {
+            } else if(!options.Lowercase.GetValueOrDefault())
+            {
                 minLowercaseCalc = 0;
             }
 
-            if (options.Number.GetValueOrDefault() && options.MinNumber.GetValueOrDefault() <= 0) {
+            if(options.Number.GetValueOrDefault() && options.MinNumber.GetValueOrDefault() <= 0)
+            {
                 minNumberCalc = 1;
-            } else if (!options.Number.GetValueOrDefault()) {
+            } else if(!options.Number.GetValueOrDefault())
+            {
                 minNumberCalc = 0;
             }
 
-            if (options.Special.GetValueOrDefault() && options.MinSpecial.GetValueOrDefault() <= 0) {
+            if(options.Special.GetValueOrDefault() && options.MinSpecial.GetValueOrDefault() <= 0)
+            {
                 minSpecialCalc = 1;
-            } else if (!options.Special.GetValueOrDefault()) {
+            } else if(!options.Special.GetValueOrDefault())
+            {
                 minSpecialCalc = 0;
             }
 
             // This should never happen but is a final safety net
-            if (options.Length.GetValueOrDefault() < 1) {
+            if(options.Length.GetValueOrDefault() < 1)
+            {
                 options.Length = 10;
             }
 
             var minLength = minUppercaseCalc + minLowercaseCalc + minNumberCalc + minSpecialCalc;
             // Normalize and Generation both require this modification
-            if (options.Length < minLength) {
+            if(options.Length < minLength)
+            {
                 options.Length = minLength;
             }
 
             // Apply other changes if the options object passed in is for generation
-            if (forGeneration) {
+            if(forGeneration)
+            {
                 options.MinUppercase = minUppercaseCalc;
                 options.MinLowercase = minLowercaseCalc;
                 options.MinNumber = minNumberCalc;
