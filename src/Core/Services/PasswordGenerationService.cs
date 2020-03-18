@@ -649,7 +649,7 @@ namespace Bit.Core.Services
             wordList[index] = wordList[index] + num;
         }
 
-        private static void SanitizePasswordLength(PasswordGenerationOptions options, bool forGeneration)
+        private void SanitizePasswordLength(PasswordGenerationOptions options, bool forGeneration)
         {
             var minUppercaseCalc = 0;
             var minLowercaseCalc = 0;
@@ -659,7 +659,8 @@ namespace Bit.Core.Services
             if(options.Uppercase.GetValueOrDefault() && options.MinUppercase.GetValueOrDefault() <= 0)
             {
                 minUppercaseCalc = 1;
-            } else if(!options.Uppercase.GetValueOrDefault())
+            } 
+            else if(!options.Uppercase.GetValueOrDefault())
             {
                 minUppercaseCalc = 0;
             }
@@ -667,7 +668,8 @@ namespace Bit.Core.Services
             if(options.Lowercase.GetValueOrDefault() && options.MinLowercase.GetValueOrDefault() <= 0) 
             {
                 minLowercaseCalc = 1;
-            } else if(!options.Lowercase.GetValueOrDefault())
+            }
+            else if(!options.Lowercase.GetValueOrDefault())
             {
                 minLowercaseCalc = 0;
             }
@@ -675,7 +677,8 @@ namespace Bit.Core.Services
             if(options.Number.GetValueOrDefault() && options.MinNumber.GetValueOrDefault() <= 0)
             {
                 minNumberCalc = 1;
-            } else if(!options.Number.GetValueOrDefault())
+            } 
+            else if(!options.Number.GetValueOrDefault())
             {
                 minNumberCalc = 0;
             }
@@ -683,7 +686,8 @@ namespace Bit.Core.Services
             if(options.Special.GetValueOrDefault() && options.MinSpecial.GetValueOrDefault() <= 0)
             {
                 minSpecialCalc = 1;
-            } else if(!options.Special.GetValueOrDefault())
+            } 
+            else if(!options.Special.GetValueOrDefault())
             {
                 minSpecialCalc = 0;
             }
