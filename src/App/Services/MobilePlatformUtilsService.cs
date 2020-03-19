@@ -218,7 +218,7 @@ namespace Bit.App.Services
                         var supportsFace = await _deviceActionService.SupportsFaceBiometricAsync();
                         text = supportsFace ? AppResources.FaceIDDirection : AppResources.FingerprintDirection;
                     }
-                    var fingerprintRequest = new AuthenticationRequestConfiguration(text)
+                    var fingerprintRequest = new AuthenticationRequestConfiguration(text, text)
                     {
                         CancelTitle = AppResources.Cancel,
                         FallbackTitle = fallbackText
