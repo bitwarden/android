@@ -82,7 +82,6 @@ namespace Bit.Droid
                 ZXing.Net.Mobile.Forms.Android.Platform.Init();
             });
             CrossFingerprint.SetCurrentActivityResolver(() => CrossCurrentActivity.Current.Activity);
-            CrossFingerprint.SetDialogFragmentType<CustomFingerprintDialogFragment>();
 
             var preferencesStorage = new PreferencesStorageService(null);
             var documentsPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
