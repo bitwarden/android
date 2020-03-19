@@ -20,6 +20,7 @@ namespace Bit.App.Pages
                 UseNativeScanning = true,
                 PossibleFormats = new List<ZXing.BarcodeFormat> { ZXing.BarcodeFormat.QR_CODE },
                 AutoRotate = false,
+                TryInverted = true
             };
             if(Device.RuntimePlatform == Device.Android)
             {
