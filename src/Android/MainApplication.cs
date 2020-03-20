@@ -70,7 +70,6 @@ namespace Bit.Droid
         {
             ServiceContainer.Register<ILogService>("logService", new AndroidLogService());
 
-            Refractored.FabControl.Droid.FloatingActionButtonViewRenderer.Init();
             // Note: This might cause a race condition. Investigate more.
             Task.Run(() =>
             {
@@ -83,7 +82,6 @@ namespace Bit.Droid
                 ZXing.Net.Mobile.Forms.Android.Platform.Init();
             });
             CrossFingerprint.SetCurrentActivityResolver(() => CrossCurrentActivity.Current.Activity);
-            CrossFingerprint.SetDialogFragmentType<CustomFingerprintDialogFragment>();
 
             var preferencesStorage = new PreferencesStorageService(null);
             var documentsPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);

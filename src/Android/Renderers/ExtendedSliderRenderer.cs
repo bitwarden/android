@@ -1,6 +1,6 @@
 ﻿using Android.Content;
 using Android.Graphics.Drawables;
-using Android.Support.V4.Content.Res;
+using AndroidX.Core.Content.Resources;
 using Bit.App.Controls;
 using Bit.Droid.Renderers;
 using Xamarin.Forms;

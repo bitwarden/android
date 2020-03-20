@@ -5,7 +5,7 @@
              xmlns:pages="clr-namespace:Bit.App.Pages"
              xmlns:u="clr-namespace:Bit.App.Utilities"
              xmlns:controls="clr-namespace:Bit.App.Controls"
-             xmlns:fab="clr-namespace:Refractored.FabControl;assembly=Refractored.FabControl"
+             xmlns:effects="clr-namespace:Bit.App.Effects;assembly=BitwardenApp"
              x:DataType="pages:AutofillCiphersPageViewModel"
              Title="{Binding PageTitle}"
              x:Name="_page">
@@ -94,12 +94,16 @@
             AbsoluteLayout.LayoutFlags="All"
             AbsoluteLayout.LayoutBounds="0, 0, 1, 1">
         </ContentView>
-        <fab:FloatingActionButtonView
+        <Button
             x:Name="_fab"
-            ImageName="plus.png"
+            Clicked="AddButton_Clicked"
+            Style="{StaticResource btn-fab}"
             AbsoluteLayout.LayoutFlags="PositionProportional"
             AbsoluteLayout.LayoutBounds="1, 1, AutoSize, AutoSize">
-        </fab:FloatingActionButtonView>
+            <Button.Effects>
+                <effects:FabShadowEffect />
+            </Button.Effects>
+        </Button>
     </AbsoluteLayout>
 
 </pages:BaseContentPage>

@@ -7,7 +7,7 @@
     xmlns:controls="clr-namespace:Bit.App.Controls"
     xmlns:u="clr-namespace:Bit.App.Utilities"
     xmlns:views="clr-namespace:Bit.Core.Models.View;assembly=BitwardenCore"
-    xmlns:fab="clr-namespace:Refractored.FabControl;assembly=Refractored.FabControl"
+    xmlns:effects="clr-namespace:Bit.App.Effects;assembly=BitwardenApp"
     x:DataType="pages:FoldersPageViewModel"
     x:Name="_page"
     Title="{Binding PageTitle}">
@@ -66,14 +66,19 @@
             AbsoluteLayout.LayoutFlags="All"
             AbsoluteLayout.LayoutBounds="0, 0, 1, 1">
         </ContentView>
-        <fab:FloatingActionButtonView
+        <Button
             x:Name="_fab"
-            ImageName="plus.png"
+            Image="plus.png"
+            Clicked="AddButton_Clicked"
+            Style="{StaticResource btn-fab}"
             AbsoluteLayout.LayoutFlags="PositionProportional"
             AbsoluteLayout.LayoutBounds="1, 1, AutoSize, AutoSize"
             AutomationProperties.IsInAccessibleTree="True"
             AutomationProperties.Name="{u:I18n AddFolder}">
-        </fab:FloatingActionButtonView>
+            <Button.Effects>
+                <effects:FabShadowEffect />
+            </Button.Effects>
+        </Button>
     </AbsoluteLayout>
 
 </pages:BaseContentPage>

@@ -14,7 +14,7 @@ namespace Bit.Core.Services
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
         private readonly string _dbPath;
-        private LiteCollection<JsonItem> _collection;
+        private ILiteCollection<JsonItem> _collection;
         private Task _initTask;
 
         public LiteDbStorageService(string dbPath)
@@ -36,7 +36,7 @@ namespace Bit.Core.Services
             {
                 try
                 {
-                    var db = new LiteDatabase($"Filename={_dbPath};");
+                    var db = new LiteDatabase($"Filename={_dbPath};Upgrade=true;");
                     _collection = db.GetCollection<JsonItem>("json_items");
                 }
                 finally
@@ -68,7 +68,7 @@ namespace Bit.Core.Services
         public async Task RemoveAsync(string key)
         {
             await InitAsync();
-            _collection.Delete(i => i.Id == key);
+            _collection.DeleteMany(i => i.Id == key);
         }
 
         private class JsonItem

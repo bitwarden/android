@@ -6,7 +6,6 @@
              xmlns:u="clr-namespace:Bit.App.Utilities"
              xmlns:effects="clr-namespace:Bit.App.Effects"
              xmlns:controls="clr-namespace:Bit.App.Controls"
-             xmlns:fab="clr-namespace:Refractored.FabControl;assembly=Refractored.FabControl"
              x:DataType="pages:GroupingsPageViewModel"
              Title="{Binding PageTitle}"
              x:Name="_page">
@@ -144,14 +143,19 @@
             AbsoluteLayout.LayoutFlags="All"
             AbsoluteLayout.LayoutBounds="0, 0, 1, 1">
         </ContentView>
-        <fab:FloatingActionButtonView
+        <Button
             x:Name="_fab"
-            ImageName="plus.png"
+            Image="plus.png"
+            Clicked="AddButton_Clicked"
+            Style="{StaticResource btn-fab}"
             AbsoluteLayout.LayoutFlags="PositionProportional"
             AbsoluteLayout.LayoutBounds="1, 1, AutoSize, AutoSize"
             AutomationProperties.IsInAccessibleTree="True"
             AutomationProperties.Name="{u:I18n AddItem}">
-        </fab:FloatingActionButtonView>
+            <Button.Effects>
+                <effects:FabShadowEffect />
+            </Button.Effects>
+        </Button>
     </AbsoluteLayout>
 
 </pages:BaseContentPage>

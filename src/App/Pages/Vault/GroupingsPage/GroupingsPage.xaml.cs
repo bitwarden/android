@@ -60,7 +60,6 @@ namespace Bit.App.Pages
             }
             else
             {
-                _fab.Clicked = AddButton_Clicked;
                 ToolbarItems.Add(_syncItem);
                 ToolbarItems.Add(_lockItem);
                 ToolbarItems.Add(_exitItem);

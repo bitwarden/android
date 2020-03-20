@@ -21,10 +21,6 @@ namespace Bit.App.Pages
                 ToolbarItems.Add(_closeItem);
                 ToolbarItems.Add(_addItem);
             }
-            else
-            {
-                _fab.Clicked = AddButton_Clicked;
-            }
         }
 
         protected override async void OnAppearing()
