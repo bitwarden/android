@@ -36,7 +36,7 @@ namespace Bit.Core.Services
             {
                 try
                 {
-                    var db = new LiteDatabase($"Filename={_dbPath};Upgrade=true");
+                    var db = new LiteDatabase($"Filename={_dbPath};Upgrade=true;");
                     _collection = db.GetCollection<JsonItem>("json_items");
                 }
                 finally
