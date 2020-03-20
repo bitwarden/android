@@ -666,7 +666,7 @@
             x:Name="_fab"
             Image="pencil.png"
             Clicked="EditButton_Clicked"
-            Style="{StaticResource floating-action-button}"
+            Style="{StaticResource btn-fab}"
             AbsoluteLayout.LayoutFlags="PositionProportional"
             AbsoluteLayout.LayoutBounds="1, 1, AutoSize, AutoSize"
             AutomationProperties.IsInAccessibleTree="True"

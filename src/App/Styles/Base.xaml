@@ -96,7 +96,7 @@
         <Setter Property="TextColor"
                 Value="{StaticResource DisabledIconColor}" />
     </Style>
-    <Style x:Key="floating-action-button" TargetType="Button">
+    <Style x:Key="btn-fab" TargetType="Button">
         <Setter Property="HeightRequest" 
                 Value="56" />
         <Setter Property="WidthRequest" 

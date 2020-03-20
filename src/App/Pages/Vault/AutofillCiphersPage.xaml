@@ -97,7 +97,7 @@
         <Button
             x:Name="_fab"
             Clicked="AddButton_Clicked"
-            Style="{StaticResource floating-action-button}"
+            Style="{StaticResource btn-fab}"
             AbsoluteLayout.LayoutFlags="PositionProportional"
             AbsoluteLayout.LayoutBounds="1, 1, AutoSize, AutoSize">
             <Button.Effects>
