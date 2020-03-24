@@ -1309,7 +1309,7 @@
     <comment>Plural form of a URI</comment>
   </data>
   <data name="CheckingPassword" xml:space="preserve">
-    <value>암호 확인중...</value>
+    <value>비밀번호 확인 중...</value>
     <comment>A loading message when doing an exposed password check.</comment>
   </data>
   <data name="CheckPassword" xml:space="preserve">
@@ -1346,7 +1346,7 @@
     <value>폴더 검색</value>
   </data>
   <data name="SearchType" xml:space="preserve">
-    <value>검색 유형</value>
+    <value>유형 검색</value>
   </data>
   <data name="Type" xml:space="preserve">
     <value>유형</value>
@@ -1447,7 +1447,7 @@
     <value>보관함이 잠겨 있습니다. 마스터 비밀번호를 입력하여 계속하세요.</value>
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
-    <value>보관함이 잠겨 있습니다. PIN 코드를 를 입력하여 계속하세요.</value>
+    <value>보관함이 잠겨 있습니다. PIN 코드를 입력하여 계속하세요.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>어두운 테마</value>
@@ -1567,7 +1567,7 @@
     <value>생체 인식</value>
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
-    <value>잠금 해제에 생체 인식 사용하기</value>
+    <value>잠금 해제에 생체 인식 사용</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
     <value>Bitwarden에 권한이 필요합니다 - Bitwarden 설정의 "자동 입력 접근성 서비스"를 확인해주세요</value>
@@ -1588,7 +1588,7 @@
     <value>거부됨</value>
   </data>
   <data name="Granted" xml:space="preserve">
-    <value>부여됨</value>
+    <value>허용됨</value>
   </data>
   <data name="FileFormat" xml:space="preserve">
     <value>파일 형식</value>

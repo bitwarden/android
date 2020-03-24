@@ -179,7 +179,7 @@
     <value>Edycja</value>
   </data>
   <data name="EditFolder" xml:space="preserve">
-    <value>Edytuj Folder</value>
+    <value>Edytuj folder</value>
   </data>
   <data name="Email" xml:space="preserve">
     <value>Adres e-mail</value>
@@ -442,7 +442,7 @@
     <value>Kontynuuj</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
-    <value>Utwórz Konto</value>
+    <value>Utwórz konto</value>
   </data>
   <data name="CreatingAccount" xml:space="preserve">
     <value>Tworzenie konta...</value>
@@ -1349,7 +1349,7 @@
     <value>Szukaj elementu</value>
   </data>
   <data name="Type" xml:space="preserve">
-    <value>Typ</value>
+    <value>Rodzaj</value>
   </data>
   <data name="MoveDown" xml:space="preserve">
     <value>Przenieś w dół</value>

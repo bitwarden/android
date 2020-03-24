@@ -1364,7 +1364,7 @@
     <value>Besitz</value>
   </data>
   <data name="WhoOwnsThisItem" xml:space="preserve">
-    <value>Wer besitzt diesen Eintrag?</value>
+    <value>Wem gehört dieser Eintrag?</value>
   </data>
   <data name="NoCollectionsToList" xml:space="preserve">
     <value>Keine Sammlungen vorhanden.</value>
@@ -1373,7 +1373,7 @@
     <value>Eintrag wurde geteilt.</value>
   </data>
   <data name="SelectOneCollection" xml:space="preserve">
-    <value>Sie müssen mindestens eine Sammlung auswählen.</value>
+    <value>Es muss mindestens eine Sammlung ausgewählt sein.</value>
   </data>
   <data name="Share" xml:space="preserve">
     <value>Teilen</value>
@@ -1394,7 +1394,7 @@
     <value>Passphrase</value>
   </data>
   <data name="WordSeparator" xml:space="preserve">
-    <value>Worttrennzeichen</value>
+    <value>Trennzeichen</value>
   </data>
   <data name="Clear" xml:space="preserve">
     <value>Leeren</value>
@@ -1408,15 +1408,15 @@
     <value>Keine Ordner zum Auflisten vorhanden.</value>
   </data>
   <data name="FingerprintPhrase" xml:space="preserve">
-    <value>Fingerabdruck-Phrase</value>
+    <value>Prüfschlüssel</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="YourAccountsFingerprint" xml:space="preserve">
-    <value>Fingerabdruck-Phrase ihres Kontos</value>
+    <value>Prüfschlüssel für deinen Account</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="ShareVaultConfirmation" xml:space="preserve">
-    <value>Bitwarden erlaubt es Ihnen, Ihren Tresor mit anderen zu teilen, indem Sie ein Organisationskonto verwenden. Möchten Sie die bitwarden.com Website besuchen, um mehr zu erfahren?</value>
+    <value>Bitwarden ermöglicht es dir, deinen Tresor mit anderen zu teilen, indem du ein Organisationskonto benutzt. Möchtest du bitwarden.com besuchen, um mehr zu erfahren?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
     <value>Tresor exportieren</value>
