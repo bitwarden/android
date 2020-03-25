@@ -136,6 +136,7 @@
     <Compile Include="Services\CryptoPrimitiveService.cs" />
     <Compile Include="Services\DeviceActionService.cs" />
     <Compile Include="Services\LocalizeService.cs" />
+    <Compile Include="Tiles\AutofillTileService.cs" />
     <Compile Include="Tiles\GeneratorTileService.cs" />
     <Compile Include="Tiles\MyVaultTileService.cs" />
     <Compile Include="Utilities\AndroidHelpers.cs" />

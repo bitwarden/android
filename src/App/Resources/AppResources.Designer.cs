@@ -2859,5 +2859,17 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("SaveAttachmentSuccess", resourceCulture);
             }
         }
+        
+        public static string AutofillTileAccessibilityRequired {
+            get {
+                return ResourceManager.GetString("AutofillTileAccessibilityRequired", resourceCulture);
+            }
+        }
+        
+        public static string AutofillTileUriNotFound {
+            get {
+                return ResourceManager.GetString("AutofillTileUriNotFound", resourceCulture);
+            }
+        }
     }
 }

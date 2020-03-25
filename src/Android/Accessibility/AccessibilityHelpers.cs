@@ -20,6 +20,8 @@ namespace Bit.Droid.Accessibility
         public static Credentials LastCredentials = null;
         public static string SystemUiPackage = "com.android.systemui";
         public static string BitwardenTag = "bw_access";
+        public static bool IsAutofillTileAdded = false;
+        public static bool IsAccessibilityBroadcastReady = false;
 
         public static Dictionary<string, Browser> SupportedBrowsers => new List<Browser>
         {

@@ -29,6 +29,7 @@ namespace Bit.Droid.Accessibility
         private const string BitwardenWebsite = "vault.bitwarden.com";
 
         private IStorageService _storageService;
+        private IBroadcasterService _broadcasterService;
         private DateTime? _lastSettingsReload = null;
         private TimeSpan _settingsReloadSpan = TimeSpan.FromMinutes(1);
         private HashSet<string> _blacklistedUris;
@@ -47,6 +48,50 @@ namespace Bit.Droid.Accessibility
         private HashSet<string> _launcherPackageNames = null;
         private DateTime? _lastLauncherSetBuilt = null;
         private TimeSpan _rebuildLauncherSpan = TimeSpan.FromHours(1);
+
+        public override void OnCreate()
+        {
+            base.OnCreate();
+            LoadServices();
+            _broadcasterService.Subscribe(nameof(AccessibilityService), (message) =>
+            {
+                if(message.Command == "OnAutofillTileClick")
+                {
+                    var runnable = new Java.Lang.Runnable(OnAutofillTileClick);
+                    _handler.PostDelayed(runnable, 250);
+                }
+            });
+            AccessibilityHelpers.IsAccessibilityBroadcastReady = true;
+        }
+
+        public override void OnDestroy()
+        {
+            AccessibilityHelpers.IsAccessibilityBroadcastReady = false;
+            _broadcasterService.Unsubscribe(nameof(AccessibilityService));
+        }
+        
+        private void OnAutofillTileClick()
+        {
+            CancelOverlayPrompt();
+            
+            var root = RootInActiveWindow;
+            if(root != null && root.PackageName != BitwardenPackage &&
+               root.PackageName != AccessibilityHelpers.SystemUiPackage &&
+               !SkipPackage(root.PackageName))
+            {
+                var uri = AccessibilityHelpers.GetUri(root);
+                if(!string.IsNullOrWhiteSpace(uri))
+                {
+                    var intent = new Intent(this, typeof(AccessibilityActivity));
+                    intent.PutExtra("uri", uri);
+                    intent.SetFlags(ActivityFlags.NewTask | ActivityFlags.SingleTop | ActivityFlags.ClearTop);
+                    StartActivity(intent);
+                    return;
+                }
+            }
+            
+            Toast.MakeText(this, AppResources.AutofillTileUriNotFound, ToastLength.Long).Show();
+        }
 
         public override void OnAccessibilityEvent(AccessibilityEvent e)
         {
@@ -201,8 +246,14 @@ namespace Bit.Droid.Accessibility
         {
             if(!AccessibilityHelpers.OverlayPermitted())
             {
-                System.Diagnostics.Debug.WriteLine(">>> Overlay Permission not granted");
-                Toast.MakeText(this, AppResources.AccessibilityOverlayPermissionAlert, ToastLength.Long).Show();
+                if(!AccessibilityHelpers.IsAutofillTileAdded)
+                {
+                    // The user has the option of only using the autofill tile and leaving the overlay permission
+                    // disabled, so only show this toast if they're using accessibility without overlay permission and
+                    // have _not_ added the autofill tile
+                    System.Diagnostics.Debug.WriteLine(">>> Overlay Permission not granted");
+                    Toast.MakeText(this, AppResources.AccessibilityOverlayPermissionAlert, ToastLength.Long).Show();   
+                }
                 return;
             }
 
@@ -391,6 +442,10 @@ namespace Bit.Droid.Accessibility
             if(_storageService == null)
             {
                 _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+            }
+            if(_broadcasterService == null)
+            {
+                _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             }
         }
 
