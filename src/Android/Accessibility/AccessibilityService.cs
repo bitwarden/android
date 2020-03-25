@@ -226,8 +226,12 @@ namespace Bit.Droid.Accessibility
 
             if(_windowManager != null && _overlayView != null)
             {
-                _windowManager.RemoveViewImmediate(_overlayView);
-                System.Diagnostics.Debug.WriteLine(">>> Accessibility Overlay View Removed");
+                try
+                {
+                    _windowManager.RemoveViewImmediate(_overlayView);
+                    System.Diagnostics.Debug.WriteLine(">>> Accessibility Overlay View Removed");
+                }
+                catch { }
             }
 
             _overlayView = null;
