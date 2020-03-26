@@ -4,6 +4,8 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using System;
+using Bit.Core.Abstractions;
+using Bit.Core.Utilities;
 
 namespace Bit.Droid.Accessibility
 {
@@ -16,13 +18,13 @@ namespace Bit.Droid.Accessibility
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-            LaunchMainActivity(Intent, 932473);
+            HandleIntent(Intent, 932473);
         }
 
         protected override void OnNewIntent(Intent intent)
         {
             base.OnNewIntent(intent);
-            LaunchMainActivity(intent, 489729);
+            HandleIntent(intent, 489729);
         }
 
         protected override void OnDestroy()
@@ -76,6 +78,21 @@ namespace Bit.Droid.Accessibility
                 }
             }
             Finish();
+        }
+
+        private void HandleIntent(Intent callingIntent, int requestCode)
+        {
+            if(callingIntent?.GetBooleanExtra("autofillTileClicked", false) ?? false)
+            {
+                Intent.RemoveExtra("autofillTileClicked");
+                var messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
+                messagingService.Send("OnAutofillTileClick");
+                Finish();
+            }
+            else
+            {
+                LaunchMainActivity(callingIntent, requestCode);
+            }
         }
 
         private void LaunchMainActivity(Intent callingIntent, int requestCode)

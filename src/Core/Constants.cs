@@ -15,6 +15,7 @@
         public static string LastFileCacheClearKey = "lastFileCacheClear";
         public static string AutofillDisableSavePromptKey = "autofillDisableSavePrompt";
         public static string AutofillBlacklistedUrisKey = "autofillBlacklistedUris";
+        public static string AutofillTileAdded = "autofillTileAdded";
         public static string DisableFaviconKey = "disableFavicon";
         public static string PushRegisteredTokenKey = "pushRegisteredToken";
         public static string PushCurrentTokenKey = "pushCurrentToken";
