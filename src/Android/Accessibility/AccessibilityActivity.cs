@@ -82,7 +82,7 @@ namespace Bit.Droid.Accessibility
 
         private void HandleIntent(Intent callingIntent, int requestCode)
         {
-            if(callingIntent?.GetBooleanExtra("autofillTileClicked", false) == true)
+            if(callingIntent?.GetBooleanExtra("autofillTileClicked", false) ?? false)
             {
                 Intent.RemoveExtra("autofillTileClicked");
                 var messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");

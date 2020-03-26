@@ -1,24 +1,29 @@
-﻿using Android.App;
+﻿using Android;
+using Android.App;
 using Android.Content;
-using Android.OS;
 using Android.Runtime;
 using Android.Service.QuickSettings;
 using Bit.App.Resources;
+using Bit.Core;
+using Bit.Core.Abstractions;
+using Bit.Core.Utilities;
 using Bit.Droid.Accessibility;
 using Java.Lang;
 
 namespace Bit.Droid.Tile
 {
-    [Service(Permission = Android.Manifest.Permission.BindQuickSettingsTile, Label = "@string/ScanAndFill",
+    [Service(Permission = Manifest.Permission.BindQuickSettingsTile, Label = "@string/ScanAndFill",
         Icon = "@drawable/shield")]
     [IntentFilter(new string[] { ActionQsTile })]
     [Register("com.x8bit.bitwarden.AutofillTileService")]
     public class AutofillTileService : TileService
     {
+        private IStorageService _storageService;
+        
         public override void OnTileAdded()
         {
             base.OnTileAdded();
-            AccessibilityHelpers.IsAutofillTileAdded = true;
+            SetTileAdded(true);
         }
 
         public override void OnStartListening()
@@ -34,7 +39,7 @@ namespace Bit.Droid.Tile
         public override void OnTileRemoved()
         {
             base.OnTileRemoved();
-            AccessibilityHelpers.IsAutofillTileAdded = false;
+            SetTileAdded(false);
         }
 
         public override void OnClick()
@@ -49,6 +54,16 @@ namespace Bit.Droid.Tile
             {
                 ScanAndFill();
             }
+        }
+
+        private void SetTileAdded(bool isAdded)
+        {
+            AccessibilityHelpers.IsAutofillTileAdded = isAdded;
+            if(_storageService == null)
+            {
+                _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+            }
+            _storageService.SaveAsync(Constants.AutofillTileAdded, isAdded);
         }
 
         private void ScanAndFill()

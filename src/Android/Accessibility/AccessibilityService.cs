@@ -53,6 +53,7 @@ namespace Bit.Droid.Accessibility
         {
             base.OnCreate();
             LoadServices();
+            var settingsTask = LoadSettingsAsync();
             _broadcasterService.Subscribe(nameof(AccessibilityService), (message) =>
             {
                 if(message.Command == "OnAutofillTileClick")
@@ -68,29 +69,6 @@ namespace Bit.Droid.Accessibility
         {
             AccessibilityHelpers.IsAccessibilityBroadcastReady = false;
             _broadcasterService.Unsubscribe(nameof(AccessibilityService));
-        }
-        
-        private void OnAutofillTileClick()
-        {
-            CancelOverlayPrompt();
-            
-            var root = RootInActiveWindow;
-            if(root != null && root.PackageName != BitwardenPackage &&
-               root.PackageName != AccessibilityHelpers.SystemUiPackage &&
-               !SkipPackage(root.PackageName))
-            {
-                var uri = AccessibilityHelpers.GetUri(root);
-                if(!string.IsNullOrWhiteSpace(uri))
-                {
-                    var intent = new Intent(this, typeof(AccessibilityActivity));
-                    intent.PutExtra("uri", uri);
-                    intent.SetFlags(ActivityFlags.NewTask | ActivityFlags.SingleTop | ActivityFlags.ClearTop);
-                    StartActivity(intent);
-                    return;
-                }
-            }
-            
-            Toast.MakeText(this, AppResources.AutofillTileUriNotFound, ToastLength.Long).Show();
         }
 
         public override void OnAccessibilityEvent(AccessibilityEvent e)
@@ -218,6 +196,29 @@ namespace Bit.Droid.Accessibility
             }
             passwordNodes.Dispose();
             return filled;
+        }
+        
+        private void OnAutofillTileClick()
+        {
+            CancelOverlayPrompt();
+            
+            var root = RootInActiveWindow;
+            if(root != null && root.PackageName != BitwardenPackage &&
+               root.PackageName != AccessibilityHelpers.SystemUiPackage &&
+               !SkipPackage(root.PackageName))
+            {
+                var uri = AccessibilityHelpers.GetUri(root);
+                if(!string.IsNullOrWhiteSpace(uri))
+                {
+                    var intent = new Intent(this, typeof(AccessibilityActivity));
+                    intent.PutExtra("uri", uri);
+                    intent.SetFlags(ActivityFlags.NewTask | ActivityFlags.SingleTop | ActivityFlags.ClearTop);
+                    StartActivity(intent);
+                    return;
+                }
+            }
+            
+            Toast.MakeText(this, AppResources.AutofillTileUriNotFound, ToastLength.Long).Show();
         }
 
         private void CancelOverlayPrompt()
@@ -464,6 +465,8 @@ namespace Bit.Droid.Accessibility
                 {
                     _blacklistedUris = new HashSet<string>(uris);
                 }
+                var isAutoFillTileAdded = await _storageService.GetAsync<bool?>(Constants.AutofillTileAdded);
+                AccessibilityHelpers.IsAutofillTileAdded = isAutoFillTileAdded.GetValueOrDefault();
             }
         }
     }
