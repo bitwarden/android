@@ -16,7 +16,7 @@ namespace Bit.Core.Models.Export
 
         public SecureNoteView ToView(SecureNote req, SecureNoteView view = null)
         {
-            if(view == null)
+            if (view == null)
             {
                 view = new SecureNoteView();
             }

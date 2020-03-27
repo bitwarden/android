@@ -24,11 +24,11 @@ namespace Bit.Core.Services
 
         public Task InitAsync()
         {
-            if(_collection != null)
+            if (_collection != null)
             {
                 return Task.FromResult(0);
             }
-            if(_initTask != null)
+            if (_initTask != null)
             {
                 return _initTask;
             }
@@ -51,7 +51,7 @@ namespace Bit.Core.Services
         {
             await InitAsync();
             var item = _collection.Find(i => i.Id == key).FirstOrDefault();
-            if(item == null)
+            if (item == null)
             {
                 return default(T);
             }

@@ -32,12 +32,12 @@ namespace Bit.iOS.Extension
             Logo.Image = new UIImage(ThemeHelpers.LightTheme ? "logo.png" : "logo_white.png");
             View.BackgroundColor = ThemeHelpers.SplashBackgroundColor;
             _context.ExtContext = ExtensionContext;
-            foreach(var item in ExtensionContext.InputItems)
+            foreach (var item in ExtensionContext.InputItems)
             {
                 var processed = false;
-                foreach(var itemProvider in item.Attachments)
+                foreach (var itemProvider in item.Attachments)
                 {
-                    if(ProcessWebUrlProvider(itemProvider)
+                    if (ProcessWebUrlProvider(itemProvider)
                         || ProcessFindLoginProvider(itemProvider)
                         || ProcessFindLoginBrowserProvider(itemProvider, Constants.UTTypeAppExtensionFillBrowserAction)
                         || ProcessFindLoginBrowserProvider(itemProvider, Constants.UTTypeAppExtensionFillWebViewAction)
@@ -49,7 +49,7 @@ namespace Bit.iOS.Extension
                         break;
                     }
                 }
-                if(processed)
+                if (processed)
                 {
                     break;
                 }
@@ -59,7 +59,7 @@ namespace Bit.iOS.Extension
         public override void ViewDidAppear(bool animated)
         {
             base.ViewDidAppear(animated);
-            if(!IsAuthed())
+            if (!IsAuthed())
             {
                 var alert = Dialogs.CreateAlert(null, AppResources.MustLogInMainApp, AppResources.Ok, (a) =>
                 {
@@ -68,12 +68,12 @@ namespace Bit.iOS.Extension
                 PresentViewController(alert, true, null);
                 return;
             }
-            if(_context.ProviderType == Constants.UTTypeAppExtensionSetup)
+            if (_context.ProviderType == Constants.UTTypeAppExtensionSetup)
             {
                 PerformSegue("setupSegue", this);
                 return;
             }
-            if(IsLocked())
+            if (IsLocked())
             {
                 PerformSegue("lockPasswordSegue", this);
             }
@@ -85,23 +85,23 @@ namespace Bit.iOS.Extension
 
         public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
         {
-            if(segue.DestinationViewController is UINavigationController navController)
+            if (segue.DestinationViewController is UINavigationController navController)
             {
-                if(navController.TopViewController is LoginListViewController listLoginController)
+                if (navController.TopViewController is LoginListViewController listLoginController)
                 {
                     listLoginController.Context = _context;
                     listLoginController.LoadingController = this;
                 }
-                else if(navController.TopViewController is LoginAddViewController addLoginController)
+                else if (navController.TopViewController is LoginAddViewController addLoginController)
                 {
                     addLoginController.Context = _context;
                     addLoginController.LoadingController = this;
                 }
-                else if(navController.TopViewController is LockPasswordViewController passwordViewController)
+                else if (navController.TopViewController is LockPasswordViewController passwordViewController)
                 {
                     passwordViewController.LoadingController = this;
                 }
-                else if(navController.TopViewController is SetupViewController setupViewController)
+                else if (navController.TopViewController is SetupViewController setupViewController)
                 {
                     setupViewController.Context = _context;
                     setupViewController.LoadingController = this;
@@ -118,11 +118,11 @@ namespace Bit.iOS.Extension
         private void ContinueOn()
         {
             Debug.WriteLine("BW Log, Segue to setup, login add or list.");
-            if(_context.ProviderType == Constants.UTTypeAppExtensionSaveLoginAction)
+            if (_context.ProviderType == Constants.UTTypeAppExtensionSaveLoginAction)
             {
                 PerformSegue("newLoginSegue", this);
             }
-            else if(_context.ProviderType == Constants.UTTypeAppExtensionSetup)
+            else if (_context.ProviderType == Constants.UTTypeAppExtensionSetup)
             {
                 PerformSegue("setupSegue", this);
             }
@@ -136,40 +136,40 @@ namespace Bit.iOS.Extension
             List<Tuple<string, string>> fields, string totp)
         {
             NSDictionary itemData = null;
-            if(_context.ProviderType == UTType.PropertyList)
+            if (_context.ProviderType == UTType.PropertyList)
             {
                 var fillScript = new FillScript(_context.Details, username, password, fields);
                 var scriptJson = CoreHelpers.SerializeJson(fillScript, true);
                 var scriptDict = new NSDictionary(Constants.AppExtensionWebViewPageFillScript, scriptJson);
                 itemData = new NSDictionary(NSJavaScriptExtension.FinalizeArgumentKey, scriptDict);
             }
-            else if(_context.ProviderType == Constants.UTTypeAppExtensionFindLoginAction)
+            else if (_context.ProviderType == Constants.UTTypeAppExtensionFindLoginAction)
             {
                 itemData = new NSDictionary(
                     Constants.AppExtensionUsernameKey, username,
                     Constants.AppExtensionPasswordKey, password);
             }
-            else if(_context.ProviderType == Constants.UTTypeAppExtensionFillBrowserAction
+            else if (_context.ProviderType == Constants.UTTypeAppExtensionFillBrowserAction
                 || _context.ProviderType == Constants.UTTypeAppExtensionFillWebViewAction)
             {
                 var fillScript = new FillScript(_context.Details, username, password, fields);
                 var scriptJson = CoreHelpers.SerializeJson(fillScript, true);
                 itemData = new NSDictionary(Constants.AppExtensionWebViewPageFillScript, scriptJson);
             }
-            else if(_context.ProviderType == Constants.UTTypeAppExtensionSaveLoginAction)
+            else if (_context.ProviderType == Constants.UTTypeAppExtensionSaveLoginAction)
             {
                 itemData = new NSDictionary(
                     Constants.AppExtensionUsernameKey, username,
                     Constants.AppExtensionPasswordKey, password);
             }
-            else if(_context.ProviderType == Constants.UTTypeAppExtensionChangePasswordAction)
+            else if (_context.ProviderType == Constants.UTTypeAppExtensionChangePasswordAction)
             {
                 itemData = new NSDictionary(
                     Constants.AppExtensionPasswordKey, string.Empty,
                     Constants.AppExtensionOldPasswordKey, password);
             }
 
-            if(!string.IsNullOrWhiteSpace(totp))
+            if (!string.IsNullOrWhiteSpace(totp))
             {
                 UIPasteboard.General.String = totp;
             }
@@ -184,7 +184,7 @@ namespace Bit.iOS.Extension
             var returningItems = new NSExtensionItem[] { resultsItem };
             NSRunLoop.Main.BeginInvokeOnMainThread(async () =>
             {
-                if(!string.IsNullOrWhiteSpace(id) && itemData != null)
+                if (!string.IsNullOrWhiteSpace(id) && itemData != null)
                 {
                     var eventService = ServiceContainer.Resolve<IEventService>("eventService");
                     await eventService.CollectAsync(Bit.Core.Enums.EventType.Cipher_ClientAutofilled, id);
@@ -197,24 +197,24 @@ namespace Bit.iOS.Extension
         private bool ProcessItemProvider(NSItemProvider itemProvider, string type, Action<NSDictionary> dictAction,
             Action<NSUrl> urlAction = null)
         {
-            if(!itemProvider.HasItemConformingTo(type))
+            if (!itemProvider.HasItemConformingTo(type))
             {
                 return false;
             }
 
             itemProvider.LoadItem(type, null, (NSObject list, NSError error) =>
             {
-                if(list == null)
+                if (list == null)
                 {
                     return;
                 }
 
                 _context.ProviderType = type;
-                if(list is NSDictionary dict && dictAction != null)
+                if (list is NSDictionary dict && dictAction != null)
                 {
                     dictAction(dict);
                 }
-                else if(list is NSUrl && urlAction != null)
+                else if (list is NSUrl && urlAction != null)
                 {
                     var url = list as NSUrl;
                     urlAction(url);
@@ -234,7 +234,7 @@ namespace Bit.iOS.Extension
                 Debug.WriteLine("BW LOG, Notes: " + _context.Notes);
                 Debug.WriteLine("BW LOG, Details: " + _context.Details);
 
-                if(_context.PasswordOptions != null)
+                if (_context.PasswordOptions != null)
                 {
                     Debug.WriteLine("BW LOG, PasswordOptions Min Length: " + _context.PasswordOptions.MinLength);
                     Debug.WriteLine("BW LOG, PasswordOptions Max Length: " + _context.PasswordOptions.MaxLength);
@@ -252,7 +252,7 @@ namespace Bit.iOS.Extension
             return ProcessItemProvider(itemProvider, UTType.PropertyList, dict =>
             {
                 var result = dict[NSJavaScriptExtension.PreprocessingResultsKey];
-                if(result == null)
+                if (result == null)
                 {
                     return;
                 }
@@ -268,7 +268,7 @@ namespace Bit.iOS.Extension
             {
                 var version = dict[Constants.AppExtensionVersionNumberKey] as NSNumber;
                 var url = dict[Constants.AppExtensionUrlStringKey] as NSString;
-                if(url != null)
+                if (url != null)
                 {
                     _context.UrlString = url;
                 }
@@ -281,14 +281,14 @@ namespace Bit.iOS.Extension
             {
                 var version = dict[Constants.AppExtensionVersionNumberKey] as NSNumber;
                 var url = dict[Constants.AppExtensionUrlStringKey] as NSString;
-                if(url != null)
+                if (url != null)
                 {
                     _context.UrlString = url;
                 }
                 _context.Details = DeserializeDictionary<PageDetails>(dict[Constants.AppExtensionWebViewPageDetails] as NSDictionary);
             }, url =>
             {
-                if(url != null)
+                if (url != null)
                 {
                     _context.UrlString = url.AbsoluteString;
                 }
@@ -307,7 +307,7 @@ namespace Bit.iOS.Extension
                 var password = dict[Constants.AppExtensionPasswordKey] as NSString;
                 var notes = dict[Constants.AppExtensionNotesKey] as NSString;
                 var fields = dict[Constants.AppExtensionFieldsKey] as NSDictionary;
-                if(url != null)
+                if (url != null)
                 {
                     _context.UrlString = url;
                 }
@@ -332,7 +332,7 @@ namespace Bit.iOS.Extension
                 var oldPassword = dict[Constants.AppExtensionOldPasswordKey] as NSString;
                 var notes = dict[Constants.AppExtensionNotesKey] as NSString;
                 var fields = dict[Constants.AppExtensionFieldsKey] as NSDictionary;
-                if(url != null)
+                if (url != null)
                 {
                     _context.UrlString = url;
                 }
@@ -347,7 +347,7 @@ namespace Bit.iOS.Extension
 
         private bool ProcessExtensionSetupProvider(NSItemProvider itemProvider)
         {
-            if(itemProvider.HasItemConformingTo(Constants.UTTypeAppExtensionSetup))
+            if (itemProvider.HasItemConformingTo(Constants.UTTypeAppExtensionSetup))
             {
                 _context.ProviderType = Constants.UTTypeAppExtensionSetup;
                 return true;
@@ -357,11 +357,11 @@ namespace Bit.iOS.Extension
 
         private T DeserializeDictionary<T>(NSDictionary dict)
         {
-            if(dict != null)
+            if (dict != null)
             {
                 var jsonData = NSJsonSerialization.Serialize(
                     dict, NSJsonWritingOptions.PrettyPrinted, out NSError jsonError);
-                if(jsonData != null)
+                if (jsonData != null)
                 {
                     var jsonString = new NSString(jsonData, NSStringEncoding.UTF8);
                     return DeserializeString<T>(jsonString);
@@ -372,7 +372,7 @@ namespace Bit.iOS.Extension
 
         private T DeserializeString<T>(NSString jsonString)
         {
-            if(jsonString != null)
+            if (jsonString != null)
             {
                 var convertedObject = CoreHelpers.DeserializeJson<T>(jsonString.ToString());
                 return convertedObject;
@@ -382,14 +382,14 @@ namespace Bit.iOS.Extension
 
         private void InitApp()
         {
-            if(ServiceContainer.RegisteredServices.Count > 0)
+            if (ServiceContainer.RegisteredServices.Count > 0)
             {
                 ServiceContainer.Reset();
             }
             iOSCoreHelpers.RegisterLocalServices();
             var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             ServiceContainer.Init(deviceActionService.DeviceUserAgent);
-            if(!_initedHockeyApp)
+            if (!_initedHockeyApp)
             {
                 iOSCoreHelpers.RegisterHockeyApp();
                 _initedHockeyApp = true;

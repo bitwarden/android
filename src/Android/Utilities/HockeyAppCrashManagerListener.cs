@@ -45,7 +45,7 @@ namespace Bit.Droid.Utilities
         {
             get
             {
-                if(_userId != null && _appId != null)
+                if (_userId != null && _appId != null)
                 {
                     return JsonConvert.SerializeObject(new
                     {

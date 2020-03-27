@@ -13,10 +13,10 @@ namespace Bit.Core.Models.Response
         public ErrorResponse(JObject response, HttpStatusCode status, bool identityResponse = false)
         {
             JObject errorModel = null;
-            if(response != null)
+            if (response != null)
             {
                 var responseErrorModel = response.GetValue("ErrorModel", StringComparison.OrdinalIgnoreCase);
-                if(responseErrorModel != null && identityResponse)
+                if (responseErrorModel != null && identityResponse)
                 {
                     errorModel = responseErrorModel.Value<JObject>(); ;
                 }
@@ -25,7 +25,7 @@ namespace Bit.Core.Models.Response
                     errorModel = response;
                 }
             }
-            if(errorModel != null)
+            if (errorModel != null)
             {
                 var model = errorModel.ToObject<ErrorModel>();
                 Message = model.Message;
@@ -33,7 +33,7 @@ namespace Bit.Core.Models.Response
             }
             else
             {
-                if((int)status == 429)
+                if ((int)status == 429)
                 {
                     Message = "Rate limit exceeded. Try again later.";
                 }
@@ -47,13 +47,13 @@ namespace Bit.Core.Models.Response
 
         public string GetSingleMessage()
         {
-            if(ValidationErrors == null)
+            if (ValidationErrors == null)
             {
                 return Message;
             }
-            foreach(var error in ValidationErrors)
+            foreach (var error in ValidationErrors)
             {
-                if(error.Value?.Any() ?? false)
+                if (error.Value?.Any() ?? false)
                 {
                     return error.Value[0];
                 }

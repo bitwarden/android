@@ -37,10 +37,10 @@ namespace Bit.Core.Models.Domain
                 "Password",
                 "Totp"
             }, orgId);
-            if(Uris != null)
+            if (Uris != null)
             {
                 view.Uris = new List<LoginUriView>();
-                foreach(var uri in Uris)
+                foreach (var uri in Uris)
                 {
                     view.Uris.Add(await uri.DecryptAsync(orgId));
                 }
@@ -58,7 +58,7 @@ namespace Bit.Core.Models.Domain
                 "Password",
                 "Totp"
             });
-            if(Uris?.Any() ?? false)
+            if (Uris?.Any() ?? false)
             {
                 l.Uris = Uris.Select(u => u.ToLoginUriData()).ToList();
             }

@@ -15,11 +15,11 @@ namespace Bit.Droid.Utilities
             string name = null;
             string[] projection = { MediaStore.MediaColumns.DisplayName };
             var metaCursor = context.ContentResolver.Query(uri, projection, null, null, null);
-            if(metaCursor != null)
+            if (metaCursor != null)
             {
                 try
                 {
-                    if(metaCursor.MoveToFirst())
+                    if (metaCursor.MoveToFirst())
                     {
                         name = metaCursor.GetString(0);
                     }
@@ -37,12 +37,12 @@ namespace Bit.Droid.Utilities
             var restrictionsManager = (RestrictionsManager)context.GetSystemService(Context.RestrictionsService);
             var restrictions = restrictionsManager.ApplicationRestrictions;
             var dict = new Dictionary<string, string>();
-            if(restrictions.ContainsKey(BaseEnvironmentUrlRestrictionKey))
+            if (restrictions.ContainsKey(BaseEnvironmentUrlRestrictionKey))
             {
                 dict.Add(BaseEnvironmentUrlRestrictionKey, restrictions.GetString(BaseEnvironmentUrlRestrictionKey));
             }
 
-            if(dict.Count > 0)
+            if (dict.Count > 0)
             {
                 await AppHelpers.SetPreconfiguredSettingsAsync(dict);
             }

@@ -6,7 +6,7 @@
 
         public PasswordGenerationOptions(bool defaultOptions)
         {
-            if(defaultOptions)
+            if (defaultOptions)
             {
                 Length = 14;
                 Ambiguous = false;

@@ -37,14 +37,14 @@ namespace Bit.Droid
         public MainApplication(IntPtr handle, JniHandleOwnership transer)
           : base(handle, transer)
         {
-            if(ServiceContainer.RegisteredServices.Count == 0)
+            if (ServiceContainer.RegisteredServices.Count == 0)
             {
                 RegisterLocalServices();
                 var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
                 ServiceContainer.Init(deviceActionService.DeviceUserAgent);
             }
 #if !FDROID
-            if(Build.VERSION.SdkInt <= BuildVersionCodes.Kitkat)
+            if (Build.VERSION.SdkInt <= BuildVersionCodes.Kitkat)
             {
                 ProviderInstaller.InstallIfNeededAsync(ApplicationContext, this);
             }

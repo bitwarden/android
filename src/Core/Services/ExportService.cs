@@ -38,20 +38,20 @@ namespace Bit.Core.Services
             _decryptedFolders = await _folderService.GetAllDecryptedAsync();
             _decryptedCiphers = await _cipherService.GetAllDecryptedAsync();
 
-            if(format == "csv")
+            if (format == "csv")
             {
                 var foldersMap = _decryptedFolders.Where(f => f.Id != null).ToDictionary(f => f.Id);
 
                 var exportCiphers = new List<ExportCipher>();
-                foreach(var c in _decryptedCiphers)
+                foreach (var c in _decryptedCiphers)
                 {
                     // only export logins and secure notes
-                    if(c.Type != CipherType.Login && c.Type != CipherType.SecureNote)
+                    if (c.Type != CipherType.Login && c.Type != CipherType.SecureNote)
                     {
                         continue;
                     }
 
-                    if(c.OrganizationId != null)
+                    if (c.OrganizationId != null)
                     {
                         continue;
                     }
@@ -115,11 +115,11 @@ namespace Bit.Core.Services
             cipher.LoginPassword = null;
             cipher.LoginTotp = null;
 
-            if(c.Fields != null)
+            if (c.Fields != null)
             {
-                foreach(var f in c.Fields)
+                foreach (var f in c.Fields)
                 {
-                    if(cipher.Fields == null)
+                    if (cipher.Fields == null)
                     {
                         cipher.Fields = "";
                     }
@@ -132,7 +132,7 @@ namespace Bit.Core.Services
                 }
             }
 
-            switch(c.Type)
+            switch (c.Type)
             {
                 case CipherType.Login:
                     cipher.Type = "login";
@@ -140,11 +140,11 @@ namespace Bit.Core.Services
                     cipher.LoginPassword = c.Login.Password;
                     cipher.LoginTotp = c.Login.Totp;
 
-                    if(c.Login.Uris != null)
+                    if (c.Login.Uris != null)
                     {
-                        foreach(var u in c.Login.Uris)
+                        foreach (var u in c.Login.Uris)
                         {
-                            if(cipher.LoginUris == null)
+                            if (cipher.LoginUris == null)
                             {
                                 cipher.LoginUris = "";
                             }

@@ -56,12 +56,12 @@ namespace Bit.iOS.Core.Controllers
             BasePasswordLabel.TextColor = ThemeHelpers.TextColor;
 
             var controller = ChildViewControllers.LastOrDefault();
-            if(controller != null)
+            if (controller != null)
             {
                 OptionsTableViewController = controller as UITableViewController;
             }
 
-            if(OptionsTableViewController != null)
+            if (OptionsTableViewController != null)
             {
                 OptionsTableViewController.TableView.RowHeight = UITableView.AutomaticDimension;
                 OptionsTableViewController.TableView.EstimatedRowHeight = 70;
@@ -89,14 +89,14 @@ namespace Bit.iOS.Core.Controllers
             LengthCell.ValueChanged += Options_ValueChanged;
 
             // Adjust based on context password options
-            if(PasswordOptions != null)
+            if (PasswordOptions != null)
             {
-                if(PasswordOptions.RequireDigits)
+                if (PasswordOptions.RequireDigits)
                 {
                     NumbersCell.Switch.On = true;
                     NumbersCell.Switch.Enabled = false;
 
-                    if(MinNumbersCell.Value < 1)
+                    if (MinNumbersCell.Value < 1)
                     {
                         MinNumbersCell.Value = 1;
                     }
@@ -104,12 +104,12 @@ namespace Bit.iOS.Core.Controllers
                     MinNumbersCell.Stepper.MinimumValue = 1;
                 }
 
-                if(PasswordOptions.RequireSymbols)
+                if (PasswordOptions.RequireSymbols)
                 {
                     SpecialCell.Switch.On = true;
                     SpecialCell.Switch.Enabled = false;
 
-                    if(MinSpecialCell.Value < 1)
+                    if (MinSpecialCell.Value < 1)
                     {
                         MinSpecialCell.Value = 1;
                     }
@@ -117,11 +117,11 @@ namespace Bit.iOS.Core.Controllers
                     MinSpecialCell.Stepper.MinimumValue = 1;
                 }
 
-                if(PasswordOptions.MinLength < PasswordOptions.MaxLength)
+                if (PasswordOptions.MinLength < PasswordOptions.MaxLength)
                 {
-                    if(PasswordOptions.MinLength > 0 && PasswordOptions.MinLength > LengthCell.Slider.MinValue)
+                    if (PasswordOptions.MinLength > 0 && PasswordOptions.MinLength > LengthCell.Slider.MinValue)
                     {
-                        if(LengthCell.Value < PasswordOptions.MinLength)
+                        if (LengthCell.Value < PasswordOptions.MinLength)
                         {
                             LengthCell.Slider.Value = PasswordOptions.MinLength;
                         }
@@ -129,9 +129,9 @@ namespace Bit.iOS.Core.Controllers
                         LengthCell.Slider.MinValue = PasswordOptions.MinLength;
                     }
 
-                    if(PasswordOptions.MaxLength > 5 && PasswordOptions.MaxLength < LengthCell.Slider.MaxValue)
+                    if (PasswordOptions.MaxLength > 5 && PasswordOptions.MaxLength < LengthCell.Slider.MaxValue)
                     {
-                        if(LengthCell.Value > PasswordOptions.MaxLength)
+                        if (LengthCell.Value > PasswordOptions.MaxLength)
                         {
                             LengthCell.Slider.Value = PasswordOptions.MaxLength;
                         }
@@ -147,7 +147,7 @@ namespace Bit.iOS.Core.Controllers
 
         private void Options_ValueChanged(object sender, EventArgs e)
         {
-            if(InvalidState())
+            if (InvalidState())
             {
                 LowercaseCell.Switch.On = true;
             }
@@ -186,46 +186,46 @@ namespace Bit.iOS.Core.Controllers
 
             public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
             {
-                if(indexPath.Section == 0)
+                if (indexPath.Section == 0)
                 {
                     var cell = new ExtendedUITableViewCell();
                     cell.TextLabel.TextColor = ThemeHelpers.PrimaryColor;
-                    if(indexPath.Row == 0)
+                    if (indexPath.Row == 0)
                     {
                         cell.TextLabel.Text = AppResources.RegeneratePassword;
                     }
-                    else if(indexPath.Row == 1)
+                    else if (indexPath.Row == 1)
                     {
                         cell.TextLabel.Text = AppResources.CopyPassword;
                     }
                     return cell;
                 }
 
-                if(indexPath.Row == 0)
+                if (indexPath.Row == 0)
                 {
                     return _controller.LengthCell;
                 }
-                else if(indexPath.Row == 1)
+                else if (indexPath.Row == 1)
                 {
                     return _controller.UppercaseCell;
                 }
-                else if(indexPath.Row == 2)
+                else if (indexPath.Row == 2)
                 {
                     return _controller.LowercaseCell;
                 }
-                else if(indexPath.Row == 3)
+                else if (indexPath.Row == 3)
                 {
                     return _controller.NumbersCell;
                 }
-                else if(indexPath.Row == 4)
+                else if (indexPath.Row == 4)
                 {
                     return _controller.SpecialCell;
                 }
-                else if(indexPath.Row == 5)
+                else if (indexPath.Row == 5)
                 {
                     return _controller.MinNumbersCell;
                 }
-                else if(indexPath.Row == 6)
+                else if (indexPath.Row == 6)
                 {
                     return _controller.MinSpecialCell;
                 }
@@ -245,7 +245,7 @@ namespace Bit.iOS.Core.Controllers
 
             public override nint RowsInSection(UITableView tableview, nint section)
             {
-                if(section == 0)
+                if (section == 0)
                 {
                     return 2;
                 }
@@ -255,7 +255,7 @@ namespace Bit.iOS.Core.Controllers
 
             public override nfloat GetHeightForHeader(UITableView tableView, nint section)
             {
-                if(section == 0)
+                if (section == 0)
                 {
                     return 0.00001f;
                 }
@@ -265,7 +265,7 @@ namespace Bit.iOS.Core.Controllers
 
             public override UIView GetViewForHeader(UITableView tableView, nint section)
             {
-                if(section == 0)
+                if (section == 0)
                 {
                     return new UIView(CGRect.Empty)
                     {
@@ -278,7 +278,7 @@ namespace Bit.iOS.Core.Controllers
 
             public override string TitleForHeader(UITableView tableView, nint section)
             {
-                if(section == 1)
+                if (section == 1)
                 {
                     return AppResources.Options;
                 }
@@ -288,7 +288,7 @@ namespace Bit.iOS.Core.Controllers
 
             public override string TitleForFooter(UITableView tableView, nint section)
             {
-                if(section == 1)
+                if (section == 1)
                 {
                     return AppResources.OptionDefaults;
                 }
@@ -298,13 +298,13 @@ namespace Bit.iOS.Core.Controllers
 
             public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
             {
-                if(indexPath.Section == 0)
+                if (indexPath.Section == 0)
                 {
-                    if(indexPath.Row == 0)
+                    if (indexPath.Row == 0)
                     {
                         var task = _controller.GeneratePasswordAsync();
                     }
-                    else if(indexPath.Row == 1)
+                    else if (indexPath.Row == 1)
                     {
                         UIPasteboard clipboard = UIPasteboard.General;
                         clipboard.String = _controller.BasePasswordLabel.Text;

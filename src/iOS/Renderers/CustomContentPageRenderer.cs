@@ -14,14 +14,14 @@ namespace Bit.iOS.Renderers
         public override void ViewWillAppear(bool animated)
         {
             base.ViewWillAppear(animated);
-            if(!(Element is ContentPage contentPage) || NavigationController == null)
+            if (!(Element is ContentPage contentPage) || NavigationController == null)
             {
                 return;
             }
 
             // Hide bottom line under nav bar
             var navBar = NavigationController.NavigationBar;
-            if(navBar != null)
+            if (navBar != null)
             {
                 navBar.SetValueForKey(FromObject(true), new Foundation.NSString("hidesShadow"));
             }
@@ -31,19 +31,19 @@ namespace Bit.iOS.Renderers
             var rightNativeButtons = (navigationItem.RightBarButtonItems ?? new UIBarButtonItem[] { }).ToList();
             var newLeftButtons = new List<UIBarButtonItem>();
             var newRightButtons = new List<UIBarButtonItem>();
-            foreach(var nativeItem in rightNativeButtons)
+            foreach (var nativeItem in rightNativeButtons)
             {
                 // Use reflection to get Xamarin private field "_item"
                 var field = nativeItem.GetType().GetField("_item", BindingFlags.NonPublic | BindingFlags.Instance);
-                if(field == null)
+                if (field == null)
                 {
                     return;
                 }
-                if(!(field.GetValue(nativeItem) is ToolbarItem info))
+                if (!(field.GetValue(nativeItem) is ToolbarItem info))
                 {
                     return;
                 }
-                if(info.Priority < 0)
+                if (info.Priority < 0)
                 {
                     newLeftButtons.Add(nativeItem);
                 }
@@ -52,7 +52,7 @@ namespace Bit.iOS.Renderers
                     newRightButtons.Add(nativeItem);
                 }
             }
-            foreach(var nativeItem in leftNativeButtons)
+            foreach (var nativeItem in leftNativeButtons)
             {
                 newLeftButtons.Add(nativeItem);
             }

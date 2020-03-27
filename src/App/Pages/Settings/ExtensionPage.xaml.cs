@@ -21,7 +21,7 @@ namespace Bit.App.Pages
 
         private void Show_Clicked(object sender, EventArgs e)
         {
-            if(DoOnce())
+            if (DoOnce())
             {
                 _vm.ShowExtension();
             }
@@ -29,7 +29,7 @@ namespace Bit.App.Pages
 
         private void Close_Clicked(object sender, EventArgs e)
         {
-            if(DoOnce())
+            if (DoOnce())
             {
                 Navigation.PopModalAsync();
             }

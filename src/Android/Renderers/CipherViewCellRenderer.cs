@@ -32,25 +32,25 @@ namespace Bit.Droid.Renderers
         protected override Android.Views.View GetCellCore(Cell item, Android.Views.View convertView,
             ViewGroup parent, Context context)
         {
-            if(_faTypeface == null)
+            if (_faTypeface == null)
             {
                 _faTypeface = Typeface.CreateFromAsset(context.Assets, "FontAwesome.ttf");
             }
-            if(_miTypeface == null)
+            if (_miTypeface == null)
             {
                 _miTypeface = Typeface.CreateFromAsset(context.Assets, "MaterialIcons_Regular.ttf");
             }
-            if(_textColor == default(Android.Graphics.Color))
+            if (_textColor == default(Android.Graphics.Color))
             {
                 _textColor = ((Xamarin.Forms.Color)Xamarin.Forms.Application.Current.Resources["TextColor"])
                     .ToAndroid();
             }
-            if(_mutedColor == default(Android.Graphics.Color))
+            if (_mutedColor == default(Android.Graphics.Color))
             {
                 _mutedColor = ((Xamarin.Forms.Color)Xamarin.Forms.Application.Current.Resources["MutedColor"])
                     .ToAndroid();
             }
-            if(_disabledIconColor == default(Android.Graphics.Color))
+            if (_disabledIconColor == default(Android.Graphics.Color))
             {
                 _disabledIconColor =
                     ((Xamarin.Forms.Color)Xamarin.Forms.Application.Current.Resources["DisabledIconColor"])
@@ -59,7 +59,7 @@ namespace Bit.Droid.Renderers
 
             var cipherCell = item as CipherViewCell;
             _cell = convertView as AndroidCipherCell;
-            if(_cell == null)
+            if (_cell == null)
             {
                 _cell = new AndroidCipherCell(context, cipherCell, _faTypeface, _miTypeface);
             }
@@ -77,11 +77,11 @@ namespace Bit.Droid.Renderers
         {
             var cipherCell = sender as CipherViewCell;
             _cell.CipherViewCell = cipherCell;
-            if(e.PropertyName == CipherViewCell.CipherProperty.PropertyName)
+            if (e.PropertyName == CipherViewCell.CipherProperty.PropertyName)
             {
                 _cell.UpdateCell(cipherCell);
             }
-            else if(e.PropertyName == CipherViewCell.WebsiteIconsEnabledProperty.PropertyName)
+            else if (e.PropertyName == CipherViewCell.WebsiteIconsEnabledProperty.PropertyName)
             {
                 _cell.UpdateIconImage(cipherCell);
             }
@@ -145,7 +145,7 @@ namespace Bit.Droid.Renderers
 
             var cipher = cipherCell.Cipher;
             Name.Text = cipher.Name;
-            if(!string.IsNullOrWhiteSpace(cipher.SubTitle))
+            if (!string.IsNullOrWhiteSpace(cipher.SubTitle))
             {
                 SubTitle.Text = cipher.SubTitle;
                 SubTitle.Visibility = ViewStates.Visible;
@@ -160,7 +160,7 @@ namespace Bit.Droid.Renderers
 
         public void UpdateIconImage(CipherViewCell cipherCell)
         {
-            if(_currentTask != null && !_currentTask.IsCancelled && !_currentTask.IsCompleted)
+            if (_currentTask != null && !_currentTask.IsCancelled && !_currentTask.IsCompleted)
             {
                 _currentTask.Cancel();
             }
@@ -168,7 +168,7 @@ namespace Bit.Droid.Renderers
             var cipher = cipherCell.Cipher;
 
             var iconImage = cipherCell.GetIconImage(cipher);
-            if(iconImage.Item2 != null)
+            if (iconImage.Item2 != null)
             {
                 IconImage.SetImageResource(Resource.Drawable.login);
                 IconImage.Visibility = ViewStates.Visible;
@@ -197,7 +197,7 @@ namespace Bit.Droid.Renderers
 
         private void MoreButton_Click(object sender, EventArgs e)
         {
-            if(CipherViewCell.ButtonCommand?.CanExecute(CipherViewCell.Cipher) ?? false)
+            if (CipherViewCell.ButtonCommand?.CanExecute(CipherViewCell.Cipher) ?? false)
             {
                 CipherViewCell.ButtonCommand.Execute(CipherViewCell.Cipher);
             }
@@ -205,7 +205,7 @@ namespace Bit.Droid.Renderers
 
         protected override void Dispose(bool disposing)
         {
-            if(disposing)
+            if (disposing)
             {
                 MoreButton.Click -= MoreButton_Click;
             }

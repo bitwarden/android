@@ -8,7 +8,7 @@ namespace Bit.iOS.Core.Controllers
         public ExtendedUITableViewCell()
         {
             BackgroundColor = ThemeHelpers.BackgroundColor;
-            if(!ThemeHelpers.LightTheme)
+            if (!ThemeHelpers.LightTheme)
             {
                 SelectionStyle = UITableViewCellSelectionStyle.None;
             }
@@ -18,7 +18,7 @@ namespace Bit.iOS.Core.Controllers
             : base(style, reusedId)
         {
             BackgroundColor = ThemeHelpers.BackgroundColor;
-            if(!ThemeHelpers.LightTheme)
+            if (!ThemeHelpers.LightTheme)
             {
                 SelectionStyle = UITableViewCellSelectionStyle.None;
             }

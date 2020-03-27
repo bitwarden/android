@@ -67,7 +67,7 @@ namespace Bit.App.Pages
             _appOptions = appOptions;
             Uri = appOptions.Uri;
             string name = null;
-            if(Uri.StartsWith(Constants.AndroidAppProtocol))
+            if (Uri.StartsWith(Constants.AndroidAppProtocol))
             {
                 name = Uri.Substring(Constants.AndroidAppProtocol.Length);
             }
@@ -75,7 +75,7 @@ namespace Bit.App.Pages
             {
                 name = CoreHelpers.GetDomain(Uri);
             }
-            if(string.IsNullOrWhiteSpace(name))
+            if (string.IsNullOrWhiteSpace(name))
             {
                 name = "--";
             }
@@ -93,14 +93,14 @@ namespace Bit.App.Pages
             var ciphers = await _cipherService.GetAllDecryptedByUrlAsync(Uri, null);
             var matching = ciphers.Item1?.Select(c => new GroupingsPageListItem { Cipher = c }).ToList();
             var hasMatching = matching?.Any() ?? false;
-            if(matching?.Any() ?? false)
+            if (matching?.Any() ?? false)
             {
                 groupedItems.Add(
                     new GroupingsPageListGroup(matching, AppResources.MatchingItems, matching.Count, false, true));
             }
             var fuzzy = ciphers.Item2?.Select(c =>
                 new GroupingsPageListItem { Cipher = c, FuzzyAutofill = true }).ToList();
-            if(fuzzy?.Any() ?? false)
+            if (fuzzy?.Any() ?? false)
             {
                 groupedItems.Add(
                     new GroupingsPageListGroup(fuzzy, AppResources.PossibleMatchingItems, fuzzy.Count, false,
@@ -112,21 +112,21 @@ namespace Bit.App.Pages
 
         public async Task SelectCipherAsync(CipherView cipher, bool fuzzy)
         {
-            if(cipher == null)
+            if (cipher == null)
             {
                 return;
             }
-            if(_deviceActionService.SystemMajorVersion() < 21)
+            if (_deviceActionService.SystemMajorVersion() < 21)
             {
                 await AppHelpers.CipherListOptions(Page, cipher);
             }
             else
             {
                 var autofillResponse = AppResources.Yes;
-                if(fuzzy)
+                if (fuzzy)
                 {
                     var options = new List<string> { AppResources.Yes };
-                    if(cipher.Type == CipherType.Login &&
+                    if (cipher.Type == CipherType.Login &&
                         Xamarin.Essentials.Connectivity.NetworkAccess != Xamarin.Essentials.NetworkAccess.None)
                     {
                         options.Add(AppResources.YesAndSave);
@@ -135,10 +135,10 @@ namespace Bit.App.Pages
                         string.Format(AppResources.BitwardenAutofillServiceMatchConfirm, Name), AppResources.No,
                         options.ToArray());
                 }
-                if(autofillResponse == AppResources.YesAndSave && cipher.Type == CipherType.Login)
+                if (autofillResponse == AppResources.YesAndSave && cipher.Type == CipherType.Login)
                 {
                     var uris = cipher.Login?.Uris?.ToList();
-                    if(uris == null)
+                    if (uris == null)
                     {
                         uris = new List<LoginUriView>();
                     }
@@ -154,17 +154,17 @@ namespace Bit.App.Pages
                         await _cipherService.SaveWithServerAsync(await _cipherService.EncryptAsync(cipher));
                         await _deviceActionService.HideLoadingAsync();
                     }
-                    catch(ApiException e)
+                    catch (ApiException e)
                     {
                         await _deviceActionService.HideLoadingAsync();
-                        if(e?.Error != null)
+                        if (e?.Error != null)
                         {
                             await _platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(),
                                 AppResources.AnErrorHasOccurred);
                         }
                     }
                 }
-                if(autofillResponse == AppResources.Yes || autofillResponse == AppResources.YesAndSave)
+                if (autofillResponse == AppResources.Yes || autofillResponse == AppResources.YesAndSave)
                 {
                     _deviceActionService.Autofill(cipher);
                 }
@@ -173,7 +173,7 @@ namespace Bit.App.Pages
 
         private async void CipherOptionsAsync(CipherView cipher)
         {
-            if((Page as BaseContentPage).DoOnce())
+            if ((Page as BaseContentPage).DoOnce())
             {
                 await AppHelpers.CipherListOptions(Page, cipher);
             }

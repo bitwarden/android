@@ -63,14 +63,14 @@ namespace Bit.Core.Services
             get => _decryptedCipherCache;
             set
             {
-                if(value == null)
+                if (value == null)
                 {
                     _decryptedCipherCache?.Clear();
                 }
                 _decryptedCipherCache = value;
-                if(_searchService != null)
+                if (_searchService != null)
                 {
-                    if(value == null)
+                    if (value == null)
                     {
                         _searchService().ClearIndex();
                     }
@@ -91,22 +91,22 @@ namespace Bit.Core.Services
             Cipher originalCipher = null)
         {
             // Adjust password history
-            if(model.Id != null)
+            if (model.Id != null)
             {
-                if(originalCipher == null)
+                if (originalCipher == null)
                 {
                     originalCipher = await GetAsync(model.Id);
                 }
-                if(originalCipher != null)
+                if (originalCipher != null)
                 {
                     var existingCipher = await originalCipher.DecryptAsync();
-                    if(model.PasswordHistory == null)
+                    if (model.PasswordHistory == null)
                     {
                         model.PasswordHistory = new List<PasswordHistoryView>();
                     }
-                    if(model.Type == CipherType.Login && existingCipher.Type == CipherType.Login)
+                    if (model.Type == CipherType.Login && existingCipher.Type == CipherType.Login)
                     {
-                        if(!string.IsNullOrWhiteSpace(existingCipher.Login.Password) &&
+                        if (!string.IsNullOrWhiteSpace(existingCipher.Login.Password) &&
                             existingCipher.Login.Password != model.Login.Password)
                         {
                             var now = DateTime.UtcNow;
@@ -123,7 +123,7 @@ namespace Bit.Core.Services
                             model.Login.PasswordRevisionDate = existingCipher.Login.PasswordRevisionDate;
                         }
                     }
-                    if(existingCipher.HasFields)
+                    if (existingCipher.HasFields)
                     {
                         var existingHiddenFields = existingCipher.Fields.Where(f =>
                             f.Type == FieldType.Hidden && !string.IsNullOrWhiteSpace(f.Name) &&
@@ -131,10 +131,10 @@ namespace Bit.Core.Services
                         var hiddenFields = model.Fields?.Where(f =>
                             f.Type == FieldType.Hidden && !string.IsNullOrWhiteSpace(f.Name)) ??
                             new List<FieldView>();
-                        foreach(var ef in existingHiddenFields)
+                        foreach (var ef in existingHiddenFields)
                         {
                             var matchedField = hiddenFields.FirstOrDefault(f => f.Name == ef.Name);
-                            if(matchedField == null || matchedField.Value != ef.Value)
+                            if (matchedField == null || matchedField.Value != ef.Value)
                             {
                                 var ph = new PasswordHistoryView
                                 {
@@ -146,11 +146,11 @@ namespace Bit.Core.Services
                         }
                     }
                 }
-                if(!model.PasswordHistory?.Any() ?? false)
+                if (!model.PasswordHistory?.Any() ?? false)
                 {
                     model.PasswordHistory = null;
                 }
-                else if(model.PasswordHistory != null && model.PasswordHistory.Count > 5)
+                else if (model.PasswordHistory != null && model.PasswordHistory.Count > 5)
                 {
                     model.PasswordHistory = model.PasswordHistory.Take(5).ToList();
                 }
@@ -166,10 +166,10 @@ namespace Bit.Core.Services
                 CollectionIds = model.CollectionIds
             };
 
-            if(key == null && cipher.OrganizationId != null)
+            if (key == null && cipher.OrganizationId != null)
             {
                 key = await _cryptoService.GetOrgKeyAsync(cipher.OrganizationId);
-                if(key == null)
+                if (key == null)
                 {
                     throw new Exception("Cannot encrypt cipher for organization. No key.");
                 }
@@ -198,7 +198,7 @@ namespace Bit.Core.Services
                 Keys_LocalData);
             var ciphers = await _storageService.GetAsync<Dictionary<string, CipherData>>(
                 string.Format(Keys_CiphersFormat, userId));
-            if(!ciphers?.ContainsKey(id) ?? true)
+            if (!ciphers?.ContainsKey(id) ?? true)
             {
                 return null;
             }
@@ -220,11 +220,11 @@ namespace Bit.Core.Services
 
         public Task<List<CipherView>> GetAllDecryptedAsync()
         {
-            if(DecryptedCipherCache != null)
+            if (DecryptedCipherCache != null)
             {
                 return Task.FromResult(DecryptedCipherCache);
             }
-            if(_getAllDecryptedTask != null && !_getAllDecryptedTask.IsCompleted && !_getAllDecryptedTask.IsFaulted)
+            if (_getAllDecryptedTask != null && !_getAllDecryptedTask.IsCompleted && !_getAllDecryptedTask.IsFaulted)
             {
                 return _getAllDecryptedTask;
             }
@@ -233,7 +233,7 @@ namespace Bit.Core.Services
                 try
                 {
                     var hashKey = await _cryptoService.HasKeyAsync();
-                    if(!hashKey)
+                    if (!hashKey)
                     {
                         throw new Exception("No key.");
                     }
@@ -245,7 +245,7 @@ namespace Bit.Core.Services
                     }
                     var tasks = new List<Task>();
                     var ciphers = await GetAllAsync();
-                    foreach(var cipher in ciphers)
+                    foreach (var cipher in ciphers)
                     {
                         tasks.Add(decryptAndAddCipherAsync(cipher));
                     }
@@ -265,11 +265,11 @@ namespace Bit.Core.Services
             var ciphers = await GetAllDecryptedAsync();
             return ciphers.Where(cipher =>
             {
-                if(folder && cipher.FolderId == groupingId)
+                if (folder && cipher.FolderId == groupingId)
                 {
                     return true;
                 }
-                if(!folder && cipher.CollectionIds != null && cipher.CollectionIds.Contains(groupingId))
+                if (!folder && cipher.CollectionIds != null && cipher.CollectionIds.Contains(groupingId))
                 {
                     return true;
                 }
@@ -286,7 +286,7 @@ namespace Bit.Core.Services
         public async Task<Tuple<List<CipherView>, List<CipherView>, List<CipherView>>> GetAllDecryptedByUrlAsync(
             string url, List<CipherType> includeOtherTypes = null)
         {
-            if(string.IsNullOrWhiteSpace(url) && includeOtherTypes == null)
+            if (string.IsNullOrWhiteSpace(url) && includeOtherTypes == null)
             {
                 return new Tuple<List<CipherView>, List<CipherView>, List<CipherView>>(
                     new List<CipherView>(), new List<CipherView>(), new List<CipherView>());
@@ -317,43 +317,43 @@ namespace Bit.Core.Services
             var ciphers = await ciphersTask;
 
             var defaultMatch = (UriMatchType?)(await _storageService.GetAsync<int?>(Constants.DefaultUriMatch));
-            if(defaultMatch == null)
+            if (defaultMatch == null)
             {
                 defaultMatch = UriMatchType.Domain;
             }
 
-            foreach(var cipher in ciphers)
+            foreach (var cipher in ciphers)
             {
-                if(cipher.Type != CipherType.Login && (includeOtherTypes?.Any(t => t == cipher.Type) ?? false))
+                if (cipher.Type != CipherType.Login && (includeOtherTypes?.Any(t => t == cipher.Type) ?? false))
                 {
                     others.Add(cipher);
                     continue;
                 }
 
-                if(cipher.Type != CipherType.Login || cipher.Login?.Uris == null || !cipher.Login.Uris.Any())
+                if (cipher.Type != CipherType.Login || cipher.Login?.Uris == null || !cipher.Login.Uris.Any())
                 {
                     continue;
                 }
 
-                foreach(var u in cipher.Login.Uris)
+                foreach (var u in cipher.Login.Uris)
                 {
-                    if(string.IsNullOrWhiteSpace(u.Uri))
+                    if (string.IsNullOrWhiteSpace(u.Uri))
                     {
                         continue;
                     }
                     var match = false;
-                    switch(u.Match)
+                    switch (u.Match)
                     {
                         case null:
                         case UriMatchType.Domain:
                             match = CheckDefaultUriMatch(cipher, u, matchingLogins, matchingFuzzyLogins,
                                 matchingDomainsSet, matchingFuzzyDomainsSet, mobileApp, mobileAppSearchTerms);
-                            if(match && u.Domain != null)
+                            if (match && u.Domain != null)
                             {
-                                if(_domainMatchBlacklist.ContainsKey(u.Domain))
+                                if (_domainMatchBlacklist.ContainsKey(u.Domain))
                                 {
                                     var domainUrlHost = CoreHelpers.GetHost(url);
-                                    if(_domainMatchBlacklist[u.Domain].Contains(domainUrlHost))
+                                    if (_domainMatchBlacklist[u.Domain].Contains(domainUrlHost))
                                     {
                                         match = false;
                                     }
@@ -363,21 +363,21 @@ namespace Bit.Core.Services
                         case UriMatchType.Host:
                             var urlHost = CoreHelpers.GetHost(url);
                             match = urlHost != null && urlHost == CoreHelpers.GetHost(u.Uri);
-                            if(match)
+                            if (match)
                             {
                                 AddMatchingLogin(cipher, matchingLogins, matchingFuzzyLogins);
                             }
                             break;
                         case UriMatchType.Exact:
                             match = url == u.Uri;
-                            if(match)
+                            if (match)
                             {
                                 AddMatchingLogin(cipher, matchingLogins, matchingFuzzyLogins);
                             }
                             break;
                         case UriMatchType.StartsWith:
                             match = url.StartsWith(u.Uri);
-                            if(match)
+                            if (match)
                             {
                                 AddMatchingLogin(cipher, matchingLogins, matchingFuzzyLogins);
                             }
@@ -387,18 +387,18 @@ namespace Bit.Core.Services
                             {
                                 var regex = new Regex(u.Uri, RegexOptions.IgnoreCase, TimeSpan.FromSeconds(1));
                                 match = regex.IsMatch(url);
-                                if(match)
+                                if (match)
                                 {
                                     AddMatchingLogin(cipher, matchingLogins, matchingFuzzyLogins);
                                 }
                             }
-                            catch(ArgumentException) { }
+                            catch (ArgumentException) { }
                             break;
                         case UriMatchType.Never:
                         default:
                             break;
                     }
-                    if(match)
+                    if (match)
                     {
                         break;
                     }
@@ -418,15 +418,15 @@ namespace Bit.Core.Services
         {
             var ciphersLocalData = await _storageService.GetAsync<Dictionary<string, Dictionary<string, object>>>(
                 Keys_LocalData);
-            if(ciphersLocalData == null)
+            if (ciphersLocalData == null)
             {
                 ciphersLocalData = new Dictionary<string, Dictionary<string, object>>();
             }
-            if(!ciphersLocalData.ContainsKey(id))
+            if (!ciphersLocalData.ContainsKey(id))
             {
                 ciphersLocalData.Add(id, new Dictionary<string, object>());
             }
-            if(ciphersLocalData[id].ContainsKey("lastUsedDate"))
+            if (ciphersLocalData[id].ContainsKey("lastUsedDate"))
             {
                 ciphersLocalData[id]["lastUsedDate"] = DateTime.UtcNow;
             }
@@ -437,12 +437,12 @@ namespace Bit.Core.Services
 
             await _storageService.SaveAsync(Keys_LocalData, ciphersLocalData);
             // Update cache
-            if(DecryptedCipherCache == null)
+            if (DecryptedCipherCache == null)
             {
                 return;
             }
             var cached = DecryptedCipherCache.FirstOrDefault(c => c.Id == id);
-            if(cached != null)
+            if (cached != null)
             {
                 cached.LocalData = ciphersLocalData[id];
             }
@@ -450,12 +450,12 @@ namespace Bit.Core.Services
 
         public async Task SaveNeverDomainAsync(string domain)
         {
-            if(string.IsNullOrWhiteSpace(domain))
+            if (string.IsNullOrWhiteSpace(domain))
             {
                 return;
             }
             var domains = await _storageService.GetAsync<HashSet<string>>(Keys_NeverDomains);
-            if(domains == null)
+            if (domains == null)
             {
                 domains = new HashSet<string>();
             }
@@ -466,9 +466,9 @@ namespace Bit.Core.Services
         public async Task SaveWithServerAsync(Cipher cipher)
         {
             CipherResponse response;
-            if(cipher.Id == null)
+            if (cipher.Id == null)
             {
-                if(cipher.CollectionIds != null)
+                if (cipher.CollectionIds != null)
                 {
                     var request = new CipherCreateRequest(cipher);
                     response = await _apiService.PostCipherCreateAsync(request);
@@ -493,11 +493,11 @@ namespace Bit.Core.Services
         public async Task ShareWithServerAsync(CipherView cipher, string organizationId, HashSet<string> collectionIds)
         {
             var attachmentTasks = new List<Task>();
-            if(cipher.Attachments != null)
+            if (cipher.Attachments != null)
             {
-                foreach(var attachment in cipher.Attachments)
+                foreach (var attachment in cipher.Attachments)
                 {
-                    if(attachment.Key == null)
+                    if (attachment.Key == null)
                     {
                         attachmentTasks.Add(ShareAttachmentWithServerAsync(attachment, cipher.Id, organizationId));
                     }
@@ -545,11 +545,11 @@ namespace Bit.Core.Services
             var userId = await _userService.GetUserIdAsync();
             var storageKey = string.Format(Keys_CiphersFormat, userId);
             var ciphers = await _storageService.GetAsync<Dictionary<string, CipherData>>(storageKey);
-            if(ciphers == null)
+            if (ciphers == null)
             {
                 ciphers = new Dictionary<string, CipherData>();
             }
-            if(!ciphers.ContainsKey(cipher.Id))
+            if (!ciphers.ContainsKey(cipher.Id))
             {
                 ciphers.Add(cipher.Id, null);
             }
@@ -563,13 +563,13 @@ namespace Bit.Core.Services
             var userId = await _userService.GetUserIdAsync();
             var storageKey = string.Format(Keys_CiphersFormat, userId);
             var ciphers = await _storageService.GetAsync<Dictionary<string, CipherData>>(storageKey);
-            if(ciphers == null)
+            if (ciphers == null)
             {
                 ciphers = new Dictionary<string, CipherData>();
             }
-            foreach(var c in cipher)
+            foreach (var c in cipher)
             {
-                if(!ciphers.ContainsKey(c.Id))
+                if (!ciphers.ContainsKey(c.Id))
                 {
                     ciphers.Add(c.Id, null);
                 }
@@ -597,11 +597,11 @@ namespace Bit.Core.Services
             var userId = await _userService.GetUserIdAsync();
             var cipherKey = string.Format(Keys_CiphersFormat, userId);
             var ciphers = await _storageService.GetAsync<Dictionary<string, CipherData>>(cipherKey);
-            if(ciphers == null)
+            if (ciphers == null)
             {
                 return;
             }
-            if(!ciphers.ContainsKey(id))
+            if (!ciphers.ContainsKey(id))
             {
                 return;
             }
@@ -615,13 +615,13 @@ namespace Bit.Core.Services
             var userId = await _userService.GetUserIdAsync();
             var cipherKey = string.Format(Keys_CiphersFormat, userId);
             var ciphers = await _storageService.GetAsync<Dictionary<string, CipherData>>(cipherKey);
-            if(ciphers == null)
+            if (ciphers == null)
             {
                 return;
             }
-            foreach(var id in ids)
+            foreach (var id in ids)
             {
-                if(!ciphers.ContainsKey(id))
+                if (!ciphers.ContainsKey(id))
                 {
                     return;
                 }
@@ -642,12 +642,12 @@ namespace Bit.Core.Services
             var userId = await _userService.GetUserIdAsync();
             var cipherKey = string.Format(Keys_CiphersFormat, userId);
             var ciphers = await _storageService.GetAsync<Dictionary<string, CipherData>>(cipherKey);
-            if(ciphers == null || !ciphers.ContainsKey(id) || ciphers[id].Attachments == null)
+            if (ciphers == null || !ciphers.ContainsKey(id) || ciphers[id].Attachments == null)
             {
                 return;
             }
             var attachment = ciphers[id].Attachments.FirstOrDefault(a => a.Id == attachmentId);
-            if(attachment != null)
+            if (attachment != null)
             {
                 ciphers[id].Attachments.Remove(attachment);
             }
@@ -662,7 +662,7 @@ namespace Bit.Core.Services
                 await _apiService.DeleteCipherAttachmentAsync(id, attachmentId);
                 await DeleteAttachmentAsync(id, attachmentId);
             }
-            catch(ApiException e)
+            catch (ApiException e)
             {
                 await DeleteAttachmentAsync(id, attachmentId);
                 throw e;
@@ -674,12 +674,12 @@ namespace Bit.Core.Services
             try
             {
                 var response = await _httpClient.GetAsync(new Uri(attachment.Url));
-                if(!response.IsSuccessStatusCode)
+                if (!response.IsSuccessStatusCode)
                 {
                     return null;
                 }
                 var data = await response.Content.ReadAsByteArrayAsync();
-                if(data == null)
+                if (data == null)
                 {
                     return null;
                 }
@@ -696,7 +696,7 @@ namespace Bit.Core.Services
             string organizationId)
         {
             var attachmentResponse = await _httpClient.GetAsync(attachmentView.Url);
-            if(!attachmentResponse.IsSuccessStatusCode)
+            if (!attachmentResponse.IsSuccessStatusCode)
             {
                 throw new Exception("Failed to download attachment: " + attachmentResponse.StatusCode);
             }
@@ -722,62 +722,62 @@ namespace Bit.Core.Services
             var loginUriString = loginUri.Uri;
             var loginUriDomain = loginUri.Domain;
 
-            if(matchingDomainsSet.Contains(loginUriString))
+            if (matchingDomainsSet.Contains(loginUriString))
             {
                 AddMatchingLogin(cipher, matchingLogins, matchingFuzzyLogins);
                 return true;
             }
-            else if(mobileApp && matchingFuzzyDomainsSet.Contains(loginUriString))
+            else if (mobileApp && matchingFuzzyDomainsSet.Contains(loginUriString))
             {
                 AddMatchingFuzzyLogin(cipher, matchingLogins, matchingFuzzyLogins);
                 return false;
             }
-            else if(!mobileApp)
+            else if (!mobileApp)
             {
                 var info = InfoFromMobileAppUrl(loginUriString);
-                if(info?.Item1 != null && matchingDomainsSet.Contains(info.Item1))
+                if (info?.Item1 != null && matchingDomainsSet.Contains(info.Item1))
                 {
                     AddMatchingFuzzyLogin(cipher, matchingLogins, matchingFuzzyLogins);
                     return false;
                 }
             }
 
-            if(!loginUri.Uri.Contains("://") && loginUriString.Contains("."))
+            if (!loginUri.Uri.Contains("://") && loginUriString.Contains("."))
             {
                 loginUriString = "http://" + loginUriString;
             }
 
-            if(loginUriDomain != null)
+            if (loginUriDomain != null)
             {
                 loginUriDomain = loginUriDomain.ToLowerInvariant();
-                if(matchingDomainsSet.Contains(loginUriDomain))
+                if (matchingDomainsSet.Contains(loginUriDomain))
                 {
                     AddMatchingLogin(cipher, matchingLogins, matchingFuzzyLogins);
                     return true;
                 }
-                else if(mobileApp && matchingFuzzyDomainsSet.Contains(loginUriDomain))
+                else if (mobileApp && matchingFuzzyDomainsSet.Contains(loginUriDomain))
                 {
                     AddMatchingFuzzyLogin(cipher, matchingLogins, matchingFuzzyLogins);
                     return false;
                 }
             }
 
-            if(mobileApp && (mobileAppSearchTerms?.Any() ?? false))
+            if (mobileApp && (mobileAppSearchTerms?.Any() ?? false))
             {
                 var addedFromSearchTerm = false;
                 var loginName = cipher.Name?.ToLowerInvariant();
-                foreach(var term in mobileAppSearchTerms)
+                foreach (var term in mobileAppSearchTerms)
                 {
                     addedFromSearchTerm = (loginUriDomain != null && loginUriDomain.Contains(term)) ||
                         (loginName != null && loginName.Contains(term));
-                    if(!addedFromSearchTerm)
+                    if (!addedFromSearchTerm)
                     {
                         var domainTerm = loginUriDomain?.Split('.')[0];
                         addedFromSearchTerm =
                             (domainTerm != null && domainTerm.Length > 2 && term.Contains(domainTerm)) ||
                             (loginName != null && term.Contains(loginName));
                     }
-                    if(addedFromSearchTerm)
+                    if (addedFromSearchTerm)
                     {
                         AddMatchingFuzzyLogin(cipher, matchingLogins, matchingFuzzyLogins);
                         return false;
@@ -791,7 +791,7 @@ namespace Bit.Core.Services
         private void AddMatchingLogin(CipherView cipher, List<CipherView> matchingLogins,
             List<CipherView> matchingFuzzyLogins)
         {
-            if(matchingFuzzyLogins.Contains(cipher))
+            if (matchingFuzzyLogins.Contains(cipher))
             {
                 matchingFuzzyLogins.Remove(cipher);
             }
@@ -801,7 +801,7 @@ namespace Bit.Core.Services
         private void AddMatchingFuzzyLogin(CipherView cipher, List<CipherView> matchingLogins,
             List<CipherView> matchingFuzzyLogins)
         {
-            if(!matchingFuzzyLogins.Contains(cipher) && !matchingLogins.Contains(cipher))
+            if (!matchingFuzzyLogins.Contains(cipher) && !matchingLogins.Contains(cipher))
             {
                 matchingFuzzyLogins.Add(cipher);
             }
@@ -813,39 +813,39 @@ namespace Bit.Core.Services
             var matchingDomains = new HashSet<string>();
             var matchingFuzzyDomains = new HashSet<string>();
             var eqDomains = await _settingsService.GetEquivalentDomainsAsync();
-            foreach(var eqDomain in eqDomains)
+            foreach (var eqDomain in eqDomains)
             {
                 var eqDomainSet = new HashSet<string>(eqDomain);
-                if(mobileApp)
+                if (mobileApp)
                 {
-                    if(eqDomainSet.Contains(url))
+                    if (eqDomainSet.Contains(url))
                     {
-                        foreach(var d in eqDomain)
+                        foreach (var d in eqDomain)
                         {
                             matchingDomains.Add(d);
                         }
                     }
-                    else if(mobileAppWebUriString != null && eqDomainSet.Contains(mobileAppWebUriString))
+                    else if (mobileAppWebUriString != null && eqDomainSet.Contains(mobileAppWebUriString))
                     {
-                        foreach(var d in eqDomain)
+                        foreach (var d in eqDomain)
                         {
                             matchingFuzzyDomains.Add(d);
                         }
                     }
                 }
-                else if(eqDomainSet.Contains(domain))
+                else if (eqDomainSet.Contains(domain))
                 {
-                    foreach(var d in eqDomain)
+                    foreach (var d in eqDomain)
                     {
                         matchingDomains.Add(d);
                     }
                 }
             }
-            if(!matchingDomains.Any())
+            if (!matchingDomains.Any())
             {
                 matchingDomains.Add(mobileApp ? url : domain);
             }
-            if(mobileApp && mobileAppWebUriString != null &&
+            if (mobileApp && mobileAppWebUriString != null &&
                 !matchingFuzzyDomains.Any() && !matchingDomains.Contains(mobileAppWebUriString))
             {
                 matchingFuzzyDomains.Add(mobileAppWebUriString);
@@ -855,11 +855,11 @@ namespace Bit.Core.Services
 
         private Tuple<string, string[]> InfoFromMobileAppUrl(string mobileAppUrlString)
         {
-            if(UrlIsAndroidApp(mobileAppUrlString))
+            if (UrlIsAndroidApp(mobileAppUrlString))
             {
                 return InfoFromAndroidAppUri(mobileAppUrlString);
             }
-            else if(UrlIsiOSApp(mobileAppUrlString))
+            else if (UrlIsiOSApp(mobileAppUrlString))
             {
                 return InfoFromiOSAppUrl(mobileAppUrlString);
             }
@@ -868,12 +868,12 @@ namespace Bit.Core.Services
 
         private Tuple<string, string[]> InfoFromAndroidAppUri(string androidAppUrlString)
         {
-            if(!UrlIsAndroidApp(androidAppUrlString))
+            if (!UrlIsAndroidApp(androidAppUrlString))
             {
                 return null;
             }
             var androidUrlParts = androidAppUrlString.Replace(Constants.AndroidAppProtocol, string.Empty).Split('.');
-            if(androidUrlParts.Length >= 2)
+            if (androidUrlParts.Length >= 2)
             {
                 var webUri = string.Join(".", androidUrlParts[1], androidUrlParts[0]);
                 var searchTerms = androidUrlParts.Where(p => !_ignoredSearchTerms.Contains(p))
@@ -885,7 +885,7 @@ namespace Bit.Core.Services
 
         private Tuple<string, string[]> InfoFromiOSAppUrl(string iosAppUrlString)
         {
-            if(!UrlIsiOSApp(iosAppUrlString))
+            if (!UrlIsiOSApp(iosAppUrlString))
             {
                 return null;
             }
@@ -920,7 +920,7 @@ namespace Bit.Core.Services
                 var modelPropInfo = modelType.GetProperty(propName);
                 var modelProp = modelPropInfo.GetValue(model) as string;
                 CipherString val = null;
-                if(!string.IsNullOrWhiteSpace(modelProp))
+                if (!string.IsNullOrWhiteSpace(modelProp))
                 {
                     val = await _cryptoService.EncryptAsync(modelProp, key);
                 }
@@ -929,7 +929,7 @@ namespace Bit.Core.Services
             };
 
             var tasks = new List<Task>();
-            foreach(var prop in map)
+            foreach (var prop in map)
             {
                 tasks.Add(makeAndSetCs(prop));
             }
@@ -939,7 +939,7 @@ namespace Bit.Core.Services
         private async Task EncryptAttachmentsAsync(List<AttachmentView> attachmentsModel, SymmetricCryptoKey key,
             Cipher cipher)
         {
-            if(!attachmentsModel?.Any() ?? true)
+            if (!attachmentsModel?.Any() ?? true)
             {
                 cipher.Attachments = null;
                 return;
@@ -952,13 +952,13 @@ namespace Bit.Core.Services
                 {
                     "FileName"
                 }, key);
-                if(model.Key != null)
+                if (model.Key != null)
                 {
                     attachment.Key = await _cryptoService.EncryptAsync(model.Key.Key, key);
                 }
                 encAttachments.Add(attachment);
             }
-            foreach(var model in attachmentsModel)
+            foreach (var model in attachmentsModel)
             {
                 tasks.Add(encryptAndAddAttachmentAsync(model, new Attachment
                 {
@@ -974,7 +974,7 @@ namespace Bit.Core.Services
 
         private async Task EncryptCipherDataAsync(Cipher cipher, CipherView model, SymmetricCryptoKey key)
         {
-            switch(cipher.Type)
+            switch (cipher.Type)
             {
                 case CipherType.Login:
                     cipher.Login = new Login
@@ -987,10 +987,10 @@ namespace Bit.Core.Services
                         "Password",
                         "Totp"
                     }, key);
-                    if(model.Login.Uris != null)
+                    if (model.Login.Uris != null)
                     {
                         cipher.Login.Uris = new List<LoginUri>();
-                        foreach(var uri in model.Login.Uris)
+                        foreach (var uri in model.Login.Uris)
                         {
                             var loginUri = new LoginUri
                             {
@@ -1051,7 +1051,7 @@ namespace Bit.Core.Services
         private async Task EncryptFieldsAsync(List<FieldView> fieldsModel, SymmetricCryptoKey key,
             Cipher cipher)
         {
-            if(!fieldsModel?.Any() ?? true)
+            if (!fieldsModel?.Any() ?? true)
             {
                 cipher.Fields = null;
                 return;
@@ -1067,14 +1067,14 @@ namespace Bit.Core.Services
                 }, key);
                 encFields.Add(field);
             }
-            foreach(var model in fieldsModel)
+            foreach (var model in fieldsModel)
             {
                 var field = new Field
                 {
                     Type = model.Type
                 };
                 // normalize boolean type field values
-                if(model.Type == FieldType.Boolean && model.Value != "true")
+                if (model.Type == FieldType.Boolean && model.Value != "true")
                 {
                     model.Value = "false";
                 }
@@ -1087,7 +1087,7 @@ namespace Bit.Core.Services
         private async Task EncryptPasswordHistoriesAsync(List<PasswordHistoryView> phModels,
             SymmetricCryptoKey key, Cipher cipher)
         {
-            if(!phModels?.Any() ?? true)
+            if (!phModels?.Any() ?? true)
             {
                 cipher.PasswordHistory = null;
                 return;
@@ -1102,7 +1102,7 @@ namespace Bit.Core.Services
                 }, key);
                 encPhs.Add(ph);
             }
-            foreach(var model in phModels)
+            foreach (var model in phModels)
             {
                 tasks.Add(encryptAndAddHistoryAsync(model, new PasswordHistory
                 {
@@ -1126,28 +1126,28 @@ namespace Bit.Core.Services
             {
                 var aName = a?.Name;
                 var bName = b?.Name;
-                if(aName == null && bName != null)
+                if (aName == null && bName != null)
                 {
                     return -1;
                 }
-                if(aName != null && bName == null)
+                if (aName != null && bName == null)
                 {
                     return 1;
                 }
-                if(aName == null && bName == null)
+                if (aName == null && bName == null)
                 {
                     return 0;
                 }
                 var result = _i18nService.StringComparer.Compare(aName, bName);
-                if(result != 0 || a.Type != CipherType.Login || b.Type != CipherType.Login)
+                if (result != 0 || a.Type != CipherType.Login || b.Type != CipherType.Login)
                 {
                     return result;
                 }
-                if(a.Login.Username != null)
+                if (a.Login.Username != null)
                 {
                     aName += a.Login.Username;
                 }
-                if(b.Login.Username != null)
+                if (b.Login.Username != null)
                 {
                     bName += b.Login.Username;
                 }
@@ -1165,19 +1165,19 @@ namespace Bit.Core.Services
                     b.LocalData["lastUsedDate"] as DateTime? : null;
 
                 var bothNotNull = aLastUsed != null && bLastUsed != null;
-                if(bothNotNull && aLastUsed.Value < bLastUsed.Value)
+                if (bothNotNull && aLastUsed.Value < bLastUsed.Value)
                 {
                     return 1;
                 }
-                if(aLastUsed != null && bLastUsed == null)
+                if (aLastUsed != null && bLastUsed == null)
                 {
                     return -1;
                 }
-                if(bothNotNull && aLastUsed.Value > bLastUsed.Value)
+                if (bothNotNull && aLastUsed.Value > bLastUsed.Value)
                 {
                     return -1;
                 }
-                if(bLastUsed != null && aLastUsed == null)
+                if (bLastUsed != null && aLastUsed == null)
                 {
                     return 1;
                 }
@@ -1199,7 +1199,7 @@ namespace Bit.Core.Services
             public int Compare(CipherView a, CipherView b)
             {
                 var result = _cipherLastUsedComparer.Compare(a, b);
-                if(result != 0)
+                if (result != 0)
                 {
                     return result;
                 }

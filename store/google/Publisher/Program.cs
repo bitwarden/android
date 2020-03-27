@@ -19,7 +19,7 @@ namespace Bit.Publisher
 
         static void Main(string[] args)
         {
-            if(args.Length < 3)
+            if (args.Length < 3)
             {
                 throw new ArgumentException("Not enough arguments.");
             }
@@ -30,32 +30,32 @@ namespace Bit.Publisher
                 _apkFilePath = args[1];
 
                 var track = args[2].Substring(0, 1).ToLower();
-                if(track == "a")
+                if (track == "a")
                 {
                     _track = "alpha";
                 }
-                else if(track == "b")
+                else if (track == "b")
                 {
                     _track = "beta";
                 }
-                else if(track == "p")
+                else if (track == "p")
                 {
                     _track = "production";
                 }
-                else if(track == "r")
+                else if (track == "r")
                 {
                     _track = "rollout";
                 }
-                else if(track == "i")
+                else if (track == "i")
                 {
                     _track = "internal";
                 }
 
                 new Program().Run().Wait();
             }
-            catch(AggregateException ex)
+            catch (AggregateException ex)
             {
-                foreach(var e in ex.InnerExceptions)
+                foreach (var e in ex.InnerExceptions)
                 {
                     Console.WriteLine("ERROR: " + e.Message);
                 }
@@ -67,7 +67,7 @@ namespace Bit.Publisher
         private async Task Run()
         {
             GoogleCredential creds;
-            using(var stream = new FileStream(_credsFilePath, FileMode.Open))
+            using (var stream = new FileStream(_credsFilePath, FileMode.Open))
             {
                 creds = GoogleCredential.FromStream(stream).CreateScoped(
                     AndroidPublisherService.Scope.Androidpublisher);
@@ -84,13 +84,13 @@ namespace Bit.Publisher
             Console.WriteLine("Created edit with id {0}.", edit.Id);
 
             Apk apk = null;
-            using(var stream = new FileStream(_apkFilePath, FileMode.Open))
+            using (var stream = new FileStream(_apkFilePath, FileMode.Open))
             {
                 var uploadMedia = service.Edits.Apks.Upload(Package, edit.Id, stream,
                     "application/vnd.android.package-archive");
 
                 var progress = await uploadMedia.UploadAsync();
-                if(progress.Status == Google.Apis.Upload.UploadStatus.Completed)
+                if (progress.Status == Google.Apis.Upload.UploadStatus.Completed)
                 {
                     apk = uploadMedia.ResponseBody;
                 }

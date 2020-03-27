@@ -51,10 +51,10 @@ namespace Bit.Core.Models.View
         {
             get
             {
-                if(_domain == null && Uri != null)
+                if (_domain == null && Uri != null)
                 {
                     _domain = CoreHelpers.GetDomain(Uri);
-                    if(_domain == string.Empty)
+                    if (_domain == string.Empty)
                     {
                         _domain = null;
                     }
@@ -67,10 +67,10 @@ namespace Bit.Core.Models.View
         {
             get
             {
-                if(_hostname == null && Uri != null)
+                if (_hostname == null && Uri != null)
                 {
                     _hostname = CoreHelpers.GetHostname(Uri);
-                    if(_hostname == string.Empty)
+                    if (_hostname == string.Empty)
                     {
                         _hostname = null;
                     }
@@ -88,11 +88,11 @@ namespace Bit.Core.Models.View
         {
             get
             {
-                if(_canLaunch != null)
+                if (_canLaunch != null)
                 {
                     return _canLaunch.Value;
                 }
-                if(Uri != null && Match != UriMatchType.RegularExpression)
+                if (Uri != null && Match != UriMatchType.RegularExpression)
                 {
                     var uri = LaunchUri;
                     _canLaunch = _canLaunchWhitelist.Any(prefix => uri.StartsWith(prefix));

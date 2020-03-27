@@ -8,7 +8,7 @@ namespace Bit.App.Pages
 
         protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
         {
-            if(item is SettingsPageListItem listItem)
+            if (item is SettingsPageListItem listItem)
             {
                 return RegularTemplate;
             }

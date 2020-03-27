@@ -32,30 +32,30 @@ namespace Bit.Core.Services
         public async Task CollectAsync(EventType eventType, string cipherId = null, bool uploadImmediately = false)
         {
             var authed = await _userService.IsAuthenticatedAsync();
-            if(!authed)
+            if (!authed)
             {
                 return;
             }
             var organizations = await _userService.GetAllOrganizationAsync();
-            if(organizations == null)
+            if (organizations == null)
             {
                 return;
             }
             var orgIds = new HashSet<string>(organizations.Where(o => o.UseEvents).Select(o => o.Id));
-            if(!orgIds.Any())
+            if (!orgIds.Any())
             {
                 return;
             }
-            if(cipherId != null)
+            if (cipherId != null)
             {
                 var cipher = await _cipherService.GetAsync(cipherId);
-                if(cipher?.OrganizationId == null || !orgIds.Contains(cipher.OrganizationId))
+                if (cipher?.OrganizationId == null || !orgIds.Contains(cipher.OrganizationId))
                 {
                     return;
                 }
             }
             var eventCollection = await _storageService.GetAsync<List<EventData>>(Constants.EventCollectionKey);
-            if(eventCollection == null)
+            if (eventCollection == null)
             {
                 eventCollection = new List<EventData>();
             }
@@ -66,7 +66,7 @@ namespace Bit.Core.Services
                 Date = DateTime.UtcNow
             });
             await _storageService.SaveAsync(Constants.EventCollectionKey, eventCollection);
-            if(uploadImmediately)
+            if (uploadImmediately)
             {
                 await UploadEventsAsync();
             }
@@ -75,12 +75,12 @@ namespace Bit.Core.Services
         public async Task UploadEventsAsync()
         {
             var authed = await _userService.IsAuthenticatedAsync();
-            if(!authed)
+            if (!authed)
             {
                 return;
             }
             var eventCollection = await _storageService.GetAsync<List<EventData>>(Constants.EventCollectionKey);
-            if(eventCollection == null || !eventCollection.Any())
+            if (eventCollection == null || !eventCollection.Any())
             {
                 return;
             }
@@ -95,7 +95,7 @@ namespace Bit.Core.Services
                 await _apiService.PostEventsCollectAsync(request);
                 await ClearEventsAsync();
             }
-            catch(ApiException) { }
+            catch (ApiException) { }
         }
 
         public async Task ClearEventsAsync()

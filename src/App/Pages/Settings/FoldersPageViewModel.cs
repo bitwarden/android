@@ -34,7 +34,7 @@ namespace Bit.App.Pages
         {
             var folders = await _folderService.GetAllDecryptedAsync();
             // Remove "No Folder"
-            if(folders?.Any() ?? false)
+            if (folders?.Any() ?? false)
             {
                 folders = folders.GetRange(0, folders.Count - 1);
             }

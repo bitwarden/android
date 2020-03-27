@@ -17,7 +17,7 @@ namespace Bit.App.Pages
             InitializeComponent();
             _vm = BindingContext as EnvironmentPageViewModel;
             _vm.Page = this;
-            if(Device.RuntimePlatform == Device.Android)
+            if (Device.RuntimePlatform == Device.Android)
             {
                 ToolbarItems.RemoveAt(0);
             }
@@ -32,7 +32,7 @@ namespace Bit.App.Pages
 
         private async void Submit_Clicked(object sender, EventArgs e)
         {
-            if(DoOnce())
+            if (DoOnce())
             {
                 await _vm.SubmitAsync();
             }
@@ -40,7 +40,7 @@ namespace Bit.App.Pages
 
         private async void Close_Clicked(object sender, EventArgs e)
         {
-            if(DoOnce())
+            if (DoOnce())
             {
                 _messagingService.Send("showStatusBar", false);
                 await Navigation.PopModalAsync();

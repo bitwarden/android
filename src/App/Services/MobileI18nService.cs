@@ -31,7 +31,7 @@ namespace Bit.App.Services
         {
             get
             {
-                if(_stringComparer == null)
+                if (_stringComparer == null)
                 {
                     _stringComparer = StringComparer.Create(Culture, false);
                 }
@@ -42,7 +42,7 @@ namespace Bit.App.Services
         {
             get
             {
-                if(_localeNames == null)
+                if (_localeNames == null)
                 {
                     _localeNames = new Dictionary<string, string>
                     {
@@ -92,12 +92,12 @@ namespace Bit.App.Services
 
         public void Init(CultureInfo culture = null)
         {
-            if(_inited)
+            if (_inited)
             {
                 throw new Exception("I18n already inited.");
             }
             _inited = true;
-            if(culture != null)
+            if (culture != null)
             {
                 Culture = culture;
             }
@@ -113,28 +113,28 @@ namespace Bit.App.Services
 
         public string Translate(string id, string p1 = null, string p2 = null, string p3 = null)
         {
-            if(string.IsNullOrWhiteSpace(id))
+            if (string.IsNullOrWhiteSpace(id))
             {
                 return string.Empty;
             }
             var result = _resourceManager.Value.GetString(id, Culture);
-            if(result == null)
+            if (result == null)
             {
                 result = _resourceManager.Value.GetString(id, _defaultCulture);
-                if(result == null)
+                if (result == null)
                 {
                     result = $"{{{id}}}";
                 }
             }
-            if(p1 == null && p2 == null && p3 == null)
+            if (p1 == null && p2 == null && p3 == null)
             {
                 return result;
             }
-            else if(p2 == null && p3 == null)
+            else if (p2 == null && p3 == null)
             {
                 return string.Format(result, p1);
             }
-            else if(p3 == null)
+            else if (p3 == null)
             {
                 return string.Format(result, p1, p2);
             }

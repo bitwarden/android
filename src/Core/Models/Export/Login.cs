@@ -24,7 +24,7 @@ namespace Bit.Core.Models.Export
 
         public static LoginView ToView(Login req, LoginView view = null)
         {
-            if(view == null)
+            if (view == null)
             {
                 view = new LoginView();
             }

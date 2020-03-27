@@ -39,7 +39,7 @@ namespace Bit.iOS.Core.Utilities
         public static UIAlertController CreateActionSheet(string title, UIViewController controller)
         {
             var sheet = UIAlertController.Create(title, null, UIAlertControllerStyle.ActionSheet);
-            if(UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad)
+            if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad)
             {
                 var x = controller.View.Bounds.Width / 2;
                 var y = controller.View.Bounds.Bottom;

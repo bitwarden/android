@@ -34,7 +34,7 @@ namespace Bit.App.Pages
 
         public bool DoOnce(Action action = null, int milliseconds = 1000)
         {
-            if(LastPageAction.HasValue && (DateTime.UtcNow - LastPageAction.Value).TotalMilliseconds < milliseconds)
+            if (LastPageAction.HasValue && (DateTime.UtcNow - LastPageAction.Value).TotalMilliseconds < milliseconds)
             {
                 // Last action occurred recently.
                 return false;
@@ -52,7 +52,7 @@ namespace Bit.App.Pages
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 HorizontalOptions = LayoutOptions.Center
             };
-            if(targetView != null)
+            if (targetView != null)
             {
                 targetView.Content = indicator;
             }
@@ -68,9 +68,9 @@ namespace Bit.App.Pages
             async Task DoWorkAsync()
             {
                 await workFunction.Invoke();
-                if(sourceView != null)
+                if (sourceView != null)
                 {
-                    if(targetView != null)
+                    if (targetView != null)
                     {
                         targetView.Content = sourceView;
                     }
@@ -80,7 +80,7 @@ namespace Bit.App.Pages
                     }
                 }
             }
-            if(Device.RuntimePlatform == Device.iOS)
+            if (Device.RuntimePlatform == Device.iOS)
             {
                 await DoWorkAsync();
                 return;
@@ -103,7 +103,7 @@ namespace Bit.App.Pages
 
         private void SetStorageService()
         {
-            if(_storageService == null)
+            if (_storageService == null)
             {
                 _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             }

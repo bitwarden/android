@@ -10,7 +10,7 @@ namespace Bit.Droid.Effects
     {
         protected override void OnAttached ()
         {
-            if(Control is Android.Widget.Button button)
+            if (Control is Android.Widget.Button button)
             {
                 var gd = new GradientDrawable();
                 gd.SetColor(((Color)Application.Current.Resources["FabColor"]).ToAndroid());

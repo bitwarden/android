@@ -24,7 +24,7 @@ namespace Bit.App.Pages
             _vm = BindingContext as TwoFactorPageViewModel;
             _vm.Page = this;
             DuoWebView = _duoWebView;
-            if(Device.RuntimePlatform == Device.Android)
+            if (Device.RuntimePlatform == Device.Android)
             {
                 ToolbarItems.Remove(_cancelItem);
             }
@@ -34,7 +34,7 @@ namespace Bit.App.Pages
 
         public void AddContinueButton()
         {
-            if(!ToolbarItems.Contains(_continueItem))
+            if (!ToolbarItems.Contains(_continueItem))
             {
                 ToolbarItems.Add(_continueItem);
             }
@@ -42,7 +42,7 @@ namespace Bit.App.Pages
 
         public void RemoveContinueButton()
         {
-            if(ToolbarItems.Contains(_continueItem))
+            if (ToolbarItems.Contains(_continueItem))
             {
                 ToolbarItems.Remove(_continueItem);
             }
@@ -53,10 +53,10 @@ namespace Bit.App.Pages
             base.OnAppearing();
             _broadcasterService.Subscribe(nameof(TwoFactorPage), (message) =>
             {
-                if(message.Command == "gotYubiKeyOTP")
+                if (message.Command == "gotYubiKeyOTP")
                 {
                     var token = (string)message.Data;
-                    if(_vm.YubikeyMethod && !string.IsNullOrWhiteSpace(token) &&
+                    if (_vm.YubikeyMethod && !string.IsNullOrWhiteSpace(token) &&
                         token.Length == 44 && !token.Contains(" "))
                     {
                         Device.BeginInvokeOnMainThread(async () =>
@@ -66,22 +66,22 @@ namespace Bit.App.Pages
                         });
                     }
                 }
-                else if(message.Command == "resumeYubiKey")
+                else if (message.Command == "resumeYubiKey")
                 {
-                    if(_vm.YubikeyMethod)
+                    if (_vm.YubikeyMethod)
                     {
                         _messagingService.Send("listenYubiKeyOTP", true);
                     }
                 }
             });
 
-            if(!_inited)
+            if (!_inited)
             {
                 _inited = true;
                 await LoadOnAppearedAsync(_scrollView, true, () =>
                 {
                     _vm.Init();
-                    if(_vm.TotpMethod)
+                    if (_vm.TotpMethod)
                     {
                         RequestFocus(_totpEntry);
                     }
@@ -93,7 +93,7 @@ namespace Bit.App.Pages
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            if(!_vm.YubikeyMethod)
+            if (!_vm.YubikeyMethod)
             {
                 _messagingService.Send("listenYubiKeyOTP", false);
                 _broadcasterService.Unsubscribe(nameof(TwoFactorPage));
@@ -101,7 +101,7 @@ namespace Bit.App.Pages
         }
         protected override bool OnBackButtonPressed()
         {
-            if(_vm.YubikeyMethod)
+            if (_vm.YubikeyMethod)
             {
                 _messagingService.Send("listenYubiKeyOTP", false);
                 _broadcasterService.Unsubscribe(nameof(TwoFactorPage));
@@ -111,7 +111,7 @@ namespace Bit.App.Pages
 
         private async void Continue_Clicked(object sender, EventArgs e)
         {
-            if(DoOnce())
+            if (DoOnce())
             {
                 await _vm.SubmitAsync();
             }
@@ -119,7 +119,7 @@ namespace Bit.App.Pages
 
         private async void Methods_Clicked(object sender, EventArgs e)
         {
-            if(DoOnce())
+            if (DoOnce())
             {
                 await _vm.AnotherMethodAsync();
             }
@@ -127,7 +127,7 @@ namespace Bit.App.Pages
 
         private async void ResendEmail_Clicked(object sender, EventArgs e)
         {
-            if(DoOnce())
+            if (DoOnce())
             {
                 await _vm.SendEmailAsync(true, true);
             }
@@ -135,7 +135,7 @@ namespace Bit.App.Pages
 
         private async void Close_Clicked(object sender, System.EventArgs e)
         {
-            if(DoOnce())
+            if (DoOnce())
             {
                 await Navigation.PopModalAsync();
             }
@@ -143,9 +143,9 @@ namespace Bit.App.Pages
 
         private void TryAgain_Clicked(object sender, EventArgs e)
         {
-            if(DoOnce())
+            if (DoOnce())
             {
-                if(_vm.YubikeyMethod)
+                if (_vm.YubikeyMethod)
                 {
                     _messagingService.Send("listenYubiKeyOTP", true);
                 }

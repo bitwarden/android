@@ -39,26 +39,26 @@ namespace Bit.iOS.Autofill
         {
             InitAppIfNeeded();
             _context.ServiceIdentifiers = serviceIdentifiers;
-            if(serviceIdentifiers.Length > 0)
+            if (serviceIdentifiers.Length > 0)
             {
                 var uri = serviceIdentifiers[0].Identifier;
-                if(serviceIdentifiers[0].Type == ASCredentialServiceIdentifierType.Domain)
+                if (serviceIdentifiers[0].Type == ASCredentialServiceIdentifierType.Domain)
                 {
                     uri = string.Concat("https://", uri);
                 }
                 _context.UrlString = uri;
             }
-            if(!CheckAuthed())
+            if (!CheckAuthed())
             {
                 return;
             }
-            if(IsLocked())
+            if (IsLocked())
             {
                 PerformSegue("lockPasswordSegue", this);
             }
             else
             {
-                if(_context.ServiceIdentifiers == null || _context.ServiceIdentifiers.Length == 0)
+                if (_context.ServiceIdentifiers == null || _context.ServiceIdentifiers.Length == 0)
                 {
                     PerformSegue("loginSearchSegue", this);
                 }
@@ -72,7 +72,7 @@ namespace Bit.iOS.Autofill
         public override void ProvideCredentialWithoutUserInteraction(ASPasswordCredentialIdentity credentialIdentity)
         {
             InitAppIfNeeded();
-            if(!IsAuthed() || IsLocked())
+            if (!IsAuthed() || IsLocked())
             {
                 var err = new NSError(new NSString("ASExtensionErrorDomain"),
                     Convert.ToInt32(ASExtensionErrorCode.UserInteractionRequired), null);
@@ -86,7 +86,7 @@ namespace Bit.iOS.Autofill
         public override void PrepareInterfaceToProvideCredential(ASPasswordCredentialIdentity credentialIdentity)
         {
             InitAppIfNeeded();
-            if(!CheckAuthed())
+            if (!CheckAuthed())
             {
                 return;
             }
@@ -98,7 +98,7 @@ namespace Bit.iOS.Autofill
         {
             InitAppIfNeeded();
             _context.Configuring = true;
-            if(!CheckAuthed())
+            if (!CheckAuthed())
             {
                 return;
             }
@@ -108,14 +108,14 @@ namespace Bit.iOS.Autofill
         public void CompleteRequest(string id = null, string username = null,
             string password = null, string totp = null)
         {
-            if((_context?.Configuring ?? true) && string.IsNullOrWhiteSpace(password))
+            if ((_context?.Configuring ?? true) && string.IsNullOrWhiteSpace(password))
             {
                 ServiceContainer.Reset();
                 ExtensionContext?.CompleteExtensionConfigurationRequest();
                 return;
             }
 
-            if(_context == null || string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+            if (_context == null || string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
             {
                 ServiceContainer.Reset();
                 var err = new NSError(new NSString("ASExtensionErrorDomain"),
@@ -124,7 +124,7 @@ namespace Bit.iOS.Autofill
                 return;
             }
 
-            if(!string.IsNullOrWhiteSpace(totp))
+            if (!string.IsNullOrWhiteSpace(totp))
             {
                 UIPasteboard.General.String = totp;
             }
@@ -132,7 +132,7 @@ namespace Bit.iOS.Autofill
             var cred = new ASPasswordCredential(username, password);
             NSRunLoop.Main.BeginInvokeOnMainThread(async () =>
             {
-                if(!string.IsNullOrWhiteSpace(id))
+                if (!string.IsNullOrWhiteSpace(id))
                 {
                     var eventService = ServiceContainer.Resolve<IEventService>("eventService");
                     await eventService.CollectAsync(Bit.Core.Enums.EventType.Cipher_ClientAutofilled, id);
@@ -144,23 +144,23 @@ namespace Bit.iOS.Autofill
 
         public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
         {
-            if(segue.DestinationViewController is UINavigationController navController)
+            if (segue.DestinationViewController is UINavigationController navController)
             {
-                if(navController.TopViewController is LoginListViewController listLoginController)
+                if (navController.TopViewController is LoginListViewController listLoginController)
                 {
                     listLoginController.Context = _context;
                     listLoginController.CPViewController = this;
                 }
-                else if(navController.TopViewController is LoginSearchViewController listSearchController)
+                else if (navController.TopViewController is LoginSearchViewController listSearchController)
                 {
                     listSearchController.Context = _context;
                     listSearchController.CPViewController = this;
                 }
-                else if(navController.TopViewController is LockPasswordViewController passwordViewController)
+                else if (navController.TopViewController is LockPasswordViewController passwordViewController)
                 {
                     passwordViewController.CPViewController = this;
                 }
-                else if(navController.TopViewController is SetupViewController setupViewController)
+                else if (navController.TopViewController is SetupViewController setupViewController)
                 {
                     setupViewController.CPViewController = this;
                 }
@@ -171,17 +171,17 @@ namespace Bit.iOS.Autofill
         {
             DismissViewController(false, async () =>
             {
-                if(_context.CredentialIdentity != null)
+                if (_context.CredentialIdentity != null)
                 {
                     await ProvideCredentialAsync();
                     return;
                 }
-                if(_context.Configuring)
+                if (_context.Configuring)
                 {
                     PerformSegue("setupSegue", this);
                     return;
                 }
-                if(_context.ServiceIdentifiers == null || _context.ServiceIdentifiers.Length == 0)
+                if (_context.ServiceIdentifiers == null || _context.ServiceIdentifiers.Length == 0)
                 {
                     PerformSegue("loginSearchSegue", this);
                 }
@@ -196,7 +196,7 @@ namespace Bit.iOS.Autofill
         {
             var cipherService = ServiceContainer.Resolve<ICipherService>("cipherService", true);
             var cipher = await cipherService?.GetAsync(_context.CredentialIdentity.RecordIdentifier);
-            if(cipher == null || cipher.Type != Bit.Core.Enums.CipherType.Login)
+            if (cipher == null || cipher.Type != Bit.Core.Enums.CipherType.Login)
             {
                 var err = new NSError(new NSString("ASExtensionErrorDomain"),
                     Convert.ToInt32(ASExtensionErrorCode.CredentialIdentityNotFound), null);
@@ -208,11 +208,11 @@ namespace Bit.iOS.Autofill
             var decCipher = await cipher.DecryptAsync();
             string totpCode = null;
             var disableTotpCopy = await storageService.GetAsync<bool?>(Bit.Core.Constants.DisableAutoTotpCopyKey);
-            if(!disableTotpCopy.GetValueOrDefault(false))
+            if (!disableTotpCopy.GetValueOrDefault(false))
             {
                 var userService = ServiceContainer.Resolve<IUserService>("userService");
                 var canAccessPremiumAsync = await userService.CanAccessPremiumAsync();
-                if(!string.IsNullOrWhiteSpace(decCipher.Login.Totp) &&
+                if (!string.IsNullOrWhiteSpace(decCipher.Login.Totp) &&
                     (canAccessPremiumAsync || cipher.OrganizationUseTotp))
                 {
                     var totpService = ServiceContainer.Resolve<ITotpService>("totpService");
@@ -225,7 +225,7 @@ namespace Bit.iOS.Autofill
 
         private void CheckLock(Action notLockedAction)
         {
-            if(IsLocked())
+            if (IsLocked())
             {
                 PerformSegue("lockPasswordSegue", this);
             }
@@ -237,7 +237,7 @@ namespace Bit.iOS.Autofill
 
         private bool CheckAuthed()
         {
-            if(!IsAuthed())
+            if (!IsAuthed())
             {
                 var alert = Dialogs.CreateAlert(null, AppResources.MustLogInMainAppAutofill, AppResources.Ok, (a) =>
                 {
@@ -263,14 +263,14 @@ namespace Bit.iOS.Autofill
 
         private void InitApp()
         {
-            if(ServiceContainer.RegisteredServices.Count > 0)
+            if (ServiceContainer.RegisteredServices.Count > 0)
             {
                 ServiceContainer.Reset();
             }
             iOSCoreHelpers.RegisterLocalServices();
             var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             ServiceContainer.Init(deviceActionService.DeviceUserAgent);
-            if(!_initedHockeyApp)
+            if (!_initedHockeyApp)
             {
                 iOSCoreHelpers.RegisterHockeyApp();
                 _initedHockeyApp = true;
@@ -281,7 +281,7 @@ namespace Bit.iOS.Autofill
 
         private void InitAppIfNeeded()
         {
-            if(ServiceContainer.RegisteredServices == null || ServiceContainer.RegisteredServices.Count == 0)
+            if (ServiceContainer.RegisteredServices == null || ServiceContainer.RegisteredServices.Count == 0)
             {
                 InitApp();
             }

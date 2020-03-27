@@ -21,22 +21,22 @@ namespace Bit.App.Utilities
             Application.Current.Resources.MergedDictionaries.Add(new Variables());
 
             // Themed variables
-            if(name == "dark")
+            if (name == "dark")
             {
                 Application.Current.Resources.MergedDictionaries.Add(new Dark());
                 UsingLightTheme = false;
             }
-            else if(name == "black")
+            else if (name == "black")
             {
                 Application.Current.Resources.MergedDictionaries.Add(new Black());
                 UsingLightTheme = false;
             }
-            else if(name == "nord")
+            else if (name == "nord")
             {
                 Application.Current.Resources.MergedDictionaries.Add(new Nord());
                 UsingLightTheme = false;
             }
-            else if(name == "light")
+            else if (name == "light")
             {
                 Application.Current.Resources.MergedDictionaries.Add(new Light());
                 UsingLightTheme = true;
@@ -44,7 +44,7 @@ namespace Bit.App.Utilities
             else
             {
                 var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService", true);
-                if(deviceActionService?.UsingDarkTheme() ?? false)
+                if (deviceActionService?.UsingDarkTheme() ?? false)
                 {
                     Application.Current.Resources.MergedDictionaries.Add(new Dark());
                     UsingLightTheme = false;
@@ -60,11 +60,11 @@ namespace Bit.App.Utilities
             Application.Current.Resources.MergedDictionaries.Add(new Base());
 
             // Platform styles
-            if(Device.RuntimePlatform == Device.Android)
+            if (Device.RuntimePlatform == Device.Android)
             {
                 Application.Current.Resources.MergedDictionaries.Add(new Android());
             }
-            else if(Device.RuntimePlatform == Device.iOS)
+            else if (Device.RuntimePlatform == Device.iOS)
             {
                 Application.Current.Resources.MergedDictionaries.Add(new iOS());
             }

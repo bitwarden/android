@@ -76,7 +76,7 @@ namespace Bit.Core.Utilities
             MatchingRule = null;
 
             //  If the fqdn is empty, we have a problem already
-            if(domainString.Trim() == string.Empty)
+            if (domainString.Trim() == string.Empty)
             {
                 throw new ArgumentException("The domain cannot be blank");
             }
@@ -85,7 +85,7 @@ namespace Bit.Core.Utilities
             MatchingRule = FindMatchingTLDRule(domainString);
 
             //  At this point, no rules match, we have a problem
-            if(MatchingRule == null)
+            if (MatchingRule == null)
             {
                 throw new FormatException("The domain does not have a recognized TLD");
             }
@@ -95,7 +95,7 @@ namespace Bit.Core.Utilities
             var tldIndex = 0;
 
             //  First, determine what type of rule we have, and set the TLD accordingly
-            switch(MatchingRule.Type)
+            switch (MatchingRule.Type)
             {
                 case TLDRule.RuleType.Normal:
                     tldIndex = domainString.LastIndexOf("." + MatchingRule.Name);
@@ -125,13 +125,13 @@ namespace Bit.Core.Utilities
             //  If we have 0 parts left, there is just a tld and no domain or subdomain
             //  If we have 1 part, it's the domain, and there is no subdomain
             //  If we have 2+ parts, the last part is the domain, the other parts (combined) are the subdomain
-            if(lstRemainingParts.Count > 0)
+            if (lstRemainingParts.Count > 0)
             {
                 //  Set the domain:
                 SLD = lstRemainingParts[lstRemainingParts.Count - 1];
 
                 //  Set the subdomain, if there is one to set:
-                if(lstRemainingParts.Count > 1)
+                if (lstRemainingParts.Count > 1)
                 {
                     //  We strip off the trailing period, too
                     SubDomain = tempSudomainAndDomain.Substring(0, tempSudomainAndDomain.Length - SLD.Length - 1);
@@ -154,22 +154,22 @@ namespace Bit.Core.Utilities
             //  Our 'matches' collection:
             var ruleMatches = new List<TLDRule>();
 
-            foreach(string domainPart in lstDomainParts)
+            foreach (string domainPart in lstDomainParts)
             {
                 //  Add on our next domain part:
                 checkAgainst = string.Format("{0}.{1}", domainPart, checkAgainst);
 
                 //  If we end in a period, strip it off:
-                if(checkAgainst.EndsWith("."))
+                if (checkAgainst.EndsWith("."))
                 {
                     checkAgainst = checkAgainst.Substring(0, checkAgainst.Length - 1);
                 }
 
                 var rules = Enum.GetValues(typeof(TLDRule.RuleType)).Cast<TLDRule.RuleType>();
-                foreach(var rule in rules)
+                foreach (var rule in rules)
                 {
                     //  Try to match rule:
-                    if(TLDRulesCache.Instance.TLDRuleLists[rule].TryGetValue(checkAgainst, out TLDRule result))
+                    if (TLDRulesCache.Instance.TLDRuleLists[rule].TryGetValue(checkAgainst, out TLDRule result))
                     {
                         ruleMatches.Add(result);
                     }
@@ -185,7 +185,7 @@ namespace Bit.Core.Utilities
 
             //  Take the top result (our primary match):
             TLDRule primaryMatch = results.Take(1).SingleOrDefault();
-            if(primaryMatch != null)
+            if (primaryMatch != null)
             {
                 //Debug.WriteLine(string.Format("Looks like our match is: {0}, which is a(n) {1} rule.",
                 //    primaryMatch.Name, primaryMatch.Type));
@@ -206,12 +206,12 @@ namespace Bit.Core.Utilities
             public TLDRule(string ruleInfo)
             {
                 //  Parse the rule and set properties accordingly:
-                if(ruleInfo.StartsWith("*"))
+                if (ruleInfo.StartsWith("*"))
                 {
                     Type = RuleType.Wildcard;
                     Name = ruleInfo.Substring(2);
                 }
-                else if(ruleInfo.StartsWith("!"))
+                else if (ruleInfo.StartsWith("!"))
                 {
                     Type = RuleType.Exception;
                     Name = ruleInfo.Substring(1);
@@ -225,7 +225,7 @@ namespace Bit.Core.Utilities
 
             public int CompareTo(TLDRule other)
             {
-                if(other == null)
+                if (other == null)
                 {
                     return -1;
                 }
@@ -258,11 +258,11 @@ namespace Bit.Core.Utilities
             {
                 get
                 {
-                    if(_uniqueInstance == null)
+                    if (_uniqueInstance == null)
                     {
-                        lock(_syncObj)
+                        lock (_syncObj)
                         {
-                            if(_uniqueInstance == null)
+                            if (_uniqueInstance == null)
                             {
                                 _uniqueInstance = new TLDRulesCache();
                             }
@@ -286,7 +286,7 @@ namespace Bit.Core.Utilities
 
             public static void Reset()
             {
-                lock(_syncObj)
+                lock (_syncObj)
                 {
                     _uniqueInstance = null;
                 }
@@ -296,7 +296,7 @@ namespace Bit.Core.Utilities
             {
                 var results = new Dictionary<TLDRule.RuleType, IDictionary<string, TLDRule>>();
                 var rules = Enum.GetValues(typeof(TLDRule.RuleType)).Cast<TLDRule.RuleType>();
-                foreach(var rule in rules)
+                foreach (var rule in rules)
                 {
                     results[rule] = new Dictionary<string, TLDRule>(StringComparer.CurrentCultureIgnoreCase);
                 }
@@ -307,14 +307,14 @@ namespace Bit.Core.Utilities
                 //  b.) Blank
                 var filteredRuleString = ruleStrings.Where(ruleString =>
                     !ruleString.StartsWith("//") && ruleString.Trim().Length != 0);
-                foreach(var ruleString in filteredRuleString)
+                foreach (var ruleString in filteredRuleString)
                 {
                     var result = new TLDRule(ruleString);
                     results[result.Type][result.Name] = result;
                 }
 
                 //  Return our results:
-                if(CoreHelpers.InDebugMode())
+                if (CoreHelpers.InDebugMode())
                 {
                     Debug.WriteLine(string.Format("Loaded {0} rules into cache.",
                         results.Values.Sum(r => r.Values.Count)));
@@ -327,9 +327,9 @@ namespace Bit.Core.Utilities
                 var assembly = typeof(TLDRulesCache).GetTypeInfo().Assembly;
                 var stream = assembly.GetManifestResourceStream("Bit.Core.Resources.public_suffix_list.dat");
                 string line;
-                using(var reader = new StreamReader(stream))
+                using (var reader = new StreamReader(stream))
                 {
-                    while((line = reader.ReadLine()) != null)
+                    while ((line = reader.ReadLine()) != null)
                     {
                         yield return line;
                     }

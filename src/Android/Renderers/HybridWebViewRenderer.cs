@@ -28,20 +28,20 @@ namespace Bit.Droid.Renderers
         {
             base.OnElementChanged(e);
 
-            if(Control == null)
+            if (Control == null)
             {
                 var webView = new AWebkit.WebView(_context);
                 webView.Settings.JavaScriptEnabled = true;
                 webView.SetWebViewClient(new JSWebViewClient(string.Format("javascript: {0}", JSFunction)));
                 SetNativeControl(webView);
             }
-            if(e.OldElement != null)
+            if (e.OldElement != null)
             {
                 Control.RemoveJavascriptInterface("jsBridge");
                 var hybridWebView = e.OldElement as HybridWebView;
                 hybridWebView.Cleanup();
             }
-            if(e.NewElement != null)
+            if (e.NewElement != null)
             {
                 Control.AddJavascriptInterface(new JSBridge(this), "jsBridge");
                 Control.LoadUrl(Element.Uri);
@@ -51,7 +51,7 @@ namespace Bit.Droid.Renderers
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             base.OnElementPropertyChanged(sender, e);
-            if(e.PropertyName == HybridWebView.UriProperty.PropertyName)
+            if (e.PropertyName == HybridWebView.UriProperty.PropertyName)
             {
                 Control.LoadUrl(Element.Uri);
             }
@@ -70,7 +70,7 @@ namespace Bit.Droid.Renderers
             [Export("invokeAction")]
             public void InvokeAction(string data)
             {
-                if(_hybridWebViewRenderer != null &&
+                if (_hybridWebViewRenderer != null &&
                     _hybridWebViewRenderer.TryGetTarget(out HybridWebViewRenderer hybridRenderer))
                 {
                     hybridRenderer.Element.InvokeAction(data);

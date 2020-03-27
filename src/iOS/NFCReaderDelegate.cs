@@ -19,9 +19,9 @@ namespace Bit.iOS
         public override void DidDetect(NFCNdefReaderSession session, NFCNdefMessage[] messages)
         {
             var results = new List<string>();
-            foreach(var message in messages)
+            foreach (var message in messages)
             {
-                foreach(var record in message.Records)
+                foreach (var record in message.Records)
                 {
                     try
                     {
@@ -31,10 +31,10 @@ namespace Bit.iOS
                 }
             }
 
-            foreach(var result in results)
+            foreach (var result in results)
             {
                 var matches = _otpPattern.Matches(result);
-                if(matches.Count > 0 && matches[0].Groups.Count > 1)
+                if (matches.Count > 0 && matches[0].Groups.Count > 1)
                 {
                     var otp = matches[0].Groups[1].ToString();
                     _callback.Invoke(true, otp);

@@ -48,7 +48,7 @@ namespace Bit.Core.Models.Domain
         {
             get
             {
-                if(Type == OrganizationUserType.Owner)
+                if (Type == OrganizationUserType.Owner)
                 {
                     return true;
                 }
@@ -60,7 +60,7 @@ namespace Bit.Core.Models.Domain
         {
             get
             {
-                switch(Type)
+                switch (Type)
                 {
                     case OrganizationUserType.Owner:
                     case OrganizationUserType.Admin:

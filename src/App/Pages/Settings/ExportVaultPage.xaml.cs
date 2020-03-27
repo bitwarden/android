@@ -26,12 +26,12 @@ namespace Bit.App.Pages
             await _vm.InitAsync();
             _broadcasterService.Subscribe(nameof(ExportVaultPage), (message) =>
             {
-                if(message.Command == "selectSaveFileResult")
+                if (message.Command == "selectSaveFileResult")
                 {
                     Device.BeginInvokeOnMainThread(() =>
                     {
                         var data = message.Data as Tuple<string, string>;
-                        if(data == null)
+                        if (data == null)
                         {
                             return;
                         }
@@ -52,7 +52,7 @@ namespace Bit.App.Pages
 
         private async void Close_Clicked(object sender, System.EventArgs e)
         {
-            if(DoOnce())
+            if (DoOnce())
             {
                 await Navigation.PopModalAsync();
             }
@@ -60,7 +60,7 @@ namespace Bit.App.Pages
 
         private async void ExportVault_Clicked(object sender, EventArgs e)
         {
-            if(DoOnce())
+            if (DoOnce())
             {
                 await _vm.ExportVaultAsync();
             }

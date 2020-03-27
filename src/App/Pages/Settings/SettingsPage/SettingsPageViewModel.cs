@@ -64,7 +64,7 @@ namespace Bit.App.Pages
         {
             _supportsFingerprint = await _platformUtilsService.SupportsBiometricAsync();
             var lastSync = await _syncService.GetLastSyncAsync();
-            if(lastSync != null)
+            if (lastSync != null)
             {
                 lastSync = lastSync.Value.ToLocalTime();
                 _lastSyncDate = string.Format("{0} {1}", lastSync.Value.ToShortDateString(),
@@ -85,7 +85,7 @@ namespace Bit.App.Pages
             var text = string.Format("© Bitwarden Inc. 2015-{0}\n\n{1}", DateTime.Now.Year, debugText);
             var copy = await _platformUtilsService.ShowDialogAsync(text, AppResources.Bitwarden, AppResources.Copy,
                 AppResources.Close);
-            if(copy)
+            if (copy)
             {
                 await _platformUtilsService.CopyToClipboardAsync(debugText);
             }
@@ -103,7 +103,7 @@ namespace Bit.App.Pages
             {
                 fingerprint = await _cryptoService.GetFingerprintAsync(await _userService.GetUserIdAsync());
             }
-            catch(Exception e) when(e.Message == "No public key available.")
+            catch (Exception e) when(e.Message == "No public key available.")
             {
                 return;
             }
@@ -111,7 +111,7 @@ namespace Bit.App.Pages
             var text = string.Format("{0}:\n\n{1}", AppResources.YourAccountsFingerprint, phrase);
             var learnMore = await _platformUtilsService.ShowDialogAsync(text, AppResources.FingerprintPhrase,
                 AppResources.LearnMore, AppResources.Close);
-            if(learnMore)
+            if (learnMore)
             {
                 _platformUtilsService.LaunchUri("https://help.bitwarden.com/article/fingerprint-phrase/");
             }
@@ -130,7 +130,7 @@ namespace Bit.App.Pages
         public void WebVault()
         {
             var url = _environmentService.GetWebVaultUrl();
-            if(url == null)
+            if (url == null)
             {
                 url = "https://vault.bitwarden.com";
             }
@@ -141,7 +141,7 @@ namespace Bit.App.Pages
         {
             var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.ShareVaultConfirmation,
                 AppResources.ShareVault, AppResources.Yes, AppResources.Cancel);
-            if(confirmed)
+            if (confirmed)
             {
                 _platformUtilsService.LaunchUri("https://help.bitwarden.com/article/what-is-an-organization/");
             }
@@ -151,7 +151,7 @@ namespace Bit.App.Pages
         {
             var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.TwoStepLoginConfirmation,
                 AppResources.TwoStepLogin, AppResources.Yes, AppResources.Cancel);
-            if(confirmed)
+            if (confirmed)
             {
                 _platformUtilsService.LaunchUri("https://help.bitwarden.com/article/setup-two-step-login/");
             }
@@ -161,7 +161,7 @@ namespace Bit.App.Pages
         {
             var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.ChangePasswordConfirmation,
                 AppResources.ChangeMasterPassword, AppResources.Yes, AppResources.Cancel);
-            if(confirmed)
+            if (confirmed)
             {
                 _platformUtilsService.LaunchUri("https://help.bitwarden.com/article/change-your-master-password/");
             }
@@ -171,7 +171,7 @@ namespace Bit.App.Pages
         {
             var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.LogoutConfirmation,
                 AppResources.LogOut, AppResources.Yes, AppResources.Cancel);
-            if(confirmed)
+            if (confirmed)
             {
                 _messagingService.Send("logout");
             }
@@ -186,7 +186,7 @@ namespace Bit.App.Pages
         {
             var options = _lockOptions.Select(o => o.Key == _lockOptionValue ? $"✓ {o.Key}" : o.Key).ToArray();
             var selection = await Page.DisplayActionSheet(AppResources.LockOptions, AppResources.Cancel, null, options);
-            if(selection == null || selection == AppResources.Cancel)
+            if (selection == null || selection == AppResources.Cancel)
             {
                 return;
             }
@@ -200,11 +200,11 @@ namespace Bit.App.Pages
         public async Task UpdatePinAsync()
         {
             _pin = !_pin;
-            if(_pin)
+            if (_pin)
             {
                 var pin = await _deviceActionService.DisplayPromptAync(AppResources.EnterPIN,
                     AppResources.SetPINDescription, null, AppResources.Submit, AppResources.Cancel, true);
-                if(!string.IsNullOrWhiteSpace(pin))
+                if (!string.IsNullOrWhiteSpace(pin))
                 {
                     var masterPassOnRestart = await _platformUtilsService.ShowDialogAsync(
                        AppResources.PINRequireMasterPasswordRestart, AppResources.UnlockWithPIN,
@@ -219,7 +219,7 @@ namespace Bit.App.Pages
                     var key = await _cryptoService.GetKeyAsync();
                     var pinProtectedKey = await _cryptoService.EncryptAsync(key.Key, pinKey);
 
-                    if(masterPassOnRestart)
+                    if (masterPassOnRestart)
                     {
                         var encPin = await _cryptoService.EncryptAsync(pin);
                         await _storageService.SaveAsync(Constants.ProtectedPin, encPin.EncryptedString);
@@ -235,7 +235,7 @@ namespace Bit.App.Pages
                     _pin = false;
                 }
             }
-            if(!_pin)
+            if (!_pin)
             {
                 await _cryptoService.ClearPinProtectedKeyAsync();
                 await _lockService.ClearAsync();
@@ -246,20 +246,20 @@ namespace Bit.App.Pages
         public async Task UpdateFingerprintAsync()
         {
             var current = _fingerprint;
-            if(_fingerprint)
+            if (_fingerprint)
             {
                 _fingerprint = false;
             }
-            else if(await _platformUtilsService.SupportsBiometricAsync())
+            else if (await _platformUtilsService.SupportsBiometricAsync())
             {
                 _fingerprint = await _platformUtilsService.AuthenticateBiometricAsync(null,
                     _deviceActionService.DeviceType == Core.Enums.DeviceType.Android ? "." : null);
             }
-            if(_fingerprint == current)
+            if (_fingerprint == current)
             {
                 return;
             }
-            if(_fingerprint)
+            if (_fingerprint)
             {
                 await _storageService.SaveAsync(Constants.FingerprintUnlockKey, true);
             }
@@ -276,9 +276,9 @@ namespace Bit.App.Pages
         {
             var doUpper = Device.RuntimePlatform != Device.Android;
             var autofillItems = new List<SettingsPageListItem>();
-            if(Device.RuntimePlatform == Device.Android)
+            if (Device.RuntimePlatform == Device.Android)
             {
-                if(_deviceActionService.SupportsAutofillService())
+                if (_deviceActionService.SupportsAutofillService())
                 {
                     autofillItems.Add(new SettingsPageListItem
                     {
@@ -299,7 +299,7 @@ namespace Bit.App.Pages
             }
             else
             {
-                if(_deviceActionService.SystemMajorVersion() >= 12)
+                if (_deviceActionService.SystemMajorVersion() >= 12)
                 {
                     autofillItems.Add(new SettingsPageListItem { Name = AppResources.PasswordAutofill });
                 }
@@ -321,15 +321,15 @@ namespace Bit.App.Pages
                 new SettingsPageListItem { Name = AppResources.LockNow },
                 new SettingsPageListItem { Name = AppResources.TwoStepLogin }
             };
-            if(_supportsFingerprint || _fingerprint)
+            if (_supportsFingerprint || _fingerprint)
             {
                 var fingerprintName = AppResources.Fingerprint;
-                if(Device.RuntimePlatform == Device.iOS)
+                if (Device.RuntimePlatform == Device.iOS)
                 {
                     fingerprintName = _deviceActionService.SupportsFaceBiometric() ? AppResources.FaceID :
                         AppResources.TouchID;
                 }
-                else if(Device.RuntimePlatform == Device.Android && _deviceActionService.UseNativeBiometric())
+                else if (Device.RuntimePlatform == Device.Android && _deviceActionService.UseNativeBiometric())
                 {
                     fingerprintName = AppResources.Biometrics;
                 }

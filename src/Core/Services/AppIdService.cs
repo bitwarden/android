@@ -26,7 +26,7 @@ namespace Bit.Core.Services
         private async Task<string> MakeAndGetAppIdAsync(string key)
         {
             var existingId = await _storageService.GetAsync<string>(key);
-            if(existingId != null)
+            if (existingId != null)
             {
                 return existingId;
             }

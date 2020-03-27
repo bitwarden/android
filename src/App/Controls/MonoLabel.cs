@@ -6,7 +6,7 @@ namespace Bit.App.Controls
     {
         public MonoLabel()
         {
-            switch(Device.RuntimePlatform)
+            switch (Device.RuntimePlatform)
             {
                 case Device.iOS:
                     FontFamily = "Menlo-Regular";

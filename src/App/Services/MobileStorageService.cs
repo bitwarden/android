@@ -49,19 +49,19 @@ namespace Bit.App.Services
 
         public async Task<T> GetAsync<T>(string key)
         {
-            if(_preferenceStorageKeys.Contains(key))
+            if (_preferenceStorageKeys.Contains(key))
             {
                 var prefValue = await _preferencesStorageService.GetAsync<T>(key);
-                if(prefValue != null || !_migrateToPreferences.Contains(key) ||
+                if (prefValue != null || !_migrateToPreferences.Contains(key) ||
                     _haveMigratedToPreferences.Contains(key))
                 {
                     return prefValue;
                 }
             }
             var liteDbValue = await _liteDbStorageService.GetAsync<T>(key);
-            if(_migrateToPreferences.Contains(key))
+            if (_migrateToPreferences.Contains(key))
             {
-                if(liteDbValue != null)
+                if (liteDbValue != null)
                 {
                     await _preferencesStorageService.SaveAsync(key, liteDbValue);
                     await _liteDbStorageService.RemoveAsync(key);
@@ -73,7 +73,7 @@ namespace Bit.App.Services
 
         public Task SaveAsync<T>(string key, T obj)
         {
-            if(_preferenceStorageKeys.Contains(key))
+            if (_preferenceStorageKeys.Contains(key))
             {
                 return _preferencesStorageService.SaveAsync(key, obj);
             }
@@ -82,7 +82,7 @@ namespace Bit.App.Services
 
         public Task RemoveAsync(string key)
         {
-            if(_preferenceStorageKeys.Contains(key))
+            if (_preferenceStorageKeys.Contains(key))
             {
                 return _preferencesStorageService.RemoveAsync(key);
             }

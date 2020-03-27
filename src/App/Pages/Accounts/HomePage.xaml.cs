@@ -33,7 +33,7 @@ namespace Bit.App.Pages
 
         private void LogIn_Clicked(object sender, EventArgs e)
         {
-            if(DoOnce())
+            if (DoOnce())
             {
                 Navigation.PushModalAsync(new NavigationPage(new LoginPage()));
             }
@@ -41,7 +41,7 @@ namespace Bit.App.Pages
 
         private void Register_Clicked(object sender, EventArgs e)
         {
-            if(DoOnce())
+            if (DoOnce())
             {
                 Navigation.PushModalAsync(new NavigationPage(new RegisterPage(this)));
             }
@@ -49,7 +49,7 @@ namespace Bit.App.Pages
 
         private void Settings_Clicked(object sender, EventArgs e)
         {
-            if(DoOnce())
+            if (DoOnce())
             {
                 Navigation.PushModalAsync(new NavigationPage(new EnvironmentPage()));
             }

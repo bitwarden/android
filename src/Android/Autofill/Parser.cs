@@ -33,16 +33,16 @@ namespace Bit.Droid.Autofill
         {
             get
             {
-                if(!string.IsNullOrWhiteSpace(_uri))
+                if (!string.IsNullOrWhiteSpace(_uri))
                 {
                     return _uri;
                 }
                 var websiteNull = string.IsNullOrWhiteSpace(Website);
-                if(websiteNull && string.IsNullOrWhiteSpace(PackageName))
+                if (websiteNull && string.IsNullOrWhiteSpace(PackageName))
                 {
                     _uri = null;
                 }
-                else if(!websiteNull)
+                else if (!websiteNull)
                 {
                     _uri = Website;
                 }
@@ -59,7 +59,7 @@ namespace Bit.Droid.Autofill
             get => _packageName;
             set
             {
-                if(string.IsNullOrWhiteSpace(value))
+                if (string.IsNullOrWhiteSpace(value))
                 {
                     _packageName = _uri = null;
                 }
@@ -72,7 +72,7 @@ namespace Bit.Droid.Autofill
             get => _website;
             set
             {
-                if(string.IsNullOrWhiteSpace(value))
+                if (string.IsNullOrWhiteSpace(value))
                 {
                     _website = _uri = null;
                 }
@@ -84,10 +84,10 @@ namespace Bit.Droid.Autofill
         {
             var fillable = !string.IsNullOrWhiteSpace(Uri) && !AutofillHelpers.BlacklistedUris.Contains(Uri) &&
                 FieldCollection != null && FieldCollection.Fillable;
-            if(fillable)
+            if (fillable)
             {
                 var blacklistedUris = await storageService.GetAsync<List<string>>(Constants.AutofillBlacklistedUrisKey);
-                if(blacklistedUris != null && blacklistedUris.Count > 0)
+                if (blacklistedUris != null && blacklistedUris.Count > 0)
                 {
                     fillable = !new HashSet<string>(blacklistedUris).Contains(Uri);
                 }
@@ -98,20 +98,20 @@ namespace Bit.Droid.Autofill
         public void Parse()
         {
             string titlePackageId = null;
-            for(var i = 0; i < _structure.WindowNodeCount; i++)
+            for (var i = 0; i < _structure.WindowNodeCount; i++)
             {
                 var node = _structure.GetWindowNodeAt(i);
-                if(i == 0)
+                if (i == 0)
                 {
                     titlePackageId = GetTitlePackageId(node);
                 }
                 ParseNode(node.RootViewNode);
             }
-            if(string.IsNullOrWhiteSpace(PackageName) && string.IsNullOrWhiteSpace(Website))
+            if (string.IsNullOrWhiteSpace(PackageName) && string.IsNullOrWhiteSpace(Website))
             {
                 PackageName = titlePackageId;
             }
-            if(!AutofillHelpers.TrustedBrowsers.Contains(PackageName) &&
+            if (!AutofillHelpers.TrustedBrowsers.Contains(PackageName) &&
                 !AutofillHelpers.CompatBrowsers.Contains(PackageName))
             {
                 Website = null;
@@ -123,7 +123,7 @@ namespace Bit.Droid.Autofill
             SetPackageAndDomain(node);
             var hints = node.GetAutofillHints();
             var isEditText = node.ClassName == "android.widget.EditText" || node?.HtmlInfo?.Tag == "input";
-            if(isEditText || (hints?.Length ?? 0) > 0)
+            if (isEditText || (hints?.Length ?? 0) > 0)
             {
                 FieldCollection.Add(new Field(node));
             }
@@ -132,7 +132,7 @@ namespace Bit.Droid.Autofill
                 FieldCollection.IgnoreAutofillIds.Add(node.AutofillId);
             }
 
-            for(var i = 0; i < node.ChildCount; i++)
+            for (var i = 0; i < node.ChildCount; i++)
             {
                 ParseNode(node.GetChildAt(i));
             }
@@ -140,15 +140,15 @@ namespace Bit.Droid.Autofill
 
         private void SetPackageAndDomain(ViewNode node)
         {
-            if(string.IsNullOrWhiteSpace(PackageName) && !string.IsNullOrWhiteSpace(node.IdPackage) &&
+            if (string.IsNullOrWhiteSpace(PackageName) && !string.IsNullOrWhiteSpace(node.IdPackage) &&
                 !_excludedPackageIds.Contains(node.IdPackage))
             {
                 PackageName = node.IdPackage;
             }
-            if(string.IsNullOrWhiteSpace(Website) && !string.IsNullOrWhiteSpace(node.WebDomain))
+            if (string.IsNullOrWhiteSpace(Website) && !string.IsNullOrWhiteSpace(node.WebDomain))
             {
                 var scheme = "http";
-                if((int)Build.VERSION.SdkInt >= 28)
+                if ((int)Build.VERSION.SdkInt >= 28)
                 {
                     scheme = node.WebScheme;
                 }
@@ -158,13 +158,13 @@ namespace Bit.Droid.Autofill
 
         private string GetTitlePackageId(WindowNode node)
         {
-            if(node != null && !string.IsNullOrWhiteSpace(node.Title))
+            if (node != null && !string.IsNullOrWhiteSpace(node.Title))
             {
                 var slashPosition = node.Title.IndexOf('/');
-                if(slashPosition > -1)
+                if (slashPosition > -1)
                 {
                     var packageId = node.Title.Substring(0, slashPosition);
-                    if(packageId.Contains("."))
+                    if (packageId.Contains("."))
                     {
                         return packageId;
                     }

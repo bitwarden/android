@@ -13,7 +13,7 @@ namespace Bit.iOS.Renderers
         protected override void OnElementChanged(ElementChangedEventArgs<Entry> e)
         {
             base.OnElementChanged(e);
-            if(Control != null && e.NewElement is Entry)
+            if (Control != null && e.NewElement is Entry)
             {
                 Control.ClearButtonMode = UITextFieldViewMode.WhileEditing;
                 UpdateTintColor();
@@ -26,13 +26,13 @@ namespace Bit.iOS.Renderers
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             base.OnElementPropertyChanged(sender, e);
-            if(e.PropertyName == Entry.FontAttributesProperty.PropertyName ||
+            if (e.PropertyName == Entry.FontAttributesProperty.PropertyName ||
                 e.PropertyName == Entry.FontFamilyProperty.PropertyName ||
                 e.PropertyName == Entry.FontSizeProperty.PropertyName)
             {
                 UpdateFontSize();
             }
-            else if(e.PropertyName == Entry.TextColorProperty.PropertyName)
+            else if (e.PropertyName == Entry.TextColorProperty.PropertyName)
             {
                 UpdateTintColor();
             }
@@ -41,9 +41,9 @@ namespace Bit.iOS.Renderers
         private void UpdateFontSize()
         {
             var pointSize = iOSHelpers.GetAccessibleFont<Entry>(Element.FontSize);
-            if(pointSize != null)
+            if (pointSize != null)
             {
-                if(!string.IsNullOrWhiteSpace(Element.FontFamily))
+                if (!string.IsNullOrWhiteSpace(Element.FontFamily))
                 {
                     Control.Font = UIFont.FromName(Element.FontFamily, pointSize.Value);
                 }
@@ -61,7 +61,7 @@ namespace Bit.iOS.Renderers
 
         private void UpdateKeyboardAppearance()
         {
-            if(!Core.Utilities.ThemeHelpers.LightTheme)
+            if (!Core.Utilities.ThemeHelpers.LightTheme)
             {
                 Control.KeyboardAppearance = UIKeyboardAppearance.Dark;
             }

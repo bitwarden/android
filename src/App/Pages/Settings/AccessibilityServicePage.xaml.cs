@@ -25,7 +25,7 @@ namespace Bit.App.Pages
             _timerStarted = DateTime.UtcNow;
             Device.StartTimer(new TimeSpan(0, 0, 3), () =>
             {
-                if(_timerStarted == null || (DateTime.UtcNow - _timerStarted) > _timerMaxLength)
+                if (_timerStarted == null || (DateTime.UtcNow - _timerStarted) > _timerMaxLength)
                 {
                     return false;
                 }
@@ -45,7 +45,7 @@ namespace Bit.App.Pages
 
         private void Settings_Clicked(object sender, EventArgs e)
         {
-            if(DoOnce())
+            if (DoOnce())
             {
                 _vm.OpenSettings();
             }
@@ -53,7 +53,7 @@ namespace Bit.App.Pages
 
         private void OverlayPermissionSettings_Clicked(object sender, EventArgs e)
         {
-            if(DoOnce())
+            if (DoOnce())
             {
                 _vm.OpenOverlayPermissionSettings();
             }

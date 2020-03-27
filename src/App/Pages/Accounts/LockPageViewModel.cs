@@ -107,13 +107,13 @@ namespace Bit.App.Pages
             FingerprintLock = await _lockService.IsFingerprintLockSetAsync();
             _email = await _userService.GetEmailAsync();
             var webVault = _environmentService.GetWebVaultUrl();
-            if(string.IsNullOrWhiteSpace(webVault))
+            if (string.IsNullOrWhiteSpace(webVault))
             {
                 webVault = "https://bitwarden.com";
             }
             var webVaultHostname = CoreHelpers.GetHostname(webVault);
             LoggedInAsText = string.Format(AppResources.LoggedInAsOn, _email, webVaultHostname);
-            if(PinLock)
+            if (PinLock)
             {
                 PageTitle = AppResources.VerifyPIN;
                 LockedVerifyText = AppResources.VaultLockedPIN;
@@ -124,14 +124,14 @@ namespace Bit.App.Pages
                 LockedVerifyText = AppResources.VaultLockedMasterPassword;
             }
 
-            if(FingerprintLock)
+            if (FingerprintLock)
             {
                 var supportsFace = await _deviceActionService.SupportsFaceBiometricAsync();
-                if(Device.RuntimePlatform == Device.iOS && supportsFace)
+                if (Device.RuntimePlatform == Device.iOS && supportsFace)
                 {
                     FingerprintButtonText = AppResources.UseFaceIDToUnlock;
                 }
-                else if(Device.RuntimePlatform == Device.Android && _deviceActionService.UseNativeBiometric())
+                else if (Device.RuntimePlatform == Device.Android && _deviceActionService.UseNativeBiometric())
                 {
                     FingerprintButtonText = AppResources.UseBiometricsToUnlock;
                 }
@@ -139,7 +139,7 @@ namespace Bit.App.Pages
                 {
                     FingerprintButtonText = AppResources.UseFingerprintToUnlock;
                 }
-                if(autoPromptFingerprint)
+                if (autoPromptFingerprint)
                 {
                     var tasks = Task.Run(async () =>
                     {
@@ -152,14 +152,14 @@ namespace Bit.App.Pages
 
         public async Task SubmitAsync()
         {
-            if(PinLock && string.IsNullOrWhiteSpace(Pin))
+            if (PinLock && string.IsNullOrWhiteSpace(Pin))
             {
                 await Page.DisplayAlert(AppResources.AnErrorHasOccurred,
                     string.Format(AppResources.ValidationFieldRequired, AppResources.PIN),
                     AppResources.Ok);
                 return;
             }
-            if(!PinLock && string.IsNullOrWhiteSpace(MasterPassword))
+            if (!PinLock && string.IsNullOrWhiteSpace(MasterPassword))
             {
                 await Page.DisplayAlert(AppResources.AnErrorHasOccurred,
                     string.Format(AppResources.ValidationFieldRequired, AppResources.MasterPassword),
@@ -171,12 +171,12 @@ namespace Bit.App.Pages
             var kdf = await _userService.GetKdfAsync();
             var kdfIterations = await _userService.GetKdfIterationsAsync();
 
-            if(PinLock)
+            if (PinLock)
             {
                 var failed = true;
                 try
                 {
-                    if(_pinSet.Item1)
+                    if (_pinSet.Item1)
                     {
                         var key = await _cryptoService.MakeKeyFromPinAsync(Pin, _email,
                             kdf.GetValueOrDefault(KdfType.PBKDF2_SHA256), kdfIterations.GetValueOrDefault(5000),
@@ -185,7 +185,7 @@ namespace Bit.App.Pages
                         var protectedPin = await _storageService.GetAsync<string>(Constants.ProtectedPin);
                         var decPin = await _cryptoService.DecryptToUtf8Async(new CipherString(protectedPin), encKey);
                         failed = decPin != Pin;
-                        if(!failed)
+                        if (!failed)
                         {
                             Pin = string.Empty;
                             await SetKeyAndContinueAsync(key);
@@ -204,10 +204,10 @@ namespace Bit.App.Pages
                 {
                     failed = true;
                 }
-                if(failed)
+                if (failed)
                 {
                     _invalidPinAttempts++;
-                    if(_invalidPinAttempts >= 5)
+                    if (_invalidPinAttempts >= 5)
                     {
                         _messagingService.Send("logout");
                         return;
@@ -221,19 +221,19 @@ namespace Bit.App.Pages
                 var key = await _cryptoService.MakeKeyAsync(MasterPassword, _email, kdf, kdfIterations);
                 var keyHash = await _cryptoService.HashPasswordAsync(MasterPassword, key);
                 var storedKeyHash = await _cryptoService.GetKeyHashAsync();
-                if(storedKeyHash == null)
+                if (storedKeyHash == null)
                 {
                     var oldKey = await _secureStorageService.GetAsync<string>("oldKey");
-                    if(key.KeyB64 == oldKey)
+                    if (key.KeyB64 == oldKey)
                     {
                         await _secureStorageService.RemoveAsync("oldKey");
                         await _cryptoService.SetKeyHashAsync(keyHash);
                         storedKeyHash = keyHash;
                     }
                 }
-                if(storedKeyHash != null && keyHash != null && storedKeyHash == keyHash)
+                if (storedKeyHash != null && keyHash != null && storedKeyHash == keyHash)
                 {
-                    if(_pinSet.Item1)
+                    if (_pinSet.Item1)
                     {
                         var protectedPin = await _storageService.GetAsync<string>(Constants.ProtectedPin);
                         var encKey = await _cryptoService.GetEncKeyAsync(key);
@@ -257,7 +257,7 @@ namespace Bit.App.Pages
         {
             var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.LogoutConfirmation,
                 AppResources.LogOut, AppResources.Yes, AppResources.Cancel);
-            if(confirmed)
+            if (confirmed)
             {
                 _messagingService.Send("logout");
             }
@@ -273,7 +273,7 @@ namespace Bit.App.Pages
 
         public async Task PromptFingerprintAsync()
         {
-            if(!FingerprintLock)
+            if (!FingerprintLock)
             {
                 return;
             }
@@ -281,7 +281,7 @@ namespace Bit.App.Pages
             PinLock ? AppResources.PIN : AppResources.MasterPassword, () =>
             {
                 var page = Page as LockPage;
-                if(PinLock)
+                if (PinLock)
                 {
                     page.PinEntry.Focus();
                 }
@@ -291,7 +291,7 @@ namespace Bit.App.Pages
                 }
             });
             _lockService.FingerprintLocked = !success;
-            if(success)
+            if (success)
             {
                 await DoContinueAsync();
             }
@@ -300,7 +300,7 @@ namespace Bit.App.Pages
         private async Task SetKeyAndContinueAsync(SymmetricCryptoKey key)
         {
             var hasKey = await _cryptoService.HasKeyAsync();
-            if(!hasKey)
+            if (!hasKey)
             {
                 await _cryptoService.SetKeyAsync(key);
             }

@@ -13,7 +13,7 @@ namespace Bit.App.Pages
             _vm.Page = this;
             _vm.CipherId = cipherId;
             SetActivityIndicator();
-            if(Device.RuntimePlatform == Device.Android)
+            if (Device.RuntimePlatform == Device.Android)
             {
                 ToolbarItems.RemoveAt(0);
             }
@@ -32,7 +32,7 @@ namespace Bit.App.Pages
 
         private async void Save_Clicked(object sender, System.EventArgs e)
         {
-            if(DoOnce())
+            if (DoOnce())
             {
                 await _vm.SubmitAsync();
             }
@@ -40,7 +40,7 @@ namespace Bit.App.Pages
 
         private async void Close_Clicked(object sender, System.EventArgs e)
         {
-            if(DoOnce())
+            if (DoOnce())
             {
                 await Navigation.PopModalAsync();
             }

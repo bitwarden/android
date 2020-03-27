@@ -33,10 +33,10 @@ namespace Bit.iOS.Core.Services
             var appId = await _getAppId.Invoke();
             var formattedKey = string.Format(_keyFormat, appId, key);
             byte[] dataBytes = null;
-            using(var existingRecord = GetKeyRecord(formattedKey))
-            using(var record = SecKeyChain.QueryAsRecord(existingRecord, out var resultCode))
+            using (var existingRecord = GetKeyRecord(formattedKey))
+            using (var record = SecKeyChain.QueryAsRecord(existingRecord, out var resultCode))
             {
-                if(resultCode == SecStatusCode.ItemNotFound || resultCode == SecStatusCode.InteractionNotAllowed)
+                if (resultCode == SecStatusCode.ItemNotFound || resultCode == SecStatusCode.InteractionNotAllowed)
                 {
                     return (T)(object)null;
                 }
@@ -46,7 +46,7 @@ namespace Bit.iOS.Core.Services
             }
 
             var dataString = Encoding.UTF8.GetString(dataBytes);
-            if(typeof(T) == typeof(string))
+            if (typeof(T) == typeof(string))
             {
                 return (T)(object)dataString;
             }
@@ -58,14 +58,14 @@ namespace Bit.iOS.Core.Services
 
         public async Task SaveAsync<T>(string key, T obj)
         {
-            if(obj == null)
+            if (obj == null)
             {
                 await RemoveAsync(key);
                 return;
             }
 
             string dataString = null;
-            if(typeof(T) == typeof(string))
+            if (typeof(T) == typeof(string))
             {
                 dataString = obj as string;
             }
@@ -77,8 +77,8 @@ namespace Bit.iOS.Core.Services
             var appId = await _getAppId.Invoke();
             var formattedKey = string.Format(_keyFormat, appId, key);
             var dataBytes = Encoding.UTF8.GetBytes(dataString);
-            using(var data = NSData.FromArray(dataBytes))
-            using(var newRecord = GetKeyRecord(formattedKey, data))
+            using (var data = NSData.FromArray(dataBytes))
+            using (var newRecord = GetKeyRecord(formattedKey, data))
             {
                 await RemoveAsync(key);
                 CheckError(SecKeyChain.Add(newRecord));
@@ -89,9 +89,9 @@ namespace Bit.iOS.Core.Services
         {
             var appId = await _getAppId.Invoke();
             var formattedKey = string.Format(_keyFormat, appId, key);
-            using(var record = GetExistingRecord(formattedKey))
+            using (var record = GetExistingRecord(formattedKey))
             {
-                if(record != null)
+                if (record != null)
                 {
                     CheckError(SecKeyChain.Remove(record));
                 }
@@ -106,7 +106,7 @@ namespace Bit.iOS.Core.Services
                 Account = key,
                 AccessGroup = _group
             };
-            if(data != null)
+            if (data != null)
             {
                 record.Generic = data;
             }
@@ -122,7 +122,7 @@ namespace Bit.iOS.Core.Services
 
         private void CheckError(SecStatusCode resultCode, [CallerMemberName] string caller = null)
         {
-            if(resultCode != SecStatusCode.Success)
+            if (resultCode != SecStatusCode.Success)
             {
                 throw new Exception(string.Format("Failed to execute {0}. Result code: {1}", caller, resultCode));
             }

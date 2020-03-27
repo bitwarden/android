@@ -40,7 +40,7 @@ namespace Bit.Core.Models.Domain
                 "FileName"
             }, orgId);
             
-            if(Key != null)
+            if (Key != null)
             {
                 var cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
                 try

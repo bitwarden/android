@@ -22,7 +22,7 @@ namespace Bit.App.Pages
                 AutoRotate = false,
                 TryInverted = true
             };
-            if(Device.RuntimePlatform == Device.Android)
+            if (Device.RuntimePlatform == Device.Android)
             {
                 ToolbarItems.RemoveAt(0);
             }
@@ -35,7 +35,7 @@ namespace Bit.App.Pages
             _timerStarted = DateTime.Now;
             Device.StartTimer(new TimeSpan(0, 0, 2), () =>
             {
-                if(_timerStarted == null || (DateTime.Now - _timerStarted) > _timerMaxLength)
+                if (_timerStarted == null || (DateTime.Now - _timerStarted) > _timerMaxLength)
                 {
                     return false;
                 }
@@ -57,20 +57,20 @@ namespace Bit.App.Pages
             _zxing.IsAnalyzing = false;
             _zxing.IsScanning = false;
             var text = result?.Text;
-            if(!string.IsNullOrWhiteSpace(text))
+            if (!string.IsNullOrWhiteSpace(text))
             {
-                if(text.StartsWith("otpauth://totp"))
+                if (text.StartsWith("otpauth://totp"))
                 {
                     _callback(text);
                     return;
                 }
-                else if(Uri.TryCreate(text, UriKind.Absolute, out Uri uri) &&
+                else if (Uri.TryCreate(text, UriKind.Absolute, out Uri uri) &&
                     !string.IsNullOrWhiteSpace(uri?.Query))
                 {
                     var queryParts = uri.Query.Substring(1).ToLowerInvariant().Split('&');
-                    foreach(var part in queryParts)
+                    foreach (var part in queryParts)
                     {
-                        if(part.StartsWith("secret="))
+                        if (part.StartsWith("secret="))
                         {
                             _callback(part.Substring(7)?.ToUpperInvariant());
                             return;
@@ -83,7 +83,7 @@ namespace Bit.App.Pages
 
         private async void Close_Clicked(object sender, System.EventArgs e)
         {
-            if(DoOnce())
+            if (DoOnce())
             {
                 await Navigation.PopModalAsync();
             }

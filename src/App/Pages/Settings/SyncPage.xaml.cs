@@ -12,7 +12,7 @@ namespace Bit.App.Pages
             InitializeComponent();
             _vm = BindingContext as SyncPageViewModel;
             _vm.Page = this;
-            if(Device.RuntimePlatform == Device.Android)
+            if (Device.RuntimePlatform == Device.Android)
             {
                 ToolbarItems.RemoveAt(0);
             }
@@ -26,7 +26,7 @@ namespace Bit.App.Pages
 
         private async void Sync_Clicked(object sender, EventArgs e)
         {
-            if(DoOnce())
+            if (DoOnce())
             {
                 await _vm.SyncAsync();
             }
@@ -34,7 +34,7 @@ namespace Bit.App.Pages
 
         private async void Close_Clicked(object sender, System.EventArgs e)
         {
-            if(DoOnce())
+            if (DoOnce())
             {
                 await Navigation.PopModalAsync();
             }

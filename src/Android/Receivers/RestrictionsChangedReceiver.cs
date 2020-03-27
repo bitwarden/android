@@ -14,7 +14,7 @@ namespace Bit.Droid.Receivers
     {
         public async override void OnReceive(Context context, Intent intent)
         {
-            if(intent.Action == Intent.ActionApplicationRestrictionsChanged)
+            if (intent.Action == Intent.ActionApplicationRestrictionsChanged)
             {
                 await AndroidHelpers.SetPreconfiguredRestrictionSettingsAsync(context);
             }

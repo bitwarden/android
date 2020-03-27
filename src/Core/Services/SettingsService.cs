@@ -34,7 +34,7 @@ namespace Bit.Core.Services
         public async Task<List<List<string>>> GetEquivalentDomainsAsync()
         {
             var settings = await GetSettingsAsync();
-            if(settings != null && settings.ContainsKey(Keys_EquivalentDomains))
+            if (settings != null && settings.ContainsKey(Keys_EquivalentDomains))
             {
                 var jArray = (settings[Keys_EquivalentDomains] as JArray);
                 return jArray?.ToObject<List<List<string>>>() ?? new List<List<string>>();
@@ -57,7 +57,7 @@ namespace Bit.Core.Services
 
         private async Task<Dictionary<string, object>> GetSettingsAsync()
         {
-            if(_settingsCache == null)
+            if (_settingsCache == null)
             {
                 var userId = await _userService.GetUserIdAsync();
                 _settingsCache = await _storageService.GetAsync<Dictionary<string, object>>(
@@ -70,11 +70,11 @@ namespace Bit.Core.Services
         {
             var userId = await _userService.GetUserIdAsync();
             var settings = await GetSettingsAsync();
-            if(settings == null)
+            if (settings == null)
             {
                 settings = new Dictionary<string, object>();
             }
-            if(settings.ContainsKey(key))
+            if (settings.ContainsKey(key))
             {
                 settings[key] = value;
             }

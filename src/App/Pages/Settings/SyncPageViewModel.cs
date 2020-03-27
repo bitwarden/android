@@ -33,7 +33,7 @@ namespace Bit.App.Pages
         public async Task SetLastSyncAsync()
         {
             var last = await _syncService.GetLastSyncAsync();
-            if(last != null)
+            if (last != null)
             {
                 var localDate = last.Value.ToLocalTime();
                 LastSync = string.Format("{0} {1}", localDate.ToShortDateString(), localDate.ToShortTimeString());
@@ -46,7 +46,7 @@ namespace Bit.App.Pages
 
         public async Task SyncAsync()
         {
-            if(Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
+            if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
                     AppResources.InternetConnectionRequiredTitle);
@@ -57,7 +57,7 @@ namespace Bit.App.Pages
                 await _deviceActionService.ShowLoadingAsync(AppResources.Syncing);
                 var success = await _syncService.FullSyncAsync(true);
                 await _deviceActionService.HideLoadingAsync();
-                if(success)
+                if (success)
                 {
                     await SetLastSyncAsync();
                     _platformUtilsService.ShowToast("success", null, AppResources.SyncingComplete);
@@ -67,10 +67,10 @@ namespace Bit.App.Pages
                     await Page.DisplayAlert(null, AppResources.SyncingFailed, AppResources.Ok);
                 }
             }
-            catch(ApiException e)
+            catch (ApiException e)
             {
                 await _deviceActionService.HideLoadingAsync();
-                if(e?.Error != null)
+                if (e?.Error != null)
                 {
                     await _platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(),
                         AppResources.AnErrorHasOccurred);

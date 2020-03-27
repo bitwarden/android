@@ -18,7 +18,7 @@ namespace Bit.Core.Utilities
 
         public void AddRange(IEnumerable<T> range)
         {
-            foreach(var item in range)
+            foreach (var item in range)
             {
                 Items.Add(item);
             }
@@ -32,10 +32,10 @@ namespace Bit.Core.Utilities
         {
             // Maybe a fix for https://forums.xamarin.com/discussion/19114/invalid-number-of-rows-in-section
             // Items.Clear();
-            if(Items.Count > 0)
+            if (Items.Count > 0)
             {
                 var count = Items.Count;
-                for(var i = 0; i < count; i++)
+                for (var i = 0; i < count; i++)
                 {
                     Items.RemoveAt(0);
                 }

@@ -215,7 +215,7 @@ namespace Bit.App.Pages
         {
             CleanUp();
             var cipher = await _cipherService.GetAsync(CipherId);
-            if(cipher == null)
+            if (cipher == null)
             {
                 finishedLoadingAction?.Invoke();
                 return false;
@@ -224,7 +224,7 @@ namespace Bit.App.Pages
             CanAccessPremium = await _userService.CanAccessPremiumAsync();
             Fields = Cipher.Fields?.Select(f => new ViewPageFieldViewModel(Cipher, f)).ToList();
 
-            if(Cipher.Type == Core.Enums.CipherType.Login && !string.IsNullOrWhiteSpace(Cipher.Login.Totp) &&
+            if (Cipher.Type == Core.Enums.CipherType.Login && !string.IsNullOrWhiteSpace(Cipher.Login.Totp) &&
                 (Cipher.OrganizationUseTotp || CanAccessPremium))
             {
                 await TotpUpdateCodeAsync();
@@ -233,7 +233,7 @@ namespace Bit.App.Pages
                 _totpInterval = DateTime.UtcNow;
                 Device.StartTimer(new TimeSpan(0, 0, 1), () =>
                 {
-                    if(_totpInterval == null)
+                    if (_totpInterval == null)
                     {
                         return false;
                     }
@@ -241,7 +241,7 @@ namespace Bit.App.Pages
                     return true;
                 });
             }
-            if(_previousCipherId != CipherId)
+            if (_previousCipherId != CipherId)
             {
                 var task = _eventService.CollectAsync(Core.Enums.EventType.Cipher_ClientViewed, CipherId);
             }
@@ -258,7 +258,7 @@ namespace Bit.App.Pages
         public void TogglePassword()
         {
             ShowPassword = !ShowPassword;
-            if(ShowPassword)
+            if (ShowPassword)
             {
                 var task = _eventService.CollectAsync(Core.Enums.EventType.Cipher_ClientToggledPasswordVisible, CipherId);
             }
@@ -267,7 +267,7 @@ namespace Bit.App.Pages
         public void ToggleCardCode()
         {
             ShowCardCode = !ShowCardCode;
-            if(ShowCardCode)
+            if (ShowCardCode)
             {
                 var task = _eventService.CollectAsync(
                     Core.Enums.EventType.Cipher_ClientToggledCardCodeVisible, CipherId);
@@ -276,7 +276,7 @@ namespace Bit.App.Pages
 
         public async Task<bool> DeleteAsync()
         {
-            if(Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
+            if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
                     AppResources.InternetConnectionRequiredTitle);
@@ -284,7 +284,7 @@ namespace Bit.App.Pages
             }
             var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.DoYouReallyWantToDelete,
                 null, AppResources.Yes, AppResources.Cancel);
-            if(!confirmed)
+            if (!confirmed)
             {
                 return false;
             }
@@ -297,10 +297,10 @@ namespace Bit.App.Pages
                 _messagingService.Send("deletedCipher", Cipher);
                 return true;
             }
-            catch(ApiException e)
+            catch (ApiException e)
             {
                 await _deviceActionService.HideLoadingAsync();
-                if(e?.Error != null)
+                if (e?.Error != null)
                 {
                     await _platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(),
                         AppResources.AnErrorHasOccurred);
@@ -311,15 +311,15 @@ namespace Bit.App.Pages
 
         private async Task TotpUpdateCodeAsync()
         {
-            if(Cipher == null || Cipher.Type != Core.Enums.CipherType.Login || Cipher.Login.Totp == null)
+            if (Cipher == null || Cipher.Type != Core.Enums.CipherType.Login || Cipher.Login.Totp == null)
             {
                 _totpInterval = null;
                 return;
             }
             _totpCode = await _totpService.GetCodeAsync(Cipher.Login.Totp);
-            if(_totpCode != null)
+            if (_totpCode != null)
             {
-                if(_totpCode.Length > 4)
+                if (_totpCode.Length > 4)
                 {
                     var half = (int)Math.Floor(_totpCode.Length / 2M);
                     TotpCodeFormatted = string.Format("{0} {1}", _totpCode.Substring(0, half),
@@ -344,7 +344,7 @@ namespace Bit.App.Pages
             var totpSec = intervalSeconds - mod;
             TotpSec = totpSec.ToString();
             TotpLow = totpSec < 7;
-            if(mod == 0)
+            if (mod == 0)
             {
                 await TotpUpdateCodeAsync();
             }
@@ -352,15 +352,15 @@ namespace Bit.App.Pages
 
         private async void CheckPasswordAsync()
         {
-            if(!(Page as BaseContentPage).DoOnce())
+            if (!(Page as BaseContentPage).DoOnce())
             {
                 return;
             }
-            if(string.IsNullOrWhiteSpace(Cipher.Login?.Password))
+            if (string.IsNullOrWhiteSpace(Cipher.Login?.Password))
             {
                 return;
             }
-            if(Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
+            if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
                     AppResources.InternetConnectionRequiredTitle);
@@ -369,7 +369,7 @@ namespace Bit.App.Pages
             await _deviceActionService.ShowLoadingAsync(AppResources.CheckingPassword);
             var matches = await _auditService.PasswordLeakedAsync(Cipher.Login.Password);
             await _deviceActionService.HideLoadingAsync();
-            if(matches > 0)
+            if (matches > 0)
             {
                 await _platformUtilsService.ShowDialogAsync(string.Format(AppResources.PasswordExposed,
                     matches.ToString("N0")));
@@ -382,36 +382,36 @@ namespace Bit.App.Pages
 
         private async void DownloadAttachmentAsync(AttachmentView attachment)
         {
-            if(!(Page as BaseContentPage).DoOnce())
+            if (!(Page as BaseContentPage).DoOnce())
             {
                 return;
             }
-            if(Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
+            if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
                     AppResources.InternetConnectionRequiredTitle);
                 return;
             }
-            if(Cipher.OrganizationId == null && !CanAccessPremium)
+            if (Cipher.OrganizationId == null && !CanAccessPremium)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.PremiumRequired);
                 return;
             }
-            if(attachment.FileSize >= 10485760) // 10 MB
+            if (attachment.FileSize >= 10485760) // 10 MB
             {
                 var confirmed = await _platformUtilsService.ShowDialogAsync(
                     string.Format(AppResources.AttachmentLargeWarning, attachment.SizeName), null,
                     AppResources.Yes, AppResources.No);
-                if(!confirmed)
+                if (!confirmed)
                 {
                     return;
                 }
             }
 
             var canOpenFile = true;
-            if(!_deviceActionService.CanOpenFile(attachment.FileName))
+            if (!_deviceActionService.CanOpenFile(attachment.FileName))
             {
-                if(Device.RuntimePlatform == Device.iOS)
+                if (Device.RuntimePlatform == Device.iOS)
                 {
                     // iOS is currently hardcoded to always return CanOpenFile == true, but should it ever return false
                     // for any reason we want to be sure to catch it here.
@@ -427,15 +427,15 @@ namespace Bit.App.Pages
             {
                 var data = await _cipherService.DownloadAndDecryptAttachmentAsync(attachment, Cipher.OrganizationId);
                 await _deviceActionService.HideLoadingAsync();
-                if(data == null)
+                if (data == null)
                 {
                     await _platformUtilsService.ShowDialogAsync(AppResources.UnableToDownloadFile);
                     return;
                 }
 
-                if(Device.RuntimePlatform == Device.Android)
+                if (Device.RuntimePlatform == Device.Android)
                 {
-                    if(canOpenFile)
+                    if (canOpenFile)
                     {
                         // We can open this attachment directly, so give the user the option to open or save
                         PromptOpenOrSave(data, attachment);
@@ -461,11 +461,11 @@ namespace Bit.App.Pages
         {
             var selection = await Page.DisplayActionSheet(attachment.FileName, AppResources.Cancel, null,
                 AppResources.Open, AppResources.Save);
-            if(selection == AppResources.Open)
+            if (selection == AppResources.Open)
             {
                 OpenAttachment(data, attachment);
             }
-            else if(selection == AppResources.Save)
+            else if (selection == AppResources.Save)
             {
                 SaveAttachment(data, attachment);
             }
@@ -473,7 +473,7 @@ namespace Bit.App.Pages
 
         public async void OpenAttachment(byte[] data, AttachmentView attachment)
         {
-            if(!_deviceActionService.OpenFile(data, attachment.Id, attachment.FileName))
+            if (!_deviceActionService.OpenFile(data, attachment.Id, attachment.FileName))
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.UnableToOpenFile);
                 return;
@@ -484,7 +484,7 @@ namespace Bit.App.Pages
         {
             _attachmentData = data;
             _attachmentFilename = attachment.FileName;
-            if(!_deviceActionService.SaveFile(_attachmentData, null, _attachmentFilename, null))
+            if (!_deviceActionService.SaveFile(_attachmentData, null, _attachmentFilename, null))
             {
                 ClearAttachmentData();
                 await _platformUtilsService.ShowDialogAsync(AppResources.UnableToSaveAttachment);
@@ -493,7 +493,7 @@ namespace Bit.App.Pages
 
         public async void SaveFileSelected(string contentUri, string filename)
         {
-            if(_deviceActionService.SaveFile(_attachmentData, null, filename ?? _attachmentFilename, contentUri))
+            if (_deviceActionService.SaveFile(_attachmentData, null, filename ?? _attachmentFilename, contentUri))
             {
                 ClearAttachmentData();
                 _platformUtilsService.ShowToast("success", null, AppResources.SaveAttachmentSuccess);
@@ -513,56 +513,56 @@ namespace Bit.App.Pages
         private async void CopyAsync(string id, string text = null)
         {
             string name = null;
-            if(id == "LoginUsername")
+            if (id == "LoginUsername")
             {
                 text = Cipher.Login.Username;
                 name = AppResources.Username;
             }
-            else if(id == "LoginPassword")
+            else if (id == "LoginPassword")
             {
                 text = Cipher.Login.Password;
                 name = AppResources.Password;
             }
-            else if(id == "LoginTotp")
+            else if (id == "LoginTotp")
             {
                 text = _totpCode;
                 name = AppResources.VerificationCodeTotp;
             }
-            else if(id == "LoginUri")
+            else if (id == "LoginUri")
             {
                 name = AppResources.URI;
             }
-            else if(id == "FieldValue" || id == "H_FieldValue")
+            else if (id == "FieldValue" || id == "H_FieldValue")
             {
                 name = AppResources.Value;
             }
-            else if(id == "CardNumber")
+            else if (id == "CardNumber")
             {
                 text = Cipher.Card.Number;
                 name = AppResources.Number;
             }
-            else if(id == "CardCode")
+            else if (id == "CardCode")
             {
                 text = Cipher.Card.Code;
                 name = AppResources.SecurityCode;
             }
 
-            if(text != null)
+            if (text != null)
             {
                 await _platformUtilsService.CopyToClipboardAsync(text);
-                if(!string.IsNullOrWhiteSpace(name))
+                if (!string.IsNullOrWhiteSpace(name))
                 {
                     _platformUtilsService.ShowToast("info", null, string.Format(AppResources.ValueHasBeenCopied, name));
                 }
-                if(id == "LoginPassword")
+                if (id == "LoginPassword")
                 {
                     await _eventService.CollectAsync(Core.Enums.EventType.Cipher_ClientCopiedPassword, CipherId);
                 }
-                else if(id == "CardCode")
+                else if (id == "CardCode")
                 {
                     await _eventService.CollectAsync(Core.Enums.EventType.Cipher_ClientCopiedCardCode, CipherId);
                 }
-                else if(id == "H_FieldValue")
+                else if (id == "H_FieldValue")
                 {
                     await _eventService.CollectAsync(Core.Enums.EventType.Cipher_ClientCopiedHiddenField, CipherId);
                 }
@@ -581,7 +581,7 @@ namespace Bit.App.Pages
 
         private void LaunchUri(LoginUriView uri)
         {
-            if(uri.CanLaunch && (Page as BaseContentPage).DoOnce())
+            if (uri.CanLaunch && (Page as BaseContentPage).DoOnce())
             {
                 _platformUtilsService.LaunchUri(uri.LaunchUri);
             }
@@ -638,7 +638,7 @@ namespace Bit.App.Pages
         public void ToggleHiddenValue()
         {
             ShowHiddenValue = !ShowHiddenValue;
-            if(ShowHiddenValue)
+            if (ShowHiddenValue)
             {
                 var eventService = ServiceContainer.Resolve<IEventService>("eventService");
                 var task = eventService.CollectAsync(

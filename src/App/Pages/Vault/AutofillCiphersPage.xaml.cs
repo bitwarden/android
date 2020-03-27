@@ -36,7 +36,7 @@ namespace Bit.App.Pages
                 {
                     await _vm.LoadAsync();
                 }
-                catch(Exception e) when(e.Message.Contains("No key."))
+                catch (Exception e) when(e.Message.Contains("No key."))
                 {
                     await Task.Delay(1000);
                     await _vm.LoadAsync();
@@ -47,11 +47,11 @@ namespace Bit.App.Pages
         private async void RowSelected(object sender, SelectedItemChangedEventArgs e)
         {
             ((ListView)sender).SelectedItem = null;
-            if(!DoOnce())
+            if (!DoOnce())
             {
                 return;
             }
-            if(e.SelectedItem is GroupingsPageListItem item && item.Cipher != null)
+            if (e.SelectedItem is GroupingsPageListItem item && item.Cipher != null)
             {
                 await _vm.SelectCipherAsync(item.Cipher, item.FuzzyAutofill);
             }
@@ -59,11 +59,11 @@ namespace Bit.App.Pages
 
         private async void AddButton_Clicked(object sender, System.EventArgs e)
         {
-            if(!DoOnce())
+            if (!DoOnce())
             {
                 return;
             }
-            if(_appOptions.FillType.HasValue && _appOptions.FillType != CipherType.Login)
+            if (_appOptions.FillType.HasValue && _appOptions.FillType != CipherType.Login)
             {
                 var pageForOther = new AddEditPage(type: _appOptions.FillType, fromAutofill: true);
                 await Navigation.PushModalAsync(new NavigationPage(pageForOther));

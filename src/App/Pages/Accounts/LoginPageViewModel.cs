@@ -68,7 +68,7 @@ namespace Bit.App.Pages
 
         public async Task InitAsync()
         {
-            if(string.IsNullOrWhiteSpace(Email))
+            if (string.IsNullOrWhiteSpace(Email))
             {
                 Email = await _storageService.GetAsync<string>(Keys_RememberedEmail);
             }
@@ -78,25 +78,25 @@ namespace Bit.App.Pages
 
         public async Task LogInAsync()
         {
-            if(Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
+            if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
                     AppResources.InternetConnectionRequiredTitle);
                 return;
             }
-            if(string.IsNullOrWhiteSpace(Email))
+            if (string.IsNullOrWhiteSpace(Email))
             {
                 await Page.DisplayAlert(AppResources.AnErrorHasOccurred,
                     string.Format(AppResources.ValidationFieldRequired, AppResources.EmailAddress),
                     AppResources.Ok);
                 return;
             }
-            if(!Email.Contains("@"))
+            if (!Email.Contains("@"))
             {
                 await Page.DisplayAlert(AppResources.AnErrorHasOccurred, AppResources.InvalidEmail, AppResources.Ok);
                 return;
             }
-            if(string.IsNullOrWhiteSpace(MasterPassword))
+            if (string.IsNullOrWhiteSpace(MasterPassword))
             {
                 await Page.DisplayAlert(AppResources.AnErrorHasOccurred,
                     string.Format(AppResources.ValidationFieldRequired, AppResources.MasterPassword),
@@ -110,7 +110,7 @@ namespace Bit.App.Pages
                 await _deviceActionService.ShowLoadingAsync(AppResources.LoggingIn);
                 var response = await _authService.LogInAsync(Email, MasterPassword);
                 MasterPassword = string.Empty;
-                if(RememberEmail)
+                if (RememberEmail)
                 {
                     await _storageService.SaveAsync(Keys_RememberedEmail, Email);
                 }
@@ -119,7 +119,7 @@ namespace Bit.App.Pages
                     await _storageService.RemoveAsync(Keys_RememberedEmail);
                 }
                 await _deviceActionService.HideLoadingAsync();
-                if(response.TwoFactor)
+                if (response.TwoFactor)
                 {
                     var page = new TwoFactorPage();
                     await Page.Navigation.PushModalAsync(new NavigationPage(page));
@@ -132,10 +132,10 @@ namespace Bit.App.Pages
                     Application.Current.MainPage = new TabsPage();
                 }
             }
-            catch(ApiException e)
+            catch (ApiException e)
             {
                 await _deviceActionService.HideLoadingAsync();
-                if(e?.Error != null)
+                if (e?.Error != null)
                 {
                     await _platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(),
                         AppResources.AnErrorHasOccurred);

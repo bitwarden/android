@@ -21,7 +21,7 @@ namespace Bit.iOS.Core.Views
             var bgColor = UIColor.DarkGray;
             var nordTheme = Application.Current?.Resources != null &&
                 ((Color)Application.Current.Resources["BackgroundColor"]) == Color.FromHex("#3b4252");
-            if(nordTheme)
+            if (nordTheme)
             {
                 bgColor = Color.FromHex("#4c566a").ToUIColor();
             }
@@ -70,7 +70,7 @@ namespace Bit.iOS.Core.Views
 
         public void Show()
         {
-            if(Superview != null)
+            if (Superview != null)
             {
                 return;
             }
@@ -79,7 +79,7 @@ namespace Bit.iOS.Core.Views
             LayoutIfNeeded();
 
             var localSuperView = UIApplication.SharedApplication.KeyWindow;
-            if(localSuperView != null)
+            if (localSuperView != null)
             {
                 localSuperView.AddSubview(this);
 
@@ -115,7 +115,7 @@ namespace Bit.iOS.Core.Views
 
         public void Dismiss(bool animated = true)
         {
-            if(Dismissed)
+            if (Dismissed)
             {
                 return;
             }
@@ -124,7 +124,7 @@ namespace Bit.iOS.Core.Views
             _dismissTimer?.Invalidate();
             _dismissTimer = null;
 
-            if(!animated)
+            if (!animated)
             {
                 RemoveFromSuperview();
                 DismissCallback?.Invoke();

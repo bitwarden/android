@@ -19,11 +19,11 @@ namespace Bit.Droid.Autofill
         {
             get
             {
-                if(FillableForLogin)
+                if (FillableForLogin)
                 {
                     return SaveDataType.Password;
                 }
-                else if(FillableForCard)
+                else if (FillableForCard)
                 {
                     return SaveDataType.CreditCard;
                 }
@@ -43,14 +43,14 @@ namespace Bit.Droid.Autofill
         {
             get
             {
-                if(_passwordFields != null)
+                if (_passwordFields != null)
                 {
                     return _passwordFields;
                 }
-                if(Hints.Any())
+                if (Hints.Any())
                 {
                     _passwordFields = new List<Field>();
-                    if(HintToFieldsMap.ContainsKey(View.AutofillHintPassword))
+                    if (HintToFieldsMap.ContainsKey(View.AutofillHintPassword))
                     {
                         _passwordFields.AddRange(HintToFieldsMap[View.AutofillHintPassword]);
                     }
@@ -58,7 +58,7 @@ namespace Bit.Droid.Autofill
                 else
                 {
                     _passwordFields = Fields.Where(f => FieldIsPassword(f)).ToList();
-                    if(!_passwordFields.Any())
+                    if (!_passwordFields.Any())
                     {
                         _passwordFields = Fields.Where(f => FieldHasPasswordTerms(f)).ToList();
                     }
@@ -71,29 +71,29 @@ namespace Bit.Droid.Autofill
         {
             get
             {
-                if(_usernameFields != null)
+                if (_usernameFields != null)
                 {
                     return _usernameFields;
                 }
                 _usernameFields = new List<Field>();
-                if(Hints.Any())
+                if (Hints.Any())
                 {
-                    if(HintToFieldsMap.ContainsKey(View.AutofillHintEmailAddress))
+                    if (HintToFieldsMap.ContainsKey(View.AutofillHintEmailAddress))
                     {
                         _usernameFields.AddRange(HintToFieldsMap[View.AutofillHintEmailAddress]);
                     }
-                    if(HintToFieldsMap.ContainsKey(View.AutofillHintUsername))
+                    if (HintToFieldsMap.ContainsKey(View.AutofillHintUsername))
                     {
                         _usernameFields.AddRange(HintToFieldsMap[View.AutofillHintUsername]);
                     }
                 }
                 else
                 {
-                    foreach(var passwordField in PasswordFields)
+                    foreach (var passwordField in PasswordFields)
                     {
                         var usernameField = Fields.TakeWhile(f => f.AutofillId != passwordField.AutofillId)
                             .LastOrDefault();
-                        if(usernameField != null)
+                        if (usernameField != null)
                         {
                             _usernameFields.Add(usernameField);
                         }
@@ -127,7 +127,7 @@ namespace Bit.Droid.Autofill
 
         public void Add(Field field)
         {
-            if(field == null || FieldTrackingIds.Contains(field.TrackingId))
+            if (field == null || FieldTrackingIds.Contains(field.TrackingId))
             {
                 return;
             }
@@ -137,16 +137,16 @@ namespace Bit.Droid.Autofill
             Fields.Add(field);
             AutofillIds.Add(field.AutofillId);
 
-            if(field.Hints != null)
+            if (field.Hints != null)
             {
-                foreach(var hint in field.Hints)
+                foreach (var hint in field.Hints)
                 {
                     Hints.Add(hint);
-                    if(field.Focused)
+                    if (field.Focused)
                     {
                         FocusedHints.Add(hint);
                     }
-                    if(!HintToFieldsMap.ContainsKey(hint))
+                    if (!HintToFieldsMap.ContainsKey(hint))
                     {
                         HintToFieldsMap.Add(hint, new List<Field>());
                     }
@@ -157,10 +157,10 @@ namespace Bit.Droid.Autofill
 
         public SavedItem GetSavedItem()
         {
-            if(SaveType == SaveDataType.Password)
+            if (SaveType == SaveDataType.Password)
             {
                 var passwordField = PasswordFields.FirstOrDefault(f => !string.IsNullOrWhiteSpace(f.TextValue));
-                if(passwordField == null)
+                if (passwordField == null)
                 {
                     return null;
                 }
@@ -178,7 +178,7 @@ namespace Bit.Droid.Autofill
                 savedItem.Login.Username = GetFieldValue(usernameField);
                 return savedItem;
             }
-            else if(SaveType == SaveDataType.CreditCard)
+            else if (SaveType == SaveDataType.CreditCard)
             {
                 var savedItem = new SavedItem
                 {
@@ -199,26 +199,26 @@ namespace Bit.Droid.Autofill
 
         public AutofillId[] GetOptionalSaveIds()
         {
-            if(SaveType == SaveDataType.Password)
+            if (SaveType == SaveDataType.Password)
             {
                 return UsernameFields.Select(f => f.AutofillId).ToArray();
             }
-            else if(SaveType == SaveDataType.CreditCard)
+            else if (SaveType == SaveDataType.CreditCard)
             {
                 var fieldList = new List<Field>();
-                if(HintToFieldsMap.ContainsKey(View.AutofillHintCreditCardSecurityCode))
+                if (HintToFieldsMap.ContainsKey(View.AutofillHintCreditCardSecurityCode))
                 {
                     fieldList.AddRange(HintToFieldsMap[View.AutofillHintCreditCardSecurityCode]);
                 }
-                if(HintToFieldsMap.ContainsKey(View.AutofillHintCreditCardExpirationYear))
+                if (HintToFieldsMap.ContainsKey(View.AutofillHintCreditCardExpirationYear))
                 {
                     fieldList.AddRange(HintToFieldsMap[View.AutofillHintCreditCardExpirationYear]);
                 }
-                if(HintToFieldsMap.ContainsKey(View.AutofillHintCreditCardExpirationMonth))
+                if (HintToFieldsMap.ContainsKey(View.AutofillHintCreditCardExpirationMonth))
                 {
                     fieldList.AddRange(HintToFieldsMap[View.AutofillHintCreditCardExpirationMonth]);
                 }
-                if(HintToFieldsMap.ContainsKey(View.AutofillHintName))
+                if (HintToFieldsMap.ContainsKey(View.AutofillHintName))
                 {
                     fieldList.AddRange(HintToFieldsMap[View.AutofillHintName]);
                 }
@@ -229,11 +229,11 @@ namespace Bit.Droid.Autofill
 
         public AutofillId[] GetRequiredSaveFields()
         {
-            if(SaveType == SaveDataType.Password)
+            if (SaveType == SaveDataType.Password)
             {
                 return PasswordFields.Select(f => f.AutofillId).ToArray();
             }
-            else if(SaveType == SaveDataType.CreditCard && HintToFieldsMap.ContainsKey(View.AutofillHintCreditCardNumber))
+            else if (SaveType == SaveDataType.CreditCard && HintToFieldsMap.ContainsKey(View.AutofillHintCreditCardNumber))
             {
                 return HintToFieldsMap[View.AutofillHintCreditCardNumber].Select(f => f.AutofillId).ToArray();
             }
@@ -247,12 +247,12 @@ namespace Bit.Droid.Autofill
 
         private string GetFieldValue(string hint, bool monthValue = false)
         {
-            if(HintToFieldsMap.ContainsKey(hint))
+            if (HintToFieldsMap.ContainsKey(hint))
             {
-                foreach(var field in HintToFieldsMap[hint])
+                foreach (var field in HintToFieldsMap[hint])
                 {
                     var val = GetFieldValue(field, monthValue);
-                    if(!string.IsNullOrWhiteSpace(val))
+                    if (!string.IsNullOrWhiteSpace(val))
                     {
                         return val;
                     }
@@ -263,30 +263,30 @@ namespace Bit.Droid.Autofill
 
         private string GetFieldValue(Field field, bool monthValue = false)
         {
-            if(field == null)
+            if (field == null)
             {
                 return null;
             }
-            if(!string.IsNullOrWhiteSpace(field.TextValue))
+            if (!string.IsNullOrWhiteSpace(field.TextValue))
             {
-                if(field.AutofillType == AutofillType.List && field.ListValue.HasValue && monthValue)
+                if (field.AutofillType == AutofillType.List && field.ListValue.HasValue && monthValue)
                 {
-                    if(field.AutofillOptions.Count == 13)
+                    if (field.AutofillOptions.Count == 13)
                     {
                         return field.ListValue.ToString();
                     }
-                    else if(field.AutofillOptions.Count == 12)
+                    else if (field.AutofillOptions.Count == 12)
                     {
                         return (field.ListValue + 1).ToString();
                     }
                 }
                 return field.TextValue;
             }
-            else if(field.DateValue.HasValue)
+            else if (field.DateValue.HasValue)
             {
                 return field.DateValue.Value.ToString();
             }
-            else if(field.ToggleValue.HasValue)
+            else if (field.ToggleValue.HasValue)
             {
                 return field.ToggleValue.Value.ToString();
             }
@@ -300,20 +300,20 @@ namespace Bit.Droid.Autofill
                 f.InputType.HasFlag(InputTypes.TextVariationWebPassword);
 
             // For whatever reason, multi-line input types are coming through with TextVariationPassword flags
-            if(inputTypePassword && f.InputType.HasFlag(InputTypes.TextVariationPassword) &&
+            if (inputTypePassword && f.InputType.HasFlag(InputTypes.TextVariationPassword) &&
                 f.InputType.HasFlag(InputTypes.TextFlagMultiLine))
             {
                 inputTypePassword = false;
             }
 
-            if(!inputTypePassword && f.HtmlInfo != null && f.HtmlInfo.Tag == "input" &&
+            if (!inputTypePassword && f.HtmlInfo != null && f.HtmlInfo.Tag == "input" &&
                 (f.HtmlInfo.Attributes?.Any() ?? false))
             {
-                foreach(var a in f.HtmlInfo.Attributes)
+                foreach (var a in f.HtmlInfo.Attributes)
                 {
                     var key = a.First as Java.Lang.String;
                     var val = a.Second as Java.Lang.String;
-                    if(key != null && val != null && key.ToString() == "type" && val.ToString() == "password")
+                    if (key != null && val != null && key.ToString() == "type" && val.ToString() == "password")
                     {
                         return true;
                     }
@@ -331,7 +331,7 @@ namespace Bit.Droid.Autofill
 
         private bool ValueContainsAnyTerms(string value, HashSet<string> terms)
         {
-            if(string.IsNullOrWhiteSpace(value))
+            if (string.IsNullOrWhiteSpace(value))
             {
                 return false;
             }

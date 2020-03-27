@@ -19,14 +19,14 @@ namespace Bit.App.Pages
             _vm.Page = this;
             _vm.RegistrationSuccess = async () =>
             {
-                if(homePage != null)
+                if (homePage != null)
                 {
                     await homePage.DismissRegisterPageAndLogInAsync(_vm.Email);
                 }
             };
             MasterPasswordEntry = _masterPassword;
             ConfirmMasterPasswordEntry = _confirmMasterPassword;
-            if(Device.RuntimePlatform == Device.Android)
+            if (Device.RuntimePlatform == Device.Android)
             {
                 ToolbarItems.RemoveAt(0);
             }
@@ -50,7 +50,7 @@ namespace Bit.App.Pages
 
         private async void Submit_Clicked(object sender, EventArgs e)
         {
-            if(DoOnce())
+            if (DoOnce())
             {
                 await _vm.SubmitAsync();
             }
@@ -58,7 +58,7 @@ namespace Bit.App.Pages
 
         private async void Close_Clicked(object sender, EventArgs e)
         {
-            if(DoOnce())
+            if (DoOnce())
             {
                 _messagingService.Send("showStatusBar", false);
                 await Navigation.PopModalAsync();

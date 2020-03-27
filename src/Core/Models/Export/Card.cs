@@ -25,7 +25,7 @@ namespace Bit.Core.Models.Export
 
         public static CardView ToView(Card req, CardView view = null)
         {
-            if(view == null)
+            if (view == null)
             {
                 view = new CardView();
             }

@@ -149,32 +149,32 @@ namespace Bit.Core.Services
         public List<TwoFactorProvider> GetSupportedTwoFactorProviders()
         {
             var providers = new List<TwoFactorProvider>();
-            if(TwoFactorProvidersData == null)
+            if (TwoFactorProvidersData == null)
             {
                 return providers;
             }
-            if(TwoFactorProvidersData.ContainsKey(TwoFactorProviderType.OrganizationDuo) &&
+            if (TwoFactorProvidersData.ContainsKey(TwoFactorProviderType.OrganizationDuo) &&
                 _platformUtilsService.SupportsDuo())
             {
                 providers.Add(TwoFactorProviders[TwoFactorProviderType.OrganizationDuo]);
             }
-            if(TwoFactorProvidersData.ContainsKey(TwoFactorProviderType.Authenticator))
+            if (TwoFactorProvidersData.ContainsKey(TwoFactorProviderType.Authenticator))
             {
                 providers.Add(TwoFactorProviders[TwoFactorProviderType.Authenticator]);
             }
-            if(TwoFactorProvidersData.ContainsKey(TwoFactorProviderType.YubiKey))
+            if (TwoFactorProvidersData.ContainsKey(TwoFactorProviderType.YubiKey))
             {
                 providers.Add(TwoFactorProviders[TwoFactorProviderType.YubiKey]);
             }
-            if(TwoFactorProvidersData.ContainsKey(TwoFactorProviderType.Duo) && _platformUtilsService.SupportsDuo())
+            if (TwoFactorProvidersData.ContainsKey(TwoFactorProviderType.Duo) && _platformUtilsService.SupportsDuo())
             {
                 providers.Add(TwoFactorProviders[TwoFactorProviderType.Duo]);
             }
-            if(TwoFactorProvidersData.ContainsKey(TwoFactorProviderType.U2f) && _platformUtilsService.SupportsU2f())
+            if (TwoFactorProvidersData.ContainsKey(TwoFactorProviderType.U2f) && _platformUtilsService.SupportsU2f())
             {
                 providers.Add(TwoFactorProviders[TwoFactorProviderType.U2f]);
             }
-            if(TwoFactorProvidersData.ContainsKey(TwoFactorProviderType.Email))
+            if (TwoFactorProvidersData.ContainsKey(TwoFactorProviderType.Email))
             {
                 providers.Add(TwoFactorProviders[TwoFactorProviderType.Email]);
             }
@@ -183,25 +183,25 @@ namespace Bit.Core.Services
 
         public TwoFactorProviderType? GetDefaultTwoFactorProvider(bool u2fSupported)
         {
-            if(TwoFactorProvidersData == null)
+            if (TwoFactorProvidersData == null)
             {
                 return null;
             }
-            if(SelectedTwoFactorProviderType != null &&
+            if (SelectedTwoFactorProviderType != null &&
                 TwoFactorProvidersData.ContainsKey(SelectedTwoFactorProviderType.Value))
             {
                 return SelectedTwoFactorProviderType.Value;
             }
             TwoFactorProviderType? providerType = null;
             var providerPriority = -1;
-            foreach(var providerKvp in TwoFactorProvidersData)
+            foreach (var providerKvp in TwoFactorProvidersData)
             {
-                if(TwoFactorProviders.ContainsKey(providerKvp.Key))
+                if (TwoFactorProviders.ContainsKey(providerKvp.Key))
                 {
                     var provider = TwoFactorProviders[providerKvp.Key];
-                    if(provider.Priority > providerPriority)
+                    if (provider.Priority > providerPriority)
                     {
-                        if(providerKvp.Key == TwoFactorProviderType.U2f && !u2fSupported)
+                        if (providerKvp.Key == TwoFactorProviderType.U2f && !u2fSupported)
                         {
                             continue;
                         }
@@ -223,15 +223,15 @@ namespace Bit.Core.Services
             try
             {
                 var preloginResponse = await _apiService.PostPreloginAsync(new PreloginRequest { Email = email });
-                if(preloginResponse != null)
+                if (preloginResponse != null)
                 {
                     _kdf = preloginResponse.Kdf;
                     _kdfIterations = preloginResponse.KdfIterations;
                 }
             }
-            catch(ApiException e)
+            catch (ApiException e)
             {
-                if(e.Error == null || e.Error.StatusCode != System.Net.HttpStatusCode.NotFound)
+                if (e.Error == null || e.Error.StatusCode != System.Net.HttpStatusCode.NotFound)
                 {
                     throw e;
                 }
@@ -252,13 +252,13 @@ namespace Bit.Core.Services
                 Device = deviceRequest,
                 Remember = false
             };
-            if(twoFactorToken != null && twoFactorProvider != null)
+            if (twoFactorToken != null && twoFactorProvider != null)
             {
                 request.Provider = twoFactorProvider;
                 request.Token = twoFactorToken;
                 request.Remember = remember.GetValueOrDefault();
             }
-            else if(storedTwoFactorToken != null)
+            else if (storedTwoFactorToken != null)
             {
                 request.Provider = TwoFactorProviderType.Remember;
                 request.Token = storedTwoFactorToken;
@@ -270,7 +270,7 @@ namespace Bit.Core.Services
             {
                 TwoFactor = response.Item2 != null
             };
-            if(result.TwoFactor)
+            if (result.TwoFactor)
             {
                 // Two factor required.
                 var twoFactorResponse = response.Item2;
@@ -283,21 +283,21 @@ namespace Bit.Core.Services
             }
 
             var tokenResponse = response.Item1;
-            if(tokenResponse.TwoFactorToken != null)
+            if (tokenResponse.TwoFactorToken != null)
             {
                 await _tokenService.SetTwoFactorTokenAsync(tokenResponse.TwoFactorToken, email);
             }
             await _tokenService.SetTokensAsync(tokenResponse.AccessToken, tokenResponse.RefreshToken);
             await _userService.SetInformationAsync(_tokenService.GetUserId(), _tokenService.GetEmail(),
                 _kdf.Value, _kdfIterations.Value);
-            if(_setCryptoKeys)
+            if (_setCryptoKeys)
             {
                 await _cryptoService.SetKeyAsync(key);
                 await _cryptoService.SetKeyHashAsync(hashedPassword);
                 await _cryptoService.SetEncKeyAsync(tokenResponse.Key);
 
                 // User doesn't have a key pair yet (old account), let's generate one for them.
-                if(tokenResponse.PrivateKey == null)
+                if (tokenResponse.PrivateKey == null)
                 {
                     try
                     {

@@ -12,7 +12,7 @@ namespace Bit.iOS.Renderers
         protected override void OnElementChanged(ElementChangedEventArgs<Editor> e)
         {
             base.OnElementChanged(e);
-            if(e.NewElement is Editor)
+            if (e.NewElement is Editor)
             {
                 var descriptor = UIFontDescriptor.PreferredBody;
                 Control.Font = UIFont.FromDescriptor(descriptor, descriptor.PointSize);
@@ -27,7 +27,7 @@ namespace Bit.iOS.Renderers
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             base.OnElementPropertyChanged(sender, e);
-            if(e.PropertyName == Editor.TextColorProperty.PropertyName)
+            if (e.PropertyName == Editor.TextColorProperty.PropertyName)
             {
                 UpdateTintColor();
             }
@@ -40,7 +40,7 @@ namespace Bit.iOS.Renderers
 
         private void UpdateKeyboardAppearance()
         {
-            if(!Core.Utilities.ThemeHelpers.LightTheme)
+            if (!Core.Utilities.ThemeHelpers.LightTheme)
             {
                 Control.KeyboardAppearance = UIKeyboardAppearance.Dark;
             }

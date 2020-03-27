@@ -36,7 +36,7 @@ namespace Bit.Core.Services
 
         public Task<byte[]> Pbkdf2Async(byte[] password, byte[] salt, CryptoHashAlgorithm algorithm, int iterations)
         {
-            if(algorithm != CryptoHashAlgorithm.Sha256 && algorithm != CryptoHashAlgorithm.Sha512)
+            if (algorithm != CryptoHashAlgorithm.Sha256 && algorithm != CryptoHashAlgorithm.Sha512)
             {
                 throw new ArgumentException("Unsupported PBKDF2 algorithm.");
             }
@@ -71,14 +71,14 @@ namespace Bit.Core.Services
             var mac1 = hasher.GetValueAndReset();
             hasher.Append(b);
             var mac2 = hasher.GetValueAndReset();
-            if(mac1.Length != mac2.Length)
+            if (mac1.Length != mac2.Length)
             {
                 return false;
             }
 
-            for(int i = 0; i < mac2.Length; i++)
+            for (int i = 0; i < mac2.Length; i++)
             {
-                if(mac1[i] != mac2[i])
+                if (mac1[i] != mac2[i])
                 {
                     return false;
                 }
@@ -126,7 +126,7 @@ namespace Bit.Core.Services
 
         public Task<Tuple<byte[], byte[]>> RsaGenerateKeyPairAsync(int length)
         {
-            if(length != 1024 && length != 2048 && length != 4096)
+            if (length != 1024 && length != 2048 && length != 4096)
             {
                 throw new ArgumentException("Invalid key pair length.");
             }
@@ -161,7 +161,7 @@ namespace Bit.Core.Services
 
         private HashAlgorithm ToHashAlgorithm(CryptoHashAlgorithm algorithm)
         {
-            switch(algorithm)
+            switch (algorithm)
             {
                 case CryptoHashAlgorithm.Sha1:
                     return HashAlgorithm.Sha1;
@@ -178,7 +178,7 @@ namespace Bit.Core.Services
 
         private MacAlgorithm ToMacAlgorithm(CryptoHashAlgorithm algorithm)
         {
-            switch(algorithm)
+            switch (algorithm)
             {
                 case CryptoHashAlgorithm.Sha1:
                     return MacAlgorithm.HmacSha1;
@@ -193,7 +193,7 @@ namespace Bit.Core.Services
 
         private AsymmetricAlgorithm ToAsymmetricAlgorithm(CryptoHashAlgorithm algorithm)
         {
-            switch(algorithm)
+            switch (algorithm)
             {
                 case CryptoHashAlgorithm.Sha1:
                     return AsymmetricAlgorithm.RsaOaepSha1;

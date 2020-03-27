@@ -12,12 +12,12 @@ namespace Bit.Core.Models.Domain
 
         public CipherString(EncryptionType encryptionType, string data, string iv = null, string mac = null)
         {
-            if(string.IsNullOrWhiteSpace(data))
+            if (string.IsNullOrWhiteSpace(data))
             {
                 throw new ArgumentNullException(nameof(data));
             }
 
-            if(!string.IsNullOrWhiteSpace(iv))
+            if (!string.IsNullOrWhiteSpace(iv))
             {
                 EncryptedString = string.Format("{0}.{1}|{2}", (byte)encryptionType, iv, data);
             }
@@ -26,7 +26,7 @@ namespace Bit.Core.Models.Domain
                 EncryptedString = string.Format("{0}.{1}", (byte)encryptionType, data);
             }
 
-            if(!string.IsNullOrWhiteSpace(mac))
+            if (!string.IsNullOrWhiteSpace(mac))
             {
                 EncryptedString = string.Format("{0}|{1}", EncryptedString, mac);
             }
@@ -39,7 +39,7 @@ namespace Bit.Core.Models.Domain
 
         public CipherString(string encryptedString)
         {
-            if(string.IsNullOrWhiteSpace(encryptedString))
+            if (string.IsNullOrWhiteSpace(encryptedString))
             {
                 throw new ArgumentException(nameof(encryptedString));
             }
@@ -48,7 +48,7 @@ namespace Bit.Core.Models.Domain
             var headerPieces = EncryptedString.Split('.');
             string[] encPieces;
 
-            if(headerPieces.Length == 2 && Enum.TryParse(headerPieces[0], out EncryptionType encType))
+            if (headerPieces.Length == 2 && Enum.TryParse(headerPieces[0], out EncryptionType encType))
             {
                 EncryptionType = encType;
                 encPieces = headerPieces[1].Split('|');
@@ -60,11 +60,11 @@ namespace Bit.Core.Models.Domain
                     EncryptionType.AesCbc256_B64;
             }
 
-            switch(EncryptionType)
+            switch (EncryptionType)
             {
                 case EncryptionType.AesCbc128_HmacSha256_B64:
                 case EncryptionType.AesCbc256_HmacSha256_B64:
-                    if(encPieces.Length != 3)
+                    if (encPieces.Length != 3)
                     {
                         return;
                     }
@@ -73,7 +73,7 @@ namespace Bit.Core.Models.Domain
                     Mac = encPieces[2];
                     break;
                 case EncryptionType.AesCbc256_B64:
-                    if(encPieces.Length != 2)
+                    if (encPieces.Length != 2)
                     {
                         return;
                     }
@@ -82,7 +82,7 @@ namespace Bit.Core.Models.Domain
                     break;
                 case EncryptionType.Rsa2048_OaepSha256_B64:
                 case EncryptionType.Rsa2048_OaepSha1_B64:
-                    if(encPieces.Length != 1)
+                    if (encPieces.Length != 1)
                     {
                         return;
                     }
@@ -101,7 +101,7 @@ namespace Bit.Core.Models.Domain
 
         public async Task<string> DecryptAsync(string orgId = null)
         {
-            if(_decryptedValue != null)
+            if (_decryptedValue != null)
             {
                 return _decryptedValue;
             }

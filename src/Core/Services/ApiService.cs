@@ -37,7 +37,7 @@ namespace Bit.Core.Services
             _logoutCallbackAsync = logoutCallbackAsync;
             var device = (int)_platformUtilsService.GetDevice();
             _httpClient.DefaultRequestHeaders.Add("Device-Type", device.ToString());
-            if(!string.IsNullOrWhiteSpace(customUserAgent))
+            if (!string.IsNullOrWhiteSpace(customUserAgent))
             {
                 _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(customUserAgent);
             }
@@ -51,7 +51,7 @@ namespace Bit.Core.Services
         public void SetUrls(EnvironmentUrls urls)
         {
             UrlsSet = true;
-            if(!string.IsNullOrWhiteSpace(urls.Base))
+            if (!string.IsNullOrWhiteSpace(urls.Base))
             {
                 ApiBaseUrl = urls.Base + "/api";
                 IdentityBaseUrl = urls.Base + "/identity";
@@ -64,15 +64,15 @@ namespace Bit.Core.Services
             EventsBaseUrl = urls.Events;
 
             // Production
-            if(string.IsNullOrWhiteSpace(ApiBaseUrl))
+            if (string.IsNullOrWhiteSpace(ApiBaseUrl))
             {
                 ApiBaseUrl = "https://api.bitwarden.com";
             }
-            if(string.IsNullOrWhiteSpace(IdentityBaseUrl))
+            if (string.IsNullOrWhiteSpace(IdentityBaseUrl))
             {
                 IdentityBaseUrl = "https://identity.bitwarden.com";
             }
-            if(string.IsNullOrWhiteSpace(EventsBaseUrl))
+            if (string.IsNullOrWhiteSpace(EventsBaseUrl))
             {
                 EventsBaseUrl = "https://events.bitwarden.com";
             }
@@ -102,20 +102,20 @@ namespace Bit.Core.Services
                 throw new ApiException(HandleWebError(e));
             }
             JObject responseJObject = null;
-            if(IsJsonResponse(response))
+            if (IsJsonResponse(response))
             {
                 var responseJsonString = await response.Content.ReadAsStringAsync();
                 responseJObject = JObject.Parse(responseJsonString);
             }
 
-            if(responseJObject != null)
+            if (responseJObject != null)
             {
-                if(response.IsSuccessStatusCode)
+                if (response.IsSuccessStatusCode)
                 {
                     return new Tuple<IdentityTokenResponse, IdentityTwoFactorResponse>(
                         responseJObject.ToObject<IdentityTokenResponse>(), null);
                 }
-                else if(response.StatusCode == HttpStatusCode.BadRequest &&
+                else if (response.StatusCode == HttpStatusCode.BadRequest &&
                     responseJObject.ContainsKey("TwoFactorProviders2") &&
                     responseJObject["TwoFactorProviders2"] != null &&
                     responseJObject["TwoFactorProviders2"].HasValues)
@@ -304,7 +304,7 @@ namespace Bit.Core.Services
 
         public async Task PostEventsCollectAsync(IEnumerable<EventRequest> request)
         {
-            using(var requestMessage = new HttpRequestMessage())
+            using (var requestMessage = new HttpRequestMessage())
             {
                 requestMessage.Version = new Version(1, 0);
                 requestMessage.Method = HttpMethod.Post;
@@ -322,7 +322,7 @@ namespace Bit.Core.Services
                 {
                     throw new ApiException(HandleWebError(e));
                 }
-                if(!response.IsSuccessStatusCode)
+                if (!response.IsSuccessStatusCode)
                 {
                     var error = await HandleErrorAsync(response, false);
                     throw new ApiException(error);
@@ -347,7 +347,7 @@ namespace Bit.Core.Services
         public async Task<string> GetActiveBearerTokenAsync()
         {
             var accessToken = await _tokenService.GetTokenAsync();
-            if(_tokenService.TokenNeedsRefresh())
+            if (_tokenService.TokenNeedsRefresh())
             {
                 var tokenResponse = await DoRefreshTokenAsync();
                 accessToken = tokenResponse.AccessToken;
@@ -358,20 +358,20 @@ namespace Bit.Core.Services
         public async Task<TResponse> SendAsync<TRequest, TResponse>(HttpMethod method, string path, TRequest body,
             bool authed, bool hasResponse)
         {
-            using(var requestMessage = new HttpRequestMessage())
+            using (var requestMessage = new HttpRequestMessage())
             {
                 requestMessage.Version = new Version(1, 0);
                 requestMessage.Method = method;
                 requestMessage.RequestUri = new Uri(string.Concat(ApiBaseUrl, path));
-                if(body != null)
+                if (body != null)
                 {
                     var bodyType = body.GetType();
-                    if(bodyType == typeof(string))
+                    if (bodyType == typeof(string))
                     {
                         requestMessage.Content = new StringContent((object)bodyType as string, Encoding.UTF8,
                             "application/x-www-form-urlencoded; charset=utf-8");
                     }
-                    else if(bodyType == typeof(MultipartFormDataContent))
+                    else if (bodyType == typeof(MultipartFormDataContent))
                     {
                         requestMessage.Content = body as MultipartFormDataContent;
                     }
@@ -382,12 +382,12 @@ namespace Bit.Core.Services
                     }
                 }
 
-                if(authed)
+                if (authed)
                 {
                     var authHeader = await GetActiveBearerTokenAsync();
                     requestMessage.Headers.Add("Authorization", string.Concat("Bearer ", authHeader));
                 }
-                if(hasResponse)
+                if (hasResponse)
                 {
                     requestMessage.Headers.Add("Accept", "application/json");
                 }
@@ -401,12 +401,12 @@ namespace Bit.Core.Services
                 {
                     throw new ApiException(HandleWebError(e));
                 }
-                if(hasResponse && response.IsSuccessStatusCode)
+                if (hasResponse && response.IsSuccessStatusCode)
                 {
                     var responseJsonString = await response.Content.ReadAsStringAsync();
                     return JsonConvert.DeserializeObject<TResponse>(responseJsonString);
                 }
-                else if(!response.IsSuccessStatusCode)
+                else if (!response.IsSuccessStatusCode)
                 {
                     var error = await HandleErrorAsync(response, false);
                     throw new ApiException(error);
@@ -418,7 +418,7 @@ namespace Bit.Core.Services
         public async Task<IdentityTokenResponse> DoRefreshTokenAsync()
         {
             var refreshToken = await _tokenService.GetRefreshTokenAsync();
-            if(string.IsNullOrWhiteSpace(refreshToken))
+            if (string.IsNullOrWhiteSpace(refreshToken))
             {
                 throw new ApiException();
             }
@@ -447,7 +447,7 @@ namespace Bit.Core.Services
             {
                 throw new ApiException(HandleWebError(e));
             }
-            if(response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
             {
                 var responseJsonString = await response.Content.ReadAsStringAsync();
                 var tokenResponse = JsonConvert.DeserializeObject<IdentityTokenResponse>(responseJsonString);
@@ -472,14 +472,14 @@ namespace Bit.Core.Services
 
         private async Task<ErrorResponse> HandleErrorAsync(HttpResponseMessage response, bool tokenError)
         {
-            if((tokenError && response.StatusCode == HttpStatusCode.BadRequest) ||
+            if ((tokenError && response.StatusCode == HttpStatusCode.BadRequest) ||
                 response.StatusCode == HttpStatusCode.Unauthorized || response.StatusCode == HttpStatusCode.Forbidden)
             {
                 await _logoutCallbackAsync(true);
                 return null;
             }
             JObject responseJObject = null;
-            if(IsJsonResponse(response))
+            if (IsJsonResponse(response))
             {
                 var responseJsonString = await response.Content.ReadAsStringAsync();
                 responseJObject = JObject.Parse(responseJsonString);

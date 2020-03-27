@@ -8,11 +8,11 @@ namespace Bit.App.Pages
             bool first = false)
         {
             AddRange(groupItems);
-            if(string.IsNullOrWhiteSpace(name))
+            if (string.IsNullOrWhiteSpace(name))
             {
                 Name = "-";
             }
-            else if(doUpper)
+            else if (doUpper)
             {
                 Name = name.ToUpperInvariant();
             }

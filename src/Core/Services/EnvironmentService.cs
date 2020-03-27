@@ -29,11 +29,11 @@ namespace Bit.Core.Services
 
         public string GetWebVaultUrl()
         {
-            if(!string.IsNullOrWhiteSpace(WebVaultUrl))
+            if (!string.IsNullOrWhiteSpace(WebVaultUrl))
             {
                 return WebVaultUrl;
             }
-            else if(!string.IsNullOrWhiteSpace(BaseUrl))
+            else if (!string.IsNullOrWhiteSpace(BaseUrl))
             {
                 return BaseUrl;
             }
@@ -43,12 +43,12 @@ namespace Bit.Core.Services
         public async Task SetUrlsFromStorageAsync()
         {
             var urls = await _storageService.GetAsync<EnvironmentUrlData>(Constants.EnvironmentUrlsKey);
-            if(urls == null)
+            if (urls == null)
             {
                 urls = new EnvironmentUrlData();
             }
             var envUrls = new EnvironmentUrls();
-            if(!string.IsNullOrWhiteSpace(urls.Base))
+            if (!string.IsNullOrWhiteSpace(urls.Base))
             {
                 BaseUrl = envUrls.Base = urls.Base;
                 _apiService.SetUrls(envUrls);
@@ -82,7 +82,7 @@ namespace Bit.Core.Services
             EventsUrl = urls.Events;
 
             var envUrls = new EnvironmentUrls();
-            if(!string.IsNullOrWhiteSpace(BaseUrl))
+            if (!string.IsNullOrWhiteSpace(BaseUrl))
             {
                 envUrls.Base = BaseUrl;
             }
@@ -99,12 +99,12 @@ namespace Bit.Core.Services
 
         private string FormatUrl(string url)
         {
-            if(string.IsNullOrWhiteSpace(url))
+            if (string.IsNullOrWhiteSpace(url))
             {
                 return null;
             }
             url = Regex.Replace(url, "\\/+$", string.Empty);
-            if(!url.StartsWith("http://") && !url.StartsWith("https://"))
+            if (!url.StartsWith("http://") && !url.StartsWith("https://"))
             {
                 url = string.Concat("https://", url);
             }

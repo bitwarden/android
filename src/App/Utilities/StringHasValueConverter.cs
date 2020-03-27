@@ -8,13 +8,13 @@ namespace Bit.App.Utilities
         public object Convert(object value, Type targetType, object parameter,
             System.Globalization.CultureInfo culture)
         {
-            if(targetType == typeof(bool))
+            if (targetType == typeof(bool))
             {
-                if(value == null)
+                if (value == null)
                 {
                     return false;
                 }
-                if(value.GetType() == typeof(string))
+                if (value.GetType() == typeof(string))
                 {
                     return !string.IsNullOrWhiteSpace((string)value);
                 }

@@ -24,7 +24,7 @@ namespace Bit.App.Utilities
 
         public static string FormatPassword(string password)
         {
-            if(password == null)
+            if (password == null)
             {
                 return string.Empty;
             }
@@ -38,7 +38,7 @@ namespace Bit.App.Utilities
 
             // iOS won't hide the zero-width space char without these div attrs, but Android won't respect
             // display:inline-block and adds a newline after the password.  Hence, only iOS gets the div.
-            if(Device.RuntimePlatform == Device.iOS)
+            if (Device.RuntimePlatform == Device.iOS)
             {
                 result += "<div style=\"display:inline-block; align-items:center; justify-content:center; text-align:center; word-break:break-all; white-space:pre-wrap; min-width:0\">";
             }
@@ -47,15 +47,15 @@ namespace Bit.App.Utilities
             // state.
             var currentType = CharType.None;
 
-            foreach(var c in password)
+            foreach (var c in password)
             {
                 // First, identify what the current char is.
                 CharType charType;
-                if(char.IsLetter(c))
+                if (char.IsLetter(c))
                 {
                     charType = CharType.Normal;
                 }
-                else if(char.IsDigit(c))
+                else if (char.IsDigit(c))
                 {
                     charType = CharType.Number;
                 }
@@ -65,7 +65,7 @@ namespace Bit.App.Utilities
                 }
 
                 // If the char type changed, build a new span to append the text to.
-                if(charType != currentType)
+                if (charType != currentType)
                 {
                     // Close off previous span.
                     if (currentType != CharType.None)
@@ -77,7 +77,7 @@ namespace Bit.App.Utilities
 
                     // Switch the color if it is not a normal text. Otherwise leave the
                     // default value.
-                    switch(currentType)
+                    switch (currentType)
                     {
                         // Apply color style to span.
                         case CharType.Normal:
@@ -92,7 +92,7 @@ namespace Bit.App.Utilities
                     }
                 }
 
-                if(currentType == CharType.Special)
+                if (currentType == CharType.Special)
                 {
                     result += HttpUtility.HtmlEncode(c);
                 }
@@ -112,7 +112,7 @@ namespace Bit.App.Utilities
             }
             
             // Close off iOS div
-            if(Device.RuntimePlatform == Device.iOS)
+            if (Device.RuntimePlatform == Device.iOS)
             {
                 result += "</div>";
             }

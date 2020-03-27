@@ -32,19 +32,19 @@ namespace Bit.Core.Services
 
         public async Task<IEnumerable<Policy>> GetAll(PolicyType? type)
         {
-            if(_policyCache == null)
+            if (_policyCache == null)
             {
                 var userId = await _userService.GetUserIdAsync();
                 var policies = await _storageService.GetAsync<Dictionary<string, PolicyData>>(
                     string.Format(Keys_PoliciesPrefix, userId));
-                if(policies == null)
+                if (policies == null)
                 {
                     return null;
                 }
                 _policyCache = policies.Select(p => new Policy(policies[p.Key]));
             }
 
-            if(type != null)
+            if (type != null)
             {
                 return _policyCache.Where(p => p.Type == type).ToList();
             }

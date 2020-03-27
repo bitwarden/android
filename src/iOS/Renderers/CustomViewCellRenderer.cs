@@ -18,7 +18,7 @@ namespace Bit.iOS.Renderers
         public override UITableViewCell GetCell(Cell item, UITableViewCell reusableCell, UITableView tv)
         {
             var cell = base.GetCell(item, reusableCell, tv);
-            if(_noSelectionStyle)
+            if (_noSelectionStyle)
             {
                 cell.SelectionStyle = UITableViewCellSelectionStyle.None;
             }

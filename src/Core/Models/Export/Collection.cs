@@ -19,14 +19,14 @@ namespace Bit.Core.Models.Export
 
         public CollectionView ToView(Collection req, CollectionView view = null)
         {
-            if(view == null)
+            if (view == null)
             {
                 view = new CollectionView();
             }
 
             view.Name = req.Name;
             view.ExternalId = req.ExternalId;
-            if(view.OrganizationId == null)
+            if (view.OrganizationId == null)
             {
                 view.OrganizationId = req.OrganizationId;
             }

@@ -17,7 +17,7 @@ namespace Bit.Droid.Renderers
         protected override void OnElementChanged(ElementChangedEventArgs<ListView> e)
         {
             base.OnElementChanged(e);
-            if(Control != null && e.NewElement != null && e.NewElement is ExtendedListView listView)
+            if (Control != null && e.NewElement != null && e.NewElement is ExtendedListView listView)
             {
                 // Pad for FAB
                 Control.SetPadding(0, 0, 0, 170);

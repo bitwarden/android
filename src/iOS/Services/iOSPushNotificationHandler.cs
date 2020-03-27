@@ -25,11 +25,11 @@ namespace Bit.iOS.Services
             var json = DictionaryToJson(userInfo);
             var values = JObject.Parse(json);
             var keyAps = new NSString("aps");
-            if(userInfo.ContainsKey(keyAps) && userInfo.ValueForKey(keyAps) is NSDictionary aps)
+            if (userInfo.ContainsKey(keyAps) && userInfo.ValueForKey(keyAps) is NSDictionary aps)
             {
-                foreach(var apsKey in aps)
+                foreach (var apsKey in aps)
                 {
-                    if(!values.TryGetValue(apsKey.Key.ToString(), out JToken temp))
+                    if (!values.TryGetValue(apsKey.Key.ToString(), out JToken temp))
                     {
                         values.Add(apsKey.Key.ToString(), apsKey.Value.ToString());
                     }

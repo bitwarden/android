@@ -19,11 +19,11 @@ namespace Bit.Core.Utilities
         {
             get
             {
-                if(_uniqueInstance == null)
+                if (_uniqueInstance == null)
                 {
-                    lock(_syncObj)
+                    lock (_syncObj)
                     {
-                        if(_uniqueInstance == null)
+                        if (_uniqueInstance == null)
                         {
                             _uniqueInstance = new EEFLongWordList();
                         }
@@ -40,9 +40,9 @@ namespace Bit.Core.Utilities
             var assembly = typeof(EEFLongWordList).GetTypeInfo().Assembly;
             var stream = assembly.GetManifestResourceStream("Bit.Core.Resources.eff_long_word_list.txt");
             string line;
-            using(var reader = new StreamReader(stream))
+            using (var reader = new StreamReader(stream))
             {
-                while((line = reader.ReadLine()) != null)
+                while ((line = reader.ReadLine()) != null)
                 {
                     yield return line;
                 }

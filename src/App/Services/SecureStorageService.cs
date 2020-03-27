@@ -17,7 +17,7 @@ namespace Bit.App.Services
         {
             var formattedKey = string.Format(_keyFormat, key);
             var val = await Xamarin.Essentials.SecureStorage.GetAsync(formattedKey);
-            if(typeof(T) == typeof(string))
+            if (typeof(T) == typeof(string))
             {
                 return (T)(object)val;
             }
@@ -29,13 +29,13 @@ namespace Bit.App.Services
 
         public async Task SaveAsync<T>(string key, T obj)
         {
-            if(obj == null)
+            if (obj == null)
             {
                 await RemoveAsync(key);
                 return;
             }
             var formattedKey = string.Format(_keyFormat, key);
-            if(typeof(T) == typeof(string))
+            if (typeof(T) == typeof(string))
             {
                 await Xamarin.Essentials.SecureStorage.SetAsync(formattedKey, obj as string);
             }

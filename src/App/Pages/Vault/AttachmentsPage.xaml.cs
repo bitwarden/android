@@ -18,7 +18,7 @@ namespace Bit.App.Pages
             _vm.Page = this;
             _vm.CipherId = cipherId;
             SetActivityIndicator();
-            if(Device.RuntimePlatform == Device.Android)
+            if (Device.RuntimePlatform == Device.Android)
             {
                 ToolbarItems.RemoveAt(0);
             }
@@ -29,7 +29,7 @@ namespace Bit.App.Pages
             base.OnAppearing();
             _broadcasterService.Subscribe(nameof(AttachmentsPage), (message) =>
             {
-                if(message.Command == "selectFileResult")
+                if (message.Command == "selectFileResult")
                 {
                     Device.BeginInvokeOnMainThread(() =>
                     {
@@ -45,7 +45,7 @@ namespace Bit.App.Pages
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            if(Device.RuntimePlatform != Device.iOS)
+            if (Device.RuntimePlatform != Device.iOS)
             {
                 _broadcasterService.Unsubscribe(nameof(AttachmentsPage));
             }
@@ -53,7 +53,7 @@ namespace Bit.App.Pages
 
         private async void Save_Clicked(object sender, EventArgs e)
         {
-            if(DoOnce())
+            if (DoOnce())
             {
                 await _vm.SubmitAsync();
             }
@@ -61,7 +61,7 @@ namespace Bit.App.Pages
 
         private async void ChooseFile_Clicked(object sender, EventArgs e)
         {
-            if(DoOnce())
+            if (DoOnce())
             {
                 await _vm.ChooseFileAsync();
             }
@@ -69,7 +69,7 @@ namespace Bit.App.Pages
 
         private async void Close_Clicked(object sender, System.EventArgs e)
         {
-            if(DoOnce())
+            if (DoOnce())
             {
                 await Navigation.PopModalAsync();
             }

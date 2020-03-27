@@ -16,7 +16,7 @@ namespace Bit.Droid.Renderers
         protected override void OnElementChanged(ElementChangedEventArgs<SearchBar> e)
         {
             base.OnElementChanged(e);
-            if(Control != null && e.NewElement != null)
+            if (Control != null && e.NewElement != null)
             {
                 try
                 {

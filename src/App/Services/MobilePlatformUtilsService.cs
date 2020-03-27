@@ -40,12 +40,12 @@ namespace Bit.App.Services
         {
             _broadcasterService.Subscribe(nameof(MobilePlatformUtilsService), (message) =>
             {
-                if(message.Command == "showDialogResolve")
+                if (message.Command == "showDialogResolve")
                 {
                     var details = message.Data as Tuple<int, bool>;
                     var dialogId = details.Item1;
                     var confirmed = details.Item2;
-                    if(_showDialogResolves.ContainsKey(dialogId))
+                    if (_showDialogResolves.ContainsKey(dialogId))
                     {
                         var resolveObj = _showDialogResolves[dialogId].Item1;
                         resolveObj.TrySetResult(confirmed);
@@ -53,15 +53,15 @@ namespace Bit.App.Services
 
                     // Clean up old tasks
                     var deleteIds = new HashSet<int>();
-                    foreach(var item in _showDialogResolves)
+                    foreach (var item in _showDialogResolves)
                     {
                         var age = DateTime.UtcNow - item.Value.Item2;
-                        if(age.TotalMilliseconds > DialogPromiseExpiration)
+                        if (age.TotalMilliseconds > DialogPromiseExpiration)
                         {
                             deleteIds.Add(item.Key);
                         }
                     }
-                    foreach(var id in deleteIds)
+                    foreach (var id in deleteIds)
                     {
                         _showDialogResolves.Remove(id);
                     }
@@ -91,23 +91,23 @@ namespace Bit.App.Services
 
         public void LaunchUri(string uri, Dictionary<string, object> options = null)
         {
-            if((uri.StartsWith("http://") || uri.StartsWith("https://")) &&
+            if ((uri.StartsWith("http://") || uri.StartsWith("https://")) &&
                 Uri.TryCreate(uri, UriKind.Absolute, out var parsedUri))
             {
                 try
                 {
                     Browser.OpenAsync(uri, BrowserLaunchMode.External);
                 }
-                catch(FeatureNotSupportedException) { }
+                catch (FeatureNotSupportedException) { }
             }
             else
             {
                 var launched = false;
-                if(GetDevice() == Core.Enums.DeviceType.Android && uri.StartsWith("androidapp://"))
+                if (GetDevice() == Core.Enums.DeviceType.Android && uri.StartsWith("androidapp://"))
                 {
                     launched = _deviceActionService.LaunchApp(uri);
                 }
-                if(!launched && (options?.ContainsKey("page") ?? false))
+                if (!launched && (options?.ContainsKey("page") ?? false))
                 {
                     (options["page"] as Page).DisplayAlert(null, "", ""); // TODO
                 }
@@ -141,7 +141,7 @@ namespace Bit.App.Services
 
         public void ShowToast(string type, string title, string[] text, Dictionary<string, object> options = null)
         {
-            if(text.Length > 0)
+            if (text.Length > 0)
             {
                 var longDuration = options != null && options.ContainsKey("longDuration") ?
                     (bool)options["longDuration"] : false;
@@ -153,7 +153,7 @@ namespace Bit.App.Services
             string cancelText = null, string type = null)
         {
             var dialogId = 0;
-            lock(_random)
+            lock (_random)
             {
                 dialogId = _random.Next(0, int.MaxValue);
             }
@@ -186,7 +186,7 @@ namespace Bit.App.Services
             var clearMs = options != null && options.ContainsKey("clearMs") ? (int?)options["clearMs"] : null;
             var clearing = options != null && options.ContainsKey("clearing") ? (bool)options["clearing"] : false;
             await Clipboard.SetTextAsync(text);
-            if(!clearing)
+            if (!clearing)
             {
                 _messagingService.Send("copiedToClipboard", new Tuple<string, int?, bool>(text, clearMs, clearing));
             }
@@ -205,7 +205,7 @@ namespace Bit.App.Services
         public async Task<bool> AuthenticateBiometricAsync(string text = null, string fallbackText = null,
             Action fallback = null)
         {
-            if(_deviceActionService.UseNativeBiometric())
+            if (_deviceActionService.UseNativeBiometric())
             {
                 return await _deviceActionService.AuthenticateBiometricAsync(text);
             }
@@ -213,7 +213,7 @@ namespace Bit.App.Services
             {
                 try
                 {
-                    if(text == null)
+                    if (text == null)
                     {
                         var supportsFace = await _deviceActionService.SupportsFaceBiometricAsync();
                         text = supportsFace ? AppResources.FaceIDDirection : AppResources.FingerprintDirection;
@@ -224,11 +224,11 @@ namespace Bit.App.Services
                         FallbackTitle = fallbackText
                     };
                     var result = await CrossFingerprint.Current.AuthenticateAsync(fingerprintRequest);
-                    if(result.Authenticated)
+                    if (result.Authenticated)
                     {
                         return true;
                     }
-                    else if(result.Status == FingerprintAuthenticationResultStatus.FallbackRequested)
+                    else if (result.Status == FingerprintAuthenticationResultStatus.FallbackRequested)
                     {
                         fallback?.Invoke();
                     }

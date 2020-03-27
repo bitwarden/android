@@ -56,7 +56,7 @@ namespace Bit.Droid.Accessibility
             var settingsTask = LoadSettingsAsync();
             _broadcasterService.Subscribe(nameof(AccessibilityService), (message) =>
             {
-                if(message.Command == "OnAutofillTileClick")
+                if (message.Command == "OnAutofillTileClick")
                 {
                     var runnable = new Java.Lang.Runnable(OnAutofillTileClick);
                     _handler.PostDelayed(runnable, 250);
@@ -76,18 +76,18 @@ namespace Bit.Droid.Accessibility
             try
             {
                 var powerManager = GetSystemService(PowerService) as PowerManager;
-                if(Build.VERSION.SdkInt > BuildVersionCodes.KitkatWatch && !powerManager.IsInteractive)
+                if (Build.VERSION.SdkInt > BuildVersionCodes.KitkatWatch && !powerManager.IsInteractive)
                 {
                     return;
                 }
-                else if(Build.VERSION.SdkInt < BuildVersionCodes.Lollipop && !powerManager.IsScreenOn)
+                else if (Build.VERSION.SdkInt < BuildVersionCodes.Lollipop && !powerManager.IsScreenOn)
                 {
                     return;
                 }
 
-                if(SkipPackage(e?.PackageName))
+                if (SkipPackage(e?.PackageName))
                 {
-                    if(e?.PackageName != "com.android.systemui")
+                    if (e?.PackageName != "com.android.systemui")
                     {
                         CancelOverlayPrompt();
                     }
@@ -100,28 +100,28 @@ namespace Bit.Droid.Accessibility
                 var settingsTask = LoadSettingsAsync();
                 AccessibilityNodeInfo root = null;
 
-                switch(e.EventType)
+                switch (e.EventType)
                 {
                     case EventTypes.ViewFocused:
                     case EventTypes.ViewClicked:
-                        if(e.Source == null || e.PackageName == BitwardenPackage)
+                        if (e.Source == null || e.PackageName == BitwardenPackage)
                         {
                             CancelOverlayPrompt();
                             break;
                         }
 
                         root = RootInActiveWindow;
-                        if(root == null || root.PackageName != e.PackageName)
+                        if (root == null || root.PackageName != e.PackageName)
                         {
                             break;
                         }
 
-                        if(!(e.Source?.Password ?? false) && !AccessibilityHelpers.IsUsernameEditText(root, e))
+                        if (!(e.Source?.Password ?? false) && !AccessibilityHelpers.IsUsernameEditText(root, e))
                         {
                             CancelOverlayPrompt();
                             break;
                         }
-                        if(ScanAndAutofill(root, e))
+                        if (ScanAndAutofill(root, e))
                         {
                             CancelOverlayPrompt();
                         }
@@ -132,22 +132,22 @@ namespace Bit.Droid.Accessibility
                         break;
                     case EventTypes.WindowContentChanged:
                     case EventTypes.WindowStateChanged:
-                        if(AccessibilityHelpers.LastCredentials == null)
+                        if (AccessibilityHelpers.LastCredentials == null)
                         {
                             break;
                         }
-                        if(e.PackageName == BitwardenPackage)
+                        if (e.PackageName == BitwardenPackage)
                         {
                             CancelOverlayPrompt();
                             break;
                         }
 
                         root = RootInActiveWindow;
-                        if(root == null || root.PackageName != e.PackageName)
+                        if (root == null || root.PackageName != e.PackageName)
                         {
                             break;
                         }
-                        if(ScanAndAutofill(root, e))
+                        if (ScanAndAutofill(root, e))
                         {
                             CancelOverlayPrompt();
                         }
@@ -157,7 +157,7 @@ namespace Bit.Droid.Accessibility
                 }
             }
             // Suppress exceptions so that service doesn't crash.
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(">>> {0}: {1}", ex.GetType(), ex.StackTrace);
             }
@@ -172,12 +172,12 @@ namespace Bit.Droid.Accessibility
         {
             var filled = false;
             var passwordNodes = AccessibilityHelpers.GetWindowNodes(root, e, n => n.Password, false);
-            if(passwordNodes.Count > 0)
+            if (passwordNodes.Count > 0)
             {
                 var uri = AccessibilityHelpers.GetUri(root);
-                if(uri != null && !uri.Contains(BitwardenWebsite))
+                if (uri != null && !uri.Contains(BitwardenWebsite))
                 {
-                    if(AccessibilityHelpers.NeedToAutofill(AccessibilityHelpers.LastCredentials, uri))
+                    if (AccessibilityHelpers.NeedToAutofill(AccessibilityHelpers.LastCredentials, uri))
                     {
                         AccessibilityHelpers.GetNodesAndFill(root, e, passwordNodes);
                         filled = true;
@@ -186,7 +186,7 @@ namespace Bit.Droid.Accessibility
                 }
                 AccessibilityHelpers.LastCredentials = null;
             }
-            else if(AccessibilityHelpers.LastCredentials != null)
+            else if (AccessibilityHelpers.LastCredentials != null)
             {
                 Task.Run(async () =>
                 {
@@ -203,12 +203,12 @@ namespace Bit.Droid.Accessibility
             CancelOverlayPrompt();
             
             var root = RootInActiveWindow;
-            if(root != null && root.PackageName != BitwardenPackage &&
+            if (root != null && root.PackageName != BitwardenPackage &&
                root.PackageName != AccessibilityHelpers.SystemUiPackage &&
                !SkipPackage(root.PackageName))
             {
                 var uri = AccessibilityHelpers.GetUri(root);
-                if(!string.IsNullOrWhiteSpace(uri))
+                if (!string.IsNullOrWhiteSpace(uri))
                 {
                     var intent = new Intent(this, typeof(AccessibilityActivity));
                     intent.PutExtra("uri", uri);
@@ -225,7 +225,7 @@ namespace Bit.Droid.Accessibility
         {
             _overlayAnchorObserverRunning = false;
 
-            if(_windowManager != null && _overlayView != null)
+            if (_windowManager != null && _overlayView != null)
             {
                 try
                 {
@@ -240,7 +240,7 @@ namespace Bit.Droid.Accessibility
             _lastAnchorY = 0;
             _isOverlayAboveAnchor = false;
 
-            if(_anchorNode != null)
+            if (_anchorNode != null)
             {
                 _anchorNode.Recycle();
                 _anchorNode = null;
@@ -249,9 +249,9 @@ namespace Bit.Droid.Accessibility
 
         private void OverlayPromptToAutofill(AccessibilityNodeInfo root, AccessibilityEvent e)
         {
-            if(!AccessibilityHelpers.OverlayPermitted())
+            if (!AccessibilityHelpers.OverlayPermitted())
             {
-                if(!AccessibilityHelpers.IsAutofillTileAdded)
+                if (!AccessibilityHelpers.IsAutofillTileAdded)
                 {
                     // The user has the option of only using the autofill tile and leaving the overlay permission
                     // disabled, so only show this toast if they're using accessibility without overlay permission and
@@ -262,23 +262,23 @@ namespace Bit.Droid.Accessibility
                 return;
             }
 
-            if(_overlayView != null || _anchorNode != null || _overlayAnchorObserverRunning)
+            if (_overlayView != null || _anchorNode != null || _overlayAnchorObserverRunning)
             {
                 CancelOverlayPrompt();
             }
 
-            if(Java.Lang.JavaSystem.CurrentTimeMillis() - _lastAutoFillTime < 1000)
+            if (Java.Lang.JavaSystem.CurrentTimeMillis() - _lastAutoFillTime < 1000)
             {
                 return;
             }
 
             var uri = AccessibilityHelpers.GetUri(root);
             var fillable = !string.IsNullOrWhiteSpace(uri);
-            if(fillable)
+            if (fillable)
             {
-                if(_blacklistedUris != null && _blacklistedUris.Any())
+                if (_blacklistedUris != null && _blacklistedUris.Any())
                 {
-                    if(Uri.TryCreate(uri, UriKind.Absolute, out var parsedUri) && parsedUri.Scheme.StartsWith("http"))
+                    if (Uri.TryCreate(uri, UriKind.Absolute, out var parsedUri) && parsedUri.Scheme.StartsWith("http"))
                     {
                         fillable = !_blacklistedUris.Contains(
                             string.Format("{0}://{1}", parsedUri.Scheme, parsedUri.Host));
@@ -289,7 +289,7 @@ namespace Bit.Droid.Accessibility
                     }
                 }
             }
-            if(!fillable)
+            if (!fillable)
             {
                 return;
             }
@@ -314,7 +314,7 @@ namespace Bit.Droid.Accessibility
             layoutParams.X = anchorPosition.X;
             layoutParams.Y = anchorPosition.Y;
 
-            if(_windowManager == null)
+            if (_windowManager == null)
             {
                 _windowManager = GetSystemService(WindowService).JavaCast<IWindowManager>();
             }
@@ -333,7 +333,7 @@ namespace Bit.Droid.Accessibility
 
         private void StartOverlayAnchorObserver()
         {
-            if(_overlayAnchorObserverRunning)
+            if (_overlayAnchorObserverRunning)
             {
                 return;
             }
@@ -341,7 +341,7 @@ namespace Bit.Droid.Accessibility
             _overlayAnchorObserverRunning = true;
             _overlayAnchorObserverRunnable = new Java.Lang.Runnable(() =>
             {
-                if(_overlayAnchorObserverRunning)
+                if (_overlayAnchorObserverRunning)
                 {
                     AdjustOverlayForScroll();
                     _handler.PostDelayed(_overlayAnchorObserverRunnable, 250);
@@ -353,7 +353,7 @@ namespace Bit.Droid.Accessibility
 
         private void AdjustOverlayForScroll()
         {
-            if(_overlayView == null || _anchorNode == null)
+            if (_overlayView == null || _anchorNode == null)
             {
                 CancelOverlayPrompt();
                 return;
@@ -361,42 +361,42 @@ namespace Bit.Droid.Accessibility
 
             var root = RootInActiveWindow;
             IEnumerable<AccessibilityWindowInfo> windows = null;
-            if(Build.VERSION.SdkInt > BuildVersionCodes.Kitkat)
+            if (Build.VERSION.SdkInt > BuildVersionCodes.Kitkat)
             {
                 windows = Windows;
             }
 
             var anchorPosition = AccessibilityHelpers.GetOverlayAnchorPosition(_anchorNode, root, windows,
                 _overlayViewHeight, _isOverlayAboveAnchor);
-            if(anchorPosition == null)
+            if (anchorPosition == null)
             {
                 CancelOverlayPrompt();
                 return;
             }
-            else if(anchorPosition.X == -1 && anchorPosition.Y == -1)
+            else if (anchorPosition.X == -1 && anchorPosition.Y == -1)
             {
-                if(_overlayView.Visibility != ViewStates.Gone)
+                if (_overlayView.Visibility != ViewStates.Gone)
                 {
                     _overlayView.Visibility = ViewStates.Gone;
                     System.Diagnostics.Debug.WriteLine(">>> Accessibility Overlay View Hidden");
                 }
                 return;
             }
-            else if(anchorPosition.X == -1)
+            else if (anchorPosition.X == -1)
             {
                 _isOverlayAboveAnchor = false;
                 System.Diagnostics.Debug.WriteLine(">>> Accessibility Overlay View Below Anchor");
                 return;
             }
-            else if(anchorPosition.Y == -1)
+            else if (anchorPosition.Y == -1)
             {
                 _isOverlayAboveAnchor = true;
                 System.Diagnostics.Debug.WriteLine(">>> Accessibility Overlay View Above Anchor");
                 return;
             }
-            else if(anchorPosition.X == _lastAnchorX && anchorPosition.Y == _lastAnchorY)
+            else if (anchorPosition.X == _lastAnchorX && anchorPosition.Y == _lastAnchorY)
             {
-                if(_overlayView.Visibility != ViewStates.Visible)
+                if (_overlayView.Visibility != ViewStates.Visible)
                 {
                     _overlayView.Visibility = ViewStates.Visible;
                 }
@@ -412,7 +412,7 @@ namespace Bit.Droid.Accessibility
 
             _windowManager.UpdateViewLayout(_overlayView, layoutParams);
 
-            if(_overlayView.Visibility != ViewStates.Visible)
+            if (_overlayView.Visibility != ViewStates.Visible)
             {
                 _overlayView.Visibility = ViewStates.Visible;
             }
@@ -423,13 +423,13 @@ namespace Bit.Droid.Accessibility
 
         private bool SkipPackage(string eventPackageName)
         {
-            if(string.IsNullOrWhiteSpace(eventPackageName) ||
+            if (string.IsNullOrWhiteSpace(eventPackageName) ||
                 AccessibilityHelpers.FilteredPackageNames.Contains(eventPackageName) ||
                 eventPackageName.Contains("launcher"))
             {
                 return true;
             }
-            if(_launcherPackageNames == null || _lastLauncherSetBuilt == null ||
+            if (_launcherPackageNames == null || _lastLauncherSetBuilt == null ||
                 (DateTime.Now - _lastLauncherSetBuilt.Value) > _rebuildLauncherSpan)
             {
                 // refresh launcher list every now and then
@@ -444,11 +444,11 @@ namespace Bit.Droid.Accessibility
 
         private void LoadServices()
         {
-            if(_storageService == null)
+            if (_storageService == null)
             {
                 _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             }
-            if(_broadcasterService == null)
+            if (_broadcasterService == null)
             {
                 _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             }
@@ -457,11 +457,11 @@ namespace Bit.Droid.Accessibility
         private async Task LoadSettingsAsync()
         {
             var now = DateTime.UtcNow;
-            if(_lastSettingsReload == null || (now - _lastSettingsReload.Value) > _settingsReloadSpan)
+            if (_lastSettingsReload == null || (now - _lastSettingsReload.Value) > _settingsReloadSpan)
             {
                 _lastSettingsReload = now;
                 var uris = await _storageService.GetAsync<List<string>>(Constants.AutofillBlacklistedUrisKey);
-                if(uris != null)
+                if (uris != null)
                 {
                     _blacklistedUris = new HashSet<string>(uris);
                 }
