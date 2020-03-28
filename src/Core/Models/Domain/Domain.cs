@@ -12,12 +12,12 @@ namespace Bit.Core.Models.Domain
         {
             var domainType = domain.GetType();
             var dataObjType = dataObj.GetType();
-            foreach(var prop in map)
+            foreach (var prop in map)
             {
                 var dataObjPropInfo = dataObjType.GetProperty(prop);
                 var dataObjProp = dataObjPropInfo.GetValue(dataObj);
                 var domainPropInfo = domainType.GetProperty(prop);
-                if(alreadyEncrypted || (notEncList?.Contains(prop) ?? false))
+                if (alreadyEncrypted || (notEncList?.Contains(prop) ?? false))
                 {
                     domainPropInfo.SetValue(domain, dataObjProp, null);
                 }
@@ -36,12 +36,12 @@ namespace Bit.Core.Models.Domain
         {
             var domainType = domain.GetType();
             var dataObjType = dataObj.GetType();
-            foreach(var prop in map)
+            foreach (var prop in map)
             {
                 var domainPropInfo = domainType.GetProperty(prop);
                 var domainProp = domainPropInfo.GetValue(domain);
                 var dataObjPropInfo = dataObjType.GetProperty(prop);
-                if(notCipherStringList?.Contains(prop) ?? false)
+                if (notCipherStringList?.Contains(prop) ?? false)
                 {
                     dataObjPropInfo.SetValue(dataObj, domainProp, null);
                 }
@@ -62,7 +62,7 @@ namespace Bit.Core.Models.Domain
             {
                 var domainPropInfo = domainType.GetProperty(propName);
                 string val = null;
-                if(domainPropInfo.GetValue(domain) is CipherString domainProp)
+                if (domainPropInfo.GetValue(domain) is CipherString domainProp)
                 {
                     val = await domainProp.DecryptAsync(orgId);
                 }
@@ -71,7 +71,7 @@ namespace Bit.Core.Models.Domain
             };
 
             var tasks = new List<Task>();
-            foreach(var prop in map)
+            foreach (var prop in map)
             {
                 tasks.Add(decCsAndSetDec(prop));
             }

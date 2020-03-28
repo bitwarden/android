@@ -31,26 +31,26 @@ namespace Bit.Droid.Autofill
             HtmlInfo = node.HtmlInfo;
             Node = node;
 
-            if(node.AutofillValue != null)
+            if (node.AutofillValue != null)
             {
-                if(node.AutofillValue.IsList)
+                if (node.AutofillValue.IsList)
                 {
                     var autofillOptions = node.GetAutofillOptions();
-                    if(autofillOptions != null && autofillOptions.Length > 0)
+                    if (autofillOptions != null && autofillOptions.Length > 0)
                     {
                         ListValue = node.AutofillValue.ListValue;
                         TextValue = autofillOptions[node.AutofillValue.ListValue];
                     }
                 }
-                else if(node.AutofillValue.IsDate)
+                else if (node.AutofillValue.IsDate)
                 {
                     DateValue = node.AutofillValue.DateValue;
                 }
-                else if(node.AutofillValue.IsText)
+                else if (node.AutofillValue.IsText)
                 {
                     TextValue = node.AutofillValue.TextValue;
                 }
-                else if(node.AutofillValue.IsToggle)
+                else if (node.AutofillValue.IsToggle)
                 {
                     ToggleValue = node.AutofillValue.ToggleValue;
                 }
@@ -93,20 +93,20 @@ namespace Bit.Droid.Autofill
 
         public override bool Equals(object obj)
         {
-            if(this == obj)
+            if (this == obj)
             {
                 return true;
             }
-            if(obj == null || GetType() != obj.GetType())
+            if (obj == null || GetType() != obj.GetType())
             {
                 return false;
             }
             var field = obj as Field;
-            if(TextValue != null ? !TextValue.Equals(field.TextValue) : field.TextValue != null)
+            if (TextValue != null ? !TextValue.Equals(field.TextValue) : field.TextValue != null)
             {
                 return false;
             }
-            if(DateValue != null ? !DateValue.Equals(field.DateValue) : field.DateValue != null)
+            if (DateValue != null ? !DateValue.Equals(field.DateValue) : field.DateValue != null)
             {
                 return false;
             }
@@ -128,7 +128,7 @@ namespace Bit.Droid.Autofill
 
         private static bool IsValidHint(string hint)
         {
-            switch(hint)
+            switch (hint)
             {
                 case View.AutofillHintCreditCardExpirationDate:
                 case View.AutofillHintCreditCardExpirationDay:
@@ -152,14 +152,14 @@ namespace Bit.Droid.Autofill
         private void UpdateSaveTypeFromHints()
         {
             SaveType = SaveDataType.Generic;
-            if(_hints == null)
+            if (_hints == null)
             {
                 return;
             }
 
-            foreach(var hint in _hints)
+            foreach (var hint in _hints)
             {
-                switch(hint)
+                switch (hint)
                 {
                     case View.AutofillHintCreditCardExpirationDate:
                     case View.AutofillHintCreditCardExpirationDay:

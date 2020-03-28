@@ -6,7 +6,7 @@ namespace Bit.App.Models
     {
         public PlatformCulture(string platformCultureString)
         {
-            if(string.IsNullOrWhiteSpace(platformCultureString))
+            if (string.IsNullOrWhiteSpace(platformCultureString))
             {
                 throw new ArgumentException("Expected culture identifier.", nameof(platformCultureString));
             }
@@ -14,7 +14,7 @@ namespace Bit.App.Models
             // .NET expects dash, not underscore
             PlatformString = platformCultureString.Replace("_", "-");
             var dashIndex = PlatformString.IndexOf("-", StringComparison.Ordinal);
-            if(dashIndex > 0)
+            if (dashIndex > 0)
             {
                 var parts = PlatformString.Split('-');
                 LanguageCode = parts[0];

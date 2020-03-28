@@ -21,7 +21,7 @@ namespace Bit.App.Pages
             _themePicker.ItemDisplayBinding = new Binding("Value");
             _uriMatchPicker.ItemDisplayBinding = new Binding("Value");
             _clearClipboardPicker.ItemDisplayBinding = new Binding("Value");
-            if(Device.RuntimePlatform == Device.Android)
+            if (Device.RuntimePlatform == Device.Android)
             {
                 ToolbarItems.RemoveAt(0);
                 _vm.ShowAndroidAutofillSettings = _deviceActionService.SupportsAutofillService();
@@ -55,7 +55,7 @@ namespace Bit.App.Pages
 
         private async void Close_Clicked(object sender, System.EventArgs e)
         {
-            if(DoOnce())
+            if (DoOnce())
             {
                 await Navigation.PopModalAsync();
             }

@@ -36,7 +36,7 @@ namespace Bit.Core.Services
             var leakedHashes = await response.Content.ReadAsStringAsync();
             var match = leakedHashes.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None)
                 .FirstOrDefault(v => v.Split(':')[0] == hashEnding);
-            if(match != null && int.TryParse(match.Split(':')[1], out var matchCount))
+            if (match != null && int.TryParse(match.Split(':')[1], out var matchCount))
             {
                 return matchCount;
             }
@@ -49,9 +49,9 @@ namespace Bit.Core.Services
             {
                 return await _apiService.GetHibpBreachAsync(username);
             }
-            catch(ApiException e)
+            catch (ApiException e)
             {
-                if(e.Error != null && e.Error.StatusCode == System.Net.HttpStatusCode.NotFound)
+                if (e.Error != null && e.Error.StatusCode == System.Net.HttpStatusCode.NotFound)
                 {
                     return new List<BreachAccountResponse>();
                 }

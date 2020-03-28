@@ -20,7 +20,7 @@ namespace Bit.iOS.Renderers
         {
             base.OnElementChanged(e);
 
-            if(Control == null)
+            if (Control == null)
             {
                 _userController = new WKUserContentController();
                 var script = new WKUserScript(new NSString(JSFunction), WKUserScriptInjectionTime.AtDocumentEnd, false);
@@ -31,16 +31,16 @@ namespace Bit.iOS.Renderers
                 var webView = new WKWebView(Frame, config);
                 SetNativeControl(webView);
             }
-            if(e.OldElement != null)
+            if (e.OldElement != null)
             {
                 _userController.RemoveAllUserScripts();
                 _userController.RemoveScriptMessageHandler("invokeAction");
                 var hybridWebView = e.OldElement as HybridWebView;
                 hybridWebView.Cleanup();
             }
-            if(e.NewElement != null)
+            if (e.NewElement != null)
             {
-                if(Element.Uri != null)
+                if (Element.Uri != null)
                 {
                     Control.LoadRequest(new NSUrlRequest(new NSUrl(Element.Uri)));
                 }
@@ -50,7 +50,7 @@ namespace Bit.iOS.Renderers
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             base.OnElementPropertyChanged(sender, e);
-            if(e.PropertyName == HybridWebView.UriProperty.PropertyName && Element.Uri != null)
+            if (e.PropertyName == HybridWebView.UriProperty.PropertyName && Element.Uri != null)
             {
                 Control.LoadRequest(new NSUrlRequest(new NSUrl(Element.Uri)));
             }

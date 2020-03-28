@@ -16,12 +16,12 @@ namespace Bit.Droid.Push
     {
         public async override void OnMessageReceived(RemoteMessage message)
         {
-            if(message?.Data == null)
+            if (message?.Data == null)
             {
                 return;
             }
             var data = message.Data.ContainsKey("data") ? message.Data["data"] : null;
-            if(data == null)
+            if (data == null)
             {
                 return;
             }
@@ -32,7 +32,7 @@ namespace Bit.Droid.Push
                     "pushNotificationListenerService");
                 await listener.OnMessageAsync(obj, Device.Android);
             }
-            catch(JsonReaderException ex)
+            catch (JsonReaderException ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.ToString());
             }

@@ -17,7 +17,7 @@ namespace Bit.Core.Models.Request
             Notes = cipher.Notes?.EncryptedString;
             Favorite = cipher.Favorite;
 
-            switch(Type)
+            switch (Type)
             {
                 case CipherType.Login:
                     Login = new LoginApi
@@ -87,11 +87,11 @@ namespace Bit.Core.Models.Request
                 LastUsedDate = ph.LastUsedDate
             }).ToList();
 
-            if(cipher.Attachments != null)
+            if (cipher.Attachments != null)
             {
                 Attachments = new Dictionary<string, string>();
                 Attachments2 = new Dictionary<string, AttachmentRequest>();
-                foreach(var attachment in cipher.Attachments)
+                foreach (var attachment in cipher.Attachments)
                 {
                     var fileName = attachment.FileName?.EncryptedString;
                     Attachments.Add(attachment.Id, fileName);

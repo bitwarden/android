@@ -12,11 +12,11 @@ namespace Bit.Droid.Effects
     {
         protected override void OnAttached()
         {
-            if(!(Container.GetChildAt(0) is ViewGroup layout))
+            if (!(Container.GetChildAt(0) is ViewGroup layout))
             {
                 return;
             }
-            if(!(layout.GetChildAt(1) is BottomNavigationView bottomNavigationView))
+            if (!(layout.GetChildAt(1) is BottomNavigationView bottomNavigationView))
             {
                 return;
             }

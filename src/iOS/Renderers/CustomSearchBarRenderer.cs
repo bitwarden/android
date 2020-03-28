@@ -11,7 +11,7 @@ namespace Bit.iOS.Renderers
         protected override void OnElementChanged(ElementChangedEventArgs<SearchBar> e)
         {
             base.OnElementChanged(e);
-            if(e.NewElement is SearchBar)
+            if (e.NewElement is SearchBar)
             {
                 UpdateKeyboardAppearance();
             }
@@ -19,7 +19,7 @@ namespace Bit.iOS.Renderers
 
         private void UpdateKeyboardAppearance()
         {
-            if(!Core.Utilities.ThemeHelpers.LightTheme)
+            if (!Core.Utilities.ThemeHelpers.LightTheme)
             {
                 Control.KeyboardAppearance = UIKeyboardAppearance.Dark;
             }

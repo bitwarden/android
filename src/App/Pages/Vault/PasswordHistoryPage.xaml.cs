@@ -14,7 +14,7 @@ namespace Bit.App.Pages
             _vm = BindingContext as PasswordHistoryPageViewModel;
             _vm.Page = this;
             _vm.CipherId = cipherId;
-            if(Device.RuntimePlatform == Device.Android)
+            if (Device.RuntimePlatform == Device.Android)
             {
                 ToolbarItems.RemoveAt(0);
             }
@@ -30,7 +30,7 @@ namespace Bit.App.Pages
 
         private async void Close_Clicked(object sender, System.EventArgs e)
         {
-            if(DoOnce())
+            if (DoOnce())
             {
                 await Navigation.PopModalAsync();
             }

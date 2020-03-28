@@ -15,7 +15,7 @@ namespace Bit.Core.Services
 
         public Task SaveAsync<T>(string key, T obj)
         {
-            if(_state.ContainsKey(key))
+            if (_state.ContainsKey(key))
             {
                 _state[key] = obj;
             }
@@ -28,7 +28,7 @@ namespace Bit.Core.Services
 
         public Task RemoveAsync(string key)
         {
-            if(_state.ContainsKey(key))
+            if (_state.ContainsKey(key))
             {
                 _state.Remove(key);
             }

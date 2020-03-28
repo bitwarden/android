@@ -45,7 +45,7 @@ namespace Bit.Core.Services
         {
             // Overload defaults with given options
             options.Merge(_defaultOptions);
-            if(options.Type == "passphrase")
+            if (options.Type == "passphrase")
             {
                 return await GeneratePassphraseAsync(options);
             }
@@ -54,35 +54,35 @@ namespace Bit.Core.Services
             SanitizePasswordLength(options, true);
 
             var positionsBuilder = new StringBuilder();
-            if(options.Lowercase.GetValueOrDefault() && options.MinLowercase.GetValueOrDefault() > 0)
+            if (options.Lowercase.GetValueOrDefault() && options.MinLowercase.GetValueOrDefault() > 0)
             {
-                for(int i = 0; i < options.MinLowercase.GetValueOrDefault(); i++)
+                for (int i = 0; i < options.MinLowercase.GetValueOrDefault(); i++)
                 {
                     positionsBuilder.Append("l");
                 }
             }
-            if(options.Uppercase.GetValueOrDefault() && options.MinUppercase.GetValueOrDefault() > 0)
+            if (options.Uppercase.GetValueOrDefault() && options.MinUppercase.GetValueOrDefault() > 0)
             {
-                for(int i = 0; i < options.MinUppercase.GetValueOrDefault(); i++)
+                for (int i = 0; i < options.MinUppercase.GetValueOrDefault(); i++)
                 {
                     positionsBuilder.Append("u");
                 }
             }
-            if(options.Number.GetValueOrDefault() && options.MinNumber.GetValueOrDefault() > 0)
+            if (options.Number.GetValueOrDefault() && options.MinNumber.GetValueOrDefault() > 0)
             {
-                for(int i = 0; i < options.MinNumber.GetValueOrDefault(); i++)
+                for (int i = 0; i < options.MinNumber.GetValueOrDefault(); i++)
                 {
                     positionsBuilder.Append("n");
                 }
             }
-            if(options.Special.GetValueOrDefault() && options.MinSpecial.GetValueOrDefault() > 0)
+            if (options.Special.GetValueOrDefault() && options.MinSpecial.GetValueOrDefault() > 0)
             {
-                for(int i = 0; i < options.MinSpecial.GetValueOrDefault(); i++)
+                for (int i = 0; i < options.MinSpecial.GetValueOrDefault(); i++)
                 {
                     positionsBuilder.Append("s");
                 }
             }
-            while(positionsBuilder.Length < options.Length.GetValueOrDefault())
+            while (positionsBuilder.Length < options.Length.GetValueOrDefault())
             {
                 positionsBuilder.Append("a");
             }
@@ -94,46 +94,46 @@ namespace Bit.Core.Services
             // Build out other character sets
             var allCharSet = string.Empty;
             var lowercaseCharSet = LowercaseCharSet;
-            if(options.Ambiguous.GetValueOrDefault())
+            if (options.Ambiguous.GetValueOrDefault())
             {
                 lowercaseCharSet = string.Concat(lowercaseCharSet, "l");
             }
-            if(options.Lowercase.GetValueOrDefault())
+            if (options.Lowercase.GetValueOrDefault())
             {
                 allCharSet = string.Concat(allCharSet, lowercaseCharSet);
             }
 
             var uppercaseCharSet = UppercaseCharSet;
-            if(options.Ambiguous.GetValueOrDefault())
+            if (options.Ambiguous.GetValueOrDefault())
             {
                 uppercaseCharSet = string.Concat(uppercaseCharSet, "IO");
             }
-            if(options.Uppercase.GetValueOrDefault())
+            if (options.Uppercase.GetValueOrDefault())
             {
                 allCharSet = string.Concat(allCharSet, uppercaseCharSet);
             }
 
             var numberCharSet = NumberCharSet;
-            if(options.Ambiguous.GetValueOrDefault())
+            if (options.Ambiguous.GetValueOrDefault())
             {
                 numberCharSet = string.Concat(numberCharSet, "01");
             }
-            if(options.Number.GetValueOrDefault())
+            if (options.Number.GetValueOrDefault())
             {
                 allCharSet = string.Concat(allCharSet, numberCharSet);
             }
 
             var specialCharSet = SpecialCharSet;
-            if(options.Special.GetValueOrDefault())
+            if (options.Special.GetValueOrDefault())
             {
                 allCharSet = string.Concat(allCharSet, specialCharSet);
             }
 
             var password = new StringBuilder();
-            for(var i = 0; i < options.Length.GetValueOrDefault(); i++)
+            for (var i = 0; i < options.Length.GetValueOrDefault(); i++)
             {
                 var positionChars = string.Empty;
-                switch(positions[i])
+                switch (positions[i])
                 {
                     case 'l':
                         positionChars = lowercaseCharSet;
@@ -162,28 +162,28 @@ namespace Bit.Core.Services
         public async Task<string> GeneratePassphraseAsync(PasswordGenerationOptions options)
         {
             options.Merge(_defaultOptions);
-            if(options.NumWords.GetValueOrDefault() <= 2)
+            if (options.NumWords.GetValueOrDefault() <= 2)
             {
                 options.NumWords = _defaultOptions.NumWords;
             }
-            if(options.WordSeparator == null || options.WordSeparator.Length == 0 || options.WordSeparator.Length > 1)
+            if (options.WordSeparator == null || options.WordSeparator.Length == 0 || options.WordSeparator.Length > 1)
             {
                 options.WordSeparator = " ";
             }
-            if(options.Capitalize == null)
+            if (options.Capitalize == null)
             {
                 options.Capitalize = false;
             }
-            if(options.IncludeNumber == null)
+            if (options.IncludeNumber == null)
             {
                 options.IncludeNumber = false;
             }
             var listLength = EEFLongWordList.Instance.List.Count - 1;
             var wordList = new List<string>();
-            for(int i = 0; i < options.NumWords.GetValueOrDefault(); i++)
+            for (int i = 0; i < options.NumWords.GetValueOrDefault(); i++)
             {
                 var wordIndex = await _cryptoService.RandomNumberAsync(0, listLength);
-                if(options.Capitalize.GetValueOrDefault())
+                if (options.Capitalize.GetValueOrDefault())
                 {
                     wordList.Add(Capitalize(EEFLongWordList.Instance.List[wordIndex]));
                 }
@@ -192,7 +192,7 @@ namespace Bit.Core.Services
                     wordList.Add(EEFLongWordList.Instance.List[wordIndex]);
                 }
             }
-            if(options.IncludeNumber.GetValueOrDefault())
+            if (options.IncludeNumber.GetValueOrDefault())
             {
                 await AppendRandomNumberToRandomWordAsync(wordList);
             }
@@ -201,10 +201,10 @@ namespace Bit.Core.Services
 
         public async Task<(PasswordGenerationOptions, PasswordGeneratorPolicyOptions)> GetOptionsAsync()
         {
-            if(_optionsCache == null)
+            if (_optionsCache == null)
             {
                 var options = await _storageService.GetAsync<PasswordGenerationOptions>(Keys_Options);
-                if(options == null)
+                if (options == null)
                 {
                     _optionsCache = _defaultOptions;
                 }
@@ -225,66 +225,66 @@ namespace Bit.Core.Services
             EnforcePasswordGeneratorPoliciesOnOptionsAsync(PasswordGenerationOptions options)
         {
             var enforcedPolicyOptions = await GetPasswordGeneratorPolicyOptions();
-            if(enforcedPolicyOptions != null)
+            if (enforcedPolicyOptions != null)
             {
-                if(options.Length < enforcedPolicyOptions.MinLength)
+                if (options.Length < enforcedPolicyOptions.MinLength)
                 {
                     options.Length = enforcedPolicyOptions.MinLength;
                 }
 
-                if(enforcedPolicyOptions.UseUppercase)
+                if (enforcedPolicyOptions.UseUppercase)
                 {
                     options.Uppercase = true;
                 }
 
-                if(enforcedPolicyOptions.UseLowercase)
+                if (enforcedPolicyOptions.UseLowercase)
                 {
                     options.Lowercase = true;
                 }
 
-                if(enforcedPolicyOptions.UseNumbers)
+                if (enforcedPolicyOptions.UseNumbers)
                 {
                     options.Number = true;
                 }
 
-                if(options.MinNumber < enforcedPolicyOptions.NumberCount)
+                if (options.MinNumber < enforcedPolicyOptions.NumberCount)
                 {
                     options.MinNumber = enforcedPolicyOptions.NumberCount;
                 }
 
-                if(enforcedPolicyOptions.UseSpecial)
+                if (enforcedPolicyOptions.UseSpecial)
                 {
                     options.Special = true;
                 }
 
-                if(options.MinSpecial < enforcedPolicyOptions.SpecialCount)
+                if (options.MinSpecial < enforcedPolicyOptions.SpecialCount)
                 {
                     options.MinSpecial = enforcedPolicyOptions.SpecialCount;
                 }
 
                 // Must normalize these fields because the receiving call expects all options to pass the current rules
-                if(options.MinSpecial + options.MinNumber > options.Length)
+                if (options.MinSpecial + options.MinNumber > options.Length)
                 {
                     options.MinSpecial = options.Length - options.MinNumber;
                 }
 
-                if(options.NumWords < enforcedPolicyOptions.MinNumberOfWords)
+                if (options.NumWords < enforcedPolicyOptions.MinNumberOfWords)
                 {
                     options.NumWords = enforcedPolicyOptions.MinNumberOfWords;
                 }
 
-                if(enforcedPolicyOptions.Capitalize)
+                if (enforcedPolicyOptions.Capitalize)
                 {
                     options.Capitalize = true;
                 }
 
-                if(enforcedPolicyOptions.IncludeNumber)
+                if (enforcedPolicyOptions.IncludeNumber)
                 {
                     options.IncludeNumber = true;
                 }
 
                 // Force default type if password/passphrase selected via policy
-                if(enforcedPolicyOptions.DefaultType == "password" || enforcedPolicyOptions.DefaultType == "passphrase")
+                if (enforcedPolicyOptions.DefaultType == "password" || enforcedPolicyOptions.DefaultType == "passphrase")
                 {
                     options.Type = enforcedPolicyOptions.DefaultType;
                 }
@@ -303,85 +303,85 @@ namespace Bit.Core.Services
             var policies = await _policyService.GetAll(PolicyType.PasswordGenerator);
             PasswordGeneratorPolicyOptions enforcedOptions = null;
 
-            if(policies == null || !policies.Any())
+            if (policies == null || !policies.Any())
             {
                 return enforcedOptions;
             }
 
-            foreach(var currentPolicy in policies)
+            foreach (var currentPolicy in policies)
             {
-                if(!currentPolicy.Enabled || currentPolicy.Data == null)
+                if (!currentPolicy.Enabled || currentPolicy.Data == null)
                 {
                     continue;
                 }
 
-                if(enforcedOptions == null)
+                if (enforcedOptions == null)
                 {
                     enforcedOptions = new PasswordGeneratorPolicyOptions();
                 }
 
                 var defaultType = GetPolicyString(currentPolicy, "defaultType");
-                if(defaultType != null && enforcedOptions.DefaultType != "password")
+                if (defaultType != null && enforcedOptions.DefaultType != "password")
                 {
                     enforcedOptions.DefaultType = defaultType;
                 }
 
                 var minLength = GetPolicyInt(currentPolicy, "minLength");
-                if(minLength != null && (int)(long)minLength > enforcedOptions.MinLength)
+                if (minLength != null && (int)(long)minLength > enforcedOptions.MinLength)
                 {
                     enforcedOptions.MinLength = (int)(long)minLength;
                 }
 
                 var useUpper = GetPolicyBool(currentPolicy, "useUpper");
-                if(useUpper != null && (bool)useUpper)
+                if (useUpper != null && (bool)useUpper)
                 {
                     enforcedOptions.UseUppercase = true;
                 }
 
                 var useLower = GetPolicyBool(currentPolicy, "useLower");
-                if(useLower != null && (bool)useLower)
+                if (useLower != null && (bool)useLower)
                 {
                     enforcedOptions.UseLowercase = true;
                 }
 
                 var useNumbers = GetPolicyBool(currentPolicy, "useNumbers");
-                if(useNumbers != null && (bool)useNumbers)
+                if (useNumbers != null && (bool)useNumbers)
                 {
                     enforcedOptions.UseNumbers = true;
                 }
 
                 var minNumbers = GetPolicyInt(currentPolicy, "minNumbers");
-                if(minNumbers != null && (int)(long)minNumbers > enforcedOptions.NumberCount)
+                if (minNumbers != null && (int)(long)minNumbers > enforcedOptions.NumberCount)
                 {
                     enforcedOptions.NumberCount = (int)(long)minNumbers;
                 }
 
                 var useSpecial = GetPolicyBool(currentPolicy, "useSpecial");
-                if(useSpecial != null && (bool)useSpecial)
+                if (useSpecial != null && (bool)useSpecial)
                 {
                     enforcedOptions.UseSpecial = true;
                 }
 
                 var minSpecial = GetPolicyInt(currentPolicy, "minSpecial");
-                if(minSpecial != null && (int)(long)minSpecial > enforcedOptions.SpecialCount)
+                if (minSpecial != null && (int)(long)minSpecial > enforcedOptions.SpecialCount)
                 {
                     enforcedOptions.SpecialCount = (int)(long)minSpecial;
                 }
 
                 var minNumberWords = GetPolicyInt(currentPolicy, "minNumberWords");
-                if(minNumberWords != null && (int)(long)minNumberWords > enforcedOptions.MinNumberOfWords)
+                if (minNumberWords != null && (int)(long)minNumberWords > enforcedOptions.MinNumberOfWords)
                 {
                     enforcedOptions.MinNumberOfWords = (int)(long)minNumberWords;
                 }
 
                 var capitalize = GetPolicyBool(currentPolicy, "capitalize");
-                if(capitalize != null && (bool)capitalize)
+                if (capitalize != null && (bool)capitalize)
                 {
                     enforcedOptions.Capitalize = true;
                 }
                 
                 var includeNumber = GetPolicyBool(currentPolicy, "includeNumber");
-                if(includeNumber != null && (bool)includeNumber)
+                if (includeNumber != null && (bool)includeNumber)
                 {
                     enforcedOptions.IncludeNumber = true;
                 }
@@ -392,10 +392,10 @@ namespace Bit.Core.Services
 
         private int? GetPolicyInt(Policy policy, string key)
         {
-            if(policy.Data.ContainsKey(key))
+            if (policy.Data.ContainsKey(key))
             {
                 var value = policy.Data[key];
-                if(value != null)
+                if (value != null)
                 {
                     return (int)(long)value;
                 }
@@ -405,10 +405,10 @@ namespace Bit.Core.Services
 
         private bool? GetPolicyBool(Policy policy, string key)
         {
-            if(policy.Data.ContainsKey(key))
+            if (policy.Data.ContainsKey(key))
             {
                 var value = policy.Data[key];
-                if(value != null)
+                if (value != null)
                 {
                     return (bool)value;
                 }
@@ -418,10 +418,10 @@ namespace Bit.Core.Services
         
         private string GetPolicyString(Policy policy, string key)
         {
-            if(policy.Data.ContainsKey(key))
+            if (policy.Data.ContainsKey(key))
             {
                 var value = policy.Data[key];
-                if(value != null)
+                if (value != null)
                 {
                     return (string)value;
                 }
@@ -438,11 +438,11 @@ namespace Bit.Core.Services
         public async Task<List<GeneratedPasswordHistory>> GetHistoryAsync()
         {
             var hasKey = await _cryptoService.HasKeyAsync();
-            if(!hasKey)
+            if (!hasKey)
             {
                 return new List<GeneratedPasswordHistory>();
             }
-            if(_history == null)
+            if (_history == null)
             {
                 var encrypted = await _storageService.GetAsync<List<GeneratedPasswordHistory>>(Keys_History);
                 _history = await DecryptHistoryAsync(encrypted);
@@ -453,20 +453,20 @@ namespace Bit.Core.Services
         public async Task AddHistoryAsync(string password, CancellationToken token = default(CancellationToken))
         {
             var hasKey = await _cryptoService.HasKeyAsync();
-            if(!hasKey)
+            if (!hasKey)
             {
                 return;
             }
             var currentHistory = await GetHistoryAsync();
             // Prevent duplicates
-            if(MatchesPrevious(password, currentHistory))
+            if (MatchesPrevious(password, currentHistory))
             {
                 return;
             }
             token.ThrowIfCancellationRequested();
             currentHistory.Insert(0, new GeneratedPasswordHistory { Password = password, Date = DateTime.UtcNow });
             // Remove old items.
-            if(currentHistory.Count > MaxPasswordsInHistory)
+            if (currentHistory.Count > MaxPasswordsInHistory)
             {
                 currentHistory.RemoveAt(currentHistory.Count - 1);
             }
@@ -492,83 +492,83 @@ namespace Bit.Core.Services
             options.MinLowercase = 0;
             options.MinUppercase = 0;
 
-            if(!options.Uppercase.GetValueOrDefault() && !options.Lowercase.GetValueOrDefault() &&
+            if (!options.Uppercase.GetValueOrDefault() && !options.Lowercase.GetValueOrDefault() &&
                 !options.Number.GetValueOrDefault() && !options.Special.GetValueOrDefault())
             {
                 options.Lowercase = true;
             }
 
             var length = options.Length.GetValueOrDefault();
-            if(length < 5)
+            if (length < 5)
             {
                 options.Length = 5;
             }
-            else if(length > 128)
+            else if (length > 128)
             {
                 options.Length = 128;
             }
 
-            if(options.Length < enforcedPolicyOptions.MinLength)
+            if (options.Length < enforcedPolicyOptions.MinLength)
             {
                 options.Length = enforcedPolicyOptions.MinLength;
             }
 
-            if(options.MinNumber == null)
+            if (options.MinNumber == null)
             {
                 options.MinNumber = 0;
             }
-            else if(options.MinNumber > options.Length)
+            else if (options.MinNumber > options.Length)
             {
                 options.MinNumber = options.Length;
             }
-            else if(options.MinNumber > 9)
+            else if (options.MinNumber > 9)
             {
                 options.MinNumber = 9;
             }
 
-            if(options.MinNumber < enforcedPolicyOptions.NumberCount)
+            if (options.MinNumber < enforcedPolicyOptions.NumberCount)
             {
                 options.MinNumber = enforcedPolicyOptions.NumberCount;
             }
 
-            if(options.MinSpecial == null)
+            if (options.MinSpecial == null)
             {
                 options.MinSpecial = 0;
             }
-            else if(options.MinSpecial > options.Length)
+            else if (options.MinSpecial > options.Length)
             {
                 options.MinSpecial = options.Length;
             }
-            else if(options.MinSpecial > 9)
+            else if (options.MinSpecial > 9)
             {
                 options.MinSpecial = 9;
             }
 
-            if(options.MinSpecial < enforcedPolicyOptions.SpecialCount)
+            if (options.MinSpecial < enforcedPolicyOptions.SpecialCount)
             {
                 options.MinSpecial = enforcedPolicyOptions.SpecialCount;
             }
 
-            if(options.MinSpecial + options.MinNumber > options.Length)
+            if (options.MinSpecial + options.MinNumber > options.Length)
             {
                 options.MinSpecial = options.Length - options.MinNumber;
             }
 
-            if(options.NumWords == null || options.Length < 3)
+            if (options.NumWords == null || options.Length < 3)
             {
                 options.NumWords = 3;
             }
-            else if(options.NumWords > 20)
+            else if (options.NumWords > 20)
             {
                 options.NumWords = 20;
             }
 
-            if(options.NumWords < enforcedPolicyOptions.MinNumberOfWords)
+            if (options.NumWords < enforcedPolicyOptions.MinNumberOfWords)
             {
                 options.NumWords = enforcedPolicyOptions.MinNumberOfWords;
             }
 
-            if(options.WordSeparator != null && options.WordSeparator.Length > 1)
+            if (options.WordSeparator != null && options.WordSeparator.Length > 1)
             {
                 options.WordSeparator = options.WordSeparator[0].ToString();
             }
@@ -580,18 +580,18 @@ namespace Bit.Core.Services
 
         private async Task<List<GeneratedPasswordHistory>> EncryptHistoryAsync(List<GeneratedPasswordHistory> history)
         {
-            if(!history?.Any() ?? true)
+            if (!history?.Any() ?? true)
             {
                 return new List<GeneratedPasswordHistory>();
             }
             var tasks = history.Select(async item =>
             {
-                if(item == null)
+                if (item == null)
                 {
                     return null;
                 }
                 var encrypted = await _cryptoService.EncryptAsync(item.Password);
-                if(encrypted == null)
+                if (encrypted == null)
                 {
                     return null;
                 }
@@ -607,7 +607,7 @@ namespace Bit.Core.Services
 
         private async Task<List<GeneratedPasswordHistory>> DecryptHistoryAsync(List<GeneratedPasswordHistory> history)
         {
-            if(!history?.Any() ?? true)
+            if (!history?.Any() ?? true)
             {
                 return new List<GeneratedPasswordHistory>();
             }
@@ -626,7 +626,7 @@ namespace Bit.Core.Services
 
         private bool MatchesPrevious(string password, List<GeneratedPasswordHistory> history)
         {
-            if(!history?.Any() ?? true)
+            if (!history?.Any() ?? true)
             {
                 return false;
             }
@@ -640,7 +640,7 @@ namespace Bit.Core.Services
 
         private async Task AppendRandomNumberToRandomWordAsync(List<string> wordList)
         {
-            if(wordList == null || wordList.Count <= 0)
+            if (wordList == null || wordList.Count <= 0)
             {
                 return;
             }
@@ -656,57 +656,57 @@ namespace Bit.Core.Services
             var minNumberCalc = options.MinNumber;
             var minSpecialCalc = options.MinNumber;
 
-            if(options.Uppercase.GetValueOrDefault() && options.MinUppercase.GetValueOrDefault() <= 0)
+            if (options.Uppercase.GetValueOrDefault() && options.MinUppercase.GetValueOrDefault() <= 0)
             {
                 minUppercaseCalc = 1;
             } 
-            else if(!options.Uppercase.GetValueOrDefault())
+            else if (!options.Uppercase.GetValueOrDefault())
             {
                 minUppercaseCalc = 0;
             }
 
-            if(options.Lowercase.GetValueOrDefault() && options.MinLowercase.GetValueOrDefault() <= 0) 
+            if (options.Lowercase.GetValueOrDefault() && options.MinLowercase.GetValueOrDefault() <= 0) 
             {
                 minLowercaseCalc = 1;
             }
-            else if(!options.Lowercase.GetValueOrDefault())
+            else if (!options.Lowercase.GetValueOrDefault())
             {
                 minLowercaseCalc = 0;
             }
 
-            if(options.Number.GetValueOrDefault() && options.MinNumber.GetValueOrDefault() <= 0)
+            if (options.Number.GetValueOrDefault() && options.MinNumber.GetValueOrDefault() <= 0)
             {
                 minNumberCalc = 1;
             } 
-            else if(!options.Number.GetValueOrDefault())
+            else if (!options.Number.GetValueOrDefault())
             {
                 minNumberCalc = 0;
             }
 
-            if(options.Special.GetValueOrDefault() && options.MinSpecial.GetValueOrDefault() <= 0)
+            if (options.Special.GetValueOrDefault() && options.MinSpecial.GetValueOrDefault() <= 0)
             {
                 minSpecialCalc = 1;
             } 
-            else if(!options.Special.GetValueOrDefault())
+            else if (!options.Special.GetValueOrDefault())
             {
                 minSpecialCalc = 0;
             }
 
             // This should never happen but is a final safety net
-            if(options.Length.GetValueOrDefault() < 1)
+            if (options.Length.GetValueOrDefault() < 1)
             {
                 options.Length = 10;
             }
 
             var minLength = minUppercaseCalc + minLowercaseCalc + minNumberCalc + minSpecialCalc;
             // Normalize and Generation both require this modification
-            if(options.Length < minLength)
+            if (options.Length < minLength)
             {
                 options.Length = minLength;
             }
 
             // Apply other changes if the options object passed in is for generation
-            if(forGeneration)
+            if (forGeneration)
             {
                 options.MinUppercase = minUppercaseCalc;
                 options.MinLowercase = minLowercaseCalc;

@@ -15,7 +15,7 @@ namespace Bit.Core.Models.Export
 
         public FolderView ToView(Folder req, FolderView view = null)
         {
-            if(view == null)
+            if (view == null)
             {
                 view = new FolderView();
             }

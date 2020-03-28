@@ -66,15 +66,15 @@ namespace Bit.App.Pages
             _hasUpdatedKey = await _cryptoService.HasEncKeyAsync();
             var canAccessPremium = await _userService.CanAccessPremiumAsync();
             _canAccessAttachments = canAccessPremium || Cipher.OrganizationId != null;
-            if(!_canAccessAttachments)
+            if (!_canAccessAttachments)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.PremiumRequired);
             }
-            else if(!_hasUpdatedKey)
+            else if (!_hasUpdatedKey)
             {
                 var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.UpdateKey,
                     AppResources.FeatureUnavailable, AppResources.LearnMore, AppResources.Cancel);
-                if(confirmed)
+                if (confirmed)
                 {
                     _platformUtilsService.LaunchUri("https://help.bitwarden.com/article/update-encryption-key/");
                 }
@@ -83,26 +83,26 @@ namespace Bit.App.Pages
 
         public async Task<bool> SubmitAsync()
         {
-            if(Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
+            if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
                     AppResources.InternetConnectionRequiredTitle);
                 return false;
             }
-            if(!_hasUpdatedKey)
+            if (!_hasUpdatedKey)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.UpdateKey,
                     AppResources.AnErrorHasOccurred);
                 return false;
             }
-            if(FileData == null)
+            if (FileData == null)
             {
                 await _platformUtilsService.ShowDialogAsync(
                     string.Format(AppResources.ValidationFieldRequired, AppResources.File),
                     AppResources.AnErrorHasOccurred);
                 return false;
             }
-            if(FileData.Length > 104857600) // 100 MB
+            if (FileData.Length > 104857600) // 100 MB
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.MaxFileSize,
                     AppResources.AnErrorHasOccurred);
@@ -121,10 +121,10 @@ namespace Bit.App.Pages
                 FileName = null;
                 return true;
             }
-            catch(ApiException e)
+            catch (ApiException e)
             {
                 await _deviceActionService.HideLoadingAsync();
-                if(e?.Error != null)
+                if (e?.Error != null)
                 {
                     await _platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(),
                         AppResources.AnErrorHasOccurred);
@@ -140,7 +140,7 @@ namespace Bit.App.Pages
 
         private async void DeleteAsync(AttachmentView attachment)
         {
-            if(Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
+            if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
                     AppResources.InternetConnectionRequiredTitle);
@@ -148,7 +148,7 @@ namespace Bit.App.Pages
             }
             var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.DoYouReallyWantToDelete,
                 null, AppResources.Yes, AppResources.No);
-            if(!confirmed)
+            if (!confirmed)
             {
                 return;
             }
@@ -159,16 +159,16 @@ namespace Bit.App.Pages
                 await _deviceActionService.HideLoadingAsync();
                 _platformUtilsService.ShowToast("success", null, AppResources.AttachmentDeleted);
                 var attachmentToRemove = Cipher.Attachments.FirstOrDefault(a => a.Id == attachment.Id);
-                if(attachmentToRemove != null)
+                if (attachmentToRemove != null)
                 {
                     Cipher.Attachments.Remove(attachmentToRemove);
                     LoadAttachments();
                 }
             }
-            catch(ApiException e)
+            catch (ApiException e)
             {
                 await _deviceActionService.HideLoadingAsync();
-                if(e?.Error != null)
+                if (e?.Error != null)
                 {
                     await _platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(),
                         AppResources.AnErrorHasOccurred);

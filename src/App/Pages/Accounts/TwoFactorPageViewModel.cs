@@ -91,7 +91,7 @@ namespace Bit.App.Pages
 
         public void Init()
         {
-            if(string.IsNullOrWhiteSpace(_authService.Email) ||
+            if (string.IsNullOrWhiteSpace(_authService.Email) ||
                 string.IsNullOrWhiteSpace(_authService.MasterPasswordHash) ||
                 _authService.TwoFactorProvidersData == null)
             {
@@ -99,11 +99,11 @@ namespace Bit.App.Pages
                 return;
             }
 
-            if(!string.IsNullOrWhiteSpace(_environmentService.BaseUrl))
+            if (!string.IsNullOrWhiteSpace(_environmentService.BaseUrl))
             {
                 _webVaultUrl = _environmentService.BaseUrl;
             }
-            else if(!string.IsNullOrWhiteSpace(_environmentService.WebVaultUrl))
+            else if (!string.IsNullOrWhiteSpace(_environmentService.WebVaultUrl))
             {
                 _webVaultUrl = _environmentService.WebVaultUrl;
             }
@@ -117,7 +117,7 @@ namespace Bit.App.Pages
 
         public void Load()
         {
-            if(SelectedProviderType == null)
+            if (SelectedProviderType == null)
             {
                 PageTitle = AppResources.LoginUnavailable;
                 return;
@@ -125,7 +125,7 @@ namespace Bit.App.Pages
             var page = Page as TwoFactorPage;
             PageTitle = _authService.TwoFactorProviders[SelectedProviderType.Value].Name;
             var providerData = _authService.TwoFactorProvidersData[SelectedProviderType.Value];
-            switch(SelectedProviderType.Value)
+            switch (SelectedProviderType.Value)
             {
                 case TwoFactorProviderType.U2f:
                     // TODO
@@ -148,7 +148,7 @@ namespace Bit.App.Pages
                 case TwoFactorProviderType.Email:
                     TotpInstruction = string.Format(AppResources.EnterVerificationCodeEmail,
                         providerData["Email"] as string);
-                    if(_authService.TwoFactorProvidersData.Count > 1)
+                    if (_authService.TwoFactorProvidersData.Count > 1)
                     {
                         var emailTask = Task.Run(() => SendEmailAsync(false, false));
                     }
@@ -160,11 +160,11 @@ namespace Bit.App.Pages
                     break;
             }
 
-            if(!YubikeyMethod)
+            if (!YubikeyMethod)
             {
                 _messagingService.Send("listenYubiKeyOTP", false);
             }
-            if(SelectedProviderType == null || DuoMethod)
+            if (SelectedProviderType == null || DuoMethod)
             {
                 page.RemoveContinueButton();
             }
@@ -176,24 +176,24 @@ namespace Bit.App.Pages
 
         public async Task SubmitAsync()
         {
-            if(SelectedProviderType == null)
+            if (SelectedProviderType == null)
             {
                 return;
             }
-            if(Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
+            if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
                     AppResources.InternetConnectionRequiredTitle);
                 return;
             }
-            if(string.IsNullOrWhiteSpace(Token))
+            if (string.IsNullOrWhiteSpace(Token))
             {
                 await _platformUtilsService.ShowDialogAsync(
                     string.Format(AppResources.ValidationFieldRequired, AppResources.VerificationCode),
                     AppResources.AnErrorHasOccurred);
                 return;
             }
-            if(SelectedProviderType == TwoFactorProviderType.Email ||
+            if (SelectedProviderType == TwoFactorProviderType.Email ||
                 SelectedProviderType == TwoFactorProviderType.Authenticator)
             {
                 Token = Token.Replace(" ", string.Empty).Trim();
@@ -211,10 +211,10 @@ namespace Bit.App.Pages
                 await _stateService.SaveAsync(Constants.DisableFaviconKey, disableFavicon.GetValueOrDefault());
                 Application.Current.MainPage = new TabsPage();
             }
-            catch(ApiException e)
+            catch (ApiException e)
             {
                 await _deviceActionService.HideLoadingAsync();
-                if(e?.Error != null)
+                if (e?.Error != null)
                 {
                     await _platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(),
                         AppResources.AnErrorHasOccurred);
@@ -229,14 +229,14 @@ namespace Bit.App.Pages
             options.Add(AppResources.RecoveryCodeTitle);
             var method = await Page.DisplayActionSheet(AppResources.TwoStepLoginOptions, AppResources.Cancel,
                 null, options.ToArray());
-            if(method == AppResources.RecoveryCodeTitle)
+            if (method == AppResources.RecoveryCodeTitle)
             {
                 _platformUtilsService.LaunchUri("https://help.bitwarden.com/article/lost-two-step-device/");
             }
-            else if(method != AppResources.Cancel)
+            else if (method != AppResources.Cancel)
             {
                 var selected = supportedProviders.FirstOrDefault(p => p.Name == method)?.Type;
-                if(selected == SelectedProviderType)
+                if (selected == SelectedProviderType)
                 {
                     // Nothing changed
                     return;
@@ -248,11 +248,11 @@ namespace Bit.App.Pages
 
         public async Task<bool> SendEmailAsync(bool showLoading, bool doToast)
         {
-            if(!EmailMethod)
+            if (!EmailMethod)
             {
                 return false;
             }
-            if(Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
+            if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
                     AppResources.InternetConnectionRequiredTitle);
@@ -260,7 +260,7 @@ namespace Bit.App.Pages
             }
             try
             {
-                if(showLoading)
+                if (showLoading)
                 {
                     await _deviceActionService.ShowLoadingAsync(AppResources.Submitting);
                 }
@@ -270,19 +270,19 @@ namespace Bit.App.Pages
                     MasterPasswordHash = _authService.MasterPasswordHash
                 };
                 await _apiService.PostTwoFactorEmailAsync(request);
-                if(showLoading)
+                if (showLoading)
                 {
                     await _deviceActionService.HideLoadingAsync();
                 }
-                if(doToast)
+                if (doToast)
                 {
                     _platformUtilsService.ShowToast("success", null, AppResources.VerificationEmailSent);
                 }
                 return true;
             }
-            catch(ApiException)
+            catch (ApiException)
             {
-                if(showLoading)
+                if (showLoading)
                 {
                     await _deviceActionService.HideLoadingAsync();
                 }

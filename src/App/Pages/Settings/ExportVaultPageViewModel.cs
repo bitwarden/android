@@ -83,7 +83,7 @@ namespace Bit.App.Pages
 
         public async Task ExportVaultAsync()
         {
-            if(string.IsNullOrEmpty(_masterPassword))
+            if (string.IsNullOrEmpty(_masterPassword))
             {
                 await _platformUtilsService.ShowDialogAsync(_i18nService.T("InvalidMasterPassword"));
                 return;
@@ -93,7 +93,7 @@ namespace Bit.App.Pages
             MasterPassword = string.Empty;
             
             var storedKeyHash = await _cryptoService.GetKeyHashAsync();
-            if(storedKeyHash != null && keyHash != null && storedKeyHash == keyHash)
+            if (storedKeyHash != null && keyHash != null && storedKeyHash == keyHash)
             {
                 try
                 {
@@ -102,13 +102,13 @@ namespace Bit.App.Pages
                     _defaultFilename = _exportService.GetFileName(null, fileFormat);
                     _exportResult = Encoding.ASCII.GetBytes(data.Result);
 
-                    if(!_deviceActionService.SaveFile(_exportResult, null, _defaultFilename, null))
+                    if (!_deviceActionService.SaveFile(_exportResult, null, _defaultFilename, null))
                     {
                         ClearResult();
                         await _platformUtilsService.ShowDialogAsync(_i18nService.T("ExportVaultFailure"));
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     ClearResult();
                     await _platformUtilsService.ShowDialogAsync(_i18nService.T("ExportVaultFailure"));
@@ -123,7 +123,7 @@ namespace Bit.App.Pages
 
         public async void SaveFileSelected(string contentUri, string filename)
         {
-            if(_deviceActionService.SaveFile(_exportResult, null, filename ?? _defaultFilename, contentUri))
+            if (_deviceActionService.SaveFile(_exportResult, null, filename ?? _defaultFilename, contentUri))
             {
                 ClearResult();
                 _platformUtilsService.ShowToast("success", null, _i18nService.T("ExportVaultSuccess"));

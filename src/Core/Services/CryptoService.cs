@@ -49,7 +49,7 @@ namespace Bit.Core.Services
             _key = key;
             var option = await _storageService.GetAsync<int?>(Constants.LockOptionKey);
             var fingerprint = await _storageService.GetAsync<bool?>(Constants.FingerprintUnlockKey);
-            if(option.HasValue && !fingerprint.GetValueOrDefault())
+            if (option.HasValue && !fingerprint.GetValueOrDefault())
             {
                 // If we have a lock option set, we do not store the key
                 return;
@@ -65,7 +65,7 @@ namespace Bit.Core.Services
 
         public async Task SetEncKeyAsync(string encKey)
         {
-            if(encKey == null)
+            if (encKey == null)
             {
                 return;
             }
@@ -75,7 +75,7 @@ namespace Bit.Core.Services
 
         public async Task SetEncPrivateKeyAsync(string encPrivateKey)
         {
-            if(encPrivateKey == null)
+            if (encPrivateKey == null)
             {
                 return;
             }
@@ -92,12 +92,12 @@ namespace Bit.Core.Services
 
         public async Task<SymmetricCryptoKey> GetKeyAsync()
         {
-            if(_key != null)
+            if (_key != null)
             {
                 return _key;
             }
             var key = await _secureStorageService.GetAsync<string>(Keys_Key);
-            if(key != null)
+            if (key != null)
             {
                 _key = new SymmetricCryptoKey(Convert.FromBase64String(key));
             }
@@ -106,12 +106,12 @@ namespace Bit.Core.Services
 
         public async Task<string> GetKeyHashAsync()
         {
-            if(_keyHash != null)
+            if (_keyHash != null)
             {
                 return _keyHash;
             }
             var keyHash = await _storageService.GetAsync<string>(Keys_KeyHash);
-            if(keyHash != null)
+            if (keyHash != null)
             {
                 _keyHash = keyHash;
             }
@@ -120,11 +120,11 @@ namespace Bit.Core.Services
 
         public Task<SymmetricCryptoKey> GetEncKeyAsync(SymmetricCryptoKey key = null)
         {
-            if(_encKey != null)
+            if (_encKey != null)
             {
                 return Task.FromResult(_encKey);
             }
-            if(_getEncKeysTask != null && !_getEncKeysTask.IsCompleted && !_getEncKeysTask.IsFaulted)
+            if (_getEncKeysTask != null && !_getEncKeysTask.IsCompleted && !_getEncKeysTask.IsFaulted)
             {
                 return _getEncKeysTask;
             }
@@ -133,27 +133,27 @@ namespace Bit.Core.Services
                 try
                 {
                     var encKey = await _storageService.GetAsync<string>(Keys_EncKey);
-                    if(encKey == null)
+                    if (encKey == null)
                     {
                         return null;
                     }
 
-                    if(key == null)
+                    if (key == null)
                     {
                         key = await GetKeyAsync();
                     }
-                    if(key == null)
+                    if (key == null)
                     {
                         return null;
                     }
 
                     byte[] decEncKey = null;
                     var encKeyCipher = new CipherString(encKey);
-                    if(encKeyCipher.EncryptionType == EncryptionType.AesCbc256_B64)
+                    if (encKeyCipher.EncryptionType == EncryptionType.AesCbc256_B64)
                     {
                         decEncKey = await DecryptToBytesAsync(encKeyCipher, key);
                     }
-                    else if(encKeyCipher.EncryptionType == EncryptionType.AesCbc256_HmacSha256_B64)
+                    else if (encKeyCipher.EncryptionType == EncryptionType.AesCbc256_HmacSha256_B64)
                     {
                         var newKey = await StretchKeyAsync(key);
                         decEncKey = await DecryptToBytesAsync(encKeyCipher, newKey);
@@ -163,7 +163,7 @@ namespace Bit.Core.Services
                         throw new Exception("Unsupported encKey type.");
                     }
 
-                    if(decEncKey == null)
+                    if (decEncKey == null)
                     {
                         return null;
                     }
@@ -181,12 +181,12 @@ namespace Bit.Core.Services
 
         public async Task<byte[]> GetPublicKeyAsync()
         {
-            if(_publicKey != null)
+            if (_publicKey != null)
             {
                 return _publicKey;
             }
             var privateKey = await GetPrivateKeyAsync();
-            if(privateKey == null)
+            if (privateKey == null)
             {
                 return null;
             }
@@ -196,12 +196,12 @@ namespace Bit.Core.Services
 
         public async Task<byte[]> GetPrivateKeyAsync()
         {
-            if(_privateKey != null)
+            if (_privateKey != null)
             {
                 return _privateKey;
             }
             var encPrivateKey = await _storageService.GetAsync<string>(Keys_EncPrivateKey);
-            if(encPrivateKey == null)
+            if (encPrivateKey == null)
             {
                 return null;
             }
@@ -211,11 +211,11 @@ namespace Bit.Core.Services
 
         public async Task<List<string>> GetFingerprintAsync(string userId, byte[] publicKey = null)
         {
-            if(publicKey == null)
+            if (publicKey == null)
             {
                 publicKey = await GetPublicKeyAsync();
             }
-            if(publicKey == null)
+            if (publicKey == null)
             {
                 throw new Exception("No public key available.");
             }
@@ -226,11 +226,11 @@ namespace Bit.Core.Services
 
         public Task<Dictionary<string, SymmetricCryptoKey>> GetOrgKeysAsync()
         {
-            if(_orgKeys != null && _orgKeys.Count > 0)
+            if (_orgKeys != null && _orgKeys.Count > 0)
             {
                 return Task.FromResult(_orgKeys);
             }
-            if(_getOrgKeysTask != null && !_getOrgKeysTask.IsCompleted && !_getOrgKeysTask.IsFaulted)
+            if (_getOrgKeysTask != null && !_getOrgKeysTask.IsCompleted && !_getOrgKeysTask.IsFaulted)
             {
                 return _getOrgKeysTask;
             }
@@ -239,20 +239,20 @@ namespace Bit.Core.Services
                 try
                 {
                     var encOrgKeys = await _storageService.GetAsync<Dictionary<string, string>>(Keys_EncOrgKeys);
-                    if(encOrgKeys == null)
+                    if (encOrgKeys == null)
                     {
                         return null;
                     }
                     var orgKeys = new Dictionary<string, SymmetricCryptoKey>();
                     var setKey = false;
-                    foreach(var org in encOrgKeys)
+                    foreach (var org in encOrgKeys)
                     {
                         var decValue = await RsaDecryptAsync(org.Value);
                         orgKeys.Add(org.Key, new SymmetricCryptoKey(decValue));
                         setKey = true;
                     }
 
-                    if(setKey)
+                    if (setKey)
                     {
                         _orgKeys = orgKeys;
                     }
@@ -269,12 +269,12 @@ namespace Bit.Core.Services
 
         public async Task<SymmetricCryptoKey> GetOrgKeyAsync(string orgId)
         {
-            if(string.IsNullOrWhiteSpace(orgId))
+            if (string.IsNullOrWhiteSpace(orgId))
             {
                 return null;
             }
             var orgKeys = await GetOrgKeysAsync();
-            if(orgKeys == null || !orgKeys.ContainsKey(orgId))
+            if (orgKeys == null || !orgKeys.ContainsKey(orgId))
             {
                 return null;
             }
@@ -308,7 +308,7 @@ namespace Bit.Core.Services
         public async Task ClearEncKeyAsync(bool memoryOnly = false)
         {
             _encKey = null;
-            if(!memoryOnly)
+            if (!memoryOnly)
             {
                 await _storageService.RemoveAsync(Keys_EncKey);
             }
@@ -317,7 +317,7 @@ namespace Bit.Core.Services
         public async Task ClearKeyPairAsync(bool memoryOnly = false)
         {
             _publicKey = _privateKey = null;
-            if(!memoryOnly)
+            if (!memoryOnly)
             {
                 await _storageService.RemoveAsync(Keys_EncPrivateKey);
             }
@@ -326,7 +326,7 @@ namespace Bit.Core.Services
         public async Task ClearOrgKeysAsync(bool memoryOnly = false)
         {
             _orgKeys = null;
-            if(!memoryOnly)
+            if (!memoryOnly)
             {
                 await _storageService.RemoveAsync(Keys_EncOrgKeys);
             }
@@ -355,7 +355,7 @@ namespace Bit.Core.Services
             var key = await GetKeyAsync();
             var option = await _storageService.GetAsync<int?>(Constants.LockOptionKey);
             var fingerprint = await _storageService.GetAsync<bool?>(Constants.FingerprintUnlockKey);
-            if(!fingerprint.GetValueOrDefault() && (option != null || option == 0))
+            if (!fingerprint.GetValueOrDefault() && (option != null || option == 0))
             {
                 await ClearKeyAsync();
                 _key = key;
@@ -368,13 +368,13 @@ namespace Bit.Core.Services
             KdfType? kdf, int? kdfIterations)
         {
             byte[] key = null;
-            if(kdf == null || kdf == KdfType.PBKDF2_SHA256)
+            if (kdf == null || kdf == KdfType.PBKDF2_SHA256)
             {
-                if(kdfIterations == null)
+                if (kdfIterations == null)
                 {
                     kdfIterations = 5000;
                 }
-                if(kdfIterations < 5000)
+                if (kdfIterations < 5000)
                 {
                     throw new Exception("PBKDF2 iteration minimum is 5000.");
                 }
@@ -391,10 +391,10 @@ namespace Bit.Core.Services
         public async Task<SymmetricCryptoKey> MakeKeyFromPinAsync(string pin, string salt,
             KdfType kdf, int kdfIterations, CipherString protectedKeyCs = null)
         {
-            if(protectedKeyCs == null)
+            if (protectedKeyCs == null)
             {
                 var pinProtectedKey = await _storageService.GetAsync<string>(Constants.PinProtectedKey);
-                if(pinProtectedKey == null)
+                if (pinProtectedKey == null)
                 {
                     throw new Exception("No PIN protected key found.");
                 }
@@ -429,11 +429,11 @@ namespace Bit.Core.Services
 
         public async Task<string> HashPasswordAsync(string password, SymmetricCryptoKey key)
         {
-            if(key == null)
+            if (key == null)
             {
                 key = await GetKeyAsync();
             }
-            if(password == null || key == null)
+            if (password == null || key == null)
             {
                 throw new Exception("Invalid parameters.");
             }
@@ -456,7 +456,7 @@ namespace Bit.Core.Services
 
         public async Task<CipherString> EncryptAsync(string plainValue, SymmetricCryptoKey key = null)
         {
-            if(plainValue == null)
+            if (plainValue == null)
             {
                 return null;
             }
@@ -465,7 +465,7 @@ namespace Bit.Core.Services
 
         public async Task<CipherString> EncryptAsync(byte[] plainValue, SymmetricCryptoKey key = null)
         {
-            if(plainValue == null)
+            if (plainValue == null)
             {
                 return null;
             }
@@ -480,14 +480,14 @@ namespace Bit.Core.Services
         {
             var encValue = await AesEncryptAsync(plainValue, key);
             var macLen = 0;
-            if(encValue.Mac != null)
+            if (encValue.Mac != null)
             {
                 macLen = encValue.Mac.Length;
             }
             var encBytes = new byte[1 + encValue.Iv.Length + macLen + encValue.Data.Length];
             Buffer.BlockCopy(new byte[] { (byte)encValue.Key.EncType }, 0, encBytes, 0, 1);
             Buffer.BlockCopy(encValue.Iv, 0, encBytes, 1, encValue.Iv.Length);
-            if(encValue.Mac != null)
+            if (encValue.Mac != null)
             {
                 Buffer.BlockCopy(encValue.Mac, 0, encBytes, 1 + encValue.Iv.Length, encValue.Mac.Length);
             }
@@ -497,11 +497,11 @@ namespace Bit.Core.Services
 
         public async Task<CipherString> RsaEncryptAsync(byte[] data, byte[] publicKey = null)
         {
-            if(publicKey == null)
+            if (publicKey == null)
             {
                 publicKey = await GetPublicKeyAsync();
             }
-            if(publicKey == null)
+            if (publicKey == null)
             {
                 throw new Exception("Public key unavailable.");
             }
@@ -525,7 +525,7 @@ namespace Bit.Core.Services
 
         public async Task<byte[]> DecryptFromBytesAsync(byte[] encBytes, SymmetricCryptoKey key)
         {
-            if(encBytes == null)
+            if (encBytes == null)
             {
                 throw new Exception("no encBytes.");
             }
@@ -535,11 +535,11 @@ namespace Bit.Core.Services
             byte[] ivBytes = null;
             byte[] macBytes = null;
 
-            switch(encType)
+            switch (encType)
             {
                 case EncryptionType.AesCbc128_HmacSha256_B64:
                 case EncryptionType.AesCbc256_HmacSha256_B64:
-                    if(encBytes.Length < 49) // 1 + 16 + 32 + ctLength
+                    if (encBytes.Length < 49) // 1 + 16 + 32 + ctLength
                     {
                         return null;
                     }
@@ -548,7 +548,7 @@ namespace Bit.Core.Services
                     ctBytes = new ArraySegment<byte>(encBytes, 49, encBytes.Length - 49).ToArray();
                     break;
                 case EncryptionType.AesCbc256_B64:
-                    if(encBytes.Length < 17) // 1 + 16 + ctLength
+                    if (encBytes.Length < 17) // 1 + 16 + ctLength
                     {
                         return null;
                     }
@@ -573,7 +573,7 @@ namespace Bit.Core.Services
             do
             {
                 ui = await _cryptoFunctionService.RandomNumberAsync();
-            } while(ui >= upperBound);
+            } while (ui >= upperBound);
             return (int)(min + (ui % diff));
         }
 
@@ -587,7 +587,7 @@ namespace Bit.Core.Services
                 Iv = await _cryptoFunctionService.RandomBytesAsync(16)
             };
             obj.Data = await _cryptoFunctionService.AesEncryptAsync(data, obj.Iv, obj.Key.EncKey);
-            if(obj.Key.MacKey != null)
+            if (obj.Key.MacKey != null)
             {
                 var macData = new byte[obj.Iv.Length + obj.Data.Length];
                 Buffer.BlockCopy(obj.Iv, 0, macData, 0, obj.Iv.Length);
@@ -602,12 +602,12 @@ namespace Bit.Core.Services
         {
             var keyForEnc = await GetKeyForEncryptionAsync(key);
             var theKey = ResolveLegacyKey(encType, keyForEnc);
-            if(theKey.MacKey != null && mac == null)
+            if (theKey.MacKey != null && mac == null)
             {
                 // Mac required.
                 return null;
             }
-            if(theKey.EncType != encType)
+            if (theKey.EncType != encType)
             {
                 // encType unavailable.
                 return null;
@@ -623,23 +623,23 @@ namespace Bit.Core.Services
             Buffer.BlockCopy(dataBytes, 0, macDataBytes, ivBytes.Length, dataBytes.Length);
 
             byte[] macKey = null;
-            if(theKey.MacKey != null)
+            if (theKey.MacKey != null)
             {
                 macKey = theKey.MacKey;
             }
             byte[] macBytes = null;
-            if(mac != null)
+            if (mac != null)
             {
                 macBytes = Convert.FromBase64String(mac);
             }
 
             // Compute mac
-            if(macKey != null && macBytes != null)
+            if (macKey != null && macBytes != null)
             {
                 var computedMac = await _cryptoFunctionService.HmacAsync(macDataBytes, macKey,
                     CryptoHashAlgorithm.Sha256);
                 var macsEqual = await _cryptoFunctionService.CompareAsync(macBytes, computedMac);
-                if(!macsEqual)
+                if (!macsEqual)
                 {
                     // Mac failed
                     return null;
@@ -656,19 +656,19 @@ namespace Bit.Core.Services
 
             var keyForEnc = await GetKeyForEncryptionAsync(key);
             var theKey = ResolveLegacyKey(encType, keyForEnc);
-            if(theKey.MacKey != null && mac == null)
+            if (theKey.MacKey != null && mac == null)
             {
                 // Mac required.
                 return null;
             }
-            if(theKey.EncType != encType)
+            if (theKey.EncType != encType)
             {
                 // encType unavailable.
                 return null;
             }
 
             // Compute mac
-            if(theKey.MacKey != null && mac != null)
+            if (theKey.MacKey != null && mac != null)
             {
                 var macData = new byte[iv.Length + data.Length];
                 Buffer.BlockCopy(iv, 0, macData, 0, iv.Length);
@@ -676,12 +676,12 @@ namespace Bit.Core.Services
 
                 var computedMac = await _cryptoFunctionService.HmacAsync(macData, theKey.MacKey,
                     CryptoHashAlgorithm.Sha256);
-                if(computedMac == null)
+                if (computedMac == null)
                 {
                     return null;
                 }
                 var macsMatch = await _cryptoFunctionService.CompareAsync(mac, computedMac);
-                if(!macsMatch)
+                if (!macsMatch)
                 {
                     // Mac failed
                     return null;
@@ -697,35 +697,35 @@ namespace Bit.Core.Services
             EncryptionType? encType = null;
             string[] encPieces = null;
 
-            if(headerPieces.Length == 1)
+            if (headerPieces.Length == 1)
             {
                 encType = EncryptionType.Rsa2048_OaepSha256_B64;
                 encPieces = new string[] { headerPieces[0] };
             }
-            else if(headerPieces.Length == 2 && Enum.TryParse(headerPieces[0], out EncryptionType type))
+            else if (headerPieces.Length == 2 && Enum.TryParse(headerPieces[0], out EncryptionType type))
             {
                 encType = type;
                 encPieces = headerPieces[1].Split('|');
             }
 
-            if(!encType.HasValue)
+            if (!encType.HasValue)
             {
                 throw new Exception("encType unavailable.");
             }
-            if(encPieces == null || encPieces.Length == 0)
+            if (encPieces == null || encPieces.Length == 0)
             {
                 throw new Exception("encPieces unavailable.");
             }
 
             var data = Convert.FromBase64String(encPieces[0]);
             var privateKey = await GetPrivateKeyAsync();
-            if(privateKey == null)
+            if (privateKey == null)
             {
                 throw new Exception("No private key.");
             }
 
             var alg = CryptoHashAlgorithm.Sha1;
-            switch(encType.Value)
+            switch (encType.Value)
             {
                 case EncryptionType.Rsa2048_OaepSha256_B64:
                 case EncryptionType.Rsa2048_OaepSha256_HmacSha256_B64:
@@ -743,12 +743,12 @@ namespace Bit.Core.Services
 
         private async Task<SymmetricCryptoKey> GetKeyForEncryptionAsync(SymmetricCryptoKey key = null)
         {
-            if(key != null)
+            if (key != null)
             {
                 return key;
             }
             var encKey = await GetEncKeyAsync();
-            if(encKey != null)
+            if (encKey != null)
             {
                 return encKey;
             }
@@ -757,10 +757,10 @@ namespace Bit.Core.Services
 
         private SymmetricCryptoKey ResolveLegacyKey(EncryptionType encKey, SymmetricCryptoKey key)
         {
-            if(encKey == EncryptionType.AesCbc128_HmacSha256_B64 && key.EncType == EncryptionType.AesCbc256_B64)
+            if (encKey == EncryptionType.AesCbc128_HmacSha256_B64 && key.EncType == EncryptionType.AesCbc256_B64)
             {
                 // Old encrypt-then-mac scheme, make a new key
-                if(_legacyEtmKey == null)
+                if (_legacyEtmKey == null)
                 {
                     _legacyEtmKey = new SymmetricCryptoKey(key.Key, EncryptionType.AesCbc128_HmacSha256_B64);
                 }
@@ -786,7 +786,7 @@ namespace Bit.Core.Services
             var okm = new byte[size];
             var previousT = new byte[0];
             var n = (int)Math.Ceiling((double)size / hashLen);
-            for(var i = 0; i < n; i++)
+            for (var i = 0; i < n; i++)
             {
                 var t = new byte[previousT.Length + info.Length + 1];
                 previousT.CopyTo(t, 0);
@@ -805,7 +805,7 @@ namespace Bit.Core.Services
             var numWords = (int)Math.Ceiling(minimumEntropy / entropyPerWord);
 
             var entropyAvailable = hash.Length * 4;
-            if(numWords * entropyPerWord > entropyAvailable)
+            if (numWords * entropyPerWord > entropyAvailable)
             {
                 throw new Exception("Output entropy of hash function is too small");
             }
@@ -813,7 +813,7 @@ namespace Bit.Core.Services
             var phrase = new List<string>();
             var hashHex = string.Concat("0", BitConverter.ToString(hash).Replace("-", ""));
             var hashNumber = BigInteger.Parse(hashHex, System.Globalization.NumberStyles.HexNumber);
-            while(numWords-- > 0)
+            while (numWords-- > 0)
             {
                 var remainder = (int)(hashNumber % wordLength);
                 hashNumber = hashNumber / wordLength;
@@ -826,12 +826,12 @@ namespace Bit.Core.Services
             byte[] encKey)
         {
             CipherString encKeyEnc = null;
-            if(key.Key.Length == 32)
+            if (key.Key.Length == 32)
             {
                 var newKey = await StretchKeyAsync(key);
                 encKeyEnc = await EncryptAsync(encKey, newKey);
             }
-            else if(key.Key.Length == 64)
+            else if (key.Key.Length == 64)
             {
                 encKeyEnc = await EncryptAsync(encKey, key);
             }

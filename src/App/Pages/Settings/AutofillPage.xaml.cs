@@ -11,7 +11,7 @@ namespace Bit.App.Pages
 
         private void Close_Clicked(object sender, EventArgs e)
         {
-            if(DoOnce())
+            if (DoOnce())
             {
                 Navigation.PopModalAsync();
             }

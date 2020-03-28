@@ -13,7 +13,7 @@ namespace Bit.Core.Utilities
 
         public static void Init(string customUserAgent = null)
         {
-            if(Inited)
+            if (Inited)
             {
                 return;
             }
@@ -91,7 +91,7 @@ namespace Bit.Core.Utilities
 
         public static void Register<T>(string serviceName, T obj)
         {
-            if(RegisteredServices.ContainsKey(serviceName))
+            if (RegisteredServices.ContainsKey(serviceName))
             {
                 throw new Exception($"Service {serviceName} has already been registered.");
             }
@@ -100,11 +100,11 @@ namespace Bit.Core.Utilities
 
         public static T Resolve<T>(string serviceName, bool dontThrow = false)
         {
-            if(RegisteredServices.ContainsKey(serviceName))
+            if (RegisteredServices.ContainsKey(serviceName))
             {
                 return (T)RegisteredServices[serviceName];
             }
-            if(dontThrow)
+            if (dontThrow)
             {
                 return (T)(object)null;
             }

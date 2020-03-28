@@ -59,27 +59,27 @@ namespace Bit.iOS
 
             _broadcasterService.Subscribe(nameof(AppDelegate), async (message) =>
             {
-                if(message.Command == "scheduleLockTimer")
+                if (message.Command == "scheduleLockTimer")
                 {
                     LockTimer((int)message.Data);
                 }
-                else if(message.Command == "cancelLockTimer")
+                else if (message.Command == "cancelLockTimer")
                 {
                     CancelLockTimer();
                 }
-                else if(message.Command == "startEventTimer")
+                else if (message.Command == "startEventTimer")
                 {
                     StartEventTimer();
                 }
-                else if(message.Command == "stopEventTimer")
+                else if (message.Command == "stopEventTimer")
                 {
                     var task = StopEventTimerAsync();
                 }
-                else if(message.Command == "updatedTheme")
+                else if (message.Command == "updatedTheme")
                 {
                     // ThemeManager.SetThemeStyle(message.Data as string);
                 }
-                else if(message.Command == "copiedToClipboard")
+                else if (message.Command == "copiedToClipboard")
                 {
 
                     Device.BeginInvokeOnMainThread(() =>
@@ -87,50 +87,50 @@ namespace Bit.iOS
                         var task = ClearClipboardTimerAsync(message.Data as Tuple<string, int?, bool>);
                     });
                 }
-                else if(message.Command == "listenYubiKeyOTP")
+                else if (message.Command == "listenYubiKeyOTP")
                 {
                     ListenYubiKey((bool)message.Data);
                 }
-                else if(message.Command == "unlocked")
+                else if (message.Command == "unlocked")
                 {
                     var needsAutofillReplacement = await _storageService.GetAsync<bool?>(
                         Core.Constants.AutofillNeedsIdentityReplacementKey);
-                    if(needsAutofillReplacement.GetValueOrDefault())
+                    if (needsAutofillReplacement.GetValueOrDefault())
                     {
                         await ASHelpers.ReplaceAllIdentities();
                     }
                 }
-                else if(message.Command == "showAppExtension")
+                else if (message.Command == "showAppExtension")
                 {
                     Device.BeginInvokeOnMainThread(() => ShowAppExtension((ExtensionPageViewModel)message.Data));
                 }
-                else if(message.Command == "showStatusBar")
+                else if (message.Command == "showStatusBar")
                 {
                     Device.BeginInvokeOnMainThread(() =>
                         UIApplication.SharedApplication.SetStatusBarHidden(!(bool)message.Data, false));
                 }
-                else if(message.Command == "syncCompleted")
+                else if (message.Command == "syncCompleted")
                 {
-                    if(message.Data is Dictionary<string, object> data && data.ContainsKey("successfully"))
+                    if (message.Data is Dictionary<string, object> data && data.ContainsKey("successfully"))
                     {
                         var success = data["successfully"] as bool?;
-                        if(success.GetValueOrDefault() && _deviceActionService.SystemMajorVersion() >= 12)
+                        if (success.GetValueOrDefault() && _deviceActionService.SystemMajorVersion() >= 12)
                         {
                             await ASHelpers.ReplaceAllIdentities();
                         }
                     }
                 }
-                else if(message.Command == "addedCipher" || message.Command == "editedCipher")
+                else if (message.Command == "addedCipher" || message.Command == "editedCipher")
                 {
-                    if(_deviceActionService.SystemMajorVersion() >= 12)
+                    if (_deviceActionService.SystemMajorVersion() >= 12)
                     {
-                        if(await ASHelpers.IdentitiesCanIncremental())
+                        if (await ASHelpers.IdentitiesCanIncremental())
                         {
                             var cipherId = message.Data as string;
-                            if(message.Command == "addedCipher" && !string.IsNullOrWhiteSpace(cipherId))
+                            if (message.Command == "addedCipher" && !string.IsNullOrWhiteSpace(cipherId))
                             {
                                 var identity = await ASHelpers.GetCipherIdentityAsync(cipherId);
-                                if(identity == null)
+                                if (identity == null)
                                 {
                                     return;
                                 }
@@ -142,15 +142,15 @@ namespace Bit.iOS
                         await ASHelpers.ReplaceAllIdentities();
                     }
                 }
-                else if(message.Command == "deletedCipher")
+                else if (message.Command == "deletedCipher")
                 {
-                    if(_deviceActionService.SystemMajorVersion() >= 12)
+                    if (_deviceActionService.SystemMajorVersion() >= 12)
                     {
-                        if(await ASHelpers.IdentitiesCanIncremental())
+                        if (await ASHelpers.IdentitiesCanIncremental())
                         {
                             var identity = ASHelpers.ToCredentialIdentity(
                                 message.Data as Bit.Core.Models.View.CipherView);
-                            if(identity == null)
+                            if (identity == null)
                             {
                                 return;
                             }
@@ -161,9 +161,9 @@ namespace Bit.iOS
                         await ASHelpers.ReplaceAllIdentities();
                     }
                 }
-                else if(message.Command == "loggedOut")
+                else if (message.Command == "loggedOut")
                 {
-                    if(_deviceActionService.SystemMajorVersion() >= 12)
+                    if (_deviceActionService.SystemMajorVersion() >= 12)
                     {
                         await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
                     }
@@ -205,7 +205,7 @@ namespace Bit.iOS
             base.OnActivated(uiApplication);
             UIApplication.SharedApplication.ApplicationIconBadgeNumber = 0;
             var view = UIApplication.SharedApplication.KeyWindow.ViewWithTag(4321);
-            if(view != null)
+            if (view != null)
             {
                 view.RemoveFromSuperview();
                 UIApplication.SharedApplication.SetStatusBarHidden(false, false);
@@ -253,7 +253,7 @@ namespace Bit.iOS
 
         public void InitApp()
         {
-            if(ServiceContainer.RegisteredServices.Count > 0)
+            if (ServiceContainer.RegisteredServices.Count > 0)
             {
                 return;
             }
@@ -297,12 +297,12 @@ namespace Bit.iOS
 
         private void ListenYubiKey(bool listen)
         {
-            if(_deviceActionService.SupportsNfc())
+            if (_deviceActionService.SupportsNfc())
             {
                 _nfcSession?.InvalidateSession();
                 _nfcSession?.Dispose();
                 _nfcSession = null;
-                if(listen)
+                if (listen)
                 {
                     _nfcSession = new NFCNdefReaderSession(_nfcDelegate, null, true)
                     {
@@ -315,7 +315,7 @@ namespace Bit.iOS
 
         private void LockTimer(int lockOptionMinutes)
         {
-            if(_lockBackgroundTaskId > 0)
+            if (_lockBackgroundTaskId > 0)
             {
                 UIApplication.SharedApplication.EndBackgroundTask(_lockBackgroundTaskId);
                 _lockBackgroundTaskId = 0;
@@ -340,7 +340,7 @@ namespace Bit.iOS
                         _lockTimer?.Invalidate();
                         _lockTimer?.Dispose();
                         _lockTimer = null;
-                        if(_lockBackgroundTaskId > 0)
+                        if (_lockBackgroundTaskId > 0)
                         {
                             UIApplication.SharedApplication.EndBackgroundTask(_lockBackgroundTaskId);
                             _lockBackgroundTaskId = 0;
@@ -355,7 +355,7 @@ namespace Bit.iOS
             _lockTimer?.Invalidate();
             _lockTimer?.Dispose();
             _lockTimer = null;
-            if(_lockBackgroundTaskId > 0)
+            if (_lockBackgroundTaskId > 0)
             {
                 UIApplication.SharedApplication.EndBackgroundTask(_lockBackgroundTaskId);
                 _lockBackgroundTaskId = 0;
@@ -364,24 +364,24 @@ namespace Bit.iOS
 
         private async Task ClearClipboardTimerAsync(Tuple<string, int?, bool> data)
         {
-            if(data.Item3)
+            if (data.Item3)
             {
                 return;
             }
             var clearMs = data.Item2;
-            if(clearMs == null)
+            if (clearMs == null)
             {
                 var clearSeconds = await _storageService.GetAsync<int?>(Constants.ClearClipboardKey);
-                if(clearSeconds != null)
+                if (clearSeconds != null)
                 {
                     clearMs = clearSeconds.Value * 1000;
                 }
             }
-            if(clearMs == null)
+            if (clearMs == null)
             {
                 return;
             }
-            if(_clipboardBackgroundTaskId > 0)
+            if (_clipboardBackgroundTaskId > 0)
             {
                 UIApplication.SharedApplication.EndBackgroundTask(_clipboardBackgroundTaskId);
                 _clipboardBackgroundTaskId = 0;
@@ -401,14 +401,14 @@ namespace Bit.iOS
                 Device.BeginInvokeOnMainThread(() =>
                 {
                     var changeNow = UIPasteboard.General.ChangeCount;
-                    if(changeNow == 0 || lastClipboardChangeCount == changeNow)
+                    if (changeNow == 0 || lastClipboardChangeCount == changeNow)
                     {
                         UIPasteboard.General.String = string.Empty;
                     }
                     _clipboardTimer?.Invalidate();
                     _clipboardTimer?.Dispose();
                     _clipboardTimer = null;
-                    if(_clipboardBackgroundTaskId > 0)
+                    if (_clipboardBackgroundTaskId > 0)
                     {
                         UIApplication.SharedApplication.EndBackgroundTask(_clipboardBackgroundTaskId);
                         _clipboardBackgroundTaskId = 0;
@@ -432,7 +432,7 @@ namespace Bit.iOS
                 }
             };
             var modal = UIApplication.SharedApplication.KeyWindow.RootViewController.ModalViewController;
-            if(activityViewController.PopoverPresentationController != null)
+            if (activityViewController.PopoverPresentationController != null)
             {
                 activityViewController.PopoverPresentationController.SourceView = modal.View;
                 var frame = UIScreen.MainScreen.Bounds;
@@ -461,7 +461,7 @@ namespace Bit.iOS
             _eventTimer?.Invalidate();
             _eventTimer?.Dispose();
             _eventTimer = null;
-            if(_eventBackgroundTaskId > 0)
+            if (_eventBackgroundTaskId > 0)
             {
                 UIApplication.SharedApplication.EndBackgroundTask(_eventBackgroundTaskId);
                 _eventBackgroundTaskId = 0;
@@ -480,10 +480,10 @@ namespace Bit.iOS
         {
             var userDefaults = NSUserDefaults.StandardUserDefaults;
             var managedSettings = userDefaults.DictionaryForKey("com.apple.configuration.managed");
-            if(managedSettings != null && managedSettings.Count > 0)
+            if (managedSettings != null && managedSettings.Count > 0)
             {
                 var dict = new Dictionary<string, string>();
-                foreach(var setting in managedSettings)
+                foreach (var setting in managedSettings)
                 {
                     dict.Add(setting.Key.ToString(), setting.Value?.ToString());
                 }

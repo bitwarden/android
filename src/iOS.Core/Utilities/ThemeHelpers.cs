@@ -26,7 +26,7 @@ namespace Bit.iOS.Core.Utilities
             UINavigationBar.Appearance.ShadowImage = new UIImage();
             UINavigationBar.Appearance.SetBackgroundImage(new UIImage(), UIBarMetrics.Default);
             UIStepper.Appearance.TintColor = MutedColor;
-            if(!LightTheme)
+            if (!LightTheme)
             {
                 UISwitch.Appearance.TintColor = MutedColor;
             }
@@ -59,12 +59,12 @@ namespace Bit.iOS.Core.Utilities
         private static void SetThemeVariables(string theme)
         {
             LightTheme = false;
-            if(string.IsNullOrWhiteSpace(theme) && UsingOsDarkTheme)
+            if (string.IsNullOrWhiteSpace(theme) && UsingOsDarkTheme)
             {
                 theme = "dark";
             }
 
-            if(theme == "dark")
+            if (theme == "dark")
             {
                 var whiteColor = Xamarin.Forms.Color.FromHex("#ffffff").ToUIColor();
                 MutedColor = Xamarin.Forms.Color.FromHex("#a3a3a3").ToUIColor();
@@ -79,7 +79,7 @@ namespace Bit.iOS.Core.Utilities
                 NavBarBackgroundColor = Xamarin.Forms.Color.FromHex("#212121").ToUIColor();
                 NavBarTextColor = whiteColor;
             }
-            else if(theme == "black")
+            else if (theme == "black")
             {
                 var blackColor = Xamarin.Forms.Color.FromHex("#000000").ToUIColor();
                 var whiteColor = Xamarin.Forms.Color.FromHex("#ffffff").ToUIColor();
@@ -95,7 +95,7 @@ namespace Bit.iOS.Core.Utilities
                 NavBarBackgroundColor = blackColor;
                 NavBarTextColor = whiteColor;
             }
-            else if(theme == "nord")
+            else if (theme == "nord")
             {
                 MutedColor = Xamarin.Forms.Color.FromHex("#d8dee9").ToUIColor();
                 SuccessColor = Xamarin.Forms.Color.FromHex("#a3be8c").ToUIColor();

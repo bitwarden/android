@@ -39,7 +39,7 @@ namespace Bit.App.Controls
         protected override void OnPropertyChanged(string propertyName = null)
         {
             base.OnPropertyChanged(propertyName);
-            if(propertyName == ItemTemplateProperty.PropertyName || propertyName == ItemsSourceProperty.PropertyName)
+            if (propertyName == ItemTemplateProperty.PropertyName || propertyName == ItemsSourceProperty.PropertyName)
             {
                 Populate();
             }
@@ -55,9 +55,9 @@ namespace Bit.App.Controls
         {
             View view = null;
             var template = ItemTemplate;
-            if(template != null)
+            if (template != null)
             {
-                if(template is DataTemplateSelector selector)
+                if (template is DataTemplateSelector selector)
                 {
                     template = selector.SelectTemplate(item, this);
                 }
@@ -70,10 +70,10 @@ namespace Bit.App.Controls
 
         private void Populate()
         {
-            if(ItemsSource != null)
+            if (ItemsSource != null)
             {
                 Children.Clear();
-                foreach(var item in ItemsSource)
+                foreach (var item in ItemsSource)
                 {
                     Children.Add(ViewFor(item));
                 }
@@ -82,11 +82,11 @@ namespace Bit.App.Controls
 
         private static void ItemsSourceChanging(BindableObject bindable, object oldValue, object newValue)
         {
-            if(oldValue != null && oldValue is INotifyCollectionChanged ov)
+            if (oldValue != null && oldValue is INotifyCollectionChanged ov)
             {
                 ov.CollectionChanged -= (bindable as RepeaterView).OnCollectionChanged;
             }
-            if(newValue != null && newValue is INotifyCollectionChanged nv)
+            if (newValue != null && newValue is INotifyCollectionChanged nv)
             {
                 nv.CollectionChanged += (bindable as RepeaterView).OnCollectionChanged;
             }

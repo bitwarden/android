@@ -44,7 +44,7 @@ namespace Bit.Droid.Tile
         {
             base.OnClick();
 
-            if(IsLocked)
+            if (IsLocked)
             {
                 UnlockAndRun(new Runnable(() =>
                 {

@@ -25,7 +25,7 @@ namespace Bit.Core.Models.View
         {
             get
             {
-                if(!string.IsNullOrWhiteSpace(Size) && long.TryParse(Size, out var s))
+                if (!string.IsNullOrWhiteSpace(Size) && long.TryParse(Size, out var s))
                 {
                     return s;
                 }

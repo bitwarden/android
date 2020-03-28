@@ -38,7 +38,7 @@ namespace Bit.iOS.Core.Views
 
             Value = newValue;
 
-            if(valueChanged)
+            if (valueChanged)
             {
                 ValueChanged?.Invoke(this, null);
             }

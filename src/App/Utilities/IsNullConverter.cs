@@ -8,7 +8,7 @@ namespace Bit.App.Utilities
         public object Convert(object value, Type targetType, object parameter,
             System.Globalization.CultureInfo culture)
         {
-            if(targetType == typeof(bool))
+            if (targetType == typeof(bool))
             {
                 return value == null;
             }

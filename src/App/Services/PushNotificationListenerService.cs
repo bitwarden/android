@@ -29,7 +29,7 @@ namespace Bit.App.Services
         public async Task OnMessageAsync(JObject value, string deviceType)
         {
             Resolve();
-            if(value == null)
+            if (value == null)
             {
                 return;
             }
@@ -38,13 +38,13 @@ namespace Bit.App.Services
             Debug.WriteLine("Message Arrived: {0}", JsonConvert.SerializeObject(value));
 
             NotificationResponse notification = null;
-            if(deviceType == Device.Android)
+            if (deviceType == Device.Android)
             {
                 notification = value.ToObject<NotificationResponse>();
             }
             else
             {
-                if(!value.TryGetValue("data", StringComparison.OrdinalIgnoreCase, out JToken dataToken) ||
+                if (!value.TryGetValue("data", StringComparison.OrdinalIgnoreCase, out JToken dataToken) ||
                     dataToken == null)
                 {
                     return;
@@ -53,20 +53,20 @@ namespace Bit.App.Services
             }
 
             var appId = await _appIdService.GetAppIdAsync();
-            if(notification?.Payload == null || notification.ContextId == appId)
+            if (notification?.Payload == null || notification.ContextId == appId)
             {
                 return;
             }
 
             var myUserId = await _userService.GetUserIdAsync();
             var isAuthenticated = await _userService.IsAuthenticatedAsync();
-            switch(notification.Type)
+            switch (notification.Type)
             {
                 case NotificationType.SyncCipherUpdate:
                 case NotificationType.SyncCipherCreate:
                     var cipherCreateUpdateMessage = JsonConvert.DeserializeObject<SyncCipherNotification>(
                         notification.Payload);
-                    if(isAuthenticated && cipherCreateUpdateMessage.UserId == myUserId)
+                    if (isAuthenticated && cipherCreateUpdateMessage.UserId == myUserId)
                     {
                         await _syncService.SyncUpsertCipherAsync(cipherCreateUpdateMessage,
                             notification.Type == NotificationType.SyncCipherUpdate);
@@ -76,7 +76,7 @@ namespace Bit.App.Services
                 case NotificationType.SyncFolderCreate:
                     var folderCreateUpdateMessage = JsonConvert.DeserializeObject<SyncFolderNotification>(
                         notification.Payload);
-                    if(isAuthenticated && folderCreateUpdateMessage.UserId == myUserId)
+                    if (isAuthenticated && folderCreateUpdateMessage.UserId == myUserId)
                     {
                         await _syncService.SyncUpsertFolderAsync(folderCreateUpdateMessage,
                             notification.Type == NotificationType.SyncFolderUpdate);
@@ -86,7 +86,7 @@ namespace Bit.App.Services
                 case NotificationType.SyncCipherDelete:
                     var loginDeleteMessage = JsonConvert.DeserializeObject<SyncCipherNotification>(
                         notification.Payload);
-                    if(isAuthenticated && loginDeleteMessage.UserId == myUserId)
+                    if (isAuthenticated && loginDeleteMessage.UserId == myUserId)
                     {
                         await _syncService.SyncDeleteCipherAsync(loginDeleteMessage);
                     }
@@ -94,7 +94,7 @@ namespace Bit.App.Services
                 case NotificationType.SyncFolderDelete:
                     var folderDeleteMessage = JsonConvert.DeserializeObject<SyncFolderNotification>(
                         notification.Payload);
-                    if(isAuthenticated && folderDeleteMessage.UserId == myUserId)
+                    if (isAuthenticated && folderDeleteMessage.UserId == myUserId)
                     {
                         await _syncService.SyncDeleteFolderAsync(folderDeleteMessage);
                     }
@@ -102,20 +102,20 @@ namespace Bit.App.Services
                 case NotificationType.SyncCiphers:
                 case NotificationType.SyncVault:
                 case NotificationType.SyncSettings:
-                    if(isAuthenticated)
+                    if (isAuthenticated)
                     {
                         await _syncService.FullSyncAsync(false);
                     }
                     break;
                 case NotificationType.SyncOrgKeys:
-                    if(isAuthenticated)
+                    if (isAuthenticated)
                     {
                         await _apiService.RefreshIdentityTokenAsync();
                         await _syncService.FullSyncAsync(true);
                     }
                     break;
                 case NotificationType.LogOut:
-                    if(isAuthenticated)
+                    if (isAuthenticated)
                     {
                         _messagingService.Send("logout");
                     }
@@ -130,7 +130,7 @@ namespace Bit.App.Services
             Resolve();
             Debug.WriteLine(string.Format("Push Notification - Device Registered - Token : {0}", token));
             var isAuthenticated = await _userService.IsAuthenticatedAsync();
-            if(!isAuthenticated)
+            if (!isAuthenticated)
             {
                 return;
             }
@@ -142,12 +142,12 @@ namespace Bit.App.Services
                     new Core.Models.Request.DeviceTokenRequest { PushToken = token });
                 Debug.WriteLine("Registered device with server.");
                 await _storageService.SaveAsync(Constants.PushLastRegistrationDateKey, DateTime.UtcNow);
-                if(deviceType == Device.Android)
+                if (deviceType == Device.Android)
                 {
                     await _storageService.SaveAsync(Constants.PushCurrentTokenKey, token);
                 }
             }
-            catch(ApiException)
+            catch (ApiException)
             {
                 Debug.WriteLine("Failed to register device.");
             }
@@ -170,7 +170,7 @@ namespace Bit.App.Services
 
         private void Resolve()
         {
-            if(_resolved)
+            if (_resolved)
             {
                 return;
             }

@@ -49,7 +49,7 @@ namespace Bit.Core.Models.Export
 
         public static IdentityView ToView(Identity req, IdentityView view = null)
         {
-            if(view == null)
+            if (view == null)
             {
                 view = new IdentityView();
             }

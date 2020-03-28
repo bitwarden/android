@@ -11,7 +11,7 @@ namespace Bit.Core.Services
 
         public Task<T> GetAsync<T>(string key)
         {
-            if(!_dict.ContainsKey(key))
+            if (!_dict.ContainsKey(key))
             {
                 return Task.FromResult(default(T));
             }
@@ -20,7 +20,7 @@ namespace Bit.Core.Services
 
         public Task SaveAsync<T>(string key, T obj)
         {
-            if(obj == null)
+            if (obj == null)
             {
                 return RemoveAsync(key);
             }
@@ -30,7 +30,7 @@ namespace Bit.Core.Services
 
         public Task RemoveAsync(string key)
         {
-            if(_dict.ContainsKey(key))
+            if (_dict.ContainsKey(key))
             {
                 _dict.Remove(key);
             }

@@ -18,7 +18,7 @@ namespace Bit.Droid.Services
             {
                 ci = new CultureInfo(netLanguage);
             }
-            catch(CultureNotFoundException e1)
+            catch (CultureNotFoundException e1)
             {
                 // iOS locale not valid .NET culture (eg. "en-ES" : English in Spain)
                 // fallback to first characters, in this case "en"
@@ -28,7 +28,7 @@ namespace Bit.Droid.Services
                     Console.WriteLine(netLanguage + " failed, trying " + fallback + " (" + e1.Message + ")");
                     ci = new CultureInfo(fallback);
                 }
-                catch(CultureNotFoundException e2)
+                catch (CultureNotFoundException e2)
                 {
                     // iOS language not valid .NET culture, falling back to English
                     Console.WriteLine(netLanguage + " couldn't be set, using 'en' (" + e2.Message + ")");
@@ -42,9 +42,9 @@ namespace Bit.Droid.Services
         {
             Console.WriteLine("Android Language:" + androidLanguage);
             var netLanguage = androidLanguage;
-            if(androidLanguage.StartsWith("zh"))
+            if (androidLanguage.StartsWith("zh"))
             {
-                if(androidLanguage.Contains("Hant") || androidLanguage.Contains("TW") ||
+                if (androidLanguage.Contains("Hant") || androidLanguage.Contains("TW") ||
                     androidLanguage.Contains("HK") || androidLanguage.Contains("MO"))
                 {
                     netLanguage = "zh-Hant";
@@ -54,7 +54,7 @@ namespace Bit.Droid.Services
                     netLanguage = "zh-Hans";
                 }
             }
-            else if(androidLanguage.StartsWith("iw"))
+            else if (androidLanguage.StartsWith("iw"))
             {
                 // Uncomment when we support RTL
                 // netLanguage = "he";
@@ -62,7 +62,7 @@ namespace Bit.Droid.Services
             else
             {
                 // Certain languages need to be converted to CultureInfo equivalent
-                switch(androidLanguage)
+                switch (androidLanguage)
                 {
                     case "ms-BN": // "Malaysian (Brunei)" not supported .NET culture
                     case "ms-MY": // "Malaysian (Malaysia)" not supported .NET culture
@@ -87,7 +87,7 @@ namespace Bit.Droid.Services
         {
             Console.WriteLine(".NET Fallback Language:" + platCulture.LanguageCode);
             var netLanguage = platCulture.LanguageCode; // use the first part of the identifier (two chars, usually);
-            switch(platCulture.LanguageCode)
+            switch (platCulture.LanguageCode)
             {
                 case "gsw":
                     netLanguage = "de-CH"; // equivalent to German (Switzerland) for this app

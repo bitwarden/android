@@ -33,7 +33,7 @@ namespace Bit.App.Pages
             };
             Children.Add(settingsPage);
 
-            if(Device.RuntimePlatform == Device.Android)
+            if (Device.RuntimePlatform == Device.Android)
             {
                 Effects.Add(new TabBarEffect());
 
@@ -43,12 +43,12 @@ namespace Bit.App.Pages
                 Xamarin.Forms.PlatformConfiguration.AndroidSpecific.TabbedPage.SetIsSmoothScrollEnabled(this, false);
             }
 
-            if(appOptions?.GeneratorTile ?? false)
+            if (appOptions?.GeneratorTile ?? false)
             {
                 appOptions.GeneratorTile = false;
                 ResetToGeneratorPage();
             }
-            else if(appOptions?.MyVaultTile ?? false)
+            else if (appOptions?.MyVaultTile ?? false)
             {
                 appOptions.MyVaultTile = false;
             }
@@ -66,17 +66,17 @@ namespace Bit.App.Pages
 
         protected async override void OnCurrentPageChanged()
         {
-            if(CurrentPage is NavigationPage navPage)
+            if (CurrentPage is NavigationPage navPage)
             {
-                if(navPage.RootPage is GroupingsPage groupingsPage)
+                if (navPage.RootPage is GroupingsPage groupingsPage)
                 {
                     // Load something?
                 }
-                else if(navPage.RootPage is GeneratorPage genPage)
+                else if (navPage.RootPage is GeneratorPage genPage)
                 {
                     await genPage.InitAsync();
                 }
-                else if(navPage.RootPage is SettingsPage settingsPage)
+                else if (navPage.RootPage is SettingsPage settingsPage)
                 {
                     await settingsPage.InitAsync();
                 }

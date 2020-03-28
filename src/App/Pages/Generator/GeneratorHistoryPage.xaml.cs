@@ -14,7 +14,7 @@ namespace Bit.App.Pages
             SetActivityIndicator();
             _vm = BindingContext as GeneratorHistoryPageViewModel;
             _vm.Page = this;
-            if(Device.RuntimePlatform == Device.iOS)
+            if (Device.RuntimePlatform == Device.iOS)
             {
                 ToolbarItems.Add(_closeItem);
                 ToolbarItems.Add(_moreItem);
@@ -40,7 +40,7 @@ namespace Bit.App.Pages
 
         private async void Close_Clicked(object sender, System.EventArgs e)
         {
-            if(DoOnce())
+            if (DoOnce())
             {
                 await Navigation.PopModalAsync();
             }
@@ -48,13 +48,13 @@ namespace Bit.App.Pages
 
         private async void More_Clicked(object sender, EventArgs e)
         {
-            if(!DoOnce())
+            if (!DoOnce())
             {
                 return;
             }
             var selection = await DisplayActionSheet(AppResources.Options, AppResources.Cancel,
                 null, AppResources.Clear);
-            if(selection == AppResources.Clear)
+            if (selection == AppResources.Clear)
             {
                 await _vm.ClearAsync();
             }

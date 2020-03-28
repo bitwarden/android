@@ -38,27 +38,27 @@ namespace Bit.Core.Services
             List<CipherView> ciphers = null, CancellationToken ct = default(CancellationToken))
         {
             var results = new List<CipherView>();
-            if(query != null)
+            if (query != null)
             {
                 query = query.Trim().ToLower();
             }
-            if(query == string.Empty)
+            if (query == string.Empty)
             {
                 query = null;
             }
-            if(ciphers == null)
+            if (ciphers == null)
             {
                 ciphers = await _cipherService.GetAllDecryptedAsync();
             }
 
             ct.ThrowIfCancellationRequested();
-            if(filter != null)
+            if (filter != null)
             {
                 ciphers = ciphers.Where(filter).ToList();
             }
 
             ct.ThrowIfCancellationRequested();
-            if(!IsSearchable(query))
+            if (!IsSearchable(query))
             {
                 return ciphers;
             }
@@ -75,19 +75,19 @@ namespace Bit.Core.Services
             return ciphers.Where(c =>
             {
                 ct.ThrowIfCancellationRequested();
-                if(c.Name?.ToLower().Contains(query) ?? false)
+                if (c.Name?.ToLower().Contains(query) ?? false)
                 {
                     return true;
                 }
-                if(query.Length >= 8 && c.Id.StartsWith(query))
+                if (query.Length >= 8 && c.Id.StartsWith(query))
                 {
                     return true;
                 }
-                if(c.SubTitle?.ToLower().Contains(query) ?? false)
+                if (c.SubTitle?.ToLower().Contains(query) ?? false)
                 {
                     return true;
                 }
-                if(c.Login?.Uri?.ToLower()?.Contains(query) ?? false)
+                if (c.Login?.Uri?.ToLower()?.Contains(query) ?? false)
                 {
                     return true;
                 }

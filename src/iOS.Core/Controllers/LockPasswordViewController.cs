@@ -68,7 +68,7 @@ namespace Bit.iOS.Core.Controllers
                 CheckPasswordAsync().GetAwaiter().GetResult();
                 return true;
             };
-            if(_pinLock)
+            if (_pinLock)
             {
                 MasterPasswordCell.TextField.KeyboardType = UIKeyboardType.NumberPad;
             }
@@ -80,7 +80,7 @@ namespace Bit.iOS.Core.Controllers
 
             base.ViewDidLoad();
 
-            if(_fingerprintLock)
+            if (_fingerprintLock)
             {
                 var tasks = Task.Run(async () =>
                 {
@@ -93,7 +93,7 @@ namespace Bit.iOS.Core.Controllers
         public override void ViewDidAppear(bool animated)
         {
             base.ViewDidAppear(animated);
-            if(!_fingerprintLock)
+            if (!_fingerprintLock)
             {
                 MasterPasswordCell.TextField.BecomeFirstResponder();
             }
@@ -101,7 +101,7 @@ namespace Bit.iOS.Core.Controllers
 
         protected async Task CheckPasswordAsync()
         {
-            if(string.IsNullOrWhiteSpace(MasterPasswordCell.TextField.Text))
+            if (string.IsNullOrWhiteSpace(MasterPasswordCell.TextField.Text))
             {
                 var alert = Dialogs.CreateAlert(AppResources.AnErrorHasOccurred,
                     string.Format(AppResources.ValidationFieldRequired,
@@ -116,12 +116,12 @@ namespace Bit.iOS.Core.Controllers
             var kdfIterations = await _userService.GetKdfIterationsAsync();
             var inputtedValue = MasterPasswordCell.TextField.Text;
 
-            if(_pinLock)
+            if (_pinLock)
             {
                 var failed = true;
                 try
                 {
-                    if(_pinSet.Item1)
+                    if (_pinSet.Item1)
                     {
                         var key = await _cryptoService.MakeKeyFromPinAsync(inputtedValue, email,
                             kdf.GetValueOrDefault(KdfType.PBKDF2_SHA256), kdfIterations.GetValueOrDefault(5000),
@@ -130,7 +130,7 @@ namespace Bit.iOS.Core.Controllers
                         var protectedPin = await _storageService.GetAsync<string>(Bit.Core.Constants.ProtectedPin);
                         var decPin = await _cryptoService.DecryptToUtf8Async(new CipherString(protectedPin), encKey);
                         failed = decPin != inputtedValue;
-                        if(!failed)
+                        if (!failed)
                         {
                             await SetKeyAndContinueAsync(key);
                         }
@@ -147,10 +147,10 @@ namespace Bit.iOS.Core.Controllers
                 {
                     failed = true;
                 }
-                if(failed)
+                if (failed)
                 {
                     _invalidPinAttempts++;
-                    if(_invalidPinAttempts >= 5)
+                    if (_invalidPinAttempts >= 5)
                     {
                         Cancel?.Invoke();
                         return;
@@ -163,19 +163,19 @@ namespace Bit.iOS.Core.Controllers
                 var key2 = await _cryptoService.MakeKeyAsync(inputtedValue, email, kdf, kdfIterations);
                 var keyHash = await _cryptoService.HashPasswordAsync(inputtedValue, key2);
                 var storedKeyHash = await _cryptoService.GetKeyHashAsync();
-                if(storedKeyHash == null)
+                if (storedKeyHash == null)
                 {
                     var oldKey = await _secureStorageService.GetAsync<string>("oldKey");
-                    if(key2.KeyB64 == oldKey)
+                    if (key2.KeyB64 == oldKey)
                     {
                         await _secureStorageService.RemoveAsync("oldKey");
                         await _cryptoService.SetKeyHashAsync(keyHash);
                         storedKeyHash = keyHash;
                     }
                 }
-                if(storedKeyHash != null && keyHash != null && storedKeyHash == keyHash)
+                if (storedKeyHash != null && keyHash != null && storedKeyHash == keyHash)
                 {
-                    if(_pinSet.Item1)
+                    if (_pinSet.Item1)
                     {
                         var protectedPin = await _storageService.GetAsync<string>(Bit.Core.Constants.ProtectedPin);
                         var encKey = await _cryptoService.GetEncKeyAsync(key2);
@@ -196,7 +196,7 @@ namespace Bit.iOS.Core.Controllers
         private async Task SetKeyAndContinueAsync(SymmetricCryptoKey key)
         {
             var hasKey = await _cryptoService.HasKeyAsync();
-            if(!hasKey)
+            if (!hasKey)
             {
                 await _cryptoService.SetKeyAsync(key);
             }
@@ -212,7 +212,7 @@ namespace Bit.iOS.Core.Controllers
 
         public async Task PromptFingerprintAsync()
         {
-            if(!_fingerprintLock)
+            if (!_fingerprintLock)
             {
                 return;
             }
@@ -220,7 +220,7 @@ namespace Bit.iOS.Core.Controllers
                 _pinLock ? AppResources.PIN : AppResources.MasterPassword,
                 () => MasterPasswordCell.TextField.BecomeFirstResponder());
             _lockService.FingerprintLocked = !success;
-            if(success)
+            if (success)
             {
                 DoContinue();
             }
@@ -250,16 +250,16 @@ namespace Bit.iOS.Core.Controllers
 
             public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
             {
-                if(indexPath.Section == 0)
+                if (indexPath.Section == 0)
                 {
-                    if(indexPath.Row == 0)
+                    if (indexPath.Row == 0)
                     {
                         return _controller.MasterPasswordCell;
                     }
                 }
-                else if(indexPath.Section == 1)
+                else if (indexPath.Section == 1)
                 {
-                    if(indexPath.Row == 0)
+                    if (indexPath.Row == 0)
                     {
                         var fingerprintButtonText = _controller._deviceActionService.SupportsFaceBiometric() ?
                             AppResources.UseFaceIDToUnlock : AppResources.UseFingerprintToUnlock;
@@ -284,7 +284,7 @@ namespace Bit.iOS.Core.Controllers
 
             public override nint RowsInSection(UITableView tableview, nint section)
             {
-                if(section <= 1)
+                if (section <= 1)
                 {
                     return 1;
                 }
@@ -305,17 +305,17 @@ namespace Bit.iOS.Core.Controllers
             {
                 tableView.DeselectRow(indexPath, true);
                 tableView.EndEditing(true);
-                if(indexPath.Section == 1 && indexPath.Row == 0)
+                if (indexPath.Section == 1 && indexPath.Row == 0)
                 {
                     var task = _controller.PromptFingerprintAsync();
                     return;
                 }
                 var cell = tableView.CellAt(indexPath);
-                if(cell == null)
+                if (cell == null)
                 {
                     return;
                 }
-                if(cell is ISelectable selectableCell)
+                if (cell is ISelectable selectableCell)
                 {
                     selectableCell.Select();
                 }

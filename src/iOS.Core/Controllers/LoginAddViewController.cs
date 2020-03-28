@@ -116,21 +116,21 @@ namespace Bit.iOS.Core.Controllers
         protected async Task SaveAsync()
         {
             /*
-            if(!_connectivity.IsConnected)
+            if (!_connectivity.IsConnected)
             {
                 AlertNoConnection();
                 return;
             }
             */
 
-            if(string.IsNullOrWhiteSpace(PasswordCell?.TextField?.Text))
+            if (string.IsNullOrWhiteSpace(PasswordCell?.TextField?.Text))
             {
                 DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired,
                     AppResources.Password), AppResources.Ok);
                 return;
             }
 
-            if(string.IsNullOrWhiteSpace(NameCell?.TextField?.Text))
+            if (string.IsNullOrWhiteSpace(NameCell?.TextField?.Text))
             {
                 DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired,
                     AppResources.Name), AppResources.Ok);
@@ -155,7 +155,7 @@ namespace Bit.iOS.Core.Controllers
                 }
             };
 
-            if(!string.IsNullOrWhiteSpace(UriCell?.TextField?.Text))
+            if (!string.IsNullOrWhiteSpace(UriCell?.TextField?.Text))
             {
                 cipher.Login.Uris = new List<LoginUriView>
                 {
@@ -174,10 +174,10 @@ namespace Bit.iOS.Core.Controllers
                 await _cipherService.SaveWithServerAsync(cipherDomain);
                 await loadingAlert.DismissViewControllerAsync(true);
                 await _storageService.SaveAsync(Bit.Core.Constants.ClearCiphersCacheKey, true);
-                if(await ASHelpers.IdentitiesCanIncremental())
+                if (await ASHelpers.IdentitiesCanIncremental())
                 {
                     var identity = await ASHelpers.GetCipherIdentityAsync(cipherDomain.Id);
-                    if(identity != null)
+                    if (identity != null)
                     {
                         await ASCredentialIdentityStore.SharedStore.SaveCredentialIdentitiesAsync(
                             new ASPasswordCredentialIdentity[] { identity });
@@ -189,9 +189,9 @@ namespace Bit.iOS.Core.Controllers
                 }
                 Success(cipherDomain.Id);
             }
-            catch(ApiException e)
+            catch (ApiException e)
             {
-                if(e?.Error != null)
+                if (e?.Error != null)
                 {
                     DisplayAlert(AppResources.AnErrorHasOccurred, e.Error.GetSingleMessage(), AppResources.Ok);
                 }
@@ -221,41 +221,41 @@ namespace Bit.iOS.Core.Controllers
 
             public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
             {
-                if(indexPath.Section == 0)
+                if (indexPath.Section == 0)
                 {
-                    if(indexPath.Row == 0)
+                    if (indexPath.Row == 0)
                     {
                         return _controller.NameCell;
                     }
-                    else if(indexPath.Row == 1)
+                    else if (indexPath.Row == 1)
                     {
                         return _controller.UsernameCell;
                     }
-                    else if(indexPath.Row == 2)
+                    else if (indexPath.Row == 2)
                     {
                         return _controller.PasswordCell;
                     }
-                    else if(indexPath.Row == 3)
+                    else if (indexPath.Row == 3)
                     {
                         return _controller.GeneratePasswordCell;
                     }
                 }
-                else if(indexPath.Section == 1)
+                else if (indexPath.Section == 1)
                 {
                     return _controller.UriCell;
                 }
-                else if(indexPath.Section == 2)
+                else if (indexPath.Section == 2)
                 {
-                    if(indexPath.Row == 0)
+                    if (indexPath.Row == 0)
                     {
                         return _controller.FolderCell;
                     }
-                    else if(indexPath.Row == 1)
+                    else if (indexPath.Row == 1)
                     {
                         return _controller.FavoriteCell;
                     }
                 }
-                else if(indexPath.Section == 3)
+                else if (indexPath.Section == 3)
                 {
                     return _controller.NotesCell;
                 }
@@ -275,15 +275,15 @@ namespace Bit.iOS.Core.Controllers
 
             public override nint RowsInSection(UITableView tableview, nint section)
             {
-                if(section == 0)
+                if (section == 0)
                 {
                     return 4;
                 }
-                else if(section == 1)
+                else if (section == 1)
                 {
                     return 1;
                 }
-                else if(section == 2)
+                else if (section == 2)
                 {
                     return 2;
                 }
@@ -300,11 +300,11 @@ namespace Bit.iOS.Core.Controllers
 
             public override string TitleForHeader(UITableView tableView, nint section)
             {
-                if(section == 0)
+                if (section == 0)
                 {
                     return AppResources.ItemInformation;
                 }
-                else if(section == 3)
+                else if (section == 3)
                 {
                     return AppResources.Notes;
                 }
@@ -317,19 +317,19 @@ namespace Bit.iOS.Core.Controllers
                 tableView.DeselectRow(indexPath, true);
                 tableView.EndEditing(true);
 
-                if(indexPath.Section == 0 && indexPath.Row == 3)
+                if (indexPath.Section == 0 && indexPath.Row == 3)
                 {
                     _controller.PerformSegue("passwordGeneratorSegue", this);
                 }
 
                 var cell = tableView.CellAt(indexPath);
-                if(cell == null)
+                if (cell == null)
                 {
                     return;
                 }
 
                 var selectableCell = cell as ISelectable;
-                if(selectableCell != null)
+                if (selectableCell != null)
                 {
                     selectableCell.Select();
                 }

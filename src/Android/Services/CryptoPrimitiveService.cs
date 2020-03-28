@@ -14,12 +14,12 @@ namespace Bit.Droid.Services
         {
             int keySize = 256;
             IDigest digest = null;
-            if(algorithm == CryptoHashAlgorithm.Sha256)
+            if (algorithm == CryptoHashAlgorithm.Sha256)
             {
                 keySize = 256;
                 digest = new Sha256Digest();
             }
-            else if(algorithm == CryptoHashAlgorithm.Sha512)
+            else if (algorithm == CryptoHashAlgorithm.Sha512)
             {
                 keySize = 512;
                 digest = new Sha512Digest();

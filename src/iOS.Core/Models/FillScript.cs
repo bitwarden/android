@@ -14,7 +14,7 @@ namespace Bit.iOS.Core.Models
         public FillScript(PageDetails pageDetails, string fillUsername, string fillPassword,
             List<Tuple<string, string>> fillFields)
         {
-            if(pageDetails == null)
+            if (pageDetails == null)
             {
                 return;
             }
@@ -23,18 +23,18 @@ namespace Bit.iOS.Core.Models
 
             var filledFields = new Dictionary<string, PageDetails.Field>();
 
-            if(fillFields?.Any() ?? false)
+            if (fillFields?.Any() ?? false)
             {
                 var fieldNames = fillFields.Select(f => f.Item1?.ToLower()).ToArray();
-                foreach(var field in pageDetails.Fields.Where(f => f.Viewable))
+                foreach (var field in pageDetails.Fields.Where(f => f.Viewable))
                 {
-                    if(filledFields.ContainsKey(field.OpId))
+                    if (filledFields.ContainsKey(field.OpId))
                     {
                         continue;
                     }
 
                     var matchingIndex = FindMatchingFieldIndex(field, fieldNames);
-                    if(matchingIndex > -1)
+                    if (matchingIndex > -1)
                     {
                         filledFields.Add(field.OpId, field);
                         Script.Add(new List<string> { "click_on_opid", field.OpId });
@@ -43,7 +43,7 @@ namespace Bit.iOS.Core.Models
                 }
             }
 
-            if(string.IsNullOrWhiteSpace(fillPassword))
+            if (string.IsNullOrWhiteSpace(fillPassword))
             {
                 // No password for this login. Maybe they just wanted to auto-fill some custom fields?
                 SetFillScriptForFocus(filledFields);
@@ -54,39 +54,39 @@ namespace Bit.iOS.Core.Models
             List<PageDetails.Field> passwords = new List<PageDetails.Field>();
 
             var passwordFields = pageDetails.Fields.Where(f => f.Type == "password" && f.Viewable).ToArray();
-            if(!passwordFields.Any())
+            if (!passwordFields.Any())
             {
                 // not able to find any viewable password fields. maybe there are some "hidden" ones?
                 passwordFields = pageDetails.Fields.Where(f => f.Type == "password").ToArray();
             }
 
-            foreach(var form in pageDetails.Forms)
+            foreach (var form in pageDetails.Forms)
             {
                 var passwordFieldsForForm = passwordFields.Where(f => f.Form == form.Key).ToArray();
                 passwords.AddRange(passwordFieldsForForm);
 
-                if(string.IsNullOrWhiteSpace(fillUsername))
+                if (string.IsNullOrWhiteSpace(fillUsername))
                 {
                     continue;
                 }
 
-                foreach(var pf in passwordFieldsForForm)
+                foreach (var pf in passwordFieldsForForm)
                 {
                     var username = FindUsernameField(pageDetails, pf, false, true);
-                    if(username == null)
+                    if (username == null)
                     {
                         // not able to find any viewable username fields. maybe there are some "hidden" ones?
                         username = FindUsernameField(pageDetails, pf, true, true);
                     }
 
-                    if(username != null)
+                    if (username != null)
                     {
                         usernames.Add(username);
                     }
                 }
             }
 
-            if(passwordFields.Any() && !passwords.Any())
+            if (passwordFields.Any() && !passwords.Any())
             {
                 // The page does not have any forms with password fields. Use the first password field on the page and the
                 // input field just before it as the username.
@@ -94,29 +94,29 @@ namespace Bit.iOS.Core.Models
                 var pf = passwordFields.First();
                 passwords.Add(pf);
 
-                if(!string.IsNullOrWhiteSpace(fillUsername) && pf.ElementNumber > 0)
+                if (!string.IsNullOrWhiteSpace(fillUsername) && pf.ElementNumber > 0)
                 {
                     var username = FindUsernameField(pageDetails, pf, false, false);
-                    if(username == null)
+                    if (username == null)
                     {
                         // not able to find any viewable username fields. maybe there are some "hidden" ones?
                         username = FindUsernameField(pageDetails, pf, true, false);
                     }
 
-                    if(username != null)
+                    if (username != null)
                     {
                         usernames.Add(username);
                     }
                 }
             }
 
-            if(!passwordFields.Any())
+            if (!passwordFields.Any())
             {
                 // No password fields on this page. Let's try to just fuzzy fill the username.
                 var usernameFieldNamesList = _usernameFieldNames.ToList();
-                foreach(var f in pageDetails.Fields)
+                foreach (var f in pageDetails.Fields)
                 {
-                    if(f.Viewable && (f.Type == "text" || f.Type == "email" || f.Type == "tel") &&
+                    if (f.Viewable && (f.Type == "text" || f.Type == "email" || f.Type == "tel") &&
                         FieldIsFuzzyMatch(f, usernameFieldNamesList))
                     {
                         usernames.Add(f);
@@ -124,14 +124,14 @@ namespace Bit.iOS.Core.Models
                 }
             }
 
-            foreach(var username in usernames.Where(u => !filledFields.ContainsKey(u.OpId)))
+            foreach (var username in usernames.Where(u => !filledFields.ContainsKey(u.OpId)))
             {
                 filledFields.Add(username.OpId, username);
                 Script.Add(new List<string> { "click_on_opid", username.OpId });
                 Script.Add(new List<string> { "fill_by_opid", username.OpId, fillUsername });
             }
 
-            foreach(var password in passwords.Where(p => !filledFields.ContainsKey(p.OpId)))
+            foreach (var password in passwords.Where(p => !filledFields.ContainsKey(p.OpId)))
             {
                 filledFields.Add(password.OpId, password);
                 Script.Add(new List<string> { "click_on_opid", password.OpId });
@@ -157,21 +157,21 @@ namespace Bit.iOS.Core.Models
         {
             PageDetails.Field usernameField = null;
 
-            foreach(var f in pageDetails.Fields)
+            foreach (var f in pageDetails.Fields)
             {
-                if(f.ElementNumber >= passwordField.ElementNumber)
+                if (f.ElementNumber >= passwordField.ElementNumber)
                 {
                     break;
                 }
 
-                if((!checkForm || f.Form == passwordField.Form)
+                if ((!checkForm || f.Form == passwordField.Form)
                     && (canBeHidden || f.Viewable)
                     && f.ElementNumber < passwordField.ElementNumber
                     && (f.Type == "text" || f.Type == "email" || f.Type == "tel"))
                 {
                     usernameField = f;
 
-                    if(FindMatchingFieldIndex(f, _usernameFieldNames) > -1)
+                    if (FindMatchingFieldIndex(f, _usernameFieldNames) > -1)
                     {
                         // We found an exact match. No need to keep looking.
                         break;
@@ -185,19 +185,19 @@ namespace Bit.iOS.Core.Models
         private int FindMatchingFieldIndex(PageDetails.Field field, string[] names)
         {
             var matchingIndex = -1;
-            if(!string.IsNullOrWhiteSpace(field.HtmlId))
+            if (!string.IsNullOrWhiteSpace(field.HtmlId))
             {
                 matchingIndex = Array.IndexOf(names, field.HtmlId.ToLower());
             }
-            if(matchingIndex < 0 && !string.IsNullOrWhiteSpace(field.HtmlName))
+            if (matchingIndex < 0 && !string.IsNullOrWhiteSpace(field.HtmlName))
             {
                 matchingIndex = Array.IndexOf(names, field.HtmlName.ToLower());
             }
-            if(matchingIndex < 0 && !string.IsNullOrWhiteSpace(field.LabelTag))
+            if (matchingIndex < 0 && !string.IsNullOrWhiteSpace(field.LabelTag))
             {
                 matchingIndex = Array.IndexOf(names, CleanLabel(field.LabelTag));
             }
-            if(matchingIndex < 0 && !string.IsNullOrWhiteSpace(field.Placeholder))
+            if (matchingIndex < 0 && !string.IsNullOrWhiteSpace(field.Placeholder))
             {
                 matchingIndex = Array.IndexOf(names, field.Placeholder.ToLower());
             }
@@ -207,19 +207,19 @@ namespace Bit.iOS.Core.Models
 
         private bool FieldIsFuzzyMatch(PageDetails.Field field, List<string> names)
         {
-            if(!string.IsNullOrWhiteSpace(field.HtmlId) && FuzzyMatch(names, field.HtmlId.ToLower()))
+            if (!string.IsNullOrWhiteSpace(field.HtmlId) && FuzzyMatch(names, field.HtmlId.ToLower()))
             {
                 return true;
             }
-            if(!string.IsNullOrWhiteSpace(field.HtmlName) && FuzzyMatch(names, field.HtmlName.ToLower()))
+            if (!string.IsNullOrWhiteSpace(field.HtmlName) && FuzzyMatch(names, field.HtmlName.ToLower()))
             {
                 return true;
             }
-            if(!string.IsNullOrWhiteSpace(field.LabelTag) && FuzzyMatch(names, CleanLabel(field.LabelTag)))
+            if (!string.IsNullOrWhiteSpace(field.LabelTag) && FuzzyMatch(names, CleanLabel(field.LabelTag)))
             {
                 return true;
             }
-            if(!string.IsNullOrWhiteSpace(field.Placeholder) && FuzzyMatch(names, field.Placeholder.ToLower()))
+            if (!string.IsNullOrWhiteSpace(field.Placeholder) && FuzzyMatch(names, field.Placeholder.ToLower()))
             {
                 return true;
             }
@@ -229,7 +229,7 @@ namespace Bit.iOS.Core.Models
 
         private bool FuzzyMatch(List<string> options, string value)
         {
-            if((!options?.Any() ?? true) || string.IsNullOrWhiteSpace(value))
+            if ((!options?.Any() ?? true) || string.IsNullOrWhiteSpace(value))
             {
                 return false;
             }
@@ -239,18 +239,18 @@ namespace Bit.iOS.Core.Models
 
         private void SetFillScriptForFocus(IDictionary<string, PageDetails.Field> filledFields)
         {
-            if(!filledFields.Any())
+            if (!filledFields.Any())
             {
                 return;
             }
 
             PageDetails.Field lastField = null, lastPasswordField = null;
-            foreach(var field in filledFields)
+            foreach (var field in filledFields)
             {
-                if(field.Value.Viewable)
+                if (field.Value.Viewable)
                 {
                     lastField = field.Value;
-                    if(field.Value.Type == "password")
+                    if (field.Value.Type == "password")
                     {
                         lastPasswordField = field.Value;
                     }
@@ -258,11 +258,11 @@ namespace Bit.iOS.Core.Models
             }
 
             // Prioritize password field over others.
-            if(lastPasswordField != null)
+            if (lastPasswordField != null)
             {
                 Script.Add(new List<string> { "focus_by_opid", lastPasswordField.OpId });
             }
-            else if(lastField != null)
+            else if (lastField != null)
             {
                 Script.Add(new List<string> { "focus_by_opid", lastField.OpId });
             }

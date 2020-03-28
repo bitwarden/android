@@ -24,14 +24,14 @@ namespace Bit.Core.Models.Request
                 ["scope"] = "api offline_access",
                 ["client_id"] = clientId
             };
-            if(Device != null)
+            if (Device != null)
             {
                 obj.Add("deviceType", ((int)Device.Type).ToString());
                 obj.Add("deviceIdentifier", Device.Identifier);
                 obj.Add("deviceName", Device.Name);
                 obj.Add("devicePushToken", Device.PushToken);
             }
-            if(!string.IsNullOrWhiteSpace(Token) && Provider != null)
+            if (!string.IsNullOrWhiteSpace(Token) && Provider != null)
             {
                 obj.Add("twoFactorToken", Token);
                 obj.Add("twoFactorProvider", ((int)Provider.Value).ToString());

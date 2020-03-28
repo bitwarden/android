@@ -12,7 +12,7 @@ namespace Bit.iOS.Renderers
         protected override void OnElementChanged(ElementChangedEventArgs<Picker> e)
         {
             base.OnElementChanged(e);
-            if(e.NewElement is Picker)
+            if (e.NewElement is Picker)
             {
                 var descriptor = UIFontDescriptor.PreferredBody;
                 Control.Font = UIFont.FromDescriptor(descriptor, descriptor.PointSize);
@@ -23,7 +23,7 @@ namespace Bit.iOS.Renderers
 
         private void UpdateKeyboardAppearance()
         {
-            if(!Core.Utilities.ThemeHelpers.LightTheme)
+            if (!Core.Utilities.ThemeHelpers.LightTheme)
             {
                 Control.KeyboardAppearance = UIKeyboardAppearance.Dark;
             }

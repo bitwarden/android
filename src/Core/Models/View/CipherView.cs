@@ -49,7 +49,7 @@ namespace Bit.Core.Models.View
         {
             get
             {
-                switch(Type)
+                switch (Type)
                 {
                     case CipherType.Login:
                         return Login.SubTitle;
@@ -73,7 +73,7 @@ namespace Bit.Core.Models.View
         {
             get
             {
-                if(HasAttachments)
+                if (HasAttachments)
                 {
                     return Attachments.Any(a => a.Key == null);
                 }
@@ -85,11 +85,11 @@ namespace Bit.Core.Models.View
         {
             get
             {
-                if(Type != CipherType.Login || Login == null)
+                if (Type != CipherType.Login || Login == null)
                 {
                     return null;
                 }
-                else if(string.IsNullOrWhiteSpace(Login.Password))
+                else if (string.IsNullOrWhiteSpace(Login.Password))
                 {
                     return null;
                 }

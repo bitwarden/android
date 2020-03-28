@@ -13,17 +13,17 @@ namespace Bit.App.Services
 
         public void Send(Message message, string id = null)
         {
-            lock(_myLock)
+            lock (_myLock)
             {
-                if(!string.IsNullOrWhiteSpace(id))
+                if (!string.IsNullOrWhiteSpace(id))
                 {
-                    if(_subscribers.ContainsKey(id))
+                    if (_subscribers.ContainsKey(id))
                     {
                         Task.Run(() => _subscribers[id].Invoke(message));
                     }
                     return;
                 }
-                foreach(var sub in _subscribers)
+                foreach (var sub in _subscribers)
                 {
                     Task.Run(() => sub.Value.Invoke(message));
                 }
@@ -32,9 +32,9 @@ namespace Bit.App.Services
 
         public void Subscribe(string id, Action<Message> messageCallback)
         {
-            lock(_myLock)
+            lock (_myLock)
             {
-                if(_subscribers.ContainsKey(id))
+                if (_subscribers.ContainsKey(id))
                 {
                     _subscribers[id] = messageCallback;
                 }
@@ -47,9 +47,9 @@ namespace Bit.App.Services
 
         public void Unsubscribe(string id)
         {
-            lock(_myLock)
+            lock (_myLock)
             {
-                if(_subscribers.ContainsKey(id))
+                if (_subscribers.ContainsKey(id))
                 {
                     _subscribers.Remove(id);
                 }

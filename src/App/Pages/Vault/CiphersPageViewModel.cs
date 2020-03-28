@@ -75,7 +75,7 @@ namespace Bit.App.Pages
         {
             WebsiteIconsEnabled = !(await _stateService.GetAsync<bool?>(Constants.DisableFaviconKey))
                 .GetValueOrDefault();
-            if(!string.IsNullOrWhiteSpace((Page as CiphersPage).SearchBar.Text))
+            if (!string.IsNullOrWhiteSpace((Page as CiphersPage).SearchBar.Text))
             {
                 Search((Page as CiphersPage).SearchBar.Text, 200);
             }
@@ -89,13 +89,13 @@ namespace Bit.App.Pages
             {
                 List<CipherView> ciphers = null;
                 var searchable = !string.IsNullOrWhiteSpace(searchText) && searchText.Length > 1;
-                if(searchable)
+                if (searchable)
                 {
-                    if(timeout != null)
+                    if (timeout != null)
                     {
                         await Task.Delay(timeout.Value);
                     }
-                    if(searchText != (Page as CiphersPage).SearchBar.Text)
+                    if (searchText != (Page as CiphersPage).SearchBar.Text)
                     {
                         return;
                     }
@@ -108,12 +108,12 @@ namespace Bit.App.Pages
                         ciphers = await _searchService.SearchCiphersAsync(searchText, Filter, null, cts.Token);
                         cts.Token.ThrowIfCancellationRequested();
                     }
-                    catch(OperationCanceledException)
+                    catch (OperationCanceledException)
                     {
                         return;
                     }
                 }
-                if(ciphers == null)
+                if (ciphers == null)
                 {
                     ciphers = new List<CipherView>();
                 }
@@ -130,10 +130,10 @@ namespace Bit.App.Pages
         public async Task SelectCipherAsync(CipherView cipher)
         {
             string selection = null;
-            if(!string.IsNullOrWhiteSpace(AutofillUrl))
+            if (!string.IsNullOrWhiteSpace(AutofillUrl))
             {
                 var options = new List<string> { AppResources.Autofill };
-                if(cipher.Type == CipherType.Login &&
+                if (cipher.Type == CipherType.Login &&
                     Xamarin.Essentials.Connectivity.NetworkAccess != Xamarin.Essentials.NetworkAccess.None)
                 {
                     options.Add(AppResources.AutofillAndSave);
@@ -142,17 +142,17 @@ namespace Bit.App.Pages
                 selection = await Page.DisplayActionSheet(AppResources.AutofillOrView, AppResources.Cancel, null,
                     options.ToArray());
             }
-            if(selection == AppResources.View || string.IsNullOrWhiteSpace(AutofillUrl))
+            if (selection == AppResources.View || string.IsNullOrWhiteSpace(AutofillUrl))
             {
                 var page = new ViewPage(cipher.Id);
                 await Page.Navigation.PushModalAsync(new NavigationPage(page));
             }
-            else if(selection == AppResources.Autofill || selection == AppResources.AutofillAndSave)
+            else if (selection == AppResources.Autofill || selection == AppResources.AutofillAndSave)
             {
-                if(selection == AppResources.AutofillAndSave)
+                if (selection == AppResources.AutofillAndSave)
                 {
                     var uris = cipher.Login?.Uris?.ToList();
-                    if(uris == null)
+                    if (uris == null)
                     {
                         uris = new List<LoginUriView>();
                     }
@@ -168,17 +168,17 @@ namespace Bit.App.Pages
                         await _cipherService.SaveWithServerAsync(await _cipherService.EncryptAsync(cipher));
                         await _deviceActionService.HideLoadingAsync();
                     }
-                    catch(ApiException e)
+                    catch (ApiException e)
                     {
                         await _deviceActionService.HideLoadingAsync();
-                        if(e?.Error != null)
+                        if (e?.Error != null)
                         {
                             await _platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(),
                                 AppResources.AnErrorHasOccurred);
                         }
                     }
                 }
-                if(_deviceActionService.SystemMajorVersion() < 21)
+                if (_deviceActionService.SystemMajorVersion() < 21)
                 {
                     await Utilities.AppHelpers.CipherListOptions(Page, cipher);
                 }
@@ -191,7 +191,7 @@ namespace Bit.App.Pages
 
         private async void CipherOptionsAsync(CipherView cipher)
         {
-            if((Page as BaseContentPage).DoOnce())
+            if ((Page as BaseContentPage).DoOnce())
             {
                 await Utilities.AppHelpers.CipherListOptions(Page, cipher);
             }

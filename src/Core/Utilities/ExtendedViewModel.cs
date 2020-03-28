@@ -12,7 +12,7 @@ namespace Bit.Core.Utilities
         protected bool SetProperty<T>(ref T backingStore, T value, Action onChanged = null,
             [CallerMemberName]string propertyName = "", string[] additionalPropertyNames = null)
         {
-            if(EqualityComparer<T>.Default.Equals(backingStore, value))
+            if (EqualityComparer<T>.Default.Equals(backingStore, value))
             {
                 return false;
             }
@@ -26,9 +26,9 @@ namespace Bit.Core.Utilities
         protected void TriggerPropertyChanged(string propertyName, string[] additionalPropertyNames = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            if(PropertyChanged != null && additionalPropertyNames != null)
+            if (PropertyChanged != null && additionalPropertyNames != null)
             {
-                foreach(var prop in additionalPropertyNames)
+                foreach (var prop in additionalPropertyNames)
                 {
                     PropertyChanged.Invoke(this, new PropertyChangedEventArgs(prop));
                 }

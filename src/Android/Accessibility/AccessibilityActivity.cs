@@ -35,7 +35,7 @@ namespace Bit.Droid.Accessibility
         protected override void OnResume()
         {
             base.OnResume();
-            if(!Intent.HasExtra("uri"))
+            if (!Intent.HasExtra("uri"))
             {
                 Finish();
                 return;
@@ -46,7 +46,7 @@ namespace Bit.Droid.Accessibility
         protected override void OnActivityResult(int requestCode, [GeneratedEnum] Result resultCode, Intent data)
         {
             base.OnActivityResult(requestCode, resultCode, data);
-            if(data == null)
+            if (data == null)
             {
                 AccessibilityHelpers.LastCredentials = null;
             }
@@ -54,7 +54,7 @@ namespace Bit.Droid.Accessibility
             {
                 try
                 {
-                    if(data.GetStringExtra("canceled") != null)
+                    if (data.GetStringExtra("canceled") != null)
                     {
                         AccessibilityHelpers.LastCredentials = null;
                     }
@@ -82,7 +82,7 @@ namespace Bit.Droid.Accessibility
 
         private void HandleIntent(Intent callingIntent, int requestCode)
         {
-            if(callingIntent?.GetBooleanExtra("autofillTileClicked", false) ?? false)
+            if (callingIntent?.GetBooleanExtra("autofillTileClicked", false) ?? false)
             {
                 Intent.RemoveExtra("autofillTileClicked");
                 var messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
@@ -98,20 +98,20 @@ namespace Bit.Droid.Accessibility
         private void LaunchMainActivity(Intent callingIntent, int requestCode)
         {
             _lastQueriedUri = callingIntent?.GetStringExtra("uri");
-            if(_lastQueriedUri == null)
+            if (_lastQueriedUri == null)
             {
                 Finish();
                 return;
             }
             var now = DateTime.UtcNow;
-            if(_lastLaunch.HasValue && (now - _lastLaunch.Value) <= TimeSpan.FromSeconds(2))
+            if (_lastLaunch.HasValue && (now - _lastLaunch.Value) <= TimeSpan.FromSeconds(2))
             {
                 return;
             }
 
             _lastLaunch = now;
             var intent = new Intent(this, typeof(MainActivity));
-            if(!callingIntent.Flags.HasFlag(ActivityFlags.LaunchedFromHistory))
+            if (!callingIntent.Flags.HasFlag(ActivityFlags.LaunchedFromHistory))
             {
                 intent.PutExtra("uri", _lastQueriedUri);
             }

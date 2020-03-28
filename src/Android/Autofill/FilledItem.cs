@@ -27,7 +27,7 @@ namespace Bit.Droid.Autofill
             Type = cipher.Type;
             Subtitle = cipher.SubTitle;
 
-            switch(Type)
+            switch (Type)
             {
                 case CipherType.Login:
                     Icon = Resource.Drawable.login;
@@ -62,32 +62,32 @@ namespace Bit.Droid.Autofill
 
         public bool ApplyToFields(FieldCollection fieldCollection, Dataset.Builder datasetBuilder)
         {
-            if(!fieldCollection?.Fields.Any() ?? true)
+            if (!fieldCollection?.Fields.Any() ?? true)
             {
                 return false;
             }
 
             var setValues = false;
-            if(Type == CipherType.Login)
+            if (Type == CipherType.Login)
             {
-                if(fieldCollection.PasswordFields.Any() && !string.IsNullOrWhiteSpace(_password))
+                if (fieldCollection.PasswordFields.Any() && !string.IsNullOrWhiteSpace(_password))
                 {
-                    foreach(var f in fieldCollection.PasswordFields)
+                    foreach (var f in fieldCollection.PasswordFields)
                     {
                         var val = ApplyValue(f, _password);
-                        if(val != null)
+                        if (val != null)
                         {
                             setValues = true;
                             datasetBuilder.SetValue(f.AutofillId, val);
                         }
                     }
                 }
-                if(fieldCollection.UsernameFields.Any() && !string.IsNullOrWhiteSpace(Subtitle))
+                if (fieldCollection.UsernameFields.Any() && !string.IsNullOrWhiteSpace(Subtitle))
                 {
-                    foreach(var f in fieldCollection.UsernameFields)
+                    foreach (var f in fieldCollection.UsernameFields)
                     {
                         var val = ApplyValue(f, Subtitle);
-                        if(val != null)
+                        if (val != null)
                         {
                             setValues = true;
                             datasetBuilder.SetValue(f.AutofillId, val);
@@ -95,59 +95,59 @@ namespace Bit.Droid.Autofill
                     }
                 }
             }
-            else if(Type == CipherType.Card)
+            else if (Type == CipherType.Card)
             {
-                if(ApplyValue(datasetBuilder, fieldCollection, Android.Views.View.AutofillHintCreditCardNumber,
+                if (ApplyValue(datasetBuilder, fieldCollection, Android.Views.View.AutofillHintCreditCardNumber,
                     _cardNumber))
                 {
                     setValues = true;
                 }
-                if(ApplyValue(datasetBuilder, fieldCollection, Android.Views.View.AutofillHintCreditCardSecurityCode,
+                if (ApplyValue(datasetBuilder, fieldCollection, Android.Views.View.AutofillHintCreditCardSecurityCode,
                     _cardCode))
                 {
                     setValues = true;
                 }
-                if(ApplyValue(datasetBuilder, fieldCollection,
+                if (ApplyValue(datasetBuilder, fieldCollection,
                     Android.Views.View.AutofillHintCreditCardExpirationMonth, _cardExpMonth, true))
                 {
                     setValues = true;
                 }
-                if(ApplyValue(datasetBuilder, fieldCollection, Android.Views.View.AutofillHintCreditCardExpirationYear,
+                if (ApplyValue(datasetBuilder, fieldCollection, Android.Views.View.AutofillHintCreditCardExpirationYear,
                     _cardExpYear))
                 {
                     setValues = true;
                 }
-                if(ApplyValue(datasetBuilder, fieldCollection, Android.Views.View.AutofillHintName, _cardName))
+                if (ApplyValue(datasetBuilder, fieldCollection, Android.Views.View.AutofillHintName, _cardName))
                 {
                     setValues = true;
                 }
             }
-            else if(Type == CipherType.Identity)
+            else if (Type == CipherType.Identity)
             {
-                if(ApplyValue(datasetBuilder, fieldCollection, Android.Views.View.AutofillHintPhone, _idPhone))
+                if (ApplyValue(datasetBuilder, fieldCollection, Android.Views.View.AutofillHintPhone, _idPhone))
                 {
                     setValues = true;
                 }
-                if(ApplyValue(datasetBuilder, fieldCollection, Android.Views.View.AutofillHintEmailAddress, _idEmail))
+                if (ApplyValue(datasetBuilder, fieldCollection, Android.Views.View.AutofillHintEmailAddress, _idEmail))
                 {
                     setValues = true;
                 }
-                if(ApplyValue(datasetBuilder, fieldCollection, Android.Views.View.AutofillHintUsername,
+                if (ApplyValue(datasetBuilder, fieldCollection, Android.Views.View.AutofillHintUsername,
                     _idUsername))
                 {
                     setValues = true;
                 }
-                if(ApplyValue(datasetBuilder, fieldCollection, Android.Views.View.AutofillHintPostalAddress,
+                if (ApplyValue(datasetBuilder, fieldCollection, Android.Views.View.AutofillHintPostalAddress,
                     _idAddress))
                 {
                     setValues = true;
                 }
-                if(ApplyValue(datasetBuilder, fieldCollection, Android.Views.View.AutofillHintPostalCode,
+                if (ApplyValue(datasetBuilder, fieldCollection, Android.Views.View.AutofillHintPostalCode,
                     _idPostalCode))
                 {
                     setValues = true;
                 }
-                if(ApplyValue(datasetBuilder, fieldCollection, Android.Views.View.AutofillHintName, Subtitle))
+                if (ApplyValue(datasetBuilder, fieldCollection, Android.Views.View.AutofillHintName, Subtitle))
                 {
                     setValues = true;
                 }
@@ -159,12 +159,12 @@ namespace Bit.Droid.Autofill
             string hint, string value, bool monthValue = false)
         {
             bool setValues = false;
-            if(fieldCollection.HintToFieldsMap.ContainsKey(hint) && !string.IsNullOrWhiteSpace(value))
+            if (fieldCollection.HintToFieldsMap.ContainsKey(hint) && !string.IsNullOrWhiteSpace(value))
             {
-                foreach(var f in fieldCollection.HintToFieldsMap[hint])
+                foreach (var f in fieldCollection.HintToFieldsMap[hint])
                 {
                     var val = ApplyValue(f, value, monthValue);
-                    if(val != null)
+                    if (val != null)
                     {
                         setValues = true;
                         builder.SetValue(f.AutofillId, val);
@@ -176,31 +176,31 @@ namespace Bit.Droid.Autofill
 
         private static AutofillValue ApplyValue(Field field, string value, bool monthValue = false)
         {
-            switch(field.AutofillType)
+            switch (field.AutofillType)
             {
                 case AutofillType.Date:
-                    if(long.TryParse(value, out long dateValue))
+                    if (long.TryParse(value, out long dateValue))
                     {
                         return AutofillValue.ForDate(dateValue);
                     }
                     break;
                 case AutofillType.List:
-                    if(field.AutofillOptions != null)
+                    if (field.AutofillOptions != null)
                     {
-                        if(monthValue && int.TryParse(value, out int monthIndex))
+                        if (monthValue && int.TryParse(value, out int monthIndex))
                         {
-                            if(field.AutofillOptions.Count == 13)
+                            if (field.AutofillOptions.Count == 13)
                             {
                                 return AutofillValue.ForList(monthIndex);
                             }
-                            else if(field.AutofillOptions.Count >= monthIndex)
+                            else if (field.AutofillOptions.Count >= monthIndex)
                             {
                                 return AutofillValue.ForList(monthIndex - 1);
                             }
                         }
-                        for(var i = 0; i < field.AutofillOptions.Count; i++)
+                        for (var i = 0; i < field.AutofillOptions.Count; i++)
                         {
-                            if(field.AutofillOptions[i].Equals(value))
+                            if (field.AutofillOptions[i].Equals(value))
                             {
                                 return AutofillValue.ForList(i);
                             }
@@ -210,7 +210,7 @@ namespace Bit.Droid.Autofill
                 case AutofillType.Text:
                     return AutofillValue.ForText(value);
                 case AutofillType.Toggle:
-                    if(bool.TryParse(value, out bool toggleValue))
+                    if (bool.TryParse(value, out bool toggleValue))
                     {
                         return AutofillValue.ForToggle(toggleValue);
                     }

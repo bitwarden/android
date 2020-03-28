@@ -18,12 +18,12 @@ namespace Bit.Droid.Renderers
         protected override void OnElementChanged(ElementChangedEventArgs<Slider> e)
         {
             base.OnElementChanged(e);
-            if(Control != null && Element is ExtendedSlider view)
+            if (Control != null && Element is ExtendedSlider view)
             {
                 var t = ResourcesCompat.GetDrawable(Resources, Resource.Drawable.slider_thumb, null);
-                if(t is GradientDrawable thumb)
+                if (t is GradientDrawable thumb)
                 {
-                    if(view.ThumbColor == Color.Default)
+                    if (view.ThumbColor == Color.Default)
                     {
                         thumb.SetColor(Color.White.ToAndroid());
                     }

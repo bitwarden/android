@@ -53,7 +53,7 @@ namespace Bit.Core.Services
 
         public async Task<string> GetUserIdAsync()
         {
-            if(_userId == null)
+            if (_userId == null)
             {
                 _userId = await _storageService.GetAsync<string>(Keys_UserId);
             }
@@ -62,7 +62,7 @@ namespace Bit.Core.Services
 
         public async Task<string> GetEmailAsync()
         {
-            if(_email == null)
+            if (_email == null)
             {
                 _email = await _storageService.GetAsync<string>(Keys_UserEmail);
             }
@@ -71,7 +71,7 @@ namespace Bit.Core.Services
 
         public async Task<string> GetSecurityStampAsync()
         {
-            if(_stamp == null)
+            if (_stamp == null)
             {
                 _stamp = await _storageService.GetAsync<string>(Keys_Stamp);
             }
@@ -80,7 +80,7 @@ namespace Bit.Core.Services
 
         public async Task<KdfType?> GetKdfAsync()
         {
-            if(_kdf == null)
+            if (_kdf == null)
             {
                 _kdf = (KdfType?)(await _storageService.GetAsync<int?>(Keys_Kdf));
             }
@@ -89,7 +89,7 @@ namespace Bit.Core.Services
 
         public async Task<int?> GetKdfIterationsAsync()
         {
-            if(_kdfIterations == null)
+            if (_kdfIterations == null)
             {
                 _kdfIterations = await _storageService.GetAsync<int?>(Keys_KdfIterations);
             }
@@ -114,7 +114,7 @@ namespace Bit.Core.Services
         public async Task<bool> IsAuthenticatedAsync()
         {
             var token = await _tokenService.GetTokenAsync();
-            if(token == null)
+            if (token == null)
             {
                 return false;
             }
@@ -125,7 +125,7 @@ namespace Bit.Core.Services
         public async Task<bool> CanAccessPremiumAsync()
         {
             var tokenPremium = _tokenService.GetPremium();
-            if(tokenPremium)
+            if (tokenPremium)
             {
                 return true;
             }
@@ -138,7 +138,7 @@ namespace Bit.Core.Services
             var userId = await GetUserIdAsync();
             var organizations = await _storageService.GetAsync<Dictionary<string, OrganizationData>>(
                 string.Format(Keys_OrganizationsFormat, userId));
-            if(organizations == null || !organizations.ContainsKey(id))
+            if (organizations == null || !organizations.ContainsKey(id))
             {
                 return null;
             }

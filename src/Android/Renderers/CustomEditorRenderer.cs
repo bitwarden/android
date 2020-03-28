@@ -16,7 +16,7 @@ namespace Bit.Droid.Renderers
         protected override void OnElementChanged(ElementChangedEventArgs<Editor> e)
         {
             base.OnElementChanged(e);
-            if(Control != null && e.NewElement != null)
+            if (Control != null && e.NewElement != null)
             {
                 Control.SetPadding(Control.PaddingLeft, Control.PaddingTop - 10, Control.PaddingRight,
                     Control.PaddingBottom + 20);

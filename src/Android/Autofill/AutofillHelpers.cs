@@ -75,17 +75,17 @@ namespace Bit.Droid.Autofill
 
         public static async Task<List<FilledItem>> GetFillItemsAsync(Parser parser, ICipherService cipherService)
         {
-            if(parser.FieldCollection.FillableForLogin)
+            if (parser.FieldCollection.FillableForLogin)
             {
                 var ciphers = await cipherService.GetAllDecryptedByUrlAsync(parser.Uri);
-                if(ciphers.Item1.Any() || ciphers.Item2.Any())
+                if (ciphers.Item1.Any() || ciphers.Item2.Any())
                 {
                     var allCiphers = ciphers.Item1.ToList();
                     allCiphers.AddRange(ciphers.Item2.ToList());
                     return allCiphers.Select(c => new FilledItem(c)).ToList();
                 }
             }
-            else if(parser.FieldCollection.FillableForCard)
+            else if (parser.FieldCollection.FillableForCard)
             {
                 var ciphers = await cipherService.GetAllDecryptedAsync();
                 return ciphers.Where(c => c.Type == CipherType.Card).Select(c => new FilledItem(c)).ToList();
@@ -96,12 +96,12 @@ namespace Bit.Droid.Autofill
         public static FillResponse BuildFillResponse(Parser parser, List<FilledItem> items, bool locked)
         {
             var responseBuilder = new FillResponse.Builder();
-            if(items != null && items.Count > 0)
+            if (items != null && items.Count > 0)
             {
-                foreach(var item in items)
+                foreach (var item in items)
                 {
                     var dataset = BuildDataset(parser.ApplicationContext, parser.FieldCollection, item);
-                    if(dataset != null)
+                    if (dataset != null)
                     {
                         responseBuilder.AddDataset(dataset);
                     }
@@ -118,7 +118,7 @@ namespace Bit.Droid.Autofill
         {
             var datasetBuilder = new Dataset.Builder(
                 BuildListView(filledItem.Name, filledItem.Subtitle, filledItem.Icon, context));
-            if(filledItem.ApplyToFields(fields, datasetBuilder))
+            if (filledItem.ApplyToFields(fields, datasetBuilder))
             {
                 return datasetBuilder.Build();
             }
@@ -129,15 +129,15 @@ namespace Bit.Droid.Autofill
         {
             var intent = new Intent(context, typeof(MainActivity));
             intent.PutExtra("autofillFramework", true);
-            if(fields.FillableForLogin)
+            if (fields.FillableForLogin)
             {
                 intent.PutExtra("autofillFrameworkFillType", (int)CipherType.Login);
             }
-            else if(fields.FillableForCard)
+            else if (fields.FillableForCard)
             {
                 intent.PutExtra("autofillFrameworkFillType", (int)CipherType.Card);
             }
-            else if(fields.FillableForIdentity)
+            else if (fields.FillableForIdentity)
             {
                 intent.PutExtra("autofillFrameworkFillType", (int)CipherType.Identity);
             }
@@ -159,7 +159,7 @@ namespace Bit.Droid.Autofill
             datasetBuilder.SetAuthentication(pendingIntent.IntentSender);
 
             // Dataset must have a value set. We will reset this in the main activity when the real item is chosen.
-            foreach(var autofillId in fields.AutofillIds)
+            foreach (var autofillId in fields.AutofillIds)
             {
                 datasetBuilder.SetValue(autofillId, AutofillValue.ForText("PLACEHOLDER"));
             }
@@ -181,24 +181,24 @@ namespace Bit.Droid.Autofill
             // Docs state that password fields cannot be reliably saved in Compat mode since they will show as
             // masked values.
             var compatBrowser = CompatBrowsers.Contains(parser.PackageName);
-            if(compatBrowser && fields.SaveType == SaveDataType.Password)
+            if (compatBrowser && fields.SaveType == SaveDataType.Password)
             {
                 return;
             }
 
             var requiredIds = fields.GetRequiredSaveFields();
-            if(fields.SaveType == SaveDataType.Generic || requiredIds.Length == 0)
+            if (fields.SaveType == SaveDataType.Generic || requiredIds.Length == 0)
             {
                 return;
             }
 
             var saveBuilder = new SaveInfo.Builder(fields.SaveType, requiredIds);
             var optionalIds = fields.GetOptionalSaveIds();
-            if(optionalIds.Length > 0)
+            if (optionalIds.Length > 0)
             {
                 saveBuilder.SetOptionalIds(optionalIds);
             }
-            if(compatBrowser)
+            if (compatBrowser)
             {
                 saveBuilder.SetFlags(SaveFlags.SaveOnAllViewsInvisible);
             }

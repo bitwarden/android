@@ -35,9 +35,9 @@ namespace Bit.iOS.Autofill
 
         public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
         {
-            if(segue.DestinationViewController is UINavigationController navController)
+            if (segue.DestinationViewController is UINavigationController navController)
             {
-                if(navController.TopViewController is PasswordGeneratorViewController passwordGeneratorController)
+                if (navController.TopViewController is PasswordGeneratorViewController passwordGeneratorController)
                 {
                     passwordGeneratorController.PasswordOptions = Context.PasswordOptions;
                     passwordGeneratorController.Parent = this;

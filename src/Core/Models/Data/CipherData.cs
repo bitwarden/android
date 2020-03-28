@@ -24,7 +24,7 @@ namespace Bit.Core.Models.Data
             Notes = response.Notes;
             CollectionIds = collectionIds?.ToList() ?? response.CollectionIds;
 
-            switch(Type)
+            switch (Type)
             {
                 case Enums.CipherType.Login:
                     Login = new LoginData(response.Login);

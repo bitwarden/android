@@ -19,7 +19,7 @@ namespace Bit.App.Pages
             _vm.Page = this;
             _vm.Email = email;
             MasterPasswordEntry = _masterPassword;
-            if(Device.RuntimePlatform == Device.Android)
+            if (Device.RuntimePlatform == Device.Android)
             {
                 ToolbarItems.RemoveAt(0);
             }
@@ -34,7 +34,7 @@ namespace Bit.App.Pages
         {
             base.OnAppearing();
             await _vm.InitAsync();
-            if(string.IsNullOrWhiteSpace(_vm.Email))
+            if (string.IsNullOrWhiteSpace(_vm.Email))
             {
                 RequestFocus(_email);
             }
@@ -46,7 +46,7 @@ namespace Bit.App.Pages
 
         private async void LogIn_Clicked(object sender, EventArgs e)
         {
-            if(DoOnce())
+            if (DoOnce())
             {
                 await _vm.LogInAsync();
             }
@@ -54,7 +54,7 @@ namespace Bit.App.Pages
 
         private void Hint_Clicked(object sender, EventArgs e)
         {
-            if(DoOnce())
+            if (DoOnce())
             {
                 Navigation.PushModalAsync(new NavigationPage(new HintPage()));
             }
@@ -62,7 +62,7 @@ namespace Bit.App.Pages
 
         private async void Close_Clicked(object sender, EventArgs e)
         {
-            if(DoOnce())
+            if (DoOnce())
             {
                 _messagingService.Send("showStatusBar", false);
                 await Navigation.PopModalAsync();

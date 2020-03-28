@@ -28,7 +28,7 @@ namespace Bit.Droid.Autofill
             FillCallback callback)
         {
             var structure = request.FillContexts?.LastOrDefault()?.Structure;
-            if(structure == null)
+            if (structure == null)
             {
                 return;
             }
@@ -36,27 +36,27 @@ namespace Bit.Droid.Autofill
             var parser = new Parser(structure, ApplicationContext);
             parser.Parse();
 
-            if(_storageService == null)
+            if (_storageService == null)
             {
                 _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             }
 
             var shouldAutofill = await parser.ShouldAutofillAsync(_storageService);
-            if(!shouldAutofill)
+            if (!shouldAutofill)
             {
                 return;
             }
 
-            if(_lockService == null)
+            if (_lockService == null)
             {
                 _lockService = ServiceContainer.Resolve<ILockService>("lockService");
             }
 
             List<FilledItem> items = null;
             var locked = await _lockService.IsLockedAsync();
-            if(!locked)
+            if (!locked)
             {
-                if(_cipherService == null)
+                if (_cipherService == null)
                 {
                     _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
                 }
@@ -71,18 +71,18 @@ namespace Bit.Droid.Autofill
         public async override void OnSaveRequest(SaveRequest request, SaveCallback callback)
         {
             var structure = request.FillContexts?.LastOrDefault()?.Structure;
-            if(structure == null)
+            if (structure == null)
             {
                 return;
             }
 
-            if(_storageService == null)
+            if (_storageService == null)
             {
                 _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             }
 
             var disableSavePrompt = await _storageService.GetAsync<bool?>(Constants.AutofillDisableSavePromptKey);
-            if(disableSavePrompt.GetValueOrDefault())
+            if (disableSavePrompt.GetValueOrDefault())
             {
                 return;
             }
@@ -91,7 +91,7 @@ namespace Bit.Droid.Autofill
             parser.Parse();
 
             var savedItem = parser.FieldCollection.GetSavedItem();
-            if(savedItem == null)
+            if (savedItem == null)
             {
                 Toast.MakeText(this, "Unable to save this form.", ToastLength.Short).Show();
                 return;
@@ -102,7 +102,7 @@ namespace Bit.Droid.Autofill
             intent.PutExtra("autofillFramework", true);
             intent.PutExtra("autofillFrameworkSave", true);
             intent.PutExtra("autofillFrameworkType", (int)savedItem.Type);
-            switch(savedItem.Type)
+            switch (savedItem.Type)
             {
                 case CipherType.Login:
                     intent.PutExtra("autofillFrameworkName", parser.Uri

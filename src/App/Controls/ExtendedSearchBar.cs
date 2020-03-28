@@ -8,10 +8,10 @@ namespace Bit.App.Controls
     {
         public ExtendedSearchBar()
         {
-            if(Device.RuntimePlatform == Device.iOS)
+            if (Device.RuntimePlatform == Device.iOS)
             {
                 var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService", true);
-                if(!deviceActionService?.UsingDarkTheme() ?? false)
+                if (!deviceActionService?.UsingDarkTheme() ?? false)
                 {
                     TextColor = Color.Black;
                 }

@@ -12,7 +12,7 @@ namespace Bit.Droid.Receivers
         public override void OnReceive(Context context, Intent intent)
         {
             var clipboardManager = context.GetSystemService(Context.ClipboardService) as ClipboardManager;
-            if(StaticStore.LastClipboardValue != null && StaticStore.LastClipboardValue == clipboardManager.Text)
+            if (StaticStore.LastClipboardValue != null && StaticStore.LastClipboardValue == clipboardManager.Text)
             {
                 clipboardManager.Text = string.Empty;
             }

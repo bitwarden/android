@@ -7,7 +7,7 @@ namespace Bit.App.Controls
         public FaButton()
         {
             Padding = 0;
-            switch(Device.RuntimePlatform)
+            switch (Device.RuntimePlatform)
             {
                 case Device.iOS:
                     FontFamily = "FontAwesome";

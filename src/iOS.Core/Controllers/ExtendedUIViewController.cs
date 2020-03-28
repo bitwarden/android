@@ -22,11 +22,11 @@ namespace Bit.iOS.Core.Controllers
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
-            if(View != null)
+            if (View != null)
             {
                 View.BackgroundColor = ThemeHelpers.BackgroundColor;
             }
-            if(NavigationController?.NavigationBar != null)
+            if (NavigationController?.NavigationBar != null)
             {
                 NavigationController.NavigationBar.BarTintColor = ThemeHelpers.NavBarBackgroundColor;
                 NavigationController.NavigationBar.BackgroundColor = ThemeHelpers.NavBarBackgroundColor;

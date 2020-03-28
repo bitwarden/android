@@ -41,12 +41,12 @@ namespace Bit.App.Pages
 
         public async Task LoadAsync()
         {
-            if(Folder == null)
+            if (Folder == null)
             {
-                if(EditMode)
+                if (EditMode)
                 {
                     var folder = await _folderService.GetAsync(FolderId);
-                    if(folder != null)
+                    if (folder != null)
                     {
                         Folder = await folder.DecryptAsync();
                     }
@@ -60,17 +60,17 @@ namespace Bit.App.Pages
 
         public async Task<bool> SubmitAsync()
         {
-            if(Folder == null)
+            if (Folder == null)
             {
                 return false;
             }
-            if(Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
+            if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
                     AppResources.InternetConnectionRequiredTitle);
                 return false;
             }
-            if(string.IsNullOrWhiteSpace(Folder.Name))
+            if (string.IsNullOrWhiteSpace(Folder.Name))
             {
                 await Page.DisplayAlert(AppResources.AnErrorHasOccurred,
                     string.Format(AppResources.ValidationFieldRequired, AppResources.Name),
@@ -90,10 +90,10 @@ namespace Bit.App.Pages
                 await Page.Navigation.PopModalAsync();
                 return true;
             }
-            catch(ApiException e)
+            catch (ApiException e)
             {
                 await _deviceActionService.HideLoadingAsync();
-                if(e?.Error != null)
+                if (e?.Error != null)
                 {
                     await _platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(),
                         AppResources.AnErrorHasOccurred);
@@ -104,11 +104,11 @@ namespace Bit.App.Pages
 
         public async Task<bool> DeleteAsync()
         {
-            if(Folder == null)
+            if (Folder == null)
             {
                 return false;
             }
-            if(Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
+            if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
                     AppResources.InternetConnectionRequiredTitle);
@@ -116,7 +116,7 @@ namespace Bit.App.Pages
             }
             var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.DoYouReallyWantToDelete,
                 null, AppResources.Yes, AppResources.No);
-            if(!confirmed)
+            if (!confirmed)
             {
                 return false;
             }
@@ -129,10 +129,10 @@ namespace Bit.App.Pages
                 await Page.Navigation.PopModalAsync();
                 return true;
             }
-            catch(ApiException e)
+            catch (ApiException e)
             {
                 await _deviceActionService.HideLoadingAsync();
-                if(e?.Error != null)
+                if (e?.Error != null)
                 {
                     await _platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(),
                         AppResources.AnErrorHasOccurred);

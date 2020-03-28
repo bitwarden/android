@@ -32,7 +32,7 @@ namespace Bit.iOS.Core.Utilities
 
         public static void RegisterLocalServices()
         {
-            if(ServiceContainer.Resolve<ILogService>("logService", true) == null)
+            if (ServiceContainer.Resolve<ILogService>("logService", true) == null)
             {
                 ServiceContainer.Register<ILogService>("logService", new ConsoleLogService());
             }
@@ -87,7 +87,7 @@ namespace Bit.iOS.Core.Utilities
             await ServiceContainer.Resolve<IStateService>("stateService").SaveAsync(
                 Bit.Core.Constants.DisableFaviconKey, disableFavicon);
             await ServiceContainer.Resolve<IEnvironmentService>("environmentService").SetUrlsFromStorageAsync();
-            if(postBootstrapFunc != null)
+            if (postBootstrapFunc != null)
             {
                 await postBootstrapFunc.Invoke();
             }

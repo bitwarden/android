@@ -10,7 +10,7 @@ namespace Bit.Droid.Effects
     {
         protected override void OnAttached()
         {
-            if(Element is Label label && Control is TextView textView)
+            if (Element is Label label && Control is TextView textView)
             {
                 textView.SetTextSize(Android.Util.ComplexUnitType.Pt, (float)label.FontSize);
             }

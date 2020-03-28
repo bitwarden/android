@@ -26,7 +26,7 @@ namespace Bit.App.Utilities
         {
             var val = _i18nService.T(Id, P1, P2, P3);
             /*
-            if(Header && Device.RuntimePlatform == Device.iOS)
+            if (Header && Device.RuntimePlatform == Device.iOS)
             {
                 return val.ToUpper();
             }

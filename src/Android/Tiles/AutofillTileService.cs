@@ -46,7 +46,7 @@ namespace Bit.Droid.Tile
         {
             base.OnClick();
             
-            if(IsLocked)
+            if (IsLocked)
             {
                 UnlockAndRun(new Runnable(ScanAndFill));
             }
@@ -59,7 +59,7 @@ namespace Bit.Droid.Tile
         private void SetTileAdded(bool isAdded)
         {
             AccessibilityHelpers.IsAutofillTileAdded = isAdded;
-            if(_storageService == null)
+            if (_storageService == null)
             {
                 _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             }
@@ -68,7 +68,7 @@ namespace Bit.Droid.Tile
 
         private void ScanAndFill()
         {
-            if(!AccessibilityHelpers.IsAccessibilityBroadcastReady)
+            if (!AccessibilityHelpers.IsAccessibilityBroadcastReady)
             {
                 ShowConfigErrorDialog();
                 return;

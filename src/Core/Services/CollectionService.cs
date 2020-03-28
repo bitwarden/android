@@ -41,12 +41,12 @@ namespace Bit.Core.Services
 
         public async Task<Collection> EncryptAsync(CollectionView model)
         {
-            if(model.OrganizationId == null)
+            if (model.OrganizationId == null)
             {
                 throw new Exception("Collection has no organization id.");
             }
             var key = await _cryptoService.GetOrgKeyAsync(model.OrganizationId);
-            if(key == null)
+            if (key == null)
             {
                 throw new Exception("No key for this collection's organization.");
             }
@@ -62,7 +62,7 @@ namespace Bit.Core.Services
 
         public async Task<List<CollectionView>> DecryptManyAsync(List<Collection> collections)
         {
-            if(collections == null)
+            if (collections == null)
             {
                 return new List<CollectionView>();
             }
@@ -73,7 +73,7 @@ namespace Bit.Core.Services
                 decCollections.Add(c);
             }
             var tasks = new List<Task>();
-            foreach(var collection in collections)
+            foreach (var collection in collections)
             {
                 tasks.Add(decryptAndAddCollectionAsync(collection));
             }
@@ -86,7 +86,7 @@ namespace Bit.Core.Services
             var userId = await _userService.GetUserIdAsync();
             var collections = await _storageService.GetAsync<Dictionary<string, CollectionData>>(
                 string.Format(Keys_CollectionsFormat, userId));
-            if(!collections?.ContainsKey(id) ?? true)
+            if (!collections?.ContainsKey(id) ?? true)
             {
                 return null;
             }
@@ -105,12 +105,12 @@ namespace Bit.Core.Services
         // TODO: sequentialize?
         public async Task<List<CollectionView>> GetAllDecryptedAsync()
         {
-            if(_decryptedCollectionCache != null)
+            if (_decryptedCollectionCache != null)
             {
                 return _decryptedCollectionCache;
             }
             var hasKey = await _cryptoService.HasKeyAsync();
-            if(!hasKey)
+            if (!hasKey)
             {
                 throw new Exception("No key.");
             }
@@ -121,12 +121,12 @@ namespace Bit.Core.Services
 
         public async Task<List<TreeNode<CollectionView>>> GetAllNestedAsync(List<CollectionView> collections = null)
         {
-            if(collections == null)
+            if (collections == null)
             {
                 collections = await GetAllDecryptedAsync();
             }
             var nodes = new List<TreeNode<CollectionView>>();
-            foreach(var c in collections)
+            foreach (var c in collections)
             {
                 var collectionCopy = new CollectionView
                 {
@@ -151,11 +151,11 @@ namespace Bit.Core.Services
             var userId = await _userService.GetUserIdAsync();
             var storageKey = string.Format(Keys_CollectionsFormat, userId);
             var collections = await _storageService.GetAsync<Dictionary<string, CollectionData>>(storageKey);
-            if(collections == null)
+            if (collections == null)
             {
                 collections = new Dictionary<string, CollectionData>();
             }
-            if(!collections.ContainsKey(collection.Id))
+            if (!collections.ContainsKey(collection.Id))
             {
                 collections.Add(collection.Id, null);
             }
@@ -169,13 +169,13 @@ namespace Bit.Core.Services
             var userId = await _userService.GetUserIdAsync();
             var storageKey = string.Format(Keys_CollectionsFormat, userId);
             var collections = await _storageService.GetAsync<Dictionary<string, CollectionData>>(storageKey);
-            if(collections == null)
+            if (collections == null)
             {
                 collections = new Dictionary<string, CollectionData>();
             }
-            foreach(var c in collection)
+            foreach (var c in collection)
             {
-                if(!collections.ContainsKey(c.Id))
+                if (!collections.ContainsKey(c.Id))
                 {
                     collections.Add(c.Id, null);
                 }
@@ -203,7 +203,7 @@ namespace Bit.Core.Services
             var userId = await _userService.GetUserIdAsync();
             var collectionKey = string.Format(Keys_CollectionsFormat, userId);
             var collections = await _storageService.GetAsync<Dictionary<string, CollectionData>>(collectionKey);
-            if(collections == null || !collections.ContainsKey(id))
+            if (collections == null || !collections.ContainsKey(id))
             {
                 return;
             }
@@ -225,15 +225,15 @@ namespace Bit.Core.Services
             {
                 var aName = a?.Name;
                 var bName = b?.Name;
-                if(aName == null && bName != null)
+                if (aName == null && bName != null)
                 {
                     return -1;
                 }
-                if(aName != null && bName == null)
+                if (aName != null && bName == null)
                 {
                     return 1;
                 }
-                if(aName == null && bName == null)
+                if (aName == null && bName == null)
                 {
                     return 0;
                 }

@@ -14,12 +14,12 @@ namespace Bit.iOS.Core.Services
         {
             uint keySize = 32;
             uint pseudoRandomAlgorithm = 3; // kCCPRFHmacAlgSHA256
-            if(algorithm == CryptoHashAlgorithm.Sha512)
+            if (algorithm == CryptoHashAlgorithm.Sha512)
             {
                 keySize = 64;
                 pseudoRandomAlgorithm = 5; // kCCPRFHmacAlgSHA512
             }
-            else if(algorithm != CryptoHashAlgorithm.Sha256)
+            else if (algorithm != CryptoHashAlgorithm.Sha256)
             {
                 throw new ArgumentException("Unsupported PBKDF2 algorithm.");
             }

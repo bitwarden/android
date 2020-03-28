@@ -17,15 +17,15 @@ namespace Bit.App.Pages
             _vm.FolderId = folderId;
             _vm.Init();
             SetActivityIndicator();
-            if(!_vm.EditMode || Device.RuntimePlatform == Device.iOS)
+            if (!_vm.EditMode || Device.RuntimePlatform == Device.iOS)
             {
                 ToolbarItems.Remove(_deleteItem);
             }
-            if(_vm.EditMode && Device.RuntimePlatform == Device.iOS)
+            if (_vm.EditMode && Device.RuntimePlatform == Device.iOS)
             {
                 ToolbarItems.Add(_moreItem);
             }
-            if(Device.RuntimePlatform == Device.Android)
+            if (Device.RuntimePlatform == Device.Android)
             {
                 ToolbarItems.RemoveAt(0);
             }
@@ -37,7 +37,7 @@ namespace Bit.App.Pages
             await LoadOnAppearedAsync(_scrollView, true, async () =>
             {
                 await _vm.LoadAsync();
-                if(!_vm.EditMode)
+                if (!_vm.EditMode)
                 {
                     RequestFocus(_nameEntry);
                 }
@@ -46,7 +46,7 @@ namespace Bit.App.Pages
 
         private async void Save_Clicked(object sender, System.EventArgs e)
         {
-            if(DoOnce())
+            if (DoOnce())
             {
                 await _vm.SubmitAsync();
             }
@@ -54,7 +54,7 @@ namespace Bit.App.Pages
 
         private async void Delete_Clicked(object sender, System.EventArgs e)
         {
-            if(DoOnce())
+            if (DoOnce())
             {
                 await _vm.DeleteAsync();
             }
@@ -62,7 +62,7 @@ namespace Bit.App.Pages
 
         private async void Close_Clicked(object sender, System.EventArgs e)
         {
-            if(DoOnce())
+            if (DoOnce())
             {
                 await Navigation.PopModalAsync();
             }
@@ -70,14 +70,14 @@ namespace Bit.App.Pages
 
         private async void More_Clicked(object sender, System.EventArgs e)
         {
-            if(!DoOnce())
+            if (!DoOnce())
             {
                 return;
             }
             var options = new List<string> { };
             var selection = await DisplayActionSheet(AppResources.Options, AppResources.Cancel,
                 _vm.EditMode ? AppResources.Delete : null, options.ToArray());
-            if(selection == AppResources.Delete)
+            if (selection == AppResources.Delete)
             {
                 await _vm.DeleteAsync();
             }

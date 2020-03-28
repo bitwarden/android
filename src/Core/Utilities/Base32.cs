@@ -10,16 +10,16 @@ namespace Bit.Core.Utilities
 
         public static byte[] FromBase32(string input)
         {
-            if(input == null)
+            if (input == null)
             {
                 throw new ArgumentNullException(nameof(input));
             }
 
             input = input.ToUpperInvariant();
             var cleanedInput = string.Empty;
-            foreach(var c in input)
+            foreach (var c in input)
             {
-                if(_base32Chars.IndexOf(c) < 0)
+                if (_base32Chars.IndexOf(c) < 0)
                 {
                     continue;
                 }
@@ -28,7 +28,7 @@ namespace Bit.Core.Utilities
             }
 
             input = cleanedInput;
-            if(input.Length == 0)
+            if (input.Length == 0)
             {
                 return new byte[0];
             }
@@ -39,10 +39,10 @@ namespace Bit.Core.Utilities
             var outputBits = 0;
             var outputIndex = 0;
 
-            while(outputIndex < output.Length)
+            while (outputIndex < output.Length)
             {
                 var byteIndex = _base32Chars.IndexOf(input[inputIndex]);
-                if(byteIndex < 0)
+                if (byteIndex < 0)
                 {
                     throw new FormatException();
                 }
@@ -52,14 +52,14 @@ namespace Bit.Core.Utilities
                 output[outputIndex] |= (byte)(byteIndex >> (5 - (bitIndex + bits)));
 
                 bitIndex += bits;
-                if(bitIndex >= 5)
+                if (bitIndex >= 5)
                 {
                     inputIndex++;
                     bitIndex = 0;
                 }
 
                 outputBits += bits;
-                if(outputBits >= 8)
+                if (outputBits >= 8)
                 {
                     outputIndex++;
                     outputBits = 0;

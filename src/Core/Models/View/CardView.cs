@@ -43,12 +43,12 @@ namespace Bit.Core.Models.View
         {
             get
             {
-                if(_subTitle == null)
+                if (_subTitle == null)
                 {
                     _subTitle = Brand;
-                    if(Number != null && Number.Length >= 4)
+                    if (Number != null && Number.Length >= 4)
                     {
-                        if(!string.IsNullOrWhiteSpace(_subTitle))
+                        if (!string.IsNullOrWhiteSpace(_subTitle))
                         {
                             _subTitle += ", ";
                         }
@@ -71,7 +71,7 @@ namespace Bit.Core.Models.View
             {
                 var expMonthNull = string.IsNullOrWhiteSpace(ExpMonth);
                 var expYearNull = string.IsNullOrWhiteSpace(ExpYear);
-                if(expMonthNull && expYearNull)
+                if (expMonthNull && expYearNull)
                 {
                     return null;
                 }

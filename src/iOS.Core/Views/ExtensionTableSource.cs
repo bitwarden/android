@@ -44,14 +44,14 @@ namespace Bit.iOS.Core.Views
         {
             var combinedLogins = new List<CipherView>();
 
-            if(urlFilter)
+            if (urlFilter)
             {
                 var logins = await _cipherService.GetAllDecryptedByUrlAsync(_context.UrlString);
-                if(logins?.Item1 != null)
+                if (logins?.Item1 != null)
                 {
                     combinedLogins.AddRange(logins.Item1);
                 }
-                if(logins?.Item2 != null)
+                if (logins?.Item2 != null)
                 {
                     combinedLogins.AddRange(logins.Item2);
                 }
@@ -73,7 +73,7 @@ namespace Bit.iOS.Core.Views
         {
             ct.ThrowIfCancellationRequested();
 
-            if(string.IsNullOrWhiteSpace(searchFilter))
+            if (string.IsNullOrWhiteSpace(searchFilter))
             {
                 Items = _allItems.ToList();
             }
@@ -95,7 +95,7 @@ namespace Bit.iOS.Core.Views
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
-            if(Items == null || Items.Count() == 0)
+            if (Items == null || Items.Count() == 0)
             {
                 var noDataCell = new ExtendedUITableViewCell(UITableViewCellStyle.Default, "NoDataCell");
                 noDataCell.TextLabel.Text = AppResources.NoItemsTap;
@@ -109,7 +109,7 @@ namespace Bit.iOS.Core.Views
             var cell = tableView.DequeueReusableCell(CellIdentifier);
 
             // if there are no cells to reuse, create a new one
-            if(cell == null)
+            if (cell == null)
             {
                 Debug.WriteLine("BW Log, Make new cell for list.");
                 cell = new ExtendedUITableViewCell(UITableViewCellStyle.Subtitle, CellIdentifier);
@@ -121,7 +121,7 @@ namespace Bit.iOS.Core.Views
 
         public override void WillDisplay(UITableView tableView, UITableViewCell cell, NSIndexPath indexPath)
         {
-            if(Items == null || Items.Count() == 0 || cell == null)
+            if (Items == null || Items.Count() == 0 || cell == null)
             {
                 return;
             }
@@ -135,9 +135,9 @@ namespace Bit.iOS.Core.Views
         {
             string totp = null;
             var accessPremium = await _userService.CanAccessPremiumAsync();
-            if(accessPremium || (item?.CipherView.OrganizationUseTotp ?? false))
+            if (accessPremium || (item?.CipherView.OrganizationUseTotp ?? false))
             {
-                if(item != null && !string.IsNullOrWhiteSpace(item.Totp))
+                if (item != null && !string.IsNullOrWhiteSpace(item.Totp))
                 {
                     totp = await _totpService.GetCodeAsync(item.Totp);
                 }

@@ -9,7 +9,7 @@ namespace Bit.App.Pages
 
         protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
         {
-            if(item is GroupingsPageListItem listItem)
+            if (item is GroupingsPageListItem listItem)
             {
                 return listItem.Cipher != null ? CipherTemplate : GroupTemplate;
             }

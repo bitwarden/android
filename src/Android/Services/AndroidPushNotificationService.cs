@@ -30,7 +30,7 @@ namespace Bit.Droid.Services
         {
             var registeredToken = await _storageService.GetAsync<string>(Constants.PushRegisteredTokenKey);
             var currentToken = await GetTokenAsync();
-            if(!string.IsNullOrWhiteSpace(registeredToken) && registeredToken != currentToken)
+            if (!string.IsNullOrWhiteSpace(registeredToken) && registeredToken != currentToken)
             {
                 await _pushNotificationListenerService.OnRegisteredAsync(registeredToken, Device.Android);
             }

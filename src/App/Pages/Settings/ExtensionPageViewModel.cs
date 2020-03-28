@@ -66,7 +66,7 @@ namespace Bit.App.Pages
         public void EnabledExtension(bool enabled)
         {
             Started = true;
-            if(!Activated && enabled)
+            if (!Activated && enabled)
             {
                 Activated = enabled;
             }

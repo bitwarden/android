@@ -23,10 +23,10 @@ namespace Bit.iOS.Core.Views
             {
                 NSRunLoop.Main.BeginInvokeOnMainThread(async () =>
                 {
-                    if(!string.IsNullOrWhiteSpace(searchText))
+                    if (!string.IsNullOrWhiteSpace(searchText))
                     {
                         await Task.Delay(300);
-                        if(searchText != searchBar.Text)
+                        if (searchText != searchBar.Text)
                         {
                             return;
                         }
@@ -40,7 +40,7 @@ namespace Bit.iOS.Core.Views
                         ((ExtensionTableSource)_tableView.Source).FilterResults(searchText, cts.Token);
                         _tableView.ReloadData();
                     }
-                    catch(OperationCanceledException) { }
+                    catch (OperationCanceledException) { }
                     _filterResultsCancellationTokenSource = cts;
                 });
             }, cts.Token);

@@ -48,10 +48,10 @@ namespace Bit.Core.Services
         public async Task<bool> IsLockedAsync()
         {
             var hasKey = await _cryptoService.HasKeyAsync();
-            if(hasKey)
+            if (hasKey)
             {
                 var fingerprintSet = await IsFingerprintLockSetAsync();
-                if(fingerprintSet && FingerprintLocked)
+                if (fingerprintSet && FingerprintLocked)
                 {
                     return true;
                 }
@@ -61,35 +61,35 @@ namespace Bit.Core.Services
 
         public async Task CheckLockAsync()
         {
-            if(_platformUtilsService.IsViewOpen())
+            if (_platformUtilsService.IsViewOpen())
             {
                 return;
             }
             var authed = await _userService.IsAuthenticatedAsync();
-            if(!authed)
+            if (!authed)
             {
                 return;
             }
-            if(await IsLockedAsync())
+            if (await IsLockedAsync())
             {
                 return;
             }
             var lockOption = _platformUtilsService.LockTimeout();
-            if(lockOption == null)
+            if (lockOption == null)
             {
                 lockOption = await _storageService.GetAsync<int?>(Constants.LockOptionKey);
             }
-            if(lockOption.GetValueOrDefault(-1) < 0)
+            if (lockOption.GetValueOrDefault(-1) < 0)
             {
                 return;
             }
             var lastActive = await _storageService.GetAsync<DateTime?>(Constants.LastActiveKey);
-            if(lastActive == null)
+            if (lastActive == null)
             {
                 return;
             }
             var diff = DateTime.UtcNow - lastActive.Value;
-            if(diff.TotalSeconds >= lockOption.Value)
+            if (diff.TotalSeconds >= lockOption.Value)
             {
                 // need to lock now
                 await LockAsync(true);
@@ -99,14 +99,14 @@ namespace Bit.Core.Services
         public async Task LockAsync(bool allowSoftLock = false, bool userInitiated = false)
         {
             var authed = await _userService.IsAuthenticatedAsync();
-            if(!authed)
+            if (!authed)
             {
                 return;
             }
-            if(allowSoftLock)
+            if (allowSoftLock)
             {
                 FingerprintLocked = await IsFingerprintLockSetAsync();
-                if(FingerprintLocked)
+                if (FingerprintLocked)
                 {
                     _messagingService.Send("locked", userInitiated);
                     _lockedCallback?.Invoke(userInitiated);

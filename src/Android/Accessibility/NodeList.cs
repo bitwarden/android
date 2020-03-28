@@ -8,7 +8,7 @@ namespace Bit.Droid.Accessibility
     {
         public void Dispose()
         {
-            foreach(var item in this)
+            foreach (var item in this)
             {
                 item.Recycle();
                 item.Dispose();

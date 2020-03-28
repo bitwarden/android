@@ -105,7 +105,7 @@ namespace Bit.Droid.Accessibility
         {
             var testNodes = GetWindowNodes(root, e, n => n.ViewIdResourceName != null && n.Text != null, false);
             var testNodesData = testNodes.Select(n => new { id = n.ViewIdResourceName, text = n.Text });
-            foreach(var node in testNodesData)
+            foreach (var node in testNodesData)
             {
                 System.Diagnostics.Debug.WriteLine("Node: {0} = {1}", node.id, node.text);
             }
@@ -114,21 +114,21 @@ namespace Bit.Droid.Accessibility
         public static string GetUri(AccessibilityNodeInfo root)
         {
             var uri = string.Concat(Constants.AndroidAppProtocol, root.PackageName);
-            if(SupportedBrowsers.ContainsKey(root.PackageName))
+            if (SupportedBrowsers.ContainsKey(root.PackageName))
             {
                 var browser = SupportedBrowsers[root.PackageName];
                 AccessibilityNodeInfo addressNode = null;
-                foreach(var uriViewId in browser.UriViewId.Split(","))
+                foreach (var uriViewId in browser.UriViewId.Split(","))
                 {
                     addressNode = root.FindAccessibilityNodeInfosByViewId(
                         $"{root.PackageName}:id/{uriViewId}").FirstOrDefault();
-                    if(addressNode != null)
+                    if (addressNode != null)
                     {
                         break;
                     }
                 }
 
-                if(addressNode != null)
+                if (addressNode != null)
                 {
                     uri = ExtractUri(uri, addressNode, browser);
                     addressNode.Recycle();
@@ -145,28 +145,28 @@ namespace Bit.Droid.Accessibility
 
         public static string ExtractUri(string uri, AccessibilityNodeInfo addressNode, Browser browser)
         {
-            if(addressNode?.Text == null)
+            if (addressNode?.Text == null)
             {
                 return uri;
             }
-            if(addressNode.Text == null)
+            if (addressNode.Text == null)
             {
                 return uri;
             }
             uri = browser.GetUriFunction(addressNode.Text)?.Trim();
-            if(uri != null && uri.Contains("."))
+            if (uri != null && uri.Contains("."))
             {
-                if(!uri.Contains("://") && !uri.Contains(" "))
+                if (!uri.Contains("://") && !uri.Contains(" "))
                 {
                     uri = string.Concat("http://", uri);
                 }
-                else if(Build.VERSION.SdkInt <= BuildVersionCodes.KitkatWatch)
+                else if (Build.VERSION.SdkInt <= BuildVersionCodes.KitkatWatch)
                 {
                     var parts = uri.Split(new string[] { ". " }, StringSplitOptions.None);
-                    if(parts.Length > 1)
+                    if (parts.Length > 1)
                     {
                         var urlPart = parts.FirstOrDefault(p => p.StartsWith("http"));
-                        if(urlPart != null)
+                        if (urlPart != null)
                         {
                             uri = urlPart.Trim();
                         }
@@ -181,11 +181,11 @@ namespace Bit.Droid.Accessibility
         /// </summary>
         public static bool NeedToAutofill(Credentials credentials, string currentUriString)
         {
-            if(credentials == null)
+            if (credentials == null)
             {
                 return false;
             }
-            if(Uri.TryCreate(credentials.LastUri, UriKind.Absolute, out Uri lastUri) &&
+            if (Uri.TryCreate(credentials.LastUri, UriKind.Absolute, out Uri lastUri) &&
                 Uri.TryCreate(currentUriString, UriKind.Absolute, out Uri currentUri))
             {
                 return lastUri.Host == currentUri.Host;
@@ -202,7 +202,7 @@ namespace Bit.Droid.Accessibility
             IEnumerable<AccessibilityNodeInfo> passwordNodes)
         {
             FillEditText(usernameNode, LastCredentials?.Username);
-            foreach(var n in passwordNodes)
+            foreach (var n in passwordNodes)
             {
                 FillEditText(n, LastCredentials?.Password);
             }
@@ -210,7 +210,7 @@ namespace Bit.Droid.Accessibility
 
         public static void FillEditText(AccessibilityNodeInfo editTextNode, string value)
         {
-            if(editTextNode == null || value == null)
+            if (editTextNode == null || value == null)
             {
                 return;
             }
@@ -223,35 +223,35 @@ namespace Bit.Droid.Accessibility
             Func<AccessibilityNodeInfo, bool> condition, bool disposeIfUnused, NodeList nodes = null,
             int recursionDepth = 0)
         {
-            if(nodes == null)
+            if (nodes == null)
             {
                 nodes = new NodeList();
             }
             var dispose = disposeIfUnused;
-            if(n != null && recursionDepth < 100)
+            if (n != null && recursionDepth < 100)
             {
                 var add = n.WindowId == e.WindowId &&
                     !(n.ViewIdResourceName?.StartsWith(SystemUiPackage) ?? false) &&
                     condition(n);
-                if(add)
+                if (add)
                 {
                     dispose = false;
                     nodes.Add(n);
                 }
 
-                for(var i = 0; i < n.ChildCount; i++)
+                for (var i = 0; i < n.ChildCount; i++)
                 {
                     var childNode = n.GetChild(i);
-                    if(childNode == null)
+                    if (childNode == null)
                     {
                         continue;
                     }
-                    else if(i > 100)
+                    else if (i > 100)
                     {
                         Android.Util.Log.Info(BitwardenTag, "Too many child iterations.");
                         break;
                     }
-                    else if(childNode.GetHashCode() == n.GetHashCode())
+                    else if (childNode.GetHashCode() == n.GetHashCode())
                     {
                         Android.Util.Log.Info(BitwardenTag, "Child node is the same as parent for some reason.");
                     }
@@ -261,7 +261,7 @@ namespace Bit.Droid.Accessibility
                     }
                 }
             }
-            if(dispose)
+            if (dispose)
             {
                 n?.Recycle();
                 n?.Dispose();
@@ -283,9 +283,9 @@ namespace Bit.Droid.Accessibility
             IEnumerable<AccessibilityNodeInfo> allEditTexts)
         {
             AccessibilityNodeInfo previousEditText = null;
-            foreach(var editText in allEditTexts)
+            foreach (var editText in allEditTexts)
             {
-                if(editText.Password)
+                if (editText.Password)
                 {
                     return previousEditText;
                 }
@@ -300,7 +300,7 @@ namespace Bit.Droid.Accessibility
             var usernameEditText = GetUsernameEditTextIfPasswordExists(allEditTexts);
 
             var isUsernameEditText = false;
-            if(usernameEditText != null)
+            if (usernameEditText != null)
             {
                 isUsernameEditText = IsSameNode(usernameEditText, e.Source);
             }
@@ -311,7 +311,7 @@ namespace Bit.Droid.Accessibility
 
         public static bool IsSameNode(AccessibilityNodeInfo node1, AccessibilityNodeInfo node2)
         {
-            if(node1 != null && node2 != null)
+            if (node1 != null && node2 != null)
             {
                 return node1.Equals(node2) || node1.GetHashCode() == node2.GetHashCode();
             }
@@ -320,7 +320,7 @@ namespace Bit.Droid.Accessibility
 
         public static bool OverlayPermitted()
         {
-            if(Build.VERSION.SdkInt >= BuildVersionCodes.M)
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.M)
             {
                 return Settings.CanDrawOverlays(Android.App.Application.Context);
             }
@@ -347,7 +347,7 @@ namespace Bit.Droid.Accessibility
         public static WindowManagerLayoutParams GetOverlayLayoutParams()
         {
             WindowManagerTypes windowManagerType;
-            if(Build.VERSION.SdkInt >= BuildVersionCodes.O)
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.O)
             {
                 windowManagerType = WindowManagerTypes.ApplicationOverlay;
             }
@@ -376,7 +376,7 @@ namespace Bit.Droid.Accessibility
             var anchorViewY = isOverlayAboveAnchor ? anchorViewRect.Top : anchorViewRect.Bottom;
             anchorViewRect.Dispose();
             
-            if(isOverlayAboveAnchor)
+            if (isOverlayAboveAnchor)
             {
                 anchorViewY -= overlayViewHeight;
             }
@@ -389,15 +389,15 @@ namespace Bit.Droid.Accessibility
             IEnumerable<AccessibilityWindowInfo> windows, int overlayViewHeight, bool isOverlayAboveAnchor)
         {
             Point point = null;
-            if(anchorNode != null)
+            if (anchorNode != null)
             {
                 // Update node's info since this is still a reference from an older event
                 anchorNode.Refresh();
-                if(!anchorNode.VisibleToUser)
+                if (!anchorNode.VisibleToUser)
                 {
                     return new Point(-1, -1);
                 }
-                if(!anchorNode.Focused)
+                if (!anchorNode.Focused)
                 {
                     return null;
                 }
@@ -406,9 +406,9 @@ namespace Bit.Droid.Accessibility
                 // of visibility
                 var minY = 0;
                 int maxY;
-                if(windows != null)
+                if (windows != null)
                 {
-                    if(IsStatusBarExpanded(windows))
+                    if (IsStatusBarExpanded(windows))
                     {
                         return new Point(-1, -1);
                     }
@@ -417,7 +417,7 @@ namespace Bit.Droid.Accessibility
                 else
                 {
                     var rootNodeHeight = GetNodeHeight(root);
-                    if(rootNodeHeight == -1)
+                    if (rootNodeHeight == -1)
                     {
                         return null;
                     }
@@ -425,9 +425,9 @@ namespace Bit.Droid.Accessibility
                 }
 
                 point = GetOverlayAnchorPosition(anchorNode, overlayViewHeight, isOverlayAboveAnchor);
-                if(point.Y < minY)
+                if (point.Y < minY)
                 {
-                    if(isOverlayAboveAnchor)
+                    if (isOverlayAboveAnchor)
                     {
                         // view nearing bounds, anchor to bottom
                         point.X = -1;
@@ -440,9 +440,9 @@ namespace Bit.Droid.Accessibility
                         point.Y = -1;
                     }
                 } 
-                else if(point.Y > maxY)
+                else if (point.Y > maxY)
                 {
-                    if(isOverlayAboveAnchor)
+                    if (isOverlayAboveAnchor)
                     {
                         // view out of bounds, hide overlay
                         point.X = -1;
@@ -455,7 +455,7 @@ namespace Bit.Droid.Accessibility
                         point.Y = -1;
                     }
                 } 
-                else if(isOverlayAboveAnchor && point.Y < (maxY - overlayViewHeight - GetNodeHeight(anchorNode)))
+                else if (isOverlayAboveAnchor && point.Y < (maxY - overlayViewHeight - GetNodeHeight(anchorNode)))
                 {
                     // This else block forces the overlay to return to bottom alignment as soon as space is available
                     // below the anchor view. Removing this will change the behavior to wait until there isn't enough
@@ -469,12 +469,12 @@ namespace Bit.Droid.Accessibility
 
         public static bool IsStatusBarExpanded(IEnumerable<AccessibilityWindowInfo> windows)
         {
-            if(windows != null && windows.Any())
+            if (windows != null && windows.Any())
             {
                 var isSystemWindowsOnly = true;
-                foreach(var window in windows)
+                foreach (var window in windows)
                 {
-                    if(window.Type != AccessibilityWindowType.System)
+                    if (window.Type != AccessibilityWindowType.System)
                     {
                         isSystemWindowsOnly = false;
                         break;
@@ -489,13 +489,13 @@ namespace Bit.Droid.Accessibility
         {
             var appWindowHeight = 0;
             var nonAppWindowHeight = 0;
-            if(windows != null)
+            if (windows != null)
             {
-                foreach(var window in windows)
+                foreach (var window in windows)
                 {
                     var windowRect = new Rect();
                     window.GetBoundsInScreen(windowRect);
-                    if(window.Type == AccessibilityWindowType.Application)
+                    if (window.Type == AccessibilityWindowType.Application)
                     {
                         appWindowHeight += windowRect.Height();
                     }
@@ -510,7 +510,7 @@ namespace Bit.Droid.Accessibility
 
         public static int GetNodeHeight(AccessibilityNodeInfo node)
         {
-            if(node == null)
+            if (node == null)
             {
                 return -1;
             }
@@ -536,7 +536,7 @@ namespace Bit.Droid.Accessibility
             var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
             var barHeight = 0;
             var resourceId = activity.Resources.GetIdentifier(resName, "dimen", "android");
-            if(resourceId > 0)
+            if (resourceId > 0)
             {
                 barHeight = activity.Resources.GetDimensionPixelSize(resourceId);
             }

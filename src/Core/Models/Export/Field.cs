@@ -20,7 +20,7 @@ namespace Bit.Core.Models.Export
 
         public static FieldView ToView(Field req, FieldView view = null)
         {
-            if(view == null)
+            if (view == null)
             {
                 view = new FieldView();
             }

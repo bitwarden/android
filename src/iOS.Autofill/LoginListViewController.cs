@@ -35,7 +35,7 @@ namespace Bit.iOS.Autofill
             var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             var needsAutofillReplacement = await storageService.GetAsync<bool?>(
                 Core.Constants.AutofillNeedsIdentityReplacementKey);
-            if(needsAutofillReplacement.GetValueOrDefault())
+            if (needsAutofillReplacement.GetValueOrDefault())
             {
                 await ASHelpers.ReplaceAllIdentities();
             }
@@ -58,14 +58,14 @@ namespace Bit.iOS.Autofill
 
         public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
         {
-            if(segue.DestinationViewController is UINavigationController navController)
+            if (segue.DestinationViewController is UINavigationController navController)
             {
-                if(navController.TopViewController is LoginAddViewController addLoginController)
+                if (navController.TopViewController is LoginAddViewController addLoginController)
                 {
                     addLoginController.Context = Context;
                     addLoginController.LoginListController = this;
                 }
-                if(navController.TopViewController is LoginSearchViewController searchLoginController)
+                if (navController.TopViewController is LoginSearchViewController searchLoginController)
                 {
                     searchLoginController.Context = Context;
                     searchLoginController.CPViewController = CPViewController;
