@@ -19,7 +19,7 @@
     <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <AndroidLinkSkip>Xamarin.GooglePlayServices.Base;Xamarin.GooglePlayServices.Basement;Xamarin.GooglePlayServices.Measurement;Xamarin.GooglePlayServices.Gcm;BitwardenAndroid;BitwardenApp;BitwardenCore;Xamarin.Android.Net;Xamarin.Android.Net.OldAndroidSSLSocketFactory</AndroidLinkSkip>
+    <AndroidLinkSkip>Xamarin.GooglePlayServices.Base;Xamarin.GooglePlayServices.Basement;Xamarin.GooglePlayServices.Measurement;Xamarin.GooglePlayServices.Gcm;BitwardenAndroid;BitwardenApp;BitwardenCore;Xamarin.Android.Net;Xamarin.Android.Net.OldAndroidSSLSocketFactory;LiteDB</AndroidLinkSkip>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
