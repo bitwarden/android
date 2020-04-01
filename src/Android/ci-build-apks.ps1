@@ -108,8 +108,8 @@ echo "########################################"
 $xml=New-Object XML;
 $xml.Load($appPath);
 
-$hockeyNode=$xml.SelectSingleNode("/Project/ItemGroup/PackageReference[@Include='HockeySDK.Xamarin']");
-$hockeyNode.ParentNode.RemoveChild($hockeyNode);
+$appCenterNode=$xml.SelectSingleNode("/Project/ItemGroup/PackageReference[@Include='Microsoft.AppCenter.Crashes']");
+$appCenterNode.ParentNode.RemoveChild($appCenterNode);
 
 $xml.Save($appPath);
 

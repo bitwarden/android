@@ -79,8 +79,8 @@ namespace Bit.Droid
             }
 
 #if !FDROID
-            var hockeyAppListener = new HockeyAppCrashManagerListener(_appIdService, _userService);
-            var hockeyAppTask = hockeyAppListener.InitAsync(this);
+            var appCenterHelper = new AppCenterHelper(_appIdService, _userService);
+            var appCenterTask = appCenterHelper.InitAsync();
 #endif
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
