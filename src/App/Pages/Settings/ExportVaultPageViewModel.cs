@@ -6,7 +6,9 @@ using Bit.Core.Utilities;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+#if !FDROID
 using Microsoft.AppCenter.Crashes;
+#endif
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
