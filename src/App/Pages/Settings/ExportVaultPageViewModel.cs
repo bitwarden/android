@@ -113,8 +113,10 @@ namespace Bit.App.Pages
                 {
                     ClearResult();
                     await _platformUtilsService.ShowDialogAsync(_i18nService.T("ExportVaultFailure"));
-                    Crashes.TrackError(ex);
                     System.Diagnostics.Debug.WriteLine(">>> {0}: {1}", ex.GetType(), ex.StackTrace);
+#if !FDROID
+                    Crashes.TrackError(ex);
+#endif
                 }
             }
             else
