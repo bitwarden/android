@@ -404,25 +404,22 @@ namespace Bit.Droid.Accessibility
 
                 // node.VisibleToUser doesn't always give us exactly what we want, so attempt to tighten up the range
                 // of visibility
-                var minY = 0;
-                int maxY;
+                var inputMethodHeight = 0;
                 if (windows != null)
                 {
                     if (IsStatusBarExpanded(windows))
                     {
                         return new Point(-1, -1);
                     }
-                    maxY = GetApplicationVisibleHeight(windows);
+                    inputMethodHeight = GetInputMethodHeight(windows);
                 }
-                else
+                var minY = 0;
+                var rootNodeHeight = GetNodeHeight(root);
+                if (rootNodeHeight == -1)
                 {
-                    var rootNodeHeight = GetNodeHeight(root);
-                    if (rootNodeHeight == -1)
-                    {
-                        return null;
-                    }
-                    maxY = rootNodeHeight - GetNavigationBarHeight();
+                    return null;
                 }
+                var maxY = rootNodeHeight - GetNavigationBarHeight() - GetStatusBarHeight() - inputMethodHeight;
 
                 point = GetOverlayAnchorPosition(anchorNode, overlayViewHeight, isOverlayAboveAnchor);
                 if (point.Y < minY)
@@ -440,7 +437,7 @@ namespace Bit.Droid.Accessibility
                         point.Y = -1;
                     }
                 } 
-                else if (point.Y > maxY)
+                else if (point.Y > (maxY - overlayViewHeight))
                 {
                     if (isOverlayAboveAnchor)
                     {
@@ -455,7 +452,7 @@ namespace Bit.Droid.Accessibility
                         point.Y = -1;
                     }
                 } 
-                else if (isOverlayAboveAnchor && point.Y < (maxY - overlayViewHeight - GetNodeHeight(anchorNode)))
+                else if (isOverlayAboveAnchor && point.Y < (maxY - (overlayViewHeight * 2) - GetNodeHeight(anchorNode)))
                 {
                     // This else block forces the overlay to return to bottom alignment as soon as space is available
                     // below the anchor view. Removing this will change the behavior to wait until there isn't enough
@@ -485,27 +482,23 @@ namespace Bit.Droid.Accessibility
             return false;
         }
 
-        public static int GetApplicationVisibleHeight(IEnumerable<AccessibilityWindowInfo> windows)
+        public static int GetInputMethodHeight(IEnumerable<AccessibilityWindowInfo> windows)
         {
-            var appWindowHeight = 0;
-            var nonAppWindowHeight = 0;
+            var inputMethodWindowHeight = 0;
             if (windows != null)
             {
                 foreach (var window in windows)
                 {
-                    var windowRect = new Rect();
-                    window.GetBoundsInScreen(windowRect);
-                    if (window.Type == AccessibilityWindowType.Application)
+                    if (window.Type == AccessibilityWindowType.InputMethod)
                     {
-                        appWindowHeight += windowRect.Height();
-                    }
-                    else
-                    {
-                        nonAppWindowHeight += windowRect.Height();
+                        var windowRect = new Rect();
+                        window.GetBoundsInScreen(windowRect);
+                        inputMethodWindowHeight = windowRect.Height();
+                        break;
                     }
                 }
             }
-            return appWindowHeight - nonAppWindowHeight;
+            return inputMethodWindowHeight;
         }
 
         public static int GetNodeHeight(AccessibilityNodeInfo node)
