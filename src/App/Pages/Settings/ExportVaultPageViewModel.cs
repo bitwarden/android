@@ -6,6 +6,7 @@ using Bit.Core.Utilities;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AppCenter.Crashes;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -112,6 +113,7 @@ namespace Bit.App.Pages
                 {
                     ClearResult();
                     await _platformUtilsService.ShowDialogAsync(_i18nService.T("ExportVaultFailure"));
+                    Crashes.TrackError(ex);
                     System.Diagnostics.Debug.WriteLine(">>> {0}: {1}", ex.GetType(), ex.StackTrace);
                 }
             }
