@@ -9,7 +9,6 @@ using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Bit.iOS.Core.Services;
 using Foundation;
-using HockeyApp.iOS;
 using UIKit;
 
 namespace Bit.iOS.Core.Utilities
@@ -22,12 +21,12 @@ namespace Bit.iOS.Core.Utilities
         public static string AppGroupId = "group.com.8bit.bitwarden";
         public static string AccessGroup = "LTZ2PFU5D6.com.8bit.bitwarden";
 
-        public static void RegisterHockeyApp()
+        public static void RegisterAppCenter()
         {
-            var crashManagerDelegate = new HockeyAppCrashManagerDelegate(
+            var appCenterHelper = new AppCenterHelper(
                 ServiceContainer.Resolve<IAppIdService>("appIdService"),
                 ServiceContainer.Resolve<IUserService>("userService"));
-            var task = crashManagerDelegate.InitAsync();
+            var appCenterTask = appCenterHelper.InitAsync();
         }
 
         public static void RegisterLocalServices()

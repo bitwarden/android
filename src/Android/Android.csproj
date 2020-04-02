@@ -19,7 +19,7 @@
     <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <AndroidLinkSkip>Xamarin.GooglePlayServices.Base;Xamarin.GooglePlayServices.Basement;Xamarin.GooglePlayServices.Measurement;Xamarin.GooglePlayServices.Gcm;BitwardenAndroid;BitwardenApp;BitwardenCore;Xamarin.Android.Net;Xamarin.Android.Net.OldAndroidSSLSocketFactory;LiteDB</AndroidLinkSkip>
+    <AndroidLinkSkip>Xamarin.GooglePlayServices.Base;Xamarin.GooglePlayServices.Basement;Xamarin.GooglePlayServices.Measurement;Xamarin.GooglePlayServices.Gcm;BitwardenAndroid;BitwardenApp;BitwardenCore;Xamarin.Android.Net;Xamarin.Android.Net.OldAndroidSSLSocketFactory;LiteDB;Microsoft.AppCenter.Crashes</AndroidLinkSkip>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -140,7 +140,7 @@
     <Compile Include="Tiles\GeneratorTileService.cs" />
     <Compile Include="Tiles\MyVaultTileService.cs" />
     <Compile Include="Utilities\AndroidHelpers.cs" />
-    <Compile Include="Utilities\HockeyAppCrashManagerListener.cs" />
+    <Compile Include="Utilities\AppCenterHelper.cs" />
     <Compile Include="Utilities\StaticStore.cs" />
   </ItemGroup>
   <ItemGroup>

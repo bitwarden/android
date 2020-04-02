@@ -13,7 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="HockeySDK.Xamarin" Version="5.2.0" />
+    <PackageReference Include="Microsoft.AppCenter.Crashes" Version="3.1.0" />
     <PackageReference Include="Plugin.Fingerprint" Version="2.1.1" />
     <PackageReference Include="Xamarin.Essentials" Version="1.5.1" />
     <PackageReference Include="Xamarin.FFImageLoading.Forms" Version="2.4.11.982" />
