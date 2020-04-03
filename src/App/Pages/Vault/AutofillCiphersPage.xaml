@@ -96,6 +96,7 @@
         </ContentView>
         <Button
             x:Name="_fab"
+            Image="plus.png"
             Clicked="AddButton_Clicked"
             Style="{StaticResource btn-fab}"
             AbsoluteLayout.LayoutFlags="PositionProportional"
