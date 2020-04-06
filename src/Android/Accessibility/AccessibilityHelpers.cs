@@ -77,6 +77,7 @@ namespace Bit.Droid.Accessibility
             new Browser("jp.co.fenrir.android.sleipnir_black", "url_text"),
             new Browser("jp.co.fenrir.android.sleipnir_test", "url_text"),
             new Browser("com.vivaldi.browser", "url_bar"),
+            new Browser("com.vivaldi.browser.snapshot", "url_bar"),
             new Browser("com.feedback.browser.wjbrowser", "addressbar_url"),
         }.ToDictionary(n => n.PackageName);
 
