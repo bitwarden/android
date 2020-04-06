@@ -62,6 +62,7 @@ namespace Bit.Droid.Autofill
             "org.mozilla.rocket",
             "org.torproject.torbrowser",
             "com.vivaldi.browser",
+            "com.vivaldi.browser.snapshot",
         };
 
         // The URLs are blacklisted from autofilling
