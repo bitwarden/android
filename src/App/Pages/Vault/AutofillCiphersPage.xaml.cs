@@ -78,12 +78,6 @@ namespace Bit.App.Pages
         {
             var page = new CiphersPage(null, autofillUrl: _vm.Uri);
             Application.Current.MainPage = new NavigationPage(page);
-            _platformUtilsService.ShowToast("info", null,
-                string.Format(AppResources.BitwardenAutofillServiceSearch, _vm.Name),
-                new System.Collections.Generic.Dictionary<string, object>
-                {
-                    ["longDuration"] = true
-                });
         }
     }
 }
