@@ -4,9 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
-using Android.Graphics;
 using Android.OS;
-using Android.Provider;
 using Android.Runtime;
 using Android.Views;
 using Android.Views.Accessibility;
@@ -15,7 +13,6 @@ using Bit.App.Resources;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
-using Java.Util;
 
 namespace Bit.Droid.Accessibility
 {
@@ -249,6 +246,12 @@ namespace Bit.Droid.Accessibility
 
         private void OverlayPromptToAutofill(AccessibilityNodeInfo root, AccessibilityEvent e)
         {
+            if (Java.Lang.JavaSystem.CurrentTimeMillis() - _lastAutoFillTime < 1000 ||
+                AccessibilityHelpers.IsAutofillServicePromptVisible(Windows))
+            {
+                return;
+            }
+            
             if (!AccessibilityHelpers.OverlayPermitted())
             {
                 if (!AccessibilityHelpers.IsAutofillTileAdded)
@@ -265,11 +268,6 @@ namespace Bit.Droid.Accessibility
             if (_overlayView != null || _anchorNode != null || _overlayAnchorObserverRunning)
             {
                 CancelOverlayPrompt();
-            }
-
-            if (Java.Lang.JavaSystem.CurrentTimeMillis() - _lastAutoFillTime < 1000)
-            {
-                return;
             }
 
             var uri = AccessibilityHelpers.GetUri(root);
@@ -309,8 +307,8 @@ namespace Bit.Droid.Accessibility
             };
 
             var layoutParams = AccessibilityHelpers.GetOverlayLayoutParams();
-            var anchorPosition = AccessibilityHelpers.GetOverlayAnchorPosition(e.Source, _overlayViewHeight,
-                _isOverlayAboveAnchor);
+            var anchorPosition = AccessibilityHelpers.GetOverlayAnchorPosition(this, e.Source, 
+                _overlayViewHeight, _isOverlayAboveAnchor);
             layoutParams.X = anchorPosition.X;
             layoutParams.Y = anchorPosition.Y;
 
@@ -353,7 +351,8 @@ namespace Bit.Droid.Accessibility
 
         private void AdjustOverlayForScroll()
         {
-            if (_overlayView == null || _anchorNode == null)
+            if (_overlayView == null || _anchorNode == null || 
+                AccessibilityHelpers.IsAutofillServicePromptVisible(Windows))
             {
                 CancelOverlayPrompt();
                 return;
@@ -366,8 +365,8 @@ namespace Bit.Droid.Accessibility
                 windows = Windows;
             }
 
-            var anchorPosition = AccessibilityHelpers.GetOverlayAnchorPosition(_anchorNode, root, windows,
-                _overlayViewHeight, _isOverlayAboveAnchor);
+            var anchorPosition = AccessibilityHelpers.GetOverlayAnchorPosition(this, _anchorNode, root, 
+                windows, _overlayViewHeight, _isOverlayAboveAnchor);
             if (anchorPosition == null)
             {
                 CancelOverlayPrompt();
