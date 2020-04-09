@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Android.Content;
-using Android.Content.Res;
 using Android.Graphics;
 using Android.OS;
 using Android.Provider;
@@ -11,7 +10,6 @@ using Android.Views.Accessibility;
 using Android.Widget;
 using Bit.App.Resources;
 using Bit.Core;
-using Plugin.CurrentActivity;
 
 namespace Bit.Droid.Accessibility
 {
@@ -368,8 +366,8 @@ namespace Bit.Droid.Accessibility
             return layoutParams;
         }
 
-        public static Point GetOverlayAnchorPosition(AccessibilityNodeInfo anchorView, int overlayViewHeight, 
-            bool isOverlayAboveAnchor)
+        public static Point GetOverlayAnchorPosition(AccessibilityService service, AccessibilityNodeInfo anchorView, 
+            int overlayViewHeight, bool isOverlayAboveAnchor)
         {
             var anchorViewRect = new Rect();
             anchorView.GetBoundsInScreen(anchorViewRect);
@@ -381,13 +379,14 @@ namespace Bit.Droid.Accessibility
             {
                 anchorViewY -= overlayViewHeight;
             }
-            anchorViewY -= GetStatusBarHeight();
+            anchorViewY -= GetStatusBarHeight(service);
 
             return new Point(anchorViewX, anchorViewY);
         }
 
-        public static Point GetOverlayAnchorPosition(AccessibilityNodeInfo anchorNode, AccessibilityNodeInfo root,
-            IEnumerable<AccessibilityWindowInfo> windows, int overlayViewHeight, bool isOverlayAboveAnchor)
+        public static Point GetOverlayAnchorPosition(AccessibilityService service, AccessibilityNodeInfo anchorNode, 
+            AccessibilityNodeInfo root, IEnumerable<AccessibilityWindowInfo> windows, int overlayViewHeight, 
+            bool isOverlayAboveAnchor)
         {
             Point point = null;
             if (anchorNode != null)
@@ -420,9 +419,10 @@ namespace Bit.Droid.Accessibility
                 {
                     return null;
                 }
-                var maxY = rootNodeHeight - GetNavigationBarHeight() - GetStatusBarHeight() - inputMethodHeight;
+                var maxY = rootNodeHeight - GetNavigationBarHeight(service) - GetStatusBarHeight(service) -
+                           inputMethodHeight;
 
-                point = GetOverlayAnchorPosition(anchorNode, overlayViewHeight, isOverlayAboveAnchor);
+                point = GetOverlayAnchorPosition(service, anchorNode, overlayViewHeight, isOverlayAboveAnchor);
                 if (point.Y < minY)
                 {
                     if (isOverlayAboveAnchor)
@@ -501,6 +501,21 @@ namespace Bit.Droid.Accessibility
             }
             return inputMethodWindowHeight;
         }
+        
+        public static bool IsAutofillServicePromptVisible(IEnumerable<AccessibilityWindowInfo> windows)
+        {
+            if (windows != null)
+            {
+                foreach (var window in windows)
+                {
+                    if (window.Title?.ToLower().Contains("autofill") ?? false)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
 
         public static int GetNodeHeight(AccessibilityNodeInfo node)
         {
@@ -515,24 +530,23 @@ namespace Bit.Droid.Accessibility
             return nodeRectHeight;
         }
 
-        private static int GetStatusBarHeight()
+        private static int GetStatusBarHeight(AccessibilityService service)
         {
-            return GetSystemResourceDimenPx("status_bar_height");
+            return GetSystemResourceDimenPx(service, "status_bar_height");
         }
 
-        private static int GetNavigationBarHeight()
+        private static int GetNavigationBarHeight(AccessibilityService service)
         {
-            return GetSystemResourceDimenPx("navigation_bar_height");
+            return GetSystemResourceDimenPx(service, "navigation_bar_height");
         }
 
-        private static int GetSystemResourceDimenPx(string resName)
+        private static int GetSystemResourceDimenPx(AccessibilityService service, string resName)
         {
-            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
             var barHeight = 0;
-            var resourceId = activity.Resources.GetIdentifier(resName, "dimen", "android");
+            var resourceId = service.Resources.GetIdentifier(resName, "dimen", "android");
             if (resourceId > 0)
             {
-                barHeight = activity.Resources.GetDimensionPixelSize(resourceId);
+                barHeight = service.Resources.GetDimensionPixelSize(resourceId);
             }
             return barHeight;
         }
