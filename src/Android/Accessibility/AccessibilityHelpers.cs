@@ -504,17 +504,7 @@ namespace Bit.Droid.Accessibility
         
         public static bool IsAutofillServicePromptVisible(IEnumerable<AccessibilityWindowInfo> windows)
         {
-            if (windows != null)
-            {
-                foreach (var window in windows)
-                {
-                    if (window.Title?.ToLower().Contains("autofill") ?? false)
-                    {
-                        return true;
-                    }
-                }
-            }
-            return false;
+            return windows?.Any(w => w.Title?.ToLower().Contains("autofill") ?? false) ?? false;
         }
 
         public static int GetNodeHeight(AccessibilityNodeInfo node)
@@ -542,13 +532,12 @@ namespace Bit.Droid.Accessibility
 
         private static int GetSystemResourceDimenPx(AccessibilityService service, string resName)
         {
-            var barHeight = 0;
             var resourceId = service.Resources.GetIdentifier(resName, "dimen", "android");
             if (resourceId > 0)
             {
-                barHeight = service.Resources.GetDimensionPixelSize(resourceId);
+                return service.Resources.GetDimensionPixelSize(resourceId);
             }
-            return barHeight;
+            return 0;
         }
     }
 }
