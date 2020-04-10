@@ -1,9 +1,9 @@
-﻿using Bit.Core.Abstractions;
+﻿using Bit.App.Models;
+using Bit.Core;
+using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using System;
-using Bit.App.Models;
 using System.Threading.Tasks;
-using Bit.Core;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
