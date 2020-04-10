@@ -166,6 +166,7 @@
                         <controls:ExtendedSlider
                             DragCompleted="LengthSlider_DragCompleted"
                             Value="{Binding Length}"
+                            AutomationProperties.HelpText="{Binding Length}"
                             StyleClass="box-value"
                             VerticalOptions="CenterAndExpand"
                             HorizontalOptions="FillAndExpand"
