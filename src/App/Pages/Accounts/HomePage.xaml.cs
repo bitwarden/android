@@ -3,6 +3,7 @@ using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using System;
 using System.Threading.Tasks;
+using Bit.App.Models;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -10,11 +11,13 @@ namespace Bit.App.Pages
     public partial class HomePage : BaseContentPage
     {
         private IMessagingService _messagingService;
+        private readonly AppOptions _appOptions;
 
-        public HomePage()
+        public HomePage(AppOptions appOptions = null)
         {
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _messagingService.Send("showStatusBar", false);
+            _appOptions = appOptions;
             InitializeComponent();
             _logo.Source = !ThemeManager.UsingLightTheme ? "logo_white.png" : "logo.png";
         }
@@ -22,7 +25,7 @@ namespace Bit.App.Pages
         public async Task DismissRegisterPageAndLogInAsync(string email)
         {
             await Navigation.PopModalAsync();
-            await Navigation.PushModalAsync(new NavigationPage(new LoginPage(email)));
+            await Navigation.PushModalAsync(new NavigationPage(new LoginPage(email, _appOptions)));
         }
 
         protected override void OnAppearing()
@@ -35,7 +38,7 @@ namespace Bit.App.Pages
         {
             if (DoOnce())
             {
-                Navigation.PushModalAsync(new NavigationPage(new LoginPage()));
+                Navigation.PushModalAsync(new NavigationPage(new LoginPage(null, _appOptions)));
             }
         }
 
