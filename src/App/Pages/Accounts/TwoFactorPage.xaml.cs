@@ -168,7 +168,7 @@ namespace Bit.App.Pages
                     Application.Current.MainPage = new NavigationPage(new AddEditPage(appOptions: _appOptions));
                     return;
                 }
-                else if (_appOptions.Uri != null)
+                if (_appOptions.Uri != null)
                 {
                     Application.Current.MainPage = new NavigationPage(new AutofillCiphersPage(_appOptions));
                     return;
