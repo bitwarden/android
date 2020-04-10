@@ -1,4 +1,5 @@
-﻿using Bit.App.Abstractions;
+﻿using System;
+using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Bit.Core;
 using Bit.Core.Abstractions;
@@ -88,6 +89,7 @@ namespace Bit.App.Pages
             });
         }
         public Command SubmitCommand { get; }
+        public Action TwoFactorAction { get; set; }
 
         public void Init()
         {
@@ -209,7 +211,7 @@ namespace Bit.App.Pages
                 _broadcasterService.Unsubscribe(nameof(TwoFactorPage));
                 var disableFavicon = await _storageService.GetAsync<bool?>(Constants.DisableFaviconKey);
                 await _stateService.SaveAsync(Constants.DisableFaviconKey, disableFavicon.GetValueOrDefault());
-                Application.Current.MainPage = new TabsPage();
+                TwoFactorAction?.Invoke();
             }
             catch (ApiException e)
             {
