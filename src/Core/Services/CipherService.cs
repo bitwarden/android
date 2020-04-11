@@ -342,7 +342,12 @@ namespace Bit.Core.Services
                         continue;
                     }
                     var match = false;
-                    switch (u.Match)
+                    var toMatch = defaultMatch;
+                    if (u.Match != null)
+                    {
+                        toMatch = u.Match;
+                    }
+                    switch (toMatch)
                     {
                         case null:
                         case UriMatchType.Domain:
