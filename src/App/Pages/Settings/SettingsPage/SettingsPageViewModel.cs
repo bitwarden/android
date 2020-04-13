@@ -19,7 +19,7 @@ namespace Bit.App.Pages
         private readonly IDeviceActionService _deviceActionService;
         private readonly IEnvironmentService _environmentService;
         private readonly IMessagingService _messagingService;
-        private readonly ILockService _lockService;
+        private readonly IVaultTimeoutService _vaultTimeoutService;
         private readonly IStorageService _storageService;
         private readonly ISyncService _syncService;
 
@@ -50,7 +50,7 @@ namespace Bit.App.Pages
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
-            _lockService = ServiceContainer.Resolve<ILockService>("lockService");
+            _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
 
@@ -72,9 +72,9 @@ namespace Bit.App.Pages
             }
             var option = await _storageService.GetAsync<int?>(Constants.LockOptionKey);
             _lockOptionValue = _lockOptions.FirstOrDefault(o => o.Value == option).Key;
-            var pinSet = await _lockService.IsPinLockSetAsync();
+            var pinSet = await _vaultTimeoutService.IsPinLockSetAsync();
             _pin = pinSet.Item1 || pinSet.Item2;
-            _fingerprint = await _lockService.IsFingerprintLockSetAsync();
+            _fingerprint = await _vaultTimeoutService.IsFingerprintLockSetAsync();
             BuildList();
         }
 
@@ -179,7 +179,7 @@ namespace Bit.App.Pages
 
         public async Task LockAsync()
         {
-            await _lockService.LockAsync(true, true);
+            await _vaultTimeoutService.LockAsync(true, true);
         }
 
         public async Task LockOptionsAsync()
@@ -193,7 +193,7 @@ namespace Bit.App.Pages
             var cleanSelection = selection.Replace("✓ ", string.Empty);
             var selectionOption = _lockOptions.FirstOrDefault(o => o.Key == cleanSelection);
             _lockOptionValue = selectionOption.Key;
-            await _lockService.SetLockOptionAsync(selectionOption.Value);
+            await _vaultTimeoutService.SetLockOptionAsync(selectionOption.Value);
             BuildList();
         }
 
@@ -223,7 +223,7 @@ namespace Bit.App.Pages
                     {
                         var encPin = await _cryptoService.EncryptAsync(pin);
                         await _storageService.SaveAsync(Constants.ProtectedPin, encPin.EncryptedString);
-                        _lockService.PinProtectedKey = pinProtectedKey;
+                        _vaultTimeoutService.PinProtectedKey = pinProtectedKey;
                     }
                     else
                     {
@@ -238,7 +238,7 @@ namespace Bit.App.Pages
             if (!_pin)
             {
                 await _cryptoService.ClearPinProtectedKeyAsync();
-                await _lockService.ClearAsync();
+                await _vaultTimeoutService.ClearAsync();
             }
             BuildList();
         }
@@ -267,7 +267,7 @@ namespace Bit.App.Pages
             {
                 await _storageService.RemoveAsync(Constants.FingerprintUnlockKey);
             }
-            _lockService.FingerprintLocked = false;
+            _vaultTimeoutService.FingerprintLocked = false;
             await _cryptoService.ToggleKeyAsync();
             BuildList();
         }

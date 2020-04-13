@@ -15,8 +15,8 @@ namespace Bit.iOS.Core.Utilities
             if (await AutofillEnabled())
             {
                 var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
-                var lockService = ServiceContainer.Resolve<ILockService>("lockService");
-                if (await lockService.IsLockedAsync())
+                var vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
+                if (await vaultTimeoutService.IsLockedAsync())
                 {
                     await storageService.SaveAsync(Constants.AutofillNeedsIdentityReplacementKey, true);
                     return;

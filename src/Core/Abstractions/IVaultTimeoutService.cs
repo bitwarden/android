@@ -4,7 +4,7 @@ using Bit.Core.Models.Domain;
 
 namespace Bit.Core.Abstractions
 {
-    public interface ILockService
+    public interface IVaultTimeoutService
     {
         CipherString PinProtectedKey { get; set; }
         bool FingerprintLocked { get; set; }

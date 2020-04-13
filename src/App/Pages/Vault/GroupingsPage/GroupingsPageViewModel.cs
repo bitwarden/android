@@ -38,7 +38,7 @@ namespace Bit.App.Pages
         private readonly ICollectionService _collectionService;
         private readonly ISyncService _syncService;
         private readonly IUserService _userService;
-        private readonly ILockService _lockService;
+        private readonly IVaultTimeoutService _vaultTimeoutService;
         private readonly IDeviceActionService _deviceActionService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IMessagingService _messagingService;
@@ -51,7 +51,7 @@ namespace Bit.App.Pages
             _collectionService = ServiceContainer.Resolve<ICollectionService>("collectionService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
             _userService = ServiceContainer.Resolve<IUserService>("userService");
-            _lockService = ServiceContainer.Resolve<ILockService>("lockService");
+            _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
@@ -143,7 +143,7 @@ namespace Bit.App.Pages
             {
                 return;
             }
-            if (await _lockService.IsLockedAsync())
+            if (await _vaultTimeoutService.IsLockedAsync())
             {
                 return;
             }
