@@ -6,6 +6,7 @@ using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.Request;
 using Bit.Core.Utilities;
+using System;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -88,6 +89,7 @@ namespace Bit.App.Pages
             });
         }
         public Command SubmitCommand { get; }
+        public Action TwoFactorAction { get; set; }
 
         public void Init()
         {
@@ -209,7 +211,7 @@ namespace Bit.App.Pages
                 _broadcasterService.Unsubscribe(nameof(TwoFactorPage));
                 var disableFavicon = await _storageService.GetAsync<bool?>(Constants.DisableFaviconKey);
                 await _stateService.SaveAsync(Constants.DisableFaviconKey, disableFavicon.GetValueOrDefault());
-                Application.Current.MainPage = new TabsPage();
+                TwoFactorAction?.Invoke();
             }
             catch (ApiException e)
             {

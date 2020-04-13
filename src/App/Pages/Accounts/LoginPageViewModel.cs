@@ -4,6 +4,7 @@ using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Exceptions;
 using Bit.Core.Utilities;
+using System;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -65,6 +66,8 @@ namespace Bit.App.Pages
         public Command TogglePasswordCommand { get; }
         public string ShowPasswordIcon => ShowPassword ? "" : "";
         public bool RememberEmail { get; set; }
+        public Action StartTwoFactorAction { get; set; }
+        public Action LoggedInAction { get; set; }
 
         public async Task InitAsync()
         {
@@ -121,15 +124,14 @@ namespace Bit.App.Pages
                 await _deviceActionService.HideLoadingAsync();
                 if (response.TwoFactor)
                 {
-                    var page = new TwoFactorPage();
-                    await Page.Navigation.PushModalAsync(new NavigationPage(page));
+                    StartTwoFactorAction?.Invoke();
                 }
                 else
                 {
                     var disableFavicon = await _storageService.GetAsync<bool?>(Constants.DisableFaviconKey);
                     await _stateService.SaveAsync(Constants.DisableFaviconKey, disableFavicon.GetValueOrDefault());
                     var task = Task.Run(async () => await _syncService.FullSyncAsync(true));
-                    Application.Current.MainPage = new TabsPage();
+                    LoggedInAction?.Invoke();
                 }
             }
             catch (ApiException e)
