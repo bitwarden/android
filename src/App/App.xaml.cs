@@ -304,7 +304,7 @@ namespace Bit.App
             }
             else
             {
-                Current.MainPage = new HomePage();
+                Current.MainPage = new HomePage(_appOptions);
             }
         }
 

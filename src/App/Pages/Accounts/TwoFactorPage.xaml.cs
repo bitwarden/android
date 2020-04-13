@@ -1,4 +1,6 @@
 ﻿using Bit.App.Controls;
+using Bit.App.Models;
+using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using System;
@@ -11,18 +13,23 @@ namespace Bit.App.Pages
     {
         private readonly IBroadcasterService _broadcasterService;
         private readonly IMessagingService _messagingService;
+        private readonly IStorageService _storageService;
+        private readonly AppOptions _appOptions;
 
         private TwoFactorPageViewModel _vm;
         private bool _inited;
 
-        public TwoFactorPage()
+        public TwoFactorPage(AppOptions appOptions = null)
         {
             InitializeComponent();
             SetActivityIndicator();
+            _appOptions = appOptions;
+            _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _vm = BindingContext as TwoFactorPageViewModel;
             _vm.Page = this;
+            _vm.TwoFactorAction = () => Device.BeginInvokeOnMainThread(async () => await TwoFactorAuthAsync());
             DuoWebView = _duoWebView;
             if (Device.RuntimePlatform == Device.Android)
             {
@@ -150,6 +157,29 @@ namespace Bit.App.Pages
                     _messagingService.Send("listenYubiKeyOTP", true);
                 }
             }
+        }
+        
+        private async Task TwoFactorAuthAsync()
+        {
+            if (_appOptions != null)
+            {
+                if (_appOptions.FromAutofillFramework && _appOptions.SaveType.HasValue)
+                {
+                    Application.Current.MainPage = new NavigationPage(new AddEditPage(appOptions: _appOptions));
+                    return;
+                }
+                if (_appOptions.Uri != null)
+                {
+                    Application.Current.MainPage = new NavigationPage(new AutofillCiphersPage(_appOptions));
+                    return;
+                }
+            }
+            var previousPage = await _storageService.GetAsync<PreviousPageInfo>(Constants.PreviousPageKey);
+            if (previousPage != null)
+            {
+                await _storageService.RemoveAsync(Constants.PreviousPageKey);
+            }
+            Application.Current.MainPage = new TabsPage(_appOptions, previousPage);
         }
     }
 }
