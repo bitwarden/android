@@ -10,8 +10,8 @@ namespace Bit.App.Pages
 {
     public partial class HomePage : BaseContentPage
     {
-        private IMessagingService _messagingService;
         private readonly AppOptions _appOptions;
+        private IMessagingService _messagingService;
 
         public HomePage(AppOptions appOptions = null)
         {
