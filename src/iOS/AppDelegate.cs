@@ -38,7 +38,7 @@ namespace Bit.iOS
         private IMessagingService _messagingService;
         private IBroadcasterService _broadcasterService;
         private IStorageService _storageService;
-        private ILockService _lockService;
+        private IVaultTimeoutService _vaultTimeoutService;
         private IEventService _eventService;
 
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
@@ -50,7 +50,7 @@ namespace Bit.iOS
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
-            _lockService = ServiceContainer.Resolve<ILockService>("lockService");
+            _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             _eventService = ServiceContainer.Resolve<IEventService>("eventService");
 
             LoadApplication(new App.App(null));
@@ -336,7 +336,7 @@ namespace Bit.iOS
                 {
                     Device.BeginInvokeOnMainThread(() =>
                     {
-                        _lockService.CheckLockAsync();
+                        _vaultTimeoutService.CheckLockAsync();
                         _lockTimer?.Invalidate();
                         _lockTimer?.Dispose();
                         _lockTimer = null;

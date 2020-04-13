@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Bit.Core.Services
 {
-    public class LockService : ILockService
+    public class VaultTimeoutService : IVaultTimeoutService
     {
         private readonly ICryptoService _cryptoService;
         private readonly IUserService _userService;
@@ -18,7 +18,7 @@ namespace Bit.Core.Services
         private readonly IMessagingService _messagingService;
         private readonly Action<bool> _lockedCallback;
 
-        public LockService(
+        public VaultTimeoutService(
             ICryptoService cryptoService,
             IUserService userService,
             IPlatformUtilsService platformUtilsService,

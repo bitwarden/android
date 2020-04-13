@@ -400,8 +400,8 @@ namespace Bit.iOS.Extension
 
         private bool IsLocked()
         {
-            var lockService = ServiceContainer.Resolve<ILockService>("lockService");
-            return lockService.IsLockedAsync().GetAwaiter().GetResult();
+            var vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
+            return vaultTimeoutService.IsLockedAsync().GetAwaiter().GetResult();
         }
 
         private bool IsAuthed()

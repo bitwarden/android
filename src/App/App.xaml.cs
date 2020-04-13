@@ -22,7 +22,7 @@ namespace Bit.App
         private readonly IBroadcasterService _broadcasterService;
         private readonly IMessagingService _messagingService;
         private readonly IStateService _stateService;
-        private readonly ILockService _lockService;
+        private readonly IVaultTimeoutService _vaultTimeoutService;
         private readonly ISyncService _syncService;
         private readonly ITokenService _tokenService;
         private readonly ICryptoService _cryptoService;
@@ -48,7 +48,7 @@ namespace Bit.App
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
-            _lockService = ServiceContainer.Resolve<ILockService>("lockService");
+            _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
             _tokenService = ServiceContainer.Resolve<ITokenService>("tokenService");
             _cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
@@ -95,7 +95,7 @@ namespace Bit.App
                 }
                 else if (message.Command == "lockVault")
                 {
-                    await _lockService.LockAsync(true);
+                    await _vaultTimeoutService.LockAsync(true);
                 }
                 else if (message.Command == "logout")
                 {
@@ -198,7 +198,7 @@ namespace Bit.App
             _isResumed = false;
             if (Device.RuntimePlatform == Device.Android)
             {
-                var isLocked = await _lockService.IsLockedAsync();
+                var isLocked = await _vaultTimeoutService.IsLockedAsync();
                 if (!isLocked)
                 {
                     await _storageService.SaveAsync(Constants.LastActiveKey, DateTime.UtcNow);
@@ -266,9 +266,9 @@ namespace Bit.App
                 _folderService.ClearAsync(userId),
                 _collectionService.ClearAsync(userId),
                 _passwordGenerationService.ClearAsync(),
-                _lockService.ClearAsync(),
+                _vaultTimeoutService.ClearAsync(),
                 _stateService.PurgeAsync());
-            _lockService.FingerprintLocked = true;
+            _vaultTimeoutService.FingerprintLocked = true;
             _searchService.ClearIndex();
             _authService.LogOut(() =>
             {
@@ -285,7 +285,7 @@ namespace Bit.App
             var authed = await _userService.IsAuthenticatedAsync();
             if (authed)
             {
-                if (await _lockService.IsLockedAsync())
+                if (await _vaultTimeoutService.IsLockedAsync())
                 {
                     Current.MainPage = new NavigationPage(new LockPage(_appOptions));
                 }
@@ -310,7 +310,7 @@ namespace Bit.App
 
         private async Task HandleLockingAsync()
         {
-            if (await _lockService.IsLockedAsync())
+            if (await _vaultTimeoutService.IsLockedAsync())
             {
                 return;
             }
@@ -331,7 +331,7 @@ namespace Bit.App
             }
             else if (lockOption == 0)
             {
-                await _lockService.LockAsync(true);
+                await _vaultTimeoutService.LockAsync(true);
             }
         }
 
