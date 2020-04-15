@@ -9,12 +9,13 @@ namespace Bit.Core.Abstractions
         CipherString PinProtectedKey { get; set; }
         bool FingerprintLocked { get; set; }
 
-        Task CheckLockAsync();
+        Task CheckVaultTimeoutAsync();
         Task ClearAsync();
         Task<bool> IsLockedAsync();
         Task<Tuple<bool, bool>> IsPinLockSetAsync();
         Task<bool> IsFingerprintLockSetAsync();
         Task LockAsync(bool allowSoftLock = false, bool userInitiated = false);
-        Task SetLockOptionAsync(int? lockOption);
+        Task LogOutAsync();
+        Task SetVaultTimeoutOptionsAsync(int? timeout, string action);
     }
 }

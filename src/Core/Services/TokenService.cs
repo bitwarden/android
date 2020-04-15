@@ -35,6 +35,13 @@ namespace Bit.Core.Services
         {
             _token = token;
             _decodedToken = null;
+
+            if (await SkipTokenStorage())
+            {
+                // If we have a vault timeout and the action is log out, don't store token
+                return;
+            }
+            
             await _storageService.SaveAsync(Keys_AccessToken, token);
         }
 
@@ -51,6 +58,13 @@ namespace Bit.Core.Services
         public async Task SetRefreshTokenAsync(string refreshToken)
         {
             _refreshToken = refreshToken;
+
+            if (await SkipTokenStorage())
+            {
+                // If we have a vault timeout and the action is log out, don't store token
+                return;
+            }
+            
             await _storageService.SaveAsync(Keys_RefreshToken, refreshToken);
         }
 
@@ -62,6 +76,24 @@ namespace Bit.Core.Services
             }
             _refreshToken = await _storageService.GetAsync<string>(Keys_RefreshToken);
             return _refreshToken;
+        }
+
+        public async Task ToggleTokensAsync()
+        {
+            var token = await GetTokenAsync();
+            var refreshToken = await GetRefreshTokenAsync();
+            var timeout = await _storageService.GetAsync<int?>(Constants.VaultTimeoutKey);
+            var action = await _storageService.GetAsync<string>(Constants.VaultTimeoutActionKey);
+            if ((timeout != null || timeout == 0) && action == "logOut")
+            {
+                await ClearTokenAsync();
+                _token = token;
+                _refreshToken = refreshToken;
+                return;
+            }
+
+            await SetTokenAsync(token);
+            await SetRefreshTokenAsync(refreshToken);
         }
 
         public async Task SetTwoFactorTokenAsync(string token, string email)
@@ -224,6 +256,13 @@ namespace Bit.Core.Services
             }
             // Standard base64 decoder
             return Convert.FromBase64String(output);
+        }
+
+        private async Task<bool> SkipTokenStorage()
+        {
+            var timeout = await _storageService.GetAsync<int?>(Constants.VaultTimeoutKey);
+            var action = await _storageService.GetAsync<string>(Constants.VaultTimeoutActionKey);
+            return timeout.HasValue && action == "logOut";
         }
     }
 }

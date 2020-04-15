@@ -12,7 +12,8 @@ namespace Bit.App.Services
 
         private readonly HashSet<string> _preferenceStorageKeys = new HashSet<string>
         {
-            Constants.LockOptionKey,
+            Constants.VaultTimeoutKey,
+            Constants.VaultTimeoutActionKey,
             Constants.ThemeKey,
             Constants.DefaultUriMatch,
             Constants.DisableAutoTotpCopyKey,
