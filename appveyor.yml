@@ -98,7 +98,7 @@ build_script:
       if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
       .\src\Android\ci-build-apks.ps1
       if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
-      Push-AppveyorArtifact .\com.x8bit.bitwarden.apk
+      Push-AppveyorArtifact .\com.x8bit.bitwarden.aab
       Push-AppveyorArtifact .\com.x8bit.bitwarden-fdroid.apk
     }
 
@@ -114,7 +114,7 @@ on_success:
       cd store\google\Publisher\bin\Release\netcoreapp2.0
       dotnet Publisher.dll `
         $env:APPVEYOR_BUILD_FOLDER\store\google\Publisher\play_creds.json `
-        $env:APPVEYOR_BUILD_FOLDER\com.x8bit.bitwarden.apk `
+        $env:APPVEYOR_BUILD_FOLDER\com.x8bit.bitwarden.aab `
         alpha
       cd $env:APPVEYOR_BUILD_FOLDER
     }
