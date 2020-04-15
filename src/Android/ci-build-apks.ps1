@@ -35,13 +35,13 @@ msbuild "$($androidPath)" "/t:SignAndroidPackage" "/p:Configuration=Release" "/p
     "/p:AndroidSigningKeyStore=8bit.keystore" "/p:AndroidSigningStorePass=$($env:keystore_password)" "/v:quiet"
 	
 echo "########################################"
-echo "##### Copy Release apk to project root"
+echo "##### Copy Google Play aab to project root"
 echo "########################################"
 
-$signedApkPath = $($rootPath + "\src\Android\bin\Release\com.x8bit.bitwarden-Signed.apk");
-$signedApkDestPath = $($rootPath + "\com.x8bit.bitwarden.apk");
+$signedAabPath = $($rootPath + "\src\Android\bin\Release\com.x8bit.bitwarden-Signed.aab");
+$signedAabDestPath = $($rootPath + "\com.x8bit.bitwarden.aab");
 
-Copy-Item $signedApkPath $signedApkDestPath
+Copy-Item $signedAabPath $signedAabDestPath
 
 echo "########################################"
 echo "##### Clean Android and App"
