@@ -77,6 +77,7 @@ namespace Bit.Droid.Accessibility
             new Browser("com.vivaldi.browser", "url_bar"),
             new Browser("com.vivaldi.browser.snapshot", "url_bar"),
             new Browser("com.feedback.browser.wjbrowser", "addressbar_url"),
+            new Browser("com.naver.whale", "url_bar"),
         }.ToDictionary(n => n.PackageName);
 
         // Known packages to skip

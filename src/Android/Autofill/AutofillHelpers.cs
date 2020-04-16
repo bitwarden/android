@@ -64,6 +64,7 @@ namespace Bit.Droid.Autofill
             "org.torproject.torbrowser",
             "com.vivaldi.browser",
             "com.vivaldi.browser.snapshot",
+            "com.naver.whale",
         };
 
         // The URLs are blacklisted from autofilling
