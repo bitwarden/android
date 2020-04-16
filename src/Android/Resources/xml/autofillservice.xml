@@ -1,5 +1,9 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Be sure to keep this in sync with values in AutofillHelpers.CompatBrowsers -->
 <autofill-service xmlns:android="http://schemas.android.com/apk/res/android">
+  <compatibility-package
+    android:name="com.android.browser"
+    android:maxLongVersionCode="10000000000"/>
   <compatibility-package
     android:name="com.android.chrome"
     android:maxLongVersionCode="10000000000"/>
@@ -26,6 +30,9 @@
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
     android:name="com.opera.mini.native.beta"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
+    android:name="com.opera.touch"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
     android:name="com.sec.android.app.sbrowser"
@@ -91,7 +98,16 @@
     android:name="com.ecosia.android"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
+    android:name="com.qwant.liberty"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
+    android:name="org.torproject.torbrowser"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
     android:name="com.vivaldi.browser"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
+    android:name="com.vivaldi.browser.snapshot"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
     android:name="com.naver.whale"
