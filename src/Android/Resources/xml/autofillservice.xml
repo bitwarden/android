@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <!-- Be sure to keep this in sync with values in AutofillHelpers.CompatBrowsers -->
 <autofill-service xmlns:android="http://schemas.android.com/apk/res/android">
   <compatibility-package
@@ -108,5 +108,8 @@
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
     android:name="com.vivaldi.browser.snapshot"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
+    android:name="com.naver.whale"
     android:maxLongVersionCode="10000000000"/>
 </autofill-service>

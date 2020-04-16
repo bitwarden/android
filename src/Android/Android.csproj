@@ -153,6 +153,7 @@
     <GoogleServicesJson Include="google-services.json" />
     <GoogleServicesJson Include="google-services.json.enc" />
     <None Include="Properties\AndroidManifest.xml" />
+    <None Include="upload-keystore.jks.enc" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\Tabbar.axml" />
