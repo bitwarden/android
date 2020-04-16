@@ -82,8 +82,6 @@ namespace Bit.Core.Services
         {
             var token = await GetTokenAsync();
             var refreshToken = await GetRefreshTokenAsync();
-            var timeout = await _storageService.GetAsync<int?>(Constants.VaultTimeoutKey);
-            var action = await _storageService.GetAsync<string>(Constants.VaultTimeoutActionKey);
             if (await SkipTokenStorage())
             {
                 await ClearTokenAsync();
