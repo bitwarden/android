@@ -4,7 +4,8 @@
     {
         public const string AndroidAppProtocol = "androidapp://";
         public const string iOSAppProtocol = "iosapp://";
-        public static string LockOptionKey = "lockOption";
+        public static string VaultTimeoutKey = "lockOption";
+        public static string VaultTimeoutActionKey = "vaultTimeoutAction";
         public static string LastActiveKey = "lastActive";
         public static string FingerprintUnlockKey = "fingerprintUnlock";
         public static string ProtectedPin = "protectedPin";

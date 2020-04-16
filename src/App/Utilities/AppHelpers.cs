@@ -128,10 +128,16 @@ namespace Bit.App.Utilities
             if (lastBuild == null)
             {
                 // Installed
-                var currentLock = await storageService.GetAsync<int?>(Constants.LockOptionKey);
-                if (currentLock == null)
+                var currentTimeout = await storageService.GetAsync<int?>(Constants.VaultTimeoutKey);
+                if (currentTimeout == null)
                 {
-                    await storageService.SaveAsync(Constants.LockOptionKey, 15);
+                    await storageService.SaveAsync(Constants.VaultTimeoutKey, 15);
+                }
+                
+                var currentAction = await storageService.GetAsync<int?>(Constants.VaultTimeoutActionKey);
+                if (currentAction == null)
+                {
+                    await storageService.SaveAsync(Constants.VaultTimeoutActionKey, "lock");
                 }
             }
             else if (lastBuild != currentBuild)

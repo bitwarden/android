@@ -47,7 +47,7 @@ namespace Bit.Core.Services
         public async Task SetKeyAsync(SymmetricCryptoKey key)
         {
             _key = key;
-            var option = await _storageService.GetAsync<int?>(Constants.LockOptionKey);
+            var option = await _storageService.GetAsync<int?>(Constants.VaultTimeoutKey);
             var fingerprint = await _storageService.GetAsync<bool?>(Constants.FingerprintUnlockKey);
             if (option.HasValue && !fingerprint.GetValueOrDefault())
             {
@@ -353,7 +353,7 @@ namespace Bit.Core.Services
         public async Task ToggleKeyAsync()
         {
             var key = await GetKeyAsync();
-            var option = await _storageService.GetAsync<int?>(Constants.LockOptionKey);
+            var option = await _storageService.GetAsync<int?>(Constants.VaultTimeoutKey);
             var fingerprint = await _storageService.GetAsync<bool?>(Constants.FingerprintUnlockKey);
             if (!fingerprint.GetValueOrDefault() && (option != null || option == 0))
             {

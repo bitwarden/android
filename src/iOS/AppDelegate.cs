@@ -336,7 +336,7 @@ namespace Bit.iOS
                 {
                     Device.BeginInvokeOnMainThread(() =>
                     {
-                        _vaultTimeoutService.CheckLockAsync();
+                        _vaultTimeoutService.CheckVaultTimeoutAsync();
                         _lockTimer?.Invalidate();
                         _lockTimer?.Dispose();
                         _lockTimer = null;

@@ -322,7 +322,7 @@ namespace Bit.App
             var lockOption = _platformUtilsService.LockTimeout();
             if (lockOption == null)
             {
-                lockOption = await _storageService.GetAsync<int?>(Constants.LockOptionKey);
+                lockOption = await _storageService.GetAsync<int?>(Constants.VaultTimeoutKey);
             }
             lockOption = lockOption.GetValueOrDefault(-1);
             if (lockOption > 0)
@@ -422,7 +422,7 @@ namespace Bit.App
             await _stateService.PurgeAsync();
             if (autoPromptFingerprint && Device.RuntimePlatform == Device.iOS)
             {
-                var lockOptions = await _storageService.GetAsync<int?>(Constants.LockOptionKey);
+                var lockOptions = await _storageService.GetAsync<int?>(Constants.VaultTimeoutKey);
                 if (lockOptions == 0)
                 {
                     autoPromptFingerprint = false;

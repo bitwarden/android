@@ -70,7 +70,7 @@ namespace Bit.App.Pages
                 _lastSyncDate = string.Format("{0} {1}", lastSync.Value.ToShortDateString(),
                     lastSync.Value.ToShortTimeString());
             }
-            var option = await _storageService.GetAsync<int?>(Constants.LockOptionKey);
+            var option = await _storageService.GetAsync<int?>(Constants.VaultTimeoutKey);
             _lockOptionValue = _lockOptions.FirstOrDefault(o => o.Value == option).Key;
             var pinSet = await _vaultTimeoutService.IsPinLockSetAsync();
             _pin = pinSet.Item1 || pinSet.Item2;
@@ -193,7 +193,8 @@ namespace Bit.App.Pages
             var cleanSelection = selection.Replace("✓ ", string.Empty);
             var selectionOption = _lockOptions.FirstOrDefault(o => o.Key == cleanSelection);
             _lockOptionValue = selectionOption.Key;
-            await _vaultTimeoutService.SetLockOptionAsync(selectionOption.Value);
+            // TODO Save Action instead of null
+            await _vaultTimeoutService.SetVaultTimeoutOptionsAsync(selectionOption.Value, null);
             BuildList();
         }
 

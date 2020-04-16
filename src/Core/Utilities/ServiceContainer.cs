@@ -46,7 +46,12 @@ namespace Bit.Core.Utilities
             var collectionService = new CollectionService(cryptoService, userService, storageService, i18nService);
             searchService = new SearchService(cipherService);
             var vaultTimeoutService = new VaultTimeoutService(cryptoService, userService, platformUtilsService, 
-                storageService, folderService, cipherService, collectionService, searchService, messagingService, null);
+                storageService, folderService, cipherService, collectionService, searchService, messagingService, tokenService,
+                null, (expired) =>
+                {
+                    messagingService.Send("logout", expired);
+                    return Task.FromResult(0);
+                });
             var policyService = new PolicyService(storageService, userService);
             var syncService = new SyncService(userService, apiService, settingsService, folderService,
                 cipherService, cryptoService, collectionService, storageService, messagingService, policyService,

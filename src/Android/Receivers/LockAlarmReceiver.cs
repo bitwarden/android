@@ -10,7 +10,7 @@ namespace Bit.Droid.Receivers
         public async override void OnReceive(Context context, Intent intent)
         {
             var vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
-            await vaultTimeoutService.CheckLockAsync();
+            await vaultTimeoutService.CheckVaultTimeoutAsync();
         }
     }
 }

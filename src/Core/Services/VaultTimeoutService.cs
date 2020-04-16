@@ -16,7 +16,9 @@ namespace Bit.Core.Services
         private readonly ICollectionService _collectionService;
         private readonly ISearchService _searchService;
         private readonly IMessagingService _messagingService;
+        private readonly ITokenService _tokenService;
         private readonly Action<bool> _lockedCallback;
+        private readonly Func<bool, Task> _loggedOutCallback;
 
         public VaultTimeoutService(
             ICryptoService cryptoService,
@@ -28,7 +30,9 @@ namespace Bit.Core.Services
             ICollectionService collectionService,
             ISearchService searchService,
             IMessagingService messagingService,
-            Action<bool> lockedCallback)
+            ITokenService tokenService,
+            Action<bool> lockedCallback,
+            Func<bool, Task> loggedOutCallback)
         {
             _cryptoService = cryptoService;
             _userService = userService;
@@ -39,7 +43,9 @@ namespace Bit.Core.Services
             _collectionService = collectionService;
             _searchService = searchService;
             _messagingService = messagingService;
+            _tokenService = tokenService;
             _lockedCallback = lockedCallback;
+            _loggedOutCallback = loggedOutCallback;
         }
 
         public CipherString PinProtectedKey { get; set; } = null;
@@ -59,7 +65,7 @@ namespace Bit.Core.Services
             return !hasKey;
         }
 
-        public async Task CheckLockAsync()
+        public async Task CheckVaultTimeoutAsync()
         {
             if (_platformUtilsService.IsViewOpen())
             {
@@ -74,12 +80,13 @@ namespace Bit.Core.Services
             {
                 return;
             }
-            var lockOption = _platformUtilsService.LockTimeout();
-            if (lockOption == null)
+            // This only returns null
+            var vaultTimeout = _platformUtilsService.LockTimeout();
+            if (vaultTimeout == null)
             {
-                lockOption = await _storageService.GetAsync<int?>(Constants.LockOptionKey);
+                vaultTimeout = await _storageService.GetAsync<int?>(Constants.VaultTimeoutKey);
             }
-            if (lockOption.GetValueOrDefault(-1) < 0)
+            if (vaultTimeout.GetValueOrDefault(-1) < 0)
             {
                 return;
             }
@@ -89,10 +96,18 @@ namespace Bit.Core.Services
                 return;
             }
             var diff = DateTime.UtcNow - lastActive.Value;
-            if (diff.TotalSeconds >= lockOption.Value)
+            if (diff.TotalSeconds >= vaultTimeout.Value)
             {
-                // need to lock now
-                await LockAsync(true);
+                // Pivot based on saved action
+                var action = await _storageService.GetAsync<string>(Constants.VaultTimeoutActionKey);
+                if (action == "lock")
+                {
+                    await LockAsync(true);
+                }
+                else
+                {
+                    await LogOutAsync();
+                }
             }
         }
 
@@ -126,11 +141,21 @@ namespace Bit.Core.Services
             _messagingService.Send("locked", userInitiated);
             _lockedCallback?.Invoke(userInitiated);
         }
-
-        public async Task SetLockOptionAsync(int? lockOption)
+        
+        public async Task LogOutAsync()
         {
-            await _storageService.SaveAsync(Constants.LockOptionKey, lockOption);
+            if(_loggedOutCallback != null)
+            {
+                await _loggedOutCallback.Invoke(false);
+            }
+        }
+
+        public async Task SetVaultTimeoutOptionsAsync(int? timeout, string action)
+        {
+            await _storageService.SaveAsync(Constants.VaultTimeoutKey, timeout);
+            await _storageService.SaveAsync(Constants.VaultTimeoutActionKey, action);
             await _cryptoService.ToggleKeyAsync();
+            await _tokenService.ToggleTokensAsync();
         }
 
         public async Task<Tuple<bool, bool>> IsPinLockSetAsync()
