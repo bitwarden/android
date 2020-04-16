@@ -96,6 +96,10 @@ namespace Bit.Publisher
                 }
                 else
                 {
+                    if (progress.Exception != null)
+                    {
+                        Console.WriteLine("Upload exception: {0}", progress.Exception);
+                    }
                     throw new Exception("Upload failed.");
                 }
             }
