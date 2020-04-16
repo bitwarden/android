@@ -26,7 +26,8 @@ $encUploadKeystorePath = $($rootPath + "\src\Android\upload-keystore.jks.enc");
 $secureFilePath = $($rootPath + "\secure-file\tools\secure-file.exe");
 
 Invoke-Expression "& `"$secureFilePath`" -decrypt $($encKeystorePath) -secret $($env:keystore_dec_secret)"
-Invoke-Expression "& `"$secureFilePath`" -decrypt $($encUploadKeystorePath) -secret $($env:upload_keystore_dec_secret)"
+Invoke-Expression "& `"$secureFilePath`" -decrypt $($encUploadKeystorePath) -secret $($env:upload_keystore_dec_secret) `
+    -salt $($env:upload_keystore_dec_salt)"
 
 echo "########################################"
 echo "##### Sign Release Configuration"
