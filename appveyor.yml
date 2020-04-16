@@ -56,10 +56,10 @@ before_build:
     if($isWindows) {
       nuget restore
       if($env:UPLOAD_KEYSTORE_DEC_SECRET -or$env:KEYSTORE_DEC_SECRET -or $env:GOOGLE_SERVICES_DEC_SECRET -or $env:PLAY_DEC_SECRET) {
-        nuget install secure-file -ExcludeVersion
+        iex ((New-Object Net.WebClient).DownloadString('https://raw.githubusercontent.com/appveyor/secure-file/master/install.ps1'))
       }
       if($env:GOOGLE_SERVICES_DEC_SECRET) {
-        secure-file\tools\secure-file -decrypt src\Android\google-services.json.enc `
+        appveyor-tools\secure-file -decrypt src\Android\google-services.json.enc `
           -secret $env:GOOGLE_SERVICES_DEC_SECRET
       }
     }
@@ -110,7 +110,7 @@ on_success:
     fi
 - ps: |
     if($isWindows -and $env:PLAY_DEC_SECRET) {
-      secure-file\tools\secure-file -decrypt store\google\Publisher\play_creds.json.enc -secret $env:PLAY_DEC_SECRET
+      appveyor-tools\secure-file -decrypt store\google\Publisher\play_creds.json.enc -secret $env:PLAY_DEC_SECRET
       cd store\google\Publisher\bin\Release\netcoreapp2.0
       dotnet Publisher.dll `
         $env:APPVEYOR_BUILD_FOLDER\store\google\Publisher\play_creds.json `
