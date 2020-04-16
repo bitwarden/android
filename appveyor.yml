@@ -55,7 +55,7 @@ before_build:
 - ps: |
     if($isWindows) {
       nuget restore
-      if($env:KEYSTORE_DEC_SECRET -or $env:GOOGLE_SERVICES_DEC_SECRET -or $env:PLAY_DEC_SECRET) {
+      if($env:UPLOAD_KEYSTORE_DEC_SECRET -or$env:KEYSTORE_DEC_SECRET -or $env:GOOGLE_SERVICES_DEC_SECRET -or $env:PLAY_DEC_SECRET) {
         nuget install secure-file -ExcludeVersion
       }
       if($env:GOOGLE_SERVICES_DEC_SECRET) {
