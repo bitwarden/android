@@ -220,13 +220,13 @@ namespace Bit.App
 
         private async Task SleptAsync()
         {
-            await HandleLockingAsync();
+            await HandleVaultTimeoutAsync();
             _messagingService.Send("stopEventTimer");
         }
 
         private async void ResumedAsync()
         {
-            _messagingService.Send("cancelLockTimer");
+            _messagingService.Send("cancelVaultTimeoutTimer");
             _messagingService.Send("startEventTimer");
             await ClearCacheIfNeededAsync();
             await TryClearCiphersCacheAsync();
@@ -308,7 +308,7 @@ namespace Bit.App
             }
         }
 
-        private async Task HandleLockingAsync()
+        private async Task HandleVaultTimeoutAsync()
         {
             if (await _vaultTimeoutService.IsLockedAsync())
             {
@@ -319,19 +319,28 @@ namespace Bit.App
             {
                 return;
             }
-            var lockOption = _platformUtilsService.LockTimeout();
-            if (lockOption == null)
+            // Will only ever be null - look to remove this in the future
+            var vaultTimeout = _platformUtilsService.LockTimeout();
+            if (vaultTimeout == null)
             {
-                lockOption = await _storageService.GetAsync<int?>(Constants.VaultTimeoutKey);
+                vaultTimeout = await _storageService.GetAsync<int?>(Constants.VaultTimeoutKey);
             }
-            lockOption = lockOption.GetValueOrDefault(-1);
-            if (lockOption > 0)
+            vaultTimeout = vaultTimeout.GetValueOrDefault(-1);
+            if (vaultTimeout > 0)
             {
-                _messagingService.Send("scheduleLockTimer", lockOption.Value);
+                _messagingService.Send("scheduleVaultTimeoutTimer", vaultTimeout.Value);
             }
-            else if (lockOption == 0)
+            else if (vaultTimeout == 0)
             {
-                await _vaultTimeoutService.LockAsync(true);
+                var action = await _storageService.GetAsync<string>(Constants.VaultTimeoutActionKey);
+                if (action == "lock")
+                {
+                    await _vaultTimeoutService.LockAsync(true);
+                }
+                else
+                {
+                    await _vaultTimeoutService.LogOutAsync();
+                }
             }
         }
 
@@ -422,8 +431,8 @@ namespace Bit.App
             await _stateService.PurgeAsync();
             if (autoPromptFingerprint && Device.RuntimePlatform == Device.iOS)
             {
-                var lockOptions = await _storageService.GetAsync<int?>(Constants.VaultTimeoutKey);
-                if (lockOptions == 0)
+                var vaultTimeout = await _storageService.GetAsync<int?>(Constants.VaultTimeoutKey);
+                if (vaultTimeout == 0)
                 {
                     autoPromptFingerprint = false;
                 }
