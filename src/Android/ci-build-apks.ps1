@@ -34,7 +34,7 @@ echo "########################################"
 
 msbuild "$($androidPath)" "/t:SignAndroidPackage" "/p:Configuration=Release" "/p:AndroidKeyStore=true" `
     "/p:AndroidSigningKeyAlias=upload" "/p:AndroidSigningKeyPass=$($env:upload_keystore_password)" `
-    "/p:AndroidSigningKeyStore=upload-keystore.jks.enc" "/p:AndroidSigningStorePass=$($env:upload_keystore_password)" `
+    "/p:AndroidSigningKeyStore=upload-keystore.jks" "/p:AndroidSigningStorePass=$($env:upload_keystore_password)" `
     "/v:quiet"
 
 echo "########################################"
