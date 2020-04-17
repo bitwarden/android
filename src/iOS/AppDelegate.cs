@@ -29,7 +29,7 @@ namespace Bit.iOS
         private NFCReaderDelegate _nfcDelegate = null;
         private NSTimer _clipboardTimer = null;
         private nint _clipboardBackgroundTaskId;
-        private NSTimer _lockTimer = null;
+        private NSTimer _vaultTimeoutTimer = null;
         private nint _lockBackgroundTaskId;
         private NSTimer _eventTimer = null;
         private nint _eventBackgroundTaskId;
@@ -59,13 +59,13 @@ namespace Bit.iOS
 
             _broadcasterService.Subscribe(nameof(AppDelegate), async (message) =>
             {
-                if (message.Command == "scheduleLockTimer")
+                if (message.Command == "scheduleVaultTimeoutTimer")
                 {
-                    LockTimer((int)message.Data);
+                    VaultTimeoutTimer((int)message.Data);
                 }
-                else if (message.Command == "cancelLockTimer")
+                else if (message.Command == "cancelVaultTimeoutTimer")
                 {
-                    CancelLockTimer();
+                    CancelVaultTimeoutTimer();
                 }
                 else if (message.Command == "startEventTimer")
                 {
@@ -313,7 +313,7 @@ namespace Bit.iOS
             }
         }
 
-        private void LockTimer(int lockOptionMinutes)
+        private void VaultTimeoutTimer(int vaultTimeoutMinutes)
         {
             if (_lockBackgroundTaskId > 0)
             {
@@ -325,21 +325,21 @@ namespace Bit.iOS
                 UIApplication.SharedApplication.EndBackgroundTask(_lockBackgroundTaskId);
                 _lockBackgroundTaskId = 0;
             });
-            var lockOptionMs = lockOptionMinutes * 60000;
-            _lockTimer?.Invalidate();
-            _lockTimer?.Dispose();
-            _lockTimer = null;
-            var lockMsSpan = TimeSpan.FromMilliseconds(lockOptionMs + 10);
+            var vaultTimeoutMs = vaultTimeoutMinutes * 60000;
+            _vaultTimeoutTimer?.Invalidate();
+            _vaultTimeoutTimer?.Dispose();
+            _vaultTimeoutTimer = null;
+            var vaultTimeoutMsSpan = TimeSpan.FromMilliseconds(vaultTimeoutMs + 10);
             Device.BeginInvokeOnMainThread(() =>
             {
-                _lockTimer = NSTimer.CreateScheduledTimer(lockMsSpan, timer =>
+                _vaultTimeoutTimer = NSTimer.CreateScheduledTimer(vaultTimeoutMsSpan, timer =>
                 {
                     Device.BeginInvokeOnMainThread(() =>
                     {
                         _vaultTimeoutService.CheckVaultTimeoutAsync();
-                        _lockTimer?.Invalidate();
-                        _lockTimer?.Dispose();
-                        _lockTimer = null;
+                        _vaultTimeoutTimer?.Invalidate();
+                        _vaultTimeoutTimer?.Dispose();
+                        _vaultTimeoutTimer = null;
                         if (_lockBackgroundTaskId > 0)
                         {
                             UIApplication.SharedApplication.EndBackgroundTask(_lockBackgroundTaskId);
@@ -350,11 +350,11 @@ namespace Bit.iOS
             });
         }
 
-        private void CancelLockTimer()
+        private void CancelVaultTimeoutTimer()
         {
-            _lockTimer?.Invalidate();
-            _lockTimer?.Dispose();
-            _lockTimer = null;
+            _vaultTimeoutTimer?.Invalidate();
+            _vaultTimeoutTimer?.Dispose();
+            _vaultTimeoutTimer = null;
             if (_lockBackgroundTaskId > 0)
             {
                 UIApplication.SharedApplication.EndBackgroundTask(_lockBackgroundTaskId);
