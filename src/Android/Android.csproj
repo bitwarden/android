@@ -19,7 +19,6 @@
     <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <AndroidLinkSkip>Xamarin.GooglePlayServices.Base;Xamarin.GooglePlayServices.Basement;Xamarin.GooglePlayServices.Measurement;Xamarin.GooglePlayServices.Gcm;BitwardenAndroid;BitwardenApp;BitwardenCore;Xamarin.Android.Net;Xamarin.Android.Net.OldAndroidSSLSocketFactory;LiteDB;Microsoft.AppCenter.Crashes</AndroidLinkSkip>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -45,7 +44,7 @@
     <AndroidSupportedAbis>armeabi-v7a;x86;x86_64;arm64-v8a</AndroidSupportedAbis>
     <JavaMaximumHeapSize>1G</JavaMaximumHeapSize>
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
-    <AndroidLinkMode>Full</AndroidLinkMode>
+    <AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'FDroid|AnyCPU'">
     <DebugSymbols>false</DebugSymbols>
@@ -61,7 +60,7 @@
     <JavaMaximumHeapSize>1G</JavaMaximumHeapSize>
     <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
-    <AndroidLinkMode>Full</AndroidLinkMode>
+    <AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
@@ -89,7 +88,7 @@
     <PackageReference Include="Xamarin.AndroidX.Legacy.Support.V4" Version="1.0.0" />
     <PackageReference Include="Xamarin.AndroidX.CardView" Version="1.0.0" />
     <PackageReference Include="Xamarin.AndroidX.MediaRouter" Version="1.1.0" />
-    <PackageReference Include="Xamarin.AndroidX.Migration" Version="1.0.2" />
+    <PackageReference Include="Xamarin.AndroidX.Migration" Version="1.0.4" />
     <PackageReference Include="Xamarin.GooglePlayServices.SafetyNet">
       <Version>71.1600.0</Version>
     </PackageReference>

@@ -13,7 +13,7 @@ namespace Bit.Publisher
     {
         private const string Package = "com.x8bit.bitwarden";
 
-        private static string _apkFilePath;
+        private static string _aabFilePath;
         private static string _credsFilePath;
         private static string _track;
 
@@ -27,7 +27,7 @@ namespace Bit.Publisher
             try
             {
                 _credsFilePath = args[0];
-                _apkFilePath = args[1];
+                _aabFilePath = args[1];
 
                 var track = args[2].Substring(0, 1).ToLower();
                 if (track == "a")
@@ -83,31 +83,35 @@ namespace Bit.Publisher
 
             Console.WriteLine("Created edit with id {0}.", edit.Id);
 
-            Apk apk = null;
-            using (var stream = new FileStream(_apkFilePath, FileMode.Open))
+            Bundle aab = null;
+            using (var stream = new FileStream(_aabFilePath, FileMode.Open))
             {
-                var uploadMedia = service.Edits.Apks.Upload(Package, edit.Id, stream,
-                    "application/vnd.android.package-archive");
+                var uploadMedia = service.Edits.Bundles.Upload(Package, edit.Id, stream,
+                    "application/octet-stream");
 
                 var progress = await uploadMedia.UploadAsync();
                 if (progress.Status == Google.Apis.Upload.UploadStatus.Completed)
                 {
-                    apk = uploadMedia.ResponseBody;
+                    aab = uploadMedia.ResponseBody;
                 }
                 else
                 {
+                    if (progress.Exception != null)
+                    {
+                        Console.WriteLine("Upload exception: {0}", progress.Exception);
+                    }
                     throw new Exception("Upload failed.");
                 }
             }
 
-            Console.WriteLine("Version code {0} has been uploaded.", apk.VersionCode);
+            Console.WriteLine("Version code {0} has been uploaded.", aab.VersionCode);
 
             var trackRequest = service.Edits.Tracks.Update(new Track
             {
                 TrackValue = _track,
                 Releases = new List<TrackRelease>
                 {
-                    new TrackRelease { VersionCodes = new List<long?> { apk.VersionCode }, Status = "completed" }
+                    new TrackRelease { VersionCodes = new List<long?> { aab.VersionCode }, Status = "completed" }
                 }
             }, Package, edit.Id, _track);
 

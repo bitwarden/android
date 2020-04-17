@@ -29,16 +29,33 @@ Invoke-Expression "& `"$secureFilePath`" -decrypt $($encKeystorePath) -secret $(
 Invoke-Expression "& `"$secureFilePath`" -decrypt $($encUploadKeystorePath) -secret $($env:upload_keystore_dec_secret)"
 
 echo "########################################"
-echo "##### Sign Release Configuration"
+echo "##### Sign Google Play Bundle Release Configuration"
 echo "########################################"
 
 msbuild "$($androidPath)" "/t:SignAndroidPackage" "/p:Configuration=Release" "/p:AndroidKeyStore=true" `
     "/p:AndroidSigningKeyAlias=upload" "/p:AndroidSigningKeyPass=$($env:upload_keystore_password)" `
     "/p:AndroidSigningKeyStore=upload-keystore.jks" "/p:AndroidSigningStorePass=$($env:upload_keystore_password)" `
-    "/v:quiet"
+    "/p:AndroidPackageFormat=aab" "/v:quiet"
 
 echo "########################################"
-echo "##### Copy Release apk to project root"
+echo "##### Copy Google Play Bundle to project root"
+echo "########################################"
+
+$signedAabPath = $($rootPath + "\src\Android\bin\Release\com.x8bit.bitwarden-Signed.aab");
+$signedAabDestPath = $($rootPath + "\com.x8bit.bitwarden.aab");
+
+Copy-Item $signedAabPath $signedAabDestPath
+
+echo "########################################"
+echo "##### Sign APK Release Configuration"
+echo "########################################"
+
+msbuild "$($androidPath)" "/t:SignAndroidPackage" "/p:Configuration=Release" "/p:AndroidKeyStore=true" `
+    "/p:AndroidSigningKeyAlias=bitwarden" "/p:AndroidSigningKeyPass=$($env:keystore_password)" `
+    "/p:AndroidSigningKeyStore=8bit.keystore" "/p:AndroidSigningStorePass=$($env:keystore_password)" "/v:quiet"
+	
+echo "########################################"
+echo "##### Copy Release APK to project root"
 echo "########################################"
 
 $signedApkPath = $($rootPath + "\src\Android\bin\Release\com.x8bit.bitwarden-Signed.apk");
