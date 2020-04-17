@@ -46,7 +46,6 @@
     <JavaMaximumHeapSize>1G</JavaMaximumHeapSize>
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
     <AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
-    <AndroidPackageFormat>aab</AndroidPackageFormat>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'FDroid|AnyCPU'">
     <DebugSymbols>false</DebugSymbols>
