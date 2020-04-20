@@ -50,6 +50,7 @@ namespace Bit.Droid.Autofill
             "org.mozilla.reference.browser",
             "org.mozilla.rocket",
             "com.brave.browser",
+            "com.brave.browser_beta",
             "com.google.android.apps.chrome",
             "com.google.android.apps.chrome_dev",
             "com.yandex.browser",
