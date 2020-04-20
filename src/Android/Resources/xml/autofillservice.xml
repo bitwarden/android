@@ -68,6 +68,9 @@
     android:name="com.brave.browser"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
+    android:name="com.brave.browser_beta"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
     android:name="com.google.android.apps.chrome"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
