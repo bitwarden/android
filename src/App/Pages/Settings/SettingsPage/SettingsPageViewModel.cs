@@ -375,7 +375,7 @@ namespace Bit.App.Pages
                     Name = string.Format(AppResources.UnlockWith, fingerprintName),
                     SubLabel = _fingerprint ? AppResources.Enabled : AppResources.Disabled
                 };
-                securityItems.Insert(1, item);
+                securityItems.Insert(2, item);
             }
             var accountItems = new List<SettingsPageListItem>
             {
