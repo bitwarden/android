@@ -518,22 +518,22 @@
   <data name="Lock" xml:space="preserve">
     <value>Lezárás</value>
   </data>
-  <data name="LockOption15Minutes" xml:space="preserve">
+  <data name="VaultTimeout15Minutes" xml:space="preserve">
     <value>15 perc</value>
   </data>
-  <data name="LockOption1Hour" xml:space="preserve">
+  <data name="VaultTimeout1Hour" xml:space="preserve">
     <value>1 óra</value>
   </data>
-  <data name="LockOption1Minute" xml:space="preserve">
+  <data name="VaultTimeout1Minute" xml:space="preserve">
     <value>1 perc</value>
   </data>
-  <data name="LockOption4Hours" xml:space="preserve">
+  <data name="VaultTimeout4Hours" xml:space="preserve">
     <value>4 óra</value>
   </data>
-  <data name="LockOptionImmediately" xml:space="preserve">
+  <data name="VaultTimeoutImmediately" xml:space="preserve">
     <value>Azonnal</value>
   </data>
-  <data name="LockOptions" xml:space="preserve">
+  <data name="VaultTimeout" xml:space="preserve">
     <value>Zárolási beállítások</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
@@ -1430,10 +1430,10 @@
   <data name="Unlock" xml:space="preserve">
     <value>Feloldás</value>
   </data>
-  <data name="LockOption30Minutes" xml:space="preserve">
+  <data name="VaultTimeout30Minutes" xml:space="preserve">
     <value>30 perc</value>
   </data>
-  <data name="LockOption5Minutes" xml:space="preserve">
+  <data name="VaultTimeout5Minutes" xml:space="preserve">
     <value>5 perc</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
@@ -1532,7 +1532,7 @@
   <data name="DisableSavePromptDescription" xml:space="preserve">
     <value>A "Bejelentkezés felkérés hozzáadása" automatikusan felajánlja a bejelentkezés széfbe mentését az első bejelentkezéskor.</value>
   </data>
-  <data name="LockOptionOnRestart" xml:space="preserve">
+  <data name="VaultTimeoutOnRestart" xml:space="preserve">
     <value>Újraindításkor</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">

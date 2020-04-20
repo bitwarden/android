@@ -518,22 +518,22 @@
   <data name="Lock" xml:space="preserve">
     <value>鎖定</value>
   </data>
-  <data name="LockOption15Minutes" xml:space="preserve">
+  <data name="VaultTimeout15Minutes" xml:space="preserve">
     <value>15 分鐘</value>
   </data>
-  <data name="LockOption1Hour" xml:space="preserve">
+  <data name="VaultTimeout1Hour" xml:space="preserve">
     <value>1 小時</value>
   </data>
-  <data name="LockOption1Minute" xml:space="preserve">
+  <data name="VaultTimeout1Minute" xml:space="preserve">
     <value>1 分鐘</value>
   </data>
-  <data name="LockOption4Hours" xml:space="preserve">
+  <data name="VaultTimeout4Hours" xml:space="preserve">
     <value>4 小時</value>
   </data>
-  <data name="LockOptionImmediately" xml:space="preserve">
+  <data name="VaultTimeoutImmediately" xml:space="preserve">
     <value>立即</value>
   </data>
-  <data name="LockOptions" xml:space="preserve">
+  <data name="VaultTimeout" xml:space="preserve">
     <value>自動鎖定時間</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
@@ -1430,10 +1430,10 @@
   <data name="Unlock" xml:space="preserve">
     <value>解鎖</value>
   </data>
-  <data name="LockOption30Minutes" xml:space="preserve">
+  <data name="VaultTimeout30Minutes" xml:space="preserve">
     <value>30 分鐘</value>
   </data>
-  <data name="LockOption5Minutes" xml:space="preserve">
+  <data name="VaultTimeout5Minutes" xml:space="preserve">
     <value>5 分鐘</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
@@ -1532,7 +1532,7 @@
   <data name="DisableSavePromptDescription" xml:space="preserve">
     <value>當您首次輸入時，「儲存提示」會自動提示您將新項目儲存進密碼庫。</value>
   </data>
-  <data name="LockOptionOnRestart" xml:space="preserve">
+  <data name="VaultTimeoutOnRestart" xml:space="preserve">
     <value>於程式重新啟動時</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">

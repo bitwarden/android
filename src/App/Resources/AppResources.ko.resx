@@ -518,22 +518,22 @@
   <data name="Lock" xml:space="preserve">
     <value>잠금</value>
   </data>
-  <data name="LockOption15Minutes" xml:space="preserve">
+  <data name="VaultTimeout15Minutes" xml:space="preserve">
     <value>15분</value>
   </data>
-  <data name="LockOption1Hour" xml:space="preserve">
+  <data name="VaultTimeout1Hour" xml:space="preserve">
     <value>1시간</value>
   </data>
-  <data name="LockOption1Minute" xml:space="preserve">
+  <data name="VaultTimeout1Minute" xml:space="preserve">
     <value>1분</value>
   </data>
-  <data name="LockOption4Hours" xml:space="preserve">
+  <data name="VaultTimeout4Hours" xml:space="preserve">
     <value>4시간</value>
   </data>
-  <data name="LockOptionImmediately" xml:space="preserve">
+  <data name="VaultTimeoutImmediately" xml:space="preserve">
     <value>즉시</value>
   </data>
-  <data name="LockOptions" xml:space="preserve">
+  <data name="VaultTimeout" xml:space="preserve">
     <value>잠금 옵션</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
@@ -1430,10 +1430,10 @@
   <data name="Unlock" xml:space="preserve">
     <value>잠금 해제</value>
   </data>
-  <data name="LockOption30Minutes" xml:space="preserve">
+  <data name="VaultTimeout30Minutes" xml:space="preserve">
     <value>30분</value>
   </data>
-  <data name="LockOption5Minutes" xml:space="preserve">
+  <data name="VaultTimeout5Minutes" xml:space="preserve">
     <value>5분</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
@@ -1532,7 +1532,7 @@
   <data name="DisableSavePromptDescription" xml:space="preserve">
     <value>"저장 프롬포트"를 사용하면 처음 입력할 때마다 보관함에 그 항목을 추가할 것인지 물어봅니다.</value>
   </data>
-  <data name="LockOptionOnRestart" xml:space="preserve">
+  <data name="VaultTimeoutOnRestart" xml:space="preserve">
     <value>앱 재시작 시</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">

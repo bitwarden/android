@@ -518,22 +518,22 @@
   <data name="Lock" xml:space="preserve">
     <value>Lås</value>
   </data>
-  <data name="LockOption15Minutes" xml:space="preserve">
+  <data name="VaultTimeout15Minutes" xml:space="preserve">
     <value>15 minutter</value>
   </data>
-  <data name="LockOption1Hour" xml:space="preserve">
+  <data name="VaultTimeout1Hour" xml:space="preserve">
     <value>1 time</value>
   </data>
-  <data name="LockOption1Minute" xml:space="preserve">
+  <data name="VaultTimeout1Minute" xml:space="preserve">
     <value>1 minutt</value>
   </data>
-  <data name="LockOption4Hours" xml:space="preserve">
+  <data name="VaultTimeout4Hours" xml:space="preserve">
     <value>4 timer</value>
   </data>
-  <data name="LockOptionImmediately" xml:space="preserve">
+  <data name="VaultTimeoutImmediately" xml:space="preserve">
     <value>Umiddelbart</value>
   </data>
-  <data name="LockOptions" xml:space="preserve">
+  <data name="VaultTimeout" xml:space="preserve">
     <value>Låsingsinnstillinger</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
@@ -1430,10 +1430,10 @@
   <data name="Unlock" xml:space="preserve">
     <value>Lås opp</value>
   </data>
-  <data name="LockOption30Minutes" xml:space="preserve">
+  <data name="VaultTimeout30Minutes" xml:space="preserve">
     <value>30 minutter</value>
   </data>
-  <data name="LockOption5Minutes" xml:space="preserve">
+  <data name="VaultTimeout5Minutes" xml:space="preserve">
     <value>5 minutter</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
@@ -1532,7 +1532,7 @@
   <data name="DisableSavePromptDescription" xml:space="preserve">
     <value>"Lagreforespørselen" spør deg automatisk om du vil lagre nye elementer i hvelvet ditt når du skriver dem inn for første gang.</value>
   </data>
-  <data name="LockOptionOnRestart" xml:space="preserve">
+  <data name="VaultTimeoutOnRestart" xml:space="preserve">
     <value>Ved app-omstart</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">

@@ -518,22 +518,22 @@
   <data name="Lock" xml:space="preserve">
     <value>Zamknout</value>
   </data>
-  <data name="LockOption15Minutes" xml:space="preserve">
+  <data name="VaultTimeout15Minutes" xml:space="preserve">
     <value>Po 15 minutách</value>
   </data>
-  <data name="LockOption1Hour" xml:space="preserve">
+  <data name="VaultTimeout1Hour" xml:space="preserve">
     <value>Po 1 hodině</value>
   </data>
-  <data name="LockOption1Minute" xml:space="preserve">
+  <data name="VaultTimeout1Minute" xml:space="preserve">
     <value>Po 1 minutě</value>
   </data>
-  <data name="LockOption4Hours" xml:space="preserve">
+  <data name="VaultTimeout4Hours" xml:space="preserve">
     <value>Po 4 hodinách</value>
   </data>
-  <data name="LockOptionImmediately" xml:space="preserve">
+  <data name="VaultTimeoutImmediately" xml:space="preserve">
     <value>Okamžitě</value>
   </data>
-  <data name="LockOptions" xml:space="preserve">
+  <data name="VaultTimeout" xml:space="preserve">
     <value>Možnosti zamknutí</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
@@ -1430,10 +1430,10 @@
   <data name="Unlock" xml:space="preserve">
     <value>Odemknout</value>
   </data>
-  <data name="LockOption30Minutes" xml:space="preserve">
+  <data name="VaultTimeout30Minutes" xml:space="preserve">
     <value>Po 30 minutách</value>
   </data>
-  <data name="LockOption5Minutes" xml:space="preserve">
+  <data name="VaultTimeout5Minutes" xml:space="preserve">
     <value>Po 5 minutách</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
@@ -1532,7 +1532,7 @@
   <data name="DisableSavePromptDescription" xml:space="preserve">
     <value>„Výzva k uložení“ vás automaticky vyzve k uložení nových položek do trezoru, kdykoli je poprvé zadáte.</value>
   </data>
-  <data name="LockOptionOnRestart" xml:space="preserve">
+  <data name="VaultTimeoutOnRestart" xml:space="preserve">
     <value>Při restartu aplikace</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">

@@ -134,7 +134,7 @@ namespace Bit.App.Utilities
                     await storageService.SaveAsync(Constants.VaultTimeoutKey, 15);
                 }
                 
-                var currentAction = await storageService.GetAsync<int?>(Constants.VaultTimeoutActionKey);
+                var currentAction = await storageService.GetAsync<string>(Constants.VaultTimeoutActionKey);
                 if (currentAction == null)
                 {
                     await storageService.SaveAsync(Constants.VaultTimeoutActionKey, "lock");
