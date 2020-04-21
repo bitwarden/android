@@ -533,7 +533,7 @@
   <data name="LockOptionImmediately" xml:space="preserve">
     <value>Natychmiast</value>
   </data>
-  <data name="LockOption" xml:space="preserve">
+  <data name="LockOptions" xml:space="preserve">
     <value>Czas automatycznego blokowania</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">

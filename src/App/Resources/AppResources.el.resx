@@ -534,7 +534,7 @@
   <data name="LockOptionImmediately" xml:space="preserve">
     <value>Άμεσα</value>
   </data>
-  <data name="LockOption" xml:space="preserve">
+  <data name="LockOptions" xml:space="preserve">
     <value>Επιλογές Κλειδώματος</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">

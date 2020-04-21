@@ -533,7 +533,7 @@
   <data name="LockOptionImmediately" xml:space="preserve">
     <value>तत्‍काल</value>
   </data>
-  <data name="LockOption" xml:space="preserve">
+  <data name="LockOptions" xml:space="preserve">
     <value>अवरोध विकल्प</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
