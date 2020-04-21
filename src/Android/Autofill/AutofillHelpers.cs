@@ -65,6 +65,7 @@ namespace Bit.Droid.Autofill
             "org.torproject.torbrowser",
             "com.vivaldi.browser",
             "com.vivaldi.browser.snapshot",
+            "com.vivaldi.browser.sopranos",
             "com.naver.whale",
         };
 
