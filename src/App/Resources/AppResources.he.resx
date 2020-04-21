@@ -518,22 +518,22 @@
   <data name="Lock" xml:space="preserve">
     <value>נעל</value>
   </data>
-  <data name="VaultTimeout15Minutes" xml:space="preserve">
+  <data name="LockOption15Minutes" xml:space="preserve">
     <value>15 דקות</value>
   </data>
-  <data name="VaultTimeout1Hour" xml:space="preserve">
+  <data name="LockOption1Hour" xml:space="preserve">
     <value>שעה</value>
   </data>
-  <data name="VaultTimeout1Minute" xml:space="preserve">
+  <data name="LockOption1Minute" xml:space="preserve">
     <value>דקה</value>
   </data>
-  <data name="VaultTimeout4Hours" xml:space="preserve">
+  <data name="LockOption4Hours" xml:space="preserve">
     <value>4 שעות</value>
   </data>
-  <data name="VaultTimeoutImmediately" xml:space="preserve">
+  <data name="LockOptionImmediately" xml:space="preserve">
     <value>באופן מיידי</value>
   </data>
-  <data name="VaultTimeout" xml:space="preserve">
+  <data name="LockOption" xml:space="preserve">
     <value>אפשרויות נעילה</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
@@ -1431,10 +1431,10 @@ Bitwarden בעזרת פתיחת חלון "הגדרות".</value>
   <data name="Unlock" xml:space="preserve">
     <value>בטל נעילה</value>
   </data>
-  <data name="VaultTimeout30Minutes" xml:space="preserve">
+  <data name="LockOption30Minutes" xml:space="preserve">
     <value>30 דקות</value>
   </data>
-  <data name="VaultTimeout5Minutes" xml:space="preserve">
+  <data name="LockOption5Minutes" xml:space="preserve">
     <value>5 דקות</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
@@ -1533,7 +1533,7 @@ Bitwarden בעזרת פתיחת חלון "הגדרות".</value>
   <data name="DisableSavePromptDescription" xml:space="preserve">
     <value>החלון "שמור" מופיע כשאתה מזין פרטי כניסה בפעם הראשונה.</value>
   </data>
-  <data name="VaultTimeoutOnRestart" xml:space="preserve">
+  <data name="LockOptionOnRestart" xml:space="preserve">
     <value>באתחול האפליקציה</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">

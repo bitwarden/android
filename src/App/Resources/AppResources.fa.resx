@@ -518,22 +518,22 @@
   <data name="Lock" xml:space="preserve">
     <value>قفل</value>
   </data>
-  <data name="VaultTimeout15Minutes" xml:space="preserve">
+  <data name="LockOption15Minutes" xml:space="preserve">
     <value>۱۵ دقیقه</value>
   </data>
-  <data name="VaultTimeout1Hour" xml:space="preserve">
+  <data name="LockOption1Hour" xml:space="preserve">
     <value>۱ ساعت</value>
   </data>
-  <data name="VaultTimeout1Minute" xml:space="preserve">
+  <data name="LockOption1Minute" xml:space="preserve">
     <value>۱ دقیقه</value>
   </data>
-  <data name="VaultTimeout4Hours" xml:space="preserve">
+  <data name="LockOption4Hours" xml:space="preserve">
     <value>۴ ساعت</value>
   </data>
-  <data name="VaultTimeoutImmediately" xml:space="preserve">
+  <data name="LockOptionImmediately" xml:space="preserve">
     <value>بلافاصله</value>
   </data>
-  <data name="VaultTimeout" xml:space="preserve">
+  <data name="LockOption" xml:space="preserve">
     <value>گزینه‌های قفل</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
@@ -1430,10 +1430,10 @@
   <data name="Unlock" xml:space="preserve">
     <value>باز کردن قفل</value>
   </data>
-  <data name="VaultTimeout30Minutes" xml:space="preserve">
+  <data name="LockOption30Minutes" xml:space="preserve">
     <value>۳۰ دقیقه</value>
   </data>
-  <data name="VaultTimeout5Minutes" xml:space="preserve">
+  <data name="LockOption5Minutes" xml:space="preserve">
     <value>۵ دقیقه</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
@@ -1532,7 +1532,7 @@
   <data name="DisableSavePromptDescription" xml:space="preserve">
     <value>"ذخیره سریع" به صورت خودکار باعث افزایش سرعت شما برای ذخیره موارد جدید در گاوصندوقتان می شود زمانی که شما آنها را برای اولین بار وارد میکند.</value>
   </data>
-  <data name="VaultTimeoutOnRestart" xml:space="preserve">
+  <data name="LockOptionOnRestart" xml:space="preserve">
     <value>راه اندازی مجدد در برنامه</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">

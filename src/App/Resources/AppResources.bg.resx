@@ -518,22 +518,22 @@
   <data name="Lock" xml:space="preserve">
     <value>Заключване</value>
   </data>
-  <data name="VaultTimeout15Minutes" xml:space="preserve">
+  <data name="LockOption15Minutes" xml:space="preserve">
     <value>15 минути</value>
   </data>
-  <data name="VaultTimeout1Hour" xml:space="preserve">
+  <data name="LockOption1Hour" xml:space="preserve">
     <value>1 час</value>
   </data>
-  <data name="VaultTimeout1Minute" xml:space="preserve">
+  <data name="LockOption1Minute" xml:space="preserve">
     <value>1 минута</value>
   </data>
-  <data name="VaultTimeout4Hours" xml:space="preserve">
+  <data name="LockOption4Hours" xml:space="preserve">
     <value>4 часа</value>
   </data>
-  <data name="VaultTimeoutImmediately" xml:space="preserve">
+  <data name="LockOptionImmediately" xml:space="preserve">
     <value>Незабавно</value>
   </data>
-  <data name="VaultTimeout" xml:space="preserve">
+  <data name="LockOption" xml:space="preserve">
     <value>Настройки на заключването</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
@@ -1430,10 +1430,10 @@
   <data name="Unlock" xml:space="preserve">
     <value>Отключване</value>
   </data>
-  <data name="VaultTimeout30Minutes" xml:space="preserve">
+  <data name="LockOption30Minutes" xml:space="preserve">
     <value>30 минути</value>
   </data>
-  <data name="VaultTimeout5Minutes" xml:space="preserve">
+  <data name="LockOption5Minutes" xml:space="preserve">
     <value>5 минути</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
@@ -1532,7 +1532,7 @@
   <data name="DisableSavePromptDescription" xml:space="preserve">
     <value>Дали да бъдете автоматично подканени да запазите в трезора данни за вписване, които въвеждате за първи път.</value>
   </data>
-  <data name="VaultTimeoutOnRestart" xml:space="preserve">
+  <data name="LockOptionOnRestart" xml:space="preserve">
     <value>При повторно пускане</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">

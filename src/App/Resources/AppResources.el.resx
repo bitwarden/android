@@ -519,22 +519,22 @@
   <data name="Lock" xml:space="preserve">
     <value>Κλείδωμα</value>
   </data>
-  <data name="VaultTimeout15Minutes" xml:space="preserve">
+  <data name="LockOption15Minutes" xml:space="preserve">
     <value>15 λεπτά</value>
   </data>
-  <data name="VaultTimeout1Hour" xml:space="preserve">
+  <data name="LockOption1Hour" xml:space="preserve">
     <value>1 ώρα</value>
   </data>
-  <data name="VaultTimeout1Minute" xml:space="preserve">
+  <data name="LockOption1Minute" xml:space="preserve">
     <value>1 λεπτό</value>
   </data>
-  <data name="VaultTimeout4Hours" xml:space="preserve">
+  <data name="LockOption4Hours" xml:space="preserve">
     <value>4 ώρες</value>
   </data>
-  <data name="VaultTimeoutImmediately" xml:space="preserve">
+  <data name="LockOptionImmediately" xml:space="preserve">
     <value>Άμεσα</value>
   </data>
-  <data name="VaultTimeout" xml:space="preserve">
+  <data name="LockOption" xml:space="preserve">
     <value>Επιλογές Κλειδώματος</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
@@ -1431,10 +1431,10 @@
   <data name="Unlock" xml:space="preserve">
     <value>Ξεκλείδωμα</value>
   </data>
-  <data name="VaultTimeout30Minutes" xml:space="preserve">
+  <data name="LockOption30Minutes" xml:space="preserve">
     <value>30 λεπτά</value>
   </data>
-  <data name="VaultTimeout5Minutes" xml:space="preserve">
+  <data name="LockOption5Minutes" xml:space="preserve">
     <value>5 λεπτά</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
@@ -1533,7 +1533,7 @@
   <data name="DisableSavePromptDescription" xml:space="preserve">
     <value>Η "προτροπή αποθήκευσης" σας ζητάει αυτόματα να αποθηκεύετε νέα στοιχεία στο vault σας, κάθε φορά που τα εισάγετε για πρώτη φορά.</value>
   </data>
-  <data name="VaultTimeoutOnRestart" xml:space="preserve">
+  <data name="LockOptionOnRestart" xml:space="preserve">
     <value>Κατά την Επανεκκίνηση Εφαρμογής</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">

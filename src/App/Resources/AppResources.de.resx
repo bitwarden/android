@@ -518,22 +518,22 @@
   <data name="Lock" xml:space="preserve">
     <value>Sperren</value>
   </data>
-  <data name="VaultTimeout15Minutes" xml:space="preserve">
+  <data name="LockOption15Minutes" xml:space="preserve">
     <value>15 Minuten</value>
   </data>
-  <data name="VaultTimeout1Hour" xml:space="preserve">
+  <data name="LockOption1Hour" xml:space="preserve">
     <value>1 Stunde</value>
   </data>
-  <data name="VaultTimeout1Minute" xml:space="preserve">
+  <data name="LockOption1Minute" xml:space="preserve">
     <value>1 Minute</value>
   </data>
-  <data name="VaultTimeout4Hours" xml:space="preserve">
+  <data name="LockOption4Hours" xml:space="preserve">
     <value>4 Stunden</value>
   </data>
-  <data name="VaultTimeoutImmediately" xml:space="preserve">
+  <data name="LockOptionImmediately" xml:space="preserve">
     <value>Sofort</value>
   </data>
-  <data name="VaultTimeout" xml:space="preserve">
+  <data name="LockOption" xml:space="preserve">
     <value>Sperroptionen</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
@@ -1430,10 +1430,10 @@
   <data name="Unlock" xml:space="preserve">
     <value>Entsperren</value>
   </data>
-  <data name="VaultTimeout30Minutes" xml:space="preserve">
+  <data name="LockOption30Minutes" xml:space="preserve">
     <value>30 Minuten</value>
   </data>
-  <data name="VaultTimeout5Minutes" xml:space="preserve">
+  <data name="LockOption5Minutes" xml:space="preserve">
     <value>5 Minuten</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
@@ -1532,7 +1532,7 @@
   <data name="DisableSavePromptDescription" xml:space="preserve">
     <value>Der "Speichern-Prompt" fordert Sie automatisch dazu auf, neue Einträge in den Tresor zu speichern, wenn Sie sie zum ersten Mal eingeben.</value>
   </data>
-  <data name="VaultTimeoutOnRestart" xml:space="preserve">
+  <data name="LockOptionOnRestart" xml:space="preserve">
     <value>Bei App Neustart</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">

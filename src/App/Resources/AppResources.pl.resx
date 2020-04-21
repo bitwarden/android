@@ -518,22 +518,22 @@
   <data name="Lock" xml:space="preserve">
     <value>Blokada</value>
   </data>
-  <data name="VaultTimeout15Minutes" xml:space="preserve">
+  <data name="LockOption15Minutes" xml:space="preserve">
     <value>15 minut</value>
   </data>
-  <data name="VaultTimeout1Hour" xml:space="preserve">
+  <data name="LockOption1Hour" xml:space="preserve">
     <value>1 godzina</value>
   </data>
-  <data name="VaultTimeout1Minute" xml:space="preserve">
+  <data name="LockOption1Minute" xml:space="preserve">
     <value>1 minuta</value>
   </data>
-  <data name="VaultTimeout4Hours" xml:space="preserve">
+  <data name="LockOption4Hours" xml:space="preserve">
     <value>4 godziny</value>
   </data>
-  <data name="VaultTimeoutImmediately" xml:space="preserve">
+  <data name="LockOptionImmediately" xml:space="preserve">
     <value>Natychmiast</value>
   </data>
-  <data name="VaultTimeout" xml:space="preserve">
+  <data name="LockOption" xml:space="preserve">
     <value>Czas automatycznego blokowania</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
@@ -1430,10 +1430,10 @@
   <data name="Unlock" xml:space="preserve">
     <value>Odblokuj</value>
   </data>
-  <data name="VaultTimeout30Minutes" xml:space="preserve">
+  <data name="LockOption30Minutes" xml:space="preserve">
     <value>30 minut</value>
   </data>
-  <data name="VaultTimeout5Minutes" xml:space="preserve">
+  <data name="LockOption5Minutes" xml:space="preserve">
     <value>5 minut</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
@@ -1532,7 +1532,7 @@
   <data name="DisableSavePromptDescription" xml:space="preserve">
     <value>"Monit o zapisywanie" automatycznie zapyta Cię o zapisanie nowych elementów do sejfu za każdym razem, gdy wpiszesz je po raz pierwszy.</value>
   </data>
-  <data name="VaultTimeoutOnRestart" xml:space="preserve">
+  <data name="LockOptionOnRestart" xml:space="preserve">
     <value>Po restarcie aplikacji</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
