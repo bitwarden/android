@@ -28,6 +28,7 @@ namespace Bit.Droid.Accessibility
             new Browser("org.chromium.chrome", "url_bar"),
             new Browser("com.android.browser", "url"),
             new Browser("com.brave.browser", "url_bar"),
+            new Browser("com.brave.browser_beta", "url_bar"),
             new Browser("com.opera.browser", "url_field"),
             new Browser("com.opera.browser.beta", "url_field"),
             new Browser("com.opera.mini.native", "url_field"),
