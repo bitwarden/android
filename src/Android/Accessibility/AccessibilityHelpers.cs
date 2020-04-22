@@ -28,6 +28,7 @@ namespace Bit.Droid.Accessibility
             new Browser("org.chromium.chrome", "url_bar"),
             new Browser("com.android.browser", "url"),
             new Browser("com.brave.browser", "url_bar"),
+            new Browser("com.brave.browser_beta", "url_bar"),
             new Browser("com.opera.browser", "url_field"),
             new Browser("com.opera.browser.beta", "url_field"),
             new Browser("com.opera.mini.native", "url_field"),
@@ -76,7 +77,9 @@ namespace Bit.Droid.Accessibility
             new Browser("jp.co.fenrir.android.sleipnir_test", "url_text"),
             new Browser("com.vivaldi.browser", "url_bar"),
             new Browser("com.vivaldi.browser.snapshot", "url_bar"),
+            new Browser("com.vivaldi.browser.sopranos", "url_bar"),
             new Browser("com.feedback.browser.wjbrowser", "addressbar_url"),
+            new Browser("com.naver.whale", "url_bar"),
         }.ToDictionary(n => n.PackageName);
 
         // Known packages to skip
