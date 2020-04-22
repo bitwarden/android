@@ -753,33 +753,33 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string VaultTimeout15Minutes {
+        public static string FifteenMinutes {
             get {
-                return ResourceManager.GetString("VaultTimeout15Minutes", resourceCulture);
+                return ResourceManager.GetString("FifteenMinutes", resourceCulture);
             }
         }
         
-        public static string VaultTimeout1Hour {
+        public static string OneHour {
             get {
-                return ResourceManager.GetString("VaultTimeout1Hour", resourceCulture);
+                return ResourceManager.GetString("OneHour", resourceCulture);
             }
         }
         
-        public static string VaultTimeout1Minute {
+        public static string OneMinute {
             get {
-                return ResourceManager.GetString("VaultTimeout1Minute", resourceCulture);
+                return ResourceManager.GetString("OneMinute", resourceCulture);
             }
         }
         
-        public static string VaultTimeout4Hours {
+        public static string FourHours {
             get {
-                return ResourceManager.GetString("VaultTimeout4Hours", resourceCulture);
+                return ResourceManager.GetString("FourHours", resourceCulture);
             }
         }
         
-        public static string VaultTimeoutImmediately {
+        public static string Immediately {
             get {
-                return ResourceManager.GetString("VaultTimeoutImmediately", resourceCulture);
+                return ResourceManager.GetString("Immediately", resourceCulture);
             }
         }
         
@@ -2505,15 +2505,9 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string VaultTimeout30Minutes {
+        public static string ThirtyMinutes {
             get {
-                return ResourceManager.GetString("VaultTimeout30Minutes", resourceCulture);
-            }
-        }
-        
-        public static string VaultTimeout5Minutes {
-            get {
-                return ResourceManager.GetString("VaultTimeout5Minutes", resourceCulture);
+                return ResourceManager.GetString("ThirtyMinutes", resourceCulture);
             }
         }
         
@@ -2556,12 +2550,6 @@ namespace Bit.App.Resources {
         public static string FiveMinutes {
             get {
                 return ResourceManager.GetString("FiveMinutes", resourceCulture);
-            }
-        }
-        
-        public static string OneMinute {
-            get {
-                return ResourceManager.GetString("OneMinute", resourceCulture);
             }
         }
         
@@ -2691,9 +2679,9 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string VaultTimeoutOnRestart {
+        public static string OnRestart {
             get {
-                return ResourceManager.GetString("VaultTimeoutOnRestart", resourceCulture);
+                return ResourceManager.GetString("OnRestart", resourceCulture);
             }
         }
         

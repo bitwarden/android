@@ -32,14 +32,14 @@ namespace Bit.App.Pages
         private List<KeyValuePair<string, int?>> _vaultTimeouts =
             new List<KeyValuePair<string, int?>>
             {
-                new KeyValuePair<string, int?>(AppResources.VaultTimeoutImmediately, 0),
-                new KeyValuePair<string, int?>(AppResources.VaultTimeout1Minute, 1),
-                new KeyValuePair<string, int?>(AppResources.VaultTimeout5Minutes, 5),
-                new KeyValuePair<string, int?>(AppResources.VaultTimeout15Minutes, 15),
-                new KeyValuePair<string, int?>(AppResources.VaultTimeout30Minutes, 30),
-                new KeyValuePair<string, int?>(AppResources.VaultTimeout1Hour, 60),
-                new KeyValuePair<string, int?>(AppResources.VaultTimeout4Hours, 240),
-                new KeyValuePair<string, int?>(AppResources.VaultTimeoutOnRestart, -1),
+                new KeyValuePair<string, int?>(AppResources.Immediately, 0),
+                new KeyValuePair<string, int?>(AppResources.OneMinute, 1),
+                new KeyValuePair<string, int?>(AppResources.FiveMinutes, 5),
+                new KeyValuePair<string, int?>(AppResources.FifteenMinutes, 15),
+                new KeyValuePair<string, int?>(AppResources.ThirtyMinutes, 30),
+                new KeyValuePair<string, int?>(AppResources.OneHour, 60),
+                new KeyValuePair<string, int?>(AppResources.FourHours, 240),
+                new KeyValuePair<string, int?>(AppResources.OnRestart, -1),
                 new KeyValuePair<string, int?>(AppResources.Never, null),
             };
         private List<KeyValuePair<string, string>> _vaultTimeoutActions =
@@ -203,7 +203,7 @@ namespace Bit.App.Pages
             var selectionOption = _vaultTimeouts.FirstOrDefault(o => o.Key == cleanSelection);
             _vaultTimeoutDisplayValue = selectionOption.Key;
             await _vaultTimeoutService.SetVaultTimeoutOptionsAsync(selectionOption.Value,
-                getVaultTimeoutActionFromKey(_vaultTimeoutActionDisplayValue));
+                GetVaultTimeoutActionFromKey(_vaultTimeoutActionDisplayValue));
             BuildList();
         }
         
@@ -228,7 +228,7 @@ namespace Bit.App.Pages
             }
             var selectionOption = _vaultTimeoutActions.FirstOrDefault(o => o.Key == cleanSelection);
             _vaultTimeoutActionDisplayValue = selectionOption.Key;
-            await _vaultTimeoutService.SetVaultTimeoutOptionsAsync(getVaultTimeoutFromKey(_vaultTimeoutDisplayValue),
+            await _vaultTimeoutService.SetVaultTimeoutOptionsAsync(GetVaultTimeoutFromKey(_vaultTimeoutDisplayValue),
                 selectionOption.Value);
             BuildList();
         }
@@ -408,12 +408,12 @@ namespace Bit.App.Pages
             });
         }
 
-        private string getVaultTimeoutActionFromKey(string key)
+        private string GetVaultTimeoutActionFromKey(string key)
         {
             return _vaultTimeoutActions.FirstOrDefault(o => o.Key == key).Value;
         }
 
-        private int? getVaultTimeoutFromKey(string key)
+        private int? GetVaultTimeoutFromKey(string key)
         {
             return _vaultTimeouts.FirstOrDefault(o => o.Key == key).Value;
         }

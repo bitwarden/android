@@ -518,19 +518,19 @@
   <data name="Lock" xml:space="preserve">
     <value>Lock</value>
   </data>
-  <data name="VaultTimeout15Minutes" xml:space="preserve">
+  <data name="FifteenMinutes" xml:space="preserve">
     <value>15 minutes</value>
   </data>
-  <data name="VaultTimeout1Hour" xml:space="preserve">
+  <data name="OneHour" xml:space="preserve">
     <value>1 hour</value>
   </data>
-  <data name="VaultTimeout1Minute" xml:space="preserve">
+  <data name="OneMinute" xml:space="preserve">
     <value>1 minute</value>
   </data>
-  <data name="VaultTimeout4Hours" xml:space="preserve">
+  <data name="FourHours" xml:space="preserve">
     <value>4 hours</value>
   </data>
-  <data name="VaultTimeoutImmediately" xml:space="preserve">
+  <data name="Immediately" xml:space="preserve">
     <value>Immediately</value>
   </data>
   <data name="VaultTimeout" xml:space="preserve">
@@ -1436,11 +1436,8 @@
   <data name="Unlock" xml:space="preserve">
     <value>Unlock</value>
   </data>
-  <data name="VaultTimeout30Minutes" xml:space="preserve">
+  <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minutes</value>
-  </data>
-  <data name="VaultTimeout5Minutes" xml:space="preserve">
-    <value>5 minutes</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
     <value>Set your PIN code for unlocking Bitwarden. Your PIN settings will be reset if you ever fully log out of the application.</value>
@@ -1538,7 +1535,7 @@
   <data name="DisableSavePromptDescription" xml:space="preserve">
     <value>The "Save Prompt" automatically prompts you to save new items to your vault whenever you enter them for the first time.</value>
   </data>
-  <data name="VaultTimeoutOnRestart" xml:space="preserve">
+  <data name="OnRestart" xml:space="preserve">
     <value>On App Restart</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
