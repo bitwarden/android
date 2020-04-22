@@ -77,6 +77,7 @@ namespace Bit.Publisher
             {
                 HttpClientInitializer = creds
             });
+            service.HttpClient.Timeout = TimeSpan.FromMinutes(3);
 
             var editRequest = service.Edits.Insert(null, Package);
             var edit = await editRequest.ExecuteAsync();
