@@ -45,7 +45,7 @@
 
             <DataTemplate x:Key="groupTemplate"
                           x:DataType="pages:GroupingsPageListItem">
-                <ViewCell>
+         
                     <StackLayout Orientation="Horizontal"
                                  StyleClass="list-row, list-row-platform">
                         <controls:FaLabel Text="{Binding Icon, Mode=OneWay}"
@@ -67,7 +67,6 @@
                                HorizontalTextAlignment="End"
                                StyleClass="list-sub"/>
                     </StackLayout>
-                </ViewCell>
             </DataTemplate>
 
             <pages:GroupingsPageListItemSelector x:Key="listItemDataTemplateSelector"
@@ -89,27 +88,20 @@
                         IsVisible="{Binding ShowAddCipherButton}"></Button>
                 </StackLayout>
 
-                <controls:ExtendedListView
-                    x:Name="_listView"
-                    IsVisible="{Binding ShowList}"
-                    ItemsSource="{Binding GroupedItems}"
-                    VerticalOptions="FillAndExpand"
-                    HasUnevenRows="True"
-                    RowHeight="-1"
-                    RefreshCommand="{Binding RefreshCommand}"
-                    IsPullToRefreshEnabled="True"
-                    IsRefreshing="{Binding Refreshing}"
-                    ItemTemplate="{StaticResource listItemDataTemplateSelector}"
-                    IsGroupingEnabled="True"
-                    ItemSelected="RowSelected"
-                    StyleClass="list, list-platform">
-                    <x:Arguments>
-                        <ListViewCachingStrategy>RecycleElement</ListViewCachingStrategy>
-                    </x:Arguments>
-
-                    <ListView.GroupHeaderTemplate>
-                        <DataTemplate x:DataType="pages:GroupingsPageListGroup">
-                            <ViewCell>
+                <RefreshView
+                    Command="{Binding RefreshCommand}"
+                    IsRefreshing="{Binding Refreshing}">
+                    <CollectionView
+                        IsVisible="{Binding ShowList}"
+                        ItemsSource="{Binding GroupedItems}"
+                        VerticalOptions="FillAndExpand"
+                        ItemTemplate="{StaticResource listItemDataTemplateSelector}"
+                        IsGrouped="True"
+                        SelectionChanged="RowSelected"
+                        SelectionMode="Single"
+                        StyleClass="list, list-platform">
+                        <CollectionView.GroupHeaderTemplate>
+                            <DataTemplate x:DataType="pages:GroupingsPageListGroup">
                                 <StackLayout
                                     Spacing="0" Padding="0" VerticalOptions="FillAndExpand"
                                     StyleClass="list-row-header-container, list-row-header-container-platform">
@@ -126,10 +118,10 @@
                                     </StackLayout>
                                     <BoxView StyleClass="list-section-separator-bottom, list-section-separator-bottom-platform" />
                                 </StackLayout>
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.GroupHeaderTemplate>
-                </controls:ExtendedListView>
+                            </DataTemplate>
+                        </CollectionView.GroupHeaderTemplate>
+                    </CollectionView>
+                </RefreshView>
             </StackLayout>
         </ResourceDictionary>
     </ContentPage.Resources>
