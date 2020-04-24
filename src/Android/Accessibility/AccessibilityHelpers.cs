@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Android.App;
 using Android.Content;
 using Android.Graphics;
 using Android.OS;
 using Android.Provider;
+using Android.Runtime;
 using Android.Views;
 using Android.Views.Accessibility;
 using Android.Widget;
@@ -324,13 +326,40 @@ namespace Bit.Droid.Accessibility
         {
             if (Build.VERSION.SdkInt >= BuildVersionCodes.M)
             {
-                return Settings.CanDrawOverlays(Android.App.Application.Context);
+                if (Settings.CanDrawOverlays(Application.Context))
+                {
+                    return true;
+                }
+                
+                var appOpsMgr = (AppOpsManager)Application.Context.GetSystemService(Context.AppOpsService);
+                var mode = appOpsMgr.CheckOpNoThrow("android:system_alert_window", Process.MyUid(),
+                    Application.Context.PackageName);
+                if (mode == AppOpsManagerMode.Allowed || mode == AppOpsManagerMode.Ignored)
+                {
+                    return true;
+                }
+                
+                try
+                {
+                    var wm = Application.Context.GetSystemService(Context.WindowService)
+                        .JavaCast<IWindowManager>();
+                    if (wm == null)
+                    {
+                        return false;
+                    }
+                    var testView = new View(Application.Context);
+                    var layoutParams = GetOverlayLayoutParams();
+                    wm.AddView(testView, layoutParams);
+                    wm.RemoveView(testView);
+                    return true;
+                }
+                catch { }
+                
+                return false;
             }
-            else
-            {
-                // TODO do older android versions require a check?
-                return true;
-            }
+            
+            // older android versions are always true
+            return true;
         }
 
         public static LinearLayout GetOverlayView(Context context)
