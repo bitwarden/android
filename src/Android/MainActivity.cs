@@ -386,7 +386,6 @@ namespace Bit.Droid
             {
                 return;
             }
-            StaticStore.LastClipboardValue = data.Item1;
             var triggerMs = Java.Lang.JavaSystem.CurrentTimeMillis() + clearMs.Value;
             var alarmManager = GetSystemService(AlarmService) as AlarmManager;
             alarmManager.Set(AlarmType.Rtc, triggerMs, _clearClipboardPendingIntent);

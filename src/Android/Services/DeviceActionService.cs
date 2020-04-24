@@ -446,7 +446,8 @@ namespace Bit.Droid.Services
                     new BiometricAuthenticationCallback
                     {
                         Success = authResult => result.TrySetResult(true),
-                        Failed = () => result.TrySetResult(false),
+                        Error = () => result.TrySetResult(false),
+                        Failed = () => { },
                         Help = (helpCode, helpString) => { }
                     });
                 return result.Task;
@@ -860,12 +861,13 @@ namespace Bit.Droid.Services
             var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
             var clipboardManager = activity.GetSystemService(
                 Context.ClipboardService) as Android.Content.ClipboardManager;
-            clipboardManager.Text = text;
+            clipboardManager.PrimaryClip = ClipData.NewPlainText("bitwarden", text);
         }
 
         private class BiometricAuthenticationCallback : BiometricPrompt.AuthenticationCallback
         {
             public Action<BiometricPrompt.AuthenticationResult> Success { get; set; }
+            public Action Error { get; set; }
             public Action Failed { get; set; }
             public Action<BiometricAcquiredStatus, Java.Lang.ICharSequence> Help { get; set; }
 
@@ -873,6 +875,12 @@ namespace Bit.Droid.Services
             {
                 base.OnAuthenticationSucceeded(authResult);
                 Success?.Invoke(authResult);
+            }
+
+            public override void OnAuthenticationError([GeneratedEnum] BiometricErrorCode errorCode, Java.Lang.ICharSequence errString)
+            {
+                base.OnAuthenticationError(errorCode, errString);
+                Error?.Invoke();
             }
 
             public override void OnAuthenticationFailed()
