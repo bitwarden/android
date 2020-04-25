@@ -1463,9 +1463,6 @@
   <data name="FiveMinutes" xml:space="preserve">
     <value>5 minutes</value>
   </data>
-  <data name="OneMinute" xml:space="preserve">
-    <value>1 minute</value>
-  </data>
   <data name="TenSeconds" xml:space="preserve">
     <value>10 seconds</value>
   </data>
