@@ -119,7 +119,17 @@ namespace Bit.App.Pages
         {
             if (DoOnce())
             {
-                await Navigation.PushModalAsync(new NavigationPage(new AddEditPage(_vm.CipherId)));
+                if (_vm.IsDeleted)
+                {
+                    if (await _vm.RestoreAsync())
+                    {
+                        await Navigation.PopModalAsync();
+                    }
+                }
+                else
+                {
+                    await Navigation.PushModalAsync(new NavigationPage(new AddEditPage(_vm.CipherId)));
+                }
             }
         }
 
@@ -194,8 +204,9 @@ namespace Bit.App.Pages
             }
 
             var selection = await DisplayActionSheet(AppResources.Options, AppResources.Cancel,
-                AppResources.Delete, options.ToArray());
-            if (selection == AppResources.Delete)
+                _vm.IsDeleted ? AppResources.Delete : AppResources.SoftDelete,
+                options.ToArray());
+            if (selection == AppResources.Delete || selection == AppResources.SoftDelete)
             {
                 if (await _vm.DeleteAsync())
                 {
@@ -234,7 +245,19 @@ namespace Bit.App.Pages
 
         private void AdjustToolbar()
         {
-            if (Device.RuntimePlatform != Device.Android || _vm.Cipher == null)
+            if (_vm.Cipher == null)
+            {
+                return;
+            }
+            _editItem.Text = _vm.Cipher.IsDeleted ? AppResources.Restore :
+                AppResources.Edit;
+            _deleteItem.Text = _vm.Cipher.IsDeleted ? AppResources.Delete :
+                AppResources.SoftDelete;
+            if (_vm.Cipher.IsDeleted)
+            {
+                _absLayout.Children.Remove(_fab);
+            }
+            if (Device.RuntimePlatform != Device.Android)
             {
                 return;
             }
@@ -267,6 +290,10 @@ namespace Bit.App.Pages
                 {
                     ToolbarItems.Insert(1, _collectionsItem);
                 }
+            }
+            if (_vm.Cipher.IsDeleted && !ToolbarItems.Contains(_editItem))
+            {
+                ToolbarItems.Insert(1, _editItem);
             }
         }
     }

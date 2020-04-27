@@ -44,7 +44,7 @@
                          Order="Secondary"
                          x:Name="_attachmentsItem"
                          x:Key="attachmentsItem" />
-            <ToolbarItem Text="{u:I18n Delete}"
+            <ToolbarItem Text="{u:I18n SoftDelete}"
                          Clicked="Delete_Clicked"
                          Order="Secondary"
                          IsDestructive="True"
