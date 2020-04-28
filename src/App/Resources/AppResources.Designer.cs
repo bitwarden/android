@@ -2879,12 +2879,6 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string SoftDelete {
-            get {
-                return ResourceManager.GetString("SoftDelete", resourceCulture);
-            }
-        }
-        
         public static string SoftDeleting {
             get {
                 return ResourceManager.GetString("SoftDeleting", resourceCulture);

@@ -204,9 +204,8 @@ namespace Bit.App.Pages
             }
 
             var selection = await DisplayActionSheet(AppResources.Options, AppResources.Cancel,
-                _vm.IsDeleted ? AppResources.Delete : AppResources.SoftDelete,
-                options.ToArray());
-            if (selection == AppResources.Delete || selection == AppResources.SoftDelete)
+                AppResources.Delete, options.ToArray());
+            if (selection == AppResources.Delete)
             {
                 if (await _vm.DeleteAsync())
                 {
@@ -251,8 +250,6 @@ namespace Bit.App.Pages
             }
             _editItem.Text = _vm.Cipher.IsDeleted ? AppResources.Restore :
                 AppResources.Edit;
-            _deleteItem.Text = _vm.Cipher.IsDeleted ? AppResources.Delete :
-                AppResources.SoftDelete;
             if (_vm.Cipher.IsDeleted)
             {
                 _absLayout.Children.Remove(_fab);

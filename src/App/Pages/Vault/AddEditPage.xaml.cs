@@ -267,8 +267,8 @@ namespace Bit.App.Pages
                 options.Add(_vm.Cipher.OrganizationId == null ? AppResources.Share : AppResources.Collections);
             }
             var selection = await DisplayActionSheet(AppResources.Options, AppResources.Cancel,
-                (_vm.EditMode && !_vm.CloneMode) ? AppResources.SoftDelete : null, options.ToArray());
-            if (selection == AppResources.SoftDelete)
+                (_vm.EditMode && !_vm.CloneMode) ? AppResources.Delete : null, options.ToArray());
+            if (selection == AppResources.Delete)
             {
                 if (await _vm.DeleteAsync())
                 {

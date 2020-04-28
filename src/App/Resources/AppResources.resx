@@ -1634,10 +1634,6 @@
   <data name="AutofillTileUriNotFound" xml:space="preserve">
     <value>No password fields detected</value>
   </data>
-  <data name="SoftDelete" xml:space="preserve">
-    <value>Send to trash</value>
-    <comment>Soft-Deletes an entity (verb).</comment>
-  </data>
   <data name="SoftDeleting" xml:space="preserve">
     <value>Sending to trash...</value>
     <comment>Message shown when interacting with the server</comment>
