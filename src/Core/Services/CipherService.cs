@@ -265,6 +265,10 @@ namespace Bit.Core.Services
             var ciphers = await GetAllDecryptedAsync();
             return ciphers.Where(cipher =>
             {
+                if (cipher.IsDeleted)
+                {
+                    return false;
+                }
                 if (folder && cipher.FolderId == groupingId)
                 {
                     return true;
@@ -324,6 +328,11 @@ namespace Bit.Core.Services
 
             foreach (var cipher in ciphers)
             {
+                if (cipher.IsDeleted)
+                {
+                    continue;
+                }
+
                 if (cipher.Type != CipherType.Login && (includeOtherTypes?.Any(t => t == cipher.Type) ?? false))
                 {
                     others.Add(cipher);
@@ -693,6 +702,45 @@ namespace Bit.Core.Services
             }
             catch { }
             return null;
+        }
+
+        public async Task SoftDeleteWithServerAsync(string id)
+        {
+            var userId = await _userService.GetUserIdAsync();
+            var cipherKey = string.Format(Keys_CiphersFormat, userId);
+            var ciphers = await _storageService.GetAsync<Dictionary<string, CipherData>>(cipherKey);
+            if (ciphers == null)
+            {
+                return;
+            }
+            if (!ciphers.ContainsKey(id))
+            {
+                return;
+            }
+
+            await _apiService.PutDeleteCipherAsync(id);
+            ciphers[id].DeletedDate = DateTime.UtcNow;
+            await _storageService.SaveAsync(cipherKey, ciphers);
+            DecryptedCipherCache = null;
+        }
+
+        public async Task RestoreWithServerAsync(string id)
+        {
+            var userId = await _userService.GetUserIdAsync();
+            var cipherKey = string.Format(Keys_CiphersFormat, userId);
+            var ciphers = await _storageService.GetAsync<Dictionary<string, CipherData>>(cipherKey);
+            if (ciphers == null)
+            {
+                return;
+            }
+            if (!ciphers.ContainsKey(id))
+            {
+                return;
+            }
+            await _apiService.PutRestoreCipherAsync(id);
+            ciphers[id].DeletedDate = null;
+            await _storageService.SaveAsync(cipherKey, ciphers);
+            DecryptedCipherCache = null;
         }
 
         // Helpers

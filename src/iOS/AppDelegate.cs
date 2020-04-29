@@ -168,6 +168,11 @@ namespace Bit.iOS
                         await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
                     }
                 }
+                else if ((message.Command == "softDeletedCipher" || message.Command == "restoredCipher")
+                    && _deviceActionService.SystemMajorVersion() >= 12)
+                {
+                    await ASHelpers.ReplaceAllIdentities();
+                }
             });
 
             return base.FinishedLaunching(app, options);

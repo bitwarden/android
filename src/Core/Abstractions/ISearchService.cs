@@ -12,8 +12,8 @@ namespace Bit.Core.Abstractions
         Task IndexCiphersAsync();
         bool IsSearchable(string query);
         Task<List<CipherView>> SearchCiphersAsync(string query, Func<CipherView, bool> filter = null,
-            List<CipherView> ciphers = null, CancellationToken ct = default(CancellationToken));
+            List<CipherView> ciphers = null, CancellationToken ct = default);
         List<CipherView> SearchCiphersBasic(List<CipherView> ciphers, string query,
-            CancellationToken ct = default(CancellationToken));
+            CancellationToken ct = default, bool deleted = false);
     }
 }

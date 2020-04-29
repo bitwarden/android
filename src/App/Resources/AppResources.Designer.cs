@@ -10,6 +10,7 @@
 
 namespace Bit.App.Resources {
     using System;
+    using System.Reflection;
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
@@ -1924,6 +1925,12 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string NoItemsTrash {
+            get {
+                return ResourceManager.GetString("NoItemsTrash", resourceCulture);
+            }
+        }
+        
         public static string AutofillAccessibilityService {
             get {
                 return ResourceManager.GetString("AutofillAccessibilityService", resourceCulture);
@@ -2869,6 +2876,66 @@ namespace Bit.App.Resources {
         public static string AutofillTileUriNotFound {
             get {
                 return ResourceManager.GetString("AutofillTileUriNotFound", resourceCulture);
+            }
+        }
+        
+        public static string SoftDeleting {
+            get {
+                return ResourceManager.GetString("SoftDeleting", resourceCulture);
+            }
+        }
+        
+        public static string ItemSoftDeleted {
+            get {
+                return ResourceManager.GetString("ItemSoftDeleted", resourceCulture);
+            }
+        }
+        
+        public static string Restore {
+            get {
+                return ResourceManager.GetString("Restore", resourceCulture);
+            }
+        }
+        
+        public static string Restoring {
+            get {
+                return ResourceManager.GetString("Restoring", resourceCulture);
+            }
+        }
+        
+        public static string ItemRestored {
+            get {
+                return ResourceManager.GetString("ItemRestored", resourceCulture);
+            }
+        }
+        
+        public static string Trash {
+            get {
+                return ResourceManager.GetString("Trash", resourceCulture);
+            }
+        }
+        
+        public static string SearchTrash {
+            get {
+                return ResourceManager.GetString("SearchTrash", resourceCulture);
+            }
+        }
+        
+        public static string DoYouReallyWantToPermanentlyDeleteCipher {
+            get {
+                return ResourceManager.GetString("DoYouReallyWantToPermanentlyDeleteCipher", resourceCulture);
+            }
+        }
+        
+        public static string DoYouReallyWantToRestoreCipher {
+            get {
+                return ResourceManager.GetString("DoYouReallyWantToRestoreCipher", resourceCulture);
+            }
+        }
+        
+        public static string DoYouReallyWantToSoftDeleteCipher {
+            get {
+                return ResourceManager.GetString("DoYouReallyWantToSoftDeleteCipher", resourceCulture);
             }
         }
     }

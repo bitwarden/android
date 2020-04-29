@@ -22,6 +22,7 @@ namespace Bit.Core.Models.View
             LocalData = c.LocalData;
             CollectionIds = c.CollectionIds;
             RevisionDate = c.RevisionDate;
+            DeletedDate = c.DeletedDate;
         }
 
         public string Id { get; set; }
@@ -43,6 +44,7 @@ namespace Bit.Core.Models.View
         public List<PasswordHistoryView> PasswordHistory { get; set; }
         public HashSet<string> CollectionIds { get; set; }
         public DateTime RevisionDate { get; set; }
+        public DateTime? DeletedDate { get; set; }
 
 
         public string SubTitle
@@ -96,5 +98,6 @@ namespace Bit.Core.Models.View
                 return Login.PasswordRevisionDate;
             }
         }
+        public bool IsDeleted => DeletedDate.HasValue;
     }
 }

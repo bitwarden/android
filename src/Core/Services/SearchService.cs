@@ -35,7 +35,7 @@ namespace Bit.Core.Services
         }
 
         public async Task<List<CipherView>> SearchCiphersAsync(string query, Func<CipherView, bool> filter = null,
-            List<CipherView> ciphers = null, CancellationToken ct = default(CancellationToken))
+            List<CipherView> ciphers = null, CancellationToken ct = default)
         {
             var results = new List<CipherView>();
             if (query != null)
@@ -68,7 +68,7 @@ namespace Bit.Core.Services
         }
 
         public List<CipherView> SearchCiphersBasic(List<CipherView> ciphers, string query,
-            CancellationToken ct = default(CancellationToken))
+            CancellationToken ct = default, bool deleted = false)
         {
             ct.ThrowIfCancellationRequested();
             query = query.Trim().ToLower();

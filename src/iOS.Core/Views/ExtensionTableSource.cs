@@ -63,7 +63,7 @@ namespace Bit.iOS.Core.Views
             }
 
             _allItems = combinedLogins
-                .Where(c => c.Type == Bit.Core.Enums.CipherType.Login)
+                .Where(c => c.Type == Bit.Core.Enums.CipherType.Login && !c.IsDeleted)
                 .Select(s => new CipherViewModel(s))
                 .ToList() ?? new List<CipherViewModel>();
             FilterResults(searchFilter, new CancellationToken());

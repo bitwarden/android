@@ -45,6 +45,7 @@ namespace Bit.Core.Models.Data
             Fields = response.Fields?.Select(f => new FieldData(f)).ToList();
             Attachments = response.Attachments?.Select(a => new AttachmentData(a)).ToList();
             PasswordHistory = response.PasswordHistory?.Select(ph => new PasswordHistoryData(ph)).ToList();
+            DeletedDate = response.DeletedDate;
         }
 
         public string Id { get; set; }
@@ -66,5 +67,6 @@ namespace Bit.Core.Models.Data
         public List<AttachmentData> Attachments { get; set; }
         public List<PasswordHistoryData> PasswordHistory { get; set; }
         public List<string> CollectionIds { get; set; }
+        public DateTime? DeletedDate { get; set; }
     }
 }

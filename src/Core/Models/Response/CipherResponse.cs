@@ -24,5 +24,6 @@ namespace Bit.Core.Models.Response
         public List<AttachmentResponse> Attachments { get; set; }
         public List<PasswordHistoryResponse> PasswordHistory { get; set; }
         public List<string> CollectionIds { get; set; }
+        public DateTime? DeletedDate { get; set; }
     }
 }

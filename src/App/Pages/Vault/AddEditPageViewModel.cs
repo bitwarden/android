@@ -489,7 +489,8 @@ namespace Bit.App.Pages
                     AppResources.InternetConnectionRequiredTitle);
                 return false;
             }
-            var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.DoYouReallyWantToDelete,
+            var confirmed = await _platformUtilsService.ShowDialogAsync(
+                AppResources.DoYouReallyWantToSoftDeleteCipher,
                 null, AppResources.Yes, AppResources.Cancel);
             if (!confirmed)
             {
@@ -497,11 +498,11 @@ namespace Bit.App.Pages
             }
             try
             {
-                await _deviceActionService.ShowLoadingAsync(AppResources.Deleting);
-                await _cipherService.DeleteWithServerAsync(Cipher.Id);
+                await _deviceActionService.ShowLoadingAsync(AppResources.SoftDeleting);
+                await _cipherService.SoftDeleteWithServerAsync(Cipher.Id);
                 await _deviceActionService.HideLoadingAsync();
-                _platformUtilsService.ShowToast("success", null, AppResources.ItemDeleted);
-                _messagingService.Send("deletedCipher", Cipher);
+                _platformUtilsService.ShowToast("success", null, AppResources.ItemSoftDeleted);
+                _messagingService.Send("softDeletedCipher", Cipher);
                 return true;
             }
             catch (ApiException e)
