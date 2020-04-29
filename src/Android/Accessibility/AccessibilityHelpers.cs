@@ -164,9 +164,13 @@ namespace Bit.Droid.Accessibility
                 {
                     return uri;
                 }
-                if (Uri.TryCreate("http://" + uri, UriKind.Absolute, out var uri3))
+                var hasHttpProtocol = uri.StartsWith("http://") || uri.StartsWith("https://");
+                if (!hasHttpProtocol && uri.Contains("."))
                 {
-                    return string.Concat("http://", uri);
+                    if (Uri.TryCreate("http://" + uri, UriKind.Absolute, out var uri3))
+                    {
+                        return string.Concat("http://", uri);
+                    }
                 }
             }
             return uri;
