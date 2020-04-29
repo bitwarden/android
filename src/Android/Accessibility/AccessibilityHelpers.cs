@@ -147,7 +147,7 @@ namespace Bit.Droid.Accessibility
             return uri;
         }
 
-        public static string ExtractUri(string uri, AccessibilityNodeInfo addressNode, Browser browser)
+        private static string ExtractUri(string uri, AccessibilityNodeInfo addressNode, Browser browser)
         {
             if (addressNode?.Text == null)
             {
@@ -160,21 +160,13 @@ namespace Bit.Droid.Accessibility
             uri = browser.GetUriFunction(addressNode.Text)?.Trim();
             if (uri != null && uri.Contains("."))
             {
-                if (!uri.Contains("://") && !uri.Contains(" "))
+                if (Uri.TryCreate(uri, UriKind.Absolute, out var uri2))
                 {
-                    uri = string.Concat("http://", uri);
+                    return uri;
                 }
-                else if (Build.VERSION.SdkInt <= BuildVersionCodes.KitkatWatch)
+                if (Uri.TryCreate("http://" + uri, UriKind.Absolute, out var uri3))
                 {
-                    var parts = uri.Split(new string[] { ". " }, StringSplitOptions.None);
-                    if (parts.Length > 1)
-                    {
-                        var urlPart = parts.FirstOrDefault(p => p.StartsWith("http"));
-                        if (urlPart != null)
-                        {
-                            uri = urlPart.Trim();
-                        }
-                    }
+                    return string.Concat("http://", uri);
                 }
             }
             return uri;
