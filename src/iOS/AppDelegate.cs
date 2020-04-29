@@ -120,7 +120,7 @@ namespace Bit.iOS
                         }
                     }
                 }
-                else if (message.Command == "addedCipher" || message.Command == "editedCipher")
+                else if (message.Command == "addedCipher" || message.Command == "editedCipher" || message.Command == "restoredCipher")
                 {
                     if (_deviceActionService.SystemMajorVersion() >= 12)
                     {
@@ -142,7 +142,7 @@ namespace Bit.iOS
                         await ASHelpers.ReplaceAllIdentities();
                     }
                 }
-                else if (message.Command == "deletedCipher")
+                else if (message.Command == "deletedCipher" || message.Command == "softDeletedCipher")
                 {
                     if (_deviceActionService.SystemMajorVersion() >= 12)
                     {
