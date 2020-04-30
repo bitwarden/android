@@ -17,11 +17,12 @@ namespace Bit.Droid.Autofill
         private static int _pendingIntentId = 0;
 
         // These browser work natively with the autofill framework
+        // Be sure to keep these entries sorted alphabetically
         public static HashSet<string> TrustedBrowsers = new HashSet<string>
         {
+            "com.duckduckgo.mobile.android",
             "org.mozilla.focus",
             "org.mozilla.klar",
-            "com.duckduckgo.mobile.android",
         };
 
         // These browsers work using the compatibility shim for the autofill framework
