@@ -161,10 +161,6 @@ namespace Bit.Droid.Accessibility
             uri = browser.GetUriFunction(addressNode.Text)?.Trim();
             if (uri != null && uri.Contains("."))
             {
-                if (Uri.TryCreate(uri, UriKind.Absolute, out var uri2))
-                {
-                    return uri;
-                }
                 var hasHttpProtocol = uri.StartsWith("http://") || uri.StartsWith("https://");
                 if (!hasHttpProtocol && uri.Contains("."))
                 {
@@ -172,6 +168,10 @@ namespace Bit.Droid.Accessibility
                     {
                         return string.Concat("http://", uri);
                     }
+                }
+                if (Uri.TryCreate(uri, UriKind.Absolute, out var uri2))
+                {
+                    return uri;
                 }
             }
             return uri;

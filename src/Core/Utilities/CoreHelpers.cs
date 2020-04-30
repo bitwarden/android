@@ -85,10 +85,6 @@ namespace Bit.Core.Utilities
             {
                 return null;
             }
-            if (Uri.TryCreate(uriString, UriKind.Absolute, out var uri))
-            {
-                return uri;
-            }
             var hasHttpProtocol = uriString.StartsWith("http://") || uriString.StartsWith("https://");
             if (!hasHttpProtocol && uriString.Contains("."))
             {
@@ -96,6 +92,10 @@ namespace Bit.Core.Utilities
                 {
                     return uri2;
                 }
+            }
+            if (Uri.TryCreate(uriString, UriKind.Absolute, out var uri))
+            {
+                return uri;
             }
             return null;
         }
