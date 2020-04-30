@@ -161,17 +161,17 @@ namespace Bit.Droid.Accessibility
             uri = browser.GetUriFunction(addressNode.Text)?.Trim();
             if (uri != null && uri.Contains("."))
             {
-                if (Uri.TryCreate(uri, UriKind.Absolute, out var uri2))
-                {
-                    return uri;
-                }
                 var hasHttpProtocol = uri.StartsWith("http://") || uri.StartsWith("https://");
                 if (!hasHttpProtocol && uri.Contains("."))
                 {
-                    if (Uri.TryCreate("http://" + uri, UriKind.Absolute, out var uri3))
+                    if (Uri.TryCreate("http://" + uri, UriKind.Absolute, out var uri2))
                     {
                         return string.Concat("http://", uri);
                     }
+                }
+                if (Uri.TryCreate(uri, UriKind.Absolute, out var uri3))
+                {
+                    return uri;
                 }
             }
             return uri;
