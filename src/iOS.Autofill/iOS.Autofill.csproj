@@ -170,6 +170,10 @@
     <Compile Include="LoginListViewController.designer.cs">
       <DependentUpon>LoginListViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="LoginPasswordViewController.cs" />
+    <Compile Include="LoginPasswordViewController.designer.cs">
+      <DependentUpon>LoginPasswordViewController.cs</DependentUpon>
+    </Compile>
     <Compile Include="LoginSearchViewController.cs" />
     <Compile Include="LoginSearchViewController.designer.cs">
       <DependentUpon>LoginSearchViewController.cs</DependentUpon>

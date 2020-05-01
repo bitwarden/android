@@ -48,11 +48,11 @@ namespace Bit.iOS.Autofill
                 }
                 _context.UrlString = uri;
             }
-            if (!CheckAuthed())
+            if (!IsAuthed())
             {
-                return;
+                PerformSegue("loginPasswordSegue", this);
             }
-            if (IsLocked())
+            else if (IsLocked())
             {
                 PerformSegue("lockPasswordSegue", this);
             }
@@ -86,11 +86,12 @@ namespace Bit.iOS.Autofill
         public override void PrepareInterfaceToProvideCredential(ASPasswordCredentialIdentity credentialIdentity)
         {
             InitAppIfNeeded();
-            if (!CheckAuthed())
+            _context.CredentialIdentity = credentialIdentity;
+            if (!IsAuthed())
             {
+                PerformSegue("loginPasswordSegue", this);
                 return;
             }
-            _context.CredentialIdentity = credentialIdentity;
             CheckLock(async () => await ProvideCredentialAsync());
         }
 
@@ -98,8 +99,9 @@ namespace Bit.iOS.Autofill
         {
             InitAppIfNeeded();
             _context.Configuring = true;
-            if (!CheckAuthed())
+            if (!IsAuthed())
             {
+                PerformSegue("loginPasswordSegue", this);
                 return;
             }
             CheckLock(() => PerformSegue("setupSegue", this));
@@ -159,6 +161,10 @@ namespace Bit.iOS.Autofill
                 else if (navController.TopViewController is LockPasswordViewController passwordViewController)
                 {
                     passwordViewController.CPViewController = this;
+                }
+                else if (navController.TopViewController is LoginPasswordViewController loginCredentialViewController)
+                {
+                    loginCredentialViewController.CPViewController = this;
                 }
                 else if (navController.TopViewController is SetupViewController setupViewController)
                 {
@@ -235,19 +241,19 @@ namespace Bit.iOS.Autofill
             }
         }
 
-        private bool CheckAuthed()
-        {
-            if (!IsAuthed())
-            {
-                var alert = Dialogs.CreateAlert(null, AppResources.MustLogInMainAppAutofill, AppResources.Ok, (a) =>
-                {
-                    CompleteRequest();
-                });
-                PresentViewController(alert, true, null);
-                return false;
-            }
-            return true;
-        }
+        // private bool CheckAuthed()
+        // {
+        //     if (IsAuthed())
+        //     {
+        //         var alert = Dialogs.CreateAlert(null, AppResources.MustLogInMainAppAutofill, AppResources.Ok, (a) =>
+        //         {
+        //             CompleteRequest();
+        //         });
+        //         PresentViewController(alert, true, null);
+        //         return false;
+        //     }
+        //     return false;
+        // }
 
         private bool IsLocked()
         {
