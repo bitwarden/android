@@ -13,7 +13,7 @@ namespace Bit.iOS.Autofill
         public override UINavigationItem BaseNavItem => NavItem;
         public override UIBarButtonItem BaseCancelButton => CancelButton;
         public override UIBarButtonItem BaseSubmitButton => SubmitButton;
-        public override Action Success => () => CPViewController.DismissLockAndContinue();
+        public override Action Success => () => CPViewController.DismissAccessControlAndContinue();
         public override Action Cancel => () => CPViewController.CompleteRequest();
 
         partial void SubmitButton_Activated(UIBarButtonItem sender)

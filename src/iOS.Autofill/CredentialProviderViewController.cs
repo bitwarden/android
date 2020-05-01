@@ -173,7 +173,7 @@ namespace Bit.iOS.Autofill
             }
         }
 
-        public void DismissLockAndContinue()
+        public void DismissAccessControlAndContinue()
         {
             DismissViewController(false, async () =>
             {
@@ -240,21 +240,7 @@ namespace Bit.iOS.Autofill
                 notLockedAction();
             }
         }
-
-        // private bool CheckAuthed()
-        // {
-        //     if (IsAuthed())
-        //     {
-        //         var alert = Dialogs.CreateAlert(null, AppResources.MustLogInMainAppAutofill, AppResources.Ok, (a) =>
-        //         {
-        //             CompleteRequest();
-        //         });
-        //         PresentViewController(alert, true, null);
-        //         return false;
-        //     }
-        //     return false;
-        // }
-
+        
         private bool IsLocked()
         {
             var vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");

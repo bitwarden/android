@@ -55,13 +55,13 @@ namespace Bit.iOS.Core.Controllers
             MasterPasswordCell.TextField.ReturnKeyType = UIReturnKeyType.Go;
             MasterPasswordCell.TextField.ShouldReturn += (UITextField tf) =>
             {
-                // TODO This isn't working (?)
+                // TODO This isn't working - bricks application
                 LogInAsync().GetAwaiter().GetResult();
                 return true;
             };
 
             TableView.RowHeight = UITableView.AutomaticDimension;
-            TableView.EstimatedRowHeight = 70; // No clue what we're estimating here? Should I double it for two cells?
+            TableView.EstimatedRowHeight = 70; // Should this be adjusted for two cells?
             TableView.Source = new TableSource(this);
             TableView.AllowsSelection = true;
             
@@ -99,14 +99,14 @@ namespace Bit.iOS.Core.Controllers
             {
                 var emailEmptyAlert = Dialogs.CreateAlert(AppResources.AnErrorHasOccurred,
                     string.Format(AppResources.ValidationFieldRequired, AppResources.EmailAddress),
-                    AppResources.Ok);
+                    AppResources.Ok, (a) => EmailCell.TextField.BecomeFirstResponder());
                 PresentViewController(emailEmptyAlert, true, null);
                 return;
             }
             if (!email.Contains("@"))
             {
                 var emailInvalidAlert = Dialogs.CreateAlert(AppResources.AnErrorHasOccurred,
-                    AppResources.InvalidEmail, AppResources.Ok);
+                    AppResources.InvalidEmail, AppResources.Ok,(a) => EmailCell.TextField.BecomeFirstResponder());
                 PresentViewController(emailInvalidAlert, true, null);
                 return;
             }
@@ -114,7 +114,7 @@ namespace Bit.iOS.Core.Controllers
             {
                 var passwordEmptyAlert = Dialogs.CreateAlert(AppResources.AnErrorHasOccurred,
                     string.Format(AppResources.ValidationFieldRequired, AppResources.MasterPassword),
-                    AppResources.Ok);
+                    AppResources.Ok,(a) => MasterPasswordCell.TextField.BecomeFirstResponder());
                 PresentViewController(passwordEmptyAlert, true, null);
                 return;
             }
