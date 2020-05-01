@@ -21,6 +21,15 @@
     android:name="com.brave.browser_beta"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
+    android:name="com.brave.browser_default"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
+    android:name="com.brave.browser_dev"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
+    android:name="com.brave.browser_nightly"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
     android:name="com.chrome.beta"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
