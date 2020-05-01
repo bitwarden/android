@@ -55,6 +55,7 @@ namespace Bit.Droid.Accessibility
             new Browser("com.opera.browser", "url_field"),
             new Browser("com.opera.browser.beta", "url_field"),
             new Browser("com.opera.mini.native", "url_field"),
+            new Browser("com.opera.mini.native.beta", "url_field"),
             new Browser("com.opera.touch", "addressbarEdit"),
             new Browser("com.qwant.liberty", "url_bar_title"),
             new Browser("com.sec.android.app.sbrowser", "location_bar_edit_text"),
@@ -83,6 +84,8 @@ namespace Bit.Droid.Accessibility
             new Browser("org.mozilla.focus", "display_url"),
             new Browser("org.mozilla.klar", "display_url"),
             new Browser("org.mozilla.reference.browser", "mozac_browser_toolbar_url_view"),
+            new Browser("org.mozilla.rocket", "display_url"),
+            new Browser("org.torproject.torbrowser", "url_bar_title"),
         }.ToDictionary(n => n.PackageName);
 
         // Known packages to skip
