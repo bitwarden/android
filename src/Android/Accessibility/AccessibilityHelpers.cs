@@ -74,6 +74,7 @@ namespace Bit.Droid.Accessibility
             new Browser("org.bromite.bromite", "url_bar"),
             new Browser("org.chromium.chrome", "url_bar"),
             new Browser("org.codeaurora.swe.browser", "url_bar"),
+            new Browser("org.gnu.icecat", "url_bar_title"),
             new Browser("org.iron.srware", "url_bar"),
             new Browser("org.mozilla.fenix", "mozac_browser_toolbar_url_view"),
             new Browser("org.mozilla.fenix.nightly", "mozac_browser_toolbar_url_view"),
