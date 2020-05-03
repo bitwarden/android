@@ -31,6 +31,7 @@ namespace Bit.Droid.Accessibility
             new Browser("com.amazon.cloud9", "url"),
             new Browser("com.android.browser", "url"),
             new Browser("com.android.chrome", "url_bar"),
+            new Browser("com.avast.android.secure.browser", "editor"),
             new Browser("com.brave.browser", "url_bar"),
             new Browser("com.brave.browser_beta", "url_bar"),
             new Browser("com.chrome.beta", "url_bar"),
