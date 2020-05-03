@@ -61,6 +61,7 @@ namespace Bit.Droid.Autofill
             "org.bromite.bromite",
             "org.chromium.chrome",
             "org.codeaurora.swe.browser",
+            "org.gnu.icecat",
             "org.mozilla.fenix",
             "org.mozilla.fenix.nightly",
             "org.mozilla.fennec_aurora",
