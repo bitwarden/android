@@ -8,11 +8,8 @@ using Bit.App.Abstractions;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using System.Threading.Tasks;
-using Bit.Core.Models.Domain;
-using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Xamarin.Essentials;
-using Xamarin.Forms;
 
 namespace Bit.iOS.Core.Controllers
 {
@@ -38,7 +35,7 @@ namespace Bit.iOS.Core.Controllers
         public FormEntryTableViewCell MasterPasswordCell { get; set; } = new FormEntryTableViewCell(
             AppResources.MasterPassword);
 
-        public override void ViewDidLoad()
+        public override async void ViewDidLoad()
         {
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
@@ -55,18 +52,17 @@ namespace Bit.iOS.Core.Controllers
             MasterPasswordCell.TextField.ReturnKeyType = UIReturnKeyType.Go;
             MasterPasswordCell.TextField.ShouldReturn += (UITextField tf) =>
             {
-                // TODO This isn't working - bricks application
-                LogInAsync().GetAwaiter().GetResult();
+                var task = LogInAsync();
                 return true;
             };
 
             TableView.RowHeight = UITableView.AutomaticDimension;
-            TableView.EstimatedRowHeight = 70; // Should this be adjusted for two cells?
+            TableView.EstimatedRowHeight = 70;
             TableView.Source = new TableSource(this);
             TableView.AllowsSelection = true;
             
             // Attempt to programatically set the user's email
-            EmailCell.TextField.Text = _storageService.GetAsync<string>("rememberedEmail").GetAwaiter().GetResult();
+            EmailCell.TextField.Text = await _storageService.GetAsync<string>("rememberedEmail");
 
             base.ViewDidLoad();
         }
@@ -88,7 +84,7 @@ namespace Bit.iOS.Core.Controllers
         { 
             var email = EmailCell.TextField.Text;
             var password = MasterPasswordCell.TextField.Text;
-            if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
+            if (Connectivity.NetworkAccess == NetworkAccess.None)
             {
                 var connectivityAlert = Dialogs.CreateAlert(AppResources.InternetConnectionRequiredTitle,
                     AppResources.InternetConnectionRequiredMessage, AppResources.Ok);
@@ -130,7 +126,9 @@ namespace Bit.iOS.Core.Controllers
                 }
                 else
                 {
-                    var task = Task.Run(async () => await _syncService.FullSyncAsync(true));
+                    await _deviceActionService.ShowLoadingAsync(AppResources.Syncing);
+                    await _syncService.FullSyncAsync(true);
+                    await _deviceActionService.HideLoadingAsync();
                     EmailCell.TextField.ResignFirstResponder();
                     MasterPasswordCell.TextField.ResignFirstResponder();
                     Success();

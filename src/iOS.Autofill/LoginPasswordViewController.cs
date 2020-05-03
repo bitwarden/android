@@ -1,15 +1,14 @@
 ﻿using System;
-
-using Foundation;
 using UIKit;
 
 namespace Bit.iOS.Autofill
 {
 	public partial class LoginPasswordViewController : Core.Controllers.LoginPasswordViewController
 	{
-		public LoginPasswordViewController(IntPtr handle) : base(handle)
-		{
-		}
+		public LoginPasswordViewController(IntPtr handle) 
+            : base(handle)
+		{ }
+        
         public CredentialProviderViewController CPViewController { get; set; }
         public override UINavigationItem BaseNavItem => NavItem;
         public override UIBarButtonItem BaseCancelButton => CancelButton;
