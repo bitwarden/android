@@ -70,6 +70,7 @@ namespace Bit.Droid.Autofill
             "org.mozilla.reference.browser",
             "org.mozilla.rocket",
             "org.torproject.torbrowser",
+            "org.torproject.torbrowser_alpha",
         };
 
         // The URLs are blacklisted from autofilling
