@@ -3,11 +3,11 @@ using UIKit;
 
 namespace Bit.iOS.Autofill
 {
-	public partial class LoginPasswordViewController : Core.Controllers.LoginPasswordViewController
-	{
-		public LoginPasswordViewController(IntPtr handle) 
+    public partial class LoginPasswordViewController : Core.Controllers.LoginPasswordViewController
+    {
+        public LoginPasswordViewController(IntPtr handle) 
             : base(handle)
-		{ }
+        { }
         
         public CredentialProviderViewController CPViewController { get; set; }
         public override UINavigationItem BaseNavItem => NavItem;
