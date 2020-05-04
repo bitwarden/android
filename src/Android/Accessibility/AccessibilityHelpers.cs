@@ -92,6 +92,7 @@ namespace Bit.Droid.Accessibility
             new Browser("org.mozilla.reference.browser", "mozac_browser_toolbar_url_view"),
             new Browser("org.mozilla.rocket", "display_url"),
             new Browser("org.torproject.torbrowser", "url_bar_title"),
+            new Browser("org.torproject.torbrowser_alpha", "url_bar_title"),
         }.ToDictionary(n => n.PackageName);
 
         // Known packages to skip
