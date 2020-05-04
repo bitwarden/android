@@ -96,6 +96,12 @@
     android:name="mark.via.gp"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
+    android:name="org.adblockplus.browser"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
+    android:name="org.adblockplus.browser.beta"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
     android:name="org.bromite.bromite"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package

@@ -61,6 +61,8 @@ namespace Bit.Droid.Autofill
             "com.vivaldi.browser.sopranos",
             "com.yandex.browser",
             "mark.via.gp",
+            "org.adblockplus.browser",
+            "org.adblockplus.browser.beta",
             "org.bromite.bromite",
             "org.chromium.chrome",
             "org.codeaurora.swe.browser",
