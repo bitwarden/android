@@ -34,6 +34,7 @@ namespace Bit.Droid.Autofill
             "com.amazon.cloud9",
             "com.android.browser",
             "com.android.chrome",
+            "com.avast.android.secure.browser",
             "com.brave.browser",
             "com.brave.browser_beta",
             "com.brave.browser_default",
