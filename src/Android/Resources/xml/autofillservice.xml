@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!--
-  Be sure to:
-    - keep these entries sorted alphabetically
-    - keep this list in sync with values in AutofillHelpers.CompatBrowsers
+  These browsers work using the compatibility shim for the Autofill Framework
+  (and need to be listed here as well)
+
+  Be sure:
+    - to keep these entries sorted alphabetically,
+    - to keep this list in sync with values in AutofillHelpers.CompatBrowsers, and
+
+    - ... to keep this list in sync with values in AccessibilityHelpers.SupportedBrowsers [Section A], too.
   -->
 <autofill-service xmlns:android="http://schemas.android.com/apk/res/android">
   <compatibility-package

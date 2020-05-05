@@ -16,8 +16,12 @@ namespace Bit.Droid.Autofill
     {
         private static int _pendingIntentId = 0;
 
-        // These browser work natively with the autofill framework
-        // Be sure to keep these entries sorted alphabetically
+        // These browsers work natively with the Autofill Framework
+        //
+        // Be sure:
+        //   - to keep these entries sorted alphabetically and
+        //
+        //   - ... to keep this list in sync with values in AccessibilityHelpers.SupportedBrowsers [Section A], too.
         public static HashSet<string> TrustedBrowsers = new HashSet<string>
         {
             "com.duckduckgo.mobile.android",
@@ -25,10 +29,13 @@ namespace Bit.Droid.Autofill
             "org.mozilla.klar",
         };
 
-        // These browsers work using the compatibility shim for the autofill framework
-        // Be sure to:
-        //   - keep these entries sorted alphabetically
-        //   - keep this list in sync with values in Resources/xml/autofillservice.xml
+        // These browsers work using the compatibility shim for the Autofill Framework
+        //
+        // Be sure:
+        //   - to keep these entries sorted alphabetically,
+        //   - to keep this list in sync with values in Resources/xml/autofillservice.xml, and
+        //
+        //   - ... to keep this list in sync with values in AccessibilityHelpers.SupportedBrowsers [Section A], too.
         public static HashSet<string> CompatBrowsers = new HashSet<string>
         {
             "com.amazon.cloud9",
