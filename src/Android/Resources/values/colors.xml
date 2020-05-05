@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   <!-- Light theme -->
-  <color name="colorPrimary">#3c8dbc</color>
-  <color name="colorPrimaryDark">#222d32</color>
-  <color name="primary">#3c8dbc</color>
-  <color name="notificationBar">#3883af</color>
+  <color name="colorPrimary">#175DDC</color>
+  <color name="colorPrimaryDark">#1A3B66</color>
+  <color name="primary">#175DDC</color>
+  <color name="notificationBar">#1452BC</color>
   <color name="border">#dddddd</color>
 
   <!-- Dark theme -->
