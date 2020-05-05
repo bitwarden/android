@@ -59,5 +59,8 @@
     <!-- Support for Samsung "Multi Window" mode (for Android < 7.0 users) -->
     <meta-data android:name="com.samsung.android.sdk.multiwindow.enable" android:value="true" />
     <meta-data android:name="com.samsung.android.sdk.multiwindow.penwindow.enable" android:value="true" />
+
+    <!-- Support for LG "Dual Window" mode (for Android < 7.0 users) -->
+    <meta-data android:name="com.lge.support.SPLIT_WINDOW" android:value="true" />
   </application>
 </manifest>
