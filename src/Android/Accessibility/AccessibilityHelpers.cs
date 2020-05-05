@@ -23,11 +23,14 @@ namespace Bit.Droid.Accessibility
         public static bool IsAutofillTileAdded = false;
         public static bool IsAccessibilityBroadcastReady = false;
 
-        // Be sure to keep these entries sorted alphabetically
+        // Be sure to keep these two sections sorted alphabetically
         public static Dictionary<string, Browser> SupportedBrowsers => new List<Browser>
         {
-            new Browser("acr.browser.barebones", "search"),
-            new Browser("acr.browser.lightning", "search"),
+            // [Section A] Entries also present in the list of Autofill Framework
+            //
+            // So keep them in sync with:
+            //   - AutofillHelpers.{TrustedBrowsers,CompatBrowsers}
+            //   - Resources/xml/autofillservice.xml
             new Browser("com.amazon.cloud9", "url"),
             new Browser("com.android.browser", "url"),
             new Browser("com.android.chrome", "url_bar"),
@@ -42,20 +45,11 @@ namespace Bit.Droid.Accessibility
             new Browser("com.chrome.dev", "url_bar"),
             new Browser("com.duckduckgo.mobile.android", "omnibarTextInput"),
             new Browser("com.ecosia.android", "url_bar"),
-            new Browser("com.feedback.browser.wjbrowser", "addressbar_url"),
-            new Browser("com.ghostery.android.ghostery", "search_field"),
             new Browser("com.google.android.apps.chrome", "url_bar"),
             new Browser("com.google.android.apps.chrome_dev", "url_bar"),
-            new Browser("com.htc.sense.browser", "title"),
-            new Browser("com.jerky.browser2", "enterUrl"),
             new Browser("com.kiwibrowser.browser", "url_bar"),
-            new Browser("com.ksmobile.cb", "address_bar_edit_text"),
-            new Browser("com.linkbubble.playstore", "url_text"),
             new Browser("com.microsoft.emmx", "url_bar"),
-            new Browser("com.mx.browser", "address_editor_with_progress"),
-            new Browser("com.mx.browser.tablet", "address_editor_with_progress"),
             new Browser("com.naver.whale", "url_bar"),
-            new Browser("com.nubelacorp.javelin", "enterUrl"),
             new Browser("com.opera.browser", "url_field"),
             new Browser("com.opera.browser.beta", "url_field"),
             new Browser("com.opera.mini.native", "url_field"),
@@ -69,18 +63,13 @@ namespace Bit.Droid.Accessibility
             new Browser("com.vivaldi.browser.sopranos", "url_bar"),
             new Browser("com.yandex.browser", "bro_omnibar_address_title_text,bro_omnibox_collapsed_title",
                 (s) => s.Split(new char[]{' ', ' '}).FirstOrDefault()), // 0 = Regular Space, 1 = No-break space (00A0)
-            new Browser("jp.co.fenrir.android.sleipnir", "url_text"),
-            new Browser("jp.co.fenrir.android.sleipnir_black", "url_text"),
-            new Browser("jp.co.fenrir.android.sleipnir_test", "url_text"),
             new Browser("mark.via.gp", "aw"),
-            new Browser("mobi.mgeek.TunnyBrowser", "title"),
             new Browser("org.adblockplus.browser", "url_bar,url_bar_title"),
             new Browser("org.adblockplus.browser.beta", "url_bar,url_bar_title"),
             new Browser("org.bromite.bromite", "url_bar"),
             new Browser("org.chromium.chrome", "url_bar"),
             new Browser("org.codeaurora.swe.browser", "url_bar"),
             new Browser("org.gnu.icecat", "url_bar_title"),
-            new Browser("org.iron.srware", "url_bar"),
             new Browser("org.mozilla.fenix", "mozac_browser_toolbar_url_view"),
             new Browser("org.mozilla.fenix.nightly", "mozac_browser_toolbar_url_view"),
             new Browser("org.mozilla.fennec_aurora", "url_bar_title"),
@@ -93,6 +82,26 @@ namespace Bit.Droid.Accessibility
             new Browser("org.mozilla.rocket", "display_url"),
             new Browser("org.torproject.torbrowser", "url_bar_title"),
             new Browser("org.torproject.torbrowser_alpha", "url_bar_title"),
+
+            // [Section B] Entries only present here
+            //
+            // FIXME: Test the compatibility of these with Autofill Framework
+            new Browser("acr.browser.barebones", "search"),
+            new Browser("acr.browser.lightning", "search"),
+            new Browser("com.feedback.browser.wjbrowser", "addressbar_url"),
+            new Browser("com.ghostery.android.ghostery", "search_field"),
+            new Browser("com.htc.sense.browser", "title"),
+            new Browser("com.jerky.browser2", "enterUrl"),
+            new Browser("com.ksmobile.cb", "address_bar_edit_text"),
+            new Browser("com.linkbubble.playstore", "url_text"),
+            new Browser("com.mx.browser", "address_editor_with_progress"),
+            new Browser("com.mx.browser.tablet", "address_editor_with_progress"),
+            new Browser("com.nubelacorp.javelin", "enterUrl"),
+            new Browser("jp.co.fenrir.android.sleipnir", "url_text"),
+            new Browser("jp.co.fenrir.android.sleipnir_black", "url_text"),
+            new Browser("jp.co.fenrir.android.sleipnir_test", "url_text"),
+            new Browser("mobi.mgeek.TunnyBrowser", "title"),
+            new Browser("org.iron.srware", "url_bar"),
         }.ToDictionary(n => n.PackageName);
 
         // Known packages to skip
