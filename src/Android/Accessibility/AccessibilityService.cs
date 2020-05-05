@@ -168,22 +168,24 @@ namespace Bit.Droid.Accessibility
         public bool ScanAndAutofill(AccessibilityNodeInfo root, AccessibilityEvent e)
         {
             var filled = false;
-            var passwordNodes = AccessibilityHelpers.GetWindowNodes(root, e, n => n.Password, false);
-            if (passwordNodes.Count > 0)
+            var uri = AccessibilityHelpers.GetUri(root);
+            if (uri != null && !uri.Contains(BitwardenWebsite) &&
+                AccessibilityHelpers.NeedToAutofill(AccessibilityHelpers.LastCredentials, uri))
             {
-                var uri = AccessibilityHelpers.GetUri(root);
-                if (uri != null && !uri.Contains(BitwardenWebsite))
+                var allEditTexts = AccessibilityHelpers.GetWindowNodes(root, e, n => AccessibilityHelpers.EditText(n), false);
+                var usernameEditText = AccessibilityHelpers.GetUsernameEditText(uri, allEditTexts);
+                var passwordNodes = AccessibilityHelpers.GetWindowNodes(root, e, n => n.Password, false);
+                if (usernameEditText != null || passwordNodes.Count > 0)
                 {
-                    if (AccessibilityHelpers.NeedToAutofill(AccessibilityHelpers.LastCredentials, uri))
-                    {
-                        AccessibilityHelpers.GetNodesAndFill(root, e, passwordNodes);
-                        filled = true;
-                        _lastAutoFillTime = Java.Lang.JavaSystem.CurrentTimeMillis();
-                    }
+                    AccessibilityHelpers.FillCredentials(usernameEditText, passwordNodes);
+                    filled = true;
+                    _lastAutoFillTime = Java.Lang.JavaSystem.CurrentTimeMillis();
+                    AccessibilityHelpers.LastCredentials = null;
                 }
-                AccessibilityHelpers.LastCredentials = null;
+                allEditTexts.Dispose();
+                passwordNodes.Dispose();
             }
-            else if (AccessibilityHelpers.LastCredentials != null)
+            if (AccessibilityHelpers.LastCredentials != null)
             {
                 Task.Run(async () =>
                 {
@@ -191,7 +193,6 @@ namespace Bit.Droid.Accessibility
                     AccessibilityHelpers.LastCredentials = null;
                 });
             }
-            passwordNodes.Dispose();
             return filled;
         }
         

@@ -115,6 +115,17 @@ namespace Bit.Droid.Accessibility
             "com.ss.squarehome2",
             "com.treydev.pns"
         };
+        
+        // Be sure to keep these entries sorted alphabetically
+        public static Dictionary<string, KnownUsernameField> KnownUsernameFields => new List<KnownUsernameField>
+        {
+            new KnownUsernameField("accounts.google.com","ServiceLogin", "Email"),
+            new KnownUsernameField("amazon.com","signin", "ap_email_login"),
+            new KnownUsernameField("github.com", "", "user[login]-footer"),
+            new KnownUsernameField("paypal.com","signin", "email"),
+            new KnownUsernameField("signin.ebay.com","eBayISAPI.dll", "userid"),
+          
+        }.ToDictionary(n => n.UriAuthority);
 
         public static void PrintTestData(AccessibilityNodeInfo root, AccessibilityEvent e)
         {
@@ -280,17 +291,50 @@ namespace Bit.Droid.Accessibility
             return nodes;
         }
 
-        public static void GetNodesAndFill(AccessibilityNodeInfo root, AccessibilityEvent e,
-            IEnumerable<AccessibilityNodeInfo> passwordNodes)
+        public static AccessibilityNodeInfo GetUsernameEditText(string uriString, 
+            IEnumerable<AccessibilityNodeInfo> allEditTexts)
         {
-            var allEditTexts = GetWindowNodes(root, e, n => EditText(n), false);
-            var usernameEditText = GetUsernameEditTextIfPasswordExists(allEditTexts);
-            FillCredentials(usernameEditText, passwordNodes);
-            allEditTexts.Dispose();
-            usernameEditText = null;
-        }
+            string uriKey = null;
+            string uriLocalPath = null;
+            if (Uri.TryCreate(uriString, UriKind.Absolute, out var uri))
+            {
+                uriKey = uri.Authority;
+                uriLocalPath = uri.LocalPath;
+            }
 
-        public static AccessibilityNodeInfo GetUsernameEditTextIfPasswordExists(
+            if (!string.IsNullOrEmpty(uriKey))
+            {
+                // Uncomment this to log values necessary for username field discovery
+                // foreach (var editText in allEditTexts)
+                // {
+                //     System.Diagnostics.Debug.WriteLine(">>> uriKey: {0}, uriLocalPath: {1}, viewId: {2}", uriKey,
+                //         uriLocalPath, editText.ViewIdResourceName);
+                // }
+
+                if (KnownUsernameFields.ContainsKey(uriKey))
+                {
+                    var usernameField = KnownUsernameFields[uriKey];
+                    if (uriLocalPath.EndsWith(usernameField.UriPathEnd))
+                    {
+                        foreach (var editText in allEditTexts)
+                        {
+                            foreach (var usernameViewId in usernameField.UsernameViewId.Split(","))
+                            {
+                                if (usernameViewId == editText.ViewIdResourceName)
+                                {
+                                    return editText;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // no match found, attempt to establish username field based on password field
+            return GetUsernameEditTextIfPasswordExists(allEditTexts);
+        }
+        
+        private static AccessibilityNodeInfo GetUsernameEditTextIfPasswordExists(
             IEnumerable<AccessibilityNodeInfo> allEditTexts)
         {
             AccessibilityNodeInfo previousEditText = null;
@@ -308,7 +352,8 @@ namespace Bit.Droid.Accessibility
         public static bool IsUsernameEditText(AccessibilityNodeInfo root, AccessibilityEvent e)
         {
             var allEditTexts = GetWindowNodes(root, e, n => EditText(n), false);
-            var usernameEditText = GetUsernameEditTextIfPasswordExists(allEditTexts);
+            var uriString = GetUri(root);
+            var usernameEditText = GetUsernameEditText(uriString, allEditTexts);
 
             var isUsernameEditText = false;
             if (usernameEditText != null)
