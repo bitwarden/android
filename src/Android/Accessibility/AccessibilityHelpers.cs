@@ -128,13 +128,12 @@ namespace Bit.Droid.Accessibility
         // Be sure to keep these entries sorted alphabetically
         public static Dictionary<string, KnownUsernameField> KnownUsernameFields => new List<KnownUsernameField>
         {
-            new KnownUsernameField("accounts.google.com","ServiceLogin", "Email"),
-            new KnownUsernameField("amazon.com","signin", "ap_email_login"),
+            new KnownUsernameField("accounts.google.com", "ServiceLogin", "Email"),
+            new KnownUsernameField("amazon.com", "signin", "ap_email_login"),
             new KnownUsernameField("github.com", "", "user[login]-footer"),
-            new KnownUsernameField("paypal.com","signin", "email"),
-            new KnownUsernameField("signin.aws.amazon.com","signin", "resolving_input"),
-            new KnownUsernameField("signin.ebay.com","eBayISAPI.dll", "userid"),
-          
+            new KnownUsernameField("paypal.com", "signin", "email"),
+            new KnownUsernameField("signin.aws.amazon.com", "signin", "resolving_input"),
+            new KnownUsernameField("signin.ebay.com", "eBayISAPI.dll", "userid"),
         }.ToDictionary(n => n.UriAuthority);
 
         public static void PrintTestData(AccessibilityNodeInfo root, AccessibilityEvent e)
