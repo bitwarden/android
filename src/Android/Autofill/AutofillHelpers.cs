@@ -42,6 +42,7 @@ namespace Bit.Droid.Autofill
             "com.android.browser",
             "com.android.chrome",
             "com.avast.android.secure.browser",
+            "com.avg.android.secure.browser",
             "com.brave.browser",
             "com.brave.browser_beta",
             "com.brave.browser_default",
