@@ -35,6 +35,7 @@ namespace Bit.Droid.Accessibility
             new Browser("com.android.browser", "url"),
             new Browser("com.android.chrome", "url_bar"),
             new Browser("com.avast.android.secure.browser", "editor"),
+            new Browser("com.avg.android.secure.browser", "editor"),
             new Browser("com.brave.browser", "url_bar"),
             new Browser("com.brave.browser_beta", "url_bar"),
             new Browser("com.brave.browser_default", "url_bar"),
