@@ -123,6 +123,7 @@ namespace Bit.Droid.Accessibility
             new KnownUsernameField("amazon.com","signin", "ap_email_login"),
             new KnownUsernameField("github.com", "", "user[login]-footer"),
             new KnownUsernameField("paypal.com","signin", "email"),
+            new KnownUsernameField("signin.aws.amazon.com","signin", "resolving_input"),
             new KnownUsernameField("signin.ebay.com","eBayISAPI.dll", "userid"),
           
         }.ToDictionary(n => n.UriAuthority);
