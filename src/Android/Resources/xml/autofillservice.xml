@@ -23,6 +23,9 @@
     android:name="com.avast.android.secure.browser"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
+    android:name="com.avg.android.secure.browser"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
     android:name="com.brave.browser"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
