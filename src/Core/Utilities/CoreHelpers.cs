@@ -85,14 +85,17 @@ namespace Bit.Core.Utilities
             {
                 return null;
             }
-            var httpUrl = uriString.StartsWith("https://") || uriString.StartsWith("http://");
-            if (!httpUrl && !uriString.Contains("://") && Regex.IsMatch(uriString, TldEndingRegex))
+            var hasHttpProtocol = uriString.StartsWith("http://") || uriString.StartsWith("https://");
+            if (!hasHttpProtocol && uriString.Contains("."))
             {
-                uriString = "http://" + uriString;
+                if (Uri.TryCreate("http://" + uriString, UriKind.Absolute, out var uri))
+                {
+                    return uri;
+                }
             }
-            if (Uri.TryCreate(uriString, UriKind.Absolute, out var uri))
+            if (Uri.TryCreate(uriString, UriKind.Absolute, out var uri2))
             {
-                return uri;
+                return uri2;
             }
             return null;
         }
