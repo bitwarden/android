@@ -230,6 +230,9 @@
     <PackageReference Include="Microsoft.AppCenter.Crashes">
       <Version>3.2.1</Version>
     </PackageReference>
+    <PackageReference Include="Xamarin.Forms">
+      <Version>4.6.0.726</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.AppExtension.CSharp.targets" />
 </Project>

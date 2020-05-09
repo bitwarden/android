@@ -13,6 +13,8 @@ using Bit.iOS.Core.Models;
 using Bit.Core.Utilities;
 using Bit.Core.Abstractions;
 using Bit.App.Abstractions;
+using Bit.App.Pages;
+using Xamarin.Forms;
 
 namespace Bit.iOS.Extension
 {
@@ -59,6 +61,21 @@ namespace Bit.iOS.Extension
         public override void ViewDidAppear(bool animated)
         {
             base.ViewDidAppear(animated);
+
+            // Apply business logic and nativage to a XF page/flow
+            // Initialize Xamarin Forms
+            Xamarin.Forms.Forms.Init();
+            // Do NOT load application, because the flow was already activated natively
+            // Create pages, VMs, initialize data, services and the rest if needed
+            var testPage = new TestPage();
+            // The main trick is to convert XF page to a native view controller by calling CreateViewController method
+            var testController = testPage.CreateViewController();
+            // The rest is the same as with regular page
+            testController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
+            testController.View.BackgroundColor = UIColor.Yellow;
+            PresentViewController(testController, false, null);
+            return;
+
             if (!IsAuthed())
             {
                 var alert = Dialogs.CreateAlert(null, AppResources.MustLogInMainApp, AppResources.Ok, (a) =>
