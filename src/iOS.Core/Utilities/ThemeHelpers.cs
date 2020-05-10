@@ -11,12 +11,12 @@ namespace Bit.iOS.Core.Utilities
         public static UIColor BackgroundColor = Xamarin.Forms.Color.FromHex("#ffffff").ToUIColor();
         public static UIColor MutedColor = Xamarin.Forms.Color.FromHex("#777777").ToUIColor();
         public static UIColor SuccessColor = Xamarin.Forms.Color.FromHex("#00a65a").ToUIColor();
-        public static UIColor PrimaryColor = Xamarin.Forms.Color.FromHex("#3c8dbc").ToUIColor();
+        public static UIColor PrimaryColor = Xamarin.Forms.Color.FromHex("#175DDC").ToUIColor();
         public static UIColor TextColor = Xamarin.Forms.Color.FromHex("#000000").ToUIColor();
         public static UIColor PlaceholderColor = Xamarin.Forms.Color.FromHex("#d0d0d0").ToUIColor();
         public static UIColor SeparatorColor = Xamarin.Forms.Color.FromHex("#dddddd").ToUIColor();
         public static UIColor ListHeaderBackgroundColor = Xamarin.Forms.Color.FromHex("#efeff4").ToUIColor();
-        public static UIColor NavBarBackgroundColor = Xamarin.Forms.Color.FromHex("#3c8dbc").ToUIColor();
+        public static UIColor NavBarBackgroundColor = Xamarin.Forms.Color.FromHex("#175DDC").ToUIColor();
         public static UIColor NavBarTextColor = Xamarin.Forms.Color.FromHex("#ffffff").ToUIColor();
 
         public static void SetAppearance(string theme, bool usingOsDarkTheme)

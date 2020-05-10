@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Android.App;
 using Android.Content;
 using Android.Graphics;
 using Android.OS;
 using Android.Provider;
+using Android.Runtime;
 using Android.Views;
 using Android.Views.Accessibility;
 using Android.Widget;
@@ -21,65 +23,86 @@ namespace Bit.Droid.Accessibility
         public static bool IsAutofillTileAdded = false;
         public static bool IsAccessibilityBroadcastReady = false;
 
+        // Be sure to keep these two sections sorted alphabetically
         public static Dictionary<string, Browser> SupportedBrowsers => new List<Browser>
         {
-            new Browser("com.android.chrome", "url_bar"),
-            new Browser("com.chrome.beta", "url_bar"),
-            new Browser("org.chromium.chrome", "url_bar"),
+            // [Section A] Entries also present in the list of Autofill Framework
+            //
+            // So keep them in sync with:
+            //   - AutofillHelpers.{TrustedBrowsers,CompatBrowsers}
+            //   - Resources/xml/autofillservice.xml
+            new Browser("com.amazon.cloud9", "url"),
             new Browser("com.android.browser", "url"),
+            new Browser("com.android.chrome", "url_bar"),
+            new Browser("com.avast.android.secure.browser", "editor"),
+            new Browser("com.avg.android.secure.browser", "editor"),
             new Browser("com.brave.browser", "url_bar"),
             new Browser("com.brave.browser_beta", "url_bar"),
+            new Browser("com.brave.browser_default", "url_bar"),
+            new Browser("com.brave.browser_dev", "url_bar"),
+            new Browser("com.brave.browser_nightly", "url_bar"),
+            new Browser("com.chrome.beta", "url_bar"),
+            new Browser("com.chrome.canary", "url_bar"),
+            new Browser("com.chrome.dev", "url_bar"),
+            new Browser("com.duckduckgo.mobile.android", "omnibarTextInput"),
+            new Browser("com.ecosia.android", "url_bar"),
+            new Browser("com.google.android.apps.chrome", "url_bar"),
+            new Browser("com.google.android.apps.chrome_dev", "url_bar"),
+            new Browser("com.kiwibrowser.browser", "url_bar"),
+            new Browser("com.microsoft.emmx", "url_bar"),
+            new Browser("com.naver.whale", "url_bar"),
             new Browser("com.opera.browser", "url_field"),
             new Browser("com.opera.browser.beta", "url_field"),
             new Browser("com.opera.mini.native", "url_field"),
+            new Browser("com.opera.mini.native.beta", "url_field"),
             new Browser("com.opera.touch", "addressbarEdit"),
-            new Browser("com.chrome.dev", "url_bar"),
-            new Browser("com.chrome.canary", "url_bar"),
-            new Browser("com.google.android.apps.chrome", "url_bar"),
-            new Browser("com.google.android.apps.chrome_dev", "url_bar"),
-            new Browser("org.codeaurora.swe.browser", "url_bar"),
-            new Browser("org.iron.srware", "url_bar"),
+            new Browser("com.qwant.liberty", "url_bar_title"),
             new Browser("com.sec.android.app.sbrowser", "location_bar_edit_text"),
             new Browser("com.sec.android.app.sbrowser.beta", "location_bar_edit_text"),
-            new Browser("com.yandex.browser", "bro_omnibar_address_title_text,bro_omnibox_collapsed_title",
-                (s) => s.Split(new char[]{' ', ' '}).FirstOrDefault()), // 0 = Regular Space, 1 = No-break space (00A0)
-            new Browser("org.mozilla.firefox", "url_bar_title"),
-            new Browser("org.mozilla.firefox_beta", "url_bar_title"),
-            new Browser("org.mozilla.fennec_aurora", "url_bar_title"),
-            new Browser("org.mozilla.fennec_fdroid", "url_bar_title"),
-            new Browser("org.mozilla.focus", "display_url"),
-            new Browser("org.mozilla.klar", "display_url"),
-            new Browser("org.mozilla.fenix", "mozac_browser_toolbar_url_view"),
-            new Browser("org.mozilla.fenix.nightly", "mozac_browser_toolbar_url_view"),
-            new Browser("org.mozilla.reference.browser", "mozac_browser_toolbar_url_view"),
-            new Browser("com.ghostery.android.ghostery", "search_field"),
-            new Browser("org.adblockplus.browser", "url_bar_title"),
-            new Browser("com.htc.sense.browser", "title"),
-            new Browser("com.amazon.cloud9", "url"),
-            new Browser("mobi.mgeek.TunnyBrowser", "title"),
-            new Browser("com.nubelacorp.javelin", "enterUrl"),
-            new Browser("com.jerky.browser2", "enterUrl"),
-            new Browser("com.mx.browser", "address_editor_with_progress"),
-            new Browser("com.mx.browser.tablet", "address_editor_with_progress"),
-            new Browser("com.linkbubble.playstore", "url_text"),
-            new Browser("com.ksmobile.cb", "address_bar_edit_text"),
-            new Browser("acr.browser.lightning", "search"),
-            new Browser("acr.browser.barebones", "search"),
-            new Browser("com.microsoft.emmx", "url_bar"),
-            new Browser("com.duckduckgo.mobile.android", "omnibarTextInput"),
-            new Browser("mark.via.gp", "aw"),
-            new Browser("org.bromite.bromite", "url_bar"),
-            new Browser("com.kiwibrowser.browser", "url_bar"),
-            new Browser("com.ecosia.android", "url_bar"),
-            new Browser("com.qwant.liberty", "url_bar_title"),
-            new Browser("jp.co.fenrir.android.sleipnir", "url_text"),
-            new Browser("jp.co.fenrir.android.sleipnir_black", "url_text"),
-            new Browser("jp.co.fenrir.android.sleipnir_test", "url_text"),
             new Browser("com.vivaldi.browser", "url_bar"),
             new Browser("com.vivaldi.browser.snapshot", "url_bar"),
             new Browser("com.vivaldi.browser.sopranos", "url_bar"),
+            new Browser("com.yandex.browser", "bro_omnibar_address_title_text,bro_omnibox_collapsed_title",
+                (s) => s.Split(new char[]{' ', ' '}).FirstOrDefault()), // 0 = Regular Space, 1 = No-break space (00A0)
+            new Browser("mark.via.gp", "aw"),
+            new Browser("org.adblockplus.browser", "url_bar,url_bar_title"),
+            new Browser("org.adblockplus.browser.beta", "url_bar,url_bar_title"),
+            new Browser("org.bromite.bromite", "url_bar"),
+            new Browser("org.chromium.chrome", "url_bar"),
+            new Browser("org.codeaurora.swe.browser", "url_bar"),
+            new Browser("org.gnu.icecat", "url_bar_title"),
+            new Browser("org.mozilla.fenix", "mozac_browser_toolbar_url_view"),
+            new Browser("org.mozilla.fenix.nightly", "mozac_browser_toolbar_url_view"),
+            new Browser("org.mozilla.fennec_aurora", "url_bar_title"),
+            new Browser("org.mozilla.fennec_fdroid", "url_bar_title"),
+            new Browser("org.mozilla.firefox", "url_bar_title"),
+            new Browser("org.mozilla.firefox_beta", "url_bar_title"),
+            new Browser("org.mozilla.focus", "display_url"),
+            new Browser("org.mozilla.klar", "display_url"),
+            new Browser("org.mozilla.reference.browser", "mozac_browser_toolbar_url_view"),
+            new Browser("org.mozilla.rocket", "display_url"),
+            new Browser("org.torproject.torbrowser", "url_bar_title"),
+            new Browser("org.torproject.torbrowser_alpha", "url_bar_title"),
+
+            // [Section B] Entries only present here
+            //
+            // FIXME: Test the compatibility of these with Autofill Framework
+            new Browser("acr.browser.barebones", "search"),
+            new Browser("acr.browser.lightning", "search"),
             new Browser("com.feedback.browser.wjbrowser", "addressbar_url"),
-            new Browser("com.naver.whale", "url_bar"),
+            new Browser("com.ghostery.android.ghostery", "search_field"),
+            new Browser("com.htc.sense.browser", "title"),
+            new Browser("com.jerky.browser2", "enterUrl"),
+            new Browser("com.ksmobile.cb", "address_bar_edit_text"),
+            new Browser("com.linkbubble.playstore", "url_text"),
+            new Browser("com.mx.browser", "address_editor_with_progress"),
+            new Browser("com.mx.browser.tablet", "address_editor_with_progress"),
+            new Browser("com.nubelacorp.javelin", "enterUrl"),
+            new Browser("jp.co.fenrir.android.sleipnir", "url_text"),
+            new Browser("jp.co.fenrir.android.sleipnir_black", "url_text"),
+            new Browser("jp.co.fenrir.android.sleipnir_test", "url_text"),
+            new Browser("mobi.mgeek.TunnyBrowser", "title"),
+            new Browser("org.iron.srware", "url_bar"),
         }.ToDictionary(n => n.PackageName);
 
         // Known packages to skip
@@ -102,6 +125,17 @@ namespace Bit.Droid.Accessibility
             "com.ss.squarehome2",
             "com.treydev.pns"
         };
+        
+        // Be sure to keep these entries sorted alphabetically
+        public static Dictionary<string, KnownUsernameField> KnownUsernameFields => new List<KnownUsernameField>
+        {
+            new KnownUsernameField("accounts.google.com", "ServiceLogin", "Email"),
+            new KnownUsernameField("amazon.com", "signin", "ap_email_login"),
+            new KnownUsernameField("github.com", "", "user[login]-footer"),
+            new KnownUsernameField("paypal.com", "signin", "email"),
+            new KnownUsernameField("signin.aws.amazon.com", "signin", "resolving_input"),
+            new KnownUsernameField("signin.ebay.com", "eBayISAPI.dll", "userid"),
+        }.ToDictionary(n => n.UriAuthority);
 
         public static void PrintTestData(AccessibilityNodeInfo root, AccessibilityEvent e)
         {
@@ -145,7 +179,7 @@ namespace Bit.Droid.Accessibility
             return uri;
         }
 
-        public static string ExtractUri(string uri, AccessibilityNodeInfo addressNode, Browser browser)
+        private static string ExtractUri(string uri, AccessibilityNodeInfo addressNode, Browser browser)
         {
             if (addressNode?.Text == null)
             {
@@ -158,21 +192,17 @@ namespace Bit.Droid.Accessibility
             uri = browser.GetUriFunction(addressNode.Text)?.Trim();
             if (uri != null && uri.Contains("."))
             {
-                if (!uri.Contains("://") && !uri.Contains(" "))
+                var hasHttpProtocol = uri.StartsWith("http://") || uri.StartsWith("https://");
+                if (!hasHttpProtocol && uri.Contains("."))
                 {
-                    uri = string.Concat("http://", uri);
-                }
-                else if (Build.VERSION.SdkInt <= BuildVersionCodes.KitkatWatch)
-                {
-                    var parts = uri.Split(new string[] { ". " }, StringSplitOptions.None);
-                    if (parts.Length > 1)
+                    if (Uri.TryCreate("http://" + uri, UriKind.Absolute, out var uri2))
                     {
-                        var urlPart = parts.FirstOrDefault(p => p.StartsWith("http"));
-                        if (urlPart != null)
-                        {
-                            uri = urlPart.Trim();
-                        }
+                        return string.Concat("http://", uri);
                     }
+                }
+                if (Uri.TryCreate(uri, UriKind.Absolute, out var uri3))
+                {
+                    return uri;
                 }
             }
             return uri;
@@ -271,17 +301,50 @@ namespace Bit.Droid.Accessibility
             return nodes;
         }
 
-        public static void GetNodesAndFill(AccessibilityNodeInfo root, AccessibilityEvent e,
-            IEnumerable<AccessibilityNodeInfo> passwordNodes)
+        public static AccessibilityNodeInfo GetUsernameEditText(string uriString, 
+            IEnumerable<AccessibilityNodeInfo> allEditTexts)
         {
-            var allEditTexts = GetWindowNodes(root, e, n => EditText(n), false);
-            var usernameEditText = GetUsernameEditTextIfPasswordExists(allEditTexts);
-            FillCredentials(usernameEditText, passwordNodes);
-            allEditTexts.Dispose();
-            usernameEditText = null;
-        }
+            string uriKey = null;
+            string uriLocalPath = null;
+            if (Uri.TryCreate(uriString, UriKind.Absolute, out var uri))
+            {
+                uriKey = uri.Authority;
+                uriLocalPath = uri.LocalPath;
+            }
 
-        public static AccessibilityNodeInfo GetUsernameEditTextIfPasswordExists(
+            if (!string.IsNullOrEmpty(uriKey))
+            {
+                // Uncomment this to log values necessary for username field discovery
+                // foreach (var editText in allEditTexts)
+                // {
+                //     System.Diagnostics.Debug.WriteLine(">>> uriKey: {0}, uriLocalPath: {1}, viewId: {2}", uriKey,
+                //         uriLocalPath, editText.ViewIdResourceName);
+                // }
+
+                if (KnownUsernameFields.ContainsKey(uriKey))
+                {
+                    var usernameField = KnownUsernameFields[uriKey];
+                    if (uriLocalPath.EndsWith(usernameField.UriPathEnd))
+                    {
+                        foreach (var editText in allEditTexts)
+                        {
+                            foreach (var usernameViewId in usernameField.UsernameViewId.Split(","))
+                            {
+                                if (usernameViewId == editText.ViewIdResourceName)
+                                {
+                                    return editText;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // no match found, attempt to establish username field based on password field
+            return GetUsernameEditTextIfPasswordExists(allEditTexts);
+        }
+        
+        private static AccessibilityNodeInfo GetUsernameEditTextIfPasswordExists(
             IEnumerable<AccessibilityNodeInfo> allEditTexts)
         {
             AccessibilityNodeInfo previousEditText = null;
@@ -299,7 +362,8 @@ namespace Bit.Droid.Accessibility
         public static bool IsUsernameEditText(AccessibilityNodeInfo root, AccessibilityEvent e)
         {
             var allEditTexts = GetWindowNodes(root, e, n => EditText(n), false);
-            var usernameEditText = GetUsernameEditTextIfPasswordExists(allEditTexts);
+            var uriString = GetUri(root);
+            var usernameEditText = GetUsernameEditText(uriString, allEditTexts);
 
             var isUsernameEditText = false;
             if (usernameEditText != null)
@@ -324,13 +388,40 @@ namespace Bit.Droid.Accessibility
         {
             if (Build.VERSION.SdkInt >= BuildVersionCodes.M)
             {
-                return Settings.CanDrawOverlays(Android.App.Application.Context);
+                if (Settings.CanDrawOverlays(Application.Context))
+                {
+                    return true;
+                }
+                
+                var appOpsMgr = (AppOpsManager)Application.Context.GetSystemService(Context.AppOpsService);
+                var mode = appOpsMgr.CheckOpNoThrow("android:system_alert_window", Process.MyUid(),
+                    Application.Context.PackageName);
+                if (mode == AppOpsManagerMode.Allowed || mode == AppOpsManagerMode.Ignored)
+                {
+                    return true;
+                }
+                
+                try
+                {
+                    var wm = Application.Context.GetSystemService(Context.WindowService)
+                        .JavaCast<IWindowManager>();
+                    if (wm == null)
+                    {
+                        return false;
+                    }
+                    var testView = new View(Application.Context);
+                    var layoutParams = GetOverlayLayoutParams();
+                    wm.AddView(testView, layoutParams);
+                    wm.RemoveView(testView);
+                    return true;
+                }
+                catch { }
+                
+                return false;
             }
-            else
-            {
-                // TODO do older android versions require a check?
-                return true;
-            }
+            
+            // older android versions are always true
+            return true;
         }
 
         public static LinearLayout GetOverlayView(Context context)
