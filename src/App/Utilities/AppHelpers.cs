@@ -18,7 +18,7 @@ namespace Bit.App.Utilities
         {
             var platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             var eventService = ServiceContainer.Resolve<IEventService>("eventService");
-            var lockService = ServiceContainer.Resolve<ILockService>("lockService");
+            var vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             var options = new List<string> { AppResources.View, AppResources.Edit };
             if (cipher.Type == Core.Enums.CipherType.Login)
             {
@@ -63,7 +63,7 @@ namespace Bit.App.Utilities
                 }
             }
             var selection = await page.DisplayActionSheet(cipher.Name, AppResources.Cancel, null, options.ToArray());
-            if (await lockService.IsLockedAsync())
+            if (await vaultTimeoutService.IsLockedAsync())
             {
                 platformUtilsService.ShowToast("info", null, AppResources.VaultIsLocked);
             }
