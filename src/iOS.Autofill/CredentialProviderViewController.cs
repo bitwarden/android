@@ -1,6 +1,5 @@
 ﻿using AuthenticationServices;
 using Bit.App.Abstractions;
-using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using Bit.iOS.Autofill.Models;
@@ -254,7 +253,7 @@ namespace Bit.iOS.Autofill
         private void InitApp()
         {
             // Init Xamarin Forms
-            Xamarin.Forms.Forms.Init();
+            Forms.Init();
             
             if (ServiceContainer.RegisteredServices.Count > 0)
             {
@@ -298,16 +297,19 @@ namespace Bit.iOS.Autofill
 
         private void LaunchTwoFactorFlow()
         {
-            var twoFactorPage = new TwoFactorPage();
-            if(twoFactorPage.BindingContext is TwoFactorPageViewModel vm)
+            DismissViewController(false, async () =>
             {
-                vm.TwoFactorAction = DismissLockAndContinue;
-            }
+                var twoFactorPage = new TwoFactorPage();
+                if(twoFactorPage.BindingContext is TwoFactorPageViewModel vm)
+                {
+                    vm.TwoFactorAction = DismissLockAndContinue;
+                }
             
-            var navigationPage = new NavigationPage(twoFactorPage);
-            var twoFactorController = navigationPage.CreateViewController();
-            twoFactorController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            PresentViewController(twoFactorController, true, null);
+                var navigationPage = new NavigationPage(twoFactorPage);
+                var twoFactorController = navigationPage.CreateViewController();
+                twoFactorController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
+                PresentViewController(twoFactorController, true, null);
+            });
         }
     }
 }
