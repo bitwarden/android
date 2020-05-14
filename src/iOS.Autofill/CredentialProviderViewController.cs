@@ -8,7 +8,9 @@ using Bit.iOS.Core.Utilities;
 using Foundation;
 using System;
 using System.Threading.Tasks;
+using Bit.App.Pages;
 using UIKit;
+using Xamarin.Forms;
 
 namespace Bit.iOS.Autofill
 {
@@ -48,11 +50,11 @@ namespace Bit.iOS.Autofill
                 }
                 _context.UrlString = uri;
             }
-            if (!CheckAuthed())
+            if (!IsAuthed())
             {
-                return;
-            }
-            if (IsLocked())
+                LaunchLoginFlow();
+            } 
+            else if (IsLocked())
             {
                 PerformSegue("lockPasswordSegue", this);
             }
@@ -86,8 +88,9 @@ namespace Bit.iOS.Autofill
         public override void PrepareInterfaceToProvideCredential(ASPasswordCredentialIdentity credentialIdentity)
         {
             InitAppIfNeeded();
-            if (!CheckAuthed())
+            if (!IsAuthed())
             {
+                LaunchLoginFlow();
                 return;
             }
             _context.CredentialIdentity = credentialIdentity;
@@ -98,8 +101,9 @@ namespace Bit.iOS.Autofill
         {
             InitAppIfNeeded();
             _context.Configuring = true;
-            if (!CheckAuthed())
+            if (!IsAuthed())
             {
+                LaunchLoginFlow();
                 return;
             }
             CheckLock(() => PerformSegue("setupSegue", this));
@@ -235,20 +239,6 @@ namespace Bit.iOS.Autofill
             }
         }
 
-        private bool CheckAuthed()
-        {
-            if (!IsAuthed())
-            {
-                var alert = Dialogs.CreateAlert(null, AppResources.MustLogInMainAppAutofill, AppResources.Ok, (a) =>
-                {
-                    CompleteRequest();
-                });
-                PresentViewController(alert, true, null);
-                return false;
-            }
-            return true;
-        }
-
         private bool IsLocked()
         {
             var vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
@@ -263,6 +253,9 @@ namespace Bit.iOS.Autofill
 
         private void InitApp()
         {
+            // Init Xamarin Forms
+            Xamarin.Forms.Forms.Init();
+            
             if (ServiceContainer.RegisteredServices.Count > 0)
             {
                 ServiceContainer.Reset();
@@ -285,6 +278,36 @@ namespace Bit.iOS.Autofill
             {
                 InitApp();
             }
+        }
+
+        private void LaunchLoginFlow()
+        {
+            var loginPage = new LoginPage();
+            if (loginPage.BindingContext is LoginPageViewModel vm)
+            {
+                vm.StartTwoFactorAction = LaunchTwoFactorFlow;
+                vm.LoggedInAction = DismissLockAndContinue;
+                vm.HideHintButton = true;
+            }
+
+            var navigationPage = new NavigationPage(loginPage);
+            var loginController = navigationPage.CreateViewController();
+            loginController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
+            PresentViewController(loginController, true, null);
+        }
+
+        private void LaunchTwoFactorFlow()
+        {
+            var twoFactorPage = new TwoFactorPage();
+            if(twoFactorPage.BindingContext is TwoFactorPageViewModel vm)
+            {
+                vm.TwoFactorAction = DismissLockAndContinue;
+            }
+            
+            var navigationPage = new NavigationPage(twoFactorPage);
+            var twoFactorController = navigationPage.CreateViewController();
+            twoFactorController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
+            PresentViewController(twoFactorController, true, null);
         }
     }
 }

@@ -69,6 +69,8 @@ namespace Bit.App.Pages
         public Action StartTwoFactorAction { get; set; }
         public Action LoggedInAction { get; set; }
 
+        public bool HideHintButton { get; set; }
+        
         public async Task InitAsync()
         {
             if (string.IsNullOrWhiteSpace(Email))
