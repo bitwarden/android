@@ -2,6 +2,8 @@
 using System.IO;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
+using Bit.App.Models;
+using Bit.App.Resources;
 using Bit.App.Services;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
@@ -68,6 +70,8 @@ namespace Bit.iOS.Core.Utilities
         {
             (ServiceContainer.Resolve<II18nService>("i18nService") as MobileI18nService).Init();
             ServiceContainer.Resolve<IAuthService>("authService").Init();
+            (ServiceContainer.
+                Resolve<IPlatformUtilsService>("platformUtilsService") as MobilePlatformUtilsService).Init();
             // Note: This is not awaited
             var bootstrapTask = BootstrapAsync(postBootstrapFunc);
         }
@@ -77,6 +81,36 @@ namespace Bit.iOS.Core.Utilities
             ThemeHelpers.SetAppearance(ThemeManager.GetTheme(false), deviceActionService.UsingDarkTheme());
             UIApplication.SharedApplication.StatusBarHidden = false;
             UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.LightContent;
+        }
+
+        public static void SubscribeBroadcastReceiver(UIViewController controller)
+        {
+            var broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
+            var messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
+            broadcasterService.Subscribe(nameof(controller), async (message) =>
+            {
+                if (message.Command == "showDialog")
+                {
+                    var details = message.Data as DialogDetails;
+                    var confirmed = true;
+                    var confirmText = string.IsNullOrWhiteSpace(details.ConfirmText) ?
+                        AppResources.Ok : details.ConfirmText;
+                    if (!string.IsNullOrWhiteSpace(details.CancelText))
+                    { 
+                        // TODO Implement dialog with cancel text / action within Dialogs.CreateAlert(...)
+                    }
+                    else
+                    { 
+                        var alertDialog = Dialogs.CreateAlert(details.Title, details.Text, confirmText);
+                        controller.PresentViewController(alertDialog, true, null);
+                    }
+                    messagingService.Send("showDialogResolve", new Tuple<int, bool>(details.DialogId, confirmed));
+                }
+                else if (message.Command == "todo-yubi-key")
+                {
+                    // TODO Implement YubiKey actions (?)
+                }
+            });
         }
 
         private static async Task BootstrapAsync(Func<Task> postBootstrapFunc = null)

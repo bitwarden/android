@@ -269,6 +269,7 @@ namespace Bit.iOS.Autofill
             }
             iOSCoreHelpers.Bootstrap();
             iOSCoreHelpers.AppearanceAdjustments(deviceActionService);
+            iOSCoreHelpers.SubscribeBroadcastReceiver(this);
         }
 
         private void InitAppIfNeeded()
