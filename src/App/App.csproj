@@ -27,6 +27,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="ExtensionApp.xaml.cs">
+      <DependentUpon>ExtensionApp.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Pages\Accounts\EnvironmentPage.xaml.cs">
       <DependentUpon>EnvironmentPage.xaml</DependentUpon>
     </Compile>
