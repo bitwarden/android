@@ -1340,7 +1340,7 @@
     <value>Non ci sono elementi da mostrare.</value>
   </data>
   <data name="SearchCollection" xml:space="preserve">
-    <value>Cerca collezione</value>
+    <value>Cerca nella raccolta</value>
   </data>
   <data name="SearchFolder" xml:space="preserve">
     <value>Cerca cartella</value>
@@ -1514,7 +1514,7 @@
     <value>Sei sicuro di voler uscire da Bitwarden?</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
-    <value>Do you want to require unlocking with your master password when the application is restarted?</value>
+    <value>You you want to require unlocking with your master password when the application is restarted?</value>
   </data>
   <data name="Black" xml:space="preserve">
     <value>Nero</value>
@@ -1624,5 +1624,11 @@
   </data>
   <data name="SaveAttachmentSuccess" xml:space="preserve">
     <value>Allegato salvato con successo</value>
+  </data>
+  <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
+    <value>Please enable "Auto-fill Accessibility Service" from Bitwarden Settings to use the Auto-fill tile.</value>
+  </data>
+  <data name="AutofillTileUriNotFound" xml:space="preserve">
+    <value>No password fields detected</value>
   </data>
 </root>

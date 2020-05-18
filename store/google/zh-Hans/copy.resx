@@ -122,11 +122,11 @@
     <comment>Max 30 characters</comment>
   </data>
   <data name="ShortDescription" xml:space="preserve">
-    <value>Bitwarden 是一个用户名和密码管理器，能够确保您的在线安全。</value>
+    <value>Bitwarden 是一个登录和密码管理器，能够确保您的在线安全。</value>
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>Bitwarden 是保存您的登录密码最简易安全的方法，它可以在您的所有设备之间同步。
+    <value>Bitwarden 简单易用，可以简单安全地存储您所有的登录用信息和密码，并能在多台设备之间保持同步。
 
 盗号是个严重的问题，您访问的网站、使用的各类应用每天都在遭受攻击。每当发生安全漏洞，您的密码就会被盗取，如果您跨应用和网站使用相同的密码，黑客就可以轻松访问您的电子邮件，甚至银行或者其他重要账户。
 
@@ -141,19 +141,19 @@ Bitwarden 是100% 开源软件。bitwarden 的源代码托管在 github 上，�
     <value>安全免费的跨平台密码管理器</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>在一个安全的密码库管理您的登录信息</value>
+    <value>在一个安全的密码库中管理您所有的登录信息和密码</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>自动生成强力、随机和安全的密码</value>
+    <value>自动生成强大、随机和安全的密码</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>采用指纹、PIN 码、或者主密码保护您的密码库</value>
+    <value>使用 Touch ID、PIN 码、或者主密码保护您的密码库</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>从您的 web 浏览器和其他应用内快速自动登录</value>
+    <value>从您的 web 浏览器和其他应用内快速自动填充登录信息</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>同步后可以从多台设备访问密码库
+    <value>从多台设备同步和访问密码库
 
 - 手机
 - 平板电脑

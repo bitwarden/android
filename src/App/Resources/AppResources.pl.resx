@@ -800,7 +800,7 @@
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>Konto ma włączoną opcję logowania dwustopniowego, jednak to urządzenie nie wspiera żadnego ze skonfigurowanych mechanizmów autoryzacji dwustopniowej. Skorzystaj ze wspieranego urządzenia i/lub dodatkowych mechanizmów, które są lepiej obsługiwane przez różne urządzenia (np. aplikacja uwierzytelniająca).</value>
+    <value>Konto posiada włączoną opcję logowania dwustopniowego, jednak to urządzenie nie wspiera żadnego ze skonfigurowanych mechanizmów autoryzacji dwustopniowej. Skorzystaj ze wspieranego urządzenia i/lub dodatkowych mechanizmów, które są lepiej obsługiwane przez różne urządzenia (np. aplikacja uwierzytelniająca).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
     <value>Kod odzyskiwania</value>
@@ -938,7 +938,7 @@
     <value>Dla zaawansowanych użytkowników. Możesz wpisać podstawowy adres URL niezależnie dla każdej usługi.</value>
   </data>
   <data name="EnvironmentSaved" xml:space="preserve">
-    <value>URLe środowiska zostały zapisane.</value>
+    <value>Adresy URL środowiska zostały zapisane.</value>
   </data>
   <data name="FormattedIncorrectly" xml:space="preserve">
     <value>{0} nie jest poprawnie sformatowany.</value>
@@ -1191,7 +1191,7 @@
     <comment>Label for a uri/url with position. i.e. URI 1, URI 2, etc</comment>
   </data>
   <data name="BaseDomain" xml:space="preserve">
-    <value>Domena nadrzędna</value>
+    <value>Domena podstawowa</value>
   </data>
   <data name="Default" xml:space="preserve">
     <value>Domyślny</value>
@@ -1200,7 +1200,7 @@
     <value>Dokładnie</value>
   </data>
   <data name="Host" xml:space="preserve">
-    <value>Domena</value>
+    <value>Host</value>
     <comment>A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'.</comment>
   </data>
   <data name="RegEx" xml:space="preserve">
@@ -1624,5 +1624,11 @@
   </data>
   <data name="SaveAttachmentSuccess" xml:space="preserve">
     <value>Załącznik został zapisany</value>
+  </data>
+  <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
+    <value>Please enable "Auto-fill Accessibility Service" from Bitwarden Settings to use the Auto-fill tile.</value>
+  </data>
+  <data name="AutofillTileUriNotFound" xml:space="preserve">
+    <value>No password fields detected</value>
   </data>
 </root>
