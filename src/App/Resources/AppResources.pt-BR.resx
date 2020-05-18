@@ -1573,7 +1573,7 @@
     <value>O Bitwarden precisa de atenção - Veja o "Serviço de Acessibilidade de Autopreenchimento" nas Configurações do Bitwarden</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
-    <value>3. Na tela Configurações do Aplicativo Android para o Bitwarden, vá para opções de "Mostrar sobre outros aplicativos" (em Avançado) e toque no alternador para habilitar o suporte de sobreposição.</value>
+    <value>3. Na tela Configurações do Aplicativo Android para o Bitwarden, vá para a opção de "Sobrepor a outros aplicativos" (em Avançado) e toque no botão para habilitar o suporte à sobreposição.</value>
   </data>
   <data name="OverlayPermission" xml:space="preserve">
     <value>Permissão</value>
@@ -1582,7 +1582,7 @@
     <value>Abrir Configurações de Permissão de Sobreposição</value>
   </data>
   <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
-    <value>3. Na tela de Configurações do Aplicativo Android para o Bitwarden, selecione "Mostrar sobre outros aplicativos" (em "Avançado") e ative o alternador para permitir a sobreposição.</value>
+    <value>3. Na tela de Configurações do Aplicativo Android para o Bitwarden, selecione "Mostrar sobre outros aplicativos" (em "Avançado") e ative a opção para permitir a sobreposição.</value>
   </data>
   <data name="Denied" xml:space="preserve">
     <value>Negado</value>
@@ -1597,13 +1597,13 @@
     <value>Digite sua senha mestra para exportar os dados do seu cofre.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
-    <value>Esta exportação contém os dados do seu cofre num formato desencriptado. Você não deve armazenar ou enviar o arquivo exportado através de canais inseguros (como por e-mail). Exclua-o imediatamente quando terminar de utilizá-lo.</value>
+    <value>O arquivo exportado contém os dados do seu cofre em um formato não encriptado. Você não deve armazenar ou enviar o arquivo exportado através de canais inseguros (como por e-mail). Exclua-o imediatamente quando terminar de utilizá-lo.</value>
   </data>
   <data name="Warning" xml:space="preserve">
     <value>Aviso</value>
   </data>
   <data name="ExportVaultFailure" xml:space="preserve">
-    <value>Houve um problema a exportar o seu cofre. Se o problema persistir, você precisará exportar através do cofre web.</value>
+    <value>Houve um problema ao exportar o seu cofre. Caso o problema persista, você precisará exportar através do cofre web.</value>
   </data>
   <data name="ExportVaultSuccess" xml:space="preserve">
     <value>Cofre exportado com sucesso</value>
@@ -1613,16 +1613,22 @@
     <comment>Clone an entity (verb).</comment>
   </data>
   <data name="PasswordGeneratorPolicyInEffect" xml:space="preserve">
-    <value>Uma ou mais políticas da organização estão afetando as suas configurações do gerador</value>
+    <value>Uma ou mais políticas da organização estão afetando as suas configurações do gerador. </value>
   </data>
   <data name="Open" xml:space="preserve">
     <value>Abrir</value>
     <comment>Button text for an open operation (verb).</comment>
   </data>
   <data name="UnableToSaveAttachment" xml:space="preserve">
-    <value>Houve um problema ao salvar este anexo. Se o problema persistir, você poderá salvá-lo pelo cofre web.</value>
+    <value>Houve um problema ao salvar este anexo. Caso o problema persista, você poderá salvá-lo pelo cofre web.</value>
   </data>
   <data name="SaveAttachmentSuccess" xml:space="preserve">
     <value>Anexo salvo com sucesso</value>
+  </data>
+  <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
+    <value>Please enable "Auto-fill Accessibility Service" from Bitwarden Settings to use the Auto-fill tile.</value>
+  </data>
+  <data name="AutofillTileUriNotFound" xml:space="preserve">
+    <value>No password fields detected</value>
   </data>
 </root>
