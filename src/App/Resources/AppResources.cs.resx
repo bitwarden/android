@@ -1625,4 +1625,10 @@
   <data name="SaveAttachmentSuccess" xml:space="preserve">
     <value>Příloha byla úspěšně uložena</value>
   </data>
+  <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
+    <value>Please enable "Auto-fill Accessibility Service" from Bitwarden Settings to use the Auto-fill tile.</value>
+  </data>
+  <data name="AutofillTileUriNotFound" xml:space="preserve">
+    <value>No password fields detected</value>
+  </data>
 </root>
