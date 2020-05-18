@@ -286,7 +286,8 @@ namespace Bit.iOS.Autofill
         private void LaunchLoginFlow()
         {
             var loginPage = new LoginPage();
-            ThemeManager.SetTheme(false, new ExtensionApp().Resources);
+            var app = new App.App(new App.Models.AppOptions { FromIosExtension = true });
+            loginPage.Resources.Add(app.Resources);
             if (loginPage.BindingContext is LoginPageViewModel vm)
             {
                 vm.StartTwoFactorAction = LaunchTwoFactorFlow;
@@ -305,7 +306,8 @@ namespace Bit.iOS.Autofill
             DismissViewController(false, () =>
             {
                 var twoFactorPage = new TwoFactorPage();
-                ThemeManager.SetTheme(false, new ExtensionApp().Resources);
+                var app = new App.App(new App.Models.AppOptions { FromIosExtension = true });
+                loginPage.Resources.Add(app.Resources);
                 if (twoFactorPage.BindingContext is TwoFactorPageViewModel vm)
                 {
                     vm.TwoFactorAction = DismissLockAndContinue;

@@ -44,6 +44,12 @@ namespace Bit.App
         public App(AppOptions appOptions)
         {
             _appOptions = appOptions ?? new AppOptions();
+            if (_appOptions.FromIosExtension)
+            {
+                InitializeComponent();
+                ThemeManager.SetTheme(false, Current.Resources);
+                return;
+            }
             _userService = ServiceContainer.Resolve<IUserService>("userService");
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
@@ -152,20 +158,20 @@ namespace Bit.App
                 }
             });
         }
-        
+
         // Workaround for https://github.com/xamarin/Xamarin.Forms/issues/7478
         // Fixed in last Xamarin.Forms 4.4.0.x - remove this hack after updating
         public static void WaitForResume()
         {
             var checkFrequencyInMillis = 100;
             var maxTimeInMillis = 5000;
-            
+
             var count = 0;
             while (!_isResumed)
             {
                 Task.Delay(checkFrequencyInMillis).Wait();
                 count += checkFrequencyInMillis;
-                
+
                 // don't let this run forever
                 if (count >= maxTimeInMillis)
                 {
