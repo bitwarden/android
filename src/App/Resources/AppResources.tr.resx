@@ -729,7 +729,7 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
-    <value>When you select an input field and see a Bitwarden auto-fill overlay, you can tap it to launch the auto-fill service.</value>
+    <value>Bir giriş alanı seçtiğinizde ve bir Bitwarden otomatik doldurma kaplaması gördüğünüzde, otomatik doldurma hizmetini başlatmak için alana dokunabilirsiniz.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Tap this notification to auto-fill a login from your vault.</value>
@@ -1570,10 +1570,10 @@
     <value>Kilidi açmak için Biometrikleri Kullan</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
-    <value>Bitwarden needs attention - See "Auto-fill Accessibility Service" from Bitwarden Settings</value>
+    <value>Bitwarden dikkat gerektirir - Bitwarden Ayarlarından "Otomatik Doldurma Erişilebilirlik Hizmeti" konusuna bakın</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
-    <value>3. On the Android App Settings screen for Bitwarden, go to the "Display over other apps" options (under Advanced) and tap the toggle to enable overlay support.</value>
+    <value>3. Bitwarden için Android Uygulama Ayarları ekranında, "Diğer uygulamalar üzerinde görüntüle" seçeneklerine (Gelişmiş altında) gidin ve yer paylaşımı desteğini etkinleştirmek için seçim düğmesine dokunun.</value>
   </data>
   <data name="OverlayPermission" xml:space="preserve">
     <value>İzin</value>
@@ -1582,7 +1582,7 @@
     <value>Doldurma İzni Ayarlarını Aç</value>
   </data>
   <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
-    <value>3. On the Android App Settings screen for Bitwarden, select "Display over other apps" (under "Advanced") and switch on the toggle to allow the overlay.</value>
+    <value>3. Bitwarden için Android Uygulama Ayarları ekranında, "Diğer uygulamalar üzerinde görüntüle" yi seçin ("Gelişmiş" in altında) ve yer paylaşımına izin vermek için seçim düğmesini açın.</value>
   </data>
   <data name="Denied" xml:space="preserve">
     <value>Reddedildi</value>
@@ -1624,5 +1624,11 @@
   </data>
   <data name="SaveAttachmentSuccess" xml:space="preserve">
     <value>Dosya eki başarıyla kaydedildi</value>
+  </data>
+  <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
+    <value>Please enable "Auto-fill Accessibility Service" from Bitwarden Settings to use the Auto-fill tile.</value>
+  </data>
+  <data name="AutofillTileUriNotFound" xml:space="preserve">
+    <value>No password fields detected</value>
   </data>
 </root>
