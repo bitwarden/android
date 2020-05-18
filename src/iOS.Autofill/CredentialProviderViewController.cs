@@ -307,7 +307,7 @@ namespace Bit.iOS.Autofill
             {
                 var twoFactorPage = new TwoFactorPage();
                 var app = new App.App(new App.Models.AppOptions { FromIosExtension = true });
-                loginPage.Resources.Add(app.Resources);
+                twoFactorPage.Resources.Add(app.Resources);
                 if (twoFactorPage.BindingContext is TwoFactorPageViewModel vm)
                 {
                     vm.TwoFactorAction = DismissLockAndContinue;
