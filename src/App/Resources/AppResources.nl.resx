@@ -206,7 +206,7 @@
     <value>Rapporteer een fout (bug)</value>
   </data>
   <data name="FileBugReportDescription" xml:space="preserve">
-    <value>Open een probleem op onze GitHub repository.</value>
+    <value>Open een probleem op onze GitHub-repository.</value>
   </data>
   <data name="FingerprintDirection" xml:space="preserve">
     <value>Gebruik je vingerafdruk om in te loggen.</value>
@@ -1624,5 +1624,11 @@
   </data>
   <data name="SaveAttachmentSuccess" xml:space="preserve">
     <value>Bijlage succesvol opgeslagen</value>
+  </data>
+  <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
+    <value>Please enable "Auto-fill Accessibility Service" from Bitwarden Settings to use the Auto-fill tile.</value>
+  </data>
+  <data name="AutofillTileUriNotFound" xml:space="preserve">
+    <value>No password fields detected</value>
   </data>
 </root>
