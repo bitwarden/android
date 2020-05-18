@@ -1514,7 +1514,7 @@
     <value>Er du sikker på at du vil lukke Bitwarden?</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
-    <value>Do you want to require unlocking with your master password when the application is restarted?</value>
+    <value>You you want to require unlocking with your master password when the application is restarted?</value>
   </data>
   <data name="Black" xml:space="preserve">
     <value>Svart</value>
@@ -1579,7 +1579,7 @@
     <value>Tillatelse</value>
   </data>
   <data name="BitwardenAutofillServiceOpenOverlayPermissionSettings" xml:space="preserve">
-    <value>Open Overlay Permission Settings</value>
+    <value>Åpne innstillinger for overleggstillatelse</value>
   </data>
   <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
     <value>3. On the Android App Settings screen for Bitwarden, select "Display over other apps" (under "Advanced") and switch on the toggle to allow the overlay.</value>
@@ -1597,7 +1597,7 @@
     <value>Skriv inn ditt superpassordet for å eksportere dine hvelvdataer.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
-    <value>This export contains your vault data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it.</value>
+    <value>Denne eksporten inneholder hvelvdataene dine i et ukryptert format. Du skal ikke lagre eller sende den eksporterte filen over usikre kanaler (for eksempel e-post). Slett den umiddelbart etter at du er ferdig med å bruke den.</value>
   </data>
   <data name="Warning" xml:space="preserve">
     <value>Advarsel</value>
@@ -1624,5 +1624,11 @@
   </data>
   <data name="SaveAttachmentSuccess" xml:space="preserve">
     <value>Vedlegget ble lagret</value>
+  </data>
+  <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
+    <value>Please enable "Auto-fill Accessibility Service" from Bitwarden Settings to use the Auto-fill tile.</value>
+  </data>
+  <data name="AutofillTileUriNotFound" xml:space="preserve">
+    <value>No password fields detected</value>
   </data>
 </root>
