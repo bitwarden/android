@@ -458,35 +458,35 @@
     <value>Увядзіце адрас электроннай пошты ўліковага запісу для атрымання падказкі для пароля.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
-    <value>Re-enable App Extension</value>
+    <value>Паўторна ўключыць пашырэнне</value>
   </data>
   <data name="ExtensionAlmostDone" xml:space="preserve">
     <value>Амаль гатова!</value>
   </data>
   <data name="ExtensionEnable" xml:space="preserve">
-    <value>Enable App Extension</value>
+    <value>Уключыць пашырэнне</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
-    <value>In Safari, find Bitwarden using the share icon (hint: scroll to the right on the bottom row of the menu).</value>
+    <value>У Safari, праз значок 'Абагуліць' знайдзіце Bitwarden (пракруціце ўправа ў ніжнім радку меню).</value>
     <comment>Safari is the name of apple's web browser</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
-    <value>Get instant access to your passwords!</value>
+    <value>Атрымайце імгненны доступ да вашых пароляў!</value>
   </data>
   <data name="ExtensionReady" xml:space="preserve">
-    <value>You're ready to log in!</value>
+    <value>Усё гатова для ўваходу!</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
-    <value>Your logins are now easily accessible from Safari, Chrome, and other supported apps.</value>
+    <value>Цяпер вашыя імёны карыстальніка лёгка даступны з Safari, Chrome, і іншых праграм.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
-    <value>In Safari and Chrome, find Bitwarden using the share icon (hint: scroll to the right on the bottom row of the share menu).</value>
+    <value>У Safari і Chrome, праз значок 'Абагуліць' знайдзіце Bitwarden (пракруціце ўправа ў ніжнім радку меню).</value>
   </data>
   <data name="ExtensionTapIcon" xml:space="preserve">
-    <value>Tap the Bitwarden icon in the menu to launch the extension.</value>
+    <value>Націсніце на значок Bitwarden у меню, каб запусціць пашырэнне.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>To turn on Bitwarden in Safari and other apps, tap the "more" icon on the bottom row of the menu.</value>
+    <value>Каб уключыць Bitwarden у Safari і іншых праграмах, націсніце 'Яшчэ' у ніжнім радку меню.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
     <value>Абраны</value>
@@ -573,7 +573,7 @@
     <value>Дадатковыя налады</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>You must log into the main Bitwarden app before you can use the extension.</value>
+    <value>Перад выкарыстаннем пашырэння, вы павінны ўвайсці ў асноўную праграму Bitwarden.</value>
   </data>
   <data name="Never" xml:space="preserve">
     <value>Ніколі</value>
@@ -598,7 +598,7 @@
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>Option defaults are set from the main Bitwarden app's password generator tool.</value>
+    <value>Налады па змаўчанні задаюцца з генератара пароляў асноўнай праграмы Bitwarden.</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>Параметры</value>
@@ -622,7 +622,7 @@
     <value>Вы ўпэўнены, што хочаце перазапісаць бягучы пароль?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>Bitwarden keeps your vault automatically synced by using push notifications. For the best possible experience, please select "Allow" on the following prompt when asked to enable push notifications.</value>
+    <value>Bitwarden забяспечвае аўтаматычную сінхранізацыю сховішча пры дапамозе push-апавяшчэнняў. Для вашай максімальнай зручнасці, выберыце "Дазволіць" пры з'яўленні прапановы ўключыць push-апавяшчэнні.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
@@ -659,7 +659,7 @@
     <value>Элемент абноўлены.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
-    <value>Submitting...</value>
+    <value>Адпраўка...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Syncing" xml:space="preserve">
@@ -712,7 +712,7 @@
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">
-    <value>Extension Activated!</value>
+    <value>Пашырэнне актывавана!</value>
   </data>
   <data name="Icons" xml:space="preserve">
     <value>Значкі</value>
@@ -729,19 +729,19 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
-    <value>When you select an input field and see a Bitwarden auto-fill overlay, you can tap it to launch the auto-fill service.</value>
+    <value>Калі пры выбары поля ўводу вы бачыце панэль аўтазапаўнення Bitwarden, вы можаце націснуць на яе, каб запусціць службу аўтазапаўнення.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
-    <value>Tap this notification to auto-fill an item from your vault.</value>
+    <value>Націсніце на гэта апавяшчэнне для аўтазапаўнення.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
-    <value>Open Accessibility Settings</value>
+    <value>Адкрыць налады спецыяльных магчымасцяў</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
-    <value>1. On the Android Accessibility Settings screen, touch "Bitwarden" under the Services heading.</value>
+    <value>1. На экране налад спецыяльных магчымасцяў Android пад загалоўкам 'Сэрвісы' націсніце 'Bitwarden'.</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
-    <value>2. Switch on the toggle and press OK to accept.</value>
+    <value>2. Актывуйце пераключальнік і націсніце OK для пацвярджэння.</value>
   </data>
   <data name="Disabled" xml:space="preserve">
     <value>Адключана</value>
@@ -753,34 +753,34 @@
     <value>Стан</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
+    <value>Самы просты спосаб дадаць новыя імёны карыстальінка ў ваша сховішча гэта служба аўтазапаўнення Bitwarden. Дадатковыя звесткі пра выкарыстанне службы аўтазапаўнення Bitwarden знаходзяцца ў раздзеле 'Налады'.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
-    <value>Auto-fill</value>
+    <value>Аўтазапаўненне</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
-    <value>Do you want to auto-fill or view this item?</value>
+    <value>Выканаць аўтазапаўненне ці праглядзець гэты элемент?</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>Are you sure you want to auto-fill this item? It is not a complete match for "{0}".</value>
+    <value>Вы ўпэўнены, што хочаце выкарыстоўваць гэты элемент? Гэта не дакладна адпавядае "{0}".</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
-    <value>Matching Items</value>
+    <value>Адпаведныя элементы</value>
   </data>
   <data name="PossibleMatchingItems" xml:space="preserve">
-    <value>Possible Matching Items</value>
+    <value>Магчымыя адпаведныя элементы</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Пошук</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
-    <value>You are searching for an auto-fill item for "{0}".</value>
+    <value>Вы шукаеце элемент аўтазапаўнення для "{0}".</value>
   </data>
   <data name="ShareVault" xml:space="preserve">
-    <value>Share Your Vault</value>
+    <value>Абагуліць ваша сховішча</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
-    <value>Cannot open the app "{0}".</value>
+    <value>Немагчыма адкрыць праграму "{0}".</value>
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
   </data>
   <data name="AuthenticatorAppTitle" xml:space="preserve">
@@ -800,7 +800,7 @@
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>This account has two-step login enabled, however, none of the configured two-step providers are supported on this device. Please use a supported device and/or add additional providers that are better supported across devices (such as an authenticator app).</value>
+    <value>Для гэтага ўліковага запісу ўключаны двухэтапны уваход, аднак ніводны з наладжаных варыянтаў уваходу не падтрымліваецца на гэтай прыладзе. Выкарыстоўвайце прыладу, якая падтрымліваецца і/або дадайце іншыя варыянты, якія падтрымліваюцца на большасці прылад (напрыклад, праграма для аўтэнтыфікацыі).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
     <value>Код аднаўлення</value>
@@ -821,7 +821,7 @@
     <value>Выкарыстоўваць іншы метад двухэтапнага ўваходу</value>
   </data>
   <data name="VerificationEmailNotSent" xml:space="preserve">
-    <value>Could not send verification email. Try again.</value>
+    <value>Не атрымалася адправіць ліст для пацвярджэння. Паспрабуйце зноў.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
@@ -1624,5 +1624,11 @@
   </data>
   <data name="SaveAttachmentSuccess" xml:space="preserve">
     <value>Далучэнне паспяхова захавана</value>
+  </data>
+  <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
+    <value>Please enable "Auto-fill Accessibility Service" from Bitwarden Settings to use the Auto-fill tile.</value>
+  </data>
+  <data name="AutofillTileUriNotFound" xml:space="preserve">
+    <value>No password fields detected</value>
   </data>
 </root>
