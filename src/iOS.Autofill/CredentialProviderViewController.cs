@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Bit.App.Pages;
 using UIKit;
 using Xamarin.Forms;
+using Bit.App.Utilities;
 
 namespace Bit.iOS.Autofill
 {
@@ -283,6 +284,7 @@ namespace Bit.iOS.Autofill
         private void LaunchLoginFlow()
         {
             var loginPage = new LoginPage();
+            ThemeManager.SetTheme(false, loginPage.Resources);
             if (loginPage.BindingContext is LoginPageViewModel vm)
             {
                 vm.StartTwoFactorAction = LaunchTwoFactorFlow;
@@ -298,10 +300,11 @@ namespace Bit.iOS.Autofill
 
         private void LaunchTwoFactorFlow()
         {
-            DismissViewController(false, async () =>
+            DismissViewController(false, () =>
             {
                 var twoFactorPage = new TwoFactorPage();
-                if(twoFactorPage.BindingContext is TwoFactorPageViewModel vm)
+                ThemeManager.SetTheme(false, twoFactorPage.Resources);
+                if (twoFactorPage.BindingContext is TwoFactorPageViewModel vm)
                 {
                     vm.TwoFactorAction = DismissLockAndContinue;
                 }
