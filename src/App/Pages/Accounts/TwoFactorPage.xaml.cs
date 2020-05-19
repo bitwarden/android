@@ -81,7 +81,7 @@ namespace Bit.App.Pages
                     }
                 }
             });
-            
+
             await LoadOnAppearedAsync(_scrollView, true, () =>
             {
                 if (!_inited)
