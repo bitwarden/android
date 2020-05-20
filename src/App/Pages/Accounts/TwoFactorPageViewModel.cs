@@ -143,7 +143,6 @@ namespace Bit.App.Pages
                     page.DuoWebView.RegisterAction(sig =>
                     {
                         Token = sig;
-                        App.WaitForResume();
                         Device.BeginInvokeOnMainThread(async () => await SubmitAsync());
                     });
                     break;
