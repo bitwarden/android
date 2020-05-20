@@ -12,6 +12,15 @@ namespace Bit.Droid.Renderers
         public CustomEditorRenderer(Context context)
             : base(context)
         { }
+        
+        // Workaround for issue described here:
+        // https://github.com/xamarin/Xamarin.Forms/issues/8291#issuecomment-617456651
+        protected override void OnAttachedToWindow()
+        {
+            base.OnAttachedToWindow();
+            EditText.Enabled = false;
+            EditText.Enabled = true;
+        }
 
         protected override void OnElementChanged(ElementChangedEventArgs<Editor> e)
         {
