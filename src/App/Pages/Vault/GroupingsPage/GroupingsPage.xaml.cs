@@ -28,7 +28,8 @@ namespace Bit.App.Pages
         private PreviousPageInfo _previousPage;
 
         public GroupingsPage(bool mainPage, CipherType? type = null, string folderId = null,
-            string collectionId = null, string pageTitle = null, PreviousPageInfo previousPage = null)
+            string collectionId = null, string pageTitle = null, PreviousPageInfo previousPage = null, 
+            bool deleted = false)
         {
             _pageName = string.Concat(nameof(GroupingsPage), "_", DateTime.UtcNow.Ticks);
             InitializeComponent();
@@ -47,6 +48,7 @@ namespace Bit.App.Pages
             _vm.Type = type;
             _vm.FolderId = folderId;
             _vm.CollectionId = collectionId;
+            _vm.Deleted = deleted;
             _previousPage = previousPage;
             if (pageTitle != null)
             {
@@ -63,6 +65,11 @@ namespace Bit.App.Pages
                 ToolbarItems.Add(_syncItem);
                 ToolbarItems.Add(_lockItem);
                 ToolbarItems.Add(_exitItem);
+            }
+            if (deleted)
+            {
+                _absLayout.Children.Remove(_fab);
+                ToolbarItems.Remove(_addItem);
             }
         }
 
@@ -132,6 +139,7 @@ namespace Bit.App.Pages
                     }
                 }
                 await ShowPreviousPageAsync();
+                AdjustToolbar();
             }, _mainContent);
 
             if (!_vm.MainPage)
@@ -200,7 +208,11 @@ namespace Bit.App.Pages
                 return;
             }
 
-            if (item.Cipher != null)
+            if (item.IsTrash)
+            {
+                await _vm.SelectTrashAsync();
+            }
+            else if (item.Cipher != null)
             {
                 await _vm.SelectCipherAsync(item.Cipher);
             }
@@ -223,7 +235,7 @@ namespace Bit.App.Pages
             if (DoOnce())
             {
                 var page = new CiphersPage(_vm.Filter, _vm.FolderId != null, _vm.CollectionId != null,
-                    _vm.Type != null);
+                    _vm.Type != null, deleted: _vm.Deleted);
                 await Navigation.PushModalAsync(new NavigationPage(page), false);
             }
         }
@@ -245,7 +257,7 @@ namespace Bit.App.Pages
 
         private async void AddButton_Clicked(object sender, EventArgs e)
         {
-            if (DoOnce())
+            if (!_vm.Deleted && DoOnce())
             {
                 var page = new AddEditPage(null, _vm.Type, _vm.FolderId, _vm.CollectionId);
                 await Navigation.PushModalAsync(new NavigationPage(page));
@@ -267,6 +279,12 @@ namespace Bit.App.Pages
                 await Navigation.PushModalAsync(new NavigationPage(new AddEditPage(_previousPage.CipherId)));
             }
             _previousPage = null;
+        }
+
+        private void AdjustToolbar()
+        {
+            _addItem.IsEnabled = !_vm.Deleted;
+            _addItem.IconImageSource = _vm.Deleted ? null : "plus.png";
         }
     }
 }

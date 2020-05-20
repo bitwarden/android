@@ -32,7 +32,7 @@
                      Order="Secondary" />
             <ToolbarItem Text="{u:I18n Close}" Clicked="Close_Clicked" Order="Primary" Priority="-1"
                          x:Name="_closeItem" x:Key="closeItem" />
-            <ToolbarItem Text="{u:I18n Edit}" Clicked="EditToolbarItem_Clicked" Order="Primary"
+            <ToolbarItem Clicked="EditToolbarItem_Clicked" Order="Primary"
                          x:Name="_editItem" x:Key="editItem" />
             <ToolbarItem Icon="more_vert.png" Clicked="More_Clicked" Order="Primary"
                          x:Name="_moreItem" x:Key="moreItem"
@@ -670,7 +670,8 @@
             AbsoluteLayout.LayoutFlags="PositionProportional"
             AbsoluteLayout.LayoutBounds="1, 1, AutoSize, AutoSize"
             AutomationProperties.IsInAccessibleTree="True"
-            AutomationProperties.Name="{u:I18n EditItem}">
+            AutomationProperties.Name="{u:I18n EditItem}"
+            IsVisible="{Binding CanEdit}">
             <Button.Effects>
                 <effects:FabShadowEffect />
             </Button.Effects>

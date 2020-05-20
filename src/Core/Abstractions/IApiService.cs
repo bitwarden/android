@@ -37,6 +37,8 @@ namespace Bit.Core.Abstractions
         Task PutCipherCollectionsAsync(string id, CipherCollectionsRequest request);
         Task<FolderResponse> PutFolderAsync(string id, FolderRequest request);
         Task<CipherResponse> PutShareCipherAsync(string id, CipherShareRequest request);
+        Task PutDeleteCipherAsync(string id);
+        Task PutRestoreCipherAsync(string id);
         Task RefreshIdentityTokenAsync();
         Task<TResponse> SendAsync<TRequest, TResponse>(HttpMethod method, string path,
             TRequest body, bool authed, bool hasResponse);

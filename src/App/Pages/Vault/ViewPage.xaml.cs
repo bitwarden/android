@@ -119,7 +119,17 @@ namespace Bit.App.Pages
         {
             if (DoOnce())
             {
-                await Navigation.PushModalAsync(new NavigationPage(new AddEditPage(_vm.CipherId)));
+                if (_vm.IsDeleted)
+                {
+                    if (await _vm.RestoreAsync())
+                    {
+                        await Navigation.PopModalAsync();
+                    }
+                }
+                else
+                {
+                    await Navigation.PushModalAsync(new NavigationPage(new AddEditPage(_vm.CipherId)));
+                }
             }
         }
 
@@ -234,7 +244,17 @@ namespace Bit.App.Pages
 
         private void AdjustToolbar()
         {
-            if (Device.RuntimePlatform != Device.Android || _vm.Cipher == null)
+            if (_vm.Cipher == null)
+            {
+                return;
+            }
+            _editItem.Text = _vm.Cipher.IsDeleted ? AppResources.Restore :
+                AppResources.Edit;
+            if (_vm.Cipher.IsDeleted)
+            {
+                _absLayout.Children.Remove(_fab);
+            }
+            if (Device.RuntimePlatform != Device.Android)
             {
                 return;
             }
@@ -267,6 +287,10 @@ namespace Bit.App.Pages
                 {
                     ToolbarItems.Insert(1, _collectionsItem);
                 }
+            }
+            if (_vm.Cipher.IsDeleted && !ToolbarItems.Contains(_editItem))
+            {
+                ToolbarItems.Insert(1, _editItem);
             }
         }
     }

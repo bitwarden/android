@@ -19,7 +19,11 @@ namespace Bit.App.Utilities
             var platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             var eventService = ServiceContainer.Resolve<IEventService>("eventService");
             var lockService = ServiceContainer.Resolve<ILockService>("lockService");
-            var options = new List<string> { AppResources.View, AppResources.Edit };
+            var options = new List<string> { AppResources.View };
+            if (!cipher.IsDeleted)
+            {
+                options.Add(AppResources.Edit);
+            }
             if (cipher.Type == Core.Enums.CipherType.Login)
             {
                 if (!string.IsNullOrWhiteSpace(cipher.Login.Username))

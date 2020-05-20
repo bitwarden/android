@@ -16,14 +16,19 @@ namespace Bit.App.Pages
         private bool _hasFocused;
 
         public CiphersPage(Func<CipherView, bool> filter, bool folder = false, bool collection = false,
-            bool type = false, string autofillUrl = null)
+            bool type = false, string autofillUrl = null, bool deleted = false)
         {
             InitializeComponent();
             _vm = BindingContext as CiphersPageViewModel;
             _vm.Page = this;
             _vm.Filter = filter;
             _vm.AutofillUrl = _autofillUrl = autofillUrl;
-            if (folder)
+            _vm.Deleted = deleted;
+            if (deleted)
+            {
+                _vm.PageTitle = AppResources.SearchTrash;
+            }
+            else if (folder)
             {
                 _vm.PageTitle = AppResources.SearchFolder;
             }
