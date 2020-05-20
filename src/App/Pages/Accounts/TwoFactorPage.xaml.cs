@@ -82,19 +82,19 @@ namespace Bit.App.Pages
                 }
             });
 
-            if (!_inited)
+            await LoadOnAppearedAsync(_scrollView, true, () =>
             {
-                _inited = true;
-                await LoadOnAppearedAsync(_scrollView, true, () =>
+                if (!_inited)
                 {
+                    _inited = true;
                     _vm.Init();
-                    if (_vm.TotpMethod)
-                    {
-                        RequestFocus(_totpEntry);
-                    }
-                    return Task.FromResult(0);
-                });
-            }
+                }
+                if (_vm.TotpMethod)
+                {
+                    RequestFocus(_totpEntry);
+                }
+                return Task.FromResult(0);
+            });
         }
 
         protected override void OnDisappearing()
