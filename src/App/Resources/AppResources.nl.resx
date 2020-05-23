@@ -330,7 +330,7 @@
     <value>Opslaan</value>
   </data>
   <data name="Sync" xml:space="preserve">
-    <value>Synchroniseren</value>
+    <value>Synchronisatie</value>
     <comment>The title for the sync page.</comment>
   </data>
   <data name="ThankYou" xml:space="preserve">
@@ -403,7 +403,7 @@
     <value>Gebruik de Bitwarden-toegankelijkheidsdienst voor het automatisch invullen van je inloggegevens in apps en op het internet.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
-    <value>Auto-invuldienst</value>
+    <value>Dienst Automatisch aanvullen</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>Dubbelzinnige tekens vermijden</value>
@@ -418,7 +418,7 @@
     <value>Gebruik Bitwarden in Safari en andere apps om je inloggegevens automatisch in te vullen.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>Bitwarden auto-invuldienst</value>
+    <value>Bitwarden Automatisch aanvullen</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
     <value>Gebruik de Bitwarden-toegankelijkheidsdienst voor het automatisch invullen van je inloggegevens.</value>
@@ -729,7 +729,7 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
-    <value>Als je een invoerveld aantikt en de overlay van Bitwarden ziet, kun je erop tikken om de auto-invuldienst te openen.</value>
+    <value>Wanneer je een invoerveld selecteert, dan kun je de overlay van Bitwarden aantikken om automatisch aanvullen te starten.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Tik deze melding voor het automatisch invullen van een item uit je kluis.</value>
@@ -738,7 +738,7 @@
     <value>Toegankelijkheidsinstellingen openen</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
-    <value>1. Tik op het Android-toegankelijkheidsinstellingen-scherm "Bitwarden" aan onder de kop Diensten.</value>
+    <value>1. Selecteer "Bitwarden" in het scherm Android Toegankelijkheidsinstellingen - Services.</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
     <value>2. Tik op de schuifknop en druk op Oké om te accepteren.</value>
@@ -753,7 +753,7 @@
     <value>Status</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
-    <value>De eenvoudigste manier om nieuwe logins aan je kluis toe te voegen is via de Bitwarden auto-invuldienst. Leer meer over het gebruik van de Bitwarden auto-invuldienst via "Instellingen".</value>
+    <value>De eenvoudigste manier om nieuwe logins aan je kluis toe te voegen is via Bitwarden Automatisch aanvullen. Lees bij "Instellingen" meer over het gebruik van de Bitwarden Dienst Automatisch aanvullen.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Auto-invullen</value>
@@ -774,7 +774,7 @@
     <value>Zoeken</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
-    <value>Je zoekt een auto-invullen voor "{0}".</value>
+    <value>Je zoekt automatisch aanvullen voor "{0}".</value>
   </data>
   <data name="ShareVault" xml:space="preserve">
     <value>Kluis delen</value>
@@ -1131,14 +1131,17 @@
   <data name="NoItemsFolder" xml:space="preserve">
     <value>Er zijn geen items in deze map.</value>
   </data>
+  <data name="NoItemsTrash" xml:space="preserve">
+    <value>There are no items in the trash.</value>
+  </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
-    <value>Toegankelijkheidsdienst</value>
+    <value>Toegankelijkheidsdienst voor automatisch aanvullen</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>De automatische invuldienst van Bitwarden gebruikt het Android Autofill Framework om je te helpen met het invullen van inloggegevens, creditcards en identiteitsinformatie in andere apps op je apparaat.</value>
+    <value>De Dienst Automatisch aanvullen van Bitwarden gebruikt het Android Autofill Framework om je te helpen met het invullen van inloggegevens, creditcards en identiteitsinformatie in andere apps op je apparaat.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Gebruik de Bitwarden automatische invuldienst voor het automatisch invullen van je inloggevens.</value>
+    <value>Gebruik de Bitwarden Dienst Automatische aanvullen voor het automatisch invullen van je inloggevens.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Open instellingen voor automatisch invullen</value>
@@ -1160,7 +1163,7 @@
     <value>Windows Hello</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
-    <value>Het automatisch openen van het instellingenmenu Android automatisch invullen is mislukt. Je kunt het menu handmatig openen via Android-instellingen &gt; Systeem &gt; Taal en invoer &gt; Geavanceerd &gt; Automatische invuldienst.</value>
+    <value>Het instellingenmenu Android Automatisch aanvullen is niet geopend. Je kunt het menu handmatig openen via Android-instellingen &gt; Systeem &gt; Taal en invoer &gt; Geavanceerd &gt; Automatische aanvuldienst.</value>
   </data>
   <data name="CustomFieldName" xml:space="preserve">
     <value>Naam van aangepast veld</value>
@@ -1237,7 +1240,7 @@
     <value>Houd je YubiKey NEO bij de achterkant van het apparaat om door te gaan.</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
-    <value>De toegankelijkheidsdienst kan nuttig zijn wanneer apps automatisch invullen niet ondersteunen.</value>
+    <value>De toegankelijkheidsdienst kan nuttig zijn wanneer apps automatisch aanvullen niet ondersteunen.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
     <value>Wachtwoord bijgewerkt</value>
@@ -1536,7 +1539,7 @@
     <value>Na opnieuw starten van de app</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>Automatisch invullen maakt het gemakkelijk om veilig toegang te krijgen tot je Bitwarden-kluis vanuit andere websites en apps. Het lijkt erop dat je de auto-invullen service voor Bitwarden niet hebt ingeschakeld. Schakel automatisch invullen voor Bitwarden in via "Instellingen".</value>
+    <value>Automatisch aanvullen vereenvoudigt veilige toegang tot je Bitwarden-kluis vanuit andere websites en apps. Het lijkt erop dat Automatisch aanvullen niet is ingeschakeld. Schakel Automatisch aanvullen voor Bitwarden in via "Instellingen".</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
     <value>Je themawijzigingen worden toegepast bij het opnieuw starten van de app.</value>
@@ -1570,10 +1573,10 @@
     <value>Biometrie gebruiken om te ontgrendelen</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
-    <value>Bitwarden heeft je aandacht nodig - Zie "Auto-invuldienst" in de instellingen van Bitwarden</value>
+    <value>Bitwarden vraagt om je aandacht - Zie "Dienst Automatisch aanvullen" in de instellingen van Bitwarden</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
-    <value>3. Tik op de schakelaar in Bitwarden - Instellingen - Opties -  "Weergeven over andere apps" om overlay-ondersteuning in te schakelen.</value>
+    <value>3. Tik in Bitwarden - Instellingen - Opties - op de schakelaar "Weergeven over andere apps" om overlay-ondersteuning in te schakelen.</value>
   </data>
   <data name="OverlayPermission" xml:space="preserve">
     <value>Machtiging</value>
@@ -1582,7 +1585,7 @@
     <value>Overlay-machtigingen instellen</value>
   </data>
   <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
-    <value>3. Tik op de schakelaar in Bitwarden - Instellingen - Opties -  "Weergeven over andere apps" om overlay-ondersteuning in te schakelen.</value>
+    <value>3. Tik in Bitwarden - Instellingen - Opties - op de schakelaar "Weergeven over andere apps" om overlay-ondersteuning in te schakelen.</value>
   </data>
   <data name="Denied" xml:space="preserve">
     <value>Afgewezen</value>
@@ -1626,9 +1629,49 @@
     <value>Bijlage succesvol opgeslagen</value>
   </data>
   <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
-    <value>Please enable "Auto-fill Accessibility Service" from Bitwarden Settings to use the Auto-fill tile.</value>
+    <value>Schakel bij de instellingen van Bitwarden de "Toegankelijkheidsdienst voor automatisch invullen" in om de tegel automatisch invullen te gebruiken.</value>
   </data>
   <data name="AutofillTileUriNotFound" xml:space="preserve">
-    <value>No password fields detected</value>
+    <value>Geen wachtwoordvelden gevonden</value>
+  </data>
+  <data name="SoftDeleting" xml:space="preserve">
+    <value>Sending to trash...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemSoftDeleted" xml:space="preserve">
+    <value>Item has been sent to trash.</value>
+    <comment>Confirmation message after successfully soft-deleting a login</comment>
+  </data>
+  <data name="Restore" xml:space="preserve">
+    <value>Restore</value>
+    <comment>Restores an entity (verb).</comment>
+  </data>
+  <data name="Restoring" xml:space="preserve">
+    <value>Restoring...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemRestored" xml:space="preserve">
+    <value>Item has been restored.</value>
+    <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
+  </data>
+  <data name="Trash" xml:space="preserve">
+    <value>Trash</value>
+    <comment>(noun) Location of deleted items which have not yet been permanently deleted</comment>
+  </data>
+  <data name="SearchTrash" xml:space="preserve">
+    <value>Search trash</value>
+    <comment>(action prompt) Label for the search text field when viewing the trash folder</comment>
+  </data>
+  <data name="DoYouReallyWantToPermanentlyDeleteCipher" xml:space="preserve">
+    <value>Do you really want to permanently delete? This cannot be undone.</value>
+    <comment>Confirmation alert message when permanently deleteing a cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToRestoreCipher" xml:space="preserve">
+    <value>Do you really want to restore this item?</value>
+    <comment>Confirmation alert message when restoring a soft-deleted cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToSoftDeleteCipher" xml:space="preserve">
+    <value>Do you really want to send to the trash?</value>
+    <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
 </root>
