@@ -75,8 +75,8 @@ namespace Bit.Droid.Accessibility
             new Browser("org.gnu.icecat", "url_bar_title"),
             new Browser("org.mozilla.fenix", "mozac_browser_toolbar_url_view"),
             new Browser("org.mozilla.fenix.nightly", "mozac_browser_toolbar_url_view"),
-            new Browser("org.mozilla.fennec_aurora", "url_bar_title"),
-            new Browser("org.mozilla.fennec_fdroid", "url_bar_title"),
+            new Browser("org.mozilla.fennec_aurora", "mozac_browser_toolbar_url_view,url_bar_title"), // 2nd = Legacy
+            new Browser("org.mozilla.fennec_fdroid", "mozac_browser_toolbar_url_view,url_bar_title"), // 2nd = Legacy
             new Browser("org.mozilla.firefox", "url_bar_title"),
             new Browser("org.mozilla.firefox_beta", "url_bar_title"),
             new Browser("org.mozilla.focus", "display_url"),
