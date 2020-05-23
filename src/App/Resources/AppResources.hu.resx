@@ -1131,6 +1131,9 @@
   <data name="NoItemsFolder" xml:space="preserve">
     <value>Nincsenek elemek ebben a mappában.</value>
   </data>
+  <data name="NoItemsTrash" xml:space="preserve">
+    <value>There are no items in the trash.</value>
+  </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
     <value>Automatikus kitöltés kisegítő szolgáltatás</value>
   </data>
@@ -1570,19 +1573,19 @@
     <value>Biometria használata a feloldáshoz</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
-    <value>Bitwarden needs attention - See "Auto-fill Accessibility Service" from Bitwarden Settings</value>
+    <value>A Bitwarden figyelmet igényel- Információ az "Automatikus kitöltés elérési szolgáltatás" elemnél a Bitwarden beállításaiban</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
-    <value>3. On the Android App Settings screen for Bitwarden, go to the "Display over other apps" options (under Advanced) and tap the toggle to enable overlay support.</value>
+    <value>3. Az Android Alkalmazás beállítások képernyőn a "Megjelenítés más alkalmazások felett" opcióknál (a Bővített alatt) koppintsunk az átfedés támogatást engedélyező váltóra.</value>
   </data>
   <data name="OverlayPermission" xml:space="preserve">
     <value>Jogosultság</value>
   </data>
   <data name="BitwardenAutofillServiceOpenOverlayPermissionSettings" xml:space="preserve">
-    <value>Open Overlay Permission Settings</value>
+    <value>Átfedés jogosultságok beállítás megnyitása</value>
   </data>
   <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
-    <value>3. On the Android App Settings screen for Bitwarden, select "Display over other apps" (under "Advanced") and switch on the toggle to allow the overlay.</value>
+    <value>3. A Bitwardenre érvényes Android Alkalmazás beállítások képernyőn válasszuk a "Megjelenítés más alkalmazások felett" opciót (a Bővített alatt) és állítsuk át a váltóz az átfedés támogatást engedélyezésre.</value>
   </data>
   <data name="Denied" xml:space="preserve">
     <value>Megtagadva</value>
@@ -1626,9 +1629,49 @@
     <value>Melléklet sikeresen mentve</value>
   </data>
   <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
-    <value>Please enable "Auto-fill Accessibility Service" from Bitwarden Settings to use the Auto-fill tile.</value>
+    <value>Engedélyezzük az "Automatikus kitöltés elérés szolgáltatás" lehetőséget a Bitwarden beállításainál az automatikus kitöltés engedélyezéséhez.</value>
   </data>
   <data name="AutofillTileUriNotFound" xml:space="preserve">
-    <value>No password fields detected</value>
+    <value>Nincs érzékelt jelszó mező.</value>
+  </data>
+  <data name="SoftDeleting" xml:space="preserve">
+    <value>Sending to trash...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemSoftDeleted" xml:space="preserve">
+    <value>Item has been sent to trash.</value>
+    <comment>Confirmation message after successfully soft-deleting a login</comment>
+  </data>
+  <data name="Restore" xml:space="preserve">
+    <value>Restore</value>
+    <comment>Restores an entity (verb).</comment>
+  </data>
+  <data name="Restoring" xml:space="preserve">
+    <value>Restoring...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemRestored" xml:space="preserve">
+    <value>Item has been restored.</value>
+    <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
+  </data>
+  <data name="Trash" xml:space="preserve">
+    <value>Trash</value>
+    <comment>(noun) Location of deleted items which have not yet been permanently deleted</comment>
+  </data>
+  <data name="SearchTrash" xml:space="preserve">
+    <value>Search trash</value>
+    <comment>(action prompt) Label for the search text field when viewing the trash folder</comment>
+  </data>
+  <data name="DoYouReallyWantToPermanentlyDeleteCipher" xml:space="preserve">
+    <value>Do you really want to permanently delete? This cannot be undone.</value>
+    <comment>Confirmation alert message when permanently deleteing a cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToRestoreCipher" xml:space="preserve">
+    <value>Do you really want to restore this item?</value>
+    <comment>Confirmation alert message when restoring a soft-deleted cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToSoftDeleteCipher" xml:space="preserve">
+    <value>Do you really want to send to the trash?</value>
+    <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
 </root>
