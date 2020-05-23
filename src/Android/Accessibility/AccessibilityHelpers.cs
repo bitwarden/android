@@ -56,7 +56,7 @@ namespace Bit.Droid.Accessibility
             new Browser("com.opera.mini.native", "url_field"),
             new Browser("com.opera.mini.native.beta", "url_field"),
             new Browser("com.opera.touch", "addressbarEdit"),
-            new Browser("com.qwant.liberty", "url_bar_title"),
+            new Browser("com.qwant.liberty", "url_bar_title,mozac_browser_toolbar_url_view"), // 2nd = Anticipation
             new Browser("com.sec.android.app.sbrowser", "location_bar_edit_text"),
             new Browser("com.sec.android.app.sbrowser.beta", "location_bar_edit_text"),
             new Browser("com.stoutner.privacybrowser.free", "url_edittext"),
@@ -72,19 +72,19 @@ namespace Bit.Droid.Accessibility
             new Browser("org.bromite.bromite", "url_bar"),
             new Browser("org.chromium.chrome", "url_bar"),
             new Browser("org.codeaurora.swe.browser", "url_bar"),
-            new Browser("org.gnu.icecat", "url_bar_title"),
+            new Browser("org.gnu.icecat", "url_bar_title,mozac_browser_toolbar_url_view"), // 2nd = Anticipation
             new Browser("org.mozilla.fenix", "mozac_browser_toolbar_url_view"),
             new Browser("org.mozilla.fenix.nightly", "mozac_browser_toolbar_url_view"),
             new Browser("org.mozilla.fennec_aurora", "mozac_browser_toolbar_url_view,url_bar_title"), // 2nd = Legacy
-            new Browser("org.mozilla.fennec_fdroid", "url_bar_title"),
+            new Browser("org.mozilla.fennec_fdroid", "url_bar_title,mozac_browser_toolbar_url_view"), // 2nd = Anticipation
             new Browser("org.mozilla.firefox", "url_bar_title,mozac_browser_toolbar_url_view"), // 2nd = Anticipation
             new Browser("org.mozilla.firefox_beta", "mozac_browser_toolbar_url_view,url_bar_title"), // 2nd = Legacy
             new Browser("org.mozilla.focus", "display_url"),
             new Browser("org.mozilla.klar", "display_url"),
             new Browser("org.mozilla.reference.browser", "mozac_browser_toolbar_url_view"),
             new Browser("org.mozilla.rocket", "display_url"),
-            new Browser("org.torproject.torbrowser", "url_bar_title"),
-            new Browser("org.torproject.torbrowser_alpha", "url_bar_title"),
+            new Browser("org.torproject.torbrowser", "url_bar_title,mozac_browser_toolbar_url_view"), // 2nd = Anticipation
+            new Browser("org.torproject.torbrowser_alpha", "url_bar_title,mozac_browser_toolbar_url_view"), // 2nd = Anticipation
 
             // [Section B] Entries only present here
             //
