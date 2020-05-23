@@ -65,6 +65,8 @@ namespace Bit.Droid.Autofill
             "com.qwant.liberty",
             "com.sec.android.app.sbrowser",
             "com.sec.android.app.sbrowser.beta",
+            "com.stoutner.privacybrowser.free",
+            "com.stoutner.privacybrowser.standard",
             "com.vivaldi.browser",
             "com.vivaldi.browser.snapshot",
             "com.vivaldi.browser.sopranos",
