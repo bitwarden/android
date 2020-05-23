@@ -274,6 +274,7 @@ namespace Bit.App.Pages
         public bool ShowAttachments => Cipher.HasAttachments;
         public string ShowPasswordIcon => ShowPassword ? "" : "";
         public string ShowCardCodeIcon => ShowCardCode ? "" : "";
+        public int PasswordFieldColSpan => Cipher.ViewPassword ? 1 : 4;
 
         public void Init()
         {

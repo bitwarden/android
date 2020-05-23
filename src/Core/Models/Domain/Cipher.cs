@@ -26,6 +26,7 @@ namespace Bit.Core.Models.Domain
             Favorite = obj.Favorite;
             OrganizationUseTotp = obj.OrganizationUseTotp;
             Edit = obj.Edit;
+            ViewPassword = obj.ViewPassword;
             RevisionDate = obj.RevisionDate;
             CollectionIds = obj.CollectionIds != null ? new HashSet<string>(obj.CollectionIds) : null;
             LocalData = localData;
@@ -63,6 +64,7 @@ namespace Bit.Core.Models.Domain
         public bool Favorite { get; set; }
         public bool OrganizationUseTotp { get; set; }
         public bool Edit { get; set; }
+        public bool ViewPassword { get; set; }
         public DateTime RevisionDate { get; set; }
         public Dictionary<string, object> LocalData { get; set; }
         public Login Login { get; set; }

@@ -16,6 +16,7 @@ namespace Bit.Core.Models.Data
             FolderId = response.FolderId;
             UserId = userId;
             Edit = response.Edit;
+            ViewPassword = response.ViewPassword;
             OrganizationUseTotp = response.OrganizationUseTotp;
             Favorite = response.Favorite;
             RevisionDate = response.RevisionDate;
@@ -53,6 +54,7 @@ namespace Bit.Core.Models.Data
         public string FolderId { get; set; }
         public string UserId { get; set; }
         public bool Edit { get; set; }
+        public bool ViewPassword { get; set; }
         public bool OrganizationUseTotp { get; set; }
         public bool Favorite { get; set; }
         public DateTime RevisionDate { get; set; }

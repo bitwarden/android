@@ -134,7 +134,8 @@
                                     Grid.Column="1"
                                     Grid.RowSpan="2"
                                     AutomationProperties.IsInAccessibleTree="True"
-                                    AutomationProperties.Name="{u:I18n CheckPassword}" />
+                                    AutomationProperties.Name="{u:I18n CheckPassword}"
+                                    IsVisible="{Binding Cipher.ViewPassword}" />
                                 <controls:FaButton 
                                     StyleClass="box-row-button, box-row-button-platform"
                                     Text="{Binding ShowPasswordIcon}"
@@ -143,7 +144,8 @@
                                     Grid.Column="2"
                                     Grid.RowSpan="2"
                                     AutomationProperties.IsInAccessibleTree="True"
-                                    AutomationProperties.Name="{u:I18n ToggleVisibility}" />
+                                    AutomationProperties.Name="{u:I18n ToggleVisibility}"
+                                    IsVisible="{Binding Cipher.ViewPassword}" />
                                 <controls:FaButton 
                                     StyleClass="box-row-button, box-row-button-platform"
                                     Text="&#xf0ea;"
@@ -153,7 +155,8 @@
                                     Grid.Column="3"
                                     Grid.RowSpan="2"
                                     AutomationProperties.IsInAccessibleTree="True"
-                                    AutomationProperties.Name="{u:I18n CopyPassword}" />
+                                    AutomationProperties.Name="{u:I18n CopyPassword}"
+                                    IsVisible="{Binding Cipher.ViewPassword}" />
                             </Grid>
                             <BoxView StyleClass="box-row-separator"
                                      IsVisible="{Binding Cipher.Login.Password, Converter={StaticResource stringHasValue}}" />
