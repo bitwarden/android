@@ -1132,7 +1132,7 @@
     <value>در این پوشه موردی برای نمایش نیست.</value>
   </data>
   <data name="NoItemsTrash" xml:space="preserve">
-    <value>There are no items in the trash.</value>
+    <value>هیچ موردی در سطل زباله وجود ندارد.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
     <value>سرویس دستیابی به پر کردن خودکار</value>
@@ -1635,43 +1635,43 @@
     <value>هیچ فیلدی برای رمز شناسایی نشد</value>
   </data>
   <data name="SoftDeleting" xml:space="preserve">
-    <value>Sending to trash...</value>
+    <value>درحال ارسال به سطل زباله...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemSoftDeleted" xml:space="preserve">
-    <value>Item has been sent to trash.</value>
+    <value>مورد به سطل زباله فرستاده شد.</value>
     <comment>Confirmation message after successfully soft-deleting a login</comment>
   </data>
   <data name="Restore" xml:space="preserve">
-    <value>Restore</value>
+    <value>بازیابی</value>
     <comment>Restores an entity (verb).</comment>
   </data>
   <data name="Restoring" xml:space="preserve">
-    <value>Restoring...</value>
+    <value>درحال بازیابی…</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemRestored" xml:space="preserve">
-    <value>Item has been restored.</value>
+    <value>مورد بازیابی شد.</value>
     <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
   </data>
   <data name="Trash" xml:space="preserve">
-    <value>Trash</value>
+    <value>زباله ها</value>
     <comment>(noun) Location of deleted items which have not yet been permanently deleted</comment>
   </data>
   <data name="SearchTrash" xml:space="preserve">
-    <value>Search trash</value>
+    <value>جستجوی زباله ها</value>
     <comment>(action prompt) Label for the search text field when viewing the trash folder</comment>
   </data>
   <data name="DoYouReallyWantToPermanentlyDeleteCipher" xml:space="preserve">
-    <value>Do you really want to permanently delete? This cannot be undone.</value>
+    <value>مطمئنید می‌خواهید برای همیشه حذف کنید؟ این عمل قابل بازگشت نیست.</value>
     <comment>Confirmation alert message when permanently deleteing a cipher.</comment>
   </data>
   <data name="DoYouReallyWantToRestoreCipher" xml:space="preserve">
-    <value>Do you really want to restore this item?</value>
+    <value>واقعا می خواهید این آیتم را بازیابی کنید؟</value>
     <comment>Confirmation alert message when restoring a soft-deleted cipher.</comment>
   </data>
   <data name="DoYouReallyWantToSoftDeleteCipher" xml:space="preserve">
-    <value>Do you really want to send to the trash?</value>
+    <value>واقعا می خواهید این آیتم را به سطل زباله ارسال کنید؟</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
 </root>
