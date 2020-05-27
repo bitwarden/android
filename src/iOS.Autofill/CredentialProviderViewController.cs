@@ -55,7 +55,7 @@ namespace Bit.iOS.Autofill
             if (!IsAuthed())
             {
                 LaunchLoginFlow();
-            } 
+            }
             else if (IsLocked())
             {
                 PerformSegue("lockPasswordSegue", this);
@@ -257,7 +257,7 @@ namespace Bit.iOS.Autofill
         {
             // Init Xamarin Forms
             Forms.Init();
-            
+
             if (ServiceContainer.RegisteredServices.Count > 0)
             {
                 ServiceContainer.Reset();
@@ -286,8 +286,9 @@ namespace Bit.iOS.Autofill
         private void LaunchLoginFlow()
         {
             var loginPage = new LoginPage();
-            var app = new App.App(new App.Models.AppOptions { FromIosExtension = true });
-            loginPage.Resources.Add(app.Resources);
+            var resources = new ResourceDictionary();
+            ThemeManager.SetTheme(false, resources);
+            ThemeManager.ApplyToPage(resources, loginPage);
             if (loginPage.BindingContext is LoginPageViewModel vm)
             {
                 vm.StartTwoFactorAction = LaunchTwoFactorFlow;
@@ -306,13 +307,14 @@ namespace Bit.iOS.Autofill
             DismissViewController(false, () =>
             {
                 var twoFactorPage = new TwoFactorPage();
-                var app = new App.App(new App.Models.AppOptions { FromIosExtension = true });
-                twoFactorPage.Resources.Add(app.Resources);
+                var resources = new ResourceDictionary();
+                ThemeManager.SetTheme(false, resources);
+                ThemeManager.ApplyToPage(resources, twoFactorPage);
                 if (twoFactorPage.BindingContext is TwoFactorPageViewModel vm)
                 {
                     vm.TwoFactorAction = DismissLockAndContinue;
                 }
-            
+
                 var navigationPage = new NavigationPage(twoFactorPage);
                 var twoFactorController = navigationPage.CreateViewController();
                 twoFactorController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;

@@ -44,12 +44,6 @@ namespace Bit.App
         public App(AppOptions appOptions)
         {
             _appOptions = appOptions ?? new AppOptions();
-            if (_appOptions.FromIosExtension)
-            {
-                InitializeComponent();
-                ThemeManager.SetTheme(false, Current.Resources);
-                return;
-            }
             _userService = ServiceContainer.Resolve<IUserService>("userService");
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");

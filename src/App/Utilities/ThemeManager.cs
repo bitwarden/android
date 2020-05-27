@@ -81,5 +81,13 @@ namespace Bit.App.Utilities
                 string.Format(PreferencesStorageService.KeyFormat, Constants.ThemeKey), default(string),
                 !android ? "group.com.8bit.bitwarden" : default(string));
         }
+
+        public static void ApplyToPage(ResourceDictionary resourceDictionary, ContentPage page)
+        {
+            foreach (var resourceDict in resourceDictionary.MergedDictionaries)
+            {
+                page.Resources.Add(resourceDict);
+            }
+        }
     }
 }
