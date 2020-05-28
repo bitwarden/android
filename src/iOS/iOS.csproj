@@ -134,7 +134,6 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <Compile Include="NFCReaderDelegate.cs" />
     <Compile Include="Services\iOSPushNotificationHandler.cs" />
     <Compile Include="Services\iOSPushNotificationService.cs" />
     <None Include="Entitlements.plist" />

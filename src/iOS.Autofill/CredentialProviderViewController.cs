@@ -12,6 +12,7 @@ using UIKit;
 using Xamarin.Forms;
 using Bit.App.Utilities;
 using Bit.App.Models;
+using CoreNFC;
 
 namespace Bit.iOS.Autofill
 {
@@ -19,6 +20,8 @@ namespace Bit.iOS.Autofill
     {
         private Context _context;
         private bool _initedAppCenter;
+        private NFCNdefReaderSession _nfcSession = null;
+        private Core.NFCReaderDelegate _nfcDelegate = null;
 
         public CredentialProviderViewController(IntPtr handle)
             : base(handle)
@@ -263,6 +266,7 @@ namespace Bit.iOS.Autofill
             }
             iOSCoreHelpers.RegisterLocalServices();
             var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            var messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             ServiceContainer.Init(deviceActionService.DeviceUserAgent);
             if (!_initedAppCenter)
             {
@@ -271,7 +275,9 @@ namespace Bit.iOS.Autofill
             }
             iOSCoreHelpers.Bootstrap();
             iOSCoreHelpers.AppearanceAdjustments(deviceActionService);
-            iOSCoreHelpers.SubscribeBroadcastReceiver(this);
+            _nfcDelegate = new Core.NFCReaderDelegate((success, message) =>
+                messagingService.Send("gotYubiKeyOTP", message));
+            iOSCoreHelpers.SubscribeBroadcastReceiver(this, _nfcSession, _nfcDelegate);
         }
 
         private void InitAppIfNeeded()

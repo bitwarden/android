@@ -88,6 +88,7 @@
     <Compile Include="Models\FillScript.cs" />
     <Compile Include="Models\PageDetails.cs" />
     <Compile Include="Models\PasswordGenerationOptions.cs" />
+    <Compile Include="NFCReaderDelegate.cs" />
     <Compile Include="Renderers\CustomButtonRenderer.cs" />
     <Compile Include="Renderers\CustomContentPageRenderer.cs" />
     <Compile Include="Renderers\CustomEditorRenderer.cs" />

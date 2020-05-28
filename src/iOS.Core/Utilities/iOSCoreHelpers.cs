@@ -10,6 +10,7 @@ using Bit.Core.Abstractions;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Bit.iOS.Core.Services;
+using CoreNFC;
 using Foundation;
 using UIKit;
 
@@ -83,7 +84,8 @@ namespace Bit.iOS.Core.Utilities
             UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.LightContent;
         }
 
-        public static void SubscribeBroadcastReceiver(UIViewController controller)
+        public static void SubscribeBroadcastReceiver(UIViewController controller, NFCNdefReaderSession nfcSession,
+            NFCReaderDelegate nfcDelegate)
         {
             var broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             var messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
@@ -104,11 +106,30 @@ namespace Bit.iOS.Core.Utilities
                         messagingService.Send("showDialogResolve", new Tuple<int, bool>(details.DialogId, confirmed));
                     });
                 }
-                else if (message.Command == "todo-yubi-key")
+                else if (message.Command == "listenYubiKeyOTP")
                 {
-                    // TODO Implement YubiKey actions (?)
+                    ListenYubiKey((bool)message.Data, deviceActionService, nfcSession, nfcDelegate);
                 }
             });
+        }
+
+        public static void ListenYubiKey(bool listen, IDeviceActionService deviceActionService,
+            NFCNdefReaderSession nfcSession, NFCReaderDelegate nfcDelegate)
+        {
+            if (deviceActionService.SupportsNfc())
+            {
+                nfcSession?.InvalidateSession();
+                nfcSession?.Dispose();
+                nfcSession = null;
+                if (listen)
+                {
+                    nfcSession = new NFCNdefReaderSession(nfcDelegate, null, true)
+                    {
+                        AlertMessage = AppResources.HoldYubikeyNearTop
+                    };
+                    nfcSession.BeginSession();
+                }
+            }
         }
 
         private static async Task BootstrapAsync(Func<Task> postBootstrapFunc = null)

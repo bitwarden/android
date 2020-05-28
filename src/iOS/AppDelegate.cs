@@ -26,7 +26,7 @@ namespace Bit.iOS
     {
         private NFCNdefReaderSession _nfcSession = null;
         private iOSPushNotificationHandler _pushHandler = null;
-        private NFCReaderDelegate _nfcDelegate = null;
+        private Core.NFCReaderDelegate _nfcDelegate = null;
         private NSTimer _clipboardTimer = null;
         private nint _clipboardBackgroundTaskId;
         private NSTimer _vaultTimeoutTimer = null;
@@ -89,7 +89,7 @@ namespace Bit.iOS
                 }
                 else if (message.Command == "listenYubiKeyOTP")
                 {
-                    ListenYubiKey((bool)message.Data);
+                    iOSCoreHelpers.ListenYubiKey((bool)message.Data, _deviceActionService, _nfcSession, _nfcDelegate);
                 }
                 else if (message.Command == "unlocked")
                 {
@@ -278,7 +278,7 @@ namespace Bit.iOS
             iOSCoreHelpers.RegisterAppCenter();
             _pushHandler = new iOSPushNotificationHandler(
                 ServiceContainer.Resolve<IPushNotificationListenerService>("pushNotificationListenerService"));
-            _nfcDelegate = new NFCReaderDelegate((success, message) =>
+            _nfcDelegate = new Core.NFCReaderDelegate((success, message) =>
                 _messagingService.Send("gotYubiKeyOTP", message));
 
             iOSCoreHelpers.Bootstrap(async () => await ApplyManagedSettingsAsync());
@@ -292,24 +292,6 @@ namespace Bit.iOS
             var iosPushNotificationService = new iOSPushNotificationService();
             ServiceContainer.Register<IPushNotificationService>(
                 "pushNotificationService", iosPushNotificationService);
-        }
-
-        private void ListenYubiKey(bool listen)
-        {
-            if (_deviceActionService.SupportsNfc())
-            {
-                _nfcSession?.InvalidateSession();
-                _nfcSession?.Dispose();
-                _nfcSession = null;
-                if (listen)
-                {
-                    _nfcSession = new NFCNdefReaderSession(_nfcDelegate, null, true)
-                    {
-                        AlertMessage = AppResources.HoldYubikeyNearTop
-                    };
-                    _nfcSession.BeginSession();
-                }
-            }
         }
 
         private void VaultTimeoutTimer(int vaultTimeoutMinutes)
