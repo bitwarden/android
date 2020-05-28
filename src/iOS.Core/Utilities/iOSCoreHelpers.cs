@@ -87,6 +87,7 @@ namespace Bit.iOS.Core.Utilities
         {
             var broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             var messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
+            var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             broadcasterService.Subscribe(nameof(controller), (message) =>
             {
                 if (message.Command == "showDialog")
@@ -94,16 +95,13 @@ namespace Bit.iOS.Core.Utilities
                     var details = message.Data as DialogDetails;
                     var confirmText = string.IsNullOrWhiteSpace(details.ConfirmText) ?
                         AppResources.Ok : details.ConfirmText;
-                    NSRunLoop.Main.BeginInvokeOnMainThread(() =>
+
+                    NSRunLoop.Main.BeginInvokeOnMainThread(async () =>
                     {
-                        var alertDialog = Dialogs.CreateAlert(details.Title, details.Text, confirmText, (c) =>
-                        {
-                            messagingService.Send("showDialogResolve", new Tuple<int, bool>(details.DialogId, true));
-                        }, !string.IsNullOrWhiteSpace(details.CancelText) ? details.CancelText : null, (c) =>
-                        {
-                            messagingService.Send("showDialogResolve", new Tuple<int, bool>(details.DialogId, false));
-                        });
-                        controller.PresentViewController(alertDialog, true, null);
+                        var result = await deviceActionService.DisplayAlertAsync(details.Title, details.Text,
+                           details.CancelText, details.ConfirmText);
+                        var confirmed = result == details.ConfirmText;
+                        messagingService.Send("showDialogResolve", new Tuple<int, bool>(details.DialogId, confirmed));
                     });
                 }
                 else if (message.Command == "todo-yubi-key")
