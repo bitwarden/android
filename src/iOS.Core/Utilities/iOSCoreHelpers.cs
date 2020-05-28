@@ -94,14 +94,17 @@ namespace Bit.iOS.Core.Utilities
                     var details = message.Data as DialogDetails;
                     var confirmText = string.IsNullOrWhiteSpace(details.ConfirmText) ?
                         AppResources.Ok : details.ConfirmText;
-                    var alertDialog = Dialogs.CreateAlert(details.Title, details.Text, confirmText, (c) =>
+                    NSRunLoop.Main.BeginInvokeOnMainThread(() =>
                     {
-                        messagingService.Send("showDialogResolve", new Tuple<int, bool>(details.DialogId, true));
-                    }, !string.IsNullOrWhiteSpace(details.CancelText) ? details.CancelText : null, (c) =>
-                    {
-                        messagingService.Send("showDialogResolve", new Tuple<int, bool>(details.DialogId, false));
+                        var alertDialog = Dialogs.CreateAlert(details.Title, details.Text, confirmText, (c) =>
+                        {
+                            messagingService.Send("showDialogResolve", new Tuple<int, bool>(details.DialogId, true));
+                        }, !string.IsNullOrWhiteSpace(details.CancelText) ? details.CancelText : null, (c) =>
+                        {
+                            messagingService.Send("showDialogResolve", new Tuple<int, bool>(details.DialogId, false));
+                        });
+                        controller.PresentViewController(alertDialog, true, null);
                     });
-                    controller.PresentViewController(alertDialog, true, null);
                 }
                 else if (message.Command == "todo-yubi-key")
                 {
