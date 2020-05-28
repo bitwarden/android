@@ -181,8 +181,7 @@ namespace Bit.iOS
             };
             var backgroundView = new UIView(UIApplication.SharedApplication.KeyWindow.Frame)
             {
-                BackgroundColor = ((Color)Xamarin.Forms.Application.Current.Resources["SplashBackgroundColor"])
-                    .ToUIColor()
+                BackgroundColor = ThemeManager.GetResourceColor("SplashBackgroundColor").ToUIColor()
             };
             var logo = new UIImage(!ThemeManager.UsingLightTheme ? "logo_white.png" : "logo.png");
             var imageView = new UIImageView(logo)
