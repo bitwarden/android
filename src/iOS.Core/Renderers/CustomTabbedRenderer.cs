@@ -1,9 +1,9 @@
-﻿using Bit.iOS.Renderers;
+﻿using Bit.iOS.Core.Renderers;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
 [assembly: ExportRenderer(typeof(TabbedPage), typeof(CustomTabbedRenderer))]
-namespace Bit.iOS.Renderers
+namespace Bit.iOS.Core.Renderers
 {
     public class CustomTabbedRenderer : TabbedRenderer
     {

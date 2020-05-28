@@ -25,6 +25,7 @@ namespace Bit.App.Pages
         private bool _showPassword;
         private string _email;
         private string _masterPassword;
+        private bool _hideHintButton;
 
         public LoginPageViewModel()
         {
@@ -68,7 +69,14 @@ namespace Bit.App.Pages
         public bool RememberEmail { get; set; }
         public Action StartTwoFactorAction { get; set; }
         public Action LoggedInAction { get; set; }
+        public Action CloseAction { get; set; }
 
+        public bool HideHintButton
+        {
+            get => _hideHintButton;
+            set => SetProperty(ref _hideHintButton, value);
+        }
+        
         public async Task InitAsync()
         {
             if (string.IsNullOrWhiteSpace(Email))
@@ -89,20 +97,23 @@ namespace Bit.App.Pages
             }
             if (string.IsNullOrWhiteSpace(Email))
             {
-                await Page.DisplayAlert(AppResources.AnErrorHasOccurred,
+                await _platformUtilsService.ShowDialogAsync(
                     string.Format(AppResources.ValidationFieldRequired, AppResources.EmailAddress),
+                    AppResources.AnErrorHasOccurred,
                     AppResources.Ok);
                 return;
             }
             if (!Email.Contains("@"))
             {
-                await Page.DisplayAlert(AppResources.AnErrorHasOccurred, AppResources.InvalidEmail, AppResources.Ok);
+                await _platformUtilsService.ShowDialogAsync(AppResources.InvalidEmail, AppResources.AnErrorHasOccurred,
+                    AppResources.Ok);
                 return;
             }
             if (string.IsNullOrWhiteSpace(MasterPassword))
             {
-                await Page.DisplayAlert(AppResources.AnErrorHasOccurred,
+                await _platformUtilsService.ShowDialogAsync(
                     string.Format(AppResources.ValidationFieldRequired, AppResources.MasterPassword),
+                    AppResources.AnErrorHasOccurred,
                     AppResources.Ok);
                 return;
             }

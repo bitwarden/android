@@ -31,9 +31,9 @@ namespace Bit.App.Utilities
 
             // First two digits of returned hex code contains the alpha,
             // which is not supported in HTML color, so we need to cut those out.
-            var normalColor = $"<span style=\"color:#{((Color)Application.Current.Resources["TextColor"]).ToHex().Substring(3)}\">";
-            var numberColor = $"<span style=\"color:#{((Color)Application.Current.Resources["PasswordNumberColor"]).ToHex().Substring(3)}\">";
-            var specialColor = $"<span style=\"color:#{((Color)Application.Current.Resources["PasswordSpecialColor"]).ToHex().Substring(3)}\">";
+            var normalColor = $"<span style=\"color:#{ThemeManager.GetResourceColor("TextColor").ToHex().Substring(3)}\">";
+            var numberColor = $"<span style=\"color:#{ThemeManager.GetResourceColor("PasswordNumberColor").ToHex().Substring(3)}\">";
+            var specialColor = $"<span style=\"color:#{ThemeManager.GetResourceColor("PasswordSpecialColor").ToHex().Substring(3)}\">";
             var result = string.Empty;
 
             // iOS won't hide the zero-width space char without these div attrs, but Android won't respect

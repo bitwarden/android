@@ -1,4 +1,5 @@
-﻿using Foundation;
+﻿using Bit.App.Utilities;
+using Foundation;
 using System;
 using UIKit;
 using Xamarin.Forms;
@@ -19,8 +20,8 @@ namespace Bit.iOS.Core.Views
         {
             TranslatesAutoresizingMaskIntoConstraints = false;
             var bgColor = UIColor.DarkGray;
-            var nordTheme = Application.Current?.Resources != null &&
-                ((Color)Application.Current.Resources["BackgroundColor"]) == Color.FromHex("#3b4252");
+            var nordTheme = ThemeManager.Resources() != null &&
+                ThemeManager.GetResourceColor("BackgroundColor") == Color.FromHex("#3b4252");
             if (nordTheme)
             {
                 bgColor = Color.FromHex("#4c566a").ToUIColor();

@@ -30,6 +30,7 @@ namespace Bit.App.Pages
             _vm = BindingContext as TwoFactorPageViewModel;
             _vm.Page = this;
             _vm.TwoFactorAction = () => Device.BeginInvokeOnMainThread(async () => await TwoFactorAuthAsync());
+            _vm.CloseAction = async () => await Navigation.PopModalAsync();
             DuoWebView = _duoWebView;
             if (Device.RuntimePlatform == Device.Android)
             {
@@ -144,7 +145,7 @@ namespace Bit.App.Pages
         {
             if (DoOnce())
             {
-                await Navigation.PopModalAsync();
+                _vm.CloseAction();
             }
         }
 

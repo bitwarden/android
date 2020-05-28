@@ -7,6 +7,7 @@ using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
 using Bit.App.Controls;
+using Bit.App.Utilities;
 using Bit.Droid.Renderers;
 using FFImageLoading;
 using FFImageLoading.Views;
@@ -42,19 +43,15 @@ namespace Bit.Droid.Renderers
             }
             if (_textColor == default(Android.Graphics.Color))
             {
-                _textColor = ((Xamarin.Forms.Color)Xamarin.Forms.Application.Current.Resources["TextColor"])
-                    .ToAndroid();
+                _textColor = ThemeManager.GetResourceColor("TextColor").ToAndroid();
             }
             if (_mutedColor == default(Android.Graphics.Color))
             {
-                _mutedColor = ((Xamarin.Forms.Color)Xamarin.Forms.Application.Current.Resources["MutedColor"])
-                    .ToAndroid();
+                _mutedColor = ThemeManager.GetResourceColor("MutedColor").ToAndroid();
             }
             if (_disabledIconColor == default(Android.Graphics.Color))
             {
-                _disabledIconColor =
-                    ((Xamarin.Forms.Color)Xamarin.Forms.Application.Current.Resources["DisabledIconColor"])
-                    .ToAndroid();
+                _disabledIconColor = ThemeManager.GetResourceColor("DisabledIconColor").ToAndroid();
             }
 
             var cipherCell = item as CipherViewCell;

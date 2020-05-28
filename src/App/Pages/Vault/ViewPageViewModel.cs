@@ -172,7 +172,7 @@ namespace Bit.App.Pages
                 fs.Spans.Add(new Span
                 {
                     Text = string.Format(" {0}", Cipher.PasswordHistory.Count.ToString()),
-                    TextColor = (Color)Application.Current.Resources["PrimaryColor"]
+                    TextColor = ThemeManager.GetResourceColor("PrimaryColor")
                 });
                 return fs;
             }
@@ -207,7 +207,7 @@ namespace Bit.App.Pages
             set
             {
                 SetProperty(ref _totpLow, value);
-                Page.Resources["textTotp"] = Application.Current.Resources[value ? "text-danger" : "text-default"];
+                Page.Resources["textTotp"] =  ThemeManager.Resources()[value ? "text-danger" : "text-default"];
             }
         }
 

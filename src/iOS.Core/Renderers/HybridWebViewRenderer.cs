@@ -3,11 +3,11 @@ using WebKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 using Bit.App.Controls;
-using Bit.iOS.Renderers;
+using Bit.iOS.Core.Renderers;
 using System.ComponentModel;
 
 [assembly: ExportRenderer(typeof(HybridWebView), typeof(HybridWebViewRenderer))]
-namespace Bit.iOS.Renderers
+namespace Bit.iOS.Core.Renderers
 {
     public class HybridWebViewRenderer : ViewRenderer<HybridWebView, WKWebView>, IWKScriptMessageHandler
     {

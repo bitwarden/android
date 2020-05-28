@@ -1,11 +1,11 @@
-﻿using Bit.iOS.Renderers;
+﻿using Bit.iOS.Core.Renderers;
 using System.ComponentModel;
 using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
 [assembly: ExportRenderer(typeof(Editor), typeof(CustomEditorRenderer))]
-namespace Bit.iOS.Renderers
+namespace Bit.iOS.Core.Renderers
 {
     public class CustomEditorRenderer : EditorRenderer
     {
@@ -40,7 +40,7 @@ namespace Bit.iOS.Renderers
 
         private void UpdateKeyboardAppearance()
         {
-            if (!Core.Utilities.ThemeHelpers.LightTheme)
+            if (!Utilities.ThemeHelpers.LightTheme)
             {
                 Control.KeyboardAppearance = UIKeyboardAppearance.Dark;
             }

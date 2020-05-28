@@ -37,13 +37,17 @@ namespace Bit.App
         private readonly IStorageService _storageService;
         private readonly IStorageService _secureStorageService;
         private readonly IDeviceActionService _deviceActionService;
-        private readonly AppOptions _appOptions;
 
         private static bool _isResumed;
 
         public App(AppOptions appOptions)
         {
-            _appOptions = appOptions ?? new AppOptions();
+            Options = appOptions ?? new AppOptions();
+            if (Options.EmptyApp)
+            {
+                Current = this;
+                return;
+            }
             _userService = ServiceContainer.Resolve<IUserService>("userService");
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
@@ -139,12 +143,12 @@ namespace Bit.App
                             }
                             if (message.Command == "popAllAndGoToTabMyVault")
                             {
-                                _appOptions.MyVaultTile = false;
+                                Options.MyVaultTile = false;
                                 tabsPage.ResetToVaultPage();
                             }
                             else
                             {
-                                _appOptions.GeneratorTile = false;
+                                Options.GeneratorTile = false;
                                 tabsPage.ResetToGeneratorPage();
                             }
                         }
@@ -152,20 +156,22 @@ namespace Bit.App
                 }
             });
         }
-        
+
+        public AppOptions Options { get; private set; }
+
         // Workaround for https://github.com/xamarin/Xamarin.Forms/issues/7478
         // Fixed in last Xamarin.Forms 4.4.0.x - remove this hack after updating
         public static void WaitForResume()
         {
             var checkFrequencyInMillis = 100;
             var maxTimeInMillis = 5000;
-            
+
             var count = 0;
             while (!_isResumed)
             {
                 Task.Delay(checkFrequencyInMillis).Wait();
                 count += checkFrequencyInMillis;
-                
+
                 // don't let this run forever
                 if (count >= maxTimeInMillis)
                 {
@@ -180,7 +186,7 @@ namespace Bit.App
             await ClearCacheIfNeededAsync();
             await TryClearCiphersCacheAsync();
             Prime();
-            if (string.IsNullOrWhiteSpace(_appOptions.Uri))
+            if (string.IsNullOrWhiteSpace(Options.Uri))
             {
                 var updated = await AppHelpers.PerformUpdateTasksAsync(_syncService, _deviceActionService,
                     _storageService);
@@ -287,24 +293,24 @@ namespace Bit.App
             {
                 if (await _vaultTimeoutService.IsLockedAsync())
                 {
-                    Current.MainPage = new NavigationPage(new LockPage(_appOptions));
+                    Current.MainPage = new NavigationPage(new LockPage(Options));
                 }
-                else if (_appOptions.FromAutofillFramework && _appOptions.SaveType.HasValue)
+                else if (Options.FromAutofillFramework && Options.SaveType.HasValue)
                 {
-                    Current.MainPage = new NavigationPage(new AddEditPage(appOptions: _appOptions));
+                    Current.MainPage = new NavigationPage(new AddEditPage(appOptions: Options));
                 }
-                else if (_appOptions.Uri != null)
+                else if (Options.Uri != null)
                 {
-                    Current.MainPage = new NavigationPage(new AutofillCiphersPage(_appOptions));
+                    Current.MainPage = new NavigationPage(new AutofillCiphersPage(Options));
                 }
                 else
                 {
-                    Current.MainPage = new TabsPage(_appOptions);
+                    Current.MainPage = new TabsPage(Options);
                 }
             }
             else
             {
-                Current.MainPage = new HomePage(_appOptions);
+                Current.MainPage = new HomePage(Options);
             }
         }
 
@@ -355,14 +361,14 @@ namespace Bit.App
 
         private void SetTabsPageFromAutofill(bool isLocked)
         {
-            if (Device.RuntimePlatform == Device.Android && !string.IsNullOrWhiteSpace(_appOptions.Uri) &&
-                !_appOptions.FromAutofillFramework)
+            if (Device.RuntimePlatform == Device.Android && !string.IsNullOrWhiteSpace(Options.Uri) &&
+                !Options.FromAutofillFramework)
             {
                 Task.Run(() =>
                 {
                     Device.BeginInvokeOnMainThread(() =>
                     {
-                        _appOptions.Uri = null;
+                        Options.Uri = null;
                         if (isLocked)
                         {
                             Current.MainPage = new NavigationPage(new LockPage());
@@ -389,7 +395,7 @@ namespace Bit.App
         {
             InitializeComponent();
             SetCulture();
-            ThemeManager.SetTheme(Device.RuntimePlatform == Device.Android);
+            ThemeManager.SetTheme(Device.RuntimePlatform == Device.Android, Current.Resources);
             Current.MainPage = new HomePage();
             var mainPageTask = SetMainPageAsync();
             ServiceContainer.Resolve<MobilePlatformUtilsService>("platformUtilsService").Init();
@@ -467,7 +473,7 @@ namespace Bit.App
                 }
             }
             await _storageService.SaveAsync(Constants.PreviousPageKey, lastPageBeforeLock);
-            var lockPage = new LockPage(_appOptions, autoPromptFingerprint);
+            var lockPage = new LockPage(Options, autoPromptFingerprint);
             Device.BeginInvokeOnMainThread(() => Current.MainPage = new NavigationPage(lockPage));
         }
     }
