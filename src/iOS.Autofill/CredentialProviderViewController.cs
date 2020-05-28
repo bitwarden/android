@@ -289,7 +289,7 @@ namespace Bit.iOS.Autofill
             var loginPage = new LoginPage();
             var app = new App.App(new AppOptions { EmptyApp = true });
             ThemeManager.SetTheme(false, app.Resources);
-            ThemeManager.ApplyToPage(app.Resources, loginPage);
+            ThemeManager.ApplyResourcesToPage(loginPage);
             if (loginPage.BindingContext is LoginPageViewModel vm)
             {
                 vm.StartTwoFactorAction = LaunchTwoFactorFlow;
@@ -310,7 +310,7 @@ namespace Bit.iOS.Autofill
                 var twoFactorPage = new TwoFactorPage();
                 var app = new App.App(new AppOptions { EmptyApp = true });
                 ThemeManager.SetTheme(false, app.Resources);
-                ThemeManager.ApplyToPage(app.Resources, twoFactorPage);
+                ThemeManager.ApplyResourcesToPage(twoFactorPage);
                 if (twoFactorPage.BindingContext is TwoFactorPageViewModel vm)
                 {
                     vm.TwoFactorAction = DismissLockAndContinue;
