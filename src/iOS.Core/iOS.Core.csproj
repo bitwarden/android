@@ -88,6 +88,16 @@
     <Compile Include="Models\FillScript.cs" />
     <Compile Include="Models\PageDetails.cs" />
     <Compile Include="Models\PasswordGenerationOptions.cs" />
+    <Compile Include="Renderers\CustomButtonRenderer.cs" />
+    <Compile Include="Renderers\CustomContentPageRenderer.cs" />
+    <Compile Include="Renderers\CustomEditorRenderer.cs" />
+    <Compile Include="Renderers\CustomEntryRenderer.cs" />
+    <Compile Include="Renderers\CustomLabelRenderer.cs" />
+    <Compile Include="Renderers\CustomPickerRenderer.cs" />
+    <Compile Include="Renderers\CustomSearchBarRenderer.cs" />
+    <Compile Include="Renderers\CustomTabbedRenderer.cs" />
+    <Compile Include="Renderers\CustomViewCellRenderer.cs" />
+    <Compile Include="Renderers\HybridWebViewRenderer.cs" />
     <Compile Include="Services\DeviceActionService.cs" />
     <Compile Include="Utilities\ASHelpers.cs" />
     <Compile Include="Utilities\Dialogs.cs" />
@@ -97,6 +107,7 @@
     <Compile Include="Services\KeyChainStorageService.cs" />
     <Compile Include="Services\LocalizeService.cs" />
     <Compile Include="Utilities\iOSCoreHelpers.cs" />
+    <Compile Include="Utilities\iOSHelpers.cs" />
     <Compile Include="Utilities\ThemeHelpers.cs" />
     <Compile Include="Views\ExtensionSearchDelegate.cs" />
     <Compile Include="Views\ExtensionTableSource.cs" />

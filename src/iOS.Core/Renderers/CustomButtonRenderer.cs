@@ -1,19 +1,19 @@
 ﻿using System.ComponentModel;
-using Bit.iOS.Renderers;
-using Bit.iOS.Utilities;
+using Bit.iOS.Core.Renderers;
+using Bit.iOS.Core.Utilities;
 using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
-[assembly: ExportRenderer(typeof(Label), typeof(CustomLabelRenderer))]
-namespace Bit.iOS.Renderers
+[assembly: ExportRenderer(typeof(Button), typeof(CustomButtonRenderer))]
+namespace Bit.iOS.Core.Renderers
 {
-    public class CustomLabelRenderer : LabelRenderer
+    public class CustomButtonRenderer : ButtonRenderer
     {
-        protected override void OnElementChanged(ElementChangedEventArgs<Label> e)
+        protected override void OnElementChanged(ElementChangedEventArgs<Button> e)
         {
             base.OnElementChanged(e);
-            if (Control != null && e.NewElement is Label)
+            if (Control != null && e.NewElement is Button)
             {
                 UpdateFont();
             }
@@ -22,9 +22,7 @@ namespace Bit.iOS.Renderers
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             base.OnElementPropertyChanged(sender, e);
-            if (e.PropertyName == Label.FontProperty.PropertyName ||
-                e.PropertyName == Label.TextProperty.PropertyName ||
-                e.PropertyName == Label.FormattedTextProperty.PropertyName)
+            if (e.PropertyName == Button.FontProperty.PropertyName)
             {
                 UpdateFont();
             }
@@ -32,7 +30,7 @@ namespace Bit.iOS.Renderers
 
         private void UpdateFont()
         {
-            var pointSize = iOSHelpers.GetAccessibleFont<Label>(Element.FontSize);
+            var pointSize = iOSHelpers.GetAccessibleFont<Button>(Element.FontSize);
             if (pointSize != null)
             {
                 Control.Font = UIFont.FromDescriptor(Element.Font.ToUIFont().FontDescriptor, pointSize.Value);

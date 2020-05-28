@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel;
-using Bit.iOS.Renderers;
-using Bit.iOS.Utilities;
+using Bit.iOS.Core.Renderers;
+using Bit.iOS.Core.Utilities;
 using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
 [assembly: ExportRenderer(typeof(Entry), typeof(CustomEntryRenderer))]
-namespace Bit.iOS.Renderers
+namespace Bit.iOS.Core.Renderers
 {
     public class CustomEntryRenderer : EntryRenderer
     {
@@ -61,7 +61,7 @@ namespace Bit.iOS.Renderers
 
         private void UpdateKeyboardAppearance()
         {
-            if (!Core.Utilities.ThemeHelpers.LightTheme)
+            if (!ThemeHelpers.LightTheme)
             {
                 Control.KeyboardAppearance = UIKeyboardAppearance.Dark;
             }

@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Bit.iOS.Renderers;
+using Bit.iOS.Core.Renderers;
 using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
 [assembly: ExportRenderer(typeof(ContentPage), typeof(CustomContentPageRenderer))]
-namespace Bit.iOS.Renderers
+namespace Bit.iOS.Core.Renderers
 {
     public class CustomContentPageRenderer : PageRenderer
     {

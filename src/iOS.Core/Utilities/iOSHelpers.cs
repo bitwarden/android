@@ -2,7 +2,7 @@
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
-namespace Bit.iOS.Utilities
+namespace Bit.iOS.Core.Utilities
 {
     public static class iOSHelpers
     {
