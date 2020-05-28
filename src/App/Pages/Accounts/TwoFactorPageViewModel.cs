@@ -229,8 +229,8 @@ namespace Bit.App.Pages
             var supportedProviders = _authService.GetSupportedTwoFactorProviders();
             var options = supportedProviders.Select(p => p.Name).ToList();
             options.Add(AppResources.RecoveryCodeTitle);
-            var method = await Page.DisplayActionSheet(AppResources.TwoStepLoginOptions, AppResources.Cancel,
-                null, options.ToArray());
+            var method = await _deviceActionService.DisplayActionSheetAsync(AppResources.TwoStepLoginOptions,
+                AppResources.Cancel, null, options.ToArray());
             if (method == AppResources.RecoveryCodeTitle)
             {
                 _platformUtilsService.LaunchUri("https://help.bitwarden.com/article/lost-two-step-device/");
