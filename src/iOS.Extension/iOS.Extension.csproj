@@ -225,6 +225,9 @@
     <BundleResource Include="Resources\logo_white.png" />
     <BundleResource Include="Resources\logo_white%402x.png" />
     <BundleResource Include="Resources\logo_white%403x.png" />
+    <BundleResource Include="Resources\yubikey.png" />
+    <BundleResource Include="Resources\yubikey%403x.png" />
+    <BundleResource Include="Resources\yubikey%402x.png" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AppCenter.Crashes">

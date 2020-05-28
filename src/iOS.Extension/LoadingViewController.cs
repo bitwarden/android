@@ -13,6 +13,11 @@ using Bit.iOS.Core.Models;
 using Bit.Core.Utilities;
 using Bit.Core.Abstractions;
 using Bit.App.Abstractions;
+using CoreNFC;
+using Xamarin.Forms;
+using Bit.App.Pages;
+using Bit.App.Models;
+using Bit.App.Utilities;
 
 namespace Bit.iOS.Extension
 {
@@ -20,6 +25,8 @@ namespace Bit.iOS.Extension
     {
         private Context _context = new Context();
         private bool _initedAppCenter;
+        private NFCNdefReaderSession _nfcSession = null;
+        private Core.NFCReaderDelegate _nfcDelegate = null;
 
         public LoadingViewController(IntPtr handle)
             : base(handle)
@@ -59,21 +66,17 @@ namespace Bit.iOS.Extension
         public override void ViewDidAppear(bool animated)
         {
             base.ViewDidAppear(animated);
-            if (!IsAuthed())
-            {
-                var alert = Dialogs.CreateAlert(null, AppResources.MustLogInMainApp, AppResources.Ok, (a) =>
-                {
-                    CompleteRequest(null, null);
-                });
-                PresentViewController(alert, true, null);
-                return;
-            }
             if (_context.ProviderType == Constants.UTTypeAppExtensionSetup)
             {
                 PerformSegue("setupSegue", this);
                 return;
             }
-            if (IsLocked())
+            if (!IsAuthed())
+            {
+                LaunchLoginFlow();
+                return;
+            }
+            else if (IsLocked())
             {
                 PerformSegue("lockPasswordSegue", this);
             }
@@ -382,12 +385,16 @@ namespace Bit.iOS.Extension
 
         private void InitApp()
         {
+            // Init Xamarin Forms
+            Forms.Init();
+
             if (ServiceContainer.RegisteredServices.Count > 0)
             {
                 ServiceContainer.Reset();
             }
             iOSCoreHelpers.RegisterLocalServices();
             var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            var messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             ServiceContainer.Init(deviceActionService.DeviceUserAgent);
             if (!_initedAppCenter)
             {
@@ -396,6 +403,9 @@ namespace Bit.iOS.Extension
             }
             iOSCoreHelpers.Bootstrap();
             iOSCoreHelpers.AppearanceAdjustments(deviceActionService);
+            _nfcDelegate = new NFCReaderDelegate((success, message) =>
+                messagingService.Send("gotYubiKeyOTP", message));
+            iOSCoreHelpers.SubscribeBroadcastReceiver(this, _nfcSession, _nfcDelegate);
         }
 
         private bool IsLocked()
@@ -408,6 +418,45 @@ namespace Bit.iOS.Extension
         {
             var userService = ServiceContainer.Resolve<IUserService>("userService");
             return userService.IsAuthenticatedAsync().GetAwaiter().GetResult();
+        }
+
+        private void LaunchLoginFlow()
+        {
+            var loginPage = new LoginPage();
+            var app = new App.App(new AppOptions { EmptyApp = true });
+            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.ApplyResourcesToPage(loginPage);
+            if (loginPage.BindingContext is LoginPageViewModel vm)
+            {
+                vm.StartTwoFactorAction = () => DismissViewController(false, () => LaunchTwoFactorFlow());
+                vm.LoggedInAction = () => DismissLockAndContinue();
+                vm.CloseAction = () => CompleteRequest(null, null);
+                vm.HideHintButton = true;
+            }
+
+            var navigationPage = new NavigationPage(loginPage);
+            var loginController = navigationPage.CreateViewController();
+            loginController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
+            PresentViewController(loginController, true, null);
+        }
+
+        private void LaunchTwoFactorFlow()
+        {
+
+            var twoFactorPage = new TwoFactorPage();
+            var app = new App.App(new AppOptions { EmptyApp = true });
+            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.ApplyResourcesToPage(twoFactorPage);
+            if (twoFactorPage.BindingContext is TwoFactorPageViewModel vm)
+            {
+                vm.TwoFactorAction = () => DismissLockAndContinue();
+                vm.CloseAction = () => DismissViewController(false, () => LaunchLoginFlow());
+            }
+
+            var navigationPage = new NavigationPage(twoFactorPage);
+            var twoFactorController = navigationPage.CreateViewController();
+            twoFactorController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
+            PresentViewController(twoFactorController, true, null);
         }
     }
 }
