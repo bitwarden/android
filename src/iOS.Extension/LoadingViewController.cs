@@ -442,7 +442,6 @@ namespace Bit.iOS.Extension
 
         private void LaunchTwoFactorFlow()
         {
-
             var twoFactorPage = new TwoFactorPage();
             var app = new App.App(new AppOptions { EmptyApp = true });
             ThemeManager.SetTheme(false, app.Resources);
