@@ -11,8 +11,6 @@ using Bit.App.Pages;
 using UIKit;
 using Xamarin.Forms;
 using Bit.App.Utilities;
-using Bit.Core.Models.Domain;
-using Bit.App;
 using Bit.App.Models;
 
 namespace Bit.iOS.Autofill

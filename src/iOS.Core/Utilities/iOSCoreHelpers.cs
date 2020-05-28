@@ -87,24 +87,21 @@ namespace Bit.iOS.Core.Utilities
         {
             var broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             var messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
-            broadcasterService.Subscribe(nameof(controller), async (message) =>
+            broadcasterService.Subscribe(nameof(controller), (message) =>
             {
                 if (message.Command == "showDialog")
                 {
                     var details = message.Data as DialogDetails;
-                    var confirmed = true;
                     var confirmText = string.IsNullOrWhiteSpace(details.ConfirmText) ?
                         AppResources.Ok : details.ConfirmText;
-                    if (!string.IsNullOrWhiteSpace(details.CancelText))
-                    { 
-                        // TODO Implement dialog with cancel text / action within Dialogs.CreateAlert(...)
-                    }
-                    else
-                    { 
-                        var alertDialog = Dialogs.CreateAlert(details.Title, details.Text, confirmText);
-                        controller.PresentViewController(alertDialog, true, null);
-                    }
-                    messagingService.Send("showDialogResolve", new Tuple<int, bool>(details.DialogId, confirmed));
+                    var alertDialog = Dialogs.CreateAlert(details.Title, details.Text, confirmText, (c) =>
+                    {
+                        messagingService.Send("showDialogResolve", new Tuple<int, bool>(details.DialogId, true));
+                    }, !string.IsNullOrWhiteSpace(details.CancelText) ? details.CancelText : null, (c) =>
+                    {
+                        messagingService.Send("showDialogResolve", new Tuple<int, bool>(details.DialogId, false));
+                    });
+                    controller.PresentViewController(alertDialog, true, null);
                 }
                 else if (message.Command == "todo-yubi-key")
                 {

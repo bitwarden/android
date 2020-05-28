@@ -96,20 +96,23 @@ namespace Bit.App.Pages
             }
             if (string.IsNullOrWhiteSpace(Email))
             {
-                await Page.DisplayAlert(AppResources.AnErrorHasOccurred,
+                await _platformUtilsService.ShowDialogAsync(
                     string.Format(AppResources.ValidationFieldRequired, AppResources.EmailAddress),
+                    AppResources.AnErrorHasOccurred,
                     AppResources.Ok);
                 return;
             }
             if (!Email.Contains("@"))
             {
-                await Page.DisplayAlert(AppResources.AnErrorHasOccurred, AppResources.InvalidEmail, AppResources.Ok);
+                await _platformUtilsService.ShowDialogAsync(AppResources.InvalidEmail, AppResources.AnErrorHasOccurred,
+                    AppResources.Ok);
                 return;
             }
             if (string.IsNullOrWhiteSpace(MasterPassword))
             {
-                await Page.DisplayAlert(AppResources.AnErrorHasOccurred,
+                await _platformUtilsService.ShowDialogAsync(
                     string.Format(AppResources.ValidationFieldRequired, AppResources.MasterPassword),
+                    AppResources.AnErrorHasOccurred,
                     AppResources.Ok);
                 return;
             }
