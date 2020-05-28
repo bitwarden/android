@@ -18,5 +18,6 @@ namespace Bit.App.Models
         public string SaveCardExpMonth { get; set; }
         public string SaveCardExpYear { get; set; }
         public string SaveCardCode { get; set; }
+        public bool EmptyApp { get; set; }
     }
 }

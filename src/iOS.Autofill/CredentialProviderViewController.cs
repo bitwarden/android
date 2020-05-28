@@ -13,6 +13,7 @@ using Xamarin.Forms;
 using Bit.App.Utilities;
 using Bit.Core.Models.Domain;
 using Bit.App;
+using Bit.App.Models;
 
 namespace Bit.iOS.Autofill
 {
@@ -286,9 +287,9 @@ namespace Bit.iOS.Autofill
         private void LaunchLoginFlow()
         {
             var loginPage = new LoginPage();
-            var resources = new ResourceDictionary();
-            ThemeManager.SetTheme(false, resources);
-            ThemeManager.ApplyToPage(resources, loginPage);
+            var app = new App.App(new AppOptions { EmptyApp = true });
+            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.ApplyToPage(app.Resources, loginPage);
             if (loginPage.BindingContext is LoginPageViewModel vm)
             {
                 vm.StartTwoFactorAction = LaunchTwoFactorFlow;
@@ -307,9 +308,9 @@ namespace Bit.iOS.Autofill
             DismissViewController(false, () =>
             {
                 var twoFactorPage = new TwoFactorPage();
-                var resources = new ResourceDictionary();
-                ThemeManager.SetTheme(false, resources);
-                ThemeManager.ApplyToPage(resources, twoFactorPage);
+                var app = new App.App(new AppOptions { EmptyApp = true });
+                ThemeManager.SetTheme(false, app.Resources);
+                ThemeManager.ApplyToPage(app.Resources, twoFactorPage);
                 if (twoFactorPage.BindingContext is TwoFactorPageViewModel vm)
                 {
                     vm.TwoFactorAction = DismissLockAndContinue;
