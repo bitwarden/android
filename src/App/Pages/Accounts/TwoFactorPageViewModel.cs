@@ -90,6 +90,7 @@ namespace Bit.App.Pages
         }
         public Command SubmitCommand { get; }
         public Action TwoFactorAction { get; set; }
+        public Action CloseAction { get; set; }
 
         public void Init()
         {

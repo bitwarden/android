@@ -69,6 +69,7 @@ namespace Bit.App.Pages
         public bool RememberEmail { get; set; }
         public Action StartTwoFactorAction { get; set; }
         public Action LoggedInAction { get; set; }
+        public Action CloseAction { get; set; }
 
         public bool HideHintButton
         {

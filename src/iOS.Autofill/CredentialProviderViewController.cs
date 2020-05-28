@@ -296,8 +296,9 @@ namespace Bit.iOS.Autofill
             ThemeManager.ApplyResourcesToPage(loginPage);
             if (loginPage.BindingContext is LoginPageViewModel vm)
             {
-                vm.StartTwoFactorAction = LaunchTwoFactorFlow;
-                vm.LoggedInAction = DismissLockAndContinue;
+                vm.StartTwoFactorAction = () => DismissViewController(false, () => LaunchTwoFactorFlow());
+                vm.LoggedInAction = () => DismissLockAndContinue();
+                vm.CloseAction = () => CompleteRequest();
                 vm.HideHintButton = true;
             }
 
@@ -309,22 +310,21 @@ namespace Bit.iOS.Autofill
 
         private void LaunchTwoFactorFlow()
         {
-            DismissViewController(false, () =>
-            {
-                var twoFactorPage = new TwoFactorPage();
-                var app = new App.App(new AppOptions { EmptyApp = true });
-                ThemeManager.SetTheme(false, app.Resources);
-                ThemeManager.ApplyResourcesToPage(twoFactorPage);
-                if (twoFactorPage.BindingContext is TwoFactorPageViewModel vm)
-                {
-                    vm.TwoFactorAction = DismissLockAndContinue;
-                }
 
-                var navigationPage = new NavigationPage(twoFactorPage);
-                var twoFactorController = navigationPage.CreateViewController();
-                twoFactorController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-                PresentViewController(twoFactorController, true, null);
-            });
+            var twoFactorPage = new TwoFactorPage();
+            var app = new App.App(new AppOptions { EmptyApp = true });
+            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.ApplyResourcesToPage(twoFactorPage);
+            if (twoFactorPage.BindingContext is TwoFactorPageViewModel vm)
+            {
+                vm.TwoFactorAction = () => DismissLockAndContinue();
+                vm.CloseAction = () => DismissViewController(false, () => LaunchLoginFlow());
+            }
+
+            var navigationPage = new NavigationPage(twoFactorPage);
+            var twoFactorController = navigationPage.CreateViewController();
+            twoFactorController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
+            PresentViewController(twoFactorController, true, null);
         }
     }
 }
