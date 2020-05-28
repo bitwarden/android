@@ -46,6 +46,7 @@ namespace Bit.App
             _appOptions = appOptions ?? new AppOptions();
             if (_appOptions.EmptyApp)
             {
+                Current = this;
                 return;
             }
             _userService = ServiceContainer.Resolve<IUserService>("userService");

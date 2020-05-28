@@ -1,4 +1,5 @@
-﻿using Bit.App.Abstractions;
+﻿using System;
+using Bit.App.Abstractions;
 using Bit.App.Services;
 using Bit.App.Styles;
 using Bit.Core;
@@ -10,9 +11,12 @@ namespace Bit.App.Utilities
     public static class ThemeManager
     {
         public static bool UsingLightTheme = true;
+        public static Func<ResourceDictionary> Resources = () => null;
 
         public static void SetThemeStyle(string name, ResourceDictionary resources)
         {
+            Resources = () => resources;
+
             // Reset styles
             resources.Clear();
             resources.MergedDictionaries.Clear();
@@ -82,12 +86,17 @@ namespace Bit.App.Utilities
                 !android ? "group.com.8bit.bitwarden" : default(string));
         }
 
-        public static void ApplyToPage(ResourceDictionary resourceDictionary, ContentPage page)
+        public static void ApplyResourcesToPage(ContentPage page)
         {
-            foreach (var resourceDict in resourceDictionary.MergedDictionaries)
+            foreach (var resourceDict in Resources().MergedDictionaries)
             {
                 page.Resources.Add(resourceDict);
             }
+        }
+
+        public static Color GetResourceColor(string color)
+        {
+            return (Color)Resources()[color];
         }
     }
 }
