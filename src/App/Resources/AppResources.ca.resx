@@ -1131,6 +1131,9 @@
   <data name="NoItemsFolder" xml:space="preserve">
     <value>No hi ha elements en aquesta carpeta.</value>
   </data>
+  <data name="NoItemsTrash" xml:space="preserve">
+    <value>No hi ha elements a la paperera.</value>
+  </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
     <value>Ompli automàticament el servei d'accessibilitat</value>
   </data>
@@ -1624,5 +1627,51 @@
   </data>
   <data name="SaveAttachmentSuccess" xml:space="preserve">
     <value>L'adjunt s'ha guardat correctament</value>
+  </data>
+  <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
+    <value>Habiliteu "Servei d'accessibilitat d'emplenament automàtic" de la configuració de Bitwarden per utilitzar el mosaic d'emplenament automàtic.</value>
+  </data>
+  <data name="AutofillTileUriNotFound" xml:space="preserve">
+    <value>No s'han detectat camps de contrasenya</value>
+  </data>
+  <data name="SoftDeleting" xml:space="preserve">
+    <value>S'està enviant a la paperera...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemSoftDeleted" xml:space="preserve">
+    <value>L'element s'ha enviat a la paperera.</value>
+    <comment>Confirmation message after successfully soft-deleting a login</comment>
+  </data>
+  <data name="Restore" xml:space="preserve">
+    <value>Restaura</value>
+    <comment>Restores an entity (verb).</comment>
+  </data>
+  <data name="Restoring" xml:space="preserve">
+    <value>S'està restaurant...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemRestored" xml:space="preserve">
+    <value>L'element s'ha restaurat.</value>
+    <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
+  </data>
+  <data name="Trash" xml:space="preserve">
+    <value>Paperera</value>
+    <comment>(noun) Location of deleted items which have not yet been permanently deleted</comment>
+  </data>
+  <data name="SearchTrash" xml:space="preserve">
+    <value>Cerca a la paperera</value>
+    <comment>(action prompt) Label for the search text field when viewing the trash folder</comment>
+  </data>
+  <data name="DoYouReallyWantToPermanentlyDeleteCipher" xml:space="preserve">
+    <value>Esteu segur que voleu suprimir-ho definitivament? Això no es pot desfer.</value>
+    <comment>Confirmation alert message when permanently deleteing a cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToRestoreCipher" xml:space="preserve">
+    <value>Esteu segur que voleu restaurar aquest element?</value>
+    <comment>Confirmation alert message when restoring a soft-deleted cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToSoftDeleteCipher" xml:space="preserve">
+    <value>Esteu segur que voleu enviar-ho a la paperera?</value>
+    <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
 </root>

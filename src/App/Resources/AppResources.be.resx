@@ -458,35 +458,35 @@
     <value>Увядзіце адрас электроннай пошты ўліковага запісу для атрымання падказкі для пароля.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
-    <value>Re-enable App Extension</value>
+    <value>Паўторна ўключыць пашырэнне</value>
   </data>
   <data name="ExtensionAlmostDone" xml:space="preserve">
     <value>Амаль гатова!</value>
   </data>
   <data name="ExtensionEnable" xml:space="preserve">
-    <value>Enable App Extension</value>
+    <value>Уключыць пашырэнне</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
-    <value>In Safari, find Bitwarden using the share icon (hint: scroll to the right on the bottom row of the menu).</value>
+    <value>У Safari, праз значок 'Абагуліць' знайдзіце Bitwarden (пракруціце ўправа ў ніжнім радку меню).</value>
     <comment>Safari is the name of apple's web browser</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
-    <value>Get instant access to your passwords!</value>
+    <value>Атрымайце імгненны доступ да вашых пароляў!</value>
   </data>
   <data name="ExtensionReady" xml:space="preserve">
-    <value>You're ready to log in!</value>
+    <value>Усё гатова для ўваходу!</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
-    <value>Your logins are now easily accessible from Safari, Chrome, and other supported apps.</value>
+    <value>Цяпер вашыя імёны карыстальніка лёгка даступны з Safari, Chrome, і іншых праграм.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
-    <value>In Safari and Chrome, find Bitwarden using the share icon (hint: scroll to the right on the bottom row of the share menu).</value>
+    <value>У Safari і Chrome, праз значок 'Абагуліць' знайдзіце Bitwarden (пракруціце ўправа ў ніжнім радку меню).</value>
   </data>
   <data name="ExtensionTapIcon" xml:space="preserve">
-    <value>Tap the Bitwarden icon in the menu to launch the extension.</value>
+    <value>Націсніце на значок Bitwarden у меню, каб запусціць пашырэнне.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>To turn on Bitwarden in Safari and other apps, tap the "more" icon on the bottom row of the menu.</value>
+    <value>Каб уключыць Bitwarden у Safari і іншых праграмах, націсніце 'Яшчэ' у ніжнім радку меню.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
     <value>Абраны</value>
@@ -573,7 +573,7 @@
     <value>Дадатковыя налады</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>You must log into the main Bitwarden app before you can use the extension.</value>
+    <value>Перад выкарыстаннем пашырэння, вы павінны ўвайсці ў асноўную праграму Bitwarden.</value>
   </data>
   <data name="Never" xml:space="preserve">
     <value>Ніколі</value>
@@ -591,14 +591,14 @@
     <value>У вашым заданні няма элементаў для гэтага сайта/праграмы. Націсніце, каб дадаць.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
-    <value>This login does not have a username or password configured.</value>
+    <value>У гэтага лагіна адсутнічае імя карыстальніка ці пароль.</value>
   </data>
   <data name="OkGotIt" xml:space="preserve">
     <value>ОК, зразумела!</value>
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>Option defaults are set from the main Bitwarden app's password generator tool.</value>
+    <value>Налады па змаўчанні задаюцца з генератара пароляў асноўнай праграмы Bitwarden.</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>Параметры</value>
@@ -622,7 +622,7 @@
     <value>Вы ўпэўнены, што хочаце перазапісаць бягучы пароль?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>Bitwarden keeps your vault automatically synced by using push notifications. For the best possible experience, please select "Allow" on the following prompt when asked to enable push notifications.</value>
+    <value>Bitwarden забяспечвае аўтаматычную сінхранізацыю сховішча пры дапамозе push-апавяшчэнняў. Для вашай максімальнай зручнасці, выберыце "Дазволіць" пры з'яўленні прапановы ўключыць push-апавяшчэнні.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
@@ -659,7 +659,7 @@
     <value>Элемент абноўлены.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
-    <value>Submitting...</value>
+    <value>Адпраўка...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Syncing" xml:space="preserve">
@@ -712,7 +712,7 @@
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">
-    <value>Extension Activated!</value>
+    <value>Пашырэнне актывавана!</value>
   </data>
   <data name="Icons" xml:space="preserve">
     <value>Значкі</value>
@@ -729,19 +729,19 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
-    <value>When you select an input field and see a Bitwarden auto-fill overlay, you can tap it to launch the auto-fill service.</value>
+    <value>Калі пры выбары поля ўводу вы бачыце панэль аўтазапаўнення Bitwarden, вы можаце націснуць на яе, каб запусціць службу аўтазапаўнення.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
-    <value>Tap this notification to auto-fill an item from your vault.</value>
+    <value>Націсніце на гэта апавяшчэнне для аўтазапаўнення.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
-    <value>Open Accessibility Settings</value>
+    <value>Адкрыць налады спецыяльных магчымасцяў</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
-    <value>1. On the Android Accessibility Settings screen, touch "Bitwarden" under the Services heading.</value>
+    <value>1. На экране налад спецыяльных магчымасцяў Android пад загалоўкам 'Сэрвісы' націсніце 'Bitwarden'.</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
-    <value>2. Switch on the toggle and press OK to accept.</value>
+    <value>2. Актывуйце пераключальнік і націсніце OK для пацвярджэння.</value>
   </data>
   <data name="Disabled" xml:space="preserve">
     <value>Адключана</value>
@@ -753,34 +753,34 @@
     <value>Стан</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
+    <value>Самы просты спосаб дадаць новыя імёны карыстальінка ў ваша сховішча гэта служба аўтазапаўнення Bitwarden. Дадатковыя звесткі пра выкарыстанне службы аўтазапаўнення Bitwarden знаходзяцца ў раздзеле 'Налады'.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
-    <value>Auto-fill</value>
+    <value>Аўтазапаўненне</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
-    <value>Do you want to auto-fill or view this item?</value>
+    <value>Выканаць аўтазапаўненне ці праглядзець гэты элемент?</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>Are you sure you want to auto-fill this item? It is not a complete match for "{0}".</value>
+    <value>Вы ўпэўнены, што хочаце выкарыстоўваць гэты элемент? Гэта не дакладна адпавядае "{0}".</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
-    <value>Matching Items</value>
+    <value>Адпаведныя элементы</value>
   </data>
   <data name="PossibleMatchingItems" xml:space="preserve">
-    <value>Possible Matching Items</value>
+    <value>Магчымыя адпаведныя элементы</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Пошук</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
-    <value>You are searching for an auto-fill item for "{0}".</value>
+    <value>Вы шукаеце элемент аўтазапаўнення для "{0}".</value>
   </data>
   <data name="ShareVault" xml:space="preserve">
-    <value>Share Your Vault</value>
+    <value>Абагуліць ваша сховішча</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
-    <value>Cannot open the app "{0}".</value>
+    <value>Немагчыма адкрыць праграму "{0}".</value>
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
   </data>
   <data name="AuthenticatorAppTitle" xml:space="preserve">
@@ -800,7 +800,7 @@
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>This account has two-step login enabled, however, none of the configured two-step providers are supported on this device. Please use a supported device and/or add additional providers that are better supported across devices (such as an authenticator app).</value>
+    <value>Для гэтага ўліковага запісу ўключаны двухэтапны уваход, аднак ніводны з наладжаных варыянтаў уваходу не падтрымліваецца на гэтай прыладзе. Выкарыстоўвайце прыладу, якая падтрымліваецца і/або дадайце іншыя варыянты, якія падтрымліваюцца на большасці прылад (напрыклад, праграма для аўтэнтыфікацыі).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
     <value>Код аднаўлення</value>
@@ -821,7 +821,7 @@
     <value>Выкарыстоўваць іншы метад двухэтапнага ўваходу</value>
   </data>
   <data name="VerificationEmailNotSent" xml:space="preserve">
-    <value>Could not send verification email. Try again.</value>
+    <value>Не атрымалася адправіць ліст для пацвярджэння. Паспрабуйце зноў.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
@@ -829,7 +829,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
-    <value>To continue, hold your YubiKey NEO against the back of the device or insert your YubiKey into your device's USB port, then touch its button.</value>
+    <value>Для працягу прыкладзіце ваш YubiKey NEO да задняй панэлі прылады ці устаўце YubiKey ў USB-порт вашай прылады і націсніце на ім кнопку.</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
     <value>Ключ бяспекі YubiKey</value>
@@ -845,14 +845,14 @@
     <value>Немагчыма спампаваць файл.</value>
   </data>
   <data name="UnableToOpenFile" xml:space="preserve">
-    <value>Your device cannot open this type of file.</value>
+    <value>Прылада ня можа адкрыць гэты тып файла.</value>
   </data>
   <data name="Downloading" xml:space="preserve">
     <value>Спампоўванне...</value>
     <comment>Message shown when downloading a file</comment>
   </data>
   <data name="AttachmentLargeWarning" xml:space="preserve">
-    <value>This attachment is {0} in size. Are you sure you want to download it onto your device?</value>
+    <value>Гэтае улажэнне мае памер {0}. Вы сапраўды жадаеце спампаваць яго?</value>
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
   <data name="AuthenticatorKey" xml:space="preserve">
@@ -866,13 +866,13 @@
     <value>Ключ праверкі сапраўднасці дададзены.</value>
   </data>
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
-    <value>Cannot read authenticator key.</value>
+    <value>Немагчыма прачытаць ключ праверкі аутэнтычнасці.</value>
   </data>
   <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>Scanning will happen automatically.</value>
+    <value>Сканіраванне будзе адбывацца аўтаматычна.</value>
   </data>
   <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Point your camera at the QR code.</value>
+    <value>Навядзіце камеру на QR-код.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>Сканаваць QR -код</value>
@@ -887,7 +887,7 @@
     <value>Капіяваць TOTP</value>
   </data>
   <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>If your login has an authenticator key attached to it, the TOTP verification code is automatically copied to your clipboard whenever you auto-fill the login.</value>
+    <value>Калі да вашага імя карыстальніка прымацаваны ключ праверкі сапраўднасці, то код пацвярджэння TOTP будзе скапіяваны пры аўтазапаўненні імені карыстальніка.</value>
   </data>
   <data name="DisableAutoTotpCopy" xml:space="preserve">
     <value>Адключыць аўтаматычнае капіяванне TOTP</value>
@@ -1131,17 +1131,20 @@
   <data name="NoItemsFolder" xml:space="preserve">
     <value>Няма элементаў у гэтай папцы.</value>
   </data>
+  <data name="NoItemsTrash" xml:space="preserve">
+    <value>У сметніцы нічога няма.</value>
+  </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
     <value>Служба спецыяльных магчымасцяў аўтаўапаўнення</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>The Bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device.</value>
+    <value>Служба аўтазапаўнення Bitwarden карыстаецца Android Autofill Framework для запаўнення лагінаў, нумароў карт і асабістай інфармацыі ў другіх праграмах на вашай прыладзе.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Use the Bitwarden auto-fill service to fill logins, credit cards, and identity information into other apps.</value>
+    <value>Карыстайцеся службай аўтазапаўнення Bitwarden для запаўнення лагінаў, нумароў карт і асабістай інфармацыі ў другіх праграмах.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
-    <value>Open Autofill Settings</value>
+    <value>Адкрыць налады аўтазапаўнення</value>
   </data>
   <data name="FaceID" xml:space="preserve">
     <value>Face ID</value>
@@ -1154,16 +1157,16 @@
     <value>Выкарыстоўваць Face ID для разблакіроўкі</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
-    <value>Verify Face ID</value>
+    <value>Верыфікацыя Face ID</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
-    <value>We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings &gt; System &gt; Languages and input &gt; Advanced &gt; Autofill service.</value>
+    <value>Не атрымалася аўтаматычна адчыніць меню налад аўтазапаўнення Android. Вы можаце перайсці ў меню налад аўтазапаўнення з налад Android -> Сістэма -> Мова -> Мова і спосабы ўводу -> Дадатковыя налады -> Сэрвіс аўтазапаўнення.</value>
   </data>
   <data name="CustomFieldName" xml:space="preserve">
-    <value>Custom Field Name</value>
+    <value>Карыстальніцкае поле</value>
   </data>
   <data name="FieldTypeBoolean" xml:space="preserve">
     <value>Лагічнае</value>
@@ -1178,7 +1181,7 @@
     <value>Новае карыстальніцкае поле</value>
   </data>
   <data name="SelectTypeField" xml:space="preserve">
-    <value>What type of custom field do you want to add?</value>
+    <value>Які тып карыстальніцкага поля вы жадеце дадаць?</value>
   </data>
   <data name="Remove" xml:space="preserve">
     <value>Выдаліць</value>
@@ -1214,30 +1217,30 @@
     <value>Выяўленне супадзення URI</value>
   </data>
   <data name="MatchDetection" xml:space="preserve">
-    <value>Match Detection</value>
+    <value>Выяўленне супадзенняў</value>
     <comment>URI match detection for auto-fill.</comment>
   </data>
   <data name="YesAndSave" xml:space="preserve">
-    <value>Yes, and Save</value>
+    <value>Да, і захаваць</value>
   </data>
   <data name="AutofillAndSave" xml:space="preserve">
-    <value>Auto-fill and save</value>
+    <value>Запоўніць і захаваць</value>
   </data>
   <data name="Organization" xml:space="preserve">
-    <value>Organization</value>
+    <value>Арганізацыя</value>
     <comment>An entity of multiple related people (ex. a team or business organization).</comment>
   </data>
   <data name="HoldYubikeyNearTop" xml:space="preserve">
-    <value>Hold your Yubikey near the top of the device.</value>
+    <value>Трымайце YubiKey каля верху прылады.</value>
   </data>
   <data name="TryAgain" xml:space="preserve">
-    <value>Try again</value>
+    <value>Паспрабуйце зноў</value>
   </data>
   <data name="YubiKeyInstructionIos" xml:space="preserve">
-    <value>To continue, hold your YubiKey NEO against the back of the device.</value>
+    <value>Для працягу трымайце YubiKey NEO ля задняй панэлі вашай прылады.</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
-    <value>The accessibility service may be helpful to use when apps do not support the standard auto-fill service.</value>
+    <value>Служба спецыяльных магчымасцей может быць карыснай калі праграмы не падтрымліваюць стандартную службу аўтазапаўнення.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
     <value>Пароль абноўлены</value>
@@ -1248,43 +1251,43 @@
     <comment>ex. Date this item was updated</comment>
   </data>
   <data name="AutofillActivated" xml:space="preserve">
-    <value>AutoFill Activated!</value>
+    <value>Аўтазапаўненне актывіравана!</value>
   </data>
   <data name="MustLogInMainAppAutofill" xml:space="preserve">
-    <value>You must log into the main Bitwarden app before you can use AutoFill.</value>
+    <value>Перад выкарыстаннем аўтазапаўнення трэба ўвайсці ў асноўную праграму Bitwarden.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
-    <value>Your logins are now easily accessible right from your keyboard while logging into apps and websites.</value>
+    <value>Цяпер вашы лагіны лёгка даступныя з клавіятуры пры ўваходзе ў праграмы і на вэб-сайты.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
-    <value>We recommend disabling any other AutoFill apps under Settings if you do not plan to use them.</value>
+    <value>Рэкамендуецца адключыць другія праграмы аўтазапаўнення ў наладах, калі яны не выкарыстоўваюцца.</value>
   </data>
   <data name="BitwardenAutofillDescription" xml:space="preserve">
-    <value>Access your vault directly from your keyboard to quickly autofill passwords.</value>
+    <value>Атрымайце доступ да свайго сховішча з клавіятуры для хуткага аўтазапаўнення.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
-    <value>To enable password autofill on your device, follow these instructions:</value>
+    <value>Для ўключэння аўтазапаўнення паролей на прыладзе трэба выканаць наступныя дзеянні:</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
-    <value>1. Go to the iOS "Settings" app</value>
+    <value>1. Запусціце праграму iOS "Налады" ("Settings")</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Tap "Passwords &amp; Accounts"</value>
+    <value>2. Націсніце на "Паролі і аккаунты" ("Passwords &amp; Accounts")</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
-    <value>3. Tap "AutoFill Passwords"</value>
+    <value>3. Націсніце на "Аўтазапаўненне паролей" (AutoFill Passwords)</value>
   </data>
   <data name="AutofillTurnOn4" xml:space="preserve">
-    <value>4. Turn on AutoFill</value>
+    <value>4. Уключыце аўтазапаўненне ("AutoFill")</value>
   </data>
   <data name="AutofillTurnOn5" xml:space="preserve">
-    <value>5. Select "Bitwarden"</value>
+    <value>5. Выберыце "Bitwarden"</value>
   </data>
   <data name="PasswordAutofill" xml:space="preserve">
-    <value>Password AutoFill</value>
+    <value>Аўтазапаўненне паролей</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the "Settings" screen.</value>
+    <value>Самы просты спосаб дадаць новыя імёны карыстальніка ў ваша сховішча — гэта дадатак Bitwarden Password AutoFill. Дадатковыя звесткі аб выкарыстанні дадатку Bitwarden Password AutoFill у раздзеле "Налады".</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
     <value>Памылковы адрас электроннай пошты.</value>
@@ -1440,7 +1443,7 @@
     <value>Задайце PIN-код для разблакіроўкі Bitwarden. Налады PIN-кода будуць скінуты, калі вы калі-небудзь цалкам выйдзеце з праграмы.</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
-    <value>Logged in as {0} on {1}.</value>
+    <value>Вы ўвайшлі ў {0} як {1}.</value>
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
@@ -1514,32 +1517,32 @@
     <value>Вы сапраўды хочаце выйсці з Bitwarden?</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
-    <value>Do you want to require unlocking with your master password when the application is restarted?</value>
+    <value>Ці жадаеце каб пасля перазапуску праграма патрабавала майстар-пароль для разблакіроўкі?</value>
   </data>
   <data name="Black" xml:space="preserve">
     <value>Чорная</value>
     <comment>The color black</comment>
   </data>
   <data name="BlacklistedUris" xml:space="preserve">
-    <value>Blacklisted URIs</value>
+    <value>URI у чорным спісе</value>
   </data>
   <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>URIs that are blacklisted will not offer auto-fill. The list should be comma separated. Ex: "https://twitter.com, androidapp://com.twitter.android".</value>
+    <value>Аўтазапаўненне не прапануецца для URI з чорнага спісу. Элементы гэтага спісу павінны быць раздзелены коскай. Напрыклад: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
   <data name="DisableSavePrompt" xml:space="preserve">
-    <value>Disable Save Prompt</value>
+    <value>Выключыць запыт на захаванне.</value>
   </data>
   <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>The "Save Prompt" automatically prompts you to save new items to your vault whenever you enter them for the first time.</value>
+    <value>Апавяшчэнне аб захаванні аўтаматычна прапануе вам захаваць новыя элементы ў сховішчы пасля іх дадання.</value>
   </data>
   <data name="LockOptionOnRestart" xml:space="preserve">
     <value>Пры перазапуску</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>Auto-fill makes it easy to securely access your Bitwarden vault from other websites and apps. It looks like you have not enabled an auto-fill service for Bitwarden. Enable auto-fill for Bitwarden from the "Settings" screen.</value>
+    <value>Аўтазапаўненне спрашчае бяспечны доступ да вашага сховішча Bitwarden з другіх вэб-сайтаў і праграм. Здаецца, вы не уключылі службу аўтазапаўнення Bitwarden. Гэта можна зрабіць у наладах.</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
-    <value>Your theme changes will apply when the app is restarted.</value>
+    <value>Тэма будзе зменена пасля перазапуску праграмы.</value>
   </data>
   <data name="Capitalize" xml:space="preserve">
     <value>З вялікай літары</value>
@@ -1570,19 +1573,19 @@
     <value>Выкарыстоўваць біяметрычныя даныя для разблакіроўкі</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
-    <value>Bitwarden needs attention - See "Auto-fill Accessibility Service" from Bitwarden Settings</value>
+    <value>Bitwarden патрабуе вашай увагі - гл. раздзел 'Служба спецыяльных магчымасцей аўтазапаўнення' у наладах Bitwarden.</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
-    <value>3. On the Android App Settings screen for Bitwarden, go to the "Display over other apps" options (under Advanced) and tap the toggle to enable overlay support.</value>
+    <value>3. На экране налад праграм Android для Bitwarden адчыніце раздзел "Адлюстраваць паверх іншых праграм" ( раздзел "Дадатковыя налады") и цісніце пераключальнік, каб уключыць падтрымку накладання.</value>
   </data>
   <data name="OverlayPermission" xml:space="preserve">
-    <value>Permission</value>
+    <value>Дазвол</value>
   </data>
   <data name="BitwardenAutofillServiceOpenOverlayPermissionSettings" xml:space="preserve">
-    <value>Open Overlay Permission Settings</value>
+    <value>Адчыніць налады дазволу накладання</value>
   </data>
   <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
-    <value>3. On the Android App Settings screen for Bitwarden, select "Display over other apps" (under "Advanced") and switch on the toggle to allow the overlay.</value>
+    <value>3. На экране налад праграм Android для Bitwarden адчыніце раздзел "Адлюстраваць паверх іншых праграм" ( раздзел "Пашыраныя налады") и цісніце пераключальнік, каб уключыць падтрымку накладання.</value>
   </data>
   <data name="Denied" xml:space="preserve">
     <value>Адмоўлена</value>
@@ -1624,5 +1627,51 @@
   </data>
   <data name="SaveAttachmentSuccess" xml:space="preserve">
     <value>Далучэнне паспяхова захавана</value>
+  </data>
+  <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
+    <value>Калі ласка ўключыце службу аўтазапаўнення ў наладах Bitwarden каб карыстацца пліткай аўтазапаўнення.</value>
+  </data>
+  <data name="AutofillTileUriNotFound" xml:space="preserve">
+    <value>Палі для паролей не знойдзены</value>
+  </data>
+  <data name="SoftDeleting" xml:space="preserve">
+    <value>Адпраўляем у сметніцу...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemSoftDeleted" xml:space="preserve">
+    <value>Элемент быў адпраўлены ў сметніцу.</value>
+    <comment>Confirmation message after successfully soft-deleting a login</comment>
+  </data>
+  <data name="Restore" xml:space="preserve">
+    <value>Аднавіць</value>
+    <comment>Restores an entity (verb).</comment>
+  </data>
+  <data name="Restoring" xml:space="preserve">
+    <value>Аднаўленне...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemRestored" xml:space="preserve">
+    <value>Элемент быў адноўлены.</value>
+    <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
+  </data>
+  <data name="Trash" xml:space="preserve">
+    <value>Сметніца</value>
+    <comment>(noun) Location of deleted items which have not yet been permanently deleted</comment>
+  </data>
+  <data name="SearchTrash" xml:space="preserve">
+    <value>Пошук у сметніцы</value>
+    <comment>(action prompt) Label for the search text field when viewing the trash folder</comment>
+  </data>
+  <data name="DoYouReallyWantToPermanentlyDeleteCipher" xml:space="preserve">
+    <value>Вы сапраўды хочаце выдаліць? Гэтае дзеянне немагчыма адрабіць.</value>
+    <comment>Confirmation alert message when permanently deleteing a cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToRestoreCipher" xml:space="preserve">
+    <value>Вы сапраўды жадаеце аднавіць гэты запіс?</value>
+    <comment>Confirmation alert message when restoring a soft-deleted cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToSoftDeleteCipher" xml:space="preserve">
+    <value>Вы сапраўды хочаце адправіць элемент у сметніцу?</value>
+    <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
 </root>

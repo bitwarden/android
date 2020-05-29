@@ -729,7 +729,7 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
-    <value>When you select an input field and see a Bitwarden auto-fill overlay, you can tap it to launch the auto-fill service.</value>
+    <value>Kad odaberete polje za unos i vidite Bitwarden sloj automatskog popunjavanja, možete ga dodirnuti za pokretanje usluge automatskog ispunjavanja.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Dodirnite ovu obavijest da biste automatski ispunili prijavu iz svog trezora.</value>
@@ -1130,6 +1130,9 @@
   </data>
   <data name="NoItemsFolder" xml:space="preserve">
     <value>Nema stavki u ovoj mapi.</value>
+  </data>
+  <data name="NoItemsTrash" xml:space="preserve">
+    <value>There are no items in the trash.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
     <value>Usluga pristupačnosti za automatsko popunjavanje</value>
@@ -1564,65 +1567,111 @@
     <value>Upotrijebite biometrijske podatke za potvrdu.</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
-    <value>Biometrika</value>
+    <value>Biometrija</value>
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
     <value>Upotrijebite biometrijske podatke za otključavanje</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
-    <value>Bitwarden needs attention - See "Auto-fill Accessibility Service" from Bitwarden Settings</value>
+    <value>Bitwarden treba pažnju - Pogledajte "Usluga automatskog popunjavanja" u Bitwarden postavkama</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
-    <value>3. On the Android App Settings screen for Bitwarden, go to the "Display over other apps" options (under Advanced) and tap the toggle to enable overlay support.</value>
+    <value>3. Na zaslonu postavki Android aplikacije za Bitwarden idite na opcije "Prikaz preko drugih aplikacija" (pod Napredno) i dodirnite preklapanje kako biste omogućili podršku za preklapanje.</value>
   </data>
   <data name="OverlayPermission" xml:space="preserve">
-    <value>Permission</value>
+    <value>Dopuštenje</value>
   </data>
   <data name="BitwardenAutofillServiceOpenOverlayPermissionSettings" xml:space="preserve">
-    <value>Open Overlay Permission Settings</value>
+    <value>Otvorite postavke dopuštenja preklapanja</value>
   </data>
   <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
-    <value>3. On the Android App Settings screen for Bitwarden, select "Display over other apps" (under "Advanced") and switch on the toggle to allow the overlay.</value>
+    <value>3. Na zaslonu postavki Android aplikacije za Bitwarden odaberite "Prikaži preko drugih aplikacija" (pod "Napredno") i aktivirajte da biste omogućili preklapanje.</value>
   </data>
   <data name="Denied" xml:space="preserve">
-    <value>Denied</value>
+    <value>Odbijeno</value>
   </data>
   <data name="Granted" xml:space="preserve">
-    <value>Granted</value>
+    <value>Odobreno</value>
   </data>
   <data name="FileFormat" xml:space="preserve">
-    <value>File Format</value>
+    <value>Format datoteke</value>
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
-    <value>Enter your master password to export your vault data.</value>
+    <value>Unesite glavnu lozinku za izvoz podataka iz trezora.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
-    <value>This export contains your vault data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it.</value>
+    <value>Ovaj izvoz sadrži podatke trezora u nešifriranom obliku. Izvezenu datoteku ne bi trebali pohranjivati ili slati preko nesigurnih kanala (kao što je e-pošta). Izbrišite je odmah nakon završetka korištenja.</value>
   </data>
   <data name="Warning" xml:space="preserve">
-    <value>Warning</value>
+    <value>Upozorenje</value>
   </data>
   <data name="ExportVaultFailure" xml:space="preserve">
-    <value>There was a problem exporting your vault.  If the problem persists, you'll need to export from the web vault.</value>
+    <value>Dogodio se problem prilikom izvoza trezora. Ako se problem ponavlja molimo da trezor izvezete pomoću web trezora</value>
   </data>
   <data name="ExportVaultSuccess" xml:space="preserve">
-    <value>Vault exported successfully</value>
+    <value>Trezor uspješno izvezen</value>
   </data>
   <data name="Clone" xml:space="preserve">
-    <value>Clone</value>
+    <value>Kloniraj</value>
     <comment>Clone an entity (verb).</comment>
   </data>
   <data name="PasswordGeneratorPolicyInEffect" xml:space="preserve">
-    <value>One or more organization policies are affecting your generator settings</value>
+    <value>Jedna ili više politika organizacije utječu na postavke generatora</value>
   </data>
   <data name="Open" xml:space="preserve">
-    <value>Open</value>
+    <value>Otvori</value>
     <comment>Button text for an open operation (verb).</comment>
   </data>
   <data name="UnableToSaveAttachment" xml:space="preserve">
-    <value>There was a problem saving this attachment. If the problem persists, you can save it from the web vault.</value>
+    <value>Pojavio se problem prilikom pohranjivanja privitka. Ako se problem ponavlja privitak možete pohraniti pomoću web trezora</value>
   </data>
   <data name="SaveAttachmentSuccess" xml:space="preserve">
-    <value>Attachment saved successfully</value>
+    <value>Privitak uspješno pohranjen</value>
+  </data>
+  <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
+    <value>Please enable "Auto-fill Accessibility Service" from Bitwarden Settings to use the Auto-fill tile.</value>
+  </data>
+  <data name="AutofillTileUriNotFound" xml:space="preserve">
+    <value>No password fields detected</value>
+  </data>
+  <data name="SoftDeleting" xml:space="preserve">
+    <value>Sending to trash...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemSoftDeleted" xml:space="preserve">
+    <value>Item has been sent to trash.</value>
+    <comment>Confirmation message after successfully soft-deleting a login</comment>
+  </data>
+  <data name="Restore" xml:space="preserve">
+    <value>Restore</value>
+    <comment>Restores an entity (verb).</comment>
+  </data>
+  <data name="Restoring" xml:space="preserve">
+    <value>Restoring...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemRestored" xml:space="preserve">
+    <value>Item has been restored.</value>
+    <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
+  </data>
+  <data name="Trash" xml:space="preserve">
+    <value>Trash</value>
+    <comment>(noun) Location of deleted items which have not yet been permanently deleted</comment>
+  </data>
+  <data name="SearchTrash" xml:space="preserve">
+    <value>Search trash</value>
+    <comment>(action prompt) Label for the search text field when viewing the trash folder</comment>
+  </data>
+  <data name="DoYouReallyWantToPermanentlyDeleteCipher" xml:space="preserve">
+    <value>Do you really want to permanently delete? This cannot be undone.</value>
+    <comment>Confirmation alert message when permanently deleteing a cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToRestoreCipher" xml:space="preserve">
+    <value>Do you really want to restore this item?</value>
+    <comment>Confirmation alert message when restoring a soft-deleted cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToSoftDeleteCipher" xml:space="preserve">
+    <value>Do you really want to send to the trash?</value>
+    <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
 </root>

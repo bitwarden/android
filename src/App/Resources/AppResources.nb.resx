@@ -1131,6 +1131,9 @@
   <data name="NoItemsFolder" xml:space="preserve">
     <value>Det er ingen gjenstander i denne mappen.</value>
   </data>
+  <data name="NoItemsTrash" xml:space="preserve">
+    <value>Det er ingen elementer i papirkurven.</value>
+  </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
     <value>Auto-utfyllingstilgjengelighetstjeneste</value>
   </data>
@@ -1570,19 +1573,19 @@
     <value>Bruk biometri for å låse opp</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
-    <value>Bitwarden needs attention - See "Auto-fill Accessibility Service" from Bitwarden Settings</value>
+    <value>Bitwarden trenger oppmerksomhet: Se "Auto-utfyllingstjenester" fra Bitwarden-innstillinger</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
-    <value>3. On the Android App Settings screen for Bitwarden, go to the "Display over other apps" options (under Advanced) and tap the toggle to enable overlay support.</value>
+    <value>3. På Android App Innstillinger for Bitwarden, gå til "Vis over andre apper" alternativer (under avansert) og trykk på bryteren for å aktivere overleggstøtte.</value>
   </data>
   <data name="OverlayPermission" xml:space="preserve">
     <value>Tillatelse</value>
   </data>
   <data name="BitwardenAutofillServiceOpenOverlayPermissionSettings" xml:space="preserve">
-    <value>Open Overlay Permission Settings</value>
+    <value>Åpne innstillinger for overleggstillatelse</value>
   </data>
   <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
-    <value>3. On the Android App Settings screen for Bitwarden, select "Display over other apps" (under "Advanced") and switch on the toggle to allow the overlay.</value>
+    <value>3. På Android App Innstillinger for Bitwarden, velg "Vis over andre apper" (under "Avansert") og slå på bryteren for å tillate overlegg.</value>
   </data>
   <data name="Denied" xml:space="preserve">
     <value>Nektet</value>
@@ -1597,7 +1600,7 @@
     <value>Skriv inn ditt superpassordet for å eksportere dine hvelvdataer.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
-    <value>This export contains your vault data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it.</value>
+    <value>Denne eksporten inneholder hvelvdataene dine i et ukryptert format. Du skal ikke lagre eller sende den eksporterte filen over usikre kanaler (for eksempel e-post). Slett den umiddelbart etter at du er ferdig med å bruke den.</value>
   </data>
   <data name="Warning" xml:space="preserve">
     <value>Advarsel</value>
@@ -1624,5 +1627,51 @@
   </data>
   <data name="SaveAttachmentSuccess" xml:space="preserve">
     <value>Vedlegget ble lagret</value>
+  </data>
+  <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
+    <value>Aktiver "Auto-utfyllingstjenester" fra Bitwarden-innstillingene for å bruke auto-utfyllingsflisen.</value>
+  </data>
+  <data name="AutofillTileUriNotFound" xml:space="preserve">
+    <value>Ingen passordfelt oppdaget</value>
+  </data>
+  <data name="SoftDeleting" xml:space="preserve">
+    <value>Sender til papirkurv...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemSoftDeleted" xml:space="preserve">
+    <value>Varen ble sendt til papirkurven.</value>
+    <comment>Confirmation message after successfully soft-deleting a login</comment>
+  </data>
+  <data name="Restore" xml:space="preserve">
+    <value>Gjenopprett</value>
+    <comment>Restores an entity (verb).</comment>
+  </data>
+  <data name="Restoring" xml:space="preserve">
+    <value>Gjenoppretter...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemRestored" xml:space="preserve">
+    <value>Varen har blitt gjenopprettet.</value>
+    <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
+  </data>
+  <data name="Trash" xml:space="preserve">
+    <value>Papirkurv</value>
+    <comment>(noun) Location of deleted items which have not yet been permanently deleted</comment>
+  </data>
+  <data name="SearchTrash" xml:space="preserve">
+    <value>Søk i papirkurven</value>
+    <comment>(action prompt) Label for the search text field when viewing the trash folder</comment>
+  </data>
+  <data name="DoYouReallyWantToPermanentlyDeleteCipher" xml:space="preserve">
+    <value>Vil du virkelig slette denne permanent? Dette kan ikke angres.</value>
+    <comment>Confirmation alert message when permanently deleteing a cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToRestoreCipher" xml:space="preserve">
+    <value>Vil du virkelig gjenopprette denne gjenstanden?</value>
+    <comment>Confirmation alert message when restoring a soft-deleted cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToSoftDeleteCipher" xml:space="preserve">
+    <value>Vil du virkelig sende til papirkurven?</value>
+    <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
 </root>

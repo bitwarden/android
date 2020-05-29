@@ -15,6 +15,7 @@ namespace Bit.App.Pages
         public CipherType? Type { get; set; }
         public string ItemCount { get; set; }
         public bool FuzzyAutofill { get; set; }
+        public bool IsTrash { get; set; }
 
         public string Name
         {
@@ -24,7 +25,11 @@ namespace Bit.App.Pages
                 {
                     return _name;
                 }
-                if (Folder != null)
+                if (IsTrash)
+                {
+                    _name = AppResources.Trash;
+                }
+                else if (Folder != null)
                 {
                     _name = Folder.Name;
                 }
@@ -64,7 +69,11 @@ namespace Bit.App.Pages
                 {
                     return _icon;
                 }
-                if (Folder != null)
+                if (IsTrash)
+                {
+                    _icon = "\uf014"; // fa-trash-o
+                }
+                else if (Folder != null)
                 {
                     _icon = Folder.Id == null ? "" : "";
                 }

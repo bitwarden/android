@@ -300,7 +300,7 @@
     <comment>Label for notes.</comment>
   </data>
   <data name="Ok" xml:space="preserve">
-    <value>Αποδοχή</value>
+    <value>Οκ</value>
     <comment>Acknowledgement.</comment>
   </data>
   <data name="Password" xml:space="preserve">
@@ -320,7 +320,7 @@
     <comment>The title for the settings page.</comment>
   </data>
   <data name="Show" xml:space="preserve">
-    <value>Προβολή</value>
+    <value>Εμφάνιση</value>
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
@@ -346,7 +346,7 @@
     <comment>Label for a uri/url.</comment>
   </data>
   <data name="UseFingerprintToUnlock" xml:space="preserve">
-    <value>Χρήση δακτυλικού αποτυπώματος</value>
+    <value>Χρήση δακτυλικού αποτυπώματος για ξεκλείδωμα</value>
   </data>
   <data name="Username" xml:space="preserve">
     <value>Όνομα χρήστη</value>
@@ -361,10 +361,10 @@
     <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
-    <value>Επαλήθευση δακτυλικού αποτυπώματος</value>
+    <value>Επαλήθευση Δακτυλικού Αποτυπώματος</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
-    <value>Επαλήθευση κύριου κωδικού</value>
+    <value>Επαλήθευση Κύριου Κωδικού</value>
   </data>
   <data name="VerifyPIN" xml:space="preserve">
     <value>Επαλήθευση PIN</value>
@@ -379,7 +379,7 @@
     <value>Επισκεφθείτε την ιστοσελίδα μας</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Επισκεφτείτε την ιστοσελίδα μας για να λάβετε βοήθεια, νέα, να μας στείλετε email ή να μάθετε περισσότερα σχετικά με τον τρόπο χρήσης του Bitwarden.</value>
+    <value>Επισκευθείτε την ιστοσελίδα μας για να λάβετε βοήθεια, νέα, να μας στείλετε email ή να μάθετε περισσότερα σχετικά με τον τρόπο χρήσης του Bitwarden.</value>
   </data>
   <data name="Website" xml:space="preserve">
     <value>Ιστοσελίδα</value>
@@ -392,37 +392,37 @@
     <value>Λογαριασμός</value>
   </data>
   <data name="AccountCreated" xml:space="preserve">
-    <value>Ο λογαριασμός δημιουργήθηκε! Τώρα μπορείτε να συνδεθείτε.</value>
+    <value>Ο λογαριασμός σας έχει δημιουργηθεί! Τώρα μπορείτε να συνδεθείτε.</value>
   </data>
   <data name="AddAnItem" xml:space="preserve">
     <value>Προσθήκη στοιχείου</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
-    <value>Επέκταση εφαρμογής</value>
+    <value>Επέκταση Εφαρμογής</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Χρήση υπηρεσίας προσβασιμότητας Bitwarden για αυτόματη συμπλήρωση συνδέσεων σε εφαρμογές και διαδίκτυο.</value>
+    <value>Χρησιμοποιείστε την υπηρεσία προσβασιμότητας Bitwarden, για την αυτόματη συμπλήρωση συνδέσεων σε εφαρμογές και στο διαδίκτυο.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
-    <value>Υπηρεσία αυτόματης συμπλήρωσης</value>
+    <value>Υπηρεσία Αυτόματης Συμπλήρωσης</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
-    <value>Αποφυγή αμφιλεγόμενων χαρακτήρων</value>
+    <value>Αποφυγή Αμφιλεγόμενων Χαρακτήρων</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>Επέκταση εφαρμογής Bitwarden</value>
+    <value>Επέκταση Εφαρμογής Bitwarden</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
-    <value>Ο ευκολότερος τρόπος για να προσθήκη νέων συνδέσεων στη λίστα σας είναι μέσω επέκτασης εφαρμογής Bitwarden. Μάθετε περισσότερα σχετικά με τη χρήση της επέκτασης μεταβαίνοντας στις "Ρυθμίσεις".</value>
+    <value>Ο ευκολότερος τρόπος για να προσθέστε νέες συνδέσεις στο vault σας, είναι μέσω της επέκτασης εφαρμογής Bitwarden. Μάθετε περισσότερα σχετικά με τη χρήση της επέκτασης, μεταβαίνοντας στις "Ρυθμίσεις".</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
     <value>Χρήση του Bitwarden στο Safari και σε άλλες εφαρμογές για αυτόματη συμπλήρωση των συνδέσεων σας.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>Υπηρεσία αυτόματης συμπλήρωσης Bitwarden</value>
+    <value>Υπηρεσία Αυτόματης Συμπλήρωσης Bitwarden</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Χρήση υπηρεσίας προσβασιμότητας Bitwarden για αυτόματη συμπλήρωση συνδέσεων.</value>
+    <value>Χρησιμοποιείστε την υπηρεσία προσβασιμότητας Bitwarden, για την αυτόματη συμπλήρωση συνδέσεων.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Αλλαγή Email</value>
@@ -431,7 +431,7 @@
     <value>Μπορείτε να αλλάξετε τη διεύθυνση του email σας στο bitwarden.com. Θέλετε να επισκεφθείτε την ιστοσελίδα τώρα;</value>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
-    <value>Αλλαγή κύριου κωδικού</value>
+    <value>Αλλαγή Κύριου Κωδικού</value>
   </data>
   <data name="ChangePasswordConfirmation" xml:space="preserve">
     <value>Μπορείτε να αλλάξετε τον κύριο κωδικό στο bitwarden.com. Θέλετε να επισκεφθείτε την ιστοσελίδα τώρα;</value>
@@ -443,23 +443,23 @@
     <value>Συνέχεια</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
-    <value>Δημιουργία λογαριασμού</value>
+    <value>Δημιουργία Λογαριασμού</value>
   </data>
   <data name="CreatingAccount" xml:space="preserve">
     <value>Δημιουργία λογαριασμού...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="EditItem" xml:space="preserve">
-    <value>Επεξεργασία στοιχείου</value>
+    <value>Επεξεργασία Στοιχείου</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
-    <value>Αυτόματος συγχρονισμός</value>
+    <value>Ενεργοποίηση Αυτόματου Συγχρονισμού</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
-    <value>Εισαγωγή διεύθυνσης email του λογαριασμού σας για να λάβετε υπόδειξη του κύριου κωδικού.</value>
+    <value>Εισάγετε την διεύθυνση email του λογαριασμού σας, προκειμένου για να λάβετε υπόδειξη του κύριου κωδικού.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
-    <value>Εκ νέου ενεργοποίηση επέκτασης εφαρμογής</value>
+    <value>Ενεργοποιείστε εκ νέου την Επέκτασης Εφαρμογής</value>
   </data>
   <data name="ExtensionAlmostDone" xml:space="preserve">
     <value>Σχεδόν ολοκληρώθηκε!</value>
@@ -620,26 +620,26 @@
     <value>Σας στείλαμε ένα email με υπόδειξη του κύριου κωδικού.</value>
   </data>
   <data name="PasswordOverrideAlert" xml:space="preserve">
-    <value>Είστε βέβαιοι ότι θέλετε να αντικαταστήσετε τον τρέχοντα κωδικό;</value>
+    <value>Είστε βέβαιοι ότι θέλετε να αντικαταστήσετε τον τρέχον κωδικό;</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>Το Bitwarden κρατάει αυτόματα τη λίστα σας με τη χρήση ειδοποιήσεων push. Για την καλύτερη δυνατή εμπειρία, επιλέξτε "Να επιτρέπεται" στην παρακάτω ερώτηση, όταν σας ζητείται να ενεργοποιήσετε τις ειδοποιήσεις push.</value>
+    <value>Το Bitwarden κρατάει αυτόματα το vault σας, με τη χρήση ειδοποιήσεων push. Για την καλύτερη δυνατή εμπειρία, επιλέξτε "Να επιτρέπεται" στην παρακάτω ερώτηση, όταν σας ζητηθεί να ενεργοποιήσετε τις ειδοποιήσεις push.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
-    <value>Αξιολόγηση εφαρμογής</value>
+    <value>Αξιολογήστε την Εφαρμογή</value>
   </data>
   <data name="RateTheAppDescription" xml:space="preserve">
-    <value>Παρακαλούμε να μας βοηθήσετε με μια καλή κριτική!</value>
+    <value>Παρακαλούμε σκεφτείτε να μας βοηθήσετε με μια καλή κριτική!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
-    <value>Επαναδημιουργία κωδικού</value>
+    <value>Επαναδημιουργία Κωδικού</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
-    <value>Επαλήθευση κύριου κωδικού</value>
+    <value>Εισάγετε Ξανά τον Κύριο Κωδικό</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
-    <value>Αναζήτηση στη λίστα</value>
+    <value>Αναζήτηση στο vault</value>
   </data>
   <data name="Security" xml:space="preserve">
     <value>Ασφάλεια</value>
@@ -654,7 +654,7 @@
     <value>Εισαγωγή τετραψήφιου αριθμού PIN για ξεκλείδωμα εφαρμογής.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
-    <value>Πληροφορίες στοιχείου</value>
+    <value>Πληροφορίες Στοιχείου</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
     <value>Το στοιχείο ενημερώθηκε.</value>
@@ -674,17 +674,17 @@
     <value>Ο συγχρονισμός απέτυχε.</value>
   </data>
   <data name="SyncVaultNow" xml:space="preserve">
-    <value>Συγχρονισμός λίστας</value>
+    <value>Συγχρονισμός Vault Τώρα</value>
   </data>
   <data name="TouchID" xml:space="preserve">
-    <value>Αναγνωριστικό ID</value>
+    <value>Touch ID</value>
     <comment>What Apple calls their fingerprint reader.</comment>
   </data>
   <data name="TwoStepLogin" xml:space="preserve">
     <value>Σύνδεση σε δύο βήματα</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Η σύνδεση σε δύο βήματα καθιστά ασφαλέστερο τον λογαριασμό σας, απαιτώντας να επαληθεύσετε τα στοιχεία σας με μια άλλη συσκευή, όπως κλειδί ασφαλείας, εφαρμογή επαλήθευσης, μηνύματα, τηλεφωνική κλήση ή email. Μπορείτε να ενεργοποιήσετε τη σύνδεση σε δύο βήματα στο bitwarden.com. Θέλετε να επισκεφθείτε την ιστοσελίδα τώρα;</value>
+    <value>Η σύνδεση σε δύο βήματα καθιστά πιο ασφαλή τον λογαριασμό σας, απαιτώντας να επαληθεύσετε τα στοιχεία σας με μια άλλη συσκευή, όπως κλειδί ασφαλείας, εφαρμογή επαλήθευσης, μήνυμα SMS, τηλεφωνική κλήση ή email. Μπορείτε να ενεργοποιήσετε τη σύνδεση σε δύο βήματα στο bitwarden.com. Θέλετε να επισκεφθείτε την ιστοσελίδα τώρα;</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Ξεκλείδωμα με {0}</value>
@@ -697,13 +697,13 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="VerificationCode" xml:space="preserve">
-    <value>Κωδικός επαλήθευσης</value>
+    <value>Κωδικός Επαλήθευσης</value>
   </data>
   <data name="ViewItem" xml:space="preserve">
-    <value>Προβολή στοιχείου</value>
+    <value>Προβολή Στοιχείου</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>Λίστα ιστοσελίδας Bitwarden</value>
+    <value>Bitwarden Web Vault</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Χάσατε την εφαρμογή επαλήθευσης;</value>
@@ -713,7 +713,7 @@
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">
-    <value>Η επέκταση ενεργοποιήθηκε!</value>
+    <value>Η Επέκταση Ενεργοποιήθηκε!</value>
   </data>
   <data name="Icons" xml:space="preserve">
     <value>Εικονίδια</value>
@@ -733,28 +733,28 @@
     <value>Όταν επιλέξετε ένα πεδίο εισαγωγής και δείτε μια επικάλυψη αυτόματης συμπλήρωσης Bitwarden, μπορείτε να πατήσετε για να ξεκινήσει η υπηρεσία αυτόματης συμπλήρωσης.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
-    <value>Πατήστε στην ειδοποίηση για να συμπληρώσετε αυτόματα ένα στοιχείο από τη λίστα σας.</value>
+    <value>Πατήστε στην ειδοποίηση για να συμπληρώσετε αυτόματα ένα στοιχείο από το vault σας.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
-    <value>Άνοιγμα ρυθμίσεων προσβασιμότητας</value>
+    <value>Άνοιγμα των Ρυθμίσεων Προσβασιμότητας</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
     <value>Στις Ρυθμίσεις προσβασιμότητας, πατήστε "Bitwarden" στην επικεφαλίδα Υπηρεσίες.</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
-    <value>Ενεργοποίηση εναλλαγής και πατήστε αποδοχή.</value>
+    <value>Ενεργοποιείστε την εναλλαγή και πατήστε αποδοχή.</value>
   </data>
   <data name="Disabled" xml:space="preserve">
-    <value>Ανενεργό</value>
+    <value>Απενεργοποιημένο</value>
   </data>
   <data name="Enabled" xml:space="preserve">
-    <value>Ενεργό</value>
+    <value>Ενεργοποιημένο</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>Κατάσταση</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
-    <value>Ο ευκολότερος τρόπος για να προσθέσετε νέες συνδέσεις στη λίστα σας είναι από την υπηρεσία αυτόματης συμπλήρωσης Bitwarden. Μάθετε περισσότερα σχετικά με τη χρήση της υπηρεσίας αυτόματης συμπλήρωσης μεταβαίνοντας στις "Ρυθμίσεις".</value>
+    <value>Ο ευκολότερος τρόπος για να προσθέσετε νέες συνδέσεις στο vault σας, είναι με την υπηρεσία αυτόματης συμπλήρωσης του Bitwarden. Μάθετε περισσότερα σχετικά με τη χρήση της, μεταβαίνοντας στις "Ρυθμίσεις".</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Αυτόματη συμπλήρωση</value>
@@ -766,10 +766,10 @@
     <value>Είστε βέβαιοι για την αυτόματη συμπλήρωση αυτού του στοιχείου; Δεν υπάρχει πλήρης αντιστοιχία για "{0}".</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
-    <value>Αντιστοίχιση στοιχείων</value>
+    <value>Αντιστοίχιση Στοιχείων</value>
   </data>
   <data name="PossibleMatchingItems" xml:space="preserve">
-    <value>Πιθανά στοιχεία αντιστοίχισης</value>
+    <value>Πιθανά Στοιχεία Αντιστοίχισης</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Αναζήτηση</value>
@@ -946,38 +946,38 @@
     <comment>Validation error when something is not formatted correctly, such as a URL or email address.</comment>
   </data>
   <data name="IdentityUrl" xml:space="preserve">
-    <value>URL ταυτότητας διακομιστή</value>
+    <value>URL Ταυτότητας Διακομιστή</value>
     <comment>"Identity" refers to an identity server. See more context here https://en.wikipedia.org/wiki/Identity_management</comment>
   </data>
   <data name="SelfHostedEnvironment" xml:space="preserve">
-    <value>Αυτο-φιλοξενούμενο περιβάλλον</value>
+    <value>Αυτο-Φιλοξενούμενο Περιβάλλον</value>
   </data>
   <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
     <value>Καθορίστε το URL εγκατάστασης Bitwarden.</value>
   </data>
   <data name="ServerUrl" xml:space="preserve">
-    <value>URL διακομιστή</value>
+    <value>URL Διακομιστή</value>
   </data>
   <data name="WebVaultUrl" xml:space="preserve">
-    <value>URL διακομιστή διαδικτυακή λίστας</value>
+    <value>URL Διακομιστή Web Vault</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
     <value>Πατήστε στην ειδοποίηση για να συμπληρώσετε αυτόματα ένα στοιχείο από τη λίστα σας.</value>
   </data>
   <data name="CustomFields" xml:space="preserve">
-    <value>Προσαρμοσμένα πεδία</value>
+    <value>Προσαρμοσμένα Πεδία</value>
   </data>
   <data name="CopyNumber" xml:space="preserve">
-    <value>Αντιγραφή αριθμού</value>
+    <value>Αντιγραφή Αριθμού</value>
   </data>
   <data name="CopySecurityCode" xml:space="preserve">
-    <value>Αντιγραφή κωδικού ασφαλείας</value>
+    <value>Αντιγραφή Κωδικού Ασφαλείας</value>
   </data>
   <data name="Number" xml:space="preserve">
     <value>Αριθμός</value>
   </data>
   <data name="SecurityCode" xml:space="preserve">
-    <value>Κωδικός ασφαλείας</value>
+    <value>Κωδικός Ασφαλείας</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
     <value>Κάρτα</value>
@@ -989,7 +989,7 @@
     <value>Σύνδεση</value>
   </data>
   <data name="TypeSecureNote" xml:space="preserve">
-    <value>Σημείωση</value>
+    <value>Ασφαλής Σημείωση</value>
   </data>
   <data name="Address1" xml:space="preserve">
     <value>Διεύθυνση 1</value>
@@ -1010,7 +1010,7 @@
     <value>Επωνυμία κάρτας</value>
   </data>
   <data name="CardholderName" xml:space="preserve">
-    <value>Όνομα κατόχου</value>
+    <value>Όνομα κατόχου της κάρτας</value>
   </data>
   <data name="CityTown" xml:space="preserve">
     <value>Πόλη / Κωμόπολη</value>
@@ -1028,10 +1028,10 @@
     <value>Dr</value>
   </data>
   <data name="ExpirationMonth" xml:space="preserve">
-    <value>Μήνας λήξης</value>
+    <value>Μήνας Λήξης</value>
   </data>
   <data name="ExpirationYear" xml:space="preserve">
-    <value>Έτος λήξης</value>
+    <value>Έτος Λήξης</value>
   </data>
   <data name="February" xml:space="preserve">
     <value>Φεβρουάριος</value>
@@ -1052,7 +1052,7 @@
     <value>Επίθετο</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
-    <value>Αριθμός άδειας</value>
+    <value>Αριθμός Άδειας</value>
   </data>
   <data name="March" xml:space="preserve">
     <value>Μάρτιος</value>
@@ -1061,7 +1061,7 @@
     <value>Μάιος</value>
   </data>
   <data name="MiddleName" xml:space="preserve">
-    <value>Μεσαίο όνομα</value>
+    <value>Μεσαίο Όνομα</value>
   </data>
   <data name="Mr" xml:space="preserve">
     <value>Κος</value>
@@ -1079,7 +1079,7 @@
     <value>Οκτώβριος</value>
   </data>
   <data name="PassportNumber" xml:space="preserve">
-    <value>Αριθμός διαβατηρίου</value>
+    <value>Αριθμός Διαβατηρίου</value>
   </data>
   <data name="Phone" xml:space="preserve">
     <value>Τηλέφωνο</value>
@@ -1121,7 +1121,7 @@
     <value>Το Vault είναι κλειδωμένο</value>
   </data>
   <data name="GoToMyVault" xml:space="preserve">
-    <value>Μετάβαση στη λίστα μου</value>
+    <value>Μετάβαση στο vault μου</value>
   </data>
   <data name="Collections" xml:space="preserve">
     <value>Συλλογές</value>
@@ -1132,30 +1132,33 @@
   <data name="NoItemsFolder" xml:space="preserve">
     <value>Δεν υπάρχουν στοιχεία σε αυτόν τον φάκελο.</value>
   </data>
+  <data name="NoItemsTrash" xml:space="preserve">
+    <value>There are no items in the trash.</value>
+  </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
     <value>Υπηρεσία προσβασιμότητας αυτόματης συμπλήρωσης</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>Η υπηρεσία αυτόματης συμπλήρωσης Bitwarden χρησιμοποιεί το Android Autofill Framework για να σας βοηθήσει να συμπληρώσετε στοιχεία σύνδεσης, πιστωτικές κάρτες και πληροφορίες ταυτότητας σε άλλες εφαρμογές της συσκευής σας.</value>
+    <value>Η υπηρεσία αυτόματης συμπλήρωσης Bitwarden, χρησιμοποιεί το Android Autofill Framework για να σας βοηθήσει να συμπληρώσετε στοιχεία σύνδεσης, τις πιστωτικές κάρτες και τις πληροφορίες ταυτότητας σε άλλες εφαρμογές της συσκευής σας.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
     <value>Χρησιμοποιήστε την υπηρεσία αυτόματης συμπλήρωσης Bitwarden για να συμπληρώσετε τις συνδέσεις, τις πιστωτικές κάρτες και τις πληροφορίες ταυτότητας σε άλλες εφαρμογές.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
-    <value>Ρυθμίσεις αυτόματης συμπλήρωσης</value>
+    <value>Άνοιγμα των Ρυθμίσεων Αυτόματης Συμπλήρωσης</value>
   </data>
   <data name="FaceID" xml:space="preserve">
-    <value>Αναγνωριστικό προσώπου</value>
+    <value>Face ID</value>
     <comment>What Apple calls their facial recognition reader.</comment>
   </data>
   <data name="FaceIDDirection" xml:space="preserve">
-    <value>Χρήση αναγνωριστικού προσώπου για επαλήθευση.</value>
+    <value>Χρήση Face ID για επαλήθευση.</value>
   </data>
   <data name="UseFaceIDToUnlock" xml:space="preserve">
-    <value>Χρήση αναγνωριστικού προσώπου για ξεκλείδωμα</value>
+    <value>Χρήση Face ID για Ξεκλείδωμα</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
-    <value>Επαλήθευση αναγνωριστικού προσώπου</value>
+    <value>Επαλήθευση Face ID</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
@@ -1164,7 +1167,7 @@
     <value>Δεν ήταν δυνατό να ανοίξουμε αυτόματα το μενού ρυθμίσεων αυτόματης συμπλήρωσης Android για εσάς. Μπορείτε να πλοηγηθείτε στο μενού ρυθμίσεων αυτόματης συμπλήρωσης με μη αυτόματο τρόπο από τις Ρυθμίσεις Android &gt; Σύστημα &gt; Γλώσσες και εισαγωγή &gt; Σύνθετες &gt; Υπηρεσία αυτόματης συμπλήρωσης.</value>
   </data>
   <data name="CustomFieldName" xml:space="preserve">
-    <value>Όνομα προσαρμοσμένου πεδίου</value>
+    <value>Όνομα Προσαρμοσμένου Πεδίου</value>
   </data>
   <data name="FieldTypeBoolean" xml:space="preserve">
     <value>Δυαδικό</value>
@@ -1176,10 +1179,10 @@
     <value>Κείμενο</value>
   </data>
   <data name="NewCustomField" xml:space="preserve">
-    <value>Νέο προσαρμοσμένο πεδίο</value>
+    <value>Νέο Προσαρμοσμένο Πεδίο</value>
   </data>
   <data name="SelectTypeField" xml:space="preserve">
-    <value>Τύπος προσαρμοσμένου πεδίου που θέλετε να προσθέσετε;</value>
+    <value>Τι τύπος προσαρμοσμένου πεδίου είναι αυτό που θέλετε να προσθέσετε;</value>
   </data>
   <data name="Remove" xml:space="preserve">
     <value>Διαγραφή</value>
@@ -1212,14 +1215,14 @@
     <value>Έναρξη με</value>
   </data>
   <data name="URIMatchDetection" xml:space="preserve">
-    <value>Εντοπισμός αντιστοίχισης URI</value>
+    <value>Εντοπισμός Αντιστοίχισης URI</value>
   </data>
   <data name="MatchDetection" xml:space="preserve">
-    <value>Εντοπισμός αντιστοίχισης</value>
+    <value>Εντοπισμός Αντιστοίχισης</value>
     <comment>URI match detection for auto-fill.</comment>
   </data>
   <data name="YesAndSave" xml:space="preserve">
-    <value>Αποδοχή και αποθήκευση</value>
+    <value>Αποδοχή και Αποθήκευση</value>
   </data>
   <data name="AutofillAndSave" xml:space="preserve">
     <value>Αυτόματη συμπλήρωση και αποθήκευση</value>
@@ -1241,7 +1244,7 @@
     <value>Η υπηρεσία προσβασιμότητας μπορεί να είναι χρήσιμη όταν οι εφαρμογές δεν υποστηρίζουν την τυπική υπηρεσία αυτόματης συμπλήρωσης.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
-    <value>Ο κωδικός ενημερώθηκε</value>
+    <value>Ο Κωδικός Ενημερώθηκε</value>
     <comment>ex. Date this password was updated</comment>
   </data>
   <data name="DateUpdated" xml:space="preserve">
@@ -1282,10 +1285,10 @@
     <value>5. Επιλέξτε "Bitwarden"</value>
   </data>
   <data name="PasswordAutofill" xml:space="preserve">
-    <value>Αυτόματη συμπλήρωση κωδικού</value>
+    <value>Αυτόματη Συμπλήρωση Κωδικού</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
-    <value>Ο ευκολότερος τρόπος για να προσθέσετε νέες συνδέσεις στη λίστα σας είναι η επέκταση αυτόματης συμπλήρωσης κωδικού Bitwarden. Μάθετε περισσότερα σχετικά με τη χρήση της επέκτασης αυτόματης συμπλήρωσης μεταβαίνοντας στις "Ρυθμίσεις".</value>
+    <value>Ο ευκολότερος τρόπος για να προσθέσετε νέες συνδέσεις στο vault σας, είναι με την επέκταση αυτόματης συμπλήρωσης κωδικών Bitwarden. Μάθετε περισσότερα σχετικά με τη χρήση της επέκτασης αυτής, μεταβαίνοντας στις "Ρυθμίσεις".</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
     <value>Μη έγκυρη διεύθυνση email.</value>
@@ -1300,10 +1303,10 @@
     <value>Συνδέσεις</value>
   </data>
   <data name="SecureNotes" xml:space="preserve">
-    <value>Ασφαλείς σημειώσεις</value>
+    <value>Ασφαλείς Σημειώσεις</value>
   </data>
   <data name="AllItems" xml:space="preserve">
-    <value>Όλα τα στοιχεία</value>
+    <value>Όλα τα Στοιχεία</value>
   </data>
   <data name="URIs" xml:space="preserve">
     <value>URIs</value>
@@ -1314,22 +1317,22 @@
     <comment>A loading message when doing an exposed password check.</comment>
   </data>
   <data name="CheckPassword" xml:space="preserve">
-    <value>Ελέγξτε αν έχει εκτεθεί ο κωδικός.</value>
+    <value>Ελέγξτε εάν ο κωδικός σας έχει εκτεθεί.</value>
   </data>
   <data name="PasswordExposed" xml:space="preserve">
-    <value>Ο κωδικός έχει εκτεθεί {0} φορά (ες) σε παραβιάσεις δεδομένων. Πρέπει να τον αλλάξετε.</value>
+    <value>Ο κωδικός αυτός έχει εκτεθεί {0} φορά (ες) σε διαρροές δεδομένων. Πρέπει να τον αλλάξετε.</value>
   </data>
   <data name="PasswordSafe" xml:space="preserve">
-    <value>Αυτός ο κωδικός δεν βρέθηκε σε γνωστές παραβιάσεις δεδομένων. Είναι ασφαλής για χρήση.</value>
+    <value>Ο κωδικός αυτός δεν βρέθηκε σε γνωστές διαρροές δεδομένων. Είναι ασφαλής για χρήση.</value>
   </data>
   <data name="IdentityName" xml:space="preserve">
-    <value>Όνομα ταυτότητας</value>
+    <value>Όνομα Ταυτότητας</value>
   </data>
   <data name="Value" xml:space="preserve">
     <value>Τιμή</value>
   </data>
   <data name="PasswordHistory" xml:space="preserve">
-    <value>Ιστορικό κωδικού</value>
+    <value>Ιστορικό Κωδικού</value>
   </data>
   <data name="Types" xml:space="preserve">
     <value>Τύποι</value>
@@ -1338,7 +1341,7 @@
     <value>Δεν υπάρχουν κωδικοί προς εμφάνιση.</value>
   </data>
   <data name="NoItemsToList" xml:space="preserve">
-    <value>Δεν υπάρχουν στοιχεία προς εμφάνιση.</value>
+    <value>Δεν υπάρχουν στοιχεία στη λίστα.</value>
   </data>
   <data name="SearchCollection" xml:space="preserve">
     <value>Αναζήτηση στη συλλογή</value>
@@ -1368,34 +1371,34 @@
     <value>Ποιος κατέχει αυτό το στοιχείο;</value>
   </data>
   <data name="NoCollectionsToList" xml:space="preserve">
-    <value>Δεν υπάρχουν συλλογές προς εμφάνιση.</value>
+    <value>Δεν υπάρχουν επιλογές στη λίστα.</value>
   </data>
   <data name="ItemShared" xml:space="preserve">
-    <value>Το στοιχείο έχει μοιραστεί.</value>
+    <value>Το στοιχείο έχει κοινοποιηθεί.</value>
   </data>
   <data name="SelectOneCollection" xml:space="preserve">
     <value>Πρέπει να επιλέξετε τουλάχιστον μία συλλογή.</value>
   </data>
   <data name="Share" xml:space="preserve">
-    <value>Κοινή χρήση</value>
+    <value>Κοινοποίηση</value>
   </data>
   <data name="ShareItem" xml:space="preserve">
     <value>Κοινή χρήση στοιχείου</value>
   </data>
   <data name="NoOrgsToList" xml:space="preserve">
-    <value>Δεν υπάρχουν προορισμοί προς εμφάνιση.</value>
+    <value>Δεν υπάρχουν οργανισμοί προς εμφάνιση.</value>
   </data>
   <data name="ShareDesc" xml:space="preserve">
     <value>Επιλέξτε έναν οργανισμό στον οποίο θέλετε να μοιραστείτε αυτό το στοιχείο. Η κοινή χρήση μεταβιβάζει την ιδιοκτησία του στοιχείου στον οργανισμό. Δεν θα είστε πλέον ο άμεσος ιδιοκτήτης αυτού του στοιχείου μόλις το μοιραστείτε.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
-    <value>Αριθμός λέξεων</value>
+    <value>Αριθμός Λέξεων</value>
   </data>
   <data name="Passphrase" xml:space="preserve">
-    <value>Συνθηματική φράση</value>
+    <value>Συνθηματικό</value>
   </data>
   <data name="WordSeparator" xml:space="preserve">
-    <value>Διαχωριστής λέξεων</value>
+    <value>Διαχωριστής Λέξεων</value>
   </data>
   <data name="Clear" xml:space="preserve">
     <value>Εκκαθάριση</value>
@@ -1409,21 +1412,21 @@
     <value>Δεν υπάρχουν φάκελοι προς εμφάνιση.</value>
   </data>
   <data name="FingerprintPhrase" xml:space="preserve">
-    <value>Φράση δακτυλικών αποτυπωμάτων</value>
+    <value>Φράση Δακτυλικών Αποτυπωμάτων</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="YourAccountsFingerprint" xml:space="preserve">
-    <value>Φράση δακτυλικών αποτυπωμάτων λογαριασμού</value>
+    <value>Η φράση δακτυλικών αποτυπωμάτων του λογαριασμού σας</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="ShareVaultConfirmation" xml:space="preserve">
-    <value>Το Bitwarden επιτρέπει να μοιράζεστε τη λίστα σας με άλλους χρησιμοποιώντας ένα λογαριασμό οργανισμού. Θέλετε να επισκεφθείτε την ιστοσελίδα bitwarden.com για να μάθετε περισσότερα;</value>
+    <value>Το Bitwarden επιτρέπει να μοιράζεστε τη λίστα σας με άλλους χρησιμοποιώντας ένα λογαριασμό οργανισμού. Θέλετε να επισκευθείτε την ιστοσελίδα bitwarden.com για να μάθετε περισσότερα;</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
-    <value>Εξαγωγή λίστας</value>
+    <value>Εξαγωγή Vault</value>
   </data>
   <data name="LockNow" xml:space="preserve">
-    <value>Κλείδωμα τώρα</value>
+    <value>Κλείδωμα Τώρα</value>
   </data>
   <data name="PIN" xml:space="preserve">
     <value>PIN</value>
@@ -1583,19 +1586,19 @@
     <value>Ρυθμίσεις Δικαιωμάτων Επικάλυψης</value>
   </data>
   <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
-    <value>3. Στις Ρυθμίσεις του Bitwarden για Android , μεταβείτε στην ενότητα "Εμφάνιση από άλλες εφαρμογές" (Για προχωρημένους) και πατήστε το διακόπτη για να ενεργοποιήσετε την υποστήριξη επικάλυψης.</value>
+    <value>3. Στις Ρυθμίσεις του Bitwarden για Android , μεταβείτε στην ενότητα "Εμφάνιση πάνω σε άλλες εφαρμογές" (κάτω απο "Για προχωρημένους") και πατήστε το διακόπτη για να ενεργοποιήσετε την υποστήριξη επικάλυψης.</value>
   </data>
   <data name="Denied" xml:space="preserve">
-    <value>Απαγόρευση</value>
+    <value>Αρνήθηκε</value>
   </data>
   <data name="Granted" xml:space="preserve">
-    <value>Χορήγηση</value>
+    <value>Χορηγήθηκε</value>
   </data>
   <data name="FileFormat" xml:space="preserve">
-    <value>Μορφή αρχείου</value>
+    <value>Μορφή Αρχείου</value>
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
-    <value>Εισαγάγετε τον κύριο κωδικό για εξαγωγή δεδομένων λίστας.</value>
+    <value>Εισαγάγετε τον κύριο κωδικό για εξαγωγή των δεδομένων vault.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Αυτή η εξαγωγή περιέχει τα δεδομένα σε μη κρυπτογραφημένη μορφή. Δεν πρέπει να αποθηκεύετε ή να στείλετε το εξαγόμενο αρχείο μέσω μη ασφαλών τρόπων (όπως μέσω email). Διαγράψτε το αμέσως μόλις τελειώσετε με τη χρήση του.</value>
@@ -1604,26 +1607,72 @@
     <value>Προειδοποίηση</value>
   </data>
   <data name="ExportVaultFailure" xml:space="preserve">
-    <value>Παρουσιάστηκε πρόβλημα κατά την εξαγωγή της λίστας σας. Εάν το πρόβλημα επιμένει, θα χρειαστεί να εξάγετε λίστα μέσω διαδικτύου.</value>
+    <value>Παρουσιάστηκε πρόβλημα κατά την εξαγωγή της λίστας σας. Εάν το πρόβλημα επιμένει, θα χρειαστεί να εξάγετε το vault μέσω διαδικτύου.</value>
   </data>
   <data name="ExportVaultSuccess" xml:space="preserve">
-    <value>Η λίστα εξάχθηκε με επιτυχία</value>
+    <value>Το Vault Εξάχθηκε με Επιτυχία</value>
   </data>
   <data name="Clone" xml:space="preserve">
     <value>Κλωνοποίηση</value>
     <comment>Clone an entity (verb).</comment>
   </data>
   <data name="PasswordGeneratorPolicyInEffect" xml:space="preserve">
-    <value>Μία ή περισσότερες πολιτικές του οργανισμού επηρεάζουν τις ρυθμίσεις της γεννήτριας.</value>
+    <value>Μία ή περισσότερες πολιτικές του οργανισμού επηρεάζουν τις ρυθμίσεις γεννήτριας.</value>
   </data>
   <data name="Open" xml:space="preserve">
     <value>Άνοιγμα</value>
     <comment>Button text for an open operation (verb).</comment>
   </data>
   <data name="UnableToSaveAttachment" xml:space="preserve">
-    <value>Παρουσιάστηκε πρόβλημα κατά την αποθήκευση αυτού του συνημμένου. Εάν το πρόβλημα επιμένει, μπορείτε να το αποθηκεύσετε μέσω διαδικτύου.</value>
+    <value>Παρουσιάστηκε πρόβλημα κατά την αποθήκευση αυτού του συνημμένου. Εάν το πρόβλημα επιμένει, μπορείτε να το αποθηκεύσετε μέσω web vault.</value>
   </data>
   <data name="SaveAttachmentSuccess" xml:space="preserve">
     <value>Το συνημμένο αποθηκεύτηκε με επιτυχία</value>
+  </data>
+  <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
+    <value>Ενεργοποιήστε την "Υπηρεσία αυτόματης συμπλήρωσης προσβασιμότητας" από τις ρυθμίσεις Bitwarden για να χρησιμοποιήσετε το εικονίδιο αυτόματης συμπλήρωσης.</value>
+  </data>
+  <data name="AutofillTileUriNotFound" xml:space="preserve">
+    <value>Δεν εντοπίστηκαν πεδία κωδικού πρόσβασης</value>
+  </data>
+  <data name="SoftDeleting" xml:space="preserve">
+    <value>Sending to trash...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemSoftDeleted" xml:space="preserve">
+    <value>Item has been sent to trash.</value>
+    <comment>Confirmation message after successfully soft-deleting a login</comment>
+  </data>
+  <data name="Restore" xml:space="preserve">
+    <value>Restore</value>
+    <comment>Restores an entity (verb).</comment>
+  </data>
+  <data name="Restoring" xml:space="preserve">
+    <value>Restoring...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemRestored" xml:space="preserve">
+    <value>Item has been restored.</value>
+    <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
+  </data>
+  <data name="Trash" xml:space="preserve">
+    <value>Trash</value>
+    <comment>(noun) Location of deleted items which have not yet been permanently deleted</comment>
+  </data>
+  <data name="SearchTrash" xml:space="preserve">
+    <value>Search trash</value>
+    <comment>(action prompt) Label for the search text field when viewing the trash folder</comment>
+  </data>
+  <data name="DoYouReallyWantToPermanentlyDeleteCipher" xml:space="preserve">
+    <value>Do you really want to permanently delete? This cannot be undone.</value>
+    <comment>Confirmation alert message when permanently deleteing a cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToRestoreCipher" xml:space="preserve">
+    <value>Do you really want to restore this item?</value>
+    <comment>Confirmation alert message when restoring a soft-deleted cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToSoftDeleteCipher" xml:space="preserve">
+    <value>Do you really want to send to the trash?</value>
+    <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
 </root>

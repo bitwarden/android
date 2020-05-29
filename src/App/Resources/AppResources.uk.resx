@@ -680,10 +680,10 @@
     <comment>What Apple calls their fingerprint reader.</comment>
   </data>
   <data name="TwoStepLogin" xml:space="preserve">
-    <value>Двохетапна перевірка</value>
+    <value>Двоетапна перевірка</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Двохетапна перевірка робить ваш обліковий запис більш захищеним, вимагаючи підтвердження входу з використанням іншого пристрою, наприклад, за допомогою коду безпеки, програми авторизації, SMS, телефонного виклику, або е-пошти. Ви можете увімкнути двохетапну перевірку в сховищі на bitwarden.com. Хочете перейти на веб-сайт зараз?</value>
+    <value>Двоетапна перевірка робить ваш обліковий запис більш захищеним, вимагаючи підтвердження входу з використанням іншого пристрою, наприклад, за допомогою коду безпеки, програми авторизації, SMS, телефонного виклику, або е-пошти. Ви можете увімкнути двоетапну перевірку в сховищі на bitwarden.com. Хочете перейти на веб-сайт зараз?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Розблокування з {0}</value>
@@ -800,7 +800,7 @@
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>Цей обліковий запис має увімкнену двохетапну перевірку, однак, жоден з підтримуваних провайдерів для цього пристрою не підтримується. Будь ласка, скористайтеся підтримуваним пристроєм та/або додайте інших провайдерів, які мають кращу підтримку різних пристроїв (наприклад, програму авторизації).</value>
+    <value>Цей обліковий запис має увімкнену двоетапну перевірку, однак, жоден з підтримуваних провайдерів для цього пристрою не підтримується. Будь ласка, скористайтеся підтримуваним пристроєм та/або додайте інших провайдерів, які мають кращу підтримку різних пристроїв (наприклад, програму авторизації).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
     <value>Код відновлення</value>
@@ -815,10 +815,10 @@
     <comment>For 2FA</comment>
   </data>
   <data name="TwoStepLoginOptions" xml:space="preserve">
-    <value>Налаштування двохетапної перевірки</value>
+    <value>Налаштування двоетапної перевірки</value>
   </data>
   <data name="UseAnotherTwoStepMethod" xml:space="preserve">
-    <value>Інший спосіб двохетапної перевірки</value>
+    <value>Інший спосіб двоетапної перевірки</value>
   </data>
   <data name="VerificationEmailNotSent" xml:space="preserve">
     <value>Не вдається надіслати лист для перевірки. Спробуйте знову.</value>
@@ -1131,6 +1131,9 @@
   <data name="NoItemsFolder" xml:space="preserve">
     <value>В цій теці немає записів.</value>
   </data>
+  <data name="NoItemsTrash" xml:space="preserve">
+    <value>У смітнику немає записів.</value>
+  </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
     <value>Служба автозаповнення</value>
   </data>
@@ -1163,7 +1166,7 @@
     <value>Нам не вдалося автоматично відкрити меню налаштувань автозаповнення Android. Ви можете перейти до меню налаштувань автозаповнення вручну в Налаштування &gt; Система &gt; Мова і введення &gt; Додатково &gt; Служба автозаповнення.</value>
   </data>
   <data name="CustomFieldName" xml:space="preserve">
-    <value>Власна назва поля</value>
+    <value>Назва власного поля</value>
   </data>
   <data name="FieldTypeBoolean" xml:space="preserve">
     <value>Логічне значення</value>
@@ -1624,5 +1627,51 @@
   </data>
   <data name="SaveAttachmentSuccess" xml:space="preserve">
     <value>Вкладення успішно збережено</value>
+  </data>
+  <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
+    <value>Увімкніть "Автозаповнення паролів" у налаштуваннях Bitwarden для використання автозаповнення.</value>
+  </data>
+  <data name="AutofillTileUriNotFound" xml:space="preserve">
+    <value>Полів пароля не виявлено</value>
+  </data>
+  <data name="SoftDeleting" xml:space="preserve">
+    <value>Перенесення до смітника...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemSoftDeleted" xml:space="preserve">
+    <value>Запис перенесено до смітника.</value>
+    <comment>Confirmation message after successfully soft-deleting a login</comment>
+  </data>
+  <data name="Restore" xml:space="preserve">
+    <value>Відновити</value>
+    <comment>Restores an entity (verb).</comment>
+  </data>
+  <data name="Restoring" xml:space="preserve">
+    <value>Відновлення...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemRestored" xml:space="preserve">
+    <value>Запис відновлено.</value>
+    <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
+  </data>
+  <data name="Trash" xml:space="preserve">
+    <value>Смітник</value>
+    <comment>(noun) Location of deleted items which have not yet been permanently deleted</comment>
+  </data>
+  <data name="SearchTrash" xml:space="preserve">
+    <value>Пошук у смітнику</value>
+    <comment>(action prompt) Label for the search text field when viewing the trash folder</comment>
+  </data>
+  <data name="DoYouReallyWantToPermanentlyDeleteCipher" xml:space="preserve">
+    <value>Ви дійсно хочете остаточно видалити? Цю дію неможливо скасувати.</value>
+    <comment>Confirmation alert message when permanently deleteing a cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToRestoreCipher" xml:space="preserve">
+    <value>Ви дійсно хочете  відновити цей запис?</value>
+    <comment>Confirmation alert message when restoring a soft-deleted cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToSoftDeleteCipher" xml:space="preserve">
+    <value>Ви дійсно хочете перенести до смітника?</value>
+    <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
 </root>

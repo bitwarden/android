@@ -683,7 +683,7 @@
     <value>Identification en deux étapes</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>L'identification en deux étapes rend votre compte plus sécurisé en vous demandant la saisie d'un code de sécurité à chaque identification depuis l'application d'authentification. L'identification en deux étapes peut être activée dans le coffre web sur bitwarden.com. Voulez-vous visiter le site web maintenant ?</value>
+    <value>L'authentification en deux étapes sécurise davantage votre compte en exigeant que chaque connexion soit confirmée par un autre dispositif tel qu'une clé de sécurité, une application d'authentification, un SMS, un appel téléphonique ou un courriel. Cette option peut être activée depuis le coffre web sur bitwarden.com. Voulez-vous y accéder maintenant ?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Déverrouiller avec {0}</value>
@@ -1131,6 +1131,9 @@
   <data name="NoItemsFolder" xml:space="preserve">
     <value>Aucun élément dans ce dossier.</value>
   </data>
+  <data name="NoItemsTrash" xml:space="preserve">
+    <value>Il n'y a aucun élément dans la corbeille.</value>
+  </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
     <value>Service d'accessibilité pour le remplissage automatique</value>
   </data>
@@ -1561,10 +1564,10 @@
     <value>Votre session a expiré.</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
-    <value>Utiliser une empreinte biométrique pour vérifier.</value>
+    <value>Utilisez une empreinte biométrique pour vous authentifier.</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
-    <value>Biométrie</value>
+    <value>Empreintes biométriques</value>
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
     <value>Utiliser une empreinte biométrique pour déverrouiller</value>
@@ -1573,7 +1576,7 @@
     <value>Bitwarden requiert votre attention - Voir "Service d'accessibilité pour le remplissage automatique" dans les paramètres de Bitwarden</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
-    <value>3. Sur l'écran des paramètres d'application Android pour Bitwarden, sélectionnez "Superposer aux autres applications" (sous "Avancé") et appuyez sur le bouton pour permettre la superposition.</value>
+    <value>3. Dans l'application Paramètres d'Android, rendez-vous sur l'écran dédié à Bitwarden. Sélectionnez "Superposer aux autres applications" (sous "Avancé") et appuyez sur le bouton pour permettre la superposition.</value>
   </data>
   <data name="OverlayPermission" xml:space="preserve">
     <value>Permission</value>
@@ -1582,7 +1585,7 @@
     <value>Ouvrir les paramètres d'autorisation de superposition</value>
   </data>
   <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
-    <value>3. Sur l'écran des paramètres d'application Android pour Bitwarden, sélectionnez "Superposer aux autres applications" (sous "Avancé") et appuyez sur le bouton pour permettre la superposition.</value>
+    <value>3. Dans l'application Paramètres d'Android, rendez-vous sur l'écran dédié à Bitwarden. Sélectionnez "Superposer aux autres applications" (sous "Avancé") et appuyez sur le bouton pour permettre la superposition.</value>
   </data>
   <data name="Denied" xml:space="preserve">
     <value>Interdit</value>
@@ -1624,5 +1627,51 @@
   </data>
   <data name="SaveAttachmentSuccess" xml:space="preserve">
     <value>La pièce jointe a été enregistrée avec succès</value>
+  </data>
+  <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
+    <value>Veuillez activer le "Service d'accessibilité pour le remplissage automatique" dans les paramètres de Bitwarden pour utiliser la tuile de remplissage automatique.</value>
+  </data>
+  <data name="AutofillTileUriNotFound" xml:space="preserve">
+    <value>Aucun champ de mot de passe détecté</value>
+  </data>
+  <data name="SoftDeleting" xml:space="preserve">
+    <value>Envoi à la corbeille...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemSoftDeleted" xml:space="preserve">
+    <value>L'élément a été envoyé à la corbeille.</value>
+    <comment>Confirmation message after successfully soft-deleting a login</comment>
+  </data>
+  <data name="Restore" xml:space="preserve">
+    <value>Restaurer</value>
+    <comment>Restores an entity (verb).</comment>
+  </data>
+  <data name="Restoring" xml:space="preserve">
+    <value>Restauration...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemRestored" xml:space="preserve">
+    <value>L'élément a été restauré.</value>
+    <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
+  </data>
+  <data name="Trash" xml:space="preserve">
+    <value>Corbeille</value>
+    <comment>(noun) Location of deleted items which have not yet been permanently deleted</comment>
+  </data>
+  <data name="SearchTrash" xml:space="preserve">
+    <value>Rechercher dans la corbeille</value>
+    <comment>(action prompt) Label for the search text field when viewing the trash folder</comment>
+  </data>
+  <data name="DoYouReallyWantToPermanentlyDeleteCipher" xml:space="preserve">
+    <value>Êtes-vous sûr(e) de vouloir supprimer définitivement ? Cette action ne peut pas être annulée.</value>
+    <comment>Confirmation alert message when permanently deleteing a cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToRestoreCipher" xml:space="preserve">
+    <value>Voulez-vous vraiment restaurer cet élément ?</value>
+    <comment>Confirmation alert message when restoring a soft-deleted cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToSoftDeleteCipher" xml:space="preserve">
+    <value>Voulez-vous vraiment envoyer à la corbeille ?</value>
+    <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
 </root>

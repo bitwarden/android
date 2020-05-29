@@ -245,6 +245,16 @@ namespace Bit.Core.Services
             return SendAsync<object, object>(HttpMethod.Delete, string.Concat("/ciphers/", id), null, true, false);
         }
 
+        public Task PutDeleteCipherAsync(string id)
+        {
+            return SendAsync<object, object>(HttpMethod.Put, string.Concat("/ciphers/", id, "/delete"), null, true, false);
+        }
+
+        public Task PutRestoreCipherAsync(string id)
+        {
+            return SendAsync<object, object>(HttpMethod.Put, string.Concat("/ciphers/", id, "/restore"), null, true, false);
+        }
+
         #endregion
 
         #region Attachments APIs

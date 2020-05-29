@@ -729,7 +729,7 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
-    <value>當您選擇輸入欄位，看到 Bitwarden 的自動填寫提示時，可以點擊該圖示啟動自動填寫服務。</value>
+    <value>當您選擇輸入欄位，看到 Bitwarden 的自動填入提示時，可以點選該提示以啟動自動填入服務。</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>按此自動填入存在密碼庫的登入資料。</value>
@@ -1130,6 +1130,9 @@
   </data>
   <data name="NoItemsFolder" xml:space="preserve">
     <value>此資料夾中沒有登入資料。</value>
+  </data>
+  <data name="NoItemsTrash" xml:space="preserve">
+    <value>垃圾桶中沒有項目。</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
     <value>自動填入服務</value>
@@ -1573,28 +1576,28 @@
     <value>Bitwarden 需要注意 - 請到 Bitwarden 設定中確認「自動填寫協助工具服務」</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
-    <value>3. On the Android App Settings screen for Bitwarden, go to the "Display over other apps" options (under Advanced) and tap the toggle to enable overlay support.</value>
+    <value>3. 在 Android 應用程式設定介面找到 Bitwarden，輕觸 “進階” 下的 “顯示在其他應用程式上層”，並授予此權限。</value>
   </data>
   <data name="OverlayPermission" xml:space="preserve">
     <value>權限</value>
   </data>
   <data name="BitwardenAutofillServiceOpenOverlayPermissionSettings" xml:space="preserve">
-    <value>Open Overlay Permission Settings</value>
+    <value>打開疊加層權限設定</value>
   </data>
   <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
-    <value>3. On the Android App Settings screen for Bitwarden, select "Display over other apps" (under "Advanced") and switch on the toggle to allow the overlay.</value>
+    <value>3. 在 Android 應用程式設定介面找到 Bitwarden，輕觸 “進階” 下的 “顯示在其他應用程式上層”，並授予此權限。</value>
   </data>
   <data name="Denied" xml:space="preserve">
-    <value>Denied</value>
+    <value>拒絕</value>
   </data>
   <data name="Granted" xml:space="preserve">
-    <value>Granted</value>
+    <value>授予</value>
   </data>
   <data name="FileFormat" xml:space="preserve">
     <value>檔案格式</value>
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
-    <value>請輸入主控密碼來匯出密碼庫資料。</value>
+    <value>輸入您的主密碼以匯出密碼庫資料。</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>這份匯出檔案中包含未加密的密碼庫資料。您不應儲存此檔案，或透過未加密的方式傳送（例如電子郵件）。用完後請立即將它刪除。</value>
@@ -1624,5 +1627,51 @@
   </data>
   <data name="SaveAttachmentSuccess" xml:space="preserve">
     <value>成功儲存附件</value>
+  </data>
+  <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
+    <value>請到 Bitwarden 設定開啟「自動填寫協助工具服務」才能使用自動填寫方塊。</value>
+  </data>
+  <data name="AutofillTileUriNotFound" xml:space="preserve">
+    <value>未偵測到密碼欄位</value>
+  </data>
+  <data name="SoftDeleting" xml:space="preserve">
+    <value>正在傳送到垃圾桶…</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemSoftDeleted" xml:space="preserve">
+    <value>已將項目送到垃圾桶。</value>
+    <comment>Confirmation message after successfully soft-deleting a login</comment>
+  </data>
+  <data name="Restore" xml:space="preserve">
+    <value>恢復</value>
+    <comment>Restores an entity (verb).</comment>
+  </data>
+  <data name="Restoring" xml:space="preserve">
+    <value>恢復中…</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemRestored" xml:space="preserve">
+    <value>已恢復項目。</value>
+    <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
+  </data>
+  <data name="Trash" xml:space="preserve">
+    <value>垃圾桶</value>
+    <comment>(noun) Location of deleted items which have not yet been permanently deleted</comment>
+  </data>
+  <data name="SearchTrash" xml:space="preserve">
+    <value>搜尋垃圾桶</value>
+    <comment>(action prompt) Label for the search text field when viewing the trash folder</comment>
+  </data>
+  <data name="DoYouReallyWantToPermanentlyDeleteCipher" xml:space="preserve">
+    <value>確定要永久刪除嗎？刪除後將無法復原。</value>
+    <comment>Confirmation alert message when permanently deleteing a cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToRestoreCipher" xml:space="preserve">
+    <value>你真的想要恢復此項目嗎？</value>
+    <comment>Confirmation alert message when restoring a soft-deleted cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToSoftDeleteCipher" xml:space="preserve">
+    <value>您確定要丟到垃圾桶嗎？</value>
+    <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
 </root>

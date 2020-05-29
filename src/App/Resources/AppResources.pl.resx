@@ -516,7 +516,7 @@
     <value>Długość</value>
   </data>
   <data name="Lock" xml:space="preserve">
-    <value>Blokada</value>
+    <value>Zablokuj</value>
   </data>
   <data name="LockOption15Minutes" xml:space="preserve">
     <value>15 minut</value>
@@ -585,10 +585,10 @@
     <value>Brak ulubionych w sejfie.</value>
   </data>
   <data name="NoItems" xml:space="preserve">
-    <value>Brak elementów w Twoim sejfie.</value>
+    <value>Brak elementów w sejfie.</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>Brak elementów dla tej strony w Twoim sejfie. Dotknij, aby je dodać.</value>
+    <value>Brak elementów dla tej strony w sejfie. Dotknij, aby je dodać.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
     <value>Dane logowania nie posiadają skonfigurowanej nazwy użytkownika lub hasła.</value>
@@ -725,7 +725,7 @@
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>
   <data name="NoItemsForUri" xml:space="preserve">
-    <value>W Twoim sejfie brak elementów dla {0}.</value>
+    <value>Brak elementów dla {0} w sejfie. Dotknij, aby je dodać.</value>
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
@@ -771,10 +771,10 @@
     <value>Prawdopodobnie pasujące elementy</value>
   </data>
   <data name="Search" xml:space="preserve">
-    <value>Wyszukaj</value>
+    <value>Szukaj</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
-    <value>Wyszukujesz element autouzupełniania dla "{0}".</value>
+    <value>Szukasz element autouzupełniania dla "{0}".</value>
   </data>
   <data name="ShareVault" xml:space="preserve">
     <value>Udostępnij sejf</value>
@@ -800,7 +800,7 @@
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>Konto ma włączoną opcję logowania dwustopniowego, jednak to urządzenie nie wspiera żadnego ze skonfigurowanych mechanizmów autoryzacji dwustopniowej. Skorzystaj ze wspieranego urządzenia i/lub dodatkowych mechanizmów, które są lepiej obsługiwane przez różne urządzenia (np. aplikacja uwierzytelniająca).</value>
+    <value>Konto posiada włączoną opcję logowania dwustopniowego, jednak to urządzenie nie wspiera żadnego ze skonfigurowanych mechanizmów autoryzacji dwustopniowej. Skorzystaj ze wspieranego urządzenia i/lub dodatkowych mechanizmów, które są lepiej obsługiwane przez różne urządzenia (np. aplikacja uwierzytelniająca).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
     <value>Kod odzyskiwania</value>
@@ -938,7 +938,7 @@
     <value>Dla zaawansowanych użytkowników. Możesz wpisać podstawowy adres URL niezależnie dla każdej usługi.</value>
   </data>
   <data name="EnvironmentSaved" xml:space="preserve">
-    <value>URLe środowiska zostały zapisane.</value>
+    <value>Adresy URL środowiska zostały zapisane.</value>
   </data>
   <data name="FormattedIncorrectly" xml:space="preserve">
     <value>{0} nie jest poprawnie sformatowany.</value>
@@ -1131,6 +1131,9 @@
   <data name="NoItemsFolder" xml:space="preserve">
     <value>Brak elementów w tym folderze.</value>
   </data>
+  <data name="NoItemsTrash" xml:space="preserve">
+    <value>Brak elementów w koszu.</value>
+  </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
     <value>Usługa ułatwienia dostępu</value>
   </data>
@@ -1191,7 +1194,7 @@
     <comment>Label for a uri/url with position. i.e. URI 1, URI 2, etc</comment>
   </data>
   <data name="BaseDomain" xml:space="preserve">
-    <value>Domena nadrzędna</value>
+    <value>Domena podstawowa</value>
   </data>
   <data name="Default" xml:space="preserve">
     <value>Domyślny</value>
@@ -1200,7 +1203,7 @@
     <value>Dokładnie</value>
   </data>
   <data name="Host" xml:space="preserve">
-    <value>Domena</value>
+    <value>Host</value>
     <comment>A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'.</comment>
   </data>
   <data name="RegEx" xml:space="preserve">
@@ -1240,7 +1243,7 @@
     <value>Usługa ułatwienia dostępu może być pomocna w sytuacji, gdy aplikacje nie obsługują standardowej usługi autouzupełniania.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
-    <value>Hasło zostało zaktualizowane</value>
+    <value>Aktualizacja hasła</value>
     <comment>ex. Date this password was updated</comment>
   </data>
   <data name="DateUpdated" xml:space="preserve">
@@ -1340,7 +1343,7 @@
     <value>Brak elementów do wyświetlenia.</value>
   </data>
   <data name="SearchCollection" xml:space="preserve">
-    <value>Przeszukaj kolekcje</value>
+    <value>Szukaj w kolekcji</value>
   </data>
   <data name="SearchFolder" xml:space="preserve">
     <value>Szukaj w folderze</value>
@@ -1624,5 +1627,51 @@
   </data>
   <data name="SaveAttachmentSuccess" xml:space="preserve">
     <value>Załącznik został zapisany</value>
+  </data>
+  <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
+    <value>Włącz usługę ułatwienia dostępu w ustawieniach aplikacji Bitwarden.</value>
+  </data>
+  <data name="AutofillTileUriNotFound" xml:space="preserve">
+    <value>Pole hasła nie zostało wykryte</value>
+  </data>
+  <data name="SoftDeleting" xml:space="preserve">
+    <value>Przenoszenie do kosza...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemSoftDeleted" xml:space="preserve">
+    <value>Element został przeniesiony do kosza.</value>
+    <comment>Confirmation message after successfully soft-deleting a login</comment>
+  </data>
+  <data name="Restore" xml:space="preserve">
+    <value>Przywróć</value>
+    <comment>Restores an entity (verb).</comment>
+  </data>
+  <data name="Restoring" xml:space="preserve">
+    <value>Przywracanie...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemRestored" xml:space="preserve">
+    <value>Element został przywrócony.</value>
+    <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
+  </data>
+  <data name="Trash" xml:space="preserve">
+    <value>Kosz</value>
+    <comment>(noun) Location of deleted items which have not yet been permanently deleted</comment>
+  </data>
+  <data name="SearchTrash" xml:space="preserve">
+    <value>Szukaj w koszu</value>
+    <comment>(action prompt) Label for the search text field when viewing the trash folder</comment>
+  </data>
+  <data name="DoYouReallyWantToPermanentlyDeleteCipher" xml:space="preserve">
+    <value>Czy na pewno chcesz to usunąć trwale? Tej operacji nie można cofnąć.</value>
+    <comment>Confirmation alert message when permanently deleteing a cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToRestoreCipher" xml:space="preserve">
+    <value>Czy na pewno chcesz przywrócić ten element?</value>
+    <comment>Confirmation alert message when restoring a soft-deleted cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToSoftDeleteCipher" xml:space="preserve">
+    <value>Czy na pewno chcesz to przenieść do kosza?</value>
+    <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
 </root>

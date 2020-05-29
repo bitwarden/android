@@ -118,6 +118,13 @@ namespace Bit.Core.Utilities
 
         public static void Reset()
         {
+            foreach (var service in RegisteredServices)
+            {
+                if (service.Value != null && service.Value is IDisposable disposableService)
+                {
+                    disposableService.Dispose();
+                }
+            }
             Inited = false;
             RegisteredServices.Clear();
             RegisteredServices = new Dictionary<string, object>();

@@ -44,6 +44,7 @@ namespace Bit.App.Pages
         public ExtendedObservableCollection<CipherView> Ciphers { get; set; }
         public Func<CipherView, bool> Filter { get; set; }
         public string AutofillUrl { get; set; }
+        public bool Deleted { get; set; }
 
         public bool ShowNoData
         {
@@ -105,7 +106,8 @@ namespace Bit.App.Pages
                     }
                     try
                     {
-                        ciphers = await _searchService.SearchCiphersAsync(searchText, Filter, null, cts.Token);
+                        ciphers = await _searchService.SearchCiphersAsync(searchText, 
+                            Filter ?? (c => c.IsDeleted == Deleted), null, cts.Token);
                         cts.Token.ThrowIfCancellationRequested();
                     }
                     catch (OperationCanceledException)

@@ -729,7 +729,7 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
-    <value>When you select an input field and see a Bitwarden auto-fill overlay, you can tap it to launch the auto-fill service.</value>
+    <value>Bir giriş alanı seçtiğinizde ve bir Bitwarden otomatik doldurma kaplaması gördüğünüzde, otomatik doldurma hizmetini başlatmak için alana dokunabilirsiniz.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Tap this notification to auto-fill a login from your vault.</value>
@@ -1130,6 +1130,9 @@
   </data>
   <data name="NoItemsFolder" xml:space="preserve">
     <value>Bu klasörde öğe yok.</value>
+  </data>
+  <data name="NoItemsTrash" xml:space="preserve">
+    <value>There are no items in the trash.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
     <value>Otomatik Doldur Erişilebilirlik Hizmeti</value>
@@ -1570,10 +1573,10 @@
     <value>Kilidi açmak için Biometrikleri Kullan</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
-    <value>Bitwarden needs attention - See "Auto-fill Accessibility Service" from Bitwarden Settings</value>
+    <value>Bitwarden dikkat gerektirir - Bitwarden Ayarlarından "Otomatik Doldurma Erişilebilirlik Hizmeti" konusuna bakın</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
-    <value>3. On the Android App Settings screen for Bitwarden, go to the "Display over other apps" options (under Advanced) and tap the toggle to enable overlay support.</value>
+    <value>3. Bitwarden için Android Uygulama Ayarları ekranında, "Diğer uygulamalar üzerinde görüntüle" seçeneklerine (Gelişmiş altında) gidin ve yer paylaşımı desteğini etkinleştirmek için seçim düğmesine dokunun.</value>
   </data>
   <data name="OverlayPermission" xml:space="preserve">
     <value>İzin</value>
@@ -1582,7 +1585,7 @@
     <value>Doldurma İzni Ayarlarını Aç</value>
   </data>
   <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
-    <value>3. On the Android App Settings screen for Bitwarden, select "Display over other apps" (under "Advanced") and switch on the toggle to allow the overlay.</value>
+    <value>3. Bitwarden için Android Uygulama Ayarları ekranında, "Diğer uygulamalar üzerinde görüntüle" yi seçin ("Gelişmiş" in altında) ve yer paylaşımına izin vermek için seçim düğmesini açın.</value>
   </data>
   <data name="Denied" xml:space="preserve">
     <value>Reddedildi</value>
@@ -1624,5 +1627,51 @@
   </data>
   <data name="SaveAttachmentSuccess" xml:space="preserve">
     <value>Dosya eki başarıyla kaydedildi</value>
+  </data>
+  <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
+    <value>Otomatik Doldur kutucuğunu kullanmak için lütfen Bitwarden Ayarları'ndan "Otomatik Doldurma Erişilebilirlik Hizmeti" ni etkinleştirin.</value>
+  </data>
+  <data name="AutofillTileUriNotFound" xml:space="preserve">
+    <value>Şifre alanı tespit edilmedi</value>
+  </data>
+  <data name="SoftDeleting" xml:space="preserve">
+    <value>Sending to trash...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemSoftDeleted" xml:space="preserve">
+    <value>Item has been sent to trash.</value>
+    <comment>Confirmation message after successfully soft-deleting a login</comment>
+  </data>
+  <data name="Restore" xml:space="preserve">
+    <value>Restore</value>
+    <comment>Restores an entity (verb).</comment>
+  </data>
+  <data name="Restoring" xml:space="preserve">
+    <value>Restoring...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemRestored" xml:space="preserve">
+    <value>Item has been restored.</value>
+    <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
+  </data>
+  <data name="Trash" xml:space="preserve">
+    <value>Trash</value>
+    <comment>(noun) Location of deleted items which have not yet been permanently deleted</comment>
+  </data>
+  <data name="SearchTrash" xml:space="preserve">
+    <value>Search trash</value>
+    <comment>(action prompt) Label for the search text field when viewing the trash folder</comment>
+  </data>
+  <data name="DoYouReallyWantToPermanentlyDeleteCipher" xml:space="preserve">
+    <value>Do you really want to permanently delete? This cannot be undone.</value>
+    <comment>Confirmation alert message when permanently deleteing a cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToRestoreCipher" xml:space="preserve">
+    <value>Do you really want to restore this item?</value>
+    <comment>Confirmation alert message when restoring a soft-deleted cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToSoftDeleteCipher" xml:space="preserve">
+    <value>Do you really want to send to the trash?</value>
+    <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
 </root>

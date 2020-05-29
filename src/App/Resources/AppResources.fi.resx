@@ -415,13 +415,13 @@
     <value>Helpoin tapa lisätä uusia kirjautumistietoja holviisi on käyttää Bitwardenin sovelluslaajennusta. Lue lisää sovelluslaajennuksesta "Työkalut"-kohdassa.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>Käytä bitwardenia Safarissa ja muissa sovelluksissa kirjautumistietojen automaattiseen täydennykseen.</value>
+    <value>Käytä Bitwardenia käyttäjätunnustesi automaattiseen täyttöön Safarissa ja muissa sovelluksissa.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
     <value>Bitwardenin automaattinen täyttö ‑palvelu</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins.</value>
+    <value>Käytä Bitwardenin esteettömyyspalvelua käyttäjätunnustesi automaattiseen täyttöön.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Vaihda sähköpostiosoite</value>
@@ -458,16 +458,16 @@
     <value>Syötä tilisi sähköpostiosoite saadaksesi pääsalasanasi vihjeen.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
-    <value>Käytä sovelluslaajennusta</value>
+    <value>Ota sovelluslaajennus käyttöön uudelleen</value>
   </data>
   <data name="ExtensionAlmostDone" xml:space="preserve">
-    <value>Melkein valmis!</value>
+    <value>Melkein valmista!</value>
   </data>
   <data name="ExtensionEnable" xml:space="preserve">
     <value>Käytä sovelluslaajennusta</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
-    <value>Safarissa löydät bitwardenin käyttämällä jakokuvaketta (vihje: vieritä oikealle valikon alarivillä).</value>
+    <value>Löydät Bitwardenin Safarissa käyttämällä jakamiskuvaketta (vihje: vieritä oikealle valikon alarivillä).</value>
     <comment>Safari is the name of apple's web browser</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
@@ -477,16 +477,16 @@
     <value>Olet valmis kirjautumaan sisään!</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
-    <value>Kirjautumistietosi ovat nyt helposti saatavilla Safarissa, Chromessa ja muissa tuetuissa sovelluksissa.</value>
+    <value>Käyttäjätunnuksesi ovat nyt helposti saatavilla Safarissa, Chromessa ja muissa tuetuissa sovelluksissa.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
-    <value>Safarissa ja Chromessa löydät bitwardenin käyttämällä jakokuvaketta (vihje: vieritä oikealle jakovalikon alarivillä).</value>
+    <value>Löydät Bitwardenin Safarissa ja Chromessa käyttämällä jakamiskuvaketta (vihje: vieritä oikealle valikon alarivillä).</value>
   </data>
   <data name="ExtensionTapIcon" xml:space="preserve">
-    <value>Paina bitwarden-kuvaketta valikossa käynnistääksesi laajennuksen.</value>
+    <value>Käynnistä laajennus napauttamalla Bitwarden-kuvaketta valikossa.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>Ottaaksesi bitwardenin käyttöön Safarissa ja muissa sovelluksissa paina "lisää"-kuvaketta valikon alarivillä.</value>
+    <value>Ottaaksesi Bitwardenin käyttöön Safarissa ja muissa sovelluksissa, napauta "lisää"-kuvaketta valikon alarivillä.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
     <value>Suosikki</value>
@@ -507,7 +507,7 @@
     <value>Voit tuoda kerralla kaikki kohteesi bitwarden.com-verkkoholvissa. Haluatko käydä sivustolla nyt?</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
-    <value>Tuo kerralla kohteitasi muista salasananhallintapalveluista.</value>
+    <value>Tuo kerralla kohteesi muista salasananhallintapalveluista.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
     <value>Viimeisin synkronointi:</value>
@@ -573,7 +573,7 @@
     <value>Lisää asetuksia</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>Sinun on kirjauduttava bitwardenin pääsovellukseen ennen kuin voit käyttää laajennusta.</value>
+    <value>Sinun on kirjauduttava Bitwardenin pääsovellukseen ennen kuin voit käyttää laajennusta.</value>
   </data>
   <data name="Never" xml:space="preserve">
     <value>Ei koskaan</value>
@@ -588,7 +588,7 @@
     <value>Holvissasi ei ole kohteita.</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>Holvissasi ei ole kohteita tälle sivustolle. Napauta lisätäksesi kohteen.</value>
+    <value>Holvissasi ei ole kohteita tälle sivustolle/sovellukselle. Lisää kohde napauttamalla.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
     <value>Tälle käyttäjätunnukselle ei ole määritetty käyttäjänimeä tai salasanaa.</value>
@@ -622,7 +622,7 @@
     <value>Haluatko varmasti korvata nykyisen salasanan?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>bitwarden pitää holvisi automaattisesti synkronoituna käyttämällä ilmoituspalvelua. Parhaan kokemuksen takaamiseksi kannattaa ottaa ilmoitukset käyttöön seuraavassa ruudussa.</value>
+    <value>Bitwarden pitää holvisi automaattisesti synkronoituna käyttämällä push-ilmoituksia. Parhaan mahdollisen kokemuksen takaamiseksi, valitse "Salli", kun sinua pyydetään ottamaan push-ilmoitukset käyttöön seuraavassa kehotteessa.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
@@ -729,10 +729,10 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
-    <value>When you select an input field and see a Bitwarden auto-fill overlay, you can tap it to launch the auto-fill service.</value>
+    <value>Kun valitset syöttökentän ja näet Bitwardenin automaattisen täytön peittokuvan, voit napauttaa sitä käynnistääksesi automaattisen täyttöpalvelun.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
-    <value>Napauta tätä ilmoitusta täydentääksesi kohteen automaattisesti.</value>
+    <value>Napauta tätä ilmoitusta, kun haluat täyttää kohteen holvistasi automaattisesti.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
     <value>Avaa esteettömyysasetukset</value>
@@ -753,7 +753,7 @@
     <value>Tila</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
-    <value>Helpoin tapa lisätä uusia kirjautumistietoja holviisi on käyttää Bitwardenin automaattista täydennystä. Lue lisää täydennyspalvelusta "Työkalut"-kohdassa.</value>
+    <value>Helpoin tapa lisätä uusia käyttäjätunnuksia holviisi on Bitwardenin automaattisen täyttöpalvelun kautta. Lue lisää Bitwardenin automaattisen täyttöpalvelun käytöstä "Asetukset"-kohdasta.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Täytä automaattisesti</value>
@@ -762,7 +762,7 @@
     <value>Haluatko täyttää tällä kohteella vai näyttää sen tiedot?</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>Haluatko varmasti täyttää tällä kohteella? Se ei täsmää täysin osoitteeseen "{0}".</value>
+    <value>Haluatko varmasti täyttää tällä kohteella? Se ei täsmää täysin palvelun ”{0}” kanssa.</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
     <value>Täsmäävät kohteet</value>
@@ -774,7 +774,7 @@
     <value>Hae</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
-    <value>Etsitään täytettäviä kohteita osoitteelle "{0}".</value>
+    <value>Etsitään täytettävää kohdetta osoitteelle ”{0}”.</value>
   </data>
   <data name="ShareVault" xml:space="preserve">
     <value>Jaa holvisi</value>
@@ -1131,11 +1131,14 @@
   <data name="NoItemsFolder" xml:space="preserve">
     <value>Tässä kansiossa ei ole kohteita.</value>
   </data>
+  <data name="NoItemsTrash" xml:space="preserve">
+    <value>Roskakorissa ei ole kohteita.</value>
+  </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
     <value>Automaattisen täytön esteettömyyspalvelu</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>The bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device.</value>
+    <value>Bitwardenin automaattinen täyttöpalvelu käyttää Android Autofill Frameworkia käyttäjätunnusten, luottokorttien ja henkilöllisyystietojen täyttämiseen laitteesi muihin sovelluksiin.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
     <value>Käytä Bitwardenin esteettömyyspalvelua täyttääksesi automaattisesti käyttäjätunnukset, kortti- ja henkilöllisyystiedot muihin sovelluksiin.</value>
@@ -1221,7 +1224,7 @@
     <value>Kyllä, ja tallenna</value>
   </data>
   <data name="AutofillAndSave" xml:space="preserve">
-    <value>Täydennä automaattisesti ja tallenna</value>
+    <value>Täytä automaattisesti ja tallenna</value>
   </data>
   <data name="Organization" xml:space="preserve">
     <value>Organisaatio</value>
@@ -1234,10 +1237,10 @@
     <value>Yritä uudelleen</value>
   </data>
   <data name="YubiKeyInstructionIos" xml:space="preserve">
-    <value>Pidä YubiKey NEOta laitteen takaosaa vasten jatkaaksesi.</value>
+    <value>Jatka pitämällä YubiKey NEOasi laitteen takaosaa vasten.</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
-    <value>Esteettömyyspalvelu voi olla hyödyllinen sovellusten jotka eivät tue standardia automaattitäyttöpalvelua kanssa.</value>
+    <value>Esteettömyyspalvelu voi olla hyödyllinen sellaisten sovellusten kanssa, jotka eivät tue normaalia automaattitäyttöpalvelua.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
     <value>Salasana päivitetty</value>
@@ -1251,19 +1254,19 @@
     <value>Automaattinen täyttö kytketty päälle!</value>
   </data>
   <data name="MustLogInMainAppAutofill" xml:space="preserve">
-    <value>Sinun on kirjauduttava Bitwardenin pääsovellukseen ennen kuin voit käyttää automaattista täydennystä.</value>
+    <value>Sinun on kirjauduttava Bitwardenin pääsovellukseen, ennen kuin voit käyttää automaattista täyttöä.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
     <value>Your logins are now easily accessable right from your keyboard while logging into apps and websites.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
-    <value>Suosittelemme poistamaan muut AutoFill-sovellukset käytöstä asetuksista, jos et aio käyttää niitä.</value>
+    <value>Suosittelemme poistamaan kaikki muut automaattisen täytön sovellukset käytöstä asetuksista, jos et aio käyttää niitä.</value>
   </data>
   <data name="BitwardenAutofillDescription" xml:space="preserve">
-    <value>Käytä holviasi suoraan näppäimistöltä täyttääksesi salasanat automaattisesti.</value>
+    <value>Pääset holviisi suoraan näppäimistöltäsi, jotta voit käyttää salasanojen automaattista täyttöä nopeasti.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
-    <value>Ota salasanojen automattinen täyttäminen käyttöön seuraavasti:</value>
+    <value>Ota salasanan automaattinen täyttö käyttöön laitteellasi noudattamalla näitä ohjeita:</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
     <value>1. Siirry iOS:n Asetukset-sovellukseen</value>
@@ -1278,10 +1281,10 @@
     <value>4. Kytke automaattinen täyttö päälle</value>
   </data>
   <data name="AutofillTurnOn5" xml:space="preserve">
-    <value>5. Valitse Bitwarden</value>
+    <value>5. Valitse "Bitwarden"</value>
   </data>
   <data name="PasswordAutofill" xml:space="preserve">
-    <value>Salasanojen automaattitäyttö</value>
+    <value>Salasanojen automaattinen täyttö</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
     <value>Helpoin tapa lisätä uusia kirjautumistietoja holviisi on käyttää Bitwardenin sovelluslaajennusta. Lue lisää sovelluslaajennuksesta "Työkalut"-kohdassa.</value>
@@ -1296,7 +1299,7 @@
     <value>Henkilöllisyydet</value>
   </data>
   <data name="Logins" xml:space="preserve">
-    <value>Kirjautumiset</value>
+    <value>Kirjautumistiedot</value>
   </data>
   <data name="SecureNotes" xml:space="preserve">
     <value>Salatut muistiinpanot</value>
@@ -1334,7 +1337,7 @@
     <value>Tyypit</value>
   </data>
   <data name="NoPasswordsToList" xml:space="preserve">
-    <value>Ei listattavia salasanoja.</value>
+    <value>Ei näytettäviä salasanoja.</value>
   </data>
   <data name="NoItemsToList" xml:space="preserve">
     <value>Ei näytettäviä kohteita.</value>
@@ -1346,7 +1349,7 @@
     <value>Hae kansiosta</value>
   </data>
   <data name="SearchType" xml:space="preserve">
-    <value>Hakutyyppi</value>
+    <value>Hae tyypillä</value>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Tyyppi</value>
@@ -1367,7 +1370,7 @@
     <value>Kuka omistaa tämän kohteen?</value>
   </data>
   <data name="NoCollectionsToList" xml:space="preserve">
-    <value>Ei kokoelmia listattavaksi.</value>
+    <value>Ei näytettäviä kokoelmia.</value>
   </data>
   <data name="ItemShared" xml:space="preserve">
     <value>Kohde jaettu.</value>
@@ -1382,10 +1385,10 @@
     <value>Jaa kohde</value>
   </data>
   <data name="NoOrgsToList" xml:space="preserve">
-    <value>Ei listattavia organisaatioita.</value>
+    <value>Ei organisaatioita näytettäväksi.</value>
   </data>
   <data name="ShareDesc" xml:space="preserve">
-    <value>Valitse organisaatio, jonka kanssa haluat jakaa tämän kohteen. Jakaminen siirtää kohteen omistajuuden organisaatiolle. Kohteen jakamisen jälkeen et ole enää kohteen suora omistaja.</value>
+    <value>Valitse organisaatio, jonka kanssa haluat jakaa tämän kohteen. Jakaminen siirtää kohteen omistajuuden organisaatiolle. Et enää ole tämän kohteen suora omistaja, kun se on jaettu.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
     <value>Sanojen määrä</value>
@@ -1405,7 +1408,7 @@
     <comment>Short for "Password Generator"</comment>
   </data>
   <data name="NoFoldersToList" xml:space="preserve">
-    <value>Ei kansioita näytettäväksi.</value>
+    <value>Ei näytettäviä kansioita.</value>
   </data>
   <data name="FingerprintPhrase" xml:space="preserve">
     <value>Tunnistelauseke</value>
@@ -1440,7 +1443,7 @@
     <value>Aseta PIN-koodi Bitwardenin avaamista varten. PIN-asetukset nollautuvat, jos kirjaudut täysin ulos sovelluksesta.</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
-    <value>{0} kirjattu sivustolle {1}.</value>
+    <value>Kirjautunut käyttäjänä {0} palvelimella {1}.</value>
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
@@ -1480,7 +1483,7 @@
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="ClearClipboardDescription" xml:space="preserve">
-    <value>Poista kopioidut tekstit leikepöydältä automaattisesti.</value>
+    <value>Poista kopioidut arvot leikepöydältä automaattisesti.</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="DefaultUriMatchDetection" xml:space="preserve">
@@ -1505,7 +1508,7 @@
     <value>Käynnistetään uudelleen...</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
-    <value>Kopioi muistiinpano</value>
+    <value>Kopioi merkinnät</value>
   </data>
   <data name="Exit" xml:space="preserve">
     <value>Poistu</value>
@@ -1514,26 +1517,26 @@
     <value>Oletko varma, että haluat poistua Bitwardenista?</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
-    <value>Do you want to require unlocking with your master password when the application is restarted?</value>
+    <value>Haluatko vaatia lukituksen avaamista pääsalasanallasi, kun sovellus käynnistetään uudelleen?</value>
   </data>
   <data name="Black" xml:space="preserve">
     <value>Musta</value>
     <comment>The color black</comment>
   </data>
   <data name="BlacklistedUris" xml:space="preserve">
-    <value>Mustalistatut URIt</value>
+    <value>Mustalla listalla olevat URIt</value>
   </data>
   <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>URIs that are blacklisted will not offer auto-fill. The list of apps should be comma separated. Ex: "https://twitter.com, androidapp://com.twitter.android".</value>
+    <value>Mustalla listalla olevat URIt eivät tarjoa automaattista täyttöä. Listan tulee olla eroteltu pilkuilla. Esim: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
   <data name="DisableSavePrompt" xml:space="preserve">
-    <value>Kytke tallennuskehote pois</value>
+    <value>Ota tallennuskehote pois käytöstä</value>
   </data>
   <data name="DisableSavePromptDescription" xml:space="preserve">
     <value>Tallennuskehote kysyy, haluatko tallentaa kirjautumistiedot holviisi, kun kirjaudut sivustoille ensimmäistä kertaa.</value>
   </data>
   <data name="LockOptionOnRestart" xml:space="preserve">
-    <value>Ohjelman uudelleenkäynnistyksen yhteydessä</value>
+    <value>Sovellusta uudelleenkäynnistettäessä</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
     <value>Automaattinen täyttö tekee Bitwarden-holviiisi pääsystä muista ohjelmista ja sivustoista helppoa. Et näytä kytkeneen automaattista täyttöä päälle. Voit tehdä sen Asetukset-näytöstä.</value>
@@ -1555,19 +1558,19 @@
     <value>Jaettu</value>
   </data>
   <data name="ToggleVisibility" xml:space="preserve">
-    <value>Toggle Visiblity</value>
+    <value>Näytä/piilota</value>
   </data>
   <data name="LoginExpired" xml:space="preserve">
     <value>Kirjautumisistuntosi on vanhentunut.</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
-    <value>Käytä biometriikkaa vahvistaaksesi.</value>
+    <value>Vahvista biometriikalla</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
     <value>Biometriikka</value>
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
-    <value>Käytä biometriikkaa lukituksen avaamiseen</value>
+    <value>Avaa lukitus biometriikalla</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
     <value>Bitwarden needs attention - See "Auto-fill Accessibility Service" from Bitwarden Settings</value>
@@ -1603,7 +1606,7 @@
     <value>Varoitus</value>
   </data>
   <data name="ExportVaultFailure" xml:space="preserve">
-    <value>There was a problem exporting your vault.  If the problem persists, you'll need to export from the web vault.</value>
+    <value>Holvin viemisessä oli ongelma. Jos ongelma jatkuu, sinun on tehtävä vienti verkkoholvin kautta.</value>
   </data>
   <data name="ExportVaultSuccess" xml:space="preserve">
     <value>Holvi vietiin onnistuneesti</value>
@@ -1613,16 +1616,62 @@
     <comment>Clone an entity (verb).</comment>
   </data>
   <data name="PasswordGeneratorPolicyInEffect" xml:space="preserve">
-    <value>One or more organization policies are affecting your generator settings</value>
+    <value>Yksi tai useampi organisaatiokäytäntö vaikuttaa generaattorisi asetuksiin</value>
   </data>
   <data name="Open" xml:space="preserve">
     <value>Avaa</value>
     <comment>Button text for an open operation (verb).</comment>
   </data>
   <data name="UnableToSaveAttachment" xml:space="preserve">
-    <value>There was a problem saving this attachment. If the problem persists, you can save it from the web vault.</value>
+    <value>Liitteen tallentamisessa oli ongelma. Jos ongelma jatkuu, voit tehdä tallennuksen verkkoholvin kautta.</value>
   </data>
   <data name="SaveAttachmentSuccess" xml:space="preserve">
     <value>Liite tallennettiin onnistuneesti</value>
+  </data>
+  <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
+    <value>Please enable "Auto-fill Accessibility Service" from Bitwarden Settings to use the Auto-fill tile.</value>
+  </data>
+  <data name="AutofillTileUriNotFound" xml:space="preserve">
+    <value>Salasanakenttiä ei havaittu</value>
+  </data>
+  <data name="SoftDeleting" xml:space="preserve">
+    <value>Siirretään roskakoriin...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemSoftDeleted" xml:space="preserve">
+    <value>Kohde on siirretty roskakoriin.</value>
+    <comment>Confirmation message after successfully soft-deleting a login</comment>
+  </data>
+  <data name="Restore" xml:space="preserve">
+    <value>Palauta</value>
+    <comment>Restores an entity (verb).</comment>
+  </data>
+  <data name="Restoring" xml:space="preserve">
+    <value>Palautetaan...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemRestored" xml:space="preserve">
+    <value>Kohde on palautettu.</value>
+    <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
+  </data>
+  <data name="Trash" xml:space="preserve">
+    <value>Roskakori</value>
+    <comment>(noun) Location of deleted items which have not yet been permanently deleted</comment>
+  </data>
+  <data name="SearchTrash" xml:space="preserve">
+    <value>Hae roskakorista</value>
+    <comment>(action prompt) Label for the search text field when viewing the trash folder</comment>
+  </data>
+  <data name="DoYouReallyWantToPermanentlyDeleteCipher" xml:space="preserve">
+    <value>Haluatko varmasti poistaa pysyvästi? Tätä ei voi perua.</value>
+    <comment>Confirmation alert message when permanently deleteing a cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToRestoreCipher" xml:space="preserve">
+    <value>Haluatko varmasti palauttaa tämän kohteen?</value>
+    <comment>Confirmation alert message when restoring a soft-deleted cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToSoftDeleteCipher" xml:space="preserve">
+    <value>Haluatko varmasti siirtää roskakoriin?</value>
+    <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
 </root>

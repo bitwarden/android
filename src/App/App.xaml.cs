@@ -159,27 +159,6 @@ namespace Bit.App
 
         public AppOptions Options { get; private set; }
 
-        // Workaround for https://github.com/xamarin/Xamarin.Forms/issues/7478
-        // Fixed in last Xamarin.Forms 4.4.0.x - remove this hack after updating
-        public static void WaitForResume()
-        {
-            var checkFrequencyInMillis = 100;
-            var maxTimeInMillis = 5000;
-
-            var count = 0;
-            while (!_isResumed)
-            {
-                Task.Delay(checkFrequencyInMillis).Wait();
-                count += checkFrequencyInMillis;
-
-                // don't let this run forever
-                if (count >= maxTimeInMillis)
-                {
-                    break;
-                }
-            }
-        }
-
         protected async override void OnStart()
         {
             System.Diagnostics.Debug.WriteLine("XF App: OnStart");
@@ -240,13 +219,6 @@ namespace Bit.App
             SyncIfNeeded();
             if (Current.MainPage is NavigationPage navPage && navPage.CurrentPage is LockPage lockPage)
             {
-                if (Device.RuntimePlatform == Device.Android)
-                {
-                    // Workaround for https://github.com/xamarin/Xamarin.Forms/issues/7478
-                    await Task.Delay(100);
-                    Current.MainPage = new NavigationPage(lockPage);
-                    // End workaround
-                }
                 await lockPage.PromptFingerprintAfterResumeAsync();
             }
         }

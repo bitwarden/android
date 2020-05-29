@@ -683,7 +683,7 @@
     <value>Tvåstegsverifiering</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Tvåstegsverifiering gör ditt konto säkrare genom att kräva att du verifierar din inloggning med en annan enhet, t.ex. en säkerhetsnyckel, autentiseringsapp, SMS, telefonsamtal eller e-post. Tvåstegsverifiering kan aktiveras i Bitwardens webbvalv. Vill du besöka webbplatsen nu?</value>
+    <value>Tvåstegsverifiering gör ditt konto säkrare genom att kräva att du verifierar din inloggning med en annan enhet, t.ex. en säkerhetsnyckel, autentiseringsapp, SMS, telefonsamtal eller e-post. Tvåstegsverifiering kan aktiveras i Bitwarden.com webbvalv. Vill du besöka webbplatsen nu?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Lås upp med {0}</value>
@@ -1130,6 +1130,9 @@
   </data>
   <data name="NoItemsFolder" xml:space="preserve">
     <value>Det finns inga objekt i den här mappen.</value>
+  </data>
+  <data name="NoItemsTrash" xml:space="preserve">
+    <value>Det finns inga objekt i papperskorgen.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
     <value>Tillgänglighetstjänst för automatisk ifyllnad</value>
@@ -1624,5 +1627,51 @@
   </data>
   <data name="SaveAttachmentSuccess" xml:space="preserve">
     <value>Bilagan sparades</value>
+  </data>
+  <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
+    <value>Vänligen aktivera "Tillgänglighetstjänst för automatisk ifyllnad" i Bitwardens inställningar för att använda automatisk ifyllnad.</value>
+  </data>
+  <data name="AutofillTileUriNotFound" xml:space="preserve">
+    <value>Inga lösenordsfält hittades</value>
+  </data>
+  <data name="SoftDeleting" xml:space="preserve">
+    <value>Skickar till papperskorgen...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemSoftDeleted" xml:space="preserve">
+    <value>Objektet har skickats till papperskorgen.</value>
+    <comment>Confirmation message after successfully soft-deleting a login</comment>
+  </data>
+  <data name="Restore" xml:space="preserve">
+    <value>Återställ</value>
+    <comment>Restores an entity (verb).</comment>
+  </data>
+  <data name="Restoring" xml:space="preserve">
+    <value>Återställer...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemRestored" xml:space="preserve">
+    <value>Objektet har återställts.</value>
+    <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
+  </data>
+  <data name="Trash" xml:space="preserve">
+    <value>Papperskorgen</value>
+    <comment>(noun) Location of deleted items which have not yet been permanently deleted</comment>
+  </data>
+  <data name="SearchTrash" xml:space="preserve">
+    <value>Sök i papperskorgen</value>
+    <comment>(action prompt) Label for the search text field when viewing the trash folder</comment>
+  </data>
+  <data name="DoYouReallyWantToPermanentlyDeleteCipher" xml:space="preserve">
+    <value>Är du säker på att du vill radera permanent? Detta går inte att ångra.</value>
+    <comment>Confirmation alert message when permanently deleteing a cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToRestoreCipher" xml:space="preserve">
+    <value>Vill du verkligen återställa detta objekt?</value>
+    <comment>Confirmation alert message when restoring a soft-deleted cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToSoftDeleteCipher" xml:space="preserve">
+    <value>Vill du verkligen skicka till papperskorgen?</value>
+    <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
 </root>

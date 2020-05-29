@@ -86,6 +86,8 @@ namespace Bit.App.Pages
                     nameof(PasswordUpdatedText),
                     nameof(PasswordHistoryText),
                     nameof(ShowIdentityAddress),
+                    nameof(IsDeleted),
+                    nameof(CanEdit),
                 });
         }
         public List<ViewPageFieldViewModel> Fields
@@ -210,6 +212,8 @@ namespace Bit.App.Pages
                 Page.Resources["textTotp"] =  ThemeManager.Resources()[value ? "text-danger" : "text-default"];
             }
         }
+        public bool IsDeleted => Cipher.IsDeleted;
+        public bool CanEdit => !Cipher.IsDeleted;
 
         public async Task<bool> LoadAsync(Action finishedLoadingAction = null)
         {
@@ -282,7 +286,8 @@ namespace Bit.App.Pages
                     AppResources.InternetConnectionRequiredTitle);
                 return false;
             }
-            var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.DoYouReallyWantToDelete,
+            var confirmed = await _platformUtilsService.ShowDialogAsync(
+                Cipher.IsDeleted ? AppResources.DoYouReallyWantToPermanentlyDeleteCipher : AppResources.DoYouReallyWantToSoftDeleteCipher,
                 null, AppResources.Yes, AppResources.Cancel);
             if (!confirmed)
             {
@@ -290,11 +295,58 @@ namespace Bit.App.Pages
             }
             try
             {
-                await _deviceActionService.ShowLoadingAsync(AppResources.Deleting);
-                await _cipherService.DeleteWithServerAsync(Cipher.Id);
+                await _deviceActionService.ShowLoadingAsync(Cipher.IsDeleted ? AppResources.Deleting : AppResources.SoftDeleting);
+                if (Cipher.IsDeleted)
+                {
+                    await _cipherService.DeleteWithServerAsync(Cipher.Id);
+                }
+                else
+                {
+                    await _cipherService.SoftDeleteWithServerAsync(Cipher.Id);
+                }
                 await _deviceActionService.HideLoadingAsync();
-                _platformUtilsService.ShowToast("success", null, AppResources.ItemDeleted);
-                _messagingService.Send("deletedCipher", Cipher);
+                _platformUtilsService.ShowToast("success", null,
+                    Cipher.IsDeleted ? AppResources.ItemDeleted : AppResources.ItemSoftDeleted);
+                _messagingService.Send(Cipher.IsDeleted ? "deletedCipher" : "softDeletedCipher", Cipher);
+                return true;
+            }
+            catch (ApiException e)
+            {
+                await _deviceActionService.HideLoadingAsync();
+                if (e?.Error != null)
+                {
+                    await _platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(),
+                        AppResources.AnErrorHasOccurred);
+                }
+            }
+            return false;
+        }
+
+        public async Task<bool> RestoreAsync()
+        {
+            if (!IsDeleted)
+            {
+                return false;
+            }
+            if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
+            {
+                await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
+                    AppResources.InternetConnectionRequiredTitle);
+                return false;
+            }
+            var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.DoYouReallyWantToRestoreCipher,
+                null, AppResources.Yes, AppResources.Cancel);
+            if (!confirmed)
+            {
+                return false;
+            }
+            try
+            {
+                await _deviceActionService.ShowLoadingAsync(AppResources.Restoring);
+                await _cipherService.RestoreWithServerAsync(Cipher.Id);
+                await _deviceActionService.HideLoadingAsync();
+                _platformUtilsService.ShowToast("success", null, AppResources.ItemRestored);
+                _messagingService.Send("restoredCipher", Cipher);
                 return true;
             }
             catch (ApiException e)

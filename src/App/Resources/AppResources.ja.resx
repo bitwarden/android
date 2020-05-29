@@ -729,7 +729,7 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
-    <value>When you select an input field and see a Bitwarden auto-fill overlay, you can tap it to launch the auto-fill service.</value>
+    <value>入力欄を選んだときにBitwardenの自動入力のメッセージが見えたら、それをタップすれば自動入力が起動します。</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>この通知をタップすると保管庫から自動入力します。</value>
@@ -1130,6 +1130,9 @@
   </data>
   <data name="NoItemsFolder" xml:space="preserve">
     <value>このフォルダーにはアイテムがありません。</value>
+  </data>
+  <data name="NoItemsTrash" xml:space="preserve">
+    <value>ごみ箱にアイテムはありません。</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
     <value>自動入力ユーザー補助サービス</value>
@@ -1570,10 +1573,10 @@
     <value>生体認証でロック解除</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
-    <value>Bitwarden needs attention - See "Auto-fill Accessibility Service" from Bitwarden Settings</value>
+    <value>要注意：Bitwardenの設定にある「自動入力ユーザー補助サービス」を見てください。</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
-    <value>3. On the Android App Settings screen for Bitwarden, go to the "Display over other apps" options (under Advanced) and tap the toggle to enable overlay support.</value>
+    <value>3. Android のアプリ設定のBitwardenのところで、詳細設定にある「他のアプリの上に重ねて表示」を選び、トグルをタップして、オーバーレイを有効にしてください。</value>
   </data>
   <data name="OverlayPermission" xml:space="preserve">
     <value>権限</value>
@@ -1582,7 +1585,7 @@
     <value>オーバーレイ権限の設定を開く</value>
   </data>
   <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
-    <value>3. Android の Bitwarden アプリ設定画面で、「他のアプリの上に重ねて表示」を選んでトグルをオンに変えてオーバーレイを許可してください。</value>
+    <value>3. Android のアプリ設定の Bitwarden のところで、詳細設定にある「他のアプリの上に重ねて表示」を選び、トグルを押してオーバーレイを許可してください。</value>
   </data>
   <data name="Denied" xml:space="preserve">
     <value>拒否</value>
@@ -1624,5 +1627,51 @@
   </data>
   <data name="SaveAttachmentSuccess" xml:space="preserve">
     <value>添付ファイルを保存しました</value>
+  </data>
+  <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
+    <value>自動入力タイルを使用するには、Bitwarden の設定で「自動入力ユーザー補助サービス」を有効にしてください。</value>
+  </data>
+  <data name="AutofillTileUriNotFound" xml:space="preserve">
+    <value>パスワードフィールドが見つかりませんでした</value>
+  </data>
+  <data name="SoftDeleting" xml:space="preserve">
+    <value>ごみ箱に入れています…</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemSoftDeleted" xml:space="preserve">
+    <value>アイテムをごみ箱に入れました。</value>
+    <comment>Confirmation message after successfully soft-deleting a login</comment>
+  </data>
+  <data name="Restore" xml:space="preserve">
+    <value>リストア</value>
+    <comment>Restores an entity (verb).</comment>
+  </data>
+  <data name="Restoring" xml:space="preserve">
+    <value>リストア中...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="ItemRestored" xml:space="preserve">
+    <value>アイテムをリストアしました。</value>
+    <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
+  </data>
+  <data name="Trash" xml:space="preserve">
+    <value>ごみ箱</value>
+    <comment>(noun) Location of deleted items which have not yet been permanently deleted</comment>
+  </data>
+  <data name="SearchTrash" xml:space="preserve">
+    <value>ごみ箱を検索</value>
+    <comment>(action prompt) Label for the search text field when viewing the trash folder</comment>
+  </data>
+  <data name="DoYouReallyWantToPermanentlyDeleteCipher" xml:space="preserve">
+    <value>本当に完全に削除しますか？元に戻すことはできません。</value>
+    <comment>Confirmation alert message when permanently deleteing a cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToRestoreCipher" xml:space="preserve">
+    <value>本当にこのアイテムをリストアしますか？</value>
+    <comment>Confirmation alert message when restoring a soft-deleted cipher.</comment>
+  </data>
+  <data name="DoYouReallyWantToSoftDeleteCipher" xml:space="preserve">
+    <value>本当にごみ箱に入れますか？</value>
+    <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
 </root>

@@ -32,6 +32,7 @@ namespace Bit.App.Pages
         private Dictionary<string, int> _folderCounts = new Dictionary<string, int>();
         private Dictionary<string, int> _collectionCounts = new Dictionary<string, int>();
         private Dictionary<CipherType, int> _typeCounts = new Dictionary<CipherType, int>();
+        private int _deletedCount = 0;
 
         private readonly ICipherService _cipherService;
         private readonly IFolderService _folderService;
@@ -73,6 +74,7 @@ namespace Bit.App.Pages
         public string FolderId { get; set; }
         public string CollectionId { get; set; }
         public Func<CipherView, bool> Filter { get; set; }
+        public bool Deleted { get; set; }
 
         public bool HasCiphers { get; set; }
         public bool HasFolders { get; set; }
@@ -152,7 +154,7 @@ namespace Bit.App.Pages
             ShowNoData = false;
             Loading = true;
             ShowList = false;
-            ShowAddCipherButton = true;
+            ShowAddCipherButton = !Deleted;
             var groupedItems = new List<GroupingsPageListGroup>();
             var page = Page as GroupingsPage;
 
@@ -233,7 +235,8 @@ namespace Bit.App.Pages
                 }
                 if (Ciphers?.Any() ?? false)
                 {
-                    var ciphersListItems = Ciphers.Select(c => new GroupingsPageListItem { Cipher = c }).ToList();
+                    var ciphersListItems = Ciphers.Where(c => c.IsDeleted == Deleted)
+                        .Select(c => new GroupingsPageListItem { Cipher = c }).ToList();
                     groupedItems.Add(new GroupingsPageListGroup(ciphersListItems, AppResources.Items,
                         ciphersListItems.Count, uppercaseGroupNames, !MainPage && !groupedItems.Any()));
                 }
@@ -243,6 +246,18 @@ namespace Bit.App.Pages
                         c => new GroupingsPageListItem { Cipher = c }).ToList();
                     groupedItems.Add(new GroupingsPageListGroup(noFolderCiphersListItems, AppResources.FolderNone,
                         noFolderCiphersListItems.Count, uppercaseGroupNames, false));
+                }
+                // Ensure this is last in the list (appears at the bottom)
+                if (MainPage && !Deleted)
+                {
+                    groupedItems.Add(new GroupingsPageListGroup(new List<GroupingsPageListItem>()
+                    {
+                        new GroupingsPageListItem()
+                        {
+                            IsTrash = true, 
+                            ItemCount = _deletedCount.ToString("N0")
+                        }
+                    }, AppResources.Trash, _deletedCount, uppercaseGroupNames, false));
                 }
                 GroupedItems.ResetWithRange(groupedItems);
             }
@@ -299,6 +314,12 @@ namespace Bit.App.Pages
             await Page.Navigation.PushAsync(page);
         }
 
+        public async Task SelectTrashAsync()
+        {
+            var page = new GroupingsPage(false, null, null, null, AppResources.Trash, null, true);
+            await Page.Navigation.PushAsync(page);
+        }
+
         public async Task ExitAsync()
         {
             var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.ExitConfirmation,
@@ -344,6 +365,7 @@ namespace Bit.App.Pages
             HasFolders = false;
             HasCollections = false;
             Filter = null;
+            _deletedCount = 0;
 
             if (MainPage)
             {
@@ -356,9 +378,14 @@ namespace Bit.App.Pages
             }
             else
             {
-                if (Type != null)
+                if (Deleted)
                 {
-                    Filter = c => c.Type == Type.Value;
+                    Filter = c => c.IsDeleted;
+                    NoDataText = AppResources.NoItemsTrash;
+                }
+                else if (Type != null)
+                {
+                    Filter = c => c.Type == Type.Value && !c.IsDeleted;
                 }
                 else if (FolderId != null)
                 {
@@ -377,7 +404,7 @@ namespace Bit.App.Pages
                     {
                         PageTitle = AppResources.FolderNone;
                     }
-                    Filter = c => c.FolderId == folderId;
+                    Filter = c => c.FolderId == folderId && !c.IsDeleted;
                 }
                 else if (CollectionId != null)
                 {
@@ -389,7 +416,7 @@ namespace Bit.App.Pages
                         PageTitle = collectionNode.Node.Name;
                         NestedCollections = (collectionNode.Children?.Count ?? 0) > 0 ? collectionNode.Children : null;
                     }
-                    Filter = c => c.CollectionIds?.Contains(CollectionId) ?? false;
+                    Filter = c => c.CollectionIds?.Contains(CollectionId) ?? false && !c.IsDeleted;
                 }
                 else
                 {
@@ -402,6 +429,12 @@ namespace Bit.App.Pages
             {
                 if (MainPage)
                 {
+                    if (c.IsDeleted)
+                    {
+                        _deletedCount++;
+                        continue;
+                    }
+
                     if (c.Favorite)
                     {
                         if (FavoriteCiphers == null)

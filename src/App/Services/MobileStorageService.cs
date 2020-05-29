@@ -1,11 +1,12 @@
 ﻿using Bit.Core;
 using Bit.Core.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Bit.App.Services
 {
-    public class MobileStorageService : IStorageService
+    public class MobileStorageService : IStorageService, IDisposable
     {
         private readonly IStorageService _preferencesStorageService;
         private readonly IStorageService _liteDbStorageService;
@@ -88,6 +89,18 @@ namespace Bit.App.Services
                 return _preferencesStorageService.RemoveAsync(key);
             }
             return _liteDbStorageService.RemoveAsync(key);
+        }
+
+        public void Dispose()
+        {
+            if (_liteDbStorageService is IDisposable disposableLiteDbService)
+            {
+                disposableLiteDbService.Dispose();
+            }
+            if (_preferencesStorageService is IDisposable disposablePrefService)
+            {
+                disposablePrefService.Dispose();
+            }
         }
     }
 }

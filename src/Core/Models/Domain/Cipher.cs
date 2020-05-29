@@ -51,6 +51,7 @@ namespace Bit.Core.Models.Domain
             Attachments = obj.Attachments?.Select(a => new Attachment(a, alreadyEncrypted)).ToList();
             Fields = obj.Fields?.Select(f => new Field(f, alreadyEncrypted)).ToList();
             PasswordHistory = obj.PasswordHistory?.Select(ph => new PasswordHistory(ph, alreadyEncrypted)).ToList();
+            DeletedDate = obj.DeletedDate;
         }
 
         public string Id { get; set; }
@@ -72,6 +73,8 @@ namespace Bit.Core.Models.Domain
         public List<Field> Fields { get; set; }
         public List<PasswordHistory> PasswordHistory { get; set; }
         public HashSet<string> CollectionIds { get; set; }
+
+        public DateTime? DeletedDate { get; set; }
 
         public async Task<CipherView> DecryptAsync()
         {
@@ -161,7 +164,8 @@ namespace Bit.Core.Models.Domain
                 Favorite = Favorite,
                 RevisionDate = RevisionDate,
                 Type = Type,
-                CollectionIds = CollectionIds.ToList()
+                CollectionIds = CollectionIds.ToList(),
+                DeletedDate = DeletedDate
             };
             BuildDataModel(this, c, new HashSet<string>
             {
