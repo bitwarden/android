@@ -16,7 +16,7 @@ using System;
 using System.ComponentModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
-/*
+
 [assembly: ExportRenderer(typeof(CipherViewCell), typeof(CipherViewCellRenderer))]
 namespace Bit.Droid.Renderers
 {
@@ -28,63 +28,48 @@ namespace Bit.Droid.Renderers
         private static Android.Graphics.Color _mutedColor;
         private static Android.Graphics.Color _disabledIconColor;
 
-        private AndroidCipherCell _cell;
+        public CipherViewCellRenderer(Context context) : base(context) { }
 
-        public CipherViewCellRenderer(Context context) : base(context)
+        protected override void OnElementChanged (ElementChangedEventArgs<CipherViewCell> e)
         {
-            _faTypeface = Typeface.CreateFromAsset(context.Assets, "FontAwesome.ttf");
-            _miTypeface = Typeface.CreateFromAsset(context.Assets, "MaterialIcons_Regular.ttf");
-            _textColor = ThemeManager.GetResourceColor("TextColor").ToAndroid();
-            _mutedColor = ThemeManager.GetResourceColor("MutedColor").ToAndroid();
-            _disabledIconColor = ThemeManager.GetResourceColor("DisabledIconColor").ToAndroid();
-
-            if (Control == null)
+            base.OnElementChanged(e);
+            if (_faTypeface == null)
             {
-                Control = new AndroidCipherCell(context, Element, _faTypeface, _miTypeface);
+                _faTypeface = Typeface.CreateFromAsset(Context.Assets, "FontAwesome.ttf");
             }
-            else
+            if (_miTypeface == null)
             {
-                Control.CipherViewCell.PropertyChanged -= CellPropertyChanged;
+                _miTypeface = Typeface.CreateFromAsset(Context.Assets, "MaterialIcons_Regular.ttf");
             }
+            if (_textColor == default)
+            {
+                _textColor = ThemeManager.GetResourceColor("TextColor").ToAndroid();
+            }
+            if (_mutedColor == default)
+            {
+                _mutedColor = ThemeManager.GetResourceColor("MutedColor").ToAndroid();
+            }
+            if (_disabledIconColor == default)
+            {
+                _disabledIconColor = ThemeManager.GetResourceColor("DisabledIconColor").ToAndroid();
+            }
+            Control.CipherViewCell.PropertyChanged -= CellPropertyChanged;
             Element.PropertyChanged += CellPropertyChanged;
-            _cell.UpdateCell(cipherCell);
-            _cell.UpdateColors(_textColor, _mutedColor, _disabledIconColor);
-
-            this.Control
-            this.Element
-        }
-
-
-        protected override Android.Views.View GetCellCore(Cell item, Android.Views.View convertView,
-            ViewGroup parent, Context context)
-        {
-            var cipherCell = item as CipherViewCell;
-            _cell = convertView as AndroidCipherCell;
-            if (_cell == null)
-            {
-                _cell = new AndroidCipherCell(context, cipherCell, _faTypeface, _miTypeface);
-            }
-            else
-            {
-                _cell.CipherViewCell.PropertyChanged -= CellPropertyChanged;
-            }
-            cipherCell.PropertyChanged += CellPropertyChanged;
-            _cell.UpdateCell(cipherCell);
-            _cell.UpdateColors(_textColor, _mutedColor, _disabledIconColor);
-            return _cell;
+            Control.UpdateCell(Element);
+            Control.UpdateColors(_textColor, _mutedColor, _disabledIconColor);
         }
 
         public void CellPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             var cipherCell = sender as CipherViewCell;
-            _cell.CipherViewCell = cipherCell;
+            Control.CipherViewCell = cipherCell;
             if (e.PropertyName == CipherViewCell.CipherProperty.PropertyName)
             {
-                _cell.UpdateCell(cipherCell);
+                Control.UpdateCell(cipherCell);
             }
             else if (e.PropertyName == CipherViewCell.WebsiteIconsEnabledProperty.PropertyName)
             {
-                _cell.UpdateIconImage(cipherCell);
+                Control.UpdateIconImage(cipherCell);
             }
         }
     }
@@ -240,4 +225,3 @@ namespace Bit.Droid.Renderers
         }
     }
 }
-*/
