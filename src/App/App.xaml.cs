@@ -345,7 +345,7 @@ namespace Bit.App
                 }
                 else
                 {
-                    await _vaultTimeoutService.LockAsync(true);   
+                    await _vaultTimeoutService.LockAsync(true);
                 }
             }
         }
