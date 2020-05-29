@@ -100,10 +100,10 @@ namespace Bit.App.Pages
             {
                 try
                 {
-                    var data = _exportService.GetExport(FileFormatOptions[FileFormatSelectedIndex].Key);
+                    var data = await _exportService.GetExport(FileFormatOptions[FileFormatSelectedIndex].Key);
                     var fileFormat = FileFormatOptions[FileFormatSelectedIndex].Key;
                     _defaultFilename = _exportService.GetFileName(null, fileFormat);
-                    _exportResult = Encoding.ASCII.GetBytes(data.Result);
+                    _exportResult = Encoding.ASCII.GetBytes(data);
 
                     if (!_deviceActionService.SaveFile(_exportResult, null, _defaultFilename, null))
                     {
