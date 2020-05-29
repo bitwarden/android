@@ -43,7 +43,7 @@ namespace Bit.App
         public App(AppOptions appOptions)
         {
             Options = appOptions ?? new AppOptions();
-            if (Options.EmptyApp)
+            if (Options.IosExtension)
             {
                 Current = this;
                 return;
