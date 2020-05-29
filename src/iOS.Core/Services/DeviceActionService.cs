@@ -295,7 +295,11 @@ namespace Bit.iOS.Core.Services
 
         public bool SupportsNfc()
         {
-            return CoreNFC.NFCNdefReaderSession.ReadingAvailable;
+            if(Application.Current is App.App currentApp && !currentApp.Options.IosExtension)
+            {
+                return CoreNFC.NFCNdefReaderSession.ReadingAvailable;
+            }
+            return false;
         }
 
         public bool SupportsCamera()
@@ -350,7 +354,7 @@ namespace Bit.iOS.Core.Services
         public Task<string> DisplayActionSheetAsync(string title, string cancel, string destruction,
             params string[] buttons)
         {
-            if (Application.Current is App.App app && app.Options != null && !app.Options.EmptyApp)
+            if (Application.Current is App.App app && app.Options != null && !app.Options.IosExtension)
             {
                 return app.MainPage.DisplayActionSheet(title, cancel, destruction, buttons);
             }

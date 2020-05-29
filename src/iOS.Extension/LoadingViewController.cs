@@ -423,7 +423,7 @@ namespace Bit.iOS.Extension
         private void LaunchLoginFlow()
         {
             var loginPage = new LoginPage();
-            var app = new App.App(new AppOptions { EmptyApp = true });
+            var app = new App.App(new AppOptions { IosExtension = true });
             ThemeManager.SetTheme(false, app.Resources);
             ThemeManager.ApplyResourcesToPage(loginPage);
             if (loginPage.BindingContext is LoginPageViewModel vm)
@@ -443,7 +443,7 @@ namespace Bit.iOS.Extension
         private void LaunchTwoFactorFlow()
         {
             var twoFactorPage = new TwoFactorPage();
-            var app = new App.App(new AppOptions { EmptyApp = true });
+            var app = new App.App(new AppOptions { IosExtension = true });
             ThemeManager.SetTheme(false, app.Resources);
             ThemeManager.ApplyResourcesToPage(twoFactorPage);
             if (twoFactorPage.BindingContext is TwoFactorPageViewModel vm)
