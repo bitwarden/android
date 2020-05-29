@@ -129,9 +129,13 @@ namespace Bit.App.Pages
             {
                 await _vm.LockAsync();
             }
-            else if (item.Name == AppResources.LockOptions)
+            else if (item.Name == AppResources.VaultTimeout)
             {
-                await _vm.LockOptionsAsync();
+                await _vm.VaultTimeoutAsync();
+            }
+            else if (item.Name == AppResources.VaultTimeoutAction)
+            {
+                await _vm.VaultTimeoutActionAsync();
             }
             else if (item.Name == AppResources.UnlockWithPIN)
             {

@@ -16,7 +16,7 @@ namespace Bit.App.Pages
     {
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IDeviceActionService _deviceActionService;
-        private readonly ILockService _lockService;
+        private readonly IVaultTimeoutService _vaultTimeoutService;
         private readonly ICryptoService _cryptoService;
         private readonly IStorageService _storageService;
         private readonly IUserService _userService;
@@ -39,7 +39,7 @@ namespace Bit.App.Pages
         {
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
-            _lockService = ServiceContainer.Resolve<ILockService>("lockService");
+            _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             _cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _userService = ServiceContainer.Resolve<IUserService>("userService");
@@ -102,9 +102,9 @@ namespace Bit.App.Pages
 
         public async Task InitAsync(bool autoPromptFingerprint)
         {
-            _pinSet = await _lockService.IsPinLockSetAsync();
-            PinLock = (_pinSet.Item1 && _lockService.PinProtectedKey != null) || _pinSet.Item2;
-            FingerprintLock = await _lockService.IsFingerprintLockSetAsync();
+            _pinSet = await _vaultTimeoutService.IsPinLockSetAsync();
+            PinLock = (_pinSet.Item1 && _vaultTimeoutService.PinProtectedKey != null) || _pinSet.Item2;
+            FingerprintLock = await _vaultTimeoutService.IsFingerprintLockSetAsync();
             _email = await _userService.GetEmailAsync();
             var webVault = _environmentService.GetWebVaultUrl();
             if (string.IsNullOrWhiteSpace(webVault))
@@ -180,7 +180,7 @@ namespace Bit.App.Pages
                     {
                         var key = await _cryptoService.MakeKeyFromPinAsync(Pin, _email,
                             kdf.GetValueOrDefault(KdfType.PBKDF2_SHA256), kdfIterations.GetValueOrDefault(5000),
-                            _lockService.PinProtectedKey);
+                            _vaultTimeoutService.PinProtectedKey);
                         var encKey = await _cryptoService.GetEncKeyAsync(key);
                         var protectedPin = await _storageService.GetAsync<string>(Constants.ProtectedPin);
                         var decPin = await _cryptoService.DecryptToUtf8Async(new CipherString(protectedPin), encKey);
@@ -240,7 +240,7 @@ namespace Bit.App.Pages
                         var decPin = await _cryptoService.DecryptToUtf8Async(new CipherString(protectedPin), encKey);
                         var pinKey = await _cryptoService.MakePinKeyAysnc(decPin, _email,
                             kdf.GetValueOrDefault(KdfType.PBKDF2_SHA256), kdfIterations.GetValueOrDefault(5000));
-                        _lockService.PinProtectedKey = await _cryptoService.EncryptAsync(key.Key, pinKey);
+                        _vaultTimeoutService.PinProtectedKey = await _cryptoService.EncryptAsync(key.Key, pinKey);
                     }
                     MasterPassword = string.Empty;
                     await SetKeyAndContinueAsync(key);
@@ -290,7 +290,7 @@ namespace Bit.App.Pages
                     page.MasterPasswordEntry.Focus();
                 }
             });
-            _lockService.FingerprintLocked = !success;
+            _vaultTimeoutService.FingerprintLocked = !success;
             if (success)
             {
                 await DoContinueAsync();
@@ -309,7 +309,7 @@ namespace Bit.App.Pages
 
         private async Task DoContinueAsync()
         {
-            _lockService.FingerprintLocked = false;
+            _vaultTimeoutService.FingerprintLocked = false;
             var disableFavicon = await _storageService.GetAsync<bool?>(Constants.DisableFaviconKey);
             await _stateService.SaveAsync(Constants.DisableFaviconKey, disableFavicon.GetValueOrDefault());
             _messagingService.Send("unlocked");

@@ -347,6 +347,45 @@ namespace Bit.iOS.Core.Services
             return result.Task;
         }
 
+        public Task<string> DisplayActionSheetAsync(string title, string cancel, string destruction,
+            params string[] buttons)
+        {
+            if (Application.Current is App.App app && app.Options != null && !app.Options.EmptyApp)
+            {
+                return app.MainPage.DisplayActionSheet(title, cancel, destruction, buttons);
+            }
+            var result = new TaskCompletionSource<string>();
+            var vc = GetPresentedViewController();
+            var sheet = UIAlertController.Create(title, null, UIAlertControllerStyle.ActionSheet);
+            if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad)
+            {
+                var x = vc.View.Bounds.Width / 2;
+                var y = vc.View.Bounds.Bottom;
+                var rect = new CGRect(x, y, 0, 0);
+
+                sheet.PopoverPresentationController.SourceView = vc.View;
+                sheet.PopoverPresentationController.SourceRect = rect;
+                sheet.PopoverPresentationController.PermittedArrowDirections = UIPopoverArrowDirection.Unknown;
+            }
+            foreach (var button in buttons)
+            {
+                sheet.AddAction(UIAlertAction.Create(button, UIAlertActionStyle.Default,
+                    x => result.TrySetResult(button)));
+            }
+            if (!string.IsNullOrWhiteSpace(destruction))
+            {
+                sheet.AddAction(UIAlertAction.Create(destruction, UIAlertActionStyle.Destructive,
+                    x => result.TrySetResult(destruction)));
+            }
+            if (!string.IsNullOrWhiteSpace(cancel))
+            {
+                sheet.AddAction(UIAlertAction.Create(cancel, UIAlertActionStyle.Cancel,
+                    x => result.TrySetResult(cancel)));
+            }
+            vc.PresentViewController(sheet, true, null);
+            return result.Task;
+        }
+
         public void Autofill(CipherView cipher)
         {
             throw new NotImplementedException();

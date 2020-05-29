@@ -18,7 +18,7 @@ namespace Bit.App.Utilities
         {
             var platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             var eventService = ServiceContainer.Resolve<IEventService>("eventService");
-            var lockService = ServiceContainer.Resolve<ILockService>("lockService");
+            var vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             var options = new List<string> { AppResources.View };
             if (!cipher.IsDeleted)
             {
@@ -67,7 +67,7 @@ namespace Bit.App.Utilities
                 }
             }
             var selection = await page.DisplayActionSheet(cipher.Name, AppResources.Cancel, null, options.ToArray());
-            if (await lockService.IsLockedAsync())
+            if (await vaultTimeoutService.IsLockedAsync())
             {
                 platformUtilsService.ShowToast("info", null, AppResources.VaultIsLocked);
             }
@@ -137,10 +137,16 @@ namespace Bit.App.Utilities
             if (lastBuild == null)
             {
                 // Installed
-                var currentLock = await storageService.GetAsync<int?>(Constants.LockOptionKey);
-                if (currentLock == null)
+                var currentTimeout = await storageService.GetAsync<int?>(Constants.VaultTimeoutKey);
+                if (currentTimeout == null)
                 {
-                    await storageService.SaveAsync(Constants.LockOptionKey, 15);
+                    await storageService.SaveAsync(Constants.VaultTimeoutKey, 15);
+                }
+                
+                var currentAction = await storageService.GetAsync<string>(Constants.VaultTimeoutActionKey);
+                if (currentAction == null)
+                {
+                    await storageService.SaveAsync(Constants.VaultTimeoutActionKey, "lock");
                 }
             }
             else if (lastBuild != currentBuild)

@@ -26,6 +26,11 @@ namespace Bit.App.Pages
             _vm.Page = this;
             _vm.StartTwoFactorAction = () => Device.BeginInvokeOnMainThread(async () => await StartTwoFactorAsync());
             _vm.LoggedInAction = () => Device.BeginInvokeOnMainThread(async () => await LoggedInAsync());
+            _vm.CloseAction = async () =>
+            {
+                _messagingService.Send("showStatusBar", false);
+                await Navigation.PopModalAsync();
+            };
             _vm.Email = email;
             MasterPasswordEntry = _masterPassword;
             if (Device.RuntimePlatform == Device.Android)
@@ -73,8 +78,7 @@ namespace Bit.App.Pages
         {
             if (DoOnce())
             {
-                _messagingService.Send("showStatusBar", false);
-                await Navigation.PopModalAsync();
+                _vm.CloseAction();
             }
         }
 
@@ -83,7 +87,7 @@ namespace Bit.App.Pages
             var page = new TwoFactorPage();
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
-        
+
         private async Task LoggedInAsync()
         {
             if (_appOptions != null)

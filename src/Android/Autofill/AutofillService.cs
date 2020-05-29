@@ -21,7 +21,7 @@ namespace Bit.Droid.Autofill
     public class AutofillService : Android.Service.Autofill.AutofillService
     {
         private ICipherService _cipherService;
-        private ILockService _lockService;
+        private IVaultTimeoutService _vaultTimeoutService;
         private IStorageService _storageService;
 
         public async override void OnFillRequest(FillRequest request, CancellationSignal cancellationSignal,
@@ -47,13 +47,13 @@ namespace Bit.Droid.Autofill
                 return;
             }
 
-            if (_lockService == null)
+            if (_vaultTimeoutService == null)
             {
-                _lockService = ServiceContainer.Resolve<ILockService>("lockService");
+                _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             }
 
             List<FilledItem> items = null;
-            var locked = await _lockService.IsLockedAsync();
+            var locked = await _vaultTimeoutService.IsLockedAsync();
             if (!locked)
             {
                 if (_cipherService == null)

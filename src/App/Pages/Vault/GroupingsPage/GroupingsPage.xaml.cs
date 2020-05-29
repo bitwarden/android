@@ -19,7 +19,7 @@ namespace Bit.App.Pages
         private readonly ISyncService _syncService;
         private readonly IPushNotificationService _pushNotificationService;
         private readonly IStorageService _storageService;
-        private readonly ILockService _lockService;
+        private readonly IVaultTimeoutService _vaultTimeoutService;
         private readonly ICipherService _cipherService;
         private readonly IDeviceActionService _deviceActionService;
         private readonly GroupingsPageViewModel _vm;
@@ -39,7 +39,7 @@ namespace Bit.App.Pages
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
             _pushNotificationService = ServiceContainer.Resolve<IPushNotificationService>("pushNotificationService");
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
-            _lockService = ServiceContainer.Resolve<ILockService>("lockService");
+            _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _vm = BindingContext as GroupingsPageViewModel;
@@ -247,7 +247,7 @@ namespace Bit.App.Pages
 
         private async void Lock_Clicked(object sender, EventArgs e)
         {
-            await _lockService.LockAsync(true, true);
+            await _vaultTimeoutService.LockAsync(true, true);
         }
 
         private async void Exit_Clicked(object sender, EventArgs e)

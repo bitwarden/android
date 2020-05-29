@@ -26,10 +26,10 @@ namespace Bit.iOS
     {
         private NFCNdefReaderSession _nfcSession = null;
         private iOSPushNotificationHandler _pushHandler = null;
-        private NFCReaderDelegate _nfcDelegate = null;
+        private Core.NFCReaderDelegate _nfcDelegate = null;
         private NSTimer _clipboardTimer = null;
         private nint _clipboardBackgroundTaskId;
-        private NSTimer _lockTimer = null;
+        private NSTimer _vaultTimeoutTimer = null;
         private nint _lockBackgroundTaskId;
         private NSTimer _eventTimer = null;
         private nint _eventBackgroundTaskId;
@@ -38,7 +38,7 @@ namespace Bit.iOS
         private IMessagingService _messagingService;
         private IBroadcasterService _broadcasterService;
         private IStorageService _storageService;
-        private ILockService _lockService;
+        private IVaultTimeoutService _vaultTimeoutService;
         private IEventService _eventService;
 
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
@@ -50,7 +50,7 @@ namespace Bit.iOS
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
-            _lockService = ServiceContainer.Resolve<ILockService>("lockService");
+            _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             _eventService = ServiceContainer.Resolve<IEventService>("eventService");
 
             LoadApplication(new App.App(null));
@@ -59,13 +59,13 @@ namespace Bit.iOS
 
             _broadcasterService.Subscribe(nameof(AppDelegate), async (message) =>
             {
-                if (message.Command == "scheduleLockTimer")
+                if (message.Command == "scheduleVaultTimeoutTimer")
                 {
-                    LockTimer((int)message.Data);
+                    VaultTimeoutTimer((int)message.Data);
                 }
-                else if (message.Command == "cancelLockTimer")
+                else if (message.Command == "cancelVaultTimeoutTimer")
                 {
-                    CancelLockTimer();
+                    CancelVaultTimeoutTimer();
                 }
                 else if (message.Command == "startEventTimer")
                 {
@@ -89,7 +89,7 @@ namespace Bit.iOS
                 }
                 else if (message.Command == "listenYubiKeyOTP")
                 {
-                    ListenYubiKey((bool)message.Data);
+                    iOSCoreHelpers.ListenYubiKey((bool)message.Data, _deviceActionService, _nfcSession, _nfcDelegate);
                 }
                 else if (message.Command == "unlocked")
                 {
@@ -186,8 +186,7 @@ namespace Bit.iOS
             };
             var backgroundView = new UIView(UIApplication.SharedApplication.KeyWindow.Frame)
             {
-                BackgroundColor = ((Color)Xamarin.Forms.Application.Current.Resources["SplashBackgroundColor"])
-                    .ToUIColor()
+                BackgroundColor = ThemeManager.GetResourceColor("SplashBackgroundColor").ToUIColor()
             };
             var logo = new UIImage(!ThemeManager.UsingLightTheme ? "logo_white.png" : "logo.png");
             var imageView = new UIImageView(logo)
@@ -284,7 +283,7 @@ namespace Bit.iOS
             iOSCoreHelpers.RegisterAppCenter();
             _pushHandler = new iOSPushNotificationHandler(
                 ServiceContainer.Resolve<IPushNotificationListenerService>("pushNotificationListenerService"));
-            _nfcDelegate = new NFCReaderDelegate((success, message) =>
+            _nfcDelegate = new Core.NFCReaderDelegate((success, message) =>
                 _messagingService.Send("gotYubiKeyOTP", message));
 
             iOSCoreHelpers.Bootstrap(async () => await ApplyManagedSettingsAsync());
@@ -300,25 +299,7 @@ namespace Bit.iOS
                 "pushNotificationService", iosPushNotificationService);
         }
 
-        private void ListenYubiKey(bool listen)
-        {
-            if (_deviceActionService.SupportsNfc())
-            {
-                _nfcSession?.InvalidateSession();
-                _nfcSession?.Dispose();
-                _nfcSession = null;
-                if (listen)
-                {
-                    _nfcSession = new NFCNdefReaderSession(_nfcDelegate, null, true)
-                    {
-                        AlertMessage = AppResources.HoldYubikeyNearTop
-                    };
-                    _nfcSession.BeginSession();
-                }
-            }
-        }
-
-        private void LockTimer(int lockOptionMinutes)
+        private void VaultTimeoutTimer(int vaultTimeoutMinutes)
         {
             if (_lockBackgroundTaskId > 0)
             {
@@ -330,21 +311,21 @@ namespace Bit.iOS
                 UIApplication.SharedApplication.EndBackgroundTask(_lockBackgroundTaskId);
                 _lockBackgroundTaskId = 0;
             });
-            var lockOptionMs = lockOptionMinutes * 60000;
-            _lockTimer?.Invalidate();
-            _lockTimer?.Dispose();
-            _lockTimer = null;
-            var lockMsSpan = TimeSpan.FromMilliseconds(lockOptionMs + 10);
+            var vaultTimeoutMs = vaultTimeoutMinutes * 60000;
+            _vaultTimeoutTimer?.Invalidate();
+            _vaultTimeoutTimer?.Dispose();
+            _vaultTimeoutTimer = null;
+            var vaultTimeoutMsSpan = TimeSpan.FromMilliseconds(vaultTimeoutMs + 10);
             Device.BeginInvokeOnMainThread(() =>
             {
-                _lockTimer = NSTimer.CreateScheduledTimer(lockMsSpan, timer =>
+                _vaultTimeoutTimer = NSTimer.CreateScheduledTimer(vaultTimeoutMsSpan, timer =>
                 {
                     Device.BeginInvokeOnMainThread(() =>
                     {
-                        _lockService.CheckLockAsync();
-                        _lockTimer?.Invalidate();
-                        _lockTimer?.Dispose();
-                        _lockTimer = null;
+                        _vaultTimeoutService.CheckVaultTimeoutAsync();
+                        _vaultTimeoutTimer?.Invalidate();
+                        _vaultTimeoutTimer?.Dispose();
+                        _vaultTimeoutTimer = null;
                         if (_lockBackgroundTaskId > 0)
                         {
                             UIApplication.SharedApplication.EndBackgroundTask(_lockBackgroundTaskId);
@@ -355,11 +336,11 @@ namespace Bit.iOS
             });
         }
 
-        private void CancelLockTimer()
+        private void CancelVaultTimeoutTimer()
         {
-            _lockTimer?.Invalidate();
-            _lockTimer?.Dispose();
-            _lockTimer = null;
+            _vaultTimeoutTimer?.Invalidate();
+            _vaultTimeoutTimer?.Dispose();
+            _vaultTimeoutTimer = null;
             if (_lockBackgroundTaskId > 0)
             {
                 UIApplication.SharedApplication.EndBackgroundTask(_lockBackgroundTaskId);

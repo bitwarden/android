@@ -1,10 +1,10 @@
-﻿using Bit.iOS.Renderers;
+﻿using Bit.iOS.Core.Renderers;
 using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
 [assembly: ExportRenderer(typeof(SearchBar), typeof(CustomSearchBarRenderer))]
-namespace Bit.iOS.Renderers
+namespace Bit.iOS.Core.Renderers
 {
     public class CustomSearchBarRenderer : SearchBarRenderer
     {
@@ -19,7 +19,7 @@ namespace Bit.iOS.Renderers
 
         private void UpdateKeyboardAppearance()
         {
-            if (!Core.Utilities.ThemeHelpers.LightTheme)
+            if (!Utilities.ThemeHelpers.LightTheme)
             {
                 Control.KeyboardAppearance = UIKeyboardAppearance.Dark;
             }

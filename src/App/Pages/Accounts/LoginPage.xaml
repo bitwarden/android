@@ -73,8 +73,8 @@
                         AutomationProperties.Name="{u:I18n ToggleVisibility}" />
                 </Grid>
             </StackLayout>
-            <StackLayout Padding="10, 0">
-                <Button Text="{u:I18n GetPasswordHint}" Clicked="Hint_Clicked"></Button>
+            <StackLayout Padding="10, 0" IsVisible="{Binding HideHintButton, Converter={StaticResource inverseBool}}">
+                <Button Text="{u:I18n GetPasswordHint}" Clicked="Hint_Clicked" />
             </StackLayout>
         </StackLayout>
     </ScrollView>

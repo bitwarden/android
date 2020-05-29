@@ -1,8 +1,9 @@
-﻿using UIKit;
+﻿using Bit.App.Utilities;
+using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
-namespace Bit.iOS.Utilities
+namespace Bit.iOS.Core.Utilities
 {
     public static class iOSHelpers
     {
@@ -44,7 +45,7 @@ namespace Bit.iOS.Utilities
         {
             var borderLine = new UIView
             {
-                BackgroundColor = ((Color)Xamarin.Forms.Application.Current.Resources["BoxBorderColor"]).ToUIColor(),
+                BackgroundColor = ThemeManager.GetResourceColor("BoxBorderColor").ToUIColor(),
                 TranslatesAutoresizingMaskIntoConstraints = false
             };
             control.AddSubview(borderLine);

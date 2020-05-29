@@ -15,7 +15,7 @@ namespace Bit.iOS.Core.Controllers
 {
     public abstract class LockPasswordViewController : ExtendedUITableViewController
     {
-        private ILockService _lockService;
+        private IVaultTimeoutService _vaultTimeoutService;
         private ICryptoService _cryptoService;
         private IDeviceActionService _deviceActionService;
         private IUserService _userService;
@@ -42,7 +42,7 @@ namespace Bit.iOS.Core.Controllers
 
         public override void ViewDidLoad()
         {
-            _lockService = ServiceContainer.Resolve<ILockService>("lockService");
+            _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             _cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _userService = ServiceContainer.Resolve<IUserService>("userService");
@@ -50,9 +50,9 @@ namespace Bit.iOS.Core.Controllers
             _secureStorageService = ServiceContainer.Resolve<IStorageService>("secureStorageService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
 
-            _pinSet = _lockService.IsPinLockSetAsync().GetAwaiter().GetResult();
-            _pinLock = (_pinSet.Item1 && _lockService.PinProtectedKey != null) || _pinSet.Item2;
-            _fingerprintLock = _lockService.IsFingerprintLockSetAsync().GetAwaiter().GetResult();
+            _pinSet = _vaultTimeoutService.IsPinLockSetAsync().GetAwaiter().GetResult();
+            _pinLock = (_pinSet.Item1 && _vaultTimeoutService.PinProtectedKey != null) || _pinSet.Item2;
+            _fingerprintLock = _vaultTimeoutService.IsFingerprintLockSetAsync().GetAwaiter().GetResult();
 
             BaseNavItem.Title = _pinLock ? AppResources.VerifyPIN : AppResources.VerifyMasterPassword;
             BaseCancelButton.Title = AppResources.Cancel;
@@ -125,7 +125,7 @@ namespace Bit.iOS.Core.Controllers
                     {
                         var key = await _cryptoService.MakeKeyFromPinAsync(inputtedValue, email,
                             kdf.GetValueOrDefault(KdfType.PBKDF2_SHA256), kdfIterations.GetValueOrDefault(5000),
-                            _lockService.PinProtectedKey);
+                            _vaultTimeoutService.PinProtectedKey);
                         var encKey = await _cryptoService.GetEncKeyAsync(key);
                         var protectedPin = await _storageService.GetAsync<string>(Bit.Core.Constants.ProtectedPin);
                         var decPin = await _cryptoService.DecryptToUtf8Async(new CipherString(protectedPin), encKey);
@@ -182,7 +182,7 @@ namespace Bit.iOS.Core.Controllers
                         var decPin = await _cryptoService.DecryptToUtf8Async(new CipherString(protectedPin), encKey);
                         var pinKey = await _cryptoService.MakePinKeyAysnc(decPin, email,
                             kdf.GetValueOrDefault(KdfType.PBKDF2_SHA256), kdfIterations.GetValueOrDefault(5000));
-                        _lockService.PinProtectedKey = await _cryptoService.EncryptAsync(key2.Key, pinKey);
+                        _vaultTimeoutService.PinProtectedKey = await _cryptoService.EncryptAsync(key2.Key, pinKey);
                     }
                     await SetKeyAndContinueAsync(key2);
                 }
@@ -205,7 +205,7 @@ namespace Bit.iOS.Core.Controllers
 
         private void DoContinue()
         {
-            _lockService.FingerprintLocked = false;
+            _vaultTimeoutService.FingerprintLocked = false;
             MasterPasswordCell.TextField.ResignFirstResponder();
             Success();
         }
@@ -219,7 +219,7 @@ namespace Bit.iOS.Core.Controllers
             var success = await _platformUtilsService.AuthenticateBiometricAsync(null,
                 _pinLock ? AppResources.PIN : AppResources.MasterPassword,
                 () => MasterPasswordCell.TextField.BecomeFirstResponder());
-            _lockService.FingerprintLocked = !success;
+            _vaultTimeoutService.FingerprintLocked = !success;
             if (success)
             {
                 DoContinue();

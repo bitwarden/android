@@ -22,7 +22,7 @@ namespace Bit.App
         private readonly IBroadcasterService _broadcasterService;
         private readonly IMessagingService _messagingService;
         private readonly IStateService _stateService;
-        private readonly ILockService _lockService;
+        private readonly IVaultTimeoutService _vaultTimeoutService;
         private readonly ISyncService _syncService;
         private readonly ITokenService _tokenService;
         private readonly ICryptoService _cryptoService;
@@ -37,18 +37,22 @@ namespace Bit.App
         private readonly IStorageService _storageService;
         private readonly IStorageService _secureStorageService;
         private readonly IDeviceActionService _deviceActionService;
-        private readonly AppOptions _appOptions;
 
         private static bool _isResumed;
 
         public App(AppOptions appOptions)
         {
-            _appOptions = appOptions ?? new AppOptions();
+            Options = appOptions ?? new AppOptions();
+            if (Options.EmptyApp)
+            {
+                Current = this;
+                return;
+            }
             _userService = ServiceContainer.Resolve<IUserService>("userService");
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
-            _lockService = ServiceContainer.Resolve<ILockService>("lockService");
+            _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
             _tokenService = ServiceContainer.Resolve<ITokenService>("tokenService");
             _cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
@@ -95,7 +99,7 @@ namespace Bit.App
                 }
                 else if (message.Command == "lockVault")
                 {
-                    await _lockService.LockAsync(true);
+                    await _vaultTimeoutService.LockAsync(true);
                 }
                 else if (message.Command == "logout")
                 {
@@ -139,12 +143,12 @@ namespace Bit.App
                             }
                             if (message.Command == "popAllAndGoToTabMyVault")
                             {
-                                _appOptions.MyVaultTile = false;
+                                Options.MyVaultTile = false;
                                 tabsPage.ResetToVaultPage();
                             }
                             else
                             {
-                                _appOptions.GeneratorTile = false;
+                                Options.GeneratorTile = false;
                                 tabsPage.ResetToGeneratorPage();
                             }
                         }
@@ -152,14 +156,16 @@ namespace Bit.App
                 }
             });
         }
-        
+
+        public AppOptions Options { get; private set; }
+
         protected async override void OnStart()
         {
             System.Diagnostics.Debug.WriteLine("XF App: OnStart");
             await ClearCacheIfNeededAsync();
             await TryClearCiphersCacheAsync();
             Prime();
-            if (string.IsNullOrWhiteSpace(_appOptions.Uri))
+            if (string.IsNullOrWhiteSpace(Options.Uri))
             {
                 var updated = await AppHelpers.PerformUpdateTasksAsync(_syncService, _deviceActionService,
                     _storageService);
@@ -177,7 +183,7 @@ namespace Bit.App
             _isResumed = false;
             if (Device.RuntimePlatform == Device.Android)
             {
-                var isLocked = await _lockService.IsLockedAsync();
+                var isLocked = await _vaultTimeoutService.IsLockedAsync();
                 if (!isLocked)
                 {
                     await _storageService.SaveAsync(Constants.LastActiveKey, DateTime.UtcNow);
@@ -199,13 +205,13 @@ namespace Bit.App
 
         private async Task SleptAsync()
         {
-            await HandleLockingAsync();
+            await HandleVaultTimeoutAsync();
             _messagingService.Send("stopEventTimer");
         }
 
         private async void ResumedAsync()
         {
-            _messagingService.Send("cancelLockTimer");
+            _messagingService.Send("cancelVaultTimeoutTimer");
             _messagingService.Send("startEventTimer");
             await ClearCacheIfNeededAsync();
             await TryClearCiphersCacheAsync();
@@ -238,9 +244,9 @@ namespace Bit.App
                 _folderService.ClearAsync(userId),
                 _collectionService.ClearAsync(userId),
                 _passwordGenerationService.ClearAsync(),
-                _lockService.ClearAsync(),
+                _vaultTimeoutService.ClearAsync(),
                 _stateService.PurgeAsync());
-            _lockService.FingerprintLocked = true;
+            _vaultTimeoutService.FingerprintLocked = true;
             _searchService.ClearIndex();
             _authService.LogOut(() =>
             {
@@ -257,32 +263,32 @@ namespace Bit.App
             var authed = await _userService.IsAuthenticatedAsync();
             if (authed)
             {
-                if (await _lockService.IsLockedAsync())
+                if (await _vaultTimeoutService.IsLockedAsync())
                 {
-                    Current.MainPage = new NavigationPage(new LockPage(_appOptions));
+                    Current.MainPage = new NavigationPage(new LockPage(Options));
                 }
-                else if (_appOptions.FromAutofillFramework && _appOptions.SaveType.HasValue)
+                else if (Options.FromAutofillFramework && Options.SaveType.HasValue)
                 {
-                    Current.MainPage = new NavigationPage(new AddEditPage(appOptions: _appOptions));
+                    Current.MainPage = new NavigationPage(new AddEditPage(appOptions: Options));
                 }
-                else if (_appOptions.Uri != null)
+                else if (Options.Uri != null)
                 {
-                    Current.MainPage = new NavigationPage(new AutofillCiphersPage(_appOptions));
+                    Current.MainPage = new NavigationPage(new AutofillCiphersPage(Options));
                 }
                 else
                 {
-                    Current.MainPage = new TabsPage(_appOptions);
+                    Current.MainPage = new TabsPage(Options);
                 }
             }
             else
             {
-                Current.MainPage = new HomePage(_appOptions);
+                Current.MainPage = new HomePage(Options);
             }
         }
 
-        private async Task HandleLockingAsync()
+        private async Task HandleVaultTimeoutAsync()
         {
-            if (await _lockService.IsLockedAsync())
+            if (await _vaultTimeoutService.IsLockedAsync())
             {
                 return;
             }
@@ -291,19 +297,28 @@ namespace Bit.App
             {
                 return;
             }
-            var lockOption = _platformUtilsService.LockTimeout();
-            if (lockOption == null)
+            // Will only ever be null - look to remove this in the future
+            var vaultTimeout = _platformUtilsService.LockTimeout();
+            if (vaultTimeout == null)
             {
-                lockOption = await _storageService.GetAsync<int?>(Constants.LockOptionKey);
+                vaultTimeout = await _storageService.GetAsync<int?>(Constants.VaultTimeoutKey);
             }
-            lockOption = lockOption.GetValueOrDefault(-1);
-            if (lockOption > 0)
+            vaultTimeout = vaultTimeout.GetValueOrDefault(-1);
+            if (vaultTimeout > 0)
             {
-                _messagingService.Send("scheduleLockTimer", lockOption.Value);
+                _messagingService.Send("scheduleVaultTimeoutTimer", vaultTimeout.Value);
             }
-            else if (lockOption == 0)
+            else if (vaultTimeout == 0)
             {
-                await _lockService.LockAsync(true);
+                var action = await _storageService.GetAsync<string>(Constants.VaultTimeoutActionKey);
+                if (action == "logOut")
+                {
+                    await _vaultTimeoutService.LogOutAsync();
+                }
+                else
+                {
+                    await _vaultTimeoutService.LockAsync(true);
+                }
             }
         }
 
@@ -318,14 +333,14 @@ namespace Bit.App
 
         private void SetTabsPageFromAutofill(bool isLocked)
         {
-            if (Device.RuntimePlatform == Device.Android && !string.IsNullOrWhiteSpace(_appOptions.Uri) &&
-                !_appOptions.FromAutofillFramework)
+            if (Device.RuntimePlatform == Device.Android && !string.IsNullOrWhiteSpace(Options.Uri) &&
+                !Options.FromAutofillFramework)
             {
                 Task.Run(() =>
                 {
                     Device.BeginInvokeOnMainThread(() =>
                     {
-                        _appOptions.Uri = null;
+                        Options.Uri = null;
                         if (isLocked)
                         {
                             Current.MainPage = new NavigationPage(new LockPage());
@@ -352,7 +367,7 @@ namespace Bit.App
         {
             InitializeComponent();
             SetCulture();
-            ThemeManager.SetTheme(Device.RuntimePlatform == Device.Android);
+            ThemeManager.SetTheme(Device.RuntimePlatform == Device.Android, Current.Resources);
             Current.MainPage = new HomePage();
             var mainPageTask = SetMainPageAsync();
             ServiceContainer.Resolve<MobilePlatformUtilsService>("platformUtilsService").Init();
@@ -394,8 +409,8 @@ namespace Bit.App
             await _stateService.PurgeAsync();
             if (autoPromptFingerprint && Device.RuntimePlatform == Device.iOS)
             {
-                var lockOptions = await _storageService.GetAsync<int?>(Constants.LockOptionKey);
-                if (lockOptions == 0)
+                var vaultTimeout = await _storageService.GetAsync<int?>(Constants.VaultTimeoutKey);
+                if (vaultTimeout == 0)
                 {
                     autoPromptFingerprint = false;
                 }
@@ -430,7 +445,7 @@ namespace Bit.App
                 }
             }
             await _storageService.SaveAsync(Constants.PreviousPageKey, lastPageBeforeLock);
-            var lockPage = new LockPage(_appOptions, autoPromptFingerprint);
+            var lockPage = new LockPage(Options, autoPromptFingerprint);
             Device.BeginInvokeOnMainThread(() => Current.MainPage = new NavigationPage(lockPage));
         }
     }

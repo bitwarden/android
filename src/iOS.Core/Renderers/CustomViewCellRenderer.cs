@@ -1,10 +1,11 @@
-﻿using Bit.iOS.Renderers;
+﻿using Bit.App.Utilities;
+using Bit.iOS.Core.Renderers;
 using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
 [assembly: ExportRenderer(typeof(ViewCell), typeof(CustomViewCellRenderer))]
-namespace Bit.iOS.Renderers
+namespace Bit.iOS.Core.Renderers
 {
     public class CustomViewCellRenderer : ViewCellRenderer
     {
@@ -12,7 +13,7 @@ namespace Bit.iOS.Renderers
 
         public CustomViewCellRenderer()
         {
-            _noSelectionStyle = (Color)Xamarin.Forms.Application.Current.Resources["BackgroundColor"] != Color.White;
+            _noSelectionStyle = ThemeManager.GetResourceColor("BackgroundColor") != Color.White;
         }
 
         public override UITableViewCell GetCell(Cell item, UITableViewCell reusableCell, UITableView tv)

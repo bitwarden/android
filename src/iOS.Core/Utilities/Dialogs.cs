@@ -27,12 +27,18 @@ namespace Bit.iOS.Core.Utilities
             return alert;
         }
 
-        public static UIAlertController CreateAlert(string title, string message, string accept, Action<UIAlertAction> acceptHandle = null)
+        public static UIAlertController CreateAlert(string title, string message, string accept,
+            Action<UIAlertAction> acceptHandle = null, string cancel = null, Action<UIAlertAction> cancelHandle = null)
         {
             var alert = UIAlertController.Create(title, message, UIAlertControllerStyle.Alert);
             var oldFrame = alert.View.Frame;
-            alert.View.Frame = new RectangleF((float)oldFrame.X, (float)oldFrame.Y, (float)oldFrame.Width, (float)oldFrame.Height - 20);
+            alert.View.Frame = new RectangleF((float)oldFrame.X, (float)oldFrame.Y, (float)oldFrame.Width,
+                (float)oldFrame.Height - 20);
             alert.AddAction(UIAlertAction.Create(accept, UIAlertActionStyle.Default, acceptHandle));
+            if (!string.IsNullOrWhiteSpace(cancel))
+            {
+                alert.AddAction(UIAlertAction.Create(cancel, UIAlertActionStyle.Default, cancelHandle));
+            }
             return alert;
         }
 

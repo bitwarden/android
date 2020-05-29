@@ -200,13 +200,13 @@ namespace Bit.Droid.Services
             catch { }
             return null;
         }
-        
+
         public bool SaveFile(byte[] fileData, string id, string fileName, string contentUri)
         {
             try
             {
                 var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
-                
+
                 if (contentUri != null)
                 {
                     var uri = Android.Net.Uri.Parse(contentUri);
@@ -219,7 +219,7 @@ namespace Bit.Droid.Services
                     javaStream.Close();
                     return true;
                 }
-                
+
                 // Prompt for location to save file
                 var extension = MimeTypeMap.GetFileExtensionFromUrl(fileName.Replace(' ', '_').ToLower());
                 if (extension == null)
@@ -238,7 +238,7 @@ namespace Bit.Droid.Services
                 intent.SetType(mimeType);
                 intent.AddCategory(Intent.CategoryOpenable);
                 intent.PutExtra(Intent.ExtraTitle, fileName);
-                
+
                 activity.StartActivityForResult(intent, Constants.SaveFileRequestCode);
                 return true;
             }
@@ -567,6 +567,13 @@ namespace Bit.Droid.Services
             alert.CancelEvent += (o, args) => { result.TrySetResult(null); };
             alert.Show();
             return result.Task;
+        }
+
+        public async Task<string> DisplayActionSheetAsync(string title, string cancel, string destruction,
+            params string[] buttons)
+        {
+            return await Xamarin.Forms.Application.Current.MainPage.DisplayActionSheet(
+                title, cancel, destruction, buttons);
         }
 
         public void Autofill(CipherView cipher)

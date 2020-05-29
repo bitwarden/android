@@ -16,6 +16,7 @@ namespace Bit.Core.Abstractions
         bool GetPremium();
         Task<string> GetRefreshTokenAsync();
         Task<string> GetTokenAsync();
+        Task ToggleTokensAsync();
         DateTime? GetTokenExpirationDate();
         Task<string> GetTwoFactorTokenAsync(string email);
         string GetUserId();

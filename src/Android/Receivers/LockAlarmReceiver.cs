@@ -9,8 +9,8 @@ namespace Bit.Droid.Receivers
     {
         public async override void OnReceive(Context context, Intent intent)
         {
-            var lockService = ServiceContainer.Resolve<ILockService>("lockService");
-            await lockService.CheckLockAsync();
+            var vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
+            await vaultTimeoutService.CheckVaultTimeoutAsync();
         }
     }
 }

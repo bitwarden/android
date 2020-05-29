@@ -45,8 +45,13 @@ namespace Bit.Core.Utilities
                 i18nService, cipherService);
             var collectionService = new CollectionService(cryptoService, userService, storageService, i18nService);
             searchService = new SearchService(cipherService);
-            var lockService = new LockService(cryptoService, userService, platformUtilsService, storageService,
-                folderService, cipherService, collectionService, searchService, messagingService, null);
+            var vaultTimeoutService = new VaultTimeoutService(cryptoService, userService, platformUtilsService, 
+                storageService, folderService, cipherService, collectionService, searchService, messagingService, tokenService,
+                null, (expired) =>
+                {
+                    messagingService.Send("logout", expired);
+                    return Task.FromResult(0);
+                });
             var policyService = new PolicyService(storageService, userService);
             var syncService = new SyncService(userService, apiService, settingsService, folderService,
                 cipherService, cryptoService, collectionService, storageService, messagingService, policyService,
@@ -59,7 +64,7 @@ namespace Bit.Core.Utilities
                 cryptoFunctionService, policyService);
             var totpService = new TotpService(storageService, cryptoFunctionService);
             var authService = new AuthService(cryptoService, apiService, userService, tokenService, appIdService,
-                i18nService, platformUtilsService, messagingService, lockService);
+                i18nService, platformUtilsService, messagingService, vaultTimeoutService);
             var exportService = new ExportService(folderService, cipherService);
             var auditService = new AuditService(cryptoFunctionService, apiService);
             var environmentService = new EnvironmentService(apiService, storageService);
@@ -79,7 +84,7 @@ namespace Bit.Core.Utilities
             Register<ISearchService>("searchService", searchService);
             Register<IPolicyService>("policyService", policyService);
             Register<ISyncService>("syncService", syncService);
-            Register<ILockService>("lockService", lockService);
+            Register<IVaultTimeoutService>("vaultTimeoutService", vaultTimeoutService);
             Register<IPasswordGenerationService>("passwordGenerationService", passwordGenerationService);
             Register<ITotpService>("totpService", totpService);
             Register<IAuthService>("authService", authService);

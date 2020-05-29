@@ -32,6 +32,7 @@ namespace Bit.App.Abstractions
         int SystemMajorVersion();
         string SystemModel();
         Task<string> DisplayAlertAsync(string title, string message, string cancel, params string[] buttons);
+        Task<string> DisplayActionSheetAsync(string title, string cancel, string destruction, params string[] buttons);
         void Autofill(CipherView cipher);
         void CloseAutofill();
         void Background();

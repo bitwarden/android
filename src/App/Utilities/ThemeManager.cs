@@ -1,4 +1,5 @@
-﻿using Bit.App.Abstractions;
+﻿using System;
+using Bit.App.Abstractions;
 using Bit.App.Services;
 using Bit.App.Styles;
 using Bit.Core;
@@ -10,35 +11,38 @@ namespace Bit.App.Utilities
     public static class ThemeManager
     {
         public static bool UsingLightTheme = true;
+        public static Func<ResourceDictionary> Resources = () => null;
 
-        public static void SetThemeStyle(string name)
+        public static void SetThemeStyle(string name, ResourceDictionary resources)
         {
+            Resources = () => resources;
+
             // Reset styles
-            Application.Current.Resources.Clear();
-            Application.Current.Resources.MergedDictionaries.Clear();
+            resources.Clear();
+            resources.MergedDictionaries.Clear();
 
             // Variables
-            Application.Current.Resources.MergedDictionaries.Add(new Variables());
+            resources.MergedDictionaries.Add(new Variables());
 
             // Themed variables
             if (name == "dark")
             {
-                Application.Current.Resources.MergedDictionaries.Add(new Dark());
+                resources.MergedDictionaries.Add(new Dark());
                 UsingLightTheme = false;
             }
             else if (name == "black")
             {
-                Application.Current.Resources.MergedDictionaries.Add(new Black());
+                resources.MergedDictionaries.Add(new Black());
                 UsingLightTheme = false;
             }
             else if (name == "nord")
             {
-                Application.Current.Resources.MergedDictionaries.Add(new Nord());
+                resources.MergedDictionaries.Add(new Nord());
                 UsingLightTheme = false;
             }
             else if (name == "light")
             {
-                Application.Current.Resources.MergedDictionaries.Add(new Light());
+                resources.MergedDictionaries.Add(new Light());
                 UsingLightTheme = true;
             }
             else
@@ -46,33 +50,33 @@ namespace Bit.App.Utilities
                 var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService", true);
                 if (deviceActionService?.UsingDarkTheme() ?? false)
                 {
-                    Application.Current.Resources.MergedDictionaries.Add(new Dark());
+                    resources.MergedDictionaries.Add(new Dark());
                     UsingLightTheme = false;
                 }
                 else
                 {
-                    Application.Current.Resources.MergedDictionaries.Add(new Light());
+                    resources.MergedDictionaries.Add(new Light());
                     UsingLightTheme = true;
                 }
             }
 
             // Base styles
-            Application.Current.Resources.MergedDictionaries.Add(new Base());
+            resources.MergedDictionaries.Add(new Base());
 
             // Platform styles
             if (Device.RuntimePlatform == Device.Android)
             {
-                Application.Current.Resources.MergedDictionaries.Add(new Android());
+                resources.MergedDictionaries.Add(new Android());
             }
             else if (Device.RuntimePlatform == Device.iOS)
             {
-                Application.Current.Resources.MergedDictionaries.Add(new iOS());
+                resources.MergedDictionaries.Add(new iOS());
             }
         }
 
-        public static void SetTheme(bool android)
+        public static void SetTheme(bool android, ResourceDictionary resources)
         {
-            SetThemeStyle(GetTheme(android));
+            SetThemeStyle(GetTheme(android), resources);
         }
 
         public static string GetTheme(bool android)
@@ -80,6 +84,19 @@ namespace Bit.App.Utilities
             return Xamarin.Essentials.Preferences.Get(
                 string.Format(PreferencesStorageService.KeyFormat, Constants.ThemeKey), default(string),
                 !android ? "group.com.8bit.bitwarden" : default(string));
+        }
+
+        public static void ApplyResourcesToPage(ContentPage page)
+        {
+            foreach (var resourceDict in Resources().MergedDictionaries)
+            {
+                page.Resources.Add(resourceDict);
+            }
+        }
+
+        public static Color GetResourceColor(string color)
+        {
+            return (Color)Resources()[color];
         }
     }
 }

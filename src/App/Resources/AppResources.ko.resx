@@ -1517,7 +1517,7 @@
     <value>정말로 Bitwarden에서 나가시려는 건가요?</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
-    <value>You you want to require unlocking with your master password when the application is restarted?</value>
+    <value>Do you want to require unlocking with your master password when the application is restarted?</value>
   </data>
   <data name="Black" xml:space="preserve">
     <value>검은 테마</value>

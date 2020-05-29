@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-namespace Bit.iOS
+namespace Bit.iOS.Core
 {
     public class NFCReaderDelegate : NFCNdefReaderSessionDelegate
     {
