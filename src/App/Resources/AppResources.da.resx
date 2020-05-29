@@ -1132,7 +1132,7 @@
     <value>Der er ingen elementer i denne mappe.</value>
   </data>
   <data name="NoItemsTrash" xml:space="preserve">
-    <value>Der er ingen emner i papirkurven.</value>
+    <value>Der er ingen elementer i papirkurven.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
     <value>Autoudfyld hjælpefunktion</value>
@@ -1639,7 +1639,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemSoftDeleted" xml:space="preserve">
-    <value>Enme er sendt til papirkurven</value>
+    <value>Element er sendt til papirkurven</value>
     <comment>Confirmation message after successfully soft-deleting a login</comment>
   </data>
   <data name="Restore" xml:space="preserve">
@@ -1651,7 +1651,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemRestored" xml:space="preserve">
-    <value>Enme er gendannet.</value>
+    <value>Element er gendannet.</value>
     <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
   </data>
   <data name="Trash" xml:space="preserve">
@@ -1659,19 +1659,19 @@
     <comment>(noun) Location of deleted items which have not yet been permanently deleted</comment>
   </data>
   <data name="SearchTrash" xml:space="preserve">
-    <value>Spg i papirkurven</value>
+    <value>Søg i papirkurven</value>
     <comment>(action prompt) Label for the search text field when viewing the trash folder</comment>
   </data>
   <data name="DoYouReallyWantToPermanentlyDeleteCipher" xml:space="preserve">
-    <value>Sikker på, at du vil slette permanent? Dette kan ikke fortrydes.</value>
+    <value>Er du sikker på, at du vil slette permanent? Dette kan ikke fortrydes.</value>
     <comment>Confirmation alert message when permanently deleteing a cipher.</comment>
   </data>
   <data name="DoYouReallyWantToRestoreCipher" xml:space="preserve">
-    <value>Sikker på, at du vil gendanne dette emne?</value>
+    <value>Er du sikker på, at du vil gendanne dette element?</value>
     <comment>Confirmation alert message when restoring a soft-deleted cipher.</comment>
   </data>
   <data name="DoYouReallyWantToSoftDeleteCipher" xml:space="preserve">
-    <value>Sikker på, at du sende til papirkurven?</value>
+    <value>Er du sikker på, at du sende til papirkurven?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
 </root>
