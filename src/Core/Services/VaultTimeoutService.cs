@@ -100,13 +100,13 @@ namespace Bit.Core.Services
             {
                 // Pivot based on saved action
                 var action = await _storageService.GetAsync<string>(Constants.VaultTimeoutActionKey);
-                if (action == "lock")
+                if (action == "logOut")
                 {
-                    await LockAsync(true);
+                    await LogOutAsync();
                 }
                 else
                 {
-                    await LogOutAsync();
+                    await LockAsync(true);
                 }
             }
         }

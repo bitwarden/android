@@ -79,7 +79,7 @@ namespace Bit.App.Pages
             }
             var timeout = await _storageService.GetAsync<int?>(Constants.VaultTimeoutKey);
             _vaultTimeoutDisplayValue = _vaultTimeouts.FirstOrDefault(o => o.Value == timeout).Key;
-            var action = await _storageService.GetAsync<string>(Constants.VaultTimeoutActionKey);
+            var action = await _storageService.GetAsync<string>(Constants.VaultTimeoutActionKey) ?? "lock";
             _vaultTimeoutActionDisplayValue = _vaultTimeoutActions.FirstOrDefault(o => o.Value == action).Key;
             var pinSet = await _vaultTimeoutService.IsPinLockSetAsync();
             _pin = pinSet.Item1 || pinSet.Item2;
