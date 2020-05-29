@@ -339,13 +339,13 @@ namespace Bit.App
             else if (vaultTimeout == 0)
             {
                 var action = await _storageService.GetAsync<string>(Constants.VaultTimeoutActionKey);
-                if (action == "lock")
+                if (action == "logOut")
                 {
-                    await _vaultTimeoutService.LockAsync(true);
+                    await _vaultTimeoutService.LogOutAsync();
                 }
                 else
                 {
-                    await _vaultTimeoutService.LogOutAsync();
+                    await _vaultTimeoutService.LockAsync(true);   
                 }
             }
         }
