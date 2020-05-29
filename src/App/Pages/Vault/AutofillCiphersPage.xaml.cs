@@ -4,6 +4,7 @@ using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Utilities;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -51,7 +52,7 @@ namespace Bit.App.Pages
             {
                 return;
             }
-            if (e.CurrentSelection is GroupingsPageListItem item && item.Cipher != null)
+            if (e.CurrentSelection?.FirstOrDefault() is GroupingsPageListItem item && item.Cipher != null)
             {
                 await _vm.SelectCipherAsync(item.Cipher, item.FuzzyAutofill);
             }

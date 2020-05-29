@@ -203,7 +203,7 @@ namespace Bit.App.Pages
             {
                 return;
             }
-            if (!(e.CurrentSelection is GroupingsPageListItem item))
+            if (!(e.CurrentSelection?.FirstOrDefault() is GroupingsPageListItem item))
             {
                 return;
             }
