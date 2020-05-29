@@ -16,11 +16,11 @@ using System;
 using System.ComponentModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
-
+/*
 [assembly: ExportRenderer(typeof(CipherViewCell), typeof(CipherViewCellRenderer))]
 namespace Bit.Droid.Renderers
 {
-    public class CipherViewCellRenderer : ViewCellRenderer
+    public class CipherViewCellRenderer : ViewRenderer<CipherViewCell, AndroidCipherCell> //ViewCellRenderer
     {
         private static Typeface _faTypeface;
         private static Typeface _miTypeface;
@@ -30,30 +30,34 @@ namespace Bit.Droid.Renderers
 
         private AndroidCipherCell _cell;
 
+        public CipherViewCellRenderer(Context context) : base(context)
+        {
+            _faTypeface = Typeface.CreateFromAsset(context.Assets, "FontAwesome.ttf");
+            _miTypeface = Typeface.CreateFromAsset(context.Assets, "MaterialIcons_Regular.ttf");
+            _textColor = ThemeManager.GetResourceColor("TextColor").ToAndroid();
+            _mutedColor = ThemeManager.GetResourceColor("MutedColor").ToAndroid();
+            _disabledIconColor = ThemeManager.GetResourceColor("DisabledIconColor").ToAndroid();
+
+            if (Control == null)
+            {
+                Control = new AndroidCipherCell(context, Element, _faTypeface, _miTypeface);
+            }
+            else
+            {
+                Control.CipherViewCell.PropertyChanged -= CellPropertyChanged;
+            }
+            Element.PropertyChanged += CellPropertyChanged;
+            _cell.UpdateCell(cipherCell);
+            _cell.UpdateColors(_textColor, _mutedColor, _disabledIconColor);
+
+            this.Control
+            this.Element
+        }
+
+
         protected override Android.Views.View GetCellCore(Cell item, Android.Views.View convertView,
             ViewGroup parent, Context context)
         {
-            if (_faTypeface == null)
-            {
-                _faTypeface = Typeface.CreateFromAsset(context.Assets, "FontAwesome.ttf");
-            }
-            if (_miTypeface == null)
-            {
-                _miTypeface = Typeface.CreateFromAsset(context.Assets, "MaterialIcons_Regular.ttf");
-            }
-            if (_textColor == default(Android.Graphics.Color))
-            {
-                _textColor = ThemeManager.GetResourceColor("TextColor").ToAndroid();
-            }
-            if (_mutedColor == default(Android.Graphics.Color))
-            {
-                _mutedColor = ThemeManager.GetResourceColor("MutedColor").ToAndroid();
-            }
-            if (_disabledIconColor == default(Android.Graphics.Color))
-            {
-                _disabledIconColor = ThemeManager.GetResourceColor("DisabledIconColor").ToAndroid();
-            }
-
             var cipherCell = item as CipherViewCell;
             _cell = convertView as AndroidCipherCell;
             if (_cell == null)
@@ -212,7 +216,7 @@ namespace Bit.Droid.Renderers
 
     [Android.Runtime.Preserve(AllMembers = true)]
     [Register("bit.droid.renderers.IconImageView")]
-    public class IconImageView : ImageViewAsync
+    public class IconImageView : ImageView
     {
         public IconImageView(Context context) : base(context)
         { }
@@ -236,3 +240,4 @@ namespace Bit.Droid.Renderers
         }
     }
 }
+*/

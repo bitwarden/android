@@ -60,15 +60,13 @@
                VerticalOptions="CenterAndExpand"
                HorizontalOptions="CenterAndExpand"
                HorizontalTextAlignment="Center" />
-        <ListView x:Name="_listView"
+        <CollectionView x:Name="_collectionView"
                 IsVisible="{Binding ShowList}"
                 ItemsSource="{Binding Ciphers}"
                 VerticalOptions="FillAndExpand"
-                HasUnevenRows="true"
-                CachingStrategy="RecycleElement"
-                ItemSelected="RowSelected"
+                SelectionChanged="RowSelected"
                 StyleClass="list, list-platform">
-            <ListView.ItemTemplate>
+            <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="views:CipherView">
                     <controls:CipherViewCell
                         Cipher="{Binding .}"
@@ -76,8 +74,8 @@
                         WebsiteIconsEnabled="{Binding BindingContext.WebsiteIconsEnabled, Source={x:Reference _page}}"
                         />
                 </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
     </StackLayout>
 
 </pages:BaseContentPage>

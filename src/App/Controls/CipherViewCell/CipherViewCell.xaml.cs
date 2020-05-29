@@ -9,7 +9,7 @@ using Xamarin.Forms;
 
 namespace Bit.App.Controls
 {
-    public partial class CipherViewCell : ViewCell
+    public partial class CipherViewCell : ContentView
     {
         public static readonly BindableProperty CipherProperty = BindableProperty.Create(
             nameof(Cipher), typeof(CipherView), typeof(CipherViewCell), default(CipherView), BindingMode.OneWay);

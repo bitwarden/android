@@ -44,14 +44,14 @@ namespace Bit.App.Pages
             }, _mainContent);
         }
 
-        private async void RowSelected(object sender, SelectedItemChangedEventArgs e)
+        private async void RowSelected(object sender, SelectionChangedEventArgs e)
         {
-            ((ListView)sender).SelectedItem = null;
+            ((CollectionView)sender).SelectedItem = null;
             if (!DoOnce())
             {
                 return;
             }
-            if (e.SelectedItem is GroupingsPageListItem item && item.Cipher != null)
+            if (e.CurrentSelection is GroupingsPageListItem item && item.Cipher != null)
             {
                 await _vm.SelectCipherAsync(item.Cipher, item.FuzzyAutofill);
             }

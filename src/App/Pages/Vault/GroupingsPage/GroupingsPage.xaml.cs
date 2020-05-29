@@ -33,7 +33,7 @@ namespace Bit.App.Pages
         {
             _pageName = string.Concat(nameof(GroupingsPage), "_", DateTime.UtcNow.Ticks);
             InitializeComponent();
-            ListView = _listView;
+            CollectionView = _collectionView;
             SetActivityIndicator(_mainContent);
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
@@ -73,7 +73,7 @@ namespace Bit.App.Pages
             }
         }
 
-        public ExtendedListView ListView { get; set; }
+        public ExtendedCollectionView CollectionView { get; set; }
 
         protected async override void OnAppearing()
         {
@@ -196,14 +196,14 @@ namespace Bit.App.Pages
             _broadcasterService.Unsubscribe(_pageName);
         }
 
-        private async void RowSelected(object sender, SelectedItemChangedEventArgs e)
+        private async void RowSelected(object sender, SelectionChangedEventArgs e)
         {
-            ((ListView)sender).SelectedItem = null;
+            ((CollectionView)sender).SelectedItem = null;
             if (!DoOnce())
             {
                 return;
             }
-            if (!(e.SelectedItem is GroupingsPageListItem item))
+            if (!(e.CurrentSelection is GroupingsPageListItem item))
             {
                 return;
             }

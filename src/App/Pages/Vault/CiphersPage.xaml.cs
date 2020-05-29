@@ -119,15 +119,15 @@ namespace Bit.App.Pages
             }
         }
 
-        private async void RowSelected(object sender, SelectedItemChangedEventArgs e)
+        private async void RowSelected(object sender, SelectionChangedEventArgs e)
         {
-            ((ListView)sender).SelectedItem = null;
+            ((Xamarin.Forms.CollectionView)sender).SelectedItem = null;
             if (!DoOnce())
             {
                 return;
             }
 
-            if (e.SelectedItem is CipherView cipher)
+            if (e.CurrentSelection is CipherView cipher)
             {
                 await _vm.SelectCipherAsync(cipher);
             }

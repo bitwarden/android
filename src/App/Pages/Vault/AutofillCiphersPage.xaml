@@ -47,20 +47,16 @@
                         Clicked="AddButton_Clicked"></Button>
                 </StackLayout>
 
-                <controls:ExtendedListView
+                <controls:ExtendedCollectionView
                     IsVisible="{Binding ShowList}"
                     ItemsSource="{Binding GroupedItems}"
                     VerticalOptions="FillAndExpand"
-                    HasUnevenRows="true"
                     ItemTemplate="{StaticResource listItemDataTemplateSelector}"
-                    IsGroupingEnabled="True"
-                    ItemSelected="RowSelected"
+                    IsGrouped="True"
+                    SelectionChanged="RowSelected"
                     StyleClass="list, list-platform">
-                    <x:Arguments>
-                        <ListViewCachingStrategy>RecycleElement</ListViewCachingStrategy>
-                    </x:Arguments>
 
-                    <ListView.GroupHeaderTemplate>
+                    <CollectionView.GroupHeaderTemplate>
                         <DataTemplate x:DataType="pages:GroupingsPageListGroup">
                             <ViewCell>
                                 <StackLayout
@@ -79,8 +75,8 @@
                                 </StackLayout>
                             </ViewCell>
                         </DataTemplate>
-                    </ListView.GroupHeaderTemplate>
-                </controls:ExtendedListView>
+                    </CollectionView.GroupHeaderTemplate>
+                </controls:ExtendedCollectionView>
             </StackLayout>
         </ResourceDictionary>
     </ContentPage.Resources>
