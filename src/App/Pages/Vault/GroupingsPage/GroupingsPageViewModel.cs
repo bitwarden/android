@@ -140,7 +140,7 @@ namespace Bit.App.Pages
         public Command<CipherView> CipherOptionsCommand { get; set; }
         public bool LoadedOnce { get; set; }
 
-        public async Task LoadAsync(bool syncRefreshed = false)
+        public async Task LoadAsync()
         {
             if (_doingLoad)
             {
@@ -155,11 +155,9 @@ namespace Bit.App.Pages
             {
                 return;
             }
-            var isSyncOnRefreshEnabled = await _syncService.IsSyncOnRefreshEnabledAsync();
-            if (isSyncOnRefreshEnabled && Refreshing && !SyncRefreshing)
+            if (await _syncService.IsSyncOnRefreshEnabledAsync() && Refreshing && !SyncRefreshing)
             {
                 SyncRefreshing = true;
-                // LoadAsync will be called again once syncing is finished to update on UI screen. (see references)
                 await _syncService.FullSyncAsync(false);
                 return;
             }
@@ -281,22 +279,16 @@ namespace Bit.App.Pages
                 _doingLoad = false;
                 Loaded = true;
                 Loading = false;
-                if (isSyncOnRefreshEnabled)
-                {
-                    if (syncRefreshed && SyncRefreshing)
-                    {
-                        Refreshing = false;
-                        SyncRefreshing = false;
-                    }
-                }
-                else
-                {
-                    Refreshing = false;
-                    SyncRefreshing = false;
-                }
                 ShowNoData = (MainPage && !HasCiphers) || !groupedItems.Any();
                 ShowList = !ShowNoData;
+                DisableRefreshing();
             }
+        }
+
+        public void DisableRefreshing()
+        {
+            Refreshing = false;
+            SyncRefreshing = false;
         }
 
         public async Task SelectCipherAsync(CipherView cipher)

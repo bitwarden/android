@@ -97,7 +97,7 @@ namespace Bit.App.Pages
                         IsBusy = false;
                         if (_vm.LoadedOnce)
                         {
-                            await _vm.LoadAsync(_vm.SyncRefreshing);
+                            await _vm.LoadAsync();
                         }
                     });
                 }
@@ -194,6 +194,7 @@ namespace Bit.App.Pages
             base.OnDisappearing();
             IsBusy = false;
             _broadcasterService.Unsubscribe(_pageName);
+            _vm.DisableRefreshing();
         }
 
         private async void RowSelected(object sender, SelectedItemChangedEventArgs e)
