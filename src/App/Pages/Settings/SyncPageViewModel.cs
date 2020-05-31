@@ -18,7 +18,6 @@ namespace Bit.App.Pages
         private string _lastSync = "--";
         private bool _inited;
         private bool _syncOnRefresh;
-        private bool _syncOnVaultUnlock;
 
         public SyncPageViewModel()
         {
