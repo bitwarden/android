@@ -54,6 +54,8 @@ namespace Bit.Core.Services
 
         public bool SyncInProgress { get; set; }
 
+        public async Task<bool> IsSyncOnRefreshEnabledAsync() => await _storageService.GetAsync<bool>(Constants.SyncOnRefreshKey);
+
         public async Task<DateTime?> GetLastSyncAsync()
         {
             var userId = await _userService.GetUserIdAsync();

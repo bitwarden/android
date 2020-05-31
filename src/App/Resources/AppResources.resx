@@ -1674,4 +1674,10 @@
     <value>Do you really want to send to the trash?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
+  <data name="EnableSyncOnRefresh" xml:space="preserve">
+    <value>Enable sync on refresh</value>
+  </data>
+  <data name="EnableSyncOnRefreshDescription" xml:space="preserve">
+    <value>Syncing vault with pull down gesture.</value>
+  </data>
 </root>

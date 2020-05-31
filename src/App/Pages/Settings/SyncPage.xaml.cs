@@ -21,7 +21,7 @@ namespace Bit.App.Pages
         protected async override void OnAppearing()
         {
             base.OnAppearing();
-            await _vm.SetLastSyncAsync();
+            await _vm.InitAsync();
         }
 
         private async void Sync_Clicked(object sender, EventArgs e)

@@ -4,6 +4,7 @@
     {
         public const string AndroidAppProtocol = "androidapp://";
         public const string iOSAppProtocol = "iosapp://";
+        public static string SyncOnRefreshKey = "syncOnRefresh";
         public static string VaultTimeoutKey = "lockOption";
         public static string VaultTimeoutActionKey = "vaultTimeoutAction";
         public static string LastActiveKey = "lastActive";

@@ -92,12 +92,12 @@ namespace Bit.App.Pages
                 else if (message.Command == "syncCompleted")
                 {
                     await Task.Delay(500);
-                    Device.BeginInvokeOnMainThread(() =>
+                    Device.BeginInvokeOnMainThread(async() =>
                     {
                         IsBusy = false;
                         if (_vm.LoadedOnce)
                         {
-                            var task = _vm.LoadAsync();
+                            await _vm.LoadAsync(_vm.SyncRefreshing);
                         }
                     });
                 }

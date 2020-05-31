@@ -27,6 +27,7 @@ namespace Bit.App.Pages
         private bool _showNoData;
         private bool _showList;
         private bool _websiteIconsEnabled;
+        private bool _syncRefreshing;
         private string _noDataText;
         private List<CipherView> _allCiphers;
         private Dictionary<string, int> _folderCounts = new Dictionary<string, int>();
@@ -94,6 +95,11 @@ namespace Bit.App.Pages
             get => _refreshing;
             set => SetProperty(ref _refreshing, value);
         }
+        public bool SyncRefreshing
+        {
+            get => _syncRefreshing;
+            set => SetProperty(ref _syncRefreshing, value);
+        }
         public bool Loading
         {
             get => _loading;
@@ -134,7 +140,7 @@ namespace Bit.App.Pages
         public Command<CipherView> CipherOptionsCommand { get; set; }
         public bool LoadedOnce { get; set; }
 
-        public async Task LoadAsync()
+        public async Task LoadAsync(bool syncRefreshed = false)
         {
             if (_doingLoad)
             {
@@ -149,6 +155,15 @@ namespace Bit.App.Pages
             {
                 return;
             }
+            var isSyncOnRefreshEnabled = await _syncService.IsSyncOnRefreshEnabledAsync();
+            if (isSyncOnRefreshEnabled && Refreshing && !SyncRefreshing)
+            {
+                SyncRefreshing = true;
+                // LoadAsync will be called again once syncing is finished to update on UI screen. (see references)
+                await _syncService.FullSyncAsync(false);
+                return;
+            }
+
             _doingLoad = true;
             LoadedOnce = true;
             ShowNoData = false;
@@ -266,7 +281,19 @@ namespace Bit.App.Pages
                 _doingLoad = false;
                 Loaded = true;
                 Loading = false;
-                Refreshing = false;
+                if (isSyncOnRefreshEnabled)
+                {
+                    if (syncRefreshed && SyncRefreshing)
+                    {
+                        Refreshing = false;
+                        SyncRefreshing = false;
+                    }
+                }
+                else
+                {
+                    Refreshing = false;
+                    SyncRefreshing = false;
+                }
                 ShowNoData = (MainPage && !HasCiphers) || !groupedItems.Any();
                 ShowList = !ShowNoData;
             }
