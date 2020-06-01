@@ -50,7 +50,7 @@ namespace Bit.App.Pages
         public async Task InitAsync()
         {
             await SetLastSyncAsync();
-            EnableSyncOnRefresh = await _syncService.IsSyncOnRefreshEnabledAsync();
+            EnableSyncOnRefresh = await _storageService.GetAsync<bool>(Constants.SyncOnRefreshKey);
             _inited = true;
         }
 

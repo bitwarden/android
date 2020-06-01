@@ -45,6 +45,7 @@ namespace Bit.App.Pages
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IMessagingService _messagingService;
         private readonly IStateService _stateService;
+        private readonly IStorageService _storageService;
 
         public GroupingsPageViewModel()
         {
@@ -58,6 +59,7 @@ namespace Bit.App.Pages
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
 
             Loading = true;
             PageTitle = AppResources.MyVault;
@@ -155,7 +157,7 @@ namespace Bit.App.Pages
             {
                 return;
             }
-            if (await _syncService.IsSyncOnRefreshEnabledAsync() && Refreshing && !SyncRefreshing)
+            if (await _storageService.GetAsync<bool>(Constants.SyncOnRefreshKey) && Refreshing && !SyncRefreshing)
             {
                 SyncRefreshing = true;
                 await _syncService.FullSyncAsync(false);
