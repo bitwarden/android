@@ -518,23 +518,29 @@
   <data name="Lock" xml:space="preserve">
     <value>قفل</value>
   </data>
-  <data name="LockOption15Minutes" xml:space="preserve">
-    <value>۱۵ دقیقه</value>
+  <data name="FifteenMinutes" xml:space="preserve">
+    <value>15 minutes</value>
   </data>
-  <data name="LockOption1Hour" xml:space="preserve">
-    <value>۱ ساعت</value>
+  <data name="OneHour" xml:space="preserve">
+    <value>1 hour</value>
   </data>
-  <data name="LockOption1Minute" xml:space="preserve">
+  <data name="OneMinute" xml:space="preserve">
     <value>۱ دقیقه</value>
   </data>
-  <data name="LockOption4Hours" xml:space="preserve">
-    <value>۴ ساعت</value>
+  <data name="FourHours" xml:space="preserve">
+    <value>4 hours</value>
   </data>
-  <data name="LockOptionImmediately" xml:space="preserve">
-    <value>بلافاصله</value>
+  <data name="Immediately" xml:space="preserve">
+    <value>Immediately</value>
   </data>
-  <data name="LockOptions" xml:space="preserve">
-    <value>گزینه‌های قفل</value>
+  <data name="VaultTimeout" xml:space="preserve">
+    <value>Vault Timeout</value>
+  </data>
+  <data name="VaultTimeoutAction" xml:space="preserve">
+    <value>Vault Timeout Action</value>
+  </data>
+  <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
+    <value>Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>در حال ورود...</value>
@@ -1433,11 +1439,8 @@
   <data name="Unlock" xml:space="preserve">
     <value>باز کردن قفل</value>
   </data>
-  <data name="LockOption30Minutes" xml:space="preserve">
-    <value>۳۰ دقیقه</value>
-  </data>
-  <data name="LockOption5Minutes" xml:space="preserve">
-    <value>۵ دقیقه</value>
+  <data name="ThirtyMinutes" xml:space="preserve">
+    <value>30 minutes</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
     <value>پین کد خود را برای باز کردن بیت واردن خود استفاده کنید. اگر به صورت کامل از حساب خود خارج شوید تنظیمات پین شما ریست می شود.</value>
@@ -1462,9 +1465,6 @@
   </data>
   <data name="FiveMinutes" xml:space="preserve">
     <value>۵ دقیقه</value>
-  </data>
-  <data name="OneMinute" xml:space="preserve">
-    <value>۱ دقیقه</value>
   </data>
   <data name="TenSeconds" xml:space="preserve">
     <value>۱۰ ثانیه</value>
@@ -1517,7 +1517,7 @@
     <value>آیا مطمئنید که می‌خواهید از Bitwarden خارج شوید؟</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
-    <value>Do you want to require unlocking with your master password when the application is restarted?</value>
+    <value>You you want to require unlocking with your master password when the application is restarted?</value>
   </data>
   <data name="Black" xml:space="preserve">
     <value>سیاه</value>
@@ -1535,8 +1535,8 @@
   <data name="DisableSavePromptDescription" xml:space="preserve">
     <value>"ذخیره سریع" به صورت خودکار باعث افزایش سرعت شما برای ذخیره موارد جدید در گاوصندوقتان می شود زمانی که شما آنها را برای اولین بار وارد میکند.</value>
   </data>
-  <data name="LockOptionOnRestart" xml:space="preserve">
-    <value>راه اندازی مجدد در برنامه</value>
+  <data name="OnRestart" xml:space="preserve">
+    <value>On App Restart</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
     <value>پرکردن خودکار دسترسی ایمن به گاوصندوق Bitwarden شما را از سایر وبسایت ها و برنامه ها آسان تر میکند. بنظر میرسد که سرویس پرکردن خودکار را برای Bitwarden فعال نکرده اید. از صفحه "تنظیمات" Bitwarden پرکردن خودکار رافعال کنید.</value>
