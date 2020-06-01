@@ -56,7 +56,10 @@ namespace Bit.App.Pages
 
         public async Task UpdateSyncOnRefreshAsync()
         {
-            if(_inited) await _storageService.SaveAsync(Constants.SyncOnRefreshKey, _syncOnRefresh);
+            if (_inited)
+            {
+                await _storageService.SaveAsync(Constants.SyncOnRefreshKey, _syncOnRefresh);
+            }
         }
 
         public async Task SetLastSyncAsync()
