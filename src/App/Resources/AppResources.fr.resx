@@ -518,23 +518,29 @@
   <data name="Lock" xml:space="preserve">
     <value>Verrouiller</value>
   </data>
-  <data name="LockOption15Minutes" xml:space="preserve">
+  <data name="FifteenMinutes" xml:space="preserve">
     <value>15 minutes</value>
   </data>
-  <data name="LockOption1Hour" xml:space="preserve">
-    <value>1 heure</value>
+  <data name="OneHour" xml:space="preserve">
+    <value>1 hour</value>
   </data>
-  <data name="LockOption1Minute" xml:space="preserve">
+  <data name="OneMinute" xml:space="preserve">
     <value>1 minute</value>
   </data>
-  <data name="LockOption4Hours" xml:space="preserve">
-    <value>4 heures</value>
+  <data name="FourHours" xml:space="preserve">
+    <value>4 hours</value>
   </data>
-  <data name="LockOptionImmediately" xml:space="preserve">
-    <value>Immédiatement</value>
+  <data name="Immediately" xml:space="preserve">
+    <value>Immediately</value>
   </data>
-  <data name="LockOptions" xml:space="preserve">
-    <value>Options de verrouillage</value>
+  <data name="VaultTimeout" xml:space="preserve">
+    <value>Vault Timeout</value>
+  </data>
+  <data name="VaultTimeoutAction" xml:space="preserve">
+    <value>Vault Timeout Action</value>
+  </data>
+  <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
+    <value>Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>Identification...</value>
@@ -1433,11 +1439,8 @@
   <data name="Unlock" xml:space="preserve">
     <value>Déverrouiller</value>
   </data>
-  <data name="LockOption30Minutes" xml:space="preserve">
+  <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minutes</value>
-  </data>
-  <data name="LockOption5Minutes" xml:space="preserve">
-    <value>5 minutes</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
     <value>Définissez votre code PIN pour déverrouiller Bitwarden. Les paramètres relatifs à votre code PIN seront réinitialisés si vous vous déconnectez complètement de l'application.</value>
@@ -1462,9 +1465,6 @@
   </data>
   <data name="FiveMinutes" xml:space="preserve">
     <value>5 minutes</value>
-  </data>
-  <data name="OneMinute" xml:space="preserve">
-    <value>1 minute</value>
   </data>
   <data name="TenSeconds" xml:space="preserve">
     <value>10 secondes</value>
@@ -1535,8 +1535,8 @@
   <data name="DisableSavePromptDescription" xml:space="preserve">
     <value>La "Demande d'enregistrement" vous invite automatiquement à enregistrer de nouveaux éléments dans votre coffre à chaque fois que vous les entrez pour la première fois.</value>
   </data>
-  <data name="LockOptionOnRestart" xml:space="preserve">
-    <value>Au redémarrage de l'application</value>
+  <data name="OnRestart" xml:space="preserve">
+    <value>On App Restart</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
     <value>Le remplissage automatique permet d'accéder facilement à votre coffre Bitwarden depuis d'autres sites et applications. Il semble que vous n'ayez pas activé de service de remplissage automatique pour Bitwarden. Activez le remplissage automatique pour Bitwarden à partir de l'écran "Paramètres".</value>
