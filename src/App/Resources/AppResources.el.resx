@@ -519,23 +519,29 @@
   <data name="Lock" xml:space="preserve">
     <value>Κλείδωμα</value>
   </data>
-  <data name="LockOption15Minutes" xml:space="preserve">
-    <value>15 λεπτά</value>
+  <data name="FifteenMinutes" xml:space="preserve">
+    <value>15 minutes</value>
   </data>
-  <data name="LockOption1Hour" xml:space="preserve">
-    <value>1 ώρα</value>
+  <data name="OneHour" xml:space="preserve">
+    <value>1 hour</value>
   </data>
-  <data name="LockOption1Minute" xml:space="preserve">
+  <data name="OneMinute" xml:space="preserve">
     <value>1 λεπτό</value>
   </data>
-  <data name="LockOption4Hours" xml:space="preserve">
-    <value>4 ώρες</value>
+  <data name="FourHours" xml:space="preserve">
+    <value>4 hours</value>
   </data>
-  <data name="LockOptionImmediately" xml:space="preserve">
-    <value>Άμεσα</value>
+  <data name="Immediately" xml:space="preserve">
+    <value>Immediately</value>
   </data>
-  <data name="LockOptions" xml:space="preserve">
-    <value>Επιλογές Κλειδώματος</value>
+  <data name="VaultTimeout" xml:space="preserve">
+    <value>Vault Timeout</value>
+  </data>
+  <data name="VaultTimeoutAction" xml:space="preserve">
+    <value>Vault Timeout Action</value>
+  </data>
+  <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
+    <value>Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>Σύνδεση...</value>
@@ -1133,7 +1139,7 @@
     <value>Δεν υπάρχουν στοιχεία σε αυτόν τον φάκελο.</value>
   </data>
   <data name="NoItemsTrash" xml:space="preserve">
-    <value>There are no items in the trash.</value>
+    <value>Δεν υπάρχουν αντικείμενα στον κάδο απορριμμάτων.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
     <value>Υπηρεσία προσβασιμότητας αυτόματης συμπλήρωσης</value>
@@ -1434,11 +1440,8 @@
   <data name="Unlock" xml:space="preserve">
     <value>Ξεκλείδωμα</value>
   </data>
-  <data name="LockOption30Minutes" xml:space="preserve">
-    <value>30 λεπτά</value>
-  </data>
-  <data name="LockOption5Minutes" xml:space="preserve">
-    <value>5 λεπτά</value>
+  <data name="ThirtyMinutes" xml:space="preserve">
+    <value>30 minutes</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
     <value>Ορίστε τον κωδικό PIN για να ξεκλειδώσετε το Bitwarden. Οι ρυθμίσεις PIN θα επαναρυθμιστούν αν αποσυνδεθείτε πλήρως από την εφαρμογή.</value>
@@ -1463,9 +1466,6 @@
   </data>
   <data name="FiveMinutes" xml:space="preserve">
     <value>5 λεπτά</value>
-  </data>
-  <data name="OneMinute" xml:space="preserve">
-    <value>1 λεπτό</value>
   </data>
   <data name="TenSeconds" xml:space="preserve">
     <value>10 δευτερόλεπτα</value>
@@ -1536,8 +1536,8 @@
   <data name="DisableSavePromptDescription" xml:space="preserve">
     <value>Η "προτροπή αποθήκευσης" σας ζητάει αυτόματα να αποθηκεύετε νέα στοιχεία στο vault σας, κάθε φορά που τα εισάγετε για πρώτη φορά.</value>
   </data>
-  <data name="LockOptionOnRestart" xml:space="preserve">
-    <value>Κατά την Επανεκκίνηση Εφαρμογής</value>
+  <data name="OnRestart" xml:space="preserve">
+    <value>On App Restart</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
     <value>Η αυτόματη συμπλήρωση διευκολύνει την ασφαλή πρόσβαση στη λίστα από άλλες ιστοσελίδες και εφαρμογές. Φαίνεται ότι δεν έχετε ενεργοποιήσει την υπηρεσία αυτόματης συμπλήρωσης για το Bitwarden. Ενεργοποιήστε την από τις "Ρυθμίσεις".</value>
@@ -1636,43 +1636,43 @@
     <value>Δεν εντοπίστηκαν πεδία κωδικού πρόσβασης</value>
   </data>
   <data name="SoftDeleting" xml:space="preserve">
-    <value>Sending to trash...</value>
+    <value>Αποστολή στον κάδο απορριμμάτων ...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemSoftDeleted" xml:space="preserve">
-    <value>Item has been sent to trash.</value>
+    <value>Το στοιχείο έχει σταλεί στον κάδο απορριμμάτων.</value>
     <comment>Confirmation message after successfully soft-deleting a login</comment>
   </data>
   <data name="Restore" xml:space="preserve">
-    <value>Restore</value>
+    <value>Ανάκτηση</value>
     <comment>Restores an entity (verb).</comment>
   </data>
   <data name="Restoring" xml:space="preserve">
-    <value>Restoring...</value>
+    <value>Γίνεται επαναφορά...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemRestored" xml:space="preserve">
-    <value>Item has been restored.</value>
+    <value>Το στοιχείο έχει ανακτηθεί.</value>
     <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
   </data>
   <data name="Trash" xml:space="preserve">
-    <value>Trash</value>
+    <value>Κάδος</value>
     <comment>(noun) Location of deleted items which have not yet been permanently deleted</comment>
   </data>
   <data name="SearchTrash" xml:space="preserve">
-    <value>Search trash</value>
+    <value>Αναζήτηση Κάδου</value>
     <comment>(action prompt) Label for the search text field when viewing the trash folder</comment>
   </data>
   <data name="DoYouReallyWantToPermanentlyDeleteCipher" xml:space="preserve">
-    <value>Do you really want to permanently delete? This cannot be undone.</value>
+    <value>Θέλετε πραγματικά να διαγράψετε οριστικά; Αυτό δεν μπορεί να αναιρεθεί.</value>
     <comment>Confirmation alert message when permanently deleteing a cipher.</comment>
   </data>
   <data name="DoYouReallyWantToRestoreCipher" xml:space="preserve">
-    <value>Do you really want to restore this item?</value>
+    <value>Θέλετε πραγματικά να επαναφέρετε αυτό το στοιχείο;</value>
     <comment>Confirmation alert message when restoring a soft-deleted cipher.</comment>
   </data>
   <data name="DoYouReallyWantToSoftDeleteCipher" xml:space="preserve">
-    <value>Do you really want to send to the trash?</value>
+    <value>Θέλετε πραγματικά να στείλετε στον κάδο απορριμμάτων;</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
 </root>

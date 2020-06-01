@@ -518,23 +518,29 @@
   <data name="Lock" xml:space="preserve">
     <value>Zablokuj</value>
   </data>
-  <data name="LockOption15Minutes" xml:space="preserve">
-    <value>15 minut</value>
+  <data name="FifteenMinutes" xml:space="preserve">
+    <value>15 minutes</value>
   </data>
-  <data name="LockOption1Hour" xml:space="preserve">
-    <value>1 godzina</value>
+  <data name="OneHour" xml:space="preserve">
+    <value>1 hour</value>
   </data>
-  <data name="LockOption1Minute" xml:space="preserve">
+  <data name="OneMinute" xml:space="preserve">
     <value>1 minuta</value>
   </data>
-  <data name="LockOption4Hours" xml:space="preserve">
-    <value>4 godziny</value>
+  <data name="FourHours" xml:space="preserve">
+    <value>4 hours</value>
   </data>
-  <data name="LockOptionImmediately" xml:space="preserve">
-    <value>Natychmiast</value>
+  <data name="Immediately" xml:space="preserve">
+    <value>Immediately</value>
   </data>
-  <data name="LockOptions" xml:space="preserve">
-    <value>Czas automatycznego blokowania</value>
+  <data name="VaultTimeout" xml:space="preserve">
+    <value>Vault Timeout</value>
+  </data>
+  <data name="VaultTimeoutAction" xml:space="preserve">
+    <value>Vault Timeout Action</value>
+  </data>
+  <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
+    <value>Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>Logowanie...</value>
@@ -1433,11 +1439,8 @@
   <data name="Unlock" xml:space="preserve">
     <value>Odblokuj</value>
   </data>
-  <data name="LockOption30Minutes" xml:space="preserve">
-    <value>30 minut</value>
-  </data>
-  <data name="LockOption5Minutes" xml:space="preserve">
-    <value>5 minut</value>
+  <data name="ThirtyMinutes" xml:space="preserve">
+    <value>30 minutes</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
     <value>Ustaw kod PIN do odblokowywania aplikacji Bitwarden. Ustawienia odblokowywania kodem PIN zostaną zresetowane po wylogowaniu.</value>
@@ -1462,9 +1465,6 @@
   </data>
   <data name="FiveMinutes" xml:space="preserve">
     <value>5 minut</value>
-  </data>
-  <data name="OneMinute" xml:space="preserve">
-    <value>1 minuta</value>
   </data>
   <data name="TenSeconds" xml:space="preserve">
     <value>10 sekund</value>
@@ -1535,8 +1535,8 @@
   <data name="DisableSavePromptDescription" xml:space="preserve">
     <value>"Monit o zapisywanie" automatycznie zapyta Cię o zapisanie nowych elementów do sejfu za każdym razem, gdy wpiszesz je po raz pierwszy.</value>
   </data>
-  <data name="LockOptionOnRestart" xml:space="preserve">
-    <value>Po restarcie aplikacji</value>
+  <data name="OnRestart" xml:space="preserve">
+    <value>On App Restart</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
     <value>Autouzupełnianie ułatwia bezpieczny dostęp do sejfu Bitwarden z innych stron i aplikacji. Wygląda na to, że nie włączyłeś usługi autouzupełniania dla Bitwarden. Włącz ją na ekranie "Ustawienia".</value>

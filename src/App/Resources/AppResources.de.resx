@@ -518,23 +518,29 @@
   <data name="Lock" xml:space="preserve">
     <value>Sperren</value>
   </data>
-  <data name="LockOption15Minutes" xml:space="preserve">
-    <value>15 Minuten</value>
+  <data name="FifteenMinutes" xml:space="preserve">
+    <value>15 minutes</value>
   </data>
-  <data name="LockOption1Hour" xml:space="preserve">
-    <value>1 Stunde</value>
+  <data name="OneHour" xml:space="preserve">
+    <value>1 hour</value>
   </data>
-  <data name="LockOption1Minute" xml:space="preserve">
+  <data name="OneMinute" xml:space="preserve">
     <value>1 Minute</value>
   </data>
-  <data name="LockOption4Hours" xml:space="preserve">
-    <value>4 Stunden</value>
+  <data name="FourHours" xml:space="preserve">
+    <value>4 hours</value>
   </data>
-  <data name="LockOptionImmediately" xml:space="preserve">
-    <value>Sofort</value>
+  <data name="Immediately" xml:space="preserve">
+    <value>Immediately</value>
   </data>
-  <data name="LockOptions" xml:space="preserve">
-    <value>Sperroptionen</value>
+  <data name="VaultTimeout" xml:space="preserve">
+    <value>Vault Timeout</value>
+  </data>
+  <data name="VaultTimeoutAction" xml:space="preserve">
+    <value>Vault Timeout Action</value>
+  </data>
+  <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
+    <value>Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>Anmeldung läuft...</value>
@@ -1433,11 +1439,8 @@
   <data name="Unlock" xml:space="preserve">
     <value>Entsperren</value>
   </data>
-  <data name="LockOption30Minutes" xml:space="preserve">
-    <value>30 Minuten</value>
-  </data>
-  <data name="LockOption5Minutes" xml:space="preserve">
-    <value>5 Minuten</value>
+  <data name="ThirtyMinutes" xml:space="preserve">
+    <value>30 minutes</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
     <value>Legen Sie Ihre PIN für das Entsperren von Bitwarden fest. Ihre PIN-Einstellungen werden zurückgesetzt, wenn Sie sich jemals vollständig aus der Anwendung abmelden.</value>
@@ -1462,9 +1465,6 @@
   </data>
   <data name="FiveMinutes" xml:space="preserve">
     <value>5 Minuten</value>
-  </data>
-  <data name="OneMinute" xml:space="preserve">
-    <value>1 Minute</value>
   </data>
   <data name="TenSeconds" xml:space="preserve">
     <value>10 Sekunden</value>
@@ -1517,7 +1517,7 @@
     <value>Sind Sie sicher, dass Sie Bitwarden verlassen möchten?</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
-    <value>Do you want to require unlocking with your master password when the application is restarted?</value>
+    <value>Möchten Sie mit Ihrem Master-Passwort entsperren, wenn die Anwendung neu gestartet wird?</value>
   </data>
   <data name="Black" xml:space="preserve">
     <value>Schwarz</value>
@@ -1527,7 +1527,7 @@
     <value>Gesperrte URIs</value>
   </data>
   <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>URIs that are blacklisted will not offer auto-fill. The list of apps should be comma separated. Ex: "https://twitter.com, androidapp://com.twitter.android".</value>
+    <value>URIs auf der Sperrliste, werden nicht automatisch ausgefüllt. Die Listeneinträge sollten durch Komma getrennt sein. Z.B.: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
   <data name="DisableSavePrompt" xml:space="preserve">
     <value>Speichern-Prompt deaktivieren</value>
@@ -1535,8 +1535,8 @@
   <data name="DisableSavePromptDescription" xml:space="preserve">
     <value>Der "Speichern-Prompt" fordert Sie automatisch dazu auf, neue Einträge in den Tresor zu speichern, wenn Sie sie zum ersten Mal eingeben.</value>
   </data>
-  <data name="LockOptionOnRestart" xml:space="preserve">
-    <value>Bei App Neustart</value>
+  <data name="OnRestart" xml:space="preserve">
+    <value>On App Restart</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
     <value>Durch automatisches Füllen ist es leicht, auf Ihren Bitwarden Tresor von anderen Webseiten und Apps sicher zuzugreifen. Es sieht aus, als ob Sie den Automatisches Fülldienst für Bitwarden nicht aktiviert haben. Aktivieren Sie automatisches Füllen im "Einstellungen"-Bildschirm.</value>
@@ -1567,10 +1567,10 @@
     <value>Biometrische Daten zur Verifizierung nutzen.</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
-    <value>Biometrisch</value>
+    <value>Biometrie</value>
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
-    <value>Biometrische Daten zum entsperren verwenden</value>
+    <value>Biometrie zum Entsperren verwenden</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
     <value>Bitwarden braucht Aufmerksamkeit - Siehe "Auto-Fill-Bedienungshilfe" in den Bitwarden-Einstellungen</value>

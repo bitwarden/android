@@ -172,14 +172,14 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="DoYouReallyWantToDelete" xml:space="preserve">
-    <value>Do you really want to delete? This cannot be undone.</value>
+    <value>क्या आप वास्तव में हटाना चाहते हैं? इसे नष्ट नहीं किया जा सकता है</value>
     <comment>Confirmation alert message when deleteing something.</comment>
   </data>
   <data name="Edit" xml:space="preserve">
     <value>संशोधन करें</value>
   </data>
   <data name="EditFolder" xml:space="preserve">
-    <value>Edit Folder</value>
+    <value>फ़ोल्डर संपादित करें</value>
   </data>
   <data name="Email" xml:space="preserve">
     <value>ईमेल</value>
@@ -193,7 +193,7 @@
     <value>हमें ईमेल करें</value>
   </data>
   <data name="EmailUsDescription" xml:space="preserve">
-    <value>Email us directly to get help or leave feedback.</value>
+    <value>सहायता प्राप्त करने या प्रतिक्रिया छोड़ने के लिए हमें ईमेल करें।</value>
   </data>
   <data name="EnterPIN" xml:space="preserve">
     <value>अपना पिन डालें</value>
@@ -203,7 +203,7 @@
     <comment>Title for your favorite items in the vault.</comment>
   </data>
   <data name="FileBugReport" xml:space="preserve">
-    <value>File a Bug Report</value>
+    <value>बग रिपोर्ट दर्ज करें</value>
   </data>
   <data name="FileBugReportDescription" xml:space="preserve">
     <value>Open an issue at our GitHub repository.</value>
@@ -518,23 +518,29 @@
   <data name="Lock" xml:space="preserve">
     <value>लॉक</value>
   </data>
-  <data name="LockOption15Minutes" xml:space="preserve">
-    <value>15 मिनिट</value>
+  <data name="FifteenMinutes" xml:space="preserve">
+    <value>15 minutes</value>
   </data>
-  <data name="LockOption1Hour" xml:space="preserve">
-    <value>1 घंटा</value>
+  <data name="OneHour" xml:space="preserve">
+    <value>1 hour</value>
   </data>
-  <data name="LockOption1Minute" xml:space="preserve">
-    <value>1 मिनट</value>
+  <data name="OneMinute" xml:space="preserve">
+    <value>1 minute</value>
   </data>
-  <data name="LockOption4Hours" xml:space="preserve">
-    <value>4 घंटे</value>
+  <data name="FourHours" xml:space="preserve">
+    <value>4 hours</value>
   </data>
-  <data name="LockOptionImmediately" xml:space="preserve">
-    <value>तत्‍काल</value>
+  <data name="Immediately" xml:space="preserve">
+    <value>Immediately</value>
   </data>
-  <data name="LockOptions" xml:space="preserve">
-    <value>अवरोध विकल्प</value>
+  <data name="VaultTimeout" xml:space="preserve">
+    <value>Vault Timeout</value>
+  </data>
+  <data name="VaultTimeoutAction" xml:space="preserve">
+    <value>Vault Timeout Action</value>
+  </data>
+  <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
+    <value>Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>लॉगिन कर रहा है...</value>
@@ -1433,11 +1439,8 @@
   <data name="Unlock" xml:space="preserve">
     <value>Unlock</value>
   </data>
-  <data name="LockOption30Minutes" xml:space="preserve">
+  <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minutes</value>
-  </data>
-  <data name="LockOption5Minutes" xml:space="preserve">
-    <value>5 minutes</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
     <value>Set your PIN code for unlocking Bitwarden. Your PIN settings will be reset if you ever fully log out of the application.</value>
@@ -1462,9 +1465,6 @@
   </data>
   <data name="FiveMinutes" xml:space="preserve">
     <value>5 minutes</value>
-  </data>
-  <data name="OneMinute" xml:space="preserve">
-    <value>1 minute</value>
   </data>
   <data name="TenSeconds" xml:space="preserve">
     <value>10 seconds</value>
@@ -1535,7 +1535,7 @@
   <data name="DisableSavePromptDescription" xml:space="preserve">
     <value>The "Save Prompt" automatically prompts you to save new items to your vault whenever you enter them for the first time.</value>
   </data>
-  <data name="LockOptionOnRestart" xml:space="preserve">
+  <data name="OnRestart" xml:space="preserve">
     <value>On App Restart</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">

@@ -518,23 +518,29 @@
   <data name="Lock" xml:space="preserve">
     <value>Lås</value>
   </data>
-  <data name="LockOption15Minutes" xml:space="preserve">
-    <value>15 minuter</value>
+  <data name="FifteenMinutes" xml:space="preserve">
+    <value>15 minutes</value>
   </data>
-  <data name="LockOption1Hour" xml:space="preserve">
-    <value>1 timme</value>
+  <data name="OneHour" xml:space="preserve">
+    <value>1 hour</value>
   </data>
-  <data name="LockOption1Minute" xml:space="preserve">
+  <data name="OneMinute" xml:space="preserve">
     <value>1 minut</value>
   </data>
-  <data name="LockOption4Hours" xml:space="preserve">
-    <value>4 timmar</value>
+  <data name="FourHours" xml:space="preserve">
+    <value>4 hours</value>
   </data>
-  <data name="LockOptionImmediately" xml:space="preserve">
-    <value>Omedelbart</value>
+  <data name="Immediately" xml:space="preserve">
+    <value>Immediately</value>
   </data>
-  <data name="LockOptions" xml:space="preserve">
-    <value>Låsalternativ</value>
+  <data name="VaultTimeout" xml:space="preserve">
+    <value>Vault Timeout</value>
+  </data>
+  <data name="VaultTimeoutAction" xml:space="preserve">
+    <value>Vault Timeout Action</value>
+  </data>
+  <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
+    <value>Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>Loggar in...</value>
@@ -1433,11 +1439,8 @@
   <data name="Unlock" xml:space="preserve">
     <value>Lås upp</value>
   </data>
-  <data name="LockOption30Minutes" xml:space="preserve">
-    <value>30 minuter</value>
-  </data>
-  <data name="LockOption5Minutes" xml:space="preserve">
-    <value>5 minuter</value>
+  <data name="ThirtyMinutes" xml:space="preserve">
+    <value>30 minutes</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
     <value>Ange en PIN-kod att låsa upp Bitwarden med. Dina PIN-kodsinställningar återställs om du någonsin loggar ut helt från appen.</value>
@@ -1462,9 +1465,6 @@
   </data>
   <data name="FiveMinutes" xml:space="preserve">
     <value>5 minuter</value>
-  </data>
-  <data name="OneMinute" xml:space="preserve">
-    <value>1 minut</value>
   </data>
   <data name="TenSeconds" xml:space="preserve">
     <value>10 sekunder</value>
@@ -1535,8 +1535,8 @@
   <data name="DisableSavePromptDescription" xml:space="preserve">
     <value>"Sparförfrågan" frågar dig om du vill lägga till nya objekt i ditt valv automatiskt när du använder dem för första gången.</value>
   </data>
-  <data name="LockOptionOnRestart" xml:space="preserve">
-    <value>Vid omstart av appen</value>
+  <data name="OnRestart" xml:space="preserve">
+    <value>On App Restart</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
     <value>Automatisk ifyllning gör det enkelt att säkert komma åt ditt Bitwarden-valv från andra webbplatser och appar. Det verkar som om du inte har aktiverat en tjänst för automatisk ifyllning för Bitwarden. Aktivera automatisk ifyllning för Bitwarden från fliken "Inställningar".</value>

@@ -518,23 +518,29 @@
   <data name="Lock" xml:space="preserve">
     <value>Zaključaj</value>
   </data>
-  <data name="LockOption15Minutes" xml:space="preserve">
-    <value>15 minuta</value>
+  <data name="FifteenMinutes" xml:space="preserve">
+    <value>15 minutes</value>
   </data>
-  <data name="LockOption1Hour" xml:space="preserve">
-    <value>1 sat</value>
+  <data name="OneHour" xml:space="preserve">
+    <value>1 hour</value>
   </data>
-  <data name="LockOption1Minute" xml:space="preserve">
+  <data name="OneMinute" xml:space="preserve">
     <value>1 minuta</value>
   </data>
-  <data name="LockOption4Hours" xml:space="preserve">
-    <value>4 sata</value>
+  <data name="FourHours" xml:space="preserve">
+    <value>4 hours</value>
   </data>
-  <data name="LockOptionImmediately" xml:space="preserve">
-    <value>Odmah</value>
+  <data name="Immediately" xml:space="preserve">
+    <value>Immediately</value>
   </data>
-  <data name="LockOptions" xml:space="preserve">
-    <value>Opcije zaključavanja</value>
+  <data name="VaultTimeout" xml:space="preserve">
+    <value>Vault Timeout</value>
+  </data>
+  <data name="VaultTimeoutAction" xml:space="preserve">
+    <value>Vault Timeout Action</value>
+  </data>
+  <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
+    <value>Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>Prijavljivanje...</value>
@@ -1433,11 +1439,8 @@
   <data name="Unlock" xml:space="preserve">
     <value>Otključaj</value>
   </data>
-  <data name="LockOption30Minutes" xml:space="preserve">
-    <value>30 minuta</value>
-  </data>
-  <data name="LockOption5Minutes" xml:space="preserve">
-    <value>5 minuta</value>
+  <data name="ThirtyMinutes" xml:space="preserve">
+    <value>30 minutes</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
     <value>Postavite Vaš PIN kod za otključavanje Bitwardena. Vaše postavke PIN-a će biti resetirane ako se ikada potpuno odjavite iz aplikacije.</value>
@@ -1462,9 +1465,6 @@
   </data>
   <data name="FiveMinutes" xml:space="preserve">
     <value>5 minuta</value>
-  </data>
-  <data name="OneMinute" xml:space="preserve">
-    <value>1 minuta</value>
   </data>
   <data name="TenSeconds" xml:space="preserve">
     <value>10 sekundi</value>
@@ -1535,8 +1535,8 @@
   <data name="DisableSavePromptDescription" xml:space="preserve">
     <value>"Upit za spremanje" automatski traži da spremite nove unose u trezor prvi put kad u njih uđete.</value>
   </data>
-  <data name="LockOptionOnRestart" xml:space="preserve">
-    <value>Kada se aplikacija ponovno pokrene</value>
+  <data name="OnRestart" xml:space="preserve">
+    <value>On App Restart</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
     <value>Automatsko punjenje olakšava siguran pristup Vašem Bitwarden trezoru s drugih web stranica i aplikacija. Izgleda da niste omogućili uslugu automatskog popunjavanja Bitwardena. Omogućite automatsko popunjavanje Bitwardena na zaslonu "Postavke".</value>

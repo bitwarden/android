@@ -518,23 +518,29 @@
   <data name="Lock" xml:space="preserve">
     <value>鎖定</value>
   </data>
-  <data name="LockOption15Minutes" xml:space="preserve">
-    <value>15 分鐘</value>
+  <data name="FifteenMinutes" xml:space="preserve">
+    <value>15 minutes</value>
   </data>
-  <data name="LockOption1Hour" xml:space="preserve">
-    <value>1 小時</value>
+  <data name="OneHour" xml:space="preserve">
+    <value>1 hour</value>
   </data>
-  <data name="LockOption1Minute" xml:space="preserve">
+  <data name="OneMinute" xml:space="preserve">
     <value>1 分鐘</value>
   </data>
-  <data name="LockOption4Hours" xml:space="preserve">
-    <value>4 小時</value>
+  <data name="FourHours" xml:space="preserve">
+    <value>4 hours</value>
   </data>
-  <data name="LockOptionImmediately" xml:space="preserve">
-    <value>立即</value>
+  <data name="Immediately" xml:space="preserve">
+    <value>Immediately</value>
   </data>
-  <data name="LockOptions" xml:space="preserve">
-    <value>自動鎖定時間</value>
+  <data name="VaultTimeout" xml:space="preserve">
+    <value>Vault Timeout</value>
+  </data>
+  <data name="VaultTimeoutAction" xml:space="preserve">
+    <value>Vault Timeout Action</value>
+  </data>
+  <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
+    <value>Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>正在登入...</value>
@@ -1433,11 +1439,8 @@
   <data name="Unlock" xml:space="preserve">
     <value>解鎖</value>
   </data>
-  <data name="LockOption30Minutes" xml:space="preserve">
-    <value>30 分鐘</value>
-  </data>
-  <data name="LockOption5Minutes" xml:space="preserve">
-    <value>5 分鐘</value>
+  <data name="ThirtyMinutes" xml:space="preserve">
+    <value>30 minutes</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
     <value>設定您用來解鎖 Bitwarden 的 PIN 碼。您的 PIN 設定將在您完全結束本應用程式時被重設。</value>
@@ -1462,9 +1465,6 @@
   </data>
   <data name="FiveMinutes" xml:space="preserve">
     <value>5 分鐘</value>
-  </data>
-  <data name="OneMinute" xml:space="preserve">
-    <value>1 分鐘</value>
   </data>
   <data name="TenSeconds" xml:space="preserve">
     <value>10 秒鐘</value>
@@ -1535,8 +1535,8 @@
   <data name="DisableSavePromptDescription" xml:space="preserve">
     <value>當您首次輸入時，「儲存提示」會自動提示您將新項目儲存進密碼庫。</value>
   </data>
-  <data name="LockOptionOnRestart" xml:space="preserve">
-    <value>於程式重新啟動時</value>
+  <data name="OnRestart" xml:space="preserve">
+    <value>On App Restart</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
     <value>「自動填入」使其他網站及 App 能更簡單地安全存取您的 Bitwarden 密碼庫。看起來您尚未啟用 Bitwarden 的自動填入服務。請在「設定」畫面啟用 Bitwarden 的自動填入。</value>
