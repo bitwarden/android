@@ -522,25 +522,25 @@
     <value>15 minutes</value>
   </data>
   <data name="OneHour" xml:space="preserve">
-    <value>1 hour</value>
+    <value>1 heure</value>
   </data>
   <data name="OneMinute" xml:space="preserve">
     <value>1 minute</value>
   </data>
   <data name="FourHours" xml:space="preserve">
-    <value>4 hours</value>
+    <value>4 heures</value>
   </data>
   <data name="Immediately" xml:space="preserve">
-    <value>Immediately</value>
+    <value>Immédiatement</value>
   </data>
   <data name="VaultTimeout" xml:space="preserve">
-    <value>Vault Timeout</value>
+    <value>Délai d'expiration du coffre</value>
   </data>
   <data name="VaultTimeoutAction" xml:space="preserve">
-    <value>Vault Timeout Action</value>
+    <value>Action lors de l'expiration du délai du coffre</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
-    <value>Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?</value>
+    <value>La déconnexion supprimera tous les accès à votre coffre et nécessite une authentification en ligne après la période d'expiration. Êtes-vous sûr de vouloir utiliser ce paramètre?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>Identification...</value>
@@ -1536,7 +1536,7 @@
     <value>La "Demande d'enregistrement" vous invite automatiquement à enregistrer de nouveaux éléments dans votre coffre à chaque fois que vous les entrez pour la première fois.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
-    <value>On App Restart</value>
+    <value>Au redémarrage de l'application</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
     <value>Le remplissage automatique permet d'accéder facilement à votre coffre Bitwarden depuis d'autres sites et applications. Il semble que vous n'ayez pas activé de service de remplissage automatique pour Bitwarden. Activez le remplissage automatique pour Bitwarden à partir de l'écran "Paramètres".</value>
