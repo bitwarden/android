@@ -120,7 +120,8 @@ namespace Bit.iOS
                         }
                     }
                 }
-                else if (message.Command == "addedCipher" || message.Command == "editedCipher" || message.Command == "restoredCipher")
+                else if (message.Command == "addedCipher" || message.Command == "editedCipher" ||
+                    message.Command == "restoredCipher")
                 {
                     if (_deviceActionService.SystemMajorVersion() >= 12)
                     {
