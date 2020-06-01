@@ -519,28 +519,28 @@
     <value>Blocca</value>
   </data>
   <data name="FifteenMinutes" xml:space="preserve">
-    <value>15 minutes</value>
+    <value>15 minuti</value>
   </data>
   <data name="OneHour" xml:space="preserve">
-    <value>1 hour</value>
+    <value>1 ora</value>
   </data>
   <data name="OneMinute" xml:space="preserve">
     <value>1 minuto</value>
   </data>
   <data name="FourHours" xml:space="preserve">
-    <value>4 hours</value>
+    <value>4 ore</value>
   </data>
   <data name="Immediately" xml:space="preserve">
-    <value>Immediately</value>
+    <value>Immediatamente</value>
   </data>
   <data name="VaultTimeout" xml:space="preserve">
-    <value>Vault Timeout</value>
+    <value>Scadenza Cassaforte</value>
   </data>
   <data name="VaultTimeoutAction" xml:space="preserve">
-    <value>Vault Timeout Action</value>
+    <value>Azione Scadenza Cassaforte</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
-    <value>Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?</value>
+    <value>La disconnessione rimuove tutti gli accessi alla tua cassaforte e richiede l'autenticazione online dopo il periodo di scadenza. Sei sicuro di voler utilizzare questa impostazione?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>Connessione in corso...</value>
@@ -1440,7 +1440,7 @@
     <value>Sblocca</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
-    <value>30 minutes</value>
+    <value>30 minuti</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
     <value>Imposta il tuo codice PIN per sbloccare Bitwarden. Le impostazioni PIN verranno reimpostate se si effettuerà il logout completo dall'applicazione.</value>
@@ -1536,7 +1536,7 @@
     <value>La "Richiesta di salvataggio" ti richiede automaticamente di salvare nuovi elementi nella tua cassaforte quando le utilizzi per la prima volta.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
-    <value>On App Restart</value>
+    <value>Al Riavvio Dell'App</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
     <value>Auto-riempimento rende facile accedere in modo sicuro alla tua cassaforte Bitwarden da altri siti web e applicazioni. Sembra che tu non abbia abilitato un servizio di auto-riempimento per Bitwarden. Abilita l'auto-riempimento per Bitwarden dalla schermata "Impostazioni".</value>
