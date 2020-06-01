@@ -20,7 +20,7 @@ using Xamarin.Forms.Platform.Android;
 [assembly: ExportRenderer(typeof(CipherViewCell), typeof(CipherViewCellRenderer))]
 namespace Bit.Droid.Renderers
 {
-    public class CipherViewCellRenderer : ViewRenderer<CipherViewCell, AndroidCipherCell> //ViewCellRenderer
+    public class CipherViewCellRenderer : ViewRenderer<CipherViewCell, AndroidCipherCell>
     {
         private static Typeface _faTypeface;
         private static Typeface _miTypeface;
@@ -33,6 +33,15 @@ namespace Bit.Droid.Renderers
         protected override void OnElementChanged (ElementChangedEventArgs<CipherViewCell> e)
         {
             base.OnElementChanged(e);
+            if (e.OldElement != null)
+            {
+                e.OldElement.PropertyChanged -= CellPropertyChanged;
+            }
+            if (e.NewElement == null)
+            {
+                return;
+            }
+
             if (_faTypeface == null)
             {
                 _faTypeface = Typeface.CreateFromAsset(Context.Assets, "FontAwesome.ttf");
@@ -53,8 +62,16 @@ namespace Bit.Droid.Renderers
             {
                 _disabledIconColor = ThemeManager.GetResourceColor("DisabledIconColor").ToAndroid();
             }
-            Control.CipherViewCell.PropertyChanged -= CellPropertyChanged;
-            Element.PropertyChanged += CellPropertyChanged;
+
+            if (Control == null)
+            {
+                if (Control == null)
+                {
+                    SetNativeControl(new AndroidCipherCell(Context, e.NewElement, _faTypeface, _miTypeface));
+                    Control.Element.PropertyChanged += CellPropertyChanged;
+                }
+            }
+
             Control.UpdateCell(Element);
             Control.UpdateColors(_textColor, _mutedColor, _disabledIconColor);
         }
@@ -62,6 +79,10 @@ namespace Bit.Droid.Renderers
         public void CellPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             var cipherCell = sender as CipherViewCell;
+            if (cipherCell == null)
+            {
+                return;
+            }
             Control.CipherViewCell = cipherCell;
             if (e.PropertyName == CipherViewCell.CipherProperty.PropertyName)
             {
@@ -88,7 +109,7 @@ namespace Bit.Droid.Renderers
             _faTypeface = faTypeface;
             _miTypeface = miTypeface;
 
-            var view = (context as Activity).LayoutInflater.Inflate(Resource.Layout.CipherViewCell, null);
+            var view = context.GetActivity().LayoutInflater.Inflate(Resource.Layout.CipherViewCell, null);
             IconImage = view.FindViewById<IconImageView>(Resource.Id.CipherCellIconImage);
             Icon = view.FindViewById<TextView>(Resource.Id.CipherCellIcon);
             Name = view.FindViewById<TextView>(Resource.Id.CipherCellName);
@@ -127,9 +148,14 @@ namespace Bit.Droid.Renderers
 
         public void UpdateCell(CipherViewCell cipherCell)
         {
+            var cipher = cipherCell.Cipher;
+            if (cipher == null)
+            {
+                return;
+            }
+
             UpdateIconImage(cipherCell);
 
-            var cipher = cipherCell.Cipher;
             Name.Text = cipher.Name;
             if (!string.IsNullOrWhiteSpace(cipher.SubTitle))
             {
