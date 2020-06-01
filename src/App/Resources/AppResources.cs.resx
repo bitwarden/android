@@ -518,23 +518,29 @@
   <data name="Lock" xml:space="preserve">
     <value>Zamknout</value>
   </data>
-  <data name="LockOption15Minutes" xml:space="preserve">
-    <value>Po 15 minutách</value>
+  <data name="FifteenMinutes" xml:space="preserve">
+    <value>15 minutes</value>
   </data>
-  <data name="LockOption1Hour" xml:space="preserve">
-    <value>Po 1 hodině</value>
+  <data name="OneHour" xml:space="preserve">
+    <value>1 hour</value>
   </data>
-  <data name="LockOption1Minute" xml:space="preserve">
-    <value>Po 1 minutě</value>
+  <data name="OneMinute" xml:space="preserve">
+    <value>1 minuta</value>
   </data>
-  <data name="LockOption4Hours" xml:space="preserve">
-    <value>Po 4 hodinách</value>
+  <data name="FourHours" xml:space="preserve">
+    <value>4 hours</value>
   </data>
-  <data name="LockOptionImmediately" xml:space="preserve">
-    <value>Okamžitě</value>
+  <data name="Immediately" xml:space="preserve">
+    <value>Immediately</value>
   </data>
-  <data name="LockOptions" xml:space="preserve">
-    <value>Možnosti zamknutí</value>
+  <data name="VaultTimeout" xml:space="preserve">
+    <value>Vault Timeout</value>
+  </data>
+  <data name="VaultTimeoutAction" xml:space="preserve">
+    <value>Vault Timeout Action</value>
+  </data>
+  <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
+    <value>Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>Přihlašování…</value>
@@ -1132,7 +1138,7 @@
     <value>V této složce nejsou žádné položky.</value>
   </data>
   <data name="NoItemsTrash" xml:space="preserve">
-    <value>There are no items in the trash.</value>
+    <value>V koši nejsou žádné položky.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
     <value>Služba přístupnosti</value>
@@ -1433,11 +1439,8 @@
   <data name="Unlock" xml:space="preserve">
     <value>Odemknout</value>
   </data>
-  <data name="LockOption30Minutes" xml:space="preserve">
-    <value>Po 30 minutách</value>
-  </data>
-  <data name="LockOption5Minutes" xml:space="preserve">
-    <value>Po 5 minutách</value>
+  <data name="ThirtyMinutes" xml:space="preserve">
+    <value>30 minutes</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
     <value>Nastavte svůj PIN kód pro odemknutí trezoru. Pokud se zcela odhlásíte z aplikace bude váš současný PIN bude resetován.</value>
@@ -1462,9 +1465,6 @@
   </data>
   <data name="FiveMinutes" xml:space="preserve">
     <value>5 minut</value>
-  </data>
-  <data name="OneMinute" xml:space="preserve">
-    <value>1 minuta</value>
   </data>
   <data name="TenSeconds" xml:space="preserve">
     <value>10 sekund</value>
@@ -1535,8 +1535,8 @@
   <data name="DisableSavePromptDescription" xml:space="preserve">
     <value>„Výzva k uložení“ vás automaticky vyzve k uložení nových položek do trezoru, kdykoli je poprvé zadáte.</value>
   </data>
-  <data name="LockOptionOnRestart" xml:space="preserve">
-    <value>Při restartu aplikace</value>
+  <data name="OnRestart" xml:space="preserve">
+    <value>On App Restart</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
     <value>Automatické vyplňování usnadňuje bezpečný přístup k trezoru Bitwarden z jiných webových stránek a aplikací. Vypadá to, že jste službu Bitwarden nepovolili. Povolte automatické vyplnění pro Bitwarden z obrazovky „Nastavení“.</value>
@@ -1629,49 +1629,49 @@
     <value>Příloha byla úspěšně uložena</value>
   </data>
   <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
-    <value>Please enable "Auto-fill Accessibility Service" from Bitwarden Settings to use the Auto-fill tile.</value>
+    <value>Povolte službu automatického vyplnění v nastavení Bitwarden pro použití dlaždice automatického vyplnění.</value>
   </data>
   <data name="AutofillTileUriNotFound" xml:space="preserve">
     <value>Nenalezena žádná pole pro hesla</value>
   </data>
   <data name="SoftDeleting" xml:space="preserve">
-    <value>Sending to trash...</value>
+    <value>Přesouvání do koše…</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemSoftDeleted" xml:space="preserve">
-    <value>Item has been sent to trash.</value>
+    <value>Položka byla přesunuta do koše.</value>
     <comment>Confirmation message after successfully soft-deleting a login</comment>
   </data>
   <data name="Restore" xml:space="preserve">
-    <value>Restore</value>
+    <value>Obnovit</value>
     <comment>Restores an entity (verb).</comment>
   </data>
   <data name="Restoring" xml:space="preserve">
-    <value>Restoring...</value>
+    <value>Obnovování…</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemRestored" xml:space="preserve">
-    <value>Item has been restored.</value>
+    <value>Položka byla obnovena.</value>
     <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
   </data>
   <data name="Trash" xml:space="preserve">
-    <value>Trash</value>
+    <value>Koš</value>
     <comment>(noun) Location of deleted items which have not yet been permanently deleted</comment>
   </data>
   <data name="SearchTrash" xml:space="preserve">
-    <value>Search trash</value>
+    <value>Hledat v koši</value>
     <comment>(action prompt) Label for the search text field when viewing the trash folder</comment>
   </data>
   <data name="DoYouReallyWantToPermanentlyDeleteCipher" xml:space="preserve">
-    <value>Do you really want to permanently delete? This cannot be undone.</value>
+    <value>Opravdu chcete trvale smazat tuto položku? Akce je nevratná.</value>
     <comment>Confirmation alert message when permanently deleteing a cipher.</comment>
   </data>
   <data name="DoYouReallyWantToRestoreCipher" xml:space="preserve">
-    <value>Do you really want to restore this item?</value>
+    <value>Opravdu chcete tuto položku obnovit?</value>
     <comment>Confirmation alert message when restoring a soft-deleted cipher.</comment>
   </data>
   <data name="DoYouReallyWantToSoftDeleteCipher" xml:space="preserve">
-    <value>Do you really want to send to the trash?</value>
+    <value>Opravdu chcete položku přesunout do koše?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
 </root>
