@@ -518,23 +518,29 @@
   <data name="Lock" xml:space="preserve">
     <value>נעל</value>
   </data>
-  <data name="LockOption15Minutes" xml:space="preserve">
-    <value>15 דקות</value>
+  <data name="FifteenMinutes" xml:space="preserve">
+    <value>15 minutes</value>
   </data>
-  <data name="LockOption1Hour" xml:space="preserve">
-    <value>שעה</value>
+  <data name="OneHour" xml:space="preserve">
+    <value>1 hour</value>
   </data>
-  <data name="LockOption1Minute" xml:space="preserve">
-    <value>דקה</value>
+  <data name="OneMinute" xml:space="preserve">
+    <value>דקה אחת</value>
   </data>
-  <data name="LockOption4Hours" xml:space="preserve">
-    <value>4 שעות</value>
+  <data name="FourHours" xml:space="preserve">
+    <value>4 hours</value>
   </data>
-  <data name="LockOptionImmediately" xml:space="preserve">
-    <value>באופן מיידי</value>
+  <data name="Immediately" xml:space="preserve">
+    <value>Immediately</value>
   </data>
-  <data name="LockOptions" xml:space="preserve">
-    <value>אפשרויות נעילה</value>
+  <data name="VaultTimeout" xml:space="preserve">
+    <value>Vault Timeout</value>
+  </data>
+  <data name="VaultTimeoutAction" xml:space="preserve">
+    <value>Vault Timeout Action</value>
+  </data>
+  <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
+    <value>Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>מתחבר...</value>
@@ -1434,11 +1440,8 @@ Bitwarden בעזרת פתיחת חלון "הגדרות".</value>
   <data name="Unlock" xml:space="preserve">
     <value>בטל נעילה</value>
   </data>
-  <data name="LockOption30Minutes" xml:space="preserve">
-    <value>30 דקות</value>
-  </data>
-  <data name="LockOption5Minutes" xml:space="preserve">
-    <value>5 דקות</value>
+  <data name="ThirtyMinutes" xml:space="preserve">
+    <value>30 minutes</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
     <value>קבע קוד PIN לביטול נעילת Bitwarden. הגדרות הPIN יאופסו אם תבצע יציאה מהתוכנה.</value>
@@ -1463,9 +1466,6 @@ Bitwarden בעזרת פתיחת חלון "הגדרות".</value>
   </data>
   <data name="FiveMinutes" xml:space="preserve">
     <value>5 דקות</value>
-  </data>
-  <data name="OneMinute" xml:space="preserve">
-    <value>דקה אחת</value>
   </data>
   <data name="TenSeconds" xml:space="preserve">
     <value>10 שניות</value>
@@ -1536,8 +1536,8 @@ Bitwarden בעזרת פתיחת חלון "הגדרות".</value>
   <data name="DisableSavePromptDescription" xml:space="preserve">
     <value>החלון "שמור" מופיע כשאתה מזין פרטי כניסה בפעם הראשונה.</value>
   </data>
-  <data name="LockOptionOnRestart" xml:space="preserve">
-    <value>באתחול האפליקציה</value>
+  <data name="OnRestart" xml:space="preserve">
+    <value>On App Restart</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
     <value>השלמה אוטומטית הופכת את תהליך הכניסה לאתרים לקל ומאובטח בעת גישה לאתרים ואפליקציות. נראה שלא הפעלת את שירות ההשלמה האוטומטית עבור Bitwarden. אנא הפעל את השירות דרך חלון "הגדרות".</value>
