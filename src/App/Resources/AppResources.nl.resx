@@ -534,13 +534,13 @@
     <value>Onmiddellijk</value>
   </data>
   <data name="VaultTimeout" xml:space="preserve">
-    <value>Kluis time-out</value>
+    <value>Time-out van de kluis</value>
   </data>
   <data name="VaultTimeoutAction" xml:space="preserve">
-    <value>Vault Timeout Action</value>
+    <value>Actie bij time-out</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
-    <value>Uitloggen verwijdert alle toegang tot uw kluis en vereist online authenticatie na de time-out. Weet je zeker dat je deze instelling wilt gebruiken?</value>
+    <value>Uitloggen ontneemt je de toegang tot je kluis en vereist online authenticatie na een periode van time-out. Weet je zeker dat je deze instelling wilt gebruiken?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>Inloggen...</value>
