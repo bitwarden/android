@@ -65,14 +65,11 @@ namespace Bit.Droid.Renderers
 
             if (Control == null)
             {
-                if (Control == null)
-                {
-                    SetNativeControl(new AndroidCipherCell(Context, e.NewElement, _faTypeface, _miTypeface));
-                    Control.Element.PropertyChanged += CellPropertyChanged;
-                }
+                SetNativeControl(new AndroidCipherCell(Context, e.NewElement, _faTypeface, _miTypeface));
+                Control.Element.PropertyChanged += CellPropertyChanged;
             }
 
-            Control.UpdateCell(Element);
+            Control.UpdateCell(Control.CipherViewCell);
             Control.UpdateColors(_textColor, _mutedColor, _disabledIconColor);
         }
 
@@ -168,6 +165,7 @@ namespace Bit.Droid.Renderers
             }
             SharedIcon.Visibility = cipher.Shared ? ViewStates.Visible : ViewStates.Gone;
             AttachmentsIcon.Visibility = cipher.HasAttachments ? ViewStates.Visible : ViewStates.Gone;
+            cipherCell.IsVisible = true;
         }
 
         public void UpdateIconImage(CipherViewCell cipherCell)
