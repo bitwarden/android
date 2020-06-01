@@ -37,13 +37,13 @@ namespace Bit.Core.Utilities
         public static string GetHostname(string uriString)
         {
             var uri = GetUri(uriString);
-            return uri != null && uri.Host != string.Empty ? uri.Host : null;
+            return string.IsNullOrEmpty(uri?.Host) ? null : uri.Host;
         }
 
         public static string GetHost(string uriString)
         {
             var uri = GetUri(uriString);
-            if (uri != null && uri.Host != string.Empty)
+            if (!string.IsNullOrEmpty(uri?.Host))
             {
                 if (uri.IsDefaultPort)
                 {
