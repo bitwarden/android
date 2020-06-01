@@ -519,25 +519,25 @@
     <value>Заблокувати</value>
   </data>
   <data name="FifteenMinutes" xml:space="preserve">
-    <value>15 minutes</value>
+    <value>15 хвилин</value>
   </data>
   <data name="OneHour" xml:space="preserve">
-    <value>1 hour</value>
+    <value>1 година</value>
   </data>
   <data name="OneMinute" xml:space="preserve">
     <value>1 хвилина</value>
   </data>
   <data name="FourHours" xml:space="preserve">
-    <value>4 hours</value>
+    <value>4 години</value>
   </data>
   <data name="Immediately" xml:space="preserve">
-    <value>Immediately</value>
+    <value>Негайно</value>
   </data>
   <data name="VaultTimeout" xml:space="preserve">
-    <value>Vault Timeout</value>
+    <value>Час очікування сховища</value>
   </data>
   <data name="VaultTimeoutAction" xml:space="preserve">
-    <value>Vault Timeout Action</value>
+    <value>Дія після часу очікування сховища</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
     <value>Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?</value>
