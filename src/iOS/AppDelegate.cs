@@ -174,6 +174,18 @@ namespace Bit.iOS
                 {
                     await ASHelpers.ReplaceAllIdentities();
                 }
+                else if (message.Command == "vaultTimeoutActionChanged")
+                {
+                    var timeoutAction = await _storageService.GetAsync<string>(Constants.VaultTimeoutActionKey);
+                    if (timeoutAction == "logOut")
+                    {
+                        await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
+                    }
+                    else
+                    {
+                        await ASHelpers.ReplaceAllIdentities();
+                    }
+                }
             });
 
             return base.FinishedLaunching(app, options);

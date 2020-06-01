@@ -112,7 +112,7 @@ namespace Bit.App.Pages
             {
                 fingerprint = await _cryptoService.GetFingerprintAsync(await _userService.GetUserIdAsync());
             }
-            catch (Exception e) when(e.Message == "No public key available.")
+            catch (Exception e) when (e.Message == "No public key available.")
             {
                 return;
             }
@@ -193,8 +193,10 @@ namespace Bit.App.Pages
 
         public async Task VaultTimeoutAsync()
         {
-            var options = _vaultTimeouts.Select(o => o.Key == _vaultTimeoutDisplayValue ? $"✓ {o.Key}" : o.Key).ToArray();
-            var selection = await Page.DisplayActionSheet(AppResources.VaultTimeout, AppResources.Cancel, null, options);
+            var options = _vaultTimeouts.Select(
+                o => o.Key == _vaultTimeoutDisplayValue ? $"✓ {o.Key}" : o.Key).ToArray();
+            var selection = await Page.DisplayActionSheet(AppResources.VaultTimeout,
+                AppResources.Cancel, null, options);
             if (selection == null || selection == AppResources.Cancel)
             {
                 return;
@@ -206,11 +208,13 @@ namespace Bit.App.Pages
                 GetVaultTimeoutActionFromKey(_vaultTimeoutActionDisplayValue));
             BuildList();
         }
-        
+
         public async Task VaultTimeoutActionAsync()
         {
-            var options = _vaultTimeoutActions.Select(o => o.Key == _vaultTimeoutActionDisplayValue ? $"✓ {o.Key}" : o.Key).ToArray();
-            var selection = await Page.DisplayActionSheet(AppResources.VaultTimeoutAction, AppResources.Cancel, null, options);
+            var options = _vaultTimeoutActions.Select(o =>
+                o.Key == _vaultTimeoutActionDisplayValue ? $"✓ {o.Key}" : o.Key).ToArray();
+            var selection = await Page.DisplayActionSheet(AppResources.VaultTimeoutAction,
+                AppResources.Cancel, null, options);
             if (selection == null || selection == AppResources.Cancel)
             {
                 return;
@@ -227,6 +231,10 @@ namespace Bit.App.Pages
                 }
             }
             var selectionOption = _vaultTimeoutActions.FirstOrDefault(o => o.Key == cleanSelection);
+            if(_vaultTimeoutActionDisplayValue != selectionOption.Key)
+            {
+                _messagingService.Send("vaultTimeoutActionChanged");
+            }
             _vaultTimeoutActionDisplayValue = selectionOption.Key;
             await _vaultTimeoutService.SetVaultTimeoutOptionsAsync(GetVaultTimeoutFromKey(_vaultTimeoutDisplayValue),
                 selectionOption.Value);
@@ -349,7 +357,11 @@ namespace Bit.App.Pages
             var securityItems = new List<SettingsPageListItem>
             {
                 new SettingsPageListItem { Name = AppResources.VaultTimeout, SubLabel = _vaultTimeoutDisplayValue },
-                new SettingsPageListItem { Name = AppResources.VaultTimeoutAction, SubLabel = _vaultTimeoutActionDisplayValue },
+                new SettingsPageListItem 
+                {
+                    Name = AppResources.VaultTimeoutAction,
+                    SubLabel = _vaultTimeoutActionDisplayValue
+                },
                 new SettingsPageListItem
                 {
                     Name = AppResources.UnlockWithPIN,
