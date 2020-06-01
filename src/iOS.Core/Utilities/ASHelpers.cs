@@ -15,6 +15,11 @@ namespace Bit.iOS.Core.Utilities
             if (await AutofillEnabled())
             {
                 var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+                var timeoutAction = await storageService.GetAsync<string>(Bit.Core.Constants.VaultTimeoutActionKey);
+                if (timeoutAction == "logOut")
+                {
+                    return;
+                }
                 var vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
                 if (await vaultTimeoutService.IsLockedAsync())
                 {
@@ -42,6 +47,12 @@ namespace Bit.iOS.Core.Utilities
 
         public static async Task<bool> IdentitiesCanIncremental()
         {
+            var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+            var timeoutAction = await storageService.GetAsync<string>(Bit.Core.Constants.VaultTimeoutActionKey);
+            if (timeoutAction == "logOut")
+            {
+                return false;
+            }
             var state = await ASCredentialIdentityStore.SharedStore?.GetCredentialIdentityStoreStateAsync();
             return state != null && state.Enabled && state.SupportsIncrementalUpdates;
         }

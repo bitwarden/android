@@ -120,7 +120,8 @@ namespace Bit.iOS
                         }
                     }
                 }
-                else if (message.Command == "addedCipher" || message.Command == "editedCipher" || message.Command == "restoredCipher")
+                else if (message.Command == "addedCipher" || message.Command == "editedCipher" ||
+                    message.Command == "restoredCipher")
                 {
                     if (_deviceActionService.SystemMajorVersion() >= 12)
                     {
@@ -172,6 +173,18 @@ namespace Bit.iOS
                     && _deviceActionService.SystemMajorVersion() >= 12)
                 {
                     await ASHelpers.ReplaceAllIdentities();
+                }
+                else if (message.Command == "vaultTimeoutActionChanged")
+                {
+                    var timeoutAction = await _storageService.GetAsync<string>(Constants.VaultTimeoutActionKey);
+                    if (timeoutAction == "logOut")
+                    {
+                        await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
+                    }
+                    else
+                    {
+                        await ASHelpers.ReplaceAllIdentities();
+                    }
                 }
             });
 
