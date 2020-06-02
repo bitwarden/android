@@ -80,11 +80,6 @@ namespace Bit.Core.Services
             _collection.DeleteMany(i => i.Id == key);
         }
 
-        public void Dispose()
-        {
-            _db?.Dispose();
-        }
-
         private class JsonItem
         {
             public JsonItem() { }
