@@ -519,28 +519,28 @@
     <value>Bloqueja</value>
   </data>
   <data name="FifteenMinutes" xml:space="preserve">
-    <value>15 minutes</value>
+    <value>15 minuts</value>
   </data>
   <data name="OneHour" xml:space="preserve">
-    <value>1 hour</value>
+    <value>1 hora</value>
   </data>
   <data name="OneMinute" xml:space="preserve">
     <value>1 minut</value>
   </data>
   <data name="FourHours" xml:space="preserve">
-    <value>4 hours</value>
+    <value>4 hores</value>
   </data>
   <data name="Immediately" xml:space="preserve">
-    <value>Immediately</value>
+    <value>Immediatament</value>
   </data>
   <data name="VaultTimeout" xml:space="preserve">
-    <value>Vault Timeout</value>
+    <value>Temps d'espera de la caixa forta</value>
   </data>
   <data name="VaultTimeoutAction" xml:space="preserve">
-    <value>Vault Timeout Action</value>
+    <value>Acció del temps d'espera de la caixa forta</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
-    <value>Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?</value>
+    <value>En tancar la sessió s'eliminarà tot l'accés a la vostra caixa forta i es requerirà una autenticació en línia després del període de temps d'espera. Esteu segur que voleu utilitzar aquesta configuració?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>S'està iniciant sessió...</value>
@@ -1440,7 +1440,7 @@
     <value>Desbloqueja</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
-    <value>30 minutes</value>
+    <value>30 minuts</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
     <value>Estableix el teu codi PIN per desbloquejar Bitwarden. La configuració PIN es restablirà si tanqueu sessió de manera completa de l'aplicació.</value>
@@ -1536,7 +1536,7 @@
     <value>"Guarda elements nous" demanarà automàticament que guardeu elements nous al magatzem cada volta que els introduïu per primera vegada.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
-    <value>On App Restart</value>
+    <value>En reiniciar l'aplicació</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
     <value>L'emplenament automàtic facilita l'accés de forma segura a la vostra caixa forta de Bitwarden des d'altres llocs web i aplicacions. Sembla que no heu habilitat un servei d’emplenament automàtic per a Bitwarden. Habiliteu-lo a la pantalla "Configuració".</value>
