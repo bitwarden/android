@@ -231,13 +231,14 @@ namespace Bit.App.Pages
                 }
             }
             var selectionOption = _vaultTimeoutActions.FirstOrDefault(o => o.Key == cleanSelection);
-            if(_vaultTimeoutActionDisplayValue != selectionOption.Key)
-            {
-                _messagingService.Send("vaultTimeoutActionChanged");
-            }
+            var changed = _vaultTimeoutActionDisplayValue != selectionOption.Key;
             _vaultTimeoutActionDisplayValue = selectionOption.Key;
             await _vaultTimeoutService.SetVaultTimeoutOptionsAsync(GetVaultTimeoutFromKey(_vaultTimeoutDisplayValue),
                 selectionOption.Value);
+            if (changed)
+            {
+                _messagingService.Send("vaultTimeoutActionChanged");
+            }
             BuildList();
         }
 
