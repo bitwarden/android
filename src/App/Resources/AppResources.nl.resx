@@ -1536,7 +1536,7 @@
     <value>De "Notificatie bij nieuwe site" vraagt automatisch om nieuwe sites op te slaan in je kluis wanneer je voor de eerste keer inlogt.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
-    <value>Na herstart</value>
+    <value>Na opnieuw starten</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
     <value>Automatisch aanvullen vereenvoudigt veilige toegang tot je Bitwarden-kluis vanuit andere websites en apps. Het lijkt erop dat Automatisch aanvullen niet is ingeschakeld. Schakel Automatisch aanvullen voor Bitwarden in via "Instellingen".</value>

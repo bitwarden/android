@@ -206,7 +206,7 @@
     <value>बग रिपोर्ट दर्ज करें</value>
   </data>
   <data name="FileBugReportDescription" xml:space="preserve">
-    <value>Open an issue at our GitHub repository.</value>
+    <value>हमारे GitHub भंडार में एक मुद्दे को बताएं।</value>
   </data>
   <data name="FingerprintDirection" xml:space="preserve">
     <value>फिंगरप्रिंट से सत्यापन करें</value>
@@ -243,37 +243,37 @@
     <comment>Hide a secret value that is currently shown (password).</comment>
   </data>
   <data name="InternetConnectionRequiredMessage" xml:space="preserve">
-    <value>Please connect to the internet before continuing.</value>
+    <value>जारी रखने से पहले कृपया इंटरनेट से जुड़े।</value>
     <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
-    <value>Internet Connection Required</value>
+    <value>इंटरनेट से जुड़िए।</value>
     <comment>Title for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InvalidMasterPassword" xml:space="preserve">
-    <value>Invalid Master Password. Try again.</value>
+    <value>मास्टर पासवर्ड गलत है। फिर कोशिश करें।</value>
   </data>
   <data name="InvalidPIN" xml:space="preserve">
-    <value>Invalid PIN. Try again.</value>
+    <value>पिन गलत है। फिर कोशिश करें।</value>
   </data>
   <data name="Launch" xml:space="preserve">
-    <value>Launch</value>
+    <value>खोलें</value>
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="LogIn" xml:space="preserve">
-    <value>Log In</value>
+    <value>लॉग इन करें</value>
     <comment>The login button text (verb).</comment>
   </data>
   <data name="LogInNoun" xml:space="preserve">
-    <value>Login</value>
+    <value>लॉग इन</value>
     <comment>Title for login page. (noun)</comment>
   </data>
   <data name="LogOut" xml:space="preserve">
-    <value>Log Out</value>
+    <value>लॉग आउट</value>
     <comment>The log out button text (verb).</comment>
   </data>
   <data name="LogoutConfirmation" xml:space="preserve">
-    <value>Are you sure you want to log out?</value>
+    <value>क्या आप वाकई लॉग आउट करना चाहते हैं?</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>मास्टर / मुख्य पासवर्ड</value>
@@ -284,22 +284,22 @@
     <comment>Text to define that there are more options things to see.</comment>
   </data>
   <data name="MyVault" xml:space="preserve">
-    <value>My Vault</value>
+    <value>मेरी तिजोरी</value>
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Name</value>
+    <value>नाम</value>
     <comment>Label for an entity name.</comment>
   </data>
   <data name="No" xml:space="preserve">
-    <value>No</value>
+    <value>नहीं</value>
   </data>
   <data name="Notes" xml:space="preserve">
     <value>टिप्पणियाँ</value>
     <comment>Label for notes.</comment>
   </data>
   <data name="Ok" xml:space="preserve">
-    <value>Ok</value>
+    <value>ठीक</value>
     <comment>Acknowledgement.</comment>
   </data>
   <data name="Password" xml:space="preserve">
@@ -323,14 +323,14 @@
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>Item has been deleted.</value>
+    <value>आइटम हटा दिया गया है।</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
-    <value>Submit</value>
+    <value>जमा करें</value>
   </data>
   <data name="Sync" xml:space="preserve">
-    <value>Sync</value>
+    <value>संकालन</value>
     <comment>The title for the sync page.</comment>
   </data>
   <data name="ThankYou" xml:space="preserve">
@@ -345,28 +345,28 @@
     <comment>Label for a uri/url.</comment>
   </data>
   <data name="UseFingerprintToUnlock" xml:space="preserve">
-    <value>Use Fingerprint to Unlock</value>
+    <value>अंगुलिछाप से खोलें</value>
   </data>
   <data name="Username" xml:space="preserve">
     <value>उपयोगकर्ता नाम:</value>
     <comment>Label for a username.</comment>
   </data>
   <data name="ValidationFieldRequired" xml:space="preserve">
-    <value>The {0} field is required.</value>
+    <value>{0} की आश्यकता है।</value>
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
-    <value>{0} has been copied.</value>
+    <value>{0} कॉपी कर लिया गया है।</value>
     <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
-    <value>Verify Fingerprint</value>
+    <value>अंगुलिछाप दें</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
-    <value>Verify Master Password</value>
+    <value>मास्टर पासवर्ड बताएं।</value>
   </data>
   <data name="VerifyPIN" xml:space="preserve">
-    <value>Verify PIN</value>
+    <value>पिन बताएं।</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>संस्करण</value>
@@ -397,13 +397,13 @@
     <value>आइटम जोड़ें</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
-    <value>App Extension</value>
+    <value>ऐप का विस्तारण</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
     <value>Use the bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
-    <value>Auto-fill Service</value>
+    <value>भरण सेवा</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>अस्पष्ट अक्षर से बचें</value>
@@ -412,7 +412,7 @@
     <value>bitwarden App Extension</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the Bitwarden App Extension. Learn more about using the Bitwarden App Extension by navigating to the "Settings" screen.</value>
+    <value>अपने तिजोरी में नए आइटम डालने का सबसे सरल तरीका है Bitwarden ऐप विस्तारण। Bitwarden ऐप विस्तरण के उपयोग संबंधी जानकारी पाने के लिए "सेटिंग्स" में जाएं।</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
     <value>Use bitwarden in Safari and other apps to auto-fill your logins.</value>
@@ -433,13 +433,13 @@
     <value>मास्टर पासवर्ड बदलें</value>
   </data>
   <data name="ChangePasswordConfirmation" xml:space="preserve">
-    <value>You can change your master password on the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>मास्टर पासवर्ड Bitwarden के वेब-तिजोरी पर जाकर बदला जा सकता है। क्या आप वहां जाना चाहते हैं?</value>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>Close</value>
+    <value>बंद करें</value>
   </data>
   <data name="Continue" xml:space="preserve">
-    <value>Continue</value>
+    <value>जारी रखें</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
     <value>खाता बनाएँ</value>
@@ -452,26 +452,26 @@
     <value>आइटम संपादित करें</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
-    <value>Enable Automatic Syncing</value>
+    <value>स्वतः सिंक चालू करें।</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
-    <value>Enter your account email address to receive your master password hint.</value>
+    <value>अपने मास्टर पासवर्ड संकेत प्राप्त करने के लिए अपने खाते का ईमेल पता दर्ज करें।</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
-    <value>Re-enable App Extension</value>
+    <value>ऐप विस्तारण को फिर चालू करें</value>
   </data>
   <data name="ExtensionAlmostDone" xml:space="preserve">
     <value>लगभग सम्पूर्ण!</value>
   </data>
   <data name="ExtensionEnable" xml:space="preserve">
-    <value>Enable App Extension</value>
+    <value>ऐप विस्तारण को चालू करें</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
     <value>In Safari, find bitwarden using the share icon (hint: scroll to the right on the bottom row of the menu).</value>
     <comment>Safari is the name of apple's web browser</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
-    <value>Get instant access to your passwords!</value>
+    <value>अपने पासवर्ड को तुरंत प्राप्त करें</value>
   </data>
   <data name="ExtensionReady" xml:space="preserve">
     <value>आप लॉग इन करने के लिए तैयार हैं!</value>
@@ -504,75 +504,76 @@
     <value>आइटम्स आयात करें</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
-    <value>You can bulk import items from the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>Bitwarden के वेब-तिजोरी से एक साथ कई आइटम आयातित किए जा सकते हैं। क्या आप वहां जाना चाहते हैं?</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
-    <value>Quickly bulk import your items from other password management apps.</value>
+    <value>दूसरे पासवर्ड प्रबंधन ऐप से एक साथ कई आइटम जल्दी आयातित करें।</value>
   </data>
   <data name="LastSync" xml:space="preserve">
-    <value>Last Sync:</value>
+    <value>आखिरी बार सिंक हुआ:</value>
   </data>
   <data name="Length" xml:space="preserve">
-    <value>Length</value>
+    <value>लंबाई</value>
   </data>
   <data name="Lock" xml:space="preserve">
     <value>लॉक</value>
   </data>
   <data name="FifteenMinutes" xml:space="preserve">
-    <value>15 minutes</value>
+    <value>15 मिनिट</value>
   </data>
   <data name="OneHour" xml:space="preserve">
-    <value>1 hour</value>
+    <value>1 घंटा</value>
   </data>
   <data name="OneMinute" xml:space="preserve">
-    <value>1 minute</value>
+    <value>1 मिनट</value>
   </data>
   <data name="FourHours" xml:space="preserve">
-    <value>4 hours</value>
+    <value>4 घंटे</value>
   </data>
   <data name="Immediately" xml:space="preserve">
-    <value>Immediately</value>
+    <value>तत्‍काल
+</value>
   </data>
   <data name="VaultTimeout" xml:space="preserve">
-    <value>Vault Timeout</value>
+    <value>तिजोरी का समय समाप्त</value>
   </data>
   <data name="VaultTimeoutAction" xml:space="preserve">
     <value>Vault Timeout Action</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
-    <value>Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?</value>
+    <value>लॉग आउट करने से तिजोरी में प्रवेश संभव नहीं होगा और समय समाप्त होने के बाद ऑनलाइन प्रमाणीकरण की आश्यकता होगी। आप इस सेटिंग्स को प्रयोग करने के लिए विश्वस्त हैं?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>लॉगिन कर रहा है...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="LoginOrCreateNewAccount" xml:space="preserve">
-    <value>Log in or create a new account to access your secure vault.</value>
+    <value>सुरक्षित तिजोरी में प्रवेश करने के लिए नया खाता बनाएं या लॉग इन करें।</value>
   </data>
   <data name="Manage" xml:space="preserve">
     <value>प्रबंधन</value>
   </data>
   <data name="MasterPasswordConfirmationValMessage" xml:space="preserve">
-    <value>Password confirmation is not correct.</value>
+    <value>पासवर्ड गलत है।</value>
   </data>
   <data name="MasterPasswordDescription" xml:space="preserve">
-    <value>The master password is the password you use to access your vault. It is very important that you do not forget your master password. There is no way to recover the password in the event that you forget it.</value>
+    <value>मास्टर पासवर्ड वह पासवर्ड है जो तिजोरी में प्रवेश के लिए प्रयोग होता है। आप मास्टर पासवर्ड ना भूले यह अतिआवश्यक है। भूलने की अवस्था में पासवर्ड को दोबारा पाना संभव नहीं होगा।</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
-    <value>Master Password Hint (optional)</value>
+    <value>मास्टर पासवर्ड संकेत (वैकल्पिक)</value>
   </data>
   <data name="MasterPasswordHintDescription" xml:space="preserve">
-    <value>A master password hint can help you remember your password if you forget it.</value>
+    <value>मास्टर पासवर्ड संकेत आपको भूल जाने की अवस्था में पासवर्ड को याद करने में सहायता करता है।</value>
   </data>
   <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Master password must be at least 8 characters long.</value>
+    <value>मास्टर पासवर्ड में कम से कम 8 अक्षर होने चाहिएं।</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
-    <value>Minimum Numbers</value>
+    <value>कम से कम अंक</value>
     <comment>Minimum numeric characters for password generator settings</comment>
   </data>
   <data name="MinSpecial" xml:space="preserve">
-    <value>Minimum Special</value>
+    <value>कम से कम विशेष अक्षर</value>
     <comment>Minimum special characters for password generator settings</comment>
   </data>
   <data name="MoreSettings" xml:space="preserve">
@@ -585,19 +586,19 @@
     <value>कभी नहीं</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>New item created.</value>
+    <value>नया आइटम बनाया गया</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
-    <value>There are no favorites in your vault.</value>
+    <value>तिजोरी में कोई अभिमत आइटम नहीं है।</value>
   </data>
   <data name="NoItems" xml:space="preserve">
-    <value>There are no items in your vault.</value>
+    <value>तिजोरी में कोई आइटम नहीं है।</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
     <value>There are no items in your vault for this website. Tap to add one.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
-    <value>This login does not have a username or password configured.</value>
+    <value>इस आइटम में कोई यूजरनेम या पासवर्ड नहीं पड़ा है।</value>
   </data>
   <data name="OkGotIt" xml:space="preserve">
     <value>ठीक है, समझ गए!</value>
@@ -622,10 +623,10 @@
     <value>पासवर्ड संकेत</value>
   </data>
   <data name="PasswordHintAlert" xml:space="preserve">
-    <value>We've sent you an email with your master password hint.</value>
+    <value>हमने आपको मास्टर पासवर्ड संकेत के साथ एक ईमेल भेजा है।</value>
   </data>
   <data name="PasswordOverrideAlert" xml:space="preserve">
-    <value>Are you sure you want to overwrite the current password?</value>
+    <value>आप पुराने पासवर्ड के ऊपर दूसरा पासवर्ड लिखने के लिए आश्वस्त हैं?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
     <value>bitwarden keeps your vault automatically synced by using push notifications. For the best possible experience, please select "Ok" on the following prompt when asked to enable push notifications.</value>
@@ -635,13 +636,13 @@
     <value>इस एप्प का मूल्यांकन करें</value>
   </data>
   <data name="RateTheAppDescription" xml:space="preserve">
-    <value>Please consider helping us out with a good review!</value>
+    <value>कृपया हमें एक अच्छी समीक्षा के साथ बाहर की मदद करने पर विचार करें!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
-    <value>Regenerate Password</value>
+    <value>पासवर्ड पुन: जनरेट करें</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
-    <value>Re-type Master Password</value>
+    <value>मास्टर पासवर्ड पुनः टाइप करें</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
     <value>Search vault</value>
@@ -662,24 +663,24 @@
     <value>आइटम सूचना</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Item updated.</value>
+    <value>आइटम अपडेट किया गया।</value>
   </data>
   <data name="Submitting" xml:space="preserve">
-    <value>Submitting...</value>
+    <value>सबमिट हो रहा हैं...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Syncing" xml:space="preserve">
-    <value>Syncing...</value>
+    <value>सिंक हो रहा है…</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="SyncingComplete" xml:space="preserve">
-    <value>Syncing complete.</value>
+    <value>सिंकिंग पूर्ण</value>
   </data>
   <data name="SyncingFailed" xml:space="preserve">
-    <value>Syncing failed.</value>
+    <value>सिंकिंग असफल।</value>
   </data>
   <data name="SyncVaultNow" xml:space="preserve">
-    <value>Sync Vault Now</value>
+    <value>तिजोरी अभी सिंक करें।</value>
   </data>
   <data name="TouchID" xml:space="preserve">
     <value>Touch ID</value>
@@ -905,28 +906,28 @@
     <value>Attachment added</value>
   </data>
   <data name="AttachmentDeleted" xml:space="preserve">
-    <value>Attachment deleted</value>
+    <value>संग्लित वस्तु डिलीट करी गई</value>
   </data>
   <data name="ChooseFile" xml:space="preserve">
-    <value>Choose File</value>
+    <value>फ़ाइल चुनें</value>
   </data>
   <data name="File" xml:space="preserve">
     <value>फ़ाइल</value>
   </data>
   <data name="NoFileChosen" xml:space="preserve">
-    <value>No file chosen</value>
+    <value>कोई फाइल नहीं चुनी गई।</value>
   </data>
   <data name="NoAttachments" xml:space="preserve">
-    <value>There are no attachments.</value>
+    <value>कोई संग्लित वस्तु नहीं है।</value>
   </data>
   <data name="FileSource" xml:space="preserve">
-    <value>File Source</value>
+    <value>फ़ाइल स्रोत</value>
   </data>
   <data name="FeatureUnavailable" xml:space="preserve">
-    <value>Feature Unavailable</value>
+    <value>फीचर उपलब्ध नहीं है</value>
   </data>
   <data name="MaxFileSize" xml:space="preserve">
-    <value>Maximum file size is 100 MB.</value>
+    <value>अधिकतम फाइल आकार 100 MB है</value>
   </data>
   <data name="UpdateKey" xml:space="preserve">
     <value>You cannot use this feature until you update your encryption key.</value>
