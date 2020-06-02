@@ -520,28 +520,28 @@
     <value>Κλείδωμα</value>
   </data>
   <data name="FifteenMinutes" xml:space="preserve">
-    <value>15 minutes</value>
+    <value>15 λεπτά</value>
   </data>
   <data name="OneHour" xml:space="preserve">
-    <value>1 hour</value>
+    <value>1 ώρα</value>
   </data>
   <data name="OneMinute" xml:space="preserve">
     <value>1 λεπτό</value>
   </data>
   <data name="FourHours" xml:space="preserve">
-    <value>4 hours</value>
+    <value>4 ώρες</value>
   </data>
   <data name="Immediately" xml:space="preserve">
-    <value>Immediately</value>
+    <value>Άμεσα</value>
   </data>
   <data name="VaultTimeout" xml:space="preserve">
-    <value>Vault Timeout</value>
+    <value>Χρόνος Λήξης Vault</value>
   </data>
   <data name="VaultTimeoutAction" xml:space="preserve">
-    <value>Vault Timeout Action</value>
+    <value>Ενέργεια Χρόνου Λήξης Vault</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
-    <value>Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?</value>
+    <value>Η αποσύνδεση θα καταργήσει όλη την πρόσβαση στο vault σας και απαιτεί online έλεγχο ταυτότητας μετά το χρονικό όριο λήξης. Είστε βέβαιοι ότι θέλετε να χρησιμοποιήσετε αυτήν τη ρύθμιση;</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>Σύνδεση...</value>
@@ -1441,7 +1441,7 @@
     <value>Ξεκλείδωμα</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
-    <value>30 minutes</value>
+    <value>30 λεπτά</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
     <value>Ορίστε τον κωδικό PIN για να ξεκλειδώσετε το Bitwarden. Οι ρυθμίσεις PIN θα επαναρυθμιστούν αν αποσυνδεθείτε πλήρως από την εφαρμογή.</value>
@@ -1537,7 +1537,7 @@
     <value>Η "προτροπή αποθήκευσης" σας ζητάει αυτόματα να αποθηκεύετε νέα στοιχεία στο vault σας, κάθε φορά που τα εισάγετε για πρώτη φορά.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
-    <value>On App Restart</value>
+    <value>Κατά την Επανεκκίνηση Εφαρμογής</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
     <value>Η αυτόματη συμπλήρωση διευκολύνει την ασφαλή πρόσβαση στη λίστα από άλλες ιστοσελίδες και εφαρμογές. Φαίνεται ότι δεν έχετε ενεργοποιήσει την υπηρεσία αυτόματης συμπλήρωσης για το Bitwarden. Ενεργοποιήστε την από τις "Ρυθμίσεις".</value>
