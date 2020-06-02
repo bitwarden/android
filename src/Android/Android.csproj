@@ -150,6 +150,7 @@
     <None Include="ci-build-apks.ps1" />
     <GoogleServicesJson Include="google-services.json" />
     <GoogleServicesJson Include="google-services.json.enc" />
+    <None Include="fdroid-keystore.jks.enc" />
     <None Include="Properties\AndroidManifest.xml" />
     <None Include="upload-keystore.jks.enc" />
   </ItemGroup>
