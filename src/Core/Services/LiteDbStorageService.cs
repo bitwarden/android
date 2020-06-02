@@ -2,14 +2,16 @@
 using LiteDB;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Bit.Core.Services
 {
-    public class LiteDbStorageService : IStorageService, IDisposable
+    public class LiteDbStorageService : IStorageService
     {
+        private static LiteDatabase _db;
+        private static readonly object _lock = new object();
+
         private readonly JsonSerializerSettings _jsonSettings = new JsonSerializerSettings
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver()
@@ -17,7 +19,6 @@ namespace Bit.Core.Services
         private readonly string _dbPath;
         private ILiteCollection<JsonItem> _collection;
         private Task _initTask;
-        private LiteDatabase _db;
 
         public LiteDbStorageService(string dbPath)
         {
@@ -38,7 +39,13 @@ namespace Bit.Core.Services
             {
                 try
                 {
-                    _db = new LiteDatabase($"Filename={_dbPath};Upgrade=true;");
+                    lock (_lock)
+                    {
+                        if (_db == null)
+                        {
+                            _db = new LiteDatabase($"Filename={_dbPath};Upgrade=true;");
+                        }
+                    }
                     _collection = _db.GetCollection<JsonItem>("json_items");
                 }
                 finally
@@ -71,11 +78,6 @@ namespace Bit.Core.Services
         {
             await InitAsync();
             _collection.DeleteMany(i => i.Id == key);
-        }
-
-        public void Dispose()
-        {
-            _db?.Dispose();
         }
 
         private class JsonItem
