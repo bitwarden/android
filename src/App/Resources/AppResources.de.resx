@@ -519,28 +519,28 @@
     <value>Sperren</value>
   </data>
   <data name="FifteenMinutes" xml:space="preserve">
-    <value>15 minutes</value>
+    <value>15 Minuten</value>
   </data>
   <data name="OneHour" xml:space="preserve">
-    <value>1 hour</value>
+    <value>1 Stunde</value>
   </data>
   <data name="OneMinute" xml:space="preserve">
     <value>1 Minute</value>
   </data>
   <data name="FourHours" xml:space="preserve">
-    <value>4 hours</value>
+    <value>4 Stunden</value>
   </data>
   <data name="Immediately" xml:space="preserve">
-    <value>Immediately</value>
+    <value>Sofort</value>
   </data>
   <data name="VaultTimeout" xml:space="preserve">
-    <value>Vault Timeout</value>
+    <value>Tresor-Timeout</value>
   </data>
   <data name="VaultTimeoutAction" xml:space="preserve">
-    <value>Vault Timeout Action</value>
+    <value>Aktion bei Tresor-Timeout</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
-    <value>Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?</value>
+    <value>Nach dem Ausloggen verlieren Sie jeglichen Zugriff auf Ihren Tresor und es ist nach Ablauf der Timeout-Zeit eine Online-Authentifizierung erforderlich. Sind Sie sicher, dass Sie diese Einstellung nutzen möchten?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>Anmeldung läuft...</value>
@@ -1440,7 +1440,7 @@
     <value>Entsperren</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
-    <value>30 minutes</value>
+    <value>30 Minuten</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
     <value>Legen Sie Ihre PIN für das Entsperren von Bitwarden fest. Ihre PIN-Einstellungen werden zurückgesetzt, wenn Sie sich jemals vollständig aus der Anwendung abmelden.</value>
@@ -1536,7 +1536,7 @@
     <value>Der "Speichern-Prompt" fordert Sie automatisch dazu auf, neue Einträge in den Tresor zu speichern, wenn Sie sie zum ersten Mal eingeben.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
-    <value>On App Restart</value>
+    <value>Beim Neustart der App</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
     <value>Durch automatisches Füllen ist es leicht, auf Ihren Bitwarden Tresor von anderen Webseiten und Apps sicher zuzugreifen. Es sieht aus, als ob Sie den Automatisches Fülldienst für Bitwarden nicht aktiviert haben. Aktivieren Sie automatisches Füllen im "Einstellungen"-Bildschirm.</value>
