@@ -540,7 +540,7 @@
     <value>Action lors de l'expiration du délai du coffre</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
-    <value>La déconnexion supprimera tous les accès à votre coffre et nécessite une authentification en ligne après la période d'expiration. Êtes-vous sûr de vouloir utiliser ce paramètre?</value>
+    <value>La déconnexion supprimera tous les accès à votre coffre et nécessite une authentification en ligne après la période d'expiration. Êtes-vous sûr de vouloir utiliser ce paramètre ?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>Identification...</value>
