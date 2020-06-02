@@ -519,28 +519,28 @@
     <value>Kilitle</value>
   </data>
   <data name="FifteenMinutes" xml:space="preserve">
-    <value>15 minutes</value>
+    <value>15 dakika</value>
   </data>
   <data name="OneHour" xml:space="preserve">
-    <value>1 hour</value>
+    <value>1 saat</value>
   </data>
   <data name="OneMinute" xml:space="preserve">
     <value>1 dakika</value>
   </data>
   <data name="FourHours" xml:space="preserve">
-    <value>4 hours</value>
+    <value>4 saat</value>
   </data>
   <data name="Immediately" xml:space="preserve">
-    <value>Immediately</value>
+    <value>Hemen</value>
   </data>
   <data name="VaultTimeout" xml:space="preserve">
-    <value>Vault Timeout</value>
+    <value>Kasa Zaman Aşımı</value>
   </data>
   <data name="VaultTimeoutAction" xml:space="preserve">
-    <value>Vault Timeout Action</value>
+    <value>Kasa Zaman Aşımı Eylemi</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
-    <value>Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?</value>
+    <value>Oturumu kapatmak kasanıza olan tüm erişiminizi kaldırır ve zaman aşımından sonra çevrimiçi kimlik doğrulaması gerektirir. Bu ayarı kullanmak istediğinizden emin misiniz?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>Oturum açılıyor...</value>
@@ -1138,7 +1138,7 @@
     <value>Bu klasörde öğe yok.</value>
   </data>
   <data name="NoItemsTrash" xml:space="preserve">
-    <value>There are no items in the trash.</value>
+    <value>Çöp kutusunda hiç öge yok.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
     <value>Otomatik Doldur Erişilebilirlik Hizmeti</value>
@@ -1440,7 +1440,7 @@
     <value>Kilidi Aç</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
-    <value>30 minutes</value>
+    <value>30 dakika</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
     <value>Bitwarden'ı açmak için bir PIN kodu belirleyin. Uygulamadan tamamen çıkış yaparsanız PIN ayarlarınız sıfırlanacaktır.</value>
@@ -1536,7 +1536,7 @@
     <value>"Kaydet Uyarısı", ilk kez girdiğinizde yeni ögeleri kasanıza kaydetmeniz için otomatik olarak size sorar.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
-    <value>On App Restart</value>
+    <value>Uygulama Yeniden Başlatılırken</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
     <value>Otomatik doldurma, Bitwarden kasanıza diğer web sitelerinden ve uygulamalardan güvenli bir şekilde erişmenizi kolaylaştırır. Bitwarden için otomatik doldurma hizmetini etkinleştirmemiş gibi görünüyorsunuz. "Ayarlar" ekranından Bitwarden için otomatik doldurmayı etkinleştirin.</value>
@@ -1635,43 +1635,43 @@
     <value>Şifre alanı tespit edilmedi</value>
   </data>
   <data name="SoftDeleting" xml:space="preserve">
-    <value>Sending to trash...</value>
+    <value>Çöp kutusuna gönderiliyor...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemSoftDeleted" xml:space="preserve">
-    <value>Item has been sent to trash.</value>
+    <value>Öge çöp kutusuna gönderildi.</value>
     <comment>Confirmation message after successfully soft-deleting a login</comment>
   </data>
   <data name="Restore" xml:space="preserve">
-    <value>Restore</value>
+    <value>Geri Yükle</value>
     <comment>Restores an entity (verb).</comment>
   </data>
   <data name="Restoring" xml:space="preserve">
-    <value>Restoring...</value>
+    <value>Geri yükleniyor...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemRestored" xml:space="preserve">
-    <value>Item has been restored.</value>
+    <value>Öge geri yüklendi.</value>
     <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
   </data>
   <data name="Trash" xml:space="preserve">
-    <value>Trash</value>
+    <value>Çöp Kutusu</value>
     <comment>(noun) Location of deleted items which have not yet been permanently deleted</comment>
   </data>
   <data name="SearchTrash" xml:space="preserve">
-    <value>Search trash</value>
+    <value>Çöplerde ara</value>
     <comment>(action prompt) Label for the search text field when viewing the trash folder</comment>
   </data>
   <data name="DoYouReallyWantToPermanentlyDeleteCipher" xml:space="preserve">
-    <value>Do you really want to permanently delete? This cannot be undone.</value>
+    <value>Gerçekten kalıcı olarak silmek istiyor musunuz? Bu işlem geri alınamaz.</value>
     <comment>Confirmation alert message when permanently deleteing a cipher.</comment>
   </data>
   <data name="DoYouReallyWantToRestoreCipher" xml:space="preserve">
-    <value>Do you really want to restore this item?</value>
+    <value>Bu ögeyi geri yüklemeyi gerçekten istiyor musunuz?</value>
     <comment>Confirmation alert message when restoring a soft-deleted cipher.</comment>
   </data>
   <data name="DoYouReallyWantToSoftDeleteCipher" xml:space="preserve">
-    <value>Do you really want to send to the trash?</value>
+    <value>Bu ögeyi çöp kutusuna göndermeyi gerçekten istiyor musunuz?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
 </root>
