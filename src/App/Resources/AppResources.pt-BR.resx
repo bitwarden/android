@@ -1629,7 +1629,7 @@
     <value>Anexo salvo com sucesso</value>
   </data>
   <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
-    <value>Por favor, habilite "Serviço de Autopreenchimento de Acessibilidade" nas configurações do Bitwarden para usar o bloco de Autopreenchimento.</value>
+    <value>Por favor, habilite "Serviço de Acessibilidade de Autopreenchimento" nas configurações do Bitwarden para usar o bloco de Autopreenchimento.</value>
   </data>
   <data name="AutofillTileUriNotFound" xml:space="preserve">
     <value>Nenhum campo de senha detectado</value>
