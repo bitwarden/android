@@ -159,7 +159,6 @@ namespace Bit.Core.Services
             return password.ToString();
         }
 
-
         public async Task<string> GeneratePassphraseAsync(PasswordGenerationOptions options)
         {
             options.Merge(_defaultOptions);
