@@ -75,6 +75,7 @@ namespace Bit.Droid.Autofill
             "org.adblockplus.browser",
             "org.adblockplus.browser.beta",
             "org.bromite.bromite",
+            "org.bromite.chromium",
             "org.chromium.chrome",
             "org.codeaurora.swe.browser",
             "org.gnu.icecat",
