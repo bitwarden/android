@@ -515,6 +515,9 @@
   <data name="Length" xml:space="preserve">
     <value>Length</value>
   </data>
+  <data name="MaxLength" xml:space="preserve">
+    <value>Max. length</value>
+  </data>
   <data name="Lock" xml:space="preserve">
     <value>Lock</value>
   </data>
@@ -1400,7 +1403,10 @@
     <value>Number of Words</value>
   </data>
   <data name="Passphrase" xml:space="preserve">
-    <value>Passphrase</value>
+    <value>Passphrase (word count)</value>
+  </data>
+  <data name="PassphraseLimited" xml:space="preserve">
+    <value>Passphrase (character limited)</value>
   </data>
   <data name="WordSeparator" xml:space="preserve">
     <value>Word Separator</value>
@@ -1543,6 +1549,10 @@
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
     <value>Your theme changes will apply when the app is restarted.</value>
+  </data>
+  <data name="ShortWords" xml:space="preserve">
+    <value>Only short words</value>
+    <comment>Limit the character count per word to 5.</comment>
   </data>
   <data name="Capitalize" xml:space="preserve">
     <value>Capitalize</value>

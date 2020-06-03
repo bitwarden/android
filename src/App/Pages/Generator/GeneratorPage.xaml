@@ -95,7 +95,28 @@
                 <StackLayout Spacing="0"
                              Padding="0"
                              IsVisible="{Binding IsPassword, Converter={StaticResource inverseBool}}">
-                    <StackLayout StyleClass="box-row, box-row-stepper">
+                    <StackLayout StyleClass="box-row, box-row-slider" IsVisible="{Binding IsPassphraseLimited}">
+                        <Label
+                            Text="{u:I18n MaxLength}"
+                            StyleClass="box-label, box-label-regular"
+                            VerticalOptions="CenterAndExpand" />
+                        <Label
+                            Text="{Binding Length}"
+                            StyleClass="box-label, box-sub-label"
+                            WidthRequest="30"
+                            VerticalOptions="CenterAndExpand"
+                            HorizontalTextAlignment="End" />
+                        <controls:ExtendedSlider
+                            DragCompleted="LengthSlider_DragCompleted"
+                            Value="{Binding Length}"
+                            AutomationProperties.HelpText="{Binding Length}"
+                            StyleClass="box-value"
+                            VerticalOptions="CenterAndExpand"
+                            HorizontalOptions="FillAndExpand"
+                            Maximum="128"
+                            Minimum="9" />
+                    </StackLayout>
+                    <StackLayout StyleClass="box-row, box-row-stepper" IsVisible="{Binding IsPassphraseLimited, Converter={StaticResource inverseBool}}">
                         <Label
                             Text="{u:I18n NumberOfWords}"
                             StyleClass="box-label, box-label-regular"
@@ -125,6 +146,19 @@
                             IsTextPredictionEnabled="False"
                             StyleClass="box-value" />
                     </StackLayout>
+                    <StackLayout StyleClass="box-row, box-row-switch">
+                        <Label
+                            Text="{u:I18n ShortWords}"
+                            StyleClass="box-label, box-label-regular"
+                            HorizontalOptions="StartAndExpand" />
+                        <Switch
+                            IsToggled="{Binding ShortWords}"
+                            IsEnabled="{Binding EnforcedPolicyOptions.ShortWords,
+                                Converter={StaticResource inverseBool}}"
+                            StyleClass="box-value"
+                            HorizontalOptions="End" />
+                    </StackLayout>
+                    <BoxView StyleClass="box-row-separator" />
                     <StackLayout StyleClass="box-row, box-row-switch">
                         <Label
                             Text="{u:I18n Capitalize}"

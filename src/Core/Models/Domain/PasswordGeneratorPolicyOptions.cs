@@ -11,6 +11,7 @@
         public bool UseSpecial { get; set; }
         public int SpecialCount { get; set; }
         public int MinNumberOfWords { get; set; }
+        public bool ShortWords { get; set; }
         public bool Capitalize { get; set; }
         public bool IncludeNumber { get; set; }
 
@@ -25,6 +26,7 @@
                 UseNumbers ||
                 UseSpecial ||
                 MinNumberOfWords > 0 ||
+                ShortWords ||
                 Capitalize ||
                 IncludeNumber;
         }

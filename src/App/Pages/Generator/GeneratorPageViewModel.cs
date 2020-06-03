@@ -3,6 +3,7 @@ using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.Domain;
 using Bit.Core.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -11,6 +12,8 @@ namespace Bit.App.Pages
 {
     public class GeneratorPageViewModel : BaseViewModel
     {
+        private readonly string[] _typeLookup = { "password", "passphrase", "passphrase_limited" };
+
         private readonly IPasswordGenerationService _passwordGenerationService;
         private readonly IPlatformUtilsService _platformUtilsService;
 
@@ -18,6 +21,7 @@ namespace Bit.App.Pages
         private PasswordGeneratorPolicyOptions _enforcedPolicyOptions;
         private string _password;
         private bool _isPassword;
+        private bool _isPassphraseLimited;
         private bool _uppercase;
         private bool _lowercase;
         private bool _number;
@@ -28,6 +32,7 @@ namespace Bit.App.Pages
         private int _length = 5;
         private int _numWords = 3;
         private string _wordSeparator;
+        private bool _shortWords;
         private bool _capitalize;
         private bool _includeNumber;
         private int _typeSelectedIndex;
@@ -39,7 +44,7 @@ namespace Bit.App.Pages
                 "passwordGenerationService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             PageTitle = AppResources.PasswordGenerator;
-            TypeOptions = new List<string> { AppResources.Password, AppResources.Passphrase };
+            TypeOptions = new List<string> { AppResources.Password, AppResources.Passphrase, AppResources.PassphraseLimited };
         }
 
         public List<string> TypeOptions { get; set; }
@@ -60,6 +65,12 @@ namespace Bit.App.Pages
         {
             get => _isPassword;
             set => SetProperty(ref _isPassword, value);
+        }
+
+        public bool IsPassphraseLimited
+        {
+            get => _isPassphraseLimited;
+            set => SetProperty(ref _isPassphraseLimited, value);
         }
 
         public int Length
@@ -197,6 +208,19 @@ namespace Bit.App.Pages
             }
         }
 
+        public bool ShortWords
+        {
+            get => _shortWords;
+            set
+            {
+                if (SetProperty(ref _shortWords, value))
+                {
+                    _options.ShortWords = value;
+                    var task = SaveOptionsAsync();
+                }
+            }
+        }
+
         public bool Capitalize
         {
             get => _capitalize;
@@ -243,6 +267,7 @@ namespace Bit.App.Pages
                 if (SetProperty(ref _typeSelectedIndex, value))
                 {
                     IsPassword = value == 0;
+                    IsPassphraseLimited = value == 0;
                     var task = SaveOptionsAsync();
                 }
             }
@@ -301,8 +326,9 @@ namespace Bit.App.Pages
         private void LoadFromOptions()
         {
             AvoidAmbiguous = !_options.Ambiguous.GetValueOrDefault();
-            TypeSelectedIndex = _options.Type == "passphrase" ? 1 : 0;
+            TypeSelectedIndex = Math.Max(Array.IndexOf(_typeLookup, _options.Type), 0);
             IsPassword = TypeSelectedIndex == 0;
+            IsPassphraseLimited = TypeSelectedIndex == 2;
             MinNumber = _options.MinNumber.GetValueOrDefault();
             MinSpecial = _options.MinSpecial.GetValueOrDefault();
             Special = _options.Special.GetValueOrDefault();
@@ -312,6 +338,7 @@ namespace Bit.App.Pages
             Uppercase = _options.Uppercase.GetValueOrDefault();
             Lowercase = _options.Lowercase.GetValueOrDefault();
             Length = _options.Length.GetValueOrDefault(5);
+            ShortWords = _options.ShortWords.GetValueOrDefault();
             Capitalize = _options.Capitalize.GetValueOrDefault();
             IncludeNumber = _options.IncludeNumber.GetValueOrDefault();
         }
@@ -319,7 +346,7 @@ namespace Bit.App.Pages
         private void SetOptions()
         {
             _options.Ambiguous = !AvoidAmbiguous;
-            _options.Type = TypeSelectedIndex == 1 ? "passphrase" : "password";
+            _options.Type = _typeLookup[Math.Min(TypeSelectedIndex, _typeLookup.Length - 1)];
             _options.MinNumber = MinNumber;
             _options.MinSpecial = MinSpecial;
             _options.Special = Special;
@@ -329,6 +356,7 @@ namespace Bit.App.Pages
             _options.Uppercase = Uppercase;
             _options.Lowercase = Lowercase;
             _options.Length = Length;
+            _options.ShortWords = ShortWords;
             _options.Capitalize = Capitalize;
             _options.IncludeNumber = IncludeNumber;
         }

@@ -45,7 +45,7 @@ namespace Bit.Core.Services
         {
             // Overload defaults with given options
             options.Merge(_defaultOptions);
-            if (options.Type == "passphrase")
+            if (options.Type == "passphrase" || options.Type == "passphrase_limited")
             {
                 return await GeneratePassphraseAsync(options);
             }
@@ -159,16 +159,21 @@ namespace Bit.Core.Services
             return password.ToString();
         }
 
+
         public async Task<string> GeneratePassphraseAsync(PasswordGenerationOptions options)
         {
             options.Merge(_defaultOptions);
+
+            var longestWord = EEFLongWordList.Instance.List.ElementAt((int)EEFLongWordListOffsets.Last).Length;
+            var shortestWord = EEFLongWordList.Instance.List.ElementAt((int)EEFLongWordListOffsets.First).Length;
+
+            if (options.Length == null || options.Length < longestWord)
+            {
+                options.Length = longestWord;
+            }
             if (options.NumWords.GetValueOrDefault() <= 2)
             {
                 options.NumWords = _defaultOptions.NumWords;
-            }
-            if (options.WordSeparator == null || options.WordSeparator.Length == 0 || options.WordSeparator.Length > 1)
-            {
-                options.WordSeparator = " ";
             }
             if (options.Capitalize == null)
             {
@@ -178,24 +183,78 @@ namespace Bit.Core.Services
             {
                 options.IncludeNumber = false;
             }
-            var listLength = EEFLongWordList.Instance.List.Count - 1;
-            var wordList = new List<string>();
-            for (int i = 0; i < options.NumWords.GetValueOrDefault(); i++)
+            if (options.ShortWords == null)
             {
-                var wordIndex = await _cryptoService.RandomNumberAsync(0, listLength);
-                if (options.Capitalize.GetValueOrDefault())
+                options.ShortWords = false;
+            }
+            if (options.WordSeparator == null || options.WordSeparator.Length == 0)
+            {
+                options.WordSeparator = "";
+            }
+            else if (options.WordSeparator.Length > 1)
+            {
+                options.WordSeparator = " ";
+            }
+
+            // Words with up to 5 chars are considered short
+            var listLength = options.ShortWords == true ? (int)EEFLongWordListOffsets.Last_5_chars
+                                                        : (int)EEFLongWordListOffsets.Last;
+            var wordList = new List<string>();
+
+            if (options.Type == "passphrase_limited")
+            {
+                // by char limiting
+                var charsLeft = 0;
+                do
                 {
-                    wordList.Add(Capitalize(EEFLongWordList.Instance.List[wordIndex]));
+                    // Check, if the chars left are associated with a list position. If not, it's undefined.
+                    // This limits the list to words, that will fit into the left space.
+                    var success = false;
+                    var charsLeftListPos = EEFLongWordListOffsets.Last;
+                    if (charsLeft <= (int)EEFLongWordListOffsets.LengthLongest)
+                    {
+                        success = Enum.TryParse($"Last_{charsLeft}_chars", out charsLeftListPos);
+                    }
+
+                    var maxListPosition = success ? Math.Min(listLength, (int)charsLeftListPos) : listLength;
+                    var wordIndex = await _cryptoService.RandomNumberAsync(0, maxListPosition);
+
+                    if (options.Capitalize.GetValueOrDefault())
+                    {
+                        wordList.Add(Capitalize(EEFLongWordList.Instance.List[wordIndex]));
+                    }
+                    else
+                    {
+                        wordList.Add(EEFLongWordList.Instance.List[wordIndex]);
+                    }
+
+                    var password = string.Join(options.WordSeparator, wordList);
+                    charsLeft = (int)options.Length - password.Length - options.WordSeparator.Length - (options.IncludeNumber == true ? 1 : 0);
                 }
-                else
+                while (charsLeft >= shortestWord);
+            }
+            else
+            {
+                // by word count
+                for (int i = 0; i < options.NumWords.GetValueOrDefault(); i++)
                 {
-                    wordList.Add(EEFLongWordList.Instance.List[wordIndex]);
+                    var wordIndex = await _cryptoService.RandomNumberAsync(0, listLength);
+                    if (options.Capitalize.GetValueOrDefault())
+                    {
+                        wordList.Add(Capitalize(EEFLongWordList.Instance.List[wordIndex]));
+                    }
+                    else
+                    {
+                        wordList.Add(EEFLongWordList.Instance.List[wordIndex]);
+                    }
                 }
             }
+
             if (options.IncludeNumber.GetValueOrDefault())
             {
                 await AppendRandomNumberToRandomWordAsync(wordList);
             }
+
             return string.Join(options.WordSeparator, wordList);
         }
 
@@ -284,7 +343,9 @@ namespace Bit.Core.Services
                 }
 
                 // Force default type if password/passphrase selected via policy
-                if (enforcedPolicyOptions.DefaultType == "password" || enforcedPolicyOptions.DefaultType == "passphrase")
+                if (enforcedPolicyOptions.DefaultType == "password" ||
+                    enforcedPolicyOptions.DefaultType == "passphrase" ||
+                    enforcedPolicyOptions.DefaultType == "passphrase_limited")
                 {
                     options.Type = enforcedPolicyOptions.DefaultType;
                 }

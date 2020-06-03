@@ -21,6 +21,7 @@
                 Type = "password";
                 NumWords = 3;
                 WordSeparator = "-";
+                ShortWords = false;
                 Capitalize = false;
                 IncludeNumber = false;
             }
@@ -39,6 +40,7 @@
         public string Type { get; set; }
         public int? NumWords { get; set; }
         public string WordSeparator { get; set; }
+        public bool? ShortWords { get; set; }
         public bool? Capitalize { get; set; }
         public bool? IncludeNumber { get; set; }
 
@@ -57,6 +59,7 @@
             Type = Type ?? defaults.Type;
             NumWords = NumWords ?? defaults.NumWords;
             WordSeparator = WordSeparator ?? defaults.WordSeparator;
+            ShortWords = ShortWords ?? defaults.ShortWords;
             Capitalize = Capitalize ?? defaults.Capitalize;
             IncludeNumber = IncludeNumber ?? defaults.IncludeNumber;
         }
