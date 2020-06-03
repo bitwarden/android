@@ -573,7 +573,7 @@
                                                 StyleClass="box-row-button, box-row-button-platform"
                                                 Text="{Binding ShowHiddenValueIcon}"
                                                 Command="{Binding ToggleHiddenValueCommand}"
-                                                IsVisible="{Binding IsHiddenType}"
+                                                IsVisible="{Binding ShowViewHidden}"
                                                 Grid.Row="0"
                                                 Grid.Column="1"
                                                 Grid.RowSpan="2"

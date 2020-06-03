@@ -16,5 +16,6 @@ namespace Bit.Core.Models.View
         public string Value { get; set; }
         public FieldType Type { get; set; }
         public string MaskedValue => Value != null ? "••••••••" : null;
+        public bool NewField { get; set; }
     }
 }

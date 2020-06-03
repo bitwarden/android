@@ -168,9 +168,12 @@
                             Text="{Binding Cipher.Login.Totp}"
                             IsSpellCheckEnabled="False"
                             IsTextPredictionEnabled="False"
+                            IsPassword="{Binding Cipher.ViewPassword, Converter={StaticResource inverseBool}}"
+                            IsEnabled="{Binding Cipher.ViewPassword}"
                             StyleClass="box-value"
                             Grid.Row="1"
-                            Grid.Column="0" />
+                            Grid.Column="0"
+                            Grid.ColumnSpan="{Binding TotpColumnSpan}" />
                         <controls:FaButton 
                             StyleClass="box-row-button, box-row-button-platform"
                             Text="&#xf030;"
@@ -178,6 +181,7 @@
                             Grid.Row="0"
                             Grid.Column="1"
                             Grid.RowSpan="2"
+                            IsVisible="{Binding Cipher.ViewPassword}"
                             AutomationProperties.IsInAccessibleTree="True"
                             AutomationProperties.Name="{u:I18n ScanQrTitle}" />
                     </Grid>
@@ -567,6 +571,7 @@
                                         Grid.Column="0"
                                         IsVisible="{Binding IsHiddenType}"
                                         IsPassword="{Binding ShowHiddenValue, Converter={StaticResource inverseBool}}"
+                                        IsEnabled="{Binding ShowViewHidden}"
                                         IsSpellCheckEnabled="False"
                                         IsTextPredictionEnabled="False">
                                         <Entry.Keyboard>
@@ -587,7 +592,7 @@
                                         StyleClass="box-row-button, box-row-button-platform"
                                         Text="{Binding ShowHiddenValueIcon}"
                                         Command="{Binding ToggleHiddenValueCommand}"
-                                        IsVisible="{Binding IsHiddenType}"
+                                        IsVisible="{Binding ShowViewHidden}"
                                         Grid.Row="0"
                                         Grid.Column="1"
                                         Grid.RowSpan="2"
