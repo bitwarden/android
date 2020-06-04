@@ -275,7 +275,7 @@ namespace Bit.App.Pages
         public string ShowPasswordIcon => ShowPassword ? "" : "";
         public string ShowCardCodeIcon => ShowCardCode ? "" : "";
         public int PasswordFieldColSpan => Cipher.ViewPassword ? 1 : 4;
-        public int TotpColumnSpan => _cipher.ViewPassword ? 1 : 2;
+        public int TotpColumnSpan => Cipher.ViewPassword ? 1 : 2;
 
         public void Init()
         {
