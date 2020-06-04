@@ -90,7 +90,7 @@
                 <RefreshView
                     IsRefreshing="{Binding Refreshing}"
                     Command="{Binding RefreshCommand}">
-                    <controls:ExtendedCollectionView
+                    <CollectionView
                         x:Name="_collectionView"
                         IsVisible="{Binding ShowList}"
                         ItemsSource="{Binding GroupedItems}"
@@ -121,7 +121,7 @@
                                 </StackLayout>
                             </DataTemplate>
                         </CollectionView.GroupHeaderTemplate>
-                    </controls:ExtendedCollectionView>
+                    </CollectionView>
                 </RefreshView>
             </StackLayout>
         </ResourceDictionary>

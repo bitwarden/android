@@ -47,7 +47,7 @@
                         Clicked="AddButton_Clicked"></Button>
                 </StackLayout>
 
-                <controls:ExtendedCollectionView
+                <CollectionView
                     IsVisible="{Binding ShowList}"
                     ItemsSource="{Binding GroupedItems}"
                     VerticalOptions="FillAndExpand"
@@ -74,7 +74,7 @@
                             </StackLayout>
                         </DataTemplate>
                     </CollectionView.GroupHeaderTemplate>
-                </controls:ExtendedCollectionView>
+                </CollectionView>
             </StackLayout>
         </ResourceDictionary>
     </ContentPage.Resources>
