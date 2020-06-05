@@ -203,12 +203,18 @@ namespace Bit.iOS.Autofill
         private async Task ProvideCredentialAsync()
         {
             var cipherService = ServiceContainer.Resolve<ICipherService>("cipherService", true);
-            var cipher = await cipherService?.GetAsync(_context.CredentialIdentity.RecordIdentifier);
-            if (cipher == null || cipher.Type != Bit.Core.Enums.CipherType.Login)
+            Bit.Core.Models.Domain.Cipher cipher = null;
+            var cancel = cipherService == null || _context.CredentialIdentity?.RecordIdentifier == null;
+            if (!cancel)
+            {
+                cipher = await cipherService.GetAsync(_context.CredentialIdentity.RecordIdentifier);
+                cancel = cipher == null || cipher.Type != Bit.Core.Enums.CipherType.Login || cipher.Login == null;
+            }
+            if (cancel)
             {
                 var err = new NSError(new NSString("ASExtensionErrorDomain"),
                     Convert.ToInt32(ASExtensionErrorCode.CredentialIdentityNotFound), null);
-                ExtensionContext.CancelRequest(err);
+                ExtensionContext?.CancelRequest(err);
                 return;
             }
 
