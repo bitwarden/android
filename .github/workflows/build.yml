@@ -25,10 +25,11 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v2
 
+      - name: Restore packages
+        run: nuget restore
+
       - name: Build app
-        run: |
-          nuget restore
-          msbuild ./src/Android/Android.csproj /p:Configuration=Debug
+        run: msbuild ./src/Android/Android.csproj /p:Configuration=Debug
 
   ios:
 
@@ -43,7 +44,8 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v2
 
+      - name: Restore packages
+        run: nuget restore
+
       - name: Build app
-        run: |
-          nuget restore
-          msbuild /verbosity:normal /p:Platform=iPhone /p:Configuration=Debug
+        run: msbuild /verbosity:normal /p:Platform=iPhone /p:Configuration=Debug
