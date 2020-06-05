@@ -1,0 +1,39 @@
+name: Build
+
+on: push
+
+jobs:
+
+  android:
+
+    runs-on: windows-latest
+
+    steps:
+      - name: Print environment
+        run: |
+          echo 'TODO'
+
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Build app
+        run: |
+          nuget restore
+          msbuild ./src/Android/Android.csproj /verbosity:normal /t:Rebuild /p:Configuration=Debug
+
+  ios:
+
+    runs-on: macos-latest
+
+    steps:
+      - name: Print environment
+        run: |
+          echo 'TODO'
+
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Build app
+        run: |
+          nuget restore
+          msbuild ./src/iOS/iOS.csproj /verbosity:normal /t:Rebuild /p:Platform=iPhoneSimulator /p:Configuration=Debug
