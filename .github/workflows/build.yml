@@ -10,12 +10,12 @@ jobs:
 
     steps:
       - name: Set up NuGet
-      - uses: nuget/setup-nuget@v1
+        uses: nuget/setup-nuget@v1
         with:
           nuget-version: 'latest'
 
       - name: Set up MSBuild
-      - uses: microsoft/setup-msbuild@v1.0.0
+        uses: microsoft/setup-msbuild@v1.0.0
 
       - name: Print environment
         run: |
