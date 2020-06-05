@@ -9,9 +9,18 @@ jobs:
     runs-on: windows-latest
 
     steps:
+      - name: Set up NuGet
+      - uses: nuget/setup-nuget@v1
+        with:
+          nuget-version: 'latest'
+
+      - name: Set up MSBuild
+      - uses: microsoft/setup-msbuild@v1.0.0
+
       - name: Print environment
         run: |
-          echo 'TODO'
+          nuget help
+          msbuild -version
 
       - name: Checkout repo
         uses: actions/checkout@v2
@@ -19,7 +28,7 @@ jobs:
       - name: Build app
         run: |
           nuget restore
-          msbuild ./src/Android/Android.csproj /verbosity:normal /t:Rebuild /p:Configuration=Debug
+          msbuild ./src/Android/Android.csproj /p:Configuration=Debug
 
   ios:
 
@@ -28,7 +37,8 @@ jobs:
     steps:
       - name: Print environment
         run: |
-          echo 'TODO'
+          nuget help
+          msbuild -version
 
       - name: Checkout repo
         uses: actions/checkout@v2
@@ -36,4 +46,4 @@ jobs:
       - name: Build app
         run: |
           nuget restore
-          msbuild ./src/iOS/iOS.csproj /verbosity:normal /t:Rebuild /p:Platform=iPhoneSimulator /p:Configuration=Debug
+          msbuild /verbosity:normal /p:Platform=iPhone /p:Configuration=Debug
