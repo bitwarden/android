@@ -48,4 +48,4 @@ jobs:
         run: nuget restore
 
       - name: Build app
-        run: msbuild /verbosity:normal /p:Platform=iPhone /p:Configuration=Debug
+        run: msbuild ./src/iOS/iOS.csproj /verbosity:normal /p:Platform=iPhone /p:Configuration=Debug
