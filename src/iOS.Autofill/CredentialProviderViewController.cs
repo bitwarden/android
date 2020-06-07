@@ -41,7 +41,7 @@ namespace Bit.iOS.Autofill
             };
         }
 
-        public override void PrepareCredentialList(ASCredentialServiceIdentifier[] serviceIdentifiers)
+        public override async void PrepareCredentialList(ASCredentialServiceIdentifier[] serviceIdentifiers)
         {
             InitAppIfNeeded();
             _context.ServiceIdentifiers = serviceIdentifiers;
@@ -54,11 +54,11 @@ namespace Bit.iOS.Autofill
                 }
                 _context.UrlString = uri;
             }
-            if (!IsAuthed())
+            if (! await IsAuthed())
             {
                 LaunchLoginFlow();
             }
-            else if (IsLocked())
+            else if (await IsLocked())
             {
                 PerformSegue("lockPasswordSegue", this);
             }
@@ -75,10 +75,10 @@ namespace Bit.iOS.Autofill
             }
         }
 
-        public override void ProvideCredentialWithoutUserInteraction(ASPasswordCredentialIdentity credentialIdentity)
+        public override async void ProvideCredentialWithoutUserInteraction(ASPasswordCredentialIdentity credentialIdentity)
         {
             InitAppIfNeeded();
-            if (!IsAuthed() || IsLocked())
+            if (! await IsAuthed() || await IsLocked())
             {
                 var err = new NSError(new NSString("ASExtensionErrorDomain"),
                     Convert.ToInt32(ASExtensionErrorCode.UserInteractionRequired), null);
@@ -86,13 +86,13 @@ namespace Bit.iOS.Autofill
                 return;
             }
             _context.CredentialIdentity = credentialIdentity;
-            ProvideCredentialAsync().GetAwaiter().GetResult();
+            await ProvideCredentialAsync();
         }
 
-        public override void PrepareInterfaceToProvideCredential(ASPasswordCredentialIdentity credentialIdentity)
+        public override async void PrepareInterfaceToProvideCredential(ASPasswordCredentialIdentity credentialIdentity)
         {
             InitAppIfNeeded();
-            if (!IsAuthed())
+            if (! await IsAuthed())
             {
                 LaunchLoginFlow();
                 return;
@@ -101,11 +101,11 @@ namespace Bit.iOS.Autofill
             CheckLock(async () => await ProvideCredentialAsync());
         }
 
-        public override void PrepareInterfaceForExtensionConfiguration()
+        public override async void PrepareInterfaceForExtensionConfiguration()
         {
             InitAppIfNeeded();
             _context.Configuring = true;
-            if (!IsAuthed())
+            if (! await IsAuthed())
             {
                 LaunchLoginFlow();
                 return;
@@ -237,9 +237,9 @@ namespace Bit.iOS.Autofill
             CompleteRequest(decCipher.Id, decCipher.Login.Username, decCipher.Login.Password, totpCode);
         }
 
-        private void CheckLock(Action notLockedAction)
+        private async void CheckLock(Action notLockedAction)
         {
-            if (IsLocked())
+            if (await IsLocked())
             {
                 PerformSegue("lockPasswordSegue", this);
             }
@@ -249,16 +249,16 @@ namespace Bit.iOS.Autofill
             }
         }
 
-        private bool IsLocked()
+        private Task<bool> IsLocked()
         {
             var vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
-            return vaultTimeoutService.IsLockedAsync().GetAwaiter().GetResult();
+            return vaultTimeoutService.IsLockedAsync();
         }
 
-        private bool IsAuthed()
+        private Task<bool> IsAuthed()
         {
             var userService = ServiceContainer.Resolve<IUserService>("userService");
-            return userService.IsAuthenticatedAsync().GetAwaiter().GetResult();
+            return userService.IsAuthenticatedAsync();
         }
 
         private void InitApp()
