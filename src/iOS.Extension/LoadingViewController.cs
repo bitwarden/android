@@ -6,9 +6,9 @@ using Bit.iOS.Core;
 using Bit.iOS.Extension.Models;
 using MobileCoreServices;
 using Bit.iOS.Core.Utilities;
-using Bit.App.Resources;
 using Bit.iOS.Core.Controllers;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Bit.iOS.Core.Models;
 using Bit.Core.Utilities;
 using Bit.Core.Abstractions;
@@ -63,7 +63,7 @@ namespace Bit.iOS.Extension
             }
         }
 
-        public override void ViewDidAppear(bool animated)
+        public override async void ViewDidAppear(bool animated)
         {
             base.ViewDidAppear(animated);
             if (_context.ProviderType == Constants.UTTypeAppExtensionSetup)
@@ -71,12 +71,12 @@ namespace Bit.iOS.Extension
                 PerformSegue("setupSegue", this);
                 return;
             }
-            if (!IsAuthed())
+            if (! await IsAuthed())
             {
                 LaunchLoginFlow();
                 return;
             }
-            else if (IsLocked())
+            else if (await IsLocked())
             {
                 PerformSegue("lockPasswordSegue", this);
             }
@@ -408,16 +408,16 @@ namespace Bit.iOS.Extension
             iOSCoreHelpers.SubscribeBroadcastReceiver(this, _nfcSession, _nfcDelegate);
         }
 
-        private bool IsLocked()
+        private Task<bool> IsLocked()
         {
             var vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
-            return vaultTimeoutService.IsLockedAsync().GetAwaiter().GetResult();
+            return vaultTimeoutService.IsLockedAsync();
         }
 
-        private bool IsAuthed()
+        private Task<bool> IsAuthed()
         {
             var userService = ServiceContainer.Resolve<IUserService>("userService");
-            return userService.IsAuthenticatedAsync().GetAwaiter().GetResult();
+            return userService.IsAuthenticatedAsync();
         }
 
         private void LaunchLoginFlow()
