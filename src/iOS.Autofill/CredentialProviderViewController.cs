@@ -54,7 +54,7 @@ namespace Bit.iOS.Autofill
                 }
                 _context.UrlString = uri;
             }
-            if (! await IsAuthed())
+            if (!await IsAuthed())
             {
                 LaunchLoginFlow();
             }
@@ -78,7 +78,7 @@ namespace Bit.iOS.Autofill
         public override async void ProvideCredentialWithoutUserInteraction(ASPasswordCredentialIdentity credentialIdentity)
         {
             InitAppIfNeeded();
-            if (! await IsAuthed() || await IsLocked())
+            if (!await IsAuthed() || await IsLocked())
             {
                 var err = new NSError(new NSString("ASExtensionErrorDomain"),
                     Convert.ToInt32(ASExtensionErrorCode.UserInteractionRequired), null);
@@ -92,7 +92,7 @@ namespace Bit.iOS.Autofill
         public override async void PrepareInterfaceToProvideCredential(ASPasswordCredentialIdentity credentialIdentity)
         {
             InitAppIfNeeded();
-            if (! await IsAuthed())
+            if (!await IsAuthed())
             {
                 LaunchLoginFlow();
                 return;
@@ -105,7 +105,7 @@ namespace Bit.iOS.Autofill
         {
             InitAppIfNeeded();
             _context.Configuring = true;
-            if (! await IsAuthed())
+            if (!await IsAuthed())
             {
                 LaunchLoginFlow();
                 return;

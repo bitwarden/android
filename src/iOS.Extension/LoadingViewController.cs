@@ -71,7 +71,7 @@ namespace Bit.iOS.Extension
                 PerformSegue("setupSegue", this);
                 return;
             }
-            if (! await IsAuthed())
+            if (!await IsAuthed())
             {
                 LaunchLoginFlow();
                 return;
