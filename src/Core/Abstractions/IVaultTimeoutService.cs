@@ -7,13 +7,13 @@ namespace Bit.Core.Abstractions
     public interface IVaultTimeoutService
     {
         CipherString PinProtectedKey { get; set; }
-        bool FingerprintLocked { get; set; }
+        bool BiometricLocked { get; set; }
 
         Task CheckVaultTimeoutAsync();
         Task ClearAsync();
         Task<bool> IsLockedAsync();
         Task<Tuple<bool, bool>> IsPinLockSetAsync();
-        Task<bool> IsFingerprintLockSetAsync();
+        Task<bool> IsBiometricLockSetAsync();
         Task LockAsync(bool allowSoftLock = false, bool userInitiated = false);
         Task LogOutAsync();
         Task SetVaultTimeoutOptionsAsync(int? timeout, string action);

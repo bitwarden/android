@@ -49,15 +49,15 @@ namespace Bit.Core.Services
         }
 
         public CipherString PinProtectedKey { get; set; } = null;
-        public bool FingerprintLocked { get; set; } = true;
+        public bool BiometricLocked { get; set; } = true;
 
         public async Task<bool> IsLockedAsync()
         {
             var hasKey = await _cryptoService.HasKeyAsync();
             if (hasKey)
             {
-                var fingerprintSet = await IsFingerprintLockSetAsync();
-                if (fingerprintSet && FingerprintLocked)
+                var biometricSet = await IsBiometricLockSetAsync();
+                if (biometricSet && BiometricLocked)
                 {
                     return true;
                 }
@@ -120,8 +120,8 @@ namespace Bit.Core.Services
             }
             if (allowSoftLock)
             {
-                FingerprintLocked = await IsFingerprintLockSetAsync();
-                if (FingerprintLocked)
+                BiometricLocked = await IsBiometricLockSetAsync();
+                if (BiometricLocked)
                 {
                     _messagingService.Send("locked", userInitiated);
                     _lockedCallback?.Invoke(userInitiated);
@@ -165,10 +165,10 @@ namespace Bit.Core.Services
             return new Tuple<bool, bool>(protectedPin != null, pinProtectedKey != null);
         }
 
-        public async Task<bool> IsFingerprintLockSetAsync()
+        public async Task<bool> IsBiometricLockSetAsync()
         {
-            var fingerprintLock = await _storageService.GetAsync<bool?>(Constants.FingerprintUnlockKey);
-            return fingerprintLock.GetValueOrDefault();
+            var biometricLock = await _storageService.GetAsync<bool?>(Constants.BiometricUnlockKey);
+            return biometricLock.GetValueOrDefault();
         }
 
         public async Task ClearAsync()

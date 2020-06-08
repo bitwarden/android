@@ -15,7 +15,6 @@ using Foundation;
 using LocalAuthentication;
 using MobileCoreServices;
 using Photos;
-using Plugin.Fingerprint;
 using UIKit;
 using Xamarin.Forms;
 
@@ -269,28 +268,6 @@ namespace Bit.iOS.Core.Services
         public Task<bool> SupportsFaceBiometricAsync()
         {
             return Task.FromResult(SupportsFaceBiometric());
-        }
-
-        public async Task<bool> BiometricAvailableAsync()
-        {
-            try
-            {
-                return await CrossFingerprint.Current.IsAvailableAsync();
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        public bool UseNativeBiometric()
-        {
-            return false;
-        }
-
-        public Task<bool> AuthenticateBiometricAsync(string text = null)
-        {
-            throw new NotSupportedException();
         }
 
         public bool SupportsNfc()

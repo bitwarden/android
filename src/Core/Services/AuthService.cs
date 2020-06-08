@@ -315,7 +315,7 @@ namespace Bit.Core.Services
                 await _cryptoService.SetEncPrivateKeyAsync(tokenResponse.PrivateKey);
             }
 
-            _vaultTimeoutService.FingerprintLocked = false;
+            _vaultTimeoutService.BiometricLocked = false;
             _messagingService.Send("loggedIn");
             return result;
         }

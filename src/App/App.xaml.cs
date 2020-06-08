@@ -219,7 +219,7 @@ namespace Bit.App
             SyncIfNeeded();
             if (Current.MainPage is NavigationPage navPage && navPage.CurrentPage is LockPage lockPage)
             {
-                await lockPage.PromptFingerprintAfterResumeAsync();
+                await lockPage.PromptBiometricAfterResumeAsync();
             }
         }
 
@@ -246,7 +246,7 @@ namespace Bit.App
                 _passwordGenerationService.ClearAsync(),
                 _vaultTimeoutService.ClearAsync(),
                 _stateService.PurgeAsync());
-            _vaultTimeoutService.FingerprintLocked = true;
+            _vaultTimeoutService.BiometricLocked = true;
             _searchService.ClearIndex();
             _authService.LogOut(() =>
             {
@@ -404,21 +404,20 @@ namespace Bit.App
             }
         }
 
-        private async Task LockedAsync(bool autoPromptFingerprint)
+        private async Task LockedAsync(bool autoPromptBiometric)
         {
             await _stateService.PurgeAsync();
-            if (autoPromptFingerprint && Device.RuntimePlatform == Device.iOS)
+            if (autoPromptBiometric && Device.RuntimePlatform == Device.iOS)
             {
                 var vaultTimeout = await _storageService.GetAsync<int?>(Constants.VaultTimeoutKey);
                 if (vaultTimeout == 0)
                 {
-                    autoPromptFingerprint = false;
+                    autoPromptBiometric = false;
                 }
             }
-            else if (autoPromptFingerprint && Device.RuntimePlatform == Device.Android &&
-                _deviceActionService.UseNativeBiometric())
+            else if (autoPromptBiometric && Device.RuntimePlatform == Device.Android)
             {
-                autoPromptFingerprint = false;
+                autoPromptBiometric = false;
             }
             PreviousPageInfo lastPageBeforeLock = null;
             if (Current.MainPage is TabbedPage tabbedPage && tabbedPage.Navigation.ModalStack.Count > 0)
@@ -445,7 +444,7 @@ namespace Bit.App
                 }
             }
             await _storageService.SaveAsync(Constants.PreviousPageKey, lastPageBeforeLock);
-            var lockPage = new LockPage(Options, autoPromptFingerprint);
+            var lockPage = new LockPage(Options, autoPromptBiometric);
             Device.BeginInvokeOnMainThread(() => Current.MainPage = new NavigationPage(lockPage));
         }
     }

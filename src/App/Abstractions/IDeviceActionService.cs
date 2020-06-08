@@ -23,9 +23,6 @@ namespace Bit.App.Abstractions
         void RateApp();
         bool SupportsFaceBiometric();
         Task<bool> SupportsFaceBiometricAsync();
-        Task<bool> BiometricAvailableAsync();
-        bool UseNativeBiometric();
-        Task<bool> AuthenticateBiometricAsync(string text = null);
         bool SupportsNfc();
         bool SupportsCamera();
         bool SupportsAutofillService();
