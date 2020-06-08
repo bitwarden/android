@@ -106,8 +106,8 @@
                     Margin="0, 10, 0, 0" />
             </StackLayout>
             <StackLayout Padding="10, 0">
-                <Button Text="{Binding FingerprintButtonText}" Clicked="Fingerprint_Clicked"
-                        IsVisible="{Binding FingerprintLock}"></Button>
+                <Button Text="{Binding BiometricButtonText}" Clicked="Biometric_Clicked"
+                        IsVisible="{Binding BiometricLock}"></Button>
                 <Button Text="{u:I18n LogOut}" Clicked="LogOut_Clicked"></Button>
             </StackLayout>
         </StackLayout>

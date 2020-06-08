@@ -28,8 +28,8 @@ namespace Bit.App.Pages
         private string _email;
         private bool _showPassword;
         private bool _pinLock;
-        private bool _fingerprintLock;
-        private string _fingerprintButtonText;
+        private bool _biometricLock;
+        private string _biometricButtonText;
         private string _loggedInAsText;
         private string _lockedVerifyText;
         private int _invalidPinAttempts = 0;
@@ -69,16 +69,16 @@ namespace Bit.App.Pages
             set => SetProperty(ref _pinLock, value);
         }
 
-        public bool FingerprintLock
+        public bool BiometricLock
         {
-            get => _fingerprintLock;
-            set => SetProperty(ref _fingerprintLock, value);
+            get => _biometricLock;
+            set => SetProperty(ref _biometricLock, value);
         }
 
-        public string FingerprintButtonText
+        public string BiometricButtonText
         {
-            get => _fingerprintButtonText;
-            set => SetProperty(ref _fingerprintButtonText, value);
+            get => _biometricButtonText;
+            set => SetProperty(ref _biometricButtonText, value);
         }
 
         public string LoggedInAsText
@@ -100,11 +100,11 @@ namespace Bit.App.Pages
         public string Pin { get; set; }
         public Action UnlockedAction { get; set; }
 
-        public async Task InitAsync(bool autoPromptFingerprint)
+        public async Task InitAsync(bool autoPromptBiometric)
         {
             _pinSet = await _vaultTimeoutService.IsPinLockSetAsync();
             PinLock = (_pinSet.Item1 && _vaultTimeoutService.PinProtectedKey != null) || _pinSet.Item2;
-            FingerprintLock = await _vaultTimeoutService.IsFingerprintLockSetAsync();
+            BiometricLock = await _vaultTimeoutService.IsBiometricLockSetAsync();
             _email = await _userService.GetEmailAsync();
             var webVault = _environmentService.GetWebVaultUrl();
             if (string.IsNullOrWhiteSpace(webVault))
@@ -124,27 +124,21 @@ namespace Bit.App.Pages
                 LockedVerifyText = AppResources.VaultLockedMasterPassword;
             }
 
-            if (FingerprintLock)
+            if (BiometricLock)
             {
-                var supportsFace = await _deviceActionService.SupportsFaceBiometricAsync();
-                if (Device.RuntimePlatform == Device.iOS && supportsFace)
+                BiometricButtonText = AppResources.UseBiometricsToUnlock;
+                if (Device.RuntimePlatform == Device.iOS)
                 {
-                    FingerprintButtonText = AppResources.UseFaceIDToUnlock;
+                    var supportsFace = await _deviceActionService.SupportsFaceBiometricAsync();
+                    BiometricButtonText = supportsFace ? AppResources.UseFaceIDToUnlock :
+                        AppResources.UseFingerprintToUnlock;
                 }
-                else if (Device.RuntimePlatform == Device.Android && _deviceActionService.UseNativeBiometric())
-                {
-                    FingerprintButtonText = AppResources.UseBiometricsToUnlock;
-                }
-                else
-                {
-                    FingerprintButtonText = AppResources.UseFingerprintToUnlock;
-                }
-                if (autoPromptFingerprint)
+                if (autoPromptBiometric)
                 {
                     var tasks = Task.Run(async () =>
                     {
                         await Task.Delay(500);
-                        Device.BeginInvokeOnMainThread(async () => await PromptFingerprintAsync());
+                        Device.BeginInvokeOnMainThread(async () => await PromptBiometricAsync());
                     });
                 }
             }
@@ -271,9 +265,9 @@ namespace Bit.App.Pages
             entry.Focus();
         }
 
-        public async Task PromptFingerprintAsync()
+        public async Task PromptBiometricAsync()
         {
-            if (!FingerprintLock)
+            if (!BiometricLock)
             {
                 return;
             }
@@ -290,7 +284,7 @@ namespace Bit.App.Pages
                     page.MasterPasswordEntry.Focus();
                 }
             });
-            _vaultTimeoutService.FingerprintLocked = !success;
+            _vaultTimeoutService.BiometricLocked = !success;
             if (success)
             {
                 await DoContinueAsync();
@@ -309,7 +303,7 @@ namespace Bit.App.Pages
 
         private async Task DoContinueAsync()
         {
-            _vaultTimeoutService.FingerprintLocked = false;
+            _vaultTimeoutService.BiometricLocked = false;
             var disableFavicon = await _storageService.GetAsync<bool?>(Constants.DisableFaviconKey);
             await _stateService.SaveAsync(Constants.DisableFaviconKey, disableFavicon.GetValueOrDefault());
             _messagingService.Send("unlocked");

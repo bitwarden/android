@@ -8,12 +8,9 @@ using Android.App;
 using Android.App.Assist;
 using Android.Content;
 using Android.Content.PM;
-using Android.Hardware.Biometrics;
-using Android.Hardware.Fingerprints;
 using Android.Nfc;
 using Android.OS;
 using Android.Provider;
-using Android.Runtime;
 using Android.Text;
 using Android.Text.Method;
 using Android.Views.Autofill;
@@ -31,7 +28,6 @@ using Bit.Core.Models.View;
 using Bit.Core.Utilities;
 using Bit.Droid.Autofill;
 using Plugin.CurrentActivity;
-using Plugin.Fingerprint;
 
 namespace Bit.Droid.Services
 {
@@ -389,69 +385,14 @@ namespace Bit.Droid.Services
 
         public bool SupportsFaceBiometric()
         {
+            // only used by iOS
             return false;
         }
 
         public Task<bool> SupportsFaceBiometricAsync()
         {
+            // only used by iOS
             return Task.FromResult(SupportsFaceBiometric());
-        }
-
-        public async Task<bool> BiometricAvailableAsync()
-        {
-            if (UseNativeBiometric())
-            {
-                var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
-                var manager = activity.GetSystemService(Context.BiometricService) as BiometricManager;
-                return manager.CanAuthenticate() == BiometricCode.Success;
-            }
-            else
-            {
-                try
-                {
-                    return await CrossFingerprint.Current.IsAvailableAsync();
-                }
-                catch
-                {
-                    return false;
-                }
-            }
-        }
-
-        public bool UseNativeBiometric()
-        {
-            return (int)Build.VERSION.SdkInt >= 29;
-        }
-
-        public Task<bool> AuthenticateBiometricAsync(string text = null)
-        {
-            if (string.IsNullOrWhiteSpace(text))
-            {
-                text = AppResources.BiometricsDirection;
-            }
-
-            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
-            using (var builder = new BiometricPrompt.Builder(activity))
-            {
-                builder.SetTitle(text);
-                builder.SetConfirmationRequired(false);
-                builder.SetNegativeButton(AppResources.Cancel, activity.MainExecutor,
-                    new DialogInterfaceOnClickListener
-                    {
-                        Clicked = () => { }
-                    });
-                var prompt = builder.Build();
-                var result = new TaskCompletionSource<bool>();
-                prompt.Authenticate(new CancellationSignal(), activity.MainExecutor,
-                    new BiometricAuthenticationCallback
-                    {
-                        Success = authResult => result.TrySetResult(true),
-                        Error = () => result.TrySetResult(false),
-                        Failed = () => { },
-                        Help = (helpCode, helpString) => { }
-                    });
-                return result.Task;
-            }
         }
 
         public bool SupportsNfc()
@@ -869,49 +810,6 @@ namespace Bit.Droid.Services
             var clipboardManager = activity.GetSystemService(
                 Context.ClipboardService) as Android.Content.ClipboardManager;
             clipboardManager.PrimaryClip = ClipData.NewPlainText("bitwarden", text);
-        }
-
-        private class BiometricAuthenticationCallback : BiometricPrompt.AuthenticationCallback
-        {
-            public Action<BiometricPrompt.AuthenticationResult> Success { get; set; }
-            public Action Error { get; set; }
-            public Action Failed { get; set; }
-            public Action<BiometricAcquiredStatus, Java.Lang.ICharSequence> Help { get; set; }
-
-            public override void OnAuthenticationSucceeded(BiometricPrompt.AuthenticationResult authResult)
-            {
-                base.OnAuthenticationSucceeded(authResult);
-                Success?.Invoke(authResult);
-            }
-
-            public override void OnAuthenticationError([GeneratedEnum] BiometricErrorCode errorCode, Java.Lang.ICharSequence errString)
-            {
-                base.OnAuthenticationError(errorCode, errString);
-                Error?.Invoke();
-            }
-
-            public override void OnAuthenticationFailed()
-            {
-                base.OnAuthenticationFailed();
-                Failed?.Invoke();
-            }
-
-            public override void OnAuthenticationHelp([GeneratedEnum] BiometricAcquiredStatus helpCode,
-                Java.Lang.ICharSequence helpString)
-            {
-                base.OnAuthenticationHelp(helpCode, helpString);
-                Help?.Invoke(helpCode, helpString);
-            }
-        }
-
-        private class DialogInterfaceOnClickListener : Java.Lang.Object, IDialogInterfaceOnClickListener
-        {
-            public Action Clicked { get; set; }
-
-            public void OnClick(IDialogInterface dialog, int which)
-            {
-                Clicked?.Invoke();
-            }
         }
     }
 }

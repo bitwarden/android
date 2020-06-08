@@ -12,17 +12,17 @@ namespace Bit.App.Pages
     {
         private readonly IStorageService _storageService;
         private readonly AppOptions _appOptions;
-        private readonly bool _autoPromptFingerprint;
+        private readonly bool _autoPromptBiometric;
         private readonly LockPageViewModel _vm;
 
         private bool _promptedAfterResume;
         private bool _appeared;
 
-        public LockPage(AppOptions appOptions = null, bool autoPromptFingerprint = true)
+        public LockPage(AppOptions appOptions = null, bool autoPromptBiometric = true)
         {
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _appOptions = appOptions;
-            _autoPromptFingerprint = autoPromptFingerprint;
+            _autoPromptBiometric = autoPromptBiometric;
             InitializeComponent();
             _vm = BindingContext as LockPageViewModel;
             _vm.Page = this;
@@ -34,15 +34,15 @@ namespace Bit.App.Pages
         public Entry MasterPasswordEntry { get; set; }
         public Entry PinEntry { get; set; }
 
-        public async Task PromptFingerprintAfterResumeAsync()
+        public async Task PromptBiometricAfterResumeAsync()
         {
-            if (_vm.FingerprintLock)
+            if (_vm.BiometricLock)
             {
                 await Task.Delay(500);
                 if (!_promptedAfterResume)
                 {
                     _promptedAfterResume = true;
-                    await _vm?.PromptFingerprintAsync();
+                    await _vm?.PromptBiometricAsync();
                 }
             }
         }
@@ -55,8 +55,8 @@ namespace Bit.App.Pages
                 return;
             }
             _appeared = true;
-            await _vm.InitAsync(_autoPromptFingerprint);
-            if (!_vm.FingerprintLock)
+            await _vm.InitAsync(_autoPromptBiometric);
+            if (!_vm.BiometricLock)
             {
                 if (_vm.PinLock)
                 {
@@ -89,11 +89,11 @@ namespace Bit.App.Pages
             }
         }
 
-        private async void Fingerprint_Clicked(object sender, EventArgs e)
+        private async void Biometric_Clicked(object sender, EventArgs e)
         {
             if (DoOnce())
             {
-                await _vm.PromptFingerprintAsync();
+                await _vm.PromptBiometricAsync();
             }
         }
 

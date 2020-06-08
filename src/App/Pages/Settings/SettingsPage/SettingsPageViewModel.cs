@@ -23,9 +23,9 @@ namespace Bit.App.Pages
         private readonly IStorageService _storageService;
         private readonly ISyncService _syncService;
 
-        private bool _supportsFingerprint;
+        private bool _supportsBiometric;
         private bool _pin;
-        private bool _fingerprint;
+        private bool _biometric;
         private string _lastSyncDate;
         private string _vaultTimeoutDisplayValue;
         private string _vaultTimeoutActionDisplayValue;
@@ -69,7 +69,7 @@ namespace Bit.App.Pages
 
         public async Task InitAsync()
         {
-            _supportsFingerprint = await _platformUtilsService.SupportsBiometricAsync();
+            _supportsBiometric = await _platformUtilsService.SupportsBiometricAsync();
             var lastSync = await _syncService.GetLastSyncAsync();
             if (lastSync != null)
             {
@@ -83,7 +83,7 @@ namespace Bit.App.Pages
             _vaultTimeoutActionDisplayValue = _vaultTimeoutActions.FirstOrDefault(o => o.Value == action).Key;
             var pinSet = await _vaultTimeoutService.IsPinLockSetAsync();
             _pin = pinSet.Item1 || pinSet.Item2;
-            _fingerprint = await _vaultTimeoutService.IsFingerprintLockSetAsync();
+            _biometric = await _vaultTimeoutService.IsBiometricLockSetAsync();
             BuildList();
         }
 
@@ -288,31 +288,31 @@ namespace Bit.App.Pages
             BuildList();
         }
 
-        public async Task UpdateFingerprintAsync()
+        public async Task UpdateBiometricAsync()
         {
-            var current = _fingerprint;
-            if (_fingerprint)
+            var current = _biometric;
+            if (_biometric)
             {
-                _fingerprint = false;
+                _biometric = false;
             }
             else if (await _platformUtilsService.SupportsBiometricAsync())
             {
-                _fingerprint = await _platformUtilsService.AuthenticateBiometricAsync(null,
+                _biometric = await _platformUtilsService.AuthenticateBiometricAsync(null,
                     _deviceActionService.DeviceType == Core.Enums.DeviceType.Android ? "." : null);
             }
-            if (_fingerprint == current)
+            if (_biometric == current)
             {
                 return;
             }
-            if (_fingerprint)
+            if (_biometric)
             {
-                await _storageService.SaveAsync(Constants.FingerprintUnlockKey, true);
+                await _storageService.SaveAsync(Constants.BiometricUnlockKey, true);
             }
             else
             {
-                await _storageService.RemoveAsync(Constants.FingerprintUnlockKey);
+                await _storageService.RemoveAsync(Constants.BiometricUnlockKey);
             }
-            _vaultTimeoutService.FingerprintLocked = false;
+            _vaultTimeoutService.BiometricLocked = false;
             await _cryptoService.ToggleKeyAsync();
             BuildList();
         }
@@ -371,22 +371,18 @@ namespace Bit.App.Pages
                 new SettingsPageListItem { Name = AppResources.LockNow },
                 new SettingsPageListItem { Name = AppResources.TwoStepLogin }
             };
-            if (_supportsFingerprint || _fingerprint)
+            if (_supportsBiometric || _biometric)
             {
-                var fingerprintName = AppResources.Fingerprint;
+                var biometricName = AppResources.Biometrics;
                 if (Device.RuntimePlatform == Device.iOS)
                 {
-                    fingerprintName = _deviceActionService.SupportsFaceBiometric() ? AppResources.FaceID :
+                    biometricName = _deviceActionService.SupportsFaceBiometric() ? AppResources.FaceID :
                         AppResources.TouchID;
-                }
-                else if (Device.RuntimePlatform == Device.Android && _deviceActionService.UseNativeBiometric())
-                {
-                    fingerprintName = AppResources.Biometrics;
                 }
                 var item = new SettingsPageListItem
                 {
-                    Name = string.Format(AppResources.UnlockWith, fingerprintName),
-                    SubLabel = _fingerprint ? AppResources.Enabled : AppResources.Disabled
+                    Name = string.Format(AppResources.UnlockWith, biometricName),
+                    SubLabel = _biometric ? AppResources.Enabled : AppResources.Disabled
                 };
                 securityItems.Insert(2, item);
             }

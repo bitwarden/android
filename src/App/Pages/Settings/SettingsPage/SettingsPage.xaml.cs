@@ -143,19 +143,15 @@ namespace Bit.App.Pages
             }
             else
             {
-                var fingerprintName = AppResources.Fingerprint;
+                var biometricName = AppResources.Biometrics;
                 if (Device.RuntimePlatform == Device.iOS)
                 {
                     var supportsFace = await _deviceActionService.SupportsFaceBiometricAsync();
-                    fingerprintName = supportsFace ? AppResources.FaceID : AppResources.TouchID;
+                    biometricName = supportsFace ? AppResources.FaceID : AppResources.TouchID;
                 }
-                else if (Device.RuntimePlatform == Device.Android && _deviceActionService.UseNativeBiometric())
+                if (item.Name == string.Format(AppResources.UnlockWith, biometricName))
                 {
-                    fingerprintName = AppResources.Biometrics;
-                }
-                if (item.Name == string.Format(AppResources.UnlockWith, fingerprintName))
-                {
-                    await _vm.UpdateFingerprintAsync();
+                    await _vm.UpdateBiometricAsync();
                 }
             }
         }

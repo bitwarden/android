@@ -52,7 +52,7 @@ namespace Bit.iOS.Core.Controllers
 
             _pinSet = _vaultTimeoutService.IsPinLockSetAsync().GetAwaiter().GetResult();
             _pinLock = (_pinSet.Item1 && _vaultTimeoutService.PinProtectedKey != null) || _pinSet.Item2;
-            _fingerprintLock = _vaultTimeoutService.IsFingerprintLockSetAsync().GetAwaiter().GetResult();
+            _fingerprintLock = _vaultTimeoutService.IsBiometricLockSetAsync().GetAwaiter().GetResult();
 
             BaseNavItem.Title = _pinLock ? AppResources.VerifyPIN : AppResources.VerifyMasterPassword;
             BaseCancelButton.Title = AppResources.Cancel;
@@ -205,7 +205,7 @@ namespace Bit.iOS.Core.Controllers
 
         private void DoContinue()
         {
-            _vaultTimeoutService.FingerprintLocked = false;
+            _vaultTimeoutService.BiometricLocked = false;
             MasterPasswordCell.TextField.ResignFirstResponder();
             Success();
         }
@@ -219,7 +219,7 @@ namespace Bit.iOS.Core.Controllers
             var success = await _platformUtilsService.AuthenticateBiometricAsync(null,
                 _pinLock ? AppResources.PIN : AppResources.MasterPassword,
                 () => MasterPasswordCell.TextField.BecomeFirstResponder());
-            _vaultTimeoutService.FingerprintLocked = !success;
+            _vaultTimeoutService.BiometricLocked = !success;
             if (success)
             {
                 DoContinue();
@@ -261,11 +261,11 @@ namespace Bit.iOS.Core.Controllers
                 {
                     if (indexPath.Row == 0)
                     {
-                        var fingerprintButtonText = _controller._deviceActionService.SupportsFaceBiometric() ?
+                        var biometricButtonText = _controller._deviceActionService.SupportsFaceBiometric() ?
                             AppResources.UseFaceIDToUnlock : AppResources.UseFingerprintToUnlock;
                         var cell = new ExtendedUITableViewCell();
                         cell.TextLabel.TextColor = ThemeHelpers.PrimaryColor;
-                        cell.TextLabel.Text = fingerprintButtonText;
+                        cell.TextLabel.Text = biometricButtonText;
                         return cell;
                     }
                 }
