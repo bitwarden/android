@@ -2,9 +2,9 @@ name: Build
 
 on:
   push:
-    branches:
-      - '!l10n_master'
-      - '!gh-pages'
+    branches-ignore:
+      - 'l10n_master'
+      - 'gh-pages'
 
 jobs:
 
@@ -29,40 +29,47 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Decrypt secrets
+        if: github.ref == 'refs/heads/master'
         run: ./github/scripts/android/decrypt-secrets.ps1
         env:
           DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
 
       - name: Increment version
+        if: github.ref == 'refs/heads/master'
         run: ./github/scripts/android/increment-version.ps1
 
       - name: Restore packages
         run: nuget restore
 
       - name: Build for Play Store
+        if: github.ref == 'refs/heads/master'
         run: ./github/scripts/android/build-play.ps1
         env:
           PLAY_KEYSTORE_PASSWORD: ${{ secrets.PLAY_KEYSTORE_PASSWORD }}
           UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}
 
-      - name: Upload Plat Store .aab
+      - name: Upload Play Store .aab
+        if: github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@v2
         with:
           name: com.x8bit.bitwarden.aab
           path: ./com.x8bit.bitwarden.aab
 
       - name: Upload Play Store .apk
+        if: github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@v2
         with:
           name: com.x8bit.bitwarden.apk
           path: ./com.x8bit.bitwarden.apk
 
       - name: Build for F-Droid Store
+        if: github.ref == 'refs/heads/master'
         run: ./github/scripts/android/build-fdroid.ps1
         env:
           FDROID_KEYSTORE_PASSWORD: ${{ secrets.FDROID_KEYSTORE_PASSWORD }}
 
       - name: Upload F-Droid .apk
+        if: github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@v2
         with:
           name: com.x8bit.bitwarden-fdroid.apk
