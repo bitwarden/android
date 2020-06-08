@@ -601,7 +601,12 @@ namespace Bit.Droid.Accessibility
         
         public static bool IsAutofillServicePromptVisible(IEnumerable<AccessibilityWindowInfo> windows)
         {
-            return windows?.Any(w => w.Title?.ToLower().Contains("autofill") ?? false) ?? false;
+            // Autofill framework not available until API 26
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.O) 
+            {
+                return windows?.Any(w => w.Title?.ToLower().Contains("autofill") ?? false) ?? false;
+            }
+            return false;
         }
 
         public static int GetNodeHeight(AccessibilityNodeInfo node)
