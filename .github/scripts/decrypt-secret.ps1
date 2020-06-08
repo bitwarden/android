@@ -21,9 +21,9 @@ if ([string]::IsNullOrEmpty($output)) {
   }
 }
 
-if(!(Test-Path -Path $secretPath))  
+if(!(Test-Path -Path $secretOutputPath))  
 {
-  New-Item -ItemType Directory -Path $secretPath 
+  New-Item -ItemType Directory -Path $secretOutputPath 
 }
 
 gpg --quiet --batch --yes --decrypt --passphrase="$passphrase" --output $output $input
