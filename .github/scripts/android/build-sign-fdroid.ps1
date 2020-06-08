@@ -4,6 +4,7 @@ $androidPath = $($rootPath + "\src\Android\Android.csproj");
 $appPath = $($rootPath + "\src\App\App.csproj");
 
 $appKeystoreFdroidFilename = "app_fdroid-keystore.jks";
+$androidManifest = $($rootPath + "\src\Android\Properties\AndroidManifest.xml");
 
 Write-Output "########################################"
 Write-Output "##### Clean Android and App"
@@ -80,11 +81,9 @@ Write-Output "########################################"
 
 Invoke-Expression "& nuget restore"
 
-Write-Output "########################################"
-Write-Output "##### Build FDroid Configuration"
-Write-Output "########################################"
-
-msbuild "$($androidPath)" "/p:Configuration=FDroid"
+# Build F-Droid Configuration
+$buildScriptPath = $($rootPath + ".\.github\scripts\android\build.ps1");
+Invoke-Expression "& `"$buildScriptPath`" -configuration FDroid"
 
 Write-Output "########################################"
 Write-Output "##### Sign FDroid Configuration"

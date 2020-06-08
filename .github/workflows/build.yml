@@ -43,36 +43,40 @@ jobs:
       - name: Restore packages
         run: nuget restore
 
-      - name: Build for Play Store
+      - name: Build
+        run: ./.github/scripts/android/build.ps1 -configuration Release
+        shell: pwsh
+
+      - name: Sign for Play Store
         if: github.ref == 'refs/heads/master'
-        run: ./.github/scripts/android/build-play.ps1
+        run: ./.github/scripts/android/sign-play.ps1
         shell: pwsh
         env:
           PLAY_KEYSTORE_PASSWORD: ${{ secrets.PLAY_KEYSTORE_PASSWORD }}
           UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}
 
-      - name: Upload Play Store .aab
+      - name: Upload Play Store .aab artifact
         if: github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@v2
         with:
           name: com.x8bit.bitwarden.aab
           path: ./com.x8bit.bitwarden.aab
 
-      - name: Upload Play Store .apk
+      - name: Upload Play Store .apk artifact
         if: github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@v2
         with:
           name: com.x8bit.bitwarden.apk
           path: ./com.x8bit.bitwarden.apk
 
-      - name: Build for F-Droid Store
+      - name: Build and Sign for F-Droid Store
         if: github.ref == 'refs/heads/master'
-        run: ./.github/scripts/android/build-fdroid.ps1
+        run: ./.github/scripts/android/build-sign-fdroid.ps1
         shell: pwsh
         env:
           FDROID_KEYSTORE_PASSWORD: ${{ secrets.FDROID_KEYSTORE_PASSWORD }}
 
-      - name: Upload F-Droid .apk
+      - name: Upload F-Droid .apk artifact
         if: github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@v2
         with:
