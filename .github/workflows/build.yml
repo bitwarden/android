@@ -43,7 +43,7 @@ jobs:
       - name: Restore packages
         run: nuget restore
 
-      - name: Build
+      - name: Build for Play Store
         run: ./.github/scripts/android/build.ps1 -configuration Release
         shell: pwsh
 
@@ -69,9 +69,20 @@ jobs:
           name: com.x8bit.bitwarden.apk
           path: ./com.x8bit.bitwarden.apk
 
-      - name: Build and Sign for F-Droid Store
+      - name: Clean for F-Droid
+        run: ./.github/scripts/android/clean-fdroid.ps1
+        shell: pwsh
+
+      - name: Restore packages
+        run: nuget restore
+
+      - name: Build for F-Droid
+        run: ./.github/scripts/android/build.ps1 -configuration FDroid
+        shell: pwsh
+
+      - name: Sign for F-Droid
         if: github.ref == 'refs/heads/master'
-        run: ./.github/scripts/android/build-sign-fdroid.ps1
+        run: ./.github/scripts/android/sign-fdroid.ps1
         shell: pwsh
         env:
           FDROID_KEYSTORE_PASSWORD: ${{ secrets.FDROID_KEYSTORE_PASSWORD }}

@@ -6,12 +6,6 @@ $appKeystorePlayFilename = "app_play-keystore.jks";
 $appKeystoreUploadFilename = "app_upload-keystore.jks";
 
 Write-Output "########################################"
-Write-Output "##### Build Release Configuration"
-Write-Output "########################################"
-
-msbuild "$($androidPath)" "/p:Configuration=Release"
-
-Write-Output "########################################"
 Write-Output "##### Sign Google Play Bundle Release Configuration"
 Write-Output "########################################"
 
@@ -46,7 +40,3 @@ $signedApkPath = $($rootPath + "\src\Android\bin\Release\com.x8bit.bitwarden-Sig
 $signedApkDestPath = $($rootPath + "\com.x8bit.bitwarden.apk");
 
 Copy-Item $signedApkPath $signedApkDestPath
-
-Write-Output "########################################"
-Write-Output "##### Done"
-Write-Output "########################################"

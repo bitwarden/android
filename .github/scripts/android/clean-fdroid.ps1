@@ -3,7 +3,6 @@
 $androidPath = $($rootPath + "\src\Android\Android.csproj");
 $appPath = $($rootPath + "\src\App\App.csproj");
 
-$appKeystoreFdroidFilename = "app_fdroid-keystore.jks";
 $androidManifest = $($rootPath + "\src\Android\Properties\AndroidManifest.xml");
 
 Write-Output "########################################"
@@ -74,35 +73,3 @@ $appCenterNode=$xml.SelectSingleNode("/Project/ItemGroup/PackageReference[@Inclu
 $appCenterNode.ParentNode.RemoveChild($appCenterNode);
 
 $xml.Save($appPath);
-
-Write-Output "########################################"
-Write-Output "##### Restore NuGet"
-Write-Output "########################################"
-
-Invoke-Expression "& nuget restore"
-
-# Build F-Droid Configuration
-$buildScriptPath = $($rootPath + ".\.github\scripts\android\build.ps1");
-Invoke-Expression "& `"$buildScriptPath`" -configuration FDroid"
-
-Write-Output "########################################"
-Write-Output "##### Sign FDroid Configuration"
-Write-Output "########################################"
-
-msbuild "$($androidPath)" "/t:SignAndroidPackage" "/p:Configuration=FDroid" "/p:AndroidKeyStore=true" `
-    "/p:AndroidSigningKeyAlias=bitwarden" "/p:AndroidSigningKeyPass=$($env:FDROID_KEYSTORE_PASSWORD)" `
-    "/p:AndroidSigningKeyStore=$($appKeystoreFdroidFilename)" `
-    "/p:AndroidSigningStorePass=$($env:FDROID_KEYSTORE_PASSWORD)" "/v:quiet"
-
-Write-Output "########################################"
-Write-Output "##### Copy FDroid apk to project root"
-Write-Output "########################################"
-
-$signedApkPath = $($rootPath + "\src\Android\bin\FDroid\com.x8bit.bitwarden-Signed.apk");
-$signedApkDestPath = $($rootPath + "\com.x8bit.bitwarden-fdroid.apk");
-
-Copy-Item $signedApkPath $signedApkDestPath
-
-Write-Output "########################################"
-Write-Output "##### Done"
-Write-Output "########################################"
