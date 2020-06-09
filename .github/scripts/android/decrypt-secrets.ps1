@@ -19,3 +19,4 @@ Invoke-Expression `
     "& `"$decryptSecretPath`" -filename $($appKeystoreFdroidFilename + ".gpg") -output $($appKeystoreFdroidPath)"
 Invoke-Expression `
     "& `"$decryptSecretPath`" -filename $($googleServicesFilename + ".gpg") -output $($googleServicesPath)"
+Invoke-Expression "& `"$decryptSecretPath`" -filename play_creds.json.gpg"

@@ -100,6 +100,11 @@ jobs:
           name: com.x8bit.bitwarden-fdroid.apk
           path: ./com.x8bit.bitwarden-fdroid.apk
 
+      - name: Deploy to Play Store
+        if: github.ref == 'refs/heads/master'
+        run: ./.github/scripts/android/deploy-play.ps1
+        shell: pwsh
+
   ios:
     runs-on: macos-latest
 
