@@ -1,8 +1,8 @@
 $homePath = $env:HOME;
-$secretsPath = $homePath + "\secrets"
+$secretsPath = $homePath + "/secrets"
 
-$mobileKeyPath = $($secretsPath + "\bitwarden-mobile-key.p12");
-$distCertPath = $($secretsPath + "\iphone-distribution-cert.p12");
+$mobileKeyPath = $($secretsPath + "/bitwarden-mobile-key.p12");
+$distCertPath = $($secretsPath + "/iphone-distribution-cert.p12");
 
 security create-keychain -p $env:KEYCHAIN_PASSWORD build.keychain
 security default-keychain -s build.keychain

@@ -5,7 +5,7 @@
 )
 
 $rootPath = $env:GITHUB_WORKSPACE;
-$iosPath = $($rootPath + "\src\iOS\iOS.csproj");
+$iosPath = $($rootPath + "/src/iOS/iOS.csproj");
 
 Write-Output "########################################"
 Write-Output "##### Build $configuration Configuration for $platform Platform"
