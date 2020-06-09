@@ -5,6 +5,9 @@
 )
 
 $homePath = $env:HOME
+
+Write-Output "Home path is: '$homePath'"
+
 $rootPath = $env:GITHUB_WORKSPACE
 
 $secretInputPath = $rootPath + "/.github/secrets"
