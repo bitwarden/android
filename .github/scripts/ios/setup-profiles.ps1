@@ -1,4 +1,4 @@
-$homePath = "~";
+$homePath = Resolve-Path "~" | Select-Object -ExpandProperty Path;
 $secretsPath = $homePath + "/secrets"
 
 $autofillProfilePath = $($secretsPath + "/dist_autofill.mobileprovision");

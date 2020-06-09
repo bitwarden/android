@@ -4,7 +4,7 @@
   [string] $output
 )
 
-$homePath = "~"
+$homePath = Resolve-Path "~" | Select-Object -ExpandProperty Path
 
 Write-Output "Home path is: '$homePath'"
 
