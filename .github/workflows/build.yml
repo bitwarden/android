@@ -132,5 +132,5 @@ jobs:
         run: nuget restore
 
       - name: Build for App Store
-        run: ./.github/scripts/android/build.ps1 -configuration AppStore -platform iPhone
+        run: ./.github/scripts/ios/build.ps1 -configuration AppStore -platform iPhone
         shell: pwsh
