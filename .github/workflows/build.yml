@@ -137,6 +137,11 @@ jobs:
           MOBILE_KEY_PASSWORD: ${{ secrets.IOS_KEY_PASSWORD }}
           DIST_CERT_PASSWORD: ${{ secrets.IOS_DIST_CERT_PASSWORD }}
 
+      - name: Set up provisioning profiles
+        if: github.ref == 'refs/heads/master'
+        run: ./.github/scripts/ios/setup-profiles.ps1
+        shell: pwsh
+
       - name: Restore packages
         run: nuget restore
 
