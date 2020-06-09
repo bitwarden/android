@@ -5,9 +5,6 @@
 )
 
 $homePath = Resolve-Path "~" | Select-Object -ExpandProperty Path
-
-Write-Output "Home path is: '$homePath'"
-
 $rootPath = $env:GITHUB_WORKSPACE
 
 $secretInputPath = $rootPath + "/.github/secrets"
