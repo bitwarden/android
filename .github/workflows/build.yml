@@ -158,3 +158,5 @@ jobs:
       - name: Build for App Store
         run: ./.github/scripts/ios/build.ps1 -configuration AppStore -platform iPhone
         shell: pwsh
+        env:
+          KEYCHAIN_PASSWORD: ${{ secrets.IOS_KEYCHAIN_PASSWORD }}
