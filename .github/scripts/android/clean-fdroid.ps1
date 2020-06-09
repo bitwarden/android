@@ -1,9 +1,9 @@
 ﻿$rootPath = $env:GITHUB_WORKSPACE;
 
-$androidPath = $($rootPath + "\src\Android\Android.csproj");
-$appPath = $($rootPath + "\src\App\App.csproj");
+$androidPath = $($rootPath + "/src/Android/Android.csproj");
+$appPath = $($rootPath + "/src/App/App.csproj");
 
-$androidManifest = $($rootPath + "\src\Android\Properties\AndroidManifest.xml");
+$androidManifest = $($rootPath + "/src/Android/Properties/AndroidManifest.xml");
 
 Write-Output "########################################"
 Write-Output "##### Clean Android and App"

@@ -5,7 +5,7 @@ Write-Output "########################################"
 Write-Output "##### Setting Version Code $buildNumber"
 Write-Output "########################################"
 
-$androidManifest = $($rootPath + "\src\Android\Properties\AndroidManifest.xml");
+$androidManifest = $($rootPath + "/src/Android/Properties/AndroidManifest.xml");
 
 $xml=New-Object XML;
 $xml.Load($androidManifest);

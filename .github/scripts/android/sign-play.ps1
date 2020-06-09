@@ -1,6 +1,6 @@
 ﻿$rootPath = $env:GITHUB_WORKSPACE;
 
-$androidPath = $($rootPath + "\src\Android\Android.csproj");
+$androidPath = $($rootPath + "/src/Android/Android.csproj");
 
 $appKeystorePlayFilename = "app_play-keystore.jks";
 $appKeystoreUploadFilename = "app_upload-keystore.jks";
@@ -18,8 +18,8 @@ Write-Output "########################################"
 Write-Output "##### Copy Google Play Bundle to project root"
 Write-Output "########################################"
 
-$signedAabPath = $($rootPath + "\src\Android\bin\Release\com.x8bit.bitwarden-Signed.aab");
-$signedAabDestPath = $($rootPath + "\com.x8bit.bitwarden.aab");
+$signedAabPath = $($rootPath + "/src/Android/bin/Release/com.x8bit.bitwarden-Signed.aab");
+$signedAabDestPath = $($rootPath + "/com.x8bit.bitwarden.aab");
 
 Copy-Item $signedAabPath $signedAabDestPath
 
@@ -36,7 +36,7 @@ Write-Output "########################################"
 Write-Output "##### Copy Release APK to project root"
 Write-Output "########################################"
 
-$signedApkPath = $($rootPath + "\src\Android\bin\Release\com.x8bit.bitwarden-Signed.apk");
-$signedApkDestPath = $($rootPath + "\com.x8bit.bitwarden.apk");
+$signedApkPath = $($rootPath + "/src/Android/bin/Release/com.x8bit.bitwarden-Signed.apk");
+$signedApkDestPath = $($rootPath + "/com.x8bit.bitwarden.apk");
 
 Copy-Item $signedApkPath $signedApkDestPath

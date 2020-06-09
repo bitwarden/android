@@ -1,6 +1,6 @@
 ﻿$rootPath = $env:GITHUB_WORKSPACE;
 
-$androidPath = $($rootPath + "\src\Android\Android.csproj");
+$androidPath = $($rootPath + "/src/Android/Android.csproj");
 
 $appKeystoreFdroidFilename = "app_fdroid-keystore.jks";
 
@@ -17,7 +17,7 @@ Write-Output "########################################"
 Write-Output "##### Copy FDroid apk to project root"
 Write-Output "########################################"
 
-$signedApkPath = $($rootPath + "\src\Android\bin\FDroid\com.x8bit.bitwarden-Signed.apk");
-$signedApkDestPath = $($rootPath + "\com.x8bit.bitwarden-fdroid.apk");
+$signedApkPath = $($rootPath + "/src/Android/bin/FDroid/com.x8bit.bitwarden-Signed.apk");
+$signedApkDestPath = $($rootPath + "/com.x8bit.bitwarden-fdroid.apk");
 
 Copy-Item $signedApkPath $signedApkDestPath

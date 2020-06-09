@@ -4,7 +4,7 @@
 )
 
 $rootPath = $env:GITHUB_WORKSPACE;
-$androidPath = $($rootPath + "\src\Android\Android.csproj");
+$androidPath = $($rootPath + "/src/Android/Android.csproj");
 
 Write-Output "########################################"
 Write-Output "##### Build $configuration Configuration"
