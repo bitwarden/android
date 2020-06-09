@@ -49,6 +49,9 @@ jobs:
       - name: Restore packages
         run: nuget restore
 
+      - name: Build Play Store publisher
+        run: dotnet build ./store/google/Publisher/Publisher.csproj -p:Configuration=Release
+
       - name: Build for Play Store
         run: ./.github/scripts/android/build.ps1 -configuration Release
         shell: pwsh
