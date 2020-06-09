@@ -118,8 +118,16 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v2
 
+      - name: Decrypt secrets
+        if: github.ref == 'refs/heads/master'
+        run: ./.github/scripts/ios/decrypt-secrets.ps1
+        shell: pwsh
+        env:
+          DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
+
       - name: Restore packages
         run: nuget restore
 
-      - name: Build app
-        run: msbuild ./src/iOS/iOS.csproj /verbosity:normal /p:Platform=iPhone /p:Configuration=Debug
+      - name: Build for App Store
+        run: ./.github/scripts/android/build.ps1 -configuration AppStore -platform iPhone
+        shell: pwsh
