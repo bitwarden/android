@@ -7,17 +7,17 @@
 $homePath = $env:HOME
 $rootPath = $env:GITHUB_WORKSPACE
 
-$secretInputPath = $rootPath + "\.github\secrets"
-$input = $secretInputPath + "\" + $filename
+$secretInputPath = $rootPath + "/.github/secrets"
+$input = $secretInputPath + "/" + $filename
 
 $passphrase = $env:DECRYPT_FILE_PASSWORD
-$secretOutputPath = $homePath + "\secrets"
+$secretOutputPath = $homePath + "/secrets"
 
 if ([string]::IsNullOrEmpty($output)) {
   if ($filename.EndsWith(".gpg")) {
-    $output = $secretOutputPath + "\" + $filename.TrimEnd(".gpg")
+    $output = $secretOutputPath + "/" + $filename.TrimEnd(".gpg")
   } else {
-    $output = $secretOutputPath + "\" + $filename + ".plaintext"
+    $output = $secretOutputPath + "/" + $filename + ".plaintext"
   }
 }
 
