@@ -1,6 +1,6 @@
 ﻿$rootPath = $env:GITHUB_WORKSPACE;
 
-$decryptSecretPath = $($rootPath + ".\.github\scripts\decrypt-secret.ps1");
+$decryptSecretPath = $($rootPath + "\.github\scripts\decrypt-secret.ps1");
 
 $appKeystorePlayFilename = "app_play-keystore.jks";
 $appKeystorePlayPath = $($rootPath + "\src\Android\$appKeystorePlayFilename");
