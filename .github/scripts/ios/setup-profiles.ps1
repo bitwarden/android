@@ -1,4 +1,4 @@
-$homePath = $env:HOME;
+$homePath = "~";
 $secretsPath = $homePath + "/secrets"
 
 $autofillProfilePath = $($secretsPath + "/dist_autofill.mobileprovision");

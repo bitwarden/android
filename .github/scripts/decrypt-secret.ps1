@@ -4,7 +4,7 @@
   [string] $output
 )
 
-$homePath = $env:HOME
+$homePath = "~"
 
 Write-Output "Home path is: '$homePath'"
 

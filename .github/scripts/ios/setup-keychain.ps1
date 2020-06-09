@@ -1,4 +1,4 @@
-$homePath = $env:HOME;
+$homePath = "~";
 $secretsPath = $homePath + "/secrets"
 
 $mobileKeyPath = $($secretsPath + "/bitwarden-mobile-key.p12");
