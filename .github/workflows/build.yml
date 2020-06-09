@@ -29,6 +29,11 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v2
 
+      - name: Print lines of code
+        run: |
+          choco install cloc --no-progress
+          cloc --vcs git --exclude-dir Resources,store,test,Properties --include-lang C#,XAML
+
       - name: Decrypt secrets
         if: github.ref == 'refs/heads/master'
         run: ./.github/scripts/android/decrypt-secrets.ps1
