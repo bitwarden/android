@@ -4,6 +4,7 @@
   [string] $platform = "iPhone"
 )
 
+#
 security default-keychain -s build.keychain
 security unlock-keychain -p $env:KEYCHAIN_PASSWORD build.keychain
 security set-keychain-settings -lut 1200
