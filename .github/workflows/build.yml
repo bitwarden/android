@@ -179,8 +179,8 @@ jobs:
         if: github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@v2
         with:
-          name: com.8bit.bitwarden.ipa
-          path: ./com.8bit.bitwarden.ipa
+          name: Bitwarden.ipa
+          path: ./bitwarden-export/Bitwarden.ipa
 
       - name: Deploy to App Store
         if: github.ref == 'refs/heads/master'
