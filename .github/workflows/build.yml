@@ -161,12 +161,14 @@ jobs:
         run: nuget restore
 
       - name: Archive Build for App Store
+        if: github.ref == 'refs/heads/master'
         run: ./.github/scripts/ios/build.ps1 -configuration AppStore -platform iPhone -archive
         shell: pwsh
         env:
           KEYCHAIN_PASSWORD: ${{ secrets.IOS_KEYCHAIN_PASSWORD }}
 
       - name: Export .ipa for App Store
+        if: github.ref == 'refs/heads/master'
         run: ./.github/scripts/ios/export-ipa.ps1 -method app-store
         shell: pwsh
 
@@ -176,3 +178,11 @@ jobs:
         with:
           name: com.8bit.bitwarden.ipa
           path: ./com.8bit.bitwarden.ipa
+
+      - name: Deploy to App Store
+        if: github.ref == 'refs/heads/master'
+        run: ./.github/scripts/ios/deploy-app-store.ps1
+        shell: pwsh
+        env:
+          APPLE_ID_USERNAME: ${{ secrets.APPLE_ID_USERNAME }}
+          APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
