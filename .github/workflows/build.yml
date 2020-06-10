@@ -138,6 +138,11 @@ jobs:
         env:
           DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
 
+      - name: Increment version
+        if: github.ref == 'refs/heads/master'
+        run: ./.github/scripts/ios/increment-version.ps1
+        shell: pwsh
+
       - name: Set up keychain
         if: github.ref == 'refs/heads/master'
         run: ./.github/scripts/ios/setup-keychain.ps1
