@@ -164,8 +164,10 @@ jobs:
         if: github.ref == 'refs/heads/master'
         run: ./.github/scripts/ios/build.ps1 -configuration AppStore -platform iPhone -archive
         shell: pwsh
-        env:
-          KEYCHAIN_PASSWORD: ${{ secrets.IOS_KEYCHAIN_PASSWORD }}
+
+      - name: Build for App Store
+        run: ./.github/scripts/ios/build.ps1 -configuration AppStore -platform iPhone
+        shell: pwsh
 
       - name: Export .ipa for App Store
         if: github.ref == 'refs/heads/master'
