@@ -165,3 +165,7 @@ jobs:
         shell: pwsh
         env:
           KEYCHAIN_PASSWORD: ${{ secrets.IOS_KEYCHAIN_PASSWORD }}
+
+      - name: Export .ipa for App Store
+        run: ./.github/scripts/ios/export-ipa.ps1 -method app-store
+        shell: pwsh
