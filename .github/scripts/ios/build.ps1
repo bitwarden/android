@@ -7,7 +7,7 @@
 #
 security default-keychain -s build.keychain
 security unlock-keychain -p $env:KEYCHAIN_PASSWORD build.keychain
-security set-keychain-settings -lut 1200
+security set-keychain-settings -lut 1200 build.keychain
 security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $env:KEYCHAIN_PASSWORD build.keychain
 
 $rootPath = $env:GITHUB_WORKSPACE;
