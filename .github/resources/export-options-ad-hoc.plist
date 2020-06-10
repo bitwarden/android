@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>method</key>
+    <string>ad-hoc</string>
+    <key>provisioningProfiles</key>
+    <dict>
+        <key>com.8bit.bitwarden</key>
+        <string>Ad hoc: Bitwarden 2020</string>
+        <key>com.8bit.bitwarden.autofill</key>
+        <string>Ad hoc: Autofill 2020</string>
+        <key>com.8bit.bitwarden.find-login-action-extension</key>
+        <string>Ad hoc: Extension 2020</string>
+    </dict>
+</dict>
+</plist>

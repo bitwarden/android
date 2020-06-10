@@ -169,3 +169,10 @@ jobs:
       - name: Export .ipa for App Store
         run: ./.github/scripts/ios/export-ipa.ps1 -method app-store
         shell: pwsh
+
+      - name: Upload App Store .ipa artifact
+        if: github.ref == 'refs/heads/master'
+        uses: actions/upload-artifact@v2
+        with:
+          name: com.8bit.bitwarden.ipa
+          path: ./com.8bit.bitwarden.ipa
