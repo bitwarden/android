@@ -1,14 +1,24 @@
 ﻿param (
   [Parameter(Mandatory=$true)]
   [string] $configuration,
-  [string] $platform = "iPhone"
+  [string] $platform = "iPhone",
+  [switch] $archive
 )
 
 $rootPath = $env:GITHUB_WORKSPACE;
 $iosPath = $($rootPath + "/src/iOS/iOS.csproj");
 
-Write-Output "########################################"
-Write-Output "##### Build $configuration Configuration for $platform Platform"
-Write-Output "########################################"
-
-msbuild "$($iosPath)" "/p:Platform=$platform" "/p:Configuration=$configuration"
+if ($archive)
+{
+  Write-Output "########################################"
+  Write-Output "##### Archive $configuration Configuration for $platform Platform"
+  Write-Output "########################################"
+  msbuild "$($iosPath)" "/p:Platform=$platform" "/p:Configuration=$configuration" `
+    "/p:ArchiveOnBuild=true" "/t:`"Build`""
+} else
+{
+  Write-Output "########################################"
+  Write-Output "##### Build $configuration Configuration for $platform Platform"
+  Write-Output "########################################"
+  msbuild "$($iosPath)" "/p:Platform=$platform" "/p:Configuration=$configuration" "/t:`"Build`""
+}
