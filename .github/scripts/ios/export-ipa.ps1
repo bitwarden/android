@@ -16,3 +16,4 @@ $destIpaPath = "$rootPath/Bitwarden.ipa";
 xcodebuild -exportArchive -archivePath $archivePath -exportPath $exportPath -exportOptionsPlist $exportOptionsPath
 
 Copy-Item $ipaPath $destIpaPath
+ls

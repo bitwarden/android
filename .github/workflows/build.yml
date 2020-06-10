@@ -166,6 +166,7 @@ jobs:
         shell: pwsh
 
       - name: Build for App Store
+        if: github.ref != 'refs/heads/master'
         run: ./.github/scripts/ios/build.ps1 -configuration AppStore -platform iPhone
         shell: pwsh
 
