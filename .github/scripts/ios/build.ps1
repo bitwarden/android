@@ -15,6 +15,11 @@ if ($archive)
   Write-Output "########################################"
   msbuild "$($iosPath)" "/p:Platform=$platform" "/p:Configuration=$configuration" `
     "/p:ArchiveOnBuild=true" "/t:`"Build`""
+
+  Write-Output "########################################"
+  Write-Output "##### Done"
+  Write-Output "########################################"
+  ls ~/Library/Developer/Xcode/Archives
 } else
 {
   Write-Output "########################################"
