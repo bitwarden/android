@@ -40,6 +40,10 @@ jobs:
           nuget help
           msbuild -version
           dotnet --info
+          Write-Output "GitHub ref: $env:GITHUB_REF"
+        shell: pwsh
+        env:
+          GITHUB_REF: ${{ github.ref }}
 
       - name: Checkout repo
         uses: actions/checkout@v2
@@ -127,6 +131,10 @@ jobs:
           nuget help
           msbuild -version
           dotnet --info
+          Write-Output "GitHub ref: $env:GITHUB_REF"
+        shell: pwsh
+        env:
+          GITHUB_REF: ${{ github.ref }}
 
       - name: Checkout repo
         uses: actions/checkout@v2
