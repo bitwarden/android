@@ -274,6 +274,8 @@ namespace Bit.App.Pages
         public bool ShowAttachments => Cipher.HasAttachments;
         public string ShowPasswordIcon => ShowPassword ? "" : "";
         public string ShowCardCodeIcon => ShowCardCode ? "" : "";
+        public int PasswordFieldColSpan => Cipher.ViewPassword ? 1 : 4;
+        public int TotpColumnSpan => Cipher.ViewPassword ? 1 : 2;
 
         public void Init()
         {
@@ -631,7 +633,8 @@ namespace Bit.App.Pages
                 Fields.Add(new AddEditPageFieldViewModel(Cipher, new FieldView
                 {
                     Type = type,
-                    Name = string.IsNullOrWhiteSpace(name) ? null : name
+                    Name = string.IsNullOrWhiteSpace(name) ? null : name,
+                    NewField = true,
                 }));
             }
         }
@@ -818,6 +821,7 @@ namespace Bit.App.Pages
         public bool IsTextType => _field.Type == FieldType.Text;
         public bool IsBooleanType => _field.Type == FieldType.Boolean;
         public bool IsHiddenType => _field.Type == FieldType.Hidden;
+        public bool ShowViewHidden => IsHiddenType && (_cipher.ViewPassword || _field.NewField);
 
         public void ToggleHiddenValue()
         {

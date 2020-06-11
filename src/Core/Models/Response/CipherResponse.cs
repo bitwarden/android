@@ -19,6 +19,7 @@ namespace Bit.Core.Models.Response
         public SecureNoteApi SecureNote { get; set; }
         public bool Favorite { get; set; }
         public bool Edit { get; set; }
+        public bool ViewPassword { get; set; } = true; // Fallback for old server versions
         public bool OrganizationUseTotp { get; set; }
         public DateTime RevisionDate { get; set; }
         public List<AttachmentResponse> Attachments { get; set; }

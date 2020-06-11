@@ -18,6 +18,7 @@ namespace Bit.Core.Models.View
             Favorite = c.Favorite;
             OrganizationUseTotp = c.OrganizationUseTotp;
             Edit = c.Edit;
+            ViewPassword = c.ViewPassword;
             Type = c.Type;
             LocalData = c.LocalData;
             CollectionIds = c.CollectionIds;
@@ -34,6 +35,7 @@ namespace Bit.Core.Models.View
         public bool Favorite { get; set; }
         public bool OrganizationUseTotp { get; set; }
         public bool Edit { get; set; }
+        public bool ViewPassword { get; set; }
         public Dictionary<string, object> LocalData { get; set; }
         public LoginView Login { get; set; }
         public IdentityView Identity { get; set; }

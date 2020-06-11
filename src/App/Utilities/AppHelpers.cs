@@ -30,7 +30,7 @@ namespace Bit.App.Utilities
                 {
                     options.Add(AppResources.CopyUsername);
                 }
-                if (!string.IsNullOrWhiteSpace(cipher.Login.Password))
+                if (!string.IsNullOrWhiteSpace(cipher.Login.Password) && cipher.ViewPassword)
                 {
                     options.Add(AppResources.CopyPassword);
                 }

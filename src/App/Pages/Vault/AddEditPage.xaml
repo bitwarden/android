@@ -112,9 +112,11 @@
                             StyleClass="box-value"
                             Grid.Row="1"
                             Grid.Column="0"
+                            Grid.ColumnSpan="{Binding PasswordFieldColSpan}"
                             IsPassword="{Binding ShowPassword, Converter={StaticResource inverseBool}}"
                             IsSpellCheckEnabled="False"
-                            IsTextPredictionEnabled="False" />
+                            IsTextPredictionEnabled="False"
+                            IsEnabled="{Binding Cipher.ViewPassword}"/>
                         <controls:FaButton 
                             StyleClass="box-row-button, box-row-button-platform"
                             Text="&#xf058;"
@@ -123,7 +125,8 @@
                             Grid.Column="1"
                             Grid.RowSpan="2"
                             AutomationProperties.IsInAccessibleTree="True"
-                            AutomationProperties.Name="{u:I18n CheckPassword}" />
+                            AutomationProperties.Name="{u:I18n CheckPassword}"
+                            IsVisible="{Binding Cipher.ViewPassword}" />
                         <controls:FaButton 
                             StyleClass="box-row-button, box-row-button-platform"
                             Text="{Binding ShowPasswordIcon}"
@@ -132,7 +135,8 @@
                             Grid.Column="2"
                             Grid.RowSpan="2"
                             AutomationProperties.IsInAccessibleTree="True"
-                            AutomationProperties.Name="{u:I18n ToggleVisibility}" />
+                            AutomationProperties.Name="{u:I18n ToggleVisibility}"
+                            IsVisible="{Binding Cipher.ViewPassword}" />
                         <controls:FaButton 
                             StyleClass="box-row-button, box-row-button-platform"
                             Text="&#xf021;"
@@ -141,7 +145,8 @@
                             Grid.Column="3"
                             Grid.RowSpan="2"
                             AutomationProperties.IsInAccessibleTree="True"
-                            AutomationProperties.Name="{u:I18n GeneratePassword}" />
+                            AutomationProperties.Name="{u:I18n GeneratePassword}"
+                            IsVisible="{Binding Cipher.ViewPassword}" />
                     </Grid>
 
                     <Grid StyleClass="box-row, box-row-input">
@@ -163,9 +168,12 @@
                             Text="{Binding Cipher.Login.Totp}"
                             IsSpellCheckEnabled="False"
                             IsTextPredictionEnabled="False"
+                            IsPassword="{Binding Cipher.ViewPassword, Converter={StaticResource inverseBool}}"
+                            IsEnabled="{Binding Cipher.ViewPassword}"
                             StyleClass="box-value"
                             Grid.Row="1"
-                            Grid.Column="0" />
+                            Grid.Column="0"
+                            Grid.ColumnSpan="{Binding TotpColumnSpan}" />
                         <controls:FaButton 
                             StyleClass="box-row-button, box-row-button-platform"
                             Text="&#xf030;"
@@ -173,6 +181,7 @@
                             Grid.Row="0"
                             Grid.Column="1"
                             Grid.RowSpan="2"
+                            IsVisible="{Binding Cipher.ViewPassword}"
                             AutomationProperties.IsInAccessibleTree="True"
                             AutomationProperties.Name="{u:I18n ScanQrTitle}" />
                     </Grid>
@@ -562,6 +571,7 @@
                                         Grid.Column="0"
                                         IsVisible="{Binding IsHiddenType}"
                                         IsPassword="{Binding ShowHiddenValue, Converter={StaticResource inverseBool}}"
+                                        IsEnabled="{Binding ShowViewHidden}"
                                         IsSpellCheckEnabled="False"
                                         IsTextPredictionEnabled="False">
                                         <Entry.Keyboard>
@@ -582,7 +592,7 @@
                                         StyleClass="box-row-button, box-row-button-platform"
                                         Text="{Binding ShowHiddenValueIcon}"
                                         Command="{Binding ToggleHiddenValueCommand}"
-                                        IsVisible="{Binding IsHiddenType}"
+                                        IsVisible="{Binding ShowViewHidden}"
                                         Grid.Row="0"
                                         Grid.Column="1"
                                         Grid.RowSpan="2"

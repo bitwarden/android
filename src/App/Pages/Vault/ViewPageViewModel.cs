@@ -684,8 +684,9 @@ namespace Bit.App.Pages
         public bool IsTextType => _field.Type == Core.Enums.FieldType.Text;
         public bool IsBooleanType => _field.Type == Core.Enums.FieldType.Boolean;
         public bool IsHiddenType => _field.Type == Core.Enums.FieldType.Hidden;
+        public bool ShowViewHidden => IsHiddenType && _cipher.ViewPassword;
         public bool ShowCopyButton => _field.Type != Core.Enums.FieldType.Boolean &&
-            !string.IsNullOrWhiteSpace(_field.Value);
+            !string.IsNullOrWhiteSpace(_field.Value) && !(IsHiddenType && !_cipher.ViewPassword);
 
         public void ToggleHiddenValue()
         {
