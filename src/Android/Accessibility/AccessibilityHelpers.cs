@@ -86,6 +86,7 @@ namespace Bit.Droid.Accessibility
             new Browser("org.mozilla.rocket", "display_url"),
             new Browser("org.torproject.torbrowser", "url_bar_title,mozac_browser_toolbar_url_view"), // 2nd = Anticipation
             new Browser("org.torproject.torbrowser_alpha", "url_bar_title,mozac_browser_toolbar_url_view"), // 2nd = Anticipation
+            new Browser("org.ungoogled.chromium", "url_bar"),
 
             // [Section B] Entries only present here
             //
