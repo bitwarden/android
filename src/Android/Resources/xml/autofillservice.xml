@@ -163,4 +163,7 @@
   <compatibility-package
     android:name="org.torproject.torbrowser_alpha"
     android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
+    android:name="org.ungoogled.chromium"
+    android:maxLongVersionCode="10000000000"/>
 </autofill-service>
