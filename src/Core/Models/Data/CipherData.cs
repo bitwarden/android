@@ -54,7 +54,7 @@ namespace Bit.Core.Models.Data
         public string FolderId { get; set; }
         public string UserId { get; set; }
         public bool Edit { get; set; }
-        public bool ViewPassword { get; set; }
+        public bool ViewPassword { get; set; } = true; // Fallback for old server versions
         public bool OrganizationUseTotp { get; set; }
         public bool Favorite { get; set; }
         public DateTime RevisionDate { get; set; }
