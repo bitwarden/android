@@ -35,7 +35,7 @@ namespace Bit.Core.Models.View
         public bool Favorite { get; set; }
         public bool OrganizationUseTotp { get; set; }
         public bool Edit { get; set; }
-        public bool ViewPassword { get; set; }
+        public bool ViewPassword { get; set; } = true;
         public Dictionary<string, object> LocalData { get; set; }
         public LoginView Login { get; set; }
         public IdentityView Identity { get; set; }
