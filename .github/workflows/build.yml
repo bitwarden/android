@@ -140,7 +140,6 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Decrypt secrets
-        if: github.ref == 'refs/heads/master'
         run: ./.github/scripts/ios/decrypt-secrets.ps1
         shell: pwsh
         env:
@@ -152,7 +151,6 @@ jobs:
         shell: pwsh
 
       - name: Set up keychain
-        if: github.ref == 'refs/heads/master'
         run: ./.github/scripts/ios/setup-keychain.ps1
         shell: pwsh
         env:
@@ -161,7 +159,6 @@ jobs:
           DIST_CERT_PASSWORD: ${{ secrets.IOS_DIST_CERT_PASSWORD }}
 
       - name: Set up provisioning profiles
-        if: github.ref == 'refs/heads/master'
         run: ./.github/scripts/ios/setup-profiles.ps1
         shell: pwsh
 
