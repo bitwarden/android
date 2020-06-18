@@ -67,6 +67,10 @@ namespace Bit.Core.Models.View
         {
             get
             {
+                if (Match == UriMatchType.RegularExpression)
+                {
+                    return null;
+                }
                 if (_hostname == null && Uri != null)
                 {
                     _hostname = CoreHelpers.GetHostname(Uri);
