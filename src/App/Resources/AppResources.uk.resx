@@ -232,7 +232,7 @@
     <value>Теку оновлено.</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
-    <value>Перейти на веб-сайт</value>
+    <value>Перейти на вебсайт</value>
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="HelpAndFeedback" xml:space="preserve">
@@ -269,7 +269,7 @@
     <comment>Title for login page. (noun)</comment>
   </data>
   <data name="LogOut" xml:space="preserve">
-    <value>Вихід</value>
+    <value>Вийти</value>
     <comment>The log out button text (verb).</comment>
   </data>
   <data name="LogoutConfirmation" xml:space="preserve">
@@ -375,13 +375,13 @@
     <value>Переглянути</value>
   </data>
   <data name="VisitOurWebsite" xml:space="preserve">
-    <value>Відвідайте наш веб-сайт</value>
+    <value>Відвідайте наш вебсайт</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Відвідайте наш веб-сайт, щоб прочитати новини, написати нам, або дізнатися більше про те, як ми використовуємо Bitwarden.</value>
+    <value>Відвідайте наш вебсайт, щоб отримати допомогу, дізнатися про новини, написати нам, або дізнатися більше про те, як використовувати Bitwarden.</value>
   </data>
   <data name="Website" xml:space="preserve">
-    <value>Веб-сайт</value>
+    <value>Вебсайт</value>
     <comment>Label for a website.</comment>
   </data>
   <data name="Yes" xml:space="preserve">
@@ -400,7 +400,7 @@
     <value>Розширення</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Використовуйте службу автозаповнення Bitwarden, щоб автоматично вводити паролі в програмах та на веб-сайтах.</value>
+    <value>Використовуйте службу автозаповнення Bitwarden, щоб автоматично вводити паролі в програмах та на вебсайтах.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Служба автозаповнення</value>
@@ -427,13 +427,13 @@
     <value>Змінити адресу е-пошти</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
-    <value>Ви можете змінити адресу е-пошти в сховищі на bitwarden.com. Хочете перейти на веб-сайт зараз?</value>
+    <value>Ви можете змінити адресу е-пошти в сховищі на bitwarden.com. Хочете перейти на вебсайт зараз?</value>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
     <value>Змінити головний пароль</value>
   </data>
   <data name="ChangePasswordConfirmation" xml:space="preserve">
-    <value>Ви можете змінити головний пароль в сховищі на bitwarden.com. Хочете перейти на веб-сайт зараз?</value>
+    <value>Ви можете змінити головний пароль в сховищі на bitwarden.com. Хочете перейти на вебсайт зараз?</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Закрити</value>
@@ -504,7 +504,7 @@
     <value>Імпорт записів</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
-    <value>Ви можете робити масовий імпорт записів зі сховища на bitwarden.com. Хочете перейти на веб-сайт зараз?</value>
+    <value>Ви можете робити масовий імпорт записів зі сховища на bitwarden.com. Хочете перейти на вебсайт зараз?</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
     <value>Швидкий імпорт ваших записів з інших програм керування паролями.</value>
@@ -516,7 +516,7 @@
     <value>Довжина</value>
   </data>
   <data name="Lock" xml:space="preserve">
-    <value>Заблокувати</value>
+    <value>Блокувати</value>
   </data>
   <data name="FifteenMinutes" xml:space="preserve">
     <value>15 хвилин</value>
@@ -594,7 +594,7 @@
     <value>У вашому сховищі немає записів.</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>У вашому сховищі немає записів для цього веб-сайту/програми. Торкніться, щоб додати.</value>
+    <value>У вашому сховищі немає записів для цього вебсайту/програми. Торкніться, щоб додати.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
     <value>Цей запис не має імені користувача або пароля.</value>
@@ -689,7 +689,7 @@
     <value>Двоетапна перевірка</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Двоетапна перевірка робить ваш обліковий запис більш захищеним, вимагаючи підтвердження входу з використанням іншого пристрою, наприклад, за допомогою коду безпеки, програми авторизації, SMS, телефонного виклику, або е-пошти. Ви можете увімкнути двоетапну перевірку в сховищі на bitwarden.com. Хочете перейти на веб-сайт зараз?</value>
+    <value>Двоетапна перевірка робить ваш обліковий запис більш захищеним, вимагаючи підтвердження входу з використанням іншого пристрою, наприклад, за допомогою коду безпеки, програми авторизації, SMS, телефонного виклику, або е-пошти. Ви можете увімкнути двоетапну перевірку в сховищі на bitwarden.com. Хочете перейти на вебсайт зараз?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Розблокування з {0}</value>
@@ -708,7 +708,7 @@
     <value>Перегляд запису</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>Веб-сховище Bitwarden</value>
+    <value>Веб сховище Bitwarden</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Втратили доступ до програми перевірки?</value>
@@ -964,7 +964,7 @@
     <value>URL-адреса сервера</value>
   </data>
   <data name="WebVaultUrl" xml:space="preserve">
-    <value>URL-адреса сервера веб-сховища</value>
+    <value>URL-адреса сервера веб сховища</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
     <value>Торкніться цього сповіщення для перегляду записів з вашого сховища.</value>
@@ -1111,10 +1111,10 @@
     <value>Термін дії</value>
   </data>
   <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>Вимкнути піктограми веб-сайтів</value>
+    <value>Вимкнути піктограми вебсайтів</value>
   </data>
   <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Впізнавані піктограми веб-сайтів додаються біля кожного запису вашого сховища.</value>
+    <value>Впізнавані піктограми вебсайтів додаються біля кожного запису вашого сховища.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>URL-адреса сервера піктограм</value>
@@ -1263,7 +1263,7 @@
     <value>Ви повинні увійти в основну програму Bitwarden, щоб використовувати автозаповнення.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
-    <value>Тепер ви можете легко отримувати доступ до своїх записів з клавіатури під час входу в програмах і на веб-сайтах.</value>
+    <value>Тепер ви можете легко отримувати доступ до своїх записів з клавіатури під час входу в програмах і на вебсайтах.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
     <value>Ми радимо вимкнути будь-які інші програми з функцією автозаповнення в Параметрах, якщо ви не плануєте ними користуватися.</value>
@@ -1425,7 +1425,7 @@
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="ShareVaultConfirmation" xml:space="preserve">
-    <value>Bitwarden дозволяє вам надавати доступ до свого сховища іншим за допомогою облікового запису організації. Чи не бажаєте перейти на веб-сайт bitwarden.com, щоб дізнатися більше?</value>
+    <value>Bitwarden дозволяє вам надавати доступ до свого сховища іншим за допомогою облікового запису організації. Чи не бажаєте перейти на вебсайт bitwarden.com, щоб дізнатися більше?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
     <value>Експорт сховища</value>
@@ -1539,7 +1539,7 @@
     <value>При перезапуску програми</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>Автозаповнення дозволяє безпечно отримувати доступ до вашого сховища Bitwarden з інших веб-сайтів та програм. Схоже, що ви не активували функцію автозаповнення Bitwarden. Увімкніть автозаповнення на екрані налаштувань.</value>
+    <value>Автозаповнення дозволяє безпечно отримувати доступ до вашого сховища Bitwarden з інших вебсайтів та програм. Схоже, що ви не активували функцію автозаповнення Bitwarden. Увімкніть автозаповнення на екрані налаштувань.</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
     <value>Зміни теми застосуються після перезапуску додатка.</value>
@@ -1606,7 +1606,7 @@
     <value>Попередження</value>
   </data>
   <data name="ExportVaultFailure" xml:space="preserve">
-    <value>Сталася помилка під час експорту вашого сховища. Якщо проблема не зникне, вам необхідно буде експортувати з веб-сховища.</value>
+    <value>Сталася помилка під час експорту вашого сховища. Якщо проблема не зникне, вам необхідно буде експортувати з веб сховища.</value>
   </data>
   <data name="ExportVaultSuccess" xml:space="preserve">
     <value>Сховище успішно експортовано</value>
@@ -1623,7 +1623,7 @@
     <comment>Button text for an open operation (verb).</comment>
   </data>
   <data name="UnableToSaveAttachment" xml:space="preserve">
-    <value>Виникла проблема зі збереженням цього вкладення. Якщо проблема не зникне, ви можете зберегти її з веб-сховища.</value>
+    <value>Виникла проблема зі збереженням цього вкладення. Якщо проблема не зникне, ви можете зберегти її з веб сховища.</value>
   </data>
   <data name="SaveAttachmentSuccess" xml:space="preserve">
     <value>Вкладення успішно збережено</value>
