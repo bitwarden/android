@@ -519,28 +519,28 @@
     <value>鎖定</value>
   </data>
   <data name="FifteenMinutes" xml:space="preserve">
-    <value>15 minutes</value>
+    <value>15 分鐘</value>
   </data>
   <data name="OneHour" xml:space="preserve">
-    <value>1 hour</value>
+    <value>1 小時</value>
   </data>
   <data name="OneMinute" xml:space="preserve">
     <value>1 分鐘</value>
   </data>
   <data name="FourHours" xml:space="preserve">
-    <value>4 hours</value>
+    <value>4 小時</value>
   </data>
   <data name="Immediately" xml:space="preserve">
-    <value>Immediately</value>
+    <value>即時</value>
   </data>
   <data name="VaultTimeout" xml:space="preserve">
-    <value>Vault Timeout</value>
+    <value>密碼庫超時</value>
   </data>
   <data name="VaultTimeoutAction" xml:space="preserve">
-    <value>Vault Timeout Action</value>
+    <value>密碼庫超時動作</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
-    <value>Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?</value>
+    <value>選擇登出將會在密碼庫超時後移除所有密碼庫存取權，重新認證時需要連接網路。決定選擇登出嗎？</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>正在登入...</value>
@@ -1440,7 +1440,7 @@
     <value>解鎖</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
-    <value>30 minutes</value>
+    <value>30 分鐘</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
     <value>設定您用來解鎖 Bitwarden 的 PIN 碼。您的 PIN 設定將在您完全結束本應用程式時被重設。</value>
@@ -1536,7 +1536,7 @@
     <value>當您首次輸入時，「儲存提示」會自動提示您將新項目儲存進密碼庫。</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
-    <value>On App Restart</value>
+    <value>於程式重新啟動時</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
     <value>「自動填入」使其他網站及 App 能更簡單地安全存取您的 Bitwarden 密碼庫。看起來您尚未啟用 Bitwarden 的自動填入服務。請在「設定」畫面啟用 Bitwarden 的自動填入。</value>
