@@ -519,19 +519,19 @@
     <value>Zámok</value>
   </data>
   <data name="FifteenMinutes" xml:space="preserve">
-    <value>15 minutes</value>
+    <value>15 minút</value>
   </data>
   <data name="OneHour" xml:space="preserve">
-    <value>1 hour</value>
+    <value>1 hodina</value>
   </data>
   <data name="OneMinute" xml:space="preserve">
     <value>1 minúta</value>
   </data>
   <data name="FourHours" xml:space="preserve">
-    <value>4 hours</value>
+    <value>4 hodiny</value>
   </data>
   <data name="Immediately" xml:space="preserve">
-    <value>Immediately</value>
+    <value>Okamžite</value>
   </data>
   <data name="VaultTimeout" xml:space="preserve">
     <value>Vault Timeout</value>
@@ -1440,7 +1440,7 @@
     <value>Odomknúť</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
-    <value>30 minutes</value>
+    <value>30 minút</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
     <value>Nastaviť kód PIN na odomknutie Bitwarden. Nastavenie PIN sa vynuluje, ak úplne odhlásite z aplikácie.</value>
@@ -1536,7 +1536,7 @@
     <value>"Notifikácia Pridať prihlasovacie údaje" vás automaticky upozorní na uloženie nových údajov do vášho trezoru vždy, keď sa s nimi prihlasujete po prvý krát.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
-    <value>On App Restart</value>
+    <value>Po reštarte aplikácie</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
     <value>Automatické dopĺňanie umožňuje jednoducho pristupovať k vašemu trezoru z iných stránok a plaikácii. Vyzerá že ste službu automatického dopĺňania pomocou Bitwarden nezapli. Zapnúť ju môžete na obrazove "Nastavenia".</value>
@@ -1632,46 +1632,46 @@
     <value>Please enable "Auto-fill Accessibility Service" from Bitwarden Settings to use the Auto-fill tile.</value>
   </data>
   <data name="AutofillTileUriNotFound" xml:space="preserve">
-    <value>No password fields detected</value>
+    <value>Nenájdené žiadne políčka na heslo</value>
   </data>
   <data name="SoftDeleting" xml:space="preserve">
-    <value>Sending to trash...</value>
+    <value>Posielanie do koša...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemSoftDeleted" xml:space="preserve">
-    <value>Item has been sent to trash.</value>
+    <value>Položka bola poslaná do koša.</value>
     <comment>Confirmation message after successfully soft-deleting a login</comment>
   </data>
   <data name="Restore" xml:space="preserve">
-    <value>Restore</value>
+    <value>Obnoviť</value>
     <comment>Restores an entity (verb).</comment>
   </data>
   <data name="Restoring" xml:space="preserve">
-    <value>Restoring...</value>
+    <value>Obnovovanie...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemRestored" xml:space="preserve">
-    <value>Item has been restored.</value>
+    <value>Položka bola obnovená.</value>
     <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
   </data>
   <data name="Trash" xml:space="preserve">
-    <value>Trash</value>
+    <value>Kôš</value>
     <comment>(noun) Location of deleted items which have not yet been permanently deleted</comment>
   </data>
   <data name="SearchTrash" xml:space="preserve">
-    <value>Search trash</value>
+    <value>Hľadať v koši</value>
     <comment>(action prompt) Label for the search text field when viewing the trash folder</comment>
   </data>
   <data name="DoYouReallyWantToPermanentlyDeleteCipher" xml:space="preserve">
-    <value>Do you really want to permanently delete? This cannot be undone.</value>
+    <value>Naozaj to chcete navždy odstrániť? Nedá sa to vrátiť späť.</value>
     <comment>Confirmation alert message when permanently deleteing a cipher.</comment>
   </data>
   <data name="DoYouReallyWantToRestoreCipher" xml:space="preserve">
-    <value>Do you really want to restore this item?</value>
+    <value>Naozaj chcete obnoviť túto položku?</value>
     <comment>Confirmation alert message when restoring a soft-deleted cipher.</comment>
   </data>
   <data name="DoYouReallyWantToSoftDeleteCipher" xml:space="preserve">
-    <value>Do you really want to send to the trash?</value>
+    <value>Naozaj to chcete poslať do koša?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
 </root>
