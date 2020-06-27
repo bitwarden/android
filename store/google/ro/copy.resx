@@ -132,7 +132,9 @@ Furtul de parole este o problemă serioasă. Site-urile web și aplicațiile pe 
 
 Experții în securitate vă recomandă să utilizați o parolă diferită, generată aleatoriu pentru fiecare cont pe care îl creați. Dar cum gestionați toate aceste parole? Bitwarden vă ușurează crearea, stocarea și accesarea parolelor.
 
-Bitwarden stochează toate autentificările dvs. într-un seif criptat care se sincronizează pe toate dispozitivele dvs. Deoarece este complet criptat numai dvs. aveţi acces la date. Nici măcar echipa Bitwarden nu poate citi datele dvs., chiar dacă vrem. Datele dvs. sunt sigilate cu criptare bit AES-256, salted hashing și PBKDF2 SHA-256.</value>
+Bitwarden stochează toate autentificările dvs. într-un seif criptat care se sincronizează pe toate dispozitivele dvs. Deoarece este complet criptat numai dvs. aveţi acces la date. Nici măcar echipa Bitwarden nu poate citi datele dvs., chiar dacă vrem. Datele dvs. sunt sigilate cu criptare bit AES-256, salted hashing și PBKDF2 SHA-256.
+
+Bitwarden este un software 100% open source. Codul sursă pentru Bitwarden este găzduit pe GitHub și toată lumea este liberă să examineze, să verifice și să contribuie la baza de cod Bitwarden.</value>
     <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
