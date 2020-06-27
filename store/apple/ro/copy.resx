@@ -122,13 +122,15 @@
     <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Bitwarden este cea mai ușoară și cea mai sigură metodă de a stoca toate autentificările și parolele, în timp ce le păstrați sincronizate între toate dispozitivele dvs.
+    <value>Bitwarden este cea mai ușoară și cea mai sigură metodă de a stoca toate autentificările și parolele, în timp ce le păstrați sincronizate între toate dispozitivele dvs. Extensia de aplicații Bitwarden vă permite să vă logați rapid la orice site prin Safari sau Chrome și este acceptată de sute de alte aplicații populare.
 
 Furtul de parole este o problemă serioasă. Site-urile web și aplicațiile pe care le utilizați sunt atacate în fiecare zi. Se înregistrează încălcări ale securității și parolele dvs. sunt furate. Când reutilizați aceleași parole între aplicații și site-uri web, hackerii pot accesa cu ușurință e-mailurile, conturile bancare și alte conturi importante.
 
 Experții în securitate vă recomandă să utilizați o parolă diferită, generată aleatoriu pentru fiecare cont pe care îl creați. Dar cum gestionați toate aceste parole? Bitwarden vă ușurează crearea, stocarea și accesarea parolelor.
 
-Bitwarden stochează toate autentificările dvs. într-un seif criptat care se sincronizează pe toate dispozitivele dvs. Deoarece este complet criptat numai dvs. aveţi acces la date. Nici măcar echipa Bitwarden nu poate citi datele dvs., chiar dacă vrem. Datele dvs. sunt sigilate cu criptare bit AES-256, salted hashing și PBKDF2 SHA-256.</value>
+Bitwarden stochează toate autentificările dvs. într-un seif criptat care se sincronizează pe toate dispozitivele dvs. Deoarece este complet criptat numai dvs. aveţi acces la date. Nici măcar echipa Bitwarden nu poate citi datele dvs., chiar dacă vrem. Datele dvs. sunt sigilate cu criptare bit AES-256, salted hashing și PBKDF2 SHA-256.
+
+Bitwarden este un software 100% open source. Codul sursă pentru Bitwarden este găzduit pe GitHub și toată lumea este liberă să examineze, să verifice și să contribuie la baza de cod Bitwarden.</value>
     <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
