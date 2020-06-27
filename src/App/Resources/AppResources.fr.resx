@@ -1564,7 +1564,7 @@
     <value>Votre session a expiré.</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
-    <value>Utilisez une empreinte biométrique pour vous authentifier.</value>
+    <value>Utiliser une empreinte biométrique pour vérifier.</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
     <value>Empreintes biométriques</value>

@@ -762,13 +762,13 @@
     <value>Die einfachste Möglichkeit, neue Anmeldedaten zu Ihrem Tresor hinzuzufügen, ist der automatische Fülldienst von Bitwarden. Erfahren Sie mehr über den automatischen Fülldienst von Bitwarden, indem Sie zu dem "Einstellungen"-Bildschirm navigieren.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
-    <value>Auto-Ausfüllen</value>
+    <value>Automatisch Einfügen</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
     <value>Möchtest du diese Zugangsdaten automatisch einfügen oder ansehen?</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>Bist du sicher, dass du die Zugangsdaten einfügen möchten? Sie stimmen nicht komplett mit "{0}" überein.</value>
+    <value>Bist du sicher, dass du diesen Eintrag automatisch einfügen möchtest? Er stimmt nicht komplett mit "{0}" überein.</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
     <value>Passende Einträge</value>
@@ -780,7 +780,7 @@
     <value>Durchsuchen</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
-    <value>Du suchst nach einem Auto-Fill Objekt für "{0}".</value>
+    <value>Du suchst nach einem Eintrag zum automatischen Einfügen für "{0}".</value>
   </data>
   <data name="ShareVault" xml:space="preserve">
     <value>Ihren Tresor teilen</value>

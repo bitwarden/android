@@ -507,7 +507,7 @@
     <value>شما میتوانید موارد را بصورت فله ای در گاوصندوق وب bitwarden.com وارد کنید. آیا مایل به دیدن وبسایت هستید؟</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
-    <value>موارد مهم خود را سریعاً از دیگر برنامه های مدیریت رمز عبور وارد کنید.</value>
+    <value>موارد مهم خود را سریعاً از دیگر برنامه های مدیریت کلمه عبور وارد کنید.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
     <value>آخرین همگام‌سازی:</value>
@@ -556,16 +556,16 @@
     <value>تایید کلمه عبور صحیح نیست.</value>
   </data>
   <data name="MasterPasswordDescription" xml:space="preserve">
-    <value>گذرواژه اصلی رمز عبوری است که شما برای دسترسی به گاوصندوق خود استفاده میکنید. بیاد داشتن گذرواژه اصلی بسیار اهمیت دارد. اگر فراموشش کنید هیچ راهی برای بازگردانی آن وجود ندارد.</value>
+    <value>کلمه عبور اصلی کلمه عبوری است که شما برای دسترسی به گاوصندوق خود استفاده میکنید. بیاد داشتن کلمه عبور اصلی بسیار اهمیت دارد. اگر فراموشش کنید هیچ راهی برای بازگردانی آن وجود ندارد.</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
-    <value>راهنمای گذرواژه اصلی (اختیاری)</value>
+    <value>راهنمای کلمه عبور اصلی (اختیاری)</value>
   </data>
   <data name="MasterPasswordHintDescription" xml:space="preserve">
-    <value>راهنمای گذرواژه اصلی می تواند در صورت فراموشی آن را بیاد بیارید.</value>
+    <value>راهنمای کلمه عبور اصلی می تواند در صورت فراموشی آن را بیاد بیارید.</value>
   </data>
   <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>طول گذرواژه اصلی باید حداقل ۸ کاراکتر باشد.</value>
+    <value>طول کلمه عبور اصلی باید حداقل ۸ کاراکتر باشد.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>حداقل اعداد</value>
@@ -597,14 +597,14 @@
     <value>هیج علاقه مندی برای این وب سایت در گاوصندوقتان موجود نیست. برای افزودن ضربه بزنید.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
-    <value>این ورود هیچ نام کاربری و رمز عبور پیکربندی شده ای ندارد.</value>
+    <value>این ورود هیچ نام کاربری و کلمه عبور پیکربندی شده ای ندارد.</value>
   </data>
   <data name="OkGotIt" xml:space="preserve">
     <value>باشه، فهمیدم!</value>
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>گزینه های پیش فرض از ابزار تولید رمز عبور Bitwarden تنظیم شد.</value>
+    <value>گزینه های پیش فرض از ابزار تولید کلمه عبور Bitwarden تنظیم شد.</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>گزینه‌ها</value>
@@ -622,10 +622,10 @@
     <value>راهنمای کلمه عبور</value>
   </data>
   <data name="PasswordHintAlert" xml:space="preserve">
-    <value>ما یک رایانامه همراه با راهنمای گذرواژه اصلی برایتان ارسال کردیم.</value>
+    <value>ما یک رایانامه همراه با راهنمای کلمه عبور اصلی برایتان ارسال کردیم.</value>
   </data>
   <data name="PasswordOverrideAlert" xml:space="preserve">
-    <value>آیا از بازنویسی بر روی رمز عبور فعلی مطمئن هستید؟</value>
+    <value>آیا از بازنویسی بر روی کلمه عبور فعلی مطمئن هستید؟</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
     <value>Bitwarden گاوصندوق شما را بصورت خودکار از طریق نشان دادن اطلاعیه ها به هنگام سازی میکند. برای بهترین تجربه کاربری ممکن، لطفاً زمانی که از شما پرسیده شد "مجاز" را سریعاً انتخاب کنید تا نمایش اعلانیه ها فعال شود.</value>
@@ -638,10 +638,10 @@
     <value>لطفاً با یک بررسی خوب به ما کمک کنید!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
-    <value>تولید رمز عبور</value>
+    <value>تولید کلمه عبور</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
-    <value>تایپ دوباره گذرواژه اصلی</value>
+    <value>تایپ دوباره کلمه عبور اصلی</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
     <value>جستجوی گاوصندوق</value>
@@ -1269,7 +1269,7 @@
     <value>پیشهاز ما این است که اگر از اپ های پرکردن خودکار دیگری استفاده میکنید آنها را غیرفعال کنید اگر برنامه ای برای استفاده از آنها ندارید.</value>
   </data>
   <data name="BitwardenAutofillDescription" xml:space="preserve">
-    <value>دسترسی به گاوصندوقتان بصورت مستقیم از طرق کیبوردتان برای سریعتر پرکردن خودکار رمزهای عبور.</value>
+    <value>دسترسی به گاوصندوقتان بصورت مستقیم از طرق کیبوردتان برای سریعتر پرکردن خودکار کلمه های عبور.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
     <value>برای فعال کردن پر کردن خودکار کلمه عبور بر روی دستگاهتان، این دستورالعمل ها را دنبال کنید:</value>
@@ -1293,7 +1293,7 @@
     <value>پرکردن خودکار کلمه عبور</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
-    <value>ساده ترین روش برای افزودن اطلاعات ورود به گاوصندوق از طریق افزونه پرکردن خودکار رمز عبور Bitwarden است. برای اطلاع بیشتر از چگونگی استفاده از پرکردن خودکار رمز عبور Bitwarden مرورکردن صفحه "تنظیمات" است.</value>
+    <value>ساده ترین روش برای افزودن اطلاعات ورود به گاوصندوق از طریق افزونه پرکردن خودکار رمز عبور Bitwarden است. برای اطلاع بیشتر از چگونگی استفاده از پرکردن خودکار کلمه عبور Bitwarden مرورکردن صفحه "تنظیمات" است.</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
     <value>نشانی رایانامه نامعتبر است.</value>
@@ -1318,17 +1318,17 @@
     <comment>Plural form of a URI</comment>
   </data>
   <data name="CheckingPassword" xml:space="preserve">
-    <value>درحال بررسی گذرواژه…</value>
+    <value>درحال بررسی کلمه عبور…</value>
     <comment>A loading message when doing an exposed password check.</comment>
   </data>
   <data name="CheckPassword" xml:space="preserve">
-    <value>بررسی کنید که آیا رمز عبور افشا شده است.</value>
+    <value>بررسی کنید که آیا کلمه عبور افشا شده است.</value>
   </data>
   <data name="PasswordExposed" xml:space="preserve">
-    <value>این رمز عبور در رخنه داده ها {0} بار افشا شده است. باید تغییرش دهید.</value>
+    <value>این کلمه عبور در رخنه داده ها {0} بار افشا شده است. باید تغییرش دهید.</value>
   </data>
   <data name="PasswordSafe" xml:space="preserve">
-    <value>این رمز عبور در هیچ رخنه داده ای شناخته نشده است. باید برای امنیت از آن استفاده کنید.</value>
+    <value>این کلمه عبور در هیچ رخنه داده ای شناخته نشده است. باید برای امنیت از آن استفاده کنید.</value>
   </data>
   <data name="IdentityName" xml:space="preserve">
     <value>نام شناسایی</value>
@@ -1450,10 +1450,10 @@
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
-    <value>گاوصندوق شما فقل شد. برای ادامه گذرواژه اصلی را وارد کنید.</value>
+    <value>گاوصندوق شما فقل شد. برای ادامه کلمه عبور اصلی را وارد کنید.</value>
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
-    <value>گاوصندوق شما قفل شده است. برای ادامه کد پین خود را تایید کنید.</value>
+    <value>گاوصندوق شما قفل شده است. برای ادامه کد پین خود را تأیید کنید.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>تیره</value>
@@ -1597,7 +1597,7 @@
     <value>فرمت پرونده</value>
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
-    <value>گذرواژه اصلی اصلی خود را برای خروجی گرفتن از گاوصندوقتان وارد کنید.</value>
+    <value>کلمه عبور اصلی اصلی خود را برای خروجی گرفتن از گاوصندوقتان وارد کنید.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>این خروجی شامل داده‌های گاوصندوق در یک قالب رمزنگاری نشده است. شما نباید آن را از طریق یک راه ارتباطی ناامن (مثل ایمیل) ذخیره یا ارسال کنید. به محض اینکه استفاده‌تان از آن تمام شد، آن را حذف کنید.</value>

@@ -519,28 +519,28 @@
     <value>잠금</value>
   </data>
   <data name="FifteenMinutes" xml:space="preserve">
-    <value>15 minutes</value>
+    <value>15분</value>
   </data>
   <data name="OneHour" xml:space="preserve">
-    <value>1 hour</value>
+    <value>1시간</value>
   </data>
   <data name="OneMinute" xml:space="preserve">
     <value>1분</value>
   </data>
   <data name="FourHours" xml:space="preserve">
-    <value>4 hours</value>
+    <value>4시간</value>
   </data>
   <data name="Immediately" xml:space="preserve">
-    <value>Immediately</value>
+    <value>즉시</value>
   </data>
   <data name="VaultTimeout" xml:space="preserve">
-    <value>Vault Timeout</value>
+    <value>보관함 시간 제한</value>
   </data>
   <data name="VaultTimeoutAction" xml:space="preserve">
-    <value>Vault Timeout Action</value>
+    <value>보관함 시간 제한 초과시 동작</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
-    <value>Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?</value>
+    <value>로그아웃하면 보관함에 대한 모든 접근이 제거되며 시간 제한을 초과하면 온라인 인증을 요구합니다. 정말로 이 설정을 사용하시겠습니까?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>로그인 중...</value>
@@ -1440,7 +1440,7 @@
     <value>잠금 해제</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
-    <value>30 minutes</value>
+    <value>30분</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
     <value>Bitwarden 잠금해제에 사용될 PIN 코드를 설정합니다. 이 애플리케이션에서 완전히 로그아웃할 경우 PIN 설정이 초기화됩니다.</value>
@@ -1536,7 +1536,7 @@
     <value>"저장 프롬포트"를 사용하면 처음 입력할 때마다 보관함에 그 항목을 추가할 것인지 물어봅니다.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
-    <value>On App Restart</value>
+    <value>앱 재시작 시</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
     <value>자동 입력은 다른 웹사이트나 앱에서 Bitwarden 보관함에 안전하게 액세스하기 쉽게 만들어줍니다. Bitwarden의 자동 입력 서비스를 활성화하지 않은 것으로 보입니다. "설정" 화면에서 Bitwarden의 자동 입력을 활성화해주세요.</value>
@@ -1643,7 +1643,7 @@
     <comment>Confirmation message after successfully soft-deleting a login</comment>
   </data>
   <data name="Restore" xml:space="preserve">
-    <value>복구</value>
+    <value>복원</value>
     <comment>Restores an entity (verb).</comment>
   </data>
   <data name="Restoring" xml:space="preserve">
