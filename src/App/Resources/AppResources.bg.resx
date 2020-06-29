@@ -540,7 +540,7 @@
     <value>Действие при изтичане на времето</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
-    <value>Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?</value>
+    <value>Излизането от трезора изцяло спира достъпа до него след изтичане на времето. Ще ви се наложи отново да се идентифицирате, за да го достъпите. Сигурни ли сте, че искате това действие?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>Вписване…</value>
@@ -1536,7 +1536,7 @@
     <value>Дали да бъдете автоматично подканени да запазите в трезора данни за вписване, които въвеждате за първи път.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
-    <value>On App Restart</value>
+    <value>При рестартиране на приложението</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
     <value>Автоматичното дописване позволява сигурен достъп до трезора от сайтове и приложения. Изглежда не сте включили тази възможност в Битуорден, можете да го направите от екрана за настройките.</value>

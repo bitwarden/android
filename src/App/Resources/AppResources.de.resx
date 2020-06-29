@@ -1322,10 +1322,10 @@
     <comment>A loading message when doing an exposed password check.</comment>
   </data>
   <data name="CheckPassword" xml:space="preserve">
-    <value>Überprüfen Sie, ob das Passwort entblößt wurde.</value>
+    <value>Überprüfen Sie, ob das Passwort kompromittiert wurde.</value>
   </data>
   <data name="PasswordExposed" xml:space="preserve">
-    <value>Dieses Passwort wurde {0}-mal in Datenlecks entblößt. Sie sollten es ändern.</value>
+    <value>Dieses Passwort wurde {0}-mal in Datenlecks gefunden. Sie sollten es ändern.</value>
   </data>
   <data name="PasswordSafe" xml:space="preserve">
     <value>Dieses Passwort wurde in keinem bekannten Datenleck gefunden. Seine Verwendung sollte sicher sein.</value>
@@ -1505,7 +1505,7 @@
     <comment>Referring to restarting the application.</comment>
   </data>
   <data name="Restarting" xml:space="preserve">
-    <value>Neustarten...</value>
+    <value>Wird neugestartet...</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Notizen kopieren</value>
@@ -1567,7 +1567,7 @@
     <value>Biometrische Daten zur Verifizierung nutzen.</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
-    <value>Biometrie</value>
+    <value>Biometrie-Verfahren</value>
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
     <value>Biometrie zum Entsperren verwenden</value>
@@ -1603,7 +1603,7 @@
     <value>Dieser Export enthält Ihre Tresor-Daten in einem unverschlüsseltem Format. Sie sollten die Datei daher nicht über unsichere Kanäle (z.B. E-Mail) versenden oder speichern. Löschen Sie die Datei sofort nach ihrer Verwendung.</value>
   </data>
   <data name="Warning" xml:space="preserve">
-    <value>Achtung</value>
+    <value>Warnung</value>
   </data>
   <data name="ExportVaultFailure" xml:space="preserve">
     <value>Beim Exportieren Ihres Tresors ist ein Problem aufgetreten. Wenn das Problem weiterhin besteht, müssen Sie aus dem Web-Tresor exportieren.</value>
@@ -1635,7 +1635,7 @@
     <value>Keine Passwortfelder erkannt</value>
   </data>
   <data name="SoftDeleting" xml:space="preserve">
-    <value>Lege in den Papierkorb…</value>
+    <value>Wird in den Papierkorb verschoben…</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemSoftDeleted" xml:space="preserve">
@@ -1647,7 +1647,7 @@
     <comment>Restores an entity (verb).</comment>
   </data>
   <data name="Restoring" xml:space="preserve">
-    <value>Stelle wieder her…</value>
+    <value>Wird wiederhergestellt...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemRestored" xml:space="preserve">

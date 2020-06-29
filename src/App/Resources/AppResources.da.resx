@@ -1564,7 +1564,7 @@
     <value>Din login-session er udløbet.</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
-    <value>Benyt biometri til godkendelse.</value>
+    <value>Biometrisk godkendelse</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
     <value>Biometri</value>
