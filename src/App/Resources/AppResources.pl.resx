@@ -1564,7 +1564,7 @@
     <value>Twoja sesja wygasła.</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
-    <value>Użyj danych biometrycznych do weryfikacji.</value>
+    <value>Weryfikacja danych biometrycznych</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
     <value>Dane biometryczne</value>
