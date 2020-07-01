@@ -308,11 +308,13 @@ namespace Bit.Droid.Accessibility
         public static AccessibilityNodeInfo GetUsernameEditText(string uriString, 
             IEnumerable<AccessibilityNodeInfo> allEditTexts)
         {
+            string uriAuthority = null;
             string uriKey = null;
             string uriLocalPath = null;
             if (Uri.TryCreate(uriString, UriKind.Absolute, out var uri))
             {
-                uriKey = uri.Authority;
+                uriAuthority = uri.Authority;
+                uriKey = uriAuthority.StartsWith("www.") ? uriAuthority.Substring(4) : uriAuthority;
                 uriLocalPath = uri.LocalPath;
             }
 
