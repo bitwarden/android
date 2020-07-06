@@ -1564,7 +1564,7 @@
     <value>Je inlogsessie is verlopen.</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
-    <value>Biometrie-verificatie.</value>
+    <value>Biometrische verificatie</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
     <value>Biometrie</value>
