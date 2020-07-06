@@ -534,13 +534,13 @@
     <value>Okamžite</value>
   </data>
   <data name="VaultTimeout" xml:space="preserve">
-    <value>Vault Timeout</value>
+    <value>Časový limit pre trezor</value>
   </data>
   <data name="VaultTimeoutAction" xml:space="preserve">
-    <value>Vault Timeout Action</value>
+    <value>Akcia pri vypršaní času pre trezor</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
-    <value>Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?</value>
+    <value>Odhlásenie bude vyžadovať online prihlásenie po vypršaní časového limitu. Naozaj chcete použiť toto nastavenie?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>Prihlasovanie...</value>
@@ -1138,7 +1138,7 @@
     <value>V tomto priečinku sa nenachádzajú žiadne položky.</value>
   </data>
   <data name="NoItemsTrash" xml:space="preserve">
-    <value>There are no items in the trash.</value>
+    <value>V koši nie sú žiadne položky</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
     <value>Služba automatického vypĺňania pre zjednodušený prístup</value>
@@ -1629,7 +1629,7 @@
     <value>Príloha úspešne uložená</value>
   </data>
   <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
-    <value>Please enable "Auto-fill Accessibility Service" from Bitwarden Settings to use the Auto-fill tile.</value>
+    <value>Zapnite službu dostupnosti pre automatické vypĺňanie v nastaveniach Bitwardenu aby ste mohli používať dlaždicu pre automatické dopĺňanie.</value>
   </data>
   <data name="AutofillTileUriNotFound" xml:space="preserve">
     <value>Nenájdené žiadne políčka na heslo</value>
