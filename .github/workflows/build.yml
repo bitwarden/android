@@ -134,7 +134,7 @@ jobs:
             -a ./com.x8bit.bitwarden.aab `
             -a ./com.x8bit.bitwarden.apk `
             -a ./com.x8bit.bitwarden-fdroid.apk `
-            -m $env:RELEASE_TAG_NAME `
+            -m "Version $($env:RELEASE_TAG_NAME.TrimStart('v'))" `
             $env:RELEASE_TAG_NAME
         shell: pwsh
         env:
@@ -200,7 +200,9 @@ jobs:
 
       - name: Compile for F-Droid Store
         if: github.event_name == 'release'
-        run: ./.github/scripts/android/compile-fdroid.sh
+        run: |
+            sudo chmod +x ./.github/scripts/android/compile-fdroid.sh
+            ./.github/scripts/android/compile-fdroid.sh
         env:
           FDROID_STORE_KEYSTORE_PASSWORD: ${{ secrets.FDROID_STORE_KEYSTORE_PASSWORD }}
           RELEASE_TAG_NAME: ${{ github.event.release.tag_name }}
@@ -289,7 +291,7 @@ jobs:
         run: |
           hub release edit `
             -a ./bitwarden-export/Bitwarden.ipa `
-            -m $env:RELEASE_TAG_NAME `
+            -m "Version $($env:RELEASE_TAG_NAME.TrimStart('v'))" `
             $env:RELEASE_TAG_NAME
         shell: pwsh
         env:
