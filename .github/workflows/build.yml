@@ -134,6 +134,7 @@ jobs:
             -a ./com.x8bit.bitwarden.aab `
             -a ./com.x8bit.bitwarden.apk `
             -a ./com.x8bit.bitwarden-fdroid.apk `
+            -m $env:RELEASE_TAG_NAME `
             $env:RELEASE_TAG_NAME
         shell: pwsh
         env:
@@ -288,6 +289,7 @@ jobs:
         run: |
           hub release edit `
             -a ./bitwarden-export/Bitwarden.ipa `
+            -m $env:RELEASE_TAG_NAME `
             $env:RELEASE_TAG_NAME
         shell: pwsh
         env:
