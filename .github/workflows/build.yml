@@ -161,10 +161,10 @@ jobs:
       - name: Set up git credentials
         if: github.event_name == 'release'
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         run: |
           git config --global credential.helper store
-          echo "https://${GITHUB_TOKEN}:x-oauth-basic@github.com" >> ~/.git-credentials
+          echo "https://${ACCESS_TOKEN}:x-oauth-basic@github.com" >> ~/.git-credentials
           git config --global user.email "ci@bitwarden.com"
           git config --global user.name "Bitwarden CI"
 
