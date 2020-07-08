@@ -18,6 +18,7 @@ using Android.Nfc;
 using Bit.App.Utilities;
 using System.Threading.Tasks;
 using AndroidX.Core.Content;
+using ZXing.Net.Mobile.Android;
 
 namespace Bit.Droid
 {
@@ -193,8 +194,7 @@ namespace Bit.Droid
             else
             {
                 Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
-                ZXing.Net.Mobile.Forms.Android.PermissionsHandler.OnRequestPermissionsResult(
-                    requestCode, permissions, grantResults);
+                PermissionsHandler.OnRequestPermissionsResult(requestCode, permissions, grantResults);
             }
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }

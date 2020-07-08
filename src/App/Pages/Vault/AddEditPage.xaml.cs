@@ -1,12 +1,14 @@
 ﻿using Bit.App.Abstractions;
 using Bit.App.Models;
 using Bit.App.Resources;
+using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Utilities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
@@ -243,6 +245,12 @@ namespace Bit.App.Pages
         {
             if (DoOnce())
             {
+                var cameraPermission = await PermissionManager.CheckAndRequestPermissionAsync(new Permissions.Camera());
+                if (cameraPermission != PermissionStatus.Granted)
+                {
+                    return;
+                }
+
                 var page = new ScanPage(key =>
                 {
                     Device.BeginInvokeOnMainThread(async () =>
