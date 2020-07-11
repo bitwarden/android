@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace Bit.Core.Models.Data
 {
@@ -25,22 +26,35 @@ namespace Bit.Core.Models.Data
             Notes = response.Notes;
             CollectionIds = collectionIds?.ToList() ?? response.CollectionIds;
 
-            switch (Type)
+            try // Added to address Issue (https://github.com/bitwarden/mobile/issues/1006)
             {
-                case Enums.CipherType.Login:
-                    Login = new LoginData(response.Login);
-                    break;
-                case Enums.CipherType.SecureNote:
-                    SecureNote = new SecureNoteData(response.SecureNote);
-                    break;
-                case Enums.CipherType.Card:
-                    Card = new CardData(response.Card);
-                    break;
-                case Enums.CipherType.Identity:
-                    Identity = new IdentityData(response.Identity);
-                    break;
-                default:
-                    break;
+                switch (Type)
+                {
+                    case Enums.CipherType.Login:
+                        Login = new LoginData(response.Login);
+                        break;
+                    case Enums.CipherType.SecureNote:
+                        SecureNote = new SecureNoteData(response.SecureNote);
+                        break;
+                    case Enums.CipherType.Card:
+                        Card = new CardData(response.Card);
+                        break;
+                    case Enums.CipherType.Identity:
+                        Identity = new IdentityData(response.Identity);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch
+            {
+                System.Diagnostics.Trace.WriteLine(new StringBuilder()
+                        .Append("BitWarden CipherData constructor failed to initialize CyperType '")
+                        .Append(Type)
+                        .Append("'; id = {")
+                        .Append(Id)
+                        .AppendLine("}")
+                    .ToString(), "BitWarden CipherData constructor");
             }
 
             Fields = response.Fields?.Select(f => new FieldData(f)).ToList();
