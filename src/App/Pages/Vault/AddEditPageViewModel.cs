@@ -455,7 +455,7 @@ namespace Bit.App.Pages
                 _platformUtilsService.ShowToast("success", null,
                     EditMode && !CloneMode ? AppResources.ItemUpdated : AppResources.NewItemCreated);
                 _messagingService.Send(EditMode && !CloneMode ? "editedCipher" : "addedCipher", Cipher.Id);
-               await _deviceActionService.RefreshAutoFillAsync();
+                await _deviceActionService.RefreshAutoFillAsync();
 
                 if (Page is AddEditPage page && page.FromAutofillFramework)
                 {
