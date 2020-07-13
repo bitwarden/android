@@ -811,5 +811,11 @@ namespace Bit.Droid.Services
                 Context.ClipboardService) as Android.Content.ClipboardManager;
             clipboardManager.PrimaryClip = ClipData.NewPlainText("bitwarden", text);
         }
+
+        public Task RefreshAutoFillAsync()
+        {
+            // iOS Service Only
+            return Task.CompletedTask;
+        }
     }
 }

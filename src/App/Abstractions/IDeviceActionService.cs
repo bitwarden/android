@@ -41,5 +41,6 @@ namespace Bit.App.Abstractions
         void OpenAccessibilityOverlayPermissionSettings();
         void OpenAutofillSettings();
         bool UsingDarkTheme();
+        Task RefreshAutoFillAsync();
     }
 }

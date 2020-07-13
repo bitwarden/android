@@ -56,6 +56,7 @@ namespace Bit.App.Pages
             {
                 await _deviceActionService.ShowLoadingAsync(AppResources.Syncing);
                 var success = await _syncService.FullSyncAsync(true);
+                await _deviceActionService.RefreshAutoFillAsync();
                 await _deviceActionService.HideLoadingAsync();
                 if (success)
                 {

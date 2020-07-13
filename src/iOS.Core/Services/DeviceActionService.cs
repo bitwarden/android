@@ -552,6 +552,11 @@ namespace Bit.iOS.Core.Services
             throw new NotImplementedException();
         }
 
+        public async Task RefreshAutoFillAsync()
+        {
+            await ASHelpers.ReplaceAllIdentities();
+        }
+
         public class PickerDelegate : UIDocumentPickerDelegate
         {
             private readonly DeviceActionService _deviceActionService;
