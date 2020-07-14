@@ -2,15 +2,13 @@
 {
     public class KnownUsernameField
     {
-        public KnownUsernameField(string uriAuthority, string uriPathEnd, string usernameViewId)
+        public KnownUsernameField(string uriAuthority, string[,] accessOptions)
         {
             UriAuthority = uriAuthority;
-            UriPathEnd = uriPathEnd;
-            UsernameViewId = usernameViewId;
+            AccessOptions = accessOptions;
         }
 
         public string UriAuthority { get; set; }
-        public string UriPathEnd { get; set; }
-        public string UsernameViewId { get; set; }
+        public string[,] AccessOptions { get; set; }
     }
 }
