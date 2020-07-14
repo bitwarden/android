@@ -25,7 +25,6 @@ namespace Bit.Core.Models.View
 
         private string _uri;
         private string _domain;
-        private string _hostname;
         private string _host;
         private bool? _canLaunch;
 
