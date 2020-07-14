@@ -25,7 +25,7 @@ namespace Bit.Core.Models.View
 
         private string _uri;
         private string _domain;
-        private string _hostname;
+        private string _host;
         private bool? _canLaunch;
 
         public LoginUriView() { }
@@ -63,7 +63,7 @@ namespace Bit.Core.Models.View
             }
         }
 
-        public string Hostname
+        public string Host
         {
             get
             {
@@ -71,19 +71,19 @@ namespace Bit.Core.Models.View
                 {
                     return null;
                 }
-                if (_hostname == null && Uri != null)
+                if (_host == null && Uri != null)
                 {
-                    _hostname = CoreHelpers.GetHostname(Uri);
-                    if (_hostname == string.Empty)
+                    _host = CoreHelpers.GetHost(Uri);
+                    if (_host == string.Empty)
                     {
-                        _hostname = null;
+                        _host = null;
                     }
                 }
-                return _hostname;
+                return _host;
             }
         }
 
-        public string HostnameOrUri => Hostname ?? Uri;
+        public string HostOrUri => Host ?? Uri;
 
         public bool IsWebsite => Uri != null && (Uri.StartsWith("http://") || Uri.StartsWith("https://") ||
             (Uri.Contains("://") && Regex.IsMatch(Uri, CoreHelpers.TldEndingRegex)));
