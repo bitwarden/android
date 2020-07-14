@@ -133,12 +133,12 @@ namespace Bit.Droid.Accessibility
         // Be sure to keep these entries sorted alphabetically
         public static Dictionary<string, KnownUsernameField> KnownUsernameFields => new List<KnownUsernameField>
         {
-            new KnownUsernameField("accounts.google.com", "ServiceLogin", "Email"),
-            new KnownUsernameField("amazon.com", "signin", "ap_email_login"),
-            new KnownUsernameField("github.com", "", "user[login]-footer"),
-            new KnownUsernameField("paypal.com", "signin", "email"),
-            new KnownUsernameField("signin.aws.amazon.com", "signin", "resolving_input"),
-            new KnownUsernameField("signin.ebay.com", "eBayISAPI.dll", "userid"),
+            new KnownUsernameField("accounts.google.com",   new string[,] { { "ServiceLogin", "Email" } }),
+            new KnownUsernameField("amazon.com",            new string[,] { { "signin", "ap_email_login" } }),
+            new KnownUsernameField("github.com",            new string[,] { { "", "user[login]-footer" } }),
+            new KnownUsernameField("paypal.com",            new string[,] { { "signin", "email" } }),
+            new KnownUsernameField("signin.aws.amazon.com", new string[,] { { "signin", "resolving_input" } }),
+            new KnownUsernameField("signin.ebay.com",       new string[,] { { "eBayISAPI.dll", "userid" } }),
         }.ToDictionary(n => n.UriAuthority);
 
         public static void PrintTestData(AccessibilityNodeInfo root, AccessibilityEvent e)
@@ -314,7 +314,7 @@ namespace Bit.Droid.Accessibility
             if (Uri.TryCreate(uriString, UriKind.Absolute, out var uri))
             {
                 uriAuthority = uri.Authority;
-                uriKey = uriAuthority.StartsWith("www.") ? uriAuthority.Substring(4) : uriAuthority;
+                uriKey = uriAuthority.StartsWith("www.", StringComparison.Ordinal) ? uriAuthority.Substring(4) : uriAuthority;
                 uriLocalPath = uri.LocalPath;
             }
 
@@ -330,15 +330,64 @@ namespace Bit.Droid.Accessibility
                 if (KnownUsernameFields.ContainsKey(uriKey))
                 {
                     var usernameField = KnownUsernameFields[uriKey];
-                    if (uriLocalPath.EndsWith(usernameField.UriPathEnd))
+                    string[,] accessOptions = usernameField.AccessOptions;
+
+                    for (int i = 0; i < accessOptions.GetLength(0); i++)
                     {
-                        foreach (var editText in allEditTexts)
+                        string curUriPathWanted = accessOptions[i, 0];
+                        string curUsernameViewId = accessOptions[i, 1];
+                        bool uriLocalPathMatches = false;
+
+                        // Case-sensitive comparison
+                        if (curUriPathWanted.StartsWith("startswith:", StringComparison.Ordinal))
                         {
-                            foreach (var usernameViewId in usernameField.UsernameViewId.Split(","))
+                            curUriPathWanted = curUriPathWanted.Substring(11);
+                            uriLocalPathMatches = uriLocalPath.StartsWith(curUriPathWanted, StringComparison.Ordinal);
+                        }
+                        else if (curUriPathWanted.StartsWith("contains:", StringComparison.Ordinal))
+                        {
+                            curUriPathWanted = curUriPathWanted.Substring(9);
+                            uriLocalPathMatches = uriLocalPath.Contains(curUriPathWanted, StringComparison.Ordinal);
+                        }
+                        else if (curUriPathWanted.StartsWith("endswith:", StringComparison.Ordinal))
+                        {
+                            curUriPathWanted = curUriPathWanted.Substring(9);
+                            uriLocalPathMatches = uriLocalPath.EndsWith(curUriPathWanted, StringComparison.Ordinal);
+                        }
+
+                        // Case-insensitive comparison
+                        else if (curUriPathWanted.StartsWith("istartswith:", StringComparison.Ordinal))
+                        {
+                            curUriPathWanted = curUriPathWanted.Substring(12);
+                            uriLocalPathMatches = uriLocalPath.StartsWith(curUriPathWanted, StringComparison.OrdinalIgnoreCase);
+                        }
+                        else if (curUriPathWanted.StartsWith("icontains:", StringComparison.Ordinal))
+                        {
+                            curUriPathWanted = curUriPathWanted.Substring(10);
+                            uriLocalPathMatches = uriLocalPath.IndexOf(curUriPathWanted, StringComparison.OrdinalIgnoreCase) >= 0;
+                        }
+                        else if (curUriPathWanted.StartsWith("iendswith:", StringComparison.Ordinal))
+                        {
+                            curUriPathWanted = curUriPathWanted.Substring(10);
+                            uriLocalPathMatches = uriLocalPath.EndsWith(curUriPathWanted, StringComparison.OrdinalIgnoreCase);
+                        }
+
+                        // Default type of comparison
+                        else
+                        {
+                            uriLocalPathMatches = uriLocalPath.EndsWith(curUriPathWanted, StringComparison.Ordinal);
+                        }
+
+                        if (uriLocalPathMatches)
+                        {
+                            foreach (var editText in allEditTexts)
                             {
-                                if (usernameViewId == editText.ViewIdResourceName)
+                                foreach (var usernameViewId in curUsernameViewId.Split(","))
                                 {
-                                    return editText;
+                                    if (usernameViewId == editText.ViewIdResourceName)
+                                    {
+                                        return editText;
+                                    }
                                 }
                             }
                         }
