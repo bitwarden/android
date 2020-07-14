@@ -470,7 +470,7 @@
                                                 Grid.Column="0"
                                                 IsVisible="{Binding IsWebsite, Mode=OneWay}" />
                                             <Label
-                                                Text="{Binding HostnameOrUri, Mode=OneWay}"
+                                                Text="{Binding HostOrUri, Mode=OneWay}"
                                                 StyleClass="box-value"
                                                 Grid.Row="1"
                                                 Grid.Column="0" />
