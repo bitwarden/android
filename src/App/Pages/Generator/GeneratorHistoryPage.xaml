@@ -81,7 +81,7 @@
                                 Text="{Binding Date, Mode=OneWay, Converter={StaticResource dateTime}}" />
                             <controls:FaButton
                                 StyleClass="list-row-button, list-row-button-platform"
-                                Text="&#xf0ea;"
+                                Text="&#xf24d;"
                                 Command="{Binding BindingContext.CopyCommand, Source={x:Reference _page}}"
                                 CommandParameter="{Binding .}"
                                 Grid.Row="0"

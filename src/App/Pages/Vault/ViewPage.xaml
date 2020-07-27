@@ -84,7 +84,7 @@
                                     Grid.Column="0" />
                                 <controls:FaButton 
                                     StyleClass="box-row-button, box-row-button-platform"
-                                    Text="&#xf0ea;"
+                                    Text="&#xf24d;"
                                     Command="{Binding CopyCommand}"
                                     CommandParameter="LoginUsername"
                                     Grid.Row="0"
@@ -148,7 +148,7 @@
                                     IsVisible="{Binding Cipher.ViewPassword}" />
                                 <controls:FaButton 
                                     StyleClass="box-row-button, box-row-button-platform"
-                                    Text="&#xf0ea;"
+                                    Text="&#xf24d;"
                                     Command="{Binding CopyCommand}"
                                     CommandParameter="LoginPassword"
                                     Grid.Row="0"
@@ -192,7 +192,7 @@
                                     VerticalOptions="CenterAndExpand" />
                                 <controls:FaButton 
                                     StyleClass="box-row-button, box-row-button-platform"
-                                    Text="&#xf0ea;"
+                                    Text="&#xf24d;"
                                     Command="{Binding CopyCommand}"
                                     CommandParameter="LoginTotp"
                                     Grid.Row="0"
@@ -237,7 +237,7 @@
                                     Grid.Column="0" />
                                 <controls:FaButton 
                                     StyleClass="box-row-button, box-row-button-platform"
-                                    Text="&#xf0ea;"
+                                    Text="&#xf24d;"
                                     Command="{Binding CopyCommand}"
                                     CommandParameter="CardNumber"
                                     Grid.Row="0"
@@ -309,7 +309,7 @@
                                     AutomationProperties.Name="{u:I18n ToggleVisibility}" />
                                 <controls:FaButton 
                                     StyleClass="box-row-button, box-row-button-platform"
-                                    Text="&#xf0ea;"
+                                    Text="&#xf24d;"
                                     Command="{Binding CopyCommand}"
                                     CommandParameter="CardCode"
                                     Grid.Row="0"
@@ -487,7 +487,7 @@
                                                 AutomationProperties.Name="{u:I18n Launch}" />
                                             <controls:FaButton
                                                 StyleClass="box-row-button, box-row-button-platform"
-                                                Text="&#xf0ea;"
+                                                Text="&#xf24d;"
                                                 Command="{Binding BindingContext.CopyUriCommand, Source={x:Reference _page}}"
                                                 CommandParameter="{Binding .}"
                                                 Grid.Row="0"
@@ -581,7 +581,7 @@
                                                 AutomationProperties.Name="{u:I18n ToggleVisibility}" />
                                             <controls:FaButton
                                                 StyleClass="box-row-button, box-row-button-platform"
-                                                Text="&#xf0ea;"
+                                                Text="&#xf24d;"
                                                 Command="{Binding BindingContext.CopyFieldCommand, Source={x:Reference _page}}"
                                                 CommandParameter="{Binding Field}"
                                                 IsVisible="{Binding ShowCopyButton}"
