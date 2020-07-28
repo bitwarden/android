@@ -58,6 +58,11 @@ namespace Bit.Droid.Services
                 // Biometric was disabled and re-enabled
                 return false;
             }
+            catch (InvalidKeyException e)
+            {
+                // Fallback for updates of Bitwarden application
+                CreateKey();
+            }
 
             return true;
         }
