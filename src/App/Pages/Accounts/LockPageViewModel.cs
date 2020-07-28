@@ -283,6 +283,7 @@ namespace Bit.App.Pages
 
         public async Task PromptBiometricAsync()
         {
+            BiometricIntegrityValid = _biometricService.ValidateIntegrity();
             if (!BiometricLock || !BiometricIntegrityValid)
             {
                 return;
