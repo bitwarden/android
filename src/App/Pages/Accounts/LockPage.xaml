@@ -106,8 +106,12 @@
                     Margin="0, 10, 0, 0" />
             </StackLayout>
             <StackLayout Padding="10, 0">
+                <Label
+                    Text="{u:I18n BiometricInvalidated}"
+                    StyleClass="box-footer-label,text-danger,text-bold"
+                    IsVisible="{Binding BiometricIntegrityValid, Converter={StaticResource inverseBool}}" />
                 <Button Text="{Binding BiometricButtonText}" Clicked="Biometric_Clicked"
-                        IsVisible="{Binding BiometricLock}"></Button>
+                        IsVisible="{Binding BiometricLock}" IsEnabled="{Binding BiometricIntegrityValid}"></Button>
                 <Button Text="{u:I18n LogOut}" Clicked="LogOut_Clicked"></Button>
             </StackLayout>
         </StackLayout>
