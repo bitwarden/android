@@ -299,7 +299,6 @@ namespace Bit.App.Pages
             }
             else if (await _platformUtilsService.SupportsBiometricAsync())
             {
-                _biometricService.SetupBiometric();
                 _biometric = await _platformUtilsService.AuthenticateBiometricAsync(null,
                     _deviceActionService.DeviceType == Core.Enums.DeviceType.Android ? "." : null);
             }
@@ -309,6 +308,7 @@ namespace Bit.App.Pages
             }
             if (_biometric)
             {
+                _biometricService.SetupBiometric();
                 await _storageService.SaveAsync(Constants.BiometricUnlockKey, true);
             }
             else
