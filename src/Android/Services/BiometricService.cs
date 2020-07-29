@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Android.OS;
 using Android.Security.Keystore;
 using Bit.Core.Abstractions;
 using Java.Security;
@@ -30,13 +31,21 @@ namespace Bit.Droid.Services
 
         public bool SetupBiometric()
         {
-            CreateKey();
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.M)
+            {
+                CreateKey();
+            }
 
             return true;
         }
 
         public bool ValidateIntegrity()
         {
+            if (Build.VERSION.SdkInt < BuildVersionCodes.M)
+            {
+                return true;
+            }
+
             _keystore.Load(null);
             IKey key = _keystore.GetKey(KeyName, null);
             Cipher cipher = Cipher.GetInstance(Transformation);

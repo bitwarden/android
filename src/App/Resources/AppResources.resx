@@ -1674,4 +1674,7 @@
     <value>Do you really want to send to the trash?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
+  <data name="BiometricInvalidated" xml:space="preserve">
+    <value>Biometric change detected, login using Master Password to enable again.</value>
+  </data>
 </root>
