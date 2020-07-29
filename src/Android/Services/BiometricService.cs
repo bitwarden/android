@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Android.Content;
 using Android.Security.Keystore;
 using Bit.Core.Abstractions;
 using Java.Security;
@@ -12,22 +11,20 @@ namespace Bit.Droid.Services
 {
     class BiometricService : IBiometricService
     {
-        static readonly string KEY_NAME = "com.8bit.bitwarden.biometric_integrity";
+        private const string KeyName = "com.8bit.bitwarden.biometric_integrity";
 
-        static readonly string KEYSTORE_NAME = "AndroidKeyStore";
+        private const string KeyStoreName = "AndroidKeyStore";
 
-        static readonly string KEY_ALGORITHM = KeyProperties.KeyAlgorithmAes;
-        static readonly string BLOCK_MODE = KeyProperties.BlockModeCbc;
-        static readonly string ENCRYPTION_PADDING = KeyProperties.EncryptionPaddingPkcs7;
-        static readonly string TRANSFORMATION = KEY_ALGORITHM + "/" + BLOCK_MODE + "/" + ENCRYPTION_PADDING;
+        private const string KeyAlgorithm = KeyProperties.KeyAlgorithmAes;
+        private const string BlockMode = KeyProperties.BlockModeCbc;
+        private const string EncryptionPadding = KeyProperties.EncryptionPaddingPkcs7;
+        private const string Transformation = KeyAlgorithm + "/" + BlockMode + "/" + EncryptionPadding;
 
-        readonly KeyStore _keystore;
-
-        Context context = Android.App.Application.Context;
+        private readonly KeyStore _keystore;
 
         public BiometricService()
         {
-            _keystore = KeyStore.GetInstance(KEYSTORE_NAME);
+            _keystore = KeyStore.GetInstance(KeyStoreName);
             _keystore.Load(null);
         }
 
@@ -41,8 +38,8 @@ namespace Bit.Droid.Services
         public bool ValidateIntegrity()
         {
             _keystore.Load(null);
-            IKey key = _keystore.GetKey(KEY_NAME, null);
-            Cipher cipher = Cipher.GetInstance(TRANSFORMATION);
+            IKey key = _keystore.GetKey(KeyName, null);
+            Cipher cipher = Cipher.GetInstance(Transformation);
 
             try
             {
@@ -69,11 +66,11 @@ namespace Bit.Droid.Services
 
         private void CreateKey()
         {
-            KeyGenerator keyGen = KeyGenerator.GetInstance(KEY_ALGORITHM, KEYSTORE_NAME);
+            KeyGenerator keyGen = KeyGenerator.GetInstance(KeyAlgorithm, KeyStoreName);
             KeyGenParameterSpec keyGenSpec =
-                new KeyGenParameterSpec.Builder(KEY_NAME, KeyStorePurpose.Encrypt | KeyStorePurpose.Decrypt)
-                    .SetBlockModes(BLOCK_MODE)
-                    .SetEncryptionPaddings(ENCRYPTION_PADDING)
+                new KeyGenParameterSpec.Builder(KeyName, KeyStorePurpose.Encrypt | KeyStorePurpose.Decrypt)
+                    .SetBlockModes(BlockMode)
+                    .SetEncryptionPaddings(EncryptionPadding)
                     .SetUserAuthenticationRequired(true)
                     .Build();
             keyGen.Init(keyGenSpec);

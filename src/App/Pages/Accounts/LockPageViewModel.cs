@@ -249,7 +249,7 @@ namespace Bit.App.Pages
                     MasterPassword = string.Empty;
                     await SetKeyAndContinueAsync(key);
 
-                    // Re-enable biometrie
+                    // Re-enable biometrics
                     if (BiometricLock & !BiometricIntegrityValid)
                     {
                         _biometricService.SetupBiometric();
