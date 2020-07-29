@@ -2,7 +2,7 @@
 
 namespace Bit.iOS.Core.Services
 {
-    class BiometricService : IBiometricService
+    public class BiometricService : IBiometricService
     {
         public bool SetupBiometric()
         {
