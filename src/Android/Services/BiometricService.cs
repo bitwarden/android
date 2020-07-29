@@ -66,7 +66,7 @@ namespace Bit.Droid.Services
             }
             catch (InvalidKeyException e)
             {
-                // Fallback for updates of Bitwarden application
+                // Fallback for old bitwarden users without a key
                 CreateKey();
             }
 
