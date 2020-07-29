@@ -55,6 +55,7 @@ namespace Bit.iOS.Core.Utilities
             var deviceActionService = new DeviceActionService(mobileStorageService, messagingService);
             var platformUtilsService = new MobilePlatformUtilsService(deviceActionService, messagingService,
                 broadcasterService);
+            var biometricService = new BiometricService();
 
             ServiceContainer.Register<IBroadcasterService>("broadcasterService", broadcasterService);
             ServiceContainer.Register<IMessagingService>("messagingService", messagingService);
@@ -65,6 +66,7 @@ namespace Bit.iOS.Core.Utilities
             ServiceContainer.Register<IStorageService>("secureStorageService", secureStorageService);
             ServiceContainer.Register<IDeviceActionService>("deviceActionService", deviceActionService);
             ServiceContainer.Register<IPlatformUtilsService>("platformUtilsService", platformUtilsService);
+            ServiceContainer.Register<IBiometricService>("biometricService", biometricService);
         }
 
         public static void Bootstrap(Func<Task> postBootstrapFunc = null)
