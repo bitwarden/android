@@ -40,19 +40,23 @@ namespace Bit.Droid.Renderers
             {
                 // Check if field type is text, otherwise ignore (numeric passwords, etc.)
                 EditText.InputType = Element.Keyboard.ToInputType();
-                if ((EditText.InputType & InputTypes.ClassText) == InputTypes.ClassText)
+                bool isText = (EditText.InputType & InputTypes.ClassText) == InputTypes.ClassText,
+                    isNumber = (EditText.InputType & InputTypes.ClassNumber) == InputTypes.ClassNumber;
+                if (isText || isNumber)
                 {
                     if (Element.IsPassword)
                     {
                         // Element is a password field, set inputType to TextVariationPassword which disables
                         // predictive text by default
-                        EditText.InputType = EditText.InputType | InputTypes.TextVariationPassword;
+                        EditText.InputType = EditText.InputType |
+                            (isText ? InputTypes.TextVariationPassword : InputTypes.NumberVariationPassword);
                     }
                     else
                     {
                         // Element is not a password field, set inputType to TextVariationVisiblePassword to
                         // disable predictive text while still displaying the content.
-                        EditText.InputType = EditText.InputType | InputTypes.TextVariationVisiblePassword;
+                        EditText.InputType = EditText.InputType |
+                            (isText ? InputTypes.TextVariationVisiblePassword : InputTypes.NumberVariationNormal);
                     }
                     
                     // The workaround above forces a reset of the style properties, so we need to re-apply the font.
