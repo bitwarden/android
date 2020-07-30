@@ -133,12 +133,12 @@ namespace Bit.Droid.Accessibility
         // Be sure to keep these entries sorted alphabetically
         public static Dictionary<string, KnownUsernameField> KnownUsernameFields => new List<KnownUsernameField>
         {
-            new KnownUsernameField("accounts.google.com",   new string[,] { { "ServiceLogin", "Email" } }),
-            new KnownUsernameField("amazon.com",            new string[,] { { "signin", "ap_email_login" } }),
-            new KnownUsernameField("github.com",            new string[,] { { "", "user[login]-footer" } }),
-            new KnownUsernameField("paypal.com",            new string[,] { { "signin", "email" } }),
-            new KnownUsernameField("signin.aws.amazon.com", new string[,] { { "signin", "resolving_input" } }),
-            new KnownUsernameField("signin.ebay.com",       new string[,] { { "eBayISAPI.dll", "userid" } }),
+            new KnownUsernameField("accounts.google.com",   new (string, string)[] { ("ServiceLogin", "Email") }),
+            new KnownUsernameField("amazon.com",            new (string, string)[] { ("signin", "ap_email_login") }),
+            new KnownUsernameField("github.com",            new (string, string)[] { ("", "user[login]-footer") }),
+            new KnownUsernameField("paypal.com",            new (string, string)[] { ("signin", "email") }),
+            new KnownUsernameField("signin.aws.amazon.com", new (string, string)[] { ("signin", "resolving_input") }),
+            new KnownUsernameField("signin.ebay.com",       new (string, string)[] { ("eBayISAPI.dll", "userid") }),
         }.ToDictionary(n => n.UriAuthority);
 
         public static void PrintTestData(AccessibilityNodeInfo root, AccessibilityEvent e)
@@ -330,12 +330,12 @@ namespace Bit.Droid.Accessibility
                 if (KnownUsernameFields.ContainsKey(uriKey))
                 {
                     var usernameField = KnownUsernameFields[uriKey];
-                    string[,] accessOptions = usernameField.AccessOptions;
+                    (string UriPathWanted, string UsernameViewId)[] accessOptions = usernameField.AccessOptions;
 
-                    for (int i = 0; i < accessOptions.GetLength(0); i++)
+                    for (int i = 0; i < accessOptions.Length; i++)
                     {
-                        string curUriPathWanted = accessOptions[i, 0];
-                        string curUsernameViewId = accessOptions[i, 1];
+                        string curUriPathWanted = accessOptions[i].UriPathWanted;
+                        string curUsernameViewId = accessOptions[i].UsernameViewId;
                         bool uriLocalPathMatches = false;
 
                         // Case-sensitive comparison
