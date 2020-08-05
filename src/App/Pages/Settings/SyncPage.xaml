@@ -16,22 +16,35 @@
         <ToolbarItem Text="{u:I18n Close}" Clicked="Close_Clicked" Order="Primary" Priority="-1" />
     </ContentPage.ToolbarItems>
 
-    <ScrollView>
-        <StackLayout Spacing="10"
-                     Padding="10, 5"
-                     VerticalOptions="Center"
-                     HorizontalOptions="FillAndExpand">
-            <Button Text="{u:I18n SyncVaultNow}"
-                    Clicked="Sync_Clicked"></Button>
-            <Label StyleClass="text-muted, text-sm" HorizontalTextAlignment="Center">
-                <Label.FormattedText>
-                    <FormattedString>
-                        <Span Text="{u:I18n LastSync}" />
-                        <Span Text=" " />
-                        <Span Text="{Binding LastSync}" />
-                    </FormattedString>
-                </Label.FormattedText>
-            </Label>
+    <ScrollView Padding="0, 0, 0, 20">
+        <StackLayout Padding="0" Spacing="20">
+            <StackLayout StyleClass="box">
+                <StackLayout StyleClass="box-row, box-row-switch">
+                    <Label
+                        Text="{u:I18n EnableSyncOnRefresh}"
+                        StyleClass="box-label, box-label-regular"
+                        HorizontalOptions="StartAndExpand" />
+                    <Switch
+                        IsToggled="{Binding EnableSyncOnRefresh}"
+                        StyleClass="box-value"
+                        HorizontalOptions="End" />
+                </StackLayout>
+                <Label
+                    Text="{u:I18n EnableSyncOnRefreshDescription}"
+                    StyleClass="box-footer-label, box-footer-label-switch" />
+            </StackLayout>
+            <StackLayout StyleClass="box">
+                <Button Text="{u:I18n SyncVaultNow}" Clicked="Sync_Clicked"></Button>
+                <Label StyleClass="text-muted, text-sm" HorizontalTextAlignment="Center">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="{u:I18n LastSync}" />
+                            <Span Text=" " />
+                            <Span Text="{Binding LastSync}" />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+            </StackLayout>
         </StackLayout>
     </ScrollView>
 

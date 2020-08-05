@@ -1,5 +1,6 @@
 ﻿using Bit.App.Abstractions;
 using Bit.App.Resources;
+using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Exceptions;
 using Bit.Core.Utilities;
@@ -11,23 +12,54 @@ namespace Bit.App.Pages
     {
         private readonly IDeviceActionService _deviceActionService;
         private readonly IPlatformUtilsService _platformUtilsService;
+        private readonly IStorageService _storageService;
         private readonly ISyncService _syncService;
 
         private string _lastSync = "--";
+        private bool _inited;
+        private bool _syncOnRefresh;
 
         public SyncPageViewModel()
         {
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
+            _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
 
             PageTitle = AppResources.Sync;
+        }
+
+        public bool EnableSyncOnRefresh
+        {
+            get => _syncOnRefresh;
+            set
+            {
+                if (SetProperty(ref _syncOnRefresh, value))
+                {
+                    var task = UpdateSyncOnRefreshAsync();
+                }
+            }
         }
 
         public string LastSync
         {
             get => _lastSync;
             set => SetProperty(ref _lastSync, value);
+        }
+
+        public async Task InitAsync()
+        {
+            await SetLastSyncAsync();
+            EnableSyncOnRefresh = await _storageService.GetAsync<bool>(Constants.SyncOnRefreshKey);
+            _inited = true;
+        }
+
+        public async Task UpdateSyncOnRefreshAsync()
+        {
+            if (_inited)
+            {
+                await _storageService.SaveAsync(Constants.SyncOnRefreshKey, _syncOnRefresh);
+            }
         }
 
         public async Task SetLastSyncAsync()
