@@ -364,7 +364,7 @@ namespace Bit.Droid.Accessibility
                         else if (curUriPathWanted.StartsWith("icontains:", StringComparison.Ordinal))
                         {
                             curUriPathWanted = curUriPathWanted.Substring(10);
-                            uriLocalPathMatches = uriLocalPath.IndexOf(curUriPathWanted, StringComparison.OrdinalIgnoreCase) >= 0;
+                            uriLocalPathMatches = uriLocalPath.Contains(curUriPathWanted, StringComparison.OrdinalIgnoreCase);
                         }
                         else if (curUriPathWanted.StartsWith("iendswith:", StringComparison.Ordinal))
                         {
