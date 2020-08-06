@@ -180,14 +180,12 @@ namespace Bit.Droid.Accessibility
             // Atlassian
             new KnownUsernameField("id.atlassian.com",       new (string, string)[] { ("login", "username") }),
 
-
             /*
              * B
              */
 
             // Bitly ——— enterprise users.
             new KnownUsernameField("bitly.com",              new (string, string)[] { ("/sso/url_slug", "url_slug") }),
-
 
             /*
              * E
@@ -216,14 +214,12 @@ namespace Bit.Droid.Accessibility
             new KnownUsernameField("signin.ebay.ph",         new (string, string)[] { ("iendswith:eBayISAPI.dll", "userid"), ("icontains:/signin/", "userid") }),
             new KnownUsernameField("signin.ebay.pl",         new (string, string)[] { ("iendswith:eBayISAPI.dll", "userid"), ("icontains:/signin/", "userid") }),
 
-
             /*
              * G
              */
 
             // Google ——— 1st = used in some cases (v1) / 2nd = used in most cases (v2).
             new KnownUsernameField("accounts.google.com",    new (string, string)[] { ("ServiceLogin", "Email"), ("identifier", "identifierId") }),
-
 
             /*
              * P
@@ -232,14 +228,12 @@ namespace Bit.Droid.Accessibility
             // PayPal ——— 1st = traditional access / 2nd = access using OAuth.
             new KnownUsernameField("paypal.com",             new (string, string)[] { ("signin", "email"), ("contains:/connect/", "email") }),
 
-
             /*
              * T
              */
 
             // Tumblr ——— despite "signup" in its ID, it's the login field (the website offers registration if the account doesn't exist).
             new KnownUsernameField("tumblr.com",             new (string, string)[] { ("login", "signup_determine_email") }),
-
 
             /*
              * Y
@@ -307,7 +301,6 @@ namespace Bit.Droid.Accessibility
              */
 
             // >>> No entry, currently.
-
 
             /*
              * Test/example purposes only
