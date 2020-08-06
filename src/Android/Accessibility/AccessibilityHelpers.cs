@@ -137,21 +137,18 @@ namespace Bit.Droid.Accessibility
              * SECTION A ——— World-renowned web sites/applications
              *************************************************************************************/
 
-
-            // REM.:  For this type of web sites/applications, the Top 100 (SimilarWeb, 2019)
-            //        and the Top 50 (Alexa Internet, 2020) are covered. National variants
-            //        have been added when available. Mobile and desktop versions supported.
+            // REM.: For this type of web sites/applications, the Top 100 (SimilarWeb, 2019)
+            //       and the Top 50 (Alexa Internet, 2020) are covered. National variants
+            //       have been added when available. Mobile and desktop versions supported.
             //
-            //        A few other popular web sites/applications have also been added.
+            //       A few other popular web sites/applications have also been added.
             //
-            //        Could not be added, however:
-            //        web sites/applications that don't use an "id" attribute for their login field.
+            //       Could not be added, however:
+            //       web sites/applications that don't use an "id" attribute for their login field.
 
-
-            // NOTE:  The case of OAuth compatible web sites/applications that also provide
-            //        a "user ID only" login page in this situation
-            //        was taken into account in the tests as well.
-
+            // NOTE: The case of OAuth compatible web sites/applications that also provide
+            //       a "user ID only" login page in this situation
+            //       was taken into account in the tests as well.
 
             /*
              * A
@@ -258,32 +255,27 @@ namespace Bit.Droid.Accessibility
             new KnownUsernameField("passport.yandex.uz",     new (string, string)[] { ("auth", "passp-field-login") }),
 
 
-
             /**************************************************************************************
              * SECTION B ——— Top 100 worldwide
              *************************************************************************************/
 
-
-            //  As of July 2020, all entries that needed to be added from
-            //  Top 100 (SimilarWeb, 2019) and Top 50 (Alexa Internet, 2020)
-            //  matched section A.
+            // As of July 2020, all entries that needed to be added from
+            // Top 100 (SimilarWeb, 2019) and Top 50 (Alexa Internet, 2020)
+            // matched section A.
             //
-            //  Therefore, no entry currently.
-
+            // Therefore, no entry currently.
 
 
             /**************************************************************************************
              * SECTION C ——— Top 20 for selected countries
              *************************************************************************************/
 
-
-            // REM.:  For these selected countries, the Top 20 (SimilarWeb, 2020)
-            //        and the Top 20 (Alexa Internet, 2020) are covered.
-            //        Mobile and desktop versions supported.
+            // REM.: For these selected countries, the Top 20 (SimilarWeb, 2020)
+            //       and the Top 20 (Alexa Internet, 2020) are covered.
+            //       Mobile and desktop versions supported.
             //
-            //        Could not be added, however:
-            //        web sites/applications that don't use an "id" attribute for their login field.
-
+            //       Could not be added, however:
+            //       web sites/applications that don't use an "id" attribute for their login field.
 
             /*
              * Japan
@@ -293,11 +285,9 @@ namespace Bit.Droid.Accessibility
             new KnownUsernameField("cfg.smt.docomo.ne.jp",   new (string, string)[] { ("contains:/auth/", "Di_Uid") }),
 
 
-
             /**************************************************************************************
              * SECTION D ——— Miscellaneous
              *************************************************************************************/
-
 
             /*
              * Various entries ——— Following user requests, etc.
@@ -306,14 +296,11 @@ namespace Bit.Droid.Accessibility
             // >>> No entry, currently.
 
 
-
-
             /**************************************************************************************
              * SECTION Z ——— Special forms
              *
              * Despite "user ID + password" fields both visible, detection rules required.
              *************************************************************************************/
-
 
             /*
              * Main
