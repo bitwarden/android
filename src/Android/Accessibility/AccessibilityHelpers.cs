@@ -248,7 +248,6 @@ namespace Bit.Droid.Accessibility
             new KnownUsernameField("passport.yandex.ua",     new (string, string)[] { ("auth", "passp-field-login") }),
             new KnownUsernameField("passport.yandex.uz",     new (string, string)[] { ("auth", "passp-field-login") }),
 
-
             /**************************************************************************************
              * SECTION B ——— Top 100 worldwide
              *************************************************************************************/
@@ -258,7 +257,6 @@ namespace Bit.Droid.Accessibility
             // matched section A.
             //
             // Therefore, no entry currently.
-
 
             /**************************************************************************************
              * SECTION C ——— Top 20 for selected countries
@@ -278,7 +276,6 @@ namespace Bit.Droid.Accessibility
             // NTT DOCOMO ——— mainly used for "My docomo".
             new KnownUsernameField("cfg.smt.docomo.ne.jp",   new (string, string)[] { ("contains:/auth/", "Di_Uid") }),
 
-
             /**************************************************************************************
              * SECTION D ——— Miscellaneous
              *************************************************************************************/
@@ -287,8 +284,7 @@ namespace Bit.Droid.Accessibility
              * Various entries ——— Following user requests, etc.
              */
 
-            // >>> No entry, currently.
-
+            // No entry, currently.
 
             /**************************************************************************************
              * SECTION Z ——— Special forms
@@ -300,7 +296,7 @@ namespace Bit.Droid.Accessibility
              * Main
              */
 
-            // >>> No entry, currently.
+            // No entry, currently.
 
             /*
              * Test/example purposes only
