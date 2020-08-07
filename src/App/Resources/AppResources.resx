@@ -1677,4 +1677,10 @@
   <data name="BiometricInvalidated" xml:space="preserve">
     <value>Biometric change detected, login using Master Password to enable again.</value>
   </data>
+  <data name="EnableSyncOnRefresh" xml:space="preserve">
+    <value>Enable sync on refresh</value>
+  </data>
+  <data name="EnableSyncOnRefreshDescription" xml:space="preserve">
+    <value>Syncing vault with pull down gesture.</value>
+  </data>
 </root>

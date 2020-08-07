@@ -129,16 +129,181 @@ namespace Bit.Droid.Accessibility
             "com.ss.squarehome2",
             "com.treydev.pns"
         };
-        
-        // Be sure to keep these entries sorted alphabetically
+
+        // Be sure to keep these sections sorted alphabetically
         public static Dictionary<string, KnownUsernameField> KnownUsernameFields => new List<KnownUsernameField>
         {
-            new KnownUsernameField("accounts.google.com", "ServiceLogin", "Email"),
-            new KnownUsernameField("amazon.com", "signin", "ap_email_login"),
-            new KnownUsernameField("github.com", "", "user[login]-footer"),
-            new KnownUsernameField("paypal.com", "signin", "email"),
-            new KnownUsernameField("signin.aws.amazon.com", "signin", "resolving_input"),
-            new KnownUsernameField("signin.ebay.com", "eBayISAPI.dll", "userid"),
+            /**************************************************************************************
+             * SECTION A ——— World-renowned web sites/applications
+             *************************************************************************************/
+
+            // REM.: For this type of web sites/applications, the Top 100 (SimilarWeb, 2019)
+            //       and the Top 50 (Alexa Internet, 2020) are covered. National variants
+            //       have been added when available. Mobile and desktop versions supported.
+            //
+            //       A few other popular web sites/applications have also been added.
+            //
+            //       Could not be added, however:
+            //       web sites/applications that don't use an "id" attribute for their login field.
+
+            // NOTE: The case of OAuth compatible web sites/applications that also provide
+            //       a "user ID only" login page in this situation
+            //       was taken into account in the tests as well.
+
+            /*
+             * A
+             */
+
+            // Amazon ——— ap_email_login = mobile / ap_email = desktop (amazon.co.jp currently uses ap_email in both cases, as of July 2020).
+            new KnownUsernameField("amazon.ae",              new (string, string)[] { ("contains:/ap/signin", "ap_email_login,ap_email") }),
+            new KnownUsernameField("amazon.ca",              new (string, string)[] { ("contains:/ap/signin", "ap_email_login,ap_email") }),
+            new KnownUsernameField("amazon.cn",              new (string, string)[] { ("contains:/ap/signin", "ap_email_login,ap_email") }),
+            new KnownUsernameField("amazon.co.jp",           new (string, string)[] { ("contains:/ap/signin", "ap_email_login,ap_email") }),
+            new KnownUsernameField("amazon.co.uk",           new (string, string)[] { ("contains:/ap/signin", "ap_email_login,ap_email") }),
+            new KnownUsernameField("amazon.com",             new (string, string)[] { ("contains:/ap/signin", "ap_email_login,ap_email") }),
+            new KnownUsernameField("amazon.com.au",          new (string, string)[] { ("contains:/ap/signin", "ap_email_login,ap_email") }),
+            new KnownUsernameField("amazon.com.br",          new (string, string)[] { ("contains:/ap/signin", "ap_email_login,ap_email") }),
+            new KnownUsernameField("amazon.com.mx",          new (string, string)[] { ("contains:/ap/signin", "ap_email_login,ap_email") }),
+            new KnownUsernameField("amazon.com.tr",          new (string, string)[] { ("contains:/ap/signin", "ap_email_login,ap_email") }),
+            new KnownUsernameField("amazon.de",              new (string, string)[] { ("contains:/ap/signin", "ap_email_login,ap_email") }),
+            new KnownUsernameField("amazon.es",              new (string, string)[] { ("contains:/ap/signin", "ap_email_login,ap_email") }),
+            new KnownUsernameField("amazon.fr",              new (string, string)[] { ("contains:/ap/signin", "ap_email_login,ap_email") }),
+            new KnownUsernameField("amazon.in",              new (string, string)[] { ("contains:/ap/signin", "ap_email_login,ap_email") }),
+            new KnownUsernameField("amazon.it",              new (string, string)[] { ("contains:/ap/signin", "ap_email_login,ap_email") }),
+            new KnownUsernameField("amazon.nl",              new (string, string)[] { ("contains:/ap/signin", "ap_email_login,ap_email") }),
+            new KnownUsernameField("amazon.sa",              new (string, string)[] { ("contains:/ap/signin", "ap_email_login,ap_email") }),
+            new KnownUsernameField("amazon.sg",              new (string, string)[] { ("contains:/ap/signin", "ap_email_login,ap_email") }),
+
+            // Amazon Web Services
+            new KnownUsernameField("signin.aws.amazon.com",  new (string, string)[] { ("signin", "resolving_input") }),
+
+            // Atlassian
+            new KnownUsernameField("id.atlassian.com",       new (string, string)[] { ("login", "username") }),
+
+            /*
+             * B
+             */
+
+            // Bitly ——— enterprise users.
+            new KnownUsernameField("bitly.com",              new (string, string)[] { ("/sso/url_slug", "url_slug") }),
+
+            /*
+             * E
+             */
+
+            // eBay ——— 1st = traditional access / 2nd = direct access (i.e. https://signin.ebay.tld/).
+            new KnownUsernameField("signin.befr.ebay.be",    new (string, string)[] { ("iendswith:eBayISAPI.dll", "userid"), ("icontains:/signin/", "userid") }),
+            new KnownUsernameField("signin.benl.ebay.be",    new (string, string)[] { ("iendswith:eBayISAPI.dll", "userid"), ("icontains:/signin/", "userid") }),
+            new KnownUsernameField("signin.cafr.ebay.ca",    new (string, string)[] { ("iendswith:eBayISAPI.dll", "userid"), ("icontains:/signin/", "userid") }),
+            new KnownUsernameField("signin.ebay.at",         new (string, string)[] { ("iendswith:eBayISAPI.dll", "userid"), ("icontains:/signin/", "userid") }),
+            new KnownUsernameField("signin.ebay.be",         new (string, string)[] { ("iendswith:eBayISAPI.dll", "userid"), ("icontains:/signin/", "userid") }),
+            new KnownUsernameField("signin.ebay.ca",         new (string, string)[] { ("iendswith:eBayISAPI.dll", "userid"), ("icontains:/signin/", "userid") }),
+            new KnownUsernameField("signin.ebay.ch",         new (string, string)[] { ("iendswith:eBayISAPI.dll", "userid"), ("icontains:/signin/", "userid") }),
+            new KnownUsernameField("signin.ebay.co.uk",      new (string, string)[] { ("iendswith:eBayISAPI.dll", "userid"), ("icontains:/signin/", "userid") }),
+            new KnownUsernameField("signin.ebay.com",        new (string, string)[] { ("iendswith:eBayISAPI.dll", "userid"), ("icontains:/signin/", "userid") }),
+            new KnownUsernameField("signin.ebay.com.au",     new (string, string)[] { ("iendswith:eBayISAPI.dll", "userid"), ("icontains:/signin/", "userid") }),
+            new KnownUsernameField("signin.ebay.com.hk",     new (string, string)[] { ("iendswith:eBayISAPI.dll", "userid"), ("icontains:/signin/", "userid") }),
+            new KnownUsernameField("signin.ebay.com.my",     new (string, string)[] { ("iendswith:eBayISAPI.dll", "userid"), ("icontains:/signin/", "userid") }),
+            new KnownUsernameField("signin.ebay.com.sg",     new (string, string)[] { ("iendswith:eBayISAPI.dll", "userid"), ("icontains:/signin/", "userid") }),
+            new KnownUsernameField("signin.ebay.de",         new (string, string)[] { ("iendswith:eBayISAPI.dll", "userid"), ("icontains:/signin/", "userid") }),
+            new KnownUsernameField("signin.ebay.es",         new (string, string)[] { ("iendswith:eBayISAPI.dll", "userid"), ("icontains:/signin/", "userid") }),
+            new KnownUsernameField("signin.ebay.fr",         new (string, string)[] { ("iendswith:eBayISAPI.dll", "userid"), ("icontains:/signin/", "userid") }),
+            new KnownUsernameField("signin.ebay.ie",         new (string, string)[] { ("iendswith:eBayISAPI.dll", "userid"), ("icontains:/signin/", "userid") }),
+            new KnownUsernameField("signin.ebay.it",         new (string, string)[] { ("iendswith:eBayISAPI.dll", "userid"), ("icontains:/signin/", "userid") }),
+            new KnownUsernameField("signin.ebay.nl",         new (string, string)[] { ("iendswith:eBayISAPI.dll", "userid"), ("icontains:/signin/", "userid") }),
+            new KnownUsernameField("signin.ebay.ph",         new (string, string)[] { ("iendswith:eBayISAPI.dll", "userid"), ("icontains:/signin/", "userid") }),
+            new KnownUsernameField("signin.ebay.pl",         new (string, string)[] { ("iendswith:eBayISAPI.dll", "userid"), ("icontains:/signin/", "userid") }),
+
+            /*
+             * G
+             */
+
+            // Google ——— 1st = used in most cases (v2) / 2nd = used in some cases (v1).
+            new KnownUsernameField("accounts.google.com",    new (string, string)[] { ("identifier", "identifierId"), ("ServiceLogin", "Email") }),
+
+            /*
+             * P
+             */
+
+            // PayPal ——— 1st = traditional access / 2nd = access using OAuth.
+            new KnownUsernameField("paypal.com",             new (string, string)[] { ("signin", "email"), ("contains:/connect/", "email") }),
+
+            /*
+             * T
+             */
+
+            // Tumblr ——— despite "signup" in its ID, it's the login field (the website offers registration if the account doesn't exist).
+            new KnownUsernameField("tumblr.com",             new (string, string)[] { ("login", "signup_determine_email") }),
+
+            /*
+             * Y
+             */
+
+            // Yandex
+            new KnownUsernameField("passport.yandex.by",     new (string, string)[] { ("auth", "passp-field-login") }),
+            new KnownUsernameField("passport.yandex.com",    new (string, string)[] { ("auth", "passp-field-login") }),
+            new KnownUsernameField("passport.yandex.com.tr", new (string, string)[] { ("auth", "passp-field-login") }),
+            new KnownUsernameField("passport.yandex.kz",     new (string, string)[] { ("auth", "passp-field-login") }),
+            new KnownUsernameField("passport.yandex.ru",     new (string, string)[] { ("auth", "passp-field-login") }),
+            new KnownUsernameField("passport.yandex.ua",     new (string, string)[] { ("auth", "passp-field-login") }),
+            new KnownUsernameField("passport.yandex.uz",     new (string, string)[] { ("auth", "passp-field-login") }),
+
+            /**************************************************************************************
+             * SECTION B ——— Top 100 worldwide
+             *************************************************************************************/
+
+            // As of July 2020, all entries that needed to be added from
+            // Top 100 (SimilarWeb, 2019) and Top 50 (Alexa Internet, 2020)
+            // matched section A.
+            //
+            // Therefore, no entry currently.
+
+            /**************************************************************************************
+             * SECTION C ——— Top 20 for selected countries
+             *************************************************************************************/
+
+            // REM.: For these selected countries, the Top 20 (SimilarWeb, 2020)
+            //       and the Top 20 (Alexa Internet, 2020) are covered.
+            //       Mobile and desktop versions supported.
+            //
+            //       Could not be added, however:
+            //       web sites/applications that don't use an "id" attribute for their login field.
+
+            /*
+             * Japan
+             */
+
+            // NTT DOCOMO ——— mainly used for "My docomo".
+            new KnownUsernameField("cfg.smt.docomo.ne.jp",   new (string, string)[] { ("contains:/auth/", "Di_Uid") }),
+
+            /**************************************************************************************
+             * SECTION D ——— Miscellaneous
+             *************************************************************************************/
+
+            /*
+             * Various entries ——— Following user requests, etc.
+             */
+
+            // No entry, currently.
+
+            /**************************************************************************************
+             * SECTION Z ——— Special forms
+             *
+             * Despite "user ID + password" fields both visible, detection rules required.
+             *************************************************************************************/
+
+            /*
+             * Main
+             */
+
+            // No entry, currently.
+
+            /*
+             * Test/example purposes only
+             */
+
+            // GitHub ——— VERY special case (signup form, just to test the proper functioning of special forms).
+            new KnownUsernameField("github.com",             new (string, string)[] { ("", "user[login]-footer") }),
         }.ToDictionary(n => n.UriAuthority);
 
         public static void PrintTestData(AccessibilityNodeInfo root, AccessibilityEvent e)
@@ -314,7 +479,7 @@ namespace Bit.Droid.Accessibility
             if (Uri.TryCreate(uriString, UriKind.Absolute, out var uri))
             {
                 uriAuthority = uri.Authority;
-                uriKey = uriAuthority.StartsWith("www.") ? uriAuthority.Substring(4) : uriAuthority;
+                uriKey = uriAuthority.StartsWith("www.", StringComparison.Ordinal) ? uriAuthority.Substring(4) : uriAuthority;
                 uriLocalPath = uri.LocalPath;
             }
 
@@ -330,15 +495,64 @@ namespace Bit.Droid.Accessibility
                 if (KnownUsernameFields.ContainsKey(uriKey))
                 {
                     var usernameField = KnownUsernameFields[uriKey];
-                    if (uriLocalPath.EndsWith(usernameField.UriPathEnd))
+                    (string UriPathWanted, string UsernameViewId)[] accessOptions = usernameField.AccessOptions;
+
+                    for (int i = 0; i < accessOptions.Length; i++)
                     {
-                        foreach (var editText in allEditTexts)
+                        string curUriPathWanted = accessOptions[i].UriPathWanted;
+                        string curUsernameViewId = accessOptions[i].UsernameViewId;
+                        bool uriLocalPathMatches = false;
+
+                        // Case-sensitive comparison
+                        if (curUriPathWanted.StartsWith("startswith:", StringComparison.Ordinal))
                         {
-                            foreach (var usernameViewId in usernameField.UsernameViewId.Split(","))
+                            curUriPathWanted = curUriPathWanted.Substring(11);
+                            uriLocalPathMatches = uriLocalPath.StartsWith(curUriPathWanted, StringComparison.Ordinal);
+                        }
+                        else if (curUriPathWanted.StartsWith("contains:", StringComparison.Ordinal))
+                        {
+                            curUriPathWanted = curUriPathWanted.Substring(9);
+                            uriLocalPathMatches = uriLocalPath.Contains(curUriPathWanted, StringComparison.Ordinal);
+                        }
+                        else if (curUriPathWanted.StartsWith("endswith:", StringComparison.Ordinal))
+                        {
+                            curUriPathWanted = curUriPathWanted.Substring(9);
+                            uriLocalPathMatches = uriLocalPath.EndsWith(curUriPathWanted, StringComparison.Ordinal);
+                        }
+
+                        // Case-insensitive comparison
+                        else if (curUriPathWanted.StartsWith("istartswith:", StringComparison.Ordinal))
+                        {
+                            curUriPathWanted = curUriPathWanted.Substring(12);
+                            uriLocalPathMatches = uriLocalPath.StartsWith(curUriPathWanted, StringComparison.OrdinalIgnoreCase);
+                        }
+                        else if (curUriPathWanted.StartsWith("icontains:", StringComparison.Ordinal))
+                        {
+                            curUriPathWanted = curUriPathWanted.Substring(10);
+                            uriLocalPathMatches = uriLocalPath.Contains(curUriPathWanted, StringComparison.OrdinalIgnoreCase);
+                        }
+                        else if (curUriPathWanted.StartsWith("iendswith:", StringComparison.Ordinal))
+                        {
+                            curUriPathWanted = curUriPathWanted.Substring(10);
+                            uriLocalPathMatches = uriLocalPath.EndsWith(curUriPathWanted, StringComparison.OrdinalIgnoreCase);
+                        }
+
+                        // Default type of comparison
+                        else
+                        {
+                            uriLocalPathMatches = uriLocalPath.EndsWith(curUriPathWanted, StringComparison.Ordinal);
+                        }
+
+                        if (uriLocalPathMatches)
+                        {
+                            foreach (var editText in allEditTexts)
                             {
-                                if (usernameViewId == editText.ViewIdResourceName)
+                                foreach (var usernameViewId in curUsernameViewId.Split(","))
                                 {
-                                    return editText;
+                                    if (usernameViewId == editText.ViewIdResourceName)
+                                    {
+                                        return editText;
+                                    }
                                 }
                             }
                         }

@@ -27,6 +27,7 @@ namespace Bit.App.Pages
         private bool _showNoData;
         private bool _showList;
         private bool _websiteIconsEnabled;
+        private bool _syncRefreshing;
         private string _noDataText;
         private List<CipherView> _allCiphers;
         private Dictionary<string, int> _folderCounts = new Dictionary<string, int>();
@@ -44,6 +45,7 @@ namespace Bit.App.Pages
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IMessagingService _messagingService;
         private readonly IStateService _stateService;
+        private readonly IStorageService _storageService;
 
         public GroupingsPageViewModel()
         {
@@ -57,6 +59,7 @@ namespace Bit.App.Pages
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
 
             Loading = true;
             PageTitle = AppResources.MyVault;
@@ -93,6 +96,11 @@ namespace Bit.App.Pages
         {
             get => _refreshing;
             set => SetProperty(ref _refreshing, value);
+        }
+        public bool SyncRefreshing
+        {
+            get => _syncRefreshing;
+            set => SetProperty(ref _syncRefreshing, value);
         }
         public bool Loading
         {
@@ -149,6 +157,13 @@ namespace Bit.App.Pages
             {
                 return;
             }
+            if (await _storageService.GetAsync<bool>(Constants.SyncOnRefreshKey) && Refreshing && !SyncRefreshing)
+            {
+                SyncRefreshing = true;
+                await _syncService.FullSyncAsync(false);
+                return;
+            }
+
             _doingLoad = true;
             LoadedOnce = true;
             ShowNoData = false;
@@ -266,10 +281,16 @@ namespace Bit.App.Pages
                 _doingLoad = false;
                 Loaded = true;
                 Loading = false;
-                Refreshing = false;
                 ShowNoData = (MainPage && !HasCiphers) || !groupedItems.Any();
                 ShowList = !ShowNoData;
+                DisableRefreshing();
             }
+        }
+
+        public void DisableRefreshing()
+        {
+            Refreshing = false;
+            SyncRefreshing = false;
         }
 
         public async Task SelectCipherAsync(CipherView cipher)

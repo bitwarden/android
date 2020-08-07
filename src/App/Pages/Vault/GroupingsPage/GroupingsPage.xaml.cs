@@ -194,6 +194,7 @@ namespace Bit.App.Pages
             base.OnDisappearing();
             IsBusy = false;
             _broadcasterService.Unsubscribe(_pageName);
+            _vm.DisableRefreshing();
         }
 
         private async void RowSelected(object sender, SelectedItemChangedEventArgs e)

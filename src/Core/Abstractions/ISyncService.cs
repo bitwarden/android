@@ -7,7 +7,6 @@ namespace Bit.Core.Abstractions
     public interface ISyncService
     {
         bool SyncInProgress { get; set; }
-
         Task<bool> FullSyncAsync(bool forceSync, bool allowThrowOnError = false);
         Task<DateTime?> GetLastSyncAsync();
         Task SetLastSyncAsync(DateTime date);
