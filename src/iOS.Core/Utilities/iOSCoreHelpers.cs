@@ -55,7 +55,7 @@ namespace Bit.iOS.Core.Utilities
             var deviceActionService = new DeviceActionService(mobileStorageService, messagingService);
             var platformUtilsService = new MobilePlatformUtilsService(deviceActionService, messagingService,
                 broadcasterService);
-            var biometricService = new BiometricService();
+            var biometricService = new BiometricService(mobileStorageService);
 
             ServiceContainer.Register<IBroadcasterService>("broadcasterService", broadcasterService);
             ServiceContainer.Register<IMessagingService>("messagingService", messagingService);
