@@ -17,14 +17,14 @@ namespace Bit.iOS.Core.Services
         public async Task<bool> SetupBiometric()
         {
             var state = GetState();
-            await _storageService.SaveAsync("biometricState", state);
+            await _storageService.SaveAsync("biometricState", ToBase64(state));
 
             return true;
         }
 
         public async Task<bool> ValidateIntegrity()
         {
-            var oldState = await _storageService.GetAsync<NSData>("biometricState");
+            var oldState = await _storageService.GetAsync<string>("biometricState");
             if (oldState == null)
             {
                 // Fallback for upgraded devices
@@ -36,7 +36,7 @@ namespace Bit.iOS.Core.Services
             {
                 var state = GetState();
 
-                return oldState == state;
+                return FromBase64(oldState) == state;
             }
         }
 
@@ -46,6 +46,17 @@ namespace Bit.iOS.Core.Services
             context.CanEvaluatePolicy(LAPolicy.DeviceOwnerAuthenticationWithBiometrics, out _);
 
             return context.EvaluatedPolicyDomainState;
+        }
+
+        private string ToBase64(NSData data)
+        {
+            return System.Convert.ToBase64String(data.ToArray());
+        }
+
+        private NSData FromBase64(string data)
+        {
+            var bytes = System.Convert.FromBase64String(data);
+            return NSData.FromArray(bytes);
         }
     }
 }
