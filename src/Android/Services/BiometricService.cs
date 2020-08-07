@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Android.OS;
 using Android.Security.Keystore;
 using Bit.Core.Abstractions;
@@ -29,21 +30,21 @@ namespace Bit.Droid.Services
             _keystore.Load(null);
         }
 
-        public bool SetupBiometric()
+        public Task<bool> SetupBiometric()
         {
             if (Build.VERSION.SdkInt >= BuildVersionCodes.M)
             {
                 CreateKey();
             }
 
-            return true;
+            return Task.FromResult(true);
         }
 
-        public bool ValidateIntegrity()
+        public Task<bool> ValidateIntegrity()
         {
             if (Build.VERSION.SdkInt < BuildVersionCodes.M)
             {
-                return true;
+                return Task.FromResult(true);
             }
 
             _keystore.Load(null);
@@ -57,12 +58,12 @@ namespace Bit.Droid.Services
             catch (KeyPermanentlyInvalidatedException e)
             {
                 // Biometric has changed
-                return false;
+                return Task.FromResult(false);
             }
             catch (UnrecoverableKeyException e)
             {
                 // Biometric was disabled and re-enabled
-                return false;
+                return Task.FromResult(false);
             }
             catch (InvalidKeyException e)
             {
@@ -70,7 +71,7 @@ namespace Bit.Droid.Services
                 CreateKey();
             }
 
-            return true;
+            return Task.FromResult(true);
         }
 
         private void CreateKey()

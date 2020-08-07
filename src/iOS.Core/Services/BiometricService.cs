@@ -1,4 +1,5 @@
-﻿using Bit.Core.Abstractions;
+﻿using System.Threading.Tasks;
+using Bit.Core.Abstractions;
 using Foundation;
 using LocalAuthentication;
 
@@ -13,28 +14,33 @@ namespace Bit.iOS.Core.Services
             _storageService = storageService;
         }
 
-        public bool SetupBiometric()
+        public async Task<bool> SetupBiometric()
         {
-            var state = getState();
-            return _storageService.SaveAsync("biometricState", state).IsCompletedSuccessfully;
+            var state = GetState();
+            await _storageService.SaveAsync("biometricState", state);
+
+            return true;
         }
 
-        public bool ValidateIntegrity()
+        public async Task<bool> ValidateIntegrity()
         {
-            var oldState = _storageService.GetAsync<NSData>("biometricState").Result;
+            var oldState = await _storageService.GetAsync<NSData>("biometricState");
             if (oldState == null)
             {
-                SetupBiometric();
+                // Fallback for upgraded devices
+                await SetupBiometric();
 
                 return true;
-            } else {
-                var state = getState();
+            }
+            else
+            {
+                var state = GetState();
 
                 return oldState == state;
             }
         }
 
-        private NSData getState()
+        private NSData GetState()
         {
             var context = new LAContext();
             context.CanEvaluatePolicy(LAPolicy.DeviceOwnerAuthenticationWithBiometrics, out _);

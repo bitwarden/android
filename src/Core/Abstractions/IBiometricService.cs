@@ -1,8 +1,10 @@
-﻿namespace Bit.Core.Abstractions
+﻿using System.Threading.Tasks;
+
+namespace Bit.Core.Abstractions
 {
     public interface IBiometricService
     {
-        bool SetupBiometric();
-        bool ValidateIntegrity();
+        Task<bool> SetupBiometric();
+        Task<bool> ValidateIntegrity();
     }
 }

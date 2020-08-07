@@ -142,7 +142,7 @@ namespace Bit.App.Pages
                     BiometricButtonText = supportsFace ? AppResources.UseFaceIDToUnlock :
                         AppResources.UseFingerprintToUnlock;
                 }
-                BiometricIntegrityValid = _biometricService.ValidateIntegrity();
+                BiometricIntegrityValid = await _biometricService.ValidateIntegrity();
                 if (autoPromptBiometric & _biometricIntegrityValid)
                 {
                     var tasks = Task.Run(async () =>
@@ -283,7 +283,7 @@ namespace Bit.App.Pages
 
         public async Task PromptBiometricAsync()
         {
-            BiometricIntegrityValid = _biometricService.ValidateIntegrity();
+            BiometricIntegrityValid = await _biometricService.ValidateIntegrity();
             if (!BiometricLock || !BiometricIntegrityValid)
             {
                 return;
