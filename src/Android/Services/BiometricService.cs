@@ -11,7 +11,7 @@ using Javax.Crypto;
 
 namespace Bit.Droid.Services
 {
-    class BiometricService : IBiometricService
+    public class BiometricService : IBiometricService
     {
         private const string KeyName = "com.8bit.bitwarden.biometric_integrity";
 
@@ -30,21 +30,21 @@ namespace Bit.Droid.Services
             _keystore.Load(null);
         }
 
-        public Task<bool> SetupBiometric()
+        public async Task<bool> SetupBiometric()
         {
             if (Build.VERSION.SdkInt >= BuildVersionCodes.M)
             {
                 CreateKey();
             }
 
-            return Task.FromResult(true);
+            return true;
         }
 
-        public Task<bool> ValidateIntegrity()
+        public async Task<bool> ValidateIntegrity()
         {
             if (Build.VERSION.SdkInt < BuildVersionCodes.M)
             {
-                return Task.FromResult(true);
+                return true;
             }
 
             _keystore.Load(null);
@@ -58,12 +58,12 @@ namespace Bit.Droid.Services
             catch (KeyPermanentlyInvalidatedException e)
             {
                 // Biometric has changed
-                return Task.FromResult(false);
+                return false;
             }
             catch (UnrecoverableKeyException e)
             {
                 // Biometric was disabled and re-enabled
-                return Task.FromResult(false);
+                return false;
             }
             catch (InvalidKeyException e)
             {
@@ -71,7 +71,7 @@ namespace Bit.Droid.Services
                 CreateKey();
             }
 
-            return Task.FromResult(true);
+            return false;
         }
 
         private void CreateKey()
