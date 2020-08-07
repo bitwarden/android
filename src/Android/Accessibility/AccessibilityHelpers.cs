@@ -218,8 +218,8 @@ namespace Bit.Droid.Accessibility
              * G
              */
 
-            // Google ——— 1st = used in some cases (v1) / 2nd = used in most cases (v2).
-            new KnownUsernameField("accounts.google.com",    new (string, string)[] { ("ServiceLogin", "Email"), ("identifier", "identifierId") }),
+            // Google ——— 1st = used in most cases (v2) / 2nd = used in some cases (v1).
+            new KnownUsernameField("accounts.google.com",    new (string, string)[] { ("identifier", "identifierId"), ("ServiceLogin", "Email") }),
 
             /*
              * P
