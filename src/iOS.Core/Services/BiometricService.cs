@@ -14,7 +14,7 @@ namespace Bit.iOS.Core.Services
             _storageService = storageService;
         }
 
-        public async Task<bool> SetupBiometric()
+        public async Task<bool> SetupBiometricAsync()
         {
             var state = GetState();
             await _storageService.SaveAsync("biometricState", ToBase64(state));
@@ -22,13 +22,13 @@ namespace Bit.iOS.Core.Services
             return true;
         }
 
-        public async Task<bool> ValidateIntegrity()
+        public async Task<bool> ValidateIntegrityAsync()
         {
             var oldState = await _storageService.GetAsync<string>("biometricState");
             if (oldState == null)
             {
                 // Fallback for upgraded devices
-                await SetupBiometric();
+                await SetupBiometricAsync();
 
                 return true;
             }

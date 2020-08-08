@@ -308,7 +308,7 @@ namespace Bit.App.Pages
             }
             if (_biometric)
             {
-                _biometricService.SetupBiometric();
+                _biometricService.SetupBiometricAsync();
                 await _storageService.SaveAsync(Constants.BiometricUnlockKey, true);
             }
             else
