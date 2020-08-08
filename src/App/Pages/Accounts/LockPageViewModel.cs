@@ -252,7 +252,7 @@ namespace Bit.App.Pages
                     // Re-enable biometrics
                     if (BiometricLock & !BiometricIntegrityValid)
                     {
-                        _biometricService.SetupBiometricAsync();
+                        await _biometricService.SetupBiometricAsync();
                     }
                 }
                 else
