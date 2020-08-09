@@ -24,11 +24,13 @@ namespace Bit.App.Pages
         private readonly IStorageService _secureStorageService;
         private readonly IEnvironmentService _environmentService;
         private readonly IStateService _stateService;
+        private readonly IBiometricService _biometricService;
 
         private string _email;
         private bool _showPassword;
         private bool _pinLock;
         private bool _biometricLock;
+        private bool _biometricIntegrityValid = true;
         private string _biometricButtonText;
         private string _loggedInAsText;
         private string _lockedVerifyText;
@@ -47,6 +49,7 @@ namespace Bit.App.Pages
             _secureStorageService = ServiceContainer.Resolve<IStorageService>("secureStorageService");
             _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            _biometricService = ServiceContainer.Resolve<IBiometricService>("biometricService");
 
             PageTitle = AppResources.VerifyMasterPassword;
             TogglePasswordCommand = new Command(TogglePassword);
@@ -73,6 +76,12 @@ namespace Bit.App.Pages
         {
             get => _biometricLock;
             set => SetProperty(ref _biometricLock, value);
+        }
+
+        public bool BiometricIntegrityValid
+        {
+            get => _biometricIntegrityValid;
+            set => SetProperty(ref _biometricIntegrityValid, value);
         }
 
         public string BiometricButtonText
@@ -133,7 +142,8 @@ namespace Bit.App.Pages
                     BiometricButtonText = supportsFace ? AppResources.UseFaceIDToUnlock :
                         AppResources.UseFingerprintToUnlock;
                 }
-                if (autoPromptBiometric)
+                BiometricIntegrityValid = await _biometricService.ValidateIntegrityAsync();
+                if (autoPromptBiometric & _biometricIntegrityValid)
                 {
                     var tasks = Task.Run(async () =>
                     {
@@ -238,6 +248,12 @@ namespace Bit.App.Pages
                     }
                     MasterPassword = string.Empty;
                     await SetKeyAndContinueAsync(key);
+
+                    // Re-enable biometrics
+                    if (BiometricLock & !BiometricIntegrityValid)
+                    {
+                        await _biometricService.SetupBiometricAsync();
+                    }
                 }
                 else
                 {
@@ -267,7 +283,8 @@ namespace Bit.App.Pages
 
         public async Task PromptBiometricAsync()
         {
-            if (!BiometricLock)
+            BiometricIntegrityValid = await _biometricService.ValidateIntegrityAsync();
+            if (!BiometricLock || !BiometricIntegrityValid)
             {
                 return;
             }

@@ -22,6 +22,7 @@ namespace Bit.App.Pages
         private readonly IVaultTimeoutService _vaultTimeoutService;
         private readonly IStorageService _storageService;
         private readonly ISyncService _syncService;
+        private readonly IBiometricService _biometricService;
 
         private bool _supportsBiometric;
         private bool _pin;
@@ -60,6 +61,7 @@ namespace Bit.App.Pages
             _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
+            _biometricService = ServiceContainer.Resolve<IBiometricService>("biometricService");
 
             GroupedItems = new ExtendedObservableCollection<SettingsPageListGroup>();
             PageTitle = AppResources.Settings;
@@ -306,6 +308,7 @@ namespace Bit.App.Pages
             }
             if (_biometric)
             {
+                await _biometricService.SetupBiometricAsync();
                 await _storageService.SaveAsync(Constants.BiometricUnlockKey, true);
             }
             else
