@@ -11,7 +11,7 @@ using Javax.Crypto;
 
 namespace Bit.Droid.Services
 {
-    class BiometricService : IBiometricService
+    public class BiometricService : IBiometricService
     {
         private const string KeyName = "com.8bit.bitwarden.biometric_integrity";
 
