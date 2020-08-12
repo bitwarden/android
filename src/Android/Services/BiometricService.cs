@@ -71,7 +71,7 @@ namespace Bit.Droid.Services
                 CreateKey();
             }
 
-            return Task.FromResult(false);
+            return Task.FromResult(true);
         }
 
         private void CreateKey()
