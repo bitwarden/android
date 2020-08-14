@@ -134,7 +134,7 @@ namespace Bit.Core.Services
             {
                 throw new InvalidOperationException("JWT must have 3 parts.");
             }
-            var decodedBytes = Base64UrlDecode(parts[1]);
+            var decodedBytes = CoreHelpers.Base64UrlDecode(parts[1]);
             if (decodedBytes == null || decodedBytes.Length < 1)
             {
                 throw new InvalidOperationException("Cannot decode the token.");
@@ -228,32 +228,6 @@ namespace Bit.Core.Services
                 throw new Exception("No issuer found.");
             }
             return decoded["iss"].Value<string>();
-        }
-
-        private byte[] Base64UrlDecode(string input)
-        {
-            var output = input;
-            // 62nd char of encoding
-            output = output.Replace('-', '+');
-            // 63rd char of encoding
-            output = output.Replace('_', '/');
-            // Pad with trailing '='s
-            switch (output.Length % 4)
-            {
-                case 0:
-                    // No pad chars in this case
-                    break;
-                case 2:
-                    // Two pad chars
-                    output += "=="; break;
-                case 3:
-                    // One pad char
-                    output += "="; break;
-                default:
-                    throw new InvalidOperationException("Illegal base64url string!");
-            }
-            // Standard base64 decoder
-            return Convert.FromBase64String(output);
         }
 
         private async Task<bool> SkipTokenStorage()
