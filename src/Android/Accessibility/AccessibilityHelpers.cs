@@ -209,6 +209,7 @@ namespace Bit.Droid.Accessibility
             new KnownUsernameField("signin.ebay.es",         new (string, string)[] { ("iendswith:eBayISAPI.dll", "userid"), ("icontains:/signin/", "userid") }),
             new KnownUsernameField("signin.ebay.fr",         new (string, string)[] { ("iendswith:eBayISAPI.dll", "userid"), ("icontains:/signin/", "userid") }),
             new KnownUsernameField("signin.ebay.ie",         new (string, string)[] { ("iendswith:eBayISAPI.dll", "userid"), ("icontains:/signin/", "userid") }),
+            new KnownUsernameField("signin.ebay.in",         new (string, string)[] { ("iendswith:eBayISAPI.dll", "userid"), ("icontains:/signin/", "userid") }),
             new KnownUsernameField("signin.ebay.it",         new (string, string)[] { ("iendswith:eBayISAPI.dll", "userid"), ("icontains:/signin/", "userid") }),
             new KnownUsernameField("signin.ebay.nl",         new (string, string)[] { ("iendswith:eBayISAPI.dll", "userid"), ("icontains:/signin/", "userid") }),
             new KnownUsernameField("signin.ebay.ph",         new (string, string)[] { ("iendswith:eBayISAPI.dll", "userid"), ("icontains:/signin/", "userid") }),
