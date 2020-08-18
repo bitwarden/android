@@ -49,6 +49,14 @@ namespace Bit.App.Pages
                 Navigation.PushModalAsync(new NavigationPage(new RegisterPage(this)));
             }
         }
+        
+        private void LogInSso_Clicked(object sender, EventArgs e)
+        {
+            if (DoOnce())
+            {
+                Navigation.PushModalAsync(new NavigationPage(new LoginSsoPage(_appOptions)));
+            }
+        }
 
         private void Settings_Clicked(object sender, EventArgs e)
         {

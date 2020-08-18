@@ -99,6 +99,7 @@ namespace Bit.Core.Services
             }
             catch (Exception e)
             {
+                System.Diagnostics.Debug.WriteLine(">>> {0}: {1}", e.GetType(), e.StackTrace);
                 throw new ApiException(HandleWebError(e));
             }
             JObject responseJObject = null;
@@ -173,6 +174,11 @@ namespace Bit.Core.Services
         public Task PostAccountKeysAsync(KeysRequest request)
         {
             return SendAsync<KeysRequest, object>(HttpMethod.Post, "/accounts/keys", request, true, false);
+        }
+
+        public Task PostAccountVerifyPasswordAsync(PasswordVerificationRequest request)
+        {
+            return SendAsync<PasswordVerificationRequest, object>(HttpMethod.Post, "/accounts/verify-password", request, true, false);
         }
 
         #endregion

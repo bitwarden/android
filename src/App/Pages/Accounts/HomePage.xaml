@@ -39,6 +39,8 @@
                     Clicked="LogIn_Clicked"></Button>
                 <Button Text="{u:I18n CreateAccount}"
                     Clicked="Register_Clicked"></Button>
+                <Button Text="{u:I18n LogInSso}"
+                    Clicked="LogInSso_Clicked"></Button>
             </StackLayout>
         </StackLayout>
     </StackLayout>

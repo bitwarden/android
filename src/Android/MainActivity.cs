@@ -144,6 +144,7 @@ namespace Bit.Droid
         protected override void OnResume()
         {
             base.OnResume();
+            Xamarin.Essentials.Platform.OnResume();
             if (_deviceActionService.SupportsNfc())
             {
                 try

@@ -23,8 +23,6 @@ namespace Bit.Core.Services
         private readonly bool _setCryptoKeys;
 
         private SymmetricCryptoKey _key;
-        private KdfType? _kdf;
-        private int? _kdfIterations;
 
         public AuthService(
             ICryptoService cryptoService,
@@ -95,6 +93,9 @@ namespace Bit.Core.Services
 
         public string Email { get; set; }
         public string MasterPasswordHash { get; set; }
+        public string Code { get; set; }
+        public string CodeVerifier { get; set; }
+        public string SsoRedirectUrl { get; set; }
         public Dictionary<TwoFactorProviderType, TwoFactorProvider> TwoFactorProviders { get; set; }
         public Dictionary<TwoFactorProviderType, Dictionary<string, object>> TwoFactorProvidersData { get; set; }
         public TwoFactorProviderType? SelectedTwoFactorProviderType { get; set; }
@@ -122,13 +123,20 @@ namespace Bit.Core.Services
             SelectedTwoFactorProviderType = null;
             var key = await MakePreloginKeyAsync(masterPassword, email);
             var hashedPassword = await _cryptoService.HashPasswordAsync(masterPassword, key);
-            return await LogInHelperAsync(email, hashedPassword, key);
+            return await LogInHelperAsync(email, hashedPassword, null, null, null, key, null, null, null);
+        }
+
+        public async Task<AuthResult> LogInSsoAsync(string code, string codeVerifier, string redirectUrl)
+        {
+            SelectedTwoFactorProviderType = null;
+            return await LogInHelperAsync(null, null, code, codeVerifier, redirectUrl, null, null, null, null);
         }
 
         public Task<AuthResult> LogInTwoFactorAsync(TwoFactorProviderType twoFactorProvider, string twoFactorToken,
             bool? remember = null)
         {
-            return LogInHelperAsync(Email, MasterPasswordHash, _key, twoFactorProvider, twoFactorToken, remember);
+            return LogInHelperAsync(Email, MasterPasswordHash, Code, CodeVerifier, SsoRedirectUrl, _key,
+                twoFactorProvider, twoFactorToken, remember);
         }
 
         public async Task<AuthResult> LogInCompleteAsync(string email, string masterPassword,
@@ -137,7 +145,16 @@ namespace Bit.Core.Services
             SelectedTwoFactorProviderType = null;
             var key = await MakePreloginKeyAsync(masterPassword, email);
             var hashedPassword = await _cryptoService.HashPasswordAsync(masterPassword, key);
-            return await LogInHelperAsync(email, hashedPassword, key, twoFactorProvider, twoFactorToken, remember);
+            return await LogInHelperAsync(email, hashedPassword, null, null, null, key, twoFactorProvider,
+                twoFactorToken, remember);
+        }
+
+        public async Task<AuthResult> LogInSsoCompleteAsync(string code, string codeVerifier, string redirectUrl,
+            TwoFactorProviderType twoFactorProvider, string twoFactorToken, bool? remember = null)
+        {
+            SelectedTwoFactorProviderType = null;
+            return await LogInHelperAsync(null, null, code, codeVerifier, redirectUrl, null, twoFactorProvider,
+                twoFactorToken, remember);
         }
 
         public void LogOut(Action callback)
@@ -213,20 +230,30 @@ namespace Bit.Core.Services
             return providerType;
         }
 
+        public bool AuthingWithSso()
+        {
+            return Code != null && CodeVerifier != null && SsoRedirectUrl != null;
+        }
+
+        public bool AuthingWithPassword()
+        {
+            return Email != null && MasterPasswordHash != null;
+        }
+
         // Helpers
 
         private async Task<SymmetricCryptoKey> MakePreloginKeyAsync(string masterPassword, string email)
         {
             email = email.Trim().ToLower();
-            _kdf = null;
-            _kdfIterations = null;
+            KdfType? kdf = null;
+            int? kdfIterations = null;
             try
             {
                 var preloginResponse = await _apiService.PostPreloginAsync(new PreloginRequest { Email = email });
                 if (preloginResponse != null)
                 {
-                    _kdf = preloginResponse.Kdf;
-                    _kdfIterations = preloginResponse.KdfIterations;
+                    kdf = preloginResponse.Kdf;
+                    kdfIterations = preloginResponse.KdfIterations;
                 }
             }
             catch (ApiException e)
@@ -236,32 +263,50 @@ namespace Bit.Core.Services
                     throw e;
                 }
             }
-            return await _cryptoService.MakeKeyAsync(masterPassword, email, _kdf, _kdfIterations);
+            return await _cryptoService.MakeKeyAsync(masterPassword, email, kdf, kdfIterations);
         }
 
-        private async Task<AuthResult> LogInHelperAsync(string email, string hashedPassword, SymmetricCryptoKey key,
+        private async Task<AuthResult> LogInHelperAsync(string email, string hashedPassword, string code,
+            string codeVerifier, string redirectUrl, SymmetricCryptoKey key,
             TwoFactorProviderType? twoFactorProvider = null, string twoFactorToken = null, bool? remember = null)
         {
             var storedTwoFactorToken = await _tokenService.GetTwoFactorTokenAsync(email);
             var appId = await _appIdService.GetAppIdAsync();
             var deviceRequest = new DeviceRequest(appId, _platformUtilsService);
-            var request = new TokenRequest
+
+            string[] emailPassword;
+            string[] codeCodeVerifier;
+            if (email != null && hashedPassword != null)
             {
-                Email = email,
-                MasterPasswordHash = hashedPassword,
-                Device = deviceRequest,
-                Remember = false
-            };
+                emailPassword = new[] { email, hashedPassword };
+            }
+            else
+            {
+                emailPassword = null;
+            }
+            if (code != null && codeVerifier != null && redirectUrl != null)
+            {
+                codeCodeVerifier = new[] { code, codeVerifier, redirectUrl };
+            }
+            else
+            {
+                codeCodeVerifier = null;
+            }
+
+            TokenRequest request;
             if (twoFactorToken != null && twoFactorProvider != null)
             {
-                request.Provider = twoFactorProvider;
-                request.Token = twoFactorToken;
-                request.Remember = remember.GetValueOrDefault();
+                request = new TokenRequest(emailPassword, codeCodeVerifier, twoFactorProvider, twoFactorToken, remember,
+                    deviceRequest);
             }
             else if (storedTwoFactorToken != null)
             {
-                request.Provider = TwoFactorProviderType.Remember;
-                request.Token = storedTwoFactorToken;
+                request = new TokenRequest(emailPassword, codeCodeVerifier, TwoFactorProviderType.Remember,
+                    storedTwoFactorToken, false, deviceRequest);
+            }
+            else
+            {
+                request = new TokenRequest(emailPassword, codeCodeVerifier, null, null, false, deviceRequest);
             }
 
             var response = await _apiService.PostIdentityTokenAsync(request);
@@ -276,6 +321,9 @@ namespace Bit.Core.Services
                 var twoFactorResponse = response.Item2;
                 Email = email;
                 MasterPasswordHash = hashedPassword;
+                Code = code;
+                CodeVerifier = codeVerifier;
+                SsoRedirectUrl = redirectUrl;
                 _key = _setCryptoKeys ? key : null;
                 TwoFactorProvidersData = twoFactorResponse.TwoFactorProviders2;
                 result.TwoFactorProviders = twoFactorResponse.TwoFactorProviders2;
@@ -283,13 +331,14 @@ namespace Bit.Core.Services
             }
 
             var tokenResponse = response.Item1;
+            result.ResetMasterPassword = tokenResponse.ResetMasterPassword;
             if (tokenResponse.TwoFactorToken != null)
             {
                 await _tokenService.SetTwoFactorTokenAsync(tokenResponse.TwoFactorToken, email);
             }
             await _tokenService.SetTokensAsync(tokenResponse.AccessToken, tokenResponse.RefreshToken);
             await _userService.SetInformationAsync(_tokenService.GetUserId(), _tokenService.GetEmail(),
-                _kdf.Value, _kdfIterations.Value);
+                tokenResponse.Kdf, tokenResponse.KdfIterations);
             if (_setCryptoKeys)
             {
                 await _cryptoService.SetKeyAsync(key);
@@ -322,8 +371,12 @@ namespace Bit.Core.Services
 
         private void ClearState()
         {
+            _key = null;
             Email = null;
             MasterPasswordHash = null;
+            Code = null;
+            CodeVerifier = null;
+            SsoRedirectUrl = null;
             TwoFactorProvidersData = null;
             SelectedTwoFactorProviderType = null;
         }
