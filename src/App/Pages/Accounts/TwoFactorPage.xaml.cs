@@ -18,11 +18,13 @@ namespace Bit.App.Pages
 
         private TwoFactorPageViewModel _vm;
         private bool _inited;
+        private bool _authingWithSso;
 
-        public TwoFactorPage(AppOptions appOptions = null)
+        public TwoFactorPage(bool? authingWithSso = false, AppOptions appOptions = null)
         {
             InitializeComponent();
             SetActivityIndicator();
+            _authingWithSso = authingWithSso ?? false;
             _appOptions = appOptions;
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
@@ -180,7 +182,14 @@ namespace Bit.App.Pages
             {
                 await _storageService.RemoveAsync(Constants.PreviousPageKey);
             }
-            Application.Current.MainPage = new TabsPage(_appOptions, previousPage);
+            if (_authingWithSso)
+            {
+                Application.Current.MainPage = new LockPage(_appOptions);
+            }
+            else
+            {
+                Application.Current.MainPage = new TabsPage(_appOptions, previousPage);
+            }
         }
     }
 }

@@ -65,7 +65,7 @@ namespace Bit.App.Pages
 
         private async Task StartTwoFactorAsync()
         {
-            var page = new TwoFactorPage();
+            var page = new TwoFactorPage(true);
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
         
