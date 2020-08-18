@@ -94,8 +94,7 @@ namespace Bit.App.Pages
 
         public void Init()
         {
-            if (string.IsNullOrWhiteSpace(_authService.Email) ||
-                string.IsNullOrWhiteSpace(_authService.MasterPasswordHash) ||
+            if ((!_authService.AuthingWithSso() && !_authService.AuthingWithPassword()) ||
                 _authService.TwoFactorProvidersData == null)
             {
                 // TODO: dismiss modal?

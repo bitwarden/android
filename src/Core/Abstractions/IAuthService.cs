@@ -18,6 +18,8 @@ namespace Bit.Core.Abstractions
         Dictionary<TwoFactorProviderType, Dictionary<string, object>> TwoFactorProvidersData { get; set; }
 
         TwoFactorProviderType? GetDefaultTwoFactorProvider(bool u2fSupported);
+        bool AuthingWithSso();
+        bool AuthingWithPassword();
         List<TwoFactorProvider> GetSupportedTwoFactorProviders();
         Task<AuthResult> LogInAsync(string email, string masterPassword);
         Task<AuthResult> LogInSsoAsync(string code, string codeVerifier, string redirectUrl);
