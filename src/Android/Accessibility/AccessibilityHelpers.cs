@@ -241,11 +241,25 @@ namespace Bit.Droid.Accessibility
              */
 
             // Yandex
+            new KnownUsernameField("passport.yandex.az",     new (string, string)[] { ("auth", "passp-field-login") }),
             new KnownUsernameField("passport.yandex.by",     new (string, string)[] { ("auth", "passp-field-login") }),
+            new KnownUsernameField("passport.yandex.co.il",  new (string, string)[] { ("auth", "passp-field-login") }),
             new KnownUsernameField("passport.yandex.com",    new (string, string)[] { ("auth", "passp-field-login") }),
+            new KnownUsernameField("passport.yandex.com.am", new (string, string)[] { ("auth", "passp-field-login") }),
+            new KnownUsernameField("passport.yandex.com.ge", new (string, string)[] { ("auth", "passp-field-login") }),
             new KnownUsernameField("passport.yandex.com.tr", new (string, string)[] { ("auth", "passp-field-login") }),
+            new KnownUsernameField("passport.yandex.ee",     new (string, string)[] { ("auth", "passp-field-login") }),
+            new KnownUsernameField("passport.yandex.fi",     new (string, string)[] { ("auth", "passp-field-login") }),
+            new KnownUsernameField("passport.yandex.fr",     new (string, string)[] { ("auth", "passp-field-login") }),
+            new KnownUsernameField("passport.yandex.kg",     new (string, string)[] { ("auth", "passp-field-login") }),
             new KnownUsernameField("passport.yandex.kz",     new (string, string)[] { ("auth", "passp-field-login") }),
+            new KnownUsernameField("passport.yandex.lt",     new (string, string)[] { ("auth", "passp-field-login") }),
+            new KnownUsernameField("passport.yandex.lv",     new (string, string)[] { ("auth", "passp-field-login") }),
+            new KnownUsernameField("passport.yandex.md",     new (string, string)[] { ("auth", "passp-field-login") }),
+            new KnownUsernameField("passport.yandex.pl",     new (string, string)[] { ("auth", "passp-field-login") }),
             new KnownUsernameField("passport.yandex.ru",     new (string, string)[] { ("auth", "passp-field-login") }),
+            new KnownUsernameField("passport.yandex.tj",     new (string, string)[] { ("auth", "passp-field-login") }),
+            new KnownUsernameField("passport.yandex.tm",     new (string, string)[] { ("auth", "passp-field-login") }),
             new KnownUsernameField("passport.yandex.ua",     new (string, string)[] { ("auth", "passp-field-login") }),
             new KnownUsernameField("passport.yandex.uz",     new (string, string)[] { ("auth", "passp-field-login") }),
 
