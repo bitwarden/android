@@ -311,10 +311,7 @@ namespace Bit.Core.Services
 
             var response = await _apiService.PostIdentityTokenAsync(request);
             ClearState();
-            var result = new AuthResult
-            {
-                TwoFactor = response.Item2 != null
-            };
+            var result = new AuthResult { TwoFactor = response.Item2 != null };
             if (result.TwoFactor)
             {
                 // Two factor required.

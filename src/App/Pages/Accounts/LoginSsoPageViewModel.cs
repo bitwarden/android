@@ -2,7 +2,6 @@
 using Bit.App.Resources;
 using Bit.Core;
 using Bit.Core.Abstractions;
-using Bit.Core.Exceptions;
 using Bit.Core.Utilities;
 using System;
 using System.Threading.Tasks;
@@ -17,7 +16,7 @@ namespace Bit.App.Pages
     {
         private const string Keys_RememberedOrgIdentifier = "rememberedOrgIdentifier";
         private const string Keys_RememberOrgIdentifier = "rememberOrgIdentifier";
-        
+
         private readonly IDeviceActionService _deviceActionService;
         private readonly IAuthService _authService;
         private readonly ISyncService _syncService;
@@ -29,8 +28,6 @@ namespace Bit.App.Pages
         private readonly IStateService _stateService;
 
         private string _orgIdentifier;
-        private string _codeChallenge;
-        private string _state;
 
         public LoginSsoPageViewModel()
         {
@@ -38,7 +35,8 @@ namespace Bit.App.Pages
             _authService = ServiceContainer.Resolve<IAuthService>("authService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
             _apiService = ServiceContainer.Resolve<IApiService>("apiService");
-            _passwordGenerationService = ServiceContainer.Resolve<IPasswordGenerationService>("passwordGenerationService");
+            _passwordGenerationService =
+                ServiceContainer.Resolve<IPasswordGenerationService>("passwordGenerationService");
             _cryptoFunctionService = ServiceContainer.Resolve<ICryptoFunctionService>("cryptoFunctionService");
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
@@ -53,13 +51,14 @@ namespace Bit.App.Pages
             get => _orgIdentifier;
             set => SetProperty(ref _orgIdentifier, value);
         }
-        
+
         public Command LogInCommand { get; }
         public bool RememberOrgIdentifier { get; set; }
         public Action StartTwoFactorAction { get; set; }
-        public Action LoggedInAction { get; set; }
+        public Action StartSetPasswordAction { get; set; }
+        public Action LoggedInSsoAction { get; set; }
         public Action CloseAction { get; set; }
-        
+
         public async Task InitAsync()
         {
             if (string.IsNullOrWhiteSpace(OrgIdentifier))
@@ -86,27 +85,19 @@ namespace Bit.App.Pages
                     AppResources.Ok);
                 return;
             }
-            
+
             await _deviceActionService.ShowLoadingAsync(AppResources.LoggingIn);
 
             var passwordOptions = new PasswordGenerationOptions(true);
             passwordOptions.Length = 64;
 
-            var codeChallenge = _codeChallenge;
-            var state = _state;
-            string codeVerifier = null;
-            if (codeChallenge == null)
-            {
-                codeVerifier = await _passwordGenerationService.GeneratePasswordAsync(passwordOptions);
-                var codeVerifierHash = await _cryptoFunctionService.HashAsync(codeVerifier, CryptoHashAlgorithm.Sha256);
-                codeChallenge = CoreHelpers.Base64UrlEncode(codeVerifierHash);
-                await _storageService.SaveAsync(Constants.SsoCodeVerifierKey, codeVerifier);
-            }
-            if (state == null)
-            {
-                state = await _passwordGenerationService.GeneratePasswordAsync(passwordOptions);
-                await _storageService.SaveAsync(Constants.SsoStateKey, state);
-            }
+            var codeVerifier = await _passwordGenerationService.GeneratePasswordAsync(passwordOptions);
+            var codeVerifierHash = await _cryptoFunctionService.HashAsync(codeVerifier, CryptoHashAlgorithm.Sha256);
+            var codeChallenge = CoreHelpers.Base64UrlEncode(codeVerifierHash);
+            await _storageService.SaveAsync(Constants.SsoCodeVerifierKey, codeVerifier);
+
+            var state = await _passwordGenerationService.GeneratePasswordAsync(passwordOptions);
+            await _storageService.SaveAsync(Constants.SsoStateKey, state);
 
             var redirectUri = "bitwarden://sso-callback";
 
@@ -126,6 +117,7 @@ namespace Bit.App.Pages
             }
             else
             {
+                await _deviceActionService.HideLoadingAsync();
                 await _platformUtilsService.ShowDialogAsync(AppResources.LoginSsoError,
                     AppResources.AnErrorHasOccurred);
             }
@@ -149,23 +141,23 @@ namespace Bit.App.Pages
                 {
                     StartTwoFactorAction?.Invoke();
                 }
+                else if (response.ResetMasterPassword)
+                {
+                    StartSetPasswordAction?.Invoke();
+                }
                 else
                 {
                     var disableFavicon = await _storageService.GetAsync<bool?>(Constants.DisableFaviconKey);
                     await _stateService.SaveAsync(Constants.DisableFaviconKey, disableFavicon.GetValueOrDefault());
                     var task = Task.Run(async () => await _syncService.FullSyncAsync(true));
-                    LoggedInAction?.Invoke();
+                    LoggedInSsoAction?.Invoke();
                 }
             }
-            catch (ApiException e)
+            catch (Exception e)
             {
                 await _deviceActionService.HideLoadingAsync();
-                if (e?.Error != null)
-                {
-                    await _platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(),
-                        AppResources.AnErrorHasOccurred);
-                }
-                System.Diagnostics.Debug.WriteLine(">>> {0}: {1}", e.GetType(), e.StackTrace);
+                await _platformUtilsService.ShowDialogAsync(AppResources.LoginSsoError,
+                    AppResources.AnErrorHasOccurred);
             }
         }
     }

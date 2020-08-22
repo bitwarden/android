@@ -31,6 +31,7 @@ namespace Bit.App.Pages
         private TwoFactorProviderType? _selectedProviderType;
         private string _totpInstruction;
         private string _webVaultUrl = "https://vault.bitwarden.com";
+        private bool _authingWithSso = false;
 
         public TwoFactorPageViewModel()
         {
@@ -90,6 +91,7 @@ namespace Bit.App.Pages
         }
         public Command SubmitCommand { get; }
         public Action TwoFactorAction { get; set; }
+        public Action StartSetPasswordAction { get; set; }
         public Action CloseAction { get; set; }
 
         public void Init()
@@ -100,6 +102,8 @@ namespace Bit.App.Pages
                 // TODO: dismiss modal?
                 return;
             }
+
+            _authingWithSso = _authService.AuthingWithSso();
 
             if (!string.IsNullOrWhiteSpace(_environmentService.BaseUrl))
             {
@@ -203,14 +207,21 @@ namespace Bit.App.Pages
             try
             {
                 await _deviceActionService.ShowLoadingAsync(AppResources.Validating);
-                await _authService.LogInTwoFactorAsync(SelectedProviderType.Value, Token, Remember);
-                await _deviceActionService.HideLoadingAsync();
+                var result = await _authService.LogInTwoFactorAsync(SelectedProviderType.Value, Token, Remember);
                 var task = Task.Run(() => _syncService.FullSyncAsync(true));
+                await _deviceActionService.HideLoadingAsync();
                 _messagingService.Send("listenYubiKeyOTP", false);
                 _broadcasterService.Unsubscribe(nameof(TwoFactorPage));
-                var disableFavicon = await _storageService.GetAsync<bool?>(Constants.DisableFaviconKey);
-                await _stateService.SaveAsync(Constants.DisableFaviconKey, disableFavicon.GetValueOrDefault());
-                TwoFactorAction?.Invoke();
+                if (_authingWithSso && result.ResetMasterPassword)
+                {
+                    StartSetPasswordAction?.Invoke();
+                }
+                else
+                {
+                    var disableFavicon = await _storageService.GetAsync<bool?>(Constants.DisableFaviconKey);
+                    await _stateService.SaveAsync(Constants.DisableFaviconKey, disableFavicon.GetValueOrDefault());
+                    TwoFactorAction?.Invoke();
+                }
             }
             catch (ApiException e)
             {

@@ -15,7 +15,7 @@ namespace Bit.Core.Abstractions
         Task<(PasswordGenerationOptions, PasswordGeneratorPolicyOptions)> GetOptionsAsync();
         Task<(PasswordGenerationOptions, PasswordGeneratorPolicyOptions)>
             EnforcePasswordGeneratorPoliciesOnOptionsAsync(PasswordGenerationOptions options);
-        Task<object> PasswordStrength(string password, List<string> userInputs = null);
+        Zxcvbn.Result PasswordStrength(string password, List<string> userInputs = null);
         Task SaveOptionsAsync(PasswordGenerationOptions options);
         void NormalizeOptions(PasswordGenerationOptions options, PasswordGeneratorPolicyOptions enforcedPolicyOptions);
     }

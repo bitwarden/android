@@ -99,7 +99,6 @@ namespace Bit.Core.Services
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debug.WriteLine(">>> {0}: {1}", e.GetType(), e.StackTrace);
                 throw new ApiException(HandleWebError(e));
             }
             JObject responseJObject = null;
@@ -166,6 +165,12 @@ namespace Bit.Core.Services
                 request, false, false);
         }
 
+        public Task SetPasswordAsync(SetPasswordRequest request)
+        {
+            return SendAsync<SetPasswordRequest, object>(HttpMethod.Post, "/accounts/set-password", request, true,
+                false);
+        }
+
         public Task PostRegisterAsync(RegisterRequest request)
         {
             return SendAsync<RegisterRequest, object>(HttpMethod.Post, "/accounts/register", request, false, false);
@@ -178,7 +183,8 @@ namespace Bit.Core.Services
 
         public Task PostAccountVerifyPasswordAsync(PasswordVerificationRequest request)
         {
-            return SendAsync<PasswordVerificationRequest, object>(HttpMethod.Post, "/accounts/verify-password", request, true, false);
+            return SendAsync<PasswordVerificationRequest, object>(HttpMethod.Post, "/accounts/verify-password", request,
+                true, false);
         }
 
         #endregion

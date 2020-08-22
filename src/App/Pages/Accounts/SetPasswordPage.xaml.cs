@@ -1,35 +1,31 @@
-﻿using Bit.App.Models;
-using Bit.Core;
-using Bit.Core.Abstractions;
+﻿using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using System;
 using System.Threading.Tasks;
+using Bit.App.Models;
+using Bit.Core;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
-    public partial class LoginSsoPage : BaseContentPage
+    public partial class SetPasswordPage : BaseContentPage
     {
         private readonly IStorageService _storageService;
         private readonly IMessagingService _messagingService;
-        private readonly IVaultTimeoutService _vaultTimeoutService;
-        private readonly LoginSsoPageViewModel _vm;
+        private readonly SetPasswordPageViewModel _vm;
         private readonly AppOptions _appOptions;
 
-        public LoginSsoPage(AppOptions appOptions = null)
+        public SetPasswordPage(AppOptions appOptions = null)
         {
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
-            _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             _messagingService.Send("showStatusBar", true);
             _appOptions = appOptions;
             InitializeComponent();
-            _vm = BindingContext as LoginSsoPageViewModel;
+            _vm = BindingContext as SetPasswordPageViewModel;
             _vm.Page = this;
-            _vm.StartTwoFactorAction = () => Device.BeginInvokeOnMainThread(async () => await StartTwoFactorAsync());
-            _vm.StartSetPasswordAction = () =>
-                Device.BeginInvokeOnMainThread(async () => await StartSetPasswordAsync());
-            _vm.LoggedInSsoAction = () => Device.BeginInvokeOnMainThread(async () => await LoggedInSsoAsync());
+            _vm.SetPasswordSuccessAction =
+                () => Device.BeginInvokeOnMainThread(async () => await SetPasswordSuccessAsync());
             _vm.CloseAction = async () =>
             {
                 _messagingService.Send("showStatusBar", false);
@@ -39,23 +35,31 @@ namespace Bit.App.Pages
             {
                 ToolbarItems.RemoveAt(0);
             }
+
+            MasterPasswordEntry = _masterPassword;
+            ConfirmMasterPasswordEntry = _confirmMasterPassword;
+
+            _masterPassword.ReturnType = ReturnType.Next;
+            _masterPassword.ReturnCommand = new Command(() => _confirmMasterPassword.Focus());
+            _confirmMasterPassword.ReturnType = ReturnType.Next;
+            _confirmMasterPassword.ReturnCommand = new Command(() => _hint.Focus());
         }
+
+        public Entry MasterPasswordEntry { get; set; }
+        public Entry ConfirmMasterPasswordEntry { get; set; }
 
         protected override async void OnAppearing()
         {
             base.OnAppearing();
             await _vm.InitAsync();
-            if (string.IsNullOrWhiteSpace(_vm.OrgIdentifier))
-            {
-                RequestFocus(_orgIdentifier);
-            }
+            RequestFocus(_masterPassword);
         }
 
-        private async void LogIn_Clicked(object sender, EventArgs e)
+        private async void Submit_Clicked(object sender, EventArgs e)
         {
             if (DoOnce())
             {
-                await _vm.LogInAsync();
+                await _vm.SubmitAsync();
             }
         }
 
@@ -67,19 +71,7 @@ namespace Bit.App.Pages
             }
         }
 
-        private async Task StartTwoFactorAsync()
-        {
-            var page = new TwoFactorPage(true);
-            await Navigation.PushModalAsync(new NavigationPage(page));
-        }
-
-        private async Task StartSetPasswordAsync()
-        {
-            var page = new SetPasswordPage(_appOptions);
-            await Navigation.PushModalAsync(new NavigationPage(page));
-        }
-
-        private async Task LoggedInSsoAsync()
+        private async Task SetPasswordSuccessAsync()
         {
             if (_appOptions != null)
             {
@@ -99,7 +91,7 @@ namespace Bit.App.Pages
             {
                 await _storageService.RemoveAsync(Constants.PreviousPageKey);
             }
-            await _vaultTimeoutService.LockAsync();
+            Application.Current.MainPage = new TabsPage(_appOptions, previousPage);
         }
     }
 }

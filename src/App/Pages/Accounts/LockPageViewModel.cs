@@ -227,9 +227,7 @@ namespace Bit.App.Pages
             {
                 var key = await _cryptoService.MakeKeyAsync(MasterPassword, _email, kdf, kdfIterations);
                 var keyHash = await _cryptoService.HashPasswordAsync(MasterPassword, key);
-
                 var passwordValid = false;
-
                 if (keyHash != null)
                 {
                     var storedKeyHash = await _cryptoService.GetKeyHashAsync();
@@ -240,7 +238,6 @@ namespace Bit.App.Pages
                     else
                     {
                         await _deviceActionService.ShowLoadingAsync(AppResources.LoggingIn);
-                        
                         var request = new PasswordVerificationRequest();
                         request.MasterPasswordHash = keyHash;
                         try
@@ -256,7 +253,6 @@ namespace Bit.App.Pages
                         await _deviceActionService.HideLoadingAsync();
                     }
                 }
-
                 if (passwordValid)
                 {
                     if (_pinSet.Item1)
@@ -282,43 +278,6 @@ namespace Bit.App.Pages
                     await _platformUtilsService.ShowDialogAsync(AppResources.InvalidMasterPassword,
                         AppResources.AnErrorHasOccurred);
                 }
-                
-                // var storedKeyHash = await _cryptoService.GetKeyHashAsync();
-                // if (storedKeyHash == null)
-                // {
-                //     var oldKey = await _secureStorageService.GetAsync<string>("oldKey");
-                //     if (key.KeyB64 == oldKey)
-                //     {
-                //         await _secureStorageService.RemoveAsync("oldKey");
-                //         await _cryptoService.SetKeyHashAsync(keyHash);
-                //         storedKeyHash = keyHash;
-                //     }
-                // }
-                // if (storedKeyHash != null && keyHash != null && storedKeyHash == keyHash)
-                // {
-                //     if (_pinSet.Item1)
-                //     {
-                //         var protectedPin = await _storageService.GetAsync<string>(Constants.ProtectedPin);
-                //         var encKey = await _cryptoService.GetEncKeyAsync(key);
-                //         var decPin = await _cryptoService.DecryptToUtf8Async(new CipherString(protectedPin), encKey);
-                //         var pinKey = await _cryptoService.MakePinKeyAysnc(decPin, _email,
-                //             kdf.GetValueOrDefault(KdfType.PBKDF2_SHA256), kdfIterations.GetValueOrDefault(5000));
-                //         _vaultTimeoutService.PinProtectedKey = await _cryptoService.EncryptAsync(key.Key, pinKey);
-                //     }
-                //     MasterPassword = string.Empty;
-                //     await SetKeyAndContinueAsync(key);
-                //
-                //     // Re-enable biometrics
-                //     if (BiometricLock & !BiometricIntegrityValid)
-                //     {
-                //         await _biometricService.SetupBiometricAsync();
-                //     }
-                // }
-                // else
-                // {
-                //     await _platformUtilsService.ShowDialogAsync(AppResources.InvalidMasterPassword,
-                //         AppResources.AnErrorHasOccurred);
-                // }
             }
         }
 

@@ -62,7 +62,7 @@ namespace Bit.Core.Models.Request
             {
                 throw new Exception("must provide credentials or codes");
             }
-            
+
             if (Device != null)
             {
                 obj.Add("deviceType", ((int)Device.Type).ToString());

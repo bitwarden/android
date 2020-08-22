@@ -115,6 +115,10 @@
       <DependentUpon>LoginSsoPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Pages\Accounts\SetPasswordPage.xaml.cs">
+      <DependentUpon>ResetMasterPasswordPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -123,10 +127,6 @@
 
   <ItemGroup>
     <EmbeddedResource Update="Controls\CipherViewCell\CipherViewCell.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Pages\Accounts\LoginSsoPage.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>

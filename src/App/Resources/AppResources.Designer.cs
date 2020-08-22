@@ -2978,5 +2978,71 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("LoginSsoError", resourceCulture);
             }
         }
+        
+        public static string SetMasterPassword {
+            get {
+                return ResourceManager.GetString("SetMasterPassword", resourceCulture);
+            }
+        }
+        
+        public static string SetMasterPasswordSummary {
+            get {
+                return ResourceManager.GetString("SetMasterPasswordSummary", resourceCulture);
+            }
+        }
+        
+        public static string MasterPasswordPolicyInEffect {
+            get {
+                return ResourceManager.GetString("MasterPasswordPolicyInEffect", resourceCulture);
+            }
+        }
+        
+        public static string PolicyInEffectMinComplexity {
+            get {
+                return ResourceManager.GetString("PolicyInEffectMinComplexity", resourceCulture);
+            }
+        }
+        
+        public static string PolicyInEffectMinLength {
+            get {
+                return ResourceManager.GetString("PolicyInEffectMinLength", resourceCulture);
+            }
+        }
+        
+        public static string PolicyInEffectUppercase {
+            get {
+                return ResourceManager.GetString("PolicyInEffectUppercase", resourceCulture);
+            }
+        }
+        
+        public static string PolicyInEffectLowercase {
+            get {
+                return ResourceManager.GetString("PolicyInEffectLowercase", resourceCulture);
+            }
+        }
+        
+        public static string PolicyInEffectNumbers {
+            get {
+                return ResourceManager.GetString("PolicyInEffectNumbers", resourceCulture);
+            }
+        }
+        
+        public static string PolicyInEffectSpecial {
+            get {
+                return ResourceManager.GetString("PolicyInEffectSpecial", resourceCulture);
+            }
+        }
+        
+        public static string MasterPasswordPolicyValidationTitle {
+            get {
+                return ResourceManager.GetString("MasterPasswordPolicyValidationTitle", resourceCulture);
+            }
+        }
+        
+        public static string MasterPasswordPolicyValidationMessage {
+            get {
+                return ResourceManager.GetString("MasterPasswordPolicyValidationMessage", resourceCulture);
+            }
+        }
     }
 }

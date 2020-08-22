@@ -14,6 +14,7 @@ namespace Bit.App.Pages
         private readonly IBroadcasterService _broadcasterService;
         private readonly IMessagingService _messagingService;
         private readonly IStorageService _storageService;
+        private readonly IVaultTimeoutService _vaultTimeoutService;
         private readonly AppOptions _appOptions;
 
         private TwoFactorPageViewModel _vm;
@@ -29,8 +30,11 @@ namespace Bit.App.Pages
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
+            _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             _vm = BindingContext as TwoFactorPageViewModel;
             _vm.Page = this;
+            _vm.StartSetPasswordAction = () =>
+                Device.BeginInvokeOnMainThread(async () => await StartSetPasswordAsync());
             _vm.TwoFactorAction = () => Device.BeginInvokeOnMainThread(async () => await TwoFactorAuthAsync());
             _vm.CloseAction = async () => await Navigation.PopModalAsync();
             DuoWebView = _duoWebView;
@@ -161,7 +165,14 @@ namespace Bit.App.Pages
                 }
             }
         }
-        
+
+        private async Task StartSetPasswordAsync()
+        {
+            _vm.CloseAction();
+            var page = new SetPasswordPage(_appOptions);
+            await Navigation.PushModalAsync(new NavigationPage(page));
+        }
+
         private async Task TwoFactorAuthAsync()
         {
             if (_appOptions != null)
@@ -184,7 +195,7 @@ namespace Bit.App.Pages
             }
             if (_authingWithSso)
             {
-                Application.Current.MainPage = new LockPage(_appOptions);
+                await _vaultTimeoutService.LockAsync();
             }
             else
             {
