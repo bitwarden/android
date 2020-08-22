@@ -407,18 +407,6 @@ namespace Bit.App
         private async Task LockedAsync(bool autoPromptBiometric)
         {
             await _stateService.PurgeAsync();
-            if (autoPromptBiometric && Device.RuntimePlatform == Device.iOS)
-            {
-                var vaultTimeout = await _storageService.GetAsync<int?>(Constants.VaultTimeoutKey);
-                if (vaultTimeout == 0)
-                {
-                    autoPromptBiometric = false;
-                }
-            }
-            else if (autoPromptBiometric && Device.RuntimePlatform == Device.Android)
-            {
-                autoPromptBiometric = false;
-            }
             PreviousPageInfo lastPageBeforeLock = null;
             if (Current.MainPage is TabbedPage tabbedPage && tabbedPage.Navigation.ModalStack.Count > 0)
             {
