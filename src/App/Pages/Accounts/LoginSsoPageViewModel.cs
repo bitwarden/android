@@ -109,17 +109,30 @@ namespace Bit.App.Pages
                       "code_challenge_method=S256&response_mode=query&" +
                       "domain_hint=" + Uri.EscapeDataString(OrgIdentifier);
 
-            var authResult = await WebAuthenticator.AuthenticateAsync(new Uri(url),
-                new Uri(redirectUri));
-            if (authResult.Properties.TryGetValue("code", out var code))
+            WebAuthenticatorResult authResult = null;
+            bool cancelled = false;
+            try
             {
-                await Login(code, codeVerifier, redirectUri);
+                authResult = await WebAuthenticator.AuthenticateAsync(new Uri(url),
+                    new Uri(redirectUri));
             }
-            else
+            catch (TaskCanceledException e)
             {
                 await _deviceActionService.HideLoadingAsync();
-                await _platformUtilsService.ShowDialogAsync(AppResources.LoginSsoError,
-                    AppResources.AnErrorHasOccurred);
+                cancelled = true;
+            }
+            if (!cancelled)
+            {
+                if (authResult != null && authResult.Properties.TryGetValue("code", out var code))
+                {
+                    await Login(code, codeVerifier, redirectUri);
+                }
+                else
+                {
+                    await _deviceActionService.HideLoadingAsync();
+                    await _platformUtilsService.ShowDialogAsync(AppResources.LoginSsoError,
+                        AppResources.AnErrorHasOccurred);
+                }
             }
         }
 
