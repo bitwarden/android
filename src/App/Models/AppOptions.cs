@@ -19,5 +19,28 @@ namespace Bit.App.Models
         public string SaveCardExpYear { get; set; }
         public string SaveCardCode { get; set; }
         public bool IosExtension { get; set; }
+
+        public void SetAllFrom(AppOptions o)
+        {
+            if (o == null)
+            {
+                return;
+            }
+            MyVaultTile = o.MyVaultTile;
+            GeneratorTile = o.GeneratorTile;
+            FromAutofillFramework = o.FromAutofillFramework;
+            FillType = o.FillType;
+            Uri = o.Uri;
+            SaveType = o.SaveType;
+            SaveName = o.SaveName;
+            SaveUsername = o.SaveUsername;
+            SavePassword = o.SavePassword;
+            SaveCardName = o.SaveCardName;
+            SaveCardNumber = o.SaveCardNumber;
+            SaveCardExpMonth = o.SaveCardExpMonth;
+            SaveCardExpYear = o.SaveCardExpYear;
+            SaveCardCode = o.SaveCardCode;
+            IosExtension = o.IosExtension;
+        }
     }
 }

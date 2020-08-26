@@ -237,7 +237,7 @@ namespace Bit.App.Pages
                     }
                     else
                     {
-                        await _deviceActionService.ShowLoadingAsync(AppResources.LoggingIn);
+                        await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
                         var request = new PasswordVerificationRequest();
                         request.MasterPasswordHash = keyHash;
                         try

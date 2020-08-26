@@ -8,6 +8,7 @@ using Bit.Core.Utilities;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Bit.App.Models;
 using Xamarin.Forms;
 
 namespace Bit.App.Utilities
@@ -191,6 +192,35 @@ namespace Bit.App.Utilities
                         break;
                 }
             }
+        }
+
+        public static bool HasAppOptions(AppOptions appOptions)
+        {
+            if (appOptions != null)
+            {
+                if (appOptions.FromAutofillFramework && appOptions.SaveType.HasValue)
+                {
+                    Application.Current.MainPage = new NavigationPage(new AddEditPage(appOptions: appOptions));
+                    return true;
+                }
+                if (appOptions.Uri != null)
+                {
+                    Application.Current.MainPage = new NavigationPage(new AutofillCiphersPage(appOptions));
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static async Task<PreviousPageInfo> ClearPreviousPage()
+        {
+            var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+            var previousPage = await storageService.GetAsync<PreviousPageInfo>(Constants.PreviousPageKey);
+            if (previousPage != null)
+            {
+                await storageService.RemoveAsync(Constants.PreviousPageKey);
+            }
+            return previousPage;
         }
     }
 }

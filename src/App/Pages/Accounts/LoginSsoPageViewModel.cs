@@ -56,7 +56,7 @@ namespace Bit.App.Pages
         public bool RememberOrgIdentifier { get; set; }
         public Action StartTwoFactorAction { get; set; }
         public Action StartSetPasswordAction { get; set; }
-        public Action LoggedInSsoAction { get; set; }
+        public Action SsoAuthSuccessAction { get; set; }
         public Action CloseAction { get; set; }
 
         public async Task InitAsync()
@@ -94,10 +94,8 @@ namespace Bit.App.Pages
             var codeVerifier = await _passwordGenerationService.GeneratePasswordAsync(passwordOptions);
             var codeVerifierHash = await _cryptoFunctionService.HashAsync(codeVerifier, CryptoHashAlgorithm.Sha256);
             var codeChallenge = CoreHelpers.Base64UrlEncode(codeVerifierHash);
-            await _storageService.SaveAsync(Constants.SsoCodeVerifierKey, codeVerifier);
 
             var state = await _passwordGenerationService.GeneratePasswordAsync(passwordOptions);
-            await _storageService.SaveAsync(Constants.SsoStateKey, state);
 
             var redirectUri = "bitwarden://sso-callback";
 
@@ -116,16 +114,29 @@ namespace Bit.App.Pages
                 authResult = await WebAuthenticator.AuthenticateAsync(new Uri(url),
                     new Uri(redirectUri));
             }
-            catch (TaskCanceledException e)
+            catch (TaskCanceledException taskCanceledException)
             {
                 await _deviceActionService.HideLoadingAsync();
                 cancelled = true;
+            }
+            catch (Exception e)
+            {
+                // WebAuthenticator throws NSErrorException if iOS flow is cancelled - by setting cancelled to true
+                // here we maintain the appearance of a clean cancellation (we don't want to do this across the board
+                // because we still want to present legitimate errors).  If/when this is fixed, we can remove this
+                // particular catch block (catching taskCanceledException above must remain)
+                // https://github.com/xamarin/Essentials/issues/1240
+                if (Device.RuntimePlatform == Device.iOS)
+                {
+                    await _deviceActionService.HideLoadingAsync();
+                    cancelled = true;
+                }
             }
             if (!cancelled)
             {
                 if (authResult != null && authResult.Properties.TryGetValue("code", out var code))
                 {
-                    await Login(code, codeVerifier, redirectUri);
+                    await LogIn(code, codeVerifier, redirectUri);
                 }
                 else
                 {
@@ -136,7 +147,7 @@ namespace Bit.App.Pages
             }
         }
 
-        private async Task Login(string code, string codeVerifier, string redirectUri)
+        private async Task LogIn(string code, string codeVerifier, string redirectUri)
         {
             try
             {
@@ -163,7 +174,7 @@ namespace Bit.App.Pages
                     var disableFavicon = await _storageService.GetAsync<bool?>(Constants.DisableFaviconKey);
                     await _stateService.SaveAsync(Constants.DisableFaviconKey, disableFavicon.GetValueOrDefault());
                     var task = Task.Run(async () => await _syncService.FullSyncAsync(true));
-                    LoggedInSsoAction?.Invoke();
+                    SsoAuthSuccessAction?.Invoke();
                 }
             }
             catch (Exception e)

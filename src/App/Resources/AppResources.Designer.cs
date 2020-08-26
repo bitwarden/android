@@ -3044,5 +3044,11 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("MasterPasswordPolicyValidationMessage", resourceCulture);
             }
         }
+        
+        public static string Loading {
+            get {
+                return ResourceManager.GetString("Loading", resourceCulture);
+            }
+        }
     }
 }

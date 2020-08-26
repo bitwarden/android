@@ -1,9 +1,9 @@
 ﻿using Bit.App.Models;
-using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using System;
 using System.Threading.Tasks;
+using Bit.App.Utilities;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -15,6 +15,8 @@ namespace Bit.App.Pages
         private readonly IVaultTimeoutService _vaultTimeoutService;
         private readonly LoginSsoPageViewModel _vm;
         private readonly AppOptions _appOptions;
+
+        private AppOptions _appOptionsCopy;
 
         public LoginSsoPage(AppOptions appOptions = null)
         {
@@ -29,7 +31,7 @@ namespace Bit.App.Pages
             _vm.StartTwoFactorAction = () => Device.BeginInvokeOnMainThread(async () => await StartTwoFactorAsync());
             _vm.StartSetPasswordAction = () =>
                 Device.BeginInvokeOnMainThread(async () => await StartSetPasswordAsync());
-            _vm.LoggedInSsoAction = () => Device.BeginInvokeOnMainThread(async () => await LoggedInSsoAsync());
+            _vm.SsoAuthSuccessAction = () => Device.BeginInvokeOnMainThread(async () => await SsoAuthSuccessAsync());
             _vm.CloseAction = async () =>
             {
                 _messagingService.Send("showStatusBar", false);
@@ -51,10 +53,31 @@ namespace Bit.App.Pages
             }
         }
 
+        private void CopyAppOptions()
+        {
+            if (_appOptions != null)
+            {
+                // create an object copy of _appOptions to persist values when app is exited during web auth flow
+                _appOptionsCopy = new AppOptions();
+                _appOptionsCopy.SetAllFrom(_appOptions);
+            }
+        }
+
+        private void restoreAppOptionsFromCopy()
+        {
+            if (_appOptions != null)
+            {
+                // restore values to original readonly _appOptions object from copy
+                _appOptions.SetAllFrom(_appOptionsCopy);
+                _appOptionsCopy = null;
+            }
+        }
+
         private async void LogIn_Clicked(object sender, EventArgs e)
         {
             if (DoOnce())
             {
+                CopyAppOptions();
                 await _vm.LogInAsync();
             }
         }
@@ -69,37 +92,23 @@ namespace Bit.App.Pages
 
         private async Task StartTwoFactorAsync()
         {
-            var page = new TwoFactorPage(true);
+            restoreAppOptionsFromCopy();
+            var page = new TwoFactorPage(true, _appOptions);
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
 
         private async Task StartSetPasswordAsync()
         {
+            restoreAppOptionsFromCopy();
             var page = new SetPasswordPage(_appOptions);
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
 
-        private async Task LoggedInSsoAsync()
+        private async Task SsoAuthSuccessAsync()
         {
-            if (_appOptions != null)
-            {
-                if (_appOptions.FromAutofillFramework && _appOptions.SaveType.HasValue)
-                {
-                    Application.Current.MainPage = new NavigationPage(new AddEditPage(appOptions: _appOptions));
-                    return;
-                }
-                if (_appOptions.Uri != null)
-                {
-                    Application.Current.MainPage = new NavigationPage(new AutofillCiphersPage(_appOptions));
-                    return;
-                }
-            }
-            var previousPage = await _storageService.GetAsync<PreviousPageInfo>(Constants.PreviousPageKey);
-            if (previousPage != null)
-            {
-                await _storageService.RemoveAsync(Constants.PreviousPageKey);
-            }
-            await _vaultTimeoutService.LockAsync();
+            restoreAppOptionsFromCopy();
+            await AppHelpers.ClearPreviousPage();
+            Application.Current.MainPage = new NavigationPage(new LockPage(_appOptions));
         }
     }
 }
