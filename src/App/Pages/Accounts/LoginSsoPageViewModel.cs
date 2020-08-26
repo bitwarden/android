@@ -134,7 +134,8 @@ namespace Bit.App.Pages
             }
             if (!cancelled)
             {
-                if (authResult != null && authResult.Properties.TryGetValue("code", out var code))
+                var code = GetResultCode(authResult, state);
+                if (!string.IsNullOrEmpty(code))
                 {
                     await LogIn(code, codeVerifier, redirectUri);
                 }
@@ -145,6 +146,21 @@ namespace Bit.App.Pages
                         AppResources.AnErrorHasOccurred);
                 }
             }
+        }
+
+        private string GetResultCode(WebAuthenticatorResult authResult, string state)
+        {
+            string code = null;
+            if (authResult != null)
+            {
+                authResult.Properties.TryGetValue("state", out var resultState);
+                if (resultState == state)
+                {
+                    authResult.Properties.TryGetValue("code", out var resultCode);
+                    code = resultCode;
+                }
+            }
+            return code;
         }
 
         private async Task LogIn(string code, string codeVerifier, string redirectUri)
