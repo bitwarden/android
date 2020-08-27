@@ -290,6 +290,7 @@ namespace Bit.Droid.Accessibility
 
             // NTT DOCOMO ——— mainly used for "My docomo".
             new KnownUsernameField("cfg.smt.docomo.ne.jp",   new (string, string)[] { ("contains:/auth/", "Di_Uid") }),
+            new KnownUsernameField("id.smt.docomo.ne.jp",    new (string, string)[] { ("contains:/cgi7/", "Di_Uid") }),
 
             /**************************************************************************************
              * SECTION D ——— Miscellaneous
