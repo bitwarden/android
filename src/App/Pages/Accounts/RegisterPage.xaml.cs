@@ -1,6 +1,7 @@
 ﻿using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using System;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -17,12 +18,11 @@ namespace Bit.App.Pages
             InitializeComponent();
             _vm = BindingContext as RegisterPageViewModel;
             _vm.Page = this;
-            _vm.RegistrationSuccess = async () =>
+            _vm.RegistrationSuccess = () => Device.BeginInvokeOnMainThread(async () => await RegistrationSuccessAsync(homePage));
+            _vm.CloseAction = async () =>
             {
-                if (homePage != null)
-                {
-                    await homePage.DismissRegisterPageAndLogInAsync(_vm.Email);
-                }
+                _messagingService.Send("showStatusBar", false);
+                await Navigation.PopModalAsync();
             };
             MasterPasswordEntry = _masterPassword;
             ConfirmMasterPasswordEntry = _confirmMasterPassword;
@@ -55,13 +55,20 @@ namespace Bit.App.Pages
                 await _vm.SubmitAsync();
             }
         }
+        
+        private async Task RegistrationSuccessAsync(HomePage homePage)
+        {
+            if (homePage != null)
+            {
+                await homePage.DismissRegisterPageAndLogInAsync(_vm.Email);
+            }
+        }
 
-        private async void Close_Clicked(object sender, EventArgs e)
+        private void Close_Clicked(object sender, EventArgs e)
         {
             if (DoOnce())
             {
-                _messagingService.Send("showStatusBar", false);
-                await Navigation.PopModalAsync();
+                _vm.CloseAction();
             }
         }
     }

@@ -25,7 +25,7 @@ namespace Bit.App.Pages
             _vm = BindingContext as LoginPageViewModel;
             _vm.Page = this;
             _vm.StartTwoFactorAction = () => Device.BeginInvokeOnMainThread(async () => await StartTwoFactorAsync());
-            _vm.LoggedInAction = () => Device.BeginInvokeOnMainThread(async () => await LoggedInAsync());
+            _vm.LogInSuccessAction = () => Device.BeginInvokeOnMainThread(async () => await LogInSuccessAsync());
             _vm.CloseAction = async () =>
             {
                 _messagingService.Send("showStatusBar", false);
@@ -74,7 +74,7 @@ namespace Bit.App.Pages
             }
         }
 
-        private async void Close_Clicked(object sender, EventArgs e)
+        private void Close_Clicked(object sender, EventArgs e)
         {
             if (DoOnce())
             {
@@ -88,7 +88,7 @@ namespace Bit.App.Pages
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
 
-        private async Task LoggedInAsync()
+        private async Task LogInSuccessAsync()
         {
             if (AppHelpers.HasAppOptions(_appOptions))
             {

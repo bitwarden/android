@@ -82,7 +82,7 @@ namespace Bit.App.Pages
             }
         }
 
-        private async void Close_Clicked(object sender, EventArgs e)
+        private void Close_Clicked(object sender, EventArgs e)
         {
             if (DoOnce())
             {

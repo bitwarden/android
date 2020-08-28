@@ -10,14 +10,12 @@ namespace Bit.App.Pages
 {
     public partial class SetPasswordPage : BaseContentPage
     {
-        private readonly IStorageService _storageService;
         private readonly IMessagingService _messagingService;
         private readonly SetPasswordPageViewModel _vm;
         private readonly AppOptions _appOptions;
 
         public SetPasswordPage(AppOptions appOptions = null)
         {
-            _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _messagingService.Send("showStatusBar", true);
             _appOptions = appOptions;

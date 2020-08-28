@@ -35,7 +35,8 @@ namespace Bit.App.Pages
             _vm.Page = this;
             _vm.StartSetPasswordAction = () =>
                 Device.BeginInvokeOnMainThread(async () => await StartSetPasswordAsync());
-            _vm.TwoFactorAction = () => Device.BeginInvokeOnMainThread(async () => await TwoFactorAuthAsync());
+            _vm.TwoFactorAuthSuccessAction = () =>
+                Device.BeginInvokeOnMainThread(async () => await TwoFactorAuthSuccessAsync());
             _vm.CloseAction = async () => await Navigation.PopModalAsync();
             DuoWebView = _duoWebView;
             if (Device.RuntimePlatform == Device.Android)
@@ -147,7 +148,7 @@ namespace Bit.App.Pages
             }
         }
 
-        private async void Close_Clicked(object sender, System.EventArgs e)
+        private void Close_Clicked(object sender, System.EventArgs e)
         {
             if (DoOnce())
             {
@@ -173,7 +174,7 @@ namespace Bit.App.Pages
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
 
-        private async Task TwoFactorAuthAsync()
+        private async Task TwoFactorAuthSuccessAsync()
         {
             if (_authingWithSso)
             {

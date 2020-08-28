@@ -90,7 +90,7 @@ namespace Bit.App.Pages
             });
         }
         public Command SubmitCommand { get; }
-        public Action TwoFactorAction { get; set; }
+        public Action TwoFactorAuthSuccessAction { get; set; }
         public Action StartSetPasswordAction { get; set; }
         public Action CloseAction { get; set; }
 
@@ -220,7 +220,7 @@ namespace Bit.App.Pages
                 {
                     var disableFavicon = await _storageService.GetAsync<bool?>(Constants.DisableFaviconKey);
                     await _stateService.SaveAsync(Constants.DisableFaviconKey, disableFavicon.GetValueOrDefault());
-                    TwoFactorAction?.Invoke();
+                    TwoFactorAuthSuccessAction?.Invoke();
                 }
             }
             catch (ApiException e)
