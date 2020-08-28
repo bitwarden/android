@@ -377,6 +377,34 @@ namespace Bit.Core.Services
             return accessToken;
         }
 
+        public async Task<object> PreValidateSso(string identifier)
+        {
+            var path = "/account/prevalidate?domainHint=" + WebUtility.UrlEncode(identifier);
+            using (var requestMessage = new HttpRequestMessage())
+            {
+                requestMessage.Version = new Version(1, 0);
+                requestMessage.Method = HttpMethod.Get;
+                requestMessage.RequestUri = new Uri(string.Concat(ApiBaseUrl, path));
+                requestMessage.Headers.Add("Accept", "application/json");
+                
+                HttpResponseMessage response;
+                try
+                {
+                    response = await _httpClient.SendAsync(requestMessage);
+                }
+                catch (Exception e)
+                {
+                    throw new ApiException(HandleWebError(e));
+                }
+                if (!response.IsSuccessStatusCode)
+                {
+                    var error = await HandleErrorAsync(response, false);
+                    throw new ApiException(error);
+                }
+                return null;
+            }
+        }
+
         public async Task<TResponse> SendAsync<TRequest, TResponse>(HttpMethod method, string path, TRequest body,
             bool authed, bool hasResponse)
         {

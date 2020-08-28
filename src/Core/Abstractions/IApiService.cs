@@ -42,6 +42,7 @@ namespace Bit.Core.Abstractions
         Task PutDeleteCipherAsync(string id);
         Task PutRestoreCipherAsync(string id);
         Task RefreshIdentityTokenAsync();
+        Task<object> PreValidateSso(string identifier);
         Task<TResponse> SendAsync<TRequest, TResponse>(HttpMethod method, string path,
             TRequest body, bool authed, bool hasResponse);
         void SetUrls(EnvironmentUrls urls);

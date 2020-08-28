@@ -6,6 +6,7 @@ using Bit.Core.Utilities;
 using System;
 using System.Threading.Tasks;
 using Bit.Core.Enums;
+using Bit.Core.Exceptions;
 using Bit.Core.Models.Domain;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -87,6 +88,19 @@ namespace Bit.App.Pages
             }
 
             await _deviceActionService.ShowLoadingAsync(AppResources.LoggingIn);
+
+            try
+            {
+                await _apiService.PreValidateSso(OrgIdentifier);
+            }
+            catch (ApiException e)
+            {
+                await _deviceActionService.HideLoadingAsync();
+                await _platformUtilsService.ShowDialogAsync(
+                    (e?.Error != null ? e.Error.GetSingleMessage() : AppResources.LoginSsoError),
+                    AppResources.AnErrorHasOccurred);
+                return;
+            }
 
             var passwordOptions = new PasswordGenerationOptions(true);
             passwordOptions.Length = 64;
