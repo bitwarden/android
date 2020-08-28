@@ -384,7 +384,7 @@ namespace Bit.Core.Services
             {
                 requestMessage.Version = new Version(1, 0);
                 requestMessage.Method = HttpMethod.Get;
-                requestMessage.RequestUri = new Uri(string.Concat(ApiBaseUrl, path));
+                requestMessage.RequestUri = new Uri(string.Concat(IdentityBaseUrl, path));
                 requestMessage.Headers.Add("Accept", "application/json");
                 
                 HttpResponseMessage response;
