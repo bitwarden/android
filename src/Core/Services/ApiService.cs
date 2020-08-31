@@ -528,13 +528,20 @@ namespace Bit.Core.Services
                 await _logoutCallbackAsync(true);
                 return null;
             }
-            JObject responseJObject = null;
-            if (IsJsonResponse(response))
+            try
             {
-                var responseJsonString = await response.Content.ReadAsStringAsync();
-                responseJObject = JObject.Parse(responseJsonString);
+                JObject responseJObject = null;
+                if (IsJsonResponse(response))
+                {
+                    var responseJsonString = await response.Content.ReadAsStringAsync();
+                    responseJObject = JObject.Parse(responseJsonString);
+                }
+                return new ErrorResponse(responseJObject, response.StatusCode, tokenError);
             }
-            return new ErrorResponse(responseJObject, response.StatusCode, tokenError);
+            catch
+            {
+                return null;
+            }
         }
 
         private bool IsJsonResponse(HttpResponseMessage response)
