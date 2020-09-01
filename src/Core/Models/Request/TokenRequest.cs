@@ -70,7 +70,7 @@ namespace Bit.Core.Models.Request
                 obj.Add("deviceName", Device.Name);
                 obj.Add("devicePushToken", Device.PushToken);
             }
-            if (!string.IsNullOrWhiteSpace(Token) && Provider != null && Remember != null)
+            if (!string.IsNullOrWhiteSpace(Token) && Provider != null && Remember.HasValue)
             {
                 obj.Add("twoFactorToken", Token);
                 obj.Add("twoFactorProvider", ((int)Provider.Value).ToString());

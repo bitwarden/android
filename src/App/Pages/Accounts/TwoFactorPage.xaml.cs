@@ -182,7 +182,7 @@ namespace Bit.App.Pages
             }
             else
             {
-                if (AppHelpers.HasAppOptions(_appOptions))
+                if (AppHelpers.SetAlternateMainPage(_appOptions))
                 {
                     return;
                 }

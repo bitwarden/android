@@ -90,7 +90,7 @@ namespace Bit.App.Pages
 
         private async Task LogInSuccessAsync()
         {
-            if (AppHelpers.HasAppOptions(_appOptions))
+            if (AppHelpers.SetAlternateMainPage(_appOptions))
             {
                 return;
             }

@@ -194,7 +194,7 @@ namespace Bit.App.Utilities
             }
         }
 
-        public static bool HasAppOptions(AppOptions appOptions)
+        public static bool SetAlternateMainPage(AppOptions appOptions)
         {
             if (appOptions != null)
             {

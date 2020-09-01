@@ -71,7 +71,7 @@ namespace Bit.App.Pages
 
         private async Task SetPasswordSuccessAsync()
         {
-            if (AppHelpers.HasAppOptions(_appOptions))
+            if (AppHelpers.SetAlternateMainPage(_appOptions))
             {
                 return;
             }

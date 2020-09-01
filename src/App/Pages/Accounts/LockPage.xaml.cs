@@ -99,7 +99,7 @@ namespace Bit.App.Pages
 
         private async Task UnlockedAsync()
         {
-            if (AppHelpers.HasAppOptions(_appOptions))
+            if (AppHelpers.SetAlternateMainPage(_appOptions))
             {
                 return;
             }
