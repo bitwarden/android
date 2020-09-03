@@ -10,6 +10,7 @@ namespace Bit.App.Pages
 {
     public partial class HomePage : BaseContentPage
     {
+        private readonly HomeViewModel _vm;
         private readonly AppOptions _appOptions;
         private IMessagingService _messagingService;
 
@@ -19,6 +20,12 @@ namespace Bit.App.Pages
             _messagingService.Send("showStatusBar", false);
             _appOptions = appOptions;
             InitializeComponent();
+            _vm = BindingContext as HomeViewModel;
+            _vm.Page = this;
+            _vm.StartLoginAction = () => Device.BeginInvokeOnMainThread(async () => await StartLoginAsync());
+            _vm.StartRegisterAction = () => Device.BeginInvokeOnMainThread(async () => await StartRegisterAsync());
+            _vm.StartSsoLoginAction = () => Device.BeginInvokeOnMainThread(async () => await StartSsoLoginAsync());
+            _vm.StartEnvironmentAction = () => Device.BeginInvokeOnMainThread(async () => await StartEnvironmentAsync());
             _logo.Source = !ThemeManager.UsingLightTheme ? "logo_white.png" : "logo.png";
         }
 
@@ -33,29 +40,69 @@ namespace Bit.App.Pages
             base.OnAppearing();
             _messagingService.Send("showStatusBar", false);
         }
+        
+        private void Close_Clicked(object sender, EventArgs e)
+        {
+            if (DoOnce())
+            {
+                _vm.CloseAction();
+            }
+        }
 
         private void LogIn_Clicked(object sender, EventArgs e)
         {
             if (DoOnce())
             {
-                Navigation.PushModalAsync(new NavigationPage(new LoginPage(null, _appOptions)));
+                _vm.StartLoginAction();
             }
+        }
+
+        private async Task StartLoginAsync()
+        {
+            var page = new LoginPage(null, _appOptions);
+            await Navigation.PushModalAsync(new NavigationPage(page));
         }
 
         private void Register_Clicked(object sender, EventArgs e)
         {
             if (DoOnce())
             {
-                Navigation.PushModalAsync(new NavigationPage(new RegisterPage(this)));
+                _vm.StartRegisterAction();
             }
         }
+        
+        private async Task StartRegisterAsync()
+        {
+            var page = new RegisterPage(this);
+            await Navigation.PushModalAsync(new NavigationPage(page));
+        }
 
-        private void Settings_Clicked(object sender, EventArgs e)
+        private void LogInSso_Clicked(object sender, EventArgs e)
         {
             if (DoOnce())
             {
-                Navigation.PushModalAsync(new NavigationPage(new EnvironmentPage()));
+                _vm.StartSsoLoginAction();
             }
+        }
+
+        private async Task StartSsoLoginAsync()
+        {
+            var page = new LoginSsoPage(_appOptions);
+            await Navigation.PushModalAsync(new NavigationPage(page));
+        }
+
+        private void Environment_Clicked(object sender, EventArgs e)
+        {
+            if (DoOnce())
+            {
+                _vm.StartEnvironmentAction();
+            }
+        }
+        
+        private async Task StartEnvironmentAsync()
+        {
+            var page = new EnvironmentPage();
+            await Navigation.PushModalAsync(new NavigationPage(page));
         }
     }
 }

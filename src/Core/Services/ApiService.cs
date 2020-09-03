@@ -165,6 +165,12 @@ namespace Bit.Core.Services
                 request, false, false);
         }
 
+        public Task SetPasswordAsync(SetPasswordRequest request)
+        {
+            return SendAsync<SetPasswordRequest, object>(HttpMethod.Post, "/accounts/set-password", request, true,
+                false);
+        }
+
         public Task PostRegisterAsync(RegisterRequest request)
         {
             return SendAsync<RegisterRequest, object>(HttpMethod.Post, "/accounts/register", request, false, false);
@@ -173,6 +179,12 @@ namespace Bit.Core.Services
         public Task PostAccountKeysAsync(KeysRequest request)
         {
             return SendAsync<KeysRequest, object>(HttpMethod.Post, "/accounts/keys", request, true, false);
+        }
+
+        public Task PostAccountVerifyPasswordAsync(PasswordVerificationRequest request)
+        {
+            return SendAsync<PasswordVerificationRequest, object>(HttpMethod.Post, "/accounts/verify-password", request,
+                true, false);
         }
 
         #endregion
@@ -365,6 +377,34 @@ namespace Bit.Core.Services
             return accessToken;
         }
 
+        public async Task<object> PreValidateSso(string identifier)
+        {
+            var path = "/account/prevalidate?domainHint=" + WebUtility.UrlEncode(identifier);
+            using (var requestMessage = new HttpRequestMessage())
+            {
+                requestMessage.Version = new Version(1, 0);
+                requestMessage.Method = HttpMethod.Get;
+                requestMessage.RequestUri = new Uri(string.Concat(IdentityBaseUrl, path));
+                requestMessage.Headers.Add("Accept", "application/json");
+                
+                HttpResponseMessage response;
+                try
+                {
+                    response = await _httpClient.SendAsync(requestMessage);
+                }
+                catch (Exception e)
+                {
+                    throw new ApiException(HandleWebError(e));
+                }
+                if (!response.IsSuccessStatusCode)
+                {
+                    var error = await HandleErrorAsync(response, false);
+                    throw new ApiException(error);
+                }
+                return null;
+            }
+        }
+
         public async Task<TResponse> SendAsync<TRequest, TResponse>(HttpMethod method, string path, TRequest body,
             bool authed, bool hasResponse)
         {
@@ -488,13 +528,20 @@ namespace Bit.Core.Services
                 await _logoutCallbackAsync(true);
                 return null;
             }
-            JObject responseJObject = null;
-            if (IsJsonResponse(response))
+            try
             {
-                var responseJsonString = await response.Content.ReadAsStringAsync();
-                responseJObject = JObject.Parse(responseJsonString);
+                JObject responseJObject = null;
+                if (IsJsonResponse(response))
+                {
+                    var responseJsonString = await response.Content.ReadAsStringAsync();
+                    responseJObject = JObject.Parse(responseJsonString);
+                }
+                return new ErrorResponse(responseJObject, response.StatusCode, tokenError);
             }
-            return new ErrorResponse(responseJObject, response.StatusCode, tokenError);
+            catch
+            {
+                return null;
+            }
         }
 
         private bool IsJsonResponse(HttpResponseMessage response)

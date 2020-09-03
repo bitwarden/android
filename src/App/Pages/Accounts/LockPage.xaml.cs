@@ -1,9 +1,9 @@
 ﻿using Bit.App.Models;
-using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using System;
 using System.Threading.Tasks;
+using Bit.App.Utilities;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -99,24 +99,11 @@ namespace Bit.App.Pages
 
         private async Task UnlockedAsync()
         {
-            if (_appOptions != null)
+            if (AppHelpers.SetAlternateMainPage(_appOptions))
             {
-                if (_appOptions.FromAutofillFramework && _appOptions.SaveType.HasValue)
-                {
-                    Application.Current.MainPage = new NavigationPage(new AddEditPage(appOptions: _appOptions));
-                    return;
-                }
-                if (_appOptions.Uri != null)
-                {
-                    Application.Current.MainPage = new NavigationPage(new AutofillCiphersPage(_appOptions));
-                    return;
-                }
+                return;
             }
-            var previousPage = await _storageService.GetAsync<PreviousPageInfo>(Constants.PreviousPageKey);
-            if (previousPage != null)
-            {
-                await _storageService.RemoveAsync(Constants.PreviousPageKey);
-            }
+            var previousPage = await AppHelpers.ClearPreviousPage();
             Application.Current.MainPage = new TabsPage(_appOptions, previousPage);
         }
     }

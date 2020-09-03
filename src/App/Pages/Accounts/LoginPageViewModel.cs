@@ -68,7 +68,7 @@ namespace Bit.App.Pages
         public string ShowPasswordIcon => ShowPassword ? "" : "";
         public bool RememberEmail { get; set; }
         public Action StartTwoFactorAction { get; set; }
-        public Action LoggedInAction { get; set; }
+        public Action LogInSuccessAction { get; set; }
         public Action CloseAction { get; set; }
 
         public bool HideHintButton
@@ -142,7 +142,7 @@ namespace Bit.App.Pages
                     var disableFavicon = await _storageService.GetAsync<bool?>(Constants.DisableFaviconKey);
                     await _stateService.SaveAsync(Constants.DisableFaviconKey, disableFavicon.GetValueOrDefault());
                     var task = Task.Run(async () => await _syncService.FullSyncAsync(true));
-                    LoggedInAction?.Invoke();
+                    LogInSuccessAction?.Invoke();
                 }
             }
             catch (ApiException e)

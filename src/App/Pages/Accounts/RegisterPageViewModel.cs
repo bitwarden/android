@@ -52,6 +52,7 @@ namespace Bit.App.Pages
         public string ConfirmMasterPassword { get; set; }
         public string Hint { get; set; }
         public Action RegistrationSuccess { get; set; }
+        public Action CloseAction { get; set; }
 
         public async Task SubmitAsync()
         {

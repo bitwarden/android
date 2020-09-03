@@ -2,37 +2,41 @@
 using Bit.Core.Utilities;
 using System;
 using System.Threading.Tasks;
+using Bit.App.Models;
+using Bit.App.Utilities;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
-    public partial class RegisterPage : BaseContentPage
+    public partial class SetPasswordPage : BaseContentPage
     {
         private readonly IMessagingService _messagingService;
-        private readonly RegisterPageViewModel _vm;
+        private readonly SetPasswordPageViewModel _vm;
+        private readonly AppOptions _appOptions;
 
-        public RegisterPage(HomePage homePage)
+        public SetPasswordPage(AppOptions appOptions = null)
         {
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _messagingService.Send("showStatusBar", true);
+            _appOptions = appOptions;
             InitializeComponent();
-            _vm = BindingContext as RegisterPageViewModel;
+            _vm = BindingContext as SetPasswordPageViewModel;
             _vm.Page = this;
-            _vm.RegistrationSuccess = () => Device.BeginInvokeOnMainThread(async () => await RegistrationSuccessAsync(homePage));
+            _vm.SetPasswordSuccessAction =
+                () => Device.BeginInvokeOnMainThread(async () => await SetPasswordSuccessAsync());
             _vm.CloseAction = async () =>
             {
                 _messagingService.Send("showStatusBar", false);
                 await Navigation.PopModalAsync();
             };
-            MasterPasswordEntry = _masterPassword;
-            ConfirmMasterPasswordEntry = _confirmMasterPassword;
             if (Device.RuntimePlatform == Device.Android)
             {
                 ToolbarItems.RemoveAt(0);
             }
 
-            _email.ReturnType = ReturnType.Next;
-            _email.ReturnCommand = new Command(() => _masterPassword.Focus());
+            MasterPasswordEntry = _masterPassword;
+            ConfirmMasterPasswordEntry = _confirmMasterPassword;
+
             _masterPassword.ReturnType = ReturnType.Next;
             _masterPassword.ReturnCommand = new Command(() => _confirmMasterPassword.Focus());
             _confirmMasterPassword.ReturnType = ReturnType.Next;
@@ -42,10 +46,11 @@ namespace Bit.App.Pages
         public Entry MasterPasswordEntry { get; set; }
         public Entry ConfirmMasterPasswordEntry { get; set; }
 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
-            RequestFocus(_email);
+            await _vm.InitAsync();
+            RequestFocus(_masterPassword);
         }
 
         private async void Submit_Clicked(object sender, EventArgs e)
@@ -55,21 +60,23 @@ namespace Bit.App.Pages
                 await _vm.SubmitAsync();
             }
         }
-        
-        private async Task RegistrationSuccessAsync(HomePage homePage)
-        {
-            if (homePage != null)
-            {
-                await homePage.DismissRegisterPageAndLogInAsync(_vm.Email);
-            }
-        }
 
-        private void Close_Clicked(object sender, EventArgs e)
+        private async void Close_Clicked(object sender, EventArgs e)
         {
             if (DoOnce())
             {
                 _vm.CloseAction();
             }
+        }
+
+        private async Task SetPasswordSuccessAsync()
+        {
+            if (AppHelpers.SetAlternateMainPage(_appOptions))
+            {
+                return;
+            }
+            var previousPage = await AppHelpers.ClearPreviousPage();
+            Application.Current.MainPage = new TabsPage(_appOptions, previousPage);
         }
     }
 }

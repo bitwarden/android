@@ -56,7 +56,7 @@ namespace Bit.iOS.Autofill
             }
             if (!await IsAuthed())
             {
-                LaunchLoginFlow();
+                LaunchHomePage();
             }
             else if (await IsLocked())
             {
@@ -94,7 +94,7 @@ namespace Bit.iOS.Autofill
             InitAppIfNeeded();
             if (!await IsAuthed())
             {
-                LaunchLoginFlow();
+                LaunchHomePage();
                 return;
             }
             _context.CredentialIdentity = credentialIdentity;
@@ -107,7 +107,7 @@ namespace Bit.iOS.Autofill
             _context.Configuring = true;
             if (!await IsAuthed())
             {
-                LaunchLoginFlow();
+                LaunchHomePage();
                 return;
             }
             CheckLock(() => PerformSegue("setupSegue", this));
@@ -294,17 +294,74 @@ namespace Bit.iOS.Autofill
             }
         }
 
-        private void LaunchLoginFlow()
+        private void LaunchHomePage()
         {
-            var loginPage = new LoginPage();
+            var homePage = new HomePage();
+            var app = new App.App(new AppOptions { IosExtension = true });
+            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.ApplyResourcesToPage(homePage);
+            if (homePage.BindingContext is HomeViewModel vm)
+            {
+                vm.StartLoginAction = () => DismissViewController(false, () => LaunchLoginFlow());
+                vm.StartRegisterAction = () => DismissViewController(false, () => LaunchRegisterFlow());
+                vm.StartSsoLoginAction = () => DismissViewController(false, () => LaunchLoginSsoFlow());
+                vm.StartEnvironmentAction = () => DismissViewController(false, () => LaunchEnvironmentFlow());
+                vm.CloseAction = () => CompleteRequest();
+            }
+
+            var navigationPage = new NavigationPage(homePage);
+            var loginController = navigationPage.CreateViewController();
+            loginController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
+            PresentViewController(loginController, true, null);
+        }
+
+        private void LaunchEnvironmentFlow()
+        {
+            var environmentPage = new EnvironmentPage();
+            var app = new App.App(new AppOptions { IosExtension = true });
+            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.ApplyResourcesToPage(environmentPage);
+            if (environmentPage.BindingContext is EnvironmentPageViewModel vm)
+            {
+                vm.SubmitSuccessAction = () => DismissViewController(false, () => LaunchHomePage());
+                vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
+            }
+
+            var navigationPage = new NavigationPage(environmentPage);
+            var loginController = navigationPage.CreateViewController();
+            loginController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
+            PresentViewController(loginController, true, null);
+        }
+
+        private void LaunchRegisterFlow()
+        {
+            var registerPage = new RegisterPage(null);
+            var app = new App.App(new AppOptions { IosExtension = true });
+            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.ApplyResourcesToPage(registerPage);
+            if (registerPage.BindingContext is RegisterPageViewModel vm)
+            {
+                vm.RegistrationSuccess = () => DismissViewController(false, () => LaunchLoginFlow(vm.Email));
+                vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
+            }
+
+            var navigationPage = new NavigationPage(registerPage);
+            var loginController = navigationPage.CreateViewController();
+            loginController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
+            PresentViewController(loginController, true, null);
+        }
+
+        private void LaunchLoginFlow(string email = null)
+        {
+            var loginPage = new LoginPage(email);
             var app = new App.App(new AppOptions { IosExtension = true });
             ThemeManager.SetTheme(false, app.Resources);
             ThemeManager.ApplyResourcesToPage(loginPage);
             if (loginPage.BindingContext is LoginPageViewModel vm)
             {
-                vm.StartTwoFactorAction = () => DismissViewController(false, () => LaunchTwoFactorFlow());
-                vm.LoggedInAction = () => DismissLockAndContinue();
-                vm.CloseAction = () => CompleteRequest();
+                vm.StartTwoFactorAction = () => DismissViewController(false, () => LaunchTwoFactorFlow(false));
+                vm.LogInSuccessAction = () => DismissLockAndContinue();
+                vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
                 vm.HideHintButton = true;
             }
 
@@ -314,22 +371,68 @@ namespace Bit.iOS.Autofill
             PresentViewController(loginController, true, null);
         }
 
-        private void LaunchTwoFactorFlow()
+        private void LaunchLoginSsoFlow()
         {
-            var twoFactorPage = new TwoFactorPage();
+            var loginPage = new LoginSsoPage();
+            var app = new App.App(new AppOptions { IosExtension = true });
+            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.ApplyResourcesToPage(loginPage);
+            if (loginPage.BindingContext is LoginSsoPageViewModel vm)
+            {
+                vm.StartTwoFactorAction = () => DismissViewController(false, () => LaunchTwoFactorFlow(true));
+                vm.StartSetPasswordAction = () => DismissViewController(false, () => LaunchSetPasswordFlow());
+                vm.SsoAuthSuccessAction = () => DismissLockAndContinue();
+                vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
+            }
+
+            var navigationPage = new NavigationPage(loginPage);
+            var loginController = navigationPage.CreateViewController();
+            loginController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
+            PresentViewController(loginController, true, null);
+        }
+
+        private void LaunchTwoFactorFlow(bool authingWithSso)
+        {
+            var twoFactorPage = new TwoFactorPage(authingWithSso);
             var app = new App.App(new AppOptions { IosExtension = true });
             ThemeManager.SetTheme(false, app.Resources);
             ThemeManager.ApplyResourcesToPage(twoFactorPage);
             if (twoFactorPage.BindingContext is TwoFactorPageViewModel vm)
             {
-                vm.TwoFactorAction = () => DismissLockAndContinue();
-                vm.CloseAction = () => DismissViewController(false, () => LaunchLoginFlow());
+                vm.TwoFactorAuthSuccessAction = () => DismissLockAndContinue();
+                vm.StartSetPasswordAction = () => DismissViewController(false, () => LaunchSetPasswordFlow());
+                if (authingWithSso)
+                {
+                    vm.CloseAction = () => DismissViewController(false, () => LaunchLoginSsoFlow());
+                }
+                else
+                {
+                    vm.CloseAction = () => DismissViewController(false, () => LaunchLoginFlow());
+                }
             }
 
             var navigationPage = new NavigationPage(twoFactorPage);
             var twoFactorController = navigationPage.CreateViewController();
             twoFactorController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
             PresentViewController(twoFactorController, true, null);
+        }
+
+        private void LaunchSetPasswordFlow()
+        {
+            var setPasswordPage = new SetPasswordPage();
+            var app = new App.App(new AppOptions { IosExtension = true });
+            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.ApplyResourcesToPage(setPasswordPage);
+            if (setPasswordPage.BindingContext is SetPasswordPageViewModel vm)
+            {
+                vm.SetPasswordSuccessAction = () => DismissLockAndContinue();
+                vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
+            }
+
+            var navigationPage = new NavigationPage(setPasswordPage);
+            var setPasswordController = navigationPage.CreateViewController();
+            setPasswordController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
+            PresentViewController(setPasswordController, true, null);
         }
     }
 }

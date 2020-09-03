@@ -12,5 +12,8 @@ namespace Bit.Core.Abstractions
         Task<IEnumerable<Policy>> GetAll(PolicyType? type);
         Task Replace(Dictionary<string, PolicyData> policies);
         Task Clear(string userId);
+        Task<MasterPasswordPolicyOptions> GetMasterPasswordPolicyOptions(IEnumerable<Policy> policies = null);
+        Task<bool> EvaluateMasterPassword(int passwordStrength, string newPassword,
+            MasterPasswordPolicyOptions enforcedPolicyOptions);
     }
 }

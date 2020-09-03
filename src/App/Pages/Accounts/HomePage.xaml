@@ -11,12 +11,16 @@
     <ContentPage.BindingContext>
         <pages:HomeViewModel />
     </ContentPage.BindingContext>
+    
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{u:I18n Close}" Clicked="Close_Clicked" Order="Primary" Priority="-1" />
+    </ContentPage.ToolbarItems>
 
     <StackLayout Spacing="0" Padding="10, 5">
         <controls:FaButton Text="&#xf013;"
                            StyleClass="btn-muted, btn-icon, btn-icon-platform"
                            HorizontalOptions="Start"
-                           Clicked="Settings_Clicked"
+                           Clicked="Environment_Clicked"
                            AutomationProperties.IsInAccessibleTree="True"
                            AutomationProperties.Name="{u:I18n Options}">
             <controls:FaButton.Margin>
@@ -39,6 +43,8 @@
                     Clicked="LogIn_Clicked"></Button>
                 <Button Text="{u:I18n CreateAccount}"
                     Clicked="Register_Clicked"></Button>
+                <Button Text="{u:I18n LogInSso}"
+                    Clicked="LogInSso_Clicked"></Button>
             </StackLayout>
         </StackLayout>
     </StackLayout>

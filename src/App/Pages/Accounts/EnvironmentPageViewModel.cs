@@ -1,6 +1,7 @@
 ﻿using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
+using System;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -8,12 +9,10 @@ namespace Bit.App.Pages
 {
     public class EnvironmentPageViewModel : BaseViewModel
     {
-        private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IEnvironmentService _environmentService;
 
         public EnvironmentPageViewModel()
         {
-            _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
 
             PageTitle = AppResources.Settings;
@@ -33,6 +32,8 @@ namespace Bit.App.Pages
         public string WebVaultUrl { get; set; }
         public string IconsUrl { get; set; }
         public string NotificationsUrls { get; set; }
+        public Action SubmitSuccessAction { get; set; }
+        public Action CloseAction { get; set; }
 
         public async Task SubmitAsync()
         {
@@ -54,8 +55,7 @@ namespace Bit.App.Pages
             IconsUrl = resUrls.Icons;
             NotificationsUrls = resUrls.Notifications;
 
-            _platformUtilsService.ShowToast("success", null, AppResources.EnvironmentSaved);
-            await Page.Navigation.PopModalAsync();
+            SubmitSuccessAction?.Invoke();
         }
     }
 }

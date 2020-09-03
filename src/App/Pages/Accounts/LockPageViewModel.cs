@@ -8,12 +8,14 @@ using Bit.Core.Models.Domain;
 using Bit.Core.Utilities;
 using System;
 using System.Threading.Tasks;
+using Bit.Core.Models.Request;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
     public class LockPageViewModel : BaseViewModel
     {
+        private readonly IApiService _apiService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IDeviceActionService _deviceActionService;
         private readonly IVaultTimeoutService _vaultTimeoutService;
@@ -39,6 +41,7 @@ namespace Bit.App.Pages
 
         public LockPageViewModel()
         {
+            _apiService = ServiceContainer.Resolve<IApiService>("apiService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
@@ -224,18 +227,33 @@ namespace Bit.App.Pages
             {
                 var key = await _cryptoService.MakeKeyAsync(MasterPassword, _email, kdf, kdfIterations);
                 var keyHash = await _cryptoService.HashPasswordAsync(MasterPassword, key);
-                var storedKeyHash = await _cryptoService.GetKeyHashAsync();
-                if (storedKeyHash == null)
+                var passwordValid = false;
+                if (keyHash != null)
                 {
-                    var oldKey = await _secureStorageService.GetAsync<string>("oldKey");
-                    if (key.KeyB64 == oldKey)
+                    var storedKeyHash = await _cryptoService.GetKeyHashAsync();
+                    if (storedKeyHash != null)
                     {
-                        await _secureStorageService.RemoveAsync("oldKey");
-                        await _cryptoService.SetKeyHashAsync(keyHash);
-                        storedKeyHash = keyHash;
+                        passwordValid = storedKeyHash == keyHash;
+                    }
+                    else
+                    {
+                        await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
+                        var request = new PasswordVerificationRequest();
+                        request.MasterPasswordHash = keyHash;
+                        try
+                        {
+                            await _apiService.PostAccountVerifyPasswordAsync(request);
+                            passwordValid = true;
+                            await _cryptoService.SetKeyHashAsync(keyHash);
+                        }
+                        catch (Exception e)
+                        {
+                            System.Diagnostics.Debug.WriteLine(">>> {0}: {1}", e.GetType(), e.StackTrace);
+                        }
+                        await _deviceActionService.HideLoadingAsync();
                     }
                 }
-                if (storedKeyHash != null && keyHash != null && storedKeyHash == keyHash)
+                if (passwordValid)
                 {
                     if (_pinSet.Item1)
                     {

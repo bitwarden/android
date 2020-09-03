@@ -26,11 +26,13 @@ namespace Bit.Core.Abstractions
         Task<ProfileResponse> GetProfileAsync();
         Task<SyncResponse> GetSyncAsync();
         Task PostAccountKeysAsync(KeysRequest request);
+        Task PostAccountVerifyPasswordAsync(PasswordVerificationRequest request);
         Task<CipherResponse> PostCipherAsync(CipherRequest request);
         Task<CipherResponse> PostCipherCreateAsync(CipherCreateRequest request);
         Task<FolderResponse> PostFolderAsync(FolderRequest request);
         Task<Tuple<IdentityTokenResponse, IdentityTwoFactorResponse>> PostIdentityTokenAsync(TokenRequest request);
         Task PostPasswordHintAsync(PasswordHintRequest request);
+        Task SetPasswordAsync(SetPasswordRequest request);
         Task<PreloginResponse> PostPreloginAsync(PreloginRequest request);
         Task PostRegisterAsync(RegisterRequest request);
         Task<CipherResponse> PutCipherAsync(string id, CipherRequest request);
@@ -40,6 +42,7 @@ namespace Bit.Core.Abstractions
         Task PutDeleteCipherAsync(string id);
         Task PutRestoreCipherAsync(string id);
         Task RefreshIdentityTokenAsync();
+        Task<object> PreValidateSso(string identifier);
         Task<TResponse> SendAsync<TRequest, TResponse>(HttpMethod method, string path,
             TRequest body, bool authed, bool hasResponse);
         void SetUrls(EnvironmentUrls urls);

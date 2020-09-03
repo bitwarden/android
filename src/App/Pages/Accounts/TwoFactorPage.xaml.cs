@@ -1,10 +1,10 @@
 ﻿using Bit.App.Controls;
 using Bit.App.Models;
-using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using System;
 using System.Threading.Tasks;
+using Bit.App.Utilities;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -14,22 +14,29 @@ namespace Bit.App.Pages
         private readonly IBroadcasterService _broadcasterService;
         private readonly IMessagingService _messagingService;
         private readonly IStorageService _storageService;
+        private readonly IVaultTimeoutService _vaultTimeoutService;
         private readonly AppOptions _appOptions;
 
         private TwoFactorPageViewModel _vm;
         private bool _inited;
+        private bool _authingWithSso;
 
-        public TwoFactorPage(AppOptions appOptions = null)
+        public TwoFactorPage(bool? authingWithSso = false, AppOptions appOptions = null)
         {
             InitializeComponent();
             SetActivityIndicator();
+            _authingWithSso = authingWithSso ?? false;
             _appOptions = appOptions;
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
+            _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             _vm = BindingContext as TwoFactorPageViewModel;
             _vm.Page = this;
-            _vm.TwoFactorAction = () => Device.BeginInvokeOnMainThread(async () => await TwoFactorAuthAsync());
+            _vm.StartSetPasswordAction = () =>
+                Device.BeginInvokeOnMainThread(async () => await StartSetPasswordAsync());
+            _vm.TwoFactorAuthSuccessAction = () =>
+                Device.BeginInvokeOnMainThread(async () => await TwoFactorAuthSuccessAsync());
             _vm.CloseAction = async () => await Navigation.PopModalAsync();
             DuoWebView = _duoWebView;
             if (Device.RuntimePlatform == Device.Android)
@@ -141,7 +148,7 @@ namespace Bit.App.Pages
             }
         }
 
-        private async void Close_Clicked(object sender, System.EventArgs e)
+        private void Close_Clicked(object sender, System.EventArgs e)
         {
             if (DoOnce())
             {
@@ -159,28 +166,29 @@ namespace Bit.App.Pages
                 }
             }
         }
-        
-        private async Task TwoFactorAuthAsync()
+
+        private async Task StartSetPasswordAsync()
         {
-            if (_appOptions != null)
+            _vm.CloseAction();
+            var page = new SetPasswordPage(_appOptions);
+            await Navigation.PushModalAsync(new NavigationPage(page));
+        }
+
+        private async Task TwoFactorAuthSuccessAsync()
+        {
+            if (_authingWithSso)
             {
-                if (_appOptions.FromAutofillFramework && _appOptions.SaveType.HasValue)
+                Application.Current.MainPage = new NavigationPage(new LockPage(_appOptions));
+            }
+            else
+            {
+                if (AppHelpers.SetAlternateMainPage(_appOptions))
                 {
-                    Application.Current.MainPage = new NavigationPage(new AddEditPage(appOptions: _appOptions));
                     return;
                 }
-                if (_appOptions.Uri != null)
-                {
-                    Application.Current.MainPage = new NavigationPage(new AutofillCiphersPage(_appOptions));
-                    return;
-                }
+                var previousPage = await AppHelpers.ClearPreviousPage();
+                Application.Current.MainPage = new TabsPage(_appOptions, previousPage);
             }
-            var previousPage = await _storageService.GetAsync<PreviousPageInfo>(Constants.PreviousPageKey);
-            if (previousPage != null)
-            {
-                await _storageService.RemoveAsync(Constants.PreviousPageKey);
-            }
-            Application.Current.MainPage = new TabsPage(_appOptions, previousPage);
         }
     }
 }

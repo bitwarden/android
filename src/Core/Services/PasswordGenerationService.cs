@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Bit.Core.Enums;
+using Zxcvbn;
 
 namespace Bit.Core.Services
 {
@@ -481,9 +482,28 @@ namespace Bit.Core.Services
             await _storageService.RemoveAsync(Keys_History);
         }
 
-        public Task<object> PasswordStrength(string password, List<string> userInputs = null)
+        public Result PasswordStrength(string password, List<string> userInputs = null)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(password))
+            {
+                return null;
+            }
+            var globalUserInputs = new List<string>
+            {
+                "bitwarden",
+                "bit",
+                "warden"
+            };
+            if (userInputs != null && userInputs.Any())
+            {
+                globalUserInputs.AddRange(userInputs);
+            }
+            // Use a hash set to get rid of any duplicate user inputs
+            var hashSet = new HashSet<string>(globalUserInputs);
+            var finalUserInputs = new string[hashSet.Count];
+            hashSet.CopyTo(finalUserInputs);
+            var result = Zxcvbn.Zxcvbn.MatchPassword(password, finalUserInputs);
+            return result;
         }
 
         public void NormalizeOptions(PasswordGenerationOptions options,

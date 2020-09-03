@@ -241,6 +241,15 @@ namespace Bit.iOS
             return true;
         }
 
+        public override bool OpenUrl(UIApplication app, NSUrl url, NSDictionary options)
+        {
+            if (Xamarin.Essentials.Platform.OpenUrl(app, url, options))
+            {
+                return true;
+            }
+            return base.OpenUrl(app, url, options);
+        }
+
         public override void FailedToRegisterForRemoteNotifications(UIApplication application, NSError error)
         {
             _pushHandler?.OnErrorReceived(error);

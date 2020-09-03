@@ -27,6 +27,7 @@
     <PackageReference Include="LiteDB" Version="5.0.8" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="PCLCrypto" Version="2.0.147" />
+    <PackageReference Include="zxcvbn-core" Version="2.1.44" />
   </ItemGroup>
 
 </Project>
