@@ -63,7 +63,7 @@ namespace Bit.App.Pages
             }
         }
 
-        private void restoreAppOptionsFromCopy()
+        private void RestoreAppOptionsFromCopy()
         {
             if (_appOptions != null)
             {
@@ -92,21 +92,21 @@ namespace Bit.App.Pages
 
         private async Task StartTwoFactorAsync()
         {
-            restoreAppOptionsFromCopy();
+            RestoreAppOptionsFromCopy();
             var page = new TwoFactorPage(true, _appOptions);
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
 
         private async Task StartSetPasswordAsync()
         {
-            restoreAppOptionsFromCopy();
+            RestoreAppOptionsFromCopy();
             var page = new SetPasswordPage(_appOptions);
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
 
         private async Task SsoAuthSuccessAsync()
         {
-            restoreAppOptionsFromCopy();
+            RestoreAppOptionsFromCopy();
             await AppHelpers.ClearPreviousPage();
             Application.Current.MainPage = new NavigationPage(new LockPage(_appOptions));
         }
