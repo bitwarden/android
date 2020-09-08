@@ -118,25 +118,25 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="About" xml:space="preserve">
-    <value>Om</value>
+    <value>Par</value>
   </data>
   <data name="Add" xml:space="preserve">
-    <value>Skapa</value>
+    <value>Pievienot</value>
     <comment>Add/create a new entity (verb).</comment>
   </data>
   <data name="AddFolder" xml:space="preserve">
-    <value>Skapa mapp</value>
+    <value>Pievienot Mapi</value>
   </data>
   <data name="AddItem" xml:space="preserve">
-    <value>Skapa objekt</value>
+    <value>Pievienot Vienumu</value>
     <comment>The title for the add item page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
-    <value>Ett fel har inträffat.</value>
+    <value>Radusies kļūda.</value>
     <comment>Alert title when something goes wrong.</comment>
   </data>
   <data name="Back" xml:space="preserve">
-    <value>Tillbaka</value>
+    <value>Atpakaļ</value>
     <comment>Navigate back to the previous screen.</comment>
   </data>
   <data name="Bitwarden" xml:space="preserve">
@@ -144,19 +144,19 @@
     <comment>App name. Shouldn't ever change.</comment>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Avbryt</value>
+    <value>Atcelt</value>
     <comment>Cancel an operation.</comment>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>Kopiera</value>
+    <value>Kopēt</value>
     <comment>Copy some value to your clipboard.</comment>
   </data>
   <data name="CopyPassword" xml:space="preserve">
-    <value>Kopiera lösenord</value>
+    <value>Kopēt Paroli</value>
     <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
   </data>
   <data name="CopyUsername" xml:space="preserve">
-    <value>Kopiera användarnamn</value>
+    <value>Kopēt Lietotājvārdu</value>
     <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
   </data>
   <data name="Credits" xml:space="preserve">
@@ -164,1514 +164,1514 @@
     <comment>Title for page that we use to give credit to resources that we use.</comment>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Ta bort</value>
+    <value>Dzēst</value>
     <comment>Delete an entity (verb).</comment>
   </data>
   <data name="Deleting" xml:space="preserve">
-    <value>Tar bort...</value>
+    <value>Dzēš...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="DoYouReallyWantToDelete" xml:space="preserve">
-    <value>Är du säker på att du vill ta bort? Det här går inte att ångra.</value>
+    <value>Vai jūs tiešām vēlaties dzēst? Šo darbību navar atsaukt.</value>
     <comment>Confirmation alert message when deleteing something.</comment>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Ändra</value>
+    <value>Rediģēt</value>
   </data>
   <data name="EditFolder" xml:space="preserve">
-    <value>Ändra mapp</value>
+    <value>Rediģēt Mapi</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>E-post</value>
+    <value>E-pasts</value>
     <comment>Short label for an email address.</comment>
   </data>
   <data name="EmailAddress" xml:space="preserve">
-    <value>E-postadress</value>
+    <value>E-pasta Adrese</value>
     <comment>Full label for a email address.</comment>
   </data>
   <data name="EmailUs" xml:space="preserve">
-    <value>Mejla oss</value>
+    <value>Rakstiet Mums</value>
   </data>
   <data name="EmailUsDescription" xml:space="preserve">
-    <value>Mejla oss direkt för att få hjälp eller för att lämna återkoppling.</value>
+    <value>Email us directly to get help or leave feedback.</value>
   </data>
   <data name="EnterPIN" xml:space="preserve">
-    <value>Ange din PIN-kod.</value>
+    <value>Ievadiet savu PIN kodu.</value>
   </data>
   <data name="Favorites" xml:space="preserve">
-    <value>Favoriter</value>
+    <value>Favorīti</value>
     <comment>Title for your favorite items in the vault.</comment>
   </data>
   <data name="FileBugReport" xml:space="preserve">
-    <value>Skicka en buggrapport</value>
+    <value>Nosūtīt Kļūdas Ziņojumu</value>
   </data>
   <data name="FileBugReportDescription" xml:space="preserve">
-    <value>Öppna ett problemärende på vårt GitHub-arkiv.</value>
+    <value>Open an issue at our GitHub repository.</value>
   </data>
   <data name="FingerprintDirection" xml:space="preserve">
-    <value>Använd ditt fingeravtryck för att verifiera.</value>
+    <value>Izmantot pirkstu nospiedumu lai verificētu.</value>
   </data>
   <data name="Folder" xml:space="preserve">
-    <value>Mapp</value>
+    <value>Mape</value>
     <comment>Label for a folder.</comment>
   </data>
   <data name="FolderCreated" xml:space="preserve">
-    <value>Ny mapp skapad.</value>
+    <value>Izveidota jauna mape.</value>
   </data>
   <data name="FolderDeleted" xml:space="preserve">
-    <value>Mapp borttagen.</value>
+    <value>Mape dzēsta.</value>
   </data>
   <data name="FolderNone" xml:space="preserve">
-    <value>Ingen mapp</value>
+    <value>Nav Mapes</value>
     <comment>Items that have no folder specified go in this special "catch-all" folder.</comment>
   </data>
   <data name="Folders" xml:space="preserve">
-    <value>Mappar</value>
+    <value>Mapes</value>
   </data>
   <data name="FolderUpdated" xml:space="preserve">
-    <value>Mapp uppdaterad.</value>
+    <value>Mape atjaunotas.</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
-    <value>Gå till webbplats</value>
+    <value>Atvērt Vietni</value>
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="HelpAndFeedback" xml:space="preserve">
-    <value>Hjälp och återkoppling</value>
+    <value>Palīdzība un Atsauksmes</value>
   </data>
   <data name="Hide" xml:space="preserve">
-    <value>Göm</value>
+    <value>Slēpt</value>
     <comment>Hide a secret value that is currently shown (password).</comment>
   </data>
   <data name="InternetConnectionRequiredMessage" xml:space="preserve">
-    <value>Var god anslut till internet innan du fortsätter.</value>
+    <value>Lūdzu savienojieties ar internetu pirms turpiniet.</value>
     <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
-    <value>Internetanslutning krävs</value>
+    <value>Nepieciešams Tīkla Savienojums</value>
     <comment>Title for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InvalidMasterPassword" xml:space="preserve">
-    <value>Ogiltigt huvudlösenord. Försök igen.</value>
+    <value>Nederīga Galvenā Parole. Mēģiniet vēlreiz.</value>
   </data>
   <data name="InvalidPIN" xml:space="preserve">
-    <value>Ogiltig PIN-kod. Försök igen.</value>
+    <value>Nederīgs PIN. Mēģiniet vēlreiz.</value>
   </data>
   <data name="Launch" xml:space="preserve">
-    <value>Öppna</value>
+    <value>Palaist</value>
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="LogIn" xml:space="preserve">
-    <value>Logga in</value>
+    <value>Ieiet</value>
     <comment>The login button text (verb).</comment>
   </data>
   <data name="LogInNoun" xml:space="preserve">
-    <value>Inloggning</value>
+    <value>Pieteikties</value>
     <comment>Title for login page. (noun)</comment>
   </data>
   <data name="LogOut" xml:space="preserve">
-    <value>Logga ut</value>
+    <value>Iziet</value>
     <comment>The log out button text (verb).</comment>
   </data>
   <data name="LogoutConfirmation" xml:space="preserve">
-    <value>Är du säker på att du vill logga ut?</value>
+    <value>Vai tiešām vēlies izrakstīties?</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
-    <value>Huvudlösenord</value>
+    <value>Galvenā Parole</value>
     <comment>Label for a master password.</comment>
   </data>
   <data name="More" xml:space="preserve">
-    <value>Mer</value>
+    <value>Vairāk</value>
     <comment>Text to define that there are more options things to see.</comment>
   </data>
   <data name="MyVault" xml:space="preserve">
-    <value>Mitt valv</value>
+    <value>Mans Seifs</value>
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Namn</value>
+    <value>Nosaukums</value>
     <comment>Label for an entity name.</comment>
   </data>
   <data name="No" xml:space="preserve">
-    <value>Nej</value>
+    <value>Nē</value>
   </data>
   <data name="Notes" xml:space="preserve">
-    <value>Anteckningar</value>
+    <value>Piezīmes</value>
     <comment>Label for notes.</comment>
   </data>
   <data name="Ok" xml:space="preserve">
-    <value>OK</value>
+    <value>Labi</value>
     <comment>Acknowledgement.</comment>
   </data>
   <data name="Password" xml:space="preserve">
-    <value>Lösenord</value>
+    <value>Parole</value>
     <comment>Label for a password.</comment>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Spara</value>
+    <value>Saglabāt</value>
     <comment>Button text for a save operation (verb).</comment>
   </data>
   <data name="Saving" xml:space="preserve">
-    <value>Sparar...</value>
+    <value>Saglabā...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>Inställningar</value>
+    <value>Iestatījumi</value>
     <comment>The title for the settings page.</comment>
   </data>
   <data name="Show" xml:space="preserve">
-    <value>Visa</value>
+    <value>Parādīt</value>
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>Tog bort objekt.</value>
+    <value>Vienums tika izdzēsts.</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
-    <value>Skicka</value>
+    <value>Iesniegt</value>
   </data>
   <data name="Sync" xml:space="preserve">
-    <value>Synka</value>
+    <value>Sinhronizēt</value>
     <comment>The title for the sync page.</comment>
   </data>
   <data name="ThankYou" xml:space="preserve">
-    <value>Tack</value>
+    <value>Paldies</value>
   </data>
   <data name="Tools" xml:space="preserve">
-    <value>Verktyg</value>
+    <value>Rīki</value>
     <comment>The title for the tools page.</comment>
   </data>
   <data name="URI" xml:space="preserve">
-    <value>URI (länk)</value>
+    <value>URI</value>
     <comment>Label for a uri/url.</comment>
   </data>
   <data name="UseFingerprintToUnlock" xml:space="preserve">
-    <value>Använd fingeravtryck för att låsa upp</value>
+    <value>Izmantot Pirkstu Nospiedumu Atslēgšanai</value>
   </data>
   <data name="Username" xml:space="preserve">
-    <value>Användarnamn</value>
+    <value>Lietotājvārds</value>
     <comment>Label for a username.</comment>
   </data>
   <data name="ValidationFieldRequired" xml:space="preserve">
-    <value>{0}-fältet krävs.</value>
+    <value>{0} lauks ir obligāts.</value>
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
-    <value>{0} har kopierats.</value>
+    <value>{0} ir nokopēts.</value>
     <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
-    <value>Verifiera fingeravtryck</value>
+    <value>Verificēt Pirkstu Nospiedumu.</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
-    <value>Verifiera huvudlösenord</value>
+    <value>Verificēt Galveno Paroli</value>
   </data>
   <data name="VerifyPIN" xml:space="preserve">
-    <value>Verifiera PIN-kod</value>
+    <value>Pārbaudīt PIN</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>Version</value>
+    <value>Versija</value>
   </data>
   <data name="View" xml:space="preserve">
-    <value>Visa</value>
+    <value>Skats</value>
   </data>
   <data name="VisitOurWebsite" xml:space="preserve">
-    <value>Besök vår webbplats</value>
+    <value>Visit Our Website</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Besök vår webbplats för att få hjälp, nyheter, mejla oss och/eller lära er mer om hur man använder Bitwarden.</value>
+    <value>Visit our website to get help, news, email us, and/or learn more about how to use Bitwarden.</value>
   </data>
   <data name="Website" xml:space="preserve">
-    <value>Webbsida</value>
+    <value>Tīmekļa vietne</value>
     <comment>Label for a website.</comment>
   </data>
   <data name="Yes" xml:space="preserve">
-    <value>Ja</value>
+    <value>Jā</value>
   </data>
   <data name="Account" xml:space="preserve">
-    <value>Konto</value>
+    <value>Konts</value>
   </data>
   <data name="AccountCreated" xml:space="preserve">
-    <value>Ditt nya konto har blivit skapat! Du kan nu logga in.</value>
+    <value>Jūsu jaunais konts ir izveidots! Jūs varat tagad ieiet.</value>
   </data>
   <data name="AddAnItem" xml:space="preserve">
-    <value>Lägg till objekt</value>
+    <value>Pievienot Vienumu</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
-    <value>Apptillägg</value>
+    <value>Lietotnes Paplašinājums</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Använd Bitwardens tillgänglighetstjänst för att automatiskt fylla i dina inloggningar i applikationer och på webben.</value>
+    <value>Use the Bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
-    <value>Hjälpmedelsservice för automatisk ifyllnad</value>
+    <value>Automātiskās Aizpildes Serviss</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
-    <value>Undvik tvetydiga tecken</value>
+    <value>Izvairīties no viegli jaucamām rakstzīmēm</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>Bitwarden apptillägg</value>
+    <value>Bitwarden Lietotnes Paplašinājums</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
-    <value>Det enklaste sättet att lägga till nya inloggningar i ditt valv är genom apptillägget. Läs mer om Bitwardens apptillägg genom att navigera till fliken "Inställningar".</value>
+    <value>The easiest way to add new logins to your vault is from the Bitwarden App Extension. Learn more about using the Bitwarden App Extension by navigating to the "Settings" screen.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>Använd Bitwarden i Safari och andra applikationer för att automatiskt fylla i din inloggningsinformation.</value>
+    <value>Use Bitwarden in Safari and other apps to auto-fill your logins.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>Bitwardens hjälpmedelsservice för automatisk ifyllnad</value>
+    <value>Bitwarden Auto-fill Service</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Använd Bitwardens tillgänglighetstjänst för att automatiskt fylla i din inloggningsinformation.</value>
+    <value>Use the Bitwarden accessibility service to auto-fill your logins.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
-    <value>Ändra e-postadress</value>
+    <value>Mainīt E-pastu</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
-    <value>Du kan ändra din e-postadress på bitwardens webbvalv. Vill du besöka webbplatsen nu?</value>
+    <value>You can change your email address on the bitwarden.com web vault. Do you want to visit the website now?</value>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
-    <value>Ändra huvudlösenord</value>
+    <value>Nomainīt Galveno Paroli</value>
   </data>
   <data name="ChangePasswordConfirmation" xml:space="preserve">
-    <value>Du kan ändra ditt huvudlösenord på bitwardens webbvalv. Vill du besöka webbplatsen nu?</value>
+    <value>You can change your master password on the bitwarden.com web vault. Do you want to visit the website now?</value>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>Stäng</value>
+    <value>Aizvērt</value>
   </data>
   <data name="Continue" xml:space="preserve">
-    <value>Fortsätt</value>
+    <value>Turpināt</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
-    <value>Skapa konto</value>
+    <value>Izveidot Kontu</value>
   </data>
   <data name="CreatingAccount" xml:space="preserve">
-    <value>Skapar konto...</value>
+    <value>Izveido kontu...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="EditItem" xml:space="preserve">
-    <value>Redigera objekt</value>
+    <value>Rediģēt Vienumu</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
-    <value>Aktivera automatisk synkronisering</value>
+    <value>Iespējot Automātisko Sinhronizāciju</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
-    <value>Ange ditt kontos e-postadress för att hämta din huvudlösenordsledtråd.</value>
+    <value>Ievadiet sava konta e-pasta adresi lai saņemtu savas galvenās paroles atgādinājumu.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
-    <value>Återaktivera apptillägg</value>
+    <value>Atkārtoti Iespējot Lietotnes Paplašinājumu</value>
   </data>
   <data name="ExtensionAlmostDone" xml:space="preserve">
-    <value>Nästan färdigt!</value>
+    <value>Gandrīz pabeigts!</value>
   </data>
   <data name="ExtensionEnable" xml:space="preserve">
-    <value>Aktivera apptillägg</value>
+    <value>Iespējot Lietotnes Paplašinājumu</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
-    <value>Inuti Safari hittar du Bitwarden genom att trycka på dela-ikonen (scrolla till höger på den nedersta raden i dela-menyn).</value>
+    <value>In Safari, find Bitwarden using the share icon (hint: scroll to the right on the bottom row of the menu).</value>
     <comment>Safari is the name of apple's web browser</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
-    <value>Få omedelbar åtkomst till dina lösenord!</value>
+    <value>Saņemiet tūlītēju piekļuvi savām parolēm!</value>
   </data>
   <data name="ExtensionReady" xml:space="preserve">
-    <value>Du är nu redo att logga in!</value>
+    <value>Jūs esat gatavi ieiet!</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
-    <value>Dina inloggningar är nu enkelt åtkomna från Safari, Chrome och andra appar som stöds.</value>
+    <value>Jūsu konti tagad ir viegli pieejami no Safari, Chrome, un citām atbalstītām lietotnēm.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
-    <value>Inuti Safari och Chrome hittar du Bitwarden genom att trycka på dela-ikonen (hjälp: skrolla till höger på den nedersta raden i dela-menyn).</value>
+    <value>In Safari and Chrome, find Bitwarden using the share icon (hint: scroll to the right on the bottom row of the share menu).</value>
   </data>
   <data name="ExtensionTapIcon" xml:space="preserve">
-    <value>Tryck på Bitwarden-ikonen i menyn för att öppna tillägget.</value>
+    <value>Tap the Bitwarden icon in the menu to launch the extension.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>För att starta Bitwarden i Safari och andra appar, tryck på "mer"-ikonen i den nedersta raden på menyn.</value>
+    <value>To turn on Bitwarden in Safari and other apps, tap the "more" icon on the bottom row of the menu.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
-    <value>Favorit</value>
+    <value>Favorīts</value>
   </data>
   <data name="Fingerprint" xml:space="preserve">
-    <value>Fingeravtryck</value>
+    <value>Pirkstu Nospiedums</value>
   </data>
   <data name="GeneratePassword" xml:space="preserve">
-    <value>Skapa lösenord</value>
+    <value>Ģenerēt Paroli</value>
   </data>
   <data name="GetPasswordHint" xml:space="preserve">
-    <value>Hämta huvudlösenordsledtråd</value>
+    <value>Saņemt savas galvenās paroles atgādinājumu</value>
   </data>
   <data name="ImportItems" xml:space="preserve">
-    <value>Importera objekt</value>
+    <value>Importēt Vienumus</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
-    <value>Du kan massimportera objekt på bitwardens webbvalv. Vill du besöka webbsidan nu?</value>
+    <value>You can bulk import items from the bitwarden.com web vault. Do you want to visit the website now?</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
-    <value>Massimportera dina objekt snabbt från andra lösenordshanterare.</value>
+    <value>Quickly bulk import your items from other password management apps.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
-    <value>Senaste synkning:</value>
+    <value>Pēdējā Sinhronizēšana:</value>
   </data>
   <data name="Length" xml:space="preserve">
-    <value>Längd</value>
+    <value>Garums</value>
   </data>
   <data name="Lock" xml:space="preserve">
-    <value>Lås</value>
+    <value>Slēgt</value>
   </data>
   <data name="FifteenMinutes" xml:space="preserve">
-    <value>15 minuter</value>
+    <value>15 minūtes</value>
   </data>
   <data name="OneHour" xml:space="preserve">
-    <value>1 timme</value>
+    <value>1 stunda</value>
   </data>
   <data name="OneMinute" xml:space="preserve">
-    <value>1 minut</value>
+    <value>1 minūte</value>
   </data>
   <data name="FourHours" xml:space="preserve">
-    <value>4 timmar</value>
+    <value>4 stundas</value>
   </data>
   <data name="Immediately" xml:space="preserve">
-    <value>Omedelbart</value>
+    <value>Nekavējoties</value>
   </data>
   <data name="VaultTimeout" xml:space="preserve">
-    <value>Valvets tidsgräns</value>
+    <value>Seifa Taimouts</value>
   </data>
   <data name="VaultTimeoutAction" xml:space="preserve">
-    <value>Åtgärd när valvets tidsgräns överskrids</value>
+    <value>Seifa Taimouta Darbība</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
-    <value>Genom att logga ut upphör all åtkomst till valvet och onlineautentisering krävs efter att tidsgränsen överskridits. Är du säker på att du vill använda denna inställning?</value>
+    <value>Iziešana noņems visu piekļuvi jūsu seifam un pieprasīs atkārtotu ieiešanu pēc taimouta perioda. Vai tiešām vēlies izmantot šo iestatījumu?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
-    <value>Loggar in...</value>
+    <value>Pieslēdzas...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="LoginOrCreateNewAccount" xml:space="preserve">
-    <value>Logga in eller skapa ett nytt konto för att komma åt dina lösenord.</value>
+    <value>Ieej vai izveido jaunu kontu lai piekļūtu savam drošajam seifam.</value>
   </data>
   <data name="Manage" xml:space="preserve">
-    <value>Hantera</value>
+    <value>Pārvaldīt</value>
   </data>
   <data name="MasterPasswordConfirmationValMessage" xml:space="preserve">
-    <value>Bekräftelsen för huvudlösenordet stämde ej.</value>
+    <value>Paroles apstiprinājums nav pareizs.</value>
   </data>
   <data name="MasterPasswordDescription" xml:space="preserve">
-    <value>Huvudlösenordet är det lösenord som du använder för att komma åt ditt valv. Det är väldigt viktigt att du inte glömmer bort ditt huvudlösenord, eftersom det inte går att återställa lösenordet om du skulle glömma bort det.</value>
+    <value>Galvenā parole ir parole, ko jūs izmantosiet lai piekļūtu savam seifam. Ir ļoti svarīgi lai jūs savu galveno paroli neaizmirstu, jo to nav iespējams atgūt aizmiršanas gadījumā.</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
-    <value>Huvudlösenordsledtråd (frivillig)</value>
+    <value>Galvenās Paroles Atgādinājums (neobligāts)</value>
   </data>
   <data name="MasterPasswordHintDescription" xml:space="preserve">
-    <value>En huvudlösenordsledtråd kan hjälpa dig att komma ihåg ditt huvudlösenord om du glömmer bort det.</value>
+    <value>Galvenās paroles atgādinājums var palīdzēt jums atcerēties savu paroli ja jūs to aizmirstiet.</value>
   </data>
   <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Huvudlösenordet måste vara minst 8 tecken långt.</value>
+    <value>Galvenai parolei ir jābūt vismaz 8 rakstzīmju garai.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
-    <value>Minst antal nummer</value>
+    <value>Minimālie Skaitļi</value>
     <comment>Minimum numeric characters for password generator settings</comment>
   </data>
   <data name="MinSpecial" xml:space="preserve">
-    <value>Minst antal speciella tecken</value>
+    <value>Minimālās Speciālās Rakstzīmes</value>
     <comment>Minimum special characters for password generator settings</comment>
   </data>
   <data name="MoreSettings" xml:space="preserve">
-    <value>Fler inställningar</value>
+    <value>Citi iestatījumi</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>Du måste logga in i Bitwarden-appen innan du kan använda tillägget.</value>
+    <value>You must log into the main Bitwarden app before you can use the extension.</value>
   </data>
   <data name="Never" xml:space="preserve">
-    <value>Aldrig</value>
+    <value>Nekad</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>Nytt objekt skapat.</value>
+    <value>Izveidots jauns vienums.</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
-    <value>Det finns inga favoriter i ditt valv.</value>
+    <value>There are no favorites in your vault.</value>
   </data>
   <data name="NoItems" xml:space="preserve">
-    <value>Det finns inga objekt i ditt valv.</value>
+    <value>There are no items in your vault.</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>Det finns inga objekt i ditt valv för den här webbplatsen. Tryck för att skapa ett.</value>
+    <value>There are no items in your vault for this website/app. Tap to add one.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
-    <value>Den här inloggningen har inte ett användarnamn eller lösenord angivet.</value>
+    <value>This login does not have a username or password configured.</value>
   </data>
   <data name="OkGotIt" xml:space="preserve">
-    <value>Ok, fattar!</value>
+    <value>Labi, sapratu!</value>
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>Standardinställningar ställs in genom Bitwarden-appens lösenordsgenerator-verktyg.</value>
+    <value>Option defaults are set from the main Bitwarden app's password generator tool.</value>
   </data>
   <data name="Options" xml:space="preserve">
-    <value>Alternativ</value>
+    <value>Iespējas</value>
   </data>
   <data name="Other" xml:space="preserve">
-    <value>Annat</value>
+    <value>Cits</value>
   </data>
   <data name="PasswordGenerated" xml:space="preserve">
-    <value>Lösenord skapat.</value>
+    <value>Parole ģenerēta.</value>
   </data>
   <data name="PasswordGenerator" xml:space="preserve">
-    <value>Lösenordsgenerator</value>
+    <value>Paroles Ģenerātors</value>
   </data>
   <data name="PasswordHint" xml:space="preserve">
-    <value>Lösenordsledtråd</value>
+    <value>Paroles Atgādinājums</value>
   </data>
   <data name="PasswordHintAlert" xml:space="preserve">
-    <value>Vi har skickat ett mejl till dig med din huvudlösenordsledtråd.</value>
+    <value>Mēs esam nosūtījuši jums E-pastu ar galvenās paroles atgādinājumu.</value>
   </data>
   <data name="PasswordOverrideAlert" xml:space="preserve">
-    <value>Är du säker på att du vill skriva över det nuvarande lösenordet?</value>
+    <value>Vai tiešām vēlies pārrakstīt esošo paroli?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>Bitwarden håller ditt valv uppdaterat automatiskt genom att använda push-aviseringar. För den bästa möjliga upplevelsen vänligen välj "Tillåt" på förfrågan om du vill aktivera push-aviseringar.</value>
+    <value>Bitwarden keeps your vault automatically synced by using push notifications. For the best possible experience, please select "Allow" on the following prompt when asked to enable push notifications.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
-    <value>Betygsätt appen</value>
+    <value>Novērtē Lietotni</value>
   </data>
   <data name="RateTheAppDescription" xml:space="preserve">
-    <value>Överväg gärna att hjälpa oss genom att ge oss en bra recension!</value>
+    <value>Lūdzu apsveriet mums palīdzēt atstājot labu vērtējumu!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
-    <value>Skapa nytt lösenord</value>
+    <value>Pārģenerēt Paroli</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
-    <value>Ange huvudlösenordet igen</value>
+    <value>Atkārtoti Ievadiet Galveno Paroli</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
-    <value>Sök i valvet</value>
+    <value>Meklēt seifā</value>
   </data>
   <data name="Security" xml:space="preserve">
-    <value>Säkerhet</value>
+    <value>Drošība</value>
   </data>
   <data name="Select" xml:space="preserve">
-    <value>Välj</value>
+    <value>Atlasīt</value>
   </data>
   <data name="SetPIN" xml:space="preserve">
-    <value>Ställ in PIN-kod</value>
+    <value>Iestatīt PIN</value>
   </data>
   <data name="SetPINDirection" xml:space="preserve">
-    <value>Ange en fyrsiffrig PIN-kod som du låser upp appen med.</value>
+    <value>Enter a 4 digit PIN code to unlock the app with.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
-    <value>Objektinformation</value>
+    <value>Vienuma Informācija</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Objekt uppdaterat.</value>
+    <value>Vienums atjaunots.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
-    <value>Skickar...</value>
+    <value>Iesniedz...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Syncing" xml:space="preserve">
-    <value>Synkroniserar...</value>
+    <value>Sinhronizē…</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="SyncingComplete" xml:space="preserve">
-    <value>Synkronisering genomförd.</value>
+    <value>Sinhronizēšana pabeigta.</value>
   </data>
   <data name="SyncingFailed" xml:space="preserve">
-    <value>Synkronisering misslyckades.</value>
+    <value>Sinhronizēšana neizdevās.</value>
   </data>
   <data name="SyncVaultNow" xml:space="preserve">
-    <value>Synka valvet nu</value>
+    <value>Sinhronizēt Seifu Tagad</value>
   </data>
   <data name="TouchID" xml:space="preserve">
     <value>Touch ID</value>
     <comment>What Apple calls their fingerprint reader.</comment>
   </data>
   <data name="TwoStepLogin" xml:space="preserve">
-    <value>Tvåstegsverifiering</value>
+    <value>Divpakāpju Ieeja</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Tvåstegsverifiering gör ditt konto säkrare genom att kräva att du verifierar din inloggning med en annan enhet, t.ex. en säkerhetsnyckel, autentiseringsapp, SMS, telefonsamtal eller e-post. Tvåstegsverifiering kan aktiveras i Bitwardens webbvalv. Vill du besöka webbplatsen nu?</value>
+    <value>Two-step login makes your account more secure by requiring you to verify your login with another device such as a security key, authenticator app, SMS, phone call, or email. Two-step login can be enabled on the bitwarden.com web vault. Do you want to visit the website now?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
-    <value>Lås upp med {0}</value>
+    <value>Atslēgt ar {0}</value>
   </data>
   <data name="UnlockWithPIN" xml:space="preserve">
-    <value>Lås upp med PIN-kod</value>
+    <value>Atslēgt ar PIN Kodu</value>
   </data>
   <data name="Validating" xml:space="preserve">
-    <value>Validerar</value>
+    <value>Validating</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="VerificationCode" xml:space="preserve">
-    <value>Verifieringskod</value>
+    <value>Verification Code</value>
   </data>
   <data name="ViewItem" xml:space="preserve">
-    <value>Visa objekt</value>
+    <value>Skatīt Vienumu</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>Bitwarden webbvalv</value>
+    <value>Bitwarden Tīmekļa Seifs</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
-    <value>Förlorat autentiseringsapp?</value>
+    <value>Lost authenticator app?</value>
   </data>
   <data name="Items" xml:space="preserve">
-    <value>Objekt</value>
+    <value>Vienumi</value>
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">
-    <value>Tillägg aktiverat!</value>
+    <value>Extension Activated!</value>
   </data>
   <data name="Icons" xml:space="preserve">
-    <value>Ikoner</value>
+    <value>Ikonas</value>
   </data>
   <data name="Translations" xml:space="preserve">
-    <value>Översättningar</value>
+    <value>Tulkojumi</value>
   </data>
   <data name="ItemsForUri" xml:space="preserve">
-    <value>Objekt för {0}</value>
+    <value>Vienumi priekš {0}</value>
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>
   <data name="NoItemsForUri" xml:space="preserve">
-    <value>Det finns inga objekt i ditt valv för {0}.</value>
+    <value>Jūsu seifā nav vienumi priekš {0}.</value>
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
-    <value>När du väljer ett inmatningsfält och ser en ruta för automatisk ifyllnad från Bitwarden, kan du trycka på den för att starta tjänsten för automatisk ifyllnad.</value>
+    <value>When you select an input field and see a Bitwarden auto-fill overlay, you can tap it to launch the auto-fill service.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
-    <value>Tryck på den här aviseringen för att automatiskt fylla i en inloggning från ditt valv.</value>
+    <value>Tap this notification to auto-fill an item from your vault.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
-    <value>Öppna tillgänglighetsinställningar</value>
+    <value>Open Accessibility Settings</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
-    <value>1. I Androids tillgänglighetsinställningar trycker du på "Bitwarden" under tjänster.</value>
+    <value>1. On the Android Accessibility Settings screen, touch "Bitwarden" under the Services heading.</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
-    <value>2. Växla till på-läget och tryck på OK för att acceptera.</value>
+    <value>2. Switch on the toggle and press OK to accept.</value>
   </data>
   <data name="Disabled" xml:space="preserve">
-    <value>Inaktiverad</value>
+    <value>Atspējots</value>
   </data>
   <data name="Enabled" xml:space="preserve">
-    <value>Aktiverad</value>
+    <value>Iespējots</value>
   </data>
   <data name="Status" xml:space="preserve">
-    <value>Status</value>
+    <value>Statuss</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
-    <value>Det lättaste sättet att lägga till nya inloggningar till ditt valv är från Bitwardens hjälpmedelsservice för automatisk ifyllnad. Läs mer om hur man använder Bitwardens hjälpmedelsservice för automatisk ifyllnad genom att navigera till fliken "Inställningar".</value>
+    <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
-    <value>Automatisk ifyllnad</value>
+    <value>Automātiskā Aizpilde</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
-    <value>Vill du automatiskt fylla i den här inloggningen eller visa den?</value>
+    <value>Do you want to auto-fill or view this item?</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>Är du säker på att du vill automatiskt fylla i den här inloggningen? Det är inte en fullständig träff för "{0}".</value>
+    <value>Are you sure you want to auto-fill this item? It is not a complete match for "{0}".</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
-    <value>Matchande objekt</value>
+    <value>Matching Items</value>
   </data>
   <data name="PossibleMatchingItems" xml:space="preserve">
-    <value>Möjliga matchande objekt</value>
+    <value>Possible Matching Items</value>
   </data>
   <data name="Search" xml:space="preserve">
-    <value>Sök</value>
+    <value>Meklēt</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
-    <value>Du letar efter en inloggning som kan automatiskt fyllas i för "{0}".</value>
+    <value>You are searching for an auto-fill item for "{0}".</value>
   </data>
   <data name="ShareVault" xml:space="preserve">
-    <value>Dela ditt valv</value>
+    <value>Koplieto Savu Seifu</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
-    <value>Kan inte öppna appen "{0}".</value>
+    <value>Cannot open the app "{0}".</value>
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
   </data>
   <data name="AuthenticatorAppTitle" xml:space="preserve">
-    <value>Autentiseringsapp</value>
+    <value>Autentifikātora Lietotne</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeApp" xml:space="preserve">
-    <value>Ange den 6-siffriga verifieringskoden från din autentiseringsapp.</value>
+    <value>Ievadiet 6 skaitļu verifikācijas kodu no savas autentifikātora lietotnes.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeEmail" xml:space="preserve">
-    <value>Ange den 6-siffriga verifieringskoden som skickades till {0}.</value>
+    <value>Ievadiet 6 skaitļu verifikācijas kodu, kas tika nosūtīts uz {0}.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
-    <value>Inloggning inte tillgänglig</value>
+    <value>Ieeja Nav Pieejama</value>
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>Detta konto har tvåstegsverifiering aktiverat, men inget av alternativen som används stöds på den här enheten. Använd en enhet som stöds och/eller lägg till en metod för tvåstegsverifiering med bättre stöd för flera olika typer av enheter (t.ex. via en autentiseringsapp).</value>
+    <value>This account has two-step login enabled, however, none of the configured two-step providers are supported on this device. Please use a supported device and/or add additional providers that are better supported across devices (such as an authenticator app).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
-    <value>Återställningskod</value>
+    <value>Atjaunošanas Kods</value>
     <comment>For 2FA</comment>
   </data>
   <data name="RememberMe" xml:space="preserve">
-    <value>Kom ihåg mig</value>
+    <value>Atcerēties mani</value>
     <comment>Remember my two-step login</comment>
   </data>
   <data name="SendVerificationCodeAgain" xml:space="preserve">
-    <value>Skicka verifieringskod-mejlet igen</value>
+    <value>Nosūtīt verifikācijas kodu atkārtoti</value>
     <comment>For 2FA</comment>
   </data>
   <data name="TwoStepLoginOptions" xml:space="preserve">
-    <value>Alternativ för tvåstegsverifiering</value>
+    <value>Divpakāpju Piekļuves Iestatījumi</value>
   </data>
   <data name="UseAnotherTwoStepMethod" xml:space="preserve">
-    <value>Använd en annan inloggningsmetod för tvåstegsverifiering</value>
+    <value>Izmantot citu divpakāpju ieejas metodi</value>
   </data>
   <data name="VerificationEmailNotSent" xml:space="preserve">
-    <value>Kunde inte skicka verifierings-mejl. Försök igen.</value>
+    <value>Could not send verification email. Try again.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
-    <value>Verifierings-mejl skickat.</value>
+    <value>Verifikācijas e-pasts nosūtīts.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
-    <value>För att fortsätta, håll din YubiKey NEO mot baksidan av enheten eller sätt i din YubiKey i USB-porten på din enhet, rör sedan knappen.</value>
+    <value>To continue, hold your YubiKey NEO against the back of the device or insert your YubiKey into your device's USB port, then touch its button.</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
-    <value>YubiKey säkerhetsnyckel</value>
+    <value>YubiKey Security Key</value>
     <comment>"YubiKey" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
-    <value>Bifoga fil</value>
+    <value>Pievienot Jaunu Pielikumu</value>
   </data>
   <data name="Attachments" xml:space="preserve">
-    <value>Bifogade filer</value>
+    <value>Pielikumi</value>
   </data>
   <data name="UnableToDownloadFile" xml:space="preserve">
-    <value>Kunde ej hämta fil.</value>
+    <value>Nav iespējams lejupielādēt failu.</value>
   </data>
   <data name="UnableToOpenFile" xml:space="preserve">
-    <value>Enheten kan inte öppna denna typ av fil.</value>
+    <value>Jūsu ierīce nevar atvērt šāda veida failu.</value>
   </data>
   <data name="Downloading" xml:space="preserve">
-    <value>Laddar ner...</value>
+    <value>Lejupielādē...</value>
     <comment>Message shown when downloading a file</comment>
   </data>
   <data name="AttachmentLargeWarning" xml:space="preserve">
-    <value>Denna bilaga är {0} i storlek. Är du säker på att du vill ladda ner den till din enhet?</value>
+    <value>This attachment is {0} in size. Are you sure you want to download it onto your device?</value>
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
   <data name="AuthenticatorKey" xml:space="preserve">
-    <value>Autentiseringsnyckel (TOTP)</value>
+    <value>Authenticator Key (TOTP)</value>
   </data>
   <data name="VerificationCodeTotp" xml:space="preserve">
-    <value>Verifieringskod (TOTP)</value>
+    <value>Verification Code (TOTP)</value>
     <comment>Totp code label</comment>
   </data>
   <data name="AuthenticatorKeyAdded" xml:space="preserve">
-    <value>Autentiseringsnyckel tillagd.</value>
+    <value>Authenticator key added.</value>
   </data>
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
-    <value>Kan inte läsa autentiseringsnyckeln.</value>
+    <value>Cannot read authenticator key.</value>
   </data>
   <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>Skanningen kommer att ske automatiskt.</value>
+    <value>Scanning will happen automatically.</value>
   </data>
   <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Rikta kameran mot en QR-kod.</value>
+    <value>Point your camera at the QR code.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
-    <value>Skanna QR-kod</value>
+    <value>Skenēt QR Kodu</value>
   </data>
   <data name="Camera" xml:space="preserve">
     <value>Kamera</value>
   </data>
   <data name="Photos" xml:space="preserve">
-    <value>Foton</value>
+    <value>Attēli</value>
   </data>
   <data name="CopyTotp" xml:space="preserve">
-    <value>Kopiera TOTP</value>
+    <value>Kopēt TOTP</value>
   </data>
   <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>Om din inloggning har en autentiseringsnyckel kopplad till den, kommer TOTP-verifieringskoden att automatiskt kopieras till urklipp när du automatiskt fyller i inloggningen.</value>
+    <value>If your login has an authenticator key attached to it, the TOTP verification code is automatically copied to your clipboard whenever you auto-fill the login.</value>
   </data>
   <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>Inaktivera automatisk TOTP-kopiering</value>
+    <value>Disable Automatic TOTP Copy</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
-    <value>Ett premium-medlemskap krävs för att använda den här funktionen.</value>
+    <value>A premium membership is required to use this feature.</value>
   </data>
   <data name="AttachementAdded" xml:space="preserve">
-    <value>Bilaga tillagd</value>
+    <value>Attachment added</value>
   </data>
   <data name="AttachmentDeleted" xml:space="preserve">
-    <value>Bilaga borttagen</value>
+    <value>Attachment deleted</value>
   </data>
   <data name="ChooseFile" xml:space="preserve">
-    <value>Välj fil</value>
+    <value>Choose File</value>
   </data>
   <data name="File" xml:space="preserve">
-    <value>Fil</value>
+    <value>Fails</value>
   </data>
   <data name="NoFileChosen" xml:space="preserve">
-    <value>Ingen fil vald</value>
+    <value>No file chosen</value>
   </data>
   <data name="NoAttachments" xml:space="preserve">
-    <value>Det finns inga bilagor.</value>
+    <value>Nav pielikumu.</value>
   </data>
   <data name="FileSource" xml:space="preserve">
-    <value>Filkälla</value>
+    <value>File Source</value>
   </data>
   <data name="FeatureUnavailable" xml:space="preserve">
-    <value>Funktionen är inte tillgänglig</value>
+    <value>Feature Unavailable</value>
   </data>
   <data name="MaxFileSize" xml:space="preserve">
-    <value>Filen får vara maximalt 100 MB.</value>
+    <value>Maximum file size is 100 MB.</value>
   </data>
   <data name="UpdateKey" xml:space="preserve">
-    <value>Du kan inte använda denna funktion förrän du uppdaterar din krypteringsnyckel.</value>
+    <value>You cannot use this feature until you update your encryption key.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
-    <value>Läs mer</value>
+    <value>Uzziniet Vairāk</value>
   </data>
   <data name="ApiUrl" xml:space="preserve">
-    <value>API server-URL</value>
+    <value>API Servera URL</value>
   </data>
   <data name="CustomEnvironment" xml:space="preserve">
-    <value>Anpassad miljö</value>
+    <value>Custom Environment</value>
   </data>
   <data name="CustomEnvironmentFooter" xml:space="preserve">
-    <value>För avancerade användare. Du kan ange bas-URL:en för varje tjänst oberoende av varandra.</value>
+    <value>For advanced users. You can specify the base URL of each service independently.</value>
   </data>
   <data name="EnvironmentSaved" xml:space="preserve">
-    <value>Miljö-URL:er har sparats.</value>
+    <value>The environment URLs have been saved.</value>
   </data>
   <data name="FormattedIncorrectly" xml:space="preserve">
-    <value>{0} är inte korrekt formaterad.</value>
+    <value>{0} is not correctly formatted.</value>
     <comment>Validation error when something is not formatted correctly, such as a URL or email address.</comment>
   </data>
   <data name="IdentityUrl" xml:space="preserve">
-    <value>Identitetsserver-URL</value>
+    <value>Identitātes Servera URL</value>
     <comment>"Identity" refers to an identity server. See more context here https://en.wikipedia.org/wiki/Identity_management</comment>
   </data>
   <data name="SelfHostedEnvironment" xml:space="preserve">
-    <value>Egen-hostad miljö</value>
+    <value>Pašuzturēta Vide</value>
   </data>
   <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
-    <value>Ange bas-URL:en för din "on-premise"-hostade Bitwarden-installation.</value>
+    <value>Specify the base URL of your on-premise hosted Bitwarden installation.</value>
   </data>
   <data name="ServerUrl" xml:space="preserve">
-    <value>Server-URL</value>
+    <value>Servera URL</value>
   </data>
   <data name="WebVaultUrl" xml:space="preserve">
-    <value>Webbvalv server-URL</value>
+    <value>Web Vault Server URL</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
-    <value>Tryck på den här aviseringen för att visa inloggningar från ditt valv.</value>
+    <value>Tap this notification to view items from your vault.</value>
   </data>
   <data name="CustomFields" xml:space="preserve">
-    <value>Anpassade fält</value>
+    <value>Custom Fields</value>
   </data>
   <data name="CopyNumber" xml:space="preserve">
-    <value>Kopiera nummer</value>
+    <value>Copy Number</value>
   </data>
   <data name="CopySecurityCode" xml:space="preserve">
-    <value>Kopiera säkerhetskod</value>
+    <value>Copy Security Code</value>
   </data>
   <data name="Number" xml:space="preserve">
-    <value>Nummer</value>
+    <value>Numurs</value>
   </data>
   <data name="SecurityCode" xml:space="preserve">
-    <value>Säkerhetskod</value>
+    <value>Drošības kods</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
-    <value>Kort</value>
+    <value>Karte</value>
   </data>
   <data name="TypeIdentity" xml:space="preserve">
-    <value>Identitet</value>
+    <value>Identitāte</value>
   </data>
   <data name="TypeLogin" xml:space="preserve">
-    <value>Inloggning</value>
+    <value>Login</value>
   </data>
   <data name="TypeSecureNote" xml:space="preserve">
-    <value>Säker anteckning</value>
+    <value>Droša Piezīme</value>
   </data>
   <data name="Address1" xml:space="preserve">
-    <value>Adress 1</value>
+    <value>Adrese 1</value>
   </data>
   <data name="Address2" xml:space="preserve">
-    <value>Adress 2</value>
+    <value>Adrese 2</value>
   </data>
   <data name="Address3" xml:space="preserve">
-    <value>Adress 3</value>
+    <value>Adrese 3</value>
   </data>
   <data name="April" xml:space="preserve">
-    <value>April</value>
+    <value>Aprīlis</value>
   </data>
   <data name="August" xml:space="preserve">
-    <value>Augusti</value>
+    <value>Augusts</value>
   </data>
   <data name="Brand" xml:space="preserve">
-    <value>Märke</value>
+    <value>Zīmols</value>
   </data>
   <data name="CardholderName" xml:space="preserve">
-    <value>Kortinnehavarens namn</value>
+    <value>Kartes Īpašnieka Vārds</value>
   </data>
   <data name="CityTown" xml:space="preserve">
-    <value>Ort</value>
+    <value>Pilsēta / Ciems</value>
   </data>
   <data name="Company" xml:space="preserve">
-    <value>Företag</value>
+    <value>Uzņēmums</value>
   </data>
   <data name="Country" xml:space="preserve">
-    <value>Land</value>
+    <value>Valsts</value>
   </data>
   <data name="December" xml:space="preserve">
-    <value>December</value>
+    <value>Decembris</value>
   </data>
   <data name="Dr" xml:space="preserve">
     <value>Dr</value>
   </data>
   <data name="ExpirationMonth" xml:space="preserve">
-    <value>Förfallomånad</value>
+    <value>Derīguma Mēnesis</value>
   </data>
   <data name="ExpirationYear" xml:space="preserve">
-    <value>Förfalloår</value>
+    <value>Derīguma Gads</value>
   </data>
   <data name="February" xml:space="preserve">
-    <value>Februari</value>
+    <value>Februāris</value>
   </data>
   <data name="FirstName" xml:space="preserve">
-    <value>Förnamn</value>
+    <value>Vārds</value>
   </data>
   <data name="January" xml:space="preserve">
-    <value>Januari</value>
+    <value>Janvāris</value>
   </data>
   <data name="July" xml:space="preserve">
-    <value>Juli</value>
+    <value>Jūlijs</value>
   </data>
   <data name="June" xml:space="preserve">
-    <value>Juni</value>
+    <value>Jūnijs</value>
   </data>
   <data name="LastName" xml:space="preserve">
-    <value>Efternamn</value>
+    <value>Uzvārds</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
-    <value>Licensnummer</value>
+    <value>Vadītāja Apliecības Numurs</value>
   </data>
   <data name="March" xml:space="preserve">
-    <value>Mars</value>
+    <value>Marts</value>
   </data>
   <data name="May" xml:space="preserve">
-    <value>Maj</value>
+    <value>Maijs</value>
   </data>
   <data name="MiddleName" xml:space="preserve">
-    <value>Mellannamn</value>
+    <value>Otrais Vārds</value>
   </data>
   <data name="Mr" xml:space="preserve">
-    <value>Herr</value>
+    <value>K-gs</value>
   </data>
   <data name="Mrs" xml:space="preserve">
-    <value>Fru</value>
+    <value>K-dze</value>
   </data>
   <data name="Ms" xml:space="preserve">
-    <value>Fröken</value>
+    <value>Jk-dze</value>
   </data>
   <data name="November" xml:space="preserve">
-    <value>November</value>
+    <value>Novembris</value>
   </data>
   <data name="October" xml:space="preserve">
-    <value>Oktober</value>
+    <value>Oktobris</value>
   </data>
   <data name="PassportNumber" xml:space="preserve">
-    <value>Passnummer</value>
+    <value>Pases Numurs</value>
   </data>
   <data name="Phone" xml:space="preserve">
-    <value>Telefon</value>
+    <value>Tālrunis</value>
   </data>
   <data name="September" xml:space="preserve">
-    <value>September</value>
+    <value>Septembris</value>
   </data>
   <data name="SSN" xml:space="preserve">
-    <value>Personnummer</value>
+    <value>Personas Kods</value>
   </data>
   <data name="StateProvince" xml:space="preserve">
-    <value>Län</value>
+    <value>Reģions / Pagasts</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Titel</value>
+    <value>Title</value>
   </data>
   <data name="ZipPostalCode" xml:space="preserve">
-    <value>Postnummer</value>
+    <value>Pasta / Zip Indekss</value>
   </data>
   <data name="Address" xml:space="preserve">
-    <value>Adress</value>
+    <value>Adrese</value>
   </data>
   <data name="Expiration" xml:space="preserve">
-    <value>Utgång</value>
+    <value>Derīgums</value>
   </data>
   <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>Inaktivera webbplatsikoner</value>
+    <value>Disable Website Icons</value>
   </data>
   <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Webbplatsikoner ger en igenkännbar ikon bredvid varje inloggningsobjekt i ditt valv.</value>
+    <value>Website Icons provide a recognizable image next to each login item in your vault.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
-    <value>Ikoner Server-URL</value>
+    <value>Ikonu Servera URL</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Fyll i automatiskt med Bitwarden</value>
+    <value>Auto-fill with Bitwarden</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
-    <value>Valvet är låst</value>
+    <value>Seifs ir slēgts</value>
   </data>
   <data name="GoToMyVault" xml:space="preserve">
-    <value>Gå till mitt valv</value>
+    <value>Iet uz manu seifu</value>
   </data>
   <data name="Collections" xml:space="preserve">
-    <value>Samlingar</value>
+    <value>Kolekcijas</value>
   </data>
   <data name="NoItemsCollection" xml:space="preserve">
-    <value>Det finns inga objekt i samlingen.</value>
+    <value>There are no items in this collection.</value>
   </data>
   <data name="NoItemsFolder" xml:space="preserve">
-    <value>Det finns inga objekt i den här mappen.</value>
+    <value>There are no items in this folder.</value>
   </data>
   <data name="NoItemsTrash" xml:space="preserve">
-    <value>Det finns inga objekt i papperskorgen.</value>
+    <value>There are no items in the trash.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
-    <value>Tillgänglighetstjänst för automatisk ifyllnad</value>
+    <value>Auto-fill Accessibility Service</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>Bitwardens tillgänglighetstjänst för automatisk ifyllnad använder Android Autofill Framework för att assistera med att fylla i inloggningar, kreditkort och identitetsinformation inuti andra appar på din enhet.</value>
+    <value>The Bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Använd Bitwardens tillgänglighetstjänst för att automatiskt fylla i inloggningar, kreditkort och identitetsinformation inuti andra appar.</value>
+    <value>Use the Bitwarden auto-fill service to fill logins, credit cards, and identity information into other apps.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
-    <value>Öppna inställningar för automatisk ifyllnad</value>
+    <value>Open Autofill Settings</value>
   </data>
   <data name="FaceID" xml:space="preserve">
     <value>Face ID</value>
     <comment>What Apple calls their facial recognition reader.</comment>
   </data>
   <data name="FaceIDDirection" xml:space="preserve">
-    <value>Använd Face ID för att verifiera.</value>
+    <value>Use Face ID to verify.</value>
   </data>
   <data name="UseFaceIDToUnlock" xml:space="preserve">
-    <value>Använd Face ID för att låsa upp</value>
+    <value>Use Face ID To Unlock</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
-    <value>Verifiera Face ID</value>
+    <value>Verify Face ID</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
-    <value>Det gick inte att automatiskt öppna inställningsmenyn för Android automatisk ifyllnad. Du kan navigera till menyn manuellt från Android inställningar &gt; System &gt; Språk och inmatning &gt; Avancerat &gt; Tjänsten autofyll.</value>
+    <value>We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings &gt; System &gt; Languages and input &gt; Advanced &gt; Autofill service.</value>
   </data>
   <data name="CustomFieldName" xml:space="preserve">
-    <value>Anpassat fältnamn</value>
+    <value>Custom Field Name</value>
   </data>
   <data name="FieldTypeBoolean" xml:space="preserve">
-    <value>Boolean</value>
+    <value>Būla</value>
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
-    <value>Dold</value>
+    <value>Paslēpts</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
-    <value>Text</value>
+    <value>Teksts</value>
   </data>
   <data name="NewCustomField" xml:space="preserve">
-    <value>Nytt anpassat fält</value>
+    <value>Jauns Pielāgotais Lauks</value>
   </data>
   <data name="SelectTypeField" xml:space="preserve">
-    <value>Vilken typ av anpassat fält vill du lägga till?</value>
+    <value>What type of custom field do you want to add?</value>
   </data>
   <data name="Remove" xml:space="preserve">
-    <value>Ta bort</value>
+    <value>Noņemt</value>
   </data>
   <data name="NewUri" xml:space="preserve">
-    <value>Ny URI</value>
+    <value>Jauns URI</value>
   </data>
   <data name="URIPosition" xml:space="preserve">
     <value>URI {0}</value>
     <comment>Label for a uri/url with position. i.e. URI 1, URI 2, etc</comment>
   </data>
   <data name="BaseDomain" xml:space="preserve">
-    <value>Basdomän</value>
+    <value>Galvenais domēns</value>
   </data>
   <data name="Default" xml:space="preserve">
-    <value>Standard</value>
+    <value>Noklusējums</value>
   </data>
   <data name="Exact" xml:space="preserve">
-    <value>Exakt</value>
+    <value>Precīzs</value>
   </data>
   <data name="Host" xml:space="preserve">
-    <value>Värd</value>
+    <value>Serveris</value>
     <comment>A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'.</comment>
   </data>
   <data name="RegEx" xml:space="preserve">
-    <value>Reguljärt uttryck</value>
+    <value>Regulāra izteiksme</value>
     <comment>A programming term, also known as 'RegEx'.</comment>
   </data>
   <data name="StartsWith" xml:space="preserve">
-    <value>Börjar med</value>
+    <value>Sākas ar</value>
   </data>
   <data name="URIMatchDetection" xml:space="preserve">
-    <value>Matchning av URI</value>
+    <value>URI Atbilstības Noteikšana</value>
   </data>
   <data name="MatchDetection" xml:space="preserve">
-    <value>Matchning</value>
+    <value>Atbilstības Noteikšana</value>
     <comment>URI match detection for auto-fill.</comment>
   </data>
   <data name="YesAndSave" xml:space="preserve">
-    <value>Ja, och spara</value>
+    <value>Jā un saglabāt</value>
   </data>
   <data name="AutofillAndSave" xml:space="preserve">
-    <value>Fyll i automatiskt och spara</value>
+    <value>Auto-fill and save</value>
   </data>
   <data name="Organization" xml:space="preserve">
-    <value>Organisation</value>
+    <value>Organizācija</value>
     <comment>An entity of multiple related people (ex. a team or business organization).</comment>
   </data>
   <data name="HoldYubikeyNearTop" xml:space="preserve">
-    <value>Håll din Yubikey nära ovansidan av enheten.</value>
+    <value>Turiet savu YubiKey pie ierīces augšas.</value>
   </data>
   <data name="TryAgain" xml:space="preserve">
-    <value>Försök igen</value>
+    <value>Mēģiniet vēlreiz</value>
   </data>
   <data name="YubiKeyInstructionIos" xml:space="preserve">
-    <value>För att fortsätta, håll din YubiKey NEO mot baksidan av enheten.</value>
+    <value>Lai turpinātu, turiet savu YubiKey NEO pret ierīces aizmuguri.</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
-    <value>Tillgänglighetstjänsten kan vara användbar när appar inte stöder standardvarianten av ifyllnad.</value>
+    <value>The accessibility service may be helpful to use when apps do not support the standard auto-fill service.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
-    <value>Lösenord uppdaterat</value>
+    <value>Parole Atjaunota</value>
     <comment>ex. Date this password was updated</comment>
   </data>
   <data name="DateUpdated" xml:space="preserve">
-    <value>Uppdaterad</value>
+    <value>Atjaunots</value>
     <comment>ex. Date this item was updated</comment>
   </data>
   <data name="AutofillActivated" xml:space="preserve">
-    <value>Automatisk ifyllnad aktiverat!</value>
+    <value>AutoFill Activated!</value>
   </data>
   <data name="MustLogInMainAppAutofill" xml:space="preserve">
-    <value>Du måste logga in i Bitwarden-appen innan du kan använda automatisk ifyllnad.</value>
+    <value>You must log into the main Bitwarden app before you can use AutoFill.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
-    <value>Dina inloggningar är nu enkelt åtkomna direkt från ditt tangentbord när du loggar in i appar och webbplatser.</value>
+    <value>Your logins are now easily accessible right from your keyboard while logging into apps and websites.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
-    <value>Vi rekommenderar att inaktivera andra appar som använder autofyll i "Inställningar" om du inte planerar att använda dem.</value>
+    <value>We recommend disabling any other AutoFill apps under Settings if you do not plan to use them.</value>
   </data>
   <data name="BitwardenAutofillDescription" xml:space="preserve">
-    <value>Kom åt ditt valv direkt genom ditt tangentbord för att snabbt kunna fylla i lösenord automatiskt.</value>
+    <value>Access your vault directly from your keyboard to quickly autofill passwords.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
-    <value>För att aktivera automatisk ifyllnad av lösenord på din enhet, följ dessa instruktioner:</value>
+    <value>To enable password autofill on your device, follow these instructions:</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
-    <value>1. Gå till iOS "Inställningar"-app</value>
+    <value>1. Go to the iOS "Settings" app</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Tryck på "Lösenord &amp; konton"</value>
+    <value>2. Tap "Passwords &amp; Accounts"</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
-    <value>3. Tryck på "Autofyll lösenord"</value>
+    <value>3. Tap "AutoFill Passwords"</value>
   </data>
   <data name="AutofillTurnOn4" xml:space="preserve">
-    <value>4. Sätt på autofyll</value>
+    <value>4. Turn on AutoFill</value>
   </data>
   <data name="AutofillTurnOn5" xml:space="preserve">
-    <value>5. Välj "Bitwarden"</value>
+    <value>5. Select "Bitwarden"</value>
   </data>
   <data name="PasswordAutofill" xml:space="preserve">
-    <value>Automatisk ifyllnad av lösenord</value>
+    <value>Password AutoFill</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
-    <value>Det lättaste sättet att lägga till nya inloggningar till ditt valv är genom att använda Bitwardens hjälpmedelsservice för automatisk ifyllnad. Läs mer om hur man använder Bitwardens hjälpmedelsservice för automatisk ifyllnad genom att navigera till "Inställningar"-skärmen.</value>
+    <value>The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the "Settings" screen.</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
-    <value>Ogiltig e-postadress.</value>
+    <value>Invalid email address.</value>
   </data>
   <data name="Cards" xml:space="preserve">
-    <value>Kort</value>
+    <value>Kartes</value>
   </data>
   <data name="Identities" xml:space="preserve">
-    <value>Identiteter</value>
+    <value>Identitātes</value>
   </data>
   <data name="Logins" xml:space="preserve">
-    <value>Inloggningar</value>
+    <value>Logins</value>
   </data>
   <data name="SecureNotes" xml:space="preserve">
-    <value>Säkra anteckningar</value>
+    <value>Drošās Piezīmes</value>
   </data>
   <data name="AllItems" xml:space="preserve">
-    <value>Alla objekt</value>
+    <value>Visi Vienumi</value>
   </data>
   <data name="URIs" xml:space="preserve">
-    <value>URI:er</value>
+    <value>URI</value>
     <comment>Plural form of a URI</comment>
   </data>
   <data name="CheckingPassword" xml:space="preserve">
-    <value>Kontrollerar lösenord...</value>
+    <value>Checking password...</value>
     <comment>A loading message when doing an exposed password check.</comment>
   </data>
   <data name="CheckPassword" xml:space="preserve">
-    <value>Kontrollera om lösenordet har avslöjats.</value>
+    <value>Check if password has been exposed.</value>
   </data>
   <data name="PasswordExposed" xml:space="preserve">
-    <value>Detta lösenord har avslöjats {0} gång(er) i dataintrång. Du bör ändra det.</value>
+    <value>This password has been exposed {0} time(s) in data breaches. You should change it.</value>
   </data>
   <data name="PasswordSafe" xml:space="preserve">
-    <value>Detta lösenord hittades inte i några kända dataintrång. Det bör vara säkert att använda.</value>
+    <value>This password was not found in any known data breaches. It should be safe to use.</value>
   </data>
   <data name="IdentityName" xml:space="preserve">
-    <value>Identitetsnamn</value>
+    <value>Identitātes Nosaukums</value>
   </data>
   <data name="Value" xml:space="preserve">
-    <value>Värde</value>
+    <value>Vērtība</value>
   </data>
   <data name="PasswordHistory" xml:space="preserve">
-    <value>Lösenordshistorik</value>
+    <value>Password History</value>
   </data>
   <data name="Types" xml:space="preserve">
-    <value>Typer</value>
+    <value>Veidi</value>
   </data>
   <data name="NoPasswordsToList" xml:space="preserve">
-    <value>Inga lösenord att lista.</value>
+    <value>No passwords to list.</value>
   </data>
   <data name="NoItemsToList" xml:space="preserve">
-    <value>Det finns inga objekt att visa.</value>
+    <value>There are no items to list.</value>
   </data>
   <data name="SearchCollection" xml:space="preserve">
-    <value>Sök i samling</value>
+    <value>Meklēt kolekcijā</value>
   </data>
   <data name="SearchFolder" xml:space="preserve">
-    <value>Sök i mapp</value>
+    <value>Meklēt mapē</value>
   </data>
   <data name="SearchType" xml:space="preserve">
-    <value>Sök efter typ</value>
+    <value>Meklēšanas veids</value>
   </data>
   <data name="Type" xml:space="preserve">
-    <value>Typ</value>
+    <value>Veids</value>
   </data>
   <data name="MoveDown" xml:space="preserve">
-    <value>Flytta ner</value>
+    <value>Move Down</value>
   </data>
   <data name="MoveUp" xml:space="preserve">
-    <value>Flytta upp</value>
+    <value>Move Up</value>
   </data>
   <data name="Miscellaneous" xml:space="preserve">
-    <value>Diverse</value>
+    <value>Miscellaneous</value>
   </data>
   <data name="Ownership" xml:space="preserve">
-    <value>Ägarskap</value>
+    <value>Ownership</value>
   </data>
   <data name="WhoOwnsThisItem" xml:space="preserve">
-    <value>Vem äger detta objekt?</value>
+    <value>Who owns this item?</value>
   </data>
   <data name="NoCollectionsToList" xml:space="preserve">
-    <value>Det finns inga samlingar att visa.</value>
+    <value>There are no collections to list.</value>
   </data>
   <data name="ItemShared" xml:space="preserve">
-    <value>Objektet har delats.</value>
+    <value>Item has been shared.</value>
   </data>
   <data name="SelectOneCollection" xml:space="preserve">
-    <value>Du måste markera minst en samling.</value>
+    <value>Jums ir jāizvēlas vismaz viena kolekcija.</value>
   </data>
   <data name="Share" xml:space="preserve">
-    <value>Dela</value>
+    <value>Koplietot</value>
   </data>
   <data name="ShareItem" xml:space="preserve">
-    <value>Dela objekt</value>
+    <value>Koplietot Vienumu</value>
   </data>
   <data name="NoOrgsToList" xml:space="preserve">
-    <value>Inga organisationer att lista.</value>
+    <value>No organizations to list.</value>
   </data>
   <data name="ShareDesc" xml:space="preserve">
-    <value>Välj en organisation som du vill dela detta objekt med. Delning överför ägandet av objektet till organisationen. Du kommer inte längre vara direkt ägare till detta objekt när det har delats.</value>
+    <value>Izvēlies organizāciju ar kuru koplietot šo vienumu. Koplietošana pārvieto šī vienuma piederību organizācijai. Jūs vairs nebūsiet šī vienuma tiešais īpašnieks kad tas tiks koplietots.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
-    <value>Antal ord</value>
+    <value>Vārdu Skaits</value>
   </data>
   <data name="Passphrase" xml:space="preserve">
-    <value>Lösenordsfras</value>
+    <value>Paroles frāze</value>
   </data>
   <data name="WordSeparator" xml:space="preserve">
-    <value>Ordavgränsare</value>
+    <value>Vārdu Atdalītājs</value>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>Rensa</value>
+    <value>Notīrīt</value>
     <comment>To clear something out. example: To clear browser history.</comment>
   </data>
   <data name="Generator" xml:space="preserve">
-    <value>Generator</value>
+    <value>Ģenerators</value>
     <comment>Short for "Password Generator"</comment>
   </data>
   <data name="NoFoldersToList" xml:space="preserve">
-    <value>Det finns inga mappar att lista.</value>
+    <value>There are no folders to list.</value>
   </data>
   <data name="FingerprintPhrase" xml:space="preserve">
-    <value>Fingeravtrycksfras</value>
+    <value>Fingerprint Phrase</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="YourAccountsFingerprint" xml:space="preserve">
-    <value>Ditt kontos fingeravtrycksfras</value>
+    <value>Your account's fingerprint phrase</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="ShareVaultConfirmation" xml:space="preserve">
-    <value>Bitwarden gör det möjligt för dig att dela ditt valv med andra genom att använda ett organisationskonto. Vill du besöka bitwarden.com för att lära dig mer?</value>
+    <value>Bitwarden allows you to share your vault with others by using an organization account. Would you like to visit the bitwarden.com website to learn more?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
-    <value>Exportera valv</value>
+    <value>Eksportēt Seifu</value>
   </data>
   <data name="LockNow" xml:space="preserve">
-    <value>Lås nu</value>
+    <value>Aizslēgt Tagad</value>
   </data>
   <data name="PIN" xml:space="preserve">
-    <value>PIN-kod</value>
+    <value>PIN</value>
   </data>
   <data name="Unlock" xml:space="preserve">
-    <value>Lås upp</value>
+    <value>Atslēgt</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
-    <value>30 minuter</value>
+    <value>30 minūtes</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
-    <value>Ange en PIN-kod att låsa upp Bitwarden med. Dina PIN-kodsinställningar återställs om du någonsin loggar ut helt från appen.</value>
+    <value>Set your PIN code for unlocking Bitwarden. Your PIN settings will be reset if you ever fully log out of the application.</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
-    <value>Inloggad som {0} på {1}.</value>
+    <value>Logged in as {0} on {1}.</value>
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
-    <value>Valvet är låst. Bekräfta ditt huvudlösenord för att fortsätta.</value>
+    <value>Your vault is locked. Verify your master password to continue.</value>
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
-    <value>Valvet är låst. Bekräfta din PIN-kod för att fortsätta.</value>
+    <value>Your vault is locked. Verify your PIN code to continue.</value>
   </data>
   <data name="Dark" xml:space="preserve">
-    <value>Mörkt</value>
+    <value>Tumšs</value>
     <comment>A dark color</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>Ljust</value>
+    <value>Gaišs</value>
     <comment>A light color</comment>
   </data>
   <data name="FiveMinutes" xml:space="preserve">
-    <value>5 minuter</value>
+    <value>5 minūtes</value>
   </data>
   <data name="TenSeconds" xml:space="preserve">
-    <value>10 sekunder</value>
+    <value>10 sekundes</value>
   </data>
   <data name="ThirtySeconds" xml:space="preserve">
-    <value>30 sekunder</value>
+    <value>30 sekundes</value>
   </data>
   <data name="TwentySeconds" xml:space="preserve">
-    <value>20 sekunder</value>
+    <value>20 sekundes</value>
   </data>
   <data name="TwoMinutes" xml:space="preserve">
-    <value>2 minuter</value>
+    <value>2 minūtes</value>
   </data>
   <data name="ClearClipboard" xml:space="preserve">
-    <value>Rensa urklipp</value>
+    <value>Notīrīt Starpliktuvi</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="ClearClipboardDescription" xml:space="preserve">
-    <value>Rensa automatiskt kopierade värden från urklipp.</value>
+    <value>Automatically clear copied values from your clipboard.</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="DefaultUriMatchDetection" xml:space="preserve">
-    <value>Standardmatchning för URI</value>
+    <value>Default URI Match Detection</value>
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
-    <value>Välj standardalternativet för hur matchning av URI är hanterat för inloggningar när du utför operationer såsom automatisk ifyllnad.</value>
+    <value>Choose the default way that URI match detection is handled for logins when performing actions such as auto-fill.</value>
   </data>
   <data name="Theme" xml:space="preserve">
-    <value>Tema</value>
+    <value>Motīvs</value>
     <comment>Color theme</comment>
   </data>
   <data name="ThemeDescription" xml:space="preserve">
-    <value>Ändra appens färgtema.</value>
+    <value>Change the application's color theme.</value>
   </data>
   <data name="RestartIsRequired" xml:space="preserve">
-    <value>Omstart krävs.</value>
+    <value>Restart is required.</value>
     <comment>Referring to restarting the application.</comment>
   </data>
   <data name="Restarting" xml:space="preserve">
-    <value>Startar om...</value>
+    <value>Restarting...</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
-    <value>Kopiera anteckningar</value>
+    <value>Kopēt Piezīmes</value>
   </data>
   <data name="Exit" xml:space="preserve">
-    <value>Avsluta</value>
+    <value>Iziet</value>
   </data>
   <data name="ExitConfirmation" xml:space="preserve">
-    <value>Är du säker på att du vill avsluta Bitwarden?</value>
+    <value>Vai tiešām vēlaties iziet no Bitwarden?</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
-    <value>Vill du behöva låsa upp med ditt huvudlösenord när programmet startas om?</value>
+    <value>Do you want to require unlocking with your master password when the application is restarted?</value>
   </data>
   <data name="Black" xml:space="preserve">
-    <value>Svart</value>
+    <value>Melns</value>
     <comment>The color black</comment>
   </data>
   <data name="BlacklistedUris" xml:space="preserve">
-    <value>Svartlistade URI:er</value>
+    <value>Blacklisted URIs</value>
   </data>
   <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>URI:er som är svartlistade kommer inte att erbjuda automatisk ifyllning. Listan bör vara kommaseparerad. Ex: "https://twitter.com, androidapp://com.twitter.android".</value>
+    <value>URIs that are blacklisted will not offer auto-fill. The list should be comma separated. Ex: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
   <data name="DisableSavePrompt" xml:space="preserve">
-    <value>Inaktivera sparförfrågan</value>
+    <value>Disable Save Prompt</value>
   </data>
   <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>"Sparförfrågan" frågar dig om du vill lägga till nya objekt i ditt valv automatiskt när du använder dem för första gången.</value>
+    <value>The "Save Prompt" automatically prompts you to save new items to your vault whenever you enter them for the first time.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
-    <value>Vid omstart av appen</value>
+    <value>On App Restart</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>Automatisk ifyllning gör det enkelt att säkert komma åt ditt Bitwarden-valv från andra webbplatser och appar. Det verkar som om du inte har aktiverat en tjänst för automatisk ifyllning för Bitwarden. Aktivera automatisk ifyllning för Bitwarden från fliken "Inställningar".</value>
+    <value>Auto-fill makes it easy to securely access your Bitwarden vault from other websites and apps. It looks like you have not enabled an auto-fill service for Bitwarden. Enable auto-fill for Bitwarden from the "Settings" screen.</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
-    <value>Ditt tema ändras när appen startas om.</value>
+    <value>Your theme changes will apply when the app is restarted.</value>
   </data>
   <data name="Capitalize" xml:space="preserve">
-    <value>Versalisera</value>
+    <value>Capitalize</value>
     <comment>ex. Uppercase the first character of a word.</comment>
   </data>
   <data name="IncludeNumber" xml:space="preserve">
-    <value>Inkludera siffra</value>
+    <value>Ievietot Skaitli</value>
   </data>
   <data name="Download" xml:space="preserve">
-    <value>Ladda ner</value>
+    <value>Lejupielādēt</value>
   </data>
   <data name="Shared" xml:space="preserve">
-    <value>Delad</value>
+    <value>Koplietots</value>
   </data>
   <data name="ToggleVisibility" xml:space="preserve">
-    <value>Växla synlighet</value>
+    <value>Pārslēgt Redzamību</value>
   </data>
   <data name="LoginExpired" xml:space="preserve">
-    <value>Din inloggningssession har löpt ut.</value>
+    <value>Your login session has expired.</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
-    <value>Använd biometri för att bekräfta.</value>
+    <value>Biometric Verification</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
-    <value>Biometri</value>
+    <value>Biometrija</value>
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
-    <value>Använd biometri för att låsa upp</value>
+    <value>Izmantot Biometriju Lai Atslēgtu</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
-    <value>Bitwarden behöver din uppmärksamhet - Se "Tillgänglighetstjänst för automatisk ifyllnad" i Bitwardens inställningar</value>
+    <value>Bitwarden needs attention - See "Auto-fill Accessibility Service" from Bitwarden Settings</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
-    <value>3. På Androids appinställningsskärm för Bitwarden, gå till alternativet "Visa över andra appar" (under Avancerat) och tryck på knappen för att aktivera stöd för visning av rutor över andra appar.</value>
+    <value>3. On the Android App Settings screen for Bitwarden, go to the "Display over other apps" options (under Advanced) and tap the toggle to enable overlay support.</value>
   </data>
   <data name="OverlayPermission" xml:space="preserve">
-    <value>Behörighet</value>
+    <value>Atļauja</value>
   </data>
   <data name="BitwardenAutofillServiceOpenOverlayPermissionSettings" xml:space="preserve">
-    <value>Öppna behörighetsinställningar för visning över andra appar</value>
+    <value>Open Overlay Permission Settings</value>
   </data>
   <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
-    <value>3. På Androids appinställningsskärm för Bitwarden, välj "Visa över andra appar" (under Avancerat) och tryck på knappen för att aktivera stöd för visning av rutor över andra appar.</value>
+    <value>3. On the Android App Settings screen for Bitwarden, select "Display over other apps" (under "Advanced") and switch on the toggle to allow the overlay.</value>
   </data>
   <data name="Denied" xml:space="preserve">
-    <value>Nekad</value>
+    <value>Denied</value>
   </data>
   <data name="Granted" xml:space="preserve">
-    <value>Beviljad</value>
+    <value>Granted</value>
   </data>
   <data name="FileFormat" xml:space="preserve">
-    <value>Filformat</value>
+    <value>Faila Formāts</value>
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
-    <value>Ange ditt huvudlösenord för att exportera ditt valv.</value>
+    <value>Ievadiet savu galveno paroli lai eksportētu sava seifa datus.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
-    <value>Denna export innehåller ditt valv i ett okrypterat format. Du bör inte lagra eller skicka den exporterade filen över osäkra kanaler (t.ex. e-post). Radera den omedelbart när du är färdig med den.</value>
+    <value>Šis eksports satur jūsu datus nešifrētā formātā. Eksportēto failu nevajadzētu saglabāt vai sūtīt izmantojot nedrošus kanālus (piemēram E-pastu). Izdzēsiet to līdzko esiet beidzis to izmantot.</value>
   </data>
   <data name="Warning" xml:space="preserve">
-    <value>Varning</value>
+    <value>Brīdinājums</value>
   </data>
   <data name="ExportVaultFailure" xml:space="preserve">
-    <value>Det gick inte att exportera ditt valv. Om problemet kvarstår måste du exportera från webbvalvet istället.</value>
+    <value>There was a problem exporting your vault.  If the problem persists, you'll need to export from the web vault.</value>
   </data>
   <data name="ExportVaultSuccess" xml:space="preserve">
-    <value>Valvet exporterades</value>
+    <value>Vault exported successfully</value>
   </data>
   <data name="Clone" xml:space="preserve">
-    <value>Klona</value>
+    <value>Clone</value>
     <comment>Clone an entity (verb).</comment>
   </data>
   <data name="PasswordGeneratorPolicyInEffect" xml:space="preserve">
-    <value>En eller flera organisationspolicyer påverkar dina generatorinställningar</value>
+    <value>One or more organization policies are affecting your generator settings</value>
   </data>
   <data name="Open" xml:space="preserve">
-    <value>Öppna</value>
+    <value>Open</value>
     <comment>Button text for an open operation (verb).</comment>
   </data>
   <data name="UnableToSaveAttachment" xml:space="preserve">
-    <value>Det gick inte att spara bilagan. Om problemet kvarstår kan du spara den från webbvalvet.</value>
+    <value>There was a problem saving this attachment. If the problem persists, you can save it from the web vault.</value>
   </data>
   <data name="SaveAttachmentSuccess" xml:space="preserve">
-    <value>Bilagan sparades</value>
+    <value>Attachment saved successfully</value>
   </data>
   <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
-    <value>Vänligen aktivera "Tillgänglighetstjänst för automatisk ifyllnad" i Bitwardens inställningar för att använda automatisk ifyllnad.</value>
+    <value>Please enable "Auto-fill Accessibility Service" from Bitwarden Settings to use the Auto-fill tile.</value>
   </data>
   <data name="AutofillTileUriNotFound" xml:space="preserve">
-    <value>Inga lösenordsfält hittades</value>
+    <value>No password fields detected</value>
   </data>
   <data name="SoftDeleting" xml:space="preserve">
-    <value>Skickar till papperskorgen...</value>
+    <value>Sending to trash...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemSoftDeleted" xml:space="preserve">
-    <value>Objektet har skickats till papperskorgen.</value>
+    <value>Item has been sent to trash.</value>
     <comment>Confirmation message after successfully soft-deleting a login</comment>
   </data>
   <data name="Restore" xml:space="preserve">
-    <value>Återställ</value>
+    <value>Restore</value>
     <comment>Restores an entity (verb).</comment>
   </data>
   <data name="Restoring" xml:space="preserve">
-    <value>Återställer...</value>
+    <value>Restoring...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemRestored" xml:space="preserve">
-    <value>Objektet har återställts.</value>
+    <value>Item has been restored.</value>
     <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
   </data>
   <data name="Trash" xml:space="preserve">
-    <value>Papperskorgen</value>
+    <value>Trash</value>
     <comment>(noun) Location of deleted items which have not yet been permanently deleted</comment>
   </data>
   <data name="SearchTrash" xml:space="preserve">
-    <value>Sök i papperskorgen</value>
+    <value>Search trash</value>
     <comment>(action prompt) Label for the search text field when viewing the trash folder</comment>
   </data>
   <data name="DoYouReallyWantToPermanentlyDeleteCipher" xml:space="preserve">
-    <value>Är du säker på att du vill radera permanent? Detta går inte att ångra.</value>
+    <value>Do you really want to permanently delete? This cannot be undone.</value>
     <comment>Confirmation alert message when permanently deleteing a cipher.</comment>
   </data>
   <data name="DoYouReallyWantToRestoreCipher" xml:space="preserve">
-    <value>Vill du verkligen återställa detta objekt?</value>
+    <value>Do you really want to restore this item?</value>
     <comment>Confirmation alert message when restoring a soft-deleted cipher.</comment>
   </data>
   <data name="DoYouReallyWantToSoftDeleteCipher" xml:space="preserve">
-    <value>Vill du verkligen skicka till papperskorgen?</value>
+    <value>Do you really want to send to the trash?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="BiometricInvalidated" xml:space="preserve">

@@ -118,44 +118,49 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Title" xml:space="preserve">
-    <value>bitwarden Password Manager</value>
+    <value>Bitwarden പാസ്സ്‌വേഡ് മാനേജർ </value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="ShortDescription" xml:space="preserve">
-    <value>bitwarden is a login and password manager that helps keep you safe while online.</value>
+    <value>ഓൺലൈനിൽ നിങ്ങളെ സുരക്ഷിതമായി കാക്കുന്ന പാസ്സ്‌വേഡ് മാനേജർ ആണ് Bitwarden.</value>
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>bitwarden is the easiest and safest way to store all of your logins and passwords while conveniently keeping them synced between all of your devices.
+    <value>നിങ്ങളുടെ എല്ലാ ലോഗിനുകളും പാസ്‌വേഡുകളും സംഭരിക്കുന്നതിനുള്ള ഏറ്റവും എളുപ്പവും സുരക്ഷിതവുമായ മാർഗ്ഗമാണ് Bitwarden, ഒപ്പം നിങ്ങളുടെ എല്ലാ ഉപകരണങ്ങളും തമ്മിൽ സമന്വയിപ്പിക്കുകയും ചെയ്യുന്നു.
 
-Password theft is a serious problem. The websites and apps that you use are under attack every day. Security breaches occur and your passwords are stolen. When you reuse the same passwords across apps and websites hackers can easily access your email, bank, and other important accounts.
+പാസ്‌വേഡ് മോഷണം ഗുരുതരമായ പ്രശ്‌നമാണ്. നിങ്ങൾ ഉപയോഗിക്കുന്ന വെബ്‌സൈറ്റുകളും അപ്ലിക്കേഷനുകളും എല്ലാ ദിവസവും ആക്രമണത്തിലാണ്. സുരക്ഷാ ലംഘനങ്ങൾ സംഭവിക്കുകയും നിങ്ങളുടെ പാസ്‌വേഡുകൾ മോഷ്‌ടിക്കപ്പെടുകയും ചെയ്യുന്നു. അപ്ലിക്കേഷനുകളിലും വെബ്‌സൈറ്റുകളിലും ഉടനീളം സമാന പാസ്‌വേഡുകൾ നിങ്ങൾ വീണ്ടും ഉപയോഗിക്കുമ്പോൾ ഹാക്കർമാർക്ക് നിങ്ങളുടെ ഇമെയിൽ, ബാങ്ക്, മറ്റ് പ്രധാനപ്പെട്ട അക്കൗണ്ടുകൾ എന്നിവ എളുപ്പത്തിൽ ആക്‌സസ്സുചെയ്യാനാകും.
 
-Security experts recommend that you use a different, randomly generated password for every account that you create. But how do you manage all those passwords? bitwarden makes it easy for you to create, store, and access your passwords.
+നിങ്ങളുടെ എല്ലാ ഉപകരണങ്ങളിലും സമന്വയിപ്പിക്കുന്ന ഒരു എൻ‌ക്രിപ്റ്റ് ചെയ്ത വാൾട്ടിൽ  Bitwarden  നിങ്ങളുടെ എല്ലാ ലോഗിനുകളും സംഭരിക്കുന്നു. നിങ്ങളുടെ ഉപകരണം വിടുന്നതിനുമുമ്പ് ഇത് പൂർണ്ണമായും എൻ‌ക്രിപ്റ്റ് ചെയ്‌തിരിക്കുന്നതിനാൽ, നിങ്ങളുടെ ഡാറ്റ നിങ്ങൾക്ക് മാത്രമേ ആക്‌സസ് ചെയ്യാൻ കഴിയൂ .  Bitwarden ടീമിന് പോലും നിങ്ങളുടെ ഡാറ്റ വായിക്കാൻ കഴിയില്ല. നിങ്ങളുടെ ഡാറ്റ AES-256 ബിറ്റ് എൻ‌ക്രിപ്ഷൻ, സാൾട്ടിങ് ഹാഷിംഗ്, PBKDF2 SHA-256 എന്നിവ ഉപയോഗിച്ച് അടച്ചിരിക്കുന്നു.
 
-bitwarden stores all of your logins in an encrypted vault that syncs across all of your devices. Since it's fully encrypted before it ever leaves your device, only you have access to your data. Not even the team at bitwarden can read your data, even if we wanted to. Your data is sealed with AES-256 bit encryption, salted hashing, and PBKDF2 SHA-256.</value>
+100% ഓപ്പൺ സോഴ്‌സ് സോഫ്റ്റ്വെയറാണ് Bitwarden . Bitwarden സോഴ്‌സ് കോഡ് GitHub- ൽ ഹോസ്റ്റുചെയ്‌തിരിക്കുന്നു, മാത്രമല്ല എല്ലാവർക്കും ഇത് അവലോകനം ചെയ്യാനും ഓഡിറ്റുചെയ്യാനും ബിറ്റ് വാർഡൻ കോഡ്ബേസിലേക്ക് സംഭാവന ചെയ്യാനും സ്വാതന്ത്ര്യമുണ്ട്.
+
+
+
+
+</value>
     <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
-    <value>आपके सभी उपकरणों के लिए एक सुरक्षित और मुफ्त पासवर्ड प्रबंधक</value>
+    <value>നിങ്ങളുടെ എല്ലാ ഉപകരണങ്ങൾക്കും സുരക്ഷിതവും സൗജന്യവുമായ പാസ്‌വേഡ് മാനേജർ.</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>एक सुरक्षित तिजोरी से अपने सभी लॉगिन और पासवर्ड प्रबंधित करें</value>
+    <value>നിങ്ങളുടെ എല്ലാ ലോഗിനുകളും പാസ്‌വേഡുകളും ഒരു സുരക്ഷിത വാൾട്ടിൽ  നിന്ന് കൈകാര്യം ചെയ്യുക</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>स्वचालित रूप से मजबूत, यादृच्छिक और सुरक्षित पासवर्ड उत्पन्न करते हैं</value>
+    <value>ശക്തവും ക്രമരഹിതവും സുരക്ഷിതവുമായ പാസ്‌വേഡുകൾ യാന്ത്രികമായി സൃഷ്‌ടിക്കുക</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>टच आईडी, पिन कोड या मास्टर पासवर्ड से अपनी तिजोरी को सुरक्षित रखें</value>
+    <value>ഫിംഗർപ്രിന്റ്, പിൻ കോഡ് അല്ലെങ്കിൽ മാസ്റ്റർ പാസ്‌വേഡ് ഉപയോഗിച്ച് നിങ്ങളുടെ വാൾട്  സുരക്ഷിതമാക്കുക </value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>अपने वेब ब्राउज़र और अन्य एप्लिकेशन के भीतर से जल्दी से लॉगिन करें</value>
+    <value>നിങ്ങളുടെ വെബ് ബ്രൗസറിലും അപ്പുകളിലും  വേഗത്തിൽ  പൂരിപ്പിക്കാം </value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>कई उपकरणों से अपने वॉल्ट को सिंक और एक्सेस करें
+    <value>ഒന്നിലധികം ഉപകരണങ്ങളിൽ നിന്ന് നിങ്ങളുടെ വാൾട്  സമന്വയിപ്പിച്ച് ആക്‌സസ്സുചെയ്യുക
 
-- फ़ोन
-- टैबलेट
-- डेस्कटॉप
-- वेब</value>
+- ഫോൺ
+- ടാബ്‌ലെറ്റ്
+- ഡെസ്ക്ടോപ്പ്
+- വെബ്</value>
   </data>
 </root>

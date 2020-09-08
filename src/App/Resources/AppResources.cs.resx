@@ -519,28 +519,28 @@
     <value>Zamknout</value>
   </data>
   <data name="FifteenMinutes" xml:space="preserve">
-    <value>15 minutes</value>
+    <value>15 minut</value>
   </data>
   <data name="OneHour" xml:space="preserve">
-    <value>1 hour</value>
+    <value>1 hodina</value>
   </data>
   <data name="OneMinute" xml:space="preserve">
     <value>1 minuta</value>
   </data>
   <data name="FourHours" xml:space="preserve">
-    <value>4 hours</value>
+    <value>4 hodiny</value>
   </data>
   <data name="Immediately" xml:space="preserve">
-    <value>Immediately</value>
+    <value>Okamžitě</value>
   </data>
   <data name="VaultTimeout" xml:space="preserve">
-    <value>Vault Timeout</value>
+    <value>Časový limit trezoru</value>
   </data>
   <data name="VaultTimeoutAction" xml:space="preserve">
-    <value>Vault Timeout Action</value>
+    <value>Akce při vypršení časového limitu trezoru</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
-    <value>Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?</value>
+    <value>Po vypršení časového limitu dojde k odhlášení. Přístup k trezoru bude odebrán a pro opětovné přihlášení bude vyžadováno online ověření. Opravdu chcete použít toto nastavení?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>Přihlašování…</value>
@@ -1440,7 +1440,7 @@
     <value>Odemknout</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
-    <value>30 minutes</value>
+    <value>30 minut</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
     <value>Nastavte svůj PIN kód pro odemknutí trezoru. Pokud se zcela odhlásíte z aplikace bude váš současný PIN bude resetován.</value>
@@ -1536,7 +1536,7 @@
     <value>„Výzva k uložení“ vás automaticky vyzve k uložení nových položek do trezoru, kdykoli je poprvé zadáte.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
-    <value>On App Restart</value>
+    <value>Při restartu aplikace</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
     <value>Automatické vyplňování usnadňuje bezpečný přístup k trezoru Bitwarden z jiných webových stránek a aplikací. Vypadá to, že jste službu Bitwarden nepovolili. Povolte automatické vyplnění pro Bitwarden z obrazovky „Nastavení“.</value>
@@ -1673,5 +1673,62 @@
   <data name="DoYouReallyWantToSoftDeleteCipher" xml:space="preserve">
     <value>Opravdu chcete položku přesunout do koše?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
+  </data>
+  <data name="BiometricInvalidated" xml:space="preserve">
+    <value>Biometric change detected, login using Master Password to enable again.</value>
+  </data>
+  <data name="EnableSyncOnRefresh" xml:space="preserve">
+    <value>Enable sync on refresh</value>
+  </data>
+  <data name="EnableSyncOnRefreshDescription" xml:space="preserve">
+    <value>Syncing vault with pull down gesture.</value>
+  </data>
+  <data name="LogInSso" xml:space="preserve">
+    <value>Enterprise Single Sign-On</value>
+  </data>
+  <data name="LogInSsoSummary" xml:space="preserve">
+    <value>Quickly log in using your organization's single sign-on portal. Please enter your organization's identifier to begin.</value>
+  </data>
+  <data name="OrgIdentifier" xml:space="preserve">
+    <value>Organization Identifier</value>
+  </data>
+  <data name="LoginSsoError" xml:space="preserve">
+    <value>Currently unable to login with SSO</value>
+  </data>
+  <data name="SetMasterPassword" xml:space="preserve">
+    <value>Set Master Password</value>
+  </data>
+  <data name="SetMasterPasswordSummary" xml:space="preserve">
+    <value>In order to complete logging in with SSO, please set a master password to access and protect your vault.</value>
+  </data>
+  <data name="MasterPasswordPolicyInEffect" xml:space="preserve">
+    <value>One or more organization policies require your master password to meet the following requirements:</value>
+  </data>
+  <data name="PolicyInEffectMinComplexity" xml:space="preserve">
+    <value>Minimum complexity score of {0}</value>
+  </data>
+  <data name="PolicyInEffectMinLength" xml:space="preserve">
+    <value>Minimum length of {0}</value>
+  </data>
+  <data name="PolicyInEffectUppercase" xml:space="preserve">
+    <value>Contain one or more uppercase characters</value>
+  </data>
+  <data name="PolicyInEffectLowercase" xml:space="preserve">
+    <value>Contain one or more lowercase characters</value>
+  </data>
+  <data name="PolicyInEffectNumbers" xml:space="preserve">
+    <value>Contain one or more numbers</value>
+  </data>
+  <data name="PolicyInEffectSpecial" xml:space="preserve">
+    <value>Contain one or more of the following special characters: {0}</value>
+  </data>
+  <data name="MasterPasswordPolicyValidationTitle" xml:space="preserve">
+    <value>Invalid Password</value>
+  </data>
+  <data name="MasterPasswordPolicyValidationMessage" xml:space="preserve">
+    <value>Password does not meet organization requirements. Please check the policy information and try again.</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Loading</value>
   </data>
 </root>

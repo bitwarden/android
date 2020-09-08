@@ -403,7 +403,7 @@
     <value>使用 Bitwarden 无障碍服务在应用和网站自动填写您的登录项目。</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
-    <value>自动填充服务</value>
+    <value>自动填写服务</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>避免模棱两可</value>
@@ -418,10 +418,10 @@
     <value>在 Safari 和其他应用中使用 Bitwarden 来自动填写登录信息。</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>Bitwarden 自动填充服务</value>
+    <value>Bitwarden 自动填写服务</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>使用 Bitwarden 无障碍服务自动填写您的登录信息。</value>
+    <value>使用 bitwarden 无障碍服务自动填写您的登录信息。</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>修改 Email</value>
@@ -735,7 +735,7 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
-    <value>当您选择一个输入字段并看到一个 Bitwarden 自动填充悬浮窗时，您可以点击它来启动自动填充服务。</value>
+    <value>当您选择一个输入字段并看到一个 Bitwarden 自动填写悬浮窗时，您可以点击它来启动自动填写服务。</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>点击此通知以自动填写密码库中的项目。</value>
@@ -753,22 +753,22 @@
     <value>禁用</value>
   </data>
   <data name="Enabled" xml:space="preserve">
-    <value>启用</value>
+    <value>已启用</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>状态</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
-    <value>向您的密码库中添加新登录项目的最简单方法，就是 Bitwarden 自动填充服务。转到 “设置” 屏幕了解更多有关使用 Bitwarden 自动填充服务的方法。</value>
+    <value>向您的密码库中添加新登录项目的最简单方法，就是 Bitwarden 自动填写服务。转到 “设置” 屏幕了解更多有关使用 Bitwarden 自动填写服务的方法。</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>自动填写</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
-    <value>您要自动填充还是查看此项目？</value>
+    <value>您要自动填写还是查看此项目？</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>您确定要自动填充吗？并不完全匹配 "{0}" 。</value>
+    <value>您确定要自动填写吗？并不完全匹配 "{0}" 。</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
     <value>匹配项目</value>
@@ -780,10 +780,10 @@
     <value>搜索</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
-    <value>你正在为 "{0}" 寻找一个自动填充项目。</value>
+    <value>你正在为 "{0}" 寻找一个自动填写项目。</value>
   </data>
   <data name="ShareVault" xml:space="preserve">
-    <value>分享你的密码库</value>
+    <value>共享你的密码库</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
     <value>无法打开应用 "{0}"。</value>
@@ -1144,13 +1144,13 @@
     <value>自动填写无障碍服务</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>Bitwarden 自动填充服务使用 Android 自动填充框架来帮助您将登录、信用卡和身份信息填写到你设备上的其他应用程序中。</value>
+    <value>Bitwarden 自动填写服务使用 Android 自动填写框架来帮助您将登录、信用卡和身份信息填写到你设备上的其他应用程序中。</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>使用 Bitwarden 自动填充服务将登录、信用卡和身份信息填写到其他应用程序中。</value>
+    <value>使用 Bitwarden 自动填写服务将登录、信用卡和身份信息填写到其他应用程序中。</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
-    <value>打开自动填充设置</value>
+    <value>打开自动填写设置</value>
   </data>
   <data name="FaceID" xml:space="preserve">
     <value>面容 ID</value>
@@ -1230,7 +1230,7 @@
     <value>是的，保存</value>
   </data>
   <data name="AutofillAndSave" xml:space="preserve">
-    <value>自动填充并保存</value>
+    <value>自动填写并保存</value>
   </data>
   <data name="Organization" xml:space="preserve">
     <value>组织</value>
@@ -1246,7 +1246,7 @@
     <value>要继续，请将您的 YubiKey NEO 设备放在设备背面。</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
-    <value>当应用程序不支持标准的自动填充服务时，辅助功能服务可能会很有用。</value>
+    <value>当应用程序不支持标准的自动填写服务时，无障碍服务可能会很有用。</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
     <value>密码更新于</value>
@@ -1257,22 +1257,22 @@
     <comment>ex. Date this item was updated</comment>
   </data>
   <data name="AutofillActivated" xml:space="preserve">
-    <value>自动填充已激活！</value>
+    <value>自动填写已激活！</value>
   </data>
   <data name="MustLogInMainAppAutofill" xml:space="preserve">
-    <value>您必须先登录 Bitwarden 应用，才可以使用自动填充。</value>
+    <value>您必须先登录 Bitwarden 应用，才可以使用自动填写。</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
     <value>现在您可以更轻松、快捷地登录应用和网站了！</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
-    <value>建议您在“设置”里关闭其它您不再使用的自动填充应用程序。</value>
+    <value>建议您在“设置”里关闭其它您不再使用的自动填写应用程序。</value>
   </data>
   <data name="BitwardenAutofillDescription" xml:space="preserve">
-    <value>从键盘直接访问密码库以快速自动填充密码。</value>
+    <value>从键盘直接访问密码库以快速自动填写密码。</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
-    <value>请按照以下步骤在你的设备上开启密码自动填充功能：</value>
+    <value>请按照以下步骤在你的设备上开启密码自动填写功能：</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
     <value>1. 前往 iOS 的 “设置” 应用</value>
@@ -1281,19 +1281,19 @@
     <value>2. 点击 “密码与帐户”</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
-    <value>3. 点击 “自动填充密码”</value>
+    <value>3. 点击 “自动填写密码”</value>
   </data>
   <data name="AutofillTurnOn4" xml:space="preserve">
-    <value>4. 打开 “自动填充密码” 开关</value>
+    <value>4. 打开 “自动填写” 开关</value>
   </data>
   <data name="AutofillTurnOn5" xml:space="preserve">
     <value>5. 勾选 “Bitwarden”</value>
   </data>
   <data name="PasswordAutofill" xml:space="preserve">
-    <value>自动填充密码</value>
+    <value>自动填写密码</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
-    <value>向您的密码库中添加新登录项目的最简单方法，就是 Bitwarden 密码自动填充扩展。转到 “设置” 屏幕了解更多有关使用 Bitwarden 密码自动填充扩展的方法。</value>
+    <value>向您的密码库中添加新登录项目的最简单方法，就是使用 Bitwarden 密码自动填写扩展。转到 “设置” 屏幕了解更多有关使用 Bitwarden 密码自动填写扩展的方法。</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
     <value>无效的电子邮件地址。</value>
@@ -1385,10 +1385,10 @@
     <value>您必须至少选择一个集合。</value>
   </data>
   <data name="Share" xml:space="preserve">
-    <value>分享</value>
+    <value>共享</value>
   </data>
   <data name="ShareItem" xml:space="preserve">
-    <value>分享项目</value>
+    <value>共享项目</value>
   </data>
   <data name="NoOrgsToList" xml:space="preserve">
     <value>没有可列出的组织。</value>
@@ -1491,7 +1491,7 @@
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
-    <value>选择在执行诸如自动填充之类的操作时对登录进行URI匹配检测的默认方式。</value>
+    <value>选择在执行诸如自动填写之类的操作时对登录进行URI匹配检测的默认方式。</value>
   </data>
   <data name="Theme" xml:space="preserve">
     <value>主题</value>
@@ -1527,7 +1527,7 @@
     <value>黑名单 URI</value>
   </data>
   <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>列入黑名单的URI将不提供自动填充。列表应以逗号分隔。例如："https://twitter.com, androidapp://com.twitter.android"。</value>
+    <value>列入黑名单的URI将不提供自动填写。列表应以逗号分隔。例如："https://twitter.com, androidapp://com.twitter.android"。</value>
   </data>
   <data name="DisableSavePrompt" xml:space="preserve">
     <value>禁用保存提示</value>
@@ -1539,7 +1539,7 @@
     <value>应用重启时</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>自动填充可以简单安全地从其他网站和应用程序中访问您的 Bitwarden 密码库。看起来您还没有启用 Bitwarden 自动填充服务。从“设置”屏幕启用 Bitwarden 自动填充。</value>
+    <value>自动填写可以简单安全地从其他网站和应用程序中访问您的 Bitwarden 密码库。看起来您还没有启用 Bitwarden 自动填写服务。从“设置”屏幕启用 Bitwarden 自动填写。</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
     <value>您的主题将在应用程序重启后生效。</value>
@@ -1555,7 +1555,7 @@
     <value>下载</value>
   </data>
   <data name="Shared" xml:space="preserve">
-    <value>分享</value>
+    <value>已共享</value>
   </data>
   <data name="ToggleVisibility" xml:space="preserve">
     <value>切换可见性</value>
@@ -1564,7 +1564,7 @@
     <value>您的登录会话已过期。</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
-    <value>使用生物识别进行验证。</value>
+    <value>使用生物识别技术验证。</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
     <value>生物识别</value>
@@ -1573,7 +1573,7 @@
     <value>使用生物识别解锁</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
-    <value>Bitwarden 需要相关权限 - 请在 Bitwarden 设置中查看“自动填充辅助功能服务”</value>
+    <value>Bitwarden 需要相关权限 - 请在 Bitwarden 设置中查看“自动填写无障碍服务”</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
     <value>3. 在 Android 应用设置界面找到 Bitwarden，点击“高级”展开高级菜单后点击“显示在其他应用的上层”选项，然后点击“允许显示在其它应用的上层”来启用。</value>
@@ -1591,7 +1591,7 @@
     <value>拒绝</value>
   </data>
   <data name="Granted" xml:space="preserve">
-    <value>允许</value>
+    <value>已授权</value>
   </data>
   <data name="FileFormat" xml:space="preserve">
     <value>文件格式</value>
@@ -1673,5 +1673,62 @@
   <data name="DoYouReallyWantToSoftDeleteCipher" xml:space="preserve">
     <value>您确定要发送到回收站吗？</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
+  </data>
+  <data name="BiometricInvalidated" xml:space="preserve">
+    <value>Biometric change detected, login using Master Password to enable again.</value>
+  </data>
+  <data name="EnableSyncOnRefresh" xml:space="preserve">
+    <value>Enable sync on refresh</value>
+  </data>
+  <data name="EnableSyncOnRefreshDescription" xml:space="preserve">
+    <value>Syncing vault with pull down gesture.</value>
+  </data>
+  <data name="LogInSso" xml:space="preserve">
+    <value>Enterprise Single Sign-On</value>
+  </data>
+  <data name="LogInSsoSummary" xml:space="preserve">
+    <value>Quickly log in using your organization's single sign-on portal. Please enter your organization's identifier to begin.</value>
+  </data>
+  <data name="OrgIdentifier" xml:space="preserve">
+    <value>Organization Identifier</value>
+  </data>
+  <data name="LoginSsoError" xml:space="preserve">
+    <value>Currently unable to login with SSO</value>
+  </data>
+  <data name="SetMasterPassword" xml:space="preserve">
+    <value>Set Master Password</value>
+  </data>
+  <data name="SetMasterPasswordSummary" xml:space="preserve">
+    <value>In order to complete logging in with SSO, please set a master password to access and protect your vault.</value>
+  </data>
+  <data name="MasterPasswordPolicyInEffect" xml:space="preserve">
+    <value>One or more organization policies require your master password to meet the following requirements:</value>
+  </data>
+  <data name="PolicyInEffectMinComplexity" xml:space="preserve">
+    <value>Minimum complexity score of {0}</value>
+  </data>
+  <data name="PolicyInEffectMinLength" xml:space="preserve">
+    <value>Minimum length of {0}</value>
+  </data>
+  <data name="PolicyInEffectUppercase" xml:space="preserve">
+    <value>Contain one or more uppercase characters</value>
+  </data>
+  <data name="PolicyInEffectLowercase" xml:space="preserve">
+    <value>Contain one or more lowercase characters</value>
+  </data>
+  <data name="PolicyInEffectNumbers" xml:space="preserve">
+    <value>Contain one or more numbers</value>
+  </data>
+  <data name="PolicyInEffectSpecial" xml:space="preserve">
+    <value>Contain one or more of the following special characters: {0}</value>
+  </data>
+  <data name="MasterPasswordPolicyValidationTitle" xml:space="preserve">
+    <value>Invalid Password</value>
+  </data>
+  <data name="MasterPasswordPolicyValidationMessage" xml:space="preserve">
+    <value>Password does not meet organization requirements. Please check the policy information and try again.</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Loading</value>
   </data>
 </root>
