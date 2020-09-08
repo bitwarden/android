@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Name" xml:space="preserve">
+    <value>Bitwarden പാസ്സ്‌വേഡ് മാനേജർ </value>
+    <comment>Max 30 characters</comment>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>നിങ്ങളുടെ എല്ലാ ലോഗിനുകളും പാസ്‌വേഡുകളും സംഭരിക്കുന്നതിനുള്ള ഏറ്റവും എളുപ്പവും സുരക്ഷിതവുമായ മാർഗ്ഗമാണ് Bitwarden, ഒപ്പം നിങ്ങളുടെ എല്ലാ ഉപകരണങ്ങളും തമ്മിൽ സമന്വയിപ്പിക്കുകയും ചെയ്യുന്നു.
+
+പാസ്‌വേഡ് മോഷണം ഗുരുതരമായ പ്രശ്‌നമാണ്. നിങ്ങൾ ഉപയോഗിക്കുന്ന വെബ്‌സൈറ്റുകളും അപ്ലിക്കേഷനുകളും എല്ലാ ദിവസവും ആക്രമണത്തിലാണ്. സുരക്ഷാ ലംഘനങ്ങൾ സംഭവിക്കുകയും നിങ്ങളുടെ പാസ്‌വേഡുകൾ മോഷ്‌ടിക്കപ്പെടുകയും ചെയ്യുന്നു. അപ്ലിക്കേഷനുകളിലും വെബ്‌സൈറ്റുകളിലും ഉടനീളം സമാന പാസ്‌വേഡുകൾ നിങ്ങൾ വീണ്ടും ഉപയോഗിക്കുമ്പോൾ ഹാക്കർമാർക്ക് നിങ്ങളുടെ ഇമെയിൽ, ബാങ്ക്, മറ്റ് പ്രധാനപ്പെട്ട അക്കൗണ്ടുകൾ എന്നിവ എളുപ്പത്തിൽ ആക്‌സസ്സുചെയ്യാനാകും.
+
+നിങ്ങളുടെ എല്ലാ ഉപകരണങ്ങളിലും സമന്വയിപ്പിക്കുന്ന ഒരു എൻ‌ക്രിപ്റ്റ് ചെയ്ത വാൾട്ടിൽ  Bitwarden  നിങ്ങളുടെ എല്ലാ ലോഗിനുകളും സംഭരിക്കുന്നു. നിങ്ങളുടെ ഉപകരണം വിടുന്നതിനുമുമ്പ് ഇത് പൂർണ്ണമായും എൻ‌ക്രിപ്റ്റ് ചെയ്‌തിരിക്കുന്നതിനാൽ, നിങ്ങളുടെ ഡാറ്റ നിങ്ങൾക്ക് മാത്രമേ ആക്‌സസ് ചെയ്യാൻ കഴിയൂ .  Bitwarden ടീമിന് പോലും നിങ്ങളുടെ ഡാറ്റ വായിക്കാൻ കഴിയില്ല. നിങ്ങളുടെ ഡാറ്റ AES-256 ബിറ്റ് എൻ‌ക്രിപ്ഷൻ, സാൾട്ടിങ് ഹാഷിംഗ്, PBKDF2 SHA-256 എന്നിവ ഉപയോഗിച്ച് അടച്ചിരിക്കുന്നു.
+
+100% ഓപ്പൺ സോഴ്‌സ് സോഫ്റ്റ്വെയറാണ് Bitwarden . Bitwarden സോഴ്‌സ് കോഡ് GitHub- ൽ ഹോസ്റ്റുചെയ്‌തിരിക്കുന്നു, മാത്രമല്ല എല്ലാവർക്കും ഇത് അവലോകനം ചെയ്യാനും ഓഡിറ്റുചെയ്യാനും ബിറ്റ് വാർഡൻ കോഡ്ബേസിലേക്ക് സംഭാവന ചെയ്യാനും സ്വാതന്ത്ര്യമുണ്ട്.
+
+
+
+
+</value>
+    <comment>Max 4000 characters</comment>
+  </data>
+  <data name="Keywords" xml:space="preserve">
+    <value>bit warden,8bit, പാസ്സ്‌വേഡ്, സൗജന്യ പാസ്സ്‌വേഡ് മാനേജർ ,സൗജന്യ പാസ്സ്‌വേഡ് മാനേജർ, ലോഗിൻ മാനേജർ </value>
+    <comment>Max 100 characters</comment>
+  </data>
+  <data name="Screenshot1" xml:space="preserve">
+    <value>നിങ്ങളുടെ എല്ലാ ലോഗിനുകളും പാസ്‌വേഡുകളും സുരക്ഷിത വാൾട്ടിൽ  നിന്ന് കൈകാര്യം ചെയ്യുക</value>
+  </data>
+  <data name="Screenshot2" xml:space="preserve">
+    <value>ശക്തവും ക്രമരഹിതവും സുരക്ഷിതവുമായ പാസ്‌വേഡുകൾ യാന്ത്രികമായി സൃഷ്‌ടിക്കുക</value>
+  </data>
+  <data name="Screenshot3" xml:space="preserve">
+    <value>Touch ID, ഫിംഗർപ്രിന്റ്, പിൻ കോഡ് അല്ലെങ്കിൽ മാസ്റ്റർ പാസ്‌വേഡ് ഉപയോഗിച്ച് നിങ്ങളുടെ വാൾട്  സുരക്ഷിതമാക്കുക </value>
+  </data>
+  <data name="Screenshot4" xml:space="preserve">
+    <value>Safari, Chrome മറ്റു നൂറു കണക്കിനു ആപ്പ്ളിക്കേഷനുകളിൽ ലോഗിനുകൾ തന്നെ പൂരിപ്പിക്കുക </value>
+  </data>
+  <data name="Screenshot5" xml:space="preserve">
+    <value>ഒന്നിലധികം ഉപകരണങ്ങളിൽ നിന്ന് നിങ്ങളുടെ വാൾട്  സമന്വയിപ്പിച്ച് ആക്‌സസ്സുചെയ്യുക
+
+- ഫോൺ
+- ടാബ്‌ലെറ്റ്
+- ഡെസ്ക്ടോപ്പ്
+- വെബ്</value>
+  </data>
+</root>
