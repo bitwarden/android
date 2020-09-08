@@ -1582,7 +1582,7 @@
     <value>권한</value>
   </data>
   <data name="BitwardenAutofillServiceOpenOverlayPermissionSettings" xml:space="preserve">
-    <value>오버레이 권한 설정 열기</value>
+    <value>다른 앱 위에 그리기 권한 설정 열기</value>
   </data>
   <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
     <value>Bitwarden의 Android 앱 설정 화면에 있는 ("고급" 아래) "다른 앱 위에 표시"를 선택하고 오버레이를 허용해주세요.</value>
@@ -1647,11 +1647,11 @@
     <comment>Restores an entity (verb).</comment>
   </data>
   <data name="Restoring" xml:space="preserve">
-    <value>복구 중...</value>
+    <value>복원 중...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemRestored" xml:space="preserve">
-    <value>항목이 복구되었습니다.</value>
+    <value>항목이 복원되었습니다.</value>
     <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
   </data>
   <data name="Trash" xml:space="preserve">
@@ -1667,11 +1667,68 @@
     <comment>Confirmation alert message when permanently deleteing a cipher.</comment>
   </data>
   <data name="DoYouReallyWantToRestoreCipher" xml:space="preserve">
-    <value>정말로 이 항목을 복구하시겠습니까?</value>
+    <value>정말 이 항목을 복원하시겠습니까?</value>
     <comment>Confirmation alert message when restoring a soft-deleted cipher.</comment>
   </data>
   <data name="DoYouReallyWantToSoftDeleteCipher" xml:space="preserve">
     <value>정말로 휴지통으로 이동시킬까요?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
+  </data>
+  <data name="BiometricInvalidated" xml:space="preserve">
+    <value>Biometric change detected, login using Master Password to enable again.</value>
+  </data>
+  <data name="EnableSyncOnRefresh" xml:space="preserve">
+    <value>Enable sync on refresh</value>
+  </data>
+  <data name="EnableSyncOnRefreshDescription" xml:space="preserve">
+    <value>Syncing vault with pull down gesture.</value>
+  </data>
+  <data name="LogInSso" xml:space="preserve">
+    <value>Enterprise Single Sign-On</value>
+  </data>
+  <data name="LogInSsoSummary" xml:space="preserve">
+    <value>Quickly log in using your organization's single sign-on portal. Please enter your organization's identifier to begin.</value>
+  </data>
+  <data name="OrgIdentifier" xml:space="preserve">
+    <value>Organization Identifier</value>
+  </data>
+  <data name="LoginSsoError" xml:space="preserve">
+    <value>Currently unable to login with SSO</value>
+  </data>
+  <data name="SetMasterPassword" xml:space="preserve">
+    <value>Set Master Password</value>
+  </data>
+  <data name="SetMasterPasswordSummary" xml:space="preserve">
+    <value>In order to complete logging in with SSO, please set a master password to access and protect your vault.</value>
+  </data>
+  <data name="MasterPasswordPolicyInEffect" xml:space="preserve">
+    <value>One or more organization policies require your master password to meet the following requirements:</value>
+  </data>
+  <data name="PolicyInEffectMinComplexity" xml:space="preserve">
+    <value>Minimum complexity score of {0}</value>
+  </data>
+  <data name="PolicyInEffectMinLength" xml:space="preserve">
+    <value>Minimum length of {0}</value>
+  </data>
+  <data name="PolicyInEffectUppercase" xml:space="preserve">
+    <value>Contain one or more uppercase characters</value>
+  </data>
+  <data name="PolicyInEffectLowercase" xml:space="preserve">
+    <value>Contain one or more lowercase characters</value>
+  </data>
+  <data name="PolicyInEffectNumbers" xml:space="preserve">
+    <value>Contain one or more numbers</value>
+  </data>
+  <data name="PolicyInEffectSpecial" xml:space="preserve">
+    <value>Contain one or more of the following special characters: {0}</value>
+  </data>
+  <data name="MasterPasswordPolicyValidationTitle" xml:space="preserve">
+    <value>Invalid Password</value>
+  </data>
+  <data name="MasterPasswordPolicyValidationMessage" xml:space="preserve">
+    <value>Password does not meet organization requirements. Please check the policy information and try again.</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Loading</value>
   </data>
 </root>
