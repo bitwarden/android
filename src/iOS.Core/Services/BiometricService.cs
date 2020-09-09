@@ -36,7 +36,7 @@ namespace Bit.iOS.Core.Services
             {
                 var state = GetState();
 
-                return FromBase64(oldState) == state;
+                return FromBase64(oldState).Equals(state);
             }
         }
 
