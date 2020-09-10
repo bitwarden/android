@@ -286,6 +286,10 @@ namespace Bit.App.Pages
 
         public async Task SliderInputAsync()
         {
+            if (!_doneIniting)
+            {
+                return;
+            }
             SetOptions();
             _passwordGenerationService.NormalizeOptions(_options, _enforcedPolicyOptions);
             Password = await _passwordGenerationService.GeneratePasswordAsync(_options);
