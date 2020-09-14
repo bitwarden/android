@@ -1675,60 +1675,60 @@
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Biometric change detected, login using Master Password to enable again.</value>
+    <value>ബയോമെട്രിക് മാറ്റം കണ്ടെത്തി, വീണ്ടും പ്രവർത്തനക്ഷമമാക്കാൻ പ്രാഥമിക പാസ്‌വേഡ് ഉപയോഗിച്ച് പ്രവേശിക്കുക.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
-    <value>Enable sync on refresh</value>
+    <value>റിഫ്രഷ് ചെയ്യുമ്പോൾ സമന്വയം പ്രാപ്തമാക്കുക</value>
   </data>
   <data name="EnableSyncOnRefreshDescription" xml:space="preserve">
-    <value>Syncing vault with pull down gesture.</value>
+    <value>പുൾ ഡൗൺ ജെസ്റ്റർ ഉപയോഗിച്ച് വാൾട്ടിനെ സമന്വയിപ്പിക്കുന്നു.</value>
   </data>
   <data name="LogInSso" xml:space="preserve">
-    <value>Enterprise Single Sign-On</value>
+    <value>എന്റർപ്രൈസ് സിംഗിൾ സൈൻ-ഓൺ</value>
   </data>
   <data name="LogInSsoSummary" xml:space="preserve">
-    <value>Quickly log in using your organization's single sign-on portal. Please enter your organization's identifier to begin.</value>
+    <value>നിങ്ങളുടെ സംഘടനയുടെ സിംഗിൾ സൈൻ-ഓൺ പോർട്ടൽ ഉപയോഗിച്ച് വേഗത്തിൽ ലോഗിൻ ചെയ്യുക. ആരംഭിക്കുന്നതിന് ദയവായി നിങ്ങളുടെ സംഘടനയുടെ ഐഡന്റിഫയർ നൽകുക.</value>
   </data>
   <data name="OrgIdentifier" xml:space="preserve">
-    <value>Organization Identifier</value>
+    <value>സംഘടനയുടെ ഐഡന്റിഫയർ</value>
   </data>
   <data name="LoginSsoError" xml:space="preserve">
-    <value>Currently unable to login with SSO</value>
+    <value>നിലവിൽ SSO ഉപയോഗിച്ച് പ്രവേശിക്കാൻ  കഴിയില്ല</value>
   </data>
   <data name="SetMasterPassword" xml:space="preserve">
-    <value>Set Master Password</value>
+    <value>പ്രാഥമിക പാസ്‌വേഡ് സജ്ജമാക്കുക</value>
   </data>
   <data name="SetMasterPasswordSummary" xml:space="preserve">
-    <value>In order to complete logging in with SSO, please set a master password to access and protect your vault.</value>
+    <value>SSO ഉപയോഗിച്ച് പ്രവേശനം പൂർത്തിയാക്കാനും, നിങ്ങളുടെ വാൾട് ആക്സസ് ചെയ്യാനും സുരക്ഷിതമാക്കാനും ഒരു പ്രാഥമിക പാസ്‌വേഡ് സജ്ജമാക്കുക.</value>
   </data>
   <data name="MasterPasswordPolicyInEffect" xml:space="preserve">
     <value>One or more organization policies require your master password to meet the following requirements:</value>
   </data>
   <data name="PolicyInEffectMinComplexity" xml:space="preserve">
-    <value>Minimum complexity score of {0}</value>
+    <value>സങ്കീർണ്ണതയുടെ കുറഞ്ഞ സ്കോർ{0}</value>
   </data>
   <data name="PolicyInEffectMinLength" xml:space="preserve">
-    <value>Minimum length of {0}</value>
+    <value>കുറഞ്ഞ ദൈർഘ്യം {0}</value>
   </data>
   <data name="PolicyInEffectUppercase" xml:space="preserve">
-    <value>Contain one or more uppercase characters</value>
+    <value>ഒന്നോ അതിലധികമോ വലിയക്ഷരങ്ങൾ അടങ്ങിയിരിക്കുന്ന</value>
   </data>
   <data name="PolicyInEffectLowercase" xml:space="preserve">
-    <value>Contain one or more lowercase characters</value>
+    <value>ഒന്നോ അതിലധികമോ ചെറിയക്ഷരങ്ങൾ അടങ്ങിയിരിക്കുന്ന</value>
   </data>
   <data name="PolicyInEffectNumbers" xml:space="preserve">
-    <value>Contain one or more numbers</value>
+    <value>ഒന്നോ അതിലധികമോ അക്കങ്ങൾ അടങ്ങിയിരിക്കുന്ന</value>
   </data>
   <data name="PolicyInEffectSpecial" xml:space="preserve">
-    <value>Contain one or more of the following special characters: {0}</value>
+    <value>ഇനിപ്പറയുന്ന ഒന്നോ അതിലധികമോ പ്രത്യേക പ്രതീകങ്ങൾ അടങ്ങിയിരിക്കുന്ന:{0}</value>
   </data>
   <data name="MasterPasswordPolicyValidationTitle" xml:space="preserve">
-    <value>Invalid Password</value>
+    <value>അസാധുവായ പാസ്‌വേഡ്</value>
   </data>
   <data name="MasterPasswordPolicyValidationMessage" xml:space="preserve">
-    <value>Password does not meet organization requirements. Please check the policy information and try again.</value>
+    <value>പാസ്‌വേഡ്, സംഘടനയുടെ ആവശ്യകതകൾ പാലിക്കുന്നില്ല. നയ വിവരങ്ങൾ പരിശോധിച്ച് വീണ്ടും ശ്രമിക്കുക.</value>
   </data>
   <data name="Loading" xml:space="preserve">
-    <value>Loading</value>
+    <value>ലഭ്യമാക്കുന്നു</value>
   </data>
 </root>

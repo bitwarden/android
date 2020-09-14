@@ -186,14 +186,14 @@
     <comment>Short label for an email address.</comment>
   </data>
   <data name="EmailAddress" xml:space="preserve">
-    <value>Email 地址</value>
+    <value>电子邮件地址</value>
     <comment>Full label for a email address.</comment>
   </data>
   <data name="EmailUs" xml:space="preserve">
     <value>给我们发邮件</value>
   </data>
   <data name="EmailUsDescription" xml:space="preserve">
-    <value>请直接给我们发邮件来获得帮助，也可以留下反馈信息。</value>
+    <value>请直接给我们发邮件来获得帮助，或留下反馈信息。</value>
   </data>
   <data name="EnterPIN" xml:space="preserve">
     <value>请输入您的 PIN 码。</value>
@@ -222,7 +222,7 @@
     <value>文件夹已删除。</value>
   </data>
   <data name="FolderNone" xml:space="preserve">
-    <value>没有文件夹</value>
+    <value>默认文件夹</value>
     <comment>Items that have no folder specified go in this special "catch-all" folder.</comment>
   </data>
   <data name="Folders" xml:space="preserve">
@@ -243,11 +243,11 @@
     <comment>Hide a secret value that is currently shown (password).</comment>
   </data>
   <data name="InternetConnectionRequiredMessage" xml:space="preserve">
-    <value>请链接因特网后再继续。</value>
+    <value>请连接因特网后再继续。</value>
     <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
-    <value>需要因特网链接</value>
+    <value>需要因特网连接</value>
     <comment>Title for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InvalidMasterPassword" xml:space="preserve">
@@ -510,7 +510,7 @@
     <value>从其他密码管理应用中快速批量导入您的项目。</value>
   </data>
   <data name="LastSync" xml:space="preserve">
-    <value>上次同步:</value>
+    <value>上次同步：</value>
   </data>
   <data name="Length" xml:space="preserve">
     <value>长度</value>
@@ -750,7 +750,7 @@
     <value>2. 切换开关，然后按确定以接受。</value>
   </data>
   <data name="Disabled" xml:space="preserve">
-    <value>禁用</value>
+    <value>已禁用</value>
   </data>
   <data name="Enabled" xml:space="preserve">
     <value>已启用</value>
@@ -1491,7 +1491,7 @@
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
-    <value>选择在执行诸如自动填写之类的操作时对登录进行URI匹配检测的默认方式。</value>
+    <value>选择在执行诸如自动填写之类的操作时对登录进行 URI 匹配检测的默认方式。</value>
   </data>
   <data name="Theme" xml:space="preserve">
     <value>主题</value>
@@ -1514,10 +1514,10 @@
     <value>退出</value>
   </data>
   <data name="ExitConfirmation" xml:space="preserve">
-    <value>您确定要退出 Bitwarden吗？</value>
+    <value>您确定要退出 Bitwarden 吗？</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
-    <value>应用程序重启后，要求使用主密码解锁吗？</value>
+    <value>应用程序重启时，要求使用主密码解锁吗？</value>
   </data>
   <data name="Black" xml:space="preserve">
     <value>黑色</value>
@@ -1527,7 +1527,7 @@
     <value>黑名单 URI</value>
   </data>
   <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>列入黑名单的URI将不提供自动填写。列表应以逗号分隔。例如："https://twitter.com, androidapp://com.twitter.android"。</value>
+    <value>列入黑名单的 URI 将不提供自动填写。列表应以逗号分隔。例如："https://twitter.com, androidapp://com.twitter.android"。</value>
   </data>
   <data name="DisableSavePrompt" xml:space="preserve">
     <value>禁用保存提示</value>
@@ -1675,60 +1675,60 @@
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Biometric change detected, login using Master Password to enable again.</value>
+    <value>检测到生物特征变化，使用主密码登录以重新启用。</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
-    <value>Enable sync on refresh</value>
+    <value>启用刷新时同步</value>
   </data>
   <data name="EnableSyncOnRefreshDescription" xml:space="preserve">
-    <value>Syncing vault with pull down gesture.</value>
+    <value>正在使用下拉手势同步密码库。</value>
   </data>
   <data name="LogInSso" xml:space="preserve">
-    <value>Enterprise Single Sign-On</value>
+    <value>企业单点登录（SSO）</value>
   </data>
   <data name="LogInSsoSummary" xml:space="preserve">
-    <value>Quickly log in using your organization's single sign-on portal. Please enter your organization's identifier to begin.</value>
+    <value>要使用您组织的单点登录（SSO）门户快速登录。请首先输入您组织的标识符。</value>
   </data>
   <data name="OrgIdentifier" xml:space="preserve">
-    <value>Organization Identifier</value>
+    <value>组织标识符</value>
   </data>
   <data name="LoginSsoError" xml:space="preserve">
-    <value>Currently unable to login with SSO</value>
+    <value>当前无法使用 SSO 登陆</value>
   </data>
   <data name="SetMasterPassword" xml:space="preserve">
-    <value>Set Master Password</value>
+    <value>设置主密码</value>
   </data>
   <data name="SetMasterPasswordSummary" xml:space="preserve">
-    <value>In order to complete logging in with SSO, please set a master password to access and protect your vault.</value>
+    <value>为使用单点登录（SSO）功能，请设置一个主密码以访问和保护您的密码库。</value>
   </data>
   <data name="MasterPasswordPolicyInEffect" xml:space="preserve">
-    <value>One or more organization policies require your master password to meet the following requirements:</value>
+    <value>一个或多个组织策略要求您的主密码满足下列要求：</value>
   </data>
   <data name="PolicyInEffectMinComplexity" xml:space="preserve">
-    <value>Minimum complexity score of {0}</value>
+    <value>最小复杂度为 {0}</value>
   </data>
   <data name="PolicyInEffectMinLength" xml:space="preserve">
-    <value>Minimum length of {0}</value>
+    <value>最小长度为 {0}</value>
   </data>
   <data name="PolicyInEffectUppercase" xml:space="preserve">
-    <value>Contain one or more uppercase characters</value>
+    <value>至少包含一个大写字符</value>
   </data>
   <data name="PolicyInEffectLowercase" xml:space="preserve">
-    <value>Contain one or more lowercase characters</value>
+    <value>至少包含一个小写字符</value>
   </data>
   <data name="PolicyInEffectNumbers" xml:space="preserve">
-    <value>Contain one or more numbers</value>
+    <value>至少包含一个数字</value>
   </data>
   <data name="PolicyInEffectSpecial" xml:space="preserve">
-    <value>Contain one or more of the following special characters: {0}</value>
+    <value>包含至少一个下列的特殊字符： {0}</value>
   </data>
   <data name="MasterPasswordPolicyValidationTitle" xml:space="preserve">
-    <value>Invalid Password</value>
+    <value>无效密码</value>
   </data>
   <data name="MasterPasswordPolicyValidationMessage" xml:space="preserve">
-    <value>Password does not meet organization requirements. Please check the policy information and try again.</value>
+    <value>密码不符合组织要求。请检查策略信息并重试。</value>
   </data>
   <data name="Loading" xml:space="preserve">
-    <value>Loading</value>
+    <value>载入中</value>
   </data>
 </root>
