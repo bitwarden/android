@@ -150,7 +150,7 @@ Bitwarden 是100% 开源软件。bitwarden 的源代码托管在 github 上，�
     <value>使用 Touch ID、PIN 码、或者主密码保护您的密码库</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>从您的 web 浏览器和其他应用内快速自动填充登录信息</value>
+    <value>从您的网络浏览器和其他应用内快速自动填充登录信息</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
     <value>从多台设备同步和访问密码库
