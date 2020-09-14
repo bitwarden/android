@@ -1675,7 +1675,7 @@
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Biometric change detected, login using Master Password to enable again.</value>
+    <value>Biometric change detected, login using master password to enable again.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Enable sync on refresh</value>
@@ -1684,25 +1684,25 @@
     <value>Syncing vault with pull down gesture.</value>
   </data>
   <data name="LogInSso" xml:space="preserve">
-    <value>Enterprise Single Sign-On</value>
+    <value>Enterprise single sign-on</value>
   </data>
   <data name="LogInSsoSummary" xml:space="preserve">
-    <value>Quickly log in using your organization's single sign-on portal. Please enter your organization's identifier to begin.</value>
+    <value>Quickly log in using your organisation's single sign-on portal. Please enter your organisation's identifier to begin.</value>
   </data>
   <data name="OrgIdentifier" xml:space="preserve">
-    <value>Organization Identifier</value>
+    <value>Organisation identifier</value>
   </data>
   <data name="LoginSsoError" xml:space="preserve">
     <value>Currently unable to login with SSO</value>
   </data>
   <data name="SetMasterPassword" xml:space="preserve">
-    <value>Set Master Password</value>
+    <value>Set master password</value>
   </data>
   <data name="SetMasterPasswordSummary" xml:space="preserve">
     <value>In order to complete logging in with SSO, please set a master password to access and protect your vault.</value>
   </data>
   <data name="MasterPasswordPolicyInEffect" xml:space="preserve">
-    <value>One or more organization policies require your master password to meet the following requirements:</value>
+    <value>One or more organisation policies require your master password to meet the following requirements:</value>
   </data>
   <data name="PolicyInEffectMinComplexity" xml:space="preserve">
     <value>Minimum complexity score of {0}</value>
@@ -1723,10 +1723,10 @@
     <value>Contain one or more of the following special characters: {0}</value>
   </data>
   <data name="MasterPasswordPolicyValidationTitle" xml:space="preserve">
-    <value>Invalid Password</value>
+    <value>Invalid password</value>
   </data>
   <data name="MasterPasswordPolicyValidationMessage" xml:space="preserve">
-    <value>Password does not meet organization requirements. Please check the policy information and try again.</value>
+    <value>Password does not meet organisation requirements. Please check the policy information and try again.</value>
   </data>
   <data name="Loading" xml:space="preserve">
     <value>Loading</value>
