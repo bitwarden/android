@@ -1675,60 +1675,60 @@
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Biometric change detected, login using Master Password to enable again.</value>
+    <value>Alteração biométrica detetada, inicie sessão utilizando a palavra-passe mestra para ativar novamente.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
-    <value>Enable sync on refresh</value>
+    <value>Ativar sincronização ao atualizar</value>
   </data>
   <data name="EnableSyncOnRefreshDescription" xml:space="preserve">
-    <value>Syncing vault with pull down gesture.</value>
+    <value>Sincronizar o cofre com o gesto de deslizar para baixo.</value>
   </data>
   <data name="LogInSso" xml:space="preserve">
-    <value>Enterprise Single Sign-On</value>
+    <value>Início de Sessão Único da Empresa</value>
   </data>
   <data name="LogInSsoSummary" xml:space="preserve">
-    <value>Quickly log in using your organization's single sign-on portal. Please enter your organization's identifier to begin.</value>
+    <value>Inicie sessão rapidamente utilizando o portal de início de sessão único da sua organização. Por favor introduza o identificador da sua organização para começar.</value>
   </data>
   <data name="OrgIdentifier" xml:space="preserve">
-    <value>Organization Identifier</value>
+    <value>Identificador da organização</value>
   </data>
   <data name="LoginSsoError" xml:space="preserve">
-    <value>Currently unable to login with SSO</value>
+    <value>Não foi possível iniciar sessão com SSO</value>
   </data>
   <data name="SetMasterPassword" xml:space="preserve">
-    <value>Set Master Password</value>
+    <value>Definir palavra-passe mestra</value>
   </data>
   <data name="SetMasterPasswordSummary" xml:space="preserve">
-    <value>In order to complete logging in with SSO, please set a master password to access and protect your vault.</value>
+    <value>Para concluir o início de sessão com SSO, por favor defina uma palavra-passe mestra para aceder e proteger o seu cofre.</value>
   </data>
   <data name="MasterPasswordPolicyInEffect" xml:space="preserve">
-    <value>One or more organization policies require your master password to meet the following requirements:</value>
+    <value>Uma ou mais políticas da organização requerem que a sua palavra-passe mestra cumpra aos seguintes requisitos:</value>
   </data>
   <data name="PolicyInEffectMinComplexity" xml:space="preserve">
-    <value>Minimum complexity score of {0}</value>
+    <value>Pontuação mínima de complexidade de {0}</value>
   </data>
   <data name="PolicyInEffectMinLength" xml:space="preserve">
-    <value>Minimum length of {0}</value>
+    <value>Comprimento mínimo de {0}</value>
   </data>
   <data name="PolicyInEffectUppercase" xml:space="preserve">
-    <value>Contain one or more uppercase characters</value>
+    <value>Contém um ou mais caracteres em maiúsculas</value>
   </data>
   <data name="PolicyInEffectLowercase" xml:space="preserve">
-    <value>Contain one or more lowercase characters</value>
+    <value>Contém um ou mais caracteres em minúsculas</value>
   </data>
   <data name="PolicyInEffectNumbers" xml:space="preserve">
-    <value>Contain one or more numbers</value>
+    <value>Contém um ou mais números</value>
   </data>
   <data name="PolicyInEffectSpecial" xml:space="preserve">
-    <value>Contain one or more of the following special characters: {0}</value>
+    <value>Contém um ou mais dos seguintes caracteres especiais: {0}</value>
   </data>
   <data name="MasterPasswordPolicyValidationTitle" xml:space="preserve">
-    <value>Invalid Password</value>
+    <value>Palavra-passe inválida</value>
   </data>
   <data name="MasterPasswordPolicyValidationMessage" xml:space="preserve">
-    <value>Password does not meet organization requirements. Please check the policy information and try again.</value>
+    <value>Palavra-passe mestra não cumpre os requisitos da organização. Por favor verifique a informação da política e tente novamente.</value>
   </data>
   <data name="Loading" xml:space="preserve">
-    <value>Loading</value>
+    <value>A carregar</value>
   </data>
 </root>
