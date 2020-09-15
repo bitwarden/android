@@ -25,7 +25,6 @@ namespace Bit.App.Pages
         private bool _showPassword;
         private string _email;
         private string _masterPassword;
-        private bool _hideHintButton;
 
         public LoginPageViewModel()
         {
@@ -70,13 +69,7 @@ namespace Bit.App.Pages
         public Action StartTwoFactorAction { get; set; }
         public Action LogInSuccessAction { get; set; }
         public Action CloseAction { get; set; }
-
-        public bool HideHintButton
-        {
-            get => _hideHintButton;
-            set => SetProperty(ref _hideHintButton, value);
-        }
-        
+                
         public async Task InitAsync()
         {
             if (string.IsNullOrWhiteSpace(Email))

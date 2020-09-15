@@ -16,12 +16,20 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <u:InverseBoolConverter x:Key="inverseBool" />
+            <ToolbarItem Icon="more_vert.png" Clicked="More_Clicked" Order="Primary"
+                x:Name="_moreItem" x:Key="moreItem"
+                 AutomationProperties.IsInAccessibleTree="True"
+                 AutomationProperties.Name="{u:I18n Options}" />
+            <ToolbarItem Text="{u:I18n GetPasswordHint}"
+                x:Key="getPasswordHint"
+                x:Name="_getPasswordHint"
+                Clicked="Hint_Clicked" 
+                Order="Secondary"/>
         </ResourceDictionary>
     </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="{u:I18n Close}" Clicked="Close_Clicked" Order="Primary" Priority="-1" />
-        <ToolbarItem Text="{u:I18n LogIn}" Clicked="LogIn_Clicked" />
     </ContentPage.ToolbarItems>
 
     <ScrollView>
@@ -73,8 +81,8 @@
                         AutomationProperties.Name="{u:I18n ToggleVisibility}" />
                 </Grid>
             </StackLayout>
-            <StackLayout Padding="10, 0" IsVisible="{Binding HideHintButton, Converter={StaticResource inverseBool}}">
-                <Button Text="{u:I18n GetPasswordHint}" Clicked="Hint_Clicked" />
+            <StackLayout Padding="10, 0">
+                <Button Text="{u:I18n LogIn}" Clicked="LogIn_Clicked" />
             </StackLayout>
         </StackLayout>
     </ScrollView>

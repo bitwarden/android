@@ -1,4 +1,5 @@
 ﻿using Bit.App.Models;
+using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using System;
@@ -40,9 +41,22 @@ namespace Bit.App.Pages
 
             _email.ReturnType = ReturnType.Next;
             _email.ReturnCommand = new Command(() => _masterPassword.Focus());
+
+            if (!HideHintButton)
+            {
+                if (Device.RuntimePlatform == Device.iOS)
+                {
+                    ToolbarItems.Add(_moreItem);
+                }
+                else
+                {
+                    ToolbarItems.Add(_getPasswordHint);
+                }
+            }
         }
 
         public Entry MasterPasswordEntry { get; set; }
+        public bool HideHintButton { get; set; }
 
         protected override async void OnAppearing()
         {
@@ -79,6 +93,22 @@ namespace Bit.App.Pages
             if (DoOnce())
             {
                 _vm.CloseAction();
+            }
+        }
+
+        private async void More_Clicked(object sender, System.EventArgs e)
+        {
+            if (!DoOnce())
+            {
+                return;
+            }
+
+            var selection = await DisplayActionSheet(AppResources.Options, 
+                AppResources.Cancel, null, AppResources.GetPasswordHint);
+
+            if (selection == AppResources.GetPasswordHint)
+            {
+                await Navigation.PushModalAsync(new NavigationPage(new HintPage()));
             }
         }
 

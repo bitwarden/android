@@ -483,12 +483,12 @@ namespace Bit.iOS.Extension
             var app = new App.App(new AppOptions { IosExtension = true });
             ThemeManager.SetTheme(false, app.Resources);
             ThemeManager.ApplyResourcesToPage(loginPage);
+            loginPage.HideHintButton = true;
             if (loginPage.BindingContext is LoginPageViewModel vm)
             {
                 vm.StartTwoFactorAction = () => DismissViewController(false, () => LaunchTwoFactorFlow(false));
                 vm.LogInSuccessAction = () => DismissLockAndContinue();
                 vm.CloseAction = () => CompleteRequest(null, null);
-                vm.HideHintButton = true;
             }
 
             var navigationPage = new NavigationPage(loginPage);

@@ -20,7 +20,7 @@
     </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="{u:I18n Unlock}" Clicked="Unlock_Clicked" />
+        <ToolbarItem Text="{u:I18n LogOut}" Clicked="LogOut_Clicked" />
     </ContentPage.ToolbarItems>
 
     <ScrollView>
@@ -112,7 +112,7 @@
                     IsVisible="{Binding BiometricIntegrityValid, Converter={StaticResource inverseBool}}" />
                 <Button Text="{Binding BiometricButtonText}" Clicked="Biometric_Clicked"
                         IsVisible="{Binding BiometricLock}" IsEnabled="{Binding BiometricIntegrityValid}"></Button>
-                <Button Text="{u:I18n LogOut}" Clicked="LogOut_Clicked"></Button>
+                <Button Text="{u:I18n Unlock}" Clicked="Unlock_Clicked"></Button>
             </StackLayout>
         </StackLayout>
     </ScrollView>
