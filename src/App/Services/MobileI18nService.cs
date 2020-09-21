@@ -69,6 +69,7 @@ namespace Bit.App.Services
                         ["it"] = "italiano",
                         ["ja"] = "日本語",
                         ["ko"] = "한국어",
+                        ["ml"] = "മലയാളം",
                         ["nb"] = "norsk (bokmål)",
                         ["nl"] = "Nederlands",
                         ["pl"] = "polski",
