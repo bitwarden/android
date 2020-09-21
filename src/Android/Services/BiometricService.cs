@@ -51,6 +51,11 @@ namespace Bit.Droid.Services
             IKey key = _keystore.GetKey(KeyName, null);
             Cipher cipher = Cipher.GetInstance(Transformation);
 
+            if (key == null || cipher == null)
+            {
+                return Task.FromResult(true);
+            }
+
             try
             {
                 cipher.Init(CipherMode.EncryptMode, key);
