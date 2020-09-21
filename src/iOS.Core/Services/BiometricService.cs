@@ -17,7 +17,10 @@ namespace Bit.iOS.Core.Services
         public async Task<bool> SetupBiometricAsync()
         {
             var state = GetState();
-            await _storageService.SaveAsync("biometricState", ToBase64(state));
+            if (state != null)
+            {
+                await _storageService.SaveAsync("biometricState", ToBase64(state));
+            }
 
             return true;
         }
@@ -35,8 +38,12 @@ namespace Bit.iOS.Core.Services
             else
             {
                 var state = GetState();
+                if (state != null)
+                {
+                    return FromBase64(oldState).Equals(state);
+                }
 
-                return FromBase64(oldState).Equals(state);
+                return true;
             }
         }
 
