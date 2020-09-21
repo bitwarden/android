@@ -51,6 +51,11 @@ namespace Bit.Droid.Services
             IKey key = _keystore.GetKey(KeyName, null);
             Cipher cipher = Cipher.GetInstance(Transformation);
 
+            if (key == null || cipher == null)
+            {
+                return Task.FromResult(true);
+            }
+
             try
             {
                 cipher.Init(CipherMode.EncryptMode, key);
@@ -76,15 +81,23 @@ namespace Bit.Droid.Services
 
         private void CreateKey()
         {
-            KeyGenerator keyGen = KeyGenerator.GetInstance(KeyAlgorithm, KeyStoreName);
-            KeyGenParameterSpec keyGenSpec =
-                new KeyGenParameterSpec.Builder(KeyName, KeyStorePurpose.Encrypt | KeyStorePurpose.Decrypt)
-                    .SetBlockModes(BlockMode)
-                    .SetEncryptionPaddings(EncryptionPadding)
-                    .SetUserAuthenticationRequired(true)
-                    .Build();
-            keyGen.Init(keyGenSpec);
-            keyGen.GenerateKey();
+            try
+            {
+                var keyGen = KeyGenerator.GetInstance(KeyAlgorithm, KeyStoreName);
+                var keyGenSpec =
+                    new KeyGenParameterSpec.Builder(KeyName, KeyStorePurpose.Encrypt | KeyStorePurpose.Decrypt)
+                        .SetBlockModes(BlockMode)
+                        .SetEncryptionPaddings(EncryptionPadding)
+                        .SetUserAuthenticationRequired(true)
+                        .Build();
+                keyGen.Init(keyGenSpec);
+                keyGen.GenerateKey();
+            }
+            catch
+            {
+                // Catch silently to allow biometrics to function on devices that are in a state where key generation
+                // is not functioning
+            }
         }
     }
 }
