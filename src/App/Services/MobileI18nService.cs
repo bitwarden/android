@@ -47,6 +47,7 @@ namespace Bit.App.Services
                     _localeNames = new Dictionary<string, string>
                     {
                         ["af"] = "Afrikaans",
+                        ["be"] = "Беларуская",
                         ["bg"] = "български",
                         ["ca"] = "català",
                         ["cs"] = "čeština",
@@ -69,6 +70,7 @@ namespace Bit.App.Services
                         ["it"] = "italiano",
                         ["ja"] = "日本語",
                         ["ko"] = "한국어",
+                        ["lv"] = "Latvietis",
                         ["ml"] = "മലയാളം",
                         ["nb"] = "norsk (bokmål)",
                         ["nl"] = "Nederlands",
