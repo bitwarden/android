@@ -116,7 +116,7 @@ namespace Bit.App.Pages
         {
             _pinSet = await _vaultTimeoutService.IsPinLockSetAsync();
             PinLock = (_pinSet.Item1 && _vaultTimeoutService.PinProtectedKey != null) || _pinSet.Item2;
-            BiometricLock = await _vaultTimeoutService.IsBiometricLockSetAsync();
+            BiometricLock = await _vaultTimeoutService.IsBiometricLockSetAsync() && await _cryptoService.HasKeyAsync();
             _email = await _userService.GetEmailAsync();
             var webVault = _environmentService.GetWebVaultUrl();
             if (string.IsNullOrWhiteSpace(webVault))
