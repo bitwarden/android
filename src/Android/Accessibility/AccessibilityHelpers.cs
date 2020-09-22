@@ -66,9 +66,9 @@ namespace Bit.Droid.Accessibility
             new Browser("com.vivaldi.browser.sopranos", "url_bar"),
             new Browser("com.yandex.browser", "bro_omnibar_address_title_text,bro_omnibox_collapsed_title",
                 (s) => s.Split(new char[]{' ', ' '}).FirstOrDefault()), // 0 = Regular Space, 1 = No-break space (00A0)
-            new Browser("idm.internet.download.manager", "url_bar"),
-            new Browser("idm.internet.download.manager.adm.lite", "url_bar"),
-            new Browser("idm.internet.download.manager.plus", "url_bar"),
+            new Browser("idm.internet.download.manager", "search"),
+            new Browser("idm.internet.download.manager.adm.lite", "search"),
+            new Browser("idm.internet.download.manager.plus", "search"),
             new Browser("mark.via.gp", "aw"),
             new Browser("org.adblockplus.browser", "url_bar,url_bar_title"), // 2nd = Legacy (before v2)
             new Browser("org.adblockplus.browser.beta", "url_bar,url_bar_title"), // 2nd = Legacy (before v2)
