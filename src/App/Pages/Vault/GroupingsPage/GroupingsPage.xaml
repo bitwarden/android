@@ -90,7 +90,7 @@
                 <RefreshView
                     IsRefreshing="{Binding Refreshing}"
                     Command="{Binding RefreshCommand}">
-                    <CollectionView
+                    <controls:ExtendedCollectionView
                         x:Name="_collectionView"
                         IsVisible="{Binding ShowList}"
                         ItemsSource="{Binding GroupedItems}"
@@ -98,30 +98,31 @@
                         ItemTemplate="{StaticResource listItemDataTemplateSelector}"
                         IsGrouped="True"
                         SelectionChanged="RowSelected"
-                        StyleClass="list, list-platform"
-                        SelectionMode="Single">
+                        StyleClass="list, list-platform">
 
                         <CollectionView.GroupHeaderTemplate>
                             <DataTemplate x:DataType="pages:GroupingsPageListGroup">
-                                <StackLayout
-                                    Spacing="0" Padding="0" VerticalOptions="FillAndExpand"
-                                    StyleClass="list-row-header-container, list-row-header-container-platform">
-                                    <BoxView
-                                        StyleClass="list-section-separator-top, list-section-separator-top-platform"
-                                        IsVisible="{Binding First, Converter={StaticResource inverseBool}}" />
-                                    <StackLayout StyleClass="list-row-header, list-row-header-platform">
-                                        <Label
-                                            Text="{Binding Name}"
-                                            StyleClass="list-header, list-header-platform" />
-                                        <Label
-                                            Text="{Binding ItemCount}"
-                                            StyleClass="list-header-sub" />
+                                <ViewCell>
+                                    <StackLayout
+                                        Spacing="0" Padding="0" VerticalOptions="FillAndExpand"
+                                        StyleClass="list-row-header-container, list-row-header-container-platform">
+                                        <BoxView
+                                            StyleClass="list-section-separator-top, list-section-separator-top-platform"
+                                            IsVisible="{Binding First, Converter={StaticResource inverseBool}}" />
+                                        <StackLayout StyleClass="list-row-header, list-row-header-platform">
+                                            <Label
+                                                Text="{Binding Name}"
+                                                StyleClass="list-header, list-header-platform" />
+                                            <Label
+                                                Text="{Binding ItemCount}"
+                                                StyleClass="list-header-sub" />
+                                        </StackLayout>
+                                        <BoxView StyleClass="list-section-separator-bottom, list-section-separator-bottom-platform" />
                                     </StackLayout>
-                                    <BoxView StyleClass="list-section-separator-bottom, list-section-separator-bottom-platform" />
-                                </StackLayout>
+                                </ViewCell>
                             </DataTemplate>
                         </CollectionView.GroupHeaderTemplate>
-                    </CollectionView>
+                    </controls:ExtendedCollectionView>
                 </RefreshView>
             </StackLayout>
         </ResourceDictionary>

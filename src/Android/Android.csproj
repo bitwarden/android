@@ -139,6 +139,7 @@
     <Compile Include="Tiles\MyVaultTileService.cs" />
     <Compile Include="Utilities\AndroidHelpers.cs" />
     <Compile Include="Utilities\AppCenterHelper.cs" />
+    <Compile Include="Renderers\ExtendedCollectionViewRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\FontAwesome.ttf" />
