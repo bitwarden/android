@@ -1,4 +1,5 @@
 ﻿using Bit.App.Models;
+using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using System;
@@ -29,6 +30,15 @@ namespace Bit.App.Pages
             _vm.UnlockedAction = () => Device.BeginInvokeOnMainThread(async () => await UnlockedAsync());
             MasterPasswordEntry = _masterPassword;
             PinEntry = _pin;
+
+            if (Device.RuntimePlatform == Device.iOS)
+            {
+                ToolbarItems.Add(_moreItem);
+            }
+            else
+            {
+                ToolbarItems.Add(_logOut);
+            }
         }
 
         public Entry MasterPasswordEntry { get; set; }
@@ -94,6 +104,22 @@ namespace Bit.App.Pages
             if (DoOnce())
             {
                 await _vm.PromptBiometricAsync();
+            }
+        }
+
+        private async void More_Clicked(object sender, System.EventArgs e)
+        {
+            if (!DoOnce())
+            {
+                return;
+            }
+
+            var selection = await DisplayActionSheet(AppResources.Options,
+                AppResources.Cancel, null, AppResources.LogOut);
+
+            if (selection == AppResources.LogOut)
+            {
+                await _vm.LogOutAsync();
             }
         }
 

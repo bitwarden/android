@@ -42,21 +42,17 @@ namespace Bit.App.Pages
             _email.ReturnType = ReturnType.Next;
             _email.ReturnCommand = new Command(() => _masterPassword.Focus());
 
-            if (!HideHintButton)
+            if (Device.RuntimePlatform == Device.iOS)
             {
-                if (Device.RuntimePlatform == Device.iOS)
-                {
-                    ToolbarItems.Add(_moreItem);
-                }
-                else
-                {
-                    ToolbarItems.Add(_getPasswordHint);
-                }
+                ToolbarItems.Add(_moreItem);
+            }
+            else
+            {
+                ToolbarItems.Add(_getPasswordHint);
             }
         }
 
         public Entry MasterPasswordEntry { get; set; }
-        public bool HideHintButton { get; set; }
 
         protected override async void OnAppearing()
         {

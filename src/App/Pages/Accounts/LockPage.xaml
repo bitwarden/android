@@ -16,11 +16,19 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <u:InverseBoolConverter x:Key="inverseBool" />
+            <ToolbarItem Icon="more_vert.png" Clicked="More_Clicked" Order="Primary"
+                x:Name="_moreItem" x:Key="moreItem"
+                AutomationProperties.IsInAccessibleTree="True"
+                AutomationProperties.Name="{u:I18n Options}" />
+            <ToolbarItem Text="{u:I18n LogOut}"
+                x:Key="logOut"
+                x:Name="_logOut"
+                Clicked="LogOut_Clicked"
+                Order="Secondary"/>
         </ResourceDictionary>
     </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="{u:I18n LogOut}" Clicked="LogOut_Clicked" />
     </ContentPage.ToolbarItems>
 
     <ScrollView>

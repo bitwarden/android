@@ -357,7 +357,6 @@ namespace Bit.iOS.Autofill
             var app = new App.App(new AppOptions { IosExtension = true });
             ThemeManager.SetTheme(false, app.Resources);
             ThemeManager.ApplyResourcesToPage(loginPage);
-            loginPage.HideHintButton = true;
             if (loginPage.BindingContext is LoginPageViewModel vm)
             {
                 vm.StartTwoFactorAction = () => DismissViewController(false, () => LaunchTwoFactorFlow(false));
