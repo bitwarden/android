@@ -10,5 +10,6 @@ namespace Bit.Core.Models.Request
         public KeysRequest Keys { get; set; }
         public KdfType Kdf { get; set; }
         public int KdfIterations { get; set; }
+        public string OrgIdentifier { get; set; }
     }
 }

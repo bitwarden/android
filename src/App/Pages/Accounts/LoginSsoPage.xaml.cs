@@ -93,14 +93,14 @@ namespace Bit.App.Pages
         private async Task StartTwoFactorAsync()
         {
             RestoreAppOptionsFromCopy();
-            var page = new TwoFactorPage(true, _appOptions);
+            var page = new TwoFactorPage(true, _appOptions, _vm.OrgIdentifier);
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
 
         private async Task StartSetPasswordAsync()
         {
             RestoreAppOptionsFromCopy();
-            var page = new SetPasswordPage(_appOptions);
+            var page = new SetPasswordPage(_appOptions, _vm.OrgIdentifier);
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
 

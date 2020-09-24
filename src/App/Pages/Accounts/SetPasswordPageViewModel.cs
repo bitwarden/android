@@ -85,6 +85,7 @@ namespace Bit.App.Pages
         public string Hint { get; set; }
         public Action SetPasswordSuccessAction { get; set; }
         public Action CloseAction { get; set; }
+        public string OrgIdentifier { get; set; }
 
         public async Task InitAsync()
         {
@@ -158,6 +159,7 @@ namespace Bit.App.Pages
                 MasterPasswordHint = Hint,
                 Kdf = kdf,
                 KdfIterations = kdfIterations,
+                OrgIdentifier = OrgIdentifier,
                 Keys = new KeysRequest
                 {
                     PublicKey = keys.Item1,
