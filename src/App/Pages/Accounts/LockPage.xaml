@@ -111,7 +111,7 @@
                     StyleClass="box-footer-label,text-danger,text-bold"
                     IsVisible="{Binding BiometricIntegrityValid, Converter={StaticResource inverseBool}}" />
                 <Button Text="{Binding BiometricButtonText}" Clicked="Biometric_Clicked"
-                        IsVisible="{Binding BiometricLock}" IsEnabled="{Binding BiometricIntegrityValid}"></Button>
+                        IsVisible="{Binding BiometricButtonVisible}"></Button>
                 <Button Text="{u:I18n LogOut}" Clicked="LogOut_Clicked"></Button>
             </StackLayout>
         </StackLayout>
