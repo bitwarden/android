@@ -69,6 +69,9 @@ namespace Bit.iOS.Core.Services
                     case "gsw-CH": // "Schwiizertüütsch (Swiss German)" not supported .NET culture
                         netLanguage = "de-CH"; // closest supported
                         break;
+                    case "pt":
+                        netLanguage = "pt-BR"; // iOS default (pt) = Portuguese (Brasil)
+                        break;
                         // add more application-specific cases here (if required)
                         // ONLY use cultures that have been tested and known to work
                 }
@@ -86,7 +89,7 @@ namespace Bit.iOS.Core.Services
             switch (platCulture.LanguageCode)
             {
                 case "pt":
-                    netLanguage = "pt-PT"; // fallback to Portuguese (Portugal)
+                    netLanguage = "pt-BR"; // fallback to Portuguese (Brasil)
                     break;
                 case "gsw":
                     netLanguage = "de-CH"; // equivalent to German (Switzerland) for this app
