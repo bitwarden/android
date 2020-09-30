@@ -203,8 +203,7 @@
                         <Entry
                             x:Name="_cardNumberEntry"
                             Text="{Binding Cipher.Card.Number}"
-                            StyleClass="box-value"
-                            Keyboard="Numeric" />
+                            StyleClass="box-value" />
                     </StackLayout>
                     <StackLayout StyleClass="box-row, box-row-input">
                         <Label
