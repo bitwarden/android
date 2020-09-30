@@ -33,7 +33,7 @@ namespace Bit.App.Pages
         private bool _pinLock;
         private bool _biometricLock;
         private bool _biometricIntegrityValid = true;
-        private bool _biometricButtonVisible = true;
+        private bool _biometricButtonVisible;
         private string _biometricButtonText;
         private string _loggedInAsText;
         private string _lockedVerifyText;
