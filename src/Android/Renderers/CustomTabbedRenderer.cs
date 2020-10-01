@@ -7,7 +7,6 @@ using Xamarin.Forms.Platform.Android;
 using Xamarin.Forms.Platform.Android.AppCompat;
 
 [assembly: ExportRenderer(typeof(TabbedPage), typeof(CustomTabbedRenderer))]
-
 namespace Bit.Droid.Renderers
 {
     public class CustomTabbedRenderer : TabbedPageRenderer, BottomNavigationView.IOnNavigationItemReselectedListener
