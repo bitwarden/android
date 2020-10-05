@@ -69,6 +69,7 @@ namespace Bit.Droid.Accessibility
             new Browser("idm.internet.download.manager", "search"),
             new Browser("idm.internet.download.manager.adm.lite", "search"),
             new Browser("idm.internet.download.manager.plus", "search"),
+            new Browser("io.github.forkmaintainers.iceraven", "mozac_browser_toolbar_url_view"),
             new Browser("mark.via.gp", "aw"),
             new Browser("org.adblockplus.browser", "url_bar,url_bar_title"), // 2nd = Legacy (before v2)
             new Browser("org.adblockplus.browser.beta", "url_bar,url_bar_title"), // 2nd = Legacy (before v2)

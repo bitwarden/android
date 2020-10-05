@@ -74,6 +74,7 @@ namespace Bit.Droid.Autofill
             "idm.internet.download.manager",
             "idm.internet.download.manager.adm.lite",
             "idm.internet.download.manager.plus",
+            "io.github.forkmaintainers.iceraven",
             "mark.via.gp",
             "org.adblockplus.browser",
             "org.adblockplus.browser.beta",
