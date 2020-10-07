@@ -14,24 +14,32 @@ namespace Bit.iOS.Core.Services
             _storageService = storageService;
         }
 
-        public async Task<bool> SetupBiometricAsync()
+        public async Task<bool> SetupBiometricAsync(string bioIntegrityKey = null)
         {
+            if (bioIntegrityKey == null)
+            {
+                bioIntegrityKey = "biometricState";
+            }
             var state = GetState();
             if (state != null)
             {
-                await _storageService.SaveAsync("biometricState", ToBase64(state));
+                await _storageService.SaveAsync(bioIntegrityKey, ToBase64(state));
             }
 
             return true;
         }
 
-        public async Task<bool> ValidateIntegrityAsync()
+        public async Task<bool> ValidateIntegrityAsync(string bioIntegrityKey = null)
         {
-            var oldState = await _storageService.GetAsync<string>("biometricState");
+            if (bioIntegrityKey == null)
+            {
+                bioIntegrityKey = "biometricState";
+            }
+            var oldState = await _storageService.GetAsync<string>(bioIntegrityKey);
             if (oldState == null)
             {
                 // Fallback for upgraded devices
-                await SetupBiometricAsync();
+                await SetupBiometricAsync(bioIntegrityKey);
 
                 return true;
             }

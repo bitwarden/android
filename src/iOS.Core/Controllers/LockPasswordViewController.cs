@@ -41,6 +41,8 @@ namespace Bit.iOS.Core.Controllers
 
         public FormEntryTableViewCell MasterPasswordCell { get; set; } = new FormEntryTableViewCell(
             AppResources.MasterPassword);
+        
+        public string BiometricIntegrityKey { get; set; }
 
         public override void ViewDidLoad()
         {
@@ -86,7 +88,8 @@ namespace Bit.iOS.Core.Controllers
 
             if (_biometricLock)
             {
-                _biometricIntegrityValid = _biometricService.ValidateIntegrityAsync().GetAwaiter().GetResult();
+                _biometricIntegrityValid = _biometricService.ValidateIntegrityAsync(BiometricIntegrityKey).GetAwaiter()
+                    .GetResult();
                 if (!_biometricIntegrityValid)
                 {
                     return;
@@ -194,6 +197,12 @@ namespace Bit.iOS.Core.Controllers
                         _vaultTimeoutService.PinProtectedKey = await _cryptoService.EncryptAsync(key2.Key, pinKey);
                     }
                     await SetKeyAndContinueAsync(key2);
+                    
+                    // Re-enable biometrics
+                    if (_biometricLock & !_biometricIntegrityValid)
+                    {
+                        await _biometricService.SetupBiometricAsync(BiometricIntegrityKey);
+                    }
                 }
                 else
                 {
