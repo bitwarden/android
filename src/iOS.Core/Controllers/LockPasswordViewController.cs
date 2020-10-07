@@ -197,6 +197,12 @@ namespace Bit.iOS.Core.Controllers
                         _vaultTimeoutService.PinProtectedKey = await _cryptoService.EncryptAsync(key2.Key, pinKey);
                     }
                     await SetKeyAndContinueAsync(key2);
+                    
+                    // Re-enable biometrics
+                    if (_biometricLock & !_biometricIntegrityValid)
+                    {
+                        await _biometricService.SetupBiometricAsync(BiometricIntegrityKey);
+                    }
                 }
                 else
                 {

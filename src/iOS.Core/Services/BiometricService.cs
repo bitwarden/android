@@ -48,7 +48,6 @@ namespace Bit.iOS.Core.Services
                 var state = GetState();
                 if (state != null)
                 {
-                    var getState = ToBase64(state);
                     return FromBase64(oldState).Equals(state);
                 }
 
