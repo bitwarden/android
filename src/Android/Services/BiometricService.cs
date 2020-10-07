@@ -30,8 +30,9 @@ namespace Bit.Droid.Services
             _keystore.Load(null);
         }
 
-        public Task<bool> SetupBiometricAsync()
+        public Task<bool> SetupBiometricAsync(string bioIntegrityKey = null)
         {
+            // bioIntegrityKey used in iOS only
             if (Build.VERSION.SdkInt >= BuildVersionCodes.M)
             {
                 CreateKey();
@@ -40,8 +41,9 @@ namespace Bit.Droid.Services
             return Task.FromResult(true);
         }
 
-        public Task<bool> ValidateIntegrityAsync()
+        public Task<bool> ValidateIntegrityAsync(string bioIntegrityKey = null)
         {
+            // bioIntegrityKey used in iOS only
             if (Build.VERSION.SdkInt < BuildVersionCodes.M)
             {
                 return Task.FromResult(true);
