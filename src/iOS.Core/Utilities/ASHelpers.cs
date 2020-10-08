@@ -27,6 +27,7 @@ namespace Bit.iOS.Core.Utilities
                     return;
                 }
                 var cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
+                cipherService.ClearCache();
                 var identities = new List<ASPasswordCredentialIdentity>();
                 var ciphers = await cipherService.GetAllDecryptedAsync();
                 foreach (var cipher in ciphers.Where(x => !x.IsDeleted))
