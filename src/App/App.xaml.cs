@@ -399,7 +399,7 @@ namespace Bit.App
             var clearCache = await _storageService.GetAsync<bool?>(Constants.ClearCiphersCacheKey);
             if (clearCache.GetValueOrDefault())
             {
-                _cipherService.ClearCache();
+                await _cipherService.ClearCache();
                 await _storageService.RemoveAsync(Constants.ClearCiphersCacheKey);
             }
         }

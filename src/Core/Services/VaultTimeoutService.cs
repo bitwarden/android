@@ -135,7 +135,7 @@ namespace Bit.Core.Services
                 _cryptoService.ClearEncKeyAsync(true));
 
             _folderService.ClearCache();
-            _cipherService.ClearCache();
+            await _cipherService.ClearCache();
             _collectionService.ClearCache();
             _searchService.ClearIndex();
             _messagingService.Send("locked", userInitiated);

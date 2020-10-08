@@ -82,9 +82,10 @@ namespace Bit.Core.Services
             }
         }
 
-        public void ClearCache()
+        public async Task ClearCache()
         {
             DecryptedCipherCache = null;
+            await _storageService.SaveAsync(Constants.ClearCiphersCacheKey, true);
         }
 
         public async Task<Cipher> EncryptAsync(CipherView model, SymmetricCryptoKey key = null,
@@ -218,15 +219,21 @@ namespace Bit.Core.Services
             return response?.ToList() ?? new List<Cipher>();
         }
 
-        public Task<List<CipherView>> GetAllDecryptedAsync()
+        public async Task<List<CipherView>> GetAllDecryptedAsync()
         {
+            var clearCache = await _storageService.GetAsync<bool?>(Constants.ClearCiphersCacheKey);
+            if (clearCache.GetValueOrDefault())
+            {
+                DecryptedCipherCache = null;
+                await _storageService.RemoveAsync(Constants.ClearCiphersCacheKey);
+            }
             if (DecryptedCipherCache != null)
             {
-                return Task.FromResult(DecryptedCipherCache);
+                return DecryptedCipherCache;
             }
             if (_getAllDecryptedTask != null && !_getAllDecryptedTask.IsCompleted && !_getAllDecryptedTask.IsFaulted)
             {
-                return _getAllDecryptedTask;
+                return await _getAllDecryptedTask;
             }
             async Task<List<CipherView>> doTask()
             {
@@ -257,7 +264,7 @@ namespace Bit.Core.Services
                 finally { }
             }
             _getAllDecryptedTask = doTask();
-            return _getAllDecryptedTask;
+            return await _getAllDecryptedTask;
         }
 
         public async Task<List<CipherView>> GetAllDecryptedForGroupingAsync(string groupingId, bool folder = true)
@@ -569,7 +576,7 @@ namespace Bit.Core.Services
             }
             ciphers[cipher.Id] = cipher;
             await _storageService.SaveAsync(storageKey, ciphers);
-            DecryptedCipherCache = null;
+            await ClearCache();
         }
 
         public async Task UpsertAsync(List<CipherData> cipher)
@@ -590,20 +597,20 @@ namespace Bit.Core.Services
                 ciphers[c.Id] = c;
             }
             await _storageService.SaveAsync(storageKey, ciphers);
-            DecryptedCipherCache = null;
+            await ClearCache();
         }
 
         public async Task ReplaceAsync(Dictionary<string, CipherData> ciphers)
         {
             var userId = await _userService.GetUserIdAsync();
             await _storageService.SaveAsync(string.Format(Keys_CiphersFormat, userId), ciphers);
-            DecryptedCipherCache = null;
+            await ClearCache();
         }
 
         public async Task ClearAsync(string userId)
         {
             await _storageService.RemoveAsync(string.Format(Keys_CiphersFormat, userId));
-            ClearCache();
+            await ClearCache();
         }
 
         public async Task DeleteAsync(string id)
@@ -621,7 +628,7 @@ namespace Bit.Core.Services
             }
             ciphers.Remove(id);
             await _storageService.SaveAsync(cipherKey, ciphers);
-            DecryptedCipherCache = null;
+            await ClearCache();
         }
 
         public async Task DeleteAsync(List<string> ids)
@@ -642,7 +649,7 @@ namespace Bit.Core.Services
                 ciphers.Remove(id);
             }
             await _storageService.SaveAsync(cipherKey, ciphers);
-            DecryptedCipherCache = null;
+            await ClearCache();
         }
 
         public async Task DeleteWithServerAsync(string id)
@@ -666,7 +673,7 @@ namespace Bit.Core.Services
                 ciphers[id].Attachments.Remove(attachment);
             }
             await _storageService.SaveAsync(cipherKey, ciphers);
-            DecryptedCipherCache = null;
+            await ClearCache();
         }
 
         public async Task DeleteAttachmentWithServerAsync(string id, string attachmentId)
@@ -721,7 +728,7 @@ namespace Bit.Core.Services
             await _apiService.PutDeleteCipherAsync(id);
             ciphers[id].DeletedDate = DateTime.UtcNow;
             await _storageService.SaveAsync(cipherKey, ciphers);
-            DecryptedCipherCache = null;
+            await ClearCache();
         }
 
         public async Task RestoreWithServerAsync(string id)
@@ -740,7 +747,7 @@ namespace Bit.Core.Services
             await _apiService.PutRestoreCipherAsync(id);
             ciphers[id].DeletedDate = null;
             await _storageService.SaveAsync(cipherKey, ciphers);
-            DecryptedCipherCache = null;
+            await ClearCache();
         }
 
         // Helpers
