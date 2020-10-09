@@ -33,6 +33,8 @@ namespace Bit.Core.Services
         private readonly IStorageService _storageService;
         private readonly II18nService _i18nService;
         private readonly Func<ISearchService> _searchService;
+        private readonly string _clearCipherCacheKey;
+        private readonly string[] _allClearCipherCacheKeys;
         private Dictionary<string, HashSet<string>> _domainMatchBlacklist = new Dictionary<string, HashSet<string>>
         {
             ["google.com"] = new HashSet<string> { "script.google.com" }
@@ -47,7 +49,9 @@ namespace Bit.Core.Services
             IApiService apiService,
             IStorageService storageService,
             II18nService i18nService,
-            Func<ISearchService> searchService)
+            Func<ISearchService> searchService,
+            string clearCipherCacheKey, 
+            string[] allClearCipherCacheKeys)
         {
             _cryptoService = cryptoService;
             _userService = userService;
@@ -56,6 +60,8 @@ namespace Bit.Core.Services
             _storageService = storageService;
             _i18nService = i18nService;
             _searchService = searchService;
+            _clearCipherCacheKey = clearCipherCacheKey;
+            _allClearCipherCacheKeys = allClearCipherCacheKeys;
         }
 
         private List<CipherView> DecryptedCipherCache
@@ -85,7 +91,13 @@ namespace Bit.Core.Services
         public async Task ClearCache()
         {
             DecryptedCipherCache = null;
-            await _storageService.SaveAsync(Constants.ClearCiphersCacheKey, true);
+            if (_allClearCipherCacheKeys != null && _allClearCipherCacheKeys.Length > 0)
+            {
+                foreach (var key in _allClearCipherCacheKeys)
+                {
+                    await _storageService.SaveAsync(key, true);
+                }
+            }
         }
 
         public async Task<Cipher> EncryptAsync(CipherView model, SymmetricCryptoKey key = null,
@@ -221,11 +233,14 @@ namespace Bit.Core.Services
 
         public async Task<List<CipherView>> GetAllDecryptedAsync()
         {
-            var clearCache = await _storageService.GetAsync<bool?>(Constants.ClearCiphersCacheKey);
-            if (clearCache.GetValueOrDefault())
+            if (_clearCipherCacheKey != null)
             {
-                DecryptedCipherCache = null;
-                await _storageService.RemoveAsync(Constants.ClearCiphersCacheKey);
+                var clearCache = await _storageService.GetAsync<bool?>(_clearCipherCacheKey);
+                if (clearCache.GetValueOrDefault())
+                {
+                    DecryptedCipherCache = null;
+                    await _storageService.RemoveAsync(_clearCipherCacheKey);
+                }
             }
             if (DecryptedCipherCache != null)
             {

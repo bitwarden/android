@@ -301,7 +301,8 @@ namespace Bit.iOS
             iOSCoreHelpers.RegisterLocalServices();
             RegisterPush();
             var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
-            ServiceContainer.Init(deviceActionService.DeviceUserAgent);
+            ServiceContainer.Init(deviceActionService.DeviceUserAgent, 
+                Bit.Core.Constants.ClearCiphersCacheKey, Bit.iOS.Core.Constants.AllClearCipherCacheKeys);
             iOSCoreHelpers.RegisterAppCenter();
             _pushHandler = new iOSPushNotificationHandler(
                 ServiceContainer.Resolve<IPushNotificationListenerService>("pushNotificationListenerService"));
