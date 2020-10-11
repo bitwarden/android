@@ -22,9 +22,11 @@ namespace Bit.iOS.Core.Controllers
         private IStorageService _storageService;
         private IStorageService _secureStorageService;
         private IPlatformUtilsService _platformUtilsService;
+        private IBiometricService _biometricService;
         private Tuple<bool, bool> _pinSet;
         private bool _pinLock;
-        private bool _fingerprintLock;
+        private bool _biometricLock;
+        private bool _biometricIntegrityValid = true;
         private int _invalidPinAttempts;
 
         public LockPasswordViewController(IntPtr handle)
@@ -39,6 +41,8 @@ namespace Bit.iOS.Core.Controllers
 
         public FormEntryTableViewCell MasterPasswordCell { get; set; } = new FormEntryTableViewCell(
             AppResources.MasterPassword);
+        
+        public string BiometricIntegrityKey { get; set; }
 
         public override void ViewDidLoad()
         {
@@ -49,10 +53,12 @@ namespace Bit.iOS.Core.Controllers
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _secureStorageService = ServiceContainer.Resolve<IStorageService>("secureStorageService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
+            _biometricService = ServiceContainer.Resolve<IBiometricService>("biometricService");
 
             _pinSet = _vaultTimeoutService.IsPinLockSetAsync().GetAwaiter().GetResult();
             _pinLock = (_pinSet.Item1 && _vaultTimeoutService.PinProtectedKey != null) || _pinSet.Item2;
-            _fingerprintLock = _vaultTimeoutService.IsBiometricLockSetAsync().GetAwaiter().GetResult();
+            _biometricLock = _vaultTimeoutService.IsBiometricLockSetAsync().GetAwaiter().GetResult() &&
+                _cryptoService.HasKeyAsync().GetAwaiter().GetResult();
 
             BaseNavItem.Title = _pinLock ? AppResources.VerifyPIN : AppResources.VerifyMasterPassword;
             BaseCancelButton.Title = AppResources.Cancel;
@@ -80,12 +86,18 @@ namespace Bit.iOS.Core.Controllers
 
             base.ViewDidLoad();
 
-            if (_fingerprintLock)
+            if (_biometricLock)
             {
+                _biometricIntegrityValid = _biometricService.ValidateIntegrityAsync(BiometricIntegrityKey).GetAwaiter()
+                    .GetResult();
+                if (!_biometricIntegrityValid)
+                {
+                    return;
+                }
                 var tasks = Task.Run(async () =>
                 {
                     await Task.Delay(500);
-                    NSRunLoop.Main.BeginInvokeOnMainThread(async () => await PromptFingerprintAsync());
+                    NSRunLoop.Main.BeginInvokeOnMainThread(async () => await PromptBiometricAsync());
                 });
             }
         }
@@ -93,7 +105,7 @@ namespace Bit.iOS.Core.Controllers
         public override void ViewDidAppear(bool animated)
         {
             base.ViewDidAppear(animated);
-            if (!_fingerprintLock)
+            if (!_biometricLock || !_biometricIntegrityValid)
             {
                 MasterPasswordCell.TextField.BecomeFirstResponder();
             }
@@ -185,6 +197,12 @@ namespace Bit.iOS.Core.Controllers
                         _vaultTimeoutService.PinProtectedKey = await _cryptoService.EncryptAsync(key2.Key, pinKey);
                     }
                     await SetKeyAndContinueAsync(key2);
+                    
+                    // Re-enable biometrics
+                    if (_biometricLock & !_biometricIntegrityValid)
+                    {
+                        await _biometricService.SetupBiometricAsync(BiometricIntegrityKey);
+                    }
                 }
                 else
                 {
@@ -210,9 +228,9 @@ namespace Bit.iOS.Core.Controllers
             Success();
         }
 
-        public async Task PromptFingerprintAsync()
+        public async Task PromptBiometricAsync()
         {
-            if (!_fingerprintLock)
+            if (!_biometricLock || !_biometricIntegrityValid)
             {
                 return;
             }
@@ -261,11 +279,22 @@ namespace Bit.iOS.Core.Controllers
                 {
                     if (indexPath.Row == 0)
                     {
-                        var biometricButtonText = _controller._deviceActionService.SupportsFaceBiometric() ?
-                            AppResources.UseFaceIDToUnlock : AppResources.UseFingerprintToUnlock;
                         var cell = new ExtendedUITableViewCell();
-                        cell.TextLabel.TextColor = ThemeHelpers.PrimaryColor;
-                        cell.TextLabel.Text = biometricButtonText;
+                        if (_controller._biometricIntegrityValid)
+                        {
+                            var biometricButtonText = _controller._deviceActionService.SupportsFaceBiometric() ?
+                            AppResources.UseFaceIDToUnlock : AppResources.UseFingerprintToUnlock;
+                            cell.TextLabel.TextColor = ThemeHelpers.PrimaryColor;
+                            cell.TextLabel.Text = biometricButtonText;
+                        }
+                        else
+                        {
+                            cell.TextLabel.TextColor = ThemeHelpers.DangerColor;
+                            cell.TextLabel.Font = ThemeHelpers.GetDangerFont();
+                            cell.TextLabel.Lines = 0;
+                            cell.TextLabel.LineBreakMode = UILineBreakMode.WordWrap;
+                            cell.TextLabel.Text = AppResources.BiometricInvalidated;
+                        }
                         return cell;
                     }
                 }
@@ -279,7 +308,7 @@ namespace Bit.iOS.Core.Controllers
 
             public override nint NumberOfSections(UITableView tableView)
             {
-                return _controller._fingerprintLock ? 2 : 1;
+                return _controller._biometricLock ? 2 : 1;
             }
 
             public override nint RowsInSection(UITableView tableview, nint section)
@@ -307,7 +336,7 @@ namespace Bit.iOS.Core.Controllers
                 tableView.EndEditing(true);
                 if (indexPath.Section == 1 && indexPath.Row == 0)
                 {
-                    var task = _controller.PromptFingerprintAsync();
+                    var task = _controller.PromptBiometricAsync();
                     return;
                 }
                 var cell = tableView.CellAt(indexPath);

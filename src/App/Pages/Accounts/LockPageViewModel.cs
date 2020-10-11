@@ -33,6 +33,7 @@ namespace Bit.App.Pages
         private bool _pinLock;
         private bool _biometricLock;
         private bool _biometricIntegrityValid = true;
+        private bool _biometricButtonVisible;
         private string _biometricButtonText;
         private string _loggedInAsText;
         private string _lockedVerifyText;
@@ -87,6 +88,12 @@ namespace Bit.App.Pages
             set => SetProperty(ref _biometricIntegrityValid, value);
         }
 
+        public bool BiometricButtonVisible
+        {
+            get => _biometricButtonVisible;
+            set => SetProperty(ref _biometricButtonVisible, value);
+        }
+
         public string BiometricButtonText
         {
             get => _biometricButtonText;
@@ -138,6 +145,13 @@ namespace Bit.App.Pages
 
             if (BiometricLock)
             {
+                BiometricIntegrityValid = await _biometricService.ValidateIntegrityAsync();
+                if (!_biometricIntegrityValid)
+                {
+                    BiometricButtonVisible = false;
+                    return;
+                }
+                BiometricButtonVisible = true;
                 BiometricButtonText = AppResources.UseBiometricsToUnlock;
                 if (Device.RuntimePlatform == Device.iOS)
                 {
@@ -145,8 +159,7 @@ namespace Bit.App.Pages
                     BiometricButtonText = supportsFace ? AppResources.UseFaceIDToUnlock :
                         AppResources.UseFingerprintToUnlock;
                 }
-                BiometricIntegrityValid = await _biometricService.ValidateIntegrityAsync();
-                if (autoPromptBiometric & _biometricIntegrityValid)
+                if (autoPromptBiometric)
                 {
                     var tasks = Task.Run(async () =>
                     {
