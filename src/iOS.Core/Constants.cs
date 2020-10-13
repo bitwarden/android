@@ -30,12 +30,5 @@
         public const string UTTypeAppExtensionSetup = "com.8bit.bitwarden.extension-setup";
 
         public const string AutofillNeedsIdentityReplacementKey = "autofillNeedsIdentityReplacement";
-
-        public static readonly string[] AllClearCipherCacheKeys =
-        {
-            Bit.Core.Constants.ClearCiphersCacheKey,
-            Bit.Core.Constants.iOSAutoFillClearCiphersCacheKey,
-            Bit.Core.Constants.iOSExtensionClearCiphersCacheKey
-        };
     }
 }

@@ -396,7 +396,7 @@ namespace Bit.iOS.Extension
             var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             var messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             ServiceContainer.Init(deviceActionService.DeviceUserAgent, 
-                Bit.Core.Constants.iOSExtensionClearCiphersCacheKey, Bit.iOS.Core.Constants.AllClearCipherCacheKeys);
+                Bit.Core.Constants.iOSExtensionClearCiphersCacheKey, Bit.Core.Constants.iOSAllClearCipherCacheKeys);
             if (!_initedAppCenter)
             {
                 iOSCoreHelpers.RegisterAppCenter();
