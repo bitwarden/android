@@ -11,7 +11,8 @@ namespace Bit.Core.Utilities
         public static Dictionary<string, object> RegisteredServices { get; set; } = new Dictionary<string, object>();
         public static bool Inited { get; set; }
 
-        public static void Init(string customUserAgent = null)
+        public static void Init(string customUserAgent = null, string clearCipherCacheKey = null, 
+            string[] allClearCipherCacheKeys = null)
         {
             if (Inited)
             {
@@ -40,7 +41,7 @@ namespace Bit.Core.Utilities
             var userService = new UserService(storageService, tokenService);
             var settingsService = new SettingsService(userService, storageService);
             var cipherService = new CipherService(cryptoService, userService, settingsService, apiService,
-                storageService, i18nService, () => searchService);
+                storageService, i18nService, () => searchService, clearCipherCacheKey, allClearCipherCacheKeys);
             var folderService = new FolderService(cryptoService, userService, apiService, storageService,
                 i18nService, cipherService);
             var collectionService = new CollectionService(cryptoService, userService, storageService, i18nService);

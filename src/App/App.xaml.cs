@@ -163,7 +163,6 @@ namespace Bit.App
         {
             System.Diagnostics.Debug.WriteLine("XF App: OnStart");
             await ClearCacheIfNeededAsync();
-            await TryClearCiphersCacheAsync();
             Prime();
             if (string.IsNullOrWhiteSpace(Options.Uri))
             {
@@ -214,7 +213,6 @@ namespace Bit.App
             _messagingService.Send("cancelVaultTimeoutTimer");
             _messagingService.Send("startEventTimer");
             await ClearCacheIfNeededAsync();
-            await TryClearCiphersCacheAsync();
             Prime();
             SyncIfNeeded();
             if (Current.MainPage is NavigationPage navPage && navPage.CurrentPage is LockPage lockPage)
@@ -388,20 +386,6 @@ namespace Bit.App
                     await _syncService.FullSyncAsync(false);
                 }
             });
-        }
-
-        private async Task TryClearCiphersCacheAsync()
-        {
-            if (Device.RuntimePlatform != Device.iOS)
-            {
-                return;
-            }
-            var clearCache = await _storageService.GetAsync<bool?>(Constants.ClearCiphersCacheKey);
-            if (clearCache.GetValueOrDefault())
-            {
-                _cipherService.ClearCache();
-                await _storageService.RemoveAsync(Constants.ClearCiphersCacheKey);
-            }
         }
 
         private async Task LockedAsync(bool autoPromptBiometric)

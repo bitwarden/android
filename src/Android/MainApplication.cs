@@ -41,7 +41,8 @@ namespace Bit.Droid
             {
                 RegisterLocalServices();
                 var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
-                ServiceContainer.Init(deviceActionService.DeviceUserAgent);
+                ServiceContainer.Init(deviceActionService.DeviceUserAgent, Constants.ClearCiphersCacheKey,
+                    Constants.AndroidAllClearCipherCacheKeys);
             }
 #if !FDROID
             if (Build.VERSION.SdkInt <= BuildVersionCodes.Kitkat)

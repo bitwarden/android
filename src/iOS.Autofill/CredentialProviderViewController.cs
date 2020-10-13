@@ -273,7 +273,8 @@ namespace Bit.iOS.Autofill
             iOSCoreHelpers.RegisterLocalServices();
             var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             var messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
-            ServiceContainer.Init(deviceActionService.DeviceUserAgent);
+            ServiceContainer.Init(deviceActionService.DeviceUserAgent, 
+                Bit.Core.Constants.iOSAutoFillClearCiphersCacheKey, Bit.Core.Constants.iOSAllClearCipherCacheKeys);
             if (!_initedAppCenter)
             {
                 iOSCoreHelpers.RegisterAppCenter();
