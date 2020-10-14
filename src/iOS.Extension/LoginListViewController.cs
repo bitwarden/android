@@ -18,7 +18,9 @@ namespace Bit.iOS.Extension
     {
         public LoginListViewController(IntPtr handle)
             : base(handle)
-        { }
+        {
+            DismissModalAction = () => Cancel();
+        }
 
         public Context Context { get; set; }
         public LoadingViewController LoadingController { get; set; }
@@ -57,6 +59,11 @@ namespace Bit.iOS.Extension
 
         partial void CancelBarButton_Activated(UIBarButtonItem sender)
         {
+            Cancel();
+        }
+        
+        private void Cancel()
+        {
             LoadingController.CompleteRequest(null, null);
         }
 
@@ -73,6 +80,8 @@ namespace Bit.iOS.Extension
                 {
                     addLoginController.Context = Context;
                     addLoginController.LoginListController = this;
+                    segue.DestinationViewController.PresentationController.Delegate =
+                        new CustomPresentationControllerDelegate(addLoginController.DismissModalAction);
                 }
             }
         }

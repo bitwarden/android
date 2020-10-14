@@ -18,6 +18,7 @@ using Xamarin.Forms;
 using Bit.App.Pages;
 using Bit.App.Models;
 using Bit.App.Utilities;
+using Bit.iOS.Core.Views;
 
 namespace Bit.iOS.Extension
 {
@@ -94,20 +95,28 @@ namespace Bit.iOS.Extension
                 {
                     listLoginController.Context = _context;
                     listLoginController.LoadingController = this;
+                    segue.DestinationViewController.PresentationController.Delegate =
+                        new CustomPresentationControllerDelegate(listLoginController.DismissModalAction);
                 }
                 else if (navController.TopViewController is LoginAddViewController addLoginController)
                 {
                     addLoginController.Context = _context;
                     addLoginController.LoadingController = this;
+                    segue.DestinationViewController.PresentationController.Delegate =
+                        new CustomPresentationControllerDelegate(addLoginController.DismissModalAction);
                 }
                 else if (navController.TopViewController is LockPasswordViewController passwordViewController)
                 {
                     passwordViewController.LoadingController = this;
+                    segue.DestinationViewController.PresentationController.Delegate =
+                        new CustomPresentationControllerDelegate(passwordViewController.DismissModalAction);
                 }
                 else if (navController.TopViewController is SetupViewController setupViewController)
                 {
                     setupViewController.Context = _context;
                     setupViewController.LoadingController = this;
+                    segue.DestinationViewController.PresentationController.Delegate =
+                        new CustomPresentationControllerDelegate(setupViewController.DismissModalAction);
                 }
             }
         }

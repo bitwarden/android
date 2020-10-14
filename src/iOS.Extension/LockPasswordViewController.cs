@@ -10,6 +10,7 @@ namespace Bit.iOS.Extension
             : base(handle)
         {
             BiometricIntegrityKey = "extensionBiometricState";
+            DismissModalAction = () => Cancel();
         }
 
         public LoadingViewController LoadingController { get; set; }

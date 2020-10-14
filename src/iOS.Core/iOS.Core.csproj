@@ -175,6 +175,7 @@
     <Compile Include="Utilities\iOSCoreHelpers.cs" />
     <Compile Include="Utilities\iOSHelpers.cs" />
     <Compile Include="Utilities\ThemeHelpers.cs" />
+    <Compile Include="Views\CustomPresentationControllerDelegate.cs" />
     <Compile Include="Views\ExtensionSearchDelegate.cs" />
     <Compile Include="Views\ExtensionTableSource.cs" />
     <Compile Include="Views\FormEntryTableViewCell.cs" />

@@ -1,5 +1,6 @@
 using System;
 using Bit.iOS.Core.Utilities;
+using Bit.iOS.Core.Views;
 using Foundation;
 using UIKit;
 
@@ -9,7 +10,9 @@ namespace Bit.iOS.Extension
     {
         public LoginAddViewController(IntPtr handle)
             : base(handle)
-        { }
+        {
+            DismissModalAction = () => Cancel();
+        }
 
         public LoginListViewController LoginListController { get; set; }
         public LoadingViewController LoadingController { get; set; }
@@ -40,6 +43,11 @@ namespace Bit.iOS.Extension
 
         partial void CancelBarButton_Activated(UIBarButtonItem sender)
         {
+            Cancel();
+        }
+        
+        private void Cancel()
+        {
             if (LoginListController != null)
             {
                 DismissViewController(true, null);
@@ -63,6 +71,8 @@ namespace Bit.iOS.Extension
                 {
                     passwordGeneratorController.PasswordOptions = Context.PasswordOptions;
                     passwordGeneratorController.Parent = this;
+                    segue.DestinationViewController.PresentationController.Delegate =
+                        new CustomPresentationControllerDelegate(passwordGeneratorController.DismissModalAction);
                 }
             }
         }

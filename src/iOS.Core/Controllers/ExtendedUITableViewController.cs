@@ -6,6 +6,8 @@ namespace Bit.iOS.Core.Controllers
 {
     public class ExtendedUITableViewController : UITableViewController
     {
+        public Action DismissModalAction { get; set; }
+        
         public ExtendedUITableViewController(IntPtr handle)
             : base(handle)
         {
