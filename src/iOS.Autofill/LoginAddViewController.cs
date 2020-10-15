@@ -10,7 +10,7 @@ namespace Bit.iOS.Autofill
         public LoginAddViewController(IntPtr handle)
             : base(handle)
         {
-            DismissModalAction = () => Cancel();
+            DismissModalAction = Cancel;
         }
 
         public LoginListViewController LoginListController { get; set; }

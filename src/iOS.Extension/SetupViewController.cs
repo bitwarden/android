@@ -13,7 +13,7 @@ namespace Bit.iOS.Extension
             : base(handle)
         {
             ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            DismissModalAction = () => Cancel();
+            DismissModalAction = Cancel;
         }
 
         public Context Context { get; set; }

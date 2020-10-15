@@ -15,7 +15,7 @@ namespace Bit.iOS.Autofill
         public LoginSearchViewController(IntPtr handle)
             : base(handle)
         {
-            DismissModalAction = () => Cancel();
+            DismissModalAction = Cancel;
         }
 
         public Context Context { get; set; }

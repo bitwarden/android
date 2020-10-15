@@ -9,7 +9,7 @@ namespace Bit.iOS.Extension
         public PasswordGeneratorViewController(IntPtr handle)
             : base(handle)
         {
-            DismissModalAction = () => Cancel();
+            DismissModalAction = Cancel;
         }
         
         public LoginAddViewController Parent { get; set; }

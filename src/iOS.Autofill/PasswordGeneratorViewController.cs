@@ -8,7 +8,7 @@ namespace Bit.iOS.Autofill
         public PasswordGeneratorViewController(IntPtr handle)
             : base(handle)
         {
-            DismissModalAction = () => Cancel();
+            DismissModalAction = Cancel;
         }
 
         public LoginAddViewController Parent { get; set; }

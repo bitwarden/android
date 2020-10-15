@@ -19,7 +19,7 @@ namespace Bit.iOS.Extension
         public LoginListViewController(IntPtr handle)
             : base(handle)
         {
-            DismissModalAction = () => Cancel();
+            DismissModalAction = Cancel;
         }
 
         public Context Context { get; set; }

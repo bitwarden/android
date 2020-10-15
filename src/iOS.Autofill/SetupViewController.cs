@@ -11,7 +11,7 @@ namespace Bit.iOS.Autofill
         public SetupViewController(IntPtr handle)
             : base(handle)
         {
-            DismissModalAction = () => Cancel();
+            DismissModalAction = Cancel;
         }
 
         public CredentialProviderViewController CPViewController { get; set; }

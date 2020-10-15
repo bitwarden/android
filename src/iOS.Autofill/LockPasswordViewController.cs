@@ -9,7 +9,7 @@ namespace Bit.iOS.Autofill
             : base(handle)
         {
             BiometricIntegrityKey = "autofillBiometricState";
-            DismissModalAction = () => Cancel();
+            DismissModalAction = Cancel;
         }
 
         public CredentialProviderViewController CPViewController { get; set; }
