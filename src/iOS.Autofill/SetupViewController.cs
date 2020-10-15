@@ -10,7 +10,9 @@ namespace Bit.iOS.Autofill
     {
         public SetupViewController(IntPtr handle)
             : base(handle)
-        { }
+        {
+            DismissModalAction = Cancel;
+        }
 
         public CredentialProviderViewController CPViewController { get; set; }
 
@@ -33,6 +35,11 @@ namespace Bit.iOS.Autofill
         }
 
         partial void BackButton_Activated(UIBarButtonItem sender)
+        {
+            Cancel();
+        }
+
+        private void Cancel()
         {
             CPViewController.CompleteRequest();
         }

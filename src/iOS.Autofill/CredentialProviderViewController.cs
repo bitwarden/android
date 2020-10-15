@@ -12,6 +12,7 @@ using UIKit;
 using Xamarin.Forms;
 using Bit.App.Utilities;
 using Bit.App.Models;
+using Bit.iOS.Core.Views;
 using CoreNFC;
 
 namespace Bit.iOS.Autofill
@@ -158,19 +159,27 @@ namespace Bit.iOS.Autofill
                 {
                     listLoginController.Context = _context;
                     listLoginController.CPViewController = this;
+                    segue.DestinationViewController.PresentationController.Delegate =
+                        new CustomPresentationControllerDelegate(listLoginController.DismissModalAction);
                 }
                 else if (navController.TopViewController is LoginSearchViewController listSearchController)
                 {
                     listSearchController.Context = _context;
                     listSearchController.CPViewController = this;
+                    segue.DestinationViewController.PresentationController.Delegate =
+                        new CustomPresentationControllerDelegate(listSearchController.DismissModalAction);
                 }
                 else if (navController.TopViewController is LockPasswordViewController passwordViewController)
                 {
                     passwordViewController.CPViewController = this;
+                    segue.DestinationViewController.PresentationController.Delegate =
+                        new CustomPresentationControllerDelegate(passwordViewController.DismissModalAction);
                 }
                 else if (navController.TopViewController is SetupViewController setupViewController)
                 {
                     setupViewController.CPViewController = this;
+                    segue.DestinationViewController.PresentationController.Delegate =
+                        new CustomPresentationControllerDelegate(setupViewController.DismissModalAction);
                 }
             }
         }

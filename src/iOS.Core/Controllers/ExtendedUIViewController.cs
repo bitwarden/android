@@ -6,6 +6,8 @@ namespace Bit.iOS.Core.Controllers
 {
     public class ExtendedUIViewController : UIViewController
     {
+        public Action DismissModalAction { get; set; }
+        
         public ExtendedUIViewController(IntPtr handle)
             : base(handle)
         {
