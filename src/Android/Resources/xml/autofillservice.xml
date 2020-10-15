@@ -178,4 +178,10 @@
   <compatibility-package
     android:name="org.ungoogled.chromium"
     android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
+    android:name="org.ungoogled.chromium.extensions.stable"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
+    android:name="org.ungoogled.chromium.stable"
+    android:maxLongVersionCode="10000000000"/>
 </autofill-service>
