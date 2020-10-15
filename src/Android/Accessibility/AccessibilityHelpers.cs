@@ -90,7 +90,9 @@ namespace Bit.Droid.Accessibility
             new Browser("org.mozilla.rocket", "display_url"),
             new Browser("org.torproject.torbrowser", "url_bar_title,mozac_browser_toolbar_url_view"), // 2nd = Anticipation
             new Browser("org.torproject.torbrowser_alpha", "mozac_browser_toolbar_url_view,url_bar_title"), // 2nd = Legacy (before v10.0a8)
-            new Browser("org.ungoogled.chromium", "url_bar"),
+            new Browser("org.ungoogled.chromium", "url_bar"), // [DEPRECATED]
+            new Browser("org.ungoogled.chromium.extensions.stable", "url_bar"),
+            new Browser("org.ungoogled.chromium.stable", "url_bar"),
 
             // [Section B] Entries only present here
             //

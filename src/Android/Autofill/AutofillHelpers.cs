@@ -94,6 +94,8 @@ namespace Bit.Droid.Autofill
             "org.torproject.torbrowser",
             "org.torproject.torbrowser_alpha",
             "org.ungoogled.chromium",
+            "org.ungoogled.chromium.extensions.stable",
+            "org.ungoogled.chromium.stable",
         };
 
         // The URLs are blacklisted from autofilling
