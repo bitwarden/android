@@ -14,9 +14,9 @@
                     <view key="view" contentMode="scaleToFill" id="6">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" customColorSpace="calibratedWhite" colorSpace="calibratedRGB" red="0.92549019607843142" green="0.94117647058823528" blue="0.96078431372549022" alpha="1"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" id="16" translatesAutoresizingMaskIntoConstraints="NO" image="logo.png">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" id="16" translatesAutoresizingMaskIntoConstraints="NO" image="LaunchScreenImage">
                                 <rect key="frame" x="159" y="248" width="282" height="44"/>
                             </imageView>
                         </subviews>
@@ -54,7 +54,7 @@
         <image name="Icon.png" width="57" height="57"/>
         <image name="ion_chevron_right.png" width="14" height="14"/>
         <image name="ion_plus.png" width="22" height="22"/>
-        <image name="logo.png" width="282" height="44"/>
+        <image name="LaunchScreenImage" width="282" height="44"/>
         <image name="cogs.png" width="29" height="29"/>
         <image name="eye.png" width="22" height="22"/>
         <image name="eye_slash.png" width="22" height="22"/>

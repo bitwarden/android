@@ -144,6 +144,11 @@
     <ImageAsset Include="Resources\Assets.xcassets\AppIcons.appiconset\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
+    <ImageAsset Include="Resources\Assets.xcassets\LaunchScreenImage.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\LaunchScreenImage.imageset\logo_white%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\LaunchScreenImage.imageset\logo_white%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\LaunchScreenImage.imageset\logo%402x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\LaunchScreenImage.imageset\logo%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -387,5 +392,8 @@
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\logo_white%403x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\Assets.xcassets\LaunchScreenImage.imageset\" />
   </ItemGroup>
 </Project>
