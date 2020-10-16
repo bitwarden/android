@@ -126,6 +126,6 @@
 	<key>NFCReaderUsageDescription</key>
 	<string>Use Yubikeys for two-facor authentication.</string>
 	<key>UILaunchImages</key>
-	<string>Resources/Assets.xcassets/LaunchScreenImage.imageset</string>
+	<string>Resources/Assets.xcassets/LaunchScreen.imageset</string>
 </dict>
 </plist>
