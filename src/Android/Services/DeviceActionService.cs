@@ -8,6 +8,7 @@ using Android.App;
 using Android.App.Assist;
 using Android.Content;
 using Android.Content.PM;
+using Android.Content.Res;
 using Android.Nfc;
 using Android.OS;
 using Android.Provider;
@@ -710,6 +711,16 @@ namespace Bit.Droid.Services
 
         public bool UsingDarkTheme()
         {
+            try
+            {
+                if (Build.VERSION.SdkInt >= BuildVersionCodes.Q)
+                {
+                    var app = CrossCurrentActivity.Current.AppContext;
+                    var uiModeFlags = app.Resources.Configuration.UiMode & UiMode.NightMask;
+                    return uiModeFlags == UiMode.NightYes;
+                }
+            }
+            catch { }
             return false;
         }
 

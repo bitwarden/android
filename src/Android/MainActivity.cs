@@ -25,7 +25,7 @@ namespace Bit.Droid
     [Activity(
         Label = "Bitwarden",
         Icon = "@mipmap/ic_launcher",
-        Theme = "@style/LightTheme.Splash",
+        Theme = "@style/LaunchTheme",
         MainLauncher = true,
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     [Register("com.x8bit.bitwarden.MainActivity")]
@@ -334,7 +334,11 @@ namespace Bit.Droid
 
         private void UpdateTheme(string theme)
         {
-            if (theme == "dark")
+            if (theme == "light")
+            {
+                SetTheme(Resource.Style.LightTheme);
+            }
+            else if (theme == "dark")
             {
                 SetTheme(Resource.Style.DarkTheme);
             }
@@ -348,7 +352,14 @@ namespace Bit.Droid
             }
             else
             {
-                SetTheme(Resource.Style.LightTheme);
+                if (_deviceActionService.UsingDarkTheme())
+                {
+                    SetTheme(Resource.Style.DarkTheme);
+                }
+                else
+                {
+                    SetTheme(Resource.Style.LightTheme);
+                }
             }
         }
 

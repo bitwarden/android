@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+  <!-- Launch theme (for auto dark/light based on system) -->
+  <style name="LaunchTheme" parent="LightTheme.Base">
+    <item name="android:windowBackground">@drawable/splash_screen</item>
+    <item name="android:windowNoTitle">true</item>
+  </style>
+
   <!-- Light theme -->
   <style name="LightTheme" parent="LightTheme.Base">
   </style>
