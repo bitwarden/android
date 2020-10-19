@@ -50,6 +50,8 @@ namespace Bit.Droid.Accessibility
             new Browser("com.google.android.apps.chrome_dev", "url_bar"),
             new Browser("com.kiwibrowser.browser", "url_bar"),
             new Browser("com.microsoft.emmx", "url_bar"),
+            new Browser("com.mmbox.browser", "search_box"),
+            new Browser("com.mmbox.xbrowser", "search_box"),
             new Browser("com.naver.whale", "url_bar"),
             new Browser("com.opera.browser", "url_field"),
             new Browser("com.opera.browser.beta", "url_field"),
@@ -66,6 +68,7 @@ namespace Bit.Droid.Accessibility
             new Browser("com.vivaldi.browser.sopranos", "url_bar"),
             new Browser("com.yandex.browser", "bro_omnibar_address_title_text,bro_omnibox_collapsed_title",
                 (s) => s.Split(new char[]{' ', ' '}).FirstOrDefault()), // 0 = Regular Space, 1 = No-break space (00A0)
+            new Browser("com.z28j.feel", "g2"), // "g2" for version 0.9.8.4 (984)
             new Browser("idm.internet.download.manager", "search"),
             new Browser("idm.internet.download.manager.adm.lite", "search"),
             new Browser("idm.internet.download.manager.plus", "search"),
