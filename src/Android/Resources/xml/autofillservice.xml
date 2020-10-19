@@ -68,6 +68,12 @@
     android:name="com.microsoft.emmx"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
+    android:name="com.mmbox.browser"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
+    android:name="com.mmbox.xbrowser"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
     android:name="com.naver.whale"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
@@ -112,13 +118,16 @@
   <compatibility-package
     android:name="com.yandex.browser"
     android:maxLongVersionCode="10000000000"/>
-    <compatibility-package
+  <compatibility-package
+    android:name="com.z28j.feel"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
     android:name="idm.internet.download.manager"
     android:maxLongVersionCode="10000000000"/>
-    <compatibility-package
+  <compatibility-package
     android:name="idm.internet.download.manager.adm.lite"
     android:maxLongVersionCode="10000000000"/>
-    <compatibility-package
+  <compatibility-package
     android:name="idm.internet.download.manager.plus"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
