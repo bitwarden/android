@@ -20,6 +20,9 @@
     android:name="com.android.chrome"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
+    android:name="com.android.htmlviewer"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
     android:name="com.avast.android.secure.browser"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
@@ -120,6 +123,9 @@
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
     android:name="io.github.forkmaintainers.iceraven"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
+    android:name="mark.via"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
     android:name="mark.via.gp"
