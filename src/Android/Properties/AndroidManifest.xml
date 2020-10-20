@@ -24,7 +24,7 @@
 
   <application
     android:label="Bitwarden"
-    android:theme="@style/LightTheme.Splash"
+    android:theme="@style/LaunchTheme"
     android:allowBackup="false"
     tools:replace="android:allowBackup"
     android:icon="@mipmap/ic_launcher"
