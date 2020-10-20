@@ -27,12 +27,15 @@ namespace Bit.Droid.Renderers
         private static Android.Graphics.Color _textColor;
         private static Android.Graphics.Color _mutedColor;
         private static Android.Graphics.Color _disabledIconColor;
+        private static bool _usingLightTheme;
 
         private AndroidCipherCell _cell;
 
         protected override Android.Views.View GetCellCore(Cell item, Android.Views.View convertView,
             ViewGroup parent, Context context)
         {
+            // TODO expand beyond light/dark detection once we support custom theme switching without app restart
+            var themeChanged = _usingLightTheme != ThemeManager.UsingLightTheme;
             if (_faTypeface == null)
             {
                 _faTypeface = Typeface.CreateFromAsset(context.Assets, "FontAwesome.ttf");
@@ -41,18 +44,19 @@ namespace Bit.Droid.Renderers
             {
                 _miTypeface = Typeface.CreateFromAsset(context.Assets, "MaterialIcons_Regular.ttf");
             }
-            if (_textColor == default(Android.Graphics.Color))
+            if (_textColor == default(Android.Graphics.Color) || themeChanged)
             {
                 _textColor = ThemeManager.GetResourceColor("TextColor").ToAndroid();
             }
-            if (_mutedColor == default(Android.Graphics.Color))
+            if (_mutedColor == default(Android.Graphics.Color) || themeChanged)
             {
                 _mutedColor = ThemeManager.GetResourceColor("MutedColor").ToAndroid();
             }
-            if (_disabledIconColor == default(Android.Graphics.Color))
+            if (_disabledIconColor == default(Android.Graphics.Color) || themeChanged)
             {
                 _disabledIconColor = ThemeManager.GetResourceColor("DisabledIconColor").ToAndroid();
             }
+            _usingLightTheme = ThemeManager.UsingLightTheme;
 
             var cipherCell = item as CipherViewCell;
             _cell = convertView as AndroidCipherCell;
