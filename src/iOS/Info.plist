@@ -125,7 +125,5 @@
 	<string>Use Face ID to unlock your vault.</string>
 	<key>NFCReaderUsageDescription</key>
 	<string>Use Yubikeys for two-facor authentication.</string>
-	<key>UILaunchImages</key>
-	<string>Resources/Assets.xcassets/LaunchScreen.imageset</string>
 </dict>
 </plist>
