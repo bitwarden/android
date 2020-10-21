@@ -20,6 +20,9 @@
     android:name="com.android.chrome"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
+    android:name="com.android.htmlviewer"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
     android:name="com.avast.android.secure.browser"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
@@ -63,6 +66,12 @@
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
     android:name="com.microsoft.emmx"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
+    android:name="com.mmbox.browser"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
+    android:name="com.mmbox.xbrowser"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
     android:name="com.naver.whale"
@@ -109,17 +118,23 @@
   <compatibility-package
     android:name="com.yandex.browser"
     android:maxLongVersionCode="10000000000"/>
-    <compatibility-package
+  <compatibility-package
+    android:name="com.z28j.feel"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
     android:name="idm.internet.download.manager"
     android:maxLongVersionCode="10000000000"/>
-    <compatibility-package
+  <compatibility-package
     android:name="idm.internet.download.manager.adm.lite"
     android:maxLongVersionCode="10000000000"/>
-    <compatibility-package
+  <compatibility-package
     android:name="idm.internet.download.manager.plus"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
     android:name="io.github.forkmaintainers.iceraven"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
+    android:name="mark.via"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
     android:name="mark.via.gp"
