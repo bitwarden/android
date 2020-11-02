@@ -679,7 +679,7 @@ namespace Bit.Droid.Accessibility
             var icon = (ImageView)view.FindViewById(Resource.Id.icon);
             text1.Text = AppResources.AutofillWithBitwarden;
             text2.Text = AppResources.GoToMyVault;
-            icon.SetImageResource(Resource.Drawable.icon);
+            icon.SetImageResource(Resource.Drawable.shield);
             return view;
         }
 
