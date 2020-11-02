@@ -3,6 +3,7 @@ using Android.Views.Autofill;
 using System.Linq;
 using Bit.Core.Enums;
 using Android.Views;
+using Android.Widget;
 using Bit.Core.Models.View;
 
 namespace Bit.Droid.Autofill
@@ -60,7 +61,8 @@ namespace Bit.Droid.Autofill
         public int Icon { get; set; } = Resource.Drawable.login;
         public CipherType Type { get; set; }
 
-        public bool ApplyToFields(FieldCollection fieldCollection, Dataset.Builder datasetBuilder)
+        public bool ApplyToFields(FieldCollection fieldCollection, Dataset.Builder datasetBuilder, 
+            RemoteViews overlayPresentation, InlinePresentation inlinePresentation)
         {
             if (!fieldCollection?.Fields.Any() ?? true)
             {
@@ -78,7 +80,14 @@ namespace Bit.Droid.Autofill
                         if (val != null)
                         {
                             setValues = true;
-                            datasetBuilder.SetValue(f.AutofillId, val);
+                            if (inlinePresentation != null)
+                            {
+                                datasetBuilder.SetValue(f.AutofillId, val, overlayPresentation, inlinePresentation);
+                            }
+                            else
+                            {
+                                datasetBuilder.SetValue(f.AutofillId, val, overlayPresentation);
+                            }
                         }
                     }
                 }
@@ -90,64 +99,75 @@ namespace Bit.Droid.Autofill
                         if (val != null)
                         {
                             setValues = true;
-                            datasetBuilder.SetValue(f.AutofillId, val);
+                            if (inlinePresentation != null)
+                            {
+                                datasetBuilder.SetValue(f.AutofillId, val, overlayPresentation, inlinePresentation);
+                            }
+                            else
+                            {
+                                datasetBuilder.SetValue(f.AutofillId, val, overlayPresentation);
+                            }
                         }
                     }
                 }
             }
             else if (Type == CipherType.Card)
             {
-                if (ApplyValue(datasetBuilder, fieldCollection, Android.Views.View.AutofillHintCreditCardNumber,
-                    _cardNumber))
+                if (ApplyValue(datasetBuilder, overlayPresentation, inlinePresentation, fieldCollection,
+                    Android.Views.View.AutofillHintCreditCardNumber, _cardNumber))
                 {
                     setValues = true;
                 }
-                if (ApplyValue(datasetBuilder, fieldCollection, Android.Views.View.AutofillHintCreditCardSecurityCode,
-                    _cardCode))
+                if (ApplyValue(datasetBuilder, overlayPresentation, inlinePresentation, fieldCollection,
+                    Android.Views.View.AutofillHintCreditCardSecurityCode, _cardCode))
                 {
                     setValues = true;
                 }
-                if (ApplyValue(datasetBuilder, fieldCollection,
+                if (ApplyValue(datasetBuilder, overlayPresentation, inlinePresentation, fieldCollection,
                     Android.Views.View.AutofillHintCreditCardExpirationMonth, _cardExpMonth, true))
                 {
                     setValues = true;
                 }
-                if (ApplyValue(datasetBuilder, fieldCollection, Android.Views.View.AutofillHintCreditCardExpirationYear,
-                    _cardExpYear))
+                if (ApplyValue(datasetBuilder, overlayPresentation, inlinePresentation, fieldCollection,
+                    Android.Views.View.AutofillHintCreditCardExpirationYear, _cardExpYear))
                 {
                     setValues = true;
                 }
-                if (ApplyValue(datasetBuilder, fieldCollection, Android.Views.View.AutofillHintName, _cardName))
+                if (ApplyValue(datasetBuilder, overlayPresentation, inlinePresentation, fieldCollection,
+                    Android.Views.View.AutofillHintName, _cardName))
                 {
                     setValues = true;
                 }
             }
             else if (Type == CipherType.Identity)
             {
-                if (ApplyValue(datasetBuilder, fieldCollection, Android.Views.View.AutofillHintPhone, _idPhone))
+                if (ApplyValue(datasetBuilder, overlayPresentation, inlinePresentation, fieldCollection,
+                    Android.Views.View.AutofillHintPhone, _idPhone))
                 {
                     setValues = true;
                 }
-                if (ApplyValue(datasetBuilder, fieldCollection, Android.Views.View.AutofillHintEmailAddress, _idEmail))
+                if (ApplyValue(datasetBuilder, overlayPresentation, inlinePresentation, fieldCollection,
+                    Android.Views.View.AutofillHintEmailAddress, _idEmail))
                 {
                     setValues = true;
                 }
-                if (ApplyValue(datasetBuilder, fieldCollection, Android.Views.View.AutofillHintUsername,
-                    _idUsername))
+                if (ApplyValue(datasetBuilder, overlayPresentation, inlinePresentation, fieldCollection,
+                    Android.Views.View.AutofillHintUsername, _idUsername))
                 {
                     setValues = true;
                 }
-                if (ApplyValue(datasetBuilder, fieldCollection, Android.Views.View.AutofillHintPostalAddress,
-                    _idAddress))
+                if (ApplyValue(datasetBuilder, overlayPresentation, inlinePresentation, fieldCollection,
+                    Android.Views.View.AutofillHintPostalAddress, _idAddress))
                 {
                     setValues = true;
                 }
-                if (ApplyValue(datasetBuilder, fieldCollection, Android.Views.View.AutofillHintPostalCode,
-                    _idPostalCode))
+                if (ApplyValue(datasetBuilder, overlayPresentation, inlinePresentation, fieldCollection,
+                    Android.Views.View.AutofillHintPostalCode, _idPostalCode))
                 {
                     setValues = true;
                 }
-                if (ApplyValue(datasetBuilder, fieldCollection, Android.Views.View.AutofillHintName, Subtitle))
+                if (ApplyValue(datasetBuilder, overlayPresentation, inlinePresentation, fieldCollection,
+                    Android.Views.View.AutofillHintName, Subtitle))
                 {
                     setValues = true;
                 }
@@ -155,8 +175,9 @@ namespace Bit.Droid.Autofill
             return setValues;
         }
 
-        private static bool ApplyValue(Dataset.Builder builder, FieldCollection fieldCollection,
-            string hint, string value, bool monthValue = false)
+        private static bool ApplyValue(Dataset.Builder builder, RemoteViews overlayPresentation,
+            InlinePresentation inlinePresentation, FieldCollection fieldCollection, string hint, string value,
+            bool monthValue = false)
         {
             bool setValues = false;
             if (fieldCollection.HintToFieldsMap.ContainsKey(hint) && !string.IsNullOrWhiteSpace(value))
@@ -167,7 +188,14 @@ namespace Bit.Droid.Autofill
                     if (val != null)
                     {
                         setValues = true;
-                        builder.SetValue(f.AutofillId, val);
+                        if (inlinePresentation != null)
+                        {
+                            builder.SetValue(f.AutofillId, val, overlayPresentation, inlinePresentation);
+                        }
+                        else
+                        {
+                            builder.SetValue(f.AutofillId, val, overlayPresentation);
+                        }
                     }
                 }
             }

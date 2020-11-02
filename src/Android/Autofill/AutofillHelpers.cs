@@ -1,14 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Android.Content;
 using Android.Service.Autofill;
 using Android.Widget;
 using System.Linq;
 using Android.App;
 using System.Threading.Tasks;
+using Android.App.Slices;
+using Android.Graphics;
+using Android.Graphics.Drawables;
+using Android.OS;
+using Android.Widget.Inline;
 using Bit.App.Resources;
 using Bit.Core.Enums;
 using Android.Views.Autofill;
 using Bit.Core.Abstractions;
+using SaveFlags = Android.Service.Autofill.SaveFlags;
 
 namespace Bit.Droid.Autofill
 {
@@ -112,6 +119,12 @@ namespace Bit.Droid.Autofill
             "androidapp://com.oneplus.applocker",
         };
 
+        public static bool IsBrowserSupported(string packageName)
+        {
+            return TrustedBrowsers.Contains(packageName) ||
+                   CompatBrowsers.Contains(packageName);
+        }
+
         public static async Task<List<FilledItem>> GetFillItemsAsync(Parser parser, ICipherService cipherService)
         {
             if (parser.FieldCollection.FillableForLogin)
@@ -132,14 +145,58 @@ namespace Bit.Droid.Autofill
             return new List<FilledItem>();
         }
 
-        public static FillResponse BuildFillResponse(Parser parser, List<FilledItem> items, bool locked)
+        public static FillResponse BuildFillResponse(Parser parser, List<FilledItem> items, bool locked,
+            FillRequest fillRequest = null)
         {
+            // Acquire inline presentation specs on Android 11+
+            IList<InlinePresentationSpec> inlinePresentationSpecs = null;
+            var inlinePresentationSpecsCount = 0;
+            var inlineMaxSuggestedCount = 0;
+            if (fillRequest != null)
+            {
+                if ((int)Build.VERSION.SdkInt >= 30)
+                {
+                    var inlineSuggestionsRequest = fillRequest.InlineSuggestionsRequest;
+                    if (inlineSuggestionsRequest != null)
+                    {
+                        // -1 to make room for 'open vault' option
+                        inlineMaxSuggestedCount = inlineSuggestionsRequest.MaxSuggestionCount - 1;
+                    }
+                    inlinePresentationSpecs = inlineSuggestionsRequest?.InlinePresentationSpecs;
+                    if (inlinePresentationSpecs != null)
+                    {
+                        inlinePresentationSpecsCount = inlinePresentationSpecs.Count;
+                    }
+                }
+            }
+            
+            // Build response
             var responseBuilder = new FillResponse.Builder();
             if (items != null && items.Count > 0)
             {
-                foreach (var item in items)
+                var maxItems = items.Count;
+                if (inlineMaxSuggestedCount > 0)
                 {
-                    var dataset = BuildDataset(parser.ApplicationContext, parser.FieldCollection, item);
+                    maxItems = Math.Min(maxItems, inlineMaxSuggestedCount);
+                }
+                for (int i = 0; i < maxItems; i++)
+                {
+                    InlinePresentationSpec inlinePresentationSpec = null;
+                    if (inlinePresentationSpecs != null)
+                    {
+                        if (i < inlinePresentationSpecsCount)
+                        {
+                            inlinePresentationSpec = inlinePresentationSpecs[i];
+                        }
+                        else
+                        {
+                            // If the max suggestion count is larger than the number of specs in the list, then
+                            // the last spec is used for the remainder of the suggestions
+                            inlinePresentationSpec = inlinePresentationSpecs[inlinePresentationSpecsCount - 1];
+                        }
+                    }
+                    var dataset = BuildDataset(parser.ApplicationContext, parser.FieldCollection, items[i], 
+                        inlinePresentationSpec);
                     if (dataset != null)
                     {
                         responseBuilder.AddDataset(dataset);
@@ -147,24 +204,39 @@ namespace Bit.Droid.Autofill
                 }
             }
             responseBuilder.AddDataset(BuildVaultDataset(parser.ApplicationContext, parser.FieldCollection,
-                parser.Uri, locked));
-            AddSaveInfo(parser, responseBuilder, parser.FieldCollection);
+                parser.Uri, locked, inlinePresentationSpecs));
+            AddSaveInfo(parser, fillRequest, responseBuilder, parser.FieldCollection);
             responseBuilder.SetIgnoredIds(parser.FieldCollection.IgnoreAutofillIds.ToArray());
             return responseBuilder.Build();
         }
 
-        public static Dataset BuildDataset(Context context, FieldCollection fields, FilledItem filledItem)
+        public static Dataset BuildDataset(Context context, FieldCollection fields, FilledItem filledItem,
+            InlinePresentationSpec inlinePresentationSpec = null)
         {
-            var datasetBuilder = new Dataset.Builder(
-                BuildListView(filledItem.Name, filledItem.Subtitle, filledItem.Icon, context));
-            if (filledItem.ApplyToFields(fields, datasetBuilder))
+            var view = BuildOverlayPresentation(
+                filledItem.Name,
+                filledItem.Subtitle,
+                filledItem.Icon,
+                context);
+            
+            var inlinePresentation = BuildInlinePresentation(
+                inlinePresentationSpec, 
+                filledItem.Name, 
+                filledItem.Subtitle, 
+                filledItem.Icon, 
+                null, 
+                context);
+
+            var datasetBuilder = new Dataset.Builder();
+            if (filledItem.ApplyToFields(fields, datasetBuilder, view, inlinePresentation))
             {
                 return datasetBuilder.Build();
             }
             return null;
         }
 
-        public static Dataset BuildVaultDataset(Context context, FieldCollection fields, string uri, bool locked)
+        public static Dataset BuildVaultDataset(Context context, FieldCollection fields, string uri, bool locked,
+            IList<InlinePresentationSpec> inlinePresentationSpecs = null)
         {
             var intent = new Intent(context, typeof(MainActivity));
             intent.PutExtra("autofillFramework", true);
@@ -188,24 +260,39 @@ namespace Bit.Droid.Autofill
             var pendingIntent = PendingIntent.GetActivity(context, ++_pendingIntentId, intent,
                 PendingIntentFlags.CancelCurrent);
 
-            var view = BuildListView(
+            var view = BuildOverlayPresentation(
                 AppResources.AutofillWithBitwarden,
                 locked ? AppResources.VaultIsLocked : AppResources.GoToMyVault,
                 Resource.Drawable.icon,
                 context);
 
-            var datasetBuilder = new Dataset.Builder(view);
-            datasetBuilder.SetAuthentication(pendingIntent.IntentSender);
+            var inlinePresentation = BuildInlinePresentation(
+                inlinePresentationSpecs?.Last(), 
+                AppResources.AutofillWithBitwarden, 
+                locked ? AppResources.VaultIsLocked : AppResources.GoToMyVault, 
+                Resource.Drawable.icon, 
+                pendingIntent, 
+                context);
+
+            var datasetBuilder = new Dataset.Builder();
+            datasetBuilder.SetAuthentication(pendingIntent?.IntentSender);
 
             // Dataset must have a value set. We will reset this in the main activity when the real item is chosen.
             foreach (var autofillId in fields.AutofillIds)
             {
-                datasetBuilder.SetValue(autofillId, AutofillValue.ForText("PLACEHOLDER"));
+                if (inlinePresentation != null)
+                {
+                    datasetBuilder.SetValue(autofillId, AutofillValue.ForText("PLACEHOLDER"), view, inlinePresentation);
+                }
+                else
+                {
+                    datasetBuilder.SetValue(autofillId, AutofillValue.ForText("PLACEHOLDER"), view);
+                }
             }
             return datasetBuilder.Build();
         }
 
-        public static RemoteViews BuildListView(string text, string subtext, int iconId, Context context)
+        public static RemoteViews BuildOverlayPresentation(string text, string subtext, int iconId, Context context)
         {
             var packageName = context.PackageName;
             var view = new RemoteViews(packageName, Resource.Layout.autofill_listitem);
@@ -215,14 +302,103 @@ namespace Bit.Droid.Autofill
             return view;
         }
 
-        public static void AddSaveInfo(Parser parser, FillResponse.Builder responseBuilder, FieldCollection fields)
+        public static InlinePresentation BuildInlinePresentation(InlinePresentationSpec inlinePresentationSpec,
+            string text, string subtext, int iconId, PendingIntent pendingIntent, Context context)
         {
+            if ((int)Build.VERSION.SdkInt < 30 || inlinePresentationSpec == null)
+            {
+                return null;
+            }
+            if (pendingIntent == null)
+            {
+                // InlinePresentation requires nonNull pending intent (even though we only utilize one for the
+                // "my vault" presentation) so we're including an empty one here
+                pendingIntent = PendingIntent.GetService(context, 0, new Intent(),
+                    PendingIntentFlags.OneShot | PendingIntentFlags.UpdateCurrent);
+            }
+            var slice = CreateInlinePresentationSlice(
+                inlinePresentationSpec,
+                text,
+                subtext,
+                iconId,
+                "Autofill option",
+                pendingIntent,
+                context);
+            if (slice != null)
+            {
+                return new InlinePresentation(slice, inlinePresentationSpec, false);
+            }
+            return null;
+        }
+
+        private static Slice CreateInlinePresentationSlice(
+            InlinePresentationSpec inlinePresentationSpec,
+            string text,
+            string subtext,
+            int iconId,
+            string contentDescription,
+            PendingIntent pendingIntent,
+            Context context)
+        {
+            var imeStyle = inlinePresentationSpec.Style;
+            if (!UiVersions.getVersions(imeStyle).contains(UiVersions.INLINE_UI_VERSION_1))
+            {
+                return null;
+            }
+        
+            Content.Builder builder = InlineSuggestionUi.newContentBuilder(pendingIntent)
+                    .setContentDescription(contentDescription);
+            if (!string.IsNullOrWhiteSpace(text))
+            {
+                builder.setTitle(text);
+            }
+            if (!string.IsNullOrWhiteSpace(subtext))
+            {
+                builder.setSubtitle(subtext);
+            }
+            if (iconId > 0)
+            {
+                var icon = Icon.CreateWithResource(context, iconId);
+                if (icon != null)
+                {
+                    if (iconId == Resource.Drawable.icon)
+                    {
+                        // Don't tint our logo
+                        icon.SetTintBlendMode(BlendMode.Dst);
+                    }
+                    builder.setStartIcon(icon);
+                }
+            }
+            return builder.build().getSlice();
+        }
+
+        public static void AddSaveInfo(Parser parser, FillRequest fillRequest, FillResponse.Builder responseBuilder, 
+            FieldCollection fields)
+        {
+            // Attempt to automatically establish compat request mode on Android 10+
+            bool? compatRequest = null;
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.Q && fillRequest != null)
+            {
+                compatRequest = (fillRequest.Flags | FillRequest.FlagCompatibilityModeRequest) == fillRequest.Flags;
+            }
             // Docs state that password fields cannot be reliably saved in Compat mode since they will show as
             // masked values.
-            var compatBrowser = CompatBrowsers.Contains(parser.PackageName);
-            if (compatBrowser && fields.SaveType == SaveDataType.Password)
+            bool compatBrowser;
+            if (compatRequest != null)
             {
-                return;
+                compatBrowser = compatRequest.Value;
+                if (compatRequest.Value  && fields.SaveType == SaveDataType.Password)
+                {
+                    return;
+                }
+            }
+            else
+            {
+                compatBrowser = CompatBrowsers.Contains(parser.PackageName);
+                if (compatBrowser && fields.SaveType == SaveDataType.Password)
+                {
+                    return;
+                }
             }
 
             var requiredIds = fields.GetRequiredSaveFields();

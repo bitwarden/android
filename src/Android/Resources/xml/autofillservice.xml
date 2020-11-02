@@ -9,7 +9,8 @@
 
     - ... to keep this list in sync with values in AccessibilityHelpers.SupportedBrowsers [Section A], too.
   -->
-<autofill-service xmlns:android="http://schemas.android.com/apk/res/android">
+<autofill-service xmlns:android="http://schemas.android.com/apk/res/android"
+    android:supportsInlineSuggestions="true">
   <compatibility-package
     android:name="com.amazon.cloud9"
     android:maxLongVersionCode="10000000000"/>

@@ -64,7 +64,7 @@ namespace Bit.Droid.Autofill
             }
 
             // build response
-            var response = AutofillHelpers.BuildFillResponse(parser, items, locked);
+            var response = AutofillHelpers.BuildFillResponse(parser, items, locked, request);
             callback.OnSuccess(response);
         }
 
