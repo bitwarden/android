@@ -30,11 +30,6 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - name: Set up NuGet
-        uses: nuget/setup-nuget@v1
-        with:
-          nuget-version: 'latest'
-
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@v1
 
