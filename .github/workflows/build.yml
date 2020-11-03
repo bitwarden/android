@@ -36,7 +36,7 @@ jobs:
           nuget-version: 'latest'
 
       - name: Set up MSBuild
-        uses: microsoft/setup-msbuild@v1.0.0
+        uses: microsoft/setup-msbuild@v1
 
       - name: Print environment
         run: |
