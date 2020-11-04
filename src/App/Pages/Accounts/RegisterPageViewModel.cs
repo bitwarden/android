@@ -56,6 +56,13 @@ namespace Bit.App.Pages
             set => SetProperty(ref _acceptPolicies, value);
         }
         
+        public Thickness GetSwitchMargin
+        {
+            get => Device.RuntimePlatform == Device.Android 
+                ? new Thickness(0, 0, 0, 0) 
+                : new Thickness(0, 0, 10, 0);
+        }
+        
         public bool ShowTerms { get; set; }
         public Command SubmitCommand { get; }
         public Command TogglePasswordCommand { get; }
