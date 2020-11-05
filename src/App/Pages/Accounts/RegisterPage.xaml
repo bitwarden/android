@@ -130,7 +130,7 @@
                         IsToggled="{Binding AcceptPolicies}"
                         StyleClass="box-value"
                         HorizontalOptions="Start"
-                        Margin="{Binding GetSwitchMargin}"/>
+                        Margin="{Binding SwitchMargin}"/>
                     <Label StyleClass="box-footer-label"
                            HorizontalOptions="Fill">
                         <Label.FormattedText>
