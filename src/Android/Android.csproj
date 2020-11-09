@@ -79,7 +79,7 @@
     <PackageReference Include="Portable.BouncyCastle">
       <Version>1.8.6.7</Version>
     </PackageReference>
-    <PackageReference Include="Xamarin.AndroidX.AutoFill" Version="1.1.0.3-alpha01" />
+    <PackageReference Include="Xamarin.AndroidX.AutoFill" Version="1.1.0.3-beta01" />
     <PackageReference Include="Xamarin.Essentials">
       <Version>1.5.3.2</Version>
     </PackageReference>

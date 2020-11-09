@@ -10,10 +10,13 @@ using Android.App.Slices;
 using Android.Graphics;
 using Android.Graphics.Drawables;
 using Android.OS;
+using Android.Runtime;
 using Android.Widget.Inline;
 using Bit.App.Resources;
 using Bit.Core.Enums;
 using Android.Views.Autofill;
+using AndroidX.AutoFill.Inline;
+using AndroidX.AutoFill.Inline.V1;
 using Bit.Core.Abstractions;
 using SaveFlags = Android.Service.Autofill.SaveFlags;
 
@@ -159,8 +162,7 @@ namespace Bit.Droid.Autofill
                     var inlineSuggestionsRequest = fillRequest.InlineSuggestionsRequest;
                     if (inlineSuggestionsRequest != null)
                     {
-                        // -1 to make room for 'open vault' option
-                        inlineMaxSuggestedCount = inlineSuggestionsRequest.MaxSuggestionCount - 1;
+                        inlineMaxSuggestedCount = inlineSuggestionsRequest.MaxSuggestionCount;
                     }
                     inlinePresentationSpecs = inlineSuggestionsRequest?.InlinePresentationSpecs;
                     if (inlinePresentationSpecs != null)
@@ -177,7 +179,8 @@ namespace Bit.Droid.Autofill
                 var maxItems = items.Count;
                 if (inlineMaxSuggestedCount > 0)
                 {
-                    maxItems = Math.Min(maxItems, inlineMaxSuggestedCount);
+                    // -1 to adjust for 'open vault' option
+                    maxItems = Math.Min(maxItems, inlineMaxSuggestedCount - 1);
                 }
                 for (int i = 0; i < maxItems; i++)
                 {
@@ -268,8 +271,8 @@ namespace Bit.Droid.Autofill
 
             var inlinePresentation = BuildInlinePresentation(
                 inlinePresentationSpecs?.Last(), 
-                AppResources.AutofillWithBitwarden, 
-                locked ? AppResources.VaultIsLocked : AppResources.GoToMyVault, 
+                AppResources.Bitwarden, 
+                locked ? AppResources.VaultIsLocked : AppResources.MyVault, 
                 Resource.Drawable.icon, 
                 pendingIntent, 
                 context);
@@ -341,20 +344,19 @@ namespace Bit.Droid.Autofill
             Context context)
         {
             var imeStyle = inlinePresentationSpec.Style;
-            if (!UiVersions.getVersions(imeStyle).contains(UiVersions.INLINE_UI_VERSION_1))
+            if (!UiVersions.GetVersions(imeStyle).Contains(UiVersions.InlineUiVersion1))
             {
                 return null;
             }
-        
-            Content.Builder builder = InlineSuggestionUi.newContentBuilder(pendingIntent)
-                    .setContentDescription(contentDescription);
+            var contentBuilder = InlineSuggestionUi.NewContentBuilder(pendingIntent)
+                .SetContentDescription(contentDescription);
             if (!string.IsNullOrWhiteSpace(text))
             {
-                builder.setTitle(text);
+                contentBuilder.SetTitle(text);
             }
             if (!string.IsNullOrWhiteSpace(subtext))
             {
-                builder.setSubtitle(subtext);
+                contentBuilder.SetSubtitle(subtext);
             }
             if (iconId > 0)
             {
@@ -366,10 +368,10 @@ namespace Bit.Droid.Autofill
                         // Don't tint our logo
                         icon.SetTintBlendMode(BlendMode.Dst);
                     }
-                    builder.setStartIcon(icon);
+                    contentBuilder.SetStartIcon(icon);
                 }
             }
-            return builder.build().getSlice();
+            return contentBuilder.Build().JavaCast<InlineSuggestionUi.Content>()?.Slice;
         }
 
         public static void AddSaveInfo(Parser parser, FillRequest fillRequest, FillResponse.Builder responseBuilder, 
