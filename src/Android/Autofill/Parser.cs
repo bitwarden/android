@@ -111,7 +111,8 @@ namespace Bit.Droid.Autofill
             {
                 PackageName = titlePackageId;
             }
-            if (!AutofillHelpers.IsBrowserSupported(PackageName))
+            if (!AutofillHelpers.TrustedBrowsers.Contains(PackageName) &&
+                !AutofillHelpers.CompatBrowsers.Contains(PackageName))
             {
                 Website = null;
             }

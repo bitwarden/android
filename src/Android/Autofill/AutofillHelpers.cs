@@ -122,12 +122,6 @@ namespace Bit.Droid.Autofill
             "androidapp://com.oneplus.applocker",
         };
 
-        public static bool IsBrowserSupported(string packageName)
-        {
-            return TrustedBrowsers.Contains(packageName) ||
-                   CompatBrowsers.Contains(packageName);
-        }
-
         public static async Task<List<FilledItem>> GetFillItemsAsync(Parser parser, ICipherService cipherService)
         {
             if (parser.FieldCollection.FillableForLogin)
@@ -216,7 +210,7 @@ namespace Bit.Droid.Autofill
         public static Dataset BuildDataset(Context context, FieldCollection fields, FilledItem filledItem,
             InlinePresentationSpec inlinePresentationSpec = null)
         {
-            var view = BuildOverlayPresentation(
+            var overlayPresentation = BuildOverlayPresentation(
                 filledItem.Name,
                 filledItem.Subtitle,
                 filledItem.Icon,
@@ -230,8 +224,12 @@ namespace Bit.Droid.Autofill
                 null, 
                 context);
 
-            var datasetBuilder = new Dataset.Builder();
-            if (filledItem.ApplyToFields(fields, datasetBuilder, view, inlinePresentation))
+            var datasetBuilder = new Dataset.Builder(overlayPresentation);
+            if (inlinePresentation != null)
+            {
+                datasetBuilder.SetInlinePresentation(inlinePresentation);
+            }
+            if (filledItem.ApplyToFields(fields, datasetBuilder))
             {
                 return datasetBuilder.Build();
             }
@@ -263,7 +261,7 @@ namespace Bit.Droid.Autofill
             var pendingIntent = PendingIntent.GetActivity(context, ++_pendingIntentId, intent,
                 PendingIntentFlags.CancelCurrent);
 
-            var view = BuildOverlayPresentation(
+            var overlayPresentation = BuildOverlayPresentation(
                 AppResources.AutofillWithBitwarden,
                 locked ? AppResources.VaultIsLocked : AppResources.GoToMyVault,
                 Resource.Drawable.icon,
@@ -277,20 +275,17 @@ namespace Bit.Droid.Autofill
                 pendingIntent, 
                 context);
 
-            var datasetBuilder = new Dataset.Builder();
+            var datasetBuilder = new Dataset.Builder(overlayPresentation);
+            if (inlinePresentation != null)
+            {
+                datasetBuilder.SetInlinePresentation(inlinePresentation);
+            }
             datasetBuilder.SetAuthentication(pendingIntent?.IntentSender);
 
             // Dataset must have a value set. We will reset this in the main activity when the real item is chosen.
             foreach (var autofillId in fields.AutofillIds)
             {
-                if (inlinePresentation != null)
-                {
-                    datasetBuilder.SetValue(autofillId, AutofillValue.ForText("PLACEHOLDER"), view, inlinePresentation);
-                }
-                else
-                {
-                    datasetBuilder.SetValue(autofillId, AutofillValue.ForText("PLACEHOLDER"), view);
-                }
+                datasetBuilder.SetValue(autofillId, AutofillValue.ForText("PLACEHOLDER"));
             }
             return datasetBuilder.Build();
         }
