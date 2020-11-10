@@ -1278,7 +1278,7 @@
     <value>1. Відкрийте "Параметри" свого пристрою iOS</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Оберіть "Паролі й облікові записи"</value>
+    <value>2. Оберіть "Паролі"</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
     <value>3. Торкніться до "Автозаповнення паролів"</value>
@@ -1542,7 +1542,7 @@
     <value>Автозаповнення дозволяє безпечно отримувати доступ до вашого сховища Bitwarden з інших вебсайтів та програм. Схоже, що ви не активували функцію автозаповнення Bitwarden. Увімкніть автозаповнення на екрані налаштувань.</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
-    <value>Зміни теми застосуються після перезапуску додатка.</value>
+    <value>Зміни теми застосуються після перезапуску програми.</value>
   </data>
   <data name="Capitalize" xml:space="preserve">
     <value>Великі літери</value>
@@ -1730,5 +1730,18 @@
   </data>
   <data name="Loading" xml:space="preserve">
     <value>Завантаження</value>
+  </data>
+  <data name="AcceptPolicies" xml:space="preserve">
+    <value>By activating this switch you agree to the following:
+</value>
+  </data>
+  <data name="AcceptPoliciesError" xml:space="preserve">
+    <value>Terms of Service and Privacy Policy have not been acknowledged.</value>
+  </data>
+  <data name="TermsOfService" xml:space="preserve">
+    <value>Terms of Service</value>
+  </data>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>Privacy Policy</value>
   </data>
 </root>

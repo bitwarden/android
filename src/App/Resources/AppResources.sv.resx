@@ -1690,7 +1690,7 @@
     <value>Logga in snabbt genom organisationens inloggningsportal. Ange organisationens identifierare för att börja.</value>
   </data>
   <data name="OrgIdentifier" xml:space="preserve">
-    <value>Organisationens Identifierare</value>
+    <value>Organisationens identifierare</value>
   </data>
   <data name="LoginSsoError" xml:space="preserve">
     <value>Det gick för närvarande inte att logga in med SSO</value>
@@ -1730,5 +1730,18 @@
   </data>
   <data name="Loading" xml:space="preserve">
     <value>Laddar</value>
+  </data>
+  <data name="AcceptPolicies" xml:space="preserve">
+    <value>By activating this switch you agree to the following:
+</value>
+  </data>
+  <data name="AcceptPoliciesError" xml:space="preserve">
+    <value>Terms of Service and Privacy Policy have not been acknowledged.</value>
+  </data>
+  <data name="TermsOfService" xml:space="preserve">
+    <value>Terms of Service</value>
+  </data>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>Privacy Policy</value>
   </data>
 </root>

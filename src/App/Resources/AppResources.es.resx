@@ -412,7 +412,7 @@
     <value>Extensión de Aplicación de Bitwarden</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
-    <value>La forma mas fácil de añadir nuevas entradas a tu caja fuerte es utilizando la Extensión de Navegador de Bitwarden. Aprende más sobre como utilizar este servicio yendo a la sección "Herramientas".</value>
+    <value>La forma más fácil de añadir nuevas entradas a su caja fuerte es utilizando la extensión de navegador de Bitwarden. Aprenda más sobre cómo utilizar este servicio en la sección de "Ajustes".</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
     <value>Utiliza Bitwarden en Safari y otras aplicaciones para autorellenar tus entradas.</value>
@@ -477,7 +477,7 @@
     <value>¡Ya estás identificado!</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
-    <value>Tus entradas son ahora fácilmente accesibles desde Safari, Chrome y otras aplicaciones soportadas.</value>
+    <value>Sus entradas son ahora fácilmente accesibles desde Safari, Chrome y otras aplicaciones soportadas.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
     <value>En Safari y Chrome, busca Bitwarden en el icono compartir (pista: desplazate a la derecha en la última fila del menú).</value>
@@ -534,13 +534,13 @@
     <value>Inmediatamente</value>
   </data>
   <data name="VaultTimeout" xml:space="preserve">
-    <value>Tiempo de espera de la bóveda</value>
+    <value>Tiempo de espera de la caja fuerte</value>
   </data>
   <data name="VaultTimeoutAction" xml:space="preserve">
-    <value>Acción de tiempo de espera de la bóveda</value>
+    <value>Acción de tiempo de espera de la caja fuerte</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
-    <value>Cerrar sesión eliminará todo el acceso a su bóveda y requiere autenticación en línea después del período de espera. ¿Estás seguro de que quieres usar esta configuración?</value>
+    <value>Cerrar sesión eliminará todo el acceso a su caja fuerte y requiere autenticación en línea después del período de espera. ¿Está seguro de que quiere usar esta configuración?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>Iniciando sesión...</value>
@@ -759,7 +759,7 @@
     <value>Estado</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
-    <value>La forma mas fácil de añadir nuevas entradas a tu caja fuerte es con el Servicio de Autorellenado de Bitwarden. Aprende más sobre como utilizar este servicio yendo a la sección "Herramientas".</value>
+    <value>La forma más fácil de añadir nuevas entradas a su caja fuerte es utilizando el Servicio de Autorellenado de Bitwarden. Aprenda más sobre cómo utilizar este servicio en la sección de "Ajustes".</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Autorellenar</value>
@@ -1240,7 +1240,7 @@
     <value>Mantén tu Yubikey cerca de la parte superior del dispositivo.</value>
   </data>
   <data name="TryAgain" xml:space="preserve">
-    <value>Vuelve a intentarlo</value>
+    <value>Inténtelo de nuevo</value>
   </data>
   <data name="YubiKeyInstructionIos" xml:space="preserve">
     <value>Para continuar, mantén tu YubiKey NEO contra la parte trasera de tu dispositivo.</value>
@@ -1263,7 +1263,7 @@
     <value>Debes identificarte en la aplicación principal de Bitwarden antes de poder utilizar Autorellenado.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
-    <value>Tus entradas son ahora fácilmente accesibles desde tu teclado mientras te identificas en aplicaciones y sitios web.</value>
+    <value>Sus entradas son ahora fácilmente accesibles desde su teclado mientras se identifica en aplicaciones y sitios web.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
     <value>Te recomendamos deshabilitar cualquier otra aplicación de Autorellenado desde Ajustes si no piensas utilizarlas.</value>
@@ -1293,7 +1293,7 @@
     <value>Autorellenado de contraseña</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
-    <value>La forma más fácil de añadir nuevas entradas a tu caja fuerte es usando la extensión de Autorellenado de contraseñas Bitwarden. Aprende más sobre como utilizar la extensión de Autorellenado de contraseñas Bitwarden yendo a la pantalla de Herramientas.</value>
+    <value>La forma más fácil de añadir nuevas entradas a su caja fuerte es utilizando la extensión de Autorellenado de contraseñas de Bitwarden. Aprenda más sobre cómo utilizar la extensión de Autorellenado de contraseñas de Bitwarden en la sección de "Ajustes".</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
     <value>Dirección de correo electrónico inválida.</value>
@@ -1325,10 +1325,10 @@
     <value>Comprobar si la contraseña ha sido comprometida.</value>
   </data>
   <data name="PasswordExposed" xml:space="preserve">
-    <value>Esta contraseña ha sido expuesta {0} veces(s) en filtraciones de datos. Deberías cambiarla.</value>
+    <value>Esta contraseña ha sido expuesta {0} veces(s) en filtraciones de datos. Debería cambiarla.</value>
   </data>
   <data name="PasswordSafe" xml:space="preserve">
-    <value>Esta contraseña no fue encontrada en ninguna filtración de datos conocida. Deberías poder utilizarla de forma segura.</value>
+    <value>Esta contraseña no fue encontrada en ninguna filtración de datos conocida. Debería poder utilizarla de forma segura.</value>
   </data>
   <data name="IdentityName" xml:space="preserve">
     <value>Nombre de la identidad</value>
@@ -1382,7 +1382,7 @@
     <value>El elemento ha sido compartido.</value>
   </data>
   <data name="SelectOneCollection" xml:space="preserve">
-    <value>Debes seleccionar al menos una colección.</value>
+    <value>Debe seleccionar al menos una colección.</value>
   </data>
   <data name="Share" xml:space="preserve">
     <value>Compartir</value>
@@ -1394,7 +1394,7 @@
     <value>No hay organizaciones que listar.</value>
   </data>
   <data name="ShareDesc" xml:space="preserve">
-    <value>Elige una organización con la que quieras compartir este elemento. Compartir transfiere la propiedad del elemento a la organización. No podrás volver a ser el propietario de este elemento una vez haya sido compartido.</value>
+    <value>Elija una organización con la que quiera compartir este elemento. Compartir transfiere la propiedad del elemento a la organización. No podrá volver a ser el propietario de este elemento una vez haya sido compartido.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
     <value>Número de palabras</value>
@@ -1443,7 +1443,7 @@
     <value>30 minutos</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
-    <value>Establece tu código PIN para desbloquear Bitwarden. Tus ajustes de PIN se reiniciarán si alguna vez cierras tu sesión completamente de la aplicación.</value>
+    <value>Establece su código PIN para desbloquear Bitwarden. Sus ajustes de PIN se reiniciarán si alguna vez cierra su sesión completamente de la aplicación.</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
     <value>Iniciado como {0} en {1}.</value>
@@ -1453,7 +1453,7 @@
     <value>Tu caja fuerte está bloqueada. Verifica tu contraseña maestra para continuar.</value>
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
-    <value>Tu caja fuerte está bloqueada. Verifica tu código PIN para continuar.</value>
+    <value>Su caja fuerte está bloqueada. Verifique su código PIN para continuar.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Oscuro</value>
@@ -1514,10 +1514,10 @@
     <value>Salir</value>
   </data>
   <data name="ExitConfirmation" xml:space="preserve">
-    <value>¿Estás seguro de que deseas salir de Bitwarden?</value>
+    <value>¿Está seguro de que desea salir de Bitwarden?</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
-    <value>You you want to require unlocking with your master password when the application is restarted?</value>
+    <value>¿Quiere solicitar el desbloqueo con su contraseña maestra cuando se reinicie la aplicación?</value>
   </data>
   <data name="Black" xml:space="preserve">
     <value>Negro</value>
@@ -1530,10 +1530,10 @@
     <value>URIs que están en la lista negra no ofrecerán auto-relleno. La lista de aplicaciones debe ser separada por comas. Ej: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
   <data name="DisableSavePrompt" xml:space="preserve">
-    <value>Desactivar Guardar Prompt</value>
+    <value>Desactivar el aviso de guardado</value>
   </data>
   <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>La "Notificación para añadir entradas" pregunta automáticamente si quieres salvar nuevas entradas en tu caja fuerte cuando te identificas en un sitio web por primera vez.</value>
+    <value>El "aviso de guardado" pregunta automáticamente si quiere guardar nuevas entradas en su caja fuerte cuando se identifica en un sitio web por primera vez.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
     <value>Al reiniciar la aplicación</value>
@@ -1542,7 +1542,7 @@
     <value>El autocompletado facilita el acceso seguro a la caja fuerte de Bitwarden desde otros sitios web y aplicaciones. Parece que no has habilitado un servicio de autocompletado para Bitwarden. Habilita el autocompletado para Bitwarden desde la pantalla "Ajustes".</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
-    <value>Los cambios de tu tema se aplicarán al reiniciar la aplicación.</value>
+    <value>Los cambios en el tema se aplicarán al reiniciar la aplicación.</value>
   </data>
   <data name="Capitalize" xml:space="preserve">
     <value>Mayúsculas iniciales</value>
@@ -1561,16 +1561,16 @@
     <value>Alternar visibilidad</value>
   </data>
   <data name="LoginExpired" xml:space="preserve">
-    <value>Tu sesión ha expirado.</value>
+    <value>Su sesión ha expirado.</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
-    <value>Utilizar biométricos para verificar.</value>
+    <value>Verificación biométrica</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
     <value>Biometría</value>
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
-    <value>Usar Biométricas para desbloquear</value>
+    <value>Utilizar biometría para desbloquear</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
     <value>Bitwarden necesita atención - Ver "Servicio de Accesibilidad Auto-rellenar" desde los ajustes de Bitwarden</value>
@@ -1597,16 +1597,16 @@
     <value>Formato de archivo</value>
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
-    <value>Introduce tu contraseña maestra para exportar la información de tu caja fuerte.</value>
+    <value>Introduzca su contraseña maestra para exportar la información de su caja fuerte.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
-    <value>Esta exportación contiene tus datos de la caja fuerte en un formato no cifrado. No deberías almacenar o enviar el archivo exportado por canales no seguros (como el correo electrónico). Elimínalo inmediatamente cuando termines de utilizarlo.</value>
+    <value>Ésta exportación contiene sus datos de la caja fuerte en un formato no cifrado. No debería almacenar o enviar el archivo exportado por canales no seguros (como el correo electrónico). Elimínelo inmediatamente cuando termine de utilizarlo.</value>
   </data>
   <data name="Warning" xml:space="preserve">
     <value>Advertencia</value>
   </data>
   <data name="ExportVaultFailure" xml:space="preserve">
-    <value>Hubo un problema al exportar tu caja fuerte. Si el problema persiste, deberás exportar desde la caja fuerte en la web.</value>
+    <value>Hubo un problema al exportar su caja fuerte. Si el problema persiste, deberá exportar desde la caja fuerte en la web.</value>
   </data>
   <data name="ExportVaultSuccess" xml:space="preserve">
     <value>Caja fuerte exportada con éxito</value>
@@ -1730,5 +1730,18 @@
   </data>
   <data name="Loading" xml:space="preserve">
     <value>Cargando</value>
+  </data>
+  <data name="AcceptPolicies" xml:space="preserve">
+    <value>By activating this switch you agree to the following:
+</value>
+  </data>
+  <data name="AcceptPoliciesError" xml:space="preserve">
+    <value>Terms of Service and Privacy Policy have not been acknowledged.</value>
+  </data>
+  <data name="TermsOfService" xml:space="preserve">
+    <value>Terms of Service</value>
+  </data>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>Privacy Policy</value>
   </data>
 </root>

@@ -695,7 +695,7 @@
     <value>用 {0} 解锁</value>
   </data>
   <data name="UnlockWithPIN" xml:space="preserve">
-    <value>用 PIN 码解锁</value>
+    <value>使用 PIN 码解锁</value>
   </data>
   <data name="Validating" xml:space="preserve">
     <value>正在验证</value>
@@ -824,7 +824,7 @@
     <value>两步登录选项</value>
   </data>
   <data name="UseAnotherTwoStepMethod" xml:space="preserve">
-    <value>使用其他两步登录方法</value>
+    <value>使用其他两步登录方式</value>
   </data>
   <data name="VerificationEmailNotSent" xml:space="preserve">
     <value>无法发送验证电子邮件。请再试一次。</value>
@@ -1671,7 +1671,7 @@
     <comment>Confirmation alert message when restoring a soft-deleted cipher.</comment>
   </data>
   <data name="DoYouReallyWantToSoftDeleteCipher" xml:space="preserve">
-    <value>您确定要发送到回收站吗？</value>
+    <value>您确定要将其发送到回收站吗？</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="BiometricInvalidated" xml:space="preserve">
@@ -1730,5 +1730,18 @@
   </data>
   <data name="Loading" xml:space="preserve">
     <value>载入中</value>
+  </data>
+  <data name="AcceptPolicies" xml:space="preserve">
+    <value>By activating this switch you agree to the following:
+</value>
+  </data>
+  <data name="AcceptPoliciesError" xml:space="preserve">
+    <value>Terms of Service and Privacy Policy have not been acknowledged.</value>
+  </data>
+  <data name="TermsOfService" xml:space="preserve">
+    <value>Terms of Service</value>
+  </data>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>Privacy Policy</value>
   </data>
 </root>
