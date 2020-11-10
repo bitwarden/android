@@ -1093,7 +1093,7 @@
     <value>സെപ്റ്റംബർ</value>
   </data>
   <data name="SSN" xml:space="preserve">
-    <value>സാമൂഹിക സുരക്ഷാ നമ്പർ</value>
+    <value>ആധാർ നമ്പർ</value>
   </data>
   <data name="StateProvince" xml:space="preserve">
     <value>സംസ്ഥാനം/ ദേശം</value>
@@ -1702,7 +1702,7 @@
     <value>SSO ഉപയോഗിച്ച് പ്രവേശനം പൂർത്തിയാക്കാനും, നിങ്ങളുടെ വാൾട് ആക്സസ് ചെയ്യാനും സുരക്ഷിതമാക്കാനും ഒരു പ്രാഥമിക പാസ്‌വേഡ് സജ്ജമാക്കുക.</value>
   </data>
   <data name="MasterPasswordPolicyInEffect" xml:space="preserve">
-    <value>One or more organization policies require your master password to meet the following requirements:</value>
+    <value>ഒന്നോ അതിലധികമോ ഓർഗനൈസേഷൻ നയങ്ങൾക്ക് ഇനിപ്പറയുന്ന ആവശ്യകതകൾ നിറവേറ്റുന്നതിന് നിങ്ങളുടെ മാസ്റ്റർ പാസ്‌വേഡ് ആവശ്യമാണ്:</value>
   </data>
   <data name="PolicyInEffectMinComplexity" xml:space="preserve">
     <value>സങ്കീർണ്ണതയുടെ കുറഞ്ഞ സ്കോർ{0}</value>
@@ -1730,5 +1730,18 @@
   </data>
   <data name="Loading" xml:space="preserve">
     <value>ലഭ്യമാക്കുന്നു</value>
+  </data>
+  <data name="AcceptPolicies" xml:space="preserve">
+    <value>By activating this switch you agree to the following:
+</value>
+  </data>
+  <data name="AcceptPoliciesError" xml:space="preserve">
+    <value>Terms of Service and Privacy Policy have not been acknowledged.</value>
+  </data>
+  <data name="TermsOfService" xml:space="preserve">
+    <value>Terms of Service</value>
+  </data>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>Privacy Policy</value>
   </data>
 </root>
