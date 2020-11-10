@@ -149,21 +149,12 @@ namespace Bit.Droid.Autofill
             IList<InlinePresentationSpec> inlinePresentationSpecs = null;
             var inlinePresentationSpecsCount = 0;
             var inlineMaxSuggestedCount = 0;
-            if (fillRequest != null)
+            if (fillRequest != null && (int)Build.VERSION.SdkInt >= 30)
             {
-                if ((int)Build.VERSION.SdkInt >= 30)
-                {
-                    var inlineSuggestionsRequest = fillRequest.InlineSuggestionsRequest;
-                    if (inlineSuggestionsRequest != null)
-                    {
-                        inlineMaxSuggestedCount = inlineSuggestionsRequest.MaxSuggestionCount;
-                    }
-                    inlinePresentationSpecs = inlineSuggestionsRequest?.InlinePresentationSpecs;
-                    if (inlinePresentationSpecs != null)
-                    {
-                        inlinePresentationSpecsCount = inlinePresentationSpecs.Count;
-                    }
-                }
+                var inlineSuggestionsRequest = fillRequest.InlineSuggestionsRequest;
+                inlineMaxSuggestedCount = inlineSuggestionsRequest?.MaxSuggestionCount ?? 0;
+                inlinePresentationSpecs = inlineSuggestionsRequest?.InlinePresentationSpecs;
+                inlinePresentationSpecsCount = inlinePresentationSpecs?.Count ?? 0;
             }
             
             // Build response
