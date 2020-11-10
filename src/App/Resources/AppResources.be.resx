@@ -251,7 +251,7 @@
     <comment>Title for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InvalidMasterPassword" xml:space="preserve">
-    <value>Памылковы майстар-пароль. Паспрабуйце яшчэ раз.</value>
+    <value>Памылковы асноўны пароль. Паспрабуйце яшчэ раз.</value>
   </data>
   <data name="InvalidPIN" xml:space="preserve">
     <value>Памылковы PIN-код. Паспрабуйце яшчэ раз.</value>
@@ -276,7 +276,7 @@
     <value>Вы ўпэўнены, што хочаце выйсці?</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
-    <value>Майстар-пароль</value>
+    <value>Асноўны пароль</value>
     <comment>Label for a master password.</comment>
   </data>
   <data name="More" xml:space="preserve">
@@ -363,7 +363,7 @@
     <value>Праверка адбітка пальца</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
-    <value>Праверыць майстар-пароль</value>
+    <value>Праверыць асноўны пароль</value>
   </data>
   <data name="VerifyPIN" xml:space="preserve">
     <value>Праверыць PIN-код</value>
@@ -430,10 +430,10 @@
     <value>Вы можаце змяніць сваю электронную пошту на bitwarden.com. Перайсці на сайт зараз?</value>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
-    <value>Змяніць майстар-пароль</value>
+    <value>Змяніць асноўны пароль</value>
   </data>
   <data name="ChangePasswordConfirmation" xml:space="preserve">
-    <value>Вы можаце змяніць свой майстар-пароль на bitwarden.com. Перайсці на сайт зараз?</value>
+    <value>Вы можаце змяніць свой асноўны пароль на bitwarden.com. Перайсці на сайт зараз?</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Закрыць</value>
@@ -498,7 +498,7 @@
     <value>Згенерыраваць пароль</value>
   </data>
   <data name="GetPasswordHint" xml:space="preserve">
-    <value>Атрымаць падказку для майстра-пароля</value>
+    <value>Атрымаць падказку для асноўнага пароля</value>
   </data>
   <data name="ImportItems" xml:space="preserve">
     <value>Імпарт элементаў</value>
@@ -556,16 +556,16 @@
     <value>Памылковае пацвярджэнне пароля.</value>
   </data>
   <data name="MasterPasswordDescription" xml:space="preserve">
-    <value>Майстар-пароль — ключ да вашага бяспечнага сховішча. Ён вельмі важны, таму не забывайце яго. Аднавіць майстар-пароль немагчыма.</value>
+    <value>Асноўны пароль — ключ да вашага бяспечнага сховішча. Ён вельмі важны, таму не забывайце яго. Аднавіць асноўны пароль немагчыма.</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
-    <value>Падказка да майстра-пароля (неабавязкова)</value>
+    <value>Падказка да асноўнага пароля (неабавязкова)</value>
   </data>
   <data name="MasterPasswordHintDescription" xml:space="preserve">
-    <value>Падказка да майстра-пароля можа дапамагчы вам яго ўспомніць.</value>
+    <value>Падказка да асноўнага пароля можа дапамагчы вам яго ўспомніць.</value>
   </data>
   <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Майстар-пароль павінен быць даўжынёй не менш за 8 сімвалаў.</value>
+    <value>Асноўны пароль павінен быць даўжынёй не менш за 8 сімвалаў.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Мін. колькасць лічбаў</value>
@@ -622,7 +622,7 @@
     <value>Падказка да пароля</value>
   </data>
   <data name="PasswordHintAlert" xml:space="preserve">
-    <value>Мы адправілі вам на электронную пошту падказку для майстра-пароля.</value>
+    <value>Мы адправілі вам на электронную пошту падказку для асноўнага пароля.</value>
   </data>
   <data name="PasswordOverrideAlert" xml:space="preserve">
     <value>Вы ўпэўнены, што хочаце перазапісаць бягучы пароль?</value>
@@ -641,7 +641,7 @@
     <value>Стварыць новы пароль</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
-    <value>Увядзіце майстар-пароль паўторна</value>
+    <value>Увядзіце асноўны пароль паўторна</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
     <value>Пошук у сховішчы</value>
@@ -1450,7 +1450,7 @@
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
-    <value>Ваша сховішча заблакіравана. Каб працягнуць, увядзіце майстар-пароль.</value>
+    <value>Ваша сховішча заблакіравана. Каб працягнуць, увядзіце асноўны пароль.</value>
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Ваша сховішча заблакіравана. Каб працягнуць, увядзіце PIN-код.</value>
@@ -1517,7 +1517,7 @@
     <value>Вы сапраўды хочаце выйсці з Bitwarden?</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
-    <value>Ці жадаеце каб пасля перазапуску праграма патрабавала майстар-пароль для разблакіроўкі?</value>
+    <value>Ці жадаеце каб пасля перазапуску праграма патрабавала асноўны пароль для разблакіроўкі?</value>
   </data>
   <data name="Black" xml:space="preserve">
     <value>Чорная</value>
@@ -1597,7 +1597,7 @@
     <value>Фармат файла</value>
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
-    <value>Увядзіце ваш майстар-пароль для экспарту даных са сховішча.</value>
+    <value>Увядзіце ваш асноўны пароль для экспарту даных са сховішча.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Экспартуемы файл утрымлівае даныя вашага сховішча ў незашыфраваным фармаце. Яго не варта захоўваць ці адпраўляць па небяспечным каналам (напрыклад, па электроннай пошце). Выдаліце яго адразу пасля выкарыстання.</value>
@@ -1675,60 +1675,73 @@
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Biometric change detected, login using Master Password to enable again.</value>
+    <value>Біяметрычныя даныя змяніліся, увайдзіце зноў праз асноўны пароль для ўключэння.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
-    <value>Enable sync on refresh</value>
+    <value>Уключыць сінхранізацыю па абнаўленні</value>
   </data>
   <data name="EnableSyncOnRefreshDescription" xml:space="preserve">
-    <value>Syncing vault with pull down gesture.</value>
+    <value>Сінхранізацыя сховішча праз свайп уніз</value>
   </data>
   <data name="LogInSso" xml:space="preserve">
-    <value>Enterprise Single Sign-On</value>
+    <value>Адзіны ўваход у карпаратыўную сістэму (SSO).</value>
   </data>
   <data name="LogInSsoSummary" xml:space="preserve">
-    <value>Quickly log in using your organization's single sign-on portal. Please enter your organization's identifier to begin.</value>
+    <value>Хуткі ўваход з выкарыстаннем адзінага ўваходу вашай арганізацыі. Калі ласка, увядзіце ідэнтыфікатар вашай арганізацыі для пачатку працы.</value>
   </data>
   <data name="OrgIdentifier" xml:space="preserve">
-    <value>Organization Identifier</value>
+    <value>Ідэнтыфікатар арганізацыі.</value>
   </data>
   <data name="LoginSsoError" xml:space="preserve">
-    <value>Currently unable to login with SSO</value>
+    <value>Часова немагчыма зайсці праз адзіны ўваход (SSO).</value>
   </data>
   <data name="SetMasterPassword" xml:space="preserve">
-    <value>Set Master Password</value>
+    <value>Задаць асноўны пароль</value>
   </data>
   <data name="SetMasterPasswordSummary" xml:space="preserve">
-    <value>In order to complete logging in with SSO, please set a master password to access and protect your vault.</value>
+    <value>Для завяршэння ўваходу праз SSO, усталюйце галоўны пароль для доступу і абароны вашаго сховішча.</value>
   </data>
   <data name="MasterPasswordPolicyInEffect" xml:space="preserve">
-    <value>One or more organization policies require your master password to meet the following requirements:</value>
+    <value>Згодна з адной або некалькімі палітыкамі арганізацыі неабходна, каб ваш асноўны пароль адказваў наступным патрабаванням:</value>
   </data>
   <data name="PolicyInEffectMinComplexity" xml:space="preserve">
-    <value>Minimum complexity score of {0}</value>
+    <value>Мінімальны бал складанасці {0}</value>
   </data>
   <data name="PolicyInEffectMinLength" xml:space="preserve">
-    <value>Minimum length of {0}</value>
+    <value>Мінімальная даўжыня {0}</value>
   </data>
   <data name="PolicyInEffectUppercase" xml:space="preserve">
-    <value>Contain one or more uppercase characters</value>
+    <value>Уключыць адну ці больш прапісных літар</value>
   </data>
   <data name="PolicyInEffectLowercase" xml:space="preserve">
-    <value>Contain one or more lowercase characters</value>
+    <value>Уключыць адну ці больш малых літар</value>
   </data>
   <data name="PolicyInEffectNumbers" xml:space="preserve">
-    <value>Contain one or more numbers</value>
+    <value>Уключыць адну ці больш лічбаў</value>
   </data>
   <data name="PolicyInEffectSpecial" xml:space="preserve">
-    <value>Contain one or more of the following special characters: {0}</value>
+    <value>Уключыць адну ці больш наступных спецыяльных сімвалаў: {0}</value>
   </data>
   <data name="MasterPasswordPolicyValidationTitle" xml:space="preserve">
-    <value>Invalid Password</value>
+    <value>Памылковы пароль</value>
   </data>
   <data name="MasterPasswordPolicyValidationMessage" xml:space="preserve">
-    <value>Password does not meet organization requirements. Please check the policy information and try again.</value>
+    <value>Пароль не адпавядае патрабаванням арганізацыі. Калі ласка, праверце патрабаванні для пароля і паспрабуйце зноў.</value>
   </data>
   <data name="Loading" xml:space="preserve">
-    <value>Loading</value>
+    <value>Загрузка</value>
+  </data>
+  <data name="AcceptPolicies" xml:space="preserve">
+    <value>By activating this switch you agree to the following:
+</value>
+  </data>
+  <data name="AcceptPoliciesError" xml:space="preserve">
+    <value>Terms of Service and Privacy Policy have not been acknowledged.</value>
+  </data>
+  <data name="TermsOfService" xml:space="preserve">
+    <value>Terms of Service</value>
+  </data>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>Privacy Policy</value>
   </data>
 </root>
