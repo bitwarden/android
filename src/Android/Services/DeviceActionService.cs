@@ -525,7 +525,7 @@ namespace Bit.Droid.Services
             {
                 return;
             }
-            if (activity.Intent.GetBooleanExtra("autofillFramework", false))
+            if (activity.Intent?.GetBooleanExtra("autofillFramework", false) ?? false)
             {
                 if (cipher == null)
                 {
@@ -596,7 +596,7 @@ namespace Bit.Droid.Services
         public void Background()
         {
             var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
-            if (activity.Intent.GetBooleanExtra("autofillFramework", false))
+            if (activity.Intent?.GetBooleanExtra("autofillFramework", false) ?? false)
             {
                 activity.SetResult(Result.Canceled);
                 activity.Finish();
