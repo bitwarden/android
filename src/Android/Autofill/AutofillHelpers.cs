@@ -372,30 +372,18 @@ namespace Bit.Droid.Autofill
         public static void AddSaveInfo(Parser parser, FillRequest fillRequest, FillResponse.Builder responseBuilder, 
             FieldCollection fields)
         {
-            // Attempt to automatically establish compat request mode on Android 10+
+            // Docs state that password fields cannot be reliably saved in Compat mode since they will show as
+            // masked values.
             bool? compatRequest = null;
             if (Build.VERSION.SdkInt >= BuildVersionCodes.Q && fillRequest != null)
             {
+                // Attempt to automatically establish compat request mode on Android 10+
                 compatRequest = (fillRequest.Flags | FillRequest.FlagCompatibilityModeRequest) == fillRequest.Flags;
             }
-            // Docs state that password fields cannot be reliably saved in Compat mode since they will show as
-            // masked values.
-            bool compatBrowser;
-            if (compatRequest != null)
+            var compatBrowser = compatRequest ?? CompatBrowsers.Contains(parser.PackageName);
+            if (compatBrowser && fields.SaveType == SaveDataType.Password)
             {
-                compatBrowser = compatRequest.Value;
-                if (compatRequest.Value  && fields.SaveType == SaveDataType.Password)
-                {
-                    return;
-                }
-            }
-            else
-            {
-                compatBrowser = CompatBrowsers.Contains(parser.PackageName);
-                if (compatBrowser && fields.SaveType == SaveDataType.Password)
-                {
-                    return;
-                }
+                return;
             }
 
             var requiredIds = fields.GetRequiredSaveFields();
