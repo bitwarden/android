@@ -372,7 +372,6 @@ namespace Bit.iOS.Autofill
                 vm.StartTwoFactorAction = () => DismissViewController(false, () => LaunchTwoFactorFlow(false));
                 vm.LogInSuccessAction = () => DismissLockAndContinue();
                 vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
-                vm.HideHintButton = true;
             }
 
             var navigationPage = new NavigationPage(loginPage);

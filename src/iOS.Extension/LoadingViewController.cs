@@ -498,7 +498,6 @@ namespace Bit.iOS.Extension
                 vm.StartTwoFactorAction = () => DismissViewController(false, () => LaunchTwoFactorFlow(false));
                 vm.LogInSuccessAction = () => DismissLockAndContinue();
                 vm.CloseAction = () => CompleteRequest(null, null);
-                vm.HideHintButton = true;
             }
 
             var navigationPage = new NavigationPage(loginPage);
