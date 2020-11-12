@@ -7,7 +7,9 @@ namespace Bit.iOS.Autofill
     {
         public PasswordGeneratorViewController(IntPtr handle)
             : base(handle)
-        { }
+        {
+            DismissModalAction = Cancel;
+        }
 
         public LoginAddViewController Parent { get; set; }
         public override UINavigationItem BaseNavItem => NavItem;
@@ -21,6 +23,11 @@ namespace Bit.iOS.Autofill
         }
 
         partial void CancelBarButton_Activated(UIBarButtonItem sender)
+        {
+            Cancel();
+        }
+        
+        private void Cancel()
         {
             DismissViewController(true, null);
         }

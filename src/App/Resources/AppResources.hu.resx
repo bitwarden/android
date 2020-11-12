@@ -1169,7 +1169,7 @@
     <value>Windows Hello</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
-    <value>Nem sikerült automatikusan megnyitni az Android automatikus kitöltés beállításai menüt. A beállítás megnyitásához nyitsd meg a Beállítások &gt; Rendszer &gt; Nyelv és bevitel &gt; Speciális &gt; Automatikus kitöltés menüpontot.</value>
+    <value>Nem sikerült megnyitni az "Android automata kitöltés" menüpontot. Manuálisan az "Android beállítások --> Rendszer --> Nyelv és bevitel --> Speciális --> Automata kitöltés" menüben érheted el.</value>
   </data>
   <data name="CustomFieldName" xml:space="preserve">
     <value>Egyéni mező neve</value>
@@ -1730,5 +1730,18 @@
   </data>
   <data name="Loading" xml:space="preserve">
     <value>A betöltés folyamatban van.</value>
+  </data>
+  <data name="AcceptPolicies" xml:space="preserve">
+    <value>By activating this switch you agree to the following:
+</value>
+  </data>
+  <data name="AcceptPoliciesError" xml:space="preserve">
+    <value>Terms of Service and Privacy Policy have not been acknowledged.</value>
+  </data>
+  <data name="TermsOfService" xml:space="preserve">
+    <value>Terms of Service</value>
+  </data>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>Privacy Policy</value>
   </data>
 </root>

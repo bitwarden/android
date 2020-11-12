@@ -8,7 +8,10 @@ namespace Bit.iOS.Extension
     {
         public LockPasswordViewController(IntPtr handle)
             : base(handle)
-        { }
+        {
+            BiometricIntegrityKey = "extensionBiometricState";
+            DismissModalAction = Cancel;
+        }
 
         public LoadingViewController LoadingController { get; set; }
         public override UINavigationItem BaseNavItem => NavItem;

@@ -8,7 +8,9 @@ namespace Bit.iOS.Extension
     {
         public PasswordGeneratorViewController(IntPtr handle)
             : base(handle)
-        { }
+        {
+            DismissModalAction = Cancel;
+        }
         
         public LoginAddViewController Parent { get; set; }
         public override UINavigationItem BaseNavItem => NavItem;
@@ -29,6 +31,11 @@ namespace Bit.iOS.Extension
         }
 
         partial void CancelBarButton_Activated(UIBarButtonItem sender)
+        {
+            Cancel();
+        }
+        
+        private void Cancel()
         {
             DismissViewController(true, null);
         }

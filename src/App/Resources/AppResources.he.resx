@@ -1565,7 +1565,7 @@ Bitwarden בעזרת פתיחת חלון "הגדרות".</value>
     <value>תוקף החיבור שלך הסתיים.</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
-    <value>השתמש בזיהוי ביומטרי כדי לאשר.</value>
+    <value>אימות ביומטרי</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
     <value>זיהוי ביומטרי</value>
@@ -1676,60 +1676,73 @@ Bitwarden בעזרת פתיחת חלון "הגדרות".</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Biometric change detected, login using Master Password to enable again.</value>
+    <value>זוהה שינוי בפרטי הזיהוי הביומטריים, אנא הכנס בעזרת הסיסמה הראשית כדי לאפשר שוב זיהוי ביומטרי.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
-    <value>Enable sync on refresh</value>
+    <value>אפשר סנכרון בעת רענון</value>
   </data>
   <data name="EnableSyncOnRefreshDescription" xml:space="preserve">
-    <value>Syncing vault with pull down gesture.</value>
+    <value>סנכרן את הכספת במחוות משיכה כלפי מטה.</value>
   </data>
   <data name="LogInSso" xml:space="preserve">
-    <value>Enterprise Single Sign-On</value>
+    <value>כניסה אחודה ארגונית</value>
   </data>
   <data name="LogInSsoSummary" xml:space="preserve">
-    <value>Quickly log in using your organization's single sign-on portal. Please enter your organization's identifier to begin.</value>
+    <value>כניסה מהירה באמצעות פורטל ההזדהות האחודה (SSO) הארגוני שלך. אנא הזן את המזהה הארגוני שלך כדי להתחיל.</value>
   </data>
   <data name="OrgIdentifier" xml:space="preserve">
-    <value>Organization Identifier</value>
+    <value>מזהה ארגוני</value>
   </data>
   <data name="LoginSsoError" xml:space="preserve">
-    <value>Currently unable to login with SSO</value>
+    <value>זמנית, לא ניתן להיכנס באמצעות זיהוי יחיד (SSO)</value>
   </data>
   <data name="SetMasterPassword" xml:space="preserve">
-    <value>Set Master Password</value>
+    <value>הגדר סיסמה ראשית</value>
   </data>
   <data name="SetMasterPasswordSummary" xml:space="preserve">
-    <value>In order to complete logging in with SSO, please set a master password to access and protect your vault.</value>
+    <value>כדי להשלים את הכניסה עם SSO, נא להגדיר סיסמה ראשית כדי לגשת ולהגן על הכספת שלך.</value>
   </data>
   <data name="MasterPasswordPolicyInEffect" xml:space="preserve">
-    <value>One or more organization policies require your master password to meet the following requirements:</value>
+    <value>אחד או יותר מכללי מדיניות הארגון דורשים שסיסמתך הראשית תעמוד בדרישות הבאות:</value>
   </data>
   <data name="PolicyInEffectMinComplexity" xml:space="preserve">
-    <value>Minimum complexity score of {0}</value>
+    <value>ניקוד מורכבות הסיסמה צריך להיות לפחות {0}</value>
   </data>
   <data name="PolicyInEffectMinLength" xml:space="preserve">
-    <value>Minimum length of {0}</value>
+    <value>אורך הסיסמה לפחות {0}</value>
   </data>
   <data name="PolicyInEffectUppercase" xml:space="preserve">
-    <value>Contain one or more uppercase characters</value>
+    <value>מכילה אות גדולה אחת או יותר</value>
   </data>
   <data name="PolicyInEffectLowercase" xml:space="preserve">
-    <value>Contain one or more lowercase characters</value>
+    <value>מכילה אות קטנה אחת או יותר</value>
   </data>
   <data name="PolicyInEffectNumbers" xml:space="preserve">
-    <value>Contain one or more numbers</value>
+    <value>מכילה ספרה אחת או יותר</value>
   </data>
   <data name="PolicyInEffectSpecial" xml:space="preserve">
-    <value>Contain one or more of the following special characters: {0}</value>
+    <value>מכילה תו אחד או יותר מהתווים הבאים: {0}</value>
   </data>
   <data name="MasterPasswordPolicyValidationTitle" xml:space="preserve">
-    <value>Invalid Password</value>
+    <value>סיסמה לא חוקית</value>
   </data>
   <data name="MasterPasswordPolicyValidationMessage" xml:space="preserve">
-    <value>Password does not meet organization requirements. Please check the policy information and try again.</value>
+    <value>הסיסמה אינה עומדת בדרישות הארגון. אנא בדוק את פרטי מדיניות הסיסמאות ונסה שנית.</value>
   </data>
   <data name="Loading" xml:space="preserve">
-    <value>Loading</value>
+    <value>טוען</value>
+  </data>
+  <data name="AcceptPolicies" xml:space="preserve">
+    <value>By activating this switch you agree to the following:
+</value>
+  </data>
+  <data name="AcceptPoliciesError" xml:space="preserve">
+    <value>Terms of Service and Privacy Policy have not been acknowledged.</value>
+  </data>
+  <data name="TermsOfService" xml:space="preserve">
+    <value>Terms of Service</value>
+  </data>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>Privacy Policy</value>
   </data>
 </root>

@@ -15,7 +15,7 @@
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
-    <TargetFrameworkVersion>v10.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v11.0</TargetFrameworkVersion>
     <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -31,6 +31,8 @@
     <AndroidLinkMode>None</AndroidLinkMode>
     <AndroidSupportedAbis />
     <JavaMaximumHeapSize>1G</JavaMaximumHeapSize>
+    <AndroidUseSharedRuntime>false</AndroidUseSharedRuntime>
+    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>false</DebugSymbols>
@@ -77,6 +79,7 @@
     <PackageReference Include="Portable.BouncyCastle">
       <Version>1.8.6.7</Version>
     </PackageReference>
+    <PackageReference Include="Xamarin.AndroidX.AutoFill" Version="1.1.0.3-beta01" />
     <PackageReference Include="Xamarin.Essentials">
       <Version>1.5.3.2</Version>
     </PackageReference>
@@ -120,6 +123,7 @@
     <Compile Include="Receivers\LockAlarmReceiver.cs" />
     <Compile Include="Receivers\PackageReplacedReceiver.cs" />
     <Compile Include="Renderers\CipherViewCellRenderer.cs" />
+    <Compile Include="Renderers\CustomTabbedRenderer.cs" />
     <Compile Include="Renderers\ExtendedSliderRenderer.cs" />
     <Compile Include="Renderers\CustomEditorRenderer.cs" />
     <Compile Include="Renderers\CustomPickerRenderer.cs" />
@@ -163,26 +167,40 @@
     <AndroidResource Include="Resources\drawable-hdpi\accessibility_step2.png" />
     <AndroidResource Include="Resources\drawable-hdpi\autofill_enable.png" />
     <AndroidResource Include="Resources\drawable-hdpi\autofill_use.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\logo_legacy.png" />
+    <AndroidResource Include="Resources\drawable-hdpi\logo_white_legacy.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\accessibility_overlay.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\accessibility_permission.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\accessibility_step1.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\accessibility_step2.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\autofill_enable.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\autofill_use.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\logo_legacy.png" />
+    <AndroidResource Include="Resources\drawable-xhdpi\logo_white_legacy.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\accessibility_overlay.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\accessibility_permission.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\accessibility_step1.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\accessibility_step2.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\autofill_enable.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\autofill_use.png" />
-    <AndroidResource Include="Resources\drawable\accessibility_overlay.png" />
-    <AndroidResource Include="Resources\drawable\accessibility_permission.png" />
-    <AndroidResource Include="Resources\drawable\accessibility_step1.png" />
-    <AndroidResource Include="Resources\drawable\accessibility_step2.png" />
-    <AndroidResource Include="Resources\drawable\autofill_enable.png" />
-    <AndroidResource Include="Resources\drawable\autofill_use.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\logo_legacy.png" />
+    <AndroidResource Include="Resources\drawable-xxhdpi\logo_white_legacy.png" />
+    <AndroidResource Include="Resources\drawable\card.xml" />
+    <AndroidResource Include="Resources\drawable\cog.xml" />
     <AndroidResource Include="Resources\drawable\icon.xml" />
     <AndroidResource Include="Resources\drawable\ic_launcher_foreground.xml" />
+    <AndroidResource Include="Resources\drawable\id.xml" />
+    <AndroidResource Include="Resources\drawable\lock.xml" />
+    <AndroidResource Include="Resources\drawable\login.xml" />
+    <AndroidResource Include="Resources\drawable\logo.xml" />
+    <AndroidResource Include="Resources\drawable\logo_white.xml" />
+    <AndroidResource Include="Resources\drawable\pencil.xml" />
+    <AndroidResource Include="Resources\drawable\plus.xml" />
+    <AndroidResource Include="Resources\drawable\refresh.xml" />
+    <AndroidResource Include="Resources\drawable\search.xml" />
+    <AndroidResource Include="Resources\drawable\shield.xml" />
+    <AndroidResource Include="Resources\drawable-v23\splash_screen.xml" />
+    <AndroidResource Include="Resources\drawable-v23\splash_screen_dark.xml" />
     <AndroidResource Include="Resources\layout\Tabbar.axml" />
     <AndroidResource Include="Resources\layout\Toolbar.axml" />
     <AndroidResource Include="Resources\mipmap-anydpi-v26\ic_launcher.xml" />
@@ -197,6 +215,7 @@
     <AndroidResource Include="Resources\mipmap-xxhdpi\ic_launcher_round.png" />
     <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher.png" />
     <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher_round.png" />
+    <AndroidResource Include="Resources\values-night\styles.xml" />
     <AndroidResource Include="Resources\values\styles.xml" />
     <AndroidResource Include="Resources\values\colors.xml" />
   </ItemGroup>
@@ -235,136 +254,13 @@
     <AndroidResource Include="Resources\layout\autofill_listitem.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\login.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-hdpi\login.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xhdpi\login.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\login.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxxhdpi\login.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\logo.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\values-v21\styles.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\refresh.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\lock.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-hdpi\logo.png" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\drawable-hdpi\yubikey.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\yubikey.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\shield.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-xhdpi\yubikey.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\logo.png" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\drawable-xxhdpi\yubikey.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-hdpi\lock.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-hdpi\refresh.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xhdpi\refresh.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xhdpi\lock.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\lock.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\refresh.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxxhdpi\lock.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxxhdpi\refresh.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\id.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\card.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-hdpi\id.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-hdpi\card.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xhdpi\id.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xhdpi\card.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\id.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\card.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxxhdpi\card.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxxhdpi\id.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\pencil.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\plus.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-hdpi\pencil.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-hdpi\plus.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xhdpi\pencil.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xhdpi\plus.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\pencil.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\plus.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxxhdpi\plus.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxxhdpi\pencil.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\slider_thumb.xml" />
@@ -376,76 +272,10 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\logo_white.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-hdpi\logo_white.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\logo_white.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\search.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-hdpi\search.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xhdpi\search.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\search.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxxhdpi\search.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\cog.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-hdpi\cog.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xhdpi\cog.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\cog.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxxhdpi\cog.png" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\values\dimens.xml">
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
       <SubType>Designer</SubType>
     </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-hdpi\shield.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xhdpi\shield.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\shield.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxxhdpi\shield.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\refresh_sm.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-hdpi\refresh_sm.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xhdpi\refresh_sm.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxhdpi\refresh_sm.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable-xxxhdpi\refresh_sm.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\CipherViewCell.axml">

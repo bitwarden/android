@@ -13,6 +13,7 @@ namespace Bit.iOS.Extension
             : base(handle)
         {
             ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
+            DismissModalAction = Cancel;
         }
 
         public Context Context { get; set; }
@@ -37,6 +38,11 @@ namespace Bit.iOS.Extension
         }
 
         partial void BackButton_Activated(UIBarButtonItem sender)
+        {
+            Cancel();
+        }
+        
+        private void Cancel()
         {
             LoadingController.CompleteRequest(null, null);
         }

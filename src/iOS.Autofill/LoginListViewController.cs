@@ -16,7 +16,9 @@ namespace Bit.iOS.Autofill
     {
         public LoginListViewController(IntPtr handle)
             : base(handle)
-        { }
+        {
+            DismissModalAction = Cancel;
+        }
 
         public Context Context { get; set; }
         public CredentialProviderViewController CPViewController { get; set; }
@@ -43,6 +45,11 @@ namespace Bit.iOS.Autofill
 
         partial void CancelBarButton_Activated(UIBarButtonItem sender)
         {
+            Cancel();
+        }
+
+        private void Cancel()
+        {
             CPViewController.CompleteRequest();
         }
 
@@ -64,12 +71,16 @@ namespace Bit.iOS.Autofill
                 {
                     addLoginController.Context = Context;
                     addLoginController.LoginListController = this;
+                    segue.DestinationViewController.PresentationController.Delegate =
+                        new CustomPresentationControllerDelegate(addLoginController.DismissModalAction);
                 }
                 if (navController.TopViewController is LoginSearchViewController searchLoginController)
                 {
                     searchLoginController.Context = Context;
                     searchLoginController.CPViewController = CPViewController;
                     searchLoginController.FromList = true;
+                    segue.DestinationViewController.PresentationController.Delegate =
+                        new CustomPresentationControllerDelegate(searchLoginController.DismissModalAction);
                 }
             }
         }

@@ -20,13 +20,15 @@ namespace Bit.App.Pages
         private TwoFactorPageViewModel _vm;
         private bool _inited;
         private bool _authingWithSso;
+        private string _orgIdentifier;
 
-        public TwoFactorPage(bool? authingWithSso = false, AppOptions appOptions = null)
+        public TwoFactorPage(bool? authingWithSso = false, AppOptions appOptions = null, string orgIdentifier = null)
         {
             InitializeComponent();
             SetActivityIndicator();
             _authingWithSso = authingWithSso ?? false;
             _appOptions = appOptions;
+            _orgIdentifier = orgIdentifier;
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
@@ -170,7 +172,7 @@ namespace Bit.App.Pages
         private async Task StartSetPasswordAsync()
         {
             _vm.CloseAction();
-            var page = new SetPasswordPage(_appOptions);
+            var page = new SetPasswordPage(_appOptions, _orgIdentifier);
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
 

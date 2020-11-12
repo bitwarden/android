@@ -32,6 +32,8 @@ namespace Bit.App.Services
             Constants.MigratedFromV1AutofillPromptShown,
             Constants.TriedV1Resync,
             Constants.ClearCiphersCacheKey,
+            Constants.iOSAutoFillClearCiphersCacheKey,
+            Constants.iOSExtensionClearCiphersCacheKey,
             Constants.EnvironmentUrlsKey,
         };
 

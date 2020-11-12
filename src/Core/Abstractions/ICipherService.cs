@@ -11,7 +11,7 @@ namespace Bit.Core.Abstractions
     public interface ICipherService
     {
         Task ClearAsync(string userId);
-        void ClearCache();
+        Task ClearCacheAsync();
         Task DeleteAsync(List<string> ids);
         Task DeleteAsync(string id);
         Task DeleteAttachmentAsync(string id, string attachmentId);

@@ -29,6 +29,8 @@
         public static string OldUserIdKey = "userId";
         public static string AddSitePromptShownKey = "addSitePromptShown";
         public static string ClearCiphersCacheKey = "clearCiphersCache";
+        public static string iOSAutoFillClearCiphersCacheKey = "iOSAutoFillClearCiphersCache";
+        public static string iOSExtensionClearCiphersCacheKey = "iOSExtensionClearCiphersCache";
         public static string MigratedFromV1 = "migratedFromV1";
         public static string MigratedFromV1AutofillPromptShown = "migratedV1AutofillPromptShown";
         public static string TriedV1Resync = "triedV1Resync";
@@ -37,5 +39,17 @@
         public const int SelectFileRequestCode = 42;
         public const int SelectFilePermissionRequestCode = 43;
         public const int SaveFileRequestCode = 44;
+        
+        public static readonly string[] AndroidAllClearCipherCacheKeys =
+        {
+            ClearCiphersCacheKey
+        };
+        
+        public static readonly string[] iOSAllClearCipherCacheKeys =
+        {
+            ClearCiphersCacheKey,
+            iOSAutoFillClearCiphersCacheKey,
+            iOSExtensionClearCiphersCacheKey
+        };
     }
 }

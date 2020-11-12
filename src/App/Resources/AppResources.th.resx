@@ -140,7 +140,7 @@
     <comment>Navigate back to the previous screen.</comment>
   </data>
   <data name="Bitwarden" xml:space="preserve">
-    <value>bitwarden</value>
+    <value>Bitwarden</value>
     <comment>App name. Shouldn't ever change.</comment>
   </data>
   <data name="Cancel" xml:space="preserve">
@@ -186,7 +186,7 @@
     <comment>Short label for an email address.</comment>
   </data>
   <data name="EmailAddress" xml:space="preserve">
-    <value>ที่อยู่อีเมล์</value>
+    <value>ที่อยู่อีเมล</value>
     <comment>Full label for a email address.</comment>
   </data>
   <data name="EmailUs" xml:space="preserve">
@@ -519,16 +519,16 @@
     <value>ล็อค</value>
   </data>
   <data name="FifteenMinutes" xml:space="preserve">
-    <value>15 minutes</value>
+    <value>15 นาที</value>
   </data>
   <data name="OneHour" xml:space="preserve">
-    <value>1 hour</value>
+    <value>1 ชั่วโมง</value>
   </data>
   <data name="OneMinute" xml:space="preserve">
-    <value>1 minute</value>
+    <value>1 นาที</value>
   </data>
   <data name="FourHours" xml:space="preserve">
-    <value>4 hours</value>
+    <value>4 ชั่วโมง</value>
   </data>
   <data name="Immediately" xml:space="preserve">
     <value>Immediately</value>
@@ -1730,5 +1730,18 @@
   </data>
   <data name="Loading" xml:space="preserve">
     <value>Loading</value>
+  </data>
+  <data name="AcceptPolicies" xml:space="preserve">
+    <value>By activating this switch you agree to the following:
+</value>
+  </data>
+  <data name="AcceptPoliciesError" xml:space="preserve">
+    <value>Terms of Service and Privacy Policy have not been acknowledged.</value>
+  </data>
+  <data name="TermsOfService" xml:space="preserve">
+    <value>Terms of Service</value>
+  </data>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>Privacy Policy</value>
   </data>
 </root>

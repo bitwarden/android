@@ -14,7 +14,7 @@ namespace Bit.App.Pages
         private readonly SetPasswordPageViewModel _vm;
         private readonly AppOptions _appOptions;
 
-        public SetPasswordPage(AppOptions appOptions = null)
+        public SetPasswordPage(AppOptions appOptions = null, string orgIdentifier = null)
         {
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _messagingService.Send("showStatusBar", true);
@@ -29,6 +29,7 @@ namespace Bit.App.Pages
                 _messagingService.Send("showStatusBar", false);
                 await Navigation.PopModalAsync();
             };
+            _vm.OrgIdentifier = orgIdentifier;
             if (Device.RuntimePlatform == Device.Android)
             {
                 ToolbarItems.RemoveAt(0);

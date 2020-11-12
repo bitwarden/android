@@ -7,6 +7,7 @@ using Bit.Core.Models.Request;
 using Bit.Core.Utilities;
 using System;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -18,6 +19,7 @@ namespace Bit.App.Pages
         private readonly ICryptoService _cryptoService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private bool _showPassword;
+        private bool _acceptPolicies;
 
         public RegisterPageViewModel()
         {
@@ -30,7 +32,13 @@ namespace Bit.App.Pages
             TogglePasswordCommand = new Command(TogglePassword);
             ToggleConfirmPasswordCommand = new Command(ToggleConfirmPassword);
             SubmitCommand = new Command(async () => await SubmitAsync());
+            ShowTerms = !_platformUtilsService.IsSelfHost();
         }
+        
+        public ICommand PoliciesClickCommand => new Command<string>((url) =>
+        {
+            _platformUtilsService.LaunchUri(url);
+        });
 
         public bool ShowPassword
         {
@@ -41,7 +49,21 @@ namespace Bit.App.Pages
                     nameof(ShowPasswordIcon)
                 });
         }
-
+        
+        public bool AcceptPolicies
+        {
+            get => _acceptPolicies;
+            set => SetProperty(ref _acceptPolicies, value);
+        }
+        
+        public Thickness SwitchMargin
+        {
+            get => Device.RuntimePlatform == Device.Android 
+                ? new Thickness(0, 0, 0, 0) 
+                : new Thickness(0, 0, 10, 0);
+        }
+        
+        public bool ShowTerms { get; set; }
         public Command SubmitCommand { get; }
         public Command TogglePasswordCommand { get; }
         public Command ToggleConfirmPasswordCommand { get; }
@@ -91,6 +113,12 @@ namespace Bit.App.Pages
             {
                 await Page.DisplayAlert(AppResources.AnErrorHasOccurred,
                     AppResources.MasterPasswordConfirmationValMessage, AppResources.Ok);
+                return;
+            }
+            if (ShowTerms && !AcceptPolicies)
+            {
+                await Page.DisplayAlert(AppResources.AnErrorHasOccurred,
+                    AppResources.AcceptPoliciesError, AppResources.Ok);
                 return;
             }
 

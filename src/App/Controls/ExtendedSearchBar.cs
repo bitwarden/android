@@ -1,5 +1,4 @@
-﻿using Bit.App.Abstractions;
-using Bit.Core.Utilities;
+﻿using Bit.App.Utilities;
 using Xamarin.Forms;
 
 namespace Bit.App.Controls
@@ -10,8 +9,7 @@ namespace Bit.App.Controls
         {
             if (Device.RuntimePlatform == Device.iOS)
             {
-                var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService", true);
-                if (!deviceActionService?.UsingDarkTheme() ?? false)
+                if (ThemeManager.UsingLightTheme)
                 {
                     TextColor = Color.Black;
                 }

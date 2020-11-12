@@ -30,8 +30,9 @@ namespace Bit.Droid.Services
             _keystore.Load(null);
         }
 
-        public Task<bool> SetupBiometricAsync()
+        public Task<bool> SetupBiometricAsync(string bioIntegrityKey = null)
         {
+            // bioIntegrityKey used in iOS only
             if (Build.VERSION.SdkInt >= BuildVersionCodes.M)
             {
                 CreateKey();
@@ -40,8 +41,9 @@ namespace Bit.Droid.Services
             return Task.FromResult(true);
         }
 
-        public Task<bool> ValidateIntegrityAsync()
+        public Task<bool> ValidateIntegrityAsync(string bioIntegrityKey = null)
         {
+            // bioIntegrityKey used in iOS only
             if (Build.VERSION.SdkInt < BuildVersionCodes.M)
             {
                 return Task.FromResult(true);
@@ -50,6 +52,11 @@ namespace Bit.Droid.Services
             _keystore.Load(null);
             IKey key = _keystore.GetKey(KeyName, null);
             Cipher cipher = Cipher.GetInstance(Transformation);
+
+            if (key == null || cipher == null)
+            {
+                return Task.FromResult(true);
+            }
 
             try
             {
@@ -76,15 +83,23 @@ namespace Bit.Droid.Services
 
         private void CreateKey()
         {
-            KeyGenerator keyGen = KeyGenerator.GetInstance(KeyAlgorithm, KeyStoreName);
-            KeyGenParameterSpec keyGenSpec =
-                new KeyGenParameterSpec.Builder(KeyName, KeyStorePurpose.Encrypt | KeyStorePurpose.Decrypt)
-                    .SetBlockModes(BlockMode)
-                    .SetEncryptionPaddings(EncryptionPadding)
-                    .SetUserAuthenticationRequired(true)
-                    .Build();
-            keyGen.Init(keyGenSpec);
-            keyGen.GenerateKey();
+            try
+            {
+                var keyGen = KeyGenerator.GetInstance(KeyAlgorithm, KeyStoreName);
+                var keyGenSpec =
+                    new KeyGenParameterSpec.Builder(KeyName, KeyStorePurpose.Encrypt | KeyStorePurpose.Decrypt)
+                        .SetBlockModes(BlockMode)
+                        .SetEncryptionPaddings(EncryptionPadding)
+                        .SetUserAuthenticationRequired(true)
+                        .Build();
+                keyGen.Init(keyGenSpec);
+                keyGen.GenerateKey();
+            }
+            catch
+            {
+                // Catch silently to allow biometrics to function on devices that are in a state where key generation
+                // is not functioning
+            }
         }
     }
 }

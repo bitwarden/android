@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Name" xml:space="preserve">
-    <value>Менеджэр пароляў Bitwarden</value>
+    <value>Менеджар пароляў Bitwarden</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
@@ -144,7 +144,7 @@ Bitwarden — гэта праграмнае забеспячэнне з адкр
     <value>Аўтаматычна генерыруйце моцныя, выпадковыя і бяспечныя паролі</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Абараніце ваша сховішча з дапамогай Touch ID, PIN-кода ці майстар-пароля.</value>
+    <value>Абараніце ваша сховішча з дапамогай Touch ID, PIN-кода ці асноўнага пароля.</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
     <value>Аўтазапаўненне падтрымлівае Safari, Chrome і сотні другіх праграм</value>

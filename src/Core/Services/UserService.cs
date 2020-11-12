@@ -124,6 +124,12 @@ namespace Bit.Core.Services
 
         public async Task<bool> CanAccessPremiumAsync()
         {
+            var authed = await IsAuthenticatedAsync();
+            if (!authed)
+            {
+                return false;
+            }
+
             var tokenPremium = _tokenService.GetPremium();
             if (tokenPremium)
             {

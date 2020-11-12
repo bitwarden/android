@@ -882,7 +882,7 @@
     <value>Point your camera at the QR code.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
-    <value>Scan QR Code</value>
+    <value>QR कोड को स्कैन करें</value>
   </data>
   <data name="Camera" xml:space="preserve">
     <value>कैमरा</value>
@@ -891,7 +891,7 @@
     <value>तस्वीरें</value>
   </data>
   <data name="CopyTotp" xml:space="preserve">
-    <value>Copy TOTP</value>
+    <value>QR कोड कॉपी करें</value>
   </data>
   <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
     <value>If your login has an authenticator key attached to it, the TOTP verification code is automatically copied to your clipboard whenever you auto-fill the login.</value>
@@ -977,13 +977,13 @@
     <value>Copy Number</value>
   </data>
   <data name="CopySecurityCode" xml:space="preserve">
-    <value>Copy Security Code</value>
+    <value>सुरक्षा कोड कॉपी करें</value>
   </data>
   <data name="Number" xml:space="preserve">
     <value>संख्या</value>
   </data>
   <data name="SecurityCode" xml:space="preserve">
-    <value>Security Code</value>
+    <value>सुरक्षा कोड</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
     <value>कार्ड</value>
@@ -1124,7 +1124,7 @@
     <value>Auto-fill with bitwarden</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
-    <value>Vault is locked</value>
+    <value>वॉल्ट पर ताला लगा है</value>
   </data>
   <data name="GoToMyVault" xml:space="preserve">
     <value>Go to my vault</value>
@@ -1176,10 +1176,10 @@
     <value>Custom Field Name</value>
   </data>
   <data name="FieldTypeBoolean" xml:space="preserve">
-    <value>Boolean</value>
+    <value>बूलियन</value>
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
-    <value>Hidden</value>
+    <value>छुपा हुआ</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>वाक्य</value>
@@ -1214,7 +1214,7 @@
     <comment>A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'.</comment>
   </data>
   <data name="RegEx" xml:space="preserve">
-    <value>Regular expression</value>
+    <value>नियमित अभिव्यक्ति</value>
     <comment>A programming term, also known as 'RegEx'.</comment>
   </data>
   <data name="StartsWith" xml:space="preserve">
@@ -1429,19 +1429,19 @@
     <value>Bitwarden allows you to share your vault with others by using an organization account. Would you like to visit the bitwarden.com website to learn more?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
-    <value>Export Vault</value>
+    <value>निर्यात तिजोरी</value>
   </data>
   <data name="LockNow" xml:space="preserve">
-    <value>Lock Now</value>
+    <value>अब ताला</value>
   </data>
   <data name="PIN" xml:space="preserve">
-    <value>PIN</value>
+    <value>पिन</value>
   </data>
   <data name="Unlock" xml:space="preserve">
-    <value>Unlock</value>
+    <value>अनलॉक</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
-    <value>30 minutes</value>
+    <value>30 मिनिट</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
     <value>Set your PIN code for unlocking Bitwarden. Your PIN settings will be reset if you ever fully log out of the application.</value>
@@ -1457,11 +1457,11 @@
     <value>Your vault is locked. Verify your PIN code to continue.</value>
   </data>
   <data name="Dark" xml:space="preserve">
-    <value>Dark</value>
+    <value>अँधेरा</value>
     <comment>A dark color</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>Light</value>
+    <value>रोशनी</value>
     <comment>A light color</comment>
   </data>
   <data name="FiveMinutes" xml:space="preserve">
@@ -1495,7 +1495,7 @@
     <value>Choose the default way that URI match detection is handled for logins when performing actions such as auto-fill.</value>
   </data>
   <data name="Theme" xml:space="preserve">
-    <value>Theme</value>
+    <value>थीम</value>
     <comment>Color theme</comment>
   </data>
   <data name="ThemeDescription" xml:space="preserve">
@@ -1509,7 +1509,7 @@
     <value>Restarting...</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
-    <value>Copy Notes</value>
+    <value>नोट कॉपी करें</value>
   </data>
   <data name="Exit" xml:space="preserve">
     <value>निकास</value>
@@ -1546,29 +1546,29 @@
     <value>Your theme changes will apply when the app is restarted.</value>
   </data>
   <data name="Capitalize" xml:space="preserve">
-    <value>Capitalize</value>
+    <value>कैपिटलाइज़ करें</value>
     <comment>ex. Uppercase the first character of a word.</comment>
   </data>
   <data name="IncludeNumber" xml:space="preserve">
-    <value>Include Number</value>
+    <value>नंबर शामिल करें</value>
   </data>
   <data name="Download" xml:space="preserve">
-    <value>Download</value>
+    <value>डाउन्लोड</value>
   </data>
   <data name="Shared" xml:space="preserve">
-    <value>Shared</value>
+    <value>साझा किया गया</value>
   </data>
   <data name="ToggleVisibility" xml:space="preserve">
     <value>दृश्यता बदलें</value>
   </data>
   <data name="LoginExpired" xml:space="preserve">
-    <value>Your login session has expired.</value>
+    <value>अपने लॉगिन सत्र समाप्त हो गया है।</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
-    <value>Biometric Verification</value>
+    <value>बायोमेट्रिक सत्यापन</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
-    <value>Biometrics</value>
+    <value>बॉयोमेट्रिक्स</value>
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
     <value>Use Biometrics To Unlock</value>
@@ -1580,7 +1580,7 @@
     <value>3. On the Android App Settings screen for Bitwarden, go to the "Display over other apps" options (under Advanced) and tap the toggle to enable overlay support.</value>
   </data>
   <data name="OverlayPermission" xml:space="preserve">
-    <value>Permission</value>
+    <value>अनुमति</value>
   </data>
   <data name="BitwardenAutofillServiceOpenOverlayPermissionSettings" xml:space="preserve">
     <value>Open Overlay Permission Settings</value>
@@ -1589,22 +1589,22 @@
     <value>3. On the Android App Settings screen for Bitwarden, select "Display over other apps" (under "Advanced") and switch on the toggle to allow the overlay.</value>
   </data>
   <data name="Denied" xml:space="preserve">
-    <value>Denied</value>
+    <value>अस्वीकृत</value>
   </data>
   <data name="Granted" xml:space="preserve">
-    <value>Granted</value>
+    <value>प्रदान की गई</value>
   </data>
   <data name="FileFormat" xml:space="preserve">
-    <value>File Format</value>
+    <value>फाइल प्रारुप</value>
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
-    <value>Enter your master password to export your vault data.</value>
+    <value>अपने कोष्ठ डेटा निर्यात करने के लिए अपना मास्टर पासवर्ड दर्ज करें।</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>This export contains your vault data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it.</value>
   </data>
   <data name="Warning" xml:space="preserve">
-    <value>Warning</value>
+    <value>चेतावनी</value>
   </data>
   <data name="ExportVaultFailure" xml:space="preserve">
     <value>There was a problem exporting your vault.  If the problem persists, you'll need to export from the web vault.</value>
@@ -1613,7 +1613,7 @@
     <value>Vault exported successfully</value>
   </data>
   <data name="Clone" xml:space="preserve">
-    <value>Clone</value>
+    <value>क्लोन</value>
     <comment>Clone an entity (verb).</comment>
   </data>
   <data name="PasswordGeneratorPolicyInEffect" xml:space="preserve">
@@ -1724,12 +1724,25 @@
     <value>Contain one or more of the following special characters: {0}</value>
   </data>
   <data name="MasterPasswordPolicyValidationTitle" xml:space="preserve">
-    <value>Invalid Password</value>
+    <value>अवैध पासवर्ड</value>
   </data>
   <data name="MasterPasswordPolicyValidationMessage" xml:space="preserve">
     <value>Password does not meet organization requirements. Please check the policy information and try again.</value>
   </data>
   <data name="Loading" xml:space="preserve">
-    <value>Loading</value>
+    <value>लोड रहा है...</value>
+  </data>
+  <data name="AcceptPolicies" xml:space="preserve">
+    <value>By activating this switch you agree to the following:
+</value>
+  </data>
+  <data name="AcceptPoliciesError" xml:space="preserve">
+    <value>Terms of Service and Privacy Policy have not been acknowledged.</value>
+  </data>
+  <data name="TermsOfService" xml:space="preserve">
+    <value>Terms of Service</value>
+  </data>
+  <data name="PrivacyPolicy" xml:space="preserve">
+    <value>Privacy Policy</value>
   </data>
 </root>

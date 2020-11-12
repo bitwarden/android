@@ -54,7 +54,7 @@ namespace Bit.Core.Services
                 // If we have a lock option set, we do not store the key
                 return;
             }
-            await _secureStorageService.SaveAsync(Keys_Key, key.KeyB64);
+            await _secureStorageService.SaveAsync(Keys_Key, key?.KeyB64);
         }
 
         public async Task SetKeyHashAsync(string keyHash)

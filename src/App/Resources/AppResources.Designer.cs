@@ -3050,5 +3050,29 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("Loading", resourceCulture);
             }
         }
+        
+        public static string AcceptPolicies {
+            get {
+                return ResourceManager.GetString("AcceptPolicies", resourceCulture);
+            }
+        }
+        
+        public static string AcceptPoliciesError {
+            get {
+                return ResourceManager.GetString("AcceptPoliciesError", resourceCulture);
+            }
+        }
+        
+        public static string TermsOfService {
+            get {
+                return ResourceManager.GetString("TermsOfService", resourceCulture);
+            }
+        }
+        
+        public static string PrivacyPolicy {
+            get {
+                return ResourceManager.GetString("PrivacyPolicy", resourceCulture);
+            }
+        }
     }
 }
