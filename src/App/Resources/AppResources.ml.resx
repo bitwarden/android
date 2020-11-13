@@ -1732,16 +1732,15 @@
     <value>ലഭ്യമാക്കുന്നു</value>
   </data>
   <data name="AcceptPolicies" xml:space="preserve">
-    <value>By activating this switch you agree to the following:
-</value>
+    <value>ഈ സ്വിച്ച് സജീവമാക്കുന്നതിലൂടെ നിങ്ങൾ ഇനിപ്പറയുന്നവ അംഗീകരിക്കുന്നു:</value>
   </data>
   <data name="AcceptPoliciesError" xml:space="preserve">
-    <value>Terms of Service and Privacy Policy have not been acknowledged.</value>
+    <value>സേവന നിബന്ധനകളും സ്വകാര്യതാ നയവും അംഗീകരിച്ചിട്ടില്ല.</value>
   </data>
   <data name="TermsOfService" xml:space="preserve">
-    <value>Terms of Service</value>
+    <value>സേവന വ്യവസ്ഥകൾ</value>
   </data>
   <data name="PrivacyPolicy" xml:space="preserve">
-    <value>Privacy Policy</value>
+    <value>സ്വകാര്യതാനയം</value>
   </data>
 </root>
