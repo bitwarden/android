@@ -935,7 +935,7 @@
     <value>Dowiedz się więcej</value>
   </data>
   <data name="ApiUrl" xml:space="preserve">
-    <value>Adres URL serwera API</value>
+    <value>Adres URL serwera interfejsu API</value>
   </data>
   <data name="CustomEnvironment" xml:space="preserve">
     <value>Niestandardowe środowisko</value>
@@ -1684,7 +1684,7 @@
     <value>Synchronizuje sejf podczas gestu przeciągnięcia w dół</value>
   </data>
   <data name="LogInSso" xml:space="preserve">
-    <value>Logowanie jednokrotne przedsiębiorstwa</value>
+    <value>Logowanie jednokrotne</value>
   </data>
   <data name="LogInSsoSummary" xml:space="preserve">
     <value>Zaloguj się szybko za pomocą logowania jednokrotnego SSO swojej organizacji. Aby rozpocząć, wpisz swój identyfikator organizacji.</value>
@@ -1732,16 +1732,15 @@
     <value>Ładowanie</value>
   </data>
   <data name="AcceptPolicies" xml:space="preserve">
-    <value>By activating this switch you agree to the following:
-</value>
+    <value>Zaznaczając tę opcję, akceptujesz:</value>
   </data>
   <data name="AcceptPoliciesError" xml:space="preserve">
-    <value>Terms of Service and Privacy Policy have not been acknowledged.</value>
+    <value>Nie zaakceptowałeś regulaminu i polityki prywatności.</value>
   </data>
   <data name="TermsOfService" xml:space="preserve">
-    <value>Terms of Service</value>
+    <value>Regulamin</value>
   </data>
   <data name="PrivacyPolicy" xml:space="preserve">
-    <value>Privacy Policy</value>
+    <value>Polityka prywatności</value>
   </data>
 </root>
