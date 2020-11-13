@@ -1732,16 +1732,15 @@
     <value>S'està carregant</value>
   </data>
   <data name="AcceptPolicies" xml:space="preserve">
-    <value>By activating this switch you agree to the following:
-</value>
+    <value>Si activeu aquesta casella, indiqueu que esteu d’acord amb el següent:</value>
   </data>
   <data name="AcceptPoliciesError" xml:space="preserve">
-    <value>Terms of Service and Privacy Policy have not been acknowledged.</value>
+    <value>No s’han reconegut les condicions del servei i la declaració de privadesa.</value>
   </data>
   <data name="TermsOfService" xml:space="preserve">
-    <value>Terms of Service</value>
+    <value>Condicions del servei</value>
   </data>
   <data name="PrivacyPolicy" xml:space="preserve">
-    <value>Privacy Policy</value>
+    <value>Declaració de privadesa</value>
   </data>
 </root>
