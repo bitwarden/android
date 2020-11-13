@@ -1732,16 +1732,15 @@
     <value>Chargement</value>
   </data>
   <data name="AcceptPolicies" xml:space="preserve">
-    <value>By activating this switch you agree to the following:
-</value>
+    <value>En cochant cette case, vous acceptez les éléments suivants :</value>
   </data>
   <data name="AcceptPoliciesError" xml:space="preserve">
-    <value>Terms of Service and Privacy Policy have not been acknowledged.</value>
+    <value>Les conditions d'utilisation et la politique de confidentialité n'ont pas été acceptées.</value>
   </data>
   <data name="TermsOfService" xml:space="preserve">
-    <value>Terms of Service</value>
+    <value>Conditions d'utilisation</value>
   </data>
   <data name="PrivacyPolicy" xml:space="preserve">
-    <value>Privacy Policy</value>
+    <value>Politique de confidentialité</value>
   </data>
 </root>
