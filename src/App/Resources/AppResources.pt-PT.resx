@@ -1732,16 +1732,15 @@
     <value>A carregar</value>
   </data>
   <data name="AcceptPolicies" xml:space="preserve">
-    <value>By activating this switch you agree to the following:
-</value>
+    <value>Ao marcar esta caixa concorda com o seguinte:</value>
   </data>
   <data name="AcceptPoliciesError" xml:space="preserve">
     <value>Terms of Service and Privacy Policy have not been acknowledged.</value>
   </data>
   <data name="TermsOfService" xml:space="preserve">
-    <value>Terms of Service</value>
+    <value>Termos de serviço</value>
   </data>
   <data name="PrivacyPolicy" xml:space="preserve">
-    <value>Privacy Policy</value>
+    <value>Política de privacidade</value>
   </data>
 </root>
