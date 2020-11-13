@@ -1732,16 +1732,15 @@
     <value>Wird geladen</value>
   </data>
   <data name="AcceptPolicies" xml:space="preserve">
-    <value>By activating this switch you agree to the following:
-</value>
+    <value>Durch das Aktivieren dieses Schalters erklären Sie sich mit folgendem einverstanden:</value>
   </data>
   <data name="AcceptPoliciesError" xml:space="preserve">
-    <value>Terms of Service and Privacy Policy have not been acknowledged.</value>
+    <value>Nutzungsbedingungen und Datenschutzbestimmungen wurden nicht akzeptiert.</value>
   </data>
   <data name="TermsOfService" xml:space="preserve">
-    <value>Terms of Service</value>
+    <value>Nutzungsbedingungen</value>
   </data>
   <data name="PrivacyPolicy" xml:space="preserve">
-    <value>Privacy Policy</value>
+    <value>Datenschutzbestimmungen</value>
   </data>
 </root>
