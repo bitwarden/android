@@ -35,6 +35,7 @@ namespace Bit.App.Services
             Constants.iOSAutoFillClearCiphersCacheKey,
             Constants.iOSExtensionClearCiphersCacheKey,
             Constants.EnvironmentUrlsKey,
+            Constants.InlineAutofillEnabledKey,
         };
 
         private readonly HashSet<string> _migrateToPreferences = new HashSet<string>

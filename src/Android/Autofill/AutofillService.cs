@@ -46,6 +46,8 @@ namespace Bit.Droid.Autofill
             {
                 return;
             }
+            
+            var inlineAutofillEnabled = await _storageService.GetAsync<bool?>(Constants.InlineAutofillEnabledKey) ?? true;
 
             if (_vaultTimeoutService == null)
             {
@@ -64,7 +66,7 @@ namespace Bit.Droid.Autofill
             }
 
             // build response
-            var response = AutofillHelpers.BuildFillResponse(parser, items, locked, request);
+            var response = AutofillHelpers.BuildFillResponse(parser, items, locked, inlineAutofillEnabled, request);
             callback.OnSuccess(response);
         }
 

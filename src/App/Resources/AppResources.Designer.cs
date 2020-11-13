@@ -3074,5 +3074,83 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("PrivacyPolicy", resourceCulture);
             }
         }
+        
+        public static string AccessibilityDrawOverPermissionAlert {
+            get {
+                return ResourceManager.GetString("AccessibilityDrawOverPermissionAlert", resourceCulture);
+            }
+        }
+        
+        public static string AutofillServices {
+            get {
+                return ResourceManager.GetString("AutofillServices", resourceCulture);
+            }
+        }
+        
+        public static string InlineAutofill {
+            get {
+                return ResourceManager.GetString("InlineAutofill", resourceCulture);
+            }
+        }
+        
+        public static string InlineAutofillDescription {
+            get {
+                return ResourceManager.GetString("InlineAutofillDescription", resourceCulture);
+            }
+        }
+        
+        public static string Accessibility {
+            get {
+                return ResourceManager.GetString("Accessibility", resourceCulture);
+            }
+        }
+        
+        public static string AccessibilityDescription {
+            get {
+                return ResourceManager.GetString("AccessibilityDescription", resourceCulture);
+            }
+        }
+        
+        public static string AccessibilityDescription2 {
+            get {
+                return ResourceManager.GetString("AccessibilityDescription2", resourceCulture);
+            }
+        }
+        
+        public static string AccessibilityDescription3 {
+            get {
+                return ResourceManager.GetString("AccessibilityDescription3", resourceCulture);
+            }
+        }
+        
+        public static string AccessibilityDescription4 {
+            get {
+                return ResourceManager.GetString("AccessibilityDescription4", resourceCulture);
+            }
+        }
+        
+        public static string DrawOver {
+            get {
+                return ResourceManager.GetString("DrawOver", resourceCulture);
+            }
+        }
+        
+        public static string DrawOverDescription {
+            get {
+                return ResourceManager.GetString("DrawOverDescription", resourceCulture);
+            }
+        }
+        
+        public static string DrawOverDescription2 {
+            get {
+                return ResourceManager.GetString("DrawOverDescription2", resourceCulture);
+            }
+        }
+        
+        public static string DrawOverDescription3 {
+            get {
+                return ResourceManager.GetString("DrawOverDescription3", resourceCulture);
+            }
+        }
     }
 }

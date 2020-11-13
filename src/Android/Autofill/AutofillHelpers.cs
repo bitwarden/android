@@ -143,13 +143,13 @@ namespace Bit.Droid.Autofill
         }
 
         public static FillResponse BuildFillResponse(Parser parser, List<FilledItem> items, bool locked,
-            FillRequest fillRequest = null)
+            bool inlineAutofillEnabled, FillRequest fillRequest = null)
         {
             // Acquire inline presentation specs on Android 11+
             IList<InlinePresentationSpec> inlinePresentationSpecs = null;
             var inlinePresentationSpecsCount = 0;
             var inlineMaxSuggestedCount = 0;
-            if (fillRequest != null && (int)Build.VERSION.SdkInt >= 30)
+            if (inlineAutofillEnabled && fillRequest != null && (int)Build.VERSION.SdkInt >= 30)
             {
                 var inlineSuggestionsRequest = fillRequest.InlineSuggestionsRequest;
                 inlineMaxSuggestedCount = inlineSuggestionsRequest?.MaxSuggestionCount ?? 0;
