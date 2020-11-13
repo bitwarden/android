@@ -1732,16 +1732,15 @@
     <value>Memuat</value>
   </data>
   <data name="AcceptPolicies" xml:space="preserve">
-    <value>By activating this switch you agree to the following:
-</value>
+    <value>Dengan mengaktifkan sakelar ini, anda menyetujui yang berikut:</value>
   </data>
   <data name="AcceptPoliciesError" xml:space="preserve">
-    <value>Terms of Service and Privacy Policy have not been acknowledged.</value>
+    <value>Persyaratan Layanan dan Kebijakan Privasi belum diakui.</value>
   </data>
   <data name="TermsOfService" xml:space="preserve">
-    <value>Terms of Service</value>
+    <value>Persyaratan Layanan</value>
   </data>
   <data name="PrivacyPolicy" xml:space="preserve">
-    <value>Privacy Policy</value>
+    <value>Kebijakan pribadi</value>
   </data>
 </root>

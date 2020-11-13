@@ -1732,16 +1732,15 @@
     <value>A betöltés folyamatban van.</value>
   </data>
   <data name="AcceptPolicies" xml:space="preserve">
-    <value>By activating this switch you agree to the following:
-</value>
+    <value>A kapcsoló bekapcsolásával egyetértünk a következőkkel:</value>
   </data>
   <data name="AcceptPoliciesError" xml:space="preserve">
-    <value>Terms of Service and Privacy Policy have not been acknowledged.</value>
+    <value>A szolgáltatási feltételeket és az adatvédelmi irányelveket nem vették figyelembe.</value>
   </data>
   <data name="TermsOfService" xml:space="preserve">
-    <value>Terms of Service</value>
+    <value>Szolgáltatási feltételek</value>
   </data>
   <data name="PrivacyPolicy" xml:space="preserve">
-    <value>Privacy Policy</value>
+    <value>Adatvédelmi Irányelvek</value>
   </data>
 </root>

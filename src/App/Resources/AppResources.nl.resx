@@ -747,7 +747,7 @@
     <value>1. Selecteer "Bitwarden" in het scherm Android Toegankelijkheidsinstellingen - Services.</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
-    <value>2. Tik op de schuifknop en druk op Oké om te accepteren.</value>
+    <value>2. Activeer de schuifknop en druk op Oké om te accepteren.</value>
   </data>
   <data name="Disabled" xml:space="preserve">
     <value>Uitgeschakeld</value>
@@ -1732,16 +1732,15 @@
     <value>Laden</value>
   </data>
   <data name="AcceptPolicies" xml:space="preserve">
-    <value>By activating this switch you agree to the following:
-</value>
+    <value>Door deze schuifknop te activeren ga je akkoord met het volgende:</value>
   </data>
   <data name="AcceptPoliciesError" xml:space="preserve">
-    <value>Terms of Service and Privacy Policy have not been acknowledged.</value>
+    <value>Algemene voorwaarden en privacybeleid zijn nog niet erkend.</value>
   </data>
   <data name="TermsOfService" xml:space="preserve">
-    <value>Terms of Service</value>
+    <value>Algemene voorwaarden</value>
   </data>
   <data name="PrivacyPolicy" xml:space="preserve">
-    <value>Privacy Policy</value>
+    <value>Privacybeleid</value>
   </data>
 </root>

@@ -1732,16 +1732,15 @@
     <value>Loading</value>
   </data>
   <data name="AcceptPolicies" xml:space="preserve">
-    <value>By activating this switch you agree to the following:
-</value>
+    <value>By activating this switch you agree to the following:</value>
   </data>
   <data name="AcceptPoliciesError" xml:space="preserve">
     <value>Terms of Service and Privacy Policy have not been acknowledged.</value>
   </data>
   <data name="TermsOfService" xml:space="preserve">
-    <value>Terms of Service</value>
+    <value>Terms of service</value>
   </data>
   <data name="PrivacyPolicy" xml:space="preserve">
-    <value>Privacy Policy</value>
+    <value>Privacy policy</value>
   </data>
 </root>

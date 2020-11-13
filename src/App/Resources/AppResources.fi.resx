@@ -1732,16 +1732,15 @@
     <value>Ladataan</value>
   </data>
   <data name="AcceptPolicies" xml:space="preserve">
-    <value>By activating this switch you agree to the following:
-</value>
+    <value>Valitsemalla tämän ruudun hyväksyt seuraavat:</value>
   </data>
   <data name="AcceptPoliciesError" xml:space="preserve">
-    <value>Terms of Service and Privacy Policy have not been acknowledged.</value>
+    <value>Palvelu- ja tietosuojakäytäntöä ei ole vahvistettu.</value>
   </data>
   <data name="TermsOfService" xml:space="preserve">
-    <value>Terms of Service</value>
+    <value>Käyttöehdot</value>
   </data>
   <data name="PrivacyPolicy" xml:space="preserve">
-    <value>Privacy Policy</value>
+    <value>Tietosuojakäytäntö</value>
   </data>
 </root>

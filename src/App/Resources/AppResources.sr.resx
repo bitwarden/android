@@ -203,13 +203,13 @@
     <comment>Title for your favorite items in the vault.</comment>
   </data>
   <data name="FileBugReport" xml:space="preserve">
-    <value>File a Bug Report</value>
+    <value>Поднесите извештај о грешци</value>
   </data>
   <data name="FileBugReportDescription" xml:space="preserve">
     <value>Open an issue at our GitHub repository.</value>
   </data>
   <data name="FingerprintDirection" xml:space="preserve">
-    <value>Use your fingerprint to verify.</value>
+    <value>Проверите помоћу отиска.</value>
   </data>
   <data name="Folder" xml:space="preserve">
     <value>Фасцикла</value>
@@ -243,18 +243,18 @@
     <comment>Hide a secret value that is currently shown (password).</comment>
   </data>
   <data name="InternetConnectionRequiredMessage" xml:space="preserve">
-    <value>Please connect to the internet before continuing.</value>
+    <value>Повежите се на Интернет пре него што наставите.</value>
     <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
-    <value>Internet Connection Required</value>
+    <value>Неопходна је веза са интернетом</value>
     <comment>Title for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InvalidMasterPassword" xml:space="preserve">
-    <value>Invalid Master Password. Try again.</value>
+    <value>Главна Лозинка је неважећа. Покушајте поново.</value>
   </data>
   <data name="InvalidPIN" xml:space="preserve">
-    <value>Invalid PIN. Try again.</value>
+    <value>Погрешан ПИН. Покушајте поново.</value>
   </data>
   <data name="Launch" xml:space="preserve">
     <value>Покрени</value>
@@ -352,11 +352,11 @@
     <comment>Label for a username.</comment>
   </data>
   <data name="ValidationFieldRequired" xml:space="preserve">
-    <value>The {0} field is required.</value>
+    <value>Поље {0} је обавзно.</value>
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
-    <value>{0} has been copied.</value>
+    <value>{0} је копирано.</value>
     <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
@@ -568,24 +568,24 @@
     <value>Master password must be at least 8 characters long.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
-    <value>Minimum Numbers</value>
+    <value>Минимално Бројева</value>
     <comment>Minimum numeric characters for password generator settings</comment>
   </data>
   <data name="MinSpecial" xml:space="preserve">
-    <value>Minimum Special</value>
+    <value>Минимално Специјално</value>
     <comment>Minimum special characters for password generator settings</comment>
   </data>
   <data name="MoreSettings" xml:space="preserve">
-    <value>More Settings</value>
+    <value>Још подешавања</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
     <value>You must log into the main Bitwarden app before you can use the extension.</value>
   </data>
   <data name="Never" xml:space="preserve">
-    <value>Never</value>
+    <value>Никад</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>New item created.</value>
+    <value>Нова ставка креирана.</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>There are no favorites in your vault.</value>
@@ -600,7 +600,7 @@
     <value>This login does not have a username or password configured.</value>
   </data>
   <data name="OkGotIt" xml:space="preserve">
-    <value>Ok, got it!</value>
+    <value>У реду, схватам!</value>
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
@@ -750,19 +750,19 @@
     <value>2. Switch on the toggle and press OK to accept.</value>
   </data>
   <data name="Disabled" xml:space="preserve">
-    <value>Disabled</value>
+    <value>Онемогућено</value>
   </data>
   <data name="Enabled" xml:space="preserve">
-    <value>Enabled</value>
+    <value>Омогућено</value>
   </data>
   <data name="Status" xml:space="preserve">
-    <value>Status</value>
+    <value>Статус</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
     <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
-    <value>Auto-fill</value>
+    <value>Ауто-пуњење</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
     <value>Do you want to auto-fill or view this item?</value>
@@ -777,32 +777,32 @@
     <value>Possible Matching Items</value>
   </data>
   <data name="Search" xml:space="preserve">
-    <value>Search</value>
+    <value>Тражи</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
     <value>You are searching for an auto-fill item for "{0}".</value>
   </data>
   <data name="ShareVault" xml:space="preserve">
-    <value>Share Your Vault</value>
+    <value>Поделите Ваш Сеф</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
     <value>Cannot open the app "{0}".</value>
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
   </data>
   <data name="AuthenticatorAppTitle" xml:space="preserve">
-    <value>Authenticator App</value>
+    <value>Апликација Аутентификатор</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeApp" xml:space="preserve">
-    <value>Enter the 6 digit verification code from your authenticator app.</value>
+    <value>Унесите шестоцифрени верификациони код из апликације за утврђивање аутентичности.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeEmail" xml:space="preserve">
-    <value>Enter the 6 digit verification code that was emailed to {0}.</value>
+    <value>Унесите шестоцифрени верификациони код који је послан на {0}.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
-    <value>Login Unavailable</value>
+    <value>Пријава недоступна</value>
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
@@ -813,25 +813,25 @@
     <comment>For 2FA</comment>
   </data>
   <data name="RememberMe" xml:space="preserve">
-    <value>Remember me</value>
+    <value>Запамти ме</value>
     <comment>Remember my two-step login</comment>
   </data>
   <data name="SendVerificationCodeAgain" xml:space="preserve">
-    <value>Send verification code email again</value>
+    <value>Поново послати верификациони код на имејл</value>
     <comment>For 2FA</comment>
   </data>
   <data name="TwoStepLoginOptions" xml:space="preserve">
-    <value>Two-step Login Options</value>
+    <value>Опције дво-коракне пријаве</value>
   </data>
   <data name="UseAnotherTwoStepMethod" xml:space="preserve">
-    <value>Use another two-step login method</value>
+    <value>Користите другу методу пријављивања у два корака</value>
   </data>
   <data name="VerificationEmailNotSent" xml:space="preserve">
     <value>Could not send verification email. Try again.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
-    <value>Verification email sent.</value>
+    <value>Имејл за потвру је послат.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
@@ -842,10 +842,10 @@
     <comment>"YubiKey" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
-    <value>Add New Attachment</value>
+    <value>Додај нови прилог</value>
   </data>
   <data name="Attachments" xml:space="preserve">
-    <value>Attachments</value>
+    <value>Прилози</value>
   </data>
   <data name="UnableToDownloadFile" xml:space="preserve">
     <value>Unable to download file.</value>
