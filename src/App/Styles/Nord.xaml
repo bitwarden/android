@@ -51,4 +51,6 @@
 
     <Color x:Key="NavigationBarBackgroundColor">#2e3440</Color>
     <Color x:Key="NavigationBarTextColor">#e5e9f0</Color>
+    
+    <Color x:Key="HyperlinkColor">#81a1c1</Color>
 </ResourceDictionary>
