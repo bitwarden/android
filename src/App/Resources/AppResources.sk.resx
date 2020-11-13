@@ -1732,16 +1732,15 @@
     <value>Načíta sa</value>
   </data>
   <data name="AcceptPolicies" xml:space="preserve">
-    <value>By activating this switch you agree to the following:
-</value>
+    <value>Zapnutím tohto spínača súhlasíte s nasledovným:</value>
   </data>
   <data name="AcceptPoliciesError" xml:space="preserve">
-    <value>Terms of Service and Privacy Policy have not been acknowledged.</value>
+    <value>Neboli akceptované Podmienky používania a zásady Ochrany osobných údajov.</value>
   </data>
   <data name="TermsOfService" xml:space="preserve">
-    <value>Terms of Service</value>
+    <value>Podmienky používania</value>
   </data>
   <data name="PrivacyPolicy" xml:space="preserve">
-    <value>Privacy Policy</value>
+    <value>Zásady ochrany osobných údajov</value>
   </data>
 </root>
