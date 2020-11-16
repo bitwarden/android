@@ -1778,7 +1778,7 @@
     <value>When enabled, allows the Bitwarden Accessibility Service to display a popup when login fields are selected.</value>
   </data>
   <data name="DrawOverDescription2" xml:space="preserve">
-    <value>If  enabled, the Bitwarden Accessibility Service will display a popup when login fields are selected to assist with auto-filling your logins.</value>
+    <value>If enabled, the Bitwarden Accessibility Service will display a popup when login fields are selected to assist with auto-filling your logins.</value>
   </data>
   <data name="DrawOverDescription3" xml:space="preserve">
     <value>If enabled, accessibility will show a popup to augment the Autofill Service for older apps that don't support the Android Autofill Framework.</value>

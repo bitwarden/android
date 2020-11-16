@@ -23,7 +23,7 @@ namespace Bit.App.Pages
             await _vm.InitAsync();
             _vm.UpdateEnabled();
             _timerStarted = DateTime.UtcNow;
-            Device.StartTimer(new TimeSpan(0, 0, 0,0,500), () =>
+            Device.StartTimer(new TimeSpan(0, 0, 0, 0, 500), () =>
             {
                 if (_timerStarted == null || (DateTime.UtcNow - _timerStarted) > _timerMaxLength)
                 {

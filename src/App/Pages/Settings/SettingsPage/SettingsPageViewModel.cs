@@ -330,7 +330,7 @@ namespace Bit.App.Pages
                 {
                     Name = AppResources.AutofillServices,
                     SubLabel = _deviceActionService.AutofillServicesEnabled() ?
-                            AppResources.Enabled : AppResources.Disabled
+                        AppResources.Enabled : AppResources.Disabled
                 });
             }
             else
