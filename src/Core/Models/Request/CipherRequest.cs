@@ -3,6 +3,7 @@ using Bit.Core.Models.Api;
 using Bit.Core.Models.Domain;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace Bit.Core.Models.Request
 {
@@ -16,6 +17,7 @@ namespace Bit.Core.Models.Request
             Name = cipher.Name?.EncryptedString;
             Notes = cipher.Notes?.EncryptedString;
             Favorite = cipher.Favorite;
+            LastKnownRevisionDate = cipher.RevisionDate;
 
             switch (Type)
             {
@@ -118,5 +120,6 @@ namespace Bit.Core.Models.Request
         public List<PasswordHistoryRequest> PasswordHistory { get; set; }
         public Dictionary<string, string> Attachments { get; set; }
         public Dictionary<string, AttachmentRequest> Attachments2 { get; set; }
+        public DateTime LastKnownRevisionDate { get; set; }
     }
 }
