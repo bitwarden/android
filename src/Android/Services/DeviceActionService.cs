@@ -378,6 +378,34 @@ namespace Bit.Droid.Services
             }
         }
 
+        public void DisableAutofillService()
+        {
+            try
+            {
+                var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+                var type = Java.Lang.Class.FromType(typeof(AutofillManager));
+                var manager = activity.GetSystemService(type) as AutofillManager;
+                manager.DisableAutofillServices();
+            }
+            catch { }
+        }
+
+        public bool AutofillServicesEnabled()
+        {
+            if (Build.VERSION.SdkInt <= BuildVersionCodes.M)
+            {
+                // Android 5-6: Both accessibility & overlay are required or nothing happens
+                return AutofillAccessibilityServiceRunning() && AutofillAccessibilityOverlayPermitted();
+            }
+            if (Build.VERSION.SdkInt == BuildVersionCodes.N)
+            {
+                // Android 7: Only accessibility is required (overlay is optional when using quick-action tile)
+                return AutofillAccessibilityServiceRunning();
+            }
+            // Android 8+: Either autofill or accessibility is required
+            return AutofillServiceEnabled() || AutofillAccessibilityServiceRunning();
+        }
+
         public string GetBuildNumber()
         {
             return Application.Context.ApplicationContext.PackageManager.GetPackageInfo(

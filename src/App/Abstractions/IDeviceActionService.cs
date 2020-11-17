@@ -36,6 +36,8 @@ namespace Bit.App.Abstractions
         bool AutofillAccessibilityServiceRunning();
         bool AutofillAccessibilityOverlayPermitted();
         bool AutofillServiceEnabled();
+        void DisableAutofillService();
+        bool AutofillServicesEnabled();
         string GetBuildNumber();
         void OpenAccessibilitySettings();
         void OpenAccessibilityOverlayPermissionSettings();

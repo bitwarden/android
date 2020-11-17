@@ -255,13 +255,13 @@ namespace Bit.Droid.Accessibility
             
             if (!AccessibilityHelpers.OverlayPermitted())
             {
-                if (!AccessibilityHelpers.IsAutofillTileAdded)
+                if (Build.VERSION.SdkInt <= BuildVersionCodes.M)
                 {
                     // The user has the option of only using the autofill tile and leaving the overlay permission
-                    // disabled, so only show this toast if they're using accessibility without overlay permission and
-                    // have _not_ added the autofill tile
+                    // disabled, so only show this toast if they're using accessibility without overlay permission on
+                    // a version of Android without quick-action tile support
                     System.Diagnostics.Debug.WriteLine(">>> Overlay Permission not granted");
-                    Toast.MakeText(this, AppResources.AccessibilityOverlayPermissionAlert, ToastLength.Long).Show();   
+                    Toast.MakeText(this, AppResources.AccessibilityDrawOverPermissionAlert, ToastLength.Long).Show();   
                 }
                 return;
             }

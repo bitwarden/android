@@ -161,28 +161,10 @@
     <None Include="upload-keystore.jks.enc" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable-hdpi\accessibility_overlay.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\accessibility_permission.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\accessibility_step1.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\accessibility_step2.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\autofill_enable.png" />
-    <AndroidResource Include="Resources\drawable-hdpi\autofill_use.png" />
     <AndroidResource Include="Resources\drawable-hdpi\logo_legacy.png" />
     <AndroidResource Include="Resources\drawable-hdpi\logo_white_legacy.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\accessibility_overlay.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\accessibility_permission.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\accessibility_step1.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\accessibility_step2.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\autofill_enable.png" />
-    <AndroidResource Include="Resources\drawable-xhdpi\autofill_use.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\logo_legacy.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\logo_white_legacy.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\accessibility_overlay.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\accessibility_permission.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\accessibility_step1.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\accessibility_step2.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\autofill_enable.png" />
-    <AndroidResource Include="Resources\drawable-xxhdpi\autofill_use.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\logo_legacy.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\logo_white_legacy.png" />
     <AndroidResource Include="Resources\drawable\card.xml" />

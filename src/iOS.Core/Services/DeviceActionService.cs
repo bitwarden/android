@@ -392,6 +392,16 @@ namespace Bit.iOS.Core.Services
             throw new NotImplementedException();
         }
 
+        public void DisableAutofillService()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool AutofillServicesEnabled()
+        {
+            throw new NotImplementedException();
+        }
+
         public string GetBuildNumber()
         {
             return NSBundle.MainBundle.InfoDictionary["CFBundleVersion"].ToString();

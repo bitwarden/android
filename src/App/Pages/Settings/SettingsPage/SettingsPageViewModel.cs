@@ -326,22 +326,10 @@ namespace Bit.App.Pages
             var autofillItems = new List<SettingsPageListItem>();
             if (Device.RuntimePlatform == Device.Android)
             {
-                if (_deviceActionService.SupportsAutofillService())
-                {
-                    autofillItems.Add(new SettingsPageListItem
-                    {
-                        Name = AppResources.AutofillService,
-                        SubLabel = _deviceActionService.AutofillServiceEnabled() ?
-                            AppResources.Enabled : AppResources.Disabled
-                    });
-                }
-
-                var accessibilityEnabled = _deviceActionService.AutofillAccessibilityServiceRunning() &&
-                    _deviceActionService.AutofillAccessibilityOverlayPermitted();
                 autofillItems.Add(new SettingsPageListItem
                 {
-                    Name = AppResources.AutofillAccessibilityService,
-                    SubLabel = accessibilityEnabled ?
+                    Name = AppResources.AutofillServices,
+                    SubLabel = _deviceActionService.AutofillServicesEnabled() ?
                         AppResources.Enabled : AppResources.Disabled
                 });
             }

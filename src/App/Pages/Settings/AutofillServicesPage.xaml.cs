@@ -3,34 +3,33 @@ using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
-    public partial class AccessibilityServicePage : BaseContentPage
+    public partial class AutofillServicesPage : BaseContentPage
     {
-        private readonly AccessibilityServicePageViewModel _vm;
+        private readonly AutofillServicesPageViewModel _vm;
         private readonly SettingsPage _settingsPage;
         private DateTime? _timerStarted = null;
         private TimeSpan _timerMaxLength = TimeSpan.FromMinutes(5);
 
-        public AccessibilityServicePage(SettingsPage settingsPage)
+        public AutofillServicesPage(SettingsPage settingsPage)
         {
             InitializeComponent();
-            _vm = BindingContext as AccessibilityServicePageViewModel;
+            _vm = BindingContext as AutofillServicesPageViewModel;
             _vm.Page = this;
             _settingsPage = settingsPage;
         }
 
-        protected override void OnAppearing()
+        protected async override void OnAppearing()
         {
+            await _vm.InitAsync();
             _vm.UpdateEnabled();
-            _vm.UpdatePermitted();
             _timerStarted = DateTime.UtcNow;
-            Device.StartTimer(new TimeSpan(0, 0, 3), () =>
+            Device.StartTimer(new TimeSpan(0, 0, 0, 0, 500), () =>
             {
                 if (_timerStarted == null || (DateTime.UtcNow - _timerStarted) > _timerMaxLength)
                 {
                     return false;
                 }
                 _vm.UpdateEnabled();
-                _vm.UpdatePermitted();
                 return true;
             });
             base.OnAppearing();
@@ -43,19 +42,32 @@ namespace Bit.App.Pages
             base.OnDisappearing();
         }
 
-        private void Settings_Clicked(object sender, EventArgs e)
+        private void ToggleAutofillService(object sender, EventArgs e)
         {
             if (DoOnce())
             {
-                _vm.OpenSettings();
+                _vm.ToggleAutofillService();
             }
         }
-
-        private void OverlayPermissionSettings_Clicked(object sender, EventArgs e)
+        
+        private void ToggleInlineAutofill(object sender, EventArgs e)
+        {
+            _vm.ToggleInlineAutofill();
+        }
+        
+        private void ToggleAccessibility(object sender, EventArgs e)
         {
             if (DoOnce())
             {
-                _vm.OpenOverlayPermissionSettings();
+                _vm.ToggleAccessibility();
+            }
+        }
+        
+        private void ToggleDrawOver(object sender, EventArgs e)
+        {
+            if (DoOnce())
+            {
+                _vm.ToggleDrawOver();
             }
         }
     }

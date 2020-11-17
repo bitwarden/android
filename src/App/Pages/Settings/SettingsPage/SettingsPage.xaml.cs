@@ -57,13 +57,9 @@ namespace Bit.App.Pages
             {
                 await Navigation.PushModalAsync(new NavigationPage(new SyncPage()));
             }
-            else if (item.Name == AppResources.AutofillAccessibilityService)
+            else if (item.Name == AppResources.AutofillServices)
             {
-                await Navigation.PushModalAsync(new NavigationPage(new AccessibilityServicePage(this)));
-            }
-            else if (item.Name == AppResources.AutofillService)
-            {
-                await Navigation.PushModalAsync(new NavigationPage(new AutofillServicePage(this)));
+                await Navigation.PushModalAsync(new NavigationPage(new AutofillServicesPage(this)));
             }
             else if (item.Name == AppResources.PasswordAutofill)
             {
