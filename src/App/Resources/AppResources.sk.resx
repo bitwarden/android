@@ -140,7 +140,7 @@
     <comment>Navigate back to the previous screen.</comment>
   </data>
   <data name="Bitwarden" xml:space="preserve">
-    <value>bitwarden</value>
+    <value>Bitwarden</value>
     <comment>App name. Shouldn't ever change.</comment>
   </data>
   <data name="Cancel" xml:space="preserve">
@@ -409,7 +409,7 @@
     <value>Vyhnúť sa dvojvýznamovým znakom</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>bitwarden rozšírenie aplikácie</value>
+    <value>Bitwarden rozšírenie aplikácie</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
     <value>Najjednoduchší spôsob, ako pridať nové prihlasovacie údaje do trezora, je z Bitwarden rozšírenia aplikácie. Ďalšie informácie o používaní Bitwarden rozšírenia aplikácie získate prechodom do obrazovky Nastavení.</value>
@@ -418,10 +418,10 @@
     <value>Použiť bitwarden v Safari a iných aplikáciach pre automatické vypĺňanie prihlasovacích údajov.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>Služba automatického vypĺňania bitwarden</value>
+    <value>Služba automatického vypĺňania Bitwardenom</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Použite službu zjednodušenia prístupu bitwarden pre automatické vypĺňanie prihlasovacích údajov.</value>
+    <value>Použite službu zjednodušenia prístupu Bitwardenu pre automatické vypĺňanie prihlasovacích údajov.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Zmeniť email</value>
@@ -744,7 +744,7 @@
     <value>Otvoriť nastavenia zjednodušenia prístupu</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
-    <value>1. Otvorte obrazovku Uľahčenia prístupu, klepnite na "bitwarden" pod nadpisom Služby.</value>
+    <value>1. Otvorte obrazovku Uľahčenia prístupu, ťuknite na "Bitwarden" pod nadpisom Služby.</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
     <value>2. Zapnite a stlačte OK pre potvrdenie.</value>
@@ -759,7 +759,7 @@
     <value>Stav</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
-    <value>Najjednoduchší spôsob, ako pridať nové prihlasovacie údaje do trezora, je z bitwarden služby automatického vypĺňania. Ďalšie informácie o používaní bitwarden automatického vypĺňania získate prechodom do obrazovky Nastavení.</value>
+    <value>Najjednoduchší spôsob, ako pridať nové prihlasovacie údaje do vášho trezora, je prostredníctvom služby automatického vypĺňania Bitwardenu. Ďalšie informácie o používaní automatického vypĺňania Bitwardenu získate prechodom do obrazovky Nastavení.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Automatické dopĺňanie</value>
@@ -1147,7 +1147,7 @@
     <value>Bitwarden služba automatického vypĺňania využíva Android Autofill Framework pre zjednodušenie vypĺňania prihlasovacích údajov, kreditných kariet a identít v aplikáciách vo vašom zariadení.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Použite službu zjednodušenia prístupu bitwarden pre automatické vypĺňanie.</value>
+    <value>Použite službu automatického vypĺňania Bitwardenu na vypĺňanie prihlasovacích údajov, kreditných kariet a informácii identít do iných aplikácií.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Otvoriť nastavenia automatického vypĺňania</value>
@@ -1517,7 +1517,7 @@
     <value>Naozaj chcete ukončiť Bitwarden?</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
-    <value>You you want to require unlocking with your master password when the application is restarted?</value>
+    <value>Chcete po reštarte aplikácie požadovať odomykanie vaším hlavným heslom?</value>
   </data>
   <data name="Black" xml:space="preserve">
     <value>Čierna</value>
@@ -1742,5 +1742,44 @@
   </data>
   <data name="PrivacyPolicy" xml:space="preserve">
     <value>Zásady ochrany osobných údajov</value>
+  </data>
+  <data name="AccessibilityDrawOverPermissionAlert" xml:space="preserve">
+    <value>Bitwarden needs attention - Enable "Draw-Over" in "Auto-fill Services" from Bitwarden Settings</value>
+  </data>
+  <data name="AutofillServices" xml:space="preserve">
+    <value>Auto-fill Services</value>
+  </data>
+  <data name="InlineAutofill" xml:space="preserve">
+    <value>Use Inline Autofill</value>
+  </data>
+  <data name="InlineAutofillDescription" xml:space="preserve">
+    <value>Use inline autofill if your selected IME (keyboard) supports it. If your configuration is not supported (or this option is disabled), the default Autofill overlay will be used.</value>
+  </data>
+  <data name="Accessibility" xml:space="preserve">
+    <value>Use Accessibility</value>
+  </data>
+  <data name="AccessibilityDescription" xml:space="preserve">
+    <value>Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. When enabled, we'll display a popup when login fields are selected.</value>
+  </data>
+  <data name="AccessibilityDescription2" xml:space="preserve">
+    <value>Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. (Requires Draw-Over to be enabled as well)</value>
+  </data>
+  <data name="AccessibilityDescription3" xml:space="preserve">
+    <value>Use the Bitwarden Accessibility Service to use the Autofill Quick-Action Tile, and/or show a popup using Draw-Over (if enabled).</value>
+  </data>
+  <data name="AccessibilityDescription4" xml:space="preserve">
+    <value>Required to use the Autofill Quick-Action Tile, or to augment the Autofill Service by using Draw-Over (if enabled).</value>
+  </data>
+  <data name="DrawOver" xml:space="preserve">
+    <value>Use Draw-Over</value>
+  </data>
+  <data name="DrawOverDescription" xml:space="preserve">
+    <value>When enabled, allows the Bitwarden Accessibility Service to display a popup when login fields are selected.</value>
+  </data>
+  <data name="DrawOverDescription2" xml:space="preserve">
+    <value>If enabled, the Bitwarden Accessibility Service will display a popup when login fields are selected to assist with auto-filling your logins.</value>
+  </data>
+  <data name="DrawOverDescription3" xml:space="preserve">
+    <value>If enabled, accessibility will show a popup to augment the Autofill Service for older apps that don't support the Android Autofill Framework.</value>
   </data>
 </root>
