@@ -1676,37 +1676,37 @@
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Biometric change detected, login using Master Password to enable again.</value>
+    <value>Εντοπίστηκε βιομετρική αλλαγή, συνδεθείτε χρησιμοποιώντας τον κύριο κωδικό πρόσβασης για ενεργοποίηση ξανά.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
-    <value>Enable sync on refresh</value>
+    <value>Ενεργοποίηση συγχρονισμού κατά την ανανέωση</value>
   </data>
   <data name="EnableSyncOnRefreshDescription" xml:space="preserve">
-    <value>Syncing vault with pull down gesture.</value>
+    <value>Συγχρονισμός vault με κύληση προς τα κάτω.</value>
   </data>
   <data name="LogInSso" xml:space="preserve">
-    <value>Enterprise Single Sign-On</value>
+    <value>Ενιαία είσοδος για επιχειρήσεις</value>
   </data>
   <data name="LogInSsoSummary" xml:space="preserve">
-    <value>Quickly log in using your organization's single sign-on portal. Please enter your organization's identifier to begin.</value>
+    <value>Συνδεθείτε γρήγορα χρησιμοποιώντας την πύλη μεμονωμένης σύνδεσης του οργανισμού σας. Εισάγετε το αναγνωριστικό του οργανισμού σας για να ξεκινήσετε.</value>
   </data>
   <data name="OrgIdentifier" xml:space="preserve">
-    <value>Organization Identifier</value>
+    <value>Αναγνωριστικό οργανισμού</value>
   </data>
   <data name="LoginSsoError" xml:space="preserve">
-    <value>Currently unable to login with SSO</value>
+    <value>Δεν είναι δυνατή η σύνδεση με SSO</value>
   </data>
   <data name="SetMasterPassword" xml:space="preserve">
     <value>Ορισμός Κύριου Κωδικού</value>
   </data>
   <data name="SetMasterPasswordSummary" xml:space="preserve">
-    <value>In order to complete logging in with SSO, please set a master password to access and protect your vault.</value>
+    <value>Για να ολοκληρώσετε τη σύνδεση με SSO, ορίστε έναν κύριο κωδικό πρόσβασης για πρόσβαση και προστασία του vault σας.</value>
   </data>
   <data name="MasterPasswordPolicyInEffect" xml:space="preserve">
-    <value>One or more organization policies require your master password to meet the following requirements:</value>
+    <value>Σε μία ή περισσότερες πολιτικές του οργανισμού απαιτείται ο κύριος κωδικός να πληρεί τις ακόλουθες απαιτήσεις:</value>
   </data>
   <data name="PolicyInEffectMinComplexity" xml:space="preserve">
-    <value>Minimum complexity score of {0}</value>
+    <value>Ελάχιστη βαθμολογία πολυπλοκότητας {0}</value>
   </data>
   <data name="PolicyInEffectMinLength" xml:space="preserve">
     <value>Ελάχιστο μήκος {0}</value>
@@ -1727,22 +1727,60 @@
     <value>Λανθασμένος Κωδικός</value>
   </data>
   <data name="MasterPasswordPolicyValidationMessage" xml:space="preserve">
-    <value>Password does not meet organization requirements. Please check the policy information and try again.</value>
+    <value>Ο κωδικός πρόσβασης δεν πληροί τις απαιτήσεις του οργανισμού. Ελέγξτε τις πληροφορίες πολιτικής και δοκιμάστε ξανά.</value>
   </data>
   <data name="Loading" xml:space="preserve">
     <value>Φόρτωση</value>
   </data>
   <data name="AcceptPolicies" xml:space="preserve">
-    <value>By activating this switch you agree to the following:
-</value>
+    <value>Ενεργοποιώντας αυτόν τον διακόπτη συμφωνείτε με τα εξής:</value>
   </data>
   <data name="AcceptPoliciesError" xml:space="preserve">
-    <value>Terms of Service and Privacy Policy have not been acknowledged.</value>
+    <value>Οι Όροι Παροχής Υπηρεσιών και η Πολιτική Απορρήτου δεν έχουν αναγνωριστεί.</value>
   </data>
   <data name="TermsOfService" xml:space="preserve">
     <value>Όροι Χρήσης</value>
   </data>
   <data name="PrivacyPolicy" xml:space="preserve">
     <value>Πολιτική Απορρήτου</value>
+  </data>
+  <data name="AccessibilityDrawOverPermissionAlert" xml:space="preserve">
+    <value>Bitwarden needs attention - Enable "Draw-Over" in "Auto-fill Services" from Bitwarden Settings</value>
+  </data>
+  <data name="AutofillServices" xml:space="preserve">
+    <value>Auto-fill Services</value>
+  </data>
+  <data name="InlineAutofill" xml:space="preserve">
+    <value>Use Inline Autofill</value>
+  </data>
+  <data name="InlineAutofillDescription" xml:space="preserve">
+    <value>Use inline autofill if your selected IME (keyboard) supports it. If your configuration is not supported (or this option is disabled), the default Autofill overlay will be used.</value>
+  </data>
+  <data name="Accessibility" xml:space="preserve">
+    <value>Use Accessibility</value>
+  </data>
+  <data name="AccessibilityDescription" xml:space="preserve">
+    <value>Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. When enabled, we'll display a popup when login fields are selected.</value>
+  </data>
+  <data name="AccessibilityDescription2" xml:space="preserve">
+    <value>Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. (Requires Draw-Over to be enabled as well)</value>
+  </data>
+  <data name="AccessibilityDescription3" xml:space="preserve">
+    <value>Use the Bitwarden Accessibility Service to use the Autofill Quick-Action Tile, and/or show a popup using Draw-Over (if enabled).</value>
+  </data>
+  <data name="AccessibilityDescription4" xml:space="preserve">
+    <value>Required to use the Autofill Quick-Action Tile, or to augment the Autofill Service by using Draw-Over (if enabled).</value>
+  </data>
+  <data name="DrawOver" xml:space="preserve">
+    <value>Use Draw-Over</value>
+  </data>
+  <data name="DrawOverDescription" xml:space="preserve">
+    <value>When enabled, allows the Bitwarden Accessibility Service to display a popup when login fields are selected.</value>
+  </data>
+  <data name="DrawOverDescription2" xml:space="preserve">
+    <value>If enabled, the Bitwarden Accessibility Service will display a popup when login fields are selected to assist with auto-filling your logins.</value>
+  </data>
+  <data name="DrawOverDescription3" xml:space="preserve">
+    <value>If enabled, accessibility will show a popup to augment the Autofill Service for older apps that don't support the Android Autofill Framework.</value>
   </data>
 </root>
