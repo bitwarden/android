@@ -122,13 +122,15 @@
     <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>bitwarden est le moyen le plus facile et sécurisé pour stocker tous vos identifiants et mots de passe tout en les synchronisant entre vos appareils. L'extension de l'application bitwarden vous permet de vous identifier rapidement sur n'importe quel site web sur Safari ou Chrome et est supporté par des centaines d'autres applications populaires.
+    <value>Bitwarden est le moyen le plus simple et le plus sûr de conserver tous vos identifiants et mots de passe de façon totalement synchronisé sur tous vos appareils. L'application Bitwarden pour iOS vous permet de vous connecter rapidement à n'importe quel site sur votre navigateur favoris tels que Chrome, Safari ou Firefox et est pris en charge par des centaines d'applications parmi les plus populaires.
 
-Le vol de mot de passe est un problème sérieux. Les sites web et applications que vous utilisez sont attaquées tous les jours. Des failles de sécurité existent et vos mots de passe sont volés. Quand vous les réutilisez les mêmes mots de passe sur plusieurs applications et sites web, les hackers peuvent facilement accéder à vos e-mails, comptes bancaires et autres comptes sensibles.
+Le vol de mots de passe est un véritable problème : les sites et les applications que vous utilisez font l'objet d'attaques informatiques permanentes. Des failles de sécurité apparaissent et vos mots de passe peuvent vous être subtilisés. En réutilisant le même mot de passe sur plusieurs applications et sites web, pirates et hackers peuvent accéder facilement à vos e-mails, à votre compte bancaire et au reste de vos comptes en ligne.
 
-Les experts en sécurité recommendent l'utilisation de mots de passe différents et aléatoires pour chaque compte que vous créez. Mais comment gérez-vous tous ces mots de passe ? bitwarden vous facilite le travaile en créant, stockant et utilisant vos pots de passe.
+Les experts en sécurité informatique préconisent d'utiliser des mots de passe multiples et générés de façon aléatoire pour chaque compte que vous créez. Mais comment gérer tous ces mots de passe ? Grâce à Bitwarden, vous pouvez enfin créer et conserver en toute sécurité vos mots de passe et vos identifiants et y accéder de façon simple et rapide.
 
-bitwarden stocke tous les identifiants dans un coffre chiffré qui est synchronisé sur tous vos appareils. Puisqu'il est entièrement chiffré avant même de quitter votre appareil, vous êtes la seule personne à pouvoir accéder à vos données. Même l'équipe de bitwarden ne peut lire vos données, même si nous le voudrions. Vos données sont scellées par un chiffrement AES-256 bit, un salage et hachage ainsi que par un PBKDF2 SHA-256.</value>
+Bitwarden conserve tous vos identifiants et mots de passe dans un coffre-fort crypté et synchronisé sur tous vos appareils. Vos données sont encryptés avant d'être synchronisés, ainsi êtes-vous la seule personne à y avoir accès. Ainsi, quand bien même nous souhaiterions y accéder, cela nous est totalement impossible : vos données sont en effet protégées par un système de cryptographie utilisant un chiffrement AES de 256 bits et un algorithme de hachage PBKDF2 SHA-256.
+
+Bitwarden est aussi un logiciel open source et son code accessible à tous sur GitHub. Ainsi chacun est libre d'analyser, de vérifier et de contribuer au code base de Bitwarden !</value>
     <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
