@@ -1743,4 +1743,43 @@
   <data name="PrivacyPolicy" xml:space="preserve">
     <value>Kebijakan pribadi</value>
   </data>
+  <data name="AccessibilityDrawOverPermissionAlert" xml:space="preserve">
+    <value>Bitwarden needs attention - Enable "Draw-Over" in "Auto-fill Services" from Bitwarden Settings</value>
+  </data>
+  <data name="AutofillServices" xml:space="preserve">
+    <value>Auto-fill Services</value>
+  </data>
+  <data name="InlineAutofill" xml:space="preserve">
+    <value>Use Inline Autofill</value>
+  </data>
+  <data name="InlineAutofillDescription" xml:space="preserve">
+    <value>Use inline autofill if your selected IME (keyboard) supports it. If your configuration is not supported (or this option is disabled), the default Autofill overlay will be used.</value>
+  </data>
+  <data name="Accessibility" xml:space="preserve">
+    <value>Use Accessibility</value>
+  </data>
+  <data name="AccessibilityDescription" xml:space="preserve">
+    <value>Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. When enabled, we'll display a popup when login fields are selected.</value>
+  </data>
+  <data name="AccessibilityDescription2" xml:space="preserve">
+    <value>Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. (Requires Draw-Over to be enabled as well)</value>
+  </data>
+  <data name="AccessibilityDescription3" xml:space="preserve">
+    <value>Use the Bitwarden Accessibility Service to use the Autofill Quick-Action Tile, and/or show a popup using Draw-Over (if enabled).</value>
+  </data>
+  <data name="AccessibilityDescription4" xml:space="preserve">
+    <value>Required to use the Autofill Quick-Action Tile, or to augment the Autofill Service by using Draw-Over (if enabled).</value>
+  </data>
+  <data name="DrawOver" xml:space="preserve">
+    <value>Use Draw-Over</value>
+  </data>
+  <data name="DrawOverDescription" xml:space="preserve">
+    <value>When enabled, allows the Bitwarden Accessibility Service to display a popup when login fields are selected.</value>
+  </data>
+  <data name="DrawOverDescription2" xml:space="preserve">
+    <value>If enabled, the Bitwarden Accessibility Service will display a popup when login fields are selected to assist with auto-filling your logins.</value>
+  </data>
+  <data name="DrawOverDescription3" xml:space="preserve">
+    <value>If enabled, accessibility will show a popup to augment the Autofill Service for older apps that don't support the Android Autofill Framework.</value>
+  </data>
 </root>
