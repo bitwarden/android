@@ -176,7 +176,8 @@ namespace Bit.Core.Services
                 Favorite = model.Favorite,
                 OrganizationId = model.OrganizationId,
                 Type = model.Type,
-                CollectionIds = model.CollectionIds
+                CollectionIds = model.CollectionIds,
+                RevisionDate = model.RevisionDate
             };
 
             if (key == null && cipher.OrganizationId != null)
