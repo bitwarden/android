@@ -3158,5 +3158,11 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("DrawOverDescription3", resourceCulture);
             }
         }
+        
+        public static string PersonalOwnershipSubmitError {
+            get {
+                return ResourceManager.GetString("PersonalOwnershipSubmitError", resourceCulture);
+            }
+        }
     }
 }

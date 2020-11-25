@@ -20,6 +20,7 @@ namespace Bit.Core.Models.Data
             UseTotp = response.UseTotp;
             Use2fa = response.Use2fa;
             UseApi = response.UseApi;
+            UsePolicies = response.UsePolicies;
             SelfHost = response.SelfHost;
             UsersGetPremium = response.UsersGetPremium;
             Seats = response.Seats;
@@ -38,6 +39,7 @@ namespace Bit.Core.Models.Data
         public bool UseTotp { get; set; }
         public bool Use2fa { get; set; }
         public bool UseApi { get; set; }
+        public bool UsePolicies { get; set; }
         public bool SelfHost { get; set; }
         public bool UsersGetPremium { get; set; }
         public int Seats { get; set; }

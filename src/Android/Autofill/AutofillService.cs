@@ -23,6 +23,7 @@ namespace Bit.Droid.Autofill
         private ICipherService _cipherService;
         private IVaultTimeoutService _vaultTimeoutService;
         private IStorageService _storageService;
+        private IPolicyService _policyService;
 
         public async override void OnFillRequest(FillRequest request, CancellationSignal cancellationSignal,
             FillCallback callback)
@@ -89,6 +90,14 @@ namespace Bit.Droid.Autofill
                 return;
             }
 
+            _policyService ??= ServiceContainer.Resolve<IPolicyService>("policyService");
+
+            var personalOwnershipPolicies = await _policyService.GetAll(PolicyType.PersonalOwnership);
+            if (personalOwnershipPolicies != null && personalOwnershipPolicies.Any(policy => policy.Enabled))
+            {
+                    return;
+            }
+            
             var parser = new Parser(structure, ApplicationContext);
             parser.Parse();
 
