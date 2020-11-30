@@ -18,7 +18,7 @@ namespace Bit.iOS.Core.Services
         {
             if (bioIntegrityKey == null)
             {
-                bioIntegrityKey = "biometricState";
+                bioIntegrityKey = Bit.Core.Constants.BiometricIntegrityKey;
             }
             var state = GetState();
             if (state != null)
@@ -33,7 +33,7 @@ namespace Bit.iOS.Core.Services
         {
             if (bioIntegrityKey == null)
             {
-                bioIntegrityKey = "biometricState";
+                bioIntegrityKey = Bit.Core.Constants.BiometricIntegrityKey;
             }
             var oldState = await _storageService.GetAsync<string>(bioIntegrityKey);
             if (oldState == null)

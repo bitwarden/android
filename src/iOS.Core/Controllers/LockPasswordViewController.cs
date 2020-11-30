@@ -59,6 +59,8 @@ namespace Bit.iOS.Core.Controllers
             _pinLock = (_pinSet.Item1 && _vaultTimeoutService.PinProtectedKey != null) || _pinSet.Item2;
             _biometricLock = _vaultTimeoutService.IsBiometricLockSetAsync().GetAwaiter().GetResult() &&
                 _cryptoService.HasKeyAsync().GetAwaiter().GetResult();
+            _biometricIntegrityValid = _biometricService.ValidateIntegrityAsync(BiometricIntegrityKey).GetAwaiter()
+                .GetResult();
 
             BaseNavItem.Title = _pinLock ? AppResources.VerifyPIN : AppResources.VerifyMasterPassword;
             BaseCancelButton.Title = AppResources.Cancel;
@@ -86,8 +88,6 @@ namespace Bit.iOS.Core.Controllers
 
             base.ViewDidLoad();
 
-            _biometricIntegrityValid = _biometricService.ValidateIntegrityAsync(BiometricIntegrityKey).GetAwaiter()
-                .GetResult();
             if (_biometricLock)
             {
                 if (!_biometricIntegrityValid)
