@@ -86,10 +86,10 @@ namespace Bit.iOS.Core.Controllers
 
             base.ViewDidLoad();
 
+            _biometricIntegrityValid = _biometricService.ValidateIntegrityAsync(BiometricIntegrityKey).GetAwaiter()
+                .GetResult();
             if (_biometricLock)
             {
-                _biometricIntegrityValid = _biometricService.ValidateIntegrityAsync(BiometricIntegrityKey).GetAwaiter()
-                    .GetResult();
                 if (!_biometricIntegrityValid)
                 {
                     return;
