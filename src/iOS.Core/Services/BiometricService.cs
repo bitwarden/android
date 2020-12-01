@@ -18,7 +18,7 @@ namespace Bit.iOS.Core.Services
         {
             if (bioIntegrityKey == null)
             {
-                bioIntegrityKey = "biometricState";
+                bioIntegrityKey = Bit.Core.Constants.BiometricIntegrityKey;
             }
             var state = GetState();
             if (state != null)
@@ -31,28 +31,27 @@ namespace Bit.iOS.Core.Services
 
         public async Task<bool> ValidateIntegrityAsync(string bioIntegrityKey = null)
         {
+            var state = GetState();
+            if (state == null)
+            {
+                // Fallback for devices unable to retrieve state
+                return true;
+            }
+            
             if (bioIntegrityKey == null)
             {
-                bioIntegrityKey = "biometricState";
+                bioIntegrityKey = Bit.Core.Constants.BiometricIntegrityKey;
             }
             var oldState = await _storageService.GetAsync<string>(bioIntegrityKey);
             if (oldState == null)
             {
-                // Fallback for upgraded devices
-                await SetupBiometricAsync(bioIntegrityKey);
-
-                return true;
+                oldState = await GetMigratedIntegrityState(bioIntegrityKey);
             }
-            else
+            if (oldState != null)
             {
-                var state = GetState();
-                if (state != null)
-                {
-                    return FromBase64(oldState).Equals(state);
-                }
-
-                return true;
+                return FromBase64(oldState).Equals(state);
             }
+            return false;
         }
 
         private NSData GetState()
@@ -72,6 +71,36 @@ namespace Bit.iOS.Core.Services
         {
             var bytes = System.Convert.FromBase64String(data);
             return NSData.FromArray(bytes);
+        }
+
+        private async Task<string> GetMigratedIntegrityState(string bioIntegrityKey)
+        {
+            var legacyKey = "biometricState";
+            if (bioIntegrityKey == Bit.Core.Constants.iOSAutoFillBiometricIntegrityKey)
+            {
+                legacyKey = "autofillBiometricState";
+            }
+            else if (bioIntegrityKey == Bit.Core.Constants.iOSExtensionBiometricIntegrityKey)
+            {
+                legacyKey = "extensionBiometricState";
+            }
+            
+            // Original values are pulled from DB since the legacy keys were never defined in _preferenceStorageKeys
+            var integrityState = await _storageService.GetAsync<string>(legacyKey);
+            if (integrityState != null)
+            {
+                // Save original value to pref storage with new key
+                await _storageService.SaveAsync(bioIntegrityKey, integrityState);
+                
+                // Remove value from DB storage with legacy key
+                await _storageService.RemoveAsync(legacyKey);
+                
+                // Return value as if it was always in pref storage
+                return integrityState;
+            }
+            
+            // Return null since the state was never set
+            return null;
         }
     }
 }

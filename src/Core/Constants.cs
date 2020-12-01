@@ -29,8 +29,11 @@
         public static string OldUserIdKey = "userId";
         public static string AddSitePromptShownKey = "addSitePromptShown";
         public static string ClearCiphersCacheKey = "clearCiphersCache";
+        public static string BiometricIntegrityKey = "biometricIntegrityState";
         public static string iOSAutoFillClearCiphersCacheKey = "iOSAutoFillClearCiphersCache";
+        public static string iOSAutoFillBiometricIntegrityKey = "iOSAutoFillBiometricIntegrityState";
         public static string iOSExtensionClearCiphersCacheKey = "iOSExtensionClearCiphersCache";
+        public static string iOSExtensionBiometricIntegrityKey = "iOSExtensionBiometricIntegrityState";
         public static string MigratedFromV1 = "migratedFromV1";
         public static string MigratedFromV1AutofillPromptShown = "migratedV1AutofillPromptShown";
         public static string TriedV1Resync = "triedV1Resync";

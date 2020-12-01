@@ -32,8 +32,11 @@ namespace Bit.App.Services
             Constants.MigratedFromV1AutofillPromptShown,
             Constants.TriedV1Resync,
             Constants.ClearCiphersCacheKey,
+            Constants.BiometricIntegrityKey,
             Constants.iOSAutoFillClearCiphersCacheKey,
+            Constants.iOSAutoFillBiometricIntegrityKey,
             Constants.iOSExtensionClearCiphersCacheKey,
+            Constants.iOSExtensionBiometricIntegrityKey,
             Constants.EnvironmentUrlsKey,
             Constants.InlineAutofillEnabledKey,
         };
