@@ -293,7 +293,7 @@ namespace Bit.iOS.Core.Controllers
                             cell.TextLabel.Font = ThemeHelpers.GetDangerFont();
                             cell.TextLabel.Lines = 0;
                             cell.TextLabel.LineBreakMode = UILineBreakMode.WordWrap;
-                            cell.TextLabel.Text = AppResources.BiometricInvalidated;
+                            cell.TextLabel.Text = AppResources.BiometricInvalidatedExtension;
                         }
                         return cell;
                     }

@@ -2943,6 +2943,12 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string BiometricInvalidatedExtension {
+            get {
+                return ResourceManager.GetString("BiometricInvalidatedExtension", resourceCulture);
+            }
+        }
+        
         public static string EnableSyncOnRefresh {
             get {
                 return ResourceManager.GetString("EnableSyncOnRefresh", resourceCulture);

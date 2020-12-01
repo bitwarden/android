@@ -31,6 +31,13 @@ namespace Bit.iOS.Core.Services
 
         public async Task<bool> ValidateIntegrityAsync(string bioIntegrityKey = null)
         {
+            var state = GetState();
+            if (state == null)
+            {
+                // Fallback for devices unable to retrieve state
+                return true;
+            }
+            
             if (bioIntegrityKey == null)
             {
                 bioIntegrityKey = Bit.Core.Constants.BiometricIntegrityKey;
@@ -40,23 +47,11 @@ namespace Bit.iOS.Core.Services
             {
                 oldState = await GetMigratedIntegrityState(bioIntegrityKey);
             }
-            if (oldState == null)
+            if (oldState != null)
             {
-                // Fallback for upgraded devices
-                await SetupBiometricAsync(bioIntegrityKey);
-
-                return true;
+                return FromBase64(oldState).Equals(state);
             }
-            else
-            {
-                var state = GetState();
-                if (state != null)
-                {
-                    return FromBase64(oldState).Equals(state);
-                }
-
-                return true;
-            }
+            return false;
         }
 
         private NSData GetState()
