@@ -24,6 +24,7 @@ namespace Bit.Droid.Autofill
         private IVaultTimeoutService _vaultTimeoutService;
         private IStorageService _storageService;
         private IPolicyService _policyService;
+        private IUserService _userService;
 
         public async override void OnFillRequest(FillRequest request, CancellationSignal cancellationSignal,
             FillCallback callback)
@@ -93,9 +94,21 @@ namespace Bit.Droid.Autofill
             _policyService ??= ServiceContainer.Resolve<IPolicyService>("policyService");
 
             var personalOwnershipPolicies = await _policyService.GetAll(PolicyType.PersonalOwnership);
-            if (personalOwnershipPolicies != null && personalOwnershipPolicies.Any(policy => policy.Enabled))
+            if (personalOwnershipPolicies != null)
             {
-                    return;
+                _userService ??= ServiceContainer.Resolve<IUserService>("userService");
+                foreach (var policy in personalOwnershipPolicies)
+                {
+                    if (policy.Enabled)
+                    {
+                        var org = await _userService.GetOrganizationAsync(policy.OrganizationId);
+                        if (org != null && org.Enabled && org.UsePolicies && !org.IsAdmin
+                           && org.Status == OrganizationUserStatusType.Confirmed)
+                        {
+                            return;
+                        }
+                    }
+                }
             }
             
             var parser = new Parser(structure, ApplicationContext);
