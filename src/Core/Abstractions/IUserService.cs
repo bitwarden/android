@@ -20,7 +20,7 @@ namespace Bit.Core.Abstractions
         Task<string> GetUserIdAsync();
         Task<bool> IsAuthenticatedAsync();
         Task ReplaceOrganizationsAsync(Dictionary<string, OrganizationData> organizations);
-        Task SetInformationAsync(string userId, string email, KdfType kdf, int kdfIterations);
+        Task SetInformationAsync(string userId, string email, KdfType kdf, int? kdfIterations);
         Task SetSecurityStampAsync(string stamp);
     }
 }

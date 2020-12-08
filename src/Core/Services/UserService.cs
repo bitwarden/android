@@ -32,7 +32,7 @@ namespace Bit.Core.Services
             _tokenService = tokenService;
         }
 
-        public async Task SetInformationAsync(string userId, string email, KdfType kdf, int kdfIterations)
+        public async Task SetInformationAsync(string userId, string email, KdfType kdf, int? kdfIterations)
         {
             _email = email;
             _userId = userId;
