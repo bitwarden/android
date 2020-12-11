@@ -430,6 +430,13 @@ namespace Bit.iOS.Core.Services
             return false;
         }
 
+        public long GetActiveTime()
+        {
+            // Fall back to UnixTimeSeconds in case this approach stops working. We'll lose clock-change protection but
+            // the lock functionality will continue to work.
+            return iOSHelpers.GetSystemUpTimeSeconds() ?? DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        }
+
         private void ImagePicker_FinishedPickingMedia(object sender, UIImagePickerMediaPickedEventArgs e)
         {
             if (sender is UIImagePickerController picker)

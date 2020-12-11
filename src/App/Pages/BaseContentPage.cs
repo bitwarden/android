@@ -3,6 +3,7 @@ using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using System;
 using System.Threading.Tasks;
+using Bit.App.Abstractions;
 using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
@@ -12,6 +13,7 @@ namespace Bit.App.Pages
     public class BaseContentPage : ContentPage
     {
         private IStorageService _storageService;
+        private IDeviceActionService _deviceActionService;
 
         protected int ShowModalAnimationDelay = 400;
         protected int ShowPageAnimationDelay = 100;
@@ -101,18 +103,22 @@ namespace Bit.App.Pages
             });
         }
 
-        private void SetStorageService()
+        private void SetServices()
         {
             if (_storageService == null)
             {
                 _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             }
+            if (_deviceActionService == null)
+            {
+                _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            }
         }
 
         private void SaveActivity()
         {
-            SetStorageService();
-            _storageService.SaveAsync(Constants.LastActiveKey, DateTime.UtcNow);
+            SetServices();
+            _storageService.SaveAsync(Constants.LastActiveKey, _deviceActionService.GetActiveTime());
         }
     }
 }

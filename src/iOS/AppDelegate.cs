@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using AuthenticationServices;
 using Bit.App.Abstractions;
 using Bit.App.Pages;
-using Bit.App.Resources;
 using Bit.App.Services;
 using Bit.App.Utilities;
 using Bit.Core;
@@ -212,7 +211,7 @@ namespace Bit.iOS
             UIApplication.SharedApplication.KeyWindow.BringSubviewToFront(view);
             UIApplication.SharedApplication.KeyWindow.EndEditing(true);
             UIApplication.SharedApplication.SetStatusBarHidden(true, false);
-            _storageService.SaveAsync(Constants.LastActiveKey, DateTime.UtcNow);
+            _storageService.SaveAsync(Constants.LastActiveKey, _deviceActionService.GetActiveTime());
             _messagingService.Send("slept");
             base.DidEnterBackground(uiApplication);
         }
