@@ -12,6 +12,12 @@ namespace Bit.Core.Models.Export
             CollectionIds = obj.CollectionIds;
         }
 
+        public CipherWithId(Domain.Cipher obj) : base(obj)
+        {
+            Id = obj.Id;
+            CollectionIds = obj.CollectionIds;
+        }
+
         [JsonProperty(Order = int.MinValue)]
         public string Id { get; set; }
         [JsonProperty(Order = int.MaxValue)]

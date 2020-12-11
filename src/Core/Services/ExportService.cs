@@ -10,7 +10,6 @@ using Bit.Core.Models.Export;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
 using CsvHelper;
-using CsvHelper.Configuration;
 using CsvHelper.Configuration.Attributes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -72,13 +71,28 @@ namespace Bit.Core.Services
                     return writer.ToString();
                 }
             }
+            else if (format == "encrypted_json")
+            {
+                var jsonDoc = new
+                {
+                    Folders = (await _folderService.GetAllAsync()).Where(f => f.Id != null).Select(f => new FolderWithId(f)),
+                    Items = (await _cipherService.GetAllAsync()).Where(c => c.OrganizationId == null).Select(c => new CipherWithId(c)),
+                };
+
+                return CoreHelpers.SerializeJson(jsonDoc,
+                    new JsonSerializerSettings
+                    {
+                        Formatting = Formatting.Indented,
+                        ContractResolver = new CamelCasePropertyNamesContractResolver()
+                    });
+            }
             else
             {
                 var jsonDoc = new
                 {
                     Folders = _decryptedFolders.Where(f => f.Id != null).Select(f => new FolderWithId(f)),
                     Items = _decryptedCiphers.Where(c => c.OrganizationId == null)
-                        .Select(c => new CipherWithId(c) {CollectionIds = null})
+                        .Select(c => new CipherWithId(c) { CollectionIds = null })
                 };
 
                 return CoreHelpers.SerializeJson(jsonDoc,

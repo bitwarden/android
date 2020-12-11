@@ -17,6 +17,15 @@ namespace Bit.Core.Models.Export
             Totp = obj.Totp;
         }
 
+        public Login(Domain.Login obj)
+        {
+            Uris = obj.Uris?.Select(u => new LoginUri(u)).ToList();
+
+            Username = obj.Username?.EncryptedString;
+            Password = obj.Password?.EncryptedString;
+            Totp = obj.Totp?.EncryptedString;
+        }
+
         public List<LoginUri> Uris { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }

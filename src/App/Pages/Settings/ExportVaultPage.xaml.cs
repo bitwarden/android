@@ -65,5 +65,13 @@ namespace Bit.App.Pages
                 await _vm.ExportVaultAsync();
             }
         }
+
+        void FileFormat_Changed(object sender, EventArgs e)
+        {
+            if (_vm != null)
+            {
+                _vm.UpdateWarning();
+            }
+        }
     }
 }
