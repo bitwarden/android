@@ -387,6 +387,12 @@ namespace Bit.App.Pages
                     IdentityTitleOptions.FindIndex(k => k.Value == Cipher.Identity.Title);
                 OwnershipSelectedIndex = string.IsNullOrWhiteSpace(Cipher.OrganizationId) ? 0 :
                     OwnershipOptions.FindIndex(k => k.Value == Cipher.OrganizationId);
+                
+                // If the selected organization is on Index 0 and we've removed the personal option, force refresh
+                if (!AllowPersonal && OwnershipSelectedIndex == 0)
+                {
+                    OrganizationChanged();
+                }
 
                 if ((!EditMode || CloneMode) && (CollectionIds?.Any() ?? false))
                 {
@@ -434,6 +440,7 @@ namespace Bit.App.Pages
                 return false;
             }
 
+            Cipher.OrganizationId = null;
             if ((!EditMode || CloneMode) && !AllowPersonal && string.IsNullOrWhiteSpace(Cipher.OrganizationId))
             {
                 await Page.DisplayAlert(AppResources.AnErrorHasOccurred,
