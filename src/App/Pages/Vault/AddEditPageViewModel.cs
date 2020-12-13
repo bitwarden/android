@@ -439,8 +439,7 @@ namespace Bit.App.Pages
                     AppResources.Ok);
                 return false;
             }
-
-            Cipher.OrganizationId = null;
+            
             if ((!EditMode || CloneMode) && !AllowPersonal && string.IsNullOrWhiteSpace(Cipher.OrganizationId))
             {
                 await Page.DisplayAlert(AppResources.AnErrorHasOccurred,
