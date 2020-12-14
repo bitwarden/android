@@ -68,10 +68,7 @@ namespace Bit.App.Pages
 
         void FileFormat_Changed(object sender, EventArgs e)
         {
-            if (_vm != null)
-            {
-                _vm.UpdateWarning();
-            }
+            _vm?.UpdateWarning();
         }
     }
 }
