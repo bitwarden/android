@@ -25,6 +25,7 @@ namespace Bit.App.Pages
         private readonly IAuditService _auditService;
         private readonly IMessagingService _messagingService;
         private readonly IEventService _eventService;
+        private readonly IPolicyService _policyService;
         private CipherView _cipher;
         private bool _showNotesSeparator;
         private bool _showPassword;
@@ -78,6 +79,7 @@ namespace Bit.App.Pages
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _collectionService = ServiceContainer.Resolve<ICollectionService>("collectionService");
             _eventService = ServiceContainer.Resolve<IEventService>("eventService");
+            _policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
             GeneratePasswordCommand = new Command(GeneratePassword);
             TogglePasswordCommand = new Command(TogglePassword);
             ToggleCardCodeCommand = new Command(ToggleCardCode);
@@ -87,6 +89,7 @@ namespace Bit.App.Pages
             Uris = new ExtendedObservableCollection<LoginUriView>();
             Fields = new ExtendedObservableCollection<AddEditPageFieldViewModel>();
             Collections = new ExtendedObservableCollection<CollectionViewModel>();
+            AllowPersonal = true;
 
             TypeOptions = new List<KeyValuePair<string, CipherType>>
             {
@@ -276,6 +279,7 @@ namespace Bit.App.Pages
         public string ShowCardCodeIcon => ShowCardCode ? "" : "";
         public int PasswordFieldColSpan => Cipher.ViewPassword ? 1 : 4;
         public int TotpColumnSpan => Cipher.ViewPassword ? 1 : 2;
+        public bool AllowPersonal { get; set; }
 
         public void Init()
         {
@@ -284,6 +288,7 @@ namespace Bit.App.Pages
 
         public async Task<bool> LoadAsync(AppOptions appOptions = null)
         {
+            var policies = (await _policyService.GetAll(PolicyType.PersonalOwnership))?.ToList();
             var myEmail = await _userService.GetEmailAsync();
             OwnershipOptions.Add(new KeyValuePair<string, string>(myEmail, null));
             var orgs = await _userService.GetAllOrganizationAsync();
@@ -292,6 +297,24 @@ namespace Bit.App.Pages
                 if (org.Enabled && org.Status == OrganizationUserStatusType.Confirmed)
                 {
                     OwnershipOptions.Add(new KeyValuePair<string, string>(org.Name, org.Id));
+                    if (policies != null && org.UsePolicies && !org.IsAdmin && AllowPersonal)
+                    {
+                        foreach (var policy in policies)
+                        {
+                            if (policy.OrganizationId == org.Id && policy.Enabled)
+                            {
+                                AllowPersonal = false;
+                                // Remove personal ownership
+                                OwnershipOptions.RemoveAt(0);
+                                // Default to the organization who owns this policy for now (if necessary)
+                                if (string.IsNullOrWhiteSpace(OrganizationId))
+                                {
+                                    OrganizationId = org.Id;
+                                }
+                                break;
+                            }
+                        }
+                    }
                 }
             }
 
@@ -364,6 +387,12 @@ namespace Bit.App.Pages
                     IdentityTitleOptions.FindIndex(k => k.Value == Cipher.Identity.Title);
                 OwnershipSelectedIndex = string.IsNullOrWhiteSpace(Cipher.OrganizationId) ? 0 :
                     OwnershipOptions.FindIndex(k => k.Value == Cipher.OrganizationId);
+                
+                // If the selected organization is on Index 0 and we've removed the personal option, force refresh
+                if (!AllowPersonal && OwnershipSelectedIndex == 0)
+                {
+                    OrganizationChanged();
+                }
 
                 if ((!EditMode || CloneMode) && (CollectionIds?.Any() ?? false))
                 {
@@ -408,6 +437,13 @@ namespace Bit.App.Pages
                 await Page.DisplayAlert(AppResources.AnErrorHasOccurred,
                     string.Format(AppResources.ValidationFieldRequired, AppResources.Name),
                     AppResources.Ok);
+                return false;
+            }
+            
+            if ((!EditMode || CloneMode) && !AllowPersonal && string.IsNullOrWhiteSpace(Cipher.OrganizationId))
+            {
+                await Page.DisplayAlert(AppResources.AnErrorHasOccurred,
+                    AppResources.PersonalOwnershipSubmitError,AppResources.Ok);
                 return false;
             }
 

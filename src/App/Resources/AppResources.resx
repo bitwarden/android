@@ -1786,4 +1786,7 @@
   <data name="DrawOverDescription3" xml:space="preserve">
     <value>If enabled, accessibility will show a popup to augment the Autofill Service for older apps that don't support the Android Autofill Framework.</value>
   </data>
+  <data name="PersonalOwnershipSubmitError" xml:space="preserve">
+    <value>Due to an Enterprise Policy, you are restricted from saving items to your personal vault. Change the Ownership option to an organization and choose from available Collections.</value>
+  </data>
 </root>
