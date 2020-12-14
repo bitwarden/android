@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using AuthenticationServices;
 using Bit.App.Abstractions;
 using Bit.App.Pages;
-using Bit.App.Resources;
 using Bit.App.Services;
 using Bit.App.Utilities;
 using Bit.Core;
@@ -29,8 +28,6 @@ namespace Bit.iOS
         private Core.NFCReaderDelegate _nfcDelegate = null;
         private NSTimer _clipboardTimer = null;
         private nint _clipboardBackgroundTaskId;
-        private NSTimer _vaultTimeoutTimer = null;
-        private nint _lockBackgroundTaskId;
         private NSTimer _eventTimer = null;
         private nint _eventBackgroundTaskId;
 
@@ -59,15 +56,7 @@ namespace Bit.iOS
 
             _broadcasterService.Subscribe(nameof(AppDelegate), async (message) =>
             {
-                if (message.Command == "scheduleVaultTimeoutTimer")
-                {
-                    VaultTimeoutTimer((int)message.Data);
-                }
-                else if (message.Command == "cancelVaultTimeoutTimer")
-                {
-                    CancelVaultTimeoutTimer();
-                }
-                else if (message.Command == "startEventTimer")
+                if (message.Command == "startEventTimer")
                 {
                     StartEventTimer();
                 }
@@ -212,7 +201,7 @@ namespace Bit.iOS
             UIApplication.SharedApplication.KeyWindow.BringSubviewToFront(view);
             UIApplication.SharedApplication.KeyWindow.EndEditing(true);
             UIApplication.SharedApplication.SetStatusBarHidden(true, false);
-            _storageService.SaveAsync(Constants.LastActiveKey, DateTime.UtcNow);
+            _storageService.SaveAsync(Constants.LastActiveKey, _deviceActionService.GetActiveTime());
             _messagingService.Send("slept");
             base.DidEnterBackground(uiApplication);
         }
@@ -320,55 +309,6 @@ namespace Bit.iOS
             var iosPushNotificationService = new iOSPushNotificationService();
             ServiceContainer.Register<IPushNotificationService>(
                 "pushNotificationService", iosPushNotificationService);
-        }
-
-        private void VaultTimeoutTimer(int vaultTimeoutMinutes)
-        {
-            if (_lockBackgroundTaskId > 0)
-            {
-                UIApplication.SharedApplication.EndBackgroundTask(_lockBackgroundTaskId);
-                _lockBackgroundTaskId = 0;
-            }
-            _lockBackgroundTaskId = UIApplication.SharedApplication.BeginBackgroundTask(() =>
-            {
-                UIApplication.SharedApplication.EndBackgroundTask(_lockBackgroundTaskId);
-                _lockBackgroundTaskId = 0;
-            });
-            var vaultTimeoutMs = vaultTimeoutMinutes * 60000;
-            _vaultTimeoutTimer?.Invalidate();
-            _vaultTimeoutTimer?.Dispose();
-            _vaultTimeoutTimer = null;
-            var vaultTimeoutMsSpan = TimeSpan.FromMilliseconds(vaultTimeoutMs + 10);
-            Device.BeginInvokeOnMainThread(() =>
-            {
-                _vaultTimeoutTimer = NSTimer.CreateScheduledTimer(vaultTimeoutMsSpan, timer =>
-                {
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        _vaultTimeoutService.CheckVaultTimeoutAsync();
-                        _vaultTimeoutTimer?.Invalidate();
-                        _vaultTimeoutTimer?.Dispose();
-                        _vaultTimeoutTimer = null;
-                        if (_lockBackgroundTaskId > 0)
-                        {
-                            UIApplication.SharedApplication.EndBackgroundTask(_lockBackgroundTaskId);
-                            _lockBackgroundTaskId = 0;
-                        }
-                    });
-                });
-            });
-        }
-
-        private void CancelVaultTimeoutTimer()
-        {
-            _vaultTimeoutTimer?.Invalidate();
-            _vaultTimeoutTimer?.Dispose();
-            _vaultTimeoutTimer = null;
-            if (_lockBackgroundTaskId > 0)
-            {
-                UIApplication.SharedApplication.EndBackgroundTask(_lockBackgroundTaskId);
-                _lockBackgroundTaskId = 0;
-            }
         }
 
         private async Task ClearClipboardTimerAsync(Tuple<string, int?, bool> data)

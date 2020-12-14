@@ -241,5 +241,10 @@ namespace Bit.App.Services
             catch { }
             return false;
         }
+
+        public long GetActiveTime()
+        {
+            return _deviceActionService.GetActiveTime();
+        }
     }
 }

@@ -90,13 +90,13 @@ namespace Bit.Core.Services
             {
                 return;
             }
-            var lastActive = await _storageService.GetAsync<DateTime?>(Constants.LastActiveKey);
+            var lastActive = await _storageService.GetAsync<long?>(Constants.LastActiveKey);
             if (lastActive == null)
             {
                 return;
             }
-            var diff = DateTime.UtcNow - lastActive.Value;
-            if (diff.TotalSeconds >= vaultTimeout.Value)
+            var diff = _platformUtilsService.GetActiveTime() - lastActive;
+            if (diff >= vaultTimeout * 60)
             {
                 // Pivot based on saved action
                 var action = await _storageService.GetAsync<string>(Constants.VaultTimeoutActionKey);

@@ -28,5 +28,6 @@ namespace Bit.Core.Abstractions
         bool SupportsDuo();
         Task<bool> SupportsBiometricAsync();
         Task<bool> AuthenticateBiometricAsync(string text = null, string fallbackText = null, Action fallback = null);
+        long GetActiveTime();
     }
 }

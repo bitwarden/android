@@ -752,6 +752,15 @@ namespace Bit.Droid.Services
             return false;
         }
 
+        public long GetActiveTime()
+        {
+            // Returns milliseconds since the system was booted, and includes deep sleep. This clock is guaranteed to
+            // be monotonic, and continues to tick even when the CPU is in power saving modes, so is the recommend
+            // basis for general purpose interval timing.
+            // ref: https://developer.android.com/reference/android/os/SystemClock#elapsedRealtime()
+            return SystemClock.ElapsedRealtime() / 1000;
+        }
+
         private bool DeleteDir(Java.IO.File dir)
         {
             if (dir != null && dir.IsDirectory)

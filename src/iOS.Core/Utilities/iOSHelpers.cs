@@ -1,4 +1,7 @@
-﻿using Bit.App.Utilities;
+﻿using System;
+using System.Runtime.InteropServices;
+using Bit.App.Utilities;
+using Microsoft.AppCenter.Crashes;
 using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
@@ -7,7 +10,52 @@ namespace Bit.iOS.Core.Utilities
 {
     public static class iOSHelpers
     {
-        public static System.nfloat? GetAccessibleFont<T>(double size)
+        [DllImport(ObjCRuntime.Constants.SystemLibrary)]
+        internal static extern int sysctlbyname([MarshalAs(UnmanagedType.LPStr)] string property, IntPtr output,
+            IntPtr oldLen, IntPtr newp, uint newLen);
+
+        // Returns the difference between when the system was booted and now in seconds, resulting in a duration that
+        // includes sleep time.
+        // ref: https://forums.xamarin.com/discussion/20006/access-to-sysctl-h
+        // ref: https://github.com/XLabs/Xamarin-Forms-Labs/blob/master/src/Platform/XLabs.Platform.iOS/Device/AppleDevice.cs
+        public static long? GetSystemUpTimeSeconds()
+        {
+            long? uptime = null;
+            IntPtr pLen = default, pStr = default;
+            try
+            {
+                var property = "kern.boottime";
+                pLen = Marshal.AllocHGlobal(sizeof(int));
+                sysctlbyname(property, IntPtr.Zero, pLen, IntPtr.Zero, 0);
+                var length = Marshal.ReadInt32(pLen);
+                pStr = Marshal.AllocHGlobal(length);
+                sysctlbyname(property, pStr, pLen, IntPtr.Zero, 0);
+                var timeVal = Marshal.PtrToStructure<TimeVal>(pStr);
+                var now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                if (timeVal.sec > 0 && now > 0)
+                {
+                    uptime = now - timeVal.sec;
+                }
+            }
+            catch (Exception e)
+            {
+                Crashes.TrackError(e);
+            }
+            finally
+            {
+                if (pLen != default)
+                {
+                    Marshal.FreeHGlobal(pLen);
+                }
+                if (pStr != default)
+                {
+                    Marshal.FreeHGlobal(pStr);
+                }
+            }
+            return uptime;
+        }
+
+        public static nfloat? GetAccessibleFont<T>(double size)
         {
             var pointSize = UIFontDescriptor.PreferredBody.PointSize;
             if (size == Device.GetNamedSize(NamedSize.Large, typeof(T)))
@@ -59,6 +107,12 @@ namespace Bit.iOS.Core.Utilities
                 NSLayoutConstraint.Create(borderLine, NSLayoutAttribute.Top, NSLayoutRelation.Equal,
                     control, NSLayoutAttribute.Bottom, 1, 10f),
             });
+        }
+        
+        private struct TimeVal
+        {
+            public long sec;
+            public long usec;
         }
     }
 }
