@@ -20,13 +20,14 @@ namespace Bit.iOS.Core.Utilities
         public static long? GetSystemUpTimeSeconds()
         {
             long? uptime = null;
+            IntPtr pLen = default, pStr = default;
             try
             {
                 var property = "kern.boottime";
-                var pLen = Marshal.AllocHGlobal(sizeof(int));
+                pLen = Marshal.AllocHGlobal(sizeof(int));
                 sysctlbyname(property, IntPtr.Zero, pLen, IntPtr.Zero, 0);
                 var length = Marshal.ReadInt32(pLen);
-                var pStr = Marshal.AllocHGlobal(length);
+                pStr = Marshal.AllocHGlobal(length);
                 sysctlbyname(property, pStr, pLen, IntPtr.Zero, 0);
                 var timeVal = Marshal.PtrToStructure<TimeVal>(pStr);
                 var now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
@@ -36,6 +37,17 @@ namespace Bit.iOS.Core.Utilities
                 }
             }
             catch { }
+            finally
+            {
+                if (pLen != default)
+                {
+                    Marshal.FreeHGlobal(pLen);
+                }
+                if (pStr != default)
+                {
+                    Marshal.FreeHGlobal(pStr);
+                }
+            }
             return uptime;
         }
 
