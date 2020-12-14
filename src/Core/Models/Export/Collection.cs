@@ -13,6 +13,13 @@ namespace Bit.Core.Models.Export
             ExternalId = obj.ExternalId;
         }
 
+        public Collection(Domain.Collection obj)
+        {
+            OrganizationId = obj.OrganizationId;
+            Name = obj.Name?.EncryptedString;
+            ExternalId = obj.ExternalId;
+        }
+
         public string OrganizationId { get; set; }
         public string Name { get; set; }
         public string ExternalId { get; set; }

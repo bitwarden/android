@@ -28,6 +28,28 @@ namespace Bit.Core.Models.Export
             LicenseNumber = obj.LicenseNumber;
         }
 
+        public Identity(Domain.Identity obj)
+        {
+            Title = obj.Title?.EncryptedString;
+            FirstName = obj.FirstName?.EncryptedString;
+            MiddleName = obj.FirstName?.EncryptedString;
+            LastName = obj.LastName?.EncryptedString;
+            Address1 = obj.Address1?.EncryptedString;
+            Address2 = obj.Address2?.EncryptedString;
+            Address3 = obj.Address3?.EncryptedString;
+            City = obj.City?.EncryptedString;
+            State = obj.State?.EncryptedString;
+            PostalCode = obj.PostalCode?.EncryptedString;
+            Country = obj.Country?.EncryptedString;
+            Company = obj.Company?.EncryptedString;
+            Email = obj.Email?.EncryptedString;
+            Phone = obj.Phone?.EncryptedString;
+            SSN = obj.SSN?.EncryptedString;
+            Username = obj.Username?.EncryptedString;
+            PassportNumber = obj.PassportNumber?.EncryptedString;
+            LicenseNumber = obj.LicenseNumber?.EncryptedString;
+        }
+
         public string Title { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }

@@ -10,7 +10,6 @@ using Bit.Core.Models.Export;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
 using CsvHelper;
-using CsvHelper.Configuration;
 using CsvHelper.Configuration.Attributes;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
@@ -22,9 +21,6 @@ namespace Bit.Core.Services
         private readonly IFolderService _folderService;
         private readonly ICipherService _cipherService;
 
-        private List<FolderView> _decryptedFolders;
-        private List<CipherView> _decryptedCiphers;
-
         public ExportService(
             IFolderService folderService,
             ICipherService cipherService)
@@ -35,58 +31,19 @@ namespace Bit.Core.Services
 
         public async Task<string> GetExport(string format = "csv")
         {
-            _decryptedFolders = await _folderService.GetAllDecryptedAsync();
-            _decryptedCiphers = await _cipherService.GetAllDecryptedAsync();
-
-            if (format == "csv")
+            if (format == "encrypted_json")
             {
-                var foldersMap = _decryptedFolders.Where(f => f.Id != null).ToDictionary(f => f.Id);
+                var folders = (await _folderService.GetAllAsync()).Where(f => f.Id != null).Select(f => new FolderWithId(f));
+                var items = (await _cipherService.GetAllAsync()).Where(c => c.OrganizationId == null).Select(c => new CipherWithId(c));
 
-                var exportCiphers = new List<ExportCipher>();
-                foreach (var c in _decryptedCiphers)
-                {
-                    // only export logins and secure notes
-                    if (c.Type != CipherType.Login && c.Type != CipherType.SecureNote)
-                    {
-                        continue;
-                    }
-
-                    if (c.OrganizationId != null)
-                    {
-                        continue;
-                    }
-
-                    var cipher = new ExportCipher();
-                    cipher.Folder = c.FolderId != null && foldersMap.ContainsKey(c.FolderId)
-                        ? foldersMap[c.FolderId].Name : null;
-                    cipher.Favorite = c.Favorite ? "1" : null;
-                    BuildCommonCipher(cipher, c);
-                    exportCiphers.Add(cipher);
-                }
-
-                using (var writer = new StringWriter())
-                using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
-                {
-                    csv.WriteRecords(exportCiphers);
-                    csv.Flush();
-                    return writer.ToString();
-                }
+                return ExportEncryptedJson(folders, items);
             }
             else
             {
-                var jsonDoc = new
-                {
-                    Folders = _decryptedFolders.Where(f => f.Id != null).Select(f => new FolderWithId(f)),
-                    Items = _decryptedCiphers.Where(c => c.OrganizationId == null)
-                        .Select(c => new CipherWithId(c) {CollectionIds = null})
-                };
+                var decryptedFolders = await _folderService.GetAllDecryptedAsync();
+                var decryptedCiphers = await _cipherService.GetAllDecryptedAsync();
 
-                return CoreHelpers.SerializeJson(jsonDoc,
-                    new JsonSerializerSettings
-                    {
-                        Formatting = Formatting.Indented,
-                        ContractResolver = new CamelCasePropertyNamesContractResolver()
-                    });
+                return format == "csv" ? ExportCsv(decryptedFolders, decryptedCiphers) : ExportJson(decryptedFolders, decryptedCiphers);
             }
         }
 
@@ -164,6 +121,74 @@ namespace Bit.Core.Services
                 default:
                     return;
             }
+        }
+
+        private string ExportCsv(IEnumerable<FolderView> decryptedFolders, IEnumerable<CipherView> decryptedCiphers)
+        {
+            var foldersMap = decryptedFolders.Where(f => f.Id != null).ToDictionary(f => f.Id);
+
+            var exportCiphers = new List<ExportCipher>();
+            foreach (var c in decryptedCiphers)
+            {
+                // only export logins and secure notes
+                if (c.Type != CipherType.Login && c.Type != CipherType.SecureNote)
+                {
+                    continue;
+                }
+
+                if (c.OrganizationId != null)
+                {
+                    continue;
+                }
+
+                var cipher = new ExportCipher();
+                cipher.Folder = c.FolderId != null && foldersMap.ContainsKey(c.FolderId)
+                    ? foldersMap[c.FolderId].Name : null;
+                cipher.Favorite = c.Favorite ? "1" : null;
+                BuildCommonCipher(cipher, c);
+                exportCiphers.Add(cipher);
+            }
+
+            using (var writer = new StringWriter())
+            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            {
+                csv.WriteRecords(exportCiphers);
+                csv.Flush();
+                return writer.ToString();
+            }
+        }
+
+        private string ExportJson(IEnumerable<FolderView> decryptedFolders, IEnumerable<CipherView> decryptedCiphers)
+        {
+            var jsonDoc = new
+            {
+                Folders = decryptedFolders.Where(f => f.Id != null).Select(f => new FolderWithId(f)),
+                Items = decryptedCiphers.Where(c => c.OrganizationId == null)
+                    .Select(c => new CipherWithId(c) { CollectionIds = null })
+            };
+
+            return CoreHelpers.SerializeJson(jsonDoc,
+                new JsonSerializerSettings
+                {
+                    Formatting = Formatting.Indented,
+                    ContractResolver = new CamelCasePropertyNamesContractResolver()
+                });
+        }
+
+        private string ExportEncryptedJson(IEnumerable<FolderWithId> folders, IEnumerable<CipherWithId> ciphers)
+        {
+            var jsonDoc = new
+            {
+                Folders = folders,
+                Items = ciphers,
+            };
+
+            return CoreHelpers.SerializeJson(jsonDoc,
+                new JsonSerializerSettings
+                {
+                    Formatting = Formatting.Indented,
+                    ContractResolver = new CamelCasePropertyNamesContractResolver()
+                });
         }
 
         private class ExportCipher

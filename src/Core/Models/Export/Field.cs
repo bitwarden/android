@@ -14,6 +14,13 @@ namespace Bit.Core.Models.Export
             Type = obj.Type;
         }
 
+        public Field(Domain.Field obj)
+        {
+            Name = obj.Name?.EncryptedString;
+            Value = obj.Value?.EncryptedString;
+            Type = obj.Type;
+        }
+
         public string Name { get; set; }
         public string Value { get; set; }
         public FieldType Type { get; set; }

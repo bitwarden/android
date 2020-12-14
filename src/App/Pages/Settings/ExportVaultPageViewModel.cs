@@ -22,10 +22,12 @@ namespace Bit.App.Pages
         private readonly IExportService _exportService;
 
         private int _fileFormatSelectedIndex;
+        private string _exportWarningMessage;
         private bool _showPassword;
         private string _masterPassword;
         private byte[] _exportResult;
         private string _defaultFilename;
+        private bool _initialized = false;
 
         public ExportVaultPageViewModel()
         {
@@ -42,13 +44,16 @@ namespace Bit.App.Pages
             FileFormatOptions = new List<KeyValuePair<string, string>>
             {
                 new KeyValuePair<string, string>("json", ".json"),
-                new KeyValuePair<string, string>("csv", ".csv")
+                new KeyValuePair<string, string>("csv", ".csv"),
+                new KeyValuePair<string, string>("encrypted_json", ".json (Encrypted)")
             };
         }
 
         public async Task InitAsync()
         {
+            _initialized = true;
             FileFormatSelectedIndex = FileFormatOptions.FindIndex(k => k.Key == "json");
+            UpdateWarning();
         }
 
         public List<KeyValuePair<string, string>> FileFormatOptions { get; set; }
@@ -57,6 +62,12 @@ namespace Bit.App.Pages
         {
             get => _fileFormatSelectedIndex;
             set { SetProperty(ref _fileFormatSelectedIndex, value); }
+        }
+
+        public string ExportWarningMessage
+        {
+            get => _exportWarningMessage;
+            set { SetProperty(ref _exportWarningMessage, value); }
         }
 
         public bool ShowPassword
@@ -138,6 +149,24 @@ namespace Bit.App.Pages
 
             ClearResult();
             await _platformUtilsService.ShowDialogAsync(_i18nService.T("ExportVaultFailure"));
+        }
+
+        public void UpdateWarning()
+        {
+            if (!_initialized)
+            {
+                return;
+            }
+
+            switch (FileFormatOptions[FileFormatSelectedIndex].Key)
+            {
+                case "encrypted_json":
+                    ExportWarningMessage = _i18nService.T("EncExportVaultWarning");
+                    break;
+                default:
+                    ExportWarningMessage = _i18nService.T("ExportVaultWarning");
+                    break;
+            }
         }
 
         private void ClearResult()

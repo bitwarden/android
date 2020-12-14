@@ -9,7 +9,13 @@ namespace Bit.Core.Models.Export
         public CipherWithId(CipherView obj) : base(obj)
         {
             Id = obj.Id;
-            CollectionIds = obj.CollectionIds;
+            CollectionIds = null;
+        }
+
+        public CipherWithId(Domain.Cipher obj) : base(obj)
+        {
+            Id = obj.Id;
+            CollectionIds = null;
         }
 
         [JsonProperty(Order = int.MinValue)]

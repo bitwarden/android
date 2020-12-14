@@ -10,6 +10,11 @@ namespace Bit.Core.Models.Export
             Id = obj.Id;
         }
 
+        public CollectionWithId(Domain.Collection obj): base(obj)
+        {
+            Id = obj.Id;
+        }
+
         [JsonProperty(Order = int.MinValue)]
         public string Id { get; set; }
     }

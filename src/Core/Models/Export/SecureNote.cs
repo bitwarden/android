@@ -12,6 +12,11 @@ namespace Bit.Core.Models.Export
             Type = obj.Type;
         }
 
+        public SecureNote(Domain.SecureNote obj)
+        {
+            Type = obj.Type;
+        }
+
         public SecureNoteType Type { get; set; }
 
         public SecureNoteView ToView(SecureNote req, SecureNoteView view = null)

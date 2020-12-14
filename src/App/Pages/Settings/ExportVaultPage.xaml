@@ -35,6 +35,7 @@
                         x:Name="_fileFormatPicker"
                         ItemsSource="{Binding FileFormatOptions, Mode=OneTime}"
                         SelectedIndex="{Binding FileFormatSelectedIndex}"
+                        SelectedIndexChanged="FileFormat_Changed"
                         StyleClass="box-value" />
                 </StackLayout>
                 <Grid StyleClass="box-row">
@@ -84,7 +85,7 @@
                                 Text="{Binding Converter={StaticResource toUpper}, ConverterParameter={u:I18n Warning}}"
                                 FontAttributes="Bold" />
                             <Span Text=": " FontAttributes="Bold" />
-                            <Span Text="{u:I18n ExportVaultWarning}" />
+                            <Span Text="{Binding ExportWarningMessage}" />
                         </FormattedString>
                     </Label.FormattedText>
                 </Label>
