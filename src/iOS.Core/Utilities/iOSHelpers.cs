@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using Bit.App.Utilities;
+using Microsoft.AppCenter.Crashes;
 using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
@@ -36,7 +37,10 @@ namespace Bit.iOS.Core.Utilities
                     uptime = now - timeVal.sec;
                 }
             }
-            catch { }
+            catch (Exception e)
+            {
+                Crashes.TrackError(e);
+            }
             finally
             {
                 if (pLen != default)

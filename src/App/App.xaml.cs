@@ -211,7 +211,6 @@ namespace Bit.App
         private async void ResumedAsync()
         {
             await _vaultTimeoutService.CheckVaultTimeoutAsync();
-            _messagingService.Send("cancelVaultTimeoutTimer");
             _messagingService.Send("startEventTimer");
             await ClearCacheIfNeededAsync();
             Prime();
@@ -303,11 +302,7 @@ namespace Bit.App
                 vaultTimeout = await _storageService.GetAsync<int?>(Constants.VaultTimeoutKey);
             }
             vaultTimeout = vaultTimeout.GetValueOrDefault(-1);
-            if (vaultTimeout > 0)
-            {
-                _messagingService.Send("scheduleVaultTimeoutTimer", vaultTimeout.Value);
-            }
-            else if (vaultTimeout == 0)
+            if (vaultTimeout == 0)
             {
                 var action = await _storageService.GetAsync<string>(Constants.VaultTimeoutActionKey);
                 if (action == "logOut")

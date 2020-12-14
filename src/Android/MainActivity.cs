@@ -38,7 +38,6 @@ namespace Bit.Droid
         private IAppIdService _appIdService;
         private IStorageService _storageService;
         private IEventService _eventService;
-        private PendingIntent _vaultTimeoutAlarmPendingIntent;
         private PendingIntent _clearClipboardPendingIntent;
         private PendingIntent _eventUploadPendingIntent;
         private AppOptions _appOptions;
@@ -50,9 +49,6 @@ namespace Bit.Droid
         {
             var eventUploadIntent = new Intent(this, typeof(EventUploadReceiver));
             _eventUploadPendingIntent = PendingIntent.GetBroadcast(this, 0, eventUploadIntent,
-                PendingIntentFlags.UpdateCurrent);
-            var alarmIntent = new Intent(this, typeof(LockAlarmReceiver));
-            _vaultTimeoutAlarmPendingIntent = PendingIntent.GetBroadcast(this, 0, alarmIntent,
                 PendingIntentFlags.UpdateCurrent);
             var clearClipboardIntent = new Intent(this, typeof(ClearClipboardAlarmReceiver));
             _clearClipboardPendingIntent = PendingIntent.GetBroadcast(this, 0, clearClipboardIntent,
@@ -91,20 +87,7 @@ namespace Bit.Droid
 
             _broadcasterService.Subscribe(_activityKey, (message) =>
             {
-                if (message.Command == "scheduleVaultTimeoutTimer")
-                {
-                    var alarmManager = GetSystemService(AlarmService) as AlarmManager;
-                    var vaultTimeoutMinutes = (int)message.Data;
-                    var vaultTimeoutMs = vaultTimeoutMinutes * 60000;
-                    var triggerMs = Java.Lang.JavaSystem.CurrentTimeMillis() + vaultTimeoutMs + 10;
-                    alarmManager.Set(AlarmType.RtcWakeup, triggerMs, _vaultTimeoutAlarmPendingIntent);
-                }
-                else if (message.Command == "cancelVaultTimeoutTimer")
-                {
-                    var alarmManager = GetSystemService(AlarmService) as AlarmManager;
-                    alarmManager.Cancel(_vaultTimeoutAlarmPendingIntent);
-                }
-                else if (message.Command == "startEventTimer")
+                if (message.Command == "startEventTimer")
                 {
                     StartEventAlarm();
                 }
