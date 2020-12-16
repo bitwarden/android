@@ -9,7 +9,6 @@ namespace Bit.Core.Services
 {
     public class LiteDbStorageService : IStorageService
     {
-        private static LiteDatabase _db;
         private static readonly object _lock = new object();
 
         private readonly JsonSerializerSettings _jsonSettings = new JsonSerializerSettings
@@ -17,67 +16,73 @@ namespace Bit.Core.Services
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
         private readonly string _dbPath;
-        private ILiteCollection<JsonItem> _collection;
-        private Task _initTask;
 
         public LiteDbStorageService(string dbPath)
         {
             _dbPath = dbPath;
         }
 
-        public Task InitAsync()
+        private LiteDatabase GetDb()
         {
-            if (_collection != null)
+            return new LiteDatabase($"Filename={_dbPath};Upgrade=true;");
+        }
+
+        private ILiteCollection<JsonItem> GetCollection(LiteDatabase db)
+        {
+            return db?.GetCollection<JsonItem>("json_items");
+        }
+
+        public Task<T> GetAsync<T>(string key)
+        {
+            lock (_lock)
             {
-                return Task.FromResult(0);
-            }
-            if (_initTask != null)
-            {
-                return _initTask;
-            }
-            _initTask = Task.Run(() =>
-            {
-                try
+                var db = GetDb();
+                var collection = GetCollection(db);
+                if (db == null || collection == null)
                 {
-                    lock (_lock)
-                    {
-                        if (_db == null)
-                        {
-                            _db = new LiteDatabase($"Filename={_dbPath};Upgrade=true;");
-                        }
-                    }
-                    _collection = _db.GetCollection<JsonItem>("json_items");
+                    return Task.FromResult(default(T));
                 }
-                finally
+                var item = collection.Find(i => i.Id == key).FirstOrDefault();
+                db.Dispose();
+                if (item == null)
                 {
-                    _initTask = null;
+                    return Task.FromResult(default(T));
                 }
-            });
-            return _initTask;
-        }
-
-        public async Task<T> GetAsync<T>(string key)
-        {
-            await InitAsync();
-            var item = _collection.Find(i => i.Id == key).FirstOrDefault();
-            if (item == null)
-            {
-                return default(T);
+                return Task.FromResult(JsonConvert.DeserializeObject<T>(item.Value, _jsonSettings));
             }
-            return JsonConvert.DeserializeObject<T>(item.Value, _jsonSettings);
         }
 
-        public async Task SaveAsync<T>(string key, T obj)
+        public Task SaveAsync<T>(string key, T obj)
         {
-            await InitAsync();
-            var data = JsonConvert.SerializeObject(obj, _jsonSettings);
-            _collection.Upsert(new JsonItem(key, data));
+            lock (_lock)
+            {
+                var db = GetDb();
+                var collection = GetCollection(db);
+                if (db == null || collection == null)
+                {
+                    return Task.CompletedTask;
+                }
+                var data = JsonConvert.SerializeObject(obj, _jsonSettings);
+                collection.Upsert(new JsonItem(key, data));
+                db.Dispose();
+                return Task.CompletedTask;
+            }
         }
 
-        public async Task RemoveAsync(string key)
+        public Task RemoveAsync(string key)
         {
-            await InitAsync();
-            _collection.DeleteMany(i => i.Id == key);
+            lock (_lock)
+            {
+                var db = GetDb();
+                var collection = GetCollection(db);
+                if (db == null || collection == null)
+                {
+                    return Task.CompletedTask;
+                }
+                collection.DeleteMany(i => i.Id == key);
+                db.Dispose();
+                return Task.CompletedTask;
+            }
         }
 
         private class JsonItem

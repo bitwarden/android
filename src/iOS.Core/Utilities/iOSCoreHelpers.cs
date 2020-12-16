@@ -43,7 +43,6 @@ namespace Bit.iOS.Core.Utilities
             var appGroupContainer = new NSFileManager().GetContainerUrl(AppGroupId);
             var liteDbStorage = new LiteDbStorageService(
                 Path.Combine(appGroupContainer.Path, "Library", "bitwarden.db"));
-            liteDbStorage.InitAsync();
             var localizeService = new LocalizeService();
             var broadcasterService = new BroadcasterService();
             var messagingService = new MobileBroadcasterMessagingService(broadcasterService);
