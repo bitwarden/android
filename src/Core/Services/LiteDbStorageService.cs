@@ -36,19 +36,26 @@ namespace Bit.Core.Services
         {
             lock (_lock)
             {
-                var db = GetDb();
-                var collection = GetCollection(db);
-                if (db == null || collection == null)
+                LiteDatabase db = null;
+                try
                 {
-                    return Task.FromResult(default(T));
+                    db = GetDb();
+                    var collection = GetCollection(db);
+                    if (db == null || collection == null)
+                    {
+                        return Task.FromResult(default(T));
+                    }
+                    var item = collection.Find(i => i.Id == key).FirstOrDefault();
+                    if (item == null)
+                    {
+                        return Task.FromResult(default(T));
+                    }
+                    return Task.FromResult(JsonConvert.DeserializeObject<T>(item.Value, _jsonSettings));
                 }
-                var item = collection.Find(i => i.Id == key).FirstOrDefault();
-                db.Dispose();
-                if (item == null)
+                finally
                 {
-                    return Task.FromResult(default(T));
+                    db?.Dispose();
                 }
-                return Task.FromResult(JsonConvert.DeserializeObject<T>(item.Value, _jsonSettings));
             }
         }
 
@@ -56,16 +63,23 @@ namespace Bit.Core.Services
         {
             lock (_lock)
             {
-                var db = GetDb();
-                var collection = GetCollection(db);
-                if (db == null || collection == null)
+                LiteDatabase db = null;
+                try
                 {
+                    db = GetDb();
+                    var collection = GetCollection(db);
+                    if (db == null || collection == null)
+                    {
+                        return Task.CompletedTask;
+                    }
+                    var data = JsonConvert.SerializeObject(obj, _jsonSettings);
+                    collection.Upsert(new JsonItem(key, data));
                     return Task.CompletedTask;
                 }
-                var data = JsonConvert.SerializeObject(obj, _jsonSettings);
-                collection.Upsert(new JsonItem(key, data));
-                db.Dispose();
-                return Task.CompletedTask;
+                finally
+                {
+                    db?.Dispose();
+                }
             }
         }
 
@@ -73,15 +87,22 @@ namespace Bit.Core.Services
         {
             lock (_lock)
             {
-                var db = GetDb();
-                var collection = GetCollection(db);
-                if (db == null || collection == null)
+                LiteDatabase db = null;
+                try
                 {
+                    db = GetDb();
+                    var collection = GetCollection(db);
+                    if (db == null || collection == null)
+                    {
+                        return Task.CompletedTask;
+                    }
+                    collection.DeleteMany(i => i.Id == key);
                     return Task.CompletedTask;
                 }
-                collection.DeleteMany(i => i.Id == key);
-                db.Dispose();
-                return Task.CompletedTask;
+                finally
+                {
+                    db?.Dispose();
+                }
             }
         }
 
