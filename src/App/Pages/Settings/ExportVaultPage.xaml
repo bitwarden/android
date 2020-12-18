@@ -76,19 +76,6 @@
                 <Label
                     Text="{u:I18n ExportVaultMasterPasswordDescription}"
                     StyleClass="box-footer-label, box-footer-label-switch" />
-                <Label
-                    StyleClass="box-footer-label, box-footer-label-switch"
-                    Margin="0, 20">
-                    <Label.FormattedText>
-                        <FormattedString>
-                            <Span
-                                Text="{Binding Converter={StaticResource toUpper}, ConverterParameter={u:I18n Warning}}"
-                                FontAttributes="Bold" />
-                            <Span Text=": " FontAttributes="Bold" />
-                            <Span Text="{Binding ExportWarningMessage}" />
-                        </FormattedString>
-                    </Label.FormattedText>
-                </Label>
                 <StackLayout Spacing="20">
                     <Button Text="{u:I18n ExportVault}"
                             Clicked="ExportVault_Clicked"

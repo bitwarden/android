@@ -2827,6 +2827,14 @@ namespace Bit.App.Resources {
             }
         }
 
+        public static string ExportVaultConfirmationTitle
+        {
+            get
+            {
+                return ResourceManager.GetString("ExportVaultConfirmationTitle", resourceCulture);
+            }
+        }
+
         public static string Warning {
             get {
                 return ResourceManager.GetString("Warning", resourceCulture);
