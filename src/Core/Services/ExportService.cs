@@ -162,6 +162,7 @@ namespace Bit.Core.Services
         {
             var jsonDoc = new
             {
+                Encrypted = false,
                 Folders = decryptedFolders.Where(f => f.Id != null).Select(f => new FolderWithId(f)),
                 Items = decryptedCiphers.Where(c => c.OrganizationId == null)
                     .Select(c => new CipherWithId(c) { CollectionIds = null })
@@ -179,6 +180,7 @@ namespace Bit.Core.Services
         {
             var jsonDoc = new
             {
+                Encrypted = true,
                 Folders = folders,
                 Items = ciphers,
             };
