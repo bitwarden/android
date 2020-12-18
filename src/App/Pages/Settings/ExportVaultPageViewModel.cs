@@ -105,36 +105,43 @@ namespace Bit.App.Pages
 
             var keyHash = await _cryptoService.HashPasswordAsync(_masterPassword, null);
             MasterPassword = string.Empty;
-            
-            var storedKeyHash = await _cryptoService.GetKeyHashAsync();
-            if (storedKeyHash != null && keyHash != null && storedKeyHash == keyHash)
-            {
-                try
-                {
-                    var data = await _exportService.GetExport(FileFormatOptions[FileFormatSelectedIndex].Key);
-                    var fileFormat = FileFormatOptions[FileFormatSelectedIndex].Key;
-                    _defaultFilename = _exportService.GetFileName(null, fileFormat);
-                    _exportResult = Encoding.ASCII.GetBytes(data);
 
-                    if (!_deviceActionService.SaveFile(_exportResult, null, _defaultFilename, null))
-                    {
-                        ClearResult();
-                        await _platformUtilsService.ShowDialogAsync(_i18nService.T("ExportVaultFailure"));
-                    }
-                }
-                catch (Exception ex)
+            var storedKeyHash = await _cryptoService.GetKeyHashAsync();
+            if (storedKeyHash == null || keyHash == null || storedKeyHash != keyHash)
+            {
+                await _platformUtilsService.ShowDialogAsync(_i18nService.T("InvalidMasterPassword"));
+                return;
+            }
+
+            bool userConfirmedExport = await _platformUtilsService.ShowDialogAsync(ExportWarningMessage,
+                _i18nService.T("ExportVaultConfirmationTitle"), _i18nService.T("ExportVault"), _i18nService.T("Cancel"));
+
+            if (!userConfirmedExport)
+            {
+                return;
+            }
+
+            try
+            {
+                var data = await _exportService.GetExport(FileFormatOptions[FileFormatSelectedIndex].Key);
+                var fileFormat = FileFormatOptions[FileFormatSelectedIndex].Key;
+                _defaultFilename = _exportService.GetFileName(null, fileFormat);
+                _exportResult = Encoding.ASCII.GetBytes(data);
+
+                if (!_deviceActionService.SaveFile(_exportResult, null, _defaultFilename, null))
                 {
                     ClearResult();
                     await _platformUtilsService.ShowDialogAsync(_i18nService.T("ExportVaultFailure"));
-                    System.Diagnostics.Debug.WriteLine(">>> {0}: {1}", ex.GetType(), ex.StackTrace);
-#if !FDROID
-                    Crashes.TrackError(ex);
-#endif
                 }
             }
-            else
+            catch (Exception ex)
             {
-                await _platformUtilsService.ShowDialogAsync(_i18nService.T("InvalidMasterPassword"));
+                ClearResult();
+                await _platformUtilsService.ShowDialogAsync(_i18nService.T("ExportVaultFailure"));
+                System.Diagnostics.Debug.WriteLine(">>> {0}: {1}", ex.GetType(), ex.StackTrace);
+#if !FDROID
+                Crashes.TrackError(ex);
+#endif
             }
         }
 
