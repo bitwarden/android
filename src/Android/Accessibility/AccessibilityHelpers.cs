@@ -390,12 +390,15 @@ namespace Bit.Droid.Accessibility
                 var hasHttpProtocol = uri.StartsWith("http://") || uri.StartsWith("https://");
                 if (!hasHttpProtocol && uri.Contains("."))
                 {
-                    if (Uri.TryCreate("http://" + uri, UriKind.Absolute, out var uri2))
+                    if (Uri.TryCreate("https://" + uri, UriKind.Absolute, out var _))
+                    {
+                        return string.Concat("https://", uri);
+                    } else if (Uri.TryCreate("http://" + uri, UriKind.Absolute, out var _))
                     {
                         return string.Concat("http://", uri);
                     }
                 }
-                if (Uri.TryCreate(uri, UriKind.Absolute, out var uri3))
+                if (Uri.TryCreate(uri, UriKind.Absolute, out var _))
                 {
                     return uri;
                 }
