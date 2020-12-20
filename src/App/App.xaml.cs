@@ -415,10 +415,6 @@ namespace Bit.App
                     autoPromptBiometric = false;
                 }
             }
-            else if (autoPromptBiometric && Device.RuntimePlatform == Device.Android)
-            {
-                autoPromptBiometric = false;
-            }
             PreviousPageInfo lastPageBeforeLock = null;
             if (Current.MainPage is TabbedPage tabbedPage && tabbedPage.Navigation.ModalStack.Count > 0)
             {
