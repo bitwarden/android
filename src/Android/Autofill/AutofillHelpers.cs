@@ -108,7 +108,6 @@ namespace Bit.Droid.Autofill
             "org.mozilla.rocket",
             "org.torproject.torbrowser",
             "org.torproject.torbrowser_alpha",
-            "org.ungoogled.chromium",
             "org.ungoogled.chromium.extensions.stable",
             "org.ungoogled.chromium.stable",
         };
