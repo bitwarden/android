@@ -34,7 +34,7 @@ namespace Bit.Droid.Accessibility
             new Browser("com.amazon.cloud9", "url"),
             new Browser("com.android.browser", "url"),
             new Browser("com.android.chrome", "url_bar"),
-            // Rem. for "com.android.htmlviewer": doesn't have a url bar, therefore not present here.
+            // Rem. for "com.android.htmlviewer": doesn't have a URL bar, therefore not present here.
             new Browser("com.avast.android.secure.browser", "editor"),
             new Browser("com.avg.android.secure.browser", "editor"),
             new Browser("com.brave.browser", "url_bar"),
