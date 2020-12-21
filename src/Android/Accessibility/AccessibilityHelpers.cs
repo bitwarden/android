@@ -393,9 +393,6 @@ namespace Bit.Droid.Accessibility
                     if (Uri.TryCreate("https://" + uri, UriKind.Absolute, out var _))
                     {
                         return string.Concat("https://", uri);
-                    } else if (Uri.TryCreate("http://" + uri, UriKind.Absolute, out var _))
-                    {
-                        return string.Concat("http://", uri);
                     }
                 }
                 if (Uri.TryCreate(uri, UriKind.Absolute, out var _))
