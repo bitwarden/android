@@ -341,7 +341,7 @@
     <comment>The title for the tools page.</comment>
   </data>
   <data name="URI" xml:space="preserve">
-    <value>URL</value>
+    <value>URI</value>
     <comment>Label for a uri/url.</comment>
   </data>
   <data name="UseFingerprintToUnlock" xml:space="preserve">
@@ -415,7 +415,7 @@
     <value>Lihtsaim viis uute sisselogimise andmete lisamiseks on kasutada Bitwardeni rakenduse laiendust. Lisateavet Bitwardeni rakenduse laienduse kasutamiseks leiad menüüst "Seaded".</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>Kasuta Bitwardenit Safaris ja teistes rakendusestes kontoandmete sisestamiseks.</value>
+    <value>Kasuta Bitwardenit Safaris ja teistes rakendustes kontoandmete sisestamiseks.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
     <value>Bitwardeni automaattäite teenus</value>
@@ -559,7 +559,7 @@
     <value>Ülemparool on parool, millega pääsed oma kontole ligi. On äärmiselt tähtis, et ülemparool ei ununeks. Selle parooli taastamine ei ole mingil moel võimalik.</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
-    <value>Ülemparooli vihje (ei ole kohutuslik)</value>
+    <value>Ülemparooli vihje (ei ole kohustuslik)</value>
   </data>
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Vihje võib abiks olla olukorras, kui oled ülemparooli unustanud.</value>
@@ -1193,10 +1193,10 @@
     <value>Eemalda</value>
   </data>
   <data name="NewUri" xml:space="preserve">
-    <value>Uus URL</value>
+    <value>Uus URI</value>
   </data>
   <data name="URIPosition" xml:space="preserve">
-    <value>URL {0}</value>
+    <value>URI {0}</value>
     <comment>Label for a uri/url with position. i.e. URI 1, URI 2, etc</comment>
   </data>
   <data name="BaseDomain" xml:space="preserve">
@@ -1220,7 +1220,7 @@
     <value>Algab</value>
   </data>
   <data name="URIMatchDetection" xml:space="preserve">
-    <value>URL sobivuse tuvastamine</value>
+    <value>URI sobivuse tuvastamine</value>
   </data>
   <data name="MatchDetection" xml:space="preserve">
     <value>Sobivuse tuvastamine</value>
@@ -1263,7 +1263,7 @@
     <value>Pead enne Automaattäite kasutamist Bitwardeni rakendusse sisse logima.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
-    <value>Sinu kontoandmed on otse klaviatuurilt ligipääsetavad. Saad nüüd kergemini äppides ja veebilehtel sisse logida.</value>
+    <value>Sinu kontoandmed on otse klaviatuurilt ligipääsetavad. Saad nüüd kergemini äppides ja veebilehtedel sisse logida.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
     <value>Soovitame teised Automaattäite valikud Seadetest välja lülitada, kui sa neid enam ei kasuta.</value>
@@ -1314,7 +1314,7 @@
     <value>Kõik kirjed</value>
   </data>
   <data name="URIs" xml:space="preserve">
-    <value>URL-id</value>
+    <value>URI-d</value>
     <comment>Plural form of a URI</comment>
   </data>
   <data name="CheckingPassword" xml:space="preserve">
@@ -1487,11 +1487,11 @@
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="DefaultUriMatchDetection" xml:space="preserve">
-    <value>Vaikse URL-i sobivuse tuvastamine</value>
+    <value>Vaikse URI sobivuse tuvastamine</value>
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
-    <value>Vali vaikeviis, kuidas kirje ja URL-i sobivus tuvastatakse. Seda kasutatakse näiteks siis, kui lehele üritatakse automaatselt andmeid sisestada.</value>
+    <value>Vali vaikeviis, kuidas kirje ja URI-i sobivus tuvastatakse. Seda kasutatakse näiteks siis, kui lehele üritatakse automaatselt andmeid sisestada.</value>
   </data>
   <data name="Theme" xml:space="preserve">
     <value>Kujundus</value>
@@ -1524,10 +1524,10 @@
     <comment>The color black</comment>
   </data>
   <data name="BlacklistedUris" xml:space="preserve">
-    <value>Musta nimerkirja URL-id</value>
+    <value>Musta nimekirja URI-d</value>
   </data>
   <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>Musta nimekirja pandud URL-ide puhul ei pakuta automaattäitmist. Eralda nimed komaga. Nt: "https://twitter.com, androidapp://com.twitter.android".</value>
+    <value>Musta nimekirja pandud URI-de puhul ei pakuta automaattäitmist. Eralda nimed komaga. Nt: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
   <data name="DisableSavePrompt" xml:space="preserve">
     <value>Keela "Lisa konto andmed"</value>
@@ -1601,6 +1601,13 @@
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Eksporditav fail sisaldab hoidla sisu, mis on krüpteeringuta. Seda faili ei tohiks kaua käidelda ning mitte mingil juhul ebaturvaliselt saata (näiteks e-postiga). Kustuta see koheselt pärast kasutamist.</value>
+  </data>
+  <data name="EncExportVaultWarning" xml:space="preserve">
+    <value>This export encrypts your data using your account's encryption key. If you ever rotate your account's encryption key you should export again since you will not be able to decrypt this export file.</value>
+  </data>
+  <data name="ExportVaultConfirmationTitle" xml:space="preserve">
+    <value>Confirm Vault Export</value>
+    <comment>Title for the alert to confirm vault exports.</comment>
   </data>
   <data name="Warning" xml:space="preserve">
     <value>Hoiatus</value>
@@ -1677,8 +1684,11 @@
   <data name="BiometricInvalidated" xml:space="preserve">
     <value>Tuvastati biomeetriliste andmete muutus. Selle funktsiooni uuesti kasutamiseks on vajalik sisselogimine ülemparooliga.  </value>
   </data>
+  <data name="BiometricInvalidatedExtension" xml:space="preserve">
+    <value>Biometric unlock for autofill disabled pending verification of master password.</value>
+  </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
-    <value>Luba allatõmbel sünkrooniseerimine</value>
+    <value>Luba allatõmbel sünkroniseerimine</value>
   </data>
   <data name="EnableSyncOnRefreshDescription" xml:space="preserve">
     <value>Hoidla sünkroonimine ekraanil allatõmbamisel.</value>
@@ -1744,42 +1754,45 @@
     <value>Privaatsuspoliitika</value>
   </data>
   <data name="AccessibilityDrawOverPermissionAlert" xml:space="preserve">
-    <value>Bitwarden needs attention - Enable "Draw-Over" in "Auto-fill Services" from Bitwarden Settings</value>
+    <value>Bitwarden vajab tähelepanu! Vaata Bitwardeni menüüd Seaded -> Automaattäite teenused ning luba valik „Kuva peal“</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
-    <value>Auto-fill Services</value>
+    <value>Automaattäite teenused</value>
   </data>
   <data name="InlineAutofill" xml:space="preserve">
-    <value>Use Inline Autofill</value>
+    <value>Kasuta klaviatuuriülest sisestust</value>
   </data>
   <data name="InlineAutofillDescription" xml:space="preserve">
-    <value>Use inline autofill if your selected IME (keyboard) supports it. If your configuration is not supported (or this option is disabled), the default Autofill overlay will be used.</value>
+    <value>Kasuta klaviatuuriülest sisestust, kui sinu klaviatuur seda toetab. Kui klaviatuur seda funktsiooni ei toeta (või see on väljalülitatud), kasutatakse tavalist Automaattäite meetodit.</value>
   </data>
   <data name="Accessibility" xml:space="preserve">
-    <value>Use Accessibility</value>
+    <value>Kasuta juurdepääsetavust</value>
   </data>
   <data name="AccessibilityDescription" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. When enabled, we'll display a popup when login fields are selected.</value>
+    <value>Kasuta rakendustes ja veebis andmete sisestamiseks Bitwardeni juurdepääsetavuse teenust. Aktiveerimisel kuvatakse logimisväljadele vajutamisel väike hüpikaken.</value>
   </data>
   <data name="AccessibilityDescription2" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. (Requires Draw-Over to be enabled as well)</value>
+    <value>Kasuta Bitwardeni juurdepääsetavuse teenust, et rakendustes ja veebis kontoandmeid sisestada. (Vajalik on valiku „Kuva peal“ sisselülitamine).</value>
   </data>
   <data name="AccessibilityDescription3" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to use the Autofill Quick-Action Tile, and/or show a popup using Draw-Over (if enabled).</value>
+    <value>Kasuta Bitwardeni juurdepääsetavuse teenust, nägemaks Automaattäite valikute listi ja/või selleks, et näidata hüpikakent, kasutades „Kuva peal“ (kui see on sisse lülitatud).</value>
   </data>
   <data name="AccessibilityDescription4" xml:space="preserve">
-    <value>Required to use the Autofill Quick-Action Tile, or to augment the Autofill Service by using Draw-Over (if enabled).</value>
+    <value>Vajalik Automaattäite valikute listi nägemiseks ning selleks, et toetada Automaattäite teenust läbi valiku „Kuva peal“ (kui see on sisse lülitatud).</value>
   </data>
   <data name="DrawOver" xml:space="preserve">
-    <value>Use Draw-Over</value>
+    <value>Kasuta Kuva peal</value>
   </data>
   <data name="DrawOverDescription" xml:space="preserve">
-    <value>When enabled, allows the Bitwarden Accessibility Service to display a popup when login fields are selected.</value>
+    <value>Sisselülitatuna lubatakse Bitwardeni juurdepääsetavuse teenusel kuvada hüpikakent (kui valitud on sisselogimise väli).</value>
   </data>
   <data name="DrawOverDescription2" xml:space="preserve">
-    <value>If enabled, the Bitwarden Accessibility Service will display a popup when login fields are selected to assist with auto-filling your logins.</value>
+    <value>Sisselülitatuna lubatakse Bitwardeni juurdepääsetavuse teenusel kuvada hüpikakent (kui valitud on sisselogimise väli). See aitab kontoandmeid lihtsamini sisestada.</value>
   </data>
   <data name="DrawOverDescription3" xml:space="preserve">
-    <value>If enabled, accessibility will show a popup to augment the Autofill Service for older apps that don't support the Android Autofill Framework.</value>
+    <value>Sisselülitatuna kuvatakse hüpikakent, et võimaldada sisselogimist vanemates äppides, mis ei toeta Androidi Autofill raamistikku.</value>
+  </data>
+  <data name="PersonalOwnershipSubmitError" xml:space="preserve">
+    <value>Due to an Enterprise Policy, you are restricted from saving items to your personal vault. Change the Ownership option to an organization and choose from available Collections.</value>
   </data>
 </root>
