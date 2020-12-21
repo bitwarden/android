@@ -122,15 +122,15 @@
     <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Bitwarden er den letteste og sikreste måde at opbevare alle dine logins og adgangskoder på, samtidig med at de er synkroniserede imellem alle dine enheder. Bitwarden app udvidelsen lader dig hurtigt logge ind på enhver hjemmeside i Safari eller Chrome, og er understøttet af hundredvis af andre populære apps.
+    <value>Bitwarden er den nemmeste og sikreste måde at gemme alle dine logins og adgangskoder på, samtidig med at de er synkroniserede mellem alle dine enheder. Bitwarden app udvidelsen giver dig mulighed for hurtigt at logge ind på enhver hjemmeside via Safari eller Chrome og understøttes af hundredvis af andre populære apps.
 
-Tyveri af adgangskoder er et seriøst problem. Hjemmesider og apps du bruger er under angreb hver dag. Sikkerheden bristes, og så er dine adgangskoder stjålet. Når du genbruger de samme adgangskoder på forskellige hjemmesider og apps, kan hackere nemt få adgang til din e-mail, bank- og andre vigtige konti.
+Tyveri af adgangskoder er et alvorligt problem. De hjemmesider og apps du bruger, er under angreb hver dag. Sikkerhedsbrud opstår, og dine adgangskoder bliver stjålet. Når du genbruger de samme adgangskoder på tværs af apps og hjemmesider, kan hackere nemt få adgang til din e-mail, bank- og andre vigtige konti.
 
-Sikkerhedseksperter anbefaler, at man bruger en unik, tilfældig genereret, adgangskode til hver konto man opretter. Men hvordan administrerer man alle disse adgangskoder? Bitwarden gør det nemt for dig at oprette, gemme og få adgang til dine adgangskoder.
+Sikkerhedseksperter anbefaler, at du bruger en unik, tilfældigt genereret, adgangskode til hver konto du opretter. Men hvordan håndterer du alle disse adgangskoder? Bitwarden gør det nemt for dig at oprette, gemme og få adgang til dine adgangskoder.
 
-Bitwarden gemmer alle dine login i en krypteret boks, der synkroniseres imellem alle dine enheder. Da de er fuldstændig krypterede, før de overhovedet forlader dine enheder, er det kun dig der har adgang til dine data. Ikke engang teamet hos Bitwarden kan få adgang til dine data, selv hvis de forsøgte på det. Dine data er sikret med AES-256 bit kryptering, saltet hasing og PBKDF2 SHA-256.
+Bitwarden gemmer alle dine logins i en krypteret boks, der synkroniseres mellem alle dine enheder. Da de er fuldstændig krypterede, før de overhovedet forlader dine enheder, er det kun dig der har adgang til dine data. Ikke engang teamet hos Bitwarden kan få adgang til dine data, selv hvis de forsøgte på det. Dine data er sikret med AES-256 bit kryptering, saltet hasing og PBKDF2 SHA-256.
 
-Bitwarden er 100% open source software. Kildekoden til Bitwarden ligger på GitHub, og enhver kan gennemse, evaluere og bidrage til Bitwardens kildekode.</value>
+Bitwarden er fokuseret på open source software. Kildekoden til Bitwarden ligger på GitHub, og enhver kan gennemse, revidere og bidrage til Bitwardens kildekode.</value>
     <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
