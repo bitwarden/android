@@ -118,46 +118,45 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Title" xml:space="preserve">
-    <value>Bitwarden - Manager de parole gratuit</value>
+    <value>Manager de parole Bitwarden</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="ShortDescription" xml:space="preserve">
-    <value>Bitwarden este un manager de autentificări ce vă ajută să fiţi în siguranță.</value>
+    <value>Bitwarden este un manager de conectare și parole care vă ajută să fiți în siguranță când sunteți on-line.</value>
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
     <value>Bitwarden este cea mai ușoară și cea mai sigură metodă de a stoca toate autentificările și parolele, în timp ce le păstrați sincronizate între toate dispozitivele dvs.
 
-Furtul de parole este o problemă serioasă. Site-urile web și aplicațiile pe care le utilizați sunt atacate în fiecare zi. Se înregistrează încălcări ale securității și parolele dvs. sunt furate. Când reutilizați aceleași parole între aplicații și site-uri web, hackerii pot accesa cu ușurință e-mailurile, conturile bancare și alte conturi importante.
+Furtul de parole este o problemă serioasă. Saiturile web și aplicațiile pe care le utilizați sunt atacate în fiecare zi. Se înregistrează încălcări ale securității și parolele dvs. sunt furate. Când reutilizați aceleași parole între aplicații și saituri web, hackerii pot accesa cu ușurință e-mailurile, conturile bancare și alte conturi importante.
 
 Experții în securitate vă recomandă să utilizați o parolă diferită, generată aleatoriu pentru fiecare cont pe care îl creați. Dar cum gestionați toate aceste parole? Bitwarden vă ușurează crearea, stocarea și accesarea parolelor.
 
-Bitwarden stochează toate autentificările dvs. într-un seif criptat care se sincronizează pe toate dispozitivele dvs. Deoarece este complet criptat numai dvs. aveţi acces la date. Nici măcar echipa Bitwarden nu poate citi datele dvs., chiar dacă vrem. Datele dvs. sunt sigilate cu criptare bit AES-256, salted hashing și PBKDF2 SHA-256.
+Bitwarden stochează toate autentificările dvs. într-un seif criptat care se sincronizează pe toate dispozitivele dvs. Deoarece este complet criptat numai dvs. aveți acces la date. Nici măcar echipa Bitwarden nu poate citi datele dvs., chiar dacă ar vrea. Datele dvs. sunt sigilate cu criptare bit AES-256, salted hashing și PBKDF2 SHA-256.
 
-Bitwarden este un software 100% open source. Codul sursă pentru Bitwarden este găzduit pe GitHub și toată lumea este liberă să examineze, să verifice și să contribuie la baza de cod Bitwarden.</value>
+Bitwarden este un software 100% open source. Codul sursă pentru Bitwarden este găzduit pe GitHub și toată lumea este liberă să examineze, să verifice și să contribuie la sursa de coduri Bitwarden.</value>
     <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
     <value>Un manager de parole sigur și gratuit pentru toate dispozitivele dvs.</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Gestionați toate datele de conectare și parolele dintr-un seif securizat</value>
+    <value>Gestionează toate datele de conectare și parolele dintr-un seif securizat</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Generați automat parole puternice, aleatoare și securizate</value>
+    <value>Generează automat parole puternice, aleatorii și securizate</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Protejați seiful cu amprentă digitală, cod PIN sau parolă principală</value>
+    <value>Protejează seiful dvs. cu amprentă digitală, cod PIN sau parolă principală</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Completați automat autentificările din browserul dvs. web și din alte aplicații</value>
+    <value>Auto-completează autentificările din browserul dvs. web și din alte aplicații</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Sincronizați și accesați seiful dvs. de pe mai multe dispozitive
-
-- Telefon
-- Tabletă
-- Desktop
-- Web</value>
+    <value>Sincronizare și accesare a seifului dvs. de pe multiple dispozitive:
+ - telefon
+ - tabletă
+ - desktop
+ - web</value>
   </data>
 </root>
