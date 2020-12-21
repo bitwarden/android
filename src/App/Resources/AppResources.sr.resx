@@ -222,7 +222,7 @@
     <value>Фасцикла избрисана.</value>
   </data>
   <data name="FolderNone" xml:space="preserve">
-    <value>Нема фасцикле</value>
+    <value>Без фасцикле</value>
     <comment>Items that have no folder specified go in this special "catch-all" folder.</comment>
   </data>
   <data name="Folders" xml:space="preserve">
@@ -257,7 +257,7 @@
     <value>Погрешан ПИН. Покушајте поново.</value>
   </data>
   <data name="Launch" xml:space="preserve">
-    <value>Покрени</value>
+    <value>Отвори</value>
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="LogIn" xml:space="preserve">
@@ -501,7 +501,7 @@
     <value>Добити савет за Вашу Главну Лозинку</value>
   </data>
   <data name="ImportItems" xml:space="preserve">
-    <value>Увоз ставка</value>
+    <value>Увоз ставки</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
     <value>Можете скупно увести ставке из bitwarden.com сефа. Да ли желите да посетите веб страницу сада?</value>
@@ -550,7 +550,7 @@
     <value>Пријавите се или креирајте нови налог за приступ Сефу.</value>
   </data>
   <data name="Manage" xml:space="preserve">
-    <value>Управљај</value>
+    <value>Управљати</value>
   </data>
   <data name="MasterPasswordConfirmationValMessage" xml:space="preserve">
     <value>Потврђена лозинка није коректна.</value>
@@ -644,7 +644,7 @@
     <value>Поновити Главну Лозинку</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
-    <value>Претраћи сеф</value>
+    <value>Претражи сеф</value>
   </data>
   <data name="Security" xml:space="preserve">
     <value>Сигурност</value>
@@ -862,10 +862,10 @@
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
   <data name="AuthenticatorKey" xml:space="preserve">
-    <value>Верификациони код (TOTP)</value>
+    <value>Једнократни код</value>
   </data>
   <data name="VerificationCodeTotp" xml:space="preserve">
-    <value>Верификациони код (TOTP)</value>
+    <value>Једнократни код</value>
     <comment>Totp code label</comment>
   </data>
   <data name="AuthenticatorKeyAdded" xml:space="preserve">
@@ -890,13 +890,13 @@
     <value>Слике</value>
   </data>
   <data name="CopyTotp" xml:space="preserve">
-    <value>Копирај верификациони код</value>
+    <value>Копирај једнократни код</value>
   </data>
   <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>Ако је за вашу пријаву приложен аутентификациони кључ, TOTP верификациони код се аутоматски копира у вашем клипборду кад год ауто-попуните пријаву.</value>
+    <value>Ако је за вашу пријаву приложен аутентификациони кључ, једнократни код се аутоматски копира у вашем клипборду кад год ауто-попуните пријаву.</value>
   </data>
   <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>Угаси аутоматско копирање TOTP</value>
+    <value>Угаси аутоматско копирање једнократног кода</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
     <value>Премијум је потребно за употребу ове способности.</value>
@@ -985,7 +985,7 @@
     <value>Сигурносни код</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
-    <value>Картица</value>
+    <value>Кредитна Картица</value>
   </data>
   <data name="TypeIdentity" xml:space="preserve">
     <value>Идентитет</value>
@@ -1169,7 +1169,7 @@
     <value>Windows Hello</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
-    <value>We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings &gt; System &gt; Languages and input &gt; Advanced &gt; Autofill service.</value>
+    <value>Нисмо могли аутоматски да отворимо мени за подешавања Ауто-пуњења. До менија подешавања ауто-пуњења можете ручно да дођете из Андроид подешавања &gt; Систем &gt; Језици и унос &gt; Напредно &gt; Сервис ауто-пуњења.</value>
   </data>
   <data name="CustomFieldName" xml:space="preserve">
     <value>Назив прилагођеног поља</value>
@@ -1299,7 +1299,7 @@
     <value>Неисправан имејл.</value>
   </data>
   <data name="Cards" xml:space="preserve">
-    <value>Картице</value>
+    <value>Кредитне Картице</value>
   </data>
   <data name="Identities" xml:space="preserve">
     <value>Идентитети</value>
@@ -1400,7 +1400,7 @@
     <value>Број речи</value>
   </data>
   <data name="Passphrase" xml:space="preserve">
-    <value>Реченица</value>
+    <value>Фраза лозинка</value>
   </data>
   <data name="WordSeparator" xml:space="preserve">
     <value>Одвајач речи</value>
@@ -1456,11 +1456,11 @@
     <value>Сеф је блокиран. Проверити ПИН код за наставак.</value>
   </data>
   <data name="Dark" xml:space="preserve">
-    <value>Тамно</value>
+    <value>Тамна</value>
     <comment>A dark color</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>Светло</value>
+    <value>Светла</value>
     <comment>A light color</comment>
   </data>
   <data name="FiveMinutes" xml:space="preserve">
@@ -1533,19 +1533,19 @@
     <value>Онемогући упит за сачувавање</value>
   </data>
   <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>The "Save Prompt" automatically prompts you to save new items to your vault whenever you enter them for the first time.</value>
+    <value>Нотификација Сашувавања аутоматски тражи да нове предмете сачувате у свом сефу кад год их први пут унесете.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
     <value>На поновно покретање</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>Auto-fill makes it easy to securely access your Bitwarden vault from other websites and apps. It looks like you have not enabled an auto-fill service for Bitwarden. Enable auto-fill for Bitwarden from the "Settings" screen.</value>
+    <value>Ауто-пуњење олакшава сигуран приступ вашем Bitwarden сефу са других веб локација и апликација. Изгледа да нисте омогућили сервис ауто-пуњења за Bitwarden. Омогућите Ауто-пуњење за Bitwarden из екрана "Подешавања".</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
     <value>Промене теме примењиваће се када се апликација поново покрене.</value>
   </data>
   <data name="Capitalize" xml:space="preserve">
-    <value>Велика слова</value>
+    <value>Прво слово велико</value>
     <comment>ex. Uppercase the first character of a word.</comment>
   </data>
   <data name="IncludeNumber" xml:space="preserve">
@@ -1573,19 +1573,19 @@
     <value>Користи биометријско откључавање</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
-    <value>Bitwarden needs attention - See "Auto-fill Accessibility Service" from Bitwarden Settings</value>
+    <value>Bitwarden треба пажњу - Ићи на "Сервис приступачности ауто-пуњења" из подешавања Bitwarden-а</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
-    <value>3. On the Android App Settings screen for Bitwarden, go to the "Display over other apps" options (under Advanced) and tap the toggle to enable overlay support.</value>
+    <value>3. На екрану подешавања Андроид апликације за Bitwarden, идите на напредну опцију "Прикажите преко других апликација" и додирните прекидач да бисте омогућили подршку за преклапање.</value>
   </data>
   <data name="OverlayPermission" xml:space="preserve">
     <value>Дозвола</value>
   </data>
   <data name="BitwardenAutofillServiceOpenOverlayPermissionSettings" xml:space="preserve">
-    <value>Open Overlay Permission Settings</value>
+    <value>Отворите поставке дозволе за преклапање</value>
   </data>
   <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
-    <value>3. On the Android App Settings screen for Bitwarden, select "Display over other apps" (under "Advanced") and switch on the toggle to allow the overlay.</value>
+    <value>3. На екрану подешавања за Bitwarden, одабрати "Прикажите преко других апликација" (испод "Напредно") и укључите прекидач да бисте дозволили прекривање.</value>
   </data>
   <data name="Denied" xml:space="preserve">
     <value>Одбијено</value>
@@ -1601,6 +1601,13 @@
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Овај извоз садржи податке сефа у нешифрираном формату. Не бисте смели да сачувате или шаљете извезену датотеку преко несигурних канала (као што је имејл). Избришите датотеку одмах након што завршите са коришћењем.</value>
+  </data>
+  <data name="EncExportVaultWarning" xml:space="preserve">
+    <value>This export encrypts your data using your account's encryption key. If you ever rotate your account's encryption key you should export again since you will not be able to decrypt this export file.</value>
+  </data>
+  <data name="ExportVaultConfirmationTitle" xml:space="preserve">
+    <value>Confirm Vault Export</value>
+    <comment>Title for the alert to confirm vault exports.</comment>
   </data>
   <data name="Warning" xml:space="preserve">
     <value>Упозорење</value>
@@ -1629,7 +1636,7 @@
     <value>Прилог успешно сачуван</value>
   </data>
   <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
-    <value>Please enable "Auto-fill Accessibility Service" from Bitwarden Settings to use the Auto-fill tile.</value>
+    <value>Омогућите "Ауто-пуњење услуге приступачности" из подешавања Bitwarden-а да би употребили ауто-пуњење.</value>
   </data>
   <data name="AutofillTileUriNotFound" xml:space="preserve">
     <value>Поље са лозинком није нађен</value>
@@ -1667,33 +1674,36 @@
     <comment>Confirmation alert message when permanently deleteing a cipher.</comment>
   </data>
   <data name="DoYouReallyWantToRestoreCipher" xml:space="preserve">
-    <value>Do you really want to restore this item?</value>
+    <value>Стварно повратити ову ставку?</value>
     <comment>Confirmation alert message when restoring a soft-deleted cipher.</comment>
   </data>
   <data name="DoYouReallyWantToSoftDeleteCipher" xml:space="preserve">
-    <value>Do you really want to send to the trash?</value>
+    <value>Стварно послати у отпад?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Biometric change detected, login using Master Password to enable again.</value>
+    <value>Откривена је биометријска промена, пријавите се помоћу главне лозинке да бисте је поново омогућили.</value>
+  </data>
+  <data name="BiometricInvalidatedExtension" xml:space="preserve">
+    <value>Biometric unlock for autofill disabled pending verification of master password.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
-    <value>Enable sync on refresh</value>
+    <value>Омогући синхронизацију при освежавању</value>
   </data>
   <data name="EnableSyncOnRefreshDescription" xml:space="preserve">
-    <value>Syncing vault with pull down gesture.</value>
+    <value>Синхронизација сефа с покретом према доле.</value>
   </data>
   <data name="LogInSso" xml:space="preserve">
-    <value>Enterprise Single Sign-On</value>
+    <value>Enterprise Једна Пријава</value>
   </data>
   <data name="LogInSsoSummary" xml:space="preserve">
-    <value>Quickly log in using your organization's single sign-on portal. Please enter your organization's identifier to begin.</value>
+    <value>Брзо се пријавите помоћу портала за јединствену пријаву ваше организације. Унесите идентификатор организације да бисте започели.</value>
   </data>
   <data name="OrgIdentifier" xml:space="preserve">
-    <value>Organization Identifier</value>
+    <value>Идентификатор организације</value>
   </data>
   <data name="LoginSsoError" xml:space="preserve">
-    <value>Currently unable to login with SSO</value>
+    <value>Тренутно није могуће пријавити се са SSO</value>
   </data>
   <data name="SetMasterPassword" xml:space="preserve">
     <value>Постави Главну Лозинку</value>
@@ -1711,29 +1721,28 @@
     <value>Минимална дужина од {0}</value>
   </data>
   <data name="PolicyInEffectUppercase" xml:space="preserve">
-    <value>Contain one or more uppercase characters</value>
+    <value>Садржи један или више великих слова</value>
   </data>
   <data name="PolicyInEffectLowercase" xml:space="preserve">
-    <value>Contain one or more lowercase characters</value>
+    <value>Садржи један или више малих слова</value>
   </data>
   <data name="PolicyInEffectNumbers" xml:space="preserve">
-    <value>Contain one or more numbers</value>
+    <value>Садрже један или више бројева</value>
   </data>
   <data name="PolicyInEffectSpecial" xml:space="preserve">
-    <value>Contain one or more of the following special characters: {0}</value>
+    <value>Садрже један или више бројева ових специјалних слова: {0}</value>
   </data>
   <data name="MasterPasswordPolicyValidationTitle" xml:space="preserve">
     <value>Неисправна лозинка</value>
   </data>
   <data name="MasterPasswordPolicyValidationMessage" xml:space="preserve">
-    <value>Password does not meet organization requirements. Please check the policy information and try again.</value>
+    <value>Лозинка не испуњава организационе захтеве. Проверите информације о политици и покушајте поново.</value>
   </data>
   <data name="Loading" xml:space="preserve">
     <value>Учитавање</value>
   </data>
   <data name="AcceptPolicies" xml:space="preserve">
-    <value>By activating this switch you agree to the following:
-</value>
+    <value>Активирањем овог прекидача прихватате следеће:</value>
   </data>
   <data name="AcceptPoliciesError" xml:space="preserve">
     <value>Услови услуге и Политика приватности нису признати.</value>
@@ -1745,42 +1754,45 @@
     <value>Политика приватности</value>
   </data>
   <data name="AccessibilityDrawOverPermissionAlert" xml:space="preserve">
-    <value>Bitwarden needs attention - Enable "Draw-Over" in "Auto-fill Services" from Bitwarden Settings</value>
+    <value>Bitwarden треба пажњу - Омогућите "Преко" у "Сервиси Ауто-пуњења" из подешавања Bitwarden-а</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
-    <value>Auto-fill Services</value>
+    <value>Сервиси Ауто-пуњења</value>
   </data>
   <data name="InlineAutofill" xml:space="preserve">
-    <value>Use Inline Autofill</value>
+    <value>Употребити на месту Ауто-пуњење</value>
   </data>
   <data name="InlineAutofillDescription" xml:space="preserve">
-    <value>Use inline autofill if your selected IME (keyboard) supports it. If your configuration is not supported (or this option is disabled), the default Autofill overlay will be used.</value>
+    <value>Употребити на месту Ауто-пуњење ако Ваша тастатура то подржава. Ако ваша конфигурација није подржана (или је ова опција онемогућена), подразумевано прекривање Ауто-пуњење ће се користити.</value>
   </data>
   <data name="Accessibility" xml:space="preserve">
-    <value>Use Accessibility</value>
+    <value>Користите приступачност</value>
   </data>
   <data name="AccessibilityDescription" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. When enabled, we'll display a popup when login fields are selected.</value>
+    <value>Користите Bitwarden услугу приступачности да бисте ауто-пунили своје пријаве у апликацијама и на вебу. Када је омогућено, приказаћемо искачући прозор када су изабрана поља за пријаву.</value>
   </data>
   <data name="AccessibilityDescription2" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. (Requires Draw-Over to be enabled as well)</value>
+    <value>Користите Bitwarden услугу приступачности да бисте ауто-пунили своје пријаве у апликацијама и на вебу. (Захтева и омогућавање превлачења)</value>
   </data>
   <data name="AccessibilityDescription3" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to use the Autofill Quick-Action Tile, and/or show a popup using Draw-Over (if enabled).</value>
+    <value>Употребите Bitwarden сервис приступачности за уотребу Ауто-пуњење брзе акције, и/или приказати искачући прозор помоћу Превлачење (ако је омогућено).</value>
   </data>
   <data name="AccessibilityDescription4" xml:space="preserve">
-    <value>Required to use the Autofill Quick-Action Tile, or to augment the Autofill Service by using Draw-Over (if enabled).</value>
+    <value>Потребно за употребу Љуто-пуњење брзе акције, или са се повећа сервис са превачење (ако је омогућено).</value>
   </data>
   <data name="DrawOver" xml:space="preserve">
-    <value>Use Draw-Over</value>
+    <value>Употреби превлачење</value>
   </data>
   <data name="DrawOverDescription" xml:space="preserve">
-    <value>When enabled, allows the Bitwarden Accessibility Service to display a popup when login fields are selected.</value>
+    <value>Када је омогућено, омогућава Bitwarden-а да приказује искачући прозор када су изабрана поља за пријављивање.</value>
   </data>
   <data name="DrawOverDescription2" xml:space="preserve">
-    <value>If enabled, the Bitwarden Accessibility Service will display a popup when login fields are selected to assist with auto-filling your logins.</value>
+    <value>Ако је омогућено, Bitwarden ће приказати искачући прозор када су изабрана поља за пријаву за помагање у ауто-пуњење ваших пријава.</value>
   </data>
   <data name="DrawOverDescription3" xml:space="preserve">
-    <value>If enabled, accessibility will show a popup to augment the Autofill Service for older apps that don't support the Android Autofill Framework.</value>
+    <value>Ако је омогућена, доступност ће приказати искачући прозор за увећавање услуге ауто-пуњења за старије апликације које не подржавају Android Autofill Framework.</value>
+  </data>
+  <data name="PersonalOwnershipSubmitError" xml:space="preserve">
+    <value>Due to an Enterprise Policy, you are restricted from saving items to your personal vault. Change the Ownership option to an organization and choose from available Collections.</value>
   </data>
 </root>
