@@ -134,7 +134,7 @@ Bitwardenје софтвер са 100% отвореног кода. Изворн
     <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
-    <value>bit warden,8bit,password,free password manager,password manager,login manager</value>
+    <value>bit warden,8bit,лозинка,бесплатни менаџер лозинки,менаџер лозинки,менаџер пријава</value>
     <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
@@ -144,10 +144,10 @@ Bitwardenје софтвер са 100% отвореног кода. Изворн
     <value>Аутоматски генеришите јаке, насумичне и сигурне лозинке</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Protect your vault with Touch ID, PIN code, or master password</value>
+    <value>Заштитите свој сеф помоћу Touch ID, ПИН кода, или главне лозинке</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Auto-fill logins from Safari, Chrome, and hundreds of other apps</value>
+    <value>Ауто-пуни пријаве са Safari, Chrome, и стотине других апликација</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
     <value>Синхронизујте и приступите сефу са више уређаја</value>
