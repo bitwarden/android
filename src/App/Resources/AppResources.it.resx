@@ -759,7 +759,7 @@
     <value>Stato</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
-    <value>Il modo più semplice per aggiungere nuovi login al tuo cassaforte è dal Servizio Auto-riempimento Bitwarden. Scopri di più sull'utilizzo del Servizio Auto-riempimento Bitwarden navigando nella schermata "Impostazioni".</value>
+    <value>Il modo più semplice per aggiungere nuovi login al tuo cassaforte è dal Servizio Auto-riempimento Bitwarden. Scopri di più sull'utilizzo del servizio di completamento automatico Bitwarden navigando nella schermata "Impostazioni".</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Auto-completamento</value>
@@ -1169,7 +1169,7 @@
     <value>Windows Hello</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
-    <value>Non è stato possibile aprire il menu di impostazioni di auto-riempimento per te. Puoi navigare manualmente al menu delle impostazioni di auto-riempimento dalle Impostazioni Android &gt; Accessibilità &gt; Servizi &gt; Bitwarden.</value>
+    <value>Non è stato possibile aprire il menu di impostazioni di completamento automatico. Puoi navigare manualmente nel menu delle impostazioni di completamento automatico dalle Impostazioni Android &gt; Accessibilità &gt; Servizi &gt; Bitwarden.</value>
   </data>
   <data name="CustomFieldName" xml:space="preserve">
     <value>Nome campo personalizzato</value>
@@ -1246,7 +1246,7 @@
     <value>Per continuare, tieni il tuo YubiKey NEO sul retro del dispositivo.</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
-    <value>Il servizio di accessibilità può essere utile quando le app non supportano il servizio di riempimento automatico standard.</value>
+    <value>Il servizio di accessibilità può essere utile quando le app non supportano il servizio di completamento automatico standard.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
     <value>Password Aggiornata</value>
@@ -1257,10 +1257,10 @@
     <comment>ex. Date this item was updated</comment>
   </data>
   <data name="AutofillActivated" xml:space="preserve">
-    <value>Riempimento automatico Attivato!</value>
+    <value>Completamento automatico attivato!</value>
   </data>
   <data name="MustLogInMainAppAutofill" xml:space="preserve">
-    <value>È necessario accedere all'app principale di Bitwarden prima di poter utilizzare il riempimento automatico.</value>
+    <value>È necessario accedere all'app principale di Bitwarden prima di poter utilizzare il completamento automatico.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
     <value>I tuoi login sono ora facilmente accessibili direttamente dalla tastiera durante l'accesso ad app e siti web.</value>
@@ -1269,7 +1269,7 @@
     <value>Se non prevedi di utilizzarli, ti consigliamo di disabilitare qualsiasi altra applicazione di Compilazione automatica nelle Impostazioni.</value>
   </data>
   <data name="BitwardenAutofillDescription" xml:space="preserve">
-    <value>Accedi al tuo caveau direttamente dalla tastiera per velocizzare il riempimento automatico delle password.</value>
+    <value>Accedi alla tua cassaforte direttamente dalla tastiera per velocizzare il completamento automatico delle password.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
     <value>Per abilitare la compilazione automatica della password sul tuo dispositivo, segui queste istruzioni:</value>
@@ -1281,16 +1281,16 @@
     <value>2. Clicca su "Password &amp; Account"</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
-    <value>3. Clicca su "Riempimento automatico password"</value>
+    <value>3. Clicca su "Completamento automatico password"</value>
   </data>
   <data name="AutofillTurnOn4" xml:space="preserve">
-    <value>4. Attiva Riempimento Automatico</value>
+    <value>4. Attiva Autocompletamento</value>
   </data>
   <data name="AutofillTurnOn5" xml:space="preserve">
     <value>5. Seleziona "Bitwarden"</value>
   </data>
   <data name="PasswordAutofill" xml:space="preserve">
-    <value>Riempimento Automatico Password</value>
+    <value>Autocompletamento Password</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
     <value>Il modo più semplice per aggiungere nuovi login alla tua cassaforte è l'estensione Bitwarden Password AutoFill. Scopri di più sull'utilizzo dell'estensione Bitwarden Password AutoFill navigando nella schermata "Impostazioni".</value>
@@ -1491,7 +1491,7 @@
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
-    <value>Scegli il modo predefinito in cui il rilevamento della corrispondenza URI viene gestito per gli accessi quando si eseguono azioni come il riempimento automatico.</value>
+    <value>Scegli il modo predefinito in cui il rilevamento della corrispondenza dell'URI viene gestito per gli accessi quando si eseguono azioni come il completamento automatico.</value>
   </data>
   <data name="Theme" xml:space="preserve">
     <value>Tema</value>
@@ -1539,7 +1539,7 @@
     <value>Al Riavvio dell'App</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>Auto-riempimento rende facile accedere in modo sicuro alla tua cassaforte Bitwarden da altri siti web e applicazioni. Sembra che tu non abbia abilitato un servizio di auto-riempimento per Bitwarden. Abilita l'auto-riempimento per Bitwarden dalla schermata "Impostazioni".</value>
+    <value>L'autocompletamento rende facile accedere in modo sicuro alla tua cassaforte Bitwarden da altri siti web e applicazioni. Sembra che tu non abbia abilitato un servizio di completamento automatico per Bitwarden. Abilita l'autocompletamento per Bitwarden dalla schermata "Impostazioni".</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
     <value>Le modifiche del tema verranno applicate quando l'app verrà riavviata.</value>
@@ -1573,7 +1573,7 @@
     <value>Usa Dati Biometrici Per Sbloccare</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
-    <value>Bitwarden richiede la tua attenzione - Vedi "Servizio di Accessibilità dell'Auto Completameno" dalle Impostazioni di Bitwarden</value>
+    <value>Bitwarden richiede la tua attenzione - Vedi "Servizio di accessibilità per l'autocompletamento" dalle Impostazioni di Bitwarden</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
     <value>3. Sulla schermata di Impostazioni dell'App Android per Bitwarden, vai alle opzioni "Mostra sulle altre app" (sotto Avanzate) e tocca l'interruttore per abilitare il supporto overlay.</value>
@@ -1601,6 +1601,13 @@
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Questa esportazione contiene i dati della tua cassaforte in formato non crittografato. Non dovresti archiviare o inviare i file esportati attraverso canali non sicuri (come l'email). Eliminali immediatamente dopo che hai finito di usarli.</value>
+  </data>
+  <data name="EncExportVaultWarning" xml:space="preserve">
+    <value>This export encrypts your data using your account's encryption key. If you ever rotate your account's encryption key you should export again since you will not be able to decrypt this export file.</value>
+  </data>
+  <data name="ExportVaultConfirmationTitle" xml:space="preserve">
+    <value>Confirm Vault Export</value>
+    <comment>Title for the alert to confirm vault exports.</comment>
   </data>
   <data name="Warning" xml:space="preserve">
     <value>Avviso</value>
@@ -1677,6 +1684,9 @@
   <data name="BiometricInvalidated" xml:space="preserve">
     <value>Dati biometrici modificati, accedi con la password principale per attivare nuovamente lo sblocco con dati biometrici.</value>
   </data>
+  <data name="BiometricInvalidatedExtension" xml:space="preserve">
+    <value>Biometric unlock for autofill disabled pending verification of master password.</value>
+  </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Abilita la sincronizzazione durante l'aggiornamento</value>
   </data>
@@ -1744,42 +1754,45 @@
     <value>Informativa sulla privacy</value>
   </data>
   <data name="AccessibilityDrawOverPermissionAlert" xml:space="preserve">
-    <value>Bitwarden needs attention - Enable "Draw-Over" in "Auto-fill Services" from Bitwarden Settings</value>
+    <value>Bitwarden richiede la tua attenzione - Abilita "Mostra sopra altre app" nelle opzioni di Bitwarden</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
-    <value>Auto-fill Services</value>
+    <value>Servizi di autocompletamento</value>
   </data>
   <data name="InlineAutofill" xml:space="preserve">
-    <value>Use Inline Autofill</value>
+    <value>Usa il completamento automatico</value>
   </data>
   <data name="InlineAutofillDescription" xml:space="preserve">
-    <value>Use inline autofill if your selected IME (keyboard) supports it. If your configuration is not supported (or this option is disabled), the default Autofill overlay will be used.</value>
+    <value>Usa il completamento automatico se l'IME (Tastiera) selezionato lo supporta. Se la tua configurazione non è supportata (o l'opzione è disabilitata), verrà utilizzato l'autocompletamento di default.</value>
   </data>
   <data name="Accessibility" xml:space="preserve">
-    <value>Use Accessibility</value>
+    <value>Usa Accessibilità</value>
   </data>
   <data name="AccessibilityDescription" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. When enabled, we'll display a popup when login fields are selected.</value>
+    <value>Utilizza il servizio di accessibilità di Bitwarden per l'autocompletamento. Se abilitato, verrà mostrato un popup quando i campi relativi al login sono selezionati.</value>
   </data>
   <data name="AccessibilityDescription2" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. (Requires Draw-Over to be enabled as well)</value>
+    <value>Utilizza il servizio di accessibilità di Bitwarden per accedere automaticamente sul web e sulle app tramite autocompletamento (È necessario abilitare "Mostra sopra altre app")</value>
   </data>
   <data name="AccessibilityDescription3" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to use the Autofill Quick-Action Tile, and/or show a popup using Draw-Over (if enabled).</value>
+    <value>Abilita il servizio di accessibilità di Bitwarden  per usare la tile di autocompletamento rapido, e/o mostra un popup quando "Mostra sopra altre app" viene utilizzato (se abilitato).</value>
   </data>
   <data name="AccessibilityDescription4" xml:space="preserve">
-    <value>Required to use the Autofill Quick-Action Tile, or to augment the Autofill Service by using Draw-Over (if enabled).</value>
+    <value>Necessario per l'utilizzo della tile per l'autocompletamento rapido o per aumentare il servizio di completamento automatico utilizzando "Mostra sopra altre app" (se abilitato).</value>
   </data>
   <data name="DrawOver" xml:space="preserve">
-    <value>Use Draw-Over</value>
+    <value>Usa Mostra sopra altre app</value>
   </data>
   <data name="DrawOverDescription" xml:space="preserve">
-    <value>When enabled, allows the Bitwarden Accessibility Service to display a popup when login fields are selected.</value>
+    <value>Se abilitato, permette al servizio di accessibilità di Bitwarden di mostrare un popup quando i campi relativi al login vengono selezionati.</value>
   </data>
   <data name="DrawOverDescription2" xml:space="preserve">
-    <value>If enabled, the Bitwarden Accessibility Service will display a popup when login fields are selected to assist with auto-filling your logins.</value>
+    <value>Se abilitato, il servizio di accessibilità di Bitwarden mostrerà un popup quando i campi login vengono selezionati per aiutarti con l'autocompletamento.</value>
   </data>
   <data name="DrawOverDescription3" xml:space="preserve">
-    <value>If enabled, accessibility will show a popup to augment the Autofill Service for older apps that don't support the Android Autofill Framework.</value>
+    <value>Se abilitato, l'accessibilità mostrerà un popup per aumentare il servizio di autocompletamento per le vecchie app che non supportano il framework di autocompletamento di Android.</value>
+  </data>
+  <data name="PersonalOwnershipSubmitError" xml:space="preserve">
+    <value>Due to an Enterprise Policy, you are restricted from saving items to your personal vault. Change the Ownership option to an organization and choose from available Collections.</value>
   </data>
 </root>
