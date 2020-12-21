@@ -1602,6 +1602,13 @@
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>ഈ എക്‌സ്‌പോർട്ടിൽ എൻക്രിപ്റ്റ് ചെയ്യാത്ത ഫോർമാറ്റിൽ നിങ്ങളുടെ വാൾട് ഡാറ്റ അടങ്ങിയിരിക്കുന്നു. എക്‌സ്‌പോർട് ചെയ്ത ഫയൽ സുരക്ഷിതമല്ലാത്ത ചാനലുകളിൽ (ഇമെയിൽ പോലുള്ളവ) നിങ്ങൾ സംഭരിക്കുകയോ അയയ്ക്കുകയോ ചെയ്യരുത്. നിങ്ങൾ ഇത് ഉപയോഗിച്ചുകഴിഞ്ഞാലുടൻ അത് മായ്ച്ചുകളയണം.</value>
   </data>
+  <data name="EncExportVaultWarning" xml:space="preserve">
+    <value>This export encrypts your data using your account's encryption key. If you ever rotate your account's encryption key you should export again since you will not be able to decrypt this export file.</value>
+  </data>
+  <data name="ExportVaultConfirmationTitle" xml:space="preserve">
+    <value>Confirm Vault Export</value>
+    <comment>Title for the alert to confirm vault exports.</comment>
+  </data>
   <data name="Warning" xml:space="preserve">
     <value>മുന്നറിയിപ്പ്‌</value>
   </data>
@@ -1677,6 +1684,9 @@
   <data name="BiometricInvalidated" xml:space="preserve">
     <value>ബയോമെട്രിക് മാറ്റം കണ്ടെത്തി, വീണ്ടും പ്രവർത്തനക്ഷമമാക്കാൻ പ്രാഥമിക പാസ്‌വേഡ് ഉപയോഗിച്ച് പ്രവേശിക്കുക.</value>
   </data>
+  <data name="BiometricInvalidatedExtension" xml:space="preserve">
+    <value>Biometric unlock for autofill disabled pending verification of master password.</value>
+  </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>റിഫ്രഷ് ചെയ്യുമ്പോൾ സമന്വയം പ്രാപ്തമാക്കുക</value>
   </data>
@@ -1744,42 +1754,45 @@
     <value>സ്വകാര്യതാനയം</value>
   </data>
   <data name="AccessibilityDrawOverPermissionAlert" xml:space="preserve">
-    <value>Bitwarden needs attention - Enable "Draw-Over" in "Auto-fill Services" from Bitwarden Settings</value>
+    <value>ബിറ്റ്വാർഡിന് ശ്രദ്ധ ആവശ്യമാണ് - ബിറ്റ്വാർഡൻ ക്രമീകരണങ്ങളിൽ നിന്ന് "ഓട്ടോഫിൽ സേവനങ്ങളിൽ" "ഡ്രോ-ഓവർ" പ്രാപ്തമാക്കുക</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
-    <value>Auto-fill Services</value>
+    <value>ഓട്ടോഫിൽ സേവനങ്ങൾ</value>
   </data>
   <data name="InlineAutofill" xml:space="preserve">
-    <value>Use Inline Autofill</value>
+    <value>ഇൻലൈൻ ഓട്ടോഫിൽ ഉപയോഗിക്കുക</value>
   </data>
   <data name="InlineAutofillDescription" xml:space="preserve">
-    <value>Use inline autofill if your selected IME (keyboard) supports it. If your configuration is not supported (or this option is disabled), the default Autofill overlay will be used.</value>
+    <value>നിങ്ങൾ തിരഞ്ഞെടുത്ത IME (കീബോർഡ്) പിന്തുണയ്ക്കുന്നുവെങ്കിൽ ഇൻലൈൻ ഓട്ടോഫിൽ ഉപയോഗിക്കുക. നിങ്ങളുടെ കോൺഫിഗറേഷൻ പിന്തുണയ്ക്കുന്നില്ലെങ്കിൽ (അല്ലെങ്കിൽ ഈ ഓപ്ഷൻ അപ്രാപ്തമാക്കി), സ്ഥിരസ്ഥിതി ഓട്ടോഫിൽ ഓവർലേ ഉപയോഗിക്കും.</value>
   </data>
   <data name="Accessibility" xml:space="preserve">
-    <value>Use Accessibility</value>
+    <value>ആക്സിസിബിലിറ്റി ഉപയോഗിക്കുക</value>
   </data>
   <data name="AccessibilityDescription" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. When enabled, we'll display a popup when login fields are selected.</value>
+    <value>അപ്ലിക്കേഷനുകളിലും വെബിലുടനീളം നിങ്ങളുടെ ലോഗിനുകൾ യാന്ത്രികമായി പൂരിപ്പിക്കുന്നതിന് ബിറ്റ്വാർഡൻ പ്രവേശനക്ഷമത സേവനം ഉപയോഗിക്കുക. പ്രവർത്തനക്ഷമമാക്കുമ്പോൾ, ലോഗിൻ ഫീൽഡുകൾ തിരഞ്ഞെടുക്കുമ്പോൾ ഞങ്ങൾ ഒരു പോപ്പ്അപ്പ് പ്രദർശിപ്പിക്കും.</value>
   </data>
   <data name="AccessibilityDescription2" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. (Requires Draw-Over to be enabled as well)</value>
+    <value>അപ്ലിക്കേഷനുകളിലും വെബിലുടനീളം നിങ്ങളുടെ ലോഗിനുകൾ യാന്ത്രികമായി പൂരിപ്പിക്കുന്നതിന് ബിറ്റ്വാർഡൻ പ്രവേശനക്ഷമത സേവനം ഉപയോഗിക്കുക. (പ്രവർത്തനക്ഷമമാക്കുന്നതിന് ഡ്രോ-ഓവർ ആവശ്യമാണ്)</value>
   </data>
   <data name="AccessibilityDescription3" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to use the Autofill Quick-Action Tile, and/or show a popup using Draw-Over (if enabled).</value>
+    <value>ഓട്ടോഫിൽ ക്വിക്ക്-ആക്ഷൻ ടൈൽ ഉപയോഗിക്കുന്നതിന് ബിറ്റ്വാർഡൻ പ്രവേശനക്ഷമത സേവനം ഉപയോഗിക്കുക, കൂടാതെ / അല്ലെങ്കിൽ ഡ്രോ-ഓവർ ഉപയോഗിച്ച് ഒരു പോപ്പ്അപ്പ് കാണിക്കുക (പ്രവർത്തനക്ഷമമാക്കിയിട്ടുണ്ടെങ്കിൽ).</value>
   </data>
   <data name="AccessibilityDescription4" xml:space="preserve">
-    <value>Required to use the Autofill Quick-Action Tile, or to augment the Autofill Service by using Draw-Over (if enabled).</value>
+    <value>ഓട്ടോഫിൽ ക്വിക്ക്-ആക്ഷൻ ടൈൽ ഉപയോഗിക്കുന്നതിനോ ഡ്രോ-ഓവർ ഉപയോഗിച്ച് പ്രവർത്തനക്ഷമമാക്കിയ ഓട്ടോഫിൽ സേവനം വർദ്ധിപ്പിക്കുന്നതിനോ ആവശ്യമാണ് (പ്രവർത്തനക്ഷമമാക്കിയിട്ടുണ്ടെങ്കിൽ).</value>
   </data>
   <data name="DrawOver" xml:space="preserve">
-    <value>Use Draw-Over</value>
+    <value>ഡ്രോ ഓവർ ഉപയോഗിക്കുക</value>
   </data>
   <data name="DrawOverDescription" xml:space="preserve">
-    <value>When enabled, allows the Bitwarden Accessibility Service to display a popup when login fields are selected.</value>
+    <value>പ്രവർത്തനക്ഷമമാക്കിയിരിക്കുമ്പോൾ, ലോഗിൻ ഫീൽഡുകൾ തിരഞ്ഞെടുക്കുമ്പോൾ ഒരു പോപ്പ്അപ്പ് പ്രദർശിപ്പിക്കാൻ ബിറ്റ്വാർഡൻ പ്രവേശന സേവനത്തെ അനുവദിക്കുന്നു.</value>
   </data>
   <data name="DrawOverDescription2" xml:space="preserve">
-    <value>If enabled, the Bitwarden Accessibility Service will display a popup when login fields are selected to assist with auto-filling your logins.</value>
+    <value>പ്രവർത്തനക്ഷമമാക്കിയിട്ടുണ്ടെങ്കിൽ, നിങ്ങളുടെ ലോഗിനുകൾ യാന്ത്രികമായി പൂരിപ്പിക്കുന്നതിന് സഹായിക്കുന്നതിന് ലോഗിൻ ഫീൽഡുകൾ തിരഞ്ഞെടുക്കുമ്പോൾ ബിറ്റ്വാർഡൻ പ്രവേശന സേവനം ഒരു പോപ്പ്അപ്പ് പ്രദർശിപ്പിക്കും.</value>
   </data>
   <data name="DrawOverDescription3" xml:space="preserve">
-    <value>If enabled, accessibility will show a popup to augment the Autofill Service for older apps that don't support the Android Autofill Framework.</value>
+    <value>പ്രവർത്തനക്ഷമമാക്കിയിട്ടുണ്ടെങ്കിൽ, Android ഓട്ടോഫിൽ ഫ്രെയിംവർക്കിനെ പിന്തുണയ്‌ക്കാത്ത പഴയ അപ്ലിക്കേഷനുകൾക്കായി ഓട്ടോഫിൽ സേവനം വർദ്ധിപ്പിക്കുന്നതിന് പ്രവേശനക്ഷമത ഒരു പോപ്പ്അപ്പ് കാണിക്കും.</value>
+  </data>
+  <data name="PersonalOwnershipSubmitError" xml:space="preserve">
+    <value>Due to an Enterprise Policy, you are restricted from saving items to your personal vault. Change the Ownership option to an organization and choose from available Collections.</value>
   </data>
 </root>
