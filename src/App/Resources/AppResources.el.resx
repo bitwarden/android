@@ -1603,6 +1603,13 @@
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Αυτή η εξαγωγή περιέχει τα δεδομένα σε μη κρυπτογραφημένη μορφή. Δεν πρέπει να αποθηκεύετε ή να στείλετε το εξαγόμενο αρχείο μέσω μη ασφαλών τρόπων (όπως μέσω email). Διαγράψτε το αμέσως μόλις τελειώσετε με τη χρήση του.</value>
   </data>
+  <data name="EncExportVaultWarning" xml:space="preserve">
+    <value>This export encrypts your data using your account's encryption key. If you ever rotate your account's encryption key you should export again since you will not be able to decrypt this export file.</value>
+  </data>
+  <data name="ExportVaultConfirmationTitle" xml:space="preserve">
+    <value>Confirm Vault Export</value>
+    <comment>Title for the alert to confirm vault exports.</comment>
+  </data>
   <data name="Warning" xml:space="preserve">
     <value>Προειδοποίηση</value>
   </data>
@@ -1678,6 +1685,9 @@
   <data name="BiometricInvalidated" xml:space="preserve">
     <value>Εντοπίστηκε βιομετρική αλλαγή, συνδεθείτε χρησιμοποιώντας τον κύριο κωδικό πρόσβασης για ενεργοποίηση ξανά.</value>
   </data>
+  <data name="BiometricInvalidatedExtension" xml:space="preserve">
+    <value>Biometric unlock for autofill disabled pending verification of master password.</value>
+  </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Ενεργοποίηση συγχρονισμού κατά την ανανέωση</value>
   </data>
@@ -1745,42 +1755,45 @@
     <value>Πολιτική Απορρήτου</value>
   </data>
   <data name="AccessibilityDrawOverPermissionAlert" xml:space="preserve">
-    <value>Bitwarden needs attention - Enable "Draw-Over" in "Auto-fill Services" from Bitwarden Settings</value>
+    <value>Το Bitwarden χρειάζεται προσοχή - Ενεργοποιήστε το "Draw-Over" στις "Υπηρεσίες αυτόματης συμπλήρωσης" από το Bitwarden Settings</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
-    <value>Auto-fill Services</value>
+    <value>Υπηρεσία Αυτόματης Συμπλήρωσης</value>
   </data>
   <data name="InlineAutofill" xml:space="preserve">
-    <value>Use Inline Autofill</value>
+    <value>Χρησιμοποιήστε Inline Αυτόματη συμπλήρωση</value>
   </data>
   <data name="InlineAutofillDescription" xml:space="preserve">
-    <value>Use inline autofill if your selected IME (keyboard) supports it. If your configuration is not supported (or this option is disabled), the default Autofill overlay will be used.</value>
+    <value>Χρησιμοποιήστε ενσωματωμένη αυτόματη συμπλήρωση εάν το επιλεγμένο IME (πληκτρολόγιο) το υποστηρίζει. Εάν η διαμόρφωση δεν υποστηρίζεται (ή αυτή η επιλογή είναι απενεργοποιημένη), θα χρησιμοποιηθεί η προεπιλεγμένη επικάλυψη αυτόματης συμπλήρωσης.</value>
   </data>
   <data name="Accessibility" xml:space="preserve">
-    <value>Use Accessibility</value>
+    <value>Χρησιμοποιήστε την Προσβασιμότητα</value>
   </data>
   <data name="AccessibilityDescription" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. When enabled, we'll display a popup when login fields are selected.</value>
+    <value>Χρησιμοποιήστε την υπηρεσία προσβασιμότητας Bitwarden για να συμπληρώσετε αυτόματα τις συνδέσεις σας σε εφαρμογές και στον ιστό. Όταν είναι ενεργοποιημένο, θα εμφανιστεί ένα αναδυόμενο παράθυρο όταν επιλέγονται πεδία σύνδεσης</value>
   </data>
   <data name="AccessibilityDescription2" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. (Requires Draw-Over to be enabled as well)</value>
+    <value>Χρησιμοποιήστε την υπηρεσία προσβασιμότητας Bitwarden για να συμπληρώσετε αυτόματα τις συνδέσεις σας σε εφαρμογές και στον ιστό. (Απαιτείται η ενεργοποίηση του Draw-Over)</value>
   </data>
   <data name="AccessibilityDescription3" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to use the Autofill Quick-Action Tile, and/or show a popup using Draw-Over (if enabled).</value>
+    <value>Χρησιμοποιήστε την υπηρεσία προσβασιμότητας Bitwarden για να χρησιμοποιήσετε το Πλακάκι γρήγορης δράσης αυτόματης συμπλήρωσης ή / και να εμφανιστεί ένα αναδυόμενο παράθυρο χρησιμοποιώντας το Draw-Over (εάν είναι ενεργοποιημένο).</value>
   </data>
   <data name="AccessibilityDescription4" xml:space="preserve">
-    <value>Required to use the Autofill Quick-Action Tile, or to augment the Autofill Service by using Draw-Over (if enabled).</value>
+    <value>Απαιτείται να χρησιμοποιήσετε το Πλακάκι αυτόματης συμπλήρωσης αυτόματης συμπλήρωσης ή για να αυξήσετε την υπηρεσία αυτόματης συμπλήρωσης χρησιμοποιώντας το Draw-Over (εάν είναι ενεργοποιημένο).</value>
   </data>
   <data name="DrawOver" xml:space="preserve">
-    <value>Use Draw-Over</value>
+    <value>Χρησιμοποιήστε το Draw-Over</value>
   </data>
   <data name="DrawOverDescription" xml:space="preserve">
-    <value>When enabled, allows the Bitwarden Accessibility Service to display a popup when login fields are selected.</value>
+    <value>Όταν είναι ενεργοποιημένο, επιτρέπει στην υπηρεσία προσβασιμότητας Bitwarden να εμφανίζει ένα αναδυόμενο παράθυρο όταν επιλέγονται πεδία σύνδεσης.</value>
   </data>
   <data name="DrawOverDescription2" xml:space="preserve">
-    <value>If enabled, the Bitwarden Accessibility Service will display a popup when login fields are selected to assist with auto-filling your logins.</value>
+    <value>Εάν είναι ενεργοποιημένη, η υπηρεσία προσβασιμότητας Bitwarden θα εμφανίσει ένα αναδυόμενο παράθυρο όταν επιλέγονται πεδία σύνδεσης για να βοηθούν στην αυτόματη συμπλήρωση των συνδέσεων σας.</value>
   </data>
   <data name="DrawOverDescription3" xml:space="preserve">
-    <value>If enabled, accessibility will show a popup to augment the Autofill Service for older apps that don't support the Android Autofill Framework.</value>
+    <value>Εάν είναι ενεργοποιημένη, η προσβασιμότητα θα εμφανίσει ένα αναδυόμενο παράθυρο για την αύξηση της υπηρεσίας αυτόματης συμπλήρωσης για παλαιότερες εφαρμογές που δεν υποστηρίζουν το Android Autofill Framework.</value>
+  </data>
+  <data name="PersonalOwnershipSubmitError" xml:space="preserve">
+    <value>Due to an Enterprise Policy, you are restricted from saving items to your personal vault. Change the Ownership option to an organization and choose from available Collections.</value>
   </data>
 </root>

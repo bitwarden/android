@@ -1602,6 +1602,13 @@
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>내보내기는 보관함 데이터가 암호화되지 않은 형식으로 포함됩니다. 내보낸 파일을 안전하지 않은 채널(예: 이메일)을 통해 저장하거나 보내지 마십시오. 사용이 끝난 후에는 즉시 삭제하십시오.</value>
   </data>
+  <data name="EncExportVaultWarning" xml:space="preserve">
+    <value>This export encrypts your data using your account's encryption key. If you ever rotate your account's encryption key you should export again since you will not be able to decrypt this export file.</value>
+  </data>
+  <data name="ExportVaultConfirmationTitle" xml:space="preserve">
+    <value>Confirm Vault Export</value>
+    <comment>Title for the alert to confirm vault exports.</comment>
+  </data>
   <data name="Warning" xml:space="preserve">
     <value>경고</value>
   </data>
@@ -1676,6 +1683,9 @@
   </data>
   <data name="BiometricInvalidated" xml:space="preserve">
     <value>생체인증 변경이 확인되었습니다. 마스터 비밀번호로 로그인해서 다시 활성화 해주세요.</value>
+  </data>
+  <data name="BiometricInvalidatedExtension" xml:space="preserve">
+    <value>Biometric unlock for autofill disabled pending verification of master password.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>새로고침할 떄 동기화 활성화</value>
@@ -1782,5 +1792,8 @@
   </data>
   <data name="DrawOverDescription3" xml:space="preserve">
     <value>If enabled, accessibility will show a popup to augment the Autofill Service for older apps that don't support the Android Autofill Framework.</value>
+  </data>
+  <data name="PersonalOwnershipSubmitError" xml:space="preserve">
+    <value>Due to an Enterprise Policy, you are restricted from saving items to your personal vault. Change the Ownership option to an organization and choose from available Collections.</value>
   </data>
 </root>

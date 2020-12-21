@@ -1602,6 +1602,13 @@
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Tämä vienti sisältää holvisi tiedot salaamattomassa muodossa. Vietyä tiedostoa EI pidä säilyttää tai lähettää salaamattomana (kuten sähköpostitse). Poista tiedosto välittömästi, kun et enää tarvitse sitä.</value>
   </data>
+  <data name="EncExportVaultWarning" xml:space="preserve">
+    <value>This export encrypts your data using your account's encryption key. If you ever rotate your account's encryption key you should export again since you will not be able to decrypt this export file.</value>
+  </data>
+  <data name="ExportVaultConfirmationTitle" xml:space="preserve">
+    <value>Vahvista holvin vienti</value>
+    <comment>Title for the alert to confirm vault exports.</comment>
+  </data>
   <data name="Warning" xml:space="preserve">
     <value>Varoitus</value>
   </data>
@@ -1677,6 +1684,9 @@
   <data name="BiometricInvalidated" xml:space="preserve">
     <value>Biometriikan muutos havaittiin, ota se takaisin käyttöön kirjautumalla sisään pääsalasanallasi.</value>
   </data>
+  <data name="BiometricInvalidatedExtension" xml:space="preserve">
+    <value>Biometric unlock for autofill disabled pending verification of master password.</value>
+  </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Synkronoi holvi päivityksen yhteydessä</value>
   </data>
@@ -1744,42 +1754,45 @@
     <value>Tietosuojakäytäntö</value>
   </data>
   <data name="AccessibilityDrawOverPermissionAlert" xml:space="preserve">
-    <value>Bitwarden needs attention - Enable "Draw-Over" in "Auto-fill Services" from Bitwarden Settings</value>
+    <value>Bitwarden tarvitsee huomiota - katso "Näkyminen muiden päällä" -asetus Bitwardenin asetusten kohdasta "Automaattisen täytön palvelut"</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
-    <value>Auto-fill Services</value>
+    <value>Automaattisen täytön palvelut</value>
   </data>
   <data name="InlineAutofill" xml:space="preserve">
-    <value>Use Inline Autofill</value>
+    <value>Käytä tekstinsisäistä automaattitäyttöä</value>
   </data>
   <data name="InlineAutofillDescription" xml:space="preserve">
-    <value>Use inline autofill if your selected IME (keyboard) supports it. If your configuration is not supported (or this option is disabled), the default Autofill overlay will be used.</value>
+    <value>Käytä tekstinsisäistä automaattitäyttöä, jos käyttämäsi IME (näppäimistö) tukee sitä. Jos käyttämäsi alusta ei ole tuettu (tai tämä valinta ei ole käytössä), käytetään normaalia automaattisen täytön ponnahdusta.</value>
   </data>
   <data name="Accessibility" xml:space="preserve">
-    <value>Use Accessibility</value>
+    <value>Käytä esteettömyyspalvelua</value>
   </data>
   <data name="AccessibilityDescription" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. When enabled, we'll display a popup when login fields are selected.</value>
+    <value>Käytä Bitwardenin esteettömyyspalvelua täyttääksesi kirjautumistietosi automaattisesti sovelluksissa ja verkossa. Tämän ollessa käytössä näytämme ponnahduksen kirjautumiskenttien ollessa valittuna.</value>
   </data>
   <data name="AccessibilityDescription2" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. (Requires Draw-Over to be enabled as well)</value>
+    <value>Käytä Bitwardenin esteettömyyspalvelua täyttääksesi kirjautumistietosi automaattisesti sovelluksissa ja verkossa. (Vaatii myös "Näkyminen muiden päällä" -asetuksen)</value>
   </data>
   <data name="AccessibilityDescription3" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to use the Autofill Quick-Action Tile, and/or show a popup using Draw-Over (if enabled).</value>
+    <value>Käytä Bitwardenin esteettömyyspalvelua käyttääksesi Automaattisen täytön pikatoimintopalkkia ja/tai näytä ponnahdus käyttäen "Näkyminen muiden päällä" -asetusta.</value>
   </data>
   <data name="AccessibilityDescription4" xml:space="preserve">
-    <value>Required to use the Autofill Quick-Action Tile, or to augment the Autofill Service by using Draw-Over (if enabled).</value>
+    <value>Vaaditaan Automaattisen täytön pikatoimintopalkin käyttöön tai Automaattisen täytön palvelun laajentamiseen "Näkyminen muiden päällä" -asetuksella.</value>
   </data>
   <data name="DrawOver" xml:space="preserve">
-    <value>Use Draw-Over</value>
+    <value>Käytä "Näkyminen muiden päällä" -asetusta</value>
   </data>
   <data name="DrawOverDescription" xml:space="preserve">
-    <value>When enabled, allows the Bitwarden Accessibility Service to display a popup when login fields are selected.</value>
+    <value>Kun käytössä, sallii Bitwardenin esteettömyyspalvelun näyttää ponnahdus kirjautumiskenttien ollessa valittuna.</value>
   </data>
   <data name="DrawOverDescription2" xml:space="preserve">
-    <value>If enabled, the Bitwarden Accessibility Service will display a popup when login fields are selected to assist with auto-filling your logins.</value>
+    <value>Kun käytössä, Bitwardenin esteettömyyspalvelu näyttää ponnahduksen kirjautumiskenttien ollessa valittuna avustaakseen kirjautumistietojesi automaattisessa täytössä.</value>
   </data>
   <data name="DrawOverDescription3" xml:space="preserve">
-    <value>If enabled, accessibility will show a popup to augment the Autofill Service for older apps that don't support the Android Autofill Framework.</value>
+    <value>Kun käytössä, esteettömyyspalvelu näyttää ponnahduksen laajentaakseen automaattisen täytön palvelun toiminnan kattamaan myös vanhemmat sovellukset, jotka eivät tue Android Autofill Frameworkia.</value>
+  </data>
+  <data name="PersonalOwnershipSubmitError" xml:space="preserve">
+    <value>Due to an Enterprise Policy, you are restricted from saving items to your personal vault. Change the Ownership option to an organization and choose from available Collections.</value>
   </data>
 </root>

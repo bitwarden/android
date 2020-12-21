@@ -122,42 +122,42 @@
     <comment>Max 30 characters</comment>
   </data>
   <data name="ShortDescription" xml:space="preserve">
-    <value>Bitwarden is a login and password manager that helps keep you safe while online.</value>
+    <value>Bitwarden је менаџер за пријављивање и лозинке који вам помаже да будете безбедни док сте на мрежи.</value>
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>Bitwarden is the easiest and safest way to store all of your logins and passwords while conveniently keeping them synced between all of your devices.
+    <value>Bitwarden је најједноставнији и најсигурнији начин за складиштење свих ваших података за пријављивање и лозинки, док их истовремено усклађујете на свим својим уређајима. Bitwarden додатак омогућава вам да се брзо пријавите на било коју веб локацију путем Safari-а или Chrome-а, а подржавају је стотине других популарних апликација.
 
-Password theft is a serious problem. The websites and apps that you use are under attack every day. Security breaches occur and your passwords are stolen. When you reuse the same passwords across apps and websites hackers can easily access your email, bank, and other important accounts.
+Крађа лозинке је озбиљан проблем. Веб локације и апликације које користите свакодневно су на удару. Дошло је до нарушавања безбедности и крађе лозинки. Када поново користите исте лозинке у апликацијама и на веб локацијама, хакери могу лако да приступе вашој е-пошти, банци и другим важним рачунима.
 
-Security experts recommend that you use a different, randomly generated password for every account that you create. But how do you manage all those passwords? Bitwarden makes it easy for you to create, store, and access your passwords.
+Стручњаци за безбедност препоручују употребу различите, насумично генерисане лозинке за сваки налог који креирате. Али како управљате свим тим лозинкама? Bitwarden вам олакшава стварање, чување и приступ вашим лозинкама.
 
-Bitwarden stores all of your logins in an encrypted vault that syncs across all of your devices. Since it's fully encrypted before it ever leaves your device, only you have access to your data. Not even the team at Bitwarden can read your data, even if we wanted to. Your data is sealed with AES-256 bit encryption, salted hashing, and PBKDF2 SHA-256.
+Bitwarden чува све ваше пријаве у шифрованом сефу који се синхронизује на свим вашим уређајима. Пошто је потпуно шифровано пре него што напусти уређај, само ви имате приступ подацима. Чак ни тим у Bitwarden не може да прочита ваше податке, чак и да то желимо. Ваши подаци су запечаћени са AES-256  битном енкрипцијом, усољеним хеширањем и PBKDF2 SHA-256.
 
-Bitwarden is focused on open source software. The source code for Bitwarden is hosted on GitHub and everyone is free to review, audit, and contribute to the Bitwarden codebase.</value>
+Bitwardenје софтвер је фокусиран на отвореног кода. Изворни код  Bitwarden-а се налази на GitHub и сви могу слободно да прегледају, провере и дају свој допринос за Bitwarden.</value>
     <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
-    <value>A secure and free password manager for all of your devices</value>
+    <value>Сигурни и бесплатни менаџер лозинке за сва Ваша уређаја</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Manage all your logins and passwords from a secure vault</value>
+    <value>Управљајте свим својим пријавама и лозинкама из сигурног сефа</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Automatically generate strong, random, and secure passwords</value>
+    <value>Аутоматски генеришите јаке, насумичне и сигурне лозинке</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Protect your vault with fingerprint, PIN code, or master password</value>
+    <value>Заштитите сеф отиском прста, ПИН кодом или главном лозинком</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Quickly auto-fill logins from within your web browser and other apps</value>
+    <value>Брзо аутоматски попуните пријаве из свог веб прегледача и других апликација</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Sync and access your vault from multiple devices
+    <value>Синхронизујте и приступите сефу са више уређаја
 
-- Phone
-- Tablet
-- Desktop
-- Web</value>
+- Телефон
+- Таблет
+- Рачунар
+- Веб</value>
   </data>
 </root>
