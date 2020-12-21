@@ -34,6 +34,7 @@ namespace Bit.Droid.Accessibility
             new Browser("com.amazon.cloud9", "url"),
             new Browser("com.android.browser", "url"),
             new Browser("com.android.chrome", "url_bar"),
+            // Rem. for "com.android.htmlviewer": doesn't have a URL bar, therefore not present here.
             new Browser("com.avast.android.secure.browser", "editor"),
             new Browser("com.avg.android.secure.browser", "editor"),
             new Browser("com.brave.browser", "url_bar"),
@@ -68,13 +69,13 @@ namespace Bit.Droid.Accessibility
             new Browser("com.vivaldi.browser.sopranos", "url_bar"),
             new Browser("com.yandex.browser", "bro_omnibar_address_title_text,bro_omnibox_collapsed_title",
                 (s) => s.Split(new char[]{' ', ' '}).FirstOrDefault()), // 0 = Regular Space, 1 = No-break space (00A0)
-            new Browser("com.z28j.feel", "g2"), // "g2" for version 0.9.8.4 (984)
+            new Browser("com.z28j.feel", "g2"),
             new Browser("idm.internet.download.manager", "search"),
             new Browser("idm.internet.download.manager.adm.lite", "search"),
             new Browser("idm.internet.download.manager.plus", "search"),
             new Browser("io.github.forkmaintainers.iceraven", "mozac_browser_toolbar_url_view"),
-            new Browser("mark.via", "o"), // "o" for version 4.0.7 (20200929)
-            new Browser("mark.via.gp", "o"), // "o" for version 4.0.7 (20200929)
+            new Browser("mark.via", "o"),
+            new Browser("mark.via.gp", "o"),
             new Browser("org.adblockplus.browser", "url_bar,url_bar_title"), // 2nd = Legacy (before v2)
             new Browser("org.adblockplus.browser.beta", "url_bar,url_bar_title"), // 2nd = Legacy (before v2)
             new Browser("org.bromite.bromite", "url_bar"),
@@ -83,8 +84,8 @@ namespace Bit.Droid.Accessibility
             new Browser("org.codeaurora.swe.browser", "url_bar"),
             new Browser("org.gnu.icecat", "url_bar_title,mozac_browser_toolbar_url_view"), // 2nd = Anticipation
             new Browser("org.mozilla.fenix", "mozac_browser_toolbar_url_view"),
-            new Browser("org.mozilla.fenix.nightly", "mozac_browser_toolbar_url_view"), // [DEPRECATED]
-            new Browser("org.mozilla.fennec_aurora", "mozac_browser_toolbar_url_view,url_bar_title"), // [DEPRECATED]
+            new Browser("org.mozilla.fenix.nightly", "mozac_browser_toolbar_url_view"), // [DEPRECATED ENTRY]
+            new Browser("org.mozilla.fennec_aurora", "mozac_browser_toolbar_url_view,url_bar_title"), // [DEPRECATED ENTRY]
             new Browser("org.mozilla.fennec_fdroid", "mozac_browser_toolbar_url_view,url_bar_title"), // 2nd = Legacy
             new Browser("org.mozilla.firefox", "mozac_browser_toolbar_url_view,url_bar_title"), // 2nd = Legacy
             new Browser("org.mozilla.firefox_beta", "mozac_browser_toolbar_url_view,url_bar_title"), // 2nd = Legacy
@@ -92,9 +93,8 @@ namespace Bit.Droid.Accessibility
             new Browser("org.mozilla.klar", "display_url"),
             new Browser("org.mozilla.reference.browser", "mozac_browser_toolbar_url_view"),
             new Browser("org.mozilla.rocket", "display_url"),
-            new Browser("org.torproject.torbrowser", "url_bar_title,mozac_browser_toolbar_url_view"), // 2nd = Anticipation
+            new Browser("org.torproject.torbrowser", "mozac_browser_toolbar_url_view,url_bar_title"), // 2nd = Legacy (before v10.0.3)
             new Browser("org.torproject.torbrowser_alpha", "mozac_browser_toolbar_url_view,url_bar_title"), // 2nd = Legacy (before v10.0a8)
-            new Browser("org.ungoogled.chromium", "url_bar"), // [DEPRECATED]
             new Browser("org.ungoogled.chromium.extensions.stable", "url_bar"),
             new Browser("org.ungoogled.chromium.stable", "url_bar"),
 
