@@ -265,7 +265,7 @@
     <comment>The login button text (verb).</comment>
   </data>
   <data name="LogInNoun" xml:space="preserve">
-    <value>Імя карыстальніка</value>
+    <value>Уліковыя даныя</value>
     <comment>Title for login page. (noun)</comment>
   </data>
   <data name="LogOut" xml:space="preserve">
@@ -400,7 +400,7 @@
     <value>Дадаць пашырэнне</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Выкарыстоўвайце службу спецыяльных магчымасцяў Bitwarden для аўтазапаўнення вашых імён карыстальніка ў праграмах і інтэрнэце.</value>
+    <value>Выкарыстоўвайце службу спецыяльных магчымасцяў Bitwarden для аўтазапаўнення вашых уліковых даных у праграмах і інтэрнэце.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Служба аўтазапаўнення</value>
@@ -412,16 +412,16 @@
     <value>Пашырэнне Bitwarden</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
-    <value>Самы просты спосаб дадаць новыя імёны карыстальніка ў ваша сховішча — гэта служба аўтаўапаўнення Bitwarden. Дадатковыя звесткі аб выкарыстанні службы аўтазапаўнення Bitwarden у раздзеле "Налады".</value>
+    <value>Самы просты спосаб дадаць новыя ўліковыя даныя ў ваша сховішча — гэта служба аўтаўапаўнення Bitwarden. Дадатковыя звесткі аб выкарыстанні службы аўтазапаўнення Bitwarden у раздзеле "Налады".</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>Выкарыстоўвайце Bitwarden у Safari і іншых праграмах для аўтазапаўнення імён карыстальніка.</value>
+    <value>Выкарыстоўвайце Bitwarden у Safari і іншых праграмах для аўтазапаўнення ўліковых даных.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
     <value>Служба аўтазапаўнення Bitwarden</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Выкарыстоўвайце службу спецыяльных магчымасцяў Bitwarden для аўтазапаўнення вашых імён карыстальніка ў праграмах і інтэрнэце.</value>
+    <value>Выкарыстоўвайце службу спецыяльных магчымасцяў Bitwarden для аўтазапаўнення вашых уліковых даных у праграмах і інтэрнэце.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Змяніць адрас электроннай пошты</value>
@@ -477,7 +477,7 @@
     <value>Усё гатова для ўваходу!</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
-    <value>Цяпер вашыя імёны карыстальніка лёгка даступны з Safari, Chrome, і іншых праграм.</value>
+    <value>Цяпер вашыя ўліковыя даныя лёгка даступны з Safari, Chrome і іншых праграм.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
     <value>У Safari і Chrome, праз значок 'Абагуліць' знайдзіце Bitwarden (пракруціце ўправа ў ніжнім радку меню).</value>
@@ -534,10 +534,10 @@
     <value>Адразу</value>
   </data>
   <data name="VaultTimeout" xml:space="preserve">
-    <value>Таймаўт сховішча</value>
+    <value>Тайм-аўт сховішча</value>
   </data>
   <data name="VaultTimeoutAction" xml:space="preserve">
-    <value>Дзеянне пры таймаўце</value>
+    <value>Дзеянне пры тайм-аўце</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
     <value>Выхад з сістэмы выдаліць доступ да сховішча і патрабуе анлайн-аутэнтыфікацію па заканчэнні перыяду чакання. Вы сапраўды жадаеце ўключыць гэтую наладу?</value>
@@ -597,7 +597,7 @@
     <value>У вашым заданні няма элементаў для гэтага сайта/праграмы. Націсніце, каб дадаць.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
-    <value>У гэтага лагіна адсутнічае імя карыстальніка ці пароль.</value>
+    <value>У гэтых уліковых даных адсутнічае імя карыстальніка або пароль.</value>
   </data>
   <data name="OkGotIt" xml:space="preserve">
     <value>ОК, зразумела!</value>
@@ -893,7 +893,7 @@
     <value>Капіяваць TOTP</value>
   </data>
   <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>Калі да вашага імя карыстальніка прымацаваны ключ праверкі сапраўднасці, то код пацвярджэння TOTP будзе скапіяваны пры аўтазапаўненні імені карыстальніка.</value>
+    <value>Калі да вашых уліковых даных прымацаваны ключ праверкі сапраўднасці, то код пацвярджэння TOTP будзе скапіяваны пры аўтазапаўненні ўліковых даных.</value>
   </data>
   <data name="DisableAutoTotpCopy" xml:space="preserve">
     <value>Адключыць аўтаматычнае капіяванне TOTP</value>
@@ -941,7 +941,7 @@
     <value>Налады асяроддзя</value>
   </data>
   <data name="CustomEnvironmentFooter" xml:space="preserve">
-    <value>Для вопытных карыстальнікаў. Можна ўвесці URL-адрасы асобна для кжонай службы.</value>
+    <value>Для вопытных карыстальнікаў. Можна ўвесці URL-адрасы асобна для кожнай службы.</value>
   </data>
   <data name="EnvironmentSaved" xml:space="preserve">
     <value>URL-адрас сервера асяроддзя захаваны.</value>
@@ -991,7 +991,7 @@
     <value>Пасведчанне</value>
   </data>
   <data name="TypeLogin" xml:space="preserve">
-    <value>Імя карыстальніка</value>
+    <value>Уліковыя даныя</value>
   </data>
   <data name="TypeSecureNote" xml:space="preserve">
     <value>Бяспечныя нататкі</value>
@@ -1144,10 +1144,10 @@
     <value>Служба спецыяльных магчымасцяў аўтаўапаўнення</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>Служба аўтазапаўнення Bitwarden карыстаецца Android Autofill Framework для запаўнення лагінаў, нумароў карт і асабістай інфармацыі ў другіх праграмах на вашай прыладзе.</value>
+    <value>Служба аўтазапаўнення Bitwarden карыстаецца Android Autofill Framework для запаўнення ўліковых даных, нумароў карт і асабістай інфармацыі ў іншых праграмах на вашай прыладзе.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Карыстайцеся службай аўтазапаўнення Bitwarden для запаўнення лагінаў, нумароў карт і асабістай інфармацыі ў другіх праграмах.</value>
+    <value>Карыстайцеся службай аўтазапаўнення Bitwarden для запаўнення ўліковых даных, нумароў карт і асабістай інфармацыі ў іншых праграмах.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Адкрыць налады аўтазапаўнення</value>
@@ -1169,7 +1169,7 @@
     <value>Windows Hello</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
-    <value>Не атрымалася аўтаматычна адчыніць меню налад аўтазапаўнення Android. Вы можаце перайсці ў меню налад аўтазапаўнення з налад Android -> Сістэма -> Мова -> Мова і спосабы ўводу -> Дадатковыя налады -> Сэрвіс аўтазапаўнення.</value>
+    <value>Не атрымалася аўтаматычна адчыніць меню налад аўтазапаўнення Android. Вы можаце перайсці ў меню налад аўтазапаўнення з налад Android -> Сістэма -> Мова -> Мова і спосабы ўводу -> Дадатковыя налады -> Служба аўтазапаўнення.</value>
   </data>
   <data name="CustomFieldName" xml:space="preserve">
     <value>Карыстальніцкае поле</value>
@@ -1263,7 +1263,7 @@
     <value>Перад выкарыстаннем аўтазапаўнення трэба ўвайсці ў асноўную праграму Bitwarden.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
-    <value>Цяпер вашы лагіны лёгка даступныя з клавіятуры пры ўваходзе ў праграмы і на вэб-сайты.</value>
+    <value>Цяпер вашы ўліковыя даныя лёгка даступныя з клавіятуры пры ўваходзе ў праграмы і на вэб-сайты.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
     <value>Рэкамендуецца адключыць другія праграмы аўтазапаўнення ў наладах, калі яны не выкарыстоўваюцца.</value>
@@ -1293,7 +1293,7 @@
     <value>Аўтазапаўненне паролей</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
-    <value>Самы просты спосаб дадаць новыя імёны карыстальніка ў ваша сховішча — гэта дадатак Bitwarden Password AutoFill. Дадатковыя звесткі аб выкарыстанні дадатку Bitwarden Password AutoFill у раздзеле "Налады".</value>
+    <value>Самы просты спосаб дадаць новыя ўліковыя даныя ў ваша сховішча — гэта праграма Bitwarden Password AutoFill. Дадатковыя звесткі аб выкарыстанні праграмы Bitwarden Password AutoFill у раздзеле "Налады".</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
     <value>Памылковы адрас электроннай пошты.</value>
@@ -1305,7 +1305,7 @@
     <value>Пасведчанні</value>
   </data>
   <data name="Logins" xml:space="preserve">
-    <value>Імёны карыстальніка</value>
+    <value>Уліковыя даныя</value>
   </data>
   <data name="SecureNotes" xml:space="preserve">
     <value>Бяспечныя нататкі</value>
@@ -1491,7 +1491,7 @@
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
-    <value>Выберыце спосаб па змаўчанні, які выкарыстоўваецца пры вызначэнні адпаведнасці URI для імён карыстальніка пры выкананні такіх дзеянняў, як аўтаматычнае запаўненне.</value>
+    <value>Выберыце спосаб па змаўчанні, які выкарыстоўваецца пры вызначэнні адпаведнасці URI для ўліковых даных пры выкананні такіх дзеянняў, як аўтаматычнае запаўненне.</value>
   </data>
   <data name="Theme" xml:space="preserve">
     <value>Тэма</value>
@@ -1576,7 +1576,7 @@
     <value>Bitwarden патрабуе вашай увагі - гл. раздзел 'Служба спецыяльных магчымасцей аўтазапаўнення' у наладах Bitwarden.</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
-    <value>3. На экране налад праграм Android для Bitwarden адчыніце раздзел "Адлюстраваць паверх іншых праграм" ( раздзел "Дадатковыя налады") и цісніце пераключальнік, каб уключыць падтрымку накладання.</value>
+    <value>3. На экране налад праграм Android для Bitwarden адчыніце раздзел "Паказваць паверх іншых праграм" (раздзел "Дадатковыя налады") и націсніце пераключальнік, каб уключыць падтрымку накладання.</value>
   </data>
   <data name="OverlayPermission" xml:space="preserve">
     <value>Дазвол</value>
@@ -1585,7 +1585,7 @@
     <value>Адчыніць налады дазволу накладання</value>
   </data>
   <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
-    <value>3. На экране налад праграм Android для Bitwarden адчыніце раздзел "Адлюстраваць паверх іншых праграм" ( раздзел "Пашыраныя налады") и цісніце пераключальнік, каб уключыць падтрымку накладання.</value>
+    <value>3. На экране налад праграм Android для Bitwarden адчыніце раздзел "Паказваць паверх іншых праграм" (раздзел "Дадатковыя налады") и націсніце пераключальнік, каб уключыць падтрымку накладання.</value>
   </data>
   <data name="Denied" xml:space="preserve">
     <value>Адмоўлена</value>
@@ -1601,6 +1601,13 @@
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Экспартуемы файл утрымлівае даныя вашага сховішча ў незашыфраваным фармаце. Яго не варта захоўваць ці адпраўляць па небяспечным каналам (напрыклад, па электроннай пошце). Выдаліце яго адразу пасля выкарыстання.</value>
+  </data>
+  <data name="EncExportVaultWarning" xml:space="preserve">
+    <value>This export encrypts your data using your account's encryption key. If you ever rotate your account's encryption key you should export again since you will not be able to decrypt this export file.</value>
+  </data>
+  <data name="ExportVaultConfirmationTitle" xml:space="preserve">
+    <value>Confirm Vault Export</value>
+    <comment>Title for the alert to confirm vault exports.</comment>
   </data>
   <data name="Warning" xml:space="preserve">
     <value>Увага</value>
@@ -1677,11 +1684,14 @@
   <data name="BiometricInvalidated" xml:space="preserve">
     <value>Біяметрычныя даныя змяніліся, увайдзіце зноў праз асноўны пароль для ўключэння.</value>
   </data>
+  <data name="BiometricInvalidatedExtension" xml:space="preserve">
+    <value>Biometric unlock for autofill disabled pending verification of master password.</value>
+  </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Уключыць сінхранізацыю па абнаўленні</value>
   </data>
   <data name="EnableSyncOnRefreshDescription" xml:space="preserve">
-    <value>Сінхранізацыя сховішча праз свайп уніз</value>
+    <value>Сінхранізацыя сховішча чырканнем уніз</value>
   </data>
   <data name="LogInSso" xml:space="preserve">
     <value>Адзіны ўваход у карпаратыўную сістэму (SSO).</value>
@@ -1732,55 +1742,57 @@
     <value>Загрузка</value>
   </data>
   <data name="AcceptPolicies" xml:space="preserve">
-    <value>By activating this switch you agree to the following:
-</value>
+    <value>Націскаючы на гэты пераключальнік вы пагаджаецеся з наступным:</value>
   </data>
   <data name="AcceptPoliciesError" xml:space="preserve">
-    <value>Terms of Service and Privacy Policy have not been acknowledged.</value>
+    <value>Умовы выкарыстання і Палітыка прыватнасці не былі пацверджаны.</value>
   </data>
   <data name="TermsOfService" xml:space="preserve">
-    <value>Terms of Service</value>
+    <value>Умовы выкарыстання</value>
   </data>
   <data name="PrivacyPolicy" xml:space="preserve">
-    <value>Privacy Policy</value>
+    <value>Палітыка прыватнасці</value>
   </data>
   <data name="AccessibilityDrawOverPermissionAlert" xml:space="preserve">
-    <value>Bitwarden needs attention - Enable "Draw-Over" in "Auto-fill Services" from Bitwarden Settings</value>
+    <value>Bitwarden патрабуе вашай увагі - гл. раздзел 'Служба спецыяльных магчымасцей аўтазапаўнення' ў наладах Bitwarden.</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
-    <value>Auto-fill Services</value>
+    <value>Службы аўтазапаўнення</value>
   </data>
   <data name="InlineAutofill" xml:space="preserve">
-    <value>Use Inline Autofill</value>
+    <value>Выкарыстоўваць убудаванае аўтазапаўненне</value>
   </data>
   <data name="InlineAutofillDescription" xml:space="preserve">
-    <value>Use inline autofill if your selected IME (keyboard) supports it. If your configuration is not supported (or this option is disabled), the default Autofill overlay will be used.</value>
+    <value>Выкарыстоўваць убудаванае аўтазапаўненне, калі выбраны спосаб уводу (клавіятура) яго падтрымлівае. Калі вашая канфігурацыя не падтрымліваецца (або гэты параметр адключаны), будзе выкарыстоўвацца аўтазапаўненне накладаннем па змаўчанні.</value>
   </data>
   <data name="Accessibility" xml:space="preserve">
-    <value>Use Accessibility</value>
+    <value>Спецыяльныя магчымасці</value>
   </data>
   <data name="AccessibilityDescription" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. When enabled, we'll display a popup when login fields are selected.</value>
+    <value>Пры дапамозе службы спецыяльных магчымасцей Bitwarden вы можаце аўтаматычна запаўняць вашыя ўліковыя даныя ў праграмах і ў інтэрнэце. Калі гэты параметр адключаны, пры выбары палёў для ўваходу будзе паказвацца ўсплывальнае акно.</value>
   </data>
   <data name="AccessibilityDescription2" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. (Requires Draw-Over to be enabled as well)</value>
+    <value>Пры дапамозе службы спецыяльных магчымасцей Bitwarden  вы можаце аўтаматычна запаўняць вашыя ўліковыя даныя ў інтэрнэце. (Патрабуецца ўключыць 'Паверх усіх праграм')</value>
   </data>
   <data name="AccessibilityDescription3" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to use the Autofill Quick-Action Tile, and/or show a popup using Draw-Over (if enabled).</value>
+    <value>Пры дапамозе службы спецыяльных магчымасцей Bitwarden  вы можаце выкарыстоўваць панэль хуткага аўтазапаўнення і/або паказу ўсплывальнага акна з выкарыстаннем параметра 'Паверх усіх праграм' (калі ён уключаны).</value>
   </data>
   <data name="AccessibilityDescription4" xml:space="preserve">
-    <value>Required to use the Autofill Quick-Action Tile, or to augment the Autofill Service by using Draw-Over (if enabled).</value>
+    <value>Патрабуецца для выкарыстоўвання панэлі хуткага аўтазапаўнення або для дапаўнення службы аўтазапаўнення пры выкарыстанні параметра 'Паверх усіх праграм' (калі ён уключаны).</value>
   </data>
   <data name="DrawOver" xml:space="preserve">
-    <value>Use Draw-Over</value>
+    <value>Паверх іншых праграм</value>
   </data>
   <data name="DrawOverDescription" xml:space="preserve">
-    <value>When enabled, allows the Bitwarden Accessibility Service to display a popup when login fields are selected.</value>
+    <value>Пры ўключэнні, дазваляе службе спецыяльных магчымасцей Bitwarden паказваць усплывальную панэль пры выбары палёў для ўваходу.</value>
   </data>
   <data name="DrawOverDescription2" xml:space="preserve">
-    <value>If enabled, the Bitwarden Accessibility Service will display a popup when login fields are selected to assist with auto-filling your logins.</value>
+    <value>Пры ўключэнні, служба спецыяльных магчымасцей Bitwarden пакажа ўсплывальную панэль пры выбары палёў для ўваходу, каб дапамагчы аўтаматычна запоўніць вашыя ўліковыя даныя.</value>
   </data>
   <data name="DrawOverDescription3" xml:space="preserve">
-    <value>If enabled, accessibility will show a popup to augment the Autofill Service for older apps that don't support the Android Autofill Framework.</value>
+    <value>Пры ўключэнні, служба спецыяльных магчымасцей Bitwarden пакажа ўсплывальнае апавяшчэнне, каб выклікаць службу аўтазапаўнення для старых праграм, якія не падтрымліваюць Android Autofill Framework.</value>
+  </data>
+  <data name="PersonalOwnershipSubmitError" xml:space="preserve">
+    <value>Due to an Enterprise Policy, you are restricted from saving items to your personal vault. Change the Ownership option to an organization and choose from available Collections.</value>
   </data>
 </root>
