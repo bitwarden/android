@@ -102,7 +102,7 @@ namespace Bit.Droid.Autofill
                     if (policy.Enabled)
                     {
                         var org = await _userService.GetOrganizationAsync(policy.OrganizationId);
-                        if (org != null && org.Enabled && org.UsePolicies && !org.IsAdmin
+                        if (org != null && org.Enabled && org.UsePolicies && !org.canManagePolicies
                            && org.Status == OrganizationUserStatusType.Confirmed)
                         {
                             return;
