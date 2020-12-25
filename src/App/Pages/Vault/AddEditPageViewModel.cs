@@ -342,6 +342,11 @@ namespace Bit.App.Pages
                     if (CloneMode)
                     {
                         Cipher.Name += " - " + AppResources.Clone;
+                        // If not allowing personal ownership, update cipher's org Id to prompt downstream changes
+                        if (Cipher.OrganizationId == null && !AllowPersonal) 
+                        {
+                            Cipher.OrganizationId = OrganizationId;
+                        }
                     }
                 }
                 else
