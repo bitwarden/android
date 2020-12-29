@@ -34,14 +34,15 @@ namespace Bit.Core.Services
             if (format == "encrypted_json")
             {
                 var folders = (await _folderService.GetAllAsync()).Where(f => f.Id != null).Select(f => new FolderWithId(f));
-                var items = (await _cipherService.GetAllAsync()).Where(c => c.OrganizationId == null).Select(c => new CipherWithId(c));
+                var items = (await _cipherService.GetAllAsync()).Where(c => c.OrganizationId == null && c.DeletedDate == null)
+                    .Select(c => new CipherWithId(c));
 
                 return ExportEncryptedJson(folders, items);
             }
             else
             {
                 var decryptedFolders = await _folderService.GetAllDecryptedAsync();
-                var decryptedCiphers = await _cipherService.GetAllDecryptedAsync();
+                var decryptedCiphers = (await _cipherService.GetAllDecryptedAsync()).Where(c => c.DeletedDate == null);
 
                 return format == "csv" ? ExportCsv(decryptedFolders, decryptedCiphers) : ExportJson(decryptedFolders, decryptedCiphers);
             }
