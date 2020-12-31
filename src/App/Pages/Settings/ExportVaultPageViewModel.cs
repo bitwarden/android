@@ -125,6 +125,8 @@ namespace Bit.App.Pages
             {
                 var data = await _exportService.GetExport(FileFormatOptions[FileFormatSelectedIndex].Key);
                 var fileFormat = FileFormatOptions[FileFormatSelectedIndex].Key;
+                fileFormat = fileFormat == "encrypted_json" ? "json" : fileFormat;
+
                 _defaultFilename = _exportService.GetFileName(null, fileFormat);
                 _exportResult = Encoding.ASCII.GetBytes(data);
 
