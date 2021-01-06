@@ -262,9 +262,9 @@ namespace Bit.Core.Services
             return SendAsync<object, object>(HttpMethod.Put, string.Concat("/ciphers/", id, "/delete"), null, true, false);
         }
 
-        public Task PutRestoreCipherAsync(string id)
+        public Task<CipherResponse> PutRestoreCipherAsync(string id)
         {
-            return SendAsync<object, object>(HttpMethod.Put, string.Concat("/ciphers/", id, "/restore"), null, true, false);
+            return SendAsync<object, CipherResponse>(HttpMethod.Put, string.Concat("/ciphers/", id, "/restore"), null, true, true);
         }
 
         #endregion
