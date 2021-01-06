@@ -56,6 +56,29 @@
     <ScrollView x:Name="_scrollView" Padding="0, 0, 0, 20">
         <StackLayout Spacing="20">
             <StackLayout StyleClass="box">
+                <Grid IsVisible="{Binding OwnershipPolicyInEffect}"
+                      Margin="0, 12, 0, 0"
+                      RowSpacing="0"
+                      ColumnSpacing="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Frame Padding="10"
+                           Margin="0"
+                           HasShadow="False"
+                           BackgroundColor="Transparent"
+                           BorderColor="Accent">
+                        <Label
+                            Text="{u:I18n PersonalOwnershipPolicyInEffect}"
+                            StyleClass="text-muted, text-sm, text-bold"
+                            HorizontalTextAlignment="Center" />
+                    </Frame>
+                </Grid>
                 <StackLayout StyleClass="box-row-header">
                     <Label Text="{u:I18n ItemInformation, Header=True}"
                            StyleClass="box-header, box-header-platform" />
