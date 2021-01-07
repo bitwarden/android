@@ -117,7 +117,8 @@
                                     StyleClass="box-value"
                                     Grid.Row="1"
                                     Grid.Column="0"
-                                    IsVisible="{Binding ShowPassword, Converter={StaticResource inverseBool}}" />
+                                    IsVisible="{Binding ShowPassword, Converter={StaticResource inverseBool}}"
+                                    AutomationProperties.IsInAccessibleTree="{Binding ShowPassword, Converter={StaticResource inverseBool}}" />
                                 <controls:MonoLabel
                                     Text="{Binding ColoredPassword, Mode=OneWay}"
                                     TextType="Html"
@@ -125,7 +126,8 @@
                                     Grid.Row="1"
                                     Grid.Column="0"
                                     LineBreakMode="CharacterWrap"
-                                    IsVisible="{Binding ShowPassword}" />
+                                    IsVisible="{Binding ShowPassword}"
+                                    AutomationProperties.IsInAccessibleTree="{Binding ShowPassword}" />
                                 <controls:FaButton 
                                     StyleClass="box-row-button, box-row-button-platform"
                                     Text="&#xf058;"
