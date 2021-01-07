@@ -267,6 +267,7 @@ namespace Bit.App.Pages
         public bool ShowCollections => (!EditMode || CloneMode) && Cipher.OrganizationId != null;
         public bool EditMode => !string.IsNullOrWhiteSpace(CipherId);
         public bool ShowOwnershipOptions => !EditMode || CloneMode;
+        public bool OwnershipPolicyInEffect => ShowOwnershipOptions && !AllowPersonal;
         public bool CloneMode { get; set; }
         public ViewPage ViewPage { get; set; }
         public bool IsLogin => Cipher?.Type == CipherType.Login;
