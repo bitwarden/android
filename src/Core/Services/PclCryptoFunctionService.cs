@@ -2,6 +2,7 @@
 using Bit.Core.Enums;
 using PCLCrypto;
 using System;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static PCLCrypto.WinRTCrypto;
@@ -41,6 +42,61 @@ namespace Bit.Core.Services
                 throw new ArgumentException("Unsupported PBKDF2 algorithm.");
             }
             return Task.FromResult(_cryptoPrimitiveService.Pbkdf2(password, salt, algorithm, iterations));
+        }
+
+        public async Task<byte[]> HkdfAsync(byte[] ikm, string salt, string info, int outputByteSize, HkdfAlgorithm algorithm)
+            => await HkdfAsync(ikm, Encoding.UTF8.GetBytes(salt), Encoding.UTF8.GetBytes(info), outputByteSize, algorithm);
+
+        public async Task<byte[]> HkdfAsync(byte[] ikm, byte[] salt, string info, int outputByteSize, HkdfAlgorithm algorithm)
+            => await HkdfAsync(ikm, salt, Encoding.UTF8.GetBytes(info), outputByteSize, algorithm);
+
+        public async Task<byte[]> HkdfAsync(byte[] ikm, string salt, byte[] info, int outputByteSize, HkdfAlgorithm algorithm)
+            => await HkdfAsync(ikm, Encoding.UTF8.GetBytes(salt), info, outputByteSize, algorithm);
+
+        public async Task<byte[]> HkdfAsync(byte[] ikm, byte[] salt, byte[] info, int outputByteSize, HkdfAlgorithm algorithm)
+        {
+            var prk = await HmacAsync(ikm, salt, HkdfAlgorithmToCryptoHashAlgorithm(algorithm));
+            return await HkdfExpandAsync(prk, info, outputByteSize, algorithm);
+        }
+
+        public async Task<byte[]> HkdfExpandAsync(byte[] prk, string info, int outputByteSize, HkdfAlgorithm algorithm)
+            => await HkdfExpandAsync(prk, Encoding.UTF8.GetBytes(info), outputByteSize, algorithm);
+
+        // ref: https://tools.ietf.org/html/rfc5869
+        public async Task<byte[]> HkdfExpandAsync(byte[] prk, byte[] info, int outputByteSize, HkdfAlgorithm algorithm)
+        {
+            var hashLen = algorithm == HkdfAlgorithm.Sha256 ? 32 : 64;
+
+            var maxOutputByteSize = 255 * hashLen;
+            if (outputByteSize > maxOutputByteSize)
+            {
+                throw new ArgumentException($"{nameof(outputByteSize)} is too large. Max is {maxOutputByteSize}, received {outputByteSize}");
+            }
+            if (prk.Length < hashLen)
+            {
+                throw new ArgumentException($"{nameof(prk)} length is too small. Must be at least {hashLen} for {algorithm}");
+            }
+
+            var cryptoHashAlgorithm = HkdfAlgorithmToCryptoHashAlgorithm(algorithm);
+            var previousT = new byte[0];
+            var runningOkmLength = 0;
+            var n = (int)Math.Ceiling((double)outputByteSize / hashLen);
+            var okm = new byte[n * hashLen];
+            for (var i = 0; i < n; i++)
+            {
+                var t = new byte[previousT.Length + info.Length + 1];
+                previousT.CopyTo(t, 0);
+                info.CopyTo(t, previousT.Length);
+                t[t.Length - 1] = (byte)(i + 1);
+                previousT = await HmacAsync(t, prk, cryptoHashAlgorithm);
+                previousT.CopyTo(okm, runningOkmLength);
+                runningOkmLength = previousT.Length;
+                if (runningOkmLength >= outputByteSize)
+                {
+                    break;
+                }
+            }
+            return okm.Take(outputByteSize).ToArray();
         }
 
         public Task<byte[]> HashAsync(string value, CryptoHashAlgorithm algorithm)
@@ -216,6 +272,19 @@ namespace Bit.Core.Services
                 .Replace("\r\n", " ") // Windows-style new line => space
                 .Replace("\n", " ") // New line => space
                 .Replace(" ", " "); // No-break space (00A0) => space
+        }
+
+        private CryptoHashAlgorithm HkdfAlgorithmToCryptoHashAlgorithm(HkdfAlgorithm hkdfAlgorithm)
+        {
+            switch (hkdfAlgorithm)
+            {
+                case HkdfAlgorithm.Sha256:
+                    return CryptoHashAlgorithm.Sha256;
+                case HkdfAlgorithm.Sha512:
+                    return CryptoHashAlgorithm.Sha512;
+                default:
+                    throw new ArgumentException($"Invalid hkdf algorithm type, {hkdfAlgorithm}");
+            }
         }
     }
 }

@@ -2,9 +2,9 @@ using AutoFixture.AutoNSubstitute;
 
 namespace Bit.Test.Common.AutoFixture.Attributes
 {
-    public class AutoSubDataAttribute : CustomAutoDataAttribute
+    public class AutoSubstitutionData : CustomAutoDataAttribute
     {
-        public AutoSubDataAttribute() : base(typeof(AutoNSubstituteCustomization))
+        public AutoSubstitutionData() : base(typeof(AutoNSubstituteCustomization))
         { }
     }
 }
