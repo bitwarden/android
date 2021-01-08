@@ -26,15 +26,7 @@ namespace Bit.Core.Models.Data
             Seats = response.Seats;
             MaxCollections = response.MaxCollections;
             MaxStorageGb = response.MaxStorageGb;
-            AccessBusinessPortal = response.AccessBusinessPortal;
-            AccessEventLogs = response.AccessEventLogs;
-            AccessImportExport = response.AccessImportExport;
-            AccessReports = response.AccessReports;
-            ManageAllCollections = response.ManageAllCollections;
-            ManageAssignedCollections = response.ManageAssignedCollections;
-            ManageGroups = response.ManageGroups;
-            ManagePolicies = response.ManagePolicies;
-            ManageUsers = response.ManageUsers;
+            Permissions = response.Permissions
         }
 
         public string Id { get; set; }
@@ -54,14 +46,6 @@ namespace Bit.Core.Models.Data
         public int Seats { get; set; }
         public int MaxCollections { get; set; }
         public short? MaxStorageGb { get; set; }
-        public bool AccessBusinessPortal { get; set; }
-        public bool AccessEventLogs { get; set; }
-        public bool AccessImportExport { get; set; }
-        public bool AccessReports { get; set; }
-        public bool ManageAllCollections { get; set; }
-        public bool ManageAssignedCollections { get; set; }
-        public bool ManageGroups { get; set; }
-        public bool ManagePolicies { get; set; }
-        public bool ManageUsers { get; set; }
+        public Permissions Permissions { get; set; }
     }
 }

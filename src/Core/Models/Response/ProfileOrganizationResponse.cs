@@ -1,4 +1,5 @@
 ﻿using Bit.Core.Enums;
+using Bit.Core.Models.Data;
 
 namespace Bit.Core.Models.Response
 {
@@ -22,14 +23,6 @@ namespace Bit.Core.Models.Response
         public OrganizationUserStatusType Status { get; set; }
         public OrganizationUserType Type { get; set; }
         public bool Enabled { get; set; }
-        public bool AccessBusinessPortal { get; set; }
-        public bool AccessEventLogs { get; set; }
-        public bool AccessImportExport { get; set; }
-        public bool AccessReports { get; set; }
-        public bool ManageAllCollections { get; set; }
-        public bool ManageAssignedCollections { get; set; }
-        public bool ManageGroups { get; set; }
-        public bool ManagePolicies { get; set; }
-        public bool ManageUsers { get; set; }
+        public Permissions Permissions { get; set; }
     }
 }

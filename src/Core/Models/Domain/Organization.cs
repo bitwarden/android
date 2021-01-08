@@ -26,15 +26,7 @@ namespace Bit.Core.Models.Domain
             Seats = obj.Seats;
             MaxCollections = obj.MaxCollections;
             MaxStorageGb = obj.MaxStorageGb;
-            AccessBusinessPortal = obj.AccessBusinessPortal;
-            AccessEventLogs = obj.AccessEventLogs;
-            AccessImportExport = obj.AccessImportExport;
-            AccessReports = obj.AccessReports;
-            ManageAllCollections = obj.ManageAllCollections;
-            ManageAssignedCollections = obj.ManageAssignedCollections;
-            ManageGroups = obj.ManageGroups;
-            ManagePolicies = obj.ManagePolicies;
-            ManageUsers = obj.ManageUsers;
+            Permissions = obj.Permissions;
         }
 
         public string Id { get; set; }
@@ -54,15 +46,7 @@ namespace Bit.Core.Models.Domain
         public int Seats { get; set; }
         public int MaxCollections { get; set; }
         public short? MaxStorageGb { get; set; }
-        public bool AccessBusinessPortal { get; set; }
-        public bool AccessEventLogs { get; set; }
-        public bool AccessImportExport { get; set; }
-        public bool AccessReports { get; set; }
-        public bool ManageAllCollections { get; set; }
-        public bool ManageAssignedCollections { get; set; }
-        public bool ManageGroups { get; set; }
-        public bool ManagePolicies { get; set; }
-        public bool ManageUsers { get; set; }
+        public Permissions Permissions { get; set; }
 
         public bool CanAccess
         {
@@ -95,14 +79,14 @@ namespace Bit.Core.Models.Domain
         public bool IsAdmin => Type == OrganizationUserType.Owner || Type == OrganizationUserType.Admin;
         public bool IsOwner => Type == OrganizationUserType.Owner;
         public bool IsCustom => Type == OrganizationUserType.Custom;
-        public bool canAccessBusinessPortl => IsAdmin || AccessBusinessPortal;
-        public bool canAccessEventLogs => IsAdmin || AccessEventLogs;
-        public bool canAccessImportExport => IsAdmin || canAccessImportExport;
-        public bool canAccessReports => IsAdmin || canAccessReports;
-        public bool canManageAllCollections => IsAdmin || ManageAllCollections;
-        public bool canManageAssignedCollections => IsManager || canManageAssignedCollections;
-        public bool canManageGroups => IsAdmin || canManageGroups;
-        public bool canManagePolicies => IsAdmin || canManagePolicies;
-        public bool canManageUser => IsAdmin || canManageUser;
+        public bool canAccessBusinessPortl => IsAdmin || Permissions.AccessBusinessPortal;
+        public bool canAccessEventLogs => IsAdmin || Permissions.AccessEventLogs;
+        public bool canAccessImportExport => IsAdmin || Permissions.AccessImportExport;
+        public bool canAccessReports => IsAdmin || Permissions.AccessReports;
+        public bool canManageAllCollections => IsAdmin || Permissions.ManageAllCollections;
+        public bool canManageAssignedCollections => IsManager || Permissions.ManageAssignedCollections;
+        public bool canManageGroups => IsAdmin || Permissions.ManageGroups;
+        public bool canManagePolicies => IsAdmin || Permissions.ManagePolicies;
+        public bool canManageUser => IsAdmin || Permissions.ManageUsers;
     }
 }
