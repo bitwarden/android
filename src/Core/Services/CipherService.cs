@@ -760,8 +760,9 @@ namespace Bit.Core.Services
             {
                 return;
             }
-            await _apiService.PutRestoreCipherAsync(id);
+            var response = await _apiService.PutRestoreCipherAsync(id);
             ciphers[id].DeletedDate = null;
+            ciphers[id].RevisionDate = response.RevisionDate;
             await _storageService.SaveAsync(cipherKey, ciphers);
             await ClearCacheAsync();
         }

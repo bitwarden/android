@@ -40,7 +40,7 @@ namespace Bit.Core.Abstractions
         Task<FolderResponse> PutFolderAsync(string id, FolderRequest request);
         Task<CipherResponse> PutShareCipherAsync(string id, CipherShareRequest request);
         Task PutDeleteCipherAsync(string id);
-        Task PutRestoreCipherAsync(string id);
+        Task<CipherResponse> PutRestoreCipherAsync(string id);
         Task RefreshIdentityTokenAsync();
         Task<object> PreValidateSso(string identifier);
         Task<TResponse> SendAsync<TRequest, TResponse>(HttpMethod method, string path,
