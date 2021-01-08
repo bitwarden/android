@@ -600,7 +600,7 @@ namespace Bit.Core.Services
         {
             var hashLen = algorithm == HkdfAlgorithm.Sha256 ? 32 : 64;
 
-            int maxOutputByteSize = 256;
+            var maxOutputByteSize = 255 * hashLen;
             if (outputByteSize > maxOutputByteSize)
             {
                 throw new ArgumentException($"{nameof(outputByteSize)} is too large. Max is {maxOutputByteSize}, received {outputByteSize}");
@@ -611,9 +611,10 @@ namespace Bit.Core.Services
             }
 
             var cryptoHashAlgorithm = HkdfAlgorithmToCryptoHashAlgorithm(algorithm);
-            var okm = new byte[outputByteSize];
             var previousT = new byte[0];
+            var runningOkmLength = 0;
             var n = (int)Math.Ceiling((double)outputByteSize / hashLen);
+            var okm = new byte[n * hashLen];
             for (var i = 0; i < n; i++)
             {
                 var t = new byte[previousT.Length + info.Length + 1];
@@ -621,9 +622,14 @@ namespace Bit.Core.Services
                 info.CopyTo(t, previousT.Length);
                 t[t.Length - 1] = (byte)(i + 1);
                 previousT = await _cryptoFunctionService.HmacAsync(t, prk, cryptoHashAlgorithm);
-                previousT.CopyTo(okm, i * hashLen);
+                previousT.CopyTo(okm, runningOkmLength);
+                runningOkmLength = previousT.Length;
+                if (runningOkmLength >= outputByteSize)
+                {
+                    break;
+                }
             }
-            return okm;
+            return okm.Take(outputByteSize).ToArray();
         }
 
         // Helpers
