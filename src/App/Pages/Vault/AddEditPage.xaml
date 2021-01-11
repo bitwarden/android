@@ -95,7 +95,7 @@
                         Grid.Row="0"
                         Grid.Column="1"
                         Grid.RowSpan="2"
-                        AutomationProperties.IsInAccessibleTree="True"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.ViewPassword}"
                         AutomationProperties.Name="{u:I18n CheckPassword}"
                         IsVisible="{Binding Cipher.ViewPassword}" />
                     <controls:FaButton 
@@ -105,7 +105,7 @@
                         Grid.Row="0"
                         Grid.Column="2"
                         Grid.RowSpan="2"
-                        AutomationProperties.IsInAccessibleTree="True"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.ViewPassword}"
                         AutomationProperties.Name="{u:I18n ToggleVisibility}"
                         IsVisible="{Binding Cipher.ViewPassword}" />
                     <controls:FaButton 
@@ -115,7 +115,7 @@
                         Grid.Row="0"
                         Grid.Column="3"
                         Grid.RowSpan="2"
-                        AutomationProperties.IsInAccessibleTree="True"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.ViewPassword}"
                         AutomationProperties.Name="{u:I18n GeneratePassword}"
                         IsVisible="{Binding Cipher.ViewPassword}" />
                 </Grid>
@@ -153,7 +153,7 @@
                         Grid.Column="1"
                         Grid.RowSpan="2"
                         IsVisible="{Binding Cipher.ViewPassword}"
-                        AutomationProperties.IsInAccessibleTree="True"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.ViewPassword}"
                         AutomationProperties.Name="{u:I18n ScanQrTitle}" />
                 </Grid>
             </StackLayout>
@@ -435,7 +435,8 @@
                         <Label
                             Text="{u:I18n PersonalOwnershipPolicyInEffect}"
                             StyleClass="text-muted, text-sm, text-bold"
-                            HorizontalTextAlignment="Center" />
+                            HorizontalTextAlignment="Center"
+                            AutomationProperties.IsInAccessibleTree="{Binding OwnershipPolicyInEffect}" />
                     </Frame>
                 </Grid>
                 <StackLayout StyleClass="box-row-header">
@@ -446,12 +447,14 @@
                              IsVisible="{Binding EditMode, Converter={StaticResource inverseBool}}">
                     <Label
                         Text="{u:I18n Type}"
-                        StyleClass="box-label" />
+                        StyleClass="box-label"
+                        AutomationProperties.IsInAccessibleTree="{Binding EditMode, Converter={StaticResource inverseBool}}" />
                     <Picker
                         x:Name="_typePicker"
                         ItemsSource="{Binding TypeOptions, Mode=OneTime}"
                         SelectedIndex="{Binding TypeSelectedIndex}"
-                        StyleClass="box-value" />
+                        StyleClass="box-value"
+                        AutomationProperties.IsInAccessibleTree="{Binding EditMode, Converter={StaticResource inverseBool}}" />
                 </StackLayout>
                 <StackLayout StyleClass="box-row, box-row-input">
                     <Label
@@ -466,7 +469,8 @@
             <StackLayout StyleClass="box" IsVisible="{Binding IsLogin}">
                 <StackLayout StyleClass="box-row-header">
                     <Label Text="{u:I18n URIs, Header=True}"
-                           StyleClass="box-header, box-header-platform" />
+                           StyleClass="box-header, box-header-platform"
+                           AutomationProperties.IsInAccessibleTree="{Binding IsLogin}" />
                 </StackLayout>
                 <controls:RepeaterView ItemsSource="{Binding Uris}">
                     <controls:RepeaterView.ItemTemplate>
@@ -484,13 +488,15 @@
                                     Text="{u:I18n URI}"
                                     StyleClass="box-label"
                                     Grid.Row="0"
-                                    Grid.Column="0" />
+                                    Grid.Column="0"
+                                    AutomationProperties.IsInAccessibleTree="{Binding BindingContext.IsLogin, Source={x:Reference _page}}" />
                                 <Entry
                                     Text="{Binding Uri}"
                                     Keyboard="Url"
                                     StyleClass="box-value"
                                     Grid.Row="1"
-                                    Grid.Column="0" />
+                                    Grid.Column="0"
+                                    AutomationProperties.IsInAccessibleTree="{Binding BindingContext.IsLogin, Source={x:Reference _page}}" />
                                 <controls:FaButton
                                     StyleClass="box-row-button, box-row-button-platform"
                                     Text="&#xf013;"
@@ -499,14 +505,15 @@
                                     Grid.Row="0"
                                     Grid.Column="1"
                                     Grid.RowSpan="2"
-                                    AutomationProperties.IsInAccessibleTree="True"
+                                    AutomationProperties.IsInAccessibleTree="{Binding BindingContext.IsLogin, Source={x:Reference _page}}"
                                     AutomationProperties.Name="{u:I18n Options}" />
                             </Grid>
                         </DataTemplate>
                     </controls:RepeaterView.ItemTemplate>
                 </controls:RepeaterView>
                 <Button Text="{u:I18n NewUri}" StyleClass="box-button-row"
-                        Clicked="NewUri_Clicked"></Button>
+                        Clicked="NewUri_Clicked"
+                        AutomationProperties.IsInAccessibleTree="{Binding IsLogin}"></Button>
             </StackLayout>
             <StackLayout StyleClass="box">
                 <StackLayout StyleClass="box-row-header">
@@ -571,12 +578,15 @@
                                     <Label
                                         Text="{Binding Field.Name, Mode=OneWay}"
                                         IsVisible="{Binding IsBooleanType, Mode=OneWay, Converter={StaticResource inverseBool}}"
+                                        AutomationProperties.IsInAccessibleTree="{Binding IsBooleanType, Mode=OneWay,
+                                            Converter={StaticResource inverseBool}}"
                                         StyleClass="box-label"
                                         Grid.Row="0"
                                         Grid.Column="0" />
                                     <Label
                                         Text="{Binding Field.Name, Mode=OneWay}"
                                         IsVisible="{Binding IsBooleanType, Mode=OneWay}"
+                                        AutomationProperties.IsInAccessibleTree="{Binding IsBooleanType, Mode=OneWay}"
                                         StyleClass="box-value"
                                         VerticalOptions="FillAndExpand"
                                         VerticalTextAlignment="Center"
@@ -588,13 +598,15 @@
                                         StyleClass="box-value"
                                         Grid.Row="1"
                                         Grid.Column="0"
-                                        IsVisible="{Binding IsTextType}" />
+                                        IsVisible="{Binding IsTextType}"
+                                        AutomationProperties.IsInAccessibleTree="{Binding IsTextType}" />
                                     <controls:MonoEntry
                                         Text="{Binding Field.Value}"
                                         StyleClass="box-value"
                                         Grid.Row="1"
                                         Grid.Column="0"
                                         IsVisible="{Binding IsHiddenType}"
+                                        AutomationProperties.IsInAccessibleTree="{Binding IsHiddenType}"
                                         IsPassword="{Binding ShowHiddenValue, Converter={StaticResource inverseBool}}"
                                         IsEnabled="{Binding ShowViewHidden}"
                                         IsSpellCheckEnabled="False"
@@ -612,7 +624,8 @@
                                         Grid.Row="0"
                                         Grid.Column="1"
                                         Grid.RowSpan="2"
-                                        IsVisible="{Binding IsBooleanType}" />
+                                        IsVisible="{Binding IsBooleanType}"
+                                        AutomationProperties.IsInAccessibleTree="{Binding IsBooleanType}" />
                                     <controls:FaButton 
                                         StyleClass="box-row-button, box-row-button-platform"
                                         Text="{Binding ShowHiddenValueIcon}"
@@ -621,7 +634,7 @@
                                         Grid.Row="0"
                                         Grid.Column="1"
                                         Grid.RowSpan="2"
-                                        AutomationProperties.IsInAccessibleTree="True"
+                                        AutomationProperties.IsInAccessibleTree="{Binding ShowViewHidden}"
                                         AutomationProperties.Name="{u:I18n ToggleVisibility}" />
                                     <controls:FaButton 
                                         StyleClass="box-row-button, box-row-button-platform"
@@ -645,28 +658,33 @@
             <StackLayout StyleClass="box" IsVisible="{Binding ShowOwnershipOptions}">
                 <StackLayout StyleClass="box-row-header">
                     <Label Text="{u:I18n Ownership, Header=True}"
-                           StyleClass="box-header, box-header-platform" />
+                           StyleClass="box-header, box-header-platform"
+                           AutomationProperties.IsInAccessibleTree="{Binding ShowOwnershipOptions}" />
                 </StackLayout>
                 <StackLayout StyleClass="box-row, box-row-input">
                     <Label
                         Text="{u:I18n WhoOwnsThisItem}"
-                        StyleClass="box-label" />
+                        StyleClass="box-label"
+                        AutomationProperties.IsInAccessibleTree="{Binding ShowOwnershipOptions}" />
                     <Picker
                         x:Name="_ownershipPicker"
                         ItemsSource="{Binding OwnershipOptions, Mode=OneTime}"
                         SelectedIndex="{Binding OwnershipSelectedIndex}"
-                        StyleClass="box-value" />
+                        StyleClass="box-value"
+                        AutomationProperties.IsInAccessibleTree="{Binding ShowOwnershipOptions}" />
                 </StackLayout>
             </StackLayout>
             <StackLayout StyleClass="box" IsVisible="{Binding ShowCollections}">
                 <StackLayout StyleClass="box-row-header">
                     <Label Text="{u:I18n Collections, Header=True}"
-                           StyleClass="box-header, box-header-platform" />
+                           StyleClass="box-header, box-header-platform"
+                           AutomationProperties.IsInAccessibleTree="{Binding ShowCollections}" />
                 </StackLayout>
                 <StackLayout Spacing="0" Padding="0"
                                 IsVisible="{Binding HasCollections, Converter={StaticResource inverseBool}}">
                     <StackLayout StyleClass="box-row, box-row-switch">
-                        <Label Text="{u:I18n NoCollectionsToList}" />
+                        <Label Text="{u:I18n NoCollectionsToList}"
+                               AutomationProperties.IsInAccessibleTree="{Binding HasCollections, Converter={StaticResource inverseBool}}" />
                     </StackLayout>
                     <BoxView StyleClass="box-row-separator" />
                 </StackLayout>
@@ -678,11 +696,13 @@
                                     <Label
                                         Text="{Binding Collection.Name}"
                                         StyleClass="box-label, box-label-regular"
-                                        HorizontalOptions="StartAndExpand" />
+                                        HorizontalOptions="StartAndExpand"
+                                        AutomationProperties.IsInAccessibleTree="{Binding BindingContext.HasCollections,Source={x:Reference _page}}" />
                                     <Switch
                                         IsToggled="{Binding Checked}"
                                         StyleClass="box-value"
-                                        HorizontalOptions="End" />
+                                        HorizontalOptions="End"
+                                        AutomationProperties.IsInAccessibleTree="{Binding BindingContext.HasCollections,Source={x:Reference _page}}" />
                                 </StackLayout>
                                 <BoxView StyleClass="box-row-separator" />
                             </StackLayout>

@@ -61,12 +61,14 @@
                         Text="{u:I18n Username}"
                         StyleClass="box-label"
                         Grid.Row="0"
-                        Grid.Column="0" />
+                        Grid.Column="0"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.Login.Username, Converter={StaticResource stringHasValue}}"/>
                     <Label
                         Text="{Binding Cipher.Login.Username, Mode=OneWay}"
                         StyleClass="box-value"
                         Grid.Row="1"
-                        Grid.Column="0" />
+                        Grid.Column="0"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.Login.Username, Converter={StaticResource stringHasValue}}"/>
                     <controls:FaButton 
                         StyleClass="box-row-button, box-row-button-platform"
                         Text="&#xf24d;"
@@ -75,7 +77,7 @@
                         Grid.Row="0"
                         Grid.Column="1"
                         Grid.RowSpan="2"
-                        AutomationProperties.IsInAccessibleTree="True"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.Login.Username, Converter={StaticResource stringHasValue}}"
                         AutomationProperties.Name="{u:I18n CopyUsername}" />
                 </Grid>
                 <BoxView StyleClass="box-row-separator"
@@ -96,7 +98,8 @@
                         Text="{u:I18n Password}"
                         StyleClass="box-label"
                         Grid.Row="0"
-                        Grid.Column="0" />
+                        Grid.Column="0"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.Login.Password, Converter={StaticResource stringHasValue}}"/>
                     <controls:MonoLabel
                         Text="{Binding Cipher.Login.MaskedPassword, Mode=OneWay}"
                         StyleClass="box-value"
@@ -120,7 +123,7 @@
                         Grid.Row="0"
                         Grid.Column="1"
                         Grid.RowSpan="2"
-                        AutomationProperties.IsInAccessibleTree="True"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.Login.Password, Converter={StaticResource stringHasValue}}"
                         AutomationProperties.Name="{u:I18n CheckPassword}"
                         IsVisible="{Binding Cipher.ViewPassword}" />
                     <controls:FaButton 
@@ -130,7 +133,7 @@
                         Grid.Row="0"
                         Grid.Column="2"
                         Grid.RowSpan="2"
-                        AutomationProperties.IsInAccessibleTree="True"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.Login.Password, Converter={StaticResource stringHasValue}}"
                         AutomationProperties.Name="{u:I18n ToggleVisibility}"
                         IsVisible="{Binding Cipher.ViewPassword}" />
                     <controls:FaButton 
@@ -141,7 +144,7 @@
                         Grid.Row="0"
                         Grid.Column="3"
                         Grid.RowSpan="2"
-                        AutomationProperties.IsInAccessibleTree="True"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.Login.Password, Converter={StaticResource stringHasValue}}"
                         AutomationProperties.Name="{u:I18n CopyPassword}"
                         IsVisible="{Binding Cipher.ViewPassword}" />
                 </Grid>
@@ -161,12 +164,14 @@
                         Text="{u:I18n VerificationCodeTotp}"
                         StyleClass="box-label"
                         Grid.Row="0"
-                        Grid.Column="0" />
+                        Grid.Column="0"
+                        AutomationProperties.IsInAccessibleTree="{Binding ShowTotp}"/>
                     <controls:MonoLabel
                         Text="{Binding TotpCodeFormatted, Mode=OneWay}"
                         StyleClass="box-value"
                         Grid.Row="1"
-                        Grid.Column="0" />
+                        Grid.Column="0"
+                        AutomationProperties.IsInAccessibleTree="{Binding ShowTotp}"/>
                     <Label
                         Text="{Binding TotpSec, Mode=OneWay}"
                         Style="{DynamicResource textTotp}"
@@ -176,7 +181,8 @@
                         Grid.RowSpan="2"
                         HorizontalOptions="End"
                         HorizontalTextAlignment="End"
-                        VerticalOptions="CenterAndExpand" />
+                        VerticalOptions="CenterAndExpand"
+                        AutomationProperties.IsInAccessibleTree="{Binding ShowTotp}" />
                     <controls:FaButton 
                         StyleClass="box-row-button, box-row-button-platform"
                         Text="&#xf24d;"
@@ -185,7 +191,7 @@
                         Grid.Row="0"
                         Grid.Column="2"
                         Grid.RowSpan="2"
-                        AutomationProperties.IsInAccessibleTree="True"
+                        AutomationProperties.IsInAccessibleTree="{Binding ShowTotp}"
                         AutomationProperties.Name="{u:I18n CopyTotp}" />
                 </Grid>
                 <BoxView StyleClass="box-row-separator" IsVisible="{Binding ShowTotp}" />
@@ -197,10 +203,12 @@
                                 IsVisible="{Binding Cipher.Card.CardholderName, Converter={StaticResource stringHasValue}}">
                     <Label
                         Text="{u:I18n CardholderName}"
-                        StyleClass="box-label" />
+                        StyleClass="box-label"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.Card.CardholderName, Converter={StaticResource stringHasValue}}"/>
                     <Label
                         Text="{Binding Cipher.Card.CardholderName, Mode=OneWay}"
-                        StyleClass="box-value" />
+                        StyleClass="box-value"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.Card.CardholderName, Converter={StaticResource stringHasValue}}"/>
                 </StackLayout>
                 <BoxView StyleClass="box-row-separator"
                             IsVisible="{Binding Cipher.Card.CardholderName, Converter={StaticResource stringHasValue}}" />
@@ -218,12 +226,14 @@
                         Text="{u:I18n Number}"
                         StyleClass="box-label"
                         Grid.Row="0"
-                        Grid.Column="0" />
+                        Grid.Column="0"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.Card.Number, Converter={StaticResource stringHasValue}}"/>
                     <Label
                         Text="{Binding Cipher.Card.Number, Mode=OneWay}"
                         StyleClass="box-value"
                         Grid.Row="1"
-                        Grid.Column="0" />
+                        Grid.Column="0"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.Card.Number, Converter={StaticResource stringHasValue}}"/>
                     <controls:FaButton 
                         StyleClass="box-row-button, box-row-button-platform"
                         Text="&#xf24d;"
@@ -232,7 +242,7 @@
                         Grid.Row="0"
                         Grid.Column="1"
                         Grid.RowSpan="2"
-                        AutomationProperties.IsInAccessibleTree="True"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.Card.Number, Converter={StaticResource stringHasValue}}"
                         AutomationProperties.Name="{u:I18n CopyNumber}" />
                 </Grid>
                 <BoxView StyleClass="box-row-separator"
@@ -241,10 +251,12 @@
                                 IsVisible="{Binding Cipher.Card.Brand, Converter={StaticResource stringHasValue}}">
                     <Label
                         Text="{u:I18n Brand}"
-                        StyleClass="box-label" />
+                        StyleClass="box-label"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.Card.Number, Converter={StaticResource stringHasValue}}"/>
                     <Label
                         Text="{Binding Cipher.Card.Brand, Mode=OneWay}"
-                        StyleClass="box-value" />
+                        StyleClass="box-value"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.Card.Number, Converter={StaticResource stringHasValue}}"/>
                 </StackLayout>
                 <BoxView StyleClass="box-row-separator"
                             IsVisible="{Binding Cipher.Card.Brand, Converter={StaticResource stringHasValue}}" />
@@ -252,10 +264,12 @@
                                 IsVisible="{Binding Cipher.Card.Expiration, Converter={StaticResource stringHasValue}}">
                     <Label
                         Text="{u:I18n Expiration}"
-                        StyleClass="box-label" />
+                        StyleClass="box-label"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.Card.Expiration, Converter={StaticResource stringHasValue}}"/>
                     <Label
                         Text="{Binding Cipher.Card.Expiration, Mode=OneWay}"
-                        StyleClass="box-value" />
+                        StyleClass="box-value"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.Card.Expiration, Converter={StaticResource stringHasValue}}"/>
                 </StackLayout>
                 <BoxView StyleClass="box-row-separator"
                             IsVisible="{Binding Cipher.Card.Expiration, Converter={StaticResource stringHasValue}}" />
@@ -274,19 +288,22 @@
                         Text="{u:I18n SecurityCode}"
                         StyleClass="box-label"
                         Grid.Row="0"
-                        Grid.Column="0" />
+                        Grid.Column="0"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.Card.Code, Converter={StaticResource stringHasValue}}"/>
                     <controls:MonoLabel
                         Text="{Binding Cipher.Card.MaskedCode, Mode=OneWay}"
                         StyleClass="box-value"
                         Grid.Row="1"
                         Grid.Column="0"
-                        IsVisible="{Binding ShowCardCode, Converter={StaticResource inverseBool}}" />
+                        IsVisible="{Binding ShowCardCode, Converter={StaticResource inverseBool}}"
+                        AutomationProperties.IsInAccessibleTree="{Binding ShowCardCode, Converter={StaticResource inverseBool}}"/>
                     <controls:MonoLabel
                         Text="{Binding Cipher.Card.Code, Mode=OneWay}"
                         StyleClass="box-value"
                         Grid.Row="1"
                         Grid.Column="0"
-                        IsVisible="{Binding ShowCardCode}" />
+                        IsVisible="{Binding ShowCardCode}"
+                        AutomationProperties.IsInAccessibleTree="{Binding ShowCardCode}"/>
                     <controls:FaButton 
                         StyleClass="box-row-button, box-row-button-platform"
                         Text="{Binding ShowCardCodeIcon}"
@@ -294,7 +311,7 @@
                         Grid.Row="0"
                         Grid.Column="1"
                         Grid.RowSpan="2"
-                        AutomationProperties.IsInAccessibleTree="True"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.Card.Code, Converter={StaticResource stringHasValue}}"
                         AutomationProperties.Name="{u:I18n ToggleVisibility}" />
                     <controls:FaButton 
                         StyleClass="box-row-button, box-row-button-platform"
@@ -304,7 +321,7 @@
                         Grid.Row="0"
                         Grid.Column="2"
                         Grid.RowSpan="2"
-                        AutomationProperties.IsInAccessibleTree="True"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.Card.Code, Converter={StaticResource stringHasValue}}"
                         AutomationProperties.Name="{u:I18n CopySecurityCode}" />
                 </Grid>
                 <BoxView StyleClass="box-row-separator"
@@ -317,10 +334,12 @@
                                 IsVisible="{Binding Cipher.Identity.FullName, Converter={StaticResource stringHasValue}}">
                     <Label
                         Text="{u:I18n IdentityName}"
-                        StyleClass="box-label" />
+                        StyleClass="box-label"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.Identity.FullName, Converter={StaticResource stringHasValue}}"/>
                     <Label
                         Text="{Binding Cipher.Identity.FullName, Mode=OneWay}"
-                        StyleClass="box-value" />
+                        StyleClass="box-value"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.Identity.FullName, Converter={StaticResource stringHasValue}}"/>
                 </StackLayout>
                 <BoxView StyleClass="box-row-separator"
                             IsVisible="{Binding Cipher.Identity.FullName, Converter={StaticResource stringHasValue}}" />
@@ -328,10 +347,12 @@
                                 IsVisible="{Binding Cipher.Identity.Username, Converter={StaticResource stringHasValue}}">
                     <Label
                         Text="{u:I18n Username}"
-                        StyleClass="box-label" />
+                        StyleClass="box-label"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.Identity.Username, Converter={StaticResource stringHasValue}}"/>
                     <Label
                         Text="{Binding Cipher.Identity.Username, Mode=OneWay}"
-                        StyleClass="box-value" />
+                        StyleClass="box-value"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.Identity.Username, Converter={StaticResource stringHasValue}}"/>
                 </StackLayout>
                 <BoxView StyleClass="box-row-separator"
                             IsVisible="{Binding Cipher.Identity.Username, Converter={StaticResource stringHasValue}}" />
@@ -339,10 +360,12 @@
                                 IsVisible="{Binding Cipher.Identity.Company, Converter={StaticResource stringHasValue}}">
                     <Label
                         Text="{u:I18n Company}"
-                        StyleClass="box-label" />
+                        StyleClass="box-label"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.Identity.Company, Converter={StaticResource stringHasValue}}"/>
                     <Label
                         Text="{Binding Cipher.Identity.Company, Mode=OneWay}"
-                        StyleClass="box-value" />
+                        StyleClass="box-value"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.Identity.Company, Converter={StaticResource stringHasValue}}"/>
                 </StackLayout>
                 <BoxView StyleClass="box-row-separator"
                             IsVisible="{Binding Cipher.Identity.Company, Converter={StaticResource stringHasValue}}" />
@@ -350,10 +373,12 @@
                                 IsVisible="{Binding Cipher.Identity.SSN, Converter={StaticResource stringHasValue}}">
                     <Label
                         Text="{u:I18n SSN}"
-                        StyleClass="box-label" />
+                        StyleClass="box-label"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.Identity.SSN, Converter={StaticResource stringHasValue}}"/>
                     <Label
                         Text="{Binding Cipher.Identity.SSN, Mode=OneWay}"
-                        StyleClass="box-value" />
+                        StyleClass="box-value"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.Identity.SSN, Converter={StaticResource stringHasValue}}"/>
                 </StackLayout>
                 <BoxView StyleClass="box-row-separator"
                             IsVisible="{Binding Cipher.Identity.SSN, Converter={StaticResource stringHasValue}}" />
@@ -361,10 +386,12 @@
                                 IsVisible="{Binding Cipher.Identity.PassportNumber, Converter={StaticResource stringHasValue}}">
                     <Label
                         Text="{u:I18n PassportNumber}"
-                        StyleClass="box-label" />
+                        StyleClass="box-label"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.Identity.PassportNumber, Converter={StaticResource stringHasValue}}"/>
                     <Label
                         Text="{Binding Cipher.Identity.PassportNumber, Mode=OneWay}"
-                        StyleClass="box-value" />
+                        StyleClass="box-value"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.Identity.PassportNumber, Converter={StaticResource stringHasValue}}"/>
                 </StackLayout>
                 <BoxView StyleClass="box-row-separator"
                             IsVisible="{Binding Cipher.Identity.PassportNumber, Converter={StaticResource stringHasValue}}" />
@@ -372,10 +399,12 @@
                                 IsVisible="{Binding Cipher.Identity.LicenseNumber, Converter={StaticResource stringHasValue}}">
                     <Label
                         Text="{u:I18n LicenseNumber}"
-                        StyleClass="box-label" />
+                        StyleClass="box-label"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.Identity.LicenseNumber, Converter={StaticResource stringHasValue}}"/>
                     <Label
                         Text="{Binding Cipher.Identity.LicenseNumber, Mode=OneWay}"
-                        StyleClass="box-value" />
+                        StyleClass="box-value"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.Identity.LicenseNumber, Converter={StaticResource stringHasValue}}"/>
                 </StackLayout>
                 <BoxView StyleClass="box-row-separator"
                             IsVisible="{Binding Cipher.Identity.LicenseNumber, Converter={StaticResource stringHasValue}}" />
@@ -383,10 +412,12 @@
                                 IsVisible="{Binding Cipher.Identity.Email, Converter={StaticResource stringHasValue}}">
                     <Label
                         Text="{u:I18n Email}"
-                        StyleClass="box-label" />
+                        StyleClass="box-label"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.Identity.Email, Converter={StaticResource stringHasValue}}"/>
                     <Label
                         Text="{Binding Cipher.Identity.Email, Mode=OneWay}"
-                        StyleClass="box-value" />
+                        StyleClass="box-value"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.Identity.Email, Converter={StaticResource stringHasValue}}"/>
                 </StackLayout>
                 <BoxView StyleClass="box-row-separator"
                             IsVisible="{Binding Cipher.Identity.Email, Converter={StaticResource stringHasValue}}" />
@@ -394,36 +425,44 @@
                                 IsVisible="{Binding Cipher.Identity.Phone, Converter={StaticResource stringHasValue}}">
                     <Label
                         Text="{u:I18n Phone}"
-                        StyleClass="box-label" />
+                        StyleClass="box-label"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.Identity.Phone, Converter={StaticResource stringHasValue}}"/>
                     <Label
                         Text="{Binding Cipher.Identity.Phone, Mode=OneWay}"
-                        StyleClass="box-value" />
+                        StyleClass="box-value"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.Identity.Phone, Converter={StaticResource stringHasValue}}"/>
                 </StackLayout>
                 <BoxView StyleClass="box-row-separator"
                             IsVisible="{Binding Cipher.Identity.Phone, Converter={StaticResource stringHasValue}}" />
                 <StackLayout StyleClass="box-row" IsVisible="{Binding ShowIdentityAddress}">
                     <Label
                         Text="{u:I18n Address}"
-                        StyleClass="box-label" />
+                        StyleClass="box-label"
+                        AutomationProperties.IsInAccessibleTree="{Binding ShowIdentityAddress}" />
                     <Label
                         Text="{Binding Cipher.Identity.Address1, Mode=OneWay}"
                         IsVisible="{Binding Cipher.Identity.Address1, Converter={StaticResource stringHasValue}}"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.Identity.Address1, Converter={StaticResource stringHasValue}}"
                         StyleClass="box-value" />
                     <Label
                         Text="{Binding Cipher.Identity.Address2, Mode=OneWay}"
                         IsVisible="{Binding Cipher.Identity.Address2, Converter={StaticResource stringHasValue}}"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.Identity.Address2, Converter={StaticResource stringHasValue}}"
                         StyleClass="box-value" />
                     <Label
                         Text="{Binding Cipher.Identity.Address3, Mode=OneWay}"
                         IsVisible="{Binding Cipher.Identity.Address3, Converter={StaticResource stringHasValue}}"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.Identity.Address3, Converter={StaticResource stringHasValue}}"
                         StyleClass="box-value" />
                     <Label
                         Text="{Binding Cipher.Identity.FullAddressPart2, Mode=OneWay}"
                         IsVisible="{Binding Cipher.Identity.FullAddressPart2, Converter={StaticResource stringHasValue}}"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.Identity.FullAddressPart2, Converter={StaticResource stringHasValue}}"
                         StyleClass="box-value" />
                     <Label
                         Text="{Binding Cipher.Identity.Country, Mode=OneWay}"
                         IsVisible="{Binding Cipher.Identity.Country, Converter={StaticResource stringHasValue}}"
+                        AutomationProperties.IsInAccessibleTree="{Binding Cipher.Identity.Country, Converter={StaticResource stringHasValue}}"
                         StyleClass="box-value" />
                 </StackLayout>
                 <BoxView StyleClass="box-row-separator" IsVisible="{Binding ShowIdentityAddress}" />
@@ -449,7 +488,8 @@
                     <StackLayout StyleClass="box" IsVisible="{Binding ShowUris}">
                         <StackLayout StyleClass="box-row-header">
                             <Label Text="{u:I18n URIs, Header=True}"
-                                   StyleClass="box-header, box-header-platform" />
+                                   StyleClass="box-header, box-header-platform"
+                                   AutomationProperties.IsInAccessibleTree="{Binding ShowUris}"/>
                         </StackLayout>
                         <controls:RepeaterView ItemsSource="{Binding Cipher.Login.Uris}">
                             <controls:RepeaterView.ItemTemplate>
@@ -470,13 +510,15 @@
                                                 StyleClass="box-label"
                                                 Grid.Row="0"
                                                 Grid.Column="0"
-                                                IsVisible="{Binding IsWebsite, Mode=OneWay, Converter={StaticResource inverseBool}}" />
+                                                IsVisible="{Binding IsWebsite, Mode=OneWay, Converter={StaticResource inverseBool}}"
+                                                AutomationProperties.IsInAccessibleTree="{Binding IsWebsite, Mode=OneWay, Converter={StaticResource inverseBool}}" />
                                             <Label
                                                 Text="{u:I18n Website}"
                                                 StyleClass="box-label"
                                                 Grid.Row="0"
                                                 Grid.Column="0"
-                                                IsVisible="{Binding IsWebsite, Mode=OneWay}" />
+                                                IsVisible="{Binding IsWebsite, Mode=OneWay}"
+                                                AutomationProperties.IsInAccessibleTree="{Binding IsWebsite, Mode=OneWay}"/>
                                             <Label
                                                 Text="{Binding HostOrUri, Mode=OneWay}"
                                                 StyleClass="box-value"
@@ -491,7 +533,7 @@
                                                 Grid.Column="1"
                                                 Grid.RowSpan="2"
                                                 IsVisible="{Binding CanLaunch, Mode=OneWay}"
-                                                AutomationProperties.IsInAccessibleTree="True"
+                                                AutomationProperties.IsInAccessibleTree="{Binding CanLaunch, Mode=OneWay}"
                                                 AutomationProperties.Name="{u:I18n Launch}" />
                                             <controls:FaButton
                                                 StyleClass="box-row-button, box-row-button-platform"
@@ -514,13 +556,15 @@
                                  IsVisible="{Binding Cipher.Notes, Converter={StaticResource stringHasValue}}">
                         <StackLayout StyleClass="box-row-header">
                             <Label Text="{u:I18n Notes, Header=True}"
-                                   StyleClass="box-header, box-header-platform" />
+                                   StyleClass="box-header, box-header-platform"
+                                   AutomationProperties.IsInAccessibleTree="{Binding Cipher.Notes, Converter={StaticResource stringHasValue}}" />
                         </StackLayout>
                         <StackLayout StyleClass="box-row">
                             <Label
                                 Text="{Binding Cipher.Notes, Mode=OneWay}"
                                 StyleClass="box-value"
-                                LineBreakMode="WordWrap">
+                                LineBreakMode="WordWrap"
+                                AutomationProperties.IsInAccessibleTree="{Binding Cipher.Notes, Converter={StaticResource stringHasValue}}">
                                 <Label.Effects>
                                     <effects:SelectableLabelEffect />
                                 </Label.Effects>
@@ -531,7 +575,8 @@
                     <StackLayout StyleClass="box" IsVisible="{Binding Cipher.HasFields}">
                         <StackLayout StyleClass="box-row-header">
                             <Label Text="{u:I18n CustomFields, Header=True}"
-                                   StyleClass="box-header, box-header-platform" />
+                                   StyleClass="box-header, box-header-platform"
+                                   AutomationProperties.IsInAccessibleTree="{Binding Cipher.HasFields}" />
                         </StackLayout>
                         <controls:RepeaterView ItemsSource="{Binding Fields}">
                             <controls:RepeaterView.ItemTemplate>
@@ -557,13 +602,15 @@
                                                 StyleClass="box-value"
                                                 Grid.Row="1"
                                                 Grid.Column="0"
-                                                IsVisible="{Binding IsTextType}" />
+                                                IsVisible="{Binding IsTextType}"
+                                                AutomationProperties.IsInAccessibleTree="{Binding IsTextType} "/>
                                             <controls:FaLabel
                                                 Text="{Binding ValueText, Mode=OneWay}"
                                                 StyleClass="box-value"
                                                 Grid.Row="1"
                                                 Grid.Column="0"
                                                 IsVisible="{Binding IsBooleanType}"
+                                                AutomationProperties.IsInAccessibleTree="{Binding IsBooleanType}"
                                                 Margin="0, 5, 0, 0" />
                                             <StackLayout IsVisible="{Binding IsHiddenType}"
                                                          Grid.Row="1"
@@ -571,11 +618,13 @@
                                                 <controls:MonoLabel
                                                     Text="{Binding ValueText, Mode=OneWay}"
                                                     StyleClass="box-value"
-                                                    IsVisible="{Binding ShowHiddenValue}" />
+                                                    IsVisible="{Binding ShowHiddenValue}"
+                                                    AutomationProperties.IsInAccessibleTree="{Binding ShowHiddenValue}" />
                                                 <controls:MonoLabel
                                                     Text="{Binding Field.MaskedValue, Mode=OneWay}"
                                                     StyleClass="box-value"
-                                                    IsVisible="{Binding ShowHiddenValue, Converter={StaticResource inverseBool}}" />
+                                                    IsVisible="{Binding ShowHiddenValue, Converter={StaticResource inverseBool}}"
+                                                    AutomationProperties.IsInAccessibleTree="{Binding ShowHiddenValue, Converter={StaticResource inverseBool}}" />
                                             </StackLayout>
                                             <controls:FaButton 
                                                 StyleClass="box-row-button, box-row-button-platform"
@@ -585,7 +634,7 @@
                                                 Grid.Row="0"
                                                 Grid.Column="1"
                                                 Grid.RowSpan="2"
-                                                AutomationProperties.IsInAccessibleTree="True"
+                                                AutomationProperties.IsInAccessibleTree="{Binding ShowViewHidden}"
                                                 AutomationProperties.Name="{u:I18n ToggleVisibility}" />
                                             <controls:FaButton
                                                 StyleClass="box-row-button, box-row-button-platform"
@@ -596,7 +645,7 @@
                                                 Grid.Row="0"
                                                 Grid.Column="2"
                                                 Grid.RowSpan="2"
-                                                AutomationProperties.IsInAccessibleTree="True"
+                                                AutomationProperties.IsInAccessibleTree="{Binding ShowCopyButton}"
                                                 AutomationProperties.Name="{u:I18n Copy}" />
                                         </Grid>
                                         <BoxView StyleClass="box-row-separator" />
@@ -608,7 +657,8 @@
                     <StackLayout StyleClass="box" IsVisible="{Binding ShowAttachments}">
                         <StackLayout StyleClass="box-row-header">
                             <Label Text="{u:I18n Attachments, Header=True}"
-                                   StyleClass="box-header, box-header-platform" />
+                                   StyleClass="box-header, box-header-platform"
+                                   AutomationProperties.IsInAccessibleTree="{Binding ShowAttachments}"/>
                         </StackLayout>
                         <controls:RepeaterView ItemsSource="{Binding Cipher.Attachments}">
                             <controls:RepeaterView.ItemTemplate>
@@ -631,7 +681,7 @@
                                                 Command="{Binding BindingContext.DownloadAttachmentCommand, Source={x:Reference _page}}"
                                                 CommandParameter="{Binding .}"
                                                 VerticalOptions="Center"
-                                                AutomationProperties.IsInAccessibleTree="True"
+                                                AutomationProperties.IsInAccessibleTree="{Binding BindingContext.ShowAttachments, Source={x:Reference _page}}"
                                                 AutomationProperties.Name="{u:I18n Download}" />
                                         </StackLayout>
                                         <BoxView StyleClass="box-row-separator" />
@@ -645,14 +695,16 @@
                                StyleClass="box-footer-label" />
                         <Label FormattedText="{Binding PasswordUpdatedText}"
                                StyleClass="box-footer-label"
-                               IsVisible="{Binding Cipher.PasswordRevisionDisplayDate, Converter={StaticResource notNull}}">
+                               IsVisible="{Binding Cipher.PasswordRevisionDisplayDate, Converter={StaticResource notNull}}"
+                               AutomationProperties.IsInAccessibleTree="{Binding Cipher.PasswordRevisionDisplayDate, Converter={StaticResource notNull}}">
                             <Label.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="PasswordHistory_Tapped" />
                             </Label.GestureRecognizers>
                         </Label>
                         <Label FormattedText="{Binding PasswordHistoryText}"
                                StyleClass="box-footer-label"
-                               IsVisible="{Binding Cipher.HasPasswordHistory}">
+                               IsVisible="{Binding Cipher.HasPasswordHistory}"
+                               AutomationProperties.IsInAccessibleTree="{Binding Cipher.HasPasswordHistory}">
                             <Label.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="PasswordHistory_Tapped" />
                             </Label.GestureRecognizers>
@@ -680,7 +732,7 @@
             Style="{StaticResource btn-fab}"
             AbsoluteLayout.LayoutFlags="PositionProportional"
             AbsoluteLayout.LayoutBounds="1, 1, AutoSize, AutoSize"
-            AutomationProperties.IsInAccessibleTree="True"
+            AutomationProperties.IsInAccessibleTree="{Binding CanEdit}"
             AutomationProperties.Name="{u:I18n EditItem}"
             IsVisible="{Binding CanEdit}">
             <Button.Effects>
