@@ -97,6 +97,19 @@ namespace Bit.App.Pages
                     await Navigation.PopModalAsync();
                 }
             }, _mainContent);
+
+            if (_vm.IsLogin)
+            {
+                _itemControls.Children.Add(_loginControls);
+            }
+            else if (_vm.IsIdentity)
+            {
+                _itemControls.Children.Add(_identityControls);
+            }
+            else if (_vm.IsCard)
+            {
+                _itemControls.Children.Add(_cardControls);
+            }
         }
 
         protected override void OnDisappearing()

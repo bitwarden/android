@@ -50,12 +50,371 @@
                          IsDestructive="True"
                          x:Name="_deleteItem"
                          x:Key="deleteItem" />
+            <StackLayout Spacing="0" Padding="0"
+                         x:Name="_loginControls" x:Key="loginControls">
+                <StackLayout StyleClass="box-row, box-row-input">
+                    <Label
+                        Text="{u:I18n Username}"
+                        StyleClass="box-label" />
+                    <Entry
+                        x:Name="_loginUsernameEntry"
+                        Text="{Binding Cipher.Login.Username}"
+                        StyleClass="box-value" />
+                </StackLayout>
+                <Grid StyleClass="box-row, box-row-input">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Label
+                        Text="{u:I18n Password}"
+                        StyleClass="box-label"
+                        Grid.Row="0"
+                        Grid.Column="0" />
+                    <controls:MonoEntry
+                        x:Name="_loginPasswordEntry"
+                        Text="{Binding Cipher.Login.Password}"
+                        StyleClass="box-value"
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="{Binding PasswordFieldColSpan}"
+                        IsPassword="{Binding ShowPassword, Converter={StaticResource inverseBool}}"
+                        IsSpellCheckEnabled="False"
+                        IsTextPredictionEnabled="False"
+                        IsEnabled="{Binding Cipher.ViewPassword}"/>
+                    <controls:FaButton 
+                        StyleClass="box-row-button, box-row-button-platform"
+                        Text="&#xf058;"
+                        Command="{Binding CheckPasswordCommand}"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Grid.RowSpan="2"
+                        AutomationProperties.IsInAccessibleTree="True"
+                        AutomationProperties.Name="{u:I18n CheckPassword}"
+                        IsVisible="{Binding Cipher.ViewPassword}" />
+                    <controls:FaButton 
+                        StyleClass="box-row-button, box-row-button-platform"
+                        Text="{Binding ShowPasswordIcon}"
+                        Command="{Binding TogglePasswordCommand}"
+                        Grid.Row="0"
+                        Grid.Column="2"
+                        Grid.RowSpan="2"
+                        AutomationProperties.IsInAccessibleTree="True"
+                        AutomationProperties.Name="{u:I18n ToggleVisibility}"
+                        IsVisible="{Binding Cipher.ViewPassword}" />
+                    <controls:FaButton 
+                        StyleClass="box-row-button, box-row-button-platform"
+                        Text="&#xf021;"
+                        Command="{Binding GeneratePasswordCommand}"
+                        Grid.Row="0"
+                        Grid.Column="3"
+                        Grid.RowSpan="2"
+                        AutomationProperties.IsInAccessibleTree="True"
+                        AutomationProperties.Name="{u:I18n GeneratePassword}"
+                        IsVisible="{Binding Cipher.ViewPassword}" />
+                </Grid>
+
+                <Grid StyleClass="box-row, box-row-input">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Label
+                        Text="{u:I18n AuthenticatorKey}"
+                        StyleClass="box-label"
+                        Grid.Row="0"
+                        Grid.Column="0" />
+                    <controls:MonoEntry
+                        x:Name="_loginTotpEntry"
+                        Text="{Binding Cipher.Login.Totp}"
+                        IsSpellCheckEnabled="False"
+                        IsTextPredictionEnabled="False"
+                        IsPassword="{Binding Cipher.ViewPassword, Converter={StaticResource inverseBool}}"
+                        IsEnabled="{Binding Cipher.ViewPassword}"
+                        StyleClass="box-value"
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="{Binding TotpColumnSpan}" />
+                    <controls:FaButton 
+                        StyleClass="box-row-button, box-row-button-platform"
+                        Text="&#xf030;"
+                        Clicked="ScanTotp_Clicked"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Grid.RowSpan="2"
+                        IsVisible="{Binding Cipher.ViewPassword}"
+                        AutomationProperties.IsInAccessibleTree="True"
+                        AutomationProperties.Name="{u:I18n ScanQrTitle}" />
+                </Grid>
+            </StackLayout>
+            <StackLayout Spacing="0" Padding="0"
+                         x:Name="_cardControls" x:Key="cardControls">
+                <StackLayout StyleClass="box-row, box-row-input">
+                    <Label
+                        Text="{u:I18n CardholderName}"
+                        StyleClass="box-label" />
+                    <Entry
+                        x:Name="_cardholderNameEntry"
+                        Text="{Binding Cipher.Card.CardholderName}"
+                        StyleClass="box-value" />
+                </StackLayout>
+                <StackLayout StyleClass="box-row, box-row-input">
+                    <Label
+                        Text="{u:I18n Number}"
+                        StyleClass="box-label" />
+                    <Entry
+                        x:Name="_cardNumberEntry"
+                        Text="{Binding Cipher.Card.Number}"
+                        StyleClass="box-value" />
+                </StackLayout>
+                <StackLayout StyleClass="box-row, box-row-input">
+                    <Label
+                        Text="{u:I18n Brand}"
+                        StyleClass="box-label" />
+                    <Picker
+                        x:Name="_cardBrandPicker"
+                        ItemsSource="{Binding CardBrandOptions, Mode=OneTime}"
+                        SelectedIndex="{Binding CardBrandSelectedIndex}"
+                        StyleClass="box-value" />
+                </StackLayout>
+                <StackLayout StyleClass="box-row, box-row-input">
+                    <Label
+                        Text="{u:I18n ExpirationMonth}"
+                        StyleClass="box-label" />
+                    <Picker
+                        x:Name="_cardExpMonthPicker"
+                        ItemsSource="{Binding CardExpMonthOptions, Mode=OneTime}"
+                        SelectedIndex="{Binding CardExpMonthSelectedIndex}"
+                        StyleClass="box-value" />
+                </StackLayout>
+                <StackLayout StyleClass="box-row, box-row-input">
+                    <Label
+                        Text="{u:I18n ExpirationYear}"
+                        StyleClass="box-label" />
+                    <Entry
+                        x:Name="_cardExpYearEntry"
+                        Text="{Binding Cipher.Card.ExpYear}"
+                        StyleClass="box-value"
+                        Keyboard="Numeric" />
+                </StackLayout>
+                <Grid StyleClass="box-row, box-row-input">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Label
+                        Text="{u:I18n SecurityCode}"
+                        StyleClass="box-label"
+                        Grid.Row="0"
+                        Grid.Column="0" />
+                    <controls:MonoEntry
+                        x:Name="_cardCodeEntry"
+                        Text="{Binding Cipher.Card.Code}"
+                        StyleClass="box-value"
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Keyboard="Numeric"
+                        IsPassword="{Binding ShowCardCode, Converter={StaticResource inverseBool}}"
+                        IsSpellCheckEnabled="False"
+                        IsTextPredictionEnabled="False" />
+                    <controls:FaButton 
+                        StyleClass="box-row-button, box-row-button-platform"
+                        Text="{Binding ShowCardCodeIcon}"
+                        Command="{Binding ToggleCardCodeCommand}"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Grid.RowSpan="2"
+                        AutomationProperties.IsInAccessibleTree="True"
+                        AutomationProperties.Name="{u:I18n ToggleVisibility}" />
+                </Grid>
+            </StackLayout>
+            <StackLayout Spacing="0" Padding="0"
+                         x:Name="_identityControls" x:Key="identityControls">
+                <StackLayout StyleClass="box-row, box-row-input">
+                    <Label
+                        Text="{u:I18n Title}"
+                        StyleClass="box-label" />
+                    <Picker
+                        x:Name="_identityTitlePicker"
+                        ItemsSource="{Binding IdentityTitleOptions, Mode=OneTime}"
+                        SelectedIndex="{Binding IdentityTitleSelectedIndex}"
+                        StyleClass="box-value" />
+                </StackLayout>
+                <StackLayout StyleClass="box-row, box-row-input">
+                    <Label
+                        Text="{u:I18n FirstName}"
+                        StyleClass="box-label" />
+                    <Entry
+                        x:Name="_identityFirstNameEntry"
+                        Text="{Binding Cipher.Identity.FirstName}"
+                        StyleClass="box-value" />
+                </StackLayout>
+                <StackLayout StyleClass="box-row, box-row-input">
+                    <Label
+                        Text="{u:I18n MiddleName}"
+                        StyleClass="box-label" />
+                    <Entry
+                        x:Name="_identityMiddleNameEntry"
+                        Text="{Binding Cipher.Identity.MiddleName}"
+                        StyleClass="box-value" />
+                </StackLayout>
+                <StackLayout StyleClass="box-row, box-row-input">
+                    <Label
+                        Text="{u:I18n LastName}"
+                        StyleClass="box-label" />
+                    <Entry
+                        x:Name="_identityLastNameEntry"
+                        Text="{Binding Cipher.Identity.LastName}"
+                        StyleClass="box-value" />
+                </StackLayout>
+                <StackLayout StyleClass="box-row, box-row-input">
+                    <Label
+                        Text="{u:I18n Username}"
+                        StyleClass="box-label" />
+                    <Entry
+                        x:Name="_identityUsernameEntry"
+                        Text="{Binding Cipher.Identity.Username}"
+                        StyleClass="box-value" />
+                </StackLayout>
+                <StackLayout StyleClass="box-row, box-row-input">
+                    <Label
+                        Text="{u:I18n Company}"
+                        StyleClass="box-label" />
+                    <Entry
+                        x:Name="_identityCompanyEntry"
+                        Text="{Binding Cipher.Identity.Company}"
+                        StyleClass="box-value" />
+                </StackLayout>
+                <StackLayout StyleClass="box-row, box-row-input">
+                    <Label
+                        Text="{u:I18n SSN}"
+                        StyleClass="box-label" />
+                    <Entry
+                        x:Name="_identitySsnEntry"
+                        Text="{Binding Cipher.Identity.SSN}"
+                        StyleClass="box-value" />
+                </StackLayout>
+                <StackLayout StyleClass="box-row, box-row-input">
+                    <Label
+                        Text="{u:I18n PassportNumber}"
+                        StyleClass="box-label" />
+                    <Entry
+                        x:Name="_identityPassportNumberEntry"
+                        Text="{Binding Cipher.Identity.PassportNumber}"
+                        StyleClass="box-value" />
+                </StackLayout>
+                <StackLayout StyleClass="box-row, box-row-input">
+                    <Label
+                        Text="{u:I18n LicenseNumber}"
+                        StyleClass="box-label" />
+                    <Entry
+                        x:Name="_identityLicenseNumberEntry"
+                        Text="{Binding Cipher.Identity.LicenseNumber}"
+                        StyleClass="box-value" />
+                </StackLayout>
+                <StackLayout StyleClass="box-row, box-row-input">
+                    <Label
+                        Text="{u:I18n Email}"
+                        StyleClass="box-label" />
+                    <Entry
+                        x:Name="_identityEmailEntry"
+                        Keyboard="Email"
+                        Text="{Binding Cipher.Identity.Email}"
+                        StyleClass="box-value" />
+                </StackLayout>
+                <StackLayout StyleClass="box-row, box-row-input">
+                    <Label
+                        Text="{u:I18n Phone}"
+                        StyleClass="box-label" />
+                    <Entry
+                        x:Name="_identityPhoneEntry"
+                        Text="{Binding Cipher.Identity.Phone}"
+                        StyleClass="box-value" />
+                </StackLayout>
+                <StackLayout StyleClass="box-row, box-row-input">
+                    <Label
+                        Text="{u:I18n Address1}"
+                        StyleClass="box-label" />
+                    <Entry
+                        x:Name="_identityAddress1Entry"
+                        Text="{Binding Cipher.Identity.Address1}"
+                        StyleClass="box-value" />
+                </StackLayout>
+                <StackLayout StyleClass="box-row, box-row-input">
+                    <Label
+                        Text="{u:I18n Address2}"
+                        StyleClass="box-label" />
+                    <Entry
+                        x:Name="_identityAddress2Entry"
+                        Text="{Binding Cipher.Identity.Address2}"
+                        StyleClass="box-value" />
+                </StackLayout>
+                <StackLayout StyleClass="box-row, box-row-input">
+                    <Label
+                        Text="{u:I18n Address3}"
+                        StyleClass="box-label" />
+                    <Entry
+                        x:Name="_identityAddress3Entry"
+                        Text="{Binding Cipher.Identity.Address3}"
+                        StyleClass="box-value" />
+                </StackLayout>
+                <StackLayout StyleClass="box-row, box-row-input">
+                    <Label
+                        Text="{u:I18n CityTown}"
+                        StyleClass="box-label" />
+                    <Entry
+                        x:Name="_identityCityEntry"
+                        Text="{Binding Cipher.Identity.City}"
+                        StyleClass="box-value" />
+                </StackLayout>
+                <StackLayout StyleClass="box-row, box-row-input">
+                    <Label
+                        Text="{u:I18n StateProvince}"
+                        StyleClass="box-label" />
+                    <Entry
+                        x:Name="_identityStateEntry"
+                        Text="{Binding Cipher.Identity.State}"
+                        StyleClass="box-value" />
+                </StackLayout>
+                <StackLayout StyleClass="box-row, box-row-input">
+                    <Label
+                        Text="{u:I18n ZipPostalCode}"
+                        StyleClass="box-label" />
+                    <Entry
+                        x:Name="_identityPostalCodeEntry"
+                        Text="{Binding Cipher.Identity.PostalCode}"
+                        StyleClass="box-value" />
+                </StackLayout>
+                <StackLayout StyleClass="box-row, box-row-input">
+                    <Label
+                        Text="{u:I18n Country}"
+                        StyleClass="box-label" />
+                    <Entry
+                        x:Name="_identityCountryEntry"
+                        Text="{Binding Cipher.Identity.Country}"
+                        StyleClass="box-value" />
+                </StackLayout>
+            </StackLayout>
         </ResourceDictionary>
     </ContentPage.Resources>
 
     <ScrollView x:Name="_scrollView" Padding="0, 0, 0, 20">
         <StackLayout Spacing="20">
-            <StackLayout StyleClass="box">
+            <StackLayout StyleClass="box" x:Name="_itemControls">
                 <Grid IsVisible="{Binding OwnershipPolicyInEffect}"
                       Margin="0, 12, 0, 0"
                       RowSpacing="0"
@@ -102,362 +461,6 @@
                         x:Name="_nameEntry"
                         Text="{Binding Cipher.Name}"
                         StyleClass="box-value" />
-                </StackLayout>
-                <StackLayout IsVisible="{Binding IsLogin}" Spacing="0" Padding="0">
-                    <StackLayout StyleClass="box-row, box-row-input">
-                        <Label
-                            Text="{u:I18n Username}"
-                            StyleClass="box-label" />
-                        <Entry
-                            x:Name="_loginUsernameEntry"
-                            Text="{Binding Cipher.Login.Username}"
-                            StyleClass="box-value" />
-                    </StackLayout>
-                    <Grid StyleClass="box-row, box-row-input">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <Label
-                            Text="{u:I18n Password}"
-                            StyleClass="box-label"
-                            Grid.Row="0"
-                            Grid.Column="0" />
-                        <controls:MonoEntry
-                            x:Name="_loginPasswordEntry"
-                            Text="{Binding Cipher.Login.Password}"
-                            StyleClass="box-value"
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            Grid.ColumnSpan="{Binding PasswordFieldColSpan}"
-                            IsPassword="{Binding ShowPassword, Converter={StaticResource inverseBool}}"
-                            IsSpellCheckEnabled="False"
-                            IsTextPredictionEnabled="False"
-                            IsEnabled="{Binding Cipher.ViewPassword}"/>
-                        <controls:FaButton 
-                            StyleClass="box-row-button, box-row-button-platform"
-                            Text="&#xf058;"
-                            Command="{Binding CheckPasswordCommand}"
-                            Grid.Row="0"
-                            Grid.Column="1"
-                            Grid.RowSpan="2"
-                            AutomationProperties.IsInAccessibleTree="True"
-                            AutomationProperties.Name="{u:I18n CheckPassword}"
-                            IsVisible="{Binding Cipher.ViewPassword}" />
-                        <controls:FaButton 
-                            StyleClass="box-row-button, box-row-button-platform"
-                            Text="{Binding ShowPasswordIcon}"
-                            Command="{Binding TogglePasswordCommand}"
-                            Grid.Row="0"
-                            Grid.Column="2"
-                            Grid.RowSpan="2"
-                            AutomationProperties.IsInAccessibleTree="True"
-                            AutomationProperties.Name="{u:I18n ToggleVisibility}"
-                            IsVisible="{Binding Cipher.ViewPassword}" />
-                        <controls:FaButton 
-                            StyleClass="box-row-button, box-row-button-platform"
-                            Text="&#xf021;"
-                            Command="{Binding GeneratePasswordCommand}"
-                            Grid.Row="0"
-                            Grid.Column="3"
-                            Grid.RowSpan="2"
-                            AutomationProperties.IsInAccessibleTree="True"
-                            AutomationProperties.Name="{u:I18n GeneratePassword}"
-                            IsVisible="{Binding Cipher.ViewPassword}" />
-                    </Grid>
-
-                    <Grid StyleClass="box-row, box-row-input">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <Label
-                            Text="{u:I18n AuthenticatorKey}"
-                            StyleClass="box-label"
-                            Grid.Row="0"
-                            Grid.Column="0" />
-                        <controls:MonoEntry
-                            x:Name="_loginTotpEntry"
-                            Text="{Binding Cipher.Login.Totp}"
-                            IsSpellCheckEnabled="False"
-                            IsTextPredictionEnabled="False"
-                            IsPassword="{Binding Cipher.ViewPassword, Converter={StaticResource inverseBool}}"
-                            IsEnabled="{Binding Cipher.ViewPassword}"
-                            StyleClass="box-value"
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            Grid.ColumnSpan="{Binding TotpColumnSpan}" />
-                        <controls:FaButton 
-                            StyleClass="box-row-button, box-row-button-platform"
-                            Text="&#xf030;"
-                            Clicked="ScanTotp_Clicked"
-                            Grid.Row="0"
-                            Grid.Column="1"
-                            Grid.RowSpan="2"
-                            IsVisible="{Binding Cipher.ViewPassword}"
-                            AutomationProperties.IsInAccessibleTree="True"
-                            AutomationProperties.Name="{u:I18n ScanQrTitle}" />
-                    </Grid>
-                </StackLayout>
-                <StackLayout IsVisible="{Binding IsCard}" Spacing="0" Padding="0">
-                    <StackLayout StyleClass="box-row, box-row-input">
-                        <Label
-                            Text="{u:I18n CardholderName}"
-                            StyleClass="box-label" />
-                        <Entry
-                            x:Name="_cardholderNameEntry"
-                            Text="{Binding Cipher.Card.CardholderName}"
-                            StyleClass="box-value" />
-                    </StackLayout>
-                    <StackLayout StyleClass="box-row, box-row-input">
-                        <Label
-                            Text="{u:I18n Number}"
-                            StyleClass="box-label" />
-                        <Entry
-                            x:Name="_cardNumberEntry"
-                            Text="{Binding Cipher.Card.Number}"
-                            StyleClass="box-value" />
-                    </StackLayout>
-                    <StackLayout StyleClass="box-row, box-row-input">
-                        <Label
-                            Text="{u:I18n Brand}"
-                            StyleClass="box-label" />
-                        <Picker
-                            x:Name="_cardBrandPicker"
-                            ItemsSource="{Binding CardBrandOptions, Mode=OneTime}"
-                            SelectedIndex="{Binding CardBrandSelectedIndex}"
-                            StyleClass="box-value" />
-                    </StackLayout>
-                    <StackLayout StyleClass="box-row, box-row-input">
-                        <Label
-                            Text="{u:I18n ExpirationMonth}"
-                            StyleClass="box-label" />
-                        <Picker
-                            x:Name="_cardExpMonthPicker"
-                            ItemsSource="{Binding CardExpMonthOptions, Mode=OneTime}"
-                            SelectedIndex="{Binding CardExpMonthSelectedIndex}"
-                            StyleClass="box-value" />
-                    </StackLayout>
-                    <StackLayout StyleClass="box-row, box-row-input">
-                        <Label
-                            Text="{u:I18n ExpirationYear}"
-                            StyleClass="box-label" />
-                        <Entry
-                            x:Name="_cardExpYearEntry"
-                            Text="{Binding Cipher.Card.ExpYear}"
-                            StyleClass="box-value"
-                            Keyboard="Numeric" />
-                    </StackLayout>
-                    <Grid StyleClass="box-row, box-row-input">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <Label
-                            Text="{u:I18n SecurityCode}"
-                            StyleClass="box-label"
-                            Grid.Row="0"
-                            Grid.Column="0" />
-                        <controls:MonoEntry
-                            x:Name="_cardCodeEntry"
-                            Text="{Binding Cipher.Card.Code}"
-                            StyleClass="box-value"
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            Keyboard="Numeric"
-                            IsPassword="{Binding ShowCardCode, Converter={StaticResource inverseBool}}"
-                            IsSpellCheckEnabled="False"
-                            IsTextPredictionEnabled="False" />
-                        <controls:FaButton 
-                            StyleClass="box-row-button, box-row-button-platform"
-                            Text="{Binding ShowCardCodeIcon}"
-                            Command="{Binding ToggleCardCodeCommand}"
-                            Grid.Row="0"
-                            Grid.Column="1"
-                            Grid.RowSpan="2"
-                            AutomationProperties.IsInAccessibleTree="True"
-                            AutomationProperties.Name="{u:I18n ToggleVisibility}" />
-                    </Grid>
-                </StackLayout>
-                <StackLayout IsVisible="{Binding IsIdentity}" Spacing="0" Padding="0">
-                    <StackLayout StyleClass="box-row, box-row-input">
-                        <Label
-                            Text="{u:I18n Title}"
-                            StyleClass="box-label" />
-                        <Picker
-                            x:Name="_identityTitlePicker"
-                            ItemsSource="{Binding IdentityTitleOptions, Mode=OneTime}"
-                            SelectedIndex="{Binding IdentityTitleSelectedIndex}"
-                            StyleClass="box-value" />
-                    </StackLayout>
-                    <StackLayout StyleClass="box-row, box-row-input">
-                        <Label
-                            Text="{u:I18n FirstName}"
-                            StyleClass="box-label" />
-                        <Entry
-                            x:Name="_identityFirstNameEntry"
-                            Text="{Binding Cipher.Identity.FirstName}"
-                            StyleClass="box-value" />
-                    </StackLayout>
-                    <StackLayout StyleClass="box-row, box-row-input">
-                        <Label
-                            Text="{u:I18n MiddleName}"
-                            StyleClass="box-label" />
-                        <Entry
-                            x:Name="_identityMiddleNameEntry"
-                            Text="{Binding Cipher.Identity.MiddleName}"
-                            StyleClass="box-value" />
-                    </StackLayout>
-                    <StackLayout StyleClass="box-row, box-row-input">
-                        <Label
-                            Text="{u:I18n LastName}"
-                            StyleClass="box-label" />
-                        <Entry
-                            x:Name="_identityLastNameEntry"
-                            Text="{Binding Cipher.Identity.LastName}"
-                            StyleClass="box-value" />
-                    </StackLayout>
-                    <StackLayout StyleClass="box-row, box-row-input">
-                        <Label
-                            Text="{u:I18n Username}"
-                            StyleClass="box-label" />
-                        <Entry
-                            x:Name="_identityUsernameEntry"
-                            Text="{Binding Cipher.Identity.Username}"
-                            StyleClass="box-value" />
-                    </StackLayout>
-                    <StackLayout StyleClass="box-row, box-row-input">
-                        <Label
-                            Text="{u:I18n Company}"
-                            StyleClass="box-label" />
-                        <Entry
-                            x:Name="_identityCompanyEntry"
-                            Text="{Binding Cipher.Identity.Company}"
-                            StyleClass="box-value" />
-                    </StackLayout>
-                    <StackLayout StyleClass="box-row, box-row-input">
-                        <Label
-                            Text="{u:I18n SSN}"
-                            StyleClass="box-label" />
-                        <Entry
-                            x:Name="_identitySsnEntry"
-                            Text="{Binding Cipher.Identity.SSN}"
-                            StyleClass="box-value" />
-                    </StackLayout>
-                    <StackLayout StyleClass="box-row, box-row-input">
-                        <Label
-                            Text="{u:I18n PassportNumber}"
-                            StyleClass="box-label" />
-                        <Entry
-                            x:Name="_identityPassportNumberEntry"
-                            Text="{Binding Cipher.Identity.PassportNumber}"
-                            StyleClass="box-value" />
-                    </StackLayout>
-                    <StackLayout StyleClass="box-row, box-row-input">
-                        <Label
-                            Text="{u:I18n LicenseNumber}"
-                            StyleClass="box-label" />
-                        <Entry
-                            x:Name="_identityLicenseNumberEntry"
-                            Text="{Binding Cipher.Identity.LicenseNumber}"
-                            StyleClass="box-value" />
-                    </StackLayout>
-                    <StackLayout StyleClass="box-row, box-row-input">
-                        <Label
-                            Text="{u:I18n Email}"
-                            StyleClass="box-label" />
-                        <Entry
-                            x:Name="_identityEmailEntry"
-                            Keyboard="Email"
-                            Text="{Binding Cipher.Identity.Email}"
-                            StyleClass="box-value" />
-                    </StackLayout>
-                    <StackLayout StyleClass="box-row, box-row-input">
-                        <Label
-                            Text="{u:I18n Phone}"
-                            StyleClass="box-label" />
-                        <Entry
-                            x:Name="_identityPhoneEntry"
-                            Text="{Binding Cipher.Identity.Phone}"
-                            StyleClass="box-value" />
-                    </StackLayout>
-                    <StackLayout StyleClass="box-row, box-row-input">
-                        <Label
-                            Text="{u:I18n Address1}"
-                            StyleClass="box-label" />
-                        <Entry
-                            x:Name="_identityAddress1Entry"
-                            Text="{Binding Cipher.Identity.Address1}"
-                            StyleClass="box-value" />
-                    </StackLayout>
-                    <StackLayout StyleClass="box-row, box-row-input">
-                        <Label
-                            Text="{u:I18n Address2}"
-                            StyleClass="box-label" />
-                        <Entry
-                            x:Name="_identityAddress2Entry"
-                            Text="{Binding Cipher.Identity.Address2}"
-                            StyleClass="box-value" />
-                    </StackLayout>
-                    <StackLayout StyleClass="box-row, box-row-input">
-                        <Label
-                            Text="{u:I18n Address3}"
-                            StyleClass="box-label" />
-                        <Entry
-                            x:Name="_identityAddress3Entry"
-                            Text="{Binding Cipher.Identity.Address3}"
-                            StyleClass="box-value" />
-                    </StackLayout>
-                    <StackLayout StyleClass="box-row, box-row-input">
-                        <Label
-                            Text="{u:I18n CityTown}"
-                            StyleClass="box-label" />
-                        <Entry
-                            x:Name="_identityCityEntry"
-                            Text="{Binding Cipher.Identity.City}"
-                            StyleClass="box-value" />
-                    </StackLayout>
-                    <StackLayout StyleClass="box-row, box-row-input">
-                        <Label
-                            Text="{u:I18n StateProvince}"
-                            StyleClass="box-label" />
-                        <Entry
-                            x:Name="_identityStateEntry"
-                            Text="{Binding Cipher.Identity.State}"
-                            StyleClass="box-value" />
-                    </StackLayout>
-                    <StackLayout StyleClass="box-row, box-row-input">
-                        <Label
-                            Text="{u:I18n ZipPostalCode}"
-                            StyleClass="box-label" />
-                        <Entry
-                            x:Name="_identityPostalCodeEntry"
-                            Text="{Binding Cipher.Identity.PostalCode}"
-                            StyleClass="box-value" />
-                    </StackLayout>
-                    <StackLayout StyleClass="box-row, box-row-input">
-                        <Label
-                            Text="{u:I18n Country}"
-                            StyleClass="box-label" />
-                        <Entry
-                            x:Name="_identityCountryEntry"
-                            Text="{Binding Cipher.Identity.Country}"
-                            StyleClass="box-value" />
-                    </StackLayout>
                 </StackLayout>
             </StackLayout>
             <StackLayout StyleClass="box" IsVisible="{Binding IsLogin}">

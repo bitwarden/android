@@ -136,6 +136,8 @@ namespace Bit.App.Pages
             _identityStateEntry.ReturnCommand = new Command(() => _identityPostalCodeEntry.Focus());
             _identityPostalCodeEntry.ReturnType = ReturnType.Next;
             _identityPostalCodeEntry.ReturnCommand = new Command(() => _identityCountryEntry.Focus());
+
+            _typePicker.SelectedIndexChanged += TypePicker_SelectedIndexChanged;
         }
 
         public bool FromAutofillFramework { get; set; }
@@ -305,6 +307,26 @@ namespace Bit.App.Pages
             if (DoOnce())
             {
                 await Navigation.PopModalAsync();
+            }
+        }
+
+        private void TypePicker_SelectedIndexChanged(object sender, System.EventArgs e)
+        {
+            _itemControls.Children.Remove(_loginControls);
+            _itemControls.Children.Remove(_identityControls);
+            _itemControls.Children.Remove(_cardControls);
+
+            if (_vm.IsLogin)
+            {
+                _itemControls.Children.Add(_loginControls);
+            }
+            else if (_vm.IsIdentity)
+            {
+                _itemControls.Children.Add(_identityControls);
+            }
+            else if (_vm.IsCard)
+            {
+                _itemControls.Children.Add(_cardControls);
             }
         }
 
