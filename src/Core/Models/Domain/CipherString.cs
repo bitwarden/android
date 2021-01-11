@@ -99,7 +99,7 @@ namespace Bit.Core.Models.Domain
         public string Data { get; private set; }
         public string Mac { get; private set; }
 
-        public async Task<string> DecryptAsync(string orgId = null)
+        public async Task<string> DecryptAsync(string orgId = null, SymmetricCryptoKey key = null)
         {
             if (_decryptedValue != null)
             {
@@ -109,8 +109,11 @@ namespace Bit.Core.Models.Domain
             var cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
             try
             {
-                var orgKey = await cryptoService.GetOrgKeyAsync(orgId);
-                _decryptedValue = await cryptoService.DecryptToUtf8Async(this, orgKey);
+                if (key == null)
+                {
+                    key = await cryptoService.GetOrgKeyAsync(orgId);
+                }
+                _decryptedValue = await cryptoService.DecryptToUtf8Async(this, key);
             }
             catch
             {

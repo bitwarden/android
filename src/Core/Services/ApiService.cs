@@ -215,6 +215,28 @@ namespace Bit.Core.Services
 
         #endregion
 
+        #region Send APIs
+
+        public Task<SendResponse> GetSend(string id)
+            => SendAsync<object, SendResponse>(HttpMethod.Get, $"/sends/{id}", null, true, true);
+
+        public Task<SendResponse> PostSend(SendRequest request)
+            => SendAsync<SendRequest, SendResponse>(HttpMethod.Post, $"/sends", request, true, true);
+
+        public Task<SendResponse> PostSendFile(MultipartFormDataContent data)
+            => SendAsync<MultipartFormDataContent, SendResponse>(HttpMethod.Post, "/sends/file", data, true, true);
+
+        public Task<SendResponse> PutSend(string id, SendRequest request)
+            => SendAsync<SendRequest, SendResponse>(HttpMethod.Put, $"/sends/{id}", request, true, true);
+
+        public Task<SendResponse> PutSendRemovePassword(string id)
+            => SendAsync<object, SendResponse>(HttpMethod.Put, $"/sends/{id}", null, true, true);
+
+        public Task DeleteSend(string id)
+            => SendAsync<object, object>(HttpMethod.Delete, $"/sends/{id}", null, true, false);
+
+        #endregion
+
         #region Cipher APIs
 
         public Task<CipherResponse> GetCipherAsync(string id)
@@ -346,7 +368,7 @@ namespace Bit.Core.Services
                 }
                 if (!response.IsSuccessStatusCode)
                 {
-                    var error = await HandleErrorAsync(response, false);
+                    var error = await HandleErrorAsync(response, false, false);
                     throw new ApiException(error);
                 }
             }
@@ -398,7 +420,7 @@ namespace Bit.Core.Services
                 }
                 if (!response.IsSuccessStatusCode)
                 {
-                    var error = await HandleErrorAsync(response, false);
+                    var error = await HandleErrorAsync(response, false, true);
                     throw new ApiException(error);
                 }
                 return null;
@@ -458,7 +480,7 @@ namespace Bit.Core.Services
                 }
                 else if (!response.IsSuccessStatusCode)
                 {
-                    var error = await HandleErrorAsync(response, false);
+                    var error = await HandleErrorAsync(response, false, authed);
                     throw new ApiException(error);
                 }
                 return (TResponse)(object)null;
@@ -506,7 +528,7 @@ namespace Bit.Core.Services
             }
             else
             {
-                var error = await HandleErrorAsync(response, true);
+                var error = await HandleErrorAsync(response, true, true);
                 throw new ApiException(error);
             }
         }
@@ -520,10 +542,10 @@ namespace Bit.Core.Services
             };
         }
 
-        private async Task<ErrorResponse> HandleErrorAsync(HttpResponseMessage response, bool tokenError)
+        private async Task<ErrorResponse> HandleErrorAsync(HttpResponseMessage response, bool tokenError, bool authed)
         {
-            if ((tokenError && response.StatusCode == HttpStatusCode.BadRequest) ||
-                response.StatusCode == HttpStatusCode.Unauthorized || response.StatusCode == HttpStatusCode.Forbidden)
+            if (authed && ((tokenError && response.StatusCode == HttpStatusCode.BadRequest) ||
+                response.StatusCode == HttpStatusCode.Unauthorized || response.StatusCode == HttpStatusCode.Forbidden))
             {
                 await _logoutCallbackAsync(true);
                 return null;

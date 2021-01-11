@@ -53,5 +53,12 @@ namespace Bit.Core.Abstractions
         Task PostTwoFactorEmailAsync(TwoFactorEmailRequest request);
         Task PutDeviceTokenAsync(string identifier, DeviceTokenRequest request);
         Task PostEventsCollectAsync(IEnumerable<EventRequest> request);
+
+        Task<SendResponse> GetSend(string id);
+        Task<SendResponse> PostSend(SendRequest request);
+        Task<SendResponse> PostSendFile(MultipartFormDataContent data);
+        Task<SendResponse> PutSend(string id, SendRequest request);
+        Task<SendResponse> PutSendRemovePassword(string id);
+        Task DeleteSend(string id);
     }
 }

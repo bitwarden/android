@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bit.Core.Enums;
@@ -40,6 +40,7 @@ namespace Bit.Core.Abstractions
         Task<Tuple<string, CipherString>> MakeKeyPairAsync(SymmetricCryptoKey key = null);
         Task<SymmetricCryptoKey> MakePinKeyAysnc(string pin, string salt, KdfType kdf, int kdfIterations);
         Task<Tuple<CipherString, SymmetricCryptoKey>> MakeShareKeyAsync();
+        Task<SymmetricCryptoKey> MakeSendKeyAsync(byte[] keyMaterial);
         Task<int> RandomNumberAsync(int min, int max);
         Task<Tuple<SymmetricCryptoKey, CipherString>> RemakeEncKeyAsync(SymmetricCryptoKey key);
         Task<CipherString> RsaEncryptAsync(byte[] data, byte[] publicKey = null);

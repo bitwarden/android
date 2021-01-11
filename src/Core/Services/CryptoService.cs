@@ -1,4 +1,4 @@
-using Bit.Core.Abstractions;
+﻿using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Response;
@@ -427,6 +427,12 @@ namespace Bit.Core.Services
             return await StretchKeyAsync(pinKey);
         }
 
+        public async Task<SymmetricCryptoKey> MakeSendKeyAsync(byte[] keyMaterial)
+        {
+            var sendKey = await _cryptoFunctionService.HkdfAsync(keyMaterial, "bitwarden-send", "send", 65, HkdfAlgorithm.Sha256);
+            return new SymmetricCryptoKey(sendKey);
+        }
+
         public async Task<string> HashPasswordAsync(string password, SymmetricCryptoKey key)
         {
             if (key == null)
@@ -829,19 +835,6 @@ namespace Bit.Core.Services
             public byte[] Data { get; set; }
             public byte[] Mac { get; set; }
             public SymmetricCryptoKey Key { get; set; }
-        }
-
-        private CryptoHashAlgorithm HkdfAlgorithmToCryptoHashAlgorithm(HkdfAlgorithm hkdfAlgorithm)
-        {
-            switch (hkdfAlgorithm)
-            {
-                case HkdfAlgorithm.Sha256:
-                    return CryptoHashAlgorithm.Sha256;
-                case HkdfAlgorithm.Sha512:
-                    return CryptoHashAlgorithm.Sha512;
-                default:
-                    throw new ArgumentException($"Invalid hkdf algorithm type, {hkdfAlgorithm}");
-            }
         }
     }
 }
