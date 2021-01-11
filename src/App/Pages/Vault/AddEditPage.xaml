@@ -488,15 +488,13 @@
                                     Text="{u:I18n URI}"
                                     StyleClass="box-label"
                                     Grid.Row="0"
-                                    Grid.Column="0"
-                                    AutomationProperties.IsInAccessibleTree="{Binding BindingContext.IsLogin, Source={x:Reference _page}}" />
+                                    Grid.Column="0" />
                                 <Entry
                                     Text="{Binding Uri}"
                                     Keyboard="Url"
                                     StyleClass="box-value"
                                     Grid.Row="1"
-                                    Grid.Column="0"
-                                    AutomationProperties.IsInAccessibleTree="{Binding BindingContext.IsLogin, Source={x:Reference _page}}" />
+                                    Grid.Column="0" />
                                 <controls:FaButton
                                     StyleClass="box-row-button, box-row-button-platform"
                                     Text="&#xf013;"
@@ -505,7 +503,7 @@
                                     Grid.Row="0"
                                     Grid.Column="1"
                                     Grid.RowSpan="2"
-                                    AutomationProperties.IsInAccessibleTree="{Binding BindingContext.IsLogin, Source={x:Reference _page}}"
+                                    AutomationProperties.IsInAccessibleTree="True"
                                     AutomationProperties.Name="{u:I18n Options}" />
                             </Grid>
                         </DataTemplate>
@@ -696,13 +694,11 @@
                                     <Label
                                         Text="{Binding Collection.Name}"
                                         StyleClass="box-label, box-label-regular"
-                                        HorizontalOptions="StartAndExpand"
-                                        AutomationProperties.IsInAccessibleTree="{Binding BindingContext.HasCollections,Source={x:Reference _page}}" />
+                                        HorizontalOptions="StartAndExpand" />
                                     <Switch
                                         IsToggled="{Binding Checked}"
                                         StyleClass="box-value"
-                                        HorizontalOptions="End"
-                                        AutomationProperties.IsInAccessibleTree="{Binding BindingContext.HasCollections,Source={x:Reference _page}}" />
+                                        HorizontalOptions="End" />
                                 </StackLayout>
                                 <BoxView StyleClass="box-row-separator" />
                             </StackLayout>
