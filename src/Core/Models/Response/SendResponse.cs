@@ -20,6 +20,6 @@ namespace Bit.Core.Models.Response
         public DateTime? ExpirationDate { get; internal set; }
         public DateTime DeletionDate { get; internal set; }
         public string Password { get; set; }
-        public bool Disable { get; set; }
+        public bool Disabled { get; set; }
     }
 }

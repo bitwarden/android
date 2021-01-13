@@ -17,7 +17,7 @@ namespace Bit.Core.Services
 {
     public class SendService : ISendService
     {
-        private string SEND_KEY(string userId) => string.Format("sends_{0}", userId);
+        public static string SEND_KEY(string userId) => string.Format("sends_{0}", userId);
         private List<SendView> _decryptedSendsCache;
         private readonly ICryptoService _cryptoService;
         private readonly IUserService _userService;
@@ -68,7 +68,7 @@ namespace Bit.Core.Services
 
         public async Task DeleteWithServerAsync(string id)
         {
-            await _apiService.DeleteSend(id);
+            await _apiService.DeleteSendAsync(id);
             await DeleteAsync(id);
         }
 
@@ -193,7 +193,7 @@ namespace Bit.Core.Services
             {
                 if (send.Type == SendType.Text)
                 {
-                    response = await _apiService.PostSend(request);
+                    response = await _apiService.PostSendAsync(request);
                 }
                 else if (send.Type == SendType.File)
                 {
@@ -203,13 +203,13 @@ namespace Bit.Core.Services
                         { new ByteArrayContent(encryptedFileData), "data", send.File.FileName.EncryptedString }
                     };
 
-                    response = await _apiService.PostSendFile(fd);
+                    response = await _apiService.PostSendFileAsync(fd);
                 }
                 send.Id = response?.Id;
             }
             else
             {
-                response = await _apiService.PutSend(send.Id, request);
+                response = await _apiService.PutSendAsync(send.Id, request);
             }
 
             var userId = await _userService.GetUserIdAsync();
@@ -233,7 +233,7 @@ namespace Bit.Core.Services
 
         public async Task RemovePasswordWithServerAsync(string id)
         {
-            var response = await _apiService.PutSendRemovePassword(id);
+            var response = await _apiService.PutSendRemovePasswordAsync(id);
             var userId = await _userService.GetUserIdAsync();
             await UpsertAsync(new SendData(response, userId));
         }

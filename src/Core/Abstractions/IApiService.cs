@@ -54,11 +54,11 @@ namespace Bit.Core.Abstractions
         Task PutDeviceTokenAsync(string identifier, DeviceTokenRequest request);
         Task PostEventsCollectAsync(IEnumerable<EventRequest> request);
 
-        Task<SendResponse> GetSend(string id);
-        Task<SendResponse> PostSend(SendRequest request);
-        Task<SendResponse> PostSendFile(MultipartFormDataContent data);
-        Task<SendResponse> PutSend(string id, SendRequest request);
-        Task<SendResponse> PutSendRemovePassword(string id);
-        Task DeleteSend(string id);
+        Task<SendResponse> GetSendAsync(string id);
+        Task<SendResponse> PostSendAsync(SendRequest request);
+        Task<SendResponse> PostSendFileAsync(MultipartFormDataContent data);
+        Task<SendResponse> PutSendAsync(string id, SendRequest request);
+        Task<SendResponse> PutSendRemovePasswordAsync(string id);
+        Task DeleteSendAsync(string id);
     }
 }

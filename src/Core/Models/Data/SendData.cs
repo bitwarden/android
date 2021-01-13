@@ -23,7 +23,7 @@ namespace Bit.Core.Models.Data
             ExpirationDate = response.ExpirationDate;
             DeletionDate = response.DeletionDate;
             Password = response.Password;
-            Disabled = response.Disable;
+            Disabled = response.Disabled;
 
             switch (Type)
             {

@@ -217,22 +217,22 @@ namespace Bit.Core.Services
 
         #region Send APIs
 
-        public Task<SendResponse> GetSend(string id)
+        public Task<SendResponse> GetSendAsync(string id)
             => SendAsync<object, SendResponse>(HttpMethod.Get, $"/sends/{id}", null, true, true);
 
-        public Task<SendResponse> PostSend(SendRequest request)
+        public Task<SendResponse> PostSendAsync(SendRequest request)
             => SendAsync<SendRequest, SendResponse>(HttpMethod.Post, $"/sends", request, true, true);
 
-        public Task<SendResponse> PostSendFile(MultipartFormDataContent data)
+        public Task<SendResponse> PostSendFileAsync(MultipartFormDataContent data)
             => SendAsync<MultipartFormDataContent, SendResponse>(HttpMethod.Post, "/sends/file", data, true, true);
 
-        public Task<SendResponse> PutSend(string id, SendRequest request)
+        public Task<SendResponse> PutSendAsync(string id, SendRequest request)
             => SendAsync<SendRequest, SendResponse>(HttpMethod.Put, $"/sends/{id}", request, true, true);
 
-        public Task<SendResponse> PutSendRemovePassword(string id)
+        public Task<SendResponse> PutSendRemovePasswordAsync(string id)
             => SendAsync<object, SendResponse>(HttpMethod.Put, $"/sends/{id}", null, true, true);
 
-        public Task DeleteSend(string id)
+        public Task DeleteSendAsync(string id)
             => SendAsync<object, object>(HttpMethod.Delete, $"/sends/{id}", null, true, false);
 
         #endregion
