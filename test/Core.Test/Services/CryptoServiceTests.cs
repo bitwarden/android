@@ -2,10 +2,8 @@
 using System;
 using System.Threading.Tasks;
 using Xunit;
-using Bit.Core.Abstractions;
 using Bit.Core.Services;
 using Bit.Core.Enums;
-using Bit.Test.Common.AutoFixture;
 using Bit.Test.Common.AutoFixture.Attributes;
 using System.Text;
 
