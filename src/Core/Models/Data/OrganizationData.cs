@@ -26,7 +26,7 @@ namespace Bit.Core.Models.Data
             Seats = response.Seats;
             MaxCollections = response.MaxCollections;
             MaxStorageGb = response.MaxStorageGb;
-            Permissions = response.Permissions
+            Permissions = response.Permissions;
         }
 
         public string Id { get; set; }
