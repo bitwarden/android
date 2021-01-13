@@ -23,7 +23,7 @@ namespace Bit.Core.Models.Domain
         public int? MaxAccessCount { get; set; }
         public int AccessCount { get; set; }
         public DateTime RevisionDate { get; set; }
-        public DateTime ExpirationDate { get; set; }
+        public DateTime? ExpirationDate { get; set; }
         public DateTime DeletionDate { get; set; }
         public string Password { get; set; }
         public bool Disabled { get; set; }

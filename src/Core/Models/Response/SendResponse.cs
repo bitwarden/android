@@ -17,7 +17,7 @@ namespace Bit.Core.Models.Response
         public int? MaxAccessCount { get; set; }
         public int AccessCount { get; internal set; }
         public DateTime RevisionDate { get; internal set; }
-        public DateTime ExpirationDate { get; internal set; }
+        public DateTime? ExpirationDate { get; internal set; }
         public DateTime DeletionDate { get; internal set; }
         public string Password { get; set; }
         public bool Disable { get; set; }

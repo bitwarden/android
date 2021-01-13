@@ -66,7 +66,7 @@ namespace Bit.Core.Services
             ClearCache();
         }
 
-        public async Task DeleteWithServerAsyncs(string id)
+        public async Task DeleteWithServerAsync(string id)
         {
             await _apiService.DeleteSend(id);
             await DeleteAsync(id);
@@ -231,6 +231,13 @@ namespace Bit.Core.Services
             _decryptedSendsCache = null;
         }
 
+        public async Task RemovePasswordWithServerAsync(string id)
+        {
+            var response = await _apiService.PutSendRemovePassword(id);
+            var userId = await _userService.GetUserIdAsync();
+            await UpsertAsync(new SendData(response, userId));
+        }
+
         private class SendLocaleComparer : IComparer<SendView>
         {
             private readonly II18nService _i18nService;
@@ -260,5 +267,4 @@ namespace Bit.Core.Services
             }
         }
     }
-
 }

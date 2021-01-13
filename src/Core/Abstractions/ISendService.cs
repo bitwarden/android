@@ -19,6 +19,7 @@ namespace Bit.Core.Abstractions
         Task ReplaceAsync(Dictionary<string, SendData> sends);
         Task ClearAsync(string userId);
         Task DeleteAsync(params string[] ids);
-        Task DeleteWithServerAsyncs(string id);
+        Task DeleteWithServerAsync(string id);
+        Task RemovePasswordWithServerAsync(string id);
     }
 }

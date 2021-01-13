@@ -34,9 +34,12 @@ namespace Bit.Core.Models.View
         public int AccessCount = 0;
         public DateTime RevisionDate { get; set; }
         public DateTime DeletionDate { get; set; }
-        public DateTime ExpirationDate { get; set; }
+        public DateTime? ExpirationDate { get; set; }
         public string Password { get; set; }
         public bool Disabled { get; set; }
         public string UrlB64Key => Key == null ? null : CoreHelpers.Base64UrlEncode(Key);
+        public bool MaxAccessCountReached => MaxAccessCount.HasValue && AccessCount >= MaxAccessCount.Value;
+        public bool Expired => ExpirationDate.HasValue && ExpirationDate.Value <= DateTime.Now;
+        public bool PendingDelete => DeletionDate <= DateTime.Now;
     }
 }

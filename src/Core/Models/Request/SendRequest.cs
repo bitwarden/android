@@ -12,7 +12,7 @@ namespace Bit.Core.Models.Request
         public string Notes { get; set; }
         public string Key { get; set; }
         public int? MaxAccessCount { get; set; }
-        public DateTime ExpirationDate { get; set; }
+        public DateTime? ExpirationDate { get; set; }
         public DateTime DeletionDate { get; set; }
         public SendTextApi Text { get; set; }
         public SendFileApi File { get; set; }
