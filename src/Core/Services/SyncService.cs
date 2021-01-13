@@ -24,6 +24,7 @@ namespace Bit.Core.Services
         private readonly IStorageService _storageService;
         private readonly IMessagingService _messagingService;
         private readonly IPolicyService _policyService;
+        private readonly ISendService _sendService;
         private readonly Func<bool, Task> _logoutCallbackAsync;
 
         public SyncService(
@@ -37,6 +38,7 @@ namespace Bit.Core.Services
             IStorageService storageService,
             IMessagingService messagingService,
             IPolicyService policyService,
+            ISendService sendService,
             Func<bool, Task> logoutCallbackAsync)
         {
             _userService = userService;
@@ -49,6 +51,7 @@ namespace Bit.Core.Services
             _storageService = storageService;
             _messagingService = messagingService;
             _policyService = policyService;
+            _sendService = sendService;
             _logoutCallbackAsync = logoutCallbackAsync;
         }
 
@@ -104,7 +107,8 @@ namespace Bit.Core.Services
                 await SyncCollectionsAsync(response.Collections);
                 await SyncCiphersAsync(userId, response.Ciphers);
                 await SyncSettingsAsync(userId, response.Domains);
-                await SyncPolicies(response.Policies);
+                await SyncPoliciesAsync(response.Policies);
+                await SyncSendsAsync(userId, response.Sends);
                 await SetLastSyncAsync(now);
                 return SyncCompleted(true);
             }
@@ -363,11 +367,14 @@ namespace Bit.Core.Services
             await _settingsService.SetEquivalentDomainsAsync(eqDomains);
         }
 
-        private async Task SyncPolicies(List<PolicyResponse> response)
+        private async Task SyncPoliciesAsync(List<PolicyResponse> response)
         {
             var policies = response?.ToDictionary(p => p.Id, p => new PolicyData(p)) ??
                 new Dictionary<string, PolicyData>();
             await _policyService.Replace(policies);
         }
+
+        private Task SyncSendsAsync(string userId, List<SendResponse> sends)
+            => _sendService.ReplaceAsync(sends.ToDictionary(s => userId, s => new SendData(s, userId)));
     }
 }

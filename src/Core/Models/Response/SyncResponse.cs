@@ -10,5 +10,6 @@ namespace Bit.Core.Models.Response
         public List<CipherResponse> Ciphers { get; set; } = new List<CipherResponse>();
         public DomainsResponse Domains { get; set; }
         public List<PolicyResponse> Policies { get; set; } = new List<PolicyResponse>();
+        public List<SendResponse> Sends { get; set; } = new List<SendResponse>();
     }
 }

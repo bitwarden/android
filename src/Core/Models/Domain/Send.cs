@@ -28,6 +28,8 @@ namespace Bit.Core.Models.Domain
         public string Password { get; set; }
         public bool Disabled { get; set; }
 
+        public Send() { }
+
         public Send(SendData data, bool alreadyEncrypted = false) : base()
         {
             BuildDomainModel(this, data, new HashSet<string>{

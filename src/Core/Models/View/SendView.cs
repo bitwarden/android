@@ -27,7 +27,7 @@ namespace Bit.Core.Models.View
         public string Notes { get; set; }
         public byte[] Key { get; set; }
         public SymmetricCryptoKey CryptoKey { get; set; }
-        public SendType? Type { get; set; } = null;
+        public SendType Type { get; set; }
         public SendTextView Text { get; set; } = new SendTextView();
         public SendFileView File { get; set; } = new SendFileView();
         public int? MaxAccessCount { get; set; }

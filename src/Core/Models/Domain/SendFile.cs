@@ -13,6 +13,8 @@ namespace Bit.Core.Models.Domain
         public string SizeName { get; set; }
         public CipherString FileName { get; set; }
 
+        public SendFile() { }
+
         public SendFile(SendFileData file, bool alreadyEncrypted = false) : base()
         {
             Size = file.Size;

@@ -11,6 +11,8 @@ namespace Bit.Core.Models.Domain
         public CipherString Text { get; set; }
         public bool Hidden { get; set; }
 
+        public SendText() { }
+
         public SendText(SendTextData data, bool alreadyEncrypted = false) : base()
         {
             Hidden = data.Hidden;
