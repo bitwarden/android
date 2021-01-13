@@ -1,4 +1,5 @@
 ﻿using Bit.Core.Enums;
+using Bit.Core.Models.Data;
 
 namespace Bit.Core.Models.Response
 {
@@ -22,5 +23,6 @@ namespace Bit.Core.Models.Response
         public OrganizationUserStatusType Status { get; set; }
         public OrganizationUserType Type { get; set; }
         public bool Enabled { get; set; }
+        public Permissions Permissions { get; set; }
     }
 }

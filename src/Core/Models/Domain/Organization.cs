@@ -26,6 +26,7 @@ namespace Bit.Core.Models.Domain
             Seats = obj.Seats;
             MaxCollections = obj.MaxCollections;
             MaxStorageGb = obj.MaxStorageGb;
+            Permissions = obj.Permissions;
         }
 
         public string Id { get; set; }
@@ -45,6 +46,7 @@ namespace Bit.Core.Models.Domain
         public int Seats { get; set; }
         public int MaxCollections { get; set; }
         public short? MaxStorageGb { get; set; }
+        public Permissions Permissions { get; set; }
 
         public bool CanAccess
         {
@@ -76,5 +78,15 @@ namespace Bit.Core.Models.Domain
 
         public bool IsAdmin => Type == OrganizationUserType.Owner || Type == OrganizationUserType.Admin;
         public bool IsOwner => Type == OrganizationUserType.Owner;
+        public bool IsCustom => Type == OrganizationUserType.Custom;
+        public bool canAccessBusinessPortl => IsAdmin || Permissions.AccessBusinessPortal;
+        public bool canAccessEventLogs => IsAdmin || Permissions.AccessEventLogs;
+        public bool canAccessImportExport => IsAdmin || Permissions.AccessImportExport;
+        public bool canAccessReports => IsAdmin || Permissions.AccessReports;
+        public bool canManageAllCollections => IsAdmin || Permissions.ManageAllCollections;
+        public bool canManageAssignedCollections => IsManager || Permissions.ManageAssignedCollections;
+        public bool canManageGroups => IsAdmin || Permissions.ManageGroups;
+        public bool canManagePolicies => IsAdmin || Permissions.ManagePolicies;
+        public bool canManageUser => IsAdmin || Permissions.ManageUsers;
     }
 }

@@ -298,7 +298,7 @@ namespace Bit.App.Pages
                 if (org.Enabled && org.Status == OrganizationUserStatusType.Confirmed)
                 {
                     OwnershipOptions.Add(new KeyValuePair<string, string>(org.Name, org.Id));
-                    if (policies != null && org.UsePolicies && !org.IsAdmin && AllowPersonal)
+                    if (policies != null && org.UsePolicies && !org.canManagePolicies && AllowPersonal)
                     {
                         foreach (var policy in policies)
                         {

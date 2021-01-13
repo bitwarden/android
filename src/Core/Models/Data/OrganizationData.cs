@@ -26,6 +26,7 @@ namespace Bit.Core.Models.Data
             Seats = response.Seats;
             MaxCollections = response.MaxCollections;
             MaxStorageGb = response.MaxStorageGb;
+            Permissions = response.Permissions;
         }
 
         public string Id { get; set; }
@@ -45,5 +46,6 @@ namespace Bit.Core.Models.Data
         public int Seats { get; set; }
         public int MaxCollections { get; set; }
         public short? MaxStorageGb { get; set; }
+        public Permissions Permissions { get; set; }
     }
 }
