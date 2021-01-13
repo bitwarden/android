@@ -1,6 +1,4 @@
 using System;
-using Xunit;
-using Xunit.Sdk;
 using AutoFixture.Xunit2;
 using AutoFixture;
 
