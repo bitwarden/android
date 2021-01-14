@@ -81,22 +81,23 @@ namespace Bit.Core.Services
                 return;
             }
             // This only returns null
-            var vaultTimeout = _platformUtilsService.LockTimeout();
-            if (vaultTimeout == null)
+            var vaultTimeoutMinutes = _platformUtilsService.LockTimeout();
+            if (vaultTimeoutMinutes == null)
             {
-                vaultTimeout = await _storageService.GetAsync<int?>(Constants.VaultTimeoutKey);
+                vaultTimeoutMinutes = await _storageService.GetAsync<int?>(Constants.VaultTimeoutKey);
             }
-            if (vaultTimeout.GetValueOrDefault(-1) < 0)
-            {
-                return;
-            }
-            var lastActive = await _storageService.GetAsync<long?>(Constants.LastActiveKey);
-            if (lastActive == null)
+            if (vaultTimeoutMinutes.GetValueOrDefault(-1) < 0)
             {
                 return;
             }
-            var diff = _platformUtilsService.GetActiveTime() - lastActive;
-            if (diff >= vaultTimeout * 60)
+            var lastActiveTime = await _storageService.GetAsync<long?>(Constants.LastActiveTimeKey);
+            if (lastActiveTime == null)
+            {
+                return;
+            }
+            var diffMs = _platformUtilsService.GetActiveTime() - lastActiveTime;
+            var vaultTimeoutMs = vaultTimeoutMinutes * 60000;
+            if (diffMs >= vaultTimeoutMs)
             {
                 // Pivot based on saved action
                 var action = await _storageService.GetAsync<string>(Constants.VaultTimeoutActionKey);

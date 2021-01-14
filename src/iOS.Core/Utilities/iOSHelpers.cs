@@ -18,7 +18,7 @@ namespace Bit.iOS.Core.Utilities
         // includes sleep time.
         // ref: https://forums.xamarin.com/discussion/20006/access-to-sysctl-h
         // ref: https://github.com/XLabs/Xamarin-Forms-Labs/blob/master/src/Platform/XLabs.Platform.iOS/Device/AppleDevice.cs
-        public static long? GetSystemUpTimeSeconds()
+        public static long? GetSystemUpTimeMilliseconds()
         {
             long? uptime = null;
             IntPtr pLen = default, pStr = default;
@@ -34,7 +34,7 @@ namespace Bit.iOS.Core.Utilities
                 var now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
                 if (timeVal.sec > 0 && now > 0)
                 {
-                    uptime = now - timeVal.sec;
+                    uptime = (now - timeVal.sec) * 1000;
                 }
             }
             catch (Exception e)

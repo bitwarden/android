@@ -7,7 +7,7 @@
         public static string SyncOnRefreshKey = "syncOnRefresh";
         public static string VaultTimeoutKey = "lockOption";
         public static string VaultTimeoutActionKey = "vaultTimeoutAction";
-        public static string LastActiveKey = "lastActive";
+        public static string LastActiveTimeKey = "lastActiveTime";
         public static string BiometricUnlockKey = "fingerprintUnlock";
         public static string ProtectedPin = "protectedPin";
         public static string PinProtectedKey = "pinProtectedKey";

@@ -758,7 +758,7 @@ namespace Bit.Droid.Services
             // be monotonic, and continues to tick even when the CPU is in power saving modes, so is the recommend
             // basis for general purpose interval timing.
             // ref: https://developer.android.com/reference/android/os/SystemClock#elapsedRealtime()
-            return SystemClock.ElapsedRealtime() / 1000;
+            return SystemClock.ElapsedRealtime();
         }
 
         private bool DeleteDir(Java.IO.File dir)

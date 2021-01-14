@@ -21,7 +21,7 @@ namespace Bit.App.Services
             Constants.DisableFaviconKey,
             Constants.ClearClipboardKey,
             Constants.AutofillDisableSavePromptKey,
-            Constants.LastActiveKey,
+            Constants.LastActiveTimeKey,
             Constants.PushInitialPromptShownKey,
             Constants.LastFileCacheClearKey,
             Constants.PushLastRegistrationDateKey,
