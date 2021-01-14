@@ -63,6 +63,9 @@ jobs:
       - name: Restore packages
         run: nuget restore
 
+      - name: Run Core Tests
+        run: dotnet test test/Core.Test/Core.Test.csproj
+
       - name: Build Play Store publisher
         run: dotnet build ./store/google/Publisher/Publisher.csproj -p:Configuration=Release
 
