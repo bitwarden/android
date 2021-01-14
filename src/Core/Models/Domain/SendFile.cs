@@ -22,6 +22,6 @@ namespace Bit.Core.Models.Domain
         }
 
         public Task<SendFileView> DecryptAsync(SymmetricCryptoKey key)
-            => DecryptObjAsync(new SendFileView(), this, new HashSet<string> { "FileName" }, null, key);
+            => DecryptObjAsync(new SendFileView(this), this, new HashSet<string> { "FileName" }, null, key);
     }
 }

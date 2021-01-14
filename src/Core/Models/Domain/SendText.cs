@@ -20,6 +20,6 @@ namespace Bit.Core.Models.Domain
         }
 
         public Task<SendTextView> DecryptAsync(SymmetricCryptoKey key)
-            => DecryptObjAsync(new SendTextView(), this, new HashSet<string> { "Text" }, null, key);
+            => DecryptObjAsync(new SendTextView(this), this, new HashSet<string> { "Text" }, null, key);
     }
 }

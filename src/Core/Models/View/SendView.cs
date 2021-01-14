@@ -31,7 +31,7 @@ namespace Bit.Core.Models.View
         public SendTextView Text { get; set; } = new SendTextView();
         public SendFileView File { get; set; } = new SendFileView();
         public int? MaxAccessCount { get; set; }
-        public int AccessCount = 0;
+        public int AccessCount { get; set; }
         public DateTime RevisionDate { get; set; }
         public DateTime DeletionDate { get; set; }
         public DateTime? ExpirationDate { get; set; }
