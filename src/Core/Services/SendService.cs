@@ -212,8 +212,7 @@ namespace Bit.Core.Services
                         response = await _apiService.PostSendFileAsync(fd);
                         break;
                     default:
-                        response = new SendResponse();
-                        break;
+                        throw new NotImplementedException($"Cannot save unknown Send type {send.Type}");
                 }
                 send.Id = response.Id;
             }
