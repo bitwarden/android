@@ -4,7 +4,7 @@ namespace Bit.Core.Models.View
 {
     public class SendTextView : View
     {
-        public SendTextView() { }
+        public SendTextView() : base() { }
         public SendTextView(SendText text)
         {
             Hidden = text.Hidden;

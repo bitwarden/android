@@ -41,7 +41,7 @@ namespace Bit.Core.Models.Request
                     };
                     break;
                 case SendType.File:
-                    File = new SendFileApi()
+                    File = new SendFileApi
                     {
                         FileName = send.File?.FileName?.EncryptedString
                     };

@@ -26,7 +26,7 @@ namespace Bit.Core.Test.Services
 {
     public class SendServiceTests
     {
-        private string SEND_KEY(string userId) => SendService.SEND_KEY(userId);
+        private string GetSendKey(string userId) => SendService.GetSendKey(userId);
 
         [Theory]
         [InlineCustomAutoData(new[] { typeof(SutProviderCustomization), typeof(TextSendCustomization) })]
@@ -39,7 +39,7 @@ namespace Bit.Core.Test.Services
             await sutProvider.Sut.ReplaceAsync(actualSendDataDict);
 
             await sutProvider.GetDependency<IStorageService>()
-                .Received(1).SaveAsync(SEND_KEY(userId), actualSendDataDict);
+                .Received(1).SaveAsync(GetSendKey(userId), actualSendDataDict);
         }
 
         [Theory]
@@ -53,7 +53,7 @@ namespace Bit.Core.Test.Services
             var actualSendDataDict = sendDatas.ToDictionary(d => d.Id, d => d);
             sutProvider.GetDependency<IUserService>().GetUserIdAsync().Returns(userId);
             sutProvider.GetDependency<IStorageService>()
-                .GetAsync<Dictionary<string, SendData>>(SEND_KEY(userId)).Returns(actualSendDataDict);
+                .GetAsync<Dictionary<string, SendData>>(GetSendKey(userId)).Returns(actualSendDataDict);
 
             var idsToDelete = actualSendDataDict.Take(numberToDelete).Select(kvp => kvp.Key).ToArray();
             var expectedSends = actualSendDataDict.Skip(numberToDelete).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
@@ -62,7 +62,7 @@ namespace Bit.Core.Test.Services
 
 
             await sutProvider.GetDependency<IStorageService>().Received(1)
-                .SaveAsync(SEND_KEY(userId),
+                .SaveAsync(GetSendKey(userId),
                     Arg.Is<Dictionary<string, SendData>>(s => TestHelper.AssertEqualExpectedPredicate(expectedSends)(s)));
         }
 
@@ -71,7 +71,7 @@ namespace Bit.Core.Test.Services
         {
             await sutProvider.Sut.ClearAsync(userId);
 
-            await sutProvider.GetDependency<IStorageService>().Received(1).RemoveAsync(SEND_KEY(userId));
+            await sutProvider.GetDependency<IStorageService>().Received(1).RemoveAsync(GetSendKey(userId));
         }
 
         [Theory]
@@ -90,7 +90,7 @@ namespace Bit.Core.Test.Services
 
             await sutProvider.GetDependency<IApiService>().Received(1).DeleteSendAsync(idToDelete);
             await sutProvider.GetDependency<IStorageService>().Received(1)
-                .SaveAsync(SEND_KEY(userId),
+                .SaveAsync(GetSendKey(userId),
                     Arg.Is<Dictionary<string, SendData>>(s => TestHelper.AssertEqualExpectedPredicate(expectedSends)(s)));
         }
 
@@ -101,7 +101,7 @@ namespace Bit.Core.Test.Services
         {
             var sendDataDict = sendDatas.ToDictionary(d => d.Id, d => d);
             sutProvider.GetDependency<IUserService>().GetUserIdAsync().Returns(userId);
-            sutProvider.GetDependency<IStorageService>().GetAsync<Dictionary<string, SendData>>(SEND_KEY(userId)).Returns(sendDataDict);
+            sutProvider.GetDependency<IStorageService>().GetAsync<Dictionary<string, SendData>>(GetSendKey(userId)).Returns(sendDataDict);
 
             foreach (var dataKvp in sendDataDict)
             {
@@ -116,7 +116,7 @@ namespace Bit.Core.Test.Services
         {
             var sendDataDict = sendDatas.ToDictionary(d => d.Id, d => d);
             sutProvider.GetDependency<IUserService>().GetUserIdAsync().Returns(userId);
-            sutProvider.GetDependency<IStorageService>().GetAsync<Dictionary<string, SendData>>(SEND_KEY(userId)).Returns(sendDataDict);
+            sutProvider.GetDependency<IStorageService>().GetAsync<Dictionary<string, SendData>>(GetSendKey(userId)).Returns(sendDataDict);
 
             var actual = await sutProvider.Sut.GetAsync(Guid.NewGuid().ToString());
 
@@ -130,7 +130,7 @@ namespace Bit.Core.Test.Services
         {
             var sendDataDict = sendDatas.ToDictionary(d => d.Id, d => d);
             sutProvider.GetDependency<IUserService>().GetUserIdAsync().Returns(userId);
-            sutProvider.GetDependency<IStorageService>().GetAsync<Dictionary<string, SendData>>(SEND_KEY(userId)).Returns(sendDataDict);
+            sutProvider.GetDependency<IStorageService>().GetAsync<Dictionary<string, SendData>>(GetSendKey(userId)).Returns(sendDataDict);
 
             var allExpected = sendDataDict.Select(kvp => new Send(kvp.Value));
             var allActual = await sutProvider.Sut.GetAllAsync();
@@ -150,7 +150,7 @@ namespace Bit.Core.Test.Services
             ServiceContainer.Register("cryptoService", sutProvider.GetDependency<ICryptoService>());
             sutProvider.GetDependency<II18nService>().StringComparer.Returns(StringComparer.CurrentCulture);
             sutProvider.GetDependency<IUserService>().GetUserIdAsync().Returns(userId);
-            sutProvider.GetDependency<IStorageService>().GetAsync<Dictionary<string, SendData>>(SEND_KEY(userId)).Returns(sendDataDict);
+            sutProvider.GetDependency<IStorageService>().GetAsync<Dictionary<string, SendData>>(GetSendKey(userId)).Returns(sendDataDict);
 
             var actual = await sutProvider.Sut.GetAllDecryptedAsync();
 
@@ -275,7 +275,7 @@ namespace Bit.Core.Test.Services
         {
             var initialSendDict = initialSends.ToDictionary(s => s.Id, s => s);
             sutProvider.GetDependency<IUserService>().GetUserIdAsync().Returns(userId);
-            sutProvider.GetDependency<IStorageService>().GetAsync<Dictionary<string, SendData>>(SEND_KEY(userId)).Returns(initialSendDict);
+            sutProvider.GetDependency<IStorageService>().GetAsync<Dictionary<string, SendData>>(GetSendKey(userId)).Returns(initialSendDict);
 
             var updatedSends = CoreHelpers.Clone(initialSendDict);
             foreach (var kvp in updatedSends)
@@ -295,7 +295,7 @@ namespace Bit.Core.Test.Services
                 }
                 return true;
             };
-            await sutProvider.GetDependency<IStorageService>().Received(1).SaveAsync(SEND_KEY(userId), Arg.Is<Dictionary<string, SendData>>(d => matchSendsPredicate(d)));
+            await sutProvider.GetDependency<IStorageService>().Received(1).SaveAsync(GetSendKey(userId), Arg.Is<Dictionary<string, SendData>>(d => matchSendsPredicate(d)));
         }
 
         [Theory]
@@ -305,7 +305,7 @@ namespace Bit.Core.Test.Services
         {
             var initialSendDict = initialSends.ToDictionary(s => s.Id, s => s);
             sutProvider.GetDependency<IUserService>().GetUserIdAsync().Returns(userId);
-            sutProvider.GetDependency<IStorageService>().GetAsync<Dictionary<string, SendData>>(SEND_KEY(userId)).Returns(initialSendDict);
+            sutProvider.GetDependency<IStorageService>().GetAsync<Dictionary<string, SendData>>(GetSendKey(userId)).Returns(initialSendDict);
 
             var expectedDict = CoreHelpers.Clone(initialSendDict).Concat(newSends.Select(s => new KeyValuePair<string, SendData>(s.Id, s)));
 
@@ -321,10 +321,9 @@ namespace Bit.Core.Test.Services
                 }
                 return true;
             };
-            await sutProvider.GetDependency<IStorageService>().Received(1).SaveAsync(SEND_KEY(userId), Arg.Is<Dictionary<string, SendData>>(d => matchSendsPredicate(d)));
+            await sutProvider.GetDependency<IStorageService>().Received(1).SaveAsync(GetSendKey(userId), Arg.Is<Dictionary<string, SendData>>(d => matchSendsPredicate(d)));
         }
 
-        // TODO test encrypt
         [Theory]
         [InlineCustomAutoData(new[] { typeof(SutProviderCustomization), typeof(SymmetricCryptoKeyCustomization), typeof(TextSendCustomization) })]
         [InlineCustomAutoData(new[] { typeof(SutProviderCustomization), typeof(SymmetricCryptoKeyCustomization), typeof(FileSendCustomization) })]

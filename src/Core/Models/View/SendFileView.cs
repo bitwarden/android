@@ -5,7 +5,7 @@ namespace Bit.Core.Models.View
 {
     public class SendFileView : View
     {
-        public SendFileView() { }
+        public SendFileView() : base() { }
 
         public SendFileView(SendFile file)
         {

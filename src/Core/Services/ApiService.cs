@@ -221,7 +221,7 @@ namespace Bit.Core.Services
             SendAsync<object, SendResponse>(HttpMethod.Get, $"/sends/{id}", null, true, true);
 
         public Task<SendResponse> PostSendAsync(SendRequest request) =>
-            SendAsync<SendRequest, SendResponse>(HttpMethod.Post, $"/sends", request, true, true);
+            SendAsync<SendRequest, SendResponse>(HttpMethod.Post, "/sends", request, true, true);
 
         public Task<SendResponse> PostSendFileAsync(MultipartFormDataContent data) =>
             SendAsync<MultipartFormDataContent, SendResponse>(HttpMethod.Post, "/sends/file", data, true, true);

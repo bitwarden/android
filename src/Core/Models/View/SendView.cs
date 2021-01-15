@@ -7,7 +7,7 @@ namespace Bit.Core.Models.View
 {
     public class SendView : View
     {
-        public SendView(Send send)
+        public SendView(Send send) : base()
         {
             Id = send.Id;
             AccessId = send.AccessId;
@@ -39,7 +39,7 @@ namespace Bit.Core.Models.View
         public bool Disabled { get; set; }
         public string UrlB64Key => Key == null ? null : CoreHelpers.Base64UrlEncode(Key);
         public bool MaxAccessCountReached => MaxAccessCount.HasValue && AccessCount >= MaxAccessCount.Value;
-        public bool Expired => ExpirationDate.HasValue && ExpirationDate.Value <= DateTime.Now;
-        public bool PendingDelete => DeletionDate <= DateTime.Now;
+        public bool Expired => ExpirationDate.HasValue && ExpirationDate.Value <= DateTime.UtcNow;
+        public bool PendingDelete => DeletionDate <= DateTime.UtcNow;
     }
 }
