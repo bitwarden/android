@@ -69,15 +69,8 @@ namespace Bit.Core.Models.Domain
 
             var cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
 
-            try
-            {
-                view.Key = await cryptoService.DecryptToBytesAsync(Key, null);
-                view.CryptoKey = await cryptoService.MakeSendKeyAsync(view.Key);
-            }
-            catch (Exception e)
-            {
-                // TODO: error?
-            }
+            view.Key = await cryptoService.DecryptToBytesAsync(Key, null);
+            view.CryptoKey = await cryptoService.MakeSendKeyAsync(view.Key);
 
             await DecryptObjAsync(view, this, new HashSet<string> { "Name", "Notes" }, null, view.CryptoKey);
 
