@@ -11,7 +11,7 @@ namespace Bit.Core.Models.Domain
         public CipherString Text { get; set; }
         public bool Hidden { get; set; }
 
-        public SendText() { }
+        public SendText() : base() { }
 
         public SendText(SendTextData data, bool alreadyEncrypted = false) : base()
         {
@@ -19,7 +19,7 @@ namespace Bit.Core.Models.Domain
             BuildDomainModel(this, data, new HashSet<string> { "Text" }, alreadyEncrypted);
         }
 
-        public Task<SendTextView> DecryptAsync(SymmetricCryptoKey key)
-            => DecryptObjAsync(new SendTextView(this), this, new HashSet<string> { "Text" }, null, key);
+        public Task<SendTextView> DecryptAsync(SymmetricCryptoKey key) =>
+            DecryptObjAsync(new SendTextView(this), this, new HashSet<string> { "Text" }, null, key);
     }
 }

@@ -334,12 +334,12 @@ namespace Bit.Core.Test.Services
             var prefixBytes = Encoding.UTF8.GetBytes(prefix);
 
 
-            byte[] getPbkdf(string password, byte[] key)
-                => prefixBytes.Concat(Encoding.UTF8.GetBytes(password)).Concat(key).ToArray();
-            CipherString encryptBytes(byte[] secret, SymmetricCryptoKey key)
-                => new CipherString($"{prefix}{Convert.ToBase64String(secret)}{Convert.ToBase64String(key.Key)}");
-            CipherString encrypt(string secret, SymmetricCryptoKey key)
-                => new CipherString($"{prefix}{secret}{Convert.ToBase64String(key.Key)}");
+            byte[] getPbkdf(string password, byte[] key) =>
+                prefixBytes.Concat(Encoding.UTF8.GetBytes(password)).Concat(key).ToArray();
+            CipherString encryptBytes(byte[] secret, SymmetricCryptoKey key) =>
+                new CipherString($"{prefix}{Convert.ToBase64String(secret)}{Convert.ToBase64String(key.Key)}");
+            CipherString encrypt(string secret, SymmetricCryptoKey key) =>
+                new CipherString($"{prefix}{secret}{Convert.ToBase64String(key.Key)}");
 
             sutProvider.GetDependency<ICryptoFunctionService>().Pbkdf2Async(Arg.Any<string>(), Arg.Any<byte[]>(), Arg.Any<CryptoHashAlgorithm>(), Arg.Any<int>())
                 .Returns(info => getPbkdf((string)info[0], (byte[])info[1]));

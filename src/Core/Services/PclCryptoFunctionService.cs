@@ -44,14 +44,14 @@ namespace Bit.Core.Services
             return Task.FromResult(_cryptoPrimitiveService.Pbkdf2(password, salt, algorithm, iterations));
         }
 
-        public async Task<byte[]> HkdfAsync(byte[] ikm, string salt, string info, int outputByteSize, HkdfAlgorithm algorithm)
-            => await HkdfAsync(ikm, Encoding.UTF8.GetBytes(salt), Encoding.UTF8.GetBytes(info), outputByteSize, algorithm);
+        public async Task<byte[]> HkdfAsync(byte[] ikm, string salt, string info, int outputByteSize, HkdfAlgorithm algorithm) =>
+            await HkdfAsync(ikm, Encoding.UTF8.GetBytes(salt), Encoding.UTF8.GetBytes(info), outputByteSize, algorithm);
 
-        public async Task<byte[]> HkdfAsync(byte[] ikm, byte[] salt, string info, int outputByteSize, HkdfAlgorithm algorithm)
-            => await HkdfAsync(ikm, salt, Encoding.UTF8.GetBytes(info), outputByteSize, algorithm);
+        public async Task<byte[]> HkdfAsync(byte[] ikm, byte[] salt, string info, int outputByteSize, HkdfAlgorithm algorithm) =>
+            await HkdfAsync(ikm, salt, Encoding.UTF8.GetBytes(info), outputByteSize, algorithm);
 
-        public async Task<byte[]> HkdfAsync(byte[] ikm, string salt, byte[] info, int outputByteSize, HkdfAlgorithm algorithm)
-            => await HkdfAsync(ikm, Encoding.UTF8.GetBytes(salt), info, outputByteSize, algorithm);
+        public async Task<byte[]> HkdfAsync(byte[] ikm, string salt, byte[] info, int outputByteSize, HkdfAlgorithm algorithm) =>
+            await HkdfAsync(ikm, Encoding.UTF8.GetBytes(salt), info, outputByteSize, algorithm);
 
         public async Task<byte[]> HkdfAsync(byte[] ikm, byte[] salt, byte[] info, int outputByteSize, HkdfAlgorithm algorithm)
         {
@@ -59,8 +59,8 @@ namespace Bit.Core.Services
             return await HkdfExpandAsync(prk, info, outputByteSize, algorithm);
         }
 
-        public async Task<byte[]> HkdfExpandAsync(byte[] prk, string info, int outputByteSize, HkdfAlgorithm algorithm)
-            => await HkdfExpandAsync(prk, Encoding.UTF8.GetBytes(info), outputByteSize, algorithm);
+        public async Task<byte[]> HkdfExpandAsync(byte[] prk, string info, int outputByteSize, HkdfAlgorithm algorithm) =>
+            await HkdfExpandAsync(prk, Encoding.UTF8.GetBytes(info), outputByteSize, algorithm);
 
         // ref: https://tools.ietf.org/html/rfc5869
         public async Task<byte[]> HkdfExpandAsync(byte[] prk, byte[] info, int outputByteSize, HkdfAlgorithm algorithm)

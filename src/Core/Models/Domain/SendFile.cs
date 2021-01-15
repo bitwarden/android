@@ -13,7 +13,7 @@ namespace Bit.Core.Models.Domain
         public string SizeName { get; set; }
         public CipherString FileName { get; set; }
 
-        public SendFile() { }
+        public SendFile() : base() { }
 
         public SendFile(SendFileData file, bool alreadyEncrypted = false) : base()
         {
@@ -21,7 +21,7 @@ namespace Bit.Core.Models.Domain
             BuildDomainModel(this, file, new HashSet<string> { "Id", "Url", "SizeName", "FileName" }, alreadyEncrypted, new HashSet<string> { "Id", "Url", "SizeName" });
         }
 
-        public Task<SendFileView> DecryptAsync(SymmetricCryptoKey key)
-            => DecryptObjAsync(new SendFileView(this), this, new HashSet<string> { "FileName" }, null, key);
+        public Task<SendFileView> DecryptAsync(SymmetricCryptoKey key) =>
+            DecryptObjAsync(new SendFileView(this), this, new HashSet<string> { "FileName" }, null, key);
     }
 }

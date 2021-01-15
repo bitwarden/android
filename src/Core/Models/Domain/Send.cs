@@ -28,7 +28,7 @@ namespace Bit.Core.Models.Domain
         public string Password { get; set; }
         public bool Disabled { get; set; }
 
-        public Send() { }
+        public Send() : base() { }
 
         public Send(SendData data, bool alreadyEncrypted = false) : base()
         {
@@ -38,7 +38,7 @@ namespace Bit.Core.Models.Domain
                 "UserId",
                 "Name",
                 "Notes",
-                "Key"
+                "Key",
             }, alreadyEncrypted, new HashSet<string> { "Id", "AccessId", "UserId" });
 
             Type = data.Type;

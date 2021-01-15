@@ -24,8 +24,8 @@ namespace Bit.Test.Common.AutoFixture
             _fixture.Customizations.Add(_constructorParameterRelay);
         }
 
-        public SutProvider<TSut> SetDependency<T>(T dependency, string parameterName = "")
-            => SetDependency(typeof(T), dependency, parameterName);
+        public SutProvider<TSut> SetDependency<T>(T dependency, string parameterName = "") =>
+            SetDependency(typeof(T), dependency, parameterName);
         public SutProvider<TSut> SetDependency(Type dependencyType, object dependency, string parameterName = "")
         {
             if (_dependencies.ContainsKey(dependencyType))
@@ -80,8 +80,8 @@ namespace Bit.Test.Common.AutoFixture
             return this;
         }
 
-        private bool DependencyIsSet(Type dependencyType, string parameterName = "")
-            => _dependencies.ContainsKey(dependencyType) && (_dependencies[dependencyType].ContainsKey(parameterName) || _dependencies[dependencyType].ContainsKey("")) ;
+        private bool DependencyIsSet(Type dependencyType, string parameterName = "") =>
+            _dependencies.ContainsKey(dependencyType) && (_dependencies[dependencyType].ContainsKey(parameterName) || _dependencies[dependencyType].ContainsKey(""));
 
         private object GetDefault(Type type) => type.IsValueType ? Activator.CreateInstance(type) : null;
 
