@@ -185,7 +185,7 @@ namespace Bit.App
                 var isLocked = await _vaultTimeoutService.IsLockedAsync();
                 if (!isLocked)
                 {
-                    await _storageService.SaveAsync(Constants.LastActiveKey, _deviceActionService.GetActiveTime());
+                    await _storageService.SaveAsync(Constants.LastActiveTimeKey, _deviceActionService.GetActiveTime());
                 }
                 SetTabsPageFromAutofill(isLocked);
                 await SleptAsync();
@@ -211,6 +211,7 @@ namespace Bit.App
         private async void ResumedAsync()
         {
             await _vaultTimeoutService.CheckVaultTimeoutAsync();
+            _messagingService.Send("cancelVaultTimeoutTimer");
             _messagingService.Send("startEventTimer");
             await ClearCacheIfNeededAsync();
             Prime();
@@ -302,7 +303,11 @@ namespace Bit.App
                 vaultTimeout = await _storageService.GetAsync<int?>(Constants.VaultTimeoutKey);
             }
             vaultTimeout = vaultTimeout.GetValueOrDefault(-1);
-            if (vaultTimeout == 0)
+            if (vaultTimeout > 0)
+            {
+                _messagingService.Send("scheduleVaultTimeoutTimer", vaultTimeout.Value);
+            }
+            else if (vaultTimeout == 0)
             {
                 var action = await _storageService.GetAsync<string>(Constants.VaultTimeoutActionKey);
                 if (action == "logOut")

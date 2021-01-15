@@ -201,7 +201,7 @@ namespace Bit.iOS
             UIApplication.SharedApplication.KeyWindow.BringSubviewToFront(view);
             UIApplication.SharedApplication.KeyWindow.EndEditing(true);
             UIApplication.SharedApplication.SetStatusBarHidden(true, false);
-            _storageService.SaveAsync(Constants.LastActiveKey, _deviceActionService.GetActiveTime());
+            _storageService.SaveAsync(Constants.LastActiveTimeKey, _deviceActionService.GetActiveTime());
             _messagingService.Send("slept");
             base.DidEnterBackground(uiApplication);
         }

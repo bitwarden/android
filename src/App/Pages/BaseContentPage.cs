@@ -118,7 +118,7 @@ namespace Bit.App.Pages
         private void SaveActivity()
         {
             SetServices();
-            _storageService.SaveAsync(Constants.LastActiveKey, _deviceActionService.GetActiveTime());
+            _storageService.SaveAsync(Constants.LastActiveTimeKey, _deviceActionService.GetActiveTime());
         }
     }
 }
