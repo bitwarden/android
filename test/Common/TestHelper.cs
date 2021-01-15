@@ -9,18 +9,6 @@ namespace Bit.Test.Common
 {
     public static class TestHelper
     {
-        public static string GetEmbeddedResource(string resourceName)
-        {
-            var assembly = Assembly.GetCallingAssembly();
-
-            var resources = assembly.GetManifestResourceNames();
-            using (var stream = assembly.GetManifestResourceStream(resources.First(r => r.EndsWith(resourceName))))
-            using (var reader = new StreamReader(stream))
-            {
-                return reader.ReadToEnd();
-            }
-        }
-
         public static void AssertPropertyEqual(object expected, object actual, params string[] excludedPropertyStrings)
         {
             var relevantExcludedProperties = excludedPropertyStrings.Where(name => !name.Contains('.')).ToList();
