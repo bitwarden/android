@@ -28,8 +28,13 @@ namespace Bit.Core.Services
         private Task<List<SendView>> _getAllDecryptedTask;
 
 
-        public SendService(ICryptoService cryptoService, IUserService userService, IApiService apiService,
-            IStorageService storageService, II18nService i18nService, ICryptoFunctionService cryptoFunctionService)
+        public SendService(
+            ICryptoService cryptoService,
+            IUserService userService,
+            IApiService apiService,
+            IStorageService storageService,
+            II18nService i18nService,
+            ICryptoFunctionService cryptoFunctionService)
         {
             _cryptoService = cryptoService;
             _userService = userService;
