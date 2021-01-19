@@ -23,6 +23,6 @@ namespace Bit.Core.Models.Response
         public OrganizationUserStatusType Status { get; set; }
         public OrganizationUserType Type { get; set; }
         public bool Enabled { get; set; }
-        public Permissions Permissions { get; set; }
+        public Permissions Permissions { get; set; } = new Permissions();
     }
 }

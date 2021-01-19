@@ -26,7 +26,7 @@ namespace Bit.Core.Models.Domain
             Seats = obj.Seats;
             MaxCollections = obj.MaxCollections;
             MaxStorageGb = obj.MaxStorageGb;
-            Permissions = obj.Permissions;
+            Permissions = obj.Permissions ?? new Permissions();
         }
 
         public string Id { get; set; }
@@ -46,7 +46,7 @@ namespace Bit.Core.Models.Domain
         public int Seats { get; set; }
         public int MaxCollections { get; set; }
         public short? MaxStorageGb { get; set; }
-        public Permissions Permissions { get; set; }
+        public Permissions Permissions { get; set; } = new Permissions();
 
         public bool CanAccess
         {
