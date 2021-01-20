@@ -122,15 +122,15 @@
     <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Bitwarden este cea mai ușoară și cea mai sigură metodă de a stoca toate autentificările și parolele, în timp ce le păstrați sincronizate între toate dispozitivele dvs. Extensia de aplicații Bitwarden vă permite să vă conectați rapid la orice sait prin Safari sau Chrome și este acceptată de sute de alte aplicații populare.
+    <value>Bitwarden este cel mai simplu și mai sigur mod de a stoca toate autentificările și parolele dvs., păstrându-le în mod convenabil sincronizate între toate dispozitivele. Aplicația Bitwarden vă permite să vă conectați rapid la orice sait prin Safari sau Chrome și este acceptată de sute de alte aplicații populare.
 
-Furtul de parole este o problemă serioasă. Saiturile web și aplicațiile pe care le utilizați sunt atacate în fiecare zi. Se înregistrează încălcări ale securității și parolele dvs. sunt furate. Când reutilizați aceleași parole între aplicații și saituri web, hackerii pot accesa cu ușurință e-mailurile, conturile bancare și alte conturi importante.
+Furtul de parole este o problemă serioasă. Saiturile web și aplicațiile pe care le utilizați sunt atacate în fiecare zi. Au loc încălcări ale securității și parolele dvs. sunt furate. Când reutilizați aceleași parole pe aplicații și saituri web, hackerii pot accesa cu ușurință e-mailurile, conturile bancare și alte conturi importante.
 
-Experții în securitate vă recomandă să utilizați o parolă diferită, generată aleatoriu pentru fiecare cont pe care îl creați. Dar cum gestionați toate aceste parole? Bitwarden vă ușurează crearea, stocarea și accesarea parolelor.
+Experții în securitate vă recomandă să utilizați câte o parolă diferită, generată aleatoriu, pentru fiecare cont pe care îl utilizați. Dar cum veți gestiona toate aceste parole? Bitwarden vă ușurează crearea, stocarea și accesarea acestor parole.
 
-Bitwarden stochează toate autentificările dvs. într-un seif criptat care se sincronizează pe toate dispozitivele dvs. Deoarece este complet criptat numai dvs. aveți acces la date. Nici măcar echipa Bitwarden nu poate citi datele dvs., chiar dacă ar vrea. Datele dvs. sunt sigilate cu criptare bit AES-256, salted hashing și PBKDF2 SHA-256.
+Bitwarden stochează toate date dvs. de autentificare într-un seif criptat care se sincronizează pe toate dispozitivele dvs. Deoarece seiful este complet criptat înainte de a fi transmis prin internet, numai dvs. aveți acces la date. Nici măcar echipa Bitwarden nu poate citi datele dvs., chiar dacă ar dori. Datele dvs. sunt sigilate prin criptare cu AES-256 biți, salted hashing și PBKDF2 SHA-256.
 
-Bitwarden este un software 100% open source. Codul sursă pentru Bitwarden este găzduit pe GitHub și toată lumea este liberă să examineze, să verifice și să contribuie la sursa de coduri Bitwarden.</value>
+Bitwarden este un software 100% "open source". Codul sursă pentru Bitwarden este găzduit pe GitHub și toată lumea este liberă să îl revizuiască, să îl verifice și să contribuie la dezvoltarea lui.</value>
     <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
@@ -150,6 +150,6 @@ Bitwarden este un software 100% open source. Codul sursă pentru Bitwarden este 
     <value>Auto-completează autentificările din Safari, Chrome și din alte aplicații</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Sincronizare și accesare a seifului dvs. de pe multiple dispozitive</value>
+    <value>Sincronizează și accesează seiful dvs. de pe multiple dispozitive</value>
   </data>
 </root>
