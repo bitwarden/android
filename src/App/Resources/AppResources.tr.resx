@@ -1603,10 +1603,10 @@
     <value>Bu dışa aktarımda kasanızdaki ögeler şifrelenmemiş olacak. Çıkan dosyayı güvensiz yöntemlerle depolamayın veya yollamayın (örneğin e-posta ile). Dosyayı ise kullandıktan sonra hemen silin.</value>
   </data>
   <data name="EncExportVaultWarning" xml:space="preserve">
-    <value>This export encrypts your data using your account's encryption key. If you ever rotate your account's encryption key you should export again since you will not be able to decrypt this export file.</value>
+    <value>Bu dışa aktarma, hesabınızın şifreleme anahtarını kullanarak verilerinizi şifreler. Hesabınızın şifreleme anahtarını döndürürseniz, bu dışa aktarma dosyasının şifresini çözemeyeceğiniz için tekrardan dışa aktarmanız gerekecektir.</value>
   </data>
   <data name="ExportVaultConfirmationTitle" xml:space="preserve">
-    <value>Confirm Vault Export</value>
+    <value>Kasayı Dışa Aktarmayı Onaylayın</value>
     <comment>Title for the alert to confirm vault exports.</comment>
   </data>
   <data name="Warning" xml:space="preserve">
@@ -1685,7 +1685,7 @@
     <value>Biyometrik değişiklik algılandı, tekrar etkinleştirmek için Ana Parola kullanarak oturum açın.</value>
   </data>
   <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Biometric unlock for autofill disabled pending verification of master password.</value>
+    <value>Otomatik doldurma için biyometrik kilit açma seçeneği, ana şifrenin doğrulanması için devre dışı bırakıldı.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Yenileme sırasında senkronizasyonu etkinleştir</value>
@@ -1793,6 +1793,9 @@
     <value>Etkinleştirilirse, erişilebilirlik, Android Otomatik Doldurma Çerçevesini desteklemeyen eski uygulamalar için Otomatik Doldurma Hizmetini genişletmek üzere bir açılır pencere gösterecektir.</value>
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
-    <value>Due to an Enterprise Policy, you are restricted from saving items to your personal vault. Change the Ownership option to an organization and choose from available Collections.</value>
+    <value>Bir Kurumsal Politika nedeniyle, kişisel kasanıza öğeleri kaydetmeniz kısıtlanmıştır. Sahiplik seçeneğini bir kuruluş olarak değiştirin ve mevcut Koleksiyonlar arasından seçim yapın.</value>
+  </data>
+  <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
+    <value>An organization policy is affecting your ownership options.</value>
   </data>
 </root>
