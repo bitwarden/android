@@ -1603,10 +1603,10 @@
     <value>O arquivo exportado contém os dados do seu cofre em um formato não encriptado. Você não deve armazenar ou enviar o arquivo exportado através de canais inseguros (como por e-mail). Exclua-o imediatamente quando terminar de utilizá-lo.</value>
   </data>
   <data name="EncExportVaultWarning" xml:space="preserve">
-    <value>This export encrypts your data using your account's encryption key. If you ever rotate your account's encryption key you should export again since you will not be able to decrypt this export file.</value>
+    <value>Esta exportação criptografa seus dados usando a chave de criptografia da sua conta. Se você rotacionar a chave de criptografia da sua conta, você deve exportar novamente, já que você não será capaz de descriptografar este arquivo de exportação.</value>
   </data>
   <data name="ExportVaultConfirmationTitle" xml:space="preserve">
-    <value>Confirm Vault Export</value>
+    <value>Confirmar exportação de cofre</value>
     <comment>Title for the alert to confirm vault exports.</comment>
   </data>
   <data name="Warning" xml:space="preserve">
@@ -1685,7 +1685,7 @@
     <value>Alteração biométrica detectada, faça o login usando a Senha Mestra para ativar novamente.</value>
   </data>
   <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Biometric unlock for autofill disabled pending verification of master password.</value>
+    <value>Desbloqueio biométrico para preenchimento automático desabilitado a verificação pendente da senha mestra.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Ativar sincronização ao atualizar</value>
@@ -1794,6 +1794,9 @@
     <value>Se ativado, a acessibilidade mostrará um pop-up para aumentar o Serviço de Autopreenchimento para aplicativos mais antigos que não suportam a Estrutura de Autopreenchimento do Android.</value>
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
-    <value>Due to an Enterprise Policy, you are restricted from saving items to your personal vault. Change the Ownership option to an organization and choose from available Collections.</value>
+    <value>Devido a uma Política Empresarial, você está restrito de salvar itens para seu cofre pessoal. Altere a opção de propriedade para uma organização e escolha entre Coleções disponíveis.</value>
+  </data>
+  <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
+    <value>An organization policy is affecting your ownership options.</value>
   </data>
 </root>

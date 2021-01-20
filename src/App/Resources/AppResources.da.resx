@@ -1603,10 +1603,10 @@
     <value>Denne eksport indeholder dine boksdata i en ukrypteret form. Du bør ikke gemme eller sende den eksporterede fil via usikre kanaler (f.eks. e-mail). Slet den straks efter at du er færdig med at bruge den.</value>
   </data>
   <data name="EncExportVaultWarning" xml:space="preserve">
-    <value>This export encrypts your data using your account's encryption key. If you ever rotate your account's encryption key you should export again since you will not be able to decrypt this export file.</value>
+    <value>Denne eksport krypterer dine data vha. din kontos krypteringsnøgle. Roterer du på et tidspunkt denne krypteringsnøgle, skal du eksportere igen, da du ellers ikke vil kunne dekryptere denne eksportfil.</value>
   </data>
   <data name="ExportVaultConfirmationTitle" xml:space="preserve">
-    <value>Confirm Vault Export</value>
+    <value>Bekræft eksport af boks</value>
     <comment>Title for the alert to confirm vault exports.</comment>
   </data>
   <data name="Warning" xml:space="preserve">
@@ -1682,10 +1682,10 @@
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Biometrisk ændring fundet. Log ind vha. hovedadgangskode for at aktivere igen.</value>
+    <value>Biometrisk oplåsning deaktiveret - afventer verifikation af hovedadgangskoden.</value>
   </data>
   <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Biometric unlock for autofill disabled pending verification of master password.</value>
+    <value>Biometrisk oplåsning til autoudfyldning deaktiveret - afventer verifikation af hovedadgangskoden.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Aktivér synk ved opfriskning</value>
@@ -1793,6 +1793,9 @@
     <value>Hvis aktiveret, vil tilgængelighedstjenesten vise en popup for at udvide Autoudfyldtjenesten for ældre apps, som ikke understøtter Android Autoudfyld Framework.</value>
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
-    <value>Due to an Enterprise Policy, you are restricted from saving items to your personal vault. Change the Ownership option to an organization and choose from available Collections.</value>
+    <value>Grundet en virksomhedspolitik kan du ikke gemme emner i din personlige boks. Skift ejerskabsindstillingen til en organisation, og vælg fra de tilgængelige samlinger.</value>
+  </data>
+  <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
+    <value>An organization policy is affecting your ownership options.</value>
   </data>
 </root>

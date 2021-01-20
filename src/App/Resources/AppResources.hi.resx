@@ -866,7 +866,7 @@
     <value>Authenticator Key (TOTP)</value>
   </data>
   <data name="VerificationCodeTotp" xml:space="preserve">
-    <value>Verification Code (TOTP)</value>
+    <value>सत्यापन कोड (TOTP)</value>
     <comment>Totp code label</comment>
   </data>
   <data name="AuthenticatorKeyAdded" xml:space="preserve">
@@ -962,7 +962,7 @@
     <value>Specify the base URL of your on-premise hosted bitwarden installation.</value>
   </data>
   <data name="ServerUrl" xml:space="preserve">
-    <value>Server URL</value>
+    <value>सर्वर URL</value>
   </data>
   <data name="WebVaultUrl" xml:space="preserve">
     <value>Web Vault Server URL</value>
@@ -1164,7 +1164,7 @@
     <value>Use Face ID To Unlock</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
-    <value>Verify Face ID</value>
+    <value>Face ID पिन बताएं।</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
@@ -1185,7 +1185,7 @@
     <value>वाक्य</value>
   </data>
   <data name="NewCustomField" xml:space="preserve">
-    <value>New Custom Field</value>
+    <value>कस्टम फील्ड जोड़े</value>
   </data>
   <data name="SelectTypeField" xml:space="preserve">
     <value>What type of custom field do you want to add?</value>
@@ -1234,7 +1234,7 @@
     <value>Auto-fill and save</value>
   </data>
   <data name="Organization" xml:space="preserve">
-    <value>Organization</value>
+    <value>संगठन</value>
     <comment>An entity of multiple related people (ex. a team or business organization).</comment>
   </data>
   <data name="HoldYubikeyNearTop" xml:space="preserve">
@@ -1796,5 +1796,8 @@
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
     <value>Due to an Enterprise Policy, you are restricted from saving items to your personal vault. Change the Ownership option to an organization and choose from available Collections.</value>
+  </data>
+  <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
+    <value>An organization policy is affecting your ownership options.</value>
   </data>
 </root>

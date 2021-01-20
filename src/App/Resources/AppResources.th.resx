@@ -1227,13 +1227,13 @@
     <comment>URI match detection for auto-fill.</comment>
   </data>
   <data name="YesAndSave" xml:space="preserve">
-    <value>Yes, and Save</value>
+    <value>ใช่ และบันทึก</value>
   </data>
   <data name="AutofillAndSave" xml:space="preserve">
     <value>Auto-fill and save</value>
   </data>
   <data name="Organization" xml:space="preserve">
-    <value>Organization</value>
+    <value>องค์กร</value>
     <comment>An entity of multiple related people (ex. a team or business organization).</comment>
   </data>
   <data name="HoldYubikeyNearTop" xml:space="preserve">
@@ -1249,11 +1249,11 @@
     <value>The accessibility service may be helpful to use when apps do not support the standard auto-fill service.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
-    <value>Password Updated</value>
+    <value>ปรับปรุงรหัสผ่านแล้ว</value>
     <comment>ex. Date this password was updated</comment>
   </data>
   <data name="DateUpdated" xml:space="preserve">
-    <value>Updated</value>
+    <value>ปรับปรุง</value>
     <comment>ex. Date this item was updated</comment>
   </data>
   <data name="AutofillActivated" xml:space="preserve">
@@ -1299,26 +1299,26 @@
     <value>Invalid email address.</value>
   </data>
   <data name="Cards" xml:space="preserve">
-    <value>Cards</value>
+    <value>บัตร</value>
   </data>
   <data name="Identities" xml:space="preserve">
     <value>Identities</value>
   </data>
   <data name="Logins" xml:space="preserve">
-    <value>Logins</value>
+    <value>เข้าสู่ระบบ</value>
   </data>
   <data name="SecureNotes" xml:space="preserve">
-    <value>Secure Notes</value>
+    <value>บันทึกการรักษาปลอดภัย</value>
   </data>
   <data name="AllItems" xml:space="preserve">
-    <value>All Items</value>
+    <value>รายการทั้งหมด</value>
   </data>
   <data name="URIs" xml:space="preserve">
     <value>URIs</value>
     <comment>Plural form of a URI</comment>
   </data>
   <data name="CheckingPassword" xml:space="preserve">
-    <value>Checking password...</value>
+    <value>กำลังเช็กรหัสผ่าน...</value>
     <comment>A loading message when doing an exposed password check.</comment>
   </data>
   <data name="CheckPassword" xml:space="preserve">
@@ -1334,13 +1334,13 @@
     <value>Identity Name</value>
   </data>
   <data name="Value" xml:space="preserve">
-    <value>Value</value>
+    <value>ค่า</value>
   </data>
   <data name="PasswordHistory" xml:space="preserve">
-    <value>Password History</value>
+    <value>ประวัติของรหัสผ่าน</value>
   </data>
   <data name="Types" xml:space="preserve">
-    <value>Types</value>
+    <value>ชนิด</value>
   </data>
   <data name="NoPasswordsToList" xml:space="preserve">
     <value>No passwords to list.</value>
@@ -1358,10 +1358,10 @@
     <value>Search type</value>
   </data>
   <data name="Type" xml:space="preserve">
-    <value>Type</value>
+    <value>ชนิด</value>
   </data>
   <data name="MoveDown" xml:space="preserve">
-    <value>Move Down</value>
+    <value>เลื่อนลง</value>
   </data>
   <data name="MoveUp" xml:space="preserve">
     <value>Move Up</value>
@@ -1795,5 +1795,8 @@
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
     <value>Due to an Enterprise Policy, you are restricted from saving items to your personal vault. Change the Ownership option to an organization and choose from available Collections.</value>
+  </data>
+  <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
+    <value>An organization policy is affecting your ownership options.</value>
   </data>
 </root>

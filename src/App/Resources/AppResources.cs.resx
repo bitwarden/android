@@ -1603,10 +1603,10 @@
     <value>Tento export obsahuje data vašeho trezoru v nezašifrovaném formátu. Soubor exportu byste neměli ukládat ani odesílat přes nezabezpečené kanály (např. e-mailem). Odstraňte jej okamžitě po jeho použití.</value>
   </data>
   <data name="EncExportVaultWarning" xml:space="preserve">
-    <value>This export encrypts your data using your account's encryption key. If you ever rotate your account's encryption key you should export again since you will not be able to decrypt this export file.</value>
+    <value>Tento export šifruje vaše údaje pomocí šifrovacího klíče vašeho účtu. Pokud někdy změníte šifrovací klíč svého účtu, měli byste provést export znovu, protože původní exportní soubor nepůjde novým klíčem dešifrovat.</value>
   </data>
   <data name="ExportVaultConfirmationTitle" xml:space="preserve">
-    <value>Confirm Vault Export</value>
+    <value>Potvrdit export trezoru</value>
     <comment>Title for the alert to confirm vault exports.</comment>
   </data>
   <data name="Warning" xml:space="preserve">
@@ -1685,7 +1685,7 @@
     <value>Data biometriky se změnila, přihlaste se pomocí hlavního hesla pro její opětovnou aktivaci.</value>
   </data>
   <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Biometric unlock for autofill disabled pending verification of master password.</value>
+    <value>Biometrické odemknutí pro automatické vyplňování je vypnuto a čeká na ověření hlavního hesla.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Povolit synchronizaci při obnovení</value>
@@ -1769,22 +1769,22 @@
     <value>Použít přístupnost</value>
   </data>
   <data name="AccessibilityDescription" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. When enabled, we'll display a popup when login fields are selected.</value>
+    <value>Použijte Bitwarden službu přístupnosti k automatickému vyplnění přihlašovacích údajů napříč aplikacemi a weby. Při zapnutí se po výběru přihlašovacích políček zobrazí vyskakovací okno.</value>
   </data>
   <data name="AccessibilityDescription2" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. (Requires Draw-Over to be enabled as well)</value>
+    <value>Použijte Bitwarden službu přístupnosti k automatickému vyplnění přihlašovacích údajů napříč aplikacemi a weby. (Vykreslování přes ostatní aplikace musí být povoleno.)</value>
   </data>
   <data name="AccessibilityDescription3" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to use the Autofill Quick-Action Tile, and/or show a popup using Draw-Over (if enabled).</value>
+    <value>Použijte Bitwarden službu přístupnosti pro dlaždici rychlého automatického vyplnění anebo zobrazení překryvného okna (pokud je povoleno).</value>
   </data>
   <data name="AccessibilityDescription4" xml:space="preserve">
-    <value>Required to use the Autofill Quick-Action Tile, or to augment the Autofill Service by using Draw-Over (if enabled).</value>
+    <value>Vyžadováno pro použití dlaždice rychlého automatického vyplnění nebo rozšíření služby automatického vyplnnění pomocí vykreslování přes ostatní aplikace (pokud je povoleno).</value>
   </data>
   <data name="DrawOver" xml:space="preserve">
-    <value>Use Draw-Over</value>
+    <value>Použít vykreslování přes ostatní aplikace</value>
   </data>
   <data name="DrawOverDescription" xml:space="preserve">
-    <value>When enabled, allows the Bitwarden Accessibility Service to display a popup when login fields are selected.</value>
+    <value>Je-li zapnuto, umožní Bitwarden službě přístupnosti zobrazovat okno při výběru polí pro přihlašovací údaje.</value>
   </data>
   <data name="DrawOverDescription2" xml:space="preserve">
     <value>If enabled, the Bitwarden Accessibility Service will display a popup when login fields are selected to assist with auto-filling your logins.</value>
@@ -1793,6 +1793,9 @@
     <value>If enabled, accessibility will show a popup to augment the Autofill Service for older apps that don't support the Android Autofill Framework.</value>
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
-    <value>Due to an Enterprise Policy, you are restricted from saving items to your personal vault. Change the Ownership option to an organization and choose from available Collections.</value>
+    <value>Z důvodu podnikových zásad nemůžete ukládat položky do svého osobního trezoru. Změňte vlastnictví  položky na organizaci a pak si vyberte z dostupných kolekcí.</value>
+  </data>
+  <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
+    <value>An organization policy is affecting your ownership options.</value>
   </data>
 </root>

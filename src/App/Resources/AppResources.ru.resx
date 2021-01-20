@@ -1603,10 +1603,10 @@
     <value>Экспортируемый файл содержит данные вашего хранилища в незашифрованном формате. Его не следует хранить или отправлять по небезопасным каналам (например по электронной почте). Удалите его сразу после использования.</value>
   </data>
   <data name="EncExportVaultWarning" xml:space="preserve">
-    <value>This export encrypts your data using your account's encryption key. If you ever rotate your account's encryption key you should export again since you will not be able to decrypt this export file.</value>
+    <value>При экспорте данные шифруются с помощью ключа шифрования учетной записи. Если вы когда-либо меняли ключ шифрования учетной записи, то следует экспортировать данные повторно, иначе вы не сможете расшифровать этот файл экспорта.</value>
   </data>
   <data name="ExportVaultConfirmationTitle" xml:space="preserve">
-    <value>Confirm Vault Export</value>
+    <value>Подтвердить экспорт хранилища</value>
     <comment>Title for the alert to confirm vault exports.</comment>
   </data>
   <data name="Warning" xml:space="preserve">
@@ -1682,10 +1682,10 @@
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Обнаружено изменение параметров биометрии. Для повторной активации необходимо авторизоваться, используя мастер-пароль.</value>
+    <value>Биометрическая разблокировка отключена в ожидании проверки мастер-пароля.</value>
   </data>
   <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Biometric unlock for autofill disabled pending verification of master password.</value>
+    <value>Биометрическая разблокировка для автозаполнения отключена в ожидании проверки мастер-пароля.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Включить синхронизацию при обновлении</value>
@@ -1793,6 +1793,9 @@
     <value>При включении, служба специальных возможностей отобразит всплывающее сообщение, чтобы вызвать службу автозаполнения для старых приложений, не поддерживающих фреймворк автозаполнения Android.</value>
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
-    <value>Due to an Enterprise Policy, you are restricted from saving items to your personal vault. Change the Ownership option to an organization and choose from available Collections.</value>
+    <value>В соответствии с корпоративной политикой вам запрещено сохранять элементы в личном хранилище. Измените параметр "Владелец" на организацию и выберите из доступных Коллекций.</value>
+  </data>
+  <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
+    <value>An organization policy is affecting your ownership options.</value>
   </data>
 </root>

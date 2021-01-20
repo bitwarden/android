@@ -1604,10 +1604,10 @@
     <value>Αυτή η εξαγωγή περιέχει τα δεδομένα σε μη κρυπτογραφημένη μορφή. Δεν πρέπει να αποθηκεύετε ή να στείλετε το εξαγόμενο αρχείο μέσω μη ασφαλών τρόπων (όπως μέσω email). Διαγράψτε το αμέσως μόλις τελειώσετε με τη χρήση του.</value>
   </data>
   <data name="EncExportVaultWarning" xml:space="preserve">
-    <value>This export encrypts your data using your account's encryption key. If you ever rotate your account's encryption key you should export again since you will not be able to decrypt this export file.</value>
+    <value>Αυτή η εξαγωγή κρυπτογραφεί τα δεδομένα σας χρησιμοποιώντας το κλειδί κρυπτογράφησης του λογαριασμού σας. Εάν ποτέ περιστρέψετε το κλειδί κρυπτογράφησης του λογαριασμού σας, θα πρέπει να κάνετε εξαγωγή ξανά, καθώς δεν θα μπορείτε να αποκρυπτογραφήσετε αυτό το αρχείο εξαγωγής.</value>
   </data>
   <data name="ExportVaultConfirmationTitle" xml:space="preserve">
-    <value>Confirm Vault Export</value>
+    <value>Επιβεβαίωση εξαγωγής Vault</value>
     <comment>Title for the alert to confirm vault exports.</comment>
   </data>
   <data name="Warning" xml:space="preserve">
@@ -1686,7 +1686,7 @@
     <value>Εντοπίστηκε βιομετρική αλλαγή, συνδεθείτε χρησιμοποιώντας τον κύριο κωδικό πρόσβασης για ενεργοποίηση ξανά.</value>
   </data>
   <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Biometric unlock for autofill disabled pending verification of master password.</value>
+    <value>Το βιομετρικό ξεκλείδωμα για αυτόματη συμπλήρωση απενεργοποιήθηκε εν αναμονή της επαλήθευσης του κύριου κωδικού πρόσβασης.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Ενεργοποίηση συγχρονισμού κατά την ανανέωση</value>
@@ -1794,6 +1794,9 @@
     <value>Εάν είναι ενεργοποιημένη, η προσβασιμότητα θα εμφανίσει ένα αναδυόμενο παράθυρο για την αύξηση της υπηρεσίας αυτόματης συμπλήρωσης για παλαιότερες εφαρμογές που δεν υποστηρίζουν το Android Autofill Framework.</value>
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
-    <value>Due to an Enterprise Policy, you are restricted from saving items to your personal vault. Change the Ownership option to an organization and choose from available Collections.</value>
+    <value>Λόγω μιας Πολιτικής Επιχειρήσεων, δεν επιτρέπεται η αποθήκευση αντικειμένων στο προσωπικό σας vault. Αλλάξτε την επιλογή Ιδιοκτησίας σε έναν οργανισμό και επιλέξτε από τις διαθέσιμες Συλλογές.</value>
+  </data>
+  <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
+    <value>An organization policy is affecting your ownership options.</value>
   </data>
 </root>
