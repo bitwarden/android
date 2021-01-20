@@ -69,7 +69,13 @@ namespace Bit.iOS.Core.Views
                     ContentView.AddConstraint(
                         NSLayoutConstraint.Create(TextView, NSLayoutAttribute.Height, NSLayoutRelation.Equal, null, NSLayoutAttribute.NoAttribute, 1f, height.Value));
                 }
+
+                TextView.Changed += (object sender, EventArgs e) =>
+                {
+                    ValueChanged?.Invoke(sender, e);
+                };
             }
+
             else
             {
                 TextField = new UITextField
@@ -116,6 +122,11 @@ namespace Bit.iOS.Core.Views
                     ContentView.AddConstraint(
                         NSLayoutConstraint.Create(TextField, NSLayoutAttribute.Height, NSLayoutRelation.Equal, null, NSLayoutAttribute.NoAttribute, 1f, height.Value));
                 }
+
+                TextField.AddTarget((object sender, EventArgs e) =>
+                {
+                    ValueChanged?.Invoke(sender, e);
+                }, UIControlEvent.EditingChanged);
             }
 
             if (labelName != null && !useLabelAsPlaceholder)
@@ -131,6 +142,7 @@ namespace Bit.iOS.Core.Views
         public UILabel Label { get; set; }
         public UITextField TextField { get; set; }
         public UITextView TextView { get; set; }
+        public event EventHandler ValueChanged;
 
         public void Select()
         {
