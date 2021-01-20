@@ -1603,10 +1603,10 @@
     <value>Bản trích xuất này chứ dữ liệu kho của bạn dưới một định dạng không được mã hóa. Bạn không nên lưu trữ hay gửi tập tin trích xuất thông qua phương thức không an toàn (như email). Xóa nó ngay lập tức khi bạn đã sử dụng xong.</value>
   </data>
   <data name="EncExportVaultWarning" xml:space="preserve">
-    <value>This export encrypts your data using your account's encryption key. If you ever rotate your account's encryption key you should export again since you will not be able to decrypt this export file.</value>
+    <value>File xuất mã hóa dữ liệu xủa bạn bằng chìa khóa giải mã, nếu bạn xoay chìa khóa giải mã, bạn cần xuất file lại nếu không bạn sẽ KHÔNG THỂ giải mã file đã xuất</value>
   </data>
   <data name="ExportVaultConfirmationTitle" xml:space="preserve">
-    <value>Confirm Vault Export</value>
+    <value>Xác nhận xuất mật khẩu ra file csv</value>
     <comment>Title for the alert to confirm vault exports.</comment>
   </data>
   <data name="Warning" xml:space="preserve">
@@ -1682,118 +1682,120 @@
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Biometric unlock disabled pending verification of master password.</value>
+    <value>Xác thực sinh trắc học bị vô hiệu hoá vì cần xác nhận password tổng </value>
   </data>
   <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Biometric unlock for autofill disabled pending verification of master password.</value>
+    <value>Phương thức xác nhận sinh trắc học bị vô hiệu hóa do cần xác nhận mật khẩu chính</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
-    <value>Enable sync on refresh</value>
+    <value>Kích hoạt đồng bộ khi làm tươi(refresh)</value>
   </data>
   <data name="EnableSyncOnRefreshDescription" xml:space="preserve">
-    <value>Syncing vault with pull down gesture.</value>
+    <value>Đồng bộ hóa kho bằng cử chỉ vuốt xuống</value>
   </data>
   <data name="LogInSso" xml:space="preserve">
-    <value>Enterprise Single Sign-On</value>
+    <value>Đăng nhập theo tài khoản tổ chức</value>
   </data>
   <data name="LogInSsoSummary" xml:space="preserve">
-    <value>Quickly log in using your organization's single sign-on portal. Please enter your organization's identifier to begin.</value>
+    <value>Đăng nhập nhanh bằng cách sử dụng cổng đăng nhập của tổ chức. Vui lòng nhập thông tin nhận dạng tổ chức để bắt đầu</value>
   </data>
   <data name="OrgIdentifier" xml:space="preserve">
-    <value>Organization Identifier</value>
+    <value>Nhận dạng tổ chức</value>
   </data>
   <data name="LoginSsoError" xml:space="preserve">
-    <value>Currently unable to login with SSO</value>
+    <value>Phương thức đăng nhập SSO hiện không khả dụng</value>
   </data>
   <data name="SetMasterPassword" xml:space="preserve">
-    <value>Set Master Password</value>
+    <value>Tạo mật khẩu chính</value>
   </data>
   <data name="SetMasterPasswordSummary" xml:space="preserve">
-    <value>In order to complete logging in with SSO, please set a master password to access and protect your vault.</value>
+    <value>Để hoàn thành việc truy cập bằng phương thức SSO, vui lòng tạo mật khẩu chính để truy cập và bảo vệ kho</value>
   </data>
   <data name="MasterPasswordPolicyInEffect" xml:space="preserve">
-    <value>One or more organization policies require your master password to meet the following requirements:</value>
+    <value>Một hay nhiều chính sách của tổ chức yêu cầu tiêu chuẩn về mật khẩu chính theo yêu cầu sau đây:</value>
   </data>
   <data name="PolicyInEffectMinComplexity" xml:space="preserve">
-    <value>Minimum complexity score of {0}</value>
+    <value>Điểm phức tạp tối thiểu {0}</value>
   </data>
   <data name="PolicyInEffectMinLength" xml:space="preserve">
-    <value>Minimum length of {0}</value>
+    <value>Độ dài mật khẩu tối thiểu: {0}</value>
   </data>
   <data name="PolicyInEffectUppercase" xml:space="preserve">
-    <value>Contain one or more uppercase characters</value>
+    <value>Có chứa một hay nhiều ký tự viết hoa</value>
   </data>
   <data name="PolicyInEffectLowercase" xml:space="preserve">
-    <value>Contain one or more lowercase characters</value>
+    <value>Có chứa một hay nhiều ký tự viết thường</value>
   </data>
   <data name="PolicyInEffectNumbers" xml:space="preserve">
-    <value>Contain one or more numbers</value>
+    <value>Có chứa một hay nhiều số</value>
   </data>
   <data name="PolicyInEffectSpecial" xml:space="preserve">
-    <value>Contain one or more of the following special characters: {0}</value>
+    <value>Có chứa một hay nhiều ký tự đặc biệt sau: {0}</value>
   </data>
   <data name="MasterPasswordPolicyValidationTitle" xml:space="preserve">
-    <value>Invalid Password</value>
+    <value>Mật khẩu sai. Ahihi đồ ngốc 😃</value>
   </data>
   <data name="MasterPasswordPolicyValidationMessage" xml:space="preserve">
-    <value>Password does not meet organization requirements. Please check the policy information and try again.</value>
+    <value>Mật khẩu không khớp với yêu cầu của tổ chức. Vui lòng kiểm tra chính sách mật khẩu và thử lại</value>
   </data>
   <data name="Loading" xml:space="preserve">
-    <value>Loading</value>
+    <value>Đang tải</value>
   </data>
   <data name="AcceptPolicies" xml:space="preserve">
-    <value>By activating this switch you agree to the following:
-</value>
+    <value>Bằng việc kích hoạt chức năng bạn đồng ý các điều kiện sau:</value>
   </data>
   <data name="AcceptPoliciesError" xml:space="preserve">
-    <value>Terms of Service and Privacy Policy have not been acknowledged.</value>
+    <value>Chính sách sử dụng và quyền riêng tư chưa biết</value>
   </data>
   <data name="TermsOfService" xml:space="preserve">
-    <value>Terms of Service</value>
+    <value>Điều khoản sử dụng</value>
   </data>
   <data name="PrivacyPolicy" xml:space="preserve">
-    <value>Privacy Policy</value>
+    <value>Chính sách quyền riêng tư</value>
   </data>
   <data name="AccessibilityDrawOverPermissionAlert" xml:space="preserve">
-    <value>Bitwarden needs attention - Enable "Draw-Over" in "Auto-fill Services" from Bitwarden Settings</value>
+    <value>Bitwarden cần kích hoạt: Vẽ lên ứng dụng( Draw-Over) trong phần cài đặt của Bitwarden</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
-    <value>Auto-fill Services</value>
+    <value>Tự động điền mật khẩu</value>
   </data>
   <data name="InlineAutofill" xml:space="preserve">
-    <value>Use Inline Autofill</value>
+    <value>Sử dụng ứng dụng tự động điền biểu mẫu</value>
   </data>
   <data name="InlineAutofillDescription" xml:space="preserve">
-    <value>Use inline autofill if your selected IME (keyboard) supports it. If your configuration is not supported (or this option is disabled), the default Autofill overlay will be used.</value>
+    <value>Sử dụng tính năng tự động điền nếu bộ gõ hỗ trợ. Nếu không, sẽ chuyển qua chế độ tự động điền mặc định</value>
   </data>
   <data name="Accessibility" xml:space="preserve">
-    <value>Use Accessibility</value>
+    <value>Sử dụng trợ năng</value>
   </data>
   <data name="AccessibilityDescription" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. When enabled, we'll display a popup when login fields are selected.</value>
+    <value>Sử dụng chế độ tự động điền của Bitwarden để tự động điền thông tin đăng nhập trong ứng dụng và website. Khi chế độ này được kích hoạt, sẽ hiển thị cửa sổ popup ở ổ đăng nhập</value>
   </data>
   <data name="AccessibilityDescription2" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. (Requires Draw-Over to be enabled as well)</value>
+    <value>Sử dụng chức năng tự động điền của Bitwarden để tự động điền mật khẩu trong app và website( Yêu cầu kích hoạt chức năng vẽ lên ứng dụng (Draw-Over))..</value>
   </data>
   <data name="AccessibilityDescription3" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to use the Autofill Quick-Action Tile, and/or show a popup using Draw-Over (if enabled).</value>
+    <value>Sử dụng chế độ tự động điền của Bitwarden để sử dụng chức năng tự động điền nhanh, và/hoặc hiển thị cửa sổ popup bằng vẽ lên ứng dụng (Draw over).</value>
   </data>
   <data name="AccessibilityDescription4" xml:space="preserve">
-    <value>Required to use the Autofill Quick-Action Tile, or to augment the Autofill Service by using Draw-Over (if enabled).</value>
+    <value>Yêu cầu sử dụng tự động điền nhanh tiêu đề bằng cách sử dụng vẽ lên ứng dụng (Draw-over).</value>
   </data>
   <data name="DrawOver" xml:space="preserve">
-    <value>Use Draw-Over</value>
+    <value>Dùng phương thức vẽ lên ứng dụng (Draw-Over)</value>
   </data>
   <data name="DrawOverDescription" xml:space="preserve">
-    <value>When enabled, allows the Bitwarden Accessibility Service to display a popup when login fields are selected.</value>
+    <value>Khi kích hoạt, bạn sẽ đồng ý cho Bitwarden hiển thị cửa sổ popup khi đăng nhập</value>
   </data>
   <data name="DrawOverDescription2" xml:space="preserve">
-    <value>If enabled, the Bitwarden Accessibility Service will display a popup when login fields are selected to assist with auto-filling your logins.</value>
+    <value>Nếu được kích hoạt, chế độ tự động điền sẽ hiển thị cửa sổ popup trong phần đăng nhập để tự động điền mật khẩu</value>
   </data>
   <data name="DrawOverDescription3" xml:space="preserve">
-    <value>If enabled, accessibility will show a popup to augment the Autofill Service for older apps that don't support the Android Autofill Framework.</value>
+    <value>Nếu được kích hoạt, </value>
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
-    <value>Due to an Enterprise Policy, you are restricted from saving items to your personal vault. Change the Ownership option to an organization and choose from available Collections.</value>
+    <value>Do chính sách về quyền riêng tư của tổ chức, bạn không được lưu trữ trong .</value>
+  </data>
+  <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
+    <value>An organization policy is affecting your ownership options.</value>
   </data>
 </root>
