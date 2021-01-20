@@ -1299,13 +1299,13 @@
     <value>Неправильна адреса е-пошти.</value>
   </data>
   <data name="Cards" xml:space="preserve">
-    <value>Карти</value>
+    <value>Картки</value>
   </data>
   <data name="Identities" xml:space="preserve">
     <value>Особисті дані</value>
   </data>
   <data name="Logins" xml:space="preserve">
-    <value>Записи</value>
+    <value>Записи входу</value>
   </data>
   <data name="SecureNotes" xml:space="preserve">
     <value>Захищені нотатки</value>
@@ -1343,10 +1343,10 @@
     <value>Типи</value>
   </data>
   <data name="NoPasswordsToList" xml:space="preserve">
-    <value>Немає паролів для відображення.</value>
+    <value>Немає паролів.</value>
   </data>
   <data name="NoItemsToList" xml:space="preserve">
-    <value>Немає записів для відображення.</value>
+    <value>Немає записів.</value>
   </data>
   <data name="SearchCollection" xml:space="preserve">
     <value>Пошук в збірках</value>
@@ -1355,7 +1355,7 @@
     <value>Пошук теки</value>
   </data>
   <data name="SearchType" xml:space="preserve">
-    <value>Типу пошуку</value>
+    <value>Пошук за типом</value>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Тип</value>
@@ -1376,7 +1376,7 @@
     <value>Хто є власником цього елемента?</value>
   </data>
   <data name="NoCollectionsToList" xml:space="preserve">
-    <value>Немає збірок для відображення.</value>
+    <value>Немає збірок.</value>
   </data>
   <data name="ItemShared" xml:space="preserve">
     <value>Надано спільний доступ для запису.</value>
@@ -1391,7 +1391,7 @@
     <value>Поділитися записом</value>
   </data>
   <data name="NoOrgsToList" xml:space="preserve">
-    <value>Немає організацій для відображення.</value>
+    <value>Немає організацій.</value>
   </data>
   <data name="ShareDesc" xml:space="preserve">
     <value>Оберіть організацію, з якою хочете поділитися. Зробивши це, ви передасте доступ до цього запису іншій організації та більше не будете його одноосібним власником.</value>
@@ -1414,7 +1414,7 @@
     <comment>Short for "Password Generator"</comment>
   </data>
   <data name="NoFoldersToList" xml:space="preserve">
-    <value>Немає тек для відображення.</value>
+    <value>Немає тек.</value>
   </data>
   <data name="FingerprintPhrase" xml:space="preserve">
     <value>Фраза відбитку</value>
@@ -1603,10 +1603,10 @@
     <value>Експортовані дані вашого сховища знаходяться в незашифрованому вигляді. Вам не слід зберігати чи надсилати їх через незахищені канали (наприклад, е-поштою). Після використання негайно видаліть їх.</value>
   </data>
   <data name="EncExportVaultWarning" xml:space="preserve">
-    <value>This export encrypts your data using your account's encryption key. If you ever rotate your account's encryption key you should export again since you will not be able to decrypt this export file.</value>
+    <value>Цей експорт шифрує ваші дані за допомогою ключа шифрування облікового запису. Якщо ви коли-небудь оновите ключ шифрування облікового запису, ви повинні виконати експорт знову, оскільки не зможете розшифрувати цей файл експорту.</value>
   </data>
   <data name="ExportVaultConfirmationTitle" xml:space="preserve">
-    <value>Confirm Vault Export</value>
+    <value>Підтвердити експорт сховища</value>
     <comment>Title for the alert to confirm vault exports.</comment>
   </data>
   <data name="Warning" xml:space="preserve">
@@ -1682,10 +1682,10 @@
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Виявлено біометричні зміни. Увійдіть за допомогою головного пароля, щоб увімкнути знову.</value>
+    <value>Біометричне розблокування вимкнено. Очікується перевірка головного пароля.</value>
   </data>
   <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Biometric unlock for autofill disabled pending verification of master password.</value>
+    <value>Біометричне розблокування для автозаповнення вимкнено. Очікується перевірка головного пароля.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Увімкнути синхронізацію жестом</value>
@@ -1793,6 +1793,9 @@
     <value>Якщо увімкнено, служба спеціальних можливостей покаже спливне повідомлення, щоб викликати службу автозаповнення для старіших програм, які не підтримують Android Autofill Framework.</value>
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
-    <value>Due to an Enterprise Policy, you are restricted from saving items to your personal vault. Change the Ownership option to an organization and choose from available Collections.</value>
+    <value>Згідно з політикою компанії, вам заборонено зберігати записи в особистому сховищі. Змініть опцію власника на організацію та виберіть серед доступних збірок.</value>
+  </data>
+  <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
+    <value>An organization policy is affecting your ownership options.</value>
   </data>
 </root>
