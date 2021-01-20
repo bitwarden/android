@@ -118,25 +118,27 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Name" xml:space="preserve">
-    <value>Bitwarden – Salasananhallinta</value>
+    <value>Bitwarden salasanojen hallinta</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>bitwarden on helpoin ja turvallisin tapa säilöä käyttäjänimesi ja salasanasi, kätevästi synkronoituna kaikille laitteillesi.
+    <value>Bitwarden on helpoin ja turvallisin tapa säilyttää käyttäjätunnuksesi ja salasanasi, samalla pitäen ne synkronoituna laitteidesi välillä. Bitwardenin sovelluslaajennus mahdollistaa nopean kirjautumisen sivustoille selaimissa kuten Safarissa tai Chromessa sekä myös lukuisissa muissa suosituissa sovelluksissa.
 
-Salasanavarkaudet ovat vakava ongelma. Käyttämäsi verkkosivustot ja sovellukset ovat hyökkäyksen kohteena päivittäin. Tietoturvavuotoja tapahtuu ja salasanoja varastetaan. Jos käytät samoja salasanoja eri sivustoilla ja sovelluksissa, voivat hakkerit mahdollisesti päästä helposti käsiksi sähköpostiisi, pankkiisi tai muihin tärkeisiin tileihin.
+Salasanavarkaudet ovat vakava ongelma ja monet käyttämäsi sivustot ja sovellukset ovat päivittäisten hyökkäysten kohteina. Tietoturvavuotoja tapahtuu ja salasanoja varastetaan. Jos käytät samoja salasanoja uudelleen eri sivustoilla ja sovelluksissa, saattavat hakkerit päästä helposti käsiksi sähköpostiisi, pankkiisi tai muihin tärkeisiin käyttäjätileihisi.
 
-Tietoturvaekspertit suosittelevat uniikkien, satunnaisesti luotujen salasanojen käyttämistä kaikilla tileilläsi. Mutta kuinka hallitset kaikkia noita salasanoja? bitwarden tekee salasanojen luomisesta, säilömisestä ja käyttämisestä helppoa.
+Tietoturva-asiantuntijat suosittelevat ainutlaatuisten, satunnaisesti luotujen salasanojen käyttöä kaikilla käyttäjätileilläsi. Mutta kuinka sitten hallitset näitä kaikkia erilaisia salasanoja? Bitwarden tekee laadukkaiden ja ainutlaatuisten salasanojen luonnista, säilytyksestä ja käytöstä helppoa.
 
-bitwarden säilöö kaikki kirjautumistietosi salattuun holviin, joka synkronoidaan kaikille laitteillesi. Koska tietosi ovat täysin salattuja jo ennen kuin ne edes lähtevät laitteeltasi, vain sinä pääset käsiksi niihin. Edes bitwardenin kehittäjätiimi ei voisi lukea tietojasi, vaikka haluaisi. Tietosi suojataan 256-bittisellä AES-salauksella, suolatulla hajautuksella sekä PBKDF2- ja SHA-256-menetelmillä.</value>
+Bitwarden säilyttää kaikki kirjautumistietosi salattussa holvissa, joka synkronoidaan laitteidesi välillä. Koska tietosi ovat täysin salattuja jo ennen kuin ne edes lähtevät laitteeltasi, vain sinä pääset niihin käsiksi. Edes Bitwardenin kehittäjät eivät voi lukea tietojasi, vaikka haluaisivat. Tietosi suojataan 256-bittisellä AES-salauksella, suolatulla hajautuksella sekä PBKDF2 ja SHA-256 -menetelmillä.
+
+Bitwarden on keskittynyt avoimen lähdekoodin ohjelmistoihin. Bitwardenin lähdekoodi on esillä GitHubissa ja kuka tahansa voi tutkia ja tarkastella sitä sekä osallistua Bitwardenin kehitykseen.</value>
     <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
-    <value>bit warden,8bit,salasana,ilmainen salasananhallinta,salasananhallintapalvelu,käyttäjätunnusten hallinta</value>
+    <value>bit warden,8bit,salasana,ilmainen salasanojen hallinta,salasanojen hallinta,käyttäjätunnusten hallinta</value>
     <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Hallitse käyttäjätunnuksiasi salatusta holvista</value>
+    <value>Hallitse käyttäjätunnuksiasi ja salasanojasi suojatussa holvissa</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
     <value>Luo automaattisesti vahvoja, satunnaisia ja turvallisia salasanoja</value>
@@ -145,9 +147,9 @@ bitwarden säilöö kaikki kirjautumistietosi salattuun holviin, joka synkronoid
     <value>Suojaa holvisi Touch ID:llä, PIN-koodilla tai pääsalasanalla</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Täytä automaattisesti kentät Safarissa, Chromessa ja sadoissa muissa sovelluksissa</value>
+    <value>Täytä kirjautumistiedot automaattisesti Safarissa, Chromessa sekä lukuisissa muissa sovelluksissa</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Synkronoi ja hallitse holviasi eri laitteilla</value>
+    <value>Synkronoi ja hallitse holviasi useilla laitteilla</value>
   </data>
 </root>
