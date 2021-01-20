@@ -1603,10 +1603,10 @@
     <value>Questa esportazione contiene i dati della tua cassaforte in formato non crittografato. Non dovresti archiviare o inviare i file esportati attraverso canali non sicuri (come l'email). Eliminali immediatamente dopo che hai finito di usarli.</value>
   </data>
   <data name="EncExportVaultWarning" xml:space="preserve">
-    <value>This export encrypts your data using your account's encryption key. If you ever rotate your account's encryption key you should export again since you will not be able to decrypt this export file.</value>
+    <value>Questa esportazione crittografa i tuoi dati utilizzando la chiave di crittografia del tuo account. Se dovessi cambiare la chiave di crittografia del tuo account, dovresti esportare di nuovo poiché non sarai in grado di decifrare questo file di esportazione.</value>
   </data>
   <data name="ExportVaultConfirmationTitle" xml:space="preserve">
-    <value>Confirm Vault Export</value>
+    <value>Conferma esportazione della Cassaforte</value>
     <comment>Title for the alert to confirm vault exports.</comment>
   </data>
   <data name="Warning" xml:space="preserve">
@@ -1685,7 +1685,7 @@
     <value>Dati biometrici modificati, accedi con la password principale per attivare nuovamente lo sblocco con dati biometrici.</value>
   </data>
   <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Biometric unlock for autofill disabled pending verification of master password.</value>
+    <value>Sblocco biometrico per riempimento automatico disabilitato in attesa della verifica della password principale.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Abilita la sincronizzazione durante l'aggiornamento</value>
@@ -1793,6 +1793,9 @@
     <value>Se abilitato, l'accessibilità mostrerà un popup per aumentare il servizio di autocompletamento per le vecchie app che non supportano il framework di autocompletamento di Android.</value>
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
-    <value>Due to an Enterprise Policy, you are restricted from saving items to your personal vault. Change the Ownership option to an organization and choose from available Collections.</value>
+    <value>A causa di una politica aziendale, non è possibile salvare elementi nella tua cassaforte personale. Cambia l'opzione Proprietà in un'organizzazione e scegli tra le Collezioni disponibili.</value>
+  </data>
+  <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
+    <value>An organization policy is affecting your ownership options.</value>
   </data>
 </root>
