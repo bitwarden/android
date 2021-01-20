@@ -1349,7 +1349,7 @@
     <value>പ്രദർശിപ്പിക്കാൻ ഇനങ്ങളൊന്നുമില്ല.</value>
   </data>
   <data name="SearchCollection" xml:space="preserve">
-    <value>കളക്ഷൻസ് തിരയുക</value>
+    <value>കളക്ഷനുകൾ  തിരയുക</value>
   </data>
   <data name="SearchFolder" xml:space="preserve">
     <value>ഫോൾഡറുകൾ തിരയുക</value>
@@ -1376,7 +1376,7 @@
     <value>ഈ ഇനം ആരുടേതാണ്?</value>
   </data>
   <data name="NoCollectionsToList" xml:space="preserve">
-    <value>പ്രദർശിപ്പിക്കാൻ കളക്ഷൻസ് ഒന്നും ഇല്ല.</value>
+    <value>പ്രദർശിപ്പിക്കാൻ കളക്ഷനുകൾ  ഒന്നും ഇല്ല.</value>
   </data>
   <data name="ItemShared" xml:space="preserve">
     <value>ഇനം പങ്കിട്ടു.</value>
@@ -1603,10 +1603,10 @@
     <value>ഈ എക്‌സ്‌പോർട്ടിൽ എൻക്രിപ്റ്റ് ചെയ്യാത്ത ഫോർമാറ്റിൽ നിങ്ങളുടെ വാൾട് ഡാറ്റ അടങ്ങിയിരിക്കുന്നു. എക്‌സ്‌പോർട് ചെയ്ത ഫയൽ സുരക്ഷിതമല്ലാത്ത ചാനലുകളിൽ (ഇമെയിൽ പോലുള്ളവ) നിങ്ങൾ സംഭരിക്കുകയോ അയയ്ക്കുകയോ ചെയ്യരുത്. നിങ്ങൾ ഇത് ഉപയോഗിച്ചുകഴിഞ്ഞാലുടൻ അത് മായ്ച്ചുകളയണം.</value>
   </data>
   <data name="EncExportVaultWarning" xml:space="preserve">
-    <value>This export encrypts your data using your account's encryption key. If you ever rotate your account's encryption key you should export again since you will not be able to decrypt this export file.</value>
+    <value>ഈ എക്‌സ്‌പോർട്ട് നിങ്ങളുടെ അക്കൗണ്ടിന്റെ എൻ‌ക്രിപ്ഷൻ കീ ഉപയോഗിച്ച് നിങ്ങളുടെ ഡാറ്റ എൻ‌ക്രിപ്റ്റ് ചെയ്യുന്നു. നിങ്ങളുടെ അക്കൗണ്ടിന്റെ എൻ‌ക്രിപ്ഷൻ കീ നിങ്ങൾ‌ എപ്പോഴെങ്കിലും തിരിക്കുകയാണെങ്കിൽ‌, ഈ എക്‌സ്‌പോർട്ട് ഫയൽ‌ ഡീക്രിപ്റ്റ് ചെയ്യാൻ‌ നിങ്ങൾ‌ക്ക് കഴിയാത്തതിനാൽ‌ നിങ്ങൾ‌ വീണ്ടും കയറ്റുമതി ചെയ്യണം.</value>
   </data>
   <data name="ExportVaultConfirmationTitle" xml:space="preserve">
-    <value>Confirm Vault Export</value>
+    <value>വാൾട് എക്‌സ്‌പോർട്ട് സ്ഥിരീകരിക്കുക</value>
     <comment>Title for the alert to confirm vault exports.</comment>
   </data>
   <data name="Warning" xml:space="preserve">
@@ -1682,7 +1682,7 @@
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="BiometricInvalidated" xml:space="preserve">
-    <value>ബയോമെട്രിക് മാറ്റം കണ്ടെത്തി, വീണ്ടും പ്രവർത്തനക്ഷമമാക്കാൻ പ്രാഥമിക പാസ്‌വേഡ് ഉപയോഗിച്ച് പ്രവേശിക്കുക.</value>
+    <value>Biometric unlock disabled pending verification of master password.</value>
   </data>
   <data name="BiometricInvalidatedExtension" xml:space="preserve">
     <value>Biometric unlock for autofill disabled pending verification of master password.</value>
@@ -1790,9 +1790,12 @@
     <value>പ്രവർത്തനക്ഷമമാക്കിയിട്ടുണ്ടെങ്കിൽ, നിങ്ങളുടെ ലോഗിനുകൾ യാന്ത്രികമായി പൂരിപ്പിക്കുന്നതിന് സഹായിക്കുന്നതിന് ലോഗിൻ ഫീൽഡുകൾ തിരഞ്ഞെടുക്കുമ്പോൾ ബിറ്റ്വാർഡൻ പ്രവേശന സേവനം ഒരു പോപ്പ്അപ്പ് പ്രദർശിപ്പിക്കും.</value>
   </data>
   <data name="DrawOverDescription3" xml:space="preserve">
-    <value>പ്രവർത്തനക്ഷമമാക്കിയിട്ടുണ്ടെങ്കിൽ, Android ഓട്ടോഫിൽ ഫ്രെയിംവർക്കിനെ പിന്തുണയ്‌ക്കാത്ത പഴയ അപ്ലിക്കേഷനുകൾക്കായി ഓട്ടോഫിൽ സേവനം വർദ്ധിപ്പിക്കുന്നതിന് പ്രവേശനക്ഷമത ഒരു പോപ്പ്അപ്പ് കാണിക്കും.</value>
+    <value>പ്രവർത്തനക്ഷമമാക്കിയിട്ടുണ്ടെങ്കിൽ, Android ഓട്ടോഫിൽ ഫ്രെയിംവർക്കിനെ പിന്തുണയ്‌ക്കാത്ത പഴയ അപ്ലിക്കേഷനുകൾക്കായി ഓട്ടോഫിൽ സേവനം വർദ്ധിപ്പിക്കുന്നതിന് ആക്സിസിബിലിറ്റി ഒരു പോപ്പ്അപ്പ് കാണിക്കും.</value>
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
-    <value>Due to an Enterprise Policy, you are restricted from saving items to your personal vault. Change the Ownership option to an organization and choose from available Collections.</value>
+    <value>ഒരു എന്റർപ്രൈസ് പോളിസി നിങ്ങളുടെ സ്വകാര്യ വാൾട്ടിലേക്ക് ഇനങ്ങൾ സംരക്ഷിക്കുന്നതിൽ നിന്ന് നിങ്ങളെ നിയന്ത്രിച്ചിരിക്കുന്നു. ഉടമസ്ഥാവകാശ ഓപ്ഷൻ ഒരു സംഘടനയിലേക്ക് മാറ്റി ലഭ്യമായ ശേഖരങ്ങളിൽ നിന്ന് തിരഞ്ഞെടുക്കുക.</value>
+  </data>
+  <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
+    <value>An organization policy is affecting your ownership options.</value>
   </data>
 </root>
