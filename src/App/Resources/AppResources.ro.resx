@@ -172,7 +172,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="DoYouReallyWantToDelete" xml:space="preserve">
-    <value>Într-adevăr doriți să ștergeți? Acest lucru nu poate fi anulat.</value>
+    <value>Doriți cu adevărat să ștergeți? Acest lucru nu poate fi anulat.</value>
     <comment>Confirmation alert message when deleteing something.</comment>
   </data>
   <data name="Edit" xml:space="preserve">
@@ -196,14 +196,14 @@
     <value>Trimiteți-ne un e-mail pentru a obține ajutor sau pentru a lăsa un feedback.</value>
   </data>
   <data name="EnterPIN" xml:space="preserve">
-    <value>Introduceți codul PIN.</value>
+    <value>Introducere cod PIN.</value>
   </data>
   <data name="Favorites" xml:space="preserve">
     <value>Favorite</value>
     <comment>Title for your favorite items in the vault.</comment>
   </data>
   <data name="FileBugReport" xml:space="preserve">
-    <value>Raport de eroare</value>
+    <value>Înregistrare raport de erori</value>
   </data>
   <data name="FileBugReportDescription" xml:space="preserve">
     <value>Raportați o problemă pe pagina noastră GitHub.</value>
@@ -229,10 +229,10 @@
     <value>Dosare</value>
   </data>
   <data name="FolderUpdated" xml:space="preserve">
-    <value>Dosar actualizat.</value>
+    <value>Dosarul s-a actualizat.</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
-    <value>Accesați saitul web</value>
+    <value>Accesare sait web</value>
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="HelpAndFeedback" xml:space="preserve">
@@ -276,7 +276,7 @@
     <value>Sigur doriți să vă deconectați?</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
-    <value>Parola principală</value>
+    <value>Parolă principală</value>
     <comment>Label for a master password.</comment>
   </data>
   <data name="More" xml:space="preserve">
@@ -391,7 +391,7 @@
     <value>Cont</value>
   </data>
   <data name="AccountCreated" xml:space="preserve">
-    <value>Nou dvs. cont a fost creat! Acum vă puteți autentifica.</value>
+    <value>Noul dvs. cont a fost creat! Acum vă puteți autentifica.</value>
   </data>
   <data name="AddAnItem" xml:space="preserve">
     <value>Adăugare articol</value>
@@ -403,10 +403,10 @@
     <value>Utilizați serviciul de accesibilitate Bitwarden pentru a completa automat datele de autentificare între aplicații și pagini web.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
-    <value>Serviciul auto-completare</value>
+    <value>Serviciul de auto-completare</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
-    <value>Evitați caracterele ambigue</value>
+    <value>Se evită caracterele ambigue</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
     <value>Extensia aplicației Bitwarden</value>
@@ -540,7 +540,7 @@
     <value>Acțiune la expirarea seifului</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
-    <value>Deconectarea va elimina accesul la seiful dvs. și necesită autentificare online după perioada de expirare. Sigur doriți să utilizați această setare?</value>
+    <value>După expirare, accesul la seiful dvs. va fi restricționat și va fi necesară autentificarea online. Sigur doriți să utilizați această setare?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>Autentificare...</value>
@@ -556,13 +556,13 @@
     <value>Confirmarea parolei nu este corectă.</value>
   </data>
   <data name="MasterPasswordDescription" xml:space="preserve">
-    <value>Parola principală este parola pe care o utilizați pentru a vă accesa seiful. Este foarte important să nu uitați parola principală. Nu există nicio modalitate de a recupera parola în cazul în care ați uitat-o.</value>
+    <value>Parola principală este parola pe care o utilizați pentru a vă accesa seiful. Este foarte important să nu uitați această parolă. Nu există nicio modalitate de a recupera parola în cazul în care ați uitat-o.</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
     <value>Indiciul pentru parola principală (opțional)</value>
   </data>
   <data name="MasterPasswordHintDescription" xml:space="preserve">
-    <value>Un indiciu pentru parola principală vă poate ajuta să vă reamintiți parola dacă o uitați.</value>
+    <value>Un indiciu pentru parola principală vă poate ajuta să v-o reamintiți dacă o uitați.</value>
   </data>
   <data name="MasterPasswordLengthValMessage" xml:space="preserve">
     <value>Parola principală trebuie să conțină minimum 8 caractere.</value>
@@ -632,7 +632,7 @@
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
-    <value>Evaluați aplicația</value>
+    <value>Evaluare aplicație</value>
   </data>
   <data name="RateTheAppDescription" xml:space="preserve">
     <value>Vă rugăm să luați în considerare să ne ajutați cu o recenzie bună!</value>
@@ -679,7 +679,7 @@
     <value>Sincronizarea nu a reușit.</value>
   </data>
   <data name="SyncVaultNow" xml:space="preserve">
-    <value>Sincronizați seiful acum</value>
+    <value>Sincronizare seif acum</value>
   </data>
   <data name="TouchID" xml:space="preserve">
     <value>Touch ID</value>
@@ -689,7 +689,7 @@
     <value>Autentificare în două etape</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Autentificarea în două etape vă face contul mai sigur, solicitându-vă să introduceți un cod de securitate dintr-o aplicație de autentificare ori de câte ori vă conectați. Autentificarea în două etape poate fi activată în seiful web bitwarden.com. Doriți să vizitați saitul acum?</value>
+    <value>Autentificarea în două etape întărește siguranța contului dvs. prin solicitarea unei confirmări de autentificare cu un alt dispozitiv, cum ar fi: o cheie de securitate, o aplicație de autentificare, un SMS, un apel telefonic sau un e-mail. Autentificarea în două etape poate fi activată în seiful web bitwarden.com. Doriți să vizitați saitul acum?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Deblocare cu {0}</value>
@@ -798,7 +798,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeEmail" xml:space="preserve">
-    <value>Introduceți codul de verificare din 6 cifre, care a fost trimis prin e-mail la {0}.</value>
+    <value>Introducere cod de verificare din 6 cifre, care a fost trimis prin e-mail la {0}.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
@@ -806,7 +806,7 @@
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>Acest cont are activată conectarea în două etape, însă niciunul dintre furnizorii în două etape configurați nu este acceptat pe acest dispozitiv. Utilizați un dispozitiv acceptat și/sau adăugați furnizori suplimentari care sunt mai bine acceptați între dispozitive (cum ar fi o aplicație de autentificare).</value>
+    <value>Acest cont are activată autentificarea în două etape, dar niciunul dintre furnizorii 2FA configurați nu este acceptat pe acest dispozitiv. Utilizați un dispozitiv acceptat și/sau adăugați furnizori suplimentari care sunt mai bine acceptați între dispozitive (cum ar fi o aplicație de autentificare).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
     <value>Cod de recuperare</value>
@@ -824,7 +824,7 @@
     <value>Opțiuni de autentificare în două etape</value>
   </data>
   <data name="UseAnotherTwoStepMethod" xml:space="preserve">
-    <value>Utilizați o altă metodă de autentificare în două etape</value>
+    <value>Utilizare de metodă diferită de autentificare în două etape</value>
   </data>
   <data name="VerificationEmailNotSent" xml:space="preserve">
     <value>Nu s-a putut trimite e-mailul de verificare. Încercați din nou.</value>
@@ -835,7 +835,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
-    <value>Pentru a continua, țineți apăsat YubiKey NEO pe partea din spate a aparatului sau introduceți YubiKey în portul USB al aparatului, apoi atingeți butonul acestuia.</value>
+    <value>Pentru a continua, țineți YubiKey NEO în partea din spate a dispozitivului sau introduceți-l în portul USB, apoi apăsați butonul acestuia.</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
     <value>Cheie de securitate YubiKey</value>
@@ -899,7 +899,7 @@
     <value>Dezactivare copiere automată TOTP</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
-    <value>Pentru a utiliza această funcție este necesar un abonament premium.</value>
+    <value>Este necesar statutul de membru Premium pentru a utiliza această caracteristică.</value>
   </data>
   <data name="AttachementAdded" xml:space="preserve">
     <value>Atașamentul s-a adăugat</value>
@@ -982,7 +982,7 @@
     <value>Număr card</value>
   </data>
   <data name="SecurityCode" xml:space="preserve">
-    <value>Cod de securitate</value>
+    <value>Cod de securitate (CVV/CVC)</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
     <value>Card</value>
@@ -1084,7 +1084,7 @@
     <value>octombrie</value>
   </data>
   <data name="PassportNumber" xml:space="preserve">
-    <value>Număr CI/pașaport</value>
+    <value>Număr CI / Pașaport</value>
   </data>
   <data name="Phone" xml:space="preserve">
     <value>Telefon</value>
@@ -1138,10 +1138,10 @@
     <value>Nu există elemente în acest dosar.</value>
   </data>
   <data name="NoItemsTrash" xml:space="preserve">
-    <value>Nu există articole în coșul de gunoi.</value>
+    <value>Nu există articole în coșul de reciclare.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
-    <value>Serviciu de accesibilitate pentru auto-completare</value>
+    <value>Serviciul de accesibilitate pentru auto-completare</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
     <value>Serviciul de auto-completare Bitwarden folosește Android Autofill Framework pentru a asista completarea informațiilor de autentificare și a celor asociate cardurilor și identităților în alte aplicații de pe dispozitivul dvs.</value>
@@ -1169,7 +1169,7 @@
     <value>Windows Hello</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
-    <value>Nu am reușit să deschidem automat meniul setărilor pentru auto-completare. Puteți să navigați manual la acesta din Setările Android &gt; Sistem &gt; Limbi și introducere text &gt; Avansate &gt; Serviciu de auto-completare.</value>
+    <value>Nu am reușit să deschidem automat meniul setărilor pentru auto-completare. Puteți să navigați manual la acesta din Setările Android &gt; Sistem &gt; Limbi și introducere text &gt; Avansate &gt; Serviciul de auto-completare.</value>
   </data>
   <data name="CustomFieldName" xml:space="preserve">
     <value>Nume de câmp particularizat</value>
@@ -1237,13 +1237,13 @@
     <comment>An entity of multiple related people (ex. a team or business organization).</comment>
   </data>
   <data name="HoldYubikeyNearTop" xml:space="preserve">
-    <value>Țineți Yubikey-ul lângă partea superioară a dispozitivului.</value>
+    <value>Țineți Yubikey în partea superioară a dispozitivului.</value>
   </data>
   <data name="TryAgain" xml:space="preserve">
     <value>Încercați din nou</value>
   </data>
   <data name="YubiKeyInstructionIos" xml:space="preserve">
-    <value>Pentru a continua, țineți cheia dvs. YubiKey NEO pe spatele aparatului.</value>
+    <value>Pentru a continua, țineți YubiKey NEO în partea din spate a dispozitivului.</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
     <value>Serviciul de accesibilitate poate fi de ajutor când aplicațiile nu acceptă serviciul standard de auto-completare.</value>
@@ -1269,10 +1269,10 @@
     <value>Vă recomandăm să dezactivați orice alte aplicații cu auto-completare din Setări dacă nu intenționați să le utilizați.</value>
   </data>
   <data name="BitwardenAutofillDescription" xml:space="preserve">
-    <value>Accesați-vă seiful direct de la tastatură pentru a auto-completa rapid parolele.</value>
+    <value>Vă permite accesul la seif direct de la tastatură pentru a auto-completa rapid parolele.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
-    <value>Pentru a activa auto-completarea pe acest dispozitiv, urmărește aceste instrucțiuni:</value>
+    <value>Pentru a activa auto-completarea pe acest dispozitiv, urmăriți aceste instrucțiuni:</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
     <value>1. Accesați Setările iOS</value>
@@ -1394,7 +1394,7 @@
     <value>Nicio organizație de afișat.</value>
   </data>
   <data name="ShareDesc" xml:space="preserve">
-    <value>Alegeți o organizație cu care doriți să partajați acest element. Partajarea transferă proprietatea asupra articolului către organizație. Nu veți mai fi proprietarul direct al acestui articol după ce a fost partajat.</value>
+    <value>Alegeți o organizație cu care doriți să partajați acest articol. Partajarea transferă proprietatea asupra articolului către organizație. Nu veți mai fi proprietarul direct al acestuia după ce a fost partajat.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
     <value>Număr de cuvinte</value>
@@ -1443,7 +1443,7 @@
     <value>30 de minute</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
-    <value>Setați codul PIN de deblocare Bitwarden. Setările codului PIN vor fi resetate dacă vă deconectați vreodată din aplicație.</value>
+    <value>Stabiliți codul PIN de deblocare Bitwarden. Setările codului PIN vor fi reinițializate dacă vă deconectați vreodată din aplicație.</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
     <value>Autentificat ca {0} pe {1}.</value>
@@ -1545,11 +1545,11 @@
     <value>Modificările temei se vor aplica după repornirea aplicației.</value>
   </data>
   <data name="Capitalize" xml:space="preserve">
-    <value>Majuscule inițiale</value>
+    <value>Se folosesc majuscule inițiale</value>
     <comment>ex. Uppercase the first character of a word.</comment>
   </data>
   <data name="IncludeNumber" xml:space="preserve">
-    <value>Includere cifră</value>
+    <value>Se includ cifre</value>
   </data>
   <data name="Download" xml:space="preserve">
     <value>Descărcare</value>
@@ -1603,10 +1603,10 @@
     <value>Acest export conține datele dvs. din seif în format necriptat. Nu ar trebui să stocați sau să trimiteți fișierul pe canale nesecurizate (cum ar fi e-mail). Ștergeți-l imediat după ce nu îl mai folosiți.</value>
   </data>
   <data name="EncExportVaultWarning" xml:space="preserve">
-    <value>This export encrypts your data using your account's encryption key. If you ever rotate your account's encryption key you should export again since you will not be able to decrypt this export file.</value>
+    <value>Acest export criptează datele folosind cheia de criptare a contului. Dacă schimbați vreodată cheia de criptare a contului, ar trebui să o exportați din nou, deoarece nu veți putea decripta acest fișier exportat.</value>
   </data>
   <data name="ExportVaultConfirmationTitle" xml:space="preserve">
-    <value>Confirm Vault Export</value>
+    <value>Confirmare export seif</value>
     <comment>Title for the alert to confirm vault exports.</comment>
   </data>
   <data name="Warning" xml:space="preserve">
@@ -1642,11 +1642,11 @@
     <value>Nu s-au detectat câmpuri de parolă</value>
   </data>
   <data name="SoftDeleting" xml:space="preserve">
-    <value>Se trimite la gunoi...</value>
+    <value>Se trimite în coșul de reciclare...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemSoftDeleted" xml:space="preserve">
-    <value>Articolul a fost trimis la gunoi.</value>
+    <value>Articolul a fost trimis în coșul de reciclare.</value>
     <comment>Confirmation message after successfully soft-deleting a login</comment>
   </data>
   <data name="Restore" xml:space="preserve">
@@ -1662,11 +1662,11 @@
     <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
   </data>
   <data name="Trash" xml:space="preserve">
-    <value>Gunoi</value>
+    <value>Coș de reciclare</value>
     <comment>(noun) Location of deleted items which have not yet been permanently deleted</comment>
   </data>
   <data name="SearchTrash" xml:space="preserve">
-    <value>Căutare la gunoi</value>
+    <value>Căutare în coșul de reciclare</value>
     <comment>(action prompt) Label for the search text field when viewing the trash folder</comment>
   </data>
   <data name="DoYouReallyWantToPermanentlyDeleteCipher" xml:space="preserve">
@@ -1678,14 +1678,14 @@
     <comment>Confirmation alert message when restoring a soft-deleted cipher.</comment>
   </data>
   <data name="DoYouReallyWantToSoftDeleteCipher" xml:space="preserve">
-    <value>Sigur doriți să trimiteți la gunoi?</value>
+    <value>Sigur doriți să trimiteți în coșul de reciclare?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Modificare biometrică detectată, conectați-vă folosind parola principală pentru a activa din nou.</value>
+    <value>Deblocarea biometrică a fost dezactivată în așteptarea verificării parolei principale.</value>
   </data>
   <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Biometric unlock for autofill disabled pending verification of master password.</value>
+    <value>Deblocarea biometrică pentru auto-completare a fost dezactivată în așteptarea verificării parolei principale.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Activare sincronizare la reîmprospătare</value>
@@ -1694,7 +1694,7 @@
     <value>Sincronizare seif cu tragere în jos</value>
   </data>
   <data name="LogInSso" xml:space="preserve">
-    <value>Identificare unică organizație (SSO)</value>
+    <value>Conectare unică organizație (SSO)</value>
   </data>
   <data name="LogInSsoSummary" xml:space="preserve">
     <value>Conectați-vă rapid utilizând portalul de conectare unică al organizației dvs. Introduceți identificatorul organizației dvs. pentru a începe.</value>
@@ -1709,7 +1709,7 @@
     <value>Setare parolă principală</value>
   </data>
   <data name="SetMasterPasswordSummary" xml:space="preserve">
-    <value>Pentru a finaliza conectarea cu SSO, vă rugăm să setați o parolă principală pentru a vă accesa și a proteja seiful.</value>
+    <value>Pentru a finaliza conectarea cu SSO, vă rugăm să setați o parolă principală pentru a vă accesa și proteja seiful.</value>
   </data>
   <data name="MasterPasswordPolicyInEffect" xml:space="preserve">
     <value>Una sau mai multe politici ale organizației necesită ca parola principală să îndeplinească următoarele cerințe:</value>
@@ -1742,13 +1742,13 @@
     <value>Se încarcă</value>
   </data>
   <data name="AcceptPolicies" xml:space="preserve">
-    <value>Activând acest comutator sunteți de acord cu următoarele:</value>
+    <value>Dacă activați acest comutator sunteți de acord cu următoarele:</value>
   </data>
   <data name="AcceptPoliciesError" xml:space="preserve">
-    <value>Termenii de utilizare și Politica de confidențialitate nu au fost recunoscute.</value>
+    <value>Termeni de utilizare și Politica de confidențialitate nu au fost recunoscute.</value>
   </data>
   <data name="TermsOfService" xml:space="preserve">
-    <value>Termenii de utilizare</value>
+    <value>Termeni de utilizare</value>
   </data>
   <data name="PrivacyPolicy" xml:space="preserve">
     <value>Politică de confidențialitate</value>
@@ -1757,7 +1757,7 @@
     <value>Bitwarden are nevoie de atenție - Activați "Afișare peste" în "Serviciul de auto-completare" din Setările Bitwarden</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
-    <value>Serviciu de Auto-completare</value>
+    <value>Servicii de auto-completare</value>
   </data>
   <data name="InlineAutofill" xml:space="preserve">
     <value>Utilizare auto-completare în linie</value>
@@ -1793,6 +1793,9 @@
     <value>Dacă este activată, accesibilitatea va afișa o fereastră pop-up pentru a augmenta Serviciul de Auto-completare pentru aplicațiile mai vechi care nu acceptă Android Autofill Framework.</value>
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
-    <value>Due to an Enterprise Policy, you are restricted from saving items to your personal vault. Change the Ownership option to an organization and choose from available Collections.</value>
+    <value>Din cauza unei politici organizaționale vă este restricționată salvarea elementelor în seiful dvs. personal. Schimbați tipul de proprietate la altă organizație și alegeți dintre colecțiile disponibile.</value>
+  </data>
+  <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
+    <value>An organization policy is affecting your ownership options.</value>
   </data>
 </root>
