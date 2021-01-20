@@ -1603,10 +1603,10 @@
     <value>這份匯出檔案中包含未加密的密碼庫資料。您不應儲存此檔案，或透過未加密的方式傳送（例如電子郵件）。用完後請立即將它刪除。</value>
   </data>
   <data name="EncExportVaultWarning" xml:space="preserve">
-    <value>This export encrypts your data using your account's encryption key. If you ever rotate your account's encryption key you should export again since you will not be able to decrypt this export file.</value>
+    <value>將使用您帳號的加密金鑰來加密匯出資料，若您更新了帳號的加密金鑰，請重新匯出，才有辦法解密匯出的檔案。</value>
   </data>
   <data name="ExportVaultConfirmationTitle" xml:space="preserve">
-    <value>Confirm Vault Export</value>
+    <value>確認匯出密碼庫</value>
     <comment>Title for the alert to confirm vault exports.</comment>
   </data>
   <data name="Warning" xml:space="preserve">
@@ -1694,80 +1694,79 @@
     <value>Syncing vault with pull down gesture.</value>
   </data>
   <data name="LogInSso" xml:space="preserve">
-    <value>Enterprise Single Sign-On</value>
+    <value>企業單一登入</value>
   </data>
   <data name="LogInSsoSummary" xml:space="preserve">
     <value>Quickly log in using your organization's single sign-on portal. Please enter your organization's identifier to begin.</value>
   </data>
   <data name="OrgIdentifier" xml:space="preserve">
-    <value>Organization Identifier</value>
+    <value>組織識別代碼</value>
   </data>
   <data name="LoginSsoError" xml:space="preserve">
-    <value>Currently unable to login with SSO</value>
+    <value>目前無法透過單一登入方式登入</value>
   </data>
   <data name="SetMasterPassword" xml:space="preserve">
-    <value>Set Master Password</value>
+    <value>設定主密碼</value>
   </data>
   <data name="SetMasterPasswordSummary" xml:space="preserve">
-    <value>In order to complete logging in with SSO, please set a master password to access and protect your vault.</value>
+    <value>請設定用來保護密碼庫的主控密碼以完成 SSO 登入。</value>
   </data>
   <data name="MasterPasswordPolicyInEffect" xml:space="preserve">
-    <value>One or more organization policies require your master password to meet the following requirements:</value>
+    <value>有一組以上組織原則要求您的主控密碼須符合下列條件：</value>
   </data>
   <data name="PolicyInEffectMinComplexity" xml:space="preserve">
-    <value>Minimum complexity score of {0}</value>
+    <value>最小複雜度分數 {0}</value>
   </data>
   <data name="PolicyInEffectMinLength" xml:space="preserve">
-    <value>Minimum length of {0}</value>
+    <value>最小長度為 {0}</value>
   </data>
   <data name="PolicyInEffectUppercase" xml:space="preserve">
-    <value>Contain one or more uppercase characters</value>
+    <value>至少包含一個大寫字母</value>
   </data>
   <data name="PolicyInEffectLowercase" xml:space="preserve">
-    <value>Contain one or more lowercase characters</value>
+    <value>至少包含一個小寫字母</value>
   </data>
   <data name="PolicyInEffectNumbers" xml:space="preserve">
-    <value>Contain one or more numbers</value>
+    <value>至少包含一個數字</value>
   </data>
   <data name="PolicyInEffectSpecial" xml:space="preserve">
-    <value>Contain one or more of the following special characters: {0}</value>
+    <value>至少包含一個下列特殊字元: {0}</value>
   </data>
   <data name="MasterPasswordPolicyValidationTitle" xml:space="preserve">
-    <value>Invalid Password</value>
+    <value>密碼無效</value>
   </data>
   <data name="MasterPasswordPolicyValidationMessage" xml:space="preserve">
-    <value>Password does not meet organization requirements. Please check the policy information and try again.</value>
+    <value>輸入的密碼不符合組織要求，請確認政策資訊然後再試一次。</value>
   </data>
   <data name="Loading" xml:space="preserve">
-    <value>Loading</value>
+    <value>載入中</value>
   </data>
   <data name="AcceptPolicies" xml:space="preserve">
-    <value>By activating this switch you agree to the following:
-</value>
+    <value>開啟此開關，代表您同意下列項目:</value>
   </data>
   <data name="AcceptPoliciesError" xml:space="preserve">
-    <value>Terms of Service and Privacy Policy have not been acknowledged.</value>
+    <value>尚未接受服務條款與隱私權保護政策。</value>
   </data>
   <data name="TermsOfService" xml:space="preserve">
-    <value>Terms of Service</value>
+    <value>服務條款</value>
   </data>
   <data name="PrivacyPolicy" xml:space="preserve">
-    <value>Privacy Policy</value>
+    <value>隱私權政策</value>
   </data>
   <data name="AccessibilityDrawOverPermissionAlert" xml:space="preserve">
     <value>Bitwarden needs attention - Enable "Draw-Over" in "Auto-fill Services" from Bitwarden Settings</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
-    <value>Auto-fill Services</value>
+    <value>自動填入服務</value>
   </data>
   <data name="InlineAutofill" xml:space="preserve">
-    <value>Use Inline Autofill</value>
+    <value>使用行內自動填寫</value>
   </data>
   <data name="InlineAutofillDescription" xml:space="preserve">
-    <value>Use inline autofill if your selected IME (keyboard) supports it. If your configuration is not supported (or this option is disabled), the default Autofill overlay will be used.</value>
+    <value>若您的輸入法支援，就使用行內自動填寫。若您的設定不支援（或未啟用此選項），就會使用預設的自動填寫覆蓋模式。</value>
   </data>
   <data name="Accessibility" xml:space="preserve">
-    <value>Use Accessibility</value>
+    <value>使用輔助性服務</value>
   </data>
   <data name="AccessibilityDescription" xml:space="preserve">
     <value>Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. When enabled, we'll display a popup when login fields are selected.</value>
@@ -1795,5 +1794,8 @@
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
     <value>Due to an Enterprise Policy, you are restricted from saving items to your personal vault. Change the Ownership option to an organization and choose from available Collections.</value>
+  </data>
+  <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
+    <value>An organization policy is affecting your ownership options.</value>
   </data>
 </root>
