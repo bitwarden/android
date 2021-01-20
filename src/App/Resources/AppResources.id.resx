@@ -1603,10 +1603,10 @@
     <value>Ekspor ini berisi data vault Anda dalam format yang tidak dienkripsi. Anda tidak boleh menyimpan atau mengirim file yang diekspor melalui saluran yang tidak aman (seperti emel). Hapus segera setelah Anda selesai menggunakannya.</value>
   </data>
   <data name="EncExportVaultWarning" xml:space="preserve">
-    <value>This export encrypts your data using your account's encryption key. If you ever rotate your account's encryption key you should export again since you will not be able to decrypt this export file.</value>
+    <value>Ekspor ini mengenkripsi data anda menggunakan kunci enkripsi akun anda. Jika anda pernah merotasi kunci enkripsi akun anda, anda harus mengekspor lagi karena anda tidak akan dapat mendekripsi file ekspor ini.</value>
   </data>
   <data name="ExportVaultConfirmationTitle" xml:space="preserve">
-    <value>Confirm Vault Export</value>
+    <value>Konfirmasi Ekspor Vault</value>
     <comment>Title for the alert to confirm vault exports.</comment>
   </data>
   <data name="Warning" xml:space="preserve">
@@ -1685,7 +1685,7 @@
     <value>Perubahan biometrik terdeteksi, login menggunakan Master Password untuk mengaktifkan kembali.</value>
   </data>
   <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Biometric unlock for autofill disabled pending verification of master password.</value>
+    <value>Buka kunci biometrik untuk pengisian otomatis dinonaktifkan sambil menunggu verifikasi kata sandi utama.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Aktifkan sinkronisasi saat refresh</value>
@@ -1793,6 +1793,9 @@
     <value>Jika diaktifkan, aksesibilitas akan menampilkan munculan untuk menambah Layanan IsiOtomatis untuk aplikasi lama yang tidak mendukung Kerangka Pengisian Otomatis Android.</value>
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
-    <value>Due to an Enterprise Policy, you are restricted from saving items to your personal vault. Change the Ownership option to an organization and choose from available Collections.</value>
+    <value>Karena Kebijakan Perusahaan, anda dilarang menyimpan item ke lemari besi pribadi anda. Ubah opsi Kepemilikan ke organisasi dan pilih dari Koleksi yang tersedia.</value>
+  </data>
+  <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
+    <value>An organization policy is affecting your ownership options.</value>
   </data>
 </root>
