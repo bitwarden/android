@@ -1806,6 +1806,9 @@
 </value>
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
-    <value>Due to an Enterprise Policy, you are restricted from saving items to your personal vault. Change the Ownership option to an organization and choose from available Collections.</value>
+    <value>Due to an Enterprise Policy, you are restricted from saving items to your personal vault. Change the Ownership option to an organisation and choose from available Collections.</value>
+  </data>
+  <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
+    <value>An organization policy is affecting your ownership options.</value>
   </data>
 </root>
