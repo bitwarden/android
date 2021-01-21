@@ -41,7 +41,7 @@ namespace Bit.iOS.Core.Controllers
         public StepperTableViewCell NumWordsCell { get; set; } = new StepperTableViewCell(
             AppResources.NumberOfWords, 3, 3, 20, 1);
         public FormEntryTableViewCell WordSeparatorCell { get; set; } = new FormEntryTableViewCell(
-            AppResources.WordSeparator);
+            AppResources.WordSeparator, leadingConstant: 20f);
         public SwitchTableViewCell CapitalizeCell { get; set; } = new SwitchTableViewCell(
             AppResources.Capitalize);
         public SwitchTableViewCell IncludeNumberCell { get; set; } = new SwitchTableViewCell(
