@@ -1,5 +1,6 @@
 ﻿using Bit.Core.Models.View;
 using System;
+using System.Linq;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -32,14 +33,14 @@ namespace Bit.App.Pages
             }, _mainContent);
         }
 
-        private async void RowSelected(object sender, SelectedItemChangedEventArgs e)
+        private async void RowSelected(object sender, SelectionChangedEventArgs e)
         {
-            ((ListView)sender).SelectedItem = null;
+            ((Xamarin.Forms.CollectionView)sender).SelectedItem = null;
             if (!DoOnce())
             {
                 return;
             }
-            if (!(e.SelectedItem is FolderView folder))
+            if (!(e.CurrentSelection?.FirstOrDefault() is FolderView folder))
             {
                 return;
             }

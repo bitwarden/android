@@ -7,6 +7,12 @@ namespace Bit.App.Controls
     {
         private CipherView _cipher;
 
+        public CipherViewCellViewModel () { }
+        public CipherViewCellViewModel(CipherView cipherView)
+        {
+            Cipher = cipherView;
+        }
+
         public CipherView Cipher
         {
             get => _cipher;

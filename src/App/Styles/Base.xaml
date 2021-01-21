@@ -124,7 +124,7 @@
     </Style>
 
     <!-- List -->
-    <Style TargetType="ListView"
+    <Style TargetType="CollectionView"
            Class="list">
     </Style>
     <Style TargetType="StackLayout"
@@ -173,6 +173,11 @@
     </Style>
     <Style TargetType="BoxView"
            Class="list-section-separator-bottom">
+        <Setter Property="HeightRequest"
+                Value="1" />
+    </Style>
+    <Style TargetType="BoxView"
+           Class="list-item-separator-bottom">
         <Setter Property="HeightRequest"
                 Value="1" />
     </Style>

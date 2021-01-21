@@ -47,40 +47,35 @@
                         Clicked="AddButton_Clicked"></Button>
                 </StackLayout>
 
-                <controls:ExtendedListView
+                <controls:ExtendedCollectionView
                     IsVisible="{Binding ShowList}"
                     ItemsSource="{Binding GroupedItems}"
                     VerticalOptions="FillAndExpand"
-                    HasUnevenRows="true"
                     ItemTemplate="{StaticResource listItemDataTemplateSelector}"
-                    IsGroupingEnabled="True"
-                    ItemSelected="RowSelected"
+                    IsGrouped="True"
+                    SelectionMode="Single"
+                    SelectionChanged="RowSelected"
                     StyleClass="list, list-platform">
-                    <x:Arguments>
-                        <ListViewCachingStrategy>RecycleElement</ListViewCachingStrategy>
-                    </x:Arguments>
 
-                    <ListView.GroupHeaderTemplate>
+                    <CollectionView.GroupHeaderTemplate>
                         <DataTemplate x:DataType="pages:GroupingsPageListGroup">
-                            <ViewCell>
-                                <StackLayout
-                                    Spacing="0" Padding="0" VerticalOptions="FillAndExpand"
-                                    StyleClass="list-row-header-container, list-row-header-container-platform">
-                                    <BoxView
-                                        StyleClass="list-section-separator-top, list-section-separator-top-platform" />
-                                    <StackLayout StyleClass="list-row-header, list-row-header-platform">
-                                        <Label
-                                            Text="{Binding Name}"
-                                            StyleClass="list-header, list-header-platform" />
-                                        <Label
-                                            Text="{Binding ItemCount}"
-                                            StyleClass="list-header-sub" />
-                                    </StackLayout>
+                            <StackLayout
+                                Spacing="0" Padding="0" VerticalOptions="FillAndExpand"
+                                StyleClass="list-row-header-container, list-row-header-container-platform">
+                                <BoxView
+                                    StyleClass="list-section-separator-top, list-section-separator-top-platform" />
+                                <StackLayout StyleClass="list-row-header, list-row-header-platform">
+                                    <Label
+                                        Text="{Binding Name}"
+                                        StyleClass="list-header, list-header-platform" />
+                                    <Label
+                                        Text="{Binding ItemCount}"
+                                        StyleClass="list-header-sub" />
                                 </StackLayout>
-                            </ViewCell>
+                            </StackLayout>
                         </DataTemplate>
-                    </ListView.GroupHeaderTemplate>
-                </controls:ExtendedListView>
+                    </CollectionView.GroupHeaderTemplate>
+                </controls:ExtendedCollectionView>
             </StackLayout>
         </ResourceDictionary>
     </ContentPage.Resources>
