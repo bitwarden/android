@@ -325,7 +325,14 @@ namespace Bit.iOS.Core.Controllers
                     return 2;
                 }
 
-                return 7;
+                if (_controller._passType == "password")
+                {
+                    return 7;
+                }
+                else
+                {
+                    return 5;
+                }
             }
 
             public override nfloat GetHeightForHeader(UITableView tableView, nint section)
