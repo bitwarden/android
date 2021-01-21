@@ -327,7 +327,7 @@ namespace Bit.iOS.Core.Controllers
 
                 if (_controller._passType == "password")
                 {
-                    return 7;
+                    return 8;
                 }
                 else
                 {
