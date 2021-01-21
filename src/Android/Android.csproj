@@ -81,19 +81,19 @@
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.AutoFill" Version="1.1.0.3-beta01" />
     <PackageReference Include="Xamarin.Essentials">
-      <Version>1.5.3.2</Version>
+      <Version>1.6.0</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Firebase.Messaging">
       <Version>71.1740.0</Version>
     </PackageReference>
-    <PackageReference Include="Xamarin.Google.Android.Material" Version="1.0.0" />
-    <PackageReference Include="Xamarin.AndroidX.AppCompat" Version="1.1.0" />
-    <PackageReference Include="Xamarin.AndroidX.Legacy.Support.V4" Version="1.0.0" />
-    <PackageReference Include="Xamarin.AndroidX.CardView" Version="1.0.0" />
-    <PackageReference Include="Xamarin.AndroidX.MediaRouter" Version="1.1.0" />
-    <PackageReference Include="Xamarin.AndroidX.Migration" Version="1.0.6" />
+    <PackageReference Include="Xamarin.Google.Android.Material" Version="1.2.1.1" />
+    <PackageReference Include="Xamarin.AndroidX.AppCompat" Version="1.2.0.6" />
+    <PackageReference Include="Xamarin.AndroidX.Legacy.Support.V4" Version="1.0.0.6" />
+    <PackageReference Include="Xamarin.AndroidX.CardView" Version="1.0.0.6" />
+    <PackageReference Include="Xamarin.AndroidX.MediaRouter" Version="1.2.0.1" />
+    <PackageReference Include="Xamarin.AndroidX.Migration" Version="1.0.8" />
     <PackageReference Include="Xamarin.GooglePlayServices.SafetyNet">
-      <Version>71.1600.0</Version>
+      <Version>117.0.0</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
@@ -122,14 +122,12 @@
     <Compile Include="Receivers\EventUploadReceiver.cs" />
     <Compile Include="Receivers\LockAlarmReceiver.cs" />
     <Compile Include="Receivers\PackageReplacedReceiver.cs" />
-    <Compile Include="Renderers\CipherViewCellRenderer.cs" />
     <Compile Include="Renderers\CustomTabbedRenderer.cs" />
     <Compile Include="Renderers\ExtendedSliderRenderer.cs" />
     <Compile Include="Renderers\CustomEditorRenderer.cs" />
     <Compile Include="Renderers\CustomPickerRenderer.cs" />
     <Compile Include="Renderers\CustomEntryRenderer.cs" />
     <Compile Include="Renderers\CustomSearchBarRenderer.cs" />
-    <Compile Include="Renderers\ExtendedListViewRenderer.cs" />
     <Compile Include="Renderers\HybridWebViewRenderer.cs" />
     <Compile Include="Services\AndroidPushNotificationService.cs" />
     <Compile Include="Services\AndroidLogService.cs" />
@@ -206,7 +204,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\App\App.csproj">
-      <Project>{9F1742A7-7D03-4BB3-8FCD-41BC3002B00A}</Project>
+      <Project>{EE44C6A1-2A85-45FE-8D9B-BF1D5F88809C}</Project>
       <Name>App</Name>
     </ProjectReference>
     <ProjectReference Include="..\Core\Core.csproj">
@@ -255,12 +253,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\values\dimens.xml">
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\layout\CipherViewCell.axml">
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
       <SubType>Designer</SubType>
     </AndroidResource>

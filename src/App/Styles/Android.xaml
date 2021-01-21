@@ -68,10 +68,10 @@
 
     <!-- List -->
 
-    <Style TargetType="ListView"
-           Class="list-platform"
+    <Style TargetType="BoxView"
+           Class="list-item-separator-bottom-platform"
            ApplyToDerivedTypes="True">
-        <Setter Property="SeparatorColor"
+        <Setter Property="BackgroundColor"
                 Value="Transparent" />
     </Style>
     <Style TargetType="StackLayout"
