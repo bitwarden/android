@@ -37,6 +37,8 @@ namespace Bit.iOS.Core.Controllers
             AppResources.MinSpecial, 1, 0, 5, 1);
         public SliderTableViewCell LengthCell { get; set; } = new SliderTableViewCell(
             AppResources.Length, 10, 5, 64);
+        public SwitchTableViewCell AmbiguousCell { get; set; } = new SwitchTableViewCell(
+            AppResources.AvoidAmbiguousCharacters);
 
         public StepperTableViewCell NumWordsCell { get; set; } = new StepperTableViewCell(
             AppResources.NumberOfWords, 3, 3, 20, 1);
@@ -99,6 +101,7 @@ namespace Bit.iOS.Core.Controllers
             MinNumbersCell.Value = options.MinNumber.GetValueOrDefault(1);
             MinSpecialCell.Value = options.MinSpecial.GetValueOrDefault(1);
             LengthCell.Value = options.Length.GetValueOrDefault(14);
+            AmbiguousCell.Switch.On = options.Ambiguous.GetValueOrDefault();
 
             NumWordsCell.Value = options.NumWords.GetValueOrDefault(3);
             WordSeparatorCell.TextField.Text = options.WordSeparator ?? "";
@@ -112,6 +115,7 @@ namespace Bit.iOS.Core.Controllers
             MinNumbersCell.ValueChanged += Options_ValueChanged;
             MinSpecialCell.ValueChanged += Options_ValueChanged;
             LengthCell.ValueChanged += Options_ValueChanged;
+            AmbiguousCell.ValueChanged += Options_ValueChanged;
 
             NumWordsCell.ValueChanged += Options_ValueChanged;
             WordSeparatorCell.ValueChanged += Options_ValueChanged;
@@ -215,6 +219,7 @@ namespace Bit.iOS.Core.Controllers
                     Special = SpecialCell.Switch.On,
                     MinSpecial = MinSpecialCell.Value,
                     MinNumber = MinNumbersCell.Value,
+                    Ambiguous = AmbiguousCell.Switch.On,
                     NumWords = NumWordsCell.Value,
                     WordSeparator = WordSeparatorCell.TextField.Text,
                     Capitalize = CapitalizeCell.Switch.On,
@@ -283,7 +288,10 @@ namespace Bit.iOS.Core.Controllers
                     else if (indexPath.Row == 7)
                     {
                         return _controller.MinSpecialCell;
-                    }
+                    } else if (indexPath.Row == 8)
+                    {
+                        return _controller.AmbiguousCell;
+                    }    
                 }
                 else
                 {
@@ -327,7 +335,7 @@ namespace Bit.iOS.Core.Controllers
 
                 if (_controller._passType == "password")
                 {
-                    return 8;
+                    return 9;
                 }
                 else
                 {
