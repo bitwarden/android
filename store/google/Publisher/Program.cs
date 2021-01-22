@@ -101,27 +101,27 @@ namespace Bit.Publisher
                     {
                         Console.WriteLine("Upload exception: {0}", progress.Exception);
                     }
-                    throw new Exception("Upload failed.");
+                    // throw new Exception("Upload failed.");
                 }
             }
 
-            Console.WriteLine("Version code {0} has been uploaded.", aab.VersionCode);
-
-            var trackRequest = service.Edits.Tracks.Update(new Track
-            {
-                TrackValue = _track,
-                Releases = new List<TrackRelease>
-                {
-                    new TrackRelease { VersionCodes = new List<long?> { aab.VersionCode }, Status = "completed" }
-                }
-            }, Package, edit.Id, _track);
-
-            var updatedTrack = await trackRequest.ExecuteAsync();
-            Console.WriteLine("Track {0} has been updated.", updatedTrack.TrackValue);
-
-            var commitRequest = service.Edits.Commit(Package, edit.Id);
-            var commitEdit = await commitRequest.ExecuteAsync();
-            Console.WriteLine("App edit with id {0} has been comitted.", commitEdit.Id);
+            // Console.WriteLine("Version code {0} has been uploaded.", aab.VersionCode);
+            //
+            // var trackRequest = service.Edits.Tracks.Update(new Track
+            // {
+            //     TrackValue = _track,
+            //     Releases = new List<TrackRelease>
+            //     {
+            //         new TrackRelease { VersionCodes = new List<long?> { aab.VersionCode }, Status = "completed" }
+            //     }
+            // }, Package, edit.Id, _track);
+            //
+            // var updatedTrack = await trackRequest.ExecuteAsync();
+            // Console.WriteLine("Track {0} has been updated.", updatedTrack.TrackValue);
+            //
+            // var commitRequest = service.Edits.Commit(Package, edit.Id);
+            // var commitEdit = await commitRequest.ExecuteAsync();
+            // Console.WriteLine("App edit with id {0} has been comitted.", commitEdit.Id);
         }
     }
 }
