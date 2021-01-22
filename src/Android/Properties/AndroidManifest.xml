@@ -3,7 +3,7 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   android:versionCode="1"
-  android:versionName="2.8.0"
+  android:versionName="2.8.1"
   android:installLocation="internalOnly"
   package="com.x8bit.bitwarden">
 
