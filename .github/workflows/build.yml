@@ -138,23 +138,23 @@ jobs:
   
   android-ubuntu:
     runs-on: ubuntu-latest
-    needs: android
+#    needs: android
 
     steps:
       - name: Set up Node
-        if: github.event_name == 'release'
+        if: github.ref == 'refs/heads/master'
         uses: actions/setup-node@v1
         with:
           node-version: '10.x'
 
       - name: Set up F-Droid server
-        if: github.event_name == 'release'
+        if: github.ref == 'refs/heads/master'
         run: |
           sudo apt-get -qq update
           sudo apt-get -qqy install --no-install-recommends fdroidserver wget
 
       - name: Set up git credentials
-        if: github.event_name == 'release'
+        if: github.ref == 'refs/heads/master'
         env:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         run: |
@@ -164,7 +164,7 @@ jobs:
           git config --global user.name "Bitwarden CI"
 
       - name: Print environment
-        if: github.event_name == 'release'
+        if: github.ref == 'refs/heads/master'
         run: |
           node --version
           npm --version
@@ -177,15 +177,15 @@ jobs:
           GITHUB_EVENT: ${{ github.event_name }}
 
       - name: Checkout repo
-        if: github.event_name == 'release'
+        if: github.ref == 'refs/heads/master'
         uses: actions/checkout@v2
 
       - name: Install Node dependencies
-        if: github.event_name == 'release'
+        if: github.ref == 'refs/heads/master'
         run: npm install
 
       - name: Decrypt secrets
-        if: github.event_name == 'release'
+        if: github.ref == 'refs/heads/master'
         run: |
           ./.github/scripts/decrypt-secret.ps1 -filename store_fdroid-keystore.jks.gpg `
             -output ./store/fdroid/keystore.jks
@@ -194,7 +194,7 @@ jobs:
           DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
 
       - name: Compile for F-Droid Store
-        if: github.event_name == 'release'
+        if: github.ref == 'refs/heads/master'
         run: |
             sudo chmod +x ./.github/scripts/android/compile-fdroid.sh
             ./.github/scripts/android/compile-fdroid.sh
@@ -203,7 +203,7 @@ jobs:
           RELEASE_TAG_NAME: ${{ github.event.release.tag_name }}
 
       - name: Deploy to gh-pages
-        if: github.event_name == 'release'
+        if: github.ref == 'refs/heads/master'
         run: npm run deploy
 
   ios:
