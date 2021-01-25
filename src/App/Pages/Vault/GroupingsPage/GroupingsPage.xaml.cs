@@ -33,7 +33,6 @@ namespace Bit.App.Pages
         {
             _pageName = string.Concat(nameof(GroupingsPage), "_", DateTime.UtcNow.Ticks);
             InitializeComponent();
-            CollectionView = _collectionView;
             SetActivityIndicator(_mainContent);
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
@@ -72,8 +71,6 @@ namespace Bit.App.Pages
                 ToolbarItems.Remove(_addItem);
             }
         }
-
-        public ExtendedCollectionView CollectionView { get; set; }
 
         protected async override void OnAppearing()
         {
