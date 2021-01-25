@@ -10,18 +10,23 @@ using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace Bit.iOS.Core.Controllers
 {
     public abstract class PasswordGeneratorViewController : ExtendedUIViewController
     {
         private IPasswordGenerationService _passwordGenerationService;
+        private string _passType;
 
         public PasswordGeneratorViewController(IntPtr handle)
             : base(handle)
         { }
 
         public UITableViewController OptionsTableViewController { get; set; }
+        public PickerTableViewCell TypePickerCell { get; set; } = new PickerTableViewCell(
+            AppResources.Type);
+
         public SwitchTableViewCell UppercaseCell { get; set; } = new SwitchTableViewCell("A-Z");
         public SwitchTableViewCell LowercaseCell { get; set; } = new SwitchTableViewCell("a-z");
         public SwitchTableViewCell NumbersCell { get; set; } = new SwitchTableViewCell("0-9");
@@ -32,7 +37,20 @@ namespace Bit.iOS.Core.Controllers
             AppResources.MinSpecial, 1, 0, 5, 1);
         public SliderTableViewCell LengthCell { get; set; } = new SliderTableViewCell(
             AppResources.Length, 10, 5, 64);
+        public SwitchTableViewCell AmbiguousCell { get; set; } = new SwitchTableViewCell(
+            AppResources.AvoidAmbiguousCharacters);
 
+        public StepperTableViewCell NumWordsCell { get; set; } = new StepperTableViewCell(
+            AppResources.NumberOfWords, 3, 3, 20, 1);
+        public FormEntryTableViewCell WordSeparatorCell { get; set; } = new FormEntryTableViewCell(
+            AppResources.WordSeparator, leadingConstant: 20f);
+        public SwitchTableViewCell CapitalizeCell { get; set; } = new SwitchTableViewCell(
+            AppResources.Capitalize);
+        public SwitchTableViewCell IncludeNumberCell { get; set; } = new SwitchTableViewCell(
+            AppResources.IncludeNumber);
+
+        public List<string> TypeOptions { get; set; } = new List<string> {
+            AppResources.Password, AppResources.Passphrase };
         public PasswordGenerationOptions PasswordOptions { get; set; }
         public abstract UINavigationItem BaseNavItem { get; }
         public abstract UIBarButtonItem BaseCancelButton { get; }
@@ -51,7 +69,7 @@ namespace Bit.iOS.Core.Controllers
             var descriptor = UIFontDescriptor.PreferredBody;
             BasePasswordLabel.Font = UIFont.FromName("Menlo-Regular", descriptor.PointSize * 1.3f);
             BasePasswordLabel.LineBreakMode = UILineBreakMode.TailTruncation;
-            BasePasswordLabel.Lines = 1;
+            BasePasswordLabel.Lines = 0;
             BasePasswordLabel.AdjustsFontSizeToFitWidth = false;
             BasePasswordLabel.TextColor = ThemeHelpers.TextColor;
 
@@ -71,6 +89,10 @@ namespace Bit.iOS.Core.Controllers
                 OptionsTableViewController.TableView.SeparatorColor = ThemeHelpers.SeparatorColor;
             }
 
+            TypePickerCell.Items = TypeOptions;
+            TypePickerCell.ValueChanged += Type_ValueChanged;
+            SetPassType();
+
             var (options, enforcedPolicyOptions) = await _passwordGenerationService.GetOptionsAsync();
             UppercaseCell.Switch.On = options.Uppercase.GetValueOrDefault();
             LowercaseCell.Switch.On = options.Lowercase.GetValueOrDefault(true);
@@ -79,6 +101,12 @@ namespace Bit.iOS.Core.Controllers
             MinNumbersCell.Value = options.MinNumber.GetValueOrDefault(1);
             MinSpecialCell.Value = options.MinSpecial.GetValueOrDefault(1);
             LengthCell.Value = options.Length.GetValueOrDefault(14);
+            AmbiguousCell.Switch.On = options.Ambiguous.GetValueOrDefault();
+
+            NumWordsCell.Value = options.NumWords.GetValueOrDefault(3);
+            WordSeparatorCell.TextField.Text = options.WordSeparator ?? "";
+            CapitalizeCell.Switch.On = options.Capitalize.GetValueOrDefault();
+            IncludeNumberCell.Switch.On = options.IncludeNumber.GetValueOrDefault();
 
             UppercaseCell.ValueChanged += Options_ValueChanged;
             LowercaseCell.ValueChanged += Options_ValueChanged;
@@ -87,6 +115,12 @@ namespace Bit.iOS.Core.Controllers
             MinNumbersCell.ValueChanged += Options_ValueChanged;
             MinSpecialCell.ValueChanged += Options_ValueChanged;
             LengthCell.ValueChanged += Options_ValueChanged;
+            AmbiguousCell.ValueChanged += Options_ValueChanged;
+
+            NumWordsCell.ValueChanged += Options_ValueChanged;
+            WordSeparatorCell.ValueChanged += Options_ValueChanged;
+            CapitalizeCell.ValueChanged += Options_ValueChanged;
+            IncludeNumberCell.ValueChanged += Options_ValueChanged;
 
             // Adjust based on context password options
             if (PasswordOptions != null)
@@ -154,6 +188,18 @@ namespace Bit.iOS.Core.Controllers
             var task = GeneratePasswordAsync();
         }
 
+        private void Type_ValueChanged(object sender, EventArgs e)
+        {
+            SetPassType();
+            OptionsTableViewController.TableView.ReloadData();
+            var task = GeneratePasswordAsync();
+        }
+
+        private void SetPassType()
+        {
+            _passType = TypePickerCell.SelectedIndex == 1 ? "passphrase" : "password";
+        }
+
         private bool InvalidState()
         {
             return !LowercaseCell.Switch.On && !UppercaseCell.Switch.On && !NumbersCell.Switch.On &&
@@ -165,6 +211,7 @@ namespace Bit.iOS.Core.Controllers
             BasePasswordLabel.Text = await _passwordGenerationService.GeneratePasswordAsync(
                 new Bit.Core.Models.Domain.PasswordGenerationOptions
                 {
+                    Type = _passType,
                     Length = LengthCell.Value,
                     Uppercase = UppercaseCell.Switch.On,
                     Lowercase = LowercaseCell.Switch.On,
@@ -172,6 +219,11 @@ namespace Bit.iOS.Core.Controllers
                     Special = SpecialCell.Switch.On,
                     MinSpecial = MinSpecialCell.Value,
                     MinNumber = MinNumbersCell.Value,
+                    Ambiguous = AmbiguousCell.Switch.On,
+                    NumWords = NumWordsCell.Value,
+                    WordSeparator = WordSeparatorCell.TextField.Text,
+                    Capitalize = CapitalizeCell.Switch.On,
+                    IncludeNumber = IncludeNumberCell.Switch.On
                 });
         }
 
@@ -203,31 +255,62 @@ namespace Bit.iOS.Core.Controllers
 
                 if (indexPath.Row == 0)
                 {
-                    return _controller.LengthCell;
+                    return _controller.TypePickerCell;
                 }
-                else if (indexPath.Row == 1)
+
+                if (_controller._passType == "password")
                 {
-                    return _controller.UppercaseCell;
+
+                    if (indexPath.Row == 1)
+                    {
+                        return _controller.LengthCell;
+                    }
+                    else if (indexPath.Row == 2)
+                    {
+                        return _controller.UppercaseCell;
+                    }
+                    else if (indexPath.Row == 3)
+                    {
+                        return _controller.LowercaseCell;
+                    }
+                    else if (indexPath.Row == 4)
+                    {
+                        return _controller.NumbersCell;
+                    }
+                    else if (indexPath.Row == 5)
+                    {
+                        return _controller.SpecialCell;
+                    }
+                    else if (indexPath.Row == 6)
+                    {
+                        return _controller.MinNumbersCell;
+                    }
+                    else if (indexPath.Row == 7)
+                    {
+                        return _controller.MinSpecialCell;
+                    } else if (indexPath.Row == 8)
+                    {
+                        return _controller.AmbiguousCell;
+                    }    
                 }
-                else if (indexPath.Row == 2)
+                else
                 {
-                    return _controller.LowercaseCell;
-                }
-                else if (indexPath.Row == 3)
-                {
-                    return _controller.NumbersCell;
-                }
-                else if (indexPath.Row == 4)
-                {
-                    return _controller.SpecialCell;
-                }
-                else if (indexPath.Row == 5)
-                {
-                    return _controller.MinNumbersCell;
-                }
-                else if (indexPath.Row == 6)
-                {
-                    return _controller.MinSpecialCell;
+                    if (indexPath.Row == 1)
+                    {
+                        return _controller.NumWordsCell;
+                    }
+                    else if (indexPath.Row == 2)
+                    {
+                        return _controller.WordSeparatorCell;
+                    }
+                    else if (indexPath.Row == 3)
+                    {
+                        return _controller.CapitalizeCell;
+                    }
+                    else if (indexPath.Row == 4)
+                    {
+                        return _controller.IncludeNumberCell;
+                    }
                 }
 
                 return new ExtendedUITableViewCell();
@@ -250,7 +333,14 @@ namespace Bit.iOS.Core.Controllers
                     return 2;
                 }
 
-                return 7;
+                if (_controller._passType == "password")
+                {
+                    return 9;
+                }
+                else
+                {
+                    return 5;
+                }
             }
 
             public override nfloat GetHeightForHeader(UITableView tableView, nint section)

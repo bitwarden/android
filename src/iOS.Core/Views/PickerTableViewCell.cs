@@ -94,6 +94,8 @@ namespace Bit.iOS.Core.Views
         public UILabel Label { get; set; }
         public UIPickerView Picker { get; set; } = new UIPickerView();
 
+        public event EventHandler ValueChanged;
+
         public List<string> Items
         {
             get { return _items; }
@@ -199,6 +201,7 @@ namespace Bit.iOS.Core.Views
                 }
 
                 _cell.UpdatePickerFromModel(this);
+                _cell.ValueChanged?.Invoke(this, null);
             }
         }
     }
