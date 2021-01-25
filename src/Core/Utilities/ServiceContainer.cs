@@ -54,8 +54,10 @@ namespace Bit.Core.Utilities
                     return Task.FromResult(0);
                 });
             var policyService = new PolicyService(storageService, userService);
+            var sendService = new SendService(cryptoService, userService, apiService, storageService, i18nService,
+                cryptoFunctionService);
             var syncService = new SyncService(userService, apiService, settingsService, folderService,
-                cipherService, cryptoService, collectionService, storageService, messagingService, policyService,
+                cipherService, cryptoService, collectionService, storageService, messagingService, policyService, sendService,
                 (bool expired) =>
                 {
                     messagingService.Send("logout", expired);

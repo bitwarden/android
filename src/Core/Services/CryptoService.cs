@@ -220,7 +220,7 @@ namespace Bit.Core.Services
                 throw new Exception("No public key available.");
             }
             var keyFingerprint = await _cryptoFunctionService.HashAsync(publicKey, CryptoHashAlgorithm.Sha256);
-            var userFingerprint = await HkdfExpandAsync(keyFingerprint, Encoding.UTF8.GetBytes(userId), 32);
+            var userFingerprint = await _cryptoFunctionService.HkdfExpandAsync(keyFingerprint, Encoding.UTF8.GetBytes(userId), 32, HkdfAlgorithm.Sha256);
             return HashPhrase(userFingerprint);
         }
 
@@ -425,6 +425,12 @@ namespace Bit.Core.Services
         {
             var pinKey = await MakeKeyAsync(pin, salt, kdf, kdfIterations);
             return await StretchKeyAsync(pinKey);
+        }
+
+        public async Task<SymmetricCryptoKey> MakeSendKeyAsync(byte[] keyMaterial)
+        {
+            var sendKey = await _cryptoFunctionService.HkdfAsync(keyMaterial, "bitwarden-send", "send", 65, HkdfAlgorithm.Sha256);
+            return new SymmetricCryptoKey(sendKey);
         }
 
         public async Task<string> HashPasswordAsync(string password, SymmetricCryptoKey key)
@@ -772,30 +778,11 @@ namespace Bit.Core.Services
         private async Task<SymmetricCryptoKey> StretchKeyAsync(SymmetricCryptoKey key)
         {
             var newKey = new byte[64];
-            var enc = await HkdfExpandAsync(key.Key, Encoding.UTF8.GetBytes("enc"), 32);
+            var enc = await _cryptoFunctionService.HkdfExpandAsync(key.Key, Encoding.UTF8.GetBytes("enc"), 32, HkdfAlgorithm.Sha256);
             Buffer.BlockCopy(enc, 0, newKey, 0, 32);
-            var mac = await HkdfExpandAsync(key.Key, Encoding.UTF8.GetBytes("mac"), 32);
+            var mac = await _cryptoFunctionService.HkdfExpandAsync(key.Key, Encoding.UTF8.GetBytes("mac"), 32, HkdfAlgorithm.Sha256);
             Buffer.BlockCopy(mac, 0, newKey, 32, 32);
             return new SymmetricCryptoKey(newKey);
-        }
-
-        // ref: https://tools.ietf.org/html/rfc5869
-        private async Task<byte[]> HkdfExpandAsync(byte[] prk, byte[] info, int size)
-        {
-            var hashLen = 32; // sha256
-            var okm = new byte[size];
-            var previousT = new byte[0];
-            var n = (int)Math.Ceiling((double)size / hashLen);
-            for (var i = 0; i < n; i++)
-            {
-                var t = new byte[previousT.Length + info.Length + 1];
-                previousT.CopyTo(t, 0);
-                info.CopyTo(t, previousT.Length);
-                t[t.Length - 1] = (byte)(i + 1);
-                previousT = await _cryptoFunctionService.HmacAsync(t, prk, CryptoHashAlgorithm.Sha256);
-                previousT.CopyTo(okm, i * hashLen);
-            }
-            return okm;
         }
 
         private List<string> HashPhrase(byte[] hash, int minimumEntropy = 64)

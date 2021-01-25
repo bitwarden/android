@@ -52,7 +52,7 @@ namespace Bit.Core.Models.Domain
             }
         }
 
-        protected async Task<V> DecryptObjAsync<V, D>(V viewModel, D domain, HashSet<string> map, string orgId)
+        protected async Task<V> DecryptObjAsync<V, D>(V viewModel, D domain, HashSet<string> map, string orgId, SymmetricCryptoKey key = null)
             where V : View.View
         {
             var viewModelType = viewModel.GetType();
@@ -64,7 +64,7 @@ namespace Bit.Core.Models.Domain
                 string val = null;
                 if (domainPropInfo.GetValue(domain) is CipherString domainProp)
                 {
-                    val = await domainProp.DecryptAsync(orgId);
+                    val = await domainProp.DecryptAsync(orgId, key);
                 }
                 var viewModelPropInfo = viewModelType.GetProperty(propName);
                 viewModelPropInfo.SetValue(viewModel, val, null);

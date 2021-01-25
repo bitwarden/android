@@ -244,5 +244,10 @@ namespace Bit.Core.Utilities
             // Standard base64 decoder
             return Convert.FromBase64String(output);
         }
+
+        public static T Clone<T>(T obj)
+        {
+            return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(obj));
+        }
     }
 }
