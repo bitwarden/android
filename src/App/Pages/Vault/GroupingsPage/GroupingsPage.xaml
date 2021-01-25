@@ -92,7 +92,6 @@
                     IsRefreshing="{Binding Refreshing}"
                     Command="{Binding RefreshCommand}">
                     <controls:ExtendedCollectionView
-                        x:Name="_collectionView"
                         IsVisible="{Binding ShowList}"
                         ItemsSource="{Binding GroupedItems}"
                         VerticalOptions="FillAndExpand"

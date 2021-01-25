@@ -15,10 +15,6 @@
           <u:IconConverter x:Key="IconConverter"/>
     </Grid.Resources>
 
-    <Grid.BindingContext>
-        <controls:CipherViewCellViewModel />
-    </Grid.BindingContext>
-
     <Grid.RowDefinitions>
         <RowDefinition Height="Auto" />
     </Grid.RowDefinitions>

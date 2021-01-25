@@ -79,7 +79,7 @@
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.AutoFill" Version="1.1.0.3-beta01" />
     <PackageReference Include="Xamarin.Essentials">
-      <Version>1.6.0</Version>
+      <Version>1.6.1</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Firebase.Messaging">
       <Version>71.1740.0</Version>
@@ -88,7 +88,7 @@
     <PackageReference Include="Xamarin.AndroidX.AppCompat" Version="1.2.0.6" />
     <PackageReference Include="Xamarin.AndroidX.Legacy.Support.V4" Version="1.0.0.6" />
     <PackageReference Include="Xamarin.AndroidX.CardView" Version="1.0.0.6" />
-    <PackageReference Include="Xamarin.AndroidX.MediaRouter" Version="1.2.0.1" />
+    <PackageReference Include="Xamarin.AndroidX.MediaRouter" Version="1.2.1" />
     <PackageReference Include="Xamarin.AndroidX.Migration" Version="1.0.8" />
     <PackageReference Include="Xamarin.GooglePlayServices.SafetyNet">
       <Version>117.0.0</Version>

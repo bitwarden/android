@@ -44,9 +44,10 @@ namespace Bit.App.Controls
             if (propertyName == CipherProperty.PropertyName)
             {
                 if (Cipher == null)
+                {
                     return;
-
-               BindingContext = new CipherViewCellViewModel(Cipher);
+                }
+                BindingContext = new CipherViewCellViewModel(Cipher);
             }
         }
 
