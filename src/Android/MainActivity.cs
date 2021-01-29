@@ -28,7 +28,8 @@ namespace Bit.Droid
         Theme = "@style/LaunchTheme",
         MainLauncher = true,
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation |
-                               ConfigChanges.Keyboard | ConfigChanges.KeyboardHidden)]
+                               ConfigChanges.Keyboard | ConfigChanges.KeyboardHidden |
+                               ConfigChanges.Navigation)]
     [Register("com.x8bit.bitwarden.MainActivity")]
     public class MainActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
