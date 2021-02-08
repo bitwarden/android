@@ -49,7 +49,8 @@ namespace Bit.iOS.Extension
         {
             if (Context.ProviderType != Constants.UTTypeAppExtensionFillBrowserAction
                 && Context.ProviderType != Constants.UTTypeAppExtensionFillWebViewAction
-                && Context.ProviderType != UTType.PropertyList)
+                && Context.ProviderType != UTType.PropertyList
+                && Context.ProviderType != Constants.UTTypeAppExtensionUrl)
             {
                 return true;
             }
