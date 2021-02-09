@@ -339,6 +339,8 @@ namespace Bit.Core.Test.Services
                 new CipherString($"{prefix}{Convert.ToBase64String(secret)}{Convert.ToBase64String(key.Key)}");
             CipherString encrypt(string secret, SymmetricCryptoKey key) =>
                 new CipherString($"{prefix}{secret}{Convert.ToBase64String(key.Key)}");
+            byte[] encryptFileBytes(byte[] secret, SymmetricCryptoKey key) =>
+                secret.Concat(key.Key).ToArray();
 
             sutProvider.GetDependency<ICryptoFunctionService>().Pbkdf2Async(Arg.Any<string>(), Arg.Any<byte[]>(), Arg.Any<CryptoHashAlgorithm>(), Arg.Any<int>())
                 .Returns(info => getPbkdf((string)info[0], (byte[])info[1]));
@@ -346,6 +348,8 @@ namespace Bit.Core.Test.Services
                 .Returns(info => encryptBytes((byte[])info[0], (SymmetricCryptoKey)info[1]));
             sutProvider.GetDependency<ICryptoService>().EncryptAsync(Arg.Any<string>(), Arg.Any<SymmetricCryptoKey>())
                 .Returns(info => encrypt((string)info[0], (SymmetricCryptoKey)info[1]));
+            sutProvider.GetDependency<ICryptoService>().EncryptToBytesAsync(Arg.Any<byte[]>(), Arg.Any<SymmetricCryptoKey>())
+                .Returns(info => encryptFileBytes((byte[])info[0], (SymmetricCryptoKey)info[1]));
 
             var (send, encryptedFileData) = await sutProvider.Sut.EncryptAsync(view, fileData, view.Password, privateKey);
 
@@ -366,7 +370,7 @@ namespace Bit.Core.Test.Services
                 case SendType.File:
                     // Only set filename
                     TestHelper.AssertPropertyEqual(encrypt(view.File.FileName, view.CryptoKey), send.File.FileName);
-                    TestHelper.AssertPropertyEqual(encryptBytes(fileData, view.CryptoKey), encryptedFileData);
+                    Assert.Equal(encryptFileBytes(fileData, view.CryptoKey), encryptedFileData);
                     break;
                 default:
                     throw new Exception("Untested send type");
