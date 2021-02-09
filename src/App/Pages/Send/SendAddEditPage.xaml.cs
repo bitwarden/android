@@ -39,7 +39,7 @@ namespace Bit.App.Pages
                 }
                 _vm.EditorMargins = new Thickness(0, 5, 0, 0);
             }
-            if (Device.RuntimePlatform == Device.iOS)
+            else if (Device.RuntimePlatform == Device.iOS)
             {
                 ToolbarItems.Add(_closeItem);
                 if (_vm.EditMode)
@@ -67,7 +67,7 @@ namespace Bit.App.Pages
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            _broadcasterService.Subscribe(nameof(SendAddEditPage), (message) =>
+            _broadcasterService.Subscribe(nameof(SendAddEditPage), message =>
             {
                 if (message.Command == "selectFileResult")
                 {
@@ -105,14 +105,14 @@ namespace Bit.App.Pages
 
         private void OnMaxAccessCountTextChanged(object sender, TextChangedEventArgs e)
         {
-            if (string.IsNullOrEmpty(e.NewTextValue))
+            if (string.IsNullOrWhiteSpace(e.NewTextValue))
             {
                 _vm.MaxAccessCount = null;
                 _maxAccessCountStepper.Value = 0;
                 return;
             }
             // accept only digits
-            if (!int.TryParse(e.NewTextValue, out int value))
+            if (!int.TryParse(e.NewTextValue, out int _))
             {
                 ((Entry)sender).Text = e.OldTextValue;
             }
