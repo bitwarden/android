@@ -351,7 +351,7 @@ namespace Bit.Core.Test.Services
 
             TestHelper.AssertPropertyEqual(view, send, "Password", "Key", "Name", "Notes", "Text", "File",
                 "AccessCount", "AccessId", "CryptoKey", "RevisionDate", "DeletionDate", "ExpirationDate", "UrlB64Key",
-                "MaxAccessCountReached", "Expired", "PendingDelete");
+                "MaxAccessCountReached", "Expired", "PendingDelete", "HasPassword", "DisplayDate");
             Assert.Equal(Convert.ToBase64String(getPbkdf(view.Password, view.Key)), send.Password);
             TestHelper.AssertPropertyEqual(encryptBytes(view.Key, privateKey), send.Key);
             TestHelper.AssertPropertyEqual(encrypt(view.Name, view.CryptoKey), send.Name);
