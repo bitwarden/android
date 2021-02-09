@@ -8,6 +8,7 @@ namespace Bit.App.Pages
     public class TabsPage : TabbedPage
     {
         private NavigationPage _groupingsPage;
+        private NavigationPage _sendGroupingsPage;
         private NavigationPage _generatorPage;
 
         public TabsPage(AppOptions appOptions = null, PreviousPageInfo previousPage = null)
@@ -18,6 +19,13 @@ namespace Bit.App.Pages
                 IconImageSource = "lock.png"
             };
             Children.Add(_groupingsPage);
+            
+            _sendGroupingsPage = new NavigationPage(new SendGroupingsPage(true))
+            {
+                Title = AppResources.Send,
+                IconImageSource = "paper_plane.png",
+            };
+            Children.Add(_sendGroupingsPage);
 
             _generatorPage = new NavigationPage(new GeneratorPage(true, null, this))
             {

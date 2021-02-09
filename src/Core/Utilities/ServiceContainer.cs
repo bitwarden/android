@@ -45,7 +45,9 @@ namespace Bit.Core.Utilities
             var folderService = new FolderService(cryptoService, userService, apiService, storageService,
                 i18nService, cipherService);
             var collectionService = new CollectionService(cryptoService, userService, storageService, i18nService);
-            searchService = new SearchService(cipherService);
+            var sendService = new SendService(cryptoService, userService, apiService, storageService, i18nService,
+                cryptoFunctionService);
+            searchService = new SearchService(cipherService, sendService);
             var vaultTimeoutService = new VaultTimeoutService(cryptoService, userService, platformUtilsService, 
                 storageService, folderService, cipherService, collectionService, searchService, messagingService, tokenService,
                 null, (expired) =>
@@ -54,8 +56,6 @@ namespace Bit.Core.Utilities
                     return Task.FromResult(0);
                 });
             var policyService = new PolicyService(storageService, userService);
-            var sendService = new SendService(cryptoService, userService, apiService, storageService, i18nService,
-                cryptoFunctionService);
             var syncService = new SyncService(userService, apiService, settingsService, folderService,
                 cipherService, cryptoService, collectionService, storageService, messagingService, policyService, sendService,
                 (bool expired) =>
@@ -86,6 +86,7 @@ namespace Bit.Core.Utilities
             Register<ICollectionService>("collectionService", collectionService);
             Register<ISearchService>("searchService", searchService);
             Register<IPolicyService>("policyService", policyService);
+            Register<ISendService>("sendService", sendService);
             Register<ISyncService>("syncService", syncService);
             Register<IVaultTimeoutService>("vaultTimeoutService", vaultTimeoutService);
             Register<IPasswordGenerationService>("passwordGenerationService", passwordGenerationService);

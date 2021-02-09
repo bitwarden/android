@@ -123,7 +123,9 @@
     <Compile Include="Receivers\LockAlarmReceiver.cs" />
     <Compile Include="Receivers\PackageReplacedReceiver.cs" />
     <Compile Include="Renderers\CipherViewCellRenderer.cs" />
+    <Compile Include="Renderers\ExtendedDatePickerRenderer.cs" />
     <Compile Include="Renderers\CustomTabbedRenderer.cs" />
+    <Compile Include="Renderers\ExtendedTimePickerRenderer.cs" />
     <Compile Include="Renderers\ExtendedSliderRenderer.cs" />
     <Compile Include="Renderers\CustomEditorRenderer.cs" />
     <Compile Include="Renderers\CustomPickerRenderer.cs" />
@@ -131,6 +133,7 @@
     <Compile Include="Renderers\CustomSearchBarRenderer.cs" />
     <Compile Include="Renderers\ExtendedListViewRenderer.cs" />
     <Compile Include="Renderers\HybridWebViewRenderer.cs" />
+    <Compile Include="Renderers\SendViewCellRenderer.cs" />
     <Compile Include="Services\AndroidPushNotificationService.cs" />
     <Compile Include="Services\AndroidLogService.cs" />
     <Compile Include="MainApplication.cs" />
@@ -176,6 +179,7 @@
     <AndroidResource Include="Resources\drawable\login.xml" />
     <AndroidResource Include="Resources\drawable\logo.xml" />
     <AndroidResource Include="Resources\drawable\logo_white.xml" />
+    <AndroidResource Include="Resources\drawable\paper_plane.xml" />
     <AndroidResource Include="Resources\drawable\pencil.xml" />
     <AndroidResource Include="Resources\drawable\plus.xml" />
     <AndroidResource Include="Resources\drawable\refresh.xml" />
@@ -183,6 +187,7 @@
     <AndroidResource Include="Resources\drawable\shield.xml" />
     <AndroidResource Include="Resources\drawable-v23\splash_screen.xml" />
     <AndroidResource Include="Resources\drawable-v23\splash_screen_dark.xml" />
+    <AndroidResource Include="Resources\layout\SendViewCell.axml" />
     <AndroidResource Include="Resources\layout\Tabbar.axml" />
     <AndroidResource Include="Resources\layout\Toolbar.axml" />
     <AndroidResource Include="Resources\mipmap-anydpi-v26\ic_launcher.xml" />

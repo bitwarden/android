@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<pages:BaseContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Bit.App.Pages.SendAddEditPage"
+    xmlns:pages="clr-namespace:Bit.App.Pages"
+    xmlns:u="clr-namespace:Bit.App.Utilities"
+    xmlns:controls="clr-namespace:Bit.App.Controls"
+    x:DataType="pages:SendAddEditPageViewModel"
+    x:Name="_page"
+    Title="{Binding PageTitle}">
+    <ContentPage.BindingContext>
+        <pages:SendAddEditPageViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{u:I18n Save}" Clicked="Save_Clicked" Order="Primary" />
+    </ContentPage.ToolbarItems>
+    
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <u:InverseBoolConverter x:Key="inverseBool" />
+            <u:IsNullConverter x:Key="null" />
+            <u:IsNotNullConverter x:Key="notNull" />
+            <ToolbarItem Text="{u:I18n Close}" Clicked="Close_Clicked" Order="Primary" Priority="-1"
+                         x:Key="closeItem" x:Name="_closeItem" />
+            <ToolbarItem Icon="more_vert.png" Clicked="More_Clicked" Order="Primary" x:Name="_moreItem"
+                         x:Key="moreItem"
+                         AutomationProperties.IsInAccessibleTree="True"
+                         AutomationProperties.Name="{u:I18n Options}" />
+            <ToolbarItem Text="{u:I18n RemovePassword}"
+                         Clicked="RemovePassword_Clicked"
+                         Order="Secondary"
+                         IsDestructive="True"
+                         x:Name="_removePassword"
+                         x:Key="removePassword" />
+            <ToolbarItem Text="{u:I18n CopyLink}"
+                         Clicked="CopyLink_Clicked"
+                         Order="Secondary"
+                         IsDestructive="True"
+                         x:Name="_copyLink"
+                         x:Key="copyLink" />
+            <ToolbarItem Text="{u:I18n ShareLink}"
+                         Clicked="ShareLink_Clicked"
+                         Order="Secondary"
+                         IsDestructive="True"
+                         x:Name="_shareLink"
+                         x:Key="shareLink" />
+            <ToolbarItem Text="{u:I18n Delete}"
+                         Clicked="Delete_Clicked"
+                         Order="Secondary"
+                         IsDestructive="True"
+                         x:Name="_deleteItem"
+                         x:Key="deleteItem" />
+            
+            <ScrollView x:Key="scrollView" x:Name="_scrollView">
+                <StackLayout Spacing="20">
+                    <StackLayout StyleClass="box">
+                        <StackLayout StyleClass="box-row"
+                                     IsVisible="{Binding EditMode, Converter={StaticResource inverseBool}}">
+                            <Label
+                                Text="{u:I18n Type}"
+                                StyleClass="box-label" />
+                            <Picker
+                                x:Name="_typePicker"
+                                ItemsSource="{Binding TypeOptions, Mode=OneTime}"
+                                SelectedIndex="{Binding TypeSelectedIndex}"
+                                StyleClass="box-value" />
+                        </StackLayout>
+                        <StackLayout StyleClass="box-row">
+                            <Label
+                                Text="{u:I18n Name}"
+                                StyleClass="box-label" />
+                            <Entry
+                                x:Name="_nameEntry"
+                                Text="{Binding Send.Name}"
+                                StyleClass="box-value" />
+                        </StackLayout>
+                        <StackLayout StyleClass="box-row"
+                                     IsVisible="{Binding IsText}">
+                            <Label
+                                Text="{u:I18n TypeText}"
+                                StyleClass="box-label" />
+                            <Editor
+                                x:Name="_textEditor"
+                                AutoSize="TextChanges"
+                                Text="{Binding Send.Text.Text}"
+                                StyleClass="box-value"
+                                Margin="{Binding EditorMargins}" />
+                            <BoxView StyleClass="box-row-separator" IsVisible="{Binding ShowEditorSeparators}" />
+                            <StackLayout StyleClass="box-row, box-row-switch">
+                                <Label
+                                    Text="{u:I18n HideTextByDefault}"
+                                    StyleClass="box-label"
+                                    VerticalOptions="Center"
+                                    HorizontalOptions="StartAndExpand" />
+                                <Switch
+                                    IsToggled="{Binding Send.Text.Hidden}"
+                                    HorizontalOptions="End"
+                                    Margin="10,0,0,0" />
+                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout StyleClass="box-row"
+                                     IsVisible="{Binding IsFile}">
+                            <Label
+                                Text="{u:I18n TypeFile}"
+                                StyleClass="box-label" />
+                            <Label
+                                Text="{Binding Send.File.FileName, Mode=OneWay}"
+                                IsVisible="{Binding EditMode}"
+                                StyleClass="box-value" />
+                            <StackLayout 
+                                IsVisible="{Binding EditMode, Converter={StaticResource inverseBool}}"
+                                StyleClass="box-row">
+                                <Label
+                                    IsVisible="{Binding FileName, Converter={StaticResource null}}"
+                                    Text="{u:I18n NoFileChosen}"
+                                    LineBreakMode="CharacterWrap"
+                                    StyleClass="text-sm, text-muted"
+                                    HorizontalOptions="FillAndExpand"
+                                    HorizontalTextAlignment="Center" />
+                                <Label
+                                    IsVisible="{Binding FileName, Converter={StaticResource notNull}}"
+                                    Text="{Binding FileName}"
+                                    LineBreakMode="CharacterWrap"
+                                    StyleClass="text-sm, text-muted"
+                                    HorizontalOptions="FillAndExpand"
+                                    HorizontalTextAlignment="Center" />
+                                <Button Text="{u:I18n ChooseFile}" 
+                                        StyleClass="box-button-row"
+                                        Clicked="ChooseFile_Clicked" />
+                                <Label
+                                    Margin="0, 10, 0, 0"
+                                    Text="{u:I18n MaxFileSize}"
+                                    StyleClass="box-footer-label" />
+                            </StackLayout>
+                        </StackLayout>
+                        <StackLayout StyleClass="box-row-header">
+                            <Label Text="{u:I18n Options, Header=True}"
+                                   StyleClass="box-header, box-header-platform" />
+                        </StackLayout>
+                        <StackLayout StyleClass="box-row">
+                            <Label
+                                Text="{u:I18n DeletionDate}"
+                                StyleClass="box-label" />
+                            <Picker
+                                x:Name="_deletionDateTypePicker"
+                                IsVisible="{Binding EditMode, Converter={StaticResource inverseBool}}"
+                                ItemsSource="{Binding DeletionTypeOptions, Mode=OneTime}"
+                                SelectedIndex="{Binding DeletionDateTypeSelectedIndex}"
+                                StyleClass="box-value" 
+                                AutomationProperties.IsInAccessibleTree="True"
+                                AutomationProperties.Name="{u:I18n DeletionTime}" />
+                            <Grid 
+                                IsVisible="{Binding ShowDeletionCustomPickers}"
+                                Margin="0,5,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <controls:ExtendedDatePicker 
+                                    Date="{Binding DeletionDate}"
+                                    Format="d"
+                                    AutomationProperties.IsInAccessibleTree="True"
+                                    AutomationProperties.Name="{u:I18n DeletionDate}"
+                                    Grid.Column="0" />
+                                <controls:ExtendedTimePicker 
+                                    Time="{Binding DeletionTime}"
+                                    Format="t" 
+                                    AutomationProperties.IsInAccessibleTree="True"
+                                    AutomationProperties.Name="{u:I18n DeletionTime}"
+                                    Grid.Column="1" />
+                            </Grid>
+                            <Label
+                                Text="{u:I18n DeletionDateInfo}"
+                                StyleClass="box-label" 
+                                Margin="0,5,0,0" />
+                        </StackLayout>
+                        <StackLayout StyleClass="box-row">
+                            <Label
+                                Text="{u:I18n ExpirationDate}"
+                                StyleClass="box-label" />
+                            <Picker
+                                x:Name="_expirationDateTypePicker"
+                                IsVisible="{Binding EditMode, Converter={StaticResource inverseBool}}"
+                                ItemsSource="{Binding ExpirationTypeOptions, Mode=OneTime}"
+                                SelectedIndex="{Binding ExpirationDateTypeSelectedIndex}"
+                                StyleClass="box-value" 
+                                AutomationProperties.IsInAccessibleTree="True"
+                                AutomationProperties.Name="{u:I18n ExpirationTime}" />
+                            <Grid
+                                IsVisible="{Binding ShowExpirationCustomPickers}"
+                                Margin="0,5,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <controls:ExtendedDatePicker 
+                                    NullableDate="{Binding ExpirationDate, Mode=TwoWay}"
+                                    PlaceHolder="mm/dd/yyyy"
+                                    Format="d"
+                                    AutomationProperties.IsInAccessibleTree="True"
+                                    AutomationProperties.Name="{u:I18n ExpirationDate}" 
+                                    Grid.Column="0" />
+                                <controls:ExtendedTimePicker 
+                                    NullableTime="{Binding ExpirationTime, Mode=TwoWay}"
+                                    PlaceHolder="--:-- --"
+                                    Format="t" 
+                                    AutomationProperties.IsInAccessibleTree="True"
+                                    AutomationProperties.Name="{u:I18n ExpirationTime}" 
+                                    Grid.Column="1" />
+                            </Grid>
+                            <StackLayout Orientation="Horizontal" Margin="0,5,0,0">
+                                <Label
+                                    Text="{u:I18n ExpirationDateInfo}"
+                                    StyleClass="box-label"
+                                    HorizontalOptions="StartAndExpand"
+                                    VerticalOptions="Center" />
+                                <Button
+                                    Text="{u:I18n Clear}"
+                                    IsVisible="{Binding EditMode}"
+                                    WidthRequest="110"
+                                    StyleClass="box-row-button" 
+                                    Clicked="ClearExpirationDate_Clicked" />
+                            </StackLayout>
+                        </StackLayout>
+                        <BoxView StyleClass="box-row-separator"
+                                 Margin="0, 5, 0, 0"/>
+                        <StackLayout StyleClass="box-row">
+                            <Label
+                                Text="{u:I18n MaximumAccessCount}"
+                                StyleClass="box-label" />
+                            <StackLayout StyleClass="box-row" Orientation="Horizontal">
+                                <Entry
+                                    Text="{Binding MaxAccessCount}"
+                                    StyleClass="box-value" 
+                                    Keyboard="Numeric"
+                                    MaxLength="9"
+                                    TextChanged="OnMaxAccessCountTextChanged"
+                                    HorizontalOptions="FillAndExpand" />
+                                <Stepper
+                                    x:Name="_maxAccessCountStepper"
+                                    Value="{Binding MaxAccessCount}"
+                                    Maximum="999999999"
+                                    Margin="10,0,0,0" />
+                            </StackLayout>
+                            <Label
+                                Text="{u:I18n MaximumAccessCountInfo}"
+                                StyleClass="box-label"
+                                Margin="0,5" />
+                            <StackLayout 
+                                    IsVisible="{Binding EditMode}"
+                                    StyleClass="box-row" 
+                                    Orientation="Horizontal">
+                                <Label
+                                    Text="{u:I18n CurrentAccessCount}"
+                                    StyleClass="box-label"
+                                    HorizontalOptions="StartAndExpand"
+                                    VerticalTextAlignment="Center" />
+                                <Label
+                                    Text="{Binding Send.AccessCount, Mode=OneWay}"
+                                    StyleClass="box-label"
+                                    HorizontalOptions="End" />
+                            </StackLayout>
+                        </StackLayout>
+                        <BoxView StyleClass="box-row-separator" />
+                        <StackLayout StyleClass="box-row" Margin="0,5">
+                            <Label
+                                Text="{u:I18n NewPassword}"
+                                StyleClass="box-label" />
+                            <StackLayout Orientation="Horizontal">
+                                <Entry
+                                    Text="{Binding NewPassword}"
+                                    IsPassword="{Binding ShowPassword, Converter={StaticResource inverseBool}}"
+                                    StyleClass="box-value" 
+                                    IsSpellCheckEnabled="False"
+                                    IsTextPredictionEnabled="False"
+                                    HorizontalOptions="FillAndExpand" />
+                                <controls:FaButton 
+                                    StyleClass="box-row-button, box-row-button-platform"
+                                    Text="{Binding ShowPasswordIcon}"
+                                    Command="{Binding TogglePasswordCommand}"
+                                    Margin="10,0,0,0"
+                                    AutomationProperties.IsInAccessibleTree="True"
+                                    AutomationProperties.Name="{u:I18n ToggleVisibility}" />
+                            </StackLayout>
+                            <Label
+                                Text="{u:I18n PasswordInfo}"
+                                StyleClass="box-label"
+                                Margin="0,5,0,0" />
+                        </StackLayout>
+                        <BoxView StyleClass="box-row-separator" />
+                        <StackLayout StyleClass="box-row" Margin="0,5">
+                            <Label
+                                Text="{u:I18n Notes}"
+                                StyleClass="box-label" />
+                            <Editor
+                                AutoSize="TextChanges"
+                                Text="{Binding Send.Notes}"
+                                StyleClass="box-value" 
+                                Margin="{Binding EditorMargins}" />
+                            <BoxView StyleClass="box-row-separator" IsVisible="{Binding ShowEditorSeparators}" />
+                            <Label
+                                Text="{u:I18n NotesInfo}"
+                                StyleClass="box-label"
+                                Margin="0,5,0,0"/>
+                        </StackLayout>
+                        <BoxView StyleClass="box-row-separator" />
+                        <StackLayout StyleClass="box-row, box-row-switch">
+                            <Label
+                                Text="{u:I18n DisableSend}"
+                                StyleClass="box-label"
+                                VerticalOptions="Center"
+                                HorizontalOptions="StartAndExpand" />
+                            <Switch
+                                IsToggled="{Binding Send.Disabled}"
+                                HorizontalOptions="End"
+                                Margin="10,0,0,0" />
+                        </StackLayout>
+                        <StackLayout StyleClass="box-row, box-row-switch">
+                            <Label
+                                Text="{u:I18n ShareOnSave}"
+                                StyleClass="box-label"
+                                VerticalOptions="Center"
+                                HorizontalOptions="StartAndExpand" />
+                            <Switch
+                                IsToggled="{Binding ShareOnSave}"
+                                HorizontalOptions="End"
+                                Margin="10,0,0,0" />
+                        </StackLayout>
+                        <BoxView StyleClass="box-row-separator" />
+                        
+                    </StackLayout>
+                </StackLayout>
+            </ScrollView>
+            
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+</pages:BaseContentPage>

@@ -15,10 +15,10 @@ namespace Bit.Core.Models.Response
         public SendTextApi Text { get; set; }
         public string Key { get; set; }
         public int? MaxAccessCount { get; set; }
-        public int AccessCount { get; internal set; }
-        public DateTime RevisionDate { get; internal set; }
-        public DateTime? ExpirationDate { get; internal set; }
-        public DateTime DeletionDate { get; internal set; }
+        public int AccessCount { get; set; }
+        public DateTime RevisionDate { get; set; }
+        public DateTime? ExpirationDate { get; set; }
+        public DateTime DeletionDate { get; set; }
         public string Password { get; set; }
         public bool Disabled { get; set; }
     }

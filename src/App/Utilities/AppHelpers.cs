@@ -1,4 +1,5 @@
-﻿using Bit.App.Abstractions;
+﻿using System;
+using Bit.App.Abstractions;
 using Bit.App.Pages;
 using Bit.App.Resources;
 using Bit.Core;
@@ -9,6 +10,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Bit.App.Models;
+using Bit.Core.Exceptions;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace Bit.App.Utilities
@@ -128,6 +131,143 @@ namespace Bit.App.Utilities
                     string.Format(AppResources.ValueHasBeenCopied, AppResources.Notes));
             }
             return selection;
+        }
+        
+        public static async Task<string> SendListOptions(ContentPage page, SendView send)
+        {
+            var platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
+            var vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
+            var options = new List<string> { AppResources.Edit };
+            options.Add(AppResources.CopyLink);
+            options.Add(AppResources.ShareLink);
+            if (send.HasPassword)
+            {
+                options.Add(AppResources.RemovePassword);
+            }
+            
+            var selection = await page.DisplayActionSheet(send.Name, AppResources.Cancel, AppResources.Delete, 
+                options.ToArray());
+            if (await vaultTimeoutService.IsLockedAsync())
+            {
+                platformUtilsService.ShowToast("info", null, AppResources.VaultIsLocked);
+            }
+            else if (selection == AppResources.Edit)
+            {
+                await page.Navigation.PushModalAsync(new NavigationPage(new SendAddEditPage(send.Id)));
+            }
+            else if (selection == AppResources.CopyLink)
+            {
+                await platformUtilsService.CopyToClipboardAsync(GetSendUrl(send));
+                platformUtilsService.ShowToast("info", null,
+                    string.Format(AppResources.ValueHasBeenCopied, AppResources.ShareLink));
+            }
+            else if (selection == AppResources.ShareLink)
+            {
+                await ShareSendUrl(send);
+            }
+            else if (selection == AppResources.RemovePassword)
+            {
+                await RemoveSendPasswordAsync(send.Id);
+            }
+            else if (selection == AppResources.Delete)
+            {
+                await DeleteSendAsync(send.Id);
+            }
+            return selection;
+        }
+        
+        public static string GetSendUrl(SendView send)
+        {
+            var environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
+            return environmentService.BaseUrl + "/#/send/" + send.AccessId + "/" + send.UrlB64Key;
+        }
+
+        public static async Task ShareSendUrl(SendView send)
+        {
+            await Share.RequestAsync(new ShareTextRequest
+            {
+                Uri = new Uri(GetSendUrl(send)).ToString(),
+                Title = AppResources.Send + " " + send.Name,
+                Subject = send.Name
+            });
+        }
+        
+        public static async Task<bool> RemoveSendPasswordAsync(string sendId)
+        {
+            var platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
+            var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            var sendService = ServiceContainer.Resolve<ISendService>("sendService");
+            
+            if (Connectivity.NetworkAccess == NetworkAccess.None)
+            {
+                await platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
+                    AppResources.InternetConnectionRequiredTitle);
+                return false;
+            }
+            var confirmed = await platformUtilsService.ShowDialogAsync(
+                AppResources.AreYouSureRemoveSendPassword,
+                null, AppResources.Yes, AppResources.Cancel);
+            if (!confirmed)
+            {
+                return false;
+            }
+            try
+            {
+                await deviceActionService.ShowLoadingAsync(AppResources.RemovingSendPassword);
+                await sendService.RemovePasswordWithServerAsync(sendId);
+                await deviceActionService.HideLoadingAsync();
+                platformUtilsService.ShowToast("success", null, AppResources.SendPasswordRemoved);
+                return true;
+            }
+            catch (ApiException e)
+            {
+                await deviceActionService.HideLoadingAsync();
+                if (e?.Error != null)
+                {
+                    await platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(),
+                        AppResources.AnErrorHasOccurred);
+                }
+            }
+            return false;
+        }
+        
+        public static async Task<bool> DeleteSendAsync(string sendId)
+        {
+            var platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
+            var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            var sendService = ServiceContainer.Resolve<ISendService>("sendService");
+            
+            if (Connectivity.NetworkAccess == NetworkAccess.None)
+            {
+                await platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
+                    AppResources.InternetConnectionRequiredTitle);
+                return false;
+            }
+            var confirmed = await platformUtilsService.ShowDialogAsync(
+                AppResources.AreYouSureDeleteSend,
+                null, AppResources.Yes, AppResources.Cancel);
+            if (!confirmed)
+            {
+                return false;
+            }
+            try
+            {
+                await deviceActionService.ShowLoadingAsync(AppResources.Deleting);
+                await sendService.DeleteWithServerAsync(sendId);
+                await deviceActionService.HideLoadingAsync();
+                platformUtilsService.ShowToast("success", null, AppResources.SendDeleted);
+                return true;
+            }
+            catch (ApiException e)
+            {
+                await deviceActionService.HideLoadingAsync();
+                if (e?.Error != null)
+                {
+                    await platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(),
+                        AppResources.AnErrorHasOccurred);
+                }
+            }
+            return false;
         }
 
         public static async Task<bool> PerformUpdateTasksAsync(ISyncService syncService,

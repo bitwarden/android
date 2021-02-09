@@ -24,7 +24,6 @@
     <item name="colorControlNormal">@color/border</item>
     <item name="android:navigationBarColor">@android:color/black</item>
     <item name="windowActionModeOverlay">true</item>
-    <item name="android:datePickerDialogTheme">@style/AppCompatDialogStyle</item>
     <item name="android:colorActivatedHighlight">@android:color/transparent</item>
     <item name="android:textCursorDrawable">@null</item>
     <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
@@ -47,7 +46,6 @@
     <item name="colorControlNormal">@color/dark_border</item>
     <item name="android:navigationBarColor">@color/dark_navigationBarBackground</item>
     <item name="windowActionModeOverlay">true</item>
-    <item name="android:datePickerDialogTheme">@style/AppCompatDialogStyle</item>
     <item name="android:colorActivatedHighlight">@android:color/transparent</item>
     <item name="android:textCursorDrawable">@null</item>
     <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
@@ -94,10 +92,5 @@
   <style name="NordTheme.Popup" parent="ThemeOverlay.AppCompat">
     <item name="android:colorBackground">@color/nord_popupBackground</item>
     <item name="android:textColor">@color/nord_popupText</item>
-  </style>
-
-  <!-- Other theme components -->
-  <style name="AppCompatDialogStyle" parent="Theme.AppCompat.Light.Dialog">
-    <item name="colorAccent">#FF4081</item>
   </style>
 </resources>
