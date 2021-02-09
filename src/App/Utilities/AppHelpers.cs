@@ -132,7 +132,7 @@ namespace Bit.App.Utilities
             }
             return selection;
         }
-        
+
         public static async Task<string> SendListOptions(ContentPage page, SendView send)
         {
             var platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
@@ -144,8 +144,8 @@ namespace Bit.App.Utilities
             {
                 options.Add(AppResources.RemovePassword);
             }
-            
-            var selection = await page.DisplayActionSheet(send.Name, AppResources.Cancel, AppResources.Delete, 
+
+            var selection = await page.DisplayActionSheet(send.Name, AppResources.Cancel, AppResources.Delete,
                 options.ToArray());
             if (await vaultTimeoutService.IsLockedAsync())
             {
@@ -175,7 +175,7 @@ namespace Bit.App.Utilities
             }
             return selection;
         }
-        
+
         public static string GetSendUrl(SendView send)
         {
             var environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
@@ -191,13 +191,13 @@ namespace Bit.App.Utilities
                 Subject = send.Name
             });
         }
-        
+
         public static async Task<bool> RemoveSendPasswordAsync(string sendId)
         {
             var platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             var sendService = ServiceContainer.Resolve<ISendService>("sendService");
-            
+
             if (Connectivity.NetworkAccess == NetworkAccess.None)
             {
                 await platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
@@ -230,13 +230,13 @@ namespace Bit.App.Utilities
             }
             return false;
         }
-        
+
         public static async Task<bool> DeleteSendAsync(string sendId)
         {
             var platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             var sendService = ServiceContainer.Resolve<ISendService>("sendService");
-            
+
             if (Connectivity.NetworkAccess == NetworkAccess.None)
             {
                 await platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
@@ -283,7 +283,7 @@ namespace Bit.App.Utilities
                 {
                     await storageService.SaveAsync(Constants.VaultTimeoutKey, 15);
                 }
-                
+
                 var currentAction = await storageService.GetAsync<string>(Constants.VaultTimeoutActionKey);
                 if (currentAction == null)
                 {

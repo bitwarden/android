@@ -38,10 +38,10 @@ namespace Bit.iOS.Core.Renderers
                 catch { }
             }
         }
-        
+
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == TimePicker.TimeProperty.PropertyName || 
+            if (e.PropertyName == TimePicker.TimeProperty.PropertyName ||
                 e.PropertyName == TimePicker.FormatProperty.PropertyName)
             {
                 if (Control != null && Element is ExtendedTimePicker element)

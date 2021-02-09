@@ -9,7 +9,7 @@ namespace Bit.App.Pages
     {
         private SendsPageViewModel _vm;
         private bool _hasFocused;
-        
+
         public SendsPage(Func<SendView, bool> filter, bool type = false)
         {
             InitializeComponent();
@@ -24,7 +24,7 @@ namespace Bit.App.Pages
             {
                 _vm.PageTitle = AppResources.SearchSends;
             }
-            
+
             if (Device.RuntimePlatform == Device.iOS)
             {
                 ToolbarItems.Add(_closeItem);
@@ -37,7 +37,7 @@ namespace Bit.App.Pages
                 NavigationPage.SetTitleView(this, _titleLayout);
             }
         }
-        
+
         public SearchBar SearchBar => _searchBar;
 
         protected async override void OnAppearing()
@@ -107,4 +107,3 @@ namespace Bit.App.Pages
         }
     }
 }
-

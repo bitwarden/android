@@ -5,9 +5,8 @@ namespace Bit.App.Pages
     public class SendGroupingsPageListGroup : List<SendGroupingsPageListItem>
     {
         public SendGroupingsPageListGroup(string name, int count, bool doUpper = true, bool first = false)
-            : this(new List<SendGroupingsPageListItem>(), name, count, doUpper, first)
-        { }
-        
+            : this(new List<SendGroupingsPageListItem>(), name, count, doUpper, first) { }
+
         public SendGroupingsPageListGroup(List<SendGroupingsPageListItem> groupItems, string name, int count,
             bool doUpper = true, bool first = false)
         {

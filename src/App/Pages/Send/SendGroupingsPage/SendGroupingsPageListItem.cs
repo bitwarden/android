@@ -8,11 +8,11 @@ namespace Bit.App.Pages
     {
         private string _icon;
         private string _name;
-        
+
         public SendView Send { get; set; }
         public SendType? Type { get; set; }
         public string ItemCount { get; set; }
-        
+
         public string Name
         {
             get

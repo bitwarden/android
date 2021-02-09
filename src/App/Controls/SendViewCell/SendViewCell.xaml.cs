@@ -12,7 +12,7 @@ namespace Bit.App.Controls
     {
         public static readonly BindableProperty SendProperty = BindableProperty.Create(
             nameof(Send), typeof(SendView), typeof(SendViewCell), default(SendView), BindingMode.OneWay);
-        
+
         public static readonly BindableProperty ButtonCommandProperty = BindableProperty.Create(
             nameof(ButtonCommand), typeof(Command<SendView>), typeof(SendViewCell));
 
@@ -34,7 +34,7 @@ namespace Bit.App.Controls
                 _usingNativeCell = true;
             }
         }
-        
+
         public SendView Send
         {
             get => GetValue(SendProperty) as SendView;
@@ -108,4 +108,3 @@ namespace Bit.App.Controls
         }
     }
 }
-

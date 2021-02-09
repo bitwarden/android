@@ -8,7 +8,7 @@ namespace Bit.Core.Models.View
     public class SendView : View
     {
         public SendView() { }
-        
+
         public SendView(Send send) : base()
         {
             Id = send.Id;

@@ -29,10 +29,10 @@ namespace Bit.Droid.Renderers
                 }
             }
         }
-        
+
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == DatePicker.DateProperty.PropertyName || 
+            if (e.PropertyName == DatePicker.DateProperty.PropertyName ||
                 e.PropertyName == DatePicker.FormatProperty.PropertyName)
             {
                 if (Control != null && Element is ExtendedDatePicker element)

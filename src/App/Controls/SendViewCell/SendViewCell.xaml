@@ -5,7 +5,7 @@
           xmlns:controls="clr-namespace:Bit.App.Controls"
           xmlns:u="clr-namespace:Bit.App.Utilities">
 
-    <Grid 
+    <Grid
         x:Name="_grid"
         StyleClass="list-row, list-row-platform"
         RowSpacing="0"
@@ -34,7 +34,7 @@
             VerticalOptions="Center"
             StyleClass="list-icon, list-icon-platform"
             AutomationProperties.IsInAccessibleTree="False" />
-        
+
         <Grid RowSpacing="0" ColumnSpacing="0" Grid.Row="0" Grid.Column="1" VerticalOptions="Center">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -49,7 +49,7 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <Label 
+            <Label
                 LineBreakMode="TailTruncation"
                 Grid.Column="0"
                 Grid.Row="0"

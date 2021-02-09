@@ -29,7 +29,7 @@ namespace Bit.App.Pages
         private string _noDataText;
         private List<SendView> _allSends;
         private Dictionary<SendType, int> _typeCounts = new Dictionary<SendType, int>();
-        
+
         private readonly ISendService _sendService;
         private readonly ISyncService _syncService;
         private readonly IUserService _userService;
@@ -37,7 +37,7 @@ namespace Bit.App.Pages
         private readonly IDeviceActionService _deviceActionService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IStorageService _storageService;
-        
+
         public SendGroupingsPageViewModel()
         {
             _sendService = ServiceContainer.Resolve<ISendService>("sendService");
@@ -58,13 +58,13 @@ namespace Bit.App.Pages
             });
             SendOptionsCommand = new Command<SendView>(SendOptionsAsync);
         }
-        
+
         public bool MainPage { get; set; }
         public SendType? Type { get; set; }
         public Func<SendView, bool> Filter { get; set; }
         public bool HasSends { get; set; }
         public List<SendView> Sends { get; set; }
-        
+
         public bool Refreshing
         {
             get => _refreshing;
@@ -109,7 +109,7 @@ namespace Bit.App.Pages
         public Command RefreshCommand { get; set; }
         public Command<SendView> SendOptionsCommand { get; set; }
         public bool LoadedOnce { get; set; }
-        
+
         public async Task LoadAsync()
         {
             if (_doingLoad)
@@ -164,12 +164,12 @@ namespace Bit.App.Pages
                         },
                     });
                 }
-                
+
                 if (Sends?.Any() ?? false)
                 {
                     var sendsListItems = Sends.Select(s => new SendGroupingsPageListItem { Send = s }).ToList();
-                    groupedSends.Add(new SendGroupingsPageListGroup(sendsListItems, 
-                        MainPage ? AppResources.AllSends : AppResources.Sends, sendsListItems.Count, 
+                    groupedSends.Add(new SendGroupingsPageListGroup(sendsListItems,
+                        MainPage ? AppResources.AllSends : AppResources.Sends, sendsListItems.Count,
                         uppercaseGroupNames, !MainPage));
                 }
                 GroupedSends.ResetWithRange(groupedSends);
@@ -190,7 +190,7 @@ namespace Bit.App.Pages
             Refreshing = false;
             SyncRefreshing = false;
         }
-        
+
         public async Task SelectSendAsync(SendView send)
         {
             var page = new SendAddEditPage(send.Id);
@@ -214,7 +214,7 @@ namespace Bit.App.Pages
             var page = new SendGroupingsPage(false, type, title);
             await Page.Navigation.PushAsync(page);
         }
-        
+
         public async Task SyncAsync()
         {
             if (Connectivity.NetworkAccess == NetworkAccess.None)
@@ -236,7 +236,7 @@ namespace Bit.App.Pages
                 _platformUtilsService.ShowToast("error", null, AppResources.SyncingFailed);
             }
         }
-        
+
         private async Task LoadDataAsync()
         {
             NoDataText = AppResources.NoSends;

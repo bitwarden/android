@@ -18,10 +18,10 @@ namespace Bit.App.Pages
         private readonly ISendService _sendService;
         private readonly SendGroupingsPageViewModel _vm;
         private readonly string _pageName;
-        
+
         private PreviousPageInfo _previousPage;
-        
-        public SendGroupingsPage(bool mainPage, SendType? type = null, string pageTitle = null, 
+
+        public SendGroupingsPage(bool mainPage, SendType? type = null, string pageTitle = null,
             PreviousPageInfo previousPage = null)
         {
             _pageName = string.Concat(nameof(GroupingsPage), "_", DateTime.UtcNow.Ticks);
@@ -40,7 +40,7 @@ namespace Bit.App.Pages
             {
                 _vm.PageTitle = pageTitle;
             }
-            
+
             if (Device.RuntimePlatform == Device.iOS)
             {
                 _absLayout.Children.Remove(_fab);
@@ -52,7 +52,7 @@ namespace Bit.App.Pages
                 ToolbarItems.Add(_lockItem);
             }
         }
-        
+
         public ExtendedListView ListView { get; set; }
 
         protected async override void OnAppearing()
@@ -62,7 +62,7 @@ namespace Bit.App.Pages
             {
                 IsBusy = true;
             }
-            
+
             _broadcasterService.Subscribe(_pageName, async (message) =>
             {
                 if (message.Command == "syncStarted")
@@ -82,7 +82,7 @@ namespace Bit.App.Pages
                     });
                 }
             });
-            
+
             await LoadOnAppearedAsync(_mainLayout, false, async () =>
             {
                 if (!_syncService.SyncInProgress || (await _sendService.GetAllAsync()).Any())
@@ -91,7 +91,7 @@ namespace Bit.App.Pages
                     {
                         await _vm.LoadAsync();
                     }
-                    catch (Exception e) when(e.Message.Contains("No key."))
+                    catch (Exception e) when (e.Message.Contains("No key."))
                     {
                         await Task.Delay(1000);
                         await _vm.LoadAsync();
@@ -105,11 +105,11 @@ namespace Bit.App.Pages
                         await _vm.LoadAsync();
                     }
                 }
-                
+
                 await ShowPreviousPageAsync();
             }, _mainContent);
         }
-        
+
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
@@ -148,17 +148,17 @@ namespace Bit.App.Pages
                 await Navigation.PushModalAsync(new NavigationPage(page), false);
             }
         }
-        
+
         private async void Sync_Clicked(object sender, EventArgs e)
         {
             await _vm.SyncAsync();
         }
-        
+
         private async void Lock_Clicked(object sender, EventArgs e)
         {
             await _vaultTimeoutService.LockAsync(true, true);
         }
-        
+
         private async void AddButton_Clicked(object sender, EventArgs e)
         {
             if (DoOnce())
@@ -167,7 +167,7 @@ namespace Bit.App.Pages
                 await Navigation.PushModalAsync(new NavigationPage(page));
             }
         }
-        
+
         private async Task ShowPreviousPageAsync()
         {
             if (_previousPage == null)
@@ -186,4 +186,3 @@ namespace Bit.App.Pages
         }
     }
 }
-

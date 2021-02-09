@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <pages:BaseContentPage xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="Bit.App.Pages.SendGroupingsPage"
@@ -13,13 +13,13 @@
     <ContentPage.BindingContext>
         <pages:SendGroupingsPageViewModel />
     </ContentPage.BindingContext>
-    
+
     <ContentPage.ToolbarItems>
         <ToolbarItem Icon="search.png" Clicked="Search_Clicked"
                      AutomationProperties.IsInAccessibleTree="True"
                      AutomationProperties.Name="{u:I18n Search}" />
     </ContentPage.ToolbarItems>
-    
+
     <ContentPage.Resources>
         <ResourceDictionary>
             <u:InverseBoolConverter x:Key="inverseBool" />
@@ -32,14 +32,14 @@
                          Clicked="AddButton_Clicked" Order="Primary"
                          AutomationProperties.IsInAccessibleTree="True"
                          AutomationProperties.Name="{u:I18n AddItem}" />
-            
+
             <DataTemplate x:Key="sendTemplate"
                           x:DataType="pages:SendGroupingsPageListItem">
                 <controls:SendViewCell
                     Send="{Binding Send}"
                     ButtonCommand="{Binding BindingContext.SendOptionsCommand, Source={x:Reference _page}}" />
             </DataTemplate>
-            
+
             <DataTemplate x:Key="sendGroupTemplate"
                           x:DataType="pages:SendGroupingsPageListItem">
                 <ViewCell>
@@ -57,20 +57,20 @@
                                LineBreakMode="TailTruncation"
                                HorizontalOptions="FillAndExpand"
                                VerticalOptions="CenterAndExpand"
-                               StyleClass="list-title"/>
+                               StyleClass="list-title" />
                         <Label Text="{Binding ItemCount, Mode=OneWay}"
                                HorizontalOptions="End"
                                VerticalOptions="CenterAndExpand"
                                HorizontalTextAlignment="End"
-                               StyleClass="list-sub"/>
+                               StyleClass="list-sub" />
                     </StackLayout>
                 </ViewCell>
             </DataTemplate>
 
             <pages:SendGroupingsPageListItemSelector x:Key="sendListItemDataTemplateSelector"
-                                                 SendTemplate="{StaticResource sendTemplate}"
-                                                 GroupTemplate="{StaticResource sendGroupTemplate}" />
-            
+                                                     SendTemplate="{StaticResource sendTemplate}"
+                                                     GroupTemplate="{StaticResource sendGroupTemplate}" />
+
             <StackLayout x:Key="mainLayout" x:Name="_mainLayout">
                 <StackLayout
                     VerticalOptions="CenterAndExpand"
@@ -121,7 +121,8 @@
                                             Text="{Binding ItemCount}"
                                             StyleClass="list-header-sub" />
                                     </StackLayout>
-                                    <BoxView StyleClass="list-section-separator-bottom, list-section-separator-bottom-platform" />
+                                    <BoxView
+                                        StyleClass="list-section-separator-bottom, list-section-separator-bottom-platform" />
                                 </StackLayout>
                             </ViewCell>
                         </DataTemplate>
@@ -153,5 +154,5 @@
             </Button.Effects>
         </Button>
     </AbsoluteLayout>
-    
+
 </pages:BaseContentPage>

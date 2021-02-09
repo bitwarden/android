@@ -14,11 +14,11 @@ namespace Bit.App.Pages
     public partial class SendAddEditPage : BaseContentPage
     {
         private readonly IBroadcasterService _broadcasterService;
-        
+
         private SendAddEditPageViewModel _vm;
-        
+
         public SendAddEditPage(
-            string sendId = null, 
+            string sendId = null,
             SendType? type = null)
         {
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
@@ -37,7 +37,7 @@ namespace Bit.App.Pages
                     ToolbarItems.Add(_shareLink);
                     ToolbarItems.Add(_deleteItem);
                 }
-                _vm.EditorMargins = new Thickness(0,5,0,0);
+                _vm.EditorMargins = new Thickness(0, 5, 0, 0);
             }
             if (Device.RuntimePlatform == Device.iOS)
             {
@@ -47,12 +47,12 @@ namespace Bit.App.Pages
                     ToolbarItems.Add(_moreItem);
                 }
                 _vm.ShowEditorSeparators = true;
-                _vm.EditorMargins = new Thickness(0,10,0,5);
+                _vm.EditorMargins = new Thickness(0, 10, 0, 5);
                 _typePicker.On<iOS>().SetUpdateMode(UpdateMode.WhenFinished);
                 _deletionDateTypePicker.On<iOS>().SetUpdateMode(UpdateMode.WhenFinished);
                 _expirationDateTypePicker.On<iOS>().SetUpdateMode(UpdateMode.WhenFinished);
             }
-            
+
             _typePicker.ItemDisplayBinding = new Binding("Key");
             _deletionDateTypePicker.ItemDisplayBinding = new Binding("Key");
             _expirationDateTypePicker.ItemDisplayBinding = new Binding("Key");
@@ -63,7 +63,7 @@ namespace Bit.App.Pages
                 _nameEntry.ReturnCommand = new Command(() => _textEditor.Focus());
             }
         }
-        
+
         protected override async void OnAppearing()
         {
             base.OnAppearing();
@@ -93,7 +93,7 @@ namespace Bit.App.Pages
                 }
             });
         }
-        
+
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
@@ -117,7 +117,7 @@ namespace Bit.App.Pages
                 ((Entry)sender).Text = e.OldTextValue;
             }
         }
-        
+
         private async void ChooseFile_Clicked(object sender, EventArgs e)
         {
             if (DoOnce())
@@ -133,7 +133,7 @@ namespace Bit.App.Pages
                 _vm.ClearExpirationDate();
             }
         }
-        
+
         private async void Save_Clicked(object sender, EventArgs e)
         {
             if (DoOnce())
@@ -141,7 +141,7 @@ namespace Bit.App.Pages
                 await _vm.SubmitAsync();
             }
         }
-        
+
         private async void RemovePassword_Clicked(object sender, EventArgs e)
         {
             if (DoOnce())
@@ -149,7 +149,7 @@ namespace Bit.App.Pages
                 await _vm.RemovePasswordAsync();
             }
         }
-        
+
         private async void CopyLink_Clicked(object sender, EventArgs e)
         {
             if (DoOnce())
@@ -157,7 +157,7 @@ namespace Bit.App.Pages
                 await _vm.CopyLinkAsync();
             }
         }
-        
+
         private async void ShareLink_Clicked(object sender, EventArgs e)
         {
             if (DoOnce())
@@ -165,7 +165,7 @@ namespace Bit.App.Pages
                 await _vm.ShareLinkAsync();
             }
         }
-        
+
         private async void Delete_Clicked(object sender, EventArgs e)
         {
             if (DoOnce())
@@ -176,7 +176,7 @@ namespace Bit.App.Pages
                 }
             }
         }
-        
+
         private async void More_Clicked(object sender, EventArgs e)
         {
             if (!DoOnce())
@@ -226,4 +226,3 @@ namespace Bit.App.Pages
         }
     }
 }
-

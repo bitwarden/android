@@ -13,7 +13,7 @@ namespace Bit.App.Pages
     public class SendsPageViewModel : BaseViewModel
     {
         private readonly ISearchService _searchService;
-        
+
         private CancellationTokenSource _searchCancellationTokenSource;
         private bool _showNoData;
         private bool _showList;
@@ -24,11 +24,11 @@ namespace Bit.App.Pages
             Sends = new ExtendedObservableCollection<SendView>();
             SendOptionsCommand = new Command<SendView>(SendOptionsAsync);
         }
-        
+
         public Command SendOptionsCommand { get; set; }
         public ExtendedObservableCollection<SendView> Sends { get; set; }
         public Func<SendView, bool> Filter { get; set; }
-        
+
         public bool ShowNoData
         {
             get => _showNoData;
@@ -37,7 +37,7 @@ namespace Bit.App.Pages
                 nameof(ShowSearchDirection)
             });
         }
-        
+
         public bool ShowList
         {
             get => _showList;
@@ -48,7 +48,7 @@ namespace Bit.App.Pages
         }
 
         public bool ShowSearchDirection => !ShowList && !ShowNoData;
-        
+
         public async Task InitAsync()
         {
             if (!string.IsNullOrWhiteSpace((Page as SendsPage).SearchBar.Text))
@@ -56,7 +56,7 @@ namespace Bit.App.Pages
                 Search((Page as SendsPage).SearchBar.Text, 200);
             }
         }
-        
+
         public void Search(string searchText, int? timeout = null)
         {
             var previousCts = _searchCancellationTokenSource;

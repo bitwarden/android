@@ -45,7 +45,7 @@ namespace Bit.App.Pages
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _sendService = ServiceContainer.Resolve<ISendService>("sendService");
             TogglePasswordCommand = new Command(TogglePassword);
-            
+
             TypeOptions = new List<KeyValuePair<string, SendType>>
             {
                 new KeyValuePair<string, SendType>(AppResources.TypeText, SendType.Text),
@@ -73,7 +73,7 @@ namespace Bit.App.Pages
                 new KeyValuePair<string, string>(AppResources.Custom, AppResources.Custom),
             };
         }
-        
+
         public Command TogglePasswordCommand { get; set; }
         public string SendId { get; set; }
         public SendType? Type { get; set; }
@@ -222,7 +222,7 @@ namespace Bit.App.Pages
                     DeletionDateTypeSelectedIndex = 4;
                     ExpirationDateTypeSelectedIndex = 0;
                 }
-                
+
                 TypeSelectedIndex = TypeOptions.FindIndex(k => k.Value == Send.Type);
                 MaxAccessCount = Send.MaxAccessCount;
                 _isOverridingPickers = true;
@@ -232,10 +232,10 @@ namespace Bit.App.Pages
                 ExpirationTime = ExpirationDate?.TimeOfDay;
                 _isOverridingPickers = false;
             }
-            
+
             return true;
         }
-        
+
         public async Task ChooseFileAsync()
         {
             await _deviceActionService.SelectFileAsync();
@@ -256,7 +256,7 @@ namespace Bit.App.Pages
             {
                 Send.File.FileName = FileName;
             }
-            
+
             // deletion date
             if (EditMode)
             {
@@ -283,9 +283,8 @@ namespace Bit.App.Pages
             {
                 Send.ExpirationDate = null;
             }
-            
         }
-        
+
         public async Task<bool> SubmitAsync()
         {
             if (Send == null)
@@ -309,7 +308,7 @@ namespace Bit.App.Pages
             {
                 if (!_canAccessPremium)
                 {
-                    await _platformUtilsService.ShowDialogAsync(AppResources.PremiumRequired); 
+                    await _platformUtilsService.ShowDialogAsync(AppResources.PremiumRequired);
                     return false;
                 }
                 if (FileData == null)
@@ -326,7 +325,7 @@ namespace Bit.App.Pages
                     return false;
                 }
             }
-            
+
             UpdateSendData();
 
             var (send, encryptedFileData) = await _sendService.EncryptAsync(Send, FileData, NewPassword);
@@ -339,11 +338,11 @@ namespace Bit.App.Pages
                 await _deviceActionService.ShowLoadingAsync(AppResources.Saving);
                 var sendId = await _sendService.SaveWithServerAsync(send, encryptedFileData);
                 await _deviceActionService.HideLoadingAsync();
-                
+
                 _platformUtilsService.ShowToast("success", null,
                     EditMode ? AppResources.SendUpdated : AppResources.NewSendCreated);
                 await Page.Navigation.PopModalAsync();
-                
+
                 if (ShareOnSave)
                 {
                     var savedSend = await _sendService.GetAsync(sendId);
@@ -353,7 +352,7 @@ namespace Bit.App.Pages
                         await AppHelpers.ShareSendUrl(savedSendView);
                     }
                 }
-                
+
                 return true;
             }
             catch (ApiException e)
@@ -376,15 +375,15 @@ namespace Bit.App.Pages
         public async Task CopyLinkAsync()
         {
             await _platformUtilsService.CopyToClipboardAsync(AppHelpers.GetSendUrl(Send));
-                _platformUtilsService.ShowToast("info", null,
-                    string.Format(AppResources.ValueHasBeenCopied, AppResources.ShareLink));
+            _platformUtilsService.ShowToast("info", null,
+                string.Format(AppResources.ValueHasBeenCopied, AppResources.ShareLink));
         }
-        
+
         public async Task ShareLinkAsync()
         {
             await AppHelpers.ShareSendUrl(Send);
         }
-        
+
         public async Task<bool> DeleteAsync()
         {
             return await AppHelpers.DeleteSendAsync(SendId);
@@ -396,14 +395,14 @@ namespace Bit.App.Pages
             {
                 if (!EditMode && TypeOptions[TypeSelectedIndex].Value == SendType.File && !_canAccessPremium)
                 {
-                    await _platformUtilsService.ShowDialogAsync(AppResources.PremiumRequired); 
+                    await _platformUtilsService.ShowDialogAsync(AppResources.PremiumRequired);
                     TypeSelectedIndex = 0;
                 }
                 Send.Type = TypeOptions[TypeSelectedIndex].Value;
                 TriggerPropertyChanged(nameof(Send), _additionalSendProperties);
             }
         }
-        
+
         private void DeletionTypeChanged()
         {
             if (Send != null && DeletionDateTypeSelectedIndex > -1)
@@ -438,7 +437,7 @@ namespace Bit.App.Pages
                 TriggerPropertyChanged(nameof(ShowDeletionCustomPickers));
             }
         }
-        
+
         private void ExpirationTypeChanged()
         {
             if (Send != null && ExpirationDateTypeSelectedIndex > -1)
@@ -481,7 +480,7 @@ namespace Bit.App.Pages
                 TriggerPropertyChanged(nameof(ShowExpirationCustomPickers));
             }
         }
-        
+
         private void ExpirationDateChanged()
         {
             if (!_isOverridingPickers && !ExpirationTime.HasValue)
@@ -490,7 +489,7 @@ namespace Bit.App.Pages
                 ExpirationTime = DateTime.Now.TimeOfDay;
             }
         }
-        
+
         private void ExpirationTimeChanged()
         {
             if (!_isOverridingPickers && !ExpirationDate.HasValue)
@@ -499,12 +498,12 @@ namespace Bit.App.Pages
                 ExpirationDate = DateTime.Today;
             }
         }
-        
+
         private void MaxAccessCountChanged()
         {
             Send.MaxAccessCount = _maxAccessCount;
         }
-        
+
         private void TogglePassword()
         {
             ShowPassword = !ShowPassword;

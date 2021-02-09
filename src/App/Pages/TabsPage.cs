@@ -19,7 +19,7 @@ namespace Bit.App.Pages
                 IconImageSource = "lock.png"
             };
             Children.Add(_groupingsPage);
-            
+
             _sendGroupingsPage = new NavigationPage(new SendGroupingsPage(true))
             {
                 Title = AppResources.Send,
