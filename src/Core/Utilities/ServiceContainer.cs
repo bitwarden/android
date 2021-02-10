@@ -84,9 +84,9 @@ namespace Bit.Core.Utilities
             Register<ICipherService>("cipherService", cipherService);
             Register<IFolderService>("folderService", folderService);
             Register<ICollectionService>("collectionService", collectionService);
+            Register<ISendService>("sendService", sendService);
             Register<ISearchService>("searchService", searchService);
             Register<IPolicyService>("policyService", policyService);
-            Register<ISendService>("sendService", sendService);
             Register<ISyncService>("syncService", syncService);
             Register<IVaultTimeoutService>("vaultTimeoutService", vaultTimeoutService);
             Register<IPasswordGenerationService>("passwordGenerationService", passwordGenerationService);
