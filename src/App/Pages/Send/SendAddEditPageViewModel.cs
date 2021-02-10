@@ -33,7 +33,7 @@ namespace Bit.App.Pages
         private TimeSpan? _expirationTime;
         private bool _isOverridingPickers;
         private int? _maxAccessCount;
-        private string[] _additionalSendProperties = new string[]
+        private string[] _additionalSendProperties = new []
         {
             nameof(IsText),
             nameof(IsFile),
@@ -179,7 +179,7 @@ namespace Bit.App.Pages
         {
             get => _showPassword;
             set => SetProperty(ref _showPassword, value,
-                additionalPropertyNames: new string[]
+                additionalPropertyNames: new []
                 {
                     nameof(ShowPasswordIcon)
                 });
@@ -258,9 +258,9 @@ namespace Bit.App.Pages
             }
 
             // deletion date
-            if (EditMode)
+            if (ShowDeletionCustomPickers)
             {
-                Send.DeletionDate = DeletionDate.Add(DeletionTime).ToUniversalTime();
+                Send.DeletionDate = DeletionDate.Date.Add(DeletionTime).ToUniversalTime();
             }
             else
             {
@@ -270,9 +270,9 @@ namespace Bit.App.Pages
             // expiration date
             if (ExpirationDate.HasValue)
             {
-                if (ExpirationTime.HasValue)
+                if (ShowExpirationCustomPickers && ExpirationTime.HasValue)
                 {
-                    Send.ExpirationDate = ExpirationDate.Value.Add(ExpirationTime.Value).ToUniversalTime();
+                    Send.ExpirationDate = ExpirationDate.Value.Date.Add(ExpirationTime.Value).ToUniversalTime();
                 }
                 else
                 {
@@ -423,13 +423,11 @@ namespace Bit.App.Pages
                         DeletionDate = DateTime.Now.AddDays(3);
                         break;
                     case 4:
+                    case 6:
                         DeletionDate = DateTime.Now.AddDays(7);
                         break;
                     case 5:
                         DeletionDate = DateTime.Now.AddDays(30);
-                        break;
-                    case 6:
-                        DeletionDate = DateTime.Now.AddDays(7);
                         break;
                 }
                 DeletionTime = DeletionDate.TimeOfDay;

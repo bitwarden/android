@@ -32,7 +32,7 @@ namespace Bit.App.Pages
         public bool ShowNoData
         {
             get => _showNoData;
-            set => SetProperty(ref _showNoData, value, additionalPropertyNames: new string[]
+            set => SetProperty(ref _showNoData, value, additionalPropertyNames: new []
             {
                 nameof(ShowSearchDirection)
             });
@@ -41,7 +41,7 @@ namespace Bit.App.Pages
         public bool ShowList
         {
             get => _showList;
-            set => SetProperty(ref _showList, value, additionalPropertyNames: new string[]
+            set => SetProperty(ref _showList, value, additionalPropertyNames: new []
             {
                 nameof(ShowSearchDirection)
             });
