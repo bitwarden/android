@@ -28,6 +28,7 @@
         public const string UTTypeAppExtensionFillWebViewAction = "org.appextension.fill-webview-action";
         public const string UTTypeAppExtensionFillBrowserAction = "org.appextension.fill-browser-action";
         public const string UTTypeAppExtensionSetup = "com.8bit.bitwarden.extension-setup";
+        public const string UTTypeAppExtensionUrl = "public.url";
 
         public const string AutofillNeedsIdentityReplacementKey = "autofillNeedsIdentityReplacement";
     }

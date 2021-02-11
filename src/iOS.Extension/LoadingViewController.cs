@@ -49,6 +49,7 @@ namespace Bit.iOS.Extension
                         || ProcessFindLoginProvider(itemProvider)
                         || ProcessFindLoginBrowserProvider(itemProvider, Constants.UTTypeAppExtensionFillBrowserAction)
                         || ProcessFindLoginBrowserProvider(itemProvider, Constants.UTTypeAppExtensionFillWebViewAction)
+                        || ProcessFindLoginBrowserProvider(itemProvider, Constants.UTTypeAppExtensionUrl)
                         || ProcessSaveLoginProvider(itemProvider)
                         || ProcessChangePasswordProvider(itemProvider)
                         || ProcessExtensionSetupProvider(itemProvider))
