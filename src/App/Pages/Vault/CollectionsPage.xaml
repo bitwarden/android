@@ -39,7 +39,7 @@
                                 <StackLayout StyleClass="box-row, box-row-switch">
                                     <Label
                                         Text="{Binding Collection.Name}"
-                                        StyleClass="box-label, box-label-regular"
+                                        StyleClass="box-label-regular"
                                         HorizontalOptions="StartAndExpand" />
                                     <Switch
                                         IsToggled="{Binding Checked}"

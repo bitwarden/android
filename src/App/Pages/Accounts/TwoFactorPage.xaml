@@ -50,7 +50,7 @@
                     <StackLayout StyleClass="box-row, box-row-switch">
                         <Label
                             Text="{u:I18n RememberMe}"
-                            StyleClass="box-label, box-label-regular"
+                            StyleClass="box-label-regular"
                             HorizontalOptions="StartAndExpand" />
                         <Switch
                             IsToggled="{Binding Remember}"
@@ -85,7 +85,7 @@
                     <StackLayout StyleClass="box-row, box-row-switch">
                         <Label
                             Text="{u:I18n RememberMe}"
-                            StyleClass="box-label, box-label-regular"
+                            StyleClass="box-label-regular"
                             HorizontalOptions="StartAndExpand" />
                         <Switch
                             IsToggled="{Binding Remember}"
@@ -105,7 +105,7 @@
                     <StackLayout StyleClass="box-row, box-row-switch">
                         <Label
                             Text="{u:I18n RememberMe}"
-                            StyleClass="box-label, box-label-regular"
+                            StyleClass="box-label-regular"
                             HorizontalOptions="StartAndExpand" />
                         <Switch
                             IsToggled="{Binding Remember}"
