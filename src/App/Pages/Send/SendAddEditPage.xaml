@@ -52,9 +52,9 @@
                          IsDestructive="True"
                          x:Name="_deleteItem"
                          x:Key="deleteItem" />
-            
+
             <Style x:Key="segmentedButtonBase" TargetType="Button">
-                <Setter Property="HeightRequest" Value="{Binding SegmentedButtonHeight}" />              
+                <Setter Property="HeightRequest" Value="{Binding SegmentedButtonHeight}" />
                 <Setter Property="FontSize" Value="{Binding SegmentedButtonFontSize}" />
                 <Setter Property="CornerRadius" Value="0" />
             </Style>
@@ -64,7 +64,7 @@
                 <Setter Property="BackgroundColor" Value="Transparent" />
                 <Setter Property="BorderColor" Value="{StaticResource PrimaryColor}" />
                 <Setter Property="BorderWidth" Value="1" />
-                
+
             </Style>
             <Style x:Key="segmentedButtonDisabled" BaseResourceKey="segmentedButtonBase" TargetType="Button">
                 <Setter Property="TextColor" Value="{StaticResource TitleTextColor}" />
@@ -72,7 +72,7 @@
                 <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor}" />
                 <Setter Property="BorderWidth" Value="0" />
             </Style>
-            
+
             <ScrollView x:Key="scrollView" x:Name="_scrollView">
                 <StackLayout Spacing="20">
                     <StackLayout StyleClass="box">
@@ -86,7 +86,7 @@
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <Button Text="{u:I18n TypeText}" 
+                                <Button Text="{u:I18n TypeText}"
                                         IsEnabled="{Binding IsFile}"
                                         Clicked="TextType_Clicked"
                                         AutomationProperties.IsInAccessibleTree="True"
@@ -96,20 +96,20 @@
                                         <VisualStateGroup x:Name="CommonStates">
                                             <VisualState x:Name="Normal">
                                                 <VisualState.Setters>
-                                                    <Setter Property="Style" 
+                                                    <Setter Property="Style"
                                                             Value="{StaticResource segmentedButtonNormal}" />
                                                 </VisualState.Setters>
                                             </VisualState>
                                             <VisualState x:Name="Disabled">
                                                 <VisualState.Setters>
-                                                    <Setter Property="Style" 
+                                                    <Setter Property="Style"
                                                             Value="{StaticResource segmentedButtonDisabled}" />
-                                                 </VisualState.Setters>
+                                                </VisualState.Setters>
                                             </VisualState>
                                         </VisualStateGroup>
                                     </VisualStateManager.VisualStateGroups>
                                 </Button>
-                                <Button Text="{u:I18n TypeFile}" 
+                                <Button Text="{u:I18n TypeFile}"
                                         IsEnabled="{Binding IsText}"
                                         Clicked="FileType_Clicked"
                                         AutomationProperties.IsInAccessibleTree="True"
@@ -119,15 +119,15 @@
                                         <VisualStateGroup x:Name="CommonStates">
                                             <VisualState x:Name="Normal">
                                                 <VisualState.Setters>
-                                                    <Setter Property="Style" 
+                                                    <Setter Property="Style"
                                                             Value="{StaticResource segmentedButtonNormal}" />
                                                 </VisualState.Setters>
                                             </VisualState>
                                             <VisualState x:Name="Disabled">
                                                 <VisualState.Setters>
-                                                    <Setter Property="Style" 
+                                                    <Setter Property="Style"
                                                             Value="{StaticResource segmentedButtonDisabled}" />
-                                                 </VisualState.Setters>
+                                                </VisualState.Setters>
                                             </VisualState>
                                         </VisualStateGroup>
                                     </VisualStateManager.VisualStateGroups>
