@@ -68,7 +68,7 @@
                 <StackLayout StyleClass="box-row, box-row-switch">
                     <Label
                         Text="{u:I18n DisableAutoTotpCopy}"
-                        StyleClass="box-label, box-label-regular"
+                        StyleClass="box-label-regular"
                         HorizontalOptions="StartAndExpand" />
                     <Switch
                         IsToggled="{Binding DisableAutoTotpCopy}"
@@ -83,7 +83,7 @@
                 <StackLayout StyleClass="box-row, box-row-switch">
                     <Label
                         Text="{u:I18n DisableWebsiteIcons}"
-                        StyleClass="box-label, box-label-regular"
+                        StyleClass="box-label-regular"
                         HorizontalOptions="StartAndExpand" />
                     <Switch
                         IsToggled="{Binding DisableFavicon}"
@@ -102,7 +102,7 @@
                 <StackLayout StyleClass="box-row, box-row-switch">
                     <Label
                         Text="{u:I18n DisableSavePrompt}"
-                        StyleClass="box-label, box-label-regular"
+                        StyleClass="box-label-regular"
                         HorizontalOptions="StartAndExpand" />
                     <Switch
                         IsToggled="{Binding AutofillDisableSavePrompt}"

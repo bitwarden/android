@@ -28,6 +28,7 @@ namespace Bit.App.Pages
             _vm.SendId = sendId;
             _vm.Type = type;
             _vm.Init();
+            SetActivityIndicator();
             if (Device.RuntimePlatform == Device.Android)
             {
                 if (_vm.EditMode)
@@ -37,6 +38,9 @@ namespace Bit.App.Pages
                     ToolbarItems.Add(_shareLink);
                     ToolbarItems.Add(_deleteItem);
                 }
+                _vm.SegmentedButtonHeight = 36;
+                _vm.SegmentedButtonFontSize = 13;
+                _vm.SegmentedButtonMargins = new Thickness(0, 10, 0, 0);
                 _vm.EditorMargins = new Thickness(0, 5, 0, 0);
             }
             else if (Device.RuntimePlatform == Device.iOS)
@@ -46,14 +50,15 @@ namespace Bit.App.Pages
                 {
                     ToolbarItems.Add(_moreItem);
                 }
+                _vm.SegmentedButtonHeight = 30;
+                _vm.SegmentedButtonFontSize = 15;
+                _vm.SegmentedButtonMargins = new Thickness(0, 5, 0, 0);
                 _vm.ShowEditorSeparators = true;
                 _vm.EditorMargins = new Thickness(0, 10, 0, 5);
-                _typePicker.On<iOS>().SetUpdateMode(UpdateMode.WhenFinished);
                 _deletionDateTypePicker.On<iOS>().SetUpdateMode(UpdateMode.WhenFinished);
                 _expirationDateTypePicker.On<iOS>().SetUpdateMode(UpdateMode.WhenFinished);
             }
 
-            _typePicker.ItemDisplayBinding = new Binding("Key");
             _deletionDateTypePicker.ItemDisplayBinding = new Binding("Key");
             _expirationDateTypePicker.ItemDisplayBinding = new Binding("Key");
 
@@ -101,6 +106,16 @@ namespace Bit.App.Pages
             {
                 _broadcasterService.Unsubscribe(nameof(SendAddEditPage));
             }
+        }
+
+        private void TextType_Clicked(object sender, EventArgs eventArgs)
+        {
+            _vm.TypeChanged(SendType.Text);
+        }
+        
+        private void FileType_Clicked(object sender, EventArgs eventArgs)
+        {
+            _vm.TypeChanged(SendType.File);
         }
 
         private void OnMaxAccessCountTextChanged(object sender, TextChangedEventArgs e)

@@ -19,7 +19,7 @@
                 <StackLayout StyleClass="box-row, box-row-switch">
                     <Label
                         Text="{u:I18n AutofillService}"
-                        StyleClass="box-label, box-label-regular"
+                        StyleClass="box-label-regular"
                         HorizontalOptions="StartAndExpand" />
                     <RelativeLayout HorizontalOptions="End">
                         <Switch
@@ -46,7 +46,7 @@
                 <StackLayout StyleClass="box-row, box-row-switch">
                     <Label
                         Text="{u:I18n InlineAutofill}"
-                        StyleClass="box-label, box-label-regular"
+                        StyleClass="box-label-regular"
                         IsEnabled="{Binding InlineAutofillEnabled}"
                         HorizontalOptions="StartAndExpand" />
                     <RelativeLayout HorizontalOptions="End">
@@ -75,7 +75,7 @@
                 <StackLayout StyleClass="box-row, box-row-switch">
                     <Label
                         Text="{u:I18n Accessibility}"
-                        StyleClass="box-label, box-label-regular"
+                        StyleClass="box-label-regular"
                         HorizontalOptions="StartAndExpand" />
                     <RelativeLayout HorizontalOptions="End">
                         <Switch
@@ -102,7 +102,7 @@
                 <StackLayout StyleClass="box-row, box-row-switch">
                     <Label
                         Text="{u:I18n DrawOver}"
-                        StyleClass="box-label, box-label-regular"
+                        StyleClass="box-label-regular"
                         IsEnabled="{Binding DrawOverEnabled}"
                         HorizontalOptions="StartAndExpand" />
                     <RelativeLayout HorizontalOptions="End">

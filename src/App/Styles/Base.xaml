@@ -320,6 +320,8 @@
            Class="box-label">
         <Setter Property="FontSize"
                 Value="Small" />
+        <Setter Property="FontAttributes"
+                Value="Bold" />
         <Setter Property="TextColor"
                 Value="{StaticResource MutedColor}" />
     </Style>

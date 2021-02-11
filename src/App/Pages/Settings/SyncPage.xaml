@@ -22,7 +22,7 @@
                 <StackLayout StyleClass="box-row, box-row-switch">
                     <Label
                         Text="{u:I18n EnableSyncOnRefresh}"
-                        StyleClass="box-label, box-label-regular"
+                        StyleClass="box-label-regular"
                         HorizontalOptions="StartAndExpand" />
                     <Switch
                         IsToggled="{Binding EnableSyncOnRefresh}"

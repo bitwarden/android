@@ -98,12 +98,12 @@
                     <StackLayout StyleClass="box-row, box-row-stepper">
                         <Label
                             Text="{u:I18n NumberOfWords}"
-                            StyleClass="box-label, box-label-regular"
+                            StyleClass="box-label-regular"
                             VerticalOptions="FillAndExpand"
                             VerticalTextAlignment="Center" />
                         <Label
                             Text="{Binding NumWords}"
-                            StyleClass="box-label, box-sub-label"
+                            StyleClass="box-sub-label"
                             HorizontalOptions="FillAndExpand"
                             HorizontalTextAlignment="End"
                             VerticalOptions="FillAndExpand"
@@ -128,7 +128,7 @@
                     <StackLayout StyleClass="box-row, box-row-switch">
                         <Label
                             Text="{u:I18n Capitalize}"
-                            StyleClass="box-label, box-label-regular"
+                            StyleClass="box-label-regular"
                             HorizontalOptions="StartAndExpand" />
                         <Switch
                             IsToggled="{Binding Capitalize}"
@@ -141,7 +141,7 @@
                     <StackLayout StyleClass="box-row, box-row-switch">
                         <Label
                             Text="{u:I18n IncludeNumber}"
-                            StyleClass="box-label, box-label-regular"
+                            StyleClass="box-label-regular"
                             HorizontalOptions="StartAndExpand" />
                         <Switch
                             IsToggled="{Binding IncludeNumber}"
@@ -155,11 +155,11 @@
                     <StackLayout StyleClass="box-row, box-row-slider">
                         <Label
                             Text="{u:I18n Length}"
-                            StyleClass="box-label, box-label-regular"
+                            StyleClass="box-label-regular"
                             VerticalOptions="CenterAndExpand" />
                         <Label
                             Text="{Binding Length}"
-                            StyleClass="box-label, box-sub-label"
+                            StyleClass="box-sub-label"
                             WidthRequest="30"
                             VerticalOptions="CenterAndExpand"
                             HorizontalTextAlignment="End" />
@@ -177,7 +177,7 @@
                     <StackLayout StyleClass="box-row, box-row-switch">
                         <Label
                             Text="A-Z"
-                            StyleClass="box-label, box-label-regular"
+                            StyleClass="box-label-regular"
                             HorizontalOptions="StartAndExpand" />
                         <Switch
                             IsToggled="{Binding Uppercase}"
@@ -190,7 +190,7 @@
                     <StackLayout StyleClass="box-row, box-row-switch">
                         <Label
                             Text="a-z"
-                            StyleClass="box-label, box-label-regular"
+                            StyleClass="box-label-regular"
                             HorizontalOptions="StartAndExpand" />
                         <Switch
                             IsToggled="{Binding Lowercase}"
@@ -203,7 +203,7 @@
                     <StackLayout StyleClass="box-row, box-row-switch">
                         <Label
                             Text="0-9"
-                            StyleClass="box-label, box-label-regular"
+                            StyleClass="box-label-regular"
                             HorizontalOptions="StartAndExpand" />
                         <Switch
                             IsToggled="{Binding Number}"
@@ -216,7 +216,7 @@
                     <StackLayout StyleClass="box-row, box-row-switch">
                         <Label
                             Text="!@#$%^&amp;*"
-                            StyleClass="box-label, box-label-regular"
+                            StyleClass="box-label-regular"
                             HorizontalOptions="StartAndExpand" />
                         <Switch
                             IsToggled="{Binding Special}"
@@ -229,12 +229,12 @@
                     <StackLayout StyleClass="box-row, box-row-stepper">
                         <Label
                             Text="{u:I18n MinNumbers}"
-                            StyleClass="box-label, box-label-regular"
+                            StyleClass="box-label-regular"
                             VerticalOptions="FillAndExpand"
                             VerticalTextAlignment="Center" />
                         <Label
                             Text="{Binding MinNumber}"
-                            StyleClass="box-label, box-sub-label"
+                            StyleClass="box-sub-label"
                             HorizontalOptions="FillAndExpand"
                             HorizontalTextAlignment="End"
                             VerticalOptions="FillAndExpand"
@@ -249,12 +249,12 @@
                     <StackLayout StyleClass="box-row, box-row-stepper">
                         <Label
                             Text="{u:I18n MinSpecial}"
-                            StyleClass="box-label, box-label-regular"
+                            StyleClass="box-label-regular"
                             VerticalOptions="FillAndExpand"
                             VerticalTextAlignment="Center" />
                         <Label
                             Text="{Binding MinSpecial}"
-                            StyleClass="box-label, box-sub-label"
+                            StyleClass="box-sub-label"
                             HorizontalOptions="FillAndExpand"
                             HorizontalTextAlignment="End"
                             VerticalOptions="FillAndExpand"
@@ -269,7 +269,7 @@
                     <StackLayout StyleClass="box-row, box-row-switch">
                         <Label
                             Text="{u:I18n AvoidAmbiguousCharacters}"
-                            StyleClass="box-label, box-label-regular"
+                            StyleClass="box-label-regular"
                             HorizontalOptions="StartAndExpand" />
                         <Switch
                             IsToggled="{Binding AvoidAmbiguous}"
