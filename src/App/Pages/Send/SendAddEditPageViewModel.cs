@@ -21,10 +21,7 @@ namespace Bit.App.Pages
         private readonly ISendService _sendService;
         private bool _canAccessPremium;
         private SendView _send;
-        private bool _showEditorSeparators;
-        private Thickness _editorMargins;
         private bool _showPassword;
-        private int _typeSelectedIndex;
         private int _deletionDateTypeSelectedIndex;
         private int _expirationDateTypeSelectedIndex;
         private DateTime _deletionDate;
@@ -76,6 +73,11 @@ namespace Bit.App.Pages
 
         public Command TogglePasswordCommand { get; set; }
         public string SendId { get; set; }
+        public int SegmentedButtonHeight { get; set; }
+        public int SegmentedButtonFontSize { get; set; }
+        public Thickness SegmentedButtonMargins { get; set; }
+        public bool ShowEditorSeparators { get; set; }
+        public Thickness EditorMargins { get; set; }
         public SendType? Type { get; set; }
         public string FileName { get; set; }
         public byte[] FileData { get; set; }
@@ -84,17 +86,6 @@ namespace Bit.App.Pages
         public List<KeyValuePair<string, SendType>> TypeOptions { get; }
         public List<KeyValuePair<string, string>> DeletionTypeOptions { get; }
         public List<KeyValuePair<string, string>> ExpirationTypeOptions { get; }
-        public int TypeSelectedIndex
-        {
-            get => _typeSelectedIndex;
-            set
-            {
-                if (SetProperty(ref _typeSelectedIndex, value))
-                {
-                    TypeChanged();
-                }
-            }
-        }
         public int DeletionDateTypeSelectedIndex
         {
             get => _deletionDateTypeSelectedIndex;
@@ -165,16 +156,6 @@ namespace Bit.App.Pages
             get => _send;
             set => SetProperty(ref _send, value, additionalPropertyNames: _additionalSendProperties);
         }
-        public bool ShowEditorSeparators
-        {
-            get => _showEditorSeparators;
-            set => SetProperty(ref _showEditorSeparators, value);
-        }
-        public Thickness EditorMargins
-        {
-            get => _editorMargins;
-            set => SetProperty(ref _editorMargins, value);
-        }
         public bool ShowPassword
         {
             get => _showPassword;
@@ -223,7 +204,6 @@ namespace Bit.App.Pages
                     ExpirationDateTypeSelectedIndex = 0;
                 }
 
-                TypeSelectedIndex = TypeOptions.FindIndex(k => k.Value == Send.Type);
                 MaxAccessCount = Send.MaxAccessCount;
                 _isOverridingPickers = true;
                 DeletionDate = Send.DeletionDate.ToLocalTime();
@@ -389,16 +369,16 @@ namespace Bit.App.Pages
             return await AppHelpers.DeleteSendAsync(SendId);
         }
 
-        private async void TypeChanged()
+        public async void TypeChanged(SendType type)
         {
-            if (Send != null && TypeSelectedIndex > -1)
+            if (Send != null)
             {
-                if (!EditMode && TypeOptions[TypeSelectedIndex].Value == SendType.File && !_canAccessPremium)
+                if (!EditMode && type == SendType.File && !_canAccessPremium)
                 {
                     await _platformUtilsService.ShowDialogAsync(AppResources.PremiumRequired);
-                    TypeSelectedIndex = 0;
+                    type = SendType.Text;
                 }
-                Send.Type = TypeOptions[TypeSelectedIndex].Value;
+                Send.Type = type;
                 TriggerPropertyChanged(nameof(Send), _additionalSendProperties);
             }
         }

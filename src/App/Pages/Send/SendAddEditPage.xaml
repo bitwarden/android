@@ -52,7 +52,27 @@
                          IsDestructive="True"
                          x:Name="_deleteItem"
                          x:Key="deleteItem" />
-
+            
+            <Style x:Key="segmentedButtonBase" TargetType="Button">
+                <Setter Property="HeightRequest" Value="{Binding SegmentedButtonHeight}" />              
+                <Setter Property="FontSize" Value="{Binding SegmentedButtonFontSize}" />
+                <Setter Property="CornerRadius" Value="0" />
+            </Style>
+            <Style x:Key="segmentedButtonNormal" BaseResourceKey="segmentedButtonBase" TargetType="Button">
+                <Setter Property="TextColor" Value="{StaticResource PrimaryColor}" />
+                <Setter Property="FontAttributes" Value="None" />
+                <Setter Property="BackgroundColor" Value="Transparent" />
+                <Setter Property="BorderColor" Value="{StaticResource PrimaryColor}" />
+                <Setter Property="BorderWidth" Value="1" />
+                
+            </Style>
+            <Style x:Key="segmentedButtonDisabled" BaseResourceKey="segmentedButtonBase" TargetType="Button">
+                <Setter Property="TextColor" Value="{StaticResource TitleTextColor}" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor}" />
+                <Setter Property="BorderWidth" Value="0" />
+            </Style>
+            
             <ScrollView x:Key="scrollView" x:Name="_scrollView">
                 <StackLayout Spacing="20">
                     <StackLayout StyleClass="box">
@@ -61,11 +81,58 @@
                             <Label
                                 Text="{u:I18n Type}"
                                 StyleClass="box-label" />
-                            <Picker
-                                x:Name="_typePicker"
-                                ItemsSource="{Binding TypeOptions, Mode=OneTime}"
-                                SelectedIndex="{Binding TypeSelectedIndex}"
-                                StyleClass="box-value" />
+                            <Grid RowSpacing="0" ColumnSpacing="0" Margin="{Binding SegmentedButtonMargins}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Button Text="{u:I18n TypeText}" 
+                                        IsEnabled="{Binding IsFile}"
+                                        Clicked="TextType_Clicked"
+                                        AutomationProperties.IsInAccessibleTree="True"
+                                        AutomationProperties.Name="{u:I18n Text}"
+                                        Grid.Column="0">
+                                    <VisualStateManager.VisualStateGroups>
+                                        <VisualStateGroup x:Name="CommonStates">
+                                            <VisualState x:Name="Normal">
+                                                <VisualState.Setters>
+                                                    <Setter Property="Style" 
+                                                            Value="{StaticResource segmentedButtonNormal}" />
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                            <VisualState x:Name="Disabled">
+                                                <VisualState.Setters>
+                                                    <Setter Property="Style" 
+                                                            Value="{StaticResource segmentedButtonDisabled}" />
+                                                 </VisualState.Setters>
+                                            </VisualState>
+                                        </VisualStateGroup>
+                                    </VisualStateManager.VisualStateGroups>
+                                </Button>
+                                <Button Text="{u:I18n TypeFile}" 
+                                        IsEnabled="{Binding IsText}"
+                                        Clicked="FileType_Clicked"
+                                        AutomationProperties.IsInAccessibleTree="True"
+                                        AutomationProperties.Name="{u:I18n File}"
+                                        Grid.Column="1">
+                                    <VisualStateManager.VisualStateGroups>
+                                        <VisualStateGroup x:Name="CommonStates">
+                                            <VisualState x:Name="Normal">
+                                                <VisualState.Setters>
+                                                    <Setter Property="Style" 
+                                                            Value="{StaticResource segmentedButtonNormal}" />
+                                                </VisualState.Setters>
+                                            </VisualState>
+                                            <VisualState x:Name="Disabled">
+                                                <VisualState.Setters>
+                                                    <Setter Property="Style" 
+                                                            Value="{StaticResource segmentedButtonDisabled}" />
+                                                 </VisualState.Setters>
+                                            </VisualState>
+                                        </VisualStateGroup>
+                                    </VisualStateManager.VisualStateGroups>
+                                </Button>
+                            </Grid>
                         </StackLayout>
                         <StackLayout StyleClass="box-row">
                             <Label
@@ -99,7 +166,7 @@
                             <StackLayout StyleClass="box-row, box-row-switch">
                                 <Label
                                     Text="{u:I18n HideTextByDefault}"
-                                    StyleClass="text-sm"
+                                    StyleClass="box-label"
                                     VerticalOptions="Center"
                                     HorizontalOptions="StartAndExpand" />
                                 <Switch
@@ -138,9 +205,11 @@
                                         StyleClass="box-button-row"
                                         Clicked="ChooseFile_Clicked" />
                                 <Label
-                                    Margin="0, 10, 0, 0"
+                                    Margin="0, 5, 0, 0"
                                     Text="{u:I18n MaxFileSize}"
-                                    StyleClass="box-footer-label" />
+                                    StyleClass="text-sm, text-muted"
+                                    HorizontalOptions="FillAndExpand"
+                                    HorizontalTextAlignment="Center" />
                             </StackLayout>
                             <Label
                                 Text="{u:I18n TypeFileInfo}"
@@ -321,7 +390,7 @@
                         <StackLayout StyleClass="box-row, box-row-switch">
                             <Label
                                 Text="{u:I18n DisableSend}"
-                                StyleClass="text-sm"
+                                StyleClass="box-label"
                                 VerticalOptions="Center"
                                 HorizontalOptions="StartAndExpand" />
                             <Switch
@@ -332,7 +401,7 @@
                         <StackLayout StyleClass="box-row, box-row-switch">
                             <Label
                                 Text="{u:I18n ShareOnSave}"
-                                StyleClass="text-sm"
+                                StyleClass="box-label"
                                 VerticalOptions="Center"
                                 HorizontalOptions="StartAndExpand" />
                             <Switch
