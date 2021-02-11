@@ -75,6 +75,10 @@
                                 x:Name="_nameEntry"
                                 Text="{Binding Send.Name}"
                                 StyleClass="box-value" />
+                            <Label
+                                Text="{u:I18n NameInfo}"
+                                StyleClass="box-label"
+                                Margin="0,5,0,0" />
                         </StackLayout>
                         <StackLayout StyleClass="box-row"
                                      IsVisible="{Binding IsText}">
@@ -88,10 +92,14 @@
                                 StyleClass="box-value"
                                 Margin="{Binding EditorMargins}" />
                             <BoxView StyleClass="box-row-separator" IsVisible="{Binding ShowEditorSeparators}" />
+                            <Label
+                                Text="{u:I18n TypeTextInfo}"
+                                StyleClass="box-label"
+                                Margin="0,5,0,0" />
                             <StackLayout StyleClass="box-row, box-row-switch">
                                 <Label
                                     Text="{u:I18n HideTextByDefault}"
-                                    StyleClass="box-label"
+                                    StyleClass="text-sm"
                                     VerticalOptions="Center"
                                     HorizontalOptions="StartAndExpand" />
                                 <Switch
@@ -134,6 +142,10 @@
                                     Text="{u:I18n MaxFileSize}"
                                     StyleClass="box-footer-label" />
                             </StackLayout>
+                            <Label
+                                Text="{u:I18n TypeFileInfo}"
+                                StyleClass="box-label"
+                                Margin="0,5,0,0" />
                         </StackLayout>
                         <StackLayout StyleClass="box-row-header">
                             <Label Text="{u:I18n Options, Header=True}"
@@ -309,7 +321,7 @@
                         <StackLayout StyleClass="box-row, box-row-switch">
                             <Label
                                 Text="{u:I18n DisableSend}"
-                                StyleClass="box-label"
+                                StyleClass="text-sm"
                                 VerticalOptions="Center"
                                 HorizontalOptions="StartAndExpand" />
                             <Switch
@@ -320,7 +332,7 @@
                         <StackLayout StyleClass="box-row, box-row-switch">
                             <Label
                                 Text="{u:I18n ShareOnSave}"
-                                StyleClass="box-label"
+                                StyleClass="text-sm"
                                 VerticalOptions="Center"
                                 HorizontalOptions="StartAndExpand" />
                             <Switch

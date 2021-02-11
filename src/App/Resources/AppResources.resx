@@ -1811,8 +1811,15 @@
     <value>Sends</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
+  <data name="NameInfo" xml:space="preserve">
+    <value>A friendly name to describe this Send.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
   <data name="TypeText" xml:space="preserve">
     <value>Text</value>
+  </data>
+  <data name="TypeTextInfo" xml:space="preserve">
+    <value>The text you want to send.</value>
   </data>
   <data name="HideTextByDefault" xml:space="preserve">
     <value>When accessing the Send, hide the text by default</value>
@@ -1820,6 +1827,9 @@
   </data>
   <data name="TypeFile" xml:space="preserve">
     <value>File</value>
+  </data>
+  <data name="TypeFileInfo" xml:space="preserve">
+    <value>The file you want to send.</value>
   </data>
   <data name="DeletionDate" xml:space="preserve">
     <value>Deletion Date</value>

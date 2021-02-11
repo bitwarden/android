@@ -3201,9 +3201,21 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string NameInfo {
+            get {
+                return ResourceManager.GetString("NameInfo", resourceCulture);
+            }
+        }
+        
         public static string TypeText {
             get {
                 return ResourceManager.GetString("TypeText", resourceCulture);
+            }
+        }
+        
+        public static string TypeTextInfo {
+            get {
+                return ResourceManager.GetString("TypeTextInfo", resourceCulture);
             }
         }
         
@@ -3216,6 +3228,12 @@ namespace Bit.App.Resources {
         public static string TypeFile {
             get {
                 return ResourceManager.GetString("TypeFile", resourceCulture);
+            }
+        }
+        
+        public static string TypeFileInfo {
+            get {
+                return ResourceManager.GetString("TypeFileInfo", resourceCulture);
             }
         }
         
