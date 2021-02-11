@@ -195,9 +195,10 @@ namespace Bit.App.Pages
                 }
                 else
                 {
+                    var defaultType = _canAccessPremium ? SendType.File : SendType.Text;
                     Send = new SendView
                     {
-                        Type = Type.GetValueOrDefault(SendType.Text),
+                        Type = Type.GetValueOrDefault(defaultType),
                         DeletionDate = DateTime.Now.AddDays(7),
                     };
                     DeletionDateTypeSelectedIndex = 4;

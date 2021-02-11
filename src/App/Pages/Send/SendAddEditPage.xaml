@@ -86,11 +86,11 @@
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <Button Text="{u:I18n TypeText}"
-                                        IsEnabled="{Binding IsFile}"
-                                        Clicked="TextType_Clicked"
+                                <Button Text="{u:I18n TypeFile}"
+                                        IsEnabled="{Binding IsText}"
+                                        Clicked="FileType_Clicked"
                                         AutomationProperties.IsInAccessibleTree="True"
-                                        AutomationProperties.Name="{u:I18n Text}"
+                                        AutomationProperties.Name="{u:I18n File}"
                                         Grid.Column="0">
                                     <VisualStateManager.VisualStateGroups>
                                         <!-- Rider users, if the x:Name values below are red, it's a known issue: -->
@@ -111,11 +111,11 @@
                                         </VisualStateGroup>
                                     </VisualStateManager.VisualStateGroups>
                                 </Button>
-                                <Button Text="{u:I18n TypeFile}"
-                                        IsEnabled="{Binding IsText}"
-                                        Clicked="FileType_Clicked"
+                                <Button Text="{u:I18n TypeText}"
+                                        IsEnabled="{Binding IsFile}"
+                                        Clicked="TextType_Clicked"
                                         AutomationProperties.IsInAccessibleTree="True"
-                                        AutomationProperties.Name="{u:I18n File}"
+                                        AutomationProperties.Name="{u:I18n Text}"
                                         Grid.Column="1">
                                     <VisualStateManager.VisualStateGroups>
                                         <!-- Rider users, if the x:Name values below are red, it's a known issue: -->
