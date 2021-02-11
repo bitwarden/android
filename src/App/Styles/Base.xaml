@@ -359,4 +359,11 @@
         <Setter Property="Margin"
                 Value="0, -10, 0, 0" />
     </Style>
+    <Style TargetType="DatePicker"
+           Class="datetime-picker">
+        <Setter Property="FontSize"
+                Value="Medium" />
+        <Setter Property="TextColor"
+                Value="{StaticResource TextColor}" />
+    </Style>
 </ResourceDictionary>

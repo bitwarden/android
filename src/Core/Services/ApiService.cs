@@ -230,7 +230,7 @@ namespace Bit.Core.Services
             SendAsync<SendRequest, SendResponse>(HttpMethod.Put, $"/sends/{id}", request, true, true);
 
         public Task<SendResponse> PutSendRemovePasswordAsync(string id) =>
-            SendAsync<object, SendResponse>(HttpMethod.Put, $"/sends/{id}", null, true, true);
+            SendAsync<object, SendResponse>(HttpMethod.Put, $"/sends/{id}/remove-password", null, true, true);
 
         public Task DeleteSendAsync(string id) =>
             SendAsync<object, object>(HttpMethod.Delete, $"/sends/{id}", null, true, false);

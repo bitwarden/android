@@ -3182,5 +3182,263 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("PersonalOwnershipPolicyInEffect", resourceCulture);
             }
         }
+        
+        public static string Send {
+            get {
+                return ResourceManager.GetString("Send", resourceCulture);
+            }
+        }
+        
+        public static string AllSends {
+            get {
+                return ResourceManager.GetString("AllSends", resourceCulture);
+            }
+        }
+        
+        public static string Sends {
+            get {
+                return ResourceManager.GetString("Sends", resourceCulture);
+            }
+        }
+        
+        public static string TypeText {
+            get {
+                return ResourceManager.GetString("TypeText", resourceCulture);
+            }
+        }
+        
+        public static string HideTextByDefault {
+            get {
+                return ResourceManager.GetString("HideTextByDefault", resourceCulture);
+            }
+        }
+        
+        public static string TypeFile {
+            get {
+                return ResourceManager.GetString("TypeFile", resourceCulture);
+            }
+        }
+        
+        public static string DeletionDate {
+            get {
+                return ResourceManager.GetString("DeletionDate", resourceCulture);
+            }
+        }
+        
+        public static string DeletionTime {
+            get {
+                return ResourceManager.GetString("DeletionTime", resourceCulture);
+            }
+        }
+        
+        public static string DeletionDateInfo {
+            get {
+                return ResourceManager.GetString("DeletionDateInfo", resourceCulture);
+            }
+        }
+        
+        public static string PendingDelete {
+            get {
+                return ResourceManager.GetString("PendingDelete", resourceCulture);
+            }
+        }
+        
+        public static string ExpirationDate {
+            get {
+                return ResourceManager.GetString("ExpirationDate", resourceCulture);
+            }
+        }
+        
+        public static string ExpirationTime {
+            get {
+                return ResourceManager.GetString("ExpirationTime", resourceCulture);
+            }
+        }
+        
+        public static string ExpirationDateInfo {
+            get {
+                return ResourceManager.GetString("ExpirationDateInfo", resourceCulture);
+            }
+        }
+        
+        public static string Expired {
+            get {
+                return ResourceManager.GetString("Expired", resourceCulture);
+            }
+        }
+        
+        public static string MaximumAccessCount {
+            get {
+                return ResourceManager.GetString("MaximumAccessCount", resourceCulture);
+            }
+        }
+        
+        public static string MaximumAccessCountInfo {
+            get {
+                return ResourceManager.GetString("MaximumAccessCountInfo", resourceCulture);
+            }
+        }
+        
+        public static string MaximumAccessCountReached {
+            get {
+                return ResourceManager.GetString("MaximumAccessCountReached", resourceCulture);
+            }
+        }
+        
+        public static string CurrentAccessCount {
+            get {
+                return ResourceManager.GetString("CurrentAccessCount", resourceCulture);
+            }
+        }
+        
+        public static string NewPassword {
+            get {
+                return ResourceManager.GetString("NewPassword", resourceCulture);
+            }
+        }
+        
+        public static string PasswordInfo {
+            get {
+                return ResourceManager.GetString("PasswordInfo", resourceCulture);
+            }
+        }
+        
+        public static string RemovePassword {
+            get {
+                return ResourceManager.GetString("RemovePassword", resourceCulture);
+            }
+        }
+        
+        public static string AreYouSureRemoveSendPassword {
+            get {
+                return ResourceManager.GetString("AreYouSureRemoveSendPassword", resourceCulture);
+            }
+        }
+        
+        public static string RemovingSendPassword {
+            get {
+                return ResourceManager.GetString("RemovingSendPassword", resourceCulture);
+            }
+        }
+        
+        public static string SendPasswordRemoved {
+            get {
+                return ResourceManager.GetString("SendPasswordRemoved", resourceCulture);
+            }
+        }
+        
+        public static string NotesInfo {
+            get {
+                return ResourceManager.GetString("NotesInfo", resourceCulture);
+            }
+        }
+        
+        public static string DisableSend {
+            get {
+                return ResourceManager.GetString("DisableSend", resourceCulture);
+            }
+        }
+        
+        public static string NoSends {
+            get {
+                return ResourceManager.GetString("NoSends", resourceCulture);
+            }
+        }
+        
+        public static string CopyLink {
+            get {
+                return ResourceManager.GetString("CopyLink", resourceCulture);
+            }
+        }
+        
+        public static string ShareLink {
+            get {
+                return ResourceManager.GetString("ShareLink", resourceCulture);
+            }
+        }
+        
+        public static string SearchSends {
+            get {
+                return ResourceManager.GetString("SearchSends", resourceCulture);
+            }
+        }
+        
+        public static string EditSend {
+            get {
+                return ResourceManager.GetString("EditSend", resourceCulture);
+            }
+        }
+        
+        public static string AddSend {
+            get {
+                return ResourceManager.GetString("AddSend", resourceCulture);
+            }
+        }
+        
+        public static string AreYouSureDeleteSend {
+            get {
+                return ResourceManager.GetString("AreYouSureDeleteSend", resourceCulture);
+            }
+        }
+        
+        public static string SendDeleted {
+            get {
+                return ResourceManager.GetString("SendDeleted", resourceCulture);
+            }
+        }
+        
+        public static string SendUpdated {
+            get {
+                return ResourceManager.GetString("SendUpdated", resourceCulture);
+            }
+        }
+        
+        public static string NewSendCreated {
+            get {
+                return ResourceManager.GetString("NewSendCreated", resourceCulture);
+            }
+        }
+        
+        public static string OneDay {
+            get {
+                return ResourceManager.GetString("OneDay", resourceCulture);
+            }
+        }
+        
+        public static string TwoDays {
+            get {
+                return ResourceManager.GetString("TwoDays", resourceCulture);
+            }
+        }
+        
+        public static string ThreeDays {
+            get {
+                return ResourceManager.GetString("ThreeDays", resourceCulture);
+            }
+        }
+        
+        public static string SevenDays {
+            get {
+                return ResourceManager.GetString("SevenDays", resourceCulture);
+            }
+        }
+        
+        public static string ThirtyDays {
+            get {
+                return ResourceManager.GetString("ThirtyDays", resourceCulture);
+            }
+        }
+        
+        public static string Custom {
+            get {
+                return ResourceManager.GetString("Custom", resourceCulture);
+            }
+        }
+        
+        public static string ShareOnSave {
+            get {
+                return ResourceManager.GetString("ShareOnSave", resourceCulture);
+            }
+        }
     }
 }

@@ -155,12 +155,14 @@
     <Compile Include="NFCReaderDelegate.cs" />
     <Compile Include="Renderers\CustomButtonRenderer.cs" />
     <Compile Include="Renderers\CustomContentPageRenderer.cs" />
+    <Compile Include="Renderers\ExtendedDatePickerRenderer.cs" />
     <Compile Include="Renderers\CustomEditorRenderer.cs" />
     <Compile Include="Renderers\CustomEntryRenderer.cs" />
     <Compile Include="Renderers\CustomLabelRenderer.cs" />
     <Compile Include="Renderers\CustomPickerRenderer.cs" />
     <Compile Include="Renderers\CustomSearchBarRenderer.cs" />
     <Compile Include="Renderers\CustomTabbedRenderer.cs" />
+    <Compile Include="Renderers\ExtendedTimePickerRenderer.cs" />
     <Compile Include="Renderers\CustomViewCellRenderer.cs" />
     <Compile Include="Renderers\HybridWebViewRenderer.cs" />
     <Compile Include="Services\BiometricService.cs" />

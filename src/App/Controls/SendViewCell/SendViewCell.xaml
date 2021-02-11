@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ViewCell xmlns="http://xamarin.com/schemas/2014/forms"
+          xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+          x:Class="Bit.App.Controls.SendViewCell"
+          xmlns:controls="clr-namespace:Bit.App.Controls"
+          xmlns:u="clr-namespace:Bit.App.Utilities">
+
+    <Grid
+        x:Name="_grid"
+        StyleClass="list-row, list-row-platform"
+        RowSpacing="0"
+        ColumnSpacing="0"
+        x:DataType="controls:SendViewCellViewModel">
+
+        <Grid.BindingContext>
+            <controls:SendViewCellViewModel />
+        </Grid.BindingContext>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="40" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="60" />
+        </Grid.ColumnDefinitions>
+
+        <controls:FaLabel
+            x:Name="_icon"
+            Grid.Row="0"
+            Grid.Column="0"
+            HorizontalOptions="Center"
+            VerticalOptions="Center"
+            StyleClass="list-icon, list-icon-platform"
+            AutomationProperties.IsInAccessibleTree="False" />
+
+        <Grid RowSpacing="0" ColumnSpacing="0" Grid.Row="0" Grid.Column="1" VerticalOptions="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Label
+                LineBreakMode="TailTruncation"
+                Grid.Column="0"
+                Grid.Row="0"
+                StyleClass="list-title, list-title-platform"
+                Text="{Binding Send.Name, Mode=OneWay}" />
+            <Label
+                LineBreakMode="TailTruncation"
+                Grid.Column="0"
+                Grid.Row="1"
+                Grid.ColumnSpan="5"
+                StyleClass="list-subtitle, list-subtitle-platform"
+                Text="{Binding Send.DisplayDate, Mode=OneWay}" />
+            <controls:FaLabel
+                Grid.Column="1"
+                Grid.Row="0"
+                HorizontalOptions="Start"
+                VerticalOptions="Center"
+                StyleClass="list-title-icon"
+                Margin="5, 0, 0, 0"
+                Text="&#xf084;"
+                IsVisible="{Binding Send.HasPassword, Mode=OneWay}"
+                AutomationProperties.IsInAccessibleTree="True"
+                AutomationProperties.Name="{u:I18n Password}" />
+            <controls:FaLabel
+                Grid.Column="2"
+                Grid.Row="0"
+                HorizontalOptions="Start"
+                VerticalOptions="Center"
+                StyleClass="list-title-icon"
+                Margin="5, 0, 0, 0"
+                Text="&#xf05e;"
+                IsVisible="{Binding Send.MaxAccessCountReached, Mode=OneWay}"
+                AutomationProperties.IsInAccessibleTree="True"
+                AutomationProperties.Name="{u:I18n MaxAccessCountReached}" />
+            <controls:FaLabel
+                Grid.Column="3"
+                Grid.Row="0"
+                HorizontalOptions="Start"
+                VerticalOptions="Center"
+                StyleClass="list-title-icon"
+                Margin="5, 0, 0, 0"
+                Text="&#xf017;"
+                IsVisible="{Binding Send.Expired, Mode=OneWay}"
+                AutomationProperties.IsInAccessibleTree="True"
+                AutomationProperties.Name="{u:I18n Expired}" />
+            <controls:FaLabel
+                Grid.Column="4"
+                Grid.Row="0"
+                HorizontalOptions="Start"
+                VerticalOptions="Center"
+                StyleClass="list-title-icon"
+                Margin="5, 0, 0, 0"
+                Text="&#xf1f8;"
+                IsVisible="{Binding Send.PendingDelete, Mode=OneWay}"
+                AutomationProperties.IsInAccessibleTree="True"
+                AutomationProperties.Name="{u:I18n PendingDelete}" />
+        </Grid>
+
+        <controls:MiButton
+            Grid.Row="0"
+            Grid.Column="2"
+            Text="&#xe5d3;"
+            StyleClass="list-row-button, list-row-button-platform, btn-disabled"
+            Clicked="MoreButton_Clicked"
+            VerticalOptions="CenterAndExpand"
+            HorizontalOptions="EndAndExpand"
+            AutomationProperties.IsInAccessibleTree="True"
+            AutomationProperties.Name="{u:I18n Options}" />
+
+    </Grid>
+
+</ViewCell>

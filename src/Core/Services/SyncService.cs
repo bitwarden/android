@@ -374,7 +374,11 @@ namespace Bit.Core.Services
             await _policyService.Replace(policies);
         }
 
-        private Task SyncSendsAsync(string userId, List<SendResponse> sends) =>
-            _sendService.ReplaceAsync(sends.ToDictionary(s => userId, s => new SendData(s, userId)));
+        private async Task SyncSendsAsync(string userId, List<SendResponse> response)
+        {
+            var sends = response?.ToDictionary(s => s.Id, s => new SendData(s, userId)) ?? 
+                new Dictionary<string, SendData>();
+            await _sendService.ReplaceAsync(sends);
+        }
     }
 }

@@ -429,7 +429,7 @@ namespace Bit.Core.Services
 
         public async Task<SymmetricCryptoKey> MakeSendKeyAsync(byte[] keyMaterial)
         {
-            var sendKey = await _cryptoFunctionService.HkdfAsync(keyMaterial, "bitwarden-send", "send", 65, HkdfAlgorithm.Sha256);
+            var sendKey = await _cryptoFunctionService.HkdfAsync(keyMaterial, "bitwarden-send", "send", 64, HkdfAlgorithm.Sha256);
             return new SymmetricCryptoKey(sendKey);
         }
 

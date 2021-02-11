@@ -77,7 +77,7 @@ namespace Bit.Core.Services
             await DeleteAsync(id);
         }
 
-        public async Task<(Send send, CipherString encryptedFileData)> EncryptAsync(SendView model, byte[] fileData,
+        public async Task<(Send send, byte[] encryptedFileData)> EncryptAsync(SendView model, byte[] fileData,
             string password, SymmetricCryptoKey key = null)
         {
             if (model.Key == null)
@@ -91,17 +91,20 @@ namespace Bit.Core.Services
                 Id = model.Id,
                 Type = model.Type,
                 Disabled = model.Disabled,
+                DeletionDate = model.DeletionDate,
+                ExpirationDate = model.ExpirationDate,
                 MaxAccessCount = model.MaxAccessCount,
                 Key = await _cryptoService.EncryptAsync(model.Key, key),
                 Name = await _cryptoService.EncryptAsync(model.Name, model.CryptoKey),
                 Notes = await _cryptoService.EncryptAsync(model.Notes, model.CryptoKey),
             };
-            CipherString encryptedFileData = null;
+            byte[] encryptedFileData = null;
 
             if (password != null)
             {
+                var kdfIterations = await _userService.GetKdfIterationsAsync() ?? 100000;
                 var passwordHash = await _cryptoFunctionService.Pbkdf2Async(password, model.Key,
-                    CryptoHashAlgorithm.Sha256, 100000);
+                    CryptoHashAlgorithm.Sha256, kdfIterations);
                 send.Password = Convert.ToBase64String(passwordHash);
             }
 
@@ -119,7 +122,7 @@ namespace Bit.Core.Services
                     if (fileData != null)
                     {
                         send.File.FileName = await _cryptoService.EncryptAsync(model.File.FileName, model.CryptoKey);
-                        encryptedFileData = await _cryptoService.EncryptAsync(fileData, model.CryptoKey);
+                        encryptedFileData = await _cryptoService.EncryptToBytesAsync(fileData, model.CryptoKey);
                     }
                     break;
                 default:
@@ -133,7 +136,7 @@ namespace Bit.Core.Services
         {
             var userId = await _userService.GetUserIdAsync();
             var sends = await _storageService.GetAsync<Dictionary<string, SendData>>(GetSendKey(userId));
-            return sends.Select(kvp => new Send(kvp.Value)).ToList();
+            return sends?.Select(kvp => new Send(kvp.Value)).ToList() ?? new List<Send>();
         }
 
         public async Task<List<SendView>> GetAllDecryptedAsync()
@@ -161,7 +164,7 @@ namespace Bit.Core.Services
                 async Task decryptAndAddSendAsync(Send send) => decSends.Add(await send.DecryptAsync());
                 await Task.WhenAll((await GetAllAsync()).Select(s => decryptAndAddSendAsync(s)));
 
-                decSends.OrderBy(s => s, new SendLocaleComparer(_i18nService)).ToList();
+                decSends = decSends.OrderBy(s => s, new SendLocaleComparer(_i18nService)).ToList();
                 _decryptedSendsCache = decSends;
                 return _decryptedSendsCache;
             }
@@ -190,9 +193,8 @@ namespace Bit.Core.Services
             _decryptedSendsCache = null;
         }
 
-        public async Task SaveWithServerAsync(Send send, byte[] encryptedFileData)
+        public async Task<string> SaveWithServerAsync(Send send, byte[] encryptedFileData)
         {
-
             var request = new SendRequest(send);
             SendResponse response;
             if (send.Id == null)
@@ -223,6 +225,7 @@ namespace Bit.Core.Services
 
             var userId = await _userService.GetUserIdAsync();
             await UpsertAsync(new SendData(response, userId));
+            return response.Id;
         }
 
         public async Task UpsertAsync(params SendData[] sends)

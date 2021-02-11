@@ -116,6 +116,10 @@
       <DependentUpon>ResetMasterPasswordPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Pages\Send\SendGroupingsPage\SendGroupingsPage.xaml.cs">
+      <DependentUpon>SendGroupingsPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
