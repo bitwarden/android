@@ -60,7 +60,7 @@
                 LineBreakMode="TailTruncation"
                 Grid.Column="0"
                 Grid.Row="1"
-                Grid.ColumnSpan="5"
+                Grid.ColumnSpan="6"
                 StyleClass="list-subtitle, list-subtitle-platform"
                 Text="{Binding Send.DisplayDate, Mode=OneWay}" />
             <controls:FaLabel
