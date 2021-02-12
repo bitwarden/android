@@ -21,6 +21,7 @@ namespace Bit.App.Pages
         private readonly ISendService _sendService;
         private bool _canAccessPremium;
         private SendView _send;
+        private string _fileName;
         private bool _showPassword;
         private int _deletionDateTypeSelectedIndex;
         private int _expirationDateTypeSelectedIndex;
@@ -79,7 +80,6 @@ namespace Bit.App.Pages
         public bool ShowEditorSeparators { get; set; }
         public Thickness EditorMargins { get; set; }
         public SendType? Type { get; set; }
-        public string FileName { get; set; }
         public byte[] FileData { get; set; }
         public string NewPassword { get; set; }
         public bool ShareOnSave { get; set; }
@@ -156,6 +156,17 @@ namespace Bit.App.Pages
             get => _send;
             set => SetProperty(ref _send, value, additionalPropertyNames: _additionalSendProperties);
         }
+        public string FileName
+        {
+            get => _fileName;
+            set
+            {
+                if (SetProperty(ref _fileName, value))
+                {
+                    Send.File.FileName = _fileName;
+                }
+            }
+        }
         public bool ShowPassword
         {
             get => _showPassword;
@@ -184,6 +195,7 @@ namespace Bit.App.Pages
             // TODO Policy Check
             if (Send == null)
             {
+                _isOverridingPickers = true;
                 if (EditMode)
                 {
                     var send = await _sendService.GetAsync(SendId);
@@ -192,6 +204,8 @@ namespace Bit.App.Pages
                         return false;
                     }
                     Send = await send.DecryptAsync();
+                    DeletionDate = Send.DeletionDate.ToLocalTime();
+                    ExpirationDate = Send.ExpirationDate?.ToLocalTime();
                 }
                 else
                 {
@@ -199,17 +213,13 @@ namespace Bit.App.Pages
                     Send = new SendView
                     {
                         Type = Type.GetValueOrDefault(defaultType),
-                        DeletionDate = DateTime.Now.AddDays(7),
                     };
                     DeletionDateTypeSelectedIndex = 4;
                     ExpirationDateTypeSelectedIndex = 0;
                 }
 
                 MaxAccessCount = Send.MaxAccessCount;
-                _isOverridingPickers = true;
-                DeletionDate = Send.DeletionDate.ToLocalTime();
                 DeletionTime = DeletionDate.TimeOfDay;
-                ExpirationDate = Send.ExpirationDate?.ToLocalTime();
                 ExpirationTime = ExpirationDate?.TimeOfDay;
                 _isOverridingPickers = false;
             }
@@ -292,18 +302,21 @@ namespace Bit.App.Pages
                     await _platformUtilsService.ShowDialogAsync(AppResources.PremiumRequired);
                     return false;
                 }
-                if (FileData == null)
+                if (!EditMode)
                 {
-                    await _platformUtilsService.ShowDialogAsync(
-                        string.Format(AppResources.ValidationFieldRequired, AppResources.File),
-                        AppResources.AnErrorHasOccurred);
-                    return false;
-                }
-                if (FileData.Length > 104857600) // 100 MB
-                {
-                    await _platformUtilsService.ShowDialogAsync(AppResources.MaxFileSize,
-                        AppResources.AnErrorHasOccurred);
-                    return false;
+                    if (FileData == null)
+                    {
+                        await _platformUtilsService.ShowDialogAsync(
+                            string.Format(AppResources.ValidationFieldRequired, AppResources.File),
+                            AppResources.AnErrorHasOccurred);
+                        return false;
+                    }
+                    if (FileData.Length > 104857600) // 100 MB
+                    {
+                        await _platformUtilsService.ShowDialogAsync(AppResources.MaxFileSize,
+                            AppResources.AnErrorHasOccurred);
+                        return false;
+                    }
                 }
             }
 
@@ -392,23 +405,23 @@ namespace Bit.App.Pages
                 switch (DeletionDateTypeSelectedIndex)
                 {
                     case 0:
-                        DeletionDate = DateTime.Now.AddHours(1);
+                        DeletionDate = DateTimeNow().AddHours(1);
                         break;
                     case 1:
-                        DeletionDate = DateTime.Now.AddDays(1);
+                        DeletionDate = DateTimeNow().AddDays(1);
                         break;
                     case 2:
-                        DeletionDate = DateTime.Now.AddDays(2);
+                        DeletionDate = DateTimeNow().AddDays(2);
                         break;
                     case 3:
-                        DeletionDate = DateTime.Now.AddDays(3);
+                        DeletionDate = DateTimeNow().AddDays(3);
                         break;
                     case 4:
                     case 6:
-                        DeletionDate = DateTime.Now.AddDays(7);
+                        DeletionDate = DateTimeNow().AddDays(7);
                         break;
                     case 5:
-                        DeletionDate = DateTime.Now.AddDays(30);
+                        DeletionDate = DateTimeNow().AddDays(30);
                         break;
                 }
                 DeletionTime = DeletionDate.TimeOfDay;
@@ -428,27 +441,27 @@ namespace Bit.App.Pages
                         ClearExpirationDate();
                         break;
                     case 1:
-                        ExpirationDate = DateTime.Now.AddHours(1);
+                        ExpirationDate = DateTimeNow().AddHours(1);
                         ExpirationTime = ExpirationDate.Value.TimeOfDay;
                         break;
                     case 2:
-                        ExpirationDate = DateTime.Now.AddDays(1);
+                        ExpirationDate = DateTimeNow().AddDays(1);
                         ExpirationTime = ExpirationDate.Value.TimeOfDay;
                         break;
                     case 3:
-                        ExpirationDate = DateTime.Now.AddDays(2);
+                        ExpirationDate = DateTimeNow().AddDays(2);
                         ExpirationTime = ExpirationDate.Value.TimeOfDay;
                         break;
                     case 4:
-                        ExpirationDate = DateTime.Now.AddDays(3);
+                        ExpirationDate = DateTimeNow().AddDays(3);
                         ExpirationTime = ExpirationDate.Value.TimeOfDay;
                         break;
                     case 5:
-                        ExpirationDate = DateTime.Now.AddDays(7);
+                        ExpirationDate = DateTimeNow().AddDays(7);
                         ExpirationTime = ExpirationDate.Value.TimeOfDay;
                         break;
                     case 6:
-                        ExpirationDate = DateTime.Now.AddDays(30);
+                        ExpirationDate = DateTimeNow().AddDays(30);
                         ExpirationTime = ExpirationDate.Value.TimeOfDay;
                         break;
                     case 7:
@@ -465,7 +478,7 @@ namespace Bit.App.Pages
             if (!_isOverridingPickers && !ExpirationTime.HasValue)
             {
                 // auto-set time to current time upon setting date
-                ExpirationTime = DateTime.Now.TimeOfDay;
+                ExpirationTime = DateTimeNow().TimeOfDay;
             }
         }
 
@@ -486,6 +499,20 @@ namespace Bit.App.Pages
         private void TogglePassword()
         {
             ShowPassword = !ShowPassword;
+        }
+
+        private DateTime DateTimeNow()
+        {
+            var dtn = DateTime.Now;
+            return new DateTime(
+                dtn.Year,
+                dtn.Month,
+                dtn.Day,
+                dtn.Hour,
+                dtn.Minute,
+                0,
+                DateTimeKind.Local
+            );
         }
     }
 }
