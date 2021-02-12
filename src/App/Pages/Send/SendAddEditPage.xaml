@@ -76,6 +76,19 @@
             <ScrollView x:Key="scrollView" x:Name="_scrollView">
                 <StackLayout Spacing="20">
                     <StackLayout StyleClass="box">
+                        <StackLayout StyleClass="box-row">
+                            <Label
+                                Text="{u:I18n Name}"
+                                StyleClass="box-label" />
+                            <Entry
+                                x:Name="_nameEntry"
+                                Text="{Binding Send.Name}"
+                                StyleClass="box-value" />
+                            <Label
+                                Text="{u:I18n NameInfo}"
+                                StyleClass="box-footer-label"
+                                Margin="0,5,0,0" />
+                        </StackLayout>
                         <StackLayout StyleClass="box-row"
                                      IsVisible="{Binding EditMode, Converter={StaticResource inverseBool}}">
                             <Label
@@ -137,19 +150,6 @@
                                     </VisualStateManager.VisualStateGroups>
                                 </Button>
                             </Grid>
-                        </StackLayout>
-                        <StackLayout StyleClass="box-row">
-                            <Label
-                                Text="{u:I18n Name}"
-                                StyleClass="box-label" />
-                            <Entry
-                                x:Name="_nameEntry"
-                                Text="{Binding Send.Name}"
-                                StyleClass="box-value" />
-                            <Label
-                                Text="{u:I18n NameInfo}"
-                                StyleClass="box-footer-label"
-                                Margin="0,5,0,0" />
                         </StackLayout>
                         <StackLayout StyleClass="box-row"
                                      IsVisible="{Binding IsText}">
@@ -244,13 +244,13 @@
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
                                 <controls:ExtendedDatePicker
-                                    Date="{Binding DeletionDate}"
+                                    NullableDate="{Binding DeletionDate, Mode=TwoWay}"
                                     Format="d"
                                     AutomationProperties.IsInAccessibleTree="True"
                                     AutomationProperties.Name="{u:I18n DeletionDate}"
                                     Grid.Column="0" />
                                 <controls:ExtendedTimePicker
-                                    Time="{Binding DeletionTime}"
+                                    NullableTime="{Binding DeletionTime, Mode=TwoWay}"
                                     Format="t"
                                     AutomationProperties.IsInAccessibleTree="True"
                                     AutomationProperties.Name="{u:I18n DeletionTime}"

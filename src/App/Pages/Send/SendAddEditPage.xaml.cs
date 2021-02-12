@@ -111,11 +111,17 @@ namespace Bit.App.Pages
         private void TextType_Clicked(object sender, EventArgs eventArgs)
         {
             _vm.TypeChanged(SendType.Text);
+            _nameEntry.ReturnType = ReturnType.Next;
+            _nameEntry.ReturnCommand = new Command(() => _textEditor.Focus());
+            RequestFocus(_nameEntry);
         }
         
         private void FileType_Clicked(object sender, EventArgs eventArgs)
         {
             _vm.TypeChanged(SendType.File);
+            _nameEntry.ReturnType = ReturnType.Done;
+            _nameEntry.ReturnCommand = null;
+            RequestFocus(_nameEntry);
         }
 
         private void OnMaxAccessCountTextChanged(object sender, TextChangedEventArgs e)
