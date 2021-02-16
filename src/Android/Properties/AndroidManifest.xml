@@ -64,4 +64,17 @@
     <!-- Support for LG "Dual Window" mode (for Android < 7.0 users) -->
     <meta-data android:name="com.lge.support.SPLIT_WINDOW" android:value="true" />
   </application>
+
+  <!-- Package visibility (for Android 11+) -->
+  <queries>
+      <intent>
+          <action android:name="android.intent.action.VIEW"/>
+          <data android:scheme="http"/>
+      </intent>
+      <intent>
+          <action android:name="android.intent.action.VIEW"/>
+          <data android:scheme="https"/>
+      </intent>
+  </queries>
+
 </manifest>
