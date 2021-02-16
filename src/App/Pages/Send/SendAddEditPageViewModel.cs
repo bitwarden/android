@@ -22,6 +22,7 @@ namespace Bit.App.Pages
         private bool _canAccessPremium;
         private SendView _send;
         private string _fileName;
+        private bool _showOptions;
         private bool _showPassword;
         private int _deletionDateTypeSelectedIndex;
         private int _expirationDateTypeSelectedIndex;
@@ -106,6 +107,11 @@ namespace Bit.App.Pages
         {
             get => _deletionTime;
             set => SetProperty(ref _deletionTime, value);
+        }
+        public bool ShowOptions
+        {
+            get => _showOptions;
+            set => SetProperty(ref _showOptions, value);
         }
         public int ExpirationDateTypeSelectedIndex
         {
@@ -395,6 +401,11 @@ namespace Bit.App.Pages
                 Send.Type = type;
                 TriggerPropertyChanged(nameof(Send), _additionalSendProperties);
             }
+        }
+        
+        public void ToggleOptions()
+        {
+            ShowOptions = !ShowOptions;
         }
 
         private void DeletionTypeChanged()
