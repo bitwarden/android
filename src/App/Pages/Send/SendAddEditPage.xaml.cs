@@ -42,6 +42,9 @@ namespace Bit.App.Pages
                 _vm.SegmentedButtonFontSize = 13;
                 _vm.SegmentedButtonMargins = new Thickness(0, 10, 0, 0);
                 _vm.EditorMargins = new Thickness(0, 5, 0, 0);
+                _btnOptions.WidthRequest = 62;
+                _btnOptionsDown.WidthRequest = 30;
+                _btnOptionsUp.WidthRequest = 30;
             }
             else if (Device.RuntimePlatform == Device.iOS)
             {
@@ -151,6 +154,11 @@ namespace Bit.App.Pages
             {
                 await _vm.ChooseFileAsync();
             }
+        }
+        
+        private void ToggleOptions_Clicked(object sender, EventArgs e)
+        {
+            _vm.ToggleOptions();
         }
 
         private void ClearExpirationDate_Clicked(object sender, EventArgs e)
