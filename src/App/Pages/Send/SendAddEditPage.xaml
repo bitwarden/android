@@ -251,18 +251,21 @@
                                 Text="{u:I18n Options}"
                                 x:Name="_btnOptions"
                                 StyleClass="box-row-button"
+                                TextColor="{StaticResource PrimaryColor}"
                                 Margin="0"
                                 Clicked="ToggleOptions_Clicked" />
                             <controls:FaButton
                                 x:Name="_btnOptionsUp"
                                 Text="&#xf077;"
                                 StyleClass="box-row-button"
+                                TextColor="{StaticResource PrimaryColor}"
                                 Clicked="ToggleOptions_Clicked"
                                 IsVisible="{Binding ShowOptions}" />
                             <controls:FaButton
                                 x:Name="_btnOptionsDown"
                                 Text="&#xf078;"
                                 StyleClass="box-row-button"
+                                TextColor="{StaticResource PrimaryColor}"
                                 Clicked="ToggleOptions_Clicked"
                                 IsVisible="{Binding ShowOptions, Converter={StaticResource inverseBool}}" />
                         </StackLayout>
