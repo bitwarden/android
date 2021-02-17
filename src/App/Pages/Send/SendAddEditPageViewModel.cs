@@ -402,7 +402,7 @@ namespace Bit.App.Pages
                 TriggerPropertyChanged(nameof(Send), _additionalSendProperties);
             }
         }
-        
+
         public void ToggleOptions()
         {
             ShowOptions = !ShowOptions;
