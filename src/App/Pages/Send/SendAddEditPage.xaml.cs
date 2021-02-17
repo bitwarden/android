@@ -121,7 +121,7 @@ namespace Bit.App.Pages
                 RequestFocus(_nameEntry);
             }
         }
-        
+
         private void FileType_Clicked(object sender, EventArgs eventArgs)
         {
             _vm.TypeChanged(SendType.File);
@@ -155,7 +155,7 @@ namespace Bit.App.Pages
                 await _vm.ChooseFileAsync();
             }
         }
-        
+
         private void ToggleOptions_Clicked(object sender, EventArgs e)
         {
             _vm.ToggleOptions();
