@@ -112,9 +112,9 @@ namespace Bit.App.Pages
             }
         }
 
-        private void TextType_Clicked(object sender, EventArgs eventArgs)
+        private async void TextType_Clicked(object sender, EventArgs eventArgs)
         {
-            _vm.TypeChangedAsync(SendType.Text);
+            await _vm.TypeChangedAsync(SendType.Text);
             _nameEntry.ReturnType = ReturnType.Next;
             _nameEntry.ReturnCommand = new Command(() => _textEditor.Focus());
             if (string.IsNullOrWhiteSpace(_vm.Send.Name))
@@ -123,9 +123,9 @@ namespace Bit.App.Pages
             }
         }
 
-        private void FileType_Clicked(object sender, EventArgs eventArgs)
+        private async void FileType_Clicked(object sender, EventArgs eventArgs)
         {
-            _vm.TypeChangedAsync(SendType.File);
+            await _vm.TypeChangedAsync(SendType.File);
             _nameEntry.ReturnType = ReturnType.Done;
             _nameEntry.ReturnCommand = null;
             if (string.IsNullOrWhiteSpace(_vm.Send.Name))

@@ -394,7 +394,7 @@ namespace Bit.App.Pages
             return await AppHelpers.DeleteSendAsync(SendId);
         }
 
-        public async void TypeChangedAsync(SendType type)
+        public async Task TypeChangedAsync(SendType type)
         {
             if (Send != null)
             {
