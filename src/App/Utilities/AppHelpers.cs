@@ -278,15 +278,14 @@ namespace Bit.App.Utilities
             
             var policies = await policyService.GetAll(PolicyType.DisableSend);
             var organizations = await userService.GetAllOrganizationAsync();
-            // return organizations.Any(o =>
-            // {
-            //     return o.Enabled &&
-            //            o.Status == OrganizationUserStatusType.Confirmed &&
-            //            o.UsePolicies &&
-            //            !o.canManagePolicies &&
-            //            policies.Any(p => p.OrganizationId == o.Id && p.Enabled);
-            // });
-            return true;
+            return organizations.Any(o =>
+            {
+                return o.Enabled &&
+                       o.Status == OrganizationUserStatusType.Confirmed &&
+                       o.UsePolicies &&
+                       !o.canManagePolicies &&
+                       policies.Any(p => p.OrganizationId == o.Id && p.Enabled);
+            });
         }
 
         public static async Task<bool> PerformUpdateTasksAsync(ISyncService syncService,

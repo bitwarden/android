@@ -81,10 +81,6 @@ namespace Bit.Droid.Renderers
             {
                 _cell.UpdateCell(sendCell);
             }
-            // else if (e.PropertyName == SendViewCell.ShowOptionsProperty.PropertyName)
-            // {
-            //     _cell.UpdateCell(sendCell);
-            // }
         }
     }
 
