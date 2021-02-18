@@ -102,6 +102,7 @@ namespace Bit.Droid.Renderers
             Icon = view.FindViewById<TextView>(Resource.Id.SendCellIcon);
             Name = view.FindViewById<TextView>(Resource.Id.SendCellName);
             SubTitle = view.FindViewById<TextView>(Resource.Id.SendCellSubTitle);
+            DisabledIcon = view.FindViewById<TextView>(Resource.Id.SendCellDisabledIcon);
             HasPasswordIcon = view.FindViewById<TextView>(Resource.Id.SendCellHasPasswordIcon);
             MaxAccessCountReachedIcon = view.FindViewById<TextView>(Resource.Id.SendCellMaxAccessCountReachedIcon);
             ExpiredIcon = view.FindViewById<TextView>(Resource.Id.SendCellExpiredIcon);
@@ -110,6 +111,7 @@ namespace Bit.Droid.Renderers
             MoreButton.Click += MoreButton_Click;
 
             Icon.Typeface = _faTypeface;
+            DisabledIcon.Typeface = _faTypeface;
             HasPasswordIcon.Typeface = _faTypeface;
             MaxAccessCountReachedIcon.Typeface = _faTypeface;
             ExpiredIcon.Typeface = _faTypeface;
@@ -120,6 +122,7 @@ namespace Bit.Droid.Renderers
             Icon.SetTextSize(ComplexUnitType.Pt, 10);
             Name.SetTextSize(ComplexUnitType.Sp, (float)Device.GetNamedSize(NamedSize.Medium, typeof(Label)));
             SubTitle.SetTextSize(ComplexUnitType.Sp, small);
+            DisabledIcon.SetTextSize(ComplexUnitType.Sp, small);
             HasPasswordIcon.SetTextSize(ComplexUnitType.Sp, small);
             MaxAccessCountReachedIcon.SetTextSize(ComplexUnitType.Sp, small);
             ExpiredIcon.SetTextSize(ComplexUnitType.Sp, small);
@@ -140,6 +143,7 @@ namespace Bit.Droid.Renderers
         public TextView Icon { get; set; }
         public TextView Name { get; set; }
         public TextView SubTitle { get; set; }
+        public TextView DisabledIcon { get; set; }
         public TextView HasPasswordIcon { get; set; }
         public TextView MaxAccessCountReachedIcon { get; set; }
         public TextView ExpiredIcon { get; set; }
@@ -153,6 +157,7 @@ namespace Bit.Droid.Renderers
             var send = sendCell.Send;
             Name.Text = send.Name;
             SubTitle.Text = send.DisplayDate;
+            DisabledIcon.Visibility = send.Disabled ? ViewStates.Visible : ViewStates.Gone;
             HasPasswordIcon.Visibility = send.HasPassword ? ViewStates.Visible : ViewStates.Gone;
             MaxAccessCountReachedIcon.Visibility = send.MaxAccessCountReached ? ViewStates.Visible : ViewStates.Gone;
             ExpiredIcon.Visibility = send.Expired ? ViewStates.Visible : ViewStates.Gone;
@@ -177,6 +182,7 @@ namespace Bit.Droid.Renderers
             Name.SetTextColor(textColor);
             SubTitle.SetTextColor(mutedColor);
             Icon.SetTextColor(mutedColor);
+            DisabledIcon.SetTextColor(mutedColor);
             HasPasswordIcon.SetTextColor(mutedColor);
             MaxAccessCountReachedIcon.SetTextColor(mutedColor);
             ExpiredIcon.SetTextColor(mutedColor);
