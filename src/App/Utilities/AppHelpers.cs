@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Bit.App.Models;
+using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -157,13 +158,11 @@ namespace Bit.App.Utilities
             }
             else if (selection == AppResources.CopyLink)
             {
-                await platformUtilsService.CopyToClipboardAsync(GetSendUrl(send));
-                platformUtilsService.ShowToast("info", null,
-                    string.Format(AppResources.ValueHasBeenCopied, AppResources.ShareLink));
+                await CopySendUrlAsync(send);
             }
             else if (selection == AppResources.ShareLink)
             {
-                await ShareSendUrl(send);
+                await ShareSendUrlAsync(send);
             }
             else if (selection == AppResources.RemovePassword)
             {
@@ -176,14 +175,24 @@ namespace Bit.App.Utilities
             return selection;
         }
 
-        public static string GetSendUrl(SendView send)
+        public static async Task CopySendUrlAsync(SendView send)
         {
-            var environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
-            return environmentService.BaseUrl + "/#/send/" + send.AccessId + "/" + send.UrlB64Key;
+            if (await IsSendDisabledByPolicyAsync())
+            {
+                return;
+            }
+            var platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
+            await platformUtilsService.CopyToClipboardAsync(AppHelpers.GetSendUrl(send));
+            platformUtilsService.ShowToast("info", null,
+                string.Format(AppResources.ValueHasBeenCopied, AppResources.SendLink));
         }
 
-        public static async Task ShareSendUrl(SendView send)
+        public static async Task ShareSendUrlAsync(SendView send)
         {
+            if (await IsSendDisabledByPolicyAsync())
+            {
+                return;
+            }
             await Share.RequestAsync(new ShareTextRequest
             {
                 Uri = new Uri(GetSendUrl(send)).ToString(),
@@ -191,9 +200,19 @@ namespace Bit.App.Utilities
                 Subject = send.Name
             });
         }
+        
+        private static string GetSendUrl(SendView send)
+        {
+            var environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
+            return environmentService.BaseUrl + "/#/send/" + send.AccessId + "/" + send.UrlB64Key;
+        }
 
         public static async Task<bool> RemoveSendPasswordAsync(string sendId)
         {
+            if (await IsSendDisabledByPolicyAsync())
+            {
+                return false;
+            }
             var platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             var sendService = ServiceContainer.Resolve<ISendService>("sendService");
@@ -268,6 +287,23 @@ namespace Bit.App.Utilities
                 }
             }
             return false;
+        }
+
+        public static async Task<bool> IsSendDisabledByPolicyAsync()
+        {
+            var policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
+            var userService = ServiceContainer.Resolve<IUserService>("userService");
+            
+            var policies = await policyService.GetAll(PolicyType.DisableSend);
+            var organizations = await userService.GetAllOrganizationAsync();
+            return organizations.Any(o =>
+            {
+                return o.Enabled &&
+                       o.Status == OrganizationUserStatusType.Confirmed &&
+                       o.UsePolicies &&
+                       !o.canManagePolicies &&
+                       policies.Any(p => p.OrganizationId == o.Id && p.Enabled);
+            });
         }
 
         public static async Task<bool> PerformUpdateTasksAsync(ISyncService syncService,

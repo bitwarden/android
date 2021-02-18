@@ -12,6 +12,7 @@ namespace Bit.App.Pages
         public SendView Send { get; set; }
         public SendType? Type { get; set; }
         public string ItemCount { get; set; }
+        public bool ShowOptions { get; set; }
 
         public string Name
         {

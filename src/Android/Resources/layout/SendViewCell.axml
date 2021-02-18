@@ -44,6 +44,14 @@
                     android:ellipsize="end"
                     android:text="Name" />
                 <TextView
+                    android:id="@+id/SendCellDisabledIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:paddingLeft="5dp"
+                    android:singleLine="true"
+                    android:text="&#xf071;" />
+                <TextView
                     android:id="@+id/SendCellHasPasswordIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

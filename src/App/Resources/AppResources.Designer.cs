@@ -3375,6 +3375,12 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string SendLink {
+            get {
+                return ResourceManager.GetString("SendLink", resourceCulture);
+            }
+        }
+        
         public static string SearchSends {
             get {
                 return ResourceManager.GetString("SearchSends", resourceCulture);
@@ -3456,6 +3462,12 @@ namespace Bit.App.Resources {
         public static string ShareOnSave {
             get {
                 return ResourceManager.GetString("ShareOnSave", resourceCulture);
+            }
+        }
+        
+        public static string SendDisabledWarning {
+            get {
+                return ResourceManager.GetString("SendDisabledWarning", resourceCulture);
             }
         }
     }

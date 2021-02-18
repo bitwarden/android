@@ -15,6 +15,9 @@ namespace Bit.App.Controls
 
         public static readonly BindableProperty ButtonCommandProperty = BindableProperty.Create(
             nameof(ButtonCommand), typeof(Command<SendView>), typeof(SendViewCell));
+        
+        public static readonly BindableProperty ShowOptionsProperty = BindableProperty.Create(
+            nameof(ShowOptions), typeof(bool), typeof(SendViewCell));
 
         private readonly IEnvironmentService _environmentService;
 
@@ -47,6 +50,12 @@ namespace Bit.App.Controls
             set => SetValue(ButtonCommandProperty, value);
         }
 
+        public bool ShowOptions
+        {
+            get => GetValue(ShowOptionsProperty) is bool && (bool)GetValue(ShowOptionsProperty);
+            set => SetValue(ShowOptionsProperty, value);
+        }
+
         protected override void OnPropertyChanged(string propertyName = null)
         {
             base.OnPropertyChanged(propertyName);
@@ -57,6 +66,10 @@ namespace Bit.App.Controls
             if (propertyName == SendProperty.PropertyName)
             {
                 _viewModel.Send = Send;
+            }
+            else if (propertyName == ShowOptionsProperty.PropertyName)
+            {
+                _viewModel.ShowOptions = ShowOptions;
             }
         }
 

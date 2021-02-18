@@ -27,7 +27,6 @@ namespace Bit.App.Pages
             _vm.Page = this;
             _vm.SendId = sendId;
             _vm.Type = type;
-            _vm.Init();
             SetActivityIndicator();
             if (Device.RuntimePlatform == Device.Android)
             {
@@ -42,7 +41,7 @@ namespace Bit.App.Pages
                 _vm.SegmentedButtonFontSize = 13;
                 _vm.SegmentedButtonMargins = new Thickness(0, 10, 0, 0);
                 _vm.EditorMargins = new Thickness(0, 5, 0, 0);
-                _btnOptions.WidthRequest = 62;
+                _btnOptions.WidthRequest = 70;
                 _btnOptionsDown.WidthRequest = 30;
                 _btnOptionsUp.WidthRequest = 30;
             }
@@ -75,6 +74,7 @@ namespace Bit.App.Pages
         protected override async void OnAppearing()
         {
             base.OnAppearing();
+            await _vm.InitAsync();
             _broadcasterService.Subscribe(nameof(SendAddEditPage), message =>
             {
                 if (message.Command == "selectFileResult")
@@ -99,6 +99,7 @@ namespace Bit.App.Pages
                 {
                     RequestFocus(_nameEntry);
                 }
+                AdjustToolbar();
             });
         }
 
@@ -111,9 +112,9 @@ namespace Bit.App.Pages
             }
         }
 
-        private void TextType_Clicked(object sender, EventArgs eventArgs)
+        private async void TextType_Clicked(object sender, EventArgs eventArgs)
         {
-            _vm.TypeChanged(SendType.Text);
+            await _vm.TypeChangedAsync(SendType.Text);
             _nameEntry.ReturnType = ReturnType.Next;
             _nameEntry.ReturnCommand = new Command(() => _textEditor.Focus());
             if (string.IsNullOrWhiteSpace(_vm.Send.Name))
@@ -122,9 +123,9 @@ namespace Bit.App.Pages
             }
         }
 
-        private void FileType_Clicked(object sender, EventArgs eventArgs)
+        private async void FileType_Clicked(object sender, EventArgs eventArgs)
         {
-            _vm.TypeChanged(SendType.File);
+            await _vm.TypeChangedAsync(SendType.File);
             _nameEntry.ReturnType = ReturnType.Done;
             _nameEntry.ReturnCommand = null;
             if (string.IsNullOrWhiteSpace(_vm.Send.Name))
@@ -219,12 +220,12 @@ namespace Bit.App.Pages
                 return;
             }
             var options = new List<string>();
-            if (_vm.Send.HasPassword)
+            if (_vm.SendEnabled && _vm.EditMode)
             {
-                options.Add(AppResources.RemovePassword);
-            }
-            if (_vm.EditMode)
-            {
+                if (_vm.Send.HasPassword)
+                {
+                    options.Add(AppResources.RemovePassword);
+                }
                 options.Add(AppResources.CopyLink);
                 options.Add(AppResources.ShareLink);
             }
@@ -257,6 +258,17 @@ namespace Bit.App.Pages
             if (DoOnce())
             {
                 await Navigation.PopModalAsync();
+            }
+        }
+
+        private void AdjustToolbar()
+        {
+            _saveItem.IsEnabled = _vm.SendEnabled;
+            if (!_vm.SendEnabled && _vm.EditMode && Device.RuntimePlatform == Device.Android)
+            {
+                ToolbarItems.Remove(_removePassword);
+                ToolbarItems.Remove(_copyLink);
+                ToolbarItems.Remove(_shareLink);
             }
         }
     }

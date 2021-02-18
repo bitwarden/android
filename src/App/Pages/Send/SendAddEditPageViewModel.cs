@@ -18,7 +18,9 @@ namespace Bit.App.Pages
     {
         private readonly IDeviceActionService _deviceActionService;
         private readonly IPlatformUtilsService _platformUtilsService;
+        private readonly IUserService _userService;
         private readonly ISendService _sendService;
+        private bool _sendEnabled;
         private bool _canAccessPremium;
         private SendView _send;
         private string _fileName;
@@ -42,6 +44,7 @@ namespace Bit.App.Pages
         {
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
+            _userService = ServiceContainer.Resolve<IUserService>("userService");
             _sendService = ServiceContainer.Resolve<ISendService>("sendService");
             TogglePasswordCommand = new Command(TogglePassword);
 
@@ -87,6 +90,11 @@ namespace Bit.App.Pages
         public List<KeyValuePair<string, SendType>> TypeOptions { get; }
         public List<KeyValuePair<string, string>> DeletionTypeOptions { get; }
         public List<KeyValuePair<string, string>> ExpirationTypeOptions { get; }
+        public bool SendEnabled
+        {
+            get => _sendEnabled;
+            set => SetProperty(ref _sendEnabled, value);
+        }
         public int DeletionDateTypeSelectedIndex
         {
             get => _deletionDateTypeSelectedIndex;
@@ -189,16 +197,15 @@ namespace Bit.App.Pages
         public bool ShowExpirationCustomPickers => EditMode || ExpirationDateTypeSelectedIndex == 7;
         public string ShowPasswordIcon => ShowPassword ? "" : "";
 
-        public void Init()
+        public async Task InitAsync()
         {
             PageTitle = EditMode ? AppResources.EditSend : AppResources.AddSend;
+            _canAccessPremium = await _userService.CanAccessPremiumAsync();
+            SendEnabled = ! await AppHelpers.IsSendDisabledByPolicyAsync();
         }
 
         public async Task<bool> LoadAsync()
         {
-            var userService = ServiceContainer.Resolve<IUserService>("userService");
-            _canAccessPremium = await userService.CanAccessPremiumAsync();
-            // TODO Policy Check
             if (Send == null)
             {
                 _isOverridingPickers = true;
@@ -284,7 +291,7 @@ namespace Bit.App.Pages
 
         public async Task<bool> SubmitAsync()
         {
-            if (Send == null)
+            if (Send == null || !SendEnabled)
             {
                 return false;
             }
@@ -349,7 +356,7 @@ namespace Bit.App.Pages
                     if (savedSend != null)
                     {
                         var savedSendView = await savedSend.DecryptAsync();
-                        await AppHelpers.ShareSendUrl(savedSendView);
+                        await AppHelpers.ShareSendUrlAsync(savedSendView);
                     }
                 }
 
@@ -374,14 +381,12 @@ namespace Bit.App.Pages
 
         public async Task CopyLinkAsync()
         {
-            await _platformUtilsService.CopyToClipboardAsync(AppHelpers.GetSendUrl(Send));
-            _platformUtilsService.ShowToast("info", null,
-                string.Format(AppResources.ValueHasBeenCopied, AppResources.ShareLink));
+            await AppHelpers.CopySendUrlAsync(Send);
         }
 
         public async Task ShareLinkAsync()
         {
-            await AppHelpers.ShareSendUrl(Send);
+            await AppHelpers.ShareSendUrlAsync(Send);
         }
 
         public async Task<bool> DeleteAsync()
@@ -389,7 +394,7 @@ namespace Bit.App.Pages
             return await AppHelpers.DeleteSendAsync(SendId);
         }
 
-        public async void TypeChanged(SendType type)
+        public async Task TypeChangedAsync(SendType type)
         {
             if (Send != null)
             {

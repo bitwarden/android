@@ -14,7 +14,8 @@
     </ContentPage.BindingContext>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="{u:I18n Save}" Clicked="Save_Clicked" Order="Primary" />
+        <ToolbarItem Text="{u:I18n Save}" Clicked="Save_Clicked" Order="Primary"
+                     x:Key="saveItem" x:Name="_saveItem"/>
     </ContentPage.ToolbarItems>
 
     <ContentPage.Resources>
@@ -76,6 +77,18 @@
             <ScrollView x:Key="scrollView" x:Name="_scrollView">
                 <StackLayout Spacing="20">
                     <StackLayout StyleClass="box">
+                        <Frame
+                            IsVisible="{Binding SendEnabled, Converter={StaticResource inverseBool}}"
+                            Padding="10"
+                            Margin="0, 12, 0, 0"
+                            HasShadow="False"
+                            BackgroundColor="Transparent"
+                            BorderColor="Accent">
+                            <Label
+                                Text="{u:I18n SendDisabledWarning}"
+                                StyleClass="text-muted, text-sm, text-bold"
+                                HorizontalTextAlignment="Center" />
+                        </Frame>
                         <StackLayout StyleClass="box-row">
                             <Label
                                 Text="{u:I18n Name}"
@@ -83,6 +96,7 @@
                             <Entry
                                 x:Name="_nameEntry"
                                 Text="{Binding Send.Name}"
+                                IsEnabled="{Binding SendEnabled}"
                                 StyleClass="box-value" />
                             <Label
                                 Text="{u:I18n NameInfo}"
@@ -186,6 +200,7 @@
                                     HorizontalTextAlignment="Center" />
                                 <Button
                                     Text="{u:I18n ChooseFile}"
+                                    IsEnabled="{Binding SendEnabled}"
                                     StyleClass="box-button-row"
                                     Clicked="ChooseFile_Clicked" />
                                 <Label
@@ -210,6 +225,7 @@
                                 x:Name="_textEditor"
                                 AutoSize="TextChanges"
                                 Text="{Binding Send.Text.Text}"
+                                IsEnabled="{Binding SendEnabled}"
                                 StyleClass="box-value"
                                 Margin="{Binding EditorMargins}" />
                             <BoxView
@@ -229,6 +245,7 @@
                                     HorizontalOptions="StartAndExpand" />
                                 <Switch
                                     IsToggled="{Binding Send.Text.Hidden}"
+                                    IsEnabled="{Binding SendEnabled}"
                                     HorizontalOptions="End"
                                     Margin="10,0,0,0" />
                             </StackLayout>
@@ -241,6 +258,7 @@
                                 HorizontalOptions="StartAndExpand" />
                             <Switch
                                 IsToggled="{Binding ShareOnSave}"
+                                IsEnabled="{Binding SendEnabled}"
                                 HorizontalOptions="End"
                                 Margin="10,0,0,0" />
                         </StackLayout>
@@ -281,6 +299,7 @@
                                     IsVisible="{Binding EditMode, Converter={StaticResource inverseBool}}"
                                     ItemsSource="{Binding DeletionTypeOptions, Mode=OneTime}"
                                     SelectedIndex="{Binding DeletionDateTypeSelectedIndex}"
+                                    IsEnabled="{Binding SendEnabled}"
                                     StyleClass="box-value"
                                     AutomationProperties.IsInAccessibleTree="True"
                                     AutomationProperties.Name="{u:I18n DeletionTime}" />
@@ -294,12 +313,14 @@
                                     <controls:ExtendedDatePicker
                                         NullableDate="{Binding DeletionDate, Mode=TwoWay}"
                                         Format="d"
+                                        IsEnabled="{Binding SendEnabled}"
                                         AutomationProperties.IsInAccessibleTree="True"
                                         AutomationProperties.Name="{u:I18n DeletionDate}"
                                         Grid.Column="0" />
                                     <controls:ExtendedTimePicker
                                         NullableTime="{Binding DeletionTime, Mode=TwoWay}"
                                         Format="t"
+                                        IsEnabled="{Binding SendEnabled}"
                                         AutomationProperties.IsInAccessibleTree="True"
                                         AutomationProperties.Name="{u:I18n DeletionTime}"
                                         Grid.Column="1" />
@@ -318,6 +339,7 @@
                                     IsVisible="{Binding EditMode, Converter={StaticResource inverseBool}}"
                                     ItemsSource="{Binding ExpirationTypeOptions, Mode=OneTime}"
                                     SelectedIndex="{Binding ExpirationDateTypeSelectedIndex}"
+                                    IsEnabled="{Binding SendEnabled}"
                                     StyleClass="box-value"
                                     AutomationProperties.IsInAccessibleTree="True"
                                     AutomationProperties.Name="{u:I18n ExpirationTime}" />
@@ -332,6 +354,7 @@
                                         NullableDate="{Binding ExpirationDate, Mode=TwoWay}"
                                         PlaceHolder="mm/dd/yyyy"
                                         Format="d"
+                                        IsEnabled="{Binding SendEnabled}"
                                         AutomationProperties.IsInAccessibleTree="True"
                                         AutomationProperties.Name="{u:I18n ExpirationDate}"
                                         Grid.Column="0" />
@@ -339,6 +362,7 @@
                                         NullableTime="{Binding ExpirationTime, Mode=TwoWay}"
                                         PlaceHolder="--:-- --"
                                         Format="t"
+                                        IsEnabled="{Binding SendEnabled}"
                                         AutomationProperties.IsInAccessibleTree="True"
                                         AutomationProperties.Name="{u:I18n ExpirationTime}"
                                         Grid.Column="1" />
@@ -356,6 +380,7 @@
                                         WidthRequest="110"
                                         HeightRequest="{Binding SegmentedButtonHeight}"
                                         FontSize="{Binding SegmentedButtonFontSize}"
+                                        IsEnabled="{Binding SendEnabled}"
                                         StyleClass="box-row-button"
                                         Clicked="ClearExpirationDate_Clicked" />
                                 </StackLayout>
@@ -371,6 +396,7 @@
                                     Orientation="Horizontal">
                                     <Entry
                                         Text="{Binding MaxAccessCount}"
+                                        IsEnabled="{Binding SendEnabled}"
                                         StyleClass="box-value"
                                         Keyboard="Numeric"
                                         MaxLength="9"
@@ -380,6 +406,7 @@
                                         x:Name="_maxAccessCountStepper"
                                         Value="{Binding MaxAccessCount}"
                                         Maximum="999999999"
+                                        IsEnabled="{Binding SendEnabled}"
                                         Margin="10,0,0,0" />
                                 </StackLayout>
                                 <Label
@@ -413,11 +440,13 @@
                                     <Entry
                                         Text="{Binding NewPassword}"
                                         IsPassword="{Binding ShowPassword, Converter={StaticResource inverseBool}}"
+                                        IsEnabled="{Binding SendEnabled}"
                                         StyleClass="box-value"
                                         IsSpellCheckEnabled="False"
                                         IsTextPredictionEnabled="False"
                                         HorizontalOptions="FillAndExpand" />
                                     <controls:FaButton
+                                        IsEnabled="{Binding SendEnabled}"
                                         StyleClass="box-row-button, box-row-button-platform"
                                         Text="{Binding ShowPasswordIcon}"
                                         Command="{Binding TogglePasswordCommand}"
@@ -439,6 +468,7 @@
                                 <Editor
                                     AutoSize="TextChanges"
                                     Text="{Binding Send.Notes}"
+                                    IsEnabled="{Binding SendEnabled}"
                                     StyleClass="box-value"
                                     Margin="{Binding EditorMargins}" />
                                 <BoxView
@@ -459,6 +489,7 @@
                                     HorizontalOptions="StartAndExpand" />
                                 <Switch
                                     IsToggled="{Binding Send.Disabled}"
+                                    IsEnabled="{Binding SendEnabled}"
                                     HorizontalOptions="End"
                                     Margin="10,0,0,0" />
                             </StackLayout>
