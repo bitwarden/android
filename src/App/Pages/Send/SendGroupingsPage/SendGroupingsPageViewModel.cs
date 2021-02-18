@@ -18,6 +18,7 @@ namespace Bit.App.Pages
 {
     public class SendGroupingsPageViewModel : BaseViewModel
     {
+        private bool _sendEnabled;
         private bool _refreshing;
         private bool _doingLoad;
         private bool _loading;
@@ -65,6 +66,11 @@ namespace Bit.App.Pages
         public bool HasSends { get; set; }
         public List<SendView> Sends { get; set; }
 
+        public bool SendEnabled
+        {
+            get => _sendEnabled;
+            set => SetProperty(ref _sendEnabled, value);
+        }
         public bool Refreshing
         {
             get => _refreshing;
@@ -110,6 +116,11 @@ namespace Bit.App.Pages
         public Command<SendView> SendOptionsCommand { get; set; }
         public bool LoadedOnce { get; set; }
 
+        public async Task InitAsync()
+        {
+            SendEnabled = ! await AppHelpers.IsSendDisabledByPolicyAsync();
+        }
+        
         public async Task LoadAsync()
         {
             if (_doingLoad)
@@ -167,7 +178,11 @@ namespace Bit.App.Pages
 
                 if (Sends?.Any() ?? false)
                 {
-                    var sendsListItems = Sends.Select(s => new SendGroupingsPageListItem { Send = s }).ToList();
+                    var sendsListItems = Sends.Select(s => new SendGroupingsPageListItem
+                    {
+                        Send = s,
+                        ShowOptions = SendEnabled
+                    }).ToList();
                     groupedSends.Add(new SendGroupingsPageListGroup(sendsListItems,
                         MainPage ? AppResources.AllSends : AppResources.Sends, sendsListItems.Count,
                         uppercaseGroupNames, !MainPage));

@@ -37,7 +37,8 @@
                           x:DataType="pages:SendGroupingsPageListItem">
                 <controls:SendViewCell
                     Send="{Binding Send}"
-                    ButtonCommand="{Binding BindingContext.SendOptionsCommand, Source={x:Reference _page}}" />
+                    ButtonCommand="{Binding BindingContext.SendOptionsCommand, Source={x:Reference _page}}"
+                    ShowOptions="{Binding ShowOptions}" />
             </DataTemplate>
 
             <DataTemplate x:Key="sendGroupTemplate"
@@ -72,6 +73,20 @@
                                                      GroupTemplate="{StaticResource sendGroupTemplate}" />
 
             <StackLayout x:Key="mainLayout" x:Name="_mainLayout">
+                <StackLayout StyleClass="box">
+                    <Frame
+                        IsVisible="{Binding SendEnabled, Converter={StaticResource inverseBool}}"
+                        Padding="10"
+                        Margin="0, 12, 0, 6"
+                        HasShadow="False"
+                        BackgroundColor="Transparent"
+                        BorderColor="Accent">
+                        <Label
+                            Text="{u:I18n SendDisabledWarning}"
+                            StyleClass="text-muted, text-sm, text-bold"
+                            HorizontalTextAlignment="Center" />
+                    </Frame>
+                </StackLayout>
                 <StackLayout
                     VerticalOptions="CenterAndExpand"
                     Padding="20, 0"
@@ -143,6 +158,7 @@
         <Button
             x:Name="_fab"
             Image="plus.png"
+            IsVisible="{Binding SendEnabled}"
             Clicked="AddButton_Clicked"
             Style="{StaticResource btn-fab}"
             AbsoluteLayout.LayoutFlags="PositionProportional"

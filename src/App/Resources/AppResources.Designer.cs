@@ -3458,5 +3458,11 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("ShareOnSave", resourceCulture);
             }
         }
+        
+        public static string SendDisabledWarning {
+            get {
+                return ResourceManager.GetString("SendDisabledWarning", resourceCulture);
+            }
+        }
     }
 }

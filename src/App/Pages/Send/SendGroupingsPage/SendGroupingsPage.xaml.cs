@@ -55,9 +55,10 @@ namespace Bit.App.Pages
 
         public ExtendedListView ListView { get; set; }
 
-        protected async override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
+            await _vm.InitAsync();
             if (_syncService.SyncInProgress)
             {
                 IsBusy = true;
@@ -107,6 +108,7 @@ namespace Bit.App.Pages
                 }
 
                 await ShowPreviousPageAsync();
+                AdjustToolbar();
             }, _mainContent);
         }
 
@@ -183,6 +185,11 @@ namespace Bit.App.Pages
                 await Navigation.PushModalAsync(new NavigationPage(new AddEditPage(_previousPage.SendId)));
             }
             _previousPage = null;
+        }
+        
+        private void AdjustToolbar()
+        {
+            _addItem.IsEnabled = _vm.SendEnabled;
         }
     }
 }

@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Bit.App.Models;
+using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -268,6 +269,24 @@ namespace Bit.App.Utilities
                 }
             }
             return false;
+        }
+
+        public static async Task<bool> IsSendDisabledByPolicyAsync()
+        {
+            var policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
+            var userService = ServiceContainer.Resolve<IUserService>("userService");
+            
+            var policies = await policyService.GetAll(PolicyType.DisableSend);
+            var organizations = await userService.GetAllOrganizationAsync();
+            // return organizations.Any(o =>
+            // {
+            //     return o.Enabled &&
+            //            o.Status == OrganizationUserStatusType.Confirmed &&
+            //            o.UsePolicies &&
+            //            !o.canManagePolicies &&
+            //            policies.Any(p => p.OrganizationId == o.Id && p.Enabled);
+            // });
+            return true;
         }
 
         public static async Task<bool> PerformUpdateTasksAsync(ISyncService syncService,

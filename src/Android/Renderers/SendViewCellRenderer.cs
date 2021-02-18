@@ -81,6 +81,10 @@ namespace Bit.Droid.Renderers
             {
                 _cell.UpdateCell(sendCell);
             }
+            // else if (e.PropertyName == SendViewCell.ShowOptionsProperty.PropertyName)
+            // {
+            //     _cell.UpdateCell(sendCell);
+            // }
         }
     }
 
@@ -125,6 +129,11 @@ namespace Bit.Droid.Renderers
             ExpiredIcon.SetTextSize(ComplexUnitType.Sp, small);
             PendingDeleteIcon.SetTextSize(ComplexUnitType.Sp, small);
             MoreButton.SetTextSize(ComplexUnitType.Sp, 25);
+
+            if (!SendViewCell.ShowOptions)
+            {
+                MoreButton.Visibility = ViewStates.Gone;
+            }
 
             AddView(view);
         }
