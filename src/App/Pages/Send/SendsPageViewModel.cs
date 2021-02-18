@@ -15,6 +15,7 @@ namespace Bit.App.Pages
         private readonly ISearchService _searchService;
 
         private CancellationTokenSource _searchCancellationTokenSource;
+        private bool _sendEnabled;
         private bool _showNoData;
         private bool _showList;
 
@@ -29,6 +30,12 @@ namespace Bit.App.Pages
         public ExtendedObservableCollection<SendView> Sends { get; set; }
         public Func<SendView, bool> Filter { get; set; }
 
+        public bool SendEnabled
+        {
+            get => _sendEnabled;
+            set => SetProperty(ref _sendEnabled, value);
+        }
+        
         public bool ShowNoData
         {
             get => _showNoData;
@@ -51,6 +58,7 @@ namespace Bit.App.Pages
 
         public async Task InitAsync()
         {
+            SendEnabled = ! await AppHelpers.IsSendDisabledByPolicyAsync();
             if (!string.IsNullOrWhiteSpace((Page as SendsPage).SearchBar.Text))
             {
                 Search((Page as SendsPage).SearchBar.Text, 200);

@@ -72,7 +72,8 @@
                 <DataTemplate x:DataType="views:SendView">
                     <controls:SendViewCell
                         Send="{Binding .}"
-                        ButtonCommand="{Binding BindingContext.SendOptionsCommand, Source={x:Reference _page}}" />
+                        ButtonCommand="{Binding BindingContext.SendOptionsCommand, Source={x:Reference _page}}"
+                        ShowOptions="{Binding BindingContext.SendEnabled, Source={x:Reference _page}}" />
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
