@@ -356,7 +356,7 @@ namespace Bit.App.Pages
                     if (savedSend != null)
                     {
                         var savedSendView = await savedSend.DecryptAsync();
-                        await AppHelpers.ShareSendUrl(savedSendView);
+                        await AppHelpers.ShareSendUrlAsync(savedSendView);
                     }
                 }
 
@@ -381,14 +381,12 @@ namespace Bit.App.Pages
 
         public async Task CopyLinkAsync()
         {
-            await _platformUtilsService.CopyToClipboardAsync(AppHelpers.GetSendUrl(Send));
-            _platformUtilsService.ShowToast("info", null,
-                string.Format(AppResources.ValueHasBeenCopied, AppResources.ShareLink));
+            await AppHelpers.CopySendUrlAsync(Send);
         }
 
         public async Task ShareLinkAsync()
         {
-            await AppHelpers.ShareSendUrl(Send);
+            await AppHelpers.ShareSendUrlAsync(Send);
         }
 
         public async Task<bool> DeleteAsync()
