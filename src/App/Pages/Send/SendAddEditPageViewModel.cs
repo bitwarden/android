@@ -18,6 +18,7 @@ namespace Bit.App.Pages
     {
         private readonly IDeviceActionService _deviceActionService;
         private readonly IPlatformUtilsService _platformUtilsService;
+        private readonly IMessagingService _messagingService;
         private readonly IUserService _userService;
         private readonly ISendService _sendService;
         private bool _sendEnabled;
@@ -44,6 +45,7 @@ namespace Bit.App.Pages
         {
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
+            _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _userService = ServiceContainer.Resolve<IUserService>("userService");
             _sendService = ServiceContainer.Resolve<ISendService>("sendService");
             TogglePasswordCommand = new Command(TogglePassword);
@@ -349,6 +351,14 @@ namespace Bit.App.Pages
                 _platformUtilsService.ShowToast("success", null,
                     EditMode ? AppResources.SendUpdated : AppResources.NewSendCreated);
                 await Page.Navigation.PopModalAsync();
+
+                if (Device.RuntimePlatform == Device.Android && IsFile)
+                {
+                    // Workaround for https://github.com/xamarin/Xamarin.Forms/issues/5418
+                    // Exiting and returning (file picker) calls OnAppearing on list page instead of this modal, and
+                    // it doesn't get called again when the model is dismissed, so the list isn't updated.
+                    _messagingService.Send("sendUpdated");
+                }
 
                 if (ShareOnSave)
                 {
