@@ -31,6 +31,7 @@ namespace Bit.Droid.Accessibility
             // So keep them in sync with:
             //   - AutofillHelpers.{TrustedBrowsers,CompatBrowsers}
             //   - Resources/xml/autofillservice.xml
+            new Browser("alook.browser", "search_fragment_input_view"),
             new Browser("com.amazon.cloud9", "url"),
             new Browser("com.android.browser", "url"),
             new Browser("com.android.chrome", "url_bar"),
@@ -74,8 +75,8 @@ namespace Bit.Droid.Accessibility
             new Browser("idm.internet.download.manager.adm.lite", "search"),
             new Browser("idm.internet.download.manager.plus", "search"),
             new Browser("io.github.forkmaintainers.iceraven", "mozac_browser_toolbar_url_view"),
-            new Browser("mark.via", "o"),
-            new Browser("mark.via.gp", "o"),
+            new Browser("mark.via", "am,an"),
+            new Browser("mark.via.gp", "as"),
             new Browser("org.adblockplus.browser", "url_bar,url_bar_title"), // 2nd = Legacy (before v2)
             new Browser("org.adblockplus.browser.beta", "url_bar,url_bar_title"), // 2nd = Legacy (before v2)
             new Browser("org.bromite.bromite", "url_bar"),
