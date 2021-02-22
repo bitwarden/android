@@ -70,7 +70,7 @@ namespace Bit.App.Pages
                 {
                     Device.BeginInvokeOnMainThread(() => IsBusy = true);
                 }
-                else if (message.Command == "syncCompleted")
+                else if (message.Command == "syncCompleted" || message.Command == "sendUpdated")
                 {
                     await Task.Delay(500);
                     Device.BeginInvokeOnMainThread(() =>
