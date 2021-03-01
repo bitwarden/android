@@ -337,6 +337,11 @@ namespace Bit.App.Pages
 
             UpdateSendData();
 
+            if (NewPassword != null && string.IsNullOrWhiteSpace(NewPassword)) 
+            {
+                NewPassword = null;
+            }
+
             var (send, encryptedFileData) = await _sendService.EncryptAsync(Send, FileData, NewPassword);
             if (send == null)
             {
