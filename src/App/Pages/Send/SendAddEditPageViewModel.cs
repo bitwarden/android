@@ -337,7 +337,7 @@ namespace Bit.App.Pages
 
             UpdateSendData();
 
-            if (NewPassword != null && string.IsNullOrWhiteSpace(NewPassword)) 
+            if (string.IsNullOrWhiteSpace(NewPassword)) 
             {
                 NewPassword = null;
             }
