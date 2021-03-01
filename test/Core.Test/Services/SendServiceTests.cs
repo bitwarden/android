@@ -181,7 +181,7 @@ namespace Bit.Core.Test.Services
             Predicate<SendRequest> sendRequestPredicate = r =>
             {
                 // Note Send -> SendRequest tested in SendRequestTests
-                TestHelper.AssertPropertyEqual(new SendRequest(send), r);
+                TestHelper.AssertPropertyEqual(new SendRequest(send, fileContentBytes?.LongLength), r);
                 return true;
             };
 
@@ -215,7 +215,7 @@ namespace Bit.Core.Test.Services
             {
                 Assert.Equal(2, fd.Count()); // expect a request and file content
 
-                var expectedRequest = JsonConvert.SerializeObject(new SendRequest(send));
+                var expectedRequest = JsonConvert.SerializeObject(new SendRequest(send, fileContentBytes?.LongLength));
                 var actualRequest = fd.First().ReadAsStringAsync().GetAwaiter().GetResult();
                 Assert.Equal(expectedRequest, actualRequest);
 
@@ -249,7 +249,7 @@ namespace Bit.Core.Test.Services
             Predicate<SendRequest> sendRequestPredicate = r =>
             {
                 // Note Send -> SendRequest tested in SendRequestTests
-                TestHelper.AssertPropertyEqual(new SendRequest(send), r);
+                TestHelper.AssertPropertyEqual(new SendRequest(send, null), r);
                 return true;
             };
 
