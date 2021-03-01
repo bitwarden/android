@@ -10,7 +10,6 @@ namespace Bit.Core.Models.Data
         public SendFileData(SendFileApi data)
         {
             Id = data.Id;
-            Url = data.Url;
             FileName = data.FileName;
             Key = data.Key;
             Size = data.Size;
@@ -18,7 +17,6 @@ namespace Bit.Core.Models.Data
         }
 
         public string Id { get; set; }
-        public string Url { get; set; }
         public string FileName { get; set; }
         public string Key { get; set; }
         public string Size { get; set; }

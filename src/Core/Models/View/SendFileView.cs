@@ -10,13 +10,11 @@ namespace Bit.Core.Models.View
         public SendFileView(SendFile file)
         {
             Id = file.Id;
-            Url = file.Url;
             Size = file.Size;
             SizeName = file.SizeName;
         }
 
         public string Id { get; set; }
-        public string Url { get; set; }
         public string Size { get; set; }
         public string SizeName { get; set; }
         public string FileName { get; set; }
