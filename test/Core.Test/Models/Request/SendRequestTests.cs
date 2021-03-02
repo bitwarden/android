@@ -13,15 +13,16 @@ namespace Bit.Core.Test.Models.Request
     public class SendRequestTests
     {
         [Theory]
-        [InlineCustomAutoData(new[] { typeof(TextSendCustomization) })]
-        [InlineCustomAutoData(new[] { typeof(FileSendCustomization) })]
-        public void SendRequest_FromSend_Success(Send send)
+        [InlineCustomAutoData(new[] { typeof(TextSendCustomization) }, null)]
+        [InlineCustomAutoData(new[] { typeof(FileSendCustomization) }, 100)]
+        public void SendRequest_FromSend_Success(long? fileLength, Send send)
         {
-            var request = new SendRequest(send);
+            var request = new SendRequest(send, fileLength);
 
             TestHelper.AssertPropertyEqual(send, request, "Id", "AccessId", "UserId", "Name", "Notes", "File", "Text", "Key", "AccessCount", "RevisionDate");
             Assert.Equal(send.Name?.EncryptedString, request.Name);
             Assert.Equal(send.Notes?.EncryptedString, request.Notes);
+            Assert.Equal(fileLength, request.FileLength);
 
             switch (send.Type)
             {

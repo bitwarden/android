@@ -195,7 +195,7 @@ namespace Bit.Core.Services
 
         public async Task<string> SaveWithServerAsync(Send send, byte[] encryptedFileData)
         {
-            var request = new SendRequest(send);
+            var request = new SendRequest(send, encryptedFileData?.LongLength);
             SendResponse response;
             if (send.Id == null)
             {
