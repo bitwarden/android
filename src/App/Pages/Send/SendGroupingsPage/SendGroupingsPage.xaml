@@ -73,9 +73,10 @@
                                                      GroupTemplate="{StaticResource sendGroupTemplate}" />
 
             <StackLayout x:Key="mainLayout" x:Name="_mainLayout">
-                <StackLayout StyleClass="box">
+                <StackLayout 
+                    IsVisible="{Binding SendEnabled, Converter={StaticResource inverseBool}}"
+                    StyleClass="box">
                     <Frame
-                        IsVisible="{Binding SendEnabled, Converter={StaticResource inverseBool}}"
                         Padding="10"
                         Margin="0, 12, 0, 6"
                         HasShadow="False"
