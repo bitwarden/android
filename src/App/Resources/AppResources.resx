@@ -1602,8 +1602,11 @@
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>This export contains your vault data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it.</value>
   </data>
-  <data name="EncExportVaultWarning" xml:space="preserve">
+  <data name="EncExportKeyWarning" xml:space="preserve">
     <value>This export encrypts your data using your account's encryption key. If you ever rotate your account's encryption key you should export again since you will not be able to decrypt this export file.</value>
+  </data>
+  <data name="EncExportAccountWarning" xml:space="preserve">
+    <value>Account encryption keys are unique to each Bitwarden user account, so you can't import an encrypted export into a different account.</value>
   </data>
   <data name="ExportVaultConfirmationTitle" xml:space="preserve">
     <value>Confirm Vault Export</value>
