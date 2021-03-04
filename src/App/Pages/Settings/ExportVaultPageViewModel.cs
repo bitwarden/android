@@ -170,7 +170,9 @@ namespace Bit.App.Pages
             switch (FileFormatOptions[FileFormatSelectedIndex].Key)
             {
                 case "encrypted_json":
-                    ExportWarningMessage = _i18nService.T("EncExportVaultWarning");
+                    ExportWarningMessage = _i18nService.T("EncExportKeyWarning") +
+                        "\n\n" +
+                        _i18nService.T("EncExportAccountWarning");
                     break;
                 default:
                     ExportWarningMessage = _i18nService.T("ExportVaultWarning");
