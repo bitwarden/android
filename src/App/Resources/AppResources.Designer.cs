@@ -3478,5 +3478,11 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("SendDisabledWarning", resourceCulture);
             }
         }
+        
+        public static string AboutSend {
+            get {
+                return ResourceManager.GetString("AboutSend", resourceCulture);
+            }
+        }
     }
 }

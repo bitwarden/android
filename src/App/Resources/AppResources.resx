@@ -1968,4 +1968,8 @@
     <value>Due to an enterprise policy, you are only able to delete an existing Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
+  <data name="AboutSend" xml:space="preserve">
+    <value>About Send</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
 </root>
