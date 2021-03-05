@@ -44,12 +44,14 @@ namespace Bit.App.Pages
             if (Device.RuntimePlatform == Device.iOS)
             {
                 _absLayout.Children.Remove(_fab);
+                ToolbarItems.Add(_aboutIconItem);
                 ToolbarItems.Add(_addItem);
             }
             else
             {
                 ToolbarItems.Add(_syncItem);
                 ToolbarItems.Add(_lockItem);
+                ToolbarItems.Add(_aboutTextItem);
             }
         }
 
@@ -159,6 +161,11 @@ namespace Bit.App.Pages
         private async void Lock_Clicked(object sender, EventArgs e)
         {
             await _vaultTimeoutService.LockAsync(true, true);
+        }
+        
+        private void About_Clicked(object sender, EventArgs e)
+        {
+            _vm.ShowAbout();
         }
 
         private async void AddButton_Clicked(object sender, EventArgs e)

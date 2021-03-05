@@ -173,6 +173,7 @@
     <AndroidResource Include="Resources\drawable\icon.xml" />
     <AndroidResource Include="Resources\drawable\ic_launcher_foreground.xml" />
     <AndroidResource Include="Resources\drawable\id.xml" />
+    <AndroidResource Include="Resources\drawable\info.xml" />
     <AndroidResource Include="Resources\drawable\lock.xml" />
     <AndroidResource Include="Resources\drawable\login.xml" />
     <AndroidResource Include="Resources\drawable\logo.xml" />
