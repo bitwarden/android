@@ -138,18 +138,18 @@ Bitwarden 為完全的開源軟體。Bitwarden 的原始碼託管於 GitHub 上�
     <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>在一個安全的密碼庫中管理密碼</value>
+    <value>在一個安全的密碼庫中管理您的所有的密碼</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
     <value>自動產生高強度、隨機並安全的密碼</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>用 Touch ID 、PIN碼或主密碼保護您的密碼庫</value>
+    <value>使用 Touch ID 、PIN 碼或主密碼保護您的密碼庫</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>在 Safari，Chrome 和數以百計的程式中自動填入登入資料</value>
+    <value>在 Safari、Chrome 和數以百計的程式中自動填入登入資料</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>在多部裝置上同步密碼庫</value>
+    <value>在多部裝置上同步和存取密碼庫</value>
   </data>
 </root>

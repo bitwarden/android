@@ -118,46 +118,42 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Title" xml:space="preserve">
-    <value>Bitwarden Parola Yöneticisi</value>
+    <value>Bitwarden পাসওয়ার্ড ব্যবস্থাপক</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="ShortDescription" xml:space="preserve">
-    <value>Bitwarden, internette sizi güvende tutan bir parola ve hesap yöneticisidir.</value>
+    <value>Bitwarden একটি পাসওয়ার্ড ব্যাবস্থাপক যা অনলাইনে থাকাকালীন আপনাকে সুরক্ষিত রাখে।</value>
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>Bitwarden, tüm kullanıcı adı ve parolalarınızı saklamanın, bunları tüm cihazlarınız arasında senkronize etmenin en kolay ve en güvenli yolu.
-
-Parola hırsızlığı ciddi bir sorun. Kullandığınız web siteleri ve uygulamalar sürekli saldırı altında. Güvenlik ihlalleri yaşanıyor ve parolalarınız çalınabiliyor. Farklı uygulamalarda ve web sitelerinde hep aynı parolaları kullanırsanız hacker’lar e-postalarınıza, banka hesabınıza ve diğer önemli hesaplarınıza kolayca erişebiliyor.
-
-Güvenlik uzmanları, oluşturduğunuz her hesap için farklı, rastgele bir parola kullanmanızı öneriyor. Peki, tüm bu parolaları nasıl yöneteceksiniz? Bitwarden, parolalarınızı oluşturmanızı, saklamanızı ve onlara erişmenizi kolaylaştırıyor.
-
-Bitwarden, tüm hesaplarınızı şifrelenmiş bir kasada saklayarak tüm cihazlarınız arasında senkronize edebilir. Verileriniz kendi cihazınız üzerinde şifrelendiği için verilerinize yalnızca siz erişebilirsiniz, Bitwarden ekibi bile verilerinizi okuyamaz. Verileriniz AES-256 bit şifreleme, salted hash ve PBKDF2 SHA-256 ile korunur.
-
-Bitwarden açık kaynaklı bir yazılımdır. GitHub’da barındırdığımız Bitwarden kaynak kodlarını herkes inceleyebilir ve kodlarımıza katkıda bulunabilir.</value>
+    <value>বিটওয়ার্ডেন আপনার সমস্ত লগইন এবং পাসওয়ার্ডগুলি সহজেই আপনার সমস্ত ডিভাইসের সাথে সিঙ্ক করার সময় সংরক্ষণ করার সবচেয়ে সহজ এবং নিরাপদ উপায়।
+পাসওয়ার্ড চুরি একটি গুরুতর সমস্যা। আপনি যে ওয়েবসাইটগুলি এবং অ্যাপ্লিকেশনগুলি ব্যবহার করেন সেগুলি প্রতিদিন আক্রমণের শিকার হয়। সুরক্ষা লঙ্ঘন ঘটে এবং আপনার পাসওয়ার্ডগুলি চুরি হয়ে যায়। আপনি যখন অ্যাপ্লিকেশন এবং ওয়েবসাইট জুড়ে একই পাসওয়ার্ডগুলি পুনরায় ব্যবহার করেন হ্যাকাররা সহজেই আপনার ইমেল, ব্যাংক এবং অন্যান্য গুরুত্বপূর্ণ অ্যাকাউন্টগুলিতে ব্যাবহার করতে পারে।
+সুরক্ষা বিশেষজ্ঞরা আপনার তৈরি প্রতিটি অ্যাকাউন্টের জন্য একটি পৃথক, এলোমেলোভাবে উৎপন্ন পাসওয়ার্ড ব্যবহার করার পরামর্শ দেয়। কিন্তু আপনি কীভাবে এই সমস্ত পাসওয়ার্ড পরিচালনা করবেন? Bitwarden আপনার পাসওয়ার্ডগুলি তৈরি, সঞ্চয় এবং ব্যাবহার করা আপনার পক্ষে সহজ করে তোলে।
+Bitwarden আপনার সমস্ত লগইন একটি এনক্রিপ্ট করা ভল্টে সঞ্চয় করে যা আপনার সমস্ত ডিভাইস জুড়ে সিঙ্ক করে। যেহেতু আপনার ডিভাইসটি ছাড়ার আগে এটি সম্পূর্ণরূপে এনক্রিপ্ট করা হয়েছে, শুধুমাত্র আপনারই ডেটাতে ব্যাবহারাধিকার রয়েছে। এমনকি আমরা Bitwarden এর দল চাইলেও আপনার তথ্যগুলি পড়তে পারব না। আপনার ডেটা AES-256 বিট এনক্রিপশন, সল্টেড হ্যাশিং এবং PBKDF2 SHA-256 দিয়ে নামমুদ্রাম্কিত করা হয়েছে।
+Bitwarden একটি মুক্ত সফ্টওয়্যার। Bitwarden এর উৎস কোডটি গিটহাবটিতে হোস্ট করা হয়েছে এবং Bitwarden কোডবেস সকলের পর্যালোচনা, নিরীক্ষণ এবং অবদানের জন্য মুক্ত।</value>
     <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
-    <value>Tüm cihazarınız için güvenli ve ücretsiz bir parola yöneticisi</value>
+    <value>আপনার সমস্ত ডিভাইসের জন্য একটি সুরক্ষিত এবং বিনামূল্যের পাসওয়ার্ড ব্যবস্থাপক</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Tüm giriş bilgilerinizi ve parolalarınızı güvenli bir kasadan yönetin</value>
+    <value>সুরক্ষিত ভল্ট থেকে আপনার সমস্ত লগইন এবং পাসওয়ার্ড পরিচালনা করুন</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Otomatik olarak güçlü, rastgele ve güvenli parolalar oluşturun</value>
+    <value>স্বয়ংক্রিয়ভাবে শক্তিশালী, এলোমেলো এবং সুরক্ষিত পাসওয়ার্ড তৈরি করুন</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Kasanızı parmak izinizle, PIN koduyla veya ana parolayla koruyun</value>
+    <value>আপনার ভল্টটিকে ফিঙ্গারপ্রিন্ট, পিন কোড বা প্রধান পাসওয়ার্ড দিয়ে সুরক্ষিত করুন</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Tarayıcınızda ve diğer uygulamalardaki giriş alanlarını otomatik olarak doldurun</value>
+    <value>আপনার ওয়েব ব্রাউজার এবং অন্যান্য অ্যাপগুলির মধ্যে থেকে স্বয়ংক্রিয়ভাবে লগইনগুলি স্বতঃপূরণ করুন</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Kasanızı senkronize ederek tüm cihazlarınızdan erişin
+    <value>একাধিক ডিভাইস থেকে আপনার ভল্ট সিঙ্ক এবং ব্যাবহার করুন
 
-- Telefon
-- Tablet
-- Bilgisayar
-- Web</value>
+- ফোন
+- ট্যাবলেট
+- ডেস্কটপ
+- ওয়েব</value>
   </data>
 </root>
