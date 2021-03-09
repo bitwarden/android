@@ -177,10 +177,20 @@
                             <Label
                                 Text="{u:I18n TypeFile}"
                                 StyleClass="box-label" />
-                            <Label
-                                Text="{Binding Send.File.FileName, Mode=OneWay}"
+                            <StackLayout 
                                 IsVisible="{Binding EditMode}"
-                                StyleClass="box-value" />
+                                Orientation="Horizontal">
+                                <Label
+                                    Text="{Binding Send.File.FileName, Mode=OneWay}"
+                                    StyleClass="box-value"
+                                    VerticalTextAlignment="Center"
+                                    HorizontalOptions="StartAndExpand" />
+                                <Label
+                                    Text="{Binding Send.File.SizeName, Mode=OneWay}"
+                                    StyleClass="box-sub-label"
+                                    HorizontalTextAlignment="End"
+                                    VerticalTextAlignment="Center" />
+                            </StackLayout>
                             <StackLayout
                                 IsVisible="{Binding EditMode, Converter={StaticResource inverseBool}}"
                                 StyleClass="box-row">
@@ -212,6 +222,7 @@
                             </StackLayout>
                             <Label
                                 Text="{u:I18n TypeFileInfo}"
+                                IsVisible="{Binding EditMode, Converter={StaticResource inverseBool}}"
                                 StyleClass="box-footer-label"
                                 Margin="0,5,0,0" />
                         </StackLayout>
