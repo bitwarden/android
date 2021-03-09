@@ -397,10 +397,10 @@
     <value>Dodaj vnos</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
-    <value>App Extension</value>
+    <value>Razširitev aplikacije</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Use the Bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
+    <value>Uporabite Bitwarden storitev dostopnosti, da samodejno izpolnite prijavne podatke v aplikacijah in na spletu. </value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Storitev samodejnega izpolnjevanja</value>
