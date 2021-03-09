@@ -118,23 +118,23 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Name" xml:space="preserve">
-    <value>Bitwarden Şifre Yöneticisi</value>
+    <value>Bitwarden Parola Yöneticisi</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Bitwarden, tüm girişlerinizi ve şifrelerinizi saklamanın yanı sıra tüm cihazlarınız arasında senkronize olmasını sağlamanın en kolay ve en güvenli yoludur.  Bitwarden uygulama uzantısı Safari veya Chrome aracılığıyla herhangi bir web sitesine hızlı bir şekilde giriş yapmanızı sağlar ve yüzlerce diğer popüler uygulama tarafından desteklenir.
+    <value>Bitwarden, tüm kullanıcı adı ve parolalarınızı saklamanın, bunları tüm cihazlarınız arasında senkronize etmenin en kolay ve en güvenli yolu. Bitwarden uygulama uzantısı, Safari’den ve Chrome’dan tüm web sitelerine anında giriş yapmanızı sağlıyor. Üstelik yüzlerce popüler uygulama tarafından da destekleniyor.
 
- Şifre hırsızlığı ciddi bir sorundur.  Kullandığınız web siteleri ve uygulamalar her gün saldırı altında.  Güvenlik ihlalleri meydana gelir ve şifreleriniz çalınır.  Aynı şifreleri uygulamalarda ve web sitelerinde tekrar kullandığınızda bilgisayar korsanları e-postalarınıza, bankanıza ve diğer önemli hesaplarınıza kolayca erişebilir.
+Parola hırsızlığı ciddi bir sorun. Kullandığınız web siteleri ve uygulamalar sürekli saldırı altında. Güvenlik ihlalleri yaşanıyor ve parolalarınız çalınabiliyor. Farklı uygulamalarda ve web sitelerinde hep aynı parolaları kullanırsanız hacker’lar e-postalarınıza, banka hesabınıza ve diğer önemli hesaplarınıza kolayca erişebiliyor.
 
- Güvenlik uzmanları, oluşturduğunuz her hesap için rasgele oluşturulmuş farklı bir şifre kullanmanızı önerir.  Ancak tüm bu şifreleri nasıl yönetiyorsunuz?  Bitwarden, şifrelerinizi oluşturmanızı, saklamanızı ve bunlara erişmenizi kolaylaştırır.
+Güvenlik uzmanları, oluşturduğunuz her hesap için farklı, rastgele bir parola kullanmanızı öneriyor. Peki, tüm bu parolaları nasıl yöneteceksiniz? Bitwarden, parolalarınızı oluşturmanızı, saklamanızı ve onlara erişmenizi kolaylaştırıyor.
 
- Bitwarden, tüm girişlerinizi tüm cihazlarınız arasında senkronize edilen şifreli bir kasada saklar.  Cihazınızdan ayrılmadan önce tamamen şifrelenmiş olduğundan, verilerinize yalnızca siz erişebilirsiniz.  Bitwarden ekibimiz bile istesek bile verilerinizi okuyamaz.  Verileriniz AES-256 bit şifreleme, tuzlanmış karma ve PBKDF2 SHA-256 ile mühürlenir.
+Bitwarden, tüm hesaplarınızı şifrelenmiş bir kasada saklayarak tüm cihazlarınız arasında senkronize edebilir. Verileriniz kendi cihazınız üzerinde şifrelendiği için verilerinize yalnızca siz erişebilirsiniz, Bitwarden ekibi bile verilerinizi okuyamaz. Verileriniz AES-256 bit şifreleme, salted hash ve PBKDF2 SHA-256 ile korunur.
 
-Bitwarden% 100 açık kaynaklı yazılımdır.  Bitwarden için kaynak kodu GitHub'da barındırılmaktadır ve herkes Bitwarden kod tabanını incelemek, denetlemek ve katkıda bulunmakta serbesttir.</value>
+Bitwarden açık kaynaklı bir yazılımdır. GitHub’da barındırdığımız Bitwarden kaynak kodlarını herkes inceleyebilir ve kodlarımıza katkıda bulunabilir.</value>
     <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
-    <value>bit yöneticisi, 8 bit, şifre, ücretsiz şifre yöneticisi, şifre yöneticisi, giriş yöneticisi</value>
+    <value>bit warden,8bit,parola,şifre,bedava parola yöneticisi,parola yöneticisi,şifre yöneticisi</value>
     <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
@@ -144,12 +144,12 @@ Bitwarden% 100 açık kaynaklı yazılımdır.  Bitwarden için kaynak kodu GitH
     <value>Otomatik olarak güçlü, rastgele ve güvenli parolalar oluşturun</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Kasanızı; Touch ID ile PIN kodu veya ana parola ile koruyun</value>
+    <value>Kasanızı Touch ID, PIN kodu veya ana parolayla koruyun</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Safari, Chrome ve diğer yüzlerce uygulamada hesap bilgilerinizi otomatik doldurun</value>
+    <value>Safari, Chrome ve yüzlerce uygulamada hesap bilgilerinizi otomatik doldurun</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Hesabınzı eşitleyin ve birden fazla cıhazdan kasanıza ulaşın</value>
+    <value>Hesabınızı senkronize ederek kasanıza tüm cihazlarınızdan ulaşın</value>
   </data>
 </root>
