@@ -182,7 +182,7 @@ namespace Bit.App.Utilities
                 return;
             }
             var platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
-            await platformUtilsService.CopyToClipboardAsync(AppHelpers.GetSendUrl(send));
+            await platformUtilsService.CopyToClipboardAsync(GetSendUrl(send));
             platformUtilsService.ShowToast("info", null,
                 string.Format(AppResources.ValueHasBeenCopied, AppResources.SendLink));
         }
@@ -204,7 +204,12 @@ namespace Bit.App.Utilities
         private static string GetSendUrl(SendView send)
         {
             var environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
-            return environmentService.BaseUrl + "/#/send/" + send.AccessId + "/" + send.UrlB64Key;
+            var webVaultUrl = environmentService.GetWebVaultUrl();
+            if (webVaultUrl != null)
+            {
+                return webVaultUrl + "/#/send/" + send.AccessId + "/" + send.UrlB64Key;
+            }
+            return "https://send.bitwarden.com/#" + send.AccessId + "/" + send.UrlB64Key;
         }
 
         public static async Task<bool> RemoveSendPasswordAsync(string sendId)
