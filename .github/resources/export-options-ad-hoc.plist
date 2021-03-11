@@ -7,11 +7,11 @@
     <key>provisioningProfiles</key>
     <dict>
         <key>com.8bit.bitwarden</key>
-        <string>Ad hoc: Bitwarden 2020</string>
+        <string>Ad hoc: Bitwarden 2021</string>
         <key>com.8bit.bitwarden.autofill</key>
-        <string>Ad hoc: Autofill 2020</string>
+        <string>Ad hoc: Autofill 2021</string>
         <key>com.8bit.bitwarden.find-login-action-extension</key>
-        <string>Ad hoc: Extension 2020</string>
+        <string>Ad hoc: Extension 2021</string>
     </dict>
 </dict>
 </plist>
