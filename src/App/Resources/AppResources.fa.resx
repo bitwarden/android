@@ -893,7 +893,7 @@
     <value>رونوشت TOTP</value>
   </data>
   <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>اگر ورود شما دارای یک کلید تأیید کننده میباشد که به آن متصل شده است، هر زمان که بصورت خودکار وارد سایت شوید کد تأیید TOTP به صورت خودکار به کلیپ بورد شما کپی می شود.</value>
+    <value>اگر ورود شما دارای یک کلید تأیید کننده می‌باشد که به آن متصل شده است، هر زمان که وارد سایت شوید کد تأیید TOTP بصورت خودکار به کلیپ بورد شما کپی می شود.</value>
   </data>
   <data name="DisableAutoTotpCopy" xml:space="preserve">
     <value>غیرفعال کردن کپی خودکار TOTP</value>
@@ -1293,7 +1293,7 @@
     <value>پرکردن خودکار کلمه عبور</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
-    <value>ساده ترین روش برای افزودن اطلاعات ورود به گاوصندوق از طریق افزونه پرکردن خودکار رمز عبور Bitwarden است. برای اطلاع بیشتر از چگونگی استفاده از پرکردن خودکار کلمه عبور Bitwarden مرورکردن صفحه "تنظیمات" است.</value>
+    <value>ساده ترین روش برای افزودن اطلاعات ورود به گاوصندوق از طریق افزونه پرکردن خودکار کلمه عبور Bitwarden است. برای اطلاع بیشتر از چگونگی استفاده از پرکردن خودکار کلمه عبور Bitwarden مرورکردن صفحه "تنظیمات" است.</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
     <value>نشانی رایانامه نامعتبر است.</value>
@@ -1450,7 +1450,7 @@
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
-    <value>گاوصندوق شما فقل شد. برای ادامه کلمه عبور اصلی را وارد کنید.</value>
+    <value>گاوصندوق شما قفل شد. برای ادامه کلمه عبور اصلی را وارد کنید.</value>
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>گاوصندوق شما قفل شده است. برای ادامه کد پین خود را تأیید کنید.</value>
@@ -1491,7 +1491,7 @@
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
-    <value>روش پیش فرض اعمال بازرسی تطابق ‌‌URL را هنگامی که عملی را مثل پر کردن خودکار انتخاب کنید.</value>
+    <value>هنگام انجام کارهایی مانند پر کردن خودکار، روش پیش فرضی را که برای شناسایی ورود URL انجام می شود انتخاب کنید.</value>
   </data>
   <data name="Theme" xml:space="preserve">
     <value>پوسته</value>
@@ -1642,7 +1642,7 @@
     <value>لطفاً برای استفاده از کاشی پر کردن خودکار ، "سرویس دستیابی خودکار" را از تنظیمات Bitwarden فعال کنید.</value>
   </data>
   <data name="AutofillTileUriNotFound" xml:space="preserve">
-    <value>هیچ فیلدی برای رمز شناسایی نشد</value>
+    <value>هیچ فیلدی برای کلمه عبور شناسایی نشد</value>
   </data>
   <data name="SoftDeleting" xml:space="preserve">
     <value>درحال ارسال به سطل زباله...</value>
@@ -1665,11 +1665,11 @@
     <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
   </data>
   <data name="Trash" xml:space="preserve">
-    <value>زباله ها</value>
+    <value>زباله‌ها</value>
     <comment>(noun) Location of deleted items which have not yet been permanently deleted</comment>
   </data>
   <data name="SearchTrash" xml:space="preserve">
-    <value>جستجوی زباله ها</value>
+    <value>جستجوی زباله‌ها</value>
     <comment>(action prompt) Label for the search text field when viewing the trash folder</comment>
   </data>
   <data name="DoYouReallyWantToPermanentlyDeleteCipher" xml:space="preserve">
@@ -1688,7 +1688,7 @@
     <value>تغییر بیومتریک شناسایی شد، برای فعال کردن مجدد آن با استفاده از کلمه عبور اصلی وارد سیستم شوید.</value>
   </data>
   <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>باز کردن قفل بیومتریک برای پرکردن خودکار در انتظار تأیید گذرواژه اصلی غیرفعال است.</value>
+    <value>باز کردن قفل بیومتریک برای پرکردن خودکار در انتظار تأیید کلمه عبور اصلی غیرفعال است.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>فعال کردن همگام سازی در نوسازی</value>
@@ -1715,7 +1715,7 @@
     <value>برای تکمیل ورود به سیستم با SSO ، لطفاً یک کلمه عبور اصلی برای دسترسی و محافظت از گاوصندوق خود تنظیم کنید.</value>
   </data>
   <data name="MasterPasswordPolicyInEffect" xml:space="preserve">
-    <value>یک یا چند سیاست سازمانی برای تأمین شرایط زیر به گذرواژه اصلی شما احتیاج دارد:</value>
+    <value>یک یا چند سیاست سازمانی برای تأمین شرایط زیر به کلمه عبور اصلی شما احتیاج دارد:</value>
   </data>
   <data name="PolicyInEffectMinComplexity" xml:space="preserve">
     <value>حداقل نمره پیچیدگی $SCORE$</value>
@@ -1873,23 +1873,23 @@
     <value>تعداد دسترسی فعلی</value>
   </data>
   <data name="NewPassword" xml:space="preserve">
-    <value>رمز عبور جدید</value>
+    <value>کلمه عبور جدید</value>
   </data>
   <data name="PasswordInfo" xml:space="preserve">
-    <value>به صورت اختیاری برای دسترسی کاربران به این ارسال به یک رمز عبور نیاز دارید.</value>
+    <value>به صورت اختیاری برای دسترسی کاربران به این ارسال به یک کلمه عبور نیاز دارید.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="RemovePassword" xml:space="preserve">
-    <value>حذف رمز عبور</value>
+    <value>حذف کلمه عبور</value>
   </data>
   <data name="AreYouSureRemoveSendPassword" xml:space="preserve">
-    <value>مطمئنید می‌خواهید این رمز عبور حذف شود؟</value>
+    <value>مطمئنید می‌خواهید این کلمه عبور حذف شود؟</value>
   </data>
   <data name="RemovingSendPassword" xml:space="preserve">
-    <value>حذف گذرواژه</value>
+    <value>حذف کلمه عبور</value>
   </data>
   <data name="SendPasswordRemoved" xml:space="preserve">
-    <value>رمز عبور حذف شد</value>
+    <value>کلمه عبور حذف شد</value>
   </data>
   <data name="NotesInfo" xml:space="preserve">
     <value>یادداشت های خصوصی در مورد این ارسال.</value>
