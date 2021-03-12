@@ -29,8 +29,10 @@ namespace Bit.App.Pages
         private bool _showPassword;
         private int _deletionDateTypeSelectedIndex;
         private int _expirationDateTypeSelectedIndex;
+        private DateTime _simpleDeletionDateTime;
         private DateTime _deletionDate;
         private TimeSpan _deletionTime;
+        private DateTime? _simpleExpirationDateTime;
         private DateTime? _expirationDate;
         private TimeSpan? _expirationTime;
         private bool _isOverridingPickers;
@@ -220,7 +222,9 @@ namespace Bit.App.Pages
                     }
                     Send = await send.DecryptAsync();
                     DeletionDate = Send.DeletionDate.ToLocalTime();
+                    DeletionTime = DeletionDate.TimeOfDay;
                     ExpirationDate = Send.ExpirationDate?.ToLocalTime();
+                    ExpirationTime = ExpirationDate?.TimeOfDay;
                 }
                 else
                 {
@@ -229,13 +233,13 @@ namespace Bit.App.Pages
                     {
                         Type = Type.GetValueOrDefault(defaultType),
                     };
+                    _deletionDate = DateTimeNow().AddDays(7);
+                    _deletionTime = DeletionDate.TimeOfDay;
                     DeletionDateTypeSelectedIndex = 4;
                     ExpirationDateTypeSelectedIndex = 0;
                 }
 
                 MaxAccessCount = Send.MaxAccessCount;
-                DeletionTime = DeletionDate.TimeOfDay;
-                ExpirationTime = ExpirationDate?.TimeOfDay;
                 _isOverridingPickers = false;
             }
 
@@ -270,20 +274,17 @@ namespace Bit.App.Pages
             }
             else
             {
-                Send.DeletionDate = DeletionDate.ToUniversalTime();
+                Send.DeletionDate = _simpleDeletionDateTime.ToUniversalTime();
             }
 
             // expiration date
-            if (ExpirationDate.HasValue)
+            if (ShowExpirationCustomPickers && ExpirationDate.HasValue && ExpirationTime.HasValue)
             {
-                if (ShowExpirationCustomPickers && ExpirationTime.HasValue)
-                {
-                    Send.ExpirationDate = ExpirationDate.Value.Date.Add(ExpirationTime.Value).ToUniversalTime();
-                }
-                else
-                {
-                    Send.ExpirationDate = ExpirationDate.Value.ToUniversalTime();
-                }
+                Send.ExpirationDate = ExpirationDate.Value.Date.Add(ExpirationTime.Value).ToUniversalTime();
+            }
+            else if (_simpleExpirationDateTime.HasValue)
+            {
+                Send.ExpirationDate = _simpleExpirationDateTime.Value.ToUniversalTime();
             }
             else
             {
@@ -436,26 +437,27 @@ namespace Bit.App.Pages
                 switch (DeletionDateTypeSelectedIndex)
                 {
                     case 0:
-                        DeletionDate = DateTimeNow().AddHours(1);
+                        _simpleDeletionDateTime = DateTimeNow().AddHours(1);
                         break;
                     case 1:
-                        DeletionDate = DateTimeNow().AddDays(1);
+                        _simpleDeletionDateTime = DateTimeNow().AddDays(1);
                         break;
                     case 2:
-                        DeletionDate = DateTimeNow().AddDays(2);
+                        _simpleDeletionDateTime = DateTimeNow().AddDays(2);
                         break;
                     case 3:
-                        DeletionDate = DateTimeNow().AddDays(3);
+                        _simpleDeletionDateTime = DateTimeNow().AddDays(3);
                         break;
                     case 4:
-                    case 6:
-                        DeletionDate = DateTimeNow().AddDays(7);
+                        _simpleDeletionDateTime = DateTimeNow().AddDays(7);
                         break;
                     case 5:
-                        DeletionDate = DateTimeNow().AddDays(30);
+                        _simpleDeletionDateTime = DateTimeNow().AddDays(30);
+                        break;
+                    case 6:
+                        // custom option, initial values already set elsewhere
                         break;
                 }
-                DeletionTime = DeletionDate.TimeOfDay;
                 _isOverridingPickers = false;
                 TriggerPropertyChanged(nameof(ShowDeletionCustomPickers));
             }
@@ -469,33 +471,29 @@ namespace Bit.App.Pages
                 switch (ExpirationDateTypeSelectedIndex)
                 {
                     case 0:
-                        ClearExpirationDate();
+                        _simpleExpirationDateTime = null;
                         break;
                     case 1:
-                        ExpirationDate = DateTimeNow().AddHours(1);
-                        ExpirationTime = ExpirationDate.Value.TimeOfDay;
+                        _simpleExpirationDateTime = DateTimeNow().AddHours(1);
                         break;
                     case 2:
-                        ExpirationDate = DateTimeNow().AddDays(1);
-                        ExpirationTime = ExpirationDate.Value.TimeOfDay;
+                        _simpleExpirationDateTime = DateTimeNow().AddDays(1);
                         break;
                     case 3:
-                        ExpirationDate = DateTimeNow().AddDays(2);
-                        ExpirationTime = ExpirationDate.Value.TimeOfDay;
+                        _simpleExpirationDateTime = DateTimeNow().AddDays(2);
                         break;
                     case 4:
-                        ExpirationDate = DateTimeNow().AddDays(3);
-                        ExpirationTime = ExpirationDate.Value.TimeOfDay;
+                        _simpleExpirationDateTime = DateTimeNow().AddDays(3);
                         break;
                     case 5:
-                        ExpirationDate = DateTimeNow().AddDays(7);
-                        ExpirationTime = ExpirationDate.Value.TimeOfDay;
+                        _simpleExpirationDateTime = DateTimeNow().AddDays(7);
                         break;
                     case 6:
-                        ExpirationDate = DateTimeNow().AddDays(30);
-                        ExpirationTime = ExpirationDate.Value.TimeOfDay;
+                        _simpleExpirationDateTime = DateTimeNow().AddDays(30);
                         break;
                     case 7:
+                        // custom option, clear all expiration values
+                        _simpleExpirationDateTime = null;
                         ClearExpirationDate();
                         break;
                 }
