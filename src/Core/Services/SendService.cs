@@ -102,9 +102,8 @@ namespace Bit.Core.Services
 
             if (password != null)
             {
-                var kdfIterations = await _userService.GetKdfIterationsAsync() ?? 100000;
                 var passwordHash = await _cryptoFunctionService.Pbkdf2Async(password, model.Key,
-                    CryptoHashAlgorithm.Sha256, kdfIterations);
+                    CryptoHashAlgorithm.Sha256, 100000);
                 send.Password = Convert.ToBase64String(passwordHash);
             }
 
