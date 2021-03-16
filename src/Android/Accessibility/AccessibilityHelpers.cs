@@ -182,7 +182,9 @@ namespace Bit.Droid.Accessibility
             new KnownUsernameField("amazon.in",              new (string, string)[] { ("contains:/ap/signin", "ap_email_login,ap_email") }),
             new KnownUsernameField("amazon.it",              new (string, string)[] { ("contains:/ap/signin", "ap_email_login,ap_email") }),
             new KnownUsernameField("amazon.nl",              new (string, string)[] { ("contains:/ap/signin", "ap_email_login,ap_email") }),
+            new KnownUsernameField("amazon.pl",              new (string, string)[] { ("contains:/ap/signin", "ap_email_login,ap_email") }),
             new KnownUsernameField("amazon.sa",              new (string, string)[] { ("contains:/ap/signin", "ap_email_login,ap_email") }),
+            new KnownUsernameField("amazon.se",              new (string, string)[] { ("contains:/ap/signin", "ap_email_login,ap_email") }),
             new KnownUsernameField("amazon.sg",              new (string, string)[] { ("contains:/ap/signin", "ap_email_login,ap_email") }),
 
             // Amazon Web Services
