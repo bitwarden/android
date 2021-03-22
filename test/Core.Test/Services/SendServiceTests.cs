@@ -200,35 +200,22 @@ namespace Bit.Core.Test.Services
 
         [Theory]
         [InlineCustomAutoData(new[] { typeof(SutProviderCustomization), typeof(FileSendCustomization) })]
-        public async Task SaveWithServerAsync_NewFileSend_Success(SutProvider<SendService> sutProvider, string userId, SendResponse response, Send send)
+        public async Task SaveWithServerAsync_NewFileSend_AzureUpload_Success(SutProvider<SendService> sutProvider, string userId, SendFileUploadDataResponse response, Send send)
         {
             send.Id = null;
+            response.FileUploadType = FileUploadType.Azure;
             sutProvider.GetDependency<IUserService>().GetUserIdAsync().Returns(userId);
-            sutProvider.GetDependency<IApiService>().PostSendAsync(Arg.Any<SendRequest>()).Returns(response);
-            sutProvider.GetDependency<IApiService>().PostSendFileAsync(Arg.Any<MultipartFormDataContent>()).Returns(response);
+            sutProvider.GetDependency<IApiService>().PostFileTypeSendAsync(Arg.Any<SendRequest>()).Returns(response);
+            sutProvider.GetDependency<IApiService>().PostSendFileAsync(Arg.Any<MultipartFormDataContent>()).Returns(response.SendResponse);
 
             var fileContentBytes = Encoding.UTF8.GetBytes("This is the file content");
 
             await sutProvider.Sut.SaveWithServerAsync(send, fileContentBytes);
 
-            Predicate<MultipartFormDataContent> formDataPredicate = fd =>
-            {
-                Assert.Equal(2, fd.Count()); // expect a request and file content
-
-                var expectedRequest = JsonConvert.SerializeObject(new SendRequest(send, fileContentBytes?.LongLength));
-                var actualRequest = fd.First().ReadAsStringAsync().GetAwaiter().GetResult();
-                Assert.Equal(expectedRequest, actualRequest);
-
-                var actualFileContent = fd.Skip(1).First().ReadAsByteArrayAsync().GetAwaiter().GetResult();
-                Assert.Equal(fileContentBytes, actualFileContent);
-                return true;
-            };
-
             switch (send.Type)
             {
                 case SendType.File:
-                    await sutProvider.GetDependency<IApiService>().Received(1)
-                        .PostSendFileAsync(Arg.Is<MultipartFormDataContent>(f => formDataPredicate(f)));
+                    await sutProvider.GetDependency<IAzureStorageService>().Received(1).UploadFileToServerAsync(response.Url, fileContentBytes, Arg.Any<Func<Task<string>>>());
                     break;
                 case SendType.Text:
                 default:
