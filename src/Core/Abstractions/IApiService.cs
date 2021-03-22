@@ -56,7 +56,10 @@ namespace Bit.Core.Abstractions
 
         Task<SendResponse> GetSendAsync(string id);
         Task<SendResponse> PostSendAsync(SendRequest request);
+        Task<SendFileUploadDataResponse> PostFileTypeSendAsync(SendRequest request);
+        Task PostSendFileAsync(string sendId, string fileId, MultipartFormDataContent data);
         Task<SendResponse> PostSendFileAsync(MultipartFormDataContent data);
+        Task<SendFileUploadDataResponse> RenewFileUploadUrlAsync(string sendId, string fileId);
         Task<SendResponse> PutSendAsync(string id, SendRequest request);
         Task<SendResponse> PutSendRemovePasswordAsync(string id);
         Task DeleteSendAsync(string id);

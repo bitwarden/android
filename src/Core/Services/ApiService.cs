@@ -223,8 +223,17 @@ namespace Bit.Core.Services
         public Task<SendResponse> PostSendAsync(SendRequest request) =>
             SendAsync<SendRequest, SendResponse>(HttpMethod.Post, "/sends", request, true, true);
 
+        public Task<SendFileUploadDataResponse> PostFileTypeSendAsync(SendRequest request) =>
+            SendAsync<SendRequest, SendFileUploadDataResponse>(HttpMethod.Post, "/sends/file/v2", request, true, true);
+
+        public Task PostSendFileAsync(string sendId, string fileId, MultipartFormDataContent data) =>
+            SendAsync<MultipartFormDataContent, object>(HttpMethod.Post, $"/sends/{sendId}/file/{fileId}", data, true, false);
+
         public Task<SendResponse> PostSendFileAsync(MultipartFormDataContent data) =>
             SendAsync<MultipartFormDataContent, SendResponse>(HttpMethod.Post, "/sends/file", data, true, true);
+
+        public Task<SendFileUploadDataResponse> RenewFileUploadUrlAsync(string sendId, string fileId) =>
+            SendAsync<object, SendFileUploadDataResponse>(HttpMethod.Get, $"/sends/{sendId}/file/{fileId}", null, true, true);
 
         public Task<SendResponse> PutSendAsync(string id, SendRequest request) =>
             SendAsync<SendRequest, SendResponse>(HttpMethod.Put, $"/sends/{id}", request, true, true);
