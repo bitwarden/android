@@ -32,8 +32,7 @@ namespace Bit.Core.Services
         {
             if (data.Length <= MAX_SINGLE_BLOB_UPLOAD_SIZE)
             {
-                await AzureUploadBlocks(uri, data, renewalCallback);
-                //await AzureUploadBlob(uri, data);
+                await AzureUploadBlob(uri, data);
             }
             else
             {
