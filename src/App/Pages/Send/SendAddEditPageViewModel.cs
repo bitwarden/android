@@ -327,7 +327,7 @@ namespace Bit.App.Pages
                             AppResources.AnErrorHasOccurred);
                         return false;
                     }
-                    if (FileData.Length > 104857600) // 100 MB
+                    if (FileData.Length > 524288000) // 500 MB
                     {
                         await _platformUtilsService.ShowDialogAsync(AppResources.MaxFileSize,
                             AppResources.AnErrorHasOccurred);
