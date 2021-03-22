@@ -80,7 +80,7 @@ namespace Bit.Core.Utilities
             return null;
         }
 
-        private static Uri GetUri(string uriString)
+        public static Uri GetUri(string uriString)
         {
             if (string.IsNullOrWhiteSpace(uriString))
             {
@@ -248,6 +248,32 @@ namespace Bit.Core.Utilities
         public static T Clone<T>(T obj)
         {
             return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(obj));
+        }
+
+        public static IEnumerable<IEnumerable<T>> Batch<T>(this IEnumerable<T> source, long size)
+        {
+            T[] bucket = null;
+            var count = 0;
+            foreach (var item in source)
+            {
+                if (bucket == null)
+                {
+                    bucket = new T[size];
+                }
+                bucket[count++] = item;
+                if (count != size)
+                {
+                    continue;
+                }
+                yield return bucket.Select(x => x);
+                bucket = null;
+                count = 0;
+            }
+            // Return the last bucket with all remaining elements
+            if (bucket != null && count > 0)
+            {
+                yield return bucket.Take(count);
+            }
         }
     }
 }

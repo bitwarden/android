@@ -45,8 +45,9 @@ namespace Bit.Core.Utilities
             var folderService = new FolderService(cryptoService, userService, apiService, storageService,
                 i18nService, cipherService);
             var collectionService = new CollectionService(cryptoService, userService, storageService, i18nService);
+            var azureStorageService = new AzureStorageService();
             var sendService = new SendService(cryptoService, userService, apiService, storageService, i18nService,
-                cryptoFunctionService);
+                cryptoFunctionService, azureStorageService);
             searchService = new SearchService(cipherService, sendService);
             var vaultTimeoutService = new VaultTimeoutService(cryptoService, userService, platformUtilsService, 
                 storageService, folderService, cipherService, collectionService, searchService, messagingService, tokenService,

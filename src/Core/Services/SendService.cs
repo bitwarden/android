@@ -24,6 +24,7 @@ namespace Bit.Core.Services
         private readonly IStorageService _storageService;
         private readonly II18nService _i18nService;
         private readonly ICryptoFunctionService _cryptoFunctionService;
+        private readonly IAzureStorageService _azureStorageService;
         private Task<List<SendView>> _getAllDecryptedTask;
 
         public SendService(
@@ -32,7 +33,8 @@ namespace Bit.Core.Services
             IApiService apiService,
             IStorageService storageService,
             II18nService i18nService,
-            ICryptoFunctionService cryptoFunctionService)
+            ICryptoFunctionService cryptoFunctionService,
+            IAzureStorageService azureStorageService)
         {
             _cryptoService = cryptoService;
             _userService = userService;
@@ -40,6 +42,7 @@ namespace Bit.Core.Services
             _storageService = storageService;
             _i18nService = i18nService;
             _cryptoFunctionService = cryptoFunctionService;
+            _azureStorageService = azureStorageService;
         }
 
         public static string GetSendKey(string userId) => string.Format("sends_{0}", userId);
@@ -204,13 +207,38 @@ namespace Bit.Core.Services
                         response = await _apiService.PostSendAsync(request);
                         break;
                     case SendType.File:
-                        var fd = new MultipartFormDataContent($"--BWMobileFormBoundary{DateTime.UtcNow.Ticks}")
-                        {
-                            { new StringContent(JsonConvert.SerializeObject(request)), "model" },
-                            { new ByteArrayContent(encryptedFileData), "data", send.File.FileName.EncryptedString }
-                        };
+                        var uploadDataResponse = await _apiService.PostFileTypeSendAsync(request);
+                        response = uploadDataResponse.SendResponse;
 
-                        response = await _apiService.PostSendFileAsync(fd);
+                        try
+                        {
+                            switch (uploadDataResponse.FileUploadType)
+                            {
+                                case FileUploadType.Direct:
+                                    var fd = new MultipartFormDataContent($"--BWMobileFormBoundary{DateTime.UtcNow.Ticks}")
+                                    {
+                                        { new ByteArrayContent(encryptedFileData), "data", send.File.FileName.EncryptedString }
+                                    };
+                                    await _apiService.PostSendFileAsync(response.Id, response.File.Id, fd);
+                                    break;
+                                case FileUploadType.Azure:
+                                    Func<Task<string>> renewalCallback = async () =>
+                                    {
+                                        var renewalResponse = await _apiService.RenewFileUploadUrlAsync(response.Id, response.File.Id);
+                                        return renewalResponse.Url;
+                                    };
+                                    await _azureStorageService.UploadFileToServerAsync(uploadDataResponse.Url, encryptedFileData, renewalCallback);
+                                    break;
+                                default:
+                                    throw new NotImplementedException($"Unknown file upload type {uploadDataResponse.FileUploadType}");
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            await _apiService.DeleteSendAsync(response.Id);
+                            throw e;
+                        }
+
                         break;
                     default:
                         throw new NotImplementedException($"Cannot save unknown Send type {send.Type}");
