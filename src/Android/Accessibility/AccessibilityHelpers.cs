@@ -77,6 +77,10 @@ namespace Bit.Droid.Accessibility
             new Browser("io.github.forkmaintainers.iceraven", "mozac_browser_toolbar_url_view"),
             new Browser("mark.via", "am,an"),
             new Browser("mark.via.gp", "as"),
+            new Browser("net.slions.fulguris.full.download", "search"),
+            new Browser("net.slions.fulguris.full.download.debug", "search"),
+            new Browser("net.slions.fulguris.full.playstore", "search"),
+            new Browser("net.slions.fulguris.full.playstore.debug", "search"),
             new Browser("org.adblockplus.browser", "url_bar,url_bar_title"), // 2nd = Legacy (before v2)
             new Browser("org.adblockplus.browser.beta", "url_bar,url_bar_title"), // 2nd = Legacy (before v2)
             new Browser("org.bromite.bromite", "url_bar"),
