@@ -50,6 +50,7 @@ namespace Bit.Droid.Accessibility
             new Browser("com.ecosia.android", "url_bar"),
             new Browser("com.google.android.apps.chrome", "url_bar"),
             new Browser("com.google.android.apps.chrome_dev", "url_bar"),
+            new Browser("com.jamal2367.styx", "search"),
             new Browser("com.kiwibrowser.browser", "url_bar"),
             new Browser("com.microsoft.emmx", "url_bar"),
             new Browser("com.mmbox.browser", "search_box"),
