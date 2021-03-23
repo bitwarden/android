@@ -66,6 +66,7 @@ namespace Bit.Droid.Autofill
             "com.ecosia.android",
             "com.google.android.apps.chrome",
             "com.google.android.apps.chrome_dev",
+            "com.jamal2367.styx",
             "com.kiwibrowser.browser",
             "com.microsoft.emmx",
             "com.mmbox.browser",
