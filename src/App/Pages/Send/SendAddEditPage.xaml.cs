@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using Bit.App.Models;
 using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
@@ -15,18 +17,21 @@ namespace Bit.App.Pages
     {
         private readonly IBroadcasterService _broadcasterService;
 
+        private AppOptions _appOptions;
         private SendAddEditPageViewModel _vm;
 
         public SendAddEditPage(
+            AppOptions appOptions = null,
             string sendId = null,
             SendType? type = null)
         {
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
+            _appOptions = appOptions;
             InitializeComponent();
             _vm = BindingContext as SendAddEditPageViewModel;
             _vm.Page = this;
             _vm.SendId = sendId;
-            _vm.Type = type;
+            _vm.Type = appOptions?.CreateSend?.Item1 ?? type;
             SetActivityIndicator();
             if (Device.RuntimePlatform == Device.Android)
             {
@@ -95,6 +100,7 @@ namespace Bit.App.Pages
                     await Navigation.PopModalAsync();
                     return;
                 }
+                await HandleCreateRequest();
                 if (!_vm.EditMode && string.IsNullOrWhiteSpace(_vm.Send?.Name))
                 {
                     RequestFocus(_nameEntry);
@@ -270,6 +276,34 @@ namespace Bit.App.Pages
                 ToolbarItems.Remove(_copyLink);
                 ToolbarItems.Remove(_shareLink);
             }
+        }
+
+        private async Task HandleCreateRequest()
+        {
+            if (_appOptions?.CreateSend == null)
+            {
+                return;
+            }
+
+            _vm.IsAddFromShare = true;
+            
+            var name = _appOptions.CreateSend.Item2;
+            _vm.Send.Name = name;
+            
+            var type = _appOptions.CreateSend.Item1;
+            if (type == SendType.File)
+            {
+                _vm.FileData = _appOptions.CreateSend.Item3;
+                _vm.FileName = name;
+                FileType_Clicked(null, null);
+            }
+            else
+            {
+                var text = _appOptions.CreateSend.Item4;
+                _vm.Send.Text.Text = text;
+                TextType_Clicked(null, null);
+            }
+            _appOptions.CreateSend = null;
         }
     }
 }

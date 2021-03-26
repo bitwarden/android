@@ -113,7 +113,7 @@ namespace Bit.App.Pages
 
         public async Task SelectSendAsync(SendView send)
         {
-            var page = new SendAddEditPage(send.Id);
+            var page = new SendAddEditPage(null, send.Id);
             await Page.Navigation.PushModalAsync(new NavigationPage(page));
         }
 

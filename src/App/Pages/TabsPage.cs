@@ -20,7 +20,7 @@ namespace Bit.App.Pages
             };
             Children.Add(_groupingsPage);
 
-            _sendGroupingsPage = new NavigationPage(new SendGroupingsPage(true))
+            _sendGroupingsPage = new NavigationPage(new SendGroupingsPage(true, null, null, appOptions))
             {
                 Title = AppResources.Send,
                 IconImageSource = "paper_plane.png",
@@ -60,6 +60,10 @@ namespace Bit.App.Pages
             {
                 appOptions.MyVaultTile = false;
             }
+            else if (appOptions?.CreateSend != null)
+            {
+                ResetToSendPage();
+            }
         }
 
         public void ResetToVaultPage()
@@ -70,6 +74,11 @@ namespace Bit.App.Pages
         public void ResetToGeneratorPage()
         {
             CurrentPage = _generatorPage;
+        }
+        
+        public void ResetToSendPage()
+        {
+            CurrentPage = _sendGroupingsPage;
         }
 
         protected async override void OnCurrentPageChanged()

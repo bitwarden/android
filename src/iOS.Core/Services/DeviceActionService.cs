@@ -437,6 +437,11 @@ namespace Bit.iOS.Core.Services
             return iOSHelpers.GetSystemUpTimeMilliseconds() ?? DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         }
 
+        public void CloseMainApp()
+        {
+            throw new NotImplementedException();
+        }
+
         private void ImagePicker_FinishedPickingMedia(object sender, UIImagePickerMediaPickedEventArgs e)
         {
             if (sender is UIImagePickerController picker)
@@ -536,27 +541,11 @@ namespace Bit.iOS.Core.Services
 
         public void PickedDocument(NSUrl url)
         {
-            url.StartAccessingSecurityScopedResource();
-            var doc = new UIDocument(url);
-            var fileName = doc.LocalizedName;
-            if (string.IsNullOrWhiteSpace(fileName))
+            var document = iOSHelpers.GetPickedDocument(url);
+            if (document != null)
             {
-                var path = doc.FileUrl?.ToString();
-                if (path != null)
-                {
-                    path = WebUtility.UrlDecode(path);
-                    var split = path.LastIndexOf('/');
-                    fileName = path.Substring(split + 1);
-                }
+                SelectFileResult(document.Item1, document.Item2);
             }
-            var fileCoordinator = new NSFileCoordinator();
-            fileCoordinator.CoordinateRead(url, NSFileCoordinatorReadingOptions.WithoutChanges,
-                out NSError error, (u) =>
-                {
-                    var data = NSData.FromUrl(u).ToArray();
-                    SelectFileResult(data, fileName ?? "unknown_file_name");
-                });
-            url.StopAccessingSecurityScopedResource();
         }
 
         public bool AutofillAccessibilityOverlayPermitted()

@@ -760,6 +760,17 @@ namespace Bit.Droid.Services
             // ref: https://developer.android.com/reference/android/os/SystemClock#elapsedRealtime()
             return SystemClock.ElapsedRealtime();
         }
+        
+        public void CloseMainApp()
+        {
+            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            if (activity == null)
+            {
+                return;
+            }
+            activity.Finish();
+            _messagingService.Send("finishMainActivity");
+        }
 
         private bool DeleteDir(Java.IO.File dir)
         {

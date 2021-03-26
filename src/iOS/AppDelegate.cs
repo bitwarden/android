@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AuthenticationServices;
 using Bit.App.Abstractions;
+// using Bit.App.Models;
 using Bit.App.Pages;
 using Bit.App.Services;
 using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
+// using Bit.Core.Enums;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Bit.iOS.Core.Utilities;
@@ -37,6 +39,8 @@ namespace Bit.iOS
         private IStorageService _storageService;
         private IVaultTimeoutService _vaultTimeoutService;
         private IEventService _eventService;
+        
+        // private AppOptions _appOptions;
 
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
@@ -50,6 +54,8 @@ namespace Bit.iOS
             _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             _eventService = ServiceContainer.Resolve<IEventService>("eventService");
 
+            // _appOptions = new AppOptions();
+            // LoadApplication(new App.App(_appOptions));
             LoadApplication(new App.App(null));
             iOSCoreHelpers.AppearanceAdjustments(_deviceActionService);
             ZXing.Net.Mobile.Forms.iOS.Platform.Init();
@@ -237,7 +243,55 @@ namespace Bit.iOS
                 return true;
             }
             return base.OpenUrl(app, url, options);
+            // if (HandleCreateSendRequest(app, url, options))
+            // {
+            //     _messagingService.Send("popAllAndGoToTabSend");
+            //     return false;
+            // }
+            // return true;
         }
+        
+        // private bool HandleCreateSendRequest(UIApplication app, NSUrl url, NSDictionary options)
+        // {
+        //     if (url != null && url.Scheme == @"file")
+        //     {
+        //         var document = iOSHelpers.GetPickedDocument(url);
+        //         if (document != null)
+        //         {
+        //             _appOptions.CreateSend = new Tuple<SendType, string, byte[], string>(SendType.File, document.Item2, document.Item1, null);
+        //             return true;
+        //         }
+        //     }
+        //     // if (intent.Action == Intent.ActionSend && intent.Type != null)
+        //     // {
+        //     //     var type = intent.Type;
+        //     //     if (type.Contains("text/"))
+        //     //     {
+        //     //         var subject = intent.GetStringExtra(Intent.ExtraSubject);
+        //     //         var text = intent.GetStringExtra(Intent.ExtraText);
+        //     //         _appOptions.CreateSend = new Tuple<SendType, string, byte[], string>(SendType.Text, subject, null, text);
+        //     //         return true;
+        //     //     }
+        //     //     else
+        //     //     {
+        //     //         var data = intent.ClipData?.GetItemAt(0);
+        //     //         var uri = data?.Uri;
+        //     //         var filename = AndroidHelpers.GetFileName(ApplicationContext, uri);
+        //     //         try
+        //     //         {
+        //     //             using (var stream = ContentResolver.OpenInputStream(uri))
+        //     //             using (var memoryStream = new MemoryStream())
+        //     //             {
+        //     //                 stream.CopyTo(memoryStream);
+        //     //                 _appOptions.CreateSend = new Tuple<SendType, string, byte[], string>(SendType.File, filename, memoryStream.ToArray(), null);
+        //     //                 return true;
+        //     //             }
+        //     //         }
+        //     //         catch (Java.IO.FileNotFoundException) { }
+        //     //     }
+        //     // }
+        //     return false;
+        // }
 
         public override void FailedToRegisterForRemoteNotifications(UIApplication application, NSError error)
         {
