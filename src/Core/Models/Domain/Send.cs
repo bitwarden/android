@@ -27,6 +27,7 @@ namespace Bit.Core.Models.Domain
         public DateTime DeletionDate { get; set; }
         public string Password { get; set; }
         public bool Disabled { get; set; }
+        public bool HideEmail { get; set; }
 
         public Send() : base() { }
 
@@ -49,6 +50,7 @@ namespace Bit.Core.Models.Domain
             RevisionDate = data.RevisionDate;
             DeletionDate = data.DeletionDate;
             ExpirationDate = data.ExpirationDate;
+            HideEmail = data.HideEmail;
 
             switch (Type)
             {

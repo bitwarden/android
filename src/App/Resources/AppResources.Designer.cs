@@ -3484,5 +3484,17 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("AboutSend", resourceCulture);
             }
         }
+        
+        public static string HideEmail {
+            get {
+                return ResourceManager.GetString("HideEmail", resourceCulture);
+            }
+        }
+        
+        public static string sendOptionsPolicyInEffect {
+            get {
+                return ResourceManager.GetString("sendOptionsPolicyInEffect", resourceCulture);
+            }
+        }
     }
 }

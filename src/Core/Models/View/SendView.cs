@@ -21,6 +21,7 @@ namespace Bit.Core.Models.View
             ExpirationDate = send.ExpirationDate;
             Disabled = send.Disabled;
             Password = send.Password;
+            HideEmail = send.HideEmail;
         }
 
         public string Id { get; set; }
@@ -45,5 +46,6 @@ namespace Bit.Core.Models.View
         public bool Expired => ExpirationDate.HasValue && ExpirationDate.Value <= DateTime.UtcNow;
         public bool PendingDelete => DeletionDate <= DateTime.UtcNow;
         public string DisplayDate => DeletionDate.ToLocalTime().ToString("MMM d, yyyy, h:mm tt");
+        public bool HideEmail { get; set; }
     }
 }

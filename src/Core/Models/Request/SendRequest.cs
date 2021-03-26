@@ -19,6 +19,7 @@ namespace Bit.Core.Models.Request
         public SendFileApi File { get; set; }
         public string Password { get; set; }
         public bool Disabled { get; set; }
+        public bool HideEmail { get; set; }
 
         public SendRequest(Send send, long? fileLength)
         {
@@ -32,6 +33,7 @@ namespace Bit.Core.Models.Request
             Key = send.Key?.EncryptedString;
             Password = send.Password;
             Disabled = send.Disabled;
+            HideEmail = send.HideEmail;
 
             switch (Type)
             {
