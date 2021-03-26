@@ -97,6 +97,7 @@ namespace Bit.Core.Services
                 Key = await _cryptoService.EncryptAsync(model.Key, key),
                 Name = await _cryptoService.EncryptAsync(model.Name, model.CryptoKey),
                 Notes = await _cryptoService.EncryptAsync(model.Notes, model.CryptoKey),
+                HideEmail = model.HideEmail
             };
             byte[] encryptedFileData = null;
 
