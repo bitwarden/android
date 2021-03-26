@@ -3491,9 +3491,9 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string sendOptionsPolicyInEffect {
+        public static string SendOptionsPolicyInEffect {
             get {
-                return ResourceManager.GetString("sendOptionsPolicyInEffect", resourceCulture);
+                return ResourceManager.GetString("SendOptionsPolicyInEffect", resourceCulture);
             }
         }
     }
