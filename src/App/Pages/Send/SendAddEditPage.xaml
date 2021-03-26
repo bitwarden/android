@@ -89,6 +89,18 @@
                                 StyleClass="text-muted, text-sm, text-bold"
                                 HorizontalTextAlignment="Center" />
                         </Frame>
+                        <Frame
+                            IsVisible="{Binding SendOptionsPolicyInEffect}"
+                            Padding="10"
+                            Margin="0, 12, 0, 0"
+                            HasShadow="False"
+                            BackgroundColor="Transparent"
+                            BorderColor="Accent">
+                            <Label
+                                Text="{u:I18n SendOptionsPolicyInEffect}"
+                                StyleClass="text-muted, text-sm, text-bold"
+                                HorizontalTextAlignment="Center" />
+                        </Frame>
                         <StackLayout StyleClass="box-row">
                             <Label
                                 Text="{u:I18n Name}"
@@ -489,6 +501,20 @@
                                     Text="{u:I18n NotesInfo}"
                                     StyleClass="box-footer-label"
                                     Margin="0,5,0,0" />
+                            </StackLayout>
+                            <StackLayout
+                                StyleClass="box-row, box-row-switch"
+                                Margin="0,5,0,0">
+                                <Label
+                                    Text="{u:I18n HideEmail}"
+                                    StyleClass="box-label-regular"
+                                    VerticalOptions="Center"
+                                    HorizontalOptions="StartAndExpand" />
+                                <Switch
+                                    IsToggled="{Binding Send.HideEmail}"
+                                    IsEnabled="{Binding DisableHideEmailControl, Converter={StaticResource inverseBool}}"
+                                    HorizontalOptions="End"
+                                    Margin="10,0,0,0" />
                             </StackLayout>
                             <StackLayout
                                 StyleClass="box-row, box-row-switch"

@@ -42,6 +42,9 @@ namespace Bit.App.Pages
             nameof(IsText),
             nameof(IsFile),
         };
+        private bool _disableHideEmail;
+        private bool _sendOptionsPolicyInEffect;
+        private bool _disableHideEmailControl;
 
         public SendAddEditPageViewModel()
         {
@@ -200,12 +203,25 @@ namespace Bit.App.Pages
         public bool ShowDeletionCustomPickers => EditMode || DeletionDateTypeSelectedIndex == 6;
         public bool ShowExpirationCustomPickers => EditMode || ExpirationDateTypeSelectedIndex == 7;
         public string ShowPasswordIcon => ShowPassword ? "" : "";
+        public bool DisableHideEmail
+        {
+            get => _disableHideEmail;
+            set => SetProperty(ref _disableHideEmail, value);
+        }
+        public bool SendOptionsPolicyInEffect
+        {
+            get => _sendOptionsPolicyInEffect;
+            set => SetProperty(ref _sendOptionsPolicyInEffect, value);
+        }
+        public bool DisableHideEmailControl { get; set; }
 
         public async Task InitAsync()
         {
             PageTitle = EditMode ? AppResources.EditSend : AppResources.AddSend;
             _canAccessPremium = await _userService.CanAccessPremiumAsync();
             SendEnabled = ! await AppHelpers.IsSendDisabledByPolicyAsync();
+            DisableHideEmail = await AppHelpers.IsHideEmailDisabledByPolicyAsync();
+            SendOptionsPolicyInEffect = SendEnabled && DisableHideEmail;
         }
 
         public async Task<bool> LoadAsync()
@@ -242,6 +258,10 @@ namespace Bit.App.Pages
                 MaxAccessCount = Send.MaxAccessCount;
                 _isOverridingPickers = false;
             }
+
+            DisableHideEmailControl = !SendEnabled ||
+                (!EditMode && DisableHideEmail) ||
+                (EditMode && DisableHideEmail && !Send.HideEmail);
 
             return true;
         }
