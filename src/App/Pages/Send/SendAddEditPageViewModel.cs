@@ -94,6 +94,7 @@ namespace Bit.App.Pages
         public byte[] FileData { get; set; }
         public string NewPassword { get; set; }
         public bool ShareOnSave { get; set; }
+        public bool DisableHideEmailControl { get; set; }
         public List<KeyValuePair<string, SendType>> TypeOptions { get; }
         public List<KeyValuePair<string, string>> DeletionTypeOptions { get; }
         public List<KeyValuePair<string, string>> ExpirationTypeOptions { get; }
@@ -197,12 +198,6 @@ namespace Bit.App.Pages
                     nameof(ShowPasswordIcon)
                 });
         }
-        public bool EditMode => !string.IsNullOrWhiteSpace(SendId);
-        public bool IsText => Send?.Type == SendType.Text;
-        public bool IsFile => Send?.Type == SendType.File;
-        public bool ShowDeletionCustomPickers => EditMode || DeletionDateTypeSelectedIndex == 6;
-        public bool ShowExpirationCustomPickers => EditMode || ExpirationDateTypeSelectedIndex == 7;
-        public string ShowPasswordIcon => ShowPassword ? "" : "";
         public bool DisableHideEmail
         {
             get => _disableHideEmail;
@@ -213,7 +208,12 @@ namespace Bit.App.Pages
             get => _sendOptionsPolicyInEffect;
             set => SetProperty(ref _sendOptionsPolicyInEffect, value);
         }
-        public bool DisableHideEmailControl { get; set; }
+        public bool EditMode => !string.IsNullOrWhiteSpace(SendId);
+        public bool IsText => Send?.Type == SendType.Text;
+        public bool IsFile => Send?.Type == SendType.File;
+        public bool ShowDeletionCustomPickers => EditMode || DeletionDateTypeSelectedIndex == 6;
+        public bool ShowExpirationCustomPickers => EditMode || ExpirationDateTypeSelectedIndex == 7;
+        public string ShowPasswordIcon => ShowPassword ? "" : "";
 
         public async Task InitAsync()
         {
