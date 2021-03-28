@@ -1977,5 +1977,6 @@
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
     <value>One or more organization policies are affecting your Send options.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
 </root>
