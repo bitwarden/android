@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
+using Bit.Core.Exceptions;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
@@ -24,25 +25,25 @@ namespace Bit.Core.Services
         private readonly IStorageService _storageService;
         private readonly II18nService _i18nService;
         private readonly ICryptoFunctionService _cryptoFunctionService;
-        private readonly IAzureStorageService _azureStorageService;
         private Task<List<SendView>> _getAllDecryptedTask;
+        private readonly IFileUploadService _fileUploadService;
 
         public SendService(
             ICryptoService cryptoService,
             IUserService userService,
             IApiService apiService,
+            IFileUploadService fileUploadService,
             IStorageService storageService,
             II18nService i18nService,
-            ICryptoFunctionService cryptoFunctionService,
-            IAzureStorageService azureStorageService)
+            ICryptoFunctionService cryptoFunctionService)
         {
             _cryptoService = cryptoService;
             _userService = userService;
             _apiService = apiService;
+            _fileUploadService = fileUploadService;
             _storageService = storageService;
             _i18nService = i18nService;
             _cryptoFunctionService = cryptoFunctionService;
-            _azureStorageService = azureStorageService;
         }
 
         public static string GetSendKey(string userId) => string.Format("sends_{0}", userId);
@@ -198,7 +199,7 @@ namespace Bit.Core.Services
         public async Task<string> SaveWithServerAsync(Send send, byte[] encryptedFileData)
         {
             var request = new SendRequest(send, encryptedFileData?.LongLength);
-            SendResponse response;
+            SendResponse response = default;
             if (send.Id == null)
             {
                 switch (send.Type)
@@ -207,38 +208,23 @@ namespace Bit.Core.Services
                         response = await _apiService.PostSendAsync(request);
                         break;
                     case SendType.File:
-                        var uploadDataResponse = await _apiService.PostFileTypeSendAsync(request);
-                        response = uploadDataResponse.SendResponse;
+                        try{
+                            var uploadDataResponse = await _apiService.PostFileTypeSendAsync(request);
+                            response = uploadDataResponse.SendResponse;
 
-                        try
-                        {
-                            switch (uploadDataResponse.FileUploadType)
-                            {
-                                case FileUploadType.Direct:
-                                    var fd = new MultipartFormDataContent($"--BWMobileFormBoundary{DateTime.UtcNow.Ticks}")
-                                    {
-                                        { new ByteArrayContent(encryptedFileData), "data", send.File.FileName.EncryptedString }
-                                    };
-                                    await _apiService.PostSendFileAsync(response.Id, response.File.Id, fd);
-                                    break;
-                                case FileUploadType.Azure:
-                                    Func<Task<string>> renewalCallback = async () =>
-                                    {
-                                        var renewalResponse = await _apiService.RenewFileUploadUrlAsync(response.Id, response.File.Id);
-                                        return renewalResponse.Url;
-                                    };
-                                    await _azureStorageService.UploadFileToServerAsync(uploadDataResponse.Url, encryptedFileData, renewalCallback);
-                                    break;
-                                default:
-                                    throw new NotImplementedException($"Unknown file upload type {uploadDataResponse.FileUploadType}");
-                            }
+                            await _fileUploadService.UploadSendFileAsync(uploadDataResponse, send.File.FileName, encryptedFileData);
                         }
-                        catch (Exception e)
+                        catch (ApiException e) when (e.Error.StatusCode == HttpStatusCode.NotFound)
                         {
-                            await _apiService.DeleteSendAsync(response.Id);
+                            response = await LegacyServerSendFileUpload(request, send, encryptedFileData);
+                        }
+                        catch (Exception e) 
+                        {
+                            if (response != default){
+                                await _apiService.DeleteSendAsync(response.Id);
+                            }
                             throw e;
                         }
-
                         break;
                     default:
                         throw new NotImplementedException($"Cannot save unknown Send type {send.Type}");
@@ -253,6 +239,17 @@ namespace Bit.Core.Services
             var userId = await _userService.GetUserIdAsync();
             await UpsertAsync(new SendData(response, userId));
             return response.Id;
+        }
+
+        [Obsolete("Mar 25 2021: This method has been deprecated in favor of direct uploads. This method still exists for backward compatibility with old server versions.")]
+        private async Task<SendResponse> LegacyServerSendFileUpload(SendRequest request, Send send, byte[] encryptedFileData) {
+            var fd = new MultipartFormDataContent($"--BWMobileFormBoundary{DateTime.UtcNow.Ticks}")
+                        {
+                            { new StringContent(JsonConvert.SerializeObject(request)), "model" },
+                            { new ByteArrayContent(encryptedFileData), "data", send.File.FileName.EncryptedString }
+                        };
+
+            return await _apiService.PostSendFileAsync(fd);
         }
 
         public async Task UpsertAsync(params SendData[] sends)

@@ -21,6 +21,8 @@ using Bit.Core.Models.Request;
 using Bit.Core.Test.AutoFixture;
 using System.Linq.Expressions;
 using Bit.Core.Models.View;
+using Bit.Core.Exceptions;
+using NSubstitute.ExceptionExtensions;
 
 namespace Bit.Core.Test.Services
 {
@@ -172,7 +174,6 @@ namespace Bit.Core.Test.Services
             send.Id = null;
             sutProvider.GetDependency<IUserService>().GetUserIdAsync().Returns(userId);
             sutProvider.GetDependency<IApiService>().PostSendAsync(Arg.Any<SendRequest>()).Returns(response);
-            sutProvider.GetDependency<IApiService>().PostSendFileAsync(Arg.Any<MultipartFormDataContent>()).Returns(response);
 
             var fileContentBytes = Encoding.UTF8.GetBytes("This is the file content");
 
@@ -206,7 +207,6 @@ namespace Bit.Core.Test.Services
             response.FileUploadType = FileUploadType.Azure;
             sutProvider.GetDependency<IUserService>().GetUserIdAsync().Returns(userId);
             sutProvider.GetDependency<IApiService>().PostFileTypeSendAsync(Arg.Any<SendRequest>()).Returns(response);
-            sutProvider.GetDependency<IApiService>().PostSendFileAsync(Arg.Any<MultipartFormDataContent>()).Returns(response.SendResponse);
 
             var fileContentBytes = Encoding.UTF8.GetBytes("This is the file content");
 
@@ -215,12 +215,29 @@ namespace Bit.Core.Test.Services
             switch (send.Type)
             {
                 case SendType.File:
-                    await sutProvider.GetDependency<IAzureStorageService>().Received(1).UploadFileToServerAsync(response.Url, fileContentBytes, Arg.Any<Func<Task<string>>>());
+                    await sutProvider.GetDependency<IFileUploadService>().Received(1).UploadSendFileAsync(response, send.File.FileName, fileContentBytes);
                     break;
                 case SendType.Text:
                 default:
                     throw new Exception("Untested send type");
             }
+        }
+
+        [Theory]
+        [InlineCustomAutoData(new[] { typeof(SutProviderCustomization), typeof(FileSendCustomization) })]
+        public async Task SaveWithServerAsync_NewFileSend_LegacyFallback_Success(SutProvider<SendService> sutProvider, string userId, Send send, SendResponse response)
+        {
+            send.Id = null;
+            sutProvider.GetDependency<IUserService>().GetUserIdAsync().Returns(userId);
+            var error = new ErrorResponse(null, System.Net.HttpStatusCode.NotFound);
+            sutProvider.GetDependency<IApiService>().PostFileTypeSendAsync(Arg.Any<SendRequest>()).Throws(new ApiException(error));
+            sutProvider.GetDependency<IApiService>().PostSendFileAsync(Arg.Any<MultipartFormDataContent>()).Returns(response);
+
+            var fileContentBytes = Encoding.UTF8.GetBytes("This is the file content");
+
+            await sutProvider.Sut.SaveWithServerAsync(send, fileContentBytes);
+
+            await sutProvider.GetDependency<IApiService>().Received(1).PostSendFileAsync(Arg.Any<MultipartFormDataContent>());
         }
 
         [Theory]

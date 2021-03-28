@@ -58,6 +58,7 @@ namespace Bit.Core.Abstractions
         Task<SendResponse> PostSendAsync(SendRequest request);
         Task<SendFileUploadDataResponse> PostFileTypeSendAsync(SendRequest request);
         Task PostSendFileAsync(string sendId, string fileId, MultipartFormDataContent data);
+        [Obsolete("Mar 25 2021: This method has been deprecated in favor of direct uploads. This method still exists for backward compatibility with old server versions.")]
         Task<SendResponse> PostSendFileAsync(MultipartFormDataContent data);
         Task<SendFileUploadDataResponse> RenewFileUploadUrlAsync(string sendId, string fileId);
         Task<SendResponse> PutSendAsync(string id, SendRequest request);

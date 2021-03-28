@@ -40,14 +40,14 @@ namespace Bit.Core.Utilities
             var appIdService = new AppIdService(storageService);
             var userService = new UserService(storageService, tokenService);
             var settingsService = new SettingsService(userService, storageService);
+            var fileUploadService = new FileUploadService(apiService);
             var cipherService = new CipherService(cryptoService, userService, settingsService, apiService,
                 storageService, i18nService, () => searchService, clearCipherCacheKey, allClearCipherCacheKeys);
             var folderService = new FolderService(cryptoService, userService, apiService, storageService,
                 i18nService, cipherService);
             var collectionService = new CollectionService(cryptoService, userService, storageService, i18nService);
-            var azureStorageService = new AzureStorageService();
-            var sendService = new SendService(cryptoService, userService, apiService, storageService, i18nService,
-                cryptoFunctionService, azureStorageService);
+            var sendService = new SendService(cryptoService, userService, apiService, fileUploadService, storageService,
+                i18nService, cryptoFunctionService);
             searchService = new SearchService(cipherService, sendService);
             var vaultTimeoutService = new VaultTimeoutService(cryptoService, userService, platformUtilsService, 
                 storageService, folderService, cipherService, collectionService, searchService, messagingService, tokenService,

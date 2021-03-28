@@ -229,6 +229,7 @@ namespace Bit.Core.Services
         public Task PostSendFileAsync(string sendId, string fileId, MultipartFormDataContent data) =>
             SendAsync<MultipartFormDataContent, object>(HttpMethod.Post, $"/sends/{sendId}/file/{fileId}", data, true, false);
 
+        [Obsolete("Mar 25 2021: This method has been deprecated in favor of direct uploads. This method still exists for backward compatibility with old server versions.")]
         public Task<SendResponse> PostSendFileAsync(MultipartFormDataContent data) =>
             SendAsync<MultipartFormDataContent, SendResponse>(HttpMethod.Post, "/sends/file", data, true, true);
 

@@ -12,7 +12,7 @@ using Bit.Core.Utilities;
 
 namespace Bit.Core.Services
 {
-    public class AzureStorageService : IAzureStorageService
+    public class AzureFileUploadService : IAzureFileUploadService
     {
         private const long MAX_SINGLE_BLOB_UPLOAD_SIZE = 256 * 1024 * 1024; // 256 MiB
         private const int MAX_BLOCKS_PER_BLOB = 50000;
@@ -20,7 +20,7 @@ namespace Bit.Core.Services
 
         private readonly HttpClient _httpClient = new HttpClient();
 
-        public AzureStorageService()
+        public AzureFileUploadService()
         {
             _httpClient.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue()
             {
@@ -28,7 +28,7 @@ namespace Bit.Core.Services
             };
         }
 
-        public async Task UploadFileToServerAsync(string uri, byte[] data, Func<Task<string>> renewalCallback)
+        public async Task Upload(string uri, byte[] data, Func<Task<string>> renewalCallback)
         {
             if (data.Length <= MAX_SINGLE_BLOB_UPLOAD_SIZE)
             {
