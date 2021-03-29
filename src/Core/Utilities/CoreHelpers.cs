@@ -80,7 +80,7 @@ namespace Bit.Core.Utilities
             return null;
         }
 
-        private static Uri GetUri(string uriString)
+        public static Uri GetUri(string uriString)
         {
             if (string.IsNullOrWhiteSpace(uriString))
             {
