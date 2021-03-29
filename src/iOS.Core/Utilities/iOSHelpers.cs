@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Net;
 using System.Runtime.InteropServices;
 using Bit.App.Utilities;
-using Foundation;
 using Microsoft.AppCenter.Crashes;
 using UIKit;
 using Xamarin.Forms;
@@ -55,33 +53,6 @@ namespace Bit.iOS.Core.Utilities
                 }
             }
             return uptime;
-        }
-        
-        public static Tuple<byte[], string> GetPickedDocument(NSUrl url)
-        {
-            Tuple<byte[], string> document = null;
-            url.StartAccessingSecurityScopedResource();
-            var doc = new UIDocument(url);
-            var fileName = doc.LocalizedName;
-            if (string.IsNullOrWhiteSpace(fileName))
-            {
-                var path = doc.FileUrl?.ToString();
-                if (path != null)
-                {
-                    path = WebUtility.UrlDecode(path);
-                    var split = path.LastIndexOf('/');
-                    fileName = path.Substring(split + 1);
-                }
-            }
-            var fileCoordinator = new NSFileCoordinator();
-            fileCoordinator.CoordinateRead(url, NSFileCoordinatorReadingOptions.WithoutChanges,
-                out NSError error, (u) =>
-                {
-                    var data = NSData.FromUrl(u).ToArray();
-                    document = new Tuple<byte[], string>(data, fileName ?? "unknown_file_name");
-                });
-            url.StopAccessingSecurityScopedResource();
-            return document;
         }
 
         public static nfloat? GetAccessibleFont<T>(double size)

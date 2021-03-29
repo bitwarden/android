@@ -541,11 +541,27 @@ namespace Bit.iOS.Core.Services
 
         public void PickedDocument(NSUrl url)
         {
-            var document = iOSHelpers.GetPickedDocument(url);
-            if (document != null)
+            url.StartAccessingSecurityScopedResource();
+            var doc = new UIDocument(url);
+            var fileName = doc.LocalizedName;
+            if (string.IsNullOrWhiteSpace(fileName))
             {
-                SelectFileResult(document.Item1, document.Item2);
+                var path = doc.FileUrl?.ToString();
+                if (path != null)
+                {
+                    path = WebUtility.UrlDecode(path);
+                    var split = path.LastIndexOf('/');
+                    fileName = path.Substring(split + 1);
+                }
             }
+            var fileCoordinator = new NSFileCoordinator();
+            fileCoordinator.CoordinateRead(url, NSFileCoordinatorReadingOptions.WithoutChanges,
+                out NSError error, (u) =>
+                {
+                    var data = NSData.FromUrl(u).ToArray();
+                    SelectFileResult(data, fileName ?? "unknown_file_name");
+                });
+            url.StopAccessingSecurityScopedResource();
         }
 
         public bool AutofillAccessibilityOverlayPermitted()

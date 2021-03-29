@@ -28,23 +28,6 @@
 			<string>com.8bit.bitwarden.url</string>
 		</dict>
 	</array>
-<!--    <key>CFBundleDocumentTypes</key>-->
-<!--    <array>-->
-<!--      <dict>-->
-<!--        <key>CFBundleTypeName</key>-->
-<!--        <string>File</string>-->
-<!--        <key>CFBundleTypeRole</key>-->
-<!--        <string>Viewer</string>-->
-<!--        <key>LSHandlerRank</key> -->
-<!--        <string>Alternate</string> -->
-<!--        <key>LSItemContentTypes</key> -->
-<!--        <array> -->
-<!--            <string>public.data</string>-->
-<!--            <string>public.content</string>-->
-<!--            <string>public.item</string>-->
-<!--        </array>-->
-<!--      </dict>-->
-<!--    </array>-->
 	<key>CFBundleLocalizations</key>
 	<array>
 		<string>en</string>
