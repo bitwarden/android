@@ -21,5 +21,6 @@ namespace Bit.Core.Models.Response
         public DateTime DeletionDate { get; set; }
         public string Password { get; set; }
         public bool Disabled { get; set; }
+        public bool? HideEmail { get; set; }
     }
 }

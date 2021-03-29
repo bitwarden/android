@@ -24,6 +24,7 @@ namespace Bit.Core.Models.Data
             DeletionDate = response.DeletionDate;
             Password = response.Password;
             Disabled = response.Disabled;
+            HideEmail = response.HideEmail.GetValueOrDefault();
 
             switch (Type)
             {
@@ -54,5 +55,6 @@ namespace Bit.Core.Models.Data
         public DateTime DeletionDate { get; set; }
         public string Password { get; set; }
         public bool Disabled { get; set; }
+        public bool HideEmail { get; set; }
     }
 }

@@ -9,5 +9,6 @@
         RequireSso = 4, // Requires users to authenticate with SSO
         PersonalOwnership = 5, // Disables personal vault ownership for adding/cloning items
         DisableSend = 6, // Disables the ability to create and edit Sends
+        SendOptions = 7, // Sets restrictions or defaults for Bitwarden Sends
     }
 }

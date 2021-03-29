@@ -42,6 +42,9 @@ namespace Bit.App.Pages
             nameof(IsText),
             nameof(IsFile),
         };
+        private bool _disableHideEmail;
+        private bool _sendOptionsPolicyInEffect;
+        private bool _disableHideEmailControl;
 
         public SendAddEditPageViewModel()
         {
@@ -91,6 +94,7 @@ namespace Bit.App.Pages
         public byte[] FileData { get; set; }
         public string NewPassword { get; set; }
         public bool ShareOnSave { get; set; }
+        public bool DisableHideEmailControl { get; set; }
         public List<KeyValuePair<string, SendType>> TypeOptions { get; }
         public List<KeyValuePair<string, string>> DeletionTypeOptions { get; }
         public List<KeyValuePair<string, string>> ExpirationTypeOptions { get; }
@@ -194,6 +198,16 @@ namespace Bit.App.Pages
                     nameof(ShowPasswordIcon)
                 });
         }
+        public bool DisableHideEmail
+        {
+            get => _disableHideEmail;
+            set => SetProperty(ref _disableHideEmail, value);
+        }
+        public bool SendOptionsPolicyInEffect
+        {
+            get => _sendOptionsPolicyInEffect;
+            set => SetProperty(ref _sendOptionsPolicyInEffect, value);
+        }
         public bool EditMode => !string.IsNullOrWhiteSpace(SendId);
         public bool IsText => Send?.Type == SendType.Text;
         public bool IsFile => Send?.Type == SendType.File;
@@ -206,6 +220,8 @@ namespace Bit.App.Pages
             PageTitle = EditMode ? AppResources.EditSend : AppResources.AddSend;
             _canAccessPremium = await _userService.CanAccessPremiumAsync();
             SendEnabled = ! await AppHelpers.IsSendDisabledByPolicyAsync();
+            DisableHideEmail = await AppHelpers.IsHideEmailDisabledByPolicyAsync();
+            SendOptionsPolicyInEffect = SendEnabled && DisableHideEmail;
         }
 
         public async Task<bool> LoadAsync()
@@ -242,6 +258,10 @@ namespace Bit.App.Pages
                 MaxAccessCount = Send.MaxAccessCount;
                 _isOverridingPickers = false;
             }
+
+            DisableHideEmailControl = !SendEnabled ||
+                (!EditMode && DisableHideEmail) ||
+                (EditMode && DisableHideEmail && !Send.HideEmail);
 
             return true;
         }
