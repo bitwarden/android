@@ -303,16 +303,26 @@ namespace Bit.Core.Services
 
         #region Attachments APIs
 
-        public Task<CipherResponse> PostCipherAttachmentAsync(string id, MultipartFormDataContent data)
+        [Obsolete("Mar 25 2021: This method has been deprecated in favor of direct uploads. This method still exists for backward compatibility with old server versions.")]
+        public Task<CipherResponse> PostCipherAttachmentLegacyAsync(string id, MultipartFormDataContent data)
         {
             return SendAsync<MultipartFormDataContent, CipherResponse>(HttpMethod.Post,
                 string.Concat("/ciphers/", id, "/attachment"), data, true, true);
         }
 
+        public Task<AttachmentUploadDataResponse> PostCipherAttachmentAsync(string id, AttachmentRequest request)
+        {
+            return SendAsync<AttachmentRequest, AttachmentUploadDataResponse>(HttpMethod.Post,
+                $"/ciphers/{id}/attachment/v2", request, true, true);
+        }
+
+        public Task<AttachmentResponse> GetAttachmentData(string cipherId, string attachmentId) =>
+            SendAsync<AttachmentResponse>(HttpMethod.Get, $"/ciphers/{cipherId}/attachment/{attachmentId}", true);
+
         public Task DeleteCipherAttachmentAsync(string id, string attachmentId)
         {
-            return SendAsync<object, object>(HttpMethod.Delete,
-                string.Concat("/ciphers/", id, "/attachment/", attachmentId), null, true, false);
+            return SendAsync(HttpMethod.Delete,
+                string.Concat("/ciphers/", id, "/attachment/", attachmentId), true);
         }
 
         public Task PostShareCipherAttachmentAsync(string id, string attachmentId, MultipartFormDataContent data,
@@ -322,6 +332,13 @@ namespace Bit.Core.Services
                 string.Concat("/ciphers/", id, "/attachment/", attachmentId, "/share?organizationId=", organizationId),
                 data, true, false);
         }
+
+        public Task<AttachmentUploadDataResponse> RenewAttachmentUploadUrlAsync(string cipherId, string attachmentId) =>
+            SendAsync<AttachmentUploadDataResponse>(HttpMethod.Get, $"/ciphers/{cipherId}/attachment/{attachmentId}", true);
+
+        public Task PostAttachmentFileAsync(string cipherId, string attachmentId, MultipartFormDataContent data) =>
+            SendAsync(HttpMethod.Post,
+                $"/ciphers/{cipherId}/attachment/{attachmentId}", data, true);
 
         #endregion
 
@@ -437,6 +454,12 @@ namespace Bit.Core.Services
             }
         }
 
+        public Task SendAsync(HttpMethod method, string path, bool authed) =>
+            SendAsync<object, object>(method, path, null, authed, false);
+        public Task SendAsync<TRequest>(HttpMethod method, string path, TRequest body, bool authed) =>
+            SendAsync<TRequest, object>(method, path, body, authed, false);
+        public Task<TResponse> SendAsync<TResponse>(HttpMethod method, string path, bool authed) =>
+            SendAsync<object, TResponse>(method, path, null, authed, true);
         public async Task<TResponse> SendAsync<TRequest, TResponse>(HttpMethod method, string path, TRequest body,
             bool authed, bool hasResponse)
         {
