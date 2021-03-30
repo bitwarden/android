@@ -19,6 +19,35 @@ namespace Bit.Core.Services {
         private readonly AzureFileUploadService _azureFileUploadService;
         private readonly ApiService _apiService;
 
+        public async Task UploadCipherAttachmentFileAsync(AttachmentUploadDataResponse uploadData,
+            string encryptedFileName, byte[] encryptedFileData)
+        {
+            try
+            {
+                switch (uploadData.FileUploadType)
+                {
+                    case FileUploadType.Direct:
+                        await _bitwardenFileUploadService.Upload(encryptedFileName, encryptedFileData,
+                            fd => _apiService.PostAttachmentFileAsync(uploadData.CipherResponse.Id, uploadData.AttachmentId, fd));
+                        break;
+                    case FileUploadType.Azure:
+                        Func<Task<string>> renewalCallback = async () =>
+                        {
+                            var response = await _apiService.RenewAttachmentUploadUrlAsync(uploadData.CipherResponse.Id, uploadData.AttachmentId);
+                            return response.Url;
+                        };
+                        await _azureFileUploadService.Upload(uploadData.Url, encryptedFileData, renewalCallback);
+                        break;
+                    default:
+                        throw new Exception($"Unkown file upload type: {uploadData.FileUploadType}");
+                }
+            } catch
+            {
+                await _apiService.DeleteCipherAttachmentAsync(uploadData.CipherResponse.Id, uploadData.AttachmentId);
+                throw;
+            }
+        }
+
         public async Task UploadSendFileAsync(SendFileUploadDataResponse uploadData, CipherString fileName, byte[] encryptedFileData)
         {
             try
@@ -41,10 +70,10 @@ namespace Bit.Core.Services {
                         throw new Exception("Unknown file upload type");
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 await _apiService.DeleteSendAsync(uploadData.SendResponse.Id);
-                throw e;
+                throw;
             }
         }
     }

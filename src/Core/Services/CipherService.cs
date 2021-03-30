@@ -30,6 +30,7 @@ namespace Bit.Core.Services
         private readonly IUserService _userService;
         private readonly ISettingsService _settingsService;
         private readonly IApiService _apiService;
+        private readonly IFileUploadService _fileUploadService;
         private readonly IStorageService _storageService;
         private readonly II18nService _i18nService;
         private readonly Func<ISearchService> _searchService;
@@ -47,6 +48,7 @@ namespace Bit.Core.Services
             IUserService userService,
             ISettingsService settingsService,
             IApiService apiService,
+            IFileUploadService fileUploadService,
             IStorageService storageService,
             II18nService i18nService,
             Func<ISearchService> searchService,
@@ -57,6 +59,7 @@ namespace Bit.Core.Services
             _userService = userService;
             _settingsService = settingsService;
             _apiService = apiService;
+            _fileUploadService = fileUploadService;
             _storageService = storageService;
             _i18nService = i18nService;
             _searchService = searchService;
@@ -553,19 +556,45 @@ namespace Bit.Core.Services
 
         public async Task<Cipher> SaveAttachmentRawWithServerAsync(Cipher cipher, string filename, byte[] data)
         {
-            var key = await _cryptoService.GetOrgKeyAsync(cipher.OrganizationId);
-            var encFileName = await _cryptoService.EncryptAsync(filename, key);
-            var dataEncKey = await _cryptoService.MakeEncKeyAsync(key);
-            var encData = await _cryptoService.EncryptToBytesAsync(data, dataEncKey.Item1);
-            var boundary = string.Concat("--BWMobileFormBoundary", DateTime.UtcNow.Ticks);
-            var fd = new MultipartFormDataContent(boundary);
-            fd.Add(new StringContent(dataEncKey.Item2.EncryptedString), "key");
-            fd.Add(new StreamContent(new MemoryStream(encData)), "data", encFileName.EncryptedString);
-            var response = await _apiService.PostCipherAttachmentAsync(cipher.Id, fd);
+            var orgKey = await _cryptoService.GetOrgKeyAsync(cipher.OrganizationId);
+            var encFileName = await _cryptoService.EncryptAsync(filename, orgKey);
+            var (attachmentKey, orgEncAttachmentKey) = await _cryptoService.MakeEncKeyAsync(orgKey);
+            var encFileData = await _cryptoService.EncryptToBytesAsync(data, attachmentKey);
+
+            CipherResponse response;
+            try
+            {
+                var request = new AttachmentRequest
+                {
+                    Key = orgEncAttachmentKey.EncryptedString,
+                    FileName = encFileName.EncryptedString,
+                    FileSize = encFileData.Length,
+                };
+
+                var uploadDataResponse = await _apiService.PostCipherAttachmentAsync(cipher.Id, request);
+                response = uploadDataResponse.CipherResponse;
+                await _fileUploadService.UploadCipherAttachmentFileAsync(uploadDataResponse, encFileName.EncryptedString, encFileData);
+            }
+            catch (ApiException e) when (e.Error.StatusCode == System.Net.HttpStatusCode.NotFound || e.Error.StatusCode == System.Net.HttpStatusCode.MethodNotAllowed)
+            {
+                response = await LegacyServerAttachmentFileUploadAsync(cipher.Id, encFileName, encFileData, orgEncAttachmentKey);
+            }
+
             var userId = await _userService.GetUserIdAsync();
             var cData = new CipherData(response, userId, cipher.CollectionIds);
             await UpsertAsync(cData);
             return new Cipher(cData);
+        }
+
+        [Obsolete("Mar 25 2021: This method has been deprecated in favor of direct uploads. This method still exists for backward compatibility with old server versions.")]
+        private async Task<CipherResponse> LegacyServerAttachmentFileUploadAsync(string cipherId,
+            CipherString encFileName, byte[] encFileData, CipherString key)
+        {
+            var boundary = string.Concat("--BWMobileFormBoundary", DateTime.UtcNow.Ticks);
+            var fd = new MultipartFormDataContent(boundary);
+            fd.Add(new StringContent(key.EncryptedString), "key");
+            fd.Add(new StreamContent(new MemoryStream(encFileData)), "data", encFileName.EncryptedString);
+            return await _apiService.PostCipherAttachmentLegacyAsync(cipherId, fd);
         }
 
         public async Task SaveCollectionsWithServerAsync(Cipher cipher)
@@ -706,11 +735,23 @@ namespace Bit.Core.Services
             }
         }
 
-        public async Task<byte[]> DownloadAndDecryptAttachmentAsync(AttachmentView attachment, string organizationId)
+        public async Task<byte[]> DownloadAndDecryptAttachmentAsync(string cipherId, AttachmentView attachment, string organizationId)
         {
+            string url;
             try
             {
-                var response = await _httpClient.GetAsync(new Uri(attachment.Url));
+                var attachmentDownloadResponse = await _apiService.GetAttachmentData(cipherId, attachment.Id);
+                url = attachmentDownloadResponse.Url;
+            }
+            // TODO: Delete this catch when all Servers are updated to respond to the above method
+            catch (ApiException e) when (e.Error.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                url = attachment.Url;
+            }
+
+            try
+            {
+                var response = await _httpClient.GetAsync(new Uri(url));
                 if (!response.IsSuccessStatusCode)
                 {
                     return null;
