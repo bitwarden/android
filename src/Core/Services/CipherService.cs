@@ -743,6 +743,7 @@ namespace Bit.Core.Services
                 var attachmentDownloadResponse = await _apiService.GetAttachmentData(cipherId, attachment.Id);
                 url = attachmentDownloadResponse.Url;
             }
+            // TODO: Delete this catch when all Servers are updated to respond to the above method
             catch (ApiException e) when (e.Error.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
                 url = attachment.Url;
