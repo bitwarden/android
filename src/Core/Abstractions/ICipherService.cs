@@ -35,7 +35,7 @@ namespace Bit.Core.Abstractions
         Task UpdateLastUsedDateAsync(string id);
         Task UpsertAsync(CipherData cipher);
         Task UpsertAsync(List<CipherData> cipher);
-        Task<byte[]> DownloadAndDecryptAttachmentAsync(AttachmentView attachment, string organizationId);
+        Task<byte[]> DownloadAndDecryptAttachmentAsync(string cipherId, AttachmentView attachment, string organizationId);
         Task SoftDeleteWithServerAsync(string id);
         Task RestoreWithServerAsync(string id);
     }

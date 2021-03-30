@@ -41,7 +41,7 @@ namespace Bit.Core.Utilities
             var userService = new UserService(storageService, tokenService);
             var settingsService = new SettingsService(userService, storageService);
             var fileUploadService = new FileUploadService(apiService);
-            var cipherService = new CipherService(cryptoService, userService, settingsService, apiService,
+            var cipherService = new CipherService(cryptoService, userService, settingsService, apiService, fileUploadService,
                 storageService, i18nService, () => searchService, clearCipherCacheKey, allClearCipherCacheKeys);
             var folderService = new FolderService(cryptoService, userService, apiService, storageService,
                 i18nService, cipherService);
