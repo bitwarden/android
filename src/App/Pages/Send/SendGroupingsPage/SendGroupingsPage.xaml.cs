@@ -19,10 +19,11 @@ namespace Bit.App.Pages
         private readonly SendGroupingsPageViewModel _vm;
         private readonly string _pageName;
 
+        private AppOptions _appOptions;
         private PreviousPageInfo _previousPage;
 
         public SendGroupingsPage(bool mainPage, SendType? type = null, string pageTitle = null,
-            PreviousPageInfo previousPage = null)
+            AppOptions appOptions = null, PreviousPageInfo previousPage = null)
         {
             _pageName = string.Concat(nameof(GroupingsPage), "_", DateTime.UtcNow.Ticks);
             InitializeComponent();
@@ -35,6 +36,7 @@ namespace Bit.App.Pages
             _vm.Page = this;
             _vm.MainPage = mainPage;
             _vm.Type = type;
+            _appOptions = appOptions;
             _previousPage = previousPage;
             if (pageTitle != null)
             {
@@ -109,8 +111,8 @@ namespace Bit.App.Pages
                     }
                 }
 
-                await ShowPreviousPageAsync();
                 AdjustToolbar();
+                await CheckAddRequest();
             }, _mainContent);
         }
 
@@ -122,6 +124,18 @@ namespace Bit.App.Pages
             _vm.DisableRefreshing();
         }
 
+        private async Task CheckAddRequest()
+        {
+            if (_appOptions?.CreateSend != null)
+            {
+                if (DoOnce())
+                {
+                    var page = new SendAddEditPage(_appOptions);
+                    await Navigation.PushModalAsync(new NavigationPage(page));
+                }
+            }
+        }
+        
         private async void RowSelected(object sender, SelectedItemChangedEventArgs e)
         {
             ((ListView)sender).SelectedItem = null;
@@ -172,28 +186,11 @@ namespace Bit.App.Pages
         {
             if (DoOnce())
             {
-                var page = new SendAddEditPage(null, _vm.Type);
+                var page = new SendAddEditPage(null, null, _vm.Type);
                 await Navigation.PushModalAsync(new NavigationPage(page));
             }
         }
 
-        private async Task ShowPreviousPageAsync()
-        {
-            if (_previousPage == null)
-            {
-                return;
-            }
-            if (_previousPage.Page == "view" && !string.IsNullOrWhiteSpace(_previousPage.SendId))
-            {
-                await Navigation.PushModalAsync(new NavigationPage(new ViewPage(_previousPage.SendId)));
-            }
-            else if (_previousPage.Page == "edit" && !string.IsNullOrWhiteSpace(_previousPage.SendId))
-            {
-                await Navigation.PushModalAsync(new NavigationPage(new AddEditPage(_previousPage.SendId)));
-            }
-            _previousPage = null;
-        }
-        
         private void AdjustToolbar()
         {
             _addItem.IsEnabled = _vm.SendEnabled;

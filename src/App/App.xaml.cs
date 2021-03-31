@@ -131,7 +131,8 @@ namespace Bit.App
                     await SetMainPageAsync();
                 }
                 else if (message.Command == "popAllAndGoToTabGenerator" ||
-                    message.Command == "popAllAndGoToTabMyVault")
+                    message.Command == "popAllAndGoToTabMyVault" ||
+                    message.Command == "popAllAndGoToTabSend")
                 {
                     Device.BeginInvokeOnMainThread(async () =>
                     {
@@ -146,10 +147,14 @@ namespace Bit.App
                                 Options.MyVaultTile = false;
                                 tabsPage.ResetToVaultPage();
                             }
-                            else
+                            else if (message.Command == "popAllAndGoToTabGenerator")
                             {
                                 Options.GeneratorTile = false;
                                 tabsPage.ResetToGeneratorPage();
+                            }
+                            else if (message.Command == "popAllAndGoToTabSend")
+                            {
+                                tabsPage.ResetToSendPage();
                             }
                         }
                     });
@@ -273,6 +278,10 @@ namespace Bit.App
                 else if (Options.Uri != null)
                 {
                     Current.MainPage = new NavigationPage(new AutofillCiphersPage(Options));
+                }
+                else if (Options.CreateSend != null)
+                {
+                    Current.MainPage = new NavigationPage(new SendAddEditPage(Options));
                 }
                 else
                 {

@@ -1,4 +1,5 @@
-﻿using Bit.Core.Enums;
+﻿using System;
+using Bit.Core.Enums;
 
 namespace Bit.App.Models
 {
@@ -19,6 +20,7 @@ namespace Bit.App.Models
         public string SaveCardExpYear { get; set; }
         public string SaveCardCode { get; set; }
         public bool IosExtension { get; set; }
+        public Tuple<SendType, string, byte[], string> CreateSend { get; set; }
 
         public void SetAllFrom(AppOptions o)
         {
@@ -41,6 +43,7 @@ namespace Bit.App.Models
             SaveCardExpYear = o.SaveCardExpYear;
             SaveCardCode = o.SaveCardCode;
             IosExtension = o.IosExtension;
+            CreateSend = o.CreateSend;
         }
     }
 }

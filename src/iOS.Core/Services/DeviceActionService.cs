@@ -437,6 +437,11 @@ namespace Bit.iOS.Core.Services
             return iOSHelpers.GetSystemUpTimeMilliseconds() ?? DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         }
 
+        public void CloseMainApp()
+        {
+            throw new NotImplementedException();
+        }
+
         private void ImagePicker_FinishedPickingMedia(object sender, UIImagePickerMediaPickedEventArgs e)
         {
             if (sender is UIImagePickerController picker)

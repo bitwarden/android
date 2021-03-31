@@ -30,6 +30,16 @@ namespace Bit.Droid
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation |
                                ConfigChanges.Keyboard | ConfigChanges.KeyboardHidden |
                                ConfigChanges.Navigation)]
+    [IntentFilter(
+        new[] { Intent.ActionSend },
+        Categories = new[] { Intent.CategoryDefault },
+        DataMimeTypes = new[]
+        {
+            @"application/*",
+            @"image/*",
+            @"video/*",
+            @"text/*"
+        })]
     [Register("com.x8bit.bitwarden.MainActivity")]
     public class MainActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
@@ -169,13 +179,21 @@ namespace Bit.Droid
                     _appOptions.GeneratorTile = true;
                 }
             }
-            if (intent.GetBooleanExtra("myVaultTile", false))
+            else if (intent.GetBooleanExtra("myVaultTile", false))
             {
                 _messagingService.Send("popAllAndGoToTabMyVault");
                 if (_appOptions != null)
                 {
                     _appOptions.MyVaultTile = true;
                 }
+            }
+            else if (intent.Action == Intent.ActionSend && intent.Type != null)
+            {
+                if (_appOptions != null)
+                {
+                    _appOptions.CreateSend = GetCreateSendRequest(intent);
+                }
+                _messagingService.Send("popAllAndGoToTabSend");
             }
             else
             {
@@ -298,7 +316,8 @@ namespace Bit.Droid
                 Uri = Intent.GetStringExtra("uri") ?? Intent.GetStringExtra("autofillFrameworkUri"),
                 MyVaultTile = Intent.GetBooleanExtra("myVaultTile", false),
                 GeneratorTile = Intent.GetBooleanExtra("generatorTile", false),
-                FromAutofillFramework = Intent.GetBooleanExtra("autofillFramework", false)
+                FromAutofillFramework = Intent.GetBooleanExtra("autofillFramework", false),
+                CreateSend = GetCreateSendRequest(Intent)
             };
             var fillType = Intent.GetIntExtra("autofillFrameworkFillType", 0);
             if (fillType > 0)
@@ -318,6 +337,37 @@ namespace Bit.Droid
                 options.SaveCardCode = Intent.GetStringExtra("autofillFrameworkCardCode");
             }
             return options;
+        }
+
+        private Tuple<SendType, string, byte[], string> GetCreateSendRequest(Intent intent)
+        {
+            if (intent.Action == Intent.ActionSend && intent.Type != null)
+            {
+                var type = intent.Type;
+                if (type.Contains("text/"))
+                {
+                    var subject = intent.GetStringExtra(Intent.ExtraSubject);
+                    var text = intent.GetStringExtra(Intent.ExtraText);
+                    return new Tuple<SendType, string, byte[], string>(SendType.Text, subject, null, text);
+                }
+                else
+                {
+                    var data = intent.ClipData?.GetItemAt(0);
+                    var uri = data?.Uri;
+                    var filename = AndroidHelpers.GetFileName(ApplicationContext, uri);
+                    try
+                    {
+                        using (var stream = ContentResolver.OpenInputStream(uri))
+                        using (var memoryStream = new MemoryStream())
+                        {
+                            stream.CopyTo(memoryStream);
+                            return new Tuple<SendType, string, byte[], string>(SendType.File, filename, memoryStream.ToArray(), null);
+                        }
+                    }
+                    catch (Java.IO.FileNotFoundException) { }
+                }
+            }
+            return null;
         }
 
         private void ParseYubiKey(string data)

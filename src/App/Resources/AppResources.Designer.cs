@@ -3496,5 +3496,11 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("SendOptionsPolicyInEffect", resourceCulture);
             }
         }
+        
+        public static string SendFilePremiumRequired {
+            get {
+                return ResourceManager.GetString("SendFilePremiumRequired", resourceCulture);
+            }
+        }
     }
 }

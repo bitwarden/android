@@ -44,5 +44,6 @@ namespace Bit.App.Abstractions
         void OpenAutofillSettings();
         bool UsingDarkTheme();
         long GetActiveTime();
+        void CloseMainApp();
     }
 }

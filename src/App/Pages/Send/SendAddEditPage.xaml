@@ -117,7 +117,7 @@
                         </StackLayout>
                         <StackLayout
                             StyleClass="box-row"
-                            IsVisible="{Binding EditMode, Converter={StaticResource inverseBool}}">
+                            IsVisible="{Binding ShowTypeButtons}">
                             <Label
                                 Text="{u:I18n Type}"
                                 StyleClass="box-label" />
@@ -222,6 +222,7 @@
                                     HorizontalTextAlignment="Center" />
                                 <Button
                                     Text="{u:I18n ChooseFile}"
+                                    IsVisible="{Binding IsAddFromShare, Converter={StaticResource inverseBool}}"
                                     IsEnabled="{Binding SendEnabled}"
                                     StyleClass="box-button-row"
                                     Clicked="ChooseFile_Clicked" />
@@ -234,7 +235,7 @@
                             </StackLayout>
                             <Label
                                 Text="{u:I18n TypeFileInfo}"
-                                IsVisible="{Binding EditMode, Converter={StaticResource inverseBool}}"
+                                IsVisible="{Binding ShowTypeButtons}"
                                 StyleClass="box-footer-label"
                                 Margin="0,5,0,0" />
                         </StackLayout>

@@ -95,6 +95,7 @@ namespace Bit.App.Pages
         public string NewPassword { get; set; }
         public bool ShareOnSave { get; set; }
         public bool DisableHideEmailControl { get; set; }
+        public bool IsAddFromShare { get; set; }
         public List<KeyValuePair<string, SendType>> TypeOptions { get; }
         public List<KeyValuePair<string, string>> DeletionTypeOptions { get; }
         public List<KeyValuePair<string, string>> ExpirationTypeOptions { get; }
@@ -208,6 +209,7 @@ namespace Bit.App.Pages
             get => _sendOptionsPolicyInEffect;
             set => SetProperty(ref _sendOptionsPolicyInEffect, value);
         }
+        public bool ShowTypeButtons => !EditMode && !IsAddFromShare;
         public bool EditMode => !string.IsNullOrWhiteSpace(SendId);
         public bool IsText => Send?.Type == SendType.Text;
         public bool IsFile => Send?.Type == SendType.File;
@@ -335,7 +337,7 @@ namespace Bit.App.Pages
             {
                 if (!_canAccessPremium)
                 {
-                    await _platformUtilsService.ShowDialogAsync(AppResources.PremiumRequired);
+                    await _platformUtilsService.ShowDialogAsync(AppResources.SendFilePremiumRequired);
                     return false;
                 }
                 if (!EditMode)
@@ -374,10 +376,6 @@ namespace Bit.App.Pages
                 var sendId = await _sendService.SaveWithServerAsync(send, encryptedFileData);
                 await _deviceActionService.HideLoadingAsync();
 
-                _platformUtilsService.ShowToast("success", null,
-                    EditMode ? AppResources.SendUpdated : AppResources.NewSendCreated);
-                await Page.Navigation.PopModalAsync();
-
                 if (Device.RuntimePlatform == Device.Android && IsFile)
                 {
                     // Workaround for https://github.com/xamarin/Xamarin.Forms/issues/5418
@@ -395,7 +393,21 @@ namespace Bit.App.Pages
                         await AppHelpers.ShareSendUrlAsync(savedSendView);
                     }
                 }
+                else
+                {
+                    _platformUtilsService.ShowToast("success", null,
+                    EditMode ? AppResources.SendUpdated : AppResources.NewSendCreated);
+                }
 
+                if (IsAddFromShare && Device.RuntimePlatform == Device.Android)
+                {
+                    _deviceActionService.CloseMainApp();
+                }
+                else
+                {
+                    await Page.Navigation.PopModalAsync();
+                }
+                
                 return true;
             }
             catch (ApiException e)
@@ -432,11 +444,29 @@ namespace Bit.App.Pages
 
         public async Task TypeChangedAsync(SendType type)
         {
+            if (!SendEnabled)
+            {
+                await _platformUtilsService.ShowDialogAsync(AppResources.SendDisabledWarning);
+                if (IsAddFromShare && Device.RuntimePlatform == Device.Android)
+                {
+                    _deviceActionService.CloseMainApp();
+                }
+                else
+                {
+                    await Page.Navigation.PopModalAsync();
+                }
+                return;
+            }
             if (Send != null)
             {
                 if (!EditMode && type == SendType.File && !_canAccessPremium)
                 {
-                    await _platformUtilsService.ShowDialogAsync(AppResources.PremiumRequired);
+                    await _platformUtilsService.ShowDialogAsync(AppResources.SendFilePremiumRequired);
+                    if (IsAddFromShare && Device.RuntimePlatform == Device.Android)
+                    {
+                        _deviceActionService.CloseMainApp();
+                        return;
+                    }
                     type = SendType.Text;
                 }
                 Send.Type = type;
