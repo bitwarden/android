@@ -55,6 +55,7 @@ namespace Bit.Droid.Accessibility
             new Browser("com.microsoft.emmx", "url_bar"),
             new Browser("com.mmbox.browser", "search_box"),
             new Browser("com.mmbox.xbrowser", "search_box"),
+            new Browser("com.mycompany.app.soulbrowser", "edit_text"),
             new Browser("com.naver.whale", "url_bar"),
             new Browser("com.opera.browser", "url_field"),
             new Browser("com.opera.browser.beta", "url_field"),

@@ -71,6 +71,7 @@ namespace Bit.Droid.Autofill
             "com.microsoft.emmx",
             "com.mmbox.browser",
             "com.mmbox.xbrowser",
+            "com.mycompany.app.soulbrowser",
             "com.naver.whale",
             "com.opera.browser",
             "com.opera.browser.beta",
