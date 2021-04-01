@@ -81,6 +81,9 @@
     android:name="com.mmbox.xbrowser"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
+    android:name="com.mycompany.app.soulbrowser"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
     android:name="com.naver.whale"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
