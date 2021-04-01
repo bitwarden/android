@@ -116,6 +116,7 @@ namespace Bit.Droid.Autofill
             "org.torproject.torbrowser_alpha",
             "org.ungoogled.chromium.extensions.stable",
             "org.ungoogled.chromium.stable",
+            "us.spotco.fennec_dos",
         };
 
         // The URLs are blacklisted from autofilling
