@@ -154,7 +154,6 @@
     <AndroidAsset Include="Assets\RobotoMono_Regular.ttf" />
     <AndroidAsset Include="Assets\MaterialIcons_Regular.ttf" />
     <None Include="8bit.keystore.enc" />
-    <None Include="ci-build-apks.ps1" />
     <GoogleServicesJson Include="google-services.json" />
     <GoogleServicesJson Include="google-services.json.enc" />
     <None Include="fdroid-keystore.jks.enc" />
