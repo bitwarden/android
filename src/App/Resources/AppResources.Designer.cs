@@ -3502,5 +3502,11 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("SendFilePremiumRequired", resourceCulture);
             }
         }
+        
+        public static string SendFileEmailVerificationRequired {
+            get {
+                return ResourceManager.GetString("SendFileEmailVerificationRequired", resourceCulture);
+            }
+        }
     }
 }
