@@ -21,8 +21,10 @@ namespace Bit.App.Pages
         private readonly IMessagingService _messagingService;
         private readonly IUserService _userService;
         private readonly ISendService _sendService;
+        private readonly ITokenService _tokenService;
         private bool _sendEnabled;
         private bool _canAccessPremium;
+        private bool _emailVerified;
         private SendView _send;
         private string _fileName;
         private bool _showOptions;
@@ -53,6 +55,7 @@ namespace Bit.App.Pages
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _userService = ServiceContainer.Resolve<IUserService>("userService");
             _sendService = ServiceContainer.Resolve<ISendService>("sendService");
+            _tokenService = ServiceContainer.Resolve<ITokenService>("tokenService");
             TogglePasswordCommand = new Command(TogglePassword);
 
             TypeOptions = new List<KeyValuePair<string, SendType>>
@@ -221,6 +224,7 @@ namespace Bit.App.Pages
         {
             PageTitle = EditMode ? AppResources.EditSend : AppResources.AddSend;
             _canAccessPremium = await _userService.CanAccessPremiumAsync();
+            _emailVerified = _tokenService.GetEmailVerified();
             SendEnabled = ! await AppHelpers.IsSendDisabledByPolicyAsync();
             DisableHideEmail = await AppHelpers.IsHideEmailDisabledByPolicyAsync();
             SendOptionsPolicyInEffect = SendEnabled && DisableHideEmail;
@@ -246,7 +250,7 @@ namespace Bit.App.Pages
                 }
                 else
                 {
-                    var defaultType = _canAccessPremium ? SendType.File : SendType.Text;
+                    var defaultType = _canAccessPremium && _emailVerified ? SendType.File : SendType.Text;
                     Send = new SendView
                     {
                         Type = Type.GetValueOrDefault(defaultType),
@@ -338,6 +342,11 @@ namespace Bit.App.Pages
                 if (!_canAccessPremium)
                 {
                     await _platformUtilsService.ShowDialogAsync(AppResources.SendFilePremiumRequired);
+                    return false;
+                }
+                if (!_emailVerified)
+                {
+                    await _platformUtilsService.ShowDialogAsync(AppResources.SendFileEmailVerificationRequired);
                     return false;
                 }
                 if (!EditMode)
@@ -459,9 +468,17 @@ namespace Bit.App.Pages
             }
             if (Send != null)
             {
-                if (!EditMode && type == SendType.File && !_canAccessPremium)
+                if (!EditMode && type == SendType.File && (!_canAccessPremium || !_emailVerified))
                 {
-                    await _platformUtilsService.ShowDialogAsync(AppResources.SendFilePremiumRequired);
+                    if (!_canAccessPremium)
+                    {
+                        await _platformUtilsService.ShowDialogAsync(AppResources.SendFilePremiumRequired);
+                    }
+                    else if (!_emailVerified)
+                    {
+                        await _platformUtilsService.ShowDialogAsync(AppResources.SendFileEmailVerificationRequired);
+                    }
+                    
                     if (IsAddFromShare && Device.RuntimePlatform == Device.Android)
                     {
                         _deviceActionService.CloseMainApp();
