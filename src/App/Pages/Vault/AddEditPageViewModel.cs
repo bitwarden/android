@@ -29,6 +29,7 @@ namespace Bit.App.Pages
         private CipherView _cipher;
         private bool _showNotesSeparator;
         private bool _showPassword;
+        private bool _showCardNumber;
         private bool _showCardCode;
         private int _typeSelectedIndex;
         private int _cardBrandSelectedIndex;
@@ -82,6 +83,7 @@ namespace Bit.App.Pages
             _policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
             GeneratePasswordCommand = new Command(GeneratePassword);
             TogglePasswordCommand = new Command(TogglePassword);
+            ToggleCardNumberCommand = new Command(ToggleCardNumber);
             ToggleCardCodeCommand = new Command(ToggleCardCode);
             CheckPasswordCommand = new Command(CheckPasswordAsync);
             UriOptionsCommand = new Command<LoginUriView>(UriOptions);
@@ -141,6 +143,7 @@ namespace Bit.App.Pages
 
         public Command GeneratePasswordCommand { get; set; }
         public Command TogglePasswordCommand { get; set; }
+        public Command ToggleCardNumberCommand { get; set; }
         public Command ToggleCardCodeCommand { get; set; }
         public Command CheckPasswordCommand { get; set; }
         public Command UriOptionsCommand { get; set; }
@@ -246,6 +249,15 @@ namespace Bit.App.Pages
                     nameof(ShowPasswordIcon)
                 });
         }
+        public bool ShowCardNumber
+        {
+            get => _showCardNumber;
+            set => SetProperty(ref _showCardNumber, value,
+                additionalPropertyNames: new string[]
+                {
+                    nameof(ShowCardNumberIcon)
+                });
+        }
         public bool ShowCardCode
         {
             get => _showCardCode;
@@ -277,6 +289,7 @@ namespace Bit.App.Pages
         public bool ShowUris => IsLogin && Cipher.Login.HasUris;
         public bool ShowAttachments => Cipher.HasAttachments;
         public string ShowPasswordIcon => ShowPassword ? "" : "";
+        public string ShowCardNumberIcon => ShowCardNumber ? "" : "";
         public string ShowCardCodeIcon => ShowCardCode ? "" : "";
         public int PasswordFieldColSpan => Cipher.ViewPassword ? 1 : 4;
         public int TotpColumnSpan => Cipher.ViewPassword ? 1 : 2;
@@ -688,6 +701,16 @@ namespace Bit.App.Pages
             if (EditMode && ShowPassword)
             {
                 var task = _eventService.CollectAsync(EventType.Cipher_ClientToggledPasswordVisible, CipherId);
+            }
+        }
+
+        public void ToggleCardNumber()
+        {
+            ShowCardNumber = !ShowCardNumber;
+            if (EditMode && ShowCardNumber)
+            {
+                var task = _eventService.CollectAsync(
+                    Core.Enums.EventType.Cipher_ClientToggledCardNumberVisible, CipherId);
             }
         }
 

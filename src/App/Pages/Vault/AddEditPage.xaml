@@ -219,15 +219,40 @@
                             Text="{Binding Cipher.Card.CardholderName}"
                             StyleClass="box-value" />
                     </StackLayout>
-                    <StackLayout StyleClass="box-row, box-row-input">
+                    <Grid StyleClass="box-row, box-row-input">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
                         <Label
                             Text="{u:I18n Number}"
-                            StyleClass="box-label" />
-                        <Entry
+                            StyleClass="box-label"
+                            Grid.Row="0"
+                            Grid.Column="0" />
+                        <controls:MonoEntry
                             x:Name="_cardNumberEntry"
                             Text="{Binding Cipher.Card.Number}"
-                            StyleClass="box-value" />
-                    </StackLayout>
+                            StyleClass="box-value"
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Keyboard="Numeric"
+                            IsPassword="{Binding ShowCardNumber, Converter={StaticResource inverseBool}}"
+                            IsSpellCheckEnabled="False"
+                            IsTextPredictionEnabled="False" />
+                        <controls:FaButton 
+                            StyleClass="box-row-button, box-row-button-platform"
+                            Text="{Binding ShowCardNumberIcon}"
+                            Command="{Binding ToggleCardNumberCommand}"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Grid.RowSpan="2"
+                            AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.Name="{u:I18n ToggleVisibility}" />
+                    </Grid>
                     <StackLayout StyleClass="box-row, box-row-input">
                         <Label
                             Text="{u:I18n Brand}"

@@ -27,6 +27,7 @@ namespace Bit.App.Pages
         private List<ViewPageFieldViewModel> _fields;
         private bool _canAccessPremium;
         private bool _showPassword;
+        private bool _showCardNumber;
         private bool _showCardCode;
         private string _totpCode;
         private string _totpCodeFormatted;
@@ -52,6 +53,7 @@ namespace Bit.App.Pages
             CopyFieldCommand = new Command<FieldView>(CopyField);
             LaunchUriCommand = new Command<LoginUriView>(LaunchUri);
             TogglePasswordCommand = new Command(TogglePassword);
+            ToggleCardNumberCommand = new Command(ToggleCardNumber);
             ToggleCardCodeCommand = new Command(ToggleCardCode);
             CheckPasswordCommand = new Command(CheckPasswordAsync);
             DownloadAttachmentCommand = new Command<AttachmentView>(DownloadAttachmentAsync);
@@ -64,6 +66,7 @@ namespace Bit.App.Pages
         public Command CopyFieldCommand { get; set; }
         public Command LaunchUriCommand { get; set; }
         public Command TogglePasswordCommand { get; set; }
+        public Command ToggleCardNumberCommand { get; set; }
         public Command ToggleCardCodeCommand { get; set; }
         public Command CheckPasswordCommand { get; set; }
         public Command DownloadAttachmentCommand { get; set; }
@@ -107,6 +110,15 @@ namespace Bit.App.Pages
                 additionalPropertyNames: new string[]
                 {
                     nameof(ShowPasswordIcon)
+                });
+        }
+        public bool ShowCardNumber
+        {
+            get => _showCardNumber;
+            set => SetProperty(ref _showCardNumber, value,
+                additionalPropertyNames: new string[]
+                {
+                    nameof(ShowCardNumberIcon)
                 });
         }
         public bool ShowCardCode
@@ -188,6 +200,7 @@ namespace Bit.App.Pages
         public bool ShowTotp => IsLogin && !string.IsNullOrWhiteSpace(Cipher.Login.Totp) &&
             !string.IsNullOrWhiteSpace(TotpCodeFormatted);
         public string ShowPasswordIcon => ShowPassword ? "" : "";
+        public string ShowCardNumberIcon => ShowCardNumber ? "" : "";
         public string ShowCardCodeIcon => ShowCardCode ? "" : "";
         public string TotpCodeFormatted
         {
@@ -265,6 +278,16 @@ namespace Bit.App.Pages
             if (ShowPassword)
             {
                 var task = _eventService.CollectAsync(Core.Enums.EventType.Cipher_ClientToggledPasswordVisible, CipherId);
+            }
+        }
+
+        public void ToggleCardNumber()
+        {
+            ShowCardNumber = !ShowCardNumber;
+            if (ShowCardNumber)
+            {
+                var task = _eventService.CollectAsync(
+                    Core.Enums.EventType.Cipher_ClientToggledCardNumberVisible, CipherId);
             }
         }
 
