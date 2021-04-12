@@ -334,7 +334,7 @@ namespace Bit.Core.Services
         }
 
         public Task<AttachmentUploadDataResponse> RenewAttachmentUploadUrlAsync(string cipherId, string attachmentId) =>
-            SendAsync<AttachmentUploadDataResponse>(HttpMethod.Get, $"/ciphers/{cipherId}/attachment/{attachmentId}", true);
+            SendAsync<AttachmentUploadDataResponse>(HttpMethod.Get, $"/ciphers/{cipherId}/attachment/{attachmentId}/renew", true);
 
         public Task PostAttachmentFileAsync(string cipherId, string attachmentId, MultipartFormDataContent data) =>
             SendAsync(HttpMethod.Post,
