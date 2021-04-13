@@ -24,6 +24,7 @@ namespace Bit.Core.Models.Domain
 
             Type = obj.Type;
             Favorite = obj.Favorite;
+            PasswordPrompt = obj.PasswordPrompt;
             OrganizationUseTotp = obj.OrganizationUseTotp;
             Edit = obj.Edit;
             ViewPassword = obj.ViewPassword;
@@ -62,6 +63,7 @@ namespace Bit.Core.Models.Domain
         public CipherString Notes { get; set; }
         public Enums.CipherType Type { get; set; }
         public bool Favorite { get; set; }
+        public bool PasswordPrompt { get; set; }
         public bool OrganizationUseTotp { get; set; }
         public bool Edit { get; set; }
         public bool ViewPassword { get; set; }
@@ -164,6 +166,7 @@ namespace Bit.Core.Models.Domain
                 Edit = Edit,
                 OrganizationUseTotp = OrganizationUseTotp,
                 Favorite = Favorite,
+                PasswordPrompt = PasswordPrompt,
                 RevisionDate = RevisionDate,
                 Type = Type,
                 CollectionIds = CollectionIds.ToList(),

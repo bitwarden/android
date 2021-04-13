@@ -22,6 +22,7 @@ namespace Bit.App.Pages
         private readonly ISearchService _searchService;
         private readonly IDeviceActionService _deviceActionService;
         private readonly IStateService _stateService;
+        private readonly IPasswordRepromptService _passwordRepromptService;
         private CancellationTokenSource _searchCancellationTokenSource;
 
         private bool _showNoData;
@@ -35,6 +36,7 @@ namespace Bit.App.Pages
             _searchService = ServiceContainer.Resolve<ISearchService>("searchService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            _passwordRepromptService = ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService");
 
             Ciphers = new ExtendedObservableCollection<CipherView>();
             CipherOptionsCommand = new Command<CipherView>(CipherOptionsAsync);
@@ -182,7 +184,7 @@ namespace Bit.App.Pages
                 }
                 if (_deviceActionService.SystemMajorVersion() < 21)
                 {
-                    await Utilities.AppHelpers.CipherListOptions(Page, cipher);
+                    await Utilities.AppHelpers.CipherListOptions(Page, cipher, _passwordRepromptService);
                 }
                 else
                 {
@@ -195,7 +197,7 @@ namespace Bit.App.Pages
         {
             if ((Page as BaseContentPage).DoOnce())
             {
-                await Utilities.AppHelpers.CipherListOptions(Page, cipher);
+                await Utilities.AppHelpers.CipherListOptions(Page, cipher, _passwordRepromptService);
             }
         }
     }

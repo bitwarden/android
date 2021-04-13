@@ -20,6 +20,7 @@ namespace Bit.Core.Models.Data
             ViewPassword = response.ViewPassword;
             OrganizationUseTotp = response.OrganizationUseTotp;
             Favorite = response.Favorite;
+            PasswordPrompt = response.PasswordPrompt;
             RevisionDate = response.RevisionDate;
             Type = response.Type;
             Name = response.Name;
@@ -71,6 +72,7 @@ namespace Bit.Core.Models.Data
         public bool ViewPassword { get; set; } = true; // Fallback for old server versions
         public bool OrganizationUseTotp { get; set; }
         public bool Favorite { get; set; }
+        public bool PasswordPrompt { get; set; }
         public DateTime RevisionDate { get; set; }
         public Enums.CipherType Type { get; set; }
         public string Name { get; set; }

@@ -23,6 +23,7 @@ namespace Bit.App.Pages
         private readonly IAuditService _auditService;
         private readonly IMessagingService _messagingService;
         private readonly IEventService _eventService;
+        private readonly IPasswordRepromptService _passwordRepromptService;
         private CipherView _cipher;
         private List<ViewPageFieldViewModel> _fields;
         private bool _canAccessPremium;
@@ -37,6 +38,7 @@ namespace Bit.App.Pages
         private string _previousCipherId;
         private byte[] _attachmentData;
         private string _attachmentFilename;
+        private bool _passwordReprompted;
 
         public ViewPageViewModel()
         {
@@ -48,6 +50,7 @@ namespace Bit.App.Pages
             _auditService = ServiceContainer.Resolve<IAuditService>("auditService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _eventService = ServiceContainer.Resolve<IEventService>("eventService");
+            _passwordRepromptService = ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService");
             CopyCommand = new Command<string>((id) => CopyAsync(id, null));
             CopyUriCommand = new Command<LoginUriView>(CopyUri);
             CopyFieldCommand = new Command<FieldView>(CopyField);
@@ -239,7 +242,7 @@ namespace Bit.App.Pages
             }
             Cipher = await cipher.DecryptAsync();
             CanAccessPremium = await _userService.CanAccessPremiumAsync();
-            Fields = Cipher.Fields?.Select(f => new ViewPageFieldViewModel(Cipher, f)).ToList();
+            Fields = Cipher.Fields?.Select(f => new ViewPageFieldViewModel(this, Cipher, f)).ToList();
 
             if (Cipher.Type == Core.Enums.CipherType.Login && !string.IsNullOrWhiteSpace(Cipher.Login.Totp) &&
                 (Cipher.OrganizationUseTotp || CanAccessPremium))
@@ -272,8 +275,13 @@ namespace Bit.App.Pages
             _totpInterval = null;
         }
 
-        public void TogglePassword()
+        public async void TogglePassword()
         {
+            if (! await PromptPasswordAsync())
+            {
+                return;
+            }
+
             ShowPassword = !ShowPassword;
             if (ShowPassword)
             {
@@ -281,8 +289,12 @@ namespace Bit.App.Pages
             }
         }
 
-        public void ToggleCardNumber()
+        public async void ToggleCardNumber()
         {
+            if (!await PromptPasswordAsync())
+            {
+                return;
+            }
             ShowCardNumber = !ShowCardNumber;
             if (ShowCardNumber)
             {
@@ -291,8 +303,12 @@ namespace Bit.App.Pages
             }
         }
 
-        public void ToggleCardCode()
+        public async void ToggleCardCode()
         {
+            if (!await PromptPasswordAsync())
+            {
+                return;
+            }
             ShowCardCode = !ShowCardCode;
             if (ShowCardCode)
             {
@@ -587,6 +603,11 @@ namespace Bit.App.Pages
         
         private async void CopyAsync(string id, string text = null)
         {
+            if (_passwordRepromptService.ProtectedFields.Contains(id) && !await PromptPasswordAsync())
+            {
+                return;
+            }
+
             string name = null;
             if (id == "LoginUsername")
             {
@@ -661,16 +682,28 @@ namespace Bit.App.Pages
                 _platformUtilsService.LaunchUri(uri.LaunchUri);
             }
         }
+
+        internal async Task<bool> PromptPasswordAsync()
+        {
+            if (!Cipher.PasswordPrompt || _passwordReprompted)
+            {
+                return true;
+            }
+
+            return _passwordReprompted = await _passwordRepromptService.ShowPasswordPrompt();
+        }
     }
 
     public class ViewPageFieldViewModel : ExtendedViewModel
     {
+        private ViewPageViewModel _vm;
         private FieldView _field;
         private CipherView _cipher;
         private bool _showHiddenValue;
 
-        public ViewPageFieldViewModel(CipherView cipher, FieldView field)
+        public ViewPageFieldViewModel(ViewPageViewModel vm, CipherView cipher, FieldView field)
         {
+            _vm = vm;
             _cipher = cipher;
             Field = field;
             ToggleHiddenValueCommand = new Command(ToggleHiddenValue);
@@ -711,8 +744,12 @@ namespace Bit.App.Pages
         public bool ShowCopyButton => _field.Type != Core.Enums.FieldType.Boolean &&
             !string.IsNullOrWhiteSpace(_field.Value) && !(IsHiddenType && !_cipher.ViewPassword);
 
-        public void ToggleHiddenValue()
+        public async void ToggleHiddenValue()
         {
+            if (!await _vm.PromptPasswordAsync())
+            {
+                return;
+            }
             ShowHiddenValue = !ShowHiddenValue;
             if (ShowHiddenValue)
             {

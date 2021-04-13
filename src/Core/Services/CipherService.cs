@@ -177,6 +177,7 @@ namespace Bit.Core.Services
                 Id = model.Id,
                 FolderId = model.FolderId,
                 Favorite = model.Favorite,
+                PasswordPrompt = model.PasswordPrompt,
                 OrganizationId = model.OrganizationId,
                 Type = model.Type,
                 CollectionIds = model.CollectionIds,

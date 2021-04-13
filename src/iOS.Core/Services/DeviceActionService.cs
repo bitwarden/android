@@ -201,7 +201,7 @@ namespace Bit.iOS.Core.Services
 
         public Task<string> DisplayPromptAync(string title = null, string description = null,
             string text = null, string okButtonText = null, string cancelButtonText = null,
-            bool numericKeyboard = false, bool autofocus = true)
+            bool numericKeyboard = false, bool autofocus = true, bool password = false)
         {
             var result = new TaskCompletionSource<string>();
             var alert = UIAlertController.Create(title ?? string.Empty, description, UIAlertControllerStyle.Alert);
@@ -223,6 +223,9 @@ namespace Bit.iOS.Core.Services
                 if (numericKeyboard)
                 {
                     input.KeyboardType = UIKeyboardType.NumberPad;
+                }
+                if (password) {
+                    input.InputType = InputTypes.TextVariationPassword | InputTypes.ClassText;
                 }
                 if (!ThemeHelpers.LightTheme)
                 {

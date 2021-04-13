@@ -23,14 +23,13 @@ namespace Bit.Core.Utilities
             var platformUtilsService = Resolve<IPlatformUtilsService>("platformUtilsService");
             var storageService = Resolve<IStorageService>("storageService");
             var secureStorageService = Resolve<IStorageService>("secureStorageService");
-            var cryptoPrimitiveService = Resolve<ICryptoPrimitiveService>("cryptoPrimitiveService");
             var i18nService = Resolve<II18nService>("i18nService");
             var messagingService = Resolve<IMessagingService>("messagingService");
+            var cryptoFunctionService = Resolve<ICryptoFunctionService>("cryptoFunctionService");
+            var cryptoService = Resolve<ICryptoService>("cryptoService");
             SearchService searchService = null;
 
             var stateService = new StateService();
-            var cryptoFunctionService = new PclCryptoFunctionService(cryptoPrimitiveService);
-            var cryptoService = new CryptoService(storageService, secureStorageService, cryptoFunctionService);
             var tokenService = new TokenService(storageService);
             var apiService = new ApiService(tokenService, platformUtilsService, (bool expired) =>
             {
@@ -75,8 +74,6 @@ namespace Bit.Core.Utilities
             var eventService = new EventService(storageService, apiService, userService, cipherService);
 
             Register<IStateService>("stateService", stateService);
-            Register<ICryptoFunctionService>("cryptoFunctionService", cryptoFunctionService);
-            Register<ICryptoService>("cryptoService", cryptoService);
             Register<ITokenService>("tokenService", tokenService);
             Register<IApiService>("apiService", apiService);
             Register<IAppIdService>("appIdService", appIdService);

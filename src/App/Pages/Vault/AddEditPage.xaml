@@ -555,6 +555,16 @@
                         StyleClass="box-value"
                         HorizontalOptions="End" />
                 </StackLayout>
+                <StackLayout StyleClass="box-row, box-row-switch">
+                    <Label
+                        Text="{u:I18n PasswordPrompt}"
+                        StyleClass="box-label-regular"
+                        HorizontalOptions="StartAndExpand" />
+                    <Switch
+                        IsToggled="{Binding Cipher.PasswordPrompt}"
+                        StyleClass="box-value"
+                        HorizontalOptions="End" />
+                </StackLayout>
                 <BoxView StyleClass="box-row-separator" />
             </StackLayout>
             <StackLayout StyleClass="box">

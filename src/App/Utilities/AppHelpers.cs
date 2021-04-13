@@ -19,7 +19,7 @@ namespace Bit.App.Utilities
 {
     public static class AppHelpers
     {
-        public static async Task<string> CipherListOptions(ContentPage page, CipherView cipher)
+        public static async Task<string> CipherListOptions(ContentPage page, CipherView cipher, IPasswordRepromptService passwordRepromptService)
         {
             var platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             var eventService = ServiceContainer.Resolve<IEventService>("eventService");
@@ -92,20 +92,26 @@ namespace Bit.App.Utilities
             }
             else if (selection == AppResources.CopyPassword)
             {
-                await platformUtilsService.CopyToClipboardAsync(cipher.Login.Password);
-                platformUtilsService.ShowToast("info", null,
-                    string.Format(AppResources.ValueHasBeenCopied, AppResources.Password));
-                var task = eventService.CollectAsync(Core.Enums.EventType.Cipher_ClientCopiedPassword, cipher.Id);
+                if (cipher.PasswordPrompt && await passwordRepromptService.ShowPasswordPrompt())
+                {
+                    await platformUtilsService.CopyToClipboardAsync(cipher.Login.Password);
+                    platformUtilsService.ShowToast("info", null,
+                        string.Format(AppResources.ValueHasBeenCopied, AppResources.Password));
+                    var task = eventService.CollectAsync(Core.Enums.EventType.Cipher_ClientCopiedPassword, cipher.Id);
+                }
             }
             else if (selection == AppResources.CopyTotp)
             {
-                var totpService = ServiceContainer.Resolve<ITotpService>("totpService");
-                var totp = await totpService.GetCodeAsync(cipher.Login.Totp);
-                if (!string.IsNullOrWhiteSpace(totp))
+                if (cipher.PasswordPrompt && await passwordRepromptService.ShowPasswordPrompt())
                 {
-                    await platformUtilsService.CopyToClipboardAsync(totp);
-                    platformUtilsService.ShowToast("info", null,
-                        string.Format(AppResources.ValueHasBeenCopied, AppResources.VerificationCodeTotp));
+                    var totpService = ServiceContainer.Resolve<ITotpService>("totpService");
+                    var totp = await totpService.GetCodeAsync(cipher.Login.Totp);
+                    if (!string.IsNullOrWhiteSpace(totp))
+                    {
+                        await platformUtilsService.CopyToClipboardAsync(totp);
+                        platformUtilsService.ShowToast("info", null,
+                            string.Format(AppResources.ValueHasBeenCopied, AppResources.VerificationCodeTotp));
+                    }
                 }
             }
             else if (selection == AppResources.Launch)
@@ -114,16 +120,22 @@ namespace Bit.App.Utilities
             }
             else if (selection == AppResources.CopyNumber)
             {
-                await platformUtilsService.CopyToClipboardAsync(cipher.Card.Number);
-                platformUtilsService.ShowToast("info", null,
-                    string.Format(AppResources.ValueHasBeenCopied, AppResources.Number));
+                if (cipher.PasswordPrompt && await passwordRepromptService.ShowPasswordPrompt())
+                {
+                    await platformUtilsService.CopyToClipboardAsync(cipher.Card.Number);
+                    platformUtilsService.ShowToast("info", null,
+                        string.Format(AppResources.ValueHasBeenCopied, AppResources.Number));
+                }
             }
             else if (selection == AppResources.CopySecurityCode)
             {
-                await platformUtilsService.CopyToClipboardAsync(cipher.Card.Code);
-                platformUtilsService.ShowToast("info", null,
-                    string.Format(AppResources.ValueHasBeenCopied, AppResources.SecurityCode));
-                var task = eventService.CollectAsync(Core.Enums.EventType.Cipher_ClientCopiedCardCode, cipher.Id);
+                if (cipher.PasswordPrompt && await passwordRepromptService.ShowPasswordPrompt())
+                {
+                    await platformUtilsService.CopyToClipboardAsync(cipher.Card.Code);
+                    platformUtilsService.ShowToast("info", null,
+                        string.Format(AppResources.ValueHasBeenCopied, AppResources.SecurityCode));
+                    var task = eventService.CollectAsync(Core.Enums.EventType.Cipher_ClientCopiedCardCode, cipher.Id);
+                }
             }
             else if (selection == AppResources.CopyNotes)
             {

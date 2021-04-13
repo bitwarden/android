@@ -18,6 +18,7 @@ namespace Bit.Core.Models.Response
         public IdentityApi Identity { get; set; }
         public SecureNoteApi SecureNote { get; set; }
         public bool Favorite { get; set; }
+        public bool PasswordPrompt { get; set; }
         public bool Edit { get; set; }
         public bool ViewPassword { get; set; } = true; // Fallback for old server versions
         public bool OrganizationUseTotp { get; set; }

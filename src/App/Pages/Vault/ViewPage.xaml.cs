@@ -128,6 +128,10 @@ namespace Bit.App.Pages
                 }
                 else
                 {
+                    if (!await _vm.PromptPasswordAsync())
+                    {
+                        return;
+                    }
                     await Navigation.PushModalAsync(new NavigationPage(new AddEditPage(_vm.CipherId)));
                 }
             }

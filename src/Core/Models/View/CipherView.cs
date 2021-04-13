@@ -16,6 +16,7 @@ namespace Bit.Core.Models.View
             OrganizationId = c.OrganizationId;
             FolderId = c.FolderId;
             Favorite = c.Favorite;
+            PasswordPrompt = c.PasswordPrompt;
             OrganizationUseTotp = c.OrganizationUseTotp;
             Edit = c.Edit;
             ViewPassword = c.ViewPassword;
@@ -33,6 +34,7 @@ namespace Bit.Core.Models.View
         public string Notes { get; set; }
         public CipherType Type { get; set; }
         public bool Favorite { get; set; }
+        public bool PasswordPrompt { get; set; }
         public bool OrganizationUseTotp { get; set; }
         public bool Edit { get; set; }
         public bool ViewPassword { get; set; } = true;
