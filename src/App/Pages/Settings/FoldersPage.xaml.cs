@@ -1,6 +1,7 @@
 ﻿using Bit.Core.Models.View;
 using System;
 using System.Linq;
+using Bit.App.Controls;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -35,7 +36,7 @@ namespace Bit.App.Pages
 
         private async void RowSelected(object sender, SelectionChangedEventArgs e)
         {
-            ((Xamarin.Forms.CollectionView)sender).SelectedItem = null;
+            ((ExtendedCollectionView)sender).SelectedItem = null;
             if (!DoOnce())
             {
                 return;

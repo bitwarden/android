@@ -60,7 +60,7 @@
                VerticalOptions="CenterAndExpand"
                HorizontalOptions="CenterAndExpand"
                HorizontalTextAlignment="Center" />
-        <CollectionView x:Name="_collectionView"
+        <controls:ExtendedCollectionView
                 IsVisible="{Binding ShowList}"
                 ItemsSource="{Binding Ciphers}"
                 VerticalOptions="FillAndExpand"
@@ -76,7 +76,7 @@
                         />
                 </DataTemplate>
             </CollectionView.ItemTemplate>
-        </CollectionView>
+        </controls:ExtendedCollectionView>
     </StackLayout>
 
 </pages:BaseContentPage>

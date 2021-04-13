@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <pages:BaseContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Bit.App.Pages.GroupingsPage"
-             xmlns:pages="clr-namespace:Bit.App.Pages"
-             xmlns:u="clr-namespace:Bit.App.Utilities"
-             xmlns:effects="clr-namespace:Bit.App.Effects"
-             xmlns:controls="clr-namespace:Bit.App.Controls"
-             x:DataType="pages:GroupingsPageViewModel"
-             Title="{Binding PageTitle}"
-             x:Name="_page">
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Bit.App.Pages.GroupingsPage"
+    xmlns:pages="clr-namespace:Bit.App.Pages"
+    xmlns:u="clr-namespace:Bit.App.Utilities"
+    xmlns:effects="clr-namespace:Bit.App.Effects"
+    xmlns:controls="clr-namespace:Bit.App.Controls"
+    x:DataType="pages:GroupingsPageViewModel"
+    Title="{Binding PageTitle}"
+    x:Name="_page">
 
     <ContentPage.BindingContext>
         <pages:GroupingsPageViewModel />
@@ -92,7 +92,6 @@
                     IsRefreshing="{Binding Refreshing}"
                     Command="{Binding RefreshCommand}">
                     <controls:ExtendedCollectionView
-                        IsVisible="{Binding ShowList}"
                         ItemsSource="{Binding GroupedItems}"
                         VerticalOptions="FillAndExpand"
                         ItemTemplate="{StaticResource listItemDataTemplateSelector}"

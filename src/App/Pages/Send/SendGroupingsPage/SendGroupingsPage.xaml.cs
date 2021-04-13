@@ -20,14 +20,13 @@ namespace Bit.App.Pages
         private readonly string _pageName;
 
         private AppOptions _appOptions;
-        private PreviousPageInfo _previousPage;
 
         public SendGroupingsPage(bool mainPage, SendType? type = null, string pageTitle = null,
-            AppOptions appOptions = null, PreviousPageInfo previousPage = null)
+            AppOptions appOptions = null)
         {
-            _pageName = string.Concat(nameof(GroupingsPage), "_", DateTime.UtcNow.Ticks);
+            _pageName = string.Concat(nameof(SendGroupingsPage), "_", DateTime.UtcNow.Ticks);
             InitializeComponent();
-            ListView = _listView;
+            SetActivityIndicator(_mainContent);
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
             _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
@@ -37,7 +36,6 @@ namespace Bit.App.Pages
             _vm.MainPage = mainPage;
             _vm.Type = type;
             _appOptions = appOptions;
-            _previousPage = previousPage;
             if (pageTitle != null)
             {
                 _vm.PageTitle = pageTitle;
@@ -46,7 +44,10 @@ namespace Bit.App.Pages
             if (Device.RuntimePlatform == Device.iOS)
             {
                 _absLayout.Children.Remove(_fab);
-                ToolbarItems.Add(_aboutIconItem);
+                if (type == null)
+                {
+                    ToolbarItems.Add(_aboutIconItem);
+                }
                 ToolbarItems.Add(_addItem);
             }
             else
@@ -56,8 +57,6 @@ namespace Bit.App.Pages
                 ToolbarItems.Add(_aboutTextItem);
             }
         }
-
-        public ExtendedListView ListView { get; set; }
 
         protected override async void OnAppearing()
         {
@@ -136,14 +135,14 @@ namespace Bit.App.Pages
             }
         }
         
-        private async void RowSelected(object sender, SelectedItemChangedEventArgs e)
+        private async void RowSelected(object sender, SelectionChangedEventArgs e)
         {
-            ((ListView)sender).SelectedItem = null;
+            ((ExtendedCollectionView)sender).SelectedItem = null;
             if (!DoOnce())
             {
                 return;
             }
-            if (!(e.SelectedItem is SendGroupingsPageListItem item))
+            if (!(e.CurrentSelection?.FirstOrDefault() is SendGroupingsPageListItem item))
             {
                 return;
             }

@@ -1,5 +1,4 @@
 ﻿using Bit.App.Abstractions;
-using Bit.App.Controls;
 using Bit.App.Models;
 using Bit.App.Resources;
 using Bit.Core;
@@ -9,6 +8,7 @@ using Bit.Core.Utilities;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Bit.App.Controls;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -196,7 +196,7 @@ namespace Bit.App.Pages
 
         private async void RowSelected(object sender, SelectionChangedEventArgs e)
         {
-            ((CollectionView)sender).SelectedItem = null;
+            ((ExtendedCollectionView)sender).SelectedItem = null;
             if (!DoOnce())
             {
                 return;

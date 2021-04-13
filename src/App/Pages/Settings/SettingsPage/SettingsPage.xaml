@@ -42,7 +42,7 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <CollectionView
+    <controls:ExtendedCollectionView
         ItemsSource="{Binding GroupedItems}"
         VerticalOptions="FillAndExpand"
         ItemTemplate="{StaticResource listItemDataTemplateSelector}"
@@ -68,6 +68,6 @@
                 </StackLayout>
             </DataTemplate>
         </CollectionView.GroupHeaderTemplate>
-    </CollectionView>
+    </controls:ExtendedCollectionView>
 
 </pages:BaseContentPage>

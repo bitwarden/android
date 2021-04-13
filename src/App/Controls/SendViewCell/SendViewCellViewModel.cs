@@ -8,6 +8,12 @@ namespace Bit.App.Controls
         private SendView _send;
         private bool _showOptions;
 
+        public SendViewCellViewModel(SendView sendView, bool showOptions)
+        {
+            Send = sendView;
+            ShowOptions = showOptions;
+        }
+
         public SendView Send
         {
             get => _send;

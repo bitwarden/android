@@ -53,7 +53,11 @@ namespace Bit.App.Controls
 
         private void MoreButton_Clicked(object sender, EventArgs e)
         {
-            ButtonCommand?.Execute(Cipher);
+            var cipher = ((sender as MiButton)?.BindingContext as CipherViewCellViewModel)?.Cipher;
+            if (cipher != null)
+            {
+                ButtonCommand?.Execute(cipher);
+            }
         }
     }
 }
