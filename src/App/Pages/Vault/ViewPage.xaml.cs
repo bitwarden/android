@@ -146,6 +146,10 @@ namespace Bit.App.Pages
         {
             if (DoOnce())
             {
+                if (!await _vm.PromptPasswordAsync())
+                {
+                    return;
+                }
                 var page = new AttachmentsPage(_vm.CipherId);
                 await Navigation.PushModalAsync(new NavigationPage(page));
             }
@@ -155,6 +159,10 @@ namespace Bit.App.Pages
         {
             if (DoOnce())
             {
+                if (!await _vm.PromptPasswordAsync())
+                {
+                    return;
+                }
                 var page = new SharePage(_vm.CipherId);
                 await Navigation.PushModalAsync(new NavigationPage(page));
             }
@@ -164,6 +172,10 @@ namespace Bit.App.Pages
         {
             if (DoOnce())
             {
+                if (!await _vm.PromptPasswordAsync())
+                {
+                    return;
+                }
                 if (await _vm.DeleteAsync())
                 {
                     await Navigation.PopModalAsync();
@@ -175,6 +187,10 @@ namespace Bit.App.Pages
         {
             if (DoOnce())
             {
+                if (!await _vm.PromptPasswordAsync())
+                {
+                    return;
+                }
                 var page = new CollectionsPage(_vm.CipherId);
                 await Navigation.PushModalAsync(new NavigationPage(page));
             }
@@ -184,6 +200,10 @@ namespace Bit.App.Pages
         {
             if (DoOnce())
             {
+                if (!await _vm.PromptPasswordAsync())
+                {
+                    return;
+                }
                 var page = new AddEditPage(_vm.CipherId, cloneMode: true, viewPage: this);
                 await Navigation.PushModalAsync(new NavigationPage(page));
             }

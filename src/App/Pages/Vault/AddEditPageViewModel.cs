@@ -294,6 +294,7 @@ namespace Bit.App.Pages
         public int PasswordFieldColSpan => Cipher.ViewPassword ? 1 : 4;
         public int TotpColumnSpan => Cipher.ViewPassword ? 1 : 2;
         public bool AllowPersonal { get; set; }
+        public bool PasswordPrompt => Cipher.Reprompt != CipherRepromptType.None;
 
         public void Init()
         {

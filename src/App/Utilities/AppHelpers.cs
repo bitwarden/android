@@ -92,7 +92,7 @@ namespace Bit.App.Utilities
             }
             else if (selection == AppResources.CopyPassword)
             {
-                if (cipher.PasswordPrompt && await passwordRepromptService.ShowPasswordPrompt())
+                if (cipher.Reprompt == CipherRepromptType.None || await passwordRepromptService.ShowPasswordPrompt())
                 {
                     await platformUtilsService.CopyToClipboardAsync(cipher.Login.Password);
                     platformUtilsService.ShowToast("info", null,
@@ -102,7 +102,7 @@ namespace Bit.App.Utilities
             }
             else if (selection == AppResources.CopyTotp)
             {
-                if (cipher.PasswordPrompt && await passwordRepromptService.ShowPasswordPrompt())
+                if (cipher.Reprompt == CipherRepromptType.None || await passwordRepromptService.ShowPasswordPrompt())
                 {
                     var totpService = ServiceContainer.Resolve<ITotpService>("totpService");
                     var totp = await totpService.GetCodeAsync(cipher.Login.Totp);
@@ -120,7 +120,7 @@ namespace Bit.App.Utilities
             }
             else if (selection == AppResources.CopyNumber)
             {
-                if (cipher.PasswordPrompt && await passwordRepromptService.ShowPasswordPrompt())
+                if (cipher.Reprompt == CipherRepromptType.None || await passwordRepromptService.ShowPasswordPrompt())
                 {
                     await platformUtilsService.CopyToClipboardAsync(cipher.Card.Number);
                     platformUtilsService.ShowToast("info", null,
@@ -129,7 +129,7 @@ namespace Bit.App.Utilities
             }
             else if (selection == AppResources.CopySecurityCode)
             {
-                if (cipher.PasswordPrompt && await passwordRepromptService.ShowPasswordPrompt())
+                if (cipher.Reprompt == CipherRepromptType.None || await passwordRepromptService.ShowPasswordPrompt())
                 {
                     await platformUtilsService.CopyToClipboardAsync(cipher.Card.Code);
                     platformUtilsService.ShowToast("info", null,

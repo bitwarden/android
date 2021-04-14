@@ -561,7 +561,8 @@
                         StyleClass="box-label-regular"
                         HorizontalOptions="StartAndExpand" />
                     <Switch
-                        IsToggled="{Binding Cipher.PasswordPrompt}"
+                        IsToggled="{Binding PasswordPrompt}"
+                        Toggled="PasswordPrompt_Toggled"
                         StyleClass="box-value"
                         HorizontalOptions="End" />
                 </StackLayout>

@@ -1,4 +1,5 @@
-﻿using Bit.Core.Models.Response;
+﻿using Bit.Core.Enums;
+using Bit.Core.Models.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +21,7 @@ namespace Bit.Core.Models.Data
             ViewPassword = response.ViewPassword;
             OrganizationUseTotp = response.OrganizationUseTotp;
             Favorite = response.Favorite;
-            PasswordPrompt = response.PasswordPrompt;
+            Reprompt = response.Reprompt;
             RevisionDate = response.RevisionDate;
             Type = response.Type;
             Name = response.Name;
@@ -72,7 +73,7 @@ namespace Bit.Core.Models.Data
         public bool ViewPassword { get; set; } = true; // Fallback for old server versions
         public bool OrganizationUseTotp { get; set; }
         public bool Favorite { get; set; }
-        public bool PasswordPrompt { get; set; }
+        public CipherRepromptType Reprompt { get; set; }
         public DateTime RevisionDate { get; set; }
         public Enums.CipherType Type { get; set; }
         public string Name { get; set; }
