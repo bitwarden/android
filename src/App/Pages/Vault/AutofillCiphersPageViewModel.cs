@@ -124,6 +124,10 @@ namespace Bit.App.Pages
             }
             else
             {
+                if (cipher.Reprompt != CipherRepromptType.None && !await _passwordRepromptService.ShowPasswordPrompt())
+                {
+                    return;
+                }
                 var autofillResponse = AppResources.Yes;
                 if (fuzzy)
                 {
