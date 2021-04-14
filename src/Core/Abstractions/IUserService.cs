@@ -17,10 +17,12 @@ namespace Bit.Core.Abstractions
         Task<int?> GetKdfIterationsAsync();
         Task<Organization> GetOrganizationAsync(string id);
         Task<string> GetSecurityStampAsync();
+        Task<bool> GetEmailVerifiedAsync();
         Task<string> GetUserIdAsync();
         Task<bool> IsAuthenticatedAsync();
         Task ReplaceOrganizationsAsync(Dictionary<string, OrganizationData> organizations);
         Task SetInformationAsync(string userId, string email, KdfType kdf, int? kdfIterations);
         Task SetSecurityStampAsync(string stamp);
+        Task SetEmailVerifiedAsync(bool emailVerified);
     }
 }

@@ -21,7 +21,6 @@ namespace Bit.App.Pages
         private readonly IMessagingService _messagingService;
         private readonly IUserService _userService;
         private readonly ISendService _sendService;
-        private readonly ITokenService _tokenService;
         private bool _sendEnabled;
         private bool _canAccessPremium;
         private bool _emailVerified;
@@ -55,7 +54,6 @@ namespace Bit.App.Pages
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _userService = ServiceContainer.Resolve<IUserService>("userService");
             _sendService = ServiceContainer.Resolve<ISendService>("sendService");
-            _tokenService = ServiceContainer.Resolve<ITokenService>("tokenService");
             TogglePasswordCommand = new Command(TogglePassword);
 
             TypeOptions = new List<KeyValuePair<string, SendType>>
@@ -224,7 +222,7 @@ namespace Bit.App.Pages
         {
             PageTitle = EditMode ? AppResources.EditSend : AppResources.AddSend;
             _canAccessPremium = await _userService.CanAccessPremiumAsync();
-            _emailVerified = _tokenService.GetEmailVerified();
+            _emailVerified = await _userService.GetEmailVerifiedAsync();
             SendEnabled = ! await AppHelpers.IsSendDisabledByPolicyAsync();
             DisableHideEmail = await AppHelpers.IsHideEmailDisabledByPolicyAsync();
             SendOptionsPolicyInEffect = SendEnabled && DisableHideEmail;
