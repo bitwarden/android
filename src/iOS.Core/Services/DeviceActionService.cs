@@ -225,7 +225,7 @@ namespace Bit.iOS.Core.Services
                     input.KeyboardType = UIKeyboardType.NumberPad;
                 }
                 if (password) {
-                    input.InputType = InputTypes.TextVariationPassword | InputTypes.ClassText;
+                    input.SecureTextEntry = true;
                 }
                 if (!ThemeHelpers.LightTheme)
                 {
