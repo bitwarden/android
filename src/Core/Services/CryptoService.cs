@@ -482,7 +482,7 @@ namespace Bit.Core.Services
             return new CipherString(encObj.Key.EncType, data, iv, mac);
         }
 
-        public async Task<byte[]> EncryptToBytesAsync(byte[] plainValue, SymmetricCryptoKey key = null)
+        public async Task<CipherByteArray> EncryptToBytesAsync(byte[] plainValue, SymmetricCryptoKey key = null)
         {
             var encValue = await AesEncryptAsync(plainValue, key);
             var macLen = 0;
@@ -498,7 +498,7 @@ namespace Bit.Core.Services
                 Buffer.BlockCopy(encValue.Mac, 0, encBytes, 1 + encValue.Iv.Length, encValue.Mac.Length);
             }
             Buffer.BlockCopy(encValue.Data, 0, encBytes, 1 + encValue.Iv.Length + macLen, encValue.Data.Length);
-            return encBytes;
+            return new CipherByteArray(encBytes);
         }
 
         public async Task<CipherString> RsaEncryptAsync(byte[] data, byte[] publicKey = null)

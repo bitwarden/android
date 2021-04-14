@@ -21,7 +21,7 @@ namespace Bit.Core.Abstractions
         Task<string> DecryptToUtf8Async(CipherString cipherString, SymmetricCryptoKey key = null);
         Task<CipherString> EncryptAsync(byte[] plainValue, SymmetricCryptoKey key = null);
         Task<CipherString> EncryptAsync(string plainValue, SymmetricCryptoKey key = null);
-        Task<byte[]> EncryptToBytesAsync(byte[] plainValue, SymmetricCryptoKey key = null);
+        Task<CipherByteArray> EncryptToBytesAsync(byte[] plainValue, SymmetricCryptoKey key = null);
         Task<SymmetricCryptoKey> GetEncKeyAsync(SymmetricCryptoKey key = null);
         Task<List<string>> GetFingerprintAsync(string userId, byte[] publicKey = null);
         Task<SymmetricCryptoKey> GetKeyAsync();

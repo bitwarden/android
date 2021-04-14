@@ -9,12 +9,12 @@ namespace Bit.Core.Abstractions
     public interface ISendService
     {
         void ClearCache();
-        Task<(Send send, byte[] encryptedFileData)> EncryptAsync(SendView model, byte[] fileData, string password,
+        Task<(Send send, CipherByteArray encryptedFileData)> EncryptAsync(SendView model, byte[] fileData, string password,
             SymmetricCryptoKey key = null);
         Task<Send> GetAsync(string id);
         Task<List<Send>> GetAllAsync();
         Task<List<SendView>> GetAllDecryptedAsync();
-        Task<string> SaveWithServerAsync(Send sendData, byte[] encryptedFileData);
+        Task<string> SaveWithServerAsync(Send sendData, CipherByteArray encryptedFileData);
         Task UpsertAsync(params SendData[] send);
         Task ReplaceAsync(Dictionary<string, SendData> sends);
         Task ClearAsync(string userId);

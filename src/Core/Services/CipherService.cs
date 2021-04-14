@@ -568,7 +568,7 @@ namespace Bit.Core.Services
                 {
                     Key = orgEncAttachmentKey.EncryptedString,
                     FileName = encFileName.EncryptedString,
-                    FileSize = encFileData.Length,
+                    FileSize = encFileData.Buffer.Length,
                 };
 
                 var uploadDataResponse = await _apiService.PostCipherAttachmentAsync(cipher.Id, request);
@@ -588,12 +588,12 @@ namespace Bit.Core.Services
 
         [Obsolete("Mar 25 2021: This method has been deprecated in favor of direct uploads. This method still exists for backward compatibility with old server versions.")]
         private async Task<CipherResponse> LegacyServerAttachmentFileUploadAsync(string cipherId,
-            CipherString encFileName, byte[] encFileData, CipherString key)
+            CipherString encFileName, CipherByteArray encFileData, CipherString key)
         {
             var boundary = string.Concat("--BWMobileFormBoundary", DateTime.UtcNow.Ticks);
             var fd = new MultipartFormDataContent(boundary);
             fd.Add(new StringContent(key.EncryptedString), "key");
-            fd.Add(new StreamContent(new MemoryStream(encFileData)), "data", encFileName.EncryptedString);
+            fd.Add(new StreamContent(new MemoryStream(encFileData.Buffer)), "data", encFileName.EncryptedString);
             return await _apiService.PostCipherAttachmentLegacyAsync(cipherId, fd);
         }
 
@@ -828,7 +828,7 @@ namespace Bit.Core.Services
             var boundary = string.Concat("--BWMobileFormBoundary", DateTime.UtcNow.Ticks);
             var fd = new MultipartFormDataContent(boundary);
             fd.Add(new StringContent(dataEncKey.Item2.EncryptedString), "key");
-            fd.Add(new StreamContent(new MemoryStream(encData)), "data", encFileName.EncryptedString);
+            fd.Add(new StreamContent(new MemoryStream(encData.Buffer)), "data", encFileName.EncryptedString);
             await _apiService.PostShareCipherAttachmentAsync(cipherId, attachmentView.Id, fd, organizationId);
         }
 

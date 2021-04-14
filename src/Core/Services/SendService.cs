@@ -81,7 +81,7 @@ namespace Bit.Core.Services
             await DeleteAsync(id);
         }
 
-        public async Task<(Send send, byte[] encryptedFileData)> EncryptAsync(SendView model, byte[] fileData,
+        public async Task<(Send send, CipherByteArray encryptedFileData)> EncryptAsync(SendView model, byte[] fileData,
             string password, SymmetricCryptoKey key = null)
         {
             if (model.Key == null)
@@ -103,7 +103,7 @@ namespace Bit.Core.Services
                 Notes = await _cryptoService.EncryptAsync(model.Notes, model.CryptoKey),
                 HideEmail = model.HideEmail
             };
-            byte[] encryptedFileData = null;
+            CipherByteArray encryptedFileData = null;
 
             if (password != null)
             {
@@ -197,9 +197,9 @@ namespace Bit.Core.Services
             _decryptedSendsCache = null;
         }
 
-        public async Task<string> SaveWithServerAsync(Send send, byte[] encryptedFileData)
+        public async Task<string> SaveWithServerAsync(Send send, CipherByteArray encryptedFileData)
         {
-            var request = new SendRequest(send, encryptedFileData?.LongLength);
+            var request = new SendRequest(send, encryptedFileData?.Buffer?.LongLength);
             SendResponse response = default;
             if (send.Id == null)
             {
@@ -243,11 +243,11 @@ namespace Bit.Core.Services
         }
 
         [Obsolete("Mar 25 2021: This method has been deprecated in favor of direct uploads. This method still exists for backward compatibility with old server versions.")]
-        private async Task<SendResponse> LegacyServerSendFileUpload(SendRequest request, Send send, byte[] encryptedFileData) {
+        private async Task<SendResponse> LegacyServerSendFileUpload(SendRequest request, Send send, CipherByteArray encryptedFileData) {
             var fd = new MultipartFormDataContent($"--BWMobileFormBoundary{DateTime.UtcNow.Ticks}")
                         {
                             { new StringContent(JsonConvert.SerializeObject(request)), "model" },
-                            { new ByteArrayContent(encryptedFileData), "data", send.File.FileName.EncryptedString }
+                            { new ByteArrayContent(encryptedFileData.Buffer), "data", send.File.FileName.EncryptedString }
                         };
 
             return await _apiService.PostSendFileAsync(fd);
