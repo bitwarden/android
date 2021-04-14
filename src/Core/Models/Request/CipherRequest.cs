@@ -17,8 +17,8 @@ namespace Bit.Core.Models.Request
             Name = cipher.Name?.EncryptedString;
             Notes = cipher.Notes?.EncryptedString;
             Favorite = cipher.Favorite;
-            Reprompt = cipher.Reprompt;
             LastKnownRevisionDate = cipher.RevisionDate;
+            Reprompt = cipher.Reprompt;
 
             switch (Type)
             {
@@ -113,7 +113,6 @@ namespace Bit.Core.Models.Request
         public string Name { get; set; }
         public string Notes { get; set; }
         public bool Favorite { get; set; }
-        public CipherRepromptType Reprompt { get; set; }
         public LoginApi Login { get; set; }
         public SecureNoteApi SecureNote { get; set; }
         public CardApi Card { get; set; }
@@ -123,5 +122,6 @@ namespace Bit.Core.Models.Request
         public Dictionary<string, string> Attachments { get; set; }
         public Dictionary<string, AttachmentRequest> Attachments2 { get; set; }
         public DateTime LastKnownRevisionDate { get; set; }
+        public CipherRepromptType Reprompt { get; set; }
     }
 }

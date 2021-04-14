@@ -177,11 +177,11 @@ namespace Bit.Core.Services
                 Id = model.Id,
                 FolderId = model.FolderId,
                 Favorite = model.Favorite,
-                Reprompt = model.Reprompt,
                 OrganizationId = model.OrganizationId,
                 Type = model.Type,
                 CollectionIds = model.CollectionIds,
-                RevisionDate = model.RevisionDate
+                RevisionDate = model.RevisionDate,
+                Reprompt = model.Reprompt
             };
 
             if (key == null && cipher.OrganizationId != null)
