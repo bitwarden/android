@@ -16,7 +16,6 @@ namespace Bit.Core.Models.View
             OrganizationId = c.OrganizationId;
             FolderId = c.FolderId;
             Favorite = c.Favorite;
-            Reprompt = c.Reprompt;
             OrganizationUseTotp = c.OrganizationUseTotp;
             Edit = c.Edit;
             ViewPassword = c.ViewPassword;
@@ -25,6 +24,7 @@ namespace Bit.Core.Models.View
             CollectionIds = c.CollectionIds;
             RevisionDate = c.RevisionDate;
             DeletedDate = c.DeletedDate;
+            Reprompt = c.Reprompt;
         }
 
         public string Id { get; set; }
@@ -34,7 +34,6 @@ namespace Bit.Core.Models.View
         public string Notes { get; set; }
         public CipherType Type { get; set; }
         public bool Favorite { get; set; }
-        public CipherRepromptType Reprompt { get; set; }
         public bool OrganizationUseTotp { get; set; }
         public bool Edit { get; set; }
         public bool ViewPassword { get; set; } = true;
@@ -49,7 +48,7 @@ namespace Bit.Core.Models.View
         public HashSet<string> CollectionIds { get; set; }
         public DateTime RevisionDate { get; set; }
         public DateTime? DeletedDate { get; set; }
-
+        public CipherRepromptType Reprompt { get; set; }
 
         public string SubTitle
         {

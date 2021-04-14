@@ -19,7 +19,6 @@ namespace Bit.Core.Models.Response
         public IdentityApi Identity { get; set; }
         public SecureNoteApi SecureNote { get; set; }
         public bool Favorite { get; set; }
-        public CipherRepromptType Reprompt { get; set; }
         public bool Edit { get; set; }
         public bool ViewPassword { get; set; } = true; // Fallback for old server versions
         public bool OrganizationUseTotp { get; set; }
@@ -28,5 +27,6 @@ namespace Bit.Core.Models.Response
         public List<PasswordHistoryResponse> PasswordHistory { get; set; }
         public List<string> CollectionIds { get; set; }
         public DateTime? DeletedDate { get; set; }
+        public CipherRepromptType Reprompt { get; set; }
     }
 }

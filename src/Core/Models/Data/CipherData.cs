@@ -1,5 +1,4 @@
-﻿using Bit.Core.Enums;
-using Bit.Core.Models.Response;
+﻿using Bit.Core.Models.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,12 +20,12 @@ namespace Bit.Core.Models.Data
             ViewPassword = response.ViewPassword;
             OrganizationUseTotp = response.OrganizationUseTotp;
             Favorite = response.Favorite;
-            Reprompt = response.Reprompt;
             RevisionDate = response.RevisionDate;
             Type = response.Type;
             Name = response.Name;
             Notes = response.Notes;
             CollectionIds = collectionIds?.ToList() ?? response.CollectionIds;
+            Reprompt = response.Reprompt;
 
             try // Added to address Issue (https://github.com/bitwarden/mobile/issues/1006)
             {
@@ -73,7 +72,6 @@ namespace Bit.Core.Models.Data
         public bool ViewPassword { get; set; } = true; // Fallback for old server versions
         public bool OrganizationUseTotp { get; set; }
         public bool Favorite { get; set; }
-        public CipherRepromptType Reprompt { get; set; }
         public DateTime RevisionDate { get; set; }
         public Enums.CipherType Type { get; set; }
         public string Name { get; set; }
@@ -87,5 +85,6 @@ namespace Bit.Core.Models.Data
         public List<PasswordHistoryData> PasswordHistory { get; set; }
         public List<string> CollectionIds { get; set; }
         public DateTime? DeletedDate { get; set; }
+        public Enums.CipherRepromptType Reprompt { get; set; }
     }
 }

@@ -25,13 +25,13 @@ namespace Bit.Core.Models.Domain
 
             Type = obj.Type;
             Favorite = obj.Favorite;
-            Reprompt = obj.Reprompt;
             OrganizationUseTotp = obj.OrganizationUseTotp;
             Edit = obj.Edit;
             ViewPassword = obj.ViewPassword;
             RevisionDate = obj.RevisionDate;
             CollectionIds = obj.CollectionIds != null ? new HashSet<string>(obj.CollectionIds) : null;
             LocalData = localData;
+            Reprompt = obj.Reprompt;
 
             switch (Type)
             {
@@ -64,7 +64,6 @@ namespace Bit.Core.Models.Domain
         public CipherString Notes { get; set; }
         public Enums.CipherType Type { get; set; }
         public bool Favorite { get; set; }
-        public CipherRepromptType Reprompt { get; set; }
         public bool OrganizationUseTotp { get; set; }
         public bool Edit { get; set; }
         public bool ViewPassword { get; set; }
@@ -78,8 +77,8 @@ namespace Bit.Core.Models.Domain
         public List<Field> Fields { get; set; }
         public List<PasswordHistory> PasswordHistory { get; set; }
         public HashSet<string> CollectionIds { get; set; }
-
         public DateTime? DeletedDate { get; set; }
+        public CipherRepromptType Reprompt { get; set; }
 
         public async Task<CipherView> DecryptAsync()
         {
@@ -167,11 +166,11 @@ namespace Bit.Core.Models.Domain
                 Edit = Edit,
                 OrganizationUseTotp = OrganizationUseTotp,
                 Favorite = Favorite,
-                Reprompt = Reprompt,
                 RevisionDate = RevisionDate,
                 Type = Type,
                 CollectionIds = CollectionIds.ToList(),
-                DeletedDate = DeletedDate
+                DeletedDate = DeletedDate,
+                Reprompt = Reprompt,
             };
             BuildDataModel(this, c, new HashSet<string>
             {
