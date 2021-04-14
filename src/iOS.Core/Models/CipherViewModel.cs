@@ -18,6 +18,7 @@ namespace Bit.iOS.Core.Models
             Totp = cipher.Login?.Totp;
             Uris = cipher.Login?.Uris?.Select(u => new LoginUriModel(u)).ToList();
             Fields = cipher.Fields?.Select(f => new Tuple<string, string>(f.Name, f.Value)).ToList();
+            Reprompt = cipher.Reprompt;
         }
 
         public string Id { get; set; }
@@ -28,6 +29,7 @@ namespace Bit.iOS.Core.Models
         public string Totp { get; set; }
         public List<Tuple<string, string>> Fields { get; set; }
         public CipherView CipherView { get; set; }
+        public CipherRepromptType Reprompt { get; set; }
 
         public class LoginUriModel
         {
