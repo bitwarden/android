@@ -124,7 +124,7 @@ namespace Bit.App.Pages
             }
             else
             {
-                if (cipher.Reprompt != CipherRepromptType.None && !await _passwordRepromptService.ShowPasswordPrompt())
+                if (cipher.Reprompt != CipherRepromptType.None && !await _passwordRepromptService.ShowPasswordPromptAsync())
                 {
                     return;
                 }

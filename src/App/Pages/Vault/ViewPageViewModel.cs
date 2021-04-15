@@ -691,7 +691,7 @@ namespace Bit.App.Pages
                 return true;
             }
 
-            return _passwordReprompted = await _passwordRepromptService.ShowPasswordPrompt();
+            return _passwordReprompted = await _passwordRepromptService.ShowPasswordPromptAsync();
         }
     }
 

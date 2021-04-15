@@ -22,6 +22,7 @@ namespace Bit.Core.Abstractions
         void SaveFile();
         Task<bool> ShowDialogAsync(string text, string title = null, string confirmText = null,
             string cancelText = null, string type = null);
+        Task<bool> ShowPasswordDialogAsync(string title, string body, Func<string, Task<bool>> validator);
         void ShowToast(string type, string title, string text, Dictionary<string, object> options = null);
         void ShowToast(string type, string title, string[] text, Dictionary<string, object> options = null);
         bool SupportsU2f();

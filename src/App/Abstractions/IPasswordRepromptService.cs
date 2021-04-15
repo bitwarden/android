@@ -6,6 +6,6 @@ namespace Bit.App.Abstractions
     {
         string[] ProtectedFields { get; }
 
-        Task<bool> ShowPasswordPrompt();
+        Task<bool> ShowPasswordPromptAsync();
     }
 }
