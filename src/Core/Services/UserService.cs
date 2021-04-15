@@ -15,6 +15,7 @@ namespace Bit.Core.Services
         private string _stamp;
         private KdfType? _kdf;
         private int? _kdfIterations;
+        private bool? _emailVerified;
 
         private const string Keys_UserId = "userId";
         private const string Keys_UserEmail = "userEmail";
@@ -22,6 +23,7 @@ namespace Bit.Core.Services
         private const string Keys_Kdf = "kdf";
         private const string Keys_KdfIterations = "kdfIterations";
         private const string Keys_OrganizationsFormat = "organizations_{0}";
+        private const string Keys_EmailVerified = "emailVerified";
 
         private readonly IStorageService _storageService;
         private readonly ITokenService _tokenService;
@@ -51,6 +53,12 @@ namespace Bit.Core.Services
             await _storageService.SaveAsync(Keys_Stamp, stamp);
         }
 
+        public async Task SetEmailVerifiedAsync(bool emailVerified)
+        {
+            _emailVerified = emailVerified;
+            await _storageService.SaveAsync(Keys_EmailVerified, emailVerified);
+        }
+
         public async Task<string> GetUserIdAsync()
         {
             if (_userId == null)
@@ -76,6 +84,15 @@ namespace Bit.Core.Services
                 _stamp = await _storageService.GetAsync<string>(Keys_Stamp);
             }
             return _stamp;
+        }
+
+        public async Task<bool> GetEmailVerifiedAsync()
+        {
+            if (_emailVerified == null)
+            {
+                _emailVerified = await _storageService.GetAsync<bool>(Keys_EmailVerified);
+            }
+            return _emailVerified.GetValueOrDefault();
         }
 
         public async Task<KdfType?> GetKdfAsync()

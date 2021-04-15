@@ -327,6 +327,7 @@ namespace Bit.Core.Services
             await _userService.SetSecurityStampAsync(response.SecurityStamp);
             var organizations = response.Organizations.ToDictionary(o => o.Id, o => new OrganizationData(o));
             await _userService.ReplaceOrganizationsAsync(organizations);
+            await _userService.SetEmailVerifiedAsync(response.EmailVerified);
         }
 
         private async Task SyncFoldersAsync(string userId, List<FolderResponse> response)
