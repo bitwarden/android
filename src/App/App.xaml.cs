@@ -249,7 +249,8 @@ namespace Bit.App
                 _collectionService.ClearAsync(userId),
                 _passwordGenerationService.ClearAsync(),
                 _vaultTimeoutService.ClearAsync(),
-                _stateService.PurgeAsync());
+                _stateService.PurgeAsync(),
+                _deviceActionService.ClearCacheAsync());
             _vaultTimeoutService.BiometricLocked = true;
             _searchService.ClearIndex();
             _authService.LogOut(() =>
