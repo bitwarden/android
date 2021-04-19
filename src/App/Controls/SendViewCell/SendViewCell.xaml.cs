@@ -1,14 +1,10 @@
 using System;
-using Bit.App.Pages;
-using Bit.Core.Abstractions;
-using Bit.Core.Enums;
 using Bit.Core.Models.View;
-using Bit.Core.Utilities;
 using Xamarin.Forms;
 
 namespace Bit.App.Controls
 {
-    public partial class SendViewCell : ViewCell
+    public partial class SendViewCell : ExtendedGrid
     {
         public static readonly BindableProperty SendProperty = BindableProperty.Create(
             nameof(Send), typeof(SendView), typeof(SendViewCell), default(SendView), BindingMode.OneWay);
@@ -17,25 +13,11 @@ namespace Bit.App.Controls
             nameof(ButtonCommand), typeof(Command<SendView>), typeof(SendViewCell));
         
         public static readonly BindableProperty ShowOptionsProperty = BindableProperty.Create(
-            nameof(ShowOptions), typeof(bool), typeof(SendViewCell));
-
-        private readonly IEnvironmentService _environmentService;
-
-        private SendViewCellViewModel _viewModel;
-        private bool _usingNativeCell;
+            nameof(ShowOptions), typeof(bool), typeof(SendViewCell), true, BindingMode.OneWay);
 
         public SendViewCell()
         {
-            _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
-            if (Device.RuntimePlatform == Device.iOS)
-            {
-                InitializeComponent();
-                _viewModel = _grid.BindingContext as SendViewCellViewModel;
-            }
-            else
-            {
-                _usingNativeCell = true;
-            }
+            InitializeComponent();
         }
 
         public SendView Send
@@ -52,72 +34,30 @@ namespace Bit.App.Controls
 
         public bool ShowOptions
         {
-            get => GetValue(ShowOptionsProperty) is bool && (bool)GetValue(ShowOptionsProperty);
+            get => (bool)GetValue(ShowOptionsProperty);
             set => SetValue(ShowOptionsProperty, value);
         }
 
         protected override void OnPropertyChanged(string propertyName = null)
         {
             base.OnPropertyChanged(propertyName);
-            if (_usingNativeCell)
-            {
-                return;
-            }
             if (propertyName == SendProperty.PropertyName)
             {
-                _viewModel.Send = Send;
+                if (Send == null)
+                {
+                    return;
+                }
+                BindingContext = new SendViewCellViewModel(Send, ShowOptions);
             }
-            else if (propertyName == ShowOptionsProperty.PropertyName)
-            {
-                _viewModel.ShowOptions = ShowOptions;
-            }
-        }
-
-        protected override void OnBindingContextChanged()
-        {
-            base.OnBindingContextChanged();
-            if (_usingNativeCell)
-            {
-                return;
-            }
-
-            SendView send = null;
-            if (BindingContext is SendGroupingsPageListItem sendGroupingsPageListItem)
-            {
-                send = sendGroupingsPageListItem.Send;
-            }
-            else if (BindingContext is SendView sv)
-            {
-                send = sv;
-            }
-            if (send != null)
-            {
-                var iconImage = GetIconImage(send);
-                _icon.IsVisible = true;
-                _icon.Text = iconImage;
-            }
-        }
-
-        public string GetIconImage(SendView send)
-        {
-            string icon = null;
-            switch (send.Type)
-            {
-                case SendType.Text:
-                    icon = "\uf0f6"; // fa-file-text-o
-                    break;
-                case SendType.File:
-                    icon = "\uf016"; // fa-file-o
-                    break;
-                default:
-                    break;
-            }
-            return icon;
         }
 
         private void MoreButton_Clicked(object sender, EventArgs e)
         {
-            ButtonCommand?.Execute(Send);
+            var send = ((sender as MiButton)?.BindingContext as SendViewCellViewModel)?.Send;
+            if (send != null)
+            {
+                ButtonCommand?.Execute(send);
+            }
         }
     }
 }

@@ -43,57 +43,53 @@
                VerticalOptions="CenterAndExpand"
                HorizontalOptions="CenterAndExpand"
                HorizontalTextAlignment="Center"></Label>
-        <ListView x:Name="_listView"
+        <controls:ExtendedCollectionView
                   IsVisible="{Binding ShowNoData, Converter={StaticResource inverseBool}}"
                   ItemsSource="{Binding History}"
                   VerticalOptions="FillAndExpand"
-                  HasUnevenRows="true"
-                  CachingStrategy="RecycleElement"
                   StyleClass="list, list-platform">
-            <ListView.ItemTemplate>
+            <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="domain:GeneratedPasswordHistory">
-                    <ViewCell>
-                        <Grid
-                            StyleClass="list-row, list-row-platform"
-                            Padding="10"
-                            RowSpacing="0"
-                            ColumnSpacing="10">
+                    <Grid
+                        StyleClass="list-row, list-row-platform"
+                        Padding="10"
+                        RowSpacing="0"
+                        ColumnSpacing="10">
 
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
 
-                            <controls:MonoLabel LineBreakMode="CharacterWrap"
-                                Grid.Column="0"
-                                Grid.Row="0"
-                                StyleClass="list-title, list-title-platform"
-                                TextType="Html"
-                                Text="{Binding Password, Mode=OneWay, Converter={StaticResource coloredPassword}}" />
-                            <Label LineBreakMode="TailTruncation"
-                                Grid.Column="0"
-                                Grid.Row="1"
-                                StyleClass="list-subtitle, list-subtitle-platform"
-                                Text="{Binding Date, Mode=OneWay, Converter={StaticResource dateTime}}" />
-                            <controls:FaButton
-                                StyleClass="list-row-button, list-row-button-platform"
-                                Text="&#xf24d;"
-                                Command="{Binding BindingContext.CopyCommand, Source={x:Reference _page}}"
-                                CommandParameter="{Binding .}"
-                                Grid.Row="0"
-                                Grid.Column="1"
-                                Grid.RowSpan="2"
-                                AutomationProperties.IsInAccessibleTree="True"
-                                AutomationProperties.Name="{u:I18n CopyPassword}" />
-                        </Grid>
-                    </ViewCell>
+                        <controls:MonoLabel LineBreakMode="CharacterWrap"
+                            Grid.Column="0"
+                            Grid.Row="0"
+                            StyleClass="list-title, list-title-platform"
+                            TextType="Html"
+                            Text="{Binding Password, Mode=OneWay, Converter={StaticResource coloredPassword}}" />
+                        <Label LineBreakMode="TailTruncation"
+                            Grid.Column="0"
+                            Grid.Row="1"
+                            StyleClass="list-subtitle, list-subtitle-platform"
+                            Text="{Binding Date, Mode=OneWay, Converter={StaticResource dateTime}}" />
+                        <controls:FaButton
+                            StyleClass="list-row-button, list-row-button-platform"
+                            Text="&#xf0ea;"
+                            Command="{Binding BindingContext.CopyCommand, Source={x:Reference _page}}"
+                            CommandParameter="{Binding .}"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Grid.RowSpan="2"
+                            AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.Name="{u:I18n CopyPassword}" />
+                    </Grid>
                 </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            </CollectionView.ItemTemplate>
+        </controls:ExtendedCollectionView>
     </StackLayout>
 
 </pages:BaseContentPage>

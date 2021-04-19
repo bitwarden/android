@@ -51,11 +51,14 @@
         <Setter Property="BackgroundColor"
                 Value="{StaticResource BackgroundColor}" />
     </Style>
-    <Style TargetType="ListView"
+    <Style TargetType="CollectionView"
            ApplyToDerivedTypes="True">
         <Setter Property="BackgroundColor"
                 Value="{StaticResource BackgroundColor}" />
-        <Setter Property="RefreshControlColor"
+    </Style>
+    <Style TargetType="RefreshView"
+           ApplyToDerivedTypes="True">
+        <Setter Property="RefreshColor"
                 Value="{StaticResource PrimaryColor}" />
     </Style>
     <Style TargetType="ActivityIndicator"
@@ -93,10 +96,10 @@
 
     <!-- List -->
 
-    <Style TargetType="ListView"
-           Class="list-platform"
+    <Style TargetType="BoxView"
+           Class="list-item-separator-bottom-platform"
            ApplyToDerivedTypes="True">
-        <Setter Property="SeparatorColor"
+        <Setter Property="BackgroundColor"
                 Value="{StaticResource ListItemBorderColor}" />
     </Style>
     <Style TargetType="StackLayout"
@@ -107,7 +110,7 @@
     <Style TargetType="StackLayout"
            Class="list-row-header-platform">
         <Setter Property="Padding"
-                Value="10, 0, 10, 5" />
+                Value="10, 22, 10, 5" />
         <Setter Property="VerticalOptions"
                 Value="EndAndExpand" />
     </Style>
@@ -127,13 +130,17 @@
            Class="list-section-separator-bottom-platform">
         <Setter Property="Color"
                 Value="{StaticResource ListSectionBorderBottomColor}" />
-        <Setter Property="Margin"
-                Value="0, 0, 0, -1" />
     </Style>
     <Style TargetType="StackLayout"
            Class="list-row-platform">
     </Style>
+    <Style TargetType="controls:ExtendedStackLayout"
+           Class="list-row-platform">
+    </Style>
     <Style TargetType="Grid"
+           Class="list-row-platform">
+    </Style>
+    <Style TargetType="controls:ExtendedGrid"
            Class="list-row-platform">
     </Style>
     <Style TargetType="Label"

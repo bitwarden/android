@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <pages:BaseContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Bit.App.Pages.GroupingsPage"
-             xmlns:pages="clr-namespace:Bit.App.Pages"
-             xmlns:u="clr-namespace:Bit.App.Utilities"
-             xmlns:effects="clr-namespace:Bit.App.Effects"
-             xmlns:controls="clr-namespace:Bit.App.Controls"
-             x:DataType="pages:GroupingsPageViewModel"
-             Title="{Binding PageTitle}"
-             x:Name="_page">
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Bit.App.Pages.GroupingsPage"
+    xmlns:pages="clr-namespace:Bit.App.Pages"
+    xmlns:u="clr-namespace:Bit.App.Utilities"
+    xmlns:effects="clr-namespace:Bit.App.Effects"
+    xmlns:controls="clr-namespace:Bit.App.Controls"
+    x:DataType="pages:GroupingsPageViewModel"
+    Title="{Binding PageTitle}"
+    x:Name="_page">
 
     <ContentPage.BindingContext>
         <pages:GroupingsPageViewModel />
@@ -45,29 +45,27 @@
 
             <DataTemplate x:Key="groupTemplate"
                           x:DataType="pages:GroupingsPageListItem">
-                <ViewCell>
-                    <StackLayout Orientation="Horizontal"
-                                 StyleClass="list-row, list-row-platform">
-                        <controls:FaLabel Text="{Binding Icon, Mode=OneWay}"
-                                          HorizontalOptions="Start"
-                                          VerticalOptions="Center"
-                                          StyleClass="list-icon, list-icon-platform">
-                            <controls:FaLabel.Effects>
-                                <effects:FixedSizeEffect />
-                            </controls:FaLabel.Effects>
-                        </controls:FaLabel>
-                        <Label Text="{Binding Name, Mode=OneWay}"
-                               LineBreakMode="TailTruncation"
-                               HorizontalOptions="FillAndExpand"
-                               VerticalOptions="CenterAndExpand"
-                               StyleClass="list-title"/>
-                        <Label Text="{Binding ItemCount, Mode=OneWay}"
-                               HorizontalOptions="End"
-                               VerticalOptions="CenterAndExpand"
-                               HorizontalTextAlignment="End"
-                               StyleClass="list-sub"/>
-                    </StackLayout>
-                </ViewCell>
+                <controls:ExtendedStackLayout Orientation="Horizontal" 
+                                              StyleClass="list-row, list-row-platform">
+                    <controls:FaLabel Text="{Binding Icon, Mode=OneWay}"
+                                      HorizontalOptions="Start"
+                                      VerticalOptions="Center"
+                                      StyleClass="list-icon, list-icon-platform">
+                        <controls:FaLabel.Effects>
+                            <effects:FixedSizeEffect />
+                        </controls:FaLabel.Effects>
+                    </controls:FaLabel>
+                    <Label Text="{Binding Name, Mode=OneWay}"
+                           LineBreakMode="TailTruncation"
+                           HorizontalOptions="FillAndExpand"
+                           VerticalOptions="CenterAndExpand"
+                           StyleClass="list-title"/>
+                    <Label Text="{Binding ItemCount, Mode=OneWay}"
+                           HorizontalOptions="End"
+                           VerticalOptions="CenterAndExpand"
+                           HorizontalTextAlignment="End"
+                           StyleClass="list-sub"/>
+                </controls:ExtendedStackLayout>
             </DataTemplate>
 
             <pages:GroupingsPageListItemSelector x:Key="listItemDataTemplateSelector"
@@ -89,27 +87,21 @@
                         IsVisible="{Binding ShowAddCipherButton}"></Button>
                 </StackLayout>
 
-                <controls:ExtendedListView
-                    x:Name="_listView"
+                <RefreshView
                     IsVisible="{Binding ShowList}"
-                    ItemsSource="{Binding GroupedItems}"
-                    VerticalOptions="FillAndExpand"
-                    HasUnevenRows="True"
-                    RowHeight="-1"
-                    RefreshCommand="{Binding RefreshCommand}"
-                    IsPullToRefreshEnabled="True"
                     IsRefreshing="{Binding Refreshing}"
-                    ItemTemplate="{StaticResource listItemDataTemplateSelector}"
-                    IsGroupingEnabled="True"
-                    ItemSelected="RowSelected"
-                    StyleClass="list, list-platform">
-                    <x:Arguments>
-                        <ListViewCachingStrategy>RecycleElement</ListViewCachingStrategy>
-                    </x:Arguments>
+                    Command="{Binding RefreshCommand}">
+                    <controls:ExtendedCollectionView
+                        ItemsSource="{Binding GroupedItems}"
+                        VerticalOptions="FillAndExpand"
+                        ItemTemplate="{StaticResource listItemDataTemplateSelector}"
+                        IsGrouped="True"
+                        SelectionMode="Single"
+                        SelectionChanged="RowSelected"
+                        StyleClass="list, list-platform">
 
-                    <ListView.GroupHeaderTemplate>
-                        <DataTemplate x:DataType="pages:GroupingsPageListGroup">
-                            <ViewCell>
+                        <CollectionView.GroupHeaderTemplate>
+                            <DataTemplate x:DataType="pages:GroupingsPageListGroup">
                                 <StackLayout
                                     Spacing="0" Padding="0" VerticalOptions="FillAndExpand"
                                     StyleClass="list-row-header-container, list-row-header-container-platform">
@@ -126,10 +118,10 @@
                                     </StackLayout>
                                     <BoxView StyleClass="list-section-separator-bottom, list-section-separator-bottom-platform" />
                                 </StackLayout>
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.GroupHeaderTemplate>
-                </controls:ExtendedListView>
+                            </DataTemplate>
+                        </CollectionView.GroupHeaderTemplate>
+                    </controls:ExtendedCollectionView>
+                </RefreshView>
             </StackLayout>
         </ResourceDictionary>
     </ContentPage.Resources>

@@ -23,7 +23,6 @@ namespace Bit.App.Pages
         private bool _doingLoad;
         private bool _loading;
         private bool _loaded;
-        private bool _showAddSendButton;
         private bool _showNoData;
         private bool _showList;
         private bool _syncRefreshing;
@@ -90,11 +89,6 @@ namespace Bit.App.Pages
         {
             get => _loaded;
             set => SetProperty(ref _loaded, value);
-        }
-        public bool ShowAddSendButton
-        {
-            get => _showAddSendButton;
-            set => SetProperty(ref _showAddSendButton, value);
         }
         public bool ShowNoData
         {

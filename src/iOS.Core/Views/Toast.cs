@@ -27,7 +27,7 @@ namespace Bit.iOS.Core.Views
                 bgColor = Color.FromHex("#4c566a").ToUIColor();
             }
             BackgroundColor = bgColor.ColorWithAlpha(0.9f);
-            Layer.CornerRadius = 15;
+            Layer.CornerRadius = 18;
             Layer.MasksToBounds = true;
 
             MessageLabel = new UILabel

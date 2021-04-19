@@ -66,10 +66,9 @@ namespace Bit.iOS.Core.Services
             {
                 Duration = TimeSpan.FromSeconds(longDuration ? 5 : 3)
             };
-            if (TabBarVisible())
-            {
-                _toast.BottomMargin = 55;
-            }
+            _toast.BottomMargin = 110;
+            _toast.LeftMargin = 20;
+            _toast.RightMargin = 20;
             _toast.Show();
             _toast.DismissCallback = () =>
             {
