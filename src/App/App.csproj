@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AppCenter.Crashes" Version="3.2.1" />
-    <PackageReference Include="Plugin.Fingerprint" Version="2.1.2" />
+    <PackageReference Include="Plugin.Fingerprint" Version="2.1.4" />
     <PackageReference Include="Xamarin.Essentials" Version="1.5.3.2" />
     <PackageReference Include="Xamarin.FFImageLoading.Forms" Version="2.4.11.982" />
     <PackageReference Include="Xamarin.Forms" Version="4.5.0.725" />
