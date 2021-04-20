@@ -21,7 +21,7 @@ namespace Bit.Core.Models.Domain
         }
 
         public string Id { get; set; }
-        public CipherString Name { get; set; }
+        public EncString Name { get; set; }
         public DateTime RevisionDate { get; set; }
 
         public Task<FolderView> DecryptAsync()

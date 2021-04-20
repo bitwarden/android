@@ -14,7 +14,7 @@ namespace Bit.Core.Services
 
         private readonly ApiService _apiService;
 
-        public async Task Upload(string encryptedFileName, CipherByteArray encryptedFileData, Func<MultipartFormDataContent, Task> apiCall)
+        public async Task Upload(string encryptedFileName, EncByteArray encryptedFileData, Func<MultipartFormDataContent, Task> apiCall)
         {
             var fd = new MultipartFormDataContent($"--BWMobileFormBoundary{DateTime.UtcNow.Ticks}")
             {

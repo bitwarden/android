@@ -29,7 +29,7 @@ namespace Bit.Core.Services
             };
         }
 
-        public async Task Upload(string uri, CipherByteArray data, Func<Task<string>> renewalCallback)
+        public async Task Upload(string uri, EncByteArray data, Func<Task<string>> renewalCallback)
         {
             if (data?.Buffer?.Length <= MAX_SINGLE_BLOB_UPLOAD_SIZE)
             {
@@ -41,7 +41,7 @@ namespace Bit.Core.Services
             }
         }
 
-        private async Task AzureUploadBlob(string uri, CipherByteArray data)
+        private async Task AzureUploadBlob(string uri, EncByteArray data)
         {
             using (var requestMessage = new HttpRequestMessage())
             {
@@ -66,7 +66,7 @@ namespace Bit.Core.Services
             }
         }
 
-        private async Task AzureUploadBlocks(string uri, CipherByteArray data, Func<Task<string>> renewalFunc)
+        private async Task AzureUploadBlocks(string uri, EncByteArray data, Func<Task<string>> renewalFunc)
         {
             _httpClient.Timeout = TimeSpan.FromHours(3);
             var baseParams = HttpUtility.ParseQueryString(CoreHelpers.GetUri(uri).Query);

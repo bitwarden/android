@@ -6,6 +6,6 @@ namespace Bit.Core.Abstractions
 {
     public interface IAzureFileUploadService
     {
-        Task Upload(string uri, CipherByteArray data, Func<Task<string>> renewalCallback);
+        Task Upload(string uri, EncByteArray data, Func<Task<string>> renewalCallback);
     }
 }

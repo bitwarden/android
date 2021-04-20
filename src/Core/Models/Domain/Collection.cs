@@ -29,7 +29,7 @@ namespace Bit.Core.Models.Domain
 
         public string Id { get; set; }
         public string OrganizationId { get; set; }
-        public CipherString Name { get; set; }
+        public EncString Name { get; set; }
         public string ExternalId { get; set; }
         public bool ReadOnly { get; set; }
 

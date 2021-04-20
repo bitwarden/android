@@ -24,12 +24,12 @@ namespace Bit.Core.Models.Domain
             BuildDomainModel(this, obj, _map, alreadyEncrypted);
         }
 
-        public CipherString CardholderName { get; set; }
-        public CipherString Brand { get; set; }
-        public CipherString Number { get; set; }
-        public CipherString ExpMonth { get; set; }
-        public CipherString ExpYear { get; set; }
-        public CipherString Code { get; set; }
+        public EncString CardholderName { get; set; }
+        public EncString Brand { get; set; }
+        public EncString Number { get; set; }
+        public EncString ExpMonth { get; set; }
+        public EncString ExpYear { get; set; }
+        public EncString Code { get; set; }
 
         public Task<CardView> DecryptAsync(string orgId)
         {

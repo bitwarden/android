@@ -175,7 +175,7 @@ namespace Bit.Core.Test.Services
             sutProvider.GetDependency<IUserService>().GetUserIdAsync().Returns(userId);
             sutProvider.GetDependency<IApiService>().PostSendAsync(Arg.Any<SendRequest>()).Returns(response);
 
-            var fileContentBytes = new CipherByteArray(Encoding.UTF8.GetBytes("This is the file content"));
+            var fileContentBytes = new EncByteArray(Encoding.UTF8.GetBytes("This is the file content"));
 
             await sutProvider.Sut.SaveWithServerAsync(send, fileContentBytes);
 
@@ -208,7 +208,7 @@ namespace Bit.Core.Test.Services
             sutProvider.GetDependency<IUserService>().GetUserIdAsync().Returns(userId);
             sutProvider.GetDependency<IApiService>().PostFileTypeSendAsync(Arg.Any<SendRequest>()).Returns(response);
 
-            var fileContentBytes = new CipherByteArray(Encoding.UTF8.GetBytes("This is the file content"));
+            var fileContentBytes = new EncByteArray(Encoding.UTF8.GetBytes("This is the file content"));
 
             await sutProvider.Sut.SaveWithServerAsync(send, fileContentBytes);
 
@@ -233,7 +233,7 @@ namespace Bit.Core.Test.Services
             sutProvider.GetDependency<IApiService>().PostFileTypeSendAsync(Arg.Any<SendRequest>()).Throws(new ApiException(error));
             sutProvider.GetDependency<IApiService>().PostSendFileAsync(Arg.Any<MultipartFormDataContent>()).Returns(response);
 
-            var fileContentBytes = new CipherByteArray(Encoding.UTF8.GetBytes("This is the file content"));
+            var fileContentBytes = new EncByteArray(Encoding.UTF8.GetBytes("This is the file content"));
 
             await sutProvider.Sut.SaveWithServerAsync(send, fileContentBytes);
 
@@ -339,12 +339,12 @@ namespace Bit.Core.Test.Services
 
             byte[] getPbkdf(string password, byte[] key) =>
                 prefixBytes.Concat(Encoding.UTF8.GetBytes(password)).Concat(key).ToArray();
-            CipherString encryptBytes(byte[] secret, SymmetricCryptoKey key) =>
-                new CipherString($"{prefix}{Convert.ToBase64String(secret)}{Convert.ToBase64String(key.Key)}");
-            CipherString encrypt(string secret, SymmetricCryptoKey key) =>
-                new CipherString($"{prefix}{secret}{Convert.ToBase64String(key.Key)}");
-            CipherByteArray encryptFileBytes(byte[] secret, SymmetricCryptoKey key) =>
-                new CipherByteArray(secret.Concat(key.Key).ToArray());
+            EncString encryptBytes(byte[] secret, SymmetricCryptoKey key) =>
+                new EncString($"{prefix}{Convert.ToBase64String(secret)}{Convert.ToBase64String(key.Key)}");
+            EncString encrypt(string secret, SymmetricCryptoKey key) =>
+                new EncString($"{prefix}{secret}{Convert.ToBase64String(key.Key)}");
+            EncByteArray encryptFileBytes(byte[] secret, SymmetricCryptoKey key) =>
+                new EncByteArray(secret.Concat(key.Key).ToArray());
 
             sutProvider.GetDependency<ICryptoFunctionService>().Pbkdf2Async(Arg.Any<string>(), Arg.Any<byte[]>(), Arg.Any<CryptoHashAlgorithm>(), Arg.Any<int>())
                 .Returns(info => getPbkdf((string)info[0], (byte[])info[1]));

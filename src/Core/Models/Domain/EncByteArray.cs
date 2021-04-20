@@ -1,10 +1,10 @@
 namespace Bit.Core.Models.Domain
 {
-    public class CipherByteArray
+    public class EncByteArray
     {
         public byte[] Buffer { get; }
 
-        public CipherByteArray(byte[] encryptedByteArray)
+        public EncByteArray(byte[] encryptedByteArray)
         {
             Buffer = encryptedByteArray;
         }

@@ -588,7 +588,7 @@ namespace Bit.Core.Services
 
         [Obsolete("Mar 25 2021: This method has been deprecated in favor of direct uploads. This method still exists for backward compatibility with old server versions.")]
         private async Task<CipherResponse> LegacyServerAttachmentFileUploadAsync(string cipherId,
-            CipherString encFileName, CipherByteArray encFileData, CipherString key)
+            EncString encFileName, EncByteArray encFileData, EncString key)
         {
             var boundary = string.Concat("--BWMobileFormBoundary", DateTime.UtcNow.Ticks);
             var fd = new MultipartFormDataContent(boundary);
@@ -1037,7 +1037,7 @@ namespace Bit.Core.Services
             {
                 var modelPropInfo = modelType.GetProperty(propName);
                 var modelProp = modelPropInfo.GetValue(model) as string;
-                CipherString val = null;
+                EncString val = null;
                 if (!string.IsNullOrWhiteSpace(modelProp))
                 {
                     val = await _cryptoService.EncryptAsync(modelProp, key);

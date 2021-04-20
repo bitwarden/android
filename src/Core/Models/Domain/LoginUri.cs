@@ -21,7 +21,7 @@ namespace Bit.Core.Models.Domain
             BuildDomainModel(this, obj, _map, alreadyEncrypted);
         }
 
-        public CipherString Uri { get; set; }
+        public EncString Uri { get; set; }
         public UriMatchType? Match { get; set; }
 
         public Task<LoginUriView> DecryptAsync(string orgId)

@@ -48,7 +48,7 @@ namespace Bit.Core.Services
             _loggedOutCallback = loggedOutCallback;
         }
 
-        public CipherString PinProtectedKey { get; set; } = null;
+        public EncString PinProtectedKey { get; set; } = null;
         public bool BiometricLocked { get; set; } = true;
 
         public async Task<bool> IsLockedAsync()
