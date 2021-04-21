@@ -203,7 +203,7 @@ namespace Bit.App.Pages
                             _vaultTimeoutService.PinProtectedKey);
                         var encKey = await _cryptoService.GetEncKeyAsync(key);
                         var protectedPin = await _storageService.GetAsync<string>(Constants.ProtectedPin);
-                        var decPin = await _cryptoService.DecryptToUtf8Async(new CipherString(protectedPin), encKey);
+                        var decPin = await _cryptoService.DecryptToUtf8Async(new EncString(protectedPin), encKey);
                         failed = decPin != Pin;
                         if (!failed)
                         {
@@ -272,7 +272,7 @@ namespace Bit.App.Pages
                     {
                         var protectedPin = await _storageService.GetAsync<string>(Constants.ProtectedPin);
                         var encKey = await _cryptoService.GetEncKeyAsync(key);
-                        var decPin = await _cryptoService.DecryptToUtf8Async(new CipherString(protectedPin), encKey);
+                        var decPin = await _cryptoService.DecryptToUtf8Async(new EncString(protectedPin), encKey);
                         var pinKey = await _cryptoService.MakePinKeyAysnc(decPin, _email,
                             kdf.GetValueOrDefault(KdfType.PBKDF2_SHA256), kdfIterations.GetValueOrDefault(5000));
                         _vaultTimeoutService.PinProtectedKey = await _cryptoService.EncryptAsync(key.Key, pinKey);

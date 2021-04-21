@@ -22,8 +22,8 @@ namespace Bit.Core.Models.Domain
             BuildDomainModel(this, obj, _map, alreadyEncrypted);
         }
 
-        public CipherString Name { get; set; }
-        public CipherString Value { get; set; }
+        public EncString Name { get; set; }
+        public EncString Value { get; set; }
         public FieldType Type { get; set; }
 
         public Task<FieldView> DecryptAsync(string orgId)

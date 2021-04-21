@@ -24,13 +24,13 @@ namespace Bit.Core.Models.Domain
                 else
                 {
                     domainPropInfo.SetValue(domain,
-                        dataObjProp != null ? new CipherString(dataObjProp as string) : null, null);
+                        dataObjProp != null ? new EncString(dataObjProp as string) : null, null);
                 }
             }
         }
 
         protected void BuildDataModel<D, O>(D domain, O dataObj, HashSet<string> map,
-            HashSet<string> notCipherStringList = null)
+            HashSet<string> notEncryptedStringList = null)
             where D : Domain
             where O : Data.Data
         {
@@ -41,13 +41,13 @@ namespace Bit.Core.Models.Domain
                 var domainPropInfo = domainType.GetProperty(prop);
                 var domainProp = domainPropInfo.GetValue(domain);
                 var dataObjPropInfo = dataObjType.GetProperty(prop);
-                if (notCipherStringList?.Contains(prop) ?? false)
+                if (notEncryptedStringList?.Contains(prop) ?? false)
                 {
                     dataObjPropInfo.SetValue(dataObj, domainProp, null);
                 }
                 else
                 {
-                    dataObjPropInfo.SetValue(dataObj, (domainProp as CipherString)?.EncryptedString, null);
+                    dataObjPropInfo.SetValue(dataObj, (domainProp as EncString)?.EncryptedString, null);
                 }
             }
         }
@@ -62,7 +62,7 @@ namespace Bit.Core.Models.Domain
             {
                 var domainPropInfo = domainType.GetProperty(propName);
                 string val = null;
-                if (domainPropInfo.GetValue(domain) is CipherString domainProp)
+                if (domainPropInfo.GetValue(domain) is EncString domainProp)
                 {
                     val = await domainProp.DecryptAsync(orgId, key);
                 }

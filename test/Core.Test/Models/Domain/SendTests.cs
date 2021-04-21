@@ -40,17 +40,17 @@ namespace Bit.Core.Test.Models.Domain
             var prefix = "decrypted_";
             var prefixBytes = Encoding.UTF8.GetBytes(prefix);
 
-            cryptoService.DecryptToBytesAsync(Arg.Any<CipherString>(), Arg.Any<SymmetricCryptoKey>())
-                .Returns(info => prefixBytes.Concat(Encoding.UTF8.GetBytes(((CipherString)info[0]).EncryptedString)).ToArray());
+            cryptoService.DecryptToBytesAsync(Arg.Any<EncString>(), Arg.Any<SymmetricCryptoKey>())
+                .Returns(info => prefixBytes.Concat(Encoding.UTF8.GetBytes(((EncString)info[0]).EncryptedString)).ToArray());
             cryptoService.DecryptFromBytesAsync(Arg.Any<byte[]>(), Arg.Any<SymmetricCryptoKey>())
                 .Returns(info => prefixBytes.Concat((byte[])info[0]).ToArray());
-            cryptoService.DecryptToUtf8Async(Arg.Any<CipherString>(), Arg.Any<SymmetricCryptoKey>())
-                .Returns(info => $"{prefix}{((CipherString)info[0]).EncryptedString}");
+            cryptoService.DecryptToUtf8Async(Arg.Any<EncString>(), Arg.Any<SymmetricCryptoKey>())
+                .Returns(info => $"{prefix}{((EncString)info[0]).EncryptedString}");
             ServiceContainer.Register("cryptoService", cryptoService);
 
             var view = await send.DecryptAsync();
 
-            string expectedDecryptionString(CipherString encryptedString) =>
+            string expectedDecryptionString(EncString encryptedString) =>
                     encryptedString?.EncryptedString == null ? null : $"{prefix}{encryptedString.EncryptedString}";
 
             TestHelper.AssertPropertyEqual(send, view, "Name", "Notes", "File", "Text", "Key", "UserId");

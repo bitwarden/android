@@ -140,7 +140,7 @@ namespace Bit.App.Pages
             var key = await _cryptoService.MakeKeyAsync(MasterPassword, email, kdf, kdfIterations);
             var masterPasswordHash = await _cryptoService.HashPasswordAsync(MasterPassword, key);
 
-            Tuple<SymmetricCryptoKey, CipherString> encKey;
+            Tuple<SymmetricCryptoKey, EncString> encKey;
             var existingEncKey = await _cryptoService.GetEncKeyAsync();
             if (existingEncKey == null)
             {

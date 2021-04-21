@@ -58,8 +58,8 @@ namespace Bit.Core.Models.Domain
         public string Id { get; set; }
         public string OrganizationId { get; set; }
         public string FolderId { get; set; }
-        public CipherString Name { get; set; }
-        public CipherString Notes { get; set; }
+        public EncString Name { get; set; }
+        public EncString Notes { get; set; }
         public Enums.CipherType Type { get; set; }
         public bool Favorite { get; set; }
         public bool OrganizationUseTotp { get; set; }

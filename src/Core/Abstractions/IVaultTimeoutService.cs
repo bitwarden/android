@@ -6,7 +6,7 @@ namespace Bit.Core.Abstractions
 {
     public interface IVaultTimeoutService
     {
-        CipherString PinProtectedKey { get; set; }
+        EncString PinProtectedKey { get; set; }
         bool BiometricLocked { get; set; }
 
         Task CheckVaultTimeoutAsync();

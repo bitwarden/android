@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Bit.Core.Models.Domain
 {
-    public class CipherString
+    public class EncString
     {
         private string _decryptedValue;
 
-        public CipherString(EncryptionType encryptionType, string data, string iv = null, string mac = null)
+        public EncString(EncryptionType encryptionType, string data, string iv = null, string mac = null)
         {
             if (string.IsNullOrWhiteSpace(data))
             {
@@ -37,7 +37,7 @@ namespace Bit.Core.Models.Domain
             Mac = mac;
         }
 
-        public CipherString(string encryptedString)
+        public EncString(string encryptedString)
         {
             if (string.IsNullOrWhiteSpace(encryptedString))
             {

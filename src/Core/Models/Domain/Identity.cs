@@ -36,24 +36,24 @@ namespace Bit.Core.Models.Domain
             BuildDomainModel(this, obj, _map, alreadyEncrypted);
         }
 
-        public CipherString Title { get; set; }
-        public CipherString FirstName { get; set; }
-        public CipherString MiddleName { get; set; }
-        public CipherString LastName { get; set; }
-        public CipherString Address1 { get; set; }
-        public CipherString Address2 { get; set; }
-        public CipherString Address3 { get; set; }
-        public CipherString City { get; set; }
-        public CipherString State { get; set; }
-        public CipherString PostalCode { get; set; }
-        public CipherString Country { get; set; }
-        public CipherString Company { get; set; }
-        public CipherString Email { get; set; }
-        public CipherString Phone { get; set; }
-        public CipherString SSN { get; set; }
-        public CipherString Username { get; set; }
-        public CipherString PassportNumber { get; set; }
-        public CipherString LicenseNumber { get; set; }
+        public EncString Title { get; set; }
+        public EncString FirstName { get; set; }
+        public EncString MiddleName { get; set; }
+        public EncString LastName { get; set; }
+        public EncString Address1 { get; set; }
+        public EncString Address2 { get; set; }
+        public EncString Address3 { get; set; }
+        public EncString City { get; set; }
+        public EncString State { get; set; }
+        public EncString PostalCode { get; set; }
+        public EncString Country { get; set; }
+        public EncString Company { get; set; }
+        public EncString Email { get; set; }
+        public EncString Phone { get; set; }
+        public EncString SSN { get; set; }
+        public EncString Username { get; set; }
+        public EncString PassportNumber { get; set; }
+        public EncString LicenseNumber { get; set; }
 
         public Task<IdentityView> DecryptAsync(string orgId)
         {

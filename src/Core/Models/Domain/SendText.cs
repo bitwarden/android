@@ -8,7 +8,7 @@ namespace Bit.Core.Models.Domain
 {
     public class SendText : Domain
     {
-        public CipherString Text { get; set; }
+        public EncString Text { get; set; }
         public bool Hidden { get; set; }
 
         public SendText() : base() { }

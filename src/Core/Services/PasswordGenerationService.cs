@@ -633,7 +633,7 @@ namespace Bit.Core.Services
             }
             var tasks = history.Select(async item =>
             {
-                var decrypted = await _cryptoService.DecryptToUtf8Async(new CipherString(item.Password));
+                var decrypted = await _cryptoService.DecryptToUtf8Async(new EncString(item.Password));
                 return new GeneratedPasswordHistory
                 {
                     Password = decrypted,

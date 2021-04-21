@@ -140,7 +140,7 @@ namespace Bit.iOS.Core.Controllers
                             _vaultTimeoutService.PinProtectedKey);
                         var encKey = await _cryptoService.GetEncKeyAsync(key);
                         var protectedPin = await _storageService.GetAsync<string>(Bit.Core.Constants.ProtectedPin);
-                        var decPin = await _cryptoService.DecryptToUtf8Async(new CipherString(protectedPin), encKey);
+                        var decPin = await _cryptoService.DecryptToUtf8Async(new EncString(protectedPin), encKey);
                         failed = decPin != inputtedValue;
                         if (!failed)
                         {
@@ -191,7 +191,7 @@ namespace Bit.iOS.Core.Controllers
                     {
                         var protectedPin = await _storageService.GetAsync<string>(Bit.Core.Constants.ProtectedPin);
                         var encKey = await _cryptoService.GetEncKeyAsync(key2);
-                        var decPin = await _cryptoService.DecryptToUtf8Async(new CipherString(protectedPin), encKey);
+                        var decPin = await _cryptoService.DecryptToUtf8Async(new EncString(protectedPin), encKey);
                         var pinKey = await _cryptoService.MakePinKeyAysnc(decPin, email,
                             kdf.GetValueOrDefault(KdfType.PBKDF2_SHA256), kdfIterations.GetValueOrDefault(5000));
                         _vaultTimeoutService.PinProtectedKey = await _cryptoService.EncryptAsync(key2.Key, pinKey);

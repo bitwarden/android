@@ -24,10 +24,10 @@ namespace Bit.Core.Models.Domain
         }
 
         public List<LoginUri> Uris { get; set; }
-        public CipherString Username { get; set; }
-        public CipherString Password { get; set; }
+        public EncString Username { get; set; }
+        public EncString Password { get; set; }
         public DateTime? PasswordRevisionDate { get; set; }
-        public CipherString Totp { get; set; }
+        public EncString Totp { get; set; }
 
         public async Task<LoginView> DecryptAsync(string orgId)
         {
