@@ -30,16 +30,6 @@ $xml.Load($androidManifest);
 $nsAndroid=New-Object System.Xml.XmlNamespaceManager($xml.NameTable);
 $nsAndroid.AddNamespace("android", "http://schemas.android.com/apk/res/android");
 
-$firebaseReceiver1=$xml.SelectSingleNode(`
-    "/manifest/application/receiver[@android:name='com.google.firebase.iid.FirebaseInstanceIdInternalReceiver']", `
-    $nsAndroid);
-$firebaseReceiver1.ParentNode.RemoveChild($firebaseReceiver1);
-
-$firebaseReceiver2=$xml.SelectSingleNode(`
-    "/manifest/application/receiver[@android:name='com.google.firebase.iid.FirebaseInstanceIdReceiver']", `
-    $nsAndroid);
-$firebaseReceiver2.ParentNode.RemoveChild($firebaseReceiver2);
-
 $xml.Save($androidManifest);
 
 Write-Output "########################################"
@@ -55,6 +45,10 @@ $ns.AddNamespace("ns", $xml.DocumentElement.NamespaceURI);
 $firebaseNode=$xml.SelectSingleNode(`
     "/ns:Project/ns:ItemGroup/ns:PackageReference[@Include='Xamarin.Firebase.Messaging']", $ns);
 $firebaseNode.ParentNode.RemoveChild($firebaseNode);
+
+$daggerNode=$xml.SelectSingleNode(`
+    "/ns:Project/ns:ItemGroup/ns:PackageReference[@Include='Xamarin.Google.Dagger']", $ns);
+$daggerNode.ParentNode.RemoveChild($daggerNode);
 
 $safetyNetNode=$xml.SelectSingleNode(`
     "/ns:Project/ns:ItemGroup/ns:PackageReference[@Include='Xamarin.GooglePlayServices.SafetyNet']", $ns);
