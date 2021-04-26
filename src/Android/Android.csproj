@@ -82,7 +82,7 @@
       <Version>1.5.3.2</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Firebase.Messaging">
-      <Version>71.1740.0</Version>
+      <Version>121.0.1</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Google.Android.Material" Version="1.0.0" />
     <PackageReference Include="Xamarin.AndroidX.AppCompat" Version="1.1.0" />
@@ -90,6 +90,7 @@
     <PackageReference Include="Xamarin.AndroidX.CardView" Version="1.0.0" />
     <PackageReference Include="Xamarin.AndroidX.MediaRouter" Version="1.1.0" />
     <PackageReference Include="Xamarin.AndroidX.Migration" Version="1.0.6" />
+    <PackageReference Include="Xamarin.Google.Dagger" Version="2.27.0" />
     <PackageReference Include="Xamarin.GooglePlayServices.SafetyNet">
       <Version>71.1600.0</Version>
     </PackageReference>
@@ -113,7 +114,6 @@
     <Compile Include="Effects\FixedSizeEffect.cs" />
     <Compile Include="Effects\SelectableLabelEffect.cs" />
     <Compile Include="Effects\TabBarEffect.cs" />
-    <Compile Include="Push\FirebaseInstanceIdService.cs" />
     <Compile Include="Push\FirebaseMessagingService.cs" />
     <Compile Include="Receivers\ClearClipboardAlarmReceiver.cs" />
     <Compile Include="Receivers\RestrictionsChangedReceiver.cs" />
