@@ -1,5 +1,4 @@
-﻿using Bit.Core;
-using Bit.Core.Models.View;
+﻿using Bit.Core.Models.View;
 using Bit.Core.Utilities;
 
 namespace Bit.App.Controls
