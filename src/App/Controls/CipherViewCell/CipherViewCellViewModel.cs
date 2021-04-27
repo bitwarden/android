@@ -1,4 +1,5 @@
-﻿using Bit.Core.Models.View;
+﻿using Bit.Core;
+using Bit.Core.Models.View;
 using Bit.Core.Utilities;
 
 namespace Bit.App.Controls
@@ -28,7 +29,8 @@ namespace Bit.App.Controls
 
         public bool ShowIconImage
         {
-            get => WebsiteIconsEnabled && Cipher.Login != null && !string.IsNullOrWhiteSpace(Cipher.Login.Uri);
+            get => WebsiteIconsEnabled && !string.IsNullOrWhiteSpace(Cipher.Login?.Uri) &&
+                   Cipher.Login.Uri.StartsWith("http");
         }
     }
 }

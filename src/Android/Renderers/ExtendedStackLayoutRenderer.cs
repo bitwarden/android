@@ -33,8 +33,8 @@ namespace Bit.Droid.Renderers
                 }
                 else
                 {
-                    _bgResId ??= ThemeManager.UsingLightTheme ? Resource.Drawable.list_item_bg : 
-                Resource.Drawable.list_item_bg_dark;
+                    _bgResId ??= ThemeManager.UsingLightTheme ? Resource.Drawable.list_item_bg :
+                        Resource.Drawable.list_item_bg_dark;
                 }
             }
             return _bgResId.Value;
