@@ -391,16 +391,7 @@ namespace Bit.App.Pages
                     _messagingService.Send("sendUpdated");
                 }
 
-                if (ShareOnSave)
-                {
-                    var savedSend = await _sendService.GetAsync(sendId);
-                    if (savedSend != null)
-                    {
-                        var savedSendView = await savedSend.DecryptAsync();
-                        await AppHelpers.ShareSendUrlAsync(savedSendView);
-                    }
-                }
-                else
+                if (!ShareOnSave)
                 {
                     _platformUtilsService.ShowToast("success", null,
                     EditMode ? AppResources.SendUpdated : AppResources.NewSendCreated);
@@ -413,6 +404,16 @@ namespace Bit.App.Pages
                 else
                 {
                     await Page.Navigation.PopModalAsync();
+                }
+                
+                if (ShareOnSave)
+                {
+                    var savedSend = await _sendService.GetAsync(sendId);
+                    if (savedSend != null)
+                    {
+                        var savedSendView = await savedSend.DecryptAsync();
+                        await AppHelpers.ShareSendUrlAsync(savedSendView);
+                    }
                 }
                 
                 return true;
