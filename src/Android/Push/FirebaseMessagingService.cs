@@ -1,7 +1,7 @@
 #if !FDROID
 using Android.App;
-using Android.Content;
 using Bit.App.Abstractions;
+using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using Firebase.Messaging;
 using Newtonsoft.Json;
@@ -10,10 +10,19 @@ using Xamarin.Forms;
 
 namespace Bit.Droid.Push
 {
-    [Service]
+    [Service(Exported=false)]
     [IntentFilter(new[] { "com.google.firebase.MESSAGING_EVENT" })]
     public class FirebaseMessagingService : Firebase.Messaging.FirebaseMessagingService
     {
+        public async override void OnNewToken(string token)
+        {
+            var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+            var pushNotificationService = ServiceContainer.Resolve<IPushNotificationService>("pushNotificationService");
+            
+            await storageService.SaveAsync(Core.Constants.PushRegisteredTokenKey, token);
+            await pushNotificationService.RegisterAsync();
+        }
+        
         public async override void OnMessageReceived(RemoteMessage message)
         {
             if (message?.Data == null)
