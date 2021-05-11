@@ -45,7 +45,6 @@ namespace Bit.App.Pages
         };
         private bool _disableHideEmail;
         private bool _sendOptionsPolicyInEffect;
-        private bool _disableHideEmailControl;
 
         public SendAddEditPageViewModel()
         {
@@ -344,7 +343,7 @@ namespace Bit.App.Pages
                 }
                 if (!_emailVerified)
                 {
-                    await _platformUtilsService.ShowDialogAsync(AppResources.SendFileEmailVerificationRequired);
+                    verifyEmailPrompt();
                     return false;
                 }
                 if (!EditMode)
@@ -475,7 +474,7 @@ namespace Bit.App.Pages
                     }
                     else if (!_emailVerified)
                     {
-                        await _platformUtilsService.ShowDialogAsync(AppResources.SendFileEmailVerificationRequired);
+                        verifyEmailPrompt();
                     }
                     
                     if (IsAddFromShare && Device.RuntimePlatform == Device.Android)
@@ -608,6 +607,16 @@ namespace Bit.App.Pages
                 0,
                 DateTimeKind.Local
             );
+        }
+
+        private async void verifyEmailPrompt()
+        {
+            var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.SendFileEmailVerificationRequired, null,
+                AppResources.Yes, AppResources.Cancel);
+            if (confirmed)
+            {
+                _platformUtilsService.LaunchUri("https://bitwarden.com/help/article/create-bitwarden-account/#verify-your-email");
+            }
         }
     }
 }
