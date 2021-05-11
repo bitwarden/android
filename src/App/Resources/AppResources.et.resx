@@ -1853,7 +1853,7 @@
     <value>Aegumise kellaaeg</value>
   </data>
   <data name="ExpirationDateInfo" xml:space="preserve">
-    <value>Seadistamisel ei pääse sellele Sendile enam pärast määratud kuupäeva ligi.</value>
+    <value>Selle valimisel ei pääse sellele Sendile enam pärast määratud kuupäeva ligi.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Expired" xml:space="preserve">
@@ -1863,7 +1863,7 @@
     <value>Maksimaalne ligipääsude arv</value>
   </data>
   <data name="MaximumAccessCountInfo" xml:space="preserve">
-    <value>Seadistamisel ei saa kasutajad pärast maksimaalse ligipääsude arvu saavutamist sellele Sendile enam ligi.</value>
+    <value>Selle valimisel ei saa kasutajad pärast maksimaalse ligipääsude arvu saavutamist sellele Sendile enam ligi.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="MaximumAccessCountReached" xml:space="preserve">
@@ -1876,7 +1876,7 @@
     <value>Uus Parool</value>
   </data>
   <data name="PasswordInfo" xml:space="preserve">
-    <value>Mittekohustuslik parooli küsimine, et Sendile ligi pääseda.</value>
+    <value>Soovi korral nõua parooli, millega Sendile ligi pääseb.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="RemovePassword" xml:space="preserve">
@@ -1904,7 +1904,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="CopyLink" xml:space="preserve">
-    <value>Kopeeri aadress</value>
+    <value>Kopeeri link</value>
   </data>
   <data name="ShareLink" xml:space="preserve">
     <value>Jaga linki</value>
@@ -1968,7 +1968,22 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AboutSend" xml:space="preserve">
-    <value>Teave Sendist</value>
+    <value>Rohkem infot</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="HideEmail" xml:space="preserve">
+    <value>Hide my email address from recipients.</value>
+  </data>
+  <data name="SendOptionsPolicyInEffect" xml:space="preserve">
+    <value>One or more organization policies are affecting your Send options.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendFilePremiumRequired" xml:space="preserve">
+    <value>Free accounts are restricted to sharing text only. A premium membership is required to use files with Send.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendFileEmailVerificationRequired" xml:space="preserve">
+    <value>You must verify your email to use files with Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
 </root>
