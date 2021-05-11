@@ -45,7 +45,6 @@ namespace Bit.App.Pages
         };
         private bool _disableHideEmail;
         private bool _sendOptionsPolicyInEffect;
-        private bool _disableHideEmailControl;
 
         public SendAddEditPageViewModel()
         {
