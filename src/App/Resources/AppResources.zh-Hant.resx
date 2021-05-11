@@ -236,18 +236,18 @@
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="HelpAndFeedback" xml:space="preserve">
-    <value>協助與回饋</value>
+    <value>協助與意見反應</value>
   </data>
   <data name="Hide" xml:space="preserve">
     <value>隱藏</value>
     <comment>Hide a secret value that is currently shown (password).</comment>
   </data>
   <data name="InternetConnectionRequiredMessage" xml:space="preserve">
-    <value>繼續前請先連線至網際網路。</value>
+    <value>繼續之前，請先連線至網際網路。</value>
     <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
-    <value>需要連線網際網路</value>
+    <value>需要網際網路連線</value>
     <comment>Title for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InvalidMasterPassword" xml:space="preserve">
@@ -295,7 +295,7 @@
     <value>否</value>
   </data>
   <data name="Notes" xml:space="preserve">
-    <value>筆記</value>
+    <value>備註</value>
     <comment>Label for notes.</comment>
   </data>
   <data name="Ok" xml:space="preserve">
@@ -461,7 +461,7 @@
     <value>重新啟用 App 擴充套件</value>
   </data>
   <data name="ExtensionAlmostDone" xml:space="preserve">
-    <value>快要完成了!</value>
+    <value>快要完成了！</value>
   </data>
   <data name="ExtensionEnable" xml:space="preserve">
     <value>啟用 App 擴充套件</value>
@@ -835,7 +835,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
-    <value>接著，將您的 YubiKey NEO 緊貼於裝置後，或者將 YubiKey 插入您裝置的 USB 連接埠，然後按下按鈕。</value>
+    <value>要繼續的話，請將您的 YubiKey 靠在裝置的背面或者將 YubiKey 插入您裝置的 USB 連接埠，然後按下按鈕。</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
     <value>YubiKey 安全鑰匙</value>
@@ -1012,7 +1012,7 @@
     <value>八月</value>
   </data>
   <data name="Brand" xml:space="preserve">
-    <value>品牌</value>
+    <value>發卡組織</value>
   </data>
   <data name="CardholderName" xml:space="preserve">
     <value>持卡人姓名</value>
@@ -1220,7 +1220,7 @@
     <value>開始於</value>
   </data>
   <data name="URIMatchDetection" xml:space="preserve">
-    <value>URL 一致性偵測</value>
+    <value>URI 一致性偵測</value>
   </data>
   <data name="MatchDetection" xml:space="preserve">
     <value>一致性偵測</value>
@@ -1243,7 +1243,7 @@
     <value>再試一次</value>
   </data>
   <data name="YubiKeyInstructionIos" xml:space="preserve">
-    <value>接著，請將您的 YubiKey NEO 靠在裝置的背面。</value>
+    <value>要繼續的話，請將您的 YubiKey 靠在裝置的背面。</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
     <value>當應用程式不支援標準的自動填入服務時，無障礙服務或許能夠幫助使用。</value>
@@ -1508,7 +1508,7 @@
     <value>正在重新啟動...</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
-    <value>複製筆記</value>
+    <value>複製備註</value>
   </data>
   <data name="Exit" xml:space="preserve">
     <value>結束</value>
@@ -1582,7 +1582,7 @@
     <value>權限</value>
   </data>
   <data name="BitwardenAutofillServiceOpenOverlayPermissionSettings" xml:space="preserve">
-    <value>打開疊加層權限設定</value>
+    <value>開啟疊加層權限設定</value>
   </data>
   <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
     <value>3. 在 Android 應用程式設定介面找到 Bitwarden，選擇「顯示在其他應用程式上層」（在「進階」下），並打開開關以允許叠加層。</value>
@@ -1763,10 +1763,10 @@
     <value>自動填入服務</value>
   </data>
   <data name="InlineAutofill" xml:space="preserve">
-    <value>使用行內自動填入</value>
+    <value>使用內嵌式自動填入</value>
   </data>
   <data name="InlineAutofillDescription" xml:space="preserve">
-    <value>若您的 IME（鍵盤）支援，將使用內嵌式自動填入。若您的設定不支援（或未啟用此選項），就會使用預設的疊加式自動填入。</value>
+    <value>若您的 IME（鍵盤）支援，將使用內嵌式自動填入。若您的設定不支援（或未啟用此選項），將使用預設的覆疊式自動填入。</value>
   </data>
   <data name="Accessibility" xml:space="preserve">
     <value>使用無障礙</value>
@@ -1870,7 +1870,7 @@
     <value>已達最大存取次數</value>
   </data>
   <data name="CurrentAccessCount" xml:space="preserve">
-    <value>目前已存取次數</value>
+    <value>目前存取次數</value>
   </data>
   <data name="NewPassword" xml:space="preserve">
     <value>新的密碼</value>
@@ -1896,7 +1896,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>停用此 Send 則沒有任何人能存取它。</value>
+    <value>停用此 Send 以阻止任何人存取它。</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
@@ -1960,7 +1960,7 @@
     <value>自訂</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
-    <value>儲存時共享此 Send。</value>
+    <value>儲存時分享此 Send。</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
@@ -1969,6 +1969,21 @@
   </data>
   <data name="AboutSend" xml:space="preserve">
     <value>關於 Send</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="HideEmail" xml:space="preserve">
+    <value>Hide my email address from recipients.</value>
+  </data>
+  <data name="SendOptionsPolicyInEffect" xml:space="preserve">
+    <value>One or more organization policies are affecting your Send options.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendFilePremiumRequired" xml:space="preserve">
+    <value>Free accounts are restricted to sharing text only. A premium membership is required to use files with Send.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendFileEmailVerificationRequired" xml:space="preserve">
+    <value>You must verify your email to use files with Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
 </root>
