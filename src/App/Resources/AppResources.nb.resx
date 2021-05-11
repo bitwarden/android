@@ -1718,7 +1718,7 @@
     <value>En eller flere av organisasjonens vilkår krever hovedpassordet ditt for å oppfylle følgende krav:</value>
   </data>
   <data name="PolicyInEffectMinComplexity" xml:space="preserve">
-    <value>Minimum complexity score of {0}</value>
+    <value>Minimum kompleksitetsskår på {0}</value>
   </data>
   <data name="PolicyInEffectMinLength" xml:space="preserve">
     <value>Minste lengde på {0}</value>
@@ -1758,7 +1758,7 @@
     <value>Retningslinjer for personvern</value>
   </data>
   <data name="AccessibilityDrawOverPermissionAlert" xml:space="preserve">
-    <value>Bitwarden needs attention - Enable "Draw-Over" in "Auto-fill Services" from Bitwarden Settings</value>
+    <value>Bitwarden trenger oppmerksomhet – Aktiver "Draw-Over" i "Auto-utfyllingstjenester" fra Bitwarden-innstillinger</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
     <value>Auto-utfyllingstjenester</value>
@@ -1767,28 +1767,28 @@
     <value>Bruk innebygd Autofyll</value>
   </data>
   <data name="InlineAutofillDescription" xml:space="preserve">
-    <value>Use inline autofill if your selected IME (keyboard) supports it. If your configuration is not supported (or this option is disabled), the default Autofill overlay will be used.</value>
+    <value>Bruk innebygd autoutfyll hvis ditt valgte IME (tastatur) støtter den. Dersom konfigurasjonen din ikke støttes (eller dette alternativet er deaktivert), vil standard autofyll overlegg bli brukt.</value>
   </data>
   <data name="Accessibility" xml:space="preserve">
     <value>Bruk tilgjengelighet</value>
   </data>
   <data name="AccessibilityDescription" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. When enabled, we'll display a popup when login fields are selected.</value>
+    <value>Bruk Bitwarden sin tilgjengelighetstjeneste for å auto-utfylle dine innlogginger på apper og på nettet. Når det er aktivert, vil vi vise en popup når innloggingsfelt er valgt.</value>
   </data>
   <data name="AccessibilityDescription2" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. (Requires Draw-Over to be enabled as well)</value>
+    <value>Bruk Bitwarden sin tilgjengelighetstjeneste for å auto-utfylle dine innlogginger på apper og på nettet. (Krever Draw-Over for å også aktiveres)</value>
   </data>
   <data name="AccessibilityDescription3" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to use the Autofill Quick-Action Tile, and/or show a popup using Draw-Over (if enabled).</value>
+    <value>Bruk Bitwarden sin tilgjengelighetstjeneste for å bruke Autofill Quick-Action Tile, og/eller vis et popup ved å bruke Draw-Over (hvis aktivert).</value>
   </data>
   <data name="AccessibilityDescription4" xml:space="preserve">
-    <value>Required to use the Autofill Quick-Action Tile, or to augment the Autofill Service by using Draw-Over (if enabled).</value>
+    <value>Påkrevd for å bruke Autofill Quick-Action Tile, eller for å utvide Autofill Service ved å bruke Draw-Over (hvis aktivert).</value>
   </data>
   <data name="DrawOver" xml:space="preserve">
     <value>Use Draw-Over</value>
   </data>
   <data name="DrawOverDescription" xml:space="preserve">
-    <value>When enabled, allows the Bitwarden Accessibility Service to display a popup when login fields are selected.</value>
+    <value>Når dette er aktivert, tillater Bitwarden å vise et sprettoppvindu når innloggingsfelt velges.</value>
   </data>
   <data name="DrawOverDescription2" xml:space="preserve">
     <value>If enabled, the Bitwarden Accessibility Service will display a popup when login fields are selected to assist with auto-filling your logins.</value>
@@ -1807,7 +1807,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AllSends" xml:space="preserve">
-    <value>All Sends</value>
+    <value>Alle Send-er</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Sends" xml:space="preserve">
@@ -1815,115 +1815,115 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NameInfo" xml:space="preserve">
-    <value>A friendly name to describe this Send.</value>
+    <value>Et vennlig navn for å beskrive dette Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="TypeText" xml:space="preserve">
-    <value>Text</value>
+    <value>Tekst</value>
   </data>
   <data name="TypeTextInfo" xml:space="preserve">
-    <value>The text you want to send.</value>
+    <value>Teksten du ønsker å sende.</value>
   </data>
   <data name="HideTextByDefault" xml:space="preserve">
-    <value>When accessing the Send, hide the text by default</value>
+    <value>Når du åpner Send-en, er teksten skjult som standard</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="TypeFile" xml:space="preserve">
-    <value>File</value>
+    <value>Fil</value>
   </data>
   <data name="TypeFileInfo" xml:space="preserve">
-    <value>The file you want to send.</value>
+    <value>Filen du vil sende.</value>
   </data>
   <data name="DeletionDate" xml:space="preserve">
-    <value>Deletion Date</value>
+    <value>Dato for sletting</value>
   </data>
   <data name="DeletionTime" xml:space="preserve">
-    <value>Deletion Time</value>
+    <value>Sletting tid</value>
   </data>
   <data name="DeletionDateInfo" xml:space="preserve">
-    <value>The Send will be permanently deleted on the specified date and time.</value>
+    <value>Send-en vil bli slettet permanent på den angitte dato og klokkeslett.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PendingDelete" xml:space="preserve">
-    <value>Pending deletion</value>
+    <value>Venter på sletting</value>
   </data>
   <data name="ExpirationDate" xml:space="preserve">
-    <value>Expiration Date</value>
+    <value>Utløpsdato</value>
   </data>
   <data name="ExpirationTime" xml:space="preserve">
-    <value>Expiration Time</value>
+    <value>Gyldig til</value>
   </data>
   <data name="ExpirationDateInfo" xml:space="preserve">
-    <value>If set, access to this Send will expire on the specified date and time.</value>
+    <value>Hvis satt, vil tilgang til denne Send gå ut på angitt dato og klokkeslett.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Expired" xml:space="preserve">
-    <value>Expired</value>
+    <value>Utløpt</value>
   </data>
   <data name="MaximumAccessCount" xml:space="preserve">
-    <value>Maximum Access Count</value>
+    <value>Maksimal antall tilganger</value>
   </data>
   <data name="MaximumAccessCountInfo" xml:space="preserve">
-    <value>If set, users will no longer be able to access this send once the maximum access count is reached.</value>
+    <value>Hvis satt, vil brukere ikke lenger ha tilgang til dette send når maksimal antall tilgang er nådd.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="MaximumAccessCountReached" xml:space="preserve">
-    <value>Max access count reached</value>
+    <value>Maksimalt antall tilganger nådd</value>
   </data>
   <data name="CurrentAccessCount" xml:space="preserve">
-    <value>Current Access Count</value>
+    <value>Antall nåværende tilgang</value>
   </data>
   <data name="NewPassword" xml:space="preserve">
-    <value>New Password</value>
+    <value>Nytt passord</value>
   </data>
   <data name="PasswordInfo" xml:space="preserve">
-    <value>Optionally require a password for users to access this Send.</value>
+    <value>Eventuelt krever et passord for brukere å få tilgang til denne Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="RemovePassword" xml:space="preserve">
-    <value>Remove Password</value>
+    <value>Fjern passord</value>
   </data>
   <data name="AreYouSureRemoveSendPassword" xml:space="preserve">
-    <value>Are you sure you want to remove the password?</value>
+    <value>Er du sikker på at du vil fjerne passordet?</value>
   </data>
   <data name="RemovingSendPassword" xml:space="preserve">
-    <value>Removing password</value>
+    <value>Fjerner passord</value>
   </data>
   <data name="SendPasswordRemoved" xml:space="preserve">
-    <value>Password has been removed.</value>
+    <value>Passordet er fjernet.</value>
   </data>
   <data name="NotesInfo" xml:space="preserve">
-    <value>Private notes about this Send.</value>
+    <value>Private notater om denne Send-en.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Disable this Send so that no one can access it.</value>
+    <value>Deaktiver denne Send-en, slik at ingen får tilgang til den.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
-    <value>There are no sends in your account.</value>
+    <value>Det er ingen sendinger på kontoen din.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="CopyLink" xml:space="preserve">
-    <value>Copy Link</value>
+    <value>Kopier lenke</value>
   </data>
   <data name="ShareLink" xml:space="preserve">
-    <value>Share Link</value>
+    <value>Del link</value>
   </data>
   <data name="SendLink" xml:space="preserve">
-    <value>Send link</value>
+    <value>Send lenke</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SearchSends" xml:space="preserve">
-    <value>Search Sends</value>
+    <value>Søk i Send-ene</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="EditSend" xml:space="preserve">
-    <value>Edit Send</value>
+    <value>Rediger Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddSend" xml:space="preserve">
-    <value>Add Send</value>
+    <value>Legg til Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AreYouSureDeleteSend" xml:space="preserve">
@@ -1943,33 +1943,48 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="OneDay" xml:space="preserve">
-    <value>1 day</value>
+    <value>1 dag</value>
   </data>
   <data name="TwoDays" xml:space="preserve">
-    <value>2 days</value>
+    <value>2 dager</value>
   </data>
   <data name="ThreeDays" xml:space="preserve">
-    <value>3 days</value>
+    <value>3 dager</value>
   </data>
   <data name="SevenDays" xml:space="preserve">
-    <value>7 days</value>
+    <value>7 dager</value>
   </data>
   <data name="ThirtyDays" xml:space="preserve">
-    <value>30 days</value>
+    <value>30 dager</value>
   </data>
   <data name="Custom" xml:space="preserve">
-    <value>Custom</value>
+    <value>Egendefinert</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
     <value>Share this Send upon save.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
-    <value>Due to an enterprise policy, you are only able to delete an existing Send.</value>
+    <value>På grunn av en virksomhetsregel kan du kun slette en eksisterende Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AboutSend" xml:space="preserve">
-    <value>About Send</value>
+    <value>Om Send</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="HideEmail" xml:space="preserve">
+    <value>Hide my email address from recipients.</value>
+  </data>
+  <data name="SendOptionsPolicyInEffect" xml:space="preserve">
+    <value>One or more organization policies are affecting your Send options.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendFilePremiumRequired" xml:space="preserve">
+    <value>Free accounts are restricted to sharing text only. A premium membership is required to use files with Send.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendFileEmailVerificationRequired" xml:space="preserve">
+    <value>You must verify your email to use files with Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
 </root>
