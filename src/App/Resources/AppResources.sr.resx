@@ -356,7 +356,7 @@
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
-    <value>{0} је копирано.</value>
+    <value>{0} је копиран/а.</value>
     <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
@@ -1834,7 +1834,7 @@
     <value>Датотека коју желиш да пошаљеш.</value>
   </data>
   <data name="DeletionDate" xml:space="preserve">
-    <value>Датум брисања</value>
+    <value>Брисање после</value>
   </data>
   <data name="DeletionTime" xml:space="preserve">
     <value>Време брисања</value>
@@ -1847,7 +1847,7 @@
     <value>Брисање на чекању</value>
   </data>
   <data name="ExpirationDate" xml:space="preserve">
-    <value>Датум истека</value>
+    <value>Рок употребе</value>
   </data>
   <data name="ExpirationTime" xml:space="preserve">
     <value>Време истека</value>
@@ -1957,7 +1957,7 @@
     <value>30 дана</value>
   </data>
   <data name="Custom" xml:space="preserve">
-    <value>Прилагођен</value>
+    <value>Друго</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
     <value>Share this upon save.
@@ -1970,6 +1970,21 @@
   </data>
   <data name="AboutSend" xml:space="preserve">
     <value>О слању</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="HideEmail" xml:space="preserve">
+    <value>Hide my email address from recipients.</value>
+  </data>
+  <data name="SendOptionsPolicyInEffect" xml:space="preserve">
+    <value>One or more organization policies are affecting your Send options.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendFilePremiumRequired" xml:space="preserve">
+    <value>Free accounts are restricted to sharing text only. A premium membership is required to use files with Send.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendFileEmailVerificationRequired" xml:space="preserve">
+    <value>You must verify your email to use files with Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
 </root>

@@ -284,7 +284,7 @@
     <comment>Text to define that there are more options things to see.</comment>
   </data>
   <data name="MyVault" xml:space="preserve">
-    <value>ห้องนิรภัยของฉัน</value>
+    <value>ตู้เซฟของฉัน</value>
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Name" xml:space="preserve">
@@ -330,7 +330,7 @@
     <value>ส่งข้อมูล</value>
   </data>
   <data name="Sync" xml:space="preserve">
-    <value>การซิงค์</value>
+    <value>ซิงค์</value>
     <comment>The title for the sync page.</comment>
   </data>
   <data name="ThankYou" xml:space="preserve">
@@ -378,7 +378,7 @@
     <value>เยี่ยมชมเว็บไซต์</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Visit our website to get help, news, email us, and/or learn more about how to use bitwarden.</value>
+    <value>เยี่ยมชมเว็บไซต์ของเราเพื่อขอความช่วยเหลือ, ข่าว, อีเมลถึงเรา, และ/หรือเรียนรู้เพิ่มเติมเกี่ยวกับวิธีการใช้ Bitwarden.</value>
   </data>
   <data name="Website" xml:space="preserve">
     <value>เว็บไซต์</value>
@@ -400,7 +400,7 @@
     <value>แอปส่วนขยาย</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
+    <value>ใช้บริการ Bitwarden เพิ่อเข้าถึงการกรอกข้อมูลอัตโนมัติเข้าสู่ระบบผ่านแอปพลิเคชันและเว็บ</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>บริการกรอกข้อมูลอัตโนมัติ</value>
@@ -409,16 +409,16 @@
     <value>หลีกเลี่ยงอักขระที่ไม่ชัดเจน</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>ส่วนขยายแอปพลิเคชัน bitwarden</value>
+    <value>ส่วนขยายแอปพลิเคชัน Bitwarden</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
     <value>The easiest way to add new logins to your vault is from the Bitwarden App Extension. Learn more about using the Bitwarden App Extension by navigating to the "Settings" screen.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>Use bitwarden in Safari and other apps to auto-fill your logins.</value>
+    <value>ใช้ Bitwarden ใน Safari และแอปอื่น ๆ ในการกรอกข้อมูลอัตโนมัติเพื่อเข้าสู่ระบบ</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>bitwarden Auto-fill Service</value>
+    <value>Bitwarden บริการกรอกข้อมูลอัตโนมัติ</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
     <value>Use the bitwarden accessibility service to auto-fill your logins.</value>
@@ -531,13 +531,13 @@
     <value>4 ชั่วโมง</value>
   </data>
   <data name="Immediately" xml:space="preserve">
-    <value>Immediately</value>
+    <value>ทันที</value>
   </data>
   <data name="VaultTimeout" xml:space="preserve">
-    <value>Vault Timeout</value>
+    <value>ระยะเวลาล็อคตู้เซฟ</value>
   </data>
   <data name="VaultTimeoutAction" xml:space="preserve">
-    <value>Vault Timeout Action</value>
+    <value>การดำเนินการหลังหมดเวลาล็อคตู้เซฟ</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
     <value>Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?</value>
@@ -644,7 +644,7 @@
     <value>ยืนยันรหัสผ่านหลัก</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
-    <value>Search vault</value>
+    <value>ค้นหาในตู้เซฟ</value>
   </data>
   <data name="Security" xml:space="preserve">
     <value>ความปลอดภัย</value>
@@ -1138,7 +1138,7 @@
     <value>ไม่มีรายการในโฟลเดอร์นี้</value>
   </data>
   <data name="NoItemsTrash" xml:space="preserve">
-    <value>There are no items in the trash.</value>
+    <value>ไม่มีรายการในถังขยะ</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
     <value>เติมข้อมูลบริการการเข้าถึงได้โดยอัตโนมัติ</value>
@@ -1230,14 +1230,14 @@
     <value>ใช่ และบันทึก</value>
   </data>
   <data name="AutofillAndSave" xml:space="preserve">
-    <value>Auto-fill and save</value>
+    <value>กรอกข้อมูลอัตโนมัติ และ บันทึก</value>
   </data>
   <data name="Organization" xml:space="preserve">
     <value>องค์กร</value>
     <comment>An entity of multiple related people (ex. a team or business organization).</comment>
   </data>
   <data name="HoldYubikeyNearTop" xml:space="preserve">
-    <value>Hold your Yubikey near the top of the device.</value>
+    <value>ถือ Yubikey ไว้ใกล้ ๆ ด้านบนอุปกรณ์ของคุณ</value>
   </data>
   <data name="TryAgain" xml:space="preserve">
     <value>Try Again</value>
@@ -1257,7 +1257,7 @@
     <comment>ex. Date this item was updated</comment>
   </data>
   <data name="AutofillActivated" xml:space="preserve">
-    <value>AutoFill Activated!</value>
+    <value>กรอกข้อมูลอัตโนมัติเปิดใช้งานแล้ว!</value>
   </data>
   <data name="MustLogInMainAppAutofill" xml:space="preserve">
     <value>You must log into the main Bitwarden app before you can use AutoFill.</value>
@@ -1290,13 +1290,13 @@
     <value>5. Select "Bitwarden"</value>
   </data>
   <data name="PasswordAutofill" xml:space="preserve">
-    <value>Password AutoFill</value>
+    <value>กรอกรหัสผ่านอัตโนมัติ</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
     <value>The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the "Settings" screen.</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
-    <value>Invalid email address.</value>
+    <value>ที่อยู่อีเมลไม่ถูกต้อง</value>
   </data>
   <data name="Cards" xml:space="preserve">
     <value>บัตร</value>
@@ -1385,7 +1385,7 @@
     <value>You must select at least one collection.</value>
   </data>
   <data name="Share" xml:space="preserve">
-    <value>Share</value>
+    <value>แบ่งปัน</value>
   </data>
   <data name="ShareItem" xml:space="preserve">
     <value>Share Item</value>
@@ -1406,11 +1406,11 @@
     <value>Word Separator</value>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>Clear</value>
+    <value>ล้าง</value>
     <comment>To clear something out. example: To clear browser history.</comment>
   </data>
   <data name="Generator" xml:space="preserve">
-    <value>Generator</value>
+    <value>สร้าง</value>
     <comment>Short for "Password Generator"</comment>
   </data>
   <data name="NoFoldersToList" xml:space="preserve">
@@ -1428,7 +1428,7 @@
     <value>Bitwarden allows you to share your vault with others by using an organization account. Would you like to visit the bitwarden.com website to learn more?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
-    <value>Export Vault</value>
+    <value>ส่งออกตู้เซฟ</value>
   </data>
   <data name="LockNow" xml:space="preserve">
     <value>Lock Now</value>
@@ -1450,36 +1450,36 @@
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
-    <value>Your vault is locked. Verify your master password to continue.</value>
+    <value>ตู้เซฟของคุณถูกล็อค ใส่รหัสผ่านหลักของคุณเพื่อดำเนินการต่อ</value>
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
-    <value>Your vault is locked. Verify your PIN code to continue.</value>
+    <value>ตู้เซฟของคุณถูกล็อค ใส่ PIN ของคุณเพื่อดำเนินการต่อ</value>
   </data>
   <data name="Dark" xml:space="preserve">
-    <value>Dark</value>
+    <value>มืด</value>
     <comment>A dark color</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>Light</value>
+    <value>สว่าง</value>
     <comment>A light color</comment>
   </data>
   <data name="FiveMinutes" xml:space="preserve">
-    <value>5 minutes</value>
+    <value>5 นาที</value>
   </data>
   <data name="TenSeconds" xml:space="preserve">
-    <value>10 seconds</value>
+    <value>10 วินาที</value>
   </data>
   <data name="ThirtySeconds" xml:space="preserve">
-    <value>30 seconds</value>
+    <value>30 วินาที</value>
   </data>
   <data name="TwentySeconds" xml:space="preserve">
-    <value>20 seconds</value>
+    <value>20 วินาที</value>
   </data>
   <data name="TwoMinutes" xml:space="preserve">
-    <value>2 minutes</value>
+    <value>2 นาที</value>
   </data>
   <data name="ClearClipboard" xml:space="preserve">
-    <value>Clear Clipboard</value>
+    <value>ล้างคลิปบอร์ด</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="ClearClipboardDescription" xml:space="preserve">
@@ -1494,7 +1494,7 @@
     <value>Choose the default way that URI match detection is handled for logins when performing actions such as auto-fill.</value>
   </data>
   <data name="Theme" xml:space="preserve">
-    <value>Theme</value>
+    <value>ธีม</value>
     <comment>Color theme</comment>
   </data>
   <data name="ThemeDescription" xml:space="preserve">
@@ -1511,7 +1511,7 @@
     <value>Copy Notes</value>
   </data>
   <data name="Exit" xml:space="preserve">
-    <value>Exit</value>
+    <value>ออก</value>
   </data>
   <data name="ExitConfirmation" xml:space="preserve">
     <value>Are you sure you want to exit Bitwarden?</value>
@@ -1520,7 +1520,7 @@
     <value>You you want to require unlocking with your master password when the application is restarted?</value>
   </data>
   <data name="Black" xml:space="preserve">
-    <value>Black</value>
+    <value>ดำ</value>
     <comment>The color black</comment>
   </data>
   <data name="BlacklistedUris" xml:space="preserve">
@@ -1552,7 +1552,7 @@
     <value>Include Number</value>
   </data>
   <data name="Download" xml:space="preserve">
-    <value>Download</value>
+    <value>ดาวน์โหลด</value>
   </data>
   <data name="Shared" xml:space="preserve">
     <value>Shared</value>
@@ -1567,7 +1567,7 @@
     <value>Biometric Verification</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
-    <value>Biometrics</value>
+    <value>ไบโอเมทริกซ์</value>
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
     <value>Use Biometrics To Unlock</value>
@@ -1579,7 +1579,7 @@
     <value>3. On the Android App Settings screen for Bitwarden, go to the "Display over other apps" options (under Advanced) and tap the toggle to enable overlay support.</value>
   </data>
   <data name="OverlayPermission" xml:space="preserve">
-    <value>Permission</value>
+    <value>สิทธิ์การใช้งาน</value>
   </data>
   <data name="BitwardenAutofillServiceOpenOverlayPermissionSettings" xml:space="preserve">
     <value>Open Overlay Permission Settings</value>
@@ -1597,7 +1597,7 @@
     <value>File Format</value>
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
-    <value>Enter your master password to export your vault data.</value>
+    <value>ใส่รหัสผ่านหลักของคุณเพื่อส่งออกข้อมูลตู้เซฟของคุณ</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>This export contains your vault data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it.</value>
@@ -1613,23 +1613,23 @@
     <comment>Title for the alert to confirm vault exports.</comment>
   </data>
   <data name="Warning" xml:space="preserve">
-    <value>Warning</value>
+    <value>คำเตือน</value>
   </data>
   <data name="ExportVaultFailure" xml:space="preserve">
     <value>There was a problem exporting your vault.  If the problem persists, you'll need to export from the web vault.</value>
   </data>
   <data name="ExportVaultSuccess" xml:space="preserve">
-    <value>Vault exported successfully</value>
+    <value>ส่งออกตู้เซฟเรียบร้อยแล้ว</value>
   </data>
   <data name="Clone" xml:space="preserve">
-    <value>Clone</value>
+    <value>โคลน</value>
     <comment>Clone an entity (verb).</comment>
   </data>
   <data name="PasswordGeneratorPolicyInEffect" xml:space="preserve">
     <value>One or more organization policies are affecting your generator settings</value>
   </data>
   <data name="Open" xml:space="preserve">
-    <value>Open</value>
+    <value>เปิด</value>
     <comment>Button text for an open operation (verb).</comment>
   </data>
   <data name="UnableToSaveAttachment" xml:space="preserve">
@@ -1653,19 +1653,19 @@
     <comment>Confirmation message after successfully soft-deleting a login</comment>
   </data>
   <data name="Restore" xml:space="preserve">
-    <value>Restore</value>
+    <value>คืนค่า</value>
     <comment>Restores an entity (verb).</comment>
   </data>
   <data name="Restoring" xml:space="preserve">
-    <value>Restoring...</value>
+    <value>กำลังคืนค่า...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemRestored" xml:space="preserve">
-    <value>Item has been restored.</value>
+    <value>รายการถูกกู้คืนแล้ว</value>
     <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
   </data>
   <data name="Trash" xml:space="preserve">
-    <value>Trash</value>
+    <value>ถังขยะ</value>
     <comment>(noun) Location of deleted items which have not yet been permanently deleted</comment>
   </data>
   <data name="SearchTrash" xml:space="preserve">
@@ -1742,7 +1742,7 @@
     <value>Password does not meet organization requirements. Please check the policy information and try again.</value>
   </data>
   <data name="Loading" xml:space="preserve">
-    <value>Loading</value>
+    <value>กำลังโหลด</value>
   </data>
   <data name="AcceptPolicies" xml:space="preserve">
     <value>By activating this switch you agree to the following:
@@ -1752,22 +1752,22 @@
     <value>Terms of Service and Privacy Policy have not been acknowledged.</value>
   </data>
   <data name="TermsOfService" xml:space="preserve">
-    <value>Terms of Service</value>
+    <value>เงื่อนไขการใช้บริการ</value>
   </data>
   <data name="PrivacyPolicy" xml:space="preserve">
-    <value>Privacy Policy</value>
+    <value>นโยบายความเป็นส่วนตัว</value>
   </data>
   <data name="AccessibilityDrawOverPermissionAlert" xml:space="preserve">
     <value>Bitwarden needs attention - Enable "Draw-Over" in "Auto-fill Services" from Bitwarden Settings</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
-    <value>Auto-fill Services</value>
+    <value>บริการกรอกข้อมูลอัตโนมัติ</value>
   </data>
   <data name="InlineAutofill" xml:space="preserve">
-    <value>Use Inline Autofill</value>
+    <value>ใช้งานกรอกข้อมูลอัตโนมัติแบบอินไลน์</value>
   </data>
   <data name="InlineAutofillDescription" xml:space="preserve">
-    <value>Use inline autofill if your selected IME (keyboard) supports it. If your configuration is not supported (or this option is disabled), the default Autofill overlay will be used.</value>
+    <value>ใช้การกรอกข้อมูลอัตโนมัติแบบอินไลน์หาก IME (แป้นพิมพ์) ที่คุณเลือกรองรับ หากไม่รองรับการกำหนดค่าของคุณ (หรือปิดใช้ตัวเลือกนี้) ระบบจะใช้การวางซ้อนการป้อนอัตโนมัติเริ่มต้น </value>
   </data>
   <data name="Accessibility" xml:space="preserve">
     <value>Use Accessibility</value>
@@ -1785,7 +1785,7 @@
     <value>Required to use the Autofill Quick-Action Tile, or to augment the Autofill Service by using Draw-Over (if enabled).</value>
   </data>
   <data name="DrawOver" xml:space="preserve">
-    <value>Use Draw-Over</value>
+    <value>ใช้งานการวางซ้อนการ</value>
   </data>
   <data name="DrawOverDescription" xml:space="preserve">
     <value>When enabled, allows the Bitwarden Accessibility Service to display a popup when login fields are selected.</value>
@@ -1807,7 +1807,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AllSends" xml:space="preserve">
-    <value>All Sends</value>
+    <value>Sends ทั้งหมด</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Sends" xml:space="preserve">
@@ -1819,7 +1819,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="TypeText" xml:space="preserve">
-    <value>Text</value>
+    <value>ข้อความ</value>
   </data>
   <data name="TypeTextInfo" xml:space="preserve">
     <value>The text you want to send.</value>
@@ -1829,7 +1829,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="TypeFile" xml:space="preserve">
-    <value>File</value>
+    <value>ไฟล์</value>
   </data>
   <data name="TypeFileInfo" xml:space="preserve">
     <value>The file you want to send.</value>
@@ -1858,7 +1858,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Expired" xml:space="preserve">
-    <value>Expired</value>
+    <value>หมดอายุ</value>
   </data>
   <data name="MaximumAccessCount" xml:space="preserve">
     <value>Maximum Access Count</value>
@@ -1874,7 +1874,7 @@
     <value>Current Access Count</value>
   </data>
   <data name="NewPassword" xml:space="preserve">
-    <value>New Password</value>
+    <value>รหัสผ่านใหม่</value>
   </data>
   <data name="PasswordInfo" xml:space="preserve">
     <value>Optionally require a password for users to access this Send.</value>
@@ -1901,7 +1901,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
-    <value>There are no sends in your account.</value>
+    <value>There are no Sends in your account.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="CopyLink" xml:space="preserve">
@@ -1943,19 +1943,19 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="OneDay" xml:space="preserve">
-    <value>1 day</value>
+    <value>1 วัน</value>
   </data>
   <data name="TwoDays" xml:space="preserve">
-    <value>2 days</value>
+    <value>2 วัน</value>
   </data>
   <data name="ThreeDays" xml:space="preserve">
-    <value>3 days</value>
+    <value>3 วัน</value>
   </data>
   <data name="SevenDays" xml:space="preserve">
-    <value>7 days</value>
+    <value>7 วัน</value>
   </data>
   <data name="ThirtyDays" xml:space="preserve">
-    <value>30 days</value>
+    <value>30 วัน</value>
   </data>
   <data name="Custom" xml:space="preserve">
     <value>Custom</value>
@@ -1969,7 +1969,22 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AboutSend" xml:space="preserve">
-    <value>About Send</value>
+    <value>เกี่ยวกับ Send</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="HideEmail" xml:space="preserve">
+    <value>Hide my email address from recipients.</value>
+  </data>
+  <data name="SendOptionsPolicyInEffect" xml:space="preserve">
+    <value>One or more organization policies are affecting your Send options.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendFilePremiumRequired" xml:space="preserve">
+    <value>Free accounts are restricted to sharing text only. A premium membership is required to use files with Send.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendFileEmailVerificationRequired" xml:space="preserve">
+    <value>You must verify your email to use files with Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
 </root>
