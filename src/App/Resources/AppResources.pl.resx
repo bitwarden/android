@@ -1814,7 +1814,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NameInfo" xml:space="preserve">
-    <value>Opis wysyłki</value>
+    <value>Nazwa wysyłki.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="TypeText" xml:space="preserve">
@@ -1824,7 +1824,7 @@
     <value>Tekst, który chcesz wysłać.</value>
   </data>
   <data name="HideTextByDefault" xml:space="preserve">
-    <value>Ukryj tekst podczas dostępu do wysyłki</value>
+    <value>Ukryj domyślnie tekst wysyłki</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="TypeFile" xml:space="preserve">
@@ -1910,7 +1910,7 @@
     <value>Udostępnij link</value>
   </data>
   <data name="SendLink" xml:space="preserve">
-    <value>Wyślij link</value>
+    <value>Link wysyłki</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SearchSends" xml:space="preserve">
@@ -1957,7 +1957,7 @@
     <value>30 dni</value>
   </data>
   <data name="Custom" xml:space="preserve">
-    <value>Niestandardowy</value>
+    <value>Niestandardowa</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
     <value>Udostępnij wysyłkę po zapisaniu.</value>
@@ -1969,6 +1969,21 @@
   </data>
   <data name="AboutSend" xml:space="preserve">
     <value>O wysyłce</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="HideEmail" xml:space="preserve">
+    <value>Hide my email address from recipients.</value>
+  </data>
+  <data name="SendOptionsPolicyInEffect" xml:space="preserve">
+    <value>One or more organization policies are affecting your Send options.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendFilePremiumRequired" xml:space="preserve">
+    <value>Free accounts are restricted to sharing text only. A premium membership is required to use files with Send.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendFileEmailVerificationRequired" xml:space="preserve">
+    <value>You must verify your email to use files with Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
 </root>
