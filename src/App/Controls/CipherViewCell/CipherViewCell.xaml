@@ -1,114 +1,111 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ViewCell xmlns="http://xamarin.com/schemas/2014/forms"
-          xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-          x:Class="Bit.App.Controls.CipherViewCell"
-          xmlns:controls="clr-namespace:Bit.App.Controls"
-          xmlns:u="clr-namespace:Bit.App.Utilities"
-          xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms">
+<controls:ExtendedGrid xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Bit.App.Controls.CipherViewCell"
+    xmlns:controls="clr-namespace:Bit.App.Controls"
+    xmlns:u="clr-namespace:Bit.App.Utilities"
+    xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    StyleClass="list-row, list-row-platform"
+    RowSpacing="0"
+    ColumnSpacing="0"
+    x:DataType="controls:CipherViewCellViewModel">
 
-    <Grid 
-        x:Name="_grid"
-        StyleClass="list-row, list-row-platform"
-        RowSpacing="0"
-        ColumnSpacing="0"
-        x:DataType="controls:CipherViewCellViewModel">
+    <Grid.Resources>
+          <u:IconGlyphConverter x:Key="iconGlyphConverter"/>
+          <u:IconImageConverter x:Key="iconImageConverter"/>
+          <u:InverseBoolConverter x:Key="inverseBool" />
+    </Grid.Resources>
 
-        <Grid.BindingContext>
-            <controls:CipherViewCellViewModel />
-        </Grid.BindingContext>
+    <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
 
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="40" />
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="60" />
+    </Grid.ColumnDefinitions>
+
+    <controls:FaLabel
+        Grid.Column="0"
+        HorizontalOptions="Center"
+        VerticalOptions="Center"
+        StyleClass="list-icon, list-icon-platform"
+        IsVisible="{Binding ShowIconImage, Converter={StaticResource inverseBool}}"
+        Text="{Binding Cipher, Converter={StaticResource iconGlyphConverter}}"
+        AutomationProperties.IsInAccessibleTree="False" />
+
+    <ff:CachedImage
+        Grid.Column="0"
+        BitmapOptimizations="True"
+        ErrorPlaceholder="login.png"
+        LoadingPlaceholder="login.png"
+        HorizontalOptions="Center"
+        VerticalOptions="Center"
+        WidthRequest="22"
+        HeightRequest="22"
+        IsVisible="{Binding ShowIconImage}"
+        Source="{Binding Cipher, Converter={StaticResource iconImageConverter}}"
+        AutomationProperties.IsInAccessibleTree="False" />
+
+    <Grid RowSpacing="0" ColumnSpacing="0" Grid.Row="0" Grid.Column="1" VerticalOptions="Center" Padding="0, 7">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="40" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="60" />
         </Grid.ColumnDefinitions>
 
+        <Label 
+            LineBreakMode="TailTruncation"
+            Grid.Column="0"
+            Grid.Row="0"
+            StyleClass="list-title, list-title-platform"
+            Text="{Binding Cipher.Name}" />
+        <Label
+            LineBreakMode="TailTruncation"
+            Grid.Column="0"
+            Grid.Row="1"
+            Grid.ColumnSpan="3"
+            StyleClass="list-subtitle, list-subtitle-platform"
+            Text="{Binding Cipher.SubTitle}" />
         <controls:FaLabel
-            x:Name="_icon"
+            Grid.Column="1"
             Grid.Row="0"
-            Grid.Column="0"
-            HorizontalOptions="Center"
+            HorizontalOptions="Start"
             VerticalOptions="Center"
-            StyleClass="list-icon, list-icon-platform"
-            AutomationProperties.IsInAccessibleTree="False" />
-
-        <ff:CachedImage
-            x:Name="_image"
-            Grid.Row="0"
-            Grid.Column="0"
-            BitmapOptimizations="True"
-            ErrorPlaceholder="login.png"
-            HorizontalOptions="Center"
-            VerticalOptions="Center"
-            WidthRequest="22"
-            HeightRequest="22"
-            IsVisible="False"
-            AutomationProperties.IsInAccessibleTree="False" />
-
-        <Grid RowSpacing="0" ColumnSpacing="0" Grid.Row="0" Grid.Column="1" VerticalOptions="Center">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-
-            <Label 
-                LineBreakMode="TailTruncation"
-                Grid.Column="0"
-                Grid.Row="0"
-                StyleClass="list-title, list-title-platform"
-                Text="{Binding Cipher.Name, Mode=OneWay}" />
-            <Label
-                LineBreakMode="TailTruncation"
-                Grid.Column="0"
-                Grid.Row="1"
-                Grid.ColumnSpan="3"
-                StyleClass="list-subtitle, list-subtitle-platform"
-                Text="{Binding Cipher.SubTitle, Mode=OneWay}" />
-            <controls:FaLabel
-                Grid.Column="1"
-                Grid.Row="0"
-                HorizontalOptions="Start"
-                VerticalOptions="Center"
-                StyleClass="list-title-icon"
-                Margin="5, 0, 0, 0"
-                Text="&#xf1e0;"
-                IsVisible="{Binding Cipher.Shared, Mode=OneWay}"
-                AutomationProperties.IsInAccessibleTree="True"
-                AutomationProperties.Name="{u:I18n Shared}" />
-            <controls:FaLabel
-                Grid.Column="2"
-                Grid.Row="0"
-                HorizontalOptions="Start"
-                VerticalOptions="Center"
-                StyleClass="list-title-icon"
-                Margin="5, 0, 0, 0"
-                Text="&#xf0c6;"
-                IsVisible="{Binding Cipher.HasAttachments, Mode=OneWay}"
-                AutomationProperties.IsInAccessibleTree="True"
-                AutomationProperties.Name="{u:I18n Attachments}" />
-        </Grid>
-
-        <controls:MiButton
-            Grid.Row="0"
-            Grid.Column="2"
-            Text="&#xe5d3;"
-            StyleClass="list-row-button, list-row-button-platform, btn-disabled"
-            Clicked="MoreButton_Clicked"
-            VerticalOptions="CenterAndExpand"
-            HorizontalOptions="EndAndExpand"
+            StyleClass="list-title-icon"
+            Margin="5, 0, 0, 0"
+            Text="&#xf1e0;"
+            IsVisible="{Binding Cipher.Shared, Mode=OneTime}"
             AutomationProperties.IsInAccessibleTree="True"
-            AutomationProperties.Name="{u:I18n Options}" />
-
+            AutomationProperties.Name="{u:I18n Shared}" />
+        <controls:FaLabel
+            Grid.Column="2"
+            Grid.Row="0"
+            HorizontalOptions="Start"
+            VerticalOptions="Center"
+            StyleClass="list-title-icon"
+            Margin="5, 0, 0, 0"
+            Text="&#xf0c6;"
+            IsVisible="{Binding Cipher.HasAttachments, Mode=OneTime}"
+            AutomationProperties.IsInAccessibleTree="True"
+            AutomationProperties.Name="{u:I18n Attachments}" />
     </Grid>
 
-</ViewCell>
+    <controls:MiButton
+        Grid.Row="0"
+        Grid.Column="2"
+        Text="&#xe5d3;"
+        StyleClass="list-row-button, list-row-button-platform, btn-disabled"
+        Clicked="MoreButton_Clicked"
+        VerticalOptions="CenterAndExpand"
+        HorizontalOptions="EndAndExpand"
+        AutomationProperties.IsInAccessibleTree="True"
+        AutomationProperties.Name="{u:I18n Options}" />
+
+</controls:ExtendedGrid>

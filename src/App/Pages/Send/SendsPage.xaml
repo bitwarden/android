@@ -60,23 +60,22 @@
                VerticalOptions="CenterAndExpand"
                HorizontalOptions="CenterAndExpand"
                HorizontalTextAlignment="Center" />
-        <ListView x:Name="_listView"
+        <controls:ExtendedCollectionView
                IsVisible="{Binding ShowList}"
                ItemsSource="{Binding Sends}"
                VerticalOptions="FillAndExpand"
-               HasUnevenRows="true"
-               CachingStrategy="RecycleElement"
-               ItemSelected="RowSelected"
+               SelectionMode="Single"
+               SelectionChanged="RowSelected"
                StyleClass="list, list-platform">
-            <ListView.ItemTemplate>
+            <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="views:SendView">
                     <controls:SendViewCell
                         Send="{Binding .}"
                         ButtonCommand="{Binding BindingContext.SendOptionsCommand, Source={x:Reference _page}}"
                         ShowOptions="{Binding BindingContext.SendEnabled, Source={x:Reference _page}}" />
                 </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            </CollectionView.ItemTemplate>
+        </controls:ExtendedCollectionView>
     </StackLayout>
 
 </pages:BaseContentPage>

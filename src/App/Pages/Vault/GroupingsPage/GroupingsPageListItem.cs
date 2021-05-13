@@ -75,30 +75,30 @@ namespace Bit.App.Pages
                 }
                 else if (Folder != null)
                 {
-                    _icon = Folder.Id == null ? "" : "";
+                    _icon = Folder.Id == null ? "\uf115" : "\uf07c"; // fa-folder-open-o : fa-folder-open
                 }
                 else if (Collection != null)
                 {
-                    _icon = "";
+                    _icon = "\uf1b2"; // fa-cube
                 }
                 else if (Type != null)
                 {
                     switch (Type.Value)
                     {
                         case CipherType.Login:
-                            _icon = "";
+                            _icon = "\uf0ac"; // fa-globe
                             break;
                         case CipherType.SecureNote:
-                            _icon = "";
+                            _icon = "\uf24a"; // fa-sticky-note-o
                             break;
                         case CipherType.Card:
-                            _icon = "";
+                            _icon = "\uf09d"; // fa-credit-card
                             break;
                         case CipherType.Identity:
-                            _icon = "";
+                            _icon = "\uf2c3"; // fa-id-card-o
                             break;
                         default:
-                            _icon = "";
+                            _icon = "\uf0ac"; // fa-globe
                             break;
                     }
                 }

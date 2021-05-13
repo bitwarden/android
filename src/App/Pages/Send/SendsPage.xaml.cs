@@ -1,4 +1,5 @@
 using System;
+using Bit.App.Controls;
 using Bit.App.Resources;
 using Bit.Core.Models.View;
 using Xamarin.Forms;
@@ -87,15 +88,15 @@ namespace Bit.App.Pages
             Navigation.PopModalAsync(false);
         }
 
-        private async void RowSelected(object sender, SelectedItemChangedEventArgs e)
+        private async void RowSelected(object sender, SelectionChangedEventArgs e)
         {
-            ((ListView)sender).SelectedItem = null;
+            ((ExtendedCollectionView)sender).SelectedItem = null;
             if (!DoOnce())
             {
                 return;
             }
 
-            if (e.SelectedItem is SendView send)
+            if (e.CurrentSelection is SendView send)
             {
                 await _vm.SelectSendAsync(send);
             }

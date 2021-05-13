@@ -1,7 +1,9 @@
 ﻿using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Bit.Core.Utilities;
+using System.Linq;
 using System.Threading.Tasks;
+using Bit.App.Controls;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -41,14 +43,14 @@ namespace Bit.App.Pages
             return base.OnBackButtonPressed();
         }
 
-        private async void RowSelected(object sender, SelectedItemChangedEventArgs e)
+        private async void RowSelected(object sender, SelectionChangedEventArgs e)
         {
-            ((ListView)sender).SelectedItem = null;
+            ((ExtendedCollectionView)sender).SelectedItem = null;
             if (!DoOnce())
             {
                 return;
             }
-            if (!(e.SelectedItem is SettingsPageListItem item))
+            if (!(e.CurrentSelection?.FirstOrDefault() is SettingsPageListItem item))
             {
                 return;
             }

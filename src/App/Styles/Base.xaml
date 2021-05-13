@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    xmlns:controls="clr-namespace:Bit.App.Controls;assembly=BitwardenApp"
                     x:Class="Bit.App.Styles.Base">
 
     <!-- General -->
@@ -124,7 +125,7 @@
     </Style>
 
     <!-- List -->
-    <Style TargetType="ListView"
+    <Style TargetType="CollectionView"
            Class="list">
     </Style>
     <Style TargetType="StackLayout"
@@ -161,7 +162,17 @@
         <Setter Property="Padding"
                 Value="10, 12" />
     </Style>
+    <Style TargetType="controls:ExtendedStackLayout"
+           Class="list-row">
+        <Setter Property="Padding"
+                Value="10, 12" />
+    </Style>
     <Style TargetType="Grid"
+           Class="list-row">
+        <Setter Property="Padding"
+                Value="2, 5, 0, 5" />
+    </Style>
+    <Style TargetType="controls:ExtendedGrid"
            Class="list-row">
         <Setter Property="Padding"
                 Value="2, 5, 0, 5" />
@@ -173,6 +184,11 @@
     </Style>
     <Style TargetType="BoxView"
            Class="list-section-separator-bottom">
+        <Setter Property="HeightRequest"
+                Value="1" />
+    </Style>
+    <Style TargetType="BoxView"
+           Class="list-item-separator-bottom">
         <Setter Property="HeightRequest"
                 Value="1" />
     </Style>

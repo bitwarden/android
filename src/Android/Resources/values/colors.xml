@@ -6,6 +6,7 @@
   <color name="primary">#175DDC</color>
   <color name="notificationBar">#1452BC</color>
   <color name="border">#dddddd</color>
+  <color name="itemPressed">#bbbbbb</color>
 
   <!-- Dark theme -->
   <color name="dark_primary">#52bdfb</color>

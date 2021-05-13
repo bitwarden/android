@@ -68,10 +68,10 @@
 
     <!-- List -->
 
-    <Style TargetType="ListView"
-           Class="list-platform"
+    <Style TargetType="BoxView"
+           Class="list-item-separator-bottom-platform"
            ApplyToDerivedTypes="True">
-        <Setter Property="SeparatorColor"
+        <Setter Property="BackgroundColor"
                 Value="Transparent" />
     </Style>
     <Style TargetType="StackLayout"
@@ -105,7 +105,13 @@
     <Style TargetType="StackLayout"
            Class="list-row-platform">
     </Style>
+    <Style TargetType="controls:ExtendedStackLayout"
+           Class="list-row-platform">
+    </Style>
     <Style TargetType="Grid"
+           Class="list-row-platform">
+    </Style>
+    <Style TargetType="controls:ExtendedGrid"
            Class="list-row-platform">
     </Style>
     <Style TargetType="Label"

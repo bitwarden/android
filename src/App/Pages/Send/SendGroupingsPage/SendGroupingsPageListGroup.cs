@@ -7,10 +7,10 @@ namespace Bit.App.Pages
         public SendGroupingsPageListGroup(string name, int count, bool doUpper = true, bool first = false)
             : this(new List<SendGroupingsPageListItem>(), name, count, doUpper, first) { }
 
-        public SendGroupingsPageListGroup(List<SendGroupingsPageListItem> groupItems, string name, int count,
+        public SendGroupingsPageListGroup(List<SendGroupingsPageListItem> sendGroupItems, string name, int count,
             bool doUpper = true, bool first = false)
         {
-            AddRange(groupItems);
+            AddRange(sendGroupItems);
             if (string.IsNullOrWhiteSpace(name))
             {
                 Name = "-";

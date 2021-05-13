@@ -19,23 +19,21 @@
             <DataTemplate
                 x:Key="regularTemplate"
                 x:DataType="pages:SettingsPageListItem">
-                <ViewCell>
-                    <StackLayout Orientation="Horizontal"
-                                 StyleClass="list-row, list-row-platform">
-                        <Label Text="{Binding Name, Mode=OneWay}"
-                               LineBreakMode="TailTruncation"
-                               HorizontalOptions="StartAndExpand"
-                               VerticalOptions="CenterAndExpand"
-                               StyleClass="list-title"/>
-                        <Label Text="{Binding SubLabel, Mode=OneWay}"
-                               IsVisible="{Binding SubLabel, Converter={StaticResource stringHasValue}}"
-                               HorizontalOptions="End"
-                               HorizontalTextAlignment="End"
-                               VerticalOptions="CenterAndExpand"
-                               TextColor="{Binding SubLabelColor}"
-                               StyleClass="list-sub" />
-                    </StackLayout>
-                </ViewCell>
+                <controls:ExtendedStackLayout Orientation="Horizontal"
+                             StyleClass="list-row, list-row-platform">
+                    <Label Text="{Binding Name, Mode=OneWay}"
+                           LineBreakMode="TailTruncation"
+                           HorizontalOptions="StartAndExpand"
+                           VerticalOptions="CenterAndExpand"
+                           StyleClass="list-title"/>
+                    <Label Text="{Binding SubLabel, Mode=OneWay}"
+                           IsVisible="{Binding SubLabel, Converter={StaticResource stringHasValue}}"
+                           HorizontalOptions="End"
+                           HorizontalTextAlignment="End"
+                           VerticalOptions="CenterAndExpand"
+                           TextColor="{Binding SubLabelColor}"
+                           StyleClass="list-sub" />
+                </controls:ExtendedStackLayout>
             </DataTemplate>
 
             <pages:SettingsPageListItemSelector
@@ -44,35 +42,32 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <ListView
+    <controls:ExtendedCollectionView
         ItemsSource="{Binding GroupedItems}"
         VerticalOptions="FillAndExpand"
-        HasUnevenRows="True"
-        RowHeight="-1"
         ItemTemplate="{StaticResource listItemDataTemplateSelector}"
-        IsGroupingEnabled="True"
-        ItemSelected="RowSelected"
+        IsGrouped="True"
+        SelectionMode="Single"
+        SelectionChanged="RowSelected"
         StyleClass="list, list-platform">
 
-        <ListView.GroupHeaderTemplate>
+        <CollectionView.GroupHeaderTemplate>
             <DataTemplate x:DataType="pages:SettingsPageListGroup">
-                <ViewCell>
-                    <StackLayout
-                        Padding="0" Spacing="0" VerticalOptions="FillAndExpand"
-                        StyleClass="list-row-header-container, list-row-header-container-platform">
-                        <BoxView
-                          StyleClass="list-section-separator-top, list-section-separator-top-platform"
-                          IsVisible="{Binding First, Converter={StaticResource inverseBool}}" />
-                        <StackLayout StyleClass="list-row-header, list-row-header-platform">
-                            <Label
-                                Text="{Binding Name}"
-                                StyleClass="list-header, list-header-platform" />
-                        </StackLayout>
-                        <BoxView StyleClass="list-section-separator-bottom, list-section-separator-bottom-platform" />
+                <StackLayout
+                    Padding="0" Spacing="0" VerticalOptions="FillAndExpand"
+                    StyleClass="list-row-header-container, list-row-header-container-platform">
+                    <BoxView
+                        StyleClass="list-section-separator-top, list-section-separator-top-platform"
+                        IsVisible="{Binding First, Converter={StaticResource inverseBool}}" />
+                    <StackLayout StyleClass="list-row-header, list-row-header-platform">
+                        <Label
+                            Text="{Binding Name}"
+                            StyleClass="list-header, list-header-platform" />
                     </StackLayout>
-                </ViewCell>
+                    <BoxView StyleClass="list-section-separator-bottom, list-section-separator-bottom-platform" />
+                </StackLayout>
             </DataTemplate>
-        </ListView.GroupHeaderTemplate>
-    </ListView>
+        </CollectionView.GroupHeaderTemplate>
+    </controls:ExtendedCollectionView>
 
 </pages:BaseContentPage>
