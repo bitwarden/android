@@ -295,7 +295,7 @@
     <value>否</value>
   </data>
   <data name="Notes" xml:space="preserve">
-    <value>笔记</value>
+    <value>备注</value>
     <comment>Label for notes.</comment>
   </data>
   <data name="Ok" xml:space="preserve">
@@ -406,7 +406,7 @@
     <value>自动填充服务</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
-    <value>避免含糊的字符</value>
+    <value>避免易混淆的字符</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
     <value>Bitwarden 应用程序扩展</value>
@@ -835,7 +835,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
-    <value>接着，将您的 YubiKey NEO 靠在设备的后面或者将 YubiKey 插入您设备的 USB 端口，然后按下按钮。</value>
+    <value>要继续，请将您的 YubiKey 靠在设备背面或者将 YubiKey 插入您设备的 USB 端口，然后按下按钮。</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
     <value>YubiKey 安全钥匙</value>
@@ -1193,7 +1193,7 @@
     <value>移除</value>
   </data>
   <data name="NewUri" xml:space="preserve">
-    <value>新 URI</value>
+    <value>新增 URI</value>
   </data>
   <data name="URIPosition" xml:space="preserve">
     <value>URI {0}</value>
@@ -1243,7 +1243,7 @@
     <value>再试一次</value>
   </data>
   <data name="YubiKeyInstructionIos" xml:space="preserve">
-    <value>接着，请将您的 YubiKey NEO 设备放在设备背面。</value>
+    <value>要继续，请将您的 YubiKey 靠在设备背面。</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
     <value>当应用程序不支持标准的自动填充服务时，无障碍服务可能会很有用。</value>
@@ -1508,7 +1508,7 @@
     <value>正在重启...</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
-    <value>复制笔记</value>
+    <value>复制备注</value>
   </data>
   <data name="Exit" xml:space="preserve">
     <value>退出</value>
@@ -1821,7 +1821,7 @@
     <value>文本</value>
   </data>
   <data name="TypeTextInfo" xml:space="preserve">
-    <value>您要发送的文本。</value>
+    <value>您想要发送的文本。</value>
   </data>
   <data name="HideTextByDefault" xml:space="preserve">
     <value>访问 Send 时，默认将隐藏文本</value>
@@ -1896,7 +1896,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>禁用此 Send 则没有人能访问它。</value>
+    <value>禁用此 Send 以阻止任何人访问它。</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
@@ -1960,7 +1960,7 @@
     <value>自定义</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
-    <value>保存时分享这个 Send。</value>
+    <value>保存时分享此 Send。</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
@@ -1969,6 +1969,21 @@
   </data>
   <data name="AboutSend" xml:space="preserve">
     <value>关于 Send</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="HideEmail" xml:space="preserve">
+    <value>Hide my email address from recipients.</value>
+  </data>
+  <data name="SendOptionsPolicyInEffect" xml:space="preserve">
+    <value>One or more organization policies are affecting your Send options.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendFilePremiumRequired" xml:space="preserve">
+    <value>Free accounts are restricted to sharing text only. A premium membership is required to use files with Send.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="SendFileEmailVerificationRequired" xml:space="preserve">
+    <value>You must verify your email to use files with Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
 </root>

@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using Bit.Core.Abstractions;
+using Bit.Core.Models.Domain;
 using Bit.Core.Utilities;
 
 namespace Bit.Core.Services
@@ -28,9 +29,9 @@ namespace Bit.Core.Services
             };
         }
 
-        public async Task Upload(string uri, byte[] data, Func<Task<string>> renewalCallback)
+        public async Task Upload(string uri, EncByteArray data, Func<Task<string>> renewalCallback)
         {
-            if (data.Length <= MAX_SINGLE_BLOB_UPLOAD_SIZE)
+            if (data?.Buffer?.Length <= MAX_SINGLE_BLOB_UPLOAD_SIZE)
             {
                 await AzureUploadBlob(uri, data);
             }
@@ -40,7 +41,7 @@ namespace Bit.Core.Services
             }
         }
 
-        private async Task AzureUploadBlob(string uri, byte[] data)
+        private async Task AzureUploadBlob(string uri, EncByteArray data)
         {
             using (var requestMessage = new HttpRequestMessage())
             {
@@ -51,7 +52,7 @@ namespace Bit.Core.Services
                 requestMessage.Headers.Add("x-ms-version", paramValues["sv"]);
                 requestMessage.Headers.Add("x-ms-blob-type", "BlockBlob");
 
-                requestMessage.Content = new ByteArrayContent(data);
+                requestMessage.Content = new ByteArrayContent(data.Buffer);
                 requestMessage.Version = new Version(1, 0);
                 requestMessage.Method = HttpMethod.Put;
                 requestMessage.RequestUri = uriBuilder.Uri;
@@ -65,13 +66,13 @@ namespace Bit.Core.Services
             }
         }
 
-        private async Task AzureUploadBlocks(string uri, byte[] data, Func<Task<string>> renewalFunc)
+        private async Task AzureUploadBlocks(string uri, EncByteArray data, Func<Task<string>> renewalFunc)
         {
             _httpClient.Timeout = TimeSpan.FromHours(3);
             var baseParams = HttpUtility.ParseQueryString(CoreHelpers.GetUri(uri).Query);
             var blockSize = MaxBlockSize(baseParams["sv"]);
             var blockIndex = 0;
-            var numBlocks = Math.Ceiling((decimal)data.Length / blockSize);
+            var numBlocks = Math.Ceiling((decimal)data.Buffer.Length / blockSize);
             var blocksStaged = new List<string>();
 
             if (numBlocks > MAX_BLOCKS_PER_BLOB)
@@ -95,7 +96,7 @@ namespace Bit.Core.Services
                         requestMessage.Headers.Add("x-ms-version", baseParams["sv"]);
                         requestMessage.Headers.Add("x-ms-blob-type", "BlockBlob");
 
-                        requestMessage.Content = new ByteArrayContent(data.Skip(blockIndex * blockSize).Take(blockSize).ToArray());
+                        requestMessage.Content = new ByteArrayContent(data.Buffer.Skip(blockIndex * blockSize).Take(blockSize).ToArray());
                         requestMessage.Version = new Version(1, 0);
                         requestMessage.Method = HttpMethod.Put;
                         requestMessage.RequestUri = blockUriBuilder.Uri;

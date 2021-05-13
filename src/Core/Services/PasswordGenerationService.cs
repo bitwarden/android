@@ -502,7 +502,7 @@ namespace Bit.Core.Services
             var hashSet = new HashSet<string>(globalUserInputs);
             var finalUserInputs = new string[hashSet.Count];
             hashSet.CopyTo(finalUserInputs);
-            var result = Zxcvbn.Zxcvbn.MatchPassword(password, finalUserInputs);
+            var result = Zxcvbn.Core.EvaluatePassword(password, finalUserInputs);
             return result;
         }
 
@@ -633,7 +633,7 @@ namespace Bit.Core.Services
             }
             var tasks = history.Select(async item =>
             {
-                var decrypted = await _cryptoService.DecryptToUtf8Async(new CipherString(item.Password));
+                var decrypted = await _cryptoService.DecryptToUtf8Async(new EncString(item.Password));
                 return new GeneratedPasswordHistory
                 {
                     Password = decrypted,

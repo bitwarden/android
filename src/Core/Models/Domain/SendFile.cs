@@ -10,7 +10,7 @@ namespace Bit.Core.Models.Domain
         public string Id { get; set; }
         public string Size { get; set; }
         public string SizeName { get; set; }
-        public CipherString FileName { get; set; }
+        public EncString FileName { get; set; }
 
         public SendFile() : base() { }
 

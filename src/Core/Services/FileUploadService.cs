@@ -20,7 +20,7 @@ namespace Bit.Core.Services {
         private readonly ApiService _apiService;
 
         public async Task UploadCipherAttachmentFileAsync(AttachmentUploadDataResponse uploadData,
-            string encryptedFileName, byte[] encryptedFileData)
+            string encryptedFileName, EncByteArray encryptedFileData)
         {
             try
             {
@@ -48,7 +48,7 @@ namespace Bit.Core.Services {
             }
         }
 
-        public async Task UploadSendFileAsync(SendFileUploadDataResponse uploadData, CipherString fileName, byte[] encryptedFileData)
+        public async Task UploadSendFileAsync(SendFileUploadDataResponse uploadData, EncString fileName, EncByteArray encryptedFileData)
         {
             try
             {

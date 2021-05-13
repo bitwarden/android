@@ -21,7 +21,7 @@ namespace Bit.Core.Models.Domain
             LastUsedDate = obj.LastUsedDate.GetValueOrDefault();
         }
 
-        public CipherString Password { get; set; }
+        public EncString Password { get; set; }
         public DateTime LastUsedDate { get; set; }
 
         public Task<PasswordHistoryView> DecryptAsync(string orgId)

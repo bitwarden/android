@@ -148,7 +148,7 @@ namespace Bit.Core.Services
                     }
 
                     byte[] decEncKey = null;
-                    var encKeyCipher = new CipherString(encKey);
+                    var encKeyCipher = new EncString(encKey);
                     if (encKeyCipher.EncryptionType == EncryptionType.AesCbc256_B64)
                     {
                         decEncKey = await DecryptToBytesAsync(encKeyCipher, key);
@@ -205,7 +205,7 @@ namespace Bit.Core.Services
             {
                 return null;
             }
-            _privateKey = await DecryptToBytesAsync(new CipherString(encPrivateKey), null);
+            _privateKey = await DecryptToBytesAsync(new EncString(encPrivateKey), null);
             return _privateKey;
         }
 
@@ -389,7 +389,7 @@ namespace Bit.Core.Services
         }
 
         public async Task<SymmetricCryptoKey> MakeKeyFromPinAsync(string pin, string salt,
-            KdfType kdf, int kdfIterations, CipherString protectedKeyCs = null)
+            KdfType kdf, int kdfIterations, EncString protectedKeyCs = null)
         {
             if (protectedKeyCs == null)
             {
@@ -398,27 +398,27 @@ namespace Bit.Core.Services
                 {
                     throw new Exception("No PIN protected key found.");
                 }
-                protectedKeyCs = new CipherString(pinProtectedKey);
+                protectedKeyCs = new EncString(pinProtectedKey);
             }
             var pinKey = await MakePinKeyAysnc(pin, salt, kdf, kdfIterations);
             var decKey = await DecryptToBytesAsync(protectedKeyCs, pinKey);
             return new SymmetricCryptoKey(decKey);
         }
 
-        public async Task<Tuple<CipherString, SymmetricCryptoKey>> MakeShareKeyAsync()
+        public async Task<Tuple<EncString, SymmetricCryptoKey>> MakeShareKeyAsync()
         {
             var shareKey = await _cryptoFunctionService.RandomBytesAsync(64);
             var publicKey = await GetPublicKeyAsync();
             var encShareKey = await RsaEncryptAsync(shareKey, publicKey);
-            return new Tuple<CipherString, SymmetricCryptoKey>(encShareKey, new SymmetricCryptoKey(shareKey));
+            return new Tuple<EncString, SymmetricCryptoKey>(encShareKey, new SymmetricCryptoKey(shareKey));
         }
 
-        public async Task<Tuple<string, CipherString>> MakeKeyPairAsync(SymmetricCryptoKey key = null)
+        public async Task<Tuple<string, EncString>> MakeKeyPairAsync(SymmetricCryptoKey key = null)
         {
             var keyPair = await _cryptoFunctionService.RsaGenerateKeyPairAsync(2048);
             var publicB64 = Convert.ToBase64String(keyPair.Item1);
             var privateEnc = await EncryptAsync(keyPair.Item2, key);
-            return new Tuple<string, CipherString>(publicB64, privateEnc);
+            return new Tuple<string, EncString>(publicB64, privateEnc);
         }
 
         public async Task<SymmetricCryptoKey> MakePinKeyAysnc(string pin, string salt, KdfType kdf, int kdfIterations)
@@ -447,20 +447,20 @@ namespace Bit.Core.Services
             return Convert.ToBase64String(hash);
         }
 
-        public async Task<Tuple<SymmetricCryptoKey, CipherString>> MakeEncKeyAsync(SymmetricCryptoKey key)
+        public async Task<Tuple<SymmetricCryptoKey, EncString>> MakeEncKeyAsync(SymmetricCryptoKey key)
         {
             var theKey = await GetKeyForEncryptionAsync(key);
             var encKey = await _cryptoFunctionService.RandomBytesAsync(64);
             return await BuildEncKeyAsync(theKey, encKey);
         }
 
-        public async Task<Tuple<SymmetricCryptoKey, CipherString>> RemakeEncKeyAsync(SymmetricCryptoKey key)
+        public async Task<Tuple<SymmetricCryptoKey, EncString>> RemakeEncKeyAsync(SymmetricCryptoKey key)
         {
             var encKey = await GetEncKeyAsync();
             return await BuildEncKeyAsync(key, encKey.Key);
         }
 
-        public async Task<CipherString> EncryptAsync(string plainValue, SymmetricCryptoKey key = null)
+        public async Task<EncString> EncryptAsync(string plainValue, SymmetricCryptoKey key = null)
         {
             if (plainValue == null)
             {
@@ -469,7 +469,7 @@ namespace Bit.Core.Services
             return await EncryptAsync(Encoding.UTF8.GetBytes(plainValue), key);
         }
 
-        public async Task<CipherString> EncryptAsync(byte[] plainValue, SymmetricCryptoKey key = null)
+        public async Task<EncString> EncryptAsync(byte[] plainValue, SymmetricCryptoKey key = null)
         {
             if (plainValue == null)
             {
@@ -479,10 +479,10 @@ namespace Bit.Core.Services
             var iv = Convert.ToBase64String(encObj.Iv);
             var data = Convert.ToBase64String(encObj.Data);
             var mac = encObj.Mac != null ? Convert.ToBase64String(encObj.Mac) : null;
-            return new CipherString(encObj.Key.EncType, data, iv, mac);
+            return new EncString(encObj.Key.EncType, data, iv, mac);
         }
 
-        public async Task<byte[]> EncryptToBytesAsync(byte[] plainValue, SymmetricCryptoKey key = null)
+        public async Task<EncByteArray> EncryptToBytesAsync(byte[] plainValue, SymmetricCryptoKey key = null)
         {
             var encValue = await AesEncryptAsync(plainValue, key);
             var macLen = 0;
@@ -498,10 +498,10 @@ namespace Bit.Core.Services
                 Buffer.BlockCopy(encValue.Mac, 0, encBytes, 1 + encValue.Iv.Length, encValue.Mac.Length);
             }
             Buffer.BlockCopy(encValue.Data, 0, encBytes, 1 + encValue.Iv.Length + macLen, encValue.Data.Length);
-            return encBytes;
+            return new EncByteArray(encBytes);
         }
 
-        public async Task<CipherString> RsaEncryptAsync(byte[] data, byte[] publicKey = null)
+        public async Task<EncString> RsaEncryptAsync(byte[] data, byte[] publicKey = null)
         {
             if (publicKey == null)
             {
@@ -512,21 +512,21 @@ namespace Bit.Core.Services
                 throw new Exception("Public key unavailable.");
             }
             var encBytes = await _cryptoFunctionService.RsaEncryptAsync(data, publicKey, CryptoHashAlgorithm.Sha1);
-            return new CipherString(EncryptionType.Rsa2048_OaepSha1_B64, Convert.ToBase64String(encBytes));
+            return new EncString(EncryptionType.Rsa2048_OaepSha1_B64, Convert.ToBase64String(encBytes));
         }
 
-        public async Task<byte[]> DecryptToBytesAsync(CipherString cipherString, SymmetricCryptoKey key = null)
+        public async Task<byte[]> DecryptToBytesAsync(EncString encString, SymmetricCryptoKey key = null)
         {
-            var iv = Convert.FromBase64String(cipherString.Iv);
-            var data = Convert.FromBase64String(cipherString.Data);
-            var mac = !string.IsNullOrWhiteSpace(cipherString.Mac) ? Convert.FromBase64String(cipherString.Mac) : null;
-            return await AesDecryptToBytesAsync(cipherString.EncryptionType, data, iv, mac, key);
+            var iv = Convert.FromBase64String(encString.Iv);
+            var data = Convert.FromBase64String(encString.Data);
+            var mac = !string.IsNullOrWhiteSpace(encString.Mac) ? Convert.FromBase64String(encString.Mac) : null;
+            return await AesDecryptToBytesAsync(encString.EncryptionType, data, iv, mac, key);
         }
 
-        public async Task<string> DecryptToUtf8Async(CipherString cipherString, SymmetricCryptoKey key = null)
+        public async Task<string> DecryptToUtf8Async(EncString encString, SymmetricCryptoKey key = null)
         {
-            return await AesDecryptToUtf8Async(cipherString.EncryptionType, cipherString.Data,
-                cipherString.Iv, cipherString.Mac, key);
+            return await AesDecryptToUtf8Async(encString.EncryptionType, encString.Data,
+                encString.Iv, encString.Mac, key);
         }
 
         public async Task<byte[]> DecryptFromBytesAsync(byte[] encBytes, SymmetricCryptoKey key)
@@ -809,10 +809,10 @@ namespace Bit.Core.Services
             return phrase;
         }
 
-        private async Task<Tuple<SymmetricCryptoKey, CipherString>> BuildEncKeyAsync(SymmetricCryptoKey key,
+        private async Task<Tuple<SymmetricCryptoKey, EncString>> BuildEncKeyAsync(SymmetricCryptoKey key,
             byte[] encKey)
         {
-            CipherString encKeyEnc = null;
+            EncString encKeyEnc = null;
             if (key.Key.Length == 32)
             {
                 var newKey = await StretchKeyAsync(key);
@@ -826,7 +826,7 @@ namespace Bit.Core.Services
             {
                 throw new Exception("Invalid key size.");
             }
-            return new Tuple<SymmetricCryptoKey, CipherString>(new SymmetricCryptoKey(encKey), encKeyEnc);
+            return new Tuple<SymmetricCryptoKey, EncString>(new SymmetricCryptoKey(encKey), encKeyEnc);
         }
 
         private class EncryptedObject

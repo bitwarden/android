@@ -75,6 +75,15 @@
     android:name="com.microsoft.emmx"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
+    android:name="com.microsoft.emmx.beta"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
+    android:name="com.microsoft.emmx.canary"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
+    android:name="com.microsoft.emmx.dev"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
     android:name="com.mmbox.browser"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
