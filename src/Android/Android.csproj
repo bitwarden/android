@@ -75,7 +75,7 @@
       <Version>2.1.0.4</Version>
     </PackageReference>
     <PackageReference Include="Portable.BouncyCastle">
-      <Version>1.8.6.7</Version>
+      <Version>1.8.10</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.AndroidX.AutoFill" Version="1.1.0.3-beta01" />
     <PackageReference Include="Xamarin.Essentials">
@@ -92,7 +92,7 @@
     <PackageReference Include="Xamarin.AndroidX.Migration" Version="1.0.6" />
     <PackageReference Include="Xamarin.Google.Dagger" Version="2.27.0" />
     <PackageReference Include="Xamarin.GooglePlayServices.SafetyNet">
-      <Version>71.1600.0</Version>
+      <Version>117.0.0</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

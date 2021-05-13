@@ -502,7 +502,7 @@ namespace Bit.Core.Services
             var hashSet = new HashSet<string>(globalUserInputs);
             var finalUserInputs = new string[hashSet.Count];
             hashSet.CopyTo(finalUserInputs);
-            var result = Zxcvbn.Zxcvbn.MatchPassword(password, finalUserInputs);
+            var result = Zxcvbn.Core.EvaluatePassword(password, finalUserInputs);
             return result;
         }
 
