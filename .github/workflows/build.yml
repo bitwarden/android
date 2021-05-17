@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
 
       - name: Set up cloc
         run: |
@@ -31,22 +31,21 @@ jobs:
 
     steps:
       - name: Set up MSBuild
-        uses: microsoft/setup-msbuild@v1
+        uses: microsoft/setup-msbuild@c26a08ba26249b81327e26f6ef381897b6a8754d
 
       - name: Print environment
         run: |
-          nuget help
+          nuget help | grep Version
           msbuild -version
           dotnet --info
-          Write-Output "GitHub ref: $env:GITHUB_REF"
-          Write-Output "GitHub event: $env:GITHUB_EVENT"
-        shell: pwsh
+          echo "GitHub ref: $GITHUB_REF"
+          echo "GitHub event: $GITHUB_EVENT"
         env:
           GITHUB_REF: ${{ github.ref }}
           GITHUB_EVENT: ${{ github.event_name }}
 
       - name: Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
 
       - name: Decrypt secrets
         if: github.ref == 'refs/heads/master' || github.event_name == 'release'
@@ -83,14 +82,14 @@ jobs:
 
       - name: Upload Play Store .aab artifact
         if: github.ref == 'refs/heads/master' || github.event_name == 'release'
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700
         with:
           name: com.x8bit.bitwarden.aab
           path: ./com.x8bit.bitwarden.aab
 
       - name: Upload Play Store .apk artifact
         if: github.ref == 'refs/heads/master' || github.event_name == 'release'
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700
         with:
           name: com.x8bit.bitwarden.apk
           path: ./com.x8bit.bitwarden.apk
@@ -115,7 +114,7 @@ jobs:
 
       - name: Upload F-Droid .apk artifact
         if: github.ref == 'refs/heads/master' || github.event_name == 'release'
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700
         with:
           name: com.x8bit.bitwarden-fdroid.apk
           path: ./com.x8bit.bitwarden-fdroid.apk
@@ -146,7 +145,7 @@ jobs:
     steps:
       - name: Set up Node
         if: github.event_name == 'release'
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@46071b5c7a2e0c34e49c3cb8a0e792e86e18d5ea
         with:
           node-version: '10.x'
 
@@ -181,7 +180,7 @@ jobs:
 
       - name: Checkout repo
         if: github.event_name == 'release'
-        uses: actions/checkout@v2
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
 
       - name: Install Node dependencies
         if: github.event_name == 'release'
@@ -215,18 +214,17 @@ jobs:
     steps:
       - name: Print environment
         run: |
-          nuget help
+          nuget help | grep Version
           msbuild -version
           dotnet --info
-          Write-Output "GitHub ref: $env:GITHUB_REF"
-          Write-Output "GitHub event: $env:GITHUB_EVENT"
-        shell: pwsh
+          echo "GitHub ref: $GITHUB_REF"
+          echo "GitHub event: $GITHUB_EVENT"
         env:
           GITHUB_REF: ${{ github.ref }}
           GITHUB_EVENT: ${{ github.event_name }}
 
       - name: Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
 
       - name: Decrypt secrets
         run: ./.github/scripts/ios/decrypt-secrets.ps1
@@ -271,7 +269,7 @@ jobs:
 
       - name: Upload App Store .ipa artifact
         if: github.ref == 'refs/heads/master' || github.event_name == 'release'
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700
         with:
           name: Bitwarden.ipa
           path: ./bitwarden-export/Bitwarden.ipa
