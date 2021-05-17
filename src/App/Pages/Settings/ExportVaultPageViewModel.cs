@@ -128,7 +128,7 @@ namespace Bit.App.Pages
                 fileFormat = fileFormat == "encrypted_json" ? "json" : fileFormat;
 
                 _defaultFilename = _exportService.GetFileName(null, fileFormat);
-                _exportResult = Encoding.ASCII.GetBytes(data);
+                _exportResult = Encoding.UTF8.GetBytes(data);
 
                 if (!_deviceActionService.SaveFile(_exportResult, null, _defaultFilename, null))
                 {
