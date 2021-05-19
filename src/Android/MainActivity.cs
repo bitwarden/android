@@ -27,6 +27,7 @@ namespace Bit.Droid
         Icon = "@mipmap/ic_launcher",
         Theme = "@style/LaunchTheme",
         MainLauncher = true,
+        TaskAffinity = "",
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation |
                                ConfigChanges.Keyboard | ConfigChanges.KeyboardHidden |
                                ConfigChanges.Navigation)]
