@@ -1,4 +1,5 @@
-﻿using Bit.Core.Models.Api;
+﻿using Bit.Core.Enums;
+using Bit.Core.Models.Api;
 using System;
 using System.Collections.Generic;
 
@@ -26,5 +27,6 @@ namespace Bit.Core.Models.Response
         public List<PasswordHistoryResponse> PasswordHistory { get; set; }
         public List<string> CollectionIds { get; set; }
         public DateTime? DeletedDate { get; set; }
+        public CipherRepromptType Reprompt { get; set; }
     }
 }

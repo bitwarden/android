@@ -224,24 +224,41 @@
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
                                 <Label
                                     Text="{u:I18n Number}"
                                     StyleClass="box-label"
                                     Grid.Row="0"
                                     Grid.Column="0" />
-                                <Label
+                                <controls:MonoLabel
+                                    Text="{Binding Cipher.Card.MaskedNumber, Mode=OneWay}"
+                                    StyleClass="box-value"
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    IsVisible="{Binding ShowCardNumber, Converter={StaticResource inverseBool}}" />
+                                <controls:MonoLabel
                                     Text="{Binding Cipher.Card.Number, Mode=OneWay}"
                                     StyleClass="box-value"
                                     Grid.Row="1"
-                                    Grid.Column="0" />
+                                    Grid.Column="0"
+                                    IsVisible="{Binding ShowCardNumber}" />
+                                <controls:FaButton 
+                                    StyleClass="box-row-button, box-row-button-platform"
+                                    Text="{Binding ShowCardNumberIcon}"
+                                    Command="{Binding ToggleCardNumberCommand}"
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    Grid.RowSpan="2"
+                                    AutomationProperties.IsInAccessibleTree="True"
+                                    AutomationProperties.Name="{u:I18n ToggleVisibility}" />
                                 <controls:FaButton 
                                     StyleClass="box-row-button, box-row-button-platform"
                                     Text="&#xf24d;"
                                     Command="{Binding CopyCommand}"
                                     CommandParameter="CardNumber"
                                     Grid.Row="0"
-                                    Grid.Column="1"
+                                    Grid.Column="2"
                                     Grid.RowSpan="2"
                                     AutomationProperties.IsInAccessibleTree="True"
                                     AutomationProperties.Name="{u:I18n CopyNumber}" />

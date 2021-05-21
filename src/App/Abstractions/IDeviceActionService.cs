@@ -19,7 +19,7 @@ namespace Bit.App.Abstractions
         Task SelectFileAsync();
         Task<string> DisplayPromptAync(string title = null, string description = null, string text = null,
             string okButtonText = null, string cancelButtonText = null, bool numericKeyboard = false,
-            bool autofocus = true);
+            bool autofocus = true, bool password = false);
         void RateApp();
         bool SupportsFaceBiometric();
         Task<bool> SupportsFaceBiometricAsync();

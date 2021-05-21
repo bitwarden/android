@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
@@ -14,7 +15,8 @@ namespace Bit.iOS.Autofill.Utilities
     {
         public async static Task TableRowSelectedAsync(UITableView tableView, NSIndexPath indexPath,
             ExtensionTableSource tableSource, CredentialProviderViewController cpViewController,
-            UITableViewController controller, string loginAddSegue)
+            UITableViewController controller, IPasswordRepromptService passwordRepromptService,
+            string loginAddSegue)
         {
             tableView.DeselectRow(indexPath, true);
             tableView.EndEditing(true);
@@ -28,6 +30,11 @@ namespace Bit.iOS.Autofill.Utilities
             if (item == null)
             {
                 cpViewController.CompleteRequest();
+                return;
+            }
+
+            if (item.Reprompt != Bit.Core.Enums.CipherRepromptType.None && !await passwordRepromptService.ShowPasswordPromptAsync())
+            {
                 return;
             }
 

@@ -18,6 +18,7 @@ namespace Bit.Core.Models.Request
             Notes = cipher.Notes?.EncryptedString;
             Favorite = cipher.Favorite;
             LastKnownRevisionDate = cipher.RevisionDate;
+            Reprompt = cipher.Reprompt;
 
             switch (Type)
             {
@@ -121,5 +122,6 @@ namespace Bit.Core.Models.Request
         public Dictionary<string, string> Attachments { get; set; }
         public Dictionary<string, AttachmentRequest> Attachments2 { get; set; }
         public DateTime LastKnownRevisionDate { get; set; }
+        public CipherRepromptType Reprompt { get; set; }
     }
 }

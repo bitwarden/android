@@ -99,6 +99,9 @@ namespace Bit.Droid
             var platformUtilsService = new MobilePlatformUtilsService(deviceActionService, messagingService,
                 broadcasterService);
             var biometricService = new BiometricService();
+            var cryptoFunctionService = new PclCryptoFunctionService(cryptoPrimitiveService);
+            var cryptoService = new CryptoService(mobileStorageService, secureStorageService, cryptoFunctionService);
+            var passwordRepromptService = new MobilePasswordRepromptService(platformUtilsService, cryptoService);
 
             ServiceContainer.Register<IBroadcasterService>("broadcasterService", broadcasterService);
             ServiceContainer.Register<IMessagingService>("messagingService", messagingService);
@@ -110,6 +113,9 @@ namespace Bit.Droid
             ServiceContainer.Register<IDeviceActionService>("deviceActionService", deviceActionService);
             ServiceContainer.Register<IPlatformUtilsService>("platformUtilsService", platformUtilsService);
             ServiceContainer.Register<IBiometricService>("biometricService", biometricService);
+            ServiceContainer.Register<ICryptoFunctionService>("cryptoFunctionService", cryptoFunctionService);
+            ServiceContainer.Register<ICryptoService>("cryptoService", cryptoService);
+            ServiceContainer.Register<IPasswordRepromptService>("passwordRepromptService", passwordRepromptService);
 
             // Push
 #if FDROID

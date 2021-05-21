@@ -307,7 +307,7 @@ namespace Bit.Droid.Services
 
         public Task<string> DisplayPromptAync(string title = null, string description = null,
             string text = null, string okButtonText = null, string cancelButtonText = null,
-            bool numericKeyboard = false, bool autofocus = true)
+            bool numericKeyboard = false, bool autofocus = true, bool password = false)
         {
             var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
             if (activity == null)
@@ -332,6 +332,10 @@ namespace Bit.Droid.Services
 #pragma warning disable CS0618 // Type or member is obsolete
                 input.KeyListener = DigitsKeyListener.GetInstance(false, false);
 #pragma warning restore CS0618 // Type or member is obsolete
+            }
+            if (password)
+            {
+                input.InputType = InputTypes.TextVariationPassword | InputTypes.ClassText;
             }
 
             input.ImeOptions = input.ImeOptions | (ImeAction)ImeFlags.NoPersonalizedLearning |

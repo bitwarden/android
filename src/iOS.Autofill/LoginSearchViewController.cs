@@ -7,6 +7,8 @@ using Bit.App.Resources;
 using Bit.iOS.Core.Views;
 using Bit.iOS.Autofill.Utilities;
 using Bit.iOS.Core.Utilities;
+using Bit.App.Abstractions;
+using Bit.Core.Utilities;
 
 namespace Bit.iOS.Autofill
 {
@@ -16,11 +18,13 @@ namespace Bit.iOS.Autofill
             : base(handle)
         {
             DismissModalAction = Cancel;
+            PasswordRepromptService = ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService");
         }
 
         public Context Context { get; set; }
         public CredentialProviderViewController CPViewController { get; set; }
         public bool FromList { get; set; }
+        public IPasswordRepromptService PasswordRepromptService { get; private set; }
 
         public async override void ViewDidLoad()
         {
@@ -107,7 +111,8 @@ namespace Bit.iOS.Autofill
             public async override void RowSelected(UITableView tableView, NSIndexPath indexPath)
             {
                 await AutofillHelpers.TableRowSelectedAsync(tableView, indexPath, this,
-                    _controller.CPViewController, _controller, "loginAddFromSearchSegue");
+                    _controller.CPViewController, _controller, _controller.PasswordRepromptService,
+                    "loginAddFromSearchSegue");
             }
         }
     }

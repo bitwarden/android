@@ -1,4 +1,5 @@
-﻿using Bit.Core.Models.Data;
+﻿using Bit.Core.Enums;
+using Bit.Core.Models.Data;
 using Bit.Core.Models.View;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,7 @@ namespace Bit.Core.Models.Domain
             RevisionDate = obj.RevisionDate;
             CollectionIds = obj.CollectionIds != null ? new HashSet<string>(obj.CollectionIds) : null;
             LocalData = localData;
+            Reprompt = obj.Reprompt;
 
             switch (Type)
             {
@@ -75,8 +77,8 @@ namespace Bit.Core.Models.Domain
         public List<Field> Fields { get; set; }
         public List<PasswordHistory> PasswordHistory { get; set; }
         public HashSet<string> CollectionIds { get; set; }
-
         public DateTime? DeletedDate { get; set; }
+        public CipherRepromptType Reprompt { get; set; }
 
         public async Task<CipherView> DecryptAsync()
         {
@@ -167,7 +169,8 @@ namespace Bit.Core.Models.Domain
                 RevisionDate = RevisionDate,
                 Type = Type,
                 CollectionIds = CollectionIds.ToList(),
-                DeletedDate = DeletedDate
+                DeletedDate = DeletedDate,
+                Reprompt = Reprompt,
             };
             BuildDataModel(this, c, new HashSet<string>
             {

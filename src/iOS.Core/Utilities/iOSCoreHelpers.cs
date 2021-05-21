@@ -55,6 +55,9 @@ namespace Bit.iOS.Core.Utilities
             var platformUtilsService = new MobilePlatformUtilsService(deviceActionService, messagingService,
                 broadcasterService);
             var biometricService = new BiometricService(mobileStorageService);
+            var cryptoFunctionService = new PclCryptoFunctionService(cryptoPrimitiveService);
+            var cryptoService = new CryptoService(mobileStorageService, secureStorageService, cryptoFunctionService);
+            var passwordRepromptService = new MobilePasswordRepromptService(platformUtilsService, cryptoService);
 
             ServiceContainer.Register<IBroadcasterService>("broadcasterService", broadcasterService);
             ServiceContainer.Register<IMessagingService>("messagingService", messagingService);
@@ -66,6 +69,9 @@ namespace Bit.iOS.Core.Utilities
             ServiceContainer.Register<IDeviceActionService>("deviceActionService", deviceActionService);
             ServiceContainer.Register<IPlatformUtilsService>("platformUtilsService", platformUtilsService);
             ServiceContainer.Register<IBiometricService>("biometricService", biometricService);
+            ServiceContainer.Register<ICryptoFunctionService>("cryptoFunctionService", cryptoFunctionService);
+            ServiceContainer.Register<ICryptoService>("cryptoService", cryptoService);
+            ServiceContainer.Register<IPasswordRepromptService>("passwordRepromptService", passwordRepromptService);
         }
 
         public static void Bootstrap(Func<Task> postBootstrapFunc = null)

@@ -3512,5 +3512,25 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("SendFileEmailVerificationRequired", resourceCulture);
             }
         }
+        public static string PasswordPrompt
+        {
+            get
+            {
+                return ResourceManager.GetString("PasswordPrompt", resourceCulture);
+            }
+        }
+        public static string PasswordConfirmation
+        {
+            get
+            {
+                return ResourceManager.GetString("PasswordConfirmation", resourceCulture);
+            }
+        }public static string PasswordConfirmationDesc
+        {
+            get
+            {
+                return ResourceManager.GetString("PasswordConfirmationDesc", resourceCulture);
+            }
+        }
     }
 }

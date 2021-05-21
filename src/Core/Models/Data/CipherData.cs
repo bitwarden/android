@@ -25,6 +25,7 @@ namespace Bit.Core.Models.Data
             Name = response.Name;
             Notes = response.Notes;
             CollectionIds = collectionIds?.ToList() ?? response.CollectionIds;
+            Reprompt = response.Reprompt;
 
             try // Added to address Issue (https://github.com/bitwarden/mobile/issues/1006)
             {
@@ -84,5 +85,6 @@ namespace Bit.Core.Models.Data
         public List<PasswordHistoryData> PasswordHistory { get; set; }
         public List<string> CollectionIds { get; set; }
         public DateTime? DeletedDate { get; set; }
+        public Enums.CipherRepromptType Reprompt { get; set; }
     }
 }

@@ -46,6 +46,7 @@ namespace Bit.App.Pages
         private readonly IMessagingService _messagingService;
         private readonly IStateService _stateService;
         private readonly IStorageService _storageService;
+        private readonly IPasswordRepromptService _passwordRepromptService;
 
         public GroupingsPageViewModel()
         {
@@ -60,6 +61,7 @@ namespace Bit.App.Pages
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+            _passwordRepromptService = ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService");
 
             Loading = true;
             PageTitle = AppResources.MyVault;
@@ -514,7 +516,7 @@ namespace Bit.App.Pages
         {
             if ((Page as BaseContentPage).DoOnce())
             {
-                await AppHelpers.CipherListOptions(Page, cipher);
+                await AppHelpers.CipherListOptions(Page, cipher, _passwordRepromptService);
             }
         }
     }

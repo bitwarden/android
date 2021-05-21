@@ -180,7 +180,8 @@ namespace Bit.Core.Services
                 OrganizationId = model.OrganizationId,
                 Type = model.Type,
                 CollectionIds = model.CollectionIds,
-                RevisionDate = model.RevisionDate
+                RevisionDate = model.RevisionDate,
+                Reprompt = model.Reprompt
             };
 
             if (key == null && cipher.OrganizationId != null)

@@ -376,5 +376,10 @@ namespace Bit.App.Pages
                 }
             }
         }
+
+        private void PasswordPrompt_Toggled(object sender, ToggledEventArgs e)
+        {
+            _vm.Cipher.Reprompt = e.Value ? CipherRepromptType.Password : CipherRepromptType.None;
+        }
     }
 }

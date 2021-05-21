@@ -140,13 +140,14 @@ namespace Bit.Droid.Autofill
                 {
                     var allCiphers = ciphers.Item1.ToList();
                     allCiphers.AddRange(ciphers.Item2.ToList());
-                    return allCiphers.Select(c => new FilledItem(c)).ToList();
+                    var nonPromptCiphers = allCiphers.Where(cipher => cipher.Reprompt == CipherRepromptType.None);
+                    return nonPromptCiphers.Select(c => new FilledItem(c)).ToList();
                 }
             }
             else if (parser.FieldCollection.FillableForCard)
             {
                 var ciphers = await cipherService.GetAllDecryptedAsync();
-                return ciphers.Where(c => c.Type == CipherType.Card).Select(c => new FilledItem(c)).ToList();
+                return ciphers.Where(c => c.Type == CipherType.Card && c.Reprompt == CipherRepromptType.None).Select(c => new FilledItem(c)).ToList();
             }
             return new List<FilledItem>();
         }

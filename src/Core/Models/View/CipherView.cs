@@ -24,6 +24,7 @@ namespace Bit.Core.Models.View
             CollectionIds = c.CollectionIds;
             RevisionDate = c.RevisionDate;
             DeletedDate = c.DeletedDate;
+            Reprompt = c.Reprompt;
         }
 
         public string Id { get; set; }
@@ -47,7 +48,7 @@ namespace Bit.Core.Models.View
         public HashSet<string> CollectionIds { get; set; }
         public DateTime RevisionDate { get; set; }
         public DateTime? DeletedDate { get; set; }
-
+        public CipherRepromptType Reprompt { get; set; }
 
         public string SubTitle
         {

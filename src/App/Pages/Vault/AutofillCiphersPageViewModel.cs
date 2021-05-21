@@ -23,6 +23,7 @@ namespace Bit.App.Pages
         private readonly IDeviceActionService _deviceActionService;
         private readonly ICipherService _cipherService;
         private readonly IStateService _stateService;
+        private readonly IPasswordRepromptService _passwordRepromptService;
 
         private AppOptions _appOptions;
         private bool _showList;
@@ -35,6 +36,7 @@ namespace Bit.App.Pages
             _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            _passwordRepromptService = ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService");
 
             GroupedItems = new ExtendedObservableCollection<GroupingsPageListGroup>();
             CipherOptionsCommand = new Command<CipherView>(CipherOptionsAsync);
@@ -118,10 +120,14 @@ namespace Bit.App.Pages
             }
             if (_deviceActionService.SystemMajorVersion() < 21)
             {
-                await AppHelpers.CipherListOptions(Page, cipher);
+                await AppHelpers.CipherListOptions(Page, cipher, _passwordRepromptService);
             }
             else
             {
+                if (cipher.Reprompt != CipherRepromptType.None && !await _passwordRepromptService.ShowPasswordPromptAsync())
+                {
+                    return;
+                }
                 var autofillResponse = AppResources.Yes;
                 if (fuzzy)
                 {
@@ -175,7 +181,7 @@ namespace Bit.App.Pages
         {
             if ((Page as BaseContentPage).DoOnce())
             {
-                await AppHelpers.CipherListOptions(Page, cipher);
+                await AppHelpers.CipherListOptions(Page, cipher, _passwordRepromptService);
             }
         }
     }
