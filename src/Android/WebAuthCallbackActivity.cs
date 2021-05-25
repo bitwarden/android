@@ -4,7 +4,6 @@ using Android.Content.PM;
 namespace Bit.Droid
 {
     [Activity(
-        Exported = false,
         NoHistory = true, 
         LaunchMode = LaunchMode.SingleTop)]
     [IntentFilter(new[] { Android.Content.Intent.ActionView },
