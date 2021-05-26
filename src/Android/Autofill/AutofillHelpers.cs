@@ -63,6 +63,8 @@ namespace Bit.Droid.Autofill
             "com.chrome.beta",
             "com.chrome.canary",
             "com.chrome.dev",
+            "com.cookiegames.smartcookie",
+            "com.cookiejarapps.android.smartcookieweb",
             "com.ecosia.android",
             "com.google.android.apps.chrome",
             "com.google.android.apps.chrome_dev",
