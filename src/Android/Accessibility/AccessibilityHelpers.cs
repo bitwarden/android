@@ -46,6 +46,8 @@ namespace Bit.Droid.Accessibility
             new Browser("com.chrome.beta", "url_bar"),
             new Browser("com.chrome.canary", "url_bar"),
             new Browser("com.chrome.dev", "url_bar"),
+            new Browser("com.cookiegames.smartcookie", "search"),
+            new Browser("com.cookiejarapps.android.smartcookieweb", "mozac_browser_toolbar_url_view"),
             new Browser("com.duckduckgo.mobile.android", "omnibarTextInput"),
             new Browser("com.ecosia.android", "url_bar"),
             new Browser("com.google.android.apps.chrome", "url_bar"),
