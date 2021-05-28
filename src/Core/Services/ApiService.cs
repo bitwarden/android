@@ -91,6 +91,7 @@ namespace Bit.Core.Services
                 Content = new FormUrlEncodedContent(request.ToIdentityToken(_platformUtilsService.IdentityClientId))
             };
             requestMessage.Headers.Add("Accept", "application/json");
+            request.AlterIdentityTokenHeaders(requestMessage.Headers);
 
             HttpResponseMessage response;
             try

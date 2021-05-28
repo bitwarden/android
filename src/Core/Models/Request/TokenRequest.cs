@@ -1,6 +1,7 @@
 ﻿using Bit.Core.Enums;
 using System;
 using System.Collections.Generic;
+using System.Net.Http.Headers;
 using System.Text;
 
 namespace Bit.Core.Models.Request
@@ -77,6 +78,14 @@ namespace Bit.Core.Models.Request
                 obj.Add("twoFactorRemember", Remember.GetValueOrDefault() ? "1" : "0");
             }
             return obj;
+        }
+
+        public void AlterIdentityTokenHeaders(HttpRequestHeaders headers)
+        {
+            if (MasterPasswordHash != null && Email != null)
+            {
+                headers.Add("Auth-Email", Email);
+            }
         }
     }
 }
