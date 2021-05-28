@@ -20,13 +20,16 @@ namespace Bit.Core.Services
     {
         private readonly IFolderService _folderService;
         private readonly ICipherService _cipherService;
+        private readonly ICryptoService _cryptoService;
 
         public ExportService(
             IFolderService folderService,
-            ICipherService cipherService)
+            ICipherService cipherService,
+            ICryptoService cryptoService)
         {
             _folderService = folderService;
             _cipherService = cipherService;
+            _cryptoService = cryptoService;
         }
 
         public async Task<string> GetExport(string format = "csv")
@@ -37,7 +40,7 @@ namespace Bit.Core.Services
                 var items = (await _cipherService.GetAllAsync()).Where(c => c.OrganizationId == null && c.DeletedDate == null)
                     .Select(c => new CipherWithId(c));
 
-                return ExportEncryptedJson(folders, items);
+                return await ExportEncryptedJson(folders, items);
             }
             else
             {
@@ -177,11 +180,14 @@ namespace Bit.Core.Services
                 });
         }
 
-        private string ExportEncryptedJson(IEnumerable<FolderWithId> folders, IEnumerable<CipherWithId> ciphers)
+        private async Task<string> ExportEncryptedJson(IEnumerable<FolderWithId> folders, IEnumerable<CipherWithId> ciphers)
         {
+            var encKeyValidation = await _cryptoService.EncryptAsync(Guid.NewGuid().ToString());
+
             var jsonDoc = new
             {
                 Encrypted = true,
+                EncKeyValidation_DO_NOT_EDIT = encKeyValidation.EncryptedString,
                 Folders = folders,
                 Items = ciphers,
             };
