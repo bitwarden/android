@@ -130,7 +130,6 @@ Manage, store, secure, and share unlimited passwords across unlimited devices fr
 
 Generate strong, unique, and random passwords based on security requirements for every website you frequent. 
 
-<<<<<<< HEAD
 Bitwarden Send quickly transmits encrypted information --- files and plaintext -- directly to anyone. 
 
 Bitwarden offers Teams and Enterprise plans for companies so you can securely share passwords with colleagues. 
@@ -148,17 +147,8 @@ Bitwarden translations exist in 40 languages and are growing, thanks to our glob
 
 Cross-Platform Applications 
 Secure and share sensitive data within your Bitwarden Vault from any browser, mobile device, or desktop OS, and more. 
-
-
-WHAT’S NEW SECTION (IF APPLICABLE)
-
-NEW-  Secure File and Text-Sharing
-Bitwarden Send automatically encrypts your files and text for secure delivery. Decryption happens upon receipt, and only you and the receiver can see the information. File attachments for Bitwarden Send is a Premium feature. 
 </value>
-=======
-Bitwarden is focused on open source software. The source code for Bitwarden is hosted on GitHub and everyone is free to review, audit, and contribute to the Bitwarden codebase.</value>
->>>>>>> fe58dea3e085b1320217ddd1bb9b5d6ac3166f57
-    <comment>Max 4000 characters</comment>
+  <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
     <value>bit warden,8bit,password,free password manager,password manager,login manager</value>
