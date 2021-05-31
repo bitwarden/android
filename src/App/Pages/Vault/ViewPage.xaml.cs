@@ -229,6 +229,12 @@ namespace Bit.App.Pages
 
             var selection = await DisplayActionSheet(AppResources.Options, AppResources.Cancel,
                 AppResources.Delete, options.ToArray());
+
+            if (!await _vm.PromptPasswordAsync())
+            {
+                return;
+            }
+
             if (selection == AppResources.Delete)
             {
                 if (await _vm.DeleteAsync())

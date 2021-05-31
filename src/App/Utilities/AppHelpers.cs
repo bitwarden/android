@@ -82,7 +82,10 @@ namespace Bit.App.Utilities
             }
             else if (selection == AppResources.Edit)
             {
-                await page.Navigation.PushModalAsync(new NavigationPage(new AddEditPage(cipher.Id)));
+                if (cipher.Reprompt == CipherRepromptType.None || await passwordRepromptService.ShowPasswordPromptAsync())
+                {
+                    await page.Navigation.PushModalAsync(new NavigationPage(new AddEditPage(cipher.Id)));
+                }
             }
             else if (selection == AppResources.CopyUsername)
             {
