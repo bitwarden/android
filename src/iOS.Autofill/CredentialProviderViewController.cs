@@ -87,7 +87,7 @@ namespace Bit.iOS.Autofill
                 return;
             }
             _context.CredentialIdentity = credentialIdentity;
-            await ProvideCredentialAsync();
+            await ProvideCredentialAsync(false);
         }
 
         public override async void PrepareInterfaceToProvideCredential(ASPasswordCredentialIdentity credentialIdentity)
@@ -209,7 +209,7 @@ namespace Bit.iOS.Autofill
             });
         }
 
-        private async Task ProvideCredentialAsync()
+        private async Task ProvideCredentialAsync(bool userInteraction = true)
         {
             var cipherService = ServiceContainer.Resolve<ICipherService>("cipherService", true);
             Bit.Core.Models.Domain.Cipher cipher = null;
@@ -229,6 +229,28 @@ namespace Bit.iOS.Autofill
 
             var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             var decCipher = await cipher.DecryptAsync();
+            if (decCipher.Reprompt != Bit.Core.Enums.CipherRepromptType.None)
+            {
+                if (userInteraction)
+                {
+                    var passwordRepromptService =
+                        ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService");
+                    if (!await passwordRepromptService.ShowPasswordPromptAsync())
+                    {
+                        var err = new NSError(new NSString("ASExtensionErrorDomain"),
+                    Convert.ToInt32(ASExtensionErrorCode.UserCanceled), null);
+                        ExtensionContext?.CancelRequest(err);
+                        return;
+                    }
+                }
+                else
+                {
+                    var err = new NSError(new NSString("ASExtensionErrorDomain"),
+                    Convert.ToInt32(ASExtensionErrorCode.UserInteractionRequired), null);
+                    ExtensionContext?.CancelRequest(err);
+                    return;
+                }
+            }
             string totpCode = null;
             var disableTotpCopy = await storageService.GetAsync<bool?>(Bit.Core.Constants.DisableAutoTotpCopyKey);
             if (!disableTotpCopy.GetValueOrDefault(false))
