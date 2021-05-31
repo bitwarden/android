@@ -176,6 +176,11 @@ namespace Bit.App.Services
             var password = await _deviceActionService.DisplayPromptAync(AppResources.PasswordConfirmation,
                 AppResources.PasswordConfirmationDesc, null, AppResources.Submit, AppResources.Cancel, password: true);
 
+            if (password == null)
+            {
+                return false;
+            }
+
             var valid = await validator(password);
 
             if (!valid)
