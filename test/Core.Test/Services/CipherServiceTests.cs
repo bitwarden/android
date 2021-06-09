@@ -24,8 +24,9 @@ namespace Bit.Core.Test.Services
         public async Task SaveWithServerAsync_PrefersFileUploadService(SutProvider<CipherService> sutProvider,
             Cipher cipher, string fileName, EncByteArray data, AttachmentUploadDataResponse uploadDataResponse, EncString encKey)
         {
+            var encFileName = new EncString(fileName);
             sutProvider.GetDependency<ICryptoService>().EncryptAsync(fileName, Arg.Any<SymmetricCryptoKey>())
-                .Returns(new EncString(fileName));
+                .Returns(encFileName);
             sutProvider.GetDependency<ICryptoService>().EncryptToBytesAsync(data.Buffer, Arg.Any<SymmetricCryptoKey>())
                 .Returns(data);
             sutProvider.GetDependency<ICryptoService>().MakeEncKeyAsync(Arg.Any<SymmetricCryptoKey>()).Returns(new Tuple<SymmetricCryptoKey, EncString>(null, encKey));
@@ -35,7 +36,7 @@ namespace Bit.Core.Test.Services
             await sutProvider.Sut.SaveAttachmentRawWithServerAsync(cipher, fileName, data.Buffer);
 
             await sutProvider.GetDependency<IFileUploadService>().Received(1)
-                .UploadCipherAttachmentFileAsync(uploadDataResponse, fileName, data);
+                .UploadCipherAttachmentFileAsync(uploadDataResponse, encFileName, data);
         }
 
         [Theory]
