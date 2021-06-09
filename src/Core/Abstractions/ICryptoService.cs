@@ -31,7 +31,7 @@ namespace Bit.Core.Abstractions
         Task<byte[]> GetPrivateKeyAsync();
         Task<byte[]> GetPublicKeyAsync();
         Task<bool> HasEncKeyAsync();
-        Task<string> HashPasswordAsync(string password, SymmetricCryptoKey key);
+        Task<string> HashPasswordAsync(string password, SymmetricCryptoKey key, HashPurpose? hashPurpose);
         Task<bool> HasKeyAsync();
         Task<Tuple<SymmetricCryptoKey, EncString>> MakeEncKeyAsync(SymmetricCryptoKey key);
         Task<SymmetricCryptoKey> MakeKeyAsync(string password, string salt, KdfType? kdf, int? kdfIterations);

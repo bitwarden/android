@@ -433,7 +433,7 @@ namespace Bit.Core.Services
             return new SymmetricCryptoKey(sendKey);
         }
 
-        public async Task<string> HashPasswordAsync(string password, SymmetricCryptoKey key)
+        public async Task<string> HashPasswordAsync(string password, SymmetricCryptoKey key, HashPurpose? hashPurpose)
         {
             if (key == null)
             {
@@ -443,7 +443,8 @@ namespace Bit.Core.Services
             {
                 throw new Exception("Invalid parameters.");
             }
-            var hash = await _cryptoFunctionService.Pbkdf2Async(key.Key, password, CryptoHashAlgorithm.Sha256, 1);
+            var iterations = hashPurpose == HashPurpose.LocalAuthorization ? 2 : 1;
+            var hash = await _cryptoFunctionService.Pbkdf2Async(key.Key, password, CryptoHashAlgorithm.Sha256, iterations);
             return Convert.ToBase64String(hash);
         }
 
