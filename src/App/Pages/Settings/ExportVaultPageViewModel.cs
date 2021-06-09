@@ -103,7 +103,7 @@ namespace Bit.App.Pages
                 return;
             }
 
-            var keyHash = await _cryptoService.HashPasswordAsync(_masterPassword, null);
+            var keyHash = await _cryptoService.HashPasswordAsync(_masterPassword, null, Core.Enums.HashPurpose.LocalAuthorization);
             MasterPassword = string.Empty;
 
             var storedKeyHash = await _cryptoService.GetKeyHashAsync();

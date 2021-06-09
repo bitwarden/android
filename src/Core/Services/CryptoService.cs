@@ -433,7 +433,7 @@ namespace Bit.Core.Services
             return new SymmetricCryptoKey(sendKey);
         }
 
-        public async Task<string> HashPasswordAsync(string password, SymmetricCryptoKey key, HashPurpose? hashPurpose)
+        public async Task<string> HashPasswordAsync(string password, SymmetricCryptoKey key, HashPurpose hashPurpose = HashPurpose.ServerAuthorization)
         {
             if (key == null)
             {

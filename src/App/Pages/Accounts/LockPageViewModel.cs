@@ -241,25 +241,26 @@ namespace Bit.App.Pages
             else
             {
                 var key = await _cryptoService.MakeKeyAsync(MasterPassword, _email, kdf, kdfIterations);
-                var keyHash = await _cryptoService.HashPasswordAsync(MasterPassword, key);
+                var localKeyHash = await _cryptoService.HashPasswordAsync(MasterPassword, key, HashPurpose.LocalAuthorization);
                 var passwordValid = false;
-                if (keyHash != null)
+                if (localKeyHash != null)
                 {
                     var storedKeyHash = await _cryptoService.GetKeyHashAsync();
                     if (storedKeyHash != null)
                     {
-                        passwordValid = storedKeyHash == keyHash;
+                        passwordValid = storedKeyHash == localKeyHash;
                     }
                     else
                     {
                         await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
+                        var keyHash = await _cryptoService.HashPasswordAsync(MasterPassword, key, HashPurpose.ServerAuthorization);
                         var request = new PasswordVerificationRequest();
                         request.MasterPasswordHash = keyHash;
                         try
                         {
                             await _apiService.PostAccountVerifyPasswordAsync(request);
                             passwordValid = true;
-                            await _cryptoService.SetKeyHashAsync(keyHash);
+                            await _cryptoService.SetKeyHashAsync(localKeyHash);
                         }
                         catch (Exception e)
                         {

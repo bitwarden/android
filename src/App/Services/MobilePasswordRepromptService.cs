@@ -29,7 +29,7 @@ namespace Bit.App.Services
                     return false;
                 };
 
-                var keyHash = await _cryptoService.HashPasswordAsync(password, null);
+                var keyHash = await _cryptoService.HashPasswordAsync(password, null, Core.Enums.HashPurpose.LocalAuthorization);
                 var storedKeyHash = await _cryptoService.GetKeyHashAsync();
 
                 if (storedKeyHash == null || keyHash == null || storedKeyHash != keyHash)
