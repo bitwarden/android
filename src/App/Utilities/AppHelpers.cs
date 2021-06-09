@@ -440,5 +440,20 @@ namespace Bit.App.Utilities
             }
             return previousPage;
         }
+
+        public static async Task<int> IncrementInvalidUnlockAttemptsAsync()
+        {
+            var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+            var invalidUnlockAttempts = await storageService.GetAsync<int>(Constants.InvalidUnlockAttempts); 
+            invalidUnlockAttempts++;
+            await storageService.SaveAsync(Constants.InvalidUnlockAttempts, invalidUnlockAttempts);
+            return invalidUnlockAttempts;
+        }
+        
+        public static async Task ResetInvalidUnlockAttemptsAsync()
+        {
+            var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+            await storageService.RemoveAsync(Constants.InvalidUnlockAttempts);
+        }
     }
 }

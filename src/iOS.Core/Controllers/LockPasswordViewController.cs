@@ -8,6 +8,7 @@ using Bit.App.Abstractions;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using System.Threading.Tasks;
+using Bit.App.Utilities;
 using Bit.Core.Models.Domain;
 using Bit.Core.Enums;
 
@@ -27,7 +28,6 @@ namespace Bit.iOS.Core.Controllers
         private bool _pinLock;
         private bool _biometricLock;
         private bool _biometricIntegrityValid = true;
-        private int _invalidPinAttempts;
 
         public LockPasswordViewController(IntPtr handle)
             : base(handle)
@@ -144,6 +144,7 @@ namespace Bit.iOS.Core.Controllers
                         failed = decPin != inputtedValue;
                         if (!failed)
                         {
+                            await AppHelpers.ResetInvalidUnlockAttemptsAsync();
                             await SetKeyAndContinueAsync(key);
                         }
                     }
@@ -152,6 +153,7 @@ namespace Bit.iOS.Core.Controllers
                         var key2 = await _cryptoService.MakeKeyFromPinAsync(inputtedValue, email,
                             kdf.GetValueOrDefault(KdfType.PBKDF2_SHA256), kdfIterations.GetValueOrDefault(5000));
                         failed = false;
+                        await AppHelpers.ResetInvalidUnlockAttemptsAsync();
                         await SetKeyAndContinueAsync(key2);
                     }
                 }
@@ -161,10 +163,10 @@ namespace Bit.iOS.Core.Controllers
                 }
                 if (failed)
                 {
-                    _invalidPinAttempts++;
-                    if (_invalidPinAttempts >= 5)
+                    var invalidUnlockAttempts = await AppHelpers.IncrementInvalidUnlockAttemptsAsync();
+                    if (invalidUnlockAttempts >= 5)
                     {
-                        Cancel?.Invoke();
+                        await LogOutAsync();
                         return;
                     }
                     InvalidValue();
@@ -196,6 +198,7 @@ namespace Bit.iOS.Core.Controllers
                             kdf.GetValueOrDefault(KdfType.PBKDF2_SHA256), kdfIterations.GetValueOrDefault(5000));
                         _vaultTimeoutService.PinProtectedKey = await _cryptoService.EncryptAsync(key2.Key, pinKey);
                     }
+                    await AppHelpers.ResetInvalidUnlockAttemptsAsync();
                     await SetKeyAndContinueAsync(key2);
                     
                     // Re-enable biometrics
@@ -206,6 +209,12 @@ namespace Bit.iOS.Core.Controllers
                 }
                 else
                 {
+                    var invalidUnlockAttempts = await AppHelpers.IncrementInvalidUnlockAttemptsAsync();
+                    if (invalidUnlockAttempts >= 5)
+                    {
+                        await LogOutAsync();
+                        return;
+                    }
                     InvalidValue();
                 }
             }
@@ -255,6 +264,42 @@ namespace Bit.iOS.Core.Controllers
                         MasterPasswordCell.TextField.BecomeFirstResponder();
                     });
             PresentViewController(alert, true, null);
+        }
+        
+        private async Task LogOutAsync()
+        {
+            var syncService = ServiceContainer.Resolve<ISyncService>("syncService");
+            var tokenService = ServiceContainer.Resolve<ITokenService>("tokenService");
+            var settingsService = ServiceContainer.Resolve<ISettingsService>("settingsService");
+            var cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
+            var folderService = ServiceContainer.Resolve<IFolderService>("folderService");
+            var collectionService = ServiceContainer.Resolve<ICollectionService>("collectionService");
+            var passwordGenerationService = ServiceContainer.Resolve<IPasswordGenerationService>(
+                "passwordGenerationService");
+            var stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            var searchService = ServiceContainer.Resolve<ISearchService>("searchService");
+            var authService = ServiceContainer.Resolve<IAuthService>("authService");
+                
+            var userId = await _userService.GetUserIdAsync();
+            await Task.WhenAll(
+                syncService.SetLastSyncAsync(DateTime.MinValue),
+                tokenService.ClearTokenAsync(),
+                _cryptoService.ClearKeysAsync(),
+                _userService.ClearAsync(),
+                settingsService.ClearAsync(userId),
+                cipherService.ClearAsync(userId),
+                folderService.ClearAsync(userId),
+                collectionService.ClearAsync(userId),
+                passwordGenerationService.ClearAsync(),
+                _vaultTimeoutService.ClearAsync(),
+                stateService.PurgeAsync(),
+                _deviceActionService.ClearCacheAsync());
+            _vaultTimeoutService.BiometricLocked = true;
+            searchService.ClearIndex();
+            authService.LogOut(() =>
+            {
+                Cancel?.Invoke();
+            });
         }
 
         public class TableSource : ExtendedUITableViewSource

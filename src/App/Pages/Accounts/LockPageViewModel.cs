@@ -8,6 +8,7 @@ using Bit.Core.Models.Domain;
 using Bit.Core.Utilities;
 using System;
 using System.Threading.Tasks;
+using Bit.App.Utilities;
 using Bit.Core.Models.Request;
 using Xamarin.Forms;
 
@@ -37,7 +38,6 @@ namespace Bit.App.Pages
         private string _biometricButtonText;
         private string _loggedInAsText;
         private string _lockedVerifyText;
-        private int _invalidPinAttempts = 0;
         private Tuple<bool, bool> _pinSet;
 
         public LockPageViewModel()
@@ -208,6 +208,7 @@ namespace Bit.App.Pages
                         if (!failed)
                         {
                             Pin = string.Empty;
+                            await AppHelpers.ResetInvalidUnlockAttemptsAsync();
                             await SetKeyAndContinueAsync(key);
                         }
                     }
@@ -217,6 +218,7 @@ namespace Bit.App.Pages
                             kdf.GetValueOrDefault(KdfType.PBKDF2_SHA256), kdfIterations.GetValueOrDefault(5000));
                         failed = false;
                         Pin = string.Empty;
+                        await AppHelpers.ResetInvalidUnlockAttemptsAsync();
                         await SetKeyAndContinueAsync(key);
                     }
                 }
@@ -226,8 +228,8 @@ namespace Bit.App.Pages
                 }
                 if (failed)
                 {
-                    _invalidPinAttempts++;
-                    if (_invalidPinAttempts >= 5)
+                    var invalidUnlockAttempts = await AppHelpers.IncrementInvalidUnlockAttemptsAsync();
+                    if (invalidUnlockAttempts >= 5)
                     {
                         _messagingService.Send("logout");
                         return;
@@ -278,6 +280,7 @@ namespace Bit.App.Pages
                         _vaultTimeoutService.PinProtectedKey = await _cryptoService.EncryptAsync(key.Key, pinKey);
                     }
                     MasterPassword = string.Empty;
+                    await AppHelpers.ResetInvalidUnlockAttemptsAsync();
                     await SetKeyAndContinueAsync(key);
 
                     // Re-enable biometrics
@@ -288,6 +291,12 @@ namespace Bit.App.Pages
                 }
                 else
                 {
+                    var invalidUnlockAttempts = await AppHelpers.IncrementInvalidUnlockAttemptsAsync();
+                    if (invalidUnlockAttempts >= 5)
+                    {
+                        _messagingService.Send("logout");
+                        return;
+                    }
                     await _platformUtilsService.ShowDialogAsync(AppResources.InvalidMasterPassword,
                         AppResources.AnErrorHasOccurred);
                 }

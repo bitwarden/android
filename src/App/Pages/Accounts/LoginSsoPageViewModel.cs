@@ -5,6 +5,7 @@ using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using System;
 using System.Threading.Tasks;
+using Bit.App.Utilities;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.Domain;
@@ -182,6 +183,7 @@ namespace Bit.App.Pages
             try
             {
                 var response = await _authService.LogInSsoAsync(code, codeVerifier, redirectUri);
+                await AppHelpers.ResetInvalidUnlockAttemptsAsync();
                 if (RememberOrgIdentifier)
                 {
                     await _storageService.SaveAsync(Keys_RememberedOrgIdentifier, OrgIdentifier);

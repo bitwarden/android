@@ -6,6 +6,7 @@ using Bit.Core.Exceptions;
 using Bit.Core.Utilities;
 using System;
 using System.Threading.Tasks;
+using Bit.App.Utilities;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -125,6 +126,7 @@ namespace Bit.App.Pages
                 {
                     await _storageService.RemoveAsync(Keys_RememberedEmail);
                 }
+                await AppHelpers.ResetInvalidUnlockAttemptsAsync();
                 await _deviceActionService.HideLoadingAsync();
                 if (response.TwoFactor)
                 {
