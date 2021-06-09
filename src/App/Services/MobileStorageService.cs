@@ -39,6 +39,7 @@ namespace Bit.App.Services
             Constants.iOSExtensionBiometricIntegrityKey,
             Constants.EnvironmentUrlsKey,
             Constants.InlineAutofillEnabledKey,
+            Constants.InvalidUnlockAttempts,
         };
 
         private readonly HashSet<string> _migrateToPreferences = new HashSet<string>

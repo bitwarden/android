@@ -40,6 +40,7 @@
         public static string EventCollectionKey = "eventCollection";
         public static string PreviousPageKey = "previousPage";
         public static string InlineAutofillEnabledKey = "inlineAutofillEnabled";
+        public static string InvalidUnlockAttempts = "invalidUnlockAttempts";
         public const int SelectFileRequestCode = 42;
         public const int SelectFilePermissionRequestCode = 43;
         public const int SaveFileRequestCode = 44;
