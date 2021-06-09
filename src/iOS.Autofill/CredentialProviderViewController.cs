@@ -79,6 +79,9 @@ namespace Bit.iOS.Autofill
         public override async void ProvideCredentialWithoutUserInteraction(ASPasswordCredentialIdentity credentialIdentity)
         {
             InitAppIfNeeded();
+            var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+            await storageService.SaveAsync(Bit.Core.Constants.PasswordRepromptAutofillKey, false);
+            await storageService.SaveAsync(Bit.Core.Constants.PasswordVerifiedAutofillKey, false);
             if (!await IsAuthed() || await IsLocked())
             {
                 var err = new NSError(new NSString("ASExtensionErrorDomain"),
@@ -231,24 +234,26 @@ namespace Bit.iOS.Autofill
             var decCipher = await cipher.DecryptAsync();
             if (decCipher.Reprompt != Bit.Core.Enums.CipherRepromptType.None)
             {
-                if (userInteraction)
+                // Prompt for password using either the lock screen or dialog unless
+                // already verified the password.
+                if (!userInteraction)
                 {
-                    var passwordRepromptService =
-                        ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService");
-                    if (!await passwordRepromptService.ShowPasswordPromptAsync())
-                    {
-                        var err = new NSError(new NSString("ASExtensionErrorDomain"),
-                    Convert.ToInt32(ASExtensionErrorCode.UserCanceled), null);
-                        ExtensionContext?.CancelRequest(err);
-                        return;
-                    }
-                }
-                else
-                {
+                    await storageService.SaveAsync(Bit.Core.Constants.PasswordRepromptAutofillKey, true);
                     var err = new NSError(new NSString("ASExtensionErrorDomain"),
                     Convert.ToInt32(ASExtensionErrorCode.UserInteractionRequired), null);
                     ExtensionContext?.CancelRequest(err);
                     return;
+                }
+                else if (!await storageService.GetAsync<bool>(Bit.Core.Constants.PasswordVerifiedAutofillKey))
+                {
+                    var passwordRepromptService = ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService");
+                    if (!await passwordRepromptService.ShowPasswordPromptAsync())
+                    {
+                        var err = new NSError(new NSString("ASExtensionErrorDomain"),
+                            Convert.ToInt32(ASExtensionErrorCode.UserCanceled), null);
+                        ExtensionContext?.CancelRequest(err);
+                        return;
+                    }
                 }
             }
             string totpCode = null;
@@ -270,7 +275,8 @@ namespace Bit.iOS.Autofill
 
         private async void CheckLock(Action notLockedAction)
         {
-            if (await IsLocked())
+            var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+            if (await IsLocked() || await storageService.GetAsync<bool>(Bit.Core.Constants.PasswordRepromptAutofillKey))
             {
                 PerformSegue("lockPasswordSegue", this);
             }
