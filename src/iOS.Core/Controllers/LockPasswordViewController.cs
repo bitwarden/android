@@ -44,7 +44,7 @@ namespace Bit.iOS.Core.Controllers
         
         public string BiometricIntegrityKey { get; set; }
 
-        public override void ViewDidLoad()
+        public async override void ViewDidLoad()
         {
             _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             _cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
@@ -87,6 +87,13 @@ namespace Bit.iOS.Core.Controllers
             TableView.AllowsSelection = true;
 
             base.ViewDidLoad();
+
+            var useLocalHash = await _storageService.GetAsync<bool>("useLocalHash");
+            if (useLocalHash != true)
+            {
+                await LogOutAsync();
+                return;
+            }
 
             if (_biometricLock)
             {
