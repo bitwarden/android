@@ -103,11 +103,10 @@ namespace Bit.App.Pages
                 return;
             }
 
-            var keyHash = await _cryptoService.HashPasswordAsync(_masterPassword, null, Core.Enums.HashPurpose.LocalAuthorization);
             MasterPassword = string.Empty;
 
-            var storedKeyHash = await _cryptoService.GetKeyHashAsync();
-            if (storedKeyHash == null || keyHash == null || storedKeyHash != keyHash)
+            var passwordValid = await _cryptoService.CompareAndUpdateKeyHashAsync(_masterPassword, null);
+            if (passwordValid)
             {
                 await _platformUtilsService.ShowDialogAsync(_i18nService.T("InvalidMasterPassword"));
                 return;

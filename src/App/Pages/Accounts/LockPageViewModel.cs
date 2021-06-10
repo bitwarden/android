@@ -241,33 +241,31 @@ namespace Bit.App.Pages
             else
             {
                 var key = await _cryptoService.MakeKeyAsync(MasterPassword, _email, kdf, kdfIterations);
-                var localKeyHash = await _cryptoService.HashPasswordAsync(MasterPassword, key, HashPurpose.LocalAuthorization);
+                var storedKeyHash = await _cryptoService.GetKeyHashAsync();
                 var passwordValid = false;
-                if (localKeyHash != null)
+                
+                if (storedKeyHash != null)
                 {
-                    var storedKeyHash = await _cryptoService.GetKeyHashAsync();
-                    if (storedKeyHash != null)
+                    passwordValid = await _cryptoService.CompareAndUpdateKeyHashAsync(MasterPassword, key);
+                }
+                else
+                {
+                    await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
+                    var keyHash = await _cryptoService.HashPasswordAsync(MasterPassword, key, HashPurpose.ServerAuthorization);
+                    var request = new PasswordVerificationRequest();
+                    request.MasterPasswordHash = keyHash;
+                    try
                     {
-                        passwordValid = storedKeyHash == localKeyHash;
+                        await _apiService.PostAccountVerifyPasswordAsync(request);
+                        passwordValid = true;
+                        var localKeyHash = await _cryptoService.HashPasswordAsync(MasterPassword, key, HashPurpose.LocalAuthorization);
+                        await _cryptoService.SetKeyHashAsync(localKeyHash);
                     }
-                    else
+                    catch (Exception e)
                     {
-                        await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
-                        var keyHash = await _cryptoService.HashPasswordAsync(MasterPassword, key, HashPurpose.ServerAuthorization);
-                        var request = new PasswordVerificationRequest();
-                        request.MasterPasswordHash = keyHash;
-                        try
-                        {
-                            await _apiService.PostAccountVerifyPasswordAsync(request);
-                            passwordValid = true;
-                            await _cryptoService.SetKeyHashAsync(localKeyHash);
-                        }
-                        catch (Exception e)
-                        {
-                            System.Diagnostics.Debug.WriteLine(">>> {0}: {1}", e.GetType(), e.StackTrace);
-                        }
-                        await _deviceActionService.HideLoadingAsync();
+                        System.Diagnostics.Debug.WriteLine(">>> {0}: {1}", e.GetType(), e.StackTrace);
                     }
+                    await _deviceActionService.HideLoadingAsync();
                 }
                 if (passwordValid)
                 {

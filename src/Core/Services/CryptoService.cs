@@ -281,6 +281,28 @@ namespace Bit.Core.Services
             return orgKeys[orgId];
         }
 
+        public async Task<bool> CompareAndUpdateKeyHashAsync(string masterPassword, SymmetricCryptoKey key)
+        {
+            var storedKeyHash = await GetKeyHashAsync();
+            if (masterPassword != null && storedKeyHash != null)
+            {
+                var localKeyHash = await HashPasswordAsync(masterPassword, key, HashPurpose.LocalAuthorization);
+                if (localKeyHash != null && storedKeyHash == localKeyHash)
+                {
+                    return true;
+                }
+
+                var serverKeyHash = await HashPasswordAsync(masterPassword, key, HashPurpose.ServerAuthorization);
+                if (serverKeyHash != null & storedKeyHash == serverKeyHash)
+                {
+                    await SetKeyHashAsync(localKeyHash);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public async Task<bool> HasKeyAsync()
         {
             var key = await GetKeyAsync();

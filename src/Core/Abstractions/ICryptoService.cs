@@ -30,6 +30,7 @@ namespace Bit.Core.Abstractions
         Task<Dictionary<string, SymmetricCryptoKey>> GetOrgKeysAsync();
         Task<byte[]> GetPrivateKeyAsync();
         Task<byte[]> GetPublicKeyAsync();
+        Task<bool> CompareAndUpdateKeyHashAsync(string masterPassword, SymmetricCryptoKey key);
         Task<bool> HasEncKeyAsync();
         Task<string> HashPasswordAsync(string password, SymmetricCryptoKey key, HashPurpose hashPurpose = HashPurpose.ServerAuthorization);
         Task<bool> HasKeyAsync();
