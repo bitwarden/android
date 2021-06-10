@@ -28,7 +28,6 @@ namespace Bit.iOS.Core.Controllers
         private bool _pinLock;
         private bool _biometricLock;
         private bool _biometricIntegrityValid = true;
-        private int _invalidPinAttempts;
         private bool _passwordReprompt = false;
 
         protected bool autofillExtension = false;
