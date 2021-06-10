@@ -10,6 +10,7 @@ namespace Bit.iOS.Autofill
         {
             BiometricIntegrityKey = Bit.Core.Constants.iOSAutoFillBiometricIntegrityKey;
             DismissModalAction = Cancel;
+            autofillExtension = true;
         }
 
         public CredentialProviderViewController CPViewController { get; set; }
