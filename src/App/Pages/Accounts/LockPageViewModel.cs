@@ -121,13 +121,6 @@ namespace Bit.App.Pages
 
         public async Task InitAsync(bool autoPromptBiometric)
         {
-            var useLocalHash = await _storageService.GetAsync<bool>("useLocalHash");
-            if (useLocalHash != true)
-            {
-                _messagingService.Send("logout");
-                return;
-            }
-
             _pinSet = await _vaultTimeoutService.IsPinLockSetAsync();
             PinLock = (_pinSet.Item1 && _vaultTimeoutService.PinProtectedKey != null) || _pinSet.Item2;
             BiometricLock = await _vaultTimeoutService.IsBiometricLockSetAsync() && await _cryptoService.HasKeyAsync();

@@ -33,7 +33,6 @@ namespace Bit.Core.Services
         private const string Keys_EncPrivateKey = "encPrivateKey";
         private const string Keys_EncKey = "encKey";
         private const string Keys_KeyHash = "keyHash";
-        private const string Keys_UseLocalHash = "useLocalHash";
 
         public CryptoService(
             IStorageService storageService,
@@ -62,7 +61,6 @@ namespace Bit.Core.Services
         {
             _keyHash = keyHash;
             await _storageService.SaveAsync(Keys_KeyHash, keyHash);
-            await _storageService.SaveAsync(Keys_UseLocalHash, true);
         }
 
         public async Task SetEncKeyAsync(string encKey)
