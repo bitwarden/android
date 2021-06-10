@@ -574,7 +574,7 @@ namespace Bit.Core.Services
 
                 var uploadDataResponse = await _apiService.PostCipherAttachmentAsync(cipher.Id, request);
                 response = uploadDataResponse.CipherResponse;
-                await _fileUploadService.UploadCipherAttachmentFileAsync(uploadDataResponse, encFileName.EncryptedString, encFileData);
+                await _fileUploadService.UploadCipherAttachmentFileAsync(uploadDataResponse, encFileName, encFileData);
             }
             catch (ApiException e) when (e.Error.StatusCode == System.Net.HttpStatusCode.NotFound || e.Error.StatusCode == System.Net.HttpStatusCode.MethodNotAllowed)
             {

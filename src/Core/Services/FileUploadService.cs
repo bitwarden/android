@@ -20,14 +20,14 @@ namespace Bit.Core.Services {
         private readonly ApiService _apiService;
 
         public async Task UploadCipherAttachmentFileAsync(AttachmentUploadDataResponse uploadData,
-            string encryptedFileName, EncByteArray encryptedFileData)
+            EncString encryptedFileName, EncByteArray encryptedFileData)
         {
             try
             {
                 switch (uploadData.FileUploadType)
                 {
                     case FileUploadType.Direct:
-                        await _bitwardenFileUploadService.Upload(encryptedFileName, encryptedFileData,
+                        await _bitwardenFileUploadService.Upload(encryptedFileName.EncryptedString, encryptedFileData,
                             fd => _apiService.PostAttachmentFileAsync(uploadData.CipherResponse.Id, uploadData.AttachmentId, fd));
                         break;
                     case FileUploadType.Azure:

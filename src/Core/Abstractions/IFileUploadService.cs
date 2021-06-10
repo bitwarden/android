@@ -4,7 +4,7 @@ using Bit.Core.Models.Response;
 
 namespace Bit.Core.Abstractions {
     public interface IFileUploadService {
-        Task UploadCipherAttachmentFileAsync(AttachmentUploadDataResponse uploadData, string fileName, EncByteArray encryptedFileData);
+        Task UploadCipherAttachmentFileAsync(AttachmentUploadDataResponse uploadData, EncString fileName, EncByteArray encryptedFileData);
         Task UploadSendFileAsync(SendFileUploadDataResponse uploadData, EncString fileName, EncByteArray encryptedFileData);
     }
 }
