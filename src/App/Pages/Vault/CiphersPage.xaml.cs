@@ -3,6 +3,7 @@ using Bit.App.Resources;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
 using System;
+using System.Linq;
 using Bit.App.Controls;
 using Xamarin.Forms;
 
@@ -128,7 +129,7 @@ namespace Bit.App.Pages
                 return;
             }
 
-            if (e.CurrentSelection is CipherView cipher)
+            if (e.CurrentSelection?.FirstOrDefault() is CipherView cipher)
             {
                 await _vm.SelectCipherAsync(cipher);
             }

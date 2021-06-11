@@ -1,4 +1,5 @@
-using System;
+﻿using System;
+using System.Linq;
 using Bit.App.Controls;
 using Bit.App.Resources;
 using Bit.Core.Models.View;
@@ -96,7 +97,7 @@ namespace Bit.App.Pages
                 return;
             }
 
-            if (e.CurrentSelection is SendView send)
+            if (e.CurrentSelection?.FirstOrDefault() is SendView send)
             {
                 await _vm.SelectSendAsync(send);
             }
