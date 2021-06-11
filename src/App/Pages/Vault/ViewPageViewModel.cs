@@ -514,6 +514,11 @@ namespace Bit.App.Pages
                 canOpenFile = false;
             }
 
+            if (!await PromptPasswordAsync())
+            {
+                return;
+            }
+
             await _deviceActionService.ShowLoadingAsync(AppResources.Downloading);
             try
             {
