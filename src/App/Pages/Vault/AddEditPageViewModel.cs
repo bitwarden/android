@@ -295,6 +295,7 @@ namespace Bit.App.Pages
         public int TotpColumnSpan => Cipher.ViewPassword ? 1 : 2;
         public bool AllowPersonal { get; set; }
         public bool PasswordPrompt => Cipher.Reprompt != CipherRepromptType.None;
+        public IEnumerable<string> DefaultUsernames { get; private set; }
 
         public void Init()
         {
@@ -363,6 +364,10 @@ namespace Bit.App.Pages
                         {
                             Cipher.OrganizationId = OrganizationId;
                         }
+                    }
+                    if (Cipher.Type == CipherType.Login)
+                    {
+                        DefaultUsernames = _cipherService.GetTopUsernamesAsync();
                     }
                 }
                 else

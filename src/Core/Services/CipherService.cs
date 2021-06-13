@@ -1232,6 +1232,16 @@ namespace Bit.Core.Services
             cipher.PasswordHistory = encPhs;
         }
 
+        public async Task<IEnumerable<string>> GetTopUsernamesAsync()
+        {
+            var decCiphers = await GetAllDecryptedAsync();
+            return decCiphers.Select(x => x.Login.Username)
+                .GroupBy(x => x)
+                .OrderByDescending(g => g.Count())
+                .Take(5)
+                .Select(g => g.Key);
+        }
+
         private class CipherLocaleComparer : IComparer<CipherView>
         {
             private readonly II18nService _i18nService;
