@@ -22,6 +22,8 @@ namespace Bit.App.Pages
         private bool _authingWithSso;
         private string _orgIdentifier;
 
+        public Button ContinueButton { get; set; }
+
         public TwoFactorPage(bool? authingWithSso = false, AppOptions appOptions = null, string orgIdentifier = null)
         {
             InitializeComponent();
@@ -45,25 +47,11 @@ namespace Bit.App.Pages
             {
                 ToolbarItems.Remove(_cancelItem);
             }
+
+            ContinueButton = _continue;
         }
 
         public HybridWebView DuoWebView { get; set; }
-
-        public void AddContinueButton()
-        {
-            if (!ToolbarItems.Contains(_continueItem))
-            {
-                ToolbarItems.Add(_continueItem);
-            }
-        }
-
-        public void RemoveContinueButton()
-        {
-            if (ToolbarItems.Contains(_continueItem))
-            {
-                ToolbarItems.Remove(_continueItem);
-            }
-        }
 
         protected async override void OnAppearing()
         {
@@ -193,6 +181,18 @@ namespace Bit.App.Pages
                 }
                 var previousPage = await AppHelpers.ClearPreviousPage();
                 Application.Current.MainPage = new TabsPage(_appOptions, previousPage);
+            }
+        }
+
+        private void Token_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(e.NewTextValue))
+            {
+                ContinueButton.IsEnabled = false;
+            }
+            else if (!ContinueButton.IsEnabled)
+            {
+                ContinueButton.IsEnabled = true;
             }
         }
     }

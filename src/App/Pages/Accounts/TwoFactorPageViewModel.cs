@@ -73,6 +73,8 @@ namespace Bit.App.Pages
 
         public bool ShowTryAgain => YubikeyMethod && Device.RuntimePlatform == Device.iOS;
 
+        public bool ShowContinue { get; set; }
+
         public string YubikeyInstruction => Device.RuntimePlatform == Device.iOS ? AppResources.YubiKeyInstructionIos :
             AppResources.YubiKeyInstruction;
 
@@ -171,11 +173,11 @@ namespace Bit.App.Pages
             }
             if (SelectedProviderType == null || DuoMethod)
             {
-                page.RemoveContinueButton();
+                ShowContinue = false;
             }
             else
             {
-                page.AddContinueButton();
+                ShowContinue = true;
             }
         }
 
