@@ -281,6 +281,28 @@ namespace Bit.Core.Services
             return orgKeys[orgId];
         }
 
+        public async Task<bool> CompareAndUpdateKeyHashAsync(string masterPassword, SymmetricCryptoKey key)
+        {
+            var storedKeyHash = await GetKeyHashAsync();
+            if (masterPassword != null && storedKeyHash != null)
+            {
+                var localKeyHash = await HashPasswordAsync(masterPassword, key, HashPurpose.LocalAuthorization);
+                if (localKeyHash != null && storedKeyHash == localKeyHash)
+                {
+                    return true;
+                }
+
+                var serverKeyHash = await HashPasswordAsync(masterPassword, key, HashPurpose.ServerAuthorization);
+                if (serverKeyHash != null & storedKeyHash == serverKeyHash)
+                {
+                    await SetKeyHashAsync(localKeyHash);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         public async Task<bool> HasKeyAsync()
         {
             var key = await GetKeyAsync();
@@ -433,7 +455,7 @@ namespace Bit.Core.Services
             return new SymmetricCryptoKey(sendKey);
         }
 
-        public async Task<string> HashPasswordAsync(string password, SymmetricCryptoKey key)
+        public async Task<string> HashPasswordAsync(string password, SymmetricCryptoKey key, HashPurpose hashPurpose = HashPurpose.ServerAuthorization)
         {
             if (key == null)
             {
@@ -443,7 +465,8 @@ namespace Bit.Core.Services
             {
                 throw new Exception("Invalid parameters.");
             }
-            var hash = await _cryptoFunctionService.Pbkdf2Async(key.Key, password, CryptoHashAlgorithm.Sha256, 1);
+            var iterations = hashPurpose == HashPurpose.LocalAuthorization ? 2 : 1;
+            var hash = await _cryptoFunctionService.Pbkdf2Async(key.Key, password, CryptoHashAlgorithm.Sha256, iterations);
             return Convert.ToBase64String(hash);
         }
 

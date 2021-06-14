@@ -93,6 +93,7 @@ namespace Bit.Core.Services
 
         public string Email { get; set; }
         public string MasterPasswordHash { get; set; }
+        public string LocalMasterPasswordHash { get; set; }
         public string Code { get; set; }
         public string CodeVerifier { get; set; }
         public string SsoRedirectUrl { get; set; }
@@ -123,7 +124,8 @@ namespace Bit.Core.Services
             SelectedTwoFactorProviderType = null;
             var key = await MakePreloginKeyAsync(masterPassword, email);
             var hashedPassword = await _cryptoService.HashPasswordAsync(masterPassword, key);
-            return await LogInHelperAsync(email, hashedPassword, null, null, null, key, null, null, null);
+            var localHashedPassword = await _cryptoService.HashPasswordAsync(masterPassword, key, HashPurpose.LocalAuthorization);
+            return await LogInHelperAsync(email, hashedPassword, localHashedPassword, null, null, null, key, null, null, null);
         }
 
         public async Task<AuthResult> LogInSsoAsync(string code, string codeVerifier, string redirectUrl)
@@ -135,7 +137,7 @@ namespace Bit.Core.Services
         public Task<AuthResult> LogInTwoFactorAsync(TwoFactorProviderType twoFactorProvider, string twoFactorToken,
             bool? remember = null)
         {
-            return LogInHelperAsync(Email, MasterPasswordHash, Code, CodeVerifier, SsoRedirectUrl, _key,
+            return LogInHelperAsync(Email, MasterPasswordHash, LocalMasterPasswordHash, Code, CodeVerifier, SsoRedirectUrl, _key,
                 twoFactorProvider, twoFactorToken, remember);
         }
 
@@ -145,7 +147,8 @@ namespace Bit.Core.Services
             SelectedTwoFactorProviderType = null;
             var key = await MakePreloginKeyAsync(masterPassword, email);
             var hashedPassword = await _cryptoService.HashPasswordAsync(masterPassword, key);
-            return await LogInHelperAsync(email, hashedPassword, null, null, null, key, twoFactorProvider,
+            var localHashedPassword = await _cryptoService.HashPasswordAsync(masterPassword, key, HashPurpose.LocalAuthorization);
+            return await LogInHelperAsync(email, hashedPassword, localHashedPassword, null, null, null, key, twoFactorProvider,
                 twoFactorToken, remember);
         }
 
@@ -153,7 +156,7 @@ namespace Bit.Core.Services
             TwoFactorProviderType twoFactorProvider, string twoFactorToken, bool? remember = null)
         {
             SelectedTwoFactorProviderType = null;
-            return await LogInHelperAsync(null, null, code, codeVerifier, redirectUrl, null, twoFactorProvider,
+            return await LogInHelperAsync(null, null, null, code, codeVerifier, redirectUrl, null, twoFactorProvider,
                 twoFactorToken, remember);
         }
 
@@ -266,8 +269,8 @@ namespace Bit.Core.Services
             return await _cryptoService.MakeKeyAsync(masterPassword, email, kdf, kdfIterations);
         }
 
-        private async Task<AuthResult> LogInHelperAsync(string email, string hashedPassword, string code,
-            string codeVerifier, string redirectUrl, SymmetricCryptoKey key,
+        private async Task<AuthResult> LogInHelperAsync(string email, string hashedPassword, string localHashedPassword,
+            string code, string codeVerifier, string redirectUrl, SymmetricCryptoKey key,
             TwoFactorProviderType? twoFactorProvider = null, string twoFactorToken = null, bool? remember = null)
         {
             var storedTwoFactorToken = await _tokenService.GetTwoFactorTokenAsync(email);
@@ -318,6 +321,7 @@ namespace Bit.Core.Services
                 var twoFactorResponse = response.Item2;
                 Email = email;
                 MasterPasswordHash = hashedPassword;
+                LocalMasterPasswordHash = localHashedPassword;
                 Code = code;
                 CodeVerifier = codeVerifier;
                 SsoRedirectUrl = redirectUrl;
@@ -339,7 +343,7 @@ namespace Bit.Core.Services
             if (_setCryptoKeys)
             {
                 await _cryptoService.SetKeyAsync(key);
-                await _cryptoService.SetKeyHashAsync(hashedPassword);
+                await _cryptoService.SetKeyHashAsync(localHashedPassword);
                 await _cryptoService.SetEncKeyAsync(tokenResponse.Key);
 
                 // User doesn't have a key pair yet (old account), let's generate one for them.
