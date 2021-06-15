@@ -246,6 +246,7 @@ namespace Bit.iOS.Autofill
                 }
                 else if (!await storageService.GetAsync<bool>(Bit.Core.Constants.PasswordVerifiedAutofillKey))
                 {
+                    // Add a timeout to resolve keyboard not always showing up.
                     await Task.Delay(250);
                     var passwordRepromptService = ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService");
                     if (!await passwordRepromptService.ShowPasswordPromptAsync())
