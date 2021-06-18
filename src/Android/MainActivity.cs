@@ -166,7 +166,9 @@ namespace Bit.Droid
                 }
                 catch { }
             }
-            var setRestrictions = AndroidHelpers.SetPreconfiguredRestrictionSettingsAsync(this);
+            AndroidHelpers.SetPreconfiguredRestrictionSettingsAsync(this)
+                .GetAwaiter()
+                .GetResult();
         }
 
         protected override void OnNewIntent(Intent intent)

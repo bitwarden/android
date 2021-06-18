@@ -381,7 +381,7 @@ namespace Bit.App.Utilities
 
         public static async Task SetPreconfiguredSettingsAsync(IDictionary<string, string> configSettings)
         {
-            if (configSettings?.Any() ?? true)
+            if (configSettings?.Any() != true)
             {
                 return;
             }
@@ -403,7 +403,7 @@ namespace Bit.App.Utilities
                                 Icons = environmentService.IconsUrl
                             });
                         }
-                        break;
+                        return;
                     default:
                         break;
                 }
