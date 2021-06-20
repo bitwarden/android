@@ -32,6 +32,7 @@ namespace Bit.App.Pages
         private string _totpInstruction;
         private string _webVaultUrl = "https://vault.bitwarden.com";
         private bool _authingWithSso = false;
+        private bool _enableContinue = false;
 
         public TwoFactorPageViewModel()
         {
@@ -74,6 +75,12 @@ namespace Bit.App.Pages
         public bool ShowTryAgain => YubikeyMethod && Device.RuntimePlatform == Device.iOS;
 
         public bool ShowContinue { get; set; }
+
+        public bool EnableContinue
+        {
+            get => _enableContinue;
+            set => SetProperty(ref _enableContinue, value);
+        }
 
         public string YubikeyInstruction => Device.RuntimePlatform == Device.iOS ? AppResources.YubiKeyInstructionIos :
             AppResources.YubiKeyInstruction;
@@ -302,6 +309,18 @@ namespace Bit.App.Pages
                 }
                 await _platformUtilsService.ShowDialogAsync(AppResources.VerificationEmailNotSent);
                 return false;
+            }
+        }
+
+        public void SetEnableContinue(bool isTokenEmpty)
+        {
+            if (isTokenEmpty)
+            {
+                EnableContinue = false;
+            }
+            else if (!EnableContinue)
+            {
+                EnableContinue = true;
             }
         }
     }

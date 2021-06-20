@@ -186,14 +186,7 @@ namespace Bit.App.Pages
 
         private void Token_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(e.NewTextValue))
-            {
-                ContinueButton.IsEnabled = false;
-            }
-            else if (!ContinueButton.IsEnabled)
-            {
-                ContinueButton.IsEnabled = true;
-            }
+            _vm.SetEnableContinue(string.IsNullOrWhiteSpace(e.NewTextValue));
         }
     }
 }

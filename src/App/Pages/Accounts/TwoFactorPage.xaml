@@ -123,8 +123,8 @@
                     HorizontalTextAlignment="Center" />
             </StackLayout>
             <Button Text="{u:I18n Continue}"
-                    IsEnabled="False"
-                    IsVisible="{Binding EmailMethod}"
+                    IsEnabled="{Binding EnableContinue}"
+                    IsVisible="{Binding ShowContinue}"
                     Clicked="Continue_Clicked"
                     Margin="10, 0"
                     x:Name="_continue"></Button>
