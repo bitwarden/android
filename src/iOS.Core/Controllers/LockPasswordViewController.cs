@@ -190,19 +190,20 @@ namespace Bit.iOS.Core.Controllers
             else
             {
                 var key2 = await _cryptoService.MakeKeyAsync(inputtedValue, email, kdf, kdfIterations);
-                var keyHash = await _cryptoService.HashPasswordAsync(inputtedValue, key2);
+                
                 var storedKeyHash = await _cryptoService.GetKeyHashAsync();
                 if (storedKeyHash == null)
                 {
                     var oldKey = await _secureStorageService.GetAsync<string>("oldKey");
                     if (key2.KeyB64 == oldKey)
                     {
+                        var localKeyHash = await _cryptoService.HashPasswordAsync(inputtedValue, key2, HashPurpose.LocalAuthorization);
                         await _secureStorageService.RemoveAsync("oldKey");
-                        await _cryptoService.SetKeyHashAsync(keyHash);
-                        storedKeyHash = keyHash;
+                        await _cryptoService.SetKeyHashAsync(localKeyHash);
                     }
                 }
-                if (storedKeyHash != null && keyHash != null && storedKeyHash == keyHash)
+                var passwordValid = await _cryptoService.CompareAndUpdateKeyHashAsync(inputtedValue, key2);
+                if (passwordValid)
                 {
                     if (_pinSet.Item1)
                     {

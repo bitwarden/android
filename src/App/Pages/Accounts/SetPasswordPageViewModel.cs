@@ -138,7 +138,8 @@ namespace Bit.App.Pages
             var kdfIterations = 100000;
             var email = await _userService.GetEmailAsync();
             var key = await _cryptoService.MakeKeyAsync(MasterPassword, email, kdf, kdfIterations);
-            var masterPasswordHash = await _cryptoService.HashPasswordAsync(MasterPassword, key);
+            var masterPasswordHash = await _cryptoService.HashPasswordAsync(MasterPassword, key, HashPurpose.ServerAuthorization);
+            var localMasterPasswordHash = await _cryptoService.HashPasswordAsync(MasterPassword, key, HashPurpose.LocalAuthorization);
 
             Tuple<SymmetricCryptoKey, EncString> encKey;
             var existingEncKey = await _cryptoService.GetEncKeyAsync();
@@ -174,7 +175,7 @@ namespace Bit.App.Pages
                 await _userService.SetInformationAsync(await _userService.GetUserIdAsync(),
                     await _userService.GetEmailAsync(), kdf, kdfIterations);
                 await _cryptoService.SetKeyAsync(key);
-                await _cryptoService.SetKeyHashAsync(masterPasswordHash);
+                await _cryptoService.SetKeyHashAsync(localMasterPasswordHash);
                 await _cryptoService.SetEncKeyAsync(encKey.Item2.EncryptedString);
                 await _cryptoService.SetEncPrivateKeyAsync(keys.Item2.EncryptedString);
                 await _deviceActionService.HideLoadingAsync();
