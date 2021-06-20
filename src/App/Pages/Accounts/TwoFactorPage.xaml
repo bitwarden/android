@@ -16,6 +16,7 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="{u:I18n Cancel}" Clicked="Close_Clicked" Order="Primary" Priority="-1"
                      x:Name="_cancelItem" />
+        <ToolbarItem Text="{u:I18n UseAnotherTwoStepMethod}" Clicked="Methods_Clicked" Order="Secondary" />
     </ContentPage.ToolbarItems>
 
     <ContentPage.Resources>
@@ -135,9 +136,6 @@
             <Button Text="{u:I18n TryAgain}"
                     IsVisible="{Binding ShowTryAgain}"
                     Clicked="TryAgain_Clicked"
-                    Margin="10, 0"></Button>
-            <Button Text="{u:I18n UseAnotherTwoStepMethod}"
-                    Clicked="Methods_Clicked"
                     Margin="10, 0"></Button>
         </StackLayout>
     </ScrollView>
