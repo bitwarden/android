@@ -561,7 +561,7 @@
                         StyleClass="box-label-regular" />
                     <controls:FaButton 
                         StyleClass="box-row-button, box-row-button-platform"
-                        Text=""
+                        Text="&#62108;"
                         Command="{Binding PasswordPromptHelpCommand}"
                         TextColor="{StaticResource MutedColor}"
                         AutomationProperties.IsInAccessibleTree="True"
