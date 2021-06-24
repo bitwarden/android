@@ -88,6 +88,7 @@ namespace Bit.App.Pages
             CheckPasswordCommand = new Command(CheckPasswordAsync);
             UriOptionsCommand = new Command<LoginUriView>(UriOptions);
             FieldOptionsCommand = new Command<AddEditPageFieldViewModel>(FieldOptions);
+            PasswordPromptHelpCommand = new Command(PasswordPromptHelp);
             Uris = new ExtendedObservableCollection<LoginUriView>();
             Fields = new ExtendedObservableCollection<AddEditPageFieldViewModel>();
             Collections = new ExtendedObservableCollection<CollectionViewModel>();
@@ -148,6 +149,7 @@ namespace Bit.App.Pages
         public Command CheckPasswordCommand { get; set; }
         public Command UriOptionsCommand { get; set; }
         public Command FieldOptionsCommand { get; set; }
+        public Command PasswordPromptHelpCommand { get; set; }
         public string CipherId { get; set; }
         public string OrganizationId { get; set; }
         public string FolderId { get; set; }
@@ -739,6 +741,11 @@ namespace Bit.App.Pages
                     await _platformUtilsService.ShowDialogAsync(AppResources.AuthenticatorKeyReadError);
                 }
             }
+        }
+
+        public void PasswordPromptHelp()
+        {
+            _platformUtilsService.LaunchUri("https://bitwarden.com/help/article/managing-items/#protect-individual-items");
         }
 
         private void TypeChanged()
