@@ -30,7 +30,7 @@
                          x:Name="_collectionsItem"
                          Clicked="Collections_Clicked"
                          Order="Secondary" />
-            <ToolbarItem Text="{u:I18n MoveToOrganization}"
+            <ToolbarItem Text="{u:I18n Share}"
                          x:Key="shareItem"
                          x:Name="_shareItem"
                          Clicked="Share_Clicked"

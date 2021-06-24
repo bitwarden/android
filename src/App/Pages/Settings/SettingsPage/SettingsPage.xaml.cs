@@ -103,7 +103,7 @@ namespace Bit.App.Pages
             {
                 await Navigation.PushModalAsync(new NavigationPage(new ExportVaultPage()));
             }
-            else if (item.Name == AppResources.LearnOrg)
+            else if (item.Name == AppResources.ShareVault)
             {
                 await _vm.ShareAsync();
             }
