@@ -129,7 +129,7 @@
 Bitwarden은 사용자의 모든 로그인을 여러 기기에서 동기화할 수 있는 암호화된 보관함에 저장합니다. 보관함은 완벽히 암호화되어 있으므로 오직 사용자 본인만이 데이터에 접근할 수 있습니다. Bitwarden 팀의 멤버들도 사용자의 데이터를 읽을 수 없습니다. 사용자의 데이터는 AES-256비트, 솔트 해싱 및 PBKDF2 SHA-256 방식으로 암호화됩니다.
 
 Bitwarden은 100% 오픈 소스 소프트웨어입니다. Bitwarden의 소스 코드는 GitHub에 공개되어 있으며 모든 사람들이 Bitwarden의 코드를 검토하고 기여할 수 있습니다.</value>
-    <comment>Max 4000 characters</comment>
+  <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
     <value>bit warden,8bit,password,무료 비밀번호 관리,비밀번호 관리, 비번관리, 암호 관리</value>
