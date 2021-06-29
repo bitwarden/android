@@ -131,7 +131,7 @@ Experții în securitate vă recomandă să utilizați câte o parolă diferită
 Bitwarden stochează toate date dvs. de autentificare într-un seif criptat care se sincronizează pe toate dispozitivele dvs. Deoarece seiful este complet criptat înainte de a fi transmis prin internet, numai dvs. aveți acces la date. Nici măcar echipa Bitwarden nu poate citi datele dvs., chiar dacă ar dori. Datele dvs. sunt sigilate prin criptare cu AES-256 biți, salted hashing și PBKDF2 SHA-256.
 
 Bitwarden este un software 100% "open source". Codul sursă pentru Bitwarden este găzduit pe GitHub și toată lumea este liberă să îl revizuiască, să îl verifice și să contribuie la dezvoltarea lui.</value>
-    <comment>Max 4000 characters</comment>
+  <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
     <value>bit warden,8bit,parola,manager de parole gratuit,manager de parole,manager de conectare</value>
