@@ -132,7 +132,7 @@ Expertos en seguridad recomiendan utilizar contraseñas diferentes y generadas a
 Bitwarden guarda todas tus credenciales en una bóveda cifrada sincronizada a través de todos tus dispositivos. Dado que la información está completamente cifrada en tu dispositivo, solo tú tienes acceso a los datos. Ni siquiera el equipo de Bitwarden podría leer tu información aunque quisiera. Tu información está sellada con cifrado AES de 256 bits, con hash y sal, y PBKDF2 SHA-256.
 
 Bitwarden se centra en el código abierto. El código fuente de Bitwarden está alojado en GitHub y cualquier persona es libre de revisarlo, auditarlo o contribuir a su base de código.</value>
-    <comment>Max 4000 characters</comment>
+  <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
     <value>bit warden,8bit,password,free password manager,password manager,login manager</value>
