@@ -131,7 +131,7 @@ Güvenlik uzmanları, oluşturduğunuz her hesap için farklı, rastgele bir par
 Bitwarden, tüm hesaplarınızı şifrelenmiş bir kasada saklayarak tüm cihazlarınız arasında senkronize edebilir. Verileriniz kendi cihazınız üzerinde şifrelendiği için verilerinize yalnızca siz erişebilirsiniz, Bitwarden ekibi bile verilerinizi okuyamaz. Verileriniz AES-256 bit şifreleme, salted hash ve PBKDF2 SHA-256 ile korunur.
 
 Bitwarden açık kaynaklı bir yazılımdır. GitHub’da barındırdığımız Bitwarden kaynak kodlarını herkes inceleyebilir ve kodlarımıza katkıda bulunabilir.</value>
-    <comment>Max 4000 characters</comment>
+  <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
     <value>bit warden,8bit,parola,şifre,bedava parola yöneticisi,parola yöneticisi,şifre yöneticisi</value>
