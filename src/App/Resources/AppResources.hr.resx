@@ -607,7 +607,7 @@
     <value>Zadane postavke preuzete iz generatora lozinki glavne aplikacije Bitwarden.</value>
   </data>
   <data name="Options" xml:space="preserve">
-    <value>Mogućnosti</value>
+    <value>Opcije</value>
   </data>
   <data name="Other" xml:space="preserve">
     <value>Ostalo</value>
@@ -1446,7 +1446,7 @@
     <value>Postavi svoj PIN kôd za otključavanje Bitwardena. Postavke PIN-a se resetiraju ako se potpuno odjaviš iz aplikacije.</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
-    <value>Prijavljen kao {0} na {1}.</value>
+    <value>Prijavljen/a kao {0} na {1}.</value>
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
@@ -1834,36 +1834,36 @@
     <value>Datoteka koju želiš poslati</value>
   </data>
   <data name="DeletionDate" xml:space="preserve">
-    <value>Datum brisanja</value>
+    <value>Obriši za</value>
   </data>
   <data name="DeletionTime" xml:space="preserve">
     <value>Vrijeme brisanja</value>
   </data>
   <data name="DeletionDateInfo" xml:space="preserve">
-    <value>Send će biti trajno izbrisan navedenog datuma.</value>
+    <value>Send će nakon navedenog vremena biti trajno izbrisan.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PendingDelete" xml:space="preserve">
     <value>Čeka brisanje</value>
   </data>
   <data name="ExpirationDate" xml:space="preserve">
-    <value>Datum isteka</value>
+    <value>Vremenski ograničeni pristup</value>
   </data>
   <data name="ExpirationTime" xml:space="preserve">
     <value>Vrijeme isteka</value>
   </data>
   <data name="ExpirationDateInfo" xml:space="preserve">
-    <value>Ako je određeno, pristup ovom Sendu će isteći navedenog dana u navedeno vrijeme.</value>
+    <value>Pristup ovom Sendu neće biti moguć nakon navednog roka.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Expired" xml:space="preserve">
     <value>Isteklo</value>
   </data>
   <data name="MaximumAccessCount" xml:space="preserve">
-    <value>Najveći proj pristupanja</value>
+    <value>Ograničeni broj pristupanja</value>
   </data>
   <data name="MaximumAccessCountInfo" xml:space="preserve">
-    <value>Ako je određen, korisnici neće moći pristupiti ovom Sendu nakon što se postigne najveći broj pristupanja.</value>
+    <value>Ako je određen, ovom Sendu će se moći pristupiti samo ograničeni broj puta.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="MaximumAccessCountReached" xml:space="preserve">
@@ -1901,6 +1901,10 @@
   </data>
   <data name="NoSends" xml:space="preserve">
     <value>Nema Sendova na tvojem računu.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="AddASend" xml:space="preserve">
+    <value>Add a Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="CopyLink" xml:space="preserve">
@@ -1960,7 +1964,7 @@
     <value>Prilagođeno</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
-    <value>Dijeli Send nakon spremanja.</value>
+    <value>Dijeli Send nakon spremanja</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
@@ -1972,18 +1976,27 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
-    <value>Hide my email address from recipients.</value>
+    <value>Sakrij moju adresu e-pošte od primatelja.</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
-    <value>One or more organization policies are affecting your Send options.</value>
+    <value>Jedno ili više pravila organizacije utječe na postavke Senda.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFilePremiumRequired" xml:space="preserve">
-    <value>Free accounts are restricted to sharing text only. A premium membership is required to use files with Send.</value>
+    <value>Kod besplatnog računa moguće je dijeljenje samo teksta. Za slanje datoteka potrebno je Premium članstvo.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFileEmailVerificationRequired" xml:space="preserve">
-    <value>You must verify your email to use files with Send.</value>
+    <value>Moraš ovjeriti svoju e-poštu za koritšenje datoteka sa Sendom.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="PasswordPrompt" xml:space="preserve">
+    <value>Master password re-prompt</value>
+  </data>
+  <data name="PasswordConfirmation" xml:space="preserve">
+    <value>Master password confirmation</value>
+  </data>
+  <data name="PasswordConfirmationDesc" xml:space="preserve">
+    <value>This action is protected, to continue please re-enter your master password to verify your identity.</value>
   </data>
 </root>
