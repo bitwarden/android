@@ -135,7 +135,7 @@ Pakar keamanan merekomendasikan agar Anda menggunakan sandi yang berbeda dan dib
 Bitwarden menyimpan semua info masuk Anda di brankas terenkripsi yang disinkronkan di semua perangkat Anda. Karena sepenuhnya dienkripsi sebelum meninggalkan perangkat Anda, hanya Anda yang memiliki akses ke data Anda. Bahkan tim di Bitwarden tidak dapat membaca data Anda, bahkan jika kami mau. Data Anda disegel dengan ekripsi AES-256 bit, hash yang di-salt, dan PBKDF2 SHA-256.
 
 Bitwarden adalah 100% perangkat lunak sumber terbuka. Kode sumber untuk Bitwarden berada di GitHub dan setiap orang bebas untuk meninjau, mengaudit, dan berkontribusi ke basis kode Bitwarden.</value>
-    <comment>Max 4000 characters</comment>
+  <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
     <value>Pengelola sandi yang aman dan gratis untuk semua perangkat Anda</value>
