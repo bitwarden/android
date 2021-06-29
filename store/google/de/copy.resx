@@ -135,7 +135,7 @@ Sicherheitsexperten empfehlen daher, dass du für jeden Account ein anderes, zuf
 Bitwarden speichert all deine Zugangsdaten in einem verschlüsselten Tresor, der mit allen Geräten synchronisiert wird. Da er komplett verschlüsselt ist, bevor er überhaupt dein Gerät verlässt, hast nur du Zugriff auf deine Daten. Nicht einmal Bitwarden kann deine Daten lesen, selbst, wenn wir es wollten. Deine Daten sind mit einer AES-256-Bit-Verschlüsselung, sowie Salted Hashing und PBKDR2 SHA-256 abgesichert.
 
 Bitwarden ist auf Open-Source-Software ausgerichtet. Der Quellcode für Bitwarden wird auf GitHub gehostet und jeder kann die Bitwarden-Codebasis überprüfen, prüfen und dazu beitragen.</value>
-    <comment>Max 4000 characters</comment>
+  <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
     <value>Ein sicherer und kostenloser Passwortmanager für alle Ihre Geräte</value>
