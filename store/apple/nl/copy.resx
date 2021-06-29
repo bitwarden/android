@@ -131,7 +131,7 @@ Beveiligingsexperts raden aan om voor lek account een verschillend, willekeurig 
 Bitwarden slaat al jouw logins op in een versleutelde kluis en synchroniseert deze tussen al je apparaten. Omdat je kluis volledig versleuteld is voor deze zelfs maar het internet opgaat, heb alleen jij toegang tot je gegevens. Zelfs het Bitwarden-team kan het niet lezen, al zouden we dat willen. Jouw gegevens zijn beveiligd met AES-256 bit-versleuteling, salted hashing en PBKDF2 SHA-256.
 
 Bitwarden is 100% gericht op open source software. De broncode voor Bitwarden staat op GitHub en iedereen kan het bekijken, beoordelen en een bijdrage leveren.</value>
-    <comment>Max 4000 characters</comment>
+  <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
     <value>bitwarden,bit warden,8bit,wachtwoord,login,gratis wachtwoordbeheer,wachtwoordbeheer,inlogbeheer</value>
