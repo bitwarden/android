@@ -131,7 +131,7 @@ Säkerhetsexperter rekommenderar att du använder ett annorlunda, slumpmässigt 
 Bitwarden lagrar alla dina inloggningar i ett krypterat valv som synkroniseras mellan alla dina enheter. Eftersom din data är helt krypterad innan den någonsin lämnar din enhet så är det endast du som har åtkomst till din data. Inte ens teamet på Bitwarden kan läsa din data. Din data är sluten med AES-256 bitars kryptering, saltad hash, och PBKDF2 SHA-256.
 
 Bitwarden är 100% öppen källkod. Källkoden för Bitwarden finns på GitHub och alla kan gå igenom, granska och bidra till Bitwardens kodbas.</value>
-    <comment>Max 4000 characters</comment>
+  <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
     <value>bit warden,8bit,lösenord,gratis lösenordshanterare,lösenordshanterare,inloggningshanterare</value>

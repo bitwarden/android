@@ -135,7 +135,7 @@ Tietoturva-asiantuntijat suosittelevat ainutlaatuisten, satunnaisesti luotujen s
 Bitwarden säilyttää kaikki kirjautumistietosi salattussa holvissa, joka synkronoidaan laitteidesi välillä. Koska tietosi ovat täysin salattuja jo ennen kuin ne edes lähtevät laitteeltasi, vain sinä pääset niihin käsiksi. Edes Bitwardenin kehittäjät eivät voi lukea tietojasi, vaikka haluaisivat. Tietosi suojataan 256-bittisellä AES-salauksella, suolatulla hajautuksella sekä PBKDF2 ja SHA-256 -menetelmillä.
 
 Bitwarden on keskittynyt avoimen lähdekoodin ohjelmistoihin. Bitwardenin lähdekoodi on esillä GitHubissa ja kuka tahansa voi tutkia ja tarkastella sitä sekä osallistua Bitwardenin kehitykseen.</value>
-    <comment>Max 4000 characters</comment>
+  <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
     <value>Turvallinen ja ilmainen salasanojen hallinta kaikille laitteillesi</value>

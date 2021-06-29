@@ -131,7 +131,7 @@ Sikkerhedseksperter anbefaler, at du bruger en unik, tilfældigt genereret, adga
 Bitwarden gemmer alle dine logins i en krypteret boks, der synkroniseres mellem alle dine enheder. Da de er fuldstændig krypterede, før de overhovedet forlader dine enheder, er det kun dig der har adgang til dine data. Ikke engang teamet hos Bitwarden kan få adgang til dine data, selv hvis de forsøgte på det. Dine data er sikret med AES-256 bit kryptering, saltet hasing og PBKDF2 SHA-256.
 
 Bitwarden er fokuseret på open source software. Kildekoden til Bitwarden ligger på GitHub, og enhver kan gennemse, revidere og bidrage til Bitwardens kildekode.</value>
-    <comment>Max 4000 characters</comment>
+  <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
     <value>bit warden,8bit,adgangskode,gratis adgangskode manager,adgangskode manager,login manager</value>

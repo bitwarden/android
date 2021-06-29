@@ -129,7 +129,7 @@ Rò rỉ mật khẩu là một vấn đề rất nghiêm trọng. Các trang we
 Các chuyên gia bảo mật khuyên bạn nên sử dụng một mật khẩu được tạo ngẫu nhiên cho mỗi tài khoản của bạn. Nhưng làm thế nào để bạn quản lý tất cả những mật khẩu đó? bitwarden giúp bạn tạo, lưu trữ và truy cập tất cả mật khẩu một cách dễ dàng.
 
 bitwarden lưu trữ tất cả các thông tin đăng nhập của bạn trong một hầm được mã hóa và đồng bộ trên tất cả các thiết bị của bạn. Vì nó được mã hóa đầy đủ trước khi nó rời khỏi thiết bị của bạn nên chỉ có bạn mới có thể truy cập vào dữ liệu của mình. Ngay cả nhóm nghiên cứu tại bitwarden cũng không thể đọc được dữ liệu của bạn khi hộ muốn. Dữ liệu của bạn được bảo vệ bằng mã hóa AES-256 bit, hàm băm và PBKDF2 SHA-256.</value>
-    <comment>Max 4000 characters</comment>
+  <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
     <value>bitwarden, bit warden, 8bit, mật khẩu, đăng nhập, quản lý mật khẩu miễn phí, quản lý mật khẩu, quản lý đăng nhập,password,login,free password manager,password manager,login manager</value>

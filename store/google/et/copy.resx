@@ -135,7 +135,7 @@ Turvaeksperdid soovitavad kasutada kõikides kasutajakontodes erinevaid, juhusli
 Bitwarden talletab kõik Sinu andmed krüpteeritud hoidlas, mida sünkroniseeritakse kõikide Sinu poolt kasutatavate seadmete vahel. Kuna hoidla sisu krüpteeritakse enne selle enne seadmest lahkumist, omad andmetele ligipääsu ainult Sina. Ka bitwardeni meeskond ei saa Sinu andmeid vaadata, isegi kui neil selleks tahtmine oleks. Sinu andmed kaitsevad AES-256 bitine krüpteering, salted hashing ja PBKDF2 SHA-256.
 
 Bitwarden on 100% avatud koodiga tarkvara. Bitwarden lähtekood on saadaval GitHubis ja kõik saavad sellega tasuta tutvuda, seda kontrollida ja Bitwardeni koodibaasi panustada.</value>
-    <comment>Max 4000 characters</comment>
+  <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
     <value>Tasuta ja turvaline paroolihaldur kõikidele Sinu seadmetele</value>

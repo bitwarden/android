@@ -131,7 +131,7 @@
 Bitwarden 将您的登录信息保存在加密的密码库中，可以在您的所有设备上同步。由于数据在发送出您的设备之前，就已经完全加密，因此只有您可以访问你的数据。甚至，就算 Bitwarden 的团队成员有这个想法，也没办法读取您的数据。您的数据采用 AES-256 位、加盐的哈希以及 PBKDF2 SHA-256 加密。
 
 Bitwarden 是100% 开源软件。bitwarden 的源代码托管在 github 上，每个人都可以自由地查看、审核和贡献 bitwarden 代码库。</value>
-    <comment>Max 4000 characters</comment>
+  <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
     <value>bitwarden,8位,密码,免费密码管理器,密码管理器,登录管理器</value>

@@ -133,7 +133,7 @@ Passordtyveri er et seriøst problem. Nettstedene og appene som du bruker er und
 Sikkerhetseksperter anbefaler at du bruker forskjellig og tilfeldig genererte passord for hver konto du lager. Men hvordan behandler du alle de passordene? Bitwarden gjør det lett for deg å lage, lagre, og få tilgang til dine passord.
 
 Bitwarden lagrer alle dine innlogginger i et kryptert hvelv som synkroniseres mellom alle dine mobiler og PCer. Siden den er fullt kryptert før den noensinne forlater din enhet, har bare du tilgang til dine dataer. Selv ikke arbeiderne hos bitwarden kan lese dine dataer, om vi så ville det. Dine dataer er forseglet med AES 256-bitkryptering, saltet kodifisering, og PBKDF2 SHA-256.</value>
-    <comment>Max 4000 characters</comment>
+  <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
     <value>En sikker og fri passordbehandler for alle dine PCer og mobiler</value>

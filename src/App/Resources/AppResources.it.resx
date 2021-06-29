@@ -284,7 +284,7 @@
     <comment>Text to define that there are more options things to see.</comment>
   </data>
   <data name="MyVault" xml:space="preserve">
-    <value>La mia cassaforte</value>
+    <value>Cassaforte</value>
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Name" xml:space="preserve">
@@ -412,7 +412,7 @@
     <value>Estensione app di Bitwarden</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
-    <value>Il modo più semplice per aggiungere nuovi login al tuo cassaforte è dall'estensione dell'applicazione Bitwarden. Scopri di più sull'utilizzo dell'estensione dell'applicazione Bitwarden navigando nella schermata "Impostazioni".</value>
+    <value>Il modo più semplice per aggiungere nuovi login alla tua cassaforte è dall'estensione dell'applicazione Bitwarden. Scopri di più sull'utilizzo dell'estensione dell'applicazione Bitwarden navigando nella schermata "Impostazioni".</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
     <value>Usa Bitwarden su Safari e altre app per auto-completare i tuoi login.</value>
@@ -477,7 +477,7 @@
     <value>Sei pronto a fare il login!</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
-    <value>I tuoi login sono ora facilmente accessibile da Safari, Chrome e altre applicazioni supportate.</value>
+    <value>I tuoi login sono ora facilmente accessibili da Safari, Chrome e altre applicazioni supportate.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
     <value>In Safari e Chrome, trova Bitwarden utilizzando l'icona di condivisione (suggerimento: scorri a destra sulla riga in basso del menu Condividi).</value>
@@ -504,7 +504,7 @@
     <value>Importa elementi</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
-    <value>Puoi importare in massa gli elementi dalla cassaforte online bitwarden.com. Vuoi visitare il sito ora?</value>
+    <value>È possibile importare elementi in blocco dalla cassaforte web bitwarden.com. Vuoi visitare il sito ora?</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
     <value>Importa rapidamente i tuoi elementi da altre app di gestione password.</value>
@@ -568,11 +568,11 @@
     <value>La password principale deve essere lunga almeno 8 caratteri.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
-    <value>Minimo di Numeri</value>
+    <value>Minimo numeri</value>
     <comment>Minimum numeric characters for password generator settings</comment>
   </data>
   <data name="MinSpecial" xml:space="preserve">
-    <value>Minimo di Speciali</value>
+    <value>Minimo speciali</value>
     <comment>Minimum special characters for password generator settings</comment>
   </data>
   <data name="MoreSettings" xml:space="preserve">
@@ -656,7 +656,7 @@
     <value>Imposta PIN</value>
   </data>
   <data name="SetPINDirection" xml:space="preserve">
-    <value>Immetti un codice PIN a 4 cifre con cui sbloccare l'applicazione.</value>
+    <value>Immetti un codice PIN a 4 cifre per sbloccare l'applicazione.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
     <value>Informazioni elemento</value>
@@ -759,7 +759,7 @@
     <value>Stato</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
-    <value>Il modo più semplice per aggiungere nuovi login alla tua cassaforte è con il servizio di auto-completamento di Bitwarden. Scopri di più sull'utilizzo del servizio di completamento automatico Bitwarden navigando nella schermata "Impostazioni".</value>
+    <value>Il modo più semplice per aggiungere nuovi login alla tua cassaforte è dal servizio di completamento automatico Bitwarden. Scopri di più sull'utilizzo del servizio di completamento automatico di Bitwarden navigando nella schermata "Impostazioni".</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Auto-completamento</value>
@@ -958,7 +958,7 @@
     <value>Ambiente self-hosted</value>
   </data>
   <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
-    <value>Specifica l'URL principale della tua installazione self-hosted di Bitwarden.</value>
+    <value>Specifica l'URL principale della tua installazione locale di Bitwarden.</value>
   </data>
   <data name="ServerUrl" xml:space="preserve">
     <value>URL del server</value>
@@ -1093,7 +1093,7 @@
     <value>Settembre</value>
   </data>
   <data name="SSN" xml:space="preserve">
-    <value>Numero di previdenza sociale/codice fiscale</value>
+    <value>Codice fiscale/Previdenza sociale</value>
   </data>
   <data name="StateProvince" xml:space="preserve">
     <value>Stato / Provincia</value>
@@ -1266,7 +1266,7 @@
     <value>I tuoi login sono ora facilmente accessibili direttamente dalla tastiera durante l'accesso ad applicazioni e siti web.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
-    <value>Se non prevedi di utilizzarli, ti consigliamo di disabilitare qualsiasi altra applicazione di Compilazione automatica nelle Impostazioni.</value>
+    <value>Se non prevedi di utilizzarli, ti consigliamo di disabilitare qualsiasi altra applicazione di compilazione automatica nelle impostazioni.</value>
   </data>
   <data name="BitwardenAutofillDescription" xml:space="preserve">
     <value>Accedi alla tua cassaforte direttamente dalla tastiera per velocizzare il completamento automatico delle password.</value>
@@ -1284,13 +1284,13 @@
     <value>3. Fai clic su "Completamento automatico password"</value>
   </data>
   <data name="AutofillTurnOn4" xml:space="preserve">
-    <value>4. Attiva autocompletamento</value>
+    <value>4. Attiva completamento automatico</value>
   </data>
   <data name="AutofillTurnOn5" xml:space="preserve">
     <value>5. Seleziona "Bitwarden"</value>
   </data>
   <data name="PasswordAutofill" xml:space="preserve">
-    <value>Autocompletamento password</value>
+    <value>Completamento automatico password</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
     <value>Il modo più semplice per aggiungere nuovi login alla tua cassaforte è l'estensione Bitwarden Password AutoFill. Scopri di più sull'utilizzo dell'estensione Bitwarden Password AutoFill navigando nella schermata "Impostazioni".</value>
@@ -1305,7 +1305,7 @@
     <value>Identità</value>
   </data>
   <data name="Logins" xml:space="preserve">
-    <value>Accessi</value>
+    <value>Login</value>
   </data>
   <data name="SecureNotes" xml:space="preserve">
     <value>Note sicure</value>
@@ -1322,13 +1322,13 @@
     <comment>A loading message when doing an exposed password check.</comment>
   </data>
   <data name="CheckPassword" xml:space="preserve">
-    <value>Controlla se la password è stata esposta.</value>
+    <value>Controlla se la password è stata compromessa.</value>
   </data>
   <data name="PasswordExposed" xml:space="preserve">
-    <value>Questa password è stata trovata {0} volta(i) in database di violazioni dei dati. Dovresti cambiarla.</value>
+    <value>Questa password è stata trovata {0} volta(e) in archivi di dati trafugati. Dovresti cambiarla.</value>
   </data>
   <data name="PasswordSafe" xml:space="preserve">
-    <value>Questa password non è stata trovata in database di violazioni dei dati noti. Dovrebbe essere sicura da utilizzare.</value>
+    <value>Questa password non è stata trovata in alcun archivio noto di dati trafugati. Dovrebbe essere sicura da utilizzare.</value>
   </data>
   <data name="IdentityName" xml:space="preserve">
     <value>Nome dell'identità</value>
@@ -1488,7 +1488,7 @@ bitwarden.com per saperne di più?</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="DefaultUriMatchDetection" xml:space="preserve">
-    <value>Rilevamento corrispondenza URI di default</value>
+    <value>Rilevamento corrispondenza URI predefinito</value>
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
@@ -1528,7 +1528,7 @@ bitwarden.com per saperne di più?</value>
     <value>URI nella lista nera</value>
   </data>
   <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>L'auto-completamento non sarà disponibile per gli URI nella lista nera. Ogni voce deve essere separata da virgola. Es: "https://twitter.com, androidapp://com.twitter.android".</value>
+    <value>L'auto-completamento non sarà offerto per gli URI nella lista nera. Ogni voce deve essere separata da virgola. Es: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
   <data name="DisableSavePrompt" xml:space="preserve">
     <value>Disabilita richiesta di salvataggio</value>
@@ -1851,7 +1851,7 @@ bitwarden.com per saperne di più?</value>
     <value>Data di scadenza</value>
   </data>
   <data name="ExpirationTime" xml:space="preserve">
-    <value>Data di scadenza</value>
+    <value>Ora di scadenza</value>
   </data>
   <data name="ExpirationDateInfo" xml:space="preserve">
     <value>Se impostato, l'accesso a questo Send scadrà alla data e all'ora specificate.</value>
@@ -1902,6 +1902,10 @@ bitwarden.com per saperne di più?</value>
   </data>
   <data name="NoSends" xml:space="preserve">
     <value>Non ci sono Send nel tuo account.</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="AddASend" xml:space="preserve">
+    <value>Aggiungi un Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="CopyLink" xml:space="preserve">
@@ -1973,18 +1977,27 @@ bitwarden.com per saperne di più?</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
-    <value>Hide my email address from recipients.</value>
+    <value>Nascondi il mio indirizzo email dai destinatari.</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
-    <value>One or more organization policies are affecting your Send options.</value>
+    <value>Una o più policy dell'organizzazione influenzano le opzioni dei Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFilePremiumRequired" xml:space="preserve">
-    <value>Free accounts are restricted to sharing text only. A premium membership is required to use files with Send.</value>
+    <value>Gli account gratuiti sono limitati solo alla condivisione di testo. Per utilizzare i file con i Send, è necessario un abbonamento premium.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFileEmailVerificationRequired" xml:space="preserve">
-    <value>You must verify your email to use files with Send.</value>
+    <value>Devi verificare la tua email per utilizzare i file con i Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="PasswordPrompt" xml:space="preserve">
+    <value>Nuova richiesta della password principale</value>
+  </data>
+  <data name="PasswordConfirmation" xml:space="preserve">
+    <value>Conferma della password principale</value>
+  </data>
+  <data name="PasswordConfirmationDesc" xml:space="preserve">
+    <value>Questa azione è protetta. Per continuare, digita nuovamente la tua password principale per verificare la tua identità.</value>
   </data>
 </root>

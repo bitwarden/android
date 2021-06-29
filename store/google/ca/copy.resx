@@ -135,7 +135,7 @@ Els experts en seguretat recomanen que utilitzeu una contrasenya diferent, gener
 Bitwarden emmagatzema tots els inicis de sessió en una caixa forta xifrada que sincronitza tots els dispositius. Com que està totalment xifrada abans de deixar el vostre dispositiu, només vosaltres tindreu accés a les dades. Ni tan sols l'equip de Bitwarden pot llegir-les, fins i tot si volguérem. Les vostres dades estan segellades amb encriptació AES de 256 bits, amb llavor i PBKDF2 SHA-256.
 
 Bitwarden és programari 100% de codi obert. El codi font de Bitwarden està allotjat a GitHub i tothom pot revisar, auditar i contribuir a la base de codis Bitwarden.</value>
-    <comment>Max 4000 characters</comment>
+  <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
     <value>Administrador de contrasenyes segur i gratuït per a tots els vostres dispositius</value>
