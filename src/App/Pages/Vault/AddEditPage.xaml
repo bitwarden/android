@@ -710,7 +710,10 @@
                     </StackLayout>
                     <BoxView StyleClass="box-row-separator" />
                 </StackLayout>
-                <controls:RepeaterView ItemsSource="{Binding Collections}" IsVisible="{Binding HasCollections}">
+                <controls:RepeaterView 
+                    x:Name="_collectionsRepeaterView" 
+                    ItemsSource="{Binding Collections}"
+                    IsVisible="{Binding HasCollections}">
                     <controls:RepeaterView.ItemTemplate>
                         <DataTemplate x:DataType="pages:CollectionViewModel">
                             <StackLayout Spacing="0" Padding="0">
