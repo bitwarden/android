@@ -47,6 +47,7 @@ namespace Bit.App.Pages
             _vm.CipherId = cipherId;
             _vm.FolderId = folderId == "none" ? null : folderId;
             _vm.CollectionIds = collectionId != null ? new HashSet<string>(new List<string> { collectionId }) : null;
+            _vm.CollectionsRepeaterView = _collectionsRepeaterView;
             _vm.Type = type;
             _vm.DefaultName = name ?? appOptions?.SaveName;
             _vm.DefaultUri = uri ?? appOptions?.Uri;
@@ -158,6 +159,7 @@ namespace Bit.App.Pages
                 {
                     RequestFocus(_nameEntry);
                 }
+                _scrollView.Scrolled += (sender, args) => _vm.HandleScroll();
             });
         }
 
