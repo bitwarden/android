@@ -802,9 +802,9 @@ namespace Bit.App.Pages
             }
             if (Cipher.OrganizationId != null)
             {
-                HasCollections = true;
                 var cols = _writeableCollections.Where(c => c.OrganizationId == Cipher.OrganizationId)
                     .Select(c => new CollectionViewModel { Collection = c }).ToList();
+                HasCollections = cols.Any();
                 Collections.ResetWithRange(cols);
                 Collections = new ExtendedObservableCollection<CollectionViewModel>(cols);
             }
