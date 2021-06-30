@@ -103,10 +103,9 @@ namespace Bit.App.Pages
                 return;
             }
 
-            MasterPassword = string.Empty;
-
             var passwordValid = await _cryptoService.CompareAndUpdateKeyHashAsync(_masterPassword, null);
-            if (passwordValid)
+            MasterPassword = string.Empty;
+            if (!passwordValid)
             {
                 await _platformUtilsService.ShowDialogAsync(_i18nService.T("InvalidMasterPassword"));
                 return;
