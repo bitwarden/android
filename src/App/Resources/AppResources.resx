@@ -1864,7 +1864,7 @@
     <value>Maximum Access Count</value>
   </data>
   <data name="MaximumAccessCountInfo" xml:space="preserve">
-    <value>If set, users will no longer be able to access this send once the maximum access count is reached.</value>
+    <value>If set, users will no longer be able to access this Send once the maximum access count is reached.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="MaximumAccessCountReached" xml:space="preserve">
