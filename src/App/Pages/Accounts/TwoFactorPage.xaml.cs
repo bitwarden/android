@@ -1,5 +1,6 @@
 ﻿using Bit.App.Controls;
 using Bit.App.Models;
+using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using System;
@@ -44,6 +45,13 @@ namespace Bit.App.Pages
             if (Device.RuntimePlatform == Device.Android)
             {
                 ToolbarItems.Remove(_cancelItem);
+            }
+            if (Device.RuntimePlatform == Device.iOS)
+            {
+                ToolbarItems.Add(_moreItem);
+            } else
+            {
+                ToolbarItems.Add(_useAnotherTwoStepMethod);
             }
         }
 
@@ -124,6 +132,21 @@ namespace Bit.App.Pages
         private async void Methods_Clicked(object sender, EventArgs e)
         {
             if (DoOnce())
+            {
+                await _vm.AnotherMethodAsync();
+            }
+        }
+
+        private async void More_Clicked(object sender, EventArgs e)
+        {
+            if (DoOnce())
+            {
+                return;
+            }
+
+            var selection = await DisplayActionSheet(AppResources.Options, AppResources.Cancel, null, AppResources.UseAnotherTwoStepMethod);
+
+            if (selection == AppResources.UseAnotherTwoStepMethod)
             {
                 await _vm.AnotherMethodAsync();
             }
