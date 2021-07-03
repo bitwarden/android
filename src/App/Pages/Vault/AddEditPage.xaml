@@ -30,7 +30,7 @@
                          x:Name="_collectionsItem"
                          Clicked="Collections_Clicked"
                          Order="Secondary" />
-            <ToolbarItem Text="{u:I18n MoveToOrganization}"
+            <ToolbarItem Text="{u:I18n Share}"
                          x:Key="shareItem"
                          x:Name="_shareItem"
                          Clicked="Share_Clicked"
@@ -558,7 +558,14 @@
                 <StackLayout StyleClass="box-row, box-row-switch">
                     <Label
                         Text="{u:I18n PasswordPrompt}"
-                        StyleClass="box-label-regular"
+                        StyleClass="box-label-regular" />
+                    <controls:FaButton 
+                        StyleClass="box-row-button, box-row-button-platform"
+                        Text="&#xf29c;"
+                        Command="{Binding PasswordPromptHelpCommand}"
+                        TextColor="{StaticResource MutedColor}"
+                        AutomationProperties.IsInAccessibleTree="True"
+                        AutomationProperties.Name="{u:I18n ToggleVisibility}"
                         HorizontalOptions="StartAndExpand" />
                     <Switch
                         IsToggled="{Binding PasswordPrompt}"
@@ -703,7 +710,10 @@
                     </StackLayout>
                     <BoxView StyleClass="box-row-separator" />
                 </StackLayout>
-                <controls:RepeaterView ItemsSource="{Binding Collections}" IsVisible="{Binding HasCollections}">
+                <controls:RepeaterView 
+                    x:Name="_collectionsRepeaterView" 
+                    ItemsSource="{Binding Collections}"
+                    IsVisible="{Binding HasCollections}">
                     <controls:RepeaterView.ItemTemplate>
                         <DataTemplate x:DataType="pages:CollectionViewModel">
                             <StackLayout Spacing="0" Padding="0">

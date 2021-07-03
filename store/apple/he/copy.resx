@@ -131,7 +131,7 @@
 תוכנת Bitwarden מאחסנת את כל הפרטים בכספת מוצפנת שמסתנכנרת בין כל המכשירים שלך. מאחר שהמידע מוצפן עוד לפני שהוא יוצר מהמכשיר שלך, רק לך יש גישה למידע. גם הצוות שלנו בBitwarden לא יכול לקרוא את המידע, אפילו אם תרצה. המידע שלך מוצפן עם הצפנת AES-256 bit, salted hashing, וPBKDF2 SHA-256.
 
 תוכנת Bitwarden היא 100% תוכנת קוד פתוח. קוד המקור של Bitwarden מאוחסן בGitHub וכל מי שרוצה יכול לתת ביקורת, הערות, ולתרום מזמנו לפיתוח הקוד של Bitwarden.</value>
-    <comment>Max 4000 characters</comment>
+  <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
     <value>bit warden,8bit,סיסמה,ניהול סיסמאות,מנהל סיסמאות,מנהל כניסות,ביטווארדן</value>

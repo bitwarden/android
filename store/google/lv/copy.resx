@@ -136,7 +136,7 @@ Bitwarden uzglabā visus pierakstīšanās vienumus šifrētā glabātavā, kas 
 
 Bitwarden ir vērsts uz atvērtā pirmkoda programmatūru. Bitwarden atvērtais pirmkods ir izvietots GitHub, un ikkatram ir iespēja pārskatīt, pārbaudīt un sniegt ieguldījumu Bitwarden pirmkodā.
 </value>
-    <comment>Max 4000 characters</comment>
+  <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
     <value>Drošs bezmaksas paroļu pārvaldnieks visām Tavām ierīcēm</value>

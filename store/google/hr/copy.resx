@@ -126,16 +126,14 @@
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>Bitwarden je jednostavan i siguran način pohrane svih Vaših korisničkih imena i lozinki, pri čemu sinkronizacija podataka omogućuje jednostavan pristup istima sa svih Vaših uređaja.
+    <value>Bitwarden je najlakši i najsigurniji način pohranjivanja svih Vaših prijava i lozinki, dok su iste sinkronizirane među svim Vašim uređajima.
 
-Krađa lozinki je ozbiljan problem. Web mjesta i aplikacije koje upotrebljavate svakoga su dana izložene pokušajima napada, pri čemu može doći do curenja podataka, a Vaše lozinke mogu biti ukradene. Upotrebljavate li jednu te istu lozinku na više mjesta, u slučaju njezinog curenja, neautorizirane osobe mogu vrlo lako pristupiti ostalim uslugama koje su zaštićene istom lozinkom, kao npr. Vašoj e-pošti, bankovnom računu i drugim važnim uslugama.
+Krađa lozinki ozbiljan je problem. Web-lokacije i aplikacije koje upotrebljavate svakodnevno su napadnute. Pojavljuju se sigurnosne povrede, a Vaše lozinke su ukradene. Ako ponovno upotrebljavate iste zaporke u aplikacijama i web-lokacijama, hakeri mogu lako pristupiti Vašoj e-pošti, banci i drugim važnim računima.
 
-Sigurnosni stručnjaci preporučuju korištenje jedinstvene, nasumično generirane lozinke za svaki račun koji stvorite. No kako upravljati svim tim lozinkama? Bitwarden Vam na siguran način olakšava generiranje složenih, sigurnih lozinki i njihovu pohranu s pripadajućim korisničkim imenima.
+Sigurnosni stručnjaci preporučuju da koristite različitu, nasumično generiranu lozinku za svaki račun koji stvorite. Ali kako upravljati svim tim lozinkama? Bitwarden vam olakšava stvaranje, pohranu i pristup lozinkama.
 
-Bitwarden pohranjuje Vaše podatke u šifrirani trezor koji se sinkronizira sa svim Vašim uređajima i lako Vam je dostupan. Budući je trezor u potpunosti šifriran prije nego li napusti uređaj, jedino Vi imate pristup podacima u trezoru. Čak niti tim u Bitwardenu ne može vidjeti Vaše podatke zapečaćene s AES-256 bitnim šifriranjem, salted hashom i PBKDF2 SHA-256.
-
-Bitwarden je usredotočen na softver otvorenog kôda. Izvorni kôd za Bitwarden smješten je na GitHub-u i svatko ga može pregledati, revidirati i doprinijeti Bitwarden codebase-u.</value>
-    <comment>Max 4000 characters</comment>
+Bitwarden pohranjuje sve Vaše prijave u šifrirani trezor koji se sinkronizira na svim Vašim uređajima. Budući da je potpuno šifriran prije nego ikada napusti uređaj, samo Vi imate pristup podacima. Čak ni tim u Bitwardenu ne može vidjeti Vaše podatke. Vaši su podaci zapečaćeni s AES-256 bitnim šifriranjem, salt hashom i PBKDF2 SHA-256.</value>
+  <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
     <value>Siguran i besplatan upravitelj lozinki za sve tvoje uređaje</value>

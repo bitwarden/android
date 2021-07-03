@@ -135,7 +135,7 @@ Os especialistas de segurança recomendam que utilize uma palavra-passe diferent
 O Bitwarden armazena todas as suas credenciais num cofre encriptado que sincroniza entre todos os seus dispositivos. Como são completamente encriptados antes de se quer sair do seu dispositivo, apenas você tem acesso aos seus dados. Nem se quer a equipa do Bitwarden pode ler os seus dados, mesmo se quiséssemos. Os seus dados são selados com encriptação AES-256 bits, salted hashing, e PBKDF2 SHA-256.
 
 O Bitwarden é 100% software de código aberto. O código fonte para o Bitwarden está hospedado no GitHub e todos podem revisar, auditar, e contribuir para a base de código do Bitwarden.</value>
-    <comment>Max 4000 characters</comment>
+  <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
     <value>Um gestor de palavras-passe seguro e gratuito para todos os seus dispositivos</value>

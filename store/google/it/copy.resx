@@ -135,7 +135,7 @@ Gli esperti di sicurezza raccomandano di utilizzare password casuali e diverse p
 Bitwarden salva tutti i tuoi login in una cassaforte sincronizzata su tutti i tuoi dispositivi. Poiché completamente cifrata, solo tu puoi accedere ai tuoi dati. Nemmeno il team di Bitwarden può leggere i tuoi dati, anche volendo. Questi sono infatti cifrati con algoritmo AES-256, salted hashing e PBKDF2 SHA-256.
 
 Bitwarden è 100% open source. Il codice sorgente è ospitato su GitHub e tutti sono liberi di revisionarlo, verificarlo e contribuire alla codebase di Bitwarden.</value>
-    <comment>Max 4000 characters</comment>
+  <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
     <value>Un gestore di password sicuro e gratuito per tutti i tuoi dispositivi</value>

@@ -1,4 +1,5 @@
-﻿using Bit.App.Abstractions;
+﻿using System;
+using Bit.App.Abstractions;
 using Bit.App.Models;
 using Bit.App.Resources;
 using Bit.Core.Abstractions;
@@ -9,6 +10,7 @@ using Bit.Core.Utilities;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Bit.App.Controls;
 using Xamarin.Forms;
 using View = Xamarin.Forms.View;
 
@@ -39,6 +41,7 @@ namespace Bit.App.Pages
         private int _ownershipSelectedIndex;
         private bool _hasCollections;
         private string _previousCipherId;
+        private DateTime _lastHandledScrollTime;
         private List<Core.Models.View.CollectionView> _writeableCollections;
         private string[] _additionalCipherProperties = new string[]
         {
@@ -88,6 +91,7 @@ namespace Bit.App.Pages
             CheckPasswordCommand = new Command(CheckPasswordAsync);
             UriOptionsCommand = new Command<LoginUriView>(UriOptions);
             FieldOptionsCommand = new Command<AddEditPageFieldViewModel>(FieldOptions);
+            PasswordPromptHelpCommand = new Command(PasswordPromptHelp);
             Uris = new ExtendedObservableCollection<LoginUriView>();
             Fields = new ExtendedObservableCollection<AddEditPageFieldViewModel>();
             Collections = new ExtendedObservableCollection<CollectionViewModel>();
@@ -148,6 +152,7 @@ namespace Bit.App.Pages
         public Command CheckPasswordCommand { get; set; }
         public Command UriOptionsCommand { get; set; }
         public Command FieldOptionsCommand { get; set; }
+        public Command PasswordPromptHelpCommand { get; set; }
         public string CipherId { get; set; }
         public string OrganizationId { get; set; }
         public string FolderId { get; set; }
@@ -164,6 +169,7 @@ namespace Bit.App.Pages
         public ExtendedObservableCollection<LoginUriView> Uris { get; set; }
         public ExtendedObservableCollection<AddEditPageFieldViewModel> Fields { get; set; }
         public ExtendedObservableCollection<CollectionViewModel> Collections { get; set; }
+        public RepeaterView CollectionsRepeaterView { get; set; }
         public int TypeSelectedIndex
         {
             get => _typeSelectedIndex;
@@ -741,6 +747,11 @@ namespace Bit.App.Pages
             }
         }
 
+        public void PasswordPromptHelp()
+        {
+            _platformUtilsService.LaunchUri("https://bitwarden.com/help/article/managing-items/#protect-individual-items");
+        }
+
         private void TypeChanged()
         {
             if (Cipher != null && TypeSelectedIndex > -1)
@@ -793,13 +804,30 @@ namespace Bit.App.Pages
             {
                 var cols = _writeableCollections.Where(c => c.OrganizationId == Cipher.OrganizationId)
                     .Select(c => new CollectionViewModel { Collection = c }).ToList();
+                HasCollections = cols.Any();
                 Collections.ResetWithRange(cols);
+                Collections = new ExtendedObservableCollection<CollectionViewModel>(cols);
             }
             else
             {
+                HasCollections = false;
                 Collections.ResetWithRange(new List<CollectionViewModel>());
+                Collections = new ExtendedObservableCollection<CollectionViewModel>(new List<CollectionViewModel>());
             }
-            HasCollections = Collections.Any();
+        }
+
+        public void HandleScroll()
+        {
+            // workaround for https://github.com/xamarin/Xamarin.Forms/issues/13607
+            // required for org ownership/collections to render properly in XF4.5+
+            if (!HasCollections ||
+                EditMode ||
+                (DateTime.Now - _lastHandledScrollTime < TimeSpan.FromMilliseconds(200)))
+            {
+                return;
+            }
+            CollectionsRepeaterView.ItemsSource = Collections;
+            _lastHandledScrollTime = DateTime.Now;
         }
 
         private void TriggerCipherChanged()

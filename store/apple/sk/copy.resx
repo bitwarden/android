@@ -131,7 +131,7 @@ Bezpečnostní experti odporúčajú používať rozdielne, náhodne generované
 Bitwarden skladuje všetky vaše prihlasovacie údaje v zašifrovanom trezore, ktorý sa synchronizuje medzi všetkými vašimi zariadeniami. Keďže je plne zašifrovaný ešte predtým, ako opustí vaše zariadenie, iba vy máte prístup k svojim údajom. Ani tím Bitwardenu nevie prečítať vaše údaje, aj keby sme chceli. Vaše dáta sú zapečatené 256-bitovým šifrovaním AES, soleným hašovaním a PBKDF2 SHA-256.
 
 Bitwarden je zameraný na software s otvoreným zdrojovým kódom. Zdrojový kód Bitwardenu je prístupný na GitHub-e a hocikto môže overiť, auditovať a prispievať do zdrojového kódu Bitwardenu.</value>
-    <comment>Max 4000 characters</comment>
+  <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
     <value>bitwarden,bit warden,8bit,heslo,prihlásenie,bezplatný správca hesiel,správca hesiel,správca prihlásení</value>

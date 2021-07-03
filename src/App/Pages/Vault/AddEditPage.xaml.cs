@@ -47,6 +47,7 @@ namespace Bit.App.Pages
             _vm.CipherId = cipherId;
             _vm.FolderId = folderId == "none" ? null : folderId;
             _vm.CollectionIds = collectionId != null ? new HashSet<string>(new List<string> { collectionId }) : null;
+            _vm.CollectionsRepeaterView = _collectionsRepeaterView;
             _vm.Type = type;
             _vm.DefaultName = name ?? appOptions?.SaveName;
             _vm.DefaultUri = uri ?? appOptions?.Uri;
@@ -158,6 +159,7 @@ namespace Bit.App.Pages
                 {
                     RequestFocus(_nameEntry);
                 }
+                _scrollView.Scrolled += (sender, args) => _vm.HandleScroll();
             });
         }
 
@@ -272,7 +274,7 @@ namespace Bit.App.Pages
             var options = new List<string> { AppResources.Attachments };
             if (_vm.EditMode)
             {
-                options.Add(_vm.Cipher.OrganizationId == null ? AppResources.MoveToOrganization : AppResources.Collections);
+                options.Add(_vm.Cipher.OrganizationId == null ? AppResources.Share : AppResources.Collections);
             }
             var selection = await DisplayActionSheet(AppResources.Options, AppResources.Cancel,
                 (_vm.EditMode && !_vm.CloneMode) ? AppResources.Delete : null, options.ToArray());
@@ -293,7 +295,7 @@ namespace Bit.App.Pages
                 var page = new CollectionsPage(_vm.CipherId);
                 await Navigation.PushModalAsync(new Xamarin.Forms.NavigationPage(page));
             }
-            else if (selection == AppResources.MoveToOrganization)
+            else if (selection == AppResources.Share)
             {
                 var page = new SharePage(_vm.CipherId);
                 await Navigation.PushModalAsync(new Xamarin.Forms.NavigationPage(page));

@@ -131,7 +131,7 @@ Eksperci od bezpieczeństwa zalecają używanie różnych, losowo wygenerowanych
 Bitwarden przechowuje wszystkie Twoje dane logowania w zaszyfrowanym sejfie, który jest synchronizowany pomiędzy Twoimi urządzeniami. Dzięki temu, że dane są w pełni zaszyfrowane, zanim opuszczą urządzenie, tylko Ty posiadasz do nich dostęp. Nawet zespół Bitwarden nie posiada dostępu do Twoich danych. Dane są zabezpieczone za pomocą szyfrowania AES-256 i kryptograficznej funkcji skrótu PBKDF2 SHA-256.
 
 Bitwarden jest oprogramowaniem otwartoźródłowym. Kod źródłowy Bitwarden jest dostępny w serwisie GitHub i każdy może go sprawdzić oraz ulepszyć.</value>
-    <comment>Max 4000 characters</comment>
+  <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
     <value>bit warden,8bit,hasło,darmowy menadżer haseł,menedżer haseł,menedżer logowania</value>

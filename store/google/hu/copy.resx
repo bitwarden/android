@@ -133,7 +133,7 @@ Manapság a jelszó lopás a legnagyobb gond. A webhelyek és alkalmazások mind
 A biztonsági szakemberek azt javasolják, hogy mindig használjunk eltérő, véletlenszerűen generált jelszót minden fiókhoz. De hogyan kezelhetők ezek a jelszavak? A Bitwarden segítségével könnyedén lehet létrehozni, tárolni jelszavakat és könnyű hozzáférést biztosít a tárolt jelszavakhoz.
 
 A Bitwaren minden bejelentkezési adatot titkosított széfben tárolja és titkosítva szinkronizálja eszközök között. Mivel teljesen titkosított, csak a tulajdonos férhet hozzá az adatokhoz. Még a Bitwarden csapata sem tudja olvasni az adatolat. Az adatok AES 256 bites titkosítással és SHA-256 PBKDF2-vel zárjuk le.</value>
-    <comment>Max 4000 characters</comment>
+  <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
     <value>Egy biztonságos és ingyenes jelszókezelő az összes eszközödre</value>

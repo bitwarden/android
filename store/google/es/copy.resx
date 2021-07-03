@@ -136,7 +136,7 @@ Expertos en seguridad recomiendan utilizar contraseña generadas aleatoriamente 
 Bitwarden guarda todos tus usuarios en una bóveda cifrada sincronizada a través de todos tus dispositivos. Dado que la información está completamente cifrada en tu dispositivo, solo tú tienes acceso a los datos. Ni siquiera el equipo de Bitwarden podría leer tu información aunque quisiera. Tu información está sellada con cifrado AES de 256 bits, con semilla y PBKDF2 SHA-256.
 
 Bitwarden es un software 100% código abierto. El código fuente de Bitwarden está alojado en GitHub y cualquier persona es libre de revisarlo, auditarlo o contribuir al código base de Bitwarden.</value>
-    <comment>Max 4000 characters</comment>
+  <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
     <value>Un gestor de contraseñas seguro y gratuito para todos tus dispositivos</value>

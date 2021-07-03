@@ -363,7 +363,7 @@
     <value>Kinnita sõrmejäljega</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
-    <value>Kinnita ülemparooliga</value>
+    <value>Autendi ülemparooliga</value>
   </data>
   <data name="VerifyPIN" xml:space="preserve">
     <value>Kinnita PIN</value>
@@ -711,7 +711,7 @@
     <value>Bitwardeni Veebihoidla</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
-    <value>Kaotasid autentiseerimise rakenduse?</value>
+    <value>Kaotasid autentimise rakenduse?</value>
   </data>
   <data name="Items" xml:space="preserve">
     <value>Kirjet</value>
@@ -790,11 +790,11 @@
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
   </data>
   <data name="AuthenticatorAppTitle" xml:space="preserve">
-    <value>Autentiseerimise rakendus</value>
+    <value>Autentimise rakendus</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeApp" xml:space="preserve">
-    <value>Sisesta autentiseerimise rakendusest 6 kohaline number.</value>
+    <value>Sisesta autentimise rakendusest 6 kohaline number.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeEmail" xml:space="preserve">
@@ -806,7 +806,7 @@
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>Sellel kontol on aktiveeritud kaheastmeline kinnitus. Siiski ei toeta ükski aktiveeritud kaheastmelise kinnitamise teenus seda konkreetset seadet. Palun kasuta ühilduvat seadet ja/või lisa uus kaheastmelise teenuse pakkuja, mis töötab rohkemates seadmetes (näiteks mõni autentiseerimise rakendus).</value>
+    <value>Sellel kontol on aktiveeritud kaheastmeline kinnitus. Siiski ei toeta ükski aktiveeritud kaheastmelise kinnitamise teenus seda konkreetset seadet. Palun kasuta ühilduvat seadet ja/või lisa uus kaheastmelise teenuse pakkuja, mis töötab rohkemates seadmetes (näiteks mõni autentimise rakendus).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
     <value>Taastamise kood</value>
@@ -862,17 +862,17 @@
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
   <data name="AuthenticatorKey" xml:space="preserve">
-    <value>Autentiseerimise võti (TOTP)</value>
+    <value>Autentimise võti (TOTP)</value>
   </data>
   <data name="VerificationCodeTotp" xml:space="preserve">
     <value>Kinnituskood (TOTP)</value>
     <comment>Totp code label</comment>
   </data>
   <data name="AuthenticatorKeyAdded" xml:space="preserve">
-    <value>Autentiseerimise võti on lisatud.</value>
+    <value>Autentimise võti on lisatud.</value>
   </data>
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
-    <value>Autentiseerimise võtme lugemine nurjus.</value>
+    <value>Autentimise võtme lugemine nurjus.</value>
   </data>
   <data name="CameraInstructionBottom" xml:space="preserve">
     <value>Skaneering toimub automaatselt.</value>
@@ -893,7 +893,7 @@
     <value>Kopeeri TOTP</value>
   </data>
   <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>Kui sinu sisselogimise andmetele on juurde lisatud autentiseerimise võti, kopeeritakse TOTP kood automaattäite kasutamisel lõikepuhvrisse.</value>
+    <value>Kui sinu sisselogimise andmetele on juurde lisatud autentimise võti, kopeeritakse TOTP kood automaattäite kasutamisel lõikepuhvrisse.</value>
   </data>
   <data name="DisableAutoTotpCopy" xml:space="preserve">
     <value>Keela automaatne TOTP kopeerimine</value>
@@ -1903,6 +1903,10 @@
     <value>Kontol pole ühtegi Sendi.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
+  <data name="AddASend" xml:space="preserve">
+    <value>Add a Send</value>
+    <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
   <data name="CopyLink" xml:space="preserve">
     <value>Kopeeri link</value>
   </data>
@@ -1972,18 +1976,27 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
-    <value>Hide my email address from recipients.</value>
+    <value>Ära näita saajatele minu e-posti aadressi.</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
-    <value>One or more organization policies are affecting your Send options.</value>
+    <value>Organisatsiooni seaded mõjutavad sinu Sendi sätteid.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFilePremiumRequired" xml:space="preserve">
-    <value>Free accounts are restricted to sharing text only. A premium membership is required to use files with Send.</value>
+    <value>Tasuta kontoga on võimalik saata ainult tekste. Failide saatmiseks on vajalik omada tasulist kontot.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFileEmailVerificationRequired" xml:space="preserve">
-    <value>You must verify your email to use files with Send.</value>
+    <value>Failide saatmiseks läbi Sendi pead kinnitama oma e-posti.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
+  </data>
+  <data name="PasswordPrompt" xml:space="preserve">
+    <value>Master password re-prompt</value>
+  </data>
+  <data name="PasswordConfirmation" xml:space="preserve">
+    <value>Master password confirmation</value>
+  </data>
+  <data name="PasswordConfirmationDesc" xml:space="preserve">
+    <value>This action is protected, to continue please re-enter your master password to verify your identity.</value>
   </data>
 </root>

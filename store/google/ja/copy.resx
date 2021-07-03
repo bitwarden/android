@@ -135,7 +135,7 @@
 Bitwarden は端末間で同期できる、暗号化された保管庫にログイン情報を保管します。端末から送信される前に暗号化されるので、あなただけがそのデータにアクセスできるのです。Bitwarden の開発者チームですら、あなたに頼まれたとしてもデータを読み取ることはできません。データは AES-256 bit 暗号化、ソルト化ハッシュ、PBKDF2 SHA-256 で保護されます。
 
 Bitwarden は100%オープンソースソフトウェアです。Bitwarden のソースコードは GitHub にホストされており、誰でもBitwardenのコードを自由にレビュー、監査、貢献できます。</value>
-    <comment>Max 4000 characters</comment>
+  <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
     <value>あらゆる端末で使える、安全な無料パスワードマネージャー</value>

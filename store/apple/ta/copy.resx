@@ -122,34 +122,34 @@
     <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Bitwarden is the easiest and safest way to store all of your logins and passwords while conveniently keeping them synced between all of your devices. The Bitwarden app extension allows you to quickly log into any website through Safari or Chrome and is supported by hundreds of other popular apps.
+    <value>உங்கள் எல்லா உள்நுழைவுகளையும் கடவுச்சொற்களையும் சேமிக்கவும் எல்லா சாதனங்களுக்கும் இடையில் ஒத்திசைக்கவும் Bitwarden எளிய பாதுகாப்பான வழி. Bitwarden செயலி  நீட்டிப்பு சஃபாரி அல்லது குரோம் மூலம் எந்தவொரு வலைத்தளத்திலும் விரைவாக உள்நுழைய உங்களை அனுமதிக்கிறது மற்றும் நூற்றுக்கணக்கான பிற பிரபல செயலிகளால் ஆதரிக்கப்படுகிறது.
 
-Password theft is a serious problem. The websites and apps that you use are under attack every day. Security breaches occur and your passwords are stolen. When you reuse the same passwords across apps and websites hackers can easily access your email, bank, and other important accounts.
+கடவுச்சொல் திருட்டு ஒரு தீவிரமான பிரச்சினை. நீங்கள் பார்க்கும் வலைத்தளங்களும் செயலிகளும் தினந்தினம் தாக்குதலுக்கு உள்ளாகிறது. பாதுகாப்பு மீறல்கள் ஏற்பட்டு உங்கள் கடவுச்சொற்கள் திருட்டுபோகிறது. அக்கடவுச்சொற்களை மற்ற செயலிகளிலும் வலைத்தளங்களிலும் பயன்படுத்தீர்களானால், ஊடுருவர்கள் உங்கள் மின்னஞ்சல், வங்கி மற்றும் வேறு முக்கிய கணக்குகளை எளிதில் அணுக இயலும்.
 
-Security experts recommend that you use a different, randomly generated password for every account that you create. But how do you manage all those passwords? Bitwarden makes it easy for you to create, store, and access your passwords.
+நீங்கள் உருவாக்கும் ஒவ்வொரு கணக்கிற்கும் வேறுபட்ட, சீரற்று உருவாக்கப்பட்ட கடவுச்சொல்லைப் பயன்படுத்துமாறு பாதுகாப்பு நிபுணர்கள் பரிந்துரைக்கின்றனர். ஆனால் அந்த கடவுச்சொற்களை எவ்வாறு நிர்வகிப்பீர்கள்? உங்கள் கடவுச்சொற்களை உருவாக்குவது, சேமிப்பது மற்றும் அணுகுவதை Bitwarden எளிதாக்குகிறது.
 
-Bitwarden stores all of your logins in an encrypted vault that syncs across all of your devices. Since it's fully encrypted before it ever leaves your device, only you have access to your data. Not even the team at Bitwarden can read your data, even if we wanted to. Your data is sealed with AES-256 bit encryption, salted hashing, and PBKDF2 SHA-256.
+பிட்வார்டன் உங்கள் உள்நுழைவுகளை உங்கள் எல்லா சாதனங்களிலும் ஒத்திசைக்கூடிய மறைகுறியாக்கப்பட்ட பெட்டகத்தில் சேமிக்கிறது. இது உங்கள் சாதனத்தை விட்டு வெளியேறுவதற்கு முன்பு முழுமையாக குறியாக்கபடுவதால் நீங்கள் மட்டுமே உங்கள் தரவை அணுக முடியும். விரும்பினாலும் Bitwarden குழுவினரால் கூட உங்கள் தரவைப் படிக்க முடியாது. உங்கள் தரவு AES-256 பிட் குறியாக்கம், சால்டட்  ஹாஷிங் மற்றும் PBKDF2 SHA-256 உடன் மூடப்பட்டுள்ளது.
 
-Bitwarden is focused on open source software. The source code for Bitwarden is hosted on GitHub and everyone is free to review, audit, and contribute to the Bitwarden codebase.</value>
-    <comment>Max 4000 characters</comment>
+Bitwarden திறந்த மூல மென்பொருளில் கவனம் செலுத்துகிறது. Bitwarden மூல குறியீடு கிட்ஹப்பில் ஹோஸ்ட் செய்யப்பட்டுள்ளது, மேலும் அனைவருக்கும் பிட்வார்டன் கோட்பேஸில் மதிப்பாய்வு செய்ய, தணிக்கை செய்ய மற்றும் பங்களிக்க இலவசம்.</value>
+  <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
-    <value>bit warden,8bit,password,free password manager,password manager,login manager</value>
+    <value>bit warden,8bit,கடவுச்சொல்,இலவச கடவுச்சொல் நிர்வாகி,கடவுச்சொல் நிர்வாகி,உள்நுழைவு நிர்வாகி</value>
     <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Manage all your logins and passwords from a secure vault</value>
+    <value>உமது எல்லா உள்நுழைவுகளையும் கடவுச்சொற்களையும் பாதுகாப்பான பெட்டகத்திலிருந்து நிர்வாகியுங்கள்</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Automatically generate strong, random, and secure passwords</value>
+    <value>தானாக வலிய, சீரற்ற, மற்றும் பாதுகாப்பான கடவுச்சொற்களை உருவாக்குங்கள்</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Protect your vault with Touch ID, PIN code, or master password</value>
+    <value>உம் பெட்டகத்தை Touch ID, கடவுக்குறி, அல்லது முதன்மை கடவுச்சொல் வைத்து பாதுகாக்கலாம்</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Auto-fill logins from Safari, Chrome, and hundreds of other apps</value>
+    <value>சஃபாரி, குரோம் மற்றும் நூற்றுக்கணக்கான பிற செயலிகளிலிருந்து உள்நுழைவுகளை தானாக நிரப்புங்கள்</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Sync and access your vault from multiple devices</value>
+    <value>பல சாதங்களிலிருந்து உம் பெட்டகத்தை ஒத்திசைகவும் அணுகவும் இயலும்</value>
   </data>
 </root>
