@@ -22,8 +22,6 @@ namespace Bit.App.Pages
         private bool _authingWithSso;
         private string _orgIdentifier;
 
-        public Button ContinueButton { get; set; }
-
         public TwoFactorPage(bool? authingWithSso = false, AppOptions appOptions = null, string orgIdentifier = null)
         {
             InitializeComponent();
@@ -47,8 +45,6 @@ namespace Bit.App.Pages
             {
                 ToolbarItems.Remove(_cancelItem);
             }
-
-            ContinueButton = _continue;
         }
 
         public HybridWebView DuoWebView { get; set; }
@@ -186,7 +182,7 @@ namespace Bit.App.Pages
 
         private void Token_TextChanged(object sender, TextChangedEventArgs e)
         {
-            _vm.SetEnableContinue(string.IsNullOrWhiteSpace(e.NewTextValue));
+            _vm.EnableContinue = !string.IsNullOrWhiteSpace(e.NewTextValue);
         }
     }
 }

@@ -178,14 +178,7 @@ namespace Bit.App.Pages
             {
                 _messagingService.Send("listenYubiKeyOTP", false);
             }
-            if (SelectedProviderType == null || DuoMethod)
-            {
-                ShowContinue = false;
-            }
-            else
-            {
-                ShowContinue = true;
-            }
+            ShowContinue = !(SelectedProviderType == null || DuoMethod);
         }
 
         public async Task SubmitAsync()
@@ -309,18 +302,6 @@ namespace Bit.App.Pages
                 }
                 await _platformUtilsService.ShowDialogAsync(AppResources.VerificationEmailNotSent);
                 return false;
-            }
-        }
-
-        public void SetEnableContinue(bool isTokenEmpty)
-        {
-            if (isTokenEmpty)
-            {
-                EnableContinue = false;
-            }
-            else if (!EnableContinue)
-            {
-                EnableContinue = true;
             }
         }
     }
