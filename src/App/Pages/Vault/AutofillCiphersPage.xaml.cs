@@ -46,6 +46,15 @@ namespace Bit.App.Pages
             }, _mainContent);
         }
 
+        protected override bool OnBackButtonPressed()
+        {
+            if (Device.RuntimePlatform == Device.Android)
+            {
+                _appOptions.Uri = null;
+            }
+            return base.OnBackButtonPressed();
+        }
+
         private async void RowSelected(object sender, SelectionChangedEventArgs e)
         {
             ((ExtendedCollectionView)sender).SelectedItem = null;
