@@ -15,6 +15,7 @@ namespace Bit.App.Pages
     {
         private readonly AppOptions _appOptions;
         private readonly IPlatformUtilsService _platformUtilsService;
+        private readonly IVaultTimeoutService _vaultTimeoutService;
 
         private AutofillCiphersPageViewModel _vm;
 
@@ -27,11 +28,17 @@ namespace Bit.App.Pages
             _vm.Init(appOptions);
 
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
+            _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
         }
 
         protected async override void OnAppearing()
         {
             base.OnAppearing();
+            await _vaultTimeoutService.CheckVaultTimeoutAsync();
+            if (await _vaultTimeoutService.IsLockedAsync())
+            {
+                return;
+            }
             await LoadOnAppearedAsync(_mainLayout, false, async () =>
             {
                 try

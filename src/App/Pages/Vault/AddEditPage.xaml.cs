@@ -20,6 +20,7 @@ namespace Bit.App.Pages
         private readonly AppOptions _appOptions;
         private readonly IStorageService _storageService;
         private readonly IDeviceActionService _deviceActionService;
+        private readonly IVaultTimeoutService _vaultTimeoutService;
 
         private AddEditPageViewModel _vm;
         private bool _fromAutofill;
@@ -38,6 +39,7 @@ namespace Bit.App.Pages
         {
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             _appOptions = appOptions;
             _fromAutofill = fromAutofill;
             FromAutofillFramework = _appOptions?.FromAutofillFramework ?? false;
@@ -145,6 +147,11 @@ namespace Bit.App.Pages
         protected override async void OnAppearing()
         {
             base.OnAppearing();
+            await _vaultTimeoutService.CheckVaultTimeoutAsync();
+            if (await _vaultTimeoutService.IsLockedAsync())
+            {
+                return;
+            }
             await LoadOnAppearedAsync(_scrollView, true, async () =>
             {
                 var success = await _vm.LoadAsync(_appOptions);
