@@ -16,6 +16,7 @@ namespace Bit.App.Pages
     public partial class SendAddEditPage : BaseContentPage
     {
         private readonly IBroadcasterService _broadcasterService;
+        private readonly IVaultTimeoutService _vaultTimeoutService;
 
         private AppOptions _appOptions;
         private SendAddEditPageViewModel _vm;
@@ -26,6 +27,7 @@ namespace Bit.App.Pages
             SendType? type = null)
         {
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
+            _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             _appOptions = appOptions;
             InitializeComponent();
             _vm = BindingContext as SendAddEditPageViewModel;
@@ -79,6 +81,11 @@ namespace Bit.App.Pages
         protected override async void OnAppearing()
         {
             base.OnAppearing();
+            await _vaultTimeoutService.CheckVaultTimeoutAsync();
+            if (await _vaultTimeoutService.IsLockedAsync())
+            {
+                return;
+            }
             await _vm.InitAsync();
             _broadcasterService.Subscribe(nameof(SendAddEditPage), message =>
             {
@@ -107,6 +114,16 @@ namespace Bit.App.Pages
                 }
                 AdjustToolbar();
             });
+        }
+
+        protected override bool OnBackButtonPressed()
+        {
+            if (_vm.IsAddFromShare && Device.RuntimePlatform == Device.Android)
+            {
+                _appOptions.CreateSend = null;
+                _vm.CloseMainApp();
+            }
+            return base.OnBackButtonPressed();
         }
 
         protected override void OnDisappearing()

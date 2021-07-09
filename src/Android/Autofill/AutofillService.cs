@@ -57,6 +57,7 @@ namespace Bit.Droid.Autofill
             }
 
             List<FilledItem> items = null;
+            await _vaultTimeoutService.CheckVaultTimeoutAsync();
             var locked = await _vaultTimeoutService.IsLockedAsync();
             if (!locked)
             {
