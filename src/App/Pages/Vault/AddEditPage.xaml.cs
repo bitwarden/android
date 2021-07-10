@@ -147,7 +147,10 @@ namespace Bit.App.Pages
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            await _vaultTimeoutService.CheckVaultTimeoutAsync();
+            if (!await AppHelpers.IsVaultTimeoutImmediateAsync())
+            {
+                await _vaultTimeoutService.CheckVaultTimeoutAsync();
+            }
             if (await _vaultTimeoutService.IsLockedAsync())
             {
                 return;

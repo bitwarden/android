@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bit.App.Models;
 using Bit.App.Resources;
+using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Utilities;
@@ -81,7 +82,10 @@ namespace Bit.App.Pages
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            await _vaultTimeoutService.CheckVaultTimeoutAsync();
+            if (!await AppHelpers.IsVaultTimeoutImmediateAsync())
+            {
+                await _vaultTimeoutService.CheckVaultTimeoutAsync();
+            }
             if (await _vaultTimeoutService.IsLockedAsync())
             {
                 return;
@@ -121,7 +125,6 @@ namespace Bit.App.Pages
             if (_vm.IsAddFromShare && Device.RuntimePlatform == Device.Android)
             {
                 _appOptions.CreateSend = null;
-                _vm.CloseMainApp();
             }
             return base.OnBackButtonPressed();
         }

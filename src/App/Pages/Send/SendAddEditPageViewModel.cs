@@ -398,7 +398,7 @@ namespace Bit.App.Pages
 
                 if (IsAddFromShare && Device.RuntimePlatform == Device.Android)
                 {
-                    CloseMainApp();
+                    _deviceActionService.CloseMainApp();
                 }
                 else
                 {
@@ -427,14 +427,6 @@ namespace Bit.App.Pages
                 }
             }
             return false;
-        }
-
-        public void CloseMainApp()
-        {
-            if (Device.RuntimePlatform == Device.Android)
-            {
-                _deviceActionService.CloseMainApp();   
-            }
         }
 
         public async Task<bool> RemovePasswordAsync()
