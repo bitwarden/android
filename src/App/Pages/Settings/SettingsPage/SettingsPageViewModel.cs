@@ -150,8 +150,8 @@ namespace Bit.App.Pages
 
         public async Task ShareAsync()
         {
-            var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.ShareVaultConfirmation,
-                AppResources.ShareVault, AppResources.Yes, AppResources.Cancel);
+            var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.LearnOrgConfirmation,
+               AppResources.LearnOrg, AppResources.Yes, AppResources.Cancel);
             if (confirmed)
             {
                 _platformUtilsService.LaunchUri("https://help.bitwarden.com/article/what-is-an-organization/");
@@ -387,13 +387,13 @@ namespace Bit.App.Pages
             {
                 new SettingsPageListItem { Name = AppResources.ImportItems },
                 new SettingsPageListItem { Name = AppResources.ExportVault },
-                new SettingsPageListItem { Name = AppResources.ShareVault },
                 new SettingsPageListItem { Name = AppResources.WebVault }
             };
             var otherItems = new List<SettingsPageListItem>
             {
                 new SettingsPageListItem { Name = AppResources.Options },
                 new SettingsPageListItem { Name = AppResources.About },
+                new SettingsPageListItem { Name = AppResources.LearnOrg },
                 new SettingsPageListItem { Name = AppResources.HelpAndFeedback },
                 new SettingsPageListItem { Name = AppResources.RateTheApp }
             };
