@@ -155,33 +155,40 @@ namespace Bit.Droid
         protected override void OnNewIntent(Intent intent)
         {
             base.OnNewIntent(intent);
-            if (intent.GetBooleanExtra("generatorTile", false))
+            try
             {
-                _messagingService.Send("popAllAndGoToTabGenerator");
-                if (_appOptions != null)
+                if (intent.GetBooleanExtra("generatorTile", false))
                 {
-                    _appOptions.GeneratorTile = true;
+                    _messagingService.Send("popAllAndGoToTabGenerator");
+                    if (_appOptions != null)
+                    {
+                        _appOptions.GeneratorTile = true;
+                    }
+                }
+                else if (intent.GetBooleanExtra("myVaultTile", false))
+                {
+                    _messagingService.Send("popAllAndGoToTabMyVault");
+                    if (_appOptions != null)
+                    {
+                        _appOptions.MyVaultTile = true;
+                    }
+                }
+                else if (intent.Action == Intent.ActionSend && intent.Type != null)
+                {
+                    if (_appOptions != null)
+                    {
+                        _appOptions.CreateSend = GetCreateSendRequest(intent);
+                    }
+                    _messagingService.Send("popAllAndGoToTabSend");
+                }
+                else
+                {
+                    ParseYubiKey(intent.DataString);
                 }
             }
-            else if (intent.GetBooleanExtra("myVaultTile", false))
+            catch (Exception e)
             {
-                _messagingService.Send("popAllAndGoToTabMyVault");
-                if (_appOptions != null)
-                {
-                    _appOptions.MyVaultTile = true;
-                }
-            }
-            else if (intent.Action == Intent.ActionSend && intent.Type != null)
-            {
-                if (_appOptions != null)
-                {
-                    _appOptions.CreateSend = GetCreateSendRequest(intent);
-                }
-                _messagingService.Send("popAllAndGoToTabSend");
-            }
-            else
-            {
-                ParseYubiKey(intent.DataString);
+                System.Diagnostics.Debug.WriteLine(">>> {0}: {1}", e.GetType(), e.StackTrace);
             }
         }
 
