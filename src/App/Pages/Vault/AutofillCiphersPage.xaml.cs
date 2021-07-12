@@ -7,6 +7,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Bit.App.Controls;
+using Bit.App.Utilities;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -34,7 +35,10 @@ namespace Bit.App.Pages
         protected async override void OnAppearing()
         {
             base.OnAppearing();
-            await _vaultTimeoutService.CheckVaultTimeoutAsync();
+            if (!await AppHelpers.IsVaultTimeoutImmediateAsync())
+            {
+                await _vaultTimeoutService.CheckVaultTimeoutAsync();
+            }
             if (await _vaultTimeoutService.IsLockedAsync())
             {
                 return;

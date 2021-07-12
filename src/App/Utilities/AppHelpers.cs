@@ -458,5 +458,17 @@ namespace Bit.App.Utilities
             var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             await storageService.RemoveAsync(Constants.InvalidUnlockAttempts);
         }
+
+        public static async Task<bool> IsVaultTimeoutImmediateAsync()
+        {
+            var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+            
+            var vaultTimeoutMinutes = await storageService.GetAsync<int?>(Constants.VaultTimeoutKey);
+            if (vaultTimeoutMinutes.GetValueOrDefault(-1) == 0)
+            {
+                return true;
+            }
+            return false;
+        }
     }
 }

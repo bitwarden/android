@@ -327,6 +327,11 @@ namespace Bit.Droid
         {
             if (intent.Action == Intent.ActionSend && intent.Type != null)
             {
+                if ((intent.Flags & ActivityFlags.LaunchedFromHistory) == ActivityFlags.LaunchedFromHistory)
+                {
+                    // don't re-deliver intent if resuming from app switcher
+                    return null;
+                }
                 var type = intent.Type;
                 if (type.Contains("text/"))
                 {
