@@ -43,8 +43,8 @@ namespace Bit.Core.Models.Domain
         public bool UsePolicies { get; set; }
         public bool SelfHost { get; set; }
         public bool UsersGetPremium { get; set; }
-        public int Seats { get; set; }
-        public int MaxCollections { get; set; }
+        public int? Seats { get; set; }
+        public short? MaxCollections { get; set; }
         public short? MaxStorageGb { get; set; }
         public Permissions Permissions { get; set; } = new Permissions();
 
