@@ -139,7 +139,7 @@ namespace Bit.App.Pages
 
         private async void More_Clicked(object sender, EventArgs e)
         {
-            if (DoOnce())
+            if (!DoOnce())
             {
                 return;
             }

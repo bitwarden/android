@@ -26,8 +26,11 @@
                 x:Name="_moreItem" x:Key="moreItem"
                  AutomationProperties.IsInAccessibleTree="True"
                  AutomationProperties.Name="{u:I18n Options}" />
-            <ToolbarItem Text="{u:I18n UseAnotherTwoStepMethod}" Clicked="Methods_Clicked" Order="Secondary"
-                x:Name="_useAnotherTwoStepMethod" x:Key="useAnotherTwoStepMethod" />
+            <ToolbarItem Text="{u:I18n UseAnotherTwoStepMethod}" 
+                Clicked="Methods_Clicked" 
+                Order="Secondary"
+                x:Name="_useAnotherTwoStepMethod" 
+                x:Key="useAnotherTwoStepMethod" />
         </ResourceDictionary>
     </ContentPage.Resources>
 
