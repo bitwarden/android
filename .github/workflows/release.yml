@@ -1,10 +1,7 @@
 name: Build
 
 on:
-  push:
-    branches-ignore:
-      - 'l10n_master'
-      - 'gh-pages'
+  workflow_dispatch:
 
 jobs:
   download-artifacts:
@@ -62,6 +59,7 @@ jobs:
   android:
     name: Android Build
     runs-on: windows-latest
+    needs: download-artifacts
     steps:
       - name: List files in directory
         run: |
@@ -106,6 +104,7 @@ jobs:
   ios:
     name: iOS Build
     runs-on: macos-latest
+    needs: download-artifacts
     steps:
       - name: List files in directory
         run: |
