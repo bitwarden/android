@@ -5,20 +5,17 @@ on:
     branches-ignore:
       - 'l10n_master'
       - 'gh-pages'
-  release:
-    types:
-      - published
 
 jobs:
 
   cloc:
+    name: CLOC
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repo
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
 
-      - name: Set up cloc
+      - name: Set up CLOC
         run: |
           sudo apt-get update
           sudo apt-get -y install cloc
@@ -26,9 +23,10 @@ jobs:
       - name: Print lines of code
         run: cloc --vcs git --exclude-dir Resources,store,test,Properties --include-lang C#,XAML
 
-  android:
-    runs-on: windows-latest
 
+  android:
+    name: Android Build
+    runs-on: windows-latest
     steps:
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@c26a08ba26249b81327e26f6ef381897b6a8754d
@@ -40,29 +38,26 @@ jobs:
           dotnet --info
           echo "GitHub ref: $GITHUB_REF"
           echo "GitHub event: $GITHUB_EVENT"
-        env:
-          GITHUB_REF: ${{ github.ref }}
-          GITHUB_EVENT: ${{ github.event_name }}
 
       - name: Checkout repo
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
 
       - name: Decrypt secrets
-        if: github.ref == 'refs/heads/master' || github.event_name == 'release'
+        if: github.ref == 'refs/heads/master'
         run: ./.github/scripts/android/decrypt-secrets.ps1
         shell: pwsh
         env:
           DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
 
       - name: Increment version
-        if: github.ref == 'refs/heads/master' || github.event_name == 'release'
+        if: github.ref == 'refs/heads/master'
         run: ./.github/scripts/android/increment-version.ps1
         shell: pwsh
 
       - name: Restore packages
         run: nuget restore
 
-      - name: Run Core Tests
+      - name: Run Core tests
         run: dotnet test test/Core.Test/Core.Test.csproj
 
       - name: Build Play Store publisher
@@ -73,7 +68,7 @@ jobs:
         shell: pwsh
 
       - name: Sign for Play Store
-        if: github.ref == 'refs/heads/master' || github.event_name == 'release'
+        if: github.ref == 'refs/heads/master'
         run: ./.github/scripts/android/sign-play.ps1
         shell: pwsh
         env:
@@ -81,14 +76,14 @@ jobs:
           UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}
 
       - name: Upload Play Store .aab artifact
-        if: github.ref == 'refs/heads/master' || github.event_name == 'release'
+        if: github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700
         with:
           name: com.x8bit.bitwarden.aab
           path: ./com.x8bit.bitwarden.aab
 
       - name: Upload Play Store .apk artifact
-        if: github.ref == 'refs/heads/master' || github.event_name == 'release'
+        if: github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700
         with:
           name: com.x8bit.bitwarden.apk
@@ -106,42 +101,24 @@ jobs:
         shell: pwsh
 
       - name: Sign for F-Droid
-        if: github.ref == 'refs/heads/master' || github.event_name == 'release'
+        if: github.ref == 'refs/heads/master'
         run: ./.github/scripts/android/sign-fdroid.ps1
         shell: pwsh
         env:
           FDROID_KEYSTORE_PASSWORD: ${{ secrets.FDROID_KEYSTORE_PASSWORD }}
 
       - name: Upload F-Droid .apk artifact
-        if: github.ref == 'refs/heads/master' || github.event_name == 'release'
+        if: github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700
         with:
           name: com.x8bit.bitwarden-fdroid.apk
-          path: ./com.x8bit.bitwarden-fdroid.apk
-
-      - name: Deploy to Play Store
-        if: github.ref == 'refs/heads/master' || github.event_name == 'release'
-        run: ./.github/scripts/android/deploy-play.ps1
-        shell: pwsh
-
-      - name: Upload release assets
-        if: github.event_name == 'release'
-        run: |
-          hub release edit `
-            -a ./com.x8bit.bitwarden.aab `
-            -a ./com.x8bit.bitwarden.apk `
-            -a ./com.x8bit.bitwarden-fdroid.apk `
-            -m "Version $($env:RELEASE_TAG_NAME.TrimStart('v'))" `
-            $env:RELEASE_TAG_NAME
-        shell: pwsh
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RELEASE_TAG_NAME: ${{ github.event.release.tag_name }}
+          path: ./com.x8bit.bitwarden-fdroid.apk  
   
+
   android-ubuntu:
+    name: Android Ubuntu Build
     runs-on: ubuntu-latest
     needs: android
-
     steps:
       - name: Set up Node
         if: github.event_name == 'release'
@@ -155,7 +132,7 @@ jobs:
           sudo apt-get -qq update
           sudo apt-get -qqy install --no-install-recommends fdroidserver wget
 
-      - name: Set up git credentials
+      - name: Set up Git credentials
         if: github.event_name == 'release'
         env:
           ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
@@ -174,9 +151,6 @@ jobs:
           Write-Output "GitHub ref: $env:GITHUB_REF"
           Write-Output "GitHub event: $env:GITHUB_EVENT"
         shell: pwsh
-        env:
-          GITHUB_REF: ${{ github.ref }}
-          GITHUB_EVENT: ${{ github.event_name }}
 
       - name: Checkout repo
         if: github.event_name == 'release'
@@ -204,13 +178,10 @@ jobs:
           FDROID_STORE_KEYSTORE_PASSWORD: ${{ secrets.FDROID_STORE_KEYSTORE_PASSWORD }}
           RELEASE_TAG_NAME: ${{ github.event.release.tag_name }}
 
-      - name: Deploy to gh-pages
-        if: github.event_name == 'release'
-        run: npm run deploy
 
   ios:
+    name: iOS Build
     runs-on: macos-latest
-
     steps:
       - name: Print environment
         run: |
@@ -219,9 +190,6 @@ jobs:
           dotnet --info
           echo "GitHub ref: $GITHUB_REF"
           echo "GitHub event: $GITHUB_EVENT"
-        env:
-          GITHUB_REF: ${{ github.ref }}
-          GITHUB_EVENT: ${{ github.event_name }}
 
       - name: Checkout repo
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
@@ -233,11 +201,11 @@ jobs:
           DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
 
       - name: Increment version
-        if: github.ref == 'refs/heads/master' || github.event_name == 'release'
+        if: github.ref == 'refs/heads/master'
         run: ./.github/scripts/ios/increment-version.ps1
         shell: pwsh
 
-      - name: Set up keychain
+      - name: Set up Keychain
         run: ./.github/scripts/ios/setup-keychain.ps1
         shell: pwsh
         env:
@@ -253,7 +221,7 @@ jobs:
         run: nuget restore
 
       - name: Archive Build for App Store
-        if: github.ref == 'refs/heads/master' || github.event_name == 'release'
+        if: github.ref == 'refs/heads/master'
         run: ./.github/scripts/ios/build.ps1 -configuration AppStore -platform iPhone -archive
         shell: pwsh
 
@@ -263,33 +231,13 @@ jobs:
         shell: pwsh
 
       - name: Export .ipa for App Store
-        if: github.ref == 'refs/heads/master' || github.event_name == 'release'
+        if: github.ref == 'refs/heads/master'
         run: ./.github/scripts/ios/export-ipa.ps1 -method app-store
         shell: pwsh
 
       - name: Upload App Store .ipa artifact
-        if: github.ref == 'refs/heads/master' || github.event_name == 'release'
+        if: github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700
         with:
           name: Bitwarden.ipa
           path: ./bitwarden-export/Bitwarden.ipa
-
-      - name: Deploy to App Store
-        if: github.ref == 'refs/heads/master' || github.event_name == 'release'
-        run: ./.github/scripts/ios/deploy-app-store.ps1
-        shell: pwsh
-        env:
-          APPLE_ID_USERNAME: ${{ secrets.APPLE_ID_USERNAME }}
-          APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
-
-      - name: Upload release assets
-        if: github.event_name == 'release'
-        run: |
-          hub release edit `
-            -a ./bitwarden-export/Bitwarden.ipa `
-            -m "Version $($env:RELEASE_TAG_NAME.TrimStart('v'))" `
-            $env:RELEASE_TAG_NAME
-        shell: pwsh
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RELEASE_TAG_NAME: ${{ github.event.release.tag_name }}
