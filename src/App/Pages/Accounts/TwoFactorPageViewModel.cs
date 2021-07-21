@@ -33,6 +33,7 @@ namespace Bit.App.Pages
         private string _webVaultUrl = "https://vault.bitwarden.com";
         private bool _authingWithSso = false;
         private bool _enableContinue = false;
+        private bool _showContinue = true;
 
         public TwoFactorPageViewModel()
         {
@@ -74,7 +75,11 @@ namespace Bit.App.Pages
 
         public bool ShowTryAgain => YubikeyMethod && Device.RuntimePlatform == Device.iOS;
 
-        public bool ShowContinue { get; set; }
+        public bool ShowContinue
+	    {
+	        get => _showContinue;
+	        set => SetProperty(ref _showContinue, value);
+	    }
 
         public bool EnableContinue
         {
