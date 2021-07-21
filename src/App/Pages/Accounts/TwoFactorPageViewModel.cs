@@ -252,7 +252,7 @@ namespace Bit.App.Pages
             {
                 _platformUtilsService.LaunchUri("https://help.bitwarden.com/article/lost-two-step-device/");
             }
-            else if (method != AppResources.Cancel)
+            else if (method != AppResources.Cancel && method != null)
             {
                 var selected = supportedProviders.FirstOrDefault(p => p.Name == method)?.Type;
                 if (selected == SelectedProviderType)
