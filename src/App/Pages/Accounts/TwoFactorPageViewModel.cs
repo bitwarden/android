@@ -76,10 +76,10 @@ namespace Bit.App.Pages
         public bool ShowTryAgain => YubikeyMethod && Device.RuntimePlatform == Device.iOS;
 
         public bool ShowContinue
-	    {
-	        get => _showContinue;
-	        set => SetProperty(ref _showContinue, value);
-	    }
+        {
+            get => _showContinue;
+            set => SetProperty(ref _showContinue, value);
+        }
 
         public bool EnableContinue
         {
