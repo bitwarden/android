@@ -43,12 +43,12 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
 
-      # - name: Decrypt secrets
-      #   if: github.ref == 'refs/heads/master'
-      #   run: ./.github/scripts/android/decrypt-secrets.ps1
-      #   shell: pwsh
-      #   env:
-      #     DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
+      - name: Decrypt secrets
+        # if: github.ref == 'refs/heads/master'
+        run: ./.github/scripts/android/decrypt-secrets.ps1
+        shell: pwsh
+        env:
+          DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
 
       - name: Increment version
         # if: github.ref == 'refs/heads/master'
@@ -68,13 +68,13 @@ jobs:
         run: ./.github/scripts/android/build.ps1 -configuration Release
         shell: pwsh
 
-      # - name: Sign for Play Store
-      #   if: github.ref == 'refs/heads/master'
-      #   run: ./.github/scripts/android/sign-play.ps1
-      #   shell: pwsh
-      #   env:
-      #     PLAY_KEYSTORE_PASSWORD: ${{ secrets.PLAY_KEYSTORE_PASSWORD }}
-      #     UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}
+      - name: Sign for Play Store
+        # if: github.ref == 'refs/heads/master'
+        run: ./.github/scripts/android/sign-play.ps1
+        shell: pwsh
+        env:
+          PLAY_KEYSTORE_PASSWORD: ${{ secrets.PLAY_KEYSTORE_PASSWORD }}
+          UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}
 
       - name: Upload Play Store .aab artifact
         # if: github.ref == 'refs/heads/master'
@@ -101,12 +101,12 @@ jobs:
         run: ./.github/scripts/android/build.ps1 -configuration FDroid
         shell: pwsh
 
-      # - name: Sign for F-Droid
-      #   if: github.ref == 'refs/heads/master'
-      #   run: ./.github/scripts/android/sign-fdroid.ps1
-      #   shell: pwsh
-      #   env:
-      #     FDROID_KEYSTORE_PASSWORD: ${{ secrets.FDROID_KEYSTORE_PASSWORD }}
+      - name: Sign for F-Droid
+        # if: github.ref == 'refs/heads/master'
+        run: ./.github/scripts/android/sign-fdroid.ps1
+        shell: pwsh
+        env:
+          FDROID_KEYSTORE_PASSWORD: ${{ secrets.FDROID_KEYSTORE_PASSWORD }}
 
       - name: Upload F-Droid .apk artifact
         # if: github.ref == 'refs/heads/master'
