@@ -4,58 +4,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  download-artifacts:
-    name: Download Artifacts
-    runs-on: ubuntu-latest
-    steps:
-      - name: List files in directory
-        run: |
-          pwd
-          ls -alh
-
-      - name: Download artifact
-        uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74
-        with:
-          # Optional, GitHub token, a Personal Access Token with `public_repo` scope if needed
-          # Required, if artifact is from a different repo
-          # github_token: ${{secrets.GITHUB_TOKEN}}
-          # Required, workflow file name or ID
-          workflow: build.yml
-          # Optional, the status or conclusion of a completed workflow to search for
-          # Can be one of a workflow conclusion::
-          # "failure", "success", "neutral", "cancelled", "skipped", "timed_out", "action_required"
-          # Or a workflow status:
-          # "completed", "in_progress", "queued"
-          # Default: "completed,success"
-          workflow_conclusion: success
-          # Optional, will get head commit SHA
-          # pr: ${{github.event.pull_request.number}}
-          # Optional, no need to specify if PR is
-          # commit: ${{github.event.pull_request.head.sha}}
-          # Optional, will use the branch
-          branch: master
-          # Optional, defaults to all types
-          # event: push
-          # Optional, will use specified workflow run
-          # run_id: 1122334455
-          # Optional, run number from the workflow
-          # run_number: 34
-          # Optional, uploaded artifact name,
-          # will download all artifacts if not specified
-          # and extract them in respective subdirectories
-          # https://github.com/actions/download-artifact#download-all-artifacts
-          # name: artifact_name
-          # Optional, directory where to extract artifact. Defaults to the artifact name (see `name` input)
-          # path: extract_here
-          # Optional, defaults to current repo
-          # repo: ${{github.repository}}
-
-      - name: List files in directory
-        run: |
-          pwd
-          ls -alh
-
-
   android:
     name: Android Build
     runs-on: windows-latest
@@ -65,6 +13,18 @@ jobs:
         run: |
           pwd
           ls -alh
+
+      - name: Download artifact
+        uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74
+        with:
+          workflow: build.yml
+          workflow_conclusion: success
+          branch: master
+          # Optional, uploaded artifact name,
+          # will download all artifacts if not specified
+          # and extract them in respective subdirectories
+          # https://github.com/actions/download-artifact#download-all-artifacts
+          # name: artifact_name
 
       - name: Deploy to Play Store
         if: github.event_name == 'release'
@@ -96,6 +56,18 @@ jobs:
           pwd
           ls -alh
 
+      - name: Download artifact
+        uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74
+        with:
+          workflow: build.yml
+          workflow_conclusion: success
+          branch: master
+          # Optional, uploaded artifact name,
+          # will download all artifacts if not specified
+          # and extract them in respective subdirectories
+          # https://github.com/actions/download-artifact#download-all-artifacts
+          # name: artifact_name
+
       - name: Deploy to gh-pages
         if: github.event_name == 'release'
         run: npm run deploy
@@ -110,6 +82,18 @@ jobs:
         run: |
           pwd
           ls -alh
+
+      - name: Download artifact
+        uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74
+        with:
+          workflow: build.yml
+          workflow_conclusion: success
+          branch: master
+          # Optional, uploaded artifact name,
+          # will download all artifacts if not specified
+          # and extract them in respective subdirectories
+          # https://github.com/actions/download-artifact#download-all-artifacts
+          # name: artifact_name
 
       - name: Deploy to App Store
         if: github.event_name == 'release'
