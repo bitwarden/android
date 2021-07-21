@@ -183,7 +183,6 @@ jobs:
 
   ios:
     name: iOS Build
-    if: false
     runs-on: macos-latest
     steps:
       - name: Print environment
@@ -204,7 +203,7 @@ jobs:
           DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
 
       - name: Increment version
-        if: github.ref == 'refs/heads/master'
+        # if: github.ref == 'refs/heads/master'
         run: ./.github/scripts/ios/increment-version.ps1
         shell: pwsh
 
@@ -224,22 +223,22 @@ jobs:
         run: nuget restore
 
       - name: Archive Build for App Store
-        if: github.ref == 'refs/heads/master'
+        # if: github.ref == 'refs/heads/master'
         run: ./.github/scripts/ios/build.ps1 -configuration AppStore -platform iPhone -archive
         shell: pwsh
 
-      - name: Build for App Store
-        if: github.ref != 'refs/heads/master'
-        run: ./.github/scripts/ios/build.ps1 -configuration AppStore -platform iPhone
-        shell: pwsh
+      # - name: Build for App Store
+      #   if: github.ref != 'refs/heads/master'
+      #   run: ./.github/scripts/ios/build.ps1 -configuration AppStore -platform iPhone
+      #   shell: pwsh
 
       - name: Export .ipa for App Store
-        if: github.ref == 'refs/heads/master'
+        # if: github.ref == 'refs/heads/master'
         run: ./.github/scripts/ios/export-ipa.ps1 -method app-store
         shell: pwsh
 
       - name: Upload App Store .ipa artifact
-        if: github.ref == 'refs/heads/master'
+        # if: github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700
         with:
           name: Bitwarden.ipa
