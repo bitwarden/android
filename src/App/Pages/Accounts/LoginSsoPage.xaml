@@ -14,7 +14,6 @@
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="{u:I18n Close}" Clicked="Close_Clicked" Order="Primary" Priority="-1" />
-        <ToolbarItem Text="{u:I18n LogIn}" Clicked="LogIn_Clicked" />
     </ContentPage.ToolbarItems>
 
     <ScrollView>
@@ -36,6 +35,10 @@
                         ReturnCommand="{Binding LogInCommand}" />
                 </StackLayout>
             </StackLayout>
+		    <StackLayout Padding="10, 0">
+				<Button Text="{u:I18n LogIn}"
+				    Clicked="LogIn_Clicked"></Button>
+			</StackLayout>
         </StackLayout>
     </ScrollView>
 
