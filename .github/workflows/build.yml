@@ -10,6 +10,7 @@ jobs:
 
   cloc:
     name: CLOC
+    if: false
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -50,7 +51,7 @@ jobs:
       #     DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
 
       - name: Increment version
-        if: github.ref == 'refs/heads/master'
+        # if: github.ref == 'refs/heads/master'
         run: ./.github/scripts/android/increment-version.ps1
         shell: pwsh
 
@@ -76,14 +77,14 @@ jobs:
       #     UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}
 
       - name: Upload Play Store .aab artifact
-        if: github.ref == 'refs/heads/master'
+        # if: github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700
         with:
           name: com.x8bit.bitwarden.aab
           path: ./com.x8bit.bitwarden.aab
 
       - name: Upload Play Store .apk artifact
-        if: github.ref == 'refs/heads/master'
+        # if: github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700
         with:
           name: com.x8bit.bitwarden.apk
@@ -108,7 +109,7 @@ jobs:
       #     FDROID_KEYSTORE_PASSWORD: ${{ secrets.FDROID_KEYSTORE_PASSWORD }}
 
       - name: Upload F-Droid .apk artifact
-        if: github.ref == 'refs/heads/master'
+        # if: github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700
         with:
           name: com.x8bit.bitwarden-fdroid.apk
@@ -117,6 +118,7 @@ jobs:
 
   android-ubuntu:
     name: Android Ubuntu Build
+    if: false
     runs-on: ubuntu-latest
     needs: android
     steps:
@@ -181,6 +183,7 @@ jobs:
 
   ios:
     name: iOS Build
+    if: false
     runs-on: macos-latest
     steps:
       - name: Print environment
