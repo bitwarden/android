@@ -7,7 +7,6 @@ on:
       - 'gh-pages'
 
 jobs:
-
   cloc:
     name: CLOC
     runs-on: ubuntu-latest
@@ -43,15 +42,51 @@ jobs:
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
 
       - name: Decrypt secrets
-        # if: github.ref == 'refs/heads/master'
-        run: ./.github/scripts/android/decrypt-secrets.ps1
+        run: |
+          $rootPath = $env:GITHUB_WORKSPACE;
+
+          $decryptSecretPath = $($rootPath + "/.github/scripts/decrypt-secret.ps1");
+
+          $appKeystorePlayFilename = "app_play-keystore.jks";
+          $appKeystorePlayPath = $($rootPath + "/src/Android/$appKeystorePlayFilename");
+          $appKeystoreUploadFilename = "app_upload-keystore.jks";
+          $appKeystoreUploadPath = $($rootPath + "/src/Android/$appKeystoreUploadFilename");
+          $appKeystoreFdroidFilename = "app_fdroid-keystore.jks";
+          $appKeystoreFdroidPath = $($rootPath + "/src/Android/$appKeystoreFdroidFilename");
+          $googleServicesFilename = "google-services.json";
+          $googleServicesPath = $($rootPath + "/src/Android/$googleServicesFilename");
+
+          Invoke-Expression `
+              "& `"$decryptSecretPath`" -filename $($appKeystorePlayFilename + ".gpg") -output $($appKeystorePlayPath)"
+          Invoke-Expression `
+              "& `"$decryptSecretPath`" -filename $($appKeystoreUploadFilename + ".gpg") -output $($appKeystoreUploadPath)"
+          Invoke-Expression `
+              "& `"$decryptSecretPath`" -filename $($appKeystoreFdroidFilename + ".gpg") -output $($appKeystoreFdroidPath)"
+          Invoke-Expression `
+              "& `"$decryptSecretPath`" -filename $($googleServicesFilename + ".gpg") -output $($googleServicesPath)"
+          Invoke-Expression "& `"$decryptSecretPath`" -filename play_creds.json.gpg"
         shell: pwsh
         env:
           DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
 
       - name: Increment version
-        # if: github.ref == 'refs/heads/master'
-        run: ./.github/scripts/android/increment-version.ps1
+        run: |
+          $rootPath = $env:GITHUB_WORKSPACE;
+          $buildNumber = 3000 + [int]$env:GITHUB_RUN_NUMBER;
+
+          Write-Output "########################################"
+          Write-Output "##### Setting Version Code $buildNumber"
+          Write-Output "########################################"
+
+          $androidManifest = $($rootPath + "/src/Android/Properties/AndroidManifest.xml");
+
+          $xml=New-Object XML;
+          $xml.Load($androidManifest);
+
+          $node=$xml.SelectNodes("/manifest");
+          $node.SetAttribute("android:versionCode", [string]$buildNumber);
+
+          $xml.Save($androidManifest);
         shell: pwsh
 
       - name: Restore packages
@@ -64,51 +99,200 @@ jobs:
         run: dotnet build ./store/google/Publisher/Publisher.csproj -p:Configuration=Release
 
       - name: Build for Play Store
-        run: ./.github/scripts/android/build.ps1 -configuration Release
+        run: |
+          $configuration = "Release";
+
+          $rootPath = $env:GITHUB_WORKSPACE;
+          $androidPath = $($rootPath + "/src/Android/Android.csproj");
+
+          Write-Output "########################################"
+          Write-Output "##### Build $configuration Configuration"
+          Write-Output "########################################"
+
+          msbuild "$($androidPath)" "/p:Configuration=$configuration"
         shell: pwsh
 
       - name: Sign for Play Store
-        # if: github.ref == 'refs/heads/master'
-        run: ./.github/scripts/android/sign-play.ps1
+        run: |
+          $rootPath = $env:GITHUB_WORKSPACE;
+
+          $androidPath = $($rootPath + "/src/Android/Android.csproj");
+
+          $appKeystorePlayFilename = "app_play-keystore.jks";
+          $appKeystoreUploadFilename = "app_upload-keystore.jks";
+
+          Write-Output "########################################"
+          Write-Output "##### Sign Google Play Bundle Release Configuration"
+          Write-Output "########################################"
+
+          msbuild "$($androidPath)" "/t:SignAndroidPackage" "/p:Configuration=Release" "/p:AndroidKeyStore=true" `
+              "/p:AndroidSigningKeyAlias=upload" "/p:AndroidSigningKeyPass=$($env:UPLOAD_KEYSTORE_PASSWORD)" `
+              "/p:AndroidSigningKeyStore=$($appKeystoreUploadFilename)" `
+              "/p:AndroidSigningStorePass=$($env:UPLOAD_KEYSTORE_PASSWORD)" "/p:AndroidPackageFormat=aab" "/v:quiet"
+
+          Write-Output "########################################"
+          Write-Output "##### Copy Google Play Bundle to project root"
+          Write-Output "########################################"
+
+          $signedAabPath = $($rootPath + "/src/Android/bin/Release/com.x8bit.bitwarden-Signed.aab");
+          $signedAabDestPath = $($rootPath + "/com.x8bit.bitwarden.aab");
+
+          Copy-Item $signedAabPath $signedAabDestPath
+
+          Write-Output "########################################"
+          Write-Output "##### Sign APK Release Configuration"
+          Write-Output "########################################"
+
+          msbuild "$($androidPath)" "/t:SignAndroidPackage" "/p:Configuration=Release" "/p:AndroidKeyStore=true" `
+              "/p:AndroidSigningKeyAlias=bitwarden" "/p:AndroidSigningKeyPass=$($env:PLAY_KEYSTORE_PASSWORD)" `
+              "/p:AndroidSigningKeyStore=$($appKeystorePlayFilename)" `
+              "/p:AndroidSigningStorePass=$($env:PLAY_KEYSTORE_PASSWORD)" "/v:quiet"
+            
+          Write-Output "########################################"
+          Write-Output "##### Copy Release APK to project root"
+          Write-Output "########################################"
+
+          $signedApkPath = $($rootPath + "/src/Android/bin/Release/com.x8bit.bitwarden-Signed.apk");
+          $signedApkDestPath = $($rootPath + "/com.x8bit.bitwarden.apk");
+
+          Copy-Item $signedApkPath $signedApkDestPath
         shell: pwsh
         env:
           PLAY_KEYSTORE_PASSWORD: ${{ secrets.PLAY_KEYSTORE_PASSWORD }}
           UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}
 
       - name: Upload Play Store .aab artifact
-        # if: github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700
         with:
           name: com.x8bit.bitwarden.aab
           path: ./com.x8bit.bitwarden.aab
 
       - name: Upload Play Store .apk artifact
-        # if: github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700
         with:
           name: com.x8bit.bitwarden.apk
           path: ./com.x8bit.bitwarden.apk
 
       - name: Clean for F-Droid
-        run: ./.github/scripts/android/clean-fdroid.ps1
+        run: |
+          $rootPath = $env:GITHUB_WORKSPACE;
+
+          $androidPath = $($rootPath + "/src/Android/Android.csproj");
+          $appPath = $($rootPath + "/src/App/App.csproj");
+
+          $androidManifest = $($rootPath + "/src/Android/Properties/AndroidManifest.xml");
+
+          Write-Output "########################################"
+          Write-Output "##### Clean Android and App"
+          Write-Output "########################################"
+
+          msbuild "$($androidPath)" "/t:Clean" "/p:Configuration=FDroid"
+          msbuild "$($appPath)" "/t:Clean" "/p:Configuration=FDroid"
+
+          Write-Output "########################################"
+          Write-Output "##### Backup project files"
+          Write-Output "########################################"
+
+          Copy-Item $androidManifest $($androidManifest + ".original");
+          Copy-Item $androidPath $($androidPath + ".original");
+          Copy-Item $appPath $($appPath + ".original");
+
+          Write-Output "########################################"
+          Write-Output "##### Cleanup Android Manifest"
+          Write-Output "########################################"
+
+          $xml=New-Object XML;
+          $xml.Load($androidManifest);
+
+          $nsAndroid=New-Object System.Xml.XmlNamespaceManager($xml.NameTable);
+          $nsAndroid.AddNamespace("android", "http://schemas.android.com/apk/res/android");
+
+          $xml.Save($androidManifest);
+
+          Write-Output "########################################"
+          Write-Output "##### Uninstall from Android.csproj"
+          Write-Output "########################################"
+
+          $xml=New-Object XML;
+          $xml.Load($androidPath);
+
+          $ns=New-Object System.Xml.XmlNamespaceManager($xml.NameTable);
+          $ns.AddNamespace("ns", $xml.DocumentElement.NamespaceURI);
+
+          $firebaseNode=$xml.SelectSingleNode(`
+              "/ns:Project/ns:ItemGroup/ns:PackageReference[@Include='Xamarin.Firebase.Messaging']", $ns);
+          $firebaseNode.ParentNode.RemoveChild($firebaseNode);
+
+          $daggerNode=$xml.SelectSingleNode(`
+              "/ns:Project/ns:ItemGroup/ns:PackageReference[@Include='Xamarin.Google.Dagger']", $ns);
+          $daggerNode.ParentNode.RemoveChild($daggerNode);
+
+          $safetyNetNode=$xml.SelectSingleNode(`
+              "/ns:Project/ns:ItemGroup/ns:PackageReference[@Include='Xamarin.GooglePlayServices.SafetyNet']", $ns);
+          $safetyNetNode.ParentNode.RemoveChild($safetyNetNode);
+
+          $xml.Save($androidPath);
+
+          Write-Output "########################################"
+          Write-Output "##### Uninstall from App.csproj"
+          Write-Output "########################################"
+
+          $xml=New-Object XML;
+          $xml.Load($appPath);
+
+          $appCenterNode=$xml.SelectSingleNode("/Project/ItemGroup/PackageReference[@Include='Microsoft.AppCenter.Crashes']");
+          $appCenterNode.ParentNode.RemoveChild($appCenterNode);
+
+          $xml.Save($appPath);
         shell: pwsh
 
       - name: Restore packages
         run: nuget restore
 
       - name: Build for F-Droid
-        run: ./.github/scripts/android/build.ps1 -configuration FDroid
+        run: |
+          $configuration = "FDroid";
+
+          $rootPath = $env:GITHUB_WORKSPACE;
+          $androidPath = $($rootPath + "/src/Android/Android.csproj");
+
+          Write-Output "########################################"
+          Write-Output "##### Build $configuration Configuration"
+          Write-Output "########################################"
+
+          msbuild "$($androidPath)" "/p:Configuration=$configuration"
         shell: pwsh
 
       - name: Sign for F-Droid
-        # if: github.ref == 'refs/heads/master'
-        run: ./.github/scripts/android/sign-fdroid.ps1
+        run: |
+          $rootPath = $env:GITHUB_WORKSPACE;
+
+          $androidPath = $($rootPath + "/src/Android/Android.csproj");
+
+          $appKeystoreFdroidFilename = "app_fdroid-keystore.jks";
+
+          Write-Output "########################################"
+          Write-Output "##### Sign FDroid Configuration"
+          Write-Output "########################################"
+
+          msbuild "$($androidPath)" "/t:SignAndroidPackage" "/p:Configuration=FDroid" "/p:AndroidKeyStore=true" `
+              "/p:AndroidSigningKeyAlias=bitwarden" "/p:AndroidSigningKeyPass=$($env:FDROID_KEYSTORE_PASSWORD)" `
+              "/p:AndroidSigningKeyStore=$($appKeystoreFdroidFilename)" `
+              "/p:AndroidSigningStorePass=$($env:FDROID_KEYSTORE_PASSWORD)" "/v:quiet"
+
+          Write-Output "########################################"
+          Write-Output "##### Copy FDroid apk to project root"
+          Write-Output "########################################"
+
+          $signedApkPath = $($rootPath + "/src/Android/bin/FDroid/com.x8bit.bitwarden-Signed.apk");
+          $signedApkDestPath = $($rootPath + "/com.x8bit.bitwarden-fdroid.apk");
+
+          Copy-Item $signedApkPath $signedApkDestPath
         shell: pwsh
         env:
           FDROID_KEYSTORE_PASSWORD: ${{ secrets.FDROID_KEYSTORE_PASSWORD }}
 
       - name: Upload F-Droid .apk artifact
-        # if: github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700
         with:
           name: com.x8bit.bitwarden-fdroid.apk
@@ -131,18 +315,65 @@ jobs:
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
 
       - name: Decrypt secrets
-        run: ./.github/scripts/ios/decrypt-secrets.ps1
+        run: |
+          $rootPath = $env:GITHUB_WORKSPACE;
+
+          $decryptSecretPath = $($rootPath + "/.github/scripts/decrypt-secret.ps1");
+
+          Invoke-Expression "& `"$decryptSecretPath`" -filename bitwarden-mobile-key.p12.gpg"
+          Invoke-Expression "& `"$decryptSecretPath`" -filename iphone-distribution-cert.p12.gpg"
+          Invoke-Expression "& `"$decryptSecretPath`" -filename dist_autofill.mobileprovision.gpg"
+          Invoke-Expression "& `"$decryptSecretPath`" -filename dist_bitwarden.mobileprovision.gpg"
+          Invoke-Expression "& `"$decryptSecretPath`" -filename dist_extension.mobileprovision.gpg"
         shell: pwsh
         env:
           DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
 
       - name: Increment version
-        # if: github.ref == 'refs/heads/master'
-        run: ./.github/scripts/ios/increment-version.ps1
+        run: |
+          $rootPath = $env:GITHUB_WORKSPACE;
+          $buildNumber = 100 + [int]$env:GITHUB_RUN_NUMBER;
+
+          $bitwardenInfo = $($rootPath + "/src/iOS/Info.plist");
+          $extensionInfo = $($rootPath + "/src/iOS.Extension/Info.plist");
+          $autofillInfo = $($rootPath + "/src/iOS.Autofill/Info.plist");
+
+          Write-Output "########################################"
+          Write-Output "##### Setting CFBundleVersion $buildNumber"
+          Write-Output "########################################"
+
+          function Update-Version($file) {
+              $xml=New-Object XML;
+              $xml.Load($file);
+
+              Select-Xml -xml $xml -XPath "//dict/key[. = 'CFBundleVersion']/following-sibling::string[1]" |
+              %{ 
+                  $_.Node.InnerXml = $buildNumber
+              }
+
+              $xml.Save($file);
+          }
+
+          Update-Version $bitwardenInfo
+          Update-Version $extensionInfo
+          Update-Version $autofillInfo
         shell: pwsh
 
       - name: Set up Keychain
-        run: ./.github/scripts/ios/setup-keychain.ps1
+        run: |
+          $homePath = Resolve-Path "~" | Select-Object -ExpandProperty Path;
+          $secretsPath = $homePath + "/secrets"
+
+          $mobileKeyPath = $($secretsPath + "/bitwarden-mobile-key.p12");
+          $distCertPath = $($secretsPath + "/iphone-distribution-cert.p12");
+
+          security create-keychain -p $env:KEYCHAIN_PASSWORD build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p $env:KEYCHAIN_PASSWORD build.keychain
+          security set-keychain-settings -lut 1200 build.keychain
+          security import $mobileKeyPath -k build.keychain -P $env:MOBILE_KEY_PASSWORD -T /usr/bin/codesign -T /usr/bin/security
+          security import $distCertPath -k build.keychain -P $env:DIST_CERT_PASSWORD -T /usr/bin/codesign -T /usr/bin/security
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $env:KEYCHAIN_PASSWORD build.keychain
         shell: pwsh
         env:
           KEYCHAIN_PASSWORD: ${{ secrets.IOS_KEYCHAIN_PASSWORD }}
@@ -150,29 +381,68 @@ jobs:
           DIST_CERT_PASSWORD: ${{ secrets.IOS_DIST_CERT_PASSWORD }}
 
       - name: Set up provisioning profiles
-        run: ./.github/scripts/ios/setup-profiles.ps1
+        run: |
+          $homePath = Resolve-Path "~" | Select-Object -ExpandProperty Path;
+          $secretsPath = $homePath + "/secrets"
+
+          $autofillProfilePath = $($secretsPath + "/dist_autofill.mobileprovision");
+          $bitwardenProfilePath = $($secretsPath + "/dist_bitwarden.mobileprovision");
+          $extensionProfilePath = $($secretsPath + "/dist_extension.mobileprovision");
+          $profilesDirPath = "~/Library/MobileDevice/Provisioning Profiles"
+
+          if (!(Test-Path -Path $profilesDirPath))  
+          {
+              New-Item -ItemType Directory -Path $profilesDirPath 
+          }
+
+          $autofill_uuid = grep UUID -A1 -a $autofillProfilePath | grep -io "[-A-F0-9]\{36\}"
+          Copy-Item $autofillProfilePath -destination "$profilesDirPath/$autofill_uuid.mobileprovision"
+
+          $bitwarden_uuid = grep UUID -A1 -a $bitwardenProfilePath | grep -io "[-A-F0-9]\{36\}"
+          Copy-Item $bitwardenProfilePath -destination "$profilesDirPath/$bitwarden_uuid.mobileprovision"
+
+          $extension_uuid = grep UUID -A1 -a $extensionProfilePath | grep -io "[-A-F0-9]\{36\}"
+          Copy-Item $extensionProfilePath -destination "$profilesDirPath/$extension_uuid.mobileprovision"
         shell: pwsh
 
       - name: Restore packages
         run: nuget restore
 
       - name: Archive Build for App Store
-        # if: github.ref == 'refs/heads/master'
-        run: ./.github/scripts/ios/build.ps1 -configuration AppStore -platform iPhone -archive
+        run: |
+          $configuration = "AppStore";
+          $platform = "iPhone";
+
+          $rootPath = $env:GITHUB_WORKSPACE;
+          $iosPath = $($rootPath + "/src/iOS/iOS.csproj");
+
+          Write-Output "########################################"
+          Write-Output "##### Archive $configuration Configuration for $platform Platform"
+          Write-Output "########################################"
+          msbuild "$($iosPath)" "/p:Platform=$platform" "/p:Configuration=$configuration" `
+            "/p:ArchiveOnBuild=true" "/t:`"Build`""
+
+          Write-Output "########################################"
+          Write-Output "##### Done"
+          Write-Output "########################################"
+          ls ~/Library/Developer/Xcode/Archives
         shell: pwsh
 
-      # - name: Build for App Store
-      #   if: github.ref != 'refs/heads/master'
-      #   run: ./.github/scripts/ios/build.ps1 -configuration AppStore -platform iPhone
-      #   shell: pwsh
-
       - name: Export .ipa for App Store
-        # if: github.ref == 'refs/heads/master'
-        run: ./.github/scripts/ios/export-ipa.ps1 -method app-store
+        run: |
+          $method = "app-store";
+
+          $rootPath = $env:GITHUB_WORKSPACE;
+          $homePath = Resolve-Path "~" | Select-Object -ExpandProperty Path
+
+          $exportOptionsPath = "$rootPath/.github/resources/export-options-$method.plist";
+          $archivePath = "$homePath/Library/Developer/Xcode/Archives/*/*.xcarchive";
+          $exportPath = "$rootPath/bitwarden-export";
+
+          xcodebuild -exportArchive -archivePath $archivePath -exportPath $exportPath -exportOptionsPlist $exportOptionsPath
         shell: pwsh
 
       - name: Upload App Store .ipa artifact
-        # if: github.ref == 'refs/heads/master'
         uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700
         with:
           name: Bitwarden.ipa

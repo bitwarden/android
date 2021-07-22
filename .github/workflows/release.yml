@@ -38,7 +38,16 @@ jobs:
           name: com.x8bit.bitwarden-fdroid.apk
 
       - name: Deploy to Play Store
-        run: ./.github/scripts/android/deploy-play.ps1
+        run: |
+          $rootPath = $env:GITHUB_WORKSPACE;
+          $homePath = Resolve-Path "~" | Select-Object -ExpandProperty Path;
+
+          $publisherPath = $($rootPath + "/store/google/Publisher/bin/Release/netcoreapp2.0/Publisher.dll");
+          $credsPath = $($homePath + "/secrets/play_creds.json");
+          $aabPath = $($rootPath + "/com.x8bit.bitwarden.aab");
+          $track = "internal";
+
+          dotnet $publisherPath $credsPath $aabPath $track
         shell: pwsh
 
       - name: Upload release assets
@@ -117,8 +126,28 @@ jobs:
 
       # - name: Compile for F-Droid Store
       #   run: |
-      #       sudo chmod +x ./.github/scripts/android/compile-fdroid.sh
-      #       ./.github/scripts/android/compile-fdroid.sh
+      #     cd $GITHUB_WORKSPACE
+      #     mkdir dist
+      #     cp CNAME ./dist
+      #     cd store
+      #     chmod 600 fdroid/config.py fdroid/keystore.jks
+      #     mkdir -p temp/fdroid
+      #     TEMP_DIR="$GITHUB_WORKSPACE/store/temp/fdroid"
+      #     cd fdroid
+      #     echo "keypass=\"$FDROID_STORE_KEYSTORE_PASSWORD\"" >>config.py
+      #     echo "keystorepass=\"$FDROID_STORE_KEYSTORE_PASSWORD\"" >>config.py
+      #     echo "local_copy_dir=\"$TEMP_DIR\"" >>config.py
+      #     mkdir -p repo
+      #     curl -Lo repo/com.x8bit.bitwarden-fdroid.apk \
+      #     https://github.com/bitwarden/mobile/releases/download/$RELEASE_TAG_NAME/com.x8bit.bitwarden-fdroid.apk
+      #     fdroid update
+      #     fdroid server update
+      #     cd ..
+      #     rm -rf temp/fdroid/archive
+      #     mv -v temp/fdroid ../dist
+      #     cd fdroid
+      #     cp index.html btn.png qr.png ../../dist/fdroid
+      #     cd $GITHUB_WORKSPACE
       #   env:
       #     FDROID_STORE_KEYSTORE_PASSWORD: ${{ secrets.FDROID_STORE_KEYSTORE_PASSWORD }}
       #     RELEASE_TAG_NAME: ${{ github.event.release.tag_name }}
@@ -145,15 +174,18 @@ jobs:
           name: Bitwarden.ipa
 
       - name: Deploy to App Store
-        if: github.event_name == 'release'
-        run: ./.github/scripts/ios/deploy-app-store.ps1
+        run: |
+          $rootPath = $env:GITHUB_WORKSPACE;
+          $ipaPath = "$rootPath/bitwarden-export/Bitwarden.ipa"
+
+          xcrun altool --upload-app --type ios --file "$ipaPath" `
+              --username "$env:APPLE_ID_USERNAME" --password "$env:APPLE_ID_PASSWORD"
         shell: pwsh
         env:
           APPLE_ID_USERNAME: ${{ secrets.APPLE_ID_USERNAME }}
           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
 
       - name: Upload release assets
-        if: github.event_name == 'release'
         run: |
           hub release edit `
             -a ./bitwarden-export/Bitwarden.ipa `
