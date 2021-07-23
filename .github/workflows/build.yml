@@ -286,15 +286,16 @@ jobs:
 
       - name: Increment version
         run: |
+          which xmlstarlet
           BUILD_NUMBER=$((100 + $GITHUB_RUN_NUMBER))
 
           echo "########################################"
           echo "##### Setting CFBundleVersion $BUILD_NUMBER"
           echo "########################################"
 
-          sed -i -e "/<key>CFBundleVersion</key> /s/<string>1<\/string>/<string>$BUILD_NUMBER<\/string>/" ./src/iOS/Info.plist
-          sed -i -e "/<key>CFBundleVersion</key> /s/<string>1<\/string>/<string>$BUILD_NUMBER<\/string>/" ./src/iOS.Extension/Info.plist
-          sed -i -e "/<key>CFBundleVersion</key> /s/<string>1<\/string>/<string>$BUILD_NUMBER<\/string>/" ./src/iOS.Autofill/Info.plist
+          sed -i -e "/<key>CFBundleVersion<\/key>/ s/<string>1<\/string>/<string>$BUILD_NUMBER<\/string>/" ./src/iOS/Info.plist
+          sed -i -e "/<key>CFBundleVersion<\/key>/ s/<string>1<\/string>/<string>$BUILD_NUMBER<\/string>/" ./src/iOS.Extension/Info.plist
+          sed -i -e "/<key>CFBundleVersion<\/key>/ s/<string>1<\/string>/<string>$BUILD_NUMBER<\/string>/" ./src/iOS.Autofill/Info.plist
 
           cat ./src/iOS/Info.plist
           cat ./src/iOS.Extension/Info.plist
