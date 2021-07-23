@@ -30,6 +30,10 @@ namespace Bit.Core.Models.Response
                 var model = errorModel.ToObject<ErrorModel>();
                 Message = model.Message;
                 ValidationErrors = model.ValidationErrors;
+                CaptchaSiteKey = ValidationErrors.ContainsKey("HCaptcha_SiteKey") ?
+                    ValidationErrors["HCaptcha_SiteKey"]?.FirstOrDefault() :
+                    null;
+                CaptchaRequired = !string.IsNullOrWhiteSpace(CaptchaSiteKey);
             }
             else
             {
@@ -44,6 +48,8 @@ namespace Bit.Core.Models.Response
         public string Message { get; set; }
         public Dictionary<string, List<string>> ValidationErrors { get; set; }
         public HttpStatusCode StatusCode { get; set; }
+        public string CaptchaSiteKey { get; set; }
+        public bool CaptchaRequired { get; set; } = false;
 
         public string GetSingleMessage()
         {
