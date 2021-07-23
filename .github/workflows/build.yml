@@ -41,25 +41,37 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
 
+      # - name: Decrypt secrets
+      #   run: |
+      #     $decryptSecretPath = $($env:GITHUB_WORKSPACE + "/.github/scripts/decrypt-secret.ps1");
+
+      #     $appKeystorePlayFilename = "app_play-keystore.jks";
+      #     $appKeystoreUploadFilename = "app_upload-keystore.jks";
+      #     $appKeystoreFdroidFilename = "app_fdroid-keystore.jks";
+      #     $googleServicesFilename = "google-services.json";
+
+      #     Invoke-Expression `
+      #         "& `"$decryptSecretPath`" -filename $($appKeystorePlayFilename + ".gpg") -output $($env:GITHUB_WORKSPACE + "/src/Android/$appKeystorePlayFilename")"
+      #     Invoke-Expression `
+      #         "& `"$decryptSecretPath`" -filename $($appKeystoreUploadFilename + ".gpg") -output $($env:GITHUB_WORKSPACE + "/src/Android/$appKeystoreUploadFilename")"
+      #     Invoke-Expression `
+      #         "& `"$decryptSecretPath`" -filename $($appKeystoreFdroidFilename + ".gpg") -output $($env:GITHUB_WORKSPACE + "/src/Android/$appKeystoreFdroidFilename")"
+      #     Invoke-Expression `
+      #         "& `"$decryptSecretPath`" -filename $($googleServicesFilename + ".gpg") -output $($env:GITHUB_WORKSPACE + "/src/Android/$googleServicesFilename")"
+      #     Invoke-Expression "& `"$decryptSecretPath`" -filename play_creds.json.gpg"
+      #   shell: pwsh
+      #   env:
+      #     DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
+
       - name: Decrypt secrets
         run: |
-          $decryptSecretPath = $($env:GITHUB_WORKSPACE + "/.github/scripts/decrypt-secret.ps1");
+          mkdir -p ~/secrets
 
-          $appKeystorePlayFilename = "app_play-keystore.jks";
-          $appKeystoreUploadFilename = "app_upload-keystore.jks";
-          $appKeystoreFdroidFilename = "app_fdroid-keystore.jks";
-          $googleServicesFilename = "google-services.json";
-
-          Invoke-Expression `
-              "& `"$decryptSecretPath`" -filename $($appKeystorePlayFilename + ".gpg") -output $($env:GITHUB_WORKSPACE + "/src/Android/$appKeystorePlayFilename")"
-          Invoke-Expression `
-              "& `"$decryptSecretPath`" -filename $($appKeystoreUploadFilename + ".gpg") -output $($env:GITHUB_WORKSPACE + "/src/Android/$appKeystoreUploadFilename")"
-          Invoke-Expression `
-              "& `"$decryptSecretPath`" -filename $($appKeystoreFdroidFilename + ".gpg") -output $($env:GITHUB_WORKSPACE + "/src/Android/$appKeystoreFdroidFilename")"
-          Invoke-Expression `
-              "& `"$decryptSecretPath`" -filename $($googleServicesFilename + ".gpg") -output $($env:GITHUB_WORKSPACE + "/src/Android/$googleServicesFilename")"
-          Invoke-Expression "& `"$decryptSecretPath`" -filename play_creds.json.gpg"
-        shell: pwsh
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output $GITHUB_WORKSPACE/src/Android/app_play-keystore.jks $GITHUB_WORKSPACE/.github/secrets/app_play-keystore.jks.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output $GITHUB_WORKSPACE/src/Android/app_upload-keystore.jks $GITHUB_WORKSPACE/.github/secrets/app_upload-keystore.jks.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output $GITHUB_WORKSPACE/src/Android/app_fdroid-keystore.jks $GITHUB_WORKSPACE/.github/secrets/app_fdroid-keystore.jks.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output $GITHUB_WORKSPACE/src/Android/google-services.json $GITHUB_WORKSPACE/.github/secrets/google-services.json.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output ~/secrets/play_creds.json play_creds.json.gpg
         env:
           DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
 
