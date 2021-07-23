@@ -286,7 +286,6 @@ jobs:
 
       - name: Increment version
         run: |
-          which xmlstarlet
           BUILD_NUMBER=$((100 + $GITHUB_RUN_NUMBER))
 
           echo "########################################"
@@ -301,6 +300,7 @@ jobs:
           cat ./src/iOS.Extension/Info.plist
           cat ./src/iOS.Autofill/Info.plist
 
+          which xmlstarlet
           exit 1
         shell: bash
 
