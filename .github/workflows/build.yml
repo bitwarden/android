@@ -292,15 +292,14 @@ jobs:
           echo "##### Setting CFBundleVersion $BUILD_NUMBER"
           echo "########################################"
 
-          sed -i -e "/<key>CFBundleVersion<\/key>/\ss/<string>1<\/string>/<string>$BUILD_NUMBER<\/string>/" ./src/iOS/Info.plist
-          sed -i -e "/<key>CFBundleVersion<\/key>/\ss/<string>1<\/string>/<string>$BUILD_NUMBER<\/string>/" ./src/iOS.Extension/Info.plist
-          sed -i -e "/<key>CFBundleVersion<\/key>/\ss/<string>1<\/string>/<string>$BUILD_NUMBER<\/string>/" ./src/iOS.Autofill/Info.plist
+          sed -i -e "/<key>CFBundleVersion<\/key>[[:space:]]/s/<string>1<\/string>/<string>$BUILD_NUMBER<\/string>/" ./src/iOS/Info.plist
+          sed -i -e "/<key>CFBundleVersion<\/key>[[:space:]]/s/<string>1<\/string>/<string>$BUILD_NUMBER<\/string>/" ./src/iOS.Extension/Info.plist
+          sed -i -e "/<key>CFBundleVersion<\/key>[[:space:]]/s/<string>1<\/string>/<string>$BUILD_NUMBER<\/string>/" ./src/iOS.Autofill/Info.plist
 
           cat ./src/iOS/Info.plist
           cat ./src/iOS.Extension/Info.plist
           cat ./src/iOS.Autofill/Info.plist
 
-          which xmlstarlet
           exit 1
         shell: bash
 
