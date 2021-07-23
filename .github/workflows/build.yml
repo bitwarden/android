@@ -287,16 +287,20 @@ jobs:
       - name: Increment version
         run: |
           which perl
-          
+
           BUILD_NUMBER=$((100 + $GITHUB_RUN_NUMBER))
 
           echo "########################################"
           echo "##### Setting CFBundleVersion $BUILD_NUMBER"
           echo "########################################"
 
-          sed "/<key>CFBundleVersion<\/key>/!b;n;c<string>$BUILD_NUMBER<\/string>" ./src/iOS/Info.plist
-          sed "/<key>CFBundleVersion<\/key>/!b;n;c<string>$BUILD_NUMBER<\/string>" ./src/iOS.Extension/Info.plist
-          sed "/<key>CFBundleVersion<\/key>/!b;n;c<string>$BUILD_NUMBER<\/string>" ./src/iOS.Autofill/Info.plist
+          #sed "/<key>CFBundleVersion<\/key>/!b;n;c<string>$BUILD_NUMBER<\/string>" ./src/iOS/Info.plist
+          #sed "/<key>CFBundleVersion<\/key>/!b;n;c<string>$BUILD_NUMBER<\/string>" ./src/iOS.Extension/Info.plist
+          #sed "/<key>CFBundleVersion<\/key>/!b;n;c<string>$BUILD_NUMBER<\/string>" ./src/iOS.Autofill/Info.plist
+
+          perl -O777 -pe 's|<key>CFBundleVersion</key>\\s*<string>[\d.]*</string>|<key>CFBundleVersion</key></key>'"$BUILD_NUMBER"'<string>|' ./src/iOS/Info.plist
+          perl -O777 -pe 's|<key>CFBundleVersion</key>\\s*<string>[\d.]*</string>|<key>CFBundleVersion</key></key>'"$BUILD_NUMBER"'<string>|' ./src/iOS.Extension/Info.plist
+          perl -O777 -pe 's|<key>CFBundleVersion</key>\\s*<string>[\d.]*</string>|<key>CFBundleVersion</key></key>'"$BUILD_NUMBER"'<string>|' ./src/iOS.Autofill/Info.plist
 
           cat ./src/iOS/Info.plist
           cat ./src/iOS.Extension/Info.plist
