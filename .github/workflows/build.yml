@@ -25,7 +25,7 @@ jobs:
 
   android:
     name: Android Build
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@c26a08ba26249b81327e26f6ef381897b6a8754d
@@ -66,7 +66,6 @@ jobs:
       - name: Decrypt secrets
         run: |
           echo $HOME
-          pwd
           mkdir -p ~/secrets
 
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output ./src/Android/app_play-keystore.jks ./.github/secrets/app_play-keystore.jks.gpg
@@ -74,6 +73,7 @@ jobs:
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output ./src/Android/app_fdroid-keystore.jks ./.github/secrets/app_fdroid-keystore.jks.gpg
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output ./src/Android/google-services.json ./.github/secrets/google-services.json.gpg
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output ~/secrets/play_creds.json play_creds.json.gpg
+        shell: bash
         env:
           DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
 
