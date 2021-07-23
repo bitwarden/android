@@ -65,12 +65,14 @@ jobs:
 
       - name: Decrypt secrets
         run: |
+          echo $HOME
+          pwd
           mkdir -p ~/secrets
 
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output $GITHUB_WORKSPACE/src/Android/app_play-keystore.jks $GITHUB_WORKSPACE/.github/secrets/app_play-keystore.jks.gpg
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output $GITHUB_WORKSPACE/src/Android/app_upload-keystore.jks $GITHUB_WORKSPACE/.github/secrets/app_upload-keystore.jks.gpg
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output $GITHUB_WORKSPACE/src/Android/app_fdroid-keystore.jks $GITHUB_WORKSPACE/.github/secrets/app_fdroid-keystore.jks.gpg
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output $GITHUB_WORKSPACE/src/Android/google-services.json $GITHUB_WORKSPACE/.github/secrets/google-services.json.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output ./src/Android/app_play-keystore.jks ./.github/secrets/app_play-keystore.jks.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output ./src/Android/app_upload-keystore.jks ./.github/secrets/app_upload-keystore.jks.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output ./src/Android/app_fdroid-keystore.jks ./.github/secrets/app_fdroid-keystore.jks.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output ./src/Android/google-services.json ./.github/secrets/google-services.json.gpg
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output ~/secrets/play_creds.json play_creds.json.gpg
         env:
           DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
