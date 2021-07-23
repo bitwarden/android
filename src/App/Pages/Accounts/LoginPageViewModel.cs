@@ -8,6 +8,10 @@ using System;
 using System.Threading.Tasks;
 using Bit.App.Utilities;
 using Xamarin.Forms;
+using Newtonsoft.Json;
+using System.Text;
+using Xamarin.Essentials;
+using System.Text.RegularExpressions;
 
 namespace Bit.App.Pages
 {
@@ -22,10 +26,14 @@ namespace Bit.App.Pages
         private readonly IStorageService _storageService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IStateService _stateService;
+        private readonly IEnvironmentService _environmentService;
+        private readonly II18nService _i18nService;
 
         private bool _showPassword;
         private string _email;
         private string _masterPassword;
+        private string _captchaToken = null;
+        private bool _loading = false;
 
         public LoginPageViewModel()
         {
@@ -35,6 +43,8 @@ namespace Bit.App.Pages
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
+            _i18nService = ServiceContainer.Resolve<II18nService>("i18nService");
 
             PageTitle = AppResources.Bitwarden;
             TogglePasswordCommand = new Command(TogglePassword);
@@ -115,9 +125,13 @@ namespace Bit.App.Pages
             ShowPassword = false;
             try
             {
-                await _deviceActionService.ShowLoadingAsync(AppResources.LoggingIn);
-                var response = await _authService.LogInAsync(Email, MasterPassword);
-                MasterPassword = string.Empty;
+                if (!_loading)
+                {
+                    await _deviceActionService.ShowLoadingAsync(AppResources.LoggingIn);
+                    _loading = true;
+                }
+
+                var response = await _authService.LogInAsync(Email, MasterPassword, _captchaToken);
                 if (RememberEmail)
                 {
                     await _storageService.SaveAsync(Keys_RememberedEmail, Email);
@@ -128,6 +142,64 @@ namespace Bit.App.Pages
                 }
                 await AppHelpers.ResetInvalidUnlockAttemptsAsync();
                 await _deviceActionService.HideLoadingAsync();
+
+                if (response.CaptchaNeeded)
+                {
+                    var callbackUri = "bitwarden://captcha-callback";
+                    var data = EncodeDataParameter(new
+                    {
+                        siteKey = response.CaptchaSiteKey,
+                        locale = _i18nService.Culture.TwoLetterISOLanguageName,
+                        callbackUri = callbackUri,
+                        captchaRequiredText = AppResources.CaptchaRequired,
+                    });
+
+                    var url = _environmentService.WebVaultUrl + "/captcha-mobile-connector.html?" + "data=" + data +
+                        "&parent=" + Uri.EscapeDataString(callbackUri) + "&v=1";
+
+                    WebAuthenticatorResult authResult = null;
+                    bool cancelled = false;
+                    try
+                    {
+                        authResult = await WebAuthenticator.AuthenticateAsync(new Uri(url),
+                            new Uri(callbackUri));
+                    }
+                    catch (TaskCanceledException taskCanceledException)
+                    {
+                        await _deviceActionService.HideLoadingAsync();
+                        cancelled = true;
+                    }
+                    catch (Exception e)
+                    {
+                        // WebAuthenticator throws NSErrorException if iOS flow is cancelled - by setting cancelled to true
+                        // here we maintain the appearance of a clean cancellation (we don't want to do this across the board
+                        // because we still want to present legitimate errors).  If/when this is fixed, we can remove this
+                        // particular catch block (catching taskCanceledException above must remain)
+                        // https://github.com/xamarin/Essentials/issues/1240
+                        if (Device.RuntimePlatform == Device.iOS)
+                        {
+                            await _deviceActionService.HideLoadingAsync();
+                            cancelled = true;
+                        }
+                    }
+
+                    if (cancelled == false && authResult != null &&
+                        authResult.Properties.TryGetValue("token", out _captchaToken))
+                    {
+                        await LogInAsync();
+                        return;
+                    }
+                    else
+                    {
+                        await _platformUtilsService.ShowDialogAsync(AppResources.CaptchaFailed,
+                            AppResources.CaptchaRequired);
+                        _loading = false;
+                        return;
+                    }
+                }
+                MasterPassword = string.Empty;
+                _captchaToken = null;
+
                 if (response.TwoFactor)
                 {
                     StartTwoFactorAction?.Invoke();
@@ -142,6 +214,8 @@ namespace Bit.App.Pages
             }
             catch (ApiException e)
             {
+                _captchaToken = null;
+                MasterPassword = string.Empty;
                 await _deviceActionService.HideLoadingAsync();
                 if (e?.Error != null)
                 {
@@ -149,12 +223,25 @@ namespace Bit.App.Pages
                         AppResources.AnErrorHasOccurred);
                 }
             }
+            _loading = false;
         }
 
         public void TogglePassword()
         {
             ShowPassword = !ShowPassword;
             (Page as LoginPage).MasterPasswordEntry.Focus();
+        }
+
+        private string EncodeDataParameter(object obj)
+        {
+            string EncodeMultibyte(Match match)
+            {
+                return Convert.ToChar(Convert.ToUInt32($"0x{match.Groups[1].Value}", 16)).ToString();
+            }
+
+            var escaped = Uri.EscapeDataString(JsonConvert.SerializeObject(obj));
+            var multiByteEscaped = Regex.Replace(escaped, "%([0-9A-F]{2})", EncodeMultibyte);
+            return Convert.ToBase64String(Encoding.UTF8.GetBytes(multiByteEscaped));
         }
     }
 }

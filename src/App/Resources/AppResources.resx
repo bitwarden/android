@@ -2000,4 +2000,10 @@
   <data name="PasswordConfirmationDesc" xml:space="preserve">
     <value>This action is protected, to continue please re-enter your master password to verify your identity.</value>
   </data>
+  <data name="CaptchaRequired" xml:space="preserve">
+    <value>Captcha Required</value>
+  </data>
+  <data name="CaptchaFailed" xml:space="preserve">
+    <value>Captcha Failed. Please try again.</value>
+  </data>
 </root>
