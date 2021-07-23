@@ -63,9 +63,6 @@ jobs:
           echo "########################################"
 
           sed "s/android:versionCode=\"1\"/android:versionCode=\"$BUILD_NUMBER\"/" ./src/Android/Properties/AndroidManifest.xml
-
-          cat ./src/Android/Properties/AndroidManifest.xml
-          exit 1
         shell: bash
 
       - name: Restore packages
@@ -79,14 +76,14 @@ jobs:
 
       - name: Build for Play Store
         run: |
-          $configuration = "Release";
+          CONFIGURATION="Release"
 
           Write-Output "########################################"
-          Write-Output "##### Build $configuration Configuration"
+          Write-Output "##### Build $CONFIGURATION Configuration"
           Write-Output "########################################"
 
-          msbuild "$($env:GITHUB_WORKSPACE + "/src/Android/Android.csproj")" "/p:Configuration=$configuration"
-        shell: pwsh
+          msbuild "./src/Android/Android.csproj" "/p:Configuration=$configuration"
+        shell: bash
 
       - name: Sign for Play Store
         run: |
