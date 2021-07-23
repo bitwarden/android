@@ -286,6 +286,8 @@ jobs:
 
       - name: Increment version
         run: |
+          which perl
+          
           BUILD_NUMBER=$((100 + $GITHUB_RUN_NUMBER))
 
           echo "########################################"
