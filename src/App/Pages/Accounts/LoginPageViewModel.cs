@@ -163,6 +163,7 @@ namespace Bit.App.Pages
                     if (await HandleCaptchaAsync(response.CaptchaSiteKey))
                     {
                         await LogInAsync();
+                        _captchaToken = null;
                         return;
                     }
                     else
