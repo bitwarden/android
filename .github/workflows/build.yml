@@ -41,33 +41,8 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
 
-      # - name: Decrypt secrets
-      #   run: |
-      #     $decryptSecretPath = $($env:GITHUB_WORKSPACE + "/.github/scripts/decrypt-secret.ps1");
-
-      #     $appKeystorePlayFilename = "app_play-keystore.jks";
-      #     $appKeystoreUploadFilename = "app_upload-keystore.jks";
-      #     $appKeystoreFdroidFilename = "app_fdroid-keystore.jks";
-      #     $googleServicesFilename = "google-services.json";
-
-      #     Invoke-Expression `
-      #         "& `"$decryptSecretPath`" -filename $($appKeystorePlayFilename + ".gpg") -output $($env:GITHUB_WORKSPACE + "/src/Android/$appKeystorePlayFilename")"
-      #     Invoke-Expression `
-      #         "& `"$decryptSecretPath`" -filename $($appKeystoreUploadFilename + ".gpg") -output $($env:GITHUB_WORKSPACE + "/src/Android/$appKeystoreUploadFilename")"
-      #     Invoke-Expression `
-      #         "& `"$decryptSecretPath`" -filename $($appKeystoreFdroidFilename + ".gpg") -output $($env:GITHUB_WORKSPACE + "/src/Android/$appKeystoreFdroidFilename")"
-      #     Invoke-Expression `
-      #         "& `"$decryptSecretPath`" -filename $($googleServicesFilename + ".gpg") -output $($env:GITHUB_WORKSPACE + "/src/Android/$googleServicesFilename")"
-      #     Invoke-Expression "& `"$decryptSecretPath`" -filename play_creds.json.gpg"
-      #   shell: pwsh
-      #   env:
-      #     DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
-
       - name: Decrypt secrets
         run: |
-          echo $HOME
-          pwd
-          ls -alh
           mkdir -p ~/secrets
 
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output ./src/Android/app_play-keystore.jks ./.github/secrets/app_play-keystore.jks.gpg
@@ -306,14 +281,14 @@ jobs:
 
       - name: Decrypt secrets
         run: |
-          $decryptSecretPath = $($env:GITHUB_WORKSPACE + "/.github/scripts/decrypt-secret.ps1");
+          mkdir -p ~/secrets
 
-          Invoke-Expression "& `"$decryptSecretPath`" -filename bitwarden-mobile-key.p12.gpg"
-          Invoke-Expression "& `"$decryptSecretPath`" -filename iphone-distribution-cert.p12.gpg"
-          Invoke-Expression "& `"$decryptSecretPath`" -filename dist_autofill.mobileprovision.gpg"
-          Invoke-Expression "& `"$decryptSecretPath`" -filename dist_bitwarden.mobileprovision.gpg"
-          Invoke-Expression "& `"$decryptSecretPath`" -filename dist_extension.mobileprovision.gpg"
-        shell: pwsh
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output $HOME/secrets/bitwarden-mobile-key.p12 ./.github/secrets/bitwarden-mobile-key.p12.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output $HOME/secrets/iphone-distribution-cert.p12 ./.github/secrets/iphone-distribution-cert.p12.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output $HOME/secrets/dist_autofill.mobileprovision ./.github/secrets/dist_autofill.mobileprovision.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output $HOME/secrets/dist_bitwarden.mobileprovision ./.github/secrets/dist_bitwarden.mobileprovision.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output $HOME/secrets/dist_extension.mobileprovision ./.github/secrets/dist_extension.mobileprovision.gpg
+        shell: bash
         env:
           DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
 
