@@ -78,9 +78,9 @@ jobs:
         run: |
           CONFIGURATION="Release"
 
-          Write-Output "########################################"
-          Write-Output "##### Build $CONFIGURATION Configuration"
-          Write-Output "########################################"
+          echo "########################################"
+          echo "##### Build $CONFIGURATION Configuration"
+          echo "########################################"
 
           msbuild "./src/Android/Android.csproj" "/p:Configuration=$configuration"
         shell: bash
