@@ -27,6 +27,11 @@ jobs:
     name: Android Build
     runs-on: windows-latest
     steps:
+      - name: Test step
+        run: |
+          which msbuild
+          exit 1
+          
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@c26a08ba26249b81327e26f6ef381897b6a8754d
 
