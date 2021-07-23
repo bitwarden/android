@@ -288,16 +288,16 @@ jobs:
         run: |
           sudo apt-get install -qqy xmlstarlet
           which xmlstarlet
-          
+
           BUILD_NUMBER=$((100 + $GITHUB_RUN_NUMBER))
 
           echo "########################################"
           echo "##### Setting CFBundleVersion $BUILD_NUMBER"
           echo "########################################"
 
-          sed -i -e "/<key>CFBundleVersion<\/key>[[:space:]]/s/<string>1<\/string>/<string>$BUILD_NUMBER<\/string>/" ./src/iOS/Info.plist
-          sed -i -e "/<key>CFBundleVersion<\/key>[[:space:]]/s/<string>1<\/string>/<string>$BUILD_NUMBER<\/string>/" ./src/iOS.Extension/Info.plist
-          sed -i -e "/<key>CFBundleVersion<\/key>[[:space:]]/s/<string>1<\/string>/<string>$BUILD_NUMBER<\/string>/" ./src/iOS.Autofill/Info.plist
+          sed "/<key>CFBundleVersion<\/key>/!b;n;c<string>$BUILD_NUMBER<\/string>" ./src/iOS/Info.plist
+          sed "/<key>CFBundleVersion<\/key>/!b;n;c<string>$BUILD_NUMBER<\/string>" ./src/iOS.Extension/Info.plist
+          sed "/<key>CFBundleVersion<\/key>/!b;n;c<string>$BUILD_NUMBER<\/string>" ./src/iOS.Autofill/Info.plist
 
           cat ./src/iOS/Info.plist
           cat ./src/iOS.Extension/Info.plist
