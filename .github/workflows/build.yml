@@ -27,11 +27,6 @@ jobs:
     name: Android Build
     runs-on: windows-latest
     steps:
-      - name: Test step
-        run: |
-          which msbuild
-          exit 1
-          
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@c26a08ba26249b81327e26f6ef381897b6a8754d
 
@@ -81,14 +76,14 @@ jobs:
 
       - name: Build for Play Store
         run: |
-          CONFIGURATION="Release"
+          $configuration = "Release";
 
-          echo "########################################"
-          echo "##### Build $CONFIGURATION Configuration"
-          echo "########################################"
+          Write-Output "########################################"
+          Write-Output "##### Build $configuration Configuration"
+          Write-Output "########################################"
 
-          msbuild "./src/Android/Android.csproj" "/p:Configuration=$configuration"
-        shell: bash
+          msbuild "$($env:GITHUB_WORKSPACE + "/src/Android/Android.csproj")" "/p:Configuration=$configuration"
+        shell: pwsh
 
       - name: Sign for Play Store
         run: |
@@ -291,28 +286,22 @@ jobs:
 
       - name: Increment version
         run: |
-          $buildNumber = 100 + [int]$env:GITHUB_RUN_NUMBER;
+          BUILD_NUMBER=$((100 + $GITHUB_RUN_NUMBER))
 
-          Write-Output "########################################"
-          Write-Output "##### Setting CFBundleVersion $buildNumber"
-          Write-Output "########################################"
+          echo "########################################"
+          echo "##### Setting CFBundleVersion $BUILD_NUMBER"
+          echo "########################################"
 
-          function Update-Version($file) {
-              $xml=New-Object XML;
-              $xml.Load($file);
+          sed -i -e "/<key>CFBundleVersion</key> /s/<string>1<\/string>/<string>$BUILD_NUMBER<\/string>/" ./src/iOS/Info.plist
+          sed -i -e "/<key>CFBundleVersion</key> /s/<string>1<\/string>/<string>$BUILD_NUMBER<\/string>/" ./src/iOS.Extension/Info.plist
+          sed -i -e "/<key>CFBundleVersion</key> /s/<string>1<\/string>/<string>$BUILD_NUMBER<\/string>/" ./src/iOS.Autofill/Info.plist
 
-              Select-Xml -xml $xml -XPath "//dict/key[. = 'CFBundleVersion']/following-sibling::string[1]" |
-              %{ 
-                  $_.Node.InnerXml = $buildNumber
-              }
+          cat ./src/iOS/Info.plist
+          cat ./src/iOS.Extension/Info.plist
+          cat ./src/iOS.Autofill/Info.plist
 
-              $xml.Save($file);
-          }
-
-          Update-Version $($env:GITHUB_WORKSPACE + "/src/iOS/Info.plist")
-          Update-Version $($env:GITHUB_WORKSPACE + "/src/iOS.Extension/Info.plist")
-          Update-Version $($env:GITHUB_WORKSPACE + "/src/iOS.Autofill/Info.plist")
-        shell: pwsh
+          exit 1
+        shell: bash
 
       - name: Set up Keychain
         run: |
