@@ -25,7 +25,7 @@ jobs:
 
   android:
     name: Android Build
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@c26a08ba26249b81327e26f6ef381897b6a8754d
