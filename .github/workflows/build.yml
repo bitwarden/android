@@ -286,9 +286,6 @@ jobs:
 
       - name: Increment version
         run: |
-          sudo apt-get install -qqy xmlstarlet
-          which xmlstarlet
-
           BUILD_NUMBER=$((100 + $GITHUB_RUN_NUMBER))
 
           echo "########################################"
