@@ -66,6 +66,8 @@ jobs:
       - name: Decrypt secrets
         run: |
           echo $HOME
+          pwd
+          ls -alh
           mkdir -p ~/secrets
 
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output ./src/Android/app_play-keystore.jks ./.github/secrets/app_play-keystore.jks.gpg
