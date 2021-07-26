@@ -322,12 +322,6 @@ jobs:
           mkdir -p "$PROFILES_DIR_PATH"
 
           AUTOFILL_UUID=$(grep UUID -A1 -a $AUTOFILL_PROFILE_PATH | grep -io "[-A-F0-9]\{36\}")
-          echo "AUTOFILL_UUID=$AUTOFILL_UUID"
-          echo "AUTOFILL_PROFILE_PATH=$AUTOFILL_PROFILE_PATH"
-          echo "PROFILES_DIR_PATH=$PROFILES_DIR_PATH"
-          echo "$PROFILES_DIR_PATH/$AUTOFILL_UUID.mobileprovision"
-          ls -alh $AUTOFILL_PROFILE_PATH
-          ls -alh "$PROFILES_DIR_PATH"
           cp $AUTOFILL_PROFILE_PATH "$PROFILES_DIR_PATH/$AUTOFILL_UUID.mobileprovision"
 
           BITWARDEN_UUID=$(grep UUID -A1 -a $BITWARDEN_PROFILE_PATH | grep -io "[-A-F0-9]\{36\}")
