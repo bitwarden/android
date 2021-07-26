@@ -299,16 +299,16 @@ jobs:
 
       - name: Set up Keychain
         run: |
-          $secretsPath = $(Resolve-Path "~" | Select-Object -ExpandProperty Path) + "/secrets"
+          SECRETS_PATH="~/secrets"
 
-          security create-keychain -p $env:KEYCHAIN_PASSWORD build.keychain
+          security create-keychain -p $KEYCHAIN_PASSWORD build.keychain
           security default-keychain -s build.keychain
-          security unlock-keychain -p $env:KEYCHAIN_PASSWORD build.keychain
+          security unlock-keychain -p $KEYCHAIN_PASSWORD build.keychain
           security set-keychain-settings -lut 1200 build.keychain
-          security import $($secretsPath + "/bitwarden-mobile-key.p12") -k build.keychain -P $env:MOBILE_KEY_PASSWORD -T /usr/bin/codesign -T /usr/bin/security
-          security import $($secretsPath + "/iphone-distribution-cert.p12") -k build.keychain -P $env:DIST_CERT_PASSWORD -T /usr/bin/codesign -T /usr/bin/security
-          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $env:KEYCHAIN_PASSWORD build.keychain
-        shell: pwsh
+          security import $SECRETS_PATH/bitwarden-mobile-key.p12 -k build.keychain -P $MOBILE_KEY_PASSWORD -T /usr/bin/codesign -T /usr/bin/security
+          security import $SECRETS_PATH/iphone-distribution-cert.p12 -k build.keychain -P $DIST_CERT_PASSWORD -T /usr/bin/codesign -T /usr/bin/security
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $KEYCHAIN_PASSWORD build.keychain
+        shell: bash
         env:
           KEYCHAIN_PASSWORD: ${{ secrets.IOS_KEYCHAIN_PASSWORD }}
           MOBILE_KEY_PASSWORD: ${{ secrets.IOS_KEY_PASSWORD }}
@@ -316,27 +316,22 @@ jobs:
 
       - name: Set up provisioning profiles
         run: |
-          $secretsPath = $(Resolve-Path "~" | Select-Object -ExpandProperty Path) + "/secrets"
+          AUTOFILL_PROFILE_PATH="~/secrets/dist_autofill.mobileprovision"
+          BITWARDEN_PROFILE_PATH="~/secrets/dist_bitwarden.mobileprovision"
+          EXTENSION_PROFILE_PATH="~/secrets/dist_extension.mobileprovision"
+          PROFILES_DIR_PATH="~/Library/MobileDevice/Provisioning Profiles"
 
-          $autofillProfilePath = $($secretsPath + "/dist_autofill.mobileprovision");
-          $bitwardenProfilePath = $($secretsPath + "/dist_bitwarden.mobileprovision");
-          $extensionProfilePath = $($secretsPath + "/dist_extension.mobileprovision");
-          $profilesDirPath = "~/Library/MobileDevice/Provisioning Profiles"
+          mkdir -p $PROFILES_DIR_PATH
 
-          if (!(Test-Path -Path $profilesDirPath))  
-          {
-              New-Item -ItemType Directory -Path $profilesDirPath 
-          }
+          AUTOFILL_UUID=$(grep UUID -A1 -a $AUTOFILL_PROFILE_PATH | grep -io "[-A-F0-9]\{36\}")
+          cp $AUTOFILL_PROFILE_PATH "$PROFILES_DIR_PATH/$AUTOFILL_UUID.mobileprovision"
 
-          $autofill_uuid = grep UUID -A1 -a $autofillProfilePath | grep -io "[-A-F0-9]\{36\}"
-          Copy-Item $autofillProfilePath -destination "$profilesDirPath/$autofill_uuid.mobileprovision"
+          BITWARDEN_UUID=$(grep UUID -A1 -a $BITWARDEN_PROFILE_PATH | grep -io "[-A-F0-9]\{36\}")
+          cp $BITWARDEN_PROFILE_PATH "$PROFILES_DIR_PATH/$BITWARDEN_UUID.mobileprovision"
 
-          $bitwarden_uuid = grep UUID -A1 -a $bitwardenProfilePath | grep -io "[-A-F0-9]\{36\}"
-          Copy-Item $bitwardenProfilePath -destination "$profilesDirPath/$bitwarden_uuid.mobileprovision"
-
-          $extension_uuid = grep UUID -A1 -a $extensionProfilePath | grep -io "[-A-F0-9]\{36\}"
-          Copy-Item $extensionProfilePath -destination "$profilesDirPath/$extension_uuid.mobileprovision"
-        shell: pwsh
+          EXTENSION_UUID=$(grep UUID -A1 -a $EXTENSION_PROFILE_PATH | grep -io "[-A-F0-9]\{36\}")
+          cp $EXTENSION_PROFILE_PATH "$PROFILES_DIR_PATH/$EXTENSION_UUID.mobileprovision"
+        shell: bash
 
       - name: Restore packages
         run: nuget restore
@@ -360,14 +355,12 @@ jobs:
 
       - name: Export .ipa for App Store
         run: |
-          $homePath = Resolve-Path "~" | Select-Object -ExpandProperty Path
+          EXPORT_OPTIONS_PATH="./.github/resources/export-options-app-store.plist"
+          ARCHIVE_PATH="~/Library/Developer/Xcode/Archives/*/*.xcarchive"
+          EXPORT_PATH="./bitwarden-export"
 
-          $exportOptionsPath = "$env:GITHUB_WORKSPACE/.github/resources/export-options-app-store.plist";
-          $archivePath = "$homePath/Library/Developer/Xcode/Archives/*/*.xcarchive";
-          $exportPath = "$env:GITHUB_WORKSPACE/bitwarden-export";
-
-          xcodebuild -exportArchive -archivePath $archivePath -exportPath $exportPath -exportOptionsPlist $exportOptionsPath
-        shell: pwsh
+          xcodebuild -exportArchive -archivePath $ARCHIVE_PATH -exportPath $EXPORT_PATH -exportOptionsPlist $EXPORT_OPTIONS_PATH
+        shell: bash
 
       - name: Upload App Store .ipa artifact
         uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700
