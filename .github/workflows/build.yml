@@ -317,11 +317,15 @@ jobs:
           AUTOFILL_PROFILE_PATH=~/secrets/dist_autofill.mobileprovision
           BITWARDEN_PROFILE_PATH=~/secrets/dist_bitwarden.mobileprovision
           EXTENSION_PROFILE_PATH=~/secrets/dist_extension.mobileprovision
-          PROFILES_DIR_PATH=~/Library/MobileDevice/Provisioning\ Profiles
+          PROFILES_DIR_PATH='~/Library/MobileDevice/Provisioning Profiles'
 
           mkdir -p $PROFILES_DIR_PATH
 
           AUTOFILL_UUID=$(grep UUID -A1 -a $AUTOFILL_PROFILE_PATH | grep -io "[-A-F0-9]\{36\}")
+          echo "AUTOFILL_UUID=$AUTOFILL_UUID"
+          echo "AUTOFILL_PROFILE_PATH=$AUTOFILL_PROFILE_PATH"
+          echo "PROFILES_DIR_PATH=$PROFILES_DIR_PATH"
+          echo "$PROFILES_DIR_PATH/$AUTOFILL_UUID.mobileprovision"
           cp $AUTOFILL_PROFILE_PATH $PROFILES_DIR_PATH/$AUTOFILL_UUID.mobileprovision
 
           BITWARDEN_UUID=$(grep UUID -A1 -a $BITWARDEN_PROFILE_PATH | grep -io "[-A-F0-9]\{36\}")
