@@ -327,7 +327,7 @@ jobs:
           echo "PROFILES_DIR_PATH=$PROFILES_DIR_PATH"
           echo "$PROFILES_DIR_PATH/$AUTOFILL_UUID.mobileprovision"
           ls -alh $AUTOFILL_PROFILE_PATH
-          ls -alh $PROFILES_DIR_PATH
+          ls -alh "$PROFILES_DIR_PATH"
           cp $AUTOFILL_PROFILE_PATH "$PROFILES_DIR_PATH/$AUTOFILL_UUID.mobileprovision"
 
           BITWARDEN_UUID=$(grep UUID -A1 -a $BITWARDEN_PROFILE_PATH | grep -io "[-A-F0-9]\{36\}")
