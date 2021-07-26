@@ -299,7 +299,7 @@ jobs:
 
           #perl -pe 's|<key>CFBundleVersion</key>\\s*<string>[\d.]*</string>|<key>CFBundleVersion</key></key>'"$BUILD_NUMBER"'<string>|' ./src/iOS/Info.plist
 
-          perl -pe 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n<string>'"$BUILD_NUMBER"'<\/string>/' ./src/iOS/Info.plist
+          perl -0777 -pe 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n<string>'"$BUILD_NUMBER"'<\/string>/' ./src/iOS/Info.plist
 
           cat ./src/iOS/Info.plist
           #cat ./src/iOS.Extension/Info.plist
