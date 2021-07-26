@@ -286,24 +286,21 @@ jobs:
 
       - name: Increment version
         run: |
-          which perl
-
           BUILD_NUMBER=$((100 + $GITHUB_RUN_NUMBER))
 
           echo "########################################"
           echo "##### Setting CFBundleVersion $BUILD_NUMBER"
           echo "########################################"
 
-          # TODO: FIX HERE
-          #sed "/<key>CFBundleVersion<\/key>/!b;n;c<string>$BUILD_NUMBER<\/string>" ./src/iOS/Info.plist
-
-          #perl -pe 's|<key>CFBundleVersion</key>\\s*<string>[\d.]*</string>|<key>CFBundleVersion</key></key>'"$BUILD_NUMBER"'<string>|' ./src/iOS/Info.plist
-
           perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./src/iOS/Info.plist
+          perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./src/iOS.Extension/Info.plist
+          perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./src/iOS.Autofill/Info.plist
+
+          ls -alh
 
           cat ./src/iOS/Info.plist
-          #cat ./src/iOS.Extension/Info.plist
-          #cat ./src/iOS.Autofill/Info.plist
+          cat ./src/iOS.Extension/Info.plist
+          cat ./src/iOS.Autofill/Info.plist
 
           exit 1
         shell: bash
