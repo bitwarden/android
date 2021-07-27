@@ -354,7 +354,7 @@ jobs:
       - name: Export .ipa for App Store
         run: |
           EXPORT_OPTIONS_PATH="./.github/resources/export-options-app-store.plist"
-          ARCHIVE_PATH="~/Library/Developer/Xcode/Archives/*/*.xcarchive"
+          ARCHIVE_PATH="$HOME/Library/Developer/Xcode/Archives/*/*.xcarchive"
           EXPORT_PATH="./bitwarden-export"
 
           xcodebuild -exportArchive -archivePath $ARCHIVE_PATH -exportPath $EXPORT_PATH -exportOptionsPlist $EXPORT_OPTIONS_PATH
