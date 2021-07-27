@@ -12,6 +12,7 @@ jobs:
         run: |
           pwd
           ls -alh
+        shell: bash
 
       - name: Download Play Store .aab artifact
         uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74
@@ -41,6 +42,7 @@ jobs:
         run: |
           pwd
           ls -alh
+        shell: bash
 
       - name: Deploy to Play Store
         if: false
