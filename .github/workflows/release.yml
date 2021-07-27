@@ -53,6 +53,11 @@ jobs:
           dotnet $PUBLISHER_PATH $CREDS_PATH $AAB_PATH $TRACK
         shell: bash
 
+      - name: TEST - List last release
+        run: |
+          hub release -L 1 -f "%T"
+        shell: bash
+
       - name: Upload release assets
         if: false
         run: |
