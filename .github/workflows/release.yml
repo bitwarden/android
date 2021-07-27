@@ -8,7 +8,7 @@ jobs:
     name: Android Build
     runs-on: windows-latest
     steps:
-      - name: List files in directory
+      - name: TEST - List files in directory
         run: |
           pwd
           ls -alh
@@ -37,28 +37,32 @@ jobs:
           branch: master
           name: com.x8bit.bitwarden-fdroid.apk
 
-      - name: Deploy to Play Store
+      - name: TEST - List files in directory
         run: |
-          $rootPath = $env:GITHUB_WORKSPACE;
-          $homePath = Resolve-Path "~" | Select-Object -ExpandProperty Path;
+          pwd
+          ls -alh
 
-          $publisherPath = $($rootPath + "/store/google/Publisher/bin/Release/netcoreapp2.0/Publisher.dll");
-          $credsPath = $($homePath + "/secrets/play_creds.json");
-          $aabPath = $($rootPath + "/com.x8bit.bitwarden.aab");
-          $track = "internal";
+      - name: Deploy to Play Store
+        if: false
+        run: |
+          PUBLISHER_PATH="./store/google/Publisher/bin/Release/netcoreapp2.0/Publisher.dll"
+          CREDS_PATH="$HOME/secrets/play_creds.json"
+          AAB_PATH="./com.x8bit.bitwarden.aab"
+          TRACK="internal"
 
-          dotnet $publisherPath $credsPath $aabPath $track
-        shell: pwsh
+          dotnet $PUBLISHER_PATH $CREDS_PATH $AAB_PATH $TRACK
+        shell: bash
 
       - name: Upload release assets
+        if: false
         run: |
-          hub release edit `
-            -a ./com.x8bit.bitwarden.aab `
-            -a ./com.x8bit.bitwarden.apk `
-            -a ./com.x8bit.bitwarden-fdroid.apk `
-            -m "Version $($env:RELEASE_TAG_NAME.TrimStart('v'))" `
-            $env:RELEASE_TAG_NAME
-        shell: pwsh
+          hub release edit \
+            -a ./com.x8bit.bitwarden.aab \
+            -a ./com.x8bit.bitwarden.apk \
+            -a ./com.x8bit.bitwarden-fdroid.apk \
+            -m "Version ${RELEASE_TAG_NAME//v}" \
+            $RELEASE_TAG_NAME
+        shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_TAG_NAME: ${{ github.event.release.tag_name }}
@@ -69,7 +73,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: android
     steps:
-      - name: List files in directory
+      - name: TEST - List files in directory
         run: |
           pwd
           ls -alh
@@ -81,6 +85,11 @@ jobs:
           workflow_conclusion: success
           branch: master
           name: com.x8bit.bitwarden-fdroid.apk
+
+      - name: TEST - List files in directory
+        run: |
+          pwd
+          ls -alh
 
       - name: Set up Node
         uses: actions/setup-node@46071b5c7a2e0c34e49c3cb8a0e792e86e18d5ea
@@ -106,9 +115,8 @@ jobs:
           node --version
           npm --version
           git --version
-          Write-Output "GitHub ref: $env:GITHUB_REF"
-          Write-Output "GitHub event: $env:GITHUB_EVENT"
-        shell: pwsh
+          echo "GitHub ref: $GITHUB_REF"
+          echo "GitHub event: $GITHUB_EVENT"
 
       - name: Checkout repo
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
@@ -123,43 +131,45 @@ jobs:
         env:
           DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
 
-      # - name: Compile for F-Droid Store
-      #   run: |
-      #     cd $GITHUB_WORKSPACE
-      #     mkdir dist
-      #     cp CNAME ./dist
-      #     cd store
-      #     chmod 600 fdroid/config.py fdroid/keystore.jks
-      #     mkdir -p temp/fdroid
-      #     TEMP_DIR="$GITHUB_WORKSPACE/store/temp/fdroid"
-      #     cd fdroid
-      #     echo "keypass=\"$FDROID_STORE_KEYSTORE_PASSWORD\"" >>config.py
-      #     echo "keystorepass=\"$FDROID_STORE_KEYSTORE_PASSWORD\"" >>config.py
-      #     echo "local_copy_dir=\"$TEMP_DIR\"" >>config.py
-      #     mkdir -p repo
-      #     curl -Lo repo/com.x8bit.bitwarden-fdroid.apk \
-      #     https://github.com/bitwarden/mobile/releases/download/$RELEASE_TAG_NAME/com.x8bit.bitwarden-fdroid.apk
-      #     fdroid update
-      #     fdroid server update
-      #     cd ..
-      #     rm -rf temp/fdroid/archive
-      #     mv -v temp/fdroid ../dist
-      #     cd fdroid
-      #     cp index.html btn.png qr.png ../../dist/fdroid
-      #     cd $GITHUB_WORKSPACE
-      #   env:
-      #     FDROID_STORE_KEYSTORE_PASSWORD: ${{ secrets.FDROID_STORE_KEYSTORE_PASSWORD }}
-      #     RELEASE_TAG_NAME: ${{ github.event.release.tag_name }}
+      - name: Compile for F-Droid Store
+        if: false
+        run: |
+          cd $GITHUB_WORKSPACE
+          mkdir dist
+          cp CNAME ./dist
+          cd store
+          chmod 600 fdroid/config.py fdroid/keystore.jks
+          mkdir -p temp/fdroid
+          TEMP_DIR="$GITHUB_WORKSPACE/store/temp/fdroid"
+          cd fdroid
+          echo "keypass=\"$FDROID_STORE_KEYSTORE_PASSWORD\"" >>config.py
+          echo "keystorepass=\"$FDROID_STORE_KEYSTORE_PASSWORD\"" >>config.py
+          echo "local_copy_dir=\"$TEMP_DIR\"" >>config.py
+          mkdir -p repo
+          curl -Lo repo/com.x8bit.bitwarden-fdroid.apk \
+          https://github.com/bitwarden/mobile/releases/download/$RELEASE_TAG_NAME/com.x8bit.bitwarden-fdroid.apk
+          fdroid update
+          fdroid server update
+          cd ..
+          rm -rf temp/fdroid/archive
+          mv -v temp/fdroid ../dist
+          cd fdroid
+          cp index.html btn.png qr.png ../../dist/fdroid
+          cd $GITHUB_WORKSPACE
+        env:
+          FDROID_STORE_KEYSTORE_PASSWORD: ${{ secrets.FDROID_STORE_KEYSTORE_PASSWORD }}
+          RELEASE_TAG_NAME: ${{ github.event.release.tag_name }}
 
-      # - name: Deploy to gh-pages
-      #   run: npm run deploy
+      - name: Deploy to gh-pages
+        if: false
+        run: npm run deploy
 
 
   ios:
     name: iOS Build
     runs-on: macos-latest
     steps:
-      - name: List files in directory
+      - name: TEST - List files in directory
         run: |
           pwd
           ls -alh
@@ -172,25 +182,29 @@ jobs:
           branch: master
           name: Bitwarden.ipa
 
-      - name: Deploy to App Store
+      - name: TEST - List files in directory
         run: |
-          $rootPath = $env:GITHUB_WORKSPACE;
-          $ipaPath = "$rootPath/bitwarden-export/Bitwarden.ipa"
+          pwd
+          ls -alh
 
-          xcrun altool --upload-app --type ios --file "$ipaPath" `
-              --username "$env:APPLE_ID_USERNAME" --password "$env:APPLE_ID_PASSWORD"
-        shell: pwsh
+      - name: Deploy to App Store
+        if: false
+        run: |
+          xcrun altool --upload-app --type ios --file "./bitwarden-export/Bitwarden.ipa" \
+              --username "$APPLE_ID_USERNAME" --password "$APPLE_ID_PASSWORD"
+        shell: bash
         env:
           APPLE_ID_USERNAME: ${{ secrets.APPLE_ID_USERNAME }}
           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
 
       - name: Upload release assets
+        if: false
         run: |
-          hub release edit `
-            -a ./bitwarden-export/Bitwarden.ipa `
-            -m "Version $($env:RELEASE_TAG_NAME.TrimStart('v'))" `
-            $env:RELEASE_TAG_NAME
-        shell: pwsh
+          hub release edit \
+            -a ./bitwarden-export/Bitwarden.ipa \
+            -m "Version ${RELEASE_TAG_NAME//v}" \
+            $RELEASE_TAG_NAME
+        shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_TAG_NAME: ${{ github.event.release.tag_name }}
