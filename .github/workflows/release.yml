@@ -4,47 +4,16 @@ on:
   workflow_dispatch:
 
 jobs:
-  android:
-    name: Android Build
-    runs-on: windows-latest
+  create-release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    outputs:
+      mobile-version: ${{ steps.retrieve-mobile-version.outputs.mobile_version }}
     steps:
-      - name: Download Play Store .aab artifact
-        uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74 # v2.14.0
-        with:
-          workflow: build.yml
-          workflow_conclusion: success
-          branch: master
-          name: com.x8bit.bitwarden.aab
-
-      - name: Download Play Store .apk artifact
-        uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74 # v2.14.0
-        with:
-          workflow: build.yml
-          workflow_conclusion: success
-          branch: master
-          name: com.x8bit.bitwarden.apk
-
-      - name: Download F-Droid .apk artifact
-        uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74 # v2.14.0
-        with:
-          workflow: build.yml
-          workflow_conclusion: success
-          branch: master
-          name: com.x8bit.bitwarden-fdroid.apk
-
-      - name: Deploy to Play Store
-        if: false
-        run: |
-          PUBLISHER_PATH="./store/google/Publisher/bin/Release/netcoreapp2.0/Publisher.dll"
-          CREDS_PATH="$HOME/secrets/play_creds.json"
-          AAB_PATH="./com.x8bit.bitwarden.aab"
-          TRACK="internal"
-
-          dotnet $PUBLISHER_PATH $CREDS_PATH $AAB_PATH $TRACK
-        shell: bash
-
       - name: Checkout repo
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
+        with:
+          ref: master # TODO: Change to RC.
 
       - name: Retrieve Mobile release version
         id: retrieve-mobile-version
@@ -59,15 +28,65 @@ jobs:
         shell: bash
 
       - name: Create Draft Release
-        id: create_release
         uses: actions/create-release@0cb9c9b65d5d1901c1f53e5e66eaf4afd303e70e # v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: v${{ steps.retrieve-mobile-version.outputs.mobile_version }}
-          release_name: ${{ steps.retrieve-mobile-version.outputs.mobile_version }}
+          release_name: Version ${{ steps.retrieve-mobile-version.outputs.mobile_version }}
           draft: true
           prerelease: false
+
+
+  android:
+    name: Android Build
+    runs-on: windows-latest
+    needs: create-release
+    steps:
+      - name: Download Play Store .aab artifact
+        uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74 # v2.14.0
+        with:
+          workflow: build.yml
+          workflow_conclusion: success
+          branch: master # TODO: Change to RC.
+          name: com.x8bit.bitwarden.aab
+
+      - name: Download Play Store .apk artifact
+        uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74 # v2.14.0
+        with:
+          workflow: build.yml
+          workflow_conclusion: success
+          branch: master # TODO: Change to RC.
+          name: com.x8bit.bitwarden.apk
+
+      - name: Download F-Droid .apk artifact
+        uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74 # v2.14.0
+        with:
+          workflow: build.yml
+          workflow_conclusion: success
+          branch: master # TODO: Change to RC.
+          name: com.x8bit.bitwarden-fdroid.apk
+
+      - name: TEST - List files
+        run: |
+          ls -alh
+        shell: bash
+
+      - name: Checkout repo
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
+        with:
+          ref: master # TODO: Change to RC.
+
+      - name: Deploy to Play Store
+        if: false
+        run: |
+          PUBLISHER_PATH="./store/google/Publisher/bin/Release/netcoreapp2.0/Publisher.dll"
+          CREDS_PATH="$HOME/secrets/play_creds.json"
+          AAB_PATH="./com.x8bit.bitwarden.aab"
+          TRACK="internal"
+
+          dotnet $PUBLISHER_PATH $CREDS_PATH $AAB_PATH $TRACK
+        shell: bash
 
       - name: Upload release assets
         if: false
@@ -76,12 +95,13 @@ jobs:
             -a ./com.x8bit.bitwarden.aab \
             -a ./com.x8bit.bitwarden.apk \
             -a ./com.x8bit.bitwarden-fdroid.apk \
-            -m "Version $RELEASE_TAG_NAME" \
+            -m "Version $RELEASE_NAME" \
             $RELEASE_TAG_NAME
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RELEASE_TAG_NAME: ${{ steps.retrieve-mobile-version.outputs.mobile_version }}
+          RELEASE_NAME: ${{ needs.create-release.outputs.mobile-version }}
+          RELEASE_TAG_NAME: v${{ needs.create-release.outputs.mobile-version }}
 
 
   android-ubuntu:
@@ -94,7 +114,7 @@ jobs:
         with:
           workflow: build.yml
           workflow_conclusion: success
-          branch: master
+          branch: master # TODO: Change to RC.
           name: com.x8bit.bitwarden-fdroid.apk
 
       - name: Set up Node
@@ -126,6 +146,8 @@ jobs:
 
       - name: Checkout repo
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
+        with:
+          ref: master # TODO: Change to RC.
 
       - name: Install Node dependencies
         run: npm install
@@ -164,7 +186,7 @@ jobs:
           cd $GITHUB_WORKSPACE
         env:
           FDROID_STORE_KEYSTORE_PASSWORD: ${{ secrets.FDROID_STORE_KEYSTORE_PASSWORD }}
-          RELEASE_TAG_NAME: ${{ github.event.release.tag_name }}
+          RELEASE_TAG_NAME: v${{ needs.create-release.outputs.mobile-version }}
 
       - name: Deploy to gh-pages
         if: false
@@ -174,13 +196,14 @@ jobs:
   ios:
     name: iOS Build
     runs-on: macos-latest
+    needs: create-release
     steps:
       - name: Download App Store .ipa artifact
         uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74 # v2.14.0
         with:
           workflow: build.yml
           workflow_conclusion: success
-          branch: master
+          branch: master # TODO: Change to RC.
           name: Bitwarden.ipa
 
       - name: Deploy to App Store
@@ -198,9 +221,10 @@ jobs:
         run: |
           hub release edit \
             -a ./bitwarden-export/Bitwarden.ipa \
-            -m "Version ${RELEASE_TAG_NAME//v}" \
+            -m "Version $RELEASE_NAME" \
             $RELEASE_TAG_NAME
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RELEASE_TAG_NAME: ${{ github.event.release.tag_name }}
+          RELEASE_NAME: ${{ needs.create-release.outputs.mobile-version }}
+          RELEASE_TAG_NAME: v${{ needs.create-release.outputs.mobile-version }}
