@@ -46,16 +46,16 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
 
-      - name: TEST - Get Mobile Version
-        id: mobile-version-test
+      - name: Retrieve Mobile release version
+        id: retrieve-mobile-version
         run: |
           ver=$(sed -n -e '/android:versionName/ s/.*\= *//p' ./src/Android/Properties/AndroidManifest.xml | tr -d '"')
-          echo "::set-output name=mobile_version::$ver"
+          echo "::set-output name=mobile_version::v$ver"
         shell: bash
 
       - name: TEST - Using mobile_version output
         run: |
-          echo "${{ steps.mobile-version-test.outputs.mobile_version }}"
+          echo "${{ steps.retrieve-mobile-version.outputs.mobile_version }}"
         shell: bash
 
       - name: Upload release assets
@@ -70,7 +70,7 @@ jobs:
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RELEASE_TAG_NAME: ${{ github.event.release.tag_name }}
+          RELEASE_TAG_NAME: ${{ steps.retrieve-mobile-version.outputs.mobile_version }}
 
 
   android-ubuntu:
