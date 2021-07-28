@@ -8,12 +8,6 @@ jobs:
     name: Android Build
     runs-on: windows-latest
     steps:
-      - name: TEST - List files in directory
-        run: |
-          pwd
-          ls -alh
-        shell: bash
-
       - name: Download Play Store .aab artifact
         uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74
         with:
@@ -38,12 +32,6 @@ jobs:
           branch: master
           name: com.x8bit.bitwarden-fdroid.apk
 
-      - name: TEST - List files in directory
-        run: |
-          pwd
-          ls -alh
-        shell: bash
-
       - name: Deploy to Play Store
         if: false
         run: |
@@ -58,21 +46,11 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
 
-      # - name: Set up Git credentials
-      #   env:
-      #     ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-      #   run: |
-      #     git config --global credential.helper store
-      #     echo "https://${ACCESS_TOKEN}:x-oauth-basic@github.com" >> ~/.git-credentials
-      #     git config --global user.email "ci@bitwarden.com"
-      #     git config --global user.name "Bitwarden CI"
-
-      - name: TEST - List last release
+      - name: TEST - Get Mobile Version
         run: |
-          hub release -L 1 -f "%T"
+          ver=$(awk '/<manifest.*android:versionName=/{print $NF}' ./src/Android/Properties/AndroidManifest.xml)
+          echo "VERSION: $ver"
         shell: bash
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload release assets
         if: false
@@ -94,11 +72,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: android
     steps:
-      - name: TEST - List files in directory
-        run: |
-          pwd
-          ls -alh
-
       - name: Download F-Droid .apk artifact
         uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74
         with:
@@ -106,11 +79,6 @@ jobs:
           workflow_conclusion: success
           branch: master
           name: com.x8bit.bitwarden-fdroid.apk
-
-      - name: TEST - List files in directory
-        run: |
-          pwd
-          ls -alh
 
       - name: Set up Node
         uses: actions/setup-node@46071b5c7a2e0c34e49c3cb8a0e792e86e18d5ea
@@ -121,6 +89,15 @@ jobs:
         run: |
           sudo apt-get -qq update
           sudo apt-get -qqy install --no-install-recommends fdroidserver wget
+
+      - name: Set up Git credentials
+        env:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        run: |
+          git config --global credential.helper store
+          echo "https://${ACCESS_TOKEN}:x-oauth-basic@github.com" >> ~/.git-credentials
+          git config --global user.email "ci@bitwarden.com"
+          git config --global user.name "Bitwarden CI"
 
       - name: Print environment
         run: |
@@ -181,11 +158,6 @@ jobs:
     name: iOS Build
     runs-on: macos-latest
     steps:
-      - name: TEST - List files in directory
-        run: |
-          pwd
-          ls -alh
-
       - name: Download App Store .ipa artifact
         uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74
         with:
@@ -193,11 +165,6 @@ jobs:
           workflow_conclusion: success
           branch: master
           name: Bitwarden.ipa
-
-      - name: TEST - List files in directory
-        run: |
-          pwd
-          ls -alh
 
       - name: Deploy to App Store
         if: false
