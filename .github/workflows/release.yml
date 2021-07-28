@@ -70,13 +70,14 @@ jobs:
       - name: Get latest release tag # Workaround for https://github.com/github/hub/issues/1817
         id: latest-release-tag
         run: |
-          echo "::set-output name=release_tag_name::$(hub release --include-drafts -L 1 -f '%T'")
+          echo "::set-output name=release_tag_name::$(hub release --include-drafts -L 1 -f '%T')"
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload release assets
         run: |
+          echo "RELEASE_TAG_NAME=$RELEASE_TAG_NAME"
           hub release edit \
             -a ./com.x8bit.bitwarden.aab \
             -a ./com.x8bit.bitwarden.apk \
@@ -209,7 +210,7 @@ jobs:
       - name: Get latest release tag # Workaround for https://github.com/github/hub/issues/1817
         id: latest-release-tag
         run: |
-          echo "::set-output name=release_tag_name::$(hub release --include-drafts -L 1 -f '%T'")
+          echo "::set-output name=release_tag_name::$(hub release --include-drafts -L 1 -f '%T')"
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
