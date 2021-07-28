@@ -58,19 +58,21 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
 
-      - name: Set up Git credentials
-        env:
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-        run: |
-          git config --global credential.helper store
-          echo "https://${ACCESS_TOKEN}:x-oauth-basic@github.com" >> ~/.git-credentials
-          git config --global user.email "ci@bitwarden.com"
-          git config --global user.name "Bitwarden CI"
+      # - name: Set up Git credentials
+      #   env:
+      #     ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+      #   run: |
+      #     git config --global credential.helper store
+      #     echo "https://${ACCESS_TOKEN}:x-oauth-basic@github.com" >> ~/.git-credentials
+      #     git config --global user.email "ci@bitwarden.com"
+      #     git config --global user.name "Bitwarden CI"
 
       - name: TEST - List last release
         run: |
           hub release -L 1 -f "%T"
         shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload release assets
         if: false
