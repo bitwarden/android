@@ -19,7 +19,7 @@ jobs:
         id: retrieve-mobile-version
         run: |
           ver=$(sed -n -e '/android:versionName/ s/.*\= *//p' ./src/Android/Properties/AndroidManifest.xml | tr -d '"')
-          echo "::set-output name=mobile_version::$ver"
+          echo "::set-output name=mobile_version::${ver}-b"
         shell: bash
 
       - name: Create Draft Release
