@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
 
       - name: Set up CLOC
         run: |
@@ -28,7 +28,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Set up MSBuild
-        uses: microsoft/setup-msbuild@c26a08ba26249b81327e26f6ef381897b6a8754d
+        uses: microsoft/setup-msbuild@c26a08ba26249b81327e26f6ef381897b6a8754d # v1
 
       - name: Print environment
         run: |
@@ -39,7 +39,7 @@ jobs:
           echo "GitHub event: $GITHUB_EVENT"
 
       - name: Checkout repo
-        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
 
       - name: Decrypt secrets
         run: |
@@ -130,13 +130,13 @@ jobs:
           UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}
 
       - name: Upload Play Store .aab artifact
-        uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700
+        uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700 # v2.2.4
         with:
           name: com.x8bit.bitwarden.aab
           path: ./com.x8bit.bitwarden.aab
 
       - name: Upload Play Store .apk artifact
-        uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700
+        uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700 # v2.2.4
         with:
           name: com.x8bit.bitwarden.apk
           path: ./com.x8bit.bitwarden.apk
@@ -250,7 +250,7 @@ jobs:
           FDROID_KEYSTORE_PASSWORD: ${{ secrets.FDROID_KEYSTORE_PASSWORD }}
 
       - name: Upload F-Droid .apk artifact
-        uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700
+        uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700 # v2.2.4
         with:
           name: com.x8bit.bitwarden-fdroid.apk
           path: ./com.x8bit.bitwarden-fdroid.apk  
@@ -269,7 +269,7 @@ jobs:
           echo "GitHub event: $GITHUB_EVENT"
 
       - name: Checkout repo
-        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
 
       - name: Decrypt secrets
         run: |
@@ -361,7 +361,7 @@ jobs:
         shell: bash
 
       - name: Upload App Store .ipa artifact
-        uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700
+        uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700 # v2.2.4
         with:
           name: Bitwarden.ipa
           path: ./bitwarden-export/Bitwarden.ipa
