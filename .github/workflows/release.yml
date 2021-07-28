@@ -200,6 +200,7 @@ jobs:
 
       - name: Upload release assets
         run: |
+          echo "RELEASE_TAG_NAME=$RELEASE_TAG_NAME"
           hub release edit \
             -a ./Bitwarden.ipa \
             -m "Version $RELEASE_NAME" \
