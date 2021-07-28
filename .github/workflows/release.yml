@@ -67,6 +67,13 @@ jobs:
           branch: master # TODO: Change to RC.
           name: com.x8bit.bitwarden-fdroid.apk
 
+      - name: TEST - List last release
+        run: |
+          hub release -L 1 -f "%T"
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Upload release assets
         run: |
           hub release edit \
@@ -197,6 +204,13 @@ jobs:
           workflow_conclusion: success
           branch: master # TODO: Change to RC.
           name: Bitwarden.ipa
+
+      - name: TEST - List last release
+        run: |
+          hub release -L 1 -f "%T"
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload release assets
         run: |
