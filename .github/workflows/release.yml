@@ -38,6 +38,11 @@ jobs:
     runs-on: windows-latest
     needs: create-release
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
+        with:
+          ref: master # TODO: Change to RC.
+
       - name: Download Play Store .aab artifact
         uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74 # v2.14.0
         with:
@@ -62,29 +67,7 @@ jobs:
           branch: master # TODO: Change to RC.
           name: com.x8bit.bitwarden-fdroid.apk
 
-      - name: Checkout repo
-        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
-        with:
-          ref: master # TODO: Change to RC.
-
-      - name: TEST - List files
-        run: |
-          ls -alh
-        shell: bash
-
-      - name: Deploy to Play Store
-        if: false
-        run: |
-          PUBLISHER_PATH="./store/google/Publisher/bin/Release/netcoreapp2.0/Publisher.dll"
-          CREDS_PATH="$HOME/secrets/play_creds.json"
-          AAB_PATH="./com.x8bit.bitwarden.aab"
-          TRACK="internal"
-
-          dotnet $PUBLISHER_PATH $CREDS_PATH $AAB_PATH $TRACK
-        shell: bash
-
       - name: Upload release assets
-        if: false
         run: |
           hub release edit \
             -a ./com.x8bit.bitwarden.aab \
@@ -98,12 +81,28 @@ jobs:
           RELEASE_NAME: ${{ needs.create-release.outputs.mobile-version }}
           RELEASE_TAG_NAME: v${{ needs.create-release.outputs.mobile-version }}
 
+      - name: Deploy to Play Store
+        if: false
+        run: |
+          PUBLISHER_PATH="./store/google/Publisher/bin/Release/netcoreapp2.0/Publisher.dll"
+          CREDS_PATH="$HOME/secrets/play_creds.json"
+          AAB_PATH="./com.x8bit.bitwarden.aab"
+          TRACK="internal"
+
+          dotnet $PUBLISHER_PATH $CREDS_PATH $AAB_PATH $TRACK
+        shell: bash
+
 
   android-ubuntu:
     name: Android Ubuntu Build
     runs-on: ubuntu-latest
     needs: android
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
+        with:
+          ref: master # TODO: Change to RC.
+
       - name: Download F-Droid .apk artifact
         uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74 # v2.14.0
         with:
@@ -138,11 +137,6 @@ jobs:
           git --version
           echo "GitHub ref: $GITHUB_REF"
           echo "GitHub event: $GITHUB_EVENT"
-
-      - name: Checkout repo
-        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
-        with:
-          ref: master # TODO: Change to RC.
 
       - name: Install Node dependencies
         run: npm install
@@ -193,6 +187,11 @@ jobs:
     runs-on: macos-latest
     needs: create-release
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
+        with:
+          ref: master # TODO: Change to RC.
+
       - name: Download App Store .ipa artifact
         uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74 # v2.14.0
         with:
@@ -201,18 +200,7 @@ jobs:
           branch: master # TODO: Change to RC.
           name: Bitwarden.ipa
 
-      - name: Deploy to App Store
-        if: false
-        run: |
-          xcrun altool --upload-app --type ios --file "./bitwarden-export/Bitwarden.ipa" \
-              --username "$APPLE_ID_USERNAME" --password "$APPLE_ID_PASSWORD"
-        shell: bash
-        env:
-          APPLE_ID_USERNAME: ${{ secrets.APPLE_ID_USERNAME }}
-          APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
-
       - name: Upload release assets
-        if: false
         run: |
           hub release edit \
             -a ./bitwarden-export/Bitwarden.ipa \
@@ -223,3 +211,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_NAME: ${{ needs.create-release.outputs.mobile-version }}
           RELEASE_TAG_NAME: v${{ needs.create-release.outputs.mobile-version }}
+
+      - name: Deploy to App Store
+        if: false
+        run: |
+          xcrun altool --upload-app --type ios --file "./bitwarden-export/Bitwarden.ipa" \
+              --username "$APPLE_ID_USERNAME" --password "$APPLE_ID_PASSWORD"
+        shell: bash
+        env:
+          APPLE_ID_USERNAME: ${{ secrets.APPLE_ID_USERNAME }}
+          APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
