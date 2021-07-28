@@ -67,9 +67,10 @@ jobs:
           branch: master # TODO: Change to RC.
           name: com.x8bit.bitwarden-fdroid.apk
 
-      - name: TEST - List last release
+      - name: Get latest release tag # Workaround for https://github.com/github/hub/issues/1817
+        id: latest-release-tag
         run: |
-          hub release --include-drafts -L 1 -f "%T"
+          echo "::set-output name=release_tag_name::$(hub release --include-drafts -L 1 -f '%T'")
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -86,7 +87,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_NAME: ${{ needs.create-release.outputs.mobile-version }}
-          RELEASE_TAG_NAME: v${{ needs.create-release.outputs.mobile-version }}
+          RELEASE_TAG_NAME: ${{ steps.latest-release-tag.outputs.release_tag_name }}
 
       - name: Deploy to Play Store
         if: false
@@ -205,9 +206,10 @@ jobs:
           branch: master # TODO: Change to RC.
           name: Bitwarden.ipa
 
-      - name: TEST - List last release
+      - name: Get latest release tag # Workaround for https://github.com/github/hub/issues/1817
+        id: latest-release-tag
         run: |
-          hub release --include-drafts -L 1 -f "%T"
+          echo "::set-output name=release_tag_name::$(hub release --include-drafts -L 1 -f '%T'")
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -223,7 +225,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_NAME: ${{ needs.create-release.outputs.mobile-version }}
-          RELEASE_TAG_NAME: v${{ needs.create-release.outputs.mobile-version }}
+          RELEASE_TAG_NAME: ${{ steps.latest-release-tag.outputs.release_tag_name }}
 
       - name: Deploy to App Store
         if: false
