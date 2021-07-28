@@ -48,7 +48,7 @@ jobs:
 
       - name: TEST - Get Mobile Version
         run: |
-          ver=$(sed -n -e '/android:versionName/ s/.*\= *//p' ./src/Android/Properties/AndroidManifest.xml)
+          ver=$(sed -n -e '/android:versionName/ s/.*\= *//p' ./src/Android/Properties/AndroidManifest.xml | tr -d '"')
           echo "VERSION: $ver"
         shell: bash
 
