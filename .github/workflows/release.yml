@@ -163,8 +163,7 @@ jobs:
           echo "keystorepass=\"$FDROID_STORE_KEYSTORE_PASSWORD\"" >>config.py
           echo "local_copy_dir=\"$TEMP_DIR\"" >>config.py
           mkdir -p repo
-          curl -Lo repo/com.x8bit.bitwarden-fdroid.apk \
-          https://github.com/bitwarden/mobile/releases/download/$RELEASE_TAG_NAME/com.x8bit.bitwarden-fdroid.apk
+          mv $GITHUB_WORKSPACE/com.x8bit.bitwarden-fdroid.apk ./repo/
           fdroid update
           fdroid server update
           cd ..
@@ -175,7 +174,6 @@ jobs:
           cd $GITHUB_WORKSPACE
         env:
           FDROID_STORE_KEYSTORE_PASSWORD: ${{ secrets.FDROID_STORE_KEYSTORE_PASSWORD }}
-          RELEASE_TAG_NAME: v${{ needs.create-release.outputs.mobile-version }}
 
       - name: Deploy to gh-pages
         if: false
@@ -203,7 +201,7 @@ jobs:
       - name: Upload release assets
         run: |
           hub release edit \
-            -a ./bitwarden-export/Bitwarden.ipa \
+            -a ./Bitwarden.ipa \
             -m "Version $RELEASE_NAME" \
             $RELEASE_TAG_NAME
         shell: bash
@@ -215,7 +213,7 @@ jobs:
       - name: Deploy to App Store
         if: false
         run: |
-          xcrun altool --upload-app --type ios --file "./bitwarden-export/Bitwarden.ipa" \
+          xcrun altool --upload-app --type ios --file "./Bitwarden.ipa" \
               --username "$APPLE_ID_USERNAME" --password "$APPLE_ID_PASSWORD"
         shell: bash
         env:
