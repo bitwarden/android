@@ -48,7 +48,7 @@ jobs:
 
       - name: TEST - Get Mobile Version
         run: |
-          ver=$(awk '/<manifest.*android:versionName=/{print $NF}' ./src/Android/Properties/AndroidManifest.xml)
+          ver=$(sed-n -e '/android:versionName/ s/.*\= *//p' ./src/Android/Properties/AndroidManifest.xml)
           echo "VERSION: $ver"
         shell: bash
 
