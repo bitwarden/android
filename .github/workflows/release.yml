@@ -69,7 +69,7 @@ jobs:
 
       - name: TEST - List last release
         run: |
-          hub release -L 1 -f "%T"
+          hub release --include-drafts -L 1 -f "%T"
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -207,7 +207,7 @@ jobs:
 
       - name: TEST - List last release
         run: |
-          hub release -L 1 -f "%T"
+          hub release --include-drafts -L 1 -f "%T"
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
