@@ -22,11 +22,6 @@ jobs:
           echo "::set-output name=mobile_version::$ver"
         shell: bash
 
-      - name: TEST - Using mobile_version output
-        run: |
-          echo "${{ steps.retrieve-mobile-version.outputs.mobile_version }}"
-        shell: bash
-
       - name: Create Draft Release
         uses: actions/create-release@0cb9c9b65d5d1901c1f53e5e66eaf4afd303e70e # v1
         env:
@@ -67,15 +62,15 @@ jobs:
           branch: master # TODO: Change to RC.
           name: com.x8bit.bitwarden-fdroid.apk
 
-      - name: TEST - List files
-        run: |
-          ls -alh
-        shell: bash
-
       - name: Checkout repo
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
         with:
           ref: master # TODO: Change to RC.
+
+      - name: TEST - List files
+        run: |
+          ls -alh
+        shell: bash
 
       - name: Deploy to Play Store
         if: false
