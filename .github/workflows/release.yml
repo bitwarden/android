@@ -13,7 +13,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
         with:
-          ref: master # TODO: Change to RC.
+          ref: rc
 
       - name: Retrieve Mobile release version
         id: retrieve-mobile-version
@@ -41,14 +41,14 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
         with:
-          ref: master # TODO: Change to RC.
+          ref: rc
 
       - name: Download Play Store .aab artifact
         uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74 # v2.14.0
         with:
           workflow: build.yml
           workflow_conclusion: success
-          branch: master # TODO: Change to RC.
+          branch: rc
           name: com.x8bit.bitwarden.aab
 
       - name: Download Play Store .apk artifact
@@ -56,7 +56,7 @@ jobs:
         with:
           workflow: build.yml
           workflow_conclusion: success
-          branch: master # TODO: Change to RC.
+          branch: rc
           name: com.x8bit.bitwarden.apk
 
       - name: Download F-Droid .apk artifact
@@ -64,7 +64,7 @@ jobs:
         with:
           workflow: build.yml
           workflow_conclusion: success
-          branch: master # TODO: Change to RC.
+          branch: rc
           name: com.x8bit.bitwarden-fdroid.apk
 
       - name: Get latest release tag # Workaround for https://github.com/github/hub/issues/1817
@@ -90,7 +90,6 @@ jobs:
           RELEASE_TAG_NAME: ${{ steps.latest-release-tag.outputs.release_tag_name }}
 
       - name: Deploy to Play Store
-        if: false
         run: |
           PUBLISHER_PATH="./store/google/Publisher/bin/Release/netcoreapp2.0/Publisher.dll"
           CREDS_PATH="$HOME/secrets/play_creds.json"
@@ -109,14 +108,14 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
         with:
-          ref: master # TODO: Change to RC.
+          ref: rc
 
       - name: Download F-Droid .apk artifact
         uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74 # v2.14.0
         with:
           workflow: build.yml
           workflow_conclusion: success
-          branch: master # TODO: Change to RC.
+          branch: rc
           name: com.x8bit.bitwarden-fdroid.apk
 
       - name: Set up Node
@@ -157,7 +156,6 @@ jobs:
           DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
 
       - name: Compile for F-Droid Store
-        if: false
         run: |
           cd $GITHUB_WORKSPACE
           mkdir dist
@@ -184,7 +182,6 @@ jobs:
           FDROID_STORE_KEYSTORE_PASSWORD: ${{ secrets.FDROID_STORE_KEYSTORE_PASSWORD }}
 
       - name: Deploy to gh-pages
-        if: false
         run: npm run deploy
 
 
@@ -196,14 +193,14 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
         with:
-          ref: master # TODO: Change to RC.
+          ref: rc
 
       - name: Download App Store .ipa artifact
         uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74 # v2.14.0
         with:
           workflow: build.yml
           workflow_conclusion: success
-          branch: master # TODO: Change to RC.
+          branch: rc
           name: Bitwarden.ipa
 
       - name: Get latest release tag # Workaround for https://github.com/github/hub/issues/1817
@@ -227,7 +224,6 @@ jobs:
           RELEASE_TAG_NAME: ${{ steps.latest-release-tag.outputs.release_tag_name }}
 
       - name: Deploy to App Store
-        if: false
         run: |
           xcrun altool --upload-app --type ios --file "./Bitwarden.ipa" \
               --username "$APPLE_ID_USERNAME" --password "$APPLE_ID_PASSWORD"
