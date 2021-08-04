@@ -133,7 +133,7 @@ namespace Bit.Core.Services
         public async Task<AuthResult> LogInSsoAsync(string code, string codeVerifier, string redirectUrl)
         {
             SelectedTwoFactorProviderType = null;
-            return await LogInHelperAsync(null, null, code, codeVerifier, redirectUrl, null, null, null, null);
+            return await LogInHelperAsync(null, null, null, code, codeVerifier, redirectUrl, null, null, null, null);
         }
 
         public Task<AuthResult> LogInTwoFactorAsync(TwoFactorProviderType twoFactorProvider, string twoFactorToken,

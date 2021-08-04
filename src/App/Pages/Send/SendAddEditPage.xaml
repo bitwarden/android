@@ -23,7 +23,7 @@
             <u:InverseBoolConverter x:Key="inverseBool" />
             <u:IsNullConverter x:Key="null" />
             <u:IsNotNullConverter x:Key="notNull" />
-            <ToolbarItem Text="{u:I18n Close}" Clicked="Close_Clicked" Order="Primary" Priority="-1"
+            <ToolbarItem Text="{u:I18n Cancel}" Clicked="Close_Clicked" Order="Primary" Priority="-1"
                          x:Key="closeItem" x:Name="_closeItem" />
             <ToolbarItem Icon="more_vert.png" Clicked="More_Clicked" Order="Primary" x:Name="_moreItem"
                          x:Key="moreItem"

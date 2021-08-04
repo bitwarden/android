@@ -1,0 +1,21 @@
+name: Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  cloc:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
+
+      - name: Set up cloc
+        run: |
+          sudo apt-get update
+          sudo apt-get -y install cloc
+
+      - name: Print lines of code
+        run: cloc --vcs git --exclude-dir Resources,store,test,Properties --include-lang C#,XAML

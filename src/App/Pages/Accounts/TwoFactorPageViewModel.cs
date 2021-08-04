@@ -33,6 +33,7 @@ namespace Bit.App.Pages
         private string _webVaultUrl = "https://vault.bitwarden.com";
         private bool _authingWithSso = false;
         private bool _enableContinue = false;
+        private bool _showContinue = true;
 
         public TwoFactorPageViewModel()
         {
@@ -74,7 +75,11 @@ namespace Bit.App.Pages
 
         public bool ShowTryAgain => YubikeyMethod && Device.RuntimePlatform == Device.iOS;
 
-        public bool ShowContinue { get; set; }
+        public bool ShowContinue
+        {
+            get => _showContinue;
+            set => SetProperty(ref _showContinue, value);
+        }
 
         public bool EnableContinue
         {
@@ -247,7 +252,7 @@ namespace Bit.App.Pages
             {
                 _platformUtilsService.LaunchUri("https://help.bitwarden.com/article/lost-two-step-device/");
             }
-            else if (method != AppResources.Cancel)
+            else if (method != AppResources.Cancel && method != null)
             {
                 var selected = supportedProviders.FirstOrDefault(p => p.Name == method)?.Type;
                 if (selected == SelectedProviderType)
