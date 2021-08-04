@@ -32,6 +32,8 @@ namespace Bit.App.Pages
         private string _totpInstruction;
         private string _webVaultUrl = "https://vault.bitwarden.com";
         private bool _authingWithSso = false;
+        private bool _enableContinue = false;
+        private bool _showContinue = true;
 
         public TwoFactorPageViewModel()
         {
@@ -72,6 +74,18 @@ namespace Bit.App.Pages
         public bool TotpMethod => AuthenticatorMethod || EmailMethod;
 
         public bool ShowTryAgain => YubikeyMethod && Device.RuntimePlatform == Device.iOS;
+
+        public bool ShowContinue
+        {
+            get => _showContinue;
+            set => SetProperty(ref _showContinue, value);
+        }
+
+        public bool EnableContinue
+        {
+            get => _enableContinue;
+            set => SetProperty(ref _enableContinue, value);
+        }
 
         public string YubikeyInstruction => Device.RuntimePlatform == Device.iOS ? AppResources.YubiKeyInstructionIos :
             AppResources.YubiKeyInstruction;
@@ -169,14 +183,7 @@ namespace Bit.App.Pages
             {
                 _messagingService.Send("listenYubiKeyOTP", false);
             }
-            if (SelectedProviderType == null || DuoMethod)
-            {
-                page.RemoveContinueButton();
-            }
-            else
-            {
-                page.AddContinueButton();
-            }
+            ShowContinue = !(SelectedProviderType == null || DuoMethod);
         }
 
         public async Task SubmitAsync()
@@ -245,7 +252,7 @@ namespace Bit.App.Pages
             {
                 _platformUtilsService.LaunchUri("https://help.bitwarden.com/article/lost-two-step-device/");
             }
-            else if (method != AppResources.Cancel)
+            else if (method != AppResources.Cancel && method != null)
             {
                 var selected = supportedProviders.FirstOrDefault(p => p.Name == method)?.Type;
                 if (selected == SelectedProviderType)

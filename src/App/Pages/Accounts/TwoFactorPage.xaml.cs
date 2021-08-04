@@ -1,5 +1,6 @@
 ﻿using Bit.App.Controls;
 using Bit.App.Models;
+using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using System;
@@ -45,25 +46,16 @@ namespace Bit.App.Pages
             {
                 ToolbarItems.Remove(_cancelItem);
             }
+            if (Device.RuntimePlatform == Device.iOS)
+            {
+                ToolbarItems.Add(_moreItem);
+            } else
+            {
+                ToolbarItems.Add(_useAnotherTwoStepMethod);
+            }
         }
 
         public HybridWebView DuoWebView { get; set; }
-
-        public void AddContinueButton()
-        {
-            if (!ToolbarItems.Contains(_continueItem))
-            {
-                ToolbarItems.Add(_continueItem);
-            }
-        }
-
-        public void RemoveContinueButton()
-        {
-            if (ToolbarItems.Contains(_continueItem))
-            {
-                ToolbarItems.Remove(_continueItem);
-            }
-        }
 
         protected async override void OnAppearing()
         {
@@ -145,6 +137,21 @@ namespace Bit.App.Pages
             }
         }
 
+        private async void More_Clicked(object sender, EventArgs e)
+        {
+            if (!DoOnce())
+            {
+                return;
+            }
+
+            var selection = await DisplayActionSheet(AppResources.Options, AppResources.Cancel, null, AppResources.UseAnotherTwoStepMethod);
+
+            if (selection == AppResources.UseAnotherTwoStepMethod)
+            {
+                await _vm.AnotherMethodAsync();
+            }
+        }
+
         private async void ResendEmail_Clicked(object sender, EventArgs e)
         {
             if (DoOnce())
@@ -194,6 +201,11 @@ namespace Bit.App.Pages
                 var previousPage = await AppHelpers.ClearPreviousPage();
                 Application.Current.MainPage = new TabsPage(_appOptions, previousPage);
             }
+        }
+
+        private void Token_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            _vm.EnableContinue = !string.IsNullOrWhiteSpace(e.NewTextValue);
         }
     }
 }
