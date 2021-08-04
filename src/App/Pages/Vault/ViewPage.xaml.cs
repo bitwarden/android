@@ -220,7 +220,7 @@ namespace Bit.App.Pages
             if (_vm.Cipher.OrganizationId == null)
             {
                 options.Add(AppResources.Clone);
-                options.Add(AppResources.Share);
+                options.Add(AppResources.MoveToOrganization);
             }
             else
             {
@@ -252,7 +252,7 @@ namespace Bit.App.Pages
                 var page = new CollectionsPage(_vm.CipherId);
                 await Navigation.PushModalAsync(new NavigationPage(page));
             }
-            else if (selection == AppResources.Share)
+            else if (selection == AppResources.MoveToOrganization)
             {
                 var page = new SharePage(_vm.CipherId);
                 await Navigation.PushModalAsync(new NavigationPage(page));
