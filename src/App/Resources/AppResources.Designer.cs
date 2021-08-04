@@ -3550,5 +3550,17 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("PasswordConfirmationDesc", resourceCulture);
             }
         }
+        
+        public static string CaptchaRequired {
+            get {
+                return ResourceManager.GetString("CaptchaRequired", resourceCulture);
+            }
+        }
+        
+        public static string CaptchaFailed {
+            get {
+                return ResourceManager.GetString("CaptchaFailed", resourceCulture);
+            }
+        }
     }
 }
