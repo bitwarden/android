@@ -379,21 +379,27 @@ namespace Bit.App.Pages
             }
             var accountItems = new List<SettingsPageListItem>
             {
-                new SettingsPageListItem { Name = AppResources.ChangeMasterPassword },
                 new SettingsPageListItem { Name = AppResources.FingerprintPhrase },
                 new SettingsPageListItem { Name = AppResources.LogOut }
             };
+            if (IncludeLinksWithSubscriptionInfo())
+            {
+                accountItems.Insert(0, new SettingsPageListItem { Name = AppResources.ChangeMasterPassword });
+            }
             var toolsItems = new List<SettingsPageListItem>
             {
                 new SettingsPageListItem { Name = AppResources.ImportItems },
-                new SettingsPageListItem { Name = AppResources.ExportVault },
-                new SettingsPageListItem { Name = AppResources.WebVault }
+                new SettingsPageListItem { Name = AppResources.ExportVault }
             };
+            if (IncludeLinksWithSubscriptionInfo())
+            {
+                toolsItems.Add(new SettingsPageListItem { Name = AppResources.LearnOrg });
+                toolsItems.Add(new SettingsPageListItem { Name = AppResources.WebVault });
+            }
             var otherItems = new List<SettingsPageListItem>
             {
                 new SettingsPageListItem { Name = AppResources.Options },
                 new SettingsPageListItem { Name = AppResources.About },
-                new SettingsPageListItem { Name = AppResources.LearnOrg },
                 new SettingsPageListItem { Name = AppResources.HelpAndFeedback },
                 new SettingsPageListItem { Name = AppResources.RateTheApp }
             };
@@ -406,6 +412,15 @@ namespace Bit.App.Pages
                 new SettingsPageListGroup(toolsItems, AppResources.Tools, doUpper),
                 new SettingsPageListGroup(otherItems, AppResources.Other, doUpper)
             });
+        }
+
+        private bool IncludeLinksWithSubscriptionInfo()
+        {
+            if (Device.RuntimePlatform == Device.iOS)
+            {
+                return false;
+            }
+            return true;
         }
 
         private string GetVaultTimeoutActionFromKey(string key)
