@@ -69,13 +69,17 @@ jobs:
 
       - name: Get latest release tag # Workaround for https://github.com/github/hub/issues/1817
         id: latest-release-tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "::set-output name=release_tag_name::$(hub release --include-drafts -L 1 -f '%T')"
         shell: bash
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload release assets
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_NAME: ${{ needs.create-release.outputs.mobile-version }}
+          RELEASE_TAG_NAME: ${{ steps.latest-release-tag.outputs.release_tag_name }}
         run: |
           hub release edit \
             -a ./com.x8bit.bitwarden.aab \
@@ -84,10 +88,6 @@ jobs:
             -m "Version $RELEASE_NAME" \
             $RELEASE_TAG_NAME
         shell: bash
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RELEASE_NAME: ${{ needs.create-release.outputs.mobile-version }}
-          RELEASE_TAG_NAME: ${{ steps.latest-release-tag.outputs.release_tag_name }}
 
       - name: Deploy to Play Store
         run: |
@@ -149,13 +149,15 @@ jobs:
         run: npm install
 
       - name: Decrypt secrets
+        env:
+          DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
         run: |
           mkdir -p ~/secrets
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output ./store/fdroid/keystore.jks ./.github/secrets/store_fdroid-keystore.jks.gpg
-        env:
-          DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
 
       - name: Compile for F-Droid Store
+        env:
+          FDROID_STORE_KEYSTORE_PASSWORD: ${{ secrets.FDROID_STORE_KEYSTORE_PASSWORD }}
         run: |
           cd $GITHUB_WORKSPACE
           mkdir dist
@@ -178,8 +180,6 @@ jobs:
           cd fdroid
           cp index.html btn.png qr.png ../../dist/fdroid
           cd $GITHUB_WORKSPACE
-        env:
-          FDROID_STORE_KEYSTORE_PASSWORD: ${{ secrets.FDROID_STORE_KEYSTORE_PASSWORD }}
 
       - name: Deploy to gh-pages
         run: npm run deploy
@@ -205,29 +205,29 @@ jobs:
 
       - name: Get latest release tag # Workaround for https://github.com/github/hub/issues/1817
         id: latest-release-tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo "::set-output name=release_tag_name::$(hub release --include-drafts -L 1 -f '%T')"
         shell: bash
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload release assets
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_NAME: ${{ needs.create-release.outputs.mobile-version }}
+          RELEASE_TAG_NAME: ${{ steps.latest-release-tag.outputs.release_tag_name }}
         run: |
           hub release edit \
             -a ./Bitwarden.ipa \
             -m "Version $RELEASE_NAME" \
             $RELEASE_TAG_NAME
         shell: bash
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RELEASE_NAME: ${{ needs.create-release.outputs.mobile-version }}
-          RELEASE_TAG_NAME: ${{ steps.latest-release-tag.outputs.release_tag_name }}
 
       - name: Deploy to App Store
+        env:
+          APPLE_ID_USERNAME: ${{ secrets.APPLE_ID_USERNAME }}
+          APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
         run: |
           xcrun altool --upload-app --type ios --file "./Bitwarden.ipa" \
               --username "$APPLE_ID_USERNAME" --password "$APPLE_ID_PASSWORD"
         shell: bash
-        env:
-          APPLE_ID_USERNAME: ${{ secrets.APPLE_ID_USERNAME }}
-          APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}

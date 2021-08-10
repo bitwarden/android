@@ -42,6 +42,8 @@ jobs:
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
 
       - name: Decrypt secrets
+        env:
+            DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
         run: |
           mkdir -p ~/secrets
 
@@ -51,8 +53,6 @@ jobs:
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output ./src/Android/google-services.json ./.github/secrets/google-services.json.gpg
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output $HOME/secrets/play_creds.json ./.github/secrets/play_creds.json.gpg
         shell: bash
-        env:
-          DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
 
       - name: Increment version
         run: |
@@ -86,6 +86,9 @@ jobs:
         shell: pwsh
 
       - name: Sign for Play Store
+        env:
+          PLAY_KEYSTORE_PASSWORD: ${{ secrets.PLAY_KEYSTORE_PASSWORD }}
+          UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}
         run: |
           $androidPath = $($env:GITHUB_WORKSPACE + "/src/Android/Android.csproj");
 
@@ -125,9 +128,6 @@ jobs:
 
           Copy-Item $signedApkPath $signedApkDestPath
         shell: pwsh
-        env:
-          PLAY_KEYSTORE_PASSWORD: ${{ secrets.PLAY_KEYSTORE_PASSWORD }}
-          UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}
 
       - name: Upload Play Store .aab artifact
         uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700 # v2.2.4
@@ -227,6 +227,8 @@ jobs:
         shell: pwsh
 
       - name: Sign for F-Droid
+        env:
+          FDROID_KEYSTORE_PASSWORD: ${{ secrets.FDROID_KEYSTORE_PASSWORD }}
         run: |
           Write-Output "########################################"
           Write-Output "##### Sign FDroid Configuration"
@@ -246,8 +248,6 @@ jobs:
 
           Copy-Item $signedApkPath $signedApkDestPath
         shell: pwsh
-        env:
-          FDROID_KEYSTORE_PASSWORD: ${{ secrets.FDROID_KEYSTORE_PASSWORD }}
 
       - name: Upload F-Droid .apk artifact
         uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700 # v2.2.4
@@ -272,6 +272,8 @@ jobs:
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
 
       - name: Decrypt secrets
+        env:
+          DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
         run: |
           mkdir -p ~/secrets
 
@@ -281,8 +283,6 @@ jobs:
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output $HOME/secrets/dist_bitwarden.mobileprovision ./.github/secrets/dist_bitwarden.mobileprovision.gpg
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output $HOME/secrets/dist_extension.mobileprovision ./.github/secrets/dist_extension.mobileprovision.gpg
         shell: bash
-        env:
-          DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
 
       - name: Increment version
         run: |
@@ -298,6 +298,10 @@ jobs:
         shell: bash
 
       - name: Set up Keychain
+        env:
+          KEYCHAIN_PASSWORD: ${{ secrets.IOS_KEYCHAIN_PASSWORD }}
+          MOBILE_KEY_PASSWORD: ${{ secrets.IOS_KEY_PASSWORD }}
+          DIST_CERT_PASSWORD: ${{ secrets.IOS_DIST_CERT_PASSWORD }}
         run: |
           security create-keychain -p $KEYCHAIN_PASSWORD build.keychain
           security default-keychain -s build.keychain
@@ -307,10 +311,6 @@ jobs:
           security import ~/secrets/iphone-distribution-cert.p12 -k build.keychain -P $DIST_CERT_PASSWORD -T /usr/bin/codesign -T /usr/bin/security
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $KEYCHAIN_PASSWORD build.keychain
         shell: bash
-        env:
-          KEYCHAIN_PASSWORD: ${{ secrets.IOS_KEYCHAIN_PASSWORD }}
-          MOBILE_KEY_PASSWORD: ${{ secrets.IOS_KEY_PASSWORD }}
-          DIST_CERT_PASSWORD: ${{ secrets.IOS_DIST_CERT_PASSWORD }}
 
       - name: Set up provisioning profiles
         run: |
