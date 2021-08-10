@@ -1,4 +1,5 @@
 ﻿using Bit.Core.Enums;
+using Bit.Core.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Net.Http.Headers;
@@ -91,7 +92,7 @@ namespace Bit.Core.Models.Request
         {
             if (MasterPasswordHash != null && Email != null)
             {
-                headers.Add("Auth-Email", Email);
+                headers.Add("Auth-Email", CoreHelpers.Base64UrlEncode(Encoding.UTF8.GetBytes(Email)));
             }
         }
     }
