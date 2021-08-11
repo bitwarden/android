@@ -29,7 +29,7 @@ namespace Bit.Core.Models.Response
             {
                 var model = errorModel.ToObject<ErrorModel>();
                 Message = model.Message;
-                ValidationErrors = model.ValidationErrors;
+                ValidationErrors = model.ValidationErrors ?? new Dictionary<string, List<string>>();
                 CaptchaSiteKey = ValidationErrors.ContainsKey("HCaptcha_SiteKey") ?
                     ValidationErrors["HCaptcha_SiteKey"]?.FirstOrDefault() :
                     null;
