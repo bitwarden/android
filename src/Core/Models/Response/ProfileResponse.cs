@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Bit.Core.Models.Response
 {
@@ -15,6 +16,7 @@ namespace Bit.Core.Models.Response
         public string Key { get; set; }
         public string PrivateKey { get; set; }
         public string SecurityStamp { get; set; }
+        public bool ForcePasswordReset { get; set; }
         public List<ProfileOrganizationResponse> Organizations { get; set; }
     }
 }

@@ -178,6 +178,12 @@ namespace Bit.Core.Services
                 true, false);
         }
 
+        public Task PutUpdateTempPasswordAsync(UpdateTempPasswordRequest request)
+        {
+            return SendAsync<UpdateTempPasswordRequest, object>(HttpMethod.Put, "/accounts/update-temp-password",
+                request, true, false);
+        }
+
         #endregion
 
         #region Folder APIs

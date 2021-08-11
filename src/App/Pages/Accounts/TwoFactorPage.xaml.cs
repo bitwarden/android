@@ -40,6 +40,8 @@ namespace Bit.App.Pages
                 Device.BeginInvokeOnMainThread(async () => await StartSetPasswordAsync());
             _vm.TwoFactorAuthSuccessAction = () =>
                 Device.BeginInvokeOnMainThread(async () => await TwoFactorAuthSuccessAsync());
+            _vm.UpdateTempPasswordAction =
+                () => Device.BeginInvokeOnMainThread(async () => await UpdateTempPasswordAsync());
             _vm.CloseAction = async () => await Navigation.PopModalAsync();
             DuoWebView = _duoWebView;
             if (Device.RuntimePlatform == Device.Android)
@@ -183,6 +185,12 @@ namespace Bit.App.Pages
         {
             _vm.CloseAction();
             var page = new SetPasswordPage(_appOptions, _orgIdentifier);
+            await Navigation.PushModalAsync(new NavigationPage(page));
+        }
+        
+        private async Task UpdateTempPasswordAsync()
+        {
+            var page = new UpdateTempPasswordPage();
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
 

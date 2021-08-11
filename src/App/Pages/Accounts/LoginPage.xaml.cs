@@ -27,6 +27,8 @@ namespace Bit.App.Pages
             _vm.Page = this;
             _vm.StartTwoFactorAction = () => Device.BeginInvokeOnMainThread(async () => await StartTwoFactorAsync());
             _vm.LogInSuccessAction = () => Device.BeginInvokeOnMainThread(async () => await LogInSuccessAsync());
+            _vm.UpdateTempPasswordAction =
+                () => Device.BeginInvokeOnMainThread(async () => await UpdateTempPasswordAsync());
             _vm.CloseAction = async () =>
             {
                 _messagingService.Send("showStatusBar", false);
@@ -122,6 +124,12 @@ namespace Bit.App.Pages
             }
             var previousPage = await AppHelpers.ClearPreviousPage();
             Application.Current.MainPage = new TabsPage(_appOptions, previousPage);
+        }
+        
+        private async Task UpdateTempPasswordAsync()
+        {
+            var page = new UpdateTempPasswordPage();
+            await Navigation.PushModalAsync(new NavigationPage(page));
         }
     }
 }

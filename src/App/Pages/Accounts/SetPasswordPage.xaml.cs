@@ -24,6 +24,8 @@ namespace Bit.App.Pages
             _vm.Page = this;
             _vm.SetPasswordSuccessAction =
                 () => Device.BeginInvokeOnMainThread(async () => await SetPasswordSuccessAsync());
+            _vm.UpdateTempPasswordAction =
+                () => Device.BeginInvokeOnMainThread(async () => await UpdateTempPasswordAsync());
             _vm.CloseAction = async () =>
             {
                 _messagingService.Send("showStatusBar", false);
@@ -68,6 +70,12 @@ namespace Bit.App.Pages
             {
                 _vm.CloseAction();
             }
+        }
+        
+        private async Task UpdateTempPasswordAsync()
+        {
+            var page = new UpdateTempPasswordPage();
+            await Navigation.PushModalAsync(new NavigationPage(page));
         }
 
         private async Task SetPasswordSuccessAsync()

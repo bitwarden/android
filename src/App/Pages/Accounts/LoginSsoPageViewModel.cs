@@ -28,6 +28,7 @@ namespace Bit.App.Pages
         private readonly IStorageService _storageService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IStateService _stateService;
+        private readonly IUserService _userService;
 
         private string _orgIdentifier;
 
@@ -43,6 +44,7 @@ namespace Bit.App.Pages
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            _userService = ServiceContainer.Resolve<IUserService>("userService");
 
             PageTitle = AppResources.Bitwarden;
             LogInCommand = new Command(async () => await LogInAsync());
@@ -60,6 +62,7 @@ namespace Bit.App.Pages
         public Action StartSetPasswordAction { get; set; }
         public Action SsoAuthSuccessAction { get; set; }
         public Action CloseAction { get; set; }
+        public Action UpdateTempPasswordAction { get; set; }
 
         public async Task InitAsync()
         {
@@ -206,7 +209,14 @@ namespace Bit.App.Pages
                     var disableFavicon = await _storageService.GetAsync<bool?>(Constants.DisableFaviconKey);
                     await _stateService.SaveAsync(Constants.DisableFaviconKey, disableFavicon.GetValueOrDefault());
                     var task = Task.Run(async () => await _syncService.FullSyncAsync(true));
-                    SsoAuthSuccessAction?.Invoke();
+                    if (await _userService.GetForcePasswordReset())
+                    {
+                        UpdateTempPasswordAction?.Invoke();
+                    }
+                    else
+                    {
+                        SsoAuthSuccessAction?.Invoke();
+                    }
                 }
             }
             catch (Exception e)

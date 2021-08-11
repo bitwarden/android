@@ -26,6 +26,7 @@ namespace Bit.App.Pages
         private readonly IMessagingService _messagingService;
         private readonly IBroadcasterService _broadcasterService;
         private readonly IStateService _stateService;
+        private readonly IUserService _userService;
 
         private bool _u2fSupported = false;
         private TwoFactorProviderType? _selectedProviderType;
@@ -47,6 +48,7 @@ namespace Bit.App.Pages
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            _userService = ServiceContainer.Resolve<IUserService>("userService");
 
             PageTitle = AppResources.TwoStepLogin;
             SubmitCommand = new Command(async () => await SubmitAsync());
@@ -107,6 +109,7 @@ namespace Bit.App.Pages
         public Action TwoFactorAuthSuccessAction { get; set; }
         public Action StartSetPasswordAction { get; set; }
         public Action CloseAction { get; set; }
+        public Action UpdateTempPasswordAction { get; set; }
 
         public void Init()
         {
@@ -227,7 +230,14 @@ namespace Bit.App.Pages
                 {
                     var disableFavicon = await _storageService.GetAsync<bool?>(Constants.DisableFaviconKey);
                     await _stateService.SaveAsync(Constants.DisableFaviconKey, disableFavicon.GetValueOrDefault());
-                    TwoFactorAuthSuccessAction?.Invoke();
+                    if (await _userService.GetForcePasswordReset())
+                    {
+                        UpdateTempPasswordAction?.Invoke();
+                    }
+                    else
+                    {
+                        TwoFactorAuthSuccessAction?.Invoke();
+                    }
                 }
             }
             catch (ApiException e)

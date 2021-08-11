@@ -84,6 +84,7 @@ namespace Bit.App.Pages
         public string ConfirmMasterPassword { get; set; }
         public string Hint { get; set; }
         public Action SetPasswordSuccessAction { get; set; }
+        public Action UpdateTempPasswordAction { get; set; }
         public Action CloseAction { get; set; }
         public string OrgIdentifier { get; set; }
 
@@ -179,8 +180,15 @@ namespace Bit.App.Pages
                 await _cryptoService.SetEncKeyAsync(encKey.Item2.EncryptedString);
                 await _cryptoService.SetEncPrivateKeyAsync(keys.Item2.EncryptedString);
                 await _deviceActionService.HideLoadingAsync();
-
-                SetPasswordSuccessAction?.Invoke();
+                
+                if (await _userService.GetForcePasswordReset())
+                {
+                    UpdateTempPasswordAction?.Invoke();
+                }
+                else
+                {
+                    SetPasswordSuccessAction?.Invoke();
+                }
             }
             catch (ApiException e)
             {
