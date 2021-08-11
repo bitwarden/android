@@ -19,7 +19,7 @@ jobs:
         id: retrieve-mobile-version
         run: |
           ver=$(sed -n -e '/android:versionName/ s/.*\= *//p' ./src/Android/Properties/AndroidManifest.xml | tr -d '"')
-          echo "::set-output name=mobile_version::${ver}-b"
+          echo "::set-output name=mobile_version::${ver}"
         shell: bash
 
       - name: Create Draft Release
@@ -33,8 +33,8 @@ jobs:
           prerelease: false
 
 
-  android:
-    name: Android Build
+  attach-artifacts:
+    name: Attach Release Artifacts
     runs-on: windows-latest
     needs: create-release
     steps:
@@ -67,6 +67,14 @@ jobs:
           branch: rc
           name: com.x8bit.bitwarden-fdroid.apk
 
+      - name: Download App Store .ipa artifact
+        uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74 # v2.14.0
+        with:
+          workflow: build.yml
+          workflow_conclusion: success
+          branch: rc
+          name: Bitwarden.ipa
+
       - name: Get latest release tag # Workaround for https://github.com/github/hub/issues/1817
         id: latest-release-tag
         env:
@@ -85,25 +93,16 @@ jobs:
             -a ./com.x8bit.bitwarden.aab \
             -a ./com.x8bit.bitwarden.apk \
             -a ./com.x8bit.bitwarden-fdroid.apk \
+            -a ./Bitwarden.ipa \
             -m "Version $RELEASE_NAME" \
             $RELEASE_TAG_NAME
         shell: bash
 
-      - name: Deploy to Play Store
-        run: |
-          PUBLISHER_PATH="./store/google/Publisher/bin/Release/netcoreapp2.0/Publisher.dll"
-          CREDS_PATH="$HOME/secrets/play_creds.json"
-          AAB_PATH="./com.x8bit.bitwarden.aab"
-          TRACK="internal"
 
-          dotnet $PUBLISHER_PATH $CREDS_PATH $AAB_PATH $TRACK
-        shell: bash
-
-
-  android-ubuntu:
-    name: Android Ubuntu Build
+  f-droid:
+    name: F-Droid Release
     runs-on: ubuntu-latest
-    needs: android
+    needs: attach-artifacts
     steps:
       - name: Checkout repo
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
@@ -183,51 +182,3 @@ jobs:
 
       - name: Deploy to gh-pages
         run: npm run deploy
-
-
-  ios:
-    name: iOS Build
-    runs-on: macos-latest
-    needs: create-release
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
-        with:
-          ref: rc
-
-      - name: Download App Store .ipa artifact
-        uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74 # v2.14.0
-        with:
-          workflow: build.yml
-          workflow_conclusion: success
-          branch: rc
-          name: Bitwarden.ipa
-
-      - name: Get latest release tag # Workaround for https://github.com/github/hub/issues/1817
-        id: latest-release-tag
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo "::set-output name=release_tag_name::$(hub release --include-drafts -L 1 -f '%T')"
-        shell: bash
-
-      - name: Upload release assets
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RELEASE_NAME: ${{ needs.create-release.outputs.mobile-version }}
-          RELEASE_TAG_NAME: ${{ steps.latest-release-tag.outputs.release_tag_name }}
-        run: |
-          hub release edit \
-            -a ./Bitwarden.ipa \
-            -m "Version $RELEASE_NAME" \
-            $RELEASE_TAG_NAME
-        shell: bash
-
-      - name: Deploy to App Store
-        env:
-          APPLE_ID_USERNAME: ${{ secrets.APPLE_ID_USERNAME }}
-          APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
-        run: |
-          xcrun altool --upload-app --type ios --file "./Bitwarden.ipa" \
-              --username "$APPLE_ID_USERNAME" --password "$APPLE_ID_PASSWORD"
-        shell: bash

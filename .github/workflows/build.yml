@@ -253,7 +253,18 @@ jobs:
         uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700 # v2.2.4
         with:
           name: com.x8bit.bitwarden-fdroid.apk
-          path: ./com.x8bit.bitwarden-fdroid.apk  
+          path: ./com.x8bit.bitwarden-fdroid.apk
+
+      - name: Deploy to Play Store
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/rc'
+        run: |
+          PUBLISHER_PATH="./store/google/Publisher/bin/Release/netcoreapp2.0/Publisher.dll"
+          CREDS_PATH="$HOME/secrets/play_creds.json"
+          AAB_PATH="./com.x8bit.bitwarden.aab"
+          TRACK="internal"
+
+          dotnet $PUBLISHER_PATH $CREDS_PATH $AAB_PATH $TRACK
+        shell: bash
 
 
   ios:
@@ -365,3 +376,13 @@ jobs:
         with:
           name: Bitwarden.ipa
           path: ./bitwarden-export/Bitwarden.ipa
+
+      - name: Deploy to App Store
+        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/rc'
+        env:
+          APPLE_ID_USERNAME: ${{ secrets.APPLE_ID_USERNAME }}
+          APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+        run: |
+          xcrun altool --upload-app --type ios --file "./Bitwarden.ipa" \
+              --username "$APPLE_ID_USERNAME" --password "$APPLE_ID_PASSWORD"
+        shell: bash
