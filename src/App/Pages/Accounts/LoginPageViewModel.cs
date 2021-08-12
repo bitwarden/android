@@ -187,15 +187,13 @@ namespace Bit.App.Pages
                     var disableFavicon = await _storageService.GetAsync<bool?>(Constants.DisableFaviconKey);
                     await _stateService.SaveAsync(Constants.DisableFaviconKey, disableFavicon.GetValueOrDefault());
                     var task = Task.Run(async () => await _syncService.FullSyncAsync(true));
-
-                    if (await _userService.GetForcePasswordReset())
-                    {
-                        UpdateTempPasswordAction?.Invoke();
-                    }
-                    else
-                    {
-                        LogInSuccessAction?.Invoke();
-                    }
+                    LogInSuccessAction?.Invoke();
+                    await task.ContinueWith(async (t) => {
+                        if (await _userService.GetForcePasswordReset())
+                        {
+                            UpdateTempPasswordAction?.Invoke();
+                        }
+                    });
                 }
             }
             catch (ApiException e)
