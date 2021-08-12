@@ -30,7 +30,7 @@ namespace Bit.App.Pages
                 captchaRequiredText = AppResources.CaptchaRequired,
             });
 
-            var url = environmentService.WebVaultUrl + "/captcha-mobile-connector.html?" + "data=" + data +
+            var url = environmentService.GetWebVaultUrl() + "/captcha-mobile-connector.html?" + "data=" + data +
                 "&parent=" + Uri.EscapeDataString(callbackUri) + "&v=1";
 
             WebAuthenticatorResult authResult = null;

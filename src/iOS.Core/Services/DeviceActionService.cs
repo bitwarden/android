@@ -106,7 +106,9 @@ namespace Bit.iOS.Core.Services
             if (_progressAlert == null)
             {
                 result.TrySetResult(0);
+                return result.Task;
             }
+
             _progressAlert.DismissViewController(false, () => result.TrySetResult(0));
             _progressAlert.Dispose();
             _progressAlert = null;
