@@ -256,18 +256,17 @@ jobs:
           path: ./com.x8bit.bitwarden-fdroid.apk
 
       - name: Check if RC branch exists
+        id: rc-branch-check
         run: |
-          git remote
-          git branch -a
-          if [[ $(git ls-remote --heads origin upgrade-pipeline) ]]; then
-            echo "RC branch exists!"
+          if [[ $(git ls-remote --heads origin rc) ]]; then
+            echo "::set-output name=branch_exists::1"
           else
-            echo "RC branch does not exist!"
+            echo "::set-output name=branch_exists::0"
           fi
         shell: bash
 
       - name: Deploy to Play Store
-        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/rc'
+        if: (github.ref == 'refs/heads/master' && steps.rc-branch-check.outputs.branch_exists == 0) || github.ref == 'refs/heads/rc'
         run: |
           PUBLISHER_PATH="./store/google/Publisher/bin/Release/netcoreapp2.0/Publisher.dll"
           CREDS_PATH="$HOME/secrets/play_creds.json"
@@ -388,8 +387,18 @@ jobs:
           name: Bitwarden.ipa
           path: ./bitwarden-export/Bitwarden.ipa
 
+      - name: Check if RC branch exists
+        id: rc-branch-check
+        run: |
+          if [[ $(git ls-remote --heads origin rc) ]]; then
+            echo "::set-output name=branch_exists::1"
+          else
+            echo "::set-output name=branch_exists::0"
+          fi
+        shell: bash
+
       - name: Deploy to App Store
-        if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/rc'
+        if: (github.ref == 'refs/heads/master' && steps.rc-branch-check.outputs.branch_exists == 0) || github.ref == 'refs/heads/rc'
         env:
           APPLE_ID_USERNAME: ${{ secrets.APPLE_ID_USERNAME }}
           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
