@@ -1715,7 +1715,7 @@
     <value>Щоб завершити налаштування входу з SSO, встановіть головний пароль для доступу і захисту сховища.</value>
   </data>
   <data name="MasterPasswordPolicyInEffect" xml:space="preserve">
-    <value>Одна або декілька політик організації зобов'язують дотримання таких вимог для головного пароля:</value>
+    <value>Одна або декілька політик організації вимагають дотримання таких вимог для головного пароля:</value>
   </data>
   <data name="PolicyInEffectMinComplexity" xml:space="preserve">
     <value>Мінімальний рівень складності {0}</value>
@@ -1904,7 +1904,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddASend" xml:space="preserve">
-    <value>Add a Send</value>
+    <value>Додати відправлення</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="CopyLink" xml:space="preserve">
@@ -1987,16 +1987,16 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFileEmailVerificationRequired" xml:space="preserve">
-    <value>Для відправлення файлів необхідно підтвердити електронну пошту.</value>
+    <value>Для відправлення файлів необхідно підтвердити електронну пошту. Ви можете виконати підтвердження у веб сховищі.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PasswordPrompt" xml:space="preserve">
-    <value>Master password re-prompt</value>
+    <value>Повторний запит головного пароля</value>
   </data>
   <data name="PasswordConfirmation" xml:space="preserve">
-    <value>Master password confirmation</value>
+    <value>Підтвердження головного пароля</value>
   </data>
   <data name="PasswordConfirmationDesc" xml:space="preserve">
-    <value>This action is protected, to continue please re-enter your master password to verify your identity.</value>
+    <value>Ця дія захищена. Щоб продовжити, повторно введіть головний пароль.</value>
   </data>
 </root>

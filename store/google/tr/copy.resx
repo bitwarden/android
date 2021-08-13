@@ -126,15 +126,31 @@
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>Bitwarden, tüm kullanıcı adı ve parolalarınızı saklamanın, bunları tüm cihazlarınız arasında senkronize etmenin en kolay ve en güvenli yolu.
+    <value>Bitwarden, Inc., 8bit Solutions LLC’nin ana şirketidir.
 
-Parola hırsızlığı ciddi bir sorun. Kullandığınız web siteleri ve uygulamalar sürekli saldırı altında. Güvenlik ihlalleri yaşanıyor ve parolalarınız çalınabiliyor. Farklı uygulamalarda ve web sitelerinde hep aynı parolaları kullanırsanız hacker’lar e-postalarınıza, banka hesabınıza ve diğer önemli hesaplarınıza kolayca erişebiliyor.
+THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET VE BİRÇOK MEDYA KURULUŞUNA GÖRE EN İYİ PAROLA YÖNETİCİSİ.
 
-Güvenlik uzmanları, oluşturduğunuz her hesap için farklı, rastgele bir parola kullanmanızı öneriyor. Peki, tüm bu parolaları nasıl yöneteceksiniz? Bitwarden, parolalarınızı oluşturmanızı, saklamanızı ve onlara erişmenizi kolaylaştırıyor.
+Sınırsız sayıda parolayı istediğiniz kadar cihazda yönetin, saklayın, koruyun ve paylaşın. Bitwarden; herkesin evde, işte veya yolda kullanabileceği açık kaynaklı parola yönetim çözümleri sunuyor.
 
-Bitwarden, tüm hesaplarınızı şifrelenmiş bir kasada saklayarak tüm cihazlarınız arasında senkronize edebilir. Verileriniz kendi cihazınız üzerinde şifrelendiği için verilerinize yalnızca siz erişebilirsiniz, Bitwarden ekibi bile verilerinizi okuyamaz. Verileriniz AES-256 bit şifreleme, salted hash ve PBKDF2 SHA-256 ile korunur.
+Sık kullandığınız web siteleri için güvenlik gereksinimlerinize uygun, güçlü, benzersiz ve rastgele parolalar oluşturabilirsiniz.
 
-Bitwarden açık kaynaklı bir yazılımdır. GitHub’da barındırdığımız Bitwarden kaynak kodlarını herkes inceleyebilir ve kodlarımıza katkıda bulunabilir.</value>
+Bitwarden Send, şifrelenmiş bilgileri (dosyalar ve düz metinler) herkese hızlı bir şekilde iletmenizi sağlıyor.
+
+Bitwarden, parolaları iş arkadaşlarınızla güvenli bir şekilde paylaşabilmeniz için şirketlere yönelik Teams ve Enterprise paketleri de sunuyor.
+
+Neden Bitwarden?
+
+Üst düzey şifreleme
+Parolalarınız gelişmiş uçtan uca şifreleme (AES-256 bit, salted hashtag ve PBKDF2 SHA-256) ile korunuyor, böylece verileriniz güvende ve gizli kalıyor.
+
+Dahili parola oluşturucu
+Sık kullandığınız web siteleri için güvenlik gereksinimlerinize uygun, güçlü, benzersiz ve rastgele parolalar oluşturabilirsiniz.
+
+Çeviriler
+Bitwarden 40 dilde kullanılabiliyor ve gönüllü topluluğumuz sayesinde çeviri sayısı giderek artıyor.
+
+Her platformla uyumlu uygulamalar
+Bitwarden kasanızdaki hassas verilere her tarayıcıdan, mobil cihazdan veya masaüstü işletim sisteminden ulaşabilir ve onları paylaşabilirsiniz.</value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">

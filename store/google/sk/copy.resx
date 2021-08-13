@@ -126,15 +126,32 @@
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>Bitwarden je najjednoduchší a najbezpečnejší spôsob, ako skladovať všetky vaše prihlasovacie mená a heslá a zároveň ich mať pohodlne synchronizované medzi všetkými vašimi zariadeniami.
+    <value>Bitwarden, Inc. je materská spoločnosť spoločnosti 8bit Solutions LLC.
 
-Krádež hesiel je vážny problém. Stránky a aplikácie, ktoré použiváte, sú pod útokom každý deň. Vykystujú sa narušenia bezpečnosti a kradnú sa heslá. Ak používate to isté heslo vo viacerých aplikáciách a na viacerých webstránkach, hackeri sa môžu ľahko dostať k vášmu emailu, banke a do iných dôležitých účtov.
+OHODNOTENÝ AKO NAJLEPŠÍ SPRÁVCA HESIEL V THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET A ĎALŠÍMI.
 
-Bezpečnostní experti odporúčajú používať rozdielne, náhodne generované heslo pre každý účet, ktorý vytvoríte. Ale ako spravovať všetky tieto heslá? Bitwarden vám uľahčí vytvárať a uskladniť vaše heslá, ako aj prístup k nim.
+Spravujte, ukladajte, zabezpečte a zdieľajte neobmedzený počet hesiel naprieč neobmedzeným počtom zariadení odkiaľkoľvek. Bitwarden ponúka open source riešenie na správu hesiel komukoľvek, kdekoľvek doma, v práci alebo na ceste.
 
-Bitwarden skladuje všetky vaše prihlasovacie údaje v zašifrovanom trezore, ktorý sa synchronizuje medzi všetkými vašimi zariadeniami. Keďže je plne zašifrovaný ešte predtým, ako opustí vaše zariadenie, iba vy máte prístup k svojim údajom. Ani tím Bitwardenu nevie prečítať vaše údaje, aj keby sme chceli. Vaše dáta sú zapečatené 256-bitovým šifrovaním AES, soleným hašovaním a PBKDF2 SHA-256.
+Vygenerujte si silné, unikátne a náhodné heslá podľa bezpečnostných požiadaviek na každej stránke, ktorú navštevujete.
 
-Bitwarden je zameraný na software s otvoreným zdrojovým kódom. Zdrojový kód Bitwardenu je prístupný na GitHub-e a hocikto môže overiť, auditovať a prispievať do zdrojového kódu Bitwardenu.</value>
+Bitwarden Send rýchlo prenesie šifrované informácie -- súbory a text -- priamo komukoľvek.
+
+Bitwarden ponúka Teams a Enterprise paušály pre firmy, aby ste mohli bezpečne zdieľať hesla s kolegami.
+
+Prečo si vybrať Bitwarden:
+
+Svetová trieda v šifrovaní
+Heslá sú chránené pokročilým end-to-end šifrovaním (AES-256 bit, salted hashtag a PBKDF2 SHA-256), takže Vaše dáta zostanú bezpečné a súkromné.
+
+Vstavaný generátor hesiel
+Vygenerujte si silné, unikátne a náhodné heslá podľa bezpečnostných požiadaviek na každej stránke, ktorú navštevujete.
+
+Svetová lokalizácia
+Vďaka našej globálnej komunite má Bitwarden neustále rastúcu lokalizáciu už do 40 jazykov.
+
+Aplikácie pre rôzne platformy
+Zabezpečte a zdieľajte súkromné dáta prostredníctvom Bitwarden trezora z ktoréhokoľvek prehliadača, mobilného zariadenia, alebo stolného počítača a ďalších.
+</value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">

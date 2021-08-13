@@ -1691,7 +1691,7 @@
     <value>마스터 비밀번호 인증을 하기 전에는 생체 인식을 사용한 자동 채우기가 비활성화됩니다.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
-    <value>새로고침할 떄 동기화 활성화</value>
+    <value>새로고침할 때 동기화 사용</value>
   </data>
   <data name="EnableSyncOnRefreshDescription" xml:space="preserve">
     <value>아래로 끌어내리면 보관함을 동기화합니다.</value>
@@ -1904,7 +1904,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddASend" xml:space="preserve">
-    <value>Add a Send</value>
+    <value>Send 추가</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="CopyLink" xml:space="preserve">
@@ -1991,12 +1991,12 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PasswordPrompt" xml:space="preserve">
-    <value>Master password re-prompt</value>
+    <value>마스터 비밀번호 재확인</value>
   </data>
   <data name="PasswordConfirmation" xml:space="preserve">
-    <value>Master password confirmation</value>
+    <value>마스터 비밀번호 확인</value>
   </data>
   <data name="PasswordConfirmationDesc" xml:space="preserve">
-    <value>This action is protected, to continue please re-enter your master password to verify your identity.</value>
+    <value>이 작업은 보호되어 있습니다. 계속하려면 마스터 비밀번호를 입력하여 신원을 인증하세요.</value>
   </data>
 </root>
