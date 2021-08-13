@@ -255,6 +255,16 @@ jobs:
           name: com.x8bit.bitwarden-fdroid.apk
           path: ./com.x8bit.bitwarden-fdroid.apk
 
+      - name: Check if RC branch exists
+        run: |
+          git remote
+          git branch -a
+          if [[ $(git ls-remote --heads origin rc) ]]; then
+            echo "RC branch exists!"
+          else
+            echo "RC brnach does not exist!"
+          fi
+
       - name: Deploy to Play Store
         if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/rc'
         run: |
