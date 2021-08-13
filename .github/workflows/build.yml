@@ -264,6 +264,7 @@ jobs:
           else
             echo "RC brnach does not exist!"
           fi
+        shell: bash
 
       - name: Deploy to Play Store
         if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/rc'
