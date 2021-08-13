@@ -63,6 +63,7 @@ jobs:
               curl -s -H "Authorization: Bearer $CROWDIN_API_TOKEN" \
               $CROWDIN_BASE_URL/$CROWDIN_PROJECT_ID/branches | jq -r '.data[0].data.id'
           )
+          echo "[*] Crowin master branch id: $BRANCH_ID"
           echo "::set-output name=id::$BRANCH_ID"
 
       - name: Get Crowdin build id
@@ -79,6 +80,7 @@ jobs:
               $CROWDIN_BASE_URL/$CROWDIN_PROJECT_ID/translations/builds \
               -d "{\"branchId\": $CROWDIN_MASTER_BRANCH_ID}" | jq -r '.data.id'
           )
+          echo "[*] Crowin translations build id: $BRANCH_ID"
           echo "::set-output name=id::$BUILD_ID"
 
       - name: Wait for Crowdin build to finish
@@ -113,6 +115,7 @@ jobs:
               curl -s -H "Authorization: Bearer $CROWDIN_API_TOKEN" \
               $CROWDIN_BASE_URL/$CROWDIN_PROJECT_ID/translations/builds/$CROWDIN_BUILD_ID/download | jq -r '.data.url'
           )
+          echo "[*] Crowin translations download url: $DOWNLOAD_URL"
           echo "::set-output name=value::$DOWNLOAD_URL"
 
       - name: Download Crowdin translations
@@ -127,27 +130,49 @@ jobs:
           unzip -o $SAVE_FILE
           rm $SAVE_FILE
 
-      - name: Commit changes
+      - name: Check changes
+        id: files-changed
         env:
           BRANCH_NAME: ${{ steps.branch.outputs.branch-name }}
           BRANCH_EXISTS: ${{ steps.branch.outputs.branch-exists }}
         run: |
-          echo "[*] Adding new translations"
-          git add .
-          echo "=====Translations Changed====="
-          git status
-          echo "=============================="
-          echo "[*] Committing"
-          git commit -m "Autosync Crowdin translations"
+          DIFF_BRANCH=master
+          if [[ "$BRANCH_EXISTS" == "true" ]]; then
+            DIFF_BRANCH=$BRANCH_NAME
+          fi
 
-          echo "[*] Pushing"
-          if [ "$BRANCH_EXISTS" == "false" ]; then
-            git push -u origin $BRANCH_NAME
+          DIFF_LEN=$(git diff origin/${DIFF_BRANCH} | wc -l | xargs)
+          echo "[*] git diff lines: ${DIFF_LEN}"
+          echo "::set-output name=num::$DIFF_LEN"
+
+      - name: Commit changes
+        env:
+          BRANCH_NAME: ${{ steps.branch.outputs.branch-name }}
+          BRANCH_EXISTS: ${{ steps.branch.outputs.branch-exists }}
+          DIFF_BRANCH: master
+          DIFF_LEN: ${{ steps.files-changed.outputs.num }}
+        run: |
+          echo "=====Translations Changed====="
+          git diff --name-only origin/${DIFF_BRANCH}
+          echo "=============================="
+
+          if [ "$DIFF_LEN" != "0" ]; then
+            echo "[*] Adding new translations"
+            git add .
+            echo "[*] Committing"
+            git commit -m "Autosync Crowdin translations"
+            echo "[*] Pushing"
+            if [ "$BRANCH_EXISTS" == "false" ]; then
+              git push -u origin $BRANCH_NAME
+            else
+              git push
+            fi
           else
-            git push
+            echo "[*] No new docs"
           fi
 
       - name: Create/Update PR
+        if: ${{ steps.files-changed.outputs.num }} != 0
         env:
           BRANCH_NAME: ${{ steps.branch.outputs.branch-name }}
           BRANCH_EXISTS: ${{ steps.branch.outputs.branch-exists }}
