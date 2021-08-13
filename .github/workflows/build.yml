@@ -259,10 +259,10 @@ jobs:
         run: |
           git remote
           git branch -a
-          if [[ $(git ls-remote --heads origin rc) ]]; then
+          if [[ $(git ls-remote --heads origin upgrade-pipeline) ]]; then
             echo "RC branch exists!"
           else
-            echo "RC brnach does not exist!"
+            echo "RC branch does not exist!"
           fi
         shell: bash
 
