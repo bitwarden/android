@@ -17,3 +17,146 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f  # v2.3.4
 
+      - name: Setup git config
+        run: |
+          git config user.name "github-actions"
+          git config user.email "<>"
+
+      - name: Get Crowndin Sync Branch
+        id: branch
+        run: |
+          BRANCH_NAME=crowdin-auto-sync
+          BRANCH_EXISTS=true
+
+          git fetch -a
+          git switch master
+          if [ $(git branch -a | egrep "remotes/origin/${BRANCH_NAME}$" | wc -l) -eq 0 ]; then
+            BRANCH_EXISTS=false
+            git switch -c $BRANCH_NAME
+          else
+            git switch $BRANCH_NAME
+          fi
+          git branch
+
+          echo "::set-output name=branch-exists::$BRANCH_EXISTS"
+          echo "::set-output name=branch-name::$BRANCH_NAME"
+
+      - name: Login to Azure
+        uses: Azure/login@77f1b2e3fb80c0e8645114159d17008b8a2e475a
+        with:
+          creds: ${{ secrets.AZURE_PROD_KV_CREDENTIALS }}
+
+      - name: Retrieve secrets
+        id: retrieve-secrets
+        uses: Azure/get-keyvault-secrets@80ccd3fafe5662407cc2e55f202ee34bfff8c403
+        with:
+          keyvault: "bitwarden-prod-kv"
+          secrets: "crowdin-api-token"
+
+      - name: Get Crowdin master branch id
+        id: crowdin-master-branch
+        env:
+          CROWDIN_API_TOKEN: ${{ steps.retrieve-secrets.outputs.crowdin-api-token }}
+        run: |
+          # Step 1: GET master branchId
+          BRANCH_ID=$(
+              curl -s -H "Authorization: Bearer $CROWDIN_API_TOKEN" \
+              $CROWDIN_BASE_URL/$CROWDIN_PROJECT_ID/branches | jq -r '.data[0].data.id'
+          )
+          echo "::set-output name=id::$BRANCH_ID"
+
+      - name: Get Crowdin build id
+        id: crowdin-build
+        env:
+          CROWDIN_API_TOKEN: ${{ steps.retrieve-secrets.outputs.crowdin-api-token }}
+          CROWDIN_MASTER_BRANCH_ID: ${{ steps.crowdin-master-branch.outputs.id }}
+        run: |
+          # Step 2: POST Build the translations and get store build id
+          BUILD_ID=$(
+              curl -X POST -s \
+              -H "Authorization: Bearer $CROWDIN_API_TOKEN" \
+              -H "Content-Type: application/json" \
+              $CROWDIN_BASE_URL/$CROWDIN_PROJECT_ID/translations/builds \
+              -d "{\"branchId\": $CROWDIN_MASTER_BRANCH_ID}" | jq -r '.data.id'
+          )
+          echo "::set-output name=id::$BUILD_ID"
+
+      - name: Wait for Crowdin build to finish
+        env:
+          MAX_TRIES: 12
+          CROWDIN_API_TOKEN: ${{ steps.retrieve-secrets.outputs.crowdin-api-token }}
+          CROWDIN_BUILD_ID: ${{ steps.crowdin-build.outputs.id }}
+        run: |
+          for try in {1..$MAX_TRIES}; do
+              BRANCH_STATUS=$(
+                  curl -s -H "Authorization: Bearer $CROWDIN_API_TOKEN" \
+                  $CROWDIN_BASE_URL/$CROWDIN_PROJECT_ID/translations/builds/$CROWDIN_BUILD_ID | jq -r '.data.status'
+              )
+              echo "[*] Build status: $BRANCH_STATUS"
+              if [[ "$BRANCH_STATUS" == "finished" ]]; then break; fi
+              if [[ "$try" == "$MAX_TRIES" ]]; then
+                  echo "[!] Exceeded tries: $try"
+                  exit 1
+              else
+                  sleep 5
+              fi
+          done
+
+      - name: Get Crowdin download URL
+        id: crowdin-download-url
+        env:
+          CROWDIN_API_TOKEN: ${{ steps.retrieve-secrets.outputs.crowdin-api-token }}
+          CROWDIN_BUILD_ID: ${{ steps.crowdin-build.outputs.id }}
+        run: |
+          # Step 4: when build is finished, get download url
+          DOWNLOAD_URL=$(
+              curl -s -H "Authorization: Bearer $CROWDIN_API_TOKEN" \
+              $CROWDIN_BASE_URL/$CROWDIN_PROJECT_ID/translations/builds/$CROWDIN_BUILD_ID/download | jq -r '.data.url'
+          )
+          echo "::set-output name=value::$DOWNLOAD_URL"
+
+      - name: Download Crowdin translations
+        env:
+          CROWDIN_API_TOKEN: ${{ steps.retrieve-secrets.outputs.crowdin-api-token }}
+          CROWDIN_DOWNLOAD_URL: ${{ steps.crowdin-download-url.outputs.value }}
+          SAVE_FILE: "translations.zip"
+        run: |
+          # Step 5: download the translations via the download url
+          curl -s $CROWDIN_DOWNLOAD_URL --output $SAVE_FILE
+          echo "[*]    Saved to: $SAVE_FILE"
+          unzip -o $SAVE_FILE
+          rm $SAVE_FILE
+
+      - name: Commit changes
+        env:
+          BRANCH_NAME: ${{ steps.branch.outputs.branch-name }}
+          BRANCH_EXISTS: ${{ steps.branch.outputs.branch-exists }}
+        run: |
+          echo "[*] Adding new translations"
+          git add .
+          echo "=====Translations Changed====="
+          git status
+          echo "=============================="
+          echo "[*] Committing"
+          git commit -m "Autosync Crowdin translations"
+
+          echo "[*] Pushing"
+          if [ "$BRANCH_EXISTS" == "false" ]; then
+            git push -u origin $BRANCH_NAME
+          else
+            git push
+          fi
+
+      - name: Create/Update PR
+        env:
+          BRANCH_NAME: ${{ steps.branch.outputs.branch-name }}
+          BRANCH_EXISTS: ${{ steps.branch.outputs.branch-exists }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ "$BRANCH_EXISTS" == "false" ]; then
+            echo "[*] Creating PR"
+            gh pr create --title "Autosync Crowdin Translations" \
+            --body "Autosync the updated translations"
+          else
+            echo "[*] Existing PR updated"
+          fi
