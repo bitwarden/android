@@ -846,7 +846,7 @@
     <value>Add New Attachment</value>
   </data>
   <data name="Attachments" xml:space="preserve">
-    <value>Attachments</value>
+    <value>अटॅचमेंट्स</value>
   </data>
   <data name="UnableToDownloadFile" xml:space="preserve">
     <value>Unable to download file.</value>
@@ -855,7 +855,7 @@
     <value>Your device cannot open this type of file.</value>
   </data>
   <data name="Downloading" xml:space="preserve">
-    <value>Downloading...</value>
+    <value>डाउनलोड कर रहा है...</value>
     <comment>Message shown when downloading a file</comment>
   </data>
   <data name="AttachmentLargeWarning" xml:space="preserve">
