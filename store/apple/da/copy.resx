@@ -122,15 +122,31 @@
     <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Bitwarden er den nemmeste og sikreste måde at gemme alle dine logins og adgangskoder på, samtidig med at de er synkroniserede mellem alle dine enheder. Bitwarden app udvidelsen giver dig mulighed for hurtigt at logge ind på enhver hjemmeside via Safari eller Chrome og understøttes af hundredvis af andre populære apps.
+    <value>Bitwarden, Inc. er moderselskab for 8bit Solutions LLC.
 
-Tyveri af adgangskoder er et alvorligt problem. De hjemmesider og apps du bruger, er under angreb hver dag. Sikkerhedsbrud opstår, og dine adgangskoder bliver stjålet. Når du genbruger de samme adgangskoder på tværs af apps og hjemmesider, kan hackere nemt få adgang til din e-mail, bank- og andre vigtige konti.
+UDNÆVNT BEDSTE PASSWORD MANAGER AF THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET OG FLERE.
 
-Sikkerhedseksperter anbefaler, at du bruger en unik, tilfældigt genereret, adgangskode til hver konto du opretter. Men hvordan håndterer du alle disse adgangskoder? Bitwarden gør det nemt for dig at oprette, gemme og få adgang til dine adgangskoder.
+Administrér, gem, sikr og del adgangskoder ubegrænset på tværs af enheder hvor som helst. Bitwarden leverer open source adgangskodeadministrationsløsninger til alle, hvad enten det er hjemme, på arbejdspladsen eller på farten.
 
-Bitwarden gemmer alle dine logins i en krypteret boks, der synkroniseres mellem alle dine enheder. Da de er fuldstændig krypterede, før de overhovedet forlader dine enheder, er det kun dig der har adgang til dine data. Ikke engang teamet hos Bitwarden kan få adgang til dine data, selv hvis de forsøgte på det. Dine data er sikret med AES-256 bit kryptering, saltet hasing og PBKDF2 SHA-256.
+Generér stærke, unikke og tilfældige adgangskoder baseret på sikkerhedskrav til hvert websted, du besøger.
 
-Bitwarden er fokuseret på open source software. Kildekoden til Bitwarden ligger på GitHub, og enhver kan gennemse, revidere og bidrage til Bitwardens kildekode.</value>
+Bitwarden Send overfører hurtigt krypterede oplysninger --- filer og almindelig tekst - direkte til enhver.
+
+Bitwarden tilbyder Teams og Enterprise-planer for virksomheder, så du sikkert kan dele adgangskoder med kolleger.
+
+Hvorfor vælge Bitwarden:
+
+Kryptering i verdensklasse
+Adgangskoder er beskyttet med avanceret end-to-end-kryptering (AES-256 bit, saltet hashtag og PBKDF2 SHA-256), så dine data forbliver sikre og private.
+
+Indbygget adgangskodegenerator
+Generér stærke, unikke og tilfældige adgangskoder baseret på sikkerhedskrav til hvert websted, du besøger.
+
+Globale oversættelser
+Bitwarden findes på 40 sprog, og flere kommer til, takket være vores globale fællesskab.
+
+Applikationer på tværs af platforme
+Beskyt og del følsomme data i din Bitwarden boks fra enhver browser, mobilenhed eller desktop OS og mere.</value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">

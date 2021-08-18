@@ -1837,7 +1837,7 @@
     <value>Deletion Date</value>
   </data>
   <data name="DeletionTime" xml:space="preserve">
-    <value>Deletion Time</value>
+    <value>Thời gian xóa</value>
   </data>
   <data name="DeletionDateInfo" xml:space="preserve">
     <value>Send sẽ được xóa vĩnh viễn vào ngày và giờ được chỉ định.</value>

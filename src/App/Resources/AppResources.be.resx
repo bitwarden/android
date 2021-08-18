@@ -604,7 +604,7 @@
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>Налады па змаўчанні задаюцца з генератара пароляў асноўнай праграмы Bitwarden.</value>
+    <value>Прадвызначаныя налады вызначаюцца з генератара пароляў асноўнай праграмы Bitwarden.</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>Параметры</value>
@@ -759,7 +759,7 @@
     <value>Стан</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
-    <value>Самы просты спосаб дадаць новыя імёны карыстальінка ў ваша сховішча гэта служба аўтазапаўнення Bitwarden. Дадатковыя звесткі пра выкарыстанне службы аўтазапаўнення Bitwarden знаходзяцца ў раздзеле 'Налады'.</value>
+    <value>Самы просты спосаб дадаць новыя лагіны ў ваша сховішча - служба аўтазапаўнення Bitwarden. Дадатковыя звесткі пра выкарыстанне службы аўтазапаўнення Bitwarden можна знайсці ў раздзеле "Налады".</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Аўтазапаўненне</value>
@@ -1203,7 +1203,7 @@
     <value>Асноўны дамен</value>
   </data>
   <data name="Default" xml:space="preserve">
-    <value>Па змаўчанні</value>
+    <value>Прадвызначана</value>
   </data>
   <data name="Exact" xml:space="preserve">
     <value>Дакладна</value>
@@ -1487,11 +1487,11 @@
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="DefaultUriMatchDetection" xml:space="preserve">
-    <value>Выяўленне супадзення URI па змаўчанні</value>
+    <value>Прадвызначанае выяўленне супадзення URI</value>
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
-    <value>Выберыце спосаб па змаўчанні, які выкарыстоўваецца пры вызначэнні адпаведнасці URI для ўліковых даных пры выкананні такіх дзеянняў, як аўтаматычнае запаўненне.</value>
+    <value>Выберыце прадвызначаны спосаб, які выкарыстоўваецца пры вызначэнні адпаведнасці URI для ўліковых даных пры выкананні такіх дзеянняў, як аўтаматычнае запаўненне.</value>
   </data>
   <data name="Theme" xml:space="preserve">
     <value>Тэма</value>
@@ -1527,7 +1527,7 @@
     <value>URI у чорным спісе</value>
   </data>
   <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>Аўтазапаўненне не прапануецца для URI з чорнага спісу. Элементы гэтага спісу павінны быць раздзелены коскай. Напрыклад: "https://twitter.com, androidapp://com.twitter.android".</value>
+    <value>Аўтазапаўненне не будзе прапаноўвацца для URI з чорнага спіса. Элементы гэтага спіса трэба падзяляць коскай. Напрыклад: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
   <data name="DisableSavePrompt" xml:space="preserve">
     <value>Выключыць запыт на захаванне.</value>
@@ -1709,7 +1709,7 @@
     <value>Часова немагчыма зайсці праз адзіны ўваход (SSO).</value>
   </data>
   <data name="SetMasterPassword" xml:space="preserve">
-    <value>Задаць асноўны пароль</value>
+    <value>Прызначыць асноўны пароль</value>
   </data>
   <data name="SetMasterPasswordSummary" xml:space="preserve">
     <value>Для завяршэння ўваходу праз SSO, усталюйце галоўны пароль для доступу і абароны вашаго сховішча.</value>
@@ -1766,7 +1766,7 @@
     <value>Выкарыстоўваць убудаванае аўтазапаўненне</value>
   </data>
   <data name="InlineAutofillDescription" xml:space="preserve">
-    <value>Выкарыстоўваць убудаванае аўтазапаўненне, калі выбраны спосаб уводу (клавіятура) яго падтрымлівае. Калі вашая канфігурацыя не падтрымліваецца (або гэты параметр адключаны), будзе выкарыстоўвацца аўтазапаўненне накладаннем па змаўчанні.</value>
+    <value>Выкарыстоўваць убудаванае аўтазапаўненне, калі выбраны спосаб уводу (клавіятура) яго падтрымлівае. Калі вашая канфігурацыя не падтрымліваецца (або гэты параметр адключаны), будзе выкарыстоўвацца прадвызначанае аўтазапаўненне.</value>
   </data>
   <data name="Accessibility" xml:space="preserve">
     <value>Спецыяльныя магчымасці</value>
@@ -1802,55 +1802,55 @@
     <value>An organization policy is affecting your ownership options.</value>
   </data>
   <data name="Send" xml:space="preserve">
-    <value>Send</value>
+    <value>Адпраўленне</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AllSends" xml:space="preserve">
-    <value>All Sends</value>
+    <value>Усе адпраўленні</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Sends" xml:space="preserve">
-    <value>Sends</value>
+    <value>Адпраўленні</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NameInfo" xml:space="preserve">
-    <value>A friendly name to describe this Send.</value>
+    <value>Зразумелая назва для апісання адпраўлення</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="TypeText" xml:space="preserve">
-    <value>Text</value>
+    <value>Тэкст</value>
   </data>
   <data name="TypeTextInfo" xml:space="preserve">
-    <value>The text you want to send.</value>
+    <value>Тэкст, які вы хочаце адправіць.</value>
   </data>
   <data name="HideTextByDefault" xml:space="preserve">
     <value>When accessing the Send, hide the text by default</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="TypeFile" xml:space="preserve">
-    <value>File</value>
+    <value>Файл</value>
   </data>
   <data name="TypeFileInfo" xml:space="preserve">
-    <value>The file you want to send.</value>
+    <value>Файл, які вы хочаце адправіць.</value>
   </data>
   <data name="DeletionDate" xml:space="preserve">
-    <value>Deletion Date</value>
+    <value>Дата выдалення</value>
   </data>
   <data name="DeletionTime" xml:space="preserve">
-    <value>Deletion Time</value>
+    <value>Час выдалення</value>
   </data>
   <data name="DeletionDateInfo" xml:space="preserve">
-    <value>The Send will be permanently deleted on the specified date and time.</value>
+    <value>Гэтае адпраўленне аўтаматычна выдаліцца ў вызначаную дату і час.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PendingDelete" xml:space="preserve">
-    <value>Pending deletion</value>
+    <value>Чаканне выдалення</value>
   </data>
   <data name="ExpirationDate" xml:space="preserve">
-    <value>Expiration Date</value>
+    <value>Дата завяршэння</value>
   </data>
   <data name="ExpirationTime" xml:space="preserve">
-    <value>Expiration Time</value>
+    <value>Час завяршэння</value>
   </data>
   <data name="ExpirationDateInfo" xml:space="preserve">
     <value>If set, access to this Send will expire on the specified date and time.</value>
@@ -1904,82 +1904,82 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddASend" xml:space="preserve">
-    <value>Add a Send</value>
+    <value>Дадаць Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="CopyLink" xml:space="preserve">
-    <value>Copy Link</value>
+    <value>Капіяваць спасылку</value>
   </data>
   <data name="ShareLink" xml:space="preserve">
-    <value>Share Link</value>
+    <value>Падзяліцца спасылкай</value>
   </data>
   <data name="SendLink" xml:space="preserve">
-    <value>Send link</value>
+    <value>Спасылка на адпраўленне</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SearchSends" xml:space="preserve">
-    <value>Search Sends</value>
+    <value>Пошук адпраўленняў</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="EditSend" xml:space="preserve">
-    <value>Edit Send</value>
+    <value>Рэдагаваць адпраўленне</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddSend" xml:space="preserve">
-    <value>Add Send</value>
+    <value>Дадаць адпраўленне</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AreYouSureDeleteSend" xml:space="preserve">
-    <value>Are you sure you want to delete this Send?</value>
+    <value>Сапраўды хочаце выдаліць адпраўленне?</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDeleted" xml:space="preserve">
-    <value>Send has been deleted.</value>
+    <value>Адпраўленне выдалена.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendUpdated" xml:space="preserve">
-    <value>Send updated.</value>
+    <value>Адпраўленне абноўлена.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NewSendCreated" xml:space="preserve">
-    <value>New send created.</value>
+    <value>Новае адпраўленне створана.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="OneDay" xml:space="preserve">
-    <value>1 day</value>
+    <value>1 дзень</value>
   </data>
   <data name="TwoDays" xml:space="preserve">
-    <value>2 days</value>
+    <value>2 дні</value>
   </data>
   <data name="ThreeDays" xml:space="preserve">
-    <value>3 days</value>
+    <value>3 дні</value>
   </data>
   <data name="SevenDays" xml:space="preserve">
-    <value>7 days</value>
+    <value>7 дзён</value>
   </data>
   <data name="ThirtyDays" xml:space="preserve">
-    <value>30 days</value>
+    <value>30 дзён</value>
   </data>
   <data name="Custom" xml:space="preserve">
-    <value>Custom</value>
+    <value>Адвольны</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
-    <value>Share this Send upon save.</value>
+    <value>Падзяліцца адпраўленнем пасля захавання.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
-    <value>Due to an enterprise policy, you are only able to delete an existing Send.</value>
+    <value>Згодна з карпаратыўнай палітыкай вы можаце выдаліць толькі існае адпраўленне.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AboutSend" xml:space="preserve">
-    <value>About Send</value>
+    <value>Пра адпраўленне</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
-    <value>Hide my email address from recipients.</value>
+    <value>Хаваць адрас электроннай пошты ад атрымальнікаў.</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
-    <value>One or more organization policies are affecting your Send options.</value>
+    <value>На параметры адпраўлення ўплываюць карпаратыўныя палітыкі.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFilePremiumRequired" xml:space="preserve">
@@ -1987,16 +1987,16 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFileEmailVerificationRequired" xml:space="preserve">
-    <value>You must verify your email to use files with Send. You can verify your email in the web vault.</value>
+    <value>Для адпраўлення файлаў патрэбна пацвердзіць свой адрас электроннай пошты.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PasswordPrompt" xml:space="preserve">
-    <value>Master password re-prompt</value>
+    <value>Паўторны запыт галоўнага пароля</value>
   </data>
   <data name="PasswordConfirmation" xml:space="preserve">
-    <value>Master password confirmation</value>
+    <value>Пацверджанне галоўнага пароля</value>
   </data>
   <data name="PasswordConfirmationDesc" xml:space="preserve">
-    <value>This action is protected, to continue please re-enter your master password to verify your identity.</value>
+    <value>Гэтае дзеянне ахоўваецца, для працягу зноў увядзіце пароль для верыфікацыі асобы.</value>
   </data>
 </root>

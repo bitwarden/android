@@ -126,13 +126,31 @@
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>bitwarden est le moyen le plus facile et sécurisé pour stocker tous vos identifiants et mots de passe tout en les synchronisant entre vos appareils. L'extension de l'application bitwarden vous permet de vous identifier rapidement sur n'importe quel site web sur Safari ou Chrome et est supporté par des centaines d'autres applications populaires.
+    <value>Bitwarden, Inc. est la société mère de 8bit Solutions LLC.
 
-Le vol de mot de passe est un problème sérieux. Les sites web et applications que vous utilisez sont attaquées tous les jours. Des failles de sécurité existent et vos mots de passe sont volés. Quand vous les réutilisez les mêmes mots de passe sur plusieurs applications et sites web, les hackers peuvent facilement accéder à vos e-mails, comptes bancaires et autres comptes sensibles.
+NOMMÉ MEILLEUR GESTIONNAIRE DE MOTS DE PASSE PAR THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, ET PLUS ENCORE.
 
-Les experts en sécurité recommendent l'utilisation de mots de passe différents et aléatoires pour chaque compte que vous créez. Mais comment gérez-vous tous ces mots de passe ? bitwarden vous facilite le travaile en créant, stockant et utilisant vos pots de passe.
+Gérez, stockez, sécurisez et partagez un nombre illimité de mots de passe sur un nombre illimité d'appareils, où que vous soyez. Bitwarden fournit des solutions de gestion de mots de passe open source à tout le monde, que ce soit à la maison, au travail ou en déplacement.
 
-bitwarden stocke tous les identifiants dans un coffre chiffré qui est synchronisé sur tous vos appareils. Puisqu'il est entièrement chiffré avant même de quitter votre appareil, vous êtes la seule personne à pouvoir accéder à vos données. Même l'équipe de bitwarden ne peut lire vos données, même si nous le voudrions. Vos données sont scellées par un chiffrement AES-256 bit, un salage et hachage ainsi que par un PBKDF2 SHA-256.</value>
+Générez des mots de passe forts, uniques et aléatoires basés sur des exigences de sécurité pour chaque site web que vous fréquentez.
+
+Bitwarden Send transmet rapidement des informations chiffrées --- fichiers et texte --- directement à quiconque.
+
+Bitwarden propose les plans Teams et Enterprise pour les entreprises afin que vous puissiez partager des mots de passe en toute sécurité avec vos collègues.
+
+Pourquoi choisir Bitwarden :
+
+Un chiffrement de classe internationale
+Les mots de passe sont protégés par un chiffrement avancé de bout en bout (AES-256 bit, salted hashtag, et PBKDF2 SHA-256) afin que vos données restent sécurisées et privées.
+
+Générateur de mots de passe intégré
+Générez des mots de passe forts, uniques et aléatoires en fonction des exigences de sécurité pour chaque site web que vous fréquentez.
+
+Traductions mondiales
+Les traductions de Bitwarden existent dans 40 langues et ne cessent de croître, grâce à notre communauté mondiale.
+
+Applications multiplateformes
+Sécurisez et partagez des données sensibles dans votre coffre-fort Bitwarden à partir de n'importe quel navigateur, appareil mobile ou système d'exploitation de bureau, et plus encore.</value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">

@@ -118,14 +118,14 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="About" xml:space="preserve">
-    <value>About</value>
+    <value>පිලිබඳව</value>
   </data>
   <data name="Add" xml:space="preserve">
-    <value>Add</value>
+    <value>එකතු කරන්න</value>
     <comment>Add/create a new entity (verb).</comment>
   </data>
   <data name="AddFolder" xml:space="preserve">
-    <value>Add Folder</value>
+    <value>බහාලුම එකතු කරන්න</value>
   </data>
   <data name="AddItem" xml:space="preserve">
     <value>Add Item</value>
@@ -136,27 +136,27 @@
     <comment>Alert title when something goes wrong.</comment>
   </data>
   <data name="Back" xml:space="preserve">
-    <value>Back</value>
+    <value>ආපසු</value>
     <comment>Navigate back to the previous screen.</comment>
   </data>
   <data name="Bitwarden" xml:space="preserve">
-    <value>Bitwarden</value>
+    <value>බිට්වාඩන්</value>
     <comment>App name. Shouldn't ever change.</comment>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>අවලංගු කරන්න</value>
     <comment>Cancel an operation.</comment>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>Copy</value>
+    <value>පිටපත්</value>
     <comment>Copy some value to your clipboard.</comment>
   </data>
   <data name="CopyPassword" xml:space="preserve">
-    <value>Copy Password</value>
+    <value>මුරපදය පිටපත් කරන්න</value>
     <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
   </data>
   <data name="CopyUsername" xml:space="preserve">
-    <value>Copy Username</value>
+    <value>පරිශීලකනාමය පිටපත් කරන්න</value>
     <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
   </data>
   <data name="Credits" xml:space="preserve">
@@ -176,17 +176,17 @@
     <comment>Confirmation alert message when deleteing something.</comment>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
+    <value>සංස්කරණය</value>
   </data>
   <data name="EditFolder" xml:space="preserve">
     <value>Edit Folder</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>Email</value>
+    <value>වි-තැපෑල</value>
     <comment>Short label for an email address.</comment>
   </data>
   <data name="EmailAddress" xml:space="preserve">
-    <value>Email Address</value>
+    <value>වි-තැපැල් ලිපිනය</value>
     <comment>Full label for a email address.</comment>
   </data>
   <data name="EmailUs" xml:space="preserve">
@@ -199,7 +199,7 @@
     <value>Enter your PIN code.</value>
   </data>
   <data name="Favorites" xml:space="preserve">
-    <value>Favorites</value>
+    <value>ප්‍රියතමයන්</value>
     <comment>Title for your favorite items in the vault.</comment>
   </data>
   <data name="FileBugReport" xml:space="preserve">
@@ -212,7 +212,7 @@
     <value>Use your fingerprint to verify.</value>
   </data>
   <data name="Folder" xml:space="preserve">
-    <value>Folder</value>
+    <value>බහාලුම</value>
     <comment>Label for a folder.</comment>
   </data>
   <data name="FolderCreated" xml:space="preserve">
@@ -222,24 +222,24 @@
     <value>Folder deleted.</value>
   </data>
   <data name="FolderNone" xml:space="preserve">
-    <value>No Folder</value>
+    <value>බහාලුමක් නැත</value>
     <comment>Items that have no folder specified go in this special "catch-all" folder.</comment>
   </data>
   <data name="Folders" xml:space="preserve">
-    <value>Folders</value>
+    <value>බහාලුම්</value>
   </data>
   <data name="FolderUpdated" xml:space="preserve">
     <value>Folder updated.</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
-    <value>Go To Website</value>
+    <value>වියමන අඩවියට යන්න</value>
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="HelpAndFeedback" xml:space="preserve">
     <value>Help and Feedback</value>
   </data>
   <data name="Hide" xml:space="preserve">
-    <value>Hide</value>
+    <value>සඟවන්න</value>
     <comment>Hide a secret value that is currently shown (password).</comment>
   </data>
   <data name="InternetConnectionRequiredMessage" xml:space="preserve">
@@ -257,23 +257,23 @@
     <value>Invalid PIN. Try again.</value>
   </data>
   <data name="Launch" xml:space="preserve">
-    <value>Launch</value>
+    <value>දියත් කරන්න</value>
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="LogIn" xml:space="preserve">
-    <value>Log In</value>
+    <value>පිවිසෙන්න</value>
     <comment>The login button text (verb).</comment>
   </data>
   <data name="LogInNoun" xml:space="preserve">
-    <value>Login</value>
+    <value>පිවිසෙන්න</value>
     <comment>Title for login page. (noun)</comment>
   </data>
   <data name="LogOut" xml:space="preserve">
-    <value>Log Out</value>
+    <value>නික්මෙන්න</value>
     <comment>The log out button text (verb).</comment>
   </data>
   <data name="LogoutConfirmation" xml:space="preserve">
-    <value>Are you sure you want to log out?</value>
+    <value>ඔබට නික්මෙන්න අවශ්‍ය බව විශ්වාසද?</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Master Password</value>
@@ -288,38 +288,38 @@
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Name</value>
+    <value>නම</value>
     <comment>Label for an entity name.</comment>
   </data>
   <data name="No" xml:space="preserve">
-    <value>No</value>
+    <value>නැහැ</value>
   </data>
   <data name="Notes" xml:space="preserve">
-    <value>Notes</value>
+    <value>සටහන්</value>
     <comment>Label for notes.</comment>
   </data>
   <data name="Ok" xml:space="preserve">
-    <value>Ok</value>
+    <value>හරි</value>
     <comment>Acknowledgement.</comment>
   </data>
   <data name="Password" xml:space="preserve">
-    <value>Password</value>
+    <value>මුරපදය</value>
     <comment>Label for a password.</comment>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Save</value>
+    <value>සුරකින්න</value>
     <comment>Button text for a save operation (verb).</comment>
   </data>
   <data name="Saving" xml:space="preserve">
-    <value>Saving...</value>
+    <value>සුරැකෙමින්...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+    <value>සැකසුම්</value>
     <comment>The title for the settings page.</comment>
   </data>
   <data name="Show" xml:space="preserve">
-    <value>Show</value>
+    <value>පෙන්වන්න</value>
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
@@ -334,10 +334,10 @@
     <comment>The title for the sync page.</comment>
   </data>
   <data name="ThankYou" xml:space="preserve">
-    <value>Thank You</value>
+    <value>ඔබට ස්තූතියි</value>
   </data>
   <data name="Tools" xml:space="preserve">
-    <value>Tools</value>
+    <value>මෙවලම්</value>
     <comment>The title for the tools page.</comment>
   </data>
   <data name="URI" xml:space="preserve">
@@ -348,7 +348,7 @@
     <value>Use Fingerprint to Unlock</value>
   </data>
   <data name="Username" xml:space="preserve">
-    <value>Username</value>
+    <value>පරිශීලක නාමය</value>
     <comment>Label for a username.</comment>
   </data>
   <data name="ValidationFieldRequired" xml:space="preserve">
@@ -369,7 +369,7 @@
     <value>Verify PIN</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>Version</value>
+    <value>අනුවාදය</value>
   </data>
   <data name="View" xml:space="preserve">
     <value>View</value>
@@ -381,14 +381,14 @@
     <value>Visit our website to get help, news, email us, and/or learn more about how to use Bitwarden.</value>
   </data>
   <data name="Website" xml:space="preserve">
-    <value>Website</value>
+    <value>වියමන අඩවිය</value>
     <comment>Label for a website.</comment>
   </data>
   <data name="Yes" xml:space="preserve">
-    <value>Yes</value>
+    <value>ඔව්</value>
   </data>
   <data name="Account" xml:space="preserve">
-    <value>Account</value>
+    <value>ගිණුම</value>
   </data>
   <data name="AccountCreated" xml:space="preserve">
     <value>Your new account has been created! You may now log in.</value>
@@ -436,16 +436,16 @@
     <value>You can change your master password on the bitwarden.com web vault. Do you want to visit the website now?</value>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>Close</value>
+    <value>වසන්න</value>
   </data>
   <data name="Continue" xml:space="preserve">
-    <value>Continue</value>
+    <value>ඉදිරියට</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
-    <value>Create Account</value>
+    <value>ගිණුමක් සාදන්න</value>
   </data>
   <data name="CreatingAccount" xml:space="preserve">
-    <value>Creating account...</value>
+    <value>ගිණුම සාදමින්...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="EditItem" xml:space="preserve">
@@ -489,7 +489,7 @@
     <value>To turn on Bitwarden in Safari and other apps, tap the "more" icon on the bottom row of the menu.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
-    <value>Favorite</value>
+    <value>ප්‍රියතමය</value>
   </data>
   <data name="Fingerprint" xml:space="preserve">
     <value>Fingerprint</value>
@@ -519,16 +519,16 @@
     <value>Lock</value>
   </data>
   <data name="FifteenMinutes" xml:space="preserve">
-    <value>15 minutes</value>
+    <value>විනාඩි 15</value>
   </data>
   <data name="OneHour" xml:space="preserve">
-    <value>1 hour</value>
+    <value>පැය 1</value>
   </data>
   <data name="OneMinute" xml:space="preserve">
-    <value>1 minute</value>
+    <value>විනාඩි 1</value>
   </data>
   <data name="FourHours" xml:space="preserve">
-    <value>4 hours</value>
+    <value>පැය 4</value>
   </data>
   <data name="Immediately" xml:space="preserve">
     <value>Immediately</value>
@@ -543,7 +543,7 @@
     <value>Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
-    <value>Logging in...</value>
+    <value>පිවිසෙමින්...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="LoginOrCreateNewAccount" xml:space="preserve">
@@ -607,10 +607,10 @@
     <value>Option defaults are set from the main Bitwarden app's password generator tool.</value>
   </data>
   <data name="Options" xml:space="preserve">
-    <value>Options</value>
+    <value>විකල්ප</value>
   </data>
   <data name="Other" xml:space="preserve">
-    <value>Other</value>
+    <value>වෙනත්</value>
   </data>
   <data name="PasswordGenerated" xml:space="preserve">
     <value>Password generated.</value>
@@ -647,7 +647,7 @@
     <value>Search vault</value>
   </data>
   <data name="Security" xml:space="preserve">
-    <value>Security</value>
+    <value>ආරක්ෂාව</value>
   </data>
   <data name="Select" xml:space="preserve">
     <value>Select</value>
@@ -724,7 +724,7 @@
     <value>Icons</value>
   </data>
   <data name="Translations" xml:space="preserve">
-    <value>Translations</value>
+    <value>පරිවර්තන</value>
   </data>
   <data name="ItemsForUri" xml:space="preserve">
     <value>Items for {0}</value>
@@ -753,16 +753,16 @@
     <value>Disabled</value>
   </data>
   <data name="Enabled" xml:space="preserve">
-    <value>Enabled</value>
+    <value>සබල කර ඇත</value>
   </data>
   <data name="Status" xml:space="preserve">
-    <value>Status</value>
+    <value>තත්වය</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
     <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
-    <value>Auto-fill</value>
+    <value>ස්වයං-පිරවීම</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
     <value>Do you want to auto-fill or view this item?</value>
@@ -777,7 +777,7 @@
     <value>Possible Matching Items</value>
   </data>
   <data name="Search" xml:space="preserve">
-    <value>Search</value>
+    <value>සොයන්න</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
     <value>You are searching for an auto-fill item for "{0}".</value>
@@ -809,7 +809,7 @@
     <value>This account has two-step login enabled, however, none of the configured two-step providers are supported on this device. Please use a supported device and/or add additional providers that are better supported across devices (such as an authenticator app).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
-    <value>Recovery Code</value>
+    <value>ප්‍රතිසාධන කේතය</value>
     <comment>For 2FA</comment>
   </data>
   <data name="RememberMe" xml:space="preserve">
@@ -854,7 +854,7 @@
     <value>Your device cannot open this type of file.</value>
   </data>
   <data name="Downloading" xml:space="preserve">
-    <value>Downloading...</value>
+    <value>බාගත වෙමින්…</value>
     <comment>Message shown when downloading a file</comment>
   </data>
   <data name="AttachmentLargeWarning" xml:space="preserve">
@@ -911,7 +911,7 @@
     <value>Choose File</value>
   </data>
   <data name="File" xml:space="preserve">
-    <value>File</value>
+    <value>ගොනුව</value>
   </data>
   <data name="NoFileChosen" xml:space="preserve">
     <value>No file chosen</value>
@@ -979,37 +979,37 @@
     <value>Copy Security Code</value>
   </data>
   <data name="Number" xml:space="preserve">
-    <value>Number</value>
+    <value>අංකය</value>
   </data>
   <data name="SecurityCode" xml:space="preserve">
-    <value>Security Code</value>
+    <value>ආරක්ෂිත කේතය</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
-    <value>Card</value>
+    <value>පත</value>
   </data>
   <data name="TypeIdentity" xml:space="preserve">
-    <value>Identity</value>
+    <value>අනන්‍යතාව</value>
   </data>
   <data name="TypeLogin" xml:space="preserve">
-    <value>Login</value>
+    <value>පිවිසෙන්න</value>
   </data>
   <data name="TypeSecureNote" xml:space="preserve">
     <value>Secure Note</value>
   </data>
   <data name="Address1" xml:space="preserve">
-    <value>Address 1</value>
+    <value>ලිපිනය 1</value>
   </data>
   <data name="Address2" xml:space="preserve">
-    <value>Address 2</value>
+    <value>ලිපිනය 2</value>
   </data>
   <data name="Address3" xml:space="preserve">
-    <value>Address 3</value>
+    <value>ලිපිනය 3</value>
   </data>
   <data name="April" xml:space="preserve">
-    <value>April</value>
+    <value>බක්</value>
   </data>
   <data name="August" xml:space="preserve">
-    <value>August</value>
+    <value>නිකිණි</value>
   </data>
   <data name="Brand" xml:space="preserve">
     <value>Brand</value>
@@ -1021,13 +1021,13 @@
     <value>City / Town</value>
   </data>
   <data name="Company" xml:space="preserve">
-    <value>Company</value>
+    <value>සමාගම</value>
   </data>
   <data name="Country" xml:space="preserve">
-    <value>Country</value>
+    <value>රට</value>
   </data>
   <data name="December" xml:space="preserve">
-    <value>December</value>
+    <value>උඳුවප්</value>
   </data>
   <data name="Dr" xml:space="preserve">
     <value>Dr</value>
@@ -1039,19 +1039,19 @@
     <value>Expiration Year</value>
   </data>
   <data name="February" xml:space="preserve">
-    <value>February</value>
+    <value>නවම්</value>
   </data>
   <data name="FirstName" xml:space="preserve">
     <value>First Name</value>
   </data>
   <data name="January" xml:space="preserve">
-    <value>January</value>
+    <value>දුරුතු</value>
   </data>
   <data name="July" xml:space="preserve">
-    <value>July</value>
+    <value>ඇසළ</value>
   </data>
   <data name="June" xml:space="preserve">
-    <value>June</value>
+    <value>පොසොන්</value>
   </data>
   <data name="LastName" xml:space="preserve">
     <value>Last Name</value>
@@ -1060,10 +1060,10 @@
     <value>License Number</value>
   </data>
   <data name="March" xml:space="preserve">
-    <value>March</value>
+    <value>මැදින්</value>
   </data>
   <data name="May" xml:space="preserve">
-    <value>May</value>
+    <value>වෙසක්</value>
   </data>
   <data name="MiddleName" xml:space="preserve">
     <value>Middle Name</value>
@@ -1078,10 +1078,10 @@
     <value>Ms</value>
   </data>
   <data name="November" xml:space="preserve">
-    <value>November</value>
+    <value>ඉල්</value>
   </data>
   <data name="October" xml:space="preserve">
-    <value>October</value>
+    <value>වප්</value>
   </data>
   <data name="PassportNumber" xml:space="preserve">
     <value>Passport Number</value>
@@ -1090,7 +1090,7 @@
     <value>Phone</value>
   </data>
   <data name="September" xml:space="preserve">
-    <value>September</value>
+    <value>බිනර</value>
   </data>
   <data name="SSN" xml:space="preserve">
     <value>Social Security Number</value>

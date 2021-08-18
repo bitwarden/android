@@ -410,50 +410,50 @@
     <value>ಅಸ್ಪಷ್ಟ ಅಕ್ಷರಗಳನ್ನು ತಪ್ಪಿಸಿ</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>Bitwarden App Extension</value>
+    <value>ಬಿಟ್‌ವಾರ್ಡೆನ್ ಅಪ್ಲಿಕೇಶನ್ ವಿಸ್ತರಣೆ</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the Bitwarden App Extension. Learn more about using the Bitwarden App Extension by navigating to the "Settings" screen.</value>
+    <value>ನಿಮ್ಮ ವಾಲ್ಟ್‌ಗೆ ಹೊಸ ಲಾಗಿನ್‌ಗಳನ್ನು ಸೇರಿಸಲು ಸುಲಭವಾದ ಮಾರ್ಗವೆಂದರೆ ಬಿಟ್‌ವಾರ್ಡೆನ್ ಅಪ್ಲಿಕೇಶನ್ ವಿಸ್ತರಣೆ. "ಸೆಟ್ಟಿಂಗ್‌ಗಳು" ಪರದೆಗೆ ನ್ಯಾವಿಗೇಟ್ ಮಾಡುವ ಮೂಲಕ ಬಿಟ್‌ವಾರ್ಡೆನ್ ಅಪ್ಲಿಕೇಶನ್ ವಿಸ್ತರಣೆಯನ್ನು ಬಳಸುವ ಬಗ್ಗೆ ಇನ್ನಷ್ಟು ತಿಳಿಯಿರಿ.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>Use Bitwarden in Safari and other apps to auto-fill your logins.</value>
+    <value>ನಿಮ್ಮ ಲಾಗಿನ್‌ಗಳನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ತುಂಬಲು ಸಫಾರಿ ಮತ್ತು ಇತರ ಅಪ್ಲಿಕೇಶನ್‌ಗಳಲ್ಲಿ ಬಿಟ್‌ವಾರ್ಡೆನ್ ಬಳಸಿ.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>Bitwarden Auto-fill Service</value>
+    <value>ಬಿಟ್ವಾರ್ಡೆನ್ ಸ್ವಯಂ ಭರ್ತಿ ಸೇವೆ</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Use the Bitwarden accessibility service to auto-fill your logins.</value>
+    <value>ನಿಮ್ಮ ಲಾಗಿನ್‌ಗಳನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ತುಂಬಲು ಬಿಟ್‌ವಾರ್ಡೆನ್ ಪ್ರವೇಶಿಸುವಿಕೆ ಸೇವೆಯನ್ನು ಬಳಸಿ.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
-    <value>Change Email</value>
+    <value>ಇಮೇಲ್ ಬದಲಾಯಿಸಿ</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
-    <value>You can change your email address on the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>ನಿಮ್ಮ ಇಮೇಲ್ ವಿಳಾಸವನ್ನು ನೀವು bitwarden.com ವೆಬ್ ವಾಲ್ಟ್‌ನಲ್ಲಿ ಬದಲಾಯಿಸಬಹುದು. ನೀವು ಈಗ ವೆಬ್‌ಸೈಟ್‌ಗೆ ಭೇಟಿ ನೀಡಲು ಬಯಸುವಿರಾ?</value>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
-    <value>Change Master Password</value>
+    <value>ಮಾಸ್ಟರ್ ಪಾಸ್ವರ್ಡ್ ಬದಲಾಯಿಸಿ</value>
   </data>
   <data name="ChangePasswordConfirmation" xml:space="preserve">
-    <value>You can change your master password on the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>ನಿಮ್ಮ ಮಾಸ್ಟರ್ ಪಾಸ್‌ವರ್ಡ್ ಅನ್ನು ನೀವು bitwarden.com ವೆಬ್ ವಾಲ್ಟ್‌ನಲ್ಲಿ ಬದಲಾಯಿಸಬಹುದು. ನೀವು ಈಗ ವೆಬ್‌ಸೈಟ್‌ಗೆ ಭೇಟಿ ನೀಡಲು ಬಯಸುವಿರಾ?</value>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>Close</value>
+    <value>ಮುಚ್ಚಿ</value>
   </data>
   <data name="Continue" xml:space="preserve">
-    <value>Continue</value>
+    <value>ಮುಂದುವರಿಸಿ</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
-    <value>Create Account</value>
+    <value>ಖಾತೆ ತೆರೆ</value>
   </data>
   <data name="CreatingAccount" xml:space="preserve">
-    <value>Creating account...</value>
+    <value>ಖಾತೆಯನ್ನು ರಚಿಸಲಾಗುತ್ತಿದೆ ...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="EditItem" xml:space="preserve">
-    <value>Edit Item</value>
+    <value>ವಸ್ತುಗಳನ್ನು ಸಂಪಾದಿಸಿ</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
-    <value>Enable Automatic Syncing</value>
+    <value>ಸ್ವಯಂಚಾಲಿತ ಸಿಂಕ್ ಮಾಡುವುದನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
     <value>ವಿಸ್ತರಣೆಯನ್ನು ಪ್ರಾರಂಭಿಸಲು ಮೆನುವಿನಲ್ಲಿರುವ ಬಿಟ್‌ವಾರ್ಡೆನ್ ಐಕಾನ್ ಟ್ಯಾಪ್ ಮಾಡಿ.</value>
@@ -484,13 +484,13 @@
     <value>ಸಫಾರಿ ಮತ್ತು ಕ್ರೋಮ್‌ನಲ್ಲಿ, ಹಂಚಿಕೆ ಐಕಾನ್ ಬಳಸಿ ಬಿಟ್‌ವಾರ್ಡೆನ್ ಅನ್ನು ಹುಡುಕಿ (ಸುಳಿವು: ಹಂಚಿಕೆ ಮೆನುವಿನ ಕೆಳಗಿನ ಸಾಲಿನಲ್ಲಿ ಬಲಕ್ಕೆ ಸ್ಕ್ರಾಲ್ ಮಾಡಿ).</value>
   </data>
   <data name="ExtensionTapIcon" xml:space="preserve">
-    <value>Tap the Bitwarden icon in the menu to launch the extension.</value>
+    <value>ವಿಸ್ತರಣೆಯನ್ನು ಪ್ರಾರಂಭಿಸಲು ಮೆನುವಿನಲ್ಲಿರುವ ಬಿಟ್‌ವಾರ್ಡೆನ್ ಐಕಾನ್ ಟ್ಯಾಪ್ ಮಾಡಿ.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>To turn on Bitwarden in Safari and other apps, tap the "more" icon on the bottom row of the menu.</value>
+    <value>ಸಫಾರಿ ಮತ್ತು ಇತರ ಅಪ್ಲಿಕೇಶನ್‌ಗಳಲ್ಲಿ ಬಿಟ್‌ವಾರ್ಡೆನ್ ಅನ್ನು ಆನ್ ಮಾಡಲು, ಮೆನುವಿನ ಕೆಳಗಿನ ಸಾಲಿನಲ್ಲಿರುವ "ಇನ್ನಷ್ಟು" ಐಕಾನ್ ಟ್ಯಾಪ್ ಮಾಡಿ.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
-    <value>Favorite</value>
+    <value>ಮೆಚ್ಚಿನ</value>
   </data>
   <data name="Fingerprint" xml:space="preserve">
     <value>ಫಿಂಗರ್‌ಪ್ರಿಂಟ್</value>
@@ -502,1471 +502,1470 @@
     <value>ನಿಮ್ಮ ಮಾಸ್ಟರ್ ಪಾಸ್‌ವರ್ಡ್ ಸುಳಿವನ್ನು ಪಡೆಯಿರಿ</value>
   </data>
   <data name="ImportItems" xml:space="preserve">
-    <value>Import Items</value>
+    <value>ವಸ್ತುಗಳನ್ನು ಆಮದು ಮಾಡಿ</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
-    <value>You can bulk import items from the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>ನೀವು ಬಿಟ್‌ವಾರ್ಡೆನ್.ಕಾಮ್ ವೆಬ್ ವಾಲ್ಟ್‌ನಿಂದ ಬೃಹತ್ ಆಮದು ವಸ್ತುಗಳನ್ನು ಮಾಡಬಹುದು. ನೀವು ಈಗ ವೆಬ್‌ಸೈಟ್‌ಗೆ ಭೇಟಿ ನೀಡಲು ಬಯಸುವಿರಾ?</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
-    <value>Quickly bulk import your items from other password management apps.</value>
+    <value>ಇತರ ಪಾಸ್‌ವರ್ಡ್ ನಿರ್ವಹಣಾ ಅಪ್ಲಿಕೇಶನ್‌ಗಳಿಂದ ನಿಮ್ಮ ವಸ್ತುಗಳನ್ನು ತ್ವರಿತವಾಗಿ ಆಮದು ಮಾಡಿ.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
-    <value>Last Sync:</value>
+    <value>ಕೊನೆಯ ಸಿಂಕ್</value>
   </data>
   <data name="Length" xml:space="preserve">
-    <value>Length</value>
+    <value>ಉದ್ದ</value>
   </data>
   <data name="Lock" xml:space="preserve">
-    <value>Lock</value>
+    <value>ಲಾಕ್‌</value>
   </data>
   <data name="FifteenMinutes" xml:space="preserve">
-    <value>15 minutes</value>
+    <value>೧೫ ನಿಮಿಷಗಳು</value>
   </data>
   <data name="OneHour" xml:space="preserve">
-    <value>1 hour</value>
+    <value>೧ ಗಂಟೆ</value>
   </data>
   <data name="OneMinute" xml:space="preserve">
-    <value>1 minute</value>
+    <value>೧ ನಿಮಿಷ</value>
   </data>
   <data name="FourHours" xml:space="preserve">
-    <value>4 hours</value>
+    <value>೪ ಗಂಟೆಗಳು</value>
   </data>
   <data name="Immediately" xml:space="preserve">
-    <value>Immediately</value>
+    <value>ತಕ್ಷಣ</value>
   </data>
   <data name="VaultTimeout" xml:space="preserve">
-    <value>Vault Timeout</value>
+    <value>ವಾಲ್ಟ್ ಕಾಲಾವಧಿ</value>
   </data>
   <data name="VaultTimeoutAction" xml:space="preserve">
-    <value>Vault Timeout Action</value>
+    <value>ವಾಲ್ಟ್ ಸಮಯ ಮೀರುವ ಕ್ರಿಯೆ</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
-    <value>Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?</value>
+    <value>ಲಾಗ್ out ಟ್ ಆಗುವುದರಿಂದ ನಿಮ್ಮ ವಾಲ್ಟ್‌ನ ಎಲ್ಲಾ ಪ್ರವೇಶವನ್ನು ತೆಗೆದುಹಾಕುತ್ತದೆ ಮತ್ತು ಕಾಲಾವಧಿ ಅವಧಿಯ ನಂತರ ಆನ್‌ಲೈನ್ ದೃ hentic ೀಕರಣದ ಅಗತ್ಯವಿದೆ. ಈ ಸೆಟ್ಟಿಂಗ್ ಅನ್ನು ಬಳಸಲು ನೀವು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
-    <value>Logging in...</value>
+    <value>ಲಾಗ್ ಇನ್ ಆಗುತ್ತಿದೆ ...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="LoginOrCreateNewAccount" xml:space="preserve">
-    <value>Log in or create a new account to access your secure vault.</value>
+    <value>ನಿಮ್ಮ ಸುರಕ್ಷಿತ ವಾಲ್ಟ್ ಅನ್ನು ಪ್ರವೇಶಿಸಲು ಲಾಗ್ ಇನ್ ಮಾಡಿ ಅಥವಾ ಹೊಸ ಖಾತೆಯನ್ನು ರಚಿಸಿ.</value>
   </data>
   <data name="Manage" xml:space="preserve">
-    <value>Manage</value>
+    <value>ವ್ಯವಸ್ಥಾಪಕ</value>
   </data>
   <data name="MasterPasswordConfirmationValMessage" xml:space="preserve">
-    <value>Password confirmation is not correct.</value>
+    <value>ಪಾಸ್ವರ್ಡ್ ದೃಢೀಕರಣ ಸರಿಯಾಗಿಲ್ಲ.</value>
   </data>
   <data name="MasterPasswordDescription" xml:space="preserve">
-    <value>The master password is the password you use to access your vault. It is very important that you do not forget your master password. There is no way to recover the password in the event that you forget it.</value>
+    <value>ನಿಮ್ಮ ವಾಲ್ಟ್ ಅನ್ನು ಪ್ರವೇಶಿಸಲು ನೀವು ಬಳಸುವ ಪಾಸ್ವರ್ಡ್ ಮಾಸ್ಟರ್ ಪಾಸ್ವರ್ಡ್ ಆಗಿದೆ. ನಿಮ್ಮ ಮಾಸ್ಟರ್ ಪಾಸ್‌ವರ್ಡ್ ಅನ್ನು ನೀವು ಮರೆಯದಿರುವುದು ಬಹಳ ಮುಖ್ಯ. ನೀವು ಅದನ್ನು ಮರೆತ ಸಂದರ್ಭದಲ್ಲಿ ಪಾಸ್‌ವರ್ಡ್ ಅನ್ನು ಮರುಪಡೆಯಲು ಯಾವುದೇ ಮಾರ್ಗವಿಲ್ಲ.</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
-    <value>Master Password Hint (optional)</value>
+    <value>ಮಾಸ್ಟರ್ ಪಾಸ್ವರ್ಡ್ ಸುಳಿವು (ಐಚ್ಛಿಕ)</value>
   </data>
   <data name="MasterPasswordHintDescription" xml:space="preserve">
-    <value>A master password hint can help you remember your password if you forget it.</value>
+    <value>ನಿಮ್ಮ ಪಾಸ್‌ವರ್ಡ್ ಅನ್ನು ನೀವು ಮರೆತರೆ ಅದನ್ನು ನೆನಪಿಟ್ಟುಕೊಳ್ಳಲು ಮಾಸ್ಟರ್ ಪಾಸ್‌ವರ್ಡ್ ಸುಳಿವು ನಿಮಗೆ ಸಹಾಯ ಮಾಡುತ್ತದೆ.</value>
   </data>
   <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Master password must be at least 8 characters long.</value>
+    <value>ಮಾಸ್ಟರ್ ಪಾಸ್‌ವರ್ಡ್ ಕನಿಷ್ಠ 8 ಅಕ್ಷರಗಳಷ್ಟು ಉದ್ದವಾಗಿರಬೇಕು.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
-    <value>Minimum Numbers</value>
+    <value>ಕನಿಷ್ಠ ಸಂಖ್ಯೆಗಳು</value>
     <comment>Minimum numeric characters for password generator settings</comment>
   </data>
   <data name="MinSpecial" xml:space="preserve">
-    <value>Minimum Special</value>
+    <value>ಕನಿಷ್ಠ ವಿಶೇಷ</value>
     <comment>Minimum special characters for password generator settings</comment>
   </data>
   <data name="MoreSettings" xml:space="preserve">
-    <value>More Settings</value>
+    <value>ಹೆಚ್ಚಿನ ಸೆಟ್ಟಿಂಗ್‌ಗಳು</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>You must log into the main Bitwarden app before you can use the extension.</value>
+    <value>ನೀವು ವಿಸ್ತರಣೆಯನ್ನು ಬಳಸುವ ಮೊದಲು ನೀವು ಮುಖ್ಯ ಬಿಟ್‌ವಾರ್ಡೆನ್ ಅಪ್ಲಿಕೇಶನ್‌ಗೆ ಲಾಗ್ ಇನ್ ಆಗಬೇಕು.</value>
   </data>
   <data name="Never" xml:space="preserve">
-    <value>Never</value>
+    <value>ಇಲ್ಲವೇ ಇಲ್ಲ</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>New item created.</value>
+    <value>ಹೊಸ ಐಟಂ ರಚಿಸಲಾಗಿದೆ.</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
-    <value>There are no favorites in your vault.</value>
+    <value>ನಿಮ್ಮ ವಾಲ್ಟ್‌ನಲ್ಲಿ ಯಾವುದೇ ಮೆಚ್ಚಿನವುಗಳಿಲ್ಲ.</value>
   </data>
   <data name="NoItems" xml:space="preserve">
-    <value>There are no items in your vault.</value>
+    <value>ನಿಮ್ಮ ವಾಲ್ಟ್‌ನಲ್ಲಿ ಯಾವುದೇ ವಸ್ತುಗಳು ಇಲ್ಲ.</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>There are no items in your vault for this website/app. Tap to add one.</value>
+    <value>ಈ ವೆಬ್‌ಸೈಟ್ / ಅಪ್ಲಿಕೇಶನ್‌ಗಾಗಿ ನಿಮ್ಮ ವಾಲ್ಟ್‌ನಲ್ಲಿ ಯಾವುದೇ ಐಟಂಗಳಿಲ್ಲ. ಒಂದನ್ನು ಸೇರಿಸಲು ಟ್ಯಾಪ್ ಮಾಡಿ.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
-    <value>This login does not have a username or password configured.</value>
+    <value>ಈ ಲಾಗಿನ್ ಬಳಕೆದಾರಹೆಸರು ಅಥವಾ ಪಾಸ್‌ವರ್ಡ್ ಅನ್ನು ಕಾನ್ಫಿಗರ್ ಮಾಡಿಲ್ಲ.</value>
   </data>
   <data name="OkGotIt" xml:space="preserve">
-    <value>Ok, got it!</value>
+    <value>ಸರಿ, ಅರ್ಥವಾಯಿತು</value>
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>Option defaults are set from the main Bitwarden app's password generator tool.</value>
+    <value>ಆಯ್ಕೆ ಡೀಫಾಲ್ಟ್‌ಗಳನ್ನು ಮುಖ್ಯ ಬಿಟ್‌ವಾರ್ಡೆನ್ ಅಪ್ಲಿಕೇಶನ್‌ನ ಪಾಸ್‌ವರ್ಡ್ ಜನರೇಟರ್ ಸಾಧನದಿಂದ ಹೊಂದಿಸಲಾಗಿದೆ.</value>
   </data>
   <data name="Options" xml:space="preserve">
-    <value>Options</value>
+    <value>ಆಯ್ಕೆಗಳು</value>
   </data>
   <data name="Other" xml:space="preserve">
-    <value>Other</value>
+    <value>ಇತರೆ</value>
   </data>
   <data name="PasswordGenerated" xml:space="preserve">
-    <value>Password generated.</value>
+    <value>ಪಾಸ್ವರ್ಡ್ ರಚಿಸಲಾಗಿದೆ.</value>
   </data>
   <data name="PasswordGenerator" xml:space="preserve">
-    <value>Password Generator</value>
+    <value>ಪಾಸ್ವರ್ಡ್ ಜನರೇಟರ್</value>
   </data>
   <data name="PasswordHint" xml:space="preserve">
-    <value>Password Hint</value>
+    <value>ಪಾಸ್ವರ್ಡ್ ಸುಳಿವು</value>
   </data>
   <data name="PasswordHintAlert" xml:space="preserve">
-    <value>We've sent you an email with your master password hint.</value>
+    <value>ನಿಮ್ಮ ಮಾಸ್ಟರ್ ಪಾಸ್‌ವರ್ಡ್ ಸುಳಿವಿನೊಂದಿಗೆ ನಾವು ನಿಮಗೆ ಇಮೇಲ್ ಕಳುಹಿಸಿದ್ದೇವೆ.</value>
   </data>
   <data name="PasswordOverrideAlert" xml:space="preserve">
-    <value>Are you sure you want to overwrite the current password?</value>
+    <value>ಪ್ರಸ್ತುತ ಪಾಸ್‌ವರ್ಡ್ ಅನ್ನು ತಿದ್ದಿಬರೆಯಲು ನೀವು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>Bitwarden keeps your vault automatically synced by using push notifications. For the best possible experience, please select "Allow" on the following prompt when asked to enable push notifications.</value>
+    <value>ಪುಶ್ ಅಧಿಸೂಚನೆಗಳನ್ನು ಬಳಸಿಕೊಂಡು ಬಿಟ್‌ವಾರ್ಡನ್ ನಿಮ್ಮ ವಾಲ್ಟ್ ಅನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಸಿಂಕ್ ಮಾಡುತ್ತದೆ. ಸಾಧ್ಯವಾದಷ್ಟು ಉತ್ತಮ ಅನುಭವಕ್ಕಾಗಿ, ಪುಶ್ ಅಧಿಸೂಚನೆಗಳನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಲು ಕೇಳಿದಾಗ ದಯವಿಟ್ಟು ಈ ಕೆಳಗಿನ ಪ್ರಾಂಪ್ಟಿನಲ್ಲಿ "ಅನುಮತಿಸು" ಆಯ್ಕೆಮಾಡಿ.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
-    <value>Rate the App</value>
+    <value>ಈ ಆಪ್‍ಗೆ ರೇಟ್ ನೀಡಿ</value>
   </data>
   <data name="RateTheAppDescription" xml:space="preserve">
-    <value>Please consider helping us out with a good review!</value>
+    <value>ಉತ್ತಮ ವಿಮರ್ಶೆಯೊಂದಿಗೆ ನಮಗೆ ಸಹಾಯ ಮಾಡಲು ದಯವಿಟ್ಟು ಪರಿಗಣಿಸಿ!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
-    <value>Regenerate Password</value>
+    <value>ಪಾಸ್ವರ್ಡ್ ಅನ್ನು ಪುನರುತ್ಪಾದಿಸಿ</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
-    <value>Re-type Master Password</value>
+    <value>ಮಾಸ್ಟರ್ ಪಾಸ್ವರ್ಡ್ ಅನ್ನು ಮರು-ಟೈಪ್ ಮಾಡಿ</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
-    <value>Search vault</value>
+    <value>ವಾಲ್ಟ್ ಹುಡುಕಿ</value>
   </data>
   <data name="Security" xml:space="preserve">
-    <value>Security</value>
+    <value>ಭದ್ರತೆ</value>
   </data>
   <data name="Select" xml:space="preserve">
-    <value>Select</value>
+    <value>ಆಯ್ಕೆಮಾಡಿ</value>
   </data>
   <data name="SetPIN" xml:space="preserve">
-    <value>Set PIN</value>
+    <value>ಪಿನ್‌ ಸೆಟ್ ಮಾಡಿ</value>
   </data>
   <data name="SetPINDirection" xml:space="preserve">
-    <value>Enter a 4 digit PIN code to unlock the app with.</value>
+    <value>ಇದರೊಂದಿಗೆ ಅಪ್ಲಿಕೇಶನ್ ಅನ್ನು ಅನ್ಲಾಕ್ ಮಾಡಲು 4 ಅಂಕಿಯ ಪಿನ್ ಕೋಡ್ ನಮೂದಿಸಿ.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
-    <value>Item Information</value>
+    <value>ಐಟಂ ಮಾಹಿತಿ</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Item updated.</value>
+    <value>ಐಟಂ ನವೀಕರಿಸಲಾಗಿದೆ.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
-    <value>Submitting...</value>
+    <value>ಸಲ್ಲಿಸಲು...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Syncing" xml:space="preserve">
-    <value>Syncing...</value>
+    <value>ಸಿಂಕ್ ಆಗುತ್ತಿದೆ...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="SyncingComplete" xml:space="preserve">
-    <value>Syncing complete.</value>
+    <value>ಸಿಂಕ್ ಮುಗಿದಿದೆ</value>
   </data>
   <data name="SyncingFailed" xml:space="preserve">
-    <value>Syncing failed.</value>
+    <value>ಸಿಂಕ್ ವಿಫಲಗೊಂಡಿದೆ</value>
   </data>
   <data name="SyncVaultNow" xml:space="preserve">
-    <value>Sync Vault Now</value>
+    <value>ವಾಲ್ಟ್ ಅನ್ನು ಈಗ ಸಿಂಕ್ ಮಾಡಿ</value>
   </data>
   <data name="TouchID" xml:space="preserve">
-    <value>Touch ID</value>
+    <value>ಟಚ್ ಐಡಿ</value>
     <comment>What Apple calls their fingerprint reader.</comment>
   </data>
   <data name="TwoStepLogin" xml:space="preserve">
-    <value>Two-step Login</value>
+    <value>ಎರಡು ಹಂತದ ಲಾಗಿನ್</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Two-step login makes your account more secure by requiring you to verify your login with another device such as a security key, authenticator app, SMS, phone call, or email. Two-step login can be enabled on the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>ಭದ್ರತಾ ಕೀ, ದೃಢೀಕರಣ ಅಪ್ಲಿಕೇಶನ್, ಎಸ್‌ಎಂಎಸ್, ಫೋನ್ ಕರೆ ಅಥವಾ ಇಮೇಲ್‌ನಂತಹ ಮತ್ತೊಂದು ಸಾಧನದೊಂದಿಗೆ ನಿಮ್ಮ ಲಾಗಿನ್ ಅನ್ನು ಪರಿಶೀಲಿಸುವ ಅಗತ್ಯವಿರುವ ಎರಡು ಹಂತದ ಲಾಗಿನ್ ನಿಮ್ಮ ಖಾತೆಯನ್ನು ಹೆಚ್ಚು ಸುರಕ್ಷಿತಗೊಳಿಸುತ್ತದೆ. ಬಿಟ್ವಾರ್ಡೆನ್.ಕಾಮ್ ವೆಬ್ ವಾಲ್ಟ್ನಲ್ಲಿ ಎರಡು-ಹಂತದ ಲಾಗಿನ್ ಅನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಬಹುದು. ನೀವು ಈಗ ವೆಬ್‌ಸೈಟ್‌ಗೆ ಭೇಟಿ ನೀಡಲು ಬಯಸುವಿರಾ?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
-    <value>Unlock with {0}</value>
+    <value>{0} ನೊಂದಿಗೆ ಅನ್ಲಾಕ್ ಮಾಡಿ</value>
   </data>
   <data name="UnlockWithPIN" xml:space="preserve">
-    <value>Unlock with PIN Code</value>
+    <value>ಪಿನ್ ಕೋಡ್‌ನೊಂದಿಗೆ ಅನ್ಲಾಕ್ ಮಾಡಿ</value>
   </data>
   <data name="Validating" xml:space="preserve">
-    <value>Validating</value>
+    <value>ಮೌಲ್ಯೀಕರಿಸಲಾಗುತ್ತಿದೆ</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="VerificationCode" xml:space="preserve">
-    <value>Verification Code</value>
+    <value>ಪರಿಶೀಲನಾ ಕೋಡ್‌ಗಳು</value>
   </data>
   <data name="ViewItem" xml:space="preserve">
-    <value>View Item</value>
+    <value>ಐಟಂ ವೀಕ್ಷಿಸಿ</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>Bitwarden Web Vault</value>
+    <value>ಬಿಟ್ವಾರ್ಡೆನ್ ವೆಬ್ ವಾಲ್ಟ್</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
-    <value>Lost authenticator app?</value>
+    <value>ದೃಢೀಕರಣ ಅಪ್ಲಿಕೇಶನ್ ಕಳೆದುಹೋಗಿದೆಯೇ?</value>
   </data>
   <data name="Items" xml:space="preserve">
-    <value>Items</value>
+    <value>ಐಟಂಗಳು</value>
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">
-    <value>Extension Activated!</value>
+    <value>ವಿಸ್ತರಣೆ ಸಕ್ರಿಯಗೊಂಡಿದೆ!</value>
   </data>
   <data name="Icons" xml:space="preserve">
-    <value>Icons</value>
+    <value>ಐಕಾನ್‌ಗಳು</value>
   </data>
   <data name="Translations" xml:space="preserve">
-    <value>Translations</value>
+    <value>ಅನುವಾದಗಳು</value>
   </data>
   <data name="ItemsForUri" xml:space="preserve">
-    <value>Items for {0}</value>
+    <value>{0}ಗಾಗಿ ಐಟಂಗಳು</value>
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>
   <data name="NoItemsForUri" xml:space="preserve">
-    <value>There are no items in your vault for {0}.</value>
+    <value>{0} ಗೆ ನಿಮ್ಮ ವಾಲ್ಟ್‌ನಲ್ಲಿ ಯಾವುದೇ ಐಟಂಗಳಿಲ್ಲ.</value>
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
-    <value>When you select an input field and see a Bitwarden auto-fill overlay, you can tap it to launch the auto-fill service.</value>
+    <value>ನೀವು ಇನ್ಪುಟ್ ಕ್ಷೇತ್ರವನ್ನು ಆಯ್ಕೆ ಮಾಡಿದಾಗ ಮತ್ತು ಬಿಟ್ವಾರ್ಡೆನ್ ಸ್ವಯಂ-ಭರ್ತಿ ಓವರ್ಲೇ ಅನ್ನು ನೋಡಿದಾಗ, ಸ್ವಯಂ-ಭರ್ತಿ ಸೇವೆಯನ್ನು ಪ್ರಾರಂಭಿಸಲು ನೀವು ಅದನ್ನು ಟ್ಯಾಪ್ ಮಾಡಬಹುದು.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
-    <value>Tap this notification to auto-fill an item from your vault.</value>
+    <value>ನಿಮ್ಮ ವಾಲ್ಟ್‌ನಿಂದ ಐಟಂ ಅನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ತುಂಬಲು ಈ ಅಧಿಸೂಚನೆಯನ್ನು ಟ್ಯಾಪ್ ಮಾಡಿ.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
-    <value>Open Accessibility Settings</value>
+    <value>ಪ್ರವೇಶಿಸುವಿಕೆ ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ತೆರೆಯಿರಿ</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
-    <value>1. On the Android Accessibility Settings screen, touch "Bitwarden" under the Services heading.</value>
+    <value>1. ಆಂಡ್ರಾಯ್ಡ್ ಪ್ರವೇಶಿಸುವಿಕೆ ಸೆಟ್ಟಿಂಗ್‌ಗಳ ಪರದೆಯಲ್ಲಿ, ಸೇವೆಗಳ ಶೀರ್ಷಿಕೆಯಡಿಯಲ್ಲಿ "ಬಿಟ್‌ವಾರ್ಡನ್" ಸ್ಪರ್ಶಿಸಿ.</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
-    <value>2. Switch on the toggle and press OK to accept.</value>
+    <value>2. ಟಾಗಲ್ ಆನ್ ಮಾಡಿ ಮತ್ತು ಸ್ವೀಕರಿಸಲು ಸರಿ ಒತ್ತಿರಿ.</value>
   </data>
   <data name="Disabled" xml:space="preserve">
-    <value>Disabled</value>
+    <value>ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ</value>
   </data>
   <data name="Enabled" xml:space="preserve">
-    <value>Enabled</value>
+    <value>ಸಕ್ರಿಯಗೊಳಿಸಿದೆ</value>
   </data>
   <data name="Status" xml:space="preserve">
-    <value>Status</value>
+    <value>ಸ್ಥಿತಿ</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
+    <value>ನಿಮ್ಮ ವಾಲ್ಟ್‌ಗೆ ಹೊಸ ಲಾಗಿನ್‌ಗಳನ್ನು ಸೇರಿಸಲು ಸುಲಭವಾದ ಮಾರ್ಗವೆಂದರೆ ಬಿಟ್‌ವಾರ್ಡೆನ್ ಸ್ವಯಂ-ಭರ್ತಿ ಸೇವೆಯಿಂದ. "ಸೆಟ್ಟಿಂಗ್‌ಗಳು" ಪರದೆಗೆ ನ್ಯಾವಿಗೇಟ್ ಮಾಡುವ ಮೂಲಕ ಬಿಟ್‌ವಾರ್ಡೆನ್ ಸ್ವಯಂ-ಭರ್ತಿ ಸೇವೆಯನ್ನು ಬಳಸುವ ಬಗ್ಗೆ ಇನ್ನಷ್ಟು ತಿಳಿಯಿರಿ.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
-    <value>Auto-fill</value>
+    <value>ಸ್ವಯಂ ಭರ್ತಿ</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
-    <value>Do you want to auto-fill or view this item?</value>
+    <value>ಈ ಐಟಂ ಅನ್ನು ಸ್ವಯಂ ಭರ್ತಿ ಮಾಡಲು ಅಥವಾ ವೀಕ್ಷಿಸಲು ನೀವು ಬಯಸುವಿರಾ?</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>Are you sure you want to auto-fill this item? It is not a complete match for "{0}".</value>
+    <value>ಈ ಐಟಂ ಅನ್ನು ಸ್ವಯಂ ತುಂಬಲು ನೀವು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ? ಇದು "{0}" ಗೆ ಸಂಪೂರ್ಣ ಹೊಂದಾಣಿಕೆಯಾಗಿಲ್ಲ.</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
-    <value>Matching Items</value>
+    <value>ಹೊಂದಾಣಿಕೆಯ ವಸ್ತುಗಳು</value>
   </data>
   <data name="PossibleMatchingItems" xml:space="preserve">
-    <value>Possible Matching Items</value>
+    <value>ಹೊಂದಾಣಿಕೆಯ ವಸ್ತುಗಳು</value>
   </data>
   <data name="Search" xml:space="preserve">
-    <value>Search</value>
+    <value>ಹುಡುಕಿ </value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
-    <value>You are searching for an auto-fill item for "{0}".</value>
+    <value>ನೀವು "{0}" ಗಾಗಿ ಸ್ವಯಂ-ಭರ್ತಿ ಐಟಂ ಅನ್ನು ಹುಡುಕುತ್ತಿದ್ದೀರಿ.</value>
   </data>
   <data name="ShareVault" xml:space="preserve">
-    <value>Share Your Vault</value>
+    <value>ನಿಮ್ಮ ವಾಲ್ಟ್ ಅನ್ನು ಹಂಚಿಕೊಳ್ಳಿ</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
-    <value>Cannot open the app "{0}".</value>
+    <value>"{0}" ಅಪ್ಲಿಕೇಶನ್ ತೆರೆಯಲು ಸಾಧ್ಯವಿಲ್ಲ.</value>
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
   </data>
   <data name="AuthenticatorAppTitle" xml:space="preserve">
-    <value>Authenticator App</value>
+    <value>ದೃಢೀಕರಣ ಅಪ್ಲಿಕೇಶನ್</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeApp" xml:space="preserve">
-    <value>Enter the 6 digit verification code from your authenticator app.</value>
+    <value>ನಿಮ್ಮ ದೃಢೀಕರಣ ಅಪ್ಲಿಕೇಶನ್‌ನಿಂದ 6 ಅಂಕಿಯ ಪರಿಶೀಲನಾ ಕೋಡ್ ಅನ್ನು ನಮೂದಿಸಿ.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeEmail" xml:space="preserve">
-    <value>Enter the 6 digit verification code that was emailed to {0}.</value>
+    <value>{0} ಇಮೇಲ್ ಮಾಡಲಾದ 6 ಅಂಕಿಯ ಪರಿಶೀಲನಾ ಕೋಡ್ ಅನ್ನು ನಮೂದಿಸಿ.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
-    <value>Login Unavailable</value>
+    <value>ಲಾಗಿನ್ ಲಭ್ಯವಿಲ್ಲ</value>
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>This account has two-step login enabled, however, none of the configured two-step providers are supported on this device. Please use a supported device and/or add additional providers that are better supported across devices (such as an authenticator app).</value>
+    <value>ಈ ಖಾತೆಯು ಎರಡು-ಹಂತದ ಲಾಗಿನ್ ಅನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿದೆ, ಆದಾಗ್ಯೂ, ಕಾನ್ಫಿಗರ್ ಮಾಡಲಾದ ಎರಡು-ಹಂತದ ಪೂರೈಕೆದಾರರಲ್ಲಿ ಯಾರೂ ಈ ಸಾಧನದಲ್ಲಿ ಬೆಂಬಲಿಸುವುದಿಲ್ಲ. ದಯವಿಟ್ಟು ಬೆಂಬಲಿತ ಸಾಧನವನ್ನು ಬಳಸಿ ಮತ್ತು / ಅಥವಾ ಸಾಧನಗಳಲ್ಲಿ ಉತ್ತಮವಾಗಿ ಬೆಂಬಲಿಸುವ ಹೆಚ್ಚುವರಿ ಪೂರೈಕೆದಾರರನ್ನು ಸೇರಿಸಿ (ದೃಢೀಕರಣ ಅಪ್ಲಿಕೇಶನ್‌ನಂತಹ).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
-    <value>Recovery Code</value>
+    <value>ಮರುಪಡೆಯುವಿಕೆ ಕೋಡ್</value>
     <comment>For 2FA</comment>
   </data>
   <data name="RememberMe" xml:space="preserve">
-    <value>Remember me</value>
+    <value>ನನ್ನನ್ನು ನೆನಪಿನಲ್ಲಿ ಇಡು</value>
     <comment>Remember my two-step login</comment>
   </data>
   <data name="SendVerificationCodeAgain" xml:space="preserve">
-    <value>Send verification code email again</value>
+    <value>ಪರಿಶೀಲನೆ ಕೋಡ್ ಇಮೇಲ್ ಅನ್ನು ಮತ್ತೆ ಕಳುಹಿಸಿ</value>
     <comment>For 2FA</comment>
   </data>
   <data name="TwoStepLoginOptions" xml:space="preserve">
-    <value>Two-step Login Options</value>
+    <value>ಎರಡು ಹಂತದ ಲಾಗಿನ್ ಆಯ್ಕೆಗಳು</value>
   </data>
   <data name="UseAnotherTwoStepMethod" xml:space="preserve">
-    <value>Use another two-step login method</value>
+    <value>ಮತ್ತೊಂದು ಎರಡು-ಹಂತದ ಲಾಗಿನ್ ವಿಧಾನವನ್ನು ಬಳಸಿ</value>
   </data>
   <data name="VerificationEmailNotSent" xml:space="preserve">
-    <value>Could not send verification email. Try again.</value>
+    <value>ಪರಿಶೀಲನೆ ಇಮೇಲ್ ಕಳುಹಿಸಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. ಮತ್ತೆ ಪ್ರಯತ್ನಿಸು.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
-    <value>Verification email sent.</value>
+    <value>ಪರಿಶೀಲನೆ ಇಮೇಲ್‌ ಕಳುಹಿಸಲಾಗಿದೆ</value>
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
-    <value>To continue, hold your YubiKey NEO against the back of the device or insert your YubiKey into your device's USB port, then touch its button.</value>
+    <value>ಮುಂದುವರೆಯಲು, ಸಾಧನದ ಹಿಂಭಾಗದಲ್ಲಿ ನಿಮ್ಮ ಯೂಬಿಕೆ ಎನ್ಇಒ ಅನ್ನು ಹಿಡಿದುಕೊಳ್ಳಿ ಅಥವಾ ನಿಮ್ಮ ಯುಬಿಕಿಯನ್ನು ನಿಮ್ಮ ಸಾಧನದ ಯುಎಸ್ಬಿ ಪೋರ್ಟ್ಗೆ ಸೇರಿಸಿ, ನಂತರ ಅದರ ಗುಂಡಿಯನ್ನು ಸ್ಪರ್ಶಿಸಿ.</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
-    <value>YubiKey Security Key</value>
+    <value>ಯುಬಿಕೆ ಭದ್ರತಾ ಕೀ</value>
     <comment>"YubiKey" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
-    <value>Add New Attachment</value>
+    <value>ಹೊಸ ಲಗತ್ತನ್ನು ಸೇರಿಸಿ</value>
   </data>
   <data name="Attachments" xml:space="preserve">
-    <value>Attachments</value>
+    <value>ಲಗತ್ತುಗಳು</value>
   </data>
   <data name="UnableToDownloadFile" xml:space="preserve">
-    <value>Unable to download file.</value>
+    <value>ಫೈಲ್ ಡೌನ್‌ಲೋಡ್ ಮಾಡಲು ಸಾಧ್ಯವಿಲ್ಲ.</value>
   </data>
   <data name="UnableToOpenFile" xml:space="preserve">
-    <value>Your device cannot open this type of file.</value>
+    <value>ನಿಮ್ಮ ಸಾಧನವು ಈ ರೀತಿಯ ಫೈಲ್ ಅನ್ನು ತೆರೆಯಲು ಸಾಧ್ಯವಿಲ್ಲ.</value>
   </data>
   <data name="Downloading" xml:space="preserve">
-    <value>Downloading...</value>
+    <value>ಡೌನ್‌ಲೋಡ್ ಆಗುತ್ತಿದೆ…</value>
     <comment>Message shown when downloading a file</comment>
   </data>
   <data name="AttachmentLargeWarning" xml:space="preserve">
-    <value>This attachment is {0} in size. Are you sure you want to download it onto your device?</value>
+    <value>ಈ ಲಗತ್ತು {0} ಗಾತ್ರದಲ್ಲಿದೆ. ನಿಮ್ಮ ಸಾಧನದಲ್ಲಿ ಅದನ್ನು ಡೌನ್‌ಲೋಡ್ ಮಾಡಲು ನೀವು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ?</value>
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
   <data name="AuthenticatorKey" xml:space="preserve">
-    <value>Authenticator Key (TOTP)</value>
+    <value>ದೃಢೀಕರಣ ಕೀ (TOTP)</value>
   </data>
   <data name="VerificationCodeTotp" xml:space="preserve">
-    <value>Verification Code (TOTP)</value>
+    <value>ಪರಿಶೀಲನಾ ಕೋಡ್‌ಗಳು</value>
     <comment>Totp code label</comment>
   </data>
   <data name="AuthenticatorKeyAdded" xml:space="preserve">
-    <value>Authenticator key added.</value>
+    <value>ದೃಢೀಕರಣ ಕೀ (TOTP)</value>
   </data>
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
-    <value>Cannot read authenticator key.</value>
+    <value>ದೃಢೀಕರಣ ಕೀಲಿಯನ್ನು ಓದಲಾಗುವುದಿಲ್ಲ.</value>
   </data>
   <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>Scanning will happen automatically.</value>
+    <value>ಸ್ಕ್ಯಾನಿಂಗ್ ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಸಂಭವಿಸುತ್ತದೆ.</value>
   </data>
   <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Point your camera at the QR code.</value>
+    <value>ನಿಮ್ಮ ಕ್ಯಾಮೆರಾವನ್ನು QR ಕೋಡ್‌ನಲ್ಲಿ ಸೂಚಿಸಿ.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
-    <value>Scan QR Code</value>
+    <value>QR ಕೋಡ್‌ ಸ್ಕ್ಯಾನ್‌ ಮಾಡಿ</value>
   </data>
   <data name="Camera" xml:space="preserve">
-    <value>Camera</value>
+    <value>ಕ್ಯಾಮರಾ</value>
   </data>
   <data name="Photos" xml:space="preserve">
-    <value>Photos</value>
+    <value>ಫೋಟೋಗಳು</value>
   </data>
   <data name="CopyTotp" xml:space="preserve">
-    <value>Copy TOTP</value>
+    <value>TOTP ಅನ್ನು ನಕಲಿಸಿ</value>
   </data>
   <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>If your login has an authenticator key attached to it, the TOTP verification code is automatically copied to your clipboard whenever you auto-fill the login.</value>
+    <value>ನಿಮ್ಮ ಲಾಗಿನ್‌ಗೆ ದೃಢೀಕರಣ ಕೀಲಿಯನ್ನು ಲಗತ್ತಿಸಿದ್ದರೆ, ನೀವು ಲಾಗಿನ್ ಅನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಭರ್ತಿ ಮಾಡಿದಾಗಲೆಲ್ಲಾ TOTP ಪರಿಶೀಲನಾ ಕೋಡ್ ನಿಮ್ಮ ಕ್ಲಿಪ್‌ಬೋರ್ಡ್‌ಗೆ ಸ್ವಯಂಚಾಲಿತವಾಗಿ ನಕಲಿಸಲ್ಪಡುತ್ತದೆ.</value>
   </data>
   <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>Disable Automatic TOTP Copy</value>
+    <value>ಸ್ವಯಂಚಾಲಿತ TOTP ನಕಲನ್ನು ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
-    <value>A premium membership is required to use this feature.</value>
+    <value>ಈ ವೈಶಿಷ್ಟ್ಯವನ್ನು ಬಳಸಲು ಪ್ರೀಮಿಯಂ ಸದಸ್ಯತ್ವ ಅಗತ್ಯವಿದೆ.</value>
   </data>
   <data name="AttachementAdded" xml:space="preserve">
-    <value>Attachment added</value>
+    <value>ಲಗತ್ತು ಸೇರಿಸಲಾಗಿದೆ</value>
   </data>
   <data name="AttachmentDeleted" xml:space="preserve">
-    <value>Attachment deleted</value>
+    <value>ಲಗತ್ತು ಅಳಿಸಲಾಗಿದೆ</value>
   </data>
   <data name="ChooseFile" xml:space="preserve">
-    <value>Choose File</value>
+    <value>ಫೈಲ್ ಆಯ್ಕೆ</value>
   </data>
   <data name="File" xml:space="preserve">
-    <value>File</value>
+    <value>ಫೈಲ್</value>
   </data>
   <data name="NoFileChosen" xml:space="preserve">
-    <value>No file chosen</value>
+    <value>ಯಾವ ಫೈಲನ್ನು ಆರಿಸಿಲ್ಲ</value>
   </data>
   <data name="NoAttachments" xml:space="preserve">
-    <value>There are no attachments.</value>
+    <value>ಯಾವುದೇ ಲಗತ್ತುಗಳಿಲ್ಲ.</value>
   </data>
   <data name="FileSource" xml:space="preserve">
-    <value>File Source</value>
+    <value>ಫೈಲ್ ಮೂಲ</value>
   </data>
   <data name="FeatureUnavailable" xml:space="preserve">
-    <value>Feature Unavailable</value>
+    <value>ವೈಶಿಷ್ಟ್ಯ ಲಭ್ಯವಿಲ್ಲ</value>
   </data>
   <data name="MaxFileSize" xml:space="preserve">
-    <value>Maximum file size is 100 MB.</value>
+    <value>ಗರಿಷ್ಠ ಫೈಲ್ ಗಾತ್ರ 100 ಎಂಬಿ.</value>
   </data>
   <data name="UpdateKey" xml:space="preserve">
-    <value>You cannot use this feature until you update your encryption key.</value>
+    <value>ನಿಮ್ಮ ಎನ್‌ಕ್ರಿಪ್ಶನ್ ಕೀಲಿಯನ್ನು ನವೀಕರಿಸುವವರೆಗೆ ನೀವು ಈ ವೈಶಿಷ್ಟ್ಯವನ್ನು ಬಳಸಲಾಗುವುದಿಲ್ಲ.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
-    <value>Learn More</value>
+    <value>ಇನ್ನಷ್ಟು ತಿಳಿಯಿರಿ</value>
   </data>
   <data name="ApiUrl" xml:space="preserve">
-    <value>API Server URL</value>
+    <value>API ಸರ್ವರ್ URL</value>
   </data>
   <data name="CustomEnvironment" xml:space="preserve">
-    <value>Custom Environment</value>
+    <value>ಕಸ್ಟಮ್ ಪರಿಸರ</value>
   </data>
   <data name="CustomEnvironmentFooter" xml:space="preserve">
-    <value>For advanced users. You can specify the base URL of each service independently.</value>
+    <value>ಸುಧಾರಿತ ಬಳಕೆದಾರರಿಗಾಗಿ. ನೀವು ಪ್ರತಿ ಸೇವೆಯ ಮೂಲ URL ಅನ್ನು ಸ್ವತಂತ್ರವಾಗಿ ನಿರ್ದಿಷ್ಟಪಡಿಸಬಹುದು.</value>
   </data>
   <data name="EnvironmentSaved" xml:space="preserve">
-    <value>The environment URLs have been saved.</value>
+    <value>ಪರಿಸರ URL ಗಳನ್ನು ಉಳಿಸಲಾಗಿದೆ.</value>
   </data>
   <data name="FormattedIncorrectly" xml:space="preserve">
-    <value>{0} is not correctly formatted.</value>
+    <value>{0} ಅನ್ನು ಸರಿಯಾಗಿ ಫಾರ್ಮ್ಯಾಟ್ ಮಾಡಲಾಗಿಲ್ಲ.</value>
     <comment>Validation error when something is not formatted correctly, such as a URL or email address.</comment>
   </data>
   <data name="IdentityUrl" xml:space="preserve">
-    <value>Identity Server URL</value>
+    <value>ಗುರುತಿನ ಸರ್ವರ್ URL</value>
     <comment>"Identity" refers to an identity server. See more context here https://en.wikipedia.org/wiki/Identity_management</comment>
   </data>
   <data name="SelfHostedEnvironment" xml:space="preserve">
-    <value>Self-hosted Environment</value>
+    <value>ಸ್ವಯಂ ಆತಿಥೇಯ ಪರಿಸರ</value>
   </data>
   <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
-    <value>Specify the base URL of your on-premise hosted Bitwarden installation.</value>
+    <value>ನಿಮ್ಮ ಆನ್-ಪ್ರಮೇಯ ಹೋಸ್ಟ್ ಮಾಡಿದ ಬಿಟ್‌ವಾರ್ಡೆನ್ ಸ್ಥಾಪನೆಯ ಮೂಲ URL ಅನ್ನು ನಿರ್ದಿಷ್ಟಪಡಿಸಿ.</value>
   </data>
   <data name="ServerUrl" xml:space="preserve">
-    <value>Server URL</value>
+    <value>ಸರ್ವರ್ URL</value>
   </data>
   <data name="WebVaultUrl" xml:space="preserve">
-    <value>Web Vault Server URL</value>
+    <value>ವೆಬ್ ವಾಲ್ಟ್ ಸರ್ವರ್ URL</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
-    <value>Tap this notification to view items from your vault.</value>
+    <value>ನಿಮ್ಮ ವಾಲ್ಟ್‌ನಿಂದ ವಸ್ತುಗಳನ್ನು ವೀಕ್ಷಿಸಲು ಈ ಅಧಿಸೂಚನೆಯನ್ನು ಟ್ಯಾಪ್ ಮಾಡಿ.</value>
   </data>
   <data name="CustomFields" xml:space="preserve">
-    <value>Custom Fields</value>
+    <value>ಕಸ್ಟಮ್ ಕ್ಷೇತ್ರಗಳು</value>
   </data>
   <data name="CopyNumber" xml:space="preserve">
-    <value>Copy Number</value>
+    <value>ನಕಲು ಸಂಖ್ಯೆ</value>
   </data>
   <data name="CopySecurityCode" xml:space="preserve">
-    <value>Copy Security Code</value>
+    <value>ಭದ್ರತಾ ಕೋಡ್ ಅನ್ನು ನಕಲಿಸಿ</value>
   </data>
   <data name="Number" xml:space="preserve">
-    <value>Number</value>
+    <value>ಸಂಖ್ಯೆ</value>
   </data>
   <data name="SecurityCode" xml:space="preserve">
-    <value>Security Code</value>
+    <value>ಭದ್ರತಾ ಕೋಡ್ </value>
   </data>
   <data name="TypeCard" xml:space="preserve">
-    <value>Card</value>
+    <value>ಕಾರ್ಡ್</value>
   </data>
   <data name="TypeIdentity" xml:space="preserve">
-    <value>Identity</value>
+    <value>ಗುರುತಿಸುವಿಕೆ</value>
   </data>
   <data name="TypeLogin" xml:space="preserve">
-    <value>Login</value>
+    <value>ಲಾಗಿನ್</value>
   </data>
   <data name="TypeSecureNote" xml:space="preserve">
-    <value>Secure Note</value>
+    <value>ಸುರಕ್ಷಿತ ಟಿಪ್ಪಣಿ</value>
   </data>
   <data name="Address1" xml:space="preserve">
-    <value>Address 1</value>
+    <value>ವಿಳಾಸ 1</value>
   </data>
   <data name="Address2" xml:space="preserve">
-    <value>Address 2</value>
+    <value>ವಿಳಾಸ 2</value>
   </data>
   <data name="Address3" xml:space="preserve">
-    <value>Address 3</value>
+    <value>ವಿಳಾಸ 3</value>
   </data>
   <data name="April" xml:space="preserve">
-    <value>April</value>
+    <value>ಏಪ್ರಿಲ್</value>
   </data>
   <data name="August" xml:space="preserve">
-    <value>August</value>
+    <value>ಆಗಸ್ಟ್</value>
   </data>
   <data name="Brand" xml:space="preserve">
-    <value>Brand</value>
+    <value>ಬ್ರ್ಯಾಂಡ್</value>
   </data>
   <data name="CardholderName" xml:space="preserve">
-    <value>Cardholder Name</value>
+    <value>ಕಾರ್ಡುದಾರನ ಹೆಸರು</value>
   </data>
   <data name="CityTown" xml:space="preserve">
-    <value>City / Town</value>
+    <value>ನಗರ / ಪಟ್ಟಣ</value>
   </data>
   <data name="Company" xml:space="preserve">
-    <value>Company</value>
+    <value>ಕಂಪನಿ</value>
   </data>
   <data name="Country" xml:space="preserve">
-    <value>Country</value>
+    <value>ದೇಶ</value>
   </data>
   <data name="December" xml:space="preserve">
-    <value>December</value>
+    <value>ಡಿಸೆಂಬರ್</value>
   </data>
   <data name="Dr" xml:space="preserve">
     <value>Dr</value>
   </data>
   <data name="ExpirationMonth" xml:space="preserve">
-    <value>Expiration Month</value>
+    <value>ಮುಕ್ತಾಯ ತಿಂಗಳು</value>
   </data>
   <data name="ExpirationYear" xml:space="preserve">
-    <value>Expiration Year</value>
+    <value>ಮುಕ್ತಾಯ ವರ್ಷ</value>
   </data>
   <data name="February" xml:space="preserve">
-    <value>February</value>
+    <value>ಫೆಬ್ರವರಿ</value>
   </data>
   <data name="FirstName" xml:space="preserve">
-    <value>First Name</value>
+    <value>ಮೊದಲ ಹೆಸರು</value>
   </data>
   <data name="January" xml:space="preserve">
-    <value>January</value>
+    <value>ಜನವರಿ</value>
   </data>
   <data name="July" xml:space="preserve">
-    <value>July</value>
+    <value>ಜುಲೈ</value>
   </data>
   <data name="June" xml:space="preserve">
-    <value>June</value>
+    <value>ಜೂನ್</value>
   </data>
   <data name="LastName" xml:space="preserve">
-    <value>Last Name</value>
+    <value>ಕೊನೆ ಹೆಸರು</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
-    <value>License Number</value>
+    <value>ಪರವಾನಗಿ ಸಂಖ್ಯೆ</value>
   </data>
   <data name="March" xml:space="preserve">
-    <value>March</value>
+    <value>ಮಾರ್ಚ್</value>
   </data>
   <data name="May" xml:space="preserve">
-    <value>May</value>
+    <value>ಮೇ</value>
   </data>
   <data name="MiddleName" xml:space="preserve">
-    <value>Middle Name</value>
+    <value>ಮಧ್ಯದ ಹೆಸರು</value>
   </data>
   <data name="Mr" xml:space="preserve">
-    <value>Mr</value>
+    <value>ಶ್ರೀ</value>
   </data>
   <data name="Mrs" xml:space="preserve">
-    <value>Mrs</value>
+    <value>ಶ್ರೀಮತಿ</value>
   </data>
   <data name="Ms" xml:space="preserve">
-    <value>Ms</value>
+    <value>ಎಂ.ಎಸ್</value>
   </data>
   <data name="November" xml:space="preserve">
-    <value>November</value>
+    <value>ನವೆಂಬರ್</value>
   </data>
   <data name="October" xml:space="preserve">
-    <value>October</value>
+    <value>ಅಕ್ಟೋಬರ್</value>
   </data>
   <data name="PassportNumber" xml:space="preserve">
-    <value>Passport Number</value>
+    <value>ಪಾಸ್ಪೋರ್ಟ್ ಸಂಖ್ಯೆ</value>
   </data>
   <data name="Phone" xml:space="preserve">
-    <value>Phone</value>
+    <value>ಫೋನ್‌</value>
   </data>
   <data name="September" xml:space="preserve">
-    <value>September</value>
+    <value>ಸೆಪ್ಟೆಂಬರ್</value>
   </data>
   <data name="SSN" xml:space="preserve">
-    <value>Social Security Number</value>
+    <value>ಸಾಮಾಜಿಕ ಭದ್ರತೆ ಸಂಖ್ಯೆ</value>
   </data>
   <data name="StateProvince" xml:space="preserve">
-    <value>State / Province</value>
+    <value>ರಾಜ್ಯ / ಪ್ರಾಂತ್ಯ</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Title</value>
+    <value>ಶೀರ್ಷಿಕೆ</value>
   </data>
   <data name="ZipPostalCode" xml:space="preserve">
-    <value>Zip / Postal Code</value>
+    <value>ಪಿನ್ / ಅಂಚೆ ಕೋಡ್</value>
   </data>
   <data name="Address" xml:space="preserve">
-    <value>Address</value>
+    <value>ವಿಳಾಸ </value>
   </data>
   <data name="Expiration" xml:space="preserve">
-    <value>Expiration</value>
+    <value>ಮುಕ್ತಾಯ</value>
   </data>
   <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>Disable Website Icons</value>
+    <value>ವೆಬ್‌ಸೈಟ್ ಚಿಹ್ನೆಗಳನ್ನು ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ</value>
   </data>
   <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Website Icons provide a recognizable image next to each login item in your vault.</value>
+    <value>ವೆಬ್‌ಸೈಟ್ ಐಕಾನ್‌ಗಳು ನಿಮ್ಮ ವಾಲ್ಟ್‌ನಲ್ಲಿರುವ ಪ್ರತಿ ಲಾಗಿನ್ ಐಟಂನ ಪಕ್ಕದಲ್ಲಿ ಗುರುತಿಸಬಹುದಾದ ಚಿತ್ರವನ್ನು ಒದಗಿಸುತ್ತದೆ.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
-    <value>Icons Server URL</value>
+    <value>ಚಿಹ್ನೆಗಳು ಸರ್ವರ್ URL</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Auto-fill with Bitwarden</value>
+    <value>ಬಿಟ್‌ವಾರ್ಡೆನ್‌ನೊಂದಿಗೆ ಸ್ವಯಂ ಭರ್ತಿ ಮಾಡಿ</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
-    <value>Vault is locked</value>
+    <value>ವಾಲ್ಟ್ ಲಾಕ್ ಆಗಿದೆ</value>
   </data>
   <data name="GoToMyVault" xml:space="preserve">
-    <value>Go to my vault</value>
+    <value>ನನ್ನ ವಾಲ್ಟ್ಗೆ ಹೋಗಿ</value>
   </data>
   <data name="Collections" xml:space="preserve">
-    <value>Collections</value>
+    <value>ಸಂಗ್ರಹಣೆಗಳು</value>
   </data>
   <data name="NoItemsCollection" xml:space="preserve">
-    <value>There are no items in this collection.</value>
+    <value>ಈ ಸಂಗ್ರಹಣೆಯಲ್ಲಿ ಯಾವುದೇ ಐಟಂಗಳಿಲ್ಲ.</value>
   </data>
   <data name="NoItemsFolder" xml:space="preserve">
-    <value>There are no items in this folder.</value>
+    <value>ಈ ಫೋಲ್ಡರ್‌ನಲ್ಲಿ ಯಾವುದೇ ಐಟಂಗಳಿಲ್ಲ.</value>
   </data>
   <data name="NoItemsTrash" xml:space="preserve">
-    <value>There are no items in the trash.</value>
+    <value>ಅನುಪಯುಕ್ತದಲ್ಲಿ ಯಾವುದೇ ವಸ್ತುಗಳು ಇಲ್ಲ.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
-    <value>Auto-fill Accessibility Service</value>
+    <value>ಸ್ವಯಂ-ಭರ್ತಿ ಪ್ರವೇಶ ಸೇವೆ</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>The Bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device.</value>
+    <value>ನಿಮ್ಮ ಸಾಧನದಲ್ಲಿನ ಇತರ ಅಪ್ಲಿಕೇಶನ್‌ಗಳಿಗೆ ಲಾಗಿನ್‌ಗಳು, ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್‌ಗಳು ಮತ್ತು ಗುರುತಿನ ಮಾಹಿತಿಯನ್ನು ಭರ್ತಿ ಮಾಡಲು ಸಹಾಯ ಮಾಡಲು ಬಿಟ್‌ವಾರ್ಡೆನ್ ಸ್ವಯಂ-ಭರ್ತಿ ಸೇವೆ ಆಂಡ್ರಾಯ್ಡ್ ಆಟೋಫಿಲ್ ಫ್ರೇಮ್‌ವರ್ಕ್ ಅನ್ನು ಬಳಸುತ್ತದೆ.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Use the Bitwarden auto-fill service to fill logins, credit cards, and identity information into other apps.</value>
+    <value>ಲಾಗಿನ್‌ಗಳು, ಕ್ರೆಡಿಟ್ ಕಾರ್ಡ್‌ಗಳು ಮತ್ತು ಗುರುತಿನ ಮಾಹಿತಿಯನ್ನು ಇತರ ಅಪ್ಲಿಕೇಶನ್‌ಗಳಲ್ಲಿ ತುಂಬಲು ಬಿಟ್‌ವಾರ್ಡೆನ್ ಸ್ವಯಂ-ಭರ್ತಿ ಸೇವೆಯನ್ನು ಬಳಸಿ.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
-    <value>Open Autofill Settings</value>
+    <value>ಆಟೋಫಿಲ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ತೆರೆಯಿರಿ</value>
   </data>
   <data name="FaceID" xml:space="preserve">
-    <value>Face ID</value>
+    <value>ಫೇಸ್ ಐಡಿ</value>
     <comment>What Apple calls their facial recognition reader.</comment>
   </data>
   <data name="FaceIDDirection" xml:space="preserve">
-    <value>Use Face ID to verify.</value>
+    <value>ಪರಿಶೀಲಿಸಲು ಫೇಸ್ ಐಡಿ ಬಳಸಿ.</value>
   </data>
   <data name="UseFaceIDToUnlock" xml:space="preserve">
-    <value>Use Face ID To Unlock</value>
+    <value>ಅನ್ಲಾಕ್ ಮಾಡಲು ಫೇಸ್ ಐಡಿ ಬಳಸಿ</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
-    <value>Verify Face ID</value>
+    <value>ಫೇಸ್ ಐಡಿ ಪರಿಶೀಲಿಸಿ</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
-    <value>Windows Hello</value>
+    <value>ವಿಂಡೋಸ್ ಹಲೋ</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
-    <value>We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings &gt; System &gt; Languages and input &gt; Advanced &gt; Autofill service.</value>
+    <value>ನಿಮಗಾಗಿ Android ಆಟೋಫಿಲ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳ ಮೆನುವನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ತೆರೆಯಲು ನಮಗೆ ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. ನೀವು Android ಸೆಟ್ಟಿಂಗ್‌ಗಳಿಂದ ಹಸ್ತಚಾಲಿತವಾಗಿ ಆಟೋಫಿಲ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳ ಮೆನುಗೆ ನ್ಯಾವಿಗೇಟ್ ಮಾಡಬಹುದು &gt; ಸಿಸ್ಟಮ್ &gt; ಭಾಷೆಗಳು ಮತ್ತು ಇನ್ಪುಟ್ &gt; ಸುಧಾರಿತ &gt; ಆಟೋಫಿಲ್ ಸೇವೆ.</value>
   </data>
   <data name="CustomFieldName" xml:space="preserve">
-    <value>Custom Field Name</value>
+    <value>ಕಸ್ಟಮ್ಫೀಲ್ಡ್ ನೇಮ್</value>
   </data>
   <data name="FieldTypeBoolean" xml:space="preserve">
-    <value>Boolean</value>
+    <value>ಬೂಲಿಯನ್</value>
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
-    <value>Hidden</value>
+    <value>ಮರೆಮಾಡಲಾಗಿದೆ</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
-    <value>Text</value>
+    <value>ಪಠ್ಯ</value>
   </data>
   <data name="NewCustomField" xml:space="preserve">
-    <value>New Custom Field</value>
+    <value>ಹೊಸ ಕಸ್ಟಮ್ ಕ್ಷೇತ್ರ</value>
   </data>
   <data name="SelectTypeField" xml:space="preserve">
-    <value>What type of custom field do you want to add?</value>
+    <value>ನೀವು ಯಾವ ರೀತಿಯ ಕಸ್ಟಮ್ ಕ್ಷೇತ್ರವನ್ನು ಸೇರಿಸಲು ಬಯಸುತ್ತೀರಿ?</value>
   </data>
   <data name="Remove" xml:space="preserve">
-    <value>Remove</value>
+    <value>ತೆಗೆ</value>
   </data>
   <data name="NewUri" xml:space="preserve">
-    <value>New URI</value>
+    <value>ಹೊಸ ಯುಆರ್ಐ</value>
   </data>
   <data name="URIPosition" xml:space="preserve">
-    <value>URI {0}</value>
+    <value>ಯುಆರ್ಐ {0}</value>
     <comment>Label for a uri/url with position. i.e. URI 1, URI 2, etc</comment>
   </data>
   <data name="BaseDomain" xml:space="preserve">
-    <value>Base domain</value>
+    <value>ಮೂಲ ಡೊಮೇನ್</value>
   </data>
   <data name="Default" xml:space="preserve">
-    <value>Default</value>
+    <value>ಡಿಫಾಲ್ಟ್</value>
   </data>
   <data name="Exact" xml:space="preserve">
-    <value>Exact</value>
+    <value>ನಿಖರವಾಗಿ</value>
   </data>
   <data name="Host" xml:space="preserve">
-    <value>Host</value>
+    <value>ಅತಿಥೆಯ</value>
     <comment>A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'.</comment>
   </data>
   <data name="RegEx" xml:space="preserve">
-    <value>Regular expression</value>
+    <value>ನಿಯಮಿತ ಅಭಿವ್ಯಕ್ತಿ</value>
     <comment>A programming term, also known as 'RegEx'.</comment>
   </data>
   <data name="StartsWith" xml:space="preserve">
-    <value>Starts with</value>
+    <value>ಇದರೊಂದಿಗೆ ಪ್ರಾರಂಭವಾಗುತ್ತದೆ</value>
   </data>
   <data name="URIMatchDetection" xml:space="preserve">
-    <value>URI Match Detection</value>
+    <value>ಯುಆರ್ಐ ಪಂದ್ಯ ಪತ್ತೆ</value>
   </data>
   <data name="MatchDetection" xml:space="preserve">
-    <value>Match Detection</value>
+    <value>ಹೊಂದಾಣಿಕೆ ಪತ್ತೆ</value>
     <comment>URI match detection for auto-fill.</comment>
   </data>
   <data name="YesAndSave" xml:space="preserve">
-    <value>Yes, and Save</value>
+    <value>ಹೌದು, ಮತ್ತು ಉಳಿಸಿ</value>
   </data>
   <data name="AutofillAndSave" xml:space="preserve">
-    <value>Auto-fill and save</value>
+    <value>ಸ್ವಯಂ ಭರ್ತಿ ಮತ್ತು ಉಳಿಸಿ</value>
   </data>
   <data name="Organization" xml:space="preserve">
-    <value>Organization</value>
+    <value>ಸಂಸ್ಥೆ</value>
     <comment>An entity of multiple related people (ex. a team or business organization).</comment>
   </data>
   <data name="HoldYubikeyNearTop" xml:space="preserve">
-    <value>Hold your Yubikey near the top of the device.</value>
+    <value>ನಿಮ್ಮ ಯುಬಿಕಿಯನ್ನು ಸಾಧನದ ಮೇಲ್ಭಾಗದಲ್ಲಿ ಹಿಡಿದುಕೊಳ್ಳಿ.</value>
   </data>
   <data name="TryAgain" xml:space="preserve">
-    <value>Try again</value>
+    <value>ಮತ್ತೊಮ್ಮೆ ಪ್ರಯತ್ನಿಸಿ</value>
   </data>
   <data name="YubiKeyInstructionIos" xml:space="preserve">
-    <value>To continue, hold your YubiKey NEO against the back of the device.</value>
+    <value>ಮುಂದುವರೆಯಲು, ಸಾಧನದ ಹಿಂಭಾಗದಲ್ಲಿ ನಿಮ್ಮ ಯೂಬಿಕೆ ಎನ್ಇಒ ಅನ್ನು ಹಿಡಿದುಕೊಳ್ಳಿ.</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
-    <value>The accessibility service may be helpful to use when apps do not support the standard auto-fill service.</value>
+    <value>ಸ್ಟ್ಯಾಂಡರ್ಡ್ ಸ್ವಯಂ-ಭರ್ತಿ ಸೇವೆಯನ್ನು ಅಪ್ಲಿಕೇಶನ್‌ಗಳು ಬೆಂಬಲಿಸದಿದ್ದಾಗ ಬಳಸಲು ಪ್ರವೇಶ ಸೇವೆ ಸಹಾಯವಾಗಬಹುದು.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
-    <value>Password Updated</value>
+    <value>ಪಾಸ್ವರ್ಡ್ ನವೀಕರಿಸಲಾಗಿದೆ</value>
     <comment>ex. Date this password was updated</comment>
   </data>
   <data name="DateUpdated" xml:space="preserve">
-    <value>Updated</value>
+    <value>ಅಪ್‌ಡೇಟ್</value>
     <comment>ex. Date this item was updated</comment>
   </data>
   <data name="AutofillActivated" xml:space="preserve">
-    <value>AutoFill Activated!</value>
+    <value>ಆಟೋಫಿಲ್ ಸಕ್ರಿಯಗೊಂಡಿದೆ!</value>
   </data>
   <data name="MustLogInMainAppAutofill" xml:space="preserve">
-    <value>You must log into the main Bitwarden app before you can use AutoFill.</value>
+    <value>ನೀವು ಆಟೋಫಿಲ್ ಬಳಸುವ ಮೊದಲು ಮುಖ್ಯ ಬಿಟ್‌ವಾರ್ಡೆನ್ ಅಪ್ಲಿಕೇಶನ್‌ಗೆ ಲಾಗ್ ಇನ್ ಆಗಬೇಕು.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
-    <value>Your logins are now easily accessible right from your keyboard while logging into apps and websites.</value>
+    <value>ಅಪ್ಲಿಕೇಶನ್‌ಗಳು ಮತ್ತು ವೆಬ್‌ಸೈಟ್‌ಗಳಿಗೆ ಲಾಗ್ ಇನ್ ಆಗುವಾಗ ನಿಮ್ಮ ಲಾಗಿನ್‌ಗಳನ್ನು ನಿಮ್ಮ ಕೀಬೋರ್ಡ್‌ನಿಂದ ಸುಲಭವಾಗಿ ಪ್ರವೇಶಿಸಬಹುದು.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
     <value>We recommend disabling any other AutoFill apps under Settings if you do not plan to use them.</value>
   </data>
   <data name="BitwardenAutofillDescription" xml:space="preserve">
-    <value>Access your vault directly from your keyboard to quickly autofill passwords.</value>
+    <value>ಪಾಸ್ವರ್ಡ್ಗಳನ್ನು ತ್ವರಿತವಾಗಿ ಸ್ವಯಂ ತುಂಬಲು ನಿಮ್ಮ ಕೀಲಿಮಣೆಯಿಂದ ನೇರವಾಗಿ ನಿಮ್ಮ ವಾಲ್ಟ್ ಅನ್ನು ಪ್ರವೇಶಿಸಿ.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
-    <value>To enable password autofill on your device, follow these instructions:</value>
+    <value>ನಿಮ್ಮ ಸಾಧನದಲ್ಲಿ ಪಾಸ್‌ವರ್ಡ್ ಸ್ವಯಂಚಾಲಿತ ಭರ್ತಿ ಮಾಡಲು, ಈ ಸೂಚನೆಗಳನ್ನು ಅನುಸರಿಸಿ:</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
-    <value>1. Go to the iOS "Settings" app</value>
+    <value>1. ಐಒಎಸ್ "ಸೆಟ್ಟಿಂಗ್ಸ್" ಅಪ್ಲಿಕೇಶನ್‌ಗೆ ಹೋಗಿ</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Tap "Passwords &amp; Accounts"</value>
+    <value>2. "ಪಾಸ್‌ವರ್ಡ್‌ಗಳು ಮತ್ತು ಖಾತೆಗಳು" ಟ್ಯಾಪ್ ಮಾಡಿ</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
-    <value>3. Tap "AutoFill Passwords"</value>
+    <value>3. "ಆಟೋಫಿಲ್ ಪಾಸ್‌ವರ್ಡ್‌ಗಳು" ಟ್ಯಾಪ್ ಮಾಡಿ</value>
   </data>
   <data name="AutofillTurnOn4" xml:space="preserve">
-    <value>4. Turn on AutoFill</value>
+    <value>4. ಆಟೋಫಿಲ್ ಆನ್ ಮಾಡಿ</value>
   </data>
   <data name="AutofillTurnOn5" xml:space="preserve">
-    <value>5. Select "Bitwarden"</value>
+    <value>5. "ಬಿಟ್ವಾರ್ಡನ್" ಆಯ್ಕೆಮಾಡಿ</value>
   </data>
   <data name="PasswordAutofill" xml:space="preserve">
-    <value>Password AutoFill</value>
+    <value>ಪಾಸ್ವರ್ಡ್ ಆಟೋಫಿಲ್</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the "Settings" screen.</value>
+    <value>ನಿಮ್ಮ ವಾಲ್ಟ್‌ಗೆ ಹೊಸ ಲಾಗಿನ್‌ಗಳನ್ನು ಸೇರಿಸಲು ಸುಲಭವಾದ ಮಾರ್ಗವೆಂದರೆ ಬಿಟ್‌ವರ್ಡ್ ಪಾಸ್‌ವರ್ಡ್ ಆಟೋಫಿಲ್ ವಿಸ್ತರಣೆಯನ್ನು ಬಳಸುವುದು. "ಸೆಟ್ಟಿಂಗ್‌ಗಳು" ಪರದೆಗೆ ನ್ಯಾವಿಗೇಟ್ ಮಾಡುವ ಮೂಲಕ ಬಿಟ್‌ವಾರ್ಡೆನ್ ಪಾಸ್‌ವರ್ಡ್ ಆಟೋಫಿಲ್ ವಿಸ್ತರಣೆಯನ್ನು ಬಳಸುವ ಬಗ್ಗೆ ಇನ್ನಷ್ಟು ತಿಳಿಯಿರಿ.</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
-    <value>Invalid email address.</value>
+    <value>ಅಮಾನ್ಯ ಇಮೇಲ್ ವಿಳಾಸ.</value>
   </data>
   <data name="Cards" xml:space="preserve">
-    <value>Cards</value>
+    <value>ಕಾರ್ಡ್‌ಗಳು</value>
   </data>
   <data name="Identities" xml:space="preserve">
-    <value>Identities</value>
+    <value>ಗುರುತುಗಳು</value>
   </data>
   <data name="Logins" xml:space="preserve">
-    <value>Logins</value>
+    <value>ಲಾಗಿನ್ಸ್</value>
   </data>
   <data name="SecureNotes" xml:space="preserve">
-    <value>Secure Notes</value>
+    <value>ಸುರಕ್ಷಿತ ಟಿಪ್ಪಣಿಗಳು</value>
   </data>
   <data name="AllItems" xml:space="preserve">
-    <value>All Items</value>
+    <value>ಎಲ್ಲಾ ವಸ್ತುಗಳು</value>
   </data>
   <data name="URIs" xml:space="preserve">
-    <value>URIs</value>
+    <value>ಯುಆರ್ಐಗಳು</value>
     <comment>Plural form of a URI</comment>
   </data>
   <data name="CheckingPassword" xml:space="preserve">
-    <value>Checking password...</value>
+    <value>ಪಾಸ್‌ವರ್ಡ್ ಪರಿಶೀಲಿಸುತ್ತಿದೆ…</value>
     <comment>A loading message when doing an exposed password check.</comment>
   </data>
   <data name="CheckPassword" xml:space="preserve">
-    <value>Check if password has been exposed.</value>
+    <value>ಪಾಸ್ವರ್ಡ್ ಬಹಿರಂಗಗೊಂಡಿದೆಯೇ ಎಂದು ಪರಿಶೀಲಿಸಿ.</value>
   </data>
   <data name="PasswordExposed" xml:space="preserve">
-    <value>This password has been exposed {0} time(s) in data breaches. You should change it.</value>
+    <value>ಡೇಟಾ ಪಾಸ್‌ಗಳಲ್ಲಿ ಈ ಪಾಸ್‌ವರ್ಡ್ {0} ಸಮಯ (ಗಳು) ಅನ್ನು ಬಹಿರಂಗಪಡಿಸಲಾಗಿದೆ. ನೀವು ಅದನ್ನು ಬದಲಾಯಿಸಬೇಕು.</value>
   </data>
   <data name="PasswordSafe" xml:space="preserve">
-    <value>This password was not found in any known data breaches. It should be safe to use.</value>
+    <value>ತಿಳಿದಿರುವ ಯಾವುದೇ ಡೇಟಾ ಉಲ್ಲಂಘನೆಗಳಲ್ಲಿ ಈ ಪಾಸ್‌ವರ್ಡ್ ಕಂಡುಬಂದಿಲ್ಲ. ಅದನ್ನು ಬಳಸಲು ಸುರಕ್ಷಿತವಾಗಿರಬೇಕು.</value>
   </data>
   <data name="IdentityName" xml:space="preserve">
-    <value>Identity Name</value>
+    <value>ಹೆಸರು ಗುರುತು</value>
   </data>
   <data name="Value" xml:space="preserve">
-    <value>Value</value>
+    <value>ಮೌಲ್ಯ</value>
   </data>
   <data name="PasswordHistory" xml:space="preserve">
-    <value>Password History</value>
+    <value>ಪಾಸ್ವರ್ಡ್ ಇತಿಹಾಸ</value>
   </data>
   <data name="Types" xml:space="preserve">
-    <value>Types</value>
+    <value>ರೀತಿಯ</value>
   </data>
   <data name="NoPasswordsToList" xml:space="preserve">
-    <value>No passwords to list.</value>
+    <value>ಪಟ್ಟಿ ಮಾಡಲು ಪಾಸ್‌ವರ್ಡ್‌ಗಳಿಲ್ಲ.</value>
   </data>
   <data name="NoItemsToList" xml:space="preserve">
-    <value>There are no items to list.</value>
+    <value>ಪಟ್ಟಿ ಮಾಡಲು ಯಾವುದೇ ಐಟಂಗಳಿಲ್ಲ.</value>
   </data>
   <data name="SearchCollection" xml:space="preserve">
-    <value>Search collection</value>
+    <value>ಸಂಗ್ರಹಣೆ ಹುಡುಕಿ</value>
   </data>
   <data name="SearchFolder" xml:space="preserve">
-    <value>Search folder</value>
+    <value>ಫೋಲ್ಡರ್ ಹುಡುಕಿ</value>
   </data>
   <data name="SearchType" xml:space="preserve">
-    <value>Search type</value>
+    <value>ಹುಡುಕಾಟ ಪ್ರಕಾರ</value>
   </data>
   <data name="Type" xml:space="preserve">
-    <value>Type</value>
+    <value>ಪ್ರಕಾರ</value>
   </data>
   <data name="MoveDown" xml:space="preserve">
-    <value>Move Down</value>
+    <value>ಕೆಳಕ್ಕೆ ಸರಿಸು</value>
   </data>
   <data name="MoveUp" xml:space="preserve">
-    <value>Move Up</value>
+    <value>ಮೇಲಕ್ಕೆ ಸರಿಸಿ</value>
   </data>
   <data name="Miscellaneous" xml:space="preserve">
-    <value>Miscellaneous</value>
+    <value>ಇತರೆ</value>
   </data>
   <data name="Ownership" xml:space="preserve">
-    <value>Ownership</value>
+    <value>ಮಾಲೀಕತ್ವ</value>
   </data>
   <data name="WhoOwnsThisItem" xml:space="preserve">
-    <value>Who owns this item?</value>
+    <value>ಈ ಐಟಂ ಅನ್ನು ಯಾರು ಹೊಂದಿದ್ದಾರೆ?</value>
   </data>
   <data name="NoCollectionsToList" xml:space="preserve">
-    <value>There are no collections to list.</value>
+    <value>ಪಟ್ಟಿ ಮಾಡಲು ಯಾವುದೇ ಸಂಗ್ರಹಗಳಿಲ್ಲ.</value>
   </data>
   <data name="ItemShared" xml:space="preserve">
-    <value>Item has been shared.</value>
+    <value>ಐಟಂ ಹಂಚಿಕೊಳ್ಳಲಾಗಿದೆ.</value>
   </data>
   <data name="SelectOneCollection" xml:space="preserve">
-    <value>You must select at least one collection.</value>
+    <value>ನೀವು ಕನಿಷ್ಠ ಒಂದು ಸಂಗ್ರಹವನ್ನು ಆರಿಸಬೇಕು.</value>
   </data>
   <data name="Share" xml:space="preserve">
-    <value>Share</value>
+    <value>ಹಂಚಿಕೊಳ್ಳಿ</value>
   </data>
   <data name="ShareItem" xml:space="preserve">
-    <value>Share Item</value>
+    <value>ಐಟಂ ಹಂಚಿಕೊಳ್ಳಿ</value>
   </data>
   <data name="NoOrgsToList" xml:space="preserve">
-    <value>No organizations to list.</value>
+    <value>ಪಟ್ಟಿ ಮಾಡಲು ಯಾವುದೇ ಸಂಸ್ಥೆಗಳು ಇಲ್ಲ.</value>
   </data>
   <data name="ShareDesc" xml:space="preserve">
-    <value>Choose an organization that you wish to share this item with. Sharing transfers ownership of the item to the organization. You will no longer be the direct owner of this item once it has been shared.</value>
+    <value>ಈ ಐಟಂ ಅನ್ನು ಹಂಚಿಕೊಳ್ಳಲು ನೀವು ಬಯಸುವ ಸಂಸ್ಥೆಯನ್ನು ಆರಿಸಿ. ಹಂಚಿಕೆಯು ವಸ್ತುವಿನ ಮಾಲೀಕತ್ವವನ್ನು ಸಂಸ್ಥೆಗೆ ವರ್ಗಾಯಿಸುತ್ತದೆ. ಈ ಐಟಂ ಅನ್ನು ಹಂಚಿಕೊಂಡ ನಂತರ ನೀವು ಇನ್ನು ಮುಂದೆ ಅದರ ನೇರ ಮಾಲೀಕರಾಗಿರುವುದಿಲ್ಲ.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
-    <value>Number of Words</value>
+    <value>ಪದಗಳ ಸಂಖ್ಯೆ</value>
   </data>
   <data name="Passphrase" xml:space="preserve">
-    <value>Passphrase</value>
+    <value>ಪಾಸ್ಫ್ರೇಸ್</value>
   </data>
   <data name="WordSeparator" xml:space="preserve">
-    <value>Word Separator</value>
+    <value>ಪದ ವಿಭಜಕ</value>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>Clear</value>
+    <value>ಕ್ಲಿಯರ್‌</value>
     <comment>To clear something out. example: To clear browser history.</comment>
   </data>
   <data name="Generator" xml:space="preserve">
-    <value>Generator</value>
+    <value>ಜನರೇಟರ್</value>
     <comment>Short for "Password Generator"</comment>
   </data>
   <data name="NoFoldersToList" xml:space="preserve">
-    <value>There are no folders to list.</value>
+    <value>ಪಟ್ಟಿ ಮಾಡಲು ಯಾವುದೇ ಫೋಲ್ಡರ್‌ಗಳಿಲ್ಲ.</value>
   </data>
   <data name="FingerprintPhrase" xml:space="preserve">
-    <value>Fingerprint Phrase</value>
+    <value>ಫಿಂಗರ್ಪ್ರಿಂಟ್ ಫ್ರೇಸ್</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="YourAccountsFingerprint" xml:space="preserve">
-    <value>Your account's fingerprint phrase</value>
+    <value>ನಿಮ್ಮ ಖಾತೆಯ ಫಿಂಗರ್‌ಪ್ರಿಂಟ್ ನುಡಿಗಟ್ಟು</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="ShareVaultConfirmation" xml:space="preserve">
     <value>Bitwarden allows you to share your vault with others by using an organization account. Would you like to visit the bitwarden.com website to learn more?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
-    <value>Export Vault</value>
+    <value>ರಫ್ತು ವಾಲ್ಟ್</value>
   </data>
   <data name="LockNow" xml:space="preserve">
-    <value>Lock Now</value>
+    <value>ಈಗ ಲಾಕ್ ಮಾಡಿ</value>
   </data>
   <data name="PIN" xml:space="preserve">
-    <value>PIN</value>
+    <value>ಪಿನ್</value>
   </data>
   <data name="Unlock" xml:space="preserve">
-    <value>Unlock</value>
+    <value>ಅನ್‌ಲಾಕ್ ಮಾಡಿ</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
-    <value>30 minutes</value>
+    <value>30 ನಿಮಿಷಗಳು</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
-    <value>Set your PIN code for unlocking Bitwarden. Your PIN settings will be reset if you ever fully log out of the application.</value>
+    <value>ಬಿಟ್‌ವಾರ್ಡೆನ್ ಅನ್ಲಾಕ್ ಮಾಡಲು ನಿಮ್ಮ ಪಿನ್ ಕೋಡ್ ಅನ್ನು ಹೊಂದಿಸಿ. ನೀವು ಎಂದಾದರೂ ಅಪ್ಲಿಕೇಶನ್‌ನಿಂದ ಸಂಪೂರ್ಣವಾಗಿ ಲಾಗ್ out ಟ್ ಆಗಿದ್ದರೆ ನಿಮ್ಮ ಪಿನ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ಮರುಹೊಂದಿಸಲಾಗುತ್ತದೆ.</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
-    <value>Logged in as {0} on {1}.</value>
+    <value>{1} ನಲ್ಲಿ {0} ಆಗಿ ಲಾಗ್ ಇನ್ ಮಾಡಲಾಗಿದೆ.</value>
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
-    <value>Your vault is locked. Verify your master password to continue.</value>
+    <value>ನಿಮ್ಮ ವಾಲ್ಟ್ ಲಾಕ್ ಆಗಿದೆ. ಮುಂದುವರೆಯಲು ನಿಮ್ಮ ಮಾಸ್ಟರ್ ಪಾಸ್‌ವರ್ಡ್ ಅನ್ನು ಪರಿಶೀಲಿಸಿ.</value>
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
-    <value>Your vault is locked. Verify your PIN code to continue.</value>
+    <value>ನಿಮ್ಮ ವಾಲ್ಟ್ ಲಾಕ್ ಆಗಿದೆ. ಮುಂದುವರೆಯಲು ನಿಮ್ಮ ಪಿನ್ ಕೋಡ್ ಪರಿಶೀಲಿಸಿ.</value>
   </data>
   <data name="Dark" xml:space="preserve">
-    <value>Dark</value>
+    <value>ಡಾರ್ಕ್</value>
     <comment>A dark color</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>Light</value>
+    <value>ಬೆಳಕು</value>
     <comment>A light color</comment>
   </data>
   <data name="FiveMinutes" xml:space="preserve">
-    <value>5 minutes</value>
+    <value>೫ ನಿಮಿಷಗಳು</value>
   </data>
   <data name="TenSeconds" xml:space="preserve">
-    <value>10 seconds</value>
+    <value>೧೦ ಕ್ಷಣ</value>
   </data>
   <data name="ThirtySeconds" xml:space="preserve">
-    <value>30 seconds</value>
+    <value>೩೦ ಕ್ಷಣ</value>
   </data>
   <data name="TwentySeconds" xml:space="preserve">
-    <value>20 seconds</value>
+    <value>೨0 ಸೆಕೆಂಡುಗಳು</value>
   </data>
   <data name="TwoMinutes" xml:space="preserve">
-    <value>2 minutes</value>
+    <value>೨ ನಿಮಿಷಗಳು</value>
   </data>
   <data name="ClearClipboard" xml:space="preserve">
-    <value>Clear Clipboard</value>
+    <value>ಕ್ಲಿಪ್‌ಬೋರ್ಡ್ ತೆರವುಗೊಳಿಸಿ</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="ClearClipboardDescription" xml:space="preserve">
-    <value>Automatically clear copied values from your clipboard.</value>
+    <value>ನಿಮ್ಮ ಕ್ಲಿಪ್‌ಬೋರ್ಡ್‌ನಿಂದ ನಕಲಿಸಿದ ಮೌಲ್ಯಗಳನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ತೆರವುಗೊಳಿಸಿ.</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="DefaultUriMatchDetection" xml:space="preserve">
-    <value>Default URI Match Detection</value>
+    <value>ಡೀಫಾಲ್ಟ್ ಯುಆರ್ಐ ಹೊಂದಾಣಿಕೆ ಪತ್ತೆ</value>
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
-    <value>Choose the default way that URI match detection is handled for logins when performing actions such as auto-fill.</value>
+    <value>ಸ್ವಯಂ ಭರ್ತಿಯಂತಹ ಕ್ರಿಯೆಗಳನ್ನು ನಿರ್ವಹಿಸುವಾಗ ಲಾಗಿನ್‌ಗಳಿಗಾಗಿ URI ಹೊಂದಾಣಿಕೆ ಪತ್ತೆಹಚ್ಚುವಿಕೆಯನ್ನು ನಿರ್ವಹಿಸುವ ಪೂರ್ವನಿಯೋಜಿತ ಮಾರ್ಗವನ್ನು ಆರಿಸಿ.</value>
   </data>
   <data name="Theme" xml:space="preserve">
-    <value>Theme</value>
+    <value>ಥೀಮ್ಸ್</value>
     <comment>Color theme</comment>
   </data>
   <data name="ThemeDescription" xml:space="preserve">
-    <value>Change the application's color theme.</value>
+    <value>ಅಪ್ಲಿಕೇಶನ್‌ನ ಬಣ್ಣ ಥೀಮ್ ಅನ್ನು ಬದಲಾಯಿಸಿ.</value>
   </data>
   <data name="RestartIsRequired" xml:space="preserve">
-    <value>Restart is required.</value>
+    <value>ಮರುಪ್ರಾರಂಭಿಸುವ ಅಗತ್ಯವಿದೆ.</value>
     <comment>Referring to restarting the application.</comment>
   </data>
   <data name="Restarting" xml:space="preserve">
-    <value>Restarting...</value>
+    <value>ಮರುಪ್ರಾರಂಭಿಸಲಾಗುತ್ತಿದೆ...</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
-    <value>Copy Notes</value>
+    <value>ಟಿಪ್ಪಣಿ ನಕಲಿಸಿ</value>
   </data>
   <data name="Exit" xml:space="preserve">
-    <value>Exit</value>
+    <value>ನಿರ್ಗಮಿಸು</value>
   </data>
   <data name="ExitConfirmation" xml:space="preserve">
-    <value>Are you sure you want to exit Bitwarden?</value>
+    <value>ಖಚಿತವಾಗಿ ನಿರ್ಗಮಿಸಲು ಬಯಸುವಿರಾ?</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
-    <value>Do you want to require unlocking with your master password when the application is restarted?</value>
+    <value>ಅಪ್ಲಿಕೇಶನ್ ಪುನರಾರಂಭಗೊಂಡಾಗ ನಿಮ್ಮ ಮಾಸ್ಟರ್ ಪಾಸ್‌ವರ್ಡ್‌ನೊಂದಿಗೆ ಅನ್‌ಲಾಕ್ ಮಾಡುವ ಅಗತ್ಯವಿದೆಯೇ?</value>
   </data>
   <data name="Black" xml:space="preserve">
-    <value>Black</value>
+    <value>ಕಪ್ಪು</value>
     <comment>The color black</comment>
   </data>
   <data name="BlacklistedUris" xml:space="preserve">
-    <value>Blacklisted URIs</value>
+    <value>ಕಪ್ಪುಪಟ್ಟಿ ಮಾಡಿದ ಯುಆರ್ಐಗಳು</value>
   </data>
   <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>URIs that are blacklisted will not offer auto-fill. The list should be comma separated. Ex: "https://twitter.com, androidapp://com.twitter.android".</value>
+    <value>ಕಪ್ಪುಪಟ್ಟಿಗೆ ಸೇರ್ಪಡೆಗೊಂಡಿರುವ ಯುಆರ್‌ಐಗಳು ಸ್ವಯಂ ಭರ್ತಿ ನೀಡುವುದಿಲ್ಲ. ಪಟ್ಟಿಯನ್ನು ಅಲ್ಪವಿರಾಮದಿಂದ ಬೇರ್ಪಡಿಸಬೇಕು. ಉದಾ: "https://twitter.com, androidapp: //com.twitter.android".</value>
   </data>
   <data name="DisableSavePrompt" xml:space="preserve">
-    <value>Disable Save Prompt</value>
+    <value>ಸೇವ್ ಪ್ರಾಂಪ್ಟ್ ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ</value>
   </data>
   <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>The "Save Prompt" automatically prompts you to save new items to your vault whenever you enter them for the first time.</value>
+    <value>"ಪ್ರಾಂಪ್ಟ್ ಉಳಿಸಿ" ನೀವು ಮೊದಲ ಬಾರಿಗೆ ಹೊಸ ವಸ್ತುಗಳನ್ನು ನಮೂದಿಸಿದಾಗಲೆಲ್ಲಾ ನಿಮ್ಮ ವಾಲ್ಟ್‌ಗೆ ಹೊಸ ವಸ್ತುಗಳನ್ನು ಉಳಿಸಲು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಕೇಳುತ್ತದೆ.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
-    <value>On App Restart</value>
+    <value>ಅಪ್ಲಿಕೇಶನ್ ಮರುಪ್ರಾರಂಭದಲ್ಲಿ</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>Auto-fill makes it easy to securely access your Bitwarden vault from other websites and apps. It looks like you have not enabled an auto-fill service for Bitwarden. Enable auto-fill for Bitwarden from the "Settings" screen.</value>
+    <value>ಸ್ವಯಂ-ಭರ್ತಿ ಇತರ ವೆಬ್‌ಸೈಟ್‌ಗಳು ಮತ್ತು ಅಪ್ಲಿಕೇಶನ್‌ಗಳಿಂದ ನಿಮ್ಮ ಬಿಟ್‌ವಾರ್ಡನ್ ವಾಲ್ಟ್ ಅನ್ನು ಸುರಕ್ಷಿತವಾಗಿ ಪ್ರವೇಶಿಸಲು ಸುಲಭಗೊಳಿಸುತ್ತದೆ. ನೀವು ಬಿಟ್‌ವಾರ್ಡೆನ್‌ಗಾಗಿ ಸ್ವಯಂ ಭರ್ತಿ ಸೇವೆಯನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿಲ್ಲ ಎಂದು ತೋರುತ್ತಿದೆ. "ಸೆಟ್ಟಿಂಗ್‌ಗಳು" ಪರದೆಯಿಂದ ಬಿಟ್‌ವಾರ್ಡೆನ್‌ಗಾಗಿ ಸ್ವಯಂ ಭರ್ತಿ ಸಕ್ರಿಯಗೊಳಿಸಿ.</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
-    <value>Your theme changes will apply when the app is restarted.</value>
+    <value>ಅಪ್ಲಿಕೇಶನ್ ಮರುಪ್ರಾರಂಭಿಸಿದಾಗ ನಿಮ್ಮ ಥೀಮ್ ಬದಲಾವಣೆಗಳು ಅನ್ವಯವಾಗುತ್ತವೆ.</value>
   </data>
   <data name="Capitalize" xml:space="preserve">
-    <value>Capitalize</value>
+    <value>ದೊಡ್ಡಕ್ಷರ ಮಾಡಿ</value>
     <comment>ex. Uppercase the first character of a word.</comment>
   </data>
   <data name="IncludeNumber" xml:space="preserve">
-    <value>Include Number</value>
+    <value>ಸಂಖ್ಯೆಯನ್ನು ಸೇರಿಸಿ</value>
   </data>
   <data name="Download" xml:space="preserve">
-    <value>Download</value>
+    <value>ಡೌನ್‌ಲೋಡ್</value>
   </data>
   <data name="Shared" xml:space="preserve">
-    <value>Shared</value>
+    <value>ಹಂಚಿಕೊಳ್ಳಲಾಗಿದೆ</value>
   </data>
   <data name="ToggleVisibility" xml:space="preserve">
-    <value>Toggle Visibility</value>
+    <value>ಗೋಚರತೆಯನ್ನು ಟಾಗಲ್ ಮಾಡಿ</value>
   </data>
   <data name="LoginExpired" xml:space="preserve">
-    <value>Your login session has expired.</value>
+    <value>ನಿಮ್ಮ ಲಾಗಿನ್ ಸೆಷನ್ ಅವಧಿ ಮೀರಿದೆ.</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
-    <value>Biometric Verification</value>
+    <value>ಬಯೋಮೆಟ್ರಿಕ್ ಪರಿಶೀಲನೆ</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
-    <value>Biometrics</value>
+    <value>ಬಯೋಮೆಟ್ರಿಕ್ </value>
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
-    <value>Use Biometrics To Unlock</value>
+    <value>ಅನ್ಲಾಕ್ ಮಾಡಲು ಬಯೋಮೆಟ್ರಿಕ್ಸ್ ಬಳಸಿ</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
-    <value>Bitwarden needs attention - See "Auto-fill Accessibility Service" from Bitwarden Settings</value>
+    <value>ಬಿಟ್‌ವಾರ್ಡೆನ್‌ಗೆ ಗಮನ ಬೇಕು - ಬಿಟ್‌ವಾರ್ಡೆನ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳಿಂದ "ಸ್ವಯಂ-ಭರ್ತಿ ಪ್ರವೇಶಿಸುವಿಕೆ ಸೇವೆ" ನೋಡಿ</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
-    <value>3. On the Android App Settings screen for Bitwarden, go to the "Display over other apps" options (under Advanced) and tap the toggle to enable overlay support.</value>
+    <value>3. ಬಿಟ್‌ವಾರ್ಡೆನ್‌ಗಾಗಿ ಆಂಡ್ರಾಯ್ಡ್ ಅಪ್ಲಿಕೇಶನ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳ ಪರದೆಯಲ್ಲಿ, "ಇತರ ಅಪ್ಲಿಕೇಶನ್‌ಗಳ ಮೇಲೆ ಪ್ರದರ್ಶಿಸು" ಆಯ್ಕೆಗಳಿಗೆ (ಸುಧಾರಿತ ಅಡಿಯಲ್ಲಿ) ಹೋಗಿ ಮತ್ತು ಓವರ್‌ಲೇ ಬೆಂಬಲವನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಲು ಟಾಗಲ್ ಟ್ಯಾಪ್ ಮಾಡಿ.</value>
   </data>
   <data name="OverlayPermission" xml:space="preserve">
-    <value>Permission</value>
+    <value>ಅನುಮತಿಗಳು</value>
   </data>
   <data name="BitwardenAutofillServiceOpenOverlayPermissionSettings" xml:space="preserve">
-    <value>Open Overlay Permission Settings</value>
+    <value>ಓವರ್‌ಲೇ ಅನುಮತಿ ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ತೆರೆಯಿರಿ</value>
   </data>
   <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
-    <value>3. On the Android App Settings screen for Bitwarden, select "Display over other apps" (under "Advanced") and switch on the toggle to allow the overlay.</value>
+    <value>3. ಬಿಟ್‌ವಾರ್ಡೆನ್‌ಗಾಗಿ ಆಂಡ್ರಾಯ್ಡ್ ಅಪ್ಲಿಕೇಶನ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳ ಪರದೆಯಲ್ಲಿ, "ಇತರ ಅಪ್ಲಿಕೇಶನ್‌ಗಳ ಮೇಲೆ ಪ್ರದರ್ಶಿಸು" ("ಸುಧಾರಿತ" ಅಡಿಯಲ್ಲಿ) ಆಯ್ಕೆಮಾಡಿ ಮತ್ತು ಓವರ್‌ಲೇ ಅನ್ನು ಅನುಮತಿಸಲು ಟಾಗಲ್ ಆನ್ ಮಾಡಿ.</value>
   </data>
   <data name="Denied" xml:space="preserve">
-    <value>Denied</value>
+    <value>ನಿರಾಕರಿಸಲಾಗಿದೆ</value>
   </data>
   <data name="Granted" xml:space="preserve">
-    <value>Granted</value>
+    <value>ಮಂಜೂರು</value>
   </data>
   <data name="FileFormat" xml:space="preserve">
-    <value>File Format</value>
+    <value>ಕಡತದ ಮಾದರಿ</value>
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
-    <value>Enter your master password to export your vault data.</value>
+    <value>ನಿಮ್ಮ ವಾಲ್ಟ್ ಡೇಟಾವನ್ನು ರಫ್ತು ಮಾಡಲು ನಿಮ್ಮ ಮಾಸ್ಟರ್ ಪಾಸ್‌ವರ್ಡ್ ಅನ್ನು ನಮೂದಿಸಿ.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
-    <value>This export contains your vault data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it.</value>
+    <value>ಈ ರಫ್ತು ನಿಮ್ಮ ವಾಲ್ಟ್ ಡೇಟಾವನ್ನು ಎನ್‌ಕ್ರಿಪ್ಟ್ ಮಾಡದ ಸ್ವರೂಪದಲ್ಲಿ ಒಳಗೊಂಡಿದೆ. ನೀವು ರಫ್ತು ಮಾಡಿದ ಫೈಲ್ ಅನ್ನು ಅಸುರಕ್ಷಿತ ಚಾನಲ್‌ಗಳಲ್ಲಿ (ಇಮೇಲ್ ನಂತಹ) ಸಂಗ್ರಹಿಸಬಾರದು ಅಥವಾ ಕಳುಹಿಸಬಾರದು. ನೀವು ಅದನ್ನು ಬಳಸಿದ ನಂತರ ಅದನ್ನು ಅಳಿಸಿ.</value>
   </data>
   <data name="EncExportKeyWarning" xml:space="preserve">
-    <value>This export encrypts your data using your account's encryption key. If you ever rotate your account's encryption key you should export again since you will not be able to decrypt this export file.</value>
+    <value>ಈ ರಫ್ತು ನಿಮ್ಮ ಖಾತೆಯ ಎನ್‌ಕ್ರಿಪ್ಶನ್ ಕೀಲಿಯನ್ನು ಬಳಸಿಕೊಂಡು ನಿಮ್ಮ ಡೇಟಾವನ್ನು ಎನ್‌ಕ್ರಿಪ್ಟ್ ಮಾಡುತ್ತದೆ. ನಿಮ್ಮ ಖಾತೆಯ ಎನ್‌ಕ್ರಿಪ್ಶನ್ ಕೀಲಿಯನ್ನು ನೀವು ಎಂದಾದರೂ ತಿರುಗಿಸಿದರೆ ನೀವು ಈ ರಫ್ತು ಫೈಲ್ ಅನ್ನು ಡೀಕ್ರಿಪ್ಟ್ ಮಾಡಲು ಸಾಧ್ಯವಾಗದ ಕಾರಣ ನೀವು ಮತ್ತೆ ರಫ್ತು ಮಾಡಬೇಕು.</value>
   </data>
   <data name="EncExportAccountWarning" xml:space="preserve">
-    <value>Account encryption keys are unique to each Bitwarden user account, so you can't import an encrypted export into a different account.</value>
+    <value>ಖಾತೆ ಎನ್‌ಕ್ರಿಪ್ಶನ್ ಕೀಗಳು ಪ್ರತಿ ಬಿಟ್‌ವಾರ್ಡೆನ್ ಬಳಕೆದಾರ ಖಾತೆಗೆ ಅನನ್ಯವಾಗಿವೆ, ಆದ್ದರಿಂದ ನೀವು ಎನ್‌ಕ್ರಿಪ್ಟ್ ಮಾಡಿದ ರಫ್ತು ಬೇರೆ ಖಾತೆಗೆ ಆಮದು ಮಾಡಲು ಸಾಧ್ಯವಿಲ್ಲ.</value>
   </data>
   <data name="ExportVaultConfirmationTitle" xml:space="preserve">
-    <value>Confirm Vault Export</value>
+    <value>ವಾಲ್ಟ್ ರಫ್ತು ಖಚಿತಪಡಿಸಿ</value>
     <comment>Title for the alert to confirm vault exports.</comment>
   </data>
   <data name="Warning" xml:space="preserve">
-    <value>Warning</value>
+    <value>ಎಚ್ಚರಿಕೆ</value>
   </data>
   <data name="ExportVaultFailure" xml:space="preserve">
-    <value>There was a problem exporting your vault.  If the problem persists, you'll need to export from the web vault.</value>
+    <value>ನಿಮ್ಮ ವಾಲ್ಟ್ ಅನ್ನು ರಫ್ತು ಮಾಡುವಲ್ಲಿ ಸಮಸ್ಯೆ ಇದೆ. ಸಮಸ್ಯೆ ಮುಂದುವರಿದರೆ, ನೀವು ವೆಬ್ ವಾಲ್ಟ್‌ನಿಂದ ರಫ್ತು ಮಾಡಬೇಕಾಗುತ್ತದೆ.</value>
   </data>
   <data name="ExportVaultSuccess" xml:space="preserve">
-    <value>Vault exported successfully</value>
+    <value>ವಾಲ್ಟ್ ಯಶಸ್ವಿಯಾಗಿ ರಫ್ತು ಮಾಡಲಾಗಿದೆ</value>
   </data>
   <data name="Clone" xml:space="preserve">
-    <value>Clone</value>
+    <value>ಕ್ಲೋನ್</value>
     <comment>Clone an entity (verb).</comment>
   </data>
   <data name="PasswordGeneratorPolicyInEffect" xml:space="preserve">
-    <value>One or more organization policies are affecting your generator settings</value>
+    <value>ಒಂದು ಅಥವಾ ಹೆಚ್ಚಿನ ಸಂಸ್ಥೆ ನೀತಿಗಳು ನಿಮ್ಮ ಜನರೇಟರ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳ ಮೇಲೆ ಪರಿಣಾಮ ಬೀರುತ್ತವೆ</value>
   </data>
   <data name="Open" xml:space="preserve">
-    <value>Open</value>
+    <value>ತೆರೆಯಿರಿ</value>
     <comment>Button text for an open operation (verb).</comment>
   </data>
   <data name="UnableToSaveAttachment" xml:space="preserve">
-    <value>There was a problem saving this attachment. If the problem persists, you can save it from the web vault.</value>
+    <value>ಈ ಲಗತ್ತನ್ನು ಉಳಿಸುವಲ್ಲಿ ಸಮಸ್ಯೆ ಇದೆ. ಸಮಸ್ಯೆ ಮುಂದುವರಿದರೆ, ನೀವು ಅದನ್ನು ವೆಬ್ ವಾಲ್ಟ್‌ನಿಂದ ಉಳಿಸಬಹುದು.</value>
   </data>
   <data name="SaveAttachmentSuccess" xml:space="preserve">
-    <value>Attachment saved successfully</value>
+    <value>ಲಗತ್ತು ಯಶಸ್ವಿಯಾಗಿ ಉಳಿಸಲಾಗಿದೆ</value>
   </data>
   <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
-    <value>Please enable "Auto-fill Accessibility Service" from Bitwarden Settings to use the Auto-fill tile.</value>
+    <value>ಸ್ವಯಂ-ಭರ್ತಿ ಟೈಲ್ ಅನ್ನು ಬಳಸಲು ದಯವಿಟ್ಟು ಬಿಟ್‌ವಾರ್ಡನ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳಿಂದ "ಸ್ವಯಂ-ಭರ್ತಿ ಪ್ರವೇಶಿಸುವಿಕೆ ಸೇವೆ" ಅನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ.</value>
   </data>
   <data name="AutofillTileUriNotFound" xml:space="preserve">
     <value>No password fields detected</value>
   </data>
   <data name="SoftDeleting" xml:space="preserve">
-    <value>Sending to trash...</value>
+    <value>ಅನುಪಯುಕ್ತಕ್ಕೆ ಕಳುಹಿಸಲಾಗುತ್ತಿದೆ ...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemSoftDeleted" xml:space="preserve">
-    <value>Item has been sent to trash.</value>
+    <value>ಐಟಂ ಅನ್ನು ಅನುಪಯುಕ್ತಕ್ಕೆ ಕಳುಹಿಸಲಾಗಿದೆ.</value>
     <comment>Confirmation message after successfully soft-deleting a login</comment>
   </data>
   <data name="Restore" xml:space="preserve">
-    <value>Restore</value>
+    <value>ಪುನಸ್ಥಾಪಿಸಿ</value>
     <comment>Restores an entity (verb).</comment>
   </data>
   <data name="Restoring" xml:space="preserve">
-    <value>Restoring...</value>
+    <value>ಮರುಸ್ಥಾಪಿಸಲಾಗುತ್ತಿದೆ ...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemRestored" xml:space="preserve">
-    <value>Item has been restored.</value>
+    <value>ಐಟಂ ಅನ್ನು ಮರುಸ್ಥಾಪಿಸಲಾಗಿದೆ.</value>
     <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
   </data>
   <data name="Trash" xml:space="preserve">
-    <value>Trash</value>
+    <value>ಅನುಪಯುಕ್ತ</value>
     <comment>(noun) Location of deleted items which have not yet been permanently deleted</comment>
   </data>
   <data name="SearchTrash" xml:space="preserve">
-    <value>Search trash</value>
+    <value>ಅನುಪಯುಕ್ತವನ್ನು ಹುಡುಕಿ</value>
     <comment>(action prompt) Label for the search text field when viewing the trash folder</comment>
   </data>
   <data name="DoYouReallyWantToPermanentlyDeleteCipher" xml:space="preserve">
-    <value>Do you really want to permanently delete? This cannot be undone.</value>
+    <value>ನೀವು ನಿಜವಾಗಿಯೂ ಶಾಶ್ವತವಾಗಿ ಅಳಿಸಲು ಬಯಸುವಿರಾ? ಇದನ್ನು ರದ್ದುಗೊಳಿಸಲು ಸಾಧ್ಯವಿಲ್ಲ.</value>
     <comment>Confirmation alert message when permanently deleteing a cipher.</comment>
   </data>
   <data name="DoYouReallyWantToRestoreCipher" xml:space="preserve">
-    <value>Do you really want to restore this item?</value>
+    <value>ಈ ಐಟಂ ಅನ್ನು ಮರುಸ್ಥಾಪಿಸಲು ನೀವು ನಿಜವಾಗಿಯೂ ಬಯಸುವಿರಾ?</value>
     <comment>Confirmation alert message when restoring a soft-deleted cipher.</comment>
   </data>
   <data name="DoYouReallyWantToSoftDeleteCipher" xml:space="preserve">
-    <value>Do you really want to send to the trash?</value>
+    <value>ನೀವು ನಿಜವಾಗಿಯೂ ಅನುಪಯುಕ್ತಕ್ಕೆ ಕಳುಹಿಸಲು ಬಯಸುವಿರಾ?</value>
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Biometric unlock disabled pending verification of master password.</value>
+    <value>ಬಯೋಮೆಟ್ರಿಕ್ ಅನ್ಲಾಕ್ ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ ಮಾಸ್ಟರ್ ಪಾಸ್ವರ್ಡ್ನ ಪರಿಶೀಲನೆ ಬಾಕಿ ಉಳಿದಿದೆ.</value>
   </data>
   <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Biometric unlock for autofill disabled pending verification of master password.</value>
+    <value>ಸ್ವಯಂಚಾಲಿತ ಭರ್ತಿಗಾಗಿ ಬಯೋಮೆಟ್ರಿಕ್ ಅನ್ಲಾಕ್ ಮಾಸ್ಟರ್ ಪಾಸ್ವರ್ಡ್ನ ಪರಿಶೀಲನೆ ಬಾಕಿ ಉಳಿದಿದೆ.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
-    <value>Enable sync on refresh</value>
+    <value>ರಿಫ್ರೆಶ್‌ನಲ್ಲಿ ಸಿಂಕ್ ಅನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ</value>
   </data>
   <data name="EnableSyncOnRefreshDescription" xml:space="preserve">
-    <value>Syncing vault with pull down gesture.</value>
+    <value>ಪುಲ್ ಡೌನ್ ಗೆಸ್ಚರ್ನೊಂದಿಗೆ ವಾಲ್ಟ್ ಅನ್ನು ಸಿಂಕ್ ಮಾಡಲಾಗುತ್ತಿದೆ.</value>
   </data>
   <data name="LogInSso" xml:space="preserve">
-    <value>Enterprise Single Sign-On</value>
+    <value>ಎಂಟರ್‌ಪ್ರೈಸ್ ಏಕ ಸೈನ್-ಆನ್</value>
   </data>
   <data name="LogInSsoSummary" xml:space="preserve">
-    <value>Quickly log in using your organization's single sign-on portal. Please enter your organization's identifier to begin.</value>
+    <value>ನಿಮ್ಮ ಸಂಸ್ಥೆಯ ಏಕ ಸೈನ್-ಆನ್ ಪೋರ್ಟಲ್ ಬಳಸಿ ತ್ವರಿತವಾಗಿ ಲಾಗ್ ಇನ್ ಮಾಡಿ. ಪ್ರಾರಂಭಿಸಲು ದಯವಿಟ್ಟು ನಿಮ್ಮ ಸಂಸ್ಥೆಯ ಗುರುತಿಸುವಿಕೆಯನ್ನು ನಮೂದಿಸಿ.</value>
   </data>
   <data name="OrgIdentifier" xml:space="preserve">
-    <value>Organization Identifier</value>
+    <value>ಸಂಸ್ಥೆ ಗುರುತಿಸುವಿಕೆ</value>
   </data>
   <data name="LoginSsoError" xml:space="preserve">
-    <value>Currently unable to login with SSO</value>
+    <value>ಪ್ರಸ್ತುತ ಎಸ್‌ಎಸ್‌ಒ ಜೊತೆ ಲಾಗಿನ್ ಆಗಲು ಸಾಧ್ಯವಿಲ್ಲ</value>
   </data>
   <data name="SetMasterPassword" xml:space="preserve">
-    <value>Set Master Password</value>
+    <value>ಮಾಸ್ಟರ್ ಪಾಸ್ವರ್ಡ್ ಹೊಂದಿಸಿ</value>
   </data>
   <data name="SetMasterPasswordSummary" xml:space="preserve">
-    <value>In order to complete logging in with SSO, please set a master password to access and protect your vault.</value>
+    <value>ಎಸ್‌ಎಸ್‌ಒನೊಂದಿಗೆ ಲಾಗಿನ್ ಆಗುವುದನ್ನು ಪೂರ್ಣಗೊಳಿಸಲು, ದಯವಿಟ್ಟು ನಿಮ್ಮ ವಾಲ್ಟ್ ಅನ್ನು ಪ್ರವೇಶಿಸಲು ಮತ್ತು ರಕ್ಷಿಸಲು ಮಾಸ್ಟರ್ ಪಾಸ್‌ವರ್ಡ್ ಅನ್ನು ಹೊಂದಿಸಿ.</value>
   </data>
   <data name="MasterPasswordPolicyInEffect" xml:space="preserve">
-    <value>One or more organization policies require your master password to meet the following requirements:</value>
+    <value>ಒಂದು ಅಥವಾ ಹೆಚ್ಚಿನ ಸಂಸ್ಥೆ ನೀತಿಗಳಿಗೆ ಈ ಕೆಳಗಿನ ಅವಶ್ಯಕತೆಗಳನ್ನು ಪೂರೈಸಲು ನಿಮ್ಮ ಮಾಸ್ಟರ್ ಪಾಸ್‌ವರ್ಡ್ ಅಗತ್ಯವಿದೆ:</value>
   </data>
   <data name="PolicyInEffectMinComplexity" xml:space="preserve">
-    <value>Minimum complexity score of {0}</value>
+    <value>{0} ನ ಕನಿಷ್ಠ ಸಂಕೀರ್ಣತೆಯ ಸ್ಕೋರ್</value>
   </data>
   <data name="PolicyInEffectMinLength" xml:space="preserve">
-    <value>Minimum length of {0}</value>
+    <value>{0}ನ ಕನಿಷ್ಠ ಉದ್ದ</value>
   </data>
   <data name="PolicyInEffectUppercase" xml:space="preserve">
-    <value>Contain one or more uppercase characters</value>
+    <value>ಒಂದು ಅಥವಾ ಹೆಚ್ಚಿನ ದೊಡ್ಡಕ್ಷರಗಳನ್ನು ಹೊಂದಿರುತ್ತದೆ</value>
   </data>
   <data name="PolicyInEffectLowercase" xml:space="preserve">
-    <value>Contain one or more lowercase characters</value>
+    <value>ಒಂದು ಅಥವಾ ಹೆಚ್ಚಿನ ಸಣ್ಣ ಅಕ್ಷರಗಳನ್ನು ಹೊಂದಿರುತ್ತದೆ</value>
   </data>
   <data name="PolicyInEffectNumbers" xml:space="preserve">
-    <value>Contain one or more numbers</value>
+    <value>ಒಂದು ಅಥವಾ ಹೆಚ್ಚಿನ ಸಂಖ್ಯೆಗಳನ್ನು ಹೊಂದಿರುತ್ತದೆ</value>
   </data>
   <data name="PolicyInEffectSpecial" xml:space="preserve">
-    <value>Contain one or more of the following special characters: {0}</value>
+    <value>ಕೆಳಗಿನ ಒಂದು ಅಥವಾ ಹೆಚ್ಚಿನ ವಿಶೇಷ ಅಕ್ಷರಗಳನ್ನು ಒಳಗೊಂಡಿರುತ್ತದೆ: {0}</value>
   </data>
   <data name="MasterPasswordPolicyValidationTitle" xml:space="preserve">
-    <value>Invalid Password</value>
+    <value>ಅಮಾನ್ಯ ಪಾಸ್‌ವರ್ಡ್</value>
   </data>
   <data name="MasterPasswordPolicyValidationMessage" xml:space="preserve">
-    <value>Password does not meet organization requirements. Please check the policy information and try again.</value>
+    <value>ಪಾಸ್ವರ್ಡ್ ಸಂಸ್ಥೆಯ ಅವಶ್ಯಕತೆಗಳನ್ನು ಪೂರೈಸುವುದಿಲ್ಲ. ದಯವಿಟ್ಟು ನೀತಿ ಮಾಹಿತಿಯನ್ನು ಪರಿಶೀಲಿಸಿ ಮತ್ತು ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.</value>
   </data>
   <data name="Loading" xml:space="preserve">
-    <value>Loading</value>
+    <value>ಲೋಡ್‌ಆಗುತ್ತಿದೆ</value>
   </data>
   <data name="AcceptPolicies" xml:space="preserve">
-    <value>By activating this switch you agree to the following:
-</value>
+    <value>ಈ ಸ್ವಿಚ್ ಅನ್ನು ಸಕ್ರಿಯಗೊಳಿಸುವ ಮೂಲಕ ನೀವು ಈ ಕೆಳಗಿನವುಗಳನ್ನು ಒಪ್ಪುತ್ತೀರಿ:</value>
   </data>
   <data name="AcceptPoliciesError" xml:space="preserve">
-    <value>Terms of Service and Privacy Policy have not been acknowledged.</value>
+    <value>ಸೇವಾ ನಿಯಮಗಳು ಮತ್ತು ಗೌಪ್ಯತೆ ನೀತಿಯನ್ನು ಅಂಗೀಕರಿಸಲಾಗಿಲ್ಲ.</value>
   </data>
   <data name="TermsOfService" xml:space="preserve">
-    <value>Terms of Service</value>
+    <value>ಸೇವಾ ನಿಯಮಗಳು</value>
   </data>
   <data name="PrivacyPolicy" xml:space="preserve">
-    <value>Privacy Policy</value>
+    <value>ಗೌಪ್ಯತಾ ನೀತಿ</value>
   </data>
   <data name="AccessibilityDrawOverPermissionAlert" xml:space="preserve">
-    <value>Bitwarden needs attention - Enable "Draw-Over" in "Auto-fill Services" from Bitwarden Settings</value>
+    <value>ಬಿಟ್‌ವಾರ್ಡೆನ್‌ಗೆ ಗಮನ ಬೇಕು - ಬಿಟ್‌ವಾರ್ಡೆನ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳಿಂದ "ಸ್ವಯಂ-ಭರ್ತಿ ಸೇವೆಗಳು" ನಲ್ಲಿ "ಡ್ರಾ-ಓವರ್" ಅನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿ</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
-    <value>Auto-fill Services</value>
+    <value>ಸ್ವಯಂ ಭರ್ತಿ ಸೇವೆ</value>
   </data>
   <data name="InlineAutofill" xml:space="preserve">
-    <value>Use Inline Autofill</value>
+    <value>ಇನ್ಲೈನ್ ಆಟೋಫಿಲ್ ಬಳಸಿ</value>
   </data>
   <data name="InlineAutofillDescription" xml:space="preserve">
-    <value>Use inline autofill if your selected IME (keyboard) supports it. If your configuration is not supported (or this option is disabled), the default Autofill overlay will be used.</value>
+    <value>ನಿಮ್ಮ ಆಯ್ದ IME (ಕೀಬೋರ್ಡ್) ಅದನ್ನು ಬೆಂಬಲಿಸಿದರೆ ಇನ್ಲೈನ್ ಆಟೋಫಿಲ್ ಬಳಸಿ. ನಿಮ್ಮ ಕಾನ್ಫಿಗರೇಶನ್ ಬೆಂಬಲಿಸದಿದ್ದರೆ (ಅಥವಾ ಈ ಆಯ್ಕೆಯನ್ನು ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಲಾಗಿದೆ), ಡೀಫಾಲ್ಟ್ ಆಟೋಫಿಲ್ ಓವರ್‌ಲೇ ಅನ್ನು ಬಳಸಲಾಗುತ್ತದೆ.</value>
   </data>
   <data name="Accessibility" xml:space="preserve">
-    <value>Use Accessibility</value>
+    <value>ಪ್ರವೇಶಿಸುವಿಕೆ ಬಳಸಿ</value>
   </data>
   <data name="AccessibilityDescription" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. When enabled, we'll display a popup when login fields are selected.</value>
+    <value>ಅಪ್ಲಿಕೇಶನ್‌ಗಳು ಮತ್ತು ವೆಬ್‌ನಾದ್ಯಂತ ನಿಮ್ಮ ಲಾಗಿನ್‌ಗಳನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ತುಂಬಲು ಬಿಟ್‌ವಾರ್ಡೆನ್ ಪ್ರವೇಶಿಸುವಿಕೆ ಸೇವೆಯನ್ನು ಬಳಸಿ. ಸಕ್ರಿಯಗೊಳಿಸಿದಾಗ, ಲಾಗಿನ್ ಕ್ಷೇತ್ರಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿದಾಗ ನಾವು ಪಾಪ್ಅಪ್ ಅನ್ನು ಪ್ರದರ್ಶಿಸುತ್ತೇವೆ.</value>
   </data>
   <data name="AccessibilityDescription2" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. (Requires Draw-Over to be enabled as well)</value>
+    <value>ಅಪ್ಲಿಕೇಶನ್‌ಗಳು ಮತ್ತು ವೆಬ್‌ನಾದ್ಯಂತ ನಿಮ್ಮ ಲಾಗಿನ್‌ಗಳನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ತುಂಬಲು ಬಿಟ್‌ವಾರ್ಡೆನ್ ಪ್ರವೇಶಿಸುವಿಕೆ ಸೇವೆಯನ್ನು ಬಳಸಿ. (ಡ್ರಾ-ಓವರ್ ಅನ್ನು ಸಹ ಸಕ್ರಿಯಗೊಳಿಸಬೇಕಾಗಿದೆ)</value>
   </data>
   <data name="AccessibilityDescription3" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to use the Autofill Quick-Action Tile, and/or show a popup using Draw-Over (if enabled).</value>
+    <value>ಆಟೋಫಿಲ್ ಕ್ವಿಕ್-ಆಕ್ಷನ್ ಟೈಲ್ ಅನ್ನು ಬಳಸಲು ಬಿಟ್‌ವಾರ್ಡೆನ್ ಪ್ರವೇಶಿಸುವಿಕೆ ಸೇವೆಯನ್ನು ಬಳಸಿ, ಮತ್ತು / ಅಥವಾ ಡ್ರಾ-ಓವರ್ ಬಳಸಿ ಪಾಪ್ಅಪ್ ಅನ್ನು ತೋರಿಸಿ (ಸಕ್ರಿಯಗೊಳಿಸಿದ್ದರೆ).</value>
   </data>
   <data name="AccessibilityDescription4" xml:space="preserve">
-    <value>Required to use the Autofill Quick-Action Tile, or to augment the Autofill Service by using Draw-Over (if enabled).</value>
+    <value>ಆಟೋಫಿಲ್ ಕ್ವಿಕ್-ಆಕ್ಷನ್ ಟೈಲ್ ಅನ್ನು ಬಳಸಲು ಅಥವಾ ಡ್ರಾ-ಓವರ್ (ಸಕ್ರಿಯಗೊಳಿಸಿದ್ದರೆ) ಬಳಸುವ ಮೂಲಕ ಆಟೋಫಿಲ್ ಸೇವೆಯನ್ನು ಹೆಚ್ಚಿಸಲು ಅಗತ್ಯವಿದೆ.</value>
   </data>
   <data name="DrawOver" xml:space="preserve">
-    <value>Use Draw-Over</value>
+    <value>ಡ್ರಾ-ಓವರ್ ಬಳಸಿ</value>
   </data>
   <data name="DrawOverDescription" xml:space="preserve">
-    <value>When enabled, allows the Bitwarden Accessibility Service to display a popup when login fields are selected.</value>
+    <value>ಸಕ್ರಿಯಗೊಳಿಸಿದಾಗ, ಲಾಗಿನ್ ಕ್ಷೇತ್ರಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿದಾಗ ಬಿಟ್‌ವಾರ್ಡೆನ್ ಪ್ರವೇಶಿಸುವಿಕೆ ಸೇವೆಯನ್ನು ಪಾಪ್ಅಪ್ ಪ್ರದರ್ಶಿಸಲು ಅನುಮತಿಸುತ್ತದೆ.</value>
   </data>
   <data name="DrawOverDescription2" xml:space="preserve">
-    <value>If enabled, the Bitwarden Accessibility Service will display a popup when login fields are selected to assist with auto-filling your logins.</value>
+    <value>ಸಕ್ರಿಯಗೊಳಿಸಿದ್ದರೆ, ನಿಮ್ಮ ಲಾಗಿನ್‌ಗಳನ್ನು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಭರ್ತಿ ಮಾಡಲು ಸಹಾಯ ಮಾಡಲು ಲಾಗಿನ್ ಕ್ಷೇತ್ರಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿದಾಗ ಬಿಟ್‌ವಾರ್ಡೆನ್ ಪ್ರವೇಶಿಸುವಿಕೆ ಸೇವೆ ಪಾಪ್ಅಪ್ ಅನ್ನು ಪ್ರದರ್ಶಿಸುತ್ತದೆ.</value>
   </data>
   <data name="DrawOverDescription3" xml:space="preserve">
-    <value>If enabled, accessibility will show a popup to augment the Autofill Service for older apps that don't support the Android Autofill Framework.</value>
+    <value>ಸಕ್ರಿಯಗೊಳಿಸಿದ್ದರೆ, ಆಂಡ್ರಾಯ್ಡ್ ಆಟೋಫಿಲ್ ಫ್ರೇಮ್‌ವರ್ಕ್ ಅನ್ನು ಬೆಂಬಲಿಸದ ಹಳೆಯ ಅಪ್ಲಿಕೇಶನ್‌ಗಳಿಗಾಗಿ ಆಟೋಫಿಲ್ ಸೇವೆಯನ್ನು ಹೆಚ್ಚಿಸಲು ಪ್ರವೇಶಿಸುವಿಕೆಯು ಪಾಪ್ಅಪ್ ಅನ್ನು ತೋರಿಸುತ್ತದೆ.</value>
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
     <value>Due to an Enterprise Policy, you are restricted from saving items to your personal vault. Change the Ownership option to an organization and choose from available Collections.</value>
   </data>
   <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
-    <value>An organization policy is affecting your ownership options.</value>
+    <value>ಸಂಸ್ಥೆಯ ನೀತಿಯು ನಿಮ್ಮ ಮಾಲೀಕತ್ವದ ಆಯ್ಕೆಗಳ ಮೇಲೆ ಪರಿಣಾಮ ಬೀರುತ್ತಿದೆ.</value>
   </data>
   <data name="Send" xml:space="preserve">
-    <value>Send</value>
+    <value>ಕಳುಹಿಸಿ</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AllSends" xml:space="preserve">
-    <value>All Sends</value>
+    <value>ಎಲ್ಲಾ ಕಳುಹಿಸುತ್ತದೆ</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Sends" xml:space="preserve">
-    <value>Sends</value>
+    <value>ಕಳುಹಿಸುತ್ತದೆ</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NameInfo" xml:space="preserve">
-    <value>A friendly name to describe this Send.</value>
+    <value>ಇದನ್ನು ಕಳುಹಿಸಲು ವಿವರಿಸಲು ಸ್ನೇಹಪರ ಹೆಸರು.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="TypeText" xml:space="preserve">
-    <value>Text</value>
+    <value>ಪಠ್ಯ</value>
   </data>
   <data name="TypeTextInfo" xml:space="preserve">
-    <value>The text you want to send.</value>
+    <value>ನೀವು ಕಳುಹಿಸಲು ಬಯಸುವ ಪಠ್ಯ.</value>
   </data>
   <data name="HideTextByDefault" xml:space="preserve">
-    <value>When accessing the Send, hide the text by default</value>
+    <value>ಕಳುಹಿಸುವಿಕೆಯನ್ನು ಪ್ರವೇಶಿಸುವಾಗ, ಪಠ್ಯವನ್ನು ಪೂರ್ವನಿಯೋಜಿತವಾಗಿ ಮರೆಮಾಡಿ</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="TypeFile" xml:space="preserve">
-    <value>File</value>
+    <value>ಫೈಲ್</value>
   </data>
   <data name="TypeFileInfo" xml:space="preserve">
-    <value>The file you want to send.</value>
+    <value>ನೀವು ಕಳುಹಿಸಲು ಬಯಸುವ ಫೈಲ್.</value>
   </data>
   <data name="DeletionDate" xml:space="preserve">
-    <value>Deletion Date</value>
+    <value>ಅಳಿಸುವ ದಿನಾಂಕ</value>
   </data>
   <data name="DeletionTime" xml:space="preserve">
-    <value>Deletion Time</value>
+    <value>ಅಳಿಸುವ ಸಮಯ</value>
   </data>
   <data name="DeletionDateInfo" xml:space="preserve">
-    <value>The Send will be permanently deleted on the specified date and time.</value>
+    <value>ಕಳುಹಿಸಿದ ದಿನಾಂಕ ಮತ್ತು ಸಮಯದ ಮೇಲೆ ಕಳುಹಿಸುವಿಕೆಯನ್ನು ಶಾಶ್ವತವಾಗಿ ಅಳಿಸಲಾಗುತ್ತದೆ.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PendingDelete" xml:space="preserve">
-    <value>Pending deletion</value>
+    <value>ಅಳಿಸುವಿಕೆ ಬಾಕಿ ಉಳಿದಿದೆ</value>
   </data>
   <data name="ExpirationDate" xml:space="preserve">
-    <value>Expiration Date</value>
+    <value>ಮುಕ್ತಾಯ ದಿನಾಂಕ</value>
   </data>
   <data name="ExpirationTime" xml:space="preserve">
-    <value>Expiration Time</value>
+    <value>ಮುಕ್ತಾಯ ಸಮಯ</value>
   </data>
   <data name="ExpirationDateInfo" xml:space="preserve">
-    <value>If set, access to this Send will expire on the specified date and time.</value>
+    <value>ಹೊಂದಿಸಿದ್ದರೆ, ಈ ಕಳುಹಿಸುವಿಕೆಯ ಪ್ರವೇಶವು ನಿಗದಿತ ದಿನಾಂಕ ಮತ್ತು ಸಮಯದ ಮೇಲೆ ಮುಕ್ತಾಯಗೊಳ್ಳುತ್ತದೆ.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Expired" xml:space="preserve">
-    <value>Expired</value>
+    <value>ಅವಧಿ ಮೀರಿದೆ</value>
   </data>
   <data name="MaximumAccessCount" xml:space="preserve">
-    <value>Maximum Access Count</value>
+    <value>ಗರಿಷ್ಠ ಪ್ರವೇಶ ಎಣಿಕೆ</value>
   </data>
   <data name="MaximumAccessCountInfo" xml:space="preserve">
-    <value>If set, users will no longer be able to access this send once the maximum access count is reached.</value>
+    <value>ಹೊಂದಿಸಿದ್ದರೆ, ಗರಿಷ್ಠ ಪ್ರವೇಶ ಎಣಿಕೆ ತಲುಪಿದ ನಂತರ ಬಳಕೆದಾರರಿಗೆ ಈ ಕಳುಹಿಸುವಿಕೆಯನ್ನು ಪ್ರವೇಶಿಸಲು ಸಾಧ್ಯವಾಗುವುದಿಲ್ಲ.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="MaximumAccessCountReached" xml:space="preserve">
-    <value>Max access count reached</value>
+    <value>ಗರಿಷ್ಠ ಪ್ರವೇಶ ಎಣಿಕೆ ತಲುಪಿದೆ</value>
   </data>
   <data name="CurrentAccessCount" xml:space="preserve">
-    <value>Current Access Count</value>
+    <value>ಪ್ರಸ್ತುತ ಪ್ರವೇಶ ಎಣಿಕೆ</value>
   </data>
   <data name="NewPassword" xml:space="preserve">
-    <value>New Password</value>
+    <value>ಹೊಸ ಪಾಸ್‌ವರ್ಡ್</value>
   </data>
   <data name="PasswordInfo" xml:space="preserve">
-    <value>Optionally require a password for users to access this Send.</value>
+    <value>ಈ ಕಳುಹಿಸುವಿಕೆಯನ್ನು ಪ್ರವೇಶಿಸಲು ಬಳಕೆದಾರರಿಗೆ ಪಾಸ್‌ವರ್ಡ್ ಐಚ್ ಗತ್ಯವಿದೆ.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="RemovePassword" xml:space="preserve">
-    <value>Remove Password</value>
+    <value>ಪಾಸ್ವರ್ಡ್ ತೆಗೆದುಹಾಕಿ</value>
   </data>
   <data name="AreYouSureRemoveSendPassword" xml:space="preserve">
-    <value>Are you sure you want to remove the password?</value>
+    <value>ಪಾಸ್ವರ್ಡ್ ಅನ್ನು ತೆಗೆದುಹಾಕಲು ನೀವು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ?</value>
   </data>
   <data name="RemovingSendPassword" xml:space="preserve">
-    <value>Removing password</value>
+    <value>ಪಾಸ್ವರ್ಡ್ ತೆಗೆದುಹಾಕಲಾಗುತ್ತಿದೆ</value>
   </data>
   <data name="SendPasswordRemoved" xml:space="preserve">
-    <value>Password has been removed.</value>
+    <value>ಪಾಸ್ವರ್ಡ್ ತೆಗೆದುಹಾಕಲಾಗಿದೆ.</value>
   </data>
   <data name="NotesInfo" xml:space="preserve">
-    <value>Private notes about this Send.</value>
+    <value>ಈ ಕಳುಹಿಸುವ ಬಗ್ಗೆ ಖಾಸಗಿ ಟಿಪ್ಪಣಿಗಳು.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Disable this Send so that no one can access it.</value>
+    <value>ಇದನ್ನು ಕಳುಹಿಸುವುದನ್ನು ನಿಷ್ಕ್ರಿಯಗೊಳಿಸಿ ಇದರಿಂದ ಯಾರೂ ಅದನ್ನು ಪ್ರವೇಶಿಸಲಾಗುವುದಿಲ್ಲ.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
-    <value>There are no Sends in your account.</value>
+    <value>ನಿಮ್ಮ ಖಾತೆಯಲ್ಲಿ ಯಾವುದೇ ಕಳುಹಿಸುವಿಕೆಗಳಿಲ್ಲ.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddASend" xml:space="preserve">
-    <value>Add a Send</value>
+    <value>ಕಳುಹಿಸು ಸೇರಿಸಿ</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="CopyLink" xml:space="preserve">
-    <value>Copy Link</value>
+    <value>ಲಿಂಕ್ ಕಾಪಿ ಮಾಡಿ</value>
   </data>
   <data name="ShareLink" xml:space="preserve">
-    <value>Share Link</value>
+    <value>ಲಿಂಕ್ ಶೇರ್ ಮಾಡಿ</value>
   </data>
   <data name="SendLink" xml:space="preserve">
-    <value>Send link</value>
+    <value>ಲಿಂಕ್ ಕಳುಹಿಸಿ</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SearchSends" xml:space="preserve">
-    <value>Search Sends</value>
+    <value>ಹುಡುಕಾಟ ಕಳುಹಿಸುತ್ತದೆ</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="EditSend" xml:space="preserve">
-    <value>Edit Send</value>
+    <value>ಕಳುಹಿಸು ಸಂಪಾದಿಸಿ</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddSend" xml:space="preserve">
-    <value>Add Send</value>
+    <value>ಕಳುಹಿಸು ಸೇರಿಸಿ</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AreYouSureDeleteSend" xml:space="preserve">
-    <value>Are you sure you want to delete this Send?</value>
+    <value>ಈ ಕಳುಹಿಸುವಿಕೆಯನ್ನು ಅಳಿಸಲು ನೀವು ಖಚಿತವಾಗಿ ಬಯಸುವಿರಾ?</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDeleted" xml:space="preserve">
-    <value>Send has been deleted.</value>
+    <value>ಕಳುಹಿಸು ಅಳಿಸಲಾಗಿದೆ.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendUpdated" xml:space="preserve">
-    <value>Send updated.</value>
+    <value>ನವೀಕರಿಸಲಾಗಿದೆ ಕಳುಹಿಸಿ.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NewSendCreated" xml:space="preserve">
-    <value>New send created.</value>
+    <value>ಹೊಸ ಕಳುಹಿಸುವಿಕೆಯನ್ನು ರಚಿಸಲಾಗಿದೆ.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="OneDay" xml:space="preserve">
-    <value>1 day</value>
+    <value>1 ದಿನ</value>
   </data>
   <data name="TwoDays" xml:space="preserve">
-    <value>2 days</value>
+    <value>2 ದಿನಗಳು</value>
   </data>
   <data name="ThreeDays" xml:space="preserve">
-    <value>3 days</value>
+    <value>3 ದಿನಗಳು</value>
   </data>
   <data name="SevenDays" xml:space="preserve">
-    <value>7 days</value>
+    <value>7 ದಿನಗಳು</value>
   </data>
   <data name="ThirtyDays" xml:space="preserve">
-    <value>30 days</value>
+    <value>30 ದಿನಗಳು</value>
   </data>
   <data name="Custom" xml:space="preserve">
-    <value>Custom</value>
+    <value>ಕಸ್ಟಮ್</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
-    <value>Share this Send upon save.</value>
+    <value>ಸೇವ್ ಆನ್ ಸೇವ್ ಅನ್ನು ಹಂಚಿಕೊಳ್ಳಿ.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
@@ -1974,14 +1973,14 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AboutSend" xml:space="preserve">
-    <value>About Send</value>
+    <value>ಕಳುಹಿಸುವ ಬಗ್ಗೆ</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
-    <value>Hide my email address from recipients.</value>
+    <value>ಸ್ವೀಕರಿಸುವವರಿಂದ ನನ್ನ ಇಮೇಲ್ ವಿಳಾಸವನ್ನು ಮರೆಮಾಡಿ.</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
-    <value>One or more organization policies are affecting your Send options.</value>
+    <value>ಒಂದು ಅಥವಾ ಹೆಚ್ಚಿನ ಸಂಸ್ಥೆಯ ನೀತಿಗಳು ನಿಮ್ಮ ಕಳುಹಿಸುವ ಆಯ್ಕೆಗಳ ಮೇಲೆ ಪರಿಣಾಮ ಬೀರುತ್ತವೆ.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFilePremiumRequired" xml:space="preserve">
@@ -1989,16 +1988,16 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFileEmailVerificationRequired" xml:space="preserve">
-    <value>You must verify your email to use files with Send. You can verify your email in the web vault.</value>
+    <value>ಕಳುಹಿಸುವಿಕೆಯೊಂದಿಗೆ ಫೈಲ್‌ಗಳನ್ನು ಬಳಸಲು ನಿಮ್ಮ ಇಮೇಲ್ ಅನ್ನು ನೀವು ಪರಿಶೀಲಿಸಬೇಕು. ವೆಬ್ ವಾಲ್ಟ್ನಲ್ಲಿ ನಿಮ್ಮ ಇಮೇಲ್ ಅನ್ನು ನೀವು ಪರಿಶೀಲಿಸಬಹುದು.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PasswordPrompt" xml:space="preserve">
-    <value>Master password re-prompt</value>
+    <value>ಮಾಸ್ಟರ್ ಪಾಸ್ವರ್ಡ್ ಮರು-ಪ್ರಾಂಪ್ಟ್</value>
   </data>
   <data name="PasswordConfirmation" xml:space="preserve">
-    <value>Master password confirmation</value>
+    <value>ಮಾಸ್ಟರ್ ಪಾಸ್ವರ್ಡ್ ದೃಢೀಕರಣ</value>
   </data>
   <data name="PasswordConfirmationDesc" xml:space="preserve">
-    <value>This action is protected, to continue please re-enter your master password to verify your identity.</value>
+    <value>ಮುಂದುವರಿಯಲು ಈ ಕ್ರಿಯೆಯನ್ನು ರಕ್ಷಿಸಲಾಗಿದೆ, ದಯವಿಟ್ಟು ನಿಮ್ಮ ಗುರುತನ್ನು ಪರಿಶೀಲಿಸಲು ನಿಮ್ಮ ಮಾಸ್ಟರ್ ಪಾಸ್‌ವರ್ಡ್ ಅನ್ನು ಮರು ನಮೂದಿಸಿ.</value>
   </data>
 </root>

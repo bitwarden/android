@@ -504,7 +504,7 @@
     <value>Importuj elementy</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
-    <value>Możesz zaimportować wiele elementów z sejfu internetowego bitwarden. Czy chcesz przejść do tej strony?</value>
+    <value>Możesz zaimportować wiele elementów z sejfu internetowego bitwarden.com. Czy chcesz przejść do tej strony?</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
     <value>Szybko zaimportuj wiele elementów z innych menedżerów haseł.</value>
@@ -556,7 +556,7 @@
     <value>Potwierdzenie hasła nie pasuje.</value>
   </data>
   <data name="MasterPasswordDescription" xml:space="preserve">
-    <value>Hasło główne zapewnia dostęp do sejfu. To bardzo ważne, abyś je pamiętał. Jeśli je zapomnisz, nie będzie możliwości, aby je przywrócić.</value>
+    <value>Hasło główne zapewnia dostęp do sejfu. To bardzo ważne, aby je pamiętać, ponieważ zapomnianego hasła nie będzie można odzyskać.</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
     <value>Podpowiedź do hasła głównego (opcjonalnie)</value>
@@ -1425,7 +1425,7 @@
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="ShareVaultConfirmation" xml:space="preserve">
-    <value>Bitwarden pozwala na udostępnianie zawartości skarbca innym osobom, przy użyciu konta organizacji. Czy chcesz odwiedź witrynę bitwarden.com, aby dowiedzieć się więcej?</value>
+    <value>Bitwarden pozwala na udostępnianie zawartości sejfu innym osobom za pośrednictwem organizacji. Czy chcesz odwiedzić stronę bitwarden.com, aby dowiedzieć się więcej?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
     <value>Eksportuj sejf</value>
@@ -1904,7 +1904,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddASend" xml:space="preserve">
-    <value>Add a Send</value>
+    <value>Dodaj wysyłkę</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="CopyLink" xml:space="preserve">
@@ -1991,12 +1991,12 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PasswordPrompt" xml:space="preserve">
-    <value>Master password re-prompt</value>
+    <value>Powtórz hasło główne</value>
   </data>
   <data name="PasswordConfirmation" xml:space="preserve">
-    <value>Master password confirmation</value>
+    <value>Potwierdź hasło główne</value>
   </data>
   <data name="PasswordConfirmationDesc" xml:space="preserve">
-    <value>This action is protected, to continue please re-enter your master password to verify your identity.</value>
+    <value>Ta operacja jest chroniona. Aby kontynuować, wpisz ponownie hasło główne.</value>
   </data>
 </root>
