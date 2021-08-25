@@ -126,15 +126,31 @@
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>Bitwarden on helpoin ja turvallisin tapa säilyttää käyttäjätunnuksesi ja salasanasi, samalla pitäen ne synkronoituna laitteidesi välillä.
+    <value>Bitwarden, inc. on 8bit Solutions LLC:n emoyhtiö.
 
-Salasanavarkaudet ovat vakava ongelma ja monet käyttämäsi sivustot ja sovellukset ovat päivittäisten hyökkäysten kohteina. Tietoturvavuotoja tapahtuu ja salasanoja varastetaan. Jos käytät samoja salasanoja uudelleen eri sivustoilla ja sovelluksissa, saattavat hakkerit päästä helposti käsiksi sähköpostiisi, pankkiisi tai muihin tärkeisiin käyttäjätileihisi.
+NIMENNYT PARHAAKSI SALASANOJEN HALLINNAKSI MM. THE VERGE, U.S. NEWS &amp; WORLD REPORT JA CNET.
 
-Tietoturva-asiantuntijat suosittelevat ainutlaatuisten, satunnaisesti luotujen salasanojen käyttöä kaikilla käyttäjätileilläsi. Mutta kuinka sitten hallitset näitä kaikkia erilaisia salasanoja? Bitwarden tekee laadukkaiden ja ainutlaatuisten salasanojen luonnista, säilytyksestä ja käytöstä helppoa.
+Hallinnoi, säilytä, suojaa ja jaa rajattomasti salasanoja missä tahansa ja miltä tahansa laitteelta. Bitwarden tarjoaa avoimeen lähdekoodin perustuvan salasanojen hallintaratkaisun kaikille, olitpa sitten kotona, töissä tai liikkeellä.
 
-Bitwarden säilyttää kaikki kirjautumistietosi salattussa holvissa, joka synkronoidaan laitteidesi välillä. Koska tietosi ovat täysin salattuja jo ennen kuin ne edes lähtevät laitteeltasi, vain sinä pääset niihin käsiksi. Edes Bitwardenin kehittäjät eivät voi lukea tietojasi, vaikka haluaisivat. Tietosi suojataan 256-bittisellä AES-salauksella, suolatulla hajautuksella sekä PBKDF2 ja SHA-256 -menetelmillä.
+Luo usein käyttämillesi sivustoille automaattisesti vahvoja, yksilöllisiä ja satunnaisia salasanoja.
 
-Bitwarden on keskittynyt avoimen lähdekoodin ohjelmistoihin. Bitwardenin lähdekoodi on esillä GitHubissa ja kuka tahansa voi tutkia ja tarkastella sitä sekä osallistua Bitwardenin kehitykseen.</value>
+Bitwarden Send -ominaisuudella lähetät tietoa nopeasti salattuna — tiedostoja ja tekstiä — suoraan kenelle tahansa.
+
+Yrityksille Bitwarden tarjoaa Teams ja Enterprise -tilaukset, jotta voit jakaa salasanoja kollegoiden kesken turvallisesti.
+
+Miksi Bitwarden?:
+
+Maailmanluokan salaus
+Salasanat on suojattu tehokkaalla päästä päähän salauksella (AES-256 Bit, suolattu hajautus ja PBKDF2 SHA-256), joten tietosi pysyvät turvassa ja yksityisinä.
+
+Sisäänrakennettu salasanageneraattori
+Luo usein käyttämillesi sivustoille vahvoja, yksilöllisiä ja satunnaisia salasanoja.
+
+Monikielinen
+Bitwardenin sovelluksia on käännetty yli 40 kielelle ja määrä kasvaa jatkuvasti, kiitos kansainvälisen yhteisömme.
+
+Alustariippumattomaton
+Suojaa, käytä ja jaa Bitwarden-holvisi arkaluontoisia tietoja kaikilla selaimilla, mobiililaitteilla, pöytätietokoneilla ja muissa järjestelmissä.</value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">

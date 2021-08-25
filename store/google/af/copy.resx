@@ -118,63 +118,62 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Title" xml:space="preserve">
-    <value>Bitwarden Password Manager</value>
+    <value>Bitwarden Wagwoordbestuurder</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="ShortDescription" xml:space="preserve">
-    <value>Bitwarden is a login and password manager that helps keep you safe while online.</value>
+    <value>Bitwarden is ’n aanteken- en wagwoordbestuurder wat u help om veilig te bly wanneer u aanlyn is.</value>
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>Bitwarden, Inc. is the parent company of 8bit Solutions LLC.
+    <value>Bitwarden, Inc. is die moederbedryf van 8bit Solutions LLC.
 
-NAMED BEST PASSWORD MANAGER BY THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, AND MORE.
+BESTE WAGWOORDBESTUURDER VOLGENS THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET EN ANDER.
 
-Manage, store, secure, and share unlimited passwords across unlimited devices from anywhere. Bitwarden delivers open source password management solutions to everyone, whether at  home, at work, or on the go.
+Beheer, bewaar, beveilig en deel ’n onbeperkte aantal wagwoorde op ’n onbeperkte aantal toestelle, waar u ookal is. Bitwarden bied oopbronwagwoordbestuuroplossings voor elk, hetsy tuis, op kantoor of op die pad.
 
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+Genereer sterk, unieke en lukrake wagwoorde gebaseer op beveiligingsvereistes vir elke webwerf wat u besoek.
 
-Bitwarden Send quickly transmits encrypted information --- files and plaintext -- directly to anyone.
+Bitwarden Send verstuur geënkripteerde inligting --- lêers en skoonteks -- vinnig regstreeks aan enigeen.
 
-Bitwarden offers Teams and Enterprise plans for companies so you can securely share passwords with colleagues.
+Bitwarden bied Span- en Ondernemingsplanne vir maatskappye, sodat u wagwoorde veilig met kollega’s kan deel.
 
-Why Choose Bitwarden:
+Waarom Bitwarden:
 
-World-Class Encryption
-Passwords are protected with advanced end-to-end encryption (AES-256 bit, salted hashtag, and PBKDF2 SHA-256) so your data stays secure and private.
+Eersteklasenkripsie
+Wagwoorde word beskerm met gevorderde eind-tot-eind-enkodering (AES-256 bit, salted hashtag en PBKDF2 SHA-256) sodat u data veilig en privaat bly.
 
-Built-in Password Generator
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+Ingeboude wagwoordgenereerder
+Genereer sterk, unieke en lukrake wagwoorde gebaseer op beveiligingsvereistes vir elke webwerf wat u besoek.
 
-Global Translations
-Bitwarden translations exist in 40 languages and are growing, thanks to our global community.
+Wêreldwye vertalings
+Bitwarden-vertalings bestaan ​​in 40 tale en groei danksy ons wêreldwye gemeenskap.
 
-Cross-Platform Applications
-Secure and share sensitive data within your Bitwarden Vault from any browser, mobile device, or desktop OS, and more.
-</value>
+Kruisplatformtoepassings
+Beveilig en deel gevoelige data in u Bitwarden kluis vanuit enige blaaier, mobiele toestel of werkskermbedryfstelsel, en meer.</value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
-    <value>A secure and free password manager for all of your devices</value>
+    <value>’n Veilige en gratis wagwoordbestuurder vir al u toestelle</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Manage all your logins and passwords from a secure vault</value>
+    <value>Bestuur al u aantekeninge en wagwoorde vanuit ’n beveiligde kluis</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Automatically generate strong, random, and secure passwords</value>
+    <value>Genereer outomaties sterk, lukrake en veilige wagwoorde</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Protect your vault with fingerprint, PIN code, or master password</value>
+    <value>Beskerm u kluis met vingerafdruk, PIN-kode of hoofwagwoord</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Quickly auto-fill logins from within your web browser and other apps</value>
+    <value>Vul aantekeninge vinnig in vanuit u webblaaiers en ander toeps</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Sync and access your vault from multiple devices
+    <value>Sinchronisasie en toegang tot u kluis op meerdere toestelle
 
-- Phone
+- Slimfoon
 - Tablet
-- Desktop
-- Web</value>
+- Rekenaar
+- Web (internet)</value>
   </data>
 </root>

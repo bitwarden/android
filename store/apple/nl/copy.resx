@@ -122,15 +122,31 @@
     <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Bitwarden is de meest eenvoudige en veilige manier voor het opslaan van al je logins en wachtwoorden die ze ook nog eens synchroniseert tussen al je apparaten. Met de Bitwarden-app-extensie kun je je snel bij elke website aanmelden via Safari of Chrome en honderden andere populaire apps.
+    <value>Bitwarden, Inc. is het moederbedrijf van 8bit Solutions LLC.
 
-Diefstal van wachtwoorden is een ernstig probleem. De websites en apps die je gebruikt worden dagelijks aangevallen. Beveiligingslekken komen voor en wachtwoorden worden gestolen. Als je hetzelfde wachtwoord gebruikt voor meerdere apps en websites, kunnen hackers gemakkelijk toegang verkrijgen tot je e-mail, bankgegevens en andere belangrijke accounts.
+BESTE WACHTWOORDBEHEERDER VOLGENS THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET EN ANDEREN.
 
-Beveiligingsexperts raden aan om voor lek account een verschillend, willekeurig gegereneerd wachtwoord te gebruiken. Maar hoe beheer je al die wachtwoorden? Bitwarden maakt het je gemakkelijk om deze te genereren, op te slaan en te gebruiken.
+Beheer, bewaar, beveilig en deel een onbeperkt aantal wachtwoorden op een onbeperkt aantal apparaten, waar je ook bent. Bitwarden levert open source wachtwoordbeheeroplossingen voor iedereen, of dat nu thuis, op het werk of onderweg is.
 
-Bitwarden slaat al jouw logins op in een versleutelde kluis en synchroniseert deze tussen al je apparaten. Omdat je kluis volledig versleuteld is voor deze zelfs maar het internet opgaat, heb alleen jij toegang tot je gegevens. Zelfs het Bitwarden-team kan het niet lezen, al zouden we dat willen. Jouw gegevens zijn beveiligd met AES-256 bit-versleuteling, salted hashing en PBKDF2 SHA-256.
+Genereer sterke, unieke en willekeurige wachtwoorden op basis van beveiligingsvereisten voor elke website die je bezoekt.
 
-Bitwarden is 100% gericht op open source software. De broncode voor Bitwarden staat op GitHub en iedereen kan het bekijken, beoordelen en een bijdrage leveren.</value>
+Bitwarden Send verzendt snel versleutelde informatie --- bestanden en platte tekst -- rechtstreeks naar iedereen.
+
+Bitwarden biedt Teams- en Enterprise-abonnementen voor bedrijven, zodat je veilig wachtwoorden kunt delen met collega's.
+
+Waarom Bitwarden:
+
+Versleuteling van wereldklasse
+Wachtwoorden worden beschermd met geavanceerde end-to-end-codering (AES-256 bit, salted hashtag en PBKDF2 SHA-256) zodat jouw gegevens veilig en privé blijven.
+
+Ingebouwde wachtwoordgenerator
+Genereer sterke, unieke en willekeurige wachtwoorden op basis van beveiligingsvereisten voor elke website die je bezoekt.
+
+Wereldwijde vertalingen
+Bitwarden-vertalingen bestaan ​​in 40 talen en groeien dankzij onze wereldwijde community.
+
+Platformoverschrijdende toepassingen
+Beveilig en deel gevoelige gegevens binnen uw Bitwarden Vault vanuit elke browser, mobiel apparaat of desktop-besturingssysteem, en meer.</value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">

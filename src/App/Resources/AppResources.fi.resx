@@ -172,7 +172,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="DoYouReallyWantToDelete" xml:space="preserve">
-    <value>Haluatko varmasti poistaa? Tätä toimintoa ei voi peruuttaa.</value>
+    <value>Haluatko varmasti poistaa? Toiminnon peruminen ei ole mahdollista.</value>
     <comment>Confirmation alert message when deleteing something.</comment>
   </data>
   <data name="Edit" xml:space="preserve">
@@ -597,7 +597,7 @@
     <value>Holvissasi ei ole kohteita tälle sivustolle/sovellukselle. Lisää kohde napauttamalla.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
-    <value>Tähän kirjautumistietoon ei ole määritetty käyttäjätunnusta tai salasanaa.</value>
+    <value>Kirjautumistiedolle ei ole määritetty käyttäjätunnusta tai salasanaa.</value>
   </data>
   <data name="OkGotIt" xml:space="preserve">
     <value>Ymmärrän!</value>
@@ -1673,7 +1673,7 @@
     <comment>(action prompt) Label for the search text field when viewing the trash folder</comment>
   </data>
   <data name="DoYouReallyWantToPermanentlyDeleteCipher" xml:space="preserve">
-    <value>Haluatko varmasti poistaa pysyvästi? Tätä ei voi perua.</value>
+    <value>Haluatko varmasti poistaa pysyvästi? Toiminnon peruminen ei ole mahdollista.</value>
     <comment>Confirmation alert message when permanently deleteing a cipher.</comment>
   </data>
   <data name="DoYouReallyWantToRestoreCipher" xml:space="preserve">
@@ -1834,26 +1834,26 @@
     <value>Tiedosto, jonka haluat lähettää.</value>
   </data>
   <data name="DeletionDate" xml:space="preserve">
-    <value>Poistopäivä</value>
+    <value>Poistoajankohta</value>
   </data>
   <data name="DeletionTime" xml:space="preserve">
     <value>Poistoaika</value>
   </data>
   <data name="DeletionDateInfo" xml:space="preserve">
-    <value>Send poistetaan pysyvästi määritettynä ajankohtana.</value>
+    <value>Send poistuu pysyvästi määritettynä ajankohtana.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PendingDelete" xml:space="preserve">
     <value>Odottaa poistoa</value>
   </data>
   <data name="ExpirationDate" xml:space="preserve">
-    <value>Erääntymispäivä</value>
+    <value>Erääntymisajankohta</value>
   </data>
   <data name="ExpirationTime" xml:space="preserve">
     <value>Erääntymisaika</value>
   </data>
   <data name="ExpirationDateInfo" xml:space="preserve">
-    <value>Jos määritetty, Send erääntyy määritettynä ajankohtana.</value>
+    <value>Send erääntyy määritettynä ajankohtana.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Expired" xml:space="preserve">
@@ -1904,7 +1904,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddASend" xml:space="preserve">
-    <value>Add a Send</value>
+    <value>Lisää Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="CopyLink" xml:space="preserve">
@@ -1987,16 +1987,16 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFileEmailVerificationRequired" xml:space="preserve">
-    <value>Sinun on vahvistettava sähköpostiosoitteesi, jotta voit käyttää tiedostoja Sendeissä.</value>
+    <value>Sinun on vahvistettava sähköpostiosoitteesi käyttääksesi tiedostoja Sendeissä. Voit vahvistaa osoitteesi verkkoholvissa.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PasswordPrompt" xml:space="preserve">
-    <value>Master password re-prompt</value>
+    <value>Pääsalasanan uudelleenkysely</value>
   </data>
   <data name="PasswordConfirmation" xml:space="preserve">
-    <value>Master password confirmation</value>
+    <value>Pääsalasanan vahvistus</value>
   </data>
   <data name="PasswordConfirmationDesc" xml:space="preserve">
-    <value>This action is protected, to continue please re-enter your master password to verify your identity.</value>
+    <value>Toiminto on suojattu. Jatkaaksesi, syötä pääsalasanasi uudelleen vahvistaaksesi henkilöllisyytesi.</value>
   </data>
 </root>

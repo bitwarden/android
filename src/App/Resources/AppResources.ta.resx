@@ -206,7 +206,7 @@
     <value>பிழையறிக்கை தாக்கல் செய்</value>
   </data>
   <data name="FileBugReportDescription" xml:space="preserve">
-    <value>Open an issue at our GitHub repository.</value>
+    <value>GitHub களஞ்சியத்தில் ஒரு சிக்கலைத் திற.</value>
   </data>
   <data name="FingerprintDirection" xml:space="preserve">
     <value>உங்கள் கைரேகையைப் பயன்படுத்தி சரிபார்க்கவும்</value>
@@ -341,7 +341,7 @@
     <comment>The title for the tools page.</comment>
   </data>
   <data name="URI" xml:space="preserve">
-    <value>யுஆர்ஐ</value>
+    <value>உரலி</value>
     <comment>Label for a uri/url.</comment>
   </data>
   <data name="UseFingerprintToUnlock" xml:space="preserve">
@@ -406,7 +406,7 @@
     <value>தன்னிரப்பி சேவை</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
-    <value>தெளிவற்ற எழுத்துக்களைத் தவிர்க்கவும்</value>
+    <value>தெளிவற்ற எழுத்துக்களைத் தவிர்</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
     <value>Bitwarden செயலி நீட்டிப்பு</value>
@@ -540,7 +540,7 @@
     <value>பெட்டகம் நேரமுடிவு செயல்</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
-    <value>Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?</value>
+    <value>வெளியேறுதல் உமது பெட்டகத்திற்கான எல்லா அணுகலையும் அகற்றும் மற்றும் நேரமுடிவு காலத்திற்குப் பிறகு இயங்கலை அங்கீகாரம் தேவைப்படுகிறது. இவ்வமைப்பை உறுதியாக பயன்படுத்த வேண்டுமா?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>உள்நுழைகிறது...</value>
@@ -604,7 +604,7 @@
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>Option defaults are set from the main Bitwarden app's password generator tool.</value>
+    <value>விருப்ப இயல்புநிலைகள் முதன்மை Bitwarden செயலியின் கடவுச்சொல் உருவாக்கி கருவியிலிருந்து அமைக்கப்படுகிறது.</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>விருப்பங்கள்</value>
@@ -628,7 +628,7 @@
     <value>தற்போதைய கடவுச்சொல்லை மேலெழுத உறுதியா?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>Bitwarden keeps your vault automatically synced by using push notifications. For the best possible experience, please select "Allow" on the following prompt when asked to enable push notifications.</value>
+    <value>push அறிவிப்புகள் பயன்படுத்தி Bitwarden உம் பெட்டகத்தை தானாக ஒத்திசைகிறது. சிறந்த சாத்தியமான அனுபவத்திற்கு, பின்வரும் தூண்டியில் push அறிவிப்புகளை இயக்கச்சொல்லி கேட்டால் "அனுமதி"ஐ தேர்ந்தெடுக்கவும்.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
@@ -689,7 +689,7 @@
     <value>இரு-படி உள்நுழைவு</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Two-step login makes your account more secure by requiring you to verify your login with another device such as a security key, authenticator app, SMS, phone call, or email. Two-step login can be enabled on the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>பாதுகாப்பு விசை, அங்கீகார செயலி, குறுஞ்செய்தி, தொலைபேசி அழைப்பு அ மின்னஞ்சல் போன்ற மற்றொரு சாதனத்துடன் உங்கள் உள்நுழைவை சரிபார்க்குமாறு கோருவதன் மூலம் இரு-படி உள்நுழைவு உங்கள் கணக்கை மிகவும் பாதுகாப்பாக்குகிறது. bitwarden.com வலை பெட்டகத்தில் இரு-படி உள்நுழைவை இயக்க முடியும். நீங்கள் இப்போது வலைத்தளத்தைப் பார்வையிட வேண்டுமா?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>{0} மூலம் பூட்டவிழ்</value>
@@ -735,7 +735,7 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
-    <value>When you select an input field and see a Bitwarden auto-fill overlay, you can tap it to launch the auto-fill service.</value>
+    <value>நீங்கள் ஓர் உள்ளீடு புலத்தை தேர்ந்து Bitwarden தன்னிரப்பி மேலடுக்கை பார்க்கும்போது, தன்னிரப்பி சேவையை தொடங்க நீங்கள் அதை தட்டலாம்.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>உங்கள் பெட்டகத்திலிருந்து உருப்படியைத் தானாக-நிரப்ப இந்த அறிவிப்பைத் தட்டவும்.</value>
@@ -744,10 +744,10 @@
     <value>அணுகல்தன்மை அமைவுகளைத் திற</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
-    <value>1. On the Android Accessibility Settings screen, touch "Bitwarden" under the Services heading.</value>
+    <value>௧. Android அணுகல்தன்மை அமைப்புகள் திரையில், சேவைகள் தலைப்பின் கீழ் "Bitwarden" ஐத் தொடு.</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
-    <value>2. Switch on the toggle and press OK to accept.</value>
+    <value>௨. நிலைமாற்றியை இயக்கி ஏற்றுக்கொள்ள சரியை அழுத்து.</value>
   </data>
   <data name="Disabled" xml:space="preserve">
     <value>முடக்கப்பட்டது</value>
@@ -759,7 +759,7 @@
     <value>நிலை</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
+    <value>உம் பெட்டகத்திற்கு புது உள்நுழைவுகளை சேர்ப்பதற்கான மிக எளிய வழி Bitwarden தன்னிரப்பி சேவையிலிருந்தே. "அமைப்புகள்" திரைக்கு சென்று Bitwarden தன்னிரப்பி  சேவையை பயன்படுத்துவது பற்றி மேலும் அறிக.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>தானாக-நிரப்பு</value>
@@ -768,7 +768,7 @@
     <value>இவ்வுருப்படியை தானாக நிரப்ப அ பார்க்க வேண்டுமா?</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>Are you sure you want to auto-fill this item? It is not a complete match for "{0}".</value>
+    <value>இவ்வுருப்படியை உறுதியாக தன்னிரப்ப வேண்டுமா? இது "{0}"க்கான முழுமையான பொருத்தமல்ல.</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
     <value>பொருந்தும் உருப்படிகள்</value>
@@ -780,7 +780,7 @@
     <value>தேடுக</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
-    <value>You are searching for an auto-fill item for "{0}".</value>
+    <value>"{0}"க்கான தண்னிரப்ப உருப்படியை தேடிக்கொண்டிருக்கிறீர்கள்.</value>
   </data>
   <data name="ShareVault" xml:space="preserve">
     <value>உங்கள் பெட்டகத்தைப் பகிர்</value>
@@ -900,7 +900,7 @@
     <value>Disable Automatic TOTP Copy</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
-    <value>A premium membership is required to use this feature.</value>
+    <value>இவ்வம்சத்தை பயன்படுத்த உயர்தர உறுப்பினர் தகுதி தேவை.</value>
   </data>
   <data name="AttachementAdded" xml:space="preserve">
     <value>இணைப்பு சேர்க்கப்பட்டது</value>
@@ -936,36 +936,36 @@
     <value>மேலும் அறிக</value>
   </data>
   <data name="ApiUrl" xml:space="preserve">
-    <value>API Server URL</value>
+    <value>API தேக்க உரலி</value>
   </data>
   <data name="CustomEnvironment" xml:space="preserve">
-    <value>Custom Environment</value>
+    <value>விருப்பிற்கேற்ற சுற்றுசூழல்</value>
   </data>
   <data name="CustomEnvironmentFooter" xml:space="preserve">
-    <value>For advanced users. You can specify the base URL of each service independently.</value>
+    <value>மேம்பட்ட பயனர்களுக்காக. ஒவ்வொரு சேவைக்கும் அடித்தள உரலியை சார்பின்றி குறிப்பிடலாம்.</value>
   </data>
   <data name="EnvironmentSaved" xml:space="preserve">
-    <value>The environment URLs have been saved.</value>
+    <value>சுற்றுசூழல் உரலிகள் சேமிக்கப்பட்டன.</value>
   </data>
   <data name="FormattedIncorrectly" xml:space="preserve">
     <value>{0} சரியாக வடிவமைக்கப்படவில்லை.</value>
     <comment>Validation error when something is not formatted correctly, such as a URL or email address.</comment>
   </data>
   <data name="IdentityUrl" xml:space="preserve">
-    <value>Identity Server URL</value>
+    <value>அடையாள தேக்க உரலி</value>
     <comment>"Identity" refers to an identity server. See more context here https://en.wikipedia.org/wiki/Identity_management</comment>
   </data>
   <data name="SelfHostedEnvironment" xml:space="preserve">
-    <value>Self-hosted Environment</value>
+    <value>சுய-வழங்கப்பட்ட சுற்றுசூழல்</value>
   </data>
   <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
     <value>Specify the base URL of your on-premise hosted Bitwarden installation.</value>
   </data>
   <data name="ServerUrl" xml:space="preserve">
-    <value>தேக்க யுஆர்எல்</value>
+    <value>தேக்க உரலி</value>
   </data>
   <data name="WebVaultUrl" xml:space="preserve">
-    <value>வலை பெட்டக தேக்க யுஆர்எல்</value>
+    <value>வலை பெட்டக தேக்க உரலி</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
     <value>உம் பெட்டகத்திலிருந்து உருப்படிகளைக் காண இவ்வறிவிப்பை தட்டவும்.</value>
@@ -1013,7 +1013,7 @@
     <value>ஆகஸ்ட்</value>
   </data>
   <data name="Brand" xml:space="preserve">
-    <value>Brand</value>
+    <value>சூட்டுக்குறி</value>
   </data>
   <data name="CardholderName" xml:space="preserve">
     <value>அட்டைதாரரின் பெயர்</value>
@@ -1115,10 +1115,10 @@
     <value>வலைத்தள படவுருக்களை முடக்கு</value>
   </data>
   <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Website Icons provide a recognizable image next to each login item in your vault.</value>
+    <value>வலைத்தள படவுருக்கள் உம் பெட்டகத்தின் ஒவ்வொரு உள்நுழைவு உருப்படிக்கும் அடுத்ததாக அடையாளங்காணக்கூடிய படத்தை வழங்கும்.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
-    <value>Icons Server URL</value>
+    <value>படவுரு தேக்க உரலி</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
     <value>Bitwarden உடன் தானாக-நிரப்புதல்</value>
@@ -1145,10 +1145,10 @@
     <value>தன்னிரப்பி அணுகல்தன்மை சேவை</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>The Bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device.</value>
+    <value>Bitwarden தன்னிரப்பி சேவை உள்நுழைவுகள், கடனட்டைகள், மற்றும் அடையாள தகவலை உம் சாதனத்திலிருக்கும் பிற செயலிகளினுள்ளே நிரப்புதலில் உதவ Android தன்னிரப்பி சட்டகத்தை பயன்படுத்துகிறது.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Use the Bitwarden auto-fill service to fill logins, credit cards, and identity information into other apps.</value>
+    <value>உள்நுழைவுகள், கடனட்டைகள், மற்றும் அடையாள தகவலை பிற செயலிகளினுள்ளே நிரப்ப Bitwarden தன்னிரப்பி சேவையை பயன்படுத்து.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>தானாக நிரப்புதல் அமைப்புகளைத் திற</value>
@@ -1167,7 +1167,7 @@
     <value>முக அடையாளத்தை சரிபார்க்கவும்</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
-    <value>Windows Hello</value>
+    <value>விண்டோஸ் ஹலோ</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
     <value>We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings &gt; System &gt; Languages and input &gt; Advanced &gt; Autofill service.</value>
@@ -1194,14 +1194,14 @@
     <value>அகற்று</value>
   </data>
   <data name="NewUri" xml:space="preserve">
-    <value>New URI</value>
+    <value>புது உரலி</value>
   </data>
   <data name="URIPosition" xml:space="preserve">
-    <value>URI {0}</value>
+    <value>உரலி {0}</value>
     <comment>Label for a uri/url with position. i.e. URI 1, URI 2, etc</comment>
   </data>
   <data name="BaseDomain" xml:space="preserve">
-    <value>Base domain</value>
+    <value>அடித்தள களம்</value>
   </data>
   <data name="Default" xml:space="preserve">
     <value>இயல்புநிலை</value>
@@ -1210,18 +1210,18 @@
     <value>சரியான</value>
   </data>
   <data name="Host" xml:space="preserve">
-    <value>Host</value>
+    <value>வழங்கி</value>
     <comment>A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'.</comment>
   </data>
   <data name="RegEx" xml:space="preserve">
-    <value>Regular expression</value>
+    <value>சுருங்குறித்தொடர்</value>
     <comment>A programming term, also known as 'RegEx'.</comment>
   </data>
   <data name="StartsWith" xml:space="preserve">
     <value>தொடக்கம்</value>
   </data>
   <data name="URIMatchDetection" xml:space="preserve">
-    <value>URI Match Detection</value>
+    <value>உரலி பொருத்தம் கண்டறிதல்</value>
   </data>
   <data name="MatchDetection" xml:space="preserve">
     <value>பொருத்தம் கண்டறிதல்</value>
@@ -1315,7 +1315,7 @@
     <value>அனைத்து உருப்படிகளும்</value>
   </data>
   <data name="URIs" xml:space="preserve">
-    <value>யுஆர்ஐகள்</value>
+    <value>உரலிகள்</value>
     <comment>Plural form of a URI</comment>
   </data>
   <data name="CheckingPassword" xml:space="preserve">
@@ -1480,15 +1480,15 @@
     <value>௨ நிமிடங்கள்</value>
   </data>
   <data name="ClearClipboard" xml:space="preserve">
-    <value>Clear Clipboard</value>
+    <value>கவ்வுபலகையை துடை</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="ClearClipboardDescription" xml:space="preserve">
-    <value>Automatically clear copied values from your clipboard.</value>
+    <value>நகலெடுத்த மதிப்புகளை கவ்வுபலகையிலிருந்து தானாக துடை</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="DefaultUriMatchDetection" xml:space="preserve">
-    <value>Default URI Match Detection</value>
+    <value>இயல்புநிலை உரலி பொருத்தம் கண்டறிதல்</value>
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
@@ -1518,20 +1518,20 @@
     <value>Bitwarden இலிருந்து வெளியேற விரும்புகிறீர்களா?</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
-    <value>Do you want to require unlocking with your master password when the application is restarted?</value>
+    <value>செயலி மறுதுவக்கத்தில் பூட்டவிழ்க்க உங்கள் பிரதான கடவுச்சொல்லை கோர வேண்டுமா?</value>
   </data>
   <data name="Black" xml:space="preserve">
     <value>கருப்பு</value>
     <comment>The color black</comment>
   </data>
   <data name="BlacklistedUris" xml:space="preserve">
-    <value>Blacklisted URIs</value>
+    <value>தடுப்புப்பட்டியலிடப்பட்ட உரலிகள்</value>
   </data>
   <data name="BlacklistedUrisDescription" xml:space="preserve">
     <value>URIs that are blacklisted will not offer auto-fill. The list should be comma separated. Ex: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
   <data name="DisableSavePrompt" xml:space="preserve">
-    <value>Disable Save Prompt</value>
+    <value>சேமிப்பு தூண்டியை முடக்கு</value>
   </data>
   <data name="DisableSavePromptDescription" xml:space="preserve">
     <value>The "Save Prompt" automatically prompts you to save new items to your vault whenever you enter them for the first time.</value>
@@ -1543,7 +1543,7 @@
     <value>Auto-fill makes it easy to securely access your Bitwarden vault from other websites and apps. It looks like you have not enabled an auto-fill service for Bitwarden. Enable auto-fill for Bitwarden from the "Settings" screen.</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
-    <value>Your theme changes will apply when the app is restarted.</value>
+    <value>உமது தோற்ற மாற்றங்கள்  செயலி மறுதுவக்கும்போது செயலாகும்.</value>
   </data>
   <data name="Capitalize" xml:space="preserve">
     <value>பேரெழுத்தாக்கு</value>
@@ -1574,19 +1574,19 @@
     <value>பூட்டவிழ்க்க உயிரியளவுகளை பயன்படுத்து</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
-    <value>Bitwarden needs attention - See "Auto-fill Accessibility Service" from Bitwarden Settings</value>
+    <value>Bitwardenக்கு கவனம் தேவை - Bitwarden அமைப்புகளிலிருந்து "தன்னிரப்பி அணுகல்தன்மை சேவை" ஐப் பார்</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
-    <value>3. On the Android App Settings screen for Bitwarden, go to the "Display over other apps" options (under Advanced) and tap the toggle to enable overlay support.</value>
+    <value>௩. Bitwarden-க்கான Android செயலி அமைப்புகள் திரையில், "பிற ஆப்ஸின் மேலே காட்டு" தெரிவுகளுக்கு (மேம்பட்டவை அடியில்) செல் மற்றும் மேலடுக்கு ஆதரவை இயக்க நிலைமாற்றியை தட்டுக.</value>
   </data>
   <data name="OverlayPermission" xml:space="preserve">
     <value>அனுமதி</value>
   </data>
   <data name="BitwardenAutofillServiceOpenOverlayPermissionSettings" xml:space="preserve">
-    <value>Open Overlay Permission Settings</value>
+    <value>மேலடுக்கு அனுமதி அமைப்புகளை திற</value>
   </data>
   <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
-    <value>3. On the Android App Settings screen for Bitwarden, select "Display over other apps" (under "Advanced") and switch on the toggle to allow the overlay.</value>
+    <value>௩. Bitwarden-க்கான Android செயலி அமைப்புகள் திரையில், "பிற ஆப்ஸின் மேலே காட்டு" (மேம்பட்டவை அடியில்) என்பதை தேர்ந்தெடு மற்றும் மேலடுக்கை அனுமதிக்க நிலைமாற்றியை இயக்குக.</value>
   </data>
   <data name="Denied" xml:space="preserve">
     <value>மறுக்கப்பட்டது</value>
@@ -1601,13 +1601,13 @@
     <value>உம் பெட்டக தரவை ஏற்றுமதி செய்ய பிரதான கடவுச்சொல்லை உள்ளிடு.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
-    <value>This export contains your vault data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it.</value>
+    <value>இவ்வேற்றுமதி உம் பெட்டக தரவை மறையாக்கப்படா வடிவில் கொண்டுள்ளது. சேமிக்கவோ பாதுகாப்பற்ற தடங்களில் (மின்னஞ்சல் போன்றவை) அனுப்பவோ கூடாது. பயன்படுத்தியவுடன் அழித்துவிடவும்.</value>
   </data>
   <data name="EncExportKeyWarning" xml:space="preserve">
     <value>This export encrypts your data using your account's encryption key. If you ever rotate your account's encryption key you should export again since you will not be able to decrypt this export file.</value>
   </data>
   <data name="EncExportAccountWarning" xml:space="preserve">
-    <value>Account encryption keys are unique to each Bitwarden user account, so you can't import an encrypted export into a different account.</value>
+    <value>கணக்கு மறையாக்க விசைகள் ஒவ்வொரு Bitwarden பயனர் கணக்கிற்கும் தனித்துவமானது, ஆக ஒரு மறையாக்கப்பட்ட ஏற்றுமதியை வேறொரு கணக்கினுள்ளே இறக்க இயலாது.</value>
   </data>
   <data name="ExportVaultConfirmationTitle" xml:space="preserve">
     <value>பெட்டக ஏற்றுமதியை உறுதிசெய்</value>
@@ -1627,23 +1627,23 @@
     <comment>Clone an entity (verb).</comment>
   </data>
   <data name="PasswordGeneratorPolicyInEffect" xml:space="preserve">
-    <value>One or more organization policies are affecting your generator settings</value>
+    <value>ஒன்று அ மேற்பட்ட நிறுவன கொள்கைகள் உமது உருவாக்கி அமைப்புகளை பாதிக்கிறது</value>
   </data>
   <data name="Open" xml:space="preserve">
     <value>திற</value>
     <comment>Button text for an open operation (verb).</comment>
   </data>
   <data name="UnableToSaveAttachment" xml:space="preserve">
-    <value>There was a problem saving this attachment. If the problem persists, you can save it from the web vault.</value>
+    <value>இவ்விணைப்பை சேமிப்பதில் சிக்கல் ஏற்பட்டது. சிக்கல் தொடர்ந்தால், வலை பெட்டகத்திலிருந்து இதை சேமிக்கலாம்.</value>
   </data>
   <data name="SaveAttachmentSuccess" xml:space="preserve">
-    <value>Attachment saved successfully</value>
+    <value>சேர்ப்பு வெற்றிகரமாக சேமிக்கப்பட்டது</value>
   </data>
   <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
-    <value>Please enable "Auto-fill Accessibility Service" from Bitwarden Settings to use the Auto-fill tile.</value>
+    <value>தன்னிரப்பி ஓட்டைப் பயன்படுத்த Bitwarden அமைவுகளிலிருந்து "தன்னிரப்பி அணுகல்தன்மை சேவை"-ஐ இயக்கவும்.</value>
   </data>
   <data name="AutofillTileUriNotFound" xml:space="preserve">
-    <value>No password fields detected</value>
+    <value>கடவுச்சொல் புலங்களேதும் கண்டறியப்படவில்லை</value>
   </data>
   <data name="SoftDeleting" xml:space="preserve">
     <value>குப்பைக்கு அனுப்புகிறது...</value>
@@ -1686,10 +1686,10 @@
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Biometric unlock disabled pending verification of master password.</value>
+    <value>உயிரியளவு பூட்டவிழ்த்தல் முடக்கப்பட்டது பிரதான கடவுச்சொல் சரிபார்ப்பு நிலுவையிலுள்ளது.</value>
   </data>
   <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Biometric unlock for autofill disabled pending verification of master password.</value>
+    <value>தன்னிரப்பலுக்கான உயிரியளவு பூட்டவிழ்த்தல் முடக்கப்பட்டது பிரதான கடவுச்சொல் சரிபார்ப்பு நிலுவையிலுள்ளது.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>புதுப்பித்தலில் ஒத்திசைவை இயக்கவும்</value>
@@ -1707,7 +1707,7 @@
     <value>நிர்வாக அடையாளங்காட்டி</value>
   </data>
   <data name="LoginSsoError" xml:space="preserve">
-    <value>Currently unable to login with SSO</value>
+    <value>SSO கொண்டு தற்போது உள்நுழைய இயலாது</value>
   </data>
   <data name="SetMasterPassword" xml:space="preserve">
     <value>பிரதான கடவுச்சொல்லை அமை</value>
@@ -1716,10 +1716,10 @@
     <value>In order to complete logging in with SSO, please set a master password to access and protect your vault.</value>
   </data>
   <data name="MasterPasswordPolicyInEffect" xml:space="preserve">
-    <value>One or more organization policies require your master password to meet the following requirements:</value>
+    <value>ஒன்று அ மேற்பட்ட நிறுவன கொள்கைகளுக்கு உமது பிரதான கடவுச்சொல் தேவை பின்வரும் தேவைகளை பூர்த்தி செய்ய:</value>
   </data>
   <data name="PolicyInEffectMinComplexity" xml:space="preserve">
-    <value>Minimum complexity score of {0}</value>
+    <value>குறைந்பட்ச உட்சிக்கல் மதிப்பெண்ணான {0}</value>
   </data>
   <data name="PolicyInEffectMinLength" xml:space="preserve">
     <value>{0} இன் குறைந்தபட்ச நீளம்</value>
@@ -1734,13 +1734,13 @@
     <value>ஒன்று அ அதற்கு மேற்பட்ட எண்களைக் கொண்டிரு</value>
   </data>
   <data name="PolicyInEffectSpecial" xml:space="preserve">
-    <value>Contain one or more of the following special characters: {0}</value>
+    <value>பின்வரும் சிறப்பு வரியுருகளுள் ஒன்று அ பலவற்றை கொண்டிரு: {0}</value>
   </data>
   <data name="MasterPasswordPolicyValidationTitle" xml:space="preserve">
     <value>செல்லாத கடவுச்சொல்</value>
   </data>
   <data name="MasterPasswordPolicyValidationMessage" xml:space="preserve">
-    <value>Password does not meet organization requirements. Please check the policy information and try again.</value>
+    <value>கடவுச்சொல் நிறுவன தேவைகளை சந்திக்கவில்லை. கொள்கை தகவலை சரிபார்த்து மீண்டும் முயலவும்.</value>
   </data>
   <data name="Loading" xml:space="preserve">
     <value>ஏற்றுகிறது</value>
@@ -1758,13 +1758,13 @@
     <value>தனியுரிமை கொள்கை</value>
   </data>
   <data name="AccessibilityDrawOverPermissionAlert" xml:space="preserve">
-    <value>Bitwarden needs attention - Enable "Draw-Over" in "Auto-fill Services" from Bitwarden Settings</value>
+    <value>Bitwardenக்கு கவனம் தேவை - Bitwarden அமைப்புகளிலிருந்து "தன்னிரப்பி சேவைகள்"-இல் "மேலே-வரைதல்"-ஐ இயக்குக</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
     <value>தன்னிரப்பி சேவைகள்</value>
   </data>
   <data name="InlineAutofill" xml:space="preserve">
-    <value>Use Inline Autofill</value>
+    <value>உள்-வரி தன்னிரப்பியை பயன்படுத்து</value>
   </data>
   <data name="InlineAutofillDescription" xml:space="preserve">
     <value>Use inline autofill if your selected IME (keyboard) supports it. If your configuration is not supported (or this option is disabled), the default Autofill overlay will be used.</value>
@@ -1785,7 +1785,7 @@
     <value>Required to use the Autofill Quick-Action Tile, or to augment the Autofill Service by using Draw-Over (if enabled).</value>
   </data>
   <data name="DrawOver" xml:space="preserve">
-    <value>Use Draw-Over</value>
+    <value>மேலே-வரைதல் பயன்படுத்து</value>
   </data>
   <data name="DrawOverDescription" xml:space="preserve">
     <value>When enabled, allows the Bitwarden Accessibility Service to display a popup when login fields are selected.</value>
@@ -1807,7 +1807,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AllSends" xml:space="preserve">
-    <value>All Sends</value>
+    <value>எல்லா Sends</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Sends" xml:space="preserve">
@@ -1815,7 +1815,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NameInfo" xml:space="preserve">
-    <value>A friendly name to describe this Send.</value>
+    <value>இந்த Send ஐ விளக்க ஒரு நட்பார்ந்த பெயர்.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="TypeText" xml:space="preserve">
@@ -1825,7 +1825,7 @@
     <value>நீங்கள் அனுப்ப விரும்பும் சொற்சரம்.</value>
   </data>
   <data name="HideTextByDefault" xml:space="preserve">
-    <value>When accessing the Send, hide the text by default</value>
+    <value>Send ஐ அணுகும்போது, இயல்புநிலையில் சொற்சரத்தை மறை</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="TypeFile" xml:space="preserve">
@@ -1841,11 +1841,11 @@
     <value>அழிக்கும் நேரம்</value>
   </data>
   <data name="DeletionDateInfo" xml:space="preserve">
-    <value>The Send will be permanently deleted on the specified date and time.</value>
+    <value>குறிப்பிடப்பட்ட தேதி மற்றும் நேரத்தில் Send நிரந்தரமாக அழிக்கப்படும்.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PendingDelete" xml:space="preserve">
-    <value>Pending deletion</value>
+    <value>அழித்தல் நிலுவையில்</value>
   </data>
   <data name="ExpirationDate" xml:space="preserve">
     <value>காலாவதி தேதி</value>
@@ -1854,7 +1854,7 @@
     <value>காலாவதி நேரம்</value>
   </data>
   <data name="ExpirationDateInfo" xml:space="preserve">
-    <value>If set, access to this Send will expire on the specified date and time.</value>
+    <value>அமைத்தால், குறிப்பிடப்பட்ட தேதி மற்றும் நேரத்தில் இந்த Send க்கான அணுகல் காலாவதியாகும்.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Expired" xml:space="preserve">
@@ -1877,7 +1877,7 @@
     <value>புது கடவுச்சொல்</value>
   </data>
   <data name="PasswordInfo" xml:space="preserve">
-    <value>Optionally require a password for users to access this Send.</value>
+    <value>விருப்பப்பட்டால் பயனர்கள் இந்த Send ஐ அணுக கடவுச்சொல் வேண்டு.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="RemovePassword" xml:space="preserve">
@@ -1893,19 +1893,19 @@
     <value>கடவுச்சொல் அகற்றப்பட்டது.</value>
   </data>
   <data name="NotesInfo" xml:space="preserve">
-    <value>Private notes about this Send.</value>
+    <value>இந்த Send பற்றிய தனிப்பட்ட குறிப்புகள்.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Disable this Send so that no one can access it.</value>
+    <value>இந்த Send-ஐ முடக்குக எனவே யாரும் இதை அணுக இயலாது.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
-    <value>There are no Sends in your account.</value>
+    <value>உம் கணக்கில் Sends எவையுமில்லை.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddASend" xml:space="preserve">
-    <value>Add a Send</value>
+    <value>ஒரு Send சேர்</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="CopyLink" xml:space="preserve">
@@ -1915,35 +1915,35 @@
     <value>இணைப்பை பகிர்</value>
   </data>
   <data name="SendLink" xml:space="preserve">
-    <value>இணைப்பை அனுப்பு</value>
+    <value>Send தொடுப்பு</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SearchSends" xml:space="preserve">
-    <value>Search Sends</value>
+    <value>Sends தேடு</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="EditSend" xml:space="preserve">
-    <value>Edit Send</value>
+    <value>Send திருத்து</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddSend" xml:space="preserve">
-    <value>Add Send</value>
+    <value>Send சேர்</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AreYouSureDeleteSend" xml:space="preserve">
-    <value>Are you sure you want to delete this Send?</value>
+    <value>இந்த Send ஐ அழிக்க உறுதியா?</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDeleted" xml:space="preserve">
-    <value>Send has been deleted.</value>
+    <value>Send அழிக்கப்பட்டது.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendUpdated" xml:space="preserve">
-    <value>Send updated.</value>
+    <value>Send புதுப்பிக்கப்பட்டது.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NewSendCreated" xml:space="preserve">
-    <value>New send created.</value>
+    <value>புது Send உருவாக்கப்பட்டது.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="OneDay" xml:space="preserve">
@@ -1965,7 +1965,7 @@
     <value>தனிபயன்</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
-    <value>Share this Send upon save.</value>
+    <value>சேமிப்பின்மீது இந்த Send ஐ பகிர்.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
@@ -1973,31 +1973,31 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AboutSend" xml:space="preserve">
-    <value>About Send</value>
+    <value>Send பற்றி</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
-    <value>Hide my email address from recipients.</value>
+    <value>பெருநர்களிடமிருந்து என் மின்னஞ்சல் முகவரியை மறை.</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
-    <value>One or more organization policies are affecting your Send options.</value>
+    <value>ஒன்று அ மேற்பட்ட நிறுவன கொள்கைகள் உமது Send தெரிவுகளை பாதிக்கிறது.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFilePremiumRequired" xml:space="preserve">
-    <value>Free accounts are restricted to sharing text only. A premium membership is required to use files with Send.</value>
+    <value>இலவச கணக்குகள் சொற்சரம் மட்டும் பகிர்தலுக்கு கட்டுப்படுத்தப்பட்டுள்ளது. Send உடன் கோப்புகளை பயன்படுத்த உயர்தர உறுப்பினர் தகுதி தேவை.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFileEmailVerificationRequired" xml:space="preserve">
-    <value>You must verify your email to use files with Send. You can verify your email in the web vault.</value>
+    <value>Send உடன் கோப்புகளை பயன்படுத்த உம் மின்னஞ்சலை கட்டாயம் நிச்சயப்படுத்தவும்.  உம் மின்னஞ்சலை வலை பெட்டகத்தில் நிச்சயப்படுத்தலாம்.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PasswordPrompt" xml:space="preserve">
-    <value>Master password re-prompt</value>
+    <value>பிரதான கடவுச்சொல் மறு-தூண்டி</value>
   </data>
   <data name="PasswordConfirmation" xml:space="preserve">
-    <value>Master password confirmation</value>
+    <value>பிரதான கடவுச்சொல் உறுதியாக்கம்</value>
   </data>
   <data name="PasswordConfirmationDesc" xml:space="preserve">
-    <value>This action is protected, to continue please re-enter your master password to verify your identity.</value>
+    <value>இச்செயல் பாதுகாக்கப்பட்டது, தொடர உம் பிரதான கடவுச்சொல்லை மறு-உள்ளிட்டு உம் அடையாளத்தை நிச்சயப்படுத்தவும்.</value>
   </data>
 </root>

@@ -122,15 +122,31 @@
     <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Bitwarden este cel mai simplu și mai sigur mod de a stoca toate autentificările și parolele dvs., păstrându-le în mod convenabil sincronizate între toate dispozitivele. Aplicația Bitwarden vă permite să vă conectați rapid la orice sait prin Safari sau Chrome și este acceptată de sute de alte aplicații populare.
+    <value>Bitwarden, Inc. este compania mamă a 8bit Solutions LLC.
 
-Furtul de parole este o problemă serioasă. Saiturile web și aplicațiile pe care le utilizați sunt atacate în fiecare zi. Au loc încălcări ale securității și parolele dvs. sunt furate. Când reutilizați aceleași parole pe aplicații și saituri web, hackerii pot accesa cu ușurință e-mailurile, conturile bancare și alte conturi importante.
+NUMIT CEL MAI BUN MANAGER DE PAROLE DE CĂTRE THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, ȘI MULȚI ALȚII.
 
-Experții în securitate vă recomandă să utilizați câte o parolă diferită, generată aleatoriu, pentru fiecare cont pe care îl utilizați. Dar cum veți gestiona toate aceste parole? Bitwarden vă ușurează crearea, stocarea și accesarea acestor parole.
+Gestionează, stochează, securizează și partajează parole nelimitate, pe dispozitive nelimitate, de oriunde. Bitwarden oferă soluții de gestionare a parolelor open source pentru toată lumea, fie acasă, la serviciu sau în deplasare.
 
-Bitwarden stochează toate date dvs. de autentificare într-un seif criptat care se sincronizează pe toate dispozitivele dvs. Deoarece seiful este complet criptat înainte de a fi transmis prin internet, numai dvs. aveți acces la date. Nici măcar echipa Bitwarden nu poate citi datele dvs., chiar dacă ar dori. Datele dvs. sunt sigilate prin criptare cu AES-256 biți, salted hashing și PBKDF2 SHA-256.
+Generează parole puternice, unice și aleatorii pe baza cerințelor de securitate a fiecărui site web pe care îl frecventați.
 
-Bitwarden este un software 100% "open source". Codul sursă pentru Bitwarden este găzduit pe GitHub și toată lumea este liberă să îl revizuiască, să îl verifice și să contribuie la dezvoltarea lui.</value>
+Bitwarden Send transmite rapid informații criptate --- fișiere și text simplu -- direct către oricine.
+
+Bitwarden oferă planurile Echipe și Organizație pentru companii, astfel încât să puteți partaja în siguranță parolele cu colegii.
+
+De ce să alegeți Bitwarden:
+
+Criptare de clasă mondială
+Parolele sunt protejate cu criptare avansată completă (AES-256 bit, hashtag experimentat și PBKDF2 SHA-256), astfel încât datele dvs. să rămână sigure și private.
+
+Generator de parole încorporat
+Generează parole puternice, unice și aleatorii pe baza cerințelor de securitate a fiecărui site web pe care îl frecventați.
+
+Traducere în mai multe limbi
+Bitwarden este deja tradus în 40 de limbi și numărul lor crește, datorită comunității noastre mondiale.
+
+Aplicații multi-platformă
+Asigură și partajează date sensibile din seiful Bitwarden de pe orice browser, dispozitiv mobil sau sistem de operare desktop și multe altele.</value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">

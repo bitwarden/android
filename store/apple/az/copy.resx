@@ -117,63 +117,55 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Title" xml:space="preserve">
-    <value>Bitwarden adgangskodemanager</value>
+  <data name="Name" xml:space="preserve">
+    <value>Bitwarden Şifrə Meneceri</value>
     <comment>Max 30 characters</comment>
   </data>
-  <data name="ShortDescription" xml:space="preserve">
-    <value>Bitwarden er en login- og adgangskodemanager, som sikrer dine informationer.</value>
-    <comment>Max 80 characters</comment>
-  </data>
-  <data name="FullDesciption" xml:space="preserve">
-    <value>Bitwarden, Inc. er moderselskab for 8bit Solutions LLC.
+  <data name="Description" xml:space="preserve">
+    <value>Bitwarden, Inc., 8bit Solutions LLC-nin ana şirkətidir.
 
-UDNÆVNT BEDSTE PASSWORD MANAGER AF THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET OG FLERE.
+THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET VƏ BİR ÇOXUNA GÖRƏ ƏN YAXŞI ŞİFRƏ MENECERİDİR.
 
-Administrér, gem, sikr og del adgangskoder ubegrænset på tværs af enheder hvor som helst. Bitwarden leverer open source adgangskodeadministrationsløsninger til alle, hvad enten det er hjemme, på arbejdspladsen eller på farten.
+Hər yerdən limitsiz cihazda limitsiz şifrəni idarə edin, saxlayın, qoruyun və paylaşın. Bitwarden evdə, işdə və ya yolda hər kəsə açıq mənbəli şifrə idarəetmə həllərini təqdim edir.
 
-Generér stærke, unikke og tilfældige adgangskoder baseret på sikkerhedskrav til hvert websted, du besøger.
+Çox istifadə etdiyiniz hər veb sayt üçün təhlükəsizlik tələblərinə görə güclü, unikal və təsadüfi şifrələr yaradın.
 
-Bitwarden Send overfører hurtigt krypterede oplysninger --- filer og almindelig tekst - direkte til enhver.
+Bitwarden Send şifrələnmiş məlumatların (fayl və sadə mətnləri) birbaşa və sürətli göndərilməsini təmin edir.
 
-Bitwarden tilbyder Teams og Enterprise-planer for virksomheder, så du sikkert kan dele adgangskoder med kolleger.
+Bitwarden, şifrələri iş yoldaşlarınızla təhlükəsiz paylaşa bilməyiniz üçün şirkətlərə Teams və Enterprise planları təklif edir.
 
-Hvorfor vælge Bitwarden:
+Nəyə görə Bitwarden-i seçməliyik:
 
-Kryptering i verdensklasse
-Adgangskoder er beskyttet med avanceret end-to-end-kryptering (AES-256 bit, saltet hashtag og PBKDF2 SHA-256), så dine data forbliver sikre og private.
+Yüksək səviyyə şifrələmə
+Şifrələriniz qabaqcıl ucdan-uca şifrələmə (AES-256 bit, salted hashtag və PBKDF2 SHA-256) ilə qorunur, beləcə verilənlərinizin təhlükəsiz və gizli qalmasını təmin edir.
 
-Indbygget adgangskodegenerator
-Generér stærke, unikke og tilfældige adgangskoder baseret på sikkerhedskrav til hvert websted, du besøger.
+Daxili şifrə yaradıcı
+Çox istifadə etdiyiniz hər veb sayt üçün təhlükəsizlik tələblərinə görə güclü, unikal və təsadüfi şifrələr yaradın.
 
-Globale oversættelser
-Bitwarden findes på 40 sprog, og flere kommer til, takket være vores globale fællesskab.
+Qlobal tərcümələr
+Bitwarden tərcümələri 40 dildə mövcuddur və qlobal cəmiyyətimiz sayəsində böyüməyə davam edir.
 
-Applikationer på tværs af platforme
-Beskyt og del følsomme data i din Bitwarden boks fra enhver browser, mobilenhed eller desktop OS og mere.</value>
+Çarpaz platform tətbiqləri
+Bitwarden anbarındakı həssas verilənləri, istənilən səyyahdan, mobil cihazdan və ya masaüstü əməliyyat sistemindən və daha çoxundan qoruyub paylaşın.</value>
   <comment>Max 4000 characters</comment>
   </data>
-  <data name="FeatureGraphic" xml:space="preserve">
-    <value>En sikker og gratis adgangskodemanager til alle dine enheder</value>
+  <data name="Keywords" xml:space="preserve">
+    <value>bit warden,8bit,şifrə,ödənişsiz şifrə meceneri,şifrə meneceri,giriş meneceri</value>
+    <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Håndtér alle din logins og adgangskoder fra en sikker boks</value>
+    <value>Bütün giriş məlumatlarınızı və şifrələrinizi təhlükəsiz bir anbardan idarə edin</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Opret stærke, tilfældige og sikre adgangskoder automatisk</value>
+    <value>Güclü, təsadüfi və etibarlı şifrələrin avtomatik yaradılması</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Beskyt din boks med fingeraftryk, pinkode eller hovedadgangskode</value>
+    <value>Anbarınızı Touch ID, PIN kod və ana şifrə ilə qoruyun</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Autoudfyld hurtigt logins i din webbrowser og andre apps</value>
+    <value>Safari, Chrome və yüzlərlə digər tətbiqdə giriş məlumatlarının avto-doldurulması</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Synkroniser, og få adgang til din boks fra flere enheder 
-
-- Telefon
-- Tablet
-- Desktop
-- Web</value>
+    <value>Anbarınıza bir neçə cihazdan eyniləşdirərək müraciət edin</value>
   </data>
 </root>
