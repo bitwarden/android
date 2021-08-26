@@ -10,36 +10,11 @@ jobs:
   crowdin-sync:
     name: Autosync
     runs-on: ubuntu-20.04
-    env:
-      CROWDIN_BASE_URL: "https://api.crowdin.com/api/v2/projects"
-      CROWDIN_PROJECT_ID: "269690"
+    env: 
+      _CROWDIN_PROJECT_ID: "269690"
     steps:
       - name: Checkout repo
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f  # v2.3.4
-
-      - name: Setup git config
-        run: |
-          git config user.name "github-actions"
-          git config user.email "<>"
-
-      - name: Get Crowndin Sync Branch
-        id: branch
-        run: |
-          BRANCH_NAME=crowdin-auto-sync
-          BRANCH_EXISTS=true
-
-          git fetch -a
-          git switch master
-          if [ $(git branch -a | egrep "remotes/origin/${BRANCH_NAME}$" | wc -l) -eq 0 ]; then
-            BRANCH_EXISTS=false
-            git switch -c $BRANCH_NAME
-          else
-            git switch $BRANCH_NAME
-          fi
-          git branch
-
-          echo "::set-output name=branch-exists::$BRANCH_EXISTS"
-          echo "::set-output name=branch-name::$BRANCH_NAME"
 
       - name: Login to Azure
         uses: Azure/login@77f1b2e3fb80c0e8645114159d17008b8a2e475a
@@ -53,135 +28,21 @@ jobs:
           keyvault: "bitwarden-prod-kv"
           secrets: "crowdin-api-token"
 
-      - name: Get Crowdin master branch id
-        id: crowdin-master-branch
+      - name: Download translations
+        uses: crowdin/github-action@e39093fd75daae7859c68eded4b43d42ec78d8ea
         env:
-          CROWDIN_API_TOKEN: ${{ steps.retrieve-secrets.outputs.crowdin-api-token }}
-        run: |
-          # Step 1: GET master branchId
-          BRANCH_ID=$(
-              curl -s -H "Authorization: Bearer $CROWDIN_API_TOKEN" \
-              $CROWDIN_BASE_URL/$CROWDIN_PROJECT_ID/branches | jq -r '.data[0].data.id'
-          )
-          echo "[*] Crowin master branch id: $BRANCH_ID"
-          echo "::set-output name=id::$BRANCH_ID"
-
-      - name: Get Crowdin build id
-        id: crowdin-build
-        env:
-          CROWDIN_API_TOKEN: ${{ steps.retrieve-secrets.outputs.crowdin-api-token }}
-          CROWDIN_MASTER_BRANCH_ID: ${{ steps.crowdin-master-branch.outputs.id }}
-        run: |
-          # Step 2: POST Build the translations and get store build id
-          BUILD_ID=$(
-              curl -X POST -s \
-              -H "Authorization: Bearer $CROWDIN_API_TOKEN" \
-              -H "Content-Type: application/json" \
-              $CROWDIN_BASE_URL/$CROWDIN_PROJECT_ID/translations/builds \
-              -d "{\"branchId\": $CROWDIN_MASTER_BRANCH_ID}" | jq -r '.data.id'
-          )
-          echo "[*] Crowin translations build id: $BRANCH_ID"
-          echo "::set-output name=id::$BUILD_ID"
-
-      - name: Wait for Crowdin build to finish
-        env:
-          MAX_TRIES: 12
-          CROWDIN_API_TOKEN: ${{ steps.retrieve-secrets.outputs.crowdin-api-token }}
-          CROWDIN_BUILD_ID: ${{ steps.crowdin-build.outputs.id }}
-        run: |
-          for try in {1..$MAX_TRIES}; do
-              BRANCH_STATUS=$(
-                  curl -s -H "Authorization: Bearer $CROWDIN_API_TOKEN" \
-                  $CROWDIN_BASE_URL/$CROWDIN_PROJECT_ID/translations/builds/$CROWDIN_BUILD_ID | jq -r '.data.status'
-              )
-              echo "[*] Build status: $BRANCH_STATUS"
-              if [[ "$BRANCH_STATUS" == "finished" ]]; then break; fi
-              if [[ "$try" == "$MAX_TRIES" ]]; then
-                  echo "[!] Exceeded tries: $try"
-                  exit 1
-              else
-                  sleep 5
-              fi
-          done
-
-      - name: Get Crowdin download URL
-        id: crowdin-download-url
-        env:
-          CROWDIN_API_TOKEN: ${{ steps.retrieve-secrets.outputs.crowdin-api-token }}
-          CROWDIN_BUILD_ID: ${{ steps.crowdin-build.outputs.id }}
-        run: |
-          # Step 4: when build is finished, get download url
-          DOWNLOAD_URL=$(
-              curl -s -H "Authorization: Bearer $CROWDIN_API_TOKEN" \
-              $CROWDIN_BASE_URL/$CROWDIN_PROJECT_ID/translations/builds/$CROWDIN_BUILD_ID/download | jq -r '.data.url'
-          )
-          echo "[*] Crowin translations download url: $DOWNLOAD_URL"
-          echo "::set-output name=value::$DOWNLOAD_URL"
-
-      - name: Download Crowdin translations
-        env:
-          CROWDIN_API_TOKEN: ${{ steps.retrieve-secrets.outputs.crowdin-api-token }}
-          CROWDIN_DOWNLOAD_URL: ${{ steps.crowdin-download-url.outputs.value }}
-          SAVE_FILE: "translations.zip"
-        run: |
-          # Step 5: download the translations via the download url
-          curl -s $CROWDIN_DOWNLOAD_URL --output $SAVE_FILE
-          echo "[*]    Saved to: $SAVE_FILE"
-          unzip -o $SAVE_FILE
-          rm $SAVE_FILE
-
-      - name: Check changes
-        id: files-changed
-        env:
-          BRANCH_NAME: ${{ steps.branch.outputs.branch-name }}
-          BRANCH_EXISTS: ${{ steps.branch.outputs.branch-exists }}
-        run: |
-          DIFF_BRANCH=master
-          if [[ "$BRANCH_EXISTS" == "true" ]]; then
-            DIFF_BRANCH=$BRANCH_NAME
-          fi
-
-          DIFF_LEN=$(git diff origin/${DIFF_BRANCH} | wc -l | xargs)
-          echo "[*] git diff lines: ${DIFF_LEN}"
-          echo "::set-output name=num::$DIFF_LEN"
-
-      - name: Commit changes
-        env:
-          BRANCH_NAME: ${{ steps.branch.outputs.branch-name }}
-          BRANCH_EXISTS: ${{ steps.branch.outputs.branch-exists }}
-          DIFF_BRANCH: master
-          DIFF_LEN: ${{ steps.files-changed.outputs.num }}
-        run: |
-          echo "=====Translations Changed====="
-          git diff --name-only origin/${DIFF_BRANCH}
-          echo "=============================="
-
-          if [ "$DIFF_LEN" != "0" ]; then
-            echo "[*] Adding new translations"
-            git add .
-            echo "[*] Committing"
-            git commit -m "Autosync Crowdin translations"
-            echo "[*] Pushing"
-            if [ "$BRANCH_EXISTS" == "false" ]; then
-              git push -u origin $BRANCH_NAME
-            else
-              git push
-            fi
-          else
-            echo "[*] No new docs"
-          fi
-
-      - name: Create/Update PR
-        if: ${{ steps.files-changed.outputs.num }} != 0
-        env:
-          BRANCH_NAME: ${{ steps.branch.outputs.branch-name }}
-          BRANCH_EXISTS: ${{ steps.branch.outputs.branch-exists }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          if [ "$BRANCH_EXISTS" == "false" ]; then
-            echo "[*] Creating PR"
-            gh pr create --title "Autosync Crowdin Translations" \
-            --body "Autosync the updated translations"
-          else
-            echo "[*] Existing PR updated"
-          fi
+          CROWDIN_API_TOKEN: ${{ steps.retrieve-secrets.outputs.crowdin-api-token }}
+        with:
+          config: crowdin.yml
+          crowdin_branch_name: master
+          upload_sources: false
+          upload_translations: false
+          download_translations: true
+          github_user_name: "github-actions"
+          github_user_email: "<>"
+          commit_message: "Autosync the updated translations"
+          localization_branch_name: crowdin-auto-sync
+          create_pull_request: true
+          pull_request_title: "Autosync Crowdin Translations"
+          pull_request_body: "Autosync the updated translations"
