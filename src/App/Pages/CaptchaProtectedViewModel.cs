@@ -37,26 +37,18 @@ namespace Bit.App.Pages
             bool cancelled = false;
             try
             {
-                authResult = await WebAuthenticator.AuthenticateAsync(new Uri(url),
-                    new Uri(callbackUri));
+                var options = new WebAuthenticatorOptions()
+                {
+                    Url = new Uri(url),
+                    CallbackUrl = new Uri(callbackUri),
+                    PrefersEphemeralWebBrowserSession = true
+                };
+                authResult = await WebAuthenticator.AuthenticateAsync(options);
             }
             catch (TaskCanceledException)
             {
                 await deviceActionService.HideLoadingAsync();
                 cancelled = true;
-            }
-            catch (Exception e)
-            {
-                // WebAuthenticator throws NSErrorException if iOS flow is cancelled - by setting cancelled to true
-                // here we maintain the appearance of a clean cancellation (we don't want to do this across the board
-                // because we still want to present legitimate errors).  If/when this is fixed, we can remove this
-                // particular catch block (catching taskCanceledException above must remain)
-                // https://github.com/xamarin/Essentials/issues/1240
-                if (Device.RuntimePlatform == Device.iOS)
-                {
-                    await deviceActionService.HideLoadingAsync();
-                    cancelled = true;
-                }
             }
 
             if (cancelled == false && authResult != null &&

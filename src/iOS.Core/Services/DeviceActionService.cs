@@ -88,7 +88,8 @@ namespace Bit.iOS.Core.Services
 
             var loadingIndicator = new UIActivityIndicatorView(new CGRect(10, 5, 50, 50));
             loadingIndicator.HidesWhenStopped = true;
-            loadingIndicator.ActivityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray;
+            loadingIndicator.ActivityIndicatorViewStyle = ThemeHelpers.LightTheme ? UIActivityIndicatorViewStyle.Gray :
+                UIActivityIndicatorViewStyle.White;
             loadingIndicator.StartAnimating();
 
             _progressAlert = UIAlertController.Create(null, text, UIAlertControllerStyle.Alert);
@@ -444,6 +445,27 @@ namespace Bit.iOS.Core.Services
         public void CloseMainApp()
         {
             throw new NotImplementedException();
+        }
+
+        public bool SupportsFido2()
+        {
+            // FIDO2 WebAuthn supported on 13.3+
+            var versionParts = UIDevice.CurrentDevice.SystemVersion.Split('.');
+            if (versionParts.Length > 0 && int.TryParse(versionParts[0], out var version))
+            {
+                if (version == 13)
+                {
+                    if (versionParts.Length > 1 && int.TryParse(versionParts[1], out var minorVersion))
+                    {
+                        return minorVersion >= 3;
+                    }
+                }
+                else if (version > 13)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         private void ImagePicker_FinishedPickingMedia(object sender, UIImagePickerMediaPickedEventArgs e)
