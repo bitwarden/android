@@ -123,43 +123,28 @@ namespace Bit.App.Pages
                       "domain_hint=" + Uri.EscapeDataString(OrgIdentifier);
 
             WebAuthenticatorResult authResult = null;
-            bool cancelled = false;
             try
             {
                 authResult = await WebAuthenticator.AuthenticateAsync(new Uri(url),
                     new Uri(redirectUri));
             }
-            catch (TaskCanceledException taskCanceledException)
+            catch (TaskCanceledException)
+            {
+                // user canceled
+                await _deviceActionService.HideLoadingAsync();
+                return;
+            }
+
+            var code = GetResultCode(authResult, state);
+            if (!string.IsNullOrEmpty(code))
+            {
+                await LogIn(code, codeVerifier, redirectUri);
+            }
+            else
             {
                 await _deviceActionService.HideLoadingAsync();
-                cancelled = true;
-            }
-            catch (Exception e)
-            {
-                // WebAuthenticator throws NSErrorException if iOS flow is cancelled - by setting cancelled to true
-                // here we maintain the appearance of a clean cancellation (we don't want to do this across the board
-                // because we still want to present legitimate errors).  If/when this is fixed, we can remove this
-                // particular catch block (catching taskCanceledException above must remain)
-                // https://github.com/xamarin/Essentials/issues/1240
-                if (Device.RuntimePlatform == Device.iOS)
-                {
-                    await _deviceActionService.HideLoadingAsync();
-                    cancelled = true;
-                }
-            }
-            if (!cancelled)
-            {
-                var code = GetResultCode(authResult, state);
-                if (!string.IsNullOrEmpty(code))
-                {
-                    await LogIn(code, codeVerifier, redirectUri);
-                }
-                else
-                {
-                    await _deviceActionService.HideLoadingAsync();
-                    await _platformUtilsService.ShowDialogAsync(AppResources.LoginSsoError,
-                        AppResources.AnErrorHasOccurred);
-                }
+                await _platformUtilsService.ShowDialogAsync(AppResources.LoginSsoError,
+                    AppResources.AnErrorHasOccurred);
             }
         }
 

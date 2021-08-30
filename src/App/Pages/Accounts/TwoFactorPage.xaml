@@ -102,6 +102,30 @@
                     </StackLayout>
                 </StackLayout>
             </StackLayout>
+            <StackLayout Spacing="20" Padding="0" IsVisible="{Binding Fido2Method, Mode=OneWay}">
+                <Label
+                    Text="{u:I18n Fido2Instruction}"
+                    Margin="10, 20, 10, 0"
+                    HorizontalTextAlignment="Center" />
+                <Image
+                    Source="yubikey.png"
+                    Margin="10, 0"
+                    WidthRequest="266"
+                    HeightRequest="160"
+                    HorizontalOptions="Center" />
+                <StackLayout StyleClass="box">
+                    <StackLayout StyleClass="box-row, box-row-switch">
+                        <Label
+                            Text="{u:I18n RememberMe}"
+                            StyleClass="box-label-regular"
+                            HorizontalOptions="StartAndExpand" />
+                        <Switch
+                            IsToggled="{Binding Remember}"
+                            StyleClass="box-value"
+                            HorizontalOptions="End" />
+                    </StackLayout>
+                </StackLayout>
+            </StackLayout>
             <StackLayout Spacing="0" Padding="0" IsVisible="{Binding DuoMethod, Mode=OneWay}"
                          VerticalOptions="FillAndExpand">
                 <controls:HybridWebView

@@ -137,8 +137,6 @@
                                     AutomationProperties.Name="{u:I18n File}"
                                     Grid.Column="0">
                                     <VisualStateManager.VisualStateGroups>
-                                        <!-- Rider users, if the x:Name values below are red, it's a known issue: -->
-                                        <!-- https://youtrack.jetbrains.com/issue/RSRP-479388 -->
                                         <VisualStateGroup x:Name="CommonStates">
                                             <VisualState x:Name="Normal">
                                                 <VisualState.Setters>
@@ -163,8 +161,6 @@
                                     AutomationProperties.Name="{u:I18n Text}"
                                     Grid.Column="1">
                                     <VisualStateManager.VisualStateGroups>
-                                        <!-- Rider users, if the x:Name values below are red, it's a known issue: -->
-                                        <!-- https://youtrack.jetbrains.com/issue/RSRP-479388 -->
                                         <VisualStateGroup x:Name="CommonStates">
                                             <VisualState x:Name="Normal">
                                                 <VisualState.Setters>

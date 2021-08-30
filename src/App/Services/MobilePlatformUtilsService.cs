@@ -129,9 +129,9 @@ namespace Bit.App.Services
             return true;
         }
 
-        public bool SupportsU2f()
+        public bool SupportsFido2()
         {
-            return false;
+            return _deviceActionService.SupportsFido2();
         }
 
         public void ShowToast(string type, string title, string text, Dictionary<string, object> options = null)

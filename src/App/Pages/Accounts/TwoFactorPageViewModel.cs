@@ -7,9 +7,13 @@ using Bit.Core.Exceptions;
 using Bit.Core.Models.Request;
 using Bit.Core.Utilities;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Bit.App.Utilities;
+using Newtonsoft.Json;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -27,7 +31,6 @@ namespace Bit.App.Pages
         private readonly IBroadcasterService _broadcasterService;
         private readonly IStateService _stateService;
 
-        private bool _u2fSupported = false;
         private TwoFactorProviderType? _selectedProviderType;
         private string _totpInstruction;
         private string _webVaultUrl = "https://vault.bitwarden.com";
@@ -65,6 +68,8 @@ namespace Bit.App.Pages
         public bool DuoMethod => SelectedProviderType == TwoFactorProviderType.Duo ||
             SelectedProviderType == TwoFactorProviderType.OrganizationDuo;
 
+        public bool Fido2Method => SelectedProviderType == TwoFactorProviderType.Fido2WebAuthn;
+
         public bool YubikeyMethod => SelectedProviderType == TwoFactorProviderType.YubiKey;
 
         public bool AuthenticatorMethod => SelectedProviderType == TwoFactorProviderType.Authenticator;
@@ -73,7 +78,7 @@ namespace Bit.App.Pages
 
         public bool TotpMethod => AuthenticatorMethod || EmailMethod;
 
-        public bool ShowTryAgain => YubikeyMethod && Device.RuntimePlatform == Device.iOS;
+        public bool ShowTryAgain => (YubikeyMethod && Device.RuntimePlatform == Device.iOS) || Fido2Method;
 
         public bool ShowContinue
         {
@@ -97,6 +102,7 @@ namespace Bit.App.Pages
             {
                 nameof(EmailMethod),
                 nameof(DuoMethod),
+                nameof(Fido2Method),
                 nameof(YubikeyMethod),
                 nameof(AuthenticatorMethod),
                 nameof(TotpMethod),
@@ -128,10 +134,7 @@ namespace Bit.App.Pages
                 _webVaultUrl = _environmentService.WebVaultUrl;
             }
 
-            // TODO: init U2F
-            _u2fSupported = false;
-
-            SelectedProviderType = _authService.GetDefaultTwoFactorProvider(_u2fSupported);
+            SelectedProviderType = _authService.GetDefaultTwoFactorProvider(_platformUtilsService.SupportsFido2());
             Load();
         }
 
@@ -147,8 +150,8 @@ namespace Bit.App.Pages
             var providerData = _authService.TwoFactorProvidersData[SelectedProviderType.Value];
             switch (SelectedProviderType.Value)
             {
-                case TwoFactorProviderType.U2f:
-                    // TODO
+                case TwoFactorProviderType.Fido2WebAuthn:
+                    Fido2AuthenticateAsync(providerData);
                     break;
                 case TwoFactorProviderType.YubiKey:
                     _messagingService.Send("listenYubiKeyOTP", true);
@@ -183,10 +186,73 @@ namespace Bit.App.Pages
             {
                 _messagingService.Send("listenYubiKeyOTP", false);
             }
-            ShowContinue = !(SelectedProviderType == null || DuoMethod);
+            ShowContinue = !(SelectedProviderType == null || DuoMethod || Fido2Method);
         }
 
-        public async Task SubmitAsync()
+        public async Task Fido2AuthenticateAsync(Dictionary<string, object> providerData = null)
+        {
+            await _deviceActionService.ShowLoadingAsync(AppResources.Validating);
+
+            if (providerData == null)
+            {
+                providerData = _authService.TwoFactorProvidersData[TwoFactorProviderType.Fido2WebAuthn];
+            }
+
+            var callbackUri = "bitwarden://webauthn-callback";
+            var data = AppHelpers.EncodeDataParameter(new
+            {
+                callbackUri = callbackUri,
+                data = JsonConvert.SerializeObject(providerData),
+                btnText = AppResources.Fido2AuthenticateWebAuthn,
+            });
+
+            var url = _webVaultUrl + "/webauthn-mobile-connector.html?" + "data=" + data +
+                      "&parent=" + Uri.EscapeDataString(callbackUri) + "&v=2";
+
+            WebAuthenticatorResult authResult = null;
+            try
+            {
+                var options = new WebAuthenticatorOptions
+                {
+                    Url = new Uri(url),
+                    CallbackUrl = new Uri(callbackUri),
+                    PrefersEphemeralWebBrowserSession = true,
+                };
+                authResult = await WebAuthenticator.AuthenticateAsync(options);
+            }
+            catch (TaskCanceledException)
+            {
+                // user canceled
+                await _deviceActionService.HideLoadingAsync();
+                return;
+            }
+
+            string response = null;
+            if (authResult != null && authResult.Properties.TryGetValue("data", out var resultData))
+            {
+                response = Uri.UnescapeDataString(resultData);
+            }
+            if (!string.IsNullOrWhiteSpace(response))
+            {
+                Token = response;
+                await SubmitAsync(false);
+            }
+            else
+            {
+                await _deviceActionService.HideLoadingAsync();
+                if (authResult != null && authResult.Properties.TryGetValue("error", out var resultError))
+                {
+                    await _platformUtilsService.ShowDialogAsync(resultError, AppResources.AnErrorHasOccurred);
+                }
+                else
+                {
+                    await _platformUtilsService.ShowDialogAsync(AppResources.Fido2SomethingWentWrong,
+                        AppResources.AnErrorHasOccurred);
+                }
+            }
+        }
+
+        public async Task SubmitAsync(bool showLoading = true)
         {
             if (SelectedProviderType == null)
             {
@@ -213,7 +279,10 @@ namespace Bit.App.Pages
 
             try
             {
-                await _deviceActionService.ShowLoadingAsync(AppResources.Validating);
+                if (showLoading)
+                {
+                    await _deviceActionService.ShowLoadingAsync(AppResources.Validating);
+                }
                 var result = await _authService.LogInTwoFactorAsync(SelectedProviderType.Value, Token, Remember);
                 var task = Task.Run(() => _syncService.FullSyncAsync(true));
                 await _deviceActionService.HideLoadingAsync();
