@@ -34,7 +34,6 @@ namespace Bit.App.Pages
         private bool _showPassword;
         private string _email;
         private string _masterPassword;
-        private bool _loginEnabled = true;
 
         public LoginPageViewModel()
         {
@@ -75,16 +74,6 @@ namespace Bit.App.Pages
             set => SetProperty(ref _masterPassword, value);
         }
 
-        public bool LoginEnabled {
-            get => _loginEnabled;
-            set => SetProperty(ref _loginEnabled, value);
-        }
-        public bool Loading
-        {
-            get => !LoginEnabled;
-            set => LoginEnabled = !value;
-        }
-
         public Command LogInCommand { get; }
         public Command TogglePasswordCommand { get; }
         public string ShowPasswordIcon => ShowPassword ? "" : "";
@@ -109,7 +98,7 @@ namespace Bit.App.Pages
             RememberEmail = rememberEmail.GetValueOrDefault(true);
         }
 
-        public async Task LogInAsync()
+        public async Task LogInAsync(bool showLoading = true)
         {
             if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
             {
@@ -143,10 +132,9 @@ namespace Bit.App.Pages
             ShowPassword = false;
             try
             {
-                if (!Loading)
+                if (showLoading)
                 {
                     await _deviceActionService.ShowLoadingAsync(AppResources.LoggingIn);
-                    Loading = true;
                 }
 
                 var response = await _authService.LogInAsync(Email, MasterPassword, _captchaToken);
@@ -159,24 +147,20 @@ namespace Bit.App.Pages
                     await _storageService.RemoveAsync(Keys_RememberedEmail);
                 }
                 await AppHelpers.ResetInvalidUnlockAttemptsAsync();
-                await _deviceActionService.HideLoadingAsync();
 
                 if (response.CaptchaNeeded)
                 {
                     if (await HandleCaptchaAsync(response.CaptchaSiteKey))
                     {
-                        await LogInAsync();
+                        await LogInAsync(false);
                         _captchaToken = null;
-                        return;
                     }
-                    else
-                    {
-                        Loading = false;
-                        return;
-                    }
+                    return;
                 }
                 MasterPassword = string.Empty;
                 _captchaToken = null;
+
+                await _deviceActionService.HideLoadingAsync();
 
                 if (response.TwoFactor)
                 {
@@ -207,7 +191,6 @@ namespace Bit.App.Pages
                         AppResources.AnErrorHasOccurred);
                 }
             }
-            Loading = false;
         }
 
         public void TogglePassword()

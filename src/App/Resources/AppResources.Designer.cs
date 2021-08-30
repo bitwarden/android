@@ -3578,5 +3578,35 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("UpdateMasterPasswordWarning", resourceCulture);
             }
         }
+        
+        public static string Fido2Title {
+            get {
+                return ResourceManager.GetString("Fido2Title", resourceCulture);
+            }
+        }
+        
+        public static string Fido2Instruction {
+            get {
+                return ResourceManager.GetString("Fido2Instruction", resourceCulture);
+            }
+        }
+        
+        public static string Fido2Desc {
+            get {
+                return ResourceManager.GetString("Fido2Desc", resourceCulture);
+            }
+        }
+        
+        public static string Fido2AuthenticateWebAuthn {
+            get {
+                return ResourceManager.GetString("Fido2AuthenticateWebAuthn", resourceCulture);
+            }
+        }
+        
+        public static string Fido2SomethingWentWrong {
+            get {
+                return ResourceManager.GetString("Fido2SomethingWentWrong", resourceCulture);
+            }
+        }
     }
 }

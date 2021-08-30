@@ -22,7 +22,6 @@ namespace Bit.App.Pages
         private readonly IPlatformUtilsService _platformUtilsService;
         private bool _showPassword;
         private bool _acceptPolicies;
-        private bool _submitEnabled = true;
 
         public RegisterPageViewModel()
         {
@@ -60,16 +59,6 @@ namespace Bit.App.Pages
             get => _acceptPolicies;
             set => SetProperty(ref _acceptPolicies, value);
         }
-        public bool SubmitEnabled
-        {
-            get => _submitEnabled;
-            set => SetProperty(ref _submitEnabled, value);
-        }
-        public bool Loading
-        {
-            get => !SubmitEnabled;
-            set => SubmitEnabled = !value;
-        }
         
         public Thickness SwitchMargin
         {
@@ -96,7 +85,7 @@ namespace Bit.App.Pages
         protected override IDeviceActionService deviceActionService => _deviceActionService;
         protected override IPlatformUtilsService platformUtilsService => _platformUtilsService;
 
-        public async Task SubmitAsync()
+        public async Task SubmitAsync(bool showLoading = true)
         {
             if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
             {
@@ -143,6 +132,11 @@ namespace Bit.App.Pages
             }
 
             // TODO: Password strength check?
+            
+            if (showLoading)
+            {
+                await _deviceActionService.ShowLoadingAsync(AppResources.CreatingAccount);
+            }
 
             Name = string.IsNullOrWhiteSpace(Name) ? null : Name;
             Email = Email.Trim().ToLower();
@@ -172,14 +166,8 @@ namespace Bit.App.Pages
 
             try
             {
-                if (!Loading)
-                {
-                    await _deviceActionService.ShowLoadingAsync(AppResources.CreatingAccount);
-                    Loading = true;
-                }
                 await _apiService.PostRegisterAsync(request);
                 await _deviceActionService.HideLoadingAsync();
-                Loading = false;
                 _platformUtilsService.ShowToast("success", null, AppResources.AccountCreated,
                     new System.Collections.Generic.Dictionary<string, object>
                     {
@@ -193,19 +181,12 @@ namespace Bit.App.Pages
                 {
                     if (await HandleCaptchaAsync(e.Error.CaptchaSiteKey))
                     {
-                        await SubmitAsync();
+                        await SubmitAsync(false);
                         _captchaToken = null;
-                        return;
                     }
-                    else
-                    {
-                        await _deviceActionService.HideLoadingAsync();
-                        Loading = false;
-                        return;
-                    };
+                    return;
                 }
                 await _deviceActionService.HideLoadingAsync();
-                Loading = false;
                 if (e?.Error != null)
                 {
                     await _platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(),

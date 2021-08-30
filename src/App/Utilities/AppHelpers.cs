@@ -8,10 +8,13 @@ using Bit.Core.Models.View;
 using Bit.Core.Utilities;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Bit.App.Models;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
+using Newtonsoft.Json;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -469,6 +472,18 @@ namespace Bit.App.Utilities
                 return true;
             }
             return false;
+        }
+
+        public static string EncodeDataParameter(object obj)
+        {
+            string EncodeMultibyte(Match match)
+            {
+                return Convert.ToChar(Convert.ToUInt32($"0x{match.Groups[1].Value}", 16)).ToString();
+            }
+
+            var escaped = Uri.EscapeDataString(JsonConvert.SerializeObject(obj));
+            var multiByteEscaped = Regex.Replace(escaped, "%([0-9A-F]{2})", EncodeMultibyte);
+            return Convert.ToBase64String(Encoding.UTF8.GetBytes(multiByteEscaped));
         }
     }
 }
