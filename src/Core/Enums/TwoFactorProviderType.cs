@@ -9,6 +9,6 @@
         U2f = 4,
         Remember = 5,
         OrganizationDuo = 6,
-        Fido2WebAuthn = 7
+        Fido2WebAuthn = 7,
     }
 }

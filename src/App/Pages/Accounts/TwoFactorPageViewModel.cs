@@ -10,9 +10,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Bit.App.Utilities;
 using Newtonsoft.Json;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -79,7 +78,7 @@ namespace Bit.App.Pages
 
         public bool TotpMethod => AuthenticatorMethod || EmailMethod;
 
-        public bool ShowTryAgain => YubikeyMethod && Device.RuntimePlatform == Device.iOS || Fido2Method;
+        public bool ShowTryAgain => (YubikeyMethod && Device.RuntimePlatform == Device.iOS) || Fido2Method;
 
         public bool ShowContinue
         {
@@ -200,7 +199,7 @@ namespace Bit.App.Pages
             }
 
             var callbackUri = "bitwarden://webauthn-callback";
-            var data = EncodeDataParameter(new
+            var data = AppHelpers.EncodeDataParameter(new
             {
                 callbackUri = callbackUri,
                 data = JsonConvert.SerializeObject(providerData),
@@ -211,47 +210,44 @@ namespace Bit.App.Pages
                       "&parent=" + Uri.EscapeDataString(callbackUri) + "&v=2";
 
             WebAuthenticatorResult authResult = null;
-            bool cancelled = false;
             try
             {
-                var options = new WebAuthenticatorOptions()
+                var options = new WebAuthenticatorOptions
                 {
                     Url = new Uri(url),
                     CallbackUrl = new Uri(callbackUri),
-                    PrefersEphemeralWebBrowserSession = true
+                    PrefersEphemeralWebBrowserSession = true,
                 };
                 authResult = await WebAuthenticator.AuthenticateAsync(options);
             }
             catch (TaskCanceledException)
             {
+                // user canceled
                 await _deviceActionService.HideLoadingAsync();
-                cancelled = true;
+                return;
             }
 
-            if (!cancelled)
+            string response = null;
+            if (authResult != null && authResult.Properties.TryGetValue("data", out var resultData))
             {
-                string response = null;
-                if (authResult != null && authResult.Properties.TryGetValue("data", out var resultData))
+                response = Uri.UnescapeDataString(resultData);
+            }
+            if (!string.IsNullOrWhiteSpace(response))
+            {
+                Token = response;
+                await SubmitAsync(false);
+            }
+            else
+            {
+                await _deviceActionService.HideLoadingAsync();
+                if (authResult != null && authResult.Properties.TryGetValue("error", out var resultError))
                 {
-                    response = Uri.UnescapeDataString(resultData);
-                }
-                if (!string.IsNullOrWhiteSpace(response))
-                {
-                    Token = response;
-                    await SubmitAsync(false);
+                    await _platformUtilsService.ShowDialogAsync(resultError, AppResources.AnErrorHasOccurred);
                 }
                 else
                 {
-                    await _deviceActionService.HideLoadingAsync();
-                    if (authResult != null && authResult.Properties.TryGetValue("error", out var resultError))
-                    {
-                        await _platformUtilsService.ShowDialogAsync(resultError, AppResources.AnErrorHasOccurred);
-                    }
-                    else
-                    {
-                        await _platformUtilsService.ShowDialogAsync(AppResources.Fido2SomethingWentWrong,
-                            AppResources.AnErrorHasOccurred);
-                    }
+                    await _platformUtilsService.ShowDialogAsync(AppResources.Fido2SomethingWentWrong,
+                        AppResources.AnErrorHasOccurred);
                 }
             }
         }
@@ -381,18 +377,6 @@ namespace Bit.App.Pages
                 await _platformUtilsService.ShowDialogAsync(AppResources.VerificationEmailNotSent);
                 return false;
             }
-        }
-        
-        private string EncodeDataParameter(object obj)
-        {
-            string EncodeMultibyte(Match match)
-            {
-                return Convert.ToChar(Convert.ToUInt32($"0x{match.Groups[1].Value}", 16)).ToString();
-            }
-
-            var escaped = Uri.EscapeDataString(JsonConvert.SerializeObject(obj));
-            var multiByteEscaped = Regex.Replace(escaped, "%([0-9A-F]{2})", EncodeMultibyte);
-            return Convert.ToBase64String(Encoding.UTF8.GetBytes(multiByteEscaped));
         }
     }
 }

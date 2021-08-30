@@ -1,13 +1,10 @@
 using System;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
+using Bit.App.Utilities;
 using Bit.Core.Abstractions;
-using Newtonsoft.Json;
 using Xamarin.Essentials;
-using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
@@ -22,7 +19,7 @@ namespace Bit.App.Pages
         protected async Task<bool> HandleCaptchaAsync(string CaptchaSiteKey)
         {
             var callbackUri = "bitwarden://captcha-callback";
-            var data = EncodeDataParameter(new
+            var data = AppHelpers.EncodeDataParameter(new
             {
                 siteKey = CaptchaSiteKey,
                 locale = i18nService.Culture.TwoLetterISOLanguageName,
@@ -37,11 +34,11 @@ namespace Bit.App.Pages
             bool cancelled = false;
             try
             {
-                var options = new WebAuthenticatorOptions()
+                var options = new WebAuthenticatorOptions
                 {
                     Url = new Uri(url),
                     CallbackUrl = new Uri(callbackUri),
-                    PrefersEphemeralWebBrowserSession = true
+                    PrefersEphemeralWebBrowserSession = true,
                 };
                 authResult = await WebAuthenticator.AuthenticateAsync(options);
             }
@@ -63,18 +60,5 @@ namespace Bit.App.Pages
                 return false;
             }
         }
-
-        private string EncodeDataParameter(object obj)
-        {
-            string EncodeMultibyte(Match match)
-            {
-                return Convert.ToChar(Convert.ToUInt32($"0x{match.Groups[1].Value}", 16)).ToString();
-            }
-
-            var escaped = Uri.EscapeDataString(JsonConvert.SerializeObject(obj));
-            var multiByteEscaped = Regex.Replace(escaped, "%([0-9A-F]{2})", EncodeMultibyte);
-            return Convert.ToBase64String(Encoding.UTF8.GetBytes(multiByteEscaped));
-        }
-
     }
 }

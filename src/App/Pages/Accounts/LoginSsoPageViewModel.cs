@@ -123,7 +123,6 @@ namespace Bit.App.Pages
                       "domain_hint=" + Uri.EscapeDataString(OrgIdentifier);
 
             WebAuthenticatorResult authResult = null;
-            bool cancelled = false;
             try
             {
                 authResult = await WebAuthenticator.AuthenticateAsync(new Uri(url),
@@ -131,22 +130,21 @@ namespace Bit.App.Pages
             }
             catch (TaskCanceledException)
             {
+                // user canceled
                 await _deviceActionService.HideLoadingAsync();
-                cancelled = true;
+                return;
             }
-            if (!cancelled)
+
+            var code = GetResultCode(authResult, state);
+            if (!string.IsNullOrEmpty(code))
             {
-                var code = GetResultCode(authResult, state);
-                if (!string.IsNullOrEmpty(code))
-                {
-                    await LogIn(code, codeVerifier, redirectUri);
-                }
-                else
-                {
-                    await _deviceActionService.HideLoadingAsync();
-                    await _platformUtilsService.ShowDialogAsync(AppResources.LoginSsoError,
-                        AppResources.AnErrorHasOccurred);
-                }
+                await LogIn(code, codeVerifier, redirectUri);
+            }
+            else
+            {
+                await _deviceActionService.HideLoadingAsync();
+                await _platformUtilsService.ShowDialogAsync(AppResources.LoginSsoError,
+                    AppResources.AnErrorHasOccurred);
             }
         }
 
