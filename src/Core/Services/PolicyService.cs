@@ -195,7 +195,7 @@ namespace Bit.Core.Services
                 p.OrganizationId == orgId && p.Type == PolicyType.ResetPassword && p.Enabled);
             resetPasswordPolicyOptions.AutoEnrollEnabled = GetPolicyBool(policy, "autoEnrollEnabled") ?? false;
 
-            return new Tuple<ResetPasswordPolicyOptions, bool>(resetPasswordPolicyOptions, policy?.Enabled ?? false);
+            return new Tuple<ResetPasswordPolicyOptions, bool>(resetPasswordPolicyOptions, policy != null);
         }
         
         private int? GetPolicyInt(Policy policy, string key)

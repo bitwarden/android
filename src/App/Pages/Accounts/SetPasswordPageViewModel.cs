@@ -51,7 +51,6 @@ namespace Bit.App.Pages
             ToggleConfirmPasswordCommand = new Command(ToggleConfirmPassword);
             SubmitCommand = new Command(async () => await SubmitAsync());
         }
-        
         public bool ShowPassword
         {
             get => _showPassword;

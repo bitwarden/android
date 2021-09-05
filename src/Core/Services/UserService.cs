@@ -178,7 +178,7 @@ namespace Bit.Core.Services
                 return null;
             }
 
-            return organizations.Find(o => o.Identifier == identifier);
+            return organizations.FirstOrDefault(o => o.Identifier == identifier);
         }
 
         public async Task<List<Organization>> GetAllOrganizationAsync()
