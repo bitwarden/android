@@ -202,7 +202,7 @@ namespace Bit.Core.Services
                 o.Enabled &&
                 o.Status >= OrganizationUserStatusType.Accepted &&
                 o.UsePolicies &&
-                !o.IsExemptFromPolicies &&
+                //!o.IsExemptFromPolicies &&
                 policySet.Distinct().Contains(o.Id));
         }
 
