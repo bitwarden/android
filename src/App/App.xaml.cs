@@ -309,7 +309,6 @@ namespace Bit.App
             {
                 return;
             }
-            // Will only ever be null - look to remove this in the future
             var vaultTimeout = await _storageService.GetAsync<int?>(Constants.VaultTimeoutKey);
             vaultTimeout = vaultTimeout.GetValueOrDefault(-1);
             if (vaultTimeout == 0)

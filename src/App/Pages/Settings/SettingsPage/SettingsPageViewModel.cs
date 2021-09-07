@@ -9,7 +9,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -27,6 +26,8 @@ namespace Bit.App.Pages
         private readonly ISyncService _syncService;
         private readonly IBiometricService _biometricService;
         private readonly IPolicyService _policyService;
+
+        private const int CustomVaultTimeoutValue = -100;
 
         private bool _supportsBiometric;
         private bool _pin;
@@ -46,7 +47,7 @@ namespace Bit.App.Pages
                 new KeyValuePair<string, int?>(AppResources.FourHours, 240),
                 new KeyValuePair<string, int?>(AppResources.OnRestart, -1),
                 new KeyValuePair<string, int?>(AppResources.Never, null),
-                new KeyValuePair<string, int?>(AppResources.Custom, -100),
+                new KeyValuePair<string, int?>(AppResources.Custom, CustomVaultTimeoutValue),
             };
         private List<KeyValuePair<string, string>> _vaultTimeoutActions =
             new List<KeyValuePair<string, string>>
@@ -95,7 +96,7 @@ namespace Bit.App.Pages
                 var minutes = _policyService.GetPolicyInt(_vaultTimeoutPolicy, "minutes").GetValueOrDefault();
                 _vaultTimeouts = _vaultTimeouts.Where(t =>
                     t.Value <= minutes &&
-                    (t.Value > 0 || t.Value == -100) &&
+                    (t.Value > 0 || t.Value == CustomVaultTimeoutValue) &&
                     t.Value != null).ToList();
             }
 
@@ -219,10 +220,9 @@ namespace Bit.App.Pages
             await _vaultTimeoutService.LockAsync(true, true);
         }
 
-        public async Task VaultTimeoutAsync(bool promptOptions = true, int customTimeout = 0)
+        public async Task VaultTimeoutAsync(bool promptOptions = true, int newTimeout = 0)
         {
             var oldTimeout = _vaultTimeout;
-            int? timeout2 = customTimeout;
 
             var options = _vaultTimeouts.Select(
                 o => o.Key == _vaultTimeoutDisplayValue ? $"✓ {o.Key}" : o.Key).ToArray();
@@ -237,34 +237,31 @@ namespace Bit.App.Pages
                 var cleanSelection = selection.Replace("✓ ", string.Empty);
                 var selectionOption = _vaultTimeouts.FirstOrDefault(o => o.Key == cleanSelection);
                 _vaultTimeoutDisplayValue = selectionOption.Key;
-                timeout2 = selectionOption.Value;
+                newTimeout = selectionOption.Value.GetValueOrDefault();
             }
 
             if (_vaultTimeoutPolicy != null)
             {
                 var maximumTimeout = _policyService.GetPolicyInt(_vaultTimeoutPolicy, "minutes");
 
-                if (timeout2 > maximumTimeout)
+                if (newTimeout > maximumTimeout)
                 {
                     await _platformUtilsService.ShowDialogAsync(AppResources.VaultTimeoutToLarge, AppResources.Warning);
                     var timeout = await _vaultTimeoutService.GetVaultTimeout();
-                    _vaultTimeoutDisplayValue = _vaultTimeouts.FirstOrDefault(o => o.Value == timeout).Key;
-                    if (_vaultTimeoutDisplayValue == null)
-                    {
-                        _vaultTimeoutDisplayValue = AppResources.Custom;
-                    }
+                    _vaultTimeoutDisplayValue = _vaultTimeouts.FirstOrDefault(o => o.Value == timeout).Key ??
+                                                AppResources.Custom;
                     return;
                 }
             }
 
-            await _vaultTimeoutService.SetVaultTimeoutOptionsAsync(timeout2,
+            await _vaultTimeoutService.SetVaultTimeoutOptionsAsync(newTimeout,
                 GetVaultTimeoutActionFromKey(_vaultTimeoutActionDisplayValue));
 
-            if (timeout2 != -100)
+            if (newTimeout != CustomVaultTimeoutValue)
             {
-                _vaultTimeout = timeout2.GetValueOrDefault();
+                _vaultTimeout = newTimeout;
             }
-            if (oldTimeout != timeout2)
+            if (oldTimeout != newTimeout)
             {
                 await Device.InvokeOnMainThreadAsync(BuildList);
             }
@@ -426,7 +423,6 @@ namespace Bit.App.Pages
                 securityItems.Insert(1, new SettingsPageListItem
                 {
                     Name = AppResources.Custom,
-                    ShowDateInput = true,
                     Time = TimeSpan.FromMinutes(Math.Abs((double) _vaultTimeout)),
                 });
             }

@@ -6,7 +6,6 @@
              xmlns:controls="clr-namespace:Bit.App.Controls"
              xmlns:u="clr-namespace:Bit.App.Utilities"
              x:DataType="pages:SettingsPageViewModel"
-             x:Name="settingspage"
              Title="{Binding PageTitle}">
     <ContentPage.BindingContext>
         <pages:SettingsPageViewModel />
@@ -34,9 +33,14 @@
                            VerticalOptions="CenterAndExpand"
                            TextColor="{Binding SubLabelColor}"
                            StyleClass="list-sub" />
-                    <TimePicker IsVisible="{Binding ShowDateInput}"
+                    <TimePicker IsVisible="{Binding ShowTimeInput}"
                                 Time="{Binding Time}" Format="HH:mm"
-                                PropertyChanged="OnTimePickerPropertyChanged" />
+                                PropertyChanged="OnTimePickerPropertyChanged"
+                                HorizontalOptions="End"
+                                VerticalOptions="Center"
+                                FontSize="Small"
+                                TextColor="{Binding SubLabelColor}"
+                                StyleClass="list-sub" Margin="-5" />
                 </controls:ExtendedStackLayout>
             </DataTemplate>
 
