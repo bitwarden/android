@@ -10,5 +10,7 @@
         PersonalOwnership = 5, // Disables personal vault ownership for adding/cloning items
         DisableSend = 6, // Disables the ability to create and edit Sends
         SendOptions = 7, // Sets restrictions or defaults for Bitwarden Sends
+        ResetPassword = 8, // Allows orgs to use reset password : also can enable auto-enrollment during invite flow
+        MaximumVaultTimeout = 9, // Sets the maximum allowed vault timeout
     }
 }

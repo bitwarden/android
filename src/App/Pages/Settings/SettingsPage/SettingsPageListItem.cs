@@ -11,6 +11,7 @@ namespace Bit.App.Pages
         public string Name { get; set; }
         public string SubLabel { get; set; }
         public bool SubLabelTextEnabled => SubLabel == AppResources.Enabled;
+        public string LineBreakMode => SubLabel == null ? "TailTruncation" : "";
         public Color SubLabelColor => SubLabelTextEnabled ?
             ThemeManager.GetResourceColor("SuccessColor") :
             ThemeManager.GetResourceColor("MutedColor");

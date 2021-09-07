@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bit.Core.Enums;
@@ -15,5 +16,7 @@ namespace Bit.Core.Abstractions
         Task<MasterPasswordPolicyOptions> GetMasterPasswordPolicyOptions(IEnumerable<Policy> policies = null);
         Task<bool> EvaluateMasterPassword(int passwordStrength, string newPassword,
             MasterPasswordPolicyOptions enforcedPolicyOptions);
+        Task<bool> PolicyAppliesToUser(PolicyType policyType, Func<Policy, bool> policyFilter = null);
+        int? GetPolicyInt(Policy policy, string key);
     }
 }

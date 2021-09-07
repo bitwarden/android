@@ -22,7 +22,7 @@
                 <controls:ExtendedStackLayout Orientation="Horizontal"
                              StyleClass="list-row, list-row-platform">
                     <Label Text="{Binding Name, Mode=OneWay}"
-                           LineBreakMode="TailTruncation"
+                           LineBreakMode="{Binding LineBreakMode}"
                            HorizontalOptions="StartAndExpand"
                            VerticalOptions="CenterAndExpand"
                            StyleClass="list-title"/>

@@ -2031,4 +2031,13 @@
   <data name="Fido2SomethingWentWrong" xml:space="preserve">
     <value>Something Went Wrong. Try again.</value>
   </data>
+  <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
+    <value>Your organization policies are affecting your vault timeout. Maximum allowed Vault Timeout is {0} hour(s) and {1} minute(s)</value>
+  </data>
+  <data name="VaultTimeoutToLarge" xml:space="preserve">
+    <value>Your vault timeout exceeds the restrictions set by your organization.</value>
+  </data>
+  <data name="OrganizationMax" xml:space="preserve">
+    <value>Organization Max</value>
+  </data>
 </root>

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -180,7 +181,32 @@ namespace Bit.Core.Services
             return true;
         }
 
-        private int? GetPolicyInt(Policy policy, string key)
+        public async Task<bool> PolicyAppliesToUser(PolicyType policyType, Func<Policy, bool> policyFilter = null)
+        {
+            if (policyFilter == null) {
+                policyFilter = _ => true;
+            }
+
+            var policies = await GetAll(policyType);
+            var organizations = await _userService.GetAllOrganizationAsync();
+
+            var filteredPolicies = policies.Where(p =>
+                    p.Enabled &&
+                    p.Type == policyType &&
+                    policyFilter(p))
+                .Select(p => p.OrganizationId);
+
+            var policySet = filteredPolicies.Distinct();
+
+            return organizations.Any(o =>
+                o.Enabled &&
+                o.Status >= OrganizationUserStatusType.Accepted &&
+                o.UsePolicies &&
+                !o.IsExemptFromPolicies &&
+                policySet.Distinct().Contains(o.Id));
+        }
+
+        public int? GetPolicyInt(Policy policy, string key)
         {
             if (policy.Data.ContainsKey(key))
             {
