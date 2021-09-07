@@ -24,6 +24,8 @@
 				<string>bitwarden</string>
 				<string>org-appextension-feature-password-management</string>
 			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
 			<key>CFBundleURLName</key>
 			<string>com.8bit.bitwarden.url</string>
 		</dict>
