@@ -3626,15 +3626,6 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Organization Max.
-        /// </summary>
-        public static string OrganizationMax {
-            get {
-                return ResourceManager.GetString("OrganizationMax", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Organization Identifier.
         /// </summary>
         public static string OrgIdentifier {

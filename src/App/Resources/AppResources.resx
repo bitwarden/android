@@ -2037,7 +2037,4 @@
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Your vault timeout exceeds the restrictions set by your organization.</value>
   </data>
-  <data name="OrganizationMax" xml:space="preserve">
-    <value>Organization Max</value>
-  </data>
 </root>
