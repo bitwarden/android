@@ -183,7 +183,7 @@ namespace Bit.Core.Services
             return SendAsync<UpdateTempPasswordRequest, object>(HttpMethod.Put, "/accounts/update-temp-password",
                 request, true, false);
         }
-
+        
         #endregion
 
         #region Folder APIs
@@ -408,6 +408,26 @@ namespace Bit.Core.Services
                 string.Concat("/hibp/breach?username=", username), null, true, true);
         }
 
+        #endregion
+        
+        #region Organizations APIs
+        
+        public Task<OrganizationKeysResponse> GetOrganizationKeysAsync(string id)
+        {
+            return SendAsync<object, OrganizationKeysResponse>(HttpMethod.Get, $"/organizations/{id}/keys", null, true, true);
+        }
+        
+        #endregion
+        
+        #region Organization User APIs
+
+        public Task PutOrganizationUserResetPasswordEnrollmentAsync(string orgId, string userId,
+            OrganizationUserResetPasswordEnrollmentRequest request)
+        {
+            return SendAsync<OrganizationUserResetPasswordEnrollmentRequest, object>(HttpMethod.Put,
+                $"/organizations/{orgId}/users/{userId}/reset-password-enrollment", request, true, false);
+        }
+        
         #endregion
 
         #region Helpers

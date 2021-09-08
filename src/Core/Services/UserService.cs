@@ -185,6 +185,19 @@ namespace Bit.Core.Services
             }
             return new Organization(organizations[id]);
         }
+        
+        public async Task<Organization> GetOrganizationByIdentifierAsync(string identifier)
+        {
+            var userId = await GetUserIdAsync();
+            var organizations = await GetAllOrganizationAsync();
+
+            if (organizations == null || organizations.Count == 0)
+            {
+                return null;
+            }
+
+            return organizations.FirstOrDefault(o => o.Identifier == identifier);
+        }
 
         public async Task<List<Organization>> GetAllOrganizationAsync()
         {

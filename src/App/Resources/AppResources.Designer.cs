@@ -3608,5 +3608,11 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("Fido2SomethingWentWrong", resourceCulture);
             }
         }
+        
+        public static string ResetPasswordAutoEnrollInviteWarning {
+            get {
+                return ResourceManager.GetString("ResetPasswordAutoEnrollInviteWarning", resourceCulture);
+            }
+        }
     }
 }

@@ -30,6 +30,7 @@ namespace Bit.App.Pages
 
         private bool _showPassword;
         private bool _isPolicyInEffect;
+        private bool _resetPasswordAutoEnroll;
         private string _policySummary;
         private MasterPasswordPolicyOptions _policy;
 
@@ -50,7 +51,6 @@ namespace Bit.App.Pages
             ToggleConfirmPasswordCommand = new Command(ToggleConfirmPassword);
             SubmitCommand = new Command(async () => await SubmitAsync());
         }
-
         public bool ShowPassword
         {
             get => _showPassword;
@@ -62,6 +62,12 @@ namespace Bit.App.Pages
         {
             get => _isPolicyInEffect;
             set => SetProperty(ref _isPolicyInEffect, value);
+        }
+        
+        public bool ResetPasswordAutoEnroll
+        {
+            get => _resetPasswordAutoEnroll;
+            set => SetProperty(ref _resetPasswordAutoEnroll, value);
         }
 
         public string PolicySummary
@@ -87,10 +93,17 @@ namespace Bit.App.Pages
         public Action UpdateTempPasswordAction { get; set; }
         public Action CloseAction { get; set; }
         public string OrgIdentifier { get; set; }
+        public string OrgId { get; set; }
 
         public async Task InitAsync()
         {
             await CheckPasswordPolicy();
+            
+            var org = await _userService.GetOrganizationByIdentifierAsync(OrgIdentifier);
+            OrgId = org?.Id;
+            var policyList = await _policyService.GetAll(PolicyType.ResetPassword);
+            var policyResult = _policyService.GetResetPasswordPolicyOptions(policyList, OrgId);
+            ResetPasswordAutoEnroll = policyResult.Item2 && policyResult.Item1.AutoEnrollEnabled;
         }
 
         public async Task SubmitAsync()
@@ -172,6 +185,7 @@ namespace Bit.App.Pages
             try
             {
                 await _deviceActionService.ShowLoadingAsync(AppResources.CreatingAccount);
+                // Set Password and relevant information
                 await _apiService.SetPasswordAsync(request);
                 await _userService.SetInformationAsync(await _userService.GetUserIdAsync(),
                     await _userService.GetEmailAsync(), kdf, kdfIterations);
@@ -179,6 +193,25 @@ namespace Bit.App.Pages
                 await _cryptoService.SetKeyHashAsync(localMasterPasswordHash);
                 await _cryptoService.SetEncKeyAsync(encKey.Item2.EncryptedString);
                 await _cryptoService.SetEncPrivateKeyAsync(keys.Item2.EncryptedString);
+
+                if (ResetPasswordAutoEnroll)
+                {
+                    // Grab Organization Keys
+                    var response = await _apiService.GetOrganizationKeysAsync(OrgId);
+                    var publicKey = CoreHelpers.Base64UrlDecode(response.PublicKey);
+                    // Grab user's Encryption Key and encrypt with Org Public Key
+                    var userEncKey = await _cryptoService.GetEncKeyAsync();
+                    var encryptedKey = await _cryptoService.RsaEncryptAsync(userEncKey.Key, publicKey);
+                    // Request
+                    var resetRequest = new OrganizationUserResetPasswordEnrollmentRequest
+                    {
+                        ResetPasswordKey = encryptedKey.EncryptedString
+                    };
+                    var userId = await _userService.GetUserIdAsync();
+                    // Enroll user
+                    await _apiService.PutOrganizationUserResetPasswordEnrollmentAsync(OrgId, userId, resetRequest);
+                }
+                
                 await _deviceActionService.HideLoadingAsync();
                 SetPasswordSuccessAction?.Invoke();
             }

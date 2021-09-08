@@ -16,6 +16,7 @@ namespace Bit.Core.Abstractions
         Task<KdfType?> GetKdfAsync();
         Task<int?> GetKdfIterationsAsync();
         Task<Organization> GetOrganizationAsync(string id);
+        Task<Organization> GetOrganizationByIdentifierAsync(string identifier);
         Task<string> GetSecurityStampAsync();
         Task<bool> GetEmailVerifiedAsync();
         Task<bool> GetForcePasswordReset();

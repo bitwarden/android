@@ -59,6 +59,9 @@ namespace Bit.Core.Abstractions
         Task PutDeviceTokenAsync(string identifier, DeviceTokenRequest request);
         Task PostEventsCollectAsync(IEnumerable<EventRequest> request);
         Task PutUpdateTempPasswordAsync(UpdateTempPasswordRequest request);
+        Task<OrganizationKeysResponse> GetOrganizationKeysAsync(string id);
+        Task PutOrganizationUserResetPasswordEnrollmentAsync(string orgId, string userId,
+            OrganizationUserResetPasswordEnrollmentRequest request);
 
         Task<SendResponse> GetSendAsync(string id);
         Task<SendResponse> PostSendAsync(SendRequest request);
