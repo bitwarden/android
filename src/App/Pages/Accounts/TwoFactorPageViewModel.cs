@@ -240,15 +240,8 @@ namespace Bit.App.Pages
             else
             {
                 await _deviceActionService.HideLoadingAsync();
-                if (authResult != null && authResult.Properties.TryGetValue("error", out var resultError))
-                {
-                    await _platformUtilsService.ShowDialogAsync(resultError, AppResources.AnErrorHasOccurred);
-                }
-                else
-                {
-                    await _platformUtilsService.ShowDialogAsync(AppResources.Fido2SomethingWentWrong,
+                await _platformUtilsService.ShowDialogAsync(AppResources.Fido2SomethingWentWrong,
                         AppResources.AnErrorHasOccurred);
-                }
             }
         }
 
