@@ -8,11 +8,6 @@ using System;
 using System.Threading.Tasks;
 using Bit.App.Utilities;
 using Xamarin.Forms;
-using Newtonsoft.Json;
-using System.Text;
-using Xamarin.Essentials;
-using System.Text.RegularExpressions;
-using Bit.Core.Services;
 
 namespace Bit.App.Pages
 {
@@ -29,7 +24,6 @@ namespace Bit.App.Pages
         private readonly IStateService _stateService;
         private readonly IEnvironmentService _environmentService;
         private readonly II18nService _i18nService;
-        private readonly IUserService _userService;
 
         private bool _showPassword;
         private string _email;
@@ -45,7 +39,6 @@ namespace Bit.App.Pages
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
             _i18nService = ServiceContainer.Resolve<II18nService>("i18nService");
-            _userService = ServiceContainer.Resolve<IUserService>("userService");
 
             PageTitle = AppResources.Bitwarden;
             TogglePasswordCommand = new Command(TogglePassword);
@@ -166,18 +159,16 @@ namespace Bit.App.Pages
                 {
                     StartTwoFactorAction?.Invoke();
                 }
+                else if (response.ForcePasswordReset)
+                {
+                    UpdateTempPasswordAction?.Invoke();
+                }
                 else
                 {
                     var disableFavicon = await _storageService.GetAsync<bool?>(Constants.DisableFaviconKey);
                     await _stateService.SaveAsync(Constants.DisableFaviconKey, disableFavicon.GetValueOrDefault());
                     var task = Task.Run(async () => await _syncService.FullSyncAsync(true));
                     LogInSuccessAction?.Invoke();
-                    await task.ContinueWith(async (t) => {
-                        if (await _userService.GetForcePasswordReset())
-                        {
-                            UpdateTempPasswordAction?.Invoke();
-                        }
-                    });
                 }
             }
             catch (ApiException e)

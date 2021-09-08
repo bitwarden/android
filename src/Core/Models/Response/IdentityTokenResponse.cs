@@ -20,5 +20,6 @@ namespace Bit.Core.Models.Response
         public string TwoFactorToken { get; set; }
         public KdfType Kdf { get; set; }
         public int? KdfIterations { get; set; }
+        public bool ForcePasswordReset { get; set; }
     }
 }

@@ -30,7 +30,6 @@ namespace Bit.App.Pages
         private readonly IMessagingService _messagingService;
         private readonly IBroadcasterService _broadcasterService;
         private readonly IStateService _stateService;
-        private readonly IUserService _userService;
 
         private TwoFactorProviderType? _selectedProviderType;
         private string _totpInstruction;
@@ -50,8 +49,7 @@ namespace Bit.App.Pages
             _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
-            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
-            _userService = ServiceContainer.Resolve<IUserService>("userService");
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService"); 
 
             PageTitle = AppResources.TwoStepLogin;
             SubmitCommand = new Command(async () => await SubmitAsync());
@@ -295,18 +293,15 @@ namespace Bit.App.Pages
                 {
                     StartSetPasswordAction?.Invoke();
                 }
+                else if (result.ForcePasswordReset)
+                {
+                    UpdateTempPasswordAction?.Invoke();
+                } 
                 else
                 {
                     var disableFavicon = await _storageService.GetAsync<bool?>(Constants.DisableFaviconKey);
                     await _stateService.SaveAsync(Constants.DisableFaviconKey, disableFavicon.GetValueOrDefault());
-                    if (await _userService.GetForcePasswordReset())
-                    {
-                        UpdateTempPasswordAction?.Invoke();
-                    }
-                    else
-                    {
-                        TwoFactorAuthSuccessAction?.Invoke();
-                    }
+                    TwoFactorAuthSuccessAction?.Invoke();
                 }
             }
             catch (ApiException e)

@@ -180,15 +180,7 @@ namespace Bit.App.Pages
                 await _cryptoService.SetEncKeyAsync(encKey.Item2.EncryptedString);
                 await _cryptoService.SetEncPrivateKeyAsync(keys.Item2.EncryptedString);
                 await _deviceActionService.HideLoadingAsync();
-                
-                if (await _userService.GetForcePasswordReset())
-                {
-                    UpdateTempPasswordAction?.Invoke();
-                }
-                else
-                {
-                    SetPasswordSuccessAction?.Invoke();
-                }
+                SetPasswordSuccessAction?.Invoke();
             }
             catch (ApiException e)
             {
