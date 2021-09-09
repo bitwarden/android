@@ -12,6 +12,7 @@ namespace Bit.App.Pages
         public string Name { get; set; }
         public string SubLabel { get; set; }
         public TimeSpan? Time { get; set; }
+        public bool UseFrame { get; set; }
         public bool SubLabelTextEnabled => SubLabel == AppResources.Enabled;
         public string LineBreakMode => SubLabel == null ? "TailTruncation" : "";
         public bool ShowSubLabel => SubLabel.Length != 0;

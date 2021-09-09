@@ -434,6 +434,7 @@ namespace Bit.App.Pages
                     Name = string.Format(AppResources.VaultTimeoutPolicyInEffect,
                         Math.Floor((float) maximumTimeout / 60),
                         maximumTimeout % 60),
+                    UseFrame = true,
                 });
             }
             if (_supportsBiometric || _biometric)
