@@ -101,8 +101,10 @@ namespace Bit.Droid.Accessibility
             new Browser("org.mozilla.fennec_fdroid", "mozac_browser_toolbar_url_view,url_bar_title"), // 2nd = Legacy
             new Browser("org.mozilla.firefox", "mozac_browser_toolbar_url_view,url_bar_title"), // 2nd = Legacy
             new Browser("org.mozilla.firefox_beta", "mozac_browser_toolbar_url_view,url_bar_title"), // 2nd = Legacy
-            new Browser("org.mozilla.focus", "display_url"),
-            new Browser("org.mozilla.klar", "display_url"),
+            new Browser("org.mozilla.focus", "mozac_browser_toolbar_url_view,display_url"), // 2nd = Legacy
+            new Browser("org.mozilla.focus.beta", "mozac_browser_toolbar_url_view,display_url"), // 2nd = Legacy
+            new Browser("org.mozilla.focus.nightly", "mozac_browser_toolbar_url_view,display_url"), // 2nd = Legacy
+            new Browser("org.mozilla.klar", "mozac_browser_toolbar_url_view,display_url"), // 2nd = Legacy
             new Browser("org.mozilla.reference.browser", "mozac_browser_toolbar_url_view"),
             new Browser("org.mozilla.rocket", "display_url"),
             new Browser("org.torproject.torbrowser", "mozac_browser_toolbar_url_view,url_bar_title"), // 2nd = Legacy (before v10.0.3)
