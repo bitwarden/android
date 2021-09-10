@@ -11,7 +11,7 @@
 	<key>CFBundleIdentifier</key>
 	<string>com.8bit.bitwarden</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.12.0</string>
+	<string>2.12.1</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>CFBundleIconName</key>
@@ -24,6 +24,8 @@
 				<string>bitwarden</string>
 				<string>org-appextension-feature-password-management</string>
 			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
 			<key>CFBundleURLName</key>
 			<string>com.8bit.bitwarden.url</string>
 		</dict>

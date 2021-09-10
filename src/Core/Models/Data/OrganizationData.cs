@@ -1,4 +1,5 @@
-﻿using Bit.Core.Enums;
+﻿using System.Data.Common;
+using Bit.Core.Enums;
 using Bit.Core.Models.Response;
 
 namespace Bit.Core.Models.Data
@@ -27,6 +28,7 @@ namespace Bit.Core.Models.Data
             MaxCollections = response.MaxCollections;
             MaxStorageGb = response.MaxStorageGb;
             Permissions = response.Permissions ?? new Permissions();
+            Identifier = response.Identifier;
         }
 
         public string Id { get; set; }
@@ -47,5 +49,6 @@ namespace Bit.Core.Models.Data
         public short? MaxCollections { get; set; }
         public short? MaxStorageGb { get; set; }
         public Permissions Permissions { get; set; } = new Permissions();
+        public string Identifier { get; set; }
     }
 }

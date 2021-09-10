@@ -18,5 +18,7 @@ namespace Bit.Core.Abstractions
             MasterPasswordPolicyOptions enforcedPolicyOptions);
 
         Task<bool> PolicyAppliesToUser(PolicyType policyType, Func<Policy, bool> policyFilter = null);
+        Tuple<ResetPasswordPolicyOptions, bool> GetResetPasswordPolicyOptions(IEnumerable<Policy> policies,
+            string orgId);
     }
 }
