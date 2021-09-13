@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Bit.Core;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -203,9 +204,9 @@ namespace Bit.App.Pages
         public bool ShowAttachments => Cipher.HasAttachments && (CanAccessPremium || Cipher.OrganizationId != null);
         public bool ShowTotp => IsLogin && !string.IsNullOrWhiteSpace(Cipher.Login.Totp) &&
             !string.IsNullOrWhiteSpace(TotpCodeFormatted);
-        public string ShowPasswordIcon => ShowPassword ? "" : "";
-        public string ShowCardNumberIcon => ShowCardNumber ? "" : "";
-        public string ShowCardCodeIcon => ShowCardCode ? "" : "";
+        public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
+        public string ShowCardNumberIcon => ShowCardNumber ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
+        public string ShowCardCodeIcon => ShowCardCode ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public string TotpCodeFormatted
         {
             get => _totpCodeFormatted;
@@ -742,7 +743,7 @@ namespace Bit.App.Pages
         public Command ToggleHiddenValueCommand { get; set; }
 
         public string ValueText => IsBooleanType ? (_field.Value == "true" ? "" : "") : _field.Value;
-        public string ShowHiddenValueIcon => _showHiddenValue ? "" : "";
+        public string ShowHiddenValueIcon => _showHiddenValue ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public bool IsTextType => _field.Type == Core.Enums.FieldType.Text;
         public bool IsBooleanType => _field.Type == Core.Enums.FieldType.Boolean;
         public bool IsHiddenType => _field.Type == Core.Enums.FieldType.Hidden;

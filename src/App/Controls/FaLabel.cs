@@ -12,7 +12,7 @@ namespace Bit.App.Controls
                     FontFamily = "FontAwesome";
                     break;
                 case Device.Android:
-                    FontFamily = "FontAwesome.ttf#FontAwesome";
+                    FontFamily = "Bitwarden_icon_font_v1.ttf#Bitwarden_icon_font_v1";
                     break;
             }
         }

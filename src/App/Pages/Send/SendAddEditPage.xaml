@@ -6,6 +6,7 @@
     xmlns:pages="clr-namespace:Bit.App.Pages"
     xmlns:u="clr-namespace:Bit.App.Utilities"
     xmlns:controls="clr-namespace:Bit.App.Controls"
+    xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
     x:DataType="pages:SendAddEditPageViewModel"
     x:Name="_page"
     Title="{Binding PageTitle}">
@@ -293,14 +294,14 @@
                                 Margin="0" />
                             <controls:FaButton
                                 x:Name="_btnOptionsUp"
-                                Text="&#xf077;"
+                                Text="{Binding Source={x:Static core:BitwardenIcons.ChevronUp}}"
                                 StyleClass="box-row-button"
                                 TextColor="{StaticResource PrimaryColor}"
                                 Clicked="ToggleOptions_Clicked"
                                 IsVisible="False" />
                             <controls:FaButton
                                 x:Name="_btnOptionsDown"
-                                Text="&#xf078;"
+                                Text="{Binding Source={x:Static core:BitwardenIcons.AngleDown}}"
                                 StyleClass="box-row-button"
                                 TextColor="{StaticResource PrimaryColor}"
                                 Clicked="ToggleOptions_Clicked"

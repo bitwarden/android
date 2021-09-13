@@ -6,6 +6,7 @@
     xmlns:pages="clr-namespace:Bit.App.Pages"
     xmlns:controls="clr-namespace:Bit.App.Controls"
     xmlns:u="clr-namespace:Bit.App.Utilities"
+    xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
     x:DataType="pages:HomeViewModel"
     Title="{Binding PageTitle}">
     <ContentPage.BindingContext>
@@ -17,7 +18,7 @@
     </ContentPage.ToolbarItems>
 
     <StackLayout Spacing="0" Padding="10, 5">
-        <controls:FaButton Text="&#xf013;"
+        <controls:FaButton Text="{Binding Source={x:Static core:BitwardenIcons.Cog}}"
                            StyleClass="btn-muted, btn-icon, btn-icon-platform"
                            HorizontalOptions="Start"
                            Clicked="Environment_Clicked"

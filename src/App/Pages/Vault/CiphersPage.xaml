@@ -7,6 +7,7 @@
     xmlns:controls="clr-namespace:Bit.App.Controls"
     xmlns:u="clr-namespace:Bit.App.Utilities"
     xmlns:views="clr-namespace:Bit.Core.Models.View;assembly=BitwardenCore"
+    xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
     x:DataType="pages:CiphersPageViewModel"
     x:Name="_page"
     Title="{Binding PageTitle}">
@@ -48,7 +49,7 @@
 
     <StackLayout x:Name="_mainLayout" Spacing="0" Padding="0">
         <controls:FaLabel IsVisible="{Binding ShowSearchDirection}"
-               Text="&#xf002;"
+               Text="{Binding Source={x:Static core:BitwardenIcons.Search}}"
                StyleClass="text-muted"
                FontSize="50"
                VerticalOptions="CenterAndExpand"

@@ -30,6 +30,10 @@
     <WarningLevel>3</WarningLevel>
     <AndroidSupportedAbis />
     <JavaMaximumHeapSize>1G</JavaMaximumHeapSize>
+    <AotAssemblies>false</AotAssemblies>
+    <EnableLLVM>false</EnableLLVM>
+    <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
+    <BundleAssemblies>false</BundleAssemblies>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>false</DebugSymbols>
@@ -149,7 +153,7 @@
     <Compile Include="WebAuthCallbackActivity.cs" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\FontAwesome.ttf" />
+    <AndroidAsset Include="Assets\Bitwarden_icon_font_v1.ttf" />
     <AndroidAsset Include="Assets\RobotoMono_Regular.ttf" />
     <AndroidAsset Include="Assets\MaterialIcons_Regular.ttf" />
     <None Include="8bit.keystore.enc" />
@@ -179,10 +183,10 @@
     <AndroidResource Include="Resources\drawable\login.xml" />
     <AndroidResource Include="Resources\drawable\logo.xml" />
     <AndroidResource Include="Resources\drawable\logo_white.xml" />
-    <AndroidResource Include="Resources\drawable\paper_plane.xml" />
+    <AndroidResource Include="Resources\drawable\send.xml" />
     <AndroidResource Include="Resources\drawable\pencil.xml" />
     <AndroidResource Include="Resources\drawable\plus.xml" />
-    <AndroidResource Include="Resources\drawable\refresh.xml" />
+    <AndroidResource Include="Resources\drawable\generate.xml" />
     <AndroidResource Include="Resources\drawable\search.xml" />
     <AndroidResource Include="Resources\drawable\shield.xml" />
     <AndroidResource Include="Resources\drawable-v23\splash_screen.xml" />

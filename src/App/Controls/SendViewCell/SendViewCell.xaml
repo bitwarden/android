@@ -4,6 +4,7 @@
     x:Class="Bit.App.Controls.SendViewCell"
     xmlns:controls="clr-namespace:Bit.App.Controls"
     xmlns:u="clr-namespace:Bit.App.Utilities"
+    xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
     StyleClass="list-row, list-row-platform"
     RowSpacing="0"
     ColumnSpacing="0"
@@ -67,7 +68,7 @@
             VerticalOptions="Center"
             StyleClass="list-title-icon"
             Margin="5, 0, 0, 0"
-            Text="&#xf071;"
+            Text="{Binding Source={x:Static core:BitwardenIcons.ExclamationTriangle}}"
             IsVisible="{Binding Send.Disabled, Mode=OneTime}"
             AutomationProperties.IsInAccessibleTree="True"
             AutomationProperties.Name="{u:I18n Disabled}" />
@@ -78,7 +79,7 @@
             VerticalOptions="Center"
             StyleClass="list-title-icon"
             Margin="5, 0, 0, 0"
-            Text="&#xf084;"
+            Text="{Binding Source={x:Static core:BitwardenIcons.Key}}"
             IsVisible="{Binding Send.HasPassword, Mode=OneTime}"
             AutomationProperties.IsInAccessibleTree="True"
             AutomationProperties.Name="{u:I18n Password}" />
@@ -89,7 +90,7 @@
             VerticalOptions="Center"
             StyleClass="list-title-icon"
             Margin="5, 0, 0, 0"
-            Text="&#xf05e;"
+            Text="{Binding Source={x:Static core:BitwardenIcons.Ban}}"
             IsVisible="{Binding Send.MaxAccessCountReached, Mode=OneTime}"
             AutomationProperties.IsInAccessibleTree="True"
             AutomationProperties.Name="{u:I18n MaxAccessCountReached}" />
@@ -100,7 +101,7 @@
             VerticalOptions="Center"
             StyleClass="list-title-icon"
             Margin="5, 0, 0, 0"
-            Text="&#xf017;"
+            Text="{Binding Source={x:Static core:BitwardenIcons.Clock}}"
             IsVisible="{Binding Send.Expired, Mode=OneTime}"
             AutomationProperties.IsInAccessibleTree="True"
             AutomationProperties.Name="{u:I18n Expired}" />
@@ -111,7 +112,7 @@
             VerticalOptions="Center"
             StyleClass="list-title-icon"
             Margin="5, 0, 0, 0"
-            Text="&#xf1f8;"
+            Text="{Binding Source={x:Static core:BitwardenIcons.Trash}}"
             IsVisible="{Binding Send.PendingDelete, Mode=OneTime}"
             AutomationProperties.IsInAccessibleTree="True"
             AutomationProperties.Name="{u:I18n PendingDelete}" />
