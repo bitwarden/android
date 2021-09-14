@@ -139,7 +139,6 @@
     <None Include="Entitlements.plist" />
     <None Include="Info.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <BundleResource Include="Resources\FontAwesome.ttf" />
     <BundleResource Include="Resources\MaterialIcons_Regular.ttf" />
     <ImageAsset Include="Resources\Assets.xcassets\AppIcons.appiconset\Contents.json">
       <Visible>false</Visible>
