@@ -9,7 +9,7 @@ namespace Bit.App.Controls
             switch (Device.RuntimePlatform)
             {
                 case Device.iOS:
-                    FontFamily = "FontAwesome";
+                    FontFamily = "Bitwarden_icon_font_v1";
                     break;
                 case Device.Android:
                     FontFamily = "Bitwarden_icon_font_v1.ttf#Bitwarden_icon_font_v1";
