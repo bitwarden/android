@@ -102,7 +102,7 @@ namespace Bit.App.Pages
             {
                 var response = await _apiService.GetOrganizationAutoEnrollStatusAsync(OrgIdentifier);
                 OrgId = response.Id;
-                ResetPasswordAutoEnroll = response.AutoEnrollEnabled;
+                ResetPasswordAutoEnroll = response.ResetPasswordEnrolled;
             }
             catch (ApiException e)
             {
