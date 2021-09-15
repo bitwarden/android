@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.Core.Models.Domain;
 using Xamarin.Essentials;
-using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
@@ -121,14 +120,14 @@ namespace Bit.App.Pages
             if (Connectivity.NetworkAccess == NetworkAccess.None)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
-                    AppResources.InternetConnectionRequiredTitle);
+                    AppResources.InternetConnectionRequiredTitle, AppResources.Ok);
                 return false;
             }
             if (string.IsNullOrWhiteSpace(MasterPassword))
             {
-                await Page.DisplayAlert(AppResources.AnErrorHasOccurred,
+                await _platformUtilsService.ShowDialogAsync(
                     string.Format(AppResources.ValidationFieldRequired, AppResources.MasterPassword),
-                    AppResources.Ok);
+                    AppResources.AnErrorHasOccurred, AppResources.Ok);
                 return false;
             }
             if (IsPolicyInEffect)
@@ -137,8 +136,8 @@ namespace Bit.App.Pages
                 var passwordStrength = _passwordGenerationService.PasswordStrength(MasterPassword, userInput);
                 if (!await _policyService.EvaluateMasterPassword(passwordStrength.Score, MasterPassword, Policy))
                 {
-                    await Page.DisplayAlert(AppResources.MasterPasswordPolicyValidationTitle,
-                        AppResources.MasterPasswordPolicyValidationMessage, AppResources.Ok);
+                    await _platformUtilsService.ShowDialogAsync(AppResources.MasterPasswordPolicyValidationMessage,
+                        AppResources.MasterPasswordPolicyValidationTitle, AppResources.Ok);
                     return false;
                 }
             }
@@ -146,15 +145,15 @@ namespace Bit.App.Pages
             {
                 if (MasterPassword.Length < 8)
                 {
-                    await Page.DisplayAlert(AppResources.MasterPasswordPolicyValidationTitle,
-                        AppResources.MasterPasswordLengthValMessage, AppResources.Ok);
+                    await _platformUtilsService.ShowDialogAsync(AppResources.MasterPasswordLengthValMessage,
+                        AppResources.MasterPasswordPolicyValidationTitle, AppResources.Ok);
                     return false;
                 }
             }
             if (MasterPassword != ConfirmMasterPassword)
             {
-                await Page.DisplayAlert(AppResources.AnErrorHasOccurred,
-                    AppResources.MasterPasswordConfirmationValMessage, AppResources.Ok);
+                await _platformUtilsService.ShowDialogAsync(AppResources.MasterPasswordConfirmationValMessage,
+                    AppResources.AnErrorHasOccurred, AppResources.Ok);
                 return false;
             }
             

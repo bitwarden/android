@@ -27,14 +27,9 @@ namespace Bit.App.Pages
             _vm.Page = this;
             
             // Actions Declaration
-            _vm.LogOutAction = async () =>
+            _vm.LogOutAction = () =>
             {
-                var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.LogoutConfirmation,
-                    AppResources.LogOut, AppResources.Yes, AppResources.Cancel);
-                if (confirmed)
-                {
-                    _messagingService.Send("logout");
-                }
+                _messagingService.Send("logout");
             };
             _vm.UpdateTempPasswordSuccessAction = () => Device.BeginInvokeOnMainThread(UpdateTempPasswordSuccess);
             
@@ -67,11 +62,16 @@ namespace Bit.App.Pages
             }
         }
 
-        private void LogOut_Clicked(object sender, EventArgs e)
+        private async void LogOut_Clicked(object sender, EventArgs e)
         {
             if (DoOnce())
             {
-                _vm.LogOutAction();
+                var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.LogoutConfirmation,
+                    AppResources.LogOut, AppResources.Yes, AppResources.Cancel);
+                if (confirmed)
+                {
+                    _vm.LogOutAction();
+                }
             }
         }
         

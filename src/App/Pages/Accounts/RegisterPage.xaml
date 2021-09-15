@@ -137,7 +137,7 @@
                             <FormattedString>
                                 <Span Text="{u:I18n AcceptPolicies}" />
                                 <Span Text="{u:I18n TermsOfService}"
-                                      TextColor="{StaticResource HyperlinkColor}">
+                                      TextColor="{DynamicResource HyperlinkColor}">
                                     <Span.GestureRecognizers>
                                         <TapGestureRecognizer Command="{Binding PoliciesClickCommand}"
                                                               CommandParameter="https://bitwarden.com/terms/" />
@@ -145,7 +145,7 @@
                                 </Span>
                                 <Span Text=", " />
                                 <Span Text="{u:I18n PrivacyPolicy}"
-                                      TextColor="{StaticResource HyperlinkColor}">
+                                      TextColor="{DynamicResource HyperlinkColor}">
                                     <Span.GestureRecognizers>
                                         <TapGestureRecognizer Command="{Binding PoliciesClickCommand}"
                                                               CommandParameter="https://bitwarden.com/privacy/" />

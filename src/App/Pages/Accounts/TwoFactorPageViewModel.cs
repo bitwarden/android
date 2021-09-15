@@ -243,12 +243,13 @@ namespace Bit.App.Pages
                 await _deviceActionService.HideLoadingAsync();
                 if (authResult != null && authResult.Properties.TryGetValue("error", out var resultError))
                 {
-                    await _platformUtilsService.ShowDialogAsync(resultError, AppResources.AnErrorHasOccurred);
+                    await _platformUtilsService.ShowDialogAsync(resultError, AppResources.AnErrorHasOccurred,
+                        AppResources.Ok);
                 }
                 else
                 {
                     await _platformUtilsService.ShowDialogAsync(AppResources.Fido2SomethingWentWrong,
-                        AppResources.AnErrorHasOccurred);
+                        AppResources.AnErrorHasOccurred, AppResources.Ok);
                 }
             }
         }
@@ -262,14 +263,14 @@ namespace Bit.App.Pages
             if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
-                    AppResources.InternetConnectionRequiredTitle);
+                    AppResources.InternetConnectionRequiredTitle, AppResources.Ok);
                 return;
             }
             if (string.IsNullOrWhiteSpace(Token))
             {
                 await _platformUtilsService.ShowDialogAsync(
                     string.Format(AppResources.ValidationFieldRequired, AppResources.VerificationCode),
-                    AppResources.AnErrorHasOccurred);
+                    AppResources.AnErrorHasOccurred, AppResources.Ok);
                 return;
             }
             if (SelectedProviderType == TwoFactorProviderType.Email ||
@@ -310,7 +311,7 @@ namespace Bit.App.Pages
                 if (e?.Error != null)
                 {
                     await _platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(),
-                        AppResources.AnErrorHasOccurred);
+                        AppResources.AnErrorHasOccurred, AppResources.Ok);
                 }
             }
         }
@@ -348,7 +349,7 @@ namespace Bit.App.Pages
             if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
-                    AppResources.InternetConnectionRequiredTitle);
+                    AppResources.InternetConnectionRequiredTitle, AppResources.Ok);
                 return false;
             }
             try
@@ -379,7 +380,8 @@ namespace Bit.App.Pages
                 {
                     await _deviceActionService.HideLoadingAsync();
                 }
-                await _platformUtilsService.ShowDialogAsync(AppResources.VerificationEmailNotSent);
+                await _platformUtilsService.ShowDialogAsync(AppResources.VerificationEmailNotSent,
+                    AppResources.AnErrorHasOccurred, AppResources.Ok);
                 return false;
             }
         }

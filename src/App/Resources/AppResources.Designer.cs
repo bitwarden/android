@@ -3579,6 +3579,18 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string UpdatingPassword {
+            get {
+                return ResourceManager.GetString("UpdatingPassword", resourceCulture);
+            }
+        }
+        
+        public static string UpdatePasswordError {
+            get {
+                return ResourceManager.GetString("UpdatePasswordError", resourceCulture);
+            }
+        }
+
         public static string Fido2Title {
             get {
                 return ResourceManager.GetString("Fido2Title", resourceCulture);

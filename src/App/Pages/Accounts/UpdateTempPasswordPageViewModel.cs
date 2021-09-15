@@ -65,7 +65,7 @@ namespace Bit.App.Pages
             // Initiate API action
             try
             {
-                await _deviceActionService.ShowLoadingAsync(AppResources.CreatingAccount);
+                await _deviceActionService.ShowLoadingAsync(AppResources.UpdatingPassword);
                 await _apiService.PutUpdateTempPasswordAsync(request);
                 await _deviceActionService.HideLoadingAsync();
 
@@ -77,7 +77,12 @@ namespace Bit.App.Pages
                 if (e?.Error != null)
                 {
                     await _platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(),
-                        AppResources.AnErrorHasOccurred);
+                        AppResources.AnErrorHasOccurred, AppResources.Ok);
+                }
+                else
+                {
+                    await _platformUtilsService.ShowDialogAsync(AppResources.UpdatePasswordError,
+                        AppResources.AnErrorHasOccurred, AppResources.Ok);
                 }
             }
         }

@@ -288,34 +288,8 @@ namespace Bit.iOS.Core.Controllers
         
         private async Task LogOutAsync()
         {
-            var syncService = ServiceContainer.Resolve<ISyncService>("syncService");
-            var tokenService = ServiceContainer.Resolve<ITokenService>("tokenService");
-            var settingsService = ServiceContainer.Resolve<ISettingsService>("settingsService");
-            var cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
-            var folderService = ServiceContainer.Resolve<IFolderService>("folderService");
-            var collectionService = ServiceContainer.Resolve<ICollectionService>("collectionService");
-            var passwordGenerationService = ServiceContainer.Resolve<IPasswordGenerationService>(
-                "passwordGenerationService");
-            var stateService = ServiceContainer.Resolve<IStateService>("stateService");
-            var searchService = ServiceContainer.Resolve<ISearchService>("searchService");
+            await AppHelpers.LogOutAsync();
             var authService = ServiceContainer.Resolve<IAuthService>("authService");
-                
-            var userId = await _userService.GetUserIdAsync();
-            await Task.WhenAll(
-                syncService.SetLastSyncAsync(DateTime.MinValue),
-                tokenService.ClearTokenAsync(),
-                _cryptoService.ClearKeysAsync(),
-                _userService.ClearAsync(),
-                settingsService.ClearAsync(userId),
-                cipherService.ClearAsync(userId),
-                folderService.ClearAsync(userId),
-                collectionService.ClearAsync(userId),
-                passwordGenerationService.ClearAsync(),
-                _vaultTimeoutService.ClearAsync(),
-                stateService.PurgeAsync(),
-                _deviceActionService.ClearCacheAsync());
-            _vaultTimeoutService.BiometricLocked = true;
-            searchService.ClearIndex();
             authService.LogOut(() =>
             {
                 Cancel?.Invoke();

@@ -17,21 +17,12 @@ namespace Bit.App
 {
     public partial class App : Application
     {
-        private readonly MobileI18nService _i18nService;
         private readonly IUserService _userService;
         private readonly IBroadcasterService _broadcasterService;
         private readonly IMessagingService _messagingService;
         private readonly IStateService _stateService;
         private readonly IVaultTimeoutService _vaultTimeoutService;
         private readonly ISyncService _syncService;
-        private readonly ITokenService _tokenService;
-        private readonly ICryptoService _cryptoService;
-        private readonly ICipherService _cipherService;
-        private readonly IFolderService _folderService;
-        private readonly ICollectionService _collectionService;
-        private readonly ISettingsService _settingsService;
-        private readonly IPasswordGenerationService _passwordGenerationService;
-        private readonly ISearchService _searchService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IAuthService _authService;
         private readonly IStorageService _storageService;
@@ -54,20 +45,10 @@ namespace Bit.App
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
-            _tokenService = ServiceContainer.Resolve<ITokenService>("tokenService");
-            _cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
-            _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
-            _folderService = ServiceContainer.Resolve<IFolderService>("folderService");
-            _settingsService = ServiceContainer.Resolve<ISettingsService>("settingsService");
-            _collectionService = ServiceContainer.Resolve<ICollectionService>("collectionService");
-            _searchService = ServiceContainer.Resolve<ISearchService>("searchService");
             _authService = ServiceContainer.Resolve<IAuthService>("authService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _secureStorageService = ServiceContainer.Resolve<IStorageService>("secureStorageService");
-            _passwordGenerationService = ServiceContainer.Resolve<IPasswordGenerationService>(
-                "passwordGenerationService");
-            _i18nService = ServiceContainer.Resolve<II18nService>("i18nService") as MobileI18nService;
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
 
             Bootstrap();
@@ -240,22 +221,7 @@ namespace Bit.App
 
         private async Task LogOutAsync(bool expired)
         {
-            var userId = await _userService.GetUserIdAsync();
-            await Task.WhenAll(
-                _syncService.SetLastSyncAsync(DateTime.MinValue),
-                _tokenService.ClearTokenAsync(),
-                _cryptoService.ClearKeysAsync(),
-                _userService.ClearAsync(),
-                _settingsService.ClearAsync(userId),
-                _cipherService.ClearAsync(userId),
-                _folderService.ClearAsync(userId),
-                _collectionService.ClearAsync(userId),
-                _passwordGenerationService.ClearAsync(),
-                _vaultTimeoutService.ClearAsync(),
-                _stateService.PurgeAsync(),
-                _deviceActionService.ClearCacheAsync());
-            _vaultTimeoutService.BiometricLocked = true;
-            _searchService.ClearIndex();
+            await AppHelpers.LogOutAsync();
             _authService.LogOut(() =>
             {
                 Current.MainPage = new HomePage();

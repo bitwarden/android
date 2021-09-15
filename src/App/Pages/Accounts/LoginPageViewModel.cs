@@ -96,15 +96,14 @@ namespace Bit.App.Pages
             if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
-                    AppResources.InternetConnectionRequiredTitle);
+                    AppResources.InternetConnectionRequiredTitle, AppResources.Ok);
                 return;
             }
             if (string.IsNullOrWhiteSpace(Email))
             {
                 await _platformUtilsService.ShowDialogAsync(
                     string.Format(AppResources.ValidationFieldRequired, AppResources.EmailAddress),
-                    AppResources.AnErrorHasOccurred,
-                    AppResources.Ok);
+                    AppResources.AnErrorHasOccurred, AppResources.Ok);
                 return;
             }
             if (!Email.Contains("@"))
@@ -117,8 +116,7 @@ namespace Bit.App.Pages
             {
                 await _platformUtilsService.ShowDialogAsync(
                     string.Format(AppResources.ValidationFieldRequired, AppResources.MasterPassword),
-                    AppResources.AnErrorHasOccurred,
-                    AppResources.Ok);
+                    AppResources.AnErrorHasOccurred, AppResources.Ok);
                 return;
             }
 
@@ -179,7 +177,7 @@ namespace Bit.App.Pages
                 if (e?.Error != null)
                 {
                     await _platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(),
-                        AppResources.AnErrorHasOccurred);
+                        AppResources.AnErrorHasOccurred, AppResources.Ok);
                 }
             }
         }
