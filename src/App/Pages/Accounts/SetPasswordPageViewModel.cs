@@ -97,12 +97,21 @@ namespace Bit.App.Pages
         public async Task InitAsync()
         {
             await CheckPasswordPolicy();
-            
-            var org = await _userService.GetOrganizationByIdentifierAsync(OrgIdentifier);
-            OrgId = org?.Id;
-            var policyList = await _policyService.GetAll(PolicyType.ResetPassword);
-            var policyResult = _policyService.GetResetPasswordPolicyOptions(policyList, OrgId);
-            ResetPasswordAutoEnroll = policyResult.Item2 && policyResult.Item1.AutoEnrollEnabled;
+
+            try
+            {
+                var response = await _apiService.GetOrganizationAutoEnrollStatusAsync(OrgIdentifier);
+                OrgId = response.Id;
+                ResetPasswordAutoEnroll = response.ResetPasswordEnrolled;
+            }
+            catch (ApiException e)
+            {
+                if (e?.Error != null)
+                {
+                    await _platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(),
+                        AppResources.AnErrorHasOccurred);
+                }
+            }
         }
 
         public async Task SubmitAsync()
