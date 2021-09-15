@@ -3615,9 +3615,9 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string Fido2SomethingWentWrong {
+        public static string Fido2CheckBrowser {
             get {
-                return ResourceManager.GetString("Fido2SomethingWentWrong", resourceCulture);
+                return ResourceManager.GetString("Fido2CheckBrowser", resourceCulture);
             }
         }
         

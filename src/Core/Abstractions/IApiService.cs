@@ -60,6 +60,7 @@ namespace Bit.Core.Abstractions
         Task PostEventsCollectAsync(IEnumerable<EventRequest> request);
         Task PutUpdateTempPasswordAsync(UpdateTempPasswordRequest request);
         Task<OrganizationKeysResponse> GetOrganizationKeysAsync(string id);
+        Task<OrganizationAutoEnrollStatusResponse> GetOrganizationAutoEnrollStatusAsync(string identifier);
         Task PutOrganizationUserResetPasswordEnrollmentAsync(string orgId, string userId,
             OrganizationUserResetPasswordEnrollmentRequest request);
 
