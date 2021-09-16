@@ -292,14 +292,14 @@
                                 StyleClass="box-row-button"
                                 TextColor="{StaticResource PrimaryColor}"
                                 Margin="0" />
-                            <controls:FaButton
+                            <controls:IconButton
                                 x:Name="_btnOptionsUp"
                                 Text="{Binding Source={x:Static core:BitwardenIcons.ChevronUp}}"
                                 StyleClass="box-row-button"
                                 TextColor="{StaticResource PrimaryColor}"
                                 Clicked="ToggleOptions_Clicked"
                                 IsVisible="False" />
-                            <controls:FaButton
+                            <controls:IconButton
                                 x:Name="_btnOptionsDown"
                                 Text="{Binding Source={x:Static core:BitwardenIcons.AngleDown}}"
                                 StyleClass="box-row-button"
@@ -465,7 +465,7 @@
                                         IsSpellCheckEnabled="False"
                                         IsTextPredictionEnabled="False"
                                         HorizontalOptions="FillAndExpand" />
-                                    <controls:FaButton
+                                    <controls:IconButton
                                         IsEnabled="{Binding SendEnabled}"
                                         StyleClass="box-row-button, box-row-button-platform"
                                         Text="{Binding ShowPasswordIcon}"

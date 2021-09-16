@@ -2,11 +2,10 @@
 
 namespace Bit.App.Controls
 {
-    public class FaButton : Button
+    public class IconLabel : Label
     {
-        public FaButton()
+        public IconLabel()
         {
-            Padding = 0;
             switch (Device.RuntimePlatform)
             {
                 case Device.iOS:

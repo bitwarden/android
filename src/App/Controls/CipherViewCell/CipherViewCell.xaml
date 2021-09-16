@@ -27,7 +27,7 @@
         <ColumnDefinition Width="60" />
     </Grid.ColumnDefinitions>
 
-    <controls:FaLabel
+    <controls:IconLabel
         Grid.Column="0"
         HorizontalOptions="Center"
         VerticalOptions="Center"
@@ -74,7 +74,7 @@
             Grid.ColumnSpan="3"
             StyleClass="list-subtitle, list-subtitle-platform"
             Text="{Binding Cipher.SubTitle}" />
-        <controls:FaLabel
+        <controls:IconLabel
             Grid.Column="1"
             Grid.Row="0"
             HorizontalOptions="Start"
@@ -85,7 +85,7 @@
             IsVisible="{Binding Cipher.Shared, Mode=OneTime}"
             AutomationProperties.IsInAccessibleTree="True"
             AutomationProperties.Name="{u:I18n Shared}" />
-        <controls:FaLabel
+        <controls:IconLabel
             Grid.Column="2"
             Grid.Row="0"
             HorizontalOptions="Start"

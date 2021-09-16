@@ -77,7 +77,7 @@
                             Grid.Row="1"
                             StyleClass="list-subtitle, list-subtitle-platform"
                             Text="{Binding Date, Mode=OneWay, Converter={StaticResource dateTime}}" />
-                        <controls:FaButton
+                        <controls:IconButton
                             StyleClass="list-row-button, list-row-button-platform"
                             Text="{Binding Source={x:Static core:BitwardenIcons.Paste}}"
                             Command="{Binding BindingContext.CopyCommand, Source={x:Reference _page}}"
