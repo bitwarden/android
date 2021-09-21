@@ -39,6 +39,7 @@ jobs:
         shell: bash
 
       - name: Create Draft Release
+        if: false
         uses: actions/create-release@0cb9c9b65d5d1901c1f53e5e66eaf4afd303e70e  # v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -58,6 +59,19 @@ jobs:
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f  # v2.3.4
         with:
           ref: rc
+
+      - name: Test download all artifacts
+        uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74  # v2.14.0
+        with:
+          workflow: build.yml
+          workflow_conclusion: success
+          branch: rc
+
+      - name: Test step
+        run: |
+          pwd
+          ls -alh
+          exit 1
 
       - name: Download Play Store .aab artifact
         uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74  # v2.14.0
@@ -116,6 +130,7 @@ jobs:
 
 
   f-droid:
+    if: false
     name: F-Droid Release
     runs-on: ubuntu-20.04
     needs: attach-artifacts
