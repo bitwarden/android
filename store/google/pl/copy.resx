@@ -126,15 +126,31 @@
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>Aplikacja Bitwarden to najłatwiejszy i najbezpieczniejszy sposób przechowywania wszystkich danych logowania i haseł, umożliwiający ich wygodną synchronizację między urządzeniami.
+    <value>Bitwarden, Inc. jest macierzystą firmą 8bit Solutions LLC.
 
-Kradzież hasła to poważny problem. Strony internetowe i aplikacje są atakowane każdego dnia. W wyniku złamania zabezpieczeń, hasła mogą zostać skradzione. Jeśli używasz tego samego hasła dla różnych aplikacji i stron, hakerzy mogą uzyskać dostęp do Twojego konta pocztowego, bankowego i innych ważnych kont.
+NAZWANY NAJLEPSZYM MENEDŻEREM HASEŁ PRZEZ THE VERGE, US NEWS &amp; WORLD REPORT, CNET I WIĘCEJ.
 
-Eksperci od bezpieczeństwa zalecają używanie różnych, losowo wygenerowanych haseł dla każdego konta. Tylko jak można zarządzać wszystkimi hasłami? Aplikacja Bitwarden sprawia, że tworzenie, przechowywanie i dostęp do haseł jest łatwy.
+Zarządzaj, przechowuj, zabezpieczaj i udostępniaj nieograniczoną liczbę haseł na nieograniczonej liczbie urządzeń z każdego miejsca. Bitwarden dostarcza rozwiązania do zarządzania hasłami z otwartym kodem źródłowym każdemu, niezależnie od tego, czy jest w domu, w pracy, czy w podróży.
 
-Bitwarden przechowuje wszystkie Twoje dane logowania w zaszyfrowanym sejfie, który jest synchronizowany pomiędzy Twoimi urządzeniami. Dzięki temu, że dane są w pełni zaszyfrowane, zanim opuszczą urządzenie, tylko Ty posiadasz do nich dostęp. Nawet zespół Bitwarden nie posiada dostępu do Twoich danych. Dane są zabezpieczone za pomocą szyfrowania AES-256 i kryptograficznej funkcji skrótu PBKDF2 SHA-256.
+Generuj silne, unikalne i losowe hasła w oparciu o wymagania bezpieczeństwa dla każdej odwiedzanej strony.
 
-Bitwarden jest oprogramowaniem otwartoźródłowym. Kod źródłowy Bitwarden jest dostępny w serwisie GitHub i każdy może go sprawdzić oraz ulepszyć.</value>
+Funkcja Bitwarden Send szybko przesyła zaszyfrowane informacje --- pliki i zwykły tekst -- bezpośrednio do każdego.
+
+Bitwarden oferuje plany dla zespołów i firm, dzięki czemu możesz bezpiecznie udostępniać hasła współpracownikom.
+
+Dlaczego warto wybrać Bitwarden:
+
+Szyfrowanie światowej klasy
+Hasła są chronione za pomocą zaawansowanego szyfrowania typu end-to-end (AES-256 bitów, dodatkowy ciąg zaburzający i PBKDF2 SHA-256), dzięki czemu Twoje dane pozostają bezpieczne i prywatne.
+
+Wbudowany generator haseł
+Generuj silne, unikalne i losowe hasła w oparciu o wymagania bezpieczeństwa dla każdej odwiedzanej strony.
+
+Przetłumaczone aplikacje
+Tłumaczenia Bitwarden są dostępne w 40 językach i rosną dzięki naszej globalnej społeczności.
+
+Aplikacje wieloplatformowe
+Zabezpiecz i udostępniaj poufne dane w swoim sejfie Bitwarden z dowolnej przeglądarki, urządzenia mobilnego, systemu operacyjnego i nie tylko.</value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">

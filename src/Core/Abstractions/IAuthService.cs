@@ -17,11 +17,11 @@ namespace Bit.Core.Abstractions
         Dictionary<TwoFactorProviderType, TwoFactorProvider> TwoFactorProviders { get; set; }
         Dictionary<TwoFactorProviderType, Dictionary<string, object>> TwoFactorProvidersData { get; set; }
 
-        TwoFactorProviderType? GetDefaultTwoFactorProvider(bool u2fSupported);
+        TwoFactorProviderType? GetDefaultTwoFactorProvider(bool fido2Supported);
         bool AuthingWithSso();
         bool AuthingWithPassword();
         List<TwoFactorProvider> GetSupportedTwoFactorProviders();
-        Task<AuthResult> LogInAsync(string email, string masterPassword);
+        Task<AuthResult> LogInAsync(string email, string masterPassword, string captchaToken);
         Task<AuthResult> LogInSsoAsync(string code, string codeVerifier, string redirectUrl);
         Task<AuthResult> LogInCompleteAsync(string email, string masterPassword, TwoFactorProviderType twoFactorProvider, string twoFactorToken, bool? remember = null);
         Task<AuthResult> LogInTwoFactorAsync(TwoFactorProviderType twoFactorProvider, string twoFactorToken, bool? remember = null);

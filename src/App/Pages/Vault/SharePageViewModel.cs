@@ -33,7 +33,7 @@ namespace Bit.App.Pages
             _collectionService = ServiceContainer.Resolve<ICollectionService>("collectionService");
             Collections = new ExtendedObservableCollection<CollectionViewModel>();
             OrganizationOptions = new List<KeyValuePair<string, string>>();
-            PageTitle = AppResources.Share;
+            PageTitle = AppResources.MoveToOrganization;
         }
 
         public string CipherId { get; set; }
@@ -109,7 +109,9 @@ namespace Bit.App.Pages
                 await _deviceActionService.ShowLoadingAsync(AppResources.Saving);
                 await _cipherService.ShareWithServerAsync(cipherView, OrganizationId, checkedCollectionIds);
                 await _deviceActionService.HideLoadingAsync();
-                _platformUtilsService.ShowToast("success", null, AppResources.ItemShared);
+                var movedItemToOrgText = string.Format(AppResources.MovedItemToOrg, cipherView.Name,
+                   (await _userService.GetOrganizationAsync(OrganizationId)).Name);
+                _platformUtilsService.ShowToast("success", null, movedItemToOrgText);
                 await Page.Navigation.PopModalAsync();
                 return true;
             }

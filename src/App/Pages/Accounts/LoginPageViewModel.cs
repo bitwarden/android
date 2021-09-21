@@ -8,10 +8,15 @@ using System;
 using System.Threading.Tasks;
 using Bit.App.Utilities;
 using Xamarin.Forms;
+using Newtonsoft.Json;
+using System.Text;
+using Xamarin.Essentials;
+using System.Text.RegularExpressions;
+using Bit.Core.Services;
 
 namespace Bit.App.Pages
 {
-    public class LoginPageViewModel : BaseViewModel
+    public class LoginPageViewModel : CaptchaProtectedViewModel
     {
         private const string Keys_RememberedEmail = "rememberedEmail";
         private const string Keys_RememberEmail = "rememberEmail";
@@ -22,6 +27,8 @@ namespace Bit.App.Pages
         private readonly IStorageService _storageService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IStateService _stateService;
+        private readonly IEnvironmentService _environmentService;
+        private readonly II18nService _i18nService;
 
         private bool _showPassword;
         private string _email;
@@ -35,6 +42,8 @@ namespace Bit.App.Pages
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
+            _i18nService = ServiceContainer.Resolve<II18nService>("i18nService");
 
             PageTitle = AppResources.Bitwarden;
             TogglePasswordCommand = new Command(TogglePassword);
@@ -70,7 +79,12 @@ namespace Bit.App.Pages
         public Action StartTwoFactorAction { get; set; }
         public Action LogInSuccessAction { get; set; }
         public Action CloseAction { get; set; }
-                
+
+        protected override II18nService i18nService => _i18nService;
+        protected override IEnvironmentService environmentService => _environmentService;
+        protected override IDeviceActionService deviceActionService => _deviceActionService;
+        protected override IPlatformUtilsService platformUtilsService => _platformUtilsService;
+
         public async Task InitAsync()
         {
             if (string.IsNullOrWhiteSpace(Email))
@@ -81,7 +95,7 @@ namespace Bit.App.Pages
             RememberEmail = rememberEmail.GetValueOrDefault(true);
         }
 
-        public async Task LogInAsync()
+        public async Task LogInAsync(bool showLoading = true)
         {
             if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
             {
@@ -115,9 +129,12 @@ namespace Bit.App.Pages
             ShowPassword = false;
             try
             {
-                await _deviceActionService.ShowLoadingAsync(AppResources.LoggingIn);
-                var response = await _authService.LogInAsync(Email, MasterPassword);
-                MasterPassword = string.Empty;
+                if (showLoading)
+                {
+                    await _deviceActionService.ShowLoadingAsync(AppResources.LoggingIn);
+                }
+
+                var response = await _authService.LogInAsync(Email, MasterPassword, _captchaToken);
                 if (RememberEmail)
                 {
                     await _storageService.SaveAsync(Keys_RememberedEmail, Email);
@@ -127,7 +144,21 @@ namespace Bit.App.Pages
                     await _storageService.RemoveAsync(Keys_RememberedEmail);
                 }
                 await AppHelpers.ResetInvalidUnlockAttemptsAsync();
+
+                if (response.CaptchaNeeded)
+                {
+                    if (await HandleCaptchaAsync(response.CaptchaSiteKey))
+                    {
+                        await LogInAsync(false);
+                        _captchaToken = null;
+                    }
+                    return;
+                }
+                MasterPassword = string.Empty;
+                _captchaToken = null;
+
                 await _deviceActionService.HideLoadingAsync();
+
                 if (response.TwoFactor)
                 {
                     StartTwoFactorAction?.Invoke();
@@ -142,6 +173,8 @@ namespace Bit.App.Pages
             }
             catch (ApiException e)
             {
+                _captchaToken = null;
+                MasterPassword = string.Empty;
                 await _deviceActionService.HideLoadingAsync();
                 if (e?.Error != null)
                 {

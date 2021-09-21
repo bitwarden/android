@@ -1,4 +1,5 @@
 ﻿using Bit.Core.Enums;
+using Bit.Core.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Net.Http.Headers;
@@ -16,10 +17,11 @@ namespace Bit.Core.Models.Request
         public string Token { get; set; }
         public TwoFactorProviderType? Provider { get; set; }
         public bool? Remember { get; set; }
+        public string CaptchaToken { get; set; }
         public DeviceRequest Device { get; set; }
 
         public TokenRequest(string[] credentials, string[] codes, TwoFactorProviderType? provider, string token,
-            bool? remember, DeviceRequest device = null)
+            bool? remember, string captchaToken, DeviceRequest device = null)
         {
             if (credentials != null && credentials.Length > 1)
             {
@@ -36,6 +38,7 @@ namespace Bit.Core.Models.Request
             Provider = provider;
             Remember = remember;
             Device = device;
+            CaptchaToken = captchaToken;
         }
 
         public Dictionary<string, string> ToIdentityToken(string clientId)
@@ -77,6 +80,11 @@ namespace Bit.Core.Models.Request
                 obj.Add("twoFactorProvider", ((int)Provider.Value).ToString());
                 obj.Add("twoFactorRemember", Remember.GetValueOrDefault() ? "1" : "0");
             }
+            if (CaptchaToken != null)
+            {
+                obj.Add("captchaResponse", CaptchaToken);
+            }
+
             return obj;
         }
 
@@ -84,7 +92,7 @@ namespace Bit.Core.Models.Request
         {
             if (MasterPasswordHash != null && Email != null)
             {
-                headers.Add("Auth-Email", Email);
+                headers.Add("Auth-Email", CoreHelpers.Base64UrlEncode(Encoding.UTF8.GetBytes(Email)));
             }
         }
     }

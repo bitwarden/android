@@ -1,3 +1,4 @@
+---
 name: Build
 
 on:
@@ -22,9 +23,8 @@ jobs:
       - name: Print lines of code
         run: cloc --vcs git --exclude-dir Resources,store,test,Properties --include-lang C#,XAML
 
-
   android:
-    name: Android Build
+    name: Android
     runs-on: windows-2019
     steps:
       - name: Set up MSBuild
@@ -326,7 +326,7 @@ jobs:
 
 
   ios:
-    name: iOS Build
+    name: Apple iOS
     runs-on: macos-10.15
     steps:
       - name: Print environment

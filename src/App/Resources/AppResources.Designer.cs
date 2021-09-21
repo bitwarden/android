@@ -363,6 +363,12 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string Move {
+            get {
+                return ResourceManager.GetString("Move", resourceCulture);
+            }
+        }
+        
         public static string Saving {
             get {
                 return ResourceManager.GetString("Saving", resourceCulture);
@@ -1257,9 +1263,9 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string ShareVault {
+        public static string LearnOrg {
             get {
-                return ResourceManager.GetString("ShareVault", resourceCulture);
+                return ResourceManager.GetString("LearnOrg", resourceCulture);
             }
         }
         
@@ -2397,6 +2403,12 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string MovedItemToOrg {
+            get {
+                return ResourceManager.GetString("MovedItemToOrg", resourceCulture);
+            }
+        }
+        
         public static string ItemShared {
             get {
                 return ResourceManager.GetString("ItemShared", resourceCulture);
@@ -2421,15 +2433,21 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string MoveToOrganization {
+            get {
+                return ResourceManager.GetString("MoveToOrganization", resourceCulture);
+            }
+        }
+        
         public static string NoOrgsToList {
             get {
                 return ResourceManager.GetString("NoOrgsToList", resourceCulture);
             }
         }
         
-        public static string ShareDesc {
+        public static string MoveToOrgDesc {
             get {
-                return ResourceManager.GetString("ShareDesc", resourceCulture);
+                return ResourceManager.GetString("MoveToOrgDesc", resourceCulture);
             }
         }
         
@@ -2481,9 +2499,9 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string ShareVaultConfirmation {
+        public static string LearnOrgConfirmation {
             get {
-                return ResourceManager.GetString("ShareVaultConfirmation", resourceCulture);
+                return ResourceManager.GetString("LearnOrgConfirmation", resourceCulture);
             }
         }
         
@@ -3512,24 +3530,70 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("SendFileEmailVerificationRequired", resourceCulture);
             }
         }
-        public static string PasswordPrompt
-        {
-            get
-            {
+        
+        public static string PasswordPrompt {
+            get {
                 return ResourceManager.GetString("PasswordPrompt", resourceCulture);
             }
         }
-        public static string PasswordConfirmation
-        {
-            get
-            {
+        
+        public static string PasswordConfirmation {
+            get {
                 return ResourceManager.GetString("PasswordConfirmation", resourceCulture);
             }
-        }public static string PasswordConfirmationDesc
-        {
-            get
-            {
+        }
+        
+        public static string PasswordConfirmationDesc {
+            get {
                 return ResourceManager.GetString("PasswordConfirmationDesc", resourceCulture);
+            }
+        }
+        
+        public static string CaptchaRequired {
+            get {
+                return ResourceManager.GetString("CaptchaRequired", resourceCulture);
+            }
+        }
+        
+        public static string CaptchaFailed {
+            get {
+                return ResourceManager.GetString("CaptchaFailed", resourceCulture);
+            }
+        }
+        
+        public static string Fido2Title {
+            get {
+                return ResourceManager.GetString("Fido2Title", resourceCulture);
+            }
+        }
+        
+        public static string Fido2Instruction {
+            get {
+                return ResourceManager.GetString("Fido2Instruction", resourceCulture);
+            }
+        }
+        
+        public static string Fido2Desc {
+            get {
+                return ResourceManager.GetString("Fido2Desc", resourceCulture);
+            }
+        }
+        
+        public static string Fido2AuthenticateWebAuthn {
+            get {
+                return ResourceManager.GetString("Fido2AuthenticateWebAuthn", resourceCulture);
+            }
+        }
+        
+        public static string Fido2CheckBrowser {
+            get {
+                return ResourceManager.GetString("Fido2CheckBrowser", resourceCulture);
+            }
+        }
+        
+        public static string ResetPasswordAutoEnrollInviteWarning {
+            get {
+                return ResourceManager.GetString("ResetPasswordAutoEnrollInviteWarning", resourceCulture);
             }
         }
     }

@@ -12,9 +12,11 @@ using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
-    public class RegisterPageViewModel : BaseViewModel
+    public class RegisterPageViewModel : CaptchaProtectedViewModel
     {
         private readonly IDeviceActionService _deviceActionService;
+        private readonly II18nService _i18nService;
+        private readonly IEnvironmentService _environmentService;
         private readonly IApiService _apiService;
         private readonly ICryptoService _cryptoService;
         private readonly IPlatformUtilsService _platformUtilsService;
@@ -27,6 +29,8 @@ namespace Bit.App.Pages
             _apiService = ServiceContainer.Resolve<IApiService>("apiService");
             _cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
+            _i18nService = ServiceContainer.Resolve<II18nService>("i18nService");
+            _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
 
             PageTitle = AppResources.CreateAccount;
             TogglePasswordCommand = new Command(TogglePassword);
@@ -76,7 +80,12 @@ namespace Bit.App.Pages
         public Action RegistrationSuccess { get; set; }
         public Action CloseAction { get; set; }
 
-        public async Task SubmitAsync()
+        protected override II18nService i18nService => _i18nService;
+        protected override IEnvironmentService environmentService => _environmentService;
+        protected override IDeviceActionService deviceActionService => _deviceActionService;
+        protected override IPlatformUtilsService platformUtilsService => _platformUtilsService;
+
+        public async Task SubmitAsync(bool showLoading = true)
         {
             if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
             {
@@ -123,6 +132,11 @@ namespace Bit.App.Pages
             }
 
             // TODO: Password strength check?
+            
+            if (showLoading)
+            {
+                await _deviceActionService.ShowLoadingAsync(AppResources.CreatingAccount);
+            }
 
             Name = string.IsNullOrWhiteSpace(Name) ? null : Name;
             Email = Email.Trim().ToLower();
@@ -145,13 +159,13 @@ namespace Bit.App.Pages
                 {
                     PublicKey = keys.Item1,
                     EncryptedPrivateKey = keys.Item2.EncryptedString
-                }
+                },
+                CaptchaResponse = _captchaToken,
             };
             // TODO: org invite?
 
             try
             {
-                await _deviceActionService.ShowLoadingAsync(AppResources.CreatingAccount);
                 await _apiService.PostRegisterAsync(request);
                 await _deviceActionService.HideLoadingAsync();
                 _platformUtilsService.ShowToast("success", null, AppResources.AccountCreated,
@@ -163,6 +177,15 @@ namespace Bit.App.Pages
             }
             catch (ApiException e)
             {
+                if (e?.Error != null && e.Error.CaptchaRequired)
+                {
+                    if (await HandleCaptchaAsync(e.Error.CaptchaSiteKey))
+                    {
+                        await SubmitAsync(false);
+                        _captchaToken = null;
+                    }
+                    return;
+                }
                 await _deviceActionService.HideLoadingAsync();
                 if (e?.Error != null)
                 {

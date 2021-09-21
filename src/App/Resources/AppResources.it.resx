@@ -1296,7 +1296,7 @@
     <value>Il modo più semplice per aggiungere nuovi login alla tua cassaforte è l'estensione Bitwarden Password AutoFill. Scopri di più sull'utilizzo dell'estensione Bitwarden Password AutoFill navigando nella schermata "Impostazioni".</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
-    <value>Indirizzo mail non valido.</value>
+    <value>Indirizzo email non valido.</value>
   </data>
   <data name="Cards" xml:space="preserve">
     <value>Carte</value>
@@ -1707,7 +1707,7 @@ bitwarden.com per saperne di più?</value>
     <value>Identificativo dell'organizzazione</value>
   </data>
   <data name="LoginSsoError" xml:space="preserve">
-    <value>Attualmente non sei in grado di effettuare il login con SSO</value>
+    <value>Attualmente non sei in grado di effettuare l'accesso con SSO</value>
   </data>
   <data name="SetMasterPassword" xml:space="preserve">
     <value>Imposta la password principale</value>
@@ -1746,7 +1746,8 @@ bitwarden.com per saperne di più?</value>
     <value>Caricamento</value>
   </data>
   <data name="AcceptPolicies" xml:space="preserve">
-    <value>Selezionando la casella accetti quanto segue:</value>
+    <value>Selezionando la casella accetti quanto segue:
+</value>
   </data>
   <data name="AcceptPoliciesError" xml:space="preserve">
     <value>I termini di servizio e l'informativa sulla privacy non sono stati accettati.</value>
@@ -1871,7 +1872,7 @@ bitwarden.com per saperne di più?</value>
     <value>Numero massimo di accessi raggiunto</value>
   </data>
   <data name="CurrentAccessCount" xml:space="preserve">
-    <value>Numero accessi corrente</value>
+    <value>Numero di accessi attuale</value>
   </data>
   <data name="NewPassword" xml:space="preserve">
     <value>Nuova password</value>

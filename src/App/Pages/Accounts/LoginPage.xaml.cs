@@ -16,6 +16,8 @@ namespace Bit.App.Pages
         private readonly LoginPageViewModel _vm;
         private readonly AppOptions _appOptions;
 
+        private bool _inputFocused;
+
         public LoginPage(string email = null, AppOptions appOptions = null)
         {
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
@@ -58,13 +60,10 @@ namespace Bit.App.Pages
         {
             base.OnAppearing();
             await _vm.InitAsync();
-            if (string.IsNullOrWhiteSpace(_vm.Email))
+            if (!_inputFocused)
             {
-                RequestFocus(_email);
-            }
-            else
-            {
-                RequestFocus(_masterPassword);
+                RequestFocus(string.IsNullOrWhiteSpace(_vm.Email) ? _email : _masterPassword);
+                _inputFocused = true;
             }
         }
 

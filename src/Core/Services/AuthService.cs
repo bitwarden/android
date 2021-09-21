@@ -76,9 +76,9 @@ namespace Bit.Core.Services
                 Priority = 10,
                 Sort = 4
             });
-            TwoFactorProviders.Add(TwoFactorProviderType.U2f, new TwoFactorProvider
+            TwoFactorProviders.Add(TwoFactorProviderType.Fido2WebAuthn, new TwoFactorProvider
             {
-                Type = TwoFactorProviderType.U2f,
+                Type = TwoFactorProviderType.Fido2WebAuthn,
                 Priority = 4,
                 Sort = 5,
                 Premium = true
@@ -92,6 +92,7 @@ namespace Bit.Core.Services
         }
 
         public string Email { get; set; }
+        public string CaptchaToken { get; set; }
         public string MasterPasswordHash { get; set; }
         public string LocalMasterPasswordHash { get; set; }
         public string Code { get; set; }
@@ -113,19 +114,20 @@ namespace Bit.Core.Services
                 string.Format("Duo ({0})", _i18nService.T("Organization"));
             TwoFactorProviders[TwoFactorProviderType.OrganizationDuo].Description =
                 _i18nService.T("DuoOrganizationDesc");
-            TwoFactorProviders[TwoFactorProviderType.U2f].Name = _i18nService.T("U2fTitle");
-            TwoFactorProviders[TwoFactorProviderType.U2f].Description = _i18nService.T("U2fDesc");
+            TwoFactorProviders[TwoFactorProviderType.Fido2WebAuthn].Name = _i18nService.T("Fido2Title");
+            TwoFactorProviders[TwoFactorProviderType.Fido2WebAuthn].Description = _i18nService.T("Fido2Desc");
             TwoFactorProviders[TwoFactorProviderType.YubiKey].Name = _i18nService.T("YubiKeyTitle");
             TwoFactorProviders[TwoFactorProviderType.YubiKey].Description = _i18nService.T("YubiKeyDesc");
         }
 
-        public async Task<AuthResult> LogInAsync(string email, string masterPassword)
+        public async Task<AuthResult> LogInAsync(string email, string masterPassword, string captchaToken)
         {
             SelectedTwoFactorProviderType = null;
             var key = await MakePreloginKeyAsync(masterPassword, email);
             var hashedPassword = await _cryptoService.HashPasswordAsync(masterPassword, key);
             var localHashedPassword = await _cryptoService.HashPasswordAsync(masterPassword, key, HashPurpose.LocalAuthorization);
-            return await LogInHelperAsync(email, hashedPassword, localHashedPassword, null, null, null, key, null, null, null);
+            return await LogInHelperAsync(email, hashedPassword, localHashedPassword, null, null, null, key, null, null,
+                null, captchaToken);
         }
 
         public async Task<AuthResult> LogInSsoAsync(string code, string codeVerifier, string redirectUrl)
@@ -138,7 +140,7 @@ namespace Bit.Core.Services
             bool? remember = null)
         {
             return LogInHelperAsync(Email, MasterPasswordHash, LocalMasterPasswordHash, Code, CodeVerifier, SsoRedirectUrl, _key,
-                twoFactorProvider, twoFactorToken, remember);
+                twoFactorProvider, twoFactorToken, remember, CaptchaToken);
         }
 
         public async Task<AuthResult> LogInCompleteAsync(string email, string masterPassword,
@@ -190,9 +192,10 @@ namespace Bit.Core.Services
             {
                 providers.Add(TwoFactorProviders[TwoFactorProviderType.Duo]);
             }
-            if (TwoFactorProvidersData.ContainsKey(TwoFactorProviderType.U2f) && _platformUtilsService.SupportsU2f())
+            if (TwoFactorProvidersData.ContainsKey(TwoFactorProviderType.Fido2WebAuthn) &&
+                _platformUtilsService.SupportsFido2())
             {
-                providers.Add(TwoFactorProviders[TwoFactorProviderType.U2f]);
+                providers.Add(TwoFactorProviders[TwoFactorProviderType.Fido2WebAuthn]);
             }
             if (TwoFactorProvidersData.ContainsKey(TwoFactorProviderType.Email))
             {
@@ -201,7 +204,7 @@ namespace Bit.Core.Services
             return providers;
         }
 
-        public TwoFactorProviderType? GetDefaultTwoFactorProvider(bool u2fSupported)
+        public TwoFactorProviderType? GetDefaultTwoFactorProvider(bool fido2Supported)
         {
             if (TwoFactorProvidersData == null)
             {
@@ -221,7 +224,7 @@ namespace Bit.Core.Services
                     var provider = TwoFactorProviders[providerKvp.Key];
                     if (provider.Priority > providerPriority)
                     {
-                        if (providerKvp.Key == TwoFactorProviderType.U2f && !u2fSupported)
+                        if (providerKvp.Key == TwoFactorProviderType.Fido2WebAuthn && !fido2Supported)
                         {
                             continue;
                         }
@@ -271,7 +274,8 @@ namespace Bit.Core.Services
 
         private async Task<AuthResult> LogInHelperAsync(string email, string hashedPassword, string localHashedPassword,
             string code, string codeVerifier, string redirectUrl, SymmetricCryptoKey key,
-            TwoFactorProviderType? twoFactorProvider = null, string twoFactorToken = null, bool? remember = null)
+            TwoFactorProviderType? twoFactorProvider = null, string twoFactorToken = null, bool? remember = null,
+            string captchaToken = null)
         {
             var storedTwoFactorToken = await _tokenService.GetTwoFactorTokenAsync(email);
             var appId = await _appIdService.GetAppIdAsync();
@@ -300,25 +304,30 @@ namespace Bit.Core.Services
             if (twoFactorToken != null && twoFactorProvider != null)
             {
                 request = new TokenRequest(emailPassword, codeCodeVerifier, twoFactorProvider, twoFactorToken, remember,
-                    deviceRequest);
+                    captchaToken, deviceRequest);
             }
             else if (storedTwoFactorToken != null)
             {
                 request = new TokenRequest(emailPassword, codeCodeVerifier, TwoFactorProviderType.Remember,
-                    storedTwoFactorToken, false, deviceRequest);
+                    storedTwoFactorToken, false, captchaToken, deviceRequest);
             }
             else
             {
-                request = new TokenRequest(emailPassword, codeCodeVerifier, null, null, false, deviceRequest);
+                request = new TokenRequest(emailPassword, codeCodeVerifier, null, null, false, captchaToken, deviceRequest);
             }
 
             var response = await _apiService.PostIdentityTokenAsync(request);
             ClearState();
-            var result = new AuthResult { TwoFactor = response.Item2 != null };
+            var result = new AuthResult { TwoFactor = response.TwoFactorNeeded, CaptchaSiteKey = response.CaptchaResponse?.SiteKey };
+
+            if (result.CaptchaNeeded)
+            {
+                return result;
+            }
+
             if (result.TwoFactor)
             {
                 // Two factor required.
-                var twoFactorResponse = response.Item2;
                 Email = email;
                 MasterPasswordHash = hashedPassword;
                 LocalMasterPasswordHash = localHashedPassword;
@@ -326,12 +335,13 @@ namespace Bit.Core.Services
                 CodeVerifier = codeVerifier;
                 SsoRedirectUrl = redirectUrl;
                 _key = _setCryptoKeys ? key : null;
-                TwoFactorProvidersData = twoFactorResponse.TwoFactorProviders2;
-                result.TwoFactorProviders = twoFactorResponse.TwoFactorProviders2;
+                TwoFactorProvidersData = response.TwoFactorResponse.TwoFactorProviders2;
+                result.TwoFactorProviders = response.TwoFactorResponse.TwoFactorProviders2;
+                CaptchaToken = response.TwoFactorResponse.CaptchaToken;
                 return result;
             }
 
-            var tokenResponse = response.Item1;
+            var tokenResponse = response.TokenResponse;
             result.ResetMasterPassword = tokenResponse.ResetMasterPassword;
             if (tokenResponse.TwoFactorToken != null)
             {
@@ -374,6 +384,7 @@ namespace Bit.Core.Services
         {
             _key = null;
             Email = null;
+            CaptchaToken = null;
             MasterPasswordHash = null;
             Code = null;
             CodeVerifier = null;

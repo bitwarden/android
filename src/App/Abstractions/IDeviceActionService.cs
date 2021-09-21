@@ -45,5 +45,6 @@ namespace Bit.App.Abstractions
         bool UsingDarkTheme();
         long GetActiveTime();
         void CloseMainApp();
+        bool SupportsFido2();
     }
 }

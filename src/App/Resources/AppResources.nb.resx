@@ -1603,10 +1603,10 @@
     <value>Denne eksporten inneholder hvelvdataene dine i et ukryptert format. Du skal ikke lagre eller sende den eksporterte filen over usikre kanaler (for eksempel e-post). Slett den umiddelbart etter at du er ferdig med å bruke den.</value>
   </data>
   <data name="EncExportKeyWarning" xml:space="preserve">
-    <value>This export encrypts your data using your account's encryption key. If you ever rotate your account's encryption key you should export again since you will not be able to decrypt this export file.</value>
+    <value>Denne eksporten krypterer dataene dine ved hjelp av kontoen din sin krypteringsnøkkel. Hvis du noen gang endrer krypteringsnøkkelen til kontoen din, bør du eksportere dataene igjen, ettersom du da ikke vil kunne dekryptere denne eksportfilen.</value>
   </data>
   <data name="EncExportAccountWarning" xml:space="preserve">
-    <value>Account encryption keys are unique to each Bitwarden user account, so you can't import an encrypted export into a different account.</value>
+    <value>Kontokrypteringsnøkler er unike for hver Bitwarden sin brukerkonto, og du kan ikke importere en kryptert eksport til en annen konto.</value>
   </data>
   <data name="ExportVaultConfirmationTitle" xml:space="preserve">
     <value>Bekreft eksport av hvelvet</value>
@@ -1700,7 +1700,7 @@
     <value>Bedriftsinnlogging (SSO)</value>
   </data>
   <data name="LogInSsoSummary" xml:space="preserve">
-    <value>Quickly log in using your organization's single sign-on portal. Please enter your organization's identifier to begin.</value>
+    <value>Logg raskt inn med din organisasjons enkelte  logg-på portal. Angi din organisasjons identifikator for å begynne.</value>
   </data>
   <data name="OrgIdentifier" xml:space="preserve">
     <value>Organisasjons identifikator</value>
@@ -1791,7 +1791,7 @@
     <value>Når dette er aktivert, tillater Bitwarden å vise et sprettoppvindu når innloggingsfelt velges.</value>
   </data>
   <data name="DrawOverDescription2" xml:space="preserve">
-    <value>If enabled, the Bitwarden Accessibility Service will display a popup when login fields are selected to assist with auto-filling your logins.</value>
+    <value>Dersom det er aktivert, vil Bitwarden sin tilgjengelighetstjeneste vise en popup når innloggingsfelt er valgt for å hjelpe deg med automatisk utfylling av dine innlogginger.</value>
   </data>
   <data name="DrawOverDescription3" xml:space="preserve">
     <value>If enabled, accessibility will show a popup to augment the Autofill Service for older apps that don't support the Android Autofill Framework.</value>
@@ -1977,18 +1977,18 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
-    <value>Hide my email address from recipients.</value>
+    <value>Skjul min e-postadresse fra mottakere.</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
-    <value>One or more organization policies are affecting your Send options.</value>
+    <value>En eller flere av organisasjons retningslinjer påvirker generatorinnstillingene dine.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFilePremiumRequired" xml:space="preserve">
-    <value>Free accounts are restricted to sharing text only. A premium membership is required to use files with Send.</value>
+    <value>Gratis kontoer kan bare dele tekst. Et premiummedlemskap kreves for å bruke filer med Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFileEmailVerificationRequired" xml:space="preserve">
-    <value>You must verify your email to use files with Send. You can verify your email in the web vault.</value>
+    <value>Du må bekrefte e-posten din for å bruke filer med Send. Du kan bekrefte e-postadressen din i netthvelvet.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PasswordPrompt" xml:space="preserve">
@@ -1998,6 +1998,6 @@
     <value>Master password confirmation</value>
   </data>
   <data name="PasswordConfirmationDesc" xml:space="preserve">
-    <value>This action is protected, to continue please re-enter your master password to verify your identity.</value>
+    <value>Denne handlingen er beskyttet, for å fortsette å skrive inn superpassordet på nytt for å verifisere din identitet.</value>
   </data>
 </root>

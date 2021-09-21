@@ -30,7 +30,7 @@ namespace Bit.Core.Abstractions
         Task<CipherResponse> PostCipherAsync(CipherRequest request);
         Task<CipherResponse> PostCipherCreateAsync(CipherCreateRequest request);
         Task<FolderResponse> PostFolderAsync(FolderRequest request);
-        Task<Tuple<IdentityTokenResponse, IdentityTwoFactorResponse>> PostIdentityTokenAsync(TokenRequest request);
+        Task<IdentityResponse> PostIdentityTokenAsync(TokenRequest request);
         Task PostPasswordHintAsync(PasswordHintRequest request);
         Task SetPasswordAsync(SetPasswordRequest request);
         Task<PreloginResponse> PostPreloginAsync(PreloginRequest request);
@@ -58,6 +58,10 @@ namespace Bit.Core.Abstractions
         Task PostTwoFactorEmailAsync(TwoFactorEmailRequest request);
         Task PutDeviceTokenAsync(string identifier, DeviceTokenRequest request);
         Task PostEventsCollectAsync(IEnumerable<EventRequest> request);
+        Task<OrganizationKeysResponse> GetOrganizationKeysAsync(string id);
+        Task<OrganizationAutoEnrollStatusResponse> GetOrganizationAutoEnrollStatusAsync(string identifier);
+        Task PutOrganizationUserResetPasswordEnrollmentAsync(string orgId, string userId,
+            OrganizationUserResetPasswordEnrollmentRequest request);
 
         Task<SendResponse> GetSendAsync(string id);
         Task<SendResponse> PostSendAsync(SendRequest request);

@@ -1,0 +1,49 @@
+---
+name: Crowdin Sync
+
+on:
+  workflow_dispatch:
+    inputs: {}
+# schedule:
+#   - cron: '0 0 * * *'
+
+jobs:
+  crowdin-sync:
+    name: Autosync
+    runs-on: ubuntu-20.04
+    env:
+      _CROWDIN_PROJECT_ID: "269690"
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f  # v2.3.4
+
+      - name: Login to Azure
+        uses: Azure/login@77f1b2e3fb80c0e8645114159d17008b8a2e475a
+        with:
+          creds: ${{ secrets.AZURE_PROD_KV_CREDENTIALS }}
+
+      - name: Retrieve secrets
+        id: retrieve-secrets
+        uses: Azure/get-keyvault-secrets@80ccd3fafe5662407cc2e55f202ee34bfff8c403
+        with:
+          keyvault: "bitwarden-prod-kv"
+          secrets: "crowdin-api-token"
+
+      - name: Download translations
+        uses: crowdin/github-action@e39093fd75daae7859c68eded4b43d42ec78d8ea
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CROWDIN_API_TOKEN: ${{ steps.retrieve-secrets.outputs.crowdin-api-token }}
+        with:
+          config: crowdin.yml
+          crowdin_branch_name: master
+          upload_sources: false
+          upload_translations: false
+          download_translations: true
+          github_user_name: "github-actions"
+          github_user_email: "<>"
+          commit_message: "Autosync the updated translations"
+          localization_branch_name: crowdin-auto-sync
+          create_pull_request: true
+          pull_request_title: "Autosync Crowdin Translations"
+          pull_request_body: "Autosync the updated translations"

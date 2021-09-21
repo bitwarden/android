@@ -776,6 +776,11 @@ namespace Bit.Droid.Services
             _messagingService.Send("finishMainActivity");
         }
 
+        public bool SupportsFido2()
+        {
+            return true;
+        }
+
         private bool DeleteDir(Java.IO.File dir)
         {
             if (dir != null && dir.IsDirectory)

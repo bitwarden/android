@@ -168,11 +168,15 @@ namespace Bit.App.Pages
             }
         }
 
-        private void TryAgain_Clicked(object sender, EventArgs e)
+        private async void TryAgain_Clicked(object sender, EventArgs e)
         {
             if (DoOnce())
             {
-                if (_vm.YubikeyMethod)
+                if (_vm.Fido2Method)
+                {
+                    await _vm.Fido2AuthenticateAsync();
+                }
+                else if (_vm.YubikeyMethod)
                 {
                     _messagingService.Send("listenYubiKeyOTP", true);
                 }

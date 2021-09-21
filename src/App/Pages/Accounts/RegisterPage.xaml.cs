@@ -11,6 +11,8 @@ namespace Bit.App.Pages
         private readonly IMessagingService _messagingService;
         private readonly RegisterPageViewModel _vm;
 
+        private bool _inputFocused;
+
         public RegisterPage(HomePage homePage)
         {
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
@@ -45,7 +47,11 @@ namespace Bit.App.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            RequestFocus(_email);
+            if (!_inputFocused)
+            {
+                RequestFocus(_email);
+                _inputFocused = true;
+            }
         }
 
         private async void Submit_Clicked(object sender, EventArgs e)

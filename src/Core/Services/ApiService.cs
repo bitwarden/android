@@ -80,8 +80,7 @@ namespace Bit.Core.Services
 
         #region Auth APIs
 
-        public async Task<Tuple<IdentityTokenResponse, IdentityTwoFactorResponse>> PostIdentityTokenAsync(
-            TokenRequest request)
+        public async Task<IdentityResponse> PostIdentityTokenAsync(TokenRequest request)
         {
             var requestMessage = new HttpRequestMessage
             {
@@ -109,23 +108,14 @@ namespace Bit.Core.Services
                 responseJObject = JObject.Parse(responseJsonString);
             }
 
-            if (responseJObject != null)
+            var identityResponse = new IdentityResponse(response.StatusCode, responseJObject);
+
+            if (identityResponse.FailedToParse)
             {
-                if (response.IsSuccessStatusCode)
-                {
-                    return new Tuple<IdentityTokenResponse, IdentityTwoFactorResponse>(
-                        responseJObject.ToObject<IdentityTokenResponse>(), null);
-                }
-                else if (response.StatusCode == HttpStatusCode.BadRequest &&
-                    responseJObject.ContainsKey("TwoFactorProviders2") &&
-                    responseJObject["TwoFactorProviders2"] != null &&
-                    responseJObject["TwoFactorProviders2"].HasValues)
-                {
-                    return new Tuple<IdentityTokenResponse, IdentityTwoFactorResponse>(
-                        null, responseJObject.ToObject<IdentityTwoFactorResponse>());
-                }
+                throw new ApiException(new ErrorResponse(responseJObject, response.StatusCode, true));
             }
-            throw new ApiException(new ErrorResponse(responseJObject, response.StatusCode, true));
+
+            return identityResponse;
         }
 
         public async Task RefreshIdentityTokenAsync()
@@ -187,7 +177,7 @@ namespace Bit.Core.Services
             return SendAsync<PasswordVerificationRequest, object>(HttpMethod.Post, "/accounts/verify-password", request,
                 true, false);
         }
-
+        
         #endregion
 
         #region Folder APIs
@@ -412,6 +402,32 @@ namespace Bit.Core.Services
                 string.Concat("/hibp/breach?username=", username), null, true, true);
         }
 
+        #endregion
+        
+        #region Organizations APIs
+        
+        public Task<OrganizationKeysResponse> GetOrganizationKeysAsync(string id)
+        {
+            return SendAsync<object, OrganizationKeysResponse>(HttpMethod.Get, $"/organizations/{id}/keys", null, true, true);
+        }
+
+        public Task<OrganizationAutoEnrollStatusResponse> GetOrganizationAutoEnrollStatusAsync(string identifier)
+        {
+            return SendAsync<object, OrganizationAutoEnrollStatusResponse>(HttpMethod.Get,
+                $"/organizations/{identifier}/auto-enroll-status", null, true, true);
+        }
+        
+        #endregion
+        
+        #region Organization User APIs
+
+        public Task PutOrganizationUserResetPasswordEnrollmentAsync(string orgId, string userId,
+            OrganizationUserResetPasswordEnrollmentRequest request)
+        {
+            return SendAsync<OrganizationUserResetPasswordEnrollmentRequest, object>(HttpMethod.Put,
+                $"/organizations/{orgId}/users/{userId}/reset-password-enrollment", request, true, false);
+        }
+        
         #endregion
 
         #region Helpers

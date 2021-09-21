@@ -1904,7 +1904,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddASend" xml:space="preserve">
-    <value>Add a Send</value>
+    <value>Dodaj Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="CopyLink" xml:space="preserve">
@@ -1987,16 +1987,16 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFileEmailVerificationRequired" xml:space="preserve">
-    <value>Moraš ovjeriti svoju e-poštu za koritšenje datoteka sa Sendom.</value>
+    <value>Moraš ovjeriti svoju e-poštu u mrežnom trezoru za koritšenje datoteka sa Sendom.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PasswordPrompt" xml:space="preserve">
-    <value>Master password re-prompt</value>
+    <value>Ponovno zatraži glavnu lozinku</value>
   </data>
   <data name="PasswordConfirmation" xml:space="preserve">
-    <value>Master password confirmation</value>
+    <value>Potvrda glavne lozinke</value>
   </data>
   <data name="PasswordConfirmationDesc" xml:space="preserve">
-    <value>This action is protected, to continue please re-enter your master password to verify your identity.</value>
+    <value>Ova radnja je zaštićena. Za nastavak i potvrdu identiteta, unesi svoju glavnu lozinku.</value>
   </data>
 </root>

@@ -1905,7 +1905,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddASend" xml:space="preserve">
-    <value>Add a Send</value>
+    <value>Lägg till en Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="CopyLink" xml:space="preserve">
@@ -1988,16 +1988,16 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFileEmailVerificationRequired" xml:space="preserve">
-    <value>Du måste verifiera din e-post för att använda filer med Send. </value>
+    <value>Du måste verifiera din e-postadress för att använda filer med Send. Du kan verifiera din e-postadress i webbvalvet.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PasswordPrompt" xml:space="preserve">
-    <value>Master password re-prompt</value>
+    <value>Återupprepa huvudlösenord</value>
   </data>
   <data name="PasswordConfirmation" xml:space="preserve">
-    <value>Master password confirmation</value>
+    <value>Bekräfta huvudlösenord</value>
   </data>
   <data name="PasswordConfirmationDesc" xml:space="preserve">
-    <value>This action is protected, to continue please re-enter your master password to verify your identity.</value>
+    <value>Denna åtgärd är skyddad. För att fortsätta, vänligen verifiera din identitet genom att ange ditt huvudlösenord.</value>
   </data>
 </root>
