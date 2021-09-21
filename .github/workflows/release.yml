@@ -12,7 +12,7 @@ jobs:
       mobile-version: ${{ steps.retrieve-mobile-version.outputs.mobile_version }}
     steps:
       - name: Checkout repo
-        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f  # v2.3.4
         with:
           ref: rc
 
@@ -39,7 +39,7 @@ jobs:
         shell: bash
 
       - name: Create Draft Release
-        uses: actions/create-release@0cb9c9b65d5d1901c1f53e5e66eaf4afd303e70e # v1
+        uses: actions/create-release@0cb9c9b65d5d1901c1f53e5e66eaf4afd303e70e  # v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -55,12 +55,12 @@ jobs:
     needs: create-release
     steps:
       - name: Checkout repo
-        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f  # v2.3.4
         with:
           ref: rc
 
       - name: Download Play Store .aab artifact
-        uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74 # v2.14.0
+        uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74  # v2.14.0
         with:
           workflow: build.yml
           workflow_conclusion: success
@@ -68,7 +68,7 @@ jobs:
           name: com.x8bit.bitwarden.aab
 
       - name: Download Play Store .apk artifact
-        uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74 # v2.14.0
+        uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74  # v2.14.0
         with:
           workflow: build.yml
           workflow_conclusion: success
@@ -76,7 +76,7 @@ jobs:
           name: com.x8bit.bitwarden.apk
 
       - name: Download F-Droid .apk artifact
-        uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74 # v2.14.0
+        uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74  # v2.14.0
         with:
           workflow: build.yml
           workflow_conclusion: success
@@ -84,14 +84,14 @@ jobs:
           name: com.x8bit.bitwarden-fdroid.apk
 
       - name: Download App Store .ipa artifact
-        uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74 # v2.14.0
+        uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74  # v2.14.0
         with:
           workflow: build.yml
           workflow_conclusion: success
           branch: rc
           name: Bitwarden.ipa
 
-      - name: Get latest release tag # Workaround for https://github.com/github/hub/issues/1817
+      - name: Get latest release tag  # Workaround for https://github.com/github/hub/issues/1817
         id: latest-release-tag
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -121,12 +121,12 @@ jobs:
     needs: attach-artifacts
     steps:
       - name: Checkout repo
-        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f  # v2.3.4
         with:
           ref: rc
 
       - name: Download F-Droid .apk artifact
-        uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74 # v2.14.0
+        uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74  # v2.14.0
         with:
           workflow: build.yml
           workflow_conclusion: success
@@ -134,7 +134,7 @@ jobs:
           name: com.x8bit.bitwarden-fdroid.apk
 
       - name: Set up Node
-        uses: actions/setup-node@46071b5c7a2e0c34e49c3cb8a0e792e86e18d5ea # v2.3.0
+        uses: actions/setup-node@46071b5c7a2e0c34e49c3cb8a0e792e86e18d5ea  # v2.3.0
         with:
           node-version: '10.x'
 
@@ -168,7 +168,8 @@ jobs:
           DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
         run: |
           mkdir -p ~/secrets
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output ./store/fdroid/keystore.jks ./.github/secrets/store_fdroid-keystore.jks.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
+            --output ./store/fdroid/keystore.jks ./.github/secrets/store_fdroid-keystore.jks.gpg
 
       - name: Compile for F-Droid Store
         env:

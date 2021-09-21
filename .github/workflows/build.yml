@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout repo
-        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f  # v2.3.4
 
       - name: Set up CLOC
         run: |
@@ -28,7 +28,7 @@ jobs:
     runs-on: windows-2019
     steps:
       - name: Set up MSBuild
-        uses: microsoft/setup-msbuild@c26a08ba26249b81327e26f6ef381897b6a8754d # v1
+        uses: microsoft/setup-msbuild@c26a08ba26249b81327e26f6ef381897b6a8754d  # v1
 
       - name: Print environment
         run: |
@@ -39,18 +39,22 @@ jobs:
           echo "GitHub event: $GITHUB_EVENT"
 
       - name: Checkout repo
-        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f  # v2.3.4
 
       - name: Decrypt secrets
         env:
-            DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
+          DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
         run: |
           mkdir -p ~/secrets
 
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output ./src/Android/app_play-keystore.jks ./.github/secrets/app_play-keystore.jks.gpg
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output ./src/Android/app_upload-keystore.jks ./.github/secrets/app_upload-keystore.jks.gpg
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output ./src/Android/google-services.json ./.github/secrets/google-services.json.gpg
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output $HOME/secrets/play_creds.json ./.github/secrets/play_creds.json.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
+            --output ./src/Android/app_play-keystore.jks ./.github/secrets/app_play-keystore.jks.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
+            --output ./src/Android/app_upload-keystore.jks ./.github/secrets/app_upload-keystore.jks.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
+            --output ./src/Android/google-services.json ./.github/secrets/google-services.json.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
+            --output $HOME/secrets/play_creds.json ./.github/secrets/play_creds.json.gpg
         shell: bash
 
       - name: Increment version
@@ -61,7 +65,8 @@ jobs:
           echo "##### Setting Version Code $BUILD_NUMBER"
           echo "########################################"
 
-          sed "s/android:versionCode=\"1\"/android:versionCode=\"$BUILD_NUMBER\"/" ./src/Android/Properties/AndroidManifest.xml
+          sed "s/android:versionCode=\"1\"/android:versionCode=\"$BUILD_NUMBER\"/" \
+            ./src/Android/Properties/AndroidManifest.xml
         shell: bash
 
       - name: Restore packages
@@ -117,7 +122,7 @@ jobs:
               "/p:AndroidSigningKeyAlias=bitwarden" "/p:AndroidSigningKeyPass=$($env:PLAY_KEYSTORE_PASSWORD)" `
               "/p:AndroidSigningKeyStore=$("app_play-keystore.jks")" `
               "/p:AndroidSigningStorePass=$($env:PLAY_KEYSTORE_PASSWORD)" "/v:quiet"
-            
+
           Write-Output "########################################"
           Write-Output "##### Copy Release APK to project root"
           Write-Output "########################################"
@@ -129,13 +134,13 @@ jobs:
         shell: pwsh
 
       - name: Upload Play Store .aab artifact
-        uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700 # v2.2.4
+        uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700  # v2.2.4
         with:
           name: com.x8bit.bitwarden.aab
           path: ./com.x8bit.bitwarden.aab
 
       - name: Upload Play Store .apk artifact
-        uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700 # v2.2.4
+        uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700  # v2.2.4
         with:
           name: com.x8bit.bitwarden.apk
           path: ./com.x8bit.bitwarden.apk
@@ -151,7 +156,9 @@ jobs:
         shell: bash
 
       - name: Deploy to Play Store
-        if: (github.ref == 'refs/heads/master' && steps.rc-branch-check.outputs.branch_exists == 0) || github.ref == 'refs/heads/rc'
+        if: |
+          (github.ref == 'refs/heads/master' && steps.rc-branch-check.outputs.branch_exists == 0)
+            || github.ref == 'refs/heads/rc'
         run: |
           PUBLISHER_PATH="./store/google/Publisher/bin/Release/netcoreapp2.0/Publisher.dll"
           CREDS_PATH="$HOME/secrets/play_creds.json"
@@ -167,7 +174,7 @@ jobs:
     runs-on: windows-2019
     steps:
       - name: Set up MSBuild
-        uses: microsoft/setup-msbuild@c26a08ba26249b81327e26f6ef381897b6a8754d # v1
+        uses: microsoft/setup-msbuild@c26a08ba26249b81327e26f6ef381897b6a8754d  # v1
 
       - name: Print environment
         run: |
@@ -178,15 +185,16 @@ jobs:
           echo "GitHub event: $GITHUB_EVENT"
 
       - name: Checkout repo
-        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f  # v2.3.4
 
       - name: Decrypt secrets
         env:
-            DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
+          DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
         run: |
           mkdir -p ~/secrets
 
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output ./src/Android/app_fdroid-keystore.jks ./.github/secrets/app_fdroid-keystore.jks.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
+            --output ./src/Android/app_fdroid-keystore.jks ./.github/secrets/app_fdroid-keystore.jks.gpg
         shell: bash
 
       - name: Increment version
@@ -197,7 +205,8 @@ jobs:
           echo "##### Setting Version Code $BUILD_NUMBER"
           echo "########################################"
 
-          sed "s/android:versionCode=\"1\"/android:versionCode=\"$BUILD_NUMBER\"/" ./src/Android/Properties/AndroidManifest.xml
+          sed "s/android:versionCode=\"1\"/android:versionCode=\"$BUILD_NUMBER\"/" \
+            ./src/Android/Properties/AndroidManifest.xml
         shell: bash
 
       - name: Clean for F-Droid
@@ -293,10 +302,11 @@ jobs:
           Write-Output "##### Sign FDroid Configuration"
           Write-Output "########################################"
 
-          msbuild "$($env:GITHUB_WORKSPACE + "/src/Android/Android.csproj")" "/t:SignAndroidPackage" "/p:Configuration=FDroid" "/p:AndroidKeyStore=true" `
-              "/p:AndroidSigningKeyAlias=bitwarden" "/p:AndroidSigningKeyPass=$($env:FDROID_KEYSTORE_PASSWORD)" `
-              "/p:AndroidSigningKeyStore=$("app_fdroid-keystore.jks")" `
-              "/p:AndroidSigningStorePass=$($env:FDROID_KEYSTORE_PASSWORD)" "/v:quiet"
+          msbuild "$($env:GITHUB_WORKSPACE + "/src/Android/Android.csproj")" `
+            "/t:SignAndroidPackage" "/p:Configuration=FDroid" "/p:AndroidKeyStore=true" `
+            "/p:AndroidSigningKeyAlias=bitwarden" "/p:AndroidSigningKeyPass=$($env:FDROID_KEYSTORE_PASSWORD)" `
+            "/p:AndroidSigningKeyStore=$("app_fdroid-keystore.jks")" `
+            "/p:AndroidSigningStorePass=$($env:FDROID_KEYSTORE_PASSWORD)" "/v:quiet"
 
           Write-Output "########################################"
           Write-Output "##### Copy FDroid apk to project root"
@@ -309,7 +319,7 @@ jobs:
         shell: pwsh
 
       - name: Upload F-Droid .apk artifact
-        uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700 # v2.2.4
+        uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700  # v2.2.4
         with:
           name: com.x8bit.bitwarden-fdroid.apk
           path: ./com.x8bit.bitwarden-fdroid.apk
@@ -338,7 +348,7 @@ jobs:
           echo "GitHub event: $GITHUB_EVENT"
 
       - name: Checkout repo
-        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f  # v2.3.4
 
       - name: Decrypt secrets
         env:
@@ -346,11 +356,16 @@ jobs:
         run: |
           mkdir -p ~/secrets
 
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output $HOME/secrets/bitwarden-mobile-key.p12 ./.github/secrets/bitwarden-mobile-key.p12.gpg
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output $HOME/secrets/iphone-distribution-cert.p12 ./.github/secrets/iphone-distribution-cert.p12.gpg
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output $HOME/secrets/dist_autofill.mobileprovision ./.github/secrets/dist_autofill.mobileprovision.gpg
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output $HOME/secrets/dist_bitwarden.mobileprovision ./.github/secrets/dist_bitwarden.mobileprovision.gpg
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output $HOME/secrets/dist_extension.mobileprovision ./.github/secrets/dist_extension.mobileprovision.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
+            --output $HOME/secrets/bitwarden-mobile-key.p12 ./.github/secrets/bitwarden-mobile-key.p12.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
+            --output $HOME/secrets/iphone-distribution-cert.p12 ./.github/secrets/iphone-distribution-cert.p12.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
+            --output $HOME/secrets/dist_autofill.mobileprovision ./.github/secrets/dist_autofill.mobileprovision.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
+            --output $HOME/secrets/dist_bitwarden.mobileprovision ./.github/secrets/dist_bitwarden.mobileprovision.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
+            --output $HOME/secrets/dist_extension.mobileprovision ./.github/secrets/dist_extension.mobileprovision.gpg
         shell: bash
 
       - name: Increment version
@@ -376,8 +391,10 @@ jobs:
           security default-keychain -s build.keychain
           security unlock-keychain -p $KEYCHAIN_PASSWORD build.keychain
           security set-keychain-settings -lut 1200 build.keychain
-          security import ~/secrets/bitwarden-mobile-key.p12 -k build.keychain -P $MOBILE_KEY_PASSWORD -T /usr/bin/codesign -T /usr/bin/security
-          security import ~/secrets/iphone-distribution-cert.p12 -k build.keychain -P $DIST_CERT_PASSWORD -T /usr/bin/codesign -T /usr/bin/security
+          security import ~/secrets/bitwarden-mobile-key.p12 -k build.keychain -P $MOBILE_KEY_PASSWORD \
+            -T /usr/bin/codesign -T /usr/bin/security
+          security import ~/secrets/iphone-distribution-cert.p12 -k build.keychain -P $DIST_CERT_PASSWORD \
+            -T /usr/bin/codesign -T /usr/bin/security
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $KEYCHAIN_PASSWORD build.keychain
         shell: bash
 
@@ -411,8 +428,8 @@ jobs:
           Write-Output "########################################"
           Write-Output "##### Archive $configuration Configuration for $platform Platform"
           Write-Output "########################################"
-          msbuild "$($env:GITHUB_WORKSPACE + "/src/iOS/iOS.csproj")" "/p:Platform=$platform" "/p:Configuration=$configuration" `
-            "/p:ArchiveOnBuild=true" "/t:`"Build`""
+          msbuild "$($env:GITHUB_WORKSPACE + "/src/iOS/iOS.csproj")" "/p:Platform=$platform" `
+            "/p:Configuration=$configuration" "/p:ArchiveOnBuild=true" "/t:`"Build`""
 
           Write-Output "########################################"
           Write-Output "##### Done"
@@ -426,11 +443,12 @@ jobs:
           ARCHIVE_PATH="$HOME/Library/Developer/Xcode/Archives/*/*.xcarchive"
           EXPORT_PATH="./bitwarden-export"
 
-          xcodebuild -exportArchive -archivePath $ARCHIVE_PATH -exportPath $EXPORT_PATH -exportOptionsPlist $EXPORT_OPTIONS_PATH
+          xcodebuild -exportArchive -archivePath $ARCHIVE_PATH -exportPath $EXPORT_PATH \
+            -exportOptionsPlist $EXPORT_OPTIONS_PATH
         shell: bash
 
       - name: Upload App Store .ipa artifact
-        uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700 # v2.2.4
+        uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700  # v2.2.4
         with:
           name: Bitwarden.ipa
           path: ./bitwarden-export/Bitwarden.ipa
@@ -446,7 +464,9 @@ jobs:
         shell: bash
 
       - name: Deploy to App Store
-        if: (github.ref == 'refs/heads/master' && steps.rc-branch-check.outputs.branch_exists == 0) || github.ref == 'refs/heads/rc'
+        if: |
+          (github.ref == 'refs/heads/master' && steps.rc-branch-check.outputs.branch_exists == 0)
+            || github.ref == 'refs/heads/rc'
         env:
           APPLE_ID_USERNAME: ${{ secrets.APPLE_ID_USERNAME }}
           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
