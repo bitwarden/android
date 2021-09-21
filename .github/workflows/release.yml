@@ -6,7 +6,7 @@ on:
 jobs:
   create-release:
     name: Create Release
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     outputs:
       mobile-version: ${{ steps.retrieve-mobile-version.outputs.mobile_version }}
     steps:
@@ -50,7 +50,7 @@ jobs:
 
   attach-artifacts:
     name: Attach Release Artifacts
-    runs-on: windows-latest
+    runs-on: windows-2019
     needs: create-release
     steps:
       - name: Checkout repo
@@ -116,7 +116,7 @@ jobs:
 
   f-droid:
     name: F-Droid Release
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     needs: attach-artifacts
     steps:
       - name: Checkout repo

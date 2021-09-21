@@ -9,7 +9,7 @@ on:
 jobs:
   cloc:
     name: CLOC
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout repo
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
@@ -25,7 +25,7 @@ jobs:
 
   android:
     name: Android Build
-    runs-on: windows-latest
+    runs-on: windows-2019
     steps:
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@c26a08ba26249b81327e26f6ef381897b6a8754d # v1
@@ -164,7 +164,7 @@ jobs:
 
   f-droid:
     name: F-Droid Build
-    runs-on: windows-latest
+    runs-on: windows-2019
     steps:
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@c26a08ba26249b81327e26f6ef381897b6a8754d # v1
@@ -327,7 +327,7 @@ jobs:
 
   ios:
     name: iOS Build
-    runs-on: macos-latest
+    runs-on: macos-10.15
     steps:
       - name: Print environment
         run: |
