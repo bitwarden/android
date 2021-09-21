@@ -209,7 +209,7 @@
     <value>Стварыце тэму з праблемай у нашым рэпазіторыі GitHub.</value>
   </data>
   <data name="FingerprintDirection" xml:space="preserve">
-    <value>Выкарыстоўвайце свой адбітак пальца для верыфікацыі.</value>
+    <value>Выкарыстоўвайце свой адбітак пальца для праверкі.</value>
   </data>
   <data name="Folder" xml:space="preserve">
     <value>Папка</value>
@@ -1163,7 +1163,7 @@
     <value>Выкарыстоўваць Face ID для разблакіроўкі</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
-    <value>Верыфікацыя Face ID</value>
+    <value>Праверка Face ID</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
@@ -1603,13 +1603,13 @@
     <value>Экспартуемы файл утрымлівае даныя вашага сховішча ў незашыфраваным фармаце. Яго не варта захоўваць ці адпраўляць па небяспечным каналам (напрыклад, па электроннай пошце). Выдаліце яго адразу пасля выкарыстання.</value>
   </data>
   <data name="EncExportKeyWarning" xml:space="preserve">
-    <value>This export encrypts your data using your account's encryption key. If you ever rotate your account's encryption key you should export again since you will not be able to decrypt this export file.</value>
+    <value>Пры экспарце даныя шыфруюцца з дапамогай ключа шыфравання ўліковага запісу. Калі вы калі-небудзь павернеце ключ шыфравання ўліковага запісу, вам належыць экспартаваць даныя паўторна, бо вы не зможаце расшыфраваць гэты файл экспарту.</value>
   </data>
   <data name="EncExportAccountWarning" xml:space="preserve">
-    <value>Account encryption keys are unique to each Bitwarden user account, so you can't import an encrypted export into a different account.</value>
+    <value>Ключы шыфравання ўнікальныя для кожнага ўліковага запісу Bitwarden, таму нельга імпартаваць зашыфраванае сховішча ў іншы ўліковы запіс.</value>
   </data>
   <data name="ExportVaultConfirmationTitle" xml:space="preserve">
-    <value>Confirm Vault Export</value>
+    <value>Пацвердзіць экспарт сховішча</value>
     <comment>Title for the alert to confirm vault exports.</comment>
   </data>
   <data name="Warning" xml:space="preserve">
@@ -1688,7 +1688,7 @@
     <value>Біяметрычныя даныя змяніліся, увайдзіце зноў праз асноўны пароль для ўключэння.</value>
   </data>
   <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Biometric unlock for autofill disabled pending verification of master password.</value>
+    <value>Біяметрычная разблакіроўка для аўтазапаўнення адключаная ў чаканні праверкі асноўнага пароля.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Уключыць сінхранізацыю па абнаўленні</value>
@@ -1712,7 +1712,7 @@
     <value>Прызначыць асноўны пароль</value>
   </data>
   <data name="SetMasterPasswordSummary" xml:space="preserve">
-    <value>Для завяршэння ўваходу праз SSO, усталюйце галоўны пароль для доступу і абароны вашаго сховішча.</value>
+    <value>Для завяршэння ўваходу праз SSO, задайце асноўны пароль для доступу і абароны вашаго сховішча.</value>
   </data>
   <data name="MasterPasswordPolicyInEffect" xml:space="preserve">
     <value>Згодна з адной або некалькімі палітыкамі арганізацыі неабходна, каб ваш асноўны пароль адказваў наступным патрабаванням:</value>
@@ -1796,10 +1796,10 @@
     <value>Пры ўключэнні, служба спецыяльных магчымасцей Bitwarden пакажа ўсплывальнае апавяшчэнне, каб выклікаць службу аўтазапаўнення для старых праграм, якія не падтрымліваюць Android Autofill Framework.</value>
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
-    <value>Due to an Enterprise Policy, you are restricted from saving items to your personal vault. Change the Ownership option to an organization and choose from available Collections.</value>
+    <value>Паводле карпаратыўнай палітыкі вам забаронена захоўваць элементы ў асабістым сховішчы. Змяніце ўладальніка на арганізацыю і выберыце з даступных Калекцый.</value>
   </data>
   <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
-    <value>An organization policy is affecting your ownership options.</value>
+    <value>Палітыка арганізацыі ўплывае на вашы варыянты валодання.</value>
   </data>
   <data name="Send" xml:space="preserve">
     <value>Адпраўленне</value>
@@ -1824,7 +1824,7 @@
     <value>Тэкст, які вы хочаце адправіць.</value>
   </data>
   <data name="HideTextByDefault" xml:space="preserve">
-    <value>When accessing the Send, hide the text by default</value>
+    <value>Пры доступе да адпраўлення хаваць тэкст па змаўчанні.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="TypeFile" xml:space="preserve">
@@ -1853,11 +1853,11 @@
     <value>Час завяршэння</value>
   </data>
   <data name="ExpirationDateInfo" xml:space="preserve">
-    <value>If set, access to this Send will expire on the specified date and time.</value>
+    <value>Калі зададзена, доступ да гэтага адпраўлення скончыцца ў зададзеныя дату і час.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Expired" xml:space="preserve">
-    <value>Expired</value>
+    <value>Тэрмін скончыўся</value>
   </data>
   <data name="MaximumAccessCount" xml:space="preserve">
     <value>Maximum Access Count</value>
@@ -1873,23 +1873,23 @@
     <value>Current Access Count</value>
   </data>
   <data name="NewPassword" xml:space="preserve">
-    <value>New Password</value>
+    <value>Новы пароль</value>
   </data>
   <data name="PasswordInfo" xml:space="preserve">
     <value>Optionally require a password for users to access this Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="RemovePassword" xml:space="preserve">
-    <value>Remove Password</value>
+    <value>Выдаліць пароль</value>
   </data>
   <data name="AreYouSureRemoveSendPassword" xml:space="preserve">
-    <value>Are you sure you want to remove the password?</value>
+    <value>Вы ўпэўнены, што хочаце выдаліць пароль?</value>
   </data>
   <data name="RemovingSendPassword" xml:space="preserve">
-    <value>Removing password</value>
+    <value>Вылаленне пароля</value>
   </data>
   <data name="SendPasswordRemoved" xml:space="preserve">
-    <value>Password has been removed.</value>
+    <value>Пароль выдалены.</value>
   </data>
   <data name="NotesInfo" xml:space="preserve">
     <value>Private notes about this Send.</value>
@@ -1991,12 +1991,12 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PasswordPrompt" xml:space="preserve">
-    <value>Паўторны запыт галоўнага пароля</value>
+    <value>Паўторны запыт асноўнага пароля</value>
   </data>
   <data name="PasswordConfirmation" xml:space="preserve">
-    <value>Пацверджанне галоўнага пароля</value>
+    <value>Пацвярджэнне асноўнага пароля</value>
   </data>
   <data name="PasswordConfirmationDesc" xml:space="preserve">
-    <value>Гэтае дзеянне ахоўваецца, для працягу зноў увядзіце пароль для верыфікацыі асобы.</value>
+    <value>Гэтае дзеянне ахоўваецца, для працягу зноў увядзіце пароль для праверкі асобы.</value>
   </data>
 </root>
