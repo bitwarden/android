@@ -39,7 +39,6 @@ jobs:
         shell: bash
 
       - name: Create Draft Release
-        if: false
         uses: actions/create-release@0cb9c9b65d5d1901c1f53e5e66eaf4afd303e70e  # v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -71,39 +70,39 @@ jobs:
         run: |
           pwd
           ls -alh
-          exit 1
+        shell: bash
 
-      - name: Download Play Store .aab artifact
-        uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74  # v2.14.0
-        with:
-          workflow: build.yml
-          workflow_conclusion: success
-          branch: rc
-          name: com.x8bit.bitwarden.aab
+      # - name: Download Play Store .aab artifact
+      #   uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74  # v2.14.0
+      #   with:
+      #     workflow: build.yml
+      #     workflow_conclusion: success
+      #     branch: rc
+      #     name: com.x8bit.bitwarden.aab
 
-      - name: Download Play Store .apk artifact
-        uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74  # v2.14.0
-        with:
-          workflow: build.yml
-          workflow_conclusion: success
-          branch: rc
-          name: com.x8bit.bitwarden.apk
+      # - name: Download Play Store .apk artifact
+      #   uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74  # v2.14.0
+      #   with:
+      #     workflow: build.yml
+      #     workflow_conclusion: success
+      #     branch: rc
+      #     name: com.x8bit.bitwarden.apk
 
-      - name: Download F-Droid .apk artifact
-        uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74  # v2.14.0
-        with:
-          workflow: build.yml
-          workflow_conclusion: success
-          branch: rc
-          name: com.x8bit.bitwarden-fdroid.apk
+      # - name: Download F-Droid .apk artifact
+      #   uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74  # v2.14.0
+      #   with:
+      #     workflow: build.yml
+      #     workflow_conclusion: success
+      #     branch: rc
+      #     name: com.x8bit.bitwarden-fdroid.apk
 
-      - name: Download App Store .ipa artifact
-        uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74  # v2.14.0
-        with:
-          workflow: build.yml
-          workflow_conclusion: success
-          branch: rc
-          name: Bitwarden.ipa
+      # - name: Download App Store .ipa artifact
+      #   uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74  # v2.14.0
+      #   with:
+      #     workflow: build.yml
+      #     workflow_conclusion: success
+      #     branch: rc
+      #     name: Bitwarden.ipa
 
       - name: Get latest release tag  # Workaround for https://github.com/github/hub/issues/1817
         id: latest-release-tag
@@ -120,10 +119,10 @@ jobs:
           RELEASE_TAG_NAME: ${{ steps.latest-release-tag.outputs.release_tag_name }}
         run: |
           hub release edit \
-            -a ./com.x8bit.bitwarden.aab \
-            -a ./com.x8bit.bitwarden.apk \
-            -a ./com.x8bit.bitwarden-fdroid.apk \
-            -a ./Bitwarden.ipa \
+            -a ./com.x8bit.bitwarden.aab/com.x8bit.bitwarden.aab \
+            -a ./com.x8bit.bitwarden.apk/com.x8bit.bitwarden.apk \
+            -a ./com.x8bit.bitwarden-fdroid.apk/com.x8bit.bitwarden-fdroid.apk \
+            -a ./Bitwarden.ipa/Bitwarden.ipa \
             -m "Version $RELEASE_NAME" \
             $RELEASE_TAG_NAME
         shell: bash
