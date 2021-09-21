@@ -7,6 +7,18 @@ on:
       - 'gh-pages'
 
 jobs:
+  test:
+    name: Test Job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get latest release tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "$(hub release -L 1 -f '%T')"
+        shell: bash
+
+
   cloc:
     name: CLOC
     runs-on: ubuntu-latest
@@ -49,7 +61,6 @@ jobs:
 
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output ./src/Android/app_play-keystore.jks ./.github/secrets/app_play-keystore.jks.gpg
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output ./src/Android/app_upload-keystore.jks ./.github/secrets/app_upload-keystore.jks.gpg
-          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output ./src/Android/app_fdroid-keystore.jks ./.github/secrets/app_fdroid-keystore.jks.gpg
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output ./src/Android/google-services.json ./.github/secrets/google-services.json.gpg
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output $HOME/secrets/play_creds.json ./.github/secrets/play_creds.json.gpg
         shell: bash
@@ -140,6 +151,66 @@ jobs:
         with:
           name: com.x8bit.bitwarden.apk
           path: ./com.x8bit.bitwarden.apk
+
+      - name: Check if RC branch exists
+        id: rc-branch-check
+        run: |
+          if [[ $(git ls-remote --heads origin rc) ]]; then
+            echo "::set-output name=branch_exists::1"
+          else
+            echo "::set-output name=branch_exists::0"
+          fi
+        shell: bash
+
+      - name: Deploy to Play Store
+        if: (github.ref == 'refs/heads/master' && steps.rc-branch-check.outputs.branch_exists == 0) || github.ref == 'refs/heads/rc'
+        run: |
+          PUBLISHER_PATH="./store/google/Publisher/bin/Release/netcoreapp2.0/Publisher.dll"
+          CREDS_PATH="$HOME/secrets/play_creds.json"
+          AAB_PATH="./com.x8bit.bitwarden.aab"
+          TRACK="internal"
+
+          dotnet $PUBLISHER_PATH $CREDS_PATH $AAB_PATH $TRACK
+        shell: bash
+
+
+  f-droid:
+    name: F-Droid Build
+    runs-on: windows-latest
+    steps:
+      - name: Set up MSBuild
+        uses: microsoft/setup-msbuild@c26a08ba26249b81327e26f6ef381897b6a8754d # v1
+
+      - name: Print environment
+        run: |
+          nuget help | grep Version
+          msbuild -version
+          dotnet --info
+          echo "GitHub ref: $GITHUB_REF"
+          echo "GitHub event: $GITHUB_EVENT"
+
+      - name: Checkout repo
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
+
+      - name: Decrypt secrets
+        env:
+            DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
+        run: |
+          mkdir -p ~/secrets
+
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" --output ./src/Android/app_fdroid-keystore.jks ./.github/secrets/app_fdroid-keystore.jks.gpg
+        shell: bash
+
+      - name: Increment version
+        run: |
+          BUILD_NUMBER=$((3000 + $GITHUB_RUN_NUMBER))
+
+          echo "########################################"
+          echo "##### Setting Version Code $BUILD_NUMBER"
+          echo "########################################"
+
+          sed "s/android:versionCode=\"1\"/android:versionCode=\"$BUILD_NUMBER\"/" ./src/Android/Properties/AndroidManifest.xml
+        shell: bash
 
       - name: Clean for F-Droid
         run: |
@@ -263,17 +334,6 @@ jobs:
           else
             echo "::set-output name=branch_exists::0"
           fi
-        shell: bash
-
-      - name: Deploy to Play Store
-        if: (github.ref == 'refs/heads/master' && steps.rc-branch-check.outputs.branch_exists == 0) || github.ref == 'refs/heads/rc'
-        run: |
-          PUBLISHER_PATH="./store/google/Publisher/bin/Release/netcoreapp2.0/Publisher.dll"
-          CREDS_PATH="$HOME/secrets/play_creds.json"
-          AAB_PATH="./com.x8bit.bitwarden.aab"
-          TRACK="internal"
-
-          dotnet $PUBLISHER_PATH $CREDS_PATH $AAB_PATH $TRACK
         shell: bash
 
 
