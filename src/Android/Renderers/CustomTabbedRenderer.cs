@@ -49,7 +49,7 @@ namespace Bit.Droid.Renderers
             return null;
         }
 
-        async void BottomNavigationView.IOnNavigationItemReselectedListener.OnNavigationItemReselected(IMenuItem item)
+        public async void OnNavigationItemReselected(IMenuItem item)
         {
             if (_page?.CurrentPage?.Navigation != null && _page.CurrentPage.Navigation.NavigationStack.Count > 0)
             {
