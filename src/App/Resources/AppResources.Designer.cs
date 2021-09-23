@@ -5388,13 +5388,24 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("YubiKeyTitle", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Zip / Postal Code.
         /// </summary>
-        public static string ZipPostalCode {
+        public static string ZipPostalCode
+        {
+            get { return ResourceManager.GetString("ZipPostalCode", resourceCulture); }
+        }
+
+        public static string Fido2CheckBrowser {
             get {
-                return ResourceManager.GetString("ZipPostalCode", resourceCulture);
+                return ResourceManager.GetString("Fido2CheckBrowser", resourceCulture);
+            }
+        }
+        
+        public static string ResetPasswordAutoEnrollInviteWarning {
+            get {
+                return ResourceManager.GetString("ResetPasswordAutoEnrollInviteWarning", resourceCulture);
             }
         }
     }

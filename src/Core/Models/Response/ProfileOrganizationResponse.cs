@@ -24,5 +24,6 @@ namespace Bit.Core.Models.Response
         public OrganizationUserType Type { get; set; }
         public bool Enabled { get; set; }
         public Permissions Permissions { get; set; } = new Permissions();
+        public string Identifier { get; set; }
     }
 }

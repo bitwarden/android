@@ -656,7 +656,7 @@
     <value>Aseta PIN-koodi</value>
   </data>
   <data name="SetPINDirection" xml:space="preserve">
-    <value>Syötä 4-numeroinen PIN-koodi, jonka avulla voit avata sovelluksen lukituksen.</value>
+    <value>Syötä 4-numeroinen PIN-koodi, jolla sovelluksen lukitus avataan.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
     <value>Kohteen tiedot</value>
@@ -692,10 +692,10 @@
     <value>Kaksivaiheinen kirjautuminen tekee tilistäsi turvallisemman edellyttämällä salasanan lisäksi kirjautumisen lisätodennusta todennuslaitteen, ‑sovelluksen, tekstiviestin, puhelun tai sähköpostin avulla. Voit ottaa kaksivaiheisen kirjautumisen käyttöön bitwarden.com‑verkkoholvissa. Haluatko käydä sivustolla nyt?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
-    <value>Lukituksen avaustapa on {0}</value>
+    <value>Avaa biometrialla: {0}</value>
   </data>
   <data name="UnlockWithPIN" xml:space="preserve">
-    <value>Avaa lukitus PIN-koodilla</value>
+    <value>Avaa PIN-koodilla</value>
   </data>
   <data name="Validating" xml:space="preserve">
     <value>Vahvistetaan</value>
@@ -1160,7 +1160,7 @@
     <value>Käytä todennukseen Face ID:tä.</value>
   </data>
   <data name="UseFaceIDToUnlock" xml:space="preserve">
-    <value>Avaa lukitus Face ID:llä</value>
+    <value>Avaa Face ID:llä</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
     <value>Vahvista Face ID</value>
@@ -1437,13 +1437,13 @@
     <value>PIN</value>
   </data>
   <data name="Unlock" xml:space="preserve">
-    <value>Avaa lukitus</value>
+    <value>Avaa</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minuuttia</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
-    <value>Aseta PIN-koodisi Bitwardenin avausta varten. PIN-asetukset tyhjentyvät, jos kirjaudut kokonaan ulos sovelluksesta.</value>
+    <value>Aseta PIN-koodi Bitwardenin avaukselle. PIN-asetukset tyhjentyvät, jos kirjaudut kokonaan ulos sovelluksesta.</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
     <value>Kirjautunut tunnuksella {0} palveluun {1}.</value>
@@ -1517,7 +1517,7 @@
     <value>Haluatko varmasti poistua Bitwardenista?</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
-    <value>Haluatko vaatia lukituksen avausta pääsalasanallasi sovelluksen uudelleenkäynnistyksen yhteydessä?</value>
+    <value>Vaaditaanko lukituksen avaus pääsalasanalla, kun sovellus käynnistetään uudelleen?</value>
   </data>
   <data name="Black" xml:space="preserve">
     <value>Musta</value>
@@ -1570,7 +1570,7 @@
     <value>Biometria</value>
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
-    <value>Avaa lukitus biometrialla</value>
+    <value>Avaa biometrialla</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
     <value>Bitwarden vaatii huomiota - Katso "Automaattisen täytön esteettömyyspalvelu" Bitwardenin asetuksissa</value>
@@ -1685,10 +1685,10 @@
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Biometrinen lukituksen avaus on poistettu käytöstä, kunnes pääsalasana on vahvistettu.</value>
+    <value>Biometrinen avaus on poistettu käytöstä, kunnes pääsalasana on vahvistettu.</value>
   </data>
   <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Automaattisen täytön biometrinen lukituksen avaus on poistettu käytöstä, kunnes pääsalasana on vahvistettu.</value>
+    <value>Automaattisen täytön biometrinen avaus on poistettu käytöstä, kunnes pääsalasana on vahvistettu.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Synkronoi holvi päivityksen yhteydessä</value>

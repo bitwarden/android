@@ -181,6 +181,23 @@ namespace Bit.Core.Services
             return true;
         }
 
+        public Tuple<ResetPasswordPolicyOptions, bool> GetResetPasswordPolicyOptions(IEnumerable<Policy> policies,
+            string orgId)
+        {
+            var resetPasswordPolicyOptions = new ResetPasswordPolicyOptions();
+
+            if (policies == null || orgId == null)
+            {
+                return new Tuple<ResetPasswordPolicyOptions, bool>(resetPasswordPolicyOptions, false);
+            }
+
+            var policy = policies.FirstOrDefault(p =>
+                p.OrganizationId == orgId && p.Type == PolicyType.ResetPassword && p.Enabled);
+            resetPasswordPolicyOptions.AutoEnrollEnabled = GetPolicyBool(policy, "autoEnrollEnabled") ?? false;
+
+            return new Tuple<ResetPasswordPolicyOptions, bool>(resetPasswordPolicyOptions, policy != null);
+        }
+
         public async Task<bool> PolicyAppliesToUser(PolicyType policyType, Func<Policy, bool> policyFilter = null)
         {
             if (policyFilter == null) {

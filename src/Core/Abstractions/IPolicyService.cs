@@ -16,6 +16,8 @@ namespace Bit.Core.Abstractions
         Task<MasterPasswordPolicyOptions> GetMasterPasswordPolicyOptions(IEnumerable<Policy> policies = null);
         Task<bool> EvaluateMasterPassword(int passwordStrength, string newPassword,
             MasterPasswordPolicyOptions enforcedPolicyOptions);
+        Tuple<ResetPasswordPolicyOptions, bool> GetResetPasswordPolicyOptions(IEnumerable<Policy> policies,
+            string orgId);
         Task<bool> PolicyAppliesToUser(PolicyType policyType, Func<Policy, bool> policyFilter = null);
         int? GetPolicyInt(Policy policy, string key);
     }

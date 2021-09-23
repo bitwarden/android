@@ -242,11 +242,12 @@ namespace Bit.App.Pages
                 await _deviceActionService.HideLoadingAsync();
                 if (authResult != null && authResult.Properties.TryGetValue("error", out var resultError))
                 {
-                    await _platformUtilsService.ShowDialogAsync(resultError, AppResources.AnErrorHasOccurred);
+                    var message = AppResources.Fido2CheckBrowser + "\n\n" + resultError;
+                    await _platformUtilsService.ShowDialogAsync(message, AppResources.AnErrorHasOccurred);
                 }
                 else
                 {
-                    await _platformUtilsService.ShowDialogAsync(AppResources.Fido2SomethingWentWrong,
+                    await _platformUtilsService.ShowDialogAsync(AppResources.Fido2CheckBrowser,
                         AppResources.AnErrorHasOccurred);
                 }
             }
