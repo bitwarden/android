@@ -8,13 +8,11 @@ jobs:
   create-release:
     name: Create Release
     runs-on: ubuntu-20.04
-    outputs:
-      mobile-version: ${{ steps.retrieve-mobile-version.outputs.mobile_version }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f  # v2.3.4
         with:
-          ref: upgrade-pipeline
+          ref: rc
 
       - name: Retrieve Mobile release version
         id: retrieve-mobile-version
@@ -38,27 +36,6 @@ jobs:
           fi
         shell: bash
 
-      - name: Create Draft Release
-        uses: actions/create-release@0cb9c9b65d5d1901c1f53e5e66eaf4afd303e70e  # v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: v${{ steps.retrieve-mobile-version.outputs.mobile_version }}
-          release_name: Version ${{ steps.retrieve-mobile-version.outputs.mobile_version }}
-          draft: true
-          prerelease: false
-
-
-  attach-artifacts:
-    name: Attach Release Artifacts
-    runs-on: windows-2019
-    needs: create-release
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f  # v2.3.4
-        with:
-          ref: rc
-
       - name: Download all artifacts
         uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74  # v2.14.0
         with:
@@ -66,28 +43,19 @@ jobs:
           workflow_conclusion: success
           branch: rc
 
-      - name: Get latest release tag  # Workaround for https://github.com/github/hub/issues/1817
-        id: latest-release-tag
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo "::set-output name=release_tag_name::$(hub release --include-drafts -L 1 -f '%T')"
-        shell: bash
-
-      - name: Upload release assets
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          RELEASE_NAME: ${{ needs.create-release.outputs.mobile-version }}
-          RELEASE_TAG_NAME: ${{ steps.latest-release-tag.outputs.release_tag_name }}
-        run: |
-          hub release edit \
-            -a ./com.x8bit.bitwarden.aab/com.x8bit.bitwarden.aab \
-            -a ./com.x8bit.bitwarden.apk/com.x8bit.bitwarden.apk \
-            -a ./com.x8bit.bitwarden-fdroid.apk/com.x8bit.bitwarden-fdroid.apk \
-            -a ./Bitwarden.ipa/Bitwarden.ipa \
-            -m "Version $RELEASE_NAME" \
-            $RELEASE_TAG_NAME
-        shell: bash
+      - name: Create release
+        uses: ncipollo/release-action@95215a3cb6e6a1908b3c44e00b4fdb15548b1e09  # v2.8.5
+        with:
+          artifacts: "./com.x8bit.bitwarden.aab/com.x8bit.bitwarden.aab,
+                      ./com.x8bit.bitwarden.apk/com.x8bit.bitwarden.apk,
+                      ./com.x8bit.bitwarden-fdroid.apk/com.x8bit.bitwarden-fdroid.apk,
+                      ./Bitwarden.ipa/Bitwarden.ipa"
+          commit: ${{ github.sha }}
+          tag: v${{ steps.retrieve-mobile-version.outputs.mobile_version }}
+          name: Test Version ${{ steps.retrieve-mobile-version.outputs.mobile_version }}
+          body: "<insert release notes here>"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          draft: true
 
 
   f-droid:
