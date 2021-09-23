@@ -12,5 +12,6 @@
         SendOptions = 7, // Sets restrictions or defaults for Bitwarden Sends
         ResetPassword = 8, // Allows orgs to use reset password : also can enable auto-enrollment during invite flow
         MaximumVaultTimeout = 9, // Sets the maximum allowed vault timeout
+        DisablePersonalVaultExport = 10, // Disable personal vault export
     }
 }
