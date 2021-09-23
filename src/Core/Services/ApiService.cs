@@ -410,6 +410,12 @@ namespace Bit.Core.Services
         {
             return SendAsync<object, OrganizationKeysResponse>(HttpMethod.Get, $"/organizations/{id}/keys", null, true, true);
         }
+
+        public Task<OrganizationAutoEnrollStatusResponse> GetOrganizationAutoEnrollStatusAsync(string identifier)
+        {
+            return SendAsync<object, OrganizationAutoEnrollStatusResponse>(HttpMethod.Get,
+                $"/organizations/{identifier}/auto-enroll-status", null, true, true);
+        }
         
         #endregion
         

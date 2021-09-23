@@ -1,4 +1,5 @@
-﻿using Bit.App.Abstractions;
+﻿using System.ComponentModel;
+using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Bit.Core.Utilities;
 using System.Linq;
@@ -41,6 +42,16 @@ namespace Bit.App.Pages
                 return true;
             }
             return base.OnBackButtonPressed();
+        }
+
+        async void OnTimePickerPropertyChanged(object sender, PropertyChangedEventArgs args)
+        {
+            var s = (TimePicker) sender;
+            var time = s.Time.TotalMinutes;
+            if (s.IsFocused && args.PropertyName == "Time")
+            {
+                await _vm.VaultTimeoutAsync(false, (int)time);
+            }
         }
 
         private async void RowSelected(object sender, SelectionChangedEventArgs e)

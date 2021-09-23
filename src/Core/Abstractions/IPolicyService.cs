@@ -20,5 +20,7 @@ namespace Bit.Core.Abstractions
         Task<bool> PolicyAppliesToUser(PolicyType policyType, Func<Policy, bool> policyFilter = null);
         Tuple<ResetPasswordPolicyOptions, bool> GetResetPasswordPolicyOptions(IEnumerable<Policy> policies,
             string orgId);
+        Task<bool> PolicyAppliesToUser(PolicyType policyType, Func<Policy, bool> policyFilter = null);
+        int? GetPolicyInt(Policy policy, string key);
     }
 }

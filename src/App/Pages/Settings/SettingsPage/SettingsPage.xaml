@@ -21,18 +21,38 @@
                 x:DataType="pages:SettingsPageListItem">
                 <controls:ExtendedStackLayout Orientation="Horizontal"
                              StyleClass="list-row, list-row-platform">
-                    <Label Text="{Binding Name, Mode=OneWay}"
-                           LineBreakMode="TailTruncation"
+                    <Frame
+                        IsVisible="{Binding UseFrame}"
+                        Padding="10"
+                        HasShadow="False"
+                        BackgroundColor="Transparent"
+                        BorderColor="Accent">
+                        <Label
+                            Text="{Binding Name, Mode=OneWay}"
+                            StyleClass="text-muted, text-sm, text-bold"
+                            HorizontalTextAlignment="Center" />
+                    </Frame>
+                    <Label IsVisible="{Binding UseFrame, Converter={StaticResource inverseBool}}"
+                           Text="{Binding Name, Mode=OneWay}"
+                           LineBreakMode="{Binding LineBreakMode}"
                            HorizontalOptions="StartAndExpand"
                            VerticalOptions="CenterAndExpand"
                            StyleClass="list-title"/>
                     <Label Text="{Binding SubLabel, Mode=OneWay}"
-                           IsVisible="{Binding SubLabel, Converter={StaticResource stringHasValue}}"
+                           IsVisible="{Binding ShowSubLabel}"
                            HorizontalOptions="End"
                            HorizontalTextAlignment="End"
                            VerticalOptions="CenterAndExpand"
                            TextColor="{Binding SubLabelColor}"
                            StyleClass="list-sub" />
+                    <TimePicker IsVisible="{Binding ShowTimeInput}"
+                                Time="{Binding Time}" Format="HH:mm"
+                                PropertyChanged="OnTimePickerPropertyChanged"
+                                HorizontalOptions="End"
+                                VerticalOptions="Center"
+                                FontSize="Small"
+                                TextColor="{Binding SubLabelColor}"
+                                StyleClass="list-sub" Margin="-5" />
                 </controls:ExtendedStackLayout>
             </DataTemplate>
 

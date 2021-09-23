@@ -534,7 +534,7 @@
     <value>Dərhal</value>
   </data>
   <data name="VaultTimeout" xml:space="preserve">
-    <value>Anbara müraciət vaxtı bitdi</value>
+    <value>Anbara müraciət bitəcək</value>
   </data>
   <data name="VaultTimeoutAction" xml:space="preserve">
     <value>Anbara müraciət vaxtının bitmə əməliyyatı</value>
