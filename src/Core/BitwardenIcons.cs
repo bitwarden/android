@@ -3,13 +3,7 @@ namespace Bit.Core
     public static class BitwardenIcons
     {
         // TODO: Missing icons
-        public const string File = FilePdf;
         public const string FolderOpenO = Frown;
-        public const string ChevronUp = Frown;
-        public const string Paste = Frown;
-        public const string Ban = Frown;
-        public const string Camera = Frown;
-        // Eye-slash not aligned with eye
 
         public const string User = "\xe900";
         public const string UserF = "\xe901";
@@ -41,7 +35,6 @@ namespace Bit.Core
         public const string AngleRight = "\xe91b";
         public const string ExternalLink = "\xe91c";
         public const string Refresh = "\xe91d";
-        public const string EyeSlash = "\xe91e";
         public const string Search = "\xe91f";
         public const string Filter = "\xe920";
         public const string PlusCircle = "\xe921";
@@ -114,5 +107,11 @@ namespace Bit.Core
         public const string Windows = "\xe964";
         public const string Wrench = "\xe965";
         public const string Youtube = "\xe966";
+        public const string Ban = "\xe967";
+        public const string Camera = "\xe968";
+        public const string ChevronUp = "\xe969";
+        public const string EyeSlash = "\xe96d";
+        public const string File = "\xe96e";
+        public const string Paste = "\xe96f";
     }
 }
