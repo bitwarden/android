@@ -17,5 +17,6 @@ namespace Bit.Core.Abstractions
         Task LockAsync(bool allowSoftLock = false, bool userInitiated = false);
         Task LogOutAsync();
         Task SetVaultTimeoutOptionsAsync(int? timeout, string action);
+        Task<int> GetVaultTimeout();
     }
 }

@@ -17,7 +17,6 @@ namespace Bit.Core.Abstractions
         bool IsSelfHost();
         bool IsViewOpen();
         void LaunchUri(string uri, Dictionary<string, object> options = null);
-        int? LockTimeout();
         Task<string> ReadFromClipboardAsync(Dictionary<string, object> options = null);
         void SaveFile();
         Task<bool> ShowDialogAsync(string text, string title = null, string confirmText = null,

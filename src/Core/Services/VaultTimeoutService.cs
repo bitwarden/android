@@ -1,7 +1,9 @@
 ﻿using Bit.Core.Abstractions;
 using Bit.Core.Models.Domain;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
+using Bit.Core.Enums;
 
 namespace Bit.Core.Services
 {
@@ -17,6 +19,7 @@ namespace Bit.Core.Services
         private readonly ISearchService _searchService;
         private readonly IMessagingService _messagingService;
         private readonly ITokenService _tokenService;
+        private readonly IPolicyService _policyService;
         private readonly Action<bool> _lockedCallback;
         private readonly Func<bool, Task> _loggedOutCallback;
 
@@ -31,6 +34,7 @@ namespace Bit.Core.Services
             ISearchService searchService,
             IMessagingService messagingService,
             ITokenService tokenService,
+            IPolicyService policyService,
             Action<bool> lockedCallback,
             Func<bool, Task> loggedOutCallback)
         {
@@ -44,6 +48,7 @@ namespace Bit.Core.Services
             _searchService = searchService;
             _messagingService = messagingService;
             _tokenService = tokenService;
+            _policyService = policyService;
             _lockedCallback = lockedCallback;
             _loggedOutCallback = loggedOutCallback;
         }
@@ -80,13 +85,8 @@ namespace Bit.Core.Services
             {
                 return;
             }
-            // This only returns null
-            var vaultTimeoutMinutes = _platformUtilsService.LockTimeout();
-            if (vaultTimeoutMinutes == null)
-            {
-                vaultTimeoutMinutes = await _storageService.GetAsync<int?>(Constants.VaultTimeoutKey);
-            }
-            if (vaultTimeoutMinutes.GetValueOrDefault(-1) < 0)
+            var vaultTimeoutMinutes = await GetVaultTimeout();
+            if (vaultTimeoutMinutes < 0)
             {
                 return;
             }
@@ -176,6 +176,35 @@ namespace Bit.Core.Services
         {
             PinProtectedKey = null;
             await _storageService.RemoveAsync(Constants.ProtectedPin);
+        }
+
+        public async Task<int> GetVaultTimeout() {
+            var vaultTimeout = (await _storageService.GetAsync<int?>(Constants.VaultTimeoutKey)).GetValueOrDefault(-1);
+
+            if (await _policyService.PolicyAppliesToUser(PolicyType.MaximumVaultTimeout)) {
+                var policy = (await _policyService.GetAll(PolicyType.MaximumVaultTimeout)).First();
+                // Remove negative values, and ensure it's smaller than maximum allowed value according to policy
+                var policyTimeout = _policyService.GetPolicyInt(policy, "minutes");
+                if (!policyTimeout.HasValue)
+                {
+                    return vaultTimeout;
+                }
+
+                var timeout = Math.Min(vaultTimeout, policyTimeout.Value);
+
+                if (timeout < 0) {
+                    timeout = policyTimeout.Value;
+                }
+
+                // We really shouldn't need to set the value here, but multiple services relies on this value being correct.
+                if (vaultTimeout != timeout) {
+                    await _storageService.SaveAsync(Constants.VaultTimeoutKey, timeout);
+                }
+
+                return timeout;
+            }
+
+            return vaultTimeout;
         }
     }
 }
