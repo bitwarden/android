@@ -1475,6 +1475,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to One or more organization policies prevents your from exporting your personal vault..
+        /// </summary>
+        public static string DisablePersonalVaultExportPolicyInEffect {
+            get {
+                return ResourceManager.GetString("DisablePersonalVaultExportPolicyInEffect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Disable Save Prompt.
         /// </summary>
         public static string DisableSavePrompt {
