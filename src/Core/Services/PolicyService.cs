@@ -181,6 +181,23 @@ namespace Bit.Core.Services
             return true;
         }
 
+        public Tuple<ResetPasswordPolicyOptions, bool> GetResetPasswordPolicyOptions(IEnumerable<Policy> policies,
+            string orgId)
+        {
+            var resetPasswordPolicyOptions = new ResetPasswordPolicyOptions();
+
+            if (policies == null || orgId == null)
+            {
+                return new Tuple<ResetPasswordPolicyOptions, bool>(resetPasswordPolicyOptions, false);
+            }
+
+            var policy = policies.FirstOrDefault(p =>
+                p.OrganizationId == orgId && p.Type == PolicyType.ResetPassword && p.Enabled);
+            resetPasswordPolicyOptions.AutoEnrollEnabled = GetPolicyBool(policy, "autoEnrollEnabled") ?? false;
+
+            return new Tuple<ResetPasswordPolicyOptions, bool>(resetPasswordPolicyOptions, policy != null);
+        }
+
         public async Task<bool> PolicyAppliesToUser(PolicyType policyType, Func<Policy, bool> policyFilter)
         {
             var policies = await GetAll(policyType);
@@ -205,22 +222,6 @@ namespace Bit.Core.Services
                 o.UsePolicies &&
                 !o.isExemptFromPolicies &&
                 policySet.Contains(o.Id));
-        }
-        public Tuple<ResetPasswordPolicyOptions, bool> GetResetPasswordPolicyOptions(IEnumerable<Policy> policies,
-            string orgId)
-        {
-            var resetPasswordPolicyOptions = new ResetPasswordPolicyOptions();
-
-            if (policies == null || orgId == null)
-            {
-                return new Tuple<ResetPasswordPolicyOptions, bool>(resetPasswordPolicyOptions, false);
-            }
-
-            var policy = policies.FirstOrDefault(p =>
-                p.OrganizationId == orgId && p.Type == PolicyType.ResetPassword && p.Enabled);
-            resetPasswordPolicyOptions.AutoEnrollEnabled = GetPolicyBool(policy, "autoEnrollEnabled") ?? false;
-
-            return new Tuple<ResetPasswordPolicyOptions, bool>(resetPasswordPolicyOptions, policy != null);
         }
 
         public int? GetPolicyInt(Policy policy, string key)
