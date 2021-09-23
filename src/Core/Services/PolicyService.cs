@@ -198,29 +198,30 @@ namespace Bit.Core.Services
             return new Tuple<ResetPasswordPolicyOptions, bool>(resetPasswordPolicyOptions, policy != null);
         }
 
-        public async Task<bool> PolicyAppliesToUser(PolicyType policyType, Func<Policy, bool> policyFilter = null)
+        public async Task<bool> PolicyAppliesToUser(PolicyType policyType, Func<Policy, bool> policyFilter)
         {
-            if (policyFilter == null) {
-                policyFilter = _ => true;
-            }
-
             var policies = await GetAll(policyType);
             var organizations = await _userService.GetAllOrganizationAsync();
 
-            var filteredPolicies = policies.Where(p =>
-                    p.Enabled &&
-                    p.Type == policyType &&
-                    policyFilter(p))
-                .Select(p => p.OrganizationId);
+            IEnumerable<Policy> filteredPolicies;
 
-            var policySet = filteredPolicies.Distinct();
+            if (policyFilter != null)
+            {
+                filteredPolicies = policies.Where(p => p.Enabled && policyFilter(p));
+            }
+            else
+            {
+                filteredPolicies = policies.Where(p => p.Enabled);
+            }
+
+            var policySet = new HashSet<string>(filteredPolicies.Select(p => p.OrganizationId));
 
             return organizations.Any(o =>
                 o.Enabled &&
                 o.Status >= OrganizationUserStatusType.Accepted &&
                 o.UsePolicies &&
-                !o.IsExemptFromPolicies &&
-                policySet.Distinct().Contains(o.Id));
+                !o.isExemptFromPolicies &&
+                policySet.Contains(o.Id));
         }
 
         public int? GetPolicyInt(Policy policy, string key)

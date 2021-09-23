@@ -91,6 +91,6 @@ namespace Bit.Core.Models.Domain
         public bool canManageGroups => IsAdmin || Permissions.ManageGroups;
         public bool canManagePolicies => IsAdmin || Permissions.ManagePolicies;
         public bool canManageUser => IsAdmin || Permissions.ManageUsers;
-        public bool IsExemptFromPolicies =>  canManagePolicies;
+        public bool isExemptFromPolicies => canManagePolicies;
     }
 }
