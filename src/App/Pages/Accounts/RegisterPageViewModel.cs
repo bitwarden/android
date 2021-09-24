@@ -90,44 +90,47 @@ namespace Bit.App.Pages
             if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
-                    AppResources.InternetConnectionRequiredTitle);
+                    AppResources.InternetConnectionRequiredTitle, AppResources.Ok);
                 return;
             }
             if (string.IsNullOrWhiteSpace(Email))
             {
-                await Page.DisplayAlert(AppResources.AnErrorHasOccurred,
+                await _platformUtilsService.ShowDialogAsync(
                     string.Format(AppResources.ValidationFieldRequired, AppResources.EmailAddress),
+                    AppResources.AnErrorHasOccurred,
                     AppResources.Ok);
                 return;
             }
             if (!Email.Contains("@"))
             {
-                await Page.DisplayAlert(AppResources.AnErrorHasOccurred, AppResources.InvalidEmail, AppResources.Ok);
+                await _platformUtilsService.ShowDialogAsync(AppResources.InvalidEmail, AppResources.AnErrorHasOccurred,
+                    AppResources.Ok);
                 return;
             }
             if (string.IsNullOrWhiteSpace(MasterPassword))
             {
-                await Page.DisplayAlert(AppResources.AnErrorHasOccurred,
+                await _platformUtilsService.ShowDialogAsync(
                     string.Format(AppResources.ValidationFieldRequired, AppResources.MasterPassword),
+                    AppResources.AnErrorHasOccurred,
                     AppResources.Ok);
                 return;
             }
             if (MasterPassword.Length < 8)
             {
-                await Page.DisplayAlert(AppResources.AnErrorHasOccurred,
-                    AppResources.MasterPasswordLengthValMessage, AppResources.Ok);
+                await _platformUtilsService.ShowDialogAsync(AppResources.MasterPasswordLengthValMessage,
+                    AppResources.AnErrorHasOccurred, AppResources.Ok);
                 return;
             }
             if (MasterPassword != ConfirmMasterPassword)
             {
-                await Page.DisplayAlert(AppResources.AnErrorHasOccurred,
-                    AppResources.MasterPasswordConfirmationValMessage, AppResources.Ok);
+                await _platformUtilsService.ShowDialogAsync(AppResources.MasterPasswordConfirmationValMessage,
+                    AppResources.AnErrorHasOccurred, AppResources.Ok);
                 return;
             }
             if (ShowTerms && !AcceptPolicies)
             {
-                await Page.DisplayAlert(AppResources.AnErrorHasOccurred,
-                    AppResources.AcceptPoliciesError, AppResources.Ok);
+                await _platformUtilsService.ShowDialogAsync(AppResources.AcceptPoliciesError,
+                    AppResources.AnErrorHasOccurred, AppResources.Ok);
                 return;
             }
 
@@ -190,7 +193,7 @@ namespace Bit.App.Pages
                 if (e?.Error != null)
                 {
                     await _platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(),
-                        AppResources.AnErrorHasOccurred);
+                        AppResources.AnErrorHasOccurred, AppResources.Ok);
                 }
             }
         }

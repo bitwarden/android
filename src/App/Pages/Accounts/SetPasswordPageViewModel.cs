@@ -90,6 +90,7 @@ namespace Bit.App.Pages
         public string ConfirmMasterPassword { get; set; }
         public string Hint { get; set; }
         public Action SetPasswordSuccessAction { get; set; }
+        public Action UpdateTempPasswordAction { get; set; }
         public Action CloseAction { get; set; }
         public string OrgIdentifier { get; set; }
         public string OrgId { get; set; }
@@ -221,7 +222,6 @@ namespace Bit.App.Pages
                 }
                 
                 await _deviceActionService.HideLoadingAsync();
-
                 SetPasswordSuccessAction?.Invoke();
             }
             catch (ApiException e)

@@ -5362,6 +5362,36 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string UpdatedMasterPassword {
+            get {
+                return ResourceManager.GetString("UpdatedMasterPassword", resourceCulture);
+            }
+        }
+        
+        public static string UpdateMasterPassword {
+            get {
+                return ResourceManager.GetString("UpdateMasterPassword", resourceCulture);
+            }
+        }
+        
+        public static string UpdateMasterPasswordWarning {
+            get {
+                return ResourceManager.GetString("UpdateMasterPasswordWarning", resourceCulture);
+            }
+        }
+        
+        public static string UpdatingPassword {
+            get {
+                return ResourceManager.GetString("UpdatingPassword", resourceCulture);
+            }
+        }
+        
+        public static string UpdatePasswordError {
+            get {
+                return ResourceManager.GetString("UpdatePasswordError", resourceCulture);
+            }
+        }
+        
         /// <summary>
         ///   Looks up a localized string similar to Your account&apos;s fingerprint phrase.
         /// </summary>

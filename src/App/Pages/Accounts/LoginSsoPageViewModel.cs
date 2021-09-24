@@ -60,6 +60,7 @@ namespace Bit.App.Pages
         public Action StartSetPasswordAction { get; set; }
         public Action SsoAuthSuccessAction { get; set; }
         public Action CloseAction { get; set; }
+        public Action UpdateTempPasswordAction { get; set; }
 
         public async Task InitAsync()
         {
@@ -185,6 +186,10 @@ namespace Bit.App.Pages
                 else if (response.ResetMasterPassword)
                 {
                     StartSetPasswordAction?.Invoke();
+                } 
+                else if (response.ForcePasswordReset)
+                {
+                    UpdateTempPasswordAction?.Invoke();
                 }
                 else
                 {

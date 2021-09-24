@@ -177,6 +177,12 @@ namespace Bit.Core.Services
             return SendAsync<PasswordVerificationRequest, object>(HttpMethod.Post, "/accounts/verify-password", request,
                 true, false);
         }
+
+        public Task PutUpdateTempPasswordAsync(UpdateTempPasswordRequest request)
+        {
+            return SendAsync<UpdateTempPasswordRequest, object>(HttpMethod.Put, "/accounts/update-temp-password",
+                request, true, false);
+        }
         
         #endregion
 

@@ -462,5 +462,40 @@ namespace Bit.App.Utilities
             var multiByteEscaped = Regex.Replace(escaped, "%([0-9A-F]{2})", EncodeMultibyte);
             return Convert.ToBase64String(Encoding.UTF8.GetBytes(multiByteEscaped));
         }
+
+        public static async Task LogOutAsync()
+        {
+            var userService = ServiceContainer.Resolve<IUserService>("userService");
+            var syncService = ServiceContainer.Resolve<ISyncService>("syncService");
+            var tokenService = ServiceContainer.Resolve<ITokenService>("tokenService");
+            var cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
+            var settingsService = ServiceContainer.Resolve<ISettingsService>("settingsService");
+            var cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
+            var folderService = ServiceContainer.Resolve<IFolderService>("folderService");
+            var collectionService = ServiceContainer.Resolve<ICollectionService>("collectionService");
+            var passwordGenerationService = ServiceContainer.Resolve<IPasswordGenerationService>(
+                "passwordGenerationService");
+            var vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
+            var stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            var searchService = ServiceContainer.Resolve<ISearchService>("searchService");
+
+            var userId = await userService.GetUserIdAsync();
+            await Task.WhenAll(
+                syncService.SetLastSyncAsync(DateTime.MinValue),
+                tokenService.ClearTokenAsync(),
+                cryptoService.ClearKeysAsync(),
+                userService.ClearAsync(),
+                settingsService.ClearAsync(userId),
+                cipherService.ClearAsync(userId),
+                folderService.ClearAsync(userId),
+                collectionService.ClearAsync(userId),
+                passwordGenerationService.ClearAsync(),
+                vaultTimeoutService.ClearAsync(),
+                stateService.PurgeAsync(),
+                deviceActionService.ClearCacheAsync());
+            vaultTimeoutService.BiometricLocked = true;
+            searchService.ClearIndex();
+        }
     }
 }
