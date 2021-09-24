@@ -157,6 +157,14 @@ jobs:
           fi
         shell: bash
 
+      - name: Test step
+        run: |
+          pwd
+          ls -alh
+          echo "HOME: $HOME"
+          echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
+        shell: bash
+
       - name: Deploy to Play Store
         if: |
           (github.ref == 'refs/heads/master' && steps.rc-branch-check.outputs.branch_exists == 0)
