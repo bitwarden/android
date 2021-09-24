@@ -534,16 +534,16 @@
     <value>Onmiddellik</value>
   </data>
   <data name="VaultTimeout" xml:space="preserve">
-    <value>Vault Timeout</value>
+    <value>Kluis-uittel</value>
   </data>
   <data name="VaultTimeoutAction" xml:space="preserve">
-    <value>Vault Timeout Action</value>
+    <value>Kluis-uittelaksie</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
-    <value>Logging out will remove all access to your vault and requires online authentication after the timeout period. Are you sure you want to use this setting?</value>
+    <value>Deur uit te teken word alle toegang tot u kluis verwyder en word waarmerking na die uitteltydperk vereis. Is u seker u wil hierdie instelling gebruik?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
-    <value>Logging in...</value>
+    <value>Teken tans aan…</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="LoginOrCreateNewAccount" xml:space="preserve">
@@ -568,11 +568,11 @@
     <value>Hoofwagwoord moet ten minste 8 karakters lank wees.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
-    <value>Minimum Numbers</value>
+    <value>Min. aantal syfers</value>
     <comment>Minimum numeric characters for password generator settings</comment>
   </data>
   <data name="MinSpecial" xml:space="preserve">
-    <value>Minimum Special</value>
+    <value>Min. aantal spesiaal</value>
     <comment>Minimum special characters for password generator settings</comment>
   </data>
   <data name="MoreSettings" xml:space="preserve">
@@ -604,7 +604,7 @@
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>Option defaults are set from the main Bitwarden app's password generator tool.</value>
+    <value>Opsieverstekke is vanaf die Bitwarden-toep se wagwoordgenereerder instelbaar.</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>Opsies</value>
@@ -665,7 +665,7 @@
     <value>Item bygewerk.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
-    <value>Submitting...</value>
+    <value>Word ingedien…</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Syncing" xml:space="preserve">
@@ -698,7 +698,7 @@
     <value>Ontgrendel met PIN-kode</value>
   </data>
   <data name="Validating" xml:space="preserve">
-    <value>Validating</value>
+    <value>Validering</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="VerificationCode" xml:space="preserve">
@@ -735,7 +735,7 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
-    <value>When you select an input field and see a Bitwarden auto-fill overlay, you can tap it to launch the auto-fill service.</value>
+    <value>Wanneer u ’n toevoerveld kies en ’n Bitwarden-outovuloorleg sien, kan u daarop tik om die outovuldiens te lanseer.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Tik hierdie kennisgewing om ’n item vanuit u kluis outomaties in te vul.</value>
@@ -759,7 +759,7 @@
     <value>Status</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
+    <value>Die eenvoudigste manier om nuwe aantekeninge tot u kluis toe te voeg is vanuit die Bitwarden-outovuldiens. Leer meer oor die gebruik van die Bitwarden-outovuldiens in “Instellings”.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Outovul</value>
@@ -806,10 +806,10 @@
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>This account has two-step login enabled, however, none of the configured two-step providers are supported on this device. Please use a supported device and/or add additional providers that are better supported across devices (such as an authenticator app).</value>
+    <value>Hierdie rekening het tweestapsaantekening geaktiveer, maar die toestel ondersteun geen van die gekonfigureerde aanbieders nie. Gebruik ’n ondersteunde toestel en/of voeg aanbieders toe wat beter ondersteuning bied vir meerdere toestelle (soos ’n waarmerktoep).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
-    <value>Recovery Code</value>
+    <value>Terugstelkode</value>
     <comment>For 2FA</comment>
   </data>
   <data name="RememberMe" xml:space="preserve">
@@ -817,7 +817,7 @@
     <comment>Remember my two-step login</comment>
   </data>
   <data name="SendVerificationCodeAgain" xml:space="preserve">
-    <value>Send verification code email again</value>
+    <value>Stuur weer e-pos met bevestigingskode</value>
     <comment>For 2FA</comment>
   </data>
   <data name="TwoStepLoginOptions" xml:space="preserve">
@@ -827,11 +827,11 @@
     <value>Gebruik ’n ander tweestapaantekenmetode</value>
   </data>
   <data name="VerificationEmailNotSent" xml:space="preserve">
-    <value>Could not send verification email. Try again.</value>
+    <value>Kon nie die e-pos vir bevestiging stuur nie. Probeer weer.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
-    <value>Verification email sent.</value>
+    <value>E-pos met bevesting is verstuur.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
@@ -854,7 +854,7 @@
     <value>U toestel kan nie hierdie tipe lêer open nie.</value>
   </data>
   <data name="Downloading" xml:space="preserve">
-    <value>Downloading...</value>
+    <value>Laai tans af…</value>
     <comment>Message shown when downloading a file</comment>
   </data>
   <data name="AttachmentLargeWarning" xml:space="preserve">
@@ -862,14 +862,14 @@
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
   <data name="AuthenticatorKey" xml:space="preserve">
-    <value>Authenticator Key (TOTP)</value>
+    <value>Waarmerkkode (TOTP)</value>
   </data>
   <data name="VerificationCodeTotp" xml:space="preserve">
-    <value>Verification Code (TOTP)</value>
+    <value>Bevestigingskode (TOTP)</value>
     <comment>Totp code label</comment>
   </data>
   <data name="AuthenticatorKeyAdded" xml:space="preserve">
-    <value>Authenticator key added.</value>
+    <value>Waarmerksleutel toegevoeg.</value>
   </data>
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>Kan nie waarmerksleutel lees nie.</value>
@@ -890,16 +890,16 @@
     <value>Foto’s</value>
   </data>
   <data name="CopyTotp" xml:space="preserve">
-    <value>Copy TOTP</value>
+    <value>Kopieer TOTP</value>
   </data>
   <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>If your login has an authenticator key attached to it, the TOTP verification code is automatically copied to your clipboard whenever you auto-fill the login.</value>
+    <value>Indien u aantekening aan ’n bevestigingskode gekoppel is, word die TOTP-bevestigingskode outomaties na die knipbord gekopieer by die aantekening se outovul.</value>
   </data>
   <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>Disable Automatic TOTP Copy</value>
+    <value>Deaktiveer outomatiese kopieëring van TOTP</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
-    <value>A premium membership is required to use this feature.</value>
+    <value>’n Premie-lidmaatskap is nodig om hierdie funksie te gebruik.</value>
   </data>
   <data name="AttachementAdded" xml:space="preserve">
     <value>Aanhegsel toegevoeg</value>
@@ -938,13 +938,13 @@
     <value>API-bedienerbronadres</value>
   </data>
   <data name="CustomEnvironment" xml:space="preserve">
-    <value>Custom Environment</value>
+    <value>Pasgemaakte omgewing</value>
   </data>
   <data name="CustomEnvironmentFooter" xml:space="preserve">
     <value>Vir gevorderde gebruikers. U kan die basisbronadres van elke diens onafhanklik instel.</value>
   </data>
   <data name="EnvironmentSaved" xml:space="preserve">
-    <value>The environment URLs have been saved.</value>
+    <value>Die omgewingbronadresse is bewaar.</value>
   </data>
   <data name="FormattedIncorrectly" xml:space="preserve">
     <value>{0} is nie korrek geformatteer nie.</value>
@@ -955,10 +955,10 @@
     <comment>"Identity" refers to an identity server. See more context here https://en.wikipedia.org/wiki/Identity_management</comment>
   </data>
   <data name="SelfHostedEnvironment" xml:space="preserve">
-    <value>Self-hosted Environment</value>
+    <value>Selfgehuisveste omgewing</value>
   </data>
   <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
-    <value>Specify the base URL of your on-premise hosted Bitwarden installation.</value>
+    <value>Spesifiseer die basisbronadres van u selfgehuisveste Bitwarden-installasie.</value>
   </data>
   <data name="ServerUrl" xml:space="preserve">
     <value>Bedienerbronadres</value>
@@ -1144,7 +1144,7 @@
     <value>Outovul Toeganklikheidsdiens</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>The Bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device.</value>
+    <value>Die Bitwarden-outovuldiens gebruik die Android-outovulraamwerk om te help met die invul van aantekeninge, kredietkaarte en identiteitsinligting in ander toeps op u toestel.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
     <value>Gebruik Bitwarden se outovuldiens om aantekeninge, kredietkaarte en identiteitsinligting in ander toeps in te vul.</value>
@@ -1169,13 +1169,13 @@
     <value>Windows Hello</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
-    <value>We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings &gt; System &gt; Languages and input &gt; Advanced &gt; Autofill service.</value>
+    <value>Ons kon nie die Android-outovulinstellingkieslys outomaties vir u open nie. U kan na die outovulinstellingkieslys navigeer dur te gaan na Android Instellings &gt; Stelsel &gt; Tale en toevoer &gt; Gevorderd &gt; Outovuldiens.</value>
   </data>
   <data name="CustomFieldName" xml:space="preserve">
     <value>Pasgemaakte veldnaam</value>
   </data>
   <data name="FieldTypeBoolean" xml:space="preserve">
-    <value>Boolean</value>
+    <value>Booleaans</value>
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>Versteek</value>
@@ -1318,7 +1318,7 @@
     <comment>Plural form of a URI</comment>
   </data>
   <data name="CheckingPassword" xml:space="preserve">
-    <value>Checking password...</value>
+    <value>Gaan tans wagwoord na…</value>
     <comment>A loading message when doing an exposed password check.</comment>
   </data>
   <data name="CheckPassword" xml:space="preserve">
@@ -1446,7 +1446,7 @@
     <value>Stel u PIN-kode in om Bitwarden te ontgrendel. U PIN-kode word heringestel indien u ooit volledig by die toep uitteken.</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
-    <value>Logged in as {0} on {1}.</value>
+    <value>Op {0} aangeteken as {1}.</value>
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
@@ -1524,22 +1524,22 @@
     <comment>The color black</comment>
   </data>
   <data name="BlacklistedUris" xml:space="preserve">
-    <value>Blacklisted URIs</value>
+    <value>Versperde URI’s</value>
   </data>
   <data name="BlacklistedUrisDescription" xml:space="preserve">
     <value>URI’s op die swartlys word nie outomaties ingevul nie. Die lys moet met komma’s geskei wees. Bv. “https://twitter.com, androidapp://com.twitter.android”.</value>
   </data>
   <data name="DisableSavePrompt" xml:space="preserve">
-    <value>Disable Save Prompt</value>
+    <value>Deaktiveer bewaarpor</value>
   </data>
   <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>The "Save Prompt" automatically prompts you to save new items to your vault whenever you enter them for the first time.</value>
+    <value>Die “bewaarpor” vra u outomaties om nuwe items in u kluis te bewaar wanneer u dit vir die eerste maal invoer.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
-    <value>On App Restart</value>
+    <value>Nadat toep herbegin is</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>Auto-fill makes it easy to securely access your Bitwarden vault from other websites and apps. It looks like you have not enabled an auto-fill service for Bitwarden. Enable auto-fill for Bitwarden from the "Settings" screen.</value>
+    <value>Outovul vereenvoudig veilige toegang tot u Bitwarden-kluis vanuit ander webwerwe en toeps. Dit kom voor of u nog nie ’n outovuldiens vir Bitwarden geaktiveer het nie. Aktiveer outovul vir Bitwarden in die “Instellings”.</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
     <value>U temaveranderinge word toegepas wanneer die toep herbegin word.</value>
@@ -1576,16 +1576,16 @@
     <value>Bitwarden kort aandag - Sien “Outovul toeganklikheidsdienste” in Bitwarden Instellings</value>
   </data>
   <data name="BitwardenAutofillServiceOverlayPermission" xml:space="preserve">
-    <value>3. On the Android App Settings screen for Bitwarden, go to the "Display over other apps" options (under Advanced) and tap the toggle to enable overlay support.</value>
+    <value>3. Op die Android-toepinstellingskerm vir Bitwarden, gaan na die “Gee weer oor ander toeps”-opsie (onder gevorderd) en tokkel die skakelaar om dit te aktiveer.</value>
   </data>
   <data name="OverlayPermission" xml:space="preserve">
     <value>Toestemmings</value>
   </data>
   <data name="BitwardenAutofillServiceOpenOverlayPermissionSettings" xml:space="preserve">
-    <value>Open Overlay Permission Settings</value>
+    <value>Open oorlegtoestemminginstellings</value>
   </data>
   <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
-    <value>3. On the Android App Settings screen for Bitwarden, select "Display over other apps" (under "Advanced") and switch on the toggle to allow the overlay.</value>
+    <value>3. Op die Android-toepinstellingskerm vir Bitwarden, kies die “Gee weer oor ander toeps”-opsie (onder “gevorderd”) en tokkel die skakelaar om oorleg toe te laat.</value>
   </data>
   <data name="Denied" xml:space="preserve">
     <value>Geweier</value>
@@ -1609,7 +1609,7 @@
     <value>Rekeningenkripsiesleutels is uniek tot elke Bitwarden-gebruikersrekening, daarom kan u nie ’n geënkripteerde uitstuur in ’n ander rekening invoer nie.</value>
   </data>
   <data name="ExportVaultConfirmationTitle" xml:space="preserve">
-    <value>Confirm Vault Export</value>
+    <value>Bevestig kluisuitstuur</value>
     <comment>Title for the alert to confirm vault exports.</comment>
   </data>
   <data name="Warning" xml:space="preserve">
@@ -1639,7 +1639,7 @@
     <value>Aanhegsel suksesvol bewaar</value>
   </data>
   <data name="AutofillTileAccessibilityRequired" xml:space="preserve">
-    <value>Please enable "Auto-fill Accessibility Service" from Bitwarden Settings to use the Auto-fill tile.</value>
+    <value>Aktiveer asb. “Outovultoeganklikheidsdiens” in Bitwarden-instellings om die outovulteël te gebruik.</value>
   </data>
   <data name="AutofillTileUriNotFound" xml:space="preserve">
     <value>Geen wagwoordvelde bespeur</value>
@@ -1653,11 +1653,11 @@
     <comment>Confirmation message after successfully soft-deleting a login</comment>
   </data>
   <data name="Restore" xml:space="preserve">
-    <value>Restore</value>
+    <value>Stel terug</value>
     <comment>Restores an entity (verb).</comment>
   </data>
   <data name="Restoring" xml:space="preserve">
-    <value>Restoring...</value>
+    <value>Stel tans terug…</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemRestored" xml:space="preserve">
@@ -1691,28 +1691,28 @@
     <value>Biometriese ontgrendeling vir outovul gedeaktiveer hangende bevestiging van hoofwagwoord.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
-    <value>Enable sync on refresh</value>
+    <value>Aktiveer sinchronisering by verfrissing</value>
   </data>
   <data name="EnableSyncOnRefreshDescription" xml:space="preserve">
     <value>Sinchroniseer kluis met aftreekgebaar.</value>
   </data>
   <data name="LogInSso" xml:space="preserve">
-    <value>Enterprise Single Sign-On</value>
+    <value>Onderneming-enkelaanteken</value>
   </data>
   <data name="LogInSsoSummary" xml:space="preserve">
-    <value>Quickly log in using your organization's single sign-on portal. Please enter your organization's identifier to begin.</value>
+    <value>Teken vinnig aan d.m.v. u organisasie se enkelaantekenportaal (SSO). Voer u organisasie se identifiseerder in om te begin.</value>
   </data>
   <data name="OrgIdentifier" xml:space="preserve">
     <value>Organisasie-identifiseerder</value>
   </data>
   <data name="LoginSsoError" xml:space="preserve">
-    <value>Currently unable to login with SSO</value>
+    <value>Kan nie tans met SSO aanteken nie</value>
   </data>
   <data name="SetMasterPassword" xml:space="preserve">
     <value>Stel Hoofwagwoord</value>
   </data>
   <data name="SetMasterPasswordSummary" xml:space="preserve">
-    <value>In order to complete logging in with SSO, please set a master password to access and protect your vault.</value>
+    <value>Om aantekening met SSO te voltooi moet u ’n hoofwagwoord instel vir toegang tot en beskerming van u kluis.</value>
   </data>
   <data name="MasterPasswordPolicyInEffect" xml:space="preserve">
     <value>Een of meer organisasiebeleide stel die volgende eise aan u hoofwagwoord:</value>
@@ -1745,8 +1745,7 @@
     <value>Laai tans</value>
   </data>
   <data name="AcceptPolicies" xml:space="preserve">
-    <value>By activating this switch you agree to the following:
-</value>
+    <value>Deur hierdie skuifknop te aktiveer stem u in tot die volgende:</value>
   </data>
   <data name="AcceptPoliciesError" xml:space="preserve">
     <value>Gebruiksvoorwaardes en privaatheidsbeleid is nie erken nie.</value>
@@ -1767,7 +1766,7 @@
     <value>Gebruik inlyn outovul</value>
   </data>
   <data name="InlineAutofillDescription" xml:space="preserve">
-    <value>Use inline autofill if your selected IME (keyboard) supports it. If your configuration is not supported (or this option is disabled), the default Autofill overlay will be used.</value>
+    <value>Gebruik inlyn outovul indien u gekose IME (toetsbord) dit ondersteun. Indien u konfigurasie nie ondersteun word nie (of die opsie is gedeaktiveer), sal die verstekoutovuloorleg gebruik word.</value>
   </data>
   <data name="Accessibility" xml:space="preserve">
     <value>Gebruik toeganklikheid</value>
@@ -1858,10 +1857,10 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Expired" xml:space="preserve">
-    <value>Expired</value>
+    <value>Verstreke</value>
   </data>
   <data name="MaximumAccessCount" xml:space="preserve">
-    <value>Maximum Access Count</value>
+    <value>Maksimum toegangsaantal</value>
   </data>
   <data name="MaximumAccessCountInfo" xml:space="preserve">
     <value>Indien ingestel het gebruikers ne meer toegang tot hierdie Send sodra die maksimum aantal toegang bereik is.</value>

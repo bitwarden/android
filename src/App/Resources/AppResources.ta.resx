@@ -806,7 +806,7 @@
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>This account has two-step login enabled, however, none of the configured two-step providers are supported on this device. Please use a supported device and/or add additional providers that are better supported across devices (such as an authenticator app).</value>
+    <value>இக்கணக்கில் இரு-படி சரிபார்ப்பு இயக்கத்திலுள்ளது, எனினும், உள்ளமைக்கப்பட்ட இரு-படி வழங்குநர் எவையும் இச்சாதனத்தில் ஆதரிக்கப்படவில்லை. ஆதரிக்கப்பட்ட சாதனம் மற்றும்/அ சாதனங்களுக்கிடையே நன்றாக ஆதரிக்கப்படும் கூடுதல் (அங்கீகார செயலி போன்ற) வழங்குநர்களைப் பயன்படுத்தவும்.</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
     <value>மீட்பு குறியீடு</value>
@@ -1170,7 +1170,7 @@
     <value>விண்டோஸ் ஹலோ</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
-    <value>We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings &gt; System &gt; Languages and input &gt; Advanced &gt; Autofill service.</value>
+    <value>உமக்காக எங்களால் தானாக Android தன்னிரப்பி அமைப்புகள் பட்டியை திறக்க இயலவில்லை. Android அமைப்புகள் &gt; சிஸ்டம் &gt; மொழிகள் மற்றும் உள்ளீடு &gt; மேம்பட்டவை &gt; தன்னிரப்பிச் சேவைக்கு கைமுறையாக நீங்களே தன்னிரப்பி அமைப்புகள் பட்டிக்கு வழிநடக்கலாம்.</value>
   </data>
   <data name="CustomFieldName" xml:space="preserve">
     <value>தனிப்பயன் புலத்தின் பெயர்</value>
@@ -1426,7 +1426,7 @@
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="ShareVaultConfirmation" xml:space="preserve">
-    <value>Bitwarden allows you to share your vault with others by using an organization account. Would you like to visit the bitwarden.com website to learn more?</value>
+    <value>நிறுவன கணக்கைப் பயன்படுத்தி உம் பெட்டகத்தைப் பிறருடன் பகிர உம்மை Bitwarden அனுமதிக்கிறது. மேலும் அறிய bitwarden.com வலைத்தளத்தை பார்வையிட விருப்பமா?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
     <value>பெட்டகத்தை ஏற்றுமதி செய்</value>
@@ -1528,7 +1528,7 @@
     <value>தடுப்புப்பட்டியலிடப்பட்ட உரலிகள்</value>
   </data>
   <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>URIs that are blacklisted will not offer auto-fill. The list should be comma separated. Ex: "https://twitter.com, androidapp://com.twitter.android".</value>
+    <value>கரும்பட்டியலிடப்பட்ட உரலிகள் தன்னிர்ப்பலை அளிக்காது. பட்டியல் காற்புள்ளியால் பிரிக்கப்பட்டிருக்க வேண்டும். எகா: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
   <data name="DisableSavePrompt" xml:space="preserve">
     <value>சேமிப்பு தூண்டியை முடக்கு</value>
@@ -1559,7 +1559,7 @@
     <value>பகிர்ந்தவை</value>
   </data>
   <data name="ToggleVisibility" xml:space="preserve">
-    <value>Toggle Visibility</value>
+    <value>புலப்பாட்டை நிலைமாற்று</value>
   </data>
   <data name="LoginExpired" xml:space="preserve">
     <value>உம் உள்நுழைவு அமர்வு காலாவதியானது.</value>
@@ -1604,7 +1604,7 @@
     <value>இவ்வேற்றுமதி உம் பெட்டக தரவை மறையாக்கப்படா வடிவில் கொண்டுள்ளது. சேமிக்கவோ பாதுகாப்பற்ற தடங்களில் (மின்னஞ்சல் போன்றவை) அனுப்பவோ கூடாது. பயன்படுத்தியவுடன் அழித்துவிடவும்.</value>
   </data>
   <data name="EncExportKeyWarning" xml:space="preserve">
-    <value>This export encrypts your data using your account's encryption key. If you ever rotate your account's encryption key you should export again since you will not be able to decrypt this export file.</value>
+    <value>இவ்வேற்றுமதி உம் கணக்கின் மறையாக்கவிசை கொண்டு உம் தரவை மறையாக்குகிறது. எப்போவாவது உமது கணக்கின் மறையாகவிசையை சுழற்றினால் இவ்வேற்றுமதிக் கோப்பை மறைநீக்க இயலாததால் மறு ஏற்றுமதி செய்ய வேண்டும்.</value>
   </data>
   <data name="EncExportAccountWarning" xml:space="preserve">
     <value>கணக்கு மறையாக்க விசைகள் ஒவ்வொரு Bitwarden பயனர் கணக்கிற்கும் தனித்துவமானது, ஆக ஒரு மறையாக்கப்பட்ட ஏற்றுமதியை வேறொரு கணக்கினுள்ளே இறக்க இயலாது.</value>
@@ -1788,7 +1788,7 @@
     <value>மேலே-வரைதல் பயன்படுத்து</value>
   </data>
   <data name="DrawOverDescription" xml:space="preserve">
-    <value>When enabled, allows the Bitwarden Accessibility Service to display a popup when login fields are selected.</value>
+    <value>இயக்கினால், உள்நுழைவு புலங்கள் தேர்ந்தெடுக்கப்படும்போது ஒரு popup காண்பிக்க  Bitwarden அணுகல்தன்மை சேவையை அனுமதிக்கிறது.</value>
   </data>
   <data name="DrawOverDescription2" xml:space="preserve">
     <value>If enabled, the Bitwarden Accessibility Service will display a popup when login fields are selected to assist with auto-filling your logins.</value>

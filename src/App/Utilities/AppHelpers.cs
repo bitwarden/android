@@ -315,38 +315,15 @@ namespace Bit.App.Utilities
         public static async Task<bool> IsSendDisabledByPolicyAsync()
         {
             var policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
-            var userService = ServiceContainer.Resolve<IUserService>("userService");
-            
-            var policies = await policyService.GetAll(PolicyType.DisableSend);
-            var organizations = await userService.GetAllOrganizationAsync();
-            return organizations.Any(o =>
-            {
-                return o.Enabled &&
-                       o.Status == OrganizationUserStatusType.Confirmed &&
-                       o.UsePolicies &&
-                       !o.canManagePolicies &&
-                       policies.Any(p => p.OrganizationId == o.Id && p.Enabled);
-            });
+            return await policyService.PolicyAppliesToUser(PolicyType.DisableSend);
         }
 
         public static async Task<bool> IsHideEmailDisabledByPolicyAsync()
         {
             var policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
-            var userService = ServiceContainer.Resolve<IUserService>("userService");
 
-            var policies = await policyService.GetAll(PolicyType.SendOptions);
-            var organizations = await userService.GetAllOrganizationAsync();
-            return organizations.Any(o =>
-            {
-                return o.Enabled &&
-                       o.Status == OrganizationUserStatusType.Confirmed &&
-                       o.UsePolicies &&
-                       !o.canManagePolicies &&
-                       policies.Any(p => p.OrganizationId == o.Id &&
-                            p.Enabled &&
-                            p.Data.ContainsKey("disableHideEmail") &&
-                            (bool)p.Data["disableHideEmail"]);
-            });
+            return await policyService.PolicyAppliesToUser(PolicyType.SendOptions,
+                policy => policy.Data.ContainsKey("disableHideEmail") && (bool)policy.Data["disableHideEmail"]);
         }
 
         public static async Task<bool> PerformUpdateTasksAsync(ISyncService syncService,

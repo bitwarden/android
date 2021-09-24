@@ -1325,7 +1325,7 @@
     <value>Проверьте, не скомпрометирован ли пароль.</value>
   </data>
   <data name="PasswordExposed" xml:space="preserve">
-    <value>Этот пароль был скомпрометирован $VALUE$ раз(а). Вам следует его изменить.</value>
+    <value>Этот пароль был скомпрометирован {0} раз(а). Вам следует его изменить.</value>
   </data>
   <data name="PasswordSafe" xml:space="preserve">
     <value>Этот пароль не обнаружен в известных базах утечек. Можно продолжать его использовать.</value>

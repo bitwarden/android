@@ -49,11 +49,11 @@ namespace Bit.Droid.Renderers
             return null;
         }
 
-        async void BottomNavigationView.IOnNavigationItemReselectedListener.OnNavigationItemReselected(IMenuItem item)
+        public void OnNavigationItemReselected(IMenuItem item)
         {
             if (_page?.CurrentPage?.Navigation != null && _page.CurrentPage.Navigation.NavigationStack.Count > 0)
             {
-                await _page.CurrentPage.Navigation.PopToRootAsync();
+                Device.BeginInvokeOnMainThread(async () => await _page.CurrentPage.Navigation.PopToRootAsync());
             }
         }
     }
