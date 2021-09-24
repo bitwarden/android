@@ -65,7 +65,7 @@ jobs:
           echo "##### Setting Version Code $BUILD_NUMBER"
           echo "########################################"
 
-          sed "s/android:versionCode=\"1\"/android:versionCode=\"$BUILD_NUMBER\"/" \
+          sed -i "s/android:versionCode=\"1\"/android:versionCode=\"$BUILD_NUMBER\"/" \
             ./src/Android/Properties/AndroidManifest.xml
         shell: bash
 
@@ -162,9 +162,9 @@ jobs:
           (github.ref == 'refs/heads/master' && steps.rc-branch-check.outputs.branch_exists == 0)
             || github.ref == 'refs/heads/rc'
         run: |
-          PUBLISHER_PATH="./store/google/Publisher/bin/Release/netcoreapp2.0/Publisher.dll"
+          PUBLISHER_PATH="$GITHUB_WORKSPACE/store/google/Publisher/bin/Release/netcoreapp2.0/Publisher.dll"
           CREDS_PATH="$HOME/secrets/play_creds.json"
-          AAB_PATH="./com.x8bit.bitwarden.aab"
+          AAB_PATH="$GITHUB_WORKSPACE/com.x8bit.bitwarden.aab"
           TRACK="internal"
 
           dotnet $PUBLISHER_PATH $CREDS_PATH $AAB_PATH $TRACK
@@ -465,6 +465,6 @@ jobs:
           APPLE_ID_USERNAME: ${{ secrets.APPLE_ID_USERNAME }}
           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
         run: |
-          xcrun altool --upload-app --type ios --file "./Bitwarden.ipa" \
+          xcrun altool --upload-app --type ios --file "./bitwarden-export/Bitwarden.ipa" \
               --username "$APPLE_ID_USERNAME" --password "$APPLE_ID_PASSWORD"
         shell: bash
