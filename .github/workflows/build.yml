@@ -138,12 +138,14 @@ jobs:
         with:
           name: com.x8bit.bitwarden.aab
           path: ./com.x8bit.bitwarden.aab
+          if-no-files-found: error
 
       - name: Upload Play Store .apk artifact
         uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700  # v2.2.4
         with:
           name: com.x8bit.bitwarden.apk
           path: ./com.x8bit.bitwarden.apk
+          if-no-files-found: error
 
       - name: Check if RC branch exists
         id: rc-branch-check
@@ -323,6 +325,7 @@ jobs:
         with:
           name: com.x8bit.bitwarden-fdroid.apk
           path: ./com.x8bit.bitwarden-fdroid.apk
+          if-no-files-found: error
 
 
   ios:
@@ -442,6 +445,7 @@ jobs:
         with:
           name: Bitwarden.ipa
           path: ./bitwarden-export/Bitwarden.ipa
+          if-no-files-found: error
 
       - name: Check if RC branch exists
         id: rc-branch-check
