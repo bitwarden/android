@@ -150,7 +150,7 @@
     <ImageAsset Include="Resources\Assets.xcassets\LaunchScreen.imageset\logo_white.png" />
     <ImageAsset Include="Resources\Assets.xcassets\LaunchScreen.imageset\logo_white%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\LaunchScreen.imageset\logo_white%403x.png" />
-    <BundleResource Include="Resources\Bitwarden_icon_font_v1.ttf" />
+    <BundleResource Include="Resources\bwi-font.ttf" />
     <BundleResource Include="Resources\cog%403x.png" />
     <BundleResource Include="Resources\cog%402x.png" />
     <BundleResource Include="Resources\cog.png" />

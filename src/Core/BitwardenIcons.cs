@@ -2,9 +2,6 @@ namespace Bit.Core
 {
     public static class BitwardenIcons
     {
-        // TODO: Missing icons
-        public const string FolderOpenO = Frown;
-
         public const string User = "\xe900";
         public const string UserF = "\xe901";
         public const string Key = "\xe902";
@@ -66,7 +63,7 @@ namespace Bit.Core
         public const string CheckSquare = "\xe93b";
         public const string MinusSquare = "\xe93c";
         public const string Close = "\xe93d";
-        public const string ShareArrow = "\xe93e";
+        public const string FolderOpenF = "\xe93e";
         public const string Paperclip = "\xe93f";
         public const string Bitcoin = "\xe940";
         public const string Cut = "\xe941";
@@ -110,6 +107,7 @@ namespace Bit.Core
         public const string Ban = "\xe967";
         public const string Camera = "\xe968";
         public const string ChevronUp = "\xe969";
+        public const string Desktop = "\xe96a";
         public const string EyeSlash = "\xe96d";
         public const string File = "\xe96e";
         public const string Paste = "\xe96f";

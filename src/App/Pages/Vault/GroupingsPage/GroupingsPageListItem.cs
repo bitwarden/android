@@ -76,7 +76,7 @@ namespace Bit.App.Pages
                 }
                 else if (Folder != null)
                 {
-                    _icon = Folder.Id == null ? BitwardenIcons.FolderOpenO : BitwardenIcons.FolderOpen;
+                    _icon = Folder.Id == null ? BitwardenIcons.FolderOpen : BitwardenIcons.FolderOpenF;
                 }
                 else if (Collection != null)
                 {

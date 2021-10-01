@@ -191,7 +191,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <InterfaceDefinition Include="MainInterface.storyboard" />
     <BundleResource Include="Resources\MaterialIcons_Regular.ttf" />
-    <BundleResource Include="Resources\Bitwarden_icon_font_v1.ttf" />
+    <BundleResource Include="Resources\bwi-font.ttf" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

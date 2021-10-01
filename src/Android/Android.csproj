@@ -149,7 +149,7 @@
     <Compile Include="WebAuthCallbackActivity.cs" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\Bitwarden_icon_font_v1.ttf" />
+    <AndroidAsset Include="Assets\bwi-font.ttf" />
     <AndroidAsset Include="Assets\RobotoMono_Regular.ttf" />
     <AndroidAsset Include="Assets\MaterialIcons_Regular.ttf" />
     <None Include="8bit.keystore.enc" />

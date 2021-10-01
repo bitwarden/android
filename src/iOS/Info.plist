@@ -103,7 +103,7 @@
 	<true/>
 	<key>UIAppFonts</key>
 	<array>
-		<string>Bitwarden_icon_font_v1.ttf</string>
+		<string>bwi-font.ttf</string>
 		<string>MaterialIcons_Regular.ttf</string>
 	</array>
 	<key>UIRequiredDeviceCapabilities</key>
