@@ -1,6 +1,8 @@
 ﻿using Bit.App.Resources;
 using System;
 using System.Threading.Tasks;
+using Bit.Core.Abstractions;
+using Bit.Core.Utilities;
 using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
@@ -9,6 +11,8 @@ namespace Bit.App.Pages
 {
     public partial class GeneratorPage : BaseContentPage
     {
+        private readonly IBroadcasterService _broadcasterService;
+        
         private GeneratorPageViewModel _vm;
         private readonly bool _fromTabPage;
         private readonly Action<string> _selectAction;
@@ -18,6 +22,7 @@ namespace Bit.App.Pages
         {
             _tabsPage = tabsPage;
             InitializeComponent();
+            _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _vm = BindingContext as GeneratorPageViewModel;
             _vm.Page = this;
             _fromTabPage = fromTabPage;
@@ -60,6 +65,22 @@ namespace Bit.App.Pages
             {
                 await InitAsync();
             }
+            _broadcasterService.Subscribe(nameof(GeneratorPage), async (message) =>
+            {
+                if (message.Command == "updatedTheme")
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        _vm.RedrawPassword();
+                    });
+                }
+            });
+        }
+        
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            _broadcasterService.Unsubscribe(nameof(GeneratorPage));
         }
 
         protected override bool OnBackButtonPressed()

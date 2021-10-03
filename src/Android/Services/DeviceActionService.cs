@@ -741,21 +741,6 @@ namespace Bit.Droid.Services
             }
         }
 
-        public bool UsingDarkTheme()
-        {
-            try
-            {
-                if (Build.VERSION.SdkInt >= BuildVersionCodes.Q)
-                {
-                    var app = CrossCurrentActivity.Current.AppContext;
-                    var uiModeFlags = app.Resources.Configuration.UiMode & UiMode.NightMask;
-                    return uiModeFlags == UiMode.NightYes;
-                }
-            }
-            catch { }
-            return false;
-        }
-
         public long GetActiveTime()
         {
             // Returns milliseconds since the system was booted, and includes deep sleep. This clock is guaranteed to

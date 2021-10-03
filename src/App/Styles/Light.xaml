@@ -15,9 +15,11 @@
     <Color x:Key="InputPlaceholderColor">#d0d0d0</Color>
 
     <Color x:Key="BackgroundColor">#ffffff</Color>
-    <Color x:Key="SplashBackgroundColor">#efeff4</Color>
+    <Color x:Key="SplashBackgroundColor">#ffffff</Color>
     <Color x:Key="BorderColor">#dddddd</Color>
     <Color x:Key="DisabledIconColor">#c7c7cd</Color>
+    <Color x:Key="SeparatorColor">#dddddd</Color>
+    <Color x:Key="TouchColor">#bbbbbb</Color>
 
     <Color x:Key="BoxBorderColor">#dddddd</Color>
     <Color x:Key="BoxHeaderTextColor">#175DDC</Color>
@@ -38,9 +40,20 @@
     <Color x:Key="SliderTrackMaxColor">#dddddd</Color>
     
     <Color x:Key="SwitchOnColor">#175DDC</Color>
+    <Color x:Key="SwitchThumbColor">#fafafa</Color>
 
+    <Color x:Key="ButtonPrimaryBackgroundColor">#175DDC</Color>
+    <Color x:Key="ButtonPrimaryBackgroundColorPressed">#1249AC</Color>
+    <Color x:Key="ButtonPrimaryBackgroundColorDisabled">#bbbbbb</Color>
+    <Color x:Key="ButtonPrimaryTextColor">#ffffff</Color>
+    <Color x:Key="ButtonPrimaryTextColorDisabled">#ffffff</Color>
+
+    <Color x:Key="ButtonBackgroundColor">#eeeeee</Color>
+    <Color x:Key="ButtonBackgroundColorPressed">#cccccc</Color>
+    <Color x:Key="ButtonBackgroundColorDisabled">#eeeeee</Color>
+    <Color x:Key="ButtonBorderColor">#aaaaaa</Color>
     <Color x:Key="ButtonTextColor">#000000</Color>
-    <Color x:Key="ButtonBackgroundColor">#dddddd</Color>
+    <Color x:Key="ButtonTextColorDisabled">#aaaaaa</Color>
 
     <Color x:Key="FabColor">#175DDC</Color>
     <Color x:Key="FabPressedColor">#3883af</Color>

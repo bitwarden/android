@@ -422,19 +422,6 @@ namespace Bit.iOS.Core.Services
             throw new NotImplementedException();
         }
 
-        public bool UsingDarkTheme()
-        {
-            try
-            {
-                if (SystemMajorVersion() > 12)
-                {
-                    return UIScreen.MainScreen.TraitCollection.UserInterfaceStyle == UIUserInterfaceStyle.Dark;
-                }
-            }
-            catch { }
-            return false;
-        }
-
         public long GetActiveTime()
         {
             // Fall back to UnixTimeMilliseconds in case this approach stops working. We'll lose clock-change

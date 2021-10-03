@@ -54,26 +54,6 @@
                          x:Name="_deleteItem"
                          x:Key="deleteItem" />
 
-            <Style x:Key="segmentedButtonBase" TargetType="Button">
-                <Setter Property="HeightRequest" Value="{Binding SegmentedButtonHeight}" />
-                <Setter Property="FontSize" Value="{Binding SegmentedButtonFontSize}" />
-                <Setter Property="CornerRadius" Value="0" />
-            </Style>
-            <Style x:Key="segmentedButtonNormal" BaseResourceKey="segmentedButtonBase" TargetType="Button">
-                <Setter Property="TextColor" Value="{StaticResource PrimaryColor}" />
-                <Setter Property="FontAttributes" Value="None" />
-                <Setter Property="BackgroundColor" Value="Transparent" />
-                <Setter Property="BorderColor" Value="{StaticResource PrimaryColor}" />
-                <Setter Property="BorderWidth" Value="1" />
-
-            </Style>
-            <Style x:Key="segmentedButtonDisabled" BaseResourceKey="segmentedButtonBase" TargetType="Button">
-                <Setter Property="TextColor" Value="{StaticResource TitleTextColor}" />
-                <Setter Property="FontAttributes" Value="Bold" />
-                <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor}" />
-                <Setter Property="BorderWidth" Value="0" />
-            </Style>
-
             <ScrollView x:Key="scrollView" x:Name="_scrollView">
                 <StackLayout Spacing="20">
                     <StackLayout StyleClass="box">
@@ -131,51 +111,25 @@
                                 </Grid.ColumnDefinitions>
                                 <Button
                                     Text="{u:I18n TypeFile}"
+                                    StyleClass="segmented-button"
                                     IsEnabled="{Binding IsText}"
+                                    HeightRequest="{Binding SegmentedButtonHeight}"
+                                    FontSize="{Binding SegmentedButtonFontSize}"
                                     Clicked="FileType_Clicked"
                                     AutomationProperties.IsInAccessibleTree="True"
                                     AutomationProperties.Name="{u:I18n File}"
                                     Grid.Column="0">
-                                    <VisualStateManager.VisualStateGroups>
-                                        <VisualStateGroup x:Name="CommonStates">
-                                            <VisualState x:Name="Normal">
-                                                <VisualState.Setters>
-                                                    <Setter Property="Style"
-                                                            Value="{StaticResource segmentedButtonNormal}" />
-                                                </VisualState.Setters>
-                                            </VisualState>
-                                            <VisualState x:Name="Disabled">
-                                                <VisualState.Setters>
-                                                    <Setter Property="Style"
-                                                            Value="{StaticResource segmentedButtonDisabled}" />
-                                                </VisualState.Setters>
-                                            </VisualState>
-                                        </VisualStateGroup>
-                                    </VisualStateManager.VisualStateGroups>
                                 </Button>
                                 <Button
                                     Text="{u:I18n TypeText}"
+                                    StyleClass="segmented-button"
                                     IsEnabled="{Binding IsFile}"
+                                    HeightRequest="{Binding SegmentedButtonHeight}"
+                                    FontSize="{Binding SegmentedButtonFontSize}"
                                     Clicked="TextType_Clicked"
                                     AutomationProperties.IsInAccessibleTree="True"
                                     AutomationProperties.Name="{u:I18n Text}"
                                     Grid.Column="1">
-                                    <VisualStateManager.VisualStateGroups>
-                                        <VisualStateGroup x:Name="CommonStates">
-                                            <VisualState x:Name="Normal">
-                                                <VisualState.Setters>
-                                                    <Setter Property="Style"
-                                                            Value="{StaticResource segmentedButtonNormal}" />
-                                                </VisualState.Setters>
-                                            </VisualState>
-                                            <VisualState x:Name="Disabled">
-                                                <VisualState.Setters>
-                                                    <Setter Property="Style"
-                                                            Value="{StaticResource segmentedButtonDisabled}" />
-                                                </VisualState.Setters>
-                                            </VisualState>
-                                        </VisualStateGroup>
-                                    </VisualStateManager.VisualStateGroups>
                                 </Button>
                             </Grid>
                         </StackLayout>
@@ -289,20 +243,20 @@
                                 Text="{u:I18n Options}"
                                 x:Name="_btnOptions"
                                 StyleClass="box-row-button"
-                                TextColor="{StaticResource PrimaryColor}"
+                                TextColor="{DynamicResource PrimaryColor}"
                                 Margin="0" />
                             <controls:FaButton
                                 x:Name="_btnOptionsUp"
                                 Text="&#xf077;"
                                 StyleClass="box-row-button"
-                                TextColor="{StaticResource PrimaryColor}"
+                                TextColor="{DynamicResource PrimaryColor}"
                                 Clicked="ToggleOptions_Clicked"
                                 IsVisible="False" />
                             <controls:FaButton
                                 x:Name="_btnOptionsDown"
                                 Text="&#xf078;"
                                 StyleClass="box-row-button"
-                                TextColor="{StaticResource PrimaryColor}"
+                                TextColor="{DynamicResource PrimaryColor}"
                                 Clicked="ToggleOptions_Clicked"
                                 IsVisible="False" />
                         </StackLayout>

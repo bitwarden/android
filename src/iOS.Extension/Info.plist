@@ -70,6 +70,8 @@
 		<string>FontAwesome.ttf</string>
 		<string>MaterialIcons_Regular.ttf</string>
 	</array>
+    <key>CADisableMinimumFrameDurationOnPhone</key>
+    <true/>
 	<key>UIRequiredDeviceCapabilities</key>
 	<dict>
 		<key>arm64</key>

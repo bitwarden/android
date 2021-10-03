@@ -51,7 +51,7 @@ namespace Bit.iOS
             _eventService = ServiceContainer.Resolve<IEventService>("eventService");
 
             LoadApplication(new App.App(null));
-            iOSCoreHelpers.AppearanceAdjustments(_deviceActionService);
+            iOSCoreHelpers.AppearanceAdjustments();
             ZXing.Net.Mobile.Forms.iOS.Platform.Init();
 
             _broadcasterService.Subscribe(nameof(AppDelegate), async (message) =>
@@ -66,7 +66,10 @@ namespace Bit.iOS
                 }
                 else if (message.Command == "updatedTheme")
                 {
-                    // ThemeManager.SetThemeStyle(message.Data as string);
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        iOSCoreHelpers.AppearanceAdjustments();
+                    });
                 }
                 else if (message.Command == "copiedToClipboard")
                 {
@@ -182,6 +185,9 @@ namespace Bit.iOS
 
         public override void DidEnterBackground(UIApplication uiApplication)
         {
+            _storageService.SaveAsync(Constants.LastActiveTimeKey, _deviceActionService.GetActiveTime());
+            _messagingService.Send("slept");
+
             var view = new UIView(UIApplication.SharedApplication.KeyWindow.Frame)
             {
                 Tag = 4321
@@ -201,8 +207,6 @@ namespace Bit.iOS
             UIApplication.SharedApplication.KeyWindow.BringSubviewToFront(view);
             UIApplication.SharedApplication.KeyWindow.EndEditing(true);
             UIApplication.SharedApplication.SetStatusBarHidden(true, false);
-            _storageService.SaveAsync(Constants.LastActiveTimeKey, _deviceActionService.GetActiveTime());
-            _messagingService.Send("slept");
             base.DidEnterBackground(uiApplication);
         }
 

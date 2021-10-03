@@ -71,6 +71,7 @@
                     HorizontalOptions="CenterAndExpand"
                     LineBreakMode="CharacterWrap" />
                 <Button Text="{u:I18n RegeneratePassword}"
+                        StyleClass="btn-primary"
                         HorizontalOptions="FillAndExpand"
                         Clicked="Regenerate_Clicked"></Button>
                 <Button Text="{u:I18n CopyPassword}"
