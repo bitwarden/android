@@ -4,9 +4,11 @@ using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 using System.Threading.Tasks;
 using Bit.Core;
+using Bit.Core.Enums;
 #if !FDROID
 using Microsoft.AppCenter.Crashes;
 #endif
@@ -21,6 +23,7 @@ namespace Bit.App.Pages
         private readonly II18nService _i18nService;
         private readonly ICryptoService _cryptoService;
         private readonly IExportService _exportService;
+        private readonly IPolicyService _policyService;
 
         private int _fileFormatSelectedIndex;
         private string _exportWarningMessage;
@@ -37,6 +40,7 @@ namespace Bit.App.Pages
             _i18nService = ServiceContainer.Resolve<II18nService>("i18nService");
             _cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
             _exportService = ServiceContainer.Resolve<IExportService>("exportService");
+            _policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
 
             PageTitle = AppResources.ExportVault;
             TogglePasswordCommand = new Command(TogglePassword);
@@ -54,10 +58,22 @@ namespace Bit.App.Pages
         {
             _initialized = true;
             FileFormatSelectedIndex = FileFormatOptions.FindIndex(k => k.Key == "json");
+            DisablePrivateVaultPolicyEnabled = await _policyService.PolicyAppliesToUser(PolicyType.DisablePersonalVaultExport);
+
             UpdateWarning();
         }
 
         public List<KeyValuePair<string, string>> FileFormatOptions { get; set; }
+        private bool _disabledPrivateVaultPolicyEnabled = false;
+
+        public bool DisablePrivateVaultPolicyEnabled
+        {
+            get => _disabledPrivateVaultPolicyEnabled;
+            set
+            {
+                SetProperty(ref _disabledPrivateVaultPolicyEnabled, value);
+            }
+        }
 
         public int FileFormatSelectedIndex
         {

@@ -5,19 +5,140 @@ on:
   workflow_dispatch:
 
 jobs:
-
-  cloc:
-    name: CLOC
-    runs-on: ubuntu-latest
-
+  release:
+    name: Create Release
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout repo
-        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f  # v2.3.4
+        with:
+          ref: rc
 
-      - name: Set up cloc
+      - name: Retrieve Mobile release version
+        id: retrieve-mobile-version
         run: |
-          sudo apt-get update
-          sudo apt-get -y install cloc
+          ver=$(sed -n -e '/android:versionName/ s/.*\= *//p' ./src/Android/Properties/AndroidManifest.xml | tr -d '"')
+          echo "::set-output name=mobile_version::${ver}"
+        shell: bash
 
-      - name: Print lines of code
-        run: cloc --vcs git --exclude-dir Resources,store,test,Properties --include-lang C#,XAML
+      - name: Check to make sure Mobile release version has been bumped
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          latest_ver=$(hub release -L 1 -f '%T')
+          latest_ver=${latest_ver:1}
+          echo "Latest version: $latest_ver"
+          ver=${{ steps.retrieve-mobile-version.outputs.mobile_version }}
+          echo "Version: $ver"
+          if [ "$latest_ver" = "$ver" ]; then
+            echo "Version has not been bumped!"
+            exit 1
+          fi
+        shell: bash
+
+      - name: Download all artifacts
+        uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74  # v2.14.0
+        with:
+          workflow: build.yml
+          workflow_conclusion: success
+          branch: rc
+
+      - name: Create release
+        uses: ncipollo/release-action@95215a3cb6e6a1908b3c44e00b4fdb15548b1e09  # v2.8.5
+        with:
+          artifacts: "./com.x8bit.bitwarden.aab/com.x8bit.bitwarden.aab,
+                      ./com.x8bit.bitwarden.apk/com.x8bit.bitwarden.apk,
+                      ./com.x8bit.bitwarden-fdroid.apk/com.x8bit.bitwarden-fdroid.apk,
+                      ./Bitwarden.ipa/Bitwarden.ipa"
+          commit: ${{ github.sha }}
+          tag: v${{ steps.retrieve-mobile-version.outputs.mobile_version }}
+          name: Test Version ${{ steps.retrieve-mobile-version.outputs.mobile_version }}
+          body: "<insert release notes here>"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          draft: true
+
+
+  f-droid:
+    name: F-Droid Release
+    runs-on: ubuntu-20.04
+    needs: release
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f  # v2.3.4
+        with:
+          ref: rc
+
+      - name: Download F-Droid .apk artifact
+        uses: dawidd6/action-download-artifact@b9571484721e8187f1fd08147b497129f8972c74  # v2.14.0
+        with:
+          workflow: build.yml
+          workflow_conclusion: success
+          branch: rc
+          name: com.x8bit.bitwarden-fdroid.apk
+
+      - name: Set up Node
+        uses: actions/setup-node@46071b5c7a2e0c34e49c3cb8a0e792e86e18d5ea  # v2.3.0
+        with:
+          node-version: '10.x'
+
+      - name: Set up F-Droid server
+        run: |
+          sudo apt-get -qq update
+          sudo apt-get -qqy install --no-install-recommends fdroidserver wget
+
+      - name: Set up Git credentials
+        env:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        run: |
+          git config --global credential.helper store
+          echo "https://${ACCESS_TOKEN}:x-oauth-basic@github.com" >> ~/.git-credentials
+          git config --global user.email "ci@bitwarden.com"
+          git config --global user.name "Bitwarden CI"
+
+      - name: Print environment
+        run: |
+          node --version
+          npm --version
+          git --version
+          echo "GitHub ref: $GITHUB_REF"
+          echo "GitHub event: $GITHUB_EVENT"
+
+      - name: Install Node dependencies
+        run: npm install
+
+      - name: Decrypt secrets
+        env:
+          DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
+        run: |
+          mkdir -p ~/secrets
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
+            --output ./store/fdroid/keystore.jks ./.github/secrets/store_fdroid-keystore.jks.gpg
+
+      - name: Compile for F-Droid Store
+        env:
+          FDROID_STORE_KEYSTORE_PASSWORD: ${{ secrets.FDROID_STORE_KEYSTORE_PASSWORD }}
+        run: |
+          cd $GITHUB_WORKSPACE
+          mkdir dist
+          cp CNAME ./dist
+          cd store
+          chmod 600 fdroid/config.py fdroid/keystore.jks
+          mkdir -p temp/fdroid
+          TEMP_DIR="$GITHUB_WORKSPACE/store/temp/fdroid"
+          cd fdroid
+          echo "keypass=\"$FDROID_STORE_KEYSTORE_PASSWORD\"" >>config.py
+          echo "keystorepass=\"$FDROID_STORE_KEYSTORE_PASSWORD\"" >>config.py
+          echo "local_copy_dir=\"$TEMP_DIR\"" >>config.py
+          mkdir -p repo
+          mv $GITHUB_WORKSPACE/com.x8bit.bitwarden-fdroid.apk ./repo/
+          fdroid update
+          fdroid server update
+          cd ..
+          rm -rf temp/fdroid/archive
+          mv -v temp/fdroid ../dist
+          cd fdroid
+          cp index.html btn.png qr.png ../../dist/fdroid
+          cd $GITHUB_WORKSPACE
+
+      - name: Deploy to gh-pages
+        run: npm run deploy

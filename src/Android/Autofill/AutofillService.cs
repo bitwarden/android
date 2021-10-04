@@ -94,24 +94,12 @@ namespace Bit.Droid.Autofill
 
             _policyService ??= ServiceContainer.Resolve<IPolicyService>("policyService");
 
-            var personalOwnershipPolicies = await _policyService.GetAll(PolicyType.PersonalOwnership);
-            if (personalOwnershipPolicies != null)
+            var personalOwnershipPolicyApplies = await _policyService.PolicyAppliesToUser(PolicyType.PersonalOwnership);
+            if (personalOwnershipPolicyApplies)
             {
-                _userService ??= ServiceContainer.Resolve<IUserService>("userService");
-                foreach (var policy in personalOwnershipPolicies)
-                {
-                    if (policy.Enabled)
-                    {
-                        var org = await _userService.GetOrganizationAsync(policy.OrganizationId);
-                        if (org != null && org.Enabled && org.UsePolicies && !org.canManagePolicies
-                           && org.Status == OrganizationUserStatusType.Confirmed)
-                        {
-                            return;
-                        }
-                    }
-                }
+                return;
             }
-            
+
             var parser = new Parser(structure, ApplicationContext);
             parser.Parse();
 

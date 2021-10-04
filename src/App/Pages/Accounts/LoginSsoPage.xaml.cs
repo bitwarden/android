@@ -32,6 +32,8 @@ namespace Bit.App.Pages
             _vm.StartSetPasswordAction = () =>
                 Device.BeginInvokeOnMainThread(async () => await StartSetPasswordAsync());
             _vm.SsoAuthSuccessAction = () => Device.BeginInvokeOnMainThread(async () => await SsoAuthSuccessAsync());
+            _vm.UpdateTempPasswordAction =
+                () => Device.BeginInvokeOnMainThread(async () => await UpdateTempPasswordAsync());
             _vm.CloseAction = async () =>
             {
                 _messagingService.Send("showStatusBar", false);
@@ -101,6 +103,12 @@ namespace Bit.App.Pages
         {
             RestoreAppOptionsFromCopy();
             var page = new SetPasswordPage(_appOptions, _vm.OrgIdentifier);
+            await Navigation.PushModalAsync(new NavigationPage(page));
+        }
+        
+        private async Task UpdateTempPasswordAsync()
+        {
+            var page = new UpdateTempPasswordPage();
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
 

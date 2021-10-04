@@ -315,38 +315,15 @@ namespace Bit.App.Utilities
         public static async Task<bool> IsSendDisabledByPolicyAsync()
         {
             var policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
-            var userService = ServiceContainer.Resolve<IUserService>("userService");
-            
-            var policies = await policyService.GetAll(PolicyType.DisableSend);
-            var organizations = await userService.GetAllOrganizationAsync();
-            return organizations.Any(o =>
-            {
-                return o.Enabled &&
-                       o.Status == OrganizationUserStatusType.Confirmed &&
-                       o.UsePolicies &&
-                       !o.canManagePolicies &&
-                       policies.Any(p => p.OrganizationId == o.Id && p.Enabled);
-            });
+            return await policyService.PolicyAppliesToUser(PolicyType.DisableSend);
         }
 
         public static async Task<bool> IsHideEmailDisabledByPolicyAsync()
         {
             var policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
-            var userService = ServiceContainer.Resolve<IUserService>("userService");
 
-            var policies = await policyService.GetAll(PolicyType.SendOptions);
-            var organizations = await userService.GetAllOrganizationAsync();
-            return organizations.Any(o =>
-            {
-                return o.Enabled &&
-                       o.Status == OrganizationUserStatusType.Confirmed &&
-                       o.UsePolicies &&
-                       !o.canManagePolicies &&
-                       policies.Any(p => p.OrganizationId == o.Id &&
-                            p.Enabled &&
-                            p.Data.ContainsKey("disableHideEmail") &&
-                            (bool)p.Data["disableHideEmail"]);
-            });
+            return await policyService.PolicyAppliesToUser(PolicyType.SendOptions,
+                policy => policy.Data.ContainsKey("disableHideEmail") && (bool)policy.Data["disableHideEmail"]);
         }
 
         public static async Task<bool> PerformUpdateTasksAsync(ISyncService syncService,
@@ -484,6 +461,41 @@ namespace Bit.App.Utilities
             var escaped = Uri.EscapeDataString(JsonConvert.SerializeObject(obj));
             var multiByteEscaped = Regex.Replace(escaped, "%([0-9A-F]{2})", EncodeMultibyte);
             return Convert.ToBase64String(Encoding.UTF8.GetBytes(multiByteEscaped));
+        }
+
+        public static async Task LogOutAsync()
+        {
+            var userService = ServiceContainer.Resolve<IUserService>("userService");
+            var syncService = ServiceContainer.Resolve<ISyncService>("syncService");
+            var tokenService = ServiceContainer.Resolve<ITokenService>("tokenService");
+            var cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
+            var settingsService = ServiceContainer.Resolve<ISettingsService>("settingsService");
+            var cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
+            var folderService = ServiceContainer.Resolve<IFolderService>("folderService");
+            var collectionService = ServiceContainer.Resolve<ICollectionService>("collectionService");
+            var passwordGenerationService = ServiceContainer.Resolve<IPasswordGenerationService>(
+                "passwordGenerationService");
+            var vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
+            var stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            var searchService = ServiceContainer.Resolve<ISearchService>("searchService");
+
+            var userId = await userService.GetUserIdAsync();
+            await Task.WhenAll(
+                syncService.SetLastSyncAsync(DateTime.MinValue),
+                tokenService.ClearTokenAsync(),
+                cryptoService.ClearKeysAsync(),
+                userService.ClearAsync(),
+                settingsService.ClearAsync(userId),
+                cipherService.ClearAsync(userId),
+                folderService.ClearAsync(userId),
+                collectionService.ClearAsync(userId),
+                passwordGenerationService.ClearAsync(),
+                vaultTimeoutService.ClearAsync(),
+                stateService.PurgeAsync(),
+                deviceActionService.ClearCacheAsync());
+            vaultTimeoutService.BiometricLocked = true;
+            searchService.ClearIndex();
         }
     }
 }

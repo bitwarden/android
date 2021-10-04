@@ -84,11 +84,6 @@ namespace Bit.App.Services
             return false;
         }
 
-        public int? LockTimeout()
-        {
-            return null;
-        }
-
         public void LaunchUri(string uri, Dictionary<string, object> options = null)
         {
             if ((uri.StartsWith("http://") || uri.StartsWith("https://")) &&

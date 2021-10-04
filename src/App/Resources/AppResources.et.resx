@@ -1685,7 +1685,7 @@
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Tuvastati biomeetriliste andmete muutus. Selle funktsiooni uuesti kasutamiseks on vajalik sisselogimine ülemparooliga.  </value>
+    <value>Automaattäite kinnitamine läbi biomeetria on keelatud. Oodatakse ülemparooli sisestamist.</value>
   </data>
   <data name="BiometricInvalidatedExtension" xml:space="preserve">
     <value>Automaattäite kinnitamine läbi biomeetria on keelatud. Oodatakse ülemparooli sisestamist.</value>
@@ -1799,7 +1799,7 @@
     <value>Ettevõtte poliitika tõttu ei saa sa andmeid oma personaalsesse Hoidlasse salvestada. Vali Omanikuks organisatsioon ja vali mõni saadavaolevatest Kogumikest.</value>
   </data>
   <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
-    <value>Organisatsiooni poliitika on seadnud omaniku valikutele piirangu.</value>
+    <value>Organisatsiooni poliitika piirab kirje omaniku valikuvõimalusi.</value>
   </data>
   <data name="Send" xml:space="preserve">
     <value>Send</value>
@@ -1987,7 +1987,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFileEmailVerificationRequired" xml:space="preserve">
-    <value>Failide saatmiseks läbi Sendi pead kinnitama oma e-posti.</value>
+    <value>Sendi kasutamiseks pead kinnitama oma e-posti aadressi. Saad seda teha veebihoidlas.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PasswordPrompt" xml:space="preserve">

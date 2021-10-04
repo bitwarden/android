@@ -343,6 +343,7 @@ namespace Bit.Core.Services
 
             var tokenResponse = response.TokenResponse;
             result.ResetMasterPassword = tokenResponse.ResetMasterPassword;
+            result.ForcePasswordReset = tokenResponse.ForcePasswordReset;
             if (tokenResponse.TwoFactorToken != null)
             {
                 await _tokenService.SetTwoFactorTokenAsync(tokenResponse.TwoFactorToken, email);

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -180,7 +181,50 @@ namespace Bit.Core.Services
             return true;
         }
 
-        private int? GetPolicyInt(Policy policy, string key)
+        public Tuple<ResetPasswordPolicyOptions, bool> GetResetPasswordPolicyOptions(IEnumerable<Policy> policies,
+            string orgId)
+        {
+            var resetPasswordPolicyOptions = new ResetPasswordPolicyOptions();
+
+            if (policies == null || orgId == null)
+            {
+                return new Tuple<ResetPasswordPolicyOptions, bool>(resetPasswordPolicyOptions, false);
+            }
+
+            var policy = policies.FirstOrDefault(p =>
+                p.OrganizationId == orgId && p.Type == PolicyType.ResetPassword && p.Enabled);
+            resetPasswordPolicyOptions.AutoEnrollEnabled = GetPolicyBool(policy, "autoEnrollEnabled") ?? false;
+
+            return new Tuple<ResetPasswordPolicyOptions, bool>(resetPasswordPolicyOptions, policy != null);
+        }
+
+        public async Task<bool> PolicyAppliesToUser(PolicyType policyType, Func<Policy, bool> policyFilter)
+        {
+            var policies = await GetAll(policyType);
+            var organizations = await _userService.GetAllOrganizationAsync();
+
+            IEnumerable<Policy> filteredPolicies;
+
+            if (policyFilter != null)
+            {
+                filteredPolicies = policies.Where(p => p.Enabled && policyFilter(p));
+            }
+            else
+            {
+                filteredPolicies = policies.Where(p => p.Enabled);
+            }
+
+            var policySet = new HashSet<string>(filteredPolicies.Select(p => p.OrganizationId));
+
+            return organizations.Any(o =>
+                o.Enabled &&
+                o.Status >= OrganizationUserStatusType.Accepted &&
+                o.UsePolicies &&
+                !o.isExemptFromPolicies &&
+                policySet.Contains(o.Id));
+        }
+
+        public int? GetPolicyInt(Policy policy, string key)
         {
             if (policy.Data.ContainsKey(key))
             {

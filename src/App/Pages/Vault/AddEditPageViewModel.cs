@@ -310,7 +310,6 @@ namespace Bit.App.Pages
 
         public async Task<bool> LoadAsync(AppOptions appOptions = null)
         {
-            var policies = (await _policyService.GetAll(PolicyType.PersonalOwnership))?.ToList();
             var myEmail = await _userService.GetEmailAsync();
             OwnershipOptions.Add(new KeyValuePair<string, string>(myEmail, null));
             var orgs = await _userService.GetAllOrganizationAsync();
@@ -319,26 +318,15 @@ namespace Bit.App.Pages
                 if (org.Enabled && org.Status == OrganizationUserStatusType.Confirmed)
                 {
                     OwnershipOptions.Add(new KeyValuePair<string, string>(org.Name, org.Id));
-                    if ((!EditMode || CloneMode) && policies != null && org.UsePolicies && !org.canManagePolicies &&
-                        AllowPersonal)
-                    {
-                        foreach (var policy in policies)
-                        {
-                            if (policy.OrganizationId == org.Id && policy.Enabled)
-                            {
-                                AllowPersonal = false;
-                                // Remove personal ownership
-                                OwnershipOptions.RemoveAt(0);
-                                // Default to the organization who owns this policy for now (if necessary)
-                                if (string.IsNullOrWhiteSpace(OrganizationId))
-                                {
-                                    OrganizationId = org.Id;
-                                }
-                                break;
-                            }
-                        }
-                    }
                 }
+            }
+
+            var personalOwnershipPolicyApplies = await _policyService.PolicyAppliesToUser(PolicyType.PersonalOwnership);
+            if (personalOwnershipPolicyApplies && (!EditMode || CloneMode))
+            {
+                AllowPersonal = false;
+                // Remove personal ownership
+                OwnershipOptions.RemoveAt(0);
             }
 
             var allCollections = await _collectionService.GetAllDecryptedAsync();

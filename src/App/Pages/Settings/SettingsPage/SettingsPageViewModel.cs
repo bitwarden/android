@@ -7,6 +7,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Bit.Core.Enums;
+using Bit.Core.Models.Domain;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -23,6 +25,9 @@ namespace Bit.App.Pages
         private readonly IStorageService _storageService;
         private readonly ISyncService _syncService;
         private readonly IBiometricService _biometricService;
+        private readonly IPolicyService _policyService;
+
+        private const int CustomVaultTimeoutValue = -100;
 
         private bool _supportsBiometric;
         private bool _pin;
@@ -42,6 +47,7 @@ namespace Bit.App.Pages
                 new KeyValuePair<string, int?>(AppResources.FourHours, 240),
                 new KeyValuePair<string, int?>(AppResources.OnRestart, -1),
                 new KeyValuePair<string, int?>(AppResources.Never, null),
+                new KeyValuePair<string, int?>(AppResources.Custom, CustomVaultTimeoutValue),
             };
         private List<KeyValuePair<string, string>> _vaultTimeoutActions =
             new List<KeyValuePair<string, string>>
@@ -49,6 +55,9 @@ namespace Bit.App.Pages
                 new KeyValuePair<string, string>(AppResources.Lock, "lock"),
                 new KeyValuePair<string, string>(AppResources.LogOut, "logOut"),
             };
+
+        private Policy _vaultTimeoutPolicy;
+        private int _vaultTimeout;
 
         public SettingsPageViewModel()
         {
@@ -62,6 +71,7 @@ namespace Bit.App.Pages
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
             _biometricService = ServiceContainer.Resolve<IBiometricService>("biometricService");
+            _policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
 
             GroupedItems = new ExtendedObservableCollection<SettingsPageListGroup>();
             PageTitle = AppResources.Settings;
@@ -79,13 +89,30 @@ namespace Bit.App.Pages
                 _lastSyncDate = string.Format("{0} {1}", lastSync.Value.ToShortDateString(),
                     lastSync.Value.ToShortTimeString());
             }
-            var timeout = await _storageService.GetAsync<int?>(Constants.VaultTimeoutKey);
-            _vaultTimeoutDisplayValue = _vaultTimeouts.FirstOrDefault(o => o.Value == timeout).Key;
+
+            if (await _policyService.PolicyAppliesToUser(PolicyType.MaximumVaultTimeout))
+            {
+                _vaultTimeoutPolicy = (await _policyService.GetAll(PolicyType.MaximumVaultTimeout)).First();
+                var minutes = _policyService.GetPolicyInt(_vaultTimeoutPolicy, "minutes").GetValueOrDefault();
+                _vaultTimeouts = _vaultTimeouts.Where(t =>
+                    t.Value <= minutes &&
+                    (t.Value > 0 || t.Value == CustomVaultTimeoutValue) &&
+                    t.Value != null).ToList();
+            }
+
+            _vaultTimeout = await _vaultTimeoutService.GetVaultTimeout();
+            _vaultTimeoutDisplayValue = _vaultTimeouts.FirstOrDefault(o => o.Value == _vaultTimeout).Key;
             var action = await _storageService.GetAsync<string>(Constants.VaultTimeoutActionKey) ?? "lock";
             _vaultTimeoutActionDisplayValue = _vaultTimeoutActions.FirstOrDefault(o => o.Value == action).Key;
             var pinSet = await _vaultTimeoutService.IsPinLockSetAsync();
             _pin = pinSet.Item1 || pinSet.Item2;
             _biometric = await _vaultTimeoutService.IsBiometricLockSetAsync();
+
+            if (_vaultTimeoutDisplayValue == null)
+            {
+                _vaultTimeoutDisplayValue = AppResources.Custom;
+            }
+
             BuildList();
         }
 
@@ -193,22 +220,51 @@ namespace Bit.App.Pages
             await _vaultTimeoutService.LockAsync(true, true);
         }
 
-        public async Task VaultTimeoutAsync()
+        public async Task VaultTimeoutAsync(bool promptOptions = true, int newTimeout = 0)
         {
+            var oldTimeout = _vaultTimeout;
+
             var options = _vaultTimeouts.Select(
                 o => o.Key == _vaultTimeoutDisplayValue ? $"✓ {o.Key}" : o.Key).ToArray();
-            var selection = await Page.DisplayActionSheet(AppResources.VaultTimeout,
-                AppResources.Cancel, null, options);
-            if (selection == null || selection == AppResources.Cancel)
+            if (promptOptions)
             {
-                return;
+                var selection = await Page.DisplayActionSheet(AppResources.VaultTimeout,
+                    AppResources.Cancel, null, options);
+                if (selection == null || selection == AppResources.Cancel)
+                {
+                    return;
+                }
+                var cleanSelection = selection.Replace("✓ ", string.Empty);
+                var selectionOption = _vaultTimeouts.FirstOrDefault(o => o.Key == cleanSelection);
+                _vaultTimeoutDisplayValue = selectionOption.Key;
+                newTimeout = selectionOption.Value.GetValueOrDefault();
             }
-            var cleanSelection = selection.Replace("✓ ", string.Empty);
-            var selectionOption = _vaultTimeouts.FirstOrDefault(o => o.Key == cleanSelection);
-            _vaultTimeoutDisplayValue = selectionOption.Key;
-            await _vaultTimeoutService.SetVaultTimeoutOptionsAsync(selectionOption.Value,
+
+            if (_vaultTimeoutPolicy != null)
+            {
+                var maximumTimeout = _policyService.GetPolicyInt(_vaultTimeoutPolicy, "minutes");
+
+                if (newTimeout > maximumTimeout)
+                {
+                    await _platformUtilsService.ShowDialogAsync(AppResources.VaultTimeoutToLarge, AppResources.Warning);
+                    var timeout = await _vaultTimeoutService.GetVaultTimeout();
+                    _vaultTimeoutDisplayValue = _vaultTimeouts.FirstOrDefault(o => o.Value == timeout).Key ??
+                                                AppResources.Custom;
+                    return;
+                }
+            }
+
+            await _vaultTimeoutService.SetVaultTimeoutOptionsAsync(newTimeout,
                 GetVaultTimeoutActionFromKey(_vaultTimeoutActionDisplayValue));
-            BuildList();
+
+            if (newTimeout != CustomVaultTimeoutValue)
+            {
+                _vaultTimeout = newTimeout;
+            }
+            if (oldTimeout != newTimeout)
+            {
+                await Device.InvokeOnMainThreadAsync(BuildList);
+            }
         }
 
         public async Task VaultTimeoutActionAsync()
@@ -235,7 +291,7 @@ namespace Bit.App.Pages
             var selectionOption = _vaultTimeoutActions.FirstOrDefault(o => o.Key == cleanSelection);
             var changed = _vaultTimeoutActionDisplayValue != selectionOption.Key;
             _vaultTimeoutActionDisplayValue = selectionOption.Key;
-            await _vaultTimeoutService.SetVaultTimeoutOptionsAsync(GetVaultTimeoutFromKey(_vaultTimeoutDisplayValue),
+            await _vaultTimeoutService.SetVaultTimeoutOptionsAsync(_vaultTimeout,
                 selectionOption.Value);
             if (changed)
             {
@@ -362,6 +418,25 @@ namespace Bit.App.Pages
                 new SettingsPageListItem { Name = AppResources.LockNow },
                 new SettingsPageListItem { Name = AppResources.TwoStepLogin }
             };
+            if (_vaultTimeoutDisplayValue == AppResources.Custom)
+            {
+                securityItems.Insert(1, new SettingsPageListItem
+                {
+                    Name = AppResources.Custom,
+                    Time = TimeSpan.FromMinutes(Math.Abs((double) _vaultTimeout)),
+                });
+            }
+            if (_vaultTimeoutPolicy != null)
+            {
+                var maximumTimeout = _policyService.GetPolicyInt(_vaultTimeoutPolicy, "minutes").GetValueOrDefault();
+                securityItems.Insert(0, new SettingsPageListItem
+                {
+                    Name = string.Format(AppResources.VaultTimeoutPolicyInEffect,
+                        Math.Floor((float) maximumTimeout / 60),
+                        maximumTimeout % 60),
+                    UseFrame = true,
+                });
+            }
             if (_supportsBiometric || _biometric)
             {
                 var biometricName = AppResources.Biometrics;

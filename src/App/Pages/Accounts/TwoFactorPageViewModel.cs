@@ -49,7 +49,7 @@ namespace Bit.App.Pages
             _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
-            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService"); 
 
             PageTitle = AppResources.TwoStepLogin;
             SubmitCommand = new Command(async () => await SubmitAsync());
@@ -113,6 +113,7 @@ namespace Bit.App.Pages
         public Action TwoFactorAuthSuccessAction { get; set; }
         public Action StartSetPasswordAction { get; set; }
         public Action CloseAction { get; set; }
+        public Action UpdateTempPasswordAction { get; set; }
 
         public void Init()
         {
@@ -242,12 +243,14 @@ namespace Bit.App.Pages
                 await _deviceActionService.HideLoadingAsync();
                 if (authResult != null && authResult.Properties.TryGetValue("error", out var resultError))
                 {
-                    await _platformUtilsService.ShowDialogAsync(resultError, AppResources.AnErrorHasOccurred);
+                    var message = AppResources.Fido2CheckBrowser + "\n\n" + resultError;
+                    await _platformUtilsService.ShowDialogAsync(message, AppResources.AnErrorHasOccurred,
+                        AppResources.Ok);
                 }
                 else
                 {
-                    await _platformUtilsService.ShowDialogAsync(AppResources.Fido2SomethingWentWrong,
-                        AppResources.AnErrorHasOccurred);
+                    await _platformUtilsService.ShowDialogAsync(AppResources.Fido2CheckBrowser,
+                        AppResources.AnErrorHasOccurred, AppResources.Ok);
                 }
             }
         }
@@ -261,14 +264,14 @@ namespace Bit.App.Pages
             if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
-                    AppResources.InternetConnectionRequiredTitle);
+                    AppResources.InternetConnectionRequiredTitle, AppResources.Ok);
                 return;
             }
             if (string.IsNullOrWhiteSpace(Token))
             {
                 await _platformUtilsService.ShowDialogAsync(
                     string.Format(AppResources.ValidationFieldRequired, AppResources.VerificationCode),
-                    AppResources.AnErrorHasOccurred);
+                    AppResources.AnErrorHasOccurred, AppResources.Ok);
                 return;
             }
             if (SelectedProviderType == TwoFactorProviderType.Email ||
@@ -292,6 +295,10 @@ namespace Bit.App.Pages
                 {
                     StartSetPasswordAction?.Invoke();
                 }
+                else if (result.ForcePasswordReset)
+                {
+                    UpdateTempPasswordAction?.Invoke();
+                } 
                 else
                 {
                     var disableFavicon = await _storageService.GetAsync<bool?>(Constants.DisableFaviconKey);
@@ -305,7 +312,7 @@ namespace Bit.App.Pages
                 if (e?.Error != null)
                 {
                     await _platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(),
-                        AppResources.AnErrorHasOccurred);
+                        AppResources.AnErrorHasOccurred, AppResources.Ok);
                 }
             }
         }
@@ -343,7 +350,7 @@ namespace Bit.App.Pages
             if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
-                    AppResources.InternetConnectionRequiredTitle);
+                    AppResources.InternetConnectionRequiredTitle, AppResources.Ok);
                 return false;
             }
             try
@@ -374,7 +381,8 @@ namespace Bit.App.Pages
                 {
                     await _deviceActionService.HideLoadingAsync();
                 }
-                await _platformUtilsService.ShowDialogAsync(AppResources.VerificationEmailNotSent);
+                await _platformUtilsService.ShowDialogAsync(AppResources.VerificationEmailNotSent,
+                    AppResources.AnErrorHasOccurred, AppResources.Ok);
                 return false;
             }
         }

@@ -8,11 +8,6 @@ using System;
 using System.Threading.Tasks;
 using Bit.App.Utilities;
 using Xamarin.Forms;
-using Newtonsoft.Json;
-using System.Text;
-using Xamarin.Essentials;
-using System.Text.RegularExpressions;
-using Bit.Core.Services;
 
 namespace Bit.App.Pages
 {
@@ -78,6 +73,7 @@ namespace Bit.App.Pages
         public bool RememberEmail { get; set; }
         public Action StartTwoFactorAction { get; set; }
         public Action LogInSuccessAction { get; set; }
+        public Action UpdateTempPasswordAction { get; set; }
         public Action CloseAction { get; set; }
 
         protected override II18nService i18nService => _i18nService;
@@ -100,15 +96,14 @@ namespace Bit.App.Pages
             if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
-                    AppResources.InternetConnectionRequiredTitle);
+                    AppResources.InternetConnectionRequiredTitle, AppResources.Ok);
                 return;
             }
             if (string.IsNullOrWhiteSpace(Email))
             {
                 await _platformUtilsService.ShowDialogAsync(
                     string.Format(AppResources.ValidationFieldRequired, AppResources.EmailAddress),
-                    AppResources.AnErrorHasOccurred,
-                    AppResources.Ok);
+                    AppResources.AnErrorHasOccurred, AppResources.Ok);
                 return;
             }
             if (!Email.Contains("@"))
@@ -121,8 +116,7 @@ namespace Bit.App.Pages
             {
                 await _platformUtilsService.ShowDialogAsync(
                     string.Format(AppResources.ValidationFieldRequired, AppResources.MasterPassword),
-                    AppResources.AnErrorHasOccurred,
-                    AppResources.Ok);
+                    AppResources.AnErrorHasOccurred, AppResources.Ok);
                 return;
             }
 
@@ -163,6 +157,10 @@ namespace Bit.App.Pages
                 {
                     StartTwoFactorAction?.Invoke();
                 }
+                else if (response.ForcePasswordReset)
+                {
+                    UpdateTempPasswordAction?.Invoke();
+                }
                 else
                 {
                     var disableFavicon = await _storageService.GetAsync<bool?>(Constants.DisableFaviconKey);
@@ -179,7 +177,7 @@ namespace Bit.App.Pages
                 if (e?.Error != null)
                 {
                     await _platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(),
-                        AppResources.AnErrorHasOccurred);
+                        AppResources.AnErrorHasOccurred, AppResources.Ok);
                 }
             }
         }

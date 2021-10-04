@@ -1,4 +1,5 @@
-﻿using Bit.Core.Enums;
+﻿using System.Data.Common;
+using Bit.Core.Enums;
 using Bit.Core.Models.Data;
 
 namespace Bit.Core.Models.Domain
@@ -27,6 +28,7 @@ namespace Bit.Core.Models.Domain
             MaxCollections = obj.MaxCollections;
             MaxStorageGb = obj.MaxStorageGb;
             Permissions = obj.Permissions ?? new Permissions();
+            Identifier = obj.Identifier;
         }
 
         public string Id { get; set; }
@@ -47,6 +49,7 @@ namespace Bit.Core.Models.Domain
         public short? MaxCollections { get; set; }
         public short? MaxStorageGb { get; set; }
         public Permissions Permissions { get; set; } = new Permissions();
+        public string Identifier { get; set; }
 
         public bool CanAccess
         {
@@ -88,5 +91,6 @@ namespace Bit.Core.Models.Domain
         public bool canManageGroups => IsAdmin || Permissions.ManageGroups;
         public bool canManagePolicies => IsAdmin || Permissions.ManagePolicies;
         public bool canManageUser => IsAdmin || Permissions.ManageUsers;
+        public bool isExemptFromPolicies => canManagePolicies;
     }
 }
