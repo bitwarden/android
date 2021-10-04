@@ -81,7 +81,8 @@ namespace Bit.iOS.Core.Views
             {
                 searchFilter = searchFilter.ToLower();
                 var results = _searchService.SearchCiphersAsync(searchFilter,
-                    c => c.Type == Bit.Core.Enums.CipherType.Login, null, ct).GetAwaiter().GetResult();
+                    c => c.Type == Bit.Core.Enums.CipherType.Login && !c.IsDeleted, null, ct)
+                    .GetAwaiter().GetResult();
                 Items = results.Select(s => new CipherViewModel(s)).ToArray();
             }
         }
