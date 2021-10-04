@@ -330,7 +330,7 @@ jobs:
 
   ios:
     name: Apple iOS
-    runs-on: macos-10.15
+    runs-on: macos-11
     steps:
       - name: Print environment
         run: |
