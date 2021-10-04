@@ -1,5 +1,3 @@
-using System;
-
 namespace Bit.Core.Models.Data 
 {
     public class Permissions
