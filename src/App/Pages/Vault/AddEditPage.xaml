@@ -647,6 +647,13 @@
                                             </Keyboard>
                                         </Entry.Keyboard>
                                     </controls:MonoEntry>
+
+                                    <Picker
+                                        x:Name="_linkedFieldTypePicker"
+                                        ItemsSource="{Binding Cipher., Mode=OneTime}"
+                                        SelectedIndex="{Binding OwnershipSelectedIndex}"
+                                        StyleClass="box-value" />
+
                                     <Switch
                                         IsToggled="{Binding BooleanValue}"
                                         Grid.Row="0"

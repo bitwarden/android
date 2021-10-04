@@ -1,10 +1,20 @@
 ﻿using Bit.Core.Models.Domain;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace Bit.Core.Models.View
 {
     public class CardView : View
     {
+        public static Dictionary<string, string> linkedFieldOptions = new Dictionary<string, string>()
+        {
+            { "cardholdername", null },
+            { "number", null },
+            { "brand", null },
+            { "expMonth", "expirationMonth" },
+            { "expYear", "expirationYear" },
+            { "code", "securityCode" },
+        };
         private string _brand;
         private string _number;
         private string _subTitle;

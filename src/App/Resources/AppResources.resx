@@ -1183,6 +1183,9 @@
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>Hidden</value>
   </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>Linked</value>
+  </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Text</value>
   </data>

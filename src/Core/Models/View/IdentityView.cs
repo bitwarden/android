@@ -1,9 +1,33 @@
 ﻿using Bit.Core.Models.Domain;
+using System.Collections.Generic;
 
 namespace Bit.Core.Models.View
 {
     public class IdentityView : View
     {
+        public static Dictionary<string, string> linkedFieldOptions = new Dictionary<string, string>()
+        {
+            { "firstName", null },
+            { "middleName", null },
+            { "lastName", null },
+            { "fullName", null },
+            { "username", null },
+            { "company", null },
+            { "ssn", null },
+            { "passportNumber", null },
+            { "licenseNumber", null },
+            { "email", null },
+            { "phone", null },
+            { "address1", null },
+            { "address2", null },
+            { "address3", null },
+            { "city", "cityTown" },
+            { "state", "stateProvince" },
+            { "postalCode", "zipPostalCode" },
+            { "country", null },
+            { "fullAddress", null },
+        };
+
         private string _firstName;
         private string _lastName;
         private string _subTitle;

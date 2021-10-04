@@ -71,6 +71,46 @@ namespace Bit.Core.Models.View
             }
         }
 
+        public Dictionary<string, string> linkedFieldOptions
+        {
+            get
+            {
+                switch (Type)
+                {
+                    case CipherType.Login:
+                        return LoginView.linkedFieldOptions;
+                    case CipherType.Card:
+                        return CardView.linkedFieldOptions;
+                    case CipherType.Identity:
+                        return IdentityView.linkedFieldOptions;
+                    default:
+                        return null;
+                }
+            }
+        }
+
+        public string linkedFieldI18nKey(string field)
+        {
+            string result = null;
+
+            switch (Type)
+            {
+                case CipherType.Login:
+                    LoginView.linkedFieldOptions.TryGetValue(field, out result);
+                    break;
+                case CipherType.Card:
+                    CardView.linkedFieldOptions.TryGetValue(field, out result);
+                    break;
+                case CipherType.Identity:
+                    IdentityView.linkedFieldOptions.TryGetValue(field, out result);
+                    break;
+                default:
+                    return null;
+            }
+
+            return result ?? field;
+        }
+
         public bool Shared => OrganizationId != null;
         public bool HasPasswordHistory => PasswordHistory?.Any() ?? false;
         public bool HasAttachments => Attachments?.Any() ?? false;
@@ -102,5 +142,6 @@ namespace Bit.Core.Models.View
             }
         }
         public bool IsDeleted => DeletedDate.HasValue;
+
     }
 }
