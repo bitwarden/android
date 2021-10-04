@@ -648,11 +648,11 @@
                                         </Entry.Keyboard>
                                     </controls:MonoEntry>
 
-                                    <Picker
+                                    <!-- <Picker
                                         x:Name="_linkedFieldTypePicker"
-                                        ItemsSource="{Binding Cipher., Mode=OneTime}"
+                                        ItemsSource="{Binding Cipher.LinkedFieldOptions, Mode=OneTime}"
                                         SelectedIndex="{Binding OwnershipSelectedIndex}"
-                                        StyleClass="box-value" />
+                                        StyleClass="box-value" /> -->
 
                                     <Switch
                                         IsToggled="{Binding BooleanValue}"

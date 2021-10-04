@@ -64,14 +64,6 @@ namespace Bit.App.Pages
                 new KeyValuePair<UriMatchType?, string>(UriMatchType.Exact, AppResources.Exact),
                 new KeyValuePair<UriMatchType?, string>(UriMatchType.Never, AppResources.Never)
             };
-        private List<KeyValuePair<FieldType, string>> _fieldTypeOptions =
-            new List<KeyValuePair<FieldType, string>>
-            {
-                new KeyValuePair<FieldType, string>(FieldType.Text, AppResources.FieldTypeText),
-                new KeyValuePair<FieldType, string>(FieldType.Hidden, AppResources.FieldTypeHidden),
-                new KeyValuePair<FieldType, string>(FieldType.Boolean, AppResources.FieldTypeBoolean),
-                new KeyValuePair<FieldType, string>(FieldType.Linked, AppResources.FieldTypeLinked),
-            };
 
         public AddEditPageViewModel()
         {
@@ -668,20 +660,32 @@ namespace Bit.App.Pages
 
         public async void AddField()
         {
+            var fieldTypeOptions = new List<KeyValuePair<FieldType, string>>
+            {
+                new KeyValuePair<FieldType, string>(FieldType.Text, AppResources.FieldTypeText),
+                new KeyValuePair<FieldType, string>(FieldType.Hidden, AppResources.FieldTypeHidden),
+                new KeyValuePair<FieldType, string>(FieldType.Boolean, AppResources.FieldTypeBoolean),
+            };
+
+            if (Cipher.Type != CipherType.SecureNote)
+            {
+                fieldTypeOptions.Add(new KeyValuePair<FieldType, string>(FieldType.Linked, "PLACEHOLDER"));
+            }
+
             var typeSelection = await Page.DisplayActionSheet(AppResources.SelectTypeField, AppResources.Cancel, null,
-                _fieldTypeOptions.Select(f => f.Value).ToArray());
+                fieldTypeOptions.Select(f => f.Value).ToArray());
             if (typeSelection == null || typeSelection == AppResources.Cancel)
             {
                 return;
             }
 
-            var type = _fieldTypeOptions.FirstOrDefault(f => f.Value == typeSelection).Key;
+            var type = fieldTypeOptions.FirstOrDefault(f => f.Value == typeSelection).Key;
             string name = null;
 
             if (type == FieldType.Linked)
             {
                 name = await Page.DisplayActionSheet(AppResources.CustomFieldName, AppResources.Cancel, null,
-                    Cipher.linkedFieldOptions.Select(kvp => Cipher.linkedFieldI18nKey(kvp.Key)).ToArray());
+                    Cipher.LinkedFieldOptions.Select(kvp => Cipher.LinkedFieldI18nKey(kvp.Key)).ToArray());
                 if (name == AppResources.Cancel)
                 {
                     return;

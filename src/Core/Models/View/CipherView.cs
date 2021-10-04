@@ -71,38 +71,38 @@ namespace Bit.Core.Models.View
             }
         }
 
-        public Dictionary<string, string> linkedFieldOptions
+        public Dictionary<string, string> LinkedFieldOptions
         {
             get
             {
                 switch (Type)
                 {
                     case CipherType.Login:
-                        return LoginView.linkedFieldOptions;
+                        return LoginView.LinkedFieldOptions;
                     case CipherType.Card:
-                        return CardView.linkedFieldOptions;
+                        return CardView.LinkedFieldOptions;
                     case CipherType.Identity:
-                        return IdentityView.linkedFieldOptions;
+                        return IdentityView.LinkedFieldOptions;
                     default:
                         return null;
                 }
             }
         }
 
-        public string linkedFieldI18nKey(string field)
+        public string LinkedFieldI18nKey(string field)
         {
             string result = null;
 
             switch (Type)
             {
                 case CipherType.Login:
-                    LoginView.linkedFieldOptions.TryGetValue(field, out result);
+                    LoginView.LinkedFieldOptions.TryGetValue(field, out result);
                     break;
                 case CipherType.Card:
-                    CardView.linkedFieldOptions.TryGetValue(field, out result);
+                    CardView.LinkedFieldOptions.TryGetValue(field, out result);
                     break;
                 case CipherType.Identity:
-                    IdentityView.linkedFieldOptions.TryGetValue(field, out result);
+                    IdentityView.LinkedFieldOptions.TryGetValue(field, out result);
                     break;
                 default:
                     return null;
