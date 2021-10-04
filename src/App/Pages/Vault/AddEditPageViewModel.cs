@@ -673,43 +673,26 @@ namespace Bit.App.Pages
             }
 
             var typeSelection = await Page.DisplayActionSheet(AppResources.SelectTypeField, AppResources.Cancel, null,
-                fieldTypeOptions.Select(f => f.Value).ToArray());
-            if (typeSelection == null || typeSelection == AppResources.Cancel)
+                _fieldTypeOptions.Select(f => f.Value).ToArray());
+            if (typeSelection != null && typeSelection != AppResources.Cancel)
             {
-                return;
-            }
-
-            var type = fieldTypeOptions.FirstOrDefault(f => f.Value == typeSelection).Key;
-            string name = null;
-
-            if (type == FieldType.Linked)
-            {
-                name = await Page.DisplayActionSheet(AppResources.CustomFieldName, AppResources.Cancel, null,
-                    Cipher.LinkedFieldOptions.Select(kvp => Cipher.LinkedFieldI18nKey(kvp.Key)).ToArray());
-                if (name == AppResources.Cancel)
+                var name = await _deviceActionService.DisplayPromptAync(AppResources.CustomFieldName);
+                if (name == null)
                 {
                     return;
                 }
+                if (Fields == null)
+                {
+                    Fields = new ExtendedObservableCollection<AddEditPageFieldViewModel>();
+                }
+                var type = _fieldTypeOptions.FirstOrDefault(f => f.Value == typeSelection).Key;
+                Fields.Add(new AddEditPageFieldViewModel(Cipher, new FieldView
+                {
+                    Type = type,
+                    Name = string.IsNullOrWhiteSpace(name) ? null : name,
+                    NewField = true,
+                }));
             }
-            else
-            {
-                name = await _deviceActionService.DisplayPromptAync(AppResources.CustomFieldName);
-            }
-
-            if (name == null)
-            {
-                return;
-            }
-            if (Fields == null)
-            {
-                Fields = new ExtendedObservableCollection<AddEditPageFieldViewModel>();
-            }
-            Fields.Add(new AddEditPageFieldViewModel(Cipher, new FieldView
-            {
-                Type = type,
-                Name = string.IsNullOrWhiteSpace(name) ? null : name,
-                NewField = true,
-            }));
         }
 
         public void TogglePassword()
