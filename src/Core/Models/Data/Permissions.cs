@@ -1,3 +1,5 @@
+using System;
+
 namespace Bit.Core.Models.Data 
 {
     public class Permissions
@@ -6,10 +8,8 @@ namespace Bit.Core.Models.Data
         public bool AccessEventLogs { get; set; }
         public bool AccessImportExport { get; set; }
         public bool AccessReports { get; set; }
-        public bool ManageAssignedCollections { get; set; }
         public bool EditAssignedCollections { get; set; }
         public bool DeleteAssignedCollections { get; set; }
-        public bool ManageAllCollections { get; set; }
         public bool CreateNewCollections { get; set; }
         public bool EditAnyCollection { get; set; }
         public bool DeleteAnyCollection { get; set; }
