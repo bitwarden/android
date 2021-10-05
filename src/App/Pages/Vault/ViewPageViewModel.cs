@@ -702,6 +702,7 @@ namespace Bit.App.Pages
 
     public class ViewPageFieldViewModel : ExtendedViewModel
     {
+        private II18nService _i18nService;
         private ViewPageViewModel _vm;
         private FieldView _field;
         private CipherView _cipher;
@@ -709,6 +710,7 @@ namespace Bit.App.Pages
 
         public ViewPageFieldViewModel(ViewPageViewModel vm, CipherView cipher, FieldView field)
         {
+            _i18nService = ServiceContainer.Resolve<II18nService>("i18nService");
             _vm = vm;
             _cipher = cipher;
             Field = field;
@@ -741,14 +743,36 @@ namespace Bit.App.Pages
 
         public Command ToggleHiddenValueCommand { get; set; }
 
-        public string ValueText => IsBooleanType ? (_field.Value == "true" ? "" : "") : _field.Value;
         public string ShowHiddenValueIcon => _showHiddenValue ? "" : "";
         public bool IsTextType => _field.Type == Core.Enums.FieldType.Text;
         public bool IsBooleanType => _field.Type == Core.Enums.FieldType.Boolean;
         public bool IsHiddenType => _field.Type == Core.Enums.FieldType.Hidden;
+        public bool IsLinkedType => _field.Type == Core.Enums.FieldType.Linked;
         public bool ShowViewHidden => IsHiddenType && _cipher.ViewPassword;
         public bool ShowCopyButton => _field.Type != Core.Enums.FieldType.Boolean &&
-            !string.IsNullOrWhiteSpace(_field.Value) && !(IsHiddenType && !_cipher.ViewPassword);
+            !string.IsNullOrWhiteSpace(_field.Value) &&
+            !(IsHiddenType && !_cipher.ViewPassword) &&
+            _field.Type != FieldType.Linked;
+
+        public string ValueText
+        {
+            get
+            {
+                if (IsBooleanType)
+                {
+                    return _field.Value == "true" ? "" : "";
+                }
+                else if (IsLinkedType)
+                {
+                    var i18nKey = _cipher.LinkedFieldI18nKey(Field.Value);
+                    return " " + _i18nService.T(i18nKey);
+                }
+                else
+                {
+                    return _field.Value;
+                }
+            }
+        }
 
         public async void ToggleHiddenValue()
         {

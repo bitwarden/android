@@ -647,13 +647,16 @@
                                             </Keyboard>
                                         </Entry.Keyboard>
                                     </controls:MonoEntry>
-
-                                    <!-- <Picker
-                                        x:Name="_linkedFieldTypePicker"
-                                        ItemsSource="{Binding Cipher.LinkedFieldOptions, Mode=OneTime}"
-                                        SelectedIndex="{Binding OwnershipSelectedIndex}"
-                                        StyleClass="box-value" /> -->
-
+                                    <StackLayout
+                                        StyleClass="box-row, box-row-input"
+                                        IsVisible="{Binding IsLinkedType}">
+                                        <Picker
+                                            x:Name="_linkedFieldTypePicker"
+                                            ItemsSource="{Binding LinkedFieldOptions, Mode=OneTime}"
+                                            SelectedIndex="{Binding LinkedFieldValueSelectedIndex}"
+                                            ItemDisplayBinding="{Binding Key}"
+                                            StyleClass="box-value" />
+                                    </StackLayout>
                                     <Switch
                                         IsToggled="{Binding BooleanValue}"
                                         Grid.Row="0"
