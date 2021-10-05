@@ -91,6 +91,11 @@ namespace Bit.Core.Models.View
 
         public string LinkedFieldI18nKey(string field)
         {
+            if (field == null)
+            {
+                return null;
+            }
+
             string result = null;
 
             switch (Type)
@@ -108,7 +113,7 @@ namespace Bit.Core.Models.View
                     return null;
             }
 
-            return result ?? field;
+            return result ?? char.ToUpper(field[0]) + field.Substring(1);
         }
 
         public bool Shared => OrganizationId != null;

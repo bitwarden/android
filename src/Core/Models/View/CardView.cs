@@ -8,12 +8,12 @@ namespace Bit.Core.Models.View
     {
         public static Dictionary<string, string> LinkedFieldOptions = new Dictionary<string, string>()
         {
-            { "cardholdername", null },
+            { "cardholderName", null },
             { "number", null },
             { "brand", null },
-            { "expMonth", "expirationMonth" },
-            { "expYear", "expirationYear" },
-            { "code", "securityCode" },
+            { "expMonth", "ExpirationMonth" },
+            { "expYear", "ExpirationYear" },
+            { "code", "SecurityCode" },
         };
         private string _brand;
         private string _number;

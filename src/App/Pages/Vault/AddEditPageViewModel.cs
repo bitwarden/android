@@ -669,7 +669,7 @@ namespace Bit.App.Pages
 
             if (Cipher.Type != CipherType.SecureNote)
             {
-                fieldTypeOptions.Add(new KeyValuePair<FieldType, string>(FieldType.Linked, "TODO Linked"));
+                fieldTypeOptions.Add(new KeyValuePair<FieldType, string>(FieldType.Linked, AppResources.FieldTypeLinked));
             }
 
             var typeSelection = await Page.DisplayActionSheet(AppResources.SelectTypeField, AppResources.Cancel, null,

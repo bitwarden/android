@@ -1059,6 +1059,9 @@
   <data name="LastName" xml:space="preserve">
     <value>Last Name</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Full Name</value>
+  </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>License Number</value>
   </data>
