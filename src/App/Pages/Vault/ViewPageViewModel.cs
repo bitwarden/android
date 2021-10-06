@@ -741,19 +741,6 @@ namespace Bit.App.Pages
                 });
         }
 
-        public Command ToggleHiddenValueCommand { get; set; }
-
-        public string ShowHiddenValueIcon => _showHiddenValue ? "" : "";
-        public bool IsTextType => _field.Type == Core.Enums.FieldType.Text;
-        public bool IsBooleanType => _field.Type == Core.Enums.FieldType.Boolean;
-        public bool IsHiddenType => _field.Type == Core.Enums.FieldType.Hidden;
-        public bool IsLinkedType => _field.Type == Core.Enums.FieldType.Linked;
-        public bool ShowViewHidden => IsHiddenType && _cipher.ViewPassword;
-        public bool ShowCopyButton => _field.Type != Core.Enums.FieldType.Boolean &&
-            !string.IsNullOrWhiteSpace(_field.Value) &&
-            !(IsHiddenType && !_cipher.ViewPassword) &&
-            _field.Type != FieldType.Linked;
-
         public string ValueText
         {
             get
@@ -773,6 +760,19 @@ namespace Bit.App.Pages
                 }
             }
         }
+
+        public Command ToggleHiddenValueCommand { get; set; }
+
+        public string ShowHiddenValueIcon => _showHiddenValue ? "" : "";
+        public bool IsTextType => _field.Type == Core.Enums.FieldType.Text;
+        public bool IsBooleanType => _field.Type == Core.Enums.FieldType.Boolean;
+        public bool IsHiddenType => _field.Type == Core.Enums.FieldType.Hidden;
+        public bool IsLinkedType => _field.Type == Core.Enums.FieldType.Linked;
+        public bool ShowViewHidden => IsHiddenType && _cipher.ViewPassword;
+        public bool ShowCopyButton => _field.Type != Core.Enums.FieldType.Boolean &&
+            !string.IsNullOrWhiteSpace(_field.Value) &&
+            !(IsHiddenType && !_cipher.ViewPassword) &&
+            _field.Type != FieldType.Linked;
 
         public async void ToggleHiddenValue()
         {

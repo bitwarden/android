@@ -89,11 +89,6 @@ namespace Bit.Core.Models.View
             }
         }
 
-        public string LinkedFieldI18nKey(int id)
-        {
-            return LinkedFieldOptions.Find(lfo => lfo.Value == id).Key;
-        }
-
         public bool Shared => OrganizationId != null;
         public bool HasPasswordHistory => PasswordHistory?.Any() ?? false;
         public bool HasAttachments => Attachments?.Any() ?? false;
@@ -125,6 +120,11 @@ namespace Bit.Core.Models.View
             }
         }
         public bool IsDeleted => DeletedDate.HasValue;
+
+        public string LinkedFieldI18nKey(int id)
+        {
+            return LinkedFieldOptions.Find(lfo => lfo.Value == id).Key;
+        }
 
     }
 }
