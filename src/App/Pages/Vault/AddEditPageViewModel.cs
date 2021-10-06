@@ -751,6 +751,12 @@ namespace Bit.App.Pages
             {
                 Cipher.Type = TypeOptions[TypeSelectedIndex].Value;
                 TriggerCipherChanged();
+
+                // Linked Custom Fields only apply to a specific item type
+                foreach (var field in Fields.Where(f => f.IsLinkedType).ToList())
+                {
+                    Fields.Remove(field);
+                }
             }
         }
 
