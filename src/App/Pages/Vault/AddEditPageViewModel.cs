@@ -860,7 +860,7 @@ namespace Bit.App.Pages
         private CipherView _cipher;
         private bool _showHiddenValue;
         private bool _booleanValue;
-        private int _linkedFieldValueSelectedIndex;
+        private int _linkedFieldOptionSelectedIndex;
         private string[] _additionalFieldProperties = new string[]
         {
             nameof(IsBooleanType),
@@ -876,27 +876,14 @@ namespace Bit.App.Pages
             Field = field;
             ToggleHiddenValueCommand = new Command(ToggleHiddenValue);
             BooleanValue = IsBooleanType && field.Value == "true";
-            LinkedFieldValueSelectedIndex = string.IsNullOrWhiteSpace(Field.Value) ? 0 :
-                LinkedFieldOptions.FindIndex(k => k.Value == Field.Value);
+            LinkedFieldOptionSelectedIndex = !Field.LinkedId.HasValue ? 0 :
+                LinkedFieldOptions.FindIndex(lfo => lfo.Value == Field.LinkedId.Value);
         }
 
         public FieldView Field
         {
             get => _field;
             set => SetProperty(ref _field, value, additionalPropertyNames: _additionalFieldProperties);
-        }
-
-        public List<KeyValuePair<string, string>> LinkedFieldOptions
-        {
-            get
-            {
-                return _cipher.LinkedFieldOptions.Select(o =>
-                {
-                    var i18nKey = _cipher.LinkedFieldI18nKey(o.Key);
-                    var test = _i18nService.T(i18nKey);
-                    return new KeyValuePair<string, string>(_i18nService.T(i18nKey), o.Key);
-                }).ToList();
-            }
         }
 
         public bool ShowHiddenValue
@@ -922,12 +909,12 @@ namespace Bit.App.Pages
             }
         }
 
-        public int LinkedFieldValueSelectedIndex
+        public int LinkedFieldOptionSelectedIndex
         {
-            get => _linkedFieldValueSelectedIndex;
+            get => _linkedFieldOptionSelectedIndex;
             set
             {
-                if (SetProperty(ref _linkedFieldValueSelectedIndex, value))
+                if (SetProperty(ref _linkedFieldOptionSelectedIndex, value))
                 {
                     LinkedFieldValueChanged();
                 }
@@ -935,6 +922,7 @@ namespace Bit.App.Pages
         }
 
         public Command ToggleHiddenValueCommand { get; set; }
+        public List<KeyValuePair<string, int>> LinkedFieldOptions => _cipher.LinkedFieldOptions;
 
         public string ShowHiddenValueIcon => _showHiddenValue ? "" : "";
         public bool IsTextType => _field.Type == FieldType.Text;
@@ -960,9 +948,10 @@ namespace Bit.App.Pages
 
         private void LinkedFieldValueChanged()
         {
-            if (Field != null && LinkedFieldValueSelectedIndex > -1)
+            if (Field != null && LinkedFieldOptionSelectedIndex > -1)
             {
-                Field.Value = LinkedFieldOptions[LinkedFieldValueSelectedIndex].Value;
+                Field.LinkedId = LinkedFieldOptions.Find(lfo =>
+                    lfo.Value == LinkedFieldOptions[LinkedFieldOptionSelectedIndex].Value).Value;
             }
         }
     }

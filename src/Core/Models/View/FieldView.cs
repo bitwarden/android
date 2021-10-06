@@ -10,6 +10,7 @@ namespace Bit.Core.Models.View
         public FieldView(Field f)
         {
             Type = f.Type;
+            LinkedId = f.LinkedId;
         }
 
         public string Name { get; set; }
@@ -17,5 +18,6 @@ namespace Bit.Core.Models.View
         public FieldType Type { get; set; }
         public string MaskedValue => Value != null ? "••••••••" : null;
         public bool NewField { get; set; }
+        public int? LinkedId { get; set; }
     }
 }

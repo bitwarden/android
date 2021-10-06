@@ -5,27 +5,27 @@ namespace Bit.Core.Models.View
 {
     public class IdentityView : View
     {
-        public static Dictionary<string, string> LinkedFieldOptions = new Dictionary<string, string>()
+        public static List<KeyValuePair<string, int>> LinkedFieldOptions = new List<KeyValuePair<string, int>>()
         {
-            { "firstName", null },
-            { "middleName", null },
-            { "lastName", null },
-            { "fullName", null },
-            { "username", null },
-            { "company", null },
-            { "ssn", "SSN" },
-            { "passportNumber", null },
-            { "licenseNumber", null },
-            { "email", null },
-            { "phone", null },
-            { "address1", null },
-            { "address2", null },
-            { "address3", null },
-            { "city", "CityTown" },
-            { "state", "StateProvince" },
-            { "postalCode", "ZipPostalCode" },
-            { "country", null },
-            { "fullAddress", null },
+            new KeyValuePair<string, int>("FirstName", 0),
+            new KeyValuePair<string, int>("MiddleName", 1),
+            new KeyValuePair<string, int>("LastName", 2),
+            new KeyValuePair<string, int>("FullName", 3),
+            new KeyValuePair<string, int>("Username", 4),
+            new KeyValuePair<string, int>("Company", 5),
+            new KeyValuePair<string, int>("SSN", 6),
+            new KeyValuePair<string, int>("PassportNumber", 7),
+            new KeyValuePair<string, int>("LicenseNumber", 8),
+            new KeyValuePair<string, int>("Email", 9),
+            new KeyValuePair<string, int>("Phone", 10),
+            new KeyValuePair<string, int>("Address1", 11),
+            new KeyValuePair<string, int>("Address2", 12),
+            new KeyValuePair<string, int>("Address3", 13),
+            new KeyValuePair<string, int>("CityTown", 14),
+            new KeyValuePair<string, int>("StateProvince", 15),
+            new KeyValuePair<string, int>("ZipPostalCode", 16),
+            new KeyValuePair<string, int>("Country", 17),
+            new KeyValuePair<string, int>("FullAddress", 18),
         };
 
         private string _firstName;

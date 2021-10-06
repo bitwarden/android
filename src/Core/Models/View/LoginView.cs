@@ -7,10 +7,10 @@ namespace Bit.Core.Models.View
 {
     public class LoginView : View
     {
-        public static Dictionary<string, string> LinkedFieldOptions = new Dictionary<string, string>()
+        public static List<KeyValuePair<string, int>> LinkedFieldOptions = new List<KeyValuePair<string, int>>()
         {
-            { "username", null },
-            { "password", null },
+            new KeyValuePair<string, int>("Username", 0),
+            new KeyValuePair<string, int>("Password", 1),
         };
 
         public LoginView() { }

@@ -6,15 +6,16 @@ namespace Bit.Core.Models.View
 {
     public class CardView : View
     {
-        public static Dictionary<string, string> LinkedFieldOptions = new Dictionary<string, string>()
+        public static List<KeyValuePair<string, int>> LinkedFieldOptions = new List<KeyValuePair<string, int>>()
         {
-            { "cardholderName", null },
-            { "number", null },
-            { "brand", null },
-            { "expMonth", "ExpirationMonth" },
-            { "expYear", "ExpirationYear" },
-            { "code", "SecurityCode" },
+            new KeyValuePair<string, int>("CardholderName", 0),
+            new KeyValuePair<string, int>("Number", 1),
+            new KeyValuePair<string, int>("Brand", 2),
+            new KeyValuePair<string, int>("ExpirationMonth", 3),
+            new KeyValuePair<string, int>("ExpirationYear", 4),
+            new KeyValuePair<string, int>("SecurityCode", 5),
         };
+
         private string _brand;
         private string _number;
         private string _subTitle;

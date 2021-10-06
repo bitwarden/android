@@ -764,7 +764,7 @@ namespace Bit.App.Pages
                 }
                 else if (IsLinkedType)
                 {
-                    var i18nKey = _cipher.LinkedFieldI18nKey(Field.Value);
+                    var i18nKey = _cipher.LinkedFieldI18nKey(Field.LinkedId.GetValueOrDefault());
                     return " " + _i18nService.T(i18nKey);
                 }
                 else

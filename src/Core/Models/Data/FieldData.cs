@@ -12,10 +12,12 @@ namespace Bit.Core.Models.Data
             Type = data.Type;
             Name = data.Name;
             Value = data.Value;
+            LinkedId = data.LinkedId.GetValueOrDefault();
         }
 
         public FieldType Type { get; set; }
         public string Name { get; set; }
         public string Value { get; set; }
+        public int? LinkedId { get; set; }
     }
 }

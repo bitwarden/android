@@ -71,7 +71,7 @@ namespace Bit.Core.Models.View
             }
         }
 
-        public Dictionary<string, string> LinkedFieldOptions
+        public List<KeyValuePair<string, int>> LinkedFieldOptions
         {
             get
             {
@@ -89,31 +89,9 @@ namespace Bit.Core.Models.View
             }
         }
 
-        public string LinkedFieldI18nKey(string field)
+        public string LinkedFieldI18nKey(int id)
         {
-            if (field == null)
-            {
-                return null;
-            }
-
-            string result = null;
-
-            switch (Type)
-            {
-                case CipherType.Login:
-                    LoginView.LinkedFieldOptions.TryGetValue(field, out result);
-                    break;
-                case CipherType.Card:
-                    CardView.LinkedFieldOptions.TryGetValue(field, out result);
-                    break;
-                case CipherType.Identity:
-                    IdentityView.LinkedFieldOptions.TryGetValue(field, out result);
-                    break;
-                default:
-                    return null;
-            }
-
-            return result ?? char.ToUpper(field[0]) + field.Substring(1);
+            return LinkedFieldOptions.Find(lfo => lfo.Value == id).Key;
         }
 
         public bool Shared => OrganizationId != null;

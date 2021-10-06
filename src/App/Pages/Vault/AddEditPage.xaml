@@ -651,9 +651,9 @@
                                         StyleClass="box-row, box-row-input"
                                         IsVisible="{Binding IsLinkedType}">
                                         <Picker
-                                            x:Name="_linkedFieldTypePicker"
+                                            x:Name="_linkedFieldOptionPicker"
                                             ItemsSource="{Binding LinkedFieldOptions, Mode=OneTime}"
-                                            SelectedIndex="{Binding LinkedFieldValueSelectedIndex}"
+                                            SelectedIndex="{Binding LinkedFieldOptionSelectedIndex}"
                                             ItemDisplayBinding="{Binding Key}"
                                             StyleClass="box-value" />
                                     </StackLayout>
