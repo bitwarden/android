@@ -366,6 +366,29 @@
         <Setter Property="VerticalOptions"
                 Value="CenterAndExpand" />
     </Style>
+    <Style TargetType="Button"
+           ApplyToDerivedTypes="True"
+           Class="box-overlay">
+        <Setter Property="BackgroundColor"
+                Value="Transparent" />
+        <Setter Property="BorderWidth"
+                Value="0" />
+        <Setter Property="Padding"
+                Value="0" />
+        <Setter Property="TextColor"
+                Value="Transparent" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Disabled" />
+                    <VisualState x:Name="Focused" />
+                    <VisualState x:Name="Selected" />
+                    <VisualState x:Name="Pressed" />
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
     <Style TargetType="BoxView"
            Class="box-row-separator">
         <Setter Property="HeightRequest"

@@ -23,11 +23,15 @@
            ApplyToDerivedTypes="True">
         <Setter Property="TextColor"
                 Value="{DynamicResource TextColor}" />
+        <Setter Property="BackgroundColor"
+                Value="{DynamicResource BackgroundColor}" />
     </Style>
     <Style TargetType="TimePicker"
            ApplyToDerivedTypes="True">
         <Setter Property="TextColor"
                 Value="{DynamicResource TextColor}" />
+        <Setter Property="BackgroundColor"
+                Value="{DynamicResource BackgroundColor}" />
     </Style>
     <Style TargetType="Editor"
            ApplyToDerivedTypes="True">

@@ -8,7 +8,6 @@ using Android.App;
 using Android.App.Assist;
 using Android.Content;
 using Android.Content.PM;
-using Android.Content.Res;
 using Android.Nfc;
 using Android.OS;
 using Android.Provider;
@@ -641,18 +640,11 @@ namespace Bit.Droid.Services
 
         public bool AutofillAccessibilityServiceRunning()
         {
-            try
-            {
-                var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
-                var manager = activity.GetSystemService(Context.ActivityService) as ActivityManager;
-                var services = manager.GetRunningServices(int.MaxValue);
-                return services.Any(s => s.Process.ToLowerInvariant().Contains("bitwarden") &&
-                    s.Service.ClassName.ToLowerInvariant().Contains("accessibilityservice"));
-            }
-            catch
-            {
-                return false;
-            }
+            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            var enabledServices = Settings.Secure.GetString(activity.ContentResolver,
+                Settings.Secure.EnabledAccessibilityServices);
+            return Application.Context.PackageName != null &&
+                   (enabledServices?.Contains(Application.Context.PackageName) ?? false);
         }
 
         public bool AutofillAccessibilityOverlayPermitted()
