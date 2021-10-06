@@ -82,7 +82,7 @@ namespace Bit.Core.Models.Request
                 Type = f.Type,
                 Name = f.Name?.EncryptedString,
                 Value = f.Value?.EncryptedString,
-                LinkedId = f.LinkedId.GetValueOrDefault(),
+                LinkedId = f.LinkedId,
             }).ToList();
 
             PasswordHistory = cipher.PasswordHistory?.Select(ph => new PasswordHistoryRequest

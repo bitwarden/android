@@ -19,7 +19,7 @@ namespace Bit.Core.Models.Domain
         public Field(FieldData obj, bool alreadyEncrypted = false)
         {
             Type = obj.Type;
-            LinkedId = obj.LinkedId.GetValueOrDefault();
+            LinkedId = obj.LinkedId;
             BuildDomainModel(this, obj, _map, alreadyEncrypted);
         }
 

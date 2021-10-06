@@ -1191,7 +1191,7 @@ namespace Bit.Core.Services
                 var field = new Field
                 {
                     Type = model.Type,
-                    LinkedId = model.LinkedId.GetValueOrDefault()
+                    LinkedId = model.LinkedId,
                 };
                 // normalize boolean type field values
                 if (model.Type == FieldType.Boolean && model.Value != "true")
