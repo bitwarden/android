@@ -44,8 +44,8 @@
     </Style>
     <Style TargetType="Switch"
            ApplyToDerivedTypes="True">
-        <Setter Property="ThumbColor"
-                Value="{DynamicResource SwitchThumbColor}" />
+        <Setter Property="OnColor"
+                Value="{DynamicResource SwitchOnColor}" />
     </Style>
     <Style TargetType="SearchBar"
            ApplyToDerivedTypes="True">
@@ -91,6 +91,8 @@
                 Value="1" />
         <Setter Property="TextColor"
                 Value="{DynamicResource ButtonTextColor}" />
+        <Setter Property="FontSize"
+                Value="18" />
         <Setter Property="CornerRadius"
                 Value="5" />
         <Setter Property="Margin"
@@ -123,6 +125,8 @@
                 Value="1" />
         <Setter Property="TextColor"
                 Value="{DynamicResource ButtonPrimaryTextColor}" />
+        <Setter Property="FontSize"
+                Value="18" />
         <Setter Property="FontAttributes"
                 Value="Bold" />
         <Setter Property="CornerRadius"

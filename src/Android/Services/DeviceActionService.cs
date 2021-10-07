@@ -27,7 +27,6 @@ using Bit.Core.Enums;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
 using Bit.Droid.Autofill;
-using Bit.Droid.Utilities;
 using Plugin.CurrentActivity;
 
 namespace Bit.Droid.Services
@@ -315,7 +314,7 @@ namespace Bit.Droid.Services
                 return Task.FromResult<string>(null);
             }
 
-            var alertBuilder = new AlertDialog.Builder(activity, ThemeHelpers.GetDialogTheme());
+            var alertBuilder = new AlertDialog.Builder(activity);
             alertBuilder.SetTitle(title);
             alertBuilder.SetMessage(description);
             var input = new EditText(activity)
@@ -479,7 +478,7 @@ namespace Bit.Droid.Services
             }
 
             var result = new TaskCompletionSource<string>();
-            var alertBuilder = new AlertDialog.Builder(activity, ThemeHelpers.GetDialogTheme());
+            var alertBuilder = new AlertDialog.Builder(activity);
             alertBuilder.SetTitle(title);
 
             if (!string.IsNullOrWhiteSpace(message))
@@ -671,7 +670,7 @@ namespace Bit.Droid.Services
             }
             catch
             {
-                var alertBuilder = new AlertDialog.Builder(activity, ThemeHelpers.GetDialogTheme());
+                var alertBuilder = new AlertDialog.Builder(activity);
                 alertBuilder.SetMessage(AppResources.BitwardenAutofillGoToSettings);
                 alertBuilder.SetCancelable(true);
                 alertBuilder.SetPositiveButton(AppResources.Ok, (sender, args) =>
@@ -723,7 +722,7 @@ namespace Bit.Droid.Services
             }
             catch (ActivityNotFoundException)
             {
-                var alertBuilder = new AlertDialog.Builder(activity, ThemeHelpers.GetDialogTheme());
+                var alertBuilder = new AlertDialog.Builder(activity);
                 alertBuilder.SetMessage(AppResources.BitwardenAutofillGoToSettings);
                 alertBuilder.SetCancelable(true);
                 alertBuilder.SetPositiveButton(AppResources.Ok, (sender, args) =>

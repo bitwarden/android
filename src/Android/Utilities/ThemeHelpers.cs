@@ -32,14 +32,6 @@ namespace Bit.Droid.Utilities
         {
             get => ThemeManager.GetResourceColor("SwitchThumbColor").ToAndroid();
         }
-        public static Color SwitchTrackOnColor
-        {
-            get => ThemeManager.GetResourceColor("SwitchTrackOnColor").ToAndroid();
-        }
-        public static Color SwitchTrackOffColor
-        {
-            get => ThemeManager.GetResourceColor("SwitchTrackOffColor").ToAndroid();
-        }
         
         public static void SetAppearance(string theme, bool osDarkModeEnabled)
         {

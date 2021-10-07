@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel;
 using Android.Content;
 using Android.Content.Res;
-using Android.Graphics;
-using Android.OS;
+using Android.Graphics.Drawables;
+using AndroidX.Core.Content.Resources;
 using Bit.Droid.Renderers;
 using Bit.Droid.Utilities;
 using Xamarin.Forms;
@@ -25,7 +25,7 @@ namespace Bit.Droid.Renderers
         
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == Switch.ThumbColorProperty.PropertyName)
+            if (e.PropertyName == Switch.OnColorProperty.PropertyName)
             {
                 UpdateColors();
             }
@@ -39,41 +39,22 @@ namespace Bit.Droid.Renderers
         {
             if (Control != null)
             {
-                var states = new[]
+                var t = ResourcesCompat.GetDrawable(Resources, Resource.Drawable.switch_thumb, null);
+                if (t is GradientDrawable thumb)
+                {
+                    Control.ThumbDrawable = thumb;
+                }
+                var thumbStates = new[]
                 {
                     new[] { Android.Resource.Attribute.StateChecked }, // checked
                     new[] { -Android.Resource.Attribute.StateChecked } // unchecked
                 };
-                
                 var thumbColors = new int[]
                 {
                     ThemeHelpers.SwitchOnColor,
                     ThemeHelpers.SwitchThumbColor
                 };
-                Control.ThumbTintList = new ColorStateList(states, thumbColors);
-                if (Build.VERSION.SdkInt >= BuildVersionCodes.Q)
-                {
-                    Control.ThumbTintBlendMode = BlendMode.Multiply;
-                }
-                else
-                {
-                    Control.ThumbTintMode = PorterDuff.Mode.Multiply;
-                }
-                
-                var trackColors = new int[]
-                {
-                    ThemeHelpers.SwitchTrackOnColor,
-                    ThemeHelpers.SwitchTrackOffColor
-                };
-                Control.TrackTintList = new ColorStateList(states, trackColors);
-                if (Build.VERSION.SdkInt >= BuildVersionCodes.Q)
-                {
-                    Control.TrackTintBlendMode = BlendMode.Multiply;
-                }
-                else
-                {
-                    Control.TrackTintMode = PorterDuff.Mode.Multiply;
-                }
+                Control.ThumbTintList = new ColorStateList(thumbStates, thumbColors);
             }
         }
     }
