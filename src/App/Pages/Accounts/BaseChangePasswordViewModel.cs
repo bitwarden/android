@@ -21,6 +21,7 @@ namespace Bit.App.Pages
         protected readonly ICryptoService _cryptoService;
         protected readonly IDeviceActionService _deviceActionService;
         protected readonly IApiService _apiService;
+        protected readonly ISyncService _syncService;
 
         private bool _showPassword;
         private bool _isPolicyInEffect;
@@ -38,6 +39,7 @@ namespace Bit.App.Pages
             _cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _apiService = ServiceContainer.Resolve<IApiService>("apiService");
+            _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
         }
 
         public bool ShowPassword
@@ -70,9 +72,17 @@ namespace Bit.App.Pages
         public string ConfirmMasterPassword { get; set; }
         public string Hint { get; set; }
 
-        public async Task InitAsync()
+        public async Task InitAsync(bool forceSync)
         {
-            await CheckPasswordPolicy();
+            if (forceSync)
+            {
+                var task = Task.Run(async () => await _syncService.FullSyncAsync(true));
+                await task.ContinueWith(async (t) => await CheckPasswordPolicy());
+            }
+            else
+            {
+                await CheckPasswordPolicy();
+            }
         }
         
         private async Task CheckPasswordPolicy()

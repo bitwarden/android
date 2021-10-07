@@ -50,7 +50,7 @@ namespace Bit.App.Pages
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            await _vm.InitAsync();
+            await _vm.InitAsync(true);
             RequestFocus(_masterPassword);
         }
 
