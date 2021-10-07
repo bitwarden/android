@@ -526,14 +526,9 @@
                                    StyleClass="box-header, box-header-platform" />
                         </StackLayout>
                         <StackLayout StyleClass="box-row">
-                            <Label
+                            <controls:SelectableLabel
                                 Text="{Binding Cipher.Notes, Mode=OneWay}"
-                                StyleClass="box-value"
-                                LineBreakMode="WordWrap">
-                                <Label.Effects>
-                                    <effects:SelectableLabelEffect />
-                                </Label.Effects>
-                            </Label>
+                                StyleClass="box-value"/>
                         </StackLayout>
                         <BoxView StyleClass="box-row-separator" />
                     </StackLayout>
@@ -561,12 +556,13 @@
                                                 StyleClass="box-label"
                                                 Grid.Row="0"
                                                 Grid.Column="0" />
-                                            <Label
+                                            <Editor
                                                 Text="{Binding ValueText, Mode=OneWay}"
                                                 StyleClass="box-value"
                                                 Grid.Row="1"
                                                 Grid.Column="0"
-                                                IsVisible="{Binding IsTextType}" />
+                                                IsVisible="{Binding IsTextType}"
+                                                IsReadOnly="True"/>
                                             <controls:FaLabel
                                                 Text="{Binding ValueText, Mode=OneWay}"
                                                 StyleClass="box-value"
