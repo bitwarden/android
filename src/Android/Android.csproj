@@ -122,6 +122,8 @@
     <Compile Include="Renderers\ExtendedDatePickerRenderer.cs" />
     <Compile Include="Renderers\CustomTabbedRenderer.cs" />
     <Compile Include="Renderers\ExtendedStackLayoutRenderer.cs" />
+    <Compile Include="Renderers\ExtendedStepperRenderer.cs" />
+    <Compile Include="Renderers\CustomSwitchRenderer.cs" />
     <Compile Include="Renderers\ExtendedTimePickerRenderer.cs" />
     <Compile Include="Renderers\ExtendedSliderRenderer.cs" />
     <Compile Include="Renderers\CustomEditorRenderer.cs" />

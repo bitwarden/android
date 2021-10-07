@@ -17,6 +17,7 @@ using Bit.Core.Enums;
 using Android.Nfc;
 using System.Threading.Tasks;
 using AndroidX.Core.Content;
+using Bit.App.Utilities;
 using ZXing.Net.Mobile.Android;
 
 namespace Bit.Droid
@@ -384,6 +385,7 @@ namespace Bit.Droid
         private void AppearanceAdjustments()
         {
             Window?.SetStatusBarColor(ThemeHelpers.NavBarBackgroundColor);
+            ThemeHelpers.SetAppearance(ThemeManager.GetTheme(true), ThemeManager.OsDarkModeEnabled());
         }
 
         private void ExitApp()

@@ -4,6 +4,7 @@ using Bit.Core.Utilities;
 using System;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
+using Bit.App.Utilities;
 using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
@@ -52,7 +53,8 @@ namespace Bit.App.Pages
             {
                 IsRunning = true,
                 VerticalOptions = LayoutOptions.CenterAndExpand,
-                HorizontalOptions = LayoutOptions.Center
+                HorizontalOptions = LayoutOptions.Center,
+                Color = ThemeManager.GetResourceColor("PrimaryColor")
             };
             if (targetView != null)
             {

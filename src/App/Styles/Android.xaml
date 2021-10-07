@@ -44,8 +44,6 @@
     </Style>
     <Style TargetType="Switch"
            ApplyToDerivedTypes="True">
-        <Setter Property="OnColor"
-                Value="{DynamicResource SwitchOnColor}" />
         <Setter Property="ThumbColor"
                 Value="{DynamicResource SwitchThumbColor}" />
     </Style>
@@ -75,6 +73,12 @@
         <Setter Property="ThumbBorderColor"
                 Value="{DynamicResource SliderThumbBorderColor}" />
     </Style>
+    <Style TargetType="controls:ExtendedStepper">
+        <Setter Property="StepperBackgroundColor"
+                Value="{DynamicResource StepperBackgroundColor}" />
+        <Setter Property="StepperForegroundColor"
+                Value="{DynamicResource StepperForegroundColor}" />
+    </Style>
     
     <!-- Buttons -->
     
@@ -87,6 +91,8 @@
                 Value="1" />
         <Setter Property="TextColor"
                 Value="{DynamicResource ButtonTextColor}" />
+        <Setter Property="CornerRadius"
+                Value="5" />
         <Setter Property="Margin"
                 Value="0, 5, 0, 0" />
         <Setter Property="VisualStateManager.VisualStateGroups">
@@ -119,6 +125,8 @@
                 Value="{DynamicResource ButtonPrimaryTextColor}" />
         <Setter Property="FontAttributes"
                 Value="Bold" />
+        <Setter Property="CornerRadius"
+                Value="5" />
         <Setter Property="Margin"
                 Value="0, 5, 0, 0" />
         <Setter Property="VisualStateManager.VisualStateGroups">

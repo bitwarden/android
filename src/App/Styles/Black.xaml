@@ -41,6 +41,11 @@
 
     <Color x:Key="SwitchOnColor">#52bdfb</Color>
     <Color x:Key="SwitchThumbColor">#B9B9B9</Color>
+    <Color x:Key="SwitchTrackOnColor">#52bdfb</Color>
+    <Color x:Key="SwitchTrackOffColor">#5A595B</Color>
+
+    <Color x:Key="StepperBackgroundColor">#5A595B</Color>
+    <Color x:Key="StepperForegroundColor">#ffffff</Color>
 
     <Color x:Key="ButtonPrimaryBackgroundColor">#52bdfb</Color>
     <Color x:Key="ButtonPrimaryBackgroundColorPressed">#058AD8</Color>

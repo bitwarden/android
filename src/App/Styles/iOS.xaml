@@ -88,6 +88,10 @@
         <Setter Property="ThumbColor"
                 Value="{DynamicResource SliderThumbColor}" />
     </Style>
+    <Style TargetType="controls:ExtendedStepper">
+        <Setter Property="StepperForegroundColor"
+                Value="{DynamicResource StepperForegroundColor}" />
+    </Style>
 
     <!-- Buttons -->
 

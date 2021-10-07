@@ -109,7 +109,7 @@
                             HorizontalTextAlignment="End"
                             VerticalOptions="FillAndExpand"
                             VerticalTextAlignment="Center" />
-                        <Stepper
+                        <controls:ExtendedStepper
                             Value="{Binding NumWords}"
                             Maximum="20"
                             Minimum="3"
@@ -240,7 +240,7 @@
                             HorizontalTextAlignment="End"
                             VerticalOptions="FillAndExpand"
                             VerticalTextAlignment="Center" />
-                        <Stepper
+                        <controls:ExtendedStepper
                             Value="{Binding MinNumber}"
                             Maximum="5"
                             Minimum="0"
@@ -260,7 +260,7 @@
                             HorizontalTextAlignment="End"
                             VerticalOptions="FillAndExpand"
                             VerticalTextAlignment="Center" />
-                        <Stepper
+                        <controls:ExtendedStepper
                             Value="{Binding MinSpecial}"
                             Maximum="5"
                             Minimum="0"
