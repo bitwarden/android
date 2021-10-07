@@ -556,13 +556,12 @@
                                                 StyleClass="box-label"
                                                 Grid.Row="0"
                                                 Grid.Column="0" />
-                                            <Editor
+                                            <Label
                                                 Text="{Binding ValueText, Mode=OneWay}"
                                                 StyleClass="box-value"
                                                 Grid.Row="1"
                                                 Grid.Column="0"
-                                                IsVisible="{Binding IsTextType}"
-                                                IsReadOnly="True"/>
+                                                IsVisible="{Binding IsTextType}" />
                                             <controls:FaLabel
                                                 Text="{Binding ValueText, Mode=OneWay}"
                                                 StyleClass="box-value"
