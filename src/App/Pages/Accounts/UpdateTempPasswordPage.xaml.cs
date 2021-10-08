@@ -30,6 +30,7 @@ namespace Bit.App.Pages
             _pageName = string.Concat(nameof(UpdateTempPasswordPage), "_", DateTime.UtcNow.Ticks);
             _vm = BindingContext as UpdateTempPasswordPageViewModel;
             _vm.Page = this;
+            SetActivityIndicator();
             
             // Actions Declaration
             _vm.LogOutAction = () =>
@@ -71,7 +72,10 @@ namespace Bit.App.Pages
                 }
             });
             base.OnAppearing();
-            await _vm.InitAsync(true);
+            await LoadOnAppearedAsync(_mainLayout, true, async () =>
+            {
+                await _vm.InitAsync(true);
+            });
             RequestFocus(_masterPassword);
         }
 
