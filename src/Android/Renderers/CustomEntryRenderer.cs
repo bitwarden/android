@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel;
 using Android.Content;
+using Android.Content.Res;
 using Android.Graphics;
 using Android.Text;
 using Android.Views.InputMethods;
 using Android.Widget;
 using Bit.Droid.Renderers;
+using Bit.Droid.Utilities;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
@@ -20,6 +22,7 @@ namespace Bit.Droid.Renderers
         protected override void OnElementChanged(ElementChangedEventArgs<Entry> e)
         {
             base.OnElementChanged(e);
+            UpdateBorderColor();
             if (Control != null && e.NewElement != null)
             {
                 Control.SetPadding(Control.PaddingLeft, Control.PaddingTop - 10, Control.PaddingRight,
@@ -67,6 +70,28 @@ namespace Bit.Droid.Renderers
                         label.Typeface = typeface;
                     }
                 }
+            }
+            else if (e.PropertyName == Entry.TextColorProperty.PropertyName)
+            {
+                UpdateBorderColor();
+            }
+        }
+
+        private void UpdateBorderColor()
+        {
+            if (Control != null)
+            {
+                var states = new[]
+                {
+                    new[] { Android.Resource.Attribute.StateFocused }, // focused
+                    new[] { -Android.Resource.Attribute.StateFocused }, // unfocused
+                };
+                var colors = new int[]
+                {
+                    ThemeHelpers.PrimaryColor, 
+                    ThemeHelpers.MutedColor
+                };
+                Control.BackgroundTintList = new ColorStateList(states, colors);
             }
         }
     }

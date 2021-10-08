@@ -1510,12 +1510,8 @@
   <data name="ThemeDescription" xml:space="preserve">
     <value>Change the application's color theme.</value>
   </data>
-  <data name="RestartIsRequired" xml:space="preserve">
-    <value>Restart is required.</value>
-    <comment>Referring to restarting the application.</comment>
-  </data>
-  <data name="Restarting" xml:space="preserve">
-    <value>Restarting...</value>
+  <data name="ThemeDefault" xml:space="preserve">
+    <value>Default (System)</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Copy Notes</value>

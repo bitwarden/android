@@ -59,7 +59,7 @@ namespace Bit.App.Pages
             }
             ThemeOptions = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>(null, AppResources.Default),
+                new KeyValuePair<string, string>(null, AppResources.ThemeDefault),
                 new KeyValuePair<string, string>("light", AppResources.Light),
                 new KeyValuePair<string, string>("dark", AppResources.Dark),
                 new KeyValuePair<string, string>("black", AppResources.Black),
@@ -215,17 +215,8 @@ namespace Bit.App.Pages
             {
                 var theme = ThemeOptions[ThemeSelectedIndex].Key;
                 await _storageService.SaveAsync(Constants.ThemeKey, theme);
-                if (Device.RuntimePlatform == Device.Android)
-                {
-                    await _deviceActionService.ShowLoadingAsync(AppResources.Restarting);
-                    await Task.Delay(1000);
-                }
-                _messagingService.Send("updatedTheme", theme);
-                if (Device.RuntimePlatform == Device.iOS)
-                {
-                    await Task.Delay(500);
-                    await _platformUtilsService.ShowDialogAsync(AppResources.ThemeAppliedOnRestart);
-                }
+                ThemeManager.SetTheme(Device.RuntimePlatform == Device.Android, Application.Current.Resources);
+                _messagingService.Send("updatedTheme");
             }
         }
 

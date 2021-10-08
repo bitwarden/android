@@ -110,11 +110,6 @@ namespace Bit.App.Pages
         public Command<SendView> SendOptionsCommand { get; set; }
         public bool LoadedOnce { get; set; }
 
-        public async Task InitAsync()
-        {
-            SendEnabled = ! await AppHelpers.IsSendDisabledByPolicyAsync();
-        }
-        
         public async Task LoadAsync()
         {
             if (_doingLoad)
@@ -142,6 +137,7 @@ namespace Bit.App.Pages
             ShowNoData = false;
             Loading = true;
             ShowList = false;
+            SendEnabled = ! await AppHelpers.IsSendDisabledByPolicyAsync();
             var groupedSends = new List<SendGroupingsPageListGroup>();
             var page = Page as SendGroupingsPage;
 

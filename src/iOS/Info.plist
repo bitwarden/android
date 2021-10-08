@@ -113,6 +113,8 @@
 		<key>arm64</key>
 		<true/>
 	</dict>
+    <key>CADisableMinimumFrameDurationOnPhone</key>
+    <true/>
 	<key>XSAppIconAssets</key>
 	<string>Resources/Assets.xcassets/AppIcons.appiconset</string>
 	<key>ITSAppUsesNonExemptEncryption</key>

@@ -42,7 +42,6 @@ namespace Bit.App.Abstractions
         void OpenAccessibilitySettings();
         void OpenAccessibilityOverlayPermissionSettings();
         void OpenAutofillSettings();
-        bool UsingDarkTheme();
         long GetActiveTime();
         void CloseMainApp();
         bool SupportsFido2();
