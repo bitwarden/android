@@ -170,6 +170,10 @@ namespace Bit.App.Pages
 
         public void ToggleInlineAutofill()
         {
+            if (!InlineAutofillEnabled)
+            {
+                return;
+            }
             InlineAutofillToggled = !InlineAutofillToggled;
         }
 
@@ -180,6 +184,10 @@ namespace Bit.App.Pages
 
         public void ToggleDrawOver()
         {
+            if (!DrawOverEnabled)
+            {
+                return;
+            }
             _deviceActionService.OpenAccessibilityOverlayPermissionSettings();
         }
         

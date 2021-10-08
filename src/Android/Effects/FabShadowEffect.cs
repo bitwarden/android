@@ -1,6 +1,6 @@
 ﻿using Android.Graphics.Drawables;
-using Bit.App.Utilities;
 using Bit.Droid.Effects;
+using Bit.Droid.Utilities;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
@@ -14,7 +14,7 @@ namespace Bit.Droid.Effects
             if (Control is Android.Widget.Button button)
             {
                 var gd = new GradientDrawable();
-                gd.SetColor(ThemeManager.GetResourceColor("FabColor").ToAndroid());
+                gd.SetColor(ThemeHelpers.FabColor);
                 gd.SetCornerRadius(100);
                 
                 button.SetBackground(gd);

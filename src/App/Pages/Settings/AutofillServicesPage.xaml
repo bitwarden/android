@@ -29,7 +29,7 @@
                             HorizontalOptions="End" />
                         <Button
                             Clicked="ToggleAutofillService"
-                            BackgroundColor="Transparent"
+                            StyleClass="box-overlay"
                             RelativeLayout.XConstraint="0"
                             RelativeLayout.YConstraint="0"
                             RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToView, ElementName=AutofillServiceSwitch, Property=Width}"
@@ -58,8 +58,7 @@
                             HorizontalOptions="End" />
                         <Button
                             Clicked="ToggleInlineAutofill"
-                            IsEnabled="{Binding InlineAutofillEnabled}"
-                            BackgroundColor="Transparent"
+                            StyleClass="box-overlay"
                             RelativeLayout.XConstraint="0"
                             RelativeLayout.YConstraint="0"
                             RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToView, ElementName=InlineAutofillSwitch, Property=Width}"
@@ -85,7 +84,7 @@
                             HorizontalOptions="End" />
                         <Button
                             Clicked="ToggleAccessibility"
-                            BackgroundColor="Transparent"
+                            StyleClass="box-overlay"
                             RelativeLayout.XConstraint="0"
                             RelativeLayout.YConstraint="0"
                             RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToView, ElementName=AccessibilitySwitch, Property=Width}"
@@ -114,8 +113,7 @@
                             HorizontalOptions="End" />
                         <Button
                             Clicked="ToggleDrawOver"
-                            IsEnabled="{Binding DrawOverEnabled}"
-                            BackgroundColor="Transparent"
+                            StyleClass="box-overlay"
                             RelativeLayout.XConstraint="0"
                             RelativeLayout.YConstraint="0"
                             RelativeLayout.WidthConstraint="{ConstraintExpression Type=RelativeToView, ElementName=DrawOverSwitch, Property=Width}"

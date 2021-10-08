@@ -1,5 +1,5 @@
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
-    android:color="@color/itemPressed">
+    android:color="#8E8E93">
 
     <item
         android:id="@android:id/mask"

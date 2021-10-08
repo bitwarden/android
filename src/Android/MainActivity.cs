@@ -15,9 +15,9 @@ using Bit.Droid.Receivers;
 using Bit.App.Models;
 using Bit.Core.Enums;
 using Android.Nfc;
-using Bit.App.Utilities;
 using System.Threading.Tasks;
 using AndroidX.Core.Content;
+using Bit.App.Utilities;
 using ZXing.Net.Mobile.Android;
 
 namespace Bit.Droid
@@ -30,7 +30,7 @@ namespace Bit.Droid
         LaunchMode = LaunchMode.SingleTask,
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation |
                                ConfigChanges.Keyboard | ConfigChanges.KeyboardHidden |
-                               ConfigChanges.Navigation)]
+                               ConfigChanges.Navigation | ConfigChanges.UiMode)]
     [IntentFilter(
         new[] { Intent.ActionSend },
         Categories = new[] { Intent.CategoryDefault },
@@ -81,7 +81,6 @@ namespace Bit.Droid
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 
-            UpdateTheme(ThemeManager.GetTheme(true));
             base.OnCreate(savedInstanceState);
             if (!CoreHelpers.InDebugMode())
             {
@@ -118,7 +117,7 @@ namespace Bit.Droid
                 }
                 else if (message.Command == "updatedTheme")
                 {
-                    RestartApp();
+                    Xamarin.Forms.Device.BeginInvokeOnMainThread(() => AppearanceAdjustments());
                 }
                 else if (message.Command == "exit")
                 {
@@ -141,6 +140,7 @@ namespace Bit.Droid
         {
             base.OnResume();
             Xamarin.Essentials.Platform.OnResume();
+            AppearanceAdjustments();
             if (_deviceActionService.SupportsNfc())
             {
                 try
@@ -382,45 +382,10 @@ namespace Bit.Droid
             }
         }
 
-        private void UpdateTheme(string theme)
+        private void AppearanceAdjustments()
         {
-            if (theme == "light")
-            {
-                SetTheme(Resource.Style.LightTheme);
-            }
-            else if (theme == "dark")
-            {
-                SetTheme(Resource.Style.DarkTheme);
-            }
-            else if (theme == "black")
-            {
-                SetTheme(Resource.Style.BlackTheme);
-            }
-            else if (theme == "nord")
-            {
-                SetTheme(Resource.Style.NordTheme);
-            }
-            else
-            {
-                if (_deviceActionService.UsingDarkTheme())
-                {
-                    SetTheme(Resource.Style.DarkTheme);
-                }
-                else
-                {
-                    SetTheme(Resource.Style.LightTheme);
-                }
-            }
-        }
-
-        private void RestartApp()
-        {
-            var intent = new Intent(this, typeof(MainActivity));
-            var pendingIntent = PendingIntent.GetActivity(this, 5923650, intent, PendingIntentFlags.CancelCurrent);
-            var alarmManager = GetSystemService(AlarmService) as AlarmManager;
-            var triggerMs = Java.Lang.JavaSystem.CurrentTimeMillis() + 500;
-            alarmManager.Set(AlarmType.Rtc, triggerMs, pendingIntent);
-            Java.Lang.JavaSystem.Exit(0);
+            Window?.SetStatusBarColor(ThemeHelpers.NavBarBackgroundColor);
+            ThemeHelpers.SetAppearance(ThemeManager.GetTheme(true), ThemeManager.OsDarkModeEnabled());
         }
 
         private void ExitApp()

@@ -200,6 +200,7 @@ namespace Bit.App
 
         private async void ResumedAsync()
         {
+            UpdateTheme();
             await _vaultTimeoutService.CheckVaultTimeoutAsync();
             _messagingService.Send("startEventTimer");
             await ClearCacheIfNeededAsync();
@@ -337,6 +338,10 @@ namespace Bit.App
             InitializeComponent();
             SetCulture();
             ThemeManager.SetTheme(Device.RuntimePlatform == Device.Android, Current.Resources);
+            Current.RequestedThemeChanged += (s, a) =>
+            {
+                UpdateTheme();
+            };
             Current.MainPage = new HomePage();
             var mainPageTask = SetMainPageAsync();
             ServiceContainer.Resolve<MobilePlatformUtilsService>("platformUtilsService").Init();
@@ -356,6 +361,15 @@ namespace Bit.App
                     await Task.Delay(1000);
                     await _syncService.FullSyncAsync(false);
                 }
+            });
+        }
+
+        private void UpdateTheme()
+        {
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                ThemeManager.SetTheme(Device.RuntimePlatform == Device.Android, Current.Resources);
+                _messagingService.Send("updatedTheme");
             });
         }
 

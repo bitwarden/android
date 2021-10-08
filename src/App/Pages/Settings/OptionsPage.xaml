@@ -31,8 +31,7 @@
                 </StackLayout>
                 <Label
                     StyleClass="box-footer-label"
-                    Text="{u:I18n ThemeDescription}"
-                    x:Name="_themeDescriptionLabel" />
+                    Text="{u:I18n ThemeDescription}" />
             </StackLayout>
             <StackLayout StyleClass="box">
                 <StackLayout StyleClass="box-row, box-row-input, box-row-input-options-platform">

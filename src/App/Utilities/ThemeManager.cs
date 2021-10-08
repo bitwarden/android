@@ -1,9 +1,8 @@
 ﻿using System;
-using Bit.App.Abstractions;
+using Bit.App.Models;
 using Bit.App.Services;
 using Bit.App.Styles;
 using Bit.Core;
-using Bit.Core.Utilities;
 using Xamarin.Forms;
 
 namespace Bit.App.Utilities
@@ -47,8 +46,7 @@ namespace Bit.App.Utilities
             }
             else
             {
-                var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService", true);
-                if (deviceActionService?.UsingDarkTheme() ?? false)
+                if (OsDarkModeEnabled())
                 {
                     resources.MergedDictionaries.Add(new Dark());
                     UsingLightTheme = false;
@@ -84,6 +82,17 @@ namespace Bit.App.Utilities
             return Xamarin.Essentials.Preferences.Get(
                 string.Format(PreferencesStorageService.KeyFormat, Constants.ThemeKey), default(string),
                 !android ? "group.com.8bit.bitwarden" : default(string));
+        }
+
+        public static bool OsDarkModeEnabled()
+        {
+            if (Application.Current == null)
+            {
+                // called from iOS extension
+                var app = new App(new AppOptions { IosExtension = true });
+                return app.RequestedTheme == OSAppTheme.Dark;
+            }
+            return Application.Current.RequestedTheme == OSAppTheme.Dark;
         }
 
         public static void ApplyResourcesToPage(ContentPage page)
