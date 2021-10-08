@@ -13,11 +13,13 @@ namespace Bit.App.Pages
         private readonly HomeViewModel _vm;
         private readonly AppOptions _appOptions;
         private IMessagingService _messagingService;
+        private IBroadcasterService _broadcasterService;
 
         public HomePage(AppOptions appOptions = null)
         {
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _messagingService.Send("showStatusBar", false);
+            _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _appOptions = appOptions;
             InitializeComponent();
             _vm = BindingContext as HomeViewModel;
@@ -26,7 +28,7 @@ namespace Bit.App.Pages
             _vm.StartRegisterAction = () => Device.BeginInvokeOnMainThread(async () => await StartRegisterAsync());
             _vm.StartSsoLoginAction = () => Device.BeginInvokeOnMainThread(async () => await StartSsoLoginAsync());
             _vm.StartEnvironmentAction = () => Device.BeginInvokeOnMainThread(async () => await StartEnvironmentAsync());
-            _logo.Source = !ThemeManager.UsingLightTheme ? "logo_white.png" : "logo.png";
+            UpdateLogo();
         }
 
         public async Task DismissRegisterPageAndLogInAsync(string email)
@@ -39,6 +41,27 @@ namespace Bit.App.Pages
         {
             base.OnAppearing();
             _messagingService.Send("showStatusBar", false);
+            _broadcasterService.Subscribe(nameof(HomePage), async (message) =>
+            {
+                if (message.Command == "updatedTheme")
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        UpdateLogo();
+                    });
+                }
+            });
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            _broadcasterService.Unsubscribe(nameof(HomePage));
+        }
+
+        private void UpdateLogo()
+        {
+            _logo.Source = !ThemeManager.UsingLightTheme ? "logo_white.png" : "logo.png";
         }
         
         private void Close_Clicked(object sender, EventArgs e)

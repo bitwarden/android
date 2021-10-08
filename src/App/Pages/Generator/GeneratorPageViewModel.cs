@@ -262,6 +262,14 @@ namespace Bit.App.Pages
             await _passwordGenerationService.AddHistoryAsync(Password);
         }
 
+        public void RedrawPassword()
+        {
+            if (!string.IsNullOrEmpty(_password))
+            {
+                TriggerPropertyChanged(nameof(ColoredPassword));
+            }
+        }
+
         public async Task SaveOptionsAsync(bool regenerate = true)
         {
             if (!_doneIniting)

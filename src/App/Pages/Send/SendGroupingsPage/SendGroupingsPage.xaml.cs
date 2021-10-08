@@ -61,7 +61,6 @@ namespace Bit.App.Pages
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            await _vm.InitAsync();
             if (_syncService.SyncInProgress)
             {
                 IsBusy = true;
