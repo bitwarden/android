@@ -111,7 +111,6 @@
     <Compile Include="Autofill\SavedItem.cs" />
     <Compile Include="Effects\FabShadowEffect.cs" />
     <Compile Include="Effects\FixedSizeEffect.cs" />
-    <Compile Include="Effects\SelectableLabelEffect.cs" />
     <Compile Include="Effects\TabBarEffect.cs" />
     <Compile Include="Push\FirebaseMessagingService.cs" />
     <Compile Include="Receivers\ClearClipboardAlarmReceiver.cs" />
@@ -148,6 +147,7 @@
     <Compile Include="Utilities\AppCenterHelper.cs" />
     <Compile Include="Utilities\ThemeHelpers.cs" />
     <Compile Include="WebAuthCallbackActivity.cs" />
+    <Compile Include="Renderers\SelectableLabelRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\FontAwesome.ttf" />

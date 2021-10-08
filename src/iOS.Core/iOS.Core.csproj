@@ -188,6 +188,7 @@
     <Compile Include="Views\StepperTableViewCell.cs" />
     <Compile Include="Views\SwitchTableViewCell.cs" />
     <Compile Include="Views\Toast.cs" />
+    <Compile Include="Renderers\SelectableLabelRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\App\App.csproj">
