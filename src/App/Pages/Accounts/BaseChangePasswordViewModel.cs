@@ -72,7 +72,7 @@ namespace Bit.App.Pages
         public string ConfirmMasterPassword { get; set; }
         public string Hint { get; set; }
 
-        public async Task InitAsync(bool forceSync)
+        public async Task InitAsync(bool forceSync = false)
         {
             if (forceSync)
             {
