@@ -14,6 +14,7 @@
           <u:IconGlyphConverter x:Key="iconGlyphConverter"/>
           <u:IconImageConverter x:Key="iconImageConverter"/>
           <u:InverseBoolConverter x:Key="inverseBool" />
+          <u:StringHasValueConverter x:Key="stringHasValueConverter" />
     </Grid.Resources>
 
     <Grid.RowDefinitions>
@@ -72,7 +73,9 @@
             Grid.Row="1"
             Grid.ColumnSpan="3"
             StyleClass="list-subtitle, list-subtitle-platform"
-            Text="{Binding Cipher.SubTitle}" />
+            Text="{Binding Cipher.SubTitle}"
+            IsVisible="{Binding Source={RelativeSource Self}, Path=Text,
+                        Converter={StaticResource stringHasValueConverter}}"/>
         <controls:FaLabel
             Grid.Column="1"
             Grid.Row="0"
