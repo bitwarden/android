@@ -10,7 +10,6 @@ namespace Bit.App.Pages
     {
         private readonly IMessagingService _messagingService;
         private readonly IPlatformUtilsService _platformUtilsService;
-        private readonly IBroadcasterService _broadcasterService;
         private readonly UpdateTempPasswordPageViewModel _vm;
         private readonly string _pageName;
 
