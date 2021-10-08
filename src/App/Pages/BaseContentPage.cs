@@ -54,7 +54,7 @@ namespace Bit.App.Pages
                 IsRunning = true,
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 HorizontalOptions = LayoutOptions.Center,
-                Color = ThemeManager.GetResourceColor("PrimaryColor")
+                Color = ThemeManager.GetResourceColor("PrimaryColor"),
             };
             if (targetView != null)
             {

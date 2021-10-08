@@ -25,6 +25,8 @@ namespace Bit.Droid.Renderers
 
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            base.OnElementPropertyChanged(sender, e);
+
             if (e.PropertyName == ExtendedStepper.StepperBackgroundColorProperty.PropertyName)
             {
                 UpdateBgColor();
@@ -32,10 +34,6 @@ namespace Bit.Droid.Renderers
             else if (e.PropertyName == ExtendedStepper.StepperForegroundColorProperty.PropertyName)
             {
                 UpdateFgColor();
-            }
-            else
-            {
-                base.OnElementPropertyChanged(sender, e);
             }
         }
 

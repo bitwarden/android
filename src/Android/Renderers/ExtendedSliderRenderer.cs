@@ -24,13 +24,11 @@ namespace Bit.Droid.Renderers
 
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            base.OnElementPropertyChanged(sender, e);
+
             if (e.PropertyName == ExtendedSlider.ThumbBorderColorProperty.PropertyName)
             {
                 UpdateColor();
-            }
-            else
-            {
-                base.OnElementPropertyChanged(sender, e);
             }
         }
         

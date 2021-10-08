@@ -25,13 +25,11 @@ namespace Bit.Droid.Renderers
         
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            base.OnElementPropertyChanged(sender, e);
+
             if (e.PropertyName == Switch.OnColorProperty.PropertyName)
             {
                 UpdateColors();
-            }
-            else
-            {
-                base.OnElementPropertyChanged(sender, e);
             }
         }
         
@@ -47,7 +45,7 @@ namespace Bit.Droid.Renderers
                 var thumbStates = new[]
                 {
                     new[] { Android.Resource.Attribute.StateChecked }, // checked
-                    new[] { -Android.Resource.Attribute.StateChecked } // unchecked
+                    new[] { -Android.Resource.Attribute.StateChecked }, // unchecked
                 };
                 var thumbColors = new int[]
                 {

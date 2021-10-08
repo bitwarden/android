@@ -84,7 +84,7 @@ namespace Bit.Droid.Renderers
                 var states = new[]
                 {
                     new[] { Android.Resource.Attribute.StateFocused }, // focused
-                    new[] { -Android.Resource.Attribute.StateFocused } // unfocused
+                    new[] { -Android.Resource.Attribute.StateFocused }, // unfocused
                 };
                 var colors = new int[]
                 {
