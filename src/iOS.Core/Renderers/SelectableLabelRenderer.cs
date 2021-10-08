@@ -17,6 +17,11 @@ namespace Bit.iOS.Core.Renderers
         {
             base.OnElementChanged(e);
 
+            if (e.OldElement != null || Element == null)
+            {
+                return;
+            }
+
             if (Control == null)
             {
                 uiTextView = new UITextView();
