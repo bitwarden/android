@@ -1,7 +1,6 @@
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using System;
-using System.Threading.Tasks;
 using Bit.App.Resources;
 using Xamarin.Forms;
 
@@ -20,7 +19,6 @@ namespace Bit.App.Pages
             // Service Init
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
-            _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             
             // Service Use
             _messagingService.Send("showStatusBar", true);
@@ -55,22 +53,6 @@ namespace Bit.App.Pages
 
         protected override async void OnAppearing()
         {
-            _broadcasterService.Subscribe(_pageName, async (message) =>
-            {
-                if (message.Command == "syncStarted")
-                {
-                    Device.BeginInvokeOnMainThread(() => IsBusy = true);
-                }
-                else if (message.Command == "syncCompleted")
-                {
-                    await Task.Delay(500);
-                    Device.BeginInvokeOnMainThread(async () =>
-                    {
-                        IsBusy = false;
-                        await _vm.InitAsync();
-                    });
-                }
-            });
             base.OnAppearing();
             await LoadOnAppearedAsync(_mainLayout, true, async () =>
             {
