@@ -185,7 +185,9 @@ namespace Bit.App.Pages
         public void TogglePassword()
         {
             ShowPassword = !ShowPassword;
-            (Page as LoginPage).MasterPasswordEntry.Focus();
+            var entry = (Page as LoginPage).MasterPasswordEntry;
+            entry.Focus();
+            entry.CursorPosition = MasterPassword.Length;
         }
     }
 }
