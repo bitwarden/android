@@ -46,7 +46,7 @@
         WidthRequest="22"
         HeightRequest="22"
         IsVisible="{Binding ShowIconImage}"
-        Source="{Binding Cipher, Converter={StaticResource iconImageConverter}}"
+        Source="{Binding IconImageSource, Mode=OneTime}"
         AutomationProperties.IsInAccessibleTree="False" />
 
     <Grid RowSpacing="0" ColumnSpacing="0" Grid.Row="0" Grid.Column="1" VerticalOptions="Center" Padding="0, 7">
