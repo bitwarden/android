@@ -220,8 +220,18 @@ namespace Bit.Core.Services
                 o.Enabled &&
                 o.Status >= OrganizationUserStatusType.Accepted &&
                 o.UsePolicies &&
-                !o.isExemptFromPolicies &&
+                !isExcemptFromPolicies(o, policyType) &&
                 policySet.Contains(o.Id));
+        }
+
+        private bool isExcemptFromPolicies(Organization organization, PolicyType policyType)
+        {
+            if (policyType == PolicyType.MaximumVaultTimeout)
+            {
+                return organization.Type == OrganizationUserType.Owner;
+            }
+
+            return organization.isExemptFromPolicies;
         }
 
         public int? GetPolicyInt(Policy policy, string key)
