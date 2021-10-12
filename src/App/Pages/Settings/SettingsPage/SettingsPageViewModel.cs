@@ -418,25 +418,6 @@ namespace Bit.App.Pages
                 new SettingsPageListItem { Name = AppResources.LockNow },
                 new SettingsPageListItem { Name = AppResources.TwoStepLogin }
             };
-            if (_vaultTimeoutDisplayValue == AppResources.Custom)
-            {
-                securityItems.Insert(1, new SettingsPageListItem
-                {
-                    Name = AppResources.Custom,
-                    Time = TimeSpan.FromMinutes(Math.Abs((double) _vaultTimeout)),
-                });
-            }
-            if (_vaultTimeoutPolicy != null)
-            {
-                var maximumTimeout = _policyService.GetPolicyInt(_vaultTimeoutPolicy, "minutes").GetValueOrDefault();
-                securityItems.Insert(0, new SettingsPageListItem
-                {
-                    Name = string.Format(AppResources.VaultTimeoutPolicyInEffect,
-                        Math.Floor((float) maximumTimeout / 60),
-                        maximumTimeout % 60),
-                    UseFrame = true,
-                });
-            }
             if (_supportsBiometric || _biometric)
             {
                 var biometricName = AppResources.Biometrics;
@@ -451,6 +432,25 @@ namespace Bit.App.Pages
                     SubLabel = _biometric ? AppResources.Enabled : AppResources.Disabled
                 };
                 securityItems.Insert(2, item);
+            }
+            if (_vaultTimeoutDisplayValue == AppResources.Custom)
+            {
+                securityItems.Insert(1, new SettingsPageListItem
+                {
+                    Name = AppResources.Custom,
+                    Time = TimeSpan.FromMinutes(Math.Abs((double)_vaultTimeout)),
+                });
+            }
+            if (_vaultTimeoutPolicy != null)
+            {
+                var maximumTimeout = _policyService.GetPolicyInt(_vaultTimeoutPolicy, "minutes").GetValueOrDefault();
+                securityItems.Insert(0, new SettingsPageListItem
+                {
+                    Name = string.Format(AppResources.VaultTimeoutPolicyInEffect,
+                        Math.Floor((float)maximumTimeout / 60),
+                        maximumTimeout % 60),
+                    UseFrame = true,
+                });
             }
             var accountItems = new List<SettingsPageListItem>
             {
