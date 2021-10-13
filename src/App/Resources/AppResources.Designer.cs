@@ -3609,6 +3609,12 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string Fido2ReturnToApp {
+            get {
+                return ResourceManager.GetString("Fido2ReturnToApp", resourceCulture);
+            }
+        }
+        
         public static string Fido2CheckBrowser {
             get {
                 return ResourceManager.GetString("Fido2CheckBrowser", resourceCulture);

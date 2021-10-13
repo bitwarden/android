@@ -205,6 +205,7 @@ namespace Bit.App.Pages
                 callbackUri = callbackUri,
                 data = JsonConvert.SerializeObject(providerData),
                 btnText = AppResources.Fido2AuthenticateWebAuthn,
+                btnReturnText = AppResources.Fido2ReturnToApp,
             });
 
             var url = _webVaultUrl + "/webauthn-mobile-connector.html?" + "data=" + data +

@@ -2039,6 +2039,9 @@
   <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
     <value>Authenticate WebAuthn</value>
   </data>
+  <data name="Fido2ReturnToApp" xml:space="preserve">
+    <value>Return to App</value>
+  </data>
   <data name="Fido2CheckBrowser" xml:space="preserve">
     <value>Please make sure your default browser supports WebAuthn and try again.</value>
   </data>
