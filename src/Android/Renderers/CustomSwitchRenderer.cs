@@ -2,6 +2,7 @@
 using Android.Content;
 using Android.Content.Res;
 using Android.Graphics.Drawables;
+using Android.OS;
 using AndroidX.Core.Content.Resources;
 using Bit.Droid.Renderers;
 using Bit.Droid.Utilities;
@@ -35,6 +36,12 @@ namespace Bit.Droid.Renderers
         
         private void UpdateColors()
         {
+            if (Build.VERSION.SdkInt <= BuildVersionCodes.LollipopMr1)
+            {
+                // Android 5.x doesn't support ThumbTintList, and using SwitchCompat on every version after 5.x
+                // doesn't apply tinting the way we want. Let 5.x to do its own thing here.
+                return;
+            }
             if (Control != null)
             {
                 var t = ResourcesCompat.GetDrawable(Resources, Resource.Drawable.switch_thumb, null);
