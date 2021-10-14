@@ -310,6 +310,9 @@
     <value>சேமி</value>
     <comment>Button text for a save operation (verb).</comment>
   </data>
+  <data name="Move" xml:space="preserve">
+    <value>Move</value>
+  </data>
   <data name="Saving" xml:space="preserve">
     <value>சேமிக்கிறது...</value>
     <comment>Message shown when interacting with the server</comment>
@@ -782,8 +785,8 @@
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
     <value>"{0}"க்கான தண்னிரப்ப உருப்படியை தேடிக்கொண்டிருக்கிறீர்கள்.</value>
   </data>
-  <data name="ShareVault" xml:space="preserve">
-    <value>உங்கள் பெட்டகத்தைப் பகிர்</value>
+  <data name="LearnOrg" xml:space="preserve">
+    <value>Learn About Organizations</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
     <value>"{0}" செயலியைத் திறக்க இயலவில்லை.</value>
@@ -1379,6 +1382,10 @@
   <data name="NoCollectionsToList" xml:space="preserve">
     <value>பட்டியலிட தொகுப்புகளில்லை.</value>
   </data>
+  <data name="MovedItemToOrg" xml:space="preserve">
+    <value>{0} moved to {1}.</value>
+    <comment>ex: Item moved to Organization.</comment>
+  </data>
   <data name="ItemShared" xml:space="preserve">
     <value>உருப்படி பகிரப்பட்டது.</value>
   </data>
@@ -1391,11 +1398,14 @@
   <data name="ShareItem" xml:space="preserve">
     <value>உருப்படியை பகிர்</value>
   </data>
+  <data name="MoveToOrganization" xml:space="preserve">
+    <value>Move to Organization</value>
+  </data>
   <data name="NoOrgsToList" xml:space="preserve">
     <value>பட்டியலிட நிறுவனங்களில்லை.</value>
   </data>
-  <data name="ShareDesc" xml:space="preserve">
-    <value>Choose an organization that you wish to share this item with. Sharing transfers ownership of the item to the organization. You will no longer be the direct owner of this item once it has been shared.</value>
+  <data name="MoveToOrgDesc" xml:space="preserve">
+    <value>Choose an organization that you wish to move this item to. Moving to an organization transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
     <value>சொற்களின் எண்ணிக்கை</value>
@@ -1425,8 +1435,8 @@
     <value>உங்கள் கணக்கின் கைரேகை சொற்றொடர்</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
-  <data name="ShareVaultConfirmation" xml:space="preserve">
-    <value>நிறுவன கணக்கைப் பயன்படுத்தி உம் பெட்டகத்தைப் பிறருடன் பகிர உம்மை Bitwarden அனுமதிக்கிறது. மேலும் அறிய bitwarden.com வலைத்தளத்தை பார்வையிட விருப்பமா?</value>
+  <data name="LearnOrgConfirmation" xml:space="preserve">
+    <value>Bitwarden allows you to share your vault items with others by using an organization account. Would you like to visit the bitwarden.com website to learn more?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
     <value>பெட்டகத்தை ஏற்றுமதி செய்</value>
@@ -1501,12 +1511,8 @@
   <data name="ThemeDescription" xml:space="preserve">
     <value>செயலியின் நிற அமைப்பை மாற்று.</value>
   </data>
-  <data name="RestartIsRequired" xml:space="preserve">
-    <value>மறுதொடக்கம் தேவை.</value>
-    <comment>Referring to restarting the application.</comment>
-  </data>
-  <data name="Restarting" xml:space="preserve">
-    <value>மறுதொடங்குகிறது…</value>
+  <data name="ThemeDefault" xml:space="preserve">
+    <value>Default (System)</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>குறிப்புகளை நகலெடு</value>
@@ -1864,7 +1870,7 @@
     <value>அதிகபட்ச அணுகல் எண்ணிக்கை</value>
   </data>
   <data name="MaximumAccessCountInfo" xml:space="preserve">
-    <value>If set, users will no longer be able to access this send once the maximum access count is reached.</value>
+    <value>If set, users will no longer be able to access this Send once the maximum access count is reached.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="MaximumAccessCountReached" xml:space="preserve">
@@ -1999,5 +2005,56 @@
   </data>
   <data name="PasswordConfirmationDesc" xml:space="preserve">
     <value>இச்செயல் பாதுகாக்கப்பட்டது, தொடர உம் பிரதான கடவுச்சொல்லை மறு-உள்ளிட்டு உம் அடையாளத்தை நிச்சயப்படுத்தவும்.</value>
+  </data>
+  <data name="CaptchaRequired" xml:space="preserve">
+    <value>Captcha Required</value>
+  </data>
+  <data name="CaptchaFailed" xml:space="preserve">
+    <value>Captcha Failed. Please try again.</value>
+  </data>
+  <data name="UpdatedMasterPassword" xml:space="preserve">
+    <value>Updated Master Password</value>
+  </data>
+  <data name="UpdateMasterPassword" xml:space="preserve">
+    <value>Update Master Password</value>
+  </data>
+  <data name="UpdateMasterPasswordWarning" xml:space="preserve">
+    <value>Your Master Password was recently changed by an administrator in your organization. In order to access the vault, you must update your Master Password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
+  </data>
+  <data name="UpdatingPassword" xml:space="preserve">
+    <value>Updating Password</value>
+  </data>
+  <data name="UpdatePasswordError" xml:space="preserve">
+    <value>Currently unable to update password</value>
+  </data>
+  <data name="Fido2Title" xml:space="preserve">
+    <value>FIDO2 WebAuthn</value>
+  </data>
+  <data name="Fido2Instruction" xml:space="preserve">
+    <value>To continue, have your FIDO2 WebAuthn enabled security key ready, then follow the instructions after clicking 'Authenticate WebAuthn' on the next screen.</value>
+  </data>
+  <data name="Fido2Desc" xml:space="preserve">
+    <value>Authentication using FIDO2 WebAuthn, you can authenticate using an external security key.</value>
+  </data>
+  <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
+    <value>Authenticate WebAuthn</value>
+  </data>
+  <data name="Fido2ReturnToApp" xml:space="preserve">
+    <value>Return to App</value>
+  </data>
+  <data name="Fido2CheckBrowser" xml:space="preserve">
+    <value>Please make sure your default browser supports WebAuthn and try again.</value>
+  </data>
+  <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
+    <value>This organization has an enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password.</value>
+  </data>
+  <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
+    <value>Your organization policies are affecting your vault timeout. Maximum allowed Vault Timeout is {0} hour(s) and {1} minute(s)</value>
+  </data>
+  <data name="VaultTimeoutToLarge" xml:space="preserve">
+    <value>Your vault timeout exceeds the restrictions set by your organization.</value>
+  </data>
+  <data name="DisablePersonalVaultExportPolicyInEffect">
+    <value>One or more organization policies prevents your from exporting your personal vault.</value>
   </data>
 </root>
