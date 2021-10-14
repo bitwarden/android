@@ -23,6 +23,10 @@ jobs:
       - name: Print lines of code
         run: cloc --vcs git --exclude-dir Resources,store,test,Properties --include-lang C#,XAML
 
+      - name: TEST FAILURE
+        run: exit 1
+
+
   android:
     name: Android
     runs-on: windows-2019
