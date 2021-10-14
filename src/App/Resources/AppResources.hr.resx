@@ -489,7 +489,7 @@
     <value>Dodirni Bitwarden ikonu u izborniku za pokretanje proširenja.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>Za uključiti Bitwardena u Safariu i drugim aplikacijama, dodirnite ikonu „Više” u donjem retku izbornika.</value>
+    <value>Za uključiti Bitwardena u Safariju i drugim aplikacijama, dodirnite ikonu „Više” u donjem retku izbornika.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
     <value>Favorit</value>
