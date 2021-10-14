@@ -204,6 +204,7 @@ namespace Bit.App.Pages
             {
                 callbackUri = callbackUri,
                 data = JsonConvert.SerializeObject(providerData),
+                headerText = AppResources.Fido2Title,
                 btnText = AppResources.Fido2AuthenticateWebAuthn,
                 btnReturnText = AppResources.Fido2ReturnToApp,
             });
