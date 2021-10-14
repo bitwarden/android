@@ -201,6 +201,10 @@ namespace Bit.Core.Services
         public async Task<bool> PolicyAppliesToUser(PolicyType policyType, Func<Policy, bool> policyFilter)
         {
             var policies = await GetAll(policyType);
+            if (policies == null)
+            {
+                return false;
+            }
             var organizations = await _userService.GetAllOrganizationAsync();
 
             IEnumerable<Policy> filteredPolicies;
