@@ -317,8 +317,9 @@ namespace Bit.App.Pages
             ShowPassword = !ShowPassword;
             var page = (Page as LockPage);
             var entry = PinLock ? page.PinEntry : page.MasterPasswordEntry;
+            var str = PinLock ? Pin : MasterPassword;
             entry.Focus();
-            entry.CursorPosition = PinLock ? Pin.Length : MasterPassword.Length;
+            entry.CursorPosition = String.IsNullOrEmpty(str) ? 0 : str.Length;
         }
 
         public async Task PromptBiometricAsync()
