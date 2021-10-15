@@ -187,7 +187,7 @@ namespace Bit.App.Pages
             ShowPassword = !ShowPassword;
             var entry = (Page as LoginPage).MasterPasswordEntry;
             entry.Focus();
-            entry.CursorPosition = MasterPassword.Length;
+            entry.CursorPosition = String.IsNullOrEmpty(MasterPassword) ? 0 : MasterPassword.Length;
         }
     }
 }
