@@ -203,7 +203,7 @@ namespace Bit.App.Pages
             ShowPassword = !ShowPassword;
             var entry = (Page as RegisterPage).MasterPasswordEntry;
             entry.Focus();
-            entry.CursorPosition = MasterPassword.Length;
+            entry.CursorPosition = MasterPassword?.Length ?? 0;
         }
 
         public void ToggleConfirmPassword()
@@ -211,7 +211,7 @@ namespace Bit.App.Pages
             ShowPassword = !ShowPassword;
             var entry = (Page as RegisterPage).ConfirmMasterPasswordEntry;
             entry.Focus();
-            entry.CursorPosition = ConfirmMasterPassword.Length;
+            entry.CursorPosition = ConfirmMasterPassword?.Length ?? 0;
         }
     }
 }
