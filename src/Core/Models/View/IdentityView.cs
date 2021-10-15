@@ -3,31 +3,8 @@ using System.Collections.Generic;
 
 namespace Bit.Core.Models.View
 {
-    public class IdentityView : View
+    public class IdentityView : ItemView
     {
-        public static List<KeyValuePair<string, int>> LinkedFieldOptions = new List<KeyValuePair<string, int>>()
-        {
-            new KeyValuePair<string, int>("FirstName", 0),
-            new KeyValuePair<string, int>("MiddleName", 1),
-            new KeyValuePair<string, int>("LastName", 2),
-            new KeyValuePair<string, int>("FullName", 3),
-            new KeyValuePair<string, int>("Username", 4),
-            new KeyValuePair<string, int>("Company", 5),
-            new KeyValuePair<string, int>("SSN", 6),
-            new KeyValuePair<string, int>("PassportNumber", 7),
-            new KeyValuePair<string, int>("LicenseNumber", 8),
-            new KeyValuePair<string, int>("Email", 9),
-            new KeyValuePair<string, int>("Phone", 10),
-            new KeyValuePair<string, int>("Address1", 11),
-            new KeyValuePair<string, int>("Address2", 12),
-            new KeyValuePair<string, int>("Address3", 13),
-            new KeyValuePair<string, int>("CityTown", 14),
-            new KeyValuePair<string, int>("StateProvince", 15),
-            new KeyValuePair<string, int>("ZipPostalCode", 16),
-            new KeyValuePair<string, int>("Country", 17),
-            new KeyValuePair<string, int>("FullAddress", 18),
-        };
-
         private string _firstName;
         private string _lastName;
         private string _subTitle;
@@ -71,7 +48,7 @@ namespace Bit.Core.Models.View
         public string PassportNumber { get; set; }
         public string LicenseNumber { get; set; }
 
-        public string SubTitle
+        public override string SubTitle
         {
             get
             {
@@ -164,6 +141,32 @@ namespace Bit.Core.Models.View
                 var postalCode = string.IsNullOrWhiteSpace(PostalCode) ? "-" : PostalCode;
                 return string.Format("{0}, {1}, {2}", city, state, postalCode);
             }
+        }
+
+        public override List<KeyValuePair<string, int>> LinkedMetadata
+        {
+            get => new List<KeyValuePair<string, int>>()
+            {
+                new KeyValuePair<string, int>("Title", 0),
+                new KeyValuePair<string, int>("MiddleName", 1),
+                new KeyValuePair<string, int>("Address1", 2),
+                new KeyValuePair<string, int>("Address2", 3),
+                new KeyValuePair<string, int>("Address3", 4),
+                new KeyValuePair<string, int>("CityTown", 5),
+                new KeyValuePair<string, int>("StateProvince", 6),
+                new KeyValuePair<string, int>("ZipPostalCode", 7),
+                new KeyValuePair<string, int>("Country", 8),
+                new KeyValuePair<string, int>("Company", 9),
+                new KeyValuePair<string, int>("Email", 10),
+                new KeyValuePair<string, int>("Phone", 11),
+                new KeyValuePair<string, int>("SSN", 12),
+                new KeyValuePair<string, int>("Username", 13),
+                new KeyValuePair<string, int>("PassportNumber", 14),
+                new KeyValuePair<string, int>("LicenseNumber", 15),
+                new KeyValuePair<string, int>("FirstName", 16),
+                new KeyValuePair<string, int>("LastName", 17),
+                new KeyValuePair<string, int>("FullName", 18),
+            };
         }
     }
 }

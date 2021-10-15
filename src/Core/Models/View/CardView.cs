@@ -4,18 +4,8 @@ using System.Text.RegularExpressions;
 
 namespace Bit.Core.Models.View
 {
-    public class CardView : View
+    public class CardView : ItemView
     {
-        public static List<KeyValuePair<string, int>> LinkedFieldOptions = new List<KeyValuePair<string, int>>()
-        {
-            new KeyValuePair<string, int>("CardholderName", 0),
-            new KeyValuePair<string, int>("Number", 1),
-            new KeyValuePair<string, int>("Brand", 2),
-            new KeyValuePair<string, int>("ExpirationMonth", 3),
-            new KeyValuePair<string, int>("ExpirationYear", 4),
-            new KeyValuePair<string, int>("SecurityCode", 5),
-        };
-
         private string _brand;
         private string _number;
         private string _subTitle;
@@ -51,7 +41,7 @@ namespace Bit.Core.Models.View
             }
         }
 
-        public string SubTitle
+        public override string SubTitle
         {
             get
             {
@@ -91,6 +81,19 @@ namespace Bit.Core.Models.View
                 var expYr = !expYearNull ? FormatYear(ExpYear) : "____";
                 return string.Format("{0} / {1}", expMo, expYr);
             }
+        }
+
+        public override List<KeyValuePair<string, int>> LinkedMetadata
+        {
+            get => new List<KeyValuePair<string, int>>()
+            {
+                new KeyValuePair<string, int>("CardholderName", 0),
+                new KeyValuePair<string, int>("ExpirationMonth", 1),
+                new KeyValuePair<string, int>("ExpirationYear", 2),
+                new KeyValuePair<string, int>("SecurityCode", 3),
+                new KeyValuePair<string, int>("Brand", 4),
+                new KeyValuePair<string, int>("Number", 5),
+            };
         }
 
         private string FormatYear(string year)
