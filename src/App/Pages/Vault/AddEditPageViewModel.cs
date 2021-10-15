@@ -927,8 +927,14 @@ namespace Bit.App.Pages
             }
         }
 
+        public List<KeyValuePair<string, int>> LinkedFieldOptions
+        {
+            get => _cipher.LinkedFieldOptions
+                .Select(kvp => new KeyValuePair<string, int>(_i18nService.T(kvp.Key), kvp.Value))
+                .ToList();
+        }
+
         public Command ToggleHiddenValueCommand { get; set; }
-        public List<KeyValuePair<string, int>> LinkedFieldOptions => _cipher.LinkedFieldOptions;
 
         public string ShowHiddenValueIcon => _showHiddenValue ? "" : "";
         public bool IsTextType => _field.Type == FieldType.Text;
