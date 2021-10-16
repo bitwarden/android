@@ -188,6 +188,12 @@ namespace Bit.iOS
             _storageService.SaveAsync(Constants.LastActiveTimeKey, _deviceActionService.GetActiveTime());
             _messagingService.Send("slept");
 
+            if (UIApplication.SharedApplication.KeyWindow == null)
+            {
+                // Despite IDE warning, KeyWindow is null here during app termination in iOS 15
+                return;
+            }
+
             var view = new UIView(UIApplication.SharedApplication.KeyWindow.Frame)
             {
                 Tag = 4321
