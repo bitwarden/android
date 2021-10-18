@@ -415,7 +415,7 @@
     <value>Bitwarden App Erweiterung</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
-    <value>Die einfachste Möglichkeit, neue Anmeldedaten zu deinemTresor hinzuzufügen, ist die Bitwarden App Erweiterung. Erfahre mehr über die Bitwarden App Erweiterung, indem du zu den "Einstellungen" wechselst.</value>
+    <value>Die einfachste Möglichkeit, neue Anmeldedaten zu deinem Tresor hinzuzufügen, ist die Bitwarden App Erweiterung. Erfahre mehr über die Bitwarden App Erweiterung, indem du zu den "Einstellungen" wechselst.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
     <value>Nutze Bitwarden in Safari und anderen Apps, um Zugangsdaten automatisch einzufügen.</value>
@@ -1296,7 +1296,7 @@
     <value>Passwort AutoFill</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
-    <value>Die einfachste Möglichkeit, neue Zugangsdaten zu deinemTresor hinzuzufügen, ist die Bitwarden Passwort Auto-Ausfüllen Erweiterung. Erfahre mehr über die Bitwarden Passwort Auto-Ausfüllen Funktion, indem du zur "Einstellungen" wechselst.</value>
+    <value>Die einfachste Möglichkeit, neue Zugangsdaten zu deinem Tresor hinzuzufügen, ist die Bitwarden Passwort Auto-Ausfüllen Erweiterung. Erfahre mehr über die Bitwarden Passwort Auto-Ausfüllen Funktion, indem du zur "Einstellungen" wechselst.</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
     <value>Ungültige E-Mail-Adresse.</value>
