@@ -243,7 +243,7 @@
     <comment>Hide a secret value that is currently shown (password).</comment>
   </data>
   <data name="InternetConnectionRequiredMessage" xml:space="preserve">
-    <value>Bitte verbinde dich mit dem Internet um fortzufahren.</value>
+    <value>Bitte verbinde dich mit dem Internet, um fortzufahren.</value>
     <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
@@ -381,7 +381,7 @@
     <value>Besuche unsere Website</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Besuche unsere Webseite um Hilfe zu erhalten, Neuigkeiten zu erfahren, Kontakt aufzunehmen und mehr über die Verwendung von Bitwarden zu lernen.</value>
+    <value>Besuche unsere Webseite, um Hilfe zu erhalten, Neuigkeiten zu erfahren, Kontakt aufzunehmen und mehr über die Verwendung von Bitwarden zu lernen.</value>
   </data>
   <data name="Website" xml:space="preserve">
     <value>Webseite</value>
