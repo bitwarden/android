@@ -563,7 +563,7 @@
                         StyleClass="box-row-button, box-row-button-platform"
                         Text="&#xf29c;"
                         Command="{Binding PasswordPromptHelpCommand}"
-                        TextColor="{StaticResource MutedColor}"
+                        TextColor="{DynamicResource MutedColor}"
                         AutomationProperties.IsInAccessibleTree="True"
                         AutomationProperties.Name="{u:I18n ToggleVisibility}"
                         HorizontalOptions="StartAndExpand" />

@@ -318,6 +318,7 @@ namespace Bit.App.Pages
             var page = (Page as LockPage);
             var entry = PinLock ? page.PinEntry : page.MasterPasswordEntry;
             entry.Focus();
+            entry.CursorPosition = PinLock ? Pin.Length : MasterPassword.Length;
         }
 
         public async Task PromptBiometricAsync()
