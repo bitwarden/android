@@ -234,7 +234,7 @@ namespace Bit.App.Pages
             {
                 var page = new CiphersPage(_vm.Filter, _vm.FolderId != null, _vm.CollectionId != null,
                     _vm.Type != null, deleted: _vm.Deleted);
-                await Navigation.PushModalAsync(new NavigationPage(page), false);
+                await Navigation.PushModalAsync(new NavigationPage(page));
             }
         }
 
