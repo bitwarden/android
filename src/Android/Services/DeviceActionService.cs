@@ -640,8 +640,7 @@ namespace Bit.Droid.Services
 
         public bool AutofillAccessibilityServiceRunning()
         {
-            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
-            var enabledServices = Settings.Secure.GetString(activity.ContentResolver,
+            var enabledServices = Settings.Secure.GetString(Application.Context.ContentResolver,
                 Settings.Secure.EnabledAccessibilityServices);
             return Application.Context.PackageName != null &&
                    (enabledServices?.Contains(Application.Context.PackageName) ?? false);
