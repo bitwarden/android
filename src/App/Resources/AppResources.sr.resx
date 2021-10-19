@@ -310,9 +310,6 @@
     <value>Сачувај</value>
     <comment>Button text for a save operation (verb).</comment>
   </data>
-  <data name="Move" xml:space="preserve">
-    <value>Move</value>
-  </data>
   <data name="Saving" xml:space="preserve">
     <value>Спремање...</value>
     <comment>Message shown when interacting with the server</comment>
@@ -785,8 +782,8 @@
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
     <value>Тражите ауто-пуњење за „{0}“.</value>
   </data>
-  <data name="LearnOrg" xml:space="preserve">
-    <value>Learn About Organizations</value>
+  <data name="ShareVault" xml:space="preserve">
+    <value>Поделите Ваш Сеф</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
     <value>Не може да се отвори апликација „{0}“.</value>
@@ -1381,10 +1378,6 @@
   <data name="NoCollectionsToList" xml:space="preserve">
     <value>Нема колекције у листи.</value>
   </data>
-  <data name="MovedItemToOrg" xml:space="preserve">
-    <value>{0} moved to {1}.</value>
-    <comment>ex: Item moved to Organization.</comment>
-  </data>
   <data name="ItemShared" xml:space="preserve">
     <value>Ставка је подељена.</value>
   </data>
@@ -1397,14 +1390,11 @@
   <data name="ShareItem" xml:space="preserve">
     <value>Поделити ставку</value>
   </data>
-  <data name="MoveToOrganization" xml:space="preserve">
-    <value>Move to Organization</value>
-  </data>
   <data name="NoOrgsToList" xml:space="preserve">
     <value>Ниједна организација у листу.</value>
   </data>
-  <data name="MoveToOrgDesc" xml:space="preserve">
-    <value>Choose an organization that you wish to move this item to. Moving to an organization transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</value>
+  <data name="ShareDesc" xml:space="preserve">
+    <value>Изаберите организацију са којом желите да делите ову ставку. Дељење преноси власништво предмета на организацију. Више нећете бити директни власник ове ставке када се она дели.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
     <value>Број речи</value>
@@ -1434,8 +1424,8 @@
     <value>Ваша Сигурносна Фраза Сефа</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
-  <data name="LearnOrgConfirmation" xml:space="preserve">
-    <value>Bitwarden allows you to share your vault items with others by using an organization account. Would you like to visit the bitwarden.com website to learn more?</value>
+  <data name="ShareVaultConfirmation" xml:space="preserve">
+    <value>Bitwarden вам омогућава да делите сефса другима користећи налог организације. Да ли желите да посетите веб локацију bitwarden.com да бисте сазнали више?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
     <value>Извоз сефа</value>
@@ -1510,8 +1500,12 @@
   <data name="ThemeDescription" xml:space="preserve">
     <value>Промени боје апликације.</value>
   </data>
-  <data name="ThemeDefault" xml:space="preserve">
-    <value>Default (System)</value>
+  <data name="RestartIsRequired" xml:space="preserve">
+    <value>Потребно рестартовање.</value>
+    <comment>Referring to restarting the application.</comment>
+  </data>
+  <data name="Restarting" xml:space="preserve">
+    <value>Поновно покретање…</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Копирај белешке</value>
@@ -2005,56 +1999,5 @@
   </data>
   <data name="PasswordConfirmationDesc" xml:space="preserve">
     <value>Ова акција је заштићена, да бисте наставили, поново унесите своју главну лозинку да бисте проверили идентитет.</value>
-  </data>
-  <data name="CaptchaRequired" xml:space="preserve">
-    <value>Captcha Required</value>
-  </data>
-  <data name="CaptchaFailed" xml:space="preserve">
-    <value>Captcha Failed. Please try again.</value>
-  </data>
-  <data name="UpdatedMasterPassword" xml:space="preserve">
-    <value>Updated Master Password</value>
-  </data>
-  <data name="UpdateMasterPassword" xml:space="preserve">
-    <value>Update Master Password</value>
-  </data>
-  <data name="UpdateMasterPasswordWarning" xml:space="preserve">
-    <value>Your Master Password was recently changed by an administrator in your organization. In order to access the vault, you must update your Master Password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
-  </data>
-  <data name="UpdatingPassword" xml:space="preserve">
-    <value>Updating Password</value>
-  </data>
-  <data name="UpdatePasswordError" xml:space="preserve">
-    <value>Currently unable to update password</value>
-  </data>
-  <data name="Fido2Title" xml:space="preserve">
-    <value>FIDO2 WebAuthn</value>
-  </data>
-  <data name="Fido2Instruction" xml:space="preserve">
-    <value>To continue, have your FIDO2 WebAuthn enabled security key ready, then follow the instructions after clicking 'Authenticate WebAuthn' on the next screen.</value>
-  </data>
-  <data name="Fido2Desc" xml:space="preserve">
-    <value>Authentication using FIDO2 WebAuthn, you can authenticate using an external security key.</value>
-  </data>
-  <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
-    <value>Authenticate WebAuthn</value>
-  </data>
-  <data name="Fido2ReturnToApp" xml:space="preserve">
-    <value>Return to App</value>
-  </data>
-  <data name="Fido2CheckBrowser" xml:space="preserve">
-    <value>Please make sure your default browser supports WebAuthn and try again.</value>
-  </data>
-  <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
-    <value>This organization has an enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password.</value>
-  </data>
-  <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>Your organization policies are affecting your vault timeout. Maximum allowed Vault Timeout is {0} hour(s) and {1} minute(s)</value>
-  </data>
-  <data name="VaultTimeoutToLarge" xml:space="preserve">
-    <value>Your vault timeout exceeds the restrictions set by your organization.</value>
-  </data>
-  <data name="DisablePersonalVaultExportPolicyInEffect">
-    <value>One or more organization policies prevents your from exporting your personal vault.</value>
   </data>
 </root>
