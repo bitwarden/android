@@ -695,7 +695,7 @@
     <value>Kaksivaiheinen kirjautuminen tekee tilistäsi turvallisemman edellyttämällä salasanan lisäksi kirjautumisen lisätodennusta todennuslaitteen, ‑sovelluksen, tekstiviestin, puhelun tai sähköpostin avulla. Voit ottaa kaksivaiheisen kirjautumisen käyttöön bitwarden.com‑verkkoholvissa. Haluatko käydä sivustolla nyt?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
-    <value>Avaustapa: {0}</value>
+    <value>Avaa biometrialla: {0}</value>
   </data>
   <data name="UnlockWithPIN" xml:space="preserve">
     <value>Avaa PIN-koodilla</value>

@@ -164,11 +164,11 @@
     <comment>Title for page that we use to give credit to resources that we use.</comment>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Radera</value>
+    <value>Ta bort</value>
     <comment>Delete an entity (verb).</comment>
   </data>
   <data name="Deleting" xml:space="preserve">
-    <value>Raderar…</value>
+    <value>Tar bort...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="DoYouReallyWantToDelete" xml:space="preserve">
@@ -176,10 +176,10 @@
     <comment>Confirmation alert message when deleteing something.</comment>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Redigera</value>
+    <value>Ändra</value>
   </data>
   <data name="EditFolder" xml:space="preserve">
-    <value>Redigera mapp</value>
+    <value>Ändra mapp</value>
   </data>
   <data name="Email" xml:space="preserve">
     <value>E-post</value>
@@ -1567,7 +1567,7 @@
     <value>Växla synlighet</value>
   </data>
   <data name="LoginExpired" xml:space="preserve">
-    <value>Din inloggningssession har upphört.</value>
+    <value>Din inloggningssession har löpt ut.</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
     <value>Använd biometri för att bekräfta.</value>
@@ -1671,7 +1671,7 @@
     <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
   </data>
   <data name="Trash" xml:space="preserve">
-    <value>Papperskorg</value>
+    <value>Papperskorgen</value>
     <comment>(noun) Location of deleted items which have not yet been permanently deleted</comment>
   </data>
   <data name="SearchTrash" xml:space="preserve">
@@ -1809,11 +1809,11 @@
     <value>En organisationspolicy påverkar dina ägarskapsalternativ.</value>
   </data>
   <data name="Send" xml:space="preserve">
-    <value>Send</value>
+    <value>Försändelse</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AllSends" xml:space="preserve">
-    <value>All Sends</value>
+    <value>Alla försändelser</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Sends" xml:space="preserve">
@@ -1864,7 +1864,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Expired" xml:space="preserve">
-    <value>Upphört</value>
+    <value>Utgången</value>
   </data>
   <data name="MaximumAccessCount" xml:space="preserve">
     <value>Maximalt antal åtkomster</value>
@@ -1979,7 +1979,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AboutSend" xml:space="preserve">
-    <value>Om Send</value>
+    <value>Om försändelser</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">

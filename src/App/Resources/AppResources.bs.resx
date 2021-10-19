@@ -1252,7 +1252,7 @@
     <value>The accessibility service may be helpful to use when apps do not support the standard auto-fill service.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
-    <value>Zadnji datum kada je lozinka ažurirana</value>
+    <value>Password Updated</value>
     <comment>ex. Date this password was updated</comment>
   </data>
   <data name="DateUpdated" xml:space="preserve">
@@ -1260,22 +1260,22 @@
     <comment>ex. Date this item was updated</comment>
   </data>
   <data name="AutofillActivated" xml:space="preserve">
-    <value>Automatsko popunjavanje lozinke aktivirano!</value>
+    <value>AutoFill Activated!</value>
   </data>
   <data name="MustLogInMainAppAutofill" xml:space="preserve">
-    <value>Morate se prijaviti na glavnu Bitwarden aplikaciju prije nego što možete koristiti dodatak.</value>
+    <value>You must log into the main Bitwarden app before you can use AutoFill.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
-    <value>Vaši podaci za prijavu su sada lakše dostupni putem Vaše tastature prilikom prijave na aplikacije i web stranice</value>
+    <value>Your logins are now easily accessible right from your keyboard while logging into apps and websites.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
-    <value>Preporučeno je onemogućiti bilo koje druge aplikacije za automatsko popunjavanje lozinki u Postavkama uređaja ukoliko ih ne planirate koristiti.</value>
+    <value>We recommend disabling any other AutoFill apps under Settings if you do not plan to use them.</value>
   </data>
   <data name="BitwardenAutofillDescription" xml:space="preserve">
-    <value>Pristupite vašem trezoru direktno putem vaše tastature da brže unesete vaše lozinke. </value>
+    <value>Access your vault directly from your keyboard to quickly autofill passwords.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
-    <value>Da bi omogućili automatsko popunjavanje lozinki na vašem uređaju, molimo vas da pratite sljedeće upute:</value>
+    <value>To enable password autofill on your device, follow these instructions:</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
     <value>1. Go to the iOS "Settings" app</value>

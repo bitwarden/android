@@ -126,31 +126,13 @@
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>Bitwarden, Inc. je vlasnik tvrtke 8bit Solutions LLC.
+    <value>Bitwarden je najlakši i najsigurniji način pohranjivanja svih Vaših prijava i lozinki, dok su iste sinkronizirane među svim Vašim uređajima.
 
-THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET I DRUGI ODABRALI SU BITWARDEN ZA NAJBOLJI UPRAVITELJ LOZINKI. 
+Krađa lozinki ozbiljan je problem. Web-lokacije i aplikacije koje upotrebljavate svakodnevno su napadnute. Pojavljuju se sigurnosne povrede, a Vaše lozinke su ukradene. Ako ponovno upotrebljavate iste zaporke u aplikacijama i web-lokacijama, hakeri mogu lako pristupiti Vašoj e-pošti, banci i drugim važnim računima.
 
-Upravljajte, spremajte, osigurajte i dijelite neograničen broj lozinki na neograničenom broju uređaja bilo gdje. Bitwarden omogućuje upravljanje lozinkama, bazirano na otvorenom kodu, svima, bilo kod kuće, na poslu ili u pokretu.
+Sigurnosni stručnjaci preporučuju da koristite različitu, nasumično generiranu lozinku za svaki račun koji stvorite. Ali kako upravljati svim tim lozinkama? Bitwarden vam olakšava stvaranje, pohranu i pristup lozinkama.
 
-Generirajte jake, jedinstvene i nasumične lozinke bazirane na sigurnosnim zahtjevima za svaku web stranicu koju često posjećujete.
-
-Bitwarden Send omoguzćuje jednostavno i brzo slanje šifriranih podataka --- datoteki ili teksta -- direktno, bilo kome.
-
-Bitwarden nudi Teams i Enterprise planove za tvrtke kako biste sigurno mogli dijeliti lozinke s kolegama na poslu.
-
-Zašto odabrati Bitwarden?
-
-Svjetski priznata enkripcija
-Lozinke su zaštićene naprednim end-to-end šifriranjem (AES-256 bit, salted hashtag i PBKDF2 SHA-256) kako bi vaši osobni podaci ostali sigurni i samo vaši.
-
-Ugrađen generator lozinki
-Generirajte jake, jedinstvene i nasumične lozinke bazirane na sigurnosnim zahtjevima za svako web mjesto koje često posjećujete.
-
-Svjetski dostupan 
-Bitwarden je, zahvaljujući našoj globalnoj zajednici, dostupan na više od 40 jezika.
-
-Podržani svi OS
-Osigurajte i sigurno dijelite osjetljive podatke sadržane u vašem Bitwarden trezoru iz bilo kojeg preglednika, mobilnog uređaja ili stolnog računala s bilo kojim OS.</value>
+Bitwarden pohranjuje sve Vaše prijave u šifrirani trezor koji se sinkronizira na svim Vašim uređajima. Budući da je potpuno šifriran prije nego ikada napusti uređaj, samo Vi imate pristup podacima. Čak ni tim u Bitwardenu ne može vidjeti Vaše podatke. Vaši su podaci zapečaćeni s AES-256 bitnim šifriranjem, salt hashom i PBKDF2 SHA-256.</value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">

@@ -125,14 +125,14 @@
     <comment>Add/create a new entity (verb).</comment>
   </data>
   <data name="AddFolder" xml:space="preserve">
-    <value>கோப்புறை சேர்</value>
+    <value>கோப்புறையை சேர்</value>
   </data>
   <data name="AddItem" xml:space="preserve">
-    <value>உருப்படியைச் சேர்</value>
+    <value>உருப்படியை சேர்</value>
     <comment>The title for the add item page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
-    <value>ஓரு பிழை நேர்ந்துவிட்டது.</value>
+    <value>ஓரு பிழை நிகழ்ந்துவிட்டது</value>
     <comment>Alert title when something goes wrong.</comment>
   </data>
   <data name="Back" xml:space="preserve">
@@ -156,7 +156,7 @@
     <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
   </data>
   <data name="CopyUsername" xml:space="preserve">
-    <value>பயனர்பெயரை நகலெடு</value>
+    <value>பயனர் பெயரை நகலெடு</value>
     <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
   </data>
   <data name="Credits" xml:space="preserve">
@@ -172,14 +172,14 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="DoYouReallyWantToDelete" xml:space="preserve">
-    <value>உண்மையிலேயே அழிக்கவேண்டுமா? இதை செயல்தவிர்க்க இயலாது.</value>
+    <value>உண்மையிலேயே அழிக்கவேண்டுமா? இதை செயல்தவிர்க்க இறலாது.</value>
     <comment>Confirmation alert message when deleteing something.</comment>
   </data>
   <data name="Edit" xml:space="preserve">
     <value>திருத்து</value>
   </data>
   <data name="EditFolder" xml:space="preserve">
-    <value>கோப்புறையைத் திருத்து</value>
+    <value>கோப்புறையை திருத்து</value>
   </data>
   <data name="Email" xml:space="preserve">
     <value>மின்னஞ்சல்</value>
@@ -193,10 +193,10 @@
     <value>எங்களுக்கு மின்னஞ்சலிடு</value>
   </data>
   <data name="EmailUsDescription" xml:space="preserve">
-    <value>நேரடியாக உதவி பெற அ கருத்து தெரிவிக்க எங்களுக்கு மின்னஞ்சலிடு</value>
+    <value>நேரடியாக உதவி பெற அ கருத்து தெரிவிக்கவோ எங்களுக்கு மின்னஞ்சலிடு</value>
   </data>
   <data name="EnterPIN" xml:space="preserve">
-    <value>உம் கடவுக்குறியை உள்ளிடு.</value>
+    <value>கடவுக்குறியீட்டை உள்ளிடவும்.</value>
   </data>
   <data name="Favorites" xml:space="preserve">
     <value>பிடித்தவை</value>
@@ -209,7 +209,7 @@
     <value>GitHub களஞ்சியத்தில் ஒரு சிக்கலைத் திற.</value>
   </data>
   <data name="FingerprintDirection" xml:space="preserve">
-    <value>உம் கைரேகையைப் பயன்படுத்தி சரிபார்.</value>
+    <value>உங்கள் கைரேகையைப் பயன்படுத்தி சரிபார்க்கவும்</value>
   </data>
   <data name="Folder" xml:space="preserve">
     <value>கோப்புறை</value>
@@ -219,20 +219,20 @@
     <value>புதிய கோப்புறை உருவாக்கப்பட்டது.</value>
   </data>
   <data name="FolderDeleted" xml:space="preserve">
-    <value>கோப்புறை அழிக்கப்பட்டது.</value>
+    <value>கோப்புறை அழிக்கப்பட்டது</value>
   </data>
   <data name="FolderNone" xml:space="preserve">
-    <value>கோப்புறையற்றவை</value>
+    <value>கோப்புறை இல்லை</value>
     <comment>Items that have no folder specified go in this special "catch-all" folder.</comment>
   </data>
   <data name="Folders" xml:space="preserve">
     <value>கோப்புறைகள்</value>
   </data>
   <data name="FolderUpdated" xml:space="preserve">
-    <value>கோப்புறை புதுப்பிக்கப்பட்டது.</value>
+    <value>கோப்புறை புதுப்பிக்கப்பட்டது</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
-    <value>வலைத்தளத்திற்குச் செல்</value>
+    <value>வலைத்தளத்திற்கு செல்</value>
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="HelpAndFeedback" xml:space="preserve">
@@ -243,7 +243,7 @@
     <comment>Hide a secret value that is currently shown (password).</comment>
   </data>
   <data name="InternetConnectionRequiredMessage" xml:space="preserve">
-    <value>தொடரும் முன் இணையத்துடன் இணைக்கவும்.</value>
+    <value>தொடரும் முன் இணையத்துடன் இணைக்கவும்</value>
     <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
@@ -251,7 +251,7 @@
     <comment>Title for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InvalidMasterPassword" xml:space="preserve">
-    <value>செல்லாத பிரதான கடவுச்சொல். மீண்டும் முயலவும்.</value>
+    <value>தவறான பிரதான கடவுச்சொல், மீண்டும் முயற்சிக்கவும்.</value>
   </data>
   <data name="InvalidPIN" xml:space="preserve">
     <value>செல்லாத கடவுக்குறி. மீண்டும் முயலவும்.</value>
@@ -273,7 +273,7 @@
     <comment>The log out button text (verb).</comment>
   </data>
   <data name="LogoutConfirmation" xml:space="preserve">
-    <value>நிச்சயமாக வெளியேற விரும்புகிறீரா?</value>
+    <value>நிச்சயமாக நீங்கள் வெளியேற விரும்புகிறீர்களா?</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>பிரதான கடவுச்சொல்</value>
@@ -348,10 +348,10 @@
     <comment>Label for a uri/url.</comment>
   </data>
   <data name="UseFingerprintToUnlock" xml:space="preserve">
-    <value>கைரேகையைப் பயன்படுத்தி பூட்டவிழ்</value>
+    <value>கைரேகையைப் பயன்படுத்தி பூட்டவிழ்க்கவும்</value>
   </data>
   <data name="Username" xml:space="preserve">
-    <value>பயனர்பெயர்</value>
+    <value>பயனர் பெயர்</value>
     <comment>Label for a username.</comment>
   </data>
   <data name="ValidationFieldRequired" xml:space="preserve">
@@ -397,7 +397,7 @@
     <value>உங்கள் புது கணக்கு உருவாக்கப்பட்டது, நீங்கள் இப்போது உள்நுழையலாம்.</value>
   </data>
   <data name="AddAnItem" xml:space="preserve">
-    <value>ஓர் உருப்படியைச் சேர்</value>
+    <value>உருப்படியை சேர்</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
     <value>செயலி நீட்டிப்பு</value>
@@ -415,7 +415,7 @@
     <value>Bitwarden செயலி நீட்டிப்பு</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
-    <value>உங்கள் பெட்டகத்திற்கு புதிய உள்நுழைவுகளைச் சேர்ப்பதற்கான மிக எளிய வழி பிட்வார்டன் செயலி நீட்டிப்பு மூலமே. "அமைப்புகள்" திரைக்கு செல்வதன் மூலம் பிட்வார்டன் செயலி நீட்டிப்பைப் பயன்படுத்துவது பற்றி மேலுமறிக.</value>
+    <value>உங்கள் பெட்டகத்திற்கு புதிய உள்நுழைவுகளைச் சேர்ப்பதற்கான மிக எளிய வழி பிட்வார்டன் செயலி நீட்டிப்பு மூலமே. "அமைப்புகள்" திரைக்கு செல்வதன் மூலம் பிட்வார்டன் செயலி நீட்டிப்பைப் பயன்படுத்துவது பற்றி மேலும் அறிக.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
     <value>Safari மற்றும் மற்ற செயலிகளில் உங்கள் உள்நுழைவுகளை தானாக நிரப்ப Bitwarden ஐ பயன்படுத்து.</value>
@@ -579,7 +579,7 @@
     <comment>Minimum special characters for password generator settings</comment>
   </data>
   <data name="MoreSettings" xml:space="preserve">
-    <value>மேலும் அமைவுகள்</value>
+    <value>மேலும் அமைப்புகள்</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
     <value>நீட்டிப்பை பயன்படுத்தும் முன் நீங்கள் முதன்மை Bitwarden செயலியில் உள்நுழைய வேண்டும்.</value>
@@ -594,10 +594,10 @@
     <value>உங்கள் பெட்டகத்தில் பிடித்தவை எவையுமில்லை.</value>
   </data>
   <data name="NoItems" xml:space="preserve">
-    <value>உம் பெட்டகத்தில் உருப்படிகள் ஏதுமில்லை.</value>
+    <value>உங்கள் பெட்டகத்தில் உருப்படிகள் எவையுமில்லை.</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>உம் பெட்டகத்தில் இவ்வலைத்தளம்/செயலிக்கான உருப்படிகள் இல்லை. ஒன்றைச் சேர்க்க தட்டுக.</value>
+    <value>இந்த வலைத்தளம்/செயலிக்கு உங்கள் பெட்டகத்தில் உருப்படிகள் எவையுமில்லை.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
     <value>இவ்வுள்நுழைவில் பயனர்பெயர் அ கடவுச்சொல் கட்டமைக்கப்படவில்லை.</value>
@@ -659,7 +659,7 @@
     <value>கடவுக்குறியை அமை</value>
   </data>
   <data name="SetPINDirection" xml:space="preserve">
-    <value>செயலியைத் திறக்க 4 இலக்க கடவுக்குறியை உள்ளிடு.</value>
+    <value>செயலியைத் திறக்க 4 இலக்க கடவுக்குறியீட்டை உள்ளிடவும்.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
     <value>உருப்படியின் தகவல்</value>
@@ -698,7 +698,7 @@
     <value>{0} மூலம் பூட்டவிழ்</value>
   </data>
   <data name="UnlockWithPIN" xml:space="preserve">
-    <value>கடவுக்குறி மூலம் பூட்டவிழ்</value>
+    <value>கடவுக்குறியீடு மூலம் பூட்டவிழ்</value>
   </data>
   <data name="Validating" xml:space="preserve">
     <value>சரிபார்க்கிறது</value>
@@ -1136,13 +1136,13 @@
     <value>தொகுப்புகள்</value>
   </data>
   <data name="NoItemsCollection" xml:space="preserve">
-    <value>இத்தொகுப்பில் உருப்படிகள் ஏதுமில்லை.</value>
+    <value>இந்த தொகுப்பில் உருப்படிகள் ஏதுமில்லை.</value>
   </data>
   <data name="NoItemsFolder" xml:space="preserve">
-    <value>இக்கோப்புறையில் உருப்படிகள் ஏதுமில்லை.</value>
+    <value>இந்த கோப்புறையில் உருப்படிகள் ஏதுமில்லை.</value>
   </data>
   <data name="NoItemsTrash" xml:space="preserve">
-    <value>இக்குப்பையில் உருப்படிகள் ஏதுமில்லை.</value>
+    <value>இந்த குப்பையில் உருப்படிகள் ஏதுமில்லை.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
     <value>தன்னிரப்பி அணுகல்தன்மை சேவை</value>
@@ -1154,7 +1154,7 @@
     <value>உள்நுழைவுகள், கடனட்டைகள், மற்றும் அடையாள தகவலை பிற செயலிகளினுள்ளே நிரப்ப Bitwarden தன்னிரப்பி சேவையை பயன்படுத்து.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
-    <value>தன்னிரப்பல் அமைவுகளைத் திற</value>
+    <value>தானாக நிரப்புதல் அமைப்புகளைத் திற</value>
   </data>
   <data name="FaceID" xml:space="preserve">
     <value>முக அடையாளம்</value>
@@ -1164,7 +1164,7 @@
     <value>சரிபார்க்க முக அடையாளத்தைப் பயன்படுத்தவும்.</value>
   </data>
   <data name="UseFaceIDToUnlock" xml:space="preserve">
-    <value>முக அடையாளத்தைப் பயன்படுத்தி பூட்டவிழ்.</value>
+    <value>பூட்டவிற்க முக அடையாளத்தைப் பயன்படுத்தவும்.</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
     <value>முக அடையாளத்தை சரிபார்க்கவும்</value>
@@ -1347,10 +1347,10 @@
     <value>வகைகள்</value>
   </data>
   <data name="NoPasswordsToList" xml:space="preserve">
-    <value>பட்டியலிட கடவுச்சொற்களில்லை.</value>
+    <value>பட்டியலிட கடவுச்சொற்கள் ஏதுமில்லை.</value>
   </data>
   <data name="NoItemsToList" xml:space="preserve">
-    <value>பட்டியலிட உருப்படிகளில்லை.</value>
+    <value>பட்டியலிட உருப்படிகள் ஏதுமில்லை.</value>
   </data>
   <data name="SearchCollection" xml:space="preserve">
     <value>தொகுப்பை தேடுக</value>
@@ -1380,7 +1380,7 @@
     <value>இந்த உருப்படி யாருடையது?</value>
   </data>
   <data name="NoCollectionsToList" xml:space="preserve">
-    <value>பட்டியலிட தொகுப்புகளில்லை.</value>
+    <value>பட்டியலிட தொகுப்புகள் ஏதுமில்லை.</value>
   </data>
   <data name="MovedItemToOrg" xml:space="preserve">
     <value>{0} moved to {1}.</value>
@@ -1402,7 +1402,7 @@
     <value>Move to Organization</value>
   </data>
   <data name="NoOrgsToList" xml:space="preserve">
-    <value>பட்டியலிட நிறுவனங்களில்லை.</value>
+    <value>பட்டியலிட நிறுவனங்கள் ஏதுமில்லை.</value>
   </data>
   <data name="MoveToOrgDesc" xml:space="preserve">
     <value>Choose an organization that you wish to move this item to. Moving to an organization transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</value>
@@ -1425,7 +1425,7 @@
     <comment>Short for "Password Generator"</comment>
   </data>
   <data name="NoFoldersToList" xml:space="preserve">
-    <value>பட்டியலிட கோப்புறைகளில்லை.</value>
+    <value>பட்டியலிட கோப்புறைகள் ஏதுமில்லை.</value>
   </data>
   <data name="FingerprintPhrase" xml:space="preserve">
     <value>கைரேகை சொற்றொடர்</value>
@@ -1454,7 +1454,7 @@
     <value>௩௦ நிமிடங்கள்</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
-    <value>Bitwardenஐ பூட்டவிழ்க்க உம் கடவுக்குறியை அமை. நீ எப்போதாவது முழுமையாக செயலியிலிருந்து வெளியேறினால் உம் கடவுக்குறி அமைவுகள்  அகரமாக்கப்படும்.</value>
+    <value>Bitwardenஐ பூட்டவிழ்க்க உம் குறியீட்டெண்ணை அமை. நீ எப்போதாவது முழுமையாக செயலியிலிருந்து வெளியேறினால் உம் குறியீட்டெண் அமைவுகள்  அகரமாக்கப்படும்.</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
     <value>{1} இல் {0} ஆக உள்நுழைந்துள்ளது.</value>
@@ -1577,7 +1577,7 @@
     <value>உயிரியளவுகள்</value>
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
-    <value>உயிரியளவுகளைப் பயன்படுத்தி பூட்டவிழ்</value>
+    <value>பூட்டவிழ்க்க உயிரியளவுகளை பயன்படுத்து</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
     <value>Bitwardenக்கு கவனம் தேவை - Bitwarden அமைப்புகளிலிருந்து "தன்னிரப்பி அணுகல்தன்மை சேவை" ஐப் பார்</value>
@@ -1589,10 +1589,10 @@
     <value>அனுமதி</value>
   </data>
   <data name="BitwardenAutofillServiceOpenOverlayPermissionSettings" xml:space="preserve">
-    <value>மேலடுக்கு அனுமதி அமைவுகளைத் திற</value>
+    <value>மேலடுக்கு அனுமதி அமைப்புகளை திற</value>
   </data>
   <data name="BitwardenAutofillServiceStep3" xml:space="preserve">
-    <value>௩. Bitwarden-க்கான Android செயலி அமைப்புகள் திரையில், "பிற ஆப்ஸின் மேலே காட்டு" (மேம்பட்டவையின் அடியில்) என்பதை தேர்ந்தெடு மற்றும் மேலடுக்கை அனுமதிக்க நிலைமாற்றியை இயக்குக.</value>
+    <value>௩. Bitwarden-க்கான Android செயலி அமைப்புகள் திரையில், "பிற ஆப்ஸின் மேலே காட்டு" (மேம்பட்டவை அடியில்) என்பதை தேர்ந்தெடு மற்றும் மேலடுக்கை அனுமதிக்க நிலைமாற்றியை இயக்குக.</value>
   </data>
   <data name="Denied" xml:space="preserve">
     <value>மறுக்கப்பட்டது</value>
@@ -1770,7 +1770,7 @@
     <value>தன்னிரப்பி சேவைகள்</value>
   </data>
   <data name="InlineAutofill" xml:space="preserve">
-    <value>உள்ளக தன்னிரப்பி பயன்படுத்து</value>
+    <value>உள்-வரி தன்னிரப்பியை பயன்படுத்து</value>
   </data>
   <data name="InlineAutofillDescription" xml:space="preserve">
     <value>Use inline autofill if your selected IME (keyboard) supports it. If your configuration is not supported (or this option is disabled), the default Autofill overlay will be used.</value>
@@ -1911,7 +1911,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddASend" xml:space="preserve">
-    <value>ஒரு Send-ஐச் சேர்</value>
+    <value>ஒரு Send சேர்</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="CopyLink" xml:space="preserve">
@@ -1933,7 +1933,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddSend" xml:space="preserve">
-    <value>Send-ஐச் சேர்</value>
+    <value>Send சேர்</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AreYouSureDeleteSend" xml:space="preserve">
