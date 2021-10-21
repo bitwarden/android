@@ -35,6 +35,7 @@ namespace Bit.Droid.Autofill
         public static HashSet<string> TrustedBrowsers = new HashSet<string>
         {
             "com.duckduckgo.mobile.android",
+            "com.google.android.googlequicksearchbox",
             "org.mozilla.focus",
             "org.mozilla.klar",
         };
