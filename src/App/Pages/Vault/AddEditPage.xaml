@@ -8,6 +8,7 @@
     xmlns:controls="clr-namespace:Bit.App.Controls"
     xmlns:views="clr-namespace:Bit.Core.Models.View;assembly=BitwardenCore"
     xmlns:behaviors="clr-namespace:Bit.App.Behaviors"
+    xmlns:effects="clr-namespace:Bit.App.Effects"
     x:DataType="pages:AddEditPageViewModel"
     x:Name="_page"
     Title="{Binding PageTitle}">
@@ -582,16 +583,19 @@
                            StyleClass="box-header, box-header-platform" />
                 </StackLayout>
                 <StackLayout StyleClass="box-row, box-row-input">
-                    <controls:ExtendedEditor
+                    <Editor
                         x:Name="_notesEditor"
                         AutoSize="TextChanges"
-                        IsScrollEnabled="False"
                         StyleClass="box-value"
+                        effects:ScrollEnabledEffect.IsScrollEnabled="false"
                         Text="{Binding Cipher.Notes}">
-                        <controls:ExtendedEditor.Behaviors>
+                        <Editor.Behaviors>
                             <behaviors:EditorPreventAutoBottomScrollingOnFocusedBehavior ParentScrollView="{x:Reference _scrollView}" />
-                        </controls:ExtendedEditor.Behaviors>
-                    </controls:ExtendedEditor>
+                        </Editor.Behaviors>
+                        <Editor.Effects>
+                            <effects:ScrollEnabledEffect />
+                        </Editor.Effects>
+                    </Editor>
                 </StackLayout>
                 <BoxView StyleClass="box-row-separator" IsVisible="{Binding ShowNotesSeparator}" />
             </StackLayout>

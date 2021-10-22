@@ -137,6 +137,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
+    <Folder Include="Effects\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
@@ -189,7 +190,7 @@
     <Compile Include="Views\SwitchTableViewCell.cs" />
     <Compile Include="Views\Toast.cs" />
     <Compile Include="Renderers\SelectableLabelRenderer.cs" />
-    <Compile Include="Renderers\ExtendedEditorRenderer.cs" />
+    <Compile Include="Effects\ScrollEnabledEffect.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\App\App.csproj">
