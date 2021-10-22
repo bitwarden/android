@@ -18,6 +18,7 @@ namespace Bit.Droid.Accessibility
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
+            MoveTaskToBack(true);
             HandleIntent(Intent, 932473);
         }
 

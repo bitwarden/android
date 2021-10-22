@@ -41,6 +41,7 @@ namespace Bit.Droid.Accessibility
         private long _lastAutoFillTime = 0;
         private Java.Lang.Runnable _overlayAnchorObserverRunnable = null;
         private Handler _handler = new Handler(Looper.MainLooper);
+        private AccessibilityNodeInfo _currentNode = null;
 
         private HashSet<string> _launcherPackageNames = null;
         private DateTime? _lastLauncherSetBuilt = null;
@@ -129,24 +130,28 @@ namespace Bit.Droid.Accessibility
                         break;
                     case EventTypes.WindowContentChanged:
                     case EventTypes.WindowStateChanged:
-                        if (AccessibilityHelpers.LastCredentials == null)
+                        if (e.PackageName != "android" && e.Source != null)
                         {
-                            break;
-                        }
-                        if (e.PackageName == BitwardenPackage)
-                        {
-                            CancelOverlayPrompt();
-                            break;
-                        }
-
-                        root = RootInActiveWindow;
-                        if (root == null || root.PackageName != e.PackageName)
-                        {
-                            break;
-                        }
-                        if (ScanAndAutofill(root, e))
-                        {
-                            CancelOverlayPrompt();
+                            if (e.EventType == EventTypes.WindowStateChanged)
+                            {
+                                if (e.PackageName != BitwardenPackage)
+                                {
+                                    _currentNode = e.Source;
+                                }
+                            }
+                            if (AccessibilityHelpers.LastCredentials == null)
+                            {
+                                break;
+                            }
+                            if (e.PackageName == BitwardenPackage)
+                            {
+                                CancelOverlayPrompt();
+                                break;
+                            }
+                            if (ScanAndAutofill(e.Source, e))
+                            {
+                                CancelOverlayPrompt();
+                            }
                         }
                         break;
                     default:
@@ -196,15 +201,18 @@ namespace Bit.Droid.Accessibility
             return filled;
         }
         
-        private void OnAutofillTileClick()
+        private async void OnAutofillTileClick()
         {
             CancelOverlayPrompt();
+
+            _currentNode.Refresh();
+            var root = _currentNode;
             
-            var root = RootInActiveWindow;
             if (root != null && root.PackageName != BitwardenPackage &&
                root.PackageName != AccessibilityHelpers.SystemUiPackage &&
                !SkipPackage(root.PackageName))
             {
+                await Task.Delay(1000);
                 var uri = AccessibilityHelpers.GetUri(root);
                 if (!string.IsNullOrWhiteSpace(uri))
                 {
