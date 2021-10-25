@@ -59,6 +59,14 @@
         <Setter Property="FontAttributes"
                 Value="Bold" />
     </Style>
+    <Style TargetType="Label"
+           Class="text-html"
+           ApplyToDerivedTypes="True">
+        <Setter Property="TextColor"
+                Value="Default" />
+        <Setter Property="TextType"
+                Value="Html" />
+    </Style>
 
     <!-- Pages -->
     <Style TargetType="TabbedPage"

@@ -63,10 +63,9 @@
                     </Frame>
                 </Grid>
                 <controls:MonoLabel
+                    StyleClass="text-lg, text-html"
                     Text="{Binding ColoredPassword, Mode=OneWay}"
-                    TextType="Html"
                     Margin="0, 20"
-                    StyleClass="text-lg"
                     HorizontalTextAlignment="Center"
                     HorizontalOptions="CenterAndExpand"
                     LineBreakMode="CharacterWrap" />
