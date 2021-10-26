@@ -96,10 +96,10 @@ namespace Bit.iOS.Core.Controllers
                 MasterPasswordCell.TextField.KeyboardType = UIKeyboardType.NumberPad;
             }
             MasterPasswordCell.Button.TitleLabel.Font = UIFont.FromName("FontAwesome", 28f);
-            MasterPasswordCell.Button.SetTitle("", UIControlState.Normal);
+            MasterPasswordCell.Button.SetTitle("\uf06e", UIControlState.Normal);
             MasterPasswordCell.Button.TouchUpInside += (sender, e) => {
                 MasterPasswordCell.TextField.SecureTextEntry = !MasterPasswordCell.TextField.SecureTextEntry;
-                MasterPasswordCell.Button.SetTitle(MasterPasswordCell.TextField.SecureTextEntry ? "" : "", UIControlState.Normal);
+                MasterPasswordCell.Button.SetTitle(MasterPasswordCell.TextField.SecureTextEntry ? "\uf06e" : "\uf070", UIControlState.Normal);
             };
 
             TableView.RowHeight = UITableView.AutomaticDimension;
