@@ -43,7 +43,7 @@ namespace Bit.iOS.Core.Controllers
         public abstract Action Cancel { get; }
 
         public FormEntryTableViewCell MasterPasswordCell { get; set; } = new FormEntryTableViewCell(
-            AppResources.MasterPassword);
+            AppResources.MasterPassword, useButton: true);
         
         public string BiometricIntegrityKey { get; set; }
 
@@ -95,6 +95,12 @@ namespace Bit.iOS.Core.Controllers
             {
                 MasterPasswordCell.TextField.KeyboardType = UIKeyboardType.NumberPad;
             }
+            MasterPasswordCell.Button.TitleLabel.Font = UIFont.FromName("FontAwesome", 28f);
+            MasterPasswordCell.Button.SetTitle("", UIControlState.Normal);
+            MasterPasswordCell.Button.TouchUpInside += (sender, e) => {
+                MasterPasswordCell.TextField.SecureTextEntry = !MasterPasswordCell.TextField.SecureTextEntry;
+                MasterPasswordCell.Button.SetTitle(MasterPasswordCell.TextField.SecureTextEntry ? "" : "", UIControlState.Normal);
+            };
 
             TableView.RowHeight = UITableView.AutomaticDimension;
             TableView.EstimatedRowHeight = 70;
