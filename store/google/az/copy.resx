@@ -118,33 +118,33 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Title" xml:space="preserve">
-    <value>Bitwarden Şifrə Meneceri</value>
+    <value>Bitwarden Parol Meneceri</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="ShortDescription" xml:space="preserve">
-    <value>Bitwarden, internetdə sizi təhlükəsiz saxlayan giriş və şifrə meneceridir.</value>
+    <value>Bitwarden, internetdə sizi təhlükəsiz saxlayan giriş və parol meneceridir.</value>
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
     <value>Bitwarden, Inc., 8bit Solutions LLC-nin ana şirkətidir.
 
-THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET VƏ BİR ÇOXUNA GÖRƏ ƏN YAXŞI ŞİFRƏ MENECERİDİR.
+THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET VƏ BİR ÇOXUNA GÖRƏ ƏN YAXŞI PAROL MENECERİDİR.
 
-Hər yerdən limitsiz cihazda limitsiz şifrəni idarə edin, saxlayın, qoruyun və paylaşın. Bitwarden evdə, işdə və ya yolda hər kəsə açıq mənbəli şifrə idarəetmə həllərini təqdim edir.
+Hər yerdən limitsiz cihazda limitsiz parolu idarə edin, saxlayın, qoruyun və paylaşın. Bitwarden evdə, işdə və ya yolda hər kəsə açıq mənbəli parol idarəetmə həllərini təqdim edir.
 
-Çox istifadə etdiyiniz hər veb sayt üçün təhlükəsizlik tələblərinə görə güclü, unikal və təsadüfi şifrələr yaradın.
+Çox istifadə etdiyiniz hər veb sayt üçün təhlükəsizlik tələblərinə görə güclü, unikal və təsadüfi parollar yaradın.
 
 Bitwarden Send şifrələnmiş məlumatların (fayl və sadə mətnləri) birbaşa və sürətli göndərilməsini təmin edir.
 
-Bitwarden, şifrələri iş yoldaşlarınızla təhlükəsiz paylaşa bilməyiniz üçün şirkətlərə Teams və Enterprise planları təklif edir.
+Bitwarden, parolları iş yoldaşlarınızla təhlükəsiz paylaşa bilməyiniz üçün şirkətlərə Teams və Enterprise planları təklif edir.
 
 Nəyə görə Bitwarden-i seçməliyik:
 
 Yüksək səviyyə şifrələmə
 Şifrələriniz qabaqcıl ucdan-uca şifrələmə (AES-256 bit, salted hashtag və PBKDF2 SHA-256) ilə qorunur, beləcə verilənlərinizin təhlükəsiz və gizli qalmasını təmin edir.
 
-Daxili şifrə yaradıcı
-Çox istifadə etdiyiniz hər veb sayt üçün təhlükəsizlik tələblərinə görə güclü, unikal və təsadüfi şifrələr yaradın.
+Daxili parol yaradıcı
+Çox istifadə etdiyiniz hər veb sayt üçün təhlükəsizlik tələblərinə görə güclü, unikal və təsadüfi parollar yaradın.
 
 Qlobal tərcümələr
 Bitwarden tərcümələri 40 dildə mövcuddur və qlobal cəmiyyətimiz sayəsində böyüməyə davam edir.
@@ -154,16 +154,16 @@ Bitwarden anbarındakı həssas verilənləri, istənilən səyyahdan, mobil cih
   <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
-    <value>Bütün cihazlarınız üçün təhlükəsiz və ödənişsiz bir şifrə meneceri</value>
+    <value>Bütün cihazlarınız üçün təhlükəsiz və ödənişsiz bir parol meneceri</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Bütün giriş məlumatlarınızı və şifrələrinizi təhlükəsiz bir anbardan idarə edin</value>
+    <value>Bütün giriş məlumatlarınızı və parollarınızı təhlükəsiz bir anbardan idarə edin</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Güclü, təsadüfi və etibarlı şifrələrin avtomatik yaradılması</value>
+    <value>Güclü, təsadüfi və etibarlı parolların avtomatik yaradılması</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Anbarınızı barmaq izi, PIN kod və ana şifrə ilə qoruyun</value>
+    <value>Anbarınızı barmaq izi, PIN kod və ana parol ilə qoruyun</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
     <value>Səyyahınızda və digər tətbiqlərdəki giriş sahələrinin cəld avto-doldurulması</value>

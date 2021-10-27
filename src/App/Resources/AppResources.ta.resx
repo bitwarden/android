@@ -311,7 +311,7 @@
     <comment>Button text for a save operation (verb).</comment>
   </data>
   <data name="Move" xml:space="preserve">
-    <value>Move</value>
+    <value>நகர்த்து</value>
   </data>
   <data name="Saving" xml:space="preserve">
     <value>சேமிக்கிறது...</value>
@@ -705,7 +705,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="VerificationCode" xml:space="preserve">
-    <value>சரிபார்ப்பு குறியீடு</value>
+    <value>சரிபார்ப்புக் குறியீடு</value>
   </data>
   <data name="ViewItem" xml:space="preserve">
     <value>உருப்படியை பார்</value>
@@ -753,10 +753,10 @@
     <value>௨. நிலைமாற்றியை இயக்கி ஏற்றுக்கொள்ள சரியை அழுத்து.</value>
   </data>
   <data name="Disabled" xml:space="preserve">
-    <value>முடக்கப்பட்டது</value>
+    <value>முடக்கத்தில்</value>
   </data>
   <data name="Enabled" xml:space="preserve">
-    <value>இயக்கப்பட்டது</value>
+    <value>இயக்கத்தில்</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>நிலை</value>
@@ -786,7 +786,7 @@
     <value>"{0}"க்கான தண்னிரப்ப உருப்படியை தேடிக்கொண்டிருக்கிறீர்கள்.</value>
   </data>
   <data name="LearnOrg" xml:space="preserve">
-    <value>Learn About Organizations</value>
+    <value>நிறுவுவனங்கள் பற்று அறிக</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
     <value>"{0}" செயலியைத் திறக்க இயலவில்லை.</value>
@@ -812,7 +812,7 @@
     <value>இக்கணக்கில் இரு-படி சரிபார்ப்பு இயக்கத்திலுள்ளது, எனினும், உள்ளமைக்கப்பட்ட இரு-படி வழங்குநர் எவையும் இச்சாதனத்தில் ஆதரிக்கப்படவில்லை. ஆதரிக்கப்பட்ட சாதனம் மற்றும்/அ சாதனங்களுக்கிடையே நன்றாக ஆதரிக்கப்படும் கூடுதல் (அங்கீகார செயலி போன்ற) வழங்குநர்களைப் பயன்படுத்தவும்.</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
-    <value>மீட்பு குறியீடு</value>
+    <value>மீட்புக் குறியீடு</value>
     <comment>For 2FA</comment>
   </data>
   <data name="RememberMe" xml:space="preserve">
@@ -1179,7 +1179,7 @@
     <value>தனிப்பயன் புலத்தின் பெயர்</value>
   </data>
   <data name="FieldTypeBoolean" xml:space="preserve">
-    <value>Boolean</value>
+    <value>ஈர்மம்</value>
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>மறைக்கப்பட்ட</value>
@@ -1241,7 +1241,7 @@
     <comment>An entity of multiple related people (ex. a team or business organization).</comment>
   </data>
   <data name="HoldYubikeyNearTop" xml:space="preserve">
-    <value>Hold your Yubikey near the top of the device.</value>
+    <value>உம் யூபிவிசையை சாதனத்தின் உச்சிக்கருகில் பிடித்திரு.</value>
   </data>
   <data name="TryAgain" xml:space="preserve">
     <value>மீண்டும் முயல்</value>
@@ -1383,7 +1383,7 @@
     <value>பட்டியலிட தொகுப்புகளில்லை.</value>
   </data>
   <data name="MovedItemToOrg" xml:space="preserve">
-    <value>{0} moved to {1}.</value>
+    <value>{0} {1}-க்கு நகர்த்தப்பட்டது.</value>
     <comment>ex: Item moved to Organization.</comment>
   </data>
   <data name="ItemShared" xml:space="preserve">
@@ -1399,7 +1399,7 @@
     <value>உருப்படியை பகிர்</value>
   </data>
   <data name="MoveToOrganization" xml:space="preserve">
-    <value>Move to Organization</value>
+    <value>நிறுவனத்துக்கு நகர்த்து</value>
   </data>
   <data name="NoOrgsToList" xml:space="preserve">
     <value>பட்டியலிட நிறுவனங்களில்லை.</value>
@@ -1436,7 +1436,7 @@
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="LearnOrgConfirmation" xml:space="preserve">
-    <value>Bitwarden allows you to share your vault items with others by using an organization account. Would you like to visit the bitwarden.com website to learn more?</value>
+    <value>நிறுவன கணக்கைப் பயன்படுத்தி உம் பெட்ட உருப்படிகளைப் பிறருடன் பகிர உம்மை Bitwarden அனுமதிக்கிறது. மேலும் அறிய bitwarden.com வலைத்தளத்தைப் பார்வையிட விருப்பமா?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
     <value>பெட்டகத்தை ஏற்றுமதி செய்</value>
@@ -1512,7 +1512,7 @@
     <value>செயலியின் நிற அமைப்பை மாற்று.</value>
   </data>
   <data name="ThemeDefault" xml:space="preserve">
-    <value>Default (System)</value>
+    <value>இயல்புநிலை (முறைமை)</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>குறிப்புகளை நகலெடு</value>
@@ -1698,7 +1698,7 @@
     <value>தன்னிரப்பலுக்கான உயிரியளவு பூட்டவிழ்த்தல் முடக்கப்பட்டது பிரதான கடவுச்சொல் சரிபார்ப்பு நிலுவையிலுள்ளது.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
-    <value>புதுப்பித்தலில் ஒத்திசைவை இயக்கவும்</value>
+    <value>புத்துணர்வூட்டலில் ஒத்திசைவை இயக்கு</value>
   </data>
   <data name="EnableSyncOnRefreshDescription" xml:space="preserve">
     <value>கீழ் இழுக்கும் சைகையுடன் பெட்டகத்தை ஒத்திசைத்தல்.</value>
@@ -2007,25 +2007,25 @@
     <value>இச்செயல் பாதுகாக்கப்பட்டது, தொடர உம் பிரதான கடவுச்சொல்லை மறு-உள்ளிட்டு உம் அடையாளத்தை நிச்சயப்படுத்தவும்.</value>
   </data>
   <data name="CaptchaRequired" xml:space="preserve">
-    <value>Captcha Required</value>
+    <value>கேப்ட்ச்சா தேவை</value>
   </data>
   <data name="CaptchaFailed" xml:space="preserve">
-    <value>Captcha Failed. Please try again.</value>
+    <value>கேப்ட்ச்சா தோல்வி. மீண்டும் முயலவும்.</value>
   </data>
   <data name="UpdatedMasterPassword" xml:space="preserve">
     <value>Updated Master Password</value>
   </data>
   <data name="UpdateMasterPassword" xml:space="preserve">
-    <value>Update Master Password</value>
+    <value>பிரதான கடவுச்சொல்லைப் புதுப்பி</value>
   </data>
   <data name="UpdateMasterPasswordWarning" xml:space="preserve">
-    <value>Your Master Password was recently changed by an administrator in your organization. In order to access the vault, you must update your Master Password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
+    <value>உம் நிறுவனத்திலுள்ள நிர்வாகியால் உம் பிரதான கடவுச்சொல் அண்மையில் மாற்றப்பட்டது. பெட்டகத்தை அணுக, உம் பிரதான கடவுச்சொல்லை இப்போது புதுப்பிக்க வேண்டும். தொடர்தல் உம் தற்போதைய அமர்விலிருந்து உம்மை வெளியேற்றி, திரும்ப உள்நுழைய கோரும். மற்ற சாதனங்களில் செயலிலுள்ள அமர்வுகள் ஒரு மணிநேரம் வரை தொடர்ந்து நிலைத்திருக்கக்கூடும்.</value>
   </data>
   <data name="UpdatingPassword" xml:space="preserve">
-    <value>Updating Password</value>
+    <value>கடவுச்சொல்லைப் புதுப்பிக்கிறது</value>
   </data>
   <data name="UpdatePasswordError" xml:space="preserve">
-    <value>Currently unable to update password</value>
+    <value>தற்போது கடவுச்சொல்லைப் புதுப்பிக்க இயலவில்லை</value>
   </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
@@ -2037,13 +2037,13 @@
     <value>Authentication using FIDO2 WebAuthn, you can authenticate using an external security key.</value>
   </data>
   <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
-    <value>Authenticate WebAuthn</value>
+    <value>WebAuthn-ஐ அங்கீகரி</value>
   </data>
   <data name="Fido2ReturnToApp" xml:space="preserve">
-    <value>Return to App</value>
+    <value>செயலிக்குத் திரும்பு</value>
   </data>
   <data name="Fido2CheckBrowser" xml:space="preserve">
-    <value>Please make sure your default browser supports WebAuthn and try again.</value>
+    <value>தயவுசெய்து உம் இயல்புநிலை உலாவி WebAuthn-ஐ ஆதரிக்குமென்பதை உறுதிப்படுத்தி மீண்டும் முயலவும்.</value>
   </data>
   <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
     <value>This organization has an enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password.</value>
@@ -2052,9 +2052,9 @@
     <value>Your organization policies are affecting your vault timeout. Maximum allowed Vault Timeout is {0} hour(s) and {1} minute(s)</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
-    <value>Your vault timeout exceeds the restrictions set by your organization.</value>
+    <value>உமது பெட்டக நேரமுடிவு உம் நிறுவனம் அமைத்த கட்டுப்பாடுகளை தாண்டுகிறது.</value>
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
-    <value>One or more organization policies prevents your from exporting your personal vault.</value>
+    <value>ஒன்று அ மேற்பட்ட நிறுவன கொள்கைகள் உம் சொந்த பெட்டகத்தை ஏற்றுமதிசெய்வதைத் தவிர்க்கிறது.</value>
   </data>
 </root>
