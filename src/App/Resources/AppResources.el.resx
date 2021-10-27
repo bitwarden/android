@@ -312,7 +312,7 @@
     <comment>Button text for a save operation (verb).</comment>
   </data>
   <data name="Move" xml:space="preserve">
-    <value>Move</value>
+    <value>Μετακίνηση</value>
   </data>
   <data name="Saving" xml:space="preserve">
     <value>Αποθήκευση...</value>
@@ -787,7 +787,7 @@
     <value>Αναζήτηση στοιχείου αυτόματης συμπλήρωσης για "{0}".</value>
   </data>
   <data name="LearnOrg" xml:space="preserve">
-    <value>Learn About Organizations</value>
+    <value>Μάθετε για τους Οργανισμούς</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
     <value>Δεν είναι δυνατή η πρόσβαση στην εφαρμογή "{0}".</value>
@@ -1383,7 +1383,7 @@
     <value>Δεν υπάρχουν επιλογές στη λίστα.</value>
   </data>
   <data name="MovedItemToOrg" xml:space="preserve">
-    <value>{0} moved to {1}.</value>
+    <value>{0} μετακινήθηκε στο {1}.</value>
     <comment>ex: Item moved to Organization.</comment>
   </data>
   <data name="ItemShared" xml:space="preserve">
@@ -1399,13 +1399,13 @@
     <value>Κοινή χρήση στοιχείου</value>
   </data>
   <data name="MoveToOrganization" xml:space="preserve">
-    <value>Move to Organization</value>
+    <value>Μετακίνηση στον Οργανισμό</value>
   </data>
   <data name="NoOrgsToList" xml:space="preserve">
     <value>Δεν υπάρχουν οργανισμοί προς εμφάνιση.</value>
   </data>
   <data name="MoveToOrgDesc" xml:space="preserve">
-    <value>Choose an organization that you wish to move this item to. Moving to an organization transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</value>
+    <value>Επιλέξτε έναν οργανισμό στον οποίο θέλετε να μετακινήσετε αυτό το στοιχείο. Η μετακίνηση σε έναν οργανισμό μεταβιβάζει την ιδιοκτησία του στοιχείου σε αυτό τον οργανισμό. Δεν θα είστε πλέον ο άμεσος ιδιοκτήτης αυτού του στοιχείου μόλις το μετακινήσετε.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
     <value>Αριθμός Λέξεων</value>
@@ -1436,7 +1436,7 @@
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="LearnOrgConfirmation" xml:space="preserve">
-    <value>Bitwarden allows you to share your vault items with others by using an organization account. Would you like to visit the bitwarden.com website to learn more?</value>
+    <value>Το Bitwarden επιτρέπει να μοιράζεστε τα στοιχεία του vault σας με άλλους χρησιμοποιώντας ένα λογαριασμό οργανισμού. Θέλετε να επισκεφθείτε την ιστοσελίδα bitwarden.com για να μάθετε περισσότερα;</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
     <value>Εξαγωγή Vault</value>
@@ -1512,7 +1512,7 @@
     <value>Αλλαγή χρώματος, θέματος εφαρμογής.</value>
   </data>
   <data name="ThemeDefault" xml:space="preserve">
-    <value>Default (System)</value>
+    <value>Προεπιλογή (σύστημα)</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Αντιγραφή Σημειώσεων</value>
@@ -2004,57 +2004,57 @@
     <value>Επιβεβαίωση κύριου κωδικού πρόσβασης</value>
   </data>
   <data name="PasswordConfirmationDesc" xml:space="preserve">
-    <value>Αυτή η ενέργεια προστατεύεται, για να συνεχίσετε, πληκτρολογήστε ξανά τον κύριο κωδικό πρόσβασης για να επαληθεύσετε την ταυτότητά σας.</value>
+    <value>Αυτή η ενέργεια προστατεύεται, για να συνεχίσετε, πληκτρολογήστε ξανά τον κύριο κωδικό πρόσβασης για να επαληθεύσετε την ταυτότητα σας.</value>
   </data>
   <data name="CaptchaRequired" xml:space="preserve">
-    <value>Captcha Required</value>
+    <value>Απαιτείται Captcha</value>
   </data>
   <data name="CaptchaFailed" xml:space="preserve">
-    <value>Captcha Failed. Please try again.</value>
+    <value>Το Captcha απέτυχε. Παρακαλώ προσπάθησε ξανα.</value>
   </data>
   <data name="UpdatedMasterPassword" xml:space="preserve">
-    <value>Updated Master Password</value>
+    <value>Ενημερώθηκε ο κύριος κωδικός πρόσβασης</value>
   </data>
   <data name="UpdateMasterPassword" xml:space="preserve">
-    <value>Update Master Password</value>
+    <value>Ενημερώστε τον κύριο κωδικό πρόσβασης</value>
   </data>
   <data name="UpdateMasterPasswordWarning" xml:space="preserve">
-    <value>Your Master Password was recently changed by an administrator in your organization. In order to access the vault, you must update your Master Password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
+    <value>Ο Κύριος Κωδικός Πρόσβασής σας άλλαξε πρόσφατα από διαχειριστή στον οργανισμό σας. Για να αποκτήσετε πρόσβαση στο vault, πρέπει να ενημερώσετε το κύριο κωδικό τώρα. Η διαδικασία θα σας αποσυνδέσει από την τρέχουσα συνεδρία σας, απαιτώντας από εσάς να συνδεθείτε ξανά. Οι ενεργές συνεδρίες σε άλλες συσκευές ενδέχεται να συνεχίσουν να είναι ενεργές για μία ώρα.</value>
   </data>
   <data name="UpdatingPassword" xml:space="preserve">
-    <value>Updating Password</value>
+    <value>Ενημέρωση Κωδικού Πρόσβασης</value>
   </data>
   <data name="UpdatePasswordError" xml:space="preserve">
-    <value>Currently unable to update password</value>
+    <value>Δεν είναι δυνατή η ενημέρωση του κωδικού πρόσβασης</value>
   </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
   </data>
   <data name="Fido2Instruction" xml:space="preserve">
-    <value>To continue, have your FIDO2 WebAuthn enabled security key ready, then follow the instructions after clicking 'Authenticate WebAuthn' on the next screen.</value>
+    <value>Για να συνεχίσετε, να έχετε το FIDO2 WebAuthn ενεργοποιημένο κλειδί ασφαλείας και στη συνέχεια ακολουθήστε τις οδηγίες αφού κάνετε κλικ στο 'Authn Authn' στην επόμενη οθόνη.</value>
   </data>
   <data name="Fido2Desc" xml:space="preserve">
-    <value>Authentication using FIDO2 WebAuthn, you can authenticate using an external security key.</value>
+    <value>Ταυτοποίηση με χρήση του FIDO2 WebAuthn, μπορείτε να κάνετε έλεγχο ταυτότητας χρησιμοποιώντας ένα εξωτερικό κλειδί ασφαλείας.</value>
   </data>
   <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
-    <value>Authenticate WebAuthn</value>
+    <value>Ταυτοποίηση WebAutn</value>
   </data>
   <data name="Fido2ReturnToApp" xml:space="preserve">
-    <value>Return to App</value>
+    <value>Επιστροφή στην εφαρμογή</value>
   </data>
   <data name="Fido2CheckBrowser" xml:space="preserve">
-    <value>Please make sure your default browser supports WebAuthn and try again.</value>
+    <value>Βεβαιωθείτε ότι ο προεπιλεγμένος περιηγητής σας υποστηρίζει WebAuthn και προσπαθήστε ξανά.</value>
   </data>
   <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
-    <value>This organization has an enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password.</value>
+    <value>Αυτός ο οργανισμός έχει μια επιχειρηματική πολιτική που θα σας εγγράψει αυτόματα στην επαναφορά κωδικού. Η εγγραφή θα επιτρέψει στους διαχειριστές του οργανισμού να αλλάξουν τον κύριο κωδικό πρόσβασης σας.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>Your organization policies are affecting your vault timeout. Maximum allowed Vault Timeout is {0} hour(s) and {1} minute(s)</value>
+    <value>Οι πολιτικές του οργανισμού σας επηρεάζουν το χρονικό όριο vault σας. Το μέγιστο επιτρεπόμενο Χρονικό όριο Vault είναι {0} ώρα(ες) και {1} λεπτό(ά)</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
-    <value>Your vault timeout exceeds the restrictions set by your organization.</value>
+    <value>Το χρονικό όριο του vault σας υπερβαίνει τους περιορισμούς που έχει ορίσει ο οργανισμός σας.</value>
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
-    <value>One or more organization policies prevents your from exporting your personal vault.</value>
+    <value>Μία ή περισσότερες οργανωτικές πολιτικές αποτρέπουν την εξαγωγή του προσωπικού vault.</value>
   </data>
 </root>

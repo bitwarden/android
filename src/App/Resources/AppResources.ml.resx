@@ -311,7 +311,7 @@
     <comment>Button text for a save operation (verb).</comment>
   </data>
   <data name="Move" xml:space="preserve">
-    <value>Move</value>
+    <value>നീക്കുക</value>
   </data>
   <data name="Saving" xml:space="preserve">
     <value>സംരക്ഷിക്കുന്നു...</value>
@@ -786,7 +786,7 @@
     <value>{0} എന്ന ഓട്ടോഫിൽ ഇനത്തിനായി നിങ്ങൾ തിരയുന്നു.</value>
   </data>
   <data name="LearnOrg" xml:space="preserve">
-    <value>Learn About Organizations</value>
+    <value>സംഘടനകളെക്കുറിച്ച് കൂടുതൽ അറിയുക</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
     <value>"{0}"അപ്ലിക്കേഷൻ തുറക്കാൻ കഴിയില്ല.</value>
@@ -1382,7 +1382,7 @@
     <value>പ്രദർശിപ്പിക്കാൻ കളക്ഷനുകൾ  ഒന്നും ഇല്ല.</value>
   </data>
   <data name="MovedItemToOrg" xml:space="preserve">
-    <value>{0} moved to {1}.</value>
+    <value>{0} {1}-ലേക്ക് മാറ്റി</value>
     <comment>ex: Item moved to Organization.</comment>
   </data>
   <data name="ItemShared" xml:space="preserve">
@@ -1398,7 +1398,7 @@
     <value>ഇനം പങ്കിടുക</value>
   </data>
   <data name="MoveToOrganization" xml:space="preserve">
-    <value>Move to Organization</value>
+    <value>സംഘടനയിലേക്ക് മാറ്റുക</value>
   </data>
   <data name="NoOrgsToList" xml:space="preserve">
     <value>പ്രദർശിപ്പിക്കാൻ സംഘടനകൾ  ഒന്നും ഇല്ല.</value>
@@ -1895,7 +1895,7 @@
     <value>പാസ്‌വേഡ് നീക്കംചെയ്യുന്നു</value>
   </data>
   <data name="SendPasswordRemoved" xml:space="preserve">
-    <value>Password has been removed.</value>
+    <value>പാസ്‌വേഡ് നീക്കം ചെയ്തു</value>
   </data>
   <data name="NotesInfo" xml:space="preserve">
     <value>Private notes about this Send.</value>
@@ -2006,22 +2006,22 @@
     <value>This action is protected, to continue please re-enter your master password to verify your identity.</value>
   </data>
   <data name="CaptchaRequired" xml:space="preserve">
-    <value>Captcha Required</value>
+    <value>Captcha നിർബന്ധമാണ്</value>
   </data>
   <data name="CaptchaFailed" xml:space="preserve">
     <value>Captcha Failed. Please try again.</value>
   </data>
   <data name="UpdatedMasterPassword" xml:space="preserve">
-    <value>Updated Master Password</value>
+    <value>പ്രാഥമിക പാസ്‌വേഡ് പുതുക്കി</value>
   </data>
   <data name="UpdateMasterPassword" xml:space="preserve">
-    <value>Update Master Password</value>
+    <value>പ്രാഥമിക പാസ്‌വേഡ് പുതുക്കുക</value>
   </data>
   <data name="UpdateMasterPasswordWarning" xml:space="preserve">
     <value>Your Master Password was recently changed by an administrator in your organization. In order to access the vault, you must update your Master Password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
   </data>
   <data name="UpdatingPassword" xml:space="preserve">
-    <value>Updating Password</value>
+    <value>പാസ്‌വേഡ് പുതുക്കുന്നു</value>
   </data>
   <data name="UpdatePasswordError" xml:space="preserve">
     <value>Currently unable to update password</value>

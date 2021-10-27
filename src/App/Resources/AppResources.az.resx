@@ -128,7 +128,7 @@
     <value>Qovluq əlavə et</value>
   </data>
   <data name="AddItem" xml:space="preserve">
-    <value>Element əlavə et</value>
+    <value>Maddə əlavə edin</value>
     <comment>The title for the add item page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
@@ -144,7 +144,7 @@
     <comment>App name. Shouldn't ever change.</comment>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>İmtina</value>
+    <value>Ləğv et</value>
     <comment>Cancel an operation.</comment>
   </data>
   <data name="Copy" xml:space="preserve">
@@ -152,11 +152,11 @@
     <comment>Copy some value to your clipboard.</comment>
   </data>
   <data name="CopyPassword" xml:space="preserve">
-    <value>Şifrəni kopyala</value>
+    <value>Parolu kopyala</value>
     <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
   </data>
   <data name="CopyUsername" xml:space="preserve">
-    <value>İstifadəçi adını kopyala</value>
+    <value>İstifadəçi adını kopyalayın</value>
     <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
   </data>
   <data name="Credits" xml:space="preserve">
@@ -176,7 +176,7 @@
     <comment>Confirmation alert message when deleteing something.</comment>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Düzəliş et</value>
+    <value>Redaktə edin</value>
   </data>
   <data name="EditFolder" xml:space="preserve">
     <value>Qovluğa düzəliş et</value>
@@ -251,7 +251,7 @@
     <comment>Title for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InvalidMasterPassword" xml:space="preserve">
-    <value>Etibarsız ana şifrə. Yenidən sınayın.</value>
+    <value>Etibarsız ana parol. Yenidən sınayın.</value>
   </data>
   <data name="InvalidPIN" xml:space="preserve">
     <value>Etibarsız PIN. Yenidən sınayın.</value>
@@ -276,7 +276,7 @@
     <value>Çıxış etmək istədiyinizə əminsiniz?</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
-    <value>Ana şifrə</value>
+    <value>Ana parol</value>
     <comment>Label for a master password.</comment>
   </data>
   <data name="More" xml:space="preserve">
@@ -303,7 +303,7 @@
     <comment>Acknowledgement.</comment>
   </data>
   <data name="Password" xml:space="preserve">
-    <value>Şifrə</value>
+    <value>Parol</value>
     <comment>Label for a password.</comment>
   </data>
   <data name="Save" xml:space="preserve">
@@ -311,7 +311,7 @@
     <comment>Button text for a save operation (verb).</comment>
   </data>
   <data name="Move" xml:space="preserve">
-    <value>Move</value>
+    <value>Daşı</value>
   </data>
   <data name="Saving" xml:space="preserve">
     <value>Saxlanılır...</value>
@@ -366,7 +366,7 @@
     <value>Barmaq izini təsdiqlə</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
-    <value>Ana şifrəni təsdiqlə</value>
+    <value>Ana parolu təsdiqlə</value>
   </data>
   <data name="VerifyPIN" xml:space="preserve">
     <value>PIN-i təsdiqlə</value>
@@ -433,10 +433,10 @@
     <value>E-poçt ünvanınızı bitwarden.com veb anbarında dəyişdirə bilərsiniz. İndi saytı ziyarət etmək istəyirsiniz?</value>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
-    <value>Ana şifrəni dəyişdir</value>
+    <value>Ana parolu dəyişdir</value>
   </data>
   <data name="ChangePasswordConfirmation" xml:space="preserve">
-    <value>Ana şifrənizi bitwarden.com veb anbarında dəyişdirə bilərsiniz. İndi saytı ziyarət etmək istəyirsiniz?</value>
+    <value>Ana parolunuzu bitwarden.com veb anbarında dəyişdirə bilərsiniz. İndi saytı ziyarət etmək istəyirsiniz?</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Bağla</value>
@@ -458,7 +458,7 @@
     <value>Avto-eyniləşdirməni fəallaşdır</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
-    <value>Ana şifrə məsləhətini alacağınız hesabınızın e-poçt ünvanını daxil edin.</value>
+    <value>Ana parol məsləhətini alacağınız hesabınızın e-poçt ünvanını daxil edin.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
     <value>Tətbiq genişləndirməsini təkrar fəallaşdır</value>
@@ -474,7 +474,7 @@
     <comment>Safari is the name of apple's web browser</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
-    <value>Şifrələrinizə dərhal müraciət edin!</value>
+    <value>Parollarınıza dərhal müraciət edin!</value>
   </data>
   <data name="ExtensionReady" xml:space="preserve">
     <value>Giriş etmək üçün hazırsınız!</value>
@@ -498,10 +498,10 @@
     <value>Barmaq izi</value>
   </data>
   <data name="GeneratePassword" xml:space="preserve">
-    <value>Şifrə yarat</value>
+    <value>Parol yarat</value>
   </data>
   <data name="GetPasswordHint" xml:space="preserve">
-    <value>Ana şifrə üçün məsləhət alın</value>
+    <value>Ana parolunuz üçün məsləhət alın</value>
   </data>
   <data name="ImportItems" xml:space="preserve">
     <value>Elementləri idxal et</value>
@@ -510,7 +510,7 @@
     <value>bitwarden.com veb anbarından elementləri toplu formada idxal edə bilərsiniz. Veb saytı indi ziyarət etmək istəyirsiniz?</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
-    <value>Digər şifrə idarəetmə tətbiqlərindəki elementləri cəld və toplu formada idxal edin.</value>
+    <value>Digər parol idarəetmə tətbiqlərindəki elementləri cəld və toplu formada idxal edin.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
     <value>Son eyniləşdirmə:</value>
@@ -556,19 +556,19 @@
     <value>İdarə et</value>
   </data>
   <data name="MasterPasswordConfirmationValMessage" xml:space="preserve">
-    <value>Şifrə təsdiqləmə doğru deyil.</value>
+    <value>Parol təsdiqləmə doğru deyil.</value>
   </data>
   <data name="MasterPasswordDescription" xml:space="preserve">
-    <value>Ana şifrə, anbarınıza müraciət etmək üçün istifadə edəcəyiniz şifrədir. Ana şifrəni yadda saxlamaq çox vacibdir. Unutsanız, şifrəni bərpa etməyin heç bir yolu yoxdur.</value>
+    <value>Ana parol, anbarınıza müraciət etmək üçün istifadə edəcəyiniz şifrədir. Ana parolu yadda saxlamaq çox vacibdir. Unutsanız, parolu bərpa etməyin heç bir yolu yoxdur.</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
-    <value>Ana şifrə məsləhəti (ixtiyari)</value>
+    <value>Ana parol məsləhəti (ixtiyari)</value>
   </data>
   <data name="MasterPasswordHintDescription" xml:space="preserve">
-    <value>Ana şifrə məsləhəti, unutduğunuz şifrənizi xatırlamağınıza kömək edir.</value>
+    <value>Ana parol məsləhəti, unutduğunuz parolu xatırlamağınıza kömək edir.</value>
   </data>
   <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Ana şifrə ən azı 8 simvol uzunluğunda olmalıdır.</value>
+    <value>Ana parol ən azı 8 simvol uzunluğunda olmalıdır.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Minimum rəqəm</value>
@@ -600,14 +600,14 @@
     <value>Anbarınızda bu veb sayt/tətbiq üçün heç bir element yoxdur. Əlavə etmək üçün toxunun.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
-    <value>Bu hesaba aid istifadəçi adı və ya şifrə yoxdur.</value>
+    <value>Bu hesaba aid istifadəçi adı və ya parol yoxdur.</value>
   </data>
   <data name="OkGotIt" xml:space="preserve">
     <value>Yaxşı, anladım!</value>
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>İlkin tənzimləmələr, əsas Bitwarden tətbiqinin şifrə yaratma alətindən tənzimlənir.</value>
+    <value>İlkin tənzimləmələr, əsas Bitwarden tətbiqinin parol yaratma alətindən tənzimlənir.</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>Seçimlər</value>
@@ -616,19 +616,19 @@
     <value>Digər</value>
   </data>
   <data name="PasswordGenerated" xml:space="preserve">
-    <value>Şifrə yaradıldı.</value>
+    <value>Parol yaradıldı.</value>
   </data>
   <data name="PasswordGenerator" xml:space="preserve">
-    <value>Şifrə yaradıcı</value>
+    <value>Parol yaradıcı</value>
   </data>
   <data name="PasswordHint" xml:space="preserve">
-    <value>Şifrə məsləhəti</value>
+    <value>Parol məsləhəti</value>
   </data>
   <data name="PasswordHintAlert" xml:space="preserve">
-    <value>Ana şifrə məsləhətini ehtiva edən bir e-poçt göndərdik.</value>
+    <value>Ana parol məsləhətini ehtiva edən bir e-poçt göndərdik.</value>
   </data>
   <data name="PasswordOverrideAlert" xml:space="preserve">
-    <value>Hazırkı şifrənin üzərinə yazmaq istədiyinizə əminsiniz?</value>
+    <value>Hazırkı parolun üzərinə yazmaq istədiyinizə əminsiniz?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
     <value>Bitwarden, ani bildirişləri istifadə edərək anbarınızı avtomatik eyniləşdirir. Mümkün olan ən yaxşı təcrübəni təqdim etmək üçün, sizdən ani bildirişləri fəallaşdırmağı soruşanda növbəti ekranda "İcazə ver"i seçin.</value>
@@ -641,10 +641,10 @@
     <value>Gözəl bir rəy ilə bizə dəstək ola bilərsiniz!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
-    <value>Şifrəni yenidən yarat</value>
+    <value>Parolu yenidən yarat</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
-    <value>Ana şifrəni yenidən yaz</value>
+    <value>Ana parolu yenidən yaz</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
     <value>Anbarda axtar</value>
@@ -786,7 +786,7 @@
     <value>"{0}" üçün avto-doldurma elementi axtarırsınız.</value>
   </data>
   <data name="LearnOrg" xml:space="preserve">
-    <value>Learn About Organizations</value>
+    <value>Təşkilatlar barədə daha ətraflı</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
     <value>"{0}" tətbiqi açıla bilmir.</value>
@@ -1252,7 +1252,7 @@
     <value>Əlçatımlılıq xidməti, standart avto-doldurma xidmətini dəstəkləməyən tətbiqlərdə kömək edə bilər.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
-    <value>Şifrə yeniləndi</value>
+    <value>Parol yeniləndi</value>
     <comment>ex. Date this password was updated</comment>
   </data>
   <data name="DateUpdated" xml:space="preserve">
@@ -1272,19 +1272,19 @@
     <value>Digər Avto-doldurma tətbiqləriniz varssa və onları istifadə etməyi düşünmürsünüzsə, Tənzimləmələrdə sıradan çıxara bilərsiniz.</value>
   </data>
   <data name="BitwardenAutofillDescription" xml:space="preserve">
-    <value>Şifrələrinizin cəld avto-doldurulması üçün anbarınıza birbaşa klaviaturanızdan müraciət edin.</value>
+    <value>Parollarınızın cəld avto-doldurulması üçün anbarınıza birbaşa klaviaturanızdan müraciət edin.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
-    <value>Cihazınızda şifrənin avto-doldurulması üçün aşağıdakı təlimatları izləyin:</value>
+    <value>Cihazınızda parolun avto-doldurulması üçün aşağıdakı təlimatları izləyin:</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
     <value>1. iOS "Tənzimləmələri"nə gedin</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. "Şifrələr və Hesablar"a toxunun.</value>
+    <value>2. "Parollar və Hesablar"a toxunun.</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
-    <value>3. "Şifrələri avto-doldur"a toxunun.</value>
+    <value>3. "Parolları avto-doldur"a toxunun.</value>
   </data>
   <data name="AutofillTurnOn4" xml:space="preserve">
     <value>4. Avto-doldurmanı işə salın</value>
@@ -1293,10 +1293,10 @@
     <value>5. "Bitwarden"i seçin</value>
   </data>
   <data name="PasswordAutofill" xml:space="preserve">
-    <value>Şifrənin avto-doldurulması</value>
+    <value>Parolun avto-doldurulması</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
-    <value>Anbarınıza yeni giriş məlumatlarını əlavə etməyin ən asan yolu, Bitwarden şifrə avto-doldurma genişləndirməsidir. Bu genişləndirmə haqqında daha ətraflı məlumat almaq üçün "Tənzimləmələr" ekranına gedin.</value>
+    <value>Anbarınıza yeni giriş məlumatlarını əlavə etməyin ən asan yolu, Bitwarden parol avto-doldurma genişləndirməsidir. Bu genişləndirmə haqqında daha ətraflı məlumat almaq üçün "Tənzimləmələr" ekranına gedin.</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
     <value>Etibarsız e-poçt ünvanı.</value>
@@ -1321,17 +1321,17 @@
     <comment>Plural form of a URI</comment>
   </data>
   <data name="CheckingPassword" xml:space="preserve">
-    <value>Şifrə yoxlanılır...</value>
+    <value>Parol yoxlanılır...</value>
     <comment>A loading message when doing an exposed password check.</comment>
   </data>
   <data name="CheckPassword" xml:space="preserve">
-    <value>Şifrənizin oğurlanıb oğurlanmadığını yoxlayın.</value>
+    <value>Parolunuzun oğurlanıb oğurlanmadığını yoxlayın.</value>
   </data>
   <data name="PasswordExposed" xml:space="preserve">
-    <value>Bu şifrə, məlumat pozuntularında {0} dəfə üzə çıxıb. Dəyişdirməyi məsləhət görürük.</value>
+    <value>Bu parol, məlumat pozuntularında {0} dəfə üzə çıxıb. Dəyişdirməyi məsləhət görürük.</value>
   </data>
   <data name="PasswordSafe" xml:space="preserve">
-    <value>Bu şifrə, məlumat pozuntularında qeydə alınmayıb. Rahatlıqla istifadə edə bilərsiniz.</value>
+    <value>Bu parol, məlumat pozuntularında qeydə alınmayıb. Rahatlıqla istifadə edə bilərsiniz.</value>
   </data>
   <data name="IdentityName" xml:space="preserve">
     <value>Kimlik adı</value>
@@ -1340,13 +1340,13 @@
     <value>Dəyər</value>
   </data>
   <data name="PasswordHistory" xml:space="preserve">
-    <value>Şifrə tarixçəsi</value>
+    <value>Parol tarixçəsi</value>
   </data>
   <data name="Types" xml:space="preserve">
     <value>Növlər</value>
   </data>
   <data name="NoPasswordsToList" xml:space="preserve">
-    <value>Siyahılanacaq şifrə yoxdur.</value>
+    <value>Siyahılanacaq parol yoxdur.</value>
   </data>
   <data name="NoItemsToList" xml:space="preserve">
     <value>Siyahılanacaq heç bir element yoxdur.</value>
@@ -1364,10 +1364,10 @@
     <value>Növ</value>
   </data>
   <data name="MoveDown" xml:space="preserve">
-    <value>Aşağı köçür</value>
+    <value>Aşağı daşı</value>
   </data>
   <data name="MoveUp" xml:space="preserve">
-    <value>Yuxarı köçür</value>
+    <value>Yuxarı daşı</value>
   </data>
   <data name="Miscellaneous" xml:space="preserve">
     <value>Müxtəlif</value>
@@ -1382,7 +1382,7 @@
     <value>Siyahılanacaq heç bir kolleksiya yoxdur.</value>
   </data>
   <data name="MovedItemToOrg" xml:space="preserve">
-    <value>{0} moved to {1}.</value>
+    <value>{0}, {1} ünvanına daşındı.</value>
     <comment>ex: Item moved to Organization.</comment>
   </data>
   <data name="ItemShared" xml:space="preserve">
@@ -1398,13 +1398,13 @@
     <value>Elementi paylaş</value>
   </data>
   <data name="MoveToOrganization" xml:space="preserve">
-    <value>Move to Organization</value>
+    <value>Təşkilata daşı</value>
   </data>
   <data name="NoOrgsToList" xml:space="preserve">
     <value>Siyahılanacaq heç bir təşkilat yoxdur.</value>
   </data>
   <data name="MoveToOrgDesc" xml:space="preserve">
-    <value>Choose an organization that you wish to move this item to. Moving to an organization transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</value>
+    <value>Bu elementi daşımaq istədiyiniz təşkilatı seçin. Bir təşkilata daşımaq, elementin sahibliyini də həmin təşkilata daşıyacaq. Daşıdıqdan sonra bu elementə birbaşa sahibliyiniz olmayacaq.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
     <value>Söz sayı</value>
@@ -1435,7 +1435,7 @@
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="LearnOrgConfirmation" xml:space="preserve">
-    <value>Bitwarden allows you to share your vault items with others by using an organization account. Would you like to visit the bitwarden.com website to learn more?</value>
+    <value>Bitwarden, bir təşkilat hesabı istifadə edərək anbar elementlərinizi başqaları ilə paylaşmağınıza icazə verər. Daha ətraflı məlumat üçün bitwarden.com saytını ziyarət etmək istəyirsiniz?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
     <value>Anbarı ixrac et</value>
@@ -1460,7 +1460,7 @@
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
-    <value>Anbarınız kilidlənib. Davam etmək üçün ana şifrənizi təsdiqləyin.</value>
+    <value>Anbarınız kilidlənib. Davam etmək üçün ana parolunuzu təsdiqləyin.</value>
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Anbarınız kilidlənib. Davam etmək üçün PIN kodunuzu təsdiqləyin.</value>
@@ -1501,7 +1501,7 @@
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
-    <value>Avto-doldurma kimim əməliyyatları icra edərkən giriş etmə prosesi üçün URI uyğunluq aşkarlamasının ilkin yolunu seçin.</value>
+    <value>Avto-doldurma kimi əməliyyatları icra edərkən giriş etmə prosesi üçün URI uyğunluq aşkarlamasının ilkin yolunu seçin.</value>
   </data>
   <data name="Theme" xml:space="preserve">
     <value>Tema</value>
@@ -1511,7 +1511,7 @@
     <value>Tətbiqin rəng temasını dəyişdirin.</value>
   </data>
   <data name="ThemeDefault" xml:space="preserve">
-    <value>Default (System)</value>
+    <value>İlkin (Sistem)</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Qeydləri kopyala</value>
@@ -1523,7 +1523,7 @@
     <value>Bitwarden-dən çıxış etmək istədiyinizə əminsiniz?</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
-    <value>Tətbiq yenidən başladılanda ana şifrə ilə kilid açılmasını məcburi etmək istəyirsiniz?</value>
+    <value>Tətbiq yenidən başladılanda ana parol ilə kilid açılmasını məcburi etmək istəyirsiniz?</value>
   </data>
   <data name="Black" xml:space="preserve">
     <value>Qara</value>
@@ -1603,7 +1603,7 @@
     <value>Fayl formatı</value>
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
-    <value>Anbar verilənlərinizi ixrac etmək üçün ana şifrənizi daxil edin.</value>
+    <value>Anbar verilənlərinizi ixrac etmək üçün ana parolunuzu daxil edin.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Bu ixrac faylındakı anbar verilənləriniz şifrələnməmiş formatdadır. İxrac edilən faylı saxlamamalı və etibarsız yollarla (e-poçt kimi) göndərməməlisiniz. Bu faylı işiniz bitdikdən sonra dərhal silin.</value>
@@ -1612,7 +1612,7 @@
     <value>Bu ixrac faylı, hesabınızın şifrələmə açarını istifadə edərək verilənlərinizi şifrələyir. Hesabınızın şifrələmə açarını döndərsəniz, bu ixrac faylının şifrəsini aça bilməyəcəyiniz üçün yenidən ixrac etməli olacaqsınız.</value>
   </data>
   <data name="EncExportAccountWarning" xml:space="preserve">
-    <value>Hesab şifrələmə açarları, hər Bitwarden istifadəçi hesabı üçün unikaldır, buna görə də şifrəli bir ixracı, fərqli bir hesaba idxal edə bilməzsiniz.</value>
+    <value>Hesab şifrələmə açarları, hər Bitwarden istifadəçi hesabı üçün unikaldır, buna görə də şifrələnmiş bir ixracı, fərqli bir hesaba idxal edə bilməzsiniz.</value>
   </data>
   <data name="ExportVaultConfirmationTitle" xml:space="preserve">
     <value>Anbarın ixracını təsdiqləyin</value>
@@ -1648,7 +1648,7 @@
     <value>Avto-doldurma qutusunu istifadə etmək üçün zəhmət olmasa "Bitwarden" tənzimləmələrində "Avto-doldurma əlçatımlılıq xidməti"ni fəallaşdırın.</value>
   </data>
   <data name="AutofillTileUriNotFound" xml:space="preserve">
-    <value>Heç bir şifrə sahəsi aşkarlanmadı</value>
+    <value>Heç bir parol sahəsi aşkarlanmadı</value>
   </data>
   <data name="SoftDeleting" xml:space="preserve">
     <value>Tullantı qutusuna göndərilir...</value>
@@ -1691,10 +1691,10 @@
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Ana şifrənin təsdiqlənməsi gözlənildiyi üçün biometrik kilid açma sıradan çıxarıldı.</value>
+    <value>Ana parolun təsdiqlənməsi gözlənildiyi üçün biometrik kilid açma sıradan çıxarıldı.</value>
   </data>
   <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Ana şifrənin təsdiqlənməsi gözlənildiyi üçün avto-doldurma üzrə biometrik kilid açma sıradan çıxarıldı.</value>
+    <value>Ana parolun təsdiqlənməsi gözlənildiyi üçün avto-doldurma üzrə biometrik kilid açma sıradan çıxarıldı.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Təzələmə əsnasında eyniləşdirməni fəallaşdır</value>
@@ -1715,13 +1715,13 @@
     <value>Hazırda SSO ilə giriş edilə bilmir</value>
   </data>
   <data name="SetMasterPassword" xml:space="preserve">
-    <value>Ana şifrəni tənzimlə</value>
+    <value>Ana parolu tənzimlə</value>
   </data>
   <data name="SetMasterPasswordSummary" xml:space="preserve">
     <value>SSO ilə giriş prosesini tamamlamaq üçün zəhmət olmasa anbarınıza müraciət etmək və onu qorumaq üçün bir ana şifrə tənzimləyin.</value>
   </data>
   <data name="MasterPasswordPolicyInEffect" xml:space="preserve">
-    <value>Bir və ya daha çox təşkilat siyasəti, aşağıdakı tələbləri qarşılamaq üçün ana şifrənizi tələb edir:</value>
+    <value>Bir və ya daha çox təşkilat siyasəti, aşağıdakı tələbləri qarşılamaq üçün ana parolunuzu tələb edir:</value>
   </data>
   <data name="PolicyInEffectMinComplexity" xml:space="preserve">
     <value>Minimum mürəkkəblik xalı: {0}</value>
@@ -1742,10 +1742,10 @@
     <value>Bu özəl simvollardan biri və ya daha çoxunu ehtiva etməlidir: {0}</value>
   </data>
   <data name="MasterPasswordPolicyValidationTitle" xml:space="preserve">
-    <value>Etibarsız şifrə</value>
+    <value>Etibarsız parol</value>
   </data>
   <data name="MasterPasswordPolicyValidationMessage" xml:space="preserve">
-    <value>Şifrə, şirkət tələblərini qarşılamır. Zəhmət olmasa siyasət məlumatlarını yoxlayıb yenidən sınayın.</value>
+    <value>Parol, şirkət tələblərini qarşılamır. Zəhmət olmasa siyasət məlumatlarını yoxlayıb yenidən sınayın.</value>
   </data>
   <data name="Loading" xml:space="preserve">
     <value>Yüklənir</value>
@@ -1879,23 +1879,23 @@
     <value>Hazırkı müraciət sayı</value>
   </data>
   <data name="NewPassword" xml:space="preserve">
-    <value>Yeni şifrə</value>
+    <value>Yeni parol</value>
   </data>
   <data name="PasswordInfo" xml:space="preserve">
-    <value>İstəyinizə görə istifadəçilərdən bu "Send"ə müraciət edərkən şifrə tələb edə bilərsiniz.</value>
+    <value>İstəyinizə görə istifadəçilərdən bu "Send"ə müraciət edərkən parol tələb edə bilərsiniz.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="RemovePassword" xml:space="preserve">
-    <value>Şifrəni çıxart</value>
+    <value>Parolu çıxart</value>
   </data>
   <data name="AreYouSureRemoveSendPassword" xml:space="preserve">
-    <value>Şifrəni çıxartmaq istədiyinizə əminsiniz?</value>
+    <value>Parolu çıxartmaq istədiyinizə əminsiniz?</value>
   </data>
   <data name="RemovingSendPassword" xml:space="preserve">
-    <value>Şifrə çıxarılır</value>
+    <value>Parol çıxarılır</value>
   </data>
   <data name="SendPasswordRemoved" xml:space="preserve">
-    <value>Şifrə çıxarıldı.</value>
+    <value>Parol çıxarıldı.</value>
   </data>
   <data name="NotesInfo" xml:space="preserve">
     <value>Bu "Send" ilə bağlı gizli qeydlər.</value>
@@ -1997,63 +1997,63 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PasswordPrompt" xml:space="preserve">
-    <value>Ana şifrəni yenidə istə</value>
+    <value>Ana parolu təkrar soruş</value>
   </data>
   <data name="PasswordConfirmation" xml:space="preserve">
-    <value>Ana şifrə təsdiqi</value>
+    <value>Ana parol təsdiqi</value>
   </data>
   <data name="PasswordConfirmationDesc" xml:space="preserve">
-    <value>Bu əməliyyat qorumalıdır, davam etmək üçün zəhmət olmasa kimliyinizi təsdiqləmək üçün ana şifrənizi təkrar daxil edin.</value>
+    <value>Bu əməliyyat qorumalıdır, davam etmək üçün zəhmət olmasa kimliyinizi təsdiqləmək üçün ana parolunuzu təkrar daxil edin.</value>
   </data>
   <data name="CaptchaRequired" xml:space="preserve">
-    <value>Captcha Required</value>
+    <value>Captcha tələb olunur</value>
   </data>
   <data name="CaptchaFailed" xml:space="preserve">
-    <value>Captcha Failed. Please try again.</value>
+    <value>Captcha uğursuz oldu. Zəhmət olmasa yenidən sınayın.</value>
   </data>
   <data name="UpdatedMasterPassword" xml:space="preserve">
-    <value>Updated Master Password</value>
+    <value>Yenilənmiş ana parol</value>
   </data>
   <data name="UpdateMasterPassword" xml:space="preserve">
-    <value>Update Master Password</value>
+    <value>Ana parolu yenilə</value>
   </data>
   <data name="UpdateMasterPasswordWarning" xml:space="preserve">
-    <value>Your Master Password was recently changed by an administrator in your organization. In order to access the vault, you must update your Master Password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
+    <value>Ana parolunuz təzəlikcə təşkilatınızdakı bir administrator tərəfindən dəyişdirildi. Anbara müraciət üçün Ana parolunuzu indi yeniləməlisiniz. Davam etsəniz, hazırkı seansdan çıxış etmiş və təkrar giriş etməli olacaqsınız. Digər cihazlardakı aktiv seanslar bir saata qədər aktiv qalmağa davam edə bilər.</value>
   </data>
   <data name="UpdatingPassword" xml:space="preserve">
-    <value>Updating Password</value>
+    <value>Parol yenilənir</value>
   </data>
   <data name="UpdatePasswordError" xml:space="preserve">
-    <value>Currently unable to update password</value>
+    <value>Hazırda parol yenilənə bilmir</value>
   </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
   </data>
   <data name="Fido2Instruction" xml:space="preserve">
-    <value>To continue, have your FIDO2 WebAuthn enabled security key ready, then follow the instructions after clicking 'Authenticate WebAuthn' on the next screen.</value>
+    <value>Davam etmək üçün FIDO2 WebAuthn fəal güvənlik açarınızı hazır saxlayın, daha sonra növbəti ekranda "WebAuthn-u təsdiqlə"yə kliklədikdən sonra təlimatları izləyin.</value>
   </data>
   <data name="Fido2Desc" xml:space="preserve">
-    <value>Authentication using FIDO2 WebAuthn, you can authenticate using an external security key.</value>
+    <value>Kimlik təsdiqləmə, FIDO2 WebAuthn istifadə edir, xarici güvənlik açarı istifadə edərək kimliyi təsdiqləyə bilərsiniz.</value>
   </data>
   <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
-    <value>Authenticate WebAuthn</value>
+    <value>WebAuthn-u təsdiqlə</value>
   </data>
   <data name="Fido2ReturnToApp" xml:space="preserve">
-    <value>Return to App</value>
+    <value>Tətbiqə qayıt</value>
   </data>
   <data name="Fido2CheckBrowser" xml:space="preserve">
-    <value>Please make sure your default browser supports WebAuthn and try again.</value>
+    <value>Zəhmət olmasa ilkin səyyahınızın WebAuthn-u təsdiqlədiyinə əmin olub yenidən sınayın.</value>
   </data>
   <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
-    <value>This organization has an enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password.</value>
+    <value>Bu təşkilat, sizi "parol sıfırlama"da avtomatik olaraq qeydiyyata alan müəssisə siyasətinə sahibdir. Qeydiyyat, təşkilat administratorlarına ana parolunuzu dəyişdirmə icazəsi verəcək.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>Your organization policies are affecting your vault timeout. Maximum allowed Vault Timeout is {0} hour(s) and {1} minute(s)</value>
+    <value>Təşkilatınızın siyasətləri, anbarınızın vaxt bitişinə təsir edir. Anbar vaxt bitişi üçün icazə verilən maksimum vaxt $HOURS$ saat $MINUTES$ dəqiqədir</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
-    <value>Your vault timeout exceeds the restrictions set by your organization.</value>
+    <value>Anbar vaxt bitişi, təşkilatınız tərəfindən tənzimlənən məhdudiyyətləri aşır.</value>
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
-    <value>One or more organization policies prevents your from exporting your personal vault.</value>
+    <value>Bir və ya daha çox təşkilat siyasəti, fərdi anbarınızı ixrac etməyinizin qarşısını alır.</value>
   </data>
 </root>
