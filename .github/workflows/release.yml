@@ -61,7 +61,7 @@ jobs:
                       ./Bitwarden.ipa/Bitwarden.ipa"
           commit: ${{ github.sha }}
           tag: v${{ steps.retrieve-mobile-version.outputs.mobile_version }}
-          name: Test Version ${{ steps.retrieve-mobile-version.outputs.mobile_version }}
+          name: Version ${{ steps.retrieve-mobile-version.outputs.mobile_version }}
           body: "<insert release notes here>"
           token: ${{ secrets.GITHUB_TOKEN }}
           draft: true
