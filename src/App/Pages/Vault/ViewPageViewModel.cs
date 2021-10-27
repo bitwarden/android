@@ -25,6 +25,7 @@ namespace Bit.App.Pages
         private readonly IMessagingService _messagingService;
         private readonly IEventService _eventService;
         private readonly IPasswordRepromptService _passwordRepromptService;
+        private readonly ILocalizeService _localizeService;
         private CipherView _cipher;
         private List<ViewPageFieldViewModel> _fields;
         private bool _canAccessPremium;
@@ -52,6 +53,7 @@ namespace Bit.App.Pages
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _eventService = ServiceContainer.Resolve<IEventService>("eventService");
             _passwordRepromptService = ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService");
+            _localizeService = ServiceContainer.Resolve<ILocalizeService>("localizeService");
             CopyCommand = new Command<string>((id) => CopyAsync(id, null));
             CopyUriCommand = new Command<LoginUriView>(CopyUri);
             CopyFieldCommand = new Command<FieldView>(CopyField);
@@ -152,8 +154,8 @@ namespace Bit.App.Pages
                 fs.Spans.Add(new Span
                 {
                     Text = string.Format(" {0} {1}",
-                        Cipher.RevisionDate.ToLocalTime().ToShortDateString(),
-                        Cipher.RevisionDate.ToLocalTime().ToShortTimeString())
+                        _localizeService.GetLocaleShortDate(Cipher.RevisionDate.ToLocalTime()),
+                        _localizeService.GetLocaleShortTime(Cipher.RevisionDate.ToLocalTime()))
                 });
                 return fs;
             }
@@ -171,8 +173,8 @@ namespace Bit.App.Pages
                 fs.Spans.Add(new Span
                 {
                     Text = string.Format(" {0} {1}",
-                        Cipher.PasswordRevisionDisplayDate?.ToLocalTime().ToShortDateString(),
-                        Cipher.PasswordRevisionDisplayDate?.ToLocalTime().ToShortTimeString())
+                        _localizeService.GetLocaleShortDate(Cipher.PasswordRevisionDisplayDate?.ToLocalTime()),
+                        _localizeService.GetLocaleShortTime(Cipher.PasswordRevisionDisplayDate?.ToLocalTime()))
                 });
                 return fs;
             }

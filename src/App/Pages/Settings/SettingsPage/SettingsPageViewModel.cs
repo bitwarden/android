@@ -26,6 +26,7 @@ namespace Bit.App.Pages
         private readonly ISyncService _syncService;
         private readonly IBiometricService _biometricService;
         private readonly IPolicyService _policyService;
+        private readonly ILocalizeService _localizeService;
 
         private const int CustomVaultTimeoutValue = -100;
 
@@ -72,6 +73,7 @@ namespace Bit.App.Pages
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
             _biometricService = ServiceContainer.Resolve<IBiometricService>("biometricService");
             _policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
+            _localizeService = ServiceContainer.Resolve<ILocalizeService>("localizeService");
 
             GroupedItems = new ExtendedObservableCollection<SettingsPageListGroup>();
             PageTitle = AppResources.Settings;
@@ -86,8 +88,9 @@ namespace Bit.App.Pages
             if (lastSync != null)
             {
                 lastSync = lastSync.Value.ToLocalTime();
-                _lastSyncDate = string.Format("{0} {1}", lastSync.Value.ToShortDateString(),
-                    lastSync.Value.ToShortTimeString());
+                _lastSyncDate = string.Format("{0} {1}",
+                    _localizeService.GetLocaleShortDate(lastSync.Value),
+                    _localizeService.GetLocaleShortTime(lastSync.Value));
             }
 
             if (await _policyService.PolicyAppliesToUser(PolicyType.MaximumVaultTimeout))
