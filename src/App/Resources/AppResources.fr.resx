@@ -311,7 +311,7 @@
     <comment>Button text for a save operation (verb).</comment>
   </data>
   <data name="Move" xml:space="preserve">
-    <value>Move</value>
+    <value>Déplacer</value>
   </data>
   <data name="Saving" xml:space="preserve">
     <value>Enregistrement...</value>
@@ -786,7 +786,7 @@
     <value>Vous recherchez un élément pour remplir automatiquement « {0} ».</value>
   </data>
   <data name="LearnOrg" xml:space="preserve">
-    <value>Learn About Organizations</value>
+    <value>En savoir plus sur les organisations</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
     <value>Impossible d'ouvrir l'application "{0}".</value>
@@ -1382,7 +1382,7 @@
     <value>Aucune collection à afficher.</value>
   </data>
   <data name="MovedItemToOrg" xml:space="preserve">
-    <value>{0} moved to {1}.</value>
+    <value>{0} déplacé vers {1}</value>
     <comment>ex: Item moved to Organization.</comment>
   </data>
   <data name="ItemShared" xml:space="preserve">
@@ -1398,7 +1398,7 @@
     <value>Partager l'élément</value>
   </data>
   <data name="MoveToOrganization" xml:space="preserve">
-    <value>Move to Organization</value>
+    <value>Déplacer vers l'organisation</value>
   </data>
   <data name="NoOrgsToList" xml:space="preserve">
     <value>Aucune organisation à afficher.</value>
@@ -1511,7 +1511,7 @@
     <value>Modifiez le thème de couleur de l'application.</value>
   </data>
   <data name="ThemeDefault" xml:space="preserve">
-    <value>Default (System)</value>
+    <value>Par défaut (Système)</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Copier les notes</value>
@@ -2006,22 +2006,22 @@
     <value>Cette action est protégée. Pour continuer, veuillez ressaisir votre mot de passe maître pour vérifier votre identité.</value>
   </data>
   <data name="CaptchaRequired" xml:space="preserve">
-    <value>Captcha Required</value>
+    <value>Captcha obligatoire</value>
   </data>
   <data name="CaptchaFailed" xml:space="preserve">
-    <value>Captcha Failed. Please try again.</value>
+    <value>Le captcha a échoué. Veuillez réessayer.</value>
   </data>
   <data name="UpdatedMasterPassword" xml:space="preserve">
-    <value>Updated Master Password</value>
+    <value>Mot de passe principal mis à jour</value>
   </data>
   <data name="UpdateMasterPassword" xml:space="preserve">
-    <value>Update Master Password</value>
+    <value>Mettre à jour le mot de passe principal</value>
   </data>
   <data name="UpdateMasterPasswordWarning" xml:space="preserve">
     <value>Your Master Password was recently changed by an administrator in your organization. In order to access the vault, you must update your Master Password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
   </data>
   <data name="UpdatingPassword" xml:space="preserve">
-    <value>Updating Password</value>
+    <value>Mise à jour du mot de passe</value>
   </data>
   <data name="UpdatePasswordError" xml:space="preserve">
     <value>Currently unable to update password</value>

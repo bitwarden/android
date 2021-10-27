@@ -311,7 +311,7 @@
     <comment>Button text for a save operation (verb).</comment>
   </data>
   <data name="Move" xml:space="preserve">
-    <value>Move</value>
+    <value>Flytta</value>
   </data>
   <data name="Saving" xml:space="preserve">
     <value>Sparar...</value>
@@ -1511,7 +1511,7 @@
     <value>Ändra appens färgtema.</value>
   </data>
   <data name="ThemeDefault" xml:space="preserve">
-    <value>Default (System)</value>
+    <value>Standard (System)</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Kopiera anteckningar</value>
@@ -1899,7 +1899,7 @@
     <value>Lösenordet har tagits bort.</value>
   </data>
   <data name="NotesInfo" xml:space="preserve">
-    <value>Egna anteckningar om denna försändelse.</value>
+    <value>Private notes about this Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
@@ -1929,27 +1929,27 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="EditSend" xml:space="preserve">
-    <value>Redigera försändelse</value>
+    <value>Redigera Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddSend" xml:space="preserve">
-    <value>Lägg till försändelse</value>
+    <value>Lägg till Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AreYouSureDeleteSend" xml:space="preserve">
-    <value>Är du säker på att du vill radera denna försändelse?</value>
+    <value>Är du säker på att du vill radera denna Send?</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDeleted" xml:space="preserve">
-    <value>Försändelsen har raderats.</value>
+    <value>Send har raderats.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendUpdated" xml:space="preserve">
-    <value>Försändelse uppdaterad</value>
+    <value>Send updated.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NewSendCreated" xml:space="preserve">
-    <value>Ny försändelse skapad.</value>
+    <value>Ny Send har skapats.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="OneDay" xml:space="preserve">
@@ -2010,7 +2010,7 @@
     <value>Captcha Required</value>
   </data>
   <data name="CaptchaFailed" xml:space="preserve">
-    <value>Captcha Failed. Please try again.</value>
+    <value>Captcha misslyckades. Vänligen försök igen.</value>
   </data>
   <data name="UpdatedMasterPassword" xml:space="preserve">
     <value>Updated Master Password</value>
@@ -2037,7 +2037,7 @@
     <value>Authentication using FIDO2 WebAuthn, you can authenticate using an external security key.</value>
   </data>
   <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
-    <value>Authenticate WebAuthn</value>
+    <value>Autentisera WebAuthn</value>
   </data>
   <data name="Fido2ReturnToApp" xml:space="preserve">
     <value>Return to App</value>
