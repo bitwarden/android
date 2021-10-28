@@ -100,5 +100,25 @@ namespace Bit.iOS.Core.Services
             Console.WriteLine(".NET Fallback Language/Locale:" + netLanguage + " (application-specific)");
             return netLanguage;
         }
+
+        public string GetLocaleShortDate(DateTime? date)
+        {
+            using (var df = new NSDateFormatter())
+            {
+                df.Locale = NSLocale.CurrentLocale;
+                df.DateStyle = NSDateFormatterStyle.Short;
+                return df.StringFor((NSDate)date);
+            }
+        }
+
+        public string GetLocaleShortTime(DateTime? time)
+        {
+            using (var df = new NSDateFormatter())
+            {
+                df.Locale = NSLocale.CurrentLocale;
+                df.TimeStyle = NSDateFormatterStyle.Short;
+                return df.StringFor((NSDate)time);
+            }
+        }
     }
 }
