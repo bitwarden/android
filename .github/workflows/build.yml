@@ -229,7 +229,7 @@ jobs:
           echo "##### Setting Version Code $BUILD_NUMBER"
           echo "########################################"
 
-          sed "s/android:versionCode=\"1\"/android:versionCode=\"$BUILD_NUMBER\"/" \
+          sed -i "s/android:versionCode=\"1\"/android:versionCode=\"$BUILD_NUMBER\"/" \
             ./src/Android/Properties/AndroidManifest.xml
         shell: bash
 
