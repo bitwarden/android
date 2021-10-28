@@ -241,7 +241,6 @@
                             StyleClass="box-value"
                             Grid.Row="1"
                             Grid.Column="0"
-                            Keyboard="Numeric"
                             IsPassword="{Binding ShowCardNumber, Converter={StaticResource inverseBool}}"
                             IsSpellCheckEnabled="False"
                             IsTextPredictionEnabled="False" />
