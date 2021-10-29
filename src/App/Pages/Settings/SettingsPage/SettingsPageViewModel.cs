@@ -57,7 +57,7 @@ namespace Bit.App.Pages
             };
 
         private Policy _vaultTimeoutPolicy;
-        private int _vaultTimeout;
+        private int? _vaultTimeout;
 
         public SettingsPageViewModel()
         {
@@ -220,7 +220,7 @@ namespace Bit.App.Pages
             await _vaultTimeoutService.LockAsync(true, true);
         }
 
-        public async Task VaultTimeoutAsync(bool promptOptions = true, int newTimeout = 0)
+        public async Task VaultTimeoutAsync(bool promptOptions = true, int? newTimeout = 0)
         {
             var oldTimeout = _vaultTimeout;
 
@@ -237,7 +237,7 @@ namespace Bit.App.Pages
                 var cleanSelection = selection.Replace("✓ ", string.Empty);
                 var selectionOption = _vaultTimeouts.FirstOrDefault(o => o.Key == cleanSelection);
                 _vaultTimeoutDisplayValue = selectionOption.Key;
-                newTimeout = selectionOption.Value.GetValueOrDefault();
+                newTimeout = selectionOption.Value;
             }
 
             if (_vaultTimeoutPolicy != null)
@@ -438,7 +438,7 @@ namespace Bit.App.Pages
                 securityItems.Insert(1, new SettingsPageListItem
                 {
                     Name = AppResources.Custom,
-                    Time = TimeSpan.FromMinutes(Math.Abs((double)_vaultTimeout)),
+                    Time = TimeSpan.FromMinutes(Math.Abs((double)_vaultTimeout.GetValueOrDefault())),
                 });
             }
             if (_vaultTimeoutPolicy != null)
