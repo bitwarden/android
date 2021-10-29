@@ -4,7 +4,9 @@ using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Exceptions;
 using Bit.Core.Utilities;
+#if !FDROID
 using Microsoft.AppCenter.Crashes;
+#endif
 
 namespace Bit.App.Pages
 {
