@@ -479,7 +479,8 @@ namespace Bit.App.Pages
                 new SettingsPageListItem { Name = AppResources.Options },
                 new SettingsPageListItem { Name = AppResources.About },
                 new SettingsPageListItem { Name = AppResources.HelpAndFeedback },
-                new SettingsPageListItem { Name = AppResources.RateTheApp }
+                new SettingsPageListItem { Name = AppResources.RateTheApp },
+                new SettingsPageListItem { Name = AppResources.DeleteAccount }
             };
             GroupedItems.ResetWithRange(new List<SettingsPageListGroup>
             {

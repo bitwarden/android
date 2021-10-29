@@ -151,6 +151,8 @@
     <ImageAsset Include="Resources\Assets.xcassets\LaunchScreen.imageset\logo_white.png" />
     <ImageAsset Include="Resources\Assets.xcassets\LaunchScreen.imageset\logo_white%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\LaunchScreen.imageset\logo_white%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\ic_warning.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\ic_warning.imageset\ic_warning.pdf" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -415,5 +417,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\Assets.xcassets\LaunchScreen.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\ic_warning.imageset\" />
   </ItemGroup>
 </Project>

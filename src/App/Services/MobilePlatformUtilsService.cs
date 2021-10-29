@@ -168,12 +168,17 @@ namespace Bit.App.Services
 
         public async Task<bool> ShowPasswordDialogAsync(string title, string body, Func<string, Task<bool>> validator)
         {
+            return (await ShowPasswordDialogAndGetItAsync(title, body, validator)).valid;
+        }
+
+        public async Task<(string password, bool valid)> ShowPasswordDialogAndGetItAsync(string title, string body, Func<string, Task<bool>> validator)
+        {
             var password = await _deviceActionService.DisplayPromptAync(AppResources.PasswordConfirmation,
                 AppResources.PasswordConfirmationDesc, null, AppResources.Submit, AppResources.Cancel, password: true);
 
             if (password == null)
             {
-                return false;
+                return (password, false);
             }
 
             var valid = await validator(password);
@@ -183,7 +188,7 @@ namespace Bit.App.Services
                 await ShowDialogAsync(AppResources.InvalidMasterPassword, null, AppResources.Ok);
             }
 
-            return valid;
+            return (password, valid);
         }
 
         public bool IsDev()

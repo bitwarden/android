@@ -183,7 +183,12 @@ namespace Bit.Core.Services
             return SendAsync<UpdateTempPasswordRequest, object>(HttpMethod.Put, "/accounts/update-temp-password",
                 request, true, false);
         }
-        
+
+        public Task DeleteAccountAsync(DeleteAccountRequest request)
+        {
+            return SendAsync<DeleteAccountRequest, object>(HttpMethod.Delete, "/accounts", request, true, false);
+        }
+
         #endregion
 
         #region Folder APIs

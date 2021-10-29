@@ -67,6 +67,13 @@
         <Setter Property="TextType"
                 Value="Html" />
     </Style>
+    <Style TargetType="Label"
+           Class="text-body">
+        <Setter Property="FontSize"
+                Value="Body" />
+        <Setter Property="TextColor"
+                Value="{DynamicResource TextColor}" />
+    </Style>
 
     <!-- Pages -->
     <Style TargetType="TabbedPage"
