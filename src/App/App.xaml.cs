@@ -163,6 +163,7 @@ namespace Bit.App
             {
                 await _vaultTimeoutService.CheckVaultTimeoutAsync();
             }
+            _vaultTimeoutService.SuppressLockLogout = false;
             _messagingService.Send("startEventTimer");
         }
 
@@ -190,6 +191,7 @@ namespace Bit.App
             {
                 ResumedAsync();
             }
+            _vaultTimeoutService.SuppressLockLogout = false;
         }
 
         private async Task SleptAsync()

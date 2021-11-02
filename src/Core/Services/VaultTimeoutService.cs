@@ -55,6 +55,7 @@ namespace Bit.Core.Services
 
         public EncString PinProtectedKey { get; set; } = null;
         public bool BiometricLocked { get; set; } = true;
+        public bool SuppressLockLogout { get; set; }
 
         public async Task<bool> IsLockedAsync()
         {
@@ -114,6 +115,10 @@ namespace Bit.Core.Services
 
         public async Task LockAsync(bool allowSoftLock = false, bool userInitiated = false)
         {
+            if (SuppressLockLogout)
+            {
+                return;
+            }
             var authed = await _userService.IsAuthenticatedAsync();
             if (!authed)
             {
@@ -145,6 +150,10 @@ namespace Bit.Core.Services
         
         public async Task LogOutAsync()
         {
+            if (SuppressLockLogout)
+            {
+                return;
+            }
             if(_loggedOutCallback != null)
             {
                 await _loggedOutCallback.Invoke(false);
