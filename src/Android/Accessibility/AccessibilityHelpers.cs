@@ -31,7 +31,6 @@ namespace Bit.Droid.Accessibility
             // So keep them in sync with:
             //   - AutofillHelpers.{TrustedBrowsers,CompatBrowsers}
             //   - Resources/xml/autofillservice.xml
-            new Browser("alook.browser", "search_fragment_input_view"),
             new Browser("com.amazon.cloud9", "url"),
             new Browser("com.android.browser", "url"),
             new Browser("com.android.chrome", "url_bar"),
@@ -52,6 +51,7 @@ namespace Bit.Droid.Accessibility
             new Browser("com.ecosia.android", "url_bar"),
             new Browser("com.google.android.apps.chrome", "url_bar"),
             new Browser("com.google.android.apps.chrome_dev", "url_bar"),
+            // Rem. for "com.google.android.captiveportallogin": URL displayed in ActionBar subtitle without viewId.
             new Browser("com.jamal2367.styx", "search"),
             new Browser("com.kiwibrowser.browser", "url_bar"),
             new Browser("com.microsoft.emmx", "url_bar"),
