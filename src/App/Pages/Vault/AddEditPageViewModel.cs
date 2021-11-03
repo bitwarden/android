@@ -667,7 +667,7 @@ namespace Bit.App.Pages
                 new KeyValuePair<FieldType, string>(FieldType.Boolean, AppResources.FieldTypeBoolean),
             };
 
-            if (Cipher.Type != CipherType.SecureNote)
+            if (Cipher.LinkedFieldOptions != null)
             {
                 fieldTypeOptions.Add(new KeyValuePair<FieldType, string>(FieldType.Linked, AppResources.FieldTypeLinked));
             }
