@@ -6,6 +6,8 @@
     xmlns:pages="clr-namespace:Bit.App.Pages"
     xmlns:u="clr-namespace:Bit.App.Utilities"
     xmlns:controls="clr-namespace:Bit.App.Controls"
+    xmlns:behaviors="clr-namespace:Bit.App.Behaviors"
+    xmlns:effects="clr-namespace:Bit.App.Effects"
     x:DataType="pages:SendAddEditPageViewModel"
     x:Name="_page"
     Title="{Binding PageTitle}">
@@ -201,7 +203,15 @@
                                 Text="{Binding Send.Text.Text}"
                                 IsEnabled="{Binding SendEnabled}"
                                 StyleClass="box-value"
-                                Margin="{Binding EditorMargins}" />
+                                Margin="{Binding EditorMargins}" 
+                                effects:ScrollEnabledEffect.IsScrollEnabled="false" >
+                                <Editor.Behaviors>
+                                    <behaviors:EditorPreventAutoBottomScrollingOnFocusedBehavior ParentScrollView="{x:Reference _scrollView}" />
+                                </Editor.Behaviors>
+                                <Editor.Effects>
+                                    <effects:ScrollEnabledEffect />
+                                </Editor.Effects>
+                            </Editor>
                             <BoxView
                                 StyleClass="box-row-separator"
                                 IsVisible="{Binding ShowEditorSeparators}" />
@@ -443,7 +453,15 @@
                                     Text="{Binding Send.Notes}"
                                     IsEnabled="{Binding SendEnabled}"
                                     StyleClass="box-value"
-                                    Margin="{Binding EditorMargins}" />
+                                    Margin="{Binding EditorMargins}"
+                                    effects:ScrollEnabledEffect.IsScrollEnabled="false" >
+                                    <Editor.Behaviors>
+                                        <behaviors:EditorPreventAutoBottomScrollingOnFocusedBehavior ParentScrollView="{x:Reference _scrollView}" />
+                                    </Editor.Behaviors>
+                                    <Editor.Effects>
+                                        <effects:ScrollEnabledEffect />
+                                    </Editor.Effects>
+                                </Editor>
                                 <BoxView
                                     StyleClass="box-row-separator"
                                     IsVisible="{Binding ShowEditorSeparators}" />

@@ -14,6 +14,7 @@ namespace Bit.App.Pages
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IStorageService _storageService;
         private readonly ISyncService _syncService;
+        private readonly ILocalizeService _localizeService;
 
         private string _lastSync = "--";
         private bool _inited;
@@ -25,6 +26,7 @@ namespace Bit.App.Pages
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
+            _localizeService = ServiceContainer.Resolve<ILocalizeService>("localizeService");
 
             PageTitle = AppResources.Sync;
         }
@@ -68,7 +70,9 @@ namespace Bit.App.Pages
             if (last != null)
             {
                 var localDate = last.Value.ToLocalTime();
-                LastSync = string.Format("{0} {1}", localDate.ToShortDateString(), localDate.ToShortTimeString());
+                LastSync = string.Format("{0} {1}",
+                    _localizeService.GetLocaleShortDate(localDate),
+                    _localizeService.GetLocaleShortTime(localDate));
             }
             else
             {

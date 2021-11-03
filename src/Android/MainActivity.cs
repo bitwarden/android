@@ -385,6 +385,7 @@ namespace Bit.Droid
         private void AppearanceAdjustments()
         {
             Window?.SetStatusBarColor(ThemeHelpers.NavBarBackgroundColor);
+            Window?.DecorView.SetBackgroundColor(ThemeHelpers.BackgroundColor);
             ThemeHelpers.SetAppearance(ThemeManager.GetTheme(true), ThemeManager.OsDarkModeEnabled());
         }
 

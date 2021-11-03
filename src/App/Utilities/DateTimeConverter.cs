@@ -1,10 +1,19 @@
 ﻿using System;
+using Bit.App.Abstractions;
+using Bit.Core.Utilities;
 using Xamarin.Forms;
 
 namespace Bit.App.Utilities
 {
     public class DateTimeConverter : IValueConverter
     {
+        private readonly ILocalizeService _localizeService;
+
+        public DateTimeConverter()
+        {
+            _localizeService = ServiceContainer.Resolve<ILocalizeService>("localizeService");
+        }
+
         public object Convert(object value, Type targetType, object parameter,
             System.Globalization.CultureInfo culture)
         {
@@ -17,7 +26,9 @@ namespace Bit.App.Utilities
                 return string.Empty;
             }
             var d = ((DateTime)value).ToLocalTime();
-            return string.Format("{0} {1}", d.ToShortDateString(), d.ToShortTimeString());
+            return string.Format("{0} {1}",
+                _localizeService.GetLocaleShortDate(d),
+                _localizeService.GetLocaleShortTime(d));
         }
 
         public object ConvertBack(object value, Type targetType, object parameter,

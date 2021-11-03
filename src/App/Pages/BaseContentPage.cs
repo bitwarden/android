@@ -23,6 +23,7 @@ namespace Bit.App.Pages
         {
             if (Device.RuntimePlatform == Device.iOS)
             {
+                On<iOS>().SetUseSafeArea(true);
                 On<iOS>().SetModalPresentationStyle(UIModalPresentationStyle.FullScreen);
             }
         }

@@ -86,7 +86,7 @@ namespace Bit.Core.Services
                 return;
             }
             var vaultTimeoutMinutes = await GetVaultTimeout();
-            if (vaultTimeoutMinutes < 0)
+            if (vaultTimeoutMinutes < 0 || vaultTimeoutMinutes == null)
             {
                 return;
             }
@@ -178,8 +178,8 @@ namespace Bit.Core.Services
             await _storageService.RemoveAsync(Constants.ProtectedPin);
         }
 
-        public async Task<int> GetVaultTimeout() {
-            var vaultTimeout = (await _storageService.GetAsync<int?>(Constants.VaultTimeoutKey)).GetValueOrDefault(-1);
+        public async Task<int?> GetVaultTimeout() {
+            var vaultTimeout = await _storageService.GetAsync<int?>(Constants.VaultTimeoutKey);
 
             if (await _policyService.PolicyAppliesToUser(PolicyType.MaximumVaultTimeout)) {
                 var policy = (await _policyService.GetAll(PolicyType.MaximumVaultTimeout)).First();
@@ -190,7 +190,7 @@ namespace Bit.Core.Services
                     return vaultTimeout;
                 }
 
-                var timeout = Math.Min(vaultTimeout, policyTimeout.Value);
+                var timeout = vaultTimeout.HasValue ? Math.Min(vaultTimeout.Value, policyTimeout.Value) : policyTimeout.Value;
 
                 if (timeout < 0) {
                     timeout = policyTimeout.Value;

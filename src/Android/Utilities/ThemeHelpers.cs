@@ -16,6 +16,10 @@ namespace Bit.Droid.Utilities
         {
             get => ThemeManager.GetResourceColor("MutedColor").ToAndroid();
         }
+        public static Color BackgroundColor
+        {
+            get => ThemeManager.GetResourceColor("BackgroundColor").ToAndroid();
+        }
         public static Color NavBarBackgroundColor
         {
             get => ThemeManager.GetResourceColor("NavigationBarBackgroundColor").ToAndroid();

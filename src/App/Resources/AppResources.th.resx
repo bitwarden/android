@@ -311,7 +311,7 @@
     <comment>Button text for a save operation (verb).</comment>
   </data>
   <data name="Move" xml:space="preserve">
-    <value>Move</value>
+    <value>ย้าย</value>
   </data>
   <data name="Saving" xml:space="preserve">
     <value>กำลังบันทึก...</value>

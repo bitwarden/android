@@ -35,6 +35,7 @@ namespace Bit.Droid.Autofill
         public static HashSet<string> TrustedBrowsers = new HashSet<string>
         {
             "com.duckduckgo.mobile.android",
+            "com.google.android.googlequicksearchbox",
             "org.mozilla.focus",
             "org.mozilla.klar",
         };
@@ -48,7 +49,6 @@ namespace Bit.Droid.Autofill
         //   - ... to keep this list in sync with values in AccessibilityHelpers.SupportedBrowsers [Section A], too.
         public static HashSet<string> CompatBrowsers = new HashSet<string>
         {
-            "alook.browser",
             "com.amazon.cloud9",
             "com.android.browser",
             "com.android.chrome",
@@ -68,6 +68,7 @@ namespace Bit.Droid.Autofill
             "com.ecosia.android",
             "com.google.android.apps.chrome",
             "com.google.android.apps.chrome_dev",
+            "com.google.android.captiveportallogin",
             "com.jamal2367.styx",
             "com.kiwibrowser.browser",
             "com.microsoft.emmx",

@@ -124,6 +124,7 @@
 
   <ItemGroup>
     <Folder Include="Resources\" />
+    <Folder Include="Behaviors\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -411,4 +412,7 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Behaviors\" />
+  </ItemGroup>
 </Project>

@@ -26,6 +26,7 @@ namespace Bit.App.Pages
         private readonly ISyncService _syncService;
         private readonly IBiometricService _biometricService;
         private readonly IPolicyService _policyService;
+        private readonly ILocalizeService _localizeService;
 
         private const int CustomVaultTimeoutValue = -100;
 
@@ -57,7 +58,7 @@ namespace Bit.App.Pages
             };
 
         private Policy _vaultTimeoutPolicy;
-        private int _vaultTimeout;
+        private int? _vaultTimeout;
 
         public SettingsPageViewModel()
         {
@@ -72,6 +73,7 @@ namespace Bit.App.Pages
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
             _biometricService = ServiceContainer.Resolve<IBiometricService>("biometricService");
             _policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
+            _localizeService = ServiceContainer.Resolve<ILocalizeService>("localizeService");
 
             GroupedItems = new ExtendedObservableCollection<SettingsPageListGroup>();
             PageTitle = AppResources.Settings;
@@ -86,8 +88,9 @@ namespace Bit.App.Pages
             if (lastSync != null)
             {
                 lastSync = lastSync.Value.ToLocalTime();
-                _lastSyncDate = string.Format("{0} {1}", lastSync.Value.ToShortDateString(),
-                    lastSync.Value.ToShortTimeString());
+                _lastSyncDate = string.Format("{0} {1}",
+                    _localizeService.GetLocaleShortDate(lastSync.Value),
+                    _localizeService.GetLocaleShortTime(lastSync.Value));
             }
 
             if (await _policyService.PolicyAppliesToUser(PolicyType.MaximumVaultTimeout))
@@ -220,7 +223,7 @@ namespace Bit.App.Pages
             await _vaultTimeoutService.LockAsync(true, true);
         }
 
-        public async Task VaultTimeoutAsync(bool promptOptions = true, int newTimeout = 0)
+        public async Task VaultTimeoutAsync(bool promptOptions = true, int? newTimeout = 0)
         {
             var oldTimeout = _vaultTimeout;
 
@@ -237,7 +240,7 @@ namespace Bit.App.Pages
                 var cleanSelection = selection.Replace("✓ ", string.Empty);
                 var selectionOption = _vaultTimeouts.FirstOrDefault(o => o.Key == cleanSelection);
                 _vaultTimeoutDisplayValue = selectionOption.Key;
-                newTimeout = selectionOption.Value.GetValueOrDefault();
+                newTimeout = selectionOption.Value;
             }
 
             if (_vaultTimeoutPolicy != null)
@@ -438,7 +441,7 @@ namespace Bit.App.Pages
                 securityItems.Insert(1, new SettingsPageListItem
                 {
                     Name = AppResources.Custom,
-                    Time = TimeSpan.FromMinutes(Math.Abs((double)_vaultTimeout)),
+                    Time = TimeSpan.FromMinutes(Math.Abs((double)_vaultTimeout.GetValueOrDefault())),
                 });
             }
             if (_vaultTimeoutPolicy != null)
