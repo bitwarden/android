@@ -1,4 +1,5 @@
 ﻿using Bit.Core.Models.Domain;
+using Bit.Core.Enums;
 using System.Collections.Generic;
 
 namespace Bit.Core.Models.View
@@ -143,29 +144,29 @@ namespace Bit.Core.Models.View
             }
         }
 
-        public override List<KeyValuePair<string, int>> LinkedMetadata
+        public override List<KeyValuePair<string, LinkedIdType>> LinkedFieldOptions
         {
-            get => new List<KeyValuePair<string, int>>()
+            get => new List<KeyValuePair<string, LinkedIdType>>()
             {
-                new KeyValuePair<string, int>("Title", 0),
-                new KeyValuePair<string, int>("MiddleName", 1),
-                new KeyValuePair<string, int>("Address1", 2),
-                new KeyValuePair<string, int>("Address2", 3),
-                new KeyValuePair<string, int>("Address3", 4),
-                new KeyValuePair<string, int>("CityTown", 5),
-                new KeyValuePair<string, int>("StateProvince", 6),
-                new KeyValuePair<string, int>("ZipPostalCode", 7),
-                new KeyValuePair<string, int>("Country", 8),
-                new KeyValuePair<string, int>("Company", 9),
-                new KeyValuePair<string, int>("Email", 10),
-                new KeyValuePair<string, int>("Phone", 11),
-                new KeyValuePair<string, int>("SSN", 12),
-                new KeyValuePair<string, int>("Username", 13),
-                new KeyValuePair<string, int>("PassportNumber", 14),
-                new KeyValuePair<string, int>("LicenseNumber", 15),
-                new KeyValuePair<string, int>("FirstName", 16),
-                new KeyValuePair<string, int>("LastName", 17),
-                new KeyValuePair<string, int>("FullName", 18),
+                new KeyValuePair<string, LinkedIdType>("Title", LinkedIdType.Identity_Title),
+                new KeyValuePair<string, LinkedIdType>("MiddleName", LinkedIdType.Identity_MiddleName),
+                new KeyValuePair<string, LinkedIdType>("Address1", LinkedIdType.Identity_Address1),
+                new KeyValuePair<string, LinkedIdType>("Address2", LinkedIdType.Identity_Address2),
+                new KeyValuePair<string, LinkedIdType>("Address3", LinkedIdType.Identity_Address3),
+                new KeyValuePair<string, LinkedIdType>("CityTown", LinkedIdType.Identity_City),
+                new KeyValuePair<string, LinkedIdType>("StateProvince", LinkedIdType.Identity_State),
+                new KeyValuePair<string, LinkedIdType>("ZipPostalCode", LinkedIdType.Identity_PostalCode),
+                new KeyValuePair<string, LinkedIdType>("Country", LinkedIdType.Identity_Country),
+                new KeyValuePair<string, LinkedIdType>("Company", LinkedIdType.Identity_Company),
+                new KeyValuePair<string, LinkedIdType>("Email", LinkedIdType.Identity_Email),
+                new KeyValuePair<string, LinkedIdType>("Phone", LinkedIdType.Identity_Phone),
+                new KeyValuePair<string, LinkedIdType>("SSN", LinkedIdType.Identity_Ssn),
+                new KeyValuePair<string, LinkedIdType>("Username", LinkedIdType.Identity_Username),
+                new KeyValuePair<string, LinkedIdType>("PassportNumber", LinkedIdType.Identity_PassportNumber),
+                new KeyValuePair<string, LinkedIdType>("LicenseNumber", LinkedIdType.Identity_LicenseNumber),
+                new KeyValuePair<string, LinkedIdType>("FirstName", LinkedIdType.Identity_FirstName),
+                new KeyValuePair<string, LinkedIdType>("LastName", LinkedIdType.Identity_LastName),
+                new KeyValuePair<string, LinkedIdType>("FullName", LinkedIdType.Identity_FullName),
             };
         }
     }

@@ -1,4 +1,5 @@
 ﻿using Bit.Core.Models.Domain;
+using Bit.Core.Enums;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
@@ -83,16 +84,16 @@ namespace Bit.Core.Models.View
             }
         }
 
-        public override List<KeyValuePair<string, int>> LinkedMetadata
+        public override List<KeyValuePair<string, LinkedIdType>> LinkedFieldOptions
         {
-            get => new List<KeyValuePair<string, int>>()
+            get => new List<KeyValuePair<string, LinkedIdType>>()
             {
-                new KeyValuePair<string, int>("CardholderName", 0),
-                new KeyValuePair<string, int>("ExpirationMonth", 1),
-                new KeyValuePair<string, int>("ExpirationYear", 2),
-                new KeyValuePair<string, int>("SecurityCode", 3),
-                new KeyValuePair<string, int>("Brand", 4),
-                new KeyValuePair<string, int>("Number", 5),
+                new KeyValuePair<string, LinkedIdType>("CardholderName", LinkedIdType.Card_CardholderName),
+                new KeyValuePair<string, LinkedIdType>("ExpirationMonth", LinkedIdType.Card_ExpMonth),
+                new KeyValuePair<string, LinkedIdType>("ExpirationYear", LinkedIdType.Card_ExpYear),
+                new KeyValuePair<string, LinkedIdType>("SecurityCode", LinkedIdType.Card_Code),
+                new KeyValuePair<string, LinkedIdType>("Brand", LinkedIdType.Card_Brand),
+                new KeyValuePair<string, LinkedIdType>("Number", LinkedIdType.Card_Number),
             };
         }
 

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Bit.Core.Enums;
 
 namespace Bit.Core.Models.View
 {
@@ -8,7 +9,6 @@ namespace Bit.Core.Models.View
 
         public abstract string SubTitle { get; }
 
-        // Must return the same id values as LinkedMetadata decorators in jslib
-        public abstract List<KeyValuePair<string, int>> LinkedMetadata { get; }
+        public abstract List<KeyValuePair<string, LinkedIdType>> LinkedFieldOptions { get; }
     }
 }

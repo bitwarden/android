@@ -26,7 +26,7 @@ namespace Bit.Core.Models.Domain
         public EncString Name { get; set; }
         public EncString Value { get; set; }
         public FieldType Type { get; set; }
-        public int? LinkedId { get; set; }
+        public LinkedIdType? LinkedId { get; set; }
 
         public Task<FieldView> DecryptAsync(string orgId)
         {

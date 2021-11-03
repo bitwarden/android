@@ -71,7 +71,7 @@ namespace Bit.Core.Models.View
             }
         }
 
-        public List<KeyValuePair<string, int>> LinkedFieldOptions => Item.LinkedMetadata;
+        public List<KeyValuePair<string, LinkedIdType>> LinkedFieldOptions => Item.LinkedFieldOptions;
         public string SubTitle => Item.SubTitle;
         public bool Shared => OrganizationId != null;
         public bool HasPasswordHistory => PasswordHistory?.Any() ?? false;
@@ -105,7 +105,7 @@ namespace Bit.Core.Models.View
         }
         public bool IsDeleted => DeletedDate.HasValue;
 
-        public string LinkedFieldI18nKey(int id)
+        public string LinkedFieldI18nKey(LinkedIdType id)
         {
             return LinkedFieldOptions.Find(lfo => lfo.Value == id).Key;
         }

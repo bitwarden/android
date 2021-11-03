@@ -1,4 +1,5 @@
 ﻿using Bit.Core.Models.Domain;
+using Bit.Core.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,12 +27,12 @@ namespace Bit.Core.Models.View
         public string LaunchUri => HasUris ? Uris.FirstOrDefault(u => u.CanLaunch)?.LaunchUri : null;
         public bool HasUris => (Uris?.Count ?? 0) > 0;
 
-        public override List<KeyValuePair<string, int>> LinkedMetadata
+        public override List<KeyValuePair<string, LinkedIdType>> LinkedFieldOptions
         {
-            get => new List<KeyValuePair<string, int>>()
+            get => new List<KeyValuePair<string, LinkedIdType>>()
             {
-                new KeyValuePair<string, int>("Username", 0),
-                new KeyValuePair<string, int>("Password", 1),
+                new KeyValuePair<string, LinkedIdType>("Username", LinkedIdType.Login_Username),
+                new KeyValuePair<string, LinkedIdType>("Password", LinkedIdType.Login_Password),
             };
         }
     }

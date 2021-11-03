@@ -15,6 +15,6 @@ namespace Bit.Core.Models.View
 
         public SecureNoteType Type { get; set; }
         public override string SubTitle => null;
-        public override List<KeyValuePair<string, int>> LinkedMetadata => null;
+        public override List<KeyValuePair<string, LinkedIdType>> LinkedFieldOptions => null;
     }
 }
