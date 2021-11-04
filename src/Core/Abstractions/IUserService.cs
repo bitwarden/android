@@ -21,11 +21,13 @@ namespace Bit.Core.Abstractions
         Task<bool> GetEmailVerifiedAsync();
         Task<bool> GetForcePasswordReset();
         Task<string> GetUserIdAsync();
+        Task<bool> GetUsesKeyConnector();
         Task<bool> IsAuthenticatedAsync();
         Task ReplaceOrganizationsAsync(Dictionary<string, OrganizationData> organizations);
         Task SetInformationAsync(string userId, string email, KdfType kdf, int? kdfIterations);
         Task SetSecurityStampAsync(string stamp);
         Task SetEmailVerifiedAsync(bool emailVerified);
         Task SetForcePasswordReset(bool forcePasswordReset);
+        Task SetUsesKeyConnector(bool usesKeyConnector);
     }
 }

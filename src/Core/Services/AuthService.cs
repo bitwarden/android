@@ -353,27 +353,55 @@ namespace Bit.Core.Services
                 tokenResponse.Kdf, tokenResponse.KdfIterations);
             if (_setCryptoKeys)
             {
-                await _cryptoService.SetKeyAsync(key);
-                await _cryptoService.SetKeyHashAsync(localHashedPassword);
-                await _cryptoService.SetEncKeyAsync(tokenResponse.Key);
-
-                // User doesn't have a key pair yet (old account), let's generate one for them.
-                if (tokenResponse.PrivateKey == null)
+                if (key != null)
                 {
-                    try
-                    {
-                        var keyPair = await _cryptoService.MakeKeyPairAsync();
-                        await _apiService.PostAccountKeysAsync(new KeysRequest
-                        {
-                            PublicKey = keyPair.Item1,
-                            EncryptedPrivateKey = keyPair.Item2.EncryptedString
-                        });
-                        tokenResponse.PrivateKey = keyPair.Item2.EncryptedString;
-                    }
-                    catch { }
+                    await _cryptoService.SetKeyAsync(key);
                 }
 
-                await _cryptoService.SetEncPrivateKeyAsync(tokenResponse.PrivateKey);
+                if (localHashedPassword != null)
+                {
+                    await _cryptoService.SetKeyHashAsync(localHashedPassword);
+                }
+
+                if (code == null || tokenResponse.Key != null)
+                {
+                    if (tokenResponse.KeyConnectorUrl != null)
+                    {
+                        try
+                        {
+                            var userKeyResponse = await _apiService.GetUserKeyFromKeyConnector(tokenResponse.KeyConnectorUrl);
+                            //const keyArr = Utils.fromB64ToArray(userKeyResponse.Key.To);
+                            //const k = new SymmetricCryptoKey(keyArr);
+                            //await this.cryptoService.setKey(k);
+                        }
+                        catch (ApiException e)
+                        {
+                            //this.logService.error(e);
+                            //throw new Error('Unable to reach key connector');
+                        }
+                    }
+
+                    await _cryptoService.SetEncKeyAsync(tokenResponse.Key);
+
+                    // User doesn't have a key pair yet (old account), let's generate one for them.
+                    if (tokenResponse.PrivateKey == null)
+                    {
+                        try
+                        {
+                            var keyPair = await _cryptoService.MakeKeyPairAsync();
+                            await _apiService.PostAccountKeysAsync(new KeysRequest
+                            {
+                                PublicKey = keyPair.Item1,
+                                EncryptedPrivateKey = keyPair.Item2.EncryptedString
+                            });
+                            tokenResponse.PrivateKey = keyPair.Item2.EncryptedString;
+                        }
+                        catch { }
+                    }
+
+                    await _cryptoService.SetEncPrivateKeyAsync(tokenResponse.PrivateKey);
+                }
+
             }
 
             _vaultTimeoutService.BiometricLocked = false;

@@ -433,7 +433,18 @@ namespace Bit.Core.Services
             return SendAsync<OrganizationUserResetPasswordEnrollmentRequest, object>(HttpMethod.Put,
                 $"/organizations/{orgId}/users/{userId}/reset-password-enrollment", request, true, false);
         }
-        
+
+        #endregion
+
+        #region Key Connector
+
+        public Task<KeyConnectorUserKeyResponse> GetUserKeyFromKeyConnector(string keyConnectorUrl)
+        {
+            var path = WebUtility.UrlEncode(keyConnectorUrl + "/user-keys");
+
+            return SendAsync<object, KeyConnectorUserKeyResponse>(HttpMethod.Get, path, null, true, true);
+        }
+
         #endregion
 
         #region Helpers

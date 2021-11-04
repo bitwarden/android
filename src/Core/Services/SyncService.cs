@@ -329,6 +329,15 @@ namespace Bit.Core.Services
             await _userService.ReplaceOrganizationsAsync(organizations);
             await _userService.SetEmailVerifiedAsync(response.EmailVerified);
             await _userService.SetForcePasswordReset(response.ForcePasswordReset);
+            await _userService.SetUsesKeyConnector(response.UsesKeyConnector);
+
+            // Onboarding
+            //const orgUsesKeyConnector = response.organizations.some(o => o.usesKeyConnector);
+            //const userIsNotUsingKeyConnector = !response.usesKeyConnector;
+            //if (this.tokenService.getIsExternal() && orgUsesKeyConnector && userIsNotUsingKeyConnector)
+            //{
+            //    this.messagingService.send('convertAccountToKeyConnector');
+            //}
         }
 
         private async Task SyncFoldersAsync(string userId, List<FolderResponse> response)
