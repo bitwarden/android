@@ -438,11 +438,50 @@ namespace Bit.Core.Services
 
         #region Key Connector
 
-        public Task<KeyConnectorUserKeyResponse> GetUserKeyFromKeyConnector(string keyConnectorUrl)
+        public async Task<KeyConnectorUserKeyResponse> GetUserKeyFromKeyConnector(string keyConnectorUrl)
         {
-            var path = WebUtility.UrlEncode(keyConnectorUrl + "/user-keys");
+            //var path = WebUtility.UrlEncode(keyConnectorUrl + "/user-keys");
 
-            return SendAsync<object, KeyConnectorUserKeyResponse>(HttpMethod.Get, path, null, true, true);
+            //return SendAsync<object, KeyConnectorUserKeyResponse>(HttpMethod.Get, path, null, true, true);
+
+            using (var requestMessage = new HttpRequestMessage())
+            {
+                requestMessage.Version = new Version(1, 0);
+                requestMessage.Method = HttpMethod.Get;
+                requestMessage.RequestUri = new Uri(string.Concat(keyConnectorUrl, "/user-keys"));
+                //requestMessage.RequestUri = new Uri(string.Concat("http://localhost:5000", "/user-keys"));
+
+                requestMessage.Headers.Add("Accept", "application/json");
+                var authHeader = await GetActiveBearerTokenAsync();
+                requestMessage.Headers.Add("Authorization", string.Concat("Bearer ", authHeader));
+
+                HttpResponseMessage response;
+                try
+                {
+                    response = await _httpClient.SendAsync(requestMessage);
+                }
+                catch (Exception e)
+                {
+                    throw new ApiException(HandleWebError(e));
+                }
+                if (!response.IsSuccessStatusCode)
+                {
+                    var error = await HandleErrorAsync(response, false, true);
+                    throw new ApiException(error);
+                }
+                var responseJsonString = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<KeyConnectorUserKeyResponse>(responseJsonString);
+            }
+        }
+
+        public async Task PostUserKeyToKeyConnector(string keyConnectorUrl, KeyConnectorUserKeyRequest request)
+        {
+            // TODO
+        }
+
+        public async Task PostSetKeyConnectorKey(SetKeyConnectorKeyRequest request)
+        {
+            // TODO
         }
 
         #endregion

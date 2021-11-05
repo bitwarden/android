@@ -12,6 +12,7 @@ namespace Bit.Core.Services
     public class AuthService : IAuthService
     {
         private readonly ICryptoService _cryptoService;
+        private readonly ICryptoFunctionService _cryptoFunctionService;
         private readonly IApiService _apiService;
         private readonly IUserService _userService;
         private readonly ITokenService _tokenService;
@@ -26,6 +27,7 @@ namespace Bit.Core.Services
 
         public AuthService(
             ICryptoService cryptoService,
+            ICryptoFunctionService cryptoFunctionService,
             IApiService apiService,
             IUserService userService,
             ITokenService tokenService,
@@ -37,6 +39,7 @@ namespace Bit.Core.Services
             bool setCryptoKeys = true)
         {
             _cryptoService = cryptoService;
+            _cryptoFunctionService = cryptoFunctionService;
             _apiService = apiService;
             _userService = userService;
             _tokenService = tokenService;
@@ -275,7 +278,7 @@ namespace Bit.Core.Services
         private async Task<AuthResult> LogInHelperAsync(string email, string hashedPassword, string localHashedPassword,
             string code, string codeVerifier, string redirectUrl, SymmetricCryptoKey key,
             TwoFactorProviderType? twoFactorProvider = null, string twoFactorToken = null, bool? remember = null,
-            string captchaToken = null)
+            string captchaToken = null, string orgId = null)
         {
             var storedTwoFactorToken = await _tokenService.GetTwoFactorTokenAsync(email);
             var appId = await _appIdService.GetAppIdAsync();
@@ -304,16 +307,16 @@ namespace Bit.Core.Services
             if (twoFactorToken != null && twoFactorProvider != null)
             {
                 request = new TokenRequest(emailPassword, codeCodeVerifier, twoFactorProvider, twoFactorToken, remember,
-                    captchaToken, deviceRequest);
+                    captchaToken, deviceRequest, orgId);
             }
             else if (storedTwoFactorToken != null)
             {
                 request = new TokenRequest(emailPassword, codeCodeVerifier, TwoFactorProviderType.Remember,
-                    storedTwoFactorToken, false, captchaToken, deviceRequest);
+                    storedTwoFactorToken, false, captchaToken, deviceRequest, orgId);
             }
             else
             {
-                request = new TokenRequest(emailPassword, codeCodeVerifier, null, null, false, captchaToken, deviceRequest);
+                request = new TokenRequest(emailPassword, codeCodeVerifier, null, null, false, captchaToken, deviceRequest, orgId);
             }
 
             var response = await _apiService.PostIdentityTokenAsync(request);
@@ -370,14 +373,13 @@ namespace Bit.Core.Services
                         try
                         {
                             var userKeyResponse = await _apiService.GetUserKeyFromKeyConnector(tokenResponse.KeyConnectorUrl);
-                            //const keyArr = Utils.fromB64ToArray(userKeyResponse.Key.To);
-                            //const k = new SymmetricCryptoKey(keyArr);
-                            //await this.cryptoService.setKey(k);
+                            var keyArr = Convert.FromBase64String(userKeyResponse.Key);
+                            var k = new SymmetricCryptoKey(keyArr);
+                            await this._cryptoService.SetKeyAsync(k);
                         }
                         catch (ApiException e)
                         {
-                            //this.logService.error(e);
-                            //throw new Error('Unable to reach key connector');
+                            throw e;
                         }
                     }
 
@@ -400,6 +402,37 @@ namespace Bit.Core.Services
                     }
 
                     await _cryptoService.SetEncPrivateKeyAsync(tokenResponse.PrivateKey);
+                }
+                else if (tokenResponse.KeyConnectorUrl != null)
+                {
+                    // SSO Key Connector Onboarding
+                    var password = await _cryptoFunctionService.RandomBytesAsync(64);
+                    var k = await _cryptoService.MakeKeyAsync(Convert.ToBase64String(password), _tokenService.GetEmail(), tokenResponse.Kdf, tokenResponse.KdfIterations);
+                    var keyConnectorRequest = new KeyConnectorUserKeyRequest(k.EncKeyB64);
+                    await _cryptoService.SetKeyAsync(k);
+
+                    var encKey = await _cryptoService.MakeEncKeyAsync(k);
+                    await _cryptoService.SetEncKeyAsync(encKey.Item2.EncryptedString);
+                    var keyPair = await _cryptoService.MakeKeyPairAsync();
+
+                    try
+                    {
+                        await _apiService.PostUserKeyToKeyConnector(tokenResponse.KeyConnectorUrl, keyConnectorRequest);
+                    }
+                    catch (ApiException e)
+                    {
+                        throw e;
+                    }
+
+                    var keys = new KeysRequest
+                    {
+                        PublicKey = keyPair.Item1,
+                        EncryptedPrivateKey = keyPair.Item2.EncryptedString
+                    };
+                    var setPasswordRequest = new SetKeyConnectorKeyRequest(
+                        encKey.Item2.EncryptedString, keys, tokenResponse.Kdf, tokenResponse.KdfIterations, orgId
+                    );
+                    await _apiService.PostSetKeyConnectorKey(setPasswordRequest);
                 }
 
             }

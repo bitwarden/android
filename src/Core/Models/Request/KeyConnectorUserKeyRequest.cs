@@ -5,5 +5,9 @@ namespace Bit.Core.Models.Request
     {
         public string Key { get; set; }
 
+        public KeyConnectorUserKeyRequest(string key)
+        {
+            this.Key = key;
+        }
     }
 }
