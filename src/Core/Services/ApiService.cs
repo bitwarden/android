@@ -438,12 +438,14 @@ namespace Bit.Core.Services
 
         #region Key Connector
 
+        public Task PostSetKeyConnectorKey(SetKeyConnectorKeyRequest request)
+        {
+            return SendAsync<SetKeyConnectorKeyRequest>(HttpMethod.Post,
+                "/accounts/set-key-connector-key", request, true);
+        }
+
         public async Task<KeyConnectorUserKeyResponse> GetUserKeyFromKeyConnector(string keyConnectorUrl)
         {
-            //var path = WebUtility.UrlEncode(keyConnectorUrl + "/user-keys");
-
-            //return SendAsync<object, KeyConnectorUserKeyResponse>(HttpMethod.Get, path, null, true, true);
-
             using (var requestMessage = new HttpRequestMessage())
             {
                 requestMessage.Version = new Version(1, 0);
@@ -476,12 +478,32 @@ namespace Bit.Core.Services
 
         public async Task PostUserKeyToKeyConnector(string keyConnectorUrl, KeyConnectorUserKeyRequest request)
         {
-            // TODO
-        }
+            using (var requestMessage = new HttpRequestMessage())
+            {
+                var authHeader = await GetActiveBearerTokenAsync();
 
-        public async Task PostSetKeyConnectorKey(SetKeyConnectorKeyRequest request)
-        {
-            // TODO
+                requestMessage.Version = new Version(1, 0);
+                requestMessage.Method = HttpMethod.Post;
+                requestMessage.RequestUri = new Uri(string.Concat(keyConnectorUrl, "/user-keys"));
+                //requestMessage.RequestUri = new Uri(string.Concat("http://localhost:5000", "/user-keys"));
+                requestMessage.Headers.Add("Accept", "application/json");
+                requestMessage.Headers.Add("Authorization", string.Concat("Bearer ", authHeader));
+
+                HttpResponseMessage response;
+                try
+                {
+                    response = await _httpClient.SendAsync(requestMessage);
+                }
+                catch (Exception e)
+                {
+                    throw new ApiException(HandleWebError(e));
+                }
+                if (!response.IsSuccessStatusCode)
+                {
+                    var error = await HandleErrorAsync(response, false, true);
+                    throw new ApiException(error);
+                }
+            }
         }
 
         #endregion
