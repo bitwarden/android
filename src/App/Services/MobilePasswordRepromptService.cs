@@ -3,6 +3,7 @@ using Bit.Core.Abstractions;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
 using System;
+using Bit.Core.Utilities;
 
 namespace Bit.App.Services
 {
@@ -21,6 +22,11 @@ namespace Bit.App.Services
 
         public async Task<bool> ShowPasswordPromptAsync()
         {
+            if (!await Enabled())
+            {
+                return true;
+            }
+
             Func<string, Task<bool>> validator = async (string password) =>
             {
                 // Assume user has canceled.
@@ -33,6 +39,12 @@ namespace Bit.App.Services
             };
 
             return await _platformUtilsService.ShowPasswordDialogAsync(AppResources.PasswordConfirmation, AppResources.PasswordConfirmationDesc, validator);
+        }
+
+        public async Task<bool> Enabled()
+        {
+            var keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
+            return !await keyConnectorService.GetUsesKeyConnector();
         }
     }
 }
