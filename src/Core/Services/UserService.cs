@@ -17,7 +17,6 @@ namespace Bit.Core.Services
         private int? _kdfIterations;
         private bool? _emailVerified;
         private bool? _forcePasswordReset;
-        private bool? _usesKeyConnector;
 
         private const string Keys_UserId = "userId";
         private const string Keys_UserEmail = "userEmail";
@@ -27,7 +26,6 @@ namespace Bit.Core.Services
         private const string Keys_OrganizationsFormat = "organizations_{0}";
         private const string Keys_EmailVerified = "emailVerified";
         private const string Keys_ForcePasswordReset = "forcePasswordReset";
-        private const string Keys_UsesKeyConnector = "usesKeyConnector";
 
         private readonly IStorageService _storageService;
         private readonly ITokenService _tokenService;
@@ -67,12 +65,6 @@ namespace Bit.Core.Services
         {
             _forcePasswordReset = forcePasswordReset;
             await _storageService.SaveAsync(Keys_ForcePasswordReset, forcePasswordReset);
-        }
-
-        public async Task SetUsesKeyConnector(bool usesKeyConnector)
-        {
-            _usesKeyConnector = usesKeyConnector;
-            await _storageService.SaveAsync(Keys_UsesKeyConnector, usesKeyConnector);
         }
 
         public async Task<string> GetUserIdAsync()
@@ -136,15 +128,6 @@ namespace Bit.Core.Services
                 _forcePasswordReset = await _storageService.GetAsync<bool>(Keys_ForcePasswordReset);
             }
             return _forcePasswordReset.GetValueOrDefault();
-        }
-
-        public async Task<bool> GetUsesKeyConnector()
-        {
-            if (_usesKeyConnector == null)
-            {
-                _usesKeyConnector = await _storageService.GetAsync<bool>(Keys_UsesKeyConnector);
-            }
-            return _usesKeyConnector.GetValueOrDefault();
         }
 
         public async Task ClearAsync()

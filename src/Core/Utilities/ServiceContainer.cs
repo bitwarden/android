@@ -49,16 +49,17 @@ namespace Bit.Core.Utilities
                 i18nService, cryptoFunctionService);
             searchService = new SearchService(cipherService, sendService);
             var policyService = new PolicyService(storageService, userService);
+            var keyConnectorService = new KeyConnectorService(storageService);
             var vaultTimeoutService = new VaultTimeoutService(cryptoService, userService, platformUtilsService,
                 storageService, folderService, cipherService, collectionService, searchService, messagingService, tokenService,
-                policyService, null, (expired) =>
+                policyService, keyConnectorService, null, (expired) =>
                 {
                     messagingService.Send("logout", expired);
                     return Task.FromResult(0);
                 });
             var syncService = new SyncService(userService, apiService, settingsService, folderService,
                 cipherService, cryptoService, collectionService, storageService, messagingService, policyService, sendService,
-                (bool expired) =>
+                keyConnectorService, (bool expired) =>
                 {
                     messagingService.Send("logout", expired);
                     return Task.FromResult(0);
@@ -94,6 +95,7 @@ namespace Bit.Core.Utilities
             Register<IAuditService>("auditService", auditService);
             Register<IEnvironmentService>("environmentService", environmentService);
             Register<IEventService>("eventService", eventService);
+            Register<IKeyConnectorService>("keyConnectorService", keyConnectorService);
         }
 
         public static void Register<T>(string serviceName, T obj)

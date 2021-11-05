@@ -25,6 +25,7 @@ namespace Bit.Core.Services
         private readonly IMessagingService _messagingService;
         private readonly IPolicyService _policyService;
         private readonly ISendService _sendService;
+        private readonly IKeyConnectorService _keyConnectorService;
         private readonly Func<bool, Task> _logoutCallbackAsync;
 
         public SyncService(
@@ -39,6 +40,7 @@ namespace Bit.Core.Services
             IMessagingService messagingService,
             IPolicyService policyService,
             ISendService sendService,
+            IKeyConnectorService keyConnectorService,
             Func<bool, Task> logoutCallbackAsync)
         {
             _userService = userService;
@@ -52,6 +54,7 @@ namespace Bit.Core.Services
             _messagingService = messagingService;
             _policyService = policyService;
             _sendService = sendService;
+            _keyConnectorService = keyConnectorService;
             _logoutCallbackAsync = logoutCallbackAsync;
         }
 
@@ -329,7 +332,7 @@ namespace Bit.Core.Services
             await _userService.ReplaceOrganizationsAsync(organizations);
             await _userService.SetEmailVerifiedAsync(response.EmailVerified);
             await _userService.SetForcePasswordReset(response.ForcePasswordReset);
-            await _userService.SetUsesKeyConnector(response.UsesKeyConnector);
+            await _keyConnectorService.SetUsesKeyConnector(response.UsesKeyConnector);
 
             // Onboarding
             //const orgUsesKeyConnector = response.organizations.some(o => o.usesKeyConnector);
