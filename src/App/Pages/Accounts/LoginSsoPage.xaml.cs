@@ -116,7 +116,14 @@ namespace Bit.App.Pages
         {
             RestoreAppOptionsFromCopy();
             await AppHelpers.ClearPreviousPage();
-            Application.Current.MainPage = new NavigationPage(new LockPage(_appOptions));
+            if (await _vaultTimeoutService.IsLockedAsync())
+            {
+                Application.Current.MainPage = new NavigationPage(new LockPage(_appOptions));
+            }
+            else
+            {
+                Application.Current.MainPage = new TabsPage(_appOptions, null);
+            }
         }
     }
 }
