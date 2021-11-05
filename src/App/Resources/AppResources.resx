@@ -2027,6 +2027,18 @@
   <data name="UpdatePasswordError" xml:space="preserve">
     <value>Currently unable to update password</value>
   </data>
+  <data name="ConvertMasterPassword" xml:space="preserve">
+    <value>Convert Master Password</value>
+  </data>
+  <data name="ConvertMasterPasswordWarning" xml:space="preserve">
+    <value>is using SSO with customer-managed encryption. Continuing will remove your Master Password from your account and require SSO to login.</value>
+  </data>
+  <data name="ConvertMasterPasswordLeave" xml:space="preserve">
+    <value>If you do not want to remove your Master Password, you may leave this organization.</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>Leave Organization</value>
+  </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
   </data>

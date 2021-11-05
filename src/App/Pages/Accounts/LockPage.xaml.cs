@@ -12,6 +12,7 @@ namespace Bit.App.Pages
     public partial class LockPage : BaseContentPage
     {
         private readonly IStorageService _storageService;
+        private readonly IKeyConnectorService _keyConnectorService;
         private readonly AppOptions _appOptions;
         private readonly bool _autoPromptBiometric;
         private readonly LockPageViewModel _vm;
@@ -22,6 +23,7 @@ namespace Bit.App.Pages
         public LockPage(AppOptions appOptions = null, bool autoPromptBiometric = true)
         {
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+            _keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
             _appOptions = appOptions;
             _autoPromptBiometric = autoPromptBiometric;
             InitializeComponent();
@@ -130,7 +132,13 @@ namespace Bit.App.Pages
                 return;
             }
             var previousPage = await AppHelpers.ClearPreviousPage();
-            Application.Current.MainPage = new TabsPage(_appOptions, previousPage);
+
+            // TODO: Use UserNeedsMigration, maybe in vault?
+            //if (await _keyConnectorService.UserNeedsMigration())
+            //{
+            await Navigation.PushModalAsync(new NavigationPage(new ConvertMasterPasswordPage()));
+            //}
+            //Application.Current.MainPage = new TabsPage(_appOptions, previousPage);
         }
     }
 }
