@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-20.04
     outputs:
       rc_branch_exists: ${{ steps.branch-check.outputs.rc_branch_exists }}
-      release_branch_exists: ${{ steps.branch-check.outputs.release_branch_exists }}
+      hotfix_branch_exists: ${{ steps.branch-check.outputs.hotfix_branch_exists }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f  # v2.3.4
@@ -43,10 +43,10 @@ jobs:
             echo "::set-output name=rc_branch_exists::0"
           fi
 
-          if [[ $(git ls-remote --heads origin release) ]]; then
-            echo "::set-output name=release_branch_exists::1"
+          if [[ $(git ls-remote --heads origin hotfix) ]]; then
+            echo "::set-output name=hotfix_branch_exists::1"
           else
-            echo "::set-output name=release_branch_exists::0"
+            echo "::set-output name=hotfix_branch_exists::0"
           fi
         shell: bash
 
@@ -180,9 +180,9 @@ jobs:
         if: |
             (github.ref == 'refs/heads/master'
               && needs.setup.outputs.rc_branch_exists == 0
-              && needs.setup.outputs.release_branch_exists == 0)
-            || (github.ref == 'refs/heads/rc' && needs.setup.outputs.release_branch_exists == 0)
-            || github.ref == 'refs/heads/release'
+              && needs.setup.outputs.hotfix_branch_exists == 0)
+            || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
+            || github.ref == 'refs/heads/hotfix'
         run: |
           PUBLISHER_PATH="$GITHUB_WORKSPACE/store/google/Publisher/bin/Release/netcoreapp2.0/Publisher.dll"
           CREDS_PATH="$HOME/secrets/play_creds.json"
@@ -474,9 +474,9 @@ jobs:
         if: |
             (github.ref == 'refs/heads/master'
               && needs.setup.outputs.rc_branch_exists == 0
-              && needs.setup.outputs.release_branch_exists == 0)
-            || (github.ref == 'refs/heads/rc' && needs.setup.outputs.release_branch_exists == 0)
-            || github.ref == 'refs/heads/release'
+              && needs.setup.outputs.hotfix_branch_exists == 0)
+            || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
+            || github.ref == 'refs/heads/hotfix'
         env:
           APPLE_ID_USERNAME: ${{ secrets.APPLE_ID_USERNAME }}
           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
@@ -536,7 +536,10 @@ jobs:
       - crowdin-push
     steps:
       - name: Check if any job failed
-        if: ${{ (github.ref == 'refs/heads/master') || (github.ref == 'refs/heads/rc') }}
+        if: |
+            (github.ref == 'refs/heads/master')
+            || (github.ref == 'refs/heads/rc')
+            || (github.ref == 'refs/heads/hotfix')
         env:
           CLOC_STATUS: ${{ needs.cloc.result }}
           ANDROID_STATUS: ${{ needs.android.result }}
