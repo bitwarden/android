@@ -10,6 +10,7 @@ namespace Bit.App.Pages
     public class TabsPage : TabbedPage
     {
         private readonly IMessagingService _messagingService;
+        private readonly IKeyConnectorService _keyConnectorService;
         
         private NavigationPage _groupingsPage;
         private NavigationPage _sendGroupingsPage;
@@ -18,6 +19,7 @@ namespace Bit.App.Pages
         public TabsPage(AppOptions appOptions = null, PreviousPageInfo previousPage = null)
         {
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
+            _keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
 
             _groupingsPage = new NavigationPage(new GroupingsPage(true, previousPage: previousPage))
             {
@@ -69,6 +71,15 @@ namespace Bit.App.Pages
             else if (appOptions?.CreateSend != null)
             {
                 ResetToSendPage();
+            }
+            
+        }
+
+        protected override async void OnAppearing()
+        {
+            if (await _keyConnectorService.UserNeedsMigration())
+            {
+                await Navigation.PushModalAsync(new NavigationPage(new RemoveMasterPasswordPage()));
             }
         }
 

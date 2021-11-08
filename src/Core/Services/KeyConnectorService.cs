@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
+using Bit.Core.Models.Domain;
+using Bit.Core.Models.Request;
 
 namespace Bit.Core.Services
 {
@@ -8,17 +10,35 @@ namespace Bit.Core.Services
     {
         private const string Keys_UsesKeyConnector = "usesKeyConnector";
 
+        private readonly IUserService _userService;
+        private readonly ICryptoService _cryptoService;
         private readonly IStorageService _storageService;
+        private readonly ITokenService _tokenService;
+        private readonly IApiService _apiService;
 
         private bool? _usesKeyConnector;
 
-        public KeyConnectorService(IStorageService storageService)
+        public KeyConnectorService(IUserService userService, ICryptoService cryptoService,
+            IStorageService storageService, ITokenService tokenService, IApiService apiService)
         {
+            _userService = userService;
+            _cryptoService = cryptoService;
             _storageService = storageService;
+            _tokenService = tokenService;
+            _apiService = apiService;
+
         }
 
-        public Task GetAndSetKey(string url) => throw new NotImplementedException();
-        public Task GetManagingOrganization() => throw new NotImplementedException();
+        public Task GetAndSetKey(string url = null)
+        {
+            //if (url == null)
+            //{
+            //    _environmentService
+
+            //}
+            throw new NotImplementedException();
+            
+        }
 
         public async Task SetUsesKeyConnector(bool usesKeyConnector)
         {
@@ -36,8 +56,41 @@ namespace Bit.Core.Services
             return _usesKeyConnector.Value;
         }
 
-        public Task MigrateUser() => throw new NotImplementedException();
+        public async Task<Organization> GetManagingOrganization()
+        {
+            var orgs = await _userService.GetAllOrganizationAsync();
+            return orgs.Find(o =>
+                o.UsesKeyConnector &&
+                !o.IsAdmin);
+        }
 
-        public Task<bool> UserNeedsMigration() => throw new NotImplementedException();
+        public async Task MigrateUser()
+        {
+            var organization = await GetManagingOrganization();
+            var key = await _cryptoService.GetKeyAsync();
+
+            try
+            {
+                var keyConnectorRequest = new KeyConnectorUserKeyRequest(key.EncKeyB64);
+                await _apiService.PostUserKeyToKeyConnector(organization.KeyConnectorUrl, keyConnectorRequest);
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
+            await _apiService.PostConvertToKeyConnector();
+        }
+
+        public async Task<bool> UserNeedsMigration()
+        {
+            var loggedInUsingSso = _tokenService.GetIsExternal();
+            var requiredByOrganization = await GetManagingOrganization() != null;
+            var userIsNotUsingKeyConnector = !await this.GetUsesKeyConnector();
+
+            return loggedInUsingSso && requiredByOrganization && userIsNotUsingKeyConnector;
+        }
+
+
     }
 }

@@ -3587,27 +3587,27 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string ConvertMasterPassword {
+        public static string RemoveMasterPassword {
             get {
-                return ResourceManager.GetString("ConvertMasterPassword", resourceCulture);
+                return ResourceManager.GetString("RemoveMasterPassword", resourceCulture);
             }
         }
         
-        public static string ConvertMasterPasswordWarning {
+        public static string RemoveMasterPasswordWarning {
             get {
-                return ResourceManager.GetString("ConvertMasterPasswordWarning", resourceCulture);
-            }
-        }
-        
-        public static string ConvertMasterPasswordLeave {
-            get {
-                return ResourceManager.GetString("ConvertMasterPasswordLeave", resourceCulture);
+                return ResourceManager.GetString("RemoveMasterPasswordWarning", resourceCulture);
             }
         }
         
         public static string LeaveOrganization {
             get {
                 return ResourceManager.GetString("LeaveOrganization", resourceCulture);
+            }
+        }
+        
+        public static string LeaveOrganizationName {
+            get {
+                return ResourceManager.GetString("LeaveOrganizationName", resourceCulture);
             }
         }
         

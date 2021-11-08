@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Bit.Core.Models.Domain;
 
 namespace Bit.Core.Abstractions
 {
@@ -10,6 +11,6 @@ namespace Bit.Core.Abstractions
         Task<bool> UserNeedsMigration();
         Task MigrateUser();
         Task GetAndSetKey(string url);
-        Task GetManagingOrganization();
+        Task<Organization> GetManagingOrganization();
     }
 }

@@ -133,12 +133,17 @@ namespace Bit.App.Pages
             }
             var previousPage = await AppHelpers.ClearPreviousPage();
 
-            // TODO: Use UserNeedsMigration, maybe in vault?
             //if (await _keyConnectorService.UserNeedsMigration())
             //{
-            await Navigation.PushModalAsync(new NavigationPage(new ConvertMasterPasswordPage()));
+            //    Application.Current.MainPage = new TabsPage(_appOptions, previousPage);
+            //    await Application.Current.MainPage.Navigation.PushModalAsync(new NavigationPage(new RemoveMasterPasswordPage()));
             //}
-            //Application.Current.MainPage = new TabsPage(_appOptions, previousPage);
+            //else
+            //{
+            //    Application.Current.MainPage = new TabsPage(_appOptions, previousPage);
+            //}
+            Application.Current.MainPage = new TabsPage(_appOptions, previousPage);
         }
+
     }
 }

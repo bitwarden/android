@@ -66,7 +66,8 @@ namespace Bit.Core.Abstractions
         Task<KeyConnectorUserKeyResponse> GetUserKeyFromKeyConnector(string keyConnectorUrl);
         Task PostUserKeyToKeyConnector(string keyConnectorUrl, KeyConnectorUserKeyRequest request);
         Task PostSetKeyConnectorKey(SetKeyConnectorKeyRequest request);
-
+        Task PostConvertToKeyConnector();
+        Task PostLeaveOrganization(string id);
 
         Task<SendResponse> GetSendAsync(string id);
         Task<SendResponse> PostSendAsync(SendRequest request);

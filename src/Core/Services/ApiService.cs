@@ -183,7 +183,17 @@ namespace Bit.Core.Services
             return SendAsync<UpdateTempPasswordRequest, object>(HttpMethod.Put, "/accounts/update-temp-password",
                 request, true, false);
         }
-        
+
+        public Task PostConvertToKeyConnector()
+        {
+            return SendAsync<object, object>(HttpMethod.Post, "/accounts/convert-to-key-connector", null, true, false);
+        }
+
+        public Task PostSetKeyConnectorKey(SetKeyConnectorKeyRequest request)
+        {
+            return SendAsync<SetKeyConnectorKeyRequest>(HttpMethod.Post, "/accounts/set-key-connector-key", request, true);
+        }
+
         #endregion
 
         #region Folder APIs
@@ -422,9 +432,14 @@ namespace Bit.Core.Services
             return SendAsync<object, OrganizationAutoEnrollStatusResponse>(HttpMethod.Get,
                 $"/organizations/{identifier}/auto-enroll-status", null, true, true);
         }
-        
+
+        public Task PostLeaveOrganization(string id)
+        {
+            return SendAsync<object, object>(HttpMethod.Post, $"/organizations/{id}/leave", null, true, false);
+        }
+
         #endregion
-        
+
         #region Organization User APIs
 
         public Task PutOrganizationUserResetPasswordEnrollmentAsync(string orgId, string userId,
@@ -438,12 +453,6 @@ namespace Bit.Core.Services
 
         #region Key Connector
 
-        public Task PostSetKeyConnectorKey(SetKeyConnectorKeyRequest request)
-        {
-            return SendAsync<SetKeyConnectorKeyRequest>(HttpMethod.Post,
-                "/accounts/set-key-connector-key", request, true);
-        }
-
         public async Task<KeyConnectorUserKeyResponse> GetUserKeyFromKeyConnector(string keyConnectorUrl)
         {
             using (var requestMessage = new HttpRequestMessage())
@@ -456,6 +465,7 @@ namespace Bit.Core.Services
                 requestMessage.Headers.Add("Accept", "application/json");
                 var authHeader = await GetActiveBearerTokenAsync();
                 requestMessage.Headers.Add("Authorization", string.Concat("Bearer ", authHeader));
+
 
                 HttpResponseMessage response;
                 try
@@ -486,8 +496,9 @@ namespace Bit.Core.Services
                 requestMessage.Method = HttpMethod.Post;
                 requestMessage.RequestUri = new Uri(string.Concat(keyConnectorUrl, "/user-keys"));
                 //requestMessage.RequestUri = new Uri(string.Concat("http://localhost:5000", "/user-keys"));
-                requestMessage.Headers.Add("Accept", "application/json");
                 requestMessage.Headers.Add("Authorization", string.Concat("Bearer ", authHeader));
+                requestMessage.Content = new StringContent(JsonConvert.SerializeObject(request, _jsonSettings),
+                    Encoding.UTF8, "application/json");
 
                 HttpResponseMessage response;
                 try

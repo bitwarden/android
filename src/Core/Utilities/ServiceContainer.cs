@@ -49,7 +49,7 @@ namespace Bit.Core.Utilities
                 i18nService, cryptoFunctionService);
             searchService = new SearchService(cipherService, sendService);
             var policyService = new PolicyService(storageService, userService);
-            var keyConnectorService = new KeyConnectorService(storageService);
+            var keyConnectorService = new KeyConnectorService(userService, cryptoService, storageService, tokenService, apiService);
             var vaultTimeoutService = new VaultTimeoutService(cryptoService, userService, platformUtilsService,
                 storageService, folderService, cipherService, collectionService, searchService, messagingService, tokenService,
                 policyService, keyConnectorService, null, (expired) =>

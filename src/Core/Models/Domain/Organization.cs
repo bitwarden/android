@@ -29,6 +29,8 @@ namespace Bit.Core.Models.Domain
             MaxStorageGb = obj.MaxStorageGb;
             Permissions = obj.Permissions ?? new Permissions();
             Identifier = obj.Identifier;
+            UsesKeyConnector = obj.UsesKeyConnector;
+            KeyConnectorUrl = obj.KeyConnectorUrl;
         }
 
         public string Id { get; set; }
@@ -50,6 +52,8 @@ namespace Bit.Core.Models.Domain
         public short? MaxStorageGb { get; set; }
         public Permissions Permissions { get; set; } = new Permissions();
         public string Identifier { get; set; }
+        public bool UsesKeyConnector { get; set; }
+        public string KeyConnectorUrl { get; set; }
 
         public bool CanAccess
         {
