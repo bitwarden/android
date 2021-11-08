@@ -561,6 +561,12 @@
                                                 Grid.Row="1"
                                                 Grid.Column="0"
                                                 IsVisible="{Binding IsTextType}" />
+                                           <controls:FaLabel
+                                                Text="{Binding ValueText, Mode=OneWay}"
+                                                StyleClass="box-value"
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                IsVisible="{Binding IsLinkedType}" />
                                             <controls:FaLabel
                                                 Text="{Binding ValueText, Mode=OneWay}"
                                                 StyleClass="box-value"

@@ -64,13 +64,6 @@ namespace Bit.App.Pages
                 new KeyValuePair<UriMatchType?, string>(UriMatchType.Exact, AppResources.Exact),
                 new KeyValuePair<UriMatchType?, string>(UriMatchType.Never, AppResources.Never)
             };
-        private List<KeyValuePair<FieldType, string>> _fieldTypeOptions =
-            new List<KeyValuePair<FieldType, string>>
-            {
-                new KeyValuePair<FieldType, string>(FieldType.Text, AppResources.FieldTypeText),
-                new KeyValuePair<FieldType, string>(FieldType.Hidden, AppResources.FieldTypeHidden),
-                new KeyValuePair<FieldType, string>(FieldType.Boolean, AppResources.FieldTypeBoolean)
-            };
 
         public AddEditPageViewModel()
         {
@@ -667,8 +660,20 @@ namespace Bit.App.Pages
 
         public async void AddField()
         {
+            var fieldTypeOptions = new List<KeyValuePair<FieldType, string>>
+            {
+                new KeyValuePair<FieldType, string>(FieldType.Text, AppResources.FieldTypeText),
+                new KeyValuePair<FieldType, string>(FieldType.Hidden, AppResources.FieldTypeHidden),
+                new KeyValuePair<FieldType, string>(FieldType.Boolean, AppResources.FieldTypeBoolean),
+            };
+
+            if (Cipher.LinkedFieldOptions != null)
+            {
+                fieldTypeOptions.Add(new KeyValuePair<FieldType, string>(FieldType.Linked, AppResources.FieldTypeLinked));
+            }
+
             var typeSelection = await Page.DisplayActionSheet(AppResources.SelectTypeField, AppResources.Cancel, null,
-                _fieldTypeOptions.Select(f => f.Value).ToArray());
+                fieldTypeOptions.Select(f => f.Value).ToArray());
             if (typeSelection != null && typeSelection != AppResources.Cancel)
             {
                 var name = await _deviceActionService.DisplayPromptAync(AppResources.CustomFieldName);
@@ -680,7 +685,7 @@ namespace Bit.App.Pages
                 {
                     Fields = new ExtendedObservableCollection<AddEditPageFieldViewModel>();
                 }
-                var type = _fieldTypeOptions.FirstOrDefault(f => f.Value == typeSelection).Key;
+                var type = fieldTypeOptions.FirstOrDefault(f => f.Value == typeSelection).Key;
                 Fields.Add(new AddEditPageFieldViewModel(Cipher, new FieldView
                 {
                     Type = type,
@@ -746,6 +751,12 @@ namespace Bit.App.Pages
             {
                 Cipher.Type = TypeOptions[TypeSelectedIndex].Value;
                 TriggerCipherChanged();
+
+                // Linked Custom Fields only apply to a specific item type
+                foreach (var field in Fields.Where(f => f.IsLinkedType).ToList())
+                {
+                    Fields.Remove(field);
+                }
             }
         }
 
@@ -850,23 +861,29 @@ namespace Bit.App.Pages
 
     public class AddEditPageFieldViewModel : ExtendedViewModel
     {
+        private II18nService _i18nService;
         private FieldView _field;
         private CipherView _cipher;
         private bool _showHiddenValue;
         private bool _booleanValue;
+        private int _linkedFieldOptionSelectedIndex;
         private string[] _additionalFieldProperties = new string[]
         {
             nameof(IsBooleanType),
             nameof(IsHiddenType),
             nameof(IsTextType),
+            nameof(IsLinkedType),
         };
 
         public AddEditPageFieldViewModel(CipherView cipher, FieldView field)
         {
+            _i18nService = ServiceContainer.Resolve<II18nService>("i18nService");
             _cipher = cipher;
             Field = field;
             ToggleHiddenValueCommand = new Command(ToggleHiddenValue);
             BooleanValue = IsBooleanType && field.Value == "true";
+            LinkedFieldOptionSelectedIndex = !Field.LinkedId.HasValue ? 0 :
+                LinkedFieldOptions.FindIndex(lfo => lfo.Value == Field.LinkedId.Value);
         }
 
         public FieldView Field
@@ -898,12 +915,32 @@ namespace Bit.App.Pages
             }
         }
 
+        public int LinkedFieldOptionSelectedIndex
+        {
+            get => _linkedFieldOptionSelectedIndex;
+            set
+            {
+                if (SetProperty(ref _linkedFieldOptionSelectedIndex, value))
+                {
+                    LinkedFieldValueChanged();
+                }
+            }
+        }
+
+        public List<KeyValuePair<string, LinkedIdType>> LinkedFieldOptions
+        {
+            get => _cipher.LinkedFieldOptions
+                .Select(kvp => new KeyValuePair<string, LinkedIdType>(_i18nService.T(kvp.Key), kvp.Value))
+                .ToList();
+        }
+
         public Command ToggleHiddenValueCommand { get; set; }
 
         public string ShowHiddenValueIcon => _showHiddenValue ? "" : "";
         public bool IsTextType => _field.Type == FieldType.Text;
         public bool IsBooleanType => _field.Type == FieldType.Boolean;
         public bool IsHiddenType => _field.Type == FieldType.Hidden;
+        public bool IsLinkedType => _field.Type == FieldType.Linked;
         public bool ShowViewHidden => IsHiddenType && (_cipher.ViewPassword || _field.NewField);
 
         public void ToggleHiddenValue()
@@ -919,6 +956,15 @@ namespace Bit.App.Pages
         public void TriggerFieldChanged()
         {
             TriggerPropertyChanged(nameof(Field), _additionalFieldProperties);
+        }
+
+        private void LinkedFieldValueChanged()
+        {
+            if (Field != null && LinkedFieldOptionSelectedIndex > -1)
+            {
+                Field.LinkedId = LinkedFieldOptions.Find(lfo =>
+                    lfo.Value == LinkedFieldOptions[LinkedFieldOptionSelectedIndex].Value).Value;
+            }
         }
     }
 }

@@ -656,6 +656,16 @@
                                             </Keyboard>
                                         </Entry.Keyboard>
                                     </controls:MonoEntry>
+                                    <StackLayout
+                                        StyleClass="box-row, box-row-input"
+                                        IsVisible="{Binding IsLinkedType}">
+                                        <Picker
+                                            x:Name="_linkedFieldOptionPicker"
+                                            ItemsSource="{Binding LinkedFieldOptions, Mode=OneTime}"
+                                            SelectedIndex="{Binding LinkedFieldOptionSelectedIndex}"
+                                            ItemDisplayBinding="{Binding Key}"
+                                            StyleClass="box-value" />
+                                    </StackLayout>
                                     <Switch
                                         IsToggled="{Binding BooleanValue}"
                                         Grid.Row="0"
