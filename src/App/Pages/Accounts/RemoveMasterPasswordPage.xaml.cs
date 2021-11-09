@@ -45,13 +45,5 @@ namespace Bit.App.Pages
                 }
             }
         }
-
-        //private async void Close_Clicked(object sender, System.EventArgs e)
-        //{
-        //    if (DoOnce())
-        //    {
-        //        await Navigation.PopModalAsync();
-        //    }
-        //}
     }
 }
