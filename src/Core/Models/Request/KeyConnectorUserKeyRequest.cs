@@ -7,7 +7,7 @@ namespace Bit.Core.Models.Request
 
         public KeyConnectorUserKeyRequest(string key)
         {
-            this.Key = key;
+            Key = key;
         }
     }
 }
