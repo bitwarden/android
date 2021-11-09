@@ -1605,6 +1605,9 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Enter your master password to export your vault data.</value>
   </data>
+    <data name="ExportVaultOtpDescription" xml:space="preserve">
+    <value>Enter the verification code to export your vault data.</value>
+  </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>This export contains your vault data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it.</value>
   </data>
@@ -2068,5 +2071,11 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>One or more organization policies prevents your from exporting your personal vault.</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>Invalid Verification Code.</value>
+  </data>
+    <data name="RequestOtp" xml:space="preserve">
+    <value>Request one-time password</value>
   </data>
 </root>

@@ -2825,6 +2825,12 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string ExportVaultOtpDescription {
+            get {
+                return ResourceManager.GetString("ExportVaultOtpDescription", resourceCulture);
+            }
+        }
+        
         public static string ExportVaultWarning {
             get {
                 return ResourceManager.GetString("ExportVaultWarning", resourceCulture);
@@ -3668,6 +3674,18 @@ namespace Bit.App.Resources {
         public static string DisablePersonalVaultExportPolicyInEffect {
             get {
                 return ResourceManager.GetString("DisablePersonalVaultExportPolicyInEffect", resourceCulture);
+            }
+        }
+        
+        public static string InvalidVerificationCode {
+            get {
+                return ResourceManager.GetString("InvalidVerificationCode", resourceCulture);
+            }
+        }
+        
+        public static string RequestOtp {
+            get {
+                return ResourceManager.GetString("RequestOtp", resourceCulture);
             }
         }
     }

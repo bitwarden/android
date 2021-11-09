@@ -60,14 +60,21 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
+                    <Button x:Name="_requestOtp"
+                        Text="{u:I18n RequestOtp}"
+                        Clicked="RequestOtp_Clicked"
+                        HorizontalOptions="Fill"
+                        VerticalOptions="End"
+                        IsEnabled="{Binding DisablePrivateVaultPolicyEnabled, Converter={StaticResource inverseBool}}"
+                        IsVisible="{Binding UseOtpVerification}"/>
                     <Label
-                        Text="{u:I18n MasterPassword}"
+                        Text="{Binding SecretName}"
                         StyleClass="box-label"
                         Grid.Row="0"
                         Grid.Column="0" />
                     <controls:MonoEntry
-                        x:Name="_masterPassword"
-                        Text="{Binding MasterPassword}"
+                        x:Name="_secret"
+                        Text="{Binding Secret}"
                         StyleClass="box-value"
                         IsSpellCheckEnabled="False"
                         IsTextPredictionEnabled="False"
@@ -85,10 +92,11 @@
                         Grid.Column="1"
                         Grid.RowSpan="2"
                         AutomationProperties.IsInAccessibleTree="True"
-                        AutomationProperties.Name="{u:I18n ToggleVisibility}" />
+                        AutomationProperties.Name="{u:I18n ToggleVisibility}"
+                        IsVisible="{Binding UseOtpVerification, Converter={StaticResource inverseBool}}"/>
                 </Grid>
                 <Label
-                    Text="{u:I18n ExportVaultMasterPasswordDescription}"
+                    Text="{Binding InstructionText}"
                     StyleClass="box-footer-label, box-footer-label-switch" />
                 <StackLayout Spacing="20">
                     <Button Text="{u:I18n ExportVault}"

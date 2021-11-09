@@ -73,6 +73,7 @@ namespace Bit.Core.Utilities
             var auditService = new AuditService(cryptoFunctionService, apiService);
             var environmentService = new EnvironmentService(apiService, storageService);
             var eventService = new EventService(storageService, apiService, userService, cipherService);
+            var userVerificationService = new UserVerificationService(apiService, platformUtilsService, i18nService, cryptoService);
 
             Register<IStateService>("stateService", stateService);
             Register<ITokenService>("tokenService", tokenService);
@@ -96,6 +97,7 @@ namespace Bit.Core.Utilities
             Register<IEnvironmentService>("environmentService", environmentService);
             Register<IEventService>("eventService", eventService);
             Register<IKeyConnectorService>("keyConnectorService", keyConnectorService);
+            Register<IUserVerificationService>("userVerificationService", userVerificationService);
         }
 
         public static void Register<T>(string serviceName, T obj)

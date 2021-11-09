@@ -178,6 +178,17 @@ namespace Bit.Core.Services
                 true, false);
         }
 
+        public Task PostAccountRequestOtp()
+        {
+            return SendAsync<object, object>(HttpMethod.Post, "/accounts/request-otp", null, true, false);
+        }
+
+        public Task PostAccountVerifyOtpAsync(VerifyOtpRequest request)
+        {
+            return SendAsync<VerifyOtpRequest, object>(HttpMethod.Post, "/accounts/verify-otp", request,
+                true, false);
+        }
+
         public Task PutUpdateTempPasswordAsync(UpdateTempPasswordRequest request)
         {
             return SendAsync<UpdateTempPasswordRequest, object>(HttpMethod.Put, "/accounts/update-temp-password",
