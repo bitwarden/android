@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
+using Bit.Core.Exceptions;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
 
@@ -29,15 +30,19 @@ namespace Bit.Core.Services
 
         }
 
-        public Task GetAndSetKey(string url = null)
+        public async Task GetAndSetKey(string url)
         {
-            //if (url == null)
-            //{
-            //    _environmentService
-
-            //}
-            throw new NotImplementedException();
-            
+            try
+            {
+                var userKeyResponse = await _apiService.GetUserKeyFromKeyConnector(url);
+                var keyArr = Convert.FromBase64String(userKeyResponse.Key);
+                var k = new SymmetricCryptoKey(keyArr);
+                await _cryptoService.SetKeyAsync(k);
+            }
+            catch (ApiException e)
+            {
+                throw e;
+            }            
         }
 
         public async Task SetUsesKeyConnector(bool usesKeyConnector)

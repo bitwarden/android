@@ -21,6 +21,7 @@ namespace Bit.Core.Services
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IMessagingService _messagingService;
         private readonly IVaultTimeoutService _vaultTimeoutService;
+        private readonly IKeyConnectorService _keyConnectorService;
         private readonly bool _setCryptoKeys;
 
         private SymmetricCryptoKey _key;
@@ -36,6 +37,7 @@ namespace Bit.Core.Services
             IPlatformUtilsService platformUtilsService,
             IMessagingService messagingService,
             IVaultTimeoutService vaultTimeoutService,
+            IKeyConnectorService keyConnectorService,
             bool setCryptoKeys = true)
         {
             _cryptoService = cryptoService;
@@ -48,6 +50,7 @@ namespace Bit.Core.Services
             _platformUtilsService = platformUtilsService;
             _messagingService = messagingService;
             _vaultTimeoutService = vaultTimeoutService;
+            _keyConnectorService = keyConnectorService;
             _setCryptoKeys = setCryptoKeys;
 
             TwoFactorProviders = new Dictionary<TwoFactorProviderType, TwoFactorProvider>();
@@ -370,17 +373,7 @@ namespace Bit.Core.Services
                 {
                     if (tokenResponse.KeyConnectorUrl != null)
                     {
-                        try
-                        {
-                            var userKeyResponse = await _apiService.GetUserKeyFromKeyConnector(tokenResponse.KeyConnectorUrl);
-                            var keyArr = Convert.FromBase64String(userKeyResponse.Key);
-                            var k = new SymmetricCryptoKey(keyArr);
-                            await this._cryptoService.SetKeyAsync(k);
-                        }
-                        catch (ApiException e)
-                        {
-                            throw e;
-                        }
+                        await _keyConnectorService.GetAndSetKey(tokenResponse.KeyConnectorUrl);
                     }
 
                     await _cryptoService.SetEncKeyAsync(tokenResponse.Key);
