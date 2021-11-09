@@ -19,6 +19,9 @@ namespace Bit.App.Pages
         protected override async void OnAppearing()
         {
             await _vm.Init();
+            _warningLabel.Text = string.Format(AppResources.RemoveMasterPasswordWarning,
+                _vm.Organization.Name);
+            _warningLabel2.Text = AppResources.RemoveMasterPasswordWarning2;
         }
 
         private async void Continue_Clicked(object sender, System.EventArgs e)

@@ -3599,6 +3599,12 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string RemoveMasterPasswordWarning2 {
+            get {
+                return ResourceManager.GetString("RemoveMasterPasswordWarning2", resourceCulture);
+            }
+        }
+        
         public static string LeaveOrganization {
             get {
                 return ResourceManager.GetString("LeaveOrganization", resourceCulture);

@@ -2031,7 +2031,10 @@
     <value>Remove Master Password</value>
   </data>
   <data name="RemoveMasterPasswordWarning" xml:space="preserve">
-    <value>{0} is using SSO with customer-managed encryption. Continuing will remove your Master Password from your account and require SSO to login.&#10;&#10;If you do not want to remove your Master Password, you may leave this organization.</value>
+    <value>{0} is using SSO with customer-managed encryption. Continuing will remove your Master Password from your account and require SSO to login.</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>If you do not want to remove your Master Password, you may leave this organization.</value>
   </data>
   <data name="LeaveOrganization" xml:space="preserve">
     <value>Leave Organization</value>

@@ -17,14 +17,6 @@ namespace Bit.App.Pages
 
         public Organization Organization;
 
-        public Action NavigateToVaultAction { get; set; }
-
-        private string _removePasswordText;
-        public string RemovePasswordText
-        {
-            get => _removePasswordText;
-            set => SetProperty(ref _removePasswordText, value);
-        }
 
         public RemoveMasterPasswordPageViewModel()
         {
@@ -40,14 +32,15 @@ namespace Bit.App.Pages
         public async Task Init()
         {
             this.Organization = await _keyConnectorService.GetManagingOrganization();
-            RemovePasswordText = string.Format(AppResources.RemoveMasterPasswordWarning, Organization.Name);
         }
 
         public async Task MigrateAccount()
         {
             await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
+
             await _keyConnectorService.MigrateUser();
             await _syncService.FullSyncAsync(true);
+
             await _deviceActionService.HideLoadingAsync();
 
         }
