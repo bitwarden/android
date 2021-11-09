@@ -19,10 +19,9 @@ namespace Bit.Core.Models.Request
         public bool? Remember { get; set; }
         public string CaptchaToken { get; set; }
         public DeviceRequest Device { get; set; }
-        public string OrgIdentifier { get; set; }
 
         public TokenRequest(string[] credentials, string[] codes, TwoFactorProviderType? provider, string token,
-            bool? remember, string captchaToken, DeviceRequest device = null, string orgIdentifier = null)
+            bool? remember, string captchaToken, DeviceRequest device = null)
         {
             if (credentials != null && credentials.Length > 1)
             {
@@ -40,7 +39,6 @@ namespace Bit.Core.Models.Request
             Remember = remember;
             Device = device;
             CaptchaToken = captchaToken;
-            OrgIdentifier = orgIdentifier;
         }
 
         public Dictionary<string, string> ToIdentityToken(string clientId)
