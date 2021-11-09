@@ -175,7 +175,7 @@ namespace Bit.App.Pages
                 _scrollView.Scrolled += (sender, args) => _vm.HandleScroll();
             });
             // Hide password reprompt option if using key connector
-            _passwordPrompt.IsVisible = await _keyConnectorService.GetUsesKeyConnector() ? false : true;
+            _passwordPrompt.IsVisible = !await _keyConnectorService.GetUsesKeyConnector();
         }
 
         protected override void OnDisappearing()
