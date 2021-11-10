@@ -17,7 +17,6 @@ namespace Bit.App.Pages
 
         public Organization Organization;
 
-
         public RemoveMasterPasswordPageViewModel()
         {
             PageTitle = AppResources.RemoveMasterPassword;
