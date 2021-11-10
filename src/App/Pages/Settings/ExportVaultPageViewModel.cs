@@ -32,7 +32,7 @@ namespace Bit.App.Pages
         private byte[] _exportResult;
         private string _defaultFilename;
         private bool _initialized = false;
-        private bool _useOtpVerification = false;
+        private bool _useOTPVerification = false;
         private string _secretName;
         private string _instructionText;
 
@@ -64,11 +64,11 @@ namespace Bit.App.Pages
             _initialized = true;
             FileFormatSelectedIndex = FileFormatOptions.FindIndex(k => k.Key == "json");
             DisablePrivateVaultPolicyEnabled = await _policyService.PolicyAppliesToUser(PolicyType.DisablePersonalVaultExport);
-            UseOtpVerification = await _keyConnectorService.GetUsesKeyConnector();
+            UseOTPVerification = await _keyConnectorService.GetUsesKeyConnector();
 
-            if (UseOtpVerification)
+            if (UseOTPVerification)
             {
-                InstructionText = _i18nService.T("ExportVaultOtpDescription");
+                InstructionText = _i18nService.T("ExportVaultOTPDescription");
                 SecretName = _i18nService.T("VerificationCode");
             }
             else
@@ -111,10 +111,10 @@ namespace Bit.App.Pages
                 additionalPropertyNames: new string[] {nameof(ShowPasswordIcon)});
         }
 
-        public bool UseOtpVerification
+        public bool UseOTPVerification
         {
-            get => _useOtpVerification;
-            set => SetProperty(ref _useOtpVerification, value);
+            get => _useOTPVerification;
+            set => SetProperty(ref _useOTPVerification, value);
         }
 
         public string Secret
@@ -193,9 +193,9 @@ namespace Bit.App.Pages
             }
         }
 
-        public async Task RequestOtp()
+        public async Task RequestOTP()
         {
-            await _apiService.PostAccountRequestOtp();
+            await _apiService.PostAccountRequestOTP();
         }
 
         public async void SaveFileSelected(string contentUri, string filename)

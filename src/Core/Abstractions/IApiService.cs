@@ -27,8 +27,8 @@ namespace Bit.Core.Abstractions
         Task<SyncResponse> GetSyncAsync();
         Task PostAccountKeysAsync(KeysRequest request);
         Task PostAccountVerifyPasswordAsync(PasswordVerificationRequest request);
-        Task PostAccountRequestOtp();
-        Task PostAccountVerifyOtpAsync(VerifyOtpRequest request);
+        Task PostAccountRequestOTP();
+        Task PostAccountVerifyOTPAsync(VerifyOTPRequest request);
         Task<CipherResponse> PostCipherAsync(CipherRequest request);
         Task<CipherResponse> PostCipherCreateAsync(CipherCreateRequest request);
         Task<FolderResponse> PostFolderAsync(FolderRequest request);

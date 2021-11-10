@@ -178,14 +178,14 @@ namespace Bit.Core.Services
                 true, false);
         }
 
-        public Task PostAccountRequestOtp()
+        public Task PostAccountRequestOTP()
         {
             return SendAsync<object, object>(HttpMethod.Post, "/accounts/request-otp", null, true, false);
         }
 
-        public Task PostAccountVerifyOtpAsync(VerifyOtpRequest request)
+        public Task PostAccountVerifyOTPAsync(VerifyOTPRequest request)
         {
-            return SendAsync<VerifyOtpRequest, object>(HttpMethod.Post, "/accounts/verify-otp", request,
+            return SendAsync<VerifyOTPRequest, object>(HttpMethod.Post, "/accounts/verify-otp", request,
                 true, false);
         }
 

@@ -66,12 +66,12 @@ namespace Bit.App.Pages
             }
         }
 
-        private async void RequestOtp_Clicked(object sender, EventArgs e)
+        private async void RequestOTP_Clicked(object sender, EventArgs e)
         {
             if (DoOnce())
             {
-                await _vm.RequestOtp();
-                _requestOtp.IsEnabled = false;
+                await _vm.RequestOTP();
+                _requestOTP.IsEnabled = false;
             }
         }
 
