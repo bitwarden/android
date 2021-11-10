@@ -39,9 +39,9 @@ namespace Bit.Core.Services
                 var k = new SymmetricCryptoKey(keyArr);
                 await _cryptoService.SetKeyAsync(k);
             }
-            catch (ApiException e)
+            catch (Exception e)
             {
-                throw e;
+                throw new Exception("Unable to reach Key Connector", e);
             }            
         }
 
@@ -81,7 +81,7 @@ namespace Bit.Core.Services
             }
             catch (Exception e)
             {
-                throw e;
+                throw new Exception("Unable to reach Key Connector", e);
             }
 
             await _apiService.PostConvertToKeyConnector();

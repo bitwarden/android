@@ -412,9 +412,9 @@ namespace Bit.Core.Services
                     {
                         await _apiService.PostUserKeyToKeyConnector(tokenResponse.KeyConnectorUrl, keyConnectorRequest);
                     }
-                    catch (ApiException e)
+                    catch (Exception e)
                     {
-                        throw e;
+                        throw new Exception("Unable to reach Key Connector", e);
                     }
 
                     var keys = new KeysRequest
