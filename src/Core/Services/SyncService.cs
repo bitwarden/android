@@ -333,7 +333,6 @@ namespace Bit.Core.Services
             await _userService.SetEmailVerifiedAsync(response.EmailVerified);
             await _userService.SetForcePasswordReset(response.ForcePasswordReset);
             await _keyConnectorService.SetUsesKeyConnector(response.UsesKeyConnector);
-
         }
 
         private async Task SyncFoldersAsync(string userId, List<FolderResponse> response)

@@ -70,7 +70,6 @@ namespace Bit.App.Pages
             {
                 ResetToSendPage();
             }
-            
         }
 
         public void ResetToVaultPage()

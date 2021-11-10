@@ -27,6 +27,5 @@ namespace Bit.Core.Models.Response
         public string Identifier { get; set; }
         public bool UsesKeyConnector { get; set; }
         public string KeyConnectorUrl { get; set; }
-
     }
 }

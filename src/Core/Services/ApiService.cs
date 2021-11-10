@@ -475,7 +475,6 @@ namespace Bit.Core.Services
                 requestMessage.RequestUri = new Uri(string.Concat(keyConnectorUrl, "/user-keys"));
                 requestMessage.Headers.Add("Authorization", string.Concat("Bearer ", authHeader));
 
-
                 HttpResponseMessage response;
                 try
                 {

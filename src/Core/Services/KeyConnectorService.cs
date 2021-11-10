@@ -27,7 +27,6 @@ namespace Bit.Core.Services
             _storageService = storageService;
             _tokenService = tokenService;
             _apiService = apiService;
-
         }
 
         public async Task GetAndSetKey(string url)
@@ -95,7 +94,5 @@ namespace Bit.Core.Services
 
             return loggedInUsingSso && requiredByOrganization && userIsNotUsingKeyConnector;
         }
-
-
     }
 }
