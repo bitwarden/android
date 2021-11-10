@@ -28,6 +28,7 @@ namespace Bit.App.Pages
         private readonly IEnvironmentService _environmentService;
         private readonly IStateService _stateService;
         private readonly IBiometricService _biometricService;
+        private readonly IKeyConnectorService _keyConnectorService;
 
         private string _email;
         private bool _showPassword;
@@ -54,6 +55,7 @@ namespace Bit.App.Pages
             _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _biometricService = ServiceContainer.Resolve<IBiometricService>("biometricService");
+            _keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
 
             PageTitle = AppResources.VerifyMasterPassword;
             TogglePasswordCommand = new Command(TogglePassword);
@@ -119,11 +121,19 @@ namespace Bit.App.Pages
         public string Pin { get; set; }
         public Action UnlockedAction { get; set; }
 
+        public async Task<bool> UserNeedsMigration() => await _keyConnectorService.UserNeedsMigration();
+
         public async Task InitAsync(bool autoPromptBiometric)
         {
             _pinSet = await _vaultTimeoutService.IsPinLockSetAsync();
             PinLock = (_pinSet.Item1 && _vaultTimeoutService.PinProtectedKey != null) || _pinSet.Item2;
             BiometricLock = await _vaultTimeoutService.IsBiometricLockSetAsync() && await _cryptoService.HasKeyAsync();
+
+            // Users with key connector and without biometric or pin has no MP to unlock with
+            if (await _keyConnectorService.GetUsesKeyConnector() && !(BiometricLock || PinLock))
+            {
+                await _vaultTimeoutService.LogOutAsync();
+            }
             _email = await _userService.GetEmailAsync();
             var webVault = _environmentService.GetWebVaultUrl();
             if (string.IsNullOrWhiteSpace(webVault))

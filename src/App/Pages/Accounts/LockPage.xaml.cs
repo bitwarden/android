@@ -12,7 +12,6 @@ namespace Bit.App.Pages
     public partial class LockPage : BaseContentPage
     {
         private readonly IStorageService _storageService;
-        private readonly IKeyConnectorService _keyConnectorService;
         private readonly IMessagingService _messagingService;
         private readonly AppOptions _appOptions;
         private readonly bool _autoPromptBiometric;
@@ -24,7 +23,6 @@ namespace Bit.App.Pages
         public LockPage(AppOptions appOptions = null, bool autoPromptBiometric = true)
         {
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
-            _keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _appOptions = appOptions;
             _autoPromptBiometric = autoPromptBiometric;
@@ -135,7 +133,7 @@ namespace Bit.App.Pages
             }
             var previousPage = await AppHelpers.ClearPreviousPage();
 
-            if (await _keyConnectorService.UserNeedsMigration())
+            if (await _vm.UserNeedsMigration())
             {
                 var removeMasterPasswordPage = new RemoveMasterPasswordPage();
                 removeMasterPasswordPage.NavigateAction += () => Device.BeginInvokeOnMainThread(async () => await UnlockedAsync());
