@@ -13,6 +13,7 @@ namespace Bit.App.Pages
     {
         private readonly IStorageService _storageService;
         private readonly IKeyConnectorService _keyConnectorService;
+        private readonly IMessagingService _messagingService;
         private readonly AppOptions _appOptions;
         private readonly bool _autoPromptBiometric;
         private readonly LockPageViewModel _vm;
@@ -24,6 +25,7 @@ namespace Bit.App.Pages
         {
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
+            _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _appOptions = appOptions;
             _autoPromptBiometric = autoPromptBiometric;
             InitializeComponent();
@@ -133,16 +135,16 @@ namespace Bit.App.Pages
             }
             var previousPage = await AppHelpers.ClearPreviousPage();
 
-            //if (await _keyConnectorService.UserNeedsMigration())
-            //{
-            //    Application.Current.MainPage = new TabsPage(_appOptions, previousPage);
-            //    await Application.Current.MainPage.Navigation.PushModalAsync(new NavigationPage(new RemoveMasterPasswordPage()));
-            //}
-            //else
-            //{
-            //    Application.Current.MainPage = new TabsPage(_appOptions, previousPage);
-            //}
-            Application.Current.MainPage = new TabsPage(_appOptions, previousPage);
+            if (await _keyConnectorService.UserNeedsMigration())
+            {
+                var removeMasterPasswordPage = new RemoveMasterPasswordPage();
+                removeMasterPasswordPage.NavigateAction += () => Device.BeginInvokeOnMainThread(async () => await UnlockedAsync());
+                await Application.Current.MainPage.Navigation.PushModalAsync(new NavigationPage(removeMasterPasswordPage));
+            }
+            else
+            {
+                Application.Current.MainPage = new TabsPage(_appOptions, previousPage);
+            }
         }
 
     }

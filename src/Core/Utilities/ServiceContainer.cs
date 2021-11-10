@@ -68,7 +68,7 @@ namespace Bit.Core.Utilities
                 cryptoFunctionService, policyService);
             var totpService = new TotpService(storageService, cryptoFunctionService);
             var authService = new AuthService(cryptoService, cryptoFunctionService, apiService, userService, tokenService, appIdService,
-                i18nService, platformUtilsService, messagingService, vaultTimeoutService);
+                i18nService, platformUtilsService, messagingService, vaultTimeoutService, keyConnectorService);
             var exportService = new ExportService(folderService, cipherService, cryptoService);
             var auditService = new AuditService(cryptoFunctionService, apiService);
             var environmentService = new EnvironmentService(apiService, storageService);

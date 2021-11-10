@@ -310,16 +310,16 @@ namespace Bit.Core.Services
             if (twoFactorToken != null && twoFactorProvider != null)
             {
                 request = new TokenRequest(emailPassword, codeCodeVerifier, twoFactorProvider, twoFactorToken, remember,
-                    captchaToken, deviceRequest, orgId);
+                    captchaToken, deviceRequest);
             }
             else if (storedTwoFactorToken != null)
             {
                 request = new TokenRequest(emailPassword, codeCodeVerifier, TwoFactorProviderType.Remember,
-                    storedTwoFactorToken, false, captchaToken, deviceRequest, orgId);
+                    storedTwoFactorToken, false, captchaToken, deviceRequest);
             }
             else
             {
-                request = new TokenRequest(emailPassword, codeCodeVerifier, null, null, false, captchaToken, deviceRequest, orgId);
+                request = new TokenRequest(emailPassword, codeCodeVerifier, null, null, false, captchaToken, deviceRequest);
             }
 
             var response = await _apiService.PostIdentityTokenAsync(request);

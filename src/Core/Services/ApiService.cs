@@ -468,13 +468,11 @@ namespace Bit.Core.Services
         {
             using (var requestMessage = new HttpRequestMessage())
             {
+                var authHeader = await GetActiveBearerTokenAsync();
+
                 requestMessage.Version = new Version(1, 0);
                 requestMessage.Method = HttpMethod.Get;
                 requestMessage.RequestUri = new Uri(string.Concat(keyConnectorUrl, "/user-keys"));
-                //requestMessage.RequestUri = new Uri(string.Concat("http://localhost:5000", "/user-keys"));
-
-                requestMessage.Headers.Add("Accept", "application/json");
-                var authHeader = await GetActiveBearerTokenAsync();
                 requestMessage.Headers.Add("Authorization", string.Concat("Bearer ", authHeader));
 
 
@@ -506,7 +504,6 @@ namespace Bit.Core.Services
                 requestMessage.Version = new Version(1, 0);
                 requestMessage.Method = HttpMethod.Post;
                 requestMessage.RequestUri = new Uri(string.Concat(keyConnectorUrl, "/user-keys"));
-                //requestMessage.RequestUri = new Uri(string.Concat("http://localhost:5000", "/user-keys"));
                 requestMessage.Headers.Add("Authorization", string.Concat("Bearer ", authHeader));
                 requestMessage.Content = new StringContent(JsonConvert.SerializeObject(request, _jsonSettings),
                     Encoding.UTF8, "application/json");

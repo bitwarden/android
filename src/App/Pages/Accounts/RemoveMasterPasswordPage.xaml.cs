@@ -9,6 +9,8 @@ namespace Bit.App.Pages
     {
         private readonly RemoveMasterPasswordPageViewModel _vm;
 
+        public Action NavigateAction { get; set; }
+
         public RemoveMasterPasswordPage()
         {
             InitializeComponent();
@@ -47,6 +49,11 @@ namespace Bit.App.Pages
                     await Navigation.PopModalAsync();
                 }
             }
+        }
+
+        protected override async void OnDisappearing()
+        {
+            NavigateAction?.Invoke();
         }
     }
 }
