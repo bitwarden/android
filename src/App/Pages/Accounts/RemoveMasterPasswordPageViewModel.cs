@@ -31,7 +31,7 @@ namespace Bit.App.Pages
 
         public async Task Init()
         {
-            this.Organization = await _keyConnectorService.GetManagingOrganization();
+            Organization = await _keyConnectorService.GetManagingOrganization();
         }
 
         public async Task MigrateAccount()
