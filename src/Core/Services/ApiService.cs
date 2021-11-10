@@ -178,14 +178,14 @@ namespace Bit.Core.Services
                 true, false);
         }
 
-        public Task PostAccountRequestOtp()
+        public Task PostAccountRequestOTP()
         {
             return SendAsync<object, object>(HttpMethod.Post, "/accounts/request-otp", null, true, false);
         }
 
-        public Task PostAccountVerifyOtpAsync(VerifyOtpRequest request)
+        public Task PostAccountVerifyOTPAsync(VerifyOTPRequest request)
         {
-            return SendAsync<VerifyOtpRequest, object>(HttpMethod.Post, "/accounts/verify-otp", request,
+            return SendAsync<VerifyOTPRequest, object>(HttpMethod.Post, "/accounts/verify-otp", request,
                 true, false);
         }
 
@@ -474,7 +474,6 @@ namespace Bit.Core.Services
                 requestMessage.Method = HttpMethod.Get;
                 requestMessage.RequestUri = new Uri(string.Concat(keyConnectorUrl, "/user-keys"));
                 requestMessage.Headers.Add("Authorization", string.Concat("Bearer ", authHeader));
-
 
                 HttpResponseMessage response;
                 try

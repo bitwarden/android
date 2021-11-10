@@ -2825,9 +2825,9 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string ExportVaultOtpDescription {
+        public static string ExportVaultOTPDescription {
             get {
-                return ResourceManager.GetString("ExportVaultOtpDescription", resourceCulture);
+                return ResourceManager.GetString("ExportVaultOTPDescription", resourceCulture);
             }
         }
         
@@ -3689,9 +3689,9 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string RequestOtp {
+        public static string RequestOTP {
             get {
-                return ResourceManager.GetString("RequestOtp", resourceCulture);
+                return ResourceManager.GetString("RequestOTP", resourceCulture);
             }
         }
     }

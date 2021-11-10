@@ -17,7 +17,6 @@ namespace Bit.App.Pages
 
         public Organization Organization;
 
-
         public RemoveMasterPasswordPageViewModel()
         {
             PageTitle = AppResources.RemoveMasterPassword;
@@ -42,7 +41,6 @@ namespace Bit.App.Pages
             await _syncService.FullSyncAsync(true);
 
             await _deviceActionService.HideLoadingAsync();
-
         }
 
         public async Task LeaveOrganization()

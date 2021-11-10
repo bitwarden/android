@@ -144,6 +144,5 @@ namespace Bit.App.Pages
                 Application.Current.MainPage = new TabsPage(_appOptions, previousPage);
             }
         }
-
     }
 }

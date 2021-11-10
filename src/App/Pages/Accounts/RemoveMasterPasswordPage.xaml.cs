@@ -32,7 +32,6 @@ namespace Bit.App.Pages
             {
                 await _vm.MigrateAccount();
                 await Navigation.PopModalAsync();
-
             }
         }
 

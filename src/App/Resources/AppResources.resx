@@ -1605,7 +1605,7 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Enter your master password to export your vault data.</value>
   </data>
-    <data name="ExportVaultOtpDescription" xml:space="preserve">
+    <data name="ExportVaultOTPDescription" xml:space="preserve">
     <value>Enter the verification code to export your vault data.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
@@ -2078,7 +2078,7 @@
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Invalid Verification Code.</value>
   </data>
-    <data name="RequestOtp" xml:space="preserve">
+    <data name="RequestOTP" xml:space="preserve">
     <value>Request one-time password</value>
   </data>
 </root>

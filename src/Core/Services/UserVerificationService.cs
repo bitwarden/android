@@ -33,10 +33,10 @@ namespace Bit.Core.Services
 
             if (verificationType == VerificationType.OTP)
             {
-                var request = new VerifyOtpRequest(secret);
+                var request = new VerifyOTPRequest(secret);
                 try
                 {
-                    await _apiService.PostAccountVerifyOtpAsync(request);
+                    await _apiService.PostAccountVerifyOTPAsync(request);
                 }
                 catch
                 {

@@ -62,13 +62,13 @@
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <Button x:Name="_requestOtp"
-                        Text="{u:I18n RequestOtp}"
-                        Clicked="RequestOtp_Clicked"
+                    <Button x:Name="_requestOTP"
+                        Text="{u:I18n RequestOTP}"
+                        Clicked="RequestOTP_Clicked"
                         HorizontalOptions="Fill"
                         VerticalOptions="End"
                         IsEnabled="{Binding DisablePrivateVaultPolicyEnabled, Converter={StaticResource inverseBool}}"
-                        IsVisible="{Binding UseOtpVerification}"
+                        IsVisible="{Binding UseOTPVerification}"
                         Grid.Row="0"
                         Margin="0,0,0,10"/>
                     <Label
@@ -96,7 +96,7 @@
                         Grid.Column="1"
                         AutomationProperties.IsInAccessibleTree="True"
                         AutomationProperties.Name="{u:I18n ToggleVisibility}"
-                        IsVisible="{Binding UseOtpVerification, Converter={StaticResource inverseBool}}"/>
+                        IsVisible="{Binding UseOTPVerification, Converter={StaticResource inverseBool}}"/>
                 </Grid>
                 <StackLayout StyleClass="box-row">
                     <Label
