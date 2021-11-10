@@ -1,0 +1,103 @@
+---
+name: Build
+
+on:
+  push:
+    branches-ignore:
+      - 'l10n_master'
+      - 'gh-pages'
+
+jobs:
+  cloc:
+    name: CLOC
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f  # v2.3.4
+
+      - name: Set up CLOC
+        run: |
+          sudo apt-get update
+          sudo apt-get -y install cloc
+
+      - name: Print lines of code
+        run: cloc --vcs git --exclude-dir Resources,store,test,Properties --include-lang C#,XAML
+
+
+  setup:
+    name: Setup
+    runs-on: ubuntu-20.04
+    outputs:
+      rc_branch_exists: ${{ steps.branch-check.outputs.rc_branch_exists }}
+      hotfix_branch_exists: ${{ steps.branch-check.outputs.hotfix_branch_exists }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f  # v2.3.4
+
+      - name: Check if special branches exist
+        id: branch-check
+        run: |
+          if [[ $(git ls-remote --heads origin rc) ]]; then
+            echo "::set-output name=rc_branch_exists::1"
+          else
+            echo "::set-output name=rc_branch_exists::0"
+          fi
+
+          if [[ $(git ls-remote --heads origin hotfix) ]]; then
+            echo "::set-output name=hotfix_branch_exists::1"
+          else
+            echo "::set-output name=hotfix_branch_exists::0"
+          fi
+        shell: bash
+
+
+  android:
+    name: Android
+    runs-on: windows-2019
+    needs: setup
+    steps:
+      - name: Set up MSBuild
+        uses: microsoft/setup-msbuild@c26a08ba26249b81327e26f6ef381897b6a8754d  # v1
+
+      - name: Print environment
+        run: |
+          nuget help | grep Version
+          msbuild -version
+          dotnet --info
+          echo "GitHub ref: $GITHUB_REF"
+          echo "GitHub event: $GITHUB_EVENT"
+
+      - name: Checkout repo
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f  # v2.3.4
+
+      - name: Increment version
+        run: |
+          BUILD_NUMBER=$((3000 + $GITHUB_RUN_NUMBER))
+
+          echo "########################################"
+          echo "##### Setting Version Code $BUILD_NUMBER"
+          echo "########################################"
+
+          sed -i "s/android:versionCode=\"1\"/android:versionCode=\"$BUILD_NUMBER\"/" \
+            ./src/Android/Properties/AndroidManifest.xml
+        shell: bash
+
+      - name: Restore packages
+        run: nuget restore
+
+      - name: Run Core tests
+        run: dotnet test test/Core.Test/Core.Test.csproj
+
+      - name: Build Play Store publisher
+        run: dotnet build ./store/google/Publisher/Publisher.csproj -p:Configuration=Release
+
+      - name: Build for Play Store
+        run: |
+          $configuration = "Release";
+
+          Write-Output "########################################"
+          Write-Output "##### Build $configuration Configuration"
+          Write-Output "########################################"
+
+          msbuild "$($env:GITHUB_WORKSPACE + "/src/Android/Android.csproj")" "/p:Configuration=$configuration"
+        shell: pwsh
