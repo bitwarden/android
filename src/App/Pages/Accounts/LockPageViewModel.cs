@@ -121,8 +121,6 @@ namespace Bit.App.Pages
         public string Pin { get; set; }
         public Action UnlockedAction { get; set; }
 
-        public async Task<bool> UserNeedsMigration() => await _keyConnectorService.UserNeedsMigration();
-
         public async Task InitAsync(bool autoPromptBiometric)
         {
             _pinSet = await _vaultTimeoutService.IsPinLockSetAsync();

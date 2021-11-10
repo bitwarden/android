@@ -140,6 +140,15 @@ namespace Bit.App
                         }
                     });
                 }
+                else if (message.Command == "removeMasterPassword")
+                {
+                    Device.BeginInvokeOnMainThread(async () =>
+                    {
+                        await Application.Current.MainPage.Navigation.PushModalAsync(
+                        new NavigationPage(new RemoveMasterPasswordPage()));
+                    });
+                }
+
             });
         }
 
