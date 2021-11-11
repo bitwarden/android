@@ -556,7 +556,7 @@
                         StyleClass="box-value"
                         HorizontalOptions="End" />
                 </StackLayout>
-                <StackLayout StyleClass="box-row, box-row-switch">
+                <StackLayout x:Name="_passwordPrompt" StyleClass="box-row, box-row-switch">
                     <Label
                         Text="{u:I18n PasswordPrompt}"
                         StyleClass="box-label-regular" />

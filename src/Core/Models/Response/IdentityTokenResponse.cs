@@ -21,5 +21,6 @@ namespace Bit.Core.Models.Response
         public KdfType Kdf { get; set; }
         public int? KdfIterations { get; set; }
         public bool ForcePasswordReset { get; set; }
+        public string KeyConnectorUrl { get; set; }
     }
 }

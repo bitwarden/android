@@ -2837,6 +2837,12 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string ExportVaultOTPDescription {
+            get {
+                return ResourceManager.GetString("ExportVaultOTPDescription", resourceCulture);
+            }
+        }
+        
         public static string ExportVaultWarning {
             get {
                 return ResourceManager.GetString("ExportVaultWarning", resourceCulture);
@@ -3599,6 +3605,36 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string RemoveMasterPassword {
+            get {
+                return ResourceManager.GetString("RemoveMasterPassword", resourceCulture);
+            }
+        }
+        
+        public static string RemoveMasterPasswordWarning {
+            get {
+                return ResourceManager.GetString("RemoveMasterPasswordWarning", resourceCulture);
+            }
+        }
+        
+        public static string RemoveMasterPasswordWarning2 {
+            get {
+                return ResourceManager.GetString("RemoveMasterPasswordWarning2", resourceCulture);
+            }
+        }
+        
+        public static string LeaveOrganization {
+            get {
+                return ResourceManager.GetString("LeaveOrganization", resourceCulture);
+            }
+        }
+        
+        public static string LeaveOrganizationName {
+            get {
+                return ResourceManager.GetString("LeaveOrganizationName", resourceCulture);
+            }
+        }
+        
         public static string Fido2Title {
             get {
                 return ResourceManager.GetString("Fido2Title", resourceCulture);
@@ -3656,6 +3692,18 @@ namespace Bit.App.Resources {
         public static string DisablePersonalVaultExportPolicyInEffect {
             get {
                 return ResourceManager.GetString("DisablePersonalVaultExportPolicyInEffect", resourceCulture);
+            }
+        }
+        
+        public static string InvalidVerificationCode {
+            get {
+                return ResourceManager.GetString("InvalidVerificationCode", resourceCulture);
+            }
+        }
+        
+        public static string RequestOTP {
+            get {
+                return ResourceManager.GetString("RequestOTP", resourceCulture);
             }
         }
     }
