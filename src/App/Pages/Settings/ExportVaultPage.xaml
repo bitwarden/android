@@ -70,6 +70,7 @@
                         IsEnabled="{Binding DisablePrivateVaultPolicyEnabled, Converter={StaticResource inverseBool}}"
                         IsVisible="{Binding UseOTPVerification}"
                         Grid.Row="0"
+                        Grid.ColumnSpan="2"
                         Margin="0,0,0,10"/>
                     <Label
                         Text="{Binding SecretName}"

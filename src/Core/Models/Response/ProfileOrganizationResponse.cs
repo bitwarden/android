@@ -26,7 +26,7 @@ namespace Bit.Core.Models.Response
         public Permissions Permissions { get; set; } = new Permissions();
         public string Identifier { get; set; }
         public bool UsesKeyConnector { get; set; }
-        public string KeyConnectorUrl { get; set; } = null;
+        public string KeyConnectorUrl { get; set; }
 
     }
 }

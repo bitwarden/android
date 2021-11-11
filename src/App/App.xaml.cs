@@ -140,12 +140,12 @@ namespace Bit.App
                         }
                     });
                 }
-                else if (message.Command == "removeMasterPassword")
+                else if (message.Command == "convertAccountToKeyConnector")
                 {
                     Device.BeginInvokeOnMainThread(async () =>
                     {
                         await Application.Current.MainPage.Navigation.PushModalAsync(
-                        new NavigationPage(new RemoveMasterPasswordPage()));
+                            new NavigationPage(new RemoveMasterPasswordPage()));
                     });
                 }
 

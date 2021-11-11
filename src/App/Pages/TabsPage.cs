@@ -79,7 +79,7 @@ namespace Bit.App.Pages
             base.OnAppearing();
             if (await _keyConnectorService.UserNeedsMigration())
             {
-                _messagingService.Send("removeMasterPassword");
+                _messagingService.Send("convertAccountToKeyConnector");
             }
         }
 
