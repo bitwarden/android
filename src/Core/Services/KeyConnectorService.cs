@@ -90,7 +90,7 @@ namespace Bit.Core.Services
         {
             var loggedInUsingSso = _tokenService.GetIsExternal();
             var requiredByOrganization = await GetManagingOrganization() != null;
-            var userIsNotUsingKeyConnector = !await this.GetUsesKeyConnector();
+            var userIsNotUsingKeyConnector = !await GetUsesKeyConnector();
 
             return loggedInUsingSso && requiredByOrganization && userIsNotUsingKeyConnector;
         }
