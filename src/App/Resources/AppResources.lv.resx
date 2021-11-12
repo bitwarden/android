@@ -333,7 +333,7 @@
     <value>Iesniegt</value>
   </data>
   <data name="Sync" xml:space="preserve">
-    <value>Sinhronizācija</value>
+    <value>Sinhronizēt</value>
     <comment>The title for the sync page.</comment>
   </data>
   <data name="ThankYou" xml:space="preserve">
@@ -1059,6 +1059,9 @@
   <data name="LastName" xml:space="preserve">
     <value>Uzvārds</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Pilnais vārds</value>
+  </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Autovadītāja apliecības numurs</value>
   </data>
@@ -1182,6 +1185,9 @@
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>Paslēpts</value>
+  </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>Saistīts</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Teksts</value>
@@ -1438,7 +1444,7 @@
     <value>Bitwarden nodrošina iespēju kopīgot glabātavas vienumus ar citiem, kad tiek izmantots apvienības konts. Vai apmeklēt bitwarden.com tīmekļa vietni, lai uzzinātu vairāk?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
-    <value>Izdot glabātavas saturu</value>
+    <value>Izgūt glabātavas saturu</value>
   </data>
   <data name="LockNow" xml:space="preserve">
     <value>Aizslēgt</value>
@@ -1603,29 +1609,32 @@
     <value>Datnes veids</value>
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
-    <value>Ievadīt galveno paroli, lai izdotu glabātavas saturu.</value>
+    <value>Ievadīt galveno paroli, lai izgūtu glabātavas saturu.</value>
+  </data>
+    <data name="ExportVaultOTPDescription" xml:space="preserve">
+    <value>Jāievada apstiprinājuma kods, lai izgūtu glabātavas saturu.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
-    <value>Šī datu izdošana satur glabātavas datus nešifrētā veidā. Izdoto datni nevajadzētu glabāt vai sūtīt nedrošos veidos (piemēram, e-pastā). Izdzēst to uzreiz pēc izmantošanas.</value>
+    <value>Šī izguve satur glabātavas datus nešifrētā veidā. Izdoto datni nevajadzētu glabāt vai sūtīt nedrošos veidos (piemēram, e-pastā). Izdzēst to uzreiz pēc izmantošanas.</value>
   </data>
   <data name="EncExportKeyWarning" xml:space="preserve">
-    <value>Šī izvade šifrē datus ar konta šifrēšanas atslēgu. Ja tā jebkad tiks mainīta, izvadi vajadzētu veikt vēlreiz, jo vairs nebūs iespējams atšifrēt šo datni.</value>
+    <value>Šī izguve šifrē datus ar konta šifrēšanas atslēgu. Ja tā jebkad tiks mainīta, izvadi vajadzētu veikt vēlreiz, jo vairs nebūs iespējams atšifrēt šo datni.</value>
   </data>
   <data name="EncExportAccountWarning" xml:space="preserve">
-    <value>Katram kontam ir neatkārtojamas šifrēšanas atslēgas, tādēļ nav iespējams ievietot šifrētas izdošanas datnes saturu citā kontā.</value>
+    <value>Katram Bitwarden kontam ir neatkārtojamas šifrēšanas atslēgas, tādēļ nav iespējams ievietot šifrētu izguvi citā kontā.</value>
   </data>
   <data name="ExportVaultConfirmationTitle" xml:space="preserve">
-    <value>Apstiprināt glabātavas satura izdošanu</value>
+    <value>Apstiprināt glabātavas satura izgūšanu</value>
     <comment>Title for the alert to confirm vault exports.</comment>
   </data>
   <data name="Warning" xml:space="preserve">
     <value>Brīdinājums</value>
   </data>
   <data name="ExportVaultFailure" xml:space="preserve">
-    <value>Glabātavas izdošanā radās sarežģījumi. Ja tie turpina pastāvēt, būs nepieciešams veikt izdošanu tīmekļa glabātavā.</value>
+    <value>Glabātavas satura izgūšanā radās sarežģījumi. Ja tie turpina pastāvēt, būs nepieciešams veikt izgūšanu tīmekļa glabātavā.</value>
   </data>
   <data name="ExportVaultSuccess" xml:space="preserve">
-    <value>Glabātava izdota veiksmīgi</value>
+    <value>Glabātavas saturs veiksmīgi izgūts</value>
   </data>
   <data name="Clone" xml:space="preserve">
     <value>Pavairot</value>
@@ -2026,6 +2035,21 @@
   <data name="UpdatePasswordError" xml:space="preserve">
     <value>Pašreiz nevar atjaunināt paroli</value>
   </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>Noņemt galveno paroli</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>{0} izmanto vienoto pieteikšanos ar klientu pārvaldītu šifrēšanu. Turpinot no konta tiks noņemta galvenā parole un būs nepieciešams pierakstīties ar vienoto pieteikšanos.</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>Ja nav vēlēšanās noņemt galveno paroli, var pamest šo apvienību.</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>Pamest apvienību</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>Pamest {0}?</value>
+  </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
   </data>
@@ -2054,6 +2078,12 @@
     <value>Glabātavas noildze pāŗsniedz apvienības uzstādītos ierobežojumus.</value>
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
-    <value>Viens vai vairāki apvienības nosacījumi neļauj izdot privātās glabātavas saturu.</value>
+    <value>Viens vai vairāki apvienības nosacījumi neļauj izgūt privātās glabātavas saturu.</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>Nederīgs apstiprinājuma kods.</value>
+  </data>
+    <data name="RequestOTP" xml:space="preserve">
+    <value>Pieprasīt vienreiz izmantojamo paroli</value>
   </data>
 </root>

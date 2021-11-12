@@ -196,7 +196,7 @@
     <value>நேரடியாக உதவி பெற அ கருத்து தெரிவிக்க எங்களுக்கு மின்னஞ்சலிடு</value>
   </data>
   <data name="EnterPIN" xml:space="preserve">
-    <value>உம் கடவுக்குறியை உள்ளிடு.</value>
+    <value>உம் கடவெண் குறியை உள்ளிடு.</value>
   </data>
   <data name="Favorites" xml:space="preserve">
     <value>பிடித்தவை</value>
@@ -254,7 +254,7 @@
     <value>செல்லாத பிரதான கடவுச்சொல். மீண்டும் முயலவும்.</value>
   </data>
   <data name="InvalidPIN" xml:space="preserve">
-    <value>செல்லாத கடவுக்குறி. மீண்டும் முயலவும்.</value>
+    <value>செல்லாத கடவெண். மீண்டும் முயலவும்.</value>
   </data>
   <data name="Launch" xml:space="preserve">
     <value>ஏவு</value>
@@ -355,11 +355,11 @@
     <comment>Label for a username.</comment>
   </data>
   <data name="ValidationFieldRequired" xml:space="preserve">
-    <value>{0} புலம் தேவை</value>
+    <value>{0} புலம் தேவை.</value>
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
-    <value>{0} நகலெடுக்கப்பட்டது</value>
+    <value>{0} நகலெடுக்கப்பட்டது.</value>
     <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
@@ -369,7 +369,7 @@
     <value>பிரதான கடவுச்சொல்லை உறுதிசெய்</value>
   </data>
   <data name="VerifyPIN" xml:space="preserve">
-    <value>கடவுக்குறியை உறுதிசெய்</value>
+    <value>கடவெண்ணை உறுதிசெய்</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>பதிப்பு</value>
@@ -403,7 +403,7 @@
     <value>செயலி நீட்டிப்பு</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>செயலிகள் மற்றும் இணையம் முழுதும் உள்ள உங்கள் உள்நுழைவுகளை தானாக நிரப்ப Bitwarden அணுகல்தன்மை சேவையை பயன்படுத்தவும்.</value>
+    <value>செயலிகள் மற்றும் இணையம் முழுதுமுள்ள உமது உள்நுழைவுகளைத் தன்னிரப்ப Bitwarden அணுகல்தன்மை சேவையைப் பயன்படுத்து.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>தன்னிரப்பி சேவை</value>
@@ -418,13 +418,13 @@
     <value>உங்கள் பெட்டகத்திற்கு புதிய உள்நுழைவுகளைச் சேர்ப்பதற்கான மிக எளிய வழி பிட்வார்டன் செயலி நீட்டிப்பு மூலமே. "அமைப்புகள்" திரைக்கு செல்வதன் மூலம் பிட்வார்டன் செயலி நீட்டிப்பைப் பயன்படுத்துவது பற்றி மேலுமறிக.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>Safari மற்றும் மற்ற செயலிகளில் உங்கள் உள்நுழைவுகளை தானாக நிரப்ப Bitwarden ஐ பயன்படுத்து.</value>
+    <value>Safari மற்றும் பிற செயலிகளில் உமது உள்நுழைவுகளைத் தன்னிரப்ப Bitwardenஐப் பயன்படுத்து.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
     <value>Bitwarden தன்னிரப்பி சேவை</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>உங்கள் உள்நுழைவுகளை தானாக நிரப்ப Bitwarden அணுகல்தன்மை சேவையை பயன்படுத்தவும்.</value>
+    <value>உம் உள்நுழைவுகளைத் தன்னிரப்ப Bitwarden அணுகல்தன்மை சேவையைப் பயன்படுத்து.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>மின்னஞ்சலை மாற்று</value>
@@ -458,7 +458,7 @@
     <value>தானியங்கு ஒத்திசைவை இயக்கு</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
-    <value>உங்கள் முதன்மை கடவுச்சொல் குறிப்பைப் பெற உங்கள் கணக்கு மின்னஞ்சல் முகவரியை உள்ளிடவும்.</value>
+    <value>உமது பிரதான கடவுச்சொல் குறிப்பைப் பெற உமது கணக்கு மின்னஞ்சல் முகவரியை உள்ளிடு.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
     <value>செயலி நீட்டிப்பை மீண்டும் இயக்கு</value>
@@ -641,7 +641,7 @@
     <value>ஒரு நல்ல விமர்சனம் மூலம் எங்களுக்கு உதவ தயவுசெய்து கருதுங்கள்!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
-    <value>கடவுச்சொல்லை மீண்டும் உருவாக்கு</value>
+    <value>கடவுச்சொல்லை மீண்டுமுருவாக்கு</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
     <value>பிரதான கடவுச்சொல்லை மீண்டும் தட்டு</value>
@@ -656,10 +656,10 @@
     <value>தேர்ந்தெடு</value>
   </data>
   <data name="SetPIN" xml:space="preserve">
-    <value>கடவுக்குறியை அமை</value>
+    <value>கடவெண்ணை அமை</value>
   </data>
   <data name="SetPINDirection" xml:space="preserve">
-    <value>செயலியைத் திறக்க 4 இலக்க கடவுக்குறியை உள்ளிடு.</value>
+    <value>செயலியைத் திறக்க 4 இலக்க கடவெண் குறியை உள்ளிடு.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
     <value>உருப்படியின் தகவல்</value>
@@ -676,7 +676,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="SyncingComplete" xml:space="preserve">
-    <value>ஒத்திசைவு முடிந்தது.</value>
+    <value>ஒத்திசைவு நிறைவடைந்தது.</value>
   </data>
   <data name="SyncingFailed" xml:space="preserve">
     <value>ஒத்திசைவு தோல்வி.</value>
@@ -698,7 +698,7 @@
     <value>{0} மூலம் பூட்டவிழ்</value>
   </data>
   <data name="UnlockWithPIN" xml:space="preserve">
-    <value>கடவுக்குறி மூலம் பூட்டவிழ்</value>
+    <value>கடவெண் குறி மூலம் பூட்டவிழ்</value>
   </data>
   <data name="Validating" xml:space="preserve">
     <value>சரிபார்க்கிறது</value>
@@ -765,13 +765,13 @@
     <value>உம் பெட்டகத்திற்கு புது உள்நுழைவுகளை சேர்ப்பதற்கான மிக எளிய வழி Bitwarden தன்னிரப்பி சேவையிலிருந்தே. "அமைப்புகள்" திரைக்கு சென்று Bitwarden தன்னிரப்பி  சேவையை பயன்படுத்துவது பற்றி மேலும் அறிக.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
-    <value>தானாக-நிரப்பு</value>
+    <value>தன்னிரப்பு</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
-    <value>இவ்வுருப்படியை தானாக நிரப்ப அ பார்க்க வேண்டுமா?</value>
+    <value>இவ்வுருப்படியை தன்னிரப்ப அ பார்க்க வேண்டுமா?</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>இவ்வுருப்படியை உறுதியாக தன்னிரப்ப வேண்டுமா? இது "{0}"க்கான முழுமையான பொருத்தமல்ல.</value>
+    <value>இவ்வுருப்படியை உறுதியாக தன்னிரப்ப வேண்டுமா? இது "{0}"க்கான நிறைவான பொருத்தமல்ல.</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
     <value>பொருந்தும் உருப்படிகள்</value>
@@ -786,7 +786,7 @@
     <value>"{0}"க்கான தண்னிரப்ப உருப்படியை தேடிக்கொண்டிருக்கிறீர்கள்.</value>
   </data>
   <data name="LearnOrg" xml:space="preserve">
-    <value>நிறுவுவனங்கள் பற்று அறிக</value>
+    <value>நிறுவனங்கள் பற்றி அறிக</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
     <value>"{0}" செயலியைத் திறக்க இயலவில்லை.</value>
@@ -1060,6 +1060,9 @@
   <data name="LastName" xml:space="preserve">
     <value>இறுதி பெயர்</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>முழுப்பெயர்</value>
+  </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>உரிம எண்</value>
   </data>
@@ -1124,7 +1127,7 @@
     <value>படவுரு தேக்க உரலி</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Bitwarden உடன் தானாக-நிரப்புதல்</value>
+    <value>Bitwarden உடன் தன்னிரப்பல்</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
     <value>பெட்டகம் பூட்டப்பட்டுள்ளது</value>
@@ -1184,6 +1187,9 @@
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>மறைக்கப்பட்ட</value>
   </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>இணைக்கப்பட்டது</value>
+  </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>சொற்சரம்</value>
   </data>
@@ -1234,7 +1240,7 @@
     <value>ஆம், சேமிக்கவும்</value>
   </data>
   <data name="AutofillAndSave" xml:space="preserve">
-    <value>தானாக-நிரப்பி சேமி</value>
+    <value>தன்னிரப்பிச் சேமி</value>
   </data>
   <data name="Organization" xml:space="preserve">
     <value>நிறுவனம்</value>
@@ -1273,10 +1279,10 @@
     <value>அமைவுகளின் கீழ் வேறு எத்தன்னிரப்பி செயலிகளையும் நீங்கள் பயன்படுத்தத் திட்டமிடவில்லை எனில் முடக்க பரிந்துரைக்கிறோம்.</value>
   </data>
   <data name="BitwardenAutofillDescription" xml:space="preserve">
-    <value>கடவுச்சொற்களை விரைவாக தானாக நிரப்ப உங்கள் விசைப்பலகையிலிருந்து நேரடியாக உங்கள் பெட்டகத்தை அணுகுக.</value>
+    <value>கடவுச்சொற்களை விரைவாக தன்னிரப்ப உம் விசைப்பலகையிலிருந்து நேரடியாக உம் பெட்டகத்தை அணுகு.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
-    <value>உங்கள் சாதனத்தில் கடவுச்சொல் தானாக நிரப்புதலை இயக்க, இந்த வழிமுறைகளைப் பின்பற்றவும்:</value>
+    <value>உம் சாதனத்தில் கடவுச்சொல் தன்னிரப்பலை இயக்க, இவ்வழிமுறைகளைப் பின்பற்று:</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
     <value>௧. iOS "அமைவுகள்" செயலிக்குச் செல்</value>
@@ -1285,10 +1291,10 @@
     <value>2. "கடவுச்சொற்கள் &amp; கணக்குகள்"ஐ தட்டு</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
-    <value>3. "கடவுச்சொல் தானாக நிரப்பல்"ஐ தட்டு</value>
+    <value>3. "கடவுச்சொற்கள் தன்னிரப்பல்"ஐத் தட்டு</value>
   </data>
   <data name="AutofillTurnOn4" xml:space="preserve">
-    <value>4. தானாக நிரப்பலை இயக்கு</value>
+    <value>4. தன்னிரப்பலை இயக்கு</value>
   </data>
   <data name="AutofillTurnOn5" xml:space="preserve">
     <value>5. "Bitwarden"ஐ தேர்ந்தெடு</value>
@@ -1432,7 +1438,7 @@
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="YourAccountsFingerprint" xml:space="preserve">
-    <value>உங்கள் கணக்கின் கைரேகை சொற்றொடர்</value>
+    <value>உமது கணக்கின் கைரேகை சொற்றொடர்</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="LearnOrgConfirmation" xml:space="preserve">
@@ -1445,7 +1451,7 @@
     <value>இப்போது பூட்டு</value>
   </data>
   <data name="PIN" xml:space="preserve">
-    <value>கடவுக்குறி</value>
+    <value>கடவெண்</value>
   </data>
   <data name="Unlock" xml:space="preserve">
     <value>பூட்டவிழ்</value>
@@ -1454,7 +1460,7 @@
     <value>௩௦ நிமிடங்கள்</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
-    <value>Bitwardenஐ பூட்டவிழ்க்க உம் கடவுக்குறியை அமை. நீ எப்போதாவது முழுமையாக செயலியிலிருந்து வெளியேறினால் உம் கடவுக்குறி அமைவுகள்  அகரமாக்கப்படும்.</value>
+    <value>Bitwardenஐ பூட்டவிழ்க்க உம் கடவெண் குறியை அமை. நீங்கள் எப்போதாவது முழுமையாக செயலியிலிருந்து வெளியேறினால் உம் கடவெண் அமைவுகள்  அகரமாக்கப்படும்.</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
     <value>{1} இல் {0} ஆக உள்நுழைந்துள்ளது.</value>
@@ -1464,7 +1470,7 @@
     <value>உங்கள் பெட்டகம் பூட்டப்பட்டுள்ளது. தொடர உங்கள் பிரதான கடவுச்சொல்லை சரிபார்க்கவும்.</value>
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
-    <value>உங்கள் பெட்டகம் பூட்டப்பட்டுள்ளது. தொடர உங்கள் த.அ.எ(PIN) குறியீட்டை சரிபார்க்கவும்.</value>
+    <value>உமது பெட்டகம் பூட்டப்பட்டுள்ளது. தொடர உமது கடவெண் குறியைச் நிச்சயப்படுத்து.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>இருள்</value>
@@ -1490,11 +1496,11 @@
     <value>௨ நிமிடங்கள்</value>
   </data>
   <data name="ClearClipboard" xml:space="preserve">
-    <value>கவ்வுபலகையை துடை</value>
+    <value>நகலகத்தைத் துடை</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="ClearClipboardDescription" xml:space="preserve">
-    <value>நகலெடுத்த மதிப்புகளை கவ்வுபலகையிலிருந்து தானாக துடை</value>
+    <value>நகலெடுத்த மதிப்புகளை உம் நகலகத்திலிருந்து தானாக துடை.</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="DefaultUriMatchDetection" xml:space="preserve">
@@ -1605,6 +1611,9 @@
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>உம் பெட்டக தரவை ஏற்றுமதி செய்ய பிரதான கடவுச்சொல்லை உள்ளிடு.</value>
+  </data>
+    <data name="ExportVaultOTPDescription" xml:space="preserve">
+    <value>உம் பெட்டக தரவை ஏற்றுமதிசெய்ய சரிபார்ப்புக் குறியீட்டை உள்ளிடு.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>இவ்வேற்றுமதி உம் பெட்டக தரவை மறையாக்கப்படா வடிவில் கொண்டுள்ளது. சேமிக்கவோ பாதுகாப்பற்ற தடங்களில் (மின்னஞ்சல் போன்றவை) அனுப்பவோ கூடாது. பயன்படுத்தியவுடன் அழித்துவிடவும்.</value>
@@ -1806,7 +1815,7 @@
     <value>Due to an Enterprise Policy, you are restricted from saving items to your personal vault. Change the Ownership option to an organization and choose from available Collections.</value>
   </data>
   <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
-    <value>An organization policy is affecting your ownership options.</value>
+    <value>ஒரு நிறுவன கொள்கை உம் உரிமை விருப்பங்களைப் பாதிக்கிறது.</value>
   </data>
   <data name="Send" xml:space="preserve">
     <value>Send</value>
@@ -1975,7 +1984,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
-    <value>Due to an enterprise policy, you are only able to delete an existing Send.</value>
+    <value>முனைவக கொள்ளையால், உம்மால் இருக்கின்ற Sendஐ மட்டுமே அழிக்கவியலும்.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AboutSend" xml:space="preserve">
@@ -2027,6 +2036,21 @@
   <data name="UpdatePasswordError" xml:space="preserve">
     <value>தற்போது கடவுச்சொல்லைப் புதுப்பிக்க இயலவில்லை</value>
   </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>பிரதான கடவுச்சொல்லை நீக்கு</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>நுகர்வோர்-நிர்வகிக்கும் மறையாக்கங்கொண்ட SOOவை {0} பயன்படுத்துகிறார். தொடர்தல் உம் பிரதான கடவுச்சொல்லை உம் கணக்கிலிருந்து நீக்கும் மற்றும் உள்நுழைய SSOவைக் கோரும்.</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>உம் பிரதான கடவுச்சொல்லை நீக்கவில்லையெனில், தாங்கள் இந்நிறுவனத்தைவிட்டு விலகலாம்.</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>நிறுவனத்தைவிட்டு விலகு</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>{0}விட்டு விலகவா?</value>
+  </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
   </data>
@@ -2049,12 +2073,18 @@
     <value>This organization has an enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>Your organization policies are affecting your vault timeout. Maximum allowed Vault Timeout is {0} hour(s) and {1} minute(s)</value>
+    <value>உம் நிறுவன கொள்கைகள் உம் பெட்டக நேரமுடிவைப் பாதிக்கிறது. அனுமதிக்கப்பட்ட அதிகபட்ச பெட்டக நேரமுடிவு {0} மணிநேரம் மற்றும் {1} நிமிடம(கள்) ஆகும்</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>உமது பெட்டக நேரமுடிவு உம் நிறுவனம் அமைத்த கட்டுப்பாடுகளை தாண்டுகிறது.</value>
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>ஒன்று அ மேற்பட்ட நிறுவன கொள்கைகள் உம் சொந்த பெட்டகத்தை ஏற்றுமதிசெய்வதைத் தவிர்க்கிறது.</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>செல்லாத சரிபார்ப்புக் குறியீடு.</value>
+  </data>
+    <data name="RequestOTP" xml:space="preserve">
+    <value>ஒருமுறை கடவுச்சொல்லைக் கோரு</value>
   </data>
 </root>

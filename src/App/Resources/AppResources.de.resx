@@ -1059,6 +1059,9 @@
   <data name="LastName" xml:space="preserve">
     <value>Nachname</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Vollständiger Name</value>
+  </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Führerscheinnummer</value>
   </data>
@@ -1182,6 +1185,9 @@
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>Versteckt</value>
+  </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>Verknüpft</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Text</value>
@@ -1605,6 +1611,9 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Gib das Masterpasswort ein, um deine Tresordaten zu exportieren.</value>
   </data>
+    <data name="ExportVaultOTPDescription" xml:space="preserve">
+    <value>Gebe den Verifizierungscode ein, um deine Tresordaten zu exportieren.</value>
+  </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Dieser Export enthält deine Tresordaten in einem unverschlüsseltem Format. Du solltest sie nicht speichern oder über unsichere Kanäle (z. B. E-Mail) senden. Lösche sie sofort nach ihrer Verwendung.</value>
   </data>
@@ -2026,6 +2035,21 @@
   <data name="UpdatePasswordError" xml:space="preserve">
     <value>Das Passwort kann derzeit nicht aktualisiert werden</value>
   </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>Master-Passwort entfernen</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>{0} verwendet SSO mit von Kunden verwalteter Verschlüsselung. Durch Fortfahren wird dein Master-Passwort von deinem Konto entfernt und SSO zum Anmelden benötigt.</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>Wenn du dein Master-Passwort nicht entfernen möchtest, kannst du diese Organisation verlassen.</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>Organisation verlassen</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>{0} verlassen?</value>
+  </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
   </data>
@@ -2055,5 +2079,11 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Eine oder mehrere Unternehmensrichtlinien verhindern es, dass du deinen persönlichen Tresor exportieren kannst.</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>Ungültiger Bestätigungscode.</value>
+  </data>
+    <data name="RequestOTP" xml:space="preserve">
+    <value>Einmalpasswort anfordern</value>
   </data>
 </root>
