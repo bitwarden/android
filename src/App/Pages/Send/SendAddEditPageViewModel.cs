@@ -96,6 +96,7 @@ namespace Bit.App.Pages
         public bool ShareOnSave { get; set; }
         public bool DisableHideEmailControl { get; set; }
         public bool IsAddFromShare { get; set; }
+        public bool CanShareOnSave { get; set; } = true;
         public List<KeyValuePair<string, SendType>> TypeOptions { get; }
         public List<KeyValuePair<string, string>> DeletionTypeOptions { get; }
         public List<KeyValuePair<string, string>> ExpirationTypeOptions { get; }
@@ -395,16 +396,23 @@ namespace Bit.App.Pages
                     _platformUtilsService.ShowToast("success", null,
                     EditMode ? AppResources.SendUpdated : AppResources.NewSendCreated);
                 }
+                //else
+                //{
+                //    var savedSend = await _sendService.GetAsync(sendId);
+                //    if (savedSend != null)
+                //    {
+                //        var savedSendView = await savedSend.DecryptAsync();
+                //        await AppHelpers.CopySendUrlAsync(savedSendView);//.ShareSendUrlAsync(savedSendView);
+                //    }
 
-                if (IsAddFromShare && Device.RuntimePlatform == Device.Android)
-                {
-                    _deviceActionService.CloseMainApp();
-                }
-                else
-                {
-                    await Page.Navigation.PopModalAsync();
-                }
-                
+                //    await Task.Delay(1500);
+
+                //    await CloseAsync();
+                //    return true;
+                //}
+
+                await CloseAsync();
+
                 if (ShareOnSave)
                 {
                     var savedSend = await _sendService.GetAsync(sendId);
@@ -414,7 +422,7 @@ namespace Bit.App.Pages
                         await AppHelpers.ShareSendUrlAsync(savedSendView);
                     }
                 }
-                
+
                 return true;
             }
             catch (ApiException e)
@@ -427,6 +435,26 @@ namespace Bit.App.Pages
                 }
             }
             return false;
+        }
+
+        private async Task CloseAsync()
+        {
+            if (IsAddFromShare)
+            {
+                if (Device.RuntimePlatform == Device.Android)
+                {
+                    _deviceActionService.CloseMainApp();
+                    return;
+                }
+
+                if (Page is SendAddEditPage sendPage && sendPage.OnClose != null)
+                {
+                    sendPage.OnClose();
+                    return;
+                }
+            }
+
+            await Page.Navigation.PopModalAsync();
         }
 
         public async Task<bool> RemovePasswordAsync()
@@ -454,14 +482,7 @@ namespace Bit.App.Pages
             if (!SendEnabled)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.SendDisabledWarning);
-                if (IsAddFromShare && Device.RuntimePlatform == Device.Android)
-                {
-                    _deviceActionService.CloseMainApp();
-                }
-                else
-                {
-                    await Page.Navigation.PopModalAsync();
-                }
+                await CloseAsync();
                 return;
             }
             if (Send != null)

@@ -194,6 +194,11 @@
       <IsAppExtension>true</IsAppExtension>
       <IsWatchApp>false</IsWatchApp>
     </ProjectReference>
+    <ProjectReference Include="..\iOS.ShareExtension\iOS.ShareExtension.csproj">
+      <IsAppExtension>true</IsAppExtension>
+      <Project>{F8C3F648-EA5A-4719-8005-85D1690B1655}</Project>
+      <Name>iOS.ShareExtension</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\autofill-kb.png" />

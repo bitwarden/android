@@ -219,12 +219,12 @@ namespace Bit.Core.Services
                         {
                             response = await LegacyServerSendFileUpload(request, send, encryptedFileData);
                         }
-                        catch (Exception e) 
+                        catch (Exception exadsfa) 
                         {
                             if (response != default){
                                 await _apiService.DeleteSendAsync(response.Id);
                             }
-                            throw e;
+                            throw exadsfa;
                         }
                         break;
                     default:

@@ -21,6 +21,7 @@ namespace Bit.App.Models
         public string SaveCardCode { get; set; }
         public bool IosExtension { get; set; }
         public Tuple<SendType, string, byte[], string> CreateSend { get; set; }
+        public bool CanShareSendOnSave { get; set; } = true;
 
         public void SetAllFrom(AppOptions o)
         {
@@ -44,6 +45,7 @@ namespace Bit.App.Models
             SaveCardCode = o.SaveCardCode;
             IosExtension = o.IosExtension;
             CreateSend = o.CreateSend;
+            CanShareSendOnSave = o.CanShareSendOnSave;
         }
     }
 }

@@ -64,6 +64,16 @@ namespace Bit.Core.Services {
                             var response = await _apiService.RenewFileUploadUrlAsync(uploadData.SendResponse.Id, uploadData.SendResponse.File.Id);
                             return response.Url;
                         };
+
+#if DEBUG
+                        // TODO: delete
+                        if (uploadData.Url.Contains("127.0.0.1"))
+                        {
+                            //uploadData.Url = uploadData.Url.Replace("127.0.0.1", "10.0.2.2");
+                            uploadData.Url = uploadData.Url.Replace("127.0.0.1", "localhost");
+                        }
+#endif
+
                         await _azureFileUploadService.Upload(uploadData.Url, encryptedFileData, renewalCallback);
                         break;
                     default:

@@ -29,6 +29,7 @@
         public const string UTTypeAppExtensionFillBrowserAction = "org.appextension.fill-browser-action";
         public const string UTTypeAppExtensionSetup = "com.8bit.bitwarden.extension-setup";
         public const string UTTypeAppExtensionUrl = "public.url";
+        public const string UTTypeAppExtensionImage = "public.image";
 
         public const string AutofillNeedsIdentityReplacementKey = "autofillNeedsIdentityReplacement";
     }

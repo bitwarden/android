@@ -6,6 +6,7 @@ using Bit.App.Resources;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
+using Bit.Core.Models.View;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration;
@@ -21,6 +22,9 @@ namespace Bit.App.Pages
 
         private AppOptions _appOptions;
         private SendAddEditPageViewModel _vm;
+
+        public Action OnClose { get; set; }
+        public Action AfterSubmit { get; set; }
 
         public SendAddEditPage(
             AppOptions appOptions = null,
@@ -108,7 +112,7 @@ namespace Bit.App.Pages
                 var success = await _vm.LoadAsync();
                 if (!success)
                 {
-                    await Navigation.PopModalAsync();
+                    await CloseAsync();
                     return;
                 }
                 await HandleCreateRequest();
@@ -118,6 +122,18 @@ namespace Bit.App.Pages
                 }
                 AdjustToolbar();
             });
+        }
+
+        private async Task CloseAsync()
+        {
+            if (OnClose is null)
+            {
+                await Navigation.PopModalAsync();
+            }
+            else
+            {
+                OnClose();
+            }
         }
 
         protected override bool OnBackButtonPressed()
@@ -200,7 +216,11 @@ namespace Bit.App.Pages
         {
             if (DoOnce())
             {
-                await _vm.SubmitAsync();
+                var submitted = await _vm.SubmitAsync();
+                if (submitted)
+                {
+                    AfterSubmit?.Invoke();
+                }
             }
         }
 
@@ -234,7 +254,7 @@ namespace Bit.App.Pages
             {
                 if (await _vm.DeleteAsync())
                 {
-                    await Navigation.PopModalAsync();
+                    await CloseAsync();
                 }
             }
         }
@@ -274,7 +294,7 @@ namespace Bit.App.Pages
             {
                 if (await _vm.DeleteAsync())
                 {
-                    await Navigation.PopModalAsync();
+                    await CloseAsync();
                 }
             }
         }
@@ -283,7 +303,7 @@ namespace Bit.App.Pages
         {
             if (DoOnce())
             {
-                await Navigation.PopModalAsync();
+                await CloseAsync();
             }
         }
 
@@ -306,6 +326,7 @@ namespace Bit.App.Pages
             }
 
             _vm.IsAddFromShare = true;
+            _vm.CanShareOnSave = _appOptions.CanShareSendOnSave;
             
             var name = _appOptions.CreateSend.Item2;
             _vm.Send.Name = name;
