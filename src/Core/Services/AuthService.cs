@@ -136,10 +136,10 @@ namespace Bit.Core.Services
                 null, captchaToken);
         }
 
-        public async Task<AuthResult> LogInSsoAsync(string code, string codeVerifier, string redirectUrl)
+        public async Task<AuthResult> LogInSsoAsync(string code, string codeVerifier, string redirectUrl, string orgId)
         {
             SelectedTwoFactorProviderType = null;
-            return await LogInHelperAsync(null, null, null, code, codeVerifier, redirectUrl, null, null, null, null);
+            return await LogInHelperAsync(null, null, null, code, codeVerifier, redirectUrl, null, orgId: orgId);
         }
 
         public Task<AuthResult> LogInTwoFactorAsync(TwoFactorProviderType twoFactorProvider, string twoFactorToken,
