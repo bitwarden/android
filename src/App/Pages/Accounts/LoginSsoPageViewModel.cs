@@ -139,7 +139,7 @@ namespace Bit.App.Pages
             var code = GetResultCode(authResult, state);
             if (!string.IsNullOrEmpty(code))
             {
-                await LogIn(code, codeVerifier, redirectUri);
+                await LogIn(code, codeVerifier, redirectUri, OrgIdentifier);
             }
             else
             {
@@ -164,11 +164,11 @@ namespace Bit.App.Pages
             return code;
         }
 
-        private async Task LogIn(string code, string codeVerifier, string redirectUri)
+        private async Task LogIn(string code, string codeVerifier, string redirectUri, string orgId)
         {
             try
             {
-                var response = await _authService.LogInSsoAsync(code, codeVerifier, redirectUri);
+                var response = await _authService.LogInSsoAsync(code, codeVerifier, redirectUri, orgId);
                 await AppHelpers.ResetInvalidUnlockAttemptsAsync();
                 if (RememberOrgIdentifier)
                 {
