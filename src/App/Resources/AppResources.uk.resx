@@ -1059,6 +1059,9 @@
   <data name="LastName" xml:space="preserve">
     <value>Прізвище</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Повне ім'я</value>
+  </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Номер ліцензії</value>
   </data>
@@ -1182,6 +1185,9 @@
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>Приховано</value>
+  </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>Пов'язано</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Текст</value>
@@ -1605,6 +1611,9 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Введіть головний пароль, щоб експортувати дані сховища.</value>
   </data>
+    <data name="ExportVaultOTPDescription" xml:space="preserve">
+    <value>Введіть код підтвердження, щоб експортувати дані сховища.</value>
+  </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Експортовані дані вашого сховища знаходяться в незашифрованому вигляді. Вам не слід зберігати чи надсилати їх через незахищені канали (наприклад, е-поштою). Після використання негайно видаліть їх.</value>
   </data>
@@ -2026,6 +2035,21 @@
   <data name="UpdatePasswordError" xml:space="preserve">
     <value>Наразі неможливо оновити пароль</value>
   </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>Вилучити головний пароль</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>{0} використовує SSO з шифруванням, керованим клієнтом. Продовжуючи, головний пароль буде вилучено з вашого облікового запису та вимагатиметься вхід з SSO.</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>Якщо ви не хочете вилучати свій головний пароль, ви можете покинути цю організацію.</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>Покинути організацію</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>Покинути {0}?</value>
+  </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
   </data>
@@ -2055,5 +2079,11 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Одна чи декілька організаційних політик не дозволяють вам експортувати особисте сховище.</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>Недійсний код підтвердження.</value>
+  </data>
+    <data name="RequestOTP" xml:space="preserve">
+    <value>Запитувати одноразовий пароль</value>
   </data>
 </root>

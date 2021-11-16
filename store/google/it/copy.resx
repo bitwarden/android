@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Title" xml:space="preserve">
-    <value>Bitwarden - Gestore di Password</value>
+    <value>Bitwarden - Gestore di password</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="ShortDescription" xml:space="preserve">
@@ -126,15 +126,31 @@
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>Bitwarden è il modo più semplice e sicuro per salvare tutti i tuoi login e password mantenendoli sincronizzati su tutti i tuoi dispositivi. L'estensione di Bitwarden ti permette di loggarti velocemente su ogni sito utilizzando Safari o Chrome ed è supportata da centinaia di altre popolari app.
+    <value>Bitwarden, Inc. è la società madre di 8bit Solutions LLC.
 
-Il furto di password è un problema serio. I siti e le app che utilizzi sono sotto attacco quotidianamente. I tuoi account possono essere violati e le tue password rubate. Quando riutilizzi la stessa password su più app e siti, gli hacker possono facilmente accedere alla tua email, al tuo conto bancario e ad altri account importanti.
+NOMINATO MIGLIOR PASSWORD MANAGER DA THE VERGE, US NEWS &amp; WORLD REPORT, CNET E ALTRO.
 
-Gli esperti di sicurezza raccomandano di utilizzare password casuali e diverse per ogni account che crei. Ma come gestirle tutte? Bitwarden facilita la creazione, l'archiviazione e l'accesso alle tue password.
+Gestisci, archivia, proteggi e condividi password illimitate su dispositivi illimitati da qualsiasi luogo. Bitwarden offre soluzioni di gestione delle password open source a tutti, a casa, al lavoro o in viaggio.
 
-Bitwarden salva tutti i tuoi login in una cassaforte sincronizzata su tutti i tuoi dispositivi. Poiché completamente cifrata, solo tu puoi accedere ai tuoi dati. Nemmeno il team di Bitwarden può leggere i tuoi dati, anche volendo. Questi sono infatti cifrati con algoritmo AES-256, salted hashing e PBKDF2 SHA-256.
+Genera password complesse, uniche e casuali in base ai requisiti di sicurezza per ogni sito web che frequenti.
 
-Bitwarden è 100% open source. Il codice sorgente è ospitato su GitHub e tutti sono liberi di revisionarlo, verificarlo e contribuire alla codebase di Bitwarden.</value>
+Bitwarden Send trasmette rapidamente informazioni cifrate --- file e testo in chiaro - direttamente a chiunque.
+
+Bitwarden offre piani Teams ed Enterprise per le aziende in modo da poter condividere le password in modo sicuro con i colleghi.
+
+Perché scegliere Bitwarden:
+
+Crittografia di livello mondiale
+Le password sono protette con cifratura end-to-end avanzata (AES-256 bit, hashtag con sale e PBKDF2 SHA-256) in modo che i tuoi dati rimangano al sicuro e privati.
+
+Generatore di password integrato
+Genera password complesse, uniche e casuali in base ai requisiti di sicurezza per ogni sito web che frequenti.
+
+Traduzioni globali
+Le traduzioni di Bitwarden esistono in 40 lingue e sono in crescita, grazie alla nostra comunità globale.
+
+Applicazioni multipiattaforma
+Proteggi e condividi i dati sensibili all'interno del tuo Bitwarden Vault da qualsiasi browser, dispositivo mobile o sistema operativo desktop e altro ancora.</value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">

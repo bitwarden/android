@@ -1059,6 +1059,9 @@
   <data name="LastName" xml:space="preserve">
     <value>Último Nome</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Nome Completo</value>
+  </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Número da Licença</value>
   </data>
@@ -1182,6 +1185,9 @@
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>Ocultado</value>
+  </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>Vinculado</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Texto</value>
@@ -1605,6 +1611,9 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Digite sua senha mestra para exportar os dados do seu cofre.</value>
   </data>
+    <data name="ExportVaultOTPDescription" xml:space="preserve">
+    <value>Insira o código de verificação para exportar os dados do seu cofre.</value>
+  </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>O arquivo exportado contém os dados do seu cofre em um formato não encriptado. Você não deve armazenar ou enviar o arquivo exportado através de canais inseguros (como por e-mail). Exclua-o imediatamente quando terminar de utilizá-lo.</value>
   </data>
@@ -2027,6 +2036,21 @@
   <data name="UpdatePasswordError" xml:space="preserve">
     <value>No momento não é possível atualizar a senha</value>
   </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>Remover Senha Mestra</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>{0} está usando o SSO com criptografia gerenciada pelo cliente.  Ao continuar, isso removerá sua Senha Mestra da sua conta e exigirá o SSO para acessar.</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>Se não quiser remover sua Senha Mestra, você pode sair desta organização.</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>Sair da Organização</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>Sair de {0}?</value>
+  </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
   </data>
@@ -2056,5 +2080,11 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Uma ou mais políticas da organização impedem que você exporte seu cofre pessoal.</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>Código de Verificação Inválido.</value>
+  </data>
+    <data name="RequestOTP" xml:space="preserve">
+    <value>Solicitar senha de uso único</value>
   </data>
 </root>

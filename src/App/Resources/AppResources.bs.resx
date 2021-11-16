@@ -311,7 +311,7 @@
     <comment>Button text for a save operation (verb).</comment>
   </data>
   <data name="Move" xml:space="preserve">
-    <value>Move</value>
+    <value>Premjesti</value>
   </data>
   <data name="Saving" xml:space="preserve">
     <value>Čuvanje...</value>
@@ -1059,6 +1059,9 @@
   <data name="LastName" xml:space="preserve">
     <value>Prezime</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Full Name</value>
+  </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Broj vozačke dozvole</value>
   </data>
@@ -1183,6 +1186,9 @@
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>Skriven</value>
   </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>Linked</value>
+  </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Tekst</value>
   </data>
@@ -1249,14 +1255,14 @@
     <value>Da biste nastavili, držite Vaš YubiKey NEO uz zadnju stranu uređaja.</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
-    <value>The accessibility service may be helpful to use when apps do not support the standard auto-fill service.</value>
+    <value>Servisi za olakšanu pristupačnost mogu biti od pomoći kada aplikacije ne podržavaju standardni servis automatskog popunjavanja (Auto Fill).</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
     <value>Zadnji datum kada je lozinka ažurirana</value>
     <comment>ex. Date this password was updated</comment>
   </data>
   <data name="DateUpdated" xml:space="preserve">
-    <value>Updated</value>
+    <value>Ažuriran</value>
     <comment>ex. Date this item was updated</comment>
   </data>
   <data name="AutofillActivated" xml:space="preserve">
@@ -1278,19 +1284,19 @@
     <value>Da bi omogućili automatsko popunjavanje lozinki na vašem uređaju, molimo vas da pratite sljedeće upute:</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
-    <value>1. Go to the iOS "Settings" app</value>
+    <value>1. Otvorite Postavke na Vašem uređaju </value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Tap "Passwords &amp; Accounts"</value>
+    <value>2. Otvorite "Lozinke"</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
-    <value>3. Tap "AutoFill Passwords"</value>
+    <value>3. Pritisnite "Auto ispuna lozinki"</value>
   </data>
   <data name="AutofillTurnOn4" xml:space="preserve">
-    <value>4. Turn on AutoFill</value>
+    <value>4. Uključite automatsko ispunjavanje </value>
   </data>
   <data name="AutofillTurnOn5" xml:space="preserve">
-    <value>5. Select "Bitwarden"</value>
+    <value>5. Odaberite Bitwarden</value>
   </data>
   <data name="PasswordAutofill" xml:space="preserve">
     <value>Password AutoFill</value>
@@ -1299,54 +1305,54 @@
     <value>The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the "Settings" screen.</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
-    <value>Invalid email address.</value>
+    <value>Neispravna email adresa</value>
   </data>
   <data name="Cards" xml:space="preserve">
-    <value>Cards</value>
+    <value>Kartice</value>
   </data>
   <data name="Identities" xml:space="preserve">
-    <value>Identities</value>
+    <value>Identiteti</value>
   </data>
   <data name="Logins" xml:space="preserve">
-    <value>Logins</value>
+    <value>Prijave</value>
   </data>
   <data name="SecureNotes" xml:space="preserve">
-    <value>Secure Notes</value>
+    <value>Sigurna zabilješke </value>
   </data>
   <data name="AllItems" xml:space="preserve">
-    <value>All Items</value>
+    <value>Sve spremljene lozinke</value>
   </data>
   <data name="URIs" xml:space="preserve">
     <value>URIs</value>
     <comment>Plural form of a URI</comment>
   </data>
   <data name="CheckingPassword" xml:space="preserve">
-    <value>Checking password...</value>
+    <value>Provjeravanje vaše lozinke...</value>
     <comment>A loading message when doing an exposed password check.</comment>
   </data>
   <data name="CheckPassword" xml:space="preserve">
-    <value>Check if password has been exposed.</value>
+    <value>Provjeri da li je lozinka kompromitovana.</value>
   </data>
   <data name="PasswordExposed" xml:space="preserve">
-    <value>This password has been exposed {0} time(s) in data breaches. You should change it.</value>
+    <value>Ova lozinka je kompromitovana {0} puta tijekom malicioznih napada. Savjetujemo njenu promjenu.</value>
   </data>
   <data name="PasswordSafe" xml:space="preserve">
-    <value>This password was not found in any known data breaches. It should be safe to use.</value>
+    <value>Ova lozinka nije pronađena ni u jednoj kompromitovanoj bazi podataka. Trebala bi biti sigurna sa korištenje.</value>
   </data>
   <data name="IdentityName" xml:space="preserve">
     <value>Identity Name</value>
   </data>
   <data name="Value" xml:space="preserve">
-    <value>Value</value>
+    <value>Vrijednost</value>
   </data>
   <data name="PasswordHistory" xml:space="preserve">
-    <value>Password History</value>
+    <value>Historija uređivanja lozinke</value>
   </data>
   <data name="Types" xml:space="preserve">
-    <value>Types</value>
+    <value>Vrste</value>
   </data>
   <data name="NoPasswordsToList" xml:space="preserve">
-    <value>No passwords to list.</value>
+    <value>Ne postoji pripadajuća lozinka.</value>
   </data>
   <data name="NoItemsToList" xml:space="preserve">
     <value>There are no items to list.</value>
@@ -1355,25 +1361,25 @@
     <value>Search collection</value>
   </data>
   <data name="SearchFolder" xml:space="preserve">
-    <value>Search folder</value>
+    <value>Pretraži folder</value>
   </data>
   <data name="SearchType" xml:space="preserve">
     <value>Search type</value>
   </data>
   <data name="Type" xml:space="preserve">
-    <value>Type</value>
+    <value>Vrsta</value>
   </data>
   <data name="MoveDown" xml:space="preserve">
-    <value>Move Down</value>
+    <value>Pomjeri prema dolje</value>
   </data>
   <data name="MoveUp" xml:space="preserve">
-    <value>Move Up</value>
+    <value>Pomjerite gore</value>
   </data>
   <data name="Miscellaneous" xml:space="preserve">
-    <value>Miscellaneous</value>
+    <value>Razno</value>
   </data>
   <data name="Ownership" xml:space="preserve">
-    <value>Ownership</value>
+    <value>Vlasništvo</value>
   </data>
   <data name="WhoOwnsThisItem" xml:space="preserve">
     <value>Who owns this item?</value>
@@ -1386,7 +1392,7 @@
     <comment>ex: Item moved to Organization.</comment>
   </data>
   <data name="ItemShared" xml:space="preserve">
-    <value>Item has been shared.</value>
+    <value>Stavka je podijeljena.</value>
   </data>
   <data name="SelectOneCollection" xml:space="preserve">
     <value>You must select at least one collection.</value>
@@ -1604,6 +1610,9 @@
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Enter your master password to export your vault data.</value>
+  </data>
+    <data name="ExportVaultOTPDescription" xml:space="preserve">
+    <value>Enter the verification code to export your vault data.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>This export contains your vault data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it.</value>
@@ -2027,6 +2036,21 @@
   <data name="UpdatePasswordError" xml:space="preserve">
     <value>Currently unable to update password</value>
   </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>Remove Master Password</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>{0} is using SSO with customer-managed encryption. Continuing will remove your Master Password from your account and require SSO to login.</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>If you do not want to remove your Master Password, you may leave this organization.</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>Leave Organization</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>Leave {0}?</value>
+  </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
   </data>
@@ -2056,5 +2080,11 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>One or more organization policies prevents your from exporting your personal vault.</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>Invalid Verification Code.</value>
+  </data>
+    <data name="RequestOTP" xml:space="preserve">
+    <value>Request one-time password</value>
   </data>
 </root>

@@ -1059,6 +1059,9 @@
   <data name="LastName" xml:space="preserve">
     <value>Фамилия</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Полное имя</value>
+  </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>ИНН</value>
   </data>
@@ -1182,6 +1185,9 @@
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>Скрытое</value>
+  </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>Связано</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Текстовое</value>
@@ -1605,6 +1611,9 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Для экспорта данных из хранилища введите мастер-пароль.</value>
   </data>
+    <data name="ExportVaultOTPDescription" xml:space="preserve">
+    <value>Введите проверочный код для экспорта данных хранилища.</value>
+  </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Экспортируемый файл содержит данные вашего хранилища в незашифрованном формате. Его не следует хранить или отправлять по небезопасным каналам (например по электронной почте). Удалите его сразу после использования.</value>
   </data>
@@ -2026,6 +2035,21 @@
   <data name="UpdatePasswordError" xml:space="preserve">
     <value>В настоящее время обновить пароль невозможно</value>
   </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>Удалить мастер-пароль</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>{0} использует SSO с шифрованием, управляемым клиентом. Если вы продолжите, то мастер-пароль будет удален из вашего аккаунта, и для авторизации потребуется SSO.</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>Если вы не хотите удалять свой мастер-пароль, вы можете покинуть эту организацию.</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>Покинуть организацию</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>Покинуть {0}?</value>
+  </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
   </data>
@@ -2055,5 +2079,11 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Экспорт вашего личного хранилища запрещен одной или несколькими политиками организации.</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>Неверный код подтверждения.</value>
+  </data>
+    <data name="RequestOTP" xml:space="preserve">
+    <value>Запросить одноразовый пароль</value>
   </data>
 </root>
