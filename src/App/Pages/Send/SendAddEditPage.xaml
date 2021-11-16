@@ -235,10 +235,9 @@
                             </StackLayout>
                         </StackLayout>
                         <StackLayout
-                            StyleClass="box-row, box-row-switch"
-                            IsVisible="{Binding CanShareOnSave}">
+                            StyleClass="box-row, box-row-switch">
                             <Label
-                                Text="{u:I18n ShareOnSave}"
+                                Text="{Binding ShareOnSaveText}"
                                 StyleClass="box-label-regular"
                                 VerticalOptions="Center"
                                 HorizontalOptions="StartAndExpand" />

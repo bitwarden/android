@@ -18,7 +18,7 @@ namespace Bit.iOS.ShareExtension
         public override UIBarButtonItem BaseCancelButton => _cancelButton;
         public override UIBarButtonItem BaseSubmitButton => _submitButton;
         public override Action Success => () => LoadingController.DismissLockAndContinue();
-        public override Action Cancel => () => LoadingController.CompleteRequest(null, null);
+        public override Action Cancel => () => LoadingController.CompleteRequest();
 
         public override void ViewDidLoad()
         {

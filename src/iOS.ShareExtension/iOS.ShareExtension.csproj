@@ -106,10 +106,6 @@
     <InterfaceDefinition Include="MainInterface.storyboard" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ShareViewController.cs" />
-    <Compile Include="ShareViewController.designer.cs">
-      <DependentUpon>ShareViewController.cs</DependentUpon>
-    </Compile>
     <Compile Include="LoadingViewController.cs" />
     <Compile Include="LoadingViewController.designer.cs">
       <DependentUpon>LoadingViewController.cs</DependentUpon>

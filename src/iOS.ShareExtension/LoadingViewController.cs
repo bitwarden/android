@@ -9,11 +9,9 @@ using Bit.App.Pages;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
-using Bit.Core.Models.View;
 using Bit.Core.Utilities;
 using Bit.iOS.Core;
 using Bit.iOS.Core.Controllers;
-using Bit.iOS.Core.Services;
 using Bit.iOS.Core.Utilities;
 using Bit.iOS.Core.Views;
 using Bit.iOS.ShareExtension.Models;
@@ -57,16 +55,16 @@ namespace Bit.iOS.ShareExtension
                 var processed = false;
                 foreach (var itemProvider in item.Attachments)
                 {
-                    if (itemProvider.HasItemConformingTo(UTType.Image))
+                    if (itemProvider.HasItemConformingTo(UTType.PlainText))
                     {
-                        _context.ProviderType = UTType.Image;
+                        _context.ProviderType = UTType.PlainText;
 
                         processed = true;
                         break;
                     }
-                    else if (itemProvider.HasItemConformingTo(UTType.PlainText))
+                    else if (itemProvider.HasItemConformingTo(UTType.Data))
                     {
-                        _context.ProviderType = UTType.PlainText;
+                        _context.ProviderType = UTType.Data;
 
                         processed = true;
                         break;
@@ -77,50 +75,14 @@ namespace Bit.iOS.ShareExtension
                     break;
                 }
             }
-
-            //ProcessAttachmentsAsync().FireAndForget(ex => Crashes.TrackError(ex));
         }
-
-        //private async Task ProcessAttachmentsAsync()
-        //{
-        //    foreach (var item in ExtensionContext.InputItems)
-        //    {
-        //        var processed = false;
-        //        foreach (var itemProvider in item.Attachments)
-        //        {
-        //            if (await ProcessImageProviderAsync(itemProvider))
-        //            {
-        //                processed = true;
-        //                break;
-        //            }
-        //        }
-        //        if (processed)
-        //        {
-        //            break;
-        //        }
-        //    }
-        //}
-
-        //private async Task<bool> ProcessImageProviderAsync(NSItemProvider itemProvider)
-        //{
-        //    if (!itemProvider.HasItemConformingTo(UTType.Image))
-        //        return false;
-
-        //    var image = await itemProvider.LoadObjectAsync<UIImage>();
-        //    _context.image
-        //}
 
         public override async void ViewDidAppear(bool animated)
         {
             base.ViewDidAppear(animated);
-            //if (_context.ProviderType == Constants.UTTypeAppExtensionSetup)
-            //{
-            //    PerformSegue("setupSegue", this);
-            //    return;
-            //}
+
             try
             {
-
                 if (!await IsAuthed())
                 {
                     LaunchHomePage();
@@ -143,21 +105,13 @@ namespace Bit.iOS.ShareExtension
 
         public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
         {
-            if (segue.DestinationViewController is UINavigationController navController)
+            if (segue.DestinationViewController is UINavigationController navController
+                &&
+                navController.TopViewController is LockPasswordViewController passwordViewController)
             {
-                if (navController.TopViewController is LockPasswordViewController passwordViewController)
-                {
-                    passwordViewController.LoadingController = this;
-                    segue.DestinationViewController.PresentationController.Delegate =
-                        new CustomPresentationControllerDelegate(passwordViewController.DismissModalAction);
-                }
-                //else if (navController.TopViewController is ShareViewController shareViewController)
-                //{
-                //    shareViewController.Context = _context;
-                //    shareViewController.LoadingController = this;
-                //    segue.DestinationViewController.PresentationController.Delegate =
-                //        new CustomPresentationControllerDelegate(shareViewController.DismissModalAction);
-                //}
+                passwordViewController.LoadingController = this;
+                segue.DestinationViewController.PresentationController.Delegate =
+                    new CustomPresentationControllerDelegate(passwordViewController.DismissModalAction);
             }
         }
 
@@ -169,25 +123,11 @@ namespace Bit.iOS.ShareExtension
 
         private async Task ContinueOnAsync()
         {
-            //Debug.WriteLine("BW Log, Segue to share.");
-            //if (_context.ProviderType == Constants.UTTypeAppExtensionSaveLoginAction)
-            //{
-            //    PerformSegue("newLoginSegue", this);
-            //}
-            //else if (_context.ProviderType == Constants.UTTypeAppExtensionSetup)
-            //{
-            //    PerformSegue("setupSegue", this);
-            //}
-            //else
-            //{
-            //PerformSegue("shareSegue", this);
-            //}
-
             Tuple<SendType, string, byte[], string> createSend = null;
 
-            if (_context.ProviderType == UTType.Image)
+            if (_context.ProviderType == UTType.Data)
             {
-                var (filename, fileBytes) = await LoadImageBytesAsync();
+                var (filename, fileBytes) = await LoadDataBytesAsync();
                 createSend = new Tuple<SendType, string, byte[], string>(SendType.File, filename, fileBytes, null);
             }
             else if (_context.ProviderType == UTType.PlainText)
@@ -199,35 +139,52 @@ namespace Bit.iOS.ShareExtension
             {
                 IosExtension = true,
                 CreateSend = createSend,
-                CanShareSendOnSave = true
+                CopyInsteadOfShareAfterSaving = true
             };
             var sendAddEditPage = new SendAddEditPage(appOptions)
             {
-                OnClose = () => CompleteRequest(null, null),
-                AfterSubmit = () => CompleteRequest(null, null)
+                OnClose = () => CompleteRequest(),
+                AfterSubmit = () => CompleteRequest()
             };
 
             var app = new App.App(appOptions);
             ThemeManager.SetTheme(false, app.Resources);
             ThemeManager.ApplyResourcesToPage(sendAddEditPage);
-            //if (sendAddEditPage.BindingContext is SendAddEditPageViewModel vm)
-            //{
-            //    vm.UpdateTempPasswordSuccessAction = () => DismissViewController(false, () => LaunchHomePage());
-            //    vm.LogOutAction = () => DismissViewController(false, () => LaunchHomePage());
-            //}
 
             var navigationPage = new NavigationPage(sendAddEditPage);
             var sendAddEditController = navigationPage.CreateViewController();
             sendAddEditController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
             PresentViewController(sendAddEditController, true, null);
+        }
 
+        private async Task<(string, byte[])> LoadDataBytesAsync()
+        {
+            var itemProvider = ExtensionContext?.InputItems.FirstOrDefault()?.Attachments?.FirstOrDefault();
+            if (itemProvider is null || !itemProvider.HasItemConformingTo(UTType.Data))
+                return default;
 
+            var item = await itemProvider.LoadItemAsync(UTType.Data, null);
+            if (item is NSUrl urlItem)
+            {
+                var filename = urlItem?.AbsoluteUrl?.LastPathComponent;
 
-            //var page = new SendAddEditPage();
-            //var vc = page.CreateViewController();
-            //var shareNavController = new UINavigationController(vc);
-            //NavigationController.PushViewController(shareNavController, true);
+                var data = NSData.FromUrl(urlItem);
+                var stream = NSInputStream.FromData(data);
+                var bytes = new byte[data.Length];
+                try
+                {
+                    stream.Open();
+                    stream.Read(bytes, data.Length);
+                }
+                finally
+                {
+                    stream?.Close();
+                }
 
+                return (filename, bytes);
+            }
+
+            return default;
         }
 
         private string LoadText()
@@ -237,177 +194,13 @@ namespace Bit.iOS.ShareExtension
                         ?.AttributedContentText?.Value;
         }
 
-        private async Task<(string, byte[])> LoadImageBytesAsync()
+        public void CompleteRequest()
         {
-            var extensionItem = ExtensionContext?.InputItems.FirstOrDefault();
-            if (extensionItem?.Attachments is null)
-                return default;
-
-            string GetDefaultFileName(NSItemProvider itemProvider)
+            NSRunLoop.Main.BeginInvokeOnMainThread(() =>
             {
-                var filename = Guid.NewGuid().ToString();
-                if (itemProvider.HasItemConformingTo(UTType.JPEG)
-                    ||
-                    itemProvider.HasItemConformingTo(UTType.JPEG2000))
-                {
-                    filename += ".jpg";
-                }
-                else if (itemProvider.HasItemConformingTo(UTType.PNG))
-                {
-                    filename += ".png";
-                }
-                else if (itemProvider.HasItemConformingTo(UTType.GIF))
-                {
-                    filename += ".gif";
-                }
-                else
-                {
-                    // Just default to png just in case
-                    filename += ".png";
-                }
-
-                return filename;
-            }
-
-            foreach (var item in extensionItem.Attachments)
-            {
-                if (!item.HasItemConformingTo(UTType.Image))
-                    continue;
-                
-                var image = await item.LoadObjectAsync<UIImage>();
-                
-                string filename = null;
-                if (UIDevice.CurrentDevice.CheckSystemVersion(11, 0))
-                {
-                    var fileRepresentation = await item.LoadFileRepresentationAsync(UTType.Image);
-                    filename = fileRepresentation?.LastPathComponent ?? GetDefaultFileName(item);
-                }
-                else
-                {
-                    // TODO: check how we could get the filename on iOS 10
-                    filename = GetDefaultFileName(item);
-                }
-
-                byte[] data;
-                using (var imageData = image.AsPNG())
-                {
-                    data = new byte[imageData.Length];
-                    System.Runtime.InteropServices.Marshal.Copy(imageData.Bytes, data, 0,
-                        Convert.ToInt32(imageData.Length));
-                    return (filename, data);
-                }
-            }
-            return default;
-        }
-
-        public void CompleteRequest(string id, NSDictionary itemData)
-        {
-            Debug.WriteLine("BW LOG, itemData: " + itemData);
-            var resultsProvider = new NSItemProvider(itemData, UTType.PropertyList);
-            var resultsItem = new NSExtensionItem { Attachments = new NSItemProvider[] { resultsProvider } };
-            var returningItems = new NSExtensionItem[] { resultsItem };
-            NSRunLoop.Main.BeginInvokeOnMainThread(async () =>
-            {
-                if (!string.IsNullOrWhiteSpace(id) && itemData != null)
-                {
-                    await _eventService.Value.CollectAsync(Bit.Core.Enums.EventType.Cipher_ClientAutofilled, id);
-                }
                 ServiceContainer.Reset();
-                ExtensionContext?.CompleteRequest(returningItems, null);
+                ExtensionContext?.CompleteRequest(new NSExtensionItem[0], null);
             });
-        }
-
-        //private bool ProcessItemProvider(NSItemProvider itemProvider, string type, Action<NSDictionary> dictAction,
-        //    Action<NSUrl> urlAction = null)
-        //{
-        //    if (!itemProvider.HasItemConformingTo(type))
-        //    {
-        //        return false;
-        //    }
-
-        //    itemProvider.LoadItem(type, null, (NSObject list, NSError error) =>
-        //    {
-        //        if (list == null)
-        //        {
-        //            return;
-        //        }
-
-        //        _context.ProviderType = type;
-        //        if (list is NSDictionary dict && dictAction != null)
-        //        {
-        //            dictAction(dict);
-        //        }
-        //        else if (list is NSUrl && urlAction != null)
-        //        {
-        //            var url = list as NSUrl;
-        //            urlAction(url);
-        //        }
-        //        else
-        //        {
-        //            throw new Exception("Cannot parse list for action. List is " +
-        //                (list?.GetType().ToString() ?? "null"));
-        //        }
-
-        //        Debug.WriteLine("BW LOG, ProviderType: " + _context.ProviderType);
-        //        Debug.WriteLine("BW LOG, Url: " + _context.UrlString);
-        //        Debug.WriteLine("BW LOG, Title: " + _context.LoginTitle);
-        //        Debug.WriteLine("BW LOG, Username: " + _context.Username);
-        //        Debug.WriteLine("BW LOG, Password: " + _context.Password);
-        //        Debug.WriteLine("BW LOG, Old Password: " + _context.OldPassword);
-        //        Debug.WriteLine("BW LOG, Notes: " + _context.Notes);
-        //        Debug.WriteLine("BW LOG, Details: " + _context.Details);
-
-        //        if (_context.PasswordOptions != null)
-        //        {
-        //            Debug.WriteLine("BW LOG, PasswordOptions Min Length: " + _context.PasswordOptions.MinLength);
-        //            Debug.WriteLine("BW LOG, PasswordOptions Max Length: " + _context.PasswordOptions.MaxLength);
-        //            Debug.WriteLine("BW LOG, PasswordOptions Require Digits: " + _context.PasswordOptions.RequireDigits);
-        //            Debug.WriteLine("BW LOG, PasswordOptions Require Symbols: " + _context.PasswordOptions.RequireSymbols);
-        //            Debug.WriteLine("BW LOG, PasswordOptions Forbidden Chars: " + _context.PasswordOptions.ForbiddenCharacters);
-        //        }
-        //    });
-
-        //    return true;
-        //}
-
-        //private bool ProcessPlainTextProvider(NSItemProvider itemProvider)
-        //{
-        //    return ProcessItemProvider(itemProvider, UTType.PlainText, dict =>
-        //    {
-        //        var result = dict[NSJavaScriptExtension.PreprocessingResultsKey];
-        //        if (result == null)
-        //        {
-        //            return;
-        //        }
-        //        _context.UrlString = result.ValueForKey(new NSString(Constants.AppExtensionUrlStringKey)) as NSString;
-        //        var jsonStr = result.ValueForKey(new NSString(Constants.AppExtensionWebViewPageDetails)) as NSString;
-        //        _context.Details = DeserializeString<PageDetails>(jsonStr);
-        //    });
-        //}
-
-        private T DeserializeDictionary<T>(NSDictionary dict)
-        {
-            if (dict != null)
-            {
-                var jsonData = NSJsonSerialization.Serialize(
-                    dict, NSJsonWritingOptions.PrettyPrinted, out NSError jsonError);
-                if (jsonData != null)
-                {
-                    var jsonString = new NSString(jsonData, NSStringEncoding.UTF8);
-                    return DeserializeString<T>(jsonString);
-                }
-            }
-            return default(T);
-        }
-
-        private T DeserializeString<T>(NSString jsonString)
-        {
-            if (jsonString != null)
-            {
-                var convertedObject = CoreHelpers.DeserializeJson<T>(jsonString.ToString());
-                return convertedObject;
-            }
-            return default(T);
         }
 
         private void InitApp()
@@ -476,7 +269,7 @@ namespace Bit.iOS.ShareExtension
                 vm.StartRegisterAction = () => DismissViewController(false, () => LaunchRegisterFlow());
                 vm.StartSsoLoginAction = () => DismissViewController(false, () => LaunchLoginSsoFlow());
                 vm.StartEnvironmentAction = () => DismissViewController(false, () => LaunchEnvironmentFlow());
-                vm.CloseAction = () => CompleteRequest(null, null);
+                vm.CloseAction = () => CompleteRequest();
             }
 
             var navigationPage = new NavigationPage(homePage);
@@ -534,7 +327,7 @@ namespace Bit.iOS.ShareExtension
                 vm.StartTwoFactorAction = () => DismissViewController(false, () => LaunchTwoFactorFlow(false));
                 vm.UpdateTempPasswordAction = () => DismissViewController(false, () => LaunchUpdateTempPasswordFlow());
                 vm.LogInSuccessAction = () => DismissLockAndContinue();
-                vm.CloseAction = () => CompleteRequest(null, null);
+                vm.CloseAction = () => CompleteRequest();
             }
 
             var navigationPage = new NavigationPage(loginPage);
