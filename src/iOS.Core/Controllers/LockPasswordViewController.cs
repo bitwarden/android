@@ -234,7 +234,6 @@ namespace Bit.iOS.Core.Controllers
                     }
                     await AppHelpers.ResetInvalidUnlockAttemptsAsync();
                     await SetKeyAndContinueAsync(key2, true);
-                    await EnableBiometrics();
                 }
                 else
                 {
@@ -247,28 +246,6 @@ namespace Bit.iOS.Core.Controllers
                     InvalidValue();
                 }
             }
-        }
-
-        private async Task SetKeyAndContinueAsync(SymmetricCryptoKey key, bool masterPassword = false)
-        {
-            var hasKey = await _cryptoService.HasKeyAsync();
-            if (!hasKey)
-            {
-                await _cryptoService.SetKeyAsync(key);
-            }
-            DoContinue(masterPassword);
-        }
-
-        private async void DoContinue(bool masterPassword = false)
-        {
-            if (masterPassword)
-            {
-                await _storageService.SaveAsync(Bit.Core.Constants.PasswordVerifiedAutofillKey, true);
-            }
-            await EnableBiometrics();
-            _vaultTimeoutService.BiometricLocked = false;
-            MasterPasswordCell.TextField.ResignFirstResponder();
-            Success();
         }
 
         public async Task PromptBiometricAsync()
@@ -284,15 +261,6 @@ namespace Bit.iOS.Core.Controllers
             if (success)
             {
                 DoContinue();
-            }
-        }
-
-        private async Task EnableBiometrics()
-        {
-            // Re-enable biometrics
-            if (_biometricLock & !_biometricIntegrityValid)
-            {
-                await _biometricService.SetupBiometricAsync(BiometricIntegrityKey);
             }
         }
 
@@ -312,6 +280,37 @@ namespace Bit.iOS.Core.Controllers
             var loginController = navigationPage.CreateViewController();
             loginController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
             PresentViewController(loginController, true, null);
+        }
+
+        private async Task SetKeyAndContinueAsync(SymmetricCryptoKey key, bool masterPassword = false)
+        {
+            var hasKey = await _cryptoService.HasKeyAsync();
+            if (!hasKey)
+            {
+                await _cryptoService.SetKeyAsync(key);
+            }
+            DoContinue(masterPassword);
+        }
+
+        private async void DoContinue(bool masterPassword = false)
+        {
+            if (masterPassword)
+            {
+                await _storageService.SaveAsync(Bit.Core.Constants.PasswordVerifiedAutofillKey, true);
+            }
+            await EnableBiometricsIfNeeded();
+            _vaultTimeoutService.BiometricLocked = false;
+            MasterPasswordCell.TextField.ResignFirstResponder();
+            Success();
+        }
+
+        private async Task EnableBiometricsIfNeeded()
+        {
+            // Re-enable biometrics if initial use
+            if (_biometricLock & !_biometricIntegrityValid)
+            {
+                await _biometricService.SetupBiometricAsync(BiometricIntegrityKey);
+            }
         }
 
         private void InvalidValue()
