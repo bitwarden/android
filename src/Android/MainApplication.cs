@@ -17,7 +17,6 @@ using Plugin.CurrentActivity;
 using Plugin.Fingerprint;
 using Xamarin.Android.Net;
 using System.Net.Http;
-using Android.Net.Http;
 using System.Net;
 #if !FDROID
 using Android.Gms.Security;
