@@ -206,15 +206,31 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\logo.png" />
-    <BundleResource Include="Resources\logo%402x.png" />
-    <BundleResource Include="Resources\logo%403x.png" />
-    <BundleResource Include="Resources\logo_white.png" />
-    <BundleResource Include="Resources\logo_white%402x.png" />
-    <BundleResource Include="Resources\logo_white%403x.png" />
-    <BundleResource Include="Resources\FontAwesome.ttf" />
-    <BundleResource Include="Resources\MaterialIcons_Regular.ttf" />
     <BundleResource Include="Resources\.DS_Store" />
+    <BundleResource Include="..\iOS\Resources\logo_white%403x.png">
+      <Link>Resources\logo_white%403x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\iOS\Resources\logo_white%402x.png">
+      <Link>Resources\logo_white%402x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\iOS\Resources\logo_white.png">
+      <Link>Resources\logo_white.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\iOS\Resources\logo%403x.png">
+      <Link>Resources\logo%403x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\iOS\Resources\logo%402x.png">
+      <Link>Resources\logo%402x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\iOS\Resources\logo.png">
+      <Link>Resources\logo.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\iOS\Resources\FontAwesome.ttf">
+      <Link>Resources\FontAwesome.ttf</Link>
+    </BundleResource>
+    <BundleResource Include="..\iOS\Resources\MaterialIcons_Regular.ttf">
+      <Link>Resources\MaterialIcons_Regular.ttf</Link>
+    </BundleResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.AppExtension.CSharp.targets" />
 </Project>
