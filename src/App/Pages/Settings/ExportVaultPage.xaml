@@ -63,7 +63,7 @@
                     IsVisible="{Binding UseOTPVerification}">
                     <Label
                         Text="{u:I18n SendVerificationCodeToEmail}"
-                        StyleClass="box-footer-label"
+                        StyleClass="box-label"
                         LineBreakMode="WordWrap"
                         Margin="0,0,0,10" />
                     <Button x:Name="_requestOTP"

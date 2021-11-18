@@ -1612,7 +1612,7 @@
     <value>Enter your master password to export your vault data.</value>
   </data>
   <data name="SendVerificationCodeToEmail" xml:space="preserve">
-    <value>Send a verification code to your email.</value>
+    <value>Send a verification code to your email</value>
   </data>
   <data name="CodeSent" xml:space="preserve">
     <value>Code Sent!</value>
