@@ -206,7 +206,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\.DS_Store" />
     <BundleResource Include="..\iOS\Resources\logo_white%403x.png">
       <Link>Resources\logo_white%403x.png</Link>
     </BundleResource>
