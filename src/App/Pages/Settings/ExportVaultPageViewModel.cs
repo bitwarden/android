@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Bit.Core.Enums;
+using Bit.Core.Exceptions;
 #if !FDROID
 using Microsoft.AppCenter.Crashes;
 #endif
@@ -195,7 +196,23 @@ namespace Bit.App.Pages
 
         public async Task RequestOTP()
         {
-            await _apiService.PostAccountRequestOTP();
+            try
+            {
+                await _deviceActionService.ShowLoadingAsync(AppResources.Sending);
+                await _apiService.PostAccountRequestOTP();
+                await _deviceActionService.HideLoadingAsync();
+                _platformUtilsService.ShowToast("success", null, AppResources.CodeSent);
+            }
+            catch (ApiException e)
+            {
+                await _deviceActionService.HideLoadingAsync();
+                if (e?.Error != null)
+                {
+                    await _platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(),
+                        AppResources.AnErrorHasOccurred);
+                }
+            }
+
         }
 
         public async void SaveFileSelected(string contentUri, string filename)

@@ -25,22 +25,27 @@
     </ContentPage.ToolbarItems>
 
     <ScrollView>
-        <StackLayout>
-            <StackLayout StyleClass="box"
-                         Spacing="20">
-                <Frame
-                    IsVisible="{Binding DisablePrivateVaultPolicyEnabled}"
-                    Padding="10"
-                    Margin="0, 12, 0, 0"
-                    HasShadow="False"
-                    BackgroundColor="Transparent"
-                    BorderColor="Accent">
-                    <Label
-                        Text="{u:I18n DisablePersonalVaultExportPolicyInEffect}"
-                        StyleClass="text-muted, text-sm, text-bold"
-                        HorizontalTextAlignment="Center" />
-                </Frame>
-                <StackLayout StyleClass="box-row">
+        <StackLayout
+            StyleClass="box"
+            Spacing="20">
+            <Frame
+                IsVisible="{Binding DisablePrivateVaultPolicyEnabled}"
+                Padding="10"
+                Margin="0, 12, 0, 0"
+                HasShadow="False"
+                BackgroundColor="Transparent"
+                BorderColor="Accent">
+                <Label
+                    Text="{u:I18n DisablePersonalVaultExportPolicyInEffect}"
+                    StyleClass="text-muted, text-sm, text-bold"
+                    HorizontalTextAlignment="Center" />
+            </Frame>
+            <Grid
+                RowSpacing="10"
+                RowDefinitions="70, Auto, Auto">
+                <StackLayout
+                    StyleClass="box-row"
+                    Grid.Row="0">
                     <Label
                         Text="{u:I18n FileFormat}"
                         StyleClass="box-label" />
@@ -52,31 +57,34 @@
                         StyleClass="box-value"
                         IsEnabled="{Binding DisablePrivateVaultPolicyEnabled, Converter={StaticResource inverseBool}}" />
                 </StackLayout>
-                <Grid StyleClass="box-row">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
+                <StackLayout
+                    StyleClass="box-row"
+                    Grid.Row="1"
+                    IsVisible="{Binding UseOTPVerification}">
+                    <Label
+                        Text="{u:I18n SendVerificationCodeToEmail}"
+                        StyleClass="box-footer-label"
+                        LineBreakMode="WordWrap"
+                        Margin="0,0,0,10" />
                     <Button x:Name="_requestOTP"
-                        Text="{u:I18n RequestOTP}"
+                        Text="{u:I18n SendCode}"
                         Clicked="RequestOTP_Clicked"
                         HorizontalOptions="Fill"
                         VerticalOptions="End"
                         IsEnabled="{Binding DisablePrivateVaultPolicyEnabled, Converter={StaticResource inverseBool}}"
-                        IsVisible="{Binding UseOTPVerification}"
-                        Grid.Row="0"
-                        Grid.ColumnSpan="2"
                         Margin="0,0,0,10"/>
+                </StackLayout>
+                <Grid
+                    StyleClass="box-row"
+                    Grid.Row="2"
+                    RowDefinitions="Auto,Auto,Auto"
+                    ColumnDefinitions="*,Auto"
+                    Padding="0">
                     <Label
                         Text="{Binding SecretName}"
                         StyleClass="box-label"
-                        Grid.Row="1"
-                        Grid.Column="0" />
+                        Grid.Row="0"
+                        Grid.ColumnSpan="2" />
                     <controls:MonoEntry
                         x:Name="_secret"
                         Text="{Binding Secret}"
@@ -85,7 +93,7 @@
                         IsTextPredictionEnabled="False"
                         IsPassword="{Binding ShowPassword, Converter={StaticResource inverseBool}}"
                         IsEnabled="{Binding DisablePrivateVaultPolicyEnabled, Converter={StaticResource inverseBool}}"
-                        Grid.Row="2"
+                        Grid.Row="1"
                         Grid.Column="0"
                         ReturnType="Go"
                         ReturnCommand="{Binding ExportVaultCommand}" />
@@ -93,22 +101,33 @@
                         StyleClass="box-row-button, box-row-button-platform"
                         Text="{Binding ShowPasswordIcon}"
                         Command="{Binding TogglePasswordCommand}"
-                        Grid.Row="2"
+                        Grid.Row="1"
                         Grid.Column="1"
                         AutomationProperties.IsInAccessibleTree="True"
                         AutomationProperties.Name="{u:I18n ToggleVisibility}"
                         IsVisible="{Binding UseOTPVerification, Converter={StaticResource inverseBool}}"/>
-                </Grid>
-                <StackLayout StyleClass="box-row">
                     <Label
-                        Text="{Binding InstructionText}"
-                        StyleClass="box-footer-label, box-footer-label-switch" />
-                    <Button Text="{u:I18n ExportVault}"
-                            Clicked="ExportVault_Clicked"
-                            HorizontalOptions="Fill"
-                            VerticalOptions="End"
-                            IsEnabled="{Binding DisablePrivateVaultPolicyEnabled, Converter={StaticResource inverseBool}}"/>
-                </StackLayout>
+                        Text="{u:I18n ConfirmYourIdentity}"
+                        StyleClass="box-footer-label"
+                        LineBreakMode="WordWrap"
+                        Grid.Row="2"
+                        Margin="0,10,0,0"
+                        IsVisible="{Binding UseOTPVerification}" />
+                </Grid>
+                
+            </Grid>
+            <StackLayout
+                StyleClass="box-row">
+                <Label
+                    Text="{u:I18n ExportVaultMasterPasswordDescription}"
+                    StyleClass="box-footer-label, box-footer-label-switch"
+                    IsVisible="{Binding UseOTPVerification, Converter={StaticResource inverseBool}}"/>
+                <Button
+                    Text="{u:I18n ExportVault}"
+                    Clicked="ExportVault_Clicked"
+                    HorizontalOptions="Fill"
+                    VerticalOptions="End"
+                    IsEnabled="{Binding DisablePrivateVaultPolicyEnabled, Converter={StaticResource inverseBool}}"/>
             </StackLayout>
         </StackLayout>
     </ScrollView>
