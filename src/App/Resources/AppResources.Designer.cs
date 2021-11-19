@@ -2543,6 +2543,12 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string UnlockVault {
+            get {
+                return ResourceManager.GetString("UnlockVault", resourceCulture);
+            }
+        }
+        
         public static string ThirtyMinutes {
             get {
                 return ResourceManager.GetString("ThirtyMinutes", resourceCulture);
@@ -2570,6 +2576,12 @@ namespace Bit.App.Resources {
         public static string VaultLockedPIN {
             get {
                 return ResourceManager.GetString("VaultLockedPIN", resourceCulture);
+            }
+        }
+        
+        public static string VaultLockedIdentity {
+            get {
+                return ResourceManager.GetString("VaultLockedIdentity", resourceCulture);
             }
         }
         

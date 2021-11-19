@@ -36,6 +36,7 @@ namespace Bit.App.Pages
         private bool _biometricLock;
         private bool _biometricIntegrityValid = true;
         private bool _biometricButtonVisible;
+        private bool _usingKeyConnector;
         private string _biometricButtonText;
         private string _loggedInAsText;
         private string _lockedVerifyText;
@@ -76,6 +77,11 @@ namespace Bit.App.Pages
         {
             get => _pinLock;
             set => SetProperty(ref _pinLock, value);
+        }
+
+        public bool UsingKeyConnector
+        {
+            get => _usingKeyConnector;
         }
 
         public bool BiometricLock
@@ -121,14 +127,15 @@ namespace Bit.App.Pages
         public string Pin { get; set; }
         public Action UnlockedAction { get; set; }
 
-        public async Task InitAsync(bool autoPromptBiometric)
+        public async Task InitAsync()
         {
             _pinSet = await _vaultTimeoutService.IsPinLockSetAsync();
             PinLock = (_pinSet.Item1 && _vaultTimeoutService.PinProtectedKey != null) || _pinSet.Item2;
             BiometricLock = await _vaultTimeoutService.IsBiometricLockSetAsync() && await _cryptoService.HasKeyAsync();
 
             // Users with key connector and without biometric or pin has no MP to unlock with
-            if (await _keyConnectorService.GetUsesKeyConnector() && !(BiometricLock || PinLock))
+            _usingKeyConnector = await _keyConnectorService.GetUsesKeyConnector();
+            if ( _usingKeyConnector && !(BiometricLock || PinLock))
             {
                 await _vaultTimeoutService.LogOutAsync();
             }
@@ -147,8 +154,16 @@ namespace Bit.App.Pages
             }
             else
             {
-                PageTitle = AppResources.VerifyMasterPassword;
-                LockedVerifyText = AppResources.VaultLockedMasterPassword;
+                if (_usingKeyConnector)
+                {
+                    PageTitle = AppResources.UnlockVault;
+                    LockedVerifyText = AppResources.VaultLockedIdentity;
+                }
+                else
+                {
+                    PageTitle = AppResources.VerifyMasterPassword;
+                    LockedVerifyText = AppResources.VaultLockedMasterPassword;
+                }
             }
 
             if (BiometricLock)
@@ -167,14 +182,7 @@ namespace Bit.App.Pages
                     BiometricButtonText = supportsFace ? AppResources.UseFaceIDToUnlock :
                         AppResources.UseFingerprintToUnlock;
                 }
-                if (autoPromptBiometric)
-                {
-                    var tasks = Task.Run(async () =>
-                    {
-                        await Task.Delay(500);
-                        Device.BeginInvokeOnMainThread(async () => await PromptBiometricAsync());
-                    });
-                }
+
             }
         }
 
