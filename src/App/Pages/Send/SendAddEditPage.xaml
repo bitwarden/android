@@ -234,9 +234,10 @@
                                     Margin="10,0,0,0" />
                             </StackLayout>
                         </StackLayout>
-                        <StackLayout StyleClass="box-row, box-row-switch">
+                        <StackLayout
+                            StyleClass="box-row, box-row-switch">
                             <Label
-                                Text="{u:I18n ShareOnSave}"
+                                Text="{Binding ShareOnSaveText}"
                                 StyleClass="box-label-regular"
                                 VerticalOptions="Center"
                                 HorizontalOptions="StartAndExpand" />
