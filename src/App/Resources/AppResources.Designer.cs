@@ -2837,9 +2837,21 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string ExportVaultOTPDescription {
+        public static string SendVerificationCodeToEmail {
             get {
-                return ResourceManager.GetString("ExportVaultOTPDescription", resourceCulture);
+                return ResourceManager.GetString("SendVerificationCodeToEmail", resourceCulture);
+            }
+        }
+        
+        public static string CodeSent {
+            get {
+                return ResourceManager.GetString("CodeSent", resourceCulture);
+            }
+        }
+        
+        public static string ConfirmYourIdentity {
+            get {
+                return ResourceManager.GetString("ConfirmYourIdentity", resourceCulture);
             }
         }
         
@@ -3701,9 +3713,15 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string RequestOTP {
+        public static string SendCode {
             get {
-                return ResourceManager.GetString("RequestOTP", resourceCulture);
+                return ResourceManager.GetString("SendCode", resourceCulture);
+            }
+        }
+        
+        public static string Sending {
+            get {
+                return ResourceManager.GetString("Sending", resourceCulture);
             }
         }
         

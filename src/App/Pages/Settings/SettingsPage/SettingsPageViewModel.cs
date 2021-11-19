@@ -319,9 +319,13 @@ namespace Bit.App.Pages
                     AppResources.SetPINDescription, null, AppResources.Submit, AppResources.Cancel, true);
                 if (!string.IsNullOrWhiteSpace(pin))
                 {
-                    var masterPassOnRestart = await _platformUtilsService.ShowDialogAsync(
-                       AppResources.PINRequireMasterPasswordRestart, AppResources.UnlockWithPIN,
-                       AppResources.Yes, AppResources.No);
+                    var masterPassOnRestart = false;
+                    if (!await _keyConnectorService.GetUsesKeyConnector())
+                    {
+                        masterPassOnRestart = await _platformUtilsService.ShowDialogAsync(
+                            AppResources.PINRequireMasterPasswordRestart, AppResources.UnlockWithPIN,
+                            AppResources.Yes, AppResources.No);
+                    }
 
                     var kdf = await _userService.GetKdfAsync();
                     var kdfIterations = await _userService.GetKdfIterationsAsync();

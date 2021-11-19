@@ -261,11 +261,11 @@
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="LogIn" xml:space="preserve">
-    <value>Kirjaudu sisään</value>
+    <value>Kirjaudu</value>
     <comment>The login button text (verb).</comment>
   </data>
   <data name="LogInNoun" xml:space="preserve">
-    <value>Kirjaudu sisään</value>
+    <value>Kirjautuminen</value>
     <comment>Title for login page. (noun)</comment>
   </data>
   <data name="LogOut" xml:space="preserve">
@@ -415,7 +415,7 @@
     <value>Bitwardenin sovelluslaajennus</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
-    <value>Helpoin tapa lisätä holviisi uusia kirjautumistietoja on käyttää Bitwardenin sovelluslaajennusta. Asetuksista löydät lisätietoja laajennuksesta.</value>
+    <value>Helpoin tapa lisätä holviisi uusia kirjautumistietoja on käyttää Bitwardenin sovelluslaajennusta. Asetusten "Lisäasetukset" -osiosta löydät lisätietoja laajennuksesta.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
     <value>Käytä Bitwardenia kirjautumistietojesi automaattiseen täyttöön Safarissa ja muissa sovelluksissa.</value>
