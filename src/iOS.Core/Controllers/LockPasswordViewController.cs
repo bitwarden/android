@@ -33,6 +33,7 @@ namespace Bit.iOS.Core.Controllers
         private bool _biometricLock;
         private bool _biometricIntegrityValid = true;
         private bool _passwordReprompt = false;
+        private bool _usesKeyConnector;
 
         protected bool autofillExtension = false;
 
@@ -80,6 +81,7 @@ namespace Bit.iOS.Core.Controllers
                     _cryptoService.HasKeyAsync().GetAwaiter().GetResult();
                 _biometricIntegrityValid = _biometricService.ValidateIntegrityAsync(BiometricIntegrityKey).GetAwaiter()
                     .GetResult();
+                _usesKeyConnector = await _keyConnectorService.GetUsesKeyConnector();
             }
             
             BaseNavItem.Title = _pinLock ? AppResources.VerifyPIN : AppResources.VerifyMasterPassword;
@@ -131,16 +133,18 @@ namespace Bit.iOS.Core.Controllers
         public override async void ViewDidAppear(bool animated)
         {
             base.ViewDidAppear(animated);
-            if (!_biometricLock || !_biometricIntegrityValid)
+
+            // Users with key connector and without biometric or pin has no MP to unlock with
+            if (_usesKeyConnector && (!(_pinLock || _biometricLock)) || ( _biometricLock && !_biometricIntegrityValid))
+            {
+                PromptSSO();
+            }
+            else if (!_biometricLock || !_biometricIntegrityValid)
             {
                 MasterPasswordCell.TextField.BecomeFirstResponder();
             }
 
-            // Users with key connector and without biometric or pin has no MP to unlock with
-            if (await _keyConnectorService.GetUsesKeyConnector() && !(_pinLock || _biometricLock))
-            {
-                PromptSSO();
-            }
+            
 
         }
 
