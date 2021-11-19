@@ -1060,7 +1060,7 @@
     <value>Efternamn</value>
   </data>
   <data name="FullName" xml:space="preserve">
-    <value>Full Name</value>
+    <value>Fullständigt namn</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Licensnummer</value>
@@ -1187,7 +1187,7 @@
     <value>Dold</value>
   </data>
   <data name="FieldTypeLinked" xml:space="preserve">
-    <value>Linked</value>
+    <value>Länkad</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Text</value>
@@ -2046,10 +2046,10 @@
     <value>If you do not want to remove your Master Password, you may leave this organization.</value>
   </data>
   <data name="LeaveOrganization" xml:space="preserve">
-    <value>Leave Organization</value>
+    <value>Lämna organisation</value>
   </data>
   <data name="LeaveOrganizationName" xml:space="preserve">
-    <value>Leave {0}?</value>
+    <value>Lämna {0}?</value>
   </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
@@ -2082,7 +2082,7 @@
     <value>One or more organization policies prevents your from exporting your personal vault.</value>
   </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
-    <value>Invalid Verification Code.</value>
+    <value>Ogiltig verifieringskod.</value>
   </data>
     <data name="RequestOTP" xml:space="preserve">
     <value>Request one-time password</value>

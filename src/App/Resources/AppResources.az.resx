@@ -1060,7 +1060,7 @@
     <value>Soyad</value>
   </data>
   <data name="FullName" xml:space="preserve">
-    <value>Full Name</value>
+    <value>Tam ad</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Lisenziya nömrəsi</value>
@@ -1187,7 +1187,7 @@
     <value>Gizli</value>
   </data>
   <data name="FieldTypeLinked" xml:space="preserve">
-    <value>Linked</value>
+    <value>Əlaqə yaradıldı</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Mətn</value>
@@ -1612,7 +1612,7 @@
     <value>Anbar verilənlərinizi ixrac etmək üçün ana parolunuzu daxil edin.</value>
   </data>
     <data name="ExportVaultOTPDescription" xml:space="preserve">
-    <value>Enter the verification code to export your vault data.</value>
+    <value>Anbar verilənlərinizi ixrac etmək üçün təsdiqləmə kodunu daxil edin.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Bu ixrac faylındakı anbar verilənləriniz şifrələnməmiş formatdadır. İxrac edilən faylı saxlamamalı və etibarsız yollarla (e-poçt kimi) göndərməməlisiniz. Bu faylı işiniz bitdikdən sonra dərhal silin.</value>
@@ -2036,19 +2036,19 @@
     <value>Hazırda parol yenilənə bilmir</value>
   </data>
   <data name="RemoveMasterPassword" xml:space="preserve">
-    <value>Remove Master Password</value>
+    <value>Ana parolu sil</value>
   </data>
   <data name="RemoveMasterPasswordWarning" xml:space="preserve">
-    <value>{0} is using SSO with customer-managed encryption. Continuing will remove your Master Password from your account and require SSO to login.</value>
+    <value>{0} müştəri tərəfindən idarə edilən şifrələmə ilə SSO istifadə edir. Davam etsəniz, Ana Parol hesabınızdan silinəcək və giriş etmək üçün SSO tələb olunacaq.</value>
   </data>
   <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
-    <value>If you do not want to remove your Master Password, you may leave this organization.</value>
+    <value>Ana Parolu silmək istəmirsinizsə, bu təşkilatı tərk edə bilərsiniz.</value>
   </data>
   <data name="LeaveOrganization" xml:space="preserve">
-    <value>Leave Organization</value>
+    <value>Təşkilatı tərk et</value>
   </data>
   <data name="LeaveOrganizationName" xml:space="preserve">
-    <value>Leave {0}?</value>
+    <value>{0} tərk edilsin?</value>
   </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
@@ -2081,9 +2081,9 @@
     <value>Bir və ya daha çox təşkilat siyasəti, fərdi anbarınızı ixrac etməyinizin qarşısını alır.</value>
   </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
-    <value>Invalid Verification Code.</value>
+    <value>Etibarsız təsdiqləmə kodu</value>
   </data>
     <data name="RequestOTP" xml:space="preserve">
-    <value>Request one-time password</value>
+    <value>Tək istifadəlik parol tələb et</value>
   </data>
 </root>
