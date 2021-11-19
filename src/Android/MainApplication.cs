@@ -16,6 +16,8 @@ using Bit.Droid.Utilities;
 using Plugin.CurrentActivity;
 using Plugin.Fingerprint;
 using Xamarin.Android.Net;
+using System.Net.Http;
+using System.Net;
 #if !FDROID
 using Android.Gms.Security;
 #endif
@@ -78,7 +80,8 @@ namespace Bit.Droid
                 FFImageLoading.ImageService.Instance.Initialize(new FFImageLoading.Config.Configuration
                 {
                     FadeAnimationEnabled = false,
-                    FadeAnimationForCachedImages = false
+                    FadeAnimationForCachedImages = false,
+                    HttpClient = new HttpClient(new AndroidClientHandler() { AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate })
                 });
                 ZXing.Net.Mobile.Forms.Android.Platform.Init();
             });

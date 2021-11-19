@@ -1612,7 +1612,7 @@
     <value>Angiv din hovedadgangskode for at eksportere boksdata.</value>
   </data>
     <data name="ExportVaultOTPDescription" xml:space="preserve">
-    <value>Angiv bekræftelseskoden for at eksportere dine Boks-data.</value>
+    <value>Angiv bekræftelseskoden for at eksportere dine boks-data.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Denne eksport indeholder dine boksdata i en ukrypteret form. Du bør ikke gemme eller sende den eksporterede fil via usikre kanaler (f.eks. e-mail). Slet den straks efter at du er færdig med at bruge den.</value>
@@ -2036,13 +2036,13 @@
     <value>Kan i øjeblikket ikke opdatere adgangskode</value>
   </data>
   <data name="RemoveMasterPassword" xml:space="preserve">
-    <value>Fjern Hovedadgangskode</value>
+    <value>Fjern hovedadgangskode</value>
   </data>
   <data name="RemoveMasterPasswordWarning" xml:space="preserve">
-    <value>{0} bruger SSO med kundestyret kryptering. Fortsætter du, fjernes din kontohovedadgangskode, og indlogning vil så kræve SSO.</value>
+    <value>{0} bruger SSO med kundestyret kryptering. Hvis du fortsætter, fjernes din hovedadgangskode fra din konto og SSO kræves for at logge på.</value>
   </data>
   <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
-    <value>Ønsker du ikke at fjerne din Hovedadgangskode, kan du forlade denne organisation.</value>
+    <value>Hvis du ikke ønsker at fjerne din hovedadgangskode, kan du forlade denne organisation.</value>
   </data>
   <data name="LeaveOrganization" xml:space="preserve">
     <value>Forlad organisation</value>

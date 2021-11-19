@@ -1060,7 +1060,7 @@
     <value>Perekonnanimi</value>
   </data>
   <data name="FullName" xml:space="preserve">
-    <value>Full Name</value>
+    <value>Täisnimi</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Litsentsi number</value>
@@ -1187,7 +1187,7 @@
     <value>Peidetud</value>
   </data>
   <data name="FieldTypeLinked" xml:space="preserve">
-    <value>Linked</value>
+    <value>Ühenduses</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Tekst</value>
@@ -1612,7 +1612,7 @@
     <value>Hoidlas olevate andmete eksportimiseks on vajalik ülemparooli sisestamine.</value>
   </data>
     <data name="ExportVaultOTPDescription" xml:space="preserve">
-    <value>Enter the verification code to export your vault data.</value>
+    <value>Sisesta hoidla andmete eksportimiseks kinnituskood.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Eksporditav fail sisaldab hoidla sisu, mis on krüpteeringuta. Seda faili ei tohiks kaua käidelda ning mitte mingil juhul ebaturvaliselt saata (näiteks e-postiga). Kustuta see koheselt pärast kasutamist.</value>
@@ -2036,19 +2036,19 @@
     <value>Parooli uuendamine pole hetkel võimalik</value>
   </data>
   <data name="RemoveMasterPassword" xml:space="preserve">
-    <value>Remove Master Password</value>
+    <value>Eemalda ülemparool</value>
   </data>
   <data name="RemoveMasterPasswordWarning" xml:space="preserve">
-    <value>{0} is using SSO with customer-managed encryption. Continuing will remove your Master Password from your account and require SSO to login.</value>
+    <value>{0} kasutab SSO-d koos kliendi poolt hallatava krüpteeringuga. Jätkamisel eemaldatakse sinu kontolt ülemparool ning nõutakse sisselogimist läbi SSO.</value>
   </data>
   <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
-    <value>If you do not want to remove your Master Password, you may leave this organization.</value>
+    <value>Kui sa ei soovi oma ülemparooli eemaldada, saad sellest organisatsioonist lahkuda.</value>
   </data>
   <data name="LeaveOrganization" xml:space="preserve">
-    <value>Leave Organization</value>
+    <value>Lahku organisatsioonist</value>
   </data>
   <data name="LeaveOrganizationName" xml:space="preserve">
-    <value>Leave {0}?</value>
+    <value>Lahkud {0}-st?</value>
   </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
@@ -2081,9 +2081,9 @@
     <value>Üks või enam organisatsiooni poliitikat ei võimalda sul oma personaalset hoidlat eksportida.</value>
   </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
-    <value>Invalid Verification Code.</value>
+    <value>Vale kinnituskood</value>
   </data>
     <data name="RequestOTP" xml:space="preserve">
-    <value>Request one-time password</value>
+    <value>Küsi ühekordset parooli</value>
   </data>
 </root>

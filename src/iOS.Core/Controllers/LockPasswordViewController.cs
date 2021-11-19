@@ -130,7 +130,7 @@ namespace Bit.iOS.Core.Controllers
             }
         }
 
-        public override void ViewDidAppear(bool animated)
+        public override async void ViewDidAppear(bool animated)
         {
             base.ViewDidAppear(animated);
 
