@@ -108,7 +108,7 @@ namespace Bit.iOS.Core.Utilities
                     NSRunLoop.Main.BeginInvokeOnMainThread(async () =>
                     {
                         var result = await deviceActionService.DisplayAlertAsync(details.Title, details.Text,
-                           details.CancelText, confirmText);
+                           details.CancelText, details.ConfirmText);
                         var confirmed = result == details.ConfirmText;
                         messagingService.Send("showDialogResolve", new Tuple<int, bool>(details.DialogId, confirmed));
                     });

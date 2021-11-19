@@ -64,7 +64,6 @@ namespace Bit.Core.Services {
                             var response = await _apiService.RenewFileUploadUrlAsync(uploadData.SendResponse.Id, uploadData.SendResponse.File.Id);
                             return response.Url;
                         };
-
                         await _azureFileUploadService.Upload(uploadData.Url, encryptedFileData, renewalCallback);
                         break;
                     default:

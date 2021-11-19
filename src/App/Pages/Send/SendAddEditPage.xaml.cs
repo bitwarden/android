@@ -7,9 +7,6 @@ using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Utilities;
-#if !FDROID
-using Microsoft.AppCenter.Crashes;
-#endif
 using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
@@ -24,9 +21,6 @@ namespace Bit.App.Pages
 
         private AppOptions _appOptions;
         private SendAddEditPageViewModel _vm;
-
-        public Action OnClose { get; set; }
-        public Action AfterSubmit { get; set; }
 
         public SendAddEditPage(
             AppOptions appOptions = null,
@@ -88,66 +82,42 @@ namespace Bit.App.Pages
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-
-            try
+            if (!await AppHelpers.IsVaultTimeoutImmediateAsync())
             {
-                if (!await AppHelpers.IsVaultTimeoutImmediateAsync())
+                await _vaultTimeoutService.CheckVaultTimeoutAsync();
+            }
+            if (await _vaultTimeoutService.IsLockedAsync())
+            {
+                return;
+            }
+            await _vm.InitAsync();
+            _broadcasterService.Subscribe(nameof(SendAddEditPage), message =>
+            {
+                if (message.Command == "selectFileResult")
                 {
-                    await _vaultTimeoutService.CheckVaultTimeoutAsync();
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        var data = message.Data as Tuple<byte[], string>;
+                        _vm.FileData = data.Item1;
+                        _vm.FileName = data.Item2;
+                    });
                 }
-                if (await _vaultTimeoutService.IsLockedAsync())
+            });
+            await LoadOnAppearedAsync(_scrollView, true, async () =>
+            {
+                var success = await _vm.LoadAsync();
+                if (!success)
                 {
+                    await Navigation.PopModalAsync();
                     return;
                 }
-                await _vm.InitAsync();
-                _broadcasterService.Subscribe(nameof(SendAddEditPage), message =>
+                await HandleCreateRequest();
+                if (!_vm.EditMode && string.IsNullOrWhiteSpace(_vm.Send?.Name))
                 {
-                    if (message.Command == "selectFileResult")
-                    {
-                        Device.BeginInvokeOnMainThread(() =>
-                        {
-                            var data = message.Data as Tuple<byte[], string>;
-                            _vm.FileData = data.Item1;
-                            _vm.FileName = data.Item2;
-                        });
-                    }
-                });
-
-                await LoadOnAppearedAsync(_scrollView, true, async () =>
-                {
-                    var success = await _vm.LoadAsync();
-                    if (!success)
-                    {
-                        await CloseAsync();
-                        return;
-                    }
-                    await HandleCreateRequest();
-                    if (!_vm.EditMode && string.IsNullOrWhiteSpace(_vm.Send?.Name))
-                    {
-                        RequestFocus(_nameEntry);
-                    }
-                    AdjustToolbar();
-                });
-            }
-            catch (Exception ex)
-            {
-#if !FDROID
-                Crashes.TrackError(ex);
-#endif
-                await CloseAsync();
-            }
-        }
-
-        private async Task CloseAsync()
-        {
-            if (OnClose is null)
-            {
-                await Navigation.PopModalAsync();
-            }
-            else
-            {
-                OnClose();
-            }
+                    RequestFocus(_nameEntry);
+                }
+                AdjustToolbar();
+            });
         }
 
         protected override bool OnBackButtonPressed()
@@ -230,11 +200,7 @@ namespace Bit.App.Pages
         {
             if (DoOnce())
             {
-                var submitted = await _vm.SubmitAsync();
-                if (submitted)
-                {
-                    AfterSubmit?.Invoke();
-                }
+                await _vm.SubmitAsync();
             }
         }
 
@@ -268,7 +234,7 @@ namespace Bit.App.Pages
             {
                 if (await _vm.DeleteAsync())
                 {
-                    await CloseAsync();
+                    await Navigation.PopModalAsync();
                 }
             }
         }
@@ -308,7 +274,7 @@ namespace Bit.App.Pages
             {
                 if (await _vm.DeleteAsync())
                 {
-                    await CloseAsync();
+                    await Navigation.PopModalAsync();
                 }
             }
         }
@@ -317,7 +283,7 @@ namespace Bit.App.Pages
         {
             if (DoOnce())
             {
-                await CloseAsync();
+                await Navigation.PopModalAsync();
             }
         }
 
@@ -340,7 +306,6 @@ namespace Bit.App.Pages
             }
 
             _vm.IsAddFromShare = true;
-            _vm.CopyInsteadOfShareAfterSaving = _appOptions.CopyInsteadOfShareAfterSaving;
             
             var name = _appOptions.CreateSend.Item2;
             _vm.Send.Name = name;

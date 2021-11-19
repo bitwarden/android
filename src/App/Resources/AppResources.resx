@@ -2090,16 +2090,10 @@
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Invalid Verification Code.</value>
   </data>
-  <data name="RequestOTP" xml:space="preserve">
-    <value>Request one-time password</value>
-  </data>
   <data name="SendCode" xml:space="preserve">
     <value>Send Code</value>
   </data>
   <data name="Sending" xml:space="preserve">
     <value>Sending</value>
-  </data>
-  <data name="CopySendLinkOnSave" xml:space="preserve">
-    <value>Copy Send link on save</value>
   </data>
 </root>
