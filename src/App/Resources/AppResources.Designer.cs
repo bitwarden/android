@@ -3724,11 +3724,5 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("Sending", resourceCulture);
             }
         }
-        
-        public static string CopySendLinkOnSave {
-            get {
-                return ResourceManager.GetString("CopySendLinkOnSave", resourceCulture);
-            }
-        }
     }
 }

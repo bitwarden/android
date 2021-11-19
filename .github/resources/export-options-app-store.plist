@@ -12,8 +12,6 @@
         <string>Dist: Autofill 2021</string>
         <key>com.8bit.bitwarden.find-login-action-extension</key>
         <string>Dist: Extension 2021</string>
-        <key>com.8bit.bitwarden.share-extension</key>
-        <string>Dist: Share Extension 2021</string>
     </dict>
 </dict>
 </plist>

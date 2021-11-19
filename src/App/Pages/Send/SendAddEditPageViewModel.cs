@@ -9,9 +9,6 @@ using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
-#if !FDROID
-using Microsoft.AppCenter.Crashes;
-#endif
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -48,7 +45,6 @@ namespace Bit.App.Pages
         };
         private bool _disableHideEmail;
         private bool _sendOptionsPolicyInEffect;
-        private bool _copyInsteadOfShareAfterSaving;
 
         public SendAddEditPageViewModel()
         {
@@ -100,16 +96,6 @@ namespace Bit.App.Pages
         public bool ShareOnSave { get; set; }
         public bool DisableHideEmailControl { get; set; }
         public bool IsAddFromShare { get; set; }
-        public bool CopyInsteadOfShareAfterSaving
-        {
-            get => _copyInsteadOfShareAfterSaving;
-            set
-            {
-                SetProperty(ref _copyInsteadOfShareAfterSaving, value);
-                TriggerPropertyChanged(nameof(ShareOnSaveText));
-            }
-        }
-        public string ShareOnSaveText => CopyInsteadOfShareAfterSaving ? AppResources.CopySendLinkOnSave : AppResources.ShareOnSave;
         public List<KeyValuePair<string, SendType>> TypeOptions { get; }
         public List<KeyValuePair<string, string>> DeletionTypeOptions { get; }
         public List<KeyValuePair<string, string>> ExpirationTypeOptions { get; }
@@ -410,36 +396,25 @@ namespace Bit.App.Pages
                     EditMode ? AppResources.SendUpdated : AppResources.NewSendCreated);
                 }
 
-                if (!CopyInsteadOfShareAfterSaving)
+                if (IsAddFromShare && Device.RuntimePlatform == Device.Android)
                 {
-                    await CloseAsync();
+                    _deviceActionService.CloseMainApp();
                 }
-
+                else
+                {
+                    await Page.Navigation.PopModalAsync();
+                }
+                
                 if (ShareOnSave)
                 {
                     var savedSend = await _sendService.GetAsync(sendId);
                     if (savedSend != null)
                     {
                         var savedSendView = await savedSend.DecryptAsync();
-                        if (CopyInsteadOfShareAfterSaving)
-                        {
-                            await AppHelpers.CopySendUrlAsync(savedSendView);
-
-                            // wait so that the user sees the message before the view gets dismissed
-                            await Task.Delay(1300);
-                        }
-                        else
-                        {
-                            await AppHelpers.ShareSendUrlAsync(savedSendView);
-                        }
+                        await AppHelpers.ShareSendUrlAsync(savedSendView);
                     }
                 }
-
-                if (CopyInsteadOfShareAfterSaving)
-                {
-                    await CloseAsync();
-                }
-
+                
                 return true;
             }
             catch (ApiException e)
@@ -451,35 +426,7 @@ namespace Bit.App.Pages
                         AppResources.AnErrorHasOccurred);
                 }
             }
-            catch (Exception ex)
-            {
-                await _deviceActionService.HideLoadingAsync();
-#if !FDROID
-                Crashes.TrackError(ex);
-#endif
-                await _platformUtilsService.ShowDialogAsync(AppResources.AnErrorHasOccurred);
-            }
             return false;
-        }
-
-        private async Task CloseAsync()
-        {
-            if (IsAddFromShare)
-            {
-                if (Device.RuntimePlatform == Device.Android)
-                {
-                    _deviceActionService.CloseMainApp();
-                    return;
-                }
-
-                if (Page is SendAddEditPage sendPage && sendPage.OnClose != null)
-                {
-                    sendPage.OnClose();
-                    return;
-                }
-            }
-
-            await Page.Navigation.PopModalAsync();
         }
 
         public async Task<bool> RemovePasswordAsync()
@@ -507,7 +454,14 @@ namespace Bit.App.Pages
             if (!SendEnabled)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.SendDisabledWarning);
-                await CloseAsync();
+                if (IsAddFromShare && Device.RuntimePlatform == Device.Android)
+                {
+                    _deviceActionService.CloseMainApp();
+                }
+                else
+                {
+                    await Page.Navigation.PopModalAsync();
+                }
                 return;
             }
             if (Send != null)

@@ -219,12 +219,12 @@ namespace Bit.Core.Services
                         {
                             response = await LegacyServerSendFileUpload(request, send, encryptedFileData);
                         }
-                        catch
+                        catch (Exception e) 
                         {
                             if (response != default){
                                 await _apiService.DeleteSendAsync(response.Id);
                             }
-                            throw;
+                            throw e;
                         }
                         break;
                     default:
