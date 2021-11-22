@@ -34,6 +34,7 @@ namespace Bit.iOS.Core.Controllers
         private bool _biometricIntegrityValid = true;
         private bool _passwordReprompt = false;
         private bool _usesKeyConnector;
+        private bool _biometricUnlockOnly = false;
 
         protected bool autofillExtension = false;
 
@@ -49,8 +50,32 @@ namespace Bit.iOS.Core.Controllers
 
         public FormEntryTableViewCell MasterPasswordCell { get; set; } = new FormEntryTableViewCell(
             AppResources.MasterPassword, useButton: true);
-        
+
         public string BiometricIntegrityKey { get; set; }
+
+        public UITableViewCell BiometricCell
+        {
+            get
+            {
+                var cell = new UITableViewCell();
+                if (_biometricIntegrityValid)
+                {
+                    var biometricButtonText = _deviceActionService.SupportsFaceBiometric() ?
+                    AppResources.UseFaceIDToUnlock : AppResources.UseFingerprintToUnlock;
+                    cell.TextLabel.TextColor = ThemeHelpers.PrimaryColor;
+                    cell.TextLabel.Text = biometricButtonText;
+                }
+                else
+                {
+                    cell.TextLabel.TextColor = ThemeHelpers.DangerColor;
+                    cell.TextLabel.Font = ThemeHelpers.GetDangerFont();
+                    cell.TextLabel.Lines = 0;
+                    cell.TextLabel.LineBreakMode = UILineBreakMode.WordWrap;
+                    cell.TextLabel.Text = AppResources.BiometricInvalidatedExtension;
+                }
+                return cell;
+            }
+        }
 
         public override async void ViewDidLoad()
         {
@@ -82,10 +107,12 @@ namespace Bit.iOS.Core.Controllers
                 _biometricIntegrityValid = _biometricService.ValidateIntegrityAsync(BiometricIntegrityKey).GetAwaiter()
                     .GetResult();
                 _usesKeyConnector = await _keyConnectorService.GetUsesKeyConnector();
+                _biometricUnlockOnly = _usesKeyConnector && !_pinLock && _biometricLock;
             }
             
             BaseNavItem.Title = _pinLock ? AppResources.VerifyPIN : AppResources.VerifyMasterPassword;
             BaseCancelButton.Title = AppResources.Cancel;
+
             BaseSubmitButton.Title = AppResources.Submit;
 
             var descriptor = UIFontDescriptor.PreferredBody;
@@ -143,9 +170,6 @@ namespace Bit.iOS.Core.Controllers
             {
                 MasterPasswordCell.TextField.BecomeFirstResponder();
             }
-
-            
-
         }
 
         protected async Task CheckPasswordAsync()
@@ -355,38 +379,34 @@ namespace Bit.iOS.Core.Controllers
                 {
                     if (indexPath.Row == 0)
                     {
-                        return _controller.MasterPasswordCell;
+                        if (_controller._biometricUnlockOnly)
+                        {
+                            return _controller.BiometricCell;
+                        }
+                        else
+                        {
+                            return _controller.MasterPasswordCell;
+                        }
                     }
                 }
                 else if (indexPath.Section == 1)
                 {
                     if (indexPath.Row == 0)
                     {
-                        var cell = new ExtendedUITableViewCell();
                         if (_controller._passwordReprompt)
                         {
+                            var cell = new ExtendedUITableViewCell();
                             cell.TextLabel.TextColor = ThemeHelpers.DangerColor;
                             cell.TextLabel.Font = ThemeHelpers.GetDangerFont();
                             cell.TextLabel.Lines = 0;
                             cell.TextLabel.LineBreakMode = UILineBreakMode.WordWrap;
                             cell.TextLabel.Text = AppResources.PasswordConfirmationDesc;
+                            return cell;
                         }
-                        else if (_controller._biometricIntegrityValid)
+                        else if (!_controller._biometricUnlockOnly)
                         {
-                            var biometricButtonText = _controller._deviceActionService.SupportsFaceBiometric() ?
-                            AppResources.UseFaceIDToUnlock : AppResources.UseFingerprintToUnlock;
-                            cell.TextLabel.TextColor = ThemeHelpers.PrimaryColor;
-                            cell.TextLabel.Text = biometricButtonText;
+                            return _controller.BiometricCell;
                         }
-                        else
-                        {
-                            cell.TextLabel.TextColor = ThemeHelpers.DangerColor;
-                            cell.TextLabel.Font = ThemeHelpers.GetDangerFont();
-                            cell.TextLabel.Lines = 0;
-                            cell.TextLabel.LineBreakMode = UILineBreakMode.WordWrap;
-                            cell.TextLabel.Text = AppResources.BiometricInvalidatedExtension;
-                        }
-                        return cell;
                     }
                 }
                 return new ExtendedUITableViewCell();
@@ -399,7 +419,10 @@ namespace Bit.iOS.Core.Controllers
 
             public override nint NumberOfSections(UITableView tableView)
             {
-                return _controller._biometricLock || _controller._passwordReprompt ? 2 : 1;
+                return (!_controller._biometricUnlockOnly && _controller._biometricLock) ||
+                    _controller._passwordReprompt
+                    ? 2
+                    : 1;
             }
 
             public override nint RowsInSection(UITableView tableview, nint section)
@@ -425,7 +448,9 @@ namespace Bit.iOS.Core.Controllers
             {
                 tableView.DeselectRow(indexPath, true);
                 tableView.EndEditing(true);
-                if (indexPath.Section == 1 && indexPath.Row == 0)
+                if (indexPath.Row == 0 &&
+                    ((_controller._biometricUnlockOnly && indexPath.Section == 0) ||
+                    indexPath.Section == 1))
                 {
                     var task = _controller.PromptBiometricAsync();
                     return;
