@@ -107,14 +107,14 @@ namespace Bit.iOS.Core.Controllers
                 _biometricIntegrityValid = _biometricService.ValidateIntegrityAsync(BiometricIntegrityKey).GetAwaiter()
                     .GetResult();
                 _usesKeyConnector = await _keyConnectorService.GetUsesKeyConnector();
-                _biometricUnlockOnly = _usesKeyConnector && !_pinLock && _biometricLock;
+                _biometricUnlockOnly = _usesKeyConnector && _biometricLock && !_pinLock;
             }
 
             if (_pinLock)
             {
                 BaseNavItem.Title = AppResources.VerifyPIN;
             }
-            else if (_biometricUnlockOnly)
+            else if (_usesKeyConnector)
             {
                 BaseNavItem.Title = AppResources.UnlockVault;
             }
@@ -137,24 +137,27 @@ namespace Bit.iOS.Core.Controllers
 
             var descriptor = UIFontDescriptor.PreferredBody;
 
-            MasterPasswordCell.Label.Text = _pinLock ? AppResources.PIN : AppResources.MasterPassword;
-            MasterPasswordCell.TextField.SecureTextEntry = true;
-            MasterPasswordCell.TextField.ReturnKeyType = UIReturnKeyType.Go;
-            MasterPasswordCell.TextField.ShouldReturn += (UITextField tf) =>
+            if (!_biometricUnlockOnly)
             {
-                CheckPasswordAsync().GetAwaiter().GetResult();
-                return true;
-            };
-            if (_pinLock)
-            {
-                MasterPasswordCell.TextField.KeyboardType = UIKeyboardType.NumberPad;
+                MasterPasswordCell.Label.Text = _pinLock ? AppResources.PIN : AppResources.MasterPassword;
+                MasterPasswordCell.TextField.SecureTextEntry = true;
+                MasterPasswordCell.TextField.ReturnKeyType = UIReturnKeyType.Go;
+                MasterPasswordCell.TextField.ShouldReturn += (UITextField tf) =>
+                {
+                    CheckPasswordAsync().GetAwaiter().GetResult();
+                    return true;
+                };
+                if (_pinLock)
+                {
+                    MasterPasswordCell.TextField.KeyboardType = UIKeyboardType.NumberPad;
+                }
+                MasterPasswordCell.Button.TitleLabel.Font = UIFont.FromName("FontAwesome", 28f);
+                MasterPasswordCell.Button.SetTitle("\uf06e", UIControlState.Normal);
+                MasterPasswordCell.Button.TouchUpInside += (sender, e) => {
+                    MasterPasswordCell.TextField.SecureTextEntry = !MasterPasswordCell.TextField.SecureTextEntry;
+                    MasterPasswordCell.Button.SetTitle(MasterPasswordCell.TextField.SecureTextEntry ? "\uf06e" : "\uf070", UIControlState.Normal);
+                };
             }
-            MasterPasswordCell.Button.TitleLabel.Font = UIFont.FromName("FontAwesome", 28f);
-            MasterPasswordCell.Button.SetTitle("\uf06e", UIControlState.Normal);
-            MasterPasswordCell.Button.TouchUpInside += (sender, e) => {
-                MasterPasswordCell.TextField.SecureTextEntry = !MasterPasswordCell.TextField.SecureTextEntry;
-                MasterPasswordCell.Button.SetTitle(MasterPasswordCell.TextField.SecureTextEntry ? "\uf06e" : "\uf070", UIControlState.Normal);
-            };
 
             TableView.RowHeight = UITableView.AutomaticDimension;
             TableView.EstimatedRowHeight = 70;
