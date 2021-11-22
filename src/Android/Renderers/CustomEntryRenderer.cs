@@ -29,7 +29,16 @@ namespace Bit.Droid.Renderers
                     Control.PaddingBottom + 20);
                 Control.ImeOptions = Control.ImeOptions | (ImeAction)ImeFlags.NoPersonalizedLearning |
                     (ImeAction)ImeFlags.NoExtractUi;
-            }
+            }   
+        }
+
+        // Workaround for bug preventing long-press -> copy/paste on Android 11
+        // See https://issuetracker.google.com/issues/37095917
+        protected override void OnAttachedToWindow()
+        {
+            base.OnAttachedToWindow();
+            Control.Enabled = false;
+            Control.Enabled = true;
         }
 
         // Workaround for failure to disable text prediction on non-password fields
