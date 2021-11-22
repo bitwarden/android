@@ -109,11 +109,31 @@ namespace Bit.iOS.Core.Controllers
                 _usesKeyConnector = await _keyConnectorService.GetUsesKeyConnector();
                 _biometricUnlockOnly = _usesKeyConnector && !_pinLock && _biometricLock;
             }
+
+            if (_pinLock)
+            {
+                BaseNavItem.Title = AppResources.VerifyPIN;
+            }
+            else if (_biometricUnlockOnly)
+            {
+                BaseNavItem.Title = AppResources.UnlockVault;
+            }
+            else
+            {
+                BaseNavItem.Title = AppResources.VerifyMasterPassword;
+            }
             
-            BaseNavItem.Title = _pinLock ? AppResources.VerifyPIN : AppResources.VerifyMasterPassword;
             BaseCancelButton.Title = AppResources.Cancel;
 
-            BaseSubmitButton.Title = AppResources.Submit;
+            if (_biometricUnlockOnly)
+            {
+                BaseSubmitButton.Title = null;
+                BaseSubmitButton.Enabled = false;
+            }
+            else
+            {
+                BaseSubmitButton.Title = AppResources.Submit;
+            }
 
             var descriptor = UIFontDescriptor.PreferredBody;
 
