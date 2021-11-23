@@ -185,7 +185,13 @@
       <DependentUpon>SetupViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Utilities\AutofillHelpers.cs" />
-    <None Include="Info.plist" />
+    <None Include="Info.plist" Condition="'$(Configuration)' == 'Release'">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Info-dev.plist" Condition="'$(Configuration)' != 'Release'">
+      <LogicalName>Info.plist</LogicalName>
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Entitlements.plist" />
     <Compile Include="Models\Context.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

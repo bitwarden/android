@@ -175,7 +175,13 @@
     <Compile Include="SetupViewController.designer.cs">
       <DependentUpon>SetupViewController.cs</DependentUpon>
     </Compile>
-    <None Include="Info.plist" />
+    <None Include="Info.plist" Condition="'$(Configuration)' == 'Release'">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Info-dev.plist" Condition="'$(Configuration)' != 'Release'">
+      <LogicalName>Info.plist</LogicalName>
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Entitlements.plist" />
     <Compile Include="Models\Context.cs" />
     <Compile Include="PasswordGeneratorViewController.cs" />
