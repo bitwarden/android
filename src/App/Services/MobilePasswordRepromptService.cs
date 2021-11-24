@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using Bit.Core.Abstractions;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
+using Bit.Core.Abstractions;
 using System;
 using Bit.Core.Utilities;
 
@@ -22,23 +22,23 @@ namespace Bit.App.Services
 
         public async Task<bool> ShowPasswordPromptAsync()
         {
-            if (!await Enabled())
-            {
-                return true;
-            }
+            return await _platformUtilsService.ShowPasswordDialogAsync(AppResources.PasswordConfirmation, AppResources.PasswordConfirmationDesc, ValidatePasswordAsync);
+        }
 
-            Func<string, Task<bool>> validator = async (string password) =>
-            {
-                // Assume user has canceled.
-                if (string.IsNullOrWhiteSpace(password))
-                {
-                    return false;
-                };
+        public async Task<(string password, bool valid)> ShowPasswordPromptAndGetItAsync()
+        {
+            return await _platformUtilsService.ShowPasswordDialogAndGetItAsync(AppResources.PasswordConfirmation, AppResources.PasswordConfirmationDesc, ValidatePasswordAsync);
+        }
 
-                return await _cryptoService.CompareAndUpdateKeyHashAsync(password, null);
+        private async Task<bool> ValidatePasswordAsync(string password)
+        {
+            // Assume user has canceled.
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                return false;
             };
 
-            return await _platformUtilsService.ShowPasswordDialogAsync(AppResources.PasswordConfirmation, AppResources.PasswordConfirmationDesc, validator);
+            return await _cryptoService.CompareAndUpdateKeyHashAsync(password, null);
         }
 
         public async Task<bool> Enabled()

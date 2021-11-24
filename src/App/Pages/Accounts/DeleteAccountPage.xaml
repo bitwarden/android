@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<pages:BaseContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Bit.App.Pages.Accounts.DeleteAccountPage"
+    xmlns:pages="clr-namespace:Bit.App.Pages"
+    xmlns:u="clr-namespace:Bit.App.Utilities"
+    x:DataType="pages:DeleteAccountViewModel"
+    Title="{Binding PageTitle}">
+    <ContentPage.BindingContext>
+        <pages:DeleteAccountViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{u:I18n Close}" Clicked="Close_Clicked" Order="Primary" Priority="-1" />
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Content>
+        <StackLayout Padding="20, 30" Spacing="0">
+            <Image
+                Source="ic_warning"
+                WidthRequest="28"
+                HeightRequest="25"
+                HorizontalOptions="Start" />
+            <Label
+                Text="{u:I18n DeletingYourAccountIsPermanent}"
+                HorizontalOptions="Start"
+                StyleClass="text-body"
+                Margin="0,15,0,0"/>
+            <Label
+                Text="{u:I18n DeleteAccountExplanation}"
+                HorizontalOptions="Start"
+                Margin="0,6,50,0"
+                Opacity="0.6" />
+            <Button
+                Text="{u:I18n Cancel}"
+                StyleClass="btn-primary"
+                HorizontalOptions="Start"
+                Margin="0,26,0,0"
+                Padding="16,6"
+                CornerRadius="2"
+                TextTransform="Uppercase"
+                Clicked="Close_Clicked" />
+            <Button
+                Text="{u:I18n DeleteAccount}"
+                StyleClass="btn-secondary"
+                TextColor="#99000000"
+                HorizontalOptions="Start"
+                Margin="0,12,0,0"
+                Padding="16,6"
+                CornerRadius="2"
+                TextTransform="Uppercase"
+                Clicked="DeleteAccount_Clicked"/>
+        </StackLayout>
+    </ContentPage.Content>
+</pages:BaseContentPage>

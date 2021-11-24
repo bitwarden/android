@@ -2543,6 +2543,12 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string UnlockVault {
+            get {
+                return ResourceManager.GetString("UnlockVault", resourceCulture);
+            }
+        }
+        
         public static string ThirtyMinutes {
             get {
                 return ResourceManager.GetString("ThirtyMinutes", resourceCulture);
@@ -2570,6 +2576,12 @@ namespace Bit.App.Resources {
         public static string VaultLockedPIN {
             get {
                 return ResourceManager.GetString("VaultLockedPIN", resourceCulture);
+            }
+        }
+        
+        public static string VaultLockedIdentity {
+            get {
+                return ResourceManager.GetString("VaultLockedIdentity", resourceCulture);
             }
         }
         
@@ -3704,6 +3716,36 @@ namespace Bit.App.Resources {
         public static string DisablePersonalVaultExportPolicyInEffect {
             get {
                 return ResourceManager.GetString("DisablePersonalVaultExportPolicyInEffect", resourceCulture);
+            }
+        }
+        
+        public static string DeleteAccount {
+            get {
+                return ResourceManager.GetString("DeleteAccount", resourceCulture);
+            }
+        }
+        
+        public static string DeletingYourAccountIsPermanent {
+            get {
+                return ResourceManager.GetString("DeletingYourAccountIsPermanent", resourceCulture);
+            }
+        }
+        
+        public static string DeleteAccountExplanation {
+            get {
+                return ResourceManager.GetString("DeleteAccountExplanation", resourceCulture);
+            }
+        }
+        
+        public static string DeletingYourAccount {
+            get {
+                return ResourceManager.GetString("DeletingYourAccount", resourceCulture);
+            }
+        }
+        
+        public static string YourAccountHasBeenPermanentlyDeleted {
+            get {
+                return ResourceManager.GetString("YourAccountHasBeenPermanentlyDeleted", resourceCulture);
             }
         }
         
