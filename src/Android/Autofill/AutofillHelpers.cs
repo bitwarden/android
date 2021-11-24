@@ -37,6 +37,8 @@ namespace Bit.Droid.Autofill
             "com.duckduckgo.mobile.android",
             "com.google.android.googlequicksearchbox",
             "org.mozilla.focus",
+            "org.mozilla.focus.beta",
+            "org.mozilla.focus.nightly",
             "org.mozilla.klar",
         };
 
