@@ -172,6 +172,7 @@
     <AndroidResource Include="Resources\drawable\cog.xml" />
     <AndroidResource Include="Resources\drawable\icon.xml" />
     <AndroidResource Include="Resources\drawable\ic_launcher_foreground.xml" />
+    <AndroidResource Include="Resources\drawable\ic_warning.xml" />
     <AndroidResource Include="Resources\drawable\id.xml" />
     <AndroidResource Include="Resources\drawable\info.xml" />
     <AndroidResource Include="Resources\drawable\list_item_bg.xml" />
@@ -205,10 +206,6 @@
     <AndroidResource Include="Resources\values-night\styles.xml" />
     <AndroidResource Include="Resources\values\styles.xml" />
     <AndroidResource Include="Resources\values\colors.xml" />
-    <AndroidResource Include="Resources\drawable\ic_warning.xml">
-      <SubType></SubType>
-      <Generator></Generator>
-    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\splash_screen.xml" />
