@@ -1059,6 +1059,9 @@
   <data name="LastName" xml:space="preserve">
     <value>نام خانوادگی</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>نام کامل</value>
+  </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>شماره مجوز</value>
   </data>
@@ -1182,6 +1185,9 @@
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>مخفی</value>
+  </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>لینک شده</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>متن</value>
@@ -1605,6 +1611,9 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>کلمه عبور اصلی خود را برای خروجی گرفتن از گاوصندوقتان وارد کنید.</value>
   </data>
+    <data name="ExportVaultOTPDescription" xml:space="preserve">
+    <value>کد تأیید را وارد کنید تا داده های گاوصندوق خود را صادر کنید.</value>
+  </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>این خروجی شامل داده‌های گاوصندوق در یک قالب رمزنگاری نشده است. شما نباید آن را از طریق یک راه ارتباطی ناامن (مثل ایمیل) ذخیره یا ارسال کنید. به محض اینکه استفاده‌تان از آن تمام شد، آن را حذف کنید.</value>
   </data>
@@ -2026,6 +2035,21 @@
   <data name="UpdatePasswordError" xml:space="preserve">
     <value>در حال حاضر نمی توان کلمه عبور را به روز کرد</value>
   </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>پاک کردن کلمه عبور اصلی</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>{0} از SSO با رمزگذاری مدیریت شده توسط مشتری استفاده می کند. ادامه، کلمه عبور اصلی شما را از حساب شما حذف می کند و نیاز به ورود SSO دارد.</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>اگر نمی‌خواهید کلمه عبور اصلی خود را حذف کنید، می‌توانید این سازمان را ترک کنید.</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>ترک سازمان</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>{0} را ترک می‌کنید؟</value>
+  </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn
 </value>
@@ -2056,5 +2080,11 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>یک یا چند خط مشی سازمان از صادرات گاوصندوق شخصی شما جلوگیری می کند.</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>کد تایید نامعتبر است.</value>
+  </data>
+    <data name="RequestOTP" xml:space="preserve">
+    <value>درخواست رمز یکبار مصرف</value>
   </data>
 </root>

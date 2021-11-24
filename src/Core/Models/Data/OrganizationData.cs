@@ -29,6 +29,8 @@ namespace Bit.Core.Models.Data
             MaxStorageGb = response.MaxStorageGb;
             Permissions = response.Permissions ?? new Permissions();
             Identifier = response.Identifier;
+            UsesKeyConnector = response.UsesKeyConnector;
+            KeyConnectorUrl = response.KeyConnectorUrl;
         }
 
         public string Id { get; set; }
@@ -50,5 +52,7 @@ namespace Bit.Core.Models.Data
         public short? MaxStorageGb { get; set; }
         public Permissions Permissions { get; set; } = new Permissions();
         public string Identifier { get; set; }
+        public bool UsesKeyConnector { get; set; }
+        public string KeyConnectorUrl { get; set; }
     }
 }

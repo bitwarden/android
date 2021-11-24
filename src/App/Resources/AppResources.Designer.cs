@@ -1781,6 +1781,12 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string FullName {
+            get {
+                return ResourceManager.GetString("FullName", resourceCulture);
+            }
+        }
+        
         public static string LicenseNumber {
             get {
                 return ResourceManager.GetString("LicenseNumber", resourceCulture);
@@ -2024,6 +2030,12 @@ namespace Bit.App.Resources {
         public static string FieldTypeHidden {
             get {
                 return ResourceManager.GetString("FieldTypeHidden", resourceCulture);
+            }
+        }
+        
+        public static string FieldTypeLinked {
+            get {
+                return ResourceManager.GetString("FieldTypeLinked", resourceCulture);
             }
         }
         
@@ -2531,6 +2543,12 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string UnlockVault {
+            get {
+                return ResourceManager.GetString("UnlockVault", resourceCulture);
+            }
+        }
+        
         public static string ThirtyMinutes {
             get {
                 return ResourceManager.GetString("ThirtyMinutes", resourceCulture);
@@ -2558,6 +2576,12 @@ namespace Bit.App.Resources {
         public static string VaultLockedPIN {
             get {
                 return ResourceManager.GetString("VaultLockedPIN", resourceCulture);
+            }
+        }
+        
+        public static string VaultLockedIdentity {
+            get {
+                return ResourceManager.GetString("VaultLockedIdentity", resourceCulture);
             }
         }
         
@@ -2822,6 +2846,24 @@ namespace Bit.App.Resources {
         public static string ExportVaultMasterPasswordDescription {
             get {
                 return ResourceManager.GetString("ExportVaultMasterPasswordDescription", resourceCulture);
+            }
+        }
+        
+        public static string SendVerificationCodeToEmail {
+            get {
+                return ResourceManager.GetString("SendVerificationCodeToEmail", resourceCulture);
+            }
+        }
+        
+        public static string CodeSent {
+            get {
+                return ResourceManager.GetString("CodeSent", resourceCulture);
+            }
+        }
+        
+        public static string ConfirmYourIdentity {
+            get {
+                return ResourceManager.GetString("ConfirmYourIdentity", resourceCulture);
             }
         }
         
@@ -3587,6 +3629,36 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string RemoveMasterPassword {
+            get {
+                return ResourceManager.GetString("RemoveMasterPassword", resourceCulture);
+            }
+        }
+        
+        public static string RemoveMasterPasswordWarning {
+            get {
+                return ResourceManager.GetString("RemoveMasterPasswordWarning", resourceCulture);
+            }
+        }
+        
+        public static string RemoveMasterPasswordWarning2 {
+            get {
+                return ResourceManager.GetString("RemoveMasterPasswordWarning2", resourceCulture);
+            }
+        }
+        
+        public static string LeaveOrganization {
+            get {
+                return ResourceManager.GetString("LeaveOrganization", resourceCulture);
+            }
+        }
+        
+        public static string LeaveOrganizationName {
+            get {
+                return ResourceManager.GetString("LeaveOrganizationName", resourceCulture);
+            }
+        }
+        
         public static string Fido2Title {
             get {
                 return ResourceManager.GetString("Fido2Title", resourceCulture);
@@ -3674,6 +3746,24 @@ namespace Bit.App.Resources {
         public static string YourAccountHasBeenPermanentlyDeleted {
             get {
                 return ResourceManager.GetString("YourAccountHasBeenPermanentlyDeleted", resourceCulture);
+            }
+        }
+        
+        public static string InvalidVerificationCode {
+            get {
+                return ResourceManager.GetString("InvalidVerificationCode", resourceCulture);
+            }
+        }
+        
+        public static string SendCode {
+            get {
+                return ResourceManager.GetString("SendCode", resourceCulture);
+            }
+        }
+        
+        public static string Sending {
+            get {
+                return ResourceManager.GetString("Sending", resourceCulture);
             }
         }
     }

@@ -28,6 +28,7 @@ namespace Bit.App.Pages
         private readonly IEnvironmentService _environmentService;
         private readonly IStateService _stateService;
         private readonly IBiometricService _biometricService;
+        private readonly IKeyConnectorService _keyConnectorService;
 
         private string _email;
         private bool _showPassword;
@@ -35,6 +36,7 @@ namespace Bit.App.Pages
         private bool _biometricLock;
         private bool _biometricIntegrityValid = true;
         private bool _biometricButtonVisible;
+        private bool _usingKeyConnector;
         private string _biometricButtonText;
         private string _loggedInAsText;
         private string _lockedVerifyText;
@@ -54,6 +56,7 @@ namespace Bit.App.Pages
             _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _biometricService = ServiceContainer.Resolve<IBiometricService>("biometricService");
+            _keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
 
             PageTitle = AppResources.VerifyMasterPassword;
             TogglePasswordCommand = new Command(TogglePassword);
@@ -74,6 +77,11 @@ namespace Bit.App.Pages
         {
             get => _pinLock;
             set => SetProperty(ref _pinLock, value);
+        }
+
+        public bool UsingKeyConnector
+        {
+            get => _usingKeyConnector;
         }
 
         public bool BiometricLock
@@ -119,11 +127,18 @@ namespace Bit.App.Pages
         public string Pin { get; set; }
         public Action UnlockedAction { get; set; }
 
-        public async Task InitAsync(bool autoPromptBiometric)
+        public async Task InitAsync()
         {
             _pinSet = await _vaultTimeoutService.IsPinLockSetAsync();
             PinLock = (_pinSet.Item1 && _vaultTimeoutService.PinProtectedKey != null) || _pinSet.Item2;
             BiometricLock = await _vaultTimeoutService.IsBiometricLockSetAsync() && await _cryptoService.HasKeyAsync();
+
+            // Users with key connector and without biometric or pin has no MP to unlock with
+            _usingKeyConnector = await _keyConnectorService.GetUsesKeyConnector();
+            if ( _usingKeyConnector && !(BiometricLock || PinLock))
+            {
+                await _vaultTimeoutService.LogOutAsync();
+            }
             _email = await _userService.GetEmailAsync();
             var webVault = _environmentService.GetWebVaultUrl();
             if (string.IsNullOrWhiteSpace(webVault))
@@ -139,8 +154,16 @@ namespace Bit.App.Pages
             }
             else
             {
-                PageTitle = AppResources.VerifyMasterPassword;
-                LockedVerifyText = AppResources.VaultLockedMasterPassword;
+                if (_usingKeyConnector)
+                {
+                    PageTitle = AppResources.UnlockVault;
+                    LockedVerifyText = AppResources.VaultLockedIdentity;
+                }
+                else
+                {
+                    PageTitle = AppResources.VerifyMasterPassword;
+                    LockedVerifyText = AppResources.VaultLockedMasterPassword;
+                }
             }
 
             if (BiometricLock)
@@ -159,14 +182,7 @@ namespace Bit.App.Pages
                     BiometricButtonText = supportsFace ? AppResources.UseFaceIDToUnlock :
                         AppResources.UseFingerprintToUnlock;
                 }
-                if (autoPromptBiometric)
-                {
-                    var tasks = Task.Run(async () =>
-                    {
-                        await Task.Delay(500);
-                        Device.BeginInvokeOnMainThread(async () => await PromptBiometricAsync());
-                    });
-                }
+
             }
         }
 

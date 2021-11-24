@@ -20,6 +20,7 @@ namespace Bit.Core.Services
         private readonly IMessagingService _messagingService;
         private readonly ITokenService _tokenService;
         private readonly IPolicyService _policyService;
+        private readonly IKeyConnectorService _keyConnectorService;
         private readonly Action<bool> _lockedCallback;
         private readonly Func<bool, Task> _loggedOutCallback;
 
@@ -35,6 +36,7 @@ namespace Bit.Core.Services
             IMessagingService messagingService,
             ITokenService tokenService,
             IPolicyService policyService,
+            IKeyConnectorService keyConnectorService,
             Action<bool> lockedCallback,
             Func<bool, Task> loggedOutCallback)
         {
@@ -49,6 +51,7 @@ namespace Bit.Core.Services
             _messagingService = messagingService;
             _tokenService = tokenService;
             _policyService = policyService;
+            _keyConnectorService = keyConnectorService;
             _lockedCallback = lockedCallback;
             _loggedOutCallback = loggedOutCallback;
         }
@@ -86,7 +89,7 @@ namespace Bit.Core.Services
                 return;
             }
             var vaultTimeoutMinutes = await GetVaultTimeout();
-            if (vaultTimeoutMinutes < 0)
+            if (vaultTimeoutMinutes < 0 || vaultTimeoutMinutes == null)
             {
                 return;
             }
@@ -119,6 +122,18 @@ namespace Bit.Core.Services
             {
                 return;
             }
+
+            if (await _keyConnectorService.GetUsesKeyConnector()) {
+                var pinSet = await IsPinLockSetAsync();
+                var pinLock = (pinSet.Item1 && PinProtectedKey != null) || pinSet.Item2;
+
+                if (!pinLock && !await IsBiometricLockSetAsync())
+                {
+                    await LogOutAsync();
+                    return;
+                }
+            }
+
             if (allowSoftLock)
             {
                 BiometricLocked = await IsBiometricLockSetAsync();
@@ -178,8 +193,8 @@ namespace Bit.Core.Services
             await _storageService.RemoveAsync(Constants.ProtectedPin);
         }
 
-        public async Task<int> GetVaultTimeout() {
-            var vaultTimeout = (await _storageService.GetAsync<int?>(Constants.VaultTimeoutKey)).GetValueOrDefault(-1);
+        public async Task<int?> GetVaultTimeout() {
+            var vaultTimeout = await _storageService.GetAsync<int?>(Constants.VaultTimeoutKey);
 
             if (await _policyService.PolicyAppliesToUser(PolicyType.MaximumVaultTimeout)) {
                 var policy = (await _policyService.GetAll(PolicyType.MaximumVaultTimeout)).First();
@@ -190,7 +205,7 @@ namespace Bit.Core.Services
                     return vaultTimeout;
                 }
 
-                var timeout = Math.Min(vaultTimeout, policyTimeout.Value);
+                var timeout = vaultTimeout.HasValue ? Math.Min(vaultTimeout.Value, policyTimeout.Value) : policyTimeout.Value;
 
                 if (timeout < 0) {
                     timeout = policyTimeout.Value;

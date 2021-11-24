@@ -1059,6 +1059,9 @@
   <data name="LastName" xml:space="preserve">
     <value>Családnév</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Teljes név</value>
+  </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Vezetői engedély száma</value>
   </data>
@@ -1182,6 +1185,9 @@
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>Rejtett</value>
+  </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>Csatolva</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Szöveg</value>
@@ -1605,6 +1611,9 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>A mesterjelszó megadása a széfadatok exportálásához.</value>
   </data>
+    <data name="ExportVaultOTPDescription" xml:space="preserve">
+    <value>Az ellenőrzőkód megadása a széfadatok exportálásához.</value>
+  </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Az exportált széfadatok titkosítatlan formátumban kerülnek elmentésre. Ne tároljuk sehol, illetve ne küldjük el senkinek a fájlt nem biztonságos felületeken (például email). Használat után azonnal töröljük.</value>
   </data>
@@ -2026,6 +2035,21 @@
   <data name="UpdatePasswordError" xml:space="preserve">
     <value>Jelenleg nem lehet frissíteni a jelszót.</value>
   </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>Mesterjelszó eltávolítása</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>{0} SSO szolgáltatást használ ügyfél által kezelt titkosítással. A folytatással eltávolító a mesterjelszó a fiókból és egyszeri bejelentkezés szükséges a bejelentkezéshez.</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>Ha nem szeretnénk eltávolítani a mesterjelszót, kiléphetünk ebből a szervezetből.</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>Szervezet elhagyása</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>Elhagyjuk {0} szervezetet?</value>
+  </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
   </data>
@@ -2055,5 +2079,11 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Egy vagy több szervezeti házirend tiltja a személyes széf exportálását.</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>Az ellenőrző kód érvénytelen.</value>
+  </data>
+    <data name="RequestOTP" xml:space="preserve">
+    <value>Egyszeri jelszó kérése</value>
   </data>
 </root>

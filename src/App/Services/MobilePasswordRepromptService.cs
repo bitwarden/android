@@ -2,6 +2,8 @@
 using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Bit.Core.Abstractions;
+using System;
+using Bit.Core.Utilities;
 
 namespace Bit.App.Services
 {
@@ -37,6 +39,12 @@ namespace Bit.App.Services
             };
 
             return await _cryptoService.CompareAndUpdateKeyHashAsync(password, null);
+        }
+
+        public async Task<bool> Enabled()
+        {
+            var keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
+            return !await keyConnectorService.GetUsesKeyConnector();
         }
     }
 }

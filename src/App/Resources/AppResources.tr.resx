@@ -1059,6 +1059,9 @@
   <data name="LastName" xml:space="preserve">
     <value>Soyadı</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Adı soyadı</value>
+  </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Ehliyet numarası</value>
   </data>
@@ -1182,6 +1185,9 @@
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>Gizli</value>
+  </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>Bağlantılı</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Metin</value>
@@ -1605,6 +1611,9 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Kasadaki verilerinizi dışa aktarmak için ana parolanızı girin.</value>
   </data>
+    <data name="ExportVaultOTPDescription" xml:space="preserve">
+    <value>Kasa verilerinizi dışa aktarmak için doğrulama kodunu girin.</value>
+  </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Dışa aktarılan dosyadaki verileriniz şifrelenmemiş olacak. Bu dosyayı güvensiz yöntemlerle (örn. e-posta) göndermemeli ve saklamamalısınız. İşiniz bittikten sonra dosyayı hemen silin.</value>
   </data>
@@ -2026,6 +2035,21 @@
   <data name="UpdatePasswordError" xml:space="preserve">
     <value>Şu anda şifre güncellenemiyor</value>
   </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>Ana parolayı kaldır</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>{0}, müşteri tarafından yönetilen şifreleme ile SSO kullanıyor. Devam ederseniz ana parolanız hesabınızdan kaldırılacak ve giriş yapmak için SSO kullanmanız gerekecektir.</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>Ana Parolanızı kaldırmak istemiyorsanız bu kuruluştan ayrılabilirsiniz.</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>Kuruluştan ayrıl</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>{0} kuruluşundan ayrılınsın mı?</value>
+  </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
   </data>
@@ -2055,5 +2079,11 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Bir veya daha fazla kuruluş ilkesi, kişisel kasanızı dışa aktarmanızı engelliyor.</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>Doğrulama kodu geçersiz.</value>
+  </data>
+    <data name="RequestOTP" xml:space="preserve">
+    <value>Tek kullanımlık parola iste</value>
   </data>
 </root>

@@ -1059,6 +1059,9 @@
   <data name="LastName" xml:space="preserve">
     <value>Priezvisko</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Celé meno</value>
+  </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Číslo vodičského preukazu</value>
   </data>
@@ -1182,6 +1185,9 @@
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>Skryté</value>
+  </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>Prepojené</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Text</value>
@@ -1605,6 +1611,9 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Zadajte vaše hlavné heslo pre export údajov trezoru.</value>
   </data>
+    <data name="ExportVaultOTPDescription" xml:space="preserve">
+    <value>Ak chcete exportovať údaje trezora, zadajte overovací kód.</value>
+  </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Tento export obsahuje vaše dáta v nešifrovanom formáte. Nemali by ste ich ukladať, ani posielať cez nezabezpečené kanály (napr. email). Okamžite ho odstráňte, keď ho prestanete používať.</value>
   </data>
@@ -2026,6 +2035,21 @@
   <data name="UpdatePasswordError" xml:space="preserve">
     <value>Aktuálne nie je možné heslo aktualizovať </value>
   </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>Odstrániť hlavné heslo</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>{0} používa SSO so šifrovaním spravovaným zákazníkom. Pokračovaním sa z vášho účtu odstráni hlavné heslo a na prihlásenie sa bude vyžadovať SSO.</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>Ak nechcete odstrániť svoje hlavné heslo, môžete opustiť túto organizáciu.</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>Opustiť organizáciu</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>Opustiť {0}?</value>
+  </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
   </data>
@@ -2055,5 +2079,11 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Jedna alebo viacero zásad organizácie vám bráni exportovať váš osobný trezor.</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>Neplatný verifikačný kód.</value>
+  </data>
+    <data name="RequestOTP" xml:space="preserve">
+    <value>Vyžiadať jednorazové heslo</value>
   </data>
 </root>

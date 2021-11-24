@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-20.04
     outputs:
       rc_branch_exists: ${{ steps.branch-check.outputs.rc_branch_exists }}
-      release_branch_exists: ${{ steps.branch-check.outputs.release_branch_exists }}
+      hotfix_branch_exists: ${{ steps.branch-check.outputs.hotfix_branch_exists }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f  # v2.3.4
@@ -43,10 +43,10 @@ jobs:
             echo "::set-output name=rc_branch_exists::0"
           fi
 
-          if [[ $(git ls-remote --heads origin release) ]]; then
-            echo "::set-output name=release_branch_exists::1"
+          if [[ $(git ls-remote --heads origin hotfix) ]]; then
+            echo "::set-output name=hotfix_branch_exists::1"
           else
-            echo "::set-output name=release_branch_exists::0"
+            echo "::set-output name=hotfix_branch_exists::0"
           fi
         shell: bash
 
@@ -180,9 +180,9 @@ jobs:
         if: |
             (github.ref == 'refs/heads/master'
               && needs.setup.outputs.rc_branch_exists == 0
-              && needs.setup.outputs.release_branch_exists == 0)
-            || (github.ref == 'refs/heads/rc' && needs.setup.outputs.release_branch_exists == 0)
-            || github.ref == 'refs/heads/release'
+              && needs.setup.outputs.hotfix_branch_exists == 0)
+            || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
+            || github.ref == 'refs/heads/hotfix'
         run: |
           PUBLISHER_PATH="$GITHUB_WORKSPACE/store/google/Publisher/bin/Release/netcoreapp2.0/Publisher.dll"
           CREDS_PATH="$HOME/secrets/play_creds.json"
@@ -474,9 +474,9 @@ jobs:
         if: |
             (github.ref == 'refs/heads/master'
               && needs.setup.outputs.rc_branch_exists == 0
-              && needs.setup.outputs.release_branch_exists == 0)
-            || (github.ref == 'refs/heads/rc' && needs.setup.outputs.release_branch_exists == 0)
-            || github.ref == 'refs/heads/release'
+              && needs.setup.outputs.hotfix_branch_exists == 0)
+            || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
+            || github.ref == 'refs/heads/hotfix'
         env:
           APPLE_ID_USERNAME: ${{ secrets.APPLE_ID_USERNAME }}
           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
@@ -484,6 +484,44 @@ jobs:
           xcrun altool --upload-app --type ios --file "./bitwarden-export/Bitwarden.ipa" \
               --username "$APPLE_ID_USERNAME" --password "$APPLE_ID_PASSWORD"
         shell: bash
+
+
+  crowdin-push:
+    name: Crowdin Push
+    if: github.ref == 'refs/heads/master'
+    needs:
+      - android
+      - f-droid
+      - ios
+    runs-on: ubuntu-20.04
+    env:
+      _CROWDIN_PROJECT_ID: "269690"
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f  # v2.3.4
+
+      - name: Login to Azure
+        uses: Azure/login@77f1b2e3fb80c0e8645114159d17008b8a2e475a
+        with:
+          creds: ${{ secrets.AZURE_PROD_KV_CREDENTIALS }}
+
+      - name: Retrieve secrets
+        id: retrieve-secrets
+        uses: Azure/get-keyvault-secrets@80ccd3fafe5662407cc2e55f202ee34bfff8c403
+        with:
+          keyvault: "bitwarden-prod-kv"
+          secrets: "crowdin-api-token"
+
+      - name: Upload Sources
+        uses: crowdin/github-action@e39093fd75daae7859c68eded4b43d42ec78d8ea  # v1.3.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CROWDIN_API_TOKEN: ${{ steps.retrieve-secrets.outputs.crowdin-api-token }}
+        with:
+          config: crowdin.yml
+          crowdin_branch_name: master
+          upload_sources: true
+          upload_translations: false
 
 
   check-failures:
@@ -495,14 +533,19 @@ jobs:
       - android
       - f-droid
       - ios
+      - crowdin-push
     steps:
       - name: Check if any job failed
-        if: ${{ (github.ref == 'refs/heads/master') || (github.ref == 'refs/heads/rc') }}
+        if: |
+            (github.ref == 'refs/heads/master')
+            || (github.ref == 'refs/heads/rc')
+            || (github.ref == 'refs/heads/hotfix')
         env:
           CLOC_STATUS: ${{ needs.cloc.result }}
           ANDROID_STATUS: ${{ needs.android.result }}
           F_DROID_STATUS: ${{ needs.f-droid.result }}
           IOS_STATUS: ${{ needs.ios.result }}
+          CROWDIN_PUSH_STATUS: ${{ needs.crowdin-push.result }}
         run: |
           if [ "$CLOC_STATUS" = "failure" ]; then
               exit 1
@@ -511,6 +554,8 @@ jobs:
           elif [ "$F_DROID_STATUS" = "failure" ]; then
               exit 1
           elif [ "$IOS_STATUS" = "failure" ]; then
+              exit 1
+          elif [ "$CROWDIN_PUSH_STATUS" = "failure" ]; then
               exit 1
           fi
 

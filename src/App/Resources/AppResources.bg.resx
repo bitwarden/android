@@ -1059,6 +1059,9 @@
   <data name="LastName" xml:space="preserve">
     <value>Фамилно име</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Пълно име</value>
+  </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Номер на лиценза</value>
   </data>
@@ -1182,6 +1185,9 @@
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>Скрито</value>
+  </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>Свързано</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Текст</value>
@@ -1605,6 +1611,9 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Въведете главната парола, за да изнесете данните.</value>
   </data>
+    <data name="ExportVaultOTPDescription" xml:space="preserve">
+    <value>Въведете кода за потвърждаване, за да изнесете данните от трезора си.</value>
+  </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Данните от трезора ви ще се изнесат в незащитен формат. Не го пращайте по незащитени канали като е-поща. Изтрийте файла незабавно след като свършите работата си с него.</value>
   </data>
@@ -2026,6 +2035,21 @@
   <data name="UpdatePasswordError" xml:space="preserve">
     <value>В момента паролата не може да бъде обновена</value>
   </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>Премахване на главната парола</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>{0} използва еднократно удостоверяване с шифроване, управлявано от клиента. Ако продължите, главната парола ще бъде премахната от регистрацията Ви и за да се впишете, вече ще трябва да използвате еднократното удостоверяване.</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>Ако не искате да премахвате главната си парола, ще трябва да напуснете организацията.</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>Напускане на организацията</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>Напускане на {0}?</value>
+  </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
   </data>
@@ -2055,5 +2079,11 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Една или повече от настройките на организацията Ви не позволяват да изнасяте личния си трезор.</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>Грешен код за потвърждаване</value>
+  </data>
+    <data name="RequestOTP" xml:space="preserve">
+    <value>Заявка за еднократна парола</value>
   </data>
 </root>

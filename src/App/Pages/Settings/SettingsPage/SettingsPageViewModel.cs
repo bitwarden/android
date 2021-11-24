@@ -27,6 +27,7 @@ namespace Bit.App.Pages
         private readonly IBiometricService _biometricService;
         private readonly IPolicyService _policyService;
         private readonly ILocalizeService _localizeService;
+        private readonly IKeyConnectorService _keyConnectorService;
 
         private const int CustomVaultTimeoutValue = -100;
 
@@ -36,6 +37,8 @@ namespace Bit.App.Pages
         private string _lastSyncDate;
         private string _vaultTimeoutDisplayValue;
         private string _vaultTimeoutActionDisplayValue;
+        private bool _showChangeMasterPassword;
+
         private List<KeyValuePair<string, int?>> _vaultTimeouts =
             new List<KeyValuePair<string, int?>>
             {
@@ -58,7 +61,7 @@ namespace Bit.App.Pages
             };
 
         private Policy _vaultTimeoutPolicy;
-        private int _vaultTimeout;
+        private int? _vaultTimeout;
 
         public SettingsPageViewModel()
         {
@@ -74,6 +77,7 @@ namespace Bit.App.Pages
             _biometricService = ServiceContainer.Resolve<IBiometricService>("biometricService");
             _policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
             _localizeService = ServiceContainer.Resolve<ILocalizeService>("localizeService");
+            _keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
 
             GroupedItems = new ExtendedObservableCollection<SettingsPageListGroup>();
             PageTitle = AppResources.Settings;
@@ -115,6 +119,9 @@ namespace Bit.App.Pages
             {
                 _vaultTimeoutDisplayValue = AppResources.Custom;
             }
+
+            _showChangeMasterPassword = IncludeLinksWithSubscriptionInfo() &&
+                !await _keyConnectorService.GetUsesKeyConnector();
 
             BuildList();
         }
@@ -223,7 +230,7 @@ namespace Bit.App.Pages
             await _vaultTimeoutService.LockAsync(true, true);
         }
 
-        public async Task VaultTimeoutAsync(bool promptOptions = true, int newTimeout = 0)
+        public async Task VaultTimeoutAsync(bool promptOptions = true, int? newTimeout = 0)
         {
             var oldTimeout = _vaultTimeout;
 
@@ -240,7 +247,7 @@ namespace Bit.App.Pages
                 var cleanSelection = selection.Replace("✓ ", string.Empty);
                 var selectionOption = _vaultTimeouts.FirstOrDefault(o => o.Key == cleanSelection);
                 _vaultTimeoutDisplayValue = selectionOption.Key;
-                newTimeout = selectionOption.Value.GetValueOrDefault();
+                newTimeout = selectionOption.Value;
             }
 
             if (_vaultTimeoutPolicy != null)
@@ -312,9 +319,13 @@ namespace Bit.App.Pages
                     AppResources.SetPINDescription, null, AppResources.Submit, AppResources.Cancel, true);
                 if (!string.IsNullOrWhiteSpace(pin))
                 {
-                    var masterPassOnRestart = await _platformUtilsService.ShowDialogAsync(
-                       AppResources.PINRequireMasterPasswordRestart, AppResources.UnlockWithPIN,
-                       AppResources.Yes, AppResources.No);
+                    var masterPassOnRestart = false;
+                    if (!await _keyConnectorService.GetUsesKeyConnector())
+                    {
+                        masterPassOnRestart = await _platformUtilsService.ShowDialogAsync(
+                            AppResources.PINRequireMasterPasswordRestart, AppResources.UnlockWithPIN,
+                            AppResources.Yes, AppResources.No);
+                    }
 
                     var kdf = await _userService.GetKdfAsync();
                     var kdfIterations = await _userService.GetKdfIterationsAsync();
@@ -441,7 +452,7 @@ namespace Bit.App.Pages
                 securityItems.Insert(1, new SettingsPageListItem
                 {
                     Name = AppResources.Custom,
-                    Time = TimeSpan.FromMinutes(Math.Abs((double)_vaultTimeout)),
+                    Time = TimeSpan.FromMinutes(Math.Abs((double)_vaultTimeout.GetValueOrDefault())),
                 });
             }
             if (_vaultTimeoutPolicy != null)
@@ -460,7 +471,7 @@ namespace Bit.App.Pages
                 new SettingsPageListItem { Name = AppResources.FingerprintPhrase },
                 new SettingsPageListItem { Name = AppResources.LogOut }
             };
-            if (IncludeLinksWithSubscriptionInfo())
+            if (_showChangeMasterPassword)
             {
                 accountItems.Insert(0, new SettingsPageListItem { Name = AppResources.ChangeMasterPassword });
             }

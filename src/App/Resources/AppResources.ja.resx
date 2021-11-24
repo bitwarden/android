@@ -1059,6 +1059,9 @@
   <data name="LastName" xml:space="preserve">
     <value>姓</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>フルネーム</value>
+  </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>免許証番号</value>
   </data>
@@ -1182,6 +1185,9 @@
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>非表示</value>
+  </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>リンク済</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>テキスト</value>
@@ -1605,6 +1611,9 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>保管庫のデータをエクスポートするには、マスターパスワードを入力してください。</value>
   </data>
+    <data name="ExportVaultOTPDescription" xml:space="preserve">
+    <value>保管庫のデータをエクスポートするための確認コードを入力してください。</value>
+  </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>このエクスポートデータは暗号化されていない形式の保管庫データを含んでいます。メールなどのセキュリティ保護されていない方法で共有したり保管したりしないでください。使用した後はすぐに削除してください。</value>
   </data>
@@ -2026,6 +2035,21 @@
   <data name="UpdatePasswordError" xml:space="preserve">
     <value>現在パスワードを更新できません。</value>
   </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>マスターパスワードを削除する</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>{0} は、顧客側で管理する暗号化で SSO を使用しています。続行すると、アカウントからマスターパスワードが削除され、ログインするには SSO が必要になります。</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>マスターパスワードを削除したくない場合は、組織から脱退してください。</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>組織から脱退する</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>{0} から脱退しますか?</value>
+  </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
   </data>
@@ -2055,5 +2079,11 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>1 つまたは複数の組織ポリシーにより、個人の保管庫をエクスポートできません。</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>認証コードが無効です。</value>
+  </data>
+    <data name="RequestOTP" xml:space="preserve">
+    <value>ワンタイムパスワードを要求する</value>
   </data>
 </root>

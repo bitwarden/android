@@ -1,9 +1,11 @@
 ﻿using Bit.Core.Models.Domain;
+using Bit.Core.Enums;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace Bit.Core.Models.View
 {
-    public class CardView : View
+    public class CardView : ItemView
     {
         private string _brand;
         private string _number;
@@ -40,7 +42,7 @@ namespace Bit.Core.Models.View
             }
         }
 
-        public string SubTitle
+        public override string SubTitle
         {
             get
             {
@@ -80,6 +82,19 @@ namespace Bit.Core.Models.View
                 var expYr = !expYearNull ? FormatYear(ExpYear) : "____";
                 return string.Format("{0} / {1}", expMo, expYr);
             }
+        }
+
+        public override List<KeyValuePair<string, LinkedIdType>> LinkedFieldOptions
+        {
+            get => new List<KeyValuePair<string, LinkedIdType>>()
+            {
+                new KeyValuePair<string, LinkedIdType>("CardholderName", LinkedIdType.Card_CardholderName),
+                new KeyValuePair<string, LinkedIdType>("ExpirationMonth", LinkedIdType.Card_ExpMonth),
+                new KeyValuePair<string, LinkedIdType>("ExpirationYear", LinkedIdType.Card_ExpYear),
+                new KeyValuePair<string, LinkedIdType>("SecurityCode", LinkedIdType.Card_Code),
+                new KeyValuePair<string, LinkedIdType>("Brand", LinkedIdType.Card_Brand),
+                new KeyValuePair<string, LinkedIdType>("Number", LinkedIdType.Card_Number),
+            };
         }
 
         private string FormatYear(string year)

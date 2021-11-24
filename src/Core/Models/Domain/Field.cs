@@ -19,12 +19,14 @@ namespace Bit.Core.Models.Domain
         public Field(FieldData obj, bool alreadyEncrypted = false)
         {
             Type = obj.Type;
+            LinkedId = obj.LinkedId;
             BuildDomainModel(this, obj, _map, alreadyEncrypted);
         }
 
         public EncString Name { get; set; }
         public EncString Value { get; set; }
         public FieldType Type { get; set; }
+        public LinkedIdType? LinkedId { get; set; }
 
         public Task<FieldView> DecryptAsync(string orgId)
         {
@@ -38,10 +40,12 @@ namespace Bit.Core.Models.Domain
             {
                 "Name",
                 "Value",
-                "Type"
+                "Type",
+                "LinkedId"
             }, new HashSet<string>
             {
-                "Type"
+                "Type",
+                "LinkedId"
             });
             return f;
         }

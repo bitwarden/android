@@ -12,9 +12,6 @@
 <autofill-service xmlns:android="http://schemas.android.com/apk/res/android"
     android:supportsInlineSuggestions="true">
   <compatibility-package
-    android:name="alook.browser"
-    android:maxLongVersionCode="10000000000"/>
-  <compatibility-package
     android:name="com.amazon.cloud9"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
@@ -72,6 +69,9 @@
     android:name="com.google.android.apps.chrome_dev"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
+    android:name="com.google.android.captiveportallogin"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
     android:name="com.jamal2367.styx"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
@@ -115,6 +115,9 @@
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
     android:name="com.opera.touch"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
+    android:name="com.qflair.browserq"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
     android:name="com.qwant.liberty"
