@@ -100,15 +100,6 @@ namespace Bit.App.Pages
         public bool ShareOnSave { get; set; }
         public bool DisableHideEmailControl { get; set; }
         public bool IsAddFromShare { get; set; }
-        public bool CopyInsteadOfShareAfterSaving
-        {
-            get => _copyInsteadOfShareAfterSaving;
-            set
-            {
-                SetProperty(ref _copyInsteadOfShareAfterSaving, value);
-                TriggerPropertyChanged(nameof(ShareOnSaveText));
-            }
-        }
         public string ShareOnSaveText => CopyInsteadOfShareAfterSaving ? AppResources.CopySendLinkOnSave : AppResources.ShareOnSave;
         public List<KeyValuePair<string, SendType>> TypeOptions { get; }
         public List<KeyValuePair<string, string>> DeletionTypeOptions { get; }
@@ -186,6 +177,15 @@ namespace Bit.App.Pages
                 {
                     MaxAccessCountChanged();
                 }
+            }
+        }
+        public bool CopyInsteadOfShareAfterSaving
+        {
+            get => _copyInsteadOfShareAfterSaving;
+            set
+            {
+                SetProperty(ref _copyInsteadOfShareAfterSaving, value);
+                TriggerPropertyChanged(nameof(ShareOnSaveText));
             }
         }
         public SendView Send
