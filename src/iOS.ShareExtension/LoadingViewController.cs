@@ -94,7 +94,7 @@ namespace Bit.iOS.ShareExtension
                 }
                 else
                 {
-                    ContinueOnAsync().FireAndForget(ex => Crashes.TrackError(ex));
+                    ContinueOnAsync().FireAndForget();
                 }
             }
             catch (Exception ex)
@@ -118,7 +118,7 @@ namespace Bit.iOS.ShareExtension
         public void DismissLockAndContinue()
         {
             Debug.WriteLine("BW Log, Dismissing lock controller.");
-            DismissViewController(false, () => ContinueOnAsync().FireAndForget(ex => Crashes.TrackError(ex)));
+            DismissViewController(false, () => ContinueOnAsync().FireAndForget());
         }
 
         private async Task ContinueOnAsync()

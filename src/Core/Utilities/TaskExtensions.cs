@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
+#if !FDROID
+using Microsoft.AppCenter.Crashes;
+#endif
 
 namespace Bit.Core.Utilities
 {
@@ -19,8 +22,10 @@ namespace Bit.Core.Utilities
             }
             catch (Exception ex)
             {
+#if !FDROID
+                Crashes.TrackError(ex);
+#endif
                 onException?.Invoke(ex);
-                // TODO: Add app center exception handling in here, but we have to check whether we can add the AppCenter package to Core
             }
         }
     }
