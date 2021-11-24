@@ -86,6 +86,7 @@ namespace Bit.Droid.Autofill
             "com.opera.mini.native",
             "com.opera.mini.native.beta",
             "com.opera.touch",
+            "com.qflair.browserq",
             "com.qwant.liberty",
             "com.sec.android.app.sbrowser",
             "com.sec.android.app.sbrowser.beta",

@@ -67,6 +67,7 @@ namespace Bit.Droid.Accessibility
             new Browser("com.opera.mini.native", "url_field"),
             new Browser("com.opera.mini.native.beta", "url_field"),
             new Browser("com.opera.touch", "addressbarEdit"),
+            new Browser("com.qflair.browserq", "url"),
             new Browser("com.qwant.liberty", "mozac_browser_toolbar_url_view,url_bar_title"), // 2nd = Legacy (before v4)
             new Browser("com.sec.android.app.sbrowser", "location_bar_edit_text"),
             new Browser("com.sec.android.app.sbrowser.beta", "location_bar_edit_text"),
