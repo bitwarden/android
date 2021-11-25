@@ -18,6 +18,7 @@ using Plugin.Fingerprint;
 using Xamarin.Android.Net;
 using System.Net.Http;
 using System.Net;
+using Bit.App.Utilities;
 #if !FDROID
 using Android.Gms.Security;
 #endif
@@ -45,6 +46,7 @@ namespace Bit.Droid
                 var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
                 ServiceContainer.Init(deviceActionService.DeviceUserAgent, Constants.ClearCiphersCacheKey,
                     Constants.AndroidAllClearCipherCacheKeys);
+                InitializeAppSetup();
             }
 #if !FDROID
             if (Build.VERSION.SdkInt <= BuildVersionCodes.Kitkat)
@@ -152,6 +154,13 @@ namespace Bit.Droid
             await ServiceContainer.Resolve<IStateService>("stateService").SaveAsync(
                 Constants.DisableFaviconKey, disableFavicon);
             await ServiceContainer.Resolve<IEnvironmentService>("environmentService").SetUrlsFromStorageAsync();
+        }
+
+        private void InitializeAppSetup()
+        {
+            var appSetup = new AppSetup();
+            appSetup.InitializeServicesLastChance();
+            ServiceContainer.Register<IAppSetup>("appSetup", appSetup);
         }
     }
 }

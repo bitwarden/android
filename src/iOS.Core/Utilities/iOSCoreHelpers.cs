@@ -146,10 +146,20 @@ namespace Bit.iOS.Core.Utilities
             await ServiceContainer.Resolve<IStateService>("stateService").SaveAsync(
                 Bit.Core.Constants.DisableFaviconKey, disableFavicon);
             await ServiceContainer.Resolve<IEnvironmentService>("environmentService").SetUrlsFromStorageAsync();
+
+            InitializeAppSetup();
+
             if (postBootstrapFunc != null)
             {
                 await postBootstrapFunc.Invoke();
             }
+        }
+
+        private static void InitializeAppSetup()
+        {
+            var appSetup = new AppSetup();
+            appSetup.InitializeServicesLastChance();
+            ServiceContainer.Register<IAppSetup>("appSetup", appSetup);
         }
     }
 }

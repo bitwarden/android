@@ -9,6 +9,8 @@
     xmlns:views="clr-namespace:Bit.Core.Models.View;assembly=BitwardenCore"
     xmlns:behaviors="clr-namespace:Bit.App.Behaviors"
     xmlns:effects="clr-namespace:Bit.App.Effects"
+    xmlns:dts="clr-namespace:Bit.App.Lists.DataTemplateSelectors"
+    xmlns:il="clr-namespace:Bit.App.Lists.ItemLayouts.CustomFields"
     x:DataType="pages:AddEditPageViewModel"
     x:Name="_page"
     Title="{Binding PageTitle}">
@@ -52,6 +54,25 @@
                          IsDestructive="True"
                          x:Name="_deleteItem"
                          x:Key="deleteItem" />
+            
+            <DataTemplate x:Key="TextCustomFieldDataTemplate">
+                <il:TextCustomFieldItemLayout />
+            </DataTemplate>
+            <DataTemplate x:Key="BooleanCustomFieldDataTemplate">
+                <il:BooleanCustomFieldItemLayout />
+            </DataTemplate>
+            <DataTemplate x:Key="HiddenCustomFieldDataTemplate">
+                <il:HiddenCustomFieldItemLayout />
+            </DataTemplate>
+            <DataTemplate x:Key="LinkedCustomFieldDataTemplate">
+                <il:LinkedCustomFieldItemLayout />
+            </DataTemplate>
+
+            <dts:CustomFieldItemTemplateSelector x:Key="CustomFieldItemTemplateSelector"
+                TextTemplate="{StaticResource TextCustomFieldDataTemplate}"
+                BooleanTemplate="{StaticResource BooleanCustomFieldDataTemplate}"
+                HiddenTemplate="{StaticResource HiddenCustomFieldDataTemplate}"
+                LinkedTemplate="{StaticResource LinkedCustomFieldDataTemplate}"/>
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -603,101 +624,10 @@
                     <Label Text="{u:I18n CustomFields, Header=True}"
                            StyleClass="box-header, box-header-platform" />
                 </StackLayout>
-                <controls:RepeaterView ItemsSource="{Binding Fields}">
-                    <controls:RepeaterView.ItemTemplate>
-                        <DataTemplate x:DataType="pages:AddEditPageFieldViewModel">
-                            <StackLayout Spacing="0" Padding="0">
-                                <Grid StyleClass="box-row, box-row-input">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="*" />
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-                                    <Label
-                                        Text="{Binding Field.Name, Mode=OneWay}"
-                                        IsVisible="{Binding IsBooleanType, Mode=OneWay, Converter={StaticResource inverseBool}}"
-                                        StyleClass="box-label"
-                                        Grid.Row="0"
-                                        Grid.Column="0" />
-                                    <Label
-                                        Text="{Binding Field.Name, Mode=OneWay}"
-                                        IsVisible="{Binding IsBooleanType, Mode=OneWay}"
-                                        StyleClass="box-value"
-                                        VerticalOptions="FillAndExpand"
-                                        VerticalTextAlignment="Center"
-                                        Grid.Row="0"
-                                        Grid.Column="0"
-                                        Grid.RowSpan="2" />
-                                    <Entry
-                                        Text="{Binding Field.Value}"
-                                        StyleClass="box-value"
-                                        Grid.Row="1"
-                                        Grid.Column="0"
-                                        IsVisible="{Binding IsTextType}" />
-                                    <controls:MonoEntry
-                                        Text="{Binding Field.Value}"
-                                        StyleClass="box-value"
-                                        Grid.Row="1"
-                                        Grid.Column="0"
-                                        IsVisible="{Binding IsHiddenType}"
-                                        IsPassword="{Binding ShowHiddenValue, Converter={StaticResource inverseBool}}"
-                                        IsEnabled="{Binding ShowViewHidden}"
-                                        IsSpellCheckEnabled="False"
-                                        IsTextPredictionEnabled="False">
-                                        <Entry.Keyboard>
-                                            <Keyboard x:FactoryMethod="Create">
-                                                <x:Arguments>
-                                                    <KeyboardFlags>None</KeyboardFlags>
-                                                </x:Arguments>
-                                            </Keyboard>
-                                        </Entry.Keyboard>
-                                    </controls:MonoEntry>
-                                    <StackLayout
-                                        StyleClass="box-row, box-row-input"
-                                        IsVisible="{Binding IsLinkedType}">
-                                        <Picker
-                                            x:Name="_linkedFieldOptionPicker"
-                                            ItemsSource="{Binding LinkedFieldOptions, Mode=OneTime}"
-                                            SelectedIndex="{Binding LinkedFieldOptionSelectedIndex}"
-                                            ItemDisplayBinding="{Binding Key}"
-                                            StyleClass="box-value" />
-                                    </StackLayout>
-                                    <Switch
-                                        IsToggled="{Binding BooleanValue}"
-                                        Grid.Row="0"
-                                        Grid.Column="1"
-                                        Grid.RowSpan="2"
-                                        IsVisible="{Binding IsBooleanType}" />
-                                    <controls:FaButton 
-                                        StyleClass="box-row-button, box-row-button-platform"
-                                        Text="{Binding ShowHiddenValueIcon}"
-                                        Command="{Binding ToggleHiddenValueCommand}"
-                                        IsVisible="{Binding ShowViewHidden}"
-                                        Grid.Row="0"
-                                        Grid.Column="1"
-                                        Grid.RowSpan="2"
-                                        AutomationProperties.IsInAccessibleTree="True"
-                                        AutomationProperties.Name="{u:I18n ToggleVisibility}" />
-                                    <controls:FaButton 
-                                        StyleClass="box-row-button, box-row-button-platform"
-                                        Text="&#xf013;"
-                                        Command="{Binding BindingContext.FieldOptionsCommand, Source={x:Reference _page}}"
-                                        CommandParameter="{Binding .}"
-                                        Grid.Row="0"
-                                        Grid.Column="2"
-                                        Grid.RowSpan="2"
-                                        AutomationProperties.IsInAccessibleTree="True"
-                                        AutomationProperties.Name="{u:I18n Options}" />
-                                </Grid>
-                                <BoxView StyleClass="box-row-separator" IsVisible="{Binding IsBooleanType}" />
-                            </StackLayout>
-                        </DataTemplate>
-                    </controls:RepeaterView.ItemTemplate>
-                </controls:RepeaterView>
+                <StackLayout
+                    Spacing="0"
+                    BindableLayout.ItemsSource="{Binding Fields}"
+                    BindableLayout.ItemTemplateSelector="{StaticResource CustomFieldItemTemplateSelector}" />
                 <Button Text="{u:I18n NewCustomField}" StyleClass="box-button-row"
                         Clicked="NewField_Clicked"></Button>
             </StackLayout>

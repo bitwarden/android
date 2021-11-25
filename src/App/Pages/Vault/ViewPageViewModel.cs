@@ -1,4 +1,5 @@
 ﻿using Bit.App.Abstractions;
+using Bit.App.Lists.ItemViewModels.CustomFields;
 using Bit.App.Resources;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
@@ -14,7 +15,7 @@ using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
-    public class ViewPageViewModel : BaseViewModel
+    public class ViewPageViewModel : BaseViewModel, IPasswordPromptable
     {
         private readonly IDeviceActionService _deviceActionService;
         private readonly ICipherService _cipherService;
@@ -26,8 +27,10 @@ namespace Bit.App.Pages
         private readonly IEventService _eventService;
         private readonly IPasswordRepromptService _passwordRepromptService;
         private readonly ILocalizeService _localizeService;
+        private readonly ICustomFieldItemFactory _customFieldItemFactory;
+
         private CipherView _cipher;
-        private List<ViewPageFieldViewModel> _fields;
+        private List<ICustomFieldItemViewModel> _fields;
         private bool _canAccessPremium;
         private bool _showPassword;
         private bool _showCardNumber;
@@ -54,6 +57,8 @@ namespace Bit.App.Pages
             _eventService = ServiceContainer.Resolve<IEventService>("eventService");
             _passwordRepromptService = ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService");
             _localizeService = ServiceContainer.Resolve<ILocalizeService>("localizeService");
+            _customFieldItemFactory = ServiceContainer.Resolve<ICustomFieldItemFactory>("customFieldItemFactory");
+
             CopyCommand = new Command<string>((id) => CopyAsync(id, null));
             CopyUriCommand = new Command<LoginUriView>(CopyUri);
             CopyFieldCommand = new Command<FieldView>(CopyField);
@@ -99,7 +104,7 @@ namespace Bit.App.Pages
                     nameof(CanEdit),
                 });
         }
-        public List<ViewPageFieldViewModel> Fields
+        public List<ICustomFieldItemViewModel> Fields
         {
             get => _fields;
             set => SetProperty(ref _fields, value);
@@ -245,7 +250,18 @@ namespace Bit.App.Pages
             }
             Cipher = await cipher.DecryptAsync();
             CanAccessPremium = await _userService.CanAccessPremiumAsync();
-            Fields = Cipher.Fields?.Select(f => new ViewPageFieldViewModel(this, Cipher, f)).ToList();
+            try
+            {
+
+            Fields = Cipher.Fields?
+                        .Select(f => _customFieldItemFactory.CreateCustomFieldItem(f, false, Cipher, this, CopyFieldCommand, null))
+                        .ToList();
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
             if (Cipher.Type == Core.Enums.CipherType.Login && !string.IsNullOrWhiteSpace(Cipher.Login.Totp) &&
                 (Cipher.OrganizationUseTotp || CanAccessPremium))
@@ -691,7 +707,7 @@ namespace Bit.App.Pages
             }
         }
 
-        internal async Task<bool> PromptPasswordAsync()
+        public async Task<bool> PromptPasswordAsync()
         {
             if (Cipher.Reprompt == CipherRepromptType.None || _passwordReprompted)
             {
@@ -699,96 +715,6 @@ namespace Bit.App.Pages
             }
 
             return _passwordReprompted = await _passwordRepromptService.ShowPasswordPromptAsync();
-        }
-    }
-
-    public class ViewPageFieldViewModel : ExtendedViewModel
-    {
-        private II18nService _i18nService;
-        private ViewPageViewModel _vm;
-        private FieldView _field;
-        private CipherView _cipher;
-        private bool _showHiddenValue;
-
-        public ViewPageFieldViewModel(ViewPageViewModel vm, CipherView cipher, FieldView field)
-        {
-            _i18nService = ServiceContainer.Resolve<II18nService>("i18nService");
-            _vm = vm;
-            _cipher = cipher;
-            Field = field;
-            ToggleHiddenValueCommand = new Command(ToggleHiddenValue);
-        }
-
-        public FieldView Field
-        {
-            get => _field;
-            set => SetProperty(ref _field, value,
-                additionalPropertyNames: new string[]
-                {
-                    nameof(ValueText),
-                    nameof(IsBooleanType),
-                    nameof(IsHiddenType),
-                    nameof(IsTextType),
-                    nameof(ShowCopyButton),
-                });
-        }
-
-        public bool ShowHiddenValue
-        {
-            get => _showHiddenValue;
-            set => SetProperty(ref _showHiddenValue, value,
-                additionalPropertyNames: new string[]
-                {
-                    nameof(ShowHiddenValueIcon)
-                });
-        }
-
-        public string ValueText
-        {
-            get
-            {
-                if (IsBooleanType)
-                {
-                    return _field.Value == "true" ? "" : "";
-                }
-                else if (IsLinkedType)
-                {
-                    var i18nKey = _cipher.LinkedFieldI18nKey(Field.LinkedId.GetValueOrDefault());
-                    return " " + _i18nService.T(i18nKey);
-                }
-                else
-                {
-                    return _field.Value;
-                }
-            }
-        }
-
-        public Command ToggleHiddenValueCommand { get; set; }
-
-        public string ShowHiddenValueIcon => _showHiddenValue ? "" : "";
-        public bool IsTextType => _field.Type == Core.Enums.FieldType.Text;
-        public bool IsBooleanType => _field.Type == Core.Enums.FieldType.Boolean;
-        public bool IsHiddenType => _field.Type == Core.Enums.FieldType.Hidden;
-        public bool IsLinkedType => _field.Type == Core.Enums.FieldType.Linked;
-        public bool ShowViewHidden => IsHiddenType && _cipher.ViewPassword;
-        public bool ShowCopyButton => _field.Type != Core.Enums.FieldType.Boolean &&
-            !string.IsNullOrWhiteSpace(_field.Value) &&
-            !(IsHiddenType && !_cipher.ViewPassword) &&
-            _field.Type != FieldType.Linked;
-
-        public async void ToggleHiddenValue()
-        {
-            if (!await _vm.PromptPasswordAsync())
-            {
-                return;
-            }
-            ShowHiddenValue = !ShowHiddenValue;
-            if (ShowHiddenValue)
-            {
-                var eventService = ServiceContainer.Resolve<IEventService>("eventService");
-                var task = eventService.CollectAsync(
-                    Core.Enums.EventType.Cipher_ClientToggledHiddenFieldVisible, _cipher.Id);
-            }
         }
     }
 }
