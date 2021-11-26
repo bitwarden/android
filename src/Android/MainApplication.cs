@@ -71,7 +71,12 @@ namespace Bit.Droid
 
         private void RegisterLocalServices()
         {
-            ServiceContainer.Register<ILogService>("logService", new AndroidLogService());
+            ServiceContainer.Register<INativeLogService>("nativeLogService", new AndroidLogService());
+#if FDROID
+            ServiceContainer.Register<ILogger>("logger", new StubLogger());
+#else
+            ServiceContainer.Register<ILogger>("logger", new Logger());
+#endif
 
             // Note: This might cause a race condition. Investigate more.
             Task.Run(() =>

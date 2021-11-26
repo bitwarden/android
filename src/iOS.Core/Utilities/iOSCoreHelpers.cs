@@ -34,9 +34,14 @@ namespace Bit.iOS.Core.Utilities
 
         public static void RegisterLocalServices()
         {
-            if (ServiceContainer.Resolve<ILogService>("logService", true) == null)
+            if (ServiceContainer.Resolve<INativeLogService>("nativeLogService", true) == null)
             {
-                ServiceContainer.Register<ILogService>("logService", new ConsoleLogService());
+                ServiceContainer.Register<INativeLogService>("nativeLogService", new ConsoleLogService());
+            }
+
+            if (ServiceContainer.Resolve<ILogger>("logger", true) == null)
+            {
+                ServiceContainer.Register<ILogger>("logger", new Logger());
             }
 
             var preferencesStorage = new PreferencesStorageService(AppGroupId);

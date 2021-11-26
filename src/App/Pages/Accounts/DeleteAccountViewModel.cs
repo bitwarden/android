@@ -1,12 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Exceptions;
 using Bit.Core.Utilities;
-#if !FDROID
-using Microsoft.AppCenter.Crashes;
-#endif
 
 namespace Bit.App.Pages
 {
@@ -18,6 +16,7 @@ namespace Bit.App.Pages
         readonly ICryptoService _cryptoService;
         readonly IPlatformUtilsService _platformUtilsService;
         readonly IDeviceActionService _deviceActionService;
+        readonly ILogger _logger;
 
         public DeleteAccountViewModel()
         {
@@ -27,6 +26,7 @@ namespace Bit.App.Pages
             _cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            _logger = ServiceContainer.Resolve<ILogger>("logger");
 
             PageTitle = AppResources.DeleteAccount;
         }
@@ -74,9 +74,7 @@ namespace Bit.App.Pages
             catch (System.Exception ex)
             {
                 await _deviceActionService.HideLoadingAsync();
-#if !FDROID
-                Crashes.TrackError(ex);
-#endif
+                _logger.Exception(ex);
                 await _platformUtilsService.ShowDialogAsync(AppResources.AnErrorHasOccurred);
             }
         }

@@ -294,7 +294,7 @@ namespace Bit.iOS
             }
 
             // Migration services
-            ServiceContainer.Register<ILogService>("logService", new ConsoleLogService());
+            ServiceContainer.Register<INativeLogService>("nativeLogService", new ConsoleLogService());
 
             // Note: This might cause a race condition. Investigate more.
             Task.Run(() =>

@@ -1,6 +1,6 @@
 ﻿namespace Bit.Core.Abstractions
 {
-    public interface ILogService
+    public interface INativeLogService
     {
         void Debug(string message);
         void Error(string message);
