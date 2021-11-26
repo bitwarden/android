@@ -3719,6 +3719,36 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string DeleteAccount {
+            get {
+                return ResourceManager.GetString("DeleteAccount", resourceCulture);
+            }
+        }
+        
+        public static string DeletingYourAccountIsPermanent {
+            get {
+                return ResourceManager.GetString("DeletingYourAccountIsPermanent", resourceCulture);
+            }
+        }
+        
+        public static string DeleteAccountExplanation {
+            get {
+                return ResourceManager.GetString("DeleteAccountExplanation", resourceCulture);
+            }
+        }
+        
+        public static string DeletingYourAccount {
+            get {
+                return ResourceManager.GetString("DeletingYourAccount", resourceCulture);
+            }
+        }
+        
+        public static string YourAccountHasBeenPermanentlyDeleted {
+            get {
+                return ResourceManager.GetString("YourAccountHasBeenPermanentlyDeleted", resourceCulture);
+            }
+        }
+        
         public static string InvalidVerificationCode {
             get {
                 return ResourceManager.GetString("InvalidVerificationCode", resourceCulture);

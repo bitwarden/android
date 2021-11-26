@@ -195,6 +195,11 @@ namespace Bit.Core.Services
                 request, true, false);
         }
 
+        public Task DeleteAccountAsync(DeleteAccountRequest request)
+        {
+            return SendAsync<DeleteAccountRequest, object>(HttpMethod.Delete, "/accounts", request, true, false);
+        }
+        
         public Task PostConvertToKeyConnector()
         {
             return SendAsync<object, object>(HttpMethod.Post, "/accounts/convert-to-key-connector", null, true, false);

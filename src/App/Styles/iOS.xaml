@@ -173,6 +173,44 @@
         </Setter>
     </Style>
     <Style TargetType="Button"
+           Class="btn-secondary">
+        <Setter Property="BackgroundColor"
+                Value="Transparent" />
+        <Setter Property="BorderColor"
+                Value="{DynamicResource ButtonBorderColor}" />
+        <Setter Property="BorderWidth" 
+                Value="1" />
+        <Setter Property="TextColor"
+                Value="{DynamicResource ButtonTextColor}" />
+        <Setter Property="FontSize"
+                Value="Medium" />
+        <Setter Property="CornerRadius"
+                Value="5" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" 
+                                    Value="{DynamicResource ButtonBackgroundColorPressed}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor"
+                                    Value="{DynamicResource ButtonTextColorDisabled}" />
+                            <Setter Property="BackgroundColor"
+                                    Value="{DynamicResource ButtonBackgroundColorDisabled}" />
+                            <Setter Property="BorderColor"
+                                    Value="{DynamicResource ButtonBackgroundColorDisabled}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+    <Style TargetType="Button"
            ApplyToDerivedTypes="True"
            Class="btn-icon-platform">
         <Setter Property="WidthRequest"
