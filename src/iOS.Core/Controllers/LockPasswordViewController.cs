@@ -185,9 +185,13 @@ namespace Bit.iOS.Core.Controllers
             base.ViewDidAppear(animated);
 
             // Users with key connector and without biometric or pin has no MP to unlock with
-            if (_usesKeyConnector && (!(_pinLock || _biometricLock)) || ( _biometricLock && !_biometricIntegrityValid))
+            if (_usesKeyConnector)
             {
-                PromptSSO();
+                if (!(_pinLock || _biometricLock) ||
+                    (_biometricLock && !_biometricIntegrityValid))
+                {
+                    PromptSSO();
+                }
             }
             else if (!_biometricLock || !_biometricIntegrityValid)
             {
