@@ -133,6 +133,7 @@ namespace Bit.Droid.Accessibility
             new Browser("jp.co.fenrir.android.sleipnir_test", "url_text"),
             new Browser("mobi.mgeek.TunnyBrowser", "title"),
             new Browser("org.iron.srware", "url_bar"),
+            new Browser("org.milk.b2", "search"),
         }.ToDictionary(n => n.PackageName);
 
         // Known packages to skip
