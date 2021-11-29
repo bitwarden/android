@@ -127,6 +127,7 @@ namespace Bit.Droid.Autofill
             "org.ungoogled.chromium.extensions.stable",
             "org.ungoogled.chromium.stable",
             "us.spotco.fennec_dos",
+            "org.milk.b2",
         };
 
         // The URLs are blacklisted from autofilling
