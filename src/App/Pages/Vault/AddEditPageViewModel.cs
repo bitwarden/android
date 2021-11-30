@@ -929,7 +929,7 @@ namespace Bit.App.Pages
 
         public List<KeyValuePair<string, LinkedIdType>> LinkedFieldOptions
         {
-            get => _cipher.LinkedFieldOptions
+            get => _cipher.LinkedFieldOptions?
                 .Select(kvp => new KeyValuePair<string, LinkedIdType>(_i18nService.T(kvp.Key), kvp.Value))
                 .ToList();
         }
