@@ -1,0 +1,83 @@
+---
+name: Version Bump
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_number:
+        description: "New Version"
+        required: true
+
+jobs:
+  bump_version:
+    name: "Create version_bump_${{ github.event.inputs.version_number }} branch"
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout Branch
+        uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579
+
+      - name: Create Version Branch
+        run: |
+          git switch -c version_bump_${{ github.event.inputs.version_number }}
+          git push -u origin version_bump_${{ github.event.inputs.version_number }}
+
+      - name: Checkout Version Branch
+        uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579
+        with:
+          ref: version_bump_${{ github.event.inputs.version_number }}
+
+      - name: Bump Version - Android XML
+        uses: bitwarden/gh-actions/version-bump@0c263b3963211ccaf5804313c3b3a0bcc52d4b19
+        with:
+          version: ${{ github.event.inputs.version_number }}
+          file_path: "./src/Android/Properties/AndroidManifest.xml"
+
+      - name: Bump Version - iOS.Autofill
+        uses: bitwarden/gh-actions/version-bump@0c263b3963211ccaf5804313c3b3a0bcc52d4b19
+        with:
+          version: ${{ github.event.inputs.version_number }}
+          file_path: "./src/iOS.Autofill/Info.plist"
+
+      - name: Bump Version - iOS.Extension
+        uses: bitwarden/gh-actions/version-bump@0c263b3963211ccaf5804313c3b3a0bcc52d4b19
+        with:
+          version: ${{ github.event.inputs.version_number }}
+          file_path: "./src/iOS.Extension/Info.plist"
+
+      - name: Bump Version - iOS
+        uses: bitwarden/gh-actions/version-bump@0c263b3963211ccaf5804313c3b3a0bcc52d4b19
+        with:
+          version: ${{ github.event.inputs.version_number }}
+          file_path: "./src/iOS/Info.plist"
+
+      - name: Commit files
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -m "Bumped version to ${{ github.event.inputs.version_number }}" -a
+
+      - name: Push changes
+        run: git push -u origin version_bump_${{ github.event.inputs.version_number }}
+
+      - name: Create Version PR
+        env:
+          PR_BRANCH: "version_bump_${{ github.event.inputs.version_number }}"
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          BASE_BRANCH: master
+          TITLE: "Bump version to ${{ github.event.inputs.version_number }}"
+        run: |
+          gh pr create --title "$TITLE" \
+            --base "$BASE" \
+            --head "$PR_BRANCH" \
+            --label "version update" \
+            --label "automated pr" \
+            --body "
+              ## Type of change
+              - [ ] Bug fix
+              - [ ] New feature development
+              - [ ] Tech debt (refactoring, code cleanup, dependency upgrades, etc)
+              - [ ] Build/deploy pipeline (DevOps)
+              - [X] Other
+              
+              ## Objective
+              Automated version bump to ${{ github.event.inputs.version_number }}"
