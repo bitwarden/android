@@ -1455,6 +1455,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>解鎖</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>解鎖密碼庫</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 分鐘</value>
   </data>
@@ -1470,6 +1473,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>密碼庫已鎖定。驗證 PIN 碼以繼續。</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>您的密碼庫已上鎖。請驗證身份後繼續。</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>深色</value>
@@ -1611,8 +1617,14 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>輸入您的主密碼以匯出密碼庫資料。</value>
   </data>
-    <data name="ExportVaultOTPDescription" xml:space="preserve">
-    <value>輸入驗證碼以匯出您的密碼庫資料。</value>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>傳送驗證碼到您的信箱</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>驗證碼已傳送！</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>請先確認身分後再繼續。</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>此匯出包含未加密格式的密碼庫檔案。您不應將它存放或經由不安全的方式（例如電子郵件）傳送。用完後請立即將它刪除。</value>
@@ -2036,13 +2048,13 @@
     <value>當前無法更新密碼</value>
   </data>
   <data name="RemoveMasterPassword" xml:space="preserve">
-    <value>移除主控密碼</value>
+    <value>移除主密碼</value>
   </data>
   <data name="RemoveMasterPasswordWarning" xml:space="preserve">
-    <value>{0} 正使用客戶管理加密的 SSO。繼續操作將從您的帳戶中移除主控密碼並要求 SSO 登入。</value>
+    <value>{0} 正使用客戶管理加密的 SSO。繼續操作將從您的帳戶中移除主密碼並要求 SSO 登入。</value>
   </data>
   <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
-    <value>如果您不想移除主控密碼，您可以離開此組織。</value>
+    <value>如果您不想移除主密碼，您可以離開這個組織。</value>
   </data>
   <data name="LeaveOrganization" xml:space="preserve">
     <value>離開組織</value>
@@ -2080,10 +2092,28 @@
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>一或多個組織策略不允許您匯出個人密碼庫。</value>
   </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>刪除帳戶</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>「刪除帳戶」不可逆</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>您的帳戶及相關資料都會被清得一乾二凈，無法復原。是否繼續？</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>刪除帳戶</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>已永久刪除您的帳戶</value>
+  </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>無效的驗證碼。</value>
   </data>
-    <data name="RequestOTP" xml:space="preserve">
-    <value>請求一次性密碼</value>
+  <data name="SendCode" xml:space="preserve">
+    <value>傳送驗證碼</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>傳送中</value>
   </data>
 </root>
