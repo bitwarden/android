@@ -1455,6 +1455,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>Разблокировать</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Разблокировать хранилище</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 минут</value>
   </data>
@@ -1470,6 +1473,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Ваше хранилище заблокировано. Для продолжения введите PIN-код.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Ваше хранилище заблокировано. Подтвердите свою личность, чтобы продолжить</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Темная</value>
@@ -1611,8 +1617,14 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Для экспорта данных из хранилища введите мастер-пароль.</value>
   </data>
-    <data name="ExportVaultOTPDescription" xml:space="preserve">
-    <value>Введите проверочный код для экспорта данных хранилища.</value>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Отправить код подтверждения на ваш email</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Код отправлен!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Подтвердите вашу личность, чтобы продолжить.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Экспортируемый файл содержит данные вашего хранилища в незашифрованном формате. Его не следует хранить или отправлять по небезопасным каналам (например по электронной почте). Удалите его сразу после использования.</value>
@@ -2080,10 +2092,28 @@
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Экспорт вашего личного хранилища запрещен одной или несколькими политиками организации.</value>
   </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Удалить аккаунт</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Удаление аккаунта отменить невозможно</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Ваш аккаунт и все связанные с ним данные будут удалены и восстановлению не подлежат. Вы уверены, что хотите продолжить?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Удаление вашего аккаунта</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Ваш аккаунт был удален навсегда</value>
+  </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Неверный код подтверждения.</value>
   </data>
-    <data name="RequestOTP" xml:space="preserve">
-    <value>Запросить одноразовый пароль</value>
+  <data name="SendCode" xml:space="preserve">
+    <value>Отправить код</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Отправка</value>
   </data>
 </root>
