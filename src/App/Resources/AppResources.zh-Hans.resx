@@ -172,7 +172,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="DoYouReallyWantToDelete" xml:space="preserve">
-    <value>您真的要删除吗？这个操作无法撤消。</value>
+    <value>您确定要删除吗？这个操作无法撤消。</value>
     <comment>Confirmation alert message when deleteing something.</comment>
   </data>
   <data name="Edit" xml:space="preserve">
@@ -311,7 +311,7 @@
     <comment>Button text for a save operation (verb).</comment>
   </data>
   <data name="Move" xml:space="preserve">
-    <value>Move</value>
+    <value>移动</value>
   </data>
   <data name="Saving" xml:space="preserve">
     <value>正在保存...</value>
@@ -537,13 +537,13 @@
     <value>立即</value>
   </data>
   <data name="VaultTimeout" xml:space="preserve">
-    <value>密码库超时</value>
+    <value>密码库超时时间</value>
   </data>
   <data name="VaultTimeoutAction" xml:space="preserve">
     <value>密码库超时动作</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
-    <value>超时后注销将解除对密码库的所有访问权限，并需要进行在线认证。确定使用此设置吗？</value>
+    <value>超时后注销将解除对密码库的所有访问权限，并需要进行在线身份验证。确定使用此设置吗？</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>正在登录...</value>
@@ -786,7 +786,7 @@
     <value>你正在为 "{0}" 寻找一个自动填充项目。</value>
   </data>
   <data name="LearnOrg" xml:space="preserve">
-    <value>Learn About Organizations</value>
+    <value>了解组织</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
     <value>无法打开应用 "{0}"。</value>
@@ -1059,6 +1059,9 @@
   <data name="LastName" xml:space="preserve">
     <value>姓</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>全名</value>
+  </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>许可证编号</value>
   </data>
@@ -1182,6 +1185,9 @@
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>隐藏</value>
+  </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>已链接</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>文本</value>
@@ -1382,7 +1388,7 @@
     <value>没有可列出的集合。</value>
   </data>
   <data name="MovedItemToOrg" xml:space="preserve">
-    <value>{0} moved to {1}.</value>
+    <value>{0} 已移动到 {1}。</value>
     <comment>ex: Item moved to Organization.</comment>
   </data>
   <data name="ItemShared" xml:space="preserve">
@@ -1398,13 +1404,13 @@
     <value>共享项目</value>
   </data>
   <data name="MoveToOrganization" xml:space="preserve">
-    <value>Move to Organization</value>
+    <value>移动到组织</value>
   </data>
   <data name="NoOrgsToList" xml:space="preserve">
     <value>没有可列出的组织。</value>
   </data>
   <data name="MoveToOrgDesc" xml:space="preserve">
-    <value>Choose an organization that you wish to move this item to. Moving to an organization transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</value>
+    <value>选择一个您想将此项目移至的组织。移动到组织会将该项目的所有权转让给该组织。移动后，您将不再是此项目的直接所有者。</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
     <value>单词数</value>
@@ -1435,7 +1441,7 @@
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="LearnOrgConfirmation" xml:space="preserve">
-    <value>Bitwarden allows you to share your vault items with others by using an organization account. Would you like to visit the bitwarden.com website to learn more?</value>
+    <value>Bitwarden 允许您通过使用组织帐户与他人分享您的密码库项目。要访问 bitwarden.com 网站了解更多信息吗？</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
     <value>导出密码库</value>
@@ -1448,6 +1454,9 @@
   </data>
   <data name="Unlock" xml:space="preserve">
     <value>解锁​​​​</value>
+  </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>解锁密码库</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 分钟</value>
@@ -1465,12 +1474,15 @@
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>您的密码库已锁定。请验证您的 PIN 码以继续。</value>
   </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>您的密码库已锁定。请验证您的身份以继续。</value>
+  </data>
   <data name="Dark" xml:space="preserve">
-    <value>暗</value>
+    <value>深色</value>
     <comment>A dark color</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>亮</value>
+    <value>浅色</value>
     <comment>A light color</comment>
   </data>
   <data name="FiveMinutes" xml:space="preserve">
@@ -1511,7 +1523,7 @@
     <value>更改本应用程序的颜色主题。</value>
   </data>
   <data name="ThemeDefault" xml:space="preserve">
-    <value>Default (System)</value>
+    <value>默认（系统）</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>复制备注</value>
@@ -1570,7 +1582,7 @@
     <value>您的登录会话已过期。</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
-    <value>使用生物识别技术验证。</value>
+    <value>使用生物识别验证。</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
     <value>生物识别</value>
@@ -1604,6 +1616,15 @@
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>输入主密码来导出你的密码库。</value>
+  </data>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>发送验证码到您的电子邮箱</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>验证码已发送！</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>请先确认您的身份后继续。</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>导出的密码库数据包含未加密格式。您不应该通过不安全的渠道（例如电子邮件）来存储或发送导出的文件。用完后请立即将其删除。</value>
@@ -1703,10 +1724,10 @@
     <value>使用下拉手势同步密码库。</value>
   </data>
   <data name="LogInSso" xml:space="preserve">
-    <value>企业单点登录（SSO）</value>
+    <value>企业单点登录</value>
   </data>
   <data name="LogInSsoSummary" xml:space="preserve">
-    <value>要使用您组织的单点登录（SSO）门户快速登录。请首先输入您组织的标识符。</value>
+    <value>要使用您组织的单点登录门户快速登录。请首先输入您组织的标识符。</value>
   </data>
   <data name="OrgIdentifier" xml:space="preserve">
     <value>组织标识符</value>
@@ -1869,7 +1890,7 @@
     <value>最大访问次数</value>
   </data>
   <data name="MaximumAccessCountInfo" xml:space="preserve">
-    <value>如果设定，达到最大访问次数后用户将无法访问此 Send。</value>
+    <value>如果设置，达到最大访问次数后用户将无法访问此 Send。</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="MaximumAccessCountReached" xml:space="preserve">
@@ -2006,54 +2027,93 @@
     <value>此操作受到保护，要继续，请重新输入您的主密码以验证您的身份。</value>
   </data>
   <data name="CaptchaRequired" xml:space="preserve">
-    <value>Captcha Required</value>
+    <value>请完成人机验证</value>
   </data>
   <data name="CaptchaFailed" xml:space="preserve">
-    <value>Captcha Failed. Please try again.</value>
+    <value>人机验证失败。请重试。</value>
   </data>
   <data name="UpdatedMasterPassword" xml:space="preserve">
-    <value>Updated Master Password</value>
+    <value>已更新主密码</value>
   </data>
   <data name="UpdateMasterPassword" xml:space="preserve">
-    <value>Update Master Password</value>
+    <value>更新主密码</value>
   </data>
   <data name="UpdateMasterPasswordWarning" xml:space="preserve">
-    <value>Your Master Password was recently changed by an administrator in your organization. In order to access the vault, you must update your Master Password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
+    <value>您的主密码最近被您组织的管理员更改过。要访问密码库，您必须立即更新主密码。继续操作将使您退出当前会话，要求您重新登录。其他设备上的活动会话可能会继续保持活动状态长达一小时。</value>
   </data>
   <data name="UpdatingPassword" xml:space="preserve">
-    <value>Updating Password</value>
+    <value>正在更新密码</value>
   </data>
   <data name="UpdatePasswordError" xml:space="preserve">
-    <value>Currently unable to update password</value>
+    <value>当前无法更新密码</value>
+  </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>移除主密码</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>{0} 正在使用客户管理加密的 SSO。继续操作将删除您的账户主密码并要求 SSO 登录。</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>如果您不想删除您的账户主密码，您可以离开这个组织。</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>离开组织</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>离开 {0}？</value>
   </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
   </data>
   <data name="Fido2Instruction" xml:space="preserve">
-    <value>To continue, have your FIDO2 WebAuthn enabled security key ready, then follow the instructions after clicking 'Authenticate WebAuthn' on the next screen.</value>
+    <value>要继续，请准备好您的已启用了 FIDO2 WebAuthn 的安全钥匙，然后在下一个界面点击 "验证 WebAuthn"。</value>
   </data>
   <data name="Fido2Desc" xml:space="preserve">
-    <value>Authentication using FIDO2 WebAuthn, you can authenticate using an external security key.</value>
+    <value>使用 FIDO2 WebAuthn 进行身份验证，您可以使用外部安全钥匙来进行身份验证。</value>
   </data>
   <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
-    <value>Authenticate WebAuthn</value>
+    <value>验证 WebAuthn</value>
   </data>
   <data name="Fido2ReturnToApp" xml:space="preserve">
-    <value>Return to App</value>
+    <value>返回应用程序</value>
   </data>
   <data name="Fido2CheckBrowser" xml:space="preserve">
-    <value>Please make sure your default browser supports WebAuthn and try again.</value>
+    <value>请确保您的默认浏览器支持 WebAuthn，然后重试。</value>
   </data>
   <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
-    <value>This organization has an enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password.</value>
+    <value>此组织有一个企业策略，将为您自动注册密码重置。注册后将允许组织管理员更改您的主密码。</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>Your organization policies are affecting your vault timeout. Maximum allowed Vault Timeout is {0} hour(s) and {1} minute(s)</value>
+    <value>您的组织策略正在影响您的密码库超时时间。最大允许的密码库超时时间是 {0} 小时 {1} 分钟</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
-    <value>Your vault timeout exceeds the restrictions set by your organization.</value>
+    <value>您的密码库超时时间超出了组织设置的限制。</value>
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
-    <value>One or more organization policies prevents your from exporting your personal vault.</value>
+    <value>一个或多个组织策略阻止您导出个人密码库。</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>删除帐户</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>删除账户是永久性的</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>你的账户和所有相关数据将被擦除并且无法恢复。你确定要继续吗？</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>正删除您的帐户</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>您的帐户已被永久删除</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>无效的验证码</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>发送验证码</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>正在发送</value>
   </data>
 </root>
