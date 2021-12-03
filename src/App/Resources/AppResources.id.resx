@@ -311,7 +311,7 @@
     <comment>Button text for a save operation (verb).</comment>
   </data>
   <data name="Move" xml:space="preserve">
-    <value>Move</value>
+    <value>Pindah</value>
   </data>
   <data name="Saving" xml:space="preserve">
     <value>Menyimpan...</value>
@@ -1060,7 +1060,7 @@
     <value>Nama Belakang</value>
   </data>
   <data name="FullName" xml:space="preserve">
-    <value>Full Name</value>
+    <value>Nama Lengkap</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Nomor Lisensi</value>
@@ -1455,6 +1455,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>Membuka kunci</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Buka Vault</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 menit</value>
   </data>
@@ -1470,6 +1473,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Brankas Anda terkunci. Verifikasi kode PIN Anda untuk melanjutkan.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Your vault is locked. Verify your identity to continue.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Gelap</value>
@@ -1611,8 +1617,14 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Masukkan kata sandi utama Anda untuk mengekspor data brankas Anda.</value>
   </data>
-    <data name="ExportVaultOTPDescription" xml:space="preserve">
-    <value>Enter the verification code to export your vault data.</value>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Send a verification code to your email</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Code Sent!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Confirm your identity to continue.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Ekspor ini berisi data vault Anda dalam format yang tidak dienkripsi. Anda tidak boleh menyimpan atau mengirim file yang diekspor melalui saluran yang tidak aman (seperti emel). Hapus segera setelah Anda selesai menggunakannya.</value>
@@ -2080,10 +2092,28 @@
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>One or more organization policies prevents your from exporting your personal vault.</value>
   </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Delete Account</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Deleting your account is permanent</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Your account and all associated data will be erased and unrecoverable. Are you sure you want to continue?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Deleting your account</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Your account has been permanently deleted</value>
+  </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Invalid Verification Code.</value>
   </data>
-    <data name="RequestOTP" xml:space="preserve">
-    <value>Request one-time password</value>
+  <data name="SendCode" xml:space="preserve">
+    <value>Kirim Kode</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Mengirim...</value>
   </data>
 </root>

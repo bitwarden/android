@@ -1455,6 +1455,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>Kilidi aç</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Kasa Kilidini Aç</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 dakika</value>
   </data>
@@ -1470,6 +1473,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Kasanız kilitlendi. Devam etmek için PIN kodunuzu doğrulayın.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Kasanız kilitli. Devam etmek için kimliğinizi doğrulayın.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Koyu</value>
@@ -1611,8 +1617,14 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Kasadaki verilerinizi dışa aktarmak için ana parolanızı girin.</value>
   </data>
-    <data name="ExportVaultOTPDescription" xml:space="preserve">
-    <value>Kasa verilerinizi dışa aktarmak için doğrulama kodunu girin.</value>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Send a verification code to your email</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Code Sent!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Confirm your identity to continue.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Dışa aktarılan dosyadaki verileriniz şifrelenmemiş olacak. Bu dosyayı güvensiz yöntemlerle (örn. e-posta) göndermemeli ve saklamamalısınız. İşiniz bittikten sonra dosyayı hemen silin.</value>
@@ -2080,10 +2092,28 @@
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Bir veya daha fazla kuruluş ilkesi, kişisel kasanızı dışa aktarmanızı engelliyor.</value>
   </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Hesabı sil</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Silinen hesaplar geri getirilemez</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Hesabınız ve içindeki tüm veriler kalıcı olarak silinecektir. Devam etmek istediğinizden emin misiniz?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Hesabınız siliniyor</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Hesabınız kalıcı olarak silinmiştir</value>
+  </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Doğrulama kodu geçersiz.</value>
   </data>
-    <data name="RequestOTP" xml:space="preserve">
-    <value>Tek kullanımlık parola iste</value>
+  <data name="SendCode" xml:space="preserve">
+    <value>Send Code</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Sending</value>
   </data>
 </root>
