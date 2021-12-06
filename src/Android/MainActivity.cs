@@ -22,25 +22,8 @@ using ZXing.Net.Mobile.Android;
 
 namespace Bit.Droid
 {
-    //[Activity(
-    //    Label = "Bitwarden",
-    //    Icon = "@mipmap/ic_launcher",
-    //    Theme = "@style/LaunchTheme",
-    //    MainLauncher = true,
-    //    LaunchMode = LaunchMode.SingleTask,
-    //    ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation |
-    //                           ConfigChanges.Keyboard | ConfigChanges.KeyboardHidden |
-    //                           ConfigChanges.Navigation | ConfigChanges.UiMode)]
-    //[IntentFilter(
-    //    new[] { Intent.ActionSend },
-    //    Categories = new[] { Intent.CategoryDefault },
-    //    DataMimeTypes = new[]
-    //    {
-    //        @"application/*",
-    //        @"image/*",
-    //        @"video/*",
-    //        @"text/*"
-    //    })]
+    // Activity and IntentFilter declarations have been moved to Properties/AndroidManifest.xml
+    // They have been hardcoded so we can use the default LaunchMode on Android 12+
     [Register("com.x8bit.bitwarden.MainActivity")]
     public class MainActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
@@ -60,7 +43,6 @@ namespace Bit.Droid
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
-            
             var eventUploadIntent = new Intent(this, typeof(EventUploadReceiver));
             _eventUploadPendingIntent = PendingIntent.GetBroadcast(this, 0, eventUploadIntent,
                 PendingIntentFlags.UpdateCurrent);
@@ -167,8 +149,6 @@ namespace Bit.Droid
                     if (_appOptions != null)
                     {
                        _appOptions.Uri = uri;
-                       if (Intent != intent)
-                           Intent = intent;
                     }
                 }
                 else if (intent.GetBooleanExtra("generatorTile", false))
