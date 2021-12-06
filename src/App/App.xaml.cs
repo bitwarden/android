@@ -113,7 +113,8 @@ namespace Bit.App
                 }
                 else if (message.Command == "popAllAndGoToTabGenerator" ||
                     message.Command == "popAllAndGoToTabMyVault" ||
-                    message.Command == "popAllAndGoToTabSend")
+                    message.Command == "popAllAndGoToTabSend" ||
+                    message.Command == "popAllAndGoToAutofillCiphers")
                 {
                     Device.BeginInvokeOnMainThread(async () =>
                     {
@@ -123,7 +124,11 @@ namespace Bit.App
                             {
                                 await tabsPage.Navigation.PopModalAsync(false);
                             }
-                            if (message.Command == "popAllAndGoToTabMyVault")
+                            if (message.Command == "popAllAndGoToAutofillCiphers")
+                            {
+                                Current.MainPage = new NavigationPage(new AutofillCiphersPage(Options));
+                            }
+                            else if (message.Command == "popAllAndGoToTabMyVault")
                             {
                                 Options.MyVaultTile = false;
                                 tabsPage.ResetToVaultPage();

@@ -22,25 +22,25 @@ using ZXing.Net.Mobile.Android;
 
 namespace Bit.Droid
 {
-    [Activity(
-        Label = "Bitwarden",
-        Icon = "@mipmap/ic_launcher",
-        Theme = "@style/LaunchTheme",
-        MainLauncher = true,
-        LaunchMode = LaunchMode.SingleTask,
-        ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation |
-                               ConfigChanges.Keyboard | ConfigChanges.KeyboardHidden |
-                               ConfigChanges.Navigation | ConfigChanges.UiMode)]
-    [IntentFilter(
-        new[] { Intent.ActionSend },
-        Categories = new[] { Intent.CategoryDefault },
-        DataMimeTypes = new[]
-        {
-            @"application/*",
-            @"image/*",
-            @"video/*",
-            @"text/*"
-        })]
+    //[Activity(
+    //    Label = "Bitwarden",
+    //    Icon = "@mipmap/ic_launcher",
+    //    Theme = "@style/LaunchTheme",
+    //    MainLauncher = true,
+    //    LaunchMode = LaunchMode.SingleTask,
+    //    ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation |
+    //                           ConfigChanges.Keyboard | ConfigChanges.KeyboardHidden |
+    //                           ConfigChanges.Navigation | ConfigChanges.UiMode)]
+    //[IntentFilter(
+    //    new[] { Intent.ActionSend },
+    //    Categories = new[] { Intent.CategoryDefault },
+    //    DataMimeTypes = new[]
+    //    {
+    //        @"application/*",
+    //        @"image/*",
+    //        @"video/*",
+    //        @"text/*"
+    //    })]
     [Register("com.x8bit.bitwarden.MainActivity")]
     public class MainActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
@@ -60,6 +60,7 @@ namespace Bit.Droid
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            
             var eventUploadIntent = new Intent(this, typeof(EventUploadReceiver));
             _eventUploadPendingIntent = PendingIntent.GetBroadcast(this, 0, eventUploadIntent,
                 PendingIntentFlags.UpdateCurrent);
@@ -159,7 +160,18 @@ namespace Bit.Droid
             base.OnNewIntent(intent);
             try
             {
-                if (intent.GetBooleanExtra("generatorTile", false))
+                var uri = intent?.GetStringExtra("uri");
+                if (uri != null)
+                {
+                    _messagingService.Send("popAllAndGoToAutofillCiphers");
+                    if (_appOptions != null)
+                    {
+                       _appOptions.Uri = uri;
+                       if (Intent != intent)
+                           Intent = intent;
+                    }
+                }
+                else if (intent.GetBooleanExtra("generatorTile", false))
                 {
                     _messagingService.Send("popAllAndGoToTabGenerator");
                     if (_appOptions != null)
