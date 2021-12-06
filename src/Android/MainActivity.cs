@@ -23,7 +23,9 @@ using ZXing.Net.Mobile.Android;
 namespace Bit.Droid
 {
     // Activity and IntentFilter declarations have been moved to Properties/AndroidManifest.xml
-    // They have been hardcoded so we can use the default LaunchMode on Android 12+
+    // They have been hardcoded so we can use the default LaunchMode on Android 11+
+    // LaunchMode defined in values/manifest.xml for Android 10- and values-v30/manifest.xml for Android 11+
+    // See https://github.com/bitwarden/mobile/pull/1673 for details
     [Register("com.x8bit.bitwarden.MainActivity")]
     public class MainActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
@@ -142,8 +144,7 @@ namespace Bit.Droid
             base.OnNewIntent(intent);
             try
             {
-                var uri = intent?.GetStringExtra("uri");
-                if (uri != null)
+                if (intent?.GetStringExtra("uri") is string uri)
                 {
                     _messagingService.Send("popAllAndGoToAutofillCiphers");
                     if (_appOptions != null)
