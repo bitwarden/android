@@ -1455,6 +1455,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>Kilidi aç</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Anbar kilidini aç</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 dəqiqə</value>
   </data>
@@ -1470,6 +1473,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Anbarınız kilidlənib. Davam etmək üçün PIN kodunuzu təsdiqləyin.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Anbarınız kilidlənib. Davam etmək üçün kimliyinizi təsdiqləyin.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Tünd</value>
@@ -1611,8 +1617,14 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Anbar verilənlərinizi ixrac etmək üçün ana parolunuzu daxil edin.</value>
   </data>
-    <data name="ExportVaultOTPDescription" xml:space="preserve">
-    <value>Anbar verilənlərinizi ixrac etmək üçün təsdiqləmə kodunu daxil edin.</value>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>E-poçtunuza bir təsdiqləmə kodu göndərin</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Kod göndərildi!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Davam etmək üçün kimliyinizi təsdiqləyin.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Bu ixrac faylındakı anbar verilənləriniz şifrələnməmiş formatdadır. İxrac edilən faylı saxlamamalı və etibarsız yollarla (e-poçt kimi) göndərməməlisiniz. Bu faylı işiniz bitdikdən sonra dərhal silin.</value>
@@ -2080,10 +2092,28 @@
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Bir və ya daha çox təşkilat siyasəti, fərdi anbarınızı ixrac etməyinizin qarşısını alır.</value>
   </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Hesabı sil</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Hesabınız birdəfəlik silinəcək</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Hesabınız və əlaqəli bütün verilənlər silinəcək və bərpa oluna bilməyəcək. Davam etmək istədiyinizə əminsiniz?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Hesabınız silinir</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Hesabınız birdəfəlik silindi</value>
+  </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Etibarsız təsdiqləmə kodu</value>
   </data>
-    <data name="RequestOTP" xml:space="preserve">
-    <value>Tək istifadəlik parol tələb et</value>
+  <data name="SendCode" xml:space="preserve">
+    <value>Kod göndər</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Göndərilir</value>
   </data>
 </root>

@@ -1459,6 +1459,9 @@ Bitwarden בעזרת פתיחת חלון "הגדרות".</value>
   <data name="Unlock" xml:space="preserve">
     <value>בטל נעילה</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Unlock Vault</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 דקות</value>
   </data>
@@ -1474,6 +1477,9 @@ Bitwarden בעזרת פתיחת חלון "הגדרות".</value>
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>הכספת שלך נעולה. הזן את קוד הPIN שלך כדי להמשיך.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Your vault is locked. Verify your identity to continue.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>כהה</value>
@@ -1615,8 +1621,14 @@ Bitwarden בעזרת פתיחת חלון "הגדרות".</value>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>הזן את הסיסמה הראשית שלך עבור יצוא המידע מהכספת.</value>
   </data>
-    <data name="ExportVaultOTPDescription" xml:space="preserve">
-    <value>Enter the verification code to export your vault data.</value>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Send a verification code to your email</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Code Sent!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Confirm your identity to continue.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>הקובץ מכיל את פרטי הכספת שלך בפורמט לא מוצפן. מומלץ להעביר את הקובץ רק בדרכים מוצפנות, ומאוד לא מומלץ לשמור או לשלוח את הקובץ הזה בדרכים לא מוצפנות (כדוגמת סתם אימייל). מחק את הקובץ מיד לאחר שסיימת את השימוש בו.</value>
@@ -2087,10 +2099,28 @@ Bitwarden בעזרת פתיחת חלון "הגדרות".</value>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>מדיניות אחת או יותר של הארגון שלך מונעות ממך לייצא את הכספת האישית שלך.</value>
   </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Delete Account</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Deleting your account is permanent</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Your account and all associated data will be erased and unrecoverable. Are you sure you want to continue?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Deleting your account</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Your account has been permanently deleted</value>
+  </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Invalid Verification Code.</value>
   </data>
-    <data name="RequestOTP" xml:space="preserve">
-    <value>Request one-time password</value>
+  <data name="SendCode" xml:space="preserve">
+    <value>Send Code</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Sending</value>
   </data>
 </root>

@@ -1455,6 +1455,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>Déverrouiller</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Unlock Vault</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minutes</value>
   </data>
@@ -1470,6 +1473,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Votre coffre est verrouillé. Saisissez votre code PIN pour continuer.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Your vault is locked. Verify your identity to continue.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Sombre</value>
@@ -1611,8 +1617,14 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Saisissez votre mot de passe maître pour exporter les données de votre coffre.</value>
   </data>
-    <data name="ExportVaultOTPDescription" xml:space="preserve">
-    <value>Entrez le code de vérification pour exporter les données de votre coffre.</value>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Send a verification code to your email</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Code Sent!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Confirm your identity to continue.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Cet export contient les données de votre coffre dans un format non chiffré. Vous ne devriez ni le stocker ni l'envoyer via des canaux non sécurisés (tel que par e-mail). Supprimez-le immédiatement après l'avoir utilisé.</value>
@@ -2080,10 +2092,28 @@
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>One or more organization policies prevents your from exporting your personal vault.</value>
   </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Supprimer le compte</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>La suppression de votre compte est permanente</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Votre compte et toutes les données associées seront effacées et irrécupérables. Êtes-vous sûr de vouloir continuer ?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Suppression de votre compte</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Votre compte a été définitivement supprimé</value>
+  </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Code de vérification invalide.</value>
   </data>
-    <data name="RequestOTP" xml:space="preserve">
-    <value>Demander un mot de passe à usage unique</value>
+  <data name="SendCode" xml:space="preserve">
+    <value>Send Code</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Sending</value>
   </data>
 </root>

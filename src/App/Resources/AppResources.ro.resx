@@ -1455,6 +1455,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>Deblocare</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Deblocare seif</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 de minute</value>
   </data>
@@ -1470,6 +1473,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Seiful dvs. este blocat. Verificați codul PIN pentru a continua.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Seiful dvs. este blocat. Verificați-vă identitatea pentru a continua.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Întunecat</value>
@@ -1611,8 +1617,14 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Introduceți parola principală pentru a exporta datele seifului.</value>
   </data>
-    <data name="ExportVaultOTPDescription" xml:space="preserve">
-    <value>Introduceți codul de verificare pentru a exporta datele seifului.</value>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Trimite un cod de verificare la adresa dvs. de e-mail</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Cod trimis</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Confirmați-vă identitatea pentru a continua.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Acest export conține datele dvs. din seif în format necriptat. Nu ar trebui să stocați sau să trimiteți fișierul pe canale nesecurizate (cum ar fi e-mail). Ștergeți-l imediat după ce nu îl mai folosiți.</value>
@@ -2080,10 +2092,28 @@
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Una sau mai multe politici ale organizației vă împiedică să exportați seiful personal.</value>
   </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Ștergere cont</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Ștergerea contului dvs. este permanentă</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Contul dvs. și toate datele asociate vor fi șterse și nu vor putea fi recuperate. Sunteți sigur ca vreți sa continuați?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Ștergerea contului dvs.</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Contul dvs. a fost șters definitiv</value>
+  </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Cod de verificare nevalid.</value>
   </data>
-    <data name="RequestOTP" xml:space="preserve">
-    <value>Solicitare de parolă unică</value>
+  <data name="SendCode" xml:space="preserve">
+    <value>Trimitere cod</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Se trimite</value>
   </data>
 </root>
