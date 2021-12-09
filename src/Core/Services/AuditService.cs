@@ -49,13 +49,9 @@ namespace Bit.Core.Services
             {
                 return await _apiService.GetHibpBreachAsync(username);
             }
-            catch (ApiException e)
+            catch (ApiException e) when (e.Error != null && e.Error.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
-                if (e.Error != null && e.Error.StatusCode == System.Net.HttpStatusCode.NotFound)
-                {
-                    return new List<BreachAccountResponse>();
-                }
-                throw e;
+                return new List<BreachAccountResponse>();
             }
         }
     }

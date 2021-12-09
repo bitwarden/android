@@ -268,12 +268,9 @@ namespace Bit.Core.Services
                     kdfIterations = preloginResponse.KdfIterations;
                 }
             }
-            catch (ApiException e)
+            catch (ApiException e) when (e.Error == null || e.Error.StatusCode != System.Net.HttpStatusCode.NotFound)
             {
-                if (e.Error == null || e.Error.StatusCode != System.Net.HttpStatusCode.NotFound)
-                {
-                    throw e;
-                }
+                throw;
             }
             return await _cryptoService.MakeKeyAsync(masterPassword, email, kdf, kdfIterations);
         }
