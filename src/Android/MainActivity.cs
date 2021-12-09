@@ -22,25 +22,10 @@ using ZXing.Net.Mobile.Android;
 
 namespace Bit.Droid
 {
-    [Activity(
-        Label = "Bitwarden",
-        Icon = "@mipmap/ic_launcher",
-        Theme = "@style/LaunchTheme",
-        MainLauncher = true,
-        LaunchMode = LaunchMode.SingleTask,
-        ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation |
-                               ConfigChanges.Keyboard | ConfigChanges.KeyboardHidden |
-                               ConfigChanges.Navigation | ConfigChanges.UiMode)]
-    [IntentFilter(
-        new[] { Intent.ActionSend },
-        Categories = new[] { Intent.CategoryDefault },
-        DataMimeTypes = new[]
-        {
-            @"application/*",
-            @"image/*",
-            @"video/*",
-            @"text/*"
-        })]
+    // Activity and IntentFilter declarations have been moved to Properties/AndroidManifest.xml
+    // They have been hardcoded so we can use the default LaunchMode on Android 11+
+    // LaunchMode defined in values/manifest.xml for Android 10- and values-v30/manifest.xml for Android 11+
+    // See https://github.com/bitwarden/mobile/pull/1673 for details
     [Register("com.x8bit.bitwarden.MainActivity")]
     public class MainActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
@@ -149,7 +134,15 @@ namespace Bit.Droid
             base.OnNewIntent(intent);
             try
             {
-                if (intent.GetBooleanExtra("generatorTile", false))
+                if (intent?.GetStringExtra("uri") is string uri)
+                {
+                    _messagingService.Send("popAllAndGoToAutofillCiphers");
+                    if (_appOptions != null)
+                    {
+                       _appOptions.Uri = uri;
+                    }
+                }
+                else if (intent.GetBooleanExtra("generatorTile", false))
                 {
                     _messagingService.Send("popAllAndGoToTabGenerator");
                     if (_appOptions != null)

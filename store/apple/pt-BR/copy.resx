@@ -122,13 +122,31 @@
     <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>O bitwarden é a maneira mais fácil e segura de armazenar todas as suas credenciais e senhas mantendo-as convenientemente sincronizadas entre todos os seus dispositivos.
+    <value>Bitwarden, Inc. é a empresa controladora da 8bit Solutions LLC.
 
-O furto de senhas é um problema sério. Os sites e aplicativos que os utiliza estão sob ataque todos os dias. Quebras de segurança ocorrem e as suas senhas são furtadas. Quando você reutiliza as mesmas senhas entre aplicativos e sites, os hackers podem facilmente acessar o seu e-mail, banco, e outras contas importantes.
+NOMEADO MELHOR GERENCIADOR DE SENHAS PELA VERGE, U.S. NEWS &amp; WORLD REPORT, CNET E MAIS.
 
-Os especialistas de segurança recomendam que utilize uma senha diferente e aleatoriamente gerada para todas as contas que você cria. Mas como gerenciar todas essas senhas? O bitwarden torna-lhe fácil criar, armazenar, e acessar as suas senhas.
+Gerencie, armazene, proteja e compartilhe senhas ilimitadas em dispositivos ilimitados de qualquer lugar. o Bitwarden oferece soluções de gerenciamento de senha de código aberto para todos, seja em casa, no trabalho ou em trânsito.
 
-O bitwarden armazena todas as suas credenciais num cofre encriptado que sincroniza entre todos os seus dispositivos. Como são completamente encriptados antes de se quer sair do seu dispositivo, apenas você tem acesso aos seus dados. Nem se quer a equipe do bitwarden pode ler os seus dados, mesmo se quiséssemos. Os seus dados são selados com encriptação AES-256 bits, salted hashing, e PBKDF2 SHA-256.</value>
+Gere senhas fortes, únicas e aleatórias com base nos requisitos de segurança de cada site que você frequenta.
+
+O Bitwarden Send transmite rapidamente informações criptografadas - arquivos e texto simples - diretamente para qualquer pessoa.
+
+O Bitwarden oferece planos Teams e Enterprise para empresas, para que você possa compartilhar com segurança as senhas com os colegas.
+
+Por que Escolher o Bitwarden:
+
+Criptografia de Classe Mundial
+As senhas são protegidas com criptografia ponta a ponta avançada (AES-256 bits, salted hashtag e PBKDF2 SHA-256) para que seus dados permaneçam seguros e privados.
+
+Gerador de Senhas Embutido
+Gere senhas fortes, exclusivas e aleatórias com base nos requisitos de segurança de cada site que você frequenta.
+
+Traduções Globais
+As traduções do Bitwarden existem em 40 idiomas e estão crescendo, graças à nossa comunidade global.
+
+Aplicativos Multi-plataforma
+Proteja e compartilhe dados confidenciais em seu Cofre do Bitwarden de qualquer navegador, dispositivo móvel ou sistema operacional de desktop e muito mais.</value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">

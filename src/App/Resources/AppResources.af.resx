@@ -1060,7 +1060,7 @@
     <value>Van</value>
   </data>
   <data name="FullName" xml:space="preserve">
-    <value>Full Name</value>
+    <value>Volle naam</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Lisensienommer</value>
@@ -1187,7 +1187,7 @@
     <value>Versteek</value>
   </data>
   <data name="FieldTypeLinked" xml:space="preserve">
-    <value>Linked</value>
+    <value>Gekoppel</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Teks</value>
@@ -1455,6 +1455,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>Ontgrendel</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Ontgrendel kluis</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minute</value>
   </data>
@@ -1470,6 +1473,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>U kluis is vergrendel. Verifieer u PIN-kode om voort te gaan.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>U kluis is vergrendel. Bevestig u identiteit om voort te gaan.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Donker</value>
@@ -1611,8 +1617,14 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Voer u hoofwagwoord in om u kluisdata uit te stuur.</value>
   </data>
-    <data name="ExportVaultOTPDescription" xml:space="preserve">
-    <value>Enter the verification code to export your vault data.</value>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Stuur ’n bevestigingskode na u e-pos</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Kode verstuur!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Bevestig u identiteit om voort te gaan.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Hierdie uitstuur bevat u kluisdata in ’n ongeënkripteerde formaat. U behoort dit nie oor onbeveiligde kanale (soos e-pos) te bewaar of verstuur nie. Skrap dit sodra u dit klaar gebruik het.</value>
@@ -2036,19 +2048,19 @@
     <value>Kan nie tans u wagwoord bywerk nie</value>
   </data>
   <data name="RemoveMasterPassword" xml:space="preserve">
-    <value>Remove Master Password</value>
+    <value>Verwyder hoofwagwoord</value>
   </data>
   <data name="RemoveMasterPasswordWarning" xml:space="preserve">
-    <value>{0} is using SSO with customer-managed encryption. Continuing will remove your Master Password from your account and require SSO to login.</value>
+    <value>{0} gebruik SSO met klantbestuurde enkripsie. Deur voort te gaan word u hoofwagwoord van u rekening verwyder en word SSO vereis om aan te teken.</value>
   </data>
   <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
-    <value>If you do not want to remove your Master Password, you may leave this organization.</value>
+    <value>Indien u nie u hoofwagwoord wil verwyder nie, kan u hierdie organisasie verlaat.</value>
   </data>
   <data name="LeaveOrganization" xml:space="preserve">
-    <value>Leave Organization</value>
+    <value>Verlaat organisasie</value>
   </data>
   <data name="LeaveOrganizationName" xml:space="preserve">
-    <value>Leave {0}?</value>
+    <value>Verlaat {0}?</value>
   </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
@@ -2080,10 +2092,28 @@
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Een of meer organisasiebeleide verhoed u om u persoonlike kluis uit te stuur.</value>
   </data>
-  <data name="InvalidVerificationCode" xml:space="preserve">
-    <value>Invalid Verification Code.</value>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Skrap rekening</value>
   </data>
-    <data name="RequestOTP" xml:space="preserve">
-    <value>Request one-time password</value>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Die skrap van u rekening is permanent</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>U rekening en alle bybehorende data sal geskrap en onherwinbaar word. Is u seker u wil voortgaan?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>U rekening word geskrap</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>U rekening is permanent geskrap</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>Ongeldige bevestigingskode.</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Verstuur kode</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Verstuur</value>
   </data>
 </root>

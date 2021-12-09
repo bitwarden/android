@@ -1455,6 +1455,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>Sblocca</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Sblocca cassaforte</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minuti</value>
   </data>
@@ -1470,6 +1473,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>La tua cassaforte è bloccata. Inserisci il tuo codice PIN per continuare.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>La tua cassaforte è bloccata. Verifica la tua identità per continuare.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Scuro</value>
@@ -1611,8 +1617,14 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Inserisci la tua password principale per esportare i dati della tua cassaforte.</value>
   </data>
-    <data name="ExportVaultOTPDescription" xml:space="preserve">
-    <value>Digita il codice di verifica per esportare i dati della tua cassaforte.</value>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Invia un codice di verifica alla tua email</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Codice inviato!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Conferma la tua identità per continuare.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Questa esportazione contiene i dati della tua cassaforte in formato non cifrato. Non dovresti archiviare o inviare i file esportati attraverso canali non sicuri (come l'email). Eliminali immediatamente dopo che hai finito di usarli.</value>
@@ -2081,10 +2093,28 @@
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Una o più policy dell'organizzazione ti impediscono di esportare la tua cassaforte personale.</value>
   </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Elimina account</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>L'eliminazione del tuo account è definitiva</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Il tuo account e tutti i dati associati saranno cancellati e non recuperabili. Sei sicuro di voler continuare?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Eliminazione del tuo account</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Il tuo account è stato eliminato definitivamente</value>
+  </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Codice di verifica non valido.</value>
   </data>
-    <data name="RequestOTP" xml:space="preserve">
-    <value>Richiedi OTP</value>
+  <data name="SendCode" xml:space="preserve">
+    <value>Invia codice</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Invio in corso</value>
   </data>
 </root>

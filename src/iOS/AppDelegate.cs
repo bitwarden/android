@@ -175,17 +175,8 @@ namespace Bit.iOS
             return base.FinishedLaunching(app, options);
         }
 
-        public override void DidEnterBackground(UIApplication uiApplication)
+        public override void OnResignActivation(UIApplication uiApplication)
         {
-            _storageService.SaveAsync(Constants.LastActiveTimeKey, _deviceActionService.GetActiveTime());
-            _messagingService.Send("slept");
-
-            if (UIApplication.SharedApplication.KeyWindow == null)
-            {
-                // Despite IDE warning, KeyWindow is null here during app termination in iOS 15
-                return;
-            }
-
             var view = new UIView(UIApplication.SharedApplication.KeyWindow.Frame)
             {
                 Tag = 4321
@@ -205,6 +196,13 @@ namespace Bit.iOS
             UIApplication.SharedApplication.KeyWindow.BringSubviewToFront(view);
             UIApplication.SharedApplication.KeyWindow.EndEditing(true);
             UIApplication.SharedApplication.SetStatusBarHidden(true, false);
+            base.OnResignActivation(uiApplication);
+        }
+
+        public override void DidEnterBackground(UIApplication uiApplication)
+        {
+            _storageService.SaveAsync(Constants.LastActiveTimeKey, _deviceActionService.GetActiveTime());
+            _messagingService.Send("slept");
             base.DidEnterBackground(uiApplication);
         }
 
