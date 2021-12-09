@@ -49,9 +49,7 @@ namespace Bit.Droid
         private IBroadcasterService _broadcasterService;
         private IUserService _userService;
         private IAppIdService _appIdService;
-        private IStorageService _storageService;
         private IEventService _eventService;
-        private PendingIntent _clearClipboardPendingIntent;
         private PendingIntent _eventUploadPendingIntent;
         private AppOptions _appOptions;
         private string _activityKey = $"{nameof(MainActivity)}_{Java.Lang.JavaSystem.CurrentTimeMillis().ToString()}";
@@ -63,9 +61,6 @@ namespace Bit.Droid
             var eventUploadIntent = new Intent(this, typeof(EventUploadReceiver));
             _eventUploadPendingIntent = PendingIntent.GetBroadcast(this, 0, eventUploadIntent,
                 PendingIntentFlags.UpdateCurrent);
-            var clearClipboardIntent = new Intent(this, typeof(ClearClipboardAlarmReceiver));
-            _clearClipboardPendingIntent = PendingIntent.GetBroadcast(this, 0, clearClipboardIntent,
-                PendingIntentFlags.UpdateCurrent);
 
             var policy = new StrictMode.ThreadPolicy.Builder().PermitAll().Build();
             StrictMode.SetThreadPolicy(policy);
@@ -75,7 +70,6 @@ namespace Bit.Droid
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _userService = ServiceContainer.Resolve<IUserService>("userService");
             _appIdService = ServiceContainer.Resolve<IAppIdService>("appIdService");
-            _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _eventService = ServiceContainer.Resolve<IEventService>("eventService");
 
             TabLayoutResource = Resource.Layout.Tabbar;
@@ -122,10 +116,6 @@ namespace Bit.Droid
                 else if (message.Command == "exit")
                 {
                     ExitApp();
-                }
-                else if (message.Command == "copiedToClipboard")
-                {
-                    var task = ClearClipboardAlarmAsync(message.Data as Tuple<string, int?, bool>);
                 }
             });
         }
@@ -393,30 +383,6 @@ namespace Bit.Droid
         {
             FinishAffinity();
             Java.Lang.JavaSystem.Exit(0);
-        }
-
-        private async Task ClearClipboardAlarmAsync(Tuple<string, int?, bool> data)
-        {
-            if (data.Item3)
-            {
-                return;
-            }
-            var clearMs = data.Item2;
-            if (clearMs == null)
-            {
-                var clearSeconds = await _storageService.GetAsync<int?>(Constants.ClearClipboardKey);
-                if (clearSeconds != null)
-                {
-                    clearMs = clearSeconds.Value * 1000;
-                }
-            }
-            if (clearMs == null)
-            {
-                return;
-            }
-            var triggerMs = Java.Lang.JavaSystem.CurrentTimeMillis() + clearMs.Value;
-            var alarmManager = GetSystemService(AlarmService) as AlarmManager;
-            alarmManager.Set(AlarmType.Rtc, triggerMs, _clearClipboardPendingIntent);
         }
 
         private void StartEventAlarm()

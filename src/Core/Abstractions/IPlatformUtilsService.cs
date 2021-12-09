@@ -9,7 +9,6 @@ namespace Bit.Core.Abstractions
     {
         string IdentityClientId { get; }
 
-        Task CopyToClipboardAsync(string text, Dictionary<string, object> options = null);
         string GetApplicationVersion();
         DeviceType GetDevice();
         string GetDeviceString();
