@@ -1,13 +1,12 @@
-﻿using Bit.App.Abstractions;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Bit.App.Abstractions;
 using Bit.App.Models;
 using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Plugin.Fingerprint;
 using Plugin.Fingerprint.Abstractions;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.SymbolStore;
-using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
