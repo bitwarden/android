@@ -189,6 +189,7 @@
     <AndroidResource Include="Resources\drawable-v23\splash_screen.xml" />
     <AndroidResource Include="Resources\drawable-v23\splash_screen_dark.xml" />
     <AndroidResource Include="Resources\drawable\switch_thumb.xml" />
+    <AndroidResource Include="Resources\layout\progress_dialog_layout.xml" />
     <AndroidResource Include="Resources\layout\Tabbar.axml" />
     <AndroidResource Include="Resources\layout\Toolbar.axml" />
     <AndroidResource Include="Resources\mipmap-anydpi-v26\ic_launcher.xml" />
