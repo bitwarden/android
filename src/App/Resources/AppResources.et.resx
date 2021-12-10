@@ -711,7 +711,7 @@
     <value>Kirje vaatamine</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>Bitwardeni Veebihoidla</value>
+    <value>Bitwarden veebihoidla</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Kaotasid autentimise rakenduse?</value>
@@ -1246,13 +1246,13 @@
     <comment>An entity of multiple related people (ex. a team or business organization).</comment>
   </data>
   <data name="HoldYubikeyNearTop" xml:space="preserve">
-    <value>Hoia oma Yubikey seadme ülaosa ligidal.</value>
+    <value>Hoia oma Yubikey seadme ülaosa lähedal.</value>
   </data>
   <data name="TryAgain" xml:space="preserve">
     <value>Proovi uuesti</value>
   </data>
   <data name="YubiKeyInstructionIos" xml:space="preserve">
-    <value>Jätkamiseks hoia YubiKey NEO-d oma seadme tagumise poole vastu.</value>
+    <value>Jätkamiseks hoia oma YubiKey NEO seadme tagumise poole vastas.</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
     <value>Juurdepääsetavuse teenus võib abiks olla olukordades, kus rakendused ei toeta standardset automaattäite teenust.</value>
