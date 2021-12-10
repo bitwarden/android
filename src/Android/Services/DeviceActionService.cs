@@ -202,8 +202,7 @@ namespace Bit.Droid.Services
                 if (activity.IsFinishing)
                     return false;
 
-                if (Build.VERSION.SdkInt >= BuildVersionCodes.JellyBeanMr1 &&
-                    activity.IsDestroyed)
+                if (activity.IsDestroyed)
                     return false;
             }
 
