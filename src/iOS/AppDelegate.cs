@@ -71,14 +71,6 @@ namespace Bit.iOS
                         iOSCoreHelpers.AppearanceAdjustments();
                     });
                 }
-                else if (message.Command == "copiedToClipboard")
-                {
-
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        var task = ClearClipboardTimerAsync(message.Data as Tuple<string, int?, bool>);
-                    });
-                }
                 else if (message.Command == "listenYubiKeyOTP")
                 {
                     iOSCoreHelpers.ListenYubiKey((bool)message.Data, _deviceActionService, _nfcSession, _nfcDelegate);
@@ -327,61 +319,6 @@ namespace Bit.iOS
             var iosPushNotificationService = new iOSPushNotificationService();
             ServiceContainer.Register<IPushNotificationService>(
                 "pushNotificationService", iosPushNotificationService);
-        }
-
-        private async Task ClearClipboardTimerAsync(Tuple<string, int?, bool> data)
-        {
-            if (data.Item3)
-            {
-                return;
-            }
-            var clearMs = data.Item2;
-            if (clearMs == null)
-            {
-                var clearSeconds = await _storageService.GetAsync<int?>(Constants.ClearClipboardKey);
-                if (clearSeconds != null)
-                {
-                    clearMs = clearSeconds.Value * 1000;
-                }
-            }
-            if (clearMs == null)
-            {
-                return;
-            }
-            if (_clipboardBackgroundTaskId > 0)
-            {
-                UIApplication.SharedApplication.EndBackgroundTask(_clipboardBackgroundTaskId);
-                _clipboardBackgroundTaskId = 0;
-            }
-            _clipboardBackgroundTaskId = UIApplication.SharedApplication.BeginBackgroundTask(() =>
-            {
-                UIApplication.SharedApplication.EndBackgroundTask(_clipboardBackgroundTaskId);
-                _clipboardBackgroundTaskId = 0;
-            });
-            _clipboardTimer?.Invalidate();
-            _clipboardTimer?.Dispose();
-            _clipboardTimer = null;
-            var lastClipboardChangeCount = UIPasteboard.General.ChangeCount;
-            var clearMsSpan = TimeSpan.FromMilliseconds(clearMs.Value);
-            _clipboardTimer = NSTimer.CreateScheduledTimer(clearMsSpan, timer =>
-            {
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    var changeNow = UIPasteboard.General.ChangeCount;
-                    if (changeNow == 0 || lastClipboardChangeCount == changeNow)
-                    {
-                        UIPasteboard.General.String = string.Empty;
-                    }
-                    _clipboardTimer?.Invalidate();
-                    _clipboardTimer?.Dispose();
-                    _clipboardTimer = null;
-                    if (_clipboardBackgroundTaskId > 0)
-                    {
-                        UIApplication.SharedApplication.EndBackgroundTask(_clipboardBackgroundTaskId);
-                        _clipboardBackgroundTaskId = 0;
-                    }
-                });
-            });
         }
 
         private void ShowAppExtension(ExtensionPageViewModel extensionPageViewModel)

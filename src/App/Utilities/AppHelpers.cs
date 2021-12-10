@@ -27,6 +27,8 @@ namespace Bit.App.Utilities
             var platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             var eventService = ServiceContainer.Resolve<IEventService>("eventService");
             var vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
+            var clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
+
             var options = new List<string> { AppResources.View };
             if (!cipher.IsDeleted)
             {
@@ -92,7 +94,7 @@ namespace Bit.App.Utilities
             }
             else if (selection == AppResources.CopyUsername)
             {
-                await platformUtilsService.CopyToClipboardAsync(cipher.Login.Username);
+                await clipboardService.CopyTextAsync(cipher.Login.Username);
                 platformUtilsService.ShowToast("info", null,
                     string.Format(AppResources.ValueHasBeenCopied, AppResources.Username));
             }
@@ -100,7 +102,7 @@ namespace Bit.App.Utilities
             {
                 if (cipher.Reprompt == CipherRepromptType.None || await passwordRepromptService.ShowPasswordPromptAsync())
                 {
-                    await platformUtilsService.CopyToClipboardAsync(cipher.Login.Password);
+                    await clipboardService.CopyTextAsync(cipher.Login.Password);
                     platformUtilsService.ShowToast("info", null,
                         string.Format(AppResources.ValueHasBeenCopied, AppResources.Password));
                     var task = eventService.CollectAsync(Core.Enums.EventType.Cipher_ClientCopiedPassword, cipher.Id);
@@ -114,7 +116,7 @@ namespace Bit.App.Utilities
                     var totp = await totpService.GetCodeAsync(cipher.Login.Totp);
                     if (!string.IsNullOrWhiteSpace(totp))
                     {
-                        await platformUtilsService.CopyToClipboardAsync(totp);
+                        await clipboardService.CopyTextAsync(totp);
                         platformUtilsService.ShowToast("info", null,
                             string.Format(AppResources.ValueHasBeenCopied, AppResources.VerificationCodeTotp));
                     }
@@ -128,7 +130,7 @@ namespace Bit.App.Utilities
             {
                 if (cipher.Reprompt == CipherRepromptType.None || await passwordRepromptService.ShowPasswordPromptAsync())
                 {
-                    await platformUtilsService.CopyToClipboardAsync(cipher.Card.Number);
+                    await clipboardService.CopyTextAsync(cipher.Card.Number);
                     platformUtilsService.ShowToast("info", null,
                         string.Format(AppResources.ValueHasBeenCopied, AppResources.Number));
                 }
@@ -137,7 +139,7 @@ namespace Bit.App.Utilities
             {
                 if (cipher.Reprompt == CipherRepromptType.None || await passwordRepromptService.ShowPasswordPromptAsync())
                 {
-                    await platformUtilsService.CopyToClipboardAsync(cipher.Card.Code);
+                    await clipboardService.CopyTextAsync(cipher.Card.Code);
                     platformUtilsService.ShowToast("info", null,
                         string.Format(AppResources.ValueHasBeenCopied, AppResources.SecurityCode));
                     var task = eventService.CollectAsync(Core.Enums.EventType.Cipher_ClientCopiedCardCode, cipher.Id);
@@ -145,7 +147,7 @@ namespace Bit.App.Utilities
             }
             else if (selection == AppResources.CopyNotes)
             {
-                await platformUtilsService.CopyToClipboardAsync(cipher.Notes);
+                await clipboardService.CopyTextAsync(cipher.Notes);
                 platformUtilsService.ShowToast("info", null,
                     string.Format(AppResources.ValueHasBeenCopied, AppResources.Notes));
             }
@@ -200,7 +202,8 @@ namespace Bit.App.Utilities
                 return;
             }
             var platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
-            await platformUtilsService.CopyToClipboardAsync(GetSendUrl(send));
+            var clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
+            await clipboardService.CopyTextAsync(GetSendUrl(send));
             platformUtilsService.ShowToast("info", null,
                 string.Format(AppResources.ValueHasBeenCopied, AppResources.SendLink));
         }
