@@ -12,6 +12,7 @@ namespace Bit.App.Pages
     {
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly ICipherService _cipherService;
+        private readonly IClipboardService _clipboardService;
 
         private bool _showNoData;
 
@@ -19,6 +20,7 @@ namespace Bit.App.Pages
         {
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
+            _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
 
             PageTitle = AppResources.PasswordHistory;
             History = new ExtendedObservableCollection<PasswordHistoryView>();
@@ -45,7 +47,7 @@ namespace Bit.App.Pages
 
         private async void CopyAsync(PasswordHistoryView ph)
         {
-            await _platformUtilsService.CopyToClipboardAsync(ph.Password);
+            await _clipboardService.CopyTextAsync(ph.Password);
             _platformUtilsService.ShowToast("info", null,
                 string.Format(AppResources.ValueHasBeenCopied, AppResources.Password));
         }

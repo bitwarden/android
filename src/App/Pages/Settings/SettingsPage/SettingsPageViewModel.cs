@@ -28,6 +28,7 @@ namespace Bit.App.Pages
         private readonly IPolicyService _policyService;
         private readonly ILocalizeService _localizeService;
         private readonly IKeyConnectorService _keyConnectorService;
+        private readonly IClipboardService _clipboardService;
 
         private const int CustomVaultTimeoutValue = -100;
 
@@ -78,6 +79,7 @@ namespace Bit.App.Pages
             _policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
             _localizeService = ServiceContainer.Resolve<ILocalizeService>("localizeService");
             _keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
+            _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
 
             GroupedItems = new ExtendedObservableCollection<SettingsPageListGroup>();
             PageTitle = AppResources.Settings;
@@ -135,7 +137,7 @@ namespace Bit.App.Pages
                 AppResources.Close);
             if (copy)
             {
-                await _platformUtilsService.CopyToClipboardAsync(debugText);
+                await _clipboardService.CopyTextAsync(debugText);
             }
         }
 

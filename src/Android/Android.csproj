@@ -149,6 +149,7 @@
     <Compile Include="Utilities\ThemeHelpers.cs" />
     <Compile Include="WebAuthCallbackActivity.cs" />
     <Compile Include="Renderers\SelectableLabelRenderer.cs" />
+    <Compile Include="Services\ClipboardService.cs" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\FontAwesome.ttf" />
