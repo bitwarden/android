@@ -1712,10 +1712,10 @@
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Alteração biométrica detectada, faça o login usando a Senha Mestra para ativar novamente.</value>
+    <value>O desbloqueio biométrico está desativado, faça o login usando a Senha Mestra para ativar novamente.</value>
   </data>
   <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>Desbloqueio biométrico para autopreenchimento desativado enquanto se aguarda a verificação da senha mestra.</value>
+    <value>O desbloqueio biométrico para autopreenchimento está desativado, faça o login usando a Senha Mestra para ativar novamente.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Ativar sincronização ao atualizar</value>
