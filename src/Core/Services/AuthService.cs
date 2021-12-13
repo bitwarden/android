@@ -268,7 +268,7 @@ namespace Bit.Core.Services
                     kdfIterations = preloginResponse.KdfIterations;
                 }
             }
-            catch (ApiException e) 
+            catch (ApiException e)
             {
                 if (e.Error == null || e.Error.StatusCode != System.Net.HttpStatusCode.NotFound)
                 {
