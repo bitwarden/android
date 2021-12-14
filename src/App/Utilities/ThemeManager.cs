@@ -4,6 +4,9 @@ using Bit.App.Services;
 using Bit.App.Styles;
 using Bit.Core;
 using Xamarin.Forms;
+#if !FDROID
+using Microsoft.AppCenter.Crashes;
+#endif
 
 namespace Bit.App.Utilities
 {
@@ -14,61 +17,79 @@ namespace Bit.App.Utilities
 
         public static void SetThemeStyle(string name, ResourceDictionary resources)
         {
-            Resources = () => resources;
+            try
+            {
+                Resources = () => resources;
 
-            // Reset styles
-            resources.Clear();
-            resources.MergedDictionaries.Clear();
+                // Reset styles
+                resources.Clear();
+                resources.MergedDictionaries.Clear();
 
-            // Variables
-            resources.MergedDictionaries.Add(new Variables());
+                // Variables
+                resources.MergedDictionaries.Add(new Variables());
 
-            // Themed variables
-            if (name == "dark")
-            {
-                resources.MergedDictionaries.Add(new Dark());
-                UsingLightTheme = false;
-            }
-            else if (name == "black")
-            {
-                resources.MergedDictionaries.Add(new Black());
-                UsingLightTheme = false;
-            }
-            else if (name == "nord")
-            {
-                resources.MergedDictionaries.Add(new Nord());
-                UsingLightTheme = false;
-            }
-            else if (name == "light")
-            {
-                resources.MergedDictionaries.Add(new Light());
-                UsingLightTheme = true;
-            }
-            else
-            {
-                if (OsDarkModeEnabled())
+                // Themed variables
+                if (name == "dark")
                 {
                     resources.MergedDictionaries.Add(new Dark());
                     UsingLightTheme = false;
                 }
-                else
+                else if (name == "black")
+                {
+                    resources.MergedDictionaries.Add(new Black());
+                    UsingLightTheme = false;
+                }
+                else if (name == "nord")
+                {
+                    resources.MergedDictionaries.Add(new Nord());
+                    UsingLightTheme = false;
+                }
+                else if (name == "light")
                 {
                     resources.MergedDictionaries.Add(new Light());
                     UsingLightTheme = true;
                 }
-            }
+                else
+                {
+                    if (OsDarkModeEnabled())
+                    {
+                        resources.MergedDictionaries.Add(new Dark());
+                        UsingLightTheme = false;
+                    }
+                    else
+                    {
+                        resources.MergedDictionaries.Add(new Light());
+                        UsingLightTheme = true;
+                    }
+                }
 
-            // Base styles
-            resources.MergedDictionaries.Add(new Base());
+                // Base styles
+                resources.MergedDictionaries.Add(new Base());
 
-            // Platform styles
-            if (Device.RuntimePlatform == Device.Android)
-            {
-                resources.MergedDictionaries.Add(new Android());
+                // Platform styles
+                if (Device.RuntimePlatform == Device.Android)
+                {
+                    resources.MergedDictionaries.Add(new Android());
+                }
+                else if (Device.RuntimePlatform == Device.iOS)
+                {
+                    resources.MergedDictionaries.Add(new iOS());
+                }
             }
-            else if (Device.RuntimePlatform == Device.iOS)
+            catch (InvalidOperationException ioex) when (ioex.Message != null && ioex.Message.StartsWith("Collection was modified"))
             {
-                resources.MergedDictionaries.Add(new iOS());
+                // https://github.com/bitwarden/mobile/issues/1689 There are certain scenarios where this might cause "collection was modified; enumeration operation may not execute"
+                // the way I found to prevent this for now was to catch the exception here and move on.
+                // Because on the screens that I found it to happen, the screen is being closed while trying to apply the resources
+                // so we shouldn't be introducing any issues.
+                // TODO: Maybe something like this https://github.com/matteobortolazzo/HtmlLabelPlugin/pull/113 can be implemented to avoid this
+                // on html labels.
+            }
+            catch (Exception ex)
+            {
+#if !FDROID
+                Crashes.TrackError(ex);
+#endif
             }
         }
 
