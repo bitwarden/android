@@ -19,6 +19,7 @@ using System.Threading.Tasks;
 using AndroidX.Core.Content;
 using Bit.App.Utilities;
 using ZXing.Net.Mobile.Android;
+using Android.Util;
 
 namespace Bit.Droid
 {
@@ -59,6 +60,9 @@ namespace Bit.Droid
 
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
+
+            // this needs to be called here before base.OnCreate(...)
+            Intent?.Validate();
 
             base.OnCreate(savedInstanceState);
             if (!CoreHelpers.InDebugMode())
