@@ -62,7 +62,7 @@ namespace Bit.Droid
             ToolbarResource = Resource.Layout.Toolbar;
 
             // this needs to be called here before base.OnCreate(...)
-            Intent?.ValidateIntent();
+            Intent?.Validate();
 
             base.OnCreate(savedInstanceState);
             if (!CoreHelpers.InDebugMode())

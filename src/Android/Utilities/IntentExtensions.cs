@@ -5,7 +5,7 @@ namespace Bit.Droid.Utilities
 {
     public static class IntentExtensions
     {
-        public static void ValidateIntent(this Intent intent)
+        public static void Validate(this Intent intent)
         {
             try
             {
