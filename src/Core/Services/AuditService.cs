@@ -55,7 +55,7 @@ namespace Bit.Core.Services
                 {
                     return new List<BreachAccountResponse>();
                 }
-                throw e;
+                throw;
             }
         }
     }
