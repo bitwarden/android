@@ -1060,7 +1060,7 @@
     <value>Prezime</value>
   </data>
   <data name="FullName" xml:space="preserve">
-    <value>Full Name</value>
+    <value>Ime i prezime</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Broj vozačke dozvole</value>
@@ -1187,7 +1187,7 @@
     <value>Skriveno</value>
   </data>
   <data name="FieldTypeLinked" xml:space="preserve">
-    <value>Linked</value>
+    <value>Povezano</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Tekst</value>
@@ -1456,7 +1456,7 @@
     <value>Otključaj</value>
   </data>
   <data name="UnlockVault" xml:space="preserve">
-    <value>Unlock Vault</value>
+    <value>Otključaj trezor</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minuta</value>
@@ -1475,7 +1475,7 @@
     <value>Tvoj trezor je zaključan. Potvrdi PIN-om za nastavak.</value>
   </data>
   <data name="VaultLockedIdentity" xml:space="preserve">
-    <value>Your vault is locked. Verify your identity to continue.</value>
+    <value>Tvoj trezor je zaključan. Potvrdi glavnu lozinku za nastavak.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Tamna</value>
@@ -1618,13 +1618,13 @@
     <value>Unesi glavnu lozinku za izvoz podataka iz trezora.</value>
   </data>
   <data name="SendVerificationCodeToEmail" xml:space="preserve">
-    <value>Send a verification code to your email</value>
+    <value>Slanje verifikacijskog kôda e-poštom</value>
   </data>
   <data name="CodeSent" xml:space="preserve">
-    <value>Code Sent!</value>
+    <value>Kôd poslan</value>
   </data>
   <data name="ConfirmYourIdentity" xml:space="preserve">
-    <value>Confirm your identity to continue.</value>
+    <value>Potvrdite lozinku za nastavak.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Ovaj izvoz sadrži podatke trezora u nešifriranom obliku! Izvezenu datoteku se ne bi smjelo pohranjivati ili slati putem nesigurnih kanala (npr. e-poštom). Izbriši ju odmah nakon završetka korištenja.</value>
@@ -2048,19 +2048,19 @@
     <value>Trenutno nije moguće ažurirati lozinku</value>
   </data>
   <data name="RemoveMasterPassword" xml:space="preserve">
-    <value>Remove Master Password</value>
+    <value>Ukloni glavnu lozinku</value>
   </data>
   <data name="RemoveMasterPasswordWarning" xml:space="preserve">
-    <value>{0} is using SSO with customer-managed encryption. Continuing will remove your Master Password from your account and require SSO to login.</value>
+    <value>{0} koristi SSO s korisnički upravljanim šifriranjem. Tvoja glavna lozinka biti će uklonjena, a za prijavu će biti potreban SSO.</value>
   </data>
   <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
-    <value>If you do not want to remove your Master Password, you may leave this organization.</value>
+    <value>Ako ne želiš ukloniti svoju glavnu lozinku, možeš napustiti ovu organizaciju.</value>
   </data>
   <data name="LeaveOrganization" xml:space="preserve">
-    <value>Leave Organization</value>
+    <value>Napusti organizaciju</value>
   </data>
   <data name="LeaveOrganizationName" xml:space="preserve">
-    <value>Leave {0}?</value>
+    <value>Napusti {0}?</value>
   </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
@@ -2093,27 +2093,27 @@
     <value>Jedno ili više pravila organizacija onemogućuje izvoz osobnog trezora. </value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
-    <value>Delete Account</value>
+    <value>Obriši račun</value>
   </data>
   <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
-    <value>Deleting your account is permanent</value>
+    <value>Brisanje tvog računa je nepovratno</value>
   </data>
   <data name="DeleteAccountExplanation" xml:space="preserve">
-    <value>Your account and all associated data will be erased and unrecoverable. Are you sure you want to continue?</value>
+    <value>Tvoj račun i svi povezani podaci biti će nepovratno obrisani. Sigurno želiš nastaviti?</value>
   </data>
   <data name="DeletingYourAccount" xml:space="preserve">
-    <value>Deleting your account</value>
+    <value>Brisanje tvog računa</value>
   </data>
   <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
-    <value>Your account has been permanently deleted</value>
+    <value>Tvoj račun je trajno obrisan.</value>
   </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
-    <value>Invalid Verification Code.</value>
+    <value>Nevažeći kôd za provjeru</value>
   </data>
   <data name="SendCode" xml:space="preserve">
-    <value>Send Code</value>
+    <value>Pošalji kôd</value>
   </data>
   <data name="Sending" xml:space="preserve">
-    <value>Sending</value>
+    <value>Šaljem</value>
   </data>
 </root>

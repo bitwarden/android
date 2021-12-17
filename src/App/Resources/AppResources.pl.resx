@@ -1475,7 +1475,7 @@
     <value>Sejf jest zablokowany. Wpisz kod PIN, aby kontynuować.</value>
   </data>
   <data name="VaultLockedIdentity" xml:space="preserve">
-    <value>Twój sejf jest zablokowany. Zweryfikuj swoją tożsamość, aby kontynuować.</value>
+    <value>Sejf jest zablokowany. Zweryfikuj swoją tożsamość, aby kontynuować.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Ciemny</value>
