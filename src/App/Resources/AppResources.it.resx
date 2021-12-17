@@ -550,7 +550,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="LoginOrCreateNewAccount" xml:space="preserve">
-    <value>Fai il log in o crea un nuovo account per accedere alla tua cassaforte di sicurezza.</value>
+    <value>Accedi o crea un nuovo account per accedere alla tua cassaforte di sicurezza.</value>
   </data>
   <data name="Manage" xml:space="preserve">
     <value>Gestisci</value>

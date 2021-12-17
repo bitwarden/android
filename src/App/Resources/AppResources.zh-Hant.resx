@@ -1184,13 +1184,13 @@
     <value>布林值</value>
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
-    <value>隱藏</value>
+    <value>隱藏型</value>
   </data>
   <data name="FieldTypeLinked" xml:space="preserve">
-    <value>已連結</value>
+    <value>連結型</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
-    <value>文字</value>
+    <value>文字型</value>
   </data>
   <data name="NewCustomField" xml:space="preserve">
     <value>新增自訂欄位</value>
@@ -1880,7 +1880,7 @@
     <value>逾期時間</value>
   </data>
   <data name="ExpirationDateInfo" xml:space="preserve">
-    <value>如果設定，對此 Send 的存取將在指定的日期和時間后逾期。</value>
+    <value>如果設定此選項，對此 Send 的存取將在指定的日期和時間後逾期。</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Expired" xml:space="preserve">
@@ -1890,7 +1890,7 @@
     <value>最大存取次數</value>
   </data>
   <data name="MaximumAccessCountInfo" xml:space="preserve">
-    <value>如果設定，達到最大存取次數后，使用者將無法再次存取此 Send。</value>
+    <value>如果設定此選項，當達到最大存取次數時，使用者將無法再次存取此 Send。</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="MaximumAccessCountReached" xml:space="preserve">

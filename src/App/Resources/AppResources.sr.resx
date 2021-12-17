@@ -2095,19 +2095,19 @@
     <value>Једна или више полиса ваше организације вас спречава да извезете ваш сеф.</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
-    <value>Delete Account</value>
+    <value>Избриши Налог</value>
   </data>
   <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
-    <value>Deleting your account is permanent</value>
+    <value>Брисање налога је трајно</value>
   </data>
   <data name="DeleteAccountExplanation" xml:space="preserve">
-    <value>Your account and all associated data will be erased and unrecoverable. Are you sure you want to continue?</value>
+    <value>Ваш налог и сви придружени подаци биће избрисани и неповратно. Да ли сте сигурни да желите да наставите?</value>
   </data>
   <data name="DeletingYourAccount" xml:space="preserve">
-    <value>Deleting your account</value>
+    <value>Брисање вашег налога</value>
   </data>
   <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
-    <value>Your account has been permanently deleted</value>
+    <value>Ваш налог је трајно обрисан</value>
   </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Неисправан верификациони код.</value>
