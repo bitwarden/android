@@ -463,11 +463,13 @@ jobs:
             -exportOptionsPlist $EXPORT_OPTIONS_PATH
         shell: bash
 
-      - name: Upload App Store .ipa artifact
+      - name: Upload App Store .ipa & dsym artifact
         uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700  # v2.2.4
         with:
-          name: Bitwarden.ipa
-          path: ./bitwarden-export/Bitwarden.ipa
+          name: Bitwarden.ipa & dsym
+          path: |
+            ./bitwarden-export/Bitwarden.ipa
+            ./bitwarden-export/*.dSYM.zip
           if-no-files-found: error
 
       - name: Deploy to App Store
