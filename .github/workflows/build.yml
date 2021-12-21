@@ -468,7 +468,6 @@ jobs:
         with:
           name: Bitwarden.ipa
           path: ./bitwarden-export/Bitwarden.ipa
-            ./bitwarden-export/*.dSYM.zip
           if-no-files-found: error
 
       - name: Upload App Store dSYM artifact
