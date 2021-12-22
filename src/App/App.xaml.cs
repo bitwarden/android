@@ -176,8 +176,9 @@ namespace Bit.App
             if (Device.RuntimePlatform == Device.Android)
             {
                 await _vaultTimeoutService.CheckVaultTimeoutAsync();
+                // Reset delay on every start
+                _vaultTimeoutService.DelayLockAndLogoutMs = null;
             }
-            _vaultTimeoutService.SuppressLockLogout = false;
             _messagingService.Send("startEventTimer");
         }
 
@@ -205,12 +206,11 @@ namespace Bit.App
             {
                 ResumedAsync();
             }
-            _vaultTimeoutService.SuppressLockLogout = false;
         }
 
         private async Task SleptAsync()
         {
-            await HandleVaultTimeoutAsync();
+            await _vaultTimeoutService.CheckVaultTimeoutAsync();
             _messagingService.Send("stopEventTimer");
         }
 
@@ -278,33 +278,6 @@ namespace Bit.App
             else
             {
                 Current.MainPage = new HomePage(Options);
-            }
-        }
-
-        private async Task HandleVaultTimeoutAsync()
-        {
-            if (await _vaultTimeoutService.IsLockedAsync())
-            {
-                return;
-            }
-            var authed = await _userService.IsAuthenticatedAsync();
-            if (!authed)
-            {
-                return;
-            }
-            var vaultTimeout = await _storageService.GetAsync<int?>(Constants.VaultTimeoutKey);
-            vaultTimeout = vaultTimeout.GetValueOrDefault(-1);
-            if (vaultTimeout == 0)
-            {
-                var action = await _storageService.GetAsync<string>(Constants.VaultTimeoutActionKey);
-                if (action == "logOut")
-                {
-                    await _vaultTimeoutService.LogOutAsync();
-                }
-                else
-                {
-                    await _vaultTimeoutService.LockAsync(true);
-                }
             }
         }
 
