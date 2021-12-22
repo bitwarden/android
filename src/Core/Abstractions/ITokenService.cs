@@ -14,6 +14,7 @@ namespace Bit.Core.Abstractions
         string GetIssuer();
         string GetName();
         bool GetPremium();
+        bool GetIsExternal();
         Task<string> GetRefreshTokenAsync();
         Task<string> GetTokenAsync();
         Task ToggleTokensAsync();

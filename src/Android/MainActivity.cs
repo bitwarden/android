@@ -19,28 +19,14 @@ using System.Threading.Tasks;
 using AndroidX.Core.Content;
 using Bit.App.Utilities;
 using ZXing.Net.Mobile.Android;
+using Android.Util;
 
 namespace Bit.Droid
 {
-    [Activity(
-        Label = "Bitwarden",
-        Icon = "@mipmap/ic_launcher",
-        Theme = "@style/LaunchTheme",
-        MainLauncher = true,
-        LaunchMode = LaunchMode.SingleTask,
-        ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation |
-                               ConfigChanges.Keyboard | ConfigChanges.KeyboardHidden |
-                               ConfigChanges.Navigation | ConfigChanges.UiMode)]
-    [IntentFilter(
-        new[] { Intent.ActionSend },
-        Categories = new[] { Intent.CategoryDefault },
-        DataMimeTypes = new[]
-        {
-            @"application/*",
-            @"image/*",
-            @"video/*",
-            @"text/*"
-        })]
+    // Activity and IntentFilter declarations have been moved to Properties/AndroidManifest.xml
+    // They have been hardcoded so we can use the default LaunchMode on Android 11+
+    // LaunchMode defined in values/manifest.xml for Android 10- and values-v30/manifest.xml for Android 11+
+    // See https://github.com/bitwarden/mobile/pull/1673 for details
     [Register("com.x8bit.bitwarden.MainActivity")]
     public class MainActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
@@ -49,9 +35,7 @@ namespace Bit.Droid
         private IBroadcasterService _broadcasterService;
         private IUserService _userService;
         private IAppIdService _appIdService;
-        private IStorageService _storageService;
         private IEventService _eventService;
-        private PendingIntent _clearClipboardPendingIntent;
         private PendingIntent _eventUploadPendingIntent;
         private AppOptions _appOptions;
         private string _activityKey = $"{nameof(MainActivity)}_{Java.Lang.JavaSystem.CurrentTimeMillis().ToString()}";
@@ -63,9 +47,6 @@ namespace Bit.Droid
             var eventUploadIntent = new Intent(this, typeof(EventUploadReceiver));
             _eventUploadPendingIntent = PendingIntent.GetBroadcast(this, 0, eventUploadIntent,
                 PendingIntentFlags.UpdateCurrent);
-            var clearClipboardIntent = new Intent(this, typeof(ClearClipboardAlarmReceiver));
-            _clearClipboardPendingIntent = PendingIntent.GetBroadcast(this, 0, clearClipboardIntent,
-                PendingIntentFlags.UpdateCurrent);
 
             var policy = new StrictMode.ThreadPolicy.Builder().PermitAll().Build();
             StrictMode.SetThreadPolicy(policy);
@@ -75,11 +56,13 @@ namespace Bit.Droid
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _userService = ServiceContainer.Resolve<IUserService>("userService");
             _appIdService = ServiceContainer.Resolve<IAppIdService>("appIdService");
-            _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _eventService = ServiceContainer.Resolve<IEventService>("eventService");
 
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
+
+            // this needs to be called here before base.OnCreate(...)
+            Intent?.Validate();
 
             base.OnCreate(savedInstanceState);
             if (!CoreHelpers.InDebugMode())
@@ -123,10 +106,6 @@ namespace Bit.Droid
                 {
                     ExitApp();
                 }
-                else if (message.Command == "copiedToClipboard")
-                {
-                    var task = ClearClipboardAlarmAsync(message.Data as Tuple<string, int?, bool>);
-                }
             });
         }
 
@@ -159,7 +138,15 @@ namespace Bit.Droid
             base.OnNewIntent(intent);
             try
             {
-                if (intent.GetBooleanExtra("generatorTile", false))
+                if (intent?.GetStringExtra("uri") is string uri)
+                {
+                    _messagingService.Send("popAllAndGoToAutofillCiphers");
+                    if (_appOptions != null)
+                    {
+                       _appOptions.Uri = uri;
+                    }
+                }
+                else if (intent.GetBooleanExtra("generatorTile", false))
                 {
                     _messagingService.Send("popAllAndGoToTabGenerator");
                     if (_appOptions != null)
@@ -393,30 +380,6 @@ namespace Bit.Droid
         {
             FinishAffinity();
             Java.Lang.JavaSystem.Exit(0);
-        }
-
-        private async Task ClearClipboardAlarmAsync(Tuple<string, int?, bool> data)
-        {
-            if (data.Item3)
-            {
-                return;
-            }
-            var clearMs = data.Item2;
-            if (clearMs == null)
-            {
-                var clearSeconds = await _storageService.GetAsync<int?>(Constants.ClearClipboardKey);
-                if (clearSeconds != null)
-                {
-                    clearMs = clearSeconds.Value * 1000;
-                }
-            }
-            if (clearMs == null)
-            {
-                return;
-            }
-            var triggerMs = Java.Lang.JavaSystem.CurrentTimeMillis() + clearMs.Value;
-            var alarmManager = GetSystemService(AlarmService) as AlarmManager;
-            alarmManager.Set(AlarmType.Rtc, triggerMs, _clearClipboardPendingIntent);
         }
 
         private void StartEventAlarm()

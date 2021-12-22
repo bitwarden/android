@@ -1059,6 +1059,9 @@
   <data name="LastName" xml:space="preserve">
     <value>Priezvisko</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Celé meno</value>
+  </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Číslo vodičského preukazu</value>
   </data>
@@ -1182,6 +1185,9 @@
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>Skryté</value>
+  </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>Prepojené</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Text</value>
@@ -1449,6 +1455,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>Odomknúť</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Odomknúť trezor</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minút</value>
   </data>
@@ -1464,6 +1473,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Váš trezor je uzamknutý. Overte sa PIN kódom ak chcete pokračovať.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Váš trezor je uzamknutý. Ak chcete pokračovať, overte svoju identitu.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Tmavý</value>
@@ -1604,6 +1616,15 @@
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Zadajte vaše hlavné heslo pre export údajov trezoru.</value>
+  </data>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Poslať overovací kód na váš e-mail</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Kód bol odoslaný!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Ak chcete pokračovať, potvrďte svoju identitu.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Tento export obsahuje vaše dáta v nešifrovanom formáte. Nemali by ste ich ukladať, ani posielať cez nezabezpečené kanály (napr. email). Okamžite ho odstráňte, keď ho prestanete používať.</value>
@@ -2026,6 +2047,21 @@
   <data name="UpdatePasswordError" xml:space="preserve">
     <value>Aktuálne nie je možné heslo aktualizovať </value>
   </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>Odstrániť hlavné heslo</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>{0} používa SSO so šifrovaním spravovaným zákazníkom. Pokračovaním sa z vášho účtu odstráni hlavné heslo a na prihlásenie sa bude vyžadovať SSO.</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>Ak nechcete odstrániť svoje hlavné heslo, môžete opustiť túto organizáciu.</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>Opustiť organizáciu</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>Opustiť {0}?</value>
+  </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
   </data>
@@ -2055,5 +2091,29 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Jedna alebo viacero zásad organizácie vám bráni exportovať váš osobný trezor.</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Odstrániť účet</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Odstránenie účtu je trvalé</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Váš účet a všetky súvisiace údaje budú vymazané a neobnoviteľné. Naozaj chcete pokračovať?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Odstraňuje sa účet</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Váš účet bol natrvalo odstránený</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>Neplatný verifikačný kód.</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Odoslať kód</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Odosiela sa</value>
   </data>
 </root>

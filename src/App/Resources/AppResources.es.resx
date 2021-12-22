@@ -1059,6 +1059,9 @@
   <data name="LastName" xml:space="preserve">
     <value>Apellido</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Nombre completo</value>
+  </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Nº de licencia</value>
   </data>
@@ -1182,6 +1185,9 @@
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>Oculto</value>
+  </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>Vinculado</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Texto</value>
@@ -1449,6 +1455,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>Desbloquear</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Desbloquear bóveda</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minutos</value>
   </data>
@@ -1464,6 +1473,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Su caja fuerte está bloqueada. Verifique su código PIN para continuar.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Your vault is locked. Verify your identity to continue.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Oscuro</value>
@@ -1604,6 +1616,15 @@
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Introduzca su contraseña maestra para exportar la información de su caja fuerte.</value>
+  </data>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Envía un código de verificación a tu correo electrónico</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>¡Código Enviado!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Confirme su identidad para continuar.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Ésta exportación contiene sus datos de la caja fuerte en un formato no cifrado. No debería almacenar o enviar el archivo exportado por canales no seguros (como el correo electrónico). Elimínelo inmediatamente cuando termine de utilizarlo.</value>
@@ -2026,6 +2047,21 @@
   <data name="UpdatePasswordError" xml:space="preserve">
     <value>Actualmente no se puede actualizar la contraseña</value>
   </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>Remove Master Password</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>{0} is using SSO with customer-managed encryption. Continuing will remove your Master Password from your account and require SSO to login.</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>Si no desea eliminar su contraseña maestra, puede abandonar esta organización.</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>Abandonar Organización</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>¿Abandonar {0}?</value>
+  </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
   </data>
@@ -2055,5 +2091,29 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Una o más políticas de organización impiden que usted exporte su caja fuerte personal.</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Delete Account</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Deleting your account is permanent</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Tu cuenta y todos los datos asociados serán borrados e irrecuperables. ¿Estás seguro de que quieres continuar?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Eliminar tu cuenta</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Tu cuenta ha sido eliminada permanentemente</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>Código de verificación no válido.</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Enviar código</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Enviando</value>
   </data>
 </root>

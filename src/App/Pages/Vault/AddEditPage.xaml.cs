@@ -21,6 +21,7 @@ namespace Bit.App.Pages
         private readonly IStorageService _storageService;
         private readonly IDeviceActionService _deviceActionService;
         private readonly IVaultTimeoutService _vaultTimeoutService;
+        private readonly IKeyConnectorService _keyConnectorService;
 
         private AddEditPageViewModel _vm;
         private bool _fromAutofill;
@@ -40,6 +41,8 @@ namespace Bit.App.Pages
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
+            _keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
+
             _appOptions = appOptions;
             _fromAutofill = fromAutofill;
             FromAutofillFramework = _appOptions?.FromAutofillFramework ?? false;
@@ -171,6 +174,8 @@ namespace Bit.App.Pages
                 }
                 _scrollView.Scrolled += (sender, args) => _vm.HandleScroll();
             });
+            // Hide password reprompt option if using key connector
+            _passwordPrompt.IsVisible = !await _keyConnectorService.GetUsesKeyConnector();
         }
 
         protected override void OnDisappearing()

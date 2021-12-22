@@ -1059,6 +1059,9 @@
   <data name="LastName" xml:space="preserve">
     <value>성</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>전체 이름</value>
+  </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>면허 번호</value>
   </data>
@@ -1182,6 +1185,9 @@
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>숨김</value>
+  </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>연결됨</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>텍스트</value>
@@ -1449,6 +1455,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>잠금 해제</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>보관함 잠금 해제</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30분</value>
   </data>
@@ -1463,6 +1472,9 @@
     <value>보관함이 잠겨 있습니다. 마스터 비밀번호를 입력하여 계속하세요.</value>
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
+    <value>보관함이 잠겨 있습니다. PIN 코드를 입력하여 계속하세요.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
     <value>보관함이 잠겨 있습니다. PIN 코드를 입력하여 계속하세요.</value>
   </data>
   <data name="Dark" xml:space="preserve">
@@ -1604,6 +1616,15 @@
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>보관함 데이터를 내보내려면 마스터 비밀번호를 입력하세요.</value>
+  </data>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>이메일로 인증 코드 보내기</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>코드가 전송되었습니다!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>계속하려면 암호를 확인하세요.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>내보내기는 보관함 데이터가 암호화되지 않은 형식으로 포함됩니다. 내보낸 파일을 안전하지 않은 채널(예: 이메일)을 통해 저장하거나 보내지 마십시오. 사용이 끝난 후에는 즉시 삭제하십시오.</value>
@@ -2026,6 +2047,21 @@
   <data name="UpdatePasswordError" xml:space="preserve">
     <value>비밀번호를 변경할 수 없음</value>
   </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>마스터 비밀번호 제거</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>{0} 조직은 직접 관리되는 암호화된 SSO를 사용하고 있습니다. 계속하면 다음 로그인부터 마스터 비밀번호 대신 SSO가 필요합니다.</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>마스터 비밀번호를 제거하고 싶지 않으시다면 조직을 떠나야 할 수도 있습니다.</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>조직 나가기</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>{0} 조직을 떠나시겠어요?</value>
+  </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
   </data>
@@ -2055,5 +2091,29 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>하나 이상의 조직 정책이 개인 보관함을 내보내는 것을 제한하고 있습니다.</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Delete Account</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Deleting your account is permanent</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Your account and all associated data will be erased and unrecoverable. Are you sure you want to continue?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Deleting your account</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Your account has been permanently deleted</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>잘못된 검증 코드입니다.</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>코드 전송</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>전송 중</value>
   </data>
 </root>

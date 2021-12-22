@@ -348,7 +348,7 @@
     <comment>Label for a uri/url.</comment>
   </data>
   <data name="UseFingerprintToUnlock" xml:space="preserve">
-    <value>Odblokuj za pomocą odcisku palca</value>
+    <value>Odblokuj odciskiem palca</value>
   </data>
   <data name="Username" xml:space="preserve">
     <value>Nazwa użytkownika</value>
@@ -695,7 +695,7 @@
     <value>Logowanie dwustopniowe sprawia, że konto jest bardziej bezpieczne poprzez wymuszenie potwierdzenia logowania z innego urządzenia, takiego jak z klucza bezpieczeństwa, aplikacji uwierzytelniającej, wiadomości SMS, telefonu lub adresu e-mail. Logowanie dwustopniowe możesz włączyć w sejfie internetowym bitwarden.com. Czy chcesz przejść do tej strony?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
-    <value>Odblokuj poprzez {0}</value>
+    <value>Odblokuj przez {0}</value>
   </data>
   <data name="UnlockWithPIN" xml:space="preserve">
     <value>Odblokuj kodem PIN</value>
@@ -1059,6 +1059,9 @@
   <data name="LastName" xml:space="preserve">
     <value>Nazwisko</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Imię i nazwisko</value>
+  </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Numer prawa jazdy</value>
   </data>
@@ -1163,7 +1166,7 @@
     <value>Użyj Face ID do weryfikacji.</value>
   </data>
   <data name="UseFaceIDToUnlock" xml:space="preserve">
-    <value>Użyj Face ID do odblokowania</value>
+    <value>Odblokuj za pomocą Touch ID</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
     <value>Zweryfikuj Face ID</value>
@@ -1182,6 +1185,9 @@
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>Pole maskowane</value>
+  </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>Powiązane pole</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Tekst</value>
@@ -1449,6 +1455,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>Odblokuj</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Odblokuj sejf</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minut</value>
   </data>
@@ -1464,6 +1473,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Sejf jest zablokowany. Wpisz kod PIN, aby kontynuować.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Sejf jest zablokowany. Zweryfikuj swoją tożsamość, aby kontynuować.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Ciemny</value>
@@ -1570,13 +1582,13 @@
     <value>Twoja sesja wygasła.</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
-    <value>Weryfikacja danych biometrycznych</value>
+    <value>Weryfikacja biometryczna</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
     <value>Dane biometryczne</value>
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
-    <value>Użyj danych biometrycznych do odblokowania</value>
+    <value>Odblokuj danymi biometrycznymi</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
     <value>Aplikacja Bitwarden wymaga uwagi - patrz "Usługa autouzupełniania" w ustawieniach aplikacji</value>
@@ -1604,6 +1616,15 @@
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Wpisz hasło główne, aby wyeksportować dane z sejfu.</value>
+  </data>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Wyślij kod weryfikacyjny na adres e-mail</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Kod został wysłany!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Potwierdź swoją tożsamość, aby kontynuować.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Plik zawiera dane sejfu w niezaszyfrowanym formacie. Nie powinieneś go przechowywać, ani przesyłać poprzez niezabezpieczone kanały (takie jak poczta e-mail). Skasuj go natychmiast po użyciu.</value>
@@ -1967,7 +1988,7 @@
     <value>30 dni</value>
   </data>
   <data name="Custom" xml:space="preserve">
-    <value>Niestandardowa</value>
+    <value>Niestandardowe</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
     <value>Udostępnij wysyłkę po zapisaniu.</value>
@@ -1997,7 +2018,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PasswordPrompt" xml:space="preserve">
-    <value>Powtórz hasło główne</value>
+    <value>Potwierdź hasłem głównym</value>
   </data>
   <data name="PasswordConfirmation" xml:space="preserve">
     <value>Potwierdź hasło główne</value>
@@ -2025,6 +2046,21 @@
   </data>
   <data name="UpdatePasswordError" xml:space="preserve">
     <value>Obecnie nie można zaktualizować hasła</value>
+  </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>Usuń hasło główne</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>Organizacja {0} używa logowania jednokrotnego SSO z własnym serwerem kluczy. Kontynuacja spowoduje usunięcie hasła głównego Twojego konta i wymusi logowanie jednokrotne SSO.</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>Jeśli nie chcesz usuwać hasła głównego, opuść organizację.</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>Opuść organizację</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>Opuścić organizację {0}?</value>
   </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
@@ -2055,5 +2091,29 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Co najmniej jedna zasada organizacji uniemożliwia wyeksportowanie Twojego sejfu.</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Usuń konto</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Usunięcie konta jest nieodwracalne</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Konto i wszystkie powiązane z nim dane zostaną trwale usunięte. Czy na pewno chcesz usunąć konto?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Usuwanie konta</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Konto zostało trwale usunięte</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>Kod weryfikacyjny jest nieprawidłowy.</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Wyślij kod</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Wysyłanie</value>
   </data>
 </root>

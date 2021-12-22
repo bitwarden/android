@@ -1059,6 +1059,9 @@
   <data name="LastName" xml:space="preserve">
     <value>Achternaam</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Volledige naam</value>
+  </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Rijbewijsnummer</value>
   </data>
@@ -1182,6 +1185,9 @@
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>Verborgen</value>
+  </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>Gekoppeld</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Tekst</value>
@@ -1449,6 +1455,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>Ontgrendelen</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Kluis ontgrendelen</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minuten</value>
   </data>
@@ -1464,6 +1473,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Je kluis is vergrendeld. Voer je PIN-code in om door te gaan.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Je kluis is vergrendeld. Bevestig je identiteit om door te gaan.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Donker</value>
@@ -1604,6 +1616,15 @@
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Voer je hoofdwachtwoord in om de kluisgegevens te exporteren.</value>
+  </data>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Stuur een verificatiecode naar je e-mail</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Code verstuurd</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Bevestig je identiteit om door te gaan.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Deze export bevat jouw kluisgegevens in een niet-versleutelde opmaak. Je moet het geëxporteerde bestand niet opslaan of verzenden over onbeveiligde kanalen (zoals e-mail). Verwijder het exportbestand direct na gebruik.</value>
@@ -2026,6 +2047,21 @@
   <data name="UpdatePasswordError" xml:space="preserve">
     <value>Kan het wachtwoord momenteel niet bijwerken</value>
   </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>Hoofdwachtwoord verwijderen</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>{0} gebruikt SSO met door de klant beheerde encryptie. Doorgaan verwijdert je hoofdwachtwoord van je account en vereist SSO om in te loggen.</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>Als je je hoofdwachtwoord niet wilt verwijderen, kunt je deze organisatie verlaten.</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>Organisatie verlaten</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>{0} verlaten?</value>
+  </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
   </data>
@@ -2055,5 +2091,29 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Organisatiebeleid voorkomt dat je je persoonlijke kluis exporteert.</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Account verwijderen</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Het verwijderen van je account is definitief</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Je account en alle bijbehorende gegevens worden onherstelbaar gewist. Weet je zeker dat je wilt doorgaan?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Je account verwijderen</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Jouw account is definitief verwijderd</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>Ongeldige verificatiecode.</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Code versturen</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Versturen</value>
   </data>
 </root>

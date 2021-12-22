@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel;
-using Bit.App.Abstractions;
-using Bit.App.Resources;
-using Bit.Core.Utilities;
 using System.Linq;
 using System.Threading.Tasks;
+using Bit.App.Abstractions;
 using Bit.App.Controls;
+using Bit.App.Pages.Accounts;
+using Bit.App.Resources;
+using Bit.Core.Utilities;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -133,6 +134,10 @@ namespace Bit.App.Pages
             else if (item.Name == AppResources.LogOut)
             {
                 await _vm.LogOutAsync();
+            }
+            else if (item.Name == AppResources.DeleteAccount)
+            {
+                await Navigation.PushModalAsync(new NavigationPage(new DeleteAccountPage()));
             }
             else if (item.Name == AppResources.LockNow)
             {

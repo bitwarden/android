@@ -1059,6 +1059,9 @@
   <data name="LastName" xml:space="preserve">
     <value>Фамилно име</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Пълно име</value>
+  </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Номер на лиценза</value>
   </data>
@@ -1182,6 +1185,9 @@
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>Скрито</value>
+  </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>Свързано</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Текст</value>
@@ -1449,6 +1455,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>Отключване</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Отключване на трезора</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 минути</value>
   </data>
@@ -1464,6 +1473,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Трезорът е заключен. Въведете своя ПИН, за да продължите.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Трезорът е заключен. Потвърдете самоличността си, за да продължите.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Тъмен</value>
@@ -1604,6 +1616,15 @@
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Въведете главната парола, за да изнесете данните.</value>
+  </data>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Изпращане на код за потвърждаване до Вашата ел. поща</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Кодът е изпратен!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Потвърдете самоличността си, за да продължите.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Данните от трезора ви ще се изнесат в незащитен формат. Не го пращайте по незащитени канали като е-поща. Изтрийте файла незабавно след като свършите работата си с него.</value>
@@ -2026,6 +2047,21 @@
   <data name="UpdatePasswordError" xml:space="preserve">
     <value>В момента паролата не може да бъде обновена</value>
   </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>Премахване на главната парола</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>{0} използва еднократно удостоверяване с шифроване, управлявано от клиента. Ако продължите, главната парола ще бъде премахната от регистрацията Ви и за да се впишете, вече ще трябва да използвате еднократното удостоверяване.</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>Ако не искате да премахвате главната си парола, ще трябва да напуснете организацията.</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>Напускане на организацията</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>Напускане на {0}?</value>
+  </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
   </data>
@@ -2055,5 +2091,29 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Една или повече от настройките на организацията Ви не позволяват да изнасяте личния си трезор.</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Изтриване на регистрацията</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Изтриването на регистрацията е необратимо</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Регистрацията Ви и всички свързани с нея данни ще бъдат изтрити и няма да могат да бъдат възстановени. Наистина ли искате да продължите?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Изтриване на регистрацията Ви</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Регистрацията Ви беше изтрита необратимо</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>Грешен код за потвърждаване</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Изпращане на кода</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Изпращане…</value>
   </data>
 </root>

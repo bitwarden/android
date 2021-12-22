@@ -216,10 +216,10 @@
     <comment>Label for a folder.</comment>
   </data>
   <data name="FolderCreated" xml:space="preserve">
-    <value>Uusi kansio luotiin.</value>
+    <value>Uusi kansio luotu.</value>
   </data>
   <data name="FolderDeleted" xml:space="preserve">
-    <value>Kansio poistettiin.</value>
+    <value>Kansio poistettu.</value>
   </data>
   <data name="FolderNone" xml:space="preserve">
     <value>Ei kansiota</value>
@@ -229,7 +229,7 @@
     <value>Kansiot</value>
   </data>
   <data name="FolderUpdated" xml:space="preserve">
-    <value>Kansio päivitettiin.</value>
+    <value>Kansio päivitetty.</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
     <value>Mene sivustolle</value>
@@ -243,7 +243,7 @@
     <comment>Hide a secret value that is currently shown (password).</comment>
   </data>
   <data name="InternetConnectionRequiredMessage" xml:space="preserve">
-    <value>Yhdistä internetiin jatkaaksesi.</value>
+    <value>Yhdistä Internetiin jatkaaksesi.</value>
     <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
@@ -261,11 +261,11 @@
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="LogIn" xml:space="preserve">
-    <value>Kirjaudu sisään</value>
+    <value>Kirjaudu</value>
     <comment>The login button text (verb).</comment>
   </data>
   <data name="LogInNoun" xml:space="preserve">
-    <value>Kirjaudu sisään</value>
+    <value>Kirjautuminen</value>
     <comment>Title for login page. (noun)</comment>
   </data>
   <data name="LogOut" xml:space="preserve">
@@ -326,7 +326,7 @@
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>Kohde poistettiin.</value>
+    <value>Kohde poistettu.</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
@@ -359,7 +359,7 @@
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
-    <value>{0} kopioitiin.</value>
+    <value>{0} kopioitu.</value>
     <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
@@ -415,7 +415,7 @@
     <value>Bitwardenin sovelluslaajennus</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
-    <value>Helpoin tapa lisätä holviisi uusia kirjautumistietoja on käyttää Bitwardenin sovelluslaajennusta. Asetuksista löydät lisätietoja laajennuksesta.</value>
+    <value>Helpoin tapa lisätä holviisi uusia kirjautumistietoja on käyttää Bitwardenin sovelluslaajennusta. Asetusten "Lisäasetukset" -osiosta löydät lisätietoja laajennuksesta.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
     <value>Käytä Bitwardenia kirjautumistietojesi automaattiseen täyttöön Safarissa ja muissa sovelluksissa.</value>
@@ -588,7 +588,7 @@
     <value>Ei koskaan</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>Uusi kohde luotiin.</value>
+    <value>Uusi kohde luotu.</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>Holvissasi ei ole suosikkeja.</value>
@@ -616,7 +616,7 @@
     <value>Muut</value>
   </data>
   <data name="PasswordGenerated" xml:space="preserve">
-    <value>Salasana luotiin.</value>
+    <value>Salasana generoitu.</value>
   </data>
   <data name="PasswordGenerator" xml:space="preserve">
     <value>Salasanageneraattori</value>
@@ -665,7 +665,7 @@
     <value>Kohteen tiedot</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Kohde päivitettiin.</value>
+    <value>Kohde päivitetty.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Käsitellään…</value>
@@ -698,7 +698,7 @@
     <value>Avaustapa: {0}</value>
   </data>
   <data name="UnlockWithPIN" xml:space="preserve">
-    <value>Avaa PIN-koodilla</value>
+    <value>Avaus PIN-koodilla</value>
   </data>
   <data name="Validating" xml:space="preserve">
     <value>Vahvistetaan</value>
@@ -753,7 +753,7 @@
     <value>2. Laita asetus päälle ja paina OK-painiketta hyväksyäksesi.</value>
   </data>
   <data name="Disabled" xml:space="preserve">
-    <value>Poistettu käytöstä</value>
+    <value>Ei käytössä</value>
   </data>
   <data name="Enabled" xml:space="preserve">
     <value>Käytössä</value>
@@ -809,7 +809,7 @@
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>Tilillä on käytössä kaksivaiheinen kirjautuminen, mutta tämä alusta ei tue käytettävissä olevia todennusmenetelmiä. Käytä yhteensopivaa laitetta ja/tai ota käyttöön laajemmin tuettuja todennusmenetelmiä (kuten todennussovellus).</value>
+    <value>Tilillä on käytössä kaksivaiheinen kirjautuminen, mutta tämä laite ei tue käytettävissä olevia todentajia. Käytä yhteensopivaa laitetta ja lisää/tai ota käyttöön laajemmin tuettuja todentajia (kuten todennussovellus).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
     <value>Palautuskoodi</value>
@@ -834,11 +834,11 @@
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
-    <value>Todennussähköposti lähetettiin.</value>
+    <value>Todennussähköposti lähetetty.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
-    <value>Aseta YubiKey NEO -todenuslaite laitettasi vasten tai kytke YubiKey-todenuslaite laitteesi USB-porttiin ja paina sen painiketta.</value>
+    <value>Aseta YubiKey NEO -todenuslaite laitettasi vasten tai kytke YubiKey-todennuslaite laitteesi USB-porttiin ja paina sen painiketta.</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
     <value>YubiKey-todennuslaite</value>
@@ -872,7 +872,7 @@
     <comment>Totp code label</comment>
   </data>
   <data name="AuthenticatorKeyAdded" xml:space="preserve">
-    <value>Todennusmenetelmän avain lisättiin.</value>
+    <value>Todennusmenetelmän avain lisätty.</value>
   </data>
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>Todennusavaimen luku epäonnistui.</value>
@@ -905,10 +905,10 @@
     <value>Käyttääksesi tätä toimintoa tarvitset Premium-jäsenyyden.</value>
   </data>
   <data name="AttachementAdded" xml:space="preserve">
-    <value>Tiedostoliite lisättiin</value>
+    <value>Tiedostoliite lisätty</value>
   </data>
   <data name="AttachmentDeleted" xml:space="preserve">
-    <value>Tiedostoliite poistettiin</value>
+    <value>Tiedostoliite poistettu</value>
   </data>
   <data name="ChooseFile" xml:space="preserve">
     <value>Valitse tiedosto</value>
@@ -947,7 +947,7 @@
     <value>Edistyneille käyttäjille. Voit määrittää jokaiselle palvelulle oman pääverkkotunnuksen.</value>
   </data>
   <data name="EnvironmentSaved" xml:space="preserve">
-    <value>Palvelinten URL-osoitteet tallennettiin.</value>
+    <value>Palvelinten URL-osoitteet tallennettu.</value>
   </data>
   <data name="FormattedIncorrectly" xml:space="preserve">
     <value>{0} on muotoiltu virheellisesti.</value>
@@ -1058,6 +1058,9 @@
   </data>
   <data name="LastName" xml:space="preserve">
     <value>Sukunimi</value>
+  </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Koko nimi</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Ajokortin numero</value>
@@ -1183,6 +1186,9 @@
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>Piilotettu teksti</value>
   </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>Linkitetty</value>
+  </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Teksti</value>
   </data>
@@ -1252,7 +1258,7 @@
     <value>Esteettömyyspalvelu voi olla hyödyllinen sellaisten sovellusten kanssa, jotka eivät tue tavallista automaattisen täytön palvelua.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
-    <value>Salasana päivitettiin</value>
+    <value>Salasana päivitetty</value>
     <comment>ex. Date this password was updated</comment>
   </data>
   <data name="DateUpdated" xml:space="preserve">
@@ -1269,7 +1275,7 @@
     <value>Kirjautumistietosi ovat nyt helposti saatavilla suoraan näppäimistöltäsi kun olet kirjautumassa sovelluksiin ja verkkosivustoille.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
-    <value>Suosittelemme poistamaan kaikki muut automaattisen täytön sovellukset käytöstä järjetelmän asetuksista, jos et aio käyttää niitä.</value>
+    <value>Suosittelemme poistamaan kaikki muut automaattisen täytön sovellukset käytöstä järjestelmän asetuksista, jollet aio käyttää niitä.</value>
   </data>
   <data name="BitwardenAutofillDescription" xml:space="preserve">
     <value>Käytä holviasi suoraan näppäimistöltä nopeaa salasanojen automaattista täyttöä varten.</value>
@@ -1386,7 +1392,7 @@
     <comment>ex: Item moved to Organization.</comment>
   </data>
   <data name="ItemShared" xml:space="preserve">
-    <value>Kohde jaettiin.</value>
+    <value>Kohde jaettu.</value>
   </data>
   <data name="SelectOneCollection" xml:space="preserve">
     <value>Valitse ainakin yksi kokoelma.</value>
@@ -1449,6 +1455,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>Avaa</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Avaa holvi</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minuuttia</value>
   </data>
@@ -1464,6 +1473,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Holvisi on lukittu. Vahvista PIN-koodisi jatkaaksesi.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Holvisi on lukittu. Vahvista henkilöllisyytesi jatkaaksesi.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Tumma</value>
@@ -1605,6 +1617,15 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Syötä pääsalasanasi viedäksesi holvisi tiedot.</value>
   </data>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Lähetä vahvistuskoodi sähköpostiisi</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Koodi lähetetty</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Vahvista henkilöllisyytesi jatkaaksesi.</value>
+  </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Tämä vienti sisältää holvisi tiedot salaamattomassa muodossa. Sinun ei tulisi säilyttää tai lähettää vietyä tiedostoa suojaamattomien kanavien (kuten sähköpostin) välityksellä. Poista se välittömästi kun sille ei enää ole käyttöä.</value>
   </data>
@@ -1667,7 +1688,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="ItemRestored" xml:space="preserve">
-    <value>Kohde palautettiin.</value>
+    <value>Kohde palautettu.</value>
     <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
   </data>
   <data name="Trash" xml:space="preserve">
@@ -2026,14 +2047,29 @@
   <data name="UpdatePasswordError" xml:space="preserve">
     <value>Salasanan päivitys ei tällä hetkellä onnistu</value>
   </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>Poista pääsalasana</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>{0} käyttää SSO:ta asiakkaan hallitsemalla salauksella. Jos jatkat, poistetaan tilitäsi pääsalasana ja jatkossa on käytettävä SSO-kirjautumista.</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>Jollet halua poistaa pääsalasanaasi, voit poistua tästä organisaatiosta.</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>Poistu organisaatiosta</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>Poistutaanko organisaatiosta {0}?</value>
+  </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
   </data>
   <data name="Fido2Instruction" xml:space="preserve">
-    <value>Jatkaaksesi, pidä FIDO2 WebAuthn -suojausavaimesi valmiina ja seuraa ohjeita napautettuasi seuraavasta näytöstä 'Authenticate WebAuthn'.</value>
+    <value>Jatkaaksesi, pidä FIDO2 WebAuthn -todennuslaitteesi valmiina ja seuraa ohjeita napautettuasi seuraavasta näytöstä 'WebAuthn-todennus'.</value>
   </data>
   <data name="Fido2Desc" xml:space="preserve">
-    <value>FIDO2 WebAuthn -tunnistautumisen voi todentaa ulkoisella suijausavaimella.</value>
+    <value>FIDO2 WebAuthn -tunnistautumisen voi todentaa ulkoisella todennuslaitteella.</value>
   </data>
   <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
     <value>WebAuthn-todennus</value>
@@ -2042,7 +2078,7 @@
     <value>Palaa sovellukseen</value>
   </data>
   <data name="Fido2CheckBrowser" xml:space="preserve">
-    <value>Varmista, että WebAuthn on oletusselaimesi tukema ja yritä uudelleen.</value>
+    <value>Varmista, että oletusselaimesi sisältää WebAuthn-tuen ja yritä uudelleen.</value>
   </data>
   <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
     <value>Organisaatiolla on käytäntö, joka liittää tilisi automaattisesti salasanan palautusapuun. Liitos sallii organisaation ylläpitäjien vaihtaa pääsalasanasi.</value>
@@ -2055,5 +2091,29 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Yksi tai useampi organisaation käytäntö estää henkilökohtaisen holvisi viennin.</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Poista tili</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Tilin poisto on pysyvä toimenpide</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Tilisi ja kaikki siihen liittyvät tiedot poistetaan, eikä niitä voida palauttaa. Haluatko varmasti jatkaa?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Tiliäsi poistetaan</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Tilisi on poistettu pysyvästi</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>Virheellinen todennuskoodi.</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Lähetä koodi</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Lähetetään</value>
   </data>
 </root>

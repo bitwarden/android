@@ -1059,6 +1059,9 @@
   <data name="LastName" xml:space="preserve">
     <value>Prezime</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Ime i prezime</value>
+  </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Broj vozačke dozvole</value>
   </data>
@@ -1182,6 +1185,9 @@
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>Skriveno</value>
+  </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>Povezano</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Tekst</value>
@@ -1449,6 +1455,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>Otključaj</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Otključaj trezor</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minuta</value>
   </data>
@@ -1464,6 +1473,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Tvoj trezor je zaključan. Potvrdi PIN-om za nastavak.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Tvoj trezor je zaključan. Potvrdi glavnu lozinku za nastavak.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Tamna</value>
@@ -1604,6 +1616,15 @@
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Unesi glavnu lozinku za izvoz podataka iz trezora.</value>
+  </data>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Slanje verifikacijskog kôda e-poštom</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Kôd poslan</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Potvrdite lozinku za nastavak.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Ovaj izvoz sadrži podatke trezora u nešifriranom obliku! Izvezenu datoteku se ne bi smjelo pohranjivati ili slati putem nesigurnih kanala (npr. e-poštom). Izbriši ju odmah nakon završetka korištenja.</value>
@@ -2026,6 +2047,21 @@
   <data name="UpdatePasswordError" xml:space="preserve">
     <value>Trenutno nije moguće ažurirati lozinku</value>
   </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>Ukloni glavnu lozinku</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>{0} koristi SSO s korisnički upravljanim šifriranjem. Tvoja glavna lozinka biti će uklonjena, a za prijavu će biti potreban SSO.</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>Ako ne želiš ukloniti svoju glavnu lozinku, možeš napustiti ovu organizaciju.</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>Napusti organizaciju</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>Napusti {0}?</value>
+  </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
   </data>
@@ -2055,5 +2091,29 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Jedno ili više pravila organizacija onemogućuje izvoz osobnog trezora. </value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Obriši račun</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Brisanje tvog računa je nepovratno</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Tvoj račun i svi povezani podaci biti će nepovratno obrisani. Sigurno želiš nastaviti?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Brisanje tvog računa</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Tvoj račun je trajno obrisan.</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>Nevažeći kôd za provjeru</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Pošalji kôd</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Šaljem</value>
   </data>
 </root>

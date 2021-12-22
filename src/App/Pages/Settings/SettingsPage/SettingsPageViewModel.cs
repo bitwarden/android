@@ -27,6 +27,8 @@ namespace Bit.App.Pages
         private readonly IBiometricService _biometricService;
         private readonly IPolicyService _policyService;
         private readonly ILocalizeService _localizeService;
+        private readonly IKeyConnectorService _keyConnectorService;
+        private readonly IClipboardService _clipboardService;
 
         private const int CustomVaultTimeoutValue = -100;
 
@@ -36,6 +38,8 @@ namespace Bit.App.Pages
         private string _lastSyncDate;
         private string _vaultTimeoutDisplayValue;
         private string _vaultTimeoutActionDisplayValue;
+        private bool _showChangeMasterPassword;
+
         private List<KeyValuePair<string, int?>> _vaultTimeouts =
             new List<KeyValuePair<string, int?>>
             {
@@ -74,6 +78,8 @@ namespace Bit.App.Pages
             _biometricService = ServiceContainer.Resolve<IBiometricService>("biometricService");
             _policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
             _localizeService = ServiceContainer.Resolve<ILocalizeService>("localizeService");
+            _keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
+            _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
 
             GroupedItems = new ExtendedObservableCollection<SettingsPageListGroup>();
             PageTitle = AppResources.Settings;
@@ -116,6 +122,9 @@ namespace Bit.App.Pages
                 _vaultTimeoutDisplayValue = AppResources.Custom;
             }
 
+            _showChangeMasterPassword = IncludeLinksWithSubscriptionInfo() &&
+                !await _keyConnectorService.GetUsesKeyConnector();
+
             BuildList();
         }
 
@@ -128,7 +137,7 @@ namespace Bit.App.Pages
                 AppResources.Close);
             if (copy)
             {
-                await _platformUtilsService.CopyToClipboardAsync(debugText);
+                await _clipboardService.CopyTextAsync(debugText);
             }
         }
 
@@ -312,9 +321,13 @@ namespace Bit.App.Pages
                     AppResources.SetPINDescription, null, AppResources.Submit, AppResources.Cancel, true);
                 if (!string.IsNullOrWhiteSpace(pin))
                 {
-                    var masterPassOnRestart = await _platformUtilsService.ShowDialogAsync(
-                       AppResources.PINRequireMasterPasswordRestart, AppResources.UnlockWithPIN,
-                       AppResources.Yes, AppResources.No);
+                    var masterPassOnRestart = false;
+                    if (!await _keyConnectorService.GetUsesKeyConnector())
+                    {
+                        masterPassOnRestart = await _platformUtilsService.ShowDialogAsync(
+                            AppResources.PINRequireMasterPasswordRestart, AppResources.UnlockWithPIN,
+                            AppResources.Yes, AppResources.No);
+                    }
 
                     var kdf = await _userService.GetKdfAsync();
                     var kdfIterations = await _userService.GetKdfIterationsAsync();
@@ -460,7 +473,7 @@ namespace Bit.App.Pages
                 new SettingsPageListItem { Name = AppResources.FingerprintPhrase },
                 new SettingsPageListItem { Name = AppResources.LogOut }
             };
-            if (IncludeLinksWithSubscriptionInfo())
+            if (_showChangeMasterPassword)
             {
                 accountItems.Insert(0, new SettingsPageListItem { Name = AppResources.ChangeMasterPassword });
             }
@@ -479,7 +492,8 @@ namespace Bit.App.Pages
                 new SettingsPageListItem { Name = AppResources.Options },
                 new SettingsPageListItem { Name = AppResources.About },
                 new SettingsPageListItem { Name = AppResources.HelpAndFeedback },
-                new SettingsPageListItem { Name = AppResources.RateTheApp }
+                new SettingsPageListItem { Name = AppResources.RateTheApp },
+                new SettingsPageListItem { Name = AppResources.DeleteAccount }
             };
             GroupedItems.ResetWithRange(new List<SettingsPageListGroup>
             {

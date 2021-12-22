@@ -711,7 +711,7 @@
     <value>Kirje vaatamine</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>Bitwardeni Veebihoidla</value>
+    <value>Bitwarden veebihoidla</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Kaotasid autentimise rakenduse?</value>
@@ -1059,6 +1059,9 @@
   <data name="LastName" xml:space="preserve">
     <value>Perekonnanimi</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Täisnimi</value>
+  </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Litsentsi number</value>
   </data>
@@ -1183,6 +1186,9 @@
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>Peidetud</value>
   </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>Ühenduses</value>
+  </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Tekst</value>
   </data>
@@ -1240,13 +1246,13 @@
     <comment>An entity of multiple related people (ex. a team or business organization).</comment>
   </data>
   <data name="HoldYubikeyNearTop" xml:space="preserve">
-    <value>Hoia oma Yubikey seadme ülaosa ligidal.</value>
+    <value>Hoia oma Yubikey seadme ülaosa lähedal.</value>
   </data>
   <data name="TryAgain" xml:space="preserve">
     <value>Proovi uuesti</value>
   </data>
   <data name="YubiKeyInstructionIos" xml:space="preserve">
-    <value>Jätkamiseks hoia YubiKey NEO-d oma seadme tagumise poole vastu.</value>
+    <value>Jätkamiseks hoia oma YubiKey NEO seadme tagumise poole vastas.</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
     <value>Juurdepääsetavuse teenus võib abiks olla olukordades, kus rakendused ei toeta standardset automaattäite teenust.</value>
@@ -1449,6 +1455,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>Lukusta lahti</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Hoidla lahtilukustamine</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minuti pärast</value>
   </data>
@@ -1464,6 +1473,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Hoidla on lukus. Jätkamiseks sisesta PIN kood.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Hoidla on lukus. Jätkamiseks kinnita oma identiteet.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Tume</value>
@@ -1604,6 +1616,15 @@
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Hoidlas olevate andmete eksportimiseks on vajalik ülemparooli sisestamine.</value>
+  </data>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Saada kinnituskood oma e-postile</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Kood on saadetud!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Jätkamiseks kinnita oma identiteet.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Eksporditav fail sisaldab hoidla sisu, mis on krüpteeringuta. Seda faili ei tohiks kaua käidelda ning mitte mingil juhul ebaturvaliselt saata (näiteks e-postiga). Kustuta see koheselt pärast kasutamist.</value>
@@ -2026,6 +2047,21 @@
   <data name="UpdatePasswordError" xml:space="preserve">
     <value>Parooli uuendamine pole hetkel võimalik</value>
   </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>Eemalda ülemparool</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>{0} kasutab SSO-d koos kliendi poolt hallatava krüpteeringuga. Jätkamisel eemaldatakse sinu kontolt ülemparool ning nõutakse sisselogimist läbi SSO.</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>Kui sa ei soovi oma ülemparooli eemaldada, saad sellest organisatsioonist lahkuda.</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>Lahku organisatsioonist</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>Lahkud {0}-st?</value>
+  </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
   </data>
@@ -2055,5 +2091,29 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Üks või enam organisatsiooni poliitikat ei võimalda sul oma personaalset hoidlat eksportida.</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Kustuta konto</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Konto kustutamist ei saa ennistada</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Konto koos kõikide andmetega kustutatakse ning seda ei saa taastada. Oled kindel, et soovid jätkata? </value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Konto kustutamine </value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Sinu konto on lõplikult kustutatud</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>Vale kinnituskood</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Saada kood</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Saatmine</value>
   </data>
 </root>

@@ -12,6 +12,7 @@ namespace Bit.Core.Services
     public class AuthService : IAuthService
     {
         private readonly ICryptoService _cryptoService;
+        private readonly ICryptoFunctionService _cryptoFunctionService;
         private readonly IApiService _apiService;
         private readonly IUserService _userService;
         private readonly ITokenService _tokenService;
@@ -20,12 +21,14 @@ namespace Bit.Core.Services
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IMessagingService _messagingService;
         private readonly IVaultTimeoutService _vaultTimeoutService;
+        private readonly IKeyConnectorService _keyConnectorService;
         private readonly bool _setCryptoKeys;
 
         private SymmetricCryptoKey _key;
 
         public AuthService(
             ICryptoService cryptoService,
+            ICryptoFunctionService cryptoFunctionService,
             IApiService apiService,
             IUserService userService,
             ITokenService tokenService,
@@ -34,9 +37,11 @@ namespace Bit.Core.Services
             IPlatformUtilsService platformUtilsService,
             IMessagingService messagingService,
             IVaultTimeoutService vaultTimeoutService,
+            IKeyConnectorService keyConnectorService,
             bool setCryptoKeys = true)
         {
             _cryptoService = cryptoService;
+            _cryptoFunctionService = cryptoFunctionService;
             _apiService = apiService;
             _userService = userService;
             _tokenService = tokenService;
@@ -45,6 +50,7 @@ namespace Bit.Core.Services
             _platformUtilsService = platformUtilsService;
             _messagingService = messagingService;
             _vaultTimeoutService = vaultTimeoutService;
+            _keyConnectorService = keyConnectorService;
             _setCryptoKeys = setCryptoKeys;
 
             TwoFactorProviders = new Dictionary<TwoFactorProviderType, TwoFactorProvider>();
@@ -130,10 +136,10 @@ namespace Bit.Core.Services
                 null, captchaToken);
         }
 
-        public async Task<AuthResult> LogInSsoAsync(string code, string codeVerifier, string redirectUrl)
+        public async Task<AuthResult> LogInSsoAsync(string code, string codeVerifier, string redirectUrl, string orgId)
         {
             SelectedTwoFactorProviderType = null;
-            return await LogInHelperAsync(null, null, null, code, codeVerifier, redirectUrl, null, null, null, null);
+            return await LogInHelperAsync(null, null, null, code, codeVerifier, redirectUrl, null, orgId: orgId);
         }
 
         public Task<AuthResult> LogInTwoFactorAsync(TwoFactorProviderType twoFactorProvider, string twoFactorToken,
@@ -266,7 +272,7 @@ namespace Bit.Core.Services
             {
                 if (e.Error == null || e.Error.StatusCode != System.Net.HttpStatusCode.NotFound)
                 {
-                    throw e;
+                    throw;
                 }
             }
             return await _cryptoService.MakeKeyAsync(masterPassword, email, kdf, kdfIterations);
@@ -275,7 +281,7 @@ namespace Bit.Core.Services
         private async Task<AuthResult> LogInHelperAsync(string email, string hashedPassword, string localHashedPassword,
             string code, string codeVerifier, string redirectUrl, SymmetricCryptoKey key,
             TwoFactorProviderType? twoFactorProvider = null, string twoFactorToken = null, bool? remember = null,
-            string captchaToken = null)
+            string captchaToken = null, string orgId = null)
         {
             var storedTwoFactorToken = await _tokenService.GetTwoFactorTokenAsync(email);
             var appId = await _appIdService.GetAppIdAsync();
@@ -353,27 +359,75 @@ namespace Bit.Core.Services
                 tokenResponse.Kdf, tokenResponse.KdfIterations);
             if (_setCryptoKeys)
             {
-                await _cryptoService.SetKeyAsync(key);
-                await _cryptoService.SetKeyHashAsync(localHashedPassword);
-                await _cryptoService.SetEncKeyAsync(tokenResponse.Key);
-
-                // User doesn't have a key pair yet (old account), let's generate one for them.
-                if (tokenResponse.PrivateKey == null)
+                if (key != null)
                 {
-                    try
-                    {
-                        var keyPair = await _cryptoService.MakeKeyPairAsync();
-                        await _apiService.PostAccountKeysAsync(new KeysRequest
-                        {
-                            PublicKey = keyPair.Item1,
-                            EncryptedPrivateKey = keyPair.Item2.EncryptedString
-                        });
-                        tokenResponse.PrivateKey = keyPair.Item2.EncryptedString;
-                    }
-                    catch { }
+                    await _cryptoService.SetKeyAsync(key);
                 }
 
-                await _cryptoService.SetEncPrivateKeyAsync(tokenResponse.PrivateKey);
+                if (localHashedPassword != null)
+                {
+                    await _cryptoService.SetKeyHashAsync(localHashedPassword);
+                }
+
+                if (code == null || tokenResponse.Key != null)
+                {
+                    if (tokenResponse.KeyConnectorUrl != null)
+                    {
+                        await _keyConnectorService.GetAndSetKey(tokenResponse.KeyConnectorUrl);
+                    }
+
+                    await _cryptoService.SetEncKeyAsync(tokenResponse.Key);
+
+                    // User doesn't have a key pair yet (old account), let's generate one for them.
+                    if (tokenResponse.PrivateKey == null)
+                    {
+                        try
+                        {
+                            var keyPair = await _cryptoService.MakeKeyPairAsync();
+                            await _apiService.PostAccountKeysAsync(new KeysRequest
+                            {
+                                PublicKey = keyPair.Item1,
+                                EncryptedPrivateKey = keyPair.Item2.EncryptedString
+                            });
+                            tokenResponse.PrivateKey = keyPair.Item2.EncryptedString;
+                        }
+                        catch { }
+                    }
+
+                    await _cryptoService.SetEncPrivateKeyAsync(tokenResponse.PrivateKey);
+                }
+                else if (tokenResponse.KeyConnectorUrl != null)
+                {
+                    // SSO Key Connector Onboarding
+                    var password = await _cryptoFunctionService.RandomBytesAsync(64);
+                    var k = await _cryptoService.MakeKeyAsync(Convert.ToBase64String(password), _tokenService.GetEmail(), tokenResponse.Kdf, tokenResponse.KdfIterations);
+                    var keyConnectorRequest = new KeyConnectorUserKeyRequest(k.EncKeyB64);
+                    await _cryptoService.SetKeyAsync(k);
+
+                    var encKey = await _cryptoService.MakeEncKeyAsync(k);
+                    await _cryptoService.SetEncKeyAsync(encKey.Item2.EncryptedString);
+                    var keyPair = await _cryptoService.MakeKeyPairAsync();
+
+                    try
+                    {
+                        await _apiService.PostUserKeyToKeyConnector(tokenResponse.KeyConnectorUrl, keyConnectorRequest);
+                    }
+                    catch (Exception e)
+                    {
+                        throw new Exception("Unable to reach Key Connector", e);
+                    }
+
+                    var keys = new KeysRequest
+                    {
+                        PublicKey = keyPair.Item1,
+                        EncryptedPrivateKey = keyPair.Item2.EncryptedString
+                    };
+                    var setPasswordRequest = new SetKeyConnectorKeyRequest(
+                        encKey.Item2.EncryptedString, keys, tokenResponse.Kdf, tokenResponse.KdfIterations, orgId
+                    );
+                    await _apiService.PostSetKeyConnectorKey(setPasswordRequest);
+                }
+
             }
 
             _vaultTimeoutService.BiometricLocked = false;
