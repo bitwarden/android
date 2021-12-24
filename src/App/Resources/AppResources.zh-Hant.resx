@@ -2102,7 +2102,7 @@
     <value>您的帳戶及相關資料都會被清得一乾二凈，無法復原。是否繼續？</value>
   </data>
   <data name="DeletingYourAccount" xml:space="preserve">
-    <value>刪除帳戶</value>
+    <value>正在刪除您的帳戶</value>
   </data>
   <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
     <value>已永久刪除您的帳戶</value>

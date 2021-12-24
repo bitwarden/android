@@ -1060,7 +1060,7 @@
     <value>นามสกุล</value>
   </data>
   <data name="FullName" xml:space="preserve">
-    <value>Full Name</value>
+    <value>ชื่อเต็ม</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>หมายเลขใบอนุญาต</value>
