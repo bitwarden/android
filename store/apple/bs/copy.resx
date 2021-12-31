@@ -118,55 +118,54 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Name" xml:space="preserve">
-    <value>Bitwarden Password Manager</value>
+    <value>Bitwarden - Besplatni upravitelj lozinkama</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Bitwarden, Inc. is the parent company of 8bit Solutions LLC.
+    <value>Bitwarden, Inc. je vlasnik tvrtke 8bit Solutions LLC.
 
-NAMED BEST PASSWORD MANAGER BY THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, AND MORE.
+THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET I DRUGI ODABRALI SU BITWARDEN ZA NAJBOLJI UPRAVITELJ LOZINKI. 
 
-Manage, store, secure, and share unlimited passwords across unlimited devices from anywhere. Bitwarden delivers open source password management solutions to everyone, whether at  home, at work, or on the go.
+Upravljajte, spremajte, osigurajte i dijelite neograničen broj lozinki na neograničenom broju uređaja bilo gdje. Bitwarden omogućuje upravljanje lozinkama, bazirano na otvorenom kodu, svima, bilo kod kuće, na poslu ili u pokretu.
 
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+Generirajte jake, jedinstvene i nasumične lozinke bazirane na sigurnosnim zahtjevima za svaku web stranicu koju često posjećujete.
 
-Bitwarden Send quickly transmits encrypted information --- files and plaintext -- directly to anyone.
+Bitwarden Send omogućuje jednostavno i brzo slanje šifriranih podataka --- datoteki ili teksta -- direktno, bilo kome.
 
-Bitwarden offers Teams and Enterprise plans for companies so you can securely share passwords with colleagues.
+Bitwarden nudi Teams i Enterprise planove za tvrtke kako biste sigurno mogli dijeliti lozinke s kolegama na poslu.
 
-Why Choose Bitwarden:
+Zašto odabrati Bitwarden?
 
-World-Class Encryption
-Passwords are protected with advanced end-to-end encryption (AES-256 bit, salted hashtag, and PBKDF2 SHA-256) so your data stays secure and private.
+Svjetski priznata enkripcija
+Lozinke su zaštićene naprednim end-to-end šifriranjem (AES-256 bit, salted hashtag i PBKDF2 SHA-256) kako bi vaši osobni podaci ostali sigurni i samo vaši.
 
-Built-in Password Generator
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+Ugrađen generator lozinki
+Generirajte jake, jedinstvene i nasumične lozinke bazirane na sigurnosnim zahtjevima za svako web mjesto koje često posjećujete.
 
-Global Translations
-Bitwarden translations exist in 40 languages and are growing, thanks to our global community.
+Svjetski dostupan 
+Bitwarden je, zahvaljujući našoj globalnoj zajednici, dostupan na više od 40 jezika.
 
-Cross-Platform Applications
-Secure and share sensitive data within your Bitwarden Vault from any browser, mobile device, or desktop OS, and more.
-</value>
+Podržani svi OS
+Osigurajte i sigurno dijelite osjetljive podatke sadržane u vašem Bitwarden trezoru iz bilo kojeg preglednika, mobilnog uređaja ili stolnog računala s bilo kojim OS.</value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
-    <value>bit warden,8bit,password,free password manager,password manager,login manager</value>
+    <value>bit warden,8bit,password,free password manager,password manager,login manager,lozinka, prijava,besplatni upravitelj lozinki,upravitelj lozinki,upravitelj za prijavu</value>
     <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Manage all your logins and passwords from a secure vault</value>
+    <value>Upravljajte svim svojim prijavama i lozinkama iz sigurnog sefa.</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Automatically generate strong, random, and secure passwords</value>
+    <value>Automatski generišite jake, nasumične i sigurne lozinke.</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Protect your vault with Touch ID, PIN code, or master password</value>
+    <value>Zaštiti svoj trezor pomoću Touch ID, Face ID, PIN-a ili glavne lozinke</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Auto-fill logins from Safari, Chrome, and hundreds of other apps</value>
+    <value>Automatski popunjavajte lozinke iz Safarija, Chrome-a i stotine drugih aplikacija</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Sync and access your vault from multiple devices</value>
+    <value>Sinhroniziraj i pristupi svom trezoru sa više uređaja</value>
   </data>
 </root>
