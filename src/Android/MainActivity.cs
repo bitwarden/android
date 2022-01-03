@@ -120,6 +120,7 @@ namespace Bit.Droid
             base.OnResume();
             Xamarin.Essentials.Platform.OnResume();
             AppearanceAdjustments();
+            _messagingService?.Send("appeared");
             if (_deviceActionService.SupportsNfc())
             {
                 try

@@ -28,9 +28,19 @@ namespace Bit.App.Pages
         protected override async void OnAppearing()
         {
             base.OnAppearing();
+
+            _vm.Subscribe();
+
             await LoadOnAppearedAsync(_mainLayout, true, async () => {
                 await _vm.InitAsync();
             });
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+
+            _vm.Unsubscribe();
         }
 
         private async void Clear_Clicked(object sender, EventArgs e)

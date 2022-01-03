@@ -8,6 +8,7 @@ using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -214,7 +215,8 @@ namespace Bit.App
 
         private async void ResumedAsync()
         {
-            UpdateTheme();
+            await UpdateThemeAsync();
+
             await _vaultTimeoutService.CheckVaultTimeoutAsync();
             _messagingService.Send("startEventTimer");
             await ClearCacheIfNeededAsync();
@@ -224,6 +226,15 @@ namespace Bit.App
             {
                 await lockPage.PromptBiometricAfterResumeAsync();
             }
+        }
+
+        public async Task UpdateThemeAsync()
+        {
+            await Device.InvokeOnMainThreadAsync(() =>
+            {
+                ThemeManager.SetTheme(Device.RuntimePlatform == Device.Android, Current.Resources);
+                _messagingService.Send("updatedTheme");
+            });
         }
 
         private void SetCulture()
@@ -354,7 +365,7 @@ namespace Bit.App
             ThemeManager.SetTheme(Device.RuntimePlatform == Device.Android, Current.Resources);
             Current.RequestedThemeChanged += (s, a) =>
             {
-                UpdateTheme();
+                UpdateThemeAsync();
             };
             Current.MainPage = new HomePage();
             var mainPageTask = SetMainPageAsync();
@@ -375,15 +386,6 @@ namespace Bit.App
                     await Task.Delay(1000);
                     await _syncService.FullSyncAsync(false);
                 }
-            });
-        }
-
-        private void UpdateTheme()
-        {
-            Device.BeginInvokeOnMainThread(() =>
-            {
-                ThemeManager.SetTheme(Device.RuntimePlatform == Device.Android, Current.Resources);
-                _messagingService.Send("updatedTheme");
             });
         }
 

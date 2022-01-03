@@ -4,6 +4,7 @@ using Bit.App.Services;
 using Bit.App.Styles;
 using Bit.Core;
 using Xamarin.Forms;
+using System.Linq;
 #if !FDROID
 using Microsoft.AppCenter.Crashes;
 #endif
@@ -21,6 +22,21 @@ namespace Bit.App.Utilities
             {
                 Resources = () => resources;
 
+                var newTheme = NeedsThemeUpdate(name, resources);
+                if (newTheme is null)
+                {
+                    return;
+                }
+
+                var currentTheme = resources.MergedDictionaries.FirstOrDefault(md => md is IThemeResourceDictionary);
+                if (currentTheme != null)
+                {
+                    resources.MergedDictionaries.Remove(currentTheme);
+                    resources.MergedDictionaries.Add(newTheme);
+                    UsingLightTheme = newTheme is Light;
+                    return;
+                }
+
                 // Reset styles
                 resources.Clear();
                 resources.MergedDictionaries.Clear();
@@ -28,40 +44,9 @@ namespace Bit.App.Utilities
                 // Variables
                 resources.MergedDictionaries.Add(new Variables());
 
-                // Themed variables
-                if (name == "dark")
-                {
-                    resources.MergedDictionaries.Add(new Dark());
-                    UsingLightTheme = false;
-                }
-                else if (name == "black")
-                {
-                    resources.MergedDictionaries.Add(new Black());
-                    UsingLightTheme = false;
-                }
-                else if (name == "nord")
-                {
-                    resources.MergedDictionaries.Add(new Nord());
-                    UsingLightTheme = false;
-                }
-                else if (name == "light")
-                {
-                    resources.MergedDictionaries.Add(new Light());
-                    UsingLightTheme = true;
-                }
-                else
-                {
-                    if (OsDarkModeEnabled())
-                    {
-                        resources.MergedDictionaries.Add(new Dark());
-                        UsingLightTheme = false;
-                    }
-                    else
-                    {
-                        resources.MergedDictionaries.Add(new Light());
-                        UsingLightTheme = true;
-                    }
-                }
+                // Theme
+                resources.MergedDictionaries.Add(newTheme);
+                UsingLightTheme = newTheme is Light;
 
                 // Base styles
                 resources.MergedDictionaries.Add(new Base());
@@ -90,6 +75,34 @@ namespace Bit.App.Utilities
 #if !FDROID
                 Crashes.TrackError(ex);
 #endif
+            }
+        }
+
+        static ResourceDictionary CheckAndGetThemeForMergedDictionaries(Type themeType, ResourceDictionary resources)
+        {
+            return resources.MergedDictionaries.Any(rd => rd.GetType() == themeType)
+                ? null
+                : Activator.CreateInstance(themeType) as ResourceDictionary;
+        }
+
+        static ResourceDictionary NeedsThemeUpdate(string themeName, ResourceDictionary resources)
+        {
+            switch (themeName)
+            {
+                case "dark":
+                    return CheckAndGetThemeForMergedDictionaries(typeof(Dark), resources);
+                case "black":
+                    return CheckAndGetThemeForMergedDictionaries(typeof(Black), resources);
+                case "nord":
+                    return CheckAndGetThemeForMergedDictionaries(typeof(Nord), resources);
+                case "light":
+                    return CheckAndGetThemeForMergedDictionaries(typeof(Light), resources);
+                default:
+                    if (OsDarkModeEnabled())
+                    {
+                        return CheckAndGetThemeForMergedDictionaries(typeof(Dark), resources);
+                    }
+                    return CheckAndGetThemeForMergedDictionaries(typeof(Light), resources);
             }
         }
 

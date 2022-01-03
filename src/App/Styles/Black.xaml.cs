@@ -2,7 +2,7 @@
 
 namespace Bit.App.Styles
 {
-    public partial class Black : ResourceDictionary
+    public partial class Black : ResourceDictionary, IThemeResourceDictionary
     {
         public Black()
         {

@@ -216,6 +216,7 @@ namespace Bit.iOS
                 view.RemoveFromSuperview();
                 UIApplication.SharedApplication.SetStatusBarHidden(false, false);
             }
+            _messagingService?.Send("appeared");
         }
 
         public override void WillEnterForeground(UIApplication uiApplication)

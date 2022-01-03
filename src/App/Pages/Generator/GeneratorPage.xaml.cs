@@ -61,18 +61,21 @@ namespace Bit.App.Pages
         protected async override void OnAppearing()
         {
             base.OnAppearing();
+
+            _vm?.RedrawPassword(); // this is needed when coming back from another view to this one and the theme has changed
+
+            lblPassword.IsVisible = true;
+
             if (!_fromTabPage)
             {
                 await InitAsync();
             }
-            _broadcasterService.Subscribe(nameof(GeneratorPage), async (message) =>
+
+            _broadcasterService.Subscribe(nameof(GeneratorPage), (message) =>
             {
                 if (message.Command == "updatedTheme")
                 {
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        _vm.RedrawPassword();
-                    });
+                    Device.BeginInvokeOnMainThread(() => _vm.RedrawPassword());
                 }
             });
         }
@@ -80,6 +83,9 @@ namespace Bit.App.Pages
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
+
+            lblPassword.IsVisible = false;
+
             _broadcasterService.Unsubscribe(nameof(GeneratorPage));
         }
 
