@@ -151,6 +151,71 @@
             </VisualStateGroupList>
         </Setter>
     </Style>
+    
+    <Style TargetType="Button"
+           Class="btn-secondary">
+        <Setter Property="BackgroundColor"
+                Value="Transparent" />
+        <Setter Property="BorderColor"
+                Value="{DynamicResource ButtonBorderColor}" />
+        <Setter Property="BorderWidth" 
+                Value="1" />
+        <Setter Property="TextColor"
+                Value="{DynamicResource ButtonTextColorOpacity}" />
+        <Setter Property="FontSize"
+                Value="Medium" />
+        <Setter Property="CornerRadius"
+                Value="5" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor"
+                                    Value="{DynamicResource ButtonTextColorDisabled}" />
+                            <Setter Property="BackgroundColor"
+                                    Value="{DynamicResource ButtonBackgroundColorDisabled}" />
+                            <Setter Property="BorderColor"
+                                    Value="{DynamicResource ButtonBackgroundColorDisabled}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+    <Style TargetType="Button"
+           Class="btn-danger">
+        <Setter Property="BackgroundColor"
+                Value="{DynamicResource DangerColor}" />
+        <Setter Property="BorderColor"
+                Value="{DynamicResource DangerColor}" />
+        <Setter Property="BorderWidth" 
+                Value="1" />
+        <Setter Property="TextColor"
+                Value="{DynamicResource ButtonPrimaryTextColor}" />
+        <Setter Property="FontSize"
+                Value="Medium" />
+        <Setter Property="CornerRadius"
+                Value="5" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor"
+                                    Value="{DynamicResource ButtonTextColorDisabled}" />
+                            <Setter Property="BackgroundColor"
+                                    Value="{DynamicResource ButtonBackgroundColorDisabled}" />
+                            <Setter Property="BorderColor"
+                                    Value="{DynamicResource ButtonBackgroundColorDisabled}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
     <Style TargetType="Button"
            ApplyToDerivedTypes="True"
            Class="btn-icon-platform">
@@ -254,5 +319,14 @@
                 Value="45" />
         <Setter Property="FontSize"
                 Value="25" />
+    </Style>
+
+    <Style TargetType="Label"
+           ApplyToDerivedTypes="True"
+           Class="title-danger">
+        <Setter Property="TextColor"
+                Value="{DynamicResource DangerColor}" />
+        <Setter Property="FontSize"
+                Value="Title" />
     </Style>
 </ResourceDictionary>

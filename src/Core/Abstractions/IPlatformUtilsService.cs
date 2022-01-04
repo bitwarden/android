@@ -9,7 +9,6 @@ namespace Bit.Core.Abstractions
     {
         string IdentityClientId { get; }
 
-        Task CopyToClipboardAsync(string text, Dictionary<string, object> options = null);
         string GetApplicationVersion();
         DeviceType GetDevice();
         string GetDeviceString();
@@ -22,6 +21,7 @@ namespace Bit.Core.Abstractions
         Task<bool> ShowDialogAsync(string text, string title = null, string confirmText = null,
             string cancelText = null, string type = null);
         Task<bool> ShowPasswordDialogAsync(string title, string body, Func<string, Task<bool>> validator);
+        Task<(string password, bool valid)> ShowPasswordDialogAndGetItAsync(string title, string body, Func<string, Task<bool>> validator);
         void ShowToast(string type, string title, string text, Dictionary<string, object> options = null);
         void ShowToast(string type, string title, string[] text, Dictionary<string, object> options = null);
         bool SupportsFido2();

@@ -1455,6 +1455,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>Откључај</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Откључај сеф</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 минута</value>
   </data>
@@ -1470,6 +1473,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Сеф је блокиран. Проверити ПИН код за наставак.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Ваш сеф је закључан. Потврдите идентитет како бисте наставили.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Тамна</value>
@@ -1611,8 +1617,14 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Унети главну лозинку за извоз сефа.</value>
   </data>
-    <data name="ExportVaultOTPDescription" xml:space="preserve">
-    <value>Упишите верификациони код да бисте извезли ваш сеф.</value>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Слање верификационог кода путем мејла</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Код послат!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Да бисте наставили потврдите ваш идентитет.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Овај извоз садржи податке сефа у нешифрираном формату. Не бисте смели да сачувате или шаљете извезену датотеку преко несигурних канала (као што је имејл). Избришите датотеку одмах након што завршите са коришћењем.</value>
@@ -2082,10 +2094,28 @@
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Једна или више полиса ваше организације вас спречава да извезете ваш сеф.</value>
   </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Избриши Налог</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Брисање налога је трајно</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Ваш налог и сви придружени подаци биће избрисани и неповратно. Да ли сте сигурни да желите да наставите?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Брисање вашег налога</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Ваш налог је трајно обрисан</value>
+  </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Неисправан верификациони код.</value>
   </data>
-    <data name="RequestOTP" xml:space="preserve">
-    <value>Захтевај једнократну лозинку</value>
+  <data name="SendCode" xml:space="preserve">
+    <value>Пошаљи код</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Слање</value>
   </data>
 </root>

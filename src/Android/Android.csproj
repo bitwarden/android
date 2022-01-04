@@ -149,6 +149,8 @@
     <Compile Include="Utilities\ThemeHelpers.cs" />
     <Compile Include="WebAuthCallbackActivity.cs" />
     <Compile Include="Renderers\SelectableLabelRenderer.cs" />
+    <Compile Include="Services\ClipboardService.cs" />
+    <Compile Include="Utilities\IntentExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\FontAwesome.ttf" />
@@ -172,6 +174,7 @@
     <AndroidResource Include="Resources\drawable\cog.xml" />
     <AndroidResource Include="Resources\drawable\icon.xml" />
     <AndroidResource Include="Resources\drawable\ic_launcher_foreground.xml" />
+    <AndroidResource Include="Resources\drawable\ic_warning.xml" />
     <AndroidResource Include="Resources\drawable\id.xml" />
     <AndroidResource Include="Resources\drawable\info.xml" />
     <AndroidResource Include="Resources\drawable\list_item_bg.xml" />
@@ -205,6 +208,8 @@
     <AndroidResource Include="Resources\values-night\styles.xml" />
     <AndroidResource Include="Resources\values\styles.xml" />
     <AndroidResource Include="Resources\values\colors.xml" />
+    <AndroidResource Include="Resources\values\manifest.xml" />
+    <AndroidResource Include="Resources\values-v30\manifest.xml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\splash_screen.xml" />
@@ -269,6 +274,9 @@
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
       <SubType>Designer</SubType>
     </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\values-v30\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

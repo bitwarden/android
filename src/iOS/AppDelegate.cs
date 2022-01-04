@@ -71,14 +71,6 @@ namespace Bit.iOS
                         iOSCoreHelpers.AppearanceAdjustments();
                     });
                 }
-                else if (message.Command == "copiedToClipboard")
-                {
-
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        var task = ClearClipboardTimerAsync(message.Data as Tuple<string, int?, bool>);
-                    });
-                }
                 else if (message.Command == "listenYubiKeyOTP")
                 {
                     iOSCoreHelpers.ListenYubiKey((bool)message.Data, _deviceActionService, _nfcSession, _nfcDelegate);
@@ -183,17 +175,8 @@ namespace Bit.iOS
             return base.FinishedLaunching(app, options);
         }
 
-        public override void DidEnterBackground(UIApplication uiApplication)
+        public override void OnResignActivation(UIApplication uiApplication)
         {
-            _storageService.SaveAsync(Constants.LastActiveTimeKey, _deviceActionService.GetActiveTime());
-            _messagingService.Send("slept");
-
-            if (UIApplication.SharedApplication.KeyWindow == null)
-            {
-                // Despite IDE warning, KeyWindow is null here during app termination in iOS 15
-                return;
-            }
-
             var view = new UIView(UIApplication.SharedApplication.KeyWindow.Frame)
             {
                 Tag = 4321
@@ -213,6 +196,13 @@ namespace Bit.iOS
             UIApplication.SharedApplication.KeyWindow.BringSubviewToFront(view);
             UIApplication.SharedApplication.KeyWindow.EndEditing(true);
             UIApplication.SharedApplication.SetStatusBarHidden(true, false);
+            base.OnResignActivation(uiApplication);
+        }
+
+        public override void DidEnterBackground(UIApplication uiApplication)
+        {
+            _storageService?.SaveAsync(Constants.LastActiveTimeKey, _deviceActionService.GetActiveTime());
+            _messagingService?.Send("slept");
             base.DidEnterBackground(uiApplication);
         }
 
@@ -230,7 +220,7 @@ namespace Bit.iOS
 
         public override void WillEnterForeground(UIApplication uiApplication)
         {
-            _messagingService.Send("resumed");
+            _messagingService?.Send("resumed");
             base.WillEnterForeground(uiApplication);
         }
 
@@ -329,61 +319,6 @@ namespace Bit.iOS
             var iosPushNotificationService = new iOSPushNotificationService();
             ServiceContainer.Register<IPushNotificationService>(
                 "pushNotificationService", iosPushNotificationService);
-        }
-
-        private async Task ClearClipboardTimerAsync(Tuple<string, int?, bool> data)
-        {
-            if (data.Item3)
-            {
-                return;
-            }
-            var clearMs = data.Item2;
-            if (clearMs == null)
-            {
-                var clearSeconds = await _storageService.GetAsync<int?>(Constants.ClearClipboardKey);
-                if (clearSeconds != null)
-                {
-                    clearMs = clearSeconds.Value * 1000;
-                }
-            }
-            if (clearMs == null)
-            {
-                return;
-            }
-            if (_clipboardBackgroundTaskId > 0)
-            {
-                UIApplication.SharedApplication.EndBackgroundTask(_clipboardBackgroundTaskId);
-                _clipboardBackgroundTaskId = 0;
-            }
-            _clipboardBackgroundTaskId = UIApplication.SharedApplication.BeginBackgroundTask(() =>
-            {
-                UIApplication.SharedApplication.EndBackgroundTask(_clipboardBackgroundTaskId);
-                _clipboardBackgroundTaskId = 0;
-            });
-            _clipboardTimer?.Invalidate();
-            _clipboardTimer?.Dispose();
-            _clipboardTimer = null;
-            var lastClipboardChangeCount = UIPasteboard.General.ChangeCount;
-            var clearMsSpan = TimeSpan.FromMilliseconds(clearMs.Value);
-            _clipboardTimer = NSTimer.CreateScheduledTimer(clearMsSpan, timer =>
-            {
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    var changeNow = UIPasteboard.General.ChangeCount;
-                    if (changeNow == 0 || lastClipboardChangeCount == changeNow)
-                    {
-                        UIPasteboard.General.String = string.Empty;
-                    }
-                    _clipboardTimer?.Invalidate();
-                    _clipboardTimer?.Dispose();
-                    _clipboardTimer = null;
-                    if (_clipboardBackgroundTaskId > 0)
-                    {
-                        UIApplication.SharedApplication.EndBackgroundTask(_clipboardBackgroundTaskId);
-                        _clipboardBackgroundTaskId = 0;
-                    }
-                });
-            });
         }
 
         private void ShowAppExtension(ExtensionPageViewModel extensionPageViewModel)

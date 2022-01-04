@@ -897,10 +897,10 @@
     <value>TOTP ஐ நகலெடு</value>
   </data>
   <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>If your login has an authenticator key attached to it, the TOTP verification code is automatically copied to your clipboard whenever you auto-fill the login.</value>
+    <value>உம் உள்நுழைவுடன் அங்கீகரிப்பான் விசை பற்றியிருந்தால், நீங்கள் உள்நுழைவை தன்னிரப்பும்போதெல்லாம் TOTP சரிபார்ப்புக்குறி  தானாக நகலகத்துக்கு நகலெடுக்கப்படுகிறது.</value>
   </data>
   <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>Disable Automatic TOTP Copy</value>
+    <value>தானியங்கு TOTP நகலடுப்பை முடக்கு</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
     <value>இவ்வம்சத்தை பயன்படுத்த உயர்தர உறுப்பினர் தகுதி தேவை.</value>
@@ -1253,10 +1253,10 @@
     <value>மீண்டும் முயல்</value>
   </data>
   <data name="YubiKeyInstructionIos" xml:space="preserve">
-    <value>To continue, hold your YubiKey NEO against the back of the device.</value>
+    <value>தொடர, உம் யீபிகீ NEOவை சாதனத்தின் பின்புறத்திற்கெதிரே பிடித்திரு.</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
-    <value>The accessibility service may be helpful to use when apps do not support the standard auto-fill service.</value>
+    <value>செயலிகள் வழக்கமான தன்னிரப்பிச்சேவையை ஆதரிக்காதபோது அணுகல்தன்மை சேவை பயன்படுத்த உதவிகரமாகவிருக்கலாம்.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
     <value>கடவுச்சொல் புதுப்பிக்கப்பட்டது</value>
@@ -1303,7 +1303,7 @@
     <value>கடவுச்சொல் தன்னிரப்பல்</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the "Settings" screen.</value>
+    <value>உம் பெட்டகத்திற்கு புது உள்நுழைவுகளைச் சேர்க்க மிக எளிய வழி பிட்வார்டன் கடவுச்சொல் தன்னிரப்பல் நீட்டிப்பு பயன்படுத்துவதே. "அமைப்புகள்" திரைக்கு சென்று பிட்வார்டன் கடவுச்சொல் தன்னிரப்பல் நீட்டிப்பைப் பயன்படுத்துவது பற்றி மேலுமறிக.</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
     <value>செல்லாத மின்னஞ்சல் முகவரி.</value>
@@ -1456,6 +1456,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>பூட்டவிழ்</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>பெட்டகத்தைப் பூட்டவிழ்</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>௩௦ நிமிடங்கள்</value>
   </data>
@@ -1471,6 +1474,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>உமது பெட்டகம் பூட்டப்பட்டுள்ளது. தொடர உமது கடவெண் குறியைச் நிச்சயப்படுத்து.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>உமது பெட்டகம் பூட்டப்பட்டுள்ளது. தொடர உமது அடையாளத்தை நிச்சயப்படுத்து.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>இருள்</value>
@@ -1612,8 +1618,14 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>உம் பெட்டக தரவை ஏற்றுமதி செய்ய பிரதான கடவுச்சொல்லை உள்ளிடு.</value>
   </data>
-    <data name="ExportVaultOTPDescription" xml:space="preserve">
-    <value>உம் பெட்டக தரவை ஏற்றுமதிசெய்ய சரிபார்ப்புக் குறியீட்டை உள்ளிடு.</value>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>உம் மின்னஞ்சலுக்கு சரிபார்ப்புக் குறியீட்டை அனுப்பு</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>குறியீடு அனுப்பப்பட்டது!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>தொடர உம் அடையாளத்தை உறுதிசெய்.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>இவ்வேற்றுமதி உம் பெட்டக தரவை மறையாக்கப்படா வடிவில் கொண்டுள்ளது. சேமிக்கவோ பாதுகாப்பற்ற தடங்களில் (மின்னஞ்சல் போன்றவை) அனுப்பவோ கூடாது. பயன்படுத்தியவுடன் அழித்துவிடவும்.</value>
@@ -1879,7 +1891,7 @@
     <value>அதிகபட்ச அணுகல் எண்ணிக்கை</value>
   </data>
   <data name="MaximumAccessCountInfo" xml:space="preserve">
-    <value>If set, users will no longer be able to access this Send once the maximum access count is reached.</value>
+    <value>அமைத்தால், அதிகபட்ச அணுகலெண்ணிக்கை எட்டப்பட்டவுடன் பயனர்கள் இந்த Sendஐ இனி அணுகவியலாது.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="MaximumAccessCountReached" xml:space="preserve">
@@ -2055,10 +2067,10 @@
     <value>FIDO2 WebAuthn</value>
   </data>
   <data name="Fido2Instruction" xml:space="preserve">
-    <value>To continue, have your FIDO2 WebAuthn enabled security key ready, then follow the instructions after clicking 'Authenticate WebAuthn' on the next screen.</value>
+    <value>தொடர, FIDO2 WebAuthn இயக்கப்பட்ட பாதுகாப்பு விசையைத் தயாராக வைத்திரு, அப்புறம் அடுத்த திரையில் 'WebAuthnஐ அங்கீகரி'ஐச் சொடுக்கிய பின் அறிவுறுத்தல்களைப் பின்பற்று.</value>
   </data>
   <data name="Fido2Desc" xml:space="preserve">
-    <value>Authentication using FIDO2 WebAuthn, you can authenticate using an external security key.</value>
+    <value>FIDO2 WebAuthn கொண்டு அங்கீகரிப்பு, நீங்கள் வெளிப்புற பாதுகாப்பு விசையைக்கொண்டு அங்கீகரிக்க முடியும்.</value>
   </data>
   <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
     <value>WebAuthn-ஐ அங்கீகரி</value>
@@ -2081,10 +2093,28 @@
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>ஒன்று அ மேற்பட்ட நிறுவன கொள்கைகள் உம் சொந்த பெட்டகத்தை ஏற்றுமதிசெய்வதைத் தவிர்க்கிறது.</value>
   </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>கணக்கை அழி</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>உமது கணக்கை அழித்தல் நிரந்தரமானது</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>உமது கணக்கும் அதனுடன் சேர்ந்த தரவனைத்தும் அழிக்கப்படும் மற்றும் மீட்டெடுக்கவியலா. நிச்சயமாக தொடரவா?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>உமது கணக்கை அழிக்கிறது</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>உமது கணக்கு நிரந்தரமாக அழிக்கப்பட்டது</value>
+  </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>செல்லாத சரிபார்ப்புக் குறியீடு.</value>
   </data>
-    <data name="RequestOTP" xml:space="preserve">
-    <value>ஒருமுறை கடவுச்சொல்லைக் கோரு</value>
+  <data name="SendCode" xml:space="preserve">
+    <value>குறியீட்டை அனுப்பு</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>அனுப்புகிறது</value>
   </data>
 </root>
