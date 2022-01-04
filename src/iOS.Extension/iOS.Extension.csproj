@@ -177,10 +177,10 @@
     <Compile Include="SetupViewController.designer.cs">
       <DependentUpon>SetupViewController.cs</DependentUpon>
     </Compile>
-    <None Include="Info.plist" Condition="'$(Configuration)' == 'Release'">
+    <None Include="Info.plist" Condition="'$(Configuration)' != 'Debug'">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Info-dev.plist" Condition="'$(Configuration)' != 'Release'">
+    <None Include="Info-dev.plist" Condition="'$(Configuration)' == 'Debug'">
       <LogicalName>Info.plist</LogicalName>
       <SubType>Designer</SubType>
     </None>
