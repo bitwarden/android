@@ -135,7 +135,7 @@ namespace Bit.App.Pages
 
             // Users with key connector and without biometric or pin has no MP to unlock with
             _usingKeyConnector = await _keyConnectorService.GetUsesKeyConnector();
-            if ( _usingKeyConnector && !(BiometricLock || PinLock))
+            if (_usingKeyConnector && !(BiometricLock || PinLock))
             {
                 await _vaultTimeoutService.LogOutAsync();
             }
@@ -184,6 +184,9 @@ namespace Bit.App.Pages
                 }
 
             }
+            var userId = await ServiceContainer.Resolve<IUserService>("userService").GetUserIdAsync();
+
+            Console.WriteLine($"###Bitwarden push registered: {ServiceContainer.Resolve<IPushNotificationService>("pushNotificationService").IsRegisteredForPush}");
         }
 
         public async Task SubmitAsync()
