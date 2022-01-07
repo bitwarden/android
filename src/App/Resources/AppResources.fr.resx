@@ -1410,7 +1410,7 @@
     <value>Aucune organisation à afficher.</value>
   </data>
   <data name="MoveToOrgDesc" xml:space="preserve">
-    <value>Choose an organization that you wish to move this item to. Moving to an organization transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</value>
+    <value>Choisissez une organisation vers laquelle vous souhaitez déplacer cet élément. Déplacer un élément vers une organisation transfère la propriété de l'élément à cette organisation. Vous ne serez plus le propriétaire direct de cet élément une fois qu'il aura été déplacé.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
     <value>Nombre de mots</value>
@@ -1456,7 +1456,7 @@
     <value>Déverrouiller</value>
   </data>
   <data name="UnlockVault" xml:space="preserve">
-    <value>Unlock Vault</value>
+    <value>Déverrouiller le coffre</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minutes</value>
@@ -1475,7 +1475,7 @@
     <value>Votre coffre est verrouillé. Saisissez votre code PIN pour continuer.</value>
   </data>
   <data name="VaultLockedIdentity" xml:space="preserve">
-    <value>Your vault is locked. Verify your identity to continue.</value>
+    <value>Votre coffre est verrouillé. Vérifiez votre identité pour continuer.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Sombre</value>
@@ -1618,13 +1618,13 @@
     <value>Saisissez votre mot de passe maître pour exporter les données de votre coffre.</value>
   </data>
   <data name="SendVerificationCodeToEmail" xml:space="preserve">
-    <value>Send a verification code to your email</value>
+    <value>Envoyer un code de vérification à votre adresse email</value>
   </data>
   <data name="CodeSent" xml:space="preserve">
-    <value>Code Sent!</value>
+    <value>Code Envoyé !</value>
   </data>
   <data name="ConfirmYourIdentity" xml:space="preserve">
-    <value>Confirm your identity to continue.</value>
+    <value>Confirmez votre identité pour continuer.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Cet export contient les données de votre coffre dans un format non chiffré. Vous ne devriez ni le stocker ni l'envoyer via des canaux non sécurisés (tel que par e-mail). Supprimez-le immédiatement après l'avoir utilisé.</value>
@@ -2039,7 +2039,7 @@
     <value>Mettre à jour le mot de passe principal</value>
   </data>
   <data name="UpdateMasterPasswordWarning" xml:space="preserve">
-    <value>Your Master Password was recently changed by an administrator in your organization. In order to access the vault, you must update your Master Password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
+    <value>Votre mot de passe maître a récemment été modifié par un administrateur de votre organisation. Pour accéder au coffre, vous devez mettre à jour votre mot de passe maître dès maintenant. Cette action va vous déconnecter et vous obligera à vous reconnecter. Les sessions actives sur d'autres appareils peuvent rester actives jusqu'à une heure.</value>
   </data>
   <data name="UpdatingPassword" xml:space="preserve">
     <value>Mise à jour du mot de passe</value>
@@ -2054,7 +2054,7 @@
     <value>{0} is using SSO with customer-managed encryption. Continuing will remove your Master Password from your account and require SSO to login.</value>
   </data>
   <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
-    <value>If you do not want to remove your Master Password, you may leave this organization.</value>
+    <value>Si vous ne souhaitez pas supprimer votre mot de passe maître actuel, vous pouvez quitter cette organisation. </value>
   </data>
   <data name="LeaveOrganization" xml:space="preserve">
     <value>Quitter l’organisation</value>
@@ -2063,16 +2063,16 @@
     <value>Quitter {0} ?</value>
   </data>
   <data name="Fido2Title" xml:space="preserve">
-    <value>FIDO2 WebAuthn</value>
+    <value>WebAuthn FIDO2</value>
   </data>
   <data name="Fido2Instruction" xml:space="preserve">
-    <value>To continue, have your FIDO2 WebAuthn enabled security key ready, then follow the instructions after clicking 'Authenticate WebAuthn' on the next screen.</value>
+    <value>Pour continuer, préparez votre clé de sécurité compatible FIDO2 WebAuthn, puis suivez les instructions après avoir cliqué sur "Authentifier WebAuthn" à l'écran suivant.</value>
   </data>
   <data name="Fido2Desc" xml:space="preserve">
     <value>Authentication using FIDO2 WebAuthn, you can authenticate using an external security key.</value>
   </data>
   <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
-    <value>Authenticate WebAuthn</value>
+    <value>Authentifier WebAuthn</value>
   </data>
   <data name="Fido2ReturnToApp" xml:space="preserve">
     <value>Retourner à l’application</value>
@@ -2084,13 +2084,13 @@
     <value>This organization has an enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>Your organization policies are affecting your vault timeout. Maximum allowed Vault Timeout is {0} hour(s) and {1} minute(s)</value>
+    <value>Les politiques de votre organisation affectent le délai d'expiration de votre coffre-fort. Le délai d'expiration maximal autorisé est de {0} heure(s) et {1} minute(s)</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
-    <value>Your vault timeout exceeds the restrictions set by your organization.</value>
+    <value>Le délai d'expiration de votre coffre-fort dépasse les restrictions définies par votre organisation.</value>
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
-    <value>One or more organization policies prevents your from exporting your personal vault.</value>
+    <value>Une ou plusieurs politiques d'organisation vous empêchent d'exporter votre coffre-fort personnel.</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Supprimer le compte</value>
@@ -2111,9 +2111,9 @@
     <value>Code de vérification invalide.</value>
   </data>
   <data name="SendCode" xml:space="preserve">
-    <value>Send Code</value>
+    <value>Envoyer le code</value>
   </data>
   <data name="Sending" xml:space="preserve">
-    <value>Sending</value>
+    <value>Envoi en cours</value>
   </data>
 </root>
