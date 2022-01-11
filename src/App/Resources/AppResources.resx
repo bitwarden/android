@@ -2117,4 +2117,7 @@
   <data name="Sending" xml:space="preserve">
     <value>Sending</value>
   </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>Verifying</value>
+  </data>
 </root>

@@ -3766,5 +3766,11 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("Sending", resourceCulture);
             }
         }
+        
+        public static string Verifying {
+            get {
+                return ResourceManager.GetString("Verifying", resourceCulture);
+            }
+        }
     }
 }
