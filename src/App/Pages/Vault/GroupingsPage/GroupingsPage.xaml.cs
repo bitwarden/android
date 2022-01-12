@@ -156,12 +156,11 @@ namespace Bit.App.Pages
                     await DisplayAlert(AppResources.EnableAutomaticSyncing, AppResources.PushNotificationAlert,
                         AppResources.OkGotIt);
                 }
-                // TODO: check if this should still be here
-                //if (!pushPromptShow.GetValueOrDefault(false) ||
-                //    DateTime.UtcNow - lastPushRegistration > TimeSpan.FromDays(1))
-                //{
+                if (!pushPromptShow.GetValueOrDefault(false) ||
+                    DateTime.UtcNow - lastPushRegistration > TimeSpan.FromDays(1))
+                {
                     await _pushNotificationService.RegisterAsync();
-                //}
+                }
             }
             else if (Device.RuntimePlatform == Device.Android)
             {

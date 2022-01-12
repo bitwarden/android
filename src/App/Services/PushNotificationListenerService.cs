@@ -28,7 +28,6 @@ namespace Bit.App.Services
 
         public async Task OnMessageAsync(JObject value, string deviceType)
         {
-            Console.WriteLine("####BITWARDEN: Push notifications OnMessageAsync###");
             Resolve();
             if (value == null)
             {
@@ -137,10 +136,6 @@ namespace Bit.App.Services
             }
 
             var appId = await _appIdService.GetAppIdAsync();
-            var userId = await ServiceContainer.Resolve<IUserService>("userService").GetUserIdAsync();
-
-            Console.WriteLine("###Bitwarden: UserId: {0} - AppId: {1} - Token: {2}", userId, appId, token);
-
             try
             {
                 await _apiService.PutDeviceTokenAsync(appId,

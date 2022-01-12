@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Foundation;
@@ -27,11 +28,11 @@ namespace Bit.iOS.Services
             {
                 if (error != null)
                 {
-                    Console.WriteLine($"Push Notifications {error}");
+                    Debug.WriteLine($"Push Notifications {error}");
                 }
                 else
                 {
-                    Console.WriteLine($"Push Notifications {granted}");
+                    Debug.WriteLine($"Push Notifications {granted}");
                 }
 
                 tcs.SetResult(granted);
