@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
+using Bit.Core;
 #if !FDROID
 using Microsoft.AppCenter.Crashes;
 #endif
