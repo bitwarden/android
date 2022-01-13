@@ -16,6 +16,8 @@ using Bit.Droid.Utilities;
 using Plugin.CurrentActivity;
 using Plugin.Fingerprint;
 using Xamarin.Android.Net;
+using System.Net.Http;
+using System.Net;
 #if !FDROID
 using Android.Gms.Security;
 #endif
@@ -78,7 +80,8 @@ namespace Bit.Droid
                 FFImageLoading.ImageService.Instance.Initialize(new FFImageLoading.Config.Configuration
                 {
                     FadeAnimationEnabled = false,
-                    FadeAnimationForCachedImages = false
+                    FadeAnimationForCachedImages = false,
+                    HttpClient = new HttpClient(new AndroidClientHandler() { AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate })
                 });
                 ZXing.Net.Mobile.Forms.Android.Platform.Init();
             });
@@ -110,6 +113,7 @@ namespace Bit.Droid
             ServiceContainer.Register<ICryptoPrimitiveService>("cryptoPrimitiveService", cryptoPrimitiveService);
             ServiceContainer.Register<IStorageService>("storageService", mobileStorageService);
             ServiceContainer.Register<IStorageService>("secureStorageService", secureStorageService);
+            ServiceContainer.Register<IClipboardService>("clipboardService", new ClipboardService(mobileStorageService));
             ServiceContainer.Register<IDeviceActionService>("deviceActionService", deviceActionService);
             ServiceContainer.Register<IPlatformUtilsService>("platformUtilsService", platformUtilsService);
             ServiceContainer.Register<IBiometricService>("biometricService", biometricService);

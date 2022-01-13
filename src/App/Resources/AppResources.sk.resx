@@ -310,6 +310,9 @@
     <value>Uložiť</value>
     <comment>Button text for a save operation (verb).</comment>
   </data>
+  <data name="Move" xml:space="preserve">
+    <value>Presunúť</value>
+  </data>
   <data name="Saving" xml:space="preserve">
     <value>Ukladá sa...</value>
     <comment>Message shown when interacting with the server</comment>
@@ -782,8 +785,8 @@
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
     <value>Hľadáte automaticky vypľňané prihlásenie pre "{0}".</value>
   </data>
-  <data name="ShareVault" xml:space="preserve">
-    <value>Zdieľať trezor</value>
+  <data name="LearnOrg" xml:space="preserve">
+    <value>Zistiť viac o organizáciách</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
     <value>Nemožno spustiť aplikáciu "{0}".</value>
@@ -1056,6 +1059,9 @@
   <data name="LastName" xml:space="preserve">
     <value>Priezvisko</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Celé meno</value>
+  </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Číslo vodičského preukazu</value>
   </data>
@@ -1179,6 +1185,9 @@
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>Skryté</value>
+  </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>Prepojené</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Text</value>
@@ -1378,6 +1387,10 @@
   <data name="NoCollectionsToList" xml:space="preserve">
     <value>Neexistujú žiadne zbierky na zobrazenie.</value>
   </data>
+  <data name="MovedItemToOrg" xml:space="preserve">
+    <value>{0} presunuté do {1}.</value>
+    <comment>ex: Item moved to Organization.</comment>
+  </data>
   <data name="ItemShared" xml:space="preserve">
     <value>Položka bola zdieľaná.</value>
   </data>
@@ -1390,11 +1403,14 @@
   <data name="ShareItem" xml:space="preserve">
     <value>Zdieľať položku</value>
   </data>
+  <data name="MoveToOrganization" xml:space="preserve">
+    <value>Presunúť do Organizácie</value>
+  </data>
   <data name="NoOrgsToList" xml:space="preserve">
     <value>Nenašli sa žiadne organizácie.</value>
   </data>
-  <data name="ShareDesc" xml:space="preserve">
-    <value>Vyberte organizáciu s ktorou chcete zdieľať túto položku. Zdieľanie presunie vlastníctvo položky na organizáciu. Po zdieľaní už nebudete priamy vlastník položky.</value>
+  <data name="MoveToOrgDesc" xml:space="preserve">
+    <value>Vyberte organizáciu, do ktorej chcete presunúť túto položku. Presunom do organizácie sa vlastníctvo položky prenáša na túto organizáciu. Po presunutí už nebudete priamym vlastníkom danej položky.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
     <value>Počet slov</value>
@@ -1424,8 +1440,8 @@
     <value>Fráza odtlačku vašeho účtu</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
-  <data name="ShareVaultConfirmation" xml:space="preserve">
-    <value>Bitwarden vám umožňuje zdieľať váš trezor s ostatnými ak používate konto v Organizácii. Chcete navštíviť stránku bitwarden.com a dozvedieť sa viac?</value>
+  <data name="LearnOrgConfirmation" xml:space="preserve">
+    <value>Bitwarden vám umožňuje zdieľať položky vášho trezora s ostatnými použitím konta v organizácii. Chcete navštíviť stránku bitwarden.com a dozvedieť sa viac?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
     <value>Export trezoru</value>
@@ -1438,6 +1454,9 @@
   </data>
   <data name="Unlock" xml:space="preserve">
     <value>Odomknúť</value>
+  </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Odomknúť trezor</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minút</value>
@@ -1454,6 +1473,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Váš trezor je uzamknutý. Overte sa PIN kódom ak chcete pokračovať.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Váš trezor je uzamknutý. Ak chcete pokračovať, overte svoju identitu.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Tmavý</value>
@@ -1500,12 +1522,8 @@
   <data name="ThemeDescription" xml:space="preserve">
     <value>Zmeniť motív aplikácie.</value>
   </data>
-  <data name="RestartIsRequired" xml:space="preserve">
-    <value>Vyžaduje sa reštart.</value>
-    <comment>Referring to restarting the application.</comment>
-  </data>
-  <data name="Restarting" xml:space="preserve">
-    <value>Prebieha reštartovanie...</value>
+  <data name="ThemeDefault" xml:space="preserve">
+    <value>Predvolené systémom</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Kopírovať poznámky</value>
@@ -1598,6 +1616,15 @@
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Zadajte vaše hlavné heslo pre export údajov trezoru.</value>
+  </data>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Poslať overovací kód na váš e-mail</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Kód bol odoslaný!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Ak chcete pokračovať, potvrďte svoju identitu.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Tento export obsahuje vaše dáta v nešifrovanom formáte. Nemali by ste ich ukladať, ani posielať cez nezabezpečené kanály (napr. email). Okamžite ho odstráňte, keď ho prestanete používať.</value>
@@ -1998,5 +2025,95 @@
   </data>
   <data name="PasswordConfirmationDesc" xml:space="preserve">
     <value>Táto akcia je chránená. Ak chcete pokračovať, znova zadajte hlavné heslo a overte svoju totožnosť.</value>
+  </data>
+  <data name="CaptchaRequired" xml:space="preserve">
+    <value>Vyžaduje sa Captcha</value>
+  </data>
+  <data name="CaptchaFailed" xml:space="preserve">
+    <value>Captcha zlyhala. Prosím, skúste to znova.</value>
+  </data>
+  <data name="UpdatedMasterPassword" xml:space="preserve">
+    <value>Hlavné heslo aktualizované</value>
+  </data>
+  <data name="UpdateMasterPassword" xml:space="preserve">
+    <value>Aktualizovať hlavné heslo</value>
+  </data>
+  <data name="UpdateMasterPasswordWarning" xml:space="preserve">
+    <value>Vaše hlavné heslo nedávno zmenil správca vo vašej organizácii. Ak chcete získať prístup k trezoru, musíte aktualizovať vaše hlavné heslo teraz. Pokračovaním sa odhlásite z aktuálnej relácie a budete sa musieť znova prihlásiť. Aktívne relácie na iných zariadeniach môžu zostať aktívne až jednu hodinu.</value>
+  </data>
+  <data name="UpdatingPassword" xml:space="preserve">
+    <value>Aktualizácia hesla</value>
+  </data>
+  <data name="UpdatePasswordError" xml:space="preserve">
+    <value>Aktuálne nie je možné heslo aktualizovať </value>
+  </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>Odstrániť hlavné heslo</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>{0} používa SSO so šifrovaním spravovaným zákazníkom. Pokračovaním sa z vášho účtu odstráni hlavné heslo a na prihlásenie sa bude vyžadovať SSO.</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>Ak nechcete odstrániť svoje hlavné heslo, môžete opustiť túto organizáciu.</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>Opustiť organizáciu</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>Opustiť {0}?</value>
+  </data>
+  <data name="Fido2Title" xml:space="preserve">
+    <value>FIDO2 WebAuthn</value>
+  </data>
+  <data name="Fido2Instruction" xml:space="preserve">
+    <value>Ak chcete pokračovať, pripravte si bezpečnostný kľúč s povoleným FIDO2 WebAuthn a potom kliknite na položku "Overiť cez WebAuthn" na ďalšej obrazovke a potom postupujte podľa pokynov.</value>
+  </data>
+  <data name="Fido2Desc" xml:space="preserve">
+    <value>Overovanie cez FIDO2 WebAuthn, môžete overovať pomocou externého bezpečnostného kľúča.</value>
+  </data>
+  <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
+    <value>Overiť cez WebAuthn</value>
+  </data>
+  <data name="Fido2ReturnToApp" xml:space="preserve">
+    <value>Vrátiť sa do aplikácie</value>
+  </data>
+  <data name="Fido2CheckBrowser" xml:space="preserve">
+    <value>Skontrolujte, či váš predvolený prehliadač podporuje WebAuthn, a skúste to znova.</value>
+  </data>
+  <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
+    <value>Táto organizácia má podnikovú politiku, ktorá vás automaticky zaregistruje na obnovenia hesla. Registrácia umožní správcom organizácie zmeniť vaše hlavné heslo.</value>
+  </data>
+  <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
+    <value>Zásady vašej organizácie ovplyvňujú časový limit trezoru. Maximálny povolený časový limit trezoru je {0} h a {1} m</value>
+  </data>
+  <data name="VaultTimeoutToLarge" xml:space="preserve">
+    <value>Časový limit vášho trezora prekračuje obmedzenia nastavené vašou organizáciou.</value>
+  </data>
+  <data name="DisablePersonalVaultExportPolicyInEffect">
+    <value>Jedna alebo viacero zásad organizácie vám bráni exportovať váš osobný trezor.</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Odstrániť účet</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Odstránenie účtu je trvalé</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Váš účet a všetky súvisiace údaje budú vymazané a neobnoviteľné. Naozaj chcete pokračovať?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Odstraňuje sa účet</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Váš účet bol natrvalo odstránený</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>Neplatný verifikačný kód.</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Odoslať kód</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Odosiela sa</value>
   </data>
 </root>

@@ -12,6 +12,7 @@ namespace Bit.App.Pages
     {
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IPasswordGenerationService _passwordGenerationService;
+        private readonly IClipboardService _clipboardService;
 
         private bool _showNoData;
 
@@ -20,6 +21,7 @@ namespace Bit.App.Pages
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _passwordGenerationService = ServiceContainer.Resolve<IPasswordGenerationService>(
                 "passwordGenerationService");
+            _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
 
             PageTitle = AppResources.PasswordHistory;
             History = new ExtendedObservableCollection<GeneratedPasswordHistory>();
@@ -51,7 +53,7 @@ namespace Bit.App.Pages
 
         private async void CopyAsync(GeneratedPasswordHistory ph)
         {
-            await _platformUtilsService.CopyToClipboardAsync(ph.Password);
+            await _clipboardService.CopyTextAsync(ph.Password);
             _platformUtilsService.ShowToast("info", null,
                 string.Format(AppResources.ValueHasBeenCopied, AppResources.Password));
         }

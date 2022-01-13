@@ -310,6 +310,9 @@
     <value>Enregistrer</value>
     <comment>Button text for a save operation (verb).</comment>
   </data>
+  <data name="Move" xml:space="preserve">
+    <value>Déplacer</value>
+  </data>
   <data name="Saving" xml:space="preserve">
     <value>Enregistrement...</value>
     <comment>Message shown when interacting with the server</comment>
@@ -782,8 +785,8 @@
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
     <value>Vous recherchez un élément pour remplir automatiquement « {0} ».</value>
   </data>
-  <data name="ShareVault" xml:space="preserve">
-    <value>Partager votre coffre</value>
+  <data name="LearnOrg" xml:space="preserve">
+    <value>En savoir plus sur les organisations</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
     <value>Impossible d'ouvrir l'application "{0}".</value>
@@ -1056,6 +1059,9 @@
   <data name="LastName" xml:space="preserve">
     <value>Nom de famille</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Nom complet</value>
+  </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Numéro de permis</value>
   </data>
@@ -1179,6 +1185,9 @@
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>Masqué</value>
+  </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>Lié</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Texte</value>
@@ -1378,6 +1387,10 @@
   <data name="NoCollectionsToList" xml:space="preserve">
     <value>Aucune collection à afficher.</value>
   </data>
+  <data name="MovedItemToOrg" xml:space="preserve">
+    <value>{0} déplacé vers {1}</value>
+    <comment>ex: Item moved to Organization.</comment>
+  </data>
   <data name="ItemShared" xml:space="preserve">
     <value>L'élément a été partagé.</value>
   </data>
@@ -1390,11 +1403,14 @@
   <data name="ShareItem" xml:space="preserve">
     <value>Partager l'élément</value>
   </data>
+  <data name="MoveToOrganization" xml:space="preserve">
+    <value>Déplacer vers l'organisation</value>
+  </data>
   <data name="NoOrgsToList" xml:space="preserve">
     <value>Aucune organisation à afficher.</value>
   </data>
-  <data name="ShareDesc" xml:space="preserve">
-    <value>Choisissez une organisation avec laquelle vous voulez partager cet élément. Le partage transfère la propriété de l'élément à l'organisation. Vous ne serez plus le propriétaire direct de cet élément après le partage.</value>
+  <data name="MoveToOrgDesc" xml:space="preserve">
+    <value>Choisissez une organisation vers laquelle vous souhaitez déplacer cet élément. Déplacer un élément vers une organisation transfère la propriété de l'élément à cette organisation. Vous ne serez plus le propriétaire direct de cet élément une fois qu'il aura été déplacé.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
     <value>Nombre de mots</value>
@@ -1424,8 +1440,8 @@
     <value>La phrase d'empreinte de votre compte</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
-  <data name="ShareVaultConfirmation" xml:space="preserve">
-    <value>Bitwarden vous permet de partager votre coffre avec d'autres personnes en utilisant un compte d'organisation. Souhaitez-vous visiter le site web bitwarden.com pour en savoir plus ?</value>
+  <data name="LearnOrgConfirmation" xml:space="preserve">
+    <value>Bitwarden vous permet de partager vos éléments de coffre avec d’autres personnes en utilisant un compte d’organisation. Voulez-vous visiter le site web de bitwarden.com pour en savoir plus ?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
     <value>Exporter le coffre</value>
@@ -1438,6 +1454,9 @@
   </data>
   <data name="Unlock" xml:space="preserve">
     <value>Déverrouiller</value>
+  </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Déverrouiller le coffre</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minutes</value>
@@ -1454,6 +1473,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Votre coffre est verrouillé. Saisissez votre code PIN pour continuer.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Votre coffre est verrouillé. Vérifiez votre identité pour continuer.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Sombre</value>
@@ -1500,12 +1522,8 @@
   <data name="ThemeDescription" xml:space="preserve">
     <value>Modifiez le thème de couleur de l'application.</value>
   </data>
-  <data name="RestartIsRequired" xml:space="preserve">
-    <value>Redémarrage requis.</value>
-    <comment>Referring to restarting the application.</comment>
-  </data>
-  <data name="Restarting" xml:space="preserve">
-    <value>Redémarrage...</value>
+  <data name="ThemeDefault" xml:space="preserve">
+    <value>Par défaut (Système)</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Copier les notes</value>
@@ -1598,6 +1616,15 @@
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Saisissez votre mot de passe maître pour exporter les données de votre coffre.</value>
+  </data>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Envoyer un code de vérification à votre adresse email</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Code Envoyé !</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Confirmez votre identité pour continuer.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Cet export contient les données de votre coffre dans un format non chiffré. Vous ne devriez ni le stocker ni l'envoyer via des canaux non sécurisés (tel que par e-mail). Supprimez-le immédiatement après l'avoir utilisé.</value>
@@ -1998,5 +2025,95 @@
   </data>
   <data name="PasswordConfirmationDesc" xml:space="preserve">
     <value>Cette action est protégée. Pour continuer, veuillez ressaisir votre mot de passe maître pour vérifier votre identité.</value>
+  </data>
+  <data name="CaptchaRequired" xml:space="preserve">
+    <value>Captcha obligatoire</value>
+  </data>
+  <data name="CaptchaFailed" xml:space="preserve">
+    <value>Le captcha a échoué. Veuillez réessayer.</value>
+  </data>
+  <data name="UpdatedMasterPassword" xml:space="preserve">
+    <value>Mot de passe principal mis à jour</value>
+  </data>
+  <data name="UpdateMasterPassword" xml:space="preserve">
+    <value>Mettre à jour le mot de passe principal</value>
+  </data>
+  <data name="UpdateMasterPasswordWarning" xml:space="preserve">
+    <value>Votre mot de passe maître a récemment été modifié par un administrateur de votre organisation. Pour accéder au coffre, vous devez mettre à jour votre mot de passe maître dès maintenant. Cette action va vous déconnecter et vous obligera à vous reconnecter. Les sessions actives sur d'autres appareils peuvent rester actives jusqu'à une heure.</value>
+  </data>
+  <data name="UpdatingPassword" xml:space="preserve">
+    <value>Mise à jour du mot de passe</value>
+  </data>
+  <data name="UpdatePasswordError" xml:space="preserve">
+    <value>Impossible de mettre à jour le mot de passe pour le moment</value>
+  </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>Supprimer le mot de passe maître</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>{0} is using SSO with customer-managed encryption. Continuing will remove your Master Password from your account and require SSO to login.</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>Si vous ne souhaitez pas supprimer votre mot de passe maître actuel, vous pouvez quitter cette organisation. </value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>Quitter l’organisation</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>Quitter {0} ?</value>
+  </data>
+  <data name="Fido2Title" xml:space="preserve">
+    <value>WebAuthn FIDO2</value>
+  </data>
+  <data name="Fido2Instruction" xml:space="preserve">
+    <value>Pour continuer, préparez votre clé de sécurité compatible FIDO2 WebAuthn, puis suivez les instructions après avoir cliqué sur "Authentifier WebAuthn" à l'écran suivant.</value>
+  </data>
+  <data name="Fido2Desc" xml:space="preserve">
+    <value>Authentication using FIDO2 WebAuthn, you can authenticate using an external security key.</value>
+  </data>
+  <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
+    <value>Authentifier WebAuthn</value>
+  </data>
+  <data name="Fido2ReturnToApp" xml:space="preserve">
+    <value>Retourner à l’application</value>
+  </data>
+  <data name="Fido2CheckBrowser" xml:space="preserve">
+    <value>Assurez-vous que votre navigateur par défaut prend en charge WebAuthn et réessayez.</value>
+  </data>
+  <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
+    <value>This organization has an enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password.</value>
+  </data>
+  <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
+    <value>Les politiques de votre organisation affectent le délai d'expiration de votre coffre-fort. Le délai d'expiration maximal autorisé est de {0} heure(s) et {1} minute(s)</value>
+  </data>
+  <data name="VaultTimeoutToLarge" xml:space="preserve">
+    <value>Le délai d'expiration de votre coffre-fort dépasse les restrictions définies par votre organisation.</value>
+  </data>
+  <data name="DisablePersonalVaultExportPolicyInEffect">
+    <value>Une ou plusieurs politiques d'organisation vous empêchent d'exporter votre coffre-fort personnel.</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Supprimer le compte</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>La suppression de votre compte est permanente</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Votre compte et toutes les données associées seront effacées et irrécupérables. Êtes-vous sûr de vouloir continuer ?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Suppression de votre compte</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Votre compte a été définitivement supprimé</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>Code de vérification invalide.</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Envoyer le code</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Envoi en cours</value>
   </data>
 </root>

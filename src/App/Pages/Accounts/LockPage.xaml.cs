@@ -11,7 +11,6 @@ namespace Bit.App.Pages
 {
     public partial class LockPage : BaseContentPage
     {
-        private readonly IStorageService _storageService;
         private readonly AppOptions _appOptions;
         private readonly bool _autoPromptBiometric;
         private readonly LockPageViewModel _vm;
@@ -21,7 +20,6 @@ namespace Bit.App.Pages
 
         public LockPage(AppOptions appOptions = null, bool autoPromptBiometric = true)
         {
-            _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _appOptions = appOptions;
             _autoPromptBiometric = autoPromptBiometric;
             InitializeComponent();
@@ -65,7 +63,7 @@ namespace Bit.App.Pages
                 return;
             }
             _appeared = true;
-            await _vm.InitAsync(_autoPromptBiometric);
+            await _vm.InitAsync();
             if (!_vm.BiometricLock)
             {
                 if (_vm.PinLock)
@@ -75,6 +73,22 @@ namespace Bit.App.Pages
                 else
                 {
                     RequestFocus(MasterPasswordEntry);
+                }
+            }
+            else
+            {
+                if (_vm.UsingKeyConnector && !_vm.PinLock)
+                {
+                    _passwordGrid.IsVisible = false;
+                    _unlockButton.IsVisible = false;
+                }
+                if (_autoPromptBiometric)
+                {
+                    var tasks = Task.Run(async () =>
+                    {
+                        await Task.Delay(500);
+                        Device.BeginInvokeOnMainThread(async () => await _vm.PromptBiometricAsync());
+                    });
                 }
             }
         }
@@ -130,6 +144,7 @@ namespace Bit.App.Pages
                 return;
             }
             var previousPage = await AppHelpers.ClearPreviousPage();
+
             Application.Current.MainPage = new TabsPage(_appOptions, previousPage);
         }
     }

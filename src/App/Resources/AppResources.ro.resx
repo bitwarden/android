@@ -310,6 +310,9 @@
     <value>Salvare</value>
     <comment>Button text for a save operation (verb).</comment>
   </data>
+  <data name="Move" xml:space="preserve">
+    <value>Mutare</value>
+  </data>
   <data name="Saving" xml:space="preserve">
     <value>Salvare...</value>
     <comment>Message shown when interacting with the server</comment>
@@ -782,8 +785,8 @@
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
     <value>Căutați o autentificare automată pentru "{0}".</value>
   </data>
-  <data name="ShareVault" xml:space="preserve">
-    <value>Partajați-vă seiful</value>
+  <data name="LearnOrg" xml:space="preserve">
+    <value>Aflați mai multe despre organizații</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
     <value>Nu se poate deschide aplicația "{0}".</value>
@@ -1056,6 +1059,9 @@
   <data name="LastName" xml:space="preserve">
     <value>Nume</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Numele complet</value>
+  </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Număr licență</value>
   </data>
@@ -1179,6 +1185,9 @@
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>Ascuns</value>
+  </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>Conectat</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Text</value>
@@ -1378,6 +1387,10 @@
   <data name="NoCollectionsToList" xml:space="preserve">
     <value>Nu există colecții de afișat.</value>
   </data>
+  <data name="MovedItemToOrg" xml:space="preserve">
+    <value>{0} s-a mutat la {1}.</value>
+    <comment>ex: Item moved to Organization.</comment>
+  </data>
   <data name="ItemShared" xml:space="preserve">
     <value>Articolul a fost partajat.</value>
   </data>
@@ -1390,11 +1403,14 @@
   <data name="ShareItem" xml:space="preserve">
     <value>Partajare articol</value>
   </data>
+  <data name="MoveToOrganization" xml:space="preserve">
+    <value>Mutare la organizație</value>
+  </data>
   <data name="NoOrgsToList" xml:space="preserve">
     <value>Nicio organizație de afișat.</value>
   </data>
-  <data name="ShareDesc" xml:space="preserve">
-    <value>Alegeți o organizație cu care doriți să partajați acest articol. Partajarea transferă proprietatea asupra articolului către organizație. Nu veți mai fi proprietarul direct al acestuia după ce a fost partajat.</value>
+  <data name="MoveToOrgDesc" xml:space="preserve">
+    <value>Alegeți o organizație la care doriți să mutați acest articol. Mutarea într-o organizație, transferă proprietatea asupra articolului către organizația respectivă. Nu veți mai fi proprietarul direct al acestui articol odată ce a fost mutat.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
     <value>Număr de cuvinte</value>
@@ -1424,7 +1440,7 @@
     <value>Fraza amprentă a contului dvs.</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
-  <data name="ShareVaultConfirmation" xml:space="preserve">
+  <data name="LearnOrgConfirmation" xml:space="preserve">
     <value>Bitwarden vă permite să vă partajați seiful cu alte persoane utilizând un cont pentru organizații. Doriți să vizitați saitul bitwarden.com pentru a afla mai multe?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
@@ -1438,6 +1454,9 @@
   </data>
   <data name="Unlock" xml:space="preserve">
     <value>Deblocare</value>
+  </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Deblocare seif</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 de minute</value>
@@ -1454,6 +1473,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Seiful dvs. este blocat. Verificați codul PIN pentru a continua.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Seiful dvs. este blocat. Verificați-vă identitatea pentru a continua.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Întunecat</value>
@@ -1500,12 +1522,8 @@
   <data name="ThemeDescription" xml:space="preserve">
     <value>Schimbare temă de culori a aplicației.</value>
   </data>
-  <data name="RestartIsRequired" xml:space="preserve">
-    <value>Repornirea este necesară.</value>
-    <comment>Referring to restarting the application.</comment>
-  </data>
-  <data name="Restarting" xml:space="preserve">
-    <value>Repornire...</value>
+  <data name="ThemeDefault" xml:space="preserve">
+    <value>Implicit (sistem)</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Copiere note</value>
@@ -1598,6 +1616,15 @@
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Introduceți parola principală pentru a exporta datele seifului.</value>
+  </data>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Trimite un cod de verificare la adresa dvs. de e-mail</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Cod trimis</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Confirmați-vă identitatea pentru a continua.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Acest export conține datele dvs. din seif în format necriptat. Nu ar trebui să stocați sau să trimiteți fișierul pe canale nesecurizate (cum ar fi e-mail). Ștergeți-l imediat după ce nu îl mai folosiți.</value>
@@ -1863,7 +1890,7 @@
     <value>Număr maxim de accesări</value>
   </data>
   <data name="MaximumAccessCountInfo" xml:space="preserve">
-    <value>Dacă este setată, utilizatorii nu vor mai putea accesa acest Send după atingerea numărului maxim de accesări.</value>
+    <value>Dacă este configurat, utilizatorii nu vor mai putea accesa acest Send când a fost atins numărul maxim de accesări.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="MaximumAccessCountReached" xml:space="preserve">
@@ -1998,5 +2025,95 @@
   </data>
   <data name="PasswordConfirmationDesc" xml:space="preserve">
     <value>Această acțiune este protejată. Pentru a continua, vă rugăm să reintroduceți parola principală pentru a vă verifica identitatea.</value>
+  </data>
+  <data name="CaptchaRequired" xml:space="preserve">
+    <value>Captcha obligatoriu</value>
+  </data>
+  <data name="CaptchaFailed" xml:space="preserve">
+    <value>Captcha a eșuat. Vă rugăm să încercați din nou.</value>
+  </data>
+  <data name="UpdatedMasterPassword" xml:space="preserve">
+    <value>Parolă principală actualizată</value>
+  </data>
+  <data name="UpdateMasterPassword" xml:space="preserve">
+    <value>Actualizare parolă principală</value>
+  </data>
+  <data name="UpdateMasterPasswordWarning" xml:space="preserve">
+    <value>Parola dvs. principală a fost modificată recent de unul din administratorii organizației dvs. Pentru a accesa seiful, trebuie să o actualizați acum. Procedura vă va deconecta de la sesiunea curentă, necesitând să vă reconectați. Sesiunile active de pe alte dispozitive pot continua să rămână active timp de până la o oră.</value>
+  </data>
+  <data name="UpdatingPassword" xml:space="preserve">
+    <value>Actualizarea parolei</value>
+  </data>
+  <data name="UpdatePasswordError" xml:space="preserve">
+    <value>În prezent, parola nu poate fi actualizată</value>
+  </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>Eliminare parolă principală</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>{0} utilizează SSO cu criptare gestionată de clienți. Continuarea va elimina parola principală din contul dvs. și va necesita SSO pentru autentificare.</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>Dacă nu doriți să eliminați parola generală, puteți părăsi această organizație.</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>Părăsire organizație</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>Părăsiți {0}</value>
+  </data>
+  <data name="Fido2Title" xml:space="preserve">
+    <value>FIDO2 WebAuthn</value>
+  </data>
+  <data name="Fido2Instruction" xml:space="preserve">
+    <value>Pentru a continua, pregătiți cheia de securitate care acceptă autentificarea FIDO2 WebAuthn, apoi urmați instrucțiunile după ce faceți clic pe „Autentificare WebAuthn” pe ecranul următor.</value>
+  </data>
+  <data name="Fido2Desc" xml:space="preserve">
+    <value>Autentificare cu FIDO2 WebAuthn. Vă puteți autentifica folosind o cheie de securitate externă.</value>
+  </data>
+  <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
+    <value>Autentificare WebAuthn</value>
+  </data>
+  <data name="Fido2ReturnToApp" xml:space="preserve">
+    <value>Revenire la aplicație</value>
+  </data>
+  <data name="Fido2CheckBrowser" xml:space="preserve">
+    <value>Asigurați-vă că browserul implicit acceptă WebAuthn și încercați din nou.</value>
+  </data>
+  <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
+    <value>Această organizație are o politică de întreprindere care vă va înregistra automat la resetarea parolei. Înregistrarea va permite administratorilor organizației să vă modifice parola principală.</value>
+  </data>
+  <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
+    <value>Politicile organizației dvs vă afectează expirarea seifului. Timpul maxim permis de expirare a seifului este {0} oră (ore) și {1} minut(e)</value>
+  </data>
+  <data name="VaultTimeoutToLarge" xml:space="preserve">
+    <value>Timpul de expirare a seifului depășește restricțiile stabilite de organizația dvs.</value>
+  </data>
+  <data name="DisablePersonalVaultExportPolicyInEffect">
+    <value>Una sau mai multe politici ale organizației vă împiedică să exportați seiful personal.</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Ștergere cont</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Ștergerea contului dvs. este permanentă</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Contul dvs. și toate datele asociate vor fi șterse și nu vor putea fi recuperate. Sunteți sigur ca vreți sa continuați?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Ștergerea contului dvs.</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Contul dvs. a fost șters definitiv</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>Cod de verificare nevalid.</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Trimitere cod</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Se trimite</value>
   </data>
 </root>

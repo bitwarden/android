@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Bit.Core.Services
 {
@@ -228,6 +229,16 @@ namespace Bit.Core.Services
                 throw new Exception("No issuer found.");
             }
             return decoded["iss"].Value<string>();
+        }
+
+        public bool GetIsExternal()
+        {
+            var decoded = DecodeToken();
+            if (decoded?["amr"] == null)
+            {
+                return false;
+            }
+            return decoded["amr"].Value<JArray>().Any(t => t.Value<string>() == "external");
         }
 
         private async Task<bool> SkipTokenStorage()

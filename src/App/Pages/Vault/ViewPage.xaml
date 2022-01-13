@@ -121,8 +121,7 @@
                                     IsVisible="{Binding ShowPassword, Converter={StaticResource inverseBool}}" />
                                 <controls:MonoLabel
                                     Text="{Binding ColoredPassword, Mode=OneWay}"
-                                    TextType="Html"
-                                    StyleClass="box-value"
+                                    StyleClass="box-value, text-html"
                                     Grid.Row="1"
                                     Grid.Column="0"
                                     LineBreakMode="CharacterWrap"
@@ -527,14 +526,9 @@
                                    StyleClass="box-header, box-header-platform" />
                         </StackLayout>
                         <StackLayout StyleClass="box-row">
-                            <Label
+                            <controls:SelectableLabel
                                 Text="{Binding Cipher.Notes, Mode=OneWay}"
-                                StyleClass="box-value"
-                                LineBreakMode="WordWrap">
-                                <Label.Effects>
-                                    <effects:SelectableLabelEffect />
-                                </Label.Effects>
-                            </Label>
+                                StyleClass="box-value"/>
                         </StackLayout>
                         <BoxView StyleClass="box-row-separator" />
                     </StackLayout>
@@ -568,6 +562,12 @@
                                                 Grid.Row="1"
                                                 Grid.Column="0"
                                                 IsVisible="{Binding IsTextType}" />
+                                            <controls:IconLabel
+                                                Text="{Binding ValueText, Mode=OneWay}"
+                                                StyleClass="box-value"
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                IsVisible="{Binding IsLinkedType}" />
                                             <controls:IconLabel
                                                 Text="{Binding ValueText, Mode=OneWay}"
                                                 StyleClass="box-value"

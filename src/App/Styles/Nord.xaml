@@ -13,11 +13,14 @@
     <Color x:Key="PasswordSpecialColor">#d08770</Color>
     <Color x:Key="ButtonColor">#d8dee9</Color>
     <Color x:Key="InputPlaceholderColor">#7b88a1</Color>
+    <Color x:Key="DangerPressedColor">#953C44</Color>
 
     <Color x:Key="BackgroundColor">#3b4252</Color>
     <Color x:Key="SplashBackgroundColor">#2e3440</Color>
     <Color x:Key="BorderColor">#2e3440</Color>
     <Color x:Key="DisabledIconColor">#d8dee9</Color>
+    <Color x:Key="SeparatorColor">#2e3440</Color>
+    <Color x:Key="TouchColor">#81a1c1</Color>
 
     <Color x:Key="BoxBorderColor">#2e3440</Color>
     <Color x:Key="BoxHeaderTextColor">#81a1c1</Color>
@@ -38,9 +41,24 @@
     <Color x:Key="SliderTrackMaxColor">#2e3440</Color>
 
     <Color x:Key="SwitchOnColor">#81a1c1</Color>
+    <Color x:Key="SwitchThumbColor">#e5e9f0</Color>
 
-    <Color x:Key="ButtonTextColor">#e5e9f0</Color>
+    <Color x:Key="StepperBackgroundColor">#4c566a</Color>
+    <Color x:Key="StepperForegroundColor">#e5e9f0</Color>
+
+    <Color x:Key="ButtonPrimaryBackgroundColor">#81a1c1</Color>
+    <Color x:Key="ButtonPrimaryBackgroundColorPressed">#4E769E</Color>
+    <Color x:Key="ButtonPrimaryBackgroundColorDisabled">#5C6C7B</Color>
+    <Color x:Key="ButtonPrimaryTextColor">#e5e9f0</Color>
+    <Color x:Key="ButtonPrimaryTextColorDisabled">#ACB5C5</Color>
+
     <Color x:Key="ButtonBackgroundColor">#4c566a</Color>
+    <Color x:Key="ButtonBackgroundColorPressed">#3A4251</Color>
+    <Color x:Key="ButtonBackgroundColorDisabled">#454951</Color>
+    <Color x:Key="ButtonBorderColor">#5E6A82</Color>
+    <Color x:Key="ButtonTextColor">#e5e9f0</Color>
+    <Color x:Key="ButtonTextColorDisabled">#aaaaaa</Color>
+    <Color x:Key="ButtonTextColorOpacity">#99e5e9f0</Color>
 
     <Color x:Key="FabColor">#81a1c1</Color>
     <Color x:Key="FabPressedColor">#81a1c1</Color>

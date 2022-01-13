@@ -732,7 +732,7 @@ namespace Bit.Core.Services
             catch (ApiException e)
             {
                 await DeleteAttachmentAsync(id, attachmentId);
-                throw e;
+                throw;
             }
         }
 
@@ -1190,7 +1190,8 @@ namespace Bit.Core.Services
             {
                 var field = new Field
                 {
-                    Type = model.Type
+                    Type = model.Type,
+                    LinkedId = model.LinkedId,
                 };
                 // normalize boolean type field values
                 if (model.Type == FieldType.Boolean && model.Value != "true")

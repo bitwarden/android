@@ -61,7 +61,6 @@ namespace Bit.App.Pages
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            await _vm.InitAsync();
             if (_syncService.SyncInProgress)
             {
                 IsBusy = true;
@@ -162,7 +161,7 @@ namespace Bit.App.Pages
             if (DoOnce())
             {
                 var page = new SendsPage(_vm.Filter, _vm.Type != null);
-                await Navigation.PushModalAsync(new NavigationPage(page), false);
+                await Navigation.PushModalAsync(new NavigationPage(page));
             }
         }
 

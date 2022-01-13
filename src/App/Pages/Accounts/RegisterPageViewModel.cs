@@ -202,13 +202,17 @@ namespace Bit.App.Pages
         public void TogglePassword()
         {
             ShowPassword = !ShowPassword;
-            (Page as RegisterPage).MasterPasswordEntry.Focus();
+            var entry = (Page as RegisterPage).MasterPasswordEntry;
+            entry.Focus();
+            entry.CursorPosition = String.IsNullOrEmpty(MasterPassword) ? 0 : MasterPassword.Length;
         }
 
         public void ToggleConfirmPassword()
         {
             ShowPassword = !ShowPassword;
-            (Page as RegisterPage).ConfirmMasterPasswordEntry.Focus();
+            var entry = (Page as RegisterPage).ConfirmMasterPasswordEntry;
+            entry.Focus();
+            entry.CursorPosition = String.IsNullOrEmpty(ConfirmMasterPassword) ? 0 : ConfirmMasterPassword.Length;
         }
     }
 }

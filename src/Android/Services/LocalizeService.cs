@@ -98,5 +98,15 @@ namespace Bit.Droid.Services
             Console.WriteLine(".NET Fallback Language/Locale:" + netLanguage + " (application-specific)");
             return netLanguage;
         }
+
+        public string GetLocaleShortDate(DateTime? date)
+        {
+            return date?.ToShortDateString() ?? string.Empty;
+        }
+
+        public string GetLocaleShortTime(DateTime? time)
+        {
+            return time?.ToShortTimeString() ?? string.Empty;
+        }
     }
 }

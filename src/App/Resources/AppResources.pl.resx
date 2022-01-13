@@ -310,6 +310,9 @@
     <value>Zapisz</value>
     <comment>Button text for a save operation (verb).</comment>
   </data>
+  <data name="Move" xml:space="preserve">
+    <value>Przenieś</value>
+  </data>
   <data name="Saving" xml:space="preserve">
     <value>Zapisywanie...</value>
     <comment>Message shown when interacting with the server</comment>
@@ -345,7 +348,7 @@
     <comment>Label for a uri/url.</comment>
   </data>
   <data name="UseFingerprintToUnlock" xml:space="preserve">
-    <value>Odblokuj za pomocą odcisku palca</value>
+    <value>Odblokuj odciskiem palca</value>
   </data>
   <data name="Username" xml:space="preserve">
     <value>Nazwa użytkownika</value>
@@ -692,7 +695,7 @@
     <value>Logowanie dwustopniowe sprawia, że konto jest bardziej bezpieczne poprzez wymuszenie potwierdzenia logowania z innego urządzenia, takiego jak z klucza bezpieczeństwa, aplikacji uwierzytelniającej, wiadomości SMS, telefonu lub adresu e-mail. Logowanie dwustopniowe możesz włączyć w sejfie internetowym bitwarden.com. Czy chcesz przejść do tej strony?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
-    <value>Odblokuj poprzez {0}</value>
+    <value>Odblokuj przez {0}</value>
   </data>
   <data name="UnlockWithPIN" xml:space="preserve">
     <value>Odblokuj kodem PIN</value>
@@ -782,8 +785,8 @@
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
     <value>Szukasz element autouzupełniania dla "{0}".</value>
   </data>
-  <data name="ShareVault" xml:space="preserve">
-    <value>Udostępnij sejf</value>
+  <data name="LearnOrg" xml:space="preserve">
+    <value>Dowiedz się więcej o organizacjach</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
     <value>Nie można otworzyć aplikacji "{0}".</value>
@@ -1056,6 +1059,9 @@
   <data name="LastName" xml:space="preserve">
     <value>Nazwisko</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Imię i nazwisko</value>
+  </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Numer prawa jazdy</value>
   </data>
@@ -1160,7 +1166,7 @@
     <value>Użyj Face ID do weryfikacji.</value>
   </data>
   <data name="UseFaceIDToUnlock" xml:space="preserve">
-    <value>Użyj Face ID do odblokowania</value>
+    <value>Odblokuj za pomocą Touch ID</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
     <value>Zweryfikuj Face ID</value>
@@ -1179,6 +1185,9 @@
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>Pole maskowane</value>
+  </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>Powiązane pole</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Tekst</value>
@@ -1378,6 +1387,10 @@
   <data name="NoCollectionsToList" xml:space="preserve">
     <value>Brak kolekcji do wyświetlenia.</value>
   </data>
+  <data name="MovedItemToOrg" xml:space="preserve">
+    <value>{0} został przeniesiony do {1}.</value>
+    <comment>ex: Item moved to Organization.</comment>
+  </data>
   <data name="ItemShared" xml:space="preserve">
     <value>Element został udostępniony.</value>
   </data>
@@ -1390,11 +1403,14 @@
   <data name="ShareItem" xml:space="preserve">
     <value>Udostępnij element</value>
   </data>
+  <data name="MoveToOrganization" xml:space="preserve">
+    <value>Przenieś do organizacji</value>
+  </data>
   <data name="NoOrgsToList" xml:space="preserve">
     <value>Brak organizacji do wyświetlenia.</value>
   </data>
-  <data name="ShareDesc" xml:space="preserve">
-    <value>Wybierz organizację, której chcesz udostępnić ten element. Udostępnianie przenosi własność elementu do wybranej organizacji. Nie będziesz już bezpośrednim właścicielem tego elementu, gdy zostanie on udostępniony.</value>
+  <data name="MoveToOrgDesc" xml:space="preserve">
+    <value>Wybierz organizację, do której chcesz przenieść ten element. Ta czynność spowoduje utratę własności elementu i przenosi te uprawnienia do organizacji.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
     <value>Liczba słów</value>
@@ -1424,7 +1440,7 @@
     <value>Unikalny identyfikator Twojego konta</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
-  <data name="ShareVaultConfirmation" xml:space="preserve">
+  <data name="LearnOrgConfirmation" xml:space="preserve">
     <value>Bitwarden pozwala na udostępnianie zawartości sejfu innym osobom za pośrednictwem organizacji. Czy chcesz odwiedzić stronę bitwarden.com, aby dowiedzieć się więcej?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
@@ -1438,6 +1454,9 @@
   </data>
   <data name="Unlock" xml:space="preserve">
     <value>Odblokuj</value>
+  </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Odblokuj sejf</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minut</value>
@@ -1454,6 +1473,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Sejf jest zablokowany. Wpisz kod PIN, aby kontynuować.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Sejf jest zablokowany. Zweryfikuj swoją tożsamość, aby kontynuować.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Ciemny</value>
@@ -1500,12 +1522,8 @@
   <data name="ThemeDescription" xml:space="preserve">
     <value>Zmień motyw kolorystyczny aplikacji.</value>
   </data>
-  <data name="RestartIsRequired" xml:space="preserve">
-    <value>Uruchomienie ponowne jest wymagane.</value>
-    <comment>Referring to restarting the application.</comment>
-  </data>
-  <data name="Restarting" xml:space="preserve">
-    <value>Uruchamianie ponowne...</value>
+  <data name="ThemeDefault" xml:space="preserve">
+    <value>Domyślny (systemowy)</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Kopiuj notatki</value>
@@ -1564,13 +1582,13 @@
     <value>Twoja sesja wygasła.</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
-    <value>Weryfikacja danych biometrycznych</value>
+    <value>Weryfikacja biometryczna</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
     <value>Dane biometryczne</value>
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
-    <value>Użyj danych biometrycznych do odblokowania</value>
+    <value>Odblokuj danymi biometrycznymi</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
     <value>Aplikacja Bitwarden wymaga uwagi - patrz "Usługa autouzupełniania" w ustawieniach aplikacji</value>
@@ -1598,6 +1616,15 @@
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Wpisz hasło główne, aby wyeksportować dane z sejfu.</value>
+  </data>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Wyślij kod weryfikacyjny na adres e-mail</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Kod został wysłany!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Potwierdź swoją tożsamość, aby kontynuować.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Plik zawiera dane sejfu w niezaszyfrowanym formacie. Nie powinieneś go przechowywać, ani przesyłać poprzez niezabezpieczone kanały (takie jak poczta e-mail). Skasuj go natychmiast po użyciu.</value>
@@ -1712,7 +1739,7 @@
     <value>Ustaw hasło główne</value>
   </data>
   <data name="SetMasterPasswordSummary" xml:space="preserve">
-    <value>Aby zakończyć logowanie jednokrotne SSO, ustaw hasło główne, aby uzyskać dostęp do sejfu.</value>
+    <value>W celu zakończenia jednokrotnego logowania SSO, ustaw hasło główne, aby uzyskać dostęp do sejfu.</value>
   </data>
   <data name="MasterPasswordPolicyInEffect" xml:space="preserve">
     <value>Co najmniej jedna zasada organizacji wymaga, aby hasło główne spełniało następujące wymagania:</value>
@@ -1961,7 +1988,7 @@
     <value>30 dni</value>
   </data>
   <data name="Custom" xml:space="preserve">
-    <value>Niestandardowa</value>
+    <value>Niestandardowe</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
     <value>Udostępnij wysyłkę po zapisaniu.</value>
@@ -1991,12 +2018,102 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PasswordPrompt" xml:space="preserve">
-    <value>Powtórz hasło główne</value>
+    <value>Potwierdź hasłem głównym</value>
   </data>
   <data name="PasswordConfirmation" xml:space="preserve">
     <value>Potwierdź hasło główne</value>
   </data>
   <data name="PasswordConfirmationDesc" xml:space="preserve">
     <value>Ta operacja jest chroniona. Aby kontynuować, wpisz ponownie hasło główne.</value>
+  </data>
+  <data name="CaptchaRequired" xml:space="preserve">
+    <value>Weryfikacja Captcha jest wymagana</value>
+  </data>
+  <data name="CaptchaFailed" xml:space="preserve">
+    <value>Weryfikacja Captcha nie powiodła się. Spróbuj ponownie.</value>
+  </data>
+  <data name="UpdatedMasterPassword" xml:space="preserve">
+    <value>Hasło główne zostało zaktualizowane</value>
+  </data>
+  <data name="UpdateMasterPassword" xml:space="preserve">
+    <value>Zaktualizuj hasło główne</value>
+  </data>
+  <data name="UpdateMasterPasswordWarning" xml:space="preserve">
+    <value>Hasło główne zostało zmienione przez administratora Twojej organizacji. Musisz je zaktualizować, aby uzyskać dostęp do sejfu. Ta czynność spowoduje wylogowanie z bieżącej sesji, przez co konieczne będzie ponowne zalogowanie się. Aktywne sesje na innych urządzeniach mogą pozostać aktywne przez maksymalnie godzinę.</value>
+  </data>
+  <data name="UpdatingPassword" xml:space="preserve">
+    <value>Aktualizowanie hasła</value>
+  </data>
+  <data name="UpdatePasswordError" xml:space="preserve">
+    <value>Obecnie nie można zaktualizować hasła</value>
+  </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>Usuń hasło główne</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>Organizacja {0} używa logowania jednokrotnego SSO z własnym serwerem kluczy. Kontynuacja spowoduje usunięcie hasła głównego Twojego konta i wymusi logowanie jednokrotne SSO.</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>Jeśli nie chcesz usuwać hasła głównego, opuść organizację.</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>Opuść organizację</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>Opuścić organizację {0}?</value>
+  </data>
+  <data name="Fido2Title" xml:space="preserve">
+    <value>FIDO2 WebAuthn</value>
+  </data>
+  <data name="Fido2Instruction" xml:space="preserve">
+    <value>Przygotuj klucz bezpieczeństwa FIDO2 WebAuthn, kliknij przycisk 'Uwierzytelnianie WebAuthn', a następnie postępuj zgodnie z instrukcjami.</value>
+  </data>
+  <data name="Fido2Desc" xml:space="preserve">
+    <value>FIDO2 WebAuthn pozwala na uwierzytelnianie za pomocą zewnętrznego klucza bezpieczeństwa.</value>
+  </data>
+  <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
+    <value>Uwierzytelnianie WebAuthn</value>
+  </data>
+  <data name="Fido2ReturnToApp" xml:space="preserve">
+    <value>Wróć do aplikacji</value>
+  </data>
+  <data name="Fido2CheckBrowser" xml:space="preserve">
+    <value>Upewnij się, że Twoja przeglądarka obsługuje WebAuthn i spróbuj ponownie.</value>
+  </data>
+  <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
+    <value>Ta organizacja posługuje się zasadą, która automatycznie rejestruje użytkowników do resetowania hasła. Rejestracja umożliwia administratorom organizacji zmianę Twojego hasła głównego.</value>
+  </data>
+  <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
+    <value>Zasady organizacji mają wpływ czas blokowania sejfu. Maksymalny dozwolony czas wynosi {0} godz. i {1} min.</value>
+  </data>
+  <data name="VaultTimeoutToLarge" xml:space="preserve">
+    <value>Czas blokowania sejfu przekracza limit określony przez organizację.</value>
+  </data>
+  <data name="DisablePersonalVaultExportPolicyInEffect">
+    <value>Co najmniej jedna zasada organizacji uniemożliwia wyeksportowanie Twojego sejfu.</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Usuń konto</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Usunięcie konta jest nieodwracalne</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Konto i wszystkie powiązane z nim dane zostaną trwale usunięte. Czy na pewno chcesz usunąć konto?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Usuwanie konta</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Konto zostało trwale usunięte</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>Kod weryfikacyjny jest nieprawidłowy.</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Wyślij kod</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Wysyłanie</value>
   </data>
 </root>

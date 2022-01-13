@@ -82,7 +82,9 @@
                 </Grid>
             </StackLayout>
             <StackLayout Padding="10, 0">
-                <Button Text="{u:I18n LogIn}" Clicked="LogIn_Clicked" />
+                <Button Text="{u:I18n LogIn}" 
+                        StyleClass="btn-primary"
+                        Clicked="LogIn_Clicked" />
             </StackLayout>
         </StackLayout>
     </ScrollView>

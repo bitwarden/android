@@ -63,14 +63,14 @@
                     </Frame>
                 </Grid>
                 <controls:MonoLabel
+                    StyleClass="text-lg, text-html"
                     Text="{Binding ColoredPassword, Mode=OneWay}"
-                    TextType="Html"
                     Margin="0, 20"
-                    StyleClass="text-lg"
                     HorizontalTextAlignment="Center"
                     HorizontalOptions="CenterAndExpand"
                     LineBreakMode="CharacterWrap" />
                 <Button Text="{u:I18n RegeneratePassword}"
+                        StyleClass="btn-primary"
                         HorizontalOptions="FillAndExpand"
                         Clicked="Regenerate_Clicked"></Button>
                 <Button Text="{u:I18n CopyPassword}"
@@ -108,7 +108,7 @@
                             HorizontalTextAlignment="End"
                             VerticalOptions="FillAndExpand"
                             VerticalTextAlignment="Center" />
-                        <Stepper
+                        <controls:ExtendedStepper
                             Value="{Binding NumWords}"
                             Maximum="20"
                             Minimum="3"
@@ -239,7 +239,7 @@
                             HorizontalTextAlignment="End"
                             VerticalOptions="FillAndExpand"
                             VerticalTextAlignment="Center" />
-                        <Stepper
+                        <controls:ExtendedStepper
                             Value="{Binding MinNumber}"
                             Maximum="5"
                             Minimum="0"
@@ -259,7 +259,7 @@
                             HorizontalTextAlignment="End"
                             VerticalOptions="FillAndExpand"
                             VerticalTextAlignment="Center" />
-                        <Stepper
+                        <controls:ExtendedStepper
                             Value="{Binding MinSpecial}"
                             Maximum="5"
                             Minimum="0"

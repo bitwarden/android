@@ -164,22 +164,22 @@
     <comment>Title for page that we use to give credit to resources that we use.</comment>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Ta bort</value>
+    <value>Radera</value>
     <comment>Delete an entity (verb).</comment>
   </data>
   <data name="Deleting" xml:space="preserve">
-    <value>Tar bort...</value>
+    <value>Raderar…</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="DoYouReallyWantToDelete" xml:space="preserve">
-    <value>Är du säker på att du vill ta bort? Det här går inte att ångra.</value>
+    <value>Vill du verkligen radera? Detta går inte att ångra.</value>
     <comment>Confirmation alert message when deleteing something.</comment>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Ändra</value>
+    <value>Redigera</value>
   </data>
   <data name="EditFolder" xml:space="preserve">
-    <value>Ändra mapp</value>
+    <value>Redigera mapp</value>
   </data>
   <data name="Email" xml:space="preserve">
     <value>E-post</value>
@@ -236,14 +236,14 @@
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="HelpAndFeedback" xml:space="preserve">
-    <value>Hjälp och återkoppling</value>
+    <value>Hjälp &amp; Feedback</value>
   </data>
   <data name="Hide" xml:space="preserve">
     <value>Göm</value>
     <comment>Hide a secret value that is currently shown (password).</comment>
   </data>
   <data name="InternetConnectionRequiredMessage" xml:space="preserve">
-    <value>Var god anslut till internet innan du fortsätter.</value>
+    <value>Vänligen anslut till internet innan du fortsätter.</value>
     <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
@@ -309,6 +309,9 @@
   <data name="Save" xml:space="preserve">
     <value>Spara</value>
     <comment>Button text for a save operation (verb).</comment>
+  </data>
+  <data name="Move" xml:space="preserve">
+    <value>Flytta</value>
   </data>
   <data name="Saving" xml:space="preserve">
     <value>Sparar...</value>
@@ -378,10 +381,10 @@
     <value>Besök vår webbplats</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Besök vår webbplats för att få hjälp, nyheter, mejla oss och/eller lära er mer om hur man använder Bitwarden.</value>
+    <value>Besök vår webbplats för att få hjälp, nyheter, mejla oss och/eller lära dig mer om hur du använder Bitwarden.</value>
   </data>
   <data name="Website" xml:space="preserve">
-    <value>Webbsida</value>
+    <value>Webbplats</value>
     <comment>Label for a website.</comment>
   </data>
   <data name="Yes" xml:space="preserve">
@@ -391,7 +394,7 @@
     <value>Konto</value>
   </data>
   <data name="AccountCreated" xml:space="preserve">
-    <value>Ditt nya konto har blivit skapat! Du kan nu logga in.</value>
+    <value>Ditt nya konto har skapats! Du kan nu logga in.</value>
   </data>
   <data name="AddAnItem" xml:space="preserve">
     <value>Lägg till objekt</value>
@@ -427,7 +430,7 @@
     <value>Ändra e-postadress</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
-    <value>Du kan ändra din e-postadress på bitwardens webbvalv. Vill du besöka webbplatsen nu?</value>
+    <value>You can change your email address on the bitwarden.com web vault. Do you want to visit the website now?</value>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
     <value>Ändra huvudlösenord</value>
@@ -471,13 +474,13 @@
     <comment>Safari is the name of apple's web browser</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
-    <value>Få omedelbar åtkomst till dina lösenord!</value>
+    <value>Få omedelbar tillgång till dina lösenord!</value>
   </data>
   <data name="ExtensionReady" xml:space="preserve">
     <value>Du är nu redo att logga in!</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
-    <value>Dina inloggningar är nu enkelt åtkomna från Safari, Chrome och andra appar som stöds.</value>
+    <value>Dina inloggningar är nu lättillgängliga i Safari, Chrome och andra appar som stöds.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
     <value>Inuti Safari och Chrome hittar du Bitwarden genom att trycka på dela-ikonen (hjälp: skrolla till höger på den nedersta raden i dela-menyn).</value>
@@ -495,7 +498,7 @@
     <value>Fingeravtryck</value>
   </data>
   <data name="GeneratePassword" xml:space="preserve">
-    <value>Skapa lösenord</value>
+    <value>Generera lösenord</value>
   </data>
   <data name="GetPasswordHint" xml:space="preserve">
     <value>Hämta huvudlösenordsledtråd</value>
@@ -547,7 +550,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="LoginOrCreateNewAccount" xml:space="preserve">
-    <value>Logga in eller skapa ett nytt konto för att komma åt dina lösenord.</value>
+    <value>Logga in eller skapa ett nytt konto för att få tillgång till ditt säkra valv.</value>
   </data>
   <data name="Manage" xml:space="preserve">
     <value>Hantera</value>
@@ -656,7 +659,7 @@
     <value>Ställ in PIN-kod</value>
   </data>
   <data name="SetPINDirection" xml:space="preserve">
-    <value>Ange en fyrsiffrig PIN-kod som du låser upp appen med.</value>
+    <value>Ange en fyrsiffrig PIN-kod för att låsa upp appen.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
     <value>Objektinformation</value>
@@ -686,7 +689,7 @@
     <comment>What Apple calls their fingerprint reader.</comment>
   </data>
   <data name="TwoStepLogin" xml:space="preserve">
-    <value>Tvåstegsverifiering</value>
+    <value>Tvåfaktorsautentisering</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
     <value>Tvåstegsverifiering gör ditt konto säkrare genom att kräva att du verifierar din inloggning med en annan enhet, t.ex. en säkerhetsnyckel, autentiseringsapp, SMS, telefonsamtal eller e-post. Tvåstegsverifiering kan aktiveras i Bitwardens webbvalv. Vill du besöka webbplatsen nu?</value>
@@ -782,8 +785,8 @@
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
     <value>Du letar efter en inloggning som kan automatiskt fyllas i för "{0}".</value>
   </data>
-  <data name="ShareVault" xml:space="preserve">
-    <value>Dela ditt valv</value>
+  <data name="LearnOrg" xml:space="preserve">
+    <value>Learn About Organizations</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
     <value>Kan inte öppna appen "{0}".</value>
@@ -1056,6 +1059,9 @@
   <data name="LastName" xml:space="preserve">
     <value>Efternamn</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Fullständigt namn</value>
+  </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Licensnummer</value>
   </data>
@@ -1179,6 +1185,9 @@
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>Dold</value>
+  </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>Länkad</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Text</value>
@@ -1378,6 +1387,10 @@
   <data name="NoCollectionsToList" xml:space="preserve">
     <value>Det finns inga samlingar att visa.</value>
   </data>
+  <data name="MovedItemToOrg" xml:space="preserve">
+    <value>{0} moved to {1}.</value>
+    <comment>ex: Item moved to Organization.</comment>
+  </data>
   <data name="ItemShared" xml:space="preserve">
     <value>Objektet har delats.</value>
   </data>
@@ -1390,11 +1403,14 @@
   <data name="ShareItem" xml:space="preserve">
     <value>Dela objekt</value>
   </data>
+  <data name="MoveToOrganization" xml:space="preserve">
+    <value>Move to Organization</value>
+  </data>
   <data name="NoOrgsToList" xml:space="preserve">
     <value>Inga organisationer att lista.</value>
   </data>
-  <data name="ShareDesc" xml:space="preserve">
-    <value>Välj en organisation som du vill dela detta objekt med. Delning överför ägandet av objektet till organisationen. Du kommer inte längre vara direkt ägare till detta objekt när det har delats.</value>
+  <data name="MoveToOrgDesc" xml:space="preserve">
+    <value>Choose an organization that you wish to move this item to. Moving to an organization transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
     <value>Antal ord</value>
@@ -1424,8 +1440,8 @@
     <value>Ditt kontos fingeravtrycksfras</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
-  <data name="ShareVaultConfirmation" xml:space="preserve">
-    <value>Bitwarden gör det möjligt för dig att dela ditt valv med andra genom att använda ett organisationskonto. Vill du besöka bitwarden.com för att lära dig mer?</value>
+  <data name="LearnOrgConfirmation" xml:space="preserve">
+    <value>Bitwarden allows you to share your vault items with others by using an organization account. Would you like to visit the bitwarden.com website to learn more?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
     <value>Exportera valv</value>
@@ -1438,6 +1454,9 @@
   </data>
   <data name="Unlock" xml:space="preserve">
     <value>Lås upp</value>
+  </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Unlock Vault</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minuter</value>
@@ -1454,6 +1473,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Valvet är låst. Bekräfta din PIN-kod för att fortsätta.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Ditt valv är låst. Bekräfta din identitet för att fortsätta.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Mörkt</value>
@@ -1500,12 +1522,8 @@
   <data name="ThemeDescription" xml:space="preserve">
     <value>Ändra appens färgtema.</value>
   </data>
-  <data name="RestartIsRequired" xml:space="preserve">
-    <value>Omstart krävs.</value>
-    <comment>Referring to restarting the application.</comment>
-  </data>
-  <data name="Restarting" xml:space="preserve">
-    <value>Startar om...</value>
+  <data name="ThemeDefault" xml:space="preserve">
+    <value>Standard (System)</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Kopiera anteckningar</value>
@@ -1561,7 +1579,7 @@
     <value>Växla synlighet</value>
   </data>
   <data name="LoginExpired" xml:space="preserve">
-    <value>Din inloggningssession har löpt ut.</value>
+    <value>Din inloggningssession har upphört.</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
     <value>Använd biometri för att bekräfta.</value>
@@ -1598,6 +1616,15 @@
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Ange ditt huvudlösenord för att exportera ditt valv.</value>
+  </data>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Skicka en verifieringskod till din e-post</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Kod har skickats!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Bekräfta din identitet för att fortsätta.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Denna export innehåller ditt valv i ett okrypterat format. Du bör inte lagra eller skicka den exporterade filen över osäkra kanaler (t.ex. e-post). Radera den omedelbart när du är färdig med den.</value>
@@ -1665,7 +1692,7 @@
     <comment>Confirmation message after successfully restoring a soft-deleted item</comment>
   </data>
   <data name="Trash" xml:space="preserve">
-    <value>Papperskorgen</value>
+    <value>Papperskorg</value>
     <comment>(noun) Location of deleted items which have not yet been permanently deleted</comment>
   </data>
   <data name="SearchTrash" xml:space="preserve">
@@ -1803,11 +1830,11 @@
     <value>En organisationspolicy påverkar dina ägarskapsalternativ.</value>
   </data>
   <data name="Send" xml:space="preserve">
-    <value>Försändelse</value>
+    <value>Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AllSends" xml:space="preserve">
-    <value>Alla försändelser</value>
+    <value>All Sends</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Sends" xml:space="preserve">
@@ -1858,7 +1885,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Expired" xml:space="preserve">
-    <value>Utgången</value>
+    <value>Upphört</value>
   </data>
   <data name="MaximumAccessCount" xml:space="preserve">
     <value>Maximalt antal åtkomster</value>
@@ -1893,7 +1920,7 @@
     <value>Lösenordet har tagits bort.</value>
   </data>
   <data name="NotesInfo" xml:space="preserve">
-    <value>Egna anteckningar om denna försändelse.</value>
+    <value>Private notes about this Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
@@ -1923,27 +1950,27 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="EditSend" xml:space="preserve">
-    <value>Redigera försändelse</value>
+    <value>Redigera Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddSend" xml:space="preserve">
-    <value>Lägg till försändelse</value>
+    <value>Lägg till Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AreYouSureDeleteSend" xml:space="preserve">
-    <value>Är du säker på att du vill radera denna försändelse?</value>
+    <value>Är du säker på att du vill radera denna Send?</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDeleted" xml:space="preserve">
-    <value>Försändelsen har raderats.</value>
+    <value>Send har raderats.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendUpdated" xml:space="preserve">
-    <value>Försändelse uppdaterad</value>
+    <value>Send updated.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NewSendCreated" xml:space="preserve">
-    <value>Ny försändelse skapad.</value>
+    <value>Ny Send har skapats.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="OneDay" xml:space="preserve">
@@ -1973,7 +2000,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AboutSend" xml:space="preserve">
-    <value>Om försändelser</value>
+    <value>Om Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
@@ -1999,5 +2026,95 @@
   </data>
   <data name="PasswordConfirmationDesc" xml:space="preserve">
     <value>Denna åtgärd är skyddad. För att fortsätta, vänligen verifiera din identitet genom att ange ditt huvudlösenord.</value>
+  </data>
+  <data name="CaptchaRequired" xml:space="preserve">
+    <value>Captcha Required</value>
+  </data>
+  <data name="CaptchaFailed" xml:space="preserve">
+    <value>Captcha misslyckades. Vänligen försök igen.</value>
+  </data>
+  <data name="UpdatedMasterPassword" xml:space="preserve">
+    <value>Updated Master Password</value>
+  </data>
+  <data name="UpdateMasterPassword" xml:space="preserve">
+    <value>Update Master Password</value>
+  </data>
+  <data name="UpdateMasterPasswordWarning" xml:space="preserve">
+    <value>Your Master Password was recently changed by an administrator in your organization. In order to access the vault, you must update your Master Password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
+  </data>
+  <data name="UpdatingPassword" xml:space="preserve">
+    <value>Updating Password</value>
+  </data>
+  <data name="UpdatePasswordError" xml:space="preserve">
+    <value>Currently unable to update password</value>
+  </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>Remove Master Password</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>{0} is using SSO with customer-managed encryption. Continuing will remove your Master Password from your account and require SSO to login.</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>If you do not want to remove your Master Password, you may leave this organization.</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>Lämna organisation</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>Lämna {0}?</value>
+  </data>
+  <data name="Fido2Title" xml:space="preserve">
+    <value>FIDO2 WebAuthn</value>
+  </data>
+  <data name="Fido2Instruction" xml:space="preserve">
+    <value>To continue, have your FIDO2 WebAuthn enabled security key ready, then follow the instructions after clicking 'Authenticate WebAuthn' on the next screen.</value>
+  </data>
+  <data name="Fido2Desc" xml:space="preserve">
+    <value>Authentication using FIDO2 WebAuthn, you can authenticate using an external security key.</value>
+  </data>
+  <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
+    <value>Autentisera WebAuthn</value>
+  </data>
+  <data name="Fido2ReturnToApp" xml:space="preserve">
+    <value>Return to App</value>
+  </data>
+  <data name="Fido2CheckBrowser" xml:space="preserve">
+    <value>Please make sure your default browser supports WebAuthn and try again.</value>
+  </data>
+  <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
+    <value>This organization has an enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password.</value>
+  </data>
+  <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
+    <value>Your organization policies are affecting your vault timeout. Maximum allowed Vault Timeout is {0} hour(s) and {1} minute(s)</value>
+  </data>
+  <data name="VaultTimeoutToLarge" xml:space="preserve">
+    <value>Your vault timeout exceeds the restrictions set by your organization.</value>
+  </data>
+  <data name="DisablePersonalVaultExportPolicyInEffect">
+    <value>One or more organization policies prevents your from exporting your personal vault.</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Radera konto</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Deleting your account is permanent</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Ditt konto och all associerad data raderas och kan inte återställas. Är du säker på att du vill fortsätta?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Deleting your account</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Your account has been permanently deleted</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>Ogiltig verifieringskod.</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Skicka kod</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Skickar</value>
   </data>
 </root>

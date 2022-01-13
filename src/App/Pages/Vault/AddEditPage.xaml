@@ -7,7 +7,8 @@
     xmlns:u="clr-namespace:Bit.App.Utilities"
     xmlns:controls="clr-namespace:Bit.App.Controls"
     xmlns:views="clr-namespace:Bit.Core.Models.View;assembly=BitwardenCore"
-    xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
+    xmlns:behaviors="clr-namespace:Bit.App.Behaviors"
+    xmlns:effects="clr-namespace:Bit.App.Effects"
     x:DataType="pages:AddEditPageViewModel"
     x:Name="_page"
     Title="{Binding PageTitle}">
@@ -240,7 +241,6 @@
                             StyleClass="box-value"
                             Grid.Row="1"
                             Grid.Column="0"
-                            Keyboard="Numeric"
                             IsPassword="{Binding ShowCardNumber, Converter={StaticResource inverseBool}}"
                             IsSpellCheckEnabled="False"
                             IsTextPredictionEnabled="False" />
@@ -556,7 +556,7 @@
                         StyleClass="box-value"
                         HorizontalOptions="End" />
                 </StackLayout>
-                <StackLayout StyleClass="box-row, box-row-switch">
+                <StackLayout x:Name="_passwordPrompt" StyleClass="box-row, box-row-switch">
                     <Label
                         Text="{u:I18n PasswordPrompt}"
                         StyleClass="box-label-regular" />
@@ -564,7 +564,7 @@
                         StyleClass="box-row-button, box-row-button-platform"
                         Text="{Binding Source={x:Static core:BitwardenIcons.QuestionCircle}}"
                         Command="{Binding PasswordPromptHelpCommand}"
-                        TextColor="{StaticResource MutedColor}"
+                        TextColor="{DynamicResource MutedColor}"
                         AutomationProperties.IsInAccessibleTree="True"
                         AutomationProperties.Name="{u:I18n ToggleVisibility}"
                         HorizontalOptions="StartAndExpand" />
@@ -585,8 +585,16 @@
                     <Editor
                         x:Name="_notesEditor"
                         AutoSize="TextChanges"
-                        Text="{Binding Cipher.Notes}"
-                        StyleClass="box-value" />
+                        StyleClass="box-value"
+                        effects:ScrollEnabledEffect.IsScrollEnabled="false"
+                        Text="{Binding Cipher.Notes}">
+                        <Editor.Behaviors>
+                            <behaviors:EditorPreventAutoBottomScrollingOnFocusedBehavior ParentScrollView="{x:Reference _scrollView}" />
+                        </Editor.Behaviors>
+                        <Editor.Effects>
+                            <effects:ScrollEnabledEffect />
+                        </Editor.Effects>
+                    </Editor>
                 </StackLayout>
                 <BoxView StyleClass="box-row-separator" IsVisible="{Binding ShowNotesSeparator}" />
             </StackLayout>
@@ -648,6 +656,16 @@
                                             </Keyboard>
                                         </Entry.Keyboard>
                                     </controls:MonoEntry>
+                                    <StackLayout
+                                        StyleClass="box-row, box-row-input"
+                                        IsVisible="{Binding IsLinkedType}">
+                                        <Picker
+                                            x:Name="_linkedFieldOptionPicker"
+                                            ItemsSource="{Binding LinkedFieldOptions, Mode=OneTime}"
+                                            SelectedIndex="{Binding LinkedFieldOptionSelectedIndex}"
+                                            ItemDisplayBinding="{Binding Key}"
+                                            StyleClass="box-value" />
+                                    </StackLayout>
                                     <Switch
                                         IsToggled="{Binding BooleanValue}"
                                         Grid.Row="0"

@@ -201,6 +201,10 @@ namespace Bit.Core.Services
         public async Task<bool> PolicyAppliesToUser(PolicyType policyType, Func<Policy, bool> policyFilter)
         {
             var policies = await GetAll(policyType);
+            if (policies == null)
+            {
+                return false;
+            }
             var organizations = await _userService.GetAllOrganizationAsync();
 
             IEnumerable<Policy> filteredPolicies;
@@ -220,8 +224,18 @@ namespace Bit.Core.Services
                 o.Enabled &&
                 o.Status >= OrganizationUserStatusType.Accepted &&
                 o.UsePolicies &&
-                !o.isExemptFromPolicies &&
+                !isExcemptFromPolicies(o, policyType) &&
                 policySet.Contains(o.Id));
+        }
+
+        private bool isExcemptFromPolicies(Organization organization, PolicyType policyType)
+        {
+            if (policyType == PolicyType.MaximumVaultTimeout)
+            {
+                return organization.Type == OrganizationUserType.Owner;
+            }
+
+            return organization.isExemptFromPolicies;
         }
 
         public int? GetPolicyInt(Policy policy, string key)

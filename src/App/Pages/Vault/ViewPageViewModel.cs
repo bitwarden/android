@@ -1,4 +1,8 @@
-﻿using Bit.App.Abstractions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
@@ -26,6 +30,9 @@ namespace Bit.App.Pages
         private readonly IMessagingService _messagingService;
         private readonly IEventService _eventService;
         private readonly IPasswordRepromptService _passwordRepromptService;
+        private readonly ILocalizeService _localizeService;
+        private readonly IClipboardService _clipboardService;
+
         private CipherView _cipher;
         private List<ViewPageFieldViewModel> _fields;
         private bool _canAccessPremium;
@@ -53,6 +60,9 @@ namespace Bit.App.Pages
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _eventService = ServiceContainer.Resolve<IEventService>("eventService");
             _passwordRepromptService = ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService");
+            _localizeService = ServiceContainer.Resolve<ILocalizeService>("localizeService");
+            _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
+
             CopyCommand = new Command<string>((id) => CopyAsync(id, null));
             CopyUriCommand = new Command<LoginUriView>(CopyUri);
             CopyFieldCommand = new Command<FieldView>(CopyField);
@@ -153,8 +163,8 @@ namespace Bit.App.Pages
                 fs.Spans.Add(new Span
                 {
                     Text = string.Format(" {0} {1}",
-                        Cipher.RevisionDate.ToLocalTime().ToShortDateString(),
-                        Cipher.RevisionDate.ToLocalTime().ToShortTimeString())
+                        _localizeService.GetLocaleShortDate(Cipher.RevisionDate.ToLocalTime()),
+                        _localizeService.GetLocaleShortTime(Cipher.RevisionDate.ToLocalTime()))
                 });
                 return fs;
             }
@@ -172,8 +182,8 @@ namespace Bit.App.Pages
                 fs.Spans.Add(new Span
                 {
                     Text = string.Format(" {0} {1}",
-                        Cipher.PasswordRevisionDisplayDate?.ToLocalTime().ToShortDateString(),
-                        Cipher.PasswordRevisionDisplayDate?.ToLocalTime().ToShortTimeString())
+                        _localizeService.GetLocaleShortDate(Cipher.PasswordRevisionDisplayDate?.ToLocalTime()),
+                        _localizeService.GetLocaleShortTime(Cipher.PasswordRevisionDisplayDate?.ToLocalTime()))
                 });
                 return fs;
             }
@@ -652,7 +662,7 @@ namespace Bit.App.Pages
 
             if (text != null)
             {
-                await _platformUtilsService.CopyToClipboardAsync(text);
+                await _clipboardService.CopyTextAsync(text);
                 if (!string.IsNullOrWhiteSpace(name))
                 {
                     _platformUtilsService.ShowToast("info", null, string.Format(AppResources.ValueHasBeenCopied, name));
@@ -703,6 +713,7 @@ namespace Bit.App.Pages
 
     public class ViewPageFieldViewModel : ExtendedViewModel
     {
+        private II18nService _i18nService;
         private ViewPageViewModel _vm;
         private FieldView _field;
         private CipherView _cipher;
@@ -710,6 +721,7 @@ namespace Bit.App.Pages
 
         public ViewPageFieldViewModel(ViewPageViewModel vm, CipherView cipher, FieldView field)
         {
+            _i18nService = ServiceContainer.Resolve<II18nService>("i18nService");
             _vm = vm;
             _cipher = cipher;
             Field = field;
@@ -740,16 +752,38 @@ namespace Bit.App.Pages
                 });
         }
 
+        public string ValueText
+        {
+            get
+            {
+                if (IsBooleanType)
+                {
+                    return _field.Value == "true" ? "" : "";
+                }
+                else if (IsLinkedType)
+                {
+                    var i18nKey = _cipher.LinkedFieldI18nKey(Field.LinkedId.GetValueOrDefault());
+                    return " " + _i18nService.T(i18nKey);
+                }
+                else
+                {
+                    return _field.Value;
+                }
+            }
+        }
+
         public Command ToggleHiddenValueCommand { get; set; }
 
-        public string ValueText => IsBooleanType ? (_field.Value == "true" ? "" : "") : _field.Value;
         public string ShowHiddenValueIcon => _showHiddenValue ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public bool IsTextType => _field.Type == Core.Enums.FieldType.Text;
         public bool IsBooleanType => _field.Type == Core.Enums.FieldType.Boolean;
         public bool IsHiddenType => _field.Type == Core.Enums.FieldType.Hidden;
+        public bool IsLinkedType => _field.Type == Core.Enums.FieldType.Linked;
         public bool ShowViewHidden => IsHiddenType && _cipher.ViewPassword;
         public bool ShowCopyButton => _field.Type != Core.Enums.FieldType.Boolean &&
-            !string.IsNullOrWhiteSpace(_field.Value) && !(IsHiddenType && !_cipher.ViewPassword);
+            !string.IsNullOrWhiteSpace(_field.Value) &&
+            !(IsHiddenType && !_cipher.ViewPassword) &&
+            _field.Type != FieldType.Linked;
 
         public async void ToggleHiddenValue()
         {

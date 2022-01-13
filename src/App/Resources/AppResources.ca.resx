@@ -310,6 +310,9 @@
     <value>Guarda</value>
     <comment>Button text for a save operation (verb).</comment>
   </data>
+  <data name="Move" xml:space="preserve">
+    <value>Desplaça</value>
+  </data>
   <data name="Saving" xml:space="preserve">
     <value>S'està guardant...</value>
     <comment>Message shown when interacting with the server</comment>
@@ -782,8 +785,8 @@
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
     <value>Esteu buscant un element d'emplenament automàtic per a "{0}".</value>
   </data>
-  <data name="ShareVault" xml:space="preserve">
-    <value>Compartiu la vostra caixa forta</value>
+  <data name="LearnOrg" xml:space="preserve">
+    <value>Més informació sobre les organitzacions</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
     <value>No es pot obrir l'aplicació "{0}".</value>
@@ -1056,6 +1059,9 @@
   <data name="LastName" xml:space="preserve">
     <value>Cognoms</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Nom complet</value>
+  </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Número de llicència</value>
   </data>
@@ -1179,6 +1185,9 @@
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>Amagat</value>
+  </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>Enllaçat</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Text</value>
@@ -1378,6 +1387,10 @@
   <data name="NoCollectionsToList" xml:space="preserve">
     <value>No hi ha cap col·lecció per llistar.</value>
   </data>
+  <data name="MovedItemToOrg" xml:space="preserve">
+    <value>{0} desplaçat a {1}.</value>
+    <comment>ex: Item moved to Organization.</comment>
+  </data>
   <data name="ItemShared" xml:space="preserve">
     <value>L'element s'ha compartit.</value>
   </data>
@@ -1390,11 +1403,14 @@
   <data name="ShareItem" xml:space="preserve">
     <value>Comparteix l'element</value>
   </data>
+  <data name="MoveToOrganization" xml:space="preserve">
+    <value>Desplaça a l'organització</value>
+  </data>
   <data name="NoOrgsToList" xml:space="preserve">
     <value>No hi ha cap organització per llistar.</value>
   </data>
-  <data name="ShareDesc" xml:space="preserve">
-    <value>Trieu una organització amb la qual vulgueu compartir aquest element. En compartir transferiu la propietat de l'element a l'organització. Ja no sereu el propietari directe d'aquest element una vegada que s'haja compartit.</value>
+  <data name="MoveToOrgDesc" xml:space="preserve">
+    <value>Trieu una organització a la qual vulgueu desplaçar aquest element. El trasllat a una organització transfereix la propietat de l'element a aquesta organització. Ja no sereu el propietari directe d'aquest element una vegada s'haja mogut.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
     <value>Nombre de paraules</value>
@@ -1424,7 +1440,7 @@
     <value>Frase d'empremta digital del vostre compte</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
-  <data name="ShareVaultConfirmation" xml:space="preserve">
+  <data name="LearnOrgConfirmation" xml:space="preserve">
     <value>Bitwarden us permet compartir la vostra caixa forta amb altres usuaris mitjançant un compte d'organització. Voleu visitar el lloc web de bitwarden.com per obtenir més informació?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
@@ -1438,6 +1454,9 @@
   </data>
   <data name="Unlock" xml:space="preserve">
     <value>Desbloqueja</value>
+  </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Desbloqueja la caixa forta</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minuts</value>
@@ -1454,6 +1473,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>La caixa forta està bloquejada. Verifiqueu El codi PIN per continuar.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>La caixa forta està bloquejada. Comproveu la vostra identitat per continuar.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Fosc</value>
@@ -1500,12 +1522,8 @@
   <data name="ThemeDescription" xml:space="preserve">
     <value>Canvia el color del tema de l'aplicació.</value>
   </data>
-  <data name="RestartIsRequired" xml:space="preserve">
-    <value>Cal que reinicieu l'aplicació.</value>
-    <comment>Referring to restarting the application.</comment>
-  </data>
-  <data name="Restarting" xml:space="preserve">
-    <value>S'està reiniciant...</value>
+  <data name="ThemeDefault" xml:space="preserve">
+    <value>Per defecte (Sistema)</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Copia notes</value>
@@ -1598,6 +1616,15 @@
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Introduïu la contrasenya mestra per exportar les dades de la caixa forta.</value>
+  </data>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Envia un codi de verificació al correu electrònic</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Codi enviat!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Confirmeu la vostra identitat per continuar.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Aquesta exportació conté les dades de la vostra caixa forta en un format no xifrat. No hauríeu d'emmagatzemar o enviar el fitxer exportat a través de canals no segurs (com ara el correu electrònic). Elimineu-lo immediatament després d'haver acabat d'usar-lo.</value>
@@ -1904,7 +1931,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddASend" xml:space="preserve">
-    <value>Add a Send</value>
+    <value>Afig Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="CopyLink" xml:space="preserve">
@@ -1991,12 +2018,102 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PasswordPrompt" xml:space="preserve">
-    <value>Master password re-prompt</value>
+    <value>Re-sol·licitud de la contrasenya mestra</value>
   </data>
   <data name="PasswordConfirmation" xml:space="preserve">
-    <value>Master password confirmation</value>
+    <value>Confirmació de la contrasenya mestra</value>
   </data>
   <data name="PasswordConfirmationDesc" xml:space="preserve">
-    <value>This action is protected, to continue please re-enter your master password to verify your identity.</value>
+    <value>Aquesta acció està protegida. Per continuar, torneu a introduir la contrasenya principal per verificar la vostra identitat.</value>
+  </data>
+  <data name="CaptchaRequired" xml:space="preserve">
+    <value>El Captcha és necessari</value>
+  </data>
+  <data name="CaptchaFailed" xml:space="preserve">
+    <value>El captcha ha fallat. Torneu-ho a provar.</value>
+  </data>
+  <data name="UpdatedMasterPassword" xml:space="preserve">
+    <value>Contrasenya mestra actualitzada</value>
+  </data>
+  <data name="UpdateMasterPassword" xml:space="preserve">
+    <value>Actualitza contrasenya mestra</value>
+  </data>
+  <data name="UpdateMasterPasswordWarning" xml:space="preserve">
+    <value>Un administrador de l'organització ha canviat recentment la contrasenya principal. Per accedir a la caixa forta, heu d'actualitzar-la ara. Si continueu, es tancarà la sessió actual i heu de tornar a iniciar-la. És possible que les sessions obertes en altres dispositius continuen actives fins a una hora.</value>
+  </data>
+  <data name="UpdatingPassword" xml:space="preserve">
+    <value>S'està actualitzant la contrasenya</value>
+  </data>
+  <data name="UpdatePasswordError" xml:space="preserve">
+    <value>Actualment no es pot actualitzar la contrasenya</value>
+  </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>Suprimiu la contrasenya mestra</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>{0} utilitza SSO amb el xifratge gestionat pel client. Continuar suprimirà la vostra contrasenya mestra del vostre compte i requerirà SSO per iniciar la sessió.</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>Si no voleu suprimir la vostra contrasenya mestra, podeu abandonar aquesta organització.</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>Abandona l'organització</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>Abandona {0}</value>
+  </data>
+  <data name="Fido2Title" xml:space="preserve">
+    <value>FIDO2 WebAuthn</value>
+  </data>
+  <data name="Fido2Instruction" xml:space="preserve">
+    <value>Per continuar, tingueu preparada la vostra clau de seguretat amb FIDO2 WebAuthn i, a continuació, seguiu les instruccions després de fer clic a "Autentica WebAuthn" a la pantalla següent.</value>
+  </data>
+  <data name="Fido2Desc" xml:space="preserve">
+    <value>Autenticació mitjançant FIDO2 WebAuthn, podeu autenticar-vos mitjançant una clau de seguretat externa.</value>
+  </data>
+  <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
+    <value>Autentica WebAuthn</value>
+  </data>
+  <data name="Fido2ReturnToApp" xml:space="preserve">
+    <value>Tornar a l'aplicació</value>
+  </data>
+  <data name="Fido2CheckBrowser" xml:space="preserve">
+    <value>Assegureu-vos que el vostre navegador predeterminat admeta WebAuthn i torneu-ho a provar.</value>
+  </data>
+  <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
+    <value>Aquesta organització té una política empresarial que us inscriurà automàticament al restabliment de la contrasenya. La inscripció permetrà als administradors de l’organització canviar la vostra contrasenya mestra.</value>
+  </data>
+  <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
+    <value>Les polítiques de l'organització afecten el temps d'espera de la caixa forta. El temps d'espera màxim permès d'aquesta és de $HOURS$ hores i $MINUTES$ minuts</value>
+  </data>
+  <data name="VaultTimeoutToLarge" xml:space="preserve">
+    <value>El temps d'espera de la caixa forta supera les restriccions establertes per la vostra organització.</value>
+  </data>
+  <data name="DisablePersonalVaultExportPolicyInEffect">
+    <value>Una o més polítiques d'organització us impedeixen exportar la vostra caixa forta.</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Suprimeix el compte</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>La supressió del vostre compte és permanent</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>El vostre compte i totes les dades associades seran suprimides i irrecuperables. Esteu segur que voleu continuar?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>S'està suprimint el vostre compte</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>El vostre compte ha sigut suprimit de forma permanent.</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>Codi de verificació no vàlid</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Envia codi</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>S'està enviant...</value>
   </data>
 </root>

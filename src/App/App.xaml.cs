@@ -113,7 +113,8 @@ namespace Bit.App
                 }
                 else if (message.Command == "popAllAndGoToTabGenerator" ||
                     message.Command == "popAllAndGoToTabMyVault" ||
-                    message.Command == "popAllAndGoToTabSend")
+                    message.Command == "popAllAndGoToTabSend" ||
+                    message.Command == "popAllAndGoToAutofillCiphers")
                 {
                     Device.BeginInvokeOnMainThread(async () =>
                     {
@@ -123,7 +124,11 @@ namespace Bit.App
                             {
                                 await tabsPage.Navigation.PopModalAsync(false);
                             }
-                            if (message.Command == "popAllAndGoToTabMyVault")
+                            if (message.Command == "popAllAndGoToAutofillCiphers")
+                            {
+                                Current.MainPage = new NavigationPage(new AutofillCiphersPage(Options));
+                            }
+                            else if (message.Command == "popAllAndGoToTabMyVault")
                             {
                                 Options.MyVaultTile = false;
                                 tabsPage.ResetToVaultPage();
@@ -140,6 +145,15 @@ namespace Bit.App
                         }
                     });
                 }
+                else if (message.Command == "convertAccountToKeyConnector")
+                {
+                    Device.BeginInvokeOnMainThread(async () =>
+                    {
+                        await Application.Current.MainPage.Navigation.PushModalAsync(
+                            new NavigationPage(new RemoveMasterPasswordPage()));
+                    });
+                }
+
             });
         }
 
@@ -200,6 +214,7 @@ namespace Bit.App
 
         private async void ResumedAsync()
         {
+            UpdateTheme();
             await _vaultTimeoutService.CheckVaultTimeoutAsync();
             _messagingService.Send("startEventTimer");
             await ClearCacheIfNeededAsync();
@@ -337,6 +352,10 @@ namespace Bit.App
             InitializeComponent();
             SetCulture();
             ThemeManager.SetTheme(Device.RuntimePlatform == Device.Android, Current.Resources);
+            Current.RequestedThemeChanged += (s, a) =>
+            {
+                UpdateTheme();
+            };
             Current.MainPage = new HomePage();
             var mainPageTask = SetMainPageAsync();
             ServiceContainer.Resolve<MobilePlatformUtilsService>("platformUtilsService").Init();
@@ -356,6 +375,15 @@ namespace Bit.App
                     await Task.Delay(1000);
                     await _syncService.FullSyncAsync(false);
                 }
+            });
+        }
+
+        private void UpdateTheme()
+        {
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                ThemeManager.SetTheme(Device.RuntimePlatform == Device.Android, Current.Resources);
+                _messagingService.Send("updatedTheme");
             });
         }
 

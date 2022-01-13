@@ -310,6 +310,9 @@
     <value>Spremi</value>
     <comment>Button text for a save operation (verb).</comment>
   </data>
+  <data name="Move" xml:space="preserve">
+    <value>Premjesti</value>
+  </data>
   <data name="Saving" xml:space="preserve">
     <value>Spremanje...</value>
     <comment>Message shown when interacting with the server</comment>
@@ -486,7 +489,7 @@
     <value>Dodirni Bitwarden ikonu u izborniku za pokretanje proširenja.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>Za uključiti Bitwardena u Safariu i drugim aplikacijama, dodirnite ikonu „Više” u donjem retku izbornika.</value>
+    <value>Za uključiti Bitwardena u Safariju i drugim aplikacijama, dodirnite ikonu „Više” u donjem retku izbornika.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
     <value>Favorit</value>
@@ -782,8 +785,8 @@
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
     <value>Tražiš stavku auto-ispune za „{0}”.</value>
   </data>
-  <data name="ShareVault" xml:space="preserve">
-    <value>Podijeli svoj trezor</value>
+  <data name="LearnOrg" xml:space="preserve">
+    <value>Više o organzacijama </value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
     <value>Nije moguće otvoriti aplikaciju „{0}”.</value>
@@ -1056,6 +1059,9 @@
   <data name="LastName" xml:space="preserve">
     <value>Prezime</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Ime i prezime</value>
+  </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Broj vozačke dozvole</value>
   </data>
@@ -1179,6 +1185,9 @@
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>Skriveno</value>
+  </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>Povezano</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Tekst</value>
@@ -1378,6 +1387,10 @@
   <data name="NoCollectionsToList" xml:space="preserve">
     <value>Nema zbirki za prikaz.</value>
   </data>
+  <data name="MovedItemToOrg" xml:space="preserve">
+    <value>{0} premješteno u {1}.</value>
+    <comment>ex: Item moved to Organization.</comment>
+  </data>
   <data name="ItemShared" xml:space="preserve">
     <value>Stavka je podijeljena.</value>
   </data>
@@ -1390,11 +1403,14 @@
   <data name="ShareItem" xml:space="preserve">
     <value>Podijeli stavku</value>
   </data>
+  <data name="MoveToOrganization" xml:space="preserve">
+    <value>Premjesti u organizaciju</value>
+  </data>
   <data name="NoOrgsToList" xml:space="preserve">
     <value>Nema organizacija za prikaz.</value>
   </data>
-  <data name="ShareDesc" xml:space="preserve">
-    <value>Odaberi organizaciju s kojom želiš podijeliti ovu stavku. Dijeljenje prenosi vlasništvo stavke na organizaciju. Nakon dijeljenja više nećeš biti izravni vlasnik ove stavke.</value>
+  <data name="MoveToOrgDesc" xml:space="preserve">
+    <value>Odaberi organizaciju u koju želiš premjestiti ovu stavku. Premještanje prenosi vlasništvo stavke na organizaciju. Nakon premještanja više nećeš biti izravni vlasnik ove stavke.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
     <value>Broj riječi</value>
@@ -1424,7 +1440,7 @@
     <value>Jedinstvena fraza tvog računa</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
-  <data name="ShareVaultConfirmation" xml:space="preserve">
+  <data name="LearnOrgConfirmation" xml:space="preserve">
     <value>Bitwarden omogućuje dijeljenje trezora s drugima pomoću organizacijskog računa. Želiš li sada posjetiti bitwarden.com za više informacija?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
@@ -1438,6 +1454,9 @@
   </data>
   <data name="Unlock" xml:space="preserve">
     <value>Otključaj</value>
+  </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Otključaj trezor</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minuta</value>
@@ -1454,6 +1473,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Tvoj trezor je zaključan. Potvrdi PIN-om za nastavak.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Tvoj trezor je zaključan. Potvrdi glavnu lozinku za nastavak.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Tamna</value>
@@ -1500,12 +1522,8 @@
   <data name="ThemeDescription" xml:space="preserve">
     <value>Mijenja boju aplikacije. </value>
   </data>
-  <data name="RestartIsRequired" xml:space="preserve">
-    <value>Potrebno je ponovo pokretanje.</value>
-    <comment>Referring to restarting the application.</comment>
-  </data>
-  <data name="Restarting" xml:space="preserve">
-    <value>Ponovno pokretanje...</value>
+  <data name="ThemeDefault" xml:space="preserve">
+    <value>Zadana (sustav)</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Kopiraj bilješke</value>
@@ -1598,6 +1616,15 @@
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Unesi glavnu lozinku za izvoz podataka iz trezora.</value>
+  </data>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Slanje verifikacijskog kôda e-poštom</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Kôd poslan</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Potvrdite lozinku za nastavak.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Ovaj izvoz sadrži podatke trezora u nešifriranom obliku! Izvezenu datoteku se ne bi smjelo pohranjivati ili slati putem nesigurnih kanala (npr. e-poštom). Izbriši ju odmah nakon završetka korištenja.</value>
@@ -1863,7 +1890,7 @@
     <value>Ograničeni broj pristupanja</value>
   </data>
   <data name="MaximumAccessCountInfo" xml:space="preserve">
-    <value>Ako je određen, ovom Sendu će se moći pristupiti samo ograničeni broj puta.</value>
+    <value>Ako je određeno, ovom Sendu će se moći pristupiti samo ograničeni broj puta.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="MaximumAccessCountReached" xml:space="preserve">
@@ -1998,5 +2025,95 @@
   </data>
   <data name="PasswordConfirmationDesc" xml:space="preserve">
     <value>Ova radnja je zaštićena. Za nastavak i potvrdu identiteta, unesi svoju glavnu lozinku.</value>
+  </data>
+  <data name="CaptchaRequired" xml:space="preserve">
+    <value>Potrebna captcha</value>
+  </data>
+  <data name="CaptchaFailed" xml:space="preserve">
+    <value>Captcha pogrešna.</value>
+  </data>
+  <data name="UpdatedMasterPassword" xml:space="preserve">
+    <value>Glavna lozinka ažurirana</value>
+  </data>
+  <data name="UpdateMasterPassword" xml:space="preserve">
+    <value>Ažuriraj glavnu lozinku</value>
+  </data>
+  <data name="UpdateMasterPasswordWarning" xml:space="preserve">
+    <value>Tvoju glavnu lozinku je nedavno promijenio administrator tvoje organizacije. Za pristup trezoru, potrebno je ažurirati glavnu lozinku, što će te odjaviti iz trenutne sesije, te ćeš se morati ponovno prijaviti. Aktivne sesije na drugim uređajima mogu ostati aktivne još sat vremena.</value>
+  </data>
+  <data name="UpdatingPassword" xml:space="preserve">
+    <value>Ažuriranje lozinke</value>
+  </data>
+  <data name="UpdatePasswordError" xml:space="preserve">
+    <value>Trenutno nije moguće ažurirati lozinku</value>
+  </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>Ukloni glavnu lozinku</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>{0} koristi SSO s korisnički upravljanim šifriranjem. Tvoja glavna lozinka biti će uklonjena, a za prijavu će biti potreban SSO.</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>Ako ne želiš ukloniti svoju glavnu lozinku, možeš napustiti ovu organizaciju.</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>Napusti organizaciju</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>Napusti {0}?</value>
+  </data>
+  <data name="Fido2Title" xml:space="preserve">
+    <value>FIDO2 WebAuthn</value>
+  </data>
+  <data name="Fido2Instruction" xml:space="preserve">
+    <value>Za nastavak, pripremi svoj FIDO2 WebAuthn sigurnosni ključ i prati upute nakon odabira opcije 'Autentifikacija WebAuthn' na sljedećem zaslonu.</value>
+  </data>
+  <data name="Fido2Desc" xml:space="preserve">
+    <value>Autentifikacija korištenjem FIDO2 WebAuthn vanjskog sigurnosnog ključa.</value>
+  </data>
+  <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
+    <value>Autentifikacija WebAuthn</value>
+  </data>
+  <data name="Fido2ReturnToApp" xml:space="preserve">
+    <value>Povratak u aplikaciju</value>
+  </data>
+  <data name="Fido2CheckBrowser" xml:space="preserve">
+    <value>Provjeri podržava li tvoj zadani preglednik WebAuthn i pokušaj ponovno.</value>
+  </data>
+  <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
+    <value>Pravilo ove organizacija automatski će te učlaniti u ponovno postavljanje lozinke. Učlanjenje će omogućiti administratorima organizacije promjenu tvoje glavne lozinke.</value>
+  </data>
+  <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
+    <value>Pravilo tvoje organizacije utječe na istek trezora. Najveće dozvoljeno vrijeme isteka je {0}:{1} h.</value>
+  </data>
+  <data name="VaultTimeoutToLarge" xml:space="preserve">
+    <value>Vrijeme isteka premašuje ograničenje koju je postavila tvoja organizacija.</value>
+  </data>
+  <data name="DisablePersonalVaultExportPolicyInEffect">
+    <value>Jedno ili više pravila organizacija onemogućuje izvoz osobnog trezora. </value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Obriši račun</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Brisanje tvog računa je nepovratno</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Tvoj račun i svi povezani podaci biti će nepovratno obrisani. Sigurno želiš nastaviti?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Brisanje tvog računa</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Tvoj račun je trajno obrisan.</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>Nevažeći kôd za provjeru</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Pošalji kôd</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Šaljem</value>
   </data>
 </root>

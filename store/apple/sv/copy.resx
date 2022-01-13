@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Name" xml:space="preserve">
-    <value>Bitwarden lösenordshanterare</value>
+    <value>Bitwarden - Lösenordshanterare</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
@@ -151,7 +151,7 @@ Säkra och dela känsliga data i ditt Bitwardenvalv från alla webbläsare, mobi
   <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
-    <value>bit warden,8bit,lösenord,gratis lösenordshanterare,lösenordshanterare,inloggningshanterare</value>
+    <value>bitwarden,bit warden,8bit,lösenord,gratis lösenordshanterare,lösenordshanterare,inloggningshanterare</value>
     <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">

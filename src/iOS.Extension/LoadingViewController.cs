@@ -414,7 +414,9 @@ namespace Bit.iOS.Extension
                 _initedAppCenter = true;
             }
             iOSCoreHelpers.Bootstrap();
-            iOSCoreHelpers.AppearanceAdjustments(deviceActionService);
+            var app = new App.App(new AppOptions { IosExtension = true });
+            ThemeManager.SetTheme(false, app.Resources);
+            iOSCoreHelpers.AppearanceAdjustments();
             _nfcDelegate = new NFCReaderDelegate((success, message) =>
                 messagingService.Send("gotYubiKeyOTP", message));
             iOSCoreHelpers.SubscribeBroadcastReceiver(this, _nfcSession, _nfcDelegate);

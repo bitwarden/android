@@ -18,7 +18,6 @@
 
     <ContentPage.Resources>
         <ResourceDictionary>
-            <u:DateTimeConverter x:Key="dateTime" />
             <ToolbarItem Text="{u:I18n Close}" Clicked="Close_Clicked" Order="Primary" Priority="-1"
                          x:Name="_closeItem" x:Key="closeItem" />
             <StackLayout

@@ -15,6 +15,7 @@
           <u:IconGlyphConverter x:Key="iconGlyphConverter"/>
           <u:IconImageConverter x:Key="iconImageConverter"/>
           <u:InverseBoolConverter x:Key="inverseBool" />
+          <u:StringHasValueConverter x:Key="stringHasValueConverter" />
     </Grid.Resources>
 
     <Grid.RowDefinitions>
@@ -46,7 +47,7 @@
         WidthRequest="22"
         HeightRequest="22"
         IsVisible="{Binding ShowIconImage}"
-        Source="{Binding Cipher, Converter={StaticResource iconImageConverter}}"
+        Source="{Binding IconImageSource, Mode=OneTime}"
         AutomationProperties.IsInAccessibleTree="False" />
 
     <Grid RowSpacing="0" ColumnSpacing="0" Grid.Row="0" Grid.Column="1" VerticalOptions="Center" Padding="0, 7">
@@ -73,7 +74,9 @@
             Grid.Row="1"
             Grid.ColumnSpan="3"
             StyleClass="list-subtitle, list-subtitle-platform"
-            Text="{Binding Cipher.SubTitle}" />
+            Text="{Binding Cipher.SubTitle}"
+            IsVisible="{Binding Source={RelativeSource Self}, Path=Text,
+                        Converter={StaticResource stringHasValueConverter}}"/>
         <controls:IconLabel
             Grid.Column="1"
             Grid.Row="0"

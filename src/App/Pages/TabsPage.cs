@@ -1,18 +1,26 @@
 ﻿using Bit.App.Effects;
 using Bit.App.Models;
 using Bit.App.Resources;
+using Bit.Core.Abstractions;
+using Bit.Core.Utilities;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
     public class TabsPage : TabbedPage
     {
+        private readonly IMessagingService _messagingService;
+        private readonly IKeyConnectorService _keyConnectorService;
+        
         private NavigationPage _groupingsPage;
         private NavigationPage _sendGroupingsPage;
         private NavigationPage _generatorPage;
 
         public TabsPage(AppOptions appOptions = null, PreviousPageInfo previousPage = null)
         {
+            _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
+            _keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
+
             _groupingsPage = new NavigationPage(new GroupingsPage(true, previousPage: previousPage))
             {
                 Title = AppResources.MyVault,
@@ -66,6 +74,15 @@ namespace Bit.App.Pages
             }
         }
 
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+            if (await _keyConnectorService.UserNeedsMigration())
+            {
+                _messagingService.Send("convertAccountToKeyConnector");
+            }
+        }
+
         public void ResetToVaultPage()
         {
             CurrentPage = _groupingsPage;
@@ -85,6 +102,7 @@ namespace Bit.App.Pages
         {
             if (CurrentPage is NavigationPage navPage)
             {
+                _messagingService.Send("updatedTheme");
                 if (navPage.RootPage is GroupingsPage groupingsPage)
                 {
                     // Load something?

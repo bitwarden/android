@@ -31,7 +31,6 @@ namespace Bit.Droid.Accessibility
             // So keep them in sync with:
             //   - AutofillHelpers.{TrustedBrowsers,CompatBrowsers}
             //   - Resources/xml/autofillservice.xml
-            new Browser("alook.browser", "search_fragment_input_view"),
             new Browser("com.amazon.cloud9", "url"),
             new Browser("com.android.browser", "url"),
             new Browser("com.android.chrome", "url_bar"),
@@ -52,6 +51,7 @@ namespace Bit.Droid.Accessibility
             new Browser("com.ecosia.android", "url_bar"),
             new Browser("com.google.android.apps.chrome", "url_bar"),
             new Browser("com.google.android.apps.chrome_dev", "url_bar"),
+            // Rem. for "com.google.android.captiveportallogin": URL displayed in ActionBar subtitle without viewId.
             new Browser("com.jamal2367.styx", "search"),
             new Browser("com.kiwibrowser.browser", "url_bar"),
             new Browser("com.microsoft.emmx", "url_bar"),
@@ -67,6 +67,7 @@ namespace Bit.Droid.Accessibility
             new Browser("com.opera.mini.native", "url_field"),
             new Browser("com.opera.mini.native.beta", "url_field"),
             new Browser("com.opera.touch", "addressbarEdit"),
+            new Browser("com.qflair.browserq", "url"),
             new Browser("com.qwant.liberty", "mozac_browser_toolbar_url_view,url_bar_title"), // 2nd = Legacy (before v4)
             new Browser("com.sec.android.app.sbrowser", "location_bar_edit_text"),
             new Browser("com.sec.android.app.sbrowser.beta", "location_bar_edit_text"),
@@ -101,8 +102,10 @@ namespace Bit.Droid.Accessibility
             new Browser("org.mozilla.fennec_fdroid", "mozac_browser_toolbar_url_view,url_bar_title"), // 2nd = Legacy
             new Browser("org.mozilla.firefox", "mozac_browser_toolbar_url_view,url_bar_title"), // 2nd = Legacy
             new Browser("org.mozilla.firefox_beta", "mozac_browser_toolbar_url_view,url_bar_title"), // 2nd = Legacy
-            new Browser("org.mozilla.focus", "display_url"),
-            new Browser("org.mozilla.klar", "display_url"),
+            new Browser("org.mozilla.focus", "mozac_browser_toolbar_url_view,display_url"), // 2nd = Legacy
+            new Browser("org.mozilla.focus.beta", "mozac_browser_toolbar_url_view,display_url"), // 2nd = Legacy
+            new Browser("org.mozilla.focus.nightly", "mozac_browser_toolbar_url_view,display_url"), // 2nd = Legacy
+            new Browser("org.mozilla.klar", "mozac_browser_toolbar_url_view,display_url"), // 2nd = Legacy
             new Browser("org.mozilla.reference.browser", "mozac_browser_toolbar_url_view"),
             new Browser("org.mozilla.rocket", "display_url"),
             new Browser("org.torproject.torbrowser", "mozac_browser_toolbar_url_view,url_bar_title"), // 2nd = Legacy (before v10.0.3)

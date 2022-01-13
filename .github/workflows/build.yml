@@ -23,9 +23,38 @@ jobs:
       - name: Print lines of code
         run: cloc --vcs git --exclude-dir Resources,store,test,Properties --include-lang C#,XAML
 
+
+  setup:
+    name: Setup
+    runs-on: ubuntu-20.04
+    outputs:
+      rc_branch_exists: ${{ steps.branch-check.outputs.rc_branch_exists }}
+      hotfix_branch_exists: ${{ steps.branch-check.outputs.hotfix_branch_exists }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f  # v2.3.4
+
+      - name: Check if special branches exist
+        id: branch-check
+        run: |
+          if [[ $(git ls-remote --heads origin rc) ]]; then
+            echo "::set-output name=rc_branch_exists::1"
+          else
+            echo "::set-output name=rc_branch_exists::0"
+          fi
+
+          if [[ $(git ls-remote --heads origin hotfix) ]]; then
+            echo "::set-output name=hotfix_branch_exists::1"
+          else
+            echo "::set-output name=hotfix_branch_exists::0"
+          fi
+        shell: bash
+
+
   android:
     name: Android
     runs-on: windows-2019
+    needs: setup
     steps:
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@c26a08ba26249b81327e26f6ef381897b6a8754d  # v1
@@ -147,20 +176,13 @@ jobs:
           path: ./com.x8bit.bitwarden.apk
           if-no-files-found: error
 
-      - name: Check if RC branch exists
-        id: rc-branch-check
-        run: |
-          if [[ $(git ls-remote --heads origin rc) ]]; then
-            echo "::set-output name=branch_exists::1"
-          else
-            echo "::set-output name=branch_exists::0"
-          fi
-        shell: bash
-
       - name: Deploy to Play Store
         if: |
-          (github.ref == 'refs/heads/master' && steps.rc-branch-check.outputs.branch_exists == 0)
-            || github.ref == 'refs/heads/rc'
+            (github.ref == 'refs/heads/master'
+              && needs.setup.outputs.rc_branch_exists == 0
+              && needs.setup.outputs.hotfix_branch_exists == 0)
+            || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
+            || github.ref == 'refs/heads/hotfix'
         run: |
           PUBLISHER_PATH="$GITHUB_WORKSPACE/store/google/Publisher/bin/Release/netcoreapp2.0/Publisher.dll"
           CREDS_PATH="$HOME/secrets/play_creds.json"
@@ -207,7 +229,7 @@ jobs:
           echo "##### Setting Version Code $BUILD_NUMBER"
           echo "########################################"
 
-          sed "s/android:versionCode=\"1\"/android:versionCode=\"$BUILD_NUMBER\"/" \
+          sed -i "s/android:versionCode=\"1\"/android:versionCode=\"$BUILD_NUMBER\"/" \
             ./src/Android/Properties/AndroidManifest.xml
         shell: bash
 
@@ -330,7 +352,8 @@ jobs:
 
   ios:
     name: Apple iOS
-    runs-on: macos-10.15
+    runs-on: macos-11
+    needs: setup
     steps:
       - name: Print environment
         run: |
@@ -447,20 +470,13 @@ jobs:
           path: ./bitwarden-export/Bitwarden.ipa
           if-no-files-found: error
 
-      - name: Check if RC branch exists
-        id: rc-branch-check
-        run: |
-          if [[ $(git ls-remote --heads origin rc) ]]; then
-            echo "::set-output name=branch_exists::1"
-          else
-            echo "::set-output name=branch_exists::0"
-          fi
-        shell: bash
-
       - name: Deploy to App Store
         if: |
-          (github.ref == 'refs/heads/master' && steps.rc-branch-check.outputs.branch_exists == 0)
-            || github.ref == 'refs/heads/rc'
+            (github.ref == 'refs/heads/master'
+              && needs.setup.outputs.rc_branch_exists == 0
+              && needs.setup.outputs.hotfix_branch_exists == 0)
+            || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
+            || github.ref == 'refs/heads/hotfix'
         env:
           APPLE_ID_USERNAME: ${{ secrets.APPLE_ID_USERNAME }}
           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
@@ -468,3 +484,99 @@ jobs:
           xcrun altool --upload-app --type ios --file "./bitwarden-export/Bitwarden.ipa" \
               --username "$APPLE_ID_USERNAME" --password "$APPLE_ID_PASSWORD"
         shell: bash
+
+
+  crowdin-push:
+    name: Crowdin Push
+    if: github.ref == 'refs/heads/master'
+    needs:
+      - android
+      - f-droid
+      - ios
+    runs-on: ubuntu-20.04
+    env:
+      _CROWDIN_PROJECT_ID: "269690"
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f  # v2.3.4
+
+      - name: Login to Azure
+        uses: Azure/login@77f1b2e3fb80c0e8645114159d17008b8a2e475a
+        with:
+          creds: ${{ secrets.AZURE_PROD_KV_CREDENTIALS }}
+
+      - name: Retrieve secrets
+        id: retrieve-secrets
+        uses: Azure/get-keyvault-secrets@80ccd3fafe5662407cc2e55f202ee34bfff8c403
+        with:
+          keyvault: "bitwarden-prod-kv"
+          secrets: "crowdin-api-token"
+
+      - name: Upload Sources
+        uses: crowdin/github-action@e39093fd75daae7859c68eded4b43d42ec78d8ea  # v1.3.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CROWDIN_API_TOKEN: ${{ steps.retrieve-secrets.outputs.crowdin-api-token }}
+        with:
+          config: crowdin.yml
+          crowdin_branch_name: master
+          upload_sources: true
+          upload_translations: false
+
+
+  check-failures:
+    name: Check for failures
+    if: always()
+    runs-on: ubuntu-20.04
+    needs:
+      - cloc
+      - android
+      - f-droid
+      - ios
+      - crowdin-push
+    steps:
+      - name: Check if any job failed
+        if: |
+            (github.ref == 'refs/heads/master')
+            || (github.ref == 'refs/heads/rc')
+            || (github.ref == 'refs/heads/hotfix')
+        env:
+          CLOC_STATUS: ${{ needs.cloc.result }}
+          ANDROID_STATUS: ${{ needs.android.result }}
+          F_DROID_STATUS: ${{ needs.f-droid.result }}
+          IOS_STATUS: ${{ needs.ios.result }}
+          CROWDIN_PUSH_STATUS: ${{ needs.crowdin-push.result }}
+        run: |
+          if [ "$CLOC_STATUS" = "failure" ]; then
+              exit 1
+          elif [ "$ANDROID_STATUS" = "failure" ]; then
+              exit 1
+          elif [ "$F_DROID_STATUS" = "failure" ]; then
+              exit 1
+          elif [ "$IOS_STATUS" = "failure" ]; then
+              exit 1
+          elif [ "$CROWDIN_PUSH_STATUS" = "failure" ]; then
+              exit 1
+          fi
+
+      - name: Login to Azure - Prod Subscription
+        uses: Azure/login@77f1b2e3fb80c0e8645114159d17008b8a2e475a
+        if: failure()
+        with:
+          creds: ${{ secrets.AZURE_PROD_KV_CREDENTIALS }}
+
+      - name: Retrieve secrets
+        id: retrieve-secrets
+        uses: Azure/get-keyvault-secrets@80ccd3fafe5662407cc2e55f202ee34bfff8c403
+        if: failure()
+        with:
+          keyvault: "bitwarden-prod-kv"
+          secrets: "devops-alerts-slack-webhook-url"
+
+      - name: Notify Slack on failure
+        uses: act10ns/slack@e4e71685b9b239384b0f676a63c32367f59c2522  # v1.2.2
+        if: failure()
+        env:
+          SLACK_WEBHOOK_URL: ${{ steps.retrieve-secrets.outputs.devops-alerts-slack-webhook-url }}
+        with:
+          status: ${{ job.status }}

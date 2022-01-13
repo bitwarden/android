@@ -6,10 +6,11 @@ using Android.Views;
 using System;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
+using Bit.Droid.Utilities;
 
 namespace Bit.Droid.Accessibility
 {
-    [Activity(Theme = "@style/LightTheme.Splash", WindowSoftInputMode = SoftInput.StateHidden)]
+    [Activity(Theme = "@style/BaseTheme", WindowSoftInputMode = SoftInput.StateHidden)]
     public class AccessibilityActivity : Activity
     {
         private DateTime? _lastLaunch = null;
@@ -17,6 +18,7 @@ namespace Bit.Droid.Accessibility
 
         protected override void OnCreate(Bundle bundle)
         {
+            Intent?.Validate();
             base.OnCreate(bundle);
             HandleIntent(Intent, 932473);
         }

@@ -29,6 +29,8 @@ namespace Bit.Core.Models.Domain
             MaxStorageGb = obj.MaxStorageGb;
             Permissions = obj.Permissions ?? new Permissions();
             Identifier = obj.Identifier;
+            UsesKeyConnector = obj.UsesKeyConnector;
+            KeyConnectorUrl = obj.KeyConnectorUrl;
         }
 
         public string Id { get; set; }
@@ -50,6 +52,8 @@ namespace Bit.Core.Models.Domain
         public short? MaxStorageGb { get; set; }
         public Permissions Permissions { get; set; } = new Permissions();
         public string Identifier { get; set; }
+        public bool UsesKeyConnector { get; set; }
+        public string KeyConnectorUrl { get; set; }
 
         public bool CanAccess
         {
@@ -86,8 +90,11 @@ namespace Bit.Core.Models.Domain
         public bool canAccessEventLogs => IsAdmin || Permissions.AccessEventLogs;
         public bool canAccessImportExport => IsAdmin || Permissions.AccessImportExport;
         public bool canAccessReports => IsAdmin || Permissions.AccessReports;
-        public bool canManageAllCollections => IsAdmin || Permissions.ManageAllCollections;
-        public bool canManageAssignedCollections => IsManager || Permissions.ManageAssignedCollections;
+        public bool canCreateNewCollections => IsAdmin || Permissions.CreateNewCollections;
+        public bool canEditAnyCollection => IsAdmin || Permissions.EditAnyCollection;
+        public bool canDeleteAnyCollection => IsAdmin || Permissions.DeleteAnyCollection;
+        public bool canEditAssignedCollections => IsManager || Permissions.EditAssignedCollections;
+        public bool canDeleteAssignedCollections => IsManager || Permissions.DeleteAssignedCollections;
         public bool canManageGroups => IsAdmin || Permissions.ManageGroups;
         public bool canManagePolicies => IsAdmin || Permissions.ManagePolicies;
         public bool canManageUser => IsAdmin || Permissions.ManageUsers;

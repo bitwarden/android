@@ -27,6 +27,8 @@ namespace Bit.Core.Abstractions
         Task<SyncResponse> GetSyncAsync();
         Task PostAccountKeysAsync(KeysRequest request);
         Task PostAccountVerifyPasswordAsync(PasswordVerificationRequest request);
+        Task PostAccountRequestOTP();
+        Task PostAccountVerifyOTPAsync(VerifyOTPRequest request);
         Task<CipherResponse> PostCipherAsync(CipherRequest request);
         Task<CipherResponse> PostCipherCreateAsync(CipherCreateRequest request);
         Task<FolderResponse> PostFolderAsync(FolderRequest request);
@@ -59,10 +61,16 @@ namespace Bit.Core.Abstractions
         Task PutDeviceTokenAsync(string identifier, DeviceTokenRequest request);
         Task PostEventsCollectAsync(IEnumerable<EventRequest> request);
         Task PutUpdateTempPasswordAsync(UpdateTempPasswordRequest request);
+        Task DeleteAccountAsync(DeleteAccountRequest request);
         Task<OrganizationKeysResponse> GetOrganizationKeysAsync(string id);
         Task<OrganizationAutoEnrollStatusResponse> GetOrganizationAutoEnrollStatusAsync(string identifier);
         Task PutOrganizationUserResetPasswordEnrollmentAsync(string orgId, string userId,
             OrganizationUserResetPasswordEnrollmentRequest request);
+        Task<KeyConnectorUserKeyResponse> GetUserKeyFromKeyConnector(string keyConnectorUrl);
+        Task PostUserKeyToKeyConnector(string keyConnectorUrl, KeyConnectorUserKeyRequest request);
+        Task PostSetKeyConnectorKey(SetKeyConnectorKeyRequest request);
+        Task PostConvertToKeyConnector();
+        Task PostLeaveOrganization(string id);
 
         Task<SendResponse> GetSendAsync(string id);
         Task<SendResponse> PostSendAsync(SendRequest request);

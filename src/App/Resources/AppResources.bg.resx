@@ -310,6 +310,9 @@
     <value>Запазване</value>
     <comment>Button text for a save operation (verb).</comment>
   </data>
+  <data name="Move" xml:space="preserve">
+    <value>Преместване</value>
+  </data>
   <data name="Saving" xml:space="preserve">
     <value>Запазване…</value>
     <comment>Message shown when interacting with the server</comment>
@@ -782,8 +785,8 @@
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
     <value>Търсене на запис за автоматично дописване на „{0}“.</value>
   </data>
-  <data name="ShareVault" xml:space="preserve">
-    <value>Споделяне на трезора ви</value>
+  <data name="LearnOrg" xml:space="preserve">
+    <value>Разберете повече за организациите</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
     <value>Програмата „{0}“ не може да се отвори.</value>
@@ -1056,6 +1059,9 @@
   <data name="LastName" xml:space="preserve">
     <value>Фамилно име</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Пълно име</value>
+  </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Номер на лиценза</value>
   </data>
@@ -1179,6 +1185,9 @@
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>Скрито</value>
+  </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>Свързано</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Текст</value>
@@ -1378,6 +1387,10 @@
   <data name="NoCollectionsToList" xml:space="preserve">
     <value>Няма колекции за показване.</value>
   </data>
+  <data name="MovedItemToOrg" xml:space="preserve">
+    <value>{0} се премести в {1}.</value>
+    <comment>ex: Item moved to Organization.</comment>
+  </data>
   <data name="ItemShared" xml:space="preserve">
     <value>Записът е споделен.</value>
   </data>
@@ -1390,11 +1403,14 @@
   <data name="ShareItem" xml:space="preserve">
     <value>Споделяне на запис</value>
   </data>
+  <data name="MoveToOrganization" xml:space="preserve">
+    <value>Преместване в организация</value>
+  </data>
   <data name="NoOrgsToList" xml:space="preserve">
     <value>Няма организации за показване.</value>
   </data>
-  <data name="ShareDesc" xml:space="preserve">
-    <value>Изберете организацията, с която искате да споделите записа. Споделянето ѝ прехвърля собствеността. След това няма вече директно да го притежавате.</value>
+  <data name="MoveToOrgDesc" xml:space="preserve">
+    <value>Изберете организацията, в която искате да преместите записа. Преместването прехвърля собствеността му към новата организация. След това няма вече директно да го притежавате.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
     <value>Брой думи</value>
@@ -1424,8 +1440,8 @@
     <value>Уникална фраза, идентифицираща абонамента ви</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
-  <data name="ShareVaultConfirmation" xml:space="preserve">
-    <value>Битуорден позволява да споделяте части от трезора си чрез регистрация на организация. Искате ли да научите повече от сайта bitwarden.com?</value>
+  <data name="LearnOrgConfirmation" xml:space="preserve">
+    <value>Битуорден позволява да споделяте записите в трезора си чрез регистрация на организация. Искате ли да научите повече от сайта bitwarden.com?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
     <value>Изнасяне на трезора</value>
@@ -1438,6 +1454,9 @@
   </data>
   <data name="Unlock" xml:space="preserve">
     <value>Отключване</value>
+  </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Отключване на трезора</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 минути</value>
@@ -1454,6 +1473,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Трезорът е заключен. Въведете своя ПИН, за да продължите.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Трезорът е заключен. Потвърдете самоличността си, за да продължите.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Тъмен</value>
@@ -1500,12 +1522,8 @@
   <data name="ThemeDescription" xml:space="preserve">
     <value>Промяна на цветовия облик на програмата.</value>
   </data>
-  <data name="RestartIsRequired" xml:space="preserve">
-    <value>Необходимо е повторно пускане.</value>
-    <comment>Referring to restarting the application.</comment>
-  </data>
-  <data name="Restarting" xml:space="preserve">
-    <value>Повторно пускане…</value>
+  <data name="ThemeDefault" xml:space="preserve">
+    <value>По подразбиране (от системата)</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Копиране на бележките</value>
@@ -1598,6 +1616,15 @@
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Въведете главната парола, за да изнесете данните.</value>
+  </data>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Изпращане на код за потвърждаване до Вашата ел. поща</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Кодът е изпратен!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Потвърдете самоличността си, за да продължите.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Данните от трезора ви ще се изнесат в незащитен формат. Не го пращайте по незащитени канали като е-поща. Изтрийте файла незабавно след като свършите работата си с него.</value>
@@ -1998,5 +2025,95 @@
   </data>
   <data name="PasswordConfirmationDesc" xml:space="preserve">
     <value>Това действие е защитено. За да продължите, въведете отново главната си парола, за да потвърдите самоличността си.</value>
+  </data>
+  <data name="CaptchaRequired" xml:space="preserve">
+    <value>Captcha Required</value>
+  </data>
+  <data name="CaptchaFailed" xml:space="preserve">
+    <value>Captcha Failed. Please try again.</value>
+  </data>
+  <data name="UpdatedMasterPassword" xml:space="preserve">
+    <value>Главната парола е променена</value>
+  </data>
+  <data name="UpdateMasterPassword" xml:space="preserve">
+    <value>Промяна на главната парола</value>
+  </data>
+  <data name="UpdateMasterPasswordWarning" xml:space="preserve">
+    <value>Вашата главна парола наскоро е била сменена от администратор в организацията Ви. За да получите достъп до трезора, трябва да промените главната си парола сега. Това означава, че ще бъдете отписан(а) от текущата си сесия и ще трябва да се впишете отново. Активните сесии на други устройства може да продължат да бъдат активни още един час.</value>
+  </data>
+  <data name="UpdatingPassword" xml:space="preserve">
+    <value>Обновяване на паролата</value>
+  </data>
+  <data name="UpdatePasswordError" xml:space="preserve">
+    <value>В момента паролата не може да бъде обновена</value>
+  </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>Премахване на главната парола</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>{0} използва еднократно удостоверяване с шифроване, управлявано от клиента. Ако продължите, главната парола ще бъде премахната от регистрацията Ви и за да се впишете, вече ще трябва да използвате еднократното удостоверяване.</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>Ако не искате да премахвате главната си парола, ще трябва да напуснете организацията.</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>Напускане на организацията</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>Напускане на {0}?</value>
+  </data>
+  <data name="Fido2Title" xml:space="preserve">
+    <value>FIDO2 WebAuthn</value>
+  </data>
+  <data name="Fido2Instruction" xml:space="preserve">
+    <value>To continue, have your FIDO2 WebAuthn enabled security key ready, then follow the instructions after clicking 'Authenticate WebAuthn' on the next screen.</value>
+  </data>
+  <data name="Fido2Desc" xml:space="preserve">
+    <value>Идентификация чрез FIDO2 WebAuthn – можете да се идентифицирате чрез външен ключ за сигурност.</value>
+  </data>
+  <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
+    <value>Authenticate WebAuthn</value>
+  </data>
+  <data name="Fido2ReturnToApp" xml:space="preserve">
+    <value>Назад към приложението</value>
+  </data>
+  <data name="Fido2CheckBrowser" xml:space="preserve">
+    <value>Уверете се, че използваният браузър поддържа WebAuthn и опитайте отново.</value>
+  </data>
+  <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
+    <value>Тази организация включва автоматично новите си потребители в смяната на пароли. Това означава, че администраторите на организацията ще могат да променят главната Ви парола.</value>
+  </data>
+  <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
+    <value>Настройките на организацията Ви влияят върху времето за достъп до трезора Ви. Максималното разрешено време за достъп е {0} час(а) и {1} минути</value>
+  </data>
+  <data name="VaultTimeoutToLarge" xml:space="preserve">
+    <value>Времето за достъп до трезора Ви превишава ограничението, определено от организацията Ви.</value>
+  </data>
+  <data name="DisablePersonalVaultExportPolicyInEffect">
+    <value>Една или повече от настройките на организацията Ви не позволяват да изнасяте личния си трезор.</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Изтриване на регистрацията</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Изтриването на регистрацията е необратимо</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Регистрацията Ви и всички свързани с нея данни ще бъдат изтрити и няма да могат да бъдат възстановени. Наистина ли искате да продължите?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Изтриване на регистрацията Ви</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Регистрацията Ви беше изтрита необратимо</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>Грешен код за потвърждаване</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Изпращане на кода</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Изпращане…</value>
   </data>
 </root>

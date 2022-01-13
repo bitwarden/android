@@ -485,6 +485,11 @@ namespace Bit.App.Pages
                     }
                 }
 
+                if (c.IsDeleted)
+                {
+                    continue;
+                }
+
                 var fId = c.FolderId ?? "none";
                 if (_folderCounts.ContainsKey(fId))
                 {

@@ -18,5 +18,6 @@ namespace Bit.Core.Models.Response
         public string SecurityStamp { get; set; }
         public bool ForcePasswordReset { get; set; }
         public List<ProfileOrganizationResponse> Organizations { get; set; }
+        public bool UsesKeyConnector { get; set; }
     }
 }

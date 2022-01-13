@@ -310,6 +310,9 @@
     <value>Salvesta</value>
     <comment>Button text for a save operation (verb).</comment>
   </data>
+  <data name="Move" xml:space="preserve">
+    <value>Teisalda</value>
+  </data>
   <data name="Saving" xml:space="preserve">
     <value>Salvestan...</value>
     <comment>Message shown when interacting with the server</comment>
@@ -708,7 +711,7 @@
     <value>Kirje vaatamine</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>Bitwardeni Veebihoidla</value>
+    <value>Bitwarden veebihoidla</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Kaotasid autentimise rakenduse?</value>
@@ -782,8 +785,8 @@
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
     <value>Otsid "{0}" automaattäite kirjet.</value>
   </data>
-  <data name="ShareVault" xml:space="preserve">
-    <value>Jaga oma hoidlat</value>
+  <data name="LearnOrg" xml:space="preserve">
+    <value>Info organisatsioonide kohta</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
     <value>Rakendust "{0}" ei ole võimalik avada.</value>
@@ -1056,6 +1059,9 @@
   <data name="LastName" xml:space="preserve">
     <value>Perekonnanimi</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Täisnimi</value>
+  </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Litsentsi number</value>
   </data>
@@ -1180,6 +1186,9 @@
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>Peidetud</value>
   </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>Ühenduses</value>
+  </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Tekst</value>
   </data>
@@ -1237,13 +1246,13 @@
     <comment>An entity of multiple related people (ex. a team or business organization).</comment>
   </data>
   <data name="HoldYubikeyNearTop" xml:space="preserve">
-    <value>Hoia oma Yubikey seadme ülaosa ligidal.</value>
+    <value>Hoia oma Yubikey seadme ülaosa lähedal.</value>
   </data>
   <data name="TryAgain" xml:space="preserve">
     <value>Proovi uuesti</value>
   </data>
   <data name="YubiKeyInstructionIos" xml:space="preserve">
-    <value>Jätkamiseks hoia YubiKey NEO-d oma seadme tagumise poole vastu.</value>
+    <value>Jätkamiseks hoia oma YubiKey NEO seadme tagumise poole vastas.</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
     <value>Juurdepääsetavuse teenus võib abiks olla olukordades, kus rakendused ei toeta standardset automaattäite teenust.</value>
@@ -1378,6 +1387,10 @@
   <data name="NoCollectionsToList" xml:space="preserve">
     <value>Puuduvad kollektsioonid, mida kuvada.</value>
   </data>
+  <data name="MovedItemToOrg" xml:space="preserve">
+    <value>{0} teisaldati {1}'sse.</value>
+    <comment>ex: Item moved to Organization.</comment>
+  </data>
   <data name="ItemShared" xml:space="preserve">
     <value>Kirje on jagatud.</value>
   </data>
@@ -1390,11 +1403,14 @@
   <data name="ShareItem" xml:space="preserve">
     <value>Jaga kirjet</value>
   </data>
+  <data name="MoveToOrganization" xml:space="preserve">
+    <value>Teisalda organisatsiooni</value>
+  </data>
   <data name="NoOrgsToList" xml:space="preserve">
     <value>Puuduvad organisatsioonid, mida kuvada.</value>
   </data>
-  <data name="ShareDesc" xml:space="preserve">
-    <value>Vali organisatsioon, millega soovid seda kirjet jagada. Jagamisega saab kirje omanikuks organisatsioon. Pärast kirje jagamist ei ole sa enam selle otsene omanik.</value>
+  <data name="MoveToOrgDesc" xml:space="preserve">
+    <value>Vali organisatsioon, kuhu soovid seda kirjet teisaldada. Teisaldamisega saab kirje omanikuks organisatsioon. Pärast kirje teisaldamist ei ole sa enam selle otsene omanik.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
     <value>Sõnade arv</value>
@@ -1424,8 +1440,8 @@
     <value>Konto sõrmejälje fraas</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
-  <data name="ShareVaultConfirmation" xml:space="preserve">
-    <value>Bitwarden võimaldab sul hoidla sisu teiste kasutajatega jagada, kasutades selleks organisatsiooni kontot. Soovid külastada lehekülge bitwarden.com ja selle kohta rohkem lugeda?</value>
+  <data name="LearnOrgConfirmation" xml:space="preserve">
+    <value>Bitwardeniga saad oma hoidla sisu teistega jagada, kasutades selleks organisatsiooni kontot. Kas soovid selle kohta lisateavet ja avada bitwarden.com veebilehe?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
     <value>Ekspordi hoidla</value>
@@ -1438,6 +1454,9 @@
   </data>
   <data name="Unlock" xml:space="preserve">
     <value>Lukusta lahti</value>
+  </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Hoidla lahtilukustamine</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minuti pärast</value>
@@ -1454,6 +1473,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Hoidla on lukus. Jätkamiseks sisesta PIN kood.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Hoidla on lukus. Jätkamiseks kinnita oma identiteet.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Tume</value>
@@ -1500,12 +1522,8 @@
   <data name="ThemeDescription" xml:space="preserve">
     <value>Muuda rakenduse värvikujundust.</value>
   </data>
-  <data name="RestartIsRequired" xml:space="preserve">
-    <value>Nõutav on rakenduse taaskäivitamine.</value>
-    <comment>Referring to restarting the application.</comment>
-  </data>
-  <data name="Restarting" xml:space="preserve">
-    <value>Taaskäivitub...</value>
+  <data name="ThemeDefault" xml:space="preserve">
+    <value>Vaikeväärtus (süsteem)</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Kopeeri märkus</value>
@@ -1564,13 +1582,13 @@
     <value>Sessioon on aegunud.</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
-    <value>Kinnita läbi biomeetria.</value>
+    <value>Kinnita biomeetriaga.</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
     <value>biomeetriaga</value>
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
-    <value>Kasuta lahtilukustamiseks biomeetriat</value>
+    <value>Lukusta lahti biomeetriaga</value>
   </data>
   <data name="AccessibilityOverlayPermissionAlert" xml:space="preserve">
     <value>Bitwarden vajab tähelepanu! Vaata Seaded - Juurdepääsetavuse teenuse seaded.</value>
@@ -1598,6 +1616,15 @@
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Hoidlas olevate andmete eksportimiseks on vajalik ülemparooli sisestamine.</value>
+  </data>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Saada kinnituskood oma e-postile</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Kood on saadetud!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Jätkamiseks kinnita oma identiteet.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Eksporditav fail sisaldab hoidla sisu, mis on krüpteeringuta. Seda faili ei tohiks kaua käidelda ning mitte mingil juhul ebaturvaliselt saata (näiteks e-postiga). Kustuta see koheselt pärast kasutamist.</value>
@@ -1998,5 +2025,95 @@
   </data>
   <data name="PasswordConfirmationDesc" xml:space="preserve">
     <value>See tegevus on kaitstud. Jätkamiseks sisesta oma ülemparool.</value>
+  </data>
+  <data name="CaptchaRequired" xml:space="preserve">
+    <value>Captcha kinnitamine</value>
+  </data>
+  <data name="CaptchaFailed" xml:space="preserve">
+    <value>Captcha kinnitamine nurjus. Proovi uuesti.</value>
+  </data>
+  <data name="UpdatedMasterPassword" xml:space="preserve">
+    <value>Uuendas ülemparooli</value>
+  </data>
+  <data name="UpdateMasterPassword" xml:space="preserve">
+    <value>Ülemparooli uuendamine</value>
+  </data>
+  <data name="UpdateMasterPasswordWarning" xml:space="preserve">
+    <value>Organisatsiooni administraator muutis hiljuti sinu ülemparooli. Hoidlale ligi pääsemiseks pead ülemparooli uuendama. Jätkates logitakse sind käimasolevast sessioonist välja, misjärel nõutakse uuesti sisselogimist. Teistes seadmetes olevad aktiivsed sessioonid jäävad aktiivseks kuni üheks tunniks.</value>
+  </data>
+  <data name="UpdatingPassword" xml:space="preserve">
+    <value>Parooli uuendamine</value>
+  </data>
+  <data name="UpdatePasswordError" xml:space="preserve">
+    <value>Parooli uuendamine pole hetkel võimalik</value>
+  </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>Eemalda ülemparool</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>{0} kasutab SSO-d koos kliendi poolt hallatava krüpteeringuga. Jätkamisel eemaldatakse sinu kontolt ülemparool ning nõutakse sisselogimist läbi SSO.</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>Kui sa ei soovi oma ülemparooli eemaldada, saad sellest organisatsioonist lahkuda.</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>Lahku organisatsioonist</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>Lahkud {0}-st?</value>
+  </data>
+  <data name="Fido2Title" xml:space="preserve">
+    <value>FIDO2 WebAuthn</value>
+  </data>
+  <data name="Fido2Instruction" xml:space="preserve">
+    <value>Jätkamiseks pane valmis oma FIDO2 WebAuthn võimekusega turvavõti. Seejärel kliki "WebAuthn kinnitamine" ja järgi juhiseid.</value>
+  </data>
+  <data name="Fido2Desc" xml:space="preserve">
+    <value>FIDO2 WebAuthn kinnitamiseks pead kasutama välist turvavõtit.</value>
+  </data>
+  <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
+    <value>WebAuthn kinnitamine</value>
+  </data>
+  <data name="Fido2ReturnToApp" xml:space="preserve">
+    <value>Tagasi rakendusse</value>
+  </data>
+  <data name="Fido2CheckBrowser" xml:space="preserve">
+    <value>Veendu, et sinu brauser toetab WebAuthn-i ja proovi uuesti.</value>
+  </data>
+  <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
+    <value>Selle organisatsiooni poliitika kohaselt liidetakse sind automaatselt ülemparooli lähtestamise funktsiooniga. Liitumisel saavad organisatsiooni administraatorid sinu ülemparooli muuta.</value>
+  </data>
+  <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
+    <value>Organisatsiooni poliitikad mõjutavad sinu hoidla ajalõppu. Maksimaalne lubatud hoidla ajalõpp on {0}  tund(i) ja {1} minut(it)</value>
+  </data>
+  <data name="VaultTimeoutToLarge" xml:space="preserve">
+    <value>Valitud hoidla ajalõpp ei ole organisatsiooni poolt määratud reeglitega kooskõlas.</value>
+  </data>
+  <data name="DisablePersonalVaultExportPolicyInEffect">
+    <value>Üks või enam organisatsiooni poliitikat ei võimalda sul oma personaalset hoidlat eksportida.</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Kustuta konto</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Konto kustutamist ei saa ennistada</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Konto koos kõikide andmetega kustutatakse ning seda ei saa taastada. Oled kindel, et soovid jätkata? </value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Konto kustutamine </value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Sinu konto on lõplikult kustutatud</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>Vale kinnituskood</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Saada kood</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Saatmine</value>
   </data>
 </root>

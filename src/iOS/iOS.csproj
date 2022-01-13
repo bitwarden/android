@@ -150,6 +150,8 @@
     <ImageAsset Include="Resources\Assets.xcassets\LaunchScreen.imageset\logo_white.png" />
     <ImageAsset Include="Resources\Assets.xcassets\LaunchScreen.imageset\logo_white%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\LaunchScreen.imageset\logo_white%403x.png" />
+    <ImageAsset Include="Resources\Assets.xcassets\ic_warning.imageset\Contents.json" />
+    <ImageAsset Include="Resources\Assets.xcassets\ic_warning.imageset\ic_warning-1.pdf" />
     <BundleResource Include="Resources\bwi-font.ttf" />
     <BundleResource Include="Resources\cog%403x.png" />
     <BundleResource Include="Resources\cog%402x.png" />
@@ -391,5 +393,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\Assets.xcassets\LaunchScreen.imageset\" />
+    <Folder Include="Resources\Assets.xcassets\ic_warning.imageset\" />
   </ItemGroup>
 </Project>

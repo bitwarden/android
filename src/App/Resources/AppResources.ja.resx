@@ -310,6 +310,9 @@
     <value>保存</value>
     <comment>Button text for a save operation (verb).</comment>
   </data>
+  <data name="Move" xml:space="preserve">
+    <value>移動</value>
+  </data>
   <data name="Saving" xml:space="preserve">
     <value>保存中...</value>
     <comment>Message shown when interacting with the server</comment>
@@ -782,8 +785,8 @@
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
     <value>「{0}」への自動入力アイテムを検索中です。</value>
   </data>
-  <data name="ShareVault" xml:space="preserve">
-    <value>保管庫の共有</value>
+  <data name="LearnOrg" xml:space="preserve">
+    <value>組織について学ぶ</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
     <value>{0} を開けません。</value>
@@ -1056,6 +1059,9 @@
   <data name="LastName" xml:space="preserve">
     <value>姓</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>フルネーム</value>
+  </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>免許証番号</value>
   </data>
@@ -1179,6 +1185,9 @@
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>非表示</value>
+  </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>リンク済</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>テキスト</value>
@@ -1308,7 +1317,7 @@
     <value>ログイン</value>
   </data>
   <data name="SecureNotes" xml:space="preserve">
-    <value>秘密のメモ</value>
+    <value>セキュアメモ</value>
   </data>
   <data name="AllItems" xml:space="preserve">
     <value>すべてのアイテム</value>
@@ -1378,6 +1387,10 @@
   <data name="NoCollectionsToList" xml:space="preserve">
     <value>表示するコレクションがありません</value>
   </data>
+  <data name="MovedItemToOrg" xml:space="preserve">
+    <value>{0} を {1} に移動しました。</value>
+    <comment>ex: Item moved to Organization.</comment>
+  </data>
   <data name="ItemShared" xml:space="preserve">
     <value>アイテムを共有しました。</value>
   </data>
@@ -1390,11 +1403,14 @@
   <data name="ShareItem" xml:space="preserve">
     <value>アイテムを共有する</value>
   </data>
+  <data name="MoveToOrganization" xml:space="preserve">
+    <value>組織に移動</value>
+  </data>
   <data name="NoOrgsToList" xml:space="preserve">
     <value>表示する組織がありません。</value>
   </data>
-  <data name="ShareDesc" xml:space="preserve">
-    <value>このアイテムを共有する組織を選択してください。共有するとアイテムの所有権は組織に移行し、あなたはもはやこのアイテムの直接のオーナーではなくなります。</value>
+  <data name="MoveToOrgDesc" xml:space="preserve">
+    <value>このアイテムを移動する組織を選択してください。組織に移動すると、アイテムの所有権がその組織に移行します。 このアイテムが移動された後、あなたはこのアイテムの直接の所有者にはなりません。</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
     <value>単語数</value>
@@ -1424,8 +1440,8 @@
     <value>アカウントのパスフレーズ</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
-  <data name="ShareVaultConfirmation" xml:space="preserve">
-    <value>Bitwardenでは、組織アカウントを使用して保管庫を他の人と共有できます。 詳細はbitwarden.comのウェブサイトをご覧ください。</value>
+  <data name="LearnOrgConfirmation" xml:space="preserve">
+    <value>Bitwardenでは、組織アカウントを使用して保管庫のアイテムを他の人と共有できます。 詳細は bitwarden.com のウェブサイトをご覧ください。</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
     <value>保管庫のエクスポート</value>
@@ -1438,6 +1454,9 @@
   </data>
   <data name="Unlock" xml:space="preserve">
     <value>ロック解除</value>
+  </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>保管庫のロックを解除</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30分</value>
@@ -1454,6 +1473,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>保管庫がロックされています。PIN コードで認証してください。</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>保管庫がロックされています。続行するには本人確認を行ってください。</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>ダーク</value>
@@ -1500,12 +1522,8 @@
   <data name="ThemeDescription" xml:space="preserve">
     <value>アプリのテーマカラーを変更します。</value>
   </data>
-  <data name="RestartIsRequired" xml:space="preserve">
-    <value>再起動が必要です。</value>
-    <comment>Referring to restarting the application.</comment>
-  </data>
-  <data name="Restarting" xml:space="preserve">
-    <value>再起動中...</value>
+  <data name="ThemeDefault" xml:space="preserve">
+    <value>デフォルト (システム)</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>メモをコピー</value>
@@ -1598,6 +1616,15 @@
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>保管庫のデータをエクスポートするには、マスターパスワードを入力してください。</value>
+  </data>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>確認コードをメールに送信</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>確認コードを送信しました。</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>続行するには本人確認を行ってください。</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>このエクスポートデータは暗号化されていない形式の保管庫データを含んでいます。メールなどのセキュリティ保護されていない方法で共有したり保管したりしないでください。使用した後はすぐに削除してください。</value>
@@ -1998,5 +2025,95 @@
   </data>
   <data name="PasswordConfirmationDesc" xml:space="preserve">
     <value>この操作は保護されています。続行するには、確認のためにマスターパスワードを再入力してください。</value>
+  </data>
+  <data name="CaptchaRequired" xml:space="preserve">
+    <value>キャプチャが要求されました</value>
+  </data>
+  <data name="CaptchaFailed" xml:space="preserve">
+    <value>キャプチャに失敗しました。もう一度やり直してください。</value>
+  </data>
+  <data name="UpdatedMasterPassword" xml:space="preserve">
+    <value>マスターパスワードを更新しました</value>
+  </data>
+  <data name="UpdateMasterPassword" xml:space="preserve">
+    <value>マスターパスワードを更新しました</value>
+  </data>
+  <data name="UpdateMasterPasswordWarning" xml:space="preserve">
+    <value>マスターパスワードは最近組織の管理者によって変更されました。保管庫にアクセスするには、今すぐ更新する必要があります。 続行すると現在のセッションからログアウトし、再度ログインする必要があります。 他のデバイスでのアクティブなセッションは、最大1時間アクティブになり続けることがあります。</value>
+  </data>
+  <data name="UpdatingPassword" xml:space="preserve">
+    <value>パスワードの更新</value>
+  </data>
+  <data name="UpdatePasswordError" xml:space="preserve">
+    <value>現在パスワードを更新できません。</value>
+  </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>マスターパスワードを削除する</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>{0} は、顧客側で管理する暗号化で SSO を使用しています。続行すると、アカウントからマスターパスワードが削除され、ログインするには SSO が必要になります。</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>マスターパスワードを削除したくない場合は、組織から脱退してください。</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>組織から脱退する</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>{0} から脱退しますか?</value>
+  </data>
+  <data name="Fido2Title" xml:space="preserve">
+    <value>FIDO2 WebAuthn</value>
+  </data>
+  <data name="Fido2Instruction" xml:space="preserve">
+    <value>続けるには FIDO2 WebAuthn セキュリティキーを有効にしてから、次の画面で「WebAuthn の認証」をクリックして指示に従ってください。</value>
+  </data>
+  <data name="Fido2Desc" xml:space="preserve">
+    <value>FIDO2 WebAuthn 外部セキュリティキーを使用して認証できます。</value>
+  </data>
+  <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
+    <value>WebAuthn の認証</value>
+  </data>
+  <data name="Fido2ReturnToApp" xml:space="preserve">
+    <value>アプリに戻る</value>
+  </data>
+  <data name="Fido2CheckBrowser" xml:space="preserve">
+    <value>デフォルトのブラウザが WebAuthn をサポートしていることを確認して、もう一度やり直してください。</value>
+  </data>
+  <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
+    <value>この組織には自動的にパスワードリセットに登録するポリシーがあります。登録すると、組織の管理者はマスターパスワードを変更できます。</value>
+  </data>
+  <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
+    <value>組織のポリシーが保管庫のタイムアウトに影響を与えています。保管庫のタイムアウトは {0} 時間 {1} 分です。</value>
+  </data>
+  <data name="VaultTimeoutToLarge" xml:space="preserve">
+    <value>保管庫のタイムアウトが組織によって設定された制限を超えています。</value>
+  </data>
+  <data name="DisablePersonalVaultExportPolicyInEffect">
+    <value>1 つまたは複数の組織ポリシーにより、個人の保管庫をエクスポートできません。</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>アカウントの削除</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>アカウントを完全に削除します</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>アカウントと関連するすべてのデータが消去され、回復不能になります。続行しますか？</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>アカウントを削除中</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>アカウントを完全に削除しました</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>認証コードが無効です。</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>コードを送信</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>送信中</value>
   </data>
 </root>

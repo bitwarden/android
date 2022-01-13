@@ -310,6 +310,9 @@
     <value>Gem</value>
     <comment>Button text for a save operation (verb).</comment>
   </data>
+  <data name="Move" xml:space="preserve">
+    <value>Flyt</value>
+  </data>
   <data name="Saving" xml:space="preserve">
     <value>Gemmer...</value>
     <comment>Message shown when interacting with the server</comment>
@@ -782,8 +785,8 @@
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
     <value>Du søger efter et autoudfyld element til "{0}".</value>
   </data>
-  <data name="ShareVault" xml:space="preserve">
-    <value>Del din boks</value>
+  <data name="LearnOrg" xml:space="preserve">
+    <value>Få mere at vide om organisationer</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
     <value>Kan ikke åbne appen "{0}".</value>
@@ -1056,6 +1059,9 @@
   <data name="LastName" xml:space="preserve">
     <value>Efternavn</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Fulde navn</value>
+  </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Kørekortnummer</value>
   </data>
@@ -1179,6 +1185,9 @@
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>Skjult</value>
+  </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>Linket</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Tekst</value>
@@ -1378,6 +1387,10 @@
   <data name="NoCollectionsToList" xml:space="preserve">
     <value>Der er ingen samlinger at vise.</value>
   </data>
+  <data name="MovedItemToOrg" xml:space="preserve">
+    <value>{0} flyttet til {1}.</value>
+    <comment>ex: Item moved to Organization.</comment>
+  </data>
   <data name="ItemShared" xml:space="preserve">
     <value>Element er blevet delt.</value>
   </data>
@@ -1390,11 +1403,14 @@
   <data name="ShareItem" xml:space="preserve">
     <value>Del element</value>
   </data>
+  <data name="MoveToOrganization" xml:space="preserve">
+    <value>Flyt til organisation</value>
+  </data>
   <data name="NoOrgsToList" xml:space="preserve">
     <value>Ingen organisationer at vise.</value>
   </data>
-  <data name="ShareDesc" xml:space="preserve">
-    <value>Vælg en organisation, som du ønsker at dele dette element med. Deling overfører ejerskab af elementet til organisationen. Du vil ikke længere være den direkte ejer af dette element, når det er blevet delt.</value>
+  <data name="MoveToOrgDesc" xml:space="preserve">
+    <value>Vælg en organisation, som du ønsker at flytte dette emne til. Flytning til en organisation overfører ejerskabet af emnet til den pågældende organisation. Du vil efter flytningen ikke længere være den direkte ejer af emnet.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
     <value>Antal ord</value>
@@ -1424,8 +1440,8 @@
     <value>Din kontos fingeraftrykssætning</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
-  <data name="ShareVaultConfirmation" xml:space="preserve">
-    <value>Bitwarden giver dig mulighed for at dele din boks med andre ved at bruge en organisationskonto. Vil du besøge webstedet bitwarden.com for at få mere at vide?</value>
+  <data name="LearnOrgConfirmation" xml:space="preserve">
+    <value>Bitwarden giver dig mulighed for at dele dine boks-elementer med andre ved at bruge en organisationskonto. Vil du besøge webstedet bitwarden.com for at få mere at vide?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
     <value>Eksportér boks</value>
@@ -1438,6 +1454,9 @@
   </data>
   <data name="Unlock" xml:space="preserve">
     <value>Lås op</value>
+  </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Lås boks op</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minutter</value>
@@ -1454,6 +1473,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Din boks er låst. Bekræft din pinkode for at fortsætte.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Din boks er låst. Bekræft din identitet for at fortsætte.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Mørk</value>
@@ -1500,12 +1522,8 @@
   <data name="ThemeDescription" xml:space="preserve">
     <value>Skift app'ens farvetema.</value>
   </data>
-  <data name="RestartIsRequired" xml:space="preserve">
-    <value>Genstart nødvendig.</value>
-    <comment>Referring to restarting the application.</comment>
-  </data>
-  <data name="Restarting" xml:space="preserve">
-    <value>Genstarter...</value>
+  <data name="ThemeDefault" xml:space="preserve">
+    <value>Standard (system)</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Kopiér notater</value>
@@ -1598,6 +1616,15 @@
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Angiv din hovedadgangskode for at eksportere boksdata.</value>
+  </data>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Send en bekræftelseskode til din e-mail</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Kode sendt!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Bekræft din identitet for at fortsætte.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Denne eksport indeholder dine boksdata i en ukrypteret form. Du bør ikke gemme eller sende den eksporterede fil via usikre kanaler (f.eks. e-mail). Slet den straks efter at du er færdig med at bruge den.</value>
@@ -1998,5 +2025,95 @@
   </data>
   <data name="PasswordConfirmationDesc" xml:space="preserve">
     <value>Denne handling er beskyttet. Angiv hovedadgangskoden igen for at bekræfte din identitet og fortsætte.</value>
+  </data>
+  <data name="CaptchaRequired" xml:space="preserve">
+    <value>Captcha kræves</value>
+  </data>
+  <data name="CaptchaFailed" xml:space="preserve">
+    <value>Captcha mislykkedes. Prøv venligst igen.</value>
+  </data>
+  <data name="UpdatedMasterPassword" xml:space="preserve">
+    <value>Hovedadgangskode opdateret</value>
+  </data>
+  <data name="UpdateMasterPassword" xml:space="preserve">
+    <value>Opdatér hovedadgangskode</value>
+  </data>
+  <data name="UpdateMasterPasswordWarning" xml:space="preserve">
+    <value>Dit hovedadgangskode blev for nylig ændret af en administrator i din organisation. For at få adgang til boksen skal du opdatere din hovedadgangskode nu. Hvis du fortsætter, logges du ud af din nuværende session, hvilket kræver, at du logger ind igen. Aktive sessioner på andre enheder kan fortsætte med at være aktive i op til én time.</value>
+  </data>
+  <data name="UpdatingPassword" xml:space="preserve">
+    <value>Opdaterer adgangskode</value>
+  </data>
+  <data name="UpdatePasswordError" xml:space="preserve">
+    <value>Kan i øjeblikket ikke opdatere adgangskode</value>
+  </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>Fjern hovedadgangskode</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>{0} bruger SSO med kundestyret kryptering. Hvis du fortsætter, fjernes din hovedadgangskode fra din konto og SSO kræves for at logge på.</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>Hvis du ikke ønsker at fjerne din hovedadgangskode, kan du forlade denne organisation.</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>Forlad organisation</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>Forlad {0}?</value>
+  </data>
+  <data name="Fido2Title" xml:space="preserve">
+    <value>FIDO2 WebAuthn</value>
+  </data>
+  <data name="Fido2Instruction" xml:space="preserve">
+    <value>For at fortsætte skal du have din FIDO2 WebAuthn-aktiverede sikkerhedsnøgle klar, klik på 'Godkend WebAuthn' på næste skærmbillede og følg instruktionerne.</value>
+  </data>
+  <data name="Fido2Desc" xml:space="preserve">
+    <value>Godkendelse ved hjælp af FIDO2 WebAuthn, du kan godkende ved hjælp af en ekstern sikkerhedsnøgle.</value>
+  </data>
+  <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
+    <value>Godkend WebAuthn</value>
+  </data>
+  <data name="Fido2ReturnToApp" xml:space="preserve">
+    <value>Vend tilbage til app</value>
+  </data>
+  <data name="Fido2CheckBrowser" xml:space="preserve">
+    <value>Sørg for, at standardbrowseren understøtter WebAuthn og forsøg igen.</value>
+  </data>
+  <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
+    <value>Denne organisation har en virksomhedspolitik, der automatisk tilmelder dig til nulstilling af adgangskode. Tilmelding giver organisationsadministratorer mulighed for at skifte din hovedadgangskode.</value>
+  </data>
+  <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
+    <value>Dine organisationspolitikker påvirker din boks-timeout. Maksimum tilladte boks-timeout er {0} time(r) og {1} minut(ter)</value>
+  </data>
+  <data name="VaultTimeoutToLarge" xml:space="preserve">
+    <value>Timeout for din boks overskrider de begrænsninger, der er angivet af din organisation.</value>
+  </data>
+  <data name="DisablePersonalVaultExportPolicyInEffect">
+    <value>En eller flere organisationspolitikker forhindrer eksport af din personlige boks.</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Slet konto</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Sletning af din konto er permanent</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Din konto og alle tilknyttede data vil blive slettet og kan ikke gendannes. Er du sikker på, at du vil fortsætte?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Sletter din konto</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Din konto er blevet permanent slettet</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>Ugyldig bekræftelseskode</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Send kode</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Sender</value>
   </data>
 </root>

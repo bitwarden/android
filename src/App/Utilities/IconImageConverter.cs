@@ -10,8 +10,6 @@ namespace Bit.App.Utilities
 {
     public class IconImageConverter : IValueConverter
     {
-        private readonly IEnvironmentService _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
-
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var cipher = value as CipherView;
@@ -29,51 +27,65 @@ namespace Bit.App.Utilities
             switch (cipher.Type)
             {
                 case CipherType.Login:
-                    icon = GetLoginIconImage(cipher);
+                    icon = IconImageHelper.GetLoginIconImage(cipher);
                     break;
                 default:
                     break;
             }
             return icon;
         }
+    }
 
-        string GetLoginIconImage(CipherView cipher)
+    public static class IconImageHelper
+    {
+        public static string GetLoginIconImage(CipherView cipher)
         {
             string image = null;
-            if (cipher.Login.Uri != null)
+            if (cipher.Login.HasUris)
             {
-                var hostnameUri = cipher.Login.Uri;
-                var isWebsite = false;
-
-                if (!hostnameUri.Contains("://") && hostnameUri.Contains("."))
+                foreach (var uri in cipher.Login.Uris)
                 {
-                    hostnameUri = string.Concat("http://", hostnameUri);
-                    isWebsite = true;
-                }
-                else
-                {
-                    isWebsite = hostnameUri.StartsWith("http") && hostnameUri.Contains(".");
-                }
-
-                if (isWebsite)
-                {
-                    var hostname = CoreHelpers.GetHostname(hostnameUri);
-                    var iconsUrl = _environmentService.IconsUrl;
-                    if (string.IsNullOrWhiteSpace(iconsUrl))
+                    var hostnameUri = uri.Uri;
+                    var isWebsite = false;
+                    if (!hostnameUri.Contains("."))
                     {
-                        if (!string.IsNullOrWhiteSpace(_environmentService.BaseUrl))
-                        {
-                            iconsUrl = string.Format("{0}/icons", _environmentService.BaseUrl);
-                        }
-                        else
-                        {
-                            iconsUrl = "https://icons.bitwarden.net";
-                        }
+                        continue;
                     }
-                    image = string.Format("{0}/{1}/icon.png", iconsUrl, hostname);
+                    if (!hostnameUri.Contains("://"))
+                    {
+                        hostnameUri = string.Concat("http://", hostnameUri);
+                    }
+                    isWebsite = hostnameUri.StartsWith("http");
+
+                    if (isWebsite)
+                    {
+                        image = GetIconUrl(hostnameUri);
+                        break;
+                    }
                 }
             }
             return image;
+        }
+
+        private static string GetIconUrl(string hostnameUri)
+        {
+            IEnvironmentService _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
+
+            var hostname = CoreHelpers.GetHostname(hostnameUri);
+            var iconsUrl = _environmentService.IconsUrl;
+            if (string.IsNullOrWhiteSpace(iconsUrl))
+            {
+                if (!string.IsNullOrWhiteSpace(_environmentService.BaseUrl))
+                {
+                    iconsUrl = string.Format("{0}/icons", _environmentService.BaseUrl);
+                }
+                else
+                {
+                    iconsUrl = "https://icons.bitwarden.net";
+                }
+            }
+            return string.Format("{0}/{1}/icon.png", iconsUrl, hostname);
+
         }
     }
 }

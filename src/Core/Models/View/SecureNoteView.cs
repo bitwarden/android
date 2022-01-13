@@ -1,9 +1,10 @@
 ﻿using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
+using System.Collections.Generic;
 
 namespace Bit.Core.Models.View
 {
-    public class SecureNoteView : View
+    public class SecureNoteView : ItemView
     {
         public SecureNoteView() { }
 
@@ -13,6 +14,7 @@ namespace Bit.Core.Models.View
         }
 
         public SecureNoteType Type { get; set; }
-        public string SubTitle => null;
+        public override string SubTitle => null;
+        public override List<KeyValuePair<string, LinkedIdType>> LinkedFieldOptions => null;
     }
 }

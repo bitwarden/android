@@ -310,6 +310,9 @@
     <value>Speichern</value>
     <comment>Button text for a save operation (verb).</comment>
   </data>
+  <data name="Move" xml:space="preserve">
+    <value>Verschieben</value>
+  </data>
   <data name="Saving" xml:space="preserve">
     <value>Wird gespeichert...</value>
     <comment>Message shown when interacting with the server</comment>
@@ -782,8 +785,8 @@
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
     <value>Du suchst nach einem Eintrag zum automatischen Einfügen für "{0}".</value>
   </data>
-  <data name="ShareVault" xml:space="preserve">
-    <value>Teile deinen Tresor</value>
+  <data name="LearnOrg" xml:space="preserve">
+    <value>Mehr über Organisationen erfahren</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
     <value>Die App "{0}" kann nicht geöffnet werden.</value>
@@ -1056,6 +1059,9 @@
   <data name="LastName" xml:space="preserve">
     <value>Nachname</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Vollständiger Name</value>
+  </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Führerscheinnummer</value>
   </data>
@@ -1179,6 +1185,9 @@
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>Versteckt</value>
+  </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>Verknüpft</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Text</value>
@@ -1378,6 +1387,10 @@
   <data name="NoCollectionsToList" xml:space="preserve">
     <value>Keine Sammlungen vorhanden.</value>
   </data>
+  <data name="MovedItemToOrg" xml:space="preserve">
+    <value>{0} verschoben nach {1}.</value>
+    <comment>ex: Item moved to Organization.</comment>
+  </data>
   <data name="ItemShared" xml:space="preserve">
     <value>Eintrag wurde geteilt.</value>
   </data>
@@ -1390,11 +1403,14 @@
   <data name="ShareItem" xml:space="preserve">
     <value>Eintrag teilen</value>
   </data>
+  <data name="MoveToOrganization" xml:space="preserve">
+    <value>In Organisation verschieben</value>
+  </data>
   <data name="NoOrgsToList" xml:space="preserve">
     <value>Keine Organisationen vorhanden.</value>
   </data>
-  <data name="ShareDesc" xml:space="preserve">
-    <value>Wähle eine Organisation aus, für die du diesen Eintrag freigeben möchtest. Die gemeinsame Nutzung überträgt das Eigentum an dem Eintrag auf diese Organisation. Du bist dann nicht mehr der direkte Besitzer dieses Eintrags, sobald er geteilt wurde.</value>
+  <data name="MoveToOrgDesc" xml:space="preserve">
+    <value>Wähle eine Organisation aus, in die du diesen Eintrag verschieben möchtest. Das Verschieben in eine Organisation überträgt das Eigentum an diese Organisation. Du bist nicht mehr der direkte Besitzer dieses Eintrags, sobald er verschoben wurde.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
     <value>Anzahl der Wörter</value>
@@ -1424,8 +1440,8 @@
     <value>Prüfschlüssel für deinen Account</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
-  <data name="ShareVaultConfirmation" xml:space="preserve">
-    <value>Bitwarden ermöglicht es dir, deinen Tresor mit anderen zu teilen, indem du ein Organisationskonto benutzt. Möchtest du bitwarden.com besuchen, um mehr zu erfahren?</value>
+  <data name="LearnOrgConfirmation" xml:space="preserve">
+    <value>Bitwarden ermöglicht es, deinen Tresor mit anderen zu teilen, indem du ein Organisationskonto benutzt. Möchtest du bitwarden.com besuchen, um mehr zu erfahren?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
     <value>Tresor exportieren</value>
@@ -1438,6 +1454,9 @@
   </data>
   <data name="Unlock" xml:space="preserve">
     <value>Entsperren</value>
+  </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Tresor entsperren</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 Minuten</value>
@@ -1454,6 +1473,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Dein Tresor ist gesperrt. Gebe deinen PIN-Code ein um fortzufahren.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Dein Tresor ist gesperrt. Überprüfe deine Identität, um fortzufahren.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Dunkel</value>
@@ -1500,12 +1522,8 @@
   <data name="ThemeDescription" xml:space="preserve">
     <value>Ändere das Farbschema der Anwendung.</value>
   </data>
-  <data name="RestartIsRequired" xml:space="preserve">
-    <value>Neustart ist erforderlich.</value>
-    <comment>Referring to restarting the application.</comment>
-  </data>
-  <data name="Restarting" xml:space="preserve">
-    <value>Wird neugestartet...</value>
+  <data name="ThemeDefault" xml:space="preserve">
+    <value>Standard (System)</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Notizen kopieren</value>
@@ -1598,6 +1616,15 @@
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Gib das Masterpasswort ein, um deine Tresordaten zu exportieren.</value>
+  </data>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Einen Bestätigungscode an deine E-Mail senden</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Code gesendet!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Bestätige deine Identität, um fortzufahren.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Dieser Export enthält deine Tresordaten in einem unverschlüsseltem Format. Du solltest sie nicht speichern oder über unsichere Kanäle (z. B. E-Mail) senden. Lösche sie sofort nach ihrer Verwendung.</value>
@@ -1998,5 +2025,95 @@
   </data>
   <data name="PasswordConfirmationDesc" xml:space="preserve">
     <value>Diese Aktion ist geschützt. Um fortzufahren, gib bitte dein Master-Passwort erneut ein, um deine Identität zu bestätigen.</value>
+  </data>
+  <data name="CaptchaRequired" xml:space="preserve">
+    <value>Captcha erforderlich</value>
+  </data>
+  <data name="CaptchaFailed" xml:space="preserve">
+    <value>Captcha fehlgeschlagen. Bitte versuche es erneut.</value>
+  </data>
+  <data name="UpdatedMasterPassword" xml:space="preserve">
+    <value>Master-Passwort aktualisiert</value>
+  </data>
+  <data name="UpdateMasterPassword" xml:space="preserve">
+    <value>Master-Passwort aktualisieren</value>
+  </data>
+  <data name="UpdateMasterPasswordWarning" xml:space="preserve">
+    <value>Dein Master-Passwort wurde kürzlich von einem Administrator deiner Organisation geändert. Um auf den Tresor zuzugreifen, musst du dein Master-Passwort jetzt aktualisieren. Wenn Du fortfährst, wirst du aus der aktuellen Sitzung abgemeldet und eine erneute Anmeldung ist erforderlich. Aktive Sitzungen auf anderen Geräten können bis zu einer Stunde weiterhin aktiv bleiben.</value>
+  </data>
+  <data name="UpdatingPassword" xml:space="preserve">
+    <value>Passwort wird aktualisiert</value>
+  </data>
+  <data name="UpdatePasswordError" xml:space="preserve">
+    <value>Das Passwort kann derzeit nicht aktualisiert werden</value>
+  </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>Master-Passwort entfernen</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>{0} verwendet SSO mit von Kunden verwalteter Verschlüsselung. Durch Fortfahren wird dein Master-Passwort von deinem Konto entfernt und SSO zum Anmelden benötigt.</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>Wenn du dein Master-Passwort nicht entfernen möchtest, kannst du diese Organisation verlassen.</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>Organisation verlassen</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>{0} verlassen?</value>
+  </data>
+  <data name="Fido2Title" xml:space="preserve">
+    <value>FIDO2 WebAuthn</value>
+  </data>
+  <data name="Fido2Instruction" xml:space="preserve">
+    <value>Um fortzufahren, halte deinen FIDO2 WebAuthn kompatiblen Sicherheitsschlüssel bereit und folge dann den Anweisungen, nachdem du auf der nächsten Seite auf 'Authentifiziere WebAuthn' geklickt hast.</value>
+  </data>
+  <data name="Fido2Desc" xml:space="preserve">
+    <value>Authentifizierung mit FIDO2 WebAuthn, du kannst dich mit einem externen Sicherheitsschlüssel authentifizieren.</value>
+  </data>
+  <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
+    <value>Authentifiziere WebAuthn</value>
+  </data>
+  <data name="Fido2ReturnToApp" xml:space="preserve">
+    <value>Zurück zur App</value>
+  </data>
+  <data name="Fido2CheckBrowser" xml:space="preserve">
+    <value>Bitte stelle sicher, dass dein Standardbrowser WebAuthn unterstützt und versuche es erneut.</value>
+  </data>
+  <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
+    <value>Diese Organisation hat eine Unternehmensrichtlinie, die dich automatisch für die Passwort Zurücksetzung registriert. Die Registrierung wird es Administratoren der Organisation erlauben, dein Master-Passwort zu ändern.</value>
+  </data>
+  <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
+    <value>Deine Organisationsrichtlinien haben Auswirkungen auf dein Tresor-Timeout. Das maximal zulässige Tresor-Timeout beträgt {0} Stunde(n) und {1} Minute(n)</value>
+  </data>
+  <data name="VaultTimeoutToLarge" xml:space="preserve">
+    <value>Dein Tresor-Timeout überschreitet die von deinem Unternehmen festgelegten Beschränkungen.</value>
+  </data>
+  <data name="DisablePersonalVaultExportPolicyInEffect">
+    <value>Eine oder mehrere Unternehmensrichtlinien verhindern es, dass du deinen persönlichen Tresor exportieren kannst.</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Konto löschen</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Das Löschen deines Kontos ist unwiderruflich</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Dein Konto und alle damit verbundenen Daten werden gelöscht und sind nicht wiederherstellbar. Bist du sicher, dass du fortfahren möchtest?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Löschen deines Kontos</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Dein Konto wurde unwiderruflich gelöscht.</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>Ungültiger Bestätigungscode.</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Code senden</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Sende</value>
   </data>
 </root>

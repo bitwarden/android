@@ -35,7 +35,7 @@
             </StackLayout>
             <StackLayout StyleClass="box">
                 <Button Text="{u:I18n SyncVaultNow}" Clicked="Sync_Clicked"></Button>
-                <Label StyleClass="text-muted, text-sm" HorizontalTextAlignment="Center">
+                <Label StyleClass="text-muted, text-sm" HorizontalTextAlignment="Center" Margin="0,10">
                     <Label.FormattedText>
                         <FormattedString>
                             <Span Text="{u:I18n LastSync}" />

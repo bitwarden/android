@@ -26,6 +26,9 @@ namespace Bit.App.Pages
         private readonly ISyncService _syncService;
         private readonly IBiometricService _biometricService;
         private readonly IPolicyService _policyService;
+        private readonly ILocalizeService _localizeService;
+        private readonly IKeyConnectorService _keyConnectorService;
+        private readonly IClipboardService _clipboardService;
 
         private const int CustomVaultTimeoutValue = -100;
 
@@ -35,6 +38,8 @@ namespace Bit.App.Pages
         private string _lastSyncDate;
         private string _vaultTimeoutDisplayValue;
         private string _vaultTimeoutActionDisplayValue;
+        private bool _showChangeMasterPassword;
+
         private List<KeyValuePair<string, int?>> _vaultTimeouts =
             new List<KeyValuePair<string, int?>>
             {
@@ -57,7 +62,7 @@ namespace Bit.App.Pages
             };
 
         private Policy _vaultTimeoutPolicy;
-        private int _vaultTimeout;
+        private int? _vaultTimeout;
 
         public SettingsPageViewModel()
         {
@@ -72,6 +77,9 @@ namespace Bit.App.Pages
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
             _biometricService = ServiceContainer.Resolve<IBiometricService>("biometricService");
             _policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
+            _localizeService = ServiceContainer.Resolve<ILocalizeService>("localizeService");
+            _keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
+            _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
 
             GroupedItems = new ExtendedObservableCollection<SettingsPageListGroup>();
             PageTitle = AppResources.Settings;
@@ -86,8 +94,9 @@ namespace Bit.App.Pages
             if (lastSync != null)
             {
                 lastSync = lastSync.Value.ToLocalTime();
-                _lastSyncDate = string.Format("{0} {1}", lastSync.Value.ToShortDateString(),
-                    lastSync.Value.ToShortTimeString());
+                _lastSyncDate = string.Format("{0} {1}",
+                    _localizeService.GetLocaleShortDate(lastSync.Value),
+                    _localizeService.GetLocaleShortTime(lastSync.Value));
             }
 
             if (await _policyService.PolicyAppliesToUser(PolicyType.MaximumVaultTimeout))
@@ -113,6 +122,9 @@ namespace Bit.App.Pages
                 _vaultTimeoutDisplayValue = AppResources.Custom;
             }
 
+            _showChangeMasterPassword = IncludeLinksWithSubscriptionInfo() &&
+                !await _keyConnectorService.GetUsesKeyConnector();
+
             BuildList();
         }
 
@@ -125,7 +137,7 @@ namespace Bit.App.Pages
                 AppResources.Close);
             if (copy)
             {
-                await _platformUtilsService.CopyToClipboardAsync(debugText);
+                await _clipboardService.CopyTextAsync(debugText);
             }
         }
 
@@ -220,7 +232,7 @@ namespace Bit.App.Pages
             await _vaultTimeoutService.LockAsync(true, true);
         }
 
-        public async Task VaultTimeoutAsync(bool promptOptions = true, int newTimeout = 0)
+        public async Task VaultTimeoutAsync(bool promptOptions = true, int? newTimeout = 0)
         {
             var oldTimeout = _vaultTimeout;
 
@@ -237,7 +249,7 @@ namespace Bit.App.Pages
                 var cleanSelection = selection.Replace("✓ ", string.Empty);
                 var selectionOption = _vaultTimeouts.FirstOrDefault(o => o.Key == cleanSelection);
                 _vaultTimeoutDisplayValue = selectionOption.Key;
-                newTimeout = selectionOption.Value.GetValueOrDefault();
+                newTimeout = selectionOption.Value;
             }
 
             if (_vaultTimeoutPolicy != null)
@@ -309,9 +321,13 @@ namespace Bit.App.Pages
                     AppResources.SetPINDescription, null, AppResources.Submit, AppResources.Cancel, true);
                 if (!string.IsNullOrWhiteSpace(pin))
                 {
-                    var masterPassOnRestart = await _platformUtilsService.ShowDialogAsync(
-                       AppResources.PINRequireMasterPasswordRestart, AppResources.UnlockWithPIN,
-                       AppResources.Yes, AppResources.No);
+                    var masterPassOnRestart = false;
+                    if (!await _keyConnectorService.GetUsesKeyConnector())
+                    {
+                        masterPassOnRestart = await _platformUtilsService.ShowDialogAsync(
+                            AppResources.PINRequireMasterPasswordRestart, AppResources.UnlockWithPIN,
+                            AppResources.Yes, AppResources.No);
+                    }
 
                     var kdf = await _userService.GetKdfAsync();
                     var kdfIterations = await _userService.GetKdfIterationsAsync();
@@ -418,25 +434,6 @@ namespace Bit.App.Pages
                 new SettingsPageListItem { Name = AppResources.LockNow },
                 new SettingsPageListItem { Name = AppResources.TwoStepLogin }
             };
-            if (_vaultTimeoutDisplayValue == AppResources.Custom)
-            {
-                securityItems.Insert(1, new SettingsPageListItem
-                {
-                    Name = AppResources.Custom,
-                    Time = TimeSpan.FromMinutes(Math.Abs((double) _vaultTimeout)),
-                });
-            }
-            if (_vaultTimeoutPolicy != null)
-            {
-                var maximumTimeout = _policyService.GetPolicyInt(_vaultTimeoutPolicy, "minutes").GetValueOrDefault();
-                securityItems.Insert(0, new SettingsPageListItem
-                {
-                    Name = string.Format(AppResources.VaultTimeoutPolicyInEffect,
-                        Math.Floor((float) maximumTimeout / 60),
-                        maximumTimeout % 60),
-                    UseFrame = true,
-                });
-            }
             if (_supportsBiometric || _biometric)
             {
                 var biometricName = AppResources.Biometrics;
@@ -452,12 +449,31 @@ namespace Bit.App.Pages
                 };
                 securityItems.Insert(2, item);
             }
+            if (_vaultTimeoutDisplayValue == AppResources.Custom)
+            {
+                securityItems.Insert(1, new SettingsPageListItem
+                {
+                    Name = AppResources.Custom,
+                    Time = TimeSpan.FromMinutes(Math.Abs((double)_vaultTimeout.GetValueOrDefault())),
+                });
+            }
+            if (_vaultTimeoutPolicy != null)
+            {
+                var maximumTimeout = _policyService.GetPolicyInt(_vaultTimeoutPolicy, "minutes").GetValueOrDefault();
+                securityItems.Insert(0, new SettingsPageListItem
+                {
+                    Name = string.Format(AppResources.VaultTimeoutPolicyInEffect,
+                        Math.Floor((float)maximumTimeout / 60),
+                        maximumTimeout % 60),
+                    UseFrame = true,
+                });
+            }
             var accountItems = new List<SettingsPageListItem>
             {
                 new SettingsPageListItem { Name = AppResources.FingerprintPhrase },
                 new SettingsPageListItem { Name = AppResources.LogOut }
             };
-            if (IncludeLinksWithSubscriptionInfo())
+            if (_showChangeMasterPassword)
             {
                 accountItems.Insert(0, new SettingsPageListItem { Name = AppResources.ChangeMasterPassword });
             }
@@ -476,7 +492,8 @@ namespace Bit.App.Pages
                 new SettingsPageListItem { Name = AppResources.Options },
                 new SettingsPageListItem { Name = AppResources.About },
                 new SettingsPageListItem { Name = AppResources.HelpAndFeedback },
-                new SettingsPageListItem { Name = AppResources.RateTheApp }
+                new SettingsPageListItem { Name = AppResources.RateTheApp },
+                new SettingsPageListItem { Name = AppResources.DeleteAccount }
             };
             GroupedItems.ResetWithRange(new List<SettingsPageListGroup>
             {

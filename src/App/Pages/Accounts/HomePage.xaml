@@ -41,11 +41,12 @@
                    HorizontalTextAlignment="Center"></Label>
             <StackLayout Spacing="5">
                 <Button Text="{u:I18n LogIn}" 
-                    Clicked="LogIn_Clicked"></Button>
+                        StyleClass="btn-primary"
+                        Clicked="LogIn_Clicked" />
                 <Button Text="{u:I18n CreateAccount}"
-                    Clicked="Register_Clicked"></Button>
+                        Clicked="Register_Clicked" />
                 <Button Text="{u:I18n LogInSso}"
-                    Clicked="LogInSso_Clicked"></Button>
+                        Clicked="LogInSso_Clicked" />
             </StackLayout>
         </StackLayout>
     </StackLayout>

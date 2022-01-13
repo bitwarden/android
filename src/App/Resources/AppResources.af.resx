@@ -310,6 +310,9 @@
     <value>Bewaar</value>
     <comment>Button text for a save operation (verb).</comment>
   </data>
+  <data name="Move" xml:space="preserve">
+    <value>Skuif</value>
+  </data>
   <data name="Saving" xml:space="preserve">
     <value>Bewaar tans…</value>
     <comment>Message shown when interacting with the server</comment>
@@ -782,8 +785,8 @@
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
     <value>U soek na ’n outovulitem vir “{0}”.</value>
   </data>
-  <data name="ShareVault" xml:space="preserve">
-    <value>Deel u kluis</value>
+  <data name="LearnOrg" xml:space="preserve">
+    <value>Meer oor organisasies</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
     <value>Kan nie die toep “{0}” open nie.</value>
@@ -1056,6 +1059,9 @@
   <data name="LastName" xml:space="preserve">
     <value>Van</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Volle naam</value>
+  </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Lisensienommer</value>
   </data>
@@ -1179,6 +1185,9 @@
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>Versteek</value>
+  </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>Gekoppel</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Teks</value>
@@ -1378,6 +1387,10 @@
   <data name="NoCollectionsToList" xml:space="preserve">
     <value>Daar is geen versamelings om te lys nie.</value>
   </data>
+  <data name="MovedItemToOrg" xml:space="preserve">
+    <value>{0} geskuif na {1}.</value>
+    <comment>ex: Item moved to Organization.</comment>
+  </data>
   <data name="ItemShared" xml:space="preserve">
     <value>Item is gedeel.</value>
   </data>
@@ -1390,11 +1403,14 @@
   <data name="ShareItem" xml:space="preserve">
     <value>Deel Item</value>
   </data>
+  <data name="MoveToOrganization" xml:space="preserve">
+    <value>Skuif na organisasie</value>
+  </data>
   <data name="NoOrgsToList" xml:space="preserve">
     <value>Geen organisasies om te lys nie.</value>
   </data>
-  <data name="ShareDesc" xml:space="preserve">
-    <value>Kies ’n organisasie waarmee u hierdie item wil deel. Deur te deel kry die organisasie die einaarskap van die item. U is dan nie meer die direkte eienaar van die item wanneer dit gedeel is nie.</value>
+  <data name="MoveToOrgDesc" xml:space="preserve">
+    <value>Kies ’n organisasie waarheen u hierdie item wil skuif. Deur te skuif kry die organisasie die einaarskap van die item. U is dan nie meer die direkte eienaar van die item wanneer dit geskuif is nie.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
     <value>Aantal woorde</value>
@@ -1424,8 +1440,8 @@
     <value>U rekening se vingerafdrukfrase</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
-  <data name="ShareVaultConfirmation" xml:space="preserve">
-    <value>Met ’n organisasierekening kan u ’n Bitwarden-kluis met ander deel. Wil u na bitwarden.com se webwerf gaan om meer hieroor te leer?</value>
+  <data name="LearnOrgConfirmation" xml:space="preserve">
+    <value>Met ’n organisasierekening kan u u Bitwarden-kluisitems met ander deel. Wil u na bitwarden.com se webwerf gaan om meer hieroor te leer?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
     <value>Stuur kluis uit</value>
@@ -1438,6 +1454,9 @@
   </data>
   <data name="Unlock" xml:space="preserve">
     <value>Ontgrendel</value>
+  </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Ontgrendel kluis</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minute</value>
@@ -1454,6 +1473,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>U kluis is vergrendel. Verifieer u PIN-kode om voort te gaan.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>U kluis is vergrendel. Bevestig u identiteit om voort te gaan.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Donker</value>
@@ -1500,12 +1522,8 @@
   <data name="ThemeDescription" xml:space="preserve">
     <value>Verander die toepassing se kleurtema.</value>
   </data>
-  <data name="RestartIsRequired" xml:space="preserve">
-    <value>Vereis herbegin.</value>
-    <comment>Referring to restarting the application.</comment>
-  </data>
-  <data name="Restarting" xml:space="preserve">
-    <value>Herbegin…</value>
+  <data name="ThemeDefault" xml:space="preserve">
+    <value>Verstek (Stelsel)</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Kopieer notas</value>
@@ -1598,6 +1616,15 @@
   </data>
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Voer u hoofwagwoord in om u kluisdata uit te stuur.</value>
+  </data>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Stuur ’n bevestigingskode na u e-pos</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Kode verstuur!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Bevestig u identiteit om voort te gaan.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Hierdie uitstuur bevat u kluisdata in ’n ongeënkripteerde formaat. U behoort dit nie oor onbeveiligde kanale (soos e-pos) te bewaar of verstuur nie. Skrap dit sodra u dit klaar gebruik het.</value>
@@ -1998,5 +2025,95 @@
   </data>
   <data name="PasswordConfirmationDesc" xml:space="preserve">
     <value>Hierdie aksie is beskerm. Voer u hoofwagwoord in om u identiteit te bevestig om voort te gaan.</value>
+  </data>
+  <data name="CaptchaRequired" xml:space="preserve">
+    <value>Captcha vereis</value>
+  </data>
+  <data name="CaptchaFailed" xml:space="preserve">
+    <value>Captcha het misluk. Probeer weer.</value>
+  </data>
+  <data name="UpdatedMasterPassword" xml:space="preserve">
+    <value>Hoofwagwoord bygewerk</value>
+  </data>
+  <data name="UpdateMasterPassword" xml:space="preserve">
+    <value>Werk hoofwagwoord by</value>
+  </data>
+  <data name="UpdateMasterPasswordWarning" xml:space="preserve">
+    <value>U hoofwagwoord is onlangs deur ’n administrateur in u organisasie verander. Om toegang tot u kluis te verkry moet u u hoofwagwoord nóú bywerk. Deur voort te gaan word u uit u huidige sessie geteken, waarna u weer sal moet aanteken. Aktiewe sessies op ander toestelle kan vir tot ’n uur steeds aktief bly.</value>
+  </data>
+  <data name="UpdatingPassword" xml:space="preserve">
+    <value>Wagwoord word bygewerk</value>
+  </data>
+  <data name="UpdatePasswordError" xml:space="preserve">
+    <value>Kan nie tans u wagwoord bywerk nie</value>
+  </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>Verwyder hoofwagwoord</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>{0} gebruik SSO met klantbestuurde enkripsie. Deur voort te gaan word u hoofwagwoord van u rekening verwyder en word SSO vereis om aan te teken.</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>Indien u nie u hoofwagwoord wil verwyder nie, kan u hierdie organisasie verlaat.</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>Verlaat organisasie</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>Verlaat {0}?</value>
+  </data>
+  <data name="Fido2Title" xml:space="preserve">
+    <value>FIDO2 WebAuthn</value>
+  </data>
+  <data name="Fido2Instruction" xml:space="preserve">
+    <value>Om voort te gaan moet u FIDO2 WebAuthn-geaktiveerde sekerheidsleutel gereed wees, volg dan die instruksies nadat u op ‘Waarmerk Webauthn’ op die volgende skerm geklik het.</value>
+  </data>
+  <data name="Fido2Desc" xml:space="preserve">
+    <value>Waarmerking m.b.v. FIDO2 WebAuthn, u kan waarmerk m.b.v. ’n eksterne sekerheidsleutel.</value>
+  </data>
+  <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
+    <value>Waarmerk WebAuthn</value>
+  </data>
+  <data name="Fido2ReturnToApp" xml:space="preserve">
+    <value>Terug na die toep</value>
+  </data>
+  <data name="Fido2CheckBrowser" xml:space="preserve">
+    <value>Maak seker u verstekwebblaaier ondersteun WebAuthn en probeer weer.</value>
+  </data>
+  <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
+    <value>Hierdie organisasie het ’n ondernemingsbeleid wat u outomaties inskryf in die terugstel van u wagwoord. Inskrywing stel organisasiebeheerders in staat om u hoofwagwoord te wysig.</value>
+  </data>
+  <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
+    <value>U organisasiebeleide beïnvloed u kluisuitelling. Maksimum toegelate kluisuittelling is {0} uur en {1} minuut(e).</value>
+  </data>
+  <data name="VaultTimeoutToLarge" xml:space="preserve">
+    <value>U kluisuittelling oorskry die beperkinge wat deur u organisasie daargestel is.</value>
+  </data>
+  <data name="DisablePersonalVaultExportPolicyInEffect">
+    <value>Een of meer organisasiebeleide verhoed u om u persoonlike kluis uit te stuur.</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Skrap rekening</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Die skrap van u rekening is permanent</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>U rekening en alle bybehorende data sal geskrap en onherwinbaar word. Is u seker u wil voortgaan?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>U rekening word geskrap</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>U rekening is permanent geskrap</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>Ongeldige bevestigingskode.</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Verstuur kode</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Verstuur</value>
   </data>
 </root>

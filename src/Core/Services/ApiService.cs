@@ -178,12 +178,38 @@ namespace Bit.Core.Services
                 true, false);
         }
 
+        public Task PostAccountRequestOTP()
+        {
+            return SendAsync<object, object>(HttpMethod.Post, "/accounts/request-otp", null, true, false);
+        }
+
+        public Task PostAccountVerifyOTPAsync(VerifyOTPRequest request)
+        {
+            return SendAsync<VerifyOTPRequest, object>(HttpMethod.Post, "/accounts/verify-otp", request,
+                true, false);
+        }
+
         public Task PutUpdateTempPasswordAsync(UpdateTempPasswordRequest request)
         {
             return SendAsync<UpdateTempPasswordRequest, object>(HttpMethod.Put, "/accounts/update-temp-password",
                 request, true, false);
         }
+
+        public Task DeleteAccountAsync(DeleteAccountRequest request)
+        {
+            return SendAsync<DeleteAccountRequest, object>(HttpMethod.Delete, "/accounts", request, true, false);
+        }
         
+        public Task PostConvertToKeyConnector()
+        {
+            return SendAsync<object, object>(HttpMethod.Post, "/accounts/convert-to-key-connector", null, true, false);
+        }
+
+        public Task PostSetKeyConnectorKey(SetKeyConnectorKeyRequest request)
+        {
+            return SendAsync<SetKeyConnectorKeyRequest>(HttpMethod.Post, "/accounts/set-key-connector-key", request, true);
+        }
+
         #endregion
 
         #region Folder APIs
@@ -422,9 +448,14 @@ namespace Bit.Core.Services
             return SendAsync<object, OrganizationAutoEnrollStatusResponse>(HttpMethod.Get,
                 $"/organizations/{identifier}/auto-enroll-status", null, true, true);
         }
-        
+
+        public Task PostLeaveOrganization(string id)
+        {
+            return SendAsync<object, object>(HttpMethod.Post, $"/organizations/{id}/leave", null, true, false);
+        }
+
         #endregion
-        
+
         #region Organization User APIs
 
         public Task PutOrganizationUserResetPasswordEnrollmentAsync(string orgId, string userId,
@@ -433,7 +464,71 @@ namespace Bit.Core.Services
             return SendAsync<OrganizationUserResetPasswordEnrollmentRequest, object>(HttpMethod.Put,
                 $"/organizations/{orgId}/users/{userId}/reset-password-enrollment", request, true, false);
         }
-        
+
+        #endregion
+
+        #region Key Connector
+
+        public async Task<KeyConnectorUserKeyResponse> GetUserKeyFromKeyConnector(string keyConnectorUrl)
+        {
+            using (var requestMessage = new HttpRequestMessage())
+            {
+                var authHeader = await GetActiveBearerTokenAsync();
+
+                requestMessage.Version = new Version(1, 0);
+                requestMessage.Method = HttpMethod.Get;
+                requestMessage.RequestUri = new Uri(string.Concat(keyConnectorUrl, "/user-keys"));
+                requestMessage.Headers.Add("Authorization", string.Concat("Bearer ", authHeader));
+
+                HttpResponseMessage response;
+                try
+                {
+                    response = await _httpClient.SendAsync(requestMessage);
+                }
+                catch (Exception e)
+                {
+                    throw new ApiException(HandleWebError(e));
+                }
+                if (!response.IsSuccessStatusCode)
+                {
+                    var error = await HandleErrorAsync(response, false, true);
+                    throw new ApiException(error);
+                }
+                var responseJsonString = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<KeyConnectorUserKeyResponse>(responseJsonString);
+            }
+        }
+
+        public async Task PostUserKeyToKeyConnector(string keyConnectorUrl, KeyConnectorUserKeyRequest request)
+        {
+            using (var requestMessage = new HttpRequestMessage())
+            {
+                var authHeader = await GetActiveBearerTokenAsync();
+
+                requestMessage.Version = new Version(1, 0);
+                requestMessage.Method = HttpMethod.Post;
+                requestMessage.RequestUri = new Uri(string.Concat(keyConnectorUrl, "/user-keys"));
+                requestMessage.Headers.Add("Authorization", string.Concat("Bearer ", authHeader));
+                requestMessage.Content = new StringContent(JsonConvert.SerializeObject(request, _jsonSettings),
+                    Encoding.UTF8, "application/json");
+
+                HttpResponseMessage response;
+                try
+                {
+                    response = await _httpClient.SendAsync(requestMessage);
+                }
+                catch (Exception e)
+                {
+                    throw new ApiException(HandleWebError(e));
+                }
+                if (!response.IsSuccessStatusCode)
+                {
+                    var error = await HandleErrorAsync(response, false, true);
+                    throw new ApiException(error);
+                }
+            }
+        }
+
         #endregion
 
         #region Helpers

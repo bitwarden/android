@@ -25,8 +25,6 @@ namespace Bit.App.Pages
             {
                 ToolbarItems.RemoveAt(0);
                 _vm.ShowAndroidAutofillSettings = _deviceActionService.SupportsAutofillService();
-                _themeDescriptionLabel.Text = string.Concat(_themeDescriptionLabel.Text, " ",
-                    AppResources.RestartIsRequired);
             }
             else
             {

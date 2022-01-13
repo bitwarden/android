@@ -6,7 +6,8 @@
     xmlns:pages="clr-namespace:Bit.App.Pages"
     xmlns:u="clr-namespace:Bit.App.Utilities"
     xmlns:controls="clr-namespace:Bit.App.Controls"
-    xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
+    xmlns:behaviors="clr-namespace:Bit.App.Behaviors"
+    xmlns:effects="clr-namespace:Bit.App.Effects"
     x:DataType="pages:SendAddEditPageViewModel"
     x:Name="_page"
     Title="{Binding PageTitle}">
@@ -54,26 +55,6 @@
                          IsDestructive="True"
                          x:Name="_deleteItem"
                          x:Key="deleteItem" />
-
-            <Style x:Key="segmentedButtonBase" TargetType="Button">
-                <Setter Property="HeightRequest" Value="{Binding SegmentedButtonHeight}" />
-                <Setter Property="FontSize" Value="{Binding SegmentedButtonFontSize}" />
-                <Setter Property="CornerRadius" Value="0" />
-            </Style>
-            <Style x:Key="segmentedButtonNormal" BaseResourceKey="segmentedButtonBase" TargetType="Button">
-                <Setter Property="TextColor" Value="{StaticResource PrimaryColor}" />
-                <Setter Property="FontAttributes" Value="None" />
-                <Setter Property="BackgroundColor" Value="Transparent" />
-                <Setter Property="BorderColor" Value="{StaticResource PrimaryColor}" />
-                <Setter Property="BorderWidth" Value="1" />
-
-            </Style>
-            <Style x:Key="segmentedButtonDisabled" BaseResourceKey="segmentedButtonBase" TargetType="Button">
-                <Setter Property="TextColor" Value="{StaticResource TitleTextColor}" />
-                <Setter Property="FontAttributes" Value="Bold" />
-                <Setter Property="BackgroundColor" Value="{StaticResource PrimaryColor}" />
-                <Setter Property="BorderWidth" Value="0" />
-            </Style>
 
             <ScrollView x:Key="scrollView" x:Name="_scrollView">
                 <StackLayout Spacing="20">
@@ -132,51 +113,25 @@
                                 </Grid.ColumnDefinitions>
                                 <Button
                                     Text="{u:I18n TypeFile}"
+                                    StyleClass="segmented-button"
                                     IsEnabled="{Binding IsText}"
+                                    HeightRequest="{Binding SegmentedButtonHeight}"
+                                    FontSize="{Binding SegmentedButtonFontSize}"
                                     Clicked="FileType_Clicked"
                                     AutomationProperties.IsInAccessibleTree="True"
                                     AutomationProperties.Name="{u:I18n File}"
                                     Grid.Column="0">
-                                    <VisualStateManager.VisualStateGroups>
-                                        <VisualStateGroup x:Name="CommonStates">
-                                            <VisualState x:Name="Normal">
-                                                <VisualState.Setters>
-                                                    <Setter Property="Style"
-                                                            Value="{StaticResource segmentedButtonNormal}" />
-                                                </VisualState.Setters>
-                                            </VisualState>
-                                            <VisualState x:Name="Disabled">
-                                                <VisualState.Setters>
-                                                    <Setter Property="Style"
-                                                            Value="{StaticResource segmentedButtonDisabled}" />
-                                                </VisualState.Setters>
-                                            </VisualState>
-                                        </VisualStateGroup>
-                                    </VisualStateManager.VisualStateGroups>
                                 </Button>
                                 <Button
                                     Text="{u:I18n TypeText}"
+                                    StyleClass="segmented-button"
                                     IsEnabled="{Binding IsFile}"
+                                    HeightRequest="{Binding SegmentedButtonHeight}"
+                                    FontSize="{Binding SegmentedButtonFontSize}"
                                     Clicked="TextType_Clicked"
                                     AutomationProperties.IsInAccessibleTree="True"
                                     AutomationProperties.Name="{u:I18n Text}"
                                     Grid.Column="1">
-                                    <VisualStateManager.VisualStateGroups>
-                                        <VisualStateGroup x:Name="CommonStates">
-                                            <VisualState x:Name="Normal">
-                                                <VisualState.Setters>
-                                                    <Setter Property="Style"
-                                                            Value="{StaticResource segmentedButtonNormal}" />
-                                                </VisualState.Setters>
-                                            </VisualState>
-                                            <VisualState x:Name="Disabled">
-                                                <VisualState.Setters>
-                                                    <Setter Property="Style"
-                                                            Value="{StaticResource segmentedButtonDisabled}" />
-                                                </VisualState.Setters>
-                                            </VisualState>
-                                        </VisualStateGroup>
-                                    </VisualStateManager.VisualStateGroups>
                                 </Button>
                             </Grid>
                         </StackLayout>
@@ -248,7 +203,15 @@
                                 Text="{Binding Send.Text.Text}"
                                 IsEnabled="{Binding SendEnabled}"
                                 StyleClass="box-value"
-                                Margin="{Binding EditorMargins}" />
+                                Margin="{Binding EditorMargins}" 
+                                effects:ScrollEnabledEffect.IsScrollEnabled="false" >
+                                <Editor.Behaviors>
+                                    <behaviors:EditorPreventAutoBottomScrollingOnFocusedBehavior ParentScrollView="{x:Reference _scrollView}" />
+                                </Editor.Behaviors>
+                                <Editor.Effects>
+                                    <effects:ScrollEnabledEffect />
+                                </Editor.Effects>
+                            </Editor>
                             <BoxView
                                 StyleClass="box-row-separator"
                                 IsVisible="{Binding ShowEditorSeparators}" />
@@ -290,20 +253,20 @@
                                 Text="{u:I18n Options}"
                                 x:Name="_btnOptions"
                                 StyleClass="box-row-button"
-                                TextColor="{StaticResource PrimaryColor}"
+                                TextColor="{DynamicResource PrimaryColor}"
                                 Margin="0" />
                             <controls:IconButton
                                 x:Name="_btnOptionsUp"
                                 Text="{Binding Source={x:Static core:BitwardenIcons.ChevronUp}}"
                                 StyleClass="box-row-button"
-                                TextColor="{StaticResource PrimaryColor}"
+                                TextColor="{DynamicResource PrimaryColor}"
                                 Clicked="ToggleOptions_Clicked"
                                 IsVisible="False" />
                             <controls:IconButton
                                 x:Name="_btnOptionsDown"
                                 Text="{Binding Source={x:Static core:BitwardenIcons.AngleDown}}"
                                 StyleClass="box-row-button"
-                                TextColor="{StaticResource PrimaryColor}"
+                                TextColor="{DynamicResource PrimaryColor}"
                                 Clicked="ToggleOptions_Clicked"
                                 IsVisible="False" />
                         </StackLayout>
@@ -422,7 +385,7 @@
                                         MaxLength="9"
                                         TextChanged="OnMaxAccessCountTextChanged"
                                         HorizontalOptions="FillAndExpand" />
-                                    <Stepper
+                                    <controls:ExtendedStepper
                                         x:Name="_maxAccessCountStepper"
                                         Value="{Binding MaxAccessCount}"
                                         Maximum="999999999"
@@ -490,7 +453,15 @@
                                     Text="{Binding Send.Notes}"
                                     IsEnabled="{Binding SendEnabled}"
                                     StyleClass="box-value"
-                                    Margin="{Binding EditorMargins}" />
+                                    Margin="{Binding EditorMargins}"
+                                    effects:ScrollEnabledEffect.IsScrollEnabled="false" >
+                                    <Editor.Behaviors>
+                                        <behaviors:EditorPreventAutoBottomScrollingOnFocusedBehavior ParentScrollView="{x:Reference _scrollView}" />
+                                    </Editor.Behaviors>
+                                    <Editor.Effects>
+                                        <effects:ScrollEnabledEffect />
+                                    </Editor.Effects>
+                                </Editor>
                                 <BoxView
                                     StyleClass="box-row-separator"
                                     IsVisible="{Binding ShowEditorSeparators}" />

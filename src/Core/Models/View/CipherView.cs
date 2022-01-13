@@ -50,20 +50,20 @@ namespace Bit.Core.Models.View
         public DateTime? DeletedDate { get; set; }
         public CipherRepromptType Reprompt { get; set; }
 
-        public string SubTitle
+        public ItemView Item
         {
             get
             {
                 switch (Type)
                 {
                     case CipherType.Login:
-                        return Login.SubTitle;
+                        return Login;
                     case CipherType.SecureNote:
-                        return SecureNote.SubTitle;
+                        return SecureNote;
                     case CipherType.Card:
-                        return Card.SubTitle;
+                        return Card;
                     case CipherType.Identity:
-                        return Identity.SubTitle;
+                        return Identity;
                     default:
                         break;
                 }
@@ -71,6 +71,8 @@ namespace Bit.Core.Models.View
             }
         }
 
+        public List<KeyValuePair<string, LinkedIdType>> LinkedFieldOptions => Item.LinkedFieldOptions;
+        public string SubTitle => Item.SubTitle;
         public bool Shared => OrganizationId != null;
         public bool HasPasswordHistory => PasswordHistory?.Any() ?? false;
         public bool HasAttachments => Attachments?.Any() ?? false;
@@ -102,5 +104,11 @@ namespace Bit.Core.Models.View
             }
         }
         public bool IsDeleted => DeletedDate.HasValue;
+
+        public string LinkedFieldI18nKey(LinkedIdType id)
+        {
+            return LinkedFieldOptions.Find(lfo => lfo.Value == id).Key;
+        }
+
     }
 }

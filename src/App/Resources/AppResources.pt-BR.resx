@@ -310,6 +310,9 @@
     <value>Salvar</value>
     <comment>Button text for a save operation (verb).</comment>
   </data>
+  <data name="Move" xml:space="preserve">
+    <value>Mover</value>
+  </data>
   <data name="Saving" xml:space="preserve">
     <value>Salvando...</value>
     <comment>Message shown when interacting with the server</comment>
@@ -782,8 +785,8 @@
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
     <value>Você está procurando uma credencial de autopreenchimento para "{0}".</value>
   </data>
-  <data name="ShareVault" xml:space="preserve">
-    <value>Compartilhar Seu Cofre</value>
+  <data name="LearnOrg" xml:space="preserve">
+    <value>Aprenda mais Sobre as Organizações</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
     <value>Não é possível abrir o aplicativo "{0}".</value>
@@ -1056,6 +1059,9 @@
   <data name="LastName" xml:space="preserve">
     <value>Último Nome</value>
   </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Nome Completo</value>
+  </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Número da Licença</value>
   </data>
@@ -1179,6 +1185,9 @@
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>Ocultado</value>
+  </data>
+  <data name="FieldTypeLinked" xml:space="preserve">
+    <value>Vinculado</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Texto</value>
@@ -1378,6 +1387,10 @@
   <data name="NoCollectionsToList" xml:space="preserve">
     <value>Não há coleções para listar.</value>
   </data>
+  <data name="MovedItemToOrg" xml:space="preserve">
+    <value>{0} movido para {1}.</value>
+    <comment>ex: Item moved to Organization.</comment>
+  </data>
   <data name="ItemShared" xml:space="preserve">
     <value>O item foi compartilhado.</value>
   </data>
@@ -1390,11 +1403,14 @@
   <data name="ShareItem" xml:space="preserve">
     <value>Compartilhar Item</value>
   </data>
+  <data name="MoveToOrganization" xml:space="preserve">
+    <value>Mover para a Organização</value>
+  </data>
   <data name="NoOrgsToList" xml:space="preserve">
     <value>Nenhuma organização para listar.</value>
   </data>
-  <data name="ShareDesc" xml:space="preserve">
-    <value>Escolha uma organização com a qual você deseja compartilhar este item. O compartilhamento transfere a propriedade do item para a organização. Você não será mais o proprietário direto deste item depois de ter sido compartilhado.</value>
+  <data name="MoveToOrgDesc" xml:space="preserve">
+    <value>Escolha uma organização para a qual você deseja mover este item. Mover para uma organização transfere a propriedade do item para essa organização. Você não será mais o proprietário direto deste item depois que ele for movido.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
     <value>Número de Palavras</value>
@@ -1424,8 +1440,8 @@
     <value>A sua frase biométrica</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
-  <data name="ShareVaultConfirmation" xml:space="preserve">
-    <value>O Bitwarden permite que você compartilhe seu cofre com outras pessoas usando uma conta da organização. Gostaria de visitar o site bitwarden.com para saber mais?</value>
+  <data name="LearnOrgConfirmation" xml:space="preserve">
+    <value>O Bitwarden permite que você compartilhe os itens do seu cofre com outros ao usar uma conta da organização. Você gostaria de visitar o site bitwarden.com para saber mais?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
     <value>Exportar Cofre</value>
@@ -1438,6 +1454,9 @@
   </data>
   <data name="Unlock" xml:space="preserve">
     <value>Desbloquear</value>
+  </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Desbloquear Cofre</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minutos</value>
@@ -1454,6 +1473,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>O seu cofre está bloqueado. Verifique o seu PIN para continuar.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Seu cofre está trancado. Verifique sua identidade para continuar.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Escuro</value>
@@ -1500,12 +1522,8 @@
   <data name="ThemeDescription" xml:space="preserve">
     <value>Altere o tema de cor do aplicativo.</value>
   </data>
-  <data name="RestartIsRequired" xml:space="preserve">
-    <value>É necessário reiniciar.</value>
-    <comment>Referring to restarting the application.</comment>
-  </data>
-  <data name="Restarting" xml:space="preserve">
-    <value>Reiniciando...</value>
+  <data name="ThemeDefault" xml:space="preserve">
+    <value>Padrão (Sistema)</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Copiar Notas</value>
@@ -1599,6 +1617,15 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Digite sua senha mestra para exportar os dados do seu cofre.</value>
   </data>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Enviar um código de verificação para o seu e-mail</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Código Enviado!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Confirme a sua identidade para continuar.</value>
+  </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>O arquivo exportado contém os dados do seu cofre em um formato não encriptado. Você não deve armazenar ou enviar o arquivo exportado através de canais inseguros (como por e-mail). Exclua-o imediatamente quando terminar de utilizá-lo.</value>
   </data>
@@ -1606,7 +1633,7 @@
     <value>Esta exportação criptografa seus dados usando a chave de criptografia da sua conta. Se você rotacionar a chave de criptografia da sua conta, você deve exportar novamente, já que você não será capaz de descriptografar este arquivo de exportação.</value>
   </data>
   <data name="EncExportAccountWarning" xml:space="preserve">
-    <value>Chaves de criptografia da conta são únicas para cada conta de usuário do Bitwarden, então você não pode importar uma exportação criptografada para uma conta diferente.</value>
+    <value>As chaves de criptografia são únicas para cada conta de usuário do Bitwarden, então você não pode importar um arquivo de exportação criptografado para uma conta diferente.</value>
   </data>
   <data name="ExportVaultConfirmationTitle" xml:space="preserve">
     <value>Confirmar exportação de cofre</value>
@@ -1685,10 +1712,10 @@
     <comment>Confirmation alert message when soft-deleting a cipher.</comment>
   </data>
   <data name="BiometricInvalidated" xml:space="preserve">
-    <value>Alteração biométrica detectada, faça o login usando a Senha Mestra para ativar novamente.</value>
+    <value>O desbloqueio biométrico está desativado, faça o login usando a Senha Mestra para ativar novamente.</value>
   </data>
   <data name="BiometricInvalidatedExtension" xml:space="preserve">
-    <value>O desbloqueio biométrico para autopreenchimento  está desabilitado, faça o login usando a Senha Mestra para ativar novamente.</value>
+    <value>O desbloqueio biométrico para autopreenchimento está desativado, faça o login usando a Senha Mestra para ativar novamente.</value>
   </data>
   <data name="EnableSyncOnRefresh" xml:space="preserve">
     <value>Ativar sincronização ao atualizar</value>
@@ -1797,7 +1824,7 @@
     <value>Se ativado, a acessibilidade mostrará um pop-up para aumentar o Serviço de Autopreenchimento para aplicativos mais antigos que não suportam a Estrutura de Autopreenchimento do Android.</value>
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
-    <value>Devido a uma Política Empresarial, você está restrito de salvar itens para seu cofre pessoal. Altere a opção de propriedade para uma organização e escolha entre Coleções disponíveis.</value>
+    <value>Devido a uma Política Empresarial, você está restrito de salvar itens para seu cofre pessoal. Altere a opção de Propriedade para uma organização e escolha entre as Coleções disponíveis.</value>
   </data>
   <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
     <value>Uma política de organização está afetando suas opções de propriedade.</value>
@@ -1877,7 +1904,7 @@
     <value>Nova Senha</value>
   </data>
   <data name="PasswordInfo" xml:space="preserve">
-    <value>Opcionalmente exigir uma senha para os usuários acessarem este Send.</value>
+    <value>Exigir opcionalmente uma senha para os usuários acessarem este Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="RemovePassword" xml:space="preserve">
@@ -1893,15 +1920,15 @@
     <value>A senha foi removida.</value>
   </data>
   <data name="NotesInfo" xml:space="preserve">
-    <value>Notas privadas sobre esse Send.</value>
+    <value>Notas privadas sobre este Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Desabilite este Send para que ninguém possa acessá-lo.</value>
+    <value>Desative este Send para que ninguém possa acessá-lo.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
-    <value>Não há nenhum Send na sua conta.</value>
+    <value>Não existem Sends na sua conta.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddASend" xml:space="preserve">
@@ -1988,7 +2015,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFileEmailVerificationRequired" xml:space="preserve">
-    <value>Você deve verificar o seu e-mail para usar arquivos com o Send.</value>
+    <value>Você precisa verificar o seu e-mail para usar arquivos com o Send. Você pode verificar seu e-mail no cofre web.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PasswordPrompt" xml:space="preserve">
@@ -1999,5 +2026,95 @@
   </data>
   <data name="PasswordConfirmationDesc" xml:space="preserve">
     <value>Esta ação é protegida, para continuar por favor reinsira a sua senha mestra para verificar a sua identidade.</value>
+  </data>
+  <data name="CaptchaRequired" xml:space="preserve">
+    <value>Captcha Obrigatório</value>
+  </data>
+  <data name="CaptchaFailed" xml:space="preserve">
+    <value>Captcha Errado. Por favor, tente novamente.</value>
+  </data>
+  <data name="UpdatedMasterPassword" xml:space="preserve">
+    <value>Senha Mestra Atualizada</value>
+  </data>
+  <data name="UpdateMasterPassword" xml:space="preserve">
+    <value>Atualizar Senha Mestra</value>
+  </data>
+  <data name="UpdateMasterPasswordWarning" xml:space="preserve">
+    <value>Sua Senha Mestra foi alterada recentemente por um administrador de sua organização. Para acessar o cofre, você precisa atualizar sua Senha Mestra agora. O processo desconectará você da sessão atual, exigindo que você inicie a sessão novamente. Sessões ativas em outros dispositivos podem continuar ativas por até uma hora.</value>
+  </data>
+  <data name="UpdatingPassword" xml:space="preserve">
+    <value>Atualizando Senha</value>
+  </data>
+  <data name="UpdatePasswordError" xml:space="preserve">
+    <value>No momento não é possível atualizar a senha</value>
+  </data>
+  <data name="RemoveMasterPassword" xml:space="preserve">
+    <value>Remover Senha Mestra</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning" xml:space="preserve">
+    <value>{0} está usando o SSO com criptografia gerenciada pelo cliente.  Ao continuar, isso removerá sua Senha Mestra da sua conta e exigirá o SSO para acessar.</value>
+  </data>
+  <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
+    <value>Se não quiser remover sua Senha Mestra, você pode sair desta organização.</value>
+  </data>
+  <data name="LeaveOrganization" xml:space="preserve">
+    <value>Sair da Organização</value>
+  </data>
+  <data name="LeaveOrganizationName" xml:space="preserve">
+    <value>Sair de {0}?</value>
+  </data>
+  <data name="Fido2Title" xml:space="preserve">
+    <value>FIDO2 WebAuthn</value>
+  </data>
+  <data name="Fido2Instruction" xml:space="preserve">
+    <value>Para continuar, esteja preparado com sua chave de segurança habilitada para FIDO2 WebAuthn e siga as instruções após clicar em 'Autenticar WebAuthn' na próxima tela.</value>
+  </data>
+  <data name="Fido2Desc" xml:space="preserve">
+    <value>Autenticação usando FIDO2 WebAuthn, você pode autenticar usando uma chave de segurança externa.</value>
+  </data>
+  <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
+    <value>Autenticar WebAuthn</value>
+  </data>
+  <data name="Fido2ReturnToApp" xml:space="preserve">
+    <value>Voltar ao Aplicativo</value>
+  </data>
+  <data name="Fido2CheckBrowser" xml:space="preserve">
+    <value>Certifique-se de que seu navegador padrão seja compatível com WebAuthn e tente novamente.</value>
+  </data>
+  <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
+    <value>Esta organização possui uma política empresarial que irá inscrevê-lo automaticamente na redefinição de senha. A inscrição permitirá que os administradores da organização alterem sua senha mestra.</value>
+  </data>
+  <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
+    <value>As políticas da sua organização estão afetando o tempo limite do seu cofre. O Tempo Limite Máximo permitido do Cofre é {0} hora(s) e {1} minuto(s)</value>
+  </data>
+  <data name="VaultTimeoutToLarge" xml:space="preserve">
+    <value>O tempo limite do seu cofre excede as restrições definidas por sua organização.</value>
+  </data>
+  <data name="DisablePersonalVaultExportPolicyInEffect">
+    <value>Uma ou mais políticas da organização impedem que você exporte seu cofre pessoal.</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Excluir Conta</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>A exclusão de sua conta é permanente</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Sua conta e todos os dados associados serão apagados e irrecuperáveis. Você tem certeza que quer continuar?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Excluindo sua conta</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Sua conta foi excluída permanentemente</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>Código de Verificação Inválido.</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Enviar Código</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Enviando</value>
   </data>
 </root>
