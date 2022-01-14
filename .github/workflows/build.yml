@@ -465,10 +465,18 @@ jobs:
             -exportOptionsPlist $EXPORT_OPTIONS_PATH
         shell: bash
 
+      - name: Copy all dSYMs files to upload 
+        run: |
+          ARCHIVE_DSYMS_PATH="$HOME/Library/Developer/Xcode/Archives/*/*.xcarchive/dSYMs"
+          EXPORT_PATH="./bitwarden-export"
+
+          cp -r $ARCHIVE_DSYMS_PATH $EXPORT_PATH
+        shell: bash
+
       - name: Upload App Store dSYM artifact
         uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700  # v2.2.4
         with:
-          name: Bitwarden dSYM
+          name: Bitwarden AppStore
           path: ./bitwarden-export
           if-no-files-found: error
 
