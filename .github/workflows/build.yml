@@ -53,6 +53,7 @@ jobs:
 
   android:
     name: Android
+    if: github.ref == 'refs/heads/master'
     runs-on: windows-2019
     needs: setup
     steps:
@@ -195,6 +196,7 @@ jobs:
 
   f-droid:
     name: F-Droid Build
+    if: github.ref == 'refs/heads/master'
     runs-on: windows-2019
     steps:
       - name: Set up MSBuild
@@ -463,18 +465,11 @@ jobs:
             -exportOptionsPlist $EXPORT_OPTIONS_PATH
         shell: bash
 
-      - name: Upload App Store .ipa artifact
-        uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700  # v2.2.4
-        with:
-          name: Bitwarden.ipa
-          path: ./bitwarden-export/Bitwarden.ipa
-          if-no-files-found: error
-
       - name: Upload App Store dSYM artifact
         uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700  # v2.2.4
         with:
           name: Bitwarden dSYM
-          path: ./**/*.dSYM.*
+          path: ./bitwarden-export
           if-no-files-found: error
 
       - name: Deploy to App Store
