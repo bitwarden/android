@@ -27,25 +27,25 @@ jobs:
           ref: version_bump_${{ github.event.inputs.version_number }}
 
       - name: Bump Version - Android XML
-        uses: bitwarden/gh-actions/version-bump@0c263b3963211ccaf5804313c3b3a0bcc52d4b19
+        uses: bitwarden/gh-actions/version-bump@03ad9a873c39cdc95dd8d77dbbda67f84db43945
         with:
           version: ${{ github.event.inputs.version_number }}
           file_path: "./src/Android/Properties/AndroidManifest.xml"
 
       - name: Bump Version - iOS.Autofill
-        uses: bitwarden/gh-actions/version-bump@0c263b3963211ccaf5804313c3b3a0bcc52d4b19
+        uses: bitwarden/gh-actions/version-bump@03ad9a873c39cdc95dd8d77dbbda67f84db43945
         with:
           version: ${{ github.event.inputs.version_number }}
           file_path: "./src/iOS.Autofill/Info.plist"
 
       - name: Bump Version - iOS.Extension
-        uses: bitwarden/gh-actions/version-bump@0c263b3963211ccaf5804313c3b3a0bcc52d4b19
+        uses: bitwarden/gh-actions/version-bump@03ad9a873c39cdc95dd8d77dbbda67f84db43945
         with:
           version: ${{ github.event.inputs.version_number }}
           file_path: "./src/iOS.Extension/Info.plist"
 
       - name: Bump Version - iOS
-        uses: bitwarden/gh-actions/version-bump@0c263b3963211ccaf5804313c3b3a0bcc52d4b19
+        uses: bitwarden/gh-actions/version-bump@03ad9a873c39cdc95dd8d77dbbda67f84db43945
         with:
           version: ${{ github.event.inputs.version_number }}
           file_path: "./src/iOS/Info.plist"
@@ -78,6 +78,6 @@ jobs:
               - [ ] Tech debt (refactoring, code cleanup, dependency upgrades, etc)
               - [ ] Build/deploy pipeline (DevOps)
               - [X] Other
-              
+
               ## Objective
               Automated version bump to ${{ github.event.inputs.version_number }}"
