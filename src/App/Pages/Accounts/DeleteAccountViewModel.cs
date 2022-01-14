@@ -36,7 +36,10 @@ namespace Bit.App.Pages
                 }
 
                 await _verificationActionsFlowHelper
-                    .Configure(VerificationFlowAction.DeleteAccount)
+                    .Configure(VerificationFlowAction.DeleteAccount,
+                               null,
+                               AppResources.DeleteAccount,
+                               true)
                     .ValidateAndExecuteAsync();
             }
             catch (System.Exception ex)

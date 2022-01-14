@@ -7,12 +7,18 @@ namespace Bit.App.Pages.Accounts
     {
         VerificationCodeViewModel _vm;
 
-        public VerificationCodePage()
+        public VerificationCodePage(string mainActionText, bool mainActionStyleDanger)
         {
             InitializeComponent();
 
             _vm = BindingContext as VerificationCodeViewModel;
             _vm.Page = this;
+            _vm.MainActionText = mainActionText;
+
+            _mainActionButton.StyleClass = new[]
+            {
+                mainActionStyleDanger ? "btn-danger" : "btn-primary"
+            };
         }
 
         protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)

@@ -24,8 +24,7 @@ namespace Bit.App.Pages
         private readonly IVerificationActionsFlowHelper _verificationActionsFlowHelper;
 
         private bool _showPassword;
-        private string _secret;
-        private string _secretName;
+        private string _secret, _secretName, _mainActionText;
 
         public VerificationCodeViewModel()
         {
@@ -58,6 +57,12 @@ namespace Bit.App.Pages
         {
             get => _secretName;
             set => SetProperty(ref _secretName, value);
+        }
+
+        public string MainActionText
+        {
+            get => _mainActionText;
+            set => SetProperty(ref _mainActionText, value);
         }
 
         public ICommand TogglePasswordCommand { get; }
@@ -108,6 +113,7 @@ namespace Bit.App.Pages
 
                 if (!await _userVerificationService.VerifyUser(Secret, Core.Enums.VerificationType.OTP))
                 {
+                    await _deviceActionService.HideLoadingAsync();
                     return;
                 }
 

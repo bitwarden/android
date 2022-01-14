@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Models;
+using Bit.App.Pages;
 using Bit.App.Resources;
 using Bit.App.Services;
 using Bit.App.Utilities;
@@ -148,6 +149,22 @@ namespace Bit.iOS.Core.Utilities
             await ServiceContainer.Resolve<IStateService>("stateService").SaveAsync(
                 Bit.Core.Constants.DisableFaviconKey, disableFavicon);
             await ServiceContainer.Resolve<IEnvironmentService>("environmentService").SetUrlsFromStorageAsync();
+
+            // TODO: Update when https://github.com/bitwarden/mobile/pull/1662 gets merged
+            var deleteAccountActionFlowExecutioner = new DeleteAccountActionFlowExecutioner(
+                ServiceContainer.Resolve<IApiService>("apiService"),
+                ServiceContainer.Resolve<IMessagingService>("messagingService"),
+                ServiceContainer.Resolve<ICryptoService>("cryptoService"),
+                ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService"),
+                ServiceContainer.Resolve<IDeviceActionService>("deviceActionService"));
+            ServiceContainer.Register<IDeleteAccountActionFlowExecutioner>("deleteAccountActionFlowExecutioner", deleteAccountActionFlowExecutioner);
+
+            var verificationActionsFlowHelper = new VerificationActionsFlowHelper(
+            ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService"),
+            ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService"),
+            ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService"));
+            ServiceContainer.Register<IVerificationActionsFlowHelper>("verificationActionsFlowHelper", verificationActionsFlowHelper);
+
             if (postBootstrapFunc != null)
             {
                 await postBootstrapFunc.Invoke();

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Pages;
@@ -9,94 +8,16 @@ using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Utilities;
-using Newtonsoft.Json;
 using Xamarin.Forms;
 
 namespace Bit.App.Utilities
 {
-    //public interface IVerificationFlowHandler
-    //{
-    //    Task Handle();
-    //}
-
-    //public abstract class VerificationFlowHandler : IVerificationFlowHandler
-    //{
-    //    IVerificationFlowHandler _nextHandler;
-
-    //    public VerificationFlowHandler(IVerificationFlowHandler nextHandler)
-    //    {
-    //        _nextHandler = nextHandler;
-    //    }
-
-    //    public virtual Task Handle()
-    //    {
-    //        return _nextHandler.Handle();
-    //    }
-    //}
-
-    //public class MasterPasswordVerificationFlowHandler : VerificationFlowHandler
-    //{
-    //    readonly IUserVerificationService _userVerificationService;
-
-    //    public MasterPasswordVerificationFlowHandler(IVerificationFlowHandler nextHandler)
-    //        : base(nextHandler)
-    //    {
-    //    }
-
-    //    public override async Task Handle()
-    //    {
-    //        if (!await _userVerificationService.VerifyUser(Secret, Core.Enums.VerificationType.MasterPassword))
-    //        {
-    //            return;
-    //        }
-
-    //        await base.Handle();
-    //    }
-    //}
-
-    //public class OTPVerificationFlowHandler : VerificationFlowHandler
-    //{
-    //    readonly IUserVerificationService _userVerificationService;
-
-    //    public OTPVerificationFlowHandler(IVerificationFlowHandler nextHandler)
-    //        : base(nextHandler)
-    //    {
-    //    }
-
-    //    public override async Task Handle()
-    //    {
-    //        if (!await _userVerificationService.VerifyUser(Secret, Core.Enums.VerificationType.OTP))
-    //        {
-    //            return;
-    //        }
-
-    //        await base.Handle();
-    //    }
-    //}
-
-    //public class VerificationFlowExecutioner
-    //{
-    //    IVerificationFlowHandler _handler;
-
-    //    public VerificationFlowExecutioner(IVerificationFlowHandler handler)
-    //    {
-    //        _handler = handler;
-    //    }
-
-    //    public async Task ExecuteAsync()
-    //    {
-    //        if (!await _handler.Handle())
-    //        {
-    //            return;
-    //        }
-
-
-    //    }
-    //}
-
     public interface IVerificationActionsFlowHelper
     {
-        IVerificationActionsFlowHelper Configure(VerificationFlowAction action, IActionFlowParmeters parameters = null);
+        IVerificationActionsFlowHelper Configure(VerificationFlowAction action,
+            IActionFlowParmeters parameters = null,
+            string verificatioCodeMainActionText = null,
+            bool isVerificationCodeMainActionStyleDanger = false);
         IActionFlowParmeters GetParameters();
         Task ValidateAndExecuteAsync();
         Task ExecuteAsync(IActionFlowParmeters parameters);
@@ -142,6 +63,8 @@ namespace Bit.App.Utilities
 
         private VerificationFlowAction? _action;
         private IActionFlowParmeters _parameters;
+        private string _verificatioCodeMainActionText;
+        private bool _isVerificationCodeMainActionStyleDanger;
 
         private readonly Dictionary<VerificationFlowAction, IActionFlowExecutioner> _actionExecutionerDictionary = new Dictionary<VerificationFlowAction, IActionFlowExecutioner>();
 
@@ -149,9 +72,6 @@ namespace Bit.App.Utilities
             IPasswordRepromptService passwordRepromptService,
             IPlatformUtilsService platformUtilsService)
         {
-            //_keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
-            //_passwordRepromptService = ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService");
-            //_platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _keyConnectorService = keyConnectorService;
             _passwordRepromptService = passwordRepromptService;
             _platformUtilsService = platformUtilsService;
@@ -159,10 +79,15 @@ namespace Bit.App.Utilities
             _actionExecutionerDictionary.Add(VerificationFlowAction.DeleteAccount, ServiceContainer.Resolve<IDeleteAccountActionFlowExecutioner>("deleteAccountActionFlowExecutioner"));
         }
 
-        public IVerificationActionsFlowHelper Configure(VerificationFlowAction action, IActionFlowParmeters parameters = null)
+        public IVerificationActionsFlowHelper Configure(VerificationFlowAction action,
+            IActionFlowParmeters parameters = null,
+            string verificatioCodeMainActionText = null,
+            bool isVerificationCodeMainActionStyleDanger = false)
         {
             _action = action;
             _parameters = parameters;
+            _verificatioCodeMainActionText = verificatioCodeMainActionText;
+            _isVerificationCodeMainActionStyleDanger = isVerificationCodeMainActionStyleDanger;
 
             return this;
         }
@@ -197,7 +122,8 @@ namespace Bit.App.Utilities
                     await ExecuteAsync(_parameters);
                     break;
                 case VerificationType.OTP:
-                    await Application.Current.MainPage.Navigation.PushModalAsync(new NavigationPage(new VerificationCodePage()));
+                    await Application.Current.MainPage.Navigation.PushModalAsync(new NavigationPage(
+                        new VerificationCodePage(_verificatioCodeMainActionText, _isVerificationCodeMainActionStyleDanger)));
                     break;
                 default:
                     throw new NotImplementedException($"There is no implementation for {verificationType}");
