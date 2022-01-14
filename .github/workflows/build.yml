@@ -474,7 +474,7 @@ jobs:
         uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700  # v2.2.4
         with:
           name: Bitwarden dSYM
-          path: ./**/*.dSYM.zip
+          path: ./**/*.dSYM.*
           if-no-files-found: error
 
       - name: Deploy to App Store
