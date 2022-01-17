@@ -14,53 +14,38 @@ namespace Bit.Core.Services
 {
     public class CryptoService : ICryptoService
     {
-        private readonly IStorageService _storageService;
-        private readonly IStorageService _secureStorageService;
+        private readonly IStateService _stateService;
         private readonly ICryptoFunctionService _cryptoFunctionService;
 
-        private SymmetricCryptoKey _key;
-        private SymmetricCryptoKey _encKey;
         private SymmetricCryptoKey _legacyEtmKey;
-        private string _keyHash;
-        private byte[] _publicKey;
-        private byte[] _privateKey;
-        private Dictionary<string, SymmetricCryptoKey> _orgKeys;
         private Task<SymmetricCryptoKey> _getEncKeysTask;
         private Task<Dictionary<string, SymmetricCryptoKey>> _getOrgKeysTask;
 
-        private const string Keys_Key = "key";
-        private const string Keys_EncOrgKeys = "encOrgKeys";
-        private const string Keys_EncPrivateKey = "encPrivateKey";
-        private const string Keys_EncKey = "encKey";
-        private const string Keys_KeyHash = "keyHash";
-
         public CryptoService(
-            IStorageService storageService,
-            IStorageService secureStorageService,
+            IStateService stateService,
             ICryptoFunctionService cryptoFunctionService)
         {
-            _storageService = storageService;
-            _secureStorageService = secureStorageService;
+            _stateService = stateService;
             _cryptoFunctionService = cryptoFunctionService;
         }
 
         public async Task SetKeyAsync(SymmetricCryptoKey key)
         {
-            _key = key;
-            var option = await _storageService.GetAsync<int?>(Constants.VaultTimeoutKey);
-            var biometric = await _storageService.GetAsync<bool?>(Constants.BiometricUnlockKey);
+            await _stateService.SetKeyDecryptedAsync(key);
+            var option = await _stateService.GetVaultTimeoutAsync();
+            var biometric = await _stateService.GetBiometricUnlockAsync();
             if (option.HasValue && !biometric.GetValueOrDefault())
             {
                 // If we have a lock option set, we do not store the key
                 return;
             }
-            await _secureStorageService.SaveAsync(Keys_Key, key?.KeyB64);
+            await _stateService.SetKeyEncryptedAsync(key?.KeyB64);
         }
 
         public async Task SetKeyHashAsync(string keyHash)
         {
-            _keyHash = keyHash;
-            await _storageService.SaveAsync(Keys_KeyHash, keyHash);
+            await _stateService.SetKeyHashCachedAsync(keyHash);
+            await _stateService.SetKeyHashAsync(keyHash);
         }
 
         public async Task SetEncKeyAsync(string encKey)
@@ -69,8 +54,8 @@ namespace Bit.Core.Services
             {
                 return;
             }
-            await _storageService.SaveAsync(Keys_EncKey, encKey);
-            _encKey = null;
+            await _stateService.SetEncKeyEncryptedAsync(encKey);
+            await _stateService.SetEncKeyDecryptedAsync(null);
         }
 
         public async Task SetEncPrivateKeyAsync(string encPrivateKey)
@@ -79,50 +64,54 @@ namespace Bit.Core.Services
             {
                 return;
             }
-            await _storageService.SaveAsync(Keys_EncPrivateKey, encPrivateKey);
-            _privateKey = null;
+            await _stateService.SetPrivateKeyEncryptedAsync(encPrivateKey);
+            await _stateService.SetPrivateKeyDecryptedAsync(null);
         }
 
         public async Task SetOrgKeysAsync(IEnumerable<ProfileOrganizationResponse> orgs)
         {
             var orgKeys = orgs.ToDictionary(org => org.Id, org => org.Key);
-            _orgKeys = null;
-            await _storageService.SaveAsync(Keys_EncOrgKeys, orgKeys);
+            await _stateService.SetOrgKeysDecryptedAsync(null);
+            await _stateService.SetOrgKeysEncryptedAsync(orgKeys);
         }
 
         public async Task<SymmetricCryptoKey> GetKeyAsync()
         {
-            if (_key != null)
+            var inMemoryKey = await _stateService.GetKeyDecryptedAsync();
+            if (inMemoryKey != null)
             {
-                return _key;
+                return inMemoryKey;
             }
-            var key = await _secureStorageService.GetAsync<string>(Keys_Key);
+            var key = await _stateService.GetKeyEncryptedAsync();
             if (key != null)
             {
-                _key = new SymmetricCryptoKey(Convert.FromBase64String(key));
+                inMemoryKey = new SymmetricCryptoKey(Convert.FromBase64String(key));
+                await _stateService.SetKeyDecryptedAsync(inMemoryKey);
             }
-            return _key;
+            return inMemoryKey;
         }
 
         public async Task<string> GetKeyHashAsync()
         {
-            if (_keyHash != null)
+            var inMemoryKeyHash = await _stateService.GetKeyHashCachedAsync();
+            if (inMemoryKeyHash != null)
             {
-                return _keyHash;
+                return inMemoryKeyHash;
             }
-            var keyHash = await _storageService.GetAsync<string>(Keys_KeyHash);
+            var keyHash = await _stateService.GetKeyHashAsync();
             if (keyHash != null)
             {
-                _keyHash = keyHash;
+                await _stateService.SetKeyHashCachedAsync(keyHash);
             }
-            return _keyHash;
+            return keyHash;
         }
 
         public Task<SymmetricCryptoKey> GetEncKeyAsync(SymmetricCryptoKey key = null)
         {
-            if (_encKey != null)
+            var inMemoryKey = _stateService.GetEncKeyDecryptedAsync().GetAwaiter().GetResult();
+            if (inMemoryKey != null)
             {
-                return Task.FromResult(_encKey);
+                return Task.FromResult(inMemoryKey);
             }
             if (_getEncKeysTask != null && !_getEncKeysTask.IsCompleted && !_getEncKeysTask.IsFaulted)
             {
@@ -132,7 +121,7 @@ namespace Bit.Core.Services
             {
                 try
                 {
-                    var encKey = await _storageService.GetAsync<string>(Keys_EncKey);
+                    var encKey = await _stateService.GetEncKeyEncryptedAsync();
                     if (encKey == null)
                     {
                         return null;
@@ -167,8 +156,9 @@ namespace Bit.Core.Services
                     {
                         return null;
                     }
-                    _encKey = new SymmetricCryptoKey(decEncKey);
-                    return _encKey;
+                    var newEncKey = new SymmetricCryptoKey(decEncKey);
+                    await _stateService.SetEncKeyDecryptedAsync(newEncKey);
+                    return newEncKey;
                 }
                 finally
                 {
@@ -181,32 +171,36 @@ namespace Bit.Core.Services
 
         public async Task<byte[]> GetPublicKeyAsync()
         {
-            if (_publicKey != null)
+            var inMemoryKey = await _stateService.GetPublicKeyAsync();
+            if (inMemoryKey != null)
             {
-                return _publicKey;
+                return inMemoryKey;
             }
             var privateKey = await GetPrivateKeyAsync();
             if (privateKey == null)
             {
                 return null;
             }
-            _publicKey = await _cryptoFunctionService.RsaExtractPublicKeyAsync(privateKey);
-            return _publicKey;
+            inMemoryKey = await _cryptoFunctionService.RsaExtractPublicKeyAsync(privateKey);
+            await _stateService.SetPublicKeyAsync(inMemoryKey);
+            return inMemoryKey;
         }
 
         public async Task<byte[]> GetPrivateKeyAsync()
         {
-            if (_privateKey != null)
+            var inMemoryKey = await _stateService.GetPrivateKeyDecryptedAsync();
+            if (inMemoryKey != null)
             {
-                return _privateKey;
+                return inMemoryKey;
             }
-            var encPrivateKey = await _storageService.GetAsync<string>(Keys_EncPrivateKey);
+            var encPrivateKey = await _stateService.GetPrivateKeyEncryptedAsync();
             if (encPrivateKey == null)
             {
                 return null;
             }
-            _privateKey = await DecryptToBytesAsync(new EncString(encPrivateKey), null);
-            return _privateKey;
+            inMemoryKey = await DecryptToBytesAsync(new EncString(encPrivateKey), null);
+            await _stateService.SetPrivateKeyDecryptedAsync(inMemoryKey);
+            return inMemoryKey;
         }
 
         public async Task<List<string>> GetFingerprintAsync(string userId, byte[] publicKey = null)
@@ -226,9 +220,10 @@ namespace Bit.Core.Services
 
         public Task<Dictionary<string, SymmetricCryptoKey>> GetOrgKeysAsync()
         {
-            if (_orgKeys != null && _orgKeys.Count > 0)
+            var inMemoryKeys = _stateService.GetOrgKeysDecryptedAsync();
+            if (inMemoryKeys != null && inMemoryKeys.Result.Count > 0)
             {
-                return Task.FromResult(_orgKeys);
+                return inMemoryKeys;
             }
             if (_getOrgKeysTask != null && !_getOrgKeysTask.IsCompleted && !_getOrgKeysTask.IsFaulted)
             {
@@ -238,7 +233,7 @@ namespace Bit.Core.Services
             {
                 try
                 {
-                    var encOrgKeys = await _storageService.GetAsync<Dictionary<string, string>>(Keys_EncOrgKeys);
+                    var encOrgKeys = await _stateService.GetOrgKeysEncryptedAsync();
                     if (encOrgKeys == null)
                     {
                         return null;
@@ -254,9 +249,9 @@ namespace Bit.Core.Services
 
                     if (setKey)
                     {
-                        _orgKeys = orgKeys;
+                        await _stateService.SetOrgKeysDecryptedAsync(orgKeys);
                     }
-                    return _orgKeys;
+                    return orgKeys;
                 }
                 finally
                 {
@@ -311,76 +306,78 @@ namespace Bit.Core.Services
 
         public async Task<bool> HasEncKeyAsync()
         {
-            var encKey = await _storageService.GetAsync<string>(Keys_EncKey);
+            var encKey = await _stateService.GetEncKeyEncryptedAsync();
             return encKey != null;
         }
 
-        public async Task ClearKeyAsync()
+        public async Task ClearKeyAsync(string userId = null)
         {
-            _key = _legacyEtmKey = null;
-            await _secureStorageService.RemoveAsync(Keys_Key);
+            await _stateService.SetKeyDecryptedAsync(null, new StorageOptions { UserId = userId });
+            _legacyEtmKey = null;
+            await _stateService.SetKeyEncryptedAsync(null, new StorageOptions { UserId = userId });
         }
 
-        public async Task ClearKeyHashAsync()
+        public async Task ClearKeyHashAsync(string userId = null)
         {
-            _keyHash = null;
-            await _storageService.RemoveAsync(Keys_KeyHash);
+            await _stateService.SetKeyHashCachedAsync(null, new StorageOptions { UserId = userId });
+            await _stateService.SetKeyHashAsync(null, new StorageOptions { UserId = userId });
         }
 
-        public async Task ClearEncKeyAsync(bool memoryOnly = false)
+        public async Task ClearEncKeyAsync(bool memoryOnly = false, string userId = null)
         {
-            _encKey = null;
+            await _stateService.SetEncKeyDecryptedAsync(null, new StorageOptions { UserId = userId });
             if (!memoryOnly)
             {
-                await _storageService.RemoveAsync(Keys_EncKey);
+                await _stateService.SetEncKeyEncryptedAsync(null, new StorageOptions { UserId = userId });
             }
         }
 
-        public async Task ClearKeyPairAsync(bool memoryOnly = false)
+        public async Task ClearKeyPairAsync(bool memoryOnly = false, string userId = null)
         {
-            _publicKey = _privateKey = null;
+            await _stateService.SetPublicKeyAsync(null, new StorageOptions { UserId = userId });
+            await _stateService.SetPrivateKeyDecryptedAsync(null, new StorageOptions { UserId = userId });
             if (!memoryOnly)
             {
-                await _storageService.RemoveAsync(Keys_EncPrivateKey);
+                await _stateService.SetPrivateKeyEncryptedAsync(null, new StorageOptions { UserId = userId });
             }
         }
 
-        public async Task ClearOrgKeysAsync(bool memoryOnly = false)
+        public async Task ClearOrgKeysAsync(bool memoryOnly = false, string userId = null)
         {
-            _orgKeys = null;
+            await _stateService.SetOrgKeysDecryptedAsync(null, new StorageOptions { UserId = userId });
             if (!memoryOnly)
             {
-                await _storageService.RemoveAsync(Keys_EncOrgKeys);
+                await _stateService.SetOrgKeysEncryptedAsync(null, new StorageOptions { UserId = userId });
             }
         }
 
-        public async Task ClearPinProtectedKeyAsync()
+        public async Task ClearPinProtectedKeyAsync(string userId = null)
         {
-            await _storageService.RemoveAsync(Constants.PinProtectedKey);
+            await _stateService.SetPinProtectedAsync(null, new StorageOptions { UserId = userId });
         }
 
-        public async Task ClearKeysAsync()
+        public async Task ClearKeysAsync(string userId = null)
         {
             await Task.WhenAll(new Task[]
             {
-                ClearKeyAsync(),
-                ClearKeyHashAsync(),
-                ClearOrgKeysAsync(),
-                ClearEncKeyAsync(),
-                ClearKeyPairAsync(),
-                ClearPinProtectedKeyAsync()
+                ClearKeyAsync(userId),
+                ClearKeyHashAsync(userId),
+                ClearOrgKeysAsync(false, userId),
+                ClearEncKeyAsync(false, userId),
+                ClearKeyPairAsync(false, userId),
+                ClearPinProtectedKeyAsync(userId)
             });
         }
 
         public async Task ToggleKeyAsync()
         {
             var key = await GetKeyAsync();
-            var option = await _storageService.GetAsync<int?>(Constants.VaultTimeoutKey);
-            var biometric = await _storageService.GetAsync<bool?>(Constants.BiometricUnlockKey);
+            var option = await _stateService.GetVaultTimeoutAsync();
+            var biometric = await _stateService.GetBiometricUnlockAsync();
             if (!biometric.GetValueOrDefault() && (option != null || option == 0))
             {
                 await ClearKeyAsync();
-                _key = key;
+                await _stateService.SetKeyDecryptedAsync(key);
                 return;
             }
             await SetKeyAsync(key);
@@ -415,7 +412,7 @@ namespace Bit.Core.Services
         {
             if (protectedKeyCs == null)
             {
-                var pinProtectedKey = await _storageService.GetAsync<string>(Constants.PinProtectedKey);
+                var pinProtectedKey = await _stateService.GetPinProtectedAsync();
                 if (pinProtectedKey == null)
                 {
                     throw new Exception("No PIN protected key found.");

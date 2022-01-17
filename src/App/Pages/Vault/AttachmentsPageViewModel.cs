@@ -17,7 +17,7 @@ namespace Bit.App.Pages
         private readonly IDeviceActionService _deviceActionService;
         private readonly ICipherService _cipherService;
         private readonly ICryptoService _cryptoService;
-        private readonly IUserService _userService;
+        private readonly IStateService _stateService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private CipherView _cipher;
         private Cipher _cipherDomain;
@@ -32,7 +32,7 @@ namespace Bit.App.Pages
             _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
             _cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
-            _userService = ServiceContainer.Resolve<IUserService>("userService");
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             Attachments = new ExtendedObservableCollection<AttachmentView>();
             DeleteAttachmentCommand = new Command<AttachmentView>(DeleteAsync);
             PageTitle = AppResources.Attachments;
@@ -64,7 +64,7 @@ namespace Bit.App.Pages
             Cipher = await _cipherDomain.DecryptAsync();
             LoadAttachments();
             _hasUpdatedKey = await _cryptoService.HasEncKeyAsync();
-            var canAccessPremium = await _userService.CanAccessPremiumAsync();
+            var canAccessPremium = await _stateService.CanAccessPremiumAsync();
             _canAccessAttachments = canAccessPremium || Cipher.OrganizationId != null;
             if (!_canAccessAttachments)
             {

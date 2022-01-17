@@ -1,22 +1,18 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Bit.Core.Models.Domain;
 
 namespace Bit.Core.Abstractions
 {
     public interface IVaultTimeoutService
     {
-        EncString PinProtectedKey { get; set; }
-        bool BiometricLocked { get; set; }
-
         Task CheckVaultTimeoutAsync();
-        Task ClearAsync();
-        Task<bool> IsLockedAsync();
+        Task ClearAsync(string userId = null);
+        Task<bool> IsLockedAsync(string userId = null);
         Task<Tuple<bool, bool>> IsPinLockSetAsync();
         Task<bool> IsBiometricLockSetAsync();
-        Task LockAsync(bool allowSoftLock = false, bool userInitiated = false);
-        Task LogOutAsync();
+        Task LockAsync(bool allowSoftLock = false, bool userInitiated = false, string userId = null);
+        Task LogOutAsync(string userId = null);
         Task SetVaultTimeoutOptionsAsync(int? timeout, string action);
-        Task<int?> GetVaultTimeout();
+        Task<int?> GetVaultTimeout(string userId = null);
     }
 }

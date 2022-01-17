@@ -9,13 +9,13 @@ namespace Bit.Core.Abstractions
 {
     public interface ICryptoService
     {
-        Task ClearEncKeyAsync(bool memoryOnly = false);
-        Task ClearKeyAsync();
-        Task ClearKeyHashAsync();
-        Task ClearKeyPairAsync(bool memoryOnly = false);
-        Task ClearKeysAsync();
-        Task ClearOrgKeysAsync(bool memoryOnly = false);
-        Task ClearPinProtectedKeyAsync();
+        Task ClearEncKeyAsync(bool memoryOnly = false, string userId = null);
+        Task ClearKeyAsync(string userId = null);
+        Task ClearKeyHashAsync(string userId = null);
+        Task ClearKeyPairAsync(bool memoryOnly = false, string userId = null);
+        Task ClearKeysAsync(string userId = null);
+        Task ClearOrgKeysAsync(bool memoryOnly = false, string userId = null);
+        Task ClearPinProtectedKeyAsync(string userId = null);
         Task<byte[]> DecryptFromBytesAsync(byte[] encBytes, SymmetricCryptoKey key);
         Task<byte[]> DecryptToBytesAsync(EncString encString, SymmetricCryptoKey key = null);
         Task<string> DecryptToUtf8Async(EncString encString, SymmetricCryptoKey key = null);

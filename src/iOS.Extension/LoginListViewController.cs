@@ -128,8 +128,9 @@ namespace Bit.iOS.Extension
                 {
                     string totp = null;
                     var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+                    var userId = _stateService.GetActiveUserIdAsync().GetAwaiter().GetResult();
                     var disableTotpCopy = storageService.GetAsync<bool?>(
-                        Bit.Core.Constants.DisableAutoTotpCopyKey).GetAwaiter().GetResult();
+                        Bit.Core.Constants.DisableAutoTotpCopyKey(userId)).GetAwaiter().GetResult();
                     if (!disableTotpCopy.GetValueOrDefault(false))
                     {
                         totp = GetTotpAsync(item).GetAwaiter().GetResult();

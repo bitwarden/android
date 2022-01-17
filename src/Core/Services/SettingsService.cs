@@ -1,28 +1,23 @@
 ﻿using Bit.Core.Abstractions;
-using Bit.Core.Utilities;
 using Newtonsoft.Json.Linq;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Bit.Core.Models.Domain;
 
 namespace Bit.Core.Services
 {
     public class SettingsService : ISettingsService
     {
-        private const string Keys_SettingsFormat = "settings_{0}";
         private const string Keys_EquivalentDomains = "equivalentDomains";
 
-        private readonly IUserService _userService;
-        private readonly IStorageService _storageService;
+        private readonly IStateService _stateService;
 
         private Dictionary<string, object> _settingsCache;
 
         public SettingsService(
-            IUserService userService,
-            IStorageService storageService)
+            IStateService stateService)
         {
-            _userService = userService;
-            _storageService = storageService;
+            _stateService = stateService;
         }
 
         public void ClearCache()
@@ -49,7 +44,7 @@ namespace Bit.Core.Services
 
         public async Task ClearAsync(string userId)
         {
-            await _storageService.RemoveAsync(string.Format(Keys_SettingsFormat, userId));
+            await _stateService.SetSettingsAsync(null, new StorageOptions { UserId = userId });
             ClearCache();
         }
 
@@ -59,16 +54,13 @@ namespace Bit.Core.Services
         {
             if (_settingsCache == null)
             {
-                var userId = await _userService.GetUserIdAsync();
-                _settingsCache = await _storageService.GetAsync<Dictionary<string, object>>(
-                    string.Format(Keys_SettingsFormat, userId));
+                _settingsCache = await _stateService.GetSettingsAsync();
             }
             return _settingsCache;
         }
 
         private async Task SetSettingsKeyAsync<T>(string key, T value)
         {
-            var userId = await _userService.GetUserIdAsync();
             var settings = await GetSettingsAsync();
             if (settings == null)
             {
@@ -82,7 +74,7 @@ namespace Bit.Core.Services
             {
                 settings.Add(key, value);
             }
-            await _storageService.SaveAsync(string.Format(Keys_SettingsFormat, userId), settings);
+            await _stateService.SetSettingsAsync(settings);
             _settingsCache = settings;
         }
     }

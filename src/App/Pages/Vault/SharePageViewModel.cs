@@ -16,7 +16,7 @@ namespace Bit.App.Pages
         private readonly IDeviceActionService _deviceActionService;
         private readonly ICipherService _cipherService;
         private readonly ICollectionService _collectionService;
-        private readonly IUserService _userService;
+        private readonly IOrganizationService _organizationService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private CipherView _cipher;
         private int _organizationSelectedIndex;
@@ -28,7 +28,7 @@ namespace Bit.App.Pages
         {
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
-            _userService = ServiceContainer.Resolve<IUserService>("userService");
+            _organizationService = ServiceContainer.Resolve<IOrganizationService>("organizationService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _collectionService = ServiceContainer.Resolve<ICollectionService>("collectionService");
             Collections = new ExtendedObservableCollection<CollectionViewModel>();
@@ -67,7 +67,7 @@ namespace Bit.App.Pages
             var allCollections = await _collectionService.GetAllDecryptedAsync();
             _writeableCollections = allCollections.Where(c => !c.ReadOnly).ToList();
 
-            var orgs = await _userService.GetAllOrganizationAsync();
+            var orgs = await _organizationService.GetAllAsync();
             OrganizationOptions = orgs.OrderBy(o => o.Name)
                 .Where(o => o.Enabled && o.Status == OrganizationUserStatusType.Confirmed)
                 .Select(o => new KeyValuePair<string, string>(o.Name, o.Id)).ToList();
@@ -110,7 +110,7 @@ namespace Bit.App.Pages
                 await _cipherService.ShareWithServerAsync(cipherView, OrganizationId, checkedCollectionIds);
                 await _deviceActionService.HideLoadingAsync();
                 var movedItemToOrgText = string.Format(AppResources.MovedItemToOrg, cipherView.Name,
-                   (await _userService.GetOrganizationAsync(OrganizationId)).Name);
+                   (await _organizationService.GetAsync(OrganizationId)).Name);
                 _platformUtilsService.ShowToast("success", null, movedItemToOrgText);
                 await Page.Navigation.PopModalAsync();
                 return true;

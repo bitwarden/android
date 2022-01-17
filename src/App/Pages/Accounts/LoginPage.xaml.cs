@@ -1,7 +1,5 @@
 ﻿using Bit.App.Models;
 using Bit.App.Resources;
-using Bit.Core.Abstractions;
-using Bit.Core.Utilities;
 using System;
 using System.Threading.Tasks;
 using Bit.App.Utilities;
@@ -11,8 +9,6 @@ namespace Bit.App.Pages
 {
     public partial class LoginPage : BaseContentPage
     {
-        private readonly IMessagingService _messagingService;
-        private readonly IStorageService _storageService;
         private readonly LoginPageViewModel _vm;
         private readonly AppOptions _appOptions;
 
@@ -20,9 +16,6 @@ namespace Bit.App.Pages
 
         public LoginPage(string email = null, AppOptions appOptions = null)
         {
-            _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
-            _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
-            _messagingService.Send("showStatusBar", true);
             _appOptions = appOptions;
             InitializeComponent();
             _vm = BindingContext as LoginPageViewModel;
@@ -33,7 +26,6 @@ namespace Bit.App.Pages
                 () => Device.BeginInvokeOnMainThread(async () => await UpdateTempPasswordAsync());
             _vm.CloseAction = async () =>
             {
-                _messagingService.Send("showStatusBar", false);
                 await Navigation.PopModalAsync();
             };
             _vm.Email = email;
@@ -41,6 +33,12 @@ namespace Bit.App.Pages
             if (Device.RuntimePlatform == Device.Android)
             {
                 ToolbarItems.RemoveAt(0);
+            }
+            if (_appOptions?.ShowAccountSwitcher ?? false)
+            {
+                _appOptions.ShowAccountSwitcher = false;
+                ToolbarItems.Add(_accountAvatar);
+                ToolbarItems.Remove(_closeItem);
             }
 
             _email.ReturnType = ReturnType.Next;
@@ -61,6 +59,11 @@ namespace Bit.App.Pages
         protected override async void OnAppearing()
         {
             base.OnAppearing();
+            _mainContent.Content = _mainLayout;
+            if (_appOptions?.ShowAccountSwitcher ?? false)
+            {
+                _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
+            }
             await _vm.InitAsync();
             if (!_inputFocused)
             {
@@ -129,6 +132,23 @@ namespace Bit.App.Pages
         {
             var page = new UpdateTempPasswordPage();
             await Navigation.PushModalAsync(new NavigationPage(page));
+        }
+
+        private async void AccountSwitch_Clicked(object sender, EventArgs e)
+        {
+            if (_accountListOverlay.IsVisible)
+            {
+                await ShowAccountListAsync(false, _accountListView, _accountListOverlay);
+            }
+            else
+            {
+                await ShowAccountListAsync(true, _accountListView, _accountListOverlay);
+            }
+        }
+
+        private async void AccountRow_Selected(object sender, SelectedItemChangedEventArgs e)
+        {
+            await AccountRowSelectedAsync(sender, e, _accountListView, _accountListOverlay);
         }
     }
 }

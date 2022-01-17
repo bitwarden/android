@@ -10,14 +10,14 @@ namespace Bit.Core.Services
     {
         private const string SteamChars = "23456789BCDFGHJKMNPQRTVWXY";
 
-        private readonly IStorageService _storageService;
+        private readonly IStateService _stateService;
         private readonly ICryptoFunctionService _cryptoFunctionService;
 
         public TotpService(
-            IStorageService storageService,
+            IStateService stateService,
             ICryptoFunctionService cryptoFunctionService)
         {
-            _storageService = storageService;
+            _stateService = stateService;
             _cryptoFunctionService = cryptoFunctionService;
         }
 
@@ -135,7 +135,7 @@ namespace Bit.Core.Services
 
         public async Task<bool> IsAutoCopyEnabledAsync()
         {
-            var disabled = await _storageService.GetAsync<bool?>(Constants.DisableAutoTotpCopyKey);
+            var disabled = await _stateService.GetDisableAutoTotpCopyAsync();
             return !disabled.GetValueOrDefault();
         }
     }

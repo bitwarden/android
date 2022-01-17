@@ -2,7 +2,6 @@
 using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Bit.App.Services;
-using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 
@@ -11,7 +10,7 @@ namespace Bit.App.Pages
     public class AutofillServicesPageViewModel : BaseViewModel
     {
         private readonly IDeviceActionService _deviceActionService;
-        private readonly IStorageService _storageService;
+        private readonly IStateService _stateService;
         private readonly MobileI18nService _i18nService;
         
         private bool _autofillServiceToggled;
@@ -23,7 +22,7 @@ namespace Bit.App.Pages
         public AutofillServicesPageViewModel()
         {
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
-            _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _i18nService = ServiceContainer.Resolve<II18nService>("i18nService") as MobileI18nService;
             PageTitle = AppResources.AutofillServices;
         }
@@ -152,7 +151,7 @@ namespace Bit.App.Pages
         
         public async Task InitAsync()
         {
-            InlineAutofillToggled = await _storageService.GetAsync<bool?>(Constants.InlineAutofillEnabledKey) ?? true;
+            InlineAutofillToggled = await _stateService.GetInlineAutofillEnabledAsync() ?? true;
             _inited = true;
         }
 
@@ -202,7 +201,7 @@ namespace Bit.App.Pages
         {
             if (_inited)
             {
-                await _storageService.SaveAsync(Constants.InlineAutofillEnabledKey, InlineAutofillToggled);
+                await _stateService.SetInlineAutofillEnabledAsync(InlineAutofillToggled);
             }
         }
     }

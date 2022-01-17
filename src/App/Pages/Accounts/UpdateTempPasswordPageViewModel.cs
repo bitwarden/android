@@ -1,8 +1,12 @@
 using Bit.App.Resources;
 using System;
 using System.Threading.Tasks;
+using Bit.Core;
+using Bit.Core.Abstractions;
+using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.Request;
+using Bit.Core.Utilities;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -43,9 +47,9 @@ namespace Bit.App.Pages
             }
             
             // Retrieve details for key generation
-            var kdf = await _userService.GetKdfAsync();
-            var kdfIterations = await _userService.GetKdfIterationsAsync();
-            var email = await _userService.GetEmailAsync();
+            var kdf = await _stateService.GetKdfTypeAsync();
+            var kdfIterations = await _stateService.GetKdfIterationsAsync();
+            var email = await _stateService.GetEmailAsync();
             
             // Create new key and hash new password
             var key = await _cryptoService.MakeKeyAsync(MasterPassword, email, kdf, kdfIterations);

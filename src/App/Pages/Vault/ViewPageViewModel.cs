@@ -18,7 +18,7 @@ namespace Bit.App.Pages
     {
         private readonly IDeviceActionService _deviceActionService;
         private readonly ICipherService _cipherService;
-        private readonly IUserService _userService;
+        private readonly IStateService _stateService;
         private readonly ITotpService _totpService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IAuditService _auditService;
@@ -48,7 +48,7 @@ namespace Bit.App.Pages
         {
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
-            _userService = ServiceContainer.Resolve<IUserService>("userService");
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _totpService = ServiceContainer.Resolve<ITotpService>("totpService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _auditService = ServiceContainer.Resolve<IAuditService>("auditService");
@@ -248,7 +248,7 @@ namespace Bit.App.Pages
                 return false;
             }
             Cipher = await cipher.DecryptAsync();
-            CanAccessPremium = await _userService.CanAccessPremiumAsync();
+            CanAccessPremium = await _stateService.CanAccessPremiumAsync();
             Fields = Cipher.Fields?.Select(f => new ViewPageFieldViewModel(this, Cipher, f)).ToList();
 
             if (Cipher.Type == Core.Enums.CipherType.Login && !string.IsNullOrWhiteSpace(Cipher.Login.Totp) &&

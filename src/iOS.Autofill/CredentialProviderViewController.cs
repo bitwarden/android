@@ -79,9 +79,9 @@ namespace Bit.iOS.Autofill
         public override async void ProvideCredentialWithoutUserInteraction(ASPasswordCredentialIdentity credentialIdentity)
         {
             InitAppIfNeeded();
-            var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
-            await storageService.SaveAsync(Bit.Core.Constants.PasswordRepromptAutofillKey, false);
-            await storageService.SaveAsync(Bit.Core.Constants.PasswordVerifiedAutofillKey, false);
+            var stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            await stateService.SetPasswordRepromptAutofillAsync(false);
+            await stateService.SetPasswordVerifiedAutofillAsync(false);
             if (!await IsAuthed() || await IsLocked())
             {
                 var err = new NSError(new NSString("ASExtensionErrorDomain"),
@@ -230,7 +230,7 @@ namespace Bit.iOS.Autofill
                 return;
             }
 
-            var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+            var stateService = ServiceContainer.Resolve<IStateService>("stateService");
             var decCipher = await cipher.DecryptAsync();
             if (decCipher.Reprompt != Bit.Core.Enums.CipherRepromptType.None)
             {
@@ -238,13 +238,13 @@ namespace Bit.iOS.Autofill
                 // already verified the password.
                 if (!userInteraction)
                 {
-                    await storageService.SaveAsync(Bit.Core.Constants.PasswordRepromptAutofillKey, true);
+                    await stateService.SetPasswordRepromptAutofillAsync(true);
                     var err = new NSError(new NSString("ASExtensionErrorDomain"),
                     Convert.ToInt32(ASExtensionErrorCode.UserInteractionRequired), null);
                     ExtensionContext?.CancelRequest(err);
                     return;
                 }
-                else if (!await storageService.GetAsync<bool>(Bit.Core.Constants.PasswordVerifiedAutofillKey))
+                else if (!await stateService.GetPasswordVerifiedAutofillAsync())
                 {
                     // Add a timeout to resolve keyboard not always showing up.
                     await Task.Delay(250);
@@ -259,11 +259,10 @@ namespace Bit.iOS.Autofill
                 }
             }
             string totpCode = null;
-            var disableTotpCopy = await storageService.GetAsync<bool?>(Bit.Core.Constants.DisableAutoTotpCopyKey);
+            var disableTotpCopy = await stateService.GetDisableAutoTotpCopyAsync();
             if (!disableTotpCopy.GetValueOrDefault(false))
             {
-                var userService = ServiceContainer.Resolve<IUserService>("userService");
-                var canAccessPremiumAsync = await userService.CanAccessPremiumAsync();
+                var canAccessPremiumAsync = await stateService.CanAccessPremiumAsync();
                 if (!string.IsNullOrWhiteSpace(decCipher.Login.Totp) &&
                     (canAccessPremiumAsync || cipher.OrganizationUseTotp))
                 {
@@ -277,8 +276,8 @@ namespace Bit.iOS.Autofill
 
         private async void CheckLock(Action notLockedAction)
         {
-            var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
-            if (await IsLocked() || await storageService.GetAsync<bool>(Bit.Core.Constants.PasswordRepromptAutofillKey))
+            var stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            if (await IsLocked() || await stateService.GetPasswordRepromptAutofillAsync())
             {
                 PerformSegue("lockPasswordSegue", this);
             }
@@ -296,8 +295,8 @@ namespace Bit.iOS.Autofill
 
         private Task<bool> IsAuthed()
         {
-            var userService = ServiceContainer.Resolve<IUserService>("userService");
-            return userService.IsAuthenticatedAsync();
+            var stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            return stateService.IsAuthenticatedAsync();
         }
 
         private void LogoutIfAuthed()
@@ -306,7 +305,8 @@ namespace Bit.iOS.Autofill
             {
                 if (await IsAuthed())
                 {
-                    await AppHelpers.LogOutAsync();
+                    var stateService = ServiceContainer.Resolve<IStateService>("stateService");
+                    await AppHelpers.LogOutAsync(await stateService.GetActiveUserIdAsync());
                     var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
                     if (deviceActionService.SystemMajorVersion() >= 12)
                     {
@@ -337,7 +337,7 @@ namespace Bit.iOS.Autofill
             }
             iOSCoreHelpers.Bootstrap();
             var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.SetTheme(app.Resources);
             iOSCoreHelpers.AppearanceAdjustments();
             _nfcDelegate = new Core.NFCReaderDelegate((success, message) =>
                 messagingService.Send("gotYubiKeyOTP", message));
@@ -356,7 +356,7 @@ namespace Bit.iOS.Autofill
         {
             var homePage = new HomePage();
             var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesToPage(homePage);
             if (homePage.BindingContext is HomeViewModel vm)
             {
@@ -379,7 +379,7 @@ namespace Bit.iOS.Autofill
         {
             var environmentPage = new EnvironmentPage();
             var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesToPage(environmentPage);
             if (environmentPage.BindingContext is EnvironmentPageViewModel vm)
             {
@@ -397,7 +397,7 @@ namespace Bit.iOS.Autofill
         {
             var registerPage = new RegisterPage(null);
             var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesToPage(registerPage);
             if (registerPage.BindingContext is RegisterPageViewModel vm)
             {
@@ -415,7 +415,7 @@ namespace Bit.iOS.Autofill
         {
             var loginPage = new LoginPage(email);
             var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesToPage(loginPage);
             if (loginPage.BindingContext is LoginPageViewModel vm)
             {
@@ -437,7 +437,7 @@ namespace Bit.iOS.Autofill
         {
             var loginPage = new LoginSsoPage();
             var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesToPage(loginPage);
             if (loginPage.BindingContext is LoginSsoPageViewModel vm)
             {
@@ -460,7 +460,7 @@ namespace Bit.iOS.Autofill
         {
             var twoFactorPage = new TwoFactorPage(authingWithSso);
             var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesToPage(twoFactorPage);
             if (twoFactorPage.BindingContext is TwoFactorPageViewModel vm)
             {
@@ -487,7 +487,7 @@ namespace Bit.iOS.Autofill
         {
             var setPasswordPage = new SetPasswordPage();
             var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesToPage(setPasswordPage);
             if (setPasswordPage.BindingContext is SetPasswordPageViewModel vm)
             {
@@ -506,7 +506,7 @@ namespace Bit.iOS.Autofill
         {
             var updateTempPasswordPage = new UpdateTempPasswordPage();
             var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesToPage(updateTempPasswordPage);
             if (updateTempPasswordPage.BindingContext is UpdateTempPasswordPageViewModel vm)
             {

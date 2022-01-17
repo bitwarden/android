@@ -1,10 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <pages:BaseContentPage 
     xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="Bit.App.Pages.LoginPage"
     xmlns:pages="clr-namespace:Bit.App.Pages"
     xmlns:controls="clr-namespace:Bit.App.Controls"
+    xmlns:view="clr-namespace:Bit.Core.Models.View;assembly=BitwardenCore"
     xmlns:u="clr-namespace:Bit.App.Utilities"
     x:DataType="pages:LoginPageViewModel"
     Title="{Binding PageTitle}">
@@ -13,9 +15,24 @@
         <pages:LoginPageViewModel />
     </ContentPage.BindingContext>
 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem x:Name="_closeItem" x:Key="closeItem" Text="{u:I18n Close}" 
+                     Clicked="Close_Clicked" Order="Primary" Priority="-1" />
+    </ContentPage.ToolbarItems>
+    
     <ContentPage.Resources>
         <ResourceDictionary>
             <u:InverseBoolConverter x:Key="inverseBool" />
+            <controls:ExtendedToolbarItem
+                x:Name="_accountAvatar"
+                x:Key="accountAvatar"
+                IconImageSource="{Binding AvatarImageSource}"
+                Clicked="AccountSwitch_Clicked"
+                Order="Primary"
+                Priority="-1"
+                UseOriginalImage="True"
+                AutomationProperties.IsInAccessibleTree="True"
+                AutomationProperties.Name="{u:I18n Account}" />
             <ToolbarItem Icon="more_vert.png" Clicked="More_Clicked" Order="Primary"
                 x:Name="_moreItem" x:Key="moreItem"
                  AutomationProperties.IsInAccessibleTree="True"
@@ -25,68 +42,107 @@
                 x:Name="_getPasswordHint"
                 Clicked="Hint_Clicked" 
                 Order="Secondary"/>
+
+            <ScrollView x:Name="_mainLayout" x:Key="mainLayout">
+                <StackLayout Spacing="20">
+                    <StackLayout StyleClass="box">
+                        <StackLayout StyleClass="box-row">
+                            <Label
+                                Text="{u:I18n EmailAddress}"
+                                StyleClass="box-label" />
+                            <Entry
+                                x:Name="_email"
+                                Text="{Binding Email}"
+                                Keyboard="Email"
+                                StyleClass="box-value" />
+                        </StackLayout>
+                        <Grid StyleClass="box-row">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Label
+                                Text="{u:I18n MasterPassword}"
+                                StyleClass="box-label"
+                                Grid.Row="0"
+                                Grid.Column="0" />
+                            <controls:MonoEntry
+                                x:Name="_masterPassword"
+                                Text="{Binding MasterPassword}"
+                                StyleClass="box-value"
+                                IsSpellCheckEnabled="False"
+                                IsTextPredictionEnabled="False"
+                                IsPassword="{Binding ShowPassword, Converter={StaticResource inverseBool}}"
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                ReturnType="Go"
+                                ReturnCommand="{Binding LogInCommand}" />
+                            <controls:FaButton
+                                StyleClass="box-row-button, box-row-button-platform"
+                                Text="{Binding ShowPasswordIcon}"
+                                Command="{Binding TogglePasswordCommand}"
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Grid.RowSpan="2"
+                                AutomationProperties.IsInAccessibleTree="True"
+                                AutomationProperties.Name="{u:I18n ToggleVisibility}" />
+                        </Grid>
+                    </StackLayout>
+                    <StackLayout Padding="10, 0">
+                        <Button Text="{u:I18n LogIn}" 
+                                StyleClass="btn-primary"
+                                Clicked="LogIn_Clicked" />
+                    </StackLayout>
+                </StackLayout>
+            </ScrollView>
         </ResourceDictionary>
     </ContentPage.Resources>
+    
+    <AbsoluteLayout
+        x:Name="_absLayout"
+        VerticalOptions="FillAndExpand"
+        HorizontalOptions="FillAndExpand">
+        <ContentView
+            x:Name="_mainContent"
+            AbsoluteLayout.LayoutFlags="All"
+            AbsoluteLayout.LayoutBounds="0, 0, 1, 1">
+        </ContentView>
 
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="{u:I18n Close}" Clicked="Close_Clicked" Order="Primary" Priority="-1" />
-    </ContentPage.ToolbarItems>
+        <!-- Account Switching Overlay -->
+        <ContentView
+            x:Name="_accountListOverlay"
+            AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+            AbsoluteLayout.LayoutFlags="All"
+            IsVisible="False"
+            BackgroundColor="#22000000"
+            Padding="0">
 
-    <ScrollView>
-        <StackLayout Spacing="20">
-            <StackLayout StyleClass="box">
-                <StackLayout StyleClass="box-row">
-                    <Label
-                        Text="{u:I18n EmailAddress}"
-                        StyleClass="box-label" />
-                    <Entry
-                        x:Name="_email"
-                        Text="{Binding Email}"
-                        Keyboard="Email"
-                        StyleClass="box-value" />
-                </StackLayout>
-                <Grid StyleClass="box-row">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <Label
-                        Text="{u:I18n MasterPassword}"
-                        StyleClass="box-label"
-                        Grid.Row="0"
-                        Grid.Column="0" />
-                    <controls:MonoEntry
-                        x:Name="_masterPassword"
-                        Text="{Binding MasterPassword}"
-                        StyleClass="box-value"
-                        IsSpellCheckEnabled="False"
-                        IsTextPredictionEnabled="False"
-                        IsPassword="{Binding ShowPassword, Converter={StaticResource inverseBool}}"
-                        Grid.Row="1"
-                        Grid.Column="0"
-                        ReturnType="Go"
-                        ReturnCommand="{Binding LogInCommand}" />
-                    <controls:FaButton
-                        StyleClass="box-row-button, box-row-button-platform"
-                        Text="{Binding ShowPasswordIcon}"
-                        Command="{Binding TogglePasswordCommand}"
-                        Grid.Row="0"
-                        Grid.Column="1"
-                        Grid.RowSpan="2"
-                        AutomationProperties.IsInAccessibleTree="True"
-                        AutomationProperties.Name="{u:I18n ToggleVisibility}" />
-                </Grid>
+            <StackLayout
+                x:Name="_accountListView"
+                VerticalOptions="StartAndExpand"
+                HorizontalOptions="FillAndExpand"
+                BackgroundColor="{DynamicResource BackgroundColor}"
+                xct:ShadowEffect.Color="Black"
+                xct:ShadowEffect.Radius="10"
+                xct:ShadowEffect.OffsetY="3">
+                <ListView
+                    ItemsSource="{Binding Accounts}"
+                    ItemSelected="AccountRow_Selected"
+                    VerticalOptions="FillAndExpand"
+                    RowHeight="60">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="view:AccountView">
+                            <controls:AccountViewCell
+                                Account="{Binding .}" />
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
             </StackLayout>
-            <StackLayout Padding="10, 0">
-                <Button Text="{u:I18n LogIn}" 
-                        StyleClass="btn-primary"
-                        Clicked="LogIn_Clicked" />
-            </StackLayout>
-        </StackLayout>
-    </ScrollView>
+        </ContentView>
+    </AbsoluteLayout>
 
 </pages:BaseContentPage>

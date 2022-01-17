@@ -19,9 +19,8 @@ namespace Bit.App.Services
     {
         private bool _showNotification;
         private bool _resolved;
-        private IStorageService _storageService;
         private ISyncService _syncService;
-        private IUserService _userService;
+        private IStateService _stateService;
         private IAppIdService _appIdService;
         private IApiService _apiService;
         private IMessagingService _messagingService;
@@ -58,8 +57,8 @@ namespace Bit.App.Services
                 return;
             }
 
-            var myUserId = await _userService.GetUserIdAsync();
-            var isAuthenticated = await _userService.IsAuthenticatedAsync();
+            var myUserId = await _stateService.GetActiveUserIdAsync();
+            var isAuthenticated = await _stateService.IsAuthenticatedAsync();
             switch (notification.Type)
             {
                 case NotificationType.SyncCipherUpdate:
@@ -129,7 +128,7 @@ namespace Bit.App.Services
         {
             Resolve();
             Debug.WriteLine(string.Format("Push Notification - Device Registered - Token : {0}", token));
-            var isAuthenticated = await _userService.IsAuthenticatedAsync();
+            var isAuthenticated = await _stateService.IsAuthenticatedAsync();
             if (!isAuthenticated)
             {
                 return;
@@ -141,10 +140,10 @@ namespace Bit.App.Services
                 await _apiService.PutDeviceTokenAsync(appId,
                     new Core.Models.Request.DeviceTokenRequest { PushToken = token });
                 Debug.WriteLine("Registered device with server.");
-                await _storageService.SaveAsync(Constants.PushLastRegistrationDateKey, DateTime.UtcNow);
+                await _stateService.SetPushLastRegistrationDateAsync(DateTime.UtcNow);
                 if (deviceType == Device.Android)
                 {
-                    await _storageService.SaveAsync(Constants.PushCurrentTokenKey, token);
+                    await _stateService.SetPushCurrentTokenAsync(token);
                 }
             }
             catch (ApiException)
@@ -174,9 +173,8 @@ namespace Bit.App.Services
             {
                 return;
             }
-            _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
-            _userService = ServiceContainer.Resolve<IUserService>("userService");
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _appIdService = ServiceContainer.Resolve<IAppIdService>("appIdService");
             _apiService = ServiceContainer.Resolve<IApiService>("apiService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");

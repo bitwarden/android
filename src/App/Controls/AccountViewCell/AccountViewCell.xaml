@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ViewCell xmlns="http://xamarin.com/schemas/2014/forms"
+          xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+          xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+          x:Class="Bit.App.Controls.AccountViewCell"
+          xmlns:controls="clr-namespace:Bit.App.Controls"
+          xmlns:u="clr-namespace:Bit.App.Utilities"
+          x:DataType="controls:AccountViewCellViewModel">
+    <Grid RowSpacing="0"
+          ColumnSpacing="0">
+
+        <Grid.Resources>
+            <u:InverseBoolConverter x:Key="inverseBool" />
+        </Grid.Resources>
+
+        <Grid
+            IsVisible="{Binding IsAccount}"
+            VerticalOptions="CenterAndExpand">
+            
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="70" />
+            </Grid.ColumnDefinitions>
+
+            <Grid
+                Grid.Row="0"
+                Grid.Column="0"
+                RowSpacing="3"
+                Margin="12,0,0,0"
+                VerticalOptions="Center">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Label
+                    Grid.Column="0"
+                    Grid.Row="0"
+                    Text="{Binding Account.Email}"
+                    StyleClass="list-title"
+                    LineBreakMode="TailTruncation" />
+                <Label
+                    Grid.Column="0"
+                    Grid.Row="1"
+                    Text="{Binding Account.Hostname}"
+                    StyleClass="list-sub"
+                    LineBreakMode="TailTruncation" />
+            </Grid>
+
+            <Label
+                Grid.Column="1"
+                Grid.Row="0"
+                Text="{Binding AuthStatusText}"
+                FontSize="Small"
+                FontAttributes="Italic"
+                LineBreakMode="NoWrap"
+                HorizontalOptions="End"
+                Margin="0,0,20,0"
+                VerticalOptions="Center" />
+        </Grid>
+
+        <Grid
+            IsVisible="{Binding IsAccount, Converter={StaticResource inverseBool}}"
+            VerticalOptions="CenterAndExpand">
+            
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="36" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Image
+                Grid.Column="0"
+                VerticalOptions="Center"
+                Margin="12,0,0,0"
+                WidthRequest="{OnPlatform 14, iOS=14, Android=26}"
+                HeightRequest="{OnPlatform 14, iOS=14, Android=26}"
+                Source="plus.png"
+                xct:IconTintColorEffect.TintColor="{DynamicResource TextColor}"
+                AutomationProperties.IsInAccessibleTree="False" />
+            <Label
+                Text="Add Account"
+                StyleClass="list-title"
+                LineBreakMode="TailTruncation"
+                VerticalOptions="Center"
+                Grid.Column="1" />
+        </Grid>
+    </Grid>
+</ViewCell>

@@ -207,13 +207,22 @@
     <BundleResource Include="Resources\autofill-kb%403x.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\cog.png" />
+    <BundleResource Include="Resources\cog_environment.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\cog%402x.png" />
+    <BundleResource Include="Resources\cog_environment%402x.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\cog%403x.png" />
+    <BundleResource Include="Resources\cog_environment%403x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\cog_settings.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\cog_settings%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\cog_settings%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\ext-act.png" />

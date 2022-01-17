@@ -28,7 +28,7 @@ namespace Bit.Core.Test.Services
 {
     public class SendServiceTests
     {
-        private string GetSendKey(string userId) => SendService.GetSendKey(userId);
+        private string GetSendKey(string userId) => Constants.SendsKey(userId);
 
         [Theory]
         [InlineCustomAutoData(new[] { typeof(SutProviderCustomization), typeof(TextSendCustomization) })]
@@ -36,7 +36,7 @@ namespace Bit.Core.Test.Services
         public async Task ReplaceAsync_Success(SutProvider<SendService> sutProvider, string userId, IEnumerable<SendData> sendDatas)
         {
             var actualSendDataDict = sendDatas.ToDictionary(d => d.Id, d => d);
-            sutProvider.GetDependency<IUserService>().GetUserIdAsync().Returns(userId);
+            sutProvider.GetDependency<IStateService>().GetActiveUserIdAsync().Returns(userId);
 
             await sutProvider.Sut.ReplaceAsync(actualSendDataDict);
 
@@ -53,7 +53,7 @@ namespace Bit.Core.Test.Services
         public async Task DeleteAsync_Success(int numberToDelete, SutProvider<SendService> sutProvider, string userId, IEnumerable<SendData> sendDatas)
         {
             var actualSendDataDict = sendDatas.ToDictionary(d => d.Id, d => d);
-            sutProvider.GetDependency<IUserService>().GetUserIdAsync().Returns(userId);
+            sutProvider.GetDependency<IStateService>().GetActiveUserIdAsync().Returns(userId);
             sutProvider.GetDependency<IStorageService>()
                 .GetAsync<Dictionary<string, SendData>>(GetSendKey(userId)).Returns(actualSendDataDict);
 
@@ -84,7 +84,7 @@ namespace Bit.Core.Test.Services
             var initialSendDatas = sendDatas.ToDictionary(d => d.Id, d => d);
             var idToDelete = initialSendDatas.First().Key;
             var expectedSends = initialSendDatas.Skip(1).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
-            sutProvider.GetDependency<IUserService>().GetUserIdAsync().Returns(userId);
+            sutProvider.GetDependency<IStateService>().GetActiveUserIdAsync().Returns(userId);
             sutProvider.GetDependency<IStorageService>()
                 .GetAsync<Dictionary<string, SendData>>(Arg.Any<string>()).Returns(initialSendDatas);
 
@@ -102,7 +102,7 @@ namespace Bit.Core.Test.Services
         public async Task GetAsync_Success(SutProvider<SendService> sutProvider, string userId, IEnumerable<SendData> sendDatas)
         {
             var sendDataDict = sendDatas.ToDictionary(d => d.Id, d => d);
-            sutProvider.GetDependency<IUserService>().GetUserIdAsync().Returns(userId);
+            sutProvider.GetDependency<IStateService>().GetActiveUserIdAsync().Returns(userId);
             sutProvider.GetDependency<IStorageService>().GetAsync<Dictionary<string, SendData>>(GetSendKey(userId)).Returns(sendDataDict);
 
             foreach (var dataKvp in sendDataDict)
@@ -117,7 +117,7 @@ namespace Bit.Core.Test.Services
         public async Task GetAsync_NonExistringId_ReturnsNull(SutProvider<SendService> sutProvider, string userId, IEnumerable<SendData> sendDatas)
         {
             var sendDataDict = sendDatas.ToDictionary(d => d.Id, d => d);
-            sutProvider.GetDependency<IUserService>().GetUserIdAsync().Returns(userId);
+            sutProvider.GetDependency<IStateService>().GetActiveUserIdAsync().Returns(userId);
             sutProvider.GetDependency<IStorageService>().GetAsync<Dictionary<string, SendData>>(GetSendKey(userId)).Returns(sendDataDict);
 
             var actual = await sutProvider.Sut.GetAsync(Guid.NewGuid().ToString());
@@ -131,7 +131,7 @@ namespace Bit.Core.Test.Services
         public async Task GetAllAsync_Success(SutProvider<SendService> sutProvider, string userId, IEnumerable<SendData> sendDatas)
         {
             var sendDataDict = sendDatas.ToDictionary(d => d.Id, d => d);
-            sutProvider.GetDependency<IUserService>().GetUserIdAsync().Returns(userId);
+            sutProvider.GetDependency<IStateService>().GetActiveUserIdAsync().Returns(userId);
             sutProvider.GetDependency<IStorageService>().GetAsync<Dictionary<string, SendData>>(GetSendKey(userId)).Returns(sendDataDict);
 
             var allExpected = sendDataDict.Select(kvp => new Send(kvp.Value));
@@ -154,7 +154,7 @@ namespace Bit.Core.Test.Services
             sutProvider.GetDependency<ICryptoService>().HasKeyAsync().Returns(true);
             ServiceContainer.Register("cryptoService", sutProvider.GetDependency<ICryptoService>());
             sutProvider.GetDependency<II18nService>().StringComparer.Returns(StringComparer.CurrentCulture);
-            sutProvider.GetDependency<IUserService>().GetUserIdAsync().Returns(userId);
+            sutProvider.GetDependency<IStateService>().GetActiveUserIdAsync().Returns(userId);
             sutProvider.GetDependency<IStorageService>().GetAsync<Dictionary<string, SendData>>(GetSendKey(userId)).Returns(sendDataDict);
 
             var actual = await sutProvider.Sut.GetAllDecryptedAsync();
@@ -175,7 +175,7 @@ namespace Bit.Core.Test.Services
         public async Task SaveWithServerAsync_NewTextSend_Success(SutProvider<SendService> sutProvider, string userId, SendResponse response, Send send)
         {
             send.Id = null;
-            sutProvider.GetDependency<IUserService>().GetUserIdAsync().Returns(userId);
+            sutProvider.GetDependency<IStateService>().GetActiveUserIdAsync().Returns(userId);
             sutProvider.GetDependency<IApiService>().PostSendAsync(Arg.Any<SendRequest>()).Returns(response);
 
             var fileContentBytes = new EncByteArray(Encoding.UTF8.GetBytes("This is the file content"));
@@ -208,7 +208,7 @@ namespace Bit.Core.Test.Services
         {
             send.Id = null;
             response.FileUploadType = FileUploadType.Azure;
-            sutProvider.GetDependency<IUserService>().GetUserIdAsync().Returns(userId);
+            sutProvider.GetDependency<IStateService>().GetActiveUserIdAsync().Returns(userId);
             sutProvider.GetDependency<IApiService>().PostFileTypeSendAsync(Arg.Any<SendRequest>()).Returns(response);
 
             var fileContentBytes = new EncByteArray(Encoding.UTF8.GetBytes("This is the file content"));
@@ -231,7 +231,7 @@ namespace Bit.Core.Test.Services
         public async Task SaveWithServerAsync_NewFileSend_LegacyFallback_Success(SutProvider<SendService> sutProvider, string userId, Send send, SendResponse response)
         {
             send.Id = null;
-            sutProvider.GetDependency<IUserService>().GetUserIdAsync().Returns(userId);
+            sutProvider.GetDependency<IStateService>().GetActiveUserIdAsync().Returns(userId);
             var error = new ErrorResponse(null, System.Net.HttpStatusCode.NotFound);
             sutProvider.GetDependency<IApiService>().PostFileTypeSendAsync(Arg.Any<SendRequest>()).Throws(new ApiException(error));
             sutProvider.GetDependency<IApiService>().PostSendFileAsync(Arg.Any<MultipartFormDataContent>()).Returns(response);
@@ -248,7 +248,7 @@ namespace Bit.Core.Test.Services
         [InlineCustomAutoData(new[] { typeof(SutProviderCustomization), typeof(FileSendCustomization) })]
         public async Task SaveWithServerAsync_PutSend_Success(SutProvider<SendService> sutProvider, string userId, SendResponse response, Send send)
         {
-            sutProvider.GetDependency<IUserService>().GetUserIdAsync().Returns(userId);
+            sutProvider.GetDependency<IStateService>().GetActiveUserIdAsync().Returns(userId);
             sutProvider.GetDependency<IApiService>().PutSendAsync(send.Id, Arg.Any<SendRequest>()).Returns(response);
 
             await sutProvider.Sut.SaveWithServerAsync(send, null);
@@ -281,7 +281,7 @@ namespace Bit.Core.Test.Services
         public async Task UpsertAsync_Update_Success(SutProvider<SendService> sutProvider, string userId, IEnumerable<SendData> initialSends)
         {
             var initialSendDict = initialSends.ToDictionary(s => s.Id, s => s);
-            sutProvider.GetDependency<IUserService>().GetUserIdAsync().Returns(userId);
+            sutProvider.GetDependency<IStateService>().GetActiveUserIdAsync().Returns(userId);
             sutProvider.GetDependency<IStorageService>().GetAsync<Dictionary<string, SendData>>(GetSendKey(userId)).Returns(initialSendDict);
 
             var updatedSends = CoreHelpers.Clone(initialSendDict);
@@ -311,7 +311,7 @@ namespace Bit.Core.Test.Services
         public async Task UpsertAsync_NewSends_Success(SutProvider<SendService> sutProvider, string userId, IEnumerable<SendData> initialSends, IEnumerable<SendData> newSends)
         {
             var initialSendDict = initialSends.ToDictionary(s => s.Id, s => s);
-            sutProvider.GetDependency<IUserService>().GetUserIdAsync().Returns(userId);
+            sutProvider.GetDependency<IStateService>().GetActiveUserIdAsync().Returns(userId);
             sutProvider.GetDependency<IStorageService>().GetAsync<Dictionary<string, SendData>>(GetSendKey(userId)).Returns(initialSendDict);
 
             var expectedDict = CoreHelpers.Clone(initialSendDict).Concat(newSends.Select(s => new KeyValuePair<string, SendData>(s.Id, s)));

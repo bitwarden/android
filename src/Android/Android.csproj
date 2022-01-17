@@ -171,7 +171,8 @@
     <AndroidResource Include="Resources\drawable-xxhdpi\logo_legacy.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\logo_white_legacy.png" />
     <AndroidResource Include="Resources\drawable\card.xml" />
-    <AndroidResource Include="Resources\drawable\cog.xml" />
+    <AndroidResource Include="Resources\drawable\cog_environment.xml" />
+    <AndroidResource Include="Resources\drawable\cog_settings.xml" />
     <AndroidResource Include="Resources\drawable\icon.xml" />
     <AndroidResource Include="Resources\drawable\ic_launcher_foreground.xml" />
     <AndroidResource Include="Resources\drawable\ic_warning.xml" />

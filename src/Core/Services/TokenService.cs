@@ -5,24 +5,21 @@ using System;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
+using Bit.Core.Models.Domain;
 
 namespace Bit.Core.Services
 {
     public class TokenService : ITokenService
     {
-        private readonly IStorageService _storageService;
+        private readonly IStateService _stateService;
 
         private string _token;
         private JObject _decodedToken;
         private string _refreshToken;
 
-        private const string Keys_AccessToken = "accessToken";
-        private const string Keys_RefreshToken = "refreshToken";
-        private const string Keys_TwoFactorTokenFormat = "twoFactorToken_{0}";
-
-        public TokenService(IStorageService storageService)
+        public TokenService(IStateService stateService)
         {
-            _storageService = storageService;
+            _stateService = stateService;
         }
 
         public async Task SetTokensAsync(string accessToken, string refreshToken)
@@ -43,7 +40,7 @@ namespace Bit.Core.Services
                 return;
             }
             
-            await _storageService.SaveAsync(Keys_AccessToken, token);
+            // await _stateService.SetAccessTokenAsync(token);
         }
 
         public async Task<string> GetTokenAsync()
@@ -52,7 +49,7 @@ namespace Bit.Core.Services
             {
                 return _token;
             }
-            _token = await _storageService.GetAsync<string>(Keys_AccessToken);
+            _token = await _stateService.GetAccessTokenAsync();
             return _token;
         }
 
@@ -66,7 +63,7 @@ namespace Bit.Core.Services
                 return;
             }
             
-            await _storageService.SaveAsync(Keys_RefreshToken, refreshToken);
+            // await _stateService.SetRefreshTokenAsync(refreshToken);
         }
 
         public async Task<string> GetRefreshTokenAsync()
@@ -75,7 +72,7 @@ namespace Bit.Core.Services
             {
                 return _refreshToken;
             }
-            _refreshToken = await _storageService.GetAsync<string>(Keys_RefreshToken);
+            _refreshToken = await _stateService.GetRefreshTokenAsync();
             return _refreshToken;
         }
 
@@ -97,27 +94,32 @@ namespace Bit.Core.Services
 
         public async Task SetTwoFactorTokenAsync(string token, string email)
         {
-            await _storageService.SaveAsync(string.Format(Keys_TwoFactorTokenFormat, email), token);
+            await _stateService.SetTwoFactorTokenAsync(token, new StorageOptions { Email = email });
         }
 
         public async Task<string> GetTwoFactorTokenAsync(string email)
         {
-            return await _storageService.GetAsync<string>(string.Format(Keys_TwoFactorTokenFormat, email));
+            return await _stateService.GetTwoFactorTokenAsync(new StorageOptions { Email = email });
         }
 
         public async Task ClearTwoFactorTokenAsync(string email)
         {
-            await _storageService.RemoveAsync(string.Format(Keys_TwoFactorTokenFormat, email));
+            await _stateService.SetTwoFactorTokenAsync(null, new StorageOptions { Email = email });
         }
 
-        public async Task ClearTokenAsync()
+        public async Task ClearTokenAsync(string userId = null)
+        {
+            ClearCache();
+            await Task.WhenAll(
+                _stateService.SetAccessTokenAsync(null, new StorageOptions { UserId = userId }),
+                _stateService.SetRefreshTokenAsync(null, new StorageOptions { UserId = userId }));
+        }
+
+        public void ClearCache()
         {
             _token = null;
             _decodedToken = null;
             _refreshToken = null;
-            await Task.WhenAll(
-                _storageService.RemoveAsync(Keys_AccessToken),
-                _storageService.RemoveAsync(Keys_RefreshToken));
         }
 
         public JObject DecodeToken()
@@ -231,8 +233,12 @@ namespace Bit.Core.Services
             return decoded["iss"].Value<string>();
         }
 
-        public bool GetIsExternal()
+        public async Task<bool> GetIsExternal()
         {
+            if (_token == null)
+            {
+                await GetTokenAsync();
+            }
             var decoded = DecodeToken();
             if (decoded?["amr"] == null)
             {
@@ -243,8 +249,8 @@ namespace Bit.Core.Services
 
         private async Task<bool> SkipTokenStorage()
         {
-            var timeout = await _storageService.GetAsync<int?>(Constants.VaultTimeoutKey);
-            var action = await _storageService.GetAsync<string>(Constants.VaultTimeoutActionKey);
+            var timeout = await _stateService.GetVaultTimeoutAsync();
+            var action = await _stateService.GetVaultTimeoutActionAsync();
             return timeout.HasValue && action == "logOut";
         }
     }

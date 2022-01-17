@@ -35,7 +35,7 @@ namespace Bit.iOS
         private IMessagingService _messagingService;
         private IBroadcasterService _broadcasterService;
         private IStorageService _storageService;
-        private IVaultTimeoutService _vaultTimeoutService;
+        private IStateService _stateService;
         private IEventService _eventService;
 
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
@@ -47,7 +47,7 @@ namespace Bit.iOS
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
-            _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _eventService = ServiceContainer.Resolve<IEventService>("eventService");
 
             LoadApplication(new App.App(null));
@@ -87,11 +87,6 @@ namespace Bit.iOS
                 else if (message.Command == "showAppExtension")
                 {
                     Device.BeginInvokeOnMainThread(() => ShowAppExtension((ExtensionPageViewModel)message.Data));
-                }
-                else if (message.Command == "showStatusBar")
-                {
-                    Device.BeginInvokeOnMainThread(() =>
-                        UIApplication.SharedApplication.SetStatusBarHidden(!(bool)message.Data, false));
                 }
                 else if (message.Command == "syncCompleted")
                 {
@@ -160,7 +155,7 @@ namespace Bit.iOS
                 }
                 else if (message.Command == "vaultTimeoutActionChanged")
                 {
-                    var timeoutAction = await _storageService.GetAsync<string>(Constants.VaultTimeoutActionKey);
+                    var timeoutAction = await _stateService.GetVaultTimeoutActionAsync();
                     if (timeoutAction == "logOut")
                     {
                         await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
@@ -195,13 +190,12 @@ namespace Bit.iOS
             UIApplication.SharedApplication.KeyWindow.AddSubview(view);
             UIApplication.SharedApplication.KeyWindow.BringSubviewToFront(view);
             UIApplication.SharedApplication.KeyWindow.EndEditing(true);
-            UIApplication.SharedApplication.SetStatusBarHidden(true, false);
             base.OnResignActivation(uiApplication);
         }
 
         public override void DidEnterBackground(UIApplication uiApplication)
         {
-            _storageService.SaveAsync(Constants.LastActiveTimeKey, _deviceActionService.GetActiveTime());
+            _stateService.SetLastActiveTimeAsync(_deviceActionService.GetActiveTime());
             _messagingService.Send("slept");
             base.DidEnterBackground(uiApplication);
         }
@@ -214,7 +208,6 @@ namespace Bit.iOS
             if (view != null)
             {
                 view.RemoveFromSuperview();
-                UIApplication.SharedApplication.SetStatusBarHidden(false, false);
             }
         }
 

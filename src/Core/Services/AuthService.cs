@@ -14,13 +14,12 @@ namespace Bit.Core.Services
         private readonly ICryptoService _cryptoService;
         private readonly ICryptoFunctionService _cryptoFunctionService;
         private readonly IApiService _apiService;
-        private readonly IUserService _userService;
+        private readonly IStateService _stateService;
         private readonly ITokenService _tokenService;
         private readonly IAppIdService _appIdService;
         private readonly II18nService _i18nService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IMessagingService _messagingService;
-        private readonly IVaultTimeoutService _vaultTimeoutService;
         private readonly IKeyConnectorService _keyConnectorService;
         private readonly bool _setCryptoKeys;
 
@@ -30,7 +29,7 @@ namespace Bit.Core.Services
             ICryptoService cryptoService,
             ICryptoFunctionService cryptoFunctionService,
             IApiService apiService,
-            IUserService userService,
+            IStateService stateService,
             ITokenService tokenService,
             IAppIdService appIdService,
             II18nService i18nService,
@@ -43,13 +42,12 @@ namespace Bit.Core.Services
             _cryptoService = cryptoService;
             _cryptoFunctionService = cryptoFunctionService;
             _apiService = apiService;
-            _userService = userService;
+            _stateService = stateService;
             _tokenService = tokenService;
             _appIdService = appIdService;
             _i18nService = i18nService;
             _platformUtilsService = platformUtilsService;
             _messagingService = messagingService;
-            _vaultTimeoutService = vaultTimeoutService;
             _keyConnectorService = keyConnectorService;
             _setCryptoKeys = setCryptoKeys;
 
@@ -355,8 +353,23 @@ namespace Bit.Core.Services
                 await _tokenService.SetTwoFactorTokenAsync(tokenResponse.TwoFactorToken, email);
             }
             await _tokenService.SetTokensAsync(tokenResponse.AccessToken, tokenResponse.RefreshToken);
-            await _userService.SetInformationAsync(_tokenService.GetUserId(), _tokenService.GetEmail(),
-                tokenResponse.Kdf, tokenResponse.KdfIterations);
+            await _stateService.AddAccountAsync(
+                new Account(
+                    new Account.AccountProfile()
+                    {
+                        UserId = _tokenService.GetUserId(),
+                        Email = _tokenService.GetEmail(),
+                        HasPremiumPersonally = _tokenService.GetPremium(),
+                        KdfType = tokenResponse.Kdf,
+                        KdfIterations = tokenResponse.KdfIterations,
+                    },
+                    new Account.AccountTokens()
+                    {
+                        AccessToken = tokenResponse.AccessToken,
+                        RefreshToken = tokenResponse.RefreshToken,
+                    }
+                )
+            );
             if (_setCryptoKeys)
             {
                 if (key != null)
@@ -430,7 +443,7 @@ namespace Bit.Core.Services
 
             }
 
-            _vaultTimeoutService.BiometricLocked = false;
+            _stateService.BiometricLocked = false;
             _messagingService.Send("loggedIn");
             return result;
         }

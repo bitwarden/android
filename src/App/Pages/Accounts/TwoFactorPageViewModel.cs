@@ -1,6 +1,5 @@
 ﻿using Bit.App.Abstractions;
 using Bit.App.Resources;
-using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
@@ -23,7 +22,6 @@ namespace Bit.App.Pages
         private readonly IDeviceActionService _deviceActionService;
         private readonly IAuthService _authService;
         private readonly ISyncService _syncService;
-        private readonly IStorageService _storageService;
         private readonly IApiService _apiService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IEnvironmentService _environmentService;
@@ -43,7 +41,6 @@ namespace Bit.App.Pages
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _authService = ServiceContainer.Resolve<IAuthService>("authService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
-            _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _apiService = ServiceContainer.Resolve<IApiService>("apiService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
@@ -303,8 +300,6 @@ namespace Bit.App.Pages
                 } 
                 else
                 {
-                    var disableFavicon = await _storageService.GetAsync<bool?>(Constants.DisableFaviconKey);
-                    await _stateService.SaveAsync(Constants.DisableFaviconKey, disableFavicon.GetValueOrDefault());
                     TwoFactorAuthSuccessAction?.Invoke();
                 }
             }
