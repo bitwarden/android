@@ -473,11 +473,13 @@ jobs:
           cp -r $ARCHIVE_DSYMS_PATH $EXPORT_PATH
         shell: bash
 
-      - name: Upload App Store dSYM artifact
+      - name: Upload App Store .ipa & dSYMs artifacts
         uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700  # v2.2.4
         with:
-          name: Bitwarden AppStore
-          path: ./bitwarden-export
+          name: Bitwarden iOS
+          path: |
+            ./bitwarden-export/Bitwarden.ipa
+            ./bitwarden-export/dSYMs/*.*
           if-no-files-found: error
 
       - name: Deploy to App Store
