@@ -195,8 +195,8 @@ namespace Bit.iOS
 
         public override void DidEnterBackground(UIApplication uiApplication)
         {
-            _stateService.SetLastActiveTimeAsync(_deviceActionService.GetActiveTime());
-            _messagingService.Send("slept");
+            _stateService?.SetLastActiveTimeAsync(_deviceActionService.GetActiveTime());
+            _messagingService?.Send("slept");
             base.DidEnterBackground(uiApplication);
         }
 
@@ -213,7 +213,7 @@ namespace Bit.iOS
 
         public override void WillEnterForeground(UIApplication uiApplication)
         {
-            _messagingService.Send("resumed");
+            _messagingService?.Send("resumed");
             base.WillEnterForeground(uiApplication);
         }
 
