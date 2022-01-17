@@ -121,19 +121,19 @@ namespace Bit.App.Pages
                 if (isVisible)
                 {
                     // start listView in default (off-screen) position
-                    await listView.TranslateTo(0, listView.Height * -1,0);
-                    
+                    await listView.TranslateTo(0, listView.Height * -1, 0);
+
                     // set overlay opacity to zero before making visible and start fade-in
                     overlay.Opacity = 0;
                     overlay.IsVisible = true;
                     overlay.FadeTo(1, 100);
-                    
+
                     if (Device.RuntimePlatform == Device.Android && fab != null)
                     {
                         // start fab fade-out
                         fab.FadeTo(0, 200);
                     }
-                    
+
                     // slide account list into view
                     await listView.TranslateTo(0, 0, 200, Easing.SinOut);
                 }
@@ -141,23 +141,24 @@ namespace Bit.App.Pages
                 {
                     // start overlay fade-out
                     overlay.FadeTo(0, 200);
-                    
+
                     if (Device.RuntimePlatform == Device.Android && fab != null)
                     {
                         // start fab fade-in
                         fab.FadeTo(1, 200);
                     }
-                    
+
                     // slide account list out of view
                     await listView.TranslateTo(0, listView.Height * -1, 200, Easing.SinIn);
-                    
+
                     // remove overlay
                     overlay.IsVisible = false;
                 }
             });
         }
-        
-        protected async Task AccountRowSelectedAsync(object sender, SelectedItemChangedEventArgs e, View listView, View overlay, View fab = null)
+
+        protected async Task AccountRowSelectedAsync(object sender, SelectedItemChangedEventArgs e, View listView,
+            View overlay, View fab = null)
         {
             if (!DoOnce())
             {
@@ -167,7 +168,7 @@ namespace Bit.App.Pages
             {
                 return;
             }
-            
+
             ((Xamarin.Forms.ListView)sender).SelectedItem = null;
             await Task.Delay(100);
             await ShowAccountListAsync(false, listView, overlay, fab);

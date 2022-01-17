@@ -477,7 +477,6 @@ namespace Bit.Core.Services
             }
             var newHistory = await EncryptHistoryAsync(currentHistory);
             token.ThrowIfCancellationRequested();
-            var userId = await _stateService.GetActiveUserIdAsync();
             await _stateService.SetEncryptedPasswordGenerationHistoryAsync(newHistory);
         }
 

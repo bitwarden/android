@@ -1468,8 +1468,8 @@ namespace Bit.Core.Services
                 }
                 else
                 {
-                    var vaultTimeService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
-                    if (await vaultTimeService.IsLockedAsync(accountView.UserId))
+                    // var vaultTimeService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
+                    // if (await vaultTimeService.IsLockedAsync(accountView.UserId))
                     // {
                     //     var action = await GetVaultTimeoutActionAsync(new StorageOptions { UserId = accountView.UserId });
                     //     if (action == "logOut")

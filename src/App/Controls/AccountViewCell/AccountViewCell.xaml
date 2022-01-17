@@ -23,7 +23,7 @@
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="70" />
+                <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
             <Grid
@@ -64,7 +64,7 @@
                 FontAttributes="Italic"
                 LineBreakMode="NoWrap"
                 HorizontalOptions="End"
-                Margin="0,0,20,0"
+                Margin="10,0,20,0"
                 VerticalOptions="Center" />
         </Grid>
 

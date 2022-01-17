@@ -3,7 +3,6 @@ using Bit.App.Models;
 using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.Data;
-using Bit.Core.Models.Domain;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
 
@@ -47,7 +46,7 @@ namespace Bit.App.Pages
             var settingsPage = new NavigationPage(new SettingsPage(this))
             {
                 Title = AppResources.Settings,
-                IconImageSource = "cogs.png"
+                IconImageSource = "cog_settings.png"
             };
             Children.Add(settingsPage);
 

@@ -46,7 +46,7 @@ namespace Bit.Core.Services
         {
             await _stateService.SetOrganizationsAsync(organizations);
         }
-        
+
         public async Task ClearAllAsync(string userId)
         {
             await _stateService.SetOrganizationsAsync(null, new StorageOptions { UserId = userId });

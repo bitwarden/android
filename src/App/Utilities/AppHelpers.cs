@@ -2,7 +2,6 @@
 using Bit.App.Abstractions;
 using Bit.App.Pages;
 using Bit.App.Resources;
-using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
@@ -15,7 +14,6 @@ using Bit.App.Models;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.Data;
-using Bit.Core.Models.Domain;
 using Newtonsoft.Json;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -336,28 +334,10 @@ namespace Bit.App.Utilities
         {
             var currentBuild = deviceActionService.GetBuildNumber();
             var lastBuild = await stateService.GetLastBuildAsync();
-            // if (lastBuild == null)
-            // {
-            //     // Installed
-            //     var currentTimeout = await stateService.GetVaultTimeoutAsync();
-            //     if (currentTimeout == null)
-            //     {
-            //         await stateService.SetVaultTimeoutAsync(15);
-            //     }
-            //
-            //     var currentAction = await stateService.GetVaultTimeoutActionAsync();
-            //     if (currentAction == null)
-            //     {
-            //         await stateService.SetVaultTimeoutActionAsync("lock");
-            //     }
-            // }
-            if (lastBuild != currentBuild)
+            if (lastBuild == null || lastBuild != currentBuild)
             {
                 // Updated
                 var tasks = Task.Run(() => syncService.FullSyncAsync(true));
-            }
-            if (lastBuild != currentBuild)
-            {
                 await stateService.SetLastBuildAsync(currentBuild);
                 return true;
             }
@@ -487,7 +467,7 @@ namespace Bit.App.Utilities
             {
                 userId = await stateService.GetActiveUserIdAsync();
             }
-            
+
             await Task.WhenAll(
                 syncService.SetLastSyncAsync(DateTime.MinValue),
                 tokenService.ClearTokenAsync(userId),
@@ -503,7 +483,7 @@ namespace Bit.App.Utilities
             stateService.BiometricLocked = true;
             searchService.ClearIndex();
         }
-        
+
         public static async Task ClearServiceCache()
         {
             var tokenService = ServiceContainer.Resolve<ITokenService>("tokenService");
@@ -514,7 +494,7 @@ namespace Bit.App.Utilities
                 "passwordGenerationService");
             var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             var searchService = ServiceContainer.Resolve<ISearchService>("searchService");
-            
+
             await Task.WhenAll(
                 cipherService.ClearCacheAsync(),
                 deviceActionService.ClearCacheAsync());

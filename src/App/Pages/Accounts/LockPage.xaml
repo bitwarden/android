@@ -123,8 +123,8 @@
                             StyleClass="box-row"
                             Padding="0, 10, 0, 0">
                             <Label
-                            Text="{Binding LockedVerifyText}"
-                            StyleClass="box-footer-label" />
+                                Text="{Binding LockedVerifyText}"
+                                StyleClass="box-footer-label" />
                             <Label
                                 Text="{Binding LoggedInAsText}"
                                 StyleClass="box-footer-label"
@@ -137,7 +137,8 @@
                             StyleClass="box-footer-label,text-danger,text-bold"
                             IsVisible="{Binding BiometricIntegrityValid, Converter={StaticResource inverseBool}}" />
                         <Button Text="{Binding BiometricButtonText}" Clicked="Biometric_Clicked"
-                                IsVisible="{Binding BiometricButtonVisible}"></Button>
+                                IsVisible="{Binding BiometricButtonVisible}">
+                        </Button>
                         <Button
                             x:Name="_unlockButton"
                             Text="{u:I18n Unlock}"
@@ -148,7 +149,7 @@
             </ScrollView>
         </ResourceDictionary>
     </ContentPage.Resources>
-    
+
     <AbsoluteLayout
         x:Name="_absLayout"
         VerticalOptions="FillAndExpand"

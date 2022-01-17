@@ -33,7 +33,6 @@ namespace Bit.App.Pages
             }
             if (_appOptions?.ShowAccountSwitcher ?? false)
             {
-                _appOptions.ShowAccountSwitcher = false;
                 ToolbarItems.Add(_accountAvatar);
             }
         }
@@ -50,6 +49,7 @@ namespace Bit.App.Pages
             _mainContent.Content = _mainLayout;
             if (_appOptions?.ShowAccountSwitcher ?? false)
             {
+                _appOptions.ShowAccountSwitcher = false;
                 _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
             }
             _broadcasterService.Subscribe(nameof(HomePage), async (message) =>

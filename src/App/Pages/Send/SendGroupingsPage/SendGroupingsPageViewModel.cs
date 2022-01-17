@@ -123,7 +123,6 @@ namespace Bit.App.Pages
             {
                 return;
             }
-            var userId = await _stateService.GetActiveUserIdAsync();
             if (await _stateService.GetSyncOnRefreshAsync() && Refreshing && !SyncRefreshing)
             {
                 SyncRefreshing = true;

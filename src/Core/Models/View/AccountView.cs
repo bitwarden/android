@@ -15,13 +15,13 @@ namespace Bit.Core.Models.View
                 return;
             }
             IsAccount = true;
-            
+
             UserId = a.Profile.UserId;
             Email = a.Profile.Email;
             Hostname = a.Settings.EnvironmentUrls.Base;
             AuthStatus = a.Profile.AuthStatus;
         }
-        
+
         public bool IsAccount { get; set; }
         public string UserId { get; set; }
         public string Email { get; set; }

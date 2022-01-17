@@ -36,7 +36,6 @@ namespace Bit.App.Pages
             }
             if (_appOptions?.ShowAccountSwitcher ?? false)
             {
-                _appOptions.ShowAccountSwitcher = false;
                 ToolbarItems.Add(_accountAvatar);
                 ToolbarItems.Remove(_closeItem);
             }
@@ -62,6 +61,7 @@ namespace Bit.App.Pages
             _mainContent.Content = _mainLayout;
             if (_appOptions?.ShowAccountSwitcher ?? false)
             {
+                _appOptions.ShowAccountSwitcher = false;
                 _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
             }
             await _vm.InitAsync();

@@ -12,7 +12,7 @@ namespace Bit.Core.Models.Domain
         public AccountKeys Keys;
 
         public Account() { }
-        
+
         public Account(AccountProfile profile, AccountTokens tokens)
         {
             Profile = profile;
@@ -35,8 +35,11 @@ namespace Bit.Core.Models.Domain
 
             public AccountProfile(AccountProfile copy)
             {
-                if (copy == null) { return;}
-                
+                if (copy == null)
+                {
+                    return;
+                }
+
                 UserId = copy.UserId;
                 Email = copy.Email;
                 AuthStatus = copy.AuthStatus;
@@ -44,7 +47,7 @@ namespace Bit.Core.Models.Domain
                 KdfType = copy.KdfType;
                 KdfIterations = copy.KdfIterations;
             }
-            
+
             public string UserId;
             public string Email;
             public AuthenticationStatus? AuthStatus;
@@ -52,45 +55,51 @@ namespace Bit.Core.Models.Domain
             public KdfType? KdfType;
             public int? KdfIterations;
         }
-        
-        public class  AccountTokens
+
+        public class AccountTokens
         {
-            public AccountTokens() {}
+            public AccountTokens() { }
 
             public AccountTokens(AccountTokens copy)
             {
-                if (copy == null) { return;}
-                
+                if (copy == null)
+                {
+                    return;
+                }
+
                 AccessToken = copy.AccessToken;
                 RefreshToken = copy.RefreshToken;
             }
-            
+
             public string AccessToken;
             public string RefreshToken;
         }
-        
+
         public class AccountSettings
         {
-            public AccountSettings() {}
+            public AccountSettings() { }
 
             public AccountSettings(AccountSettings copy)
             {
-                if (copy == null) { return;}
-                
+                if (copy == null)
+                {
+                    return;
+                }
+
                 EnvironmentUrls = copy.EnvironmentUrls;
                 PinProtected = copy.PinProtected;
             }
-            
+
             public EnvironmentUrlData EnvironmentUrls;
             public EncString PinProtected;
         }
-        
+
         public class AccountKeys
         {
             public SymmetricCryptoKey Key;
             public string KeyHash;
             public SymmetricCryptoKey EncKey;
-            public Dictionary<string, SymmetricCryptoKey> 
+            public Dictionary<string, SymmetricCryptoKey>
                 OrganizationKeys = new Dictionary<string, SymmetricCryptoKey>();
             public byte[] PrivateKey;
             public byte[] PublicKey;

@@ -215,8 +215,8 @@ namespace Bit.App.Pages
                     {
                         ResetPasswordKey = encryptedKey.EncryptedString
                     };
-                    // Enroll user
                     var userId = await _stateService.GetActiveUserIdAsync();
+                    // Enroll user
                     await _apiService.PutOrganizationUserResetPasswordEnrollmentAsync(OrgId, userId, resetRequest);
                 }
                 

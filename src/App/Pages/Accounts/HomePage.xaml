@@ -15,9 +15,10 @@
     </ContentPage.BindingContext>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Icon="cog_environment.png" Clicked="Environment_Clicked" Order="Primary"
-                AutomationProperties.IsInAccessibleTree="True"
-                AutomationProperties.Name="{u:I18n Options}" />
+        <ToolbarItem
+            Icon="cog_environment.png" Clicked="Environment_Clicked" Order="Primary"
+            AutomationProperties.IsInAccessibleTree="True"
+            AutomationProperties.Name="{u:I18n Options}" />
     </ContentPage.ToolbarItems>
 
     <ContentPage.Resources>
@@ -34,7 +35,7 @@
                 AutomationProperties.Name="{u:I18n Account}" />
             <ToolbarItem x:Name="_closeItem" x:Key="closeItem" Text="{u:I18n Close}"
                          Clicked="Close_Clicked" Order="Primary" />
-            
+
             <StackLayout x:Name="_mainLayout" x:Key="mainLayout" Spacing="0" Padding="10, 5">
                 <StackLayout VerticalOptions="CenterAndExpand" Spacing="20">
                     <Image
@@ -43,9 +44,10 @@
                         VerticalOptions="Center" />
                     <Label Text="{u:I18n LoginOrCreateNewAccount}"
                            StyleClass="text-lg"
-                           HorizontalTextAlignment="Center"></Label>
+                           HorizontalTextAlignment="Center">
+                    </Label>
                     <StackLayout Spacing="5">
-                        <Button Text="{u:I18n LogIn}" 
+                        <Button Text="{u:I18n LogIn}"
                                 StyleClass="btn-primary"
                                 Clicked="LogIn_Clicked" />
                         <Button Text="{u:I18n CreateAccount}"
@@ -57,7 +59,7 @@
             </StackLayout>
         </ResourceDictionary>
     </ContentPage.Resources>
-    
+
     <AbsoluteLayout
         x:Name="_absLayout"
         VerticalOptions="FillAndExpand"

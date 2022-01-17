@@ -1,8 +1,6 @@
 ﻿using System;
 using Bit.App.Models;
-using Bit.App.Services;
 using Bit.App.Styles;
-using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
