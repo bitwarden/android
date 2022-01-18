@@ -11,8 +11,8 @@ using Bit.Core.Enums;
 using Bit.Core.Utilities;
 #if !FDROID
 using Microsoft.AppCenter.Crashes;
-using System;
 #endif
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
