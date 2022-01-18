@@ -69,8 +69,13 @@ namespace Bit.Droid.Autofill
             }
 
             // build response
-            var response = AutofillHelpers.BuildFillResponse(parser, items, locked, inlineAutofillEnabled, request);
-            callback.OnSuccess(response);
+            var response = AutofillHelpers.CreateFillResponse(parser, items, locked, inlineAutofillEnabled, request);
+            var disableSavePrompt = await _storageService.GetAsync<bool?>(Constants.AutofillDisableSavePromptKey);
+            if (!disableSavePrompt.GetValueOrDefault())
+            {
+                AutofillHelpers.AddSaveInfo(parser, request, response, parser.FieldCollection);
+            }
+            callback.OnSuccess(response.Build());
         }
 
         public async override void OnSaveRequest(SaveRequest request, SaveCallback callback)
