@@ -27,31 +27,27 @@
         <ScrollView>
             <Grid
                 RowSpacing="10"
+                ColumnSpacing="10"
                 RowDefinitions="Auto, Auto, Auto"
+                ColumnDefinitions="*, *"
                 Padding="10">
-                <StackLayout
-                    StyleClass="box-row"
-                    Grid.Row="0">
-                    <Label
-                        Text="{u:I18n SendVerificationCodeToEmail}"
-                        StyleClass="box-label"
-                        LineBreakMode="WordWrap"
-                        Margin="0,0,0,10" />
-                    <Button x:Name="_requestOTP"
-                        Text="{u:I18n SendCode}"
-                        Clicked="RequestOTP_Clicked"
-                        HorizontalOptions="Fill"
-                        VerticalOptions="End"
-                        Margin="0,0,0,10"/>
-                </StackLayout>
+                <Label
+                    Grid.Row="0"
+                    Grid.ColumnSpan="2"
+                    Padding="0,10"
+                    Text="{Binding SendCodeStatus}"
+                    StyleClass="box-label"
+                    LineBreakMode="WordWrap"
+                    Margin="0,0,0,10" />
                 <Grid
                     StyleClass="box-row"
                     Grid.Row="1"
+                    Grid.ColumnSpan="2"
                     RowDefinitions="Auto,Auto,Auto"
                     ColumnDefinitions="*,Auto"
                     Padding="0">
                     <Label
-                        Text="{Binding SecretName}"
+                        Text="{u:I18n VerificationCode}"
                         StyleClass="box-label"
                         Grid.Row="0"
                         Grid.ColumnSpan="2" />
@@ -87,9 +83,16 @@
                     Padding="10,0"
                     Text="{Binding MainActionText}"
                     Command="{Binding MainActionCommand}"
-                    HorizontalOptions="Start"
-                    VerticalOptions="End"
-                    TextTransform="Uppercase"/>
+                    HorizontalOptions="FillAndExpand"
+                    VerticalOptions="Start" />
+                <Button
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    Text="{u:I18n ResendCode}"
+                    Padding="10,0"
+                    Command="{Binding RequestOTPCommand}"
+                    HorizontalOptions="Fill"
+                    VerticalOptions="Start"/>
             </Grid>
         </ScrollView>
     </ContentPage.Content>

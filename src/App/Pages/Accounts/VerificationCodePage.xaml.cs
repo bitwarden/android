@@ -45,14 +45,5 @@ namespace Bit.App.Pages.Accounts
                 await Navigation.PopModalAsync();
             }
         }
-
-        private async void RequestOTP_Clicked(object sender, EventArgs e)
-        {
-            if (DoOnce())
-            {
-                await _vm.RequestOTPAsync();
-                _requestOTP.IsEnabled = false;
-            }
-        }
     }
 }

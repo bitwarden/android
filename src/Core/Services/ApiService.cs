@@ -180,7 +180,7 @@ namespace Bit.Core.Services
 
         public Task PostAccountRequestOTP()
         {
-            return SendAsync<object, object>(HttpMethod.Post, "/accounts/request-otp", null, true, false);
+            return SendAsync<object, object>(HttpMethod.Post, "/accounts/request-otp", null, true, false, false);
         }
 
         public Task PostAccountVerifyOTPAsync(VerifyOTPRequest request)

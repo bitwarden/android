@@ -161,8 +161,7 @@ namespace Bit.iOS.Core.Utilities
 
             var verificationActionsFlowHelper = new VerificationActionsFlowHelper(
             ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService"),
-            ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService"),
-            ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService"));
+            ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService"));
             ServiceContainer.Register<IVerificationActionsFlowHelper>("verificationActionsFlowHelper", verificationActionsFlowHelper);
 
             if (postBootstrapFunc != null)

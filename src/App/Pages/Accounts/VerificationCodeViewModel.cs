@@ -24,7 +24,7 @@ namespace Bit.App.Pages
         private readonly IVerificationActionsFlowHelper _verificationActionsFlowHelper;
 
         private bool _showPassword;
-        private string _secret, _secretName, _mainActionText;
+        private string _secret, _mainActionText, _sendCodeStatus;
 
         public VerificationCodeViewModel()
         {
@@ -35,9 +35,10 @@ namespace Bit.App.Pages
             _verificationActionsFlowHelper = ServiceContainer.Resolve<IVerificationActionsFlowHelper>("verificationActionsFlowHelper");
 
             PageTitle = AppResources.VerificationCode;
-
+            
             TogglePasswordCommand = new Command(TogglePassword);
             MainActionCommand = new AsyncCommand(MainActionAsync, allowsMultipleExecutions: false);
+            RequestOTPCommand = new AsyncCommand(RequestOTPAsync, allowsMultipleExecutions: false);
         }
 
         public bool ShowPassword
@@ -53,21 +54,23 @@ namespace Bit.App.Pages
             set => SetProperty(ref _secret, value);
         }
 
-        public string SecretName
-        {
-            get => _secretName;
-            set => SetProperty(ref _secretName, value);
-        }
-
         public string MainActionText
         {
             get => _mainActionText;
             set => SetProperty(ref _mainActionText, value);
         }
+        
+        public string SendCodeStatus
+        {
+            get => _sendCodeStatus;
+            set => SetProperty(ref _sendCodeStatus, value);
+        }
 
         public ICommand TogglePasswordCommand { get; }
 
         public ICommand MainActionCommand { get; }
+
+        public ICommand RequestOTPCommand { get; }
 
         public string ShowPasswordIcon => ShowPassword ? "" : "";
 
@@ -82,18 +85,31 @@ namespace Bit.App.Pages
         {
             try
             {
-                await _deviceActionService.ShowLoadingAsync(AppResources.Sending);
+                if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
+                {
+                    await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
+                        AppResources.InternetConnectionRequiredTitle, AppResources.Ok);
+
+                    SendCodeStatus = AppResources.AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain;
+                    return;
+                }
+
+                await _deviceActionService.ShowLoadingAsync(AppResources.SendingCode);
+
                 await _apiService.PostAccountRequestOTP();
-                await _deviceActionService.HideLoadingAsync();
+
+                SendCodeStatus = AppResources.AVerificationCodeWasSentToYourEmail;
+
                 _platformUtilsService.ShowToast(null, null, AppResources.CodeSent);
             }
             catch (ApiException e)
             {
                 await _deviceActionService.HideLoadingAsync();
+                SendCodeStatus = AppResources.AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain;
+
                 if (e?.Error != null)
                 {
-                    await _platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(),
-                        AppResources.AnErrorHasOccurred);
+                    await _platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(), AppResources.AnErrorHasOccurred);
                 }
             }
             catch (Exception ex)
@@ -102,6 +118,7 @@ namespace Bit.App.Pages
                 Crashes.TrackError(ex);
 #endif
                 await _deviceActionService.HideLoadingAsync();
+                SendCodeStatus = AppResources.AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain;
             }
         }
 
@@ -109,6 +126,19 @@ namespace Bit.App.Pages
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(Secret))
+                {
+                    await _platformUtilsService.ShowDialogAsync(AppResources.EnterTheVerificationCodeThatWasSentToYourEmail, AppResources.AnErrorHasOccurred);
+                    return;
+                }
+
+                if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
+                {
+                    await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
+                        AppResources.InternetConnectionRequiredTitle, AppResources.Ok);
+                    return;
+                }
+
                 await _deviceActionService.ShowLoadingAsync(AppResources.Verifying);
 
                 if (!await _userVerificationService.VerifyUser(Secret, Core.Enums.VerificationType.OTP))

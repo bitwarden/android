@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Pages;
 using Bit.App.Pages.Accounts;
-using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Utilities;
@@ -59,7 +58,6 @@ namespace Bit.App.Utilities
     {
         private readonly IKeyConnectorService _keyConnectorService;
         private readonly IPasswordRepromptService _passwordRepromptService;
-        private readonly IPlatformUtilsService _platformUtilsService;
 
         private VerificationFlowAction? _action;
         private IActionFlowParmeters _parameters;
@@ -69,12 +67,10 @@ namespace Bit.App.Utilities
         private readonly Dictionary<VerificationFlowAction, IActionFlowExecutioner> _actionExecutionerDictionary = new Dictionary<VerificationFlowAction, IActionFlowExecutioner>();
 
         public VerificationActionsFlowHelper(IKeyConnectorService keyConnectorService,
-            IPasswordRepromptService passwordRepromptService,
-            IPlatformUtilsService platformUtilsService)
+            IPasswordRepromptService passwordRepromptService)
         {
             _keyConnectorService = keyConnectorService;
             _passwordRepromptService = passwordRepromptService;
-            _platformUtilsService = platformUtilsService;
 
             _actionExecutionerDictionary.Add(VerificationFlowAction.DeleteAccount, ServiceContainer.Resolve<IDeleteAccountActionFlowExecutioner>("deleteAccountActionFlowExecutioner"));
         }
@@ -114,11 +110,10 @@ namespace Bit.App.Utilities
                     var (password, valid) = await _passwordRepromptService.ShowPasswordPromptAndGetItAsync();
                     if (!valid)
                     {
-                        await _platformUtilsService.ShowDialogAsync(AppResources.InvalidMasterPassword);
                         return;
                     }
 
-                    _parameters.Secret = password;
+                    GetParameters().Secret = password;
                     await ExecuteAsync(_parameters);
                     break;
                 case VerificationType.OTP:
