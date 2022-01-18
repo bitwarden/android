@@ -45,13 +45,13 @@
                 <Label
                     Grid.Column="0"
                     Grid.Row="0"
-                    Text="{Binding Account.Email}"
+                    Text="{Binding AccountView.Email}"
                     StyleClass="list-title"
                     LineBreakMode="TailTruncation" />
                 <Label
                     Grid.Column="0"
                     Grid.Row="1"
-                    Text="{Binding Account.Hostname}"
+                    Text="{Binding AccountView.Hostname}"
                     StyleClass="list-sub"
                     LineBreakMode="TailTruncation" />
             </Grid>

@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using Bit.Core.Enums;
+﻿using Bit.Core.Enums;
 using Bit.Core.Models.Data;
 
 namespace Bit.Core.Models.Domain
 {
     public class Account : Domain
     {
+        public AuthenticationStatus? AuthStatus;
         public AccountProfile Profile;
         public AccountTokens Tokens;
         public AccountSettings Settings;
@@ -24,6 +24,7 @@ namespace Bit.Core.Models.Domain
         public Account(Account account)
         {
             // Copy constructor excludes Keys (for storage)
+            AuthStatus = account.AuthStatus;
             Profile = new AccountProfile(account.Profile);
             Tokens = new AccountTokens(account.Tokens);
             Settings = new AccountSettings(account.Settings);
@@ -42,18 +43,20 @@ namespace Bit.Core.Models.Domain
 
                 UserId = copy.UserId;
                 Email = copy.Email;
-                AuthStatus = copy.AuthStatus;
-                HasPremiumPersonally = copy.HasPremiumPersonally;
+                Stamp = copy.Stamp;
                 KdfType = copy.KdfType;
                 KdfIterations = copy.KdfIterations;
+                EmailVerified = copy.EmailVerified;
+                HasPremiumPersonally = copy.HasPremiumPersonally;
             }
 
             public string UserId;
             public string Email;
-            public AuthenticationStatus? AuthStatus;
-            public bool? HasPremiumPersonally;
+            public string Stamp;
             public KdfType? KdfType;
             public int? KdfIterations;
+            public bool? EmailVerified;
+            public bool? HasPremiumPersonally;
         }
 
         public class AccountTokens
@@ -88,21 +91,19 @@ namespace Bit.Core.Models.Domain
 
                 EnvironmentUrls = copy.EnvironmentUrls;
                 PinProtected = copy.PinProtected;
+                VaultTimeout = copy.VaultTimeout;
+                VaultTimeoutAction = copy.VaultTimeoutAction;
             }
 
             public EnvironmentUrlData EnvironmentUrls;
             public EncString PinProtected;
+            public int? VaultTimeout;
+            public string VaultTimeoutAction;
         }
 
         public class AccountKeys
         {
             public SymmetricCryptoKey Key;
-            public string KeyHash;
-            public SymmetricCryptoKey EncKey;
-            public Dictionary<string, SymmetricCryptoKey>
-                OrganizationKeys = new Dictionary<string, SymmetricCryptoKey>();
-            public byte[] PrivateKey;
-            public byte[] PublicKey;
         }
     }
 }

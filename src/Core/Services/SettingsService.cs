@@ -2,7 +2,6 @@
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Bit.Core.Models.Domain;
 
 namespace Bit.Core.Services
 {
@@ -44,7 +43,7 @@ namespace Bit.Core.Services
 
         public async Task ClearAsync(string userId)
         {
-            await _stateService.SetSettingsAsync(null, new StorageOptions { UserId = userId });
+            await _stateService.SetSettingsAsync(null, userId);
             ClearCache();
         }
 

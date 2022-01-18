@@ -181,7 +181,7 @@ namespace Bit.Core.Services
 
         public async Task ClearAsync(string userId)
         {
-            await _stateService.SetEncryptedCollectionsAsync(null, new StorageOptions { UserId = userId });
+            await _stateService.SetEncryptedCollectionsAsync(null, userId);
             _decryptedCollectionCache = null;
         }
 

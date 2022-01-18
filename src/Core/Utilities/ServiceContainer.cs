@@ -30,9 +30,9 @@ namespace Bit.Core.Utilities
             SearchService searchService = null;
 
             var tokenService = new TokenService(stateService);
-            var apiService = new ApiService(tokenService, platformUtilsService, (bool expired) =>
+            var apiService = new ApiService(tokenService, platformUtilsService, (extras) =>
             {
-                messagingService.Send("logout", expired);
+                messagingService.Send("logout", extras);
                 return Task.FromResult(0);
             }, customUserAgent);
             var appIdService = new AppIdService(stateService);
@@ -59,9 +59,9 @@ namespace Bit.Core.Utilities
                 });
             var syncService = new SyncService(stateService, apiService, settingsService, folderService, cipherService, 
                 cryptoService, collectionService, organizationService, messagingService, policyService, sendService,
-                keyConnectorService, (bool expired) =>
+                keyConnectorService, (extras) =>
                 {
-                    messagingService.Send("logout", expired);
+                    messagingService.Send("logout", extras);
                     return Task.FromResult(0);
                 });
             var passwordGenerationService = new PasswordGenerationService(cryptoService, stateService,

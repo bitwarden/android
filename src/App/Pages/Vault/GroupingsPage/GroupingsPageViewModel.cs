@@ -133,13 +133,13 @@ namespace Bit.App.Pages
             get => _websiteIconsEnabled;
             set => SetProperty(ref _websiteIconsEnabled, value);
         }
-        public ExtendedObservableCollection<AccountView> Accounts
+        public ExtendedObservableCollection<AccountView> AccountViews
         {
             get
             {
                 // create a separate collection that includes the "add new" row
                 var accounts = new ExtendedObservableCollection<AccountView>();
-                accounts.AddRange(_stateService.Accounts);
+                accounts.AddRange(_stateService.AccountViews);
                 accounts.Add(new AccountView());
                 return accounts;
             }

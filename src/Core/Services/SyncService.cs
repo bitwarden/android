@@ -24,7 +24,7 @@ namespace Bit.Core.Services
         private readonly IPolicyService _policyService;
         private readonly ISendService _sendService;
         private readonly IKeyConnectorService _keyConnectorService;
-        private readonly Func<bool, Task> _logoutCallbackAsync;
+        private readonly Func<Tuple<string, bool, bool>, Task> _logoutCallbackAsync;
 
         public SyncService(
             IStateService stateService,
@@ -39,7 +39,7 @@ namespace Bit.Core.Services
             IPolicyService policyService,
             ISendService sendService,
             IKeyConnectorService keyConnectorService,
-            Func<bool, Task> logoutCallbackAsync)
+            Func<Tuple<string, bool, bool>, Task> logoutCallbackAsync)
         {
             _stateService = stateService;
             _apiService = apiService;
@@ -316,7 +316,7 @@ namespace Bit.Core.Services
             {
                 if (_logoutCallbackAsync != null)
                 {
-                    await _logoutCallbackAsync(true);
+                    await _logoutCallbackAsync(new Tuple<string, bool, bool>(response.Id, false, true));
                 }
                 return;
             }

@@ -180,7 +180,7 @@
                 xct:ShadowEffect.Radius="10"
                 xct:ShadowEffect.OffsetY="3">
                 <ListView
-                    ItemsSource="{Binding Accounts}"
+                    ItemsSource="{Binding AccountViews}"
                     ItemSelected="AccountRow_Selected"
                     VerticalOptions="FillAndExpand"
                     RowHeight="60">

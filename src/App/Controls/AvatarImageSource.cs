@@ -100,7 +100,8 @@ namespace Bit.App.Controls
             for (var i = 0; i < 3; i++)
             {
                 var value = (hash >> (i * 8)) & 0xff;
-                color += Convert.ToString(value, 16);
+                var base16 = "00" + Convert.ToString(value, 16);
+                color += base16.Substring(base16.Length - 2);
             }
             if (Device.RuntimePlatform == Device.iOS)
             {

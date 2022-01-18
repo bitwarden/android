@@ -639,7 +639,7 @@ namespace Bit.Core.Services
 
         public async Task ClearAsync(string userId)
         {
-            await _stateService.SetEncryptedCiphersAsync(null, new StorageOptions { UserId = userId });
+            await _stateService.SetEncryptedCiphersAsync(null, userId);
             await ClearCacheAsync();
         }
 

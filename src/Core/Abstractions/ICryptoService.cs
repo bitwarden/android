@@ -16,6 +16,7 @@ namespace Bit.Core.Abstractions
         Task ClearKeysAsync(string userId = null);
         Task ClearOrgKeysAsync(bool memoryOnly = false, string userId = null);
         Task ClearPinProtectedKeyAsync(string userId = null);
+        void ClearCache();
         Task<byte[]> DecryptFromBytesAsync(byte[] encBytes, SymmetricCryptoKey key);
         Task<byte[]> DecryptToBytesAsync(EncString encString, SymmetricCryptoKey key = null);
         Task<string> DecryptToUtf8Async(EncString encString, SymmetricCryptoKey key = null);

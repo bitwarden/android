@@ -64,8 +64,6 @@
         public static string PassGenOptionsKey(string userId) => $"passwordGenerationOptions_{userId}";
         public static string PassGenHistoryKey(string userId) => $"generatedPasswordHistory_{userId}";
         public static string TwoFactorTokenKey(string email) => $"twoFactorToken_{email}";
-        public static string VaultTimeoutKey(string userId) => $"vaultTimeout_{userId}";
-        public static string VaultTimeoutActionKey(string userId) => $"vaultTimeoutAction_{userId}";
         public static string LastActiveTimeKey(string userId) => $"lastActiveTime_{userId}";
         public static string InvalidUnlockAttemptsKey(string userId) => $"invalidUnlockAttempts_{userId}";
         public static string InlineAutofillEnabledKey(string userId) => $"inlineAutofillEnabled_{userId}";
@@ -83,8 +81,6 @@
         public static string SettingsKey(string userId) => $"settings_{userId}";
         public static string UsesKeyConnectorKey(string userId) => $"usesKeyConnector_{userId}";
         public static string ProtectedPinKey(string userId) => $"protectedPin_{userId}";
-        public static string SecurityStampKey(string userId) => $"securityStamp_{userId}";
-        public static string EmailVerifiedKey(string userId) => $"emailVerified_{userId}";
         public static string ForcePasswordResetKey(string userId) => $"forcePasswordReset_{userId}";
         public static string LastSyncKey(string userId) => $"lastSync_{userId}";
         public static string BiometricUnlockKey(string userId) => $"biometricUnlock_{userId}";

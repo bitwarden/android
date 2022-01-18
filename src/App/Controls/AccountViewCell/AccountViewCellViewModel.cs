@@ -5,27 +5,27 @@ namespace Bit.App.Controls
 {
     public class AccountViewCellViewModel : ExtendedViewModel
     {
-        private AccountView _account;
+        private AccountView _accountView;
 
         public AccountViewCellViewModel(AccountView accountView)
         {
-            Account = accountView;
+            AccountView = accountView;
         }
         
-        public AccountView Account
+        public AccountView AccountView
         {
-            get => _account;
-            set => SetProperty(ref _account, value);
+            get => _accountView;
+            set => SetProperty(ref _accountView, value);
         }
 
         public bool IsAccount
         {
-            get => Account.IsAccount;
+            get => AccountView.IsAccount;
         }
         
         public string AuthStatusText
         {
-            get => Account.AuthStatus.ToString();
+            get => AccountView.AuthStatus.ToString();
         }
     }
 }

@@ -145,7 +145,8 @@ namespace Bit.iOS
                 {
                     if (_deviceActionService.SystemMajorVersion() >= 12)
                     {
-                        await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
+                        // TODO make account-specific
+                        // await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
                     }
                 }
                 else if ((message.Command == "softDeletedCipher" || message.Command == "restoredCipher")

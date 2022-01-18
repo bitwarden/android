@@ -22,7 +22,7 @@ namespace Bit.Core.Services
 
         public bool BiometricLocked { get; set; }
 
-        public ExtendedObservableCollection<AccountView> Accounts { get; set; }
+        public ExtendedObservableCollection<AccountView> AccountViews { get; set; }
 
         public StateService(IStorageService storageService, IStorageService secureStorageService)
         {
@@ -30,7 +30,13 @@ namespace Bit.Core.Services
             _secureStorageService = secureStorageService;
         }
 
-        public async Task<string> GetActiveUserIdAsync(StorageOptions options = null)
+        public async Task<List<string>> GetUserIdsAsync()
+        {
+            await CheckStateAsync();
+            return _state?.Accounts?.Keys.ToList();
+        }
+
+        public async Task<string> GetActiveUserIdAsync()
         {
             await CheckStateAsync();
 
@@ -45,14 +51,16 @@ namespace Bit.Core.Services
 
         public async Task SetActiveUserAsync(string userId)
         {
-            await ValidateUserAsync(userId);
-            await CheckStateAsync(false);
+            if (userId != null)
+            {
+                await ValidateUserAsync(userId);
+            }
+            await CheckStateAsync();
             var state = await GetStateFromStorageAsync();
             state.ActiveUserId = userId;
             await SaveStateToStorageAsync(state);
             _state.ActiveUserId = userId;
-            await RefreshAccountList();
-            
+
             // Update pre-auth settings based on now-active user
             var rememberEmail = await GetRememberEmailAsync();
             if (rememberEmail.GetValueOrDefault(true))
@@ -62,15 +70,53 @@ namespace Bit.Core.Services
             await SetPreAuthEnvironmentUrlsAsync(await GetEnvironmentUrlsAsync());
         }
 
-        public async Task<bool> IsAuthenticatedAsync(StorageOptions options = null)
+        public async Task<bool> IsAuthenticatedAsync(string userId = null)
         {
-            return await GetAccessTokenAsync(options) != null && await GetActiveUserIdAsync(options) != null;
+            if (userId != null)
+            {
+                return await GetAccessTokenAsync(userId) != null && (_state?.Accounts?.ContainsKey(userId) ?? false);
+            }
+            return await GetAccessTokenAsync(userId) != null;
         }
 
         public async Task<bool> HasMultipleAccountsAsync()
         {
-            await CheckStateAsync(false);
+            await CheckStateAsync();
             return _state.Accounts?.Count > 1;
+        }
+
+        public async Task RefreshAccountViews()
+        {
+            await CheckStateAsync();
+
+            AccountViews = new ExtendedObservableCollection<AccountView>();
+            var accountList = _state?.Accounts?.Values.ToList();
+            if (accountList == null)
+            {
+                return;
+            }
+            foreach (var account in accountList)
+            {
+                var accountView = new AccountView(account);
+                if (accountView.UserId == _state.ActiveUserId)
+                {
+                    accountView.AuthStatus = AuthenticationStatus.Active;
+                }
+                else
+                {
+                    if (await IsLockedAsync(accountView.UserId))
+                    {
+                        var action = account.Settings.VaultTimeoutAction;
+                        accountView.AuthStatus = action == "logOut" ? AuthenticationStatus.LoggedOut
+                            : AuthenticationStatus.Locked;
+                    }
+                    else
+                    {
+                        accountView.AuthStatus = AuthenticationStatus.Unlocked;
+                    }
+                }
+                AccountViews.Add(accountView);
+            }
         }
 
         public async Task AddAccountAsync(Account account)
@@ -79,11 +125,18 @@ namespace Bit.Core.Services
             await SetActiveUserAsync(account.Profile.UserId);
         }
 
-        public async Task CleanAsync(string userId)
+        public async Task ClearAsync(string userId)
         {
-            if (_state?.Accounts != null && (userId == null || userId == await GetActiveUserIdAsync()))
+            if (userId == null)
             {
-                // Find the next user to make active
+                throw new Exception("userId cannot be null");
+            }
+
+            await RemoveAccountAsync(userId);
+
+            // Find the next user to make active, if any
+            if (_state?.Accounts != null)
+            {
                 foreach (var account in _state.Accounts)
                 {
                     var uid = account.Value?.Profile?.UserId;
@@ -91,16 +144,13 @@ namespace Bit.Core.Services
                     {
                         continue;
                     }
-                    if (await IsAuthenticatedAsync(new StorageOptions { UserId = uid }))
+                    if (await IsAuthenticatedAsync(uid))
                     {
                         await SetActiveUserAsync(uid);
                         break;
                     }
-                    await SetActiveUserAsync(null);
                 }
             }
-
-            await RemoveAccountAsync(userId);
         }
 
         public async Task<EnvironmentUrlData> GetPreAuthEnvironmentUrlsAsync()
@@ -115,1064 +165,1096 @@ namespace Bit.Core.Services
                 Constants.PreAuthEnvironmentUrlsKey, value, await GetDefaultStorageOptionsAsync());
         }
 
-        public async Task<EnvironmentUrlData> GetEnvironmentUrlsAsync(StorageOptions options = null)
+        public async Task<EnvironmentUrlData> GetEnvironmentUrlsAsync(string userId = null)
         {
             return (await GetAccountAsync(
-                ReconcileOptions(options, await GetDefaultStorageOptionsAsync())
+                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync())
             ))?.Settings?.EnvironmentUrls;
         }
 
-        public async Task SetEnvironmentUrlsAsync(EnvironmentUrlData value, StorageOptions options = null)
+        public async Task<bool?> GetBiometricUnlockAsync(string userId = null)
         {
-            var reconciledOptions =
-                ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
-            var account = await GetAccountAsync(reconciledOptions);
-            account.Settings.EnvironmentUrls = value;
-            await SaveAccountAsync(account, reconciledOptions);
-        }
-
-        public async Task<bool?> GetBiometricUnlockAsync(StorageOptions options = null)
-        {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.BiometricUnlockKey(reconciledOptions.UserId);
             return await GetValueAsync<bool?>(key, reconciledOptions);
         }
 
-        public async Task SetBiometricUnlockAsync(bool? value, StorageOptions options = null)
+        public async Task SetBiometricUnlockAsync(bool? value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.BiometricUnlockKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<bool> CanAccessPremiumAsync(StorageOptions options = null)
+        public async Task<bool> CanAccessPremiumAsync(string userId = null)
         {
-            if (!await IsAuthenticatedAsync(options))
+            if (userId == null)
+            {
+                userId = await GetActiveUserIdAsync();
+            }
+            if (!await IsAuthenticatedAsync(userId))
             {
                 return false;
             }
 
             var account = await GetAccountAsync(
-                ReconcileOptions(options, await GetDefaultStorageOptionsAsync()));
-            if (account.Profile.HasPremiumPersonally.GetValueOrDefault())
+                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync()));
+            if (account?.Profile?.HasPremiumPersonally.GetValueOrDefault() ?? false)
             {
                 return true;
             }
 
-            var userId = account.Profile?.UserId;
-            if (userId == null)
-            {
-                userId = await GetActiveUserIdAsync();
-            }
             var organizationService = ServiceContainer.Resolve<IOrganizationService>("organizationService");
             var organizations = await organizationService.GetAllAsync(userId);
             return organizations?.Any(o => o.UsersGetPremium && o.Enabled) ?? false;
         }
 
-        public async Task<string> GetProtectedPinAsync(StorageOptions options = null)
+        public async Task<string> GetProtectedPinAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultSecureStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultSecureStorageOptionsAsync());
             var key = Constants.ProtectedPinKey(reconciledOptions.UserId);
             return await GetValueAsync<string>(key, reconciledOptions);
         }
 
-        public async Task SetProtectedPinAsync(string value, StorageOptions options = null)
+        public async Task SetProtectedPinAsync(string value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultSecureStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultSecureStorageOptionsAsync());
             var key = Constants.ProtectedPinKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<string> GetPinProtectedAsync(StorageOptions options = null)
+        public async Task<string> GetPinProtectedAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.PinProtectedKey(reconciledOptions.UserId);
             return await GetValueAsync<string>(key, reconciledOptions);
         }
 
-        public async Task SetPinProtectedAsync(string value, StorageOptions options = null)
+        public async Task SetPinProtectedAsync(string value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.PinProtectedKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<EncString> GetPinProtectedCachedAsync(StorageOptions options = null)
+        public async Task<EncString> GetPinProtectedCachedAsync(string userId = null)
         {
             return (await GetAccountAsync(
-                ReconcileOptions(options, await GetDefaultStorageOptionsAsync())
+                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync())
             ))?.Settings?.PinProtected;
         }
 
-        public async Task SetPinProtectedCachedAsync(EncString value, StorageOptions options = null)
+        public async Task SetPinProtectedCachedAsync(EncString value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var account = await GetAccountAsync(reconciledOptions);
             account.Settings.PinProtected = value;
             await SaveAccountAsync(account, reconciledOptions);
         }
 
-        public async Task<KdfType?> GetKdfTypeAsync(StorageOptions options = null)
+        public async Task<KdfType?> GetKdfTypeAsync(string userId = null)
         {
             return (await GetAccountAsync(
-                ReconcileOptions(options, await GetDefaultStorageOptionsAsync())
+                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync())
             ))?.Profile?.KdfType;
         }
 
-        public async Task SetKdfTypeAsync(KdfType? value, StorageOptions options = null)
+        public async Task SetKdfTypeAsync(KdfType? value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var account = await GetAccountAsync(reconciledOptions);
             account.Profile.KdfType = value;
             await SaveAccountAsync(account, reconciledOptions);
         }
 
-        public async Task<int?> GetKdfIterationsAsync(StorageOptions options = null)
+        public async Task<int?> GetKdfIterationsAsync(string userId = null)
         {
             return (await GetAccountAsync(
-                ReconcileOptions(options, await GetDefaultStorageOptionsAsync())
+                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync())
             ))?.Profile?.KdfIterations;
         }
 
-        public async Task SetKdfIterationsAsync(int? value, StorageOptions options = null)
+        public async Task SetKdfIterationsAsync(int? value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var account = await GetAccountAsync(reconciledOptions);
             account.Profile.KdfIterations = value;
             await SaveAccountAsync(account, reconciledOptions);
         }
 
-        public async Task<string> GetKeyEncryptedAsync(StorageOptions options = null)
+        public async Task<string> GetKeyEncryptedAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultSecureStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultSecureStorageOptionsAsync());
             var key = Constants.KeyKey(reconciledOptions.UserId);
             return await GetValueAsync<string>(key, reconciledOptions);
         }
 
-        public async Task SetKeyEncryptedAsync(string value, StorageOptions options)
+        public async Task SetKeyEncryptedAsync(string value, string userId)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultSecureStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultSecureStorageOptionsAsync());
             var key = Constants.KeyKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<SymmetricCryptoKey> GetKeyDecryptedAsync(StorageOptions options = null)
+        public async Task<SymmetricCryptoKey> GetKeyDecryptedAsync(string userId = null)
         {
             return (await GetAccountAsync(
-                ReconcileOptions(options, await GetDefaultInMemoryOptionsAsync())
+                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultInMemoryOptionsAsync())
             ))?.Keys?.Key;
         }
 
-        public async Task SetKeyDecryptedAsync(SymmetricCryptoKey value, StorageOptions options = null)
+        public async Task SetKeyDecryptedAsync(SymmetricCryptoKey value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultInMemoryOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultInMemoryOptionsAsync());
             var account = await GetAccountAsync(reconciledOptions);
             account.Keys.Key = value;
             await SaveAccountAsync(account, reconciledOptions);
         }
 
-        public async Task<string> GetKeyHashAsync(StorageOptions options = null)
+        public async Task<string> GetKeyHashAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.KeyHashKey(reconciledOptions.UserId);
             return await GetValueAsync<string>(key, reconciledOptions);
         }
 
-        public async Task SetKeyHashAsync(string value, StorageOptions options = null)
+        public async Task SetKeyHashAsync(string value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.KeyHashKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<string> GetKeyHashCachedAsync(StorageOptions options = null)
+        public async Task<string> GetEncKeyEncryptedAsync(string userId = null)
         {
-            return (await GetAccountAsync(
-                ReconcileOptions(options, await GetDefaultStorageOptionsAsync())
-            ))?.Keys?.KeyHash;
-        }
-
-        public async Task SetKeyHashCachedAsync(string value, StorageOptions options = null)
-        {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
-            var account = await GetAccountAsync(reconciledOptions);
-            account.Keys.KeyHash = value;
-            await SaveAccountAsync(account, reconciledOptions);
-        }
-
-        public async Task<string> GetEncKeyEncryptedAsync(StorageOptions options = null)
-        {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.EncKeyKey(reconciledOptions.UserId);
             return await GetValueAsync<string>(key, reconciledOptions);
         }
 
-        public async Task SetEncKeyEncryptedAsync(string value, StorageOptions options)
+        public async Task SetEncKeyEncryptedAsync(string value, string userId)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.EncKeyKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<SymmetricCryptoKey> GetEncKeyDecryptedAsync(StorageOptions options = null)
+        public async Task<Dictionary<string, string>> GetOrgKeysEncryptedAsync(string userId = null)
         {
-            return (await GetAccountAsync(
-                ReconcileOptions(options, await GetDefaultInMemoryOptionsAsync())
-            ))?.Keys?.EncKey;
-        }
-
-        public async Task SetEncKeyDecryptedAsync(SymmetricCryptoKey value, StorageOptions options = null)
-        {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultInMemoryOptionsAsync());
-            var account = await GetAccountAsync(reconciledOptions);
-            account.Keys.EncKey = value;
-            await SaveAccountAsync(account, reconciledOptions);
-        }
-
-        public async Task<Dictionary<string, string>> GetOrgKeysEncryptedAsync(StorageOptions options = null)
-        {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.EncOrgKeysKey(reconciledOptions.UserId);
             return await GetValueAsync<Dictionary<string, string>>(key, reconciledOptions);
         }
 
-        public async Task SetOrgKeysEncryptedAsync(Dictionary<string, string> value, StorageOptions options = null)
+        public async Task SetOrgKeysEncryptedAsync(Dictionary<string, string> value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.EncOrgKeysKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<Dictionary<string, SymmetricCryptoKey>> GetOrgKeysDecryptedAsync(
-            StorageOptions options = null)
+        public async Task<string> GetPrivateKeyEncryptedAsync(string userId = null)
         {
-            return (await GetAccountAsync(
-                ReconcileOptions(options, await GetDefaultInMemoryOptionsAsync())
-            ))?.Keys?.OrganizationKeys;
-        }
-
-        public async Task SetOrgKeysDecryptedAsync(Dictionary<string, SymmetricCryptoKey> value,
-            StorageOptions options = null)
-        {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultInMemoryOptionsAsync());
-            var account = await GetAccountAsync(reconciledOptions);
-            account.Keys.OrganizationKeys = value;
-            await SaveAccountAsync(account, reconciledOptions);
-        }
-
-        public async Task<byte[]> GetPublicKeyAsync(StorageOptions options = null)
-        {
-            return (await GetAccountAsync(
-                ReconcileOptions(options, await GetDefaultStorageOptionsAsync())
-            ))?.Keys?.PublicKey;
-        }
-
-        public async Task SetPublicKeyAsync(byte[] value, StorageOptions options = null)
-        {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
-            var account = await GetAccountAsync(reconciledOptions);
-            account.Keys.PublicKey = value;
-            await SaveAccountAsync(account, reconciledOptions);
-        }
-
-        public async Task<string> GetPrivateKeyEncryptedAsync(StorageOptions options = null)
-        {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.EncPrivateKeyKey(reconciledOptions.UserId);
             return await GetValueAsync<string>(key, reconciledOptions);
         }
 
-        public async Task SetPrivateKeyEncryptedAsync(string value, StorageOptions options = null)
+        public async Task SetPrivateKeyEncryptedAsync(string value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.EncPrivateKeyKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<byte[]> GetPrivateKeyDecryptedAsync(StorageOptions options = null)
+        public async Task<List<string>> GetAutofillBlacklistedUrisAsync(string userId = null)
         {
-            return (await GetAccountAsync(
-                ReconcileOptions(options, await GetDefaultInMemoryOptionsAsync())
-            ))?.Keys?.PrivateKey;
-        }
-
-        public async Task SetPrivateKeyDecryptedAsync(byte[] value, StorageOptions options = null)
-        {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultInMemoryOptionsAsync());
-            var account = await GetAccountAsync(reconciledOptions);
-            account.Keys.PrivateKey = value;
-            await SaveAccountAsync(account);
-        }
-
-        public async Task<List<string>> GetAutofillBlacklistedUrisAsync(StorageOptions options = null)
-        {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.AutofillBlacklistedUrisKey(reconciledOptions.UserId);
             return await GetValueAsync<List<string>>(key, reconciledOptions);
         }
 
-        public async Task SetAutofillBlacklistedUrisAsync(List<string> value, StorageOptions options = null)
+        public async Task SetAutofillBlacklistedUrisAsync(List<string> value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.AutofillBlacklistedUrisKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<bool?> GetAutofillTileAddedAsync(StorageOptions options = null)
+        public async Task<bool?> GetAutofillTileAddedAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.AutofillTileAdded;
             return await GetValueAsync<bool?>(key, reconciledOptions);
         }
 
-        public async Task SetAutofillTileAddedAsync(bool? value, StorageOptions options = null)
+        public async Task SetAutofillTileAddedAsync(bool? value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.AutofillTileAdded;
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<string> GetEmailAsync(StorageOptions options = null)
+        public async Task<string> GetEmailAsync(string userId = null)
         {
             return (await GetAccountAsync(
-                ReconcileOptions(options, await GetDefaultStorageOptionsAsync())
+                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync())
             ))?.Profile?.Email;
         }
 
-        public async Task<long?> GetLastActiveTimeAsync(StorageOptions options = null)
+        public async Task<long?> GetLastActiveTimeAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.LastActiveTimeKey(reconciledOptions.UserId);
             return await GetValueAsync<long?>(key, reconciledOptions);
         }
 
-        public async Task SetLastActiveTimeAsync(long? value, StorageOptions options = null)
+        public async Task SetLastActiveTimeAsync(long? value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.LastActiveTimeKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<int?> GetVaultTimeoutAsync(StorageOptions options = null)
+        public async Task<int?> GetVaultTimeoutAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
-            var key = Constants.VaultTimeoutKey(reconciledOptions.UserId);
-            return await GetValueAsync<int?>(key, reconciledOptions) ?? 15;
+            return (await GetAccountAsync(
+                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync())
+            ))?.Settings?.VaultTimeout;
         }
 
-        public async Task SetVaultTimeoutAsync(int? value, StorageOptions options = null)
+        public async Task SetVaultTimeoutAsync(int? value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
-            var key = Constants.VaultTimeoutKey(reconciledOptions.UserId);
-            await SetValueAsync(key, value, reconciledOptions);
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            var account = await GetAccountAsync(reconciledOptions);
+            account.Settings.VaultTimeout = value;
+            await SaveAccountAsync(account, reconciledOptions);
         }
 
-        public async Task<string> GetVaultTimeoutActionAsync(StorageOptions options = null)
+        public async Task<string> GetVaultTimeoutActionAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
-            var key = Constants.VaultTimeoutActionKey(reconciledOptions.UserId);
-            return await GetValueAsync<string>(key, reconciledOptions) ?? "lock";
+            return (await GetAccountAsync(
+                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync())
+            ))?.Settings?.VaultTimeoutAction;
         }
 
-        public async Task SetVaultTimeoutActionAsync(string value, StorageOptions options = null)
+        public async Task SetVaultTimeoutActionAsync(string value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
-            var key = Constants.VaultTimeoutActionKey(reconciledOptions.UserId);
-            await SetValueAsync(key, value, reconciledOptions);
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            var account = await GetAccountAsync(reconciledOptions);
+            account.Settings.VaultTimeoutAction = value;
+            await SaveAccountAsync(account, reconciledOptions);
         }
 
-        public async Task<DateTime?> GetLastFileCacheClearAsync(StorageOptions options = null)
+        public async Task<DateTime?> GetLastFileCacheClearAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.LastFileCacheClearKey;
             return await GetValueAsync<DateTime?>(key, reconciledOptions);
         }
 
-        public async Task SetLastFileCacheClearAsync(DateTime? value, StorageOptions options = null)
+        public async Task SetLastFileCacheClearAsync(DateTime? value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.LastFileCacheClearKey;
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<PreviousPageInfo> GetPreviousPageInfoAsync(StorageOptions options = null)
+        public async Task<PreviousPageInfo> GetPreviousPageInfoAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.PreviousPageKey(reconciledOptions.UserId);
             return await GetValueAsync<PreviousPageInfo>(key, reconciledOptions);
         }
 
-        public async Task SetPreviousPageInfoAsync(PreviousPageInfo value, StorageOptions options = null)
+        public async Task SetPreviousPageInfoAsync(PreviousPageInfo value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.PreviousPageKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<int> GetInvalidUnlockAttemptsAsync(StorageOptions options = null)
+        public async Task<int> GetInvalidUnlockAttemptsAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.InvalidUnlockAttemptsKey(reconciledOptions.UserId);
             return await GetValueAsync<int>(key, reconciledOptions);
         }
 
-        public async Task SetInvalidUnlockAttemptsAsync(int? value, StorageOptions options = null)
+        public async Task SetInvalidUnlockAttemptsAsync(int? value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.InvalidUnlockAttemptsKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<string> GetLastBuildAsync(StorageOptions options = null)
+        public async Task<string> GetLastBuildAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.LastBuildKey;
             return await GetValueAsync<string>(key, reconciledOptions);
         }
 
-        public async Task SetLastBuildAsync(string value, StorageOptions options = null)
+        public async Task SetLastBuildAsync(string value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.LastBuildKey;
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<bool?> GetDisableFaviconAsync(StorageOptions options = null)
+        public async Task<bool?> GetDisableFaviconAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.DisableFaviconKey(reconciledOptions.UserId);
             return await GetValueAsync<bool?>(key, reconciledOptions);
         }
 
-        public async Task SetDisableFaviconAsync(bool? value, StorageOptions options = null)
+        public async Task SetDisableFaviconAsync(bool? value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.DisableFaviconKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<bool?> GetDisableAutoTotpCopyAsync(StorageOptions options = null)
+        public async Task<bool?> GetDisableAutoTotpCopyAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.DisableAutoTotpCopyKey(reconciledOptions.UserId);
             return await GetValueAsync<bool?>(key, reconciledOptions);
         }
 
-        public async Task SetDisableAutoTotpCopyAsync(bool? value, StorageOptions options = null)
+        public async Task SetDisableAutoTotpCopyAsync(bool? value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.DisableAutoTotpCopyKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<bool?> GetInlineAutofillEnabledAsync(StorageOptions options = null)
+        public async Task<bool?> GetInlineAutofillEnabledAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.InlineAutofillEnabledKey(reconciledOptions.UserId);
             return await GetValueAsync<bool?>(key, reconciledOptions);
         }
 
-        public async Task SetInlineAutofillEnabledAsync(bool? value, StorageOptions options = null)
+        public async Task SetInlineAutofillEnabledAsync(bool? value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.InlineAutofillEnabledKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<bool?> GetAutofillDisableSavePromptAsync(StorageOptions options = null)
+        public async Task<bool?> GetAutofillDisableSavePromptAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.AutofillDisableSavePromptKey(reconciledOptions.UserId);
             return await GetValueAsync<bool?>(key, reconciledOptions);
         }
 
-        public async Task SetAutofillDisableSavePromptAsync(bool? value, StorageOptions options = null)
+        public async Task SetAutofillDisableSavePromptAsync(bool? value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.AutofillDisableSavePromptKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<Dictionary<string, Dictionary<string, object>>> GetLocalDataAsync(
-            StorageOptions options = null)
+        public async Task<Dictionary<string, Dictionary<string, object>>> GetLocalDataAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.LocalDataKey(reconciledOptions.UserId);
             return await GetValueAsync<Dictionary<string, Dictionary<string, object>>>(key, reconciledOptions);
         }
 
-        public async Task SetLocalDataAsync(Dictionary<string, Dictionary<string, object>> value,
-            StorageOptions options = null)
+        public async Task SetLocalDataAsync(Dictionary<string, Dictionary<string, object>> value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.LocalDataKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<Dictionary<string, CipherData>> GetEncryptedCiphersAsync(StorageOptions options = null)
+        public async Task<Dictionary<string, CipherData>> GetEncryptedCiphersAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.CiphersKey(reconciledOptions.UserId);
             return await GetValueAsync<Dictionary<string, CipherData>>(key, reconciledOptions);
         }
 
-        public async Task SetEncryptedCiphersAsync(Dictionary<string, CipherData> value, StorageOptions options = null)
+        public async Task SetEncryptedCiphersAsync(Dictionary<string, CipherData> value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.CiphersKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<int?> GetDefaultUriMatchAsync(StorageOptions options = null)
+        public async Task<int?> GetDefaultUriMatchAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.DefaultUriMatchKey(reconciledOptions.UserId);
             return await GetValueAsync<int?>(key, reconciledOptions);
         }
 
-        public async Task SetDefaultUriMatchAsync(int? value, StorageOptions options = null)
+        public async Task SetDefaultUriMatchAsync(int? value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.DefaultUriMatchKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<HashSet<string>> GetNeverDomainsAsync(StorageOptions options = null)
+        public async Task<HashSet<string>> GetNeverDomainsAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.NeverDomainsKey(reconciledOptions.UserId);
             return await GetValueAsync<HashSet<string>>(key, reconciledOptions);
         }
 
-        public async Task SetNeverDomainsAsync(HashSet<string> value, StorageOptions options = null)
+        public async Task SetNeverDomainsAsync(HashSet<string> value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.NeverDomainsKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<int?> GetClearClipboardAsync(StorageOptions options = null)
+        public async Task<int?> GetClearClipboardAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.ClearClipboardKey(reconciledOptions.UserId);
             return await GetValueAsync<int?>(key, reconciledOptions);
         }
 
-        public async Task SetClearClipboardAsync(int? value, StorageOptions options = null)
+        public async Task SetClearClipboardAsync(int? value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.ClearClipboardKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<Dictionary<string, CollectionData>> GetEncryptedCollectionsAsync(
-            StorageOptions options = null)
+        public async Task<Dictionary<string, CollectionData>> GetEncryptedCollectionsAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.CollectionsKey(reconciledOptions.UserId);
             return await GetValueAsync<Dictionary<string, CollectionData>>(key, reconciledOptions);
         }
 
-        public async Task SetEncryptedCollectionsAsync(Dictionary<string, CollectionData> value,
-            StorageOptions options = null)
+        public async Task SetEncryptedCollectionsAsync(Dictionary<string, CollectionData> value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.CollectionsKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<bool> GetPasswordRepromptAutofillAsync(StorageOptions options = null)
+        public async Task<bool> GetPasswordRepromptAutofillAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.PasswordRepromptAutofillKey(reconciledOptions.UserId);
             return await GetValueAsync<bool?>(key, reconciledOptions) ?? false;
         }
 
-        public async Task SetPasswordRepromptAutofillAsync(bool? value, StorageOptions options = null)
+        public async Task SetPasswordRepromptAutofillAsync(bool? value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.PasswordRepromptAutofillKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<bool> GetPasswordVerifiedAutofillAsync(StorageOptions options = null)
+        public async Task<bool> GetPasswordVerifiedAutofillAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.PasswordVerifiedAutofillKey(reconciledOptions.UserId);
             return await GetValueAsync<bool?>(key, reconciledOptions) ?? false;
         }
 
-        public async Task SetPasswordVerifiedAutofillAsync(bool? value, StorageOptions options = null)
+        public async Task SetPasswordVerifiedAutofillAsync(bool? value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.PasswordVerifiedAutofillKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<DateTime?> GetLastSyncAsync(StorageOptions options = null)
+        public async Task<DateTime?> GetLastSyncAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.LastSyncKey(reconciledOptions.UserId);
             return await GetValueAsync<DateTime?>(key, reconciledOptions);
         }
 
-        public async Task SetLastSyncAsync(DateTime? value, StorageOptions options = null)
+        public async Task SetLastSyncAsync(DateTime? value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.LastSyncKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<string> GetSecurityStampAsync(StorageOptions options = null)
+        public async Task<string> GetSecurityStampAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
-            var key = Constants.SecurityStampKey(reconciledOptions.UserId);
-            return await GetValueAsync<string>(key, reconciledOptions);
+            return (await GetAccountAsync(
+                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync())
+            ))?.Profile?.Stamp;
         }
 
-        public async Task SetSecurityStampAsync(string value, StorageOptions options = null)
+        public async Task SetSecurityStampAsync(string value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
-            var key = Constants.SecurityStampKey(reconciledOptions.UserId);
-            await SetValueAsync(key, value, reconciledOptions);
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            var account = await GetAccountAsync(reconciledOptions);
+            account.Profile.Stamp = value;
+            await SaveAccountAsync(account, reconciledOptions);
         }
 
-        public async Task<bool> GetEmailVerifiedAsync(StorageOptions options = null)
+        public async Task<bool> GetEmailVerifiedAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
-            var key = Constants.EmailVerifiedKey(reconciledOptions.UserId);
-            return await GetValueAsync<bool?>(key, reconciledOptions) ?? false;
+            return (await GetAccountAsync(
+                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync())
+            ))?.Profile?.EmailVerified ?? false;
         }
 
-        public async Task SetEmailVerifiedAsync(bool? value, StorageOptions options = null)
+        public async Task SetEmailVerifiedAsync(bool? value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
-            var key = Constants.EmailVerifiedKey(reconciledOptions.UserId);
-            await SetValueAsync(key, value, reconciledOptions);
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            var account = await GetAccountAsync(reconciledOptions);
+            account.Profile.EmailVerified = value;
+            await SaveAccountAsync(account, reconciledOptions);
         }
 
-        public async Task<bool> GetForcePasswordReset(StorageOptions options)
+        public async Task<bool> GetForcePasswordReset(string userId)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.ForcePasswordResetKey(reconciledOptions.UserId);
             return await GetValueAsync<bool?>(key, reconciledOptions) ?? false;
         }
 
-        public async Task SetForcePasswordResetAsync(bool? value, StorageOptions options)
+        public async Task SetForcePasswordResetAsync(bool? value, string userId)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.ForcePasswordResetKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<bool> GetSyncOnRefreshAsync(StorageOptions options = null)
+        public async Task<bool> GetSyncOnRefreshAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.SyncOnRefreshKey(reconciledOptions.UserId);
             return await GetValueAsync<bool?>(key, reconciledOptions) ?? false;
         }
 
-        public async Task SetSyncOnRefreshAsync(bool? value, StorageOptions options = null)
+        public async Task SetSyncOnRefreshAsync(bool? value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.SyncOnRefreshKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<string> GetRememberedEmailAsync(StorageOptions options = null)
+        public async Task<string> GetRememberedEmailAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.RememberedEmailKey;
             return await GetValueAsync<string>(key, reconciledOptions);
         }
 
-        public async Task SetRememberedEmailAsync(string value, StorageOptions options = null)
+        public async Task SetRememberedEmailAsync(string value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.RememberedEmailKey;
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<bool?> GetRememberEmailAsync(StorageOptions options = null)
+        public async Task<bool?> GetRememberEmailAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.RememberEmailKey;
             return await GetValueAsync<bool?>(key, reconciledOptions);
         }
 
-        public async Task SetRememberEmailAsync(bool? value, StorageOptions options = null)
+        public async Task SetRememberEmailAsync(bool? value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.RememberEmailKey;
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<string> GetRememberedOrgIdentifierAsync(StorageOptions options = null)
+        public async Task<string> GetRememberedOrgIdentifierAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.RememberedOrgIdentifierKey;
             return await GetValueAsync<string>(key, reconciledOptions);
         }
 
-        public async Task SetRememberedOrgIdentifierAsync(string value, StorageOptions options = null)
+        public async Task SetRememberedOrgIdentifierAsync(string value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.RememberedOrgIdentifierKey;
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<bool?> GetRememberOrgIdentifierAsync(StorageOptions options = null)
+        public async Task<bool?> GetRememberOrgIdentifierAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.RememberOrgIdentifierKey;
             return await GetValueAsync<bool?>(key, reconciledOptions);
         }
 
-        public async Task SetRememberOrgIdentifierAsync(bool? value, StorageOptions options = null)
+        public async Task SetRememberOrgIdentifierAsync(bool? value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.RememberOrgIdentifierKey;
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<string> GetThemeAsync(StorageOptions options = null)
+        public async Task<string> GetThemeAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.ThemeKey(reconciledOptions.UserId);
             return await GetValueAsync<string>(key, reconciledOptions);
         }
 
-        public async Task SetThemeAsync(string value, StorageOptions options = null)
+        public async Task SetThemeAsync(string value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.ThemeKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<bool?> GetAddSitePromptShownAsync(StorageOptions options = null)
+        public async Task<bool?> GetAddSitePromptShownAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.AddSitePromptShownKey;
             return await GetValueAsync<bool?>(key, reconciledOptions);
         }
 
-        public async Task SetAddSitePromptShownAsync(bool? value, StorageOptions options = null)
+        public async Task SetAddSitePromptShownAsync(bool? value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.AddSitePromptShownKey;
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<bool?> GetMigratedFromV1Async(StorageOptions options = null)
+        public async Task<bool?> GetMigratedFromV1Async(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.MigratedFromV1;
             return await GetValueAsync<bool?>(key, reconciledOptions);
         }
 
-        public async Task SetMigratedFromV1Async(bool? value, StorageOptions options = null)
+        public async Task SetMigratedFromV1Async(bool? value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.MigratedFromV1;
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<bool?> GetMigratedFromV1AutofillPromptShownAsync(StorageOptions options = null)
+        public async Task<bool?> GetMigratedFromV1AutofillPromptShownAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.MigratedFromV1AutofillPromptShown;
             return await GetValueAsync<bool?>(key, reconciledOptions);
         }
 
-        public async Task SetMigratedFromV1AutofillPromptShownAsync(bool? value, StorageOptions options = null)
+        public async Task SetMigratedFromV1AutofillPromptShownAsync(bool? value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.MigratedFromV1AutofillPromptShown;
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<bool?> GetTriedV1ResyncAsync(StorageOptions options = null)
+        public async Task<bool?> GetTriedV1ResyncAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.TriedV1Resync;
             return await GetValueAsync<bool?>(key, reconciledOptions);
         }
 
-        public async Task SetTriedV1ResyncAsync(bool? value, StorageOptions options = null)
+        public async Task SetTriedV1ResyncAsync(bool? value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.TriedV1Resync;
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<bool?> GetPushInitialPromptShownAsync(StorageOptions options = null)
+        public async Task<bool?> GetPushInitialPromptShownAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.PushInitialPromptShownKey;
             return await GetValueAsync<bool?>(key, reconciledOptions);
         }
 
-        public async Task SetPushInitialPromptShownAsync(bool? value, StorageOptions options = null)
+        public async Task SetPushInitialPromptShownAsync(bool? value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.PushInitialPromptShownKey;
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<DateTime?> GetPushLastRegistrationDateAsync(StorageOptions options = null)
+        public async Task<DateTime?> GetPushLastRegistrationDateAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.PushLastRegistrationDateKey;
             return await GetValueAsync<DateTime?>(key, reconciledOptions);
         }
 
-        public async Task SetPushLastRegistrationDateAsync(DateTime? value, StorageOptions options = null)
+        public async Task SetPushLastRegistrationDateAsync(DateTime? value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.PushLastRegistrationDateKey;
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<string> GetPushCurrentTokenAsync(StorageOptions options = null)
+        public async Task<string> GetPushCurrentTokenAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.PushCurrentTokenKey;
             return await GetValueAsync<string>(key, reconciledOptions);
         }
 
-        public async Task SetPushCurrentTokenAsync(string value, StorageOptions options = null)
+        public async Task SetPushCurrentTokenAsync(string value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.PushCurrentTokenKey;
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<List<EventData>> GetEventCollectionAsync(StorageOptions options = null)
+        public async Task<List<EventData>> GetEventCollectionAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.EventCollectionKey;
             return await GetValueAsync<List<EventData>>(key, reconciledOptions);
         }
 
-        public async Task SetEventCollectionAsync(List<EventData> value, StorageOptions options = null)
+        public async Task SetEventCollectionAsync(List<EventData> value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.EventCollectionKey;
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<Dictionary<string, FolderData>> GetEncryptedFoldersAsync(StorageOptions options = null)
+        public async Task<Dictionary<string, FolderData>> GetEncryptedFoldersAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.FoldersKey(reconciledOptions.UserId);
             return await GetValueAsync<Dictionary<string, FolderData>>(key, reconciledOptions);
         }
 
-        public async Task SetEncryptedFoldersAsync(Dictionary<string, FolderData> value, StorageOptions options = null)
+        public async Task SetEncryptedFoldersAsync(Dictionary<string, FolderData> value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.FoldersKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<Dictionary<string, PolicyData>> GetEncryptedPoliciesAsync(StorageOptions options = null)
+        public async Task<Dictionary<string, PolicyData>> GetEncryptedPoliciesAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.PoliciesKey(reconciledOptions.UserId);
             return await GetValueAsync<Dictionary<string, PolicyData>>(key, reconciledOptions);
         }
 
-        public async Task SetEncryptedPoliciesAsync(Dictionary<string, PolicyData> value, StorageOptions options)
+        public async Task SetEncryptedPoliciesAsync(Dictionary<string, PolicyData> value, string userId)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.PoliciesKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<string> GetPushRegisteredTokenAsync(StorageOptions options = null)
+        public async Task<string> GetPushRegisteredTokenAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.PushRegisteredTokenKey;
             return await GetValueAsync<string>(key, reconciledOptions);
         }
 
-        public async Task SetPushRegisteredTokenAsync(string value, StorageOptions options = null)
+        public async Task SetPushRegisteredTokenAsync(string value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.PushRegisteredTokenKey;
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<bool?> GetAppExtensionStartedAsync(StorageOptions options = null)
+        public async Task<bool?> GetAppExtensionStartedAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.AppExtensionStartedKey;
             return await GetValueAsync<bool?>(key, reconciledOptions);
         }
 
-        public async Task SetAppExtensionStartedAsync(bool? value, StorageOptions options = null)
+        public async Task SetAppExtensionStartedAsync(bool? value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.AppExtensionStartedKey;
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<bool?> GetAppExtensionActivatedAsync(StorageOptions options = null)
+        public async Task<bool?> GetAppExtensionActivatedAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.AppExtensionActivatedKey;
             return await GetValueAsync<bool?>(key, reconciledOptions);
         }
 
-        public async Task SetAppExtensionActivatedAsync(bool? value, StorageOptions options = null)
+        public async Task SetAppExtensionActivatedAsync(bool? value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.AppExtensionActivatedKey;
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<string> GetAppIdAsync(StorageOptions options = null)
+        public async Task<string> GetAppIdAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.AppIdKey;
             return await GetValueAsync<string>(key, reconciledOptions);
         }
 
-        public async Task SetAppIdAsync(string value, StorageOptions options = null)
+        public async Task SetAppIdAsync(string value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.AppIdKey;
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<bool> GetUsesKeyConnectorAsync(StorageOptions options = null)
+        public async Task<bool> GetUsesKeyConnectorAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.UsesKeyConnectorKey(reconciledOptions.UserId);
             return await GetValueAsync<bool?>(key, reconciledOptions) ?? false;
         }
 
-        public async Task SetUsesKeyConnectorAsync(bool? value, StorageOptions options = null)
+        public async Task SetUsesKeyConnectorAsync(bool? value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.UsesKeyConnectorKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<Dictionary<string, OrganizationData>> GetOrganizationsAsync(StorageOptions options = null)
+        public async Task<Dictionary<string, OrganizationData>> GetOrganizationsAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.OrganizationsKey(reconciledOptions.UserId);
             return await GetValueAsync<Dictionary<string, OrganizationData>>(key, reconciledOptions);
         }
 
-        public async Task SetOrganizationsAsync(Dictionary<string, OrganizationData> value,
-            StorageOptions options = null)
+        public async Task SetOrganizationsAsync(Dictionary<string, OrganizationData> value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.OrganizationsKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<PasswordGenerationOptions> GetPasswordGenerationOptionsAsync(StorageOptions options = null)
+        public async Task<PasswordGenerationOptions> GetPasswordGenerationOptionsAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.PassGenOptionsKey(reconciledOptions.UserId);
             return await GetValueAsync<PasswordGenerationOptions>(key, reconciledOptions);
         }
 
-        public async Task SetPasswordGenerationOptionsAsync(PasswordGenerationOptions value,
-            StorageOptions options = null)
+        public async Task SetPasswordGenerationOptionsAsync(PasswordGenerationOptions value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.PassGenOptionsKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<List<GeneratedPasswordHistory>> GetEncryptedPasswordGenerationHistory(
-            StorageOptions options = null)
+        public async Task<List<GeneratedPasswordHistory>> GetEncryptedPasswordGenerationHistory(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.PassGenHistoryKey(reconciledOptions.UserId);
             return await GetValueAsync<List<GeneratedPasswordHistory>>(key, reconciledOptions);
         }
 
         public async Task SetEncryptedPasswordGenerationHistoryAsync(List<GeneratedPasswordHistory> value,
-            StorageOptions options = null)
+            string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.PassGenHistoryKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<Dictionary<string, SendData>> GetEncryptedSendsAsync(StorageOptions options = null)
+        public async Task<Dictionary<string, SendData>> GetEncryptedSendsAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.SendsKey(reconciledOptions.UserId);
             return await GetValueAsync<Dictionary<string, SendData>>(key, reconciledOptions);
         }
 
-        public async Task SetEncryptedSendsAsync(Dictionary<string, SendData> value, StorageOptions options = null)
+        public async Task SetEncryptedSendsAsync(Dictionary<string, SendData> value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.SendsKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<Dictionary<string, object>> GetSettingsAsync(StorageOptions options = null)
+        public async Task<Dictionary<string, object>> GetSettingsAsync(string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.SettingsKey(reconciledOptions.UserId);
             return await GetValueAsync<Dictionary<string, object>>(key, reconciledOptions);
         }
 
-        public async Task SetSettingsAsync(Dictionary<string, object> value, StorageOptions options = null)
+        public async Task SetSettingsAsync(Dictionary<string, object> value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.SettingsKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<string> GetAccessTokenAsync(StorageOptions options = null)
+        public async Task<string> GetAccessTokenAsync(string userId = null)
         {
             return (await GetAccountAsync(
-                ReconcileOptions(options, await GetDefaultStorageOptionsAsync())
+                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync())
             ))?.Tokens?.AccessToken;
         }
 
-        public async Task SetAccessTokenAsync(string value, StorageOptions options = null)
+        public async Task SetAccessTokenAsync(string value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var account = await GetAccountAsync(reconciledOptions);
             account.Tokens.AccessToken = value;
             await SaveAccountAsync(account, reconciledOptions);
         }
 
-        public async Task<string> GetRefreshTokenAsync(StorageOptions options = null)
+        public async Task<string> GetRefreshTokenAsync(string userId = null)
         {
             return (await GetAccountAsync(
-                ReconcileOptions(options, await GetDefaultStorageOptionsAsync())
+                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync())
             ))?.Tokens?.RefreshToken;
         }
 
-        public async Task SetRefreshTokenAsync(string value, StorageOptions options = null)
+        public async Task SetRefreshTokenAsync(string value, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
             var account = await GetAccountAsync(reconciledOptions);
             account.Tokens.RefreshToken = value;
             await SaveAccountAsync(account, reconciledOptions);
         }
 
-        public async Task<string> GetTwoFactorTokenAsync(StorageOptions options = null)
+        public async Task<string> GetTwoFactorTokenAsync(string email = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions =
+                ReconcileOptions(new StorageOptions { Email = email }, await GetDefaultStorageOptionsAsync());
             var key = Constants.TwoFactorTokenKey(reconciledOptions.Email);
             return await GetValueAsync<string>(key, reconciledOptions);
         }
 
-        public async Task SetTwoFactorTokenAsync(string value, StorageOptions options = null)
+        public async Task SetTwoFactorTokenAsync(string value, string email = null)
         {
-            var reconciledOptions = ReconcileOptions(options, await GetDefaultStorageOptionsAsync());
+            var reconciledOptions =
+                ReconcileOptions(new StorageOptions { Email = email }, await GetDefaultStorageOptionsAsync());
             var key = Constants.TwoFactorTokenKey(reconciledOptions.Email);
             await SetValueAsync(key, value, reconciledOptions);
         }
@@ -1243,7 +1325,7 @@ namespace Bit.Core.Services
                 throw new Exception("account?.Profile?.UserId cannot be null");
             }
 
-            await CheckStateAsync(false);
+            await CheckStateAsync();
 
             // Memory
             if (UseMemory(options))
@@ -1276,8 +1358,6 @@ namespace Bit.Core.Services
 
                 await SaveStateToStorageAsync(state);
             }
-
-            await RefreshAccountList();
         }
 
         private async Task<bool> SkipTokenStorageAsync()
@@ -1294,37 +1374,44 @@ namespace Bit.Core.Services
                 throw new Exception("userId cannot be null");
             }
 
-            await CheckStateAsync(false);
+            await CheckStateAsync();
 
             // Memory
             if (_state?.Accounts?.ContainsKey(userId) ?? false)
             {
                 _state?.Accounts?.Remove(userId);
             }
+            if (_state?.ActiveUserId == userId)
+            {
+                _state.ActiveUserId = null;
+            }
 
             // Storage
+            var stateModified = false;
             var state = await GetStateFromStorageAsync();
             if (state?.Accounts?.ContainsKey(userId) ?? false)
             {
                 state.Accounts.Remove(userId);
+                stateModified = true;
+            }
+            if (state?.ActiveUserId == userId)
+            {
+                state.ActiveUserId = null;
+                stateModified = true;
+            }
+            if (stateModified)
+            {
                 await SaveStateToStorageAsync(state);
             }
 
             // Secure Storage
-            var options = new StorageOptions
-            {
-                UserId = userId,
-                UseSecureStorage = true,
-            };
-            await SetProtectedPinAsync(null, options);
-            await SetKeyEncryptedAsync(null, options);
-            
-            await RefreshAccountList();
+            await SetProtectedPinAsync(null, userId);
+            await SetKeyEncryptedAsync(null, userId);
         }
 
         private async Task ScaffoldNewAccountAsync(Account account)
         {
-            await CheckStateAsync(false);
+            await CheckStateAsync();
 
             account.Settings.EnvironmentUrls = await GetPreAuthEnvironmentUrlsAsync();
 
@@ -1333,6 +1420,19 @@ namespace Bit.Core.Services
             if (state.Accounts == null)
             {
                 state.Accounts = new Dictionary<string, Account>();
+            }
+            if (state.Accounts.ContainsKey(account.Profile.UserId))
+            {
+                // Account data already exists, restore appropriate data
+                account.Settings.VaultTimeout = state.Accounts[account.Profile.UserId].Settings?.VaultTimeout;
+                account.Settings.VaultTimeoutAction =
+                    state.Accounts[account.Profile.UserId].Settings?.VaultTimeoutAction;
+            }
+            else
+            {
+                // New account, set defaults
+                account.Settings.VaultTimeout = 15;
+                account.Settings.VaultTimeoutAction = "lock";
             }
             state.Accounts[account.Profile.UserId] = account;
             await SaveStateToStorageAsync(state);
@@ -1352,8 +1452,7 @@ namespace Bit.Core.Services
             }
         }
 
-        private StorageOptions ReconcileOptions(StorageOptions requestedOptions,
-            StorageOptions defaultOptions)
+        private StorageOptions ReconcileOptions(StorageOptions requestedOptions, StorageOptions defaultOptions)
         {
             if (requestedOptions == null)
             {
@@ -1409,6 +1508,7 @@ namespace Bit.Core.Services
         private async Task<State> GetStateFromStorageAsync()
         {
             var state = await _storageService.GetAsync<State>(Constants.StateKey);
+            // TODO Remove logging once all bugs are squished
             Debug.WriteLine(JsonConvert.SerializeObject(state, Formatting.Indented),
                 ">>> GetStateFromStorageAsync()");
             return state;
@@ -1417,27 +1517,12 @@ namespace Bit.Core.Services
         private async Task SaveStateToStorageAsync(State state)
         {
             await _storageService.SaveAsync(Constants.StateKey, state);
+            // TODO Remove logging once all bugs are squished
             Debug.WriteLine(JsonConvert.SerializeObject(state, Formatting.Indented),
                 ">>> SaveStateToStorageAsync()");
         }
 
-        private async Task PruneInMemoryAccountsAsync()
-        {
-            // TODO not sure if needed due to pref storage of settings
-            // We preserve settings for logged out accounts, but we don't want to consider them when thinking about
-            // active account state
-            var accounts = new Dictionary<string, Account>();
-            foreach (var account in _state.Accounts)
-            {
-                if (await IsAuthenticatedAsync(new StorageOptions { UserId = account.Value.Profile.UserId }))
-                {
-                    accounts.Add(account.Key, account.Value);
-                }
-            }
-            _state.Accounts = accounts;
-        }
-
-        private async Task CheckStateAsync(bool includeAccountRefresh = true)
+        private async Task CheckStateAsync()
         {
             // TODO perform migration if necessary
 
@@ -1445,49 +1530,35 @@ namespace Bit.Core.Services
             {
                 _state = await GetStateFromStorageAsync() ?? new State();
             }
-            if (includeAccountRefresh)
-            {
-                await RefreshAccountList();
-            }
         }
 
-        private async Task RefreshAccountList()
+        private async Task<bool> IsLockedAsync(string userId)
         {
-            Accounts = new ExtendedObservableCollection<AccountView>();
-            var accountList = _state?.Accounts?.Values.ToList();
-            if (accountList == null)
+            if (userId == null)
             {
-                return;
+                userId = await GetActiveUserIdAsync();
             }
-            foreach (var account in accountList)
+            bool hasKey;
+            var inMemoryKey = await GetKeyDecryptedAsync(userId);
+            if (inMemoryKey != null)
             {
-                var accountView = new AccountView(account);
-                if (accountView.UserId == _state.ActiveUserId)
-                {
-                    accountView.AuthStatus = AuthenticationStatus.Active;
-                }
-                else
-                {
-                    // var vaultTimeService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
-                    // if (await vaultTimeService.IsLockedAsync(accountView.UserId))
-                    // {
-                    //     var action = await GetVaultTimeoutActionAsync(new StorageOptions { UserId = accountView.UserId });
-                    //     if (action == "logOut")
-                    //     {
-                    //         accountView.AuthStatus = AuthenticationStatus.LoggedOut;
-                    //     }
-                    //     else
-                    //     {
-                    //         accountView.AuthStatus = AuthenticationStatus.Locked;
-                    //     }
-                    // }
-                    // else
-                    // {
-                        accountView.AuthStatus = AuthenticationStatus.Unlocked;
-                    // }
-                }
-                Accounts.Add(accountView);
+                hasKey = true;
             }
+            else
+            {
+                var storedKey = await GetKeyEncryptedAsync(userId);
+                hasKey = storedKey != null;
+            }
+            if (hasKey)
+            {
+                var biometricLock = await GetBiometricUnlockAsync(userId);
+                var biometricSet = biometricLock.GetValueOrDefault();
+                if (biometricSet && BiometricLocked)
+                {
+                    return true;
+                }
+            }
+            return !hasKey;
         }
 
         private async Task ValidateUserAsync(string userId)
@@ -1515,6 +1586,7 @@ namespace Bit.Core.Services
 
         private void Log(string tag, StorageOptions options, string key, string value)
         {
+            // TODO Remove this once all bugs are squished
             var text = options?.UseSecureStorage ?? false ? "SECURE / " : "";
             text += "Key: " + key + " / ";
             if (value != null)

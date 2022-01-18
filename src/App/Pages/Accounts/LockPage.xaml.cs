@@ -27,10 +27,6 @@ namespace Bit.App.Pages
             MasterPasswordEntry = _masterPassword;
             PinEntry = _pin;
 
-            if (_appOptions?.ShowAccountSwitcher ?? false)
-            {
-                ToolbarItems.Add(_accountAvatar);
-            }
             if (Device.RuntimePlatform == Device.iOS)
             {
                 ToolbarItems.Add(_moreItem);
@@ -66,9 +62,9 @@ namespace Bit.App.Pages
             }
             _appeared = true;
             _mainContent.Content = _mainLayout;
-            if (_appOptions?.ShowAccountSwitcher ?? false)
+            if (await HasMultipleAccountsAsync())
             {
-                _appOptions.ShowAccountSwitcher = false;
+                ToolbarItems.Add(_accountAvatar);
                 _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
             }
             await _vm.InitAsync();

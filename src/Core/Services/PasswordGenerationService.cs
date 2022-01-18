@@ -483,8 +483,7 @@ namespace Bit.Core.Services
         public async Task ClearAsync(string userId = null)
         {
             _history = new List<GeneratedPasswordHistory>();
-            await _stateService.SetEncryptedPasswordGenerationHistoryAsync(null, 
-                new StorageOptions { UserId = userId });
+            await _stateService.SetEncryptedPasswordGenerationHistoryAsync(null, userId);
         }
 
         public Result PasswordStrength(string password, List<string> userInputs = null)

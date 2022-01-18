@@ -17,9 +17,9 @@ namespace Bit.App.Pages
             PageTitle = AppResources.Bitwarden;
         }
 
-        public ExtendedObservableCollection<AccountView> Accounts
+        public ExtendedObservableCollection<AccountView> AccountViews
         {
-            get => _stateService.Accounts;
+            get => _stateService.AccountViews;
         }
 
         public Action StartLoginAction { get; set; }

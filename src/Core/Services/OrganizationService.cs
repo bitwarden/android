@@ -38,7 +38,7 @@ namespace Bit.Core.Services
 
         public async Task<List<Organization>> GetAllAsync(string userId = null)
         {
-            var organizations = await _stateService.GetOrganizationsAsync(new StorageOptions { UserId = userId });
+            var organizations = await _stateService.GetOrganizationsAsync(userId);
             return organizations?.Select(o => new Organization(o.Value)).ToList() ?? new List<Organization>();
         }
 
@@ -49,7 +49,7 @@ namespace Bit.Core.Services
 
         public async Task ClearAllAsync(string userId)
         {
-            await _stateService.SetOrganizationsAsync(null, new StorageOptions { UserId = userId });
+            await _stateService.SetOrganizationsAsync(null, userId);
         }
     }
 }

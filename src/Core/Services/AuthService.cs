@@ -359,9 +359,9 @@ namespace Bit.Core.Services
                     {
                         UserId = _tokenService.GetUserId(),
                         Email = _tokenService.GetEmail(),
-                        HasPremiumPersonally = _tokenService.GetPremium(),
                         KdfType = tokenResponse.Kdf,
                         KdfIterations = tokenResponse.KdfIterations,
+                        HasPremiumPersonally = _tokenService.GetPremium(),
                     },
                     new Account.AccountTokens()
                     {

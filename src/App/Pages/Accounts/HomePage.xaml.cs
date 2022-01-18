@@ -14,6 +14,8 @@ namespace Bit.App.Pages
         private readonly AppOptions _appOptions;
         private IBroadcasterService _broadcasterService;
 
+        private bool _appeared;
+
         public HomePage(AppOptions appOptions = null)
         {
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
@@ -31,10 +33,6 @@ namespace Bit.App.Pages
             {
                 ToolbarItems.Add(_closeItem);
             }
-            if (_appOptions?.ShowAccountSwitcher ?? false)
-            {
-                ToolbarItems.Add(_accountAvatar);
-            }
         }
 
         public async Task DismissRegisterPageAndLogInAsync(string email)
@@ -46,12 +44,6 @@ namespace Bit.App.Pages
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            _mainContent.Content = _mainLayout;
-            if (_appOptions?.ShowAccountSwitcher ?? false)
-            {
-                _appOptions.ShowAccountSwitcher = false;
-                _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
-            }
             _broadcasterService.Subscribe(nameof(HomePage), async (message) =>
             {
                 if (message.Command == "updatedTheme")
@@ -62,6 +54,17 @@ namespace Bit.App.Pages
                     });
                 }
             });
+            if (_appeared)
+            {
+                return;
+            }
+            _appeared = true;
+            _mainContent.Content = _mainLayout;
+            if (await HasMultipleAccountsAsync())
+            {
+                ToolbarItems.Add(_accountAvatar);
+                _vm.AvatarImageSource = await GetAvatarImageSourceAsync(false);
+            }
         }
 
         protected override void OnDisappearing()

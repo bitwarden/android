@@ -113,9 +113,9 @@ namespace Bit.App.Pages
             set => SetProperty(ref _lockedVerifyText, value);
         }
 
-        public ExtendedObservableCollection<AccountView> Accounts
+        public ExtendedObservableCollection<AccountView> AccountViews
         {
-            get => _stateService.Accounts;
+            get => _stateService.AccountViews;
         }
 
         public Command SubmitCommand { get; }

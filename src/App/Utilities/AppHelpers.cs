@@ -447,7 +447,7 @@ namespace Bit.App.Utilities
             return Convert.ToBase64String(Encoding.UTF8.GetBytes(multiByteEscaped));
         }
 
-        public static async Task LogOutAsync(string userId)
+        public static async Task LogOutAsync(string userId, bool userInitiated = false)
         {
             var syncService = ServiceContainer.Resolve<ISyncService>("syncService");
             var tokenService = ServiceContainer.Resolve<ITokenService>("tokenService");
@@ -469,24 +469,30 @@ namespace Bit.App.Utilities
             }
 
             await Task.WhenAll(
-                syncService.SetLastSyncAsync(DateTime.MinValue),
-                tokenService.ClearTokenAsync(userId),
-                cryptoService.ClearKeysAsync(userId),
-                stateService.CleanAsync(userId),
-                settingsService.ClearAsync(userId),
                 cipherService.ClearAsync(userId),
                 folderService.ClearAsync(userId),
                 collectionService.ClearAsync(userId),
                 passwordGenerationService.ClearAsync(userId),
-                vaultTimeoutService.ClearAsync(userId),
                 deviceActionService.ClearCacheAsync());
+            if (userInitiated)
+            {
+                await Task.WhenAll(
+                    syncService.SetLastSyncAsync(DateTime.MinValue),
+                    tokenService.ClearTokenAsync(userId),
+                    cryptoService.ClearKeysAsync(userId),
+                    settingsService.ClearAsync(userId),
+                    vaultTimeoutService.ClearAsync(userId),
+                    stateService.ClearAsync(userId));
+            }
             stateService.BiometricLocked = true;
             searchService.ClearIndex();
         }
 
-        public static async Task ClearServiceCache()
+        public static async Task OnAccountSwitchAsync()
         {
+            var environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
             var tokenService = ServiceContainer.Resolve<ITokenService>("tokenService");
+            var cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
             var cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
             var folderService = ServiceContainer.Resolve<IFolderService>("folderService");
             var collectionService = ServiceContainer.Resolve<ICollectionService>("collectionService");
@@ -495,10 +501,13 @@ namespace Bit.App.Utilities
             var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             var searchService = ServiceContainer.Resolve<ISearchService>("searchService");
 
+            await environmentService.SetUrlsFromStorageAsync();
+
             await Task.WhenAll(
                 cipherService.ClearCacheAsync(),
                 deviceActionService.ClearCacheAsync());
             tokenService.ClearCache();
+            cryptoService.ClearCache();
             folderService.ClearCache();
             collectionService.ClearCache();
             passwordGenerationService.ClearCache();

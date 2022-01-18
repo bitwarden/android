@@ -5,7 +5,6 @@ using System;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
-using Bit.Core.Models.Domain;
 
 namespace Bit.Core.Services
 {
@@ -94,25 +93,25 @@ namespace Bit.Core.Services
 
         public async Task SetTwoFactorTokenAsync(string token, string email)
         {
-            await _stateService.SetTwoFactorTokenAsync(token, new StorageOptions { Email = email });
+            await _stateService.SetTwoFactorTokenAsync(token, email);
         }
 
         public async Task<string> GetTwoFactorTokenAsync(string email)
         {
-            return await _stateService.GetTwoFactorTokenAsync(new StorageOptions { Email = email });
+            return await _stateService.GetTwoFactorTokenAsync(email);
         }
 
         public async Task ClearTwoFactorTokenAsync(string email)
         {
-            await _stateService.SetTwoFactorTokenAsync(null, new StorageOptions { Email = email });
+            await _stateService.SetTwoFactorTokenAsync(null, email);
         }
 
         public async Task ClearTokenAsync(string userId = null)
         {
             ClearCache();
             await Task.WhenAll(
-                _stateService.SetAccessTokenAsync(null, new StorageOptions { UserId = userId }),
-                _stateService.SetRefreshTokenAsync(null, new StorageOptions { UserId = userId }));
+                _stateService.SetAccessTokenAsync(null, userId),
+                _stateService.SetRefreshTokenAsync(null, userId));
         }
 
         public void ClearCache()

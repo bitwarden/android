@@ -15,17 +15,16 @@ namespace Bit.Core.Models.View
                 return;
             }
             IsAccount = true;
-
-            UserId = a.Profile.UserId;
-            Email = a.Profile.Email;
-            Hostname = a.Settings.EnvironmentUrls.Base;
-            AuthStatus = a.Profile.AuthStatus;
+            AuthStatus = a.AuthStatus;
+            UserId = a.Profile?.UserId;
+            Email = a.Profile?.Email;
+            Hostname = a.Settings?.EnvironmentUrls?.Base;
         }
 
         public bool IsAccount { get; set; }
+        public AuthenticationStatus? AuthStatus { get; set; }
         public string UserId { get; set; }
         public string Email { get; set; }
         public string Hostname { get; set; }
-        public AuthenticationStatus? AuthStatus { get; set; }
     }
 }

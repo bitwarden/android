@@ -80,11 +80,12 @@ namespace Bit.App
                 }
                 else if (message.Command == "logout")
                 {
-                    var extras = message.Data as Tuple<bool?, string>;
-                    var expired = extras?.Item1;
-                    var userId = extras?.Item2;
+                    var extras = message.Data as Tuple<string, bool, bool>;
+                    var userId = extras?.Item1;
+                    var userInitiated = extras?.Item2;
+                    var expired = extras?.Item3;
                     Device.BeginInvokeOnMainThread(async () =>
-                        await LogOutAsync(expired.GetValueOrDefault(), userId));
+                        await LogOutAsync(userId, userInitiated, expired));
                 }
                 else if (message.Command == "loggedOut")
                 {
@@ -111,7 +112,7 @@ namespace Bit.App
                 }
                 else if (message.Command == "switchedAccount")
                 {
-                    await SwitchedAccount();
+                    await SwitchedAccountAsync();
                 }
                 else if (message.Command == "migrated")
                 {
@@ -241,13 +242,13 @@ namespace Bit.App
             new System.Globalization.UmAlQuraCalendar();
         }
 
-        private async Task LogOutAsync(bool expired, string userId)
+        private async Task LogOutAsync(string userId, bool? userInitiated, bool? expired)
         {
-            await AppHelpers.LogOutAsync(userId);
+            await AppHelpers.LogOutAsync(userId, userInitiated.GetValueOrDefault(true));
+            await SetMainPageAsync();
             _authService.LogOut(() =>
             {
-                Current.MainPage = new NavigationPage(new HomePage(Options));
-                if (expired)
+                if (expired.GetValueOrDefault())
                 {
                     _platformUtilsService.ShowToast("warning", null, AppResources.LoginExpired);
                 }
@@ -258,14 +259,14 @@ namespace Bit.App
         {
             Device.BeginInvokeOnMainThread(async () =>
             {
-                Options.ShowAccountSwitcher = true;
                 Current.MainPage = new NavigationPage(new HomePage(Options));
             });
         }
 
-        private async Task SwitchedAccount()
+        private async Task SwitchedAccountAsync()
         {
-            await AppHelpers.ClearServiceCache();
+            await AppHelpers.OnAccountSwitchAsync();
+            UpdateTheme();
             Device.BeginInvokeOnMainThread(async () =>
             {
                 await SetMainPageAsync();
@@ -274,10 +275,7 @@ namespace Bit.App
 
         private async Task SetMainPageAsync()
         {
-            if (await _stateService.HasMultipleAccountsAsync())
-            {
-                Options.ShowAccountSwitcher = true;
-            }
+            await _stateService.RefreshAccountViews();
             var authed = await _stateService.IsAuthenticatedAsync();
             if (authed)
             {

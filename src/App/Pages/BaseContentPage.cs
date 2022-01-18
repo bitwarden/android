@@ -38,6 +38,11 @@ namespace Bit.App.Pages
             await SaveActivity();
         }
 
+        public async Task<bool> HasMultipleAccountsAsync()
+        {
+            return await _stateService.HasMultipleAccountsAsync();
+        }
+
         public bool DoOnce(Action action = null, int milliseconds = 1000)
         {
             if (LastPageAction.HasValue && (DateTime.UtcNow - LastPageAction.Value).TotalMilliseconds < milliseconds)
@@ -108,9 +113,9 @@ namespace Bit.App.Pages
             });
         }
 
-        protected async Task<AvatarImageSource> GetAvatarImageSourceAsync()
+        protected async Task<AvatarImageSource> GetAvatarImageSourceAsync(bool useCurrentActiveAccount = true)
         {
-            return new AvatarImageSource(await _stateService.GetEmailAsync());
+            return new AvatarImageSource(useCurrentActiveAccount ? await _stateService.GetEmailAsync() : null);
         }
 
         protected async Task ShowAccountListAsync(bool isVisible, View listView, View overlay, View fab = null)
@@ -120,6 +125,9 @@ namespace Bit.App.Pages
                 // Not all animations are awaited. This is intentional to allow multiple simultaneous animations.
                 if (isVisible)
                 {
+                    // Update account views to reflect current state
+                    await _stateService.RefreshAccountViews();
+
                     // start listView in default (off-screen) position
                     await listView.TranslateTo(0, listView.Height * -1, 0);
 
@@ -173,13 +181,13 @@ namespace Bit.App.Pages
             await Task.Delay(100);
             await ShowAccountListAsync(false, listView, overlay, fab);
 
-            if (item.Account.IsAccount)
+            if (item.AccountView.IsAccount)
             {
-                if (item.Account.AuthStatus != AuthenticationStatus.Active)
+                if (item.AccountView.AuthStatus != AuthenticationStatus.Active)
                 {
-                    await _stateService.SetActiveUserAsync(item.Account.UserId);
-                    _messagingService.Send("switchedAccount");
+                    await _stateService.SetActiveUserAsync(item.AccountView.UserId);
                 }
+                _messagingService.Send("switchedAccount");
             }
             else
             {

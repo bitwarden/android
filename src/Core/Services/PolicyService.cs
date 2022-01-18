@@ -60,7 +60,7 @@ namespace Bit.Core.Services
 
         public async Task Clear(string userId)
         {
-            await _stateService.SetEncryptedPoliciesAsync(null, new StorageOptions { UserId = userId });
+            await _stateService.SetEncryptedPoliciesAsync(null, userId);
             _policyCache = null;
         }
 

@@ -1,5 +1,4 @@
 ﻿using Bit.Core.Abstractions;
-using Bit.Core.Models.Domain;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,7 +20,7 @@ namespace Bit.Core.Services
         private readonly IPolicyService _policyService;
         private readonly IKeyConnectorService _keyConnectorService;
         private readonly Action<bool> _lockedCallback;
-        private readonly Func<Tuple<bool, string>, Task> _loggedOutCallback;
+        private readonly Func<Tuple<string, bool, bool>, Task> _loggedOutCallback;
 
         public VaultTimeoutService(
             ICryptoService cryptoService,
@@ -36,7 +35,7 @@ namespace Bit.Core.Services
             IPolicyService policyService,
             IKeyConnectorService keyConnectorService,
             Action<bool> lockedCallback,
-            Func<Tuple<bool, string>, Task> loggedOutCallback)
+            Func<Tuple<string, bool, bool>, Task> loggedOutCallback)
         {
             _cryptoService = cryptoService;
             _stateService = stateService;
@@ -74,18 +73,18 @@ namespace Bit.Core.Services
                 return;
             }
 
-            foreach (var account in _stateService.Accounts)
+            foreach (var userId in await _stateService.GetUserIdsAsync())
             {
-                if (account.UserId != null && await ShouldLockAsync(account.UserId))
+                if (userId != null && await ShouldLockAsync(userId))
                 {
-                    await ExecuteTimeoutActionAsync(account.UserId);
+                    await ExecuteTimeoutActionAsync(userId);
                 }
             }
         }
 
         private async Task<bool> ShouldLockAsync(string userId)
         {
-            var authed = await _stateService.IsAuthenticatedAsync(new StorageOptions { UserId = userId });
+            var authed = await _stateService.IsAuthenticatedAsync(userId);
             if (!authed)
             {
                 return false;
@@ -99,7 +98,7 @@ namespace Bit.Core.Services
             {
                 return false;
             }
-            var lastActiveTime = await _stateService.GetLastActiveTimeAsync(new StorageOptions { UserId = userId });
+            var lastActiveTime = await _stateService.GetLastActiveTimeAsync(userId);
             if (lastActiveTime == null)
             {
                 return false;
@@ -111,10 +110,10 @@ namespace Bit.Core.Services
 
         private async Task ExecuteTimeoutActionAsync(string userId)
         {
-            var action = await _stateService.GetVaultTimeoutActionAsync(new StorageOptions { UserId = userId });
+            var action = await _stateService.GetVaultTimeoutActionAsync(userId);
             if (action == "logOut")
             {
-                await LogOutAsync(userId);
+                await LogOutAsync(false, userId);
             }
             else
             {
@@ -124,7 +123,7 @@ namespace Bit.Core.Services
 
         public async Task LockAsync(bool allowSoftLock = false, bool userInitiated = false, string userId = null)
         {
-            var authed = await _stateService.IsAuthenticatedAsync(new StorageOptions { UserId = userId });
+            var authed = await _stateService.IsAuthenticatedAsync(userId);
             if (!authed)
             {
                 return;
@@ -136,7 +135,7 @@ namespace Bit.Core.Services
 
                 if (!pinLock && !await IsBiometricLockSetAsync())
                 {
-                    await LogOutAsync();
+                    await LogOutAsync(userInitiated, userId);
                     return;
                 }
             }
@@ -172,11 +171,11 @@ namespace Bit.Core.Services
             _lockedCallback?.Invoke(userInitiated);
         }
         
-        public async Task LogOutAsync(string userId = null)
+        public async Task LogOutAsync(bool userInitiated = true, string userId = null)
         {
             if(_loggedOutCallback != null)
             {
-                await _loggedOutCallback.Invoke(new Tuple<bool, string>(false, userId));
+                await _loggedOutCallback.Invoke(new Tuple<string, bool, bool>(userId, userInitiated, false));
             }
         }
 
@@ -203,8 +202,8 @@ namespace Bit.Core.Services
 
         public async Task ClearAsync(string userId = null)
         {
-            await _stateService.SetPinProtectedAsync(null, new StorageOptions { UserId = userId });
-            await _stateService.SetProtectedPinAsync(null, new StorageOptions { UserId = userId });
+            await _stateService.SetPinProtectedAsync(null, userId);
+            await _stateService.SetProtectedPinAsync(null, userId);
         }
 
         public async Task<int?> GetVaultTimeout(string userId = null) {

@@ -192,7 +192,7 @@ namespace Bit.Core.Services
 
         public async Task ClearAsync(string userId)
         {
-            await _stateService.SetEncryptedFoldersAsync(null, new StorageOptions { UserId = userId });
+            await _stateService.SetEncryptedFoldersAsync(null, userId);
             _decryptedFolderCache = null;
         }
 

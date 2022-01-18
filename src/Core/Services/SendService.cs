@@ -45,7 +45,7 @@ namespace Bit.Core.Services
 
         public async Task ClearAsync(string userId)
         {
-            await _stateService.SetEncryptedSendsAsync(null, new StorageOptions { UserId = userId });
+            await _stateService.SetEncryptedSendsAsync(null, userId);
             ClearCache();
         }
 
