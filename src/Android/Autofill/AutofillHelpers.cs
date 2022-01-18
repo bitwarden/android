@@ -73,6 +73,7 @@ namespace Bit.Droid.Autofill
             "com.google.android.captiveportallogin",
             "com.jamal2367.styx",
             "com.kiwibrowser.browser",
+            "com.kiwibrowser.browser.dev",
             "com.microsoft.emmx",
             "com.microsoft.emmx.beta",
             "com.microsoft.emmx.canary",

@@ -78,6 +78,9 @@
     android:name="com.kiwibrowser.browser"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
+    android:name="com.kiwibrowser.browser.dev"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
     android:name="com.microsoft.emmx"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
