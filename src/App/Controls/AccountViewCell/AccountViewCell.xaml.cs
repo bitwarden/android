@@ -7,18 +7,18 @@ namespace Bit.App.Controls
     {
         public static readonly BindableProperty AccountProperty = BindableProperty.Create(
             nameof(Account), typeof(AccountView), typeof(AccountViewCell), default(AccountView), BindingMode.OneWay);
-        
+
         public AccountViewCell()
         {
             InitializeComponent();
         }
-        
+
         public AccountView Account
         {
             get => GetValue(AccountProperty) as AccountView;
             set => SetValue(AccountProperty, value);
         }
-        
+
         protected override void OnPropertyChanged(string propertyName = null)
         {
             base.OnPropertyChanged(propertyName);
@@ -33,4 +33,3 @@ namespace Bit.App.Controls
         }
     }
 }
-

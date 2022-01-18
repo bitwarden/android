@@ -16,14 +16,7 @@
     </ContentPage.BindingContext>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem x:Name="_closeItem" x:Key="closeItem" Text="{u:I18n Close}"
-                     Clicked="Close_Clicked" Order="Primary" Priority="-1" />
-    </ContentPage.ToolbarItems>
-
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <u:InverseBoolConverter x:Key="inverseBool" />
-            <controls:ExtendedToolbarItem
+        <controls:ExtendedToolbarItem
                 x:Name="_accountAvatar"
                 x:Key="accountAvatar"
                 IconImageSource="{Binding AvatarImageSource}"
@@ -33,6 +26,13 @@
                 UseOriginalImage="True"
                 AutomationProperties.IsInAccessibleTree="True"
                 AutomationProperties.Name="{u:I18n Account}" />
+        <ToolbarItem x:Name="_closeItem" x:Key="closeItem" Text="{u:I18n Close}"
+                     Clicked="Close_Clicked" Order="Primary" Priority="-1" />
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <u:InverseBoolConverter x:Key="inverseBool" />
             <ToolbarItem Icon="more_vert.png" Clicked="More_Clicked" Order="Primary"
                 x:Name="_moreItem" x:Key="moreItem"
                  AutomationProperties.IsInAccessibleTree="True"

@@ -10,12 +10,12 @@ namespace Bit.App.Controls
     public class AvatarImageSource : StreamImageSource
     {
         private string _data;
-        
+
         public AvatarImageSource(string data = null)
         {
             _data = data;
         }
-        
+
         public override Func<CancellationToken, Task<Stream>> Stream => GetStreamAsync;
 
         private Task<Stream> GetStreamAsync(CancellationToken userToken = new CancellationToken())
@@ -31,7 +31,7 @@ namespace Bit.App.Controls
         {
             string chars = null;
             string upperData = null;
-            
+
             if (string.IsNullOrEmpty(_data))
             {
                 chars = "..";
@@ -41,11 +41,11 @@ namespace Bit.App.Controls
                 upperData = _data.ToUpper();
                 chars = upperData.Substring(0, 2).ToUpper();
             }
-            
+
             var bgColor = StringToColor(upperData);
-            var textColor = Color.White;;
+            var textColor = Color.White;
             var size = 50;
-            
+
             var bitmap = new SKBitmap(
                 size * 2,
                 size * 2,
@@ -84,7 +84,7 @@ namespace Bit.App.Controls
 
             return SKImage.FromBitmap(bitmap).Encode(SKEncodedImageFormat.Png, 100).AsStream();
         }
-        
+
         private Color StringToColor(string str)
         {
             if (str == null)

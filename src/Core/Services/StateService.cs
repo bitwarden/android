@@ -123,6 +123,7 @@ namespace Bit.Core.Services
         {
             await ScaffoldNewAccountAsync(account);
             await SetActiveUserAsync(account.Profile.UserId);
+            await RefreshAccountViews();
         }
 
         public async Task ClearAsync(string userId)

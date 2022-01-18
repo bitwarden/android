@@ -14,8 +14,6 @@ namespace Bit.App.Pages
         private readonly AppOptions _appOptions;
         private IBroadcasterService _broadcasterService;
 
-        private bool _appeared;
-
         public HomePage(AppOptions appOptions = null)
         {
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
@@ -29,9 +27,9 @@ namespace Bit.App.Pages
             _vm.StartEnvironmentAction = () => Device.BeginInvokeOnMainThread(async () => await StartEnvironmentAsync());
             UpdateLogo();
 
-            if (_appOptions?.IosExtension ?? false)
+            if (!_appOptions?.IosExtension ?? false)
             {
-                ToolbarItems.Add(_closeItem);
+                ToolbarItems.Remove(_closeItem);
             }
         }
 
@@ -44,6 +42,15 @@ namespace Bit.App.Pages
         protected override async void OnAppearing()
         {
             base.OnAppearing();
+            _mainContent.Content = _mainLayout;
+            if (await HasMultipleAccountsAsync())
+            {
+                _vm.AvatarImageSource = await GetAvatarImageSourceAsync(false);
+            }
+            else
+            {
+                ToolbarItems.Remove(_accountAvatar);
+            }
             _broadcasterService.Subscribe(nameof(HomePage), async (message) =>
             {
                 if (message.Command == "updatedTheme")
@@ -54,17 +61,6 @@ namespace Bit.App.Pages
                     });
                 }
             });
-            if (_appeared)
-            {
-                return;
-            }
-            _appeared = true;
-            _mainContent.Content = _mainLayout;
-            if (await HasMultipleAccountsAsync())
-            {
-                ToolbarItems.Add(_accountAvatar);
-                _vm.AvatarImageSource = await GetAvatarImageSourceAsync(false);
-            }
         }
 
         protected override void OnDisappearing()

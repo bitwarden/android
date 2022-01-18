@@ -64,8 +64,11 @@ namespace Bit.App.Pages
             _mainContent.Content = _mainLayout;
             if (await HasMultipleAccountsAsync())
             {
-                ToolbarItems.Add(_accountAvatar);
                 _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
+            }
+            else
+            {
+                ToolbarItems.Remove(_accountAvatar);
             }
             await _vm.InitAsync();
             if (!_vm.BiometricLock)

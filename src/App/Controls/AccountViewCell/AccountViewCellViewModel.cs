@@ -11,7 +11,7 @@ namespace Bit.App.Controls
         {
             AccountView = accountView;
         }
-        
+
         public AccountView AccountView
         {
             get => _accountView;
@@ -22,7 +22,7 @@ namespace Bit.App.Controls
         {
             get => AccountView.IsAccount;
         }
-        
+
         public string AuthStatusText
         {
             get => AccountView.AuthStatus.ToString();

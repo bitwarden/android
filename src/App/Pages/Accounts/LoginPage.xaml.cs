@@ -12,7 +12,6 @@ namespace Bit.App.Pages
         private readonly LoginPageViewModel _vm;
         private readonly AppOptions _appOptions;
 
-        private bool _appeared;
         private bool _inputFocused;
 
         public LoginPage(string email = null, AppOptions appOptions = null)
@@ -47,6 +46,11 @@ namespace Bit.App.Pages
             {
                 ToolbarItems.Add(_getPasswordHint);
             }
+
+            if (!_appOptions?.IosExtension ?? false)
+            {
+                ToolbarItems.Remove(_closeItem);
+            }
         }
 
         public Entry MasterPasswordEntry { get; set; }
@@ -54,23 +58,20 @@ namespace Bit.App.Pages
         protected override async void OnAppearing()
         {
             base.OnAppearing();
+            _mainContent.Content = _mainLayout;
+            if (await HasMultipleAccountsAsync())
+            {
+                _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
+            }
+            else
+            {
+                ToolbarItems.Remove(_accountAvatar);
+            }
             await _vm.InitAsync();
             if (!_inputFocused)
             {
                 RequestFocus(string.IsNullOrWhiteSpace(_vm.Email) ? _email : _masterPassword);
                 _inputFocused = true;
-            }
-            if (_appeared)
-            {
-                return;
-            }
-            _appeared = true;
-            _mainContent.Content = _mainLayout;
-            if (await HasMultipleAccountsAsync())
-            {
-                ToolbarItems.Add(_accountAvatar);
-                ToolbarItems.Remove(_closeItem);
-                _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
             }
         }
 
