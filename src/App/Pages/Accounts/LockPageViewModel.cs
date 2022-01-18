@@ -1,4 +1,4 @@
-﻿using Bit.App.Abstractions;
+using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
@@ -133,7 +133,7 @@ namespace Bit.App.Pages
 
             // Users with key connector and without biometric or pin has no MP to unlock with
             _usingKeyConnector = await _keyConnectorService.GetUsesKeyConnector();
-            if ( _usingKeyConnector && !(BiometricLock || PinLock))
+            if (_usingKeyConnector && !(BiometricLock || PinLock))
             {
                 await _vaultTimeoutService.LogOutAsync();
             }
