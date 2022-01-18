@@ -9,6 +9,10 @@ using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Utilities;
+#if !FDROID
+using Microsoft.AppCenter.Crashes;
+using System;
+#endif
 using System.Collections.Generic;
 using System.Linq;
 
@@ -29,120 +33,138 @@ namespace Bit.Droid.Autofill
         public async override void OnFillRequest(FillRequest request, CancellationSignal cancellationSignal,
             FillCallback callback)
         {
-            var structure = request.FillContexts?.LastOrDefault()?.Structure;
-            if (structure == null)
+            try
             {
-                return;
-            }
-
-            var parser = new Parser(structure, ApplicationContext);
-            parser.Parse();
-
-            if (_storageService == null)
-            {
-                _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
-            }
-
-            var shouldAutofill = await parser.ShouldAutofillAsync(_storageService);
-            if (!shouldAutofill)
-            {
-                return;
-            }
-            
-            var inlineAutofillEnabled = await _storageService.GetAsync<bool?>(Constants.InlineAutofillEnabledKey) ?? true;
-
-            if (_vaultTimeoutService == null)
-            {
-                _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
-            }
-
-            List<FilledItem> items = null;
-            await _vaultTimeoutService.CheckVaultTimeoutAsync();
-            var locked = await _vaultTimeoutService.IsLockedAsync();
-            if (!locked)
-            {
-                if (_cipherService == null)
+                var structure = request.FillContexts?.LastOrDefault()?.Structure;
+                if (structure == null)
                 {
-                    _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
+                    return;
                 }
-                items = await AutofillHelpers.GetFillItemsAsync(parser, _cipherService);
-            }
 
-            // build response
-            var response = AutofillHelpers.CreateFillResponse(parser, items, locked, inlineAutofillEnabled, request);
-            var disableSavePrompt = await _storageService.GetAsync<bool?>(Constants.AutofillDisableSavePromptKey);
-            if (!disableSavePrompt.GetValueOrDefault())
-            {
-                AutofillHelpers.AddSaveInfo(parser, request, response, parser.FieldCollection);
+                var parser = new Parser(structure, ApplicationContext);
+                parser.Parse();
+
+                if (_storageService == null)
+                {
+                    _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+                }
+
+                var shouldAutofill = await parser.ShouldAutofillAsync(_storageService);
+                if (!shouldAutofill)
+                {
+                    return;
+                }
+
+                var inlineAutofillEnabled = await _storageService.GetAsync<bool?>(Constants.InlineAutofillEnabledKey) ?? true;
+
+                if (_vaultTimeoutService == null)
+                {
+                    _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
+                }
+
+                List<FilledItem> items = null;
+                await _vaultTimeoutService.CheckVaultTimeoutAsync();
+                var locked = await _vaultTimeoutService.IsLockedAsync();
+                if (!locked)
+                {
+                    if (_cipherService == null)
+                    {
+                        _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
+                    }
+                    items = await AutofillHelpers.GetFillItemsAsync(parser, _cipherService);
+                }
+
+                // build response
+                var response = AutofillHelpers.CreateFillResponse(parser, items, locked, inlineAutofillEnabled, request);
+                var disableSavePrompt = await _storageService.GetAsync<bool?>(Constants.AutofillDisableSavePromptKey);
+                if (!disableSavePrompt.GetValueOrDefault())
+                {
+                    AutofillHelpers.AddSaveInfo(parser, request, response, parser.FieldCollection);
+                }
+                callback.OnSuccess(response.Build());
             }
-            callback.OnSuccess(response.Build());
+            catch (Exception e)
+            {
+#if !FDROID
+                Crashes.TrackError(e);
+#endif
+            }
         }
 
         public async override void OnSaveRequest(SaveRequest request, SaveCallback callback)
         {
-            var structure = request.FillContexts?.LastOrDefault()?.Structure;
-            if (structure == null)
+            try
             {
-                return;
-            }
-
-            if (_storageService == null)
-            {
-                _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
-            }
-
-            var disableSavePrompt = await _storageService.GetAsync<bool?>(Constants.AutofillDisableSavePromptKey);
-            if (disableSavePrompt.GetValueOrDefault())
-            {
-                return;
-            }
-
-            _policyService ??= ServiceContainer.Resolve<IPolicyService>("policyService");
-
-            var personalOwnershipPolicyApplies = await _policyService.PolicyAppliesToUser(PolicyType.PersonalOwnership);
-            if (personalOwnershipPolicyApplies)
-            {
-                return;
-            }
-
-            var parser = new Parser(structure, ApplicationContext);
-            parser.Parse();
-
-            var savedItem = parser.FieldCollection.GetSavedItem();
-            if (savedItem == null)
-            {
-                Toast.MakeText(this, "Unable to save this form.", ToastLength.Short).Show();
-                return;
-            }
-
-            var intent = new Intent(this, typeof(MainActivity));
-            intent.SetFlags(ActivityFlags.NewTask | ActivityFlags.ClearTop);
-            intent.PutExtra("autofillFramework", true);
-            intent.PutExtra("autofillFrameworkSave", true);
-            intent.PutExtra("autofillFrameworkType", (int)savedItem.Type);
-            switch (savedItem.Type)
-            {
-                case CipherType.Login:
-                    intent.PutExtra("autofillFrameworkName", parser.Uri
-                        .Replace(Constants.AndroidAppProtocol, string.Empty)
-                        .Replace("https://", string.Empty)
-                        .Replace("http://", string.Empty));
-                    intent.PutExtra("autofillFrameworkUri", parser.Uri);
-                    intent.PutExtra("autofillFrameworkUsername", savedItem.Login.Username);
-                    intent.PutExtra("autofillFrameworkPassword", savedItem.Login.Password);
-                    break;
-                case CipherType.Card:
-                    intent.PutExtra("autofillFrameworkCardName", savedItem.Card.Name);
-                    intent.PutExtra("autofillFrameworkCardNumber", savedItem.Card.Number);
-                    intent.PutExtra("autofillFrameworkCardExpMonth", savedItem.Card.ExpMonth);
-                    intent.PutExtra("autofillFrameworkCardExpYear", savedItem.Card.ExpYear);
-                    intent.PutExtra("autofillFrameworkCardCode", savedItem.Card.Code);
-                    break;
-                default:
-                    Toast.MakeText(this, "Unable to save this type of form.", ToastLength.Short).Show();
+                var structure = request.FillContexts?.LastOrDefault()?.Structure;
+                if (structure == null)
+                {
                     return;
+                }
+
+                if (_storageService == null)
+                {
+                    _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+                }
+
+                var disableSavePrompt = await _storageService.GetAsync<bool?>(Constants.AutofillDisableSavePromptKey);
+                if (disableSavePrompt.GetValueOrDefault())
+                {
+                    return;
+                }
+
+                _policyService ??= ServiceContainer.Resolve<IPolicyService>("policyService");
+
+                var personalOwnershipPolicyApplies = await _policyService.PolicyAppliesToUser(PolicyType.PersonalOwnership);
+                if (personalOwnershipPolicyApplies)
+                {
+                    return;
+                }
+
+                var parser = new Parser(structure, ApplicationContext);
+                parser.Parse();
+
+                var savedItem = parser.FieldCollection.GetSavedItem();
+                if (savedItem == null)
+                {
+                    Toast.MakeText(this, "Unable to save this form.", ToastLength.Short).Show();
+                    return;
+                }
+
+                var intent = new Intent(this, typeof(MainActivity));
+                intent.SetFlags(ActivityFlags.NewTask | ActivityFlags.ClearTop);
+                intent.PutExtra("autofillFramework", true);
+                intent.PutExtra("autofillFrameworkSave", true);
+                intent.PutExtra("autofillFrameworkType", (int)savedItem.Type);
+                switch (savedItem.Type)
+                {
+                    case CipherType.Login:
+                        intent.PutExtra("autofillFrameworkName", parser.Uri
+                            .Replace(Constants.AndroidAppProtocol, string.Empty)
+                            .Replace("https://", string.Empty)
+                            .Replace("http://", string.Empty));
+                        intent.PutExtra("autofillFrameworkUri", parser.Uri);
+                        intent.PutExtra("autofillFrameworkUsername", savedItem.Login.Username);
+                        intent.PutExtra("autofillFrameworkPassword", savedItem.Login.Password);
+                        break;
+                    case CipherType.Card:
+                        intent.PutExtra("autofillFrameworkCardName", savedItem.Card.Name);
+                        intent.PutExtra("autofillFrameworkCardNumber", savedItem.Card.Number);
+                        intent.PutExtra("autofillFrameworkCardExpMonth", savedItem.Card.ExpMonth);
+                        intent.PutExtra("autofillFrameworkCardExpYear", savedItem.Card.ExpYear);
+                        intent.PutExtra("autofillFrameworkCardCode", savedItem.Card.Code);
+                        break;
+                    default:
+                        Toast.MakeText(this, "Unable to save this type of form.", ToastLength.Short).Show();
+                        return;
+                }
+                StartActivity(intent);
             }
-            StartActivity(intent);
+            catch (Exception e)
+            {
+#if !FDROID
+                Crashes.TrackError(e);
+#endif
+            }
         }
     }
 }
