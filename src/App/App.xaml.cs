@@ -110,6 +110,10 @@ namespace Bit.App
                 {
                     await AddAccount();
                 }
+                else if (message.Command == "accountAdded")
+                {
+                    UpdateTheme();
+                }
                 else if (message.Command == "switchedAccount")
                 {
                     await SwitchedAccountAsync();

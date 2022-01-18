@@ -370,6 +370,7 @@ namespace Bit.Core.Services
                     }
                 )
             );
+            _messagingService.Send("accountAdded");
             if (_setCryptoKeys)
             {
                 if (key != null)

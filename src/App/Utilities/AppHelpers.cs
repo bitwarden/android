@@ -483,6 +483,11 @@ namespace Bit.App.Utilities
                     settingsService.ClearAsync(userId),
                     vaultTimeoutService.ClearAsync(userId),
                     stateService.ClearAsync(userId));
+                if (await stateService.GetActiveUserIdAsync() != null)
+                {
+                    var messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
+                    messagingService.Send("switchedAccount");
+                }
             }
             stateService.BiometricLocked = true;
             searchService.ClearIndex();
