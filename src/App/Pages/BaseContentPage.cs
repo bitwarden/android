@@ -9,6 +9,7 @@ using Bit.Core.Enums;
 using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
+using Page = Xamarin.Forms.Page;
 
 namespace Bit.App.Pages
 {
@@ -38,9 +39,10 @@ namespace Bit.App.Pages
             await SaveActivity();
         }
 
-        public async Task<bool> HasMultipleAccountsAsync()
+        public async Task<bool> ShowAccountSwitcherAsync()
         {
-            return await _stateService.HasMultipleAccountsAsync();
+            return await _stateService.HasMultipleAccountsAsync()
+                || await _stateService.IsAuthenticatedAsync();
         }
 
         public bool DoOnce(Action action = null, int milliseconds = 1000)
@@ -166,7 +168,7 @@ namespace Bit.App.Pages
         }
 
         protected async Task AccountRowSelectedAsync(object sender, SelectedItemChangedEventArgs e, View listView,
-            View overlay, View fab = null)
+            View overlay, View fab = null, bool? allowActiveAccountSelection = false)
         {
             if (!DoOnce())
             {
@@ -186,8 +188,12 @@ namespace Bit.App.Pages
                 if (item.AccountView.AuthStatus != AuthenticationStatus.Active)
                 {
                     await _stateService.SetActiveUserAsync(item.AccountView.UserId);
+                    _messagingService.Send("switchedAccount");
                 }
-                _messagingService.Send("switchedAccount");
+                else if (allowActiveAccountSelection ?? false)
+                {
+                    _messagingService.Send("switchedAccount");
+                }
             }
             else
             {

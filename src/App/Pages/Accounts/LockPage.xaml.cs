@@ -62,7 +62,7 @@ namespace Bit.App.Pages
             }
             _appeared = true;
             _mainContent.Content = _mainLayout;
-            if (await HasMultipleAccountsAsync())
+            if (await ShowAccountSwitcherAsync())
             {
                 _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
             }
@@ -169,7 +169,7 @@ namespace Bit.App.Pages
 
         private async void AccountRow_Selected(object sender, SelectedItemChangedEventArgs e)
         {
-            await AccountRowSelectedAsync(sender, e, _accountListView, _accountListOverlay);
+            await AccountRowSelectedAsync(sender, e, _accountListView, _accountListOverlay, null, true);
         }
     }
 }
