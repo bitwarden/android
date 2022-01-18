@@ -498,6 +498,7 @@ namespace Bit.App.Utilities
             var environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
             var tokenService = ServiceContainer.Resolve<ITokenService>("tokenService");
             var cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
+            var settingsService = ServiceContainer.Resolve<ISettingsService>("settingsService");
             var cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
             var folderService = ServiceContainer.Resolve<IFolderService>("folderService");
             var collectionService = ServiceContainer.Resolve<ICollectionService>("collectionService");
@@ -513,6 +514,7 @@ namespace Bit.App.Utilities
                 deviceActionService.ClearCacheAsync());
             tokenService.ClearCache();
             cryptoService.ClearCache();
+            settingsService.ClearCache();
             folderService.ClearCache();
             collectionService.ClearCache();
             passwordGenerationService.ClearCache();

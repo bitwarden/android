@@ -270,11 +270,11 @@ namespace Bit.App
         private async Task SwitchedAccountAsync()
         {
             await AppHelpers.OnAccountSwitchAsync();
-            UpdateTheme();
             Device.BeginInvokeOnMainThread(async () =>
             {
                 await SetMainPageAsync();
             });
+            UpdateTheme();
         }
 
         private async Task SetMainPageAsync()
