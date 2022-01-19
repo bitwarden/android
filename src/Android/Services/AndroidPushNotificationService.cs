@@ -1,6 +1,7 @@
 ﻿#if !FDROID
 using System;
 using System.Threading.Tasks;
+using AndroidX.Core.App;
 using Bit.App.Abstractions;
 using Bit.Core;
 using Bit.Core.Abstractions;
@@ -20,6 +21,8 @@ namespace Bit.Droid.Services
             _storageService = storageService;
             _pushNotificationListenerService = pushNotificationListenerService;
         }
+
+        public bool IsRegisteredForPush => NotificationManagerCompat.From(Android.App.Application.Context)?.AreNotificationsEnabled() ?? false;
 
         public async Task<string> GetTokenAsync()
         {
