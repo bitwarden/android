@@ -89,12 +89,17 @@ namespace Bit.Core.Services
         {
             await CheckStateAsync();
 
-            AccountViews = new ExtendedObservableCollection<AccountView>();
+            if (AccountViews == null)
+            {
+                AccountViews = new ExtendedObservableCollection<AccountView>();
+            }
+            AccountViews.Clear();
             var accountList = _state?.Accounts?.Values.ToList();
             if (accountList == null)
             {
                 return;
             }
+            var vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             foreach (var account in accountList)
             {
                 var accountView = new AccountView(account);
@@ -104,7 +109,9 @@ namespace Bit.Core.Services
                 }
                 else
                 {
-                    if (await IsLockedAsync(accountView.UserId))
+                    var isLocked = await vaultTimeoutService.IsLockedAsync(accountView.UserId);
+                    var shouldTimeout = await vaultTimeoutService.ShouldTimeoutAsync(accountView.UserId);
+                    if (isLocked || shouldTimeout)
                     {
                         var action = account.Settings.VaultTimeoutAction;
                         accountView.AuthStatus = action == "logOut" ? AuthenticationStatus.LoggedOut

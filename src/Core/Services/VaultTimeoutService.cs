@@ -54,10 +54,10 @@ namespace Bit.Core.Services
 
         public async Task<bool> IsLockedAsync(string userId = null)
         {
-            var hasKey = await _cryptoService.HasKeyAsync();
+            var hasKey = await _cryptoService.HasKeyAsync(userId);
             if (hasKey)
             {
-                var biometricSet = await IsBiometricLockSetAsync();
+                var biometricSet = await IsBiometricLockSetAsync(userId);
                 if (biometricSet && _stateService.BiometricLocked)
                 {
                     return true;
@@ -73,16 +73,13 @@ namespace Bit.Core.Services
                 return;
             }
 
-            foreach (var userId in await _stateService.GetUserIdsAsync())
+            if (await ShouldTimeoutAsync())
             {
-                if (userId != null && await ShouldLockAsync(userId))
-                {
-                    await ExecuteTimeoutActionAsync(userId);
-                }
+                await ExecuteTimeoutActionAsync();
             }
         }
 
-        private async Task<bool> ShouldLockAsync(string userId)
+        public async Task<bool> ShouldTimeoutAsync(string userId = null)
         {
             var authed = await _stateService.IsAuthenticatedAsync(userId);
             if (!authed)
@@ -108,7 +105,7 @@ namespace Bit.Core.Services
             return diffMs >= vaultTimeoutMs;
         }
 
-        private async Task ExecuteTimeoutActionAsync(string userId)
+        public async Task ExecuteTimeoutActionAsync(string userId = null)
         {
             var action = await _stateService.GetVaultTimeoutActionAsync(userId);
             if (action == "logOut")
@@ -130,8 +127,8 @@ namespace Bit.Core.Services
             }
 
             if (await _keyConnectorService.GetUsesKeyConnector()) {
-                var pinSet = await IsPinLockSetAsync();
-                var pinLock = (pinSet.Item1 && _stateService.GetPinProtectedAsync() != null) || pinSet.Item2;
+                var pinSet = await IsPinLockSetAsync(userId);
+                var pinLock = (pinSet.Item1 && _stateService.GetPinProtectedAsync(userId) != null) || pinSet.Item2;
 
                 if (!pinLock && !await IsBiometricLockSetAsync())
                 {
@@ -142,21 +139,14 @@ namespace Bit.Core.Services
 
             if (allowSoftLock)
             {
-                var biometricLocked = await IsBiometricLockSetAsync();
-                _stateService.BiometricLocked = biometricLocked;
-                if (biometricLocked)
+                _stateService.BiometricLocked = await IsBiometricLockSetAsync();
+                if (_stateService.BiometricLocked)
                 {
                     _messagingService.Send("locked", userInitiated);
                     _lockedCallback?.Invoke(userInitiated);
                     return;
                 }
             }
-            
-            if (userId == null || userId == await _stateService.GetActiveUserIdAsync())
-            {
-                _searchService.ClearIndex();
-            }
-            
             await Task.WhenAll(
                 _cryptoService.ClearKeyAsync(userId),
                 _cryptoService.ClearOrgKeysAsync(true, userId),
@@ -187,16 +177,16 @@ namespace Bit.Core.Services
             await _tokenService.ToggleTokensAsync();
         }
 
-        public async Task<Tuple<bool, bool>> IsPinLockSetAsync()
+        public async Task<Tuple<bool, bool>> IsPinLockSetAsync(string userId = null)
         {
-            var protectedPin = await _stateService.GetProtectedPinAsync();
-            var pinProtectedKey = await _stateService.GetPinProtectedAsync();
+            var protectedPin = await _stateService.GetProtectedPinAsync(userId);
+            var pinProtectedKey = await _stateService.GetPinProtectedAsync(userId);
             return new Tuple<bool, bool>(protectedPin != null, pinProtectedKey != null);
         }
 
-        public async Task<bool> IsBiometricLockSetAsync()
+        public async Task<bool> IsBiometricLockSetAsync(string userId = null)
         {
-            var biometricLock = await _stateService.GetBiometricUnlockAsync();
+            var biometricLock = await _stateService.GetBiometricUnlockAsync(userId);
             return biometricLock.GetValueOrDefault();
         }
 

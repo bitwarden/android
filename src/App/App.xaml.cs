@@ -270,11 +270,18 @@ namespace Bit.App
         private async Task SwitchedAccountAsync()
         {
             await AppHelpers.OnAccountSwitchAsync();
+            var shouldTimeout = await _vaultTimeoutService.ShouldTimeoutAsync();
             Device.BeginInvokeOnMainThread(async () =>
             {
-                await SetMainPageAsync();
+                if (shouldTimeout)
+                {
+                    await _vaultTimeoutService.ExecuteTimeoutActionAsync();
+                }
+                else
+                {
+                    await SetMainPageAsync();
+                }
                 UpdateTheme();
-                await _vaultTimeoutService.CheckVaultTimeoutAsync();
             });
         }
 

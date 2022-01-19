@@ -80,18 +80,18 @@ namespace Bit.Core.Services
             await _stateService.SetOrgKeysEncryptedAsync(orgKeys);
         }
 
-        public async Task<SymmetricCryptoKey> GetKeyAsync()
+        public async Task<SymmetricCryptoKey> GetKeyAsync(string userId = null)
         {
-            var inMemoryKey = await _stateService.GetKeyDecryptedAsync();
+            var inMemoryKey = await _stateService.GetKeyDecryptedAsync(userId);
             if (inMemoryKey != null)
             {
                 return inMemoryKey;
             }
-            var key = await _stateService.GetKeyEncryptedAsync();
+            var key = await _stateService.GetKeyEncryptedAsync(userId);
             if (key != null)
             {
                 inMemoryKey = new SymmetricCryptoKey(Convert.FromBase64String(key));
-                await _stateService.SetKeyDecryptedAsync(inMemoryKey);
+                await _stateService.SetKeyDecryptedAsync(inMemoryKey, userId);
             }
             return inMemoryKey;
         }
@@ -295,9 +295,9 @@ namespace Bit.Core.Services
             return false;
         }
 
-        public async Task<bool> HasKeyAsync()
+        public async Task<bool> HasKeyAsync(string userId = null)
         {
-            var key = await GetKeyAsync();
+            var key = await GetKeyAsync(userId);
             return key != null;
         }
 

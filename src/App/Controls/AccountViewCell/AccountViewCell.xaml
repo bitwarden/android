@@ -7,8 +7,7 @@
           xmlns:u="clr-namespace:Bit.App.Utilities"
           x:DataType="controls:AccountViewCellViewModel">
     <Grid RowSpacing="0"
-          ColumnSpacing="0"
-          BackgroundColor="{DynamicResource BackgroundColor}">
+          ColumnSpacing="0">
 
         <Grid.Resources>
             <u:InverseBoolConverter x:Key="inverseBool" />

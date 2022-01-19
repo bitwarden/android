@@ -5,7 +5,6 @@ namespace Bit.Core.Models.Domain
 {
     public class Account : Domain
     {
-        public AuthenticationStatus? AuthStatus;
         public AccountProfile Profile;
         public AccountTokens Tokens;
         public AccountSettings Settings;
@@ -24,7 +23,6 @@ namespace Bit.Core.Models.Domain
         public Account(Account account)
         {
             // Copy constructor excludes Keys (for storage)
-            AuthStatus = account.AuthStatus;
             Profile = new AccountProfile(account.Profile);
             Tokens = new AccountTokens(account.Tokens);
             Settings = new AccountSettings(account.Settings);

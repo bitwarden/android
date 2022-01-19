@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Bit.Core;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -137,11 +138,15 @@ namespace Bit.App.Pages
         {
             get
             {
-                // create a separate collection that includes the "add new" row
-                var accounts = new ExtendedObservableCollection<AccountView>();
-                accounts.AddRange(_stateService.AccountViews);
-                accounts.Add(new AccountView());
-                return accounts;
+                if (_stateService.AccountViews.Count < Constants.MaxAccounts)
+                {
+                    // create a separate collection that includes the "add new" row
+                    var accountViews = new ExtendedObservableCollection<AccountView>();
+                    accountViews.AddRange(_stateService.AccountViews);
+                    accountViews.Add(new AccountView());
+                    return accountViews;
+                }
+                return _stateService.AccountViews;
             }
         }
 

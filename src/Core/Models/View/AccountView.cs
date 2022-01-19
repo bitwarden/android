@@ -15,7 +15,6 @@ namespace Bit.Core.Models.View
                 return;
             }
             IsAccount = true;
-            AuthStatus = a.AuthStatus;
             UserId = a.Profile?.UserId;
             Email = a.Profile?.Email;
             Hostname = a.Settings?.EnvironmentUrls?.Base;

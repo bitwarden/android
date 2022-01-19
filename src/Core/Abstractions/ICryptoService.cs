@@ -25,7 +25,7 @@ namespace Bit.Core.Abstractions
         Task<EncByteArray> EncryptToBytesAsync(byte[] plainValue, SymmetricCryptoKey key = null);
         Task<SymmetricCryptoKey> GetEncKeyAsync(SymmetricCryptoKey key = null);
         Task<List<string>> GetFingerprintAsync(string userId, byte[] publicKey = null);
-        Task<SymmetricCryptoKey> GetKeyAsync();
+        Task<SymmetricCryptoKey> GetKeyAsync(string userId = null);
         Task<string> GetKeyHashAsync();
         Task<SymmetricCryptoKey> GetOrgKeyAsync(string orgId);
         Task<Dictionary<string, SymmetricCryptoKey>> GetOrgKeysAsync();
@@ -34,7 +34,7 @@ namespace Bit.Core.Abstractions
         Task<bool> CompareAndUpdateKeyHashAsync(string masterPassword, SymmetricCryptoKey key);
         Task<bool> HasEncKeyAsync();
         Task<string> HashPasswordAsync(string password, SymmetricCryptoKey key, HashPurpose hashPurpose = HashPurpose.ServerAuthorization);
-        Task<bool> HasKeyAsync();
+        Task<bool> HasKeyAsync(string userId = null);
         Task<Tuple<SymmetricCryptoKey, EncString>> MakeEncKeyAsync(SymmetricCryptoKey key);
         Task<SymmetricCryptoKey> MakeKeyAsync(string password, string salt, KdfType? kdf, int? kdfIterations);
         Task<SymmetricCryptoKey> MakeKeyFromPinAsync(string pin, string salt, KdfType kdf, int kdfIterations,
