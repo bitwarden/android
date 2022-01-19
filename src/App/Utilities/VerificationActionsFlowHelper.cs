@@ -61,7 +61,7 @@ namespace Bit.App.Utilities
 
         private VerificationFlowAction? _action;
         private IActionFlowParmeters _parameters;
-        private string _verificatioCodeMainActionText;
+        private string _verificationCodeMainActionText;
         private bool _isVerificationCodeMainActionStyleDanger;
 
         private readonly Dictionary<VerificationFlowAction, IActionFlowExecutioner> _actionExecutionerDictionary = new Dictionary<VerificationFlowAction, IActionFlowExecutioner>();
@@ -77,12 +77,12 @@ namespace Bit.App.Utilities
 
         public IVerificationActionsFlowHelper Configure(VerificationFlowAction action,
             IActionFlowParmeters parameters = null,
-            string verificatioCodeMainActionText = null,
+            string verificationCodeMainActionText = null,
             bool isVerificationCodeMainActionStyleDanger = false)
         {
             _action = action;
             _parameters = parameters;
-            _verificatioCodeMainActionText = verificatioCodeMainActionText;
+            _verificationCodeMainActionText = verificationCodeMainActionText;
             _isVerificationCodeMainActionStyleDanger = isVerificationCodeMainActionStyleDanger;
 
             return this;
@@ -118,7 +118,7 @@ namespace Bit.App.Utilities
                     break;
                 case VerificationType.OTP:
                     await Application.Current.MainPage.Navigation.PushModalAsync(new NavigationPage(
-                        new VerificationCodePage(_verificatioCodeMainActionText, _isVerificationCodeMainActionStyleDanger)));
+                        new VerificationCodePage(_verificationCodeMainActionText, _isVerificationCodeMainActionStyleDanger)));
                     break;
                 default:
                     throw new NotImplementedException($"There is no implementation for {verificationType}");
