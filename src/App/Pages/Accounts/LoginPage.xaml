@@ -122,7 +122,7 @@
             Padding="0">
 
             <StackLayout
-                x:Name="_accountListView"
+                x:Name="_accountListContainer"
                 VerticalOptions="StartAndExpand"
                 HorizontalOptions="FillAndExpand"
                 BackgroundColor="{DynamicResource BackgroundColor}"
@@ -130,6 +130,7 @@
                 xct:ShadowEffect.Radius="10"
                 xct:ShadowEffect.OffsetY="3">
                 <ListView
+                    x:Name="_accountListView"
                     ItemsSource="{Binding AccountViews}"
                     ItemSelected="AccountRow_Selected"
                     BackgroundColor="Transparent"

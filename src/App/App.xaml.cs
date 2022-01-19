@@ -283,13 +283,14 @@ namespace Bit.App
                 {
                     await SetMainPageAsync();
                 }
+                await Task.Delay(50);
                 UpdateTheme();
             });
         }
 
         private async Task SetMainPageAsync()
         {
-            await _stateService.RefreshAccountViews();
+            await _stateService.RefreshAccountViewsAsync();
             var authed = await _stateService.IsAuthenticatedAsync();
             if (authed)
             {

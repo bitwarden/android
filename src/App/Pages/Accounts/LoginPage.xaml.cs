@@ -141,17 +141,18 @@ namespace Bit.App.Pages
         {
             if (_accountListOverlay.IsVisible)
             {
-                await ShowAccountListAsync(false, _accountListView, _accountListOverlay);
+                await ShowAccountListAsync(false, _accountListContainer, _accountListOverlay);
             }
             else
             {
-                await ShowAccountListAsync(true, _accountListView, _accountListOverlay);
+                await RefreshAccountViewsAsync(_accountListView);
+                await ShowAccountListAsync(true, _accountListContainer, _accountListOverlay);
             }
         }
 
         private async void AccountRow_Selected(object sender, SelectedItemChangedEventArgs e)
         {
-            await AccountRowSelectedAsync(sender, e, _accountListView, _accountListOverlay, null, true);
+            await AccountRowSelectedAsync(sender, e, _accountListContainer, _accountListOverlay, null, true);
         }
     }
 }

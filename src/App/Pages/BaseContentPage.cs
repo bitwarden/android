@@ -9,7 +9,6 @@ using Bit.Core.Enums;
 using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
-using Page = Xamarin.Forms.Page;
 
 namespace Bit.App.Pages
 {
@@ -37,12 +36,6 @@ namespace Bit.App.Pages
         {
             base.OnAppearing();
             await SaveActivity();
-        }
-
-        public async Task<bool> ShowAccountSwitcherAsync()
-        {
-            return await _stateService.HasMultipleAccountsAsync()
-                || await _stateService.IsAuthenticatedAsync();
         }
 
         public bool DoOnce(Action action = null, int milliseconds = 1000)
@@ -115,23 +108,33 @@ namespace Bit.App.Pages
             });
         }
 
+        protected async Task<bool> ShowAccountSwitcherAsync()
+        {
+            return await _stateService.HasMultipleAccountsAsync()
+                || await _stateService.IsAuthenticatedAsync();
+        }
+
+        protected async Task RefreshAccountViewsAsync(Xamarin.Forms.ListView accountListView)
+        {
+            await _stateService.RefreshAccountViewsAsync();
+            // Property change trigger on account listview is yielding inconsistent results, using a hammer instead
+            accountListView.ItemsSource = null;
+            accountListView.ItemsSource = _stateService.AccountViews;
+        }
         protected async Task<AvatarImageSource> GetAvatarImageSourceAsync(bool useCurrentActiveAccount = true)
         {
             return new AvatarImageSource(useCurrentActiveAccount ? await _stateService.GetEmailAsync() : null);
         }
 
-        protected async Task ShowAccountListAsync(bool isVisible, View listView, View overlay, View fab = null)
+        protected async Task ShowAccountListAsync(bool isVisible, View listContainer, View overlay, View fab = null)
         {
             Device.BeginInvokeOnMainThread(async () =>
             {
                 // Not all animations are awaited. This is intentional to allow multiple simultaneous animations.
                 if (isVisible)
                 {
-                    // Update account views to reflect current state
-                    await _stateService.RefreshAccountViews();
-
                     // start listView in default (off-screen) position
-                    await listView.TranslateTo(0, listView.Height * -1, 0);
+                    await listContainer.TranslateTo(0, listContainer.Height * -1, 0);
 
                     // set overlay opacity to zero before making visible and start fade-in
                     overlay.Opacity = 0;
@@ -145,7 +148,7 @@ namespace Bit.App.Pages
                     }
 
                     // slide account list into view
-                    await listView.TranslateTo(0, 0, 200, Easing.SinOut);
+                    await listContainer.TranslateTo(0, 0, 200, Easing.SinOut);
                 }
                 else
                 {
@@ -159,7 +162,7 @@ namespace Bit.App.Pages
                     }
 
                     // slide account list out of view
-                    await listView.TranslateTo(0, listView.Height * -1, 200, Easing.SinIn);
+                    await listContainer.TranslateTo(0, listContainer.Height * -1, 200, Easing.SinIn);
 
                     // remove overlay
                     overlay.IsVisible = false;
@@ -167,7 +170,7 @@ namespace Bit.App.Pages
             });
         }
 
-        protected async Task AccountRowSelectedAsync(object sender, SelectedItemChangedEventArgs e, View listView,
+        protected async Task AccountRowSelectedAsync(object sender, SelectedItemChangedEventArgs e, View listContainer,
             View overlay, View fab = null, bool? allowActiveAccountSelection = false)
         {
             if (!DoOnce())
@@ -181,7 +184,7 @@ namespace Bit.App.Pages
 
             ((Xamarin.Forms.ListView)sender).SelectedItem = null;
             await Task.Delay(100);
-            await ShowAccountListAsync(false, listView, overlay, fab);
+            await ShowAccountListAsync(false, listContainer, overlay, fab);
 
             if (item.AccountView.IsAccount)
             {

@@ -18,7 +18,7 @@ namespace Bit.Core.Abstractions
         Task SetActiveUserAsync(string userId);
         Task<bool> IsAuthenticatedAsync(string userId = null);
         Task<bool> HasMultipleAccountsAsync();
-        Task RefreshAccountViews();
+        Task RefreshAccountViewsAsync();
         Task AddAccountAsync(Account account);
         Task ClearAsync(string userId);
         Task<EnvironmentUrlData> GetPreAuthEnvironmentUrlsAsync();

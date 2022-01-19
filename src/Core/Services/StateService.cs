@@ -85,7 +85,7 @@ namespace Bit.Core.Services
             return _state.Accounts?.Count > 1;
         }
 
-        public async Task RefreshAccountViews()
+        public async Task RefreshAccountViewsAsync()
         {
             await CheckStateAsync();
 
@@ -130,7 +130,7 @@ namespace Bit.Core.Services
         {
             await ScaffoldNewAccountAsync(account);
             await SetActiveUserAsync(account.Profile.UserId);
-            await RefreshAccountViews();
+            await RefreshAccountViewsAsync();
         }
 
         public async Task ClearAsync(string userId)
