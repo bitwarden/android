@@ -19,7 +19,9 @@ using System.Threading.Tasks;
 using AndroidX.Core.Content;
 using Bit.App.Utilities;
 using ZXing.Net.Mobile.Android;
-using Android.Util;
+#if !FDROID
+using Microsoft.AppCenter.Crashes;
+#endif
 
 namespace Bit.Droid
 {
@@ -120,7 +122,9 @@ namespace Bit.Droid
             base.OnResume();
             Xamarin.Essentials.Platform.OnResume();
             AppearanceAdjustments();
-            _messagingService?.Send("appeared");
+
+            UpdateThemeOnPagesAsync();
+
             if (_deviceActionService.SupportsNfc())
             {
                 try
@@ -132,6 +136,21 @@ namespace Bit.Droid
             AndroidHelpers.SetPreconfiguredRestrictionSettingsAsync(this)
                 .GetAwaiter()
                 .GetResult();
+        }
+
+        // TODO: When #1660 gets merged then we can use the task extension FireAndForget instead of this method
+        private async void UpdateThemeOnPagesAsync()
+        {
+            try
+            {
+                await ThemeManager.UpdateThemeOnPagesAsync().ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+#if !FDROID
+                Crashes.TrackError(ex);
+#endif
+            }
         }
 
         protected override void OnNewIntent(Intent intent)

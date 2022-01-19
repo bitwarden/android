@@ -16,7 +16,6 @@ namespace Bit.App.Pages
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IPasswordGenerationService _passwordGenerationService;
         private readonly IClipboardService _clipboardService;
-        private readonly IBroadcasterService _broadcasterService;
 
         private bool _showNoData;
 
@@ -25,7 +24,6 @@ namespace Bit.App.Pages
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _passwordGenerationService = ServiceContainer.Resolve<IPasswordGenerationService>("passwordGenerationService");
             _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
-            _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
 
             PageTitle = AppResources.PasswordHistory;
             History = new ExtendedObservableCollection<GeneratedPasswordHistory>();
@@ -62,28 +60,20 @@ namespace Bit.App.Pages
                 string.Format(AppResources.ValueHasBeenCopied, AppResources.Password));
         }
 
-        public void Subscribe()
+        public async Task UpdateOnThemeChanged()
         {
-            _broadcasterService?.Subscribe(nameof(GeneratorHistoryPageViewModel), async (message) =>
+            try
             {
-                try
-                {
-                    if (message.Command == "appeared")
-                    {
-                        await Device.InvokeOnMainThreadAsync(() => History.ResetWithRange(new List<GeneratedPasswordHistory>()));
+                await Device.InvokeOnMainThreadAsync(() => History.ResetWithRange(new List<GeneratedPasswordHistory>()));
 
-                        await InitAsync();
-                    }
-                }
-                catch (System.Exception ex)
-                {
+                await InitAsync();
+            }
+            catch (System.Exception ex)
+            {
 #if !FDROID
-                    Crashes.TrackError(ex);
+                Crashes.TrackError(ex);
 #endif
-                }
-            });
+            }
         }
-
-        public void Unsubscribe() => _broadcasterService?.Unsubscribe(nameof(GeneratorHistoryPageViewModel));
     }
 }

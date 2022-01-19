@@ -1,15 +1,15 @@
-﻿using Bit.App.Resources;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using Bit.App.Resources;
+using Bit.App.Styles;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
-using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
 
 namespace Bit.App.Pages
 {
-    public partial class GeneratorPage : BaseContentPage
+    public partial class GeneratorPage : BaseContentPage, IThemeDirtablePage
     {
         private readonly IBroadcasterService _broadcasterService;
         
@@ -49,7 +49,7 @@ namespace Bit.App.Pages
             }
             if (isIos)
             {
-                _typePicker.On<iOS>().SetUpdateMode(UpdateMode.WhenFinished);
+                _typePicker.On<Xamarin.Forms.PlatformConfiguration.iOS>().SetUpdateMode(UpdateMode.WhenFinished);
             }
         }
 
@@ -61,8 +61,6 @@ namespace Bit.App.Pages
         protected async override void OnAppearing()
         {
             base.OnAppearing();
-
-            _vm?.RedrawPassword(); // this is needed when coming back from another view to this one and the theme has changed
 
             lblPassword.IsVisible = true;
 
@@ -146,6 +144,13 @@ namespace Bit.App.Pages
             {
                 await Navigation.PopModalAsync();
             }
+        }
+
+        public override async Task UpdateOnThemeChanged()
+        {
+            await base.UpdateOnThemeChanged();
+
+            await Device.InvokeOnMainThreadAsync(() => _vm?.RedrawPassword());
         }
     }
 }

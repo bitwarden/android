@@ -5,6 +5,7 @@ using Bit.App.Styles;
 using Bit.Core;
 using Xamarin.Forms;
 using System.Linq;
+using System.Threading.Tasks;
 #if !FDROID
 using Microsoft.AppCenter.Crashes;
 #endif
@@ -15,6 +16,8 @@ namespace Bit.App.Utilities
     {
         public static bool UsingLightTheme = true;
         public static Func<ResourceDictionary> Resources = () => null;
+
+        public static bool IsThemeDirty = false;
 
         public static void SetThemeStyle(string name, ResourceDictionary resources)
         {
@@ -34,6 +37,7 @@ namespace Bit.App.Utilities
                     resources.MergedDictionaries.Remove(currentTheme);
                     resources.MergedDictionaries.Add(newTheme);
                     UsingLightTheme = newTheme is Light;
+                    IsThemeDirty = true;
                     return;
                 }
 
@@ -140,6 +144,26 @@ namespace Bit.App.Utilities
         public static Color GetResourceColor(string color)
         {
             return (Color)Resources()[color];
+        }
+
+        public static async Task UpdateThemeOnPagesAsync()
+        {
+            if (IsThemeDirty)
+            {
+                IsThemeDirty = false;
+
+                await Application.Current.MainPage.TraverseNavigationRecursivelyAsync(async p =>
+                {
+                    if (p is IThemeDirtablePage themeDirtablePage)
+                    {
+                        themeDirtablePage.IsThemeDirty = true;
+                        if (p.IsVisible)
+                        {
+                            await themeDirtablePage.UpdateOnThemeChanged();
+                        }
+                    }
+                });
+            }
         }
     }
 }
