@@ -1051,20 +1051,18 @@ namespace Bit.Core.Services
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<string> GetPushRegisteredTokenAsync(string userId = null)
+        public async Task<string> GetPushRegisteredTokenAsync()
         {
-            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
-                await GetDefaultStorageOptionsAsync());
+            var options = await GetDefaultStorageOptionsAsync();
             var key = Constants.PushRegisteredTokenKey;
-            return await GetValueAsync<string>(key, reconciledOptions);
+            return await GetValueAsync<string>(key, options);
         }
 
-        public async Task SetPushRegisteredTokenAsync(string value, string userId = null)
+        public async Task SetPushRegisteredTokenAsync(string value)
         {
-            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
-                await GetDefaultStorageOptionsAsync());
+            var options = await GetDefaultStorageOptionsAsync();
             var key = Constants.PushRegisteredTokenKey;
-            await SetValueAsync(key, value, reconciledOptions);
+            await SetValueAsync(key, value, options);
         }
 
         public async Task<bool?> GetAppExtensionStartedAsync(string userId = null)

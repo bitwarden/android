@@ -133,8 +133,8 @@ namespace Bit.Core.Abstractions
         Task SetEncryptedFoldersAsync(Dictionary<string, FolderData> value, string userId = null);
         Task<Dictionary<string, PolicyData>> GetEncryptedPoliciesAsync(string userId = null);
         Task SetEncryptedPoliciesAsync(Dictionary<string, PolicyData> value, string userId = null);
-        Task<string> GetPushRegisteredTokenAsync(string userId = null);
-        Task SetPushRegisteredTokenAsync(string value, string userId = null);
+        Task<string> GetPushRegisteredTokenAsync();
+        Task SetPushRegisteredTokenAsync(string value);
         Task<bool?> GetAppExtensionStartedAsync(string userId = null);
         Task SetAppExtensionStartedAsync(bool? value, string userId = null);
         Task<bool?> GetAppExtensionActivatedAsync(string userId = null);

@@ -273,8 +273,9 @@ namespace Bit.App
             Device.BeginInvokeOnMainThread(async () =>
             {
                 await SetMainPageAsync();
+                UpdateTheme();
+                await _vaultTimeoutService.CheckVaultTimeoutAsync();
             });
-            UpdateTheme();
         }
 
         private async Task SetMainPageAsync()
