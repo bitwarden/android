@@ -18,6 +18,7 @@ namespace Bit.App.Pages
         private readonly ICipherService _cipherService;
         private readonly ICryptoService _cryptoService;
         private readonly IStateService _stateService;
+        private readonly IVaultTimeoutService _vaultTimeoutService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private CipherView _cipher;
         private Cipher _cipherDomain;
@@ -33,6 +34,7 @@ namespace Bit.App.Pages
             _cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             Attachments = new ExtendedObservableCollection<AttachmentView>();
             DeleteAttachmentCommand = new Command<AttachmentView>(DeleteAsync);
             PageTitle = AppResources.Attachments;
@@ -135,6 +137,11 @@ namespace Bit.App.Pages
 
         public async Task ChooseFileAsync()
         {
+            // Prevent Android from locking if vault timeout set to "immediate"
+            if (Device.RuntimePlatform == Device.Android)
+            {
+                _vaultTimeoutService.DelayLockAndLogoutMs = 60000;
+            }
             await _deviceActionService.SelectFileAsync();
         }
 

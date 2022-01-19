@@ -52,6 +52,8 @@ namespace Bit.Core.Services
             _loggedOutCallback = loggedOutCallback;
         }
 
+        public long? DelayLockAndLogoutMs { get; set; }
+
         public async Task<bool> IsLockedAsync(string userId = null)
         {
             var hasKey = await _cryptoService.HasKeyAsync(userId);
@@ -95,12 +97,20 @@ namespace Bit.Core.Services
             {
                 return false;
             }
+            if (vaultTimeoutMinutes == 0 && !DelayLockAndLogoutMs.HasValue)
+            {
+                return true;
+            }
             var lastActiveTime = await _stateService.GetLastActiveTimeAsync(userId);
             if (lastActiveTime == null)
             {
                 return false;
             }
             var diffMs = _platformUtilsService.GetActiveTime() - lastActiveTime;
+            if (DelayLockAndLogoutMs.HasValue && diffMs < DelayLockAndLogoutMs)
+            {
+                return false;
+            }
             var vaultTimeoutMs = vaultTimeoutMinutes * 60000;
             return diffMs >= vaultTimeoutMs;
         }
