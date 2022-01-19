@@ -72,10 +72,6 @@ namespace Bit.Core.Services
 
         public async Task<bool> IsAuthenticatedAsync(string userId = null)
         {
-            if (userId != null)
-            {
-                return await GetAccessTokenAsync(userId) != null && (_state?.Accounts?.ContainsKey(userId) ?? false);
-            }
             return await GetAccessTokenAsync(userId) != null;
         }
 
@@ -85,7 +81,7 @@ namespace Bit.Core.Services
             return _state.Accounts?.Count > 1;
         }
 
-        public async Task RefreshAccountViewsAsync()
+        public async Task RefreshAccountViewsAsync(bool allowAddAccountRow)
         {
             await CheckStateAsync();
 
@@ -124,13 +120,17 @@ namespace Bit.Core.Services
                 }
                 AccountViews.Add(accountView);
             }
+            if (allowAddAccountRow && AccountViews.Count < Constants.MaxAccounts)
+            {
+                AccountViews.Add(new AccountView());
+            }
         }
 
         public async Task AddAccountAsync(Account account)
         {
             await ScaffoldNewAccountAsync(account);
             await SetActiveUserAsync(account.Profile.UserId);
-            await RefreshAccountViewsAsync();
+            await RefreshAccountViewsAsync(true);
         }
 
         public async Task ClearAsync(string userId)
@@ -1224,9 +1224,10 @@ namespace Bit.Core.Services
             ))?.Tokens?.AccessToken;
         }
 
-        public async Task SetAccessTokenAsync(string value, string userId = null)
+        public async Task SetAccessTokenAsync(string value, bool skipTokenStorage, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+            var reconciledOptions = ReconcileOptions(
+                new StorageOptions { UserId = userId, SkipTokenStorage = skipTokenStorage },
                 await GetDefaultStorageOptionsAsync());
             var account = await GetAccountAsync(reconciledOptions);
             account.Tokens.AccessToken = value;
@@ -1240,9 +1241,10 @@ namespace Bit.Core.Services
             ))?.Tokens?.RefreshToken;
         }
 
-        public async Task SetRefreshTokenAsync(string value, string userId = null)
+        public async Task SetRefreshTokenAsync(string value, bool skipTokenStorage, string userId = null)
         {
-            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+            var reconciledOptions = ReconcileOptions(
+                new StorageOptions { UserId = userId, SkipTokenStorage = skipTokenStorage },
                 await GetDefaultStorageOptionsAsync());
             var account = await GetAccountAsync(reconciledOptions);
             account.Tokens.RefreshToken = value;
@@ -1356,7 +1358,7 @@ namespace Bit.Core.Services
                 state.Accounts[account.Profile.UserId] = new Account(account);
 
                 // If we have a vault timeout and the action is log out, don't store token
-                if (await SkipTokenStorageAsync())
+                if (options?.SkipTokenStorage.GetValueOrDefault() ?? false)
                 {
                     state.Accounts[account.Profile.UserId].Tokens.AccessToken = null;
                     state.Accounts[account.Profile.UserId].Tokens.RefreshToken = null;
@@ -1364,13 +1366,6 @@ namespace Bit.Core.Services
 
                 await SaveStateToStorageAsync(state);
             }
-        }
-
-        private async Task<bool> SkipTokenStorageAsync()
-        {
-            var timeout = await GetVaultTimeoutAsync();
-            var action = await GetVaultTimeoutActionAsync();
-            return timeout.HasValue && action == "logOut";
         }
 
         private async Task RemoveAccountAsync(string userId)
@@ -1468,6 +1463,7 @@ namespace Bit.Core.Services
             requestedOptions.UseSecureStorage = requestedOptions.UseSecureStorage ?? defaultOptions.UseSecureStorage;
             requestedOptions.UserId = requestedOptions.UserId ?? defaultOptions.UserId;
             requestedOptions.Email = requestedOptions.Email ?? defaultOptions.Email;
+            requestedOptions.SkipTokenStorage = requestedOptions.SkipTokenStorage ?? defaultOptions.SkipTokenStorage;
             return requestedOptions;
         }
 

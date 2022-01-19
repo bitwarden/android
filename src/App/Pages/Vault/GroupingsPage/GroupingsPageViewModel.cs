@@ -136,18 +136,7 @@ namespace Bit.App.Pages
         }
         public ExtendedObservableCollection<AccountView> AccountViews
         {
-            get
-            {
-                if (_stateService.AccountViews.Count < Constants.MaxAccounts)
-                {
-                    // create a separate collection that includes the "add new" row
-                    var accountViews = new ExtendedObservableCollection<AccountView>();
-                    accountViews.AddRange(_stateService.AccountViews);
-                    accountViews.Add(new AccountView());
-                    return accountViews;
-                }
-                return _stateService.AccountViews;
-            }
+            get => _stateService.AccountViews;
         }
 
         public ExtendedObservableCollection<GroupingsPageListGroup> GroupedItems { get; set; }

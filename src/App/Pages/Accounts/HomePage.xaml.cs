@@ -45,7 +45,7 @@ namespace Bit.App.Pages
             _mainContent.Content = _mainLayout;
             if (await ShowAccountSwitcherAsync())
             {
-                _vm.AvatarImageSource = await GetAvatarImageSourceAsync(false);
+                _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
             }
             else
             {
@@ -146,7 +146,7 @@ namespace Bit.App.Pages
             }
             else
             {
-                await RefreshAccountViewsAsync(_accountListView);
+                await RefreshAccountViewsAsync(_accountListView, false);
                 await ShowAccountListAsync(true, _accountListContainer, _accountListOverlay);
             }
         }

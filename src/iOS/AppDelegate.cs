@@ -141,11 +141,15 @@ namespace Bit.iOS
                         await ASHelpers.ReplaceAllIdentities();
                     }
                 }
-                else if (message.Command == "loggedOut")
+                else if (message.Command == "logout")
                 {
                     if (_deviceActionService.SystemMajorVersion() >= 12)
                     {
-                        // TODO make account-specific
+                        var extras = message.Data as Tuple<string, bool, bool>;
+                        var userId = extras?.Item1;
+                        var userInitiated = extras?.Item2;
+                        var expired = extras?.Item3;
+                        // TODO make specific to userId
                         // await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
                     }
                 }
@@ -159,7 +163,9 @@ namespace Bit.iOS
                     var timeoutAction = await _stateService.GetVaultTimeoutActionAsync();
                     if (timeoutAction == "logOut")
                     {
-                        await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
+                        var userId = await _stateService.GetActiveUserIdAsync();
+                        // TODO make specific to userId
+                        // await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
                     }
                     else
                     {

@@ -18,7 +18,7 @@ namespace Bit.Core.Abstractions
         Task SetActiveUserAsync(string userId);
         Task<bool> IsAuthenticatedAsync(string userId = null);
         Task<bool> HasMultipleAccountsAsync();
-        Task RefreshAccountViewsAsync();
+        Task RefreshAccountViewsAsync(bool allowAddAccountRow);
         Task AddAccountAsync(Account account);
         Task ClearAsync(string userId);
         Task<EnvironmentUrlData> GetPreAuthEnvironmentUrlsAsync();
@@ -154,9 +154,9 @@ namespace Bit.Core.Abstractions
         Task<Dictionary<string, object>> GetSettingsAsync(string userId = null);
         Task SetSettingsAsync(Dictionary<string, object> value, string userId = null);
         Task<string> GetAccessTokenAsync(string userId = null);
-        Task SetAccessTokenAsync(string value, string userId = null);
+        Task SetAccessTokenAsync(string value, bool skipTokenStorage, string userId = null);
         Task<string> GetRefreshTokenAsync(string userId = null);
-        Task SetRefreshTokenAsync(string value, string userId = null);
+        Task SetRefreshTokenAsync(string value, bool skipTokenStorage, string userId = null);
         Task<string> GetTwoFactorTokenAsync(string email = null);
         Task SetTwoFactorTokenAsync(string value, string email = null);
     }

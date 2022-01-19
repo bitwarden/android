@@ -12,9 +12,8 @@ namespace Bit.Core.Services
     {
         private readonly IStateService _stateService;
 
-        private string _token;
-        private JObject _decodedToken;
-        private string _refreshToken;
+        private string _accessTokenForDecoding;
+        private JObject _decodedAccessToken;
 
         public TokenService(IStateService stateService)
         {
@@ -24,70 +23,39 @@ namespace Bit.Core.Services
         public async Task SetTokensAsync(string accessToken, string refreshToken)
         {
             await Task.WhenAll(
-                SetTokenAsync(accessToken),
+                SetAccessTokenAsync(accessToken),
                 SetRefreshTokenAsync(refreshToken));
         }
 
-        public async Task SetTokenAsync(string token)
+        public async Task SetAccessTokenAsync(string accessToken)
         {
-            _token = token;
-            _decodedToken = null;
-
-            if (await SkipTokenStorage())
-            {
-                // If we have a vault timeout and the action is log out, don't store token
-                return;
-            }
-            
-            // await _stateService.SetAccessTokenAsync(token);
+            _accessTokenForDecoding = accessToken;
+            _decodedAccessToken = null;
+            await _stateService.SetAccessTokenAsync(accessToken, await SkipTokenStorage());
         }
 
         public async Task<string> GetTokenAsync()
         {
-            if (_token != null)
-            {
-                return _token;
-            }
-            _token = await _stateService.GetAccessTokenAsync();
-            return _token;
+            _accessTokenForDecoding = await _stateService.GetAccessTokenAsync();
+            return _accessTokenForDecoding;
         }
 
         public async Task SetRefreshTokenAsync(string refreshToken)
         {
-            _refreshToken = refreshToken;
-
-            if (await SkipTokenStorage())
-            {
-                // If we have a vault timeout and the action is log out, don't store token
-                return;
-            }
-            
-            // await _stateService.SetRefreshTokenAsync(refreshToken);
+            await _stateService.SetRefreshTokenAsync(refreshToken, await SkipTokenStorage());
         }
 
         public async Task<string> GetRefreshTokenAsync()
         {
-            if (_refreshToken != null)
-            {
-                return _refreshToken;
-            }
-            _refreshToken = await _stateService.GetRefreshTokenAsync();
-            return _refreshToken;
+            return await _stateService.GetRefreshTokenAsync();
         }
 
         public async Task ToggleTokensAsync()
         {
+            // load and re-save tokens to reflect latest value of SkipTokenStorage()
             var token = await GetTokenAsync();
             var refreshToken = await GetRefreshTokenAsync();
-            if (await SkipTokenStorage())
-            {
-                await ClearTokenAsync();
-                _token = token;
-                _refreshToken = refreshToken;
-                return;
-            }
-
-            await SetTokenAsync(token);
+            await SetAccessTokenAsync(token);
             await SetRefreshTokenAsync(refreshToken);
         }
 
@@ -110,28 +78,27 @@ namespace Bit.Core.Services
         {
             ClearCache();
             await Task.WhenAll(
-                _stateService.SetAccessTokenAsync(null, userId),
-                _stateService.SetRefreshTokenAsync(null, userId));
+                _stateService.SetAccessTokenAsync(null, false, userId),
+                _stateService.SetRefreshTokenAsync(null, false, userId));
         }
 
         public void ClearCache()
         {
-            _token = null;
-            _decodedToken = null;
-            _refreshToken = null;
+            _accessTokenForDecoding = null;
+            _decodedAccessToken = null;
         }
 
         public JObject DecodeToken()
         {
-            if (_decodedToken != null)
+            if (_decodedAccessToken != null)
             {
-                return _decodedToken;
+                return _decodedAccessToken;
             }
-            if (_token == null)
+            if (_accessTokenForDecoding == null)
             {
-                throw new InvalidOperationException("Token not found.");
+                throw new InvalidOperationException("Access token not found.");
             }
-            var parts = _token.Split('.');
+            var parts = _accessTokenForDecoding.Split('.');
             if (parts.Length != 3)
             {
                 throw new InvalidOperationException("JWT must have 3 parts.");
@@ -141,8 +108,8 @@ namespace Bit.Core.Services
             {
                 throw new InvalidOperationException("Cannot decode the token.");
             }
-            _decodedToken = JObject.Parse(Encoding.UTF8.GetString(decodedBytes));
-            return _decodedToken;
+            _decodedAccessToken = JObject.Parse(Encoding.UTF8.GetString(decodedBytes));
+            return _decodedAccessToken;
         }
 
         public DateTime? GetTokenExpirationDate()
@@ -234,7 +201,7 @@ namespace Bit.Core.Services
 
         public async Task<bool> GetIsExternal()
         {
-            if (_token == null)
+            if (_accessTokenForDecoding == null)
             {
                 await GetTokenAsync();
             }

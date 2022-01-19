@@ -290,13 +290,23 @@ namespace Bit.App
 
         private async Task SetMainPageAsync()
         {
-            await _stateService.RefreshAccountViewsAsync();
             var authed = await _stateService.IsAuthenticatedAsync();
             if (authed)
             {
-                if (await _vaultTimeoutService.IsLockedAsync())
+                var isLocked = await _vaultTimeoutService.IsLockedAsync();
+                var shouldTimeout = await _vaultTimeoutService.ShouldTimeoutAsync();
+                var vaultTimeoutAction = await _stateService.GetVaultTimeoutActionAsync();
+                if (isLocked || shouldTimeout)
                 {
-                    Current.MainPage = new NavigationPage(new LockPage(Options));
+                    if (vaultTimeoutAction == "logOut")
+                    {
+                        var email = await _stateService.GetEmailAsync();
+                        Current.MainPage = new NavigationPage(new LoginPage(email, Options));
+                    }
+                    else
+                    {
+                        Current.MainPage = new NavigationPage(new LockPage(Options));
+                    }
                 }
                 else if (Options.FromAutofillFramework && Options.SaveType.HasValue)
                 {

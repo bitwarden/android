@@ -163,7 +163,7 @@ namespace Bit.App.Pages
             }
             else
             {
-                await RefreshAccountViewsAsync(_accountListView);
+                await RefreshAccountViewsAsync(_accountListView, false);
                 await ShowAccountListAsync(true, _accountListContainer, _accountListOverlay);
             }
         }

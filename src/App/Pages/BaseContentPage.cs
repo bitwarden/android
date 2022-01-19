@@ -110,13 +110,12 @@ namespace Bit.App.Pages
 
         protected async Task<bool> ShowAccountSwitcherAsync()
         {
-            return await _stateService.HasMultipleAccountsAsync()
-                || await _stateService.IsAuthenticatedAsync();
+            return await _stateService.HasMultipleAccountsAsync();
         }
 
-        protected async Task RefreshAccountViewsAsync(Xamarin.Forms.ListView accountListView)
+        protected async Task RefreshAccountViewsAsync(Xamarin.Forms.ListView accountListView, bool allowAddAccountRow)
         {
-            await _stateService.RefreshAccountViewsAsync();
+            await _stateService.RefreshAccountViewsAsync(allowAddAccountRow);
             // Property change trigger on account listview is yielding inconsistent results, using a hammer instead
             accountListView.ItemsSource = null;
             accountListView.ItemsSource = _stateService.AccountViews;
