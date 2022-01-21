@@ -22,7 +22,8 @@ namespace Bit.App.Pages
         private readonly ICipherService _cipherService;
         private readonly IFolderService _folderService;
         private readonly ICollectionService _collectionService;
-        private readonly IUserService _userService;
+        private readonly IStateService _stateService;
+        private readonly IOrganizationService _organizationService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IAuditService _auditService;
         private readonly IMessagingService _messagingService;
@@ -70,7 +71,8 @@ namespace Bit.App.Pages
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
             _folderService = ServiceContainer.Resolve<IFolderService>("folderService");
-            _userService = ServiceContainer.Resolve<IUserService>("userService");
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            _organizationService = ServiceContainer.Resolve<IOrganizationService>("organizationService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _auditService = ServiceContainer.Resolve<IAuditService>("auditService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
@@ -302,9 +304,9 @@ namespace Bit.App.Pages
 
         public async Task<bool> LoadAsync(AppOptions appOptions = null)
         {
-            var myEmail = await _userService.GetEmailAsync();
+            var myEmail = await _stateService.GetEmailAsync();
             OwnershipOptions.Add(new KeyValuePair<string, string>(myEmail, null));
-            var orgs = await _userService.GetAllOrganizationAsync();
+            var orgs = await _organizationService.GetAllAsync();
             foreach (var org in orgs.OrderBy(o => o.Name))
             {
                 if (org.Enabled && org.Status == OrganizationUserStatusType.Confirmed)

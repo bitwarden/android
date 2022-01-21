@@ -13,15 +13,10 @@ namespace Bit.App.Services
 
         private readonly HashSet<string> _preferenceStorageKeys = new HashSet<string>
         {
-            Constants.VaultTimeoutKey,
-            Constants.VaultTimeoutActionKey,
-            Constants.ThemeKey,
-            Constants.DefaultUriMatch,
-            Constants.DisableAutoTotpCopyKey,
-            Constants.DisableFaviconKey,
-            Constants.ClearClipboardKey,
-            Constants.AutofillDisableSavePromptKey,
-            Constants.LastActiveTimeKey,
+            Constants.AppIdKey,
+            Constants.PreAuthEnvironmentUrlsKey,
+            Constants.AutofillTileAdded,
+            Constants.AddSitePromptShownKey,
             Constants.PushInitialPromptShownKey,
             Constants.LastFileCacheClearKey,
             Constants.PushLastRegistrationDateKey,
@@ -37,14 +32,17 @@ namespace Bit.App.Services
             Constants.iOSAutoFillBiometricIntegrityKey,
             Constants.iOSExtensionClearCiphersCacheKey,
             Constants.iOSExtensionBiometricIntegrityKey,
-            Constants.EnvironmentUrlsKey,
-            Constants.InlineAutofillEnabledKey,
-            Constants.InvalidUnlockAttempts,
+            Constants.RememberEmailKey,
+            Constants.RememberedEmailKey,
+            Constants.RememberOrgIdentifierKey,
+            Constants.RememberedOrgIdentifierKey,
+            Constants.AppExtensionStartedKey,
+            Constants.AppExtensionActivatedKey,
         };
 
         private readonly HashSet<string> _migrateToPreferences = new HashSet<string>
         {
-            Constants.EnvironmentUrlsKey,
+            "environmentUrls",
         };
         private readonly HashSet<string> _haveMigratedToPreferences = new HashSet<string>();
 

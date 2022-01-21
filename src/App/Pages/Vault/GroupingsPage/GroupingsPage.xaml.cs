@@ -1,7 +1,5 @@
 ﻿using Bit.App.Abstractions;
-using Bit.App.Models;
 using Bit.App.Resources;
-using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Utilities;
@@ -9,6 +7,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Bit.App.Controls;
+using Bit.Core.Models.Data;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -18,7 +17,7 @@ namespace Bit.App.Pages
         private readonly IBroadcasterService _broadcasterService;
         private readonly ISyncService _syncService;
         private readonly IPushNotificationService _pushNotificationService;
-        private readonly IStorageService _storageService;
+        private readonly IStateService _stateService;
         private readonly IVaultTimeoutService _vaultTimeoutService;
         private readonly ICipherService _cipherService;
         private readonly IDeviceActionService _deviceActionService;
@@ -37,7 +36,7 @@ namespace Bit.App.Pages
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
             _pushNotificationService = ServiceContainer.Resolve<IPushNotificationService>("pushNotificationService");
-            _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
@@ -70,6 +69,10 @@ namespace Bit.App.Pages
                 _absLayout.Children.Remove(_fab);
                 ToolbarItems.Remove(_addItem);
             }
+            if (!mainPage)
+            {
+                ToolbarItems.Remove(_accountAvatar);
+            }
         }
 
         protected async override void OnAppearing()
@@ -78,6 +81,11 @@ namespace Bit.App.Pages
             if (_syncService.SyncInProgress)
             {
                 IsBusy = true;
+            }
+
+            if (_vm.MainPage)
+            {
+                _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
             }
 
             _broadcasterService.Subscribe(_pageName, async (message) =>
@@ -100,7 +108,7 @@ namespace Bit.App.Pages
                 }
             });
 
-            var migratedFromV1 = await _storageService.GetAsync<bool?>(Constants.MigratedFromV1);
+            var migratedFromV1 = await _stateService.GetMigratedFromV1Async();
             await LoadOnAppearedAsync(_mainLayout, false, async () =>
             {
                 if (!_syncService.SyncInProgress || (await _cipherService.GetAllAsync()).Any())
@@ -128,10 +136,10 @@ namespace Bit.App.Pages
                     !_vm.HasCiphers &&
                     Xamarin.Essentials.Connectivity.NetworkAccess != Xamarin.Essentials.NetworkAccess.None)
                 {
-                    var triedV1ReSync = await _storageService.GetAsync<bool?>(Constants.TriedV1Resync);
+                    var triedV1ReSync = await _stateService.GetTriedV1ResyncAsync();
                     if (!triedV1ReSync.GetValueOrDefault())
                     {
-                        await _storageService.SaveAsync(Constants.TriedV1Resync, true);
+                        await _stateService.SetTriedV1ResyncAsync(true);
                         await _syncService.FullSyncAsync(true);
                     }
                 }
@@ -145,14 +153,14 @@ namespace Bit.App.Pages
             }
 
             // Push registration
-            var lastPushRegistration = await _storageService.GetAsync<DateTime?>(Constants.PushLastRegistrationDateKey);
+            var lastPushRegistration = await _stateService.GetPushLastRegistrationDateAsync();
             lastPushRegistration = lastPushRegistration.GetValueOrDefault(DateTime.MinValue);
             if (Device.RuntimePlatform == Device.iOS)
             {
-                var pushPromptShow = await _storageService.GetAsync<bool?>(Constants.PushInitialPromptShownKey);
+                var pushPromptShow = await _stateService.GetPushInitialPromptShownAsync();
                 if (!pushPromptShow.GetValueOrDefault(false))
                 {
-                    await _storageService.SaveAsync(Constants.PushInitialPromptShownKey, true);
+                    await _stateService.SetPushInitialPromptShownAsync(true);
                     await DisplayAlert(AppResources.EnableAutomaticSyncing, AppResources.PushNotificationAlert,
                         AppResources.OkGotIt);
                 }
@@ -173,8 +181,8 @@ namespace Bit.App.Pages
                 {
                     if (migratedFromV1.GetValueOrDefault())
                     {
-                        var migratedFromV1AutofillPromptShown = await _storageService.GetAsync<bool?>(
-                            Constants.MigratedFromV1AutofillPromptShown);
+                        var migratedFromV1AutofillPromptShown = 
+                            await _stateService.GetMigratedFromV1AutofillPromptShownAsync();
                         if (!migratedFromV1AutofillPromptShown.GetValueOrDefault())
                         {
                             await DisplayAlert(AppResources.Autofill,
@@ -182,7 +190,7 @@ namespace Bit.App.Pages
                         }
                     }
                 }
-                await _storageService.SaveAsync(Constants.MigratedFromV1AutofillPromptShown, true);
+                await _stateService.SetMigratedFromV1AutofillPromptShownAsync(true);
             }
         }
 
@@ -283,6 +291,25 @@ namespace Bit.App.Pages
         {
             _addItem.IsEnabled = !_vm.Deleted;
             _addItem.IconImageSource = _vm.Deleted ? null : "plus.png";
+        }
+
+        private async void AccountSwitch_Clicked(object sender, EventArgs e)
+        {
+            
+            if (_accountListOverlay.IsVisible)
+            {
+                await ShowAccountListAsync(false, _accountListContainer, _accountListOverlay, _fab);
+            }
+            else
+            {
+                await RefreshAccountViewsAsync(_accountListView, true);
+                await ShowAccountListAsync(true, _accountListContainer, _accountListOverlay, _fab);
+            }
+        }
+
+        private async void AccountRow_Selected(object sender, SelectedItemChangedEventArgs e)
+        {
+            await AccountRowSelectedAsync(sender, e, _accountListContainer, _accountListOverlay, _fab);
         }
     }
 }

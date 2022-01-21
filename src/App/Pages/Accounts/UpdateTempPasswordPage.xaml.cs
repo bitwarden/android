@@ -19,9 +19,6 @@ namespace Bit.App.Pages
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             
-            // Service Use
-            _messagingService.Send("showStatusBar", true);
-            
             // Binding
             InitializeComponent();
             _pageName = string.Concat(nameof(UpdateTempPasswordPage), "_", DateTime.UtcNow.Ticks);

@@ -1,6 +1,5 @@
 ﻿using Bit.App.Abstractions;
 using Bit.App.Resources;
-using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using System;
@@ -17,12 +16,11 @@ namespace Bit.App.Pages
     {
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly ICryptoService _cryptoService;
-        private readonly IUserService _userService;
+        private readonly IStateService _stateService;
         private readonly IDeviceActionService _deviceActionService;
         private readonly IEnvironmentService _environmentService;
         private readonly IMessagingService _messagingService;
         private readonly IVaultTimeoutService _vaultTimeoutService;
-        private readonly IStorageService _storageService;
         private readonly ISyncService _syncService;
         private readonly IBiometricService _biometricService;
         private readonly IPolicyService _policyService;
@@ -68,12 +66,11 @@ namespace Bit.App.Pages
         {
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
-            _userService = ServiceContainer.Resolve<IUserService>("userService");
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
-            _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
             _biometricService = ServiceContainer.Resolve<IBiometricService>("biometricService");
             _policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
@@ -111,7 +108,7 @@ namespace Bit.App.Pages
 
             _vaultTimeout = await _vaultTimeoutService.GetVaultTimeout();
             _vaultTimeoutDisplayValue = _vaultTimeouts.FirstOrDefault(o => o.Value == _vaultTimeout).Key;
-            var action = await _storageService.GetAsync<string>(Constants.VaultTimeoutActionKey) ?? "lock";
+            var action = await _stateService.GetVaultTimeoutActionAsync() ?? "lock";
             _vaultTimeoutActionDisplayValue = _vaultTimeoutActions.FirstOrDefault(o => o.Value == action).Key;
             var pinSet = await _vaultTimeoutService.IsPinLockSetAsync();
             _pin = pinSet.Item1 || pinSet.Item2;
@@ -151,7 +148,7 @@ namespace Bit.App.Pages
             List<string> fingerprint;
             try
             {
-                fingerprint = await _cryptoService.GetFingerprintAsync(await _userService.GetUserIdAsync());
+                fingerprint = await _cryptoService.GetFingerprintAsync(await _stateService.GetActiveUserIdAsync());
             }
             catch (Exception e) when (e.Message == "No public key available.")
             {
@@ -329,9 +326,9 @@ namespace Bit.App.Pages
                             AppResources.Yes, AppResources.No);
                     }
 
-                    var kdf = await _userService.GetKdfAsync();
-                    var kdfIterations = await _userService.GetKdfIterationsAsync();
-                    var email = await _userService.GetEmailAsync();
+                    var kdf = await _stateService.GetKdfTypeAsync();
+                    var kdfIterations = await _stateService.GetKdfIterationsAsync();
+                    var email = await _stateService.GetEmailAsync();
                     var pinKey = await _cryptoService.MakePinKeyAysnc(pin, email,
                         kdf.GetValueOrDefault(Core.Enums.KdfType.PBKDF2_SHA256),
                         kdfIterations.GetValueOrDefault(5000));
@@ -341,12 +338,12 @@ namespace Bit.App.Pages
                     if (masterPassOnRestart)
                     {
                         var encPin = await _cryptoService.EncryptAsync(pin);
-                        await _storageService.SaveAsync(Constants.ProtectedPin, encPin.EncryptedString);
-                        _vaultTimeoutService.PinProtectedKey = pinProtectedKey;
+                        await _stateService.SetProtectedPinAsync(encPin.EncryptedString);
+                        await _stateService.SetPinProtectedCachedAsync(pinProtectedKey);
                     }
                     else
                     {
-                        await _storageService.SaveAsync(Constants.PinProtectedKey, pinProtectedKey.EncryptedString);
+                        await _stateService.SetPinProtectedAsync(pinProtectedKey.EncryptedString);
                     }
                 }
                 else
@@ -381,13 +378,13 @@ namespace Bit.App.Pages
             if (_biometric)
             {
                 await _biometricService.SetupBiometricAsync();
-                await _storageService.SaveAsync(Constants.BiometricUnlockKey, true);
+                await _stateService.SetBiometricUnlockAsync(true);
             }
             else
             {
-                await _storageService.RemoveAsync(Constants.BiometricUnlockKey);
+                await _stateService.SetBiometricUnlockAsync(null);
             }
-            _vaultTimeoutService.BiometricLocked = false;
+            _stateService.BiometricLocked = false;
             await _cryptoService.ToggleKeyAsync();
             BuildList();
         }

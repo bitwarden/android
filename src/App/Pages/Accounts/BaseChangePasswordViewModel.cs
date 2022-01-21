@@ -14,7 +14,7 @@ namespace Bit.App.Pages
     public class BaseChangePasswordViewModel : BaseViewModel
     {
         protected readonly IPlatformUtilsService _platformUtilsService;
-        protected readonly IUserService _userService;
+        protected readonly IStateService _stateService;
         protected readonly IPolicyService _policyService;
         protected readonly IPasswordGenerationService _passwordGenerationService;
         protected readonly II18nService _i18nService;
@@ -31,7 +31,7 @@ namespace Bit.App.Pages
         protected BaseChangePasswordViewModel()
         {
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
-            _userService = ServiceContainer.Resolve<IUserService>("userService");
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
             _passwordGenerationService =
                 ServiceContainer.Resolve<IPasswordGenerationService>("passwordGenerationService");
@@ -172,7 +172,7 @@ namespace Bit.App.Pages
 
         private async Task<List<string>> GetPasswordStrengthUserInput()
         {
-            var email = await _userService.GetEmailAsync();
+            var email = await _stateService.GetEmailAsync();
             List<string> userInput = null;
             var atPosition = email.IndexOf('@');
             if (atPosition > -1)

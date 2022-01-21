@@ -1,7 +1,5 @@
 ﻿using Bit.App.Models;
 using Bit.App.Resources;
-using Bit.Core.Abstractions;
-using Bit.Core.Utilities;
 using System;
 using System.Threading.Tasks;
 using Bit.App.Utilities;
@@ -63,6 +61,15 @@ namespace Bit.App.Pages
                 return;
             }
             _appeared = true;
+            _mainContent.Content = _mainLayout;
+            if (await ShowAccountSwitcherAsync())
+            {
+                _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
+            }
+            else
+            {
+                ToolbarItems.Remove(_accountAvatar);
+            }
             await _vm.InitAsync();
             if (!_vm.BiometricLock)
             {
@@ -146,6 +153,24 @@ namespace Bit.App.Pages
             var previousPage = await AppHelpers.ClearPreviousPage();
 
             Application.Current.MainPage = new TabsPage(_appOptions, previousPage);
+        }
+
+        private async void AccountSwitch_Clicked(object sender, EventArgs e)
+        {
+            if (_accountListOverlay.IsVisible)
+            {
+                await ShowAccountListAsync(false, _accountListContainer, _accountListOverlay);
+            }
+            else
+            {
+                await RefreshAccountViewsAsync(_accountListView, false);
+                await ShowAccountListAsync(true, _accountListContainer, _accountListOverlay);
+            }
+        }
+
+        private async void AccountRow_Selected(object sender, SelectedItemChangedEventArgs e)
+        {
+            await AccountRowSelectedAsync(sender, e, _accountListContainer, _accountListOverlay, null, true);
         }
     }
 }

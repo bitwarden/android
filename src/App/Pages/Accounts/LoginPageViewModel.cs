@@ -1,25 +1,21 @@
 ﻿using Bit.App.Abstractions;
 using Bit.App.Resources;
-using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Exceptions;
 using Bit.Core.Utilities;
 using System;
 using System.Threading.Tasks;
 using Bit.App.Utilities;
+using Bit.Core.Models.View;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
     public class LoginPageViewModel : CaptchaProtectedViewModel
     {
-        private const string Keys_RememberedEmail = "rememberedEmail";
-        private const string Keys_RememberEmail = "rememberEmail";
-
         private readonly IDeviceActionService _deviceActionService;
         private readonly IAuthService _authService;
         private readonly ISyncService _syncService;
-        private readonly IStorageService _storageService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IStateService _stateService;
         private readonly IEnvironmentService _environmentService;
@@ -34,7 +30,6 @@ namespace Bit.App.Pages
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _authService = ServiceContainer.Resolve<IAuthService>("authService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
-            _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
@@ -67,6 +62,11 @@ namespace Bit.App.Pages
             set => SetProperty(ref _masterPassword, value);
         }
 
+        public ExtendedObservableCollection<AccountView> AccountViews
+        {
+            get => _stateService.AccountViews;
+        }
+
         public Command LogInCommand { get; }
         public Command TogglePasswordCommand { get; }
         public string ShowPasswordIcon => ShowPassword ? "" : "";
@@ -85,9 +85,9 @@ namespace Bit.App.Pages
         {
             if (string.IsNullOrWhiteSpace(Email))
             {
-                Email = await _storageService.GetAsync<string>(Keys_RememberedEmail);
+                Email = await _stateService.GetRememberedEmailAsync();
             }
-            var rememberEmail = await _storageService.GetAsync<bool?>(Keys_RememberEmail);
+            var rememberEmail = await _stateService.GetRememberEmailAsync();
             RememberEmail = rememberEmail.GetValueOrDefault(true);
         }
 
@@ -131,11 +131,11 @@ namespace Bit.App.Pages
                 var response = await _authService.LogInAsync(Email, MasterPassword, _captchaToken);
                 if (RememberEmail)
                 {
-                    await _storageService.SaveAsync(Keys_RememberedEmail, Email);
+                    await _stateService.SetRememberedEmailAsync(Email);
                 }
                 else
                 {
-                    await _storageService.RemoveAsync(Keys_RememberedEmail);
+                    await _stateService.SetRememberedEmailAsync(null);
                 }
                 await AppHelpers.ResetInvalidUnlockAttemptsAsync();
 
@@ -163,8 +163,6 @@ namespace Bit.App.Pages
                 }
                 else
                 {
-                    var disableFavicon = await _storageService.GetAsync<bool?>(Constants.DisableFaviconKey);
-                    await _stateService.SaveAsync(Constants.DisableFaviconKey, disableFavicon.GetValueOrDefault());
                     var task = Task.Run(async () => await _syncService.FullSyncAsync(true));
                     LogInSuccessAction?.Invoke();
                 }

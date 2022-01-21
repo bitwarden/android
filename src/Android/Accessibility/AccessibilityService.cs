@@ -10,7 +10,6 @@ using Android.Views;
 using Android.Views.Accessibility;
 using Android.Widget;
 using Bit.App.Resources;
-using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 
@@ -25,7 +24,7 @@ namespace Bit.Droid.Accessibility
         private const string BitwardenPackage = "com.x8bit.bitwarden";
         private const string BitwardenWebsite = "vault.bitwarden.com";
 
-        private IStorageService _storageService;
+        private IStateService _stateService;
         private IBroadcasterService _broadcasterService;
         private DateTime? _lastSettingsReload = null;
         private TimeSpan _settingsReloadSpan = TimeSpan.FromMinutes(1);
@@ -444,9 +443,9 @@ namespace Bit.Droid.Accessibility
 
         private void LoadServices()
         {
-            if (_storageService == null)
+            if (_stateService == null)
             {
-                _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+                _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             }
             if (_broadcasterService == null)
             {
@@ -460,12 +459,12 @@ namespace Bit.Droid.Accessibility
             if (_lastSettingsReload == null || (now - _lastSettingsReload.Value) > _settingsReloadSpan)
             {
                 _lastSettingsReload = now;
-                var uris = await _storageService.GetAsync<List<string>>(Constants.AutofillBlacklistedUrisKey);
+                var uris = await _stateService.GetAutofillBlacklistedUrisAsync();
                 if (uris != null)
                 {
                     _blacklistedUris = new HashSet<string>(uris);
                 }
-                var isAutoFillTileAdded = await _storageService.GetAsync<bool?>(Constants.AutofillTileAdded);
+                var isAutoFillTileAdded = await _stateService.GetAutofillTileAddedAsync();
                 AccessibilityHelpers.IsAutofillTileAdded = isAutoFillTileAdded.GetValueOrDefault();
             }
         }

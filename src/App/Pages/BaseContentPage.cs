@@ -1,10 +1,11 @@
-﻿using Bit.Core;
-using Bit.Core.Abstractions;
+﻿using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using System;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
+using Bit.App.Controls;
 using Bit.App.Utilities;
+using Bit.Core.Enums;
 using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
@@ -13,8 +14,9 @@ namespace Bit.App.Pages
 {
     public class BaseContentPage : ContentPage
     {
-        private IStorageService _storageService;
+        private IStateService _stateService;
         private IDeviceActionService _deviceActionService;
+        private IMessagingService _messagingService;
 
         protected int ShowModalAnimationDelay = 400;
         protected int ShowPageAnimationDelay = 100;
@@ -30,10 +32,10 @@ namespace Bit.App.Pages
 
         public DateTime? LastPageAction { get; set; }
 
-        protected override void OnAppearing()
+        protected async override void OnAppearing()
         {
             base.OnAppearing();
-            SaveActivity();
+            await SaveActivity();
         }
 
         public bool DoOnce(Action action = null, int milliseconds = 1000)
@@ -106,22 +108,121 @@ namespace Bit.App.Pages
             });
         }
 
+        protected async Task<bool> ShowAccountSwitcherAsync()
+        {
+            return await _stateService.HasMultipleAccountsAsync();
+        }
+
+        protected async Task RefreshAccountViewsAsync(Xamarin.Forms.ListView accountListView, bool allowAddAccountRow)
+        {
+            await _stateService.RefreshAccountViewsAsync(allowAddAccountRow);
+            // Property change trigger on account listview is yielding inconsistent results, using a hammer instead
+            accountListView.ItemsSource = null;
+            accountListView.ItemsSource = _stateService.AccountViews;
+        }
+        protected async Task<AvatarImageSource> GetAvatarImageSourceAsync(bool useCurrentActiveAccount = true)
+        {
+            return new AvatarImageSource(useCurrentActiveAccount ? await _stateService.GetEmailAsync() : null);
+        }
+
+        protected async Task ShowAccountListAsync(bool isVisible, View listContainer, View overlay, View fab = null)
+        {
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                // Not all animations are awaited. This is intentional to allow multiple simultaneous animations.
+                if (isVisible)
+                {
+                    // start listView in default (off-screen) position
+                    await listContainer.TranslateTo(0, listContainer.Height * -1, 0);
+
+                    // set overlay opacity to zero before making visible and start fade-in
+                    overlay.Opacity = 0;
+                    overlay.IsVisible = true;
+                    overlay.FadeTo(1, 100);
+
+                    if (Device.RuntimePlatform == Device.Android && fab != null)
+                    {
+                        // start fab fade-out
+                        fab.FadeTo(0, 200);
+                    }
+
+                    // slide account list into view
+                    await listContainer.TranslateTo(0, 0, 200, Easing.SinOut);
+                }
+                else
+                {
+                    // start overlay fade-out
+                    overlay.FadeTo(0, 200);
+
+                    if (Device.RuntimePlatform == Device.Android && fab != null)
+                    {
+                        // start fab fade-in
+                        fab.FadeTo(1, 200);
+                    }
+
+                    // slide account list out of view
+                    await listContainer.TranslateTo(0, listContainer.Height * -1, 200, Easing.SinIn);
+
+                    // remove overlay
+                    overlay.IsVisible = false;
+                }
+            });
+        }
+
+        protected async Task AccountRowSelectedAsync(object sender, SelectedItemChangedEventArgs e, View listContainer,
+            View overlay, View fab = null, bool? allowActiveAccountSelection = false)
+        {
+            if (!DoOnce())
+            {
+                return;
+            }
+            if (!(e.SelectedItem is AccountViewCellViewModel item))
+            {
+                return;
+            }
+
+            ((Xamarin.Forms.ListView)sender).SelectedItem = null;
+            await Task.Delay(100);
+            await ShowAccountListAsync(false, listContainer, overlay, fab);
+
+            if (item.AccountView.IsAccount)
+            {
+                if (item.AccountView.AuthStatus != AuthenticationStatus.Active)
+                {
+                    await _stateService.SetActiveUserAsync(item.AccountView.UserId);
+                    _messagingService.Send("switchedAccount");
+                }
+                else if (allowActiveAccountSelection ?? false)
+                {
+                    _messagingService.Send("switchedAccount");
+                }
+            }
+            else
+            {
+                _messagingService.Send("addAccount");
+            }
+        }
+
         private void SetServices()
         {
-            if (_storageService == null)
+            if (_stateService == null)
             {
-                _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+                _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             }
             if (_deviceActionService == null)
             {
                 _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             }
+            if (_messagingService == null)
+            {
+                _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
+            }
         }
 
-        private void SaveActivity()
+        private async Task SaveActivity()
         {
             SetServices();
-            _storageService.SaveAsync(Constants.LastActiveTimeKey, _deviceActionService.GetActiveTime());
+            await _stateService.SetLastActiveTimeAsync(_deviceActionService.GetActiveTime());
         }
     }
 }

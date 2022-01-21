@@ -12,19 +12,17 @@ namespace Bit.Core.Services
 {
     public class PolicyService : IPolicyService
     {
-        private const string Keys_PoliciesPrefix = "policies_{0}";
-        
-        private readonly IStorageService _storageService;
-        private readonly IUserService _userService;
+        private readonly IStateService _stateService;
+        private readonly IOrganizationService _organizationService;
 
         private IEnumerable<Policy> _policyCache;
 
         public PolicyService(
-            IStorageService storageService,
-            IUserService userService)
+            IStateService stateService,
+            IOrganizationService organizationService)
         {
-            _storageService = storageService;
-            _userService = userService;
+            _stateService = stateService;
+            _organizationService = organizationService;
         }
         
         public void ClearCache()
@@ -36,9 +34,7 @@ namespace Bit.Core.Services
         {
             if (_policyCache == null)
             {
-                var userId = await _userService.GetUserIdAsync();
-                var policies = await _storageService.GetAsync<Dictionary<string, PolicyData>>(
-                    string.Format(Keys_PoliciesPrefix, userId));
+                var policies = await _stateService.GetEncryptedPoliciesAsync();
                 if (policies == null)
                 {
                     return null;
@@ -58,14 +54,13 @@ namespace Bit.Core.Services
 
         public async Task Replace(Dictionary<string, PolicyData> policies)
         {
-            var userId = await _userService.GetUserIdAsync();
-            await _storageService.SaveAsync(string.Format(Keys_PoliciesPrefix, userId), policies);
+            await _stateService.SetEncryptedPoliciesAsync(policies);
             _policyCache = null;
         }
 
         public async Task Clear(string userId)
         {
-            await _storageService.RemoveAsync(string.Format(Keys_PoliciesPrefix, userId));
+            await _stateService.SetEncryptedPoliciesAsync(null, userId);
             _policyCache = null;
         }
 
@@ -205,7 +200,7 @@ namespace Bit.Core.Services
             {
                 return false;
             }
-            var organizations = await _userService.GetAllOrganizationAsync();
+            var organizations = await _organizationService.GetAllAsync();
 
             IEnumerable<Policy> filteredPolicies;
 

@@ -15,7 +15,8 @@ namespace Bit.iOS.Core.Utilities
             if (await AutofillEnabled())
             {
                 var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
-                var timeoutAction = await storageService.GetAsync<string>(Bit.Core.Constants.VaultTimeoutActionKey);
+                var stateService = ServiceContainer.Resolve<IStateService>("stateService");
+                var timeoutAction = await stateService.GetVaultTimeoutActionAsync();
                 if (timeoutAction == "logOut")
                 {
                     return;
@@ -47,8 +48,8 @@ namespace Bit.iOS.Core.Utilities
 
         public static async Task<bool> IdentitiesCanIncremental()
         {
-            var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
-            var timeoutAction = await storageService.GetAsync<string>(Bit.Core.Constants.VaultTimeoutActionKey);
+            var stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            var timeoutAction = await stateService.GetVaultTimeoutActionAsync();
             if (timeoutAction == "logOut")
             {
                 return false;

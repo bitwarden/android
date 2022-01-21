@@ -1,6 +1,4 @@
-﻿using Bit.Core.Abstractions;
-using Bit.Core.Utilities;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -8,22 +6,18 @@ namespace Bit.App.Pages
 {
     public partial class RegisterPage : BaseContentPage
     {
-        private readonly IMessagingService _messagingService;
         private readonly RegisterPageViewModel _vm;
 
         private bool _inputFocused;
 
         public RegisterPage(HomePage homePage)
         {
-            _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
-            _messagingService.Send("showStatusBar", true);
             InitializeComponent();
             _vm = BindingContext as RegisterPageViewModel;
             _vm.Page = this;
             _vm.RegistrationSuccess = () => Device.BeginInvokeOnMainThread(async () => await RegistrationSuccessAsync(homePage));
             _vm.CloseAction = async () =>
             {
-                _messagingService.Send("showStatusBar", false);
                 await Navigation.PopModalAsync();
             };
             MasterPasswordEntry = _masterPassword;

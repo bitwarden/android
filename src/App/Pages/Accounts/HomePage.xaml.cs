@@ -12,13 +12,10 @@ namespace Bit.App.Pages
     {
         private readonly HomeViewModel _vm;
         private readonly AppOptions _appOptions;
-        private IMessagingService _messagingService;
         private IBroadcasterService _broadcasterService;
 
         public HomePage(AppOptions appOptions = null)
         {
-            _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
-            _messagingService.Send("showStatusBar", false);
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _appOptions = appOptions;
             InitializeComponent();
@@ -29,6 +26,11 @@ namespace Bit.App.Pages
             _vm.StartSsoLoginAction = () => Device.BeginInvokeOnMainThread(async () => await StartSsoLoginAsync());
             _vm.StartEnvironmentAction = () => Device.BeginInvokeOnMainThread(async () => await StartEnvironmentAsync());
             UpdateLogo();
+
+            if (!_appOptions?.IosExtension ?? false)
+            {
+                ToolbarItems.Remove(_closeItem);
+            }
         }
 
         public async Task DismissRegisterPageAndLogInAsync(string email)
@@ -37,10 +39,18 @@ namespace Bit.App.Pages
             await Navigation.PushModalAsync(new NavigationPage(new LoginPage(email, _appOptions)));
         }
 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
-            _messagingService.Send("showStatusBar", false);
+            _mainContent.Content = _mainLayout;
+            if (await ShowAccountSwitcherAsync())
+            {
+                _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
+            }
+            else
+            {
+                ToolbarItems.Remove(_accountAvatar);
+            }
             _broadcasterService.Subscribe(nameof(HomePage), async (message) =>
             {
                 if (message.Command == "updatedTheme")
@@ -126,6 +136,24 @@ namespace Bit.App.Pages
         {
             var page = new EnvironmentPage();
             await Navigation.PushModalAsync(new NavigationPage(page));
+        }
+
+        private async void AccountSwitch_Clicked(object sender, EventArgs e)
+        {
+            if (_accountListOverlay.IsVisible)
+            {
+                await ShowAccountListAsync(false, _accountListContainer, _accountListOverlay);
+            }
+            else
+            {
+                await RefreshAccountViewsAsync(_accountListView, false);
+                await ShowAccountListAsync(true, _accountListContainer, _accountListOverlay);
+            }
+        }
+
+        private async void AccountRow_Selected(object sender, SelectedItemChangedEventArgs e)
+        {
+            await AccountRowSelectedAsync(sender, e, _accountListContainer, _accountListOverlay, null, true);
         }
     }
 }
