@@ -29,13 +29,13 @@ namespace Bit.App.Utilities
                     icon = GetLoginIconGlyph(cipher);
                     break;
                 case CipherType.SecureNote:
-                    icon = "\uf24a"; // fa-sticky-note-o
+                    icon = BitwardenIcons.StickyNote;
                     break;
                 case CipherType.Card:
-                    icon = "\uf09d"; // fa-credit-card
+                    icon = BitwardenIcons.CreditCard;
                     break;
                 case CipherType.Identity:
-                    icon = "\uf2c3"; // fa-id-card-o
+                    icon = BitwardenIcons.IdCard;
                     break;
                 default:
                     break;
@@ -45,17 +45,17 @@ namespace Bit.App.Utilities
 
         string GetLoginIconGlyph(CipherView cipher)
         {
-            var icon = "\uf0ac"; // fa-globe
+            var icon = BitwardenIcons.Globe;
             if (cipher.Login.Uri != null)
             {
                 var hostnameUri = cipher.Login.Uri;
                 if (hostnameUri.StartsWith(Constants.AndroidAppProtocol))
                 {
-                    icon = "\uf17b"; // fa-android
+                    icon = BitwardenIcons.Android;
                 }
                 else if (hostnameUri.StartsWith(Constants.iOSAppProtocol))
                 {
-                    icon = "\uf179"; // fa-apple
+                    icon = BitwardenIcons.Apple;
                 }
             }
             return icon;

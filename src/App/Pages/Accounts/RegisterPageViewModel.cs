@@ -8,6 +8,7 @@ using Bit.Core.Utilities;
 using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Bit.Core;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -71,7 +72,7 @@ namespace Bit.App.Pages
         public Command SubmitCommand { get; }
         public Command TogglePasswordCommand { get; }
         public Command ToggleConfirmPasswordCommand { get; }
-        public string ShowPasswordIcon => ShowPassword ? "" : "";
+        public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public string Name { get; set; }
         public string Email { get; set; }
         public string MasterPassword { get; set; }
