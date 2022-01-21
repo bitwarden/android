@@ -786,7 +786,7 @@
     <value>Anda mencari item pengisian otomatis untuk "{0}".</value>
   </data>
   <data name="LearnOrg" xml:space="preserve">
-    <value>Learn About Organizations</value>
+    <value>Pelajari tentang Organisasi</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
     <value>Tidak dapat membuka aplikasi {0}.</value>
@@ -1187,7 +1187,7 @@
     <value>Tersembunyi</value>
   </data>
   <data name="FieldTypeLinked" xml:space="preserve">
-    <value>Linked</value>
+    <value>Terhubung</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Teks</value>
@@ -1388,7 +1388,7 @@
     <value>Tidak ada koleksi yang akan ditampilkan.</value>
   </data>
   <data name="MovedItemToOrg" xml:space="preserve">
-    <value>{0} moved to {1}.</value>
+    <value>{0} dipindahkan ke {1}.</value>
     <comment>ex: Item moved to Organization.</comment>
   </data>
   <data name="ItemShared" xml:space="preserve">
@@ -1404,13 +1404,13 @@
     <value>Berbagi Item</value>
   </data>
   <data name="MoveToOrganization" xml:space="preserve">
-    <value>Move to Organization</value>
+    <value>Pindah ke Organisasi</value>
   </data>
   <data name="NoOrgsToList" xml:space="preserve">
     <value>Tidak ada organisasi untuk dicantumkan.</value>
   </data>
   <data name="MoveToOrgDesc" xml:space="preserve">
-    <value>Choose an organization that you wish to move this item to. Moving to an organization transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</value>
+    <value>Pilih sebuah organisasi yang Anda inginkan untuk memindahkan item ini. Memindahkan berarti menyerahkan kepemilikan item kepada organisasi tersebut. Anda tidak akan lagi menjadi pemilik item ini.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
     <value>Jumlah kata</value>
@@ -1441,7 +1441,7 @@
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="LearnOrgConfirmation" xml:space="preserve">
-    <value>Bitwarden allows you to share your vault items with others by using an organization account. Would you like to visit the bitwarden.com website to learn more?</value>
+    <value>Bitwarden memungkinkan Anda untuk berbagi brankas dengan orang lain menggunakan akun organisasi. Apakah Anda ingin mengunjungi bitwarden.com untuk mempelajari lebih lanjut?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
     <value>Ekspor Brankas</value>
@@ -1475,7 +1475,7 @@
     <value>Brankas Anda terkunci. Verifikasi kode PIN Anda untuk melanjutkan.</value>
   </data>
   <data name="VaultLockedIdentity" xml:space="preserve">
-    <value>Your vault is locked. Verify your identity to continue.</value>
+    <value>Brankas terkunci. Verifikasi identitas Anda untuk melanjutkan.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Gelap</value>
@@ -1523,7 +1523,7 @@
     <value>Ubah warna tema aplikasi.</value>
   </data>
   <data name="ThemeDefault" xml:space="preserve">
-    <value>Default (System)</value>
+    <value>Bawaan (Sistem)</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Catatan Salinan</value>
@@ -1618,13 +1618,13 @@
     <value>Masukkan kata sandi utama Anda untuk mengekspor data brankas Anda.</value>
   </data>
   <data name="SendVerificationCodeToEmail" xml:space="preserve">
-    <value>Send a verification code to your email</value>
+    <value>Kirim kode verifikasi ke email Anda</value>
   </data>
   <data name="CodeSent" xml:space="preserve">
-    <value>Code Sent!</value>
+    <value>Kode Terkirim!</value>
   </data>
   <data name="ConfirmYourIdentity" xml:space="preserve">
-    <value>Confirm your identity to continue.</value>
+    <value>Konfirmasi identitas Anda untuk melanjutkan.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Ekspor ini berisi data vault Anda dalam format yang tidak dienkripsi. Anda tidak boleh menyimpan atau mengirim file yang diekspor melalui saluran yang tidak aman (seperti emel). Hapus segera setelah Anda selesai menggunakannya.</value>
@@ -2027,64 +2027,64 @@
     <value>Tindakan ini dilindungi, untuk melanjutkan harap masukkan ulang sandi utama Anda untuk memverifikasi identitas Anda.</value>
   </data>
   <data name="CaptchaRequired" xml:space="preserve">
-    <value>Captcha Required</value>
+    <value>Captcha Diperlukan</value>
   </data>
   <data name="CaptchaFailed" xml:space="preserve">
-    <value>Captcha Failed. Please try again.</value>
+    <value>Captcha Gagal. Silahkan coba lagi.</value>
   </data>
   <data name="UpdatedMasterPassword" xml:space="preserve">
-    <value>Updated Master Password</value>
+    <value>Kata Sandi Telah Diperbarui</value>
   </data>
   <data name="UpdateMasterPassword" xml:space="preserve">
-    <value>Update Master Password</value>
+    <value>Perbarui Kata Sandi Utama</value>
   </data>
   <data name="UpdateMasterPasswordWarning" xml:space="preserve">
-    <value>Your Master Password was recently changed by an administrator in your organization. In order to access the vault, you must update your Master Password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
+    <value>Kata Sandi Utama Anda baru-baru ini diubah oleh administrator organisasi Anda. Untuk mengakses brankas tersebut, Anda diharuskan memperbarui Kata Sandi Utama Anda sekarang. Jika Anda melanjutkan, Anda akan keluar dari sesi saat ini, yang mana mengharuskan Anda untuk login kembali. Sesi yang aktif di perangkat lain akan tetap aktif selama satu jam kedepan.</value>
   </data>
   <data name="UpdatingPassword" xml:space="preserve">
-    <value>Updating Password</value>
+    <value>Memperbarui Kata Sandi</value>
   </data>
   <data name="UpdatePasswordError" xml:space="preserve">
-    <value>Currently unable to update password</value>
+    <value>Saat ini tidak dapat memperbarui kata sandi</value>
   </data>
   <data name="RemoveMasterPassword" xml:space="preserve">
-    <value>Remove Master Password</value>
+    <value>Hapus Kata Sandi Utama</value>
   </data>
   <data name="RemoveMasterPasswordWarning" xml:space="preserve">
-    <value>{0} is using SSO with customer-managed encryption. Continuing will remove your Master Password from your account and require SSO to login.</value>
+    <value>{0} sedang menggunakan SSO dengan enkripsi yang dikelola oleh pelanggan. Melanjutkan akan menghapus Kata Sandi Utama Anda dari akun Anda dan membutuhkan SSO untuk login.</value>
   </data>
   <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
-    <value>If you do not want to remove your Master Password, you may leave this organization.</value>
+    <value>Jika Anda tidak ingin menghapus Kata Sandi Utama Anda, Anda dapat meninggalkan organisasi ini.</value>
   </data>
   <data name="LeaveOrganization" xml:space="preserve">
-    <value>Leave Organization</value>
+    <value>Tinggalkan Organisasi</value>
   </data>
   <data name="LeaveOrganizationName" xml:space="preserve">
-    <value>Leave {0}?</value>
+    <value>Tinggalkan {0}?</value>
   </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
   </data>
   <data name="Fido2Instruction" xml:space="preserve">
-    <value>To continue, have your FIDO2 WebAuthn enabled security key ready, then follow the instructions after clicking 'Authenticate WebAuthn' on the next screen.</value>
+    <value>Untuk melanjutkan, pastikan kunci keamanan FIDO2 WebAuthn dalam keadaan aktif, kemudian ikuti instruksi yang muncul setelah mengklik 'Authenticate WebAuthn' di layar berikutnya.</value>
   </data>
   <data name="Fido2Desc" xml:space="preserve">
-    <value>Authentication using FIDO2 WebAuthn, you can authenticate using an external security key.</value>
+    <value>Otentikasi menggunakan FIDO2 WebAuthn, Anda dapat mengautentikasi menggunakan kunci keamanan eksternal.</value>
   </data>
   <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
-    <value>Authenticate WebAuthn</value>
+    <value>Otentikasi WebAuthn</value>
   </data>
   <data name="Fido2ReturnToApp" xml:space="preserve">
-    <value>Return to App</value>
+    <value>Kembali ke Aplikasi </value>
   </data>
   <data name="Fido2CheckBrowser" xml:space="preserve">
-    <value>Please make sure your default browser supports WebAuthn and try again.</value>
+    <value>Pastikan peramban utama Anda mendukung WebAuthn, kemudian coba lagi.</value>
   </data>
   <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
-    <value>This organization has an enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password.</value>
+    <value>Organisasi ini memiliki kebijakan perusahaan yang secara otomatis mendaftarkan Anda dalam pengaturan ulang kata sandi. Dengan mendaftar, akan memungkinkan administrator organisasi untuk mengubah kata sandi utama Anda.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>Your organization policies are affecting your vault timeout. Maximum allowed Vault Timeout is {0} hour(s) and {1} minute(s)</value>
+    <value>Kebijakan organisasi Anda memengaruhi waktu tunggu brankas Anda. Batas maksimal Waktu Tunggu Brankas yang diizinkan adalah {0} jam dan {1} menit</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Your vault timeout exceeds the restrictions set by your organization.</value>
