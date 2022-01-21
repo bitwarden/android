@@ -53,7 +53,7 @@ namespace Bit.App.Pages
             if (item.ShowTimeInput)
             {
                 var timePicker = stackLayout.Children.Where(x => x is TimePicker).FirstOrDefault();
-                ((TimePicker)timePicker).Focus();
+                ((TimePicker)timePicker)?.Focus();
             }
         }
 
