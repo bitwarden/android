@@ -1455,6 +1455,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>Отключване</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Отключване на трезора</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 минути</value>
   </data>
@@ -1470,6 +1473,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Трезорът е заключен. Въведете своя ПИН, за да продължите.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Трезорът е заключен. Потвърдете самоличността си, за да продължите.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Тъмен</value>
@@ -1611,8 +1617,14 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Въведете главната парола, за да изнесете данните.</value>
   </data>
-    <data name="ExportVaultOTPDescription" xml:space="preserve">
-    <value>Въведете кода за потвърждаване, за да изнесете данните от трезора си.</value>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Изпращане на код за потвърждаване до Вашата ел. поща</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Кодът е изпратен!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Потвърдете самоличността си, за да продължите.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Данните от трезора ви ще се изнесат в незащитен формат. Не го пращайте по незащитени канали като е-поща. Изтрийте файла незабавно след като свършите работата си с него.</value>
@@ -2080,10 +2092,28 @@
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Една или повече от настройките на организацията Ви не позволяват да изнасяте личния си трезор.</value>
   </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Изтриване на регистрацията</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Изтриването на регистрацията е необратимо</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Регистрацията Ви и всички свързани с нея данни ще бъдат изтрити и няма да могат да бъдат възстановени. Наистина ли искате да продължите?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Изтриване на регистрацията Ви</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Регистрацията Ви беше изтрита необратимо</value>
+  </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Грешен код за потвърждаване</value>
   </data>
-    <data name="RequestOTP" xml:space="preserve">
-    <value>Заявка за еднократна парола</value>
+  <data name="SendCode" xml:space="preserve">
+    <value>Изпращане на кода</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Изпращане…</value>
   </data>
 </root>

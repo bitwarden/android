@@ -142,7 +142,6 @@
     <None Include="Entitlements.plist" />
     <None Include="Info.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <BundleResource Include="Resources\FontAwesome.ttf" />
     <BundleResource Include="Resources\MaterialIcons_Regular.ttf" />
     <ImageAsset Include="Resources\Assets.xcassets\AppIcons.appiconset\Contents.json">
       <Visible>false</Visible>
@@ -155,7 +154,20 @@
     <ImageAsset Include="Resources\Assets.xcassets\LaunchScreen.imageset\logo_white%402x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\LaunchScreen.imageset\logo_white%403x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\ic_warning.imageset\Contents.json" />
-    <ImageAsset Include="Resources\Assets.xcassets\ic_warning.imageset\ic_warning.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\ic_warning.imageset\ic_warning-1.pdf" />
+    <BundleResource Include="Resources\bwi-font.ttf" />
+    <BundleResource Include="Resources\cog%403x.png" />
+    <BundleResource Include="Resources\cog%402x.png" />
+    <BundleResource Include="Resources\cog.png" />
+    <BundleResource Include="Resources\send%403x.png" />
+    <BundleResource Include="Resources\send%402x.png" />
+    <BundleResource Include="Resources\send.png" />
+    <BundleResource Include="Resources\search.png" />
+    <BundleResource Include="Resources\search%402x.png" />
+    <BundleResource Include="Resources\search%403x.png" />
+    <BundleResource Include="Resources\generate%403x.png" />
+    <BundleResource Include="Resources\generate%402x.png" />
+    <BundleResource Include="Resources\generate.png" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -213,15 +225,6 @@
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\autofill-kb%403x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\cog.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\cog%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\cog%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\ext-act.png" />
@@ -287,15 +290,6 @@
     <BundleResource Include="Resources\logo%403x.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\paper_plane.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\paper_plane%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\paper_plane%403x.png" />
-  </ItemGroup>
-  <ItemGroup>
     <BundleResource Include="Resources\plus.png" />
   </ItemGroup>
   <ItemGroup>
@@ -303,24 +297,6 @@
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\plus%403x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\refresh.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\refresh%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\refresh%403x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\search.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\search%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\search%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\yubikey.png" />

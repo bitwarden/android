@@ -732,7 +732,7 @@ namespace Bit.Core.Services
             catch (ApiException e)
             {
                 await DeleteAttachmentAsync(id, attachmentId);
-                throw e;
+                throw;
             }
         }
 

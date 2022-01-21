@@ -1,4 +1,8 @@
-﻿using Bit.App.Abstractions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
@@ -10,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Bit.Core;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -26,6 +31,8 @@ namespace Bit.App.Pages
         private readonly IEventService _eventService;
         private readonly IPasswordRepromptService _passwordRepromptService;
         private readonly ILocalizeService _localizeService;
+        private readonly IClipboardService _clipboardService;
+
         private CipherView _cipher;
         private List<ViewPageFieldViewModel> _fields;
         private bool _canAccessPremium;
@@ -54,6 +61,8 @@ namespace Bit.App.Pages
             _eventService = ServiceContainer.Resolve<IEventService>("eventService");
             _passwordRepromptService = ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService");
             _localizeService = ServiceContainer.Resolve<ILocalizeService>("localizeService");
+            _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
+
             CopyCommand = new Command<string>((id) => CopyAsync(id, null));
             CopyUriCommand = new Command<LoginUriView>(CopyUri);
             CopyFieldCommand = new Command<FieldView>(CopyField);
@@ -205,9 +214,9 @@ namespace Bit.App.Pages
         public bool ShowAttachments => Cipher.HasAttachments && (CanAccessPremium || Cipher.OrganizationId != null);
         public bool ShowTotp => IsLogin && !string.IsNullOrWhiteSpace(Cipher.Login.Totp) &&
             !string.IsNullOrWhiteSpace(TotpCodeFormatted);
-        public string ShowPasswordIcon => ShowPassword ? "" : "";
-        public string ShowCardNumberIcon => ShowCardNumber ? "" : "";
-        public string ShowCardCodeIcon => ShowCardCode ? "" : "";
+        public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
+        public string ShowCardNumberIcon => ShowCardNumber ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
+        public string ShowCardCodeIcon => ShowCardCode ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public string TotpCodeFormatted
         {
             get => _totpCodeFormatted;
@@ -653,7 +662,7 @@ namespace Bit.App.Pages
 
             if (text != null)
             {
-                await _platformUtilsService.CopyToClipboardAsync(text);
+                await _clipboardService.CopyTextAsync(text);
                 if (!string.IsNullOrWhiteSpace(name))
                 {
                     _platformUtilsService.ShowToast("info", null, string.Format(AppResources.ValueHasBeenCopied, name));
@@ -765,7 +774,7 @@ namespace Bit.App.Pages
 
         public Command ToggleHiddenValueCommand { get; set; }
 
-        public string ShowHiddenValueIcon => _showHiddenValue ? "" : "";
+        public string ShowHiddenValueIcon => _showHiddenValue ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public bool IsTextType => _field.Type == Core.Enums.FieldType.Text;
         public bool IsBooleanType => _field.Type == Core.Enums.FieldType.Boolean;
         public bool IsHiddenType => _field.Type == Core.Enums.FieldType.Hidden;

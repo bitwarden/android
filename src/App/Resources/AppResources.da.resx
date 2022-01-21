@@ -1455,6 +1455,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>Lås op</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Lås boks op</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minutter</value>
   </data>
@@ -1470,6 +1473,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Din boks er låst. Bekræft din pinkode for at fortsætte.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Din boks er låst. Bekræft din identitet for at fortsætte.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Mørk</value>
@@ -1611,8 +1617,14 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Angiv din hovedadgangskode for at eksportere boksdata.</value>
   </data>
-    <data name="ExportVaultOTPDescription" xml:space="preserve">
-    <value>Angiv bekræftelseskoden for at eksportere dine boks-data.</value>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Send en bekræftelseskode til din e-mail</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Kode sendt!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Bekræft din identitet for at fortsætte.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Denne eksport indeholder dine boksdata i en ukrypteret form. Du bør ikke gemme eller sende den eksporterede fil via usikre kanaler (f.eks. e-mail). Slet den straks efter at du er færdig med at bruge den.</value>
@@ -2080,10 +2092,28 @@
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>En eller flere organisationspolitikker forhindrer eksport af din personlige boks.</value>
   </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Slet konto</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Sletning af din konto er permanent</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Din konto og alle tilknyttede data vil blive slettet og kan ikke gendannes. Er du sikker på, at du vil fortsætte?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Sletter din konto</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Din konto er blevet permanent slettet</value>
+  </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Ugyldig bekræftelseskode</value>
   </data>
-    <data name="RequestOTP" xml:space="preserve">
-    <value>Anmod om engangsadgangskode</value>
+  <data name="SendCode" xml:space="preserve">
+    <value>Send kode</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Sender</value>
   </data>
 </root>

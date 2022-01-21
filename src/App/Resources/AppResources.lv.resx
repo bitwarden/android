@@ -1455,6 +1455,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>Atslēgt</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Atslēgt glabātavu</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minūtes</value>
   </data>
@@ -1470,6 +1473,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Glabātava ir slēgta. Nepieciešams norādīt PIN kodu, lai turpinātu.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Glabātava ir slēgta. Jāapstiprina identitāte, lai turpinātu.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Tumšs</value>
@@ -1611,8 +1617,14 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Ievadīt galveno paroli, lai izgūtu glabātavas saturu.</value>
   </data>
-    <data name="ExportVaultOTPDescription" xml:space="preserve">
-    <value>Jāievada apstiprinājuma kods, lai izgūtu glabātavas saturu.</value>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Sūtīt apstiprinājuma kodu uz e-pastu</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Kods nosūtīts</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Apstiprināt identitāti, lai turpinātu.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Šī izguve satur glabātavas datus nešifrētā veidā. Izdoto datni nevajadzētu glabāt vai sūtīt nedrošos veidos (piemēram, e-pastā). Izdzēst to uzreiz pēc izmantošanas.</value>
@@ -2080,10 +2092,28 @@
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Viens vai vairāki apvienības nosacījumi neļauj izgūt privātās glabātavas saturu.</value>
   </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Dzēst kontu</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Konta dzēšana ir neatgriezeniska</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Konts un visi ar to saistītie dati tiks izdzēsti un nebūs atkopjami. Vai tiešām turpināt?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Dzēš kontu</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Konts tika neatgriezeniski izdzēsts</value>
+  </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Nederīgs apstiprinājuma kods.</value>
   </data>
-    <data name="RequestOTP" xml:space="preserve">
-    <value>Pieprasīt vienreiz izmantojamo paroli</value>
+  <data name="SendCode" xml:space="preserve">
+    <value>Nosūtīt kodu</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Sūta</value>
   </data>
 </root>

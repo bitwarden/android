@@ -73,6 +73,7 @@ namespace Bit.Droid.Autofill
             "com.google.android.captiveportallogin",
             "com.jamal2367.styx",
             "com.kiwibrowser.browser",
+            "com.kiwibrowser.browser.dev",
             "com.microsoft.emmx",
             "com.microsoft.emmx.beta",
             "com.microsoft.emmx.canary",
@@ -159,7 +160,7 @@ namespace Bit.Droid.Autofill
             return new List<FilledItem>();
         }
 
-        public static FillResponse BuildFillResponse(Parser parser, List<FilledItem> items, bool locked,
+        public static FillResponse.Builder CreateFillResponse(Parser parser, List<FilledItem> items, bool locked,
             bool inlineAutofillEnabled, FillRequest fillRequest = null)
         {
             // Acquire inline presentation specs on Android 11+
@@ -210,9 +211,8 @@ namespace Bit.Droid.Autofill
             }
             responseBuilder.AddDataset(BuildVaultDataset(parser.ApplicationContext, parser.FieldCollection,
                 parser.Uri, locked, inlinePresentationSpecs));
-            AddSaveInfo(parser, fillRequest, responseBuilder, parser.FieldCollection);
             responseBuilder.SetIgnoredIds(parser.FieldCollection.IgnoreAutofillIds.ToArray());
-            return responseBuilder.Build();
+            return responseBuilder;
         }
 
         public static Dataset BuildDataset(Context context, FieldCollection fields, FilledItem filledItem,

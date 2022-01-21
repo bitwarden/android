@@ -1,15 +1,14 @@
-﻿using Bit.App.Abstractions;
-using Bit.App.Models;
+﻿using System;
+using System.Threading.Tasks;
+using Bit.App.Abstractions;
 using Bit.App.Resources;
+using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
-using Bit.Core.Utilities;
-using System;
-using System.Threading.Tasks;
-using Bit.App.Utilities;
 using Bit.Core.Models.Request;
+using Bit.Core.Utilities;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -122,7 +121,7 @@ namespace Bit.App.Pages
 
         public Command SubmitCommand { get; }
         public Command TogglePasswordCommand { get; }
-        public string ShowPasswordIcon => ShowPassword ? "" : "";
+        public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public string MasterPassword { get; set; }
         public string Pin { get; set; }
         public Action UnlockedAction { get; set; }
@@ -135,7 +134,7 @@ namespace Bit.App.Pages
 
             // Users with key connector and without biometric or pin has no MP to unlock with
             _usingKeyConnector = await _keyConnectorService.GetUsesKeyConnector();
-            if ( _usingKeyConnector && !(BiometricLock || PinLock))
+            if (_usingKeyConnector && !(BiometricLock || PinLock))
             {
                 await _vaultTimeoutService.LogOutAsync();
             }

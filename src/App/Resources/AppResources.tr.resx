@@ -1455,6 +1455,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>Kilidi aç</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Kasa Kilidini Aç</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 dakika</value>
   </data>
@@ -1470,6 +1473,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Kasanız kilitlendi. Devam etmek için PIN kodunuzu doğrulayın.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Kasanız kilitli. Devam etmek için kimliğinizi doğrulayın.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Koyu</value>
@@ -1611,8 +1617,14 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Kasadaki verilerinizi dışa aktarmak için ana parolanızı girin.</value>
   </data>
-    <data name="ExportVaultOTPDescription" xml:space="preserve">
-    <value>Kasa verilerinizi dışa aktarmak için doğrulama kodunu girin.</value>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>E-posta adresime doğrulama kodu gönder</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Kod gönderildi!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Devam etmek için kimliğinizi doğrulayın.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Dışa aktarılan dosyadaki verileriniz şifrelenmemiş olacak. Bu dosyayı güvensiz yöntemlerle (örn. e-posta) göndermemeli ve saklamamalısınız. İşiniz bittikten sonra dosyayı hemen silin.</value>
@@ -2018,7 +2030,7 @@
     <value>Captcha gerekiyor</value>
   </data>
   <data name="CaptchaFailed" xml:space="preserve">
-    <value>Captcha güvenlik Başarısız.  Lütfen tekrar deneyin.</value>
+    <value>Captcha başarısız oldu. Lütfen yeniden deneyin.</value>
   </data>
   <data name="UpdatedMasterPassword" xml:space="preserve">
     <value>Ana parola güncellendi</value>
@@ -2027,13 +2039,13 @@
     <value>Ana parolayı güncelle</value>
   </data>
   <data name="UpdateMasterPasswordWarning" xml:space="preserve">
-    <value>Ana Parolanız yakın zamanda kuruluşunuzdaki bir yönetici tarafından değiştirildi.  Kasaya erişmek için Ana Parolanızı şimdi güncellemelisiniz.  Devam etmek, mevcut oturumunuzdan çıkmanıza neden olacak ve tekrar oturum açmanızı gerektirecektir. Diğer cihazlardaki etkin oturumlar bir saate kadar etkin kalmaya devam edebilir.</value>
+    <value>Ana parolanız kuruluşunuzdaki bir yönetici tarafından yakın zamanda değiştirildi. Kasanıza erişmek için ana parolanızı güncellemelisiniz. Devam ettiğinizde oturumunuz kapanacak ve yeniden oturum açmanız gerekecektir. Diğer cihazlardaki aktif oturumlar bir saate kadar aktif kalabilir.</value>
   </data>
   <data name="UpdatingPassword" xml:space="preserve">
     <value>Parola güncelleniyor</value>
   </data>
   <data name="UpdatePasswordError" xml:space="preserve">
-    <value>Şu anda şifre güncellenemiyor</value>
+    <value>Şu anda parola güncellenemiyor</value>
   </data>
   <data name="RemoveMasterPassword" xml:space="preserve">
     <value>Ana parolayı kaldır</value>
@@ -2054,25 +2066,25 @@
     <value>FIDO2 WebAuthn</value>
   </data>
   <data name="Fido2Instruction" xml:space="preserve">
-    <value>Devam etmek için FIDO2 WebAuthn etkin güvenlik anahtarınızı hazır bulundurun, ardından sonraki ekranda 'WebAuthn'u Doğrula'yı tıkladıktan sonra talimatları izleyin.</value>
+    <value>Devam etmek için FIDO2 WebAuthn uyumlu güvenlik anahtarınızı hazır bulundurun ve sonraki ekranda "WebAuthn ile doğrula"ya tıkladıktan sonra talimatları izleyin.</value>
   </data>
   <data name="Fido2Desc" xml:space="preserve">
-    <value>FIDO2 WebAuthn kullanarak kimlik doğrulama, harici bir güvenlik anahtarı kullanarak kimlik doğrulaması yapabilirsiniz.</value>
+    <value>FIDO2 WebAuthn ile kimlik doğrulamada harici bir güvenlik anahtarı kullanarak kimliğinizi doğrulayabilirsiniz.</value>
   </data>
   <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
-    <value>WebAuthn'de Kimlik Doğrulama</value>
+    <value>WebAutn ile doğrula</value>
   </data>
   <data name="Fido2ReturnToApp" xml:space="preserve">
     <value>Uygulamaya dön</value>
   </data>
   <data name="Fido2CheckBrowser" xml:space="preserve">
-    <value>Lütfen varsayılan tarayıcınızın WebAuthn'u desteklediğinden emin olun ve tekrar deneyin.</value>
+    <value>Lütfen varsayılan tarayıcınızın WebAuthn'i desteklediğini kontrol edip tekrar deneyin.</value>
   </data>
   <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
-    <value>Bu kuruluş, sizi otomatik olarak parola sıfırlama işlemine kaydedecek bir kurumsal ilkeye sahiptir.  Kayıt, kuruluş yöneticilerinin ana parolanızı değiştirmesine olanak tanır.</value>
+    <value>Bu kuruluşun sizi otomatik olarak parola sıfırlamaya ekleyen bir ilkesi bulunmakta. Bu ilkeye eklenmek, kuruluş yöneticilerinin ana parolanızı değiştirebilmesini sağlar.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>Kuruluş ilkeleriniz kasa zaman aşımınızı etkiliyor.  İzin verilen maksimum Kasa Zaman Aşımı {0} saat ve {1} dakikadır</value>
+    <value>Kuruluş ilkeleriniz kasa zaman aşımınızı etkiliyor. İzin verilen maksimum kasa zaman aşımı {0} saat {1} dakikadır</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Kasa zaman aşımınız, kuruluşunuz tarafından belirlenen kısıtlamaları aşıyor.</value>
@@ -2080,10 +2092,28 @@
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Bir veya daha fazla kuruluş ilkesi, kişisel kasanızı dışa aktarmanızı engelliyor.</value>
   </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Hesabı sil</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Silinen hesaplar geri getirilemez</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Hesabınız ve içindeki tüm veriler kalıcı olarak silinecektir. Devam etmek istediğinizden emin misiniz?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Hesabınız siliniyor</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Hesabınız kalıcı olarak silinmiştir</value>
+  </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Doğrulama kodu geçersiz.</value>
   </data>
-    <data name="RequestOTP" xml:space="preserve">
-    <value>Tek kullanımlık parola iste</value>
+  <data name="SendCode" xml:space="preserve">
+    <value>Kod gönder</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Gönderiliyor</value>
   </data>
 </root>

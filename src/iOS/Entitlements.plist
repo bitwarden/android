@@ -25,5 +25,7 @@
 	<array>
 		<string>webcredentials:bitwarden.com</string>
 	</array>
+	<key>aps-environment</key>
+	<string>development</string>
 </dict>
 </plist>

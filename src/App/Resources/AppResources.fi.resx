@@ -1455,6 +1455,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>Avaa</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Avaa holvi</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minuuttia</value>
   </data>
@@ -1470,6 +1473,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Holvisi on lukittu. Vahvista PIN-koodisi jatkaaksesi.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Holvisi on lukittu. Vahvista henkilöllisyytesi jatkaaksesi.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Tumma</value>
@@ -1611,8 +1617,14 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Syötä pääsalasanasi viedäksesi holvisi tiedot.</value>
   </data>
-    <data name="ExportVaultOTPDescription" xml:space="preserve">
-    <value>Syötä todennuskoodi viedäksesi holvisi tiedot.</value>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Lähetä vahvistuskoodi sähköpostiisi</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Koodi lähetetty</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Vahvista henkilöllisyytesi jatkaaksesi.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Tämä vienti sisältää holvisi tiedot salaamattomassa muodossa. Sinun ei tulisi säilyttää tai lähettää vietyä tiedostoa suojaamattomien kanavien (kuten sähköpostin) välityksellä. Poista se välittömästi kun sille ei enää ole käyttöä.</value>
@@ -2080,10 +2092,28 @@
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Yksi tai useampi organisaation käytäntö estää henkilökohtaisen holvisi viennin.</value>
   </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Poista tili</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Tilin poisto on pysyvä toimenpide</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Tilisi ja kaikki siihen liittyvät tiedot poistetaan, eikä niitä voida palauttaa. Haluatko varmasti jatkaa?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Tiliäsi poistetaan</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Tilisi on poistettu pysyvästi</value>
+  </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Virheellinen todennuskoodi.</value>
   </data>
-    <data name="RequestOTP" xml:space="preserve">
-    <value>Pyydä kertakäyttöinen salasana</value>
+  <data name="SendCode" xml:space="preserve">
+    <value>Lähetä koodi</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Lähetetään</value>
   </data>
 </root>

@@ -58,6 +58,7 @@ namespace Bit.Core.Services
 
         public EncString PinProtectedKey { get; set; } = null;
         public bool BiometricLocked { get; set; } = true;
+        public long? DelayLockAndLogoutMs { get; set; }
 
         public async Task<bool> IsLockedAsync()
         {
@@ -93,25 +94,39 @@ namespace Bit.Core.Services
             {
                 return;
             }
+            if (vaultTimeoutMinutes == 0 && !DelayLockAndLogoutMs.HasValue)
+            {
+                await LockOrLogout();
+            }
             var lastActiveTime = await _storageService.GetAsync<long?>(Constants.LastActiveTimeKey);
             if (lastActiveTime == null)
             {
                 return;
             }
             var diffMs = _platformUtilsService.GetActiveTime() - lastActiveTime;
+            if (DelayLockAndLogoutMs.HasValue && diffMs < DelayLockAndLogoutMs)
+            {
+                return;
+            }
             var vaultTimeoutMs = vaultTimeoutMinutes * 60000;
             if (diffMs >= vaultTimeoutMs)
             {
-                // Pivot based on saved action
-                var action = await _storageService.GetAsync<string>(Constants.VaultTimeoutActionKey);
-                if (action == "logOut")
-                {
-                    await LogOutAsync();
-                }
-                else
-                {
-                    await LockAsync(true);
-                }
+                await LockOrLogout();
+            }
+
+        }
+
+        private async Task LockOrLogout()
+        {
+            // Pivot based on saved action
+            var action = await _storageService.GetAsync<string>(Constants.VaultTimeoutActionKey);
+            if (action == "logOut")
+            {
+                await LogOutAsync();
+            }
+            else
+            {
+                await LockAsync(true);
             }
         }
 

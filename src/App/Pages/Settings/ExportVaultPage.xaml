@@ -97,7 +97,7 @@
                         Grid.Column="0"
                         ReturnType="Go"
                         ReturnCommand="{Binding ExportVaultCommand}" />
-                    <controls:FaButton
+                    <controls:IconButton
                         StyleClass="box-row-button, box-row-button-platform"
                         Text="{Binding ShowPasswordIcon}"
                         Command="{Binding TogglePasswordCommand}"
