@@ -73,7 +73,7 @@
                                 Grid.Column="0"
                                 ReturnType="Go"
                                 ReturnCommand="{Binding SubmitCommand}" />
-                            <controls:FaButton
+                            <controls:IconButton
                                 StyleClass="box-row-button, box-row-button-platform"
                                 Text="{Binding ShowPasswordIcon}"
                                 Command="{Binding TogglePasswordCommand}"
@@ -112,7 +112,7 @@
                                 Grid.Column="0"
                                 ReturnType="Go"
                                 ReturnCommand="{Binding SubmitCommand}" />
-                            <controls:FaButton
+                            <controls:IconButton
                                 StyleClass="box-row-button, box-row-button-platform"
                                 Text="{Binding ShowPasswordIcon}"
                                 Command="{Binding TogglePasswordCommand}"

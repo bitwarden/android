@@ -489,7 +489,7 @@
     <value>நீட்டிப்பை ஏவ பட்டியலிலுள்ள Bitwarden படவுருவைத் தட்டவும்.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>Safari மற்றும் மற்ற செயலிகளில் ஐ இயக்க, பட்டியலின் கீழ் வரிசையிலுள்ள "மேலும் "படவுருவைத் தட்டவும்.</value>
+    <value>Safari மற்றும் மற்ற செயலிகளில் Bitwardenஐ இயக்க, பட்டியலின் கீழ்வரிசையிலுள்ள "மேலும்" படவுருவைத் தட்டு.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
     <value>பிடித்தது</value>
@@ -543,7 +543,7 @@
     <value>பெட்டகம் நேரமுடிவு செயல்</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
-    <value>வெளியேறுதல் உமது பெட்டகத்திற்கான எல்லா அணுகலையும் அகற்றும் மற்றும் நேரமுடிவு காலத்திற்குப் பிறகு இயங்கலை அங்கீகாரம் தேவைப்படுகிறது. இவ்வமைப்பை உறுதியாக பயன்படுத்த வேண்டுமா?</value>
+    <value>வெளியேறுதல் உமது பெட்டகத்திற்கான எல்லா அணுகலையுமகற்றும் மற்றும் நேரமுடிவு காலத்திற்குப் பிறகு இயங்கலை அங்கீகாரம் தேவைப்படுகிறது. இவ்வமைப்பை உறுதியாக பயன்படுத்த வேண்டுமா?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>உள்நுழைகிறது...</value>
@@ -1288,7 +1288,7 @@
     <value>௧. iOS "அமைவுகள்" செயலிக்குச் செல்</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. "கடவுச்சொற்கள் &amp; கணக்குகள்"ஐ தட்டு</value>
+    <value>2. "கடவுச்சொற்கள் &amp; கணக்குகள்"ஐத் தட்டு</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
     <value>3. "கடவுச்சொற்கள் தன்னிரப்பல்"ஐத் தட்டு</value>
@@ -1297,7 +1297,7 @@
     <value>4. தன்னிரப்பலை இயக்கு</value>
   </data>
   <data name="AutofillTurnOn5" xml:space="preserve">
-    <value>5. "Bitwarden"ஐ தேர்ந்தெடு</value>
+    <value>5. "Bitwarden"ஐத் தேர்ந்தெடு</value>
   </data>
   <data name="PasswordAutofill" xml:space="preserve">
     <value>கடவுச்சொல் தன்னிரப்பல்</value>
@@ -1797,7 +1797,7 @@
     <value>Use inline autofill if your selected IME (keyboard) supports it. If your configuration is not supported (or this option is disabled), the default Autofill overlay will be used.</value>
   </data>
   <data name="Accessibility" xml:space="preserve">
-    <value>அணுகல்தன்மையைப் பயன்படுத்து</value>
+    <value>அணுகல்தன்மை பயன்படுத்து</value>
   </data>
   <data name="AccessibilityDescription" xml:space="preserve">
     <value>Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. When enabled, we'll display a popup when login fields are selected.</value>

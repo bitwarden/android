@@ -2,18 +2,18 @@
 
 namespace Bit.App.Controls
 {
-    public class FaButton : Button
+    public class IconButton : Button
     {
-        public FaButton()
+        public IconButton()
         {
             Padding = 0;
             switch (Device.RuntimePlatform)
             {
                 case Device.iOS:
-                    FontFamily = "FontAwesome";
+                    FontFamily = "bwi-font";
                     break;
                 case Device.Android:
-                    FontFamily = "FontAwesome.ttf#FontAwesome";
+                    FontFamily = "bwi-font.ttf#bwi-font";
                     break;
             }
         }

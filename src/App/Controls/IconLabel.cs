@@ -2,17 +2,17 @@
 
 namespace Bit.App.Controls
 {
-    public class FaLabel : Label
+    public class IconLabel : Label
     {
-        public FaLabel()
+        public IconLabel()
         {
             switch (Device.RuntimePlatform)
             {
                 case Device.iOS:
-                    FontFamily = "FontAwesome";
+                    FontFamily = "bwi-font";
                     break;
                 case Device.Android:
-                    FontFamily = "FontAwesome.ttf#FontAwesome";
+                    FontFamily = "bwi-font.ttf#bwi-font";
                     break;
             }
         }
