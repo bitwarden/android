@@ -112,7 +112,7 @@ namespace Bit.App
                 }
                 else if (message.Command == "accountAdded")
                 {
-                    UpdateTheme();
+                    await UpdateThemeAsync();
                 }
                 else if (message.Command == "switchedAccount")
                 {
@@ -228,7 +228,8 @@ namespace Bit.App
 
         private async void ResumedAsync()
         {
-            UpdateTheme();
+            await UpdateThemeAsync();
+
             await _vaultTimeoutService.CheckVaultTimeoutAsync();
             _messagingService.Send("startEventTimer");
             await ClearCacheIfNeededAsync();
@@ -238,6 +239,15 @@ namespace Bit.App
             {
                 await lockPage.PromptBiometricAfterResumeAsync();
             }
+        }
+
+        public async Task UpdateThemeAsync()
+        {
+            await Device.InvokeOnMainThreadAsync(() =>
+            {
+                ThemeManager.SetTheme(Current.Resources);
+                _messagingService.Send("updatedTheme");
+            });
         }
 
         private void SetCulture()
@@ -284,7 +294,7 @@ namespace Bit.App
                     await SetMainPageAsync();
                 }
                 await Task.Delay(50);
-                UpdateTheme();
+                await UpdateThemeAsync();
             });
         }
 
@@ -379,7 +389,7 @@ namespace Bit.App
             ThemeManager.SetTheme(Current.Resources);
             Current.RequestedThemeChanged += (s, a) =>
             {
-                UpdateTheme();
+                UpdateThemeAsync();
             };
             Current.MainPage = new NavigationPage(new HomePage(Options));
             var mainPageTask = SetMainPageAsync();
@@ -400,15 +410,6 @@ namespace Bit.App
                     await Task.Delay(1000);
                     await _syncService.FullSyncAsync(false);
                 }
-            });
-        }
-
-        private void UpdateTheme()
-        {
-            Device.BeginInvokeOnMainThread(() =>
-            {
-                ThemeManager.SetTheme(Current.Resources);
-                _messagingService.Send("updatedTheme");
             });
         }
 

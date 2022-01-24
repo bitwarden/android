@@ -216,6 +216,8 @@ namespace Bit.iOS
             {
                 view.RemoveFromSuperview();
             }
+
+            ThemeManager.UpdateThemeOnPagesAsync();
         }
 
         public override void WillEnterForeground(UIApplication uiApplication)

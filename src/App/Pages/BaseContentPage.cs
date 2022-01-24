@@ -32,10 +32,18 @@ namespace Bit.App.Pages
 
         public DateTime? LastPageAction { get; set; }
 
+        public bool IsThemeDirty { get; set; }
+
         protected async override void OnAppearing()
         {
             base.OnAppearing();
-            await SaveActivity();
+            
+            if (IsThemeDirty)
+            {
+                UpdateOnThemeChanged();
+            }
+            
+            await SaveActivityAsync();
         }
 
         public bool DoOnce(Action action = null, int milliseconds = 1000)
@@ -48,6 +56,12 @@ namespace Bit.App.Pages
             LastPageAction = DateTime.UtcNow;
             action?.Invoke();
             return true;
+        }
+
+        public virtual Task UpdateOnThemeChanged()
+        {
+            IsThemeDirty = false;
+            return Task.CompletedTask;
         }
 
         protected void SetActivityIndicator(ContentView targetView = null)
@@ -219,7 +233,7 @@ namespace Bit.App.Pages
             }
         }
 
-        private async Task SaveActivity()
+        private async Task SaveActivityAsync()
         {
             SetServices();
             await _stateService.SetLastActiveTimeAsync(_deviceActionService.GetActiveTime());
