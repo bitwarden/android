@@ -18,6 +18,8 @@ using Plugin.Fingerprint;
 using Xamarin.Android.Net;
 using System.Net.Http;
 using System.Net;
+using Bit.App.Utilities;
+using Bit.App.Pages;
 #if !FDROID
 using Android.Gms.Security;
 #endif
@@ -45,6 +47,20 @@ namespace Bit.Droid
                 var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
                 ServiceContainer.Init(deviceActionService.DeviceUserAgent, Constants.ClearCiphersCacheKey,
                     Constants.AndroidAllClearCipherCacheKeys);
+
+                // TODO: Update when https://github.com/bitwarden/mobile/pull/1662 gets merged
+                var deleteAccountActionFlowExecutioner = new DeleteAccountActionFlowExecutioner(
+                    ServiceContainer.Resolve<IApiService>("apiService"),
+                    ServiceContainer.Resolve<IMessagingService>("messagingService"),
+                    ServiceContainer.Resolve<ICryptoService>("cryptoService"),
+                    ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService"),
+                    ServiceContainer.Resolve<IDeviceActionService>("deviceActionService"));
+                ServiceContainer.Register<IDeleteAccountActionFlowExecutioner>("deleteAccountActionFlowExecutioner", deleteAccountActionFlowExecutioner);
+
+                var verificationActionsFlowHelper = new VerificationActionsFlowHelper(
+                    ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService"),
+                    ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService"));
+                ServiceContainer.Register<IVerificationActionsFlowHelper>("verificationActionsFlowHelper", verificationActionsFlowHelper);
             }
 #if !FDROID
             if (Build.VERSION.SdkInt <= BuildVersionCodes.Kitkat)
