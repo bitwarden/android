@@ -3766,5 +3766,41 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("Sending", resourceCulture);
             }
         }
+        
+        public static string SendingCode {
+            get {
+                return ResourceManager.GetString("SendingCode", resourceCulture);
+            }
+        }
+        
+        public static string Verifying {
+            get {
+                return ResourceManager.GetString("Verifying", resourceCulture);
+            }
+        }
+        
+        public static string ResendCode {
+            get {
+                return ResourceManager.GetString("ResendCode", resourceCulture);
+            }
+        }
+        
+        public static string AVerificationCodeWasSentToYourEmail {
+            get {
+                return ResourceManager.GetString("AVerificationCodeWasSentToYourEmail", resourceCulture);
+            }
+        }
+        
+        public static string AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain {
+            get {
+                return ResourceManager.GetString("AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain", resourceCulture);
+            }
+        }
+        
+        public static string EnterTheVerificationCodeThatWasSentToYourEmail {
+            get {
+                return ResourceManager.GetString("EnterTheVerificationCodeThatWasSentToYourEmail", resourceCulture);
+            }
+        }
     }
 }

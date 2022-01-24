@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
+using Bit.Core;
 #if !FDROID
 using Microsoft.AppCenter.Crashes;
 #endif
@@ -138,7 +139,7 @@ namespace Bit.App.Pages
 
         public Command TogglePasswordCommand { get; }
 
-        public string ShowPasswordIcon => ShowPassword ? "" : "";
+        public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
 
         public void TogglePassword()
         {

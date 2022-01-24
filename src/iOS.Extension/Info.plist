@@ -67,7 +67,7 @@
 	<array/>
 	<key>UIAppFonts</key>
 	<array>
-		<string>FontAwesome.ttf</string>
+		<string>bwi-font.ttf</string>
 		<string>MaterialIcons_Regular.ttf</string>
 	</array>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
