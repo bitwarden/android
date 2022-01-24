@@ -148,21 +148,30 @@ namespace Bit.App.Utilities
 
         public static async Task UpdateThemeOnPagesAsync()
         {
-            if (IsThemeDirty)
+            try
             {
-                IsThemeDirty = false;
-
-                await Application.Current.MainPage.TraverseNavigationRecursivelyAsync(async p =>
+                if (IsThemeDirty)
                 {
-                    if (p is IThemeDirtablePage themeDirtablePage)
+                    IsThemeDirty = false;
+
+                    await Application.Current.MainPage.TraverseNavigationRecursivelyAsync(async p =>
                     {
-                        themeDirtablePage.IsThemeDirty = true;
-                        if (p.IsVisible)
+                        if (p is IThemeDirtablePage themeDirtablePage)
                         {
-                            await themeDirtablePage.UpdateOnThemeChanged();
+                            themeDirtablePage.IsThemeDirty = true;
+                            if (p.IsVisible)
+                            {
+                                await themeDirtablePage.UpdateOnThemeChanged();
+                            }
                         }
-                    }
-                });
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+#if !FDROID
+                Crashes.TrackError(ex);
+#endif
             }
         }
     }

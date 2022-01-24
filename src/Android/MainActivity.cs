@@ -1,27 +1,24 @@
-﻿using Android.App;
-using Android.Content.PM;
-using Android.Runtime;
-using Android.OS;
-using Bit.Core;
-using System.Linq;
-using Bit.App.Abstractions;
-using Bit.Core.Utilities;
-using Bit.Core.Abstractions;
+﻿using System;
 using System.IO;
-using System;
-using Android.Content;
-using Bit.Droid.Utilities;
-using Bit.Droid.Receivers;
-using Bit.App.Models;
-using Bit.Core.Enums;
-using Android.Nfc;
+using System.Linq;
 using System.Threading.Tasks;
+using Android.App;
+using Android.Content;
+using Android.Content.PM;
+using Android.Nfc;
+using Android.OS;
+using Android.Runtime;
 using AndroidX.Core.Content;
+using Bit.App.Abstractions;
+using Bit.App.Models;
 using Bit.App.Utilities;
+using Bit.Core;
+using Bit.Core.Abstractions;
+using Bit.Core.Enums;
+using Bit.Core.Utilities;
+using Bit.Droid.Receivers;
+using Bit.Droid.Utilities;
 using ZXing.Net.Mobile.Android;
-#if !FDROID
-using Microsoft.AppCenter.Crashes;
-#endif
 
 namespace Bit.Droid
 {
@@ -123,7 +120,7 @@ namespace Bit.Droid
             Xamarin.Essentials.Platform.OnResume();
             AppearanceAdjustments();
 
-            UpdateThemeOnPagesAsync();
+            ThemeManager.UpdateThemeOnPagesAsync();
 
             if (_deviceActionService.SupportsNfc())
             {
@@ -136,21 +133,6 @@ namespace Bit.Droid
             AndroidHelpers.SetPreconfiguredRestrictionSettingsAsync(this)
                 .GetAwaiter()
                 .GetResult();
-        }
-
-        // TODO: When #1660 gets merged then we can use the task extension FireAndForget instead of this method
-        private async void UpdateThemeOnPagesAsync()
-        {
-            try
-            {
-                await ThemeManager.UpdateThemeOnPagesAsync().ConfigureAwait(false);
-            }
-            catch (Exception ex)
-            {
-#if !FDROID
-                Crashes.TrackError(ex);
-#endif
-            }
         }
 
         protected override void OnNewIntent(Intent intent)

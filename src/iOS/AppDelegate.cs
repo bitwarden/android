@@ -14,7 +14,6 @@ using Bit.iOS.Core.Utilities;
 using Bit.iOS.Services;
 using CoreNFC;
 using Foundation;
-using Microsoft.AppCenter.Crashes;
 using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
@@ -218,22 +217,7 @@ namespace Bit.iOS
                 UIApplication.SharedApplication.SetStatusBarHidden(false, false);
             }
 
-            UpdateThemeOnPagesAsync();
-        }
-
-        // TODO: When #1660 gets merged then we can use the task extension FireAndForget instead of this method
-        private async void UpdateThemeOnPagesAsync()
-        {
-            try
-            {
-                await ThemeManager.UpdateThemeOnPagesAsync().ConfigureAwait(false);
-            }
-            catch (Exception ex)
-            {
-#if !FDROID
-                Crashes.TrackError(ex);
-#endif
-            }
+            ThemeManager.UpdateThemeOnPagesAsync();
         }
 
         public override void WillEnterForeground(UIApplication uiApplication)
