@@ -9,6 +9,7 @@ using Xamarin.Forms;
 using Xamarin.CommunityToolkit.ObjectModel;
 using System.Windows.Input;
 using Bit.App.Utilities;
+using Bit.Core;
 #if !FDROID
 using Microsoft.AppCenter.Crashes;
 #endif
@@ -72,7 +73,7 @@ namespace Bit.App.Pages
 
         public ICommand RequestOTPCommand { get; }
 
-        public string ShowPasswordIcon => ShowPassword ? "" : "";
+        public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
 
         public void TogglePassword() => ShowPassword = !ShowPassword;
 
