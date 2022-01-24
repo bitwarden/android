@@ -224,8 +224,8 @@
     <BundleResource Include="..\iOS\Resources\logo.png">
       <Link>Resources\logo.png</Link>
     </BundleResource>
-    <BundleResource Include="..\iOS\Resources\FontAwesome.ttf">
-      <Link>Resources\FontAwesome.ttf</Link>
+    <BundleResource Include="..\iOS\Resources\bwi-font.ttf">
+      <Link>Resources\bwi-font.ttf</Link>
     </BundleResource>
     <BundleResource Include="..\iOS\Resources\MaterialIcons_Regular.ttf">
       <Link>Resources\MaterialIcons_Regular.ttf</Link>
