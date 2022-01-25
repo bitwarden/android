@@ -249,30 +249,36 @@ namespace Bit.iOS
             return base.ContinueUserActivity(application, userActivity, completionHandler);
         }
 
+        const string TAG = "##PUSH NOTIFICATIONS";
         public override void FailedToRegisterForRemoteNotifications(UIApplication application, NSError error)
         {
+            Console.WriteLine($"{TAG} FailedToRegisterForRemoteNotifications");
             _pushHandler?.OnErrorReceived(error);
         }
 
         public override void RegisteredForRemoteNotifications(UIApplication application, NSData deviceToken)
         {
+            Console.WriteLine($"{TAG} RegisteredForRemoteNotifications");
             _pushHandler?.OnRegisteredSuccess(deviceToken);
         }
 
         public override void DidRegisterUserNotificationSettings(UIApplication application,
             UIUserNotificationSettings notificationSettings)
         {
+            Console.WriteLine($"{TAG} DidRegisterUserNotificationSettings");
             application.RegisterForRemoteNotifications();
         }
 
         public override void DidReceiveRemoteNotification(UIApplication application, NSDictionary userInfo,
             Action<UIBackgroundFetchResult> completionHandler)
         {
+            Console.WriteLine($"{TAG} DidReceiveRemoteNotification");
             _pushHandler?.OnMessageReceived(userInfo);
         }
 
         public override void ReceivedRemoteNotification(UIApplication application, NSDictionary userInfo)
         {
+            Console.WriteLine($"{TAG} ReceivedRemoteNotification");
             _pushHandler?.OnMessageReceived(userInfo);
         }
 
@@ -313,6 +319,8 @@ namespace Bit.iOS
 
         private void RegisterPush()
         {
+            Console.WriteLine($"{TAG} RegisterPush");
+
             var notificationListenerService = new PushNotificationListenerService();
             ServiceContainer.Register<IPushNotificationListenerService>(
                 "pushNotificationListenerService", notificationListenerService);
