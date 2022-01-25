@@ -63,6 +63,7 @@
                     </Frame>
                 </Grid>
                 <controls:MonoLabel
+                    x:Name="lblPassword"
                     StyleClass="text-lg, text-html"
                     Text="{Binding ColoredPassword, Mode=OneWay}"
                     Margin="0, 20"

@@ -23,6 +23,7 @@
         public static string PushCurrentTokenKey = "pushCurrentToken";
         public static string PushLastRegistrationDateKey = "pushLastRegistrationDate";
         public static string PushInitialPromptShownKey = "pushInitialPromptShown";
+        public static string PushInstallationRegistrationError = "pushInstallationRegistrationError";
         public static string ThemeKey = "theme";
         public static string ClearClipboardKey = "clearClipboard";
         public static string LastBuildKey = "lastBuild";

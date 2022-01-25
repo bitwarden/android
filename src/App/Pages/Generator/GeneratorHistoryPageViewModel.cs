@@ -1,9 +1,12 @@
-﻿using Bit.App.Resources;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.Domain;
 using Bit.Core.Utilities;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+#if !FDROID
+using Microsoft.AppCenter.Crashes;
+#endif
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -19,8 +22,7 @@ namespace Bit.App.Pages
         public GeneratorHistoryPageViewModel()
         {
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
-            _passwordGenerationService = ServiceContainer.Resolve<IPasswordGenerationService>(
-                "passwordGenerationService");
+            _passwordGenerationService = ServiceContainer.Resolve<IPasswordGenerationService>("passwordGenerationService");
             _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
 
             PageTitle = AppResources.PasswordHistory;
@@ -56,6 +58,22 @@ namespace Bit.App.Pages
             await _clipboardService.CopyTextAsync(ph.Password);
             _platformUtilsService.ShowToast("info", null,
                 string.Format(AppResources.ValueHasBeenCopied, AppResources.Password));
+        }
+
+        public async Task UpdateOnThemeChanged()
+        {
+            try
+            {
+                await Device.InvokeOnMainThreadAsync(() => History.ResetWithRange(new List<GeneratedPasswordHistory>()));
+
+                await InitAsync();
+            }
+            catch (System.Exception ex)
+            {
+#if !FDROID
+                Crashes.TrackError(ex);
+#endif
+            }
         }
     }
 }

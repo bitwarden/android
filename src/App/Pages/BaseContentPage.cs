@@ -30,9 +30,17 @@ namespace Bit.App.Pages
 
         public DateTime? LastPageAction { get; set; }
 
+        public bool IsThemeDirty { get; set; }
+
         protected override void OnAppearing()
         {
             base.OnAppearing();
+
+            if (IsThemeDirty)
+            {
+                UpdateOnThemeChanged();
+            }
+
             SaveActivity();
         }
 
@@ -122,6 +130,12 @@ namespace Bit.App.Pages
         {
             SetServices();
             _storageService.SaveAsync(Constants.LastActiveTimeKey, _deviceActionService.GetActiveTime());
+        }
+
+        public virtual Task UpdateOnThemeChanged()
+        {
+            IsThemeDirty = false;
+            return Task.CompletedTask;
         }
     }
 }
