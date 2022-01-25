@@ -12,7 +12,9 @@ namespace Bit.iOS.Services
     public class iOSPushNotificationHandler : NSObject, IUNUserNotificationCenterDelegate
     {
         private const string TokenSetting = "token";
-        private const string DomainName = "iOSPushNotificationService";
+        //private const string DomainName = "iOSPushNotificationService";
+
+        const string TAG = "##PUSH NOTIFICATIONS";
 
         private readonly IPushNotificationListenerService _pushNotificationListenerService;
 
@@ -26,6 +28,8 @@ namespace Bit.iOS.Services
         {
             try
             {
+                Console.WriteLine($"{TAG} - OnMessageReceived.");
+
                 var json = DictionaryToJson(userInfo);
                 var values = JObject.Parse(json);
                 var keyAps = new NSString("aps");
@@ -49,19 +53,19 @@ namespace Bit.iOS.Services
 
         public void OnErrorReceived(NSError error)
         {
-            Debug.WriteLine("{0} - Registration Failed.", DomainName);
+            Console.WriteLine($"{TAG} - Registration Failed.");
             _pushNotificationListenerService.OnError(error.LocalizedDescription, Device.iOS);
         }
 
         public void OnRegisteredSuccess(NSData token)
         {
-            Debug.WriteLine("{0} - Successfully Registered.", DomainName);
+            Console.WriteLine($"{TAG} - Successfully Registered.");
 
             var hexDeviceToken = BitConverter.ToString(token.ToArray())
                                              .Replace("-", string.Empty)
                                              .ToLowerInvariant();
 
-            Debug.WriteLine("{0} - Token: {1}", DomainName, hexDeviceToken);
+            Console.WriteLine($"{TAG} - Token: {hexDeviceToken}");
 
             UNUserNotificationCenter.Current.Delegate = this;
 
@@ -80,7 +84,7 @@ namespace Bit.iOS.Services
         [Export("userNotificationCenter:willPresentNotification:withCompletionHandler:")]
         public void WillPresentNotification(UNUserNotificationCenter center, UNNotification notification, Action<UNNotificationPresentationOptions> completionHandler)
         {
-            Debug.WriteLine($"{DomainName} WillPresentNotification {notification?.Request?.Content?.UserInfo}");
+            Console.WriteLine($"{TAG} WillPresentNotification {notification?.Request?.Content?.UserInfo}");
 
             OnMessageReceived(notification?.Request?.Content?.UserInfo);
             completionHandler(UNNotificationPresentationOptions.Alert);
@@ -89,7 +93,7 @@ namespace Bit.iOS.Services
         [Export("userNotificationCenter:didReceiveNotificationResponse:withCompletionHandler:")]
         public void DidReceiveNotificationResponse(UNUserNotificationCenter center, UNNotificationResponse response, Action completionHandler)
         {
-            Debug.WriteLine($"{DomainName} DidReceiveNotificationResponse {response?.Notification?.Request?.Content?.UserInfo}");
+            Console.WriteLine($"{TAG} DidReceiveNotificationResponse {response?.Notification?.Request?.Content?.UserInfo}");
 
             if (response.IsDefaultAction)
             {
