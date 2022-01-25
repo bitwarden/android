@@ -27,11 +27,14 @@ namespace Bit.Core.Services
                 SetRefreshTokenAsync(refreshToken));
         }
 
-        public async Task SetAccessTokenAsync(string accessToken)
+        public async Task SetAccessTokenAsync(string accessToken, bool forDecodeOnly = false)
         {
             _accessTokenForDecoding = accessToken;
             _decodedAccessToken = null;
-            await _stateService.SetAccessTokenAsync(accessToken, await SkipTokenStorage());
+            if (!forDecodeOnly)
+            {
+                await _stateService.SetAccessTokenAsync(accessToken, await SkipTokenStorage());
+            }
         }
 
         public async Task<string> GetTokenAsync()

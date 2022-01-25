@@ -352,7 +352,7 @@ namespace Bit.Core.Services
             {
                 await _tokenService.SetTwoFactorTokenAsync(tokenResponse.TwoFactorToken, email);
             }
-            await _tokenService.SetTokensAsync(tokenResponse.AccessToken, tokenResponse.RefreshToken);
+            await _tokenService.SetAccessTokenAsync(tokenResponse.AccessToken, true);
             await _stateService.AddAccountAsync(
                 new Account(
                     new Account.AccountProfile()

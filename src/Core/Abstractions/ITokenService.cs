@@ -23,7 +23,7 @@ namespace Bit.Core.Abstractions
         Task<string> GetTwoFactorTokenAsync(string email);
         string GetUserId();
         Task SetRefreshTokenAsync(string refreshToken);
-        Task SetAccessTokenAsync(string token);
+        Task SetAccessTokenAsync(string token, bool forDecodeOnly = false);
         Task SetTokensAsync(string accessToken, string refreshToken);
         Task SetTwoFactorTokenAsync(string token, string email);
         bool TokenNeedsRefresh(int minutes = 5);
