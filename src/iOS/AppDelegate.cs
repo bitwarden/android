@@ -216,6 +216,8 @@ namespace Bit.iOS
                 view.RemoveFromSuperview();
                 UIApplication.SharedApplication.SetStatusBarHidden(false, false);
             }
+
+            ThemeManager.UpdateThemeOnPagesAsync();
         }
 
         public override void WillEnterForeground(UIApplication uiApplication)
