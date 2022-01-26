@@ -58,14 +58,15 @@ namespace Bit.App.Controls
             get => AccountView.AuthStatus == AuthenticationStatus.LoggedOut;
         }
 
-        public string AuthStatusIcon
+        public string AuthStatusIconActive
+        {
+            get => BitwardenIcons.CheckCircle;
+        }
+
+        public string AuthStatusIconNotActive
         {
             get
             {
-                if (IsActive)
-                {
-                    return BitwardenIcons.CheckCircle;
-                }
                 if (IsUnlocked)
                 {
                     return BitwardenIcons.Unlock;

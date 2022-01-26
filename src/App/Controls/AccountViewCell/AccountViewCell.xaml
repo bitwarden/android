@@ -73,28 +73,44 @@
                     Text="{u:I18n AccountUnlocked}"
                     IsVisible="{Binding IsUnlocked}"
                     StyleClass="list-sub"
+                    FontAttributes="Italic"
+                    TextTransform="Lowercase"
                     LineBreakMode="TailTruncation" />
                 <Label
                     Grid.Row="2"
                     Text="{u:I18n AccountLocked}"
                     IsVisible="{Binding IsLocked}"
                     StyleClass="list-sub"
+                    FontAttributes="Italic"
+                    TextTransform="Lowercase"
                     LineBreakMode="TailTruncation" />
                 <Label
                     Grid.Row="2"
                     Text="{u:I18n AccountLoggedOut}"
                     IsVisible="{Binding IsLoggedOut}"
                     StyleClass="list-sub"
+                    FontAttributes="Italic"
+                    TextTransform="Lowercase"
                     LineBreakMode="TailTruncation" />
             </Grid>
 
             <controls:IconLabel
                 Grid.Column="2"
-                Text="{Binding AuthStatusIcon}" 
+                Text="{Binding AuthStatusIconNotActive}" 
+                IsVisible="{Binding IsActive, Converter={StaticResource inverseBool}}"
                 Margin="12,0"
                 HorizontalOptions="Center"
                 VerticalOptions="Center"
                 StyleClass="list-icon, list-icon-platform" />
+            <controls:IconLabel
+                Grid.Column="2"
+                Text="{Binding AuthStatusIconActive}" 
+                IsVisible="{Binding IsActive}"
+                Margin="12,0"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                StyleClass="list-icon, list-icon-platform"
+                TextColor="{DynamicResource TextColor}"/>
         </Grid>
 
         <Grid
