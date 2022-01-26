@@ -41,6 +41,7 @@ namespace Bit.Core.Models.Domain
 
                 UserId = copy.UserId;
                 Email = copy.Email;
+                Name = copy.Name;
                 Stamp = copy.Stamp;
                 KdfType = copy.KdfType;
                 KdfIterations = copy.KdfIterations;
@@ -50,6 +51,7 @@ namespace Bit.Core.Models.Domain
 
             public string UserId;
             public string Email;
+            public string Name;
             public string Stamp;
             public KdfType? KdfType;
             public int? KdfIterations;

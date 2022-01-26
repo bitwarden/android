@@ -22,18 +22,25 @@
             </Grid.RowDefinitions>
 
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <Grid
-                Grid.Row="0"
+            <Image
                 Grid.Column="0"
-                RowSpacing="3"
-                Margin="12,0,0,0"
+                Source="{Binding AvatarImageSource}"
+                HorizontalOptions="Center"
+                Margin="10,0"
+                VerticalOptions="Center" />
+
+            <Grid
+                Grid.Column="1"
+                RowSpacing="1"
                 VerticalOptions="Center">
 
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
@@ -43,29 +50,51 @@
                 </Grid.ColumnDefinitions>
 
                 <Label
-                    Grid.Column="0"
                     Grid.Row="0"
                     Text="{Binding AccountView.Email}"
+                    IsVisible="{Binding IsActive}"
                     StyleClass="list-title"
                     LineBreakMode="TailTruncation" />
                 <Label
-                    Grid.Column="0"
+                    Grid.Row="0"
+                    Text="{Binding AccountView.Email}"
+                    IsVisible="{Binding IsActive, Converter={StaticResource inverseBool}}"
+                    StyleClass="list-title"
+                    TextColor="{DynamicResource MutedColor}"
+                    LineBreakMode="TailTruncation" />
+                <Label
                     Grid.Row="1"
+                    IsVisible="{Binding ShowHostname}"
                     Text="{Binding AccountView.Hostname}"
+                    StyleClass="list-sub"
+                    LineBreakMode="TailTruncation" />
+                <Label
+                    Grid.Row="2"
+                    Text="{u:I18n AccountUnlocked}"
+                    IsVisible="{Binding IsUnlocked}"
+                    StyleClass="list-sub"
+                    LineBreakMode="TailTruncation" />
+                <Label
+                    Grid.Row="2"
+                    Text="{u:I18n AccountLocked}"
+                    IsVisible="{Binding IsLocked}"
+                    StyleClass="list-sub"
+                    LineBreakMode="TailTruncation" />
+                <Label
+                    Grid.Row="2"
+                    Text="{u:I18n AccountLoggedOut}"
+                    IsVisible="{Binding IsLoggedOut}"
                     StyleClass="list-sub"
                     LineBreakMode="TailTruncation" />
             </Grid>
 
-            <Label
-                Grid.Column="1"
-                Grid.Row="0"
-                Text="{Binding AuthStatusText}"
-                FontSize="Small"
-                FontAttributes="Italic"
-                LineBreakMode="NoWrap"
-                HorizontalOptions="End"
-                Margin="10,0,20,0"
-                VerticalOptions="Center" />
+            <controls:IconLabel
+                Grid.Column="2"
+                Text="{Binding AuthStatusIcon}" 
+                Margin="12,0"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                StyleClass="list-icon, list-icon-platform" />
         </Grid>
 
         <Grid
@@ -77,21 +106,22 @@
             </Grid.RowDefinitions>
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="36" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
             <Image
                 Grid.Column="0"
                 VerticalOptions="Center"
-                Margin="12,0,0,0"
-                WidthRequest="{OnPlatform 14, iOS=14, Android=26}"
-                HeightRequest="{OnPlatform 14, iOS=14, Android=26}"
+                HorizontalOptions="Center"
+                Margin="14,0"
+                WidthRequest="{OnPlatform 24, iOS=24, Android=26}"
+                HeightRequest="{OnPlatform 24, iOS=24, Android=26}"
                 Source="plus.png"
                 xct:IconTintColorEffect.TintColor="{DynamicResource TextColor}"
                 AutomationProperties.IsInAccessibleTree="False" />
             <Label
-                Text="Add Account"
+                Text="{u:I18n AddAccount}"
                 StyleClass="list-title"
                 LineBreakMode="TailTruncation"
                 VerticalOptions="Center"

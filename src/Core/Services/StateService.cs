@@ -98,25 +98,18 @@ namespace Bit.Core.Services
             var vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             foreach (var account in accountList)
             {
-                var accountView = new AccountView(account);
-                if (accountView.UserId == _state.ActiveUserId)
+                var accountView = new AccountView(account, account.Profile.UserId == _state.ActiveUserId);
+                var isLocked = await vaultTimeoutService.IsLockedAsync(accountView.UserId);
+                var shouldTimeout = await vaultTimeoutService.ShouldTimeoutAsync(accountView.UserId);
+                if (isLocked || shouldTimeout)
                 {
-                    accountView.AuthStatus = AuthenticationStatus.Active;
+                    var action = account.Settings.VaultTimeoutAction;
+                    accountView.AuthStatus = action == "logOut" ? AuthenticationStatus.LoggedOut
+                        : AuthenticationStatus.Locked;
                 }
                 else
                 {
-                    var isLocked = await vaultTimeoutService.IsLockedAsync(accountView.UserId);
-                    var shouldTimeout = await vaultTimeoutService.ShouldTimeoutAsync(accountView.UserId);
-                    if (isLocked || shouldTimeout)
-                    {
-                        var action = account.Settings.VaultTimeoutAction;
-                        accountView.AuthStatus = action == "logOut" ? AuthenticationStatus.LoggedOut
-                            : AuthenticationStatus.Locked;
-                    }
-                    else
-                    {
-                        accountView.AuthStatus = AuthenticationStatus.Unlocked;
-                    }
+                    accountView.AuthStatus = AuthenticationStatus.Unlocked;
                 }
                 AccountViews.Add(accountView);
             }
@@ -432,6 +425,13 @@ namespace Bit.Core.Services
             return (await GetAccountAsync(
                 ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync())
             ))?.Profile?.Email;
+        }
+
+        public async Task<string> GetNameAsync(string userId = null)
+        {
+            return (await GetAccountAsync(
+                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync())
+            ))?.Profile?.Name;
         }
 
         public async Task<long?> GetLastActiveTimeAsync(string userId = null)
