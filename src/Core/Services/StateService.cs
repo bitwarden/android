@@ -962,36 +962,46 @@ namespace Bit.Core.Services
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<bool?> GetPushInitialPromptShownAsync(string userId = null)
+        public async Task<bool?> GetPushInitialPromptShownAsync()
         {
-            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
-                await GetDefaultStorageOptionsAsync());
+            var options = await GetDefaultStorageOptionsAsync();
             var key = Constants.PushInitialPromptShownKey;
-            return await GetValueAsync<bool?>(key, reconciledOptions);
+            return await GetValueAsync<bool?>(key, options);
         }
 
-        public async Task SetPushInitialPromptShownAsync(bool? value, string userId = null)
+        public async Task SetPushInitialPromptShownAsync(bool? value)
         {
-            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
-                await GetDefaultStorageOptionsAsync());
+            var options = await GetDefaultStorageOptionsAsync();
             var key = Constants.PushInitialPromptShownKey;
-            await SetValueAsync(key, value, reconciledOptions);
+            await SetValueAsync(key, value, options);
         }
 
-        public async Task<DateTime?> GetPushLastRegistrationDateAsync(string userId = null)
+        public async Task<DateTime?> GetPushLastRegistrationDateAsync()
         {
-            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
-                await GetDefaultStorageOptionsAsync());
+            var options = await GetDefaultStorageOptionsAsync();
             var key = Constants.PushLastRegistrationDateKey;
-            return await GetValueAsync<DateTime?>(key, reconciledOptions);
+            return await GetValueAsync<DateTime?>(key, options);
         }
 
-        public async Task SetPushLastRegistrationDateAsync(DateTime? value, string userId = null)
+        public async Task SetPushLastRegistrationDateAsync(DateTime? value)
         {
-            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
-                await GetDefaultStorageOptionsAsync());
+            var options = await GetDefaultStorageOptionsAsync();
             var key = Constants.PushLastRegistrationDateKey;
-            await SetValueAsync(key, value, reconciledOptions);
+            await SetValueAsync(key, value, options);
+        }
+
+        public async Task<string> GetPushInstallationRegistrationErrorAsync()
+        {
+            var options = await GetDefaultStorageOptionsAsync();
+            var key = Constants.PushInstallationRegistrationError;
+            return await GetValueAsync<string>(key, options);
+        }
+
+        public async Task SetPushInstallationRegistrationErrorAsync(string value)
+        {
+            var options = await GetDefaultStorageOptionsAsync();
+            var key = Constants.PushInstallationRegistrationError;
+            await SetValueAsync(key, value, options);
         }
 
         public async Task<string> GetPushCurrentTokenAsync(string userId = null)

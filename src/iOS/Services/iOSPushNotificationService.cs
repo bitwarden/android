@@ -11,6 +11,7 @@ namespace Bit.iOS.Services
     public class iOSPushNotificationService : NSObject, IPushNotificationService, IUNUserNotificationCenterDelegate
     {
         private const string TokenSetting = "token";
+        const string TAG = "##PUSH NOTIFICATIONS";
 
         public Task<string> GetTokenAsync()
         {
@@ -21,6 +22,8 @@ namespace Bit.iOS.Services
 
         public async Task RegisterAsync()
         {
+            Console.WriteLine($"{TAG} RegisterAsync");
+
             var tcs = new TaskCompletionSource<bool>();
 
             var authOptions = UNAuthorizationOptions.Alert | UNAuthorizationOptions.Badge | UNAuthorizationOptions.Sound;
@@ -28,11 +31,11 @@ namespace Bit.iOS.Services
             {
                 if (error != null)
                 {
-                    Debug.WriteLine($"Push Notifications {error}");
+                    Console.WriteLine($"{TAG} {error}");
                 }
                 else
                 {
-                    Debug.WriteLine($"Push Notifications {granted}");
+                    Console.WriteLine($"{TAG} {granted}");
                 }
 
                 tcs.SetResult(granted);
@@ -40,12 +43,15 @@ namespace Bit.iOS.Services
 
             if (await tcs.Task)
             {
+                Console.WriteLine($"{TAG} RegisterForRemoteNotifications");
                 UIApplication.SharedApplication.RegisterForRemoteNotifications();
             }
         }
 
         public Task UnregisterAsync()
         {
+            Console.WriteLine($"{TAG} UnregisterAsync");
+
             UIApplication.SharedApplication.UnregisterForRemoteNotifications();
             // TODO: unregister call
             // _pushNotificationListener.OnUnregistered(Device.iOS);

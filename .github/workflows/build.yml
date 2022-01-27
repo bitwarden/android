@@ -382,6 +382,8 @@ jobs:
             --output $HOME/secrets/dist_bitwarden.mobileprovision ./.github/secrets/dist_bitwarden.mobileprovision.gpg
           gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
             --output $HOME/secrets/dist_extension.mobileprovision ./.github/secrets/dist_extension.mobileprovision.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="$DECRYPT_FILE_PASSWORD" \
+            --output $HOME/secrets/dist_share_extension.mobileprovision ./.github/secrets/dist_share_extension.mobileprovision.gpg
         shell: bash
 
       - name: Increment version
@@ -395,6 +397,7 @@ jobs:
           perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./src/iOS/Info.plist
           perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./src/iOS.Extension/Info.plist
           perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./src/iOS.Autofill/Info.plist
+          perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./src/iOS.ShareExtension/Info.plist
         shell: bash
 
       - name: Update Entitlements
@@ -428,6 +431,7 @@ jobs:
           AUTOFILL_PROFILE_PATH=$HOME/secrets/dist_autofill.mobileprovision
           BITWARDEN_PROFILE_PATH=$HOME/secrets/dist_bitwarden.mobileprovision
           EXTENSION_PROFILE_PATH=$HOME/secrets/dist_extension.mobileprovision
+          SHARE_EXTENSION_PROFILE_PATH=$HOME/secrets/dist_share_extension.mobileprovision
           PROFILES_DIR_PATH=$HOME/Library/MobileDevice/Provisioning\ Profiles
 
           mkdir -p "$PROFILES_DIR_PATH"
@@ -440,6 +444,9 @@ jobs:
 
           EXTENSION_UUID=$(grep UUID -A1 -a $EXTENSION_PROFILE_PATH | grep -io "[-A-F0-9]\{36\}")
           cp $EXTENSION_PROFILE_PATH "$PROFILES_DIR_PATH/$EXTENSION_UUID.mobileprovision"
+
+          SHARE_EXTENSION_UUID=$(grep UUID -A1 -a $SHARE_EXTENSION_PROFILE_PATH | grep -io "[-A-F0-9]\{36\}")
+          cp $SHARE_EXTENSION_PROFILE_PATH "$PROFILES_DIR_PATH/$SHARE_EXTENSION_UUID.mobileprovision"
         shell: bash
 
       - name: Restore packages

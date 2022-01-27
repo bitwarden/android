@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
 using Xamarin.Forms;
+using ZXing.Client.Result;
 
 namespace Bit.App.Pages
 {
@@ -129,7 +130,15 @@ namespace Bit.App.Pages
         {
             var debugText = string.Format("{0}: {1} ({2})", AppResources.Version,
                 _platformUtilsService.GetApplicationVersion(), _deviceActionService.GetBuildNumber());
-            var text = string.Format("© Bitwarden Inc. 2015-{0}\n\n{1}", DateTime.Now.Year, debugText);
+            var pushNotificationsRegistered = ServiceContainer.Resolve<IPushNotificationService>("pushNotificationService").IsRegisteredForPush;
+            var pnServerRegDate = await _stateService.GetPushLastRegistrationDateAsync();
+            var pnServerError = await _stateService.GetPushInstallationRegistrationErrorAsync();
+
+            var pnServerRegDateMessage = default(DateTime) == pnServerRegDate ? "-" : $"{pnServerRegDate.GetValueOrDefault().ToShortDateString()}-{pnServerRegDate.GetValueOrDefault().ToShortTimeString()} UTC";
+            var errorMessage = string.IsNullOrEmpty(pnServerError) ? string.Empty : $"Push Notifications Server Registration error: {pnServerError}";
+
+            var text = string.Format("© Bitwarden Inc. 2015-{0}\n\n{1}\nPush Notifications registered:{2}\nPush Notifications Server Last Date :{3}\n{4}", DateTime.Now.Year, debugText, pushNotificationsRegistered, pnServerRegDateMessage, errorMessage);
+
             var copy = await _platformUtilsService.ShowDialogAsync(text, AppResources.Bitwarden, AppResources.Copy,
                 AppResources.Close);
             if (copy)
