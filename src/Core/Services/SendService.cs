@@ -210,7 +210,7 @@ namespace Bit.Core.Services
                         {
                             response = await LegacyServerSendFileUpload(request, send, encryptedFileData);
                         }
-                        catch 
+                        catch
                         {
                             if (response != default){
                                 await _apiService.DeleteSendAsync(response.Id);

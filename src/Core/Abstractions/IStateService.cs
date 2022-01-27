@@ -121,10 +121,12 @@ namespace Bit.Core.Abstractions
         Task SetMigratedFromV1AutofillPromptShownAsync(bool? value, string userId = null);
         Task<bool?> GetTriedV1ResyncAsync(string userId = null);
         Task SetTriedV1ResyncAsync(bool? value, string userId = null);
-        Task<bool?> GetPushInitialPromptShownAsync(string userId = null);
-        Task SetPushInitialPromptShownAsync(bool? value, string userId = null);
-        Task<DateTime?> GetPushLastRegistrationDateAsync(string userId = null);
-        Task SetPushLastRegistrationDateAsync(DateTime? value, string userId = null);
+        Task<bool?> GetPushInitialPromptShownAsync();
+        Task SetPushInitialPromptShownAsync(bool? value);
+        Task<DateTime?> GetPushLastRegistrationDateAsync();
+        Task SetPushLastRegistrationDateAsync(DateTime? value);
+        Task<string> GetPushInstallationRegistrationErrorAsync();
+        Task SetPushInstallationRegistrationErrorAsync(string value);
         Task<string> GetPushCurrentTokenAsync(string userId = null);
         Task SetPushCurrentTokenAsync(string value, string userId = null);
         Task<List<EventData>> GetEventCollectionAsync(string userId = null);
