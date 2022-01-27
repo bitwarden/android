@@ -152,7 +152,7 @@ namespace Bit.iOS.Core.Controllers
                 {
                     MasterPasswordCell.TextField.KeyboardType = UIKeyboardType.NumberPad;
                 }
-                MasterPasswordCell.Button.TitleLabel.Font = UIFont.FromName("FontAwesome", 28f);
+                MasterPasswordCell.Button.TitleLabel.Font = UIFont.FromName("bwi-font", 28f);
                 MasterPasswordCell.Button.SetTitle(BitwardenIcons.Eye, UIControlState.Normal);
                 MasterPasswordCell.Button.TouchUpInside += (sender, e) => {
                     MasterPasswordCell.TextField.SecureTextEntry = !MasterPasswordCell.TextField.SecureTextEntry;
