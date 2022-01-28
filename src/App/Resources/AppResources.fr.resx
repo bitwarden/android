@@ -1060,7 +1060,7 @@
     <value>Nom de famille</value>
   </data>
   <data name="FullName" xml:space="preserve">
-    <value>Nom complet</value>
+    <value>Nom et prénom</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Numéro de permis</value>
@@ -1441,7 +1441,7 @@
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="LearnOrgConfirmation" xml:space="preserve">
-    <value>Bitwarden vous permet de partager vos éléments de coffre avec d’autres personnes en utilisant un compte d’organisation. Voulez-vous visiter le site web de bitwarden.com pour en savoir plus ?</value>
+    <value>Bitwarden vous permet de partager des éléments de votre coffre avec d'autres personnes en utilisant un compte d'organisation. Souhaitez-vous visiter le site web bitwarden.com pour en savoir plus ?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
     <value>Exporter le coffre</value>
@@ -1621,7 +1621,7 @@
     <value>Envoyer un code de vérification à votre adresse email</value>
   </data>
   <data name="CodeSent" xml:space="preserve">
-    <value>Code Envoyé !</value>
+    <value>Code envoyé !</value>
   </data>
   <data name="ConfirmYourIdentity" xml:space="preserve">
     <value>Confirmez votre identité pour continuer.</value>
@@ -2033,10 +2033,10 @@
     <value>Le captcha a échoué. Veuillez réessayer.</value>
   </data>
   <data name="UpdatedMasterPassword" xml:space="preserve">
-    <value>Mot de passe principal mis à jour</value>
+    <value>Mot de passe maître mis à jour</value>
   </data>
   <data name="UpdateMasterPassword" xml:space="preserve">
-    <value>Mettre à jour le mot de passe principal</value>
+    <value>Mettre à jour le mot de passe maître</value>
   </data>
   <data name="UpdateMasterPasswordWarning" xml:space="preserve">
     <value>Votre mot de passe maître a récemment été modifié par un administrateur de votre organisation. Pour accéder au coffre, vous devez mettre à jour votre mot de passe maître dès maintenant. Cette action va vous déconnecter et vous obligera à vous reconnecter. Les sessions actives sur d'autres appareils peuvent rester actives jusqu'à une heure.</value>
@@ -2051,7 +2051,7 @@
     <value>Supprimer le mot de passe maître</value>
   </data>
   <data name="RemoveMasterPasswordWarning" xml:space="preserve">
-    <value>{0} is using SSO with customer-managed encryption. Continuing will remove your Master Password from your account and require SSO to login.</value>
+    <value>{0} utilise le SSO avec un chiffrement géré par le client. En continuant, votre mot de passe maître sera supprimé de votre compte et vous devrez utiliser le SSO pour vous connecter.</value>
   </data>
   <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
     <value>Si vous ne souhaitez pas supprimer votre mot de passe maître actuel, vous pouvez quitter cette organisation. </value>
@@ -2069,7 +2069,7 @@
     <value>Pour continuer, préparez votre clé de sécurité compatible FIDO2 WebAuthn, puis suivez les instructions après avoir cliqué sur "Authentifier WebAuthn" à l'écran suivant.</value>
   </data>
   <data name="Fido2Desc" xml:space="preserve">
-    <value>Authentication using FIDO2 WebAuthn, you can authenticate using an external security key.</value>
+    <value>Authentification avec WebAuthn FIDO2, vous pouvez vous authentifier en utilisant une clé de sécurité externe.</value>
   </data>
   <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
     <value>Authentifier WebAuthn</value>
@@ -2081,16 +2081,16 @@
     <value>Assurez-vous que votre navigateur par défaut prend en charge WebAuthn et réessayez.</value>
   </data>
   <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
-    <value>This organization has an enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password.</value>
+    <value>Cette organisation a une politique d'entreprise qui vous inscrira automatiquement à la réinitialisation du mot de passe. L'inscription permettra aux administrateurs de l'organisation de changer votre mot de passe maître.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
     <value>Les politiques de votre organisation affectent le délai d'expiration de votre coffre-fort. Le délai d'expiration maximal autorisé est de {0} heure(s) et {1} minute(s)</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
-    <value>Le délai d'expiration de votre coffre-fort dépasse les restrictions définies par votre organisation.</value>
+    <value>Le délai d'expiration de votre coffre dépasse les restrictions définies par votre organisation.</value>
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
-    <value>Une ou plusieurs politiques d'organisation vous empêchent d'exporter votre coffre-fort personnel.</value>
+    <value>Une ou plusieurs politiques d'organisation vous empêchent d'exporter votre coffre personnel.</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Supprimer le compte</value>
@@ -2110,10 +2110,34 @@
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Code de vérification invalide.</value>
   </data>
+  <data name="RequestOTP" xml:space="preserve">
+    <value>Demander un mot de passe à usage unique</value>
+  </data>
   <data name="SendCode" xml:space="preserve">
     <value>Envoyer le code</value>
   </data>
   <data name="Sending" xml:space="preserve">
     <value>Envoi en cours</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>Copier le lien du Send lors de l'enregistrement</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>Envoi du code</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>Vérification</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>Renvoyer le Code</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>Un code de vérification a été envoyé à votre adresse e-mail.</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>Une erreur s'est produite lors de l'envoi d'un code de vérification à votre adresse e-mail. Veuillez réessayer</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>Saisissez le code de vérification que nous avons envoyé votre adresse e-mail</value>
   </data>
 </root>

@@ -2110,10 +2110,34 @@
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Neplatný verifikačný kód.</value>
   </data>
+  <data name="RequestOTP" xml:space="preserve">
+    <value>Vyžiadať jednorazové heslo</value>
+  </data>
   <data name="SendCode" xml:space="preserve">
     <value>Odoslať kód</value>
   </data>
   <data name="Sending" xml:space="preserve">
     <value>Odosiela sa</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>Kopírovať odkaz Sendu pri uložení</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>Odosiela sa kód</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>Overuje sa</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>Znova odoslať kód</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>Na váš e-mail bol odoslaný overovací kód</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>Pri odosielaní overovacieho kódu na váš e-mail došlo k chybe. Skúste to, prosím, znova</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>Zadajte overovací kód, ktorý vám bol zaslaný na e-mail</value>
   </data>
 </root>

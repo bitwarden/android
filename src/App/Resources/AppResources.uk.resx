@@ -2110,10 +2110,34 @@
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Недійсний код підтвердження.</value>
   </data>
+  <data name="RequestOTP" xml:space="preserve">
+    <value>Запитувати одноразовий пароль</value>
+  </data>
   <data name="SendCode" xml:space="preserve">
     <value>Надіслати код</value>
   </data>
   <data name="Sending" xml:space="preserve">
     <value>Надсилання</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>Копіювати посилання відправлення при збереженні</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>Надсилання коду</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>Перевірка</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>Надіслати новий код</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>Код підтвердження надіслано на вашу електронну пошту</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>При надсиланні коду сталася помилка. Будь ласка, спробуйте знову</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>Введіть код підтвердження, надісланий на вашу електронну пошту</value>
   </data>
 </root>
