@@ -103,11 +103,6 @@ namespace Bit.App.Controls
                 var base16 = "00" + Convert.ToString(value, 16);
                 color += base16.Substring(base16.Length - 2);
             }
-            if (Device.RuntimePlatform == Device.iOS)
-            {
-                // TODO remove this once iOS ToolbarItem tint issue is solved
-                return Color.FromHex("#33ffffff");
-            }
             return Color.FromHex(color);
         }
     }

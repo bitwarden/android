@@ -43,6 +43,8 @@ namespace Bit.App.Pages
         {
             base.OnAppearing();
             _mainContent.Content = _mainLayout;
+            _accountAvatar?.OnAppearing();
+
             if (await ShowAccountSwitcherAsync())
             {
                 _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
@@ -67,6 +69,7 @@ namespace Bit.App.Pages
         {
             base.OnDisappearing();
             _broadcasterService.Unsubscribe(nameof(HomePage));
+            _accountAvatar?.OnDisappearing();
         }
 
         private void UpdateLogo()
