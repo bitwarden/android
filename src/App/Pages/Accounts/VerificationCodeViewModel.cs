@@ -99,6 +99,8 @@ namespace Bit.App.Pages
 
                 await _apiService.PostAccountRequestOTP();
 
+                await _deviceActionService.HideLoadingAsync();
+
                 SendCodeStatus = AppResources.AVerificationCodeWasSentToYourEmail;
 
                 _platformUtilsService.ShowToast(null, null, AppResources.CodeSent);
