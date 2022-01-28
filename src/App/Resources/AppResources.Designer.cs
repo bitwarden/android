@@ -3719,6 +3719,30 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string AddAccount {
+            get {
+                return ResourceManager.GetString("AddAccount", resourceCulture);
+            }
+        }
+        
+        public static string AccountUnlocked {
+            get {
+                return ResourceManager.GetString("AccountUnlocked", resourceCulture);
+            }
+        }
+        
+        public static string AccountLocked {
+            get {
+                return ResourceManager.GetString("AccountLocked", resourceCulture);
+            }
+        }
+        
+        public static string AccountLoggedOut {
+            get {
+                return ResourceManager.GetString("AccountLoggedOut", resourceCulture);
+            }
+        }
+        
         public static string DeleteAccount {
             get {
                 return ResourceManager.GetString("DeleteAccount", resourceCulture);

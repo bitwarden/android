@@ -136,7 +136,11 @@ namespace Bit.App.Pages
         }
         protected async Task<AvatarImageSource> GetAvatarImageSourceAsync(bool useCurrentActiveAccount = true)
         {
-            return new AvatarImageSource(useCurrentActiveAccount ? await _stateService.GetEmailAsync() : null);
+            if (useCurrentActiveAccount)
+            {
+                return new AvatarImageSource(await _stateService.GetNameAsync(), await _stateService.GetEmailAsync());
+            }
+            return new AvatarImageSource();
         }
 
         protected async Task ShowAccountListAsync(bool isVisible, View listContainer, View overlay, View fab = null)
@@ -201,7 +205,7 @@ namespace Bit.App.Pages
 
             if (item.AccountView.IsAccount)
             {
-                if (item.AccountView.AuthStatus != AuthenticationStatus.Active)
+                if (!item.AccountView.IsActive)
                 {
                     await _stateService.SetActiveUserAsync(item.AccountView.UserId);
                     _messagingService.Send("switchedAccount");

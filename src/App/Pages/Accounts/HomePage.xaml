@@ -92,7 +92,7 @@
                     ItemSelected="AccountRow_Selected"
                     BackgroundColor="Transparent"
                     VerticalOptions="FillAndExpand"
-                    RowHeight="60">
+                    RowHeight="{OnPlatform 70, iOS=70, Android=74}">
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="view:AccountView">
                             <controls:AccountViewCell

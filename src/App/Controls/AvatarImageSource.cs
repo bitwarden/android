@@ -11,9 +11,13 @@ namespace Bit.App.Controls
     {
         private string _data;
 
-        public AvatarImageSource(string data = null)
+        public AvatarImageSource(string name = null, string email = null)
         {
-            _data = data;
+            _data = name;
+            if (string.IsNullOrWhiteSpace(_data))
+            {
+                _data = email;
+            }
         }
 
         public override Func<CancellationToken, Task<Stream>> Stream => GetStreamAsync;
@@ -36,10 +40,10 @@ namespace Bit.App.Controls
             {
                 chars = "..";
             }
-            else if (_data?.Length > 2)
+            else if (_data?.Length > 1)
             {
                 upperData = _data.ToUpper();
-                chars = upperData.Substring(0, 2).ToUpper();
+                chars = GetFirstLetters(upperData, 2);
             }
 
             var bgColor = StringToColor(upperData);
@@ -83,6 +87,25 @@ namespace Bit.App.Controls
             canvas.DrawText(chars, midX, midY + rect.Height / 2, textPaint);
 
             return SKImage.FromBitmap(bitmap).Encode(SKEncodedImageFormat.Png, 100).AsStream();
+        }
+
+        private string GetFirstLetters(string data, int charCount)
+        {
+            var parts  = data.Split();
+            if (parts.Length > 1 && charCount <= 2)
+            {
+                var text = "";
+                for (int i = 0; i < charCount; i++)
+                {
+                    text += parts[i].Substring(0,1);
+                }
+                return text;
+            }
+            if (data.Length > 2)
+            {
+                return data.Substring(0, 2);
+            }
+            return null;
         }
 
         private Color StringToColor(string str)
