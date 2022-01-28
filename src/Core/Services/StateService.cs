@@ -993,14 +993,14 @@ namespace Bit.Core.Services
         public async Task<string> GetPushInstallationRegistrationErrorAsync()
         {
             var options = await GetDefaultStorageOptionsAsync();
-            var key = Constants.PushInstallationRegistrationError;
+            var key = Constants.PushInstallationRegistrationErrorKey;
             return await GetValueAsync<string>(key, options);
         }
 
         public async Task SetPushInstallationRegistrationErrorAsync(string value)
         {
             var options = await GetDefaultStorageOptionsAsync();
-            var key = Constants.PushInstallationRegistrationError;
+            var key = Constants.PushInstallationRegistrationErrorKey;
             await SetValueAsync(key, value, options);
         }
 

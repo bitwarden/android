@@ -14,7 +14,7 @@
         public static string PushCurrentTokenKey = "pushCurrentToken";
         public static string PushLastRegistrationDateKey = "pushLastRegistrationDate";
         public static string PushInitialPromptShownKey = "pushInitialPromptShown";
-        public static string PushInstallationRegistrationError = "pushInstallationRegistrationError";
+        public static string PushInstallationRegistrationErrorKey = "pushInstallationRegistrationError";
         public static string LastBuildKey = "lastBuild";
         public static string AddSitePromptShownKey = "addSitePromptShown";
         public static string ClearCiphersCacheKey = "clearCiphersCache";
