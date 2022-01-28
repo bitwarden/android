@@ -1,7 +1,7 @@
-﻿using Bit.App.Models;
-using Bit.App.Resources;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using Bit.App.Models;
+using Bit.App.Resources;
 using Bit.App.Utilities;
 using Xamarin.Forms;
 
@@ -60,14 +60,20 @@ namespace Bit.App.Pages
             {
                 return;
             }
+
             _appeared = true;
             _mainContent.Content = _mainLayout;
+
+            _accountAvatar?.OnAppearing();
+
             if (await ShowAccountSwitcherAsync())
             {
                 _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
             }
             else
             {
+                // TODO: this is currently not working because of xamarin bug on Priority = -1,
+                // check if we can hide it by putting a same backgroundcolor icon
                 ToolbarItems.Remove(_accountAvatar);
             }
             await _vm.InitAsync();
@@ -98,6 +104,13 @@ namespace Bit.App.Pages
                     });
                 }
             }
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+
+            _accountAvatar?.OnDisappearing();
         }
 
         private void Unlock_Clicked(object sender, EventArgs e)

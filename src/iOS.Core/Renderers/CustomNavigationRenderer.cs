@@ -1,6 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.ComponentModel;
+using System.Linq;
 using Bit.App.Controls;
 using Bit.iOS.Core.Renderers;
+using CoreFoundation;
 using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
@@ -24,30 +27,50 @@ namespace Bit.iOS.Core.Renderers
             {
                 return;
             }
+
+            // In order to get the correct index we need to do the same as XF and reverse the toolbar items list
+            // https://github.com/xamarin/Xamarin.Forms/blob/8f765bd87a2968bef9c86122d88c9c47be9196d2/Xamarin.Forms.Platform.iOS/Renderers/NavigationRenderer.cs#L1432
+            toolbarItems = toolbarItems.Where(t => t.Order != ToolbarItemOrder.Secondary)
+                                       .Reverse()
+                                       .ToList();
+
             var uiBarButtonItems = TopViewController.NavigationItem.RightBarButtonItems;
             if (uiBarButtonItems == null)
             {
                 return;
             }
-
-            foreach (var toolbarItem in toolbarItems)
+            
+            foreach (ExtendedToolbarItem toolbarItem in toolbarItems.Where(t => t is ExtendedToolbarItem eti
+                                                                &&
+                                                                eti.UseOriginalImage))
             {
-                if (!(toolbarItem is ExtendedToolbarItem extendedToolbarItem) || !extendedToolbarItem.UseOriginalImage)
-                {
-                    continue;
-                }
-                var index = currentPage.ToolbarItems.IndexOf(extendedToolbarItem) + 1;
+                var index = toolbarItems.IndexOf(toolbarItem);
                 if (index < 0 || index >= uiBarButtonItems.Length)
                 {
                     continue;
                 }
-                var uiBarButtonItem = uiBarButtonItems[index];
-                if (uiBarButtonItem.Image == null)
+
+                // HACK: this is awful but I can't find another way to properly prevent memory leaks from
+                // subscribing on the PropertyChanged event; there are several private places where Xamarin Forms
+                // disposes objects that are not accessible from here so I think this should cover the (un)subscription
+                // but we need to remember to call the internal methods of ExtendedToolbarItem on the lifecycle of the Page
+                toolbarItem.OnAppearingAction = () => toolbarItem.PropertyChanged += ToolbarItem_PropertyChanged;
+                toolbarItem.OnDisappearingAction = () => toolbarItem.PropertyChanged -= ToolbarItem_PropertyChanged;
+
+                // HACK: XF PimaryToolbarItem is sealed so we can't override it, and also it doesn't provide any
+                // direct way to replace it with our custom one (we can but we need to rewrite several parts of the NavigationRenderer)
+                // So I think this is the easiest soolution for now to set UIImageRenderingMode.AlwaysOriginal
+                // on the toolbar item image
+                void ToolbarItem_PropertyChanged(object s, PropertyChangedEventArgs e)
                 {
-                    continue;
-                }
-                var originalImage = uiBarButtonItem.Image.ImageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal);
-                uiBarButtonItem.Image = originalImage;
+                    if (e.PropertyName == nameof(ExtendedToolbarItem.IconImageSource))
+                    {
+                        var uiBarButtonItem = uiBarButtonItems[index];
+
+                        DispatchQueue.MainQueue.DispatchAsync(() =>
+                            uiBarButtonItem.Image = uiBarButtonItem.Image.ImageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal));
+                    }
+                };
             }
         }
     }

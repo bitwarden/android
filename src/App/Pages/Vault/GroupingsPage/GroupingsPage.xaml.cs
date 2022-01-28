@@ -83,6 +83,7 @@ namespace Bit.App.Pages
                 IsBusy = true;
             }
 
+            _accountAvatar?.OnAppearing();
             if (_vm.MainPage)
             {
                 _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
@@ -200,6 +201,7 @@ namespace Bit.App.Pages
             IsBusy = false;
             _broadcasterService.Unsubscribe(_pageName);
             _vm.DisableRefreshing();
+            _accountAvatar?.OnDisappearing();
         }
 
         private async void RowSelected(object sender, SelectionChangedEventArgs e)
