@@ -89,13 +89,13 @@ namespace Bit.App.Controls
             return SKImage.FromBitmap(bitmap).Encode(SKEncodedImageFormat.Png, 100).AsStream();
         }
 
-        private string GetFirstLetters(string data, int count)
+        private string GetFirstLetters(string data, int charCount)
         {
             var parts  = data.Split();
-            if (parts.Length > 1)
+            if (parts.Length > 1 && charCount <= 2)
             {
                 var text = "";
-                for (int i = 0; i < count; i++)
+                for (int i = 0; i < charCount; i++)
                 {
                     text += parts[i].Substring(0,1);
                 }
