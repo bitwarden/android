@@ -2110,10 +2110,34 @@
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Codi de verificació no vàlid</value>
   </data>
+  <data name="RequestOTP" xml:space="preserve">
+    <value>Sol·licita una contrasenya única</value>
+  </data>
   <data name="SendCode" xml:space="preserve">
     <value>Envia codi</value>
   </data>
   <data name="Sending" xml:space="preserve">
     <value>S'està enviant...</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>Copia enllaç Send en guardar</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>S'està enviant el codi</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>S'està verificant</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>Reenvia el codi</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>S'ha enviat el codi de verificació al vostre correu electrònic.</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>S'ha produït un error en enviar un codi de verificació al vostre correu electrònic. Torneu-ho a provar</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>Introduïu el codi de verificació que s’ha enviat al vostre correu</value>
   </data>
 </root>

@@ -69,16 +69,8 @@ namespace Bit.App.Pages
 
             _accountAvatar?.OnAppearing();
 
-            if (await ShowAccountSwitcherAsync())
-            {
-                _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
-            }
-            else
-            {
-                // TODO: this is currently not working because of xamarin bug on Priority = -1,
-                // check if we can hide it by putting a same backgroundcolor icon
-                ToolbarItems.Remove(_accountAvatar);
-            }
+            _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
+
             await _vm.InitAsync();
             if (!_vm.BiometricLock)
             {

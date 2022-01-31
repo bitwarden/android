@@ -112,7 +112,6 @@ namespace Bit.App.Pages
                 }
             });
 
-            var migratedFromV1 = await _stateService.GetMigratedFromV1Async();
             await LoadOnAppearedAsync(_mainLayout, false, async () =>
             {
                 if (!_syncService.SyncInProgress || (await _cipherService.GetAllAsync()).Any())
@@ -133,18 +132,6 @@ namespace Bit.App.Pages
                     if (!_vm.Loaded)
                     {
                         await _vm.LoadAsync();
-                    }
-                }
-                // Forced sync if for some reason we have no data after a v1 migration
-                if (_vm.MainPage && !_syncService.SyncInProgress && migratedFromV1.GetValueOrDefault() &&
-                    !_vm.HasCiphers &&
-                    Xamarin.Essentials.Connectivity.NetworkAccess != Xamarin.Essentials.NetworkAccess.None)
-                {
-                    var triedV1ReSync = await _stateService.GetTriedV1ResyncAsync();
-                    if (!triedV1ReSync.GetValueOrDefault())
-                    {
-                        await _stateService.SetTriedV1ResyncAsync(true);
-                        await _syncService.FullSyncAsync(true);
                     }
                 }
                 await ShowPreviousPageAsync();
@@ -180,21 +167,6 @@ namespace Bit.App.Pages
                 {
                     await _pushNotificationService.RegisterAsync();
                 }
-                if (!_deviceActionService.AutofillAccessibilityServiceRunning()
-                    && !_deviceActionService.AutofillServiceEnabled())
-                {
-                    if (migratedFromV1.GetValueOrDefault())
-                    {
-                        var migratedFromV1AutofillPromptShown = 
-                            await _stateService.GetMigratedFromV1AutofillPromptShownAsync();
-                        if (!migratedFromV1AutofillPromptShown.GetValueOrDefault())
-                        {
-                            await DisplayAlert(AppResources.Autofill,
-                                AppResources.AutofillServiceNotEnabled, AppResources.Ok);
-                        }
-                    }
-                }
-                await _stateService.SetMigratedFromV1AutofillPromptShownAsync(true);
             }
         }
 

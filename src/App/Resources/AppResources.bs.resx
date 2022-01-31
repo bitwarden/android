@@ -179,7 +179,7 @@
     <value>Uredi</value>
   </data>
   <data name="EditFolder" xml:space="preserve">
-    <value>Uredite fasciklu</value>
+    <value>Uredite folder</value>
   </data>
   <data name="Email" xml:space="preserve">
     <value>E-pošta</value>
@@ -212,24 +212,24 @@
     <value>Verifikujte pomoću otiska prsta.</value>
   </data>
   <data name="Folder" xml:space="preserve">
-    <value>Fascikla</value>
+    <value>Folder</value>
     <comment>Label for a folder.</comment>
   </data>
   <data name="FolderCreated" xml:space="preserve">
-    <value>Kreirana je nova fascikla.</value>
+    <value>Kreirana je novi folder.</value>
   </data>
   <data name="FolderDeleted" xml:space="preserve">
-    <value>Fascikla je izbrisana.</value>
+    <value>Folder je izbrisan.</value>
   </data>
   <data name="FolderNone" xml:space="preserve">
-    <value>Nema fascikle</value>
+    <value>Nema foldera</value>
     <comment>Items that have no folder specified go in this special "catch-all" folder.</comment>
   </data>
   <data name="Folders" xml:space="preserve">
     <value>Fascikle</value>
   </data>
   <data name="FolderUpdated" xml:space="preserve">
-    <value>Fascikla ažurirana.</value>
+    <value>Folder ažuriran.</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
     <value>Idite na vebsajt</value>
@@ -299,7 +299,7 @@
     <comment>Label for notes.</comment>
   </data>
   <data name="Ok" xml:space="preserve">
-    <value>U redu</value>
+    <value>Uredu</value>
     <comment>Acknowledgement.</comment>
   </data>
   <data name="Password" xml:space="preserve">
@@ -470,7 +470,7 @@
     <value>Omogućite dodatak aplikacije</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
-    <value>U Safari-ju pronađite Bitwarden pomoću ikone za dijeljenje (savjet: desni donji red menija).</value>
+    <value>U Safariju pronađite Bitwarden pomoću ikone za dijeljenje (savjet: skrolujte udesno u donjem redu menija).</value>
     <comment>Safari is the name of apple's web browser</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
@@ -625,7 +625,7 @@
     <value>Nagoveštaj lozinke</value>
   </data>
   <data name="PasswordHintAlert" xml:space="preserve">
-    <value>Poslali smo Vam e-poštu sa nagoveštajem Vaše glavne lozinke.</value>
+    <value>Poslali smo vam e-mail sa savjetom za glavnu lozinku.</value>
   </data>
   <data name="PasswordOverrideAlert" xml:space="preserve">
     <value>Da li ste sigurni da želite da zamijenite trenutnu lozinku?</value>
@@ -635,7 +635,7 @@
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
-    <value>Ocenite aplikaciju</value>
+    <value>Ocijenite aplikaciju</value>
   </data>
   <data name="RateTheAppDescription" xml:space="preserve">
     <value>Molimo Vas da razmotrite da li nam možete pomoći sa dobrom recenzijom!</value>
@@ -650,7 +650,7 @@
     <value>Pretražite trezor</value>
   </data>
   <data name="Security" xml:space="preserve">
-    <value>Bezbednost</value>
+    <value>Bezbjednost</value>
   </data>
   <data name="Select" xml:space="preserve">
     <value>Izaberite</value>
@@ -1033,10 +1033,10 @@
     <value>Decembar</value>
   </data>
   <data name="Dr" xml:space="preserve">
-    <value>Dr.</value>
+    <value>Dr</value>
   </data>
   <data name="ExpirationMonth" xml:space="preserve">
-    <value>Mesec roka upotrebe</value>
+    <value>Mjesec roka upotrebe</value>
   </data>
   <data name="ExpirationYear" xml:space="preserve">
     <value>Godina roka upotrebe</value>
@@ -1051,16 +1051,16 @@
     <value>Januar</value>
   </data>
   <data name="July" xml:space="preserve">
-    <value>Jul</value>
+    <value>Juli</value>
   </data>
   <data name="June" xml:space="preserve">
-    <value>Jun</value>
+    <value>Juni</value>
   </data>
   <data name="LastName" xml:space="preserve">
     <value>Prezime</value>
   </data>
   <data name="FullName" xml:space="preserve">
-    <value>Puni naziv</value>
+    <value>Puno ime</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Broj vozačke dozvole</value>
@@ -1135,13 +1135,13 @@
     <value>Idi na moj trezor</value>
   </data>
   <data name="Collections" xml:space="preserve">
-    <value>Kolekcije</value>
+    <value>Zbirke</value>
   </data>
   <data name="NoItemsCollection" xml:space="preserve">
     <value>U ovoj kolekciji nema stavki.</value>
   </data>
   <data name="NoItemsFolder" xml:space="preserve">
-    <value>U ovoj fascikli nema stavki.</value>
+    <value>U ovom folderu nema stavki.</value>
   </data>
   <data name="NoItemsTrash" xml:space="preserve">
     <value>U smeću nema predmeta.</value>
@@ -1187,7 +1187,7 @@
     <value>Skriven</value>
   </data>
   <data name="FieldTypeLinked" xml:space="preserve">
-    <value>Povezano sa</value>
+    <value>Povezano</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Tekst</value>
@@ -1212,13 +1212,13 @@
     <value>Osnovni domen</value>
   </data>
   <data name="Default" xml:space="preserve">
-    <value>Uobičajeno</value>
+    <value>Zadano</value>
   </data>
   <data name="Exact" xml:space="preserve">
     <value>Egzatan</value>
   </data>
   <data name="Host" xml:space="preserve">
-    <value>Domaćin</value>
+    <value>Host</value>
     <comment>A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'.</comment>
   </data>
   <data name="RegEx" xml:space="preserve">
@@ -1370,10 +1370,10 @@
     <value>Vrsta</value>
   </data>
   <data name="MoveDown" xml:space="preserve">
-    <value>Pomjeri prema dolje</value>
+    <value>Pomjeri dole</value>
   </data>
   <data name="MoveUp" xml:space="preserve">
-    <value>Pomjerite gore</value>
+    <value>Pomjeri gore</value>
   </data>
   <data name="Miscellaneous" xml:space="preserve">
     <value>Razno</value>
@@ -1401,7 +1401,7 @@
     <value>Podijeli</value>
   </data>
   <data name="ShareItem" xml:space="preserve">
-    <value>Podijeli fajl</value>
+    <value>Podijeli stavku</value>
   </data>
   <data name="MoveToOrganization" xml:space="preserve">
     <value>Premjesti u organizaciju</value>
@@ -1938,7 +1938,7 @@
     <value>Kopiraj link</value>
   </data>
   <data name="ShareLink" xml:space="preserve">
-    <value>Podjeli link</value>
+    <value>Podijeli link</value>
   </data>
   <data name="SendLink" xml:space="preserve">
     <value>Link od Send-a</value>
@@ -2110,10 +2110,34 @@
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Neispravan verifikacijski kod</value>
   </data>
+  <data name="RequestOTP" xml:space="preserve">
+    <value>Zahtjevaj jednokratnu lozinku</value>
+  </data>
   <data name="SendCode" xml:space="preserve">
     <value>Pošalji kod</value>
   </data>
   <data name="Sending" xml:space="preserve">
     <value>Slanje</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>Kopiraj link od Send-a prilikom spremanja</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>Kod se šalje </value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>Provjera u toku</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>Ponovo pošalji kod</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>Verifikacioni kod je poslan na tvoj E-Mail</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>Došlo je do pogreške prilikom slanja verifikacijskog koda na vaš E-Mail. Molimo pokušajte ponovo</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>Unesi verifikacijski kod koji je poslan na tvoj E-Mail</value>
   </data>
 </root>

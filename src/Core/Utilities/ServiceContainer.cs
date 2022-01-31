@@ -35,7 +35,7 @@ namespace Bit.Core.Utilities
                 messagingService.Send("logout", extras);
                 return Task.FromResult(0);
             }, customUserAgent);
-            var appIdService = new AppIdService(stateService);
+            var appIdService = new AppIdService(storageService);
             var organizationService = new OrganizationService(stateService);
             var settingsService = new SettingsService(stateService);
             var fileUploadService = new FileUploadService(apiService);

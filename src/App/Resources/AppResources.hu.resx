@@ -2110,10 +2110,34 @@
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Az ellenőrző kód érvénytelen.</value>
   </data>
+  <data name="RequestOTP" xml:space="preserve">
+    <value>Egyszeri jelszó kérése</value>
+  </data>
   <data name="SendCode" xml:space="preserve">
     <value>Send kód</value>
   </data>
   <data name="Sending" xml:space="preserve">
     <value>Küldés...</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>Send hivatkozás másolása mentéskor</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>Küldési kód</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>Ellenőrzés</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>Újraküldési kód</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>Egy ellenőrző kód lett elküldve a saját email címre.</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>Hiba történt az ellenőrző kód saját email címre történő elküldésekor. Próbáljuk újra.</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>Az emailben elküldött ellenőrző kód megadása</value>
   </data>
 </root>

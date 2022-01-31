@@ -124,7 +124,7 @@ namespace Bit.App.Pages
 
         protected async Task<bool> ShowAccountSwitcherAsync()
         {
-            return await _stateService.HasMultipleAccountsAsync();
+            return await _stateService.GetActiveUserIdAsync() != null;
         }
 
         protected async Task RefreshAccountViewsAsync(Xamarin.Forms.ListView accountListView, bool allowAddAccountRow)

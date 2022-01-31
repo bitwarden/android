@@ -6,28 +6,33 @@ namespace Bit.Core.Services
 {
     public class AppIdService : IAppIdService
     {
-        private readonly IStateService _stateService;
+        private readonly IStorageService _storageService;
 
-        public AppIdService(IStateService stateService)
+        public AppIdService(IStorageService storageService)
         {
-            _stateService = stateService;
+            _storageService = storageService;
         }
 
-        public async Task<string> GetAppIdAsync()
+        public Task<string> GetAppIdAsync()
         {
-            var appId = await _stateService.GetAppIdAsync();
-            if (appId != null)
+            return MakeAndGetAppIdAsync("appId");
+        }
+
+        public Task<string> GetAnonymousAppIdAsync()
+        {
+            return MakeAndGetAppIdAsync("anonymousAppId");
+        }
+
+        private async Task<string> MakeAndGetAppIdAsync(string key)
+        {
+            var existingId = await _storageService.GetAsync<string>(key);
+            if (existingId != null)
             {
-                return appId;
+                return existingId;
             }
-            appId = MakeAppId();
-            await _stateService.SetAppIdAsync(appId);
-            return appId;
-        }
-
-        private string MakeAppId()
-        {
-            return Guid.NewGuid().ToString();
+            var guid = Guid.NewGuid().ToString();
+            await _storageService.SaveAsync(key, guid);
+            return guid;
         }
     }
 }
