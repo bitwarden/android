@@ -173,9 +173,9 @@
             Padding="0">
             <StackLayout
                 x:Name="_accountListContainer"
+                Background="Transparent"
                 VerticalOptions="Fill"
                 HorizontalOptions="FillAndExpand"
-                BackgroundColor="{DynamicResource BackgroundColor}"
                 Orientation="Vertical"
                 xct:ShadowEffect.Color="Black"
                 xct:ShadowEffect.Radius="10"
@@ -184,7 +184,7 @@
                     x:Name="_accountListView"
                     ItemsSource="{Binding AccountViews}"
                     ItemSelected="AccountRow_Selected"
-                    BackgroundColor="Transparent"
+                    BackgroundColor="{DynamicResource BackgroundColor}"
                     VerticalOptions="Start"
                     RowHeight="{OnPlatform 70, iOS=70, Android=74}">
                     <ListView.ItemTemplate>

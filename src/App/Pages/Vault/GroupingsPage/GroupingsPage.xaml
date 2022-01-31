@@ -175,7 +175,7 @@
                 x:Name="_accountListContainer"
                 VerticalOptions="Fill"
                 HorizontalOptions="FillAndExpand"
-                BackgroundColor="{DynamicResource BackgroundColor}"
+                Background="Transparent"
                 xct:ShadowEffect.Color="Black"
                 xct:ShadowEffect.Radius="10"
                 xct:ShadowEffect.OffsetY="3">
@@ -183,7 +183,7 @@
                     x:Name="_accountListView"
                     ItemsSource="{Binding AccountViews}"
                     ItemSelected="AccountRow_Selected"
-                    BackgroundColor="Transparent"
+                    BackgroundColor="{DynamicResource BackgroundColor}"
                     VerticalOptions="Start"
                     RowHeight="{OnPlatform 70, iOS=70, Android=74}">
                     <ListView.ItemTemplate>
