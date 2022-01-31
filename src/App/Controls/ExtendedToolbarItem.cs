@@ -13,7 +13,6 @@ namespace Bit.App.Controls
         // that we don't have access to, and that we should in order to properly prevent memory leaks
         // So as a hack solution we have this OnAppearing/OnDisappearing actions and methods to be called on page lifecycle
         // to subscribe/unsubscribe indirectly on the CustomNavigationRenderer
-        #region HACKSubscription
         public Action OnAppearingAction { get; set; }
         public Action OnDisappearingAction { get; set; }
 
@@ -26,6 +25,5 @@ namespace Bit.App.Controls
         {
             OnDisappearingAction?.Invoke();
         }
-        #endregion
     }
 }

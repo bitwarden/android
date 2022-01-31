@@ -68,7 +68,17 @@ namespace Bit.iOS.Core.Renderers
                         var uiBarButtonItem = uiBarButtonItems[index];
 
                         DispatchQueue.MainQueue.DispatchAsync(() =>
-                            uiBarButtonItem.Image = uiBarButtonItem.Image.ImageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal));
+                        {
+                            try
+                            {
+                                uiBarButtonItem.Image = uiBarButtonItem.Image.ImageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal);
+                            }
+                            catch (ObjectDisposedException)
+                            {
+                                // Do nothing, we can't access the proper place to properly dispose this, so here
+                                // we can just catch and ignore the exception. This should only happen when logging out a user.
+                            }
+                        });
                     }
                 };
             }
