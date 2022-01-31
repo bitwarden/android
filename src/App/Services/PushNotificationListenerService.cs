@@ -145,7 +145,9 @@ namespace Bit.App.Services
             var appId = await _appIdService.GetAppIdAsync();
             try
             {
+#if DEBUG
                 await _storageService.RemoveAsync(Constants.PushInstallationRegistrationError);
+#endif
 
                 await _apiService.PutDeviceTokenAsync(appId,
                     new Core.Models.Request.DeviceTokenRequest { PushToken = token });
@@ -158,6 +160,7 @@ namespace Bit.App.Services
                     await _storageService.SaveAsync(Constants.PushCurrentTokenKey, token);
                 }
             }
+#if DEBUG
             catch (ApiException apiEx)
             {
                 Debug.WriteLine($"{TAG} Failed to register device.");
@@ -169,6 +172,11 @@ namespace Bit.App.Services
                 await _storageService.SaveAsync(Constants.PushInstallationRegistrationError, e.Message);
                 throw;
             }
+#else
+            catch (ApiException)
+            {
+            }
+#endif
         }
 
         public void OnUnregistered(string deviceType)
