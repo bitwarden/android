@@ -59,6 +59,7 @@ namespace Bit.iOS.Core.Controllers
             get
             {
                 var cell = new UITableViewCell();
+                cell.BackgroundColor = ThemeHelpers.BackgroundColor;
                 if (_biometricIntegrityValid)
                 {
                     var biometricButtonText = _deviceActionService.SupportsFaceBiometric() ?
