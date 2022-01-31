@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Foundation;
@@ -22,7 +21,7 @@ namespace Bit.iOS.Services
 
         public async Task RegisterAsync()
         {
-            Console.WriteLine($"{TAG} RegisterAsync");
+            Debug.WriteLine($"{TAG} RegisterAsync");
 
             var tcs = new TaskCompletionSource<bool>();
 
@@ -31,11 +30,11 @@ namespace Bit.iOS.Services
             {
                 if (error != null)
                 {
-                    Console.WriteLine($"{TAG} {error}");
+                    Debug.WriteLine($"{TAG} {error}");
                 }
                 else
                 {
-                    Console.WriteLine($"{TAG} {granted}");
+                    Debug.WriteLine($"{TAG} {granted}");
                 }
 
                 tcs.SetResult(granted);
@@ -43,14 +42,14 @@ namespace Bit.iOS.Services
 
             if (await tcs.Task)
             {
-                Console.WriteLine($"{TAG} RegisterForRemoteNotifications");
+                Debug.WriteLine($"{TAG} RegisterForRemoteNotifications");
                 UIApplication.SharedApplication.RegisterForRemoteNotifications();
             }
         }
 
         public Task UnregisterAsync()
         {
-            Console.WriteLine($"{TAG} UnregisterAsync");
+            Debug.WriteLine($"{TAG} UnregisterAsync");
 
             UIApplication.SharedApplication.UnregisterForRemoteNotifications();
             // TODO: unregister call

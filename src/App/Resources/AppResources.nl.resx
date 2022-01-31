@@ -2110,10 +2110,34 @@
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Ongeldige verificatiecode.</value>
   </data>
+  <data name="RequestOTP" xml:space="preserve">
+    <value>Eenmalig wachtwoord aanvragen</value>
+  </data>
   <data name="SendCode" xml:space="preserve">
     <value>Code versturen</value>
   </data>
   <data name="Sending" xml:space="preserve">
     <value>Versturen</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>Send-link kopiëren bij opslaan</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>Code versturen…</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>Verifiëren</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>Code opnieuw versturen</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>Er is een verificatiecode naar je e-mailadres gestuurd.</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>Er is een fout opgetreden tijdens het verzenden van een verificatiecode naar je e-mail. Probeer het opnieuw</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>Voer de verificatiecode in die we naar je e-mail is gestuurd</value>
   </data>
 </root>
