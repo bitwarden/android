@@ -123,7 +123,7 @@
 
             <StackLayout
                 x:Name="_accountListContainer"
-                VerticalOptions="StartAndExpand"
+                VerticalOptions="Fill"
                 HorizontalOptions="FillAndExpand"
                 BackgroundColor="{DynamicResource BackgroundColor}"
                 xct:ShadowEffect.Color="Black"
@@ -134,7 +134,7 @@
                     ItemsSource="{Binding AccountViews}"
                     ItemSelected="AccountRow_Selected"
                     BackgroundColor="Transparent"
-                    VerticalOptions="FillAndExpand"
+                    VerticalOptions="Start"
                     RowHeight="{OnPlatform 70, iOS=70, Android=74}">
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="view:AccountView">
@@ -143,6 +143,14 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
+                <BoxView
+                    Background="Transparent"
+                    HorizontalOptions="Fill"
+                    VerticalOptions="FillAndExpand">
+                    <BoxView.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="AccountSwitchingOverlay_Tapped" />
+                    </BoxView.GestureRecognizers>
+                </BoxView>
             </StackLayout>
         </ContentView>
     </AbsoluteLayout>

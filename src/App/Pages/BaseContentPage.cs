@@ -143,47 +143,63 @@ namespace Bit.App.Pages
             return new AvatarImageSource();
         }
 
-        protected async Task ShowAccountListAsync(bool isVisible, View listContainer, View overlay, View fab = null)
+        protected async Task ToggleAccountListAsync(View listContainer, View overlay, Xamarin.Forms.ListView accountListView, bool allowAddAccountRow, View fab = null)
         {
-            Device.BeginInvokeOnMainThread(async () =>
+            if (overlay.IsVisible)
             {
-                // Not all animations are awaited. This is intentional to allow multiple simultaneous animations.
-                if (isVisible)
+                await HideAccountListAsync(listContainer, overlay, fab);
+            }
+            else
+            {
+                await ShowAccountListAsync(listContainer, overlay, accountListView, allowAddAccountRow, fab);
+            }
+        }
+
+        protected async Task ShowAccountListAsync(View listContainer, View overlay, Xamarin.Forms.ListView accountListView, bool allowAddAccountRow, View fab = null)
+        {
+            await RefreshAccountViewsAsync(accountListView, allowAddAccountRow);
+
+            // Not all animations are awaited. This is intentional to allow multiple simultaneous animations.
+            await Device.InvokeOnMainThreadAsync(async () =>
+            {
+                // start listView in default (off-screen) position
+                await listContainer.TranslateTo(0, listContainer.Height * -1, 0);
+
+                // set overlay opacity to zero before making visible and start fade-in
+                overlay.Opacity = 0;
+                overlay.IsVisible = true;
+                overlay.FadeTo(1, 100);
+
+                if (Device.RuntimePlatform == Device.Android && fab != null)
                 {
-                    // start listView in default (off-screen) position
-                    await listContainer.TranslateTo(0, listContainer.Height * -1, 0);
-
-                    // set overlay opacity to zero before making visible and start fade-in
-                    overlay.Opacity = 0;
-                    overlay.IsVisible = true;
-                    overlay.FadeTo(1, 100);
-
-                    if (Device.RuntimePlatform == Device.Android && fab != null)
-                    {
-                        // start fab fade-out
-                        fab.FadeTo(0, 200);
-                    }
-
-                    // slide account list into view
-                    await listContainer.TranslateTo(0, 0, 200, Easing.SinOut);
+                    // start fab fade-out
+                    fab.FadeTo(0, 200);
                 }
-                else
+
+                // slide account list into view
+                await listContainer.TranslateTo(0, 0, 200, Easing.SinOut);
+            });
+        }
+
+        protected async Task HideAccountListAsync(View listContainer, View overlay, View fab = null)
+        {
+            // Not all animations are awaited. This is intentional to allow multiple simultaneous animations.
+            await Device.InvokeOnMainThreadAsync(async () =>
+            {
+                // start overlay fade-out
+                overlay.FadeTo(0, 200);
+
+                if (Device.RuntimePlatform == Device.Android && fab != null)
                 {
-                    // start overlay fade-out
-                    overlay.FadeTo(0, 200);
-
-                    if (Device.RuntimePlatform == Device.Android && fab != null)
-                    {
-                        // start fab fade-in
-                        fab.FadeTo(1, 200);
-                    }
-
-                    // slide account list out of view
-                    await listContainer.TranslateTo(0, listContainer.Height * -1, 200, Easing.SinIn);
-
-                    // remove overlay
-                    overlay.IsVisible = false;
+                    // start fab fade-in
+                    fab.FadeTo(1, 200);
                 }
+
+                // slide account list out of view
+                await listContainer.TranslateTo(0, listContainer.Height * -1, 200, Easing.SinIn);
+
+                // remove overlay
+                overlay.IsVisible = false;
             });
         }
 
@@ -201,7 +217,7 @@ namespace Bit.App.Pages
 
             ((Xamarin.Forms.ListView)sender).SelectedItem = null;
             await Task.Delay(100);
-            await ShowAccountListAsync(false, listContainer, overlay, fab);
+            await HideAccountListAsync(listContainer, overlay, fab);
 
             if (item.AccountView.IsAccount)
             {
