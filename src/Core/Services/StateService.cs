@@ -19,6 +19,7 @@ namespace Bit.Core.Services
         private readonly IStorageService _secureStorageService;
 
         private State _state;
+        private bool _migrationChecked;
 
         public bool BiometricLocked { get; set; }
 
@@ -75,12 +76,6 @@ namespace Bit.Core.Services
             return await GetAccessTokenAsync(userId) != null;
         }
 
-        public async Task<bool> HasMultipleAccountsAsync()
-        {
-            await CheckStateAsync();
-            return _state.Accounts?.Count > 1;
-        }
-
         public async Task RefreshAccountViewsAsync(bool allowAddAccountRow)
         {
             await CheckStateAsync();
@@ -133,6 +128,7 @@ namespace Bit.Core.Services
                 throw new Exception("userId cannot be null");
             }
 
+            await CheckStateAsync();
             await RemoveAccountAsync(userId);
 
             // Find the next user to make active, if any
@@ -215,7 +211,7 @@ namespace Bit.Core.Services
         public async Task<string> GetProtectedPinAsync(string userId = null)
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
-                await GetDefaultSecureStorageOptionsAsync());
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.ProtectedPinKey(reconciledOptions.UserId);
             return await GetValueAsync<string>(key, reconciledOptions);
         }
@@ -223,7 +219,7 @@ namespace Bit.Core.Services
         public async Task SetProtectedPinAsync(string value, string userId = null)
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
-                await GetDefaultSecureStorageOptionsAsync());
+                await GetDefaultStorageOptionsAsync());
             var key = Constants.ProtectedPinKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
@@ -914,54 +910,6 @@ namespace Bit.Core.Services
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<bool?> GetMigratedFromV1Async(string userId = null)
-        {
-            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
-                await GetDefaultStorageOptionsAsync());
-            var key = Constants.MigratedFromV1;
-            return await GetValueAsync<bool?>(key, reconciledOptions);
-        }
-
-        public async Task SetMigratedFromV1Async(bool? value, string userId = null)
-        {
-            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
-                await GetDefaultStorageOptionsAsync());
-            var key = Constants.MigratedFromV1;
-            await SetValueAsync(key, value, reconciledOptions);
-        }
-
-        public async Task<bool?> GetMigratedFromV1AutofillPromptShownAsync(string userId = null)
-        {
-            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
-                await GetDefaultStorageOptionsAsync());
-            var key = Constants.MigratedFromV1AutofillPromptShown;
-            return await GetValueAsync<bool?>(key, reconciledOptions);
-        }
-
-        public async Task SetMigratedFromV1AutofillPromptShownAsync(bool? value, string userId = null)
-        {
-            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
-                await GetDefaultStorageOptionsAsync());
-            var key = Constants.MigratedFromV1AutofillPromptShown;
-            await SetValueAsync(key, value, reconciledOptions);
-        }
-
-        public async Task<bool?> GetTriedV1ResyncAsync(string userId = null)
-        {
-            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
-                await GetDefaultStorageOptionsAsync());
-            var key = Constants.TriedV1Resync;
-            return await GetValueAsync<bool?>(key, reconciledOptions);
-        }
-
-        public async Task SetTriedV1ResyncAsync(bool? value, string userId = null)
-        {
-            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
-                await GetDefaultStorageOptionsAsync());
-            var key = Constants.TriedV1Resync;
-            await SetValueAsync(key, value, reconciledOptions);
-        }
-
         public async Task<bool?> GetPushInitialPromptShownAsync()
         {
             var options = await GetDefaultStorageOptionsAsync();
@@ -1111,22 +1059,6 @@ namespace Bit.Core.Services
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
                 await GetDefaultStorageOptionsAsync());
             var key = Constants.AppExtensionActivatedKey;
-            await SetValueAsync(key, value, reconciledOptions);
-        }
-
-        public async Task<string> GetAppIdAsync(string userId = null)
-        {
-            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
-                await GetDefaultStorageOptionsAsync());
-            var key = Constants.AppIdKey;
-            return await GetValueAsync<string>(key, reconciledOptions);
-        }
-
-        public async Task SetAppIdAsync(string value, string userId = null)
-        {
-            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
-                await GetDefaultStorageOptionsAsync());
-            var key = Constants.AppIdKey;
             await SetValueAsync(key, value, reconciledOptions);
         }
 
@@ -1385,7 +1317,7 @@ namespace Bit.Core.Services
                 throw new Exception("userId cannot be null");
             }
 
-            await CheckStateAsync();
+            var email = await GetEmailAsync(userId);
 
             // Memory
             if (_state?.Accounts?.ContainsKey(userId) ?? false)
@@ -1415,14 +1347,65 @@ namespace Bit.Core.Services
                 await SaveStateToStorageAsync(state);
             }
 
-            // Secure Storage
+            // Non-state storage
+            await SetBiometricUnlockAsync(null, userId);
             await SetProtectedPinAsync(null, userId);
+            await SetPinProtectedAsync(null, userId);
             await SetKeyEncryptedAsync(null, userId);
+            await SetKeyHashAsync(null, userId);
+            await SetEncKeyEncryptedAsync(null, userId);
+            await SetOrgKeysEncryptedAsync(null, userId);
+            await SetPrivateKeyEncryptedAsync(null, userId);
+            await SetAutofillBlacklistedUrisAsync(null, userId);
+            await SetAutofillTileAddedAsync(null, userId);
+            await SetLastActiveTimeAsync(null, userId);
+            await SetLastFileCacheClearAsync(null, userId);
+            await SetPreviousPageInfoAsync(null, userId);
+            await SetInvalidUnlockAttemptsAsync(null, userId);
+            await SetLastBuildAsync(null, userId);
+            await SetDisableFaviconAsync(null, userId);
+            await SetDisableAutoTotpCopyAsync(null, userId);
+            await SetInlineAutofillEnabledAsync(null, userId);
+            await SetAutofillDisableSavePromptAsync(null, userId);
+            await SetLocalDataAsync(null, userId);
+            await SetEncryptedCiphersAsync(null, userId);
+            await SetDefaultUriMatchAsync(null, userId);
+            await SetNeverDomainsAsync(null, userId);
+            await SetClearClipboardAsync(null, userId);
+            await SetEncryptedCollectionsAsync(null, userId);
+            await SetPasswordRepromptAutofillAsync(null, userId);
+            await SetPasswordVerifiedAutofillAsync(null, userId);
+            await SetLastSyncAsync(null, userId);
+            await SetForcePasswordResetAsync(null, userId);
+            await SetSyncOnRefreshAsync(null, userId);
+            await SetRememberedEmailAsync(null, userId);
+            await SetRememberEmailAsync(null, userId);
+            await SetRememberedOrgIdentifierAsync(null, userId);
+            await SetRememberOrgIdentifierAsync(null, userId);
+            await SetThemeAsync(null, userId);
+            await SetAddSitePromptShownAsync(null, userId);
+            await SetPushCurrentTokenAsync(null, userId);
+            await SetEventCollectionAsync(null, userId);
+            await SetEncryptedFoldersAsync(null, userId);
+            await SetEncryptedPoliciesAsync(null, userId);
+            await SetAppExtensionStartedAsync(null, userId);
+            await SetAppExtensionActivatedAsync(null, userId);
+            await SetUsesKeyConnectorAsync(null, userId);
+            await SetOrganizationsAsync(null, userId);
+            await SetPasswordGenerationOptionsAsync(null, userId);
+            await SetEncryptedPasswordGenerationHistoryAsync(null, userId);
+            await SetEncryptedSendsAsync(null, userId);
+            await SetSettingsAsync(null, userId);
+            if (!string.IsNullOrWhiteSpace(email))
+            {
+                await SetTwoFactorTokenAsync(null, email);
+            }
         }
 
         private async Task ScaffoldNewAccountAsync(Account account)
         {
             await CheckStateAsync();
+            var currentTheme = await GetThemeAsync();
 
             account.Settings.EnvironmentUrls = await GetPreAuthEnvironmentUrlsAsync();
 
@@ -1434,17 +1417,15 @@ namespace Bit.Core.Services
             }
             if (state.Accounts.ContainsKey(account.Profile.UserId))
             {
-                // Account data already exists, restore appropriate data
-                account.Settings.VaultTimeout = state.Accounts[account.Profile.UserId].Settings?.VaultTimeout;
-                account.Settings.VaultTimeoutAction =
-                    state.Accounts[account.Profile.UserId].Settings?.VaultTimeoutAction;
+                // Account shouldn't exist here, cleanup before proceeding
+                await RemoveAccountAsync(account.Profile.UserId);
             }
-            else
-            {
-                // New account, set defaults
-                account.Settings.VaultTimeout = 15;
-                account.Settings.VaultTimeoutAction = "lock";
-            }
+            
+            // New account defaults
+            account.Settings.VaultTimeout = 15;
+            account.Settings.VaultTimeoutAction = "lock";
+            await SetThemeAsync(currentTheme, account.Profile.UserId);
+            
             state.Accounts[account.Profile.UserId] = account;
             await SaveStateToStorageAsync(state);
 
@@ -1536,7 +1517,15 @@ namespace Bit.Core.Services
 
         private async Task CheckStateAsync()
         {
-            // TODO perform migration if necessary
+            if (!_migrationChecked)
+            {
+                var migrationService = ServiceContainer.Resolve<IStateMigrationService>("stateMigrationService");
+                if (await migrationService.NeedsMigration())
+                {
+                    await migrationService.Migrate();
+                }
+                _migrationChecked = true;
+            }
 
             if (_state == null)
             {

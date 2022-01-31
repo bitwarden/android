@@ -17,7 +17,6 @@ namespace Bit.Core.Abstractions
         Task<string> GetActiveUserIdAsync();
         Task SetActiveUserAsync(string userId);
         Task<bool> IsAuthenticatedAsync(string userId = null);
-        Task<bool> HasMultipleAccountsAsync();
         Task RefreshAccountViewsAsync(bool allowAddAccountRow);
         Task AddAccountAsync(Account account);
         Task ClearAsync(string userId);
@@ -115,12 +114,6 @@ namespace Bit.Core.Abstractions
         Task SetThemeAsync(string value, string userId = null);
         Task<bool?> GetAddSitePromptShownAsync(string userId = null);
         Task SetAddSitePromptShownAsync(bool? value, string userId = null);
-        Task<bool?> GetMigratedFromV1Async(string userId = null);
-        Task SetMigratedFromV1Async(bool? value, string userId = null);
-        Task<bool?> GetMigratedFromV1AutofillPromptShownAsync(string userId = null);
-        Task SetMigratedFromV1AutofillPromptShownAsync(bool? value, string userId = null);
-        Task<bool?> GetTriedV1ResyncAsync(string userId = null);
-        Task SetTriedV1ResyncAsync(bool? value, string userId = null);
         Task<bool?> GetPushInitialPromptShownAsync();
         Task SetPushInitialPromptShownAsync(bool? value);
         Task<DateTime?> GetPushLastRegistrationDateAsync();
@@ -141,8 +134,6 @@ namespace Bit.Core.Abstractions
         Task SetAppExtensionStartedAsync(bool? value, string userId = null);
         Task<bool?> GetAppExtensionActivatedAsync(string userId = null);
         Task SetAppExtensionActivatedAsync(bool? value, string userId = null);
-        Task<string> GetAppIdAsync(string userId = null);
-        Task SetAppIdAsync(string value, string userId = null);
         Task<bool> GetUsesKeyConnectorAsync(string userId = null);
         Task SetUsesKeyConnectorAsync(bool? value, string userId = null);
         Task<Dictionary<string, OrganizationData>> GetOrganizationsAsync(string userId = null);
