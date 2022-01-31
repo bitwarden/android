@@ -5,8 +5,8 @@
         public const int MaxAccounts = 5;
         public const string AndroidAppProtocol = "androidapp://";
         public const string iOSAppProtocol = "iosapp://";
+        public static string StateVersionKey = "stateVersion";
         public static string StateKey = "state";
-        public static string AppIdKey = "appId";
         public static string PreAuthEnvironmentUrlsKey = "preAuthEnvironmentUrls";
         public static string LastFileCacheClearKey = "lastFileCacheClear";
         public static string AutofillTileAdded = "autofillTileAdded";
@@ -23,9 +23,6 @@
         public static string iOSAutoFillBiometricIntegrityKey = "iOSAutoFillBiometricIntegrityState";
         public static string iOSExtensionClearCiphersCacheKey = "iOSExtensionClearCiphersCache";
         public static string iOSExtensionBiometricIntegrityKey = "iOSExtensionBiometricIntegrityState";
-        public static string MigratedFromV1 = "migratedFromV1";
-        public static string MigratedFromV1AutofillPromptShown = "migratedV1AutofillPromptShown";
-        public static string TriedV1Resync = "triedV1Resync";
         public static string EventCollectionKey = "eventCollection";
         public static string RememberEmailKey = "rememberEmail";
         public static string RememberedEmailKey = "rememberedEmail";
