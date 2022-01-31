@@ -30,7 +30,7 @@ namespace Bit.App.Services
 
         public async Task OnMessageAsync(JObject value, string deviceType)
         {
-            Console.WriteLine($"{TAG} OnMessageAsync called");
+            Debug.WriteLine($"{TAG} OnMessageAsync called");
 
             Resolve();
             if (value == null)
@@ -39,7 +39,7 @@ namespace Bit.App.Services
             }
 
             _showNotification = false;
-            Console.WriteLine($"{TAG} Message Arrived: {JsonConvert.SerializeObject(value)}");
+            Debug.WriteLine($"{TAG} Message Arrived: {JsonConvert.SerializeObject(value)}");
 
             NotificationResponse notification = null;
             if (deviceType == Device.Android)
@@ -56,7 +56,7 @@ namespace Bit.App.Services
                 notification = dataToken.ToObject<NotificationResponse>();
             }
 
-            Console.WriteLine($"{TAG} - Notification object created: t:{notification?.Type} - p:{notification?.Payload}");
+            Debug.WriteLine($"{TAG} - Notification object created: t:{notification?.Type} - p:{notification?.Payload}");
 
             var appId = await _appIdService.GetAppIdAsync();
             if (notification?.Payload == null || notification.ContextId == appId)
@@ -134,23 +134,24 @@ namespace Bit.App.Services
         public async Task OnRegisteredAsync(string token, string deviceType)
         {
             Resolve();
-            Console.WriteLine($"{TAG} - Device Registered - Token : {token}");
+            Debug.WriteLine($"{TAG} - Device Registered - Token : {token}");
             var isAuthenticated = await _userService.IsAuthenticatedAsync();
             if (!isAuthenticated)
             {
-                Console.WriteLine($"{TAG} - not auth");
+                Debug.WriteLine($"{TAG} - not auth");
                 return;
             }
 
             var appId = await _appIdService.GetAppIdAsync();
-            Console.WriteLine($"{TAG} - app id: {appId}");
             try
             {
                 await _storageService.RemoveAsync(Constants.PushInstallationRegistrationError);
 
                 await _apiService.PutDeviceTokenAsync(appId,
                     new Core.Models.Request.DeviceTokenRequest { PushToken = token });
-                Console.WriteLine($"{TAG} Registered device with server.");
+
+                Debug.WriteLine($"{TAG} Registered device with server.");
+
                 await _storageService.SaveAsync(Constants.PushLastRegistrationDateKey, DateTime.UtcNow);
                 if (deviceType == Device.Android)
                 {
@@ -159,7 +160,7 @@ namespace Bit.App.Services
             }
             catch (ApiException apiEx)
             {
-                Console.WriteLine($"{TAG} Failed to register device.");
+                Debug.WriteLine($"{TAG} Failed to register device.");
 
                 await _storageService.SaveAsync(Constants.PushInstallationRegistrationError, apiEx.Error?.Message);
             }
@@ -172,12 +173,12 @@ namespace Bit.App.Services
 
         public void OnUnregistered(string deviceType)
         {
-            Console.WriteLine($"{TAG} - Device Unnregistered");
+            Debug.WriteLine($"{TAG} - Device Unnregistered");
         }
 
         public void OnError(string message, string deviceType)
         {
-            Console.WriteLine($"{TAG} error - {message}");
+            Debug.WriteLine($"{TAG} error - {message}");
         }
 
         public bool ShouldShowNotification()
