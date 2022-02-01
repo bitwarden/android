@@ -1,13 +1,16 @@
-﻿using Bit.App.Abstractions;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Bit.App.Abstractions;
+using Bit.App.Controls;
 using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
-using Bit.Core.Utilities;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Bit.App.Controls;
 using Bit.Core.Models.Data;
+using Bit.Core.Utilities;
+#if !FDROID
+using Microsoft.AppCenter.Crashes;
+#endif
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -269,21 +272,44 @@ namespace Bit.App.Pages
 
         private async void AccountSwitch_Clicked(object sender, EventArgs e)
         {
-            
-            if (_accountListOverlay.IsVisible)
+            try
             {
-                await ShowAccountListAsync(false, _accountListContainer, _accountListOverlay, _fab);
+                await ToggleAccountListAsync(_accountListContainer, _accountListOverlay, _accountListView, true);
             }
-            else
+            catch (Exception ex)
             {
-                await RefreshAccountViewsAsync(_accountListView, true);
-                await ShowAccountListAsync(true, _accountListContainer, _accountListOverlay, _fab);
+#if !FDROID
+                Crashes.TrackError(ex);
+#endif
             }
         }
 
         private async void AccountRow_Selected(object sender, SelectedItemChangedEventArgs e)
         {
-            await AccountRowSelectedAsync(sender, e, _accountListContainer, _accountListOverlay, _fab);
+            try
+            {
+                await AccountRowSelectedAsync(sender, e, _accountListContainer, _accountListOverlay, _fab);
+            }
+            catch (Exception ex)
+            {
+#if !FDROID
+                Crashes.TrackError(ex);
+#endif
+            }
+        }
+
+        private async void AccountSwitchingOverlay_Tapped(object sender, EventArgs e)
+        {
+            try
+            {
+                await HideAccountListAsync(_accountListContainer, _accountListOverlay);
+            }
+            catch (Exception ex)
+            {
+#if !FDROID
+                Crashes.TrackError(ex);
+#endif
+            }
         }
     }
 }

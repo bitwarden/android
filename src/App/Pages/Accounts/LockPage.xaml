@@ -171,29 +171,42 @@
             IsVisible="False"
             BackgroundColor="#22000000"
             Padding="0">
-
             <StackLayout
                 x:Name="_accountListContainer"
-                VerticalOptions="StartAndExpand"
+                BackgroundColor="Transparent"
+                VerticalOptions="Fill"
                 HorizontalOptions="FillAndExpand"
-                BackgroundColor="{DynamicResource BackgroundColor}"
-                xct:ShadowEffect.Color="Black"
-                xct:ShadowEffect.Radius="10"
-                xct:ShadowEffect.OffsetY="3">
-                <ListView
-                    x:Name="_accountListView"
-                    ItemsSource="{Binding AccountViews}"
-                    ItemSelected="AccountRow_Selected"
+                Orientation="Vertical">
+                <Frame
+                    Padding="0"
+                    HorizontalOptions="Fill"
+                    VerticalOptions="Start"
+                    xct:ShadowEffect.Color="Black"
+                    xct:ShadowEffect.Radius="10"
+                    xct:ShadowEffect.OffsetY="3">
+                    <ListView
+                        x:Name="_accountListView"
+                        ItemsSource="{Binding AccountViews}"
+                        ItemSelected="AccountRow_Selected"
+                        BackgroundColor="{DynamicResource BackgroundColor}"
+                        VerticalOptions="Start"
+                        RowHeight="{OnPlatform 70, iOS=70, Android=74}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="view:AccountView">
+                                <controls:AccountViewCell
+                                    Account="{Binding .}" />
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Frame>
+                <BoxView
                     BackgroundColor="Transparent"
-                    VerticalOptions="FillAndExpand"
-                    RowHeight="{OnPlatform 70, iOS=70, Android=74}">
-                    <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="view:AccountView">
-                            <controls:AccountViewCell
-                                Account="{Binding .}" />
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                    HorizontalOptions="Fill"
+                    VerticalOptions="FillAndExpand">
+                    <BoxView.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="AccountSwitchingOverlay_Tapped" />
+                    </BoxView.GestureRecognizers>
+                </BoxView>
             </StackLayout>
         </ContentView>
     </AbsoluteLayout>

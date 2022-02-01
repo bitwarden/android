@@ -3,6 +3,9 @@ using System.Threading.Tasks;
 using Bit.App.Models;
 using Bit.App.Resources;
 using Bit.App.Utilities;
+#if !FDROID
+using Microsoft.AppCenter.Crashes;
+#endif
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -162,20 +165,44 @@ namespace Bit.App.Pages
 
         private async void AccountSwitch_Clicked(object sender, EventArgs e)
         {
-            if (_accountListOverlay.IsVisible)
+            try
             {
-                await ShowAccountListAsync(false, _accountListContainer, _accountListOverlay);
+                await ToggleAccountListAsync(_accountListContainer, _accountListOverlay, _accountListView, true);
             }
-            else
+            catch (Exception ex)
             {
-                await RefreshAccountViewsAsync(_accountListView, true);
-                await ShowAccountListAsync(true, _accountListContainer, _accountListOverlay);
+#if !FDROID
+                Crashes.TrackError(ex);
+#endif
             }
         }
 
         private async void AccountRow_Selected(object sender, SelectedItemChangedEventArgs e)
         {
-            await AccountRowSelectedAsync(sender, e, _accountListContainer, _accountListOverlay, null, true);
+            try
+            {
+                await AccountRowSelectedAsync(sender, e, _accountListContainer, _accountListOverlay, null, true);
+            }
+            catch (Exception ex)
+            {
+#if !FDROID
+                Crashes.TrackError(ex);
+#endif
+            }
+        }
+
+        private async void AccountSwitchingOverlay_Tapped(object sender, EventArgs e)
+        {
+            try
+            {
+                await HideAccountListAsync(_accountListContainer, _accountListOverlay);
+            }
+            catch (Exception ex)
+            {
+#if !FDROID
+                Crashes.TrackError(ex);
+#endif
+            }
         }
     }
 }
