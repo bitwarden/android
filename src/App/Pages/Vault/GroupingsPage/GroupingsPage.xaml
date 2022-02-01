@@ -175,26 +175,31 @@
                 x:Name="_accountListContainer"
                 VerticalOptions="Fill"
                 HorizontalOptions="FillAndExpand"
-                Background="Transparent"
-                xct:ShadowEffect.Color="Black"
-                xct:ShadowEffect.Radius="10"
-                xct:ShadowEffect.OffsetY="3">
-                <ListView
-                    x:Name="_accountListView"
-                    ItemsSource="{Binding AccountViews}"
-                    ItemSelected="AccountRow_Selected"
-                    BackgroundColor="{DynamicResource BackgroundColor}"
+                BackgroundColor="Transparent">
+                <Frame
+                    Padding="0"
+                    HorizontalOptions="Fill"
                     VerticalOptions="Start"
-                    RowHeight="{OnPlatform 70, iOS=70, Android=74}">
-                    <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="view:AccountView">
-                            <controls:AccountViewCell
-                                Account="{Binding .}" />
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                    xct:ShadowEffect.Color="Black"
+                    xct:ShadowEffect.Radius="10"
+                    xct:ShadowEffect.OffsetY="3">
+                    <ListView
+                        x:Name="_accountListView"
+                        ItemsSource="{Binding AccountViews}"
+                        ItemSelected="AccountRow_Selected"
+                        BackgroundColor="{DynamicResource BackgroundColor}"
+                        VerticalOptions="Start"
+                        RowHeight="{OnPlatform 70, iOS=70, Android=74}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="view:AccountView">
+                                <controls:AccountViewCell
+                                    Account="{Binding .}" />
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Frame>
                 <BoxView
-                    Background="Transparent"
+                    BackgroundColor="Transparent"
                     HorizontalOptions="Fill"
                     VerticalOptions="FillAndExpand">
                     <BoxView.GestureRecognizers>
