@@ -170,6 +170,16 @@ namespace Bit.App.Pages
             }
         }
 
+        protected override bool OnBackButtonPressed()
+        {
+            if (_accountListOverlay.IsVisible)
+            {
+                HideAccountListAsync(_accountListContainer, _accountListOverlay, _fab).FireAndForget();
+                return true;
+            }
+            return false;
+        }
+
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
@@ -215,6 +225,7 @@ namespace Bit.App.Pages
 
         private async void Search_Clicked(object sender, EventArgs e)
         {
+            await HideAccountListAsync(_accountListContainer, _accountListOverlay, _fab);
             if (DoOnce())
             {
                 var page = new CiphersPage(_vm.Filter, _vm.FolderId != null, _vm.CollectionId != null,
@@ -225,21 +236,31 @@ namespace Bit.App.Pages
 
         private async void Sync_Clicked(object sender, EventArgs e)
         {
+            await HideAccountListAsync(_accountListContainer, _accountListOverlay, _fab);
             await _vm.SyncAsync();
         }
 
         private async void Lock_Clicked(object sender, EventArgs e)
         {
+            await HideAccountListAsync(_accountListContainer, _accountListOverlay, _fab);
             await _vaultTimeoutService.LockAsync(true, true);
         }
 
         private async void Exit_Clicked(object sender, EventArgs e)
         {
+            await HideAccountListAsync(_accountListContainer, _accountListOverlay, _fab);
             await _vm.ExitAsync();
         }
 
         private async void AddButton_Clicked(object sender, EventArgs e)
         {
+            var skipAction = _accountListOverlay.IsVisible && Device.RuntimePlatform == Device.Android;
+            await HideAccountListAsync(_accountListContainer, _accountListOverlay, _fab);
+            if (skipAction)
+            {
+                // Account list in the process of closing via tapping on invisible FAB, skip this attempt
+                return;
+            }
             if (!_vm.Deleted && DoOnce())
             {
                 var page = new AddEditPage(null, _vm.Type, _vm.FolderId, _vm.CollectionId);
@@ -253,6 +274,7 @@ namespace Bit.App.Pages
             {
                 return;
             }
+            await HideAccountListAsync(_accountListContainer, _accountListOverlay, _fab);
             if (_previousPage.Page == "view" && !string.IsNullOrWhiteSpace(_previousPage.CipherId))
             {
                 await Navigation.PushModalAsync(new NavigationPage(new ViewPage(_previousPage.CipherId)));
@@ -274,7 +296,7 @@ namespace Bit.App.Pages
         {
             try
             {
-                await ToggleAccountListAsync(_accountListContainer, _accountListOverlay, _accountListView, true);
+                await ToggleAccountListAsync(_accountListContainer, _accountListOverlay, _accountListView, true, _fab);
             }
             catch (Exception ex)
             {
@@ -302,7 +324,7 @@ namespace Bit.App.Pages
         {
             try
             {
-                await HideAccountListAsync(_accountListContainer, _accountListOverlay);
+                await HideAccountListAsync(_accountListContainer, _accountListOverlay, _fab);
             }
             catch (Exception ex)
             {

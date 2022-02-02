@@ -69,6 +69,16 @@ namespace Bit.App.Pages
             });
         }
 
+        protected override bool OnBackButtonPressed()
+        {
+            if (_accountListOverlay.IsVisible)
+            {
+                HideAccountListAsync(_accountListContainer, _accountListOverlay).FireAndForget();
+                return true;
+            }
+            return false;
+        }
+
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
@@ -141,6 +151,7 @@ namespace Bit.App.Pages
         
         private async Task StartEnvironmentAsync()
         {
+            await HideAccountListAsync(_accountListContainer, _accountListOverlay);
             var page = new EnvironmentPage();
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
