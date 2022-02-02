@@ -189,13 +189,17 @@
                         ItemSelected="AccountRow_Selected"
                         BackgroundColor="{DynamicResource BackgroundColor}"
                         VerticalOptions="Start"
-                        RowHeight="{OnPlatform 70, iOS=70, Android=74}">
+                        RowHeight="{OnPlatform 70, iOS=70, Android=74}"
+                        effects:ScrollViewContentInsetAdjustmentBehaviorEffect.ContentInsetAdjustmentBehavior="Never">
                         <ListView.ItemTemplate>
                             <DataTemplate x:DataType="view:AccountView">
                                 <controls:AccountViewCell
                                     Account="{Binding .}" />
                             </DataTemplate>
                         </ListView.ItemTemplate>
+                        <ListView.Effects>
+                            <effects:ScrollViewContentInsetAdjustmentBehaviorEffect />
+                        </ListView.Effects>
                     </ListView>
                 </Frame>
                 <BoxView
