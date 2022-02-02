@@ -6,6 +6,7 @@
     x:Class="Bit.App.Pages.HomePage"
     xmlns:pages="clr-namespace:Bit.App.Pages"
     xmlns:controls="clr-namespace:Bit.App.Controls"
+    xmlns:effects="clr-namespace:Bit.App.Effects"
     xmlns:view="clr-namespace:Bit.Core.Models.View;assembly=BitwardenCore"
     xmlns:u="clr-namespace:Bit.App.Utilities"
     x:DataType="pages:HomeViewModel"
@@ -96,13 +97,18 @@
                         ItemSelected="AccountRow_Selected"
                         BackgroundColor="{DynamicResource BackgroundColor}"
                         VerticalOptions="Start"
-                        RowHeight="{OnPlatform 70, iOS=70, Android=74}">
+                        RowHeight="{OnPlatform 70, iOS=70, Android=74}"
+                        effects:ScrollViewContentInsetAdjustmentBehaviorEffect.ContentInsetAdjustmentBehavior="Never">
                         <ListView.ItemTemplate>
                             <DataTemplate x:DataType="view:AccountView">
                                 <controls:AccountViewCell
                                     Account="{Binding .}" />
                             </DataTemplate>
                         </ListView.ItemTemplate>
+                        <ListView.Effects>
+                            <effects:ScrollViewContentInsetAdjustmentBehaviorEffect />
+                        </ListView.Effects>
+
                     </ListView>
                 </Frame>
                 <BoxView
