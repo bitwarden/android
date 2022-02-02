@@ -29,6 +29,7 @@ namespace Bit.App.Pages
                 () => Device.BeginInvokeOnMainThread(async () => await UpdateTempPasswordAsync());
             _vm.CloseAction = async () =>
             {
+                await HideAccountListAsync(_accountListContainer, _accountListOverlay);
                 await Navigation.PopModalAsync();
             };
             _vm.Email = email;
@@ -80,6 +81,19 @@ namespace Bit.App.Pages
             }
         }
 
+        protected override bool OnBackButtonPressed()
+        {
+            if (_accountListOverlay.IsVisible)
+            {
+                Task.Run(async () =>
+                {
+                    await HideAccountListAsync(_accountListContainer, _accountListOverlay);
+                });
+                return true;
+            }
+            return false;
+        }
+
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
@@ -113,6 +127,7 @@ namespace Bit.App.Pages
 
         private async void More_Clicked(object sender, System.EventArgs e)
         {
+            await HideAccountListAsync(_accountListContainer, _accountListOverlay);
             if (!DoOnce())
             {
                 return;

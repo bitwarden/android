@@ -183,6 +183,11 @@ namespace Bit.App.Pages
 
         protected async Task HideAccountListAsync(View listContainer, View overlay, View fab = null)
         {
+            if (!overlay.IsVisible)
+            {
+                // already hidden, don't animate again
+                return;
+            }
             // Not all animations are awaited. This is intentional to allow multiple simultaneous animations.
             await Device.InvokeOnMainThreadAsync(async () =>
             {

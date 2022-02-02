@@ -101,6 +101,19 @@ namespace Bit.App.Pages
             }
         }
 
+        protected override bool OnBackButtonPressed()
+        {
+            if (_accountListOverlay.IsVisible)
+            {
+                Task.Run(async () =>
+                {
+                    await HideAccountListAsync(_accountListContainer, _accountListOverlay);
+                });
+                return true;
+            }
+            return false;
+        }
+
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
@@ -122,6 +135,7 @@ namespace Bit.App.Pages
 
         private async void LogOut_Clicked(object sender, EventArgs e)
         {
+            await HideAccountListAsync(_accountListContainer, _accountListOverlay);
             if (DoOnce())
             {
                 await _vm.LogOutAsync();
@@ -138,6 +152,7 @@ namespace Bit.App.Pages
 
         private async void More_Clicked(object sender, System.EventArgs e)
         {
+            await HideAccountListAsync(_accountListContainer, _accountListOverlay);
             if (!DoOnce())
             {
                 return;

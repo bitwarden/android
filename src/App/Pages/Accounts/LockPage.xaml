@@ -171,12 +171,12 @@
             IsVisible="False"
             BackgroundColor="#22000000"
             Padding="0">
+
             <StackLayout
                 x:Name="_accountListContainer"
-                BackgroundColor="Transparent"
                 VerticalOptions="Fill"
                 HorizontalOptions="FillAndExpand"
-                Orientation="Vertical">
+                BackgroundColor="Transparent">
                 <Frame
                     Padding="0"
                     HorizontalOptions="Fill"
