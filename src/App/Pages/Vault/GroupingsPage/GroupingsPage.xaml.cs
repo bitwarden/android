@@ -174,10 +174,7 @@ namespace Bit.App.Pages
         {
             if (_accountListOverlay.IsVisible)
             {
-                Task.Run(async () =>
-                {
-                    await HideAccountListAsync(_accountListContainer, _accountListOverlay, _fab);
-                });
+                HideAccountListAsync(_accountListContainer, _accountListOverlay, _fab).FireAndForget();
                 return true;
             }
             return false;

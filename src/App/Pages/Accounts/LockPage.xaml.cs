@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Bit.App.Models;
 using Bit.App.Resources;
 using Bit.App.Utilities;
+using Bit.Core.Utilities;
 #if !FDROID
 using Microsoft.AppCenter.Crashes;
 #endif
@@ -105,10 +106,7 @@ namespace Bit.App.Pages
         {
             if (_accountListOverlay.IsVisible)
             {
-                Task.Run(async () =>
-                {
-                    await HideAccountListAsync(_accountListContainer, _accountListOverlay);
-                });
+                HideAccountListAsync(_accountListContainer, _accountListOverlay).FireAndForget();
                 return true;
             }
             return false;
