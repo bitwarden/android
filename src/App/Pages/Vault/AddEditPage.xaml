@@ -165,7 +165,7 @@
                             IsVisible="{Binding Cipher.ViewPassword}" />
                         <controls:IconButton 
                             StyleClass="box-row-button, box-row-button-platform"
-                            Text="{Binding Source={x:Static core:BitwardenIcons.Refresh}}"
+                            Text="{Binding Source={x:Static core:BitwardenIcons.Generate}}"
                             Command="{Binding GeneratePasswordCommand}"
                             Grid.Row="0"
                             Grid.Column="3"
