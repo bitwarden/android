@@ -10,6 +10,7 @@ using Xamarin.CommunityToolkit.ObjectModel;
 using System.Windows.Input;
 using Bit.App.Utilities;
 using Bit.Core;
+using Bit.Core.Enums;
 #if !FDROID
 using Microsoft.AppCenter.Crashes;
 #endif
@@ -144,7 +145,7 @@ namespace Bit.App.Pages
 
                 await _deviceActionService.ShowLoadingAsync(AppResources.Verifying);
 
-                if (!await _userVerificationService.VerifyUser(Secret, Core.Enums.VerificationType.OTP))
+                if (!await _userVerificationService.VerifyUser(Secret, VerificationType.OTP))
                 {
                     await _deviceActionService.HideLoadingAsync();
                     return;
@@ -154,6 +155,7 @@ namespace Bit.App.Pages
 
                 var parameters = _verificationActionsFlowHelper.GetParameters();
                 parameters.Secret = Secret;
+                parameters.VerificationType = VerificationType.OTP;
                 await _verificationActionsFlowHelper.ExecuteAsync(parameters);
 
                 Secret = string.Empty;
