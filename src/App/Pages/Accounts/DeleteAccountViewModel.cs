@@ -58,19 +58,16 @@ namespace Bit.App.Pages
     {
         readonly IApiService _apiService;
         readonly IMessagingService _messagingService;
-        readonly ICryptoService _cryptoService;
         readonly IPlatformUtilsService _platformUtilsService;
         readonly IDeviceActionService _deviceActionService;
 
         public DeleteAccountActionFlowExecutioner(IApiService apiService,
             IMessagingService messagingService,
-            ICryptoService cryptoService,
             IPlatformUtilsService platformUtilsService,
             IDeviceActionService deviceActionService)
         {
             _apiService = apiService;
             _messagingService = messagingService;
-            _cryptoService = cryptoService;
             _platformUtilsService = platformUtilsService;
             _deviceActionService = deviceActionService;
         }
@@ -81,10 +78,10 @@ namespace Bit.App.Pages
             {
                 await _deviceActionService.ShowLoadingAsync(AppResources.DeletingYourAccount);
 
-                var masterPasswordHashKey = await _cryptoService.HashPasswordAsync(parameters.Secret, null);
                 await _apiService.DeleteAccountAsync(new Core.Models.Request.DeleteAccountRequest
                 {
-                    MasterPasswordHash = masterPasswordHashKey
+                    MasterPasswordHash = parameters.VerificationType == Core.Enums.VerificationType.MasterPassword ? parameters.Secret : (string)null,
+                    OTP = parameters.VerificationType == Core.Enums.VerificationType.OTP ? parameters.Secret : (string)null
                 });
 
                 await _deviceActionService.HideLoadingAsync();

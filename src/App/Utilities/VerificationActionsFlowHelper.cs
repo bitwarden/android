@@ -24,11 +24,15 @@ namespace Bit.App.Utilities
 
     public interface IActionFlowParmeters
     {
+        VerificationType VerificationType { get; set; }
+
         string Secret { get; set; }
     }
 
     public class DefaultActionFlowParameters : IActionFlowParmeters
     {
+        public VerificationType VerificationType { get; set; }
+
         public string Secret { get; set; }
     }
 
@@ -58,6 +62,7 @@ namespace Bit.App.Utilities
     {
         private readonly IKeyConnectorService _keyConnectorService;
         private readonly IPasswordRepromptService _passwordRepromptService;
+        private readonly ICryptoService _cryptoService;
 
         private VerificationFlowAction? _action;
         private IActionFlowParmeters _parameters;
@@ -67,10 +72,12 @@ namespace Bit.App.Utilities
         private readonly Dictionary<VerificationFlowAction, IActionFlowExecutioner> _actionExecutionerDictionary = new Dictionary<VerificationFlowAction, IActionFlowExecutioner>();
 
         public VerificationActionsFlowHelper(IKeyConnectorService keyConnectorService,
-            IPasswordRepromptService passwordRepromptService)
+            IPasswordRepromptService passwordRepromptService,
+            ICryptoService cryptoService)
         {
             _keyConnectorService = keyConnectorService;
             _passwordRepromptService = passwordRepromptService;
+            _cryptoService = cryptoService;
 
             _actionExecutionerDictionary.Add(VerificationFlowAction.DeleteAccount, ServiceContainer.Resolve<IDeleteAccountActionFlowExecutioner>("deleteAccountActionFlowExecutioner"));
         }
@@ -113,8 +120,10 @@ namespace Bit.App.Utilities
                         return;
                     }
 
-                    GetParameters().Secret = password;
-                    await ExecuteAsync(_parameters);
+                    var parameters = GetParameters();
+                    parameters.Secret = await _cryptoService.HashPasswordAsync(password, null);
+                    parameters.VerificationType = VerificationType.MasterPassword;
+                    await ExecuteAsync(parameters);
                     break;
                 case VerificationType.OTP:
                     await Application.Current.MainPage.Navigation.PushModalAsync(new NavigationPage(

@@ -884,7 +884,7 @@
     <value>將相機對準 QR code 。</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
-    <value>掃描 QR Code</value>
+    <value>掃描 QR 碼</value>
   </data>
   <data name="Camera" xml:space="preserve">
     <value>相機</value>
