@@ -1821,7 +1821,7 @@
     <value>Se abilitato, il servizio di accessibilità di Bitwarden mostrerà una finestra a comparsa quando i campi login vengono selezionati per aiutarti con l'auto-completamento.</value>
   </data>
   <data name="DrawOverDescription3" xml:space="preserve">
-    <value>Se abilitato, l'accessibilità mostrerà una finestra a compaesa per aumentare il servizio di auto-completamento per le vecchie applicazioni che non supportano il framework di auto-completamento di Android.</value>
+    <value>Se abilitato, l'accessibilità mostrerà una finestra a comparsa per aumentare il servizio di auto-completamento per le vecchie applicazioni che non supportano il framework di auto-completamento di Android.</value>
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
     <value>A causa di una policy aziendale, non è possibile salvare elementi nella tua cassaforte personale. Cambia l'opzione proprietà in un'organizzazione e scegli tra le raccolte disponibili.</value>
