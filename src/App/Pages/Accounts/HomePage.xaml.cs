@@ -1,14 +1,10 @@
-﻿using Bit.App.Models;
+﻿using System;
+using System.Threading.Tasks;
+using Bit.App.Models;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
-#if !FDROID
-using Microsoft.AppCenter.Crashes;
-#endif
-using System;
-using System.Threading.Tasks;
 using Xamarin.Forms;
-
 
 namespace Bit.App.Pages
 {
@@ -73,7 +69,7 @@ namespace Bit.App.Pages
         {
             if (_accountListOverlay.IsVisible)
             {
-                HideAccountListAsync(_accountListContainer, _accountListOverlay).FireAndForget();
+                _accountListOverlay.HideAsync().FireAndForget();
                 return true;
             }
             return false;
@@ -151,51 +147,9 @@ namespace Bit.App.Pages
         
         private async Task StartEnvironmentAsync()
         {
-            await HideAccountListAsync(_accountListContainer, _accountListOverlay);
+            await _accountListOverlay.HideAsync();
             var page = new EnvironmentPage();
             await Navigation.PushModalAsync(new NavigationPage(page));
-        }
-
-        private async void AccountSwitch_Clicked(object sender, EventArgs e)
-        {
-            try
-            {
-                await ToggleAccountListAsync(_accountListContainer, _accountListOverlay, _accountListView, false);
-            }
-            catch (Exception ex)
-            {
-#if !FDROID
-                Crashes.TrackError(ex);
-#endif
-            }
-        }
-
-        private async void AccountRow_Selected(object sender, SelectedItemChangedEventArgs e)
-        {
-            try
-            {
-                await AccountRowSelectedAsync(sender, e, _accountListContainer, _accountListOverlay, null, true);
-            }
-            catch (Exception ex)
-            {
-#if !FDROID
-                Crashes.TrackError(ex);
-#endif
-            }
-        }
-
-        private async void AccountSwitchingOverlay_Tapped(object sender, EventArgs e)
-        {
-            try
-            {
-                await HideAccountListAsync(_accountListContainer, _accountListOverlay);
-            }
-            catch (Exception ex)
-            {
-#if !FDROID
-                Crashes.TrackError(ex);
-#endif
-            }
         }
     }
 }

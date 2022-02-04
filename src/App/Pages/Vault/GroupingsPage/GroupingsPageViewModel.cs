@@ -1,4 +1,9 @@
-﻿using Bit.App.Abstractions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Bit.App.Abstractions;
+using Bit.App.Controls;
 using Bit.App.Resources;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
@@ -6,11 +11,6 @@ using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Bit.Core;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -68,6 +68,11 @@ namespace Bit.App.Pages
                 await LoadAsync();
             });
             CipherOptionsCommand = new Command<CipherView>(CipherOptionsAsync);
+
+            AccountSwitchingOverlayViewModel = new AccountSwitchingOverlayViewModel(_stateService, _messagingService)
+            {
+                AllowAddAccountRow = true
+            };
         }
 
         public bool MainPage { get; set; }
@@ -134,10 +139,8 @@ namespace Bit.App.Pages
             get => _websiteIconsEnabled;
             set => SetProperty(ref _websiteIconsEnabled, value);
         }
-        public ExtendedObservableCollection<AccountView> AccountViews
-        {
-            get => _stateService.AccountViews;
-        }
+
+        public AccountSwitchingOverlayViewModel AccountSwitchingOverlayViewModel { get; }
 
         public ExtendedObservableCollection<GroupingsPageListGroup> GroupedItems { get; set; }
         public Command RefreshCommand { get; set; }

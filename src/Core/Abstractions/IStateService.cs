@@ -5,14 +5,13 @@ using Bit.Core.Enums;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.View;
-using Bit.Core.Utilities;
 
 namespace Bit.Core.Abstractions
 {
     public interface IStateService
     {
         bool BiometricLocked { get; set; }
-        ExtendedObservableCollection<AccountView> AccountViews { get; set; }
+        List<AccountView> AccountViews { get; }
         Task<List<string>> GetUserIdsAsync();
         Task<string> GetActiveUserIdAsync();
         Task SetActiveUserAsync(string userId);

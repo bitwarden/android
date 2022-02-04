@@ -1,11 +1,10 @@
-﻿using Bit.Core.Abstractions;
-using Bit.Core.Utilities;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.App.Utilities;
-using Bit.Core.Enums;
+using Bit.Core.Abstractions;
+using Bit.Core.Utilities;
 using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
@@ -16,7 +15,6 @@ namespace Bit.App.Pages
     {
         private IStateService _stateService;
         private IDeviceActionService _deviceActionService;
-        private IMessagingService _messagingService;
 
         protected int ShowModalAnimationDelay = 400;
         protected int ShowPageAnimationDelay = 100;
@@ -127,13 +125,6 @@ namespace Bit.App.Pages
             return await _stateService.GetActiveUserIdAsync() != null;
         }
 
-        protected async Task RefreshAccountViewsAsync(Xamarin.Forms.ListView accountListView, bool allowAddAccountRow)
-        {
-            await _stateService.RefreshAccountViewsAsync(allowAddAccountRow);
-            // Property change trigger on account listview is yielding inconsistent results, using a hammer instead
-            accountListView.ItemsSource = null;
-            accountListView.ItemsSource = _stateService.AccountViews;
-        }
         protected async Task<AvatarImageSource> GetAvatarImageSourceAsync(bool useCurrentActiveAccount = true)
         {
             if (useCurrentActiveAccount)
@@ -141,105 +132,6 @@ namespace Bit.App.Pages
                 return new AvatarImageSource(await _stateService.GetNameAsync(), await _stateService.GetEmailAsync());
             }
             return new AvatarImageSource();
-        }
-
-        protected async Task ToggleAccountListAsync(View listContainer, View overlay, Xamarin.Forms.ListView accountListView, bool allowAddAccountRow, View fab = null)
-        {
-            if (overlay.IsVisible)
-            {
-                await HideAccountListAsync(listContainer, overlay, fab);
-            }
-            else
-            {
-                await ShowAccountListAsync(listContainer, overlay, accountListView, allowAddAccountRow, fab);
-            }
-        }
-
-        protected async Task ShowAccountListAsync(View listContainer, View overlay, Xamarin.Forms.ListView accountListView, bool allowAddAccountRow, View fab = null)
-        {
-            await RefreshAccountViewsAsync(accountListView, allowAddAccountRow);
-
-            // Not all animations are awaited. This is intentional to allow multiple simultaneous animations.
-            await Device.InvokeOnMainThreadAsync(async () =>
-            {
-                // start listView in default (off-screen) position
-                await listContainer.TranslateTo(0, listContainer.Height * -1, 0);
-
-                // set overlay opacity to zero before making visible and start fade-in
-                overlay.Opacity = 0;
-                overlay.IsVisible = true;
-                overlay.FadeTo(1, 100);
-
-                if (Device.RuntimePlatform == Device.Android && fab != null)
-                {
-                    // start fab fade-out
-                    fab.FadeTo(0, 200);
-                }
-
-                // slide account list into view
-                await listContainer.TranslateTo(0, 0, 200, Easing.SinOut);
-            });
-        }
-
-        protected async Task HideAccountListAsync(View listContainer, View overlay, View fab = null)
-        {
-            if (!overlay.IsVisible)
-            {
-                // already hidden, don't animate again
-                return;
-            }
-            // Not all animations are awaited. This is intentional to allow multiple simultaneous animations.
-            await Device.InvokeOnMainThreadAsync(async () =>
-            {
-                // start overlay fade-out
-                overlay.FadeTo(0, 200);
-
-                if (Device.RuntimePlatform == Device.Android && fab != null)
-                {
-                    // start fab fade-in
-                    fab.FadeTo(1, 200);
-                }
-
-                // slide account list out of view
-                await listContainer.TranslateTo(0, listContainer.Height * -1, 200, Easing.SinIn);
-
-                // remove overlay
-                overlay.IsVisible = false;
-            });
-        }
-
-        protected async Task AccountRowSelectedAsync(object sender, SelectedItemChangedEventArgs e, View listContainer,
-            View overlay, View fab = null, bool? allowActiveAccountSelection = false)
-        {
-            if (!DoOnce())
-            {
-                return;
-            }
-            if (!(e.SelectedItem is AccountViewCellViewModel item))
-            {
-                return;
-            }
-
-            ((Xamarin.Forms.ListView)sender).SelectedItem = null;
-            await Task.Delay(100);
-            await HideAccountListAsync(listContainer, overlay, fab);
-
-            if (item.AccountView.IsAccount)
-            {
-                if (!item.AccountView.IsActive)
-                {
-                    await _stateService.SetActiveUserAsync(item.AccountView.UserId);
-                    _messagingService.Send("switchedAccount");
-                }
-                else if (allowActiveAccountSelection ?? false)
-                {
-                    _messagingService.Send("switchedAccount");
-                }
-            }
-            else
-            {
-                _messagingService.Send("addAccount");
-            }
         }
 
         private void SetServices()
@@ -251,10 +143,6 @@ namespace Bit.App.Pages
             if (_deviceActionService == null)
             {
                 _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
-            }
-            if (_messagingService == null)
-            {
-                _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             }
         }
 
