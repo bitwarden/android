@@ -1923,7 +1923,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Wyłącz wysyłkę, aby nikt nie miał do niej dostępu.</value>
+    <value>Wyłącz wysyłkę, aby nikt nie miał do niej dostępu</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
@@ -1991,7 +1991,7 @@
     <value>Niestandardowe</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
-    <value>Udostępnij wysyłkę po zapisaniu.</value>
+    <value>Udostępnij wysyłkę po zapisaniu</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
@@ -2003,7 +2003,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
-    <value>Ukryj mój adres e-mail przed odbiorcami.</value>
+    <value>Ukryj mój adres e-mail przed odbiorcami</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
     <value>Co najmniej jedna zasada organizacji wpływa na ustawienia wysyłek.</value>
