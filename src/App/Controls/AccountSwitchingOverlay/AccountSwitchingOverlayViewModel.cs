@@ -28,7 +28,10 @@ namespace Bit.App.Controls
                 allowsMultipleExecutions: false);
         }
 
-        public List<AccountView> AccountViews => _stateService.AccountViews;
+        // this needs to be a new list every time for the binding to get updated,
+        // XF doesn't currentlyl provide a direct way to update on same instance
+        // https://github.com/xamarin/Xamarin.Forms/issues/1950
+        public List<AccountView> AccountViews => _stateService?.AccountViews is null ? null : new List<AccountView>(_stateService.AccountViews);
 
         public bool AllowActiveAccountSelection { get; set; }
 

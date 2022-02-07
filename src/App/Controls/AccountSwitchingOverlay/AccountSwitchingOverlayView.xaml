@@ -41,7 +41,6 @@
                 <ListView.Effects>
                     <effects:ScrollViewContentInsetAdjustmentBehaviorEffect />
                 </ListView.Effects>
-
             </ListView>
         </Frame>
         <BoxView
