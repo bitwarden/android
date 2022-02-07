@@ -8,9 +8,6 @@ using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Data;
 using Bit.Core.Utilities;
-#if !FDROID
-using Microsoft.AppCenter.Crashes;
-#endif
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -174,7 +171,7 @@ namespace Bit.App.Pages
         {
             if (_accountListOverlay.IsVisible)
             {
-                HideAccountListAsync(_accountListContainer, _accountListOverlay, _fab).FireAndForget();
+                _accountListOverlay.HideAsync().FireAndForget();
                 return true;
             }
             return false;
@@ -225,7 +222,7 @@ namespace Bit.App.Pages
 
         private async void Search_Clicked(object sender, EventArgs e)
         {
-            await HideAccountListAsync(_accountListContainer, _accountListOverlay, _fab);
+            await _accountListOverlay.HideAsync();
             if (DoOnce())
             {
                 var page = new CiphersPage(_vm.Filter, _vm.FolderId != null, _vm.CollectionId != null,
@@ -236,26 +233,26 @@ namespace Bit.App.Pages
 
         private async void Sync_Clicked(object sender, EventArgs e)
         {
-            await HideAccountListAsync(_accountListContainer, _accountListOverlay, _fab);
+            await _accountListOverlay.HideAsync();
             await _vm.SyncAsync();
         }
 
         private async void Lock_Clicked(object sender, EventArgs e)
         {
-            await HideAccountListAsync(_accountListContainer, _accountListOverlay, _fab);
+            await _accountListOverlay.HideAsync();
             await _vaultTimeoutService.LockAsync(true, true);
         }
 
         private async void Exit_Clicked(object sender, EventArgs e)
         {
-            await HideAccountListAsync(_accountListContainer, _accountListOverlay, _fab);
+            await _accountListOverlay.HideAsync();
             await _vm.ExitAsync();
         }
 
         private async void AddButton_Clicked(object sender, EventArgs e)
         {
             var skipAction = _accountListOverlay.IsVisible && Device.RuntimePlatform == Device.Android;
-            await HideAccountListAsync(_accountListContainer, _accountListOverlay, _fab);
+            await _accountListOverlay.HideAsync();
             if (skipAction)
             {
                 // Account list in the process of closing via tapping on invisible FAB, skip this attempt
@@ -274,7 +271,7 @@ namespace Bit.App.Pages
             {
                 return;
             }
-            await HideAccountListAsync(_accountListContainer, _accountListOverlay, _fab);
+            await _accountListOverlay.HideAsync();
             if (_previousPage.Page == "view" && !string.IsNullOrWhiteSpace(_previousPage.CipherId))
             {
                 await Navigation.PushModalAsync(new NavigationPage(new ViewPage(_previousPage.CipherId)));
@@ -292,51 +289,9 @@ namespace Bit.App.Pages
             _addItem.IconImageSource = _vm.Deleted ? null : "plus.png";
         }
 
-        private async void AccountSwitch_Clicked(object sender, EventArgs e)
-        {
-            try
-            {
-                await ToggleAccountListAsync(_accountListContainer, _accountListOverlay, _accountListView, true, _fab);
-            }
-            catch (Exception ex)
-            {
-#if !FDROID
-                Crashes.TrackError(ex);
-#endif
-            }
-        }
-
-        private async void AccountRow_Selected(object sender, SelectedItemChangedEventArgs e)
-        {
-            try
-            {
-                await AccountRowSelectedAsync(sender, e, _accountListContainer, _accountListOverlay, _fab);
-            }
-            catch (Exception ex)
-            {
-#if !FDROID
-                Crashes.TrackError(ex);
-#endif
-            }
-        }
-
-        private async void AccountSwitchingOverlay_Tapped(object sender, EventArgs e)
-        {
-            try
-            {
-                await HideAccountListAsync(_accountListContainer, _accountListOverlay, _fab);
-            }
-            catch (Exception ex)
-            {
-#if !FDROID
-                Crashes.TrackError(ex);
-#endif
-            }
-        }
-
         public async Task HideAccountSwitchingOverlayAsync()
         {
-            await HideAccountListAsync(_accountListContainer, _accountListOverlay, _fab);
+            await _accountListOverlay.HideAsync();
         }
     }
 }

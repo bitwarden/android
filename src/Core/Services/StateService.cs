@@ -23,7 +23,7 @@ namespace Bit.Core.Services
 
         public bool BiometricLocked { get; set; }
 
-        public ExtendedObservableCollection<AccountView> AccountViews { get; set; }
+        public List<AccountView> AccountViews { get; set; }
 
         public StateService(IStorageService storageService, IStorageService secureStorageService)
         {
@@ -82,9 +82,13 @@ namespace Bit.Core.Services
 
             if (AccountViews == null)
             {
-                AccountViews = new ExtendedObservableCollection<AccountView>();
+                AccountViews = new List<AccountView>();
             }
-            AccountViews.Clear();
+            else
+            {
+                AccountViews.Clear();
+            }
+
             var accountList = _state?.Accounts?.Values.ToList();
             if (accountList == null)
             {
