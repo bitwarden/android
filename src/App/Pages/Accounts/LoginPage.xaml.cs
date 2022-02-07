@@ -1,13 +1,10 @@
-﻿using Bit.App.Models;
-using Bit.App.Resources;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using Bit.App.Models;
+using Bit.App.Resources;
 using Bit.App.Utilities;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
-#if !FDROID
-using Microsoft.AppCenter.Crashes;
-#endif
 
 namespace Bit.App.Pages
 {
@@ -30,7 +27,7 @@ namespace Bit.App.Pages
                 () => Device.BeginInvokeOnMainThread(async () => await UpdateTempPasswordAsync());
             _vm.CloseAction = async () =>
             {
-                await HideAccountListAsync(_accountListContainer, _accountListOverlay);
+                await _accountListOverlay.HideAsync();
                 await Navigation.PopModalAsync();
             };
             _vm.Email = email;
@@ -86,7 +83,7 @@ namespace Bit.App.Pages
         {
             if (_accountListOverlay.IsVisible)
             {
-                HideAccountListAsync(_accountListContainer, _accountListOverlay).FireAndForget();
+                _accountListOverlay.HideAsync().FireAndForget();
                 return true;
             }
             return false;
@@ -125,7 +122,7 @@ namespace Bit.App.Pages
 
         private async void More_Clicked(object sender, System.EventArgs e)
         {
-            await HideAccountListAsync(_accountListContainer, _accountListOverlay);
+            await _accountListOverlay.HideAsync();
             if (!DoOnce())
             {
                 return;
@@ -160,48 +157,6 @@ namespace Bit.App.Pages
         {
             var page = new UpdateTempPasswordPage();
             await Navigation.PushModalAsync(new NavigationPage(page));
-        }
-
-        private async void AccountSwitch_Clicked(object sender, EventArgs e)
-        {
-            try
-            {
-                await ToggleAccountListAsync(_accountListContainer, _accountListOverlay, _accountListView, false);
-            }
-            catch (Exception ex)
-            {
-#if !FDROID
-                Crashes.TrackError(ex);
-#endif
-            }
-        }
-
-        private async void AccountRow_Selected(object sender, SelectedItemChangedEventArgs e)
-        {
-            try
-            {
-                await AccountRowSelectedAsync(sender, e, _accountListContainer, _accountListOverlay, null, true);
-            }
-            catch (Exception ex)
-            {
-#if !FDROID
-                Crashes.TrackError(ex);
-#endif
-            }
-        }
-
-        private async void AccountSwitchingOverlay_Tapped(object sender, EventArgs e)
-        {
-            try
-            {
-                await HideAccountListAsync(_accountListContainer, _accountListOverlay);
-            }
-            catch (Exception ex)
-            {
-#if !FDROID
-                Crashes.TrackError(ex);
-#endif
-            }
         }
     }
 }

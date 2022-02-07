@@ -1,13 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <pages:BaseContentPage xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
     x:Class="Bit.App.Pages.GroupingsPage"
     xmlns:pages="clr-namespace:Bit.App.Pages"
     xmlns:u="clr-namespace:Bit.App.Utilities"
     xmlns:effects="clr-namespace:Bit.App.Effects"
     xmlns:controls="clr-namespace:Bit.App.Controls"
-    xmlns:view="clr-namespace:Bit.Core.Models.View;assembly=BitwardenCore"
     x:DataType="pages:GroupingsPageViewModel"
     Title="{Binding PageTitle}"
     x:Name="_page">
@@ -20,7 +18,7 @@
         <controls:ExtendedToolbarItem
             x:Name="_accountAvatar"
             IconImageSource="{Binding AvatarImageSource}"
-            Clicked="AccountSwitch_Clicked"
+            Command="{Binding Source={x:Reference _accountListOverlay}, Path=ToggleVisibililtyCommand}"
             Order="Primary"
             Priority="-1"
             UseOriginalImage="True"
@@ -162,56 +160,12 @@
             </Button.Effects>
         </Button>
 
-        <!-- Account Switching Overlay -->
-        <ContentView
+        <controls:AccountSwitchingOverlayView
             x:Name="_accountListOverlay"
             AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
             AbsoluteLayout.LayoutFlags="All"
-            IsVisible="False"
-            BackgroundColor="#22000000"
-            Padding="0">
-
-            <StackLayout
-                x:Name="_accountListContainer"
-                VerticalOptions="Fill"
-                HorizontalOptions="FillAndExpand"
-                BackgroundColor="Transparent">
-                <Frame
-                    Padding="0"
-                    HorizontalOptions="Fill"
-                    VerticalOptions="Start"
-                    xct:ShadowEffect.Color="Black"
-                    xct:ShadowEffect.Radius="10"
-                    xct:ShadowEffect.OffsetY="3">
-                    <ListView
-                        x:Name="_accountListView"
-                        ItemsSource="{Binding AccountViews}"
-                        ItemSelected="AccountRow_Selected"
-                        BackgroundColor="{DynamicResource BackgroundColor}"
-                        VerticalOptions="Start"
-                        RowHeight="{OnPlatform 70, iOS=70, Android=74}"
-                        effects:ScrollViewContentInsetAdjustmentBehaviorEffect.ContentInsetAdjustmentBehavior="Never">
-                        <ListView.ItemTemplate>
-                            <DataTemplate x:DataType="view:AccountView">
-                                <controls:AccountViewCell
-                                    Account="{Binding .}" />
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                        <ListView.Effects>
-                            <effects:ScrollViewContentInsetAdjustmentBehaviorEffect />
-                        </ListView.Effects>
-                    </ListView>
-                </Frame>
-                <BoxView
-                    BackgroundColor="Transparent"
-                    HorizontalOptions="Fill"
-                    VerticalOptions="FillAndExpand">
-                    <BoxView.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="AccountSwitchingOverlay_Tapped" />
-                    </BoxView.GestureRecognizers>
-                </BoxView>
-            </StackLayout>
-        </ContentView>
+            MainFab="{Binding Source={x:Reference _fab}, Path=.}"
+            BindingContext="{Binding AccountSwitchingOverlayViewModel}"/>
     </AbsoluteLayout>
 
 </pages:BaseContentPage>

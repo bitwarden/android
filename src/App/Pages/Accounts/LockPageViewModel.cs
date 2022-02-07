@@ -1,15 +1,15 @@
-﻿using Bit.App.Abstractions;
+﻿using System;
+using System.Threading.Tasks;
+using Bit.App.Abstractions;
+using Bit.App.Controls;
 using Bit.App.Resources;
+using Bit.App.Utilities;
+using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
-using Bit.Core.Utilities;
-using System;
-using System.Threading.Tasks;
-using Bit.App.Utilities;
-using Bit.Core;
 using Bit.Core.Models.Request;
-using Bit.Core.Models.View;
+using Bit.Core.Utilities;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -55,6 +55,12 @@ namespace Bit.App.Pages
             PageTitle = AppResources.VerifyMasterPassword;
             TogglePasswordCommand = new Command(TogglePassword);
             SubmitCommand = new Command(async () => await SubmitAsync());
+
+            AccountSwitchingOverlayViewModel = new AccountSwitchingOverlayViewModel(_stateService, _messagingService)
+            {
+                AllowAddAccountRow = true,
+                AllowActiveAccountSelection = true
+            };
         }
 
         public bool ShowPassword
@@ -114,10 +120,7 @@ namespace Bit.App.Pages
             set => SetProperty(ref _lockedVerifyText, value);
         }
 
-        public ExtendedObservableCollection<AccountView> AccountViews
-        {
-            get => _stateService.AccountViews;
-        }
+        public AccountSwitchingOverlayViewModel AccountSwitchingOverlayViewModel { get; }
 
         public Command SubmitCommand { get; }
         public Command TogglePasswordCommand { get; }

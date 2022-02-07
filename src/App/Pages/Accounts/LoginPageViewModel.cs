@@ -1,13 +1,13 @@
-﻿using Bit.App.Abstractions;
+﻿using System;
+using System.Threading.Tasks;
+using Bit.App.Abstractions;
+using Bit.App.Controls;
 using Bit.App.Resources;
+using Bit.App.Utilities;
+using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Exceptions;
 using Bit.Core.Utilities;
-using System;
-using System.Threading.Tasks;
-using Bit.App.Utilities;
-using Bit.Core;
-using Bit.Core.Models.View;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -21,6 +21,7 @@ namespace Bit.App.Pages
         private readonly IStateService _stateService;
         private readonly IEnvironmentService _environmentService;
         private readonly II18nService _i18nService;
+        private readonly IMessagingService _messagingService;
 
         private bool _showPassword;
         private string _email;
@@ -35,10 +36,16 @@ namespace Bit.App.Pages
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
             _i18nService = ServiceContainer.Resolve<II18nService>("i18nService");
+            _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
 
             PageTitle = AppResources.Bitwarden;
             TogglePasswordCommand = new Command(TogglePassword);
             LogInCommand = new Command(async () => await LogInAsync());
+
+            AccountSwitchingOverlayViewModel = new AccountSwitchingOverlayViewModel(_stateService, _messagingService)
+            {
+                AllowActiveAccountSelection = true
+            };
         }
 
         public bool ShowPassword
@@ -63,10 +70,7 @@ namespace Bit.App.Pages
             set => SetProperty(ref _masterPassword, value);
         }
 
-        public ExtendedObservableCollection<AccountView> AccountViews
-        {
-            get => _stateService.AccountViews;
-        }
+        public AccountSwitchingOverlayViewModel AccountSwitchingOverlayViewModel { get; }
 
         public Command LogInCommand { get; }
         public Command TogglePasswordCommand { get; }
