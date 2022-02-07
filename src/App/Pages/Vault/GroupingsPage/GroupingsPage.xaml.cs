@@ -333,5 +333,10 @@ namespace Bit.App.Pages
 #endif
             }
         }
+
+        public async Task HideAccountSwitchingOverlayAsync()
+        {
+            await HideAccountListAsync(_accountListContainer, _accountListOverlay, _fab);
+        }
     }
 }
