@@ -1923,7 +1923,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Dezactivați acest Send astfel încât nimeni să nu-l poată accesa.</value>
+    <value>Dezactivați acest Send pentru ca nimeni să nu-l poată accesa</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
@@ -1991,7 +1991,7 @@
     <value>Personalizat</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
-    <value>Partajați această Send după salvare.</value>
+    <value>Partajați această Send după salvare</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
@@ -2003,7 +2003,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
-    <value>Ascundeți adresa mea de e-mail de la destinatari.</value>
+    <value>Ascundeți adresa mea de e-mail de la destinatari</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
     <value>Una sau mai multe politici organizaționale vă afectează opțiunile Send-ului.</value>
