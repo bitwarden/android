@@ -157,7 +157,7 @@ namespace Bit.App.Pages
 
         public void Help()
         {
-            _platformUtilsService.LaunchUri("https://help.bitwarden.com/");
+            _platformUtilsService.LaunchUri("https://bitwarden.com/help/");
         }
 
         public async Task FingerprintAsync()
@@ -177,7 +177,7 @@ namespace Bit.App.Pages
                 AppResources.LearnMore, AppResources.Close);
             if (learnMore)
             {
-                _platformUtilsService.LaunchUri("https://help.bitwarden.com/article/fingerprint-phrase/");
+                _platformUtilsService.LaunchUri("https://bitwarden.com/help/fingerprint-phrase/");
             }
         }
 
@@ -188,7 +188,7 @@ namespace Bit.App.Pages
 
         public void Import()
         {
-            _platformUtilsService.LaunchUri("https://help.bitwarden.com/article/import-data/");
+            _platformUtilsService.LaunchUri("https://bitwarden.com/help/import-data/");
         }
 
         public void WebVault()
@@ -207,7 +207,7 @@ namespace Bit.App.Pages
                AppResources.LearnOrg, AppResources.Yes, AppResources.Cancel);
             if (confirmed)
             {
-                _platformUtilsService.LaunchUri("https://help.bitwarden.com/article/what-is-an-organization/");
+                _platformUtilsService.LaunchUri("https://bitwarden.com/help/about-organizations/");
             }
         }
 
@@ -217,7 +217,7 @@ namespace Bit.App.Pages
                 AppResources.TwoStepLogin, AppResources.Yes, AppResources.Cancel);
             if (confirmed)
             {
-                _platformUtilsService.LaunchUri("https://help.bitwarden.com/article/setup-two-step-login/");
+                _platformUtilsService.LaunchUri("https://bitwarden.com/help/setup-two-step-login/");
             }
         }
 
@@ -227,7 +227,7 @@ namespace Bit.App.Pages
                 AppResources.ChangeMasterPassword, AppResources.Yes, AppResources.Cancel);
             if (confirmed)
             {
-                _platformUtilsService.LaunchUri("https://help.bitwarden.com/article/change-your-master-password/");
+                _platformUtilsService.LaunchUri("https://bitwarden.com/help/master-password/#change-your-master-password");
             }
         }
 
