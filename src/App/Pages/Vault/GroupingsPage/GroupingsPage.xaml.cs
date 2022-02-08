@@ -288,5 +288,10 @@ namespace Bit.App.Pages
             _addItem.IsEnabled = !_vm.Deleted;
             _addItem.IconImageSource = _vm.Deleted ? null : "plus.png";
         }
+
+        public async Task HideAccountSwitchingOverlayAsync()
+        {
+            await _accountListOverlay.HideAsync();
+        }
     }
 }
