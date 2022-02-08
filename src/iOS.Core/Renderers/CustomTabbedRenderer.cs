@@ -1,4 +1,6 @@
-﻿using Bit.App.Abstractions;
+﻿using System;
+using Bit.App.Abstractions;
+using Bit.App.Pages;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using Bit.iOS.Core.Renderers;
@@ -14,6 +16,7 @@ namespace Bit.iOS.Core.Renderers
     public class CustomTabbedRenderer : TabbedRenderer
     {
         private IBroadcasterService _broadcasterService;
+        private UITabBarItem _previousSelectedItem;
 
         public CustomTabbedRenderer()
         {
@@ -37,6 +40,25 @@ namespace Bit.iOS.Core.Renderers
             TabBar.Translucent = false;
             TabBar.Opaque = true;
             UpdateTabBarAppearance();
+        }
+
+        public override void ViewDidAppear(bool animated)
+        {
+            base.ViewDidAppear(animated);
+
+            if (SelectedIndex < TabBar.Items.Length)
+            {
+                _previousSelectedItem = TabBar.Items[SelectedIndex];
+            }
+        }
+
+        public override void ItemSelected(UITabBar tabbar, UITabBarItem item)
+        {
+            if (_previousSelectedItem == item && Element is TabsPage tabsPage)
+            {
+                tabsPage.OnPageReselected();
+            }
+            _previousSelectedItem = item;
         }
 
         protected override void Dispose(bool disposing)

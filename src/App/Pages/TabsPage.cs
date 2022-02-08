@@ -103,8 +103,13 @@ namespace Bit.App.Pages
         {
             if (CurrentPage is NavigationPage navPage)
             {
+                if (_groupingsPage?.RootPage is GroupingsPage groupingsPage)
+                {
+                    await groupingsPage.HideAccountSwitchingOverlayAsync();
+                }
+
                 _messagingService.Send("updatedTheme");
-                if (navPage.RootPage is GroupingsPage groupingsPage)
+                if (navPage.RootPage is GroupingsPage)
                 {
                     // Load something?
                 }
@@ -116,6 +121,14 @@ namespace Bit.App.Pages
                 {
                     await settingsPage.InitAsync();
                 }
+            }
+        }
+
+        public void OnPageReselected()
+        {
+            if (_groupingsPage?.RootPage is GroupingsPage groupingsPage)
+            {
+                groupingsPage.HideAccountSwitchingOverlayAsync().FireAndForget();
             }
         }
     }
