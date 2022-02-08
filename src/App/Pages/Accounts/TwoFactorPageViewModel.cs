@@ -328,7 +328,7 @@ namespace Bit.App.Pages
                 AppResources.Cancel, null, options.ToArray());
             if (method == AppResources.RecoveryCodeTitle)
             {
-                _platformUtilsService.LaunchUri("https://help.bitwarden.com/article/lost-two-step-device/");
+                _platformUtilsService.LaunchUri("https://bitwarden.com/help/lost-two-step-device/");
             }
             else if (method != AppResources.Cancel && method != null)
             {
