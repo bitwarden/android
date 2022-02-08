@@ -7,11 +7,10 @@ namespace Bit.Core.Abstractions
 {
     public interface IPlatformUtilsService
     {
-        string IdentityClientId { get; }
-
         string GetApplicationVersion();
         DeviceType GetDevice();
         string GetDeviceString();
+        ClientType GetClientType();
         bool IsDev();
         bool IsSelfHost();
         bool IsViewOpen();
