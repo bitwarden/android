@@ -116,7 +116,7 @@ namespace Bit.App.Pages
             var redirectUri = "bitwarden://sso-callback";
 
             var url = _apiService.IdentityBaseUrl + "/connect/authorize?" +
-                      "client_id=" + _platformUtilsService.IdentityClientId + "&" +
+                      "client_id=" + _platformUtilsService.GetClientType().GetString() + "&" +
                       "redirect_uri=" + Uri.EscapeDataString(redirectUri) + "&" +
                       "response_type=code&scope=api%20offline_access&" +
                       "state=" + state + "&code_challenge=" + codeChallenge + "&" +
