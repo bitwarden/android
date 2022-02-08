@@ -11,6 +11,23 @@ namespace Bit.App.Controls
     {
         private string _data;
 
+        public override bool Equals(object obj)
+        {
+            if (obj is null)
+            {
+                return false;
+            }
+
+            if (obj is AvatarImageSource avatar)
+            {
+                return avatar._data == _data;
+            }
+
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode() => _data?.GetHashCode() ?? -1;
+
         public AvatarImageSource(string name = null, string email = null)
         {
             _data = name;
