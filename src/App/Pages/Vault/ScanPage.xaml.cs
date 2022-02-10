@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.AppCenter.Crashes;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -7,9 +10,6 @@ namespace Bit.App.Pages
     public partial class ScanPage : BaseContentPage
     {
         private readonly Action<string> _callback;
-
-        private DateTime? _timerStarted = null;
-        private TimeSpan _timerMaxLength = TimeSpan.FromMinutes(3);
 
         public ScanPage(Action<string> callback)
         {
@@ -27,26 +27,54 @@ namespace Bit.App.Pages
                 ToolbarItems.RemoveAt(0);
             }
         }
+        private CancellationTokenSource _autofocusCts;
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
             _zxing.IsScanning = true;
-            _timerStarted = DateTime.Now;
-            Device.StartTimer(new TimeSpan(0, 0, 2), () =>
+
+            // Fix for Autofocus, now it's done every 2 seconds so that the user does't have to do it
+            // https://github.com/Redth/ZXing.Net.Mobile/issues/414
+            _autofocusCts?.Cancel();
+            _autofocusCts = new CancellationTokenSource();
+
+            var autofocusCts = _autofocusCts;
+
+            Task.Run(async () =>
             {
-                if (_timerStarted == null || (DateTime.Now - _timerStarted) > _timerMaxLength)
+                await Task.Delay(TimeSpan.FromMinutes(3), autofocusCts.Token);
+                autofocusCts.Cancel();
+            });
+
+            Device.StartTimer(TimeSpan.FromSeconds(2), () =>
+            {
+                try
                 {
+                    if (autofocusCts.IsCancellationRequested)
+                    {
+                        return false;
+                    }
+
+                    _zxing.AutoFocus();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    // we don't need to display anything to the user because at the most they just lose autofocus
+#if !FDROID
+                    Crashes.TrackError(ex);
+#endif
+                    autofocusCts?.Cancel(); // we also cancel here to cancel the Task.Delay as well.
                     return false;
                 }
-                _zxing.AutoFocus();
-                return true;
             });
         }
 
         protected override void OnDisappearing()
         {
-            _timerStarted = null;
+            _autofocusCts?.Cancel();
+
             _zxing.IsScanning = false;
             base.OnDisappearing();
         }
