@@ -35,7 +35,7 @@ jobs:
       - name: Retrieve Mobile release version
         id: retrieve-mobile-version
         run: |
-          ver=$(sed -n -e '/android:versionName/ s/.*\= *//p' ./src/Android/Properties/AndroidManifest.xml | tr -d '"')
+          ver=$(sed -E -n '/^<manifest/s/^.*[ ]android:versionName="([^"]+)".*$/\1/p' ./src/Android/Properties/AndroidManifest.xml | tr -d '"')
           echo "::set-output name=mobile_version::${ver}"
         shell: bash
 
