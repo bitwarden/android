@@ -44,6 +44,12 @@ jobs:
           version: ${{ github.event.inputs.version_number }}
           file_path: "./src/iOS.Extension/Info.plist"
 
+      - name: Bump Version - iOS.ShareExtension
+        uses: bitwarden/gh-actions/version-bump@03ad9a873c39cdc95dd8d77dbbda67f84db43945
+        with:
+          version: ${{ github.event.inputs.version_number }}
+          file_path: "./src/iOS.ShareExtension/Info.plist"
+
       - name: Bump Version - iOS
         uses: bitwarden/gh-actions/version-bump@03ad9a873c39cdc95dd8d77dbbda67f84db43945
         with:
