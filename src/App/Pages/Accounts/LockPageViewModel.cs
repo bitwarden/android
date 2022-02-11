@@ -139,6 +139,10 @@ namespace Bit.App.Pages
                 await _vaultTimeoutService.LogOutAsync();
             }
             _email = await _userService.GetEmailAsync();
+            if (string.IsNullOrWhiteSpace(_email))
+            {
+                await _vaultTimeoutService.LogOutAsync();
+            }
             var webVault = _environmentService.GetWebVaultUrl();
             if (string.IsNullOrWhiteSpace(webVault))
             {
