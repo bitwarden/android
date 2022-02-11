@@ -520,7 +520,7 @@ jobs:
         env:
           APPCENTER_IOS_TOKEN: ${{ steps.retrieve-secrets.outputs.appcenter-ios-token }}
         run: |
-          appcenter crashes upload-missing-symbols -a kspearrin/bitwarden "./bitwarden-export/dSYMs" --token $APPCENTER_IOS_TOKEN
+          appcenter crashes upload-symbols -a kspearrin/bitwarden -s "./bitwarden-export/dSYMs" --token $APPCENTER_IOS_TOKEN
         shell: bash
 
       - name: Deploy to App Store
