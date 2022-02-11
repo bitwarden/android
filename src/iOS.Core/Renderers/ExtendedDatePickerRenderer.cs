@@ -23,19 +23,6 @@ namespace Bit.iOS.Core.Renderers
                 {
                     Control.Text = element.PlaceHolder;
                 }
-
-                // force use of wheel picker on iOS 14+
-                // TODO remove this when we upgrade to X.F 5 SR-1
-                // https://github.com/xamarin/Xamarin.Forms/issues/12258#issuecomment-700168665
-                try
-                {
-                    if (UIDevice.CurrentDevice.CheckSystemVersion(13, 2))
-                    {
-                        var picker = (UIDatePicker)Control.InputView;
-                        picker.PreferredDatePickerStyle = UIDatePickerStyle.Wheels;
-                    }
-                }
-                catch { }
             }
         }
 
