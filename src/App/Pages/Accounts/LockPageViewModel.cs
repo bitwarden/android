@@ -10,6 +10,9 @@ using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
+#if !FDROID
+using Microsoft.AppCenter.Crashes;
+#endif
 
 namespace Bit.App.Pages
 {
@@ -137,8 +140,17 @@ namespace Bit.App.Pages
             if (_usingKeyConnector && !(BiometricLock || PinLock))
             {
                 await _vaultTimeoutService.LogOutAsync();
+                return;
             }
             _email = await _userService.GetEmailAsync();
+            if (string.IsNullOrWhiteSpace(_email))
+            {
+                await _vaultTimeoutService.LogOutAsync();
+#if !FDROID
+                Crashes.TrackError(new NullReferenceException("Email not found in storage"));
+#endif
+                return;
+            }
             var webVault = _environmentService.GetWebVaultUrl();
             if (string.IsNullOrWhiteSpace(webVault))
             {
