@@ -1924,7 +1924,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Desative este Send para que ninguém possa acessá-lo.</value>
+    <value>Desabilite este Send para que ninguém possa acessá-lo.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
@@ -2111,10 +2111,34 @@
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Código de Verificação Inválido.</value>
   </data>
+  <data name="RequestOTP" xml:space="preserve">
+    <value>Solicitar senha de uso único</value>
+  </data>
   <data name="SendCode" xml:space="preserve">
     <value>Enviar Código</value>
   </data>
   <data name="Sending" xml:space="preserve">
     <value>Enviando</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>Copiar link do Send ao salvar</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>Enviando código</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>Verificando</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>Reenviar Código</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>Um código de verificação foi enviado para o seu e-mail</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>Ocorreu um erro ao enviar um código de verificação para seu e-mail. Por favor, tente novamente</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>Digite o código de verificação enviado para seu e-mail</value>
   </data>
 </root>

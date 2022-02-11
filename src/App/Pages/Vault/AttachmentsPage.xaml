@@ -7,6 +7,7 @@
     xmlns:views="clr-namespace:Bit.Core.Models.View;assembly=BitwardenCore"
     xmlns:u="clr-namespace:Bit.App.Utilities"
     xmlns:controls="clr-namespace:Bit.App.Controls"
+    xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
     x:DataType="pages:AttachmentsPageViewModel"
     x:Name="_page"
     Title="{Binding PageTitle}">
@@ -49,9 +50,9 @@
                                         StyleClass="box-sub-label"
                                         HorizontalTextAlignment="End"
                                         VerticalTextAlignment="Center" />
-                                    <controls:FaButton 
+                                    <controls:IconButton 
                                         StyleClass="box-row-button, box-row-button-platform"
-                                        Text="&#xf014;"
+                                        Text="{Binding Source={x:Static core:BitwardenIcons.Trash}}"
                                         Command="{Binding BindingContext.DeleteAttachmentCommand, Source={x:Reference _page}}"
                                         CommandParameter="{Binding .}"
                                         VerticalOptions="Center"

@@ -1923,7 +1923,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Dezactivați acest Send astfel încât nimeni să nu-l poată accesa.</value>
+    <value>Dezactivați acest Send pentru ca nimeni să nu-l poată accesa</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
@@ -1991,7 +1991,7 @@
     <value>Personalizat</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
-    <value>Partajați această Send după salvare.</value>
+    <value>Partajați această Send după salvare</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
@@ -2003,7 +2003,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
-    <value>Ascundeți adresa mea de e-mail de la destinatari.</value>
+    <value>Ascundeți adresa mea de e-mail de la destinatari</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
     <value>Una sau mai multe politici organizaționale vă afectează opțiunile Send-ului.</value>
@@ -2110,10 +2110,34 @@
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Cod de verificare nevalid.</value>
   </data>
+  <data name="RequestOTP" xml:space="preserve">
+    <value>Solicitare de parolă unică</value>
+  </data>
   <data name="SendCode" xml:space="preserve">
     <value>Trimitere cod</value>
   </data>
   <data name="Sending" xml:space="preserve">
     <value>Se trimite</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>Copiați linkul Send-ului la salvare</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>Se trimite codul</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>Se verifică</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>Trimiteți un cod nou</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>Un cod de verificare a fost trimis la adresa dvs. de e-mail</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>S-a produs o eroare la trimiterea codului de verificare la adresa dvs. de e-mail. Vă rugăm să încercați din nou</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>Introduceți codul de verificare care v-a fost trimis prin e-mail.</value>
   </data>
 </root>

@@ -5,6 +5,7 @@ using Bit.App.Abstractions;
 using Bit.App.Models;
 using Bit.App.Resources;
 using Bit.Core.Abstractions;
+using Bit.Core.Enums;
 using Plugin.Fingerprint;
 using Plugin.Fingerprint.Abstractions;
 using Xamarin.Essentials;
@@ -34,8 +35,6 @@ namespace Bit.App.Services
             _messagingService = messagingService;
             _broadcasterService = broadcasterService;
         }
-
-        public string IdentityClientId => "mobile";
 
         public void Init()
         {
@@ -78,6 +77,11 @@ namespace Bit.App.Services
         public string GetDeviceString()
         {
             return DeviceInfo.Model;
+        }
+
+        public ClientType GetClientType()
+        {
+            return ClientType.Mobile;
         }
 
         public bool IsViewOpen()

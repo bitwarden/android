@@ -1923,7 +1923,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Disable this Send so that no one can access it.</value>
+    <value>Disable this Send so that no one can access it</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
@@ -2003,7 +2003,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
-    <value>Hide my email address from recipients.</value>
+    <value>Hide my email address from recipients</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
     <value>One or more organization policies are affecting your Send options.</value>
@@ -2110,10 +2110,34 @@
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Invalid Verification Code.</value>
   </data>
+  <data name="RequestOTP" xml:space="preserve">
+    <value>Request one-time password</value>
+  </data>
   <data name="SendCode" xml:space="preserve">
     <value>Send Code</value>
   </data>
   <data name="Sending" xml:space="preserve">
     <value>Sending</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>Copy Send link on save</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>Sending code</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>Verifying</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>Resend Code</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>A verification code was sent to your email</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>An error occurred while sending a verification code to your email. Please try again</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>Enter the verification code that was sent to your email</value>
   </data>
 </root>

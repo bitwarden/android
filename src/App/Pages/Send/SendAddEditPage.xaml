@@ -8,6 +8,7 @@
     xmlns:controls="clr-namespace:Bit.App.Controls"
     xmlns:behaviors="clr-namespace:Bit.App.Behaviors"
     xmlns:effects="clr-namespace:Bit.App.Effects"
+    xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
     x:DataType="pages:SendAddEditPageViewModel"
     x:Name="_page"
     Title="{Binding PageTitle}">
@@ -234,9 +235,10 @@
                                     Margin="10,0,0,0" />
                             </StackLayout>
                         </StackLayout>
-                        <StackLayout StyleClass="box-row, box-row-switch">
+                        <StackLayout
+                            StyleClass="box-row, box-row-switch">
                             <Label
-                                Text="{u:I18n ShareOnSave}"
+                                Text="{Binding ShareOnSaveText}"
                                 StyleClass="box-label-regular"
                                 VerticalOptions="Center"
                                 HorizontalOptions="StartAndExpand" />
@@ -255,16 +257,16 @@
                                 StyleClass="box-row-button"
                                 TextColor="{DynamicResource PrimaryColor}"
                                 Margin="0" />
-                            <controls:FaButton
+                            <controls:IconButton
                                 x:Name="_btnOptionsUp"
-                                Text="&#xf077;"
+                                Text="{Binding Source={x:Static core:BitwardenIcons.ChevronUp}}"
                                 StyleClass="box-row-button"
                                 TextColor="{DynamicResource PrimaryColor}"
                                 Clicked="ToggleOptions_Clicked"
                                 IsVisible="False" />
-                            <controls:FaButton
+                            <controls:IconButton
                                 x:Name="_btnOptionsDown"
-                                Text="&#xf078;"
+                                Text="{Binding Source={x:Static core:BitwardenIcons.AngleDown}}"
                                 StyleClass="box-row-button"
                                 TextColor="{DynamicResource PrimaryColor}"
                                 Clicked="ToggleOptions_Clicked"
@@ -428,7 +430,7 @@
                                         IsSpellCheckEnabled="False"
                                         IsTextPredictionEnabled="False"
                                         HorizontalOptions="FillAndExpand" />
-                                    <controls:FaButton
+                                    <controls:IconButton
                                         IsEnabled="{Binding SendEnabled}"
                                         StyleClass="box-row-button, box-row-button-platform"
                                         Text="{Binding ShowPasswordIcon}"

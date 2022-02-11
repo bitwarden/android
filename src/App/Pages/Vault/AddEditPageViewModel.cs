@@ -11,8 +11,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Bit.App.Controls;
+using Bit.Core;
 using Xamarin.Forms;
-using View = Xamarin.Forms.View;
+#if !FDROID
+using Microsoft.AppCenter.Crashes;
+#endif
 
 namespace Bit.App.Pages
 {
@@ -287,9 +290,9 @@ namespace Bit.App.Pages
         public bool IsSecureNote => Cipher?.Type == CipherType.SecureNote;
         public bool ShowUris => IsLogin && Cipher.Login.HasUris;
         public bool ShowAttachments => Cipher.HasAttachments;
-        public string ShowPasswordIcon => ShowPassword ? "" : "";
-        public string ShowCardNumberIcon => ShowCardNumber ? "" : "";
-        public string ShowCardCodeIcon => ShowCardCode ? "" : "";
+        public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
+        public string ShowCardNumberIcon => ShowCardNumber ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
+        public string ShowCardCodeIcon => ShowCardCode ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public int PasswordFieldColSpan => Cipher.ViewPassword ? 1 : 4;
         public int TotpColumnSpan => Cipher.ViewPassword ? 1 : 2;
         public bool AllowPersonal { get; set; }
@@ -493,9 +496,12 @@ namespace Bit.App.Pages
             try
             {
                 await _deviceActionService.ShowLoadingAsync(AppResources.Saving);
+
                 await _cipherService.SaveWithServerAsync(cipher);
                 Cipher.Id = cipher.Id;
+
                 await _deviceActionService.HideLoadingAsync();
+
                 _platformUtilsService.ShowToast("success", null,
                     EditMode && !CloneMode ? AppResources.ItemUpdated : AppResources.NewItemCreated);
                 _messagingService.Send(EditMode && !CloneMode ? "editedCipher" : "addedCipher", Cipher.Id);
@@ -511,18 +517,29 @@ namespace Bit.App.Pages
                     {
                         ViewPage?.UpdateCipherId(this.Cipher.Id);
                     }
-                    await Page.Navigation.PopModalAsync();
+                    // if the app is tombstoned then PopModalAsync would throw index out of bounds
+                    if (Page.Navigation?.ModalStack?.Count > 0)
+                    {
+                        await Page.Navigation.PopModalAsync();
+                    }
                 }
                 return true;
             }
-            catch (ApiException e)
+            catch (ApiException apiEx)
             {
                 await _deviceActionService.HideLoadingAsync();
-                if (e?.Error != null)
+                if (apiEx?.Error != null)
                 {
-                    await _platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(),
+                    await _platformUtilsService.ShowDialogAsync(apiEx.Error.GetSingleMessage(),
                         AppResources.AnErrorHasOccurred);
                 }
+            }
+            catch(Exception genex)
+            {
+#if !FDROID
+                Crashes.TrackError(genex);
+#endif
+                await _deviceActionService.HideLoadingAsync();
             }
             return false;
         }
@@ -742,7 +759,7 @@ namespace Bit.App.Pages
 
         public void PasswordPromptHelp()
         {
-            _platformUtilsService.LaunchUri("https://bitwarden.com/help/article/managing-items/#protect-individual-items");
+            _platformUtilsService.LaunchUri("https://bitwarden.com/help/managing-items/#protect-individual-items");
         }
 
         private void TypeChanged()
@@ -936,7 +953,7 @@ namespace Bit.App.Pages
 
         public Command ToggleHiddenValueCommand { get; set; }
 
-        public string ShowHiddenValueIcon => _showHiddenValue ? "" : "";
+        public string ShowHiddenValueIcon => _showHiddenValue ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public bool IsTextType => _field.Type == FieldType.Text;
         public bool IsBooleanType => _field.Type == FieldType.Boolean;
         public bool IsHiddenType => _field.Type == FieldType.Hidden;

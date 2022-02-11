@@ -2110,10 +2110,34 @@
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Etibarsız təsdiqləmə kodu</value>
   </data>
+  <data name="RequestOTP" xml:space="preserve">
+    <value>Tək istifadəlik parol tələb et</value>
+  </data>
   <data name="SendCode" xml:space="preserve">
     <value>Kod göndər</value>
   </data>
   <data name="Sending" xml:space="preserve">
     <value>Göndərilir</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>Send bağlantısını saxlamaq üçün kopyala</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>Kod göndərilir</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>Təsdiqlənir</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>Kodu təkrar göndər</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>Təsdiqləmə kodu e-poçtunuza göndərildi</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>E-poçtunuza təsdiqləmə kodu göndərilərkən bir xəta baş verdi. Zəhmət olmasa yenidən sınayın</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>E-poçtunuza göndərilmiş təsdiqləmə kodunu daxil edin</value>
   </data>
 </root>

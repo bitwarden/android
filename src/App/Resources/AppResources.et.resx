@@ -2110,10 +2110,34 @@
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Vale kinnituskood</value>
   </data>
+  <data name="RequestOTP" xml:space="preserve">
+    <value>Küsi ühekordset parooli</value>
+  </data>
   <data name="SendCode" xml:space="preserve">
     <value>Saada kood</value>
   </data>
   <data name="Sending" xml:space="preserve">
     <value>Saatmine</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>Kopeeri Sendi link ja salvesta</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>Koodi saatmine</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>Tuvastamine</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>Saada kood uuesti</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>Kinnituskood on saadetud e-posti aadressile.</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>Kinnituskoodi saatmisel ilmnes tõrge. Palun proovi uuesti</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>Kinnituskood on edukalt e-posti aadressile saadetud.</value>
   </data>
 </root>

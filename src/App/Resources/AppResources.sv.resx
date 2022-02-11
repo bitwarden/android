@@ -239,7 +239,7 @@
     <value>Hjälp &amp; Feedback</value>
   </data>
   <data name="Hide" xml:space="preserve">
-    <value>Göm</value>
+    <value>Dölj</value>
     <comment>Hide a secret value that is currently shown (password).</comment>
   </data>
   <data name="InternetConnectionRequiredMessage" xml:space="preserve">
@@ -412,7 +412,7 @@
     <value>Undvik tvetydiga tecken</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>Bitwarden apptillägg</value>
+    <value>Bitwarden Apptillägg</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
     <value>Det enklaste sättet att lägga till nya inloggningar i ditt valv är genom apptillägget. Läs mer om Bitwardens apptillägg genom att navigera till fliken "Inställningar".</value>
@@ -1582,7 +1582,7 @@
     <value>Din inloggningssession har upphört.</value>
   </data>
   <data name="BiometricsDirection" xml:space="preserve">
-    <value>Använd biometri för att bekräfta.</value>
+    <value>Biometrisk verifiering</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
     <value>Biometri</value>
@@ -1920,7 +1920,7 @@
     <value>Lösenordet har tagits bort.</value>
   </data>
   <data name="NotesInfo" xml:space="preserve">
-    <value>Private notes about this Send.</value>
+    <value>Privata anteckningar om denna Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
@@ -2111,10 +2111,34 @@
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Ogiltig verifieringskod.</value>
   </data>
+  <data name="RequestOTP" xml:space="preserve">
+    <value>Request one-time password</value>
+  </data>
   <data name="SendCode" xml:space="preserve">
     <value>Skicka kod</value>
   </data>
   <data name="Sending" xml:space="preserve">
     <value>Skickar</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>Copy Send link on save</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>Skickar kod</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>Verifierar</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>Resend Code</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>En verifieringskod skickades till din e-postadress</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>An error occurred while sending a verification code to your email. Please try again</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>Ange verifieringskoden som skickades till din e-postadress</value>
   </data>
 </root>

@@ -961,7 +961,7 @@
     <value>Ambiente self-hosted</value>
   </data>
   <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
-    <value>Specifica l'URL principale della tua installazione locale di Bitwarden.</value>
+    <value>Specifica l'URL principale della tua installazione self-hosted di Bitwarden.</value>
   </data>
   <data name="ServerUrl" xml:space="preserve">
     <value>URL del server</value>
@@ -1821,7 +1821,7 @@
     <value>Se abilitato, il servizio di accessibilità di Bitwarden mostrerà una finestra a comparsa quando i campi login vengono selezionati per aiutarti con l'auto-completamento.</value>
   </data>
   <data name="DrawOverDescription3" xml:space="preserve">
-    <value>Se abilitato, l'accessibilità mostrerà una finestra a compaesa per aumentare il servizio di auto-completamento per le vecchie applicazioni che non supportano il framework di auto-completamento di Android.</value>
+    <value>Se abilitato, l'accessibilità mostrerà una finestra a comparsa per aumentare il servizio di auto-completamento per le vecchie applicazioni che non supportano il framework di auto-completamento di Android.</value>
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
     <value>A causa di una policy aziendale, non è possibile salvare elementi nella tua cassaforte personale. Cambia l'opzione proprietà in un'organizzazione e scegli tra le raccolte disponibili.</value>
@@ -2111,10 +2111,34 @@
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Codice di verifica non valido.</value>
   </data>
+  <data name="RequestOTP" xml:space="preserve">
+    <value>Richiedi OTP</value>
+  </data>
   <data name="SendCode" xml:space="preserve">
     <value>Invia codice</value>
   </data>
   <data name="Sending" xml:space="preserve">
     <value>Invio in corso</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>Copia collegamento Send al salvataggio</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>Invio codice</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>Verifica</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>Invia di nuovo il codice</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>Il codice di verifica è stato inviato al tuo indirizzo email</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>Si è verificato un errore durante l'invio del codice di verifica alla tua email. Riprova.</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>Inserisci il codice di verifica che è stato inviato alla tua email</value>
   </data>
 </root>

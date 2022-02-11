@@ -8,6 +8,7 @@ namespace Bit.Core.Abstractions
     {
         EncString PinProtectedKey { get; set; }
         bool BiometricLocked { get; set; }
+        long? DelayLockAndLogoutMs { get; set; }
 
         Task CheckVaultTimeoutAsync();
         Task ClearAsync();
