@@ -333,7 +333,7 @@
     <value>Skicka</value>
   </data>
   <data name="Sync" xml:space="preserve">
-    <value>Synka</value>
+    <value>Synkronisering</value>
     <comment>The title for the sync page.</comment>
   </data>
   <data name="ThankYou" xml:space="preserve">
