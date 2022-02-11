@@ -498,6 +498,19 @@ jobs:
             ./bitwarden-export/dSYMs/*.*
           if-no-files-found: error
 
+      - name: Install AppCenter CLI
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - run: npm install -g appcenter-cli
+
+      - name: Upload dSYMs to App Center
+        env:
+          APPCENTER_IOS_TOKEN: ${{ secrets.APPCENTER_IOS_TOKEN }}
+        run: |
+          appcenter crashes upload-missing-symbols -a kspearrin/bitwarden "./bitwarden-export/dSYMs" --token $APPCENTER_IOS_TOKEN
+        shell: bash
+
       - name: Deploy to App Store
         if: |
             (github.ref == 'refs/heads/master'
