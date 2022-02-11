@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:BaseContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Bit.App.Pages.Authenticator.AuthenticatorPage"
+    xmlns:pages="clr-namespace:Bit.App.Pages"
+    xmlns:controls="clr-namespace:Bit.App.Controls"
+    xmlns:u="clr-namespace:Bit.App.Utilities"
+    xmlns:pages1="clr-namespace:Bit.App.Pages.Authenticator"
+    x:DataType="pages:GeneratorPageViewModel"
+    Title="{Binding PageTitle}">
+    <ContentPage.BindingContext>
+        <pages1:AuthenticatorPageViewModel />
+    </ContentPage.BindingContext>
+
+    <StackLayout>
+        <RefreshView
+        IsVisible="{Binding ShowList}"
+        IsRefreshing="{Binding Refreshing}"
+        Command="{Binding RefreshCommand}">
+            <controls:ExtendedCollectionView
+                ItemsSource="{Binding GroupedItems}"
+                VerticalOptions="FillAndExpand"
+                ItemTemplate="{StaticResource listItemDataTemplateSelector}"
+                IsGrouped="True"
+                SelectionMode="Single"
+                SelectionChanged="RowSelected"
+                StyleClass="list, list-platform">
+
+            </controls:ExtendedCollectionView>
+        </RefreshView>
+
+        <StackLayout
+            IsVisible="{Binding !ShowList}">
+
+        </StackLayout>
+    </StackLayout>
+
+</pages:BaseContentPage>

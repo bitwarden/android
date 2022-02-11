@@ -120,11 +120,19 @@
       <DependentUpon>SendGroupingsPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Pages\Authenticator\GeneratorPage.xaml.cs">
+      <DependentUpon>GeneratorPage.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Pages\Authenticator\AuthenticatorPage.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Resources\" />
     <Folder Include="Behaviors\" />
+    <Folder Include="Pages\Authenticator\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -414,5 +422,6 @@
 
   <ItemGroup>
     <None Remove="Behaviors\" />
+    <None Remove="Pages\Authenticator\" />
   </ItemGroup>
 </Project>

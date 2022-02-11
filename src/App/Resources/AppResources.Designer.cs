@@ -329,6 +329,12 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string Authenticator {
+            get {
+                return ResourceManager.GetString("Authenticator", resourceCulture);
+            }
+        }
+        
         public static string Name {
             get {
                 return ResourceManager.GetString("Name", resourceCulture);
