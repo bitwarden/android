@@ -80,7 +80,7 @@ namespace Bit.App.Pages
                 }
                 else if (Collection != null)
                 {
-                    _icon = BitwardenIcons.Globe;
+                    _icon = BitwardenIcons.Collection;
                 }
                 else if (Type != null)
                 {
