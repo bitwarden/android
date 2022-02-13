@@ -217,10 +217,9 @@ namespace Bit.App
 
         private async void ResumedAsync()
         {
-            await UpdateThemeAsync();
-
             await _vaultTimeoutService.CheckVaultTimeoutAsync();
             _messagingService.Send("startEventTimer");
+            await UpdateThemeAsync();
             await ClearCacheIfNeededAsync();
             Prime();
             SyncIfNeeded();
