@@ -74,7 +74,7 @@ jobs:
           artifacts: "./com.x8bit.bitwarden.aab/com.x8bit.bitwarden.aab,
                       ./com.x8bit.bitwarden.apk/com.x8bit.bitwarden.apk,
                       ./com.x8bit.bitwarden-fdroid.apk/com.x8bit.bitwarden-fdroid.apk,
-                      ./Bitwarden.ipa/Bitwarden.ipa"
+                      ./Bitwarden\ iOS/Bitwarden\ iOS"
           commit: ${{ github.sha }}
           tag: v${{ steps.retrieve-mobile-version.outputs.mobile_version }}
           name: Version ${{ steps.retrieve-mobile-version.outputs.mobile_version }}
