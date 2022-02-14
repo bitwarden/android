@@ -53,7 +53,6 @@ jobs:
 
   android:
     name: Android
-    if: github.ref == 'refs/heads/master'
     runs-on: windows-2019
     needs: setup
     steps:
@@ -196,7 +195,6 @@ jobs:
 
   f-droid:
     name: F-Droid Build
-    if: github.ref == 'refs/heads/master'
     runs-on: windows-2019
     steps:
       - name: Set up MSBuild
@@ -511,12 +509,24 @@ jobs:
           if-no-files-found: error
 
       - name: Install AppCenter CLI
+        if: |
+            (github.ref == 'refs/heads/master'
+              && needs.setup.outputs.rc_branch_exists == 0
+              && needs.setup.outputs.hotfix_branch_exists == 0)
+            || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
+            || github.ref == 'refs/heads/hotfix'
         uses: actions/setup-node@v2
         with:
           node-version: '14'
       - run: npm install -g appcenter-cli
 
       - name: Upload dSYMs to App Center
+        if: |
+            (github.ref == 'refs/heads/master'
+              && needs.setup.outputs.rc_branch_exists == 0
+              && needs.setup.outputs.hotfix_branch_exists == 0)
+            || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
+            || github.ref == 'refs/heads/hotfix'
         env:
           APPCENTER_IOS_TOKEN: ${{ steps.retrieve-secrets.outputs.appcenter-ios-token }}
         run: |
