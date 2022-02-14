@@ -366,6 +366,18 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f  # v2.3.4
 
+      - name: Login to Azure - Prod Subscription
+        uses: Azure/login@77f1b2e3fb80c0e8645114159d17008b8a2e475a
+        with:
+          creds: ${{ secrets.AZURE_PROD_KV_CREDENTIALS }}
+
+      - name: Retrieve secrets
+        id: retrieve-secrets
+        uses: Azure/get-keyvault-secrets@80ccd3fafe5662407cc2e55f202ee34bfff8c403
+        with:
+          keyvault: "bitwarden-prod-kv"
+          secrets: "appcenter-ios-token"
+
       - name: Decrypt secrets
         env:
           DECRYPT_FILE_PASSWORD: ${{ secrets.DECRYPT_FILE_PASSWORD }}
@@ -479,12 +491,47 @@ jobs:
             -exportOptionsPlist $EXPORT_OPTIONS_PATH
         shell: bash
 
-      - name: Upload App Store .ipa artifact
+      - name: Copy all dSYMs files to upload 
+        run: |
+          ARCHIVE_DSYMS_PATH="$HOME/Library/Developer/Xcode/Archives/*/*.xcarchive/dSYMs"
+          EXPORT_PATH="./bitwarden-export"
+
+          cp -r $ARCHIVE_DSYMS_PATH $EXPORT_PATH
+        shell: bash
+
+      - name: Upload App Store .ipa & dSYMs artifacts
         uses: actions/upload-artifact@ee69f02b3dfdecd58bb31b4d133da38ba6fe3700  # v2.2.4
         with:
-          name: Bitwarden.ipa
-          path: ./bitwarden-export/Bitwarden.ipa
+          name: Bitwarden iOS
+          path: |
+            ./bitwarden-export/Bitwarden.ipa
+            ./bitwarden-export/dSYMs/*.*
           if-no-files-found: error
+
+      - name: Install AppCenter CLI
+        if: |
+            (github.ref == 'refs/heads/master'
+              && needs.setup.outputs.rc_branch_exists == 0
+              && needs.setup.outputs.hotfix_branch_exists == 0)
+            || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
+            || github.ref == 'refs/heads/hotfix'
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+      - run: npm install -g appcenter-cli
+
+      - name: Upload dSYMs to App Center
+        if: |
+            (github.ref == 'refs/heads/master'
+              && needs.setup.outputs.rc_branch_exists == 0
+              && needs.setup.outputs.hotfix_branch_exists == 0)
+            || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
+            || github.ref == 'refs/heads/hotfix'
+        env:
+          APPCENTER_IOS_TOKEN: ${{ steps.retrieve-secrets.outputs.appcenter-ios-token }}
+        run: |
+          appcenter crashes upload-symbols -a kspearrin/bitwarden -s "./bitwarden-export/dSYMs" --token $APPCENTER_IOS_TOKEN
+        shell: bash
 
       - name: Deploy to App Store
         if: |
