@@ -74,10 +74,15 @@ jobs:
       - name: Prep Bitwarden iOS release asset
         run: |
           ls -atlh 
+          echo "------"
           ls -alth Bitwarden\ iOS
 
           mv Bitwarden\ iOS Bitwarden_iOS
           zip -r Bitwarden\ iOS Bitwarden_iOS
+          zip -r Bitwarden_iOS.zip Bitwarden_iOS
+          zip -r Bitwarden\ iOS.zip Bitwarden_iOS
+
+          ls -alth 
 
       - name: Create release
         uses: ncipollo/release-action@95215a3cb6e6a1908b3c44e00b4fdb15548b1e09  # v2.8.5
@@ -85,7 +90,7 @@ jobs:
           artifacts: "./com.x8bit.bitwarden.aab/com.x8bit.bitwarden.aab,
                       ./com.x8bit.bitwarden.apk/com.x8bit.bitwarden.apk,
                       ./com.x8bit.bitwarden-fdroid.apk/com.x8bit.bitwarden-fdroid.apk,
-                      ./Bitwarden\ iOS"
+                      ./Bitwarden iOS.zip"
           commit: ${{ github.sha }}
           tag: v${{ steps.retrieve-mobile-version.outputs.mobile_version }}
           name: Version ${{ steps.retrieve-mobile-version.outputs.mobile_version }}
