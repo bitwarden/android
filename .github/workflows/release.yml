@@ -68,7 +68,7 @@ jobs:
         with:
           workflow: build.yml
           workflow_conclusion: success
-          branch: ${{ steps.branch.outputs.branch-name }}
+          branch: rc #${{ steps.branch.outputs.branch-name }}
 
       - name: Explore new build assets
         run: |
