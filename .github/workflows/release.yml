@@ -72,17 +72,7 @@ jobs:
           branch: rc #${{ steps.branch.outputs.branch-name }}
 
       - name: Prep Bitwarden iOS release asset
-        run: |
-          ls -atlh 
-          echo "------"
-          ls -alth Bitwarden\ iOS
-
-          mv Bitwarden\ iOS Bitwarden_iOS
-          zip -r Bitwarden\ iOS Bitwarden_iOS
-          zip -r Bitwarden_iOS.zip Bitwarden_iOS
-          zip -r Bitwarden\ iOS.zip Bitwarden_iOS
-
-          ls -alth 
+        run: zip -r Bitwarden\ iOS.zip Bitwarden\ iOS
 
       - name: Create release
         uses: ncipollo/release-action@95215a3cb6e6a1908b3c44e00b4fdb15548b1e09  # v2.8.5
