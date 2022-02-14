@@ -96,7 +96,7 @@ namespace Bit.App
                 {
                     if (Device.RuntimePlatform == Device.iOS)
                     {
-                        ResumedAsync();
+                        ResumedAsync().FireAndForget();
                     }
                 }
                 else if (message.Command == "slept")
@@ -216,7 +216,7 @@ namespace Bit.App
             _isResumed = true;
             if (Device.RuntimePlatform == Device.Android)
             {
-                ResumedAsync();
+                ResumedAsync().FireAndForget();
             }
         }
 
@@ -226,12 +226,11 @@ namespace Bit.App
             _messagingService.Send("stopEventTimer");
         }
 
-        private async void ResumedAsync()
+        private async Task ResumedAsync()
         {
-            await UpdateThemeAsync();
-
             await _vaultTimeoutService.CheckVaultTimeoutAsync();
             _messagingService.Send("startEventTimer");
+            await UpdateThemeAsync();
             await ClearCacheIfNeededAsync();
             Prime();
             SyncIfNeeded();

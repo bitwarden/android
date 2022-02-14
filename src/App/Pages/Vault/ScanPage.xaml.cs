@@ -11,6 +11,9 @@ namespace Bit.App.Pages
     {
         private readonly Action<string> _callback;
 
+        private CancellationTokenSource _autofocusCts;
+        private Task _continuousAutofocusTask;
+
         public ScanPage(Action<string> callback)
         {
             _callback = callback;
@@ -27,7 +30,6 @@ namespace Bit.App.Pages
                 ToolbarItems.RemoveAt(0);
             }
         }
-        private CancellationTokenSource _autofocusCts;
 
         protected override void OnAppearing()
         {
@@ -37,45 +39,42 @@ namespace Bit.App.Pages
             // Fix for Autofocus, now it's done every 2 seconds so that the user does't have to do it
             // https://github.com/Redth/ZXing.Net.Mobile/issues/414
             _autofocusCts?.Cancel();
-            _autofocusCts = new CancellationTokenSource();
+            _autofocusCts = new CancellationTokenSource(TimeSpan.FromMinutes(3));
 
             var autofocusCts = _autofocusCts;
-
-            Task.Run(async () =>
-            {
-                await Task.Delay(TimeSpan.FromMinutes(3), autofocusCts.Token);
-                autofocusCts.Cancel();
-            });
-
-            Device.StartTimer(TimeSpan.FromSeconds(2), () =>
+            _continuousAutofocusTask = Task.Run(async () =>
             {
                 try
                 {
-                    if (autofocusCts.IsCancellationRequested)
+                    while (!autofocusCts.IsCancellationRequested)
                     {
-                        return false;
+                        await Task.Delay(TimeSpan.FromSeconds(2), autofocusCts.Token);
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            if (!autofocusCts.IsCancellationRequested)
+                            {
+                                _zxing.AutoFocus();
+                            }
+                        });
                     }
-
-                    _zxing.AutoFocus();
-                    return true;
                 }
+                catch (TaskCanceledException) { }
                 catch (Exception ex)
                 {
-                    // we don't need to display anything to the user because at the most they just lose autofocus
 #if !FDROID
                     Crashes.TrackError(ex);
 #endif
-                    autofocusCts?.Cancel(); // we also cancel here to cancel the Task.Delay as well.
-                    return false;
                 }
-            });
+            }, autofocusCts.Token);
         }
 
-        protected override void OnDisappearing()
+        protected override async void OnDisappearing()
         {
             _autofocusCts?.Cancel();
 
+            await _continuousAutofocusTask;
             _zxing.IsScanning = false;
+
             base.OnDisappearing();
         }
 
