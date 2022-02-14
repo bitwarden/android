@@ -42,7 +42,8 @@ jobs:
         shell: bash
 
       - name: Check to make sure Mobile release version has been bumped
-        if: ${{ github.event.inputs.release_type == 'Initial Release' }} && false
+        if: false
+        #if: ${{ github.event.inputs.release_type == 'Initial Release' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -70,10 +71,13 @@ jobs:
           workflow_conclusion: success
           branch: rc #${{ steps.branch.outputs.branch-name }}
 
-      - name: Explore new build assets
+      - name: Prep Bitwarden iOS release asset
         run: |
           ls -atlh 
           ls -alth Bitwarden\ iOS
+
+          mv Bitwarden\ iOS Bitwarden_iOS
+          zip -r Bitwarden\ iOS Bitwarden_iOS
 
       - name: Create release
         uses: ncipollo/release-action@95215a3cb6e6a1908b3c44e00b4fdb15548b1e09  # v2.8.5
