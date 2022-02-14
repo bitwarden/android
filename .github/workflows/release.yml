@@ -21,7 +21,6 @@ jobs:
       branch-name: ${{ steps.branch.outputs.branch-name }}
     steps:
       - name: Branch check
-        if: false
         run: |
           if [[ "$GITHUB_REF" != "refs/heads/rc" ]] && [[ "$GITHUB_REF" != "refs/heads/hotfix" ]]; then
             echo "==================================="
@@ -34,7 +33,6 @@ jobs:
         uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f  # v2.3.4
 
       - name: Retrieve Mobile release version
-        if: false
         id: retrieve-mobile-version
         run: |
           ver=$(sed -E -n '/^<manifest/s/^.*[ ]android:versionName="([^"]+)".*$/\1/p' ./src/Android/Properties/AndroidManifest.xml | tr -d '"')
@@ -42,8 +40,7 @@ jobs:
         shell: bash
 
       - name: Check to make sure Mobile release version has been bumped
-        if: false
-        #if: ${{ github.event.inputs.release_type == 'Initial Release' }}
+        if: ${{ github.event.inputs.release_type == 'Initial Release' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -69,7 +66,7 @@ jobs:
         with:
           workflow: build.yml
           workflow_conclusion: success
-          branch: rc #${{ steps.branch.outputs.branch-name }}
+          branch: ${{ steps.branch.outputs.branch-name }}
 
       - name: Prep Bitwarden iOS release asset
         run: zip -r Bitwarden\ iOS.zip Bitwarden\ iOS
@@ -91,7 +88,6 @@ jobs:
 
   f-droid:
     name: F-Droid Release
-    if: false
     runs-on: ubuntu-20.04
     needs: release
     steps:
