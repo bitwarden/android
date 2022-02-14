@@ -2112,7 +2112,7 @@
     <value>کد تایید نامعتبر است.</value>
   </data>
   <data name="RequestOTP" xml:space="preserve">
-    <value>Request one-time password</value>
+    <value>درخواست رمز یکبار مصرف</value>
   </data>
   <data name="SendCode" xml:space="preserve">
     <value>ارسال کد</value>
@@ -2121,7 +2121,7 @@
     <value>درحال ارسال</value>
   </data>
   <data name="CopySendLinkOnSave" xml:space="preserve">
-    <value>Copy Send link on save</value>
+    <value>لینک ارسال را در ذخیره کپی کن</value>
   </data>
   <data name="SendingCode" xml:space="preserve">
     <value>درحال ارسال کد</value>

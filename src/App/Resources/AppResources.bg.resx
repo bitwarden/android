@@ -140,7 +140,7 @@
     <comment>Navigate back to the previous screen.</comment>
   </data>
   <data name="Bitwarden" xml:space="preserve">
-    <value>Битуорден</value>
+    <value>Bitwarden</value>
     <comment>App name. Shouldn't ever change.</comment>
   </data>
   <data name="Cancel" xml:space="preserve">
@@ -182,11 +182,11 @@
     <value>Редактиране на папка</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>Е-поща</value>
+    <value>Имейл</value>
     <comment>Short label for an email address.</comment>
   </data>
   <data name="EmailAddress" xml:space="preserve">
-    <value>Е-поща</value>
+    <value>Имейл адрес</value>
     <comment>Full label for a email address.</comment>
   </data>
   <data name="EmailUs" xml:space="preserve">
@@ -288,7 +288,7 @@
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Наименование</value>
+    <value>Име</value>
     <comment>Label for an entity name.</comment>
   </data>
   <data name="No" xml:space="preserve">
