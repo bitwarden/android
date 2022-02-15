@@ -363,7 +363,7 @@
         <Setter Property="Orientation"
                 Value="Horizontal" />
         <Setter Property="Spacing"
-                Value="10" />
+                Value="5" />
     </Style>
     <Style TargetType="Button"
            ApplyToDerivedTypes="True"
