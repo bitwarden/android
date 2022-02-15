@@ -30,6 +30,7 @@ namespace Bit.Core.Models.Domain
         public string Code { get; set; }
         public string CodeVerifier { get; set; }
         public string RedirectUri { get; set; }
+        public string OrgId { get; set; }
         public TokenRequestTwoFactor TwoFactor { get; set; }
 
         public SsoLogInCredentials(string code, string codeVerifier, string redirectUri, TokenRequestTwoFactor twoFactor) {

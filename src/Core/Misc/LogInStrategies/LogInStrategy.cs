@@ -17,9 +17,8 @@ namespace Bit.Core.Misc.LogInStrategies {
         private readonly IAppIdService _appIdService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IMessagingService _messagingService;
-        private readonly IKeyConnectorService _keyConnectorService;
         // TODO: LogService?
-        // TODO: StateService
+        private readonly IStateService _stateService;
         private readonly ITwoFactorService _twoFactorService;
 
         protected abstract TokenRequest TokenRequest { get; set; }
@@ -31,6 +30,7 @@ namespace Bit.Core.Misc.LogInStrategies {
             IAppIdService appIdService,
             IPlatformUtilsService platformUtilsService,
             IMessagingService messagingService,
+            IStateService stateService,
             ITwoFactorService twoFactorService)
         {
             _cryptoService = cryptoService;
@@ -39,6 +39,7 @@ namespace Bit.Core.Misc.LogInStrategies {
             _appIdService = appIdService;
             _platformUtilsService = platformUtilsService;
             _messagingService = messagingService;
+            _stateService = stateService;
             _twoFactorService = twoFactorService;
         }
 
@@ -56,7 +57,20 @@ namespace Bit.Core.Misc.LogInStrategies {
 
             var response = await _apiService.PostIdentityTokenAsync(TokenRequest);
 
-            // TODO
+            if (response is IdentityTwoFactorResponse)
+            {
+                return ProcessTwoFactorResponseAsync(response);
+            }
+            else if (response is IdentityCaptchaResponse)
+            {
+                return ProcessCaptchaResponseAsync(response);
+            }
+            else if (response is IdentityTokenResponse)
+            {
+                return ProcessTokenResponseAsync(response);
+            }
+
+            throw new Exception("Invalid response object.");
         }
 
         protected virtual Task OnSuccessfulLoginAsync(IdentityTokenResponse response)
@@ -99,11 +113,31 @@ namespace Bit.Core.Misc.LogInStrategies {
 
         protected virtual async Task SaveAccountInformationAsync(IdentityTokenResponse tokenResponse)
         {
-            var accountInformation = await _tokenService.DecodeToken(tokenResponse.AccessToken);
-            // TODO: StateService.AddAccount
+            // TODO: this is a bit different from jslib, do we need to setAccessToken there too?
+            // also, this may require updating after account switching finalised
+            await _tokenService.SetAccessTokenAsync(tokenResponse.AccessToken, true);
+            await _stateService.AddAccountAsync(
+                new Account(
+                    new Account.AccountProfile()
+                    {
+                        UserId = _tokenService.GetUserId(),
+                        Email = _tokenService.GetEmail(),
+                        Name = _tokenService.GetName(),
+                        KdfType = tokenResponse.Kdf,
+                        KdfIterations = tokenResponse.KdfIterations,
+                        HasPremiumPersonally = _tokenService.GetPremium(),
+                    },
+                    new Account.AccountTokens()
+                    {
+                        AccessToken = tokenResponse.AccessToken,
+                        RefreshToken = tokenResponse.RefreshToken,
+                    }
+                )
+            );
+            _messagingService.Send("accountAdded");
         }
 
-        protected async Task<AuthResult> ProcessTokenResponse(IdentityTokenResponse response)
+        protected async Task<AuthResult> ProcessTokenResponseAsync(IdentityTokenResponse response)
         {
             var result = new AuthResult();
             result.ResetMasterPassword = response.ResetMasterPassword;
@@ -125,7 +159,7 @@ namespace Bit.Core.Misc.LogInStrategies {
 
             await OnSuccessfulLoginAsync(response);
 
-            // TODO: StateService.SetBiometricLocked
+            _stateService.BiometricLocked = false;
             _messagingService.Send("loggedIn");
 
             return result;

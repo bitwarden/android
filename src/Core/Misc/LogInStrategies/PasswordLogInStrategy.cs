@@ -27,7 +27,7 @@ namespace Bit.Core.Misc.LogInStrategies
             }
         }
 
-        public new PasswordTokenRequest TokenRequest;
+        public new PasswordTokenRequest TokenRequest { get; set; }
 
         private string _localHashedPassword;
         private SymmetricCryptoKey _key;
@@ -41,8 +41,9 @@ namespace Bit.Core.Misc.LogInStrategies
             IAppIdService appIdService,
             IPlatformUtilsService platformUtilsService,
             IMessagingService messagingService,
+            IStateService stateService,
             ITwoFactorService twoFactorService,
-            IAuthService authService) : base(cryptoService, apiService, tokenService, appIdService, platformUtilsService, messagingService, twoFactorService)
+            IAuthService authService) : base(cryptoService, apiService, tokenService, appIdService, platformUtilsService, messagingService, stateService, twoFactorService)
         {
             _authService = authService;
         }

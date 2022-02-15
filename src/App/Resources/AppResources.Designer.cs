@@ -3809,6 +3809,12 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string RequestOTP {
+            get {
+                return ResourceManager.GetString("RequestOTP", resourceCulture);
+            }
+        }
+        
         public static string SendCode {
             get {
                 return ResourceManager.GetString("SendCode", resourceCulture);
