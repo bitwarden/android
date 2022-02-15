@@ -29,12 +29,8 @@ namespace Bit.App.Services
             Constants.iOSAutoFillBiometricIntegrityKey,
             Constants.iOSExtensionClearCiphersCacheKey,
             Constants.iOSExtensionBiometricIntegrityKey,
-            Constants.RememberEmailKey,
             Constants.RememberedEmailKey,
-            Constants.RememberOrgIdentifierKey,
             Constants.RememberedOrgIdentifierKey,
-            Constants.AppExtensionStartedKey,
-            Constants.AppExtensionActivatedKey,
         };
 
         public MobileStorageService(

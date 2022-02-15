@@ -75,7 +75,6 @@ namespace Bit.App.Pages
         public Command LogInCommand { get; }
         public Command TogglePasswordCommand { get; }
         public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
-        public bool RememberEmail { get; set; }
         public Action StartTwoFactorAction { get; set; }
         public Action LogInSuccessAction { get; set; }
         public Action UpdateTempPasswordAction { get; set; }
@@ -92,8 +91,6 @@ namespace Bit.App.Pages
             {
                 Email = await _stateService.GetRememberedEmailAsync();
             }
-            var rememberEmail = await _stateService.GetRememberEmailAsync();
-            RememberEmail = rememberEmail.GetValueOrDefault(true);
         }
 
         public async Task LogInAsync(bool showLoading = true)
@@ -134,14 +131,7 @@ namespace Bit.App.Pages
                 }
 
                 var response = await _authService.LogInAsync(Email, MasterPassword, _captchaToken);
-                if (RememberEmail)
-                {
-                    await _stateService.SetRememberedEmailAsync(Email);
-                }
-                else
-                {
-                    await _stateService.SetRememberedEmailAsync(null);
-                }
+                await _stateService.SetRememberedEmailAsync(Email);
                 await AppHelpers.ResetInvalidUnlockAttemptsAsync();
 
                 if (response.CaptchaNeeded)

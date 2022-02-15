@@ -24,12 +24,8 @@
         public static string iOSExtensionClearCiphersCacheKey = "iOSExtensionClearCiphersCache";
         public static string iOSExtensionBiometricIntegrityKey = "iOSExtensionBiometricIntegrityState";
         public static string EventCollectionKey = "eventCollection";
-        public static string RememberEmailKey = "rememberEmail";
         public static string RememberedEmailKey = "rememberedEmail";
-        public static string RememberOrgIdentifierKey = "rememberOrgIdentifier";
         public static string RememberedOrgIdentifierKey = "rememberedOrgIdentifier";
-        public static string AppExtensionStartedKey = "appExtensionStarted";
-        public static string AppExtensionActivatedKey = "appExtensionActivated";
         public const int SelectFileRequestCode = 42;
         public const int SelectFilePermissionRequestCode = 43;
         public const int SaveFileRequestCode = 44;
@@ -80,7 +76,6 @@
         public static string SettingsKey(string userId) => $"settings_{userId}";
         public static string UsesKeyConnectorKey(string userId) => $"usesKeyConnector_{userId}";
         public static string ProtectedPinKey(string userId) => $"protectedPin_{userId}";
-        public static string ForcePasswordResetKey(string userId) => $"forcePasswordReset_{userId}";
         public static string LastSyncKey(string userId) => $"lastSync_{userId}";
         public static string BiometricUnlockKey(string userId) => $"biometricUnlock_{userId}";
     }

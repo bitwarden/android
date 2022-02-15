@@ -12,13 +12,12 @@ namespace Bit.Core.Abstractions
     {
         bool BiometricLocked { get; set; }
         List<AccountView> AccountViews { get; }
-        Task<List<string>> GetUserIdsAsync();
         Task<string> GetActiveUserIdAsync();
         Task SetActiveUserAsync(string userId);
         Task<bool> IsAuthenticatedAsync(string userId = null);
         Task RefreshAccountViewsAsync(bool allowAddAccountRow);
         Task AddAccountAsync(Account account);
-        Task ClearAsync(string userId);
+        Task LogoutAccountAsync(string userId, bool userInitiated);
         Task<EnvironmentUrlData> GetPreAuthEnvironmentUrlsAsync();
         Task SetPreAuthEnvironmentUrlsAsync(EnvironmentUrlData value);
         Task<EnvironmentUrlData> GetEnvironmentUrlsAsync(string userId = null);
@@ -49,8 +48,8 @@ namespace Bit.Core.Abstractions
         Task SetPrivateKeyEncryptedAsync(string value, string userId = null);
         Task<List<string>> GetAutofillBlacklistedUrisAsync(string userId = null);
         Task SetAutofillBlacklistedUrisAsync(List<string> value, string userId = null);
-        Task<bool?> GetAutofillTileAddedAsync(string userId = null);
-        Task SetAutofillTileAddedAsync(bool? value, string userId = null);
+        Task<bool?> GetAutofillTileAddedAsync();
+        Task SetAutofillTileAddedAsync(bool? value);
         Task<string> GetEmailAsync(string userId = null);
         Task<string> GetNameAsync(string userId = null);
         Task<long?> GetLastActiveTimeAsync(string userId = null);
@@ -65,8 +64,8 @@ namespace Bit.Core.Abstractions
         Task SetPreviousPageInfoAsync(PreviousPageInfo value, string userId = null);
         Task<int> GetInvalidUnlockAttemptsAsync(string userId = null);
         Task SetInvalidUnlockAttemptsAsync(int? value, string userId = null);
-        Task<string> GetLastBuildAsync(string userId = null);
-        Task SetLastBuildAsync(string value, string userId = null);
+        Task<string> GetLastBuildAsync();
+        Task SetLastBuildAsync(string value);
         Task<bool?> GetDisableFaviconAsync(string userId = null);
         Task SetDisableFaviconAsync(bool? value, string userId = null);
         Task<bool?> GetDisableAutoTotpCopyAsync(string userId = null);
@@ -97,18 +96,12 @@ namespace Bit.Core.Abstractions
         Task SetSecurityStampAsync(string value, string userId = null);
         Task<bool> GetEmailVerifiedAsync(string userId = null);
         Task SetEmailVerifiedAsync(bool? value, string userId = null);
-        Task<bool> GetForcePasswordReset(string userId = null);
-        Task SetForcePasswordResetAsync(bool? value, string userId = null);
         Task<bool> GetSyncOnRefreshAsync(string userId = null);
         Task SetSyncOnRefreshAsync(bool? value, string userId = null);
-        Task<string> GetRememberedEmailAsync(string userId = null);
-        Task SetRememberedEmailAsync(string value, string userId = null);
-        Task<bool?> GetRememberEmailAsync(string userId = null);
-        Task SetRememberEmailAsync(bool? value, string userId = null);
-        Task<string> GetRememberedOrgIdentifierAsync(string userId = null);
-        Task SetRememberedOrgIdentifierAsync(string value, string userId = null);
-        Task<bool?> GetRememberOrgIdentifierAsync(string userId = null);
-        Task SetRememberOrgIdentifierAsync(bool? value, string userId = null);
+        Task<string> GetRememberedEmailAsync();
+        Task SetRememberedEmailAsync(string value);
+        Task<string> GetRememberedOrgIdentifierAsync();
+        Task SetRememberedOrgIdentifierAsync(string value);
         Task<string> GetThemeAsync(string userId = null);
         Task SetThemeAsync(string value, string userId = null);
         Task<bool?> GetAddSitePromptShownAsync(string userId = null);
@@ -119,20 +112,16 @@ namespace Bit.Core.Abstractions
         Task SetPushLastRegistrationDateAsync(DateTime? value);
         Task<string> GetPushInstallationRegistrationErrorAsync();
         Task SetPushInstallationRegistrationErrorAsync(string value);
-        Task<string> GetPushCurrentTokenAsync(string userId = null);
-        Task SetPushCurrentTokenAsync(string value, string userId = null);
-        Task<List<EventData>> GetEventCollectionAsync(string userId = null);
-        Task SetEventCollectionAsync(List<EventData> value, string userId = null);
+        Task<string> GetPushCurrentTokenAsync();
+        Task SetPushCurrentTokenAsync(string value);
+        Task<List<EventData>> GetEventCollectionAsync();
+        Task SetEventCollectionAsync(List<EventData> value);
         Task<Dictionary<string, FolderData>> GetEncryptedFoldersAsync(string userId = null);
         Task SetEncryptedFoldersAsync(Dictionary<string, FolderData> value, string userId = null);
         Task<Dictionary<string, PolicyData>> GetEncryptedPoliciesAsync(string userId = null);
         Task SetEncryptedPoliciesAsync(Dictionary<string, PolicyData> value, string userId = null);
         Task<string> GetPushRegisteredTokenAsync();
         Task SetPushRegisteredTokenAsync(string value);
-        Task<bool?> GetAppExtensionStartedAsync(string userId = null);
-        Task SetAppExtensionStartedAsync(bool? value, string userId = null);
-        Task<bool?> GetAppExtensionActivatedAsync(string userId = null);
-        Task SetAppExtensionActivatedAsync(bool? value, string userId = null);
         Task<bool> GetUsesKeyConnectorAsync(string userId = null);
         Task SetUsesKeyConnectorAsync(bool? value, string userId = null);
         Task<Dictionary<string, OrganizationData>> GetOrganizationsAsync(string userId = null);

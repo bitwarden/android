@@ -88,7 +88,8 @@ namespace Bit.Core.Services
             {
                 return false;
             }
-            if (await IsLockedAsync(userId))
+            var vaultTimeoutAction = await _stateService.GetVaultTimeoutActionAsync(userId);
+            if (vaultTimeoutAction == "lock" && await IsLockedAsync(userId))
             {
                 return false;
             }

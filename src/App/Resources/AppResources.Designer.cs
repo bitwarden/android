@@ -3743,6 +3743,12 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string AccountSwitchedAutomatically {
+            get {
+                return ResourceManager.GetString("AccountSwitchedAutomatically", resourceCulture);
+            }
+        }
+        
         public static string DeleteAccount {
             get {
                 return ResourceManager.GetString("DeleteAccount", resourceCulture);

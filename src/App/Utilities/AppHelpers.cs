@@ -449,7 +449,6 @@ namespace Bit.App.Utilities
 
         public static async Task LogOutAsync(string userId, bool userInitiated = false)
         {
-            var syncService = ServiceContainer.Resolve<ISyncService>("syncService");
             var tokenService = ServiceContainer.Resolve<ITokenService>("tokenService");
             var cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
             var settingsService = ServiceContainer.Resolve<ISettingsService>("settingsService");
@@ -473,21 +472,21 @@ namespace Bit.App.Utilities
                 folderService.ClearAsync(userId),
                 collectionService.ClearAsync(userId),
                 passwordGenerationService.ClearAsync(userId),
-                deviceActionService.ClearCacheAsync());
-            if (userInitiated)
+                deviceActionService.ClearCacheAsync(),
+                tokenService.ClearTokenAsync(userId),
+                cryptoService.ClearKeysAsync(userId),
+                settingsService.ClearAsync(userId),
+                vaultTimeoutService.ClearAsync(userId),
+                stateService.LogoutAccountAsync(userId, userInitiated));
+
+            // check if we switched accounts automatically
+            if (userInitiated && await stateService.GetActiveUserIdAsync() != null)
             {
-                await Task.WhenAll(
-                    syncService.SetLastSyncAsync(DateTime.MinValue),
-                    tokenService.ClearTokenAsync(userId),
-                    cryptoService.ClearKeysAsync(userId),
-                    settingsService.ClearAsync(userId),
-                    vaultTimeoutService.ClearAsync(userId),
-                    stateService.ClearAsync(userId));
-                if (await stateService.GetActiveUserIdAsync() != null)
-                {
-                    var messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
-                    messagingService.Send("switchedAccount");
-                }
+                var messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
+                messagingService.Send("switchedAccount");
+                
+                var platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
+                platformUtilsService.ShowToast("info", null, AppResources.AccountSwitchedAutomatically);
             }
             stateService.BiometricLocked = true;
             searchService.ClearIndex();

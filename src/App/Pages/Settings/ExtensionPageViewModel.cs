@@ -8,7 +8,6 @@ namespace Bit.App.Pages
     public class ExtensionPageViewModel : BaseViewModel
     {
         private readonly IMessagingService _messagingService;
-        private readonly IStateService _stateService;
 
         private bool _started;
         private bool _activated;
@@ -16,7 +15,6 @@ namespace Bit.App.Pages
         public ExtensionPageViewModel()
         {
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
-            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             PageTitle = AppResources.AppExtension;
         }
 
@@ -47,10 +45,8 @@ namespace Bit.App.Pages
 
         public async Task InitAsync()
         {
-            var started = await _stateService.GetAppExtensionStartedAsync();
-            var activated = await _stateService.GetAppExtensionActivatedAsync();
-            Started = started.GetValueOrDefault();
-            Activated = activated.GetValueOrDefault();
+            Started = false;
+            Activated = false;
         }
 
         public void ShowExtension()
