@@ -36,251 +36,255 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <ScrollView Padding="0, 0, 0, 20">
-        <StackLayout Spacing="0" Padding="0">
-            <StackLayout StyleClass="box">
-                <Grid IsVisible="{Binding IsPolicyInEffect}"
-                      Margin="0, 12, 0, 0"
-                      RowSpacing="0"
-                      ColumnSpacing="0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <Frame Padding="10"
-                           Margin="0"
-                           HasShadow="False"
-                           BackgroundColor="Transparent"
-                           BorderColor="Accent">
-                        <Label
-                            Text="{u:I18n PasswordGeneratorPolicyInEffect}"
-                            StyleClass="text-muted, text-sm, text-bold"
-                            HorizontalTextAlignment="Center" />
-                    </Frame>
-                </Grid>
-                <controls:MonoLabel
-                    x:Name="lblPassword"
-                    StyleClass="text-lg, text-html"
-                    Text="{Binding ColoredPassword, Mode=OneWay}"
-                    Margin="0, 20"
-                    HorizontalTextAlignment="Center"
-                    HorizontalOptions="CenterAndExpand"
-                    LineBreakMode="CharacterWrap" />
-                <Button Text="{u:I18n RegeneratePassword}"
-                        StyleClass="btn-primary"
-                        HorizontalOptions="FillAndExpand"
-                        Clicked="Regenerate_Clicked"></Button>
-                <Button Text="{u:I18n CopyPassword}"
-                        HorizontalOptions="FillAndExpand"
-                        Clicked="Copy_Clicked"></Button>
-            </StackLayout>
-            <StackLayout StyleClass="box">
-                <StackLayout StyleClass="box-row-header">
-                    <Label Text="{u:I18n Options, Header=True}"
-                           StyleClass="box-header, box-header-platform" />
-                </StackLayout>
-                <StackLayout StyleClass="box-row, box-row-input">
-                    <Label
-                        Text="{u:I18n Type}"
-                        StyleClass="box-label" />
-                    <Picker
-                        x:Name="_typePicker"
-                        ItemsSource="{Binding TypeOptions, Mode=OneTime}"
-                        SelectedIndex="{Binding TypeSelectedIndex}"
-                        StyleClass="box-value" />
-                </StackLayout>
-                <StackLayout Spacing="0"
-                             Padding="0"
-                             IsVisible="{Binding IsPassword, Converter={StaticResource inverseBool}}">
-                    <StackLayout StyleClass="box-row, box-row-stepper">
-                        <Label
-                            Text="{u:I18n NumberOfWords}"
-                            StyleClass="box-label-regular"
-                            VerticalOptions="FillAndExpand"
-                            VerticalTextAlignment="Center" />
-                        <Label
-                            Text="{Binding NumWords}"
-                            StyleClass="box-sub-label"
+    <!--WORKAROUND: Wrapped in a ContentView to fix bottom screen but when using large font size on Android.
+        Check when https://github.com/xamarin/Xamarin.Forms/pull/15076 is released that may fix this without wrapping
+        in ContentView.-->
+    <ContentView>
+        <ScrollView Padding="0, 0, 0, 20">
+            <StackLayout Spacing="0" Padding="0">
+                <StackLayout StyleClass="box">
+                    <Grid IsVisible="{Binding IsPolicyInEffect}"
+                          Margin="0, 12, 0, 0"
+                          RowSpacing="0"
+                          ColumnSpacing="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Frame Padding="10"
+                               Margin="0"
+                               HasShadow="False"
+                               BackgroundColor="Transparent"
+                               BorderColor="Accent">
+                            <Label
+                                Text="{u:I18n PasswordGeneratorPolicyInEffect}"
+                                StyleClass="text-muted, text-sm, text-bold"
+                                HorizontalTextAlignment="Center" />
+                        </Frame>
+                    </Grid>
+                    <controls:MonoLabel
+                        x:Name="lblPassword"
+                        StyleClass="text-lg, text-html"
+                        Text="{Binding ColoredPassword, Mode=OneWay}"
+                        Margin="0, 20"
+                        HorizontalTextAlignment="Center"
+                        HorizontalOptions="CenterAndExpand"
+                        LineBreakMode="CharacterWrap" />
+                    <Button Text="{u:I18n RegeneratePassword}"
+                            StyleClass="btn-primary"
                             HorizontalOptions="FillAndExpand"
-                            HorizontalTextAlignment="End"
-                            VerticalOptions="FillAndExpand"
-                            VerticalTextAlignment="Center" />
-                        <controls:ExtendedStepper
-                            Value="{Binding NumWords}"
-                            Maximum="20"
-                            Minimum="3"
-                            Increment="1" />
+                            Clicked="Regenerate_Clicked"></Button>
+                    <Button Text="{u:I18n CopyPassword}"
+                            HorizontalOptions="FillAndExpand"
+                            Clicked="Copy_Clicked"></Button>
+                </StackLayout>
+                <StackLayout StyleClass="box">
+                    <StackLayout StyleClass="box-row-header">
+                        <Label Text="{u:I18n Options, Header=True}"
+                               StyleClass="box-header, box-header-platform" />
                     </StackLayout>
-                    <BoxView StyleClass="box-row-separator" />
                     <StackLayout StyleClass="box-row, box-row-input">
                         <Label
-                            Text="{u:I18n WordSeparator}"
+                            Text="{u:I18n Type}"
                             StyleClass="box-label" />
-                        <Entry
-                            Text="{Binding WordSeparator}"
-                            IsSpellCheckEnabled="False"
-                            IsTextPredictionEnabled="False"
+                        <Picker
+                            x:Name="_typePicker"
+                            ItemsSource="{Binding TypeOptions, Mode=OneTime}"
+                            SelectedIndex="{Binding TypeSelectedIndex}"
                             StyleClass="box-value" />
                     </StackLayout>
-                    <StackLayout StyleClass="box-row, box-row-switch">
-                        <Label
-                            Text="{u:I18n Capitalize}"
-                            StyleClass="box-label-regular"
-                            HorizontalOptions="StartAndExpand" />
-                        <Switch
-                            IsToggled="{Binding Capitalize}"
-                            IsEnabled="{Binding EnforcedPolicyOptions.Capitalize,
-                                Converter={StaticResource inverseBool}}"
-                            StyleClass="box-value"
-                            HorizontalOptions="End" />
+                    <StackLayout Spacing="0"
+                                 Padding="0"
+                                 IsVisible="{Binding IsPassword, Converter={StaticResource inverseBool}}">
+                        <StackLayout StyleClass="box-row, box-row-stepper">
+                            <Label
+                                Text="{u:I18n NumberOfWords}"
+                                StyleClass="box-label-regular"
+                                VerticalOptions="FillAndExpand"
+                                VerticalTextAlignment="Center" />
+                            <Label
+                                Text="{Binding NumWords}"
+                                StyleClass="box-sub-label"
+                                HorizontalOptions="FillAndExpand"
+                                HorizontalTextAlignment="End"
+                                VerticalOptions="FillAndExpand"
+                                VerticalTextAlignment="Center" />
+                            <controls:ExtendedStepper
+                                Value="{Binding NumWords}"
+                                Maximum="20"
+                                Minimum="3"
+                                Increment="1" />
+                        </StackLayout>
+                        <BoxView StyleClass="box-row-separator" />
+                        <StackLayout StyleClass="box-row, box-row-input">
+                            <Label
+                                Text="{u:I18n WordSeparator}"
+                                StyleClass="box-label" />
+                            <Entry
+                                Text="{Binding WordSeparator}"
+                                IsSpellCheckEnabled="False"
+                                IsTextPredictionEnabled="False"
+                                StyleClass="box-value" />
+                        </StackLayout>
+                        <StackLayout StyleClass="box-row, box-row-switch">
+                            <Label
+                                Text="{u:I18n Capitalize}"
+                                StyleClass="box-label-regular"
+                                HorizontalOptions="StartAndExpand" />
+                            <Switch
+                                IsToggled="{Binding Capitalize}"
+                                IsEnabled="{Binding EnforcedPolicyOptions.Capitalize,
+                                    Converter={StaticResource inverseBool}}"
+                                StyleClass="box-value"
+                                HorizontalOptions="End" />
+                        </StackLayout>
+                        <BoxView StyleClass="box-row-separator" />
+                        <StackLayout StyleClass="box-row, box-row-switch">
+                            <Label
+                                Text="{u:I18n IncludeNumber}"
+                                StyleClass="box-label-regular"
+                                HorizontalOptions="StartAndExpand" />
+                            <Switch
+                                IsToggled="{Binding IncludeNumber}"
+                                IsEnabled="{Binding EnforcedPolicyOptions.IncludeNumber,
+                                    Converter={StaticResource inverseBool}}"
+                                StyleClass="box-value"
+                                HorizontalOptions="End" />
+                        </StackLayout>
                     </StackLayout>
-                    <BoxView StyleClass="box-row-separator" />
-                    <StackLayout StyleClass="box-row, box-row-switch">
-                        <Label
-                            Text="{u:I18n IncludeNumber}"
-                            StyleClass="box-label-regular"
-                            HorizontalOptions="StartAndExpand" />
-                        <Switch
-                            IsToggled="{Binding IncludeNumber}"
-                            IsEnabled="{Binding EnforcedPolicyOptions.IncludeNumber,
-                                Converter={StaticResource inverseBool}}"
-                            StyleClass="box-value"
-                            HorizontalOptions="End" />
+                    <StackLayout Spacing="0" Padding="0" IsVisible="{Binding IsPassword}">
+                        <StackLayout StyleClass="box-row, box-row-slider">
+                            <Label
+                                Text="{u:I18n Length}"
+                                StyleClass="box-label-regular"
+                                VerticalOptions="CenterAndExpand" />
+                            <Label
+                                Text="{Binding Length}"
+                                StyleClass="box-sub-label"
+                                VerticalOptions="CenterAndExpand"
+                                HorizontalTextAlignment="End"
+                                WidthRequest="50" />
+                            <controls:ExtendedSlider
+                                DragCompleted="LengthSlider_DragCompleted"
+                                Value="{Binding Length}"
+                                AutomationProperties.HelpText="{Binding Length}"
+                                StyleClass="box-value"
+                                VerticalOptions="CenterAndExpand"
+                                HorizontalOptions="FillAndExpand"
+                                Maximum="128"
+                                Minimum="5" />
+                        </StackLayout>
+                        <BoxView StyleClass="box-row-separator" />
+                        <StackLayout StyleClass="box-row, box-row-switch">
+                            <Label
+                                Text="A-Z"
+                                StyleClass="box-label-regular"
+                                HorizontalOptions="StartAndExpand" />
+                            <Switch
+                                IsToggled="{Binding Uppercase}"
+                                IsEnabled="{Binding EnforcedPolicyOptions.UseUppercase,
+                                    Converter={StaticResource inverseBool}}"
+                                StyleClass="box-value"
+                                HorizontalOptions="End" />
+                        </StackLayout>
+                        <BoxView StyleClass="box-row-separator" />
+                        <StackLayout StyleClass="box-row, box-row-switch">
+                            <Label
+                                Text="a-z"
+                                StyleClass="box-label-regular"
+                                HorizontalOptions="StartAndExpand" />
+                            <Switch
+                                IsToggled="{Binding Lowercase}"
+                                IsEnabled="{Binding EnforcedPolicyOptions.UseLowercase,
+                                    Converter={StaticResource inverseBool}}"
+                                StyleClass="box-value"
+                                HorizontalOptions="End" />
+                        </StackLayout>
+                        <BoxView StyleClass="box-row-separator" />
+                        <StackLayout StyleClass="box-row, box-row-switch">
+                            <Label
+                                Text="0-9"
+                                StyleClass="box-label-regular"
+                                HorizontalOptions="StartAndExpand" />
+                            <Switch
+                                IsToggled="{Binding Number}"
+                                IsEnabled="{Binding EnforcedPolicyOptions.UseNumbers,
+                                    Converter={StaticResource inverseBool}}"
+                                StyleClass="box-value"
+                                HorizontalOptions="End" />
+                        </StackLayout>
+                        <BoxView StyleClass="box-row-separator" />
+                        <StackLayout StyleClass="box-row, box-row-switch">
+                            <Label
+                                Text="!@#$%^&amp;*"
+                                StyleClass="box-label-regular"
+                                HorizontalOptions="StartAndExpand" />
+                            <Switch
+                                IsToggled="{Binding Special}"
+                                IsEnabled="{Binding EnforcedPolicyOptions.UseSpecial,
+                                    Converter={StaticResource inverseBool}}"
+                                StyleClass="box-value"
+                                HorizontalOptions="End" />
+                        </StackLayout>
+                        <BoxView StyleClass="box-row-separator" />
+                        <StackLayout StyleClass="box-row, box-row-stepper">
+                            <Label
+                                Text="{u:I18n MinNumbers}"
+                                StyleClass="box-label-regular"
+                                VerticalOptions="FillAndExpand"
+                                VerticalTextAlignment="Center" />
+                            <Label
+                                Text="{Binding MinNumber}"
+                                StyleClass="box-sub-label"
+                                HorizontalOptions="FillAndExpand"
+                                HorizontalTextAlignment="End"
+                                VerticalOptions="FillAndExpand"
+                                VerticalTextAlignment="Center" />
+                            <controls:ExtendedStepper
+                                Value="{Binding MinNumber}"
+                                Maximum="5"
+                                Minimum="0"
+                                Increment="1" />
+                        </StackLayout>
+                        <BoxView StyleClass="box-row-separator" />
+                        <StackLayout StyleClass="box-row, box-row-stepper">
+                            <Label
+                                Text="{u:I18n MinSpecial}"
+                                StyleClass="box-label-regular"
+                                VerticalOptions="FillAndExpand"
+                                VerticalTextAlignment="Center" />
+                            <Label
+                                Text="{Binding MinSpecial}"
+                                StyleClass="box-sub-label"
+                                HorizontalOptions="FillAndExpand"
+                                HorizontalTextAlignment="End"
+                                VerticalOptions="FillAndExpand"
+                                VerticalTextAlignment="Center" />
+                            <controls:ExtendedStepper
+                                Value="{Binding MinSpecial}"
+                                Maximum="5"
+                                Minimum="0"
+                                Increment="1" />
+                        </StackLayout>
+                        <BoxView StyleClass="box-row-separator" />
+                        <StackLayout StyleClass="box-row, box-row-switch">
+                            <Label
+                                Text="{u:I18n AvoidAmbiguousCharacters}"
+                                StyleClass="box-label-regular"
+                                HorizontalOptions="StartAndExpand" />
+                            <Switch
+                                IsToggled="{Binding AvoidAmbiguous}"
+                                StyleClass="box-value"
+                                HorizontalOptions="End" />
+                        </StackLayout>
+                        <BoxView StyleClass="box-row-separator" />
                     </StackLayout>
-                </StackLayout>
-                <StackLayout Spacing="0" Padding="0" IsVisible="{Binding IsPassword}">
-                    <StackLayout StyleClass="box-row, box-row-slider">
-                        <Label
-                            Text="{u:I18n Length}"
-                            StyleClass="box-label-regular"
-                            VerticalOptions="CenterAndExpand" />
-                        <Label
-                            Text="{Binding Length}"
-                            StyleClass="box-sub-label"
-                            WidthRequest="30"
-                            VerticalOptions="CenterAndExpand"
-                            HorizontalTextAlignment="End" />
-                        <controls:ExtendedSlider
-                            DragCompleted="LengthSlider_DragCompleted"
-                            Value="{Binding Length}"
-                            AutomationProperties.HelpText="{Binding Length}"
-                            StyleClass="box-value"
-                            VerticalOptions="CenterAndExpand"
-                            HorizontalOptions="FillAndExpand"
-                            Maximum="128"
-                            Minimum="5" />
-                    </StackLayout>
-                    <BoxView StyleClass="box-row-separator" />
-                    <StackLayout StyleClass="box-row, box-row-switch">
-                        <Label
-                            Text="A-Z"
-                            StyleClass="box-label-regular"
-                            HorizontalOptions="StartAndExpand" />
-                        <Switch
-                            IsToggled="{Binding Uppercase}"
-                            IsEnabled="{Binding EnforcedPolicyOptions.UseUppercase,
-                                Converter={StaticResource inverseBool}}"
-                            StyleClass="box-value"
-                            HorizontalOptions="End" />
-                    </StackLayout>
-                    <BoxView StyleClass="box-row-separator" />
-                    <StackLayout StyleClass="box-row, box-row-switch">
-                        <Label
-                            Text="a-z"
-                            StyleClass="box-label-regular"
-                            HorizontalOptions="StartAndExpand" />
-                        <Switch
-                            IsToggled="{Binding Lowercase}"
-                            IsEnabled="{Binding EnforcedPolicyOptions.UseLowercase,
-                                Converter={StaticResource inverseBool}}"
-                            StyleClass="box-value"
-                            HorizontalOptions="End" />
-                    </StackLayout>
-                    <BoxView StyleClass="box-row-separator" />
-                    <StackLayout StyleClass="box-row, box-row-switch">
-                        <Label
-                            Text="0-9"
-                            StyleClass="box-label-regular"
-                            HorizontalOptions="StartAndExpand" />
-                        <Switch
-                            IsToggled="{Binding Number}"
-                            IsEnabled="{Binding EnforcedPolicyOptions.UseNumbers,
-                                Converter={StaticResource inverseBool}}"
-                            StyleClass="box-value"
-                            HorizontalOptions="End" />
-                    </StackLayout>
-                    <BoxView StyleClass="box-row-separator" />
-                    <StackLayout StyleClass="box-row, box-row-switch">
-                        <Label
-                            Text="!@#$%^&amp;*"
-                            StyleClass="box-label-regular"
-                            HorizontalOptions="StartAndExpand" />
-                        <Switch
-                            IsToggled="{Binding Special}"
-                            IsEnabled="{Binding EnforcedPolicyOptions.UseSpecial,
-                                Converter={StaticResource inverseBool}}"
-                            StyleClass="box-value"
-                            HorizontalOptions="End" />
-                    </StackLayout>
-                    <BoxView StyleClass="box-row-separator" />
-                    <StackLayout StyleClass="box-row, box-row-stepper">
-                        <Label
-                            Text="{u:I18n MinNumbers}"
-                            StyleClass="box-label-regular"
-                            VerticalOptions="FillAndExpand"
-                            VerticalTextAlignment="Center" />
-                        <Label
-                            Text="{Binding MinNumber}"
-                            StyleClass="box-sub-label"
-                            HorizontalOptions="FillAndExpand"
-                            HorizontalTextAlignment="End"
-                            VerticalOptions="FillAndExpand"
-                            VerticalTextAlignment="Center" />
-                        <controls:ExtendedStepper
-                            Value="{Binding MinNumber}"
-                            Maximum="5"
-                            Minimum="0"
-                            Increment="1" />
-                    </StackLayout>
-                    <BoxView StyleClass="box-row-separator" />
-                    <StackLayout StyleClass="box-row, box-row-stepper">
-                        <Label
-                            Text="{u:I18n MinSpecial}"
-                            StyleClass="box-label-regular"
-                            VerticalOptions="FillAndExpand"
-                            VerticalTextAlignment="Center" />
-                        <Label
-                            Text="{Binding MinSpecial}"
-                            StyleClass="box-sub-label"
-                            HorizontalOptions="FillAndExpand"
-                            HorizontalTextAlignment="End"
-                            VerticalOptions="FillAndExpand"
-                            VerticalTextAlignment="Center" />
-                        <controls:ExtendedStepper
-                            Value="{Binding MinSpecial}"
-                            Maximum="5"
-                            Minimum="0"
-                            Increment="1" />
-                    </StackLayout>
-                    <BoxView StyleClass="box-row-separator" />
-                    <StackLayout StyleClass="box-row, box-row-switch">
-                        <Label
-                            Text="{u:I18n AvoidAmbiguousCharacters}"
-                            StyleClass="box-label-regular"
-                            HorizontalOptions="StartAndExpand" />
-                        <Switch
-                            IsToggled="{Binding AvoidAmbiguous}"
-                            StyleClass="box-value"
-                            HorizontalOptions="End" />
-                    </StackLayout>
-                    <BoxView StyleClass="box-row-separator" />
                 </StackLayout>
             </StackLayout>
-        </StackLayout>
-    </ScrollView>
-
+        </ScrollView>
+    </ContentView>
 </pages:BaseContentPage>
