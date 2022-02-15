@@ -2105,6 +2105,9 @@
   <data name="AccountLoggedOut" xml:space="preserve">
     <value>Logged Out</value>
   </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Switched to next available account</value>
+  </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Delete Account</value>
   </data>

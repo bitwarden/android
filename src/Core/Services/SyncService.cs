@@ -327,7 +327,6 @@ namespace Bit.Core.Services
             var organizations = response.Organizations.ToDictionary(o => o.Id, o => new OrganizationData(o));
             await _organizationService.ReplaceAsync(organizations);
             await _stateService.SetEmailVerifiedAsync(response.EmailVerified);
-            await _stateService.SetForcePasswordResetAsync(response.ForcePasswordReset);
             await _keyConnectorService.SetUsesKeyConnector(response.UsesKeyConnector);
         }
 

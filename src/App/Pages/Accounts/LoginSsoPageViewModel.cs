@@ -49,7 +49,6 @@ namespace Bit.App.Pages
         }
 
         public Command LogInCommand { get; }
-        public bool RememberOrgIdentifier { get; set; }
         public Action StartTwoFactorAction { get; set; }
         public Action StartSetPasswordAction { get; set; }
         public Action SsoAuthSuccessAction { get; set; }
@@ -62,8 +61,6 @@ namespace Bit.App.Pages
             {
                 OrgIdentifier = await _stateService.GetRememberedOrgIdentifierAsync();
             }
-            var rememberOrgIdentifier = await _stateService.GetRememberOrgIdentifierAsync();
-            RememberOrgIdentifier = rememberOrgIdentifier.GetValueOrDefault(true);
         }
 
         public async Task LogInAsync()
@@ -164,14 +161,7 @@ namespace Bit.App.Pages
             {
                 var response = await _authService.LogInSsoAsync(code, codeVerifier, redirectUri, orgId);
                 await AppHelpers.ResetInvalidUnlockAttemptsAsync();
-                if (RememberOrgIdentifier)
-                {
-                    await _stateService.SetRememberedOrgIdentifierAsync(OrgIdentifier);
-                }
-                else
-                {
-                    await _stateService.SetRememberedOrgIdentifierAsync(null);
-                }
+                await _stateService.SetRememberedOrgIdentifierAsync(OrgIdentifier);
                 await _deviceActionService.HideLoadingAsync();
                 if (response.TwoFactor)
                 {

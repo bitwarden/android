@@ -243,8 +243,6 @@ namespace Bit.Core.Services
                 await GetValueAsync<bool?>(Storage.LiteDb, V2Keys.PasswordVerifiedAutofillKey);
             await SetValueAsync(Storage.LiteDb, Constants.PasswordVerifiedAutofillKey(userId),
                 passwordVerifiedAutofill);
-            var forcePasswordReset = await GetValueAsync<bool?>(Storage.LiteDb, V2Keys.Keys_ForcePasswordReset);
-            await SetValueAsync(Storage.LiteDb, Constants.ForcePasswordResetKey(userId), forcePasswordReset);
             var cipherLocalData = await GetValueAsync<Dictionary<string, Dictionary<string, object>>>(Storage.LiteDb,
                 V2Keys.Keys_LocalData);
             await SetValueAsync(Storage.LiteDb, Constants.LocalDataKey(userId), cipherLocalData);
