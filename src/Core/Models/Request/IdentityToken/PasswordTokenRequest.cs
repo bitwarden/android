@@ -11,7 +11,7 @@ namespace Bit.Core.Models.Request.IdentityToken
         public string MasterPasswordHash { get; set; }
         public string CaptchaToken { get; set; }
 
-        public PasswordTokenRequest(string email, string masterPasswordHash, TokenRequestTwoFactor twoFactor, string captchaToken, DeviceRequest device = null) : base(twoFactor, device)
+        public PasswordTokenRequest(string email, string masterPasswordHash, string captchaToken, TokenRequestTwoFactor twoFactor, DeviceRequest device = null) : base(twoFactor, device)
         {
             Email = email;
             MasterPasswordHash = masterPasswordHash;

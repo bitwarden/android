@@ -16,6 +16,8 @@
     <None Remove="Resources\eff_long_word_list.txt" />
     <None Remove="Resources\public_suffix_list.dat" />
     <None Remove="Models\Request\IdentityToken\" />
+    <None Remove="Misc\" />
+    <None Remove="Misc\LogInStrategies\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,5 +36,7 @@
 
   <ItemGroup>
     <Folder Include="Models\Request\IdentityToken\" />
+    <Folder Include="Misc\" />
+    <Folder Include="Misc\LogInStrategies\" />
   </ItemGroup>
 </Project>
