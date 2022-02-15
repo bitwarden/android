@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
+using Xamarin.Forms;
 
 namespace Bit.App.Pages.Authenticator
 {
@@ -10,7 +11,7 @@ namespace Bit.App.Pages.Authenticator
         #region Members
 
         private readonly IClipboardService _clipboardService;
-        private bool _showList;
+        private bool _showList = true;
         private bool _refreshing;
         private readonly IUserService _userService;
         private readonly IVaultTimeoutService _vaultTimeoutService;
@@ -57,6 +58,9 @@ namespace Bit.App.Pages.Authenticator
         #endregion
 
         #region Properties
+
+        public ExtendedObservableCollection<GroupingsPageListGroup> Items { get; set; }
+        public Command RefreshCommand { get; set; }
 
         public bool ShowList
         {

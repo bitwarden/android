@@ -23,37 +23,37 @@ namespace Bit.App.Pages.Authenticator
 
         public AuthenticatorPage(bool fromTabPage, Action<string> selectAction = null, TabsPage tabsPage = null)
         {
-            _tabsPage = tabsPage;
+            //_tabsPage = tabsPage;
             InitializeComponent();
-            _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
+            //_broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _vm = BindingContext as AuthenticatorPageViewModel;
-            _vm.Page = this;
-            _fromTabPage = fromTabPage;
-            _selectAction = selectAction;
-            var isIos = Device.RuntimePlatform == Device.iOS;
-            if (selectAction != null)
-            {
-                if (isIos)
-                {
-                    ToolbarItems.Add(_closeItem);
-                }
-                ToolbarItems.Add(_selectItem);
-            }
-            else
-            {
-                if (isIos)
-                {
-                    ToolbarItems.Add(_moreItem);
-                }
-                else
-                {
-                    ToolbarItems.Add(_historyItem);
-                }
-            }
-            if (isIos)
-            {
-                _typePicker.On<iOS>().SetUpdateMode(UpdateMode.WhenFinished);
-            }
+            //_vm.Page = this;
+            //_fromTabPage = fromTabPage;
+            //_selectAction = selectAction;
+            //var isIos = Device.RuntimePlatform == Device.iOS;
+            //if (selectAction != null)
+            //{
+            //    if (isIos)
+            //    {
+            //        ToolbarItems.Add(_closeItem);
+            //    }
+            //    ToolbarItems.Add(_selectItem);
+            //}
+            //else
+            //{
+            //    if (isIos)
+            //    {
+            //        ToolbarItems.Add(_moreItem);
+            //    }
+            //    else
+            //    {
+            //        ToolbarItems.Add(_historyItem);
+            //    }
+            //}
+            //if (isIos)
+            //{
+            //    _typePicker.On<iOS>().SetUpdateMode(UpdateMode.WhenFinished);
+            //}
         }
 
         public async Task InitAsync()
@@ -64,26 +64,30 @@ namespace Bit.App.Pages.Authenticator
         protected async override void OnAppearing()
         {
             base.OnAppearing();
-            if (!_fromTabPage)
-            {
-                await InitAsync();
-            }
-            _broadcasterService.Subscribe(nameof(GeneratorPage), async (message) =>
-            {
-                if (message.Command == "updatedTheme")
-                {
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        //_vm.RedrawPassword();
-                    });
-                }
-            });
+            //if (!_fromTabPage)
+            //{
+            //    await InitAsync();
+            //}
+            //_broadcasterService.Subscribe(nameof(GeneratorPage), async (message) =>
+            //{
+            //    if (message.Command == "updatedTheme")
+            //    {
+            //        Device.BeginInvokeOnMainThread(() =>
+            //        {
+            //            //_vm.RedrawPassword();
+            //        });
+            //    }
+            //});
         }
         
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            _broadcasterService.Unsubscribe(nameof(GeneratorPage));
+            //_broadcasterService.Unsubscribe(nameof(GeneratorPage));
+        }
+
+        private async void RowSelected(object sender, SelectionChangedEventArgs e)
+        {
         }
 
         protected override bool OnBackButtonPressed()
@@ -103,34 +107,24 @@ namespace Bit.App.Pages.Authenticator
 
         private async void More_Clicked(object sender, EventArgs e)
         {
-            if (!DoOnce())
-            {
-                return;
-            }
-            var selection = await DisplayActionSheet(AppResources.Options, AppResources.Cancel,
-                null, AppResources.PasswordHistory);
-            if (selection == AppResources.PasswordHistory)
-            {
-                var page = new GeneratorHistoryPage();
-                await Navigation.PushModalAsync(new Xamarin.Forms.NavigationPage(page));
-            }
+            //if (!DoOnce())
+            //{
+            //    return;
+            //}
+            //var selection = await DisplayActionSheet(AppResources.Options, AppResources.Cancel,
+            //    null, AppResources.PasswordHistory);
+            //if (selection == AppResources.PasswordHistory)
+            //{
+            //    var page = new GeneratorHistoryPage();
+            //    await Navigation.PushModalAsync(new Xamarin.Forms.NavigationPage(page));
+            //}
         }
 
         private void Select_Clicked(object sender, EventArgs e)
         {
-            _selectAction?.Invoke(_vm.Password);
+            //_selectAction?.Invoke(_vm.Password);
         }
 
-        private async void History_Clicked(object sender, EventArgs e)
-        {
-            var page = new GeneratorHistoryPage();
-            await Navigation.PushModalAsync(new Xamarin.Forms.NavigationPage(page));
-        }
-
-        private async void LengthSlider_DragCompleted(object sender, EventArgs e)
-        {
-            await _vm.SliderChangedAsync();
-        }
 
         private async void Close_Clicked(object sender, EventArgs e)
         {
@@ -139,5 +133,7 @@ namespace Bit.App.Pages.Authenticator
                 await Navigation.PopModalAsync();
             }
         }
+
+        
     }
 }
