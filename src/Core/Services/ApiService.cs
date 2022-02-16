@@ -1,4 +1,5 @@
 ﻿using Bit.Core.Abstractions;
+using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
@@ -37,6 +38,8 @@ namespace Bit.Core.Services
             _logoutCallbackAsync = logoutCallbackAsync;
             var device = (int)_platformUtilsService.GetDevice();
             _httpClient.DefaultRequestHeaders.Add("Device-Type", device.ToString());
+            _httpClient.DefaultRequestHeaders.Add("Bitwarden-Client-Name", _platformUtilsService.GetClientType().GetString());
+            _httpClient.DefaultRequestHeaders.Add("Bitwarden-Client-Version", _platformUtilsService.GetApplicationVersion());
             if (!string.IsNullOrWhiteSpace(customUserAgent))
             {
                 _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(customUserAgent);
@@ -87,7 +90,7 @@ namespace Bit.Core.Services
                 Version = new Version(1, 0),
                 RequestUri = new Uri(string.Concat(IdentityBaseUrl, "/connect/token")),
                 Method = HttpMethod.Post,
-                Content = new FormUrlEncodedContent(request.ToIdentityToken(_platformUtilsService.IdentityClientId))
+                Content = new FormUrlEncodedContent(request.ToIdentityToken(_platformUtilsService.GetClientType().GetString()))
             };
             requestMessage.Headers.Add("Accept", "application/json");
             request.AlterIdentityTokenHeaders(requestMessage.Headers);
@@ -180,13 +183,13 @@ namespace Bit.Core.Services
 
         public Task PostAccountRequestOTP()
         {
-            return SendAsync<object, object>(HttpMethod.Post, "/accounts/request-otp", null, true, false);
+            return SendAsync<object, object>(HttpMethod.Post, "/accounts/request-otp", null, true, false, false);
         }
 
         public Task PostAccountVerifyOTPAsync(VerifyOTPRequest request)
         {
             return SendAsync<VerifyOTPRequest, object>(HttpMethod.Post, "/accounts/verify-otp", request,
-                true, false);
+                true, false, false);
         }
 
         public Task PutUpdateTempPasswordAsync(UpdateTempPasswordRequest request)
@@ -579,7 +582,7 @@ namespace Bit.Core.Services
         public Task<TResponse> SendAsync<TResponse>(HttpMethod method, string path, bool authed) =>
             SendAsync<object, TResponse>(method, path, null, authed, true);
         public async Task<TResponse> SendAsync<TRequest, TResponse>(HttpMethod method, string path, TRequest body,
-            bool authed, bool hasResponse)
+            bool authed, bool hasResponse, bool logoutOnUnauthorized = true)
         {
             using (var requestMessage = new HttpRequestMessage())
             {
@@ -631,7 +634,7 @@ namespace Bit.Core.Services
                 }
                 else if (!response.IsSuccessStatusCode)
                 {
-                    var error = await HandleErrorAsync(response, false, authed);
+                    var error = await HandleErrorAsync(response, false, authed, logoutOnUnauthorized);
                     throw new ApiException(error);
                 }
                 return (TResponse)(object)null;
@@ -693,10 +696,18 @@ namespace Bit.Core.Services
             };
         }
 
-        private async Task<ErrorResponse> HandleErrorAsync(HttpResponseMessage response, bool tokenError, bool authed)
+        private async Task<ErrorResponse> HandleErrorAsync(HttpResponseMessage response, bool tokenError,
+            bool authed, bool logoutOnUnauthorized = true)
         {
-            if (authed && ((tokenError && response.StatusCode == HttpStatusCode.BadRequest) ||
-                response.StatusCode == HttpStatusCode.Unauthorized || response.StatusCode == HttpStatusCode.Forbidden))
+            if (authed
+                &&
+                (
+                    (tokenError && response.StatusCode == HttpStatusCode.BadRequest)
+                    ||
+                    (logoutOnUnauthorized && response.StatusCode == HttpStatusCode.Unauthorized)
+                    ||
+                    response.StatusCode == HttpStatusCode.Forbidden
+                ))
             {
                 await _logoutCallbackAsync(true);
                 return null;

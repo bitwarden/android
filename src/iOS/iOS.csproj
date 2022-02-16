@@ -41,7 +41,7 @@
     <MtouchLink>Full</MtouchLink>
     <MtouchArch>x86_64</MtouchArch>
     <ConsolePause>false</ConsolePause>
-    <MtouchExtraArgs>--nodevcodeshare --http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSAutofill --linkskip=BitwardeniOSExtension --linkskip=BitwardenApp --linkskip=BitwardenCore --linkskip=LiteDB --linkskip=CsvHelper</MtouchExtraArgs>
+    <MtouchExtraArgs>--nodevcodeshare --http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSAutofill --linkskip=BitwardeniOSExtension --linkskip=BitwardenApp --linkskip=BitwardenCore --linkskip=LiteDB --linkskip=CsvHelper --linkskip=BitwardeniOSShareExtension </MtouchExtraArgs>
     <OptimizePNGs>true</OptimizePNGs>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
   </PropertyGroup>
@@ -74,7 +74,7 @@
     <CodesignKey>iPhone Developer</CodesignKey>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <MtouchLink>Full</MtouchLink>
-    <MtouchExtraArgs>--nodevcodeshare --http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSAutofill --linkskip=BitwardeniOSExtension --linkskip=BitwardenApp --linkskip=BitwardenCore --linkskip=LiteDB --linkskip=CsvHelper</MtouchExtraArgs>
+    <MtouchExtraArgs>--nodevcodeshare --http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSAutofill --linkskip=BitwardeniOSExtension --linkskip=BitwardenApp --linkskip=BitwardenCore --linkskip=LiteDB --linkskip=CsvHelper --linkskip=BitwardeniOSShareExtension</MtouchExtraArgs>
     <OptimizePNGs>true</OptimizePNGs>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhone' ">
@@ -89,7 +89,7 @@
     <CodesignKey>iPhone Distribution</CodesignKey>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <MtouchLink>Full</MtouchLink>
-    <MtouchExtraArgs>--nodevcodeshare --http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSAutofill --linkskip=BitwardeniOSExtension --linkskip=BitwardenApp --linkskip=BitwardenCore --linkskip=LiteDB --linkskip=CsvHelper</MtouchExtraArgs>
+    <MtouchExtraArgs>--nodevcodeshare --http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSAutofill --linkskip=BitwardeniOSExtension --linkskip=BitwardenApp --linkskip=BitwardenCore --linkskip=LiteDB --linkskip=CsvHelper --linkskip=BitwardeniOSShareExtension</MtouchExtraArgs>
     <OptimizePNGs>true</OptimizePNGs>
     <CodesignProvision>Automatic:AdHoc</CodesignProvision>
   </PropertyGroup>
@@ -104,7 +104,7 @@
     <CodesignProvision>Automatic:AppStore</CodesignProvision>
     <CodesignKey>iPhone Distribution</CodesignKey>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
-    <MtouchExtraArgs>--nodevcodeshare --http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSAutofill --linkskip=BitwardeniOSExtension --linkskip=BitwardenApp --linkskip=BitwardenCore --linkskip=LiteDB --linkskip=CsvHelper</MtouchExtraArgs>
+    <MtouchExtraArgs>--nodevcodeshare --http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSAutofill --linkskip=BitwardeniOSExtension --linkskip=BitwardenApp --linkskip=BitwardenCore --linkskip=LiteDB --linkskip=CsvHelper --linkskip=BitwardeniOSShareExtension</MtouchExtraArgs>
     <OptimizePNGs>true</OptimizePNGs>
     <MtouchLink>Full</MtouchLink>
   </PropertyGroup>
@@ -118,6 +118,7 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <MtouchExtraArgs>--nodevcodeshare --http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSAutofill --linkskip=BitwardeniOSExtension --linkskip=BitwardenApp --linkskip=BitwardenCore --linkskip=LiteDB --linkskip=CsvHelper</MtouchExtraArgs>
     <OptimizePNGs>true</OptimizePNGs>
+    <MtouchLink>SdkOnly</MtouchLink>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'FDroid|iPhone'">
     <OutputPath>bin\iPhone\FDroid\</OutputPath>
@@ -127,6 +128,8 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <MtouchLink>SdkOnly</MtouchLink>
+    <MtouchArch>ARMv7</MtouchArch>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Default' ">
     <AppExtensionDebugBundleId />
@@ -139,7 +142,6 @@
     <None Include="Entitlements.plist" />
     <None Include="Info.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <BundleResource Include="Resources\FontAwesome.ttf" />
     <BundleResource Include="Resources\MaterialIcons_Regular.ttf" />
     <ImageAsset Include="Resources\Assets.xcassets\AppIcons.appiconset\Contents.json">
       <Visible>false</Visible>
@@ -153,6 +155,19 @@
     <ImageAsset Include="Resources\Assets.xcassets\LaunchScreen.imageset\logo_white%403x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\ic_warning.imageset\Contents.json" />
     <ImageAsset Include="Resources\Assets.xcassets\ic_warning.imageset\ic_warning-1.pdf" />
+    <BundleResource Include="Resources\bwi-font.ttf" />
+    <BundleResource Include="Resources\cog%403x.png" />
+    <BundleResource Include="Resources\cog%402x.png" />
+    <BundleResource Include="Resources\cog.png" />
+    <BundleResource Include="Resources\send%403x.png" />
+    <BundleResource Include="Resources\send%402x.png" />
+    <BundleResource Include="Resources\send.png" />
+    <BundleResource Include="Resources\search.png" />
+    <BundleResource Include="Resources\search%402x.png" />
+    <BundleResource Include="Resources\search%403x.png" />
+    <BundleResource Include="Resources\generate%403x.png" />
+    <BundleResource Include="Resources\generate%402x.png" />
+    <BundleResource Include="Resources\generate.png" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />
@@ -196,6 +211,11 @@
       <IsAppExtension>true</IsAppExtension>
       <IsWatchApp>false</IsWatchApp>
     </ProjectReference>
+    <ProjectReference Include="..\iOS.ShareExtension\iOS.ShareExtension.csproj">
+      <IsAppExtension>true</IsAppExtension>
+      <Project>{F8C3F648-EA5A-4719-8005-85D1690B1655}</Project>
+      <Name>iOS.ShareExtension</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\autofill-kb.png" />
@@ -205,15 +225,6 @@
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\autofill-kb%403x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\cog.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\cog%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\cog%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\ext-act.png" />
@@ -279,15 +290,6 @@
     <BundleResource Include="Resources\logo%403x.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\paper_plane.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\paper_plane%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\paper_plane%403x.png" />
-  </ItemGroup>
-  <ItemGroup>
     <BundleResource Include="Resources\plus.png" />
   </ItemGroup>
   <ItemGroup>
@@ -295,24 +297,6 @@
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\plus%403x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\refresh.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\refresh%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\refresh%403x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\search.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\search%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\search%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\yubikey.png" />

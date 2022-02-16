@@ -1923,7 +1923,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Wyłącz wysyłkę, aby nikt nie miał do niej dostępu.</value>
+    <value>Wyłącz wysyłkę, aby nikt nie miał do niej dostępu</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
@@ -1991,7 +1991,7 @@
     <value>Niestandardowe</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
-    <value>Udostępnij wysyłkę po zapisaniu.</value>
+    <value>Udostępnij wysyłkę po zapisaniu</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
@@ -2003,7 +2003,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
-    <value>Ukryj mój adres e-mail przed odbiorcami.</value>
+    <value>Ukryj mój adres e-mail przed odbiorcami</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
     <value>Co najmniej jedna zasada organizacji wpływa na ustawienia wysyłek.</value>
@@ -2110,10 +2110,34 @@
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Kod weryfikacyjny jest nieprawidłowy.</value>
   </data>
+  <data name="RequestOTP" xml:space="preserve">
+    <value>Poproś o jednorazowe hasło</value>
+  </data>
   <data name="SendCode" xml:space="preserve">
     <value>Wyślij kod</value>
   </data>
   <data name="Sending" xml:space="preserve">
     <value>Wysyłanie</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>Kopiuj link wysyłki po zapisaniu</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>Wysyłanie kodu</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>Weryfikowanie</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>Wyślij ponownie kod</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>Kod weryfikacyjny został wysłany na adres e-mail.</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>Wystąpił błąd podczas wysyłania kodu weryfikacyjnego na adres e-mail. Spróbuj ponownie</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>Wpisz kod weryfikacyjny, który został wysłany na adres e-mail</value>
   </data>
 </root>

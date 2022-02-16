@@ -140,7 +140,7 @@
     <comment>Navigate back to the previous screen.</comment>
   </data>
   <data name="Bitwarden" xml:space="preserve">
-    <value>Битуорден</value>
+    <value>Bitwarden</value>
     <comment>App name. Shouldn't ever change.</comment>
   </data>
   <data name="Cancel" xml:space="preserve">
@@ -182,11 +182,11 @@
     <value>Редактиране на папка</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>Е-поща</value>
+    <value>Имейл</value>
     <comment>Short label for an email address.</comment>
   </data>
   <data name="EmailAddress" xml:space="preserve">
-    <value>Е-поща</value>
+    <value>Имейл адрес</value>
     <comment>Full label for a email address.</comment>
   </data>
   <data name="EmailUs" xml:space="preserve">
@@ -288,7 +288,7 @@
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Наименование</value>
+    <value>Име</value>
     <comment>Label for an entity name.</comment>
   </data>
   <data name="No" xml:space="preserve">
@@ -2030,7 +2030,8 @@
     <value>Captcha Required</value>
   </data>
   <data name="CaptchaFailed" xml:space="preserve">
-    <value>Captcha Failed. Please try again.</value>
+    <value>
+Грешка. Моля опитайте пак</value>
   </data>
   <data name="UpdatedMasterPassword" xml:space="preserve">
     <value>Главната парола е променена</value>
@@ -2072,7 +2073,7 @@
     <value>Идентификация чрез FIDO2 WebAuthn – можете да се идентифицирате чрез външен ключ за сигурност.</value>
   </data>
   <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
-    <value>Authenticate WebAuthn</value>
+    <value>Идентификация WebAuthn</value>
   </data>
   <data name="Fido2ReturnToApp" xml:space="preserve">
     <value>Назад към приложението</value>
@@ -2110,10 +2111,34 @@
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Грешен код за потвърждаване</value>
   </data>
+  <data name="RequestOTP" xml:space="preserve">
+    <value>Заявка за еднократна парола</value>
+  </data>
   <data name="SendCode" xml:space="preserve">
     <value>Изпращане на кода</value>
   </data>
   <data name="Sending" xml:space="preserve">
     <value>Изпращане…</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>Копиране на връзката на изпращането при запазване</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>Изпращане на кода</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>Потвърждаване</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>Повторно изпращане на кода</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>На Вашата е-поща беше изпратен код за потвърждаване</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>Възникна грешка при изпращането на кода за потвърждаване до Вашата е-поща. Моля, опитайте отново</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>Въведете кода за потвърждаване, който беше изпратен на Вашата е-поща</value>
   </data>
 </root>

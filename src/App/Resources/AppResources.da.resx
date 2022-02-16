@@ -1923,7 +1923,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Deaktivér denne Send, så ingen kan tilgå den.</value>
+    <value>Deaktivér denne Send, så ingen kan tilgå den</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
@@ -1991,7 +1991,7 @@
     <value>Tilpasset</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
-    <value>Del denne Send, når den gemmes.</value>
+    <value>Del denne Send, når den gemmes</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
@@ -2003,7 +2003,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
-    <value>Skjul min e-mailadresse for modtagere.</value>
+    <value>Skjul min e-mailadresse for modtagere</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
     <value>Én eller flere organisationspolitikker påvirker dine Send-valgmuligheder.</value>
@@ -2110,10 +2110,34 @@
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Ugyldig bekræftelseskode</value>
   </data>
+  <data name="RequestOTP" xml:space="preserve">
+    <value>Anmod om engangsadgangskode</value>
+  </data>
   <data name="SendCode" xml:space="preserve">
     <value>Send kode</value>
   </data>
   <data name="Sending" xml:space="preserve">
     <value>Sender</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>Kopiér Send-link ved gem</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>Sender kode</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>Bekræfter</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>Send kode igen</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>En bekræftelseskode blev sendt til din e-mail</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>Der opstod en fejl under afsendelse af en bekræftelseskode til din e-mail. Prøv igen</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>Indtast den bekræftelseskode, der blev sendt til din e-mail</value>
   </data>
 </root>

@@ -8,6 +8,7 @@ using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -96,7 +97,7 @@ namespace Bit.App
                 {
                     if (Device.RuntimePlatform == Device.iOS)
                     {
-                        ResumedAsync();
+                        ResumedAsync().FireAndForget();
                     }
                 }
                 else if (message.Command == "slept")
@@ -176,6 +177,8 @@ namespace Bit.App
             if (Device.RuntimePlatform == Device.Android)
             {
                 await _vaultTimeoutService.CheckVaultTimeoutAsync();
+                // Reset delay on every start
+                _vaultTimeoutService.DelayLockAndLogoutMs = null;
             }
             _messagingService.Send("startEventTimer");
         }
@@ -202,21 +205,21 @@ namespace Bit.App
             _isResumed = true;
             if (Device.RuntimePlatform == Device.Android)
             {
-                ResumedAsync();
+                ResumedAsync().FireAndForget();
             }
         }
 
         private async Task SleptAsync()
         {
-            await HandleVaultTimeoutAsync();
+            await _vaultTimeoutService.CheckVaultTimeoutAsync();
             _messagingService.Send("stopEventTimer");
         }
 
-        private async void ResumedAsync()
+        private async Task ResumedAsync()
         {
-            UpdateTheme();
             await _vaultTimeoutService.CheckVaultTimeoutAsync();
             _messagingService.Send("startEventTimer");
+            await UpdateThemeAsync();
             await ClearCacheIfNeededAsync();
             Prime();
             SyncIfNeeded();
@@ -224,6 +227,15 @@ namespace Bit.App
             {
                 await lockPage.PromptBiometricAfterResumeAsync();
             }
+        }
+
+        public async Task UpdateThemeAsync()
+        {
+            await Device.InvokeOnMainThreadAsync(() =>
+            {
+                ThemeManager.SetTheme(Device.RuntimePlatform == Device.Android, Current.Resources);
+                _messagingService.Send("updatedTheme");
+            });
         }
 
         private void SetCulture()
@@ -279,33 +291,6 @@ namespace Bit.App
             }
         }
 
-        private async Task HandleVaultTimeoutAsync()
-        {
-            if (await _vaultTimeoutService.IsLockedAsync())
-            {
-                return;
-            }
-            var authed = await _userService.IsAuthenticatedAsync();
-            if (!authed)
-            {
-                return;
-            }
-            var vaultTimeout = await _storageService.GetAsync<int?>(Constants.VaultTimeoutKey);
-            vaultTimeout = vaultTimeout.GetValueOrDefault(-1);
-            if (vaultTimeout == 0)
-            {
-                var action = await _storageService.GetAsync<string>(Constants.VaultTimeoutActionKey);
-                if (action == "logOut")
-                {
-                    await _vaultTimeoutService.LogOutAsync();
-                }
-                else
-                {
-                    await _vaultTimeoutService.LockAsync(true);
-                }
-            }
-        }
-
         private async Task ClearCacheIfNeededAsync()
         {
             var lastClear = await _storageService.GetAsync<DateTime?>(Constants.LastFileCacheClearKey);
@@ -354,7 +339,7 @@ namespace Bit.App
             ThemeManager.SetTheme(Device.RuntimePlatform == Device.Android, Current.Resources);
             Current.RequestedThemeChanged += (s, a) =>
             {
-                UpdateTheme();
+                UpdateThemeAsync();
             };
             Current.MainPage = new HomePage();
             var mainPageTask = SetMainPageAsync();
@@ -375,15 +360,6 @@ namespace Bit.App
                     await Task.Delay(1000);
                     await _syncService.FullSyncAsync(false);
                 }
-            });
-        }
-
-        private void UpdateTheme()
-        {
-            Device.BeginInvokeOnMainThread(() =>
-            {
-                ThemeManager.SetTheme(Device.RuntimePlatform == Device.Android, Current.Resources);
-                _messagingService.Send("updatedTheme");
             });
         }
 

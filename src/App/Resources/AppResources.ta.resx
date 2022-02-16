@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="About" xml:space="preserve">
-    <value>பற்றி</value>
+    <value>இதுபற்றி</value>
   </data>
   <data name="Add" xml:space="preserve">
     <value>சேர்</value>
@@ -209,7 +209,7 @@
     <value>GitHub களஞ்சியத்தில் ஒரு சிக்கலைத் திற.</value>
   </data>
   <data name="FingerprintDirection" xml:space="preserve">
-    <value>உம் கைரேகையைப் பயன்படுத்தி சரிபார்.</value>
+    <value>உம் கைரேகையைப் பயன்படுத்திச் சரிபார்.</value>
   </data>
   <data name="Folder" xml:space="preserve">
     <value>கோப்புறை</value>
@@ -363,13 +363,13 @@
     <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
-    <value>கைரேகையை உறுதிசெய்</value>
+    <value>கைரேகையைச் சரிபார்</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
-    <value>பிரதான கடவுச்சொல்லை உறுதிசெய்</value>
+    <value>பிரதான கடவுச்சொல்லைச் சரிபார்</value>
   </data>
   <data name="VerifyPIN" xml:space="preserve">
-    <value>கடவெண்ணை உறுதிசெய்</value>
+    <value>கடவெண்ணைச் சரிபார்</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>பதிப்பு</value>
@@ -430,13 +430,13 @@
     <value>மின்னஞ்சலை மாற்று</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
-    <value>bitwarden.com வலை பெட்டகத்தில் நீங்கள் உங்கள் மின்னஞ்சலை மாற்ற இயலும். நீங்கள் இப்போது வலைத்தளத்தை பார்வையிட வேண்டுமா?</value>
+    <value>bitwarden.com வலைப்பெட்டகத்தில் நீங்கள் உங்கள் மின்னஞ்சலை மாற்ற இயலும். நீங்கள் இப்போது வலைத்தளத்தை பார்வையிட வேண்டுமா?</value>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
     <value>பிரதான கடவுச்சொல்லை மாற்று</value>
   </data>
   <data name="ChangePasswordConfirmation" xml:space="preserve">
-    <value>bitwarden.com வலை பெட்டகத்தில் நீங்கள் உங்கள் பிரதான கடவுச்சொல்லை மாற்ற இயலும். நீங்கள் இப்போது வலைத்தளத்தை பார்வையிட வேண்டுமா?</value>
+    <value>bitwarden.com வலைப்பெட்டகத்தில் நீங்கள் உங்கள் பிரதான கடவுச்சொல்லை மாற்ற இயலும். நீங்கள் இப்போது வலைத்தளத்தை பார்வையிட வேண்டுமா?</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>மூடு</value>
@@ -489,7 +489,7 @@
     <value>நீட்டிப்பை ஏவ பட்டியலிலுள்ள Bitwarden படவுருவைத் தட்டவும்.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>Safari மற்றும் மற்ற செயலிகளில் ஐ இயக்க, பட்டியலின் கீழ் வரிசையிலுள்ள "மேலும் "படவுருவைத் தட்டவும்.</value>
+    <value>Safari மற்றும் மற்ற செயலிகளில் Bitwardenஐ இயக்க, பட்டியலின் கீழ்வரிசையிலுள்ள "மேலும்" படவுருவைத் தட்டு.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
     <value>பிடித்தது</value>
@@ -507,7 +507,7 @@
     <value>உருப்படிகளை இறக்குமதி செய்</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
-    <value>bitwarden.com வலை பெட்டகத்தில் நீங்கள் உருப்படிகளை மொத்த இறக்குமதி செய்யலாம். நீங்கள் இப்போது வலைத்தளத்தை பார்வையிட வேண்டுமா?</value>
+    <value>bitwarden.com வலைப்பெட்டகத்தில் நீங்கள் உருப்படிகளை மொத்த இறக்குமதி செய்யலாம். நீங்கள் இப்போது வலைத்தளத்தை பார்வையிட வேண்டுமா?</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
     <value>உங்கள் உருப்படிகளை மற்ற கடவுச்சொல் நிர்வாக செயலிகளிலிருந்து விரைவாக மொத்த இறக்குமதி செய்க.</value>
@@ -543,7 +543,7 @@
     <value>பெட்டகம் நேரமுடிவு செயல்</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
-    <value>வெளியேறுதல் உமது பெட்டகத்திற்கான எல்லா அணுகலையும் அகற்றும் மற்றும் நேரமுடிவு காலத்திற்குப் பிறகு இயங்கலை அங்கீகாரம் தேவைப்படுகிறது. இவ்வமைப்பை உறுதியாக பயன்படுத்த வேண்டுமா?</value>
+    <value>வெளியேறுதல் உமது பெட்டகத்திற்கான எல்லா அணுகலையுமகற்றும் மற்றும் நேரமுடிவு காலத்திற்குப் பிறகு இயங்கலை அங்கீகாரம் தேவைப்படுகிறது. இவ்வமைப்பை உறுதியாக பயன்படுத்த வேண்டுமா?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>உள்நுழைகிறது...</value>
@@ -692,7 +692,7 @@
     <value>இரு-படி உள்நுழைவு</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>பாதுகாப்பு விசை, அங்கீகார செயலி, குறுஞ்செய்தி, தொலைபேசி அழைப்பு அ மின்னஞ்சல் போன்ற மற்றொரு சாதனத்துடன் உங்கள் உள்நுழைவை சரிபார்க்குமாறு கோருவதன் மூலம் இரு-படி உள்நுழைவு உங்கள் கணக்கை மிகவும் பாதுகாப்பாக்குகிறது. bitwarden.com வலை பெட்டகத்தில் இரு-படி உள்நுழைவை இயக்க முடியும். நீங்கள் இப்போது வலைத்தளத்தைப் பார்வையிட வேண்டுமா?</value>
+    <value>பாதுகாப்பு விசை, அங்கீகார செயலி, குறுஞ்செய்தி, தொலைபேசி அழைப்பு அ மின்னஞ்சல் போன்ற மற்றொரு சாதனத்துடன் உங்கள் உள்நுழைவை சரிபார்க்குமாறு கோருவதன் மூலம் இரு-படி உள்நுழைவு உங்கள் கணக்கை மிகவும் பாதுகாப்பாக்குகிறது. bitwarden.com வலைப்பெட்டகத்தில் இரு-படி உள்நுழைவை இயக்க முடியும். நீங்கள் இப்போது வலைத்தளத்தைப் பார்வையிட வேண்டுமா?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>{0} மூலம் பூட்டவிழ்</value>
@@ -711,7 +711,7 @@
     <value>உருப்படியை பார்</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>Bitwarden வலை பெட்டகம்</value>
+    <value>Bitwarden வலைப்பெட்டகம்</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>அங்கீகார செயலியை இழந்தீர்களா?</value>
@@ -734,7 +734,7 @@
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>
   <data name="NoItemsForUri" xml:space="preserve">
-    <value>{0} க்கு உம் பெட்டகத்தில் உருப்படிகள் ஏதுமில்லை.</value>
+    <value>உம் பெட்டகத்தில் {0} க்கான உருப்படிகள் ஏதுமில்லை.</value>
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
@@ -838,7 +838,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
-    <value>To continue, hold your YubiKey NEO against the back of the device or insert your YubiKey into your device's USB port, then touch its button.</value>
+    <value>தொடர, உம் யூபிகீ NEOஐ சாதனத்தின் பின்புறத்திற்கெதிரே பிடித்திரு அ அதை உம் சாதனத்தின் USB புறையினுள் புகுத்து, பிறகு இப்பொத்தானைத் தொடு.</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
     <value>YubiKey பாதுகாப்பு விசை</value>
@@ -962,13 +962,13 @@
     <value>சுய-வழங்கப்பட்ட சுற்றுசூழல்</value>
   </data>
   <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
-    <value>Specify the base URL of your on-premise hosted Bitwarden installation.</value>
+    <value>உம் வளாகத்திலேயே வழங்கியுள்ள Bitwarden நிறுவலின் அடித்தள உரலியைக் குறிப்பிடு.</value>
   </data>
   <data name="ServerUrl" xml:space="preserve">
     <value>தேக்க உரலி</value>
   </data>
   <data name="WebVaultUrl" xml:space="preserve">
-    <value>வலை பெட்டக தேக்க உரலி</value>
+    <value>வலைப்பெட்டக தேக்க உரலி</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
     <value>உம் பெட்டகத்திலிருந்து உருப்படிகளைக் காண இவ்வறிவிப்பை தட்டவும்.</value>
@@ -1164,13 +1164,13 @@
     <comment>What Apple calls their facial recognition reader.</comment>
   </data>
   <data name="FaceIDDirection" xml:space="preserve">
-    <value>சரிபார்க்க முக அடையாளத்தைப் பயன்படுத்தவும்.</value>
+    <value>சரிபார்க்க முக அடையாளத்தைப் பயன்படுத்து.</value>
   </data>
   <data name="UseFaceIDToUnlock" xml:space="preserve">
     <value>முக அடையாளத்தைப் பயன்படுத்தி பூட்டவிழ்.</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
-    <value>முக அடையாளத்தை சரிபார்க்கவும்</value>
+    <value>முக அடையாளத்தை சரிபார்</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>விண்டோஸ் ஹலோ</value>
@@ -1230,7 +1230,7 @@
     <value>தொடக்கம்</value>
   </data>
   <data name="URIMatchDetection" xml:space="preserve">
-    <value>உரலி பொருத்தம் கண்டறிதல்</value>
+    <value>உரலிப்பொருத்தங்கண்டறிதல்</value>
   </data>
   <data name="MatchDetection" xml:space="preserve">
     <value>பொருத்தம் கண்டறிதல்</value>
@@ -1288,7 +1288,7 @@
     <value>௧. iOS "அமைவுகள்" செயலிக்குச் செல்</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. "கடவுச்சொற்கள் &amp; கணக்குகள்"ஐ தட்டு</value>
+    <value>2. "கடவுச்சொற்கள் &amp; கணக்குகள்"ஐத் தட்டு</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
     <value>3. "கடவுச்சொற்கள் தன்னிரப்பல்"ஐத் தட்டு</value>
@@ -1297,7 +1297,7 @@
     <value>4. தன்னிரப்பலை இயக்கு</value>
   </data>
   <data name="AutofillTurnOn5" xml:space="preserve">
-    <value>5. "Bitwarden"ஐ தேர்ந்தெடு</value>
+    <value>5. "Bitwarden"ஐத் தேர்ந்தெடு</value>
   </data>
   <data name="PasswordAutofill" xml:space="preserve">
     <value>கடவுச்சொல் தன்னிரப்பல்</value>
@@ -1411,7 +1411,7 @@
     <value>பட்டியலிட நிறுவனங்களில்லை.</value>
   </data>
   <data name="MoveToOrgDesc" xml:space="preserve">
-    <value>Choose an organization that you wish to move this item to. Moving to an organization transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</value>
+    <value>இவ்வுருப்படியை நகர்த்த நிறுவனத்தைத் தேர்வுசெய். நிறுவனத்திற்கு நகர்த்தல் உருப்படியின் உரிமையை அந்நிறுவனத்திற்கு மாற்றும். நகர்த்தியபின் இவ்வுருப்படிக்கு நேரடி உரிமையாளராக இருக்கமாட்டீர்.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
     <value>சொற்களின் எண்ணிக்கை</value>
@@ -1470,13 +1470,13 @@
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
-    <value>உங்கள் பெட்டகம் பூட்டப்பட்டுள்ளது. தொடர உங்கள் பிரதான கடவுச்சொல்லை சரிபார்க்கவும்.</value>
+    <value>உம் பெட்டகம் பூட்டப்பட்டுள்ளது. தொடர உம் பிரதான கடவுச்சொல்லைச் சரிபார்.</value>
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
-    <value>உமது பெட்டகம் பூட்டப்பட்டுள்ளது. தொடர உமது கடவெண் குறியைச் நிச்சயப்படுத்து.</value>
+    <value>உம் பெட்டகம் பூட்டப்பட்டுள்ளது. தொடர உமது கடவெண் குறியைச் சரிபார்.</value>
   </data>
   <data name="VaultLockedIdentity" xml:space="preserve">
-    <value>உமது பெட்டகம் பூட்டப்பட்டுள்ளது. தொடர உமது அடையாளத்தை நிச்சயப்படுத்து.</value>
+    <value>உம் பெட்டகம் பூட்டப்பட்டுள்ளது. தொடர உம் அடையாளத்தைச் சரிபார்.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>இருள்</value>
@@ -1510,11 +1510,11 @@
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="DefaultUriMatchDetection" xml:space="preserve">
-    <value>இயல்புநிலை உரலி பொருத்தம் கண்டறிதல்</value>
+    <value>இயல்புநிலை உரலிப்பொருத்தங்கண்டறிதல்</value>
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
-    <value>Choose the default way that URI match detection is handled for logins when performing actions such as auto-fill.</value>
+    <value>தன்னிரப்பல் போன்ற செயற்புரிகையில் உள்நுழைவுகளுக்கான உரலிப்பொருத்தங்கண்டறிதலின் இயல்புநிலை  முறையைத் தேர்வுசெய்.</value>
   </data>
   <data name="Theme" xml:space="preserve">
     <value>நிற அமைப்பு</value>
@@ -1543,16 +1543,16 @@
     <comment>The color black</comment>
   </data>
   <data name="BlacklistedUris" xml:space="preserve">
-    <value>தடுப்புப்பட்டியலிடப்பட்ட உரலிகள்</value>
+    <value>கரும்பட்டியலிடப்பட்ட உரலிகள்</value>
   </data>
   <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>கரும்பட்டியலிடப்பட்ட உரலிகள் தன்னிர்ப்பலை அளிக்காது. பட்டியல் காற்புள்ளியால் பிரிக்கப்பட்டிருக்க வேண்டும். எகா: "https://twitter.com, androidapp://com.twitter.android".</value>
+    <value>கரும்பட்டியலிடப்பட்ட உரலிகள் தன்னிரப்பலை அளிக்காது. பட்டியல் காற்புள்ளியால் பிரிக்கப்பட்டிருக்க வேண்டும். எகா: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
   <data name="DisableSavePrompt" xml:space="preserve">
     <value>சேமிப்பு தூண்டியை முடக்கு</value>
   </data>
   <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>The "Save Prompt" automatically prompts you to save new items to your vault whenever you enter them for the first time.</value>
+    <value>நீ புது உருப்படிகளை முதன்முறை உள்ளிடும்போதெல்லாம் அவற்றை உம் பெட்டகத்தில் சேமிக்க "சேமிப்பு தூண்டி" தானாக உம்மைத் தூண்டும்.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
     <value>செயலி மறுதொடக்கத்தில்</value>
@@ -1644,7 +1644,7 @@
     <value>எச்சரிக்கை</value>
   </data>
   <data name="ExportVaultFailure" xml:space="preserve">
-    <value>உம் பெட்டகத்தை ஏற்றுமதி செய்வதில் ஒரு சிக்கல். சிக்கல் தொடர்ந்தால், வலை பெட்டகத்திலிருந்து ஏற்றுமதி செய்ய வேண்டும்.</value>
+    <value>உம் பெட்டகத்தை ஏற்றுமதி செய்வதில் ஒரு சிக்கல். சிக்கல் தொடர்ந்தால், வலைப்பெட்டகத்திலிருந்து ஏற்றுமதி செய்ய வேண்டும்.</value>
   </data>
   <data name="ExportVaultSuccess" xml:space="preserve">
     <value>பெட்டகம் வெற்றிகரமாக ஏற்றுமதி செய்யப்பட்டது</value>
@@ -1661,7 +1661,7 @@
     <comment>Button text for an open operation (verb).</comment>
   </data>
   <data name="UnableToSaveAttachment" xml:space="preserve">
-    <value>இவ்விணைப்பை சேமிப்பதில் சிக்கல் ஏற்பட்டது. சிக்கல் தொடர்ந்தால், வலை பெட்டகத்திலிருந்து இதை சேமிக்கலாம்.</value>
+    <value>இவ்விணைப்பை சேமிப்பதில் ஏதோ சிக்கல். சிக்கல் தொடர்ந்தால், வலைப்பெட்டகத்திலிருந்து இதைச் சேமிக்கலாம்.</value>
   </data>
   <data name="SaveAttachmentSuccess" xml:space="preserve">
     <value>சேர்ப்பு வெற்றிகரமாக சேமிக்கப்பட்டது</value>
@@ -1731,7 +1731,7 @@
     <value>Quickly log in using your organization's single sign-on portal. Please enter your organization's identifier to begin.</value>
   </data>
   <data name="OrgIdentifier" xml:space="preserve">
-    <value>நிர்வாக அடையாளங்காட்டி</value>
+    <value>நிறுவன அடையாளங்காட்டி</value>
   </data>
   <data name="LoginSsoError" xml:space="preserve">
     <value>SSO கொண்டு தற்போது உள்நுழைய இயலாது</value>
@@ -1740,7 +1740,7 @@
     <value>பிரதான கடவுச்சொல்லை அமை</value>
   </data>
   <data name="SetMasterPasswordSummary" xml:space="preserve">
-    <value>In order to complete logging in with SSO, please set a master password to access and protect your vault.</value>
+    <value>SSOஉடன் உள்நுழைவதை நிறைவுசெய்ய, உம் பெட்டகத்தை அணுகவும் காக்கவும் பிரதான கடவுச்சொல் அமைக்கவும்.</value>
   </data>
   <data name="MasterPasswordPolicyInEffect" xml:space="preserve">
     <value>ஒன்று அ மேற்பட்ட நிறுவன கொள்கைகளுக்கு உமது பிரதான கடவுச்சொல் தேவை பின்வரும் தேவைகளை பூர்த்தி செய்ய:</value>
@@ -1776,7 +1776,7 @@
     <value>இந்த நிலைமாற்றியை செயல்படுத்துவதன் மூலம் பின்வருவதை ஒப்புக்கொள்கிறீர்கள்:</value>
   </data>
   <data name="AcceptPoliciesError" xml:space="preserve">
-    <value>Terms of Service and Privacy Policy have not been acknowledged.</value>
+    <value>சேவை விதிமுறைகளும் தனியுரிமைக் கொள்கையும்  ஒப்புக்கொள்ளப்படவில்லை.</value>
   </data>
   <data name="TermsOfService" xml:space="preserve">
     <value>சேவை விதிமுறைகள்</value>
@@ -1797,7 +1797,7 @@
     <value>Use inline autofill if your selected IME (keyboard) supports it. If your configuration is not supported (or this option is disabled), the default Autofill overlay will be used.</value>
   </data>
   <data name="Accessibility" xml:space="preserve">
-    <value>அணுகல்தன்மையைப் பயன்படுத்து</value>
+    <value>அணுகல்தன்மை பயன்படுத்து</value>
   </data>
   <data name="AccessibilityDescription" xml:space="preserve">
     <value>Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. When enabled, we'll display a popup when login fields are selected.</value>
@@ -1936,10 +1936,10 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="CopyLink" xml:space="preserve">
-    <value>இணைப்பை நகலெடு</value>
+    <value>தொடுப்பை நகலெடு</value>
   </data>
   <data name="ShareLink" xml:space="preserve">
-    <value>இணைப்பை பகிர்</value>
+    <value>தொடுப்பைப் பகிர்</value>
   </data>
   <data name="SendLink" xml:space="preserve">
     <value>Send தொடுப்பு</value>
@@ -2015,7 +2015,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFileEmailVerificationRequired" xml:space="preserve">
-    <value>Send உடன் கோப்புகளை பயன்படுத்த உம் மின்னஞ்சலை கட்டாயம் நிச்சயப்படுத்தவும்.  உம் மின்னஞ்சலை வலை பெட்டகத்தில் நிச்சயப்படுத்தலாம்.</value>
+    <value>Send உடன் கோப்புகளைப் பயன்படுத்த உம் மின்னஞ்சலைக் கட்டாயம் சரிபார்க்க வேண்டும்.  உம் மின்னஞ்சலை வலைப்பெட்டகத்தில் சரிபார்க்கலாம்.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PasswordPrompt" xml:space="preserve">
@@ -2025,7 +2025,7 @@
     <value>பிரதான கடவுச்சொல் உறுதியாக்கம்</value>
   </data>
   <data name="PasswordConfirmationDesc" xml:space="preserve">
-    <value>இச்செயல் பாதுகாக்கப்பட்டது, தொடர உம் பிரதான கடவுச்சொல்லை மறு-உள்ளிட்டு உம் அடையாளத்தை நிச்சயப்படுத்தவும்.</value>
+    <value>இச்செயல் காக்கப்பட்டது, தொடர உம் அடையாளத்தைச் சரிபார்க்க உம் பிரதான கடவுச்சொல்லை மீண்டுமுள்ளிடவும்.</value>
   </data>
   <data name="CaptchaRequired" xml:space="preserve">
     <value>கேப்ட்ச்சா தேவை</value>
@@ -2111,10 +2111,34 @@
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>செல்லாத சரிபார்ப்புக் குறியீடு.</value>
   </data>
+  <data name="RequestOTP" xml:space="preserve">
+    <value>ஒருமுறை கடவுச்சொல்லைக் கோரு</value>
+  </data>
   <data name="SendCode" xml:space="preserve">
     <value>குறியீட்டை அனுப்பு</value>
   </data>
   <data name="Sending" xml:space="preserve">
     <value>அனுப்புகிறது</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>சேமிக்கையில் Send தொடுப்பை நகலெடு</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>குறியீட்டை அனுப்புகிறது</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>சரிபார்க்கிறது</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>குறியீட்டை மீண்டுமனுப்பு</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>சரிபார்ப்புக் குறியீடு உம் மின்னஞ்சலுக்கு அனுப்பப்பட்டது</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>உம் மின்னஞ்சலுக்கு சரிபார்ப்புக் குறியீடு அனுப்புகையில் பிழை ஏற்பட்டது. மீண்டும் முயலவும்</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>உம் மின்னஞ்சலுக்கு அனுப்பப்பட்ட சரிபார்ப்புக் குறியீட்டை உள்ளிடு</value>
   </data>
 </root>

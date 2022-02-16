@@ -45,20 +45,47 @@
                            VerticalOptions="CenterAndExpand"
                            TextColor="{Binding SubLabelColor}"
                            StyleClass="list-sub" />
-                    <TimePicker IsVisible="{Binding ShowTimeInput}"
-                                Time="{Binding Time}" Format="HH:mm"
+                </controls:ExtendedStackLayout>
+            </DataTemplate>
+            <DataTemplate
+                x:Key="timePickerTemplate"
+                x:DataType="pages:SettingsPageListItem">
+                <controls:ExtendedStackLayout Orientation="Horizontal"
+                             StyleClass="list-row, list-row-platform">
+                    <Frame
+                        IsVisible="{Binding UseFrame}"
+                        Padding="10"
+                        HasShadow="False"
+                        BackgroundColor="Transparent"
+                        BorderColor="Accent">
+                        <Label
+                            Text="{Binding Name, Mode=OneWay}"
+                            StyleClass="text-muted, text-sm, text-bold"
+                            HorizontalTextAlignment="Center" />
+                    </Frame>
+                    <Label IsVisible="{Binding UseFrame, Converter={StaticResource inverseBool}}"
+                           Text="{Binding Name, Mode=OneWay}"
+                           LineBreakMode="{Binding LineBreakMode}"
+                           HorizontalOptions="StartAndExpand"
+                           VerticalOptions="CenterAndExpand"
+                           StyleClass="list-title"/>
+                    <TimePicker Time="{Binding Time}" Format="HH:mm"
                                 PropertyChanged="OnTimePickerPropertyChanged"
                                 HorizontalOptions="End"
                                 VerticalOptions="Center"
                                 FontSize="Small"
                                 TextColor="{Binding SubLabelColor}"
-                                StyleClass="list-sub" Margin="-5" />
+                                StyleClass="list-sub" Margin="-5"/>
+                    <controls:ExtendedStackLayout.GestureRecognizers>
+			            <TapGestureRecognizer Tapped="ActivateTimePicker"/>
+		            </controls:ExtendedStackLayout.GestureRecognizers>
                 </controls:ExtendedStackLayout>
-            </DataTemplate>
+	        </DataTemplate>
 
             <pages:SettingsPageListItemSelector
                 x:Key="listItemDataTemplateSelector"
-                RegularTemplate="{StaticResource regularTemplate}" />
+                RegularTemplate="{StaticResource regularTemplate}"
+                TimePickerTemplate="{StaticResource timePickerTemplate}" />
         </ResourceDictionary>
     </ContentPage.Resources>
 

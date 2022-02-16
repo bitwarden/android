@@ -201,8 +201,8 @@ namespace Bit.iOS
 
         public override void DidEnterBackground(UIApplication uiApplication)
         {
-            _storageService.SaveAsync(Constants.LastActiveTimeKey, _deviceActionService.GetActiveTime());
-            _messagingService.Send("slept");
+            _storageService?.SaveAsync(Constants.LastActiveTimeKey, _deviceActionService.GetActiveTime());
+            _messagingService?.Send("slept");
             base.DidEnterBackground(uiApplication);
         }
 
@@ -216,11 +216,13 @@ namespace Bit.iOS
                 view.RemoveFromSuperview();
                 UIApplication.SharedApplication.SetStatusBarHidden(false, false);
             }
+
+            ThemeManager.UpdateThemeOnPagesAsync();
         }
 
         public override void WillEnterForeground(UIApplication uiApplication)
         {
-            _messagingService.Send("resumed");
+            _messagingService?.Send("resumed");
             base.WillEnterForeground(uiApplication);
         }
 

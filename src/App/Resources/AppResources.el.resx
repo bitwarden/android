@@ -2111,10 +2111,34 @@
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Μη Έγκυρος Κωδικός Επαλήθευσης.</value>
   </data>
+  <data name="RequestOTP" xml:space="preserve">
+    <value>Αιτηθείτε τον κωδικό πρόσβασης μιας χρήσης</value>
+  </data>
   <data name="SendCode" xml:space="preserve">
     <value>Αποστολή Κωδικού</value>
   </data>
   <data name="Sending" xml:space="preserve">
     <value>Αποστολή....</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>Αντιγράψτε το σύνδεσμο αποστολής κατά την αποθήκευση</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>Αποστολή κωδικού</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>Επαλήθευση</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>Επαναποστολή κωδικού</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>Ένας κωδικός επαλήθευσης έχει σταλεί στο email σας.</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>Παρουσιάστηκε σφάλμα κατά την αποστολή κωδικού επαλήθευσης στο email σας. Παρακαλούμε προσπαθήστε ξανά</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>Εισάγετε τον κωδικό επαλήθευσης που έχει σταλεί στο email σας</value>
   </data>
 </root>

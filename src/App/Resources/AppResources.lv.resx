@@ -2110,10 +2110,34 @@
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Nederīgs apstiprinājuma kods.</value>
   </data>
+  <data name="RequestOTP" xml:space="preserve">
+    <value>Pieprasīt vienreiz izmantojamo paroli</value>
+  </data>
   <data name="SendCode" xml:space="preserve">
     <value>Nosūtīt kodu</value>
   </data>
   <data name="Sending" xml:space="preserve">
     <value>Sūta</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>Saglabājot ievietot "Send" saiti starpliktuvē</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>Sūta kodu</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>Pārbauda</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>Nosūtīt kodu vēlreiz</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>Pārbaudes kods tika nosūtīts e-pastā</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>Pārbaudes koda nosūtīšanā uz e-pastu atgadījās kļūda. Lūgums mēģināt vēlreiz</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>Ievadīt pārbaudes kodu, kas tika nosūtīts e-pastā</value>
   </data>
 </root>

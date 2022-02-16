@@ -14,6 +14,7 @@ using Bit.Core.Enums;
 using Bit.App.Pages;
 using Bit.App.Models;
 using Xamarin.Forms;
+using Bit.Core;
 
 namespace Bit.iOS.Core.Controllers
 {
@@ -58,6 +59,7 @@ namespace Bit.iOS.Core.Controllers
             get
             {
                 var cell = new UITableViewCell();
+                cell.BackgroundColor = ThemeHelpers.BackgroundColor;
                 if (_biometricIntegrityValid)
                 {
                     var biometricButtonText = _deviceActionService.SupportsFaceBiometric() ?
@@ -151,11 +153,11 @@ namespace Bit.iOS.Core.Controllers
                 {
                     MasterPasswordCell.TextField.KeyboardType = UIKeyboardType.NumberPad;
                 }
-                MasterPasswordCell.Button.TitleLabel.Font = UIFont.FromName("FontAwesome", 28f);
-                MasterPasswordCell.Button.SetTitle("\uf06e", UIControlState.Normal);
+                MasterPasswordCell.Button.TitleLabel.Font = UIFont.FromName("bwi-font", 28f);
+                MasterPasswordCell.Button.SetTitle(BitwardenIcons.Eye, UIControlState.Normal);
                 MasterPasswordCell.Button.TouchUpInside += (sender, e) => {
                     MasterPasswordCell.TextField.SecureTextEntry = !MasterPasswordCell.TextField.SecureTextEntry;
-                    MasterPasswordCell.Button.SetTitle(MasterPasswordCell.TextField.SecureTextEntry ? "\uf06e" : "\uf070", UIControlState.Normal);
+                    MasterPasswordCell.Button.SetTitle(MasterPasswordCell.TextField.SecureTextEntry ? BitwardenIcons.Eye : BitwardenIcons.EyeSlash, UIControlState.Normal);
                 };
             }
 

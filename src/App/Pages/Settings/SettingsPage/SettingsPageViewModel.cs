@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
 using Xamarin.Forms;
+using ZXing.Client.Result;
 
 namespace Bit.App.Pages
 {
@@ -132,7 +133,20 @@ namespace Bit.App.Pages
         {
             var debugText = string.Format("{0}: {1} ({2})", AppResources.Version,
                 _platformUtilsService.GetApplicationVersion(), _deviceActionService.GetBuildNumber());
+
+#if DEBUG
+            var pushNotificationsRegistered = ServiceContainer.Resolve<IPushNotificationService>("pushNotificationService").IsRegisteredForPush;
+            var pnServerRegDate = await _storageService.GetAsync<DateTime>(Constants.PushLastRegistrationDateKey);
+            var pnServerError = await _storageService.GetAsync<string>(Constants.PushInstallationRegistrationError);
+
+            var pnServerRegDateMessage = default(DateTime) == pnServerRegDate ? "-" : $"{pnServerRegDate.ToShortDateString()}-{pnServerRegDate.ToShortTimeString()} UTC";
+            var errorMessage = string.IsNullOrEmpty(pnServerError) ? string.Empty : $"Push Notifications Server Registration error: {pnServerError}";
+
+            var text = string.Format("© Bitwarden Inc. 2015-{0}\n\n{1}\nPush Notifications registered:{2}\nPush Notifications Server Last Date :{3}\n{4}", DateTime.Now.Year, debugText, pushNotificationsRegistered, pnServerRegDateMessage, errorMessage);
+#else
             var text = string.Format("© Bitwarden Inc. 2015-{0}\n\n{1}", DateTime.Now.Year, debugText);
+#endif
+
             var copy = await _platformUtilsService.ShowDialogAsync(text, AppResources.Bitwarden, AppResources.Copy,
                 AppResources.Close);
             if (copy)
@@ -143,7 +157,7 @@ namespace Bit.App.Pages
 
         public void Help()
         {
-            _platformUtilsService.LaunchUri("https://help.bitwarden.com/");
+            _platformUtilsService.LaunchUri("https://bitwarden.com/help/");
         }
 
         public async Task FingerprintAsync()
@@ -163,7 +177,7 @@ namespace Bit.App.Pages
                 AppResources.LearnMore, AppResources.Close);
             if (learnMore)
             {
-                _platformUtilsService.LaunchUri("https://help.bitwarden.com/article/fingerprint-phrase/");
+                _platformUtilsService.LaunchUri("https://bitwarden.com/help/fingerprint-phrase/");
             }
         }
 
@@ -174,7 +188,7 @@ namespace Bit.App.Pages
 
         public void Import()
         {
-            _platformUtilsService.LaunchUri("https://help.bitwarden.com/article/import-data/");
+            _platformUtilsService.LaunchUri("https://bitwarden.com/help/import-data/");
         }
 
         public void WebVault()
@@ -193,7 +207,7 @@ namespace Bit.App.Pages
                AppResources.LearnOrg, AppResources.Yes, AppResources.Cancel);
             if (confirmed)
             {
-                _platformUtilsService.LaunchUri("https://help.bitwarden.com/article/what-is-an-organization/");
+                _platformUtilsService.LaunchUri("https://bitwarden.com/help/about-organizations/");
             }
         }
 
@@ -203,7 +217,7 @@ namespace Bit.App.Pages
                 AppResources.TwoStepLogin, AppResources.Yes, AppResources.Cancel);
             if (confirmed)
             {
-                _platformUtilsService.LaunchUri("https://help.bitwarden.com/article/setup-two-step-login/");
+                _platformUtilsService.LaunchUri("https://bitwarden.com/help/setup-two-step-login/");
             }
         }
 
@@ -213,7 +227,7 @@ namespace Bit.App.Pages
                 AppResources.ChangeMasterPassword, AppResources.Yes, AppResources.Cancel);
             if (confirmed)
             {
-                _platformUtilsService.LaunchUri("https://help.bitwarden.com/article/change-your-master-password/");
+                _platformUtilsService.LaunchUri("https://bitwarden.com/help/master-password/#change-your-master-password");
             }
         }
 
