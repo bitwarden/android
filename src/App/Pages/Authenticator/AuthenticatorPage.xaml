@@ -20,6 +20,12 @@
                 SelectionMode="Single"
                 SelectionChanged="RowSelected"
                 StyleClass="list, list-platform">
+                <controls:ExtendedCollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <controls:AuthenticatorViewCell />
+                    </DataTemplate>
+                </controls:ExtendedCollectionView.ItemTemplate>
+
 
             </controls:ExtendedCollectionView>
         </RefreshView>

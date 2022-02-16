@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<controls:ExtendedGrid xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Bit.App.Controls.AuthenticatorViewCell"
+    xmlns:controls="clr-namespace:Bit.App.Controls"
+    xmlns:u="clr-namespace:Bit.App.Utilities"
+    xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+    xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
+    StyleClass="list-row, list-row-platform"
+    RowSpacing="0"
+    ColumnSpacing="0"
+    x:DataType="controls:AuthenticatorViewCellViewModel">
+
+    <Grid.RowDefinitions>
+        <RowDefinition Height="Auto" />
+        <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+
+    <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="Auto" />
+        <ColumnDefinition Width="Auto" />
+    </Grid.ColumnDefinitions>
+
+    <Label
+        Text="Figma"
+        StyleClass="box-label"
+        Grid.Row="0"
+        Grid.Column="0" />
+    <controls:MonoLabel
+        Text="{Binding TotpCodeFormatted, Mode=OneWay}"
+        StyleClass="box-value"
+        Grid.Row="1"
+        Grid.Column="0" />
+    <Label
+        Text="{Binding TotpSec, Mode=OneWay}"
+        Style="{DynamicResource textTotp}"
+        Margin="0, 0, 10, 0"
+        Grid.Row="0"
+        Grid.Column="1"
+        Grid.RowSpan="2"
+        HorizontalOptions="End"
+        HorizontalTextAlignment="End"
+        VerticalOptions="CenterAndExpand" />
+    <controls:IconButton 
+        StyleClass="box-row-button, box-row-button-platform"
+        Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
+        Command="{Binding CopyCommand}"
+        CommandParameter="LoginTotp"
+        Grid.Row="0"
+        Grid.Column="2"
+        Grid.RowSpan="2"
+        AutomationProperties.IsInAccessibleTree="True"
+        AutomationProperties.Name="{u:I18n CopyTotp}" />
+</controls:ExtendedGrid>
