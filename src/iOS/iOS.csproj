@@ -146,15 +146,33 @@
     <ImageAsset Include="Resources\Assets.xcassets\AppIcons.appiconset\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
-    <ImageAsset Include="Resources\Assets.xcassets\LaunchScreen.imageset\Contents.json" />
-    <ImageAsset Include="Resources\Assets.xcassets\LaunchScreen.imageset\logo.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\LaunchScreen.imageset\logo%402x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\LaunchScreen.imageset\logo%403x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\LaunchScreen.imageset\logo_white.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\LaunchScreen.imageset\logo_white%402x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\LaunchScreen.imageset\logo_white%403x.png" />
-    <ImageAsset Include="Resources\Assets.xcassets\ic_warning.imageset\Contents.json" />
-    <ImageAsset Include="Resources\Assets.xcassets\ic_warning.imageset\ic_warning-1.pdf" />
+    <ImageAsset Include="Resources\Assets.xcassets\LaunchScreen.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Assets.xcassets\LaunchScreen.imageset\logo.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Assets.xcassets\LaunchScreen.imageset\logo%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Assets.xcassets\LaunchScreen.imageset\logo%403x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Assets.xcassets\LaunchScreen.imageset\logo_white.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Assets.xcassets\LaunchScreen.imageset\logo_white%402x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Assets.xcassets\LaunchScreen.imageset\logo_white%403x.png">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Assets.xcassets\ic_warning.imageset\Contents.json">
+      <Visible>false</Visible>
+    </ImageAsset>
+    <ImageAsset Include="Resources\Assets.xcassets\ic_warning.imageset\ic_warning-1.pdf">
+      <Visible>false</Visible>
+    </ImageAsset>
     <BundleResource Include="Resources\bwi-font.ttf" />
     <BundleResource Include="Resources\cog%403x.png" />
     <BundleResource Include="Resources\cog%402x.png" />
@@ -215,6 +233,7 @@
       <IsAppExtension>true</IsAppExtension>
       <Project>{F8C3F648-EA5A-4719-8005-85D1690B1655}</Project>
       <Name>iOS.ShareExtension</Name>
+      <IsWatchApp>false</IsWatchApp>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -399,8 +418,5 @@
   <ItemGroup>
     <BundleResource Include="Resources\logo_white%403x.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\Assets.xcassets\LaunchScreen.imageset\" />
-    <Folder Include="Resources\Assets.xcassets\ic_warning.imageset\" />
-  </ItemGroup>
+  <ItemGroup />
 </Project>
