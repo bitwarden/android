@@ -45,5 +45,6 @@ namespace Bit.App.Abstractions
         long GetActiveTime();
         void CloseMainApp();
         bool SupportsFido2();
+        float GetSystemFontSizeScale();
     }
 }

@@ -50,7 +50,8 @@
                     <controls:IconLabel Text="{Binding Icon, Mode=OneWay}"
                                       HorizontalOptions="Start"
                                       VerticalOptions="Center"
-                                      StyleClass="list-icon, list-icon-platform">
+                                      StyleClass="list-icon, list-icon-platform"
+                                      ShouldUpdateFontSizeDynamicallyForAccesibility="True">
                         <controls:IconLabel.Effects>
                             <effects:FixedSizeEffect />
                         </controls:IconLabel.Effects>
