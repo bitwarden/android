@@ -192,6 +192,7 @@
     <Compile Include="Renderers\SelectableLabelRenderer.cs" />
     <Compile Include="Effects\ScrollEnabledEffect.cs" />
     <Compile Include="Services\ClipboardService.cs" />
+    <Compile Include="Utilities\FontElementExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\App\App.csproj">

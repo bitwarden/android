@@ -12,10 +12,10 @@
     x:DataType="controls:CipherViewCellViewModel">
 
     <Grid.Resources>
-          <u:IconGlyphConverter x:Key="iconGlyphConverter"/>
-          <u:IconImageConverter x:Key="iconImageConverter"/>
-          <u:InverseBoolConverter x:Key="inverseBool" />
-          <u:StringHasValueConverter x:Key="stringHasValueConverter" />
+        <u:IconGlyphConverter x:Key="iconGlyphConverter"/>
+        <u:IconImageConverter x:Key="iconImageConverter"/>
+        <u:InverseBoolConverter x:Key="inverseBool" />
+        <u:StringHasValueConverter x:Key="stringHasValueConverter" />
     </Grid.Resources>
 
     <Grid.RowDefinitions>
@@ -23,7 +23,7 @@
     </Grid.RowDefinitions>
 
     <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="40" />
+        <ColumnDefinition Width="40" x:Name="_iconColumn" />
         <ColumnDefinition Width="*" />
         <ColumnDefinition Width="60" />
     </Grid.ColumnDefinitions>
@@ -35,6 +35,7 @@
         StyleClass="list-icon, list-icon-platform"
         IsVisible="{Binding ShowIconImage, Converter={StaticResource inverseBool}}"
         Text="{Binding Cipher, Converter={StaticResource iconGlyphConverter}}"
+        ShouldUpdateFontSizeDynamicallyForAccesibility="True"
         AutomationProperties.IsInAccessibleTree="False" />
 
     <ff:CachedImage
@@ -42,10 +43,12 @@
         BitmapOptimizations="True"
         ErrorPlaceholder="login.png"
         LoadingPlaceholder="login.png"
-        HorizontalOptions="Center"
-        VerticalOptions="Center"
-        WidthRequest="22"
-        HeightRequest="22"
+        HorizontalOptions="Fill"
+        VerticalOptions="Fill"
+        Margin="9"
+        MinimumWidthRequest="22"
+        MinimumHeightRequest="22"
+        Aspect="AspectFit"
         IsVisible="{Binding ShowIconImage}"
         Source="{Binding IconImageSource, Mode=OneTime}"
         AutomationProperties.IsInAccessibleTree="False" />
