@@ -7,7 +7,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
 
-namespace Bit.App.Pages.Authenticator
+namespace Bit.App.Pages
 {
     public partial class AuthenticatorPage : BaseContentPage
     {
@@ -30,30 +30,19 @@ namespace Bit.App.Pages.Authenticator
             //_vm.Page = this;
             //_fromTabPage = fromTabPage;
             //_selectAction = selectAction;
-            //var isIos = Device.RuntimePlatform == Device.iOS;
-            //if (selectAction != null)
-            //{
-            //    if (isIos)
-            //    {
-            //        ToolbarItems.Add(_closeItem);
-            //    }
-            //    ToolbarItems.Add(_selectItem);
-            //}
-            //else
-            //{
-            //    if (isIos)
-            //    {
-            //        ToolbarItems.Add(_moreItem);
-            //    }
-            //    else
-            //    {
-            //        ToolbarItems.Add(_historyItem);
-            //    }
-            //}
-            //if (isIos)
-            //{
-            //    _typePicker.On<iOS>().SetUpdateMode(UpdateMode.WhenFinished);
-            //}
+
+            if (Device.RuntimePlatform == Device.iOS)
+            {
+                _absLayout.Children.Remove(_fab);
+                ToolbarItems.Add(_aboutIconItem);
+                ToolbarItems.Add(_addItem);
+            }
+            else
+            {
+                ToolbarItems.Add(_syncItem);
+                ToolbarItems.Add(_lockItem);
+                ToolbarItems.Add(_aboutTextItem);
+            }
         }
 
         public async Task InitAsync()
@@ -80,24 +69,42 @@ namespace Bit.App.Pages.Authenticator
             //});
         }
         
-        protected override void OnDisappearing()
+
+        private async void Search_Clicked(object sender, EventArgs e)
         {
-            base.OnDisappearing();
-            //_broadcasterService.Unsubscribe(nameof(GeneratorPage));
+            if (DoOnce())
+            {
+                // var page = new SendsPage(_vm.Filter, _vm.Type != null);
+                // await Navigation.PushModalAsync(new NavigationPage(page));
+            }
+        }
+
+        private async void Sync_Clicked(object sender, EventArgs e)
+        {
+            // await _vm.SyncAsync();
+        }
+
+        private async void Lock_Clicked(object sender, EventArgs e)
+        {
+            // await _vaultTimeoutService.LockAsync(true, true);
+        }
+        
+        private void About_Clicked(object sender, EventArgs e)
+        {
+            // _vm.ShowAbout();
+        }
+
+        private async void AddButton_Clicked(object sender, EventArgs e)
+        {
+            if (DoOnce())
+            {
+                // var page = new SendAddEditPage(null, null, _vm.Type);
+                // await Navigation.PushModalAsync(new NavigationPage(page));
+            }
         }
 
         private async void RowSelected(object sender, SelectionChangedEventArgs e)
         {
-        }
-
-        protected override bool OnBackButtonPressed()
-        {
-            if (Device.RuntimePlatform == Device.Android && _tabsPage != null)
-            {
-                _tabsPage.ResetToVaultPage();
-                return true;
-            }
-            return base.OnBackButtonPressed();
         }
 
         private async void Copy_Clicked(object sender, EventArgs e)
@@ -120,20 +127,11 @@ namespace Bit.App.Pages.Authenticator
             //}
         }
 
-        private void Select_Clicked(object sender, EventArgs e)
+        protected override void OnDisappearing()
         {
-            //_selectAction?.Invoke(_vm.Password);
+            base.OnDisappearing();
+            //_broadcasterService.Unsubscribe(nameof(GeneratorPage));
         }
-
-
-        private async void Close_Clicked(object sender, EventArgs e)
-        {
-            if (DoOnce())
-            {
-                await Navigation.PopModalAsync();
-            }
-        }
-
         
     }
 }

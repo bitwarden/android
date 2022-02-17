@@ -30,7 +30,7 @@ namespace Bit.App.Pages
 
             Children.Add(_groupingsPage);
 
-            _authenticatorPage = new NavigationPage(new Authenticator.AuthenticatorPage(true, null, this))
+            _authenticatorPage = new NavigationPage(new AuthenticatorPage(true, null, this))
             {
                 Title = AppResources.Authenticator,
                 IconImageSource = "info.png"

@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
 
-namespace Bit.App.Pages.Authenticator
+namespace Bit.App.Pages
 {
     public class AuthenticatorPageViewModel : BaseViewModel
     {
@@ -24,6 +25,8 @@ namespace Bit.App.Pages.Authenticator
         {
             _userService = ServiceContainer.Resolve<IUserService>("userService");
             _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
+
+            PageTitle = AppResources.Authenticator;
         }
 
         #endregion
