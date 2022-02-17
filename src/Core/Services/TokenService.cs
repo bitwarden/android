@@ -5,6 +5,7 @@ using System;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
+using Bit.Core.Enums;
 
 namespace Bit.Core.Services
 {
@@ -220,7 +221,7 @@ namespace Bit.Core.Services
         {
             var timeout = await _stateService.GetVaultTimeoutAsync();
             var action = await _stateService.GetVaultTimeoutActionAsync();
-            return timeout.HasValue && action == "logOut";
+            return timeout.HasValue && action == VaultTimeoutAction.Logout;
         }
     }
 }

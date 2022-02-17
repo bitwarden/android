@@ -9,6 +9,7 @@ using Bit.Core.Models.Data;
 using Bit.Core.Utilities;
 using System;
 using System.Threading.Tasks;
+using Bit.Core.Enums;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -274,6 +275,7 @@ namespace Bit.App
         {
             Device.BeginInvokeOnMainThread(async () =>
             {
+                Options.HideAccountSwitcher = false;
                 Current.MainPage = new NavigationPage(new HomePage(Options));
             });
         }
@@ -304,12 +306,16 @@ namespace Bit.App
             {
                 var isLocked = await _vaultTimeoutService.IsLockedAsync();
                 var shouldTimeout = await _vaultTimeoutService.ShouldTimeoutAsync();
-                var vaultTimeoutAction = await _stateService.GetVaultTimeoutActionAsync();
                 if (isLocked || shouldTimeout)
                 {
-                    if (vaultTimeoutAction == "logOut")
+                    var vaultTimeoutAction = await _stateService.GetVaultTimeoutActionAsync();
+                    if (vaultTimeoutAction == VaultTimeoutAction.Logout)
                     {
+                        // TODO implement orgIdentifier flow to SSO Login page, same as email flow below
+                        // var orgIdentifier = await _stateService.GetOrgIdentifierAsync();
+                        
                         var email = await _stateService.GetEmailAsync();
+                        Options.HideAccountSwitcher = await _stateService.GetActiveUserIdAsync() == null;
                         Current.MainPage = new NavigationPage(new LoginPage(email, Options));
                     }
                     else
@@ -336,7 +342,19 @@ namespace Bit.App
             }
             else
             {
-                Current.MainPage = new NavigationPage(new HomePage(Options));
+                Options.HideAccountSwitcher = await _stateService.GetActiveUserIdAsync() == null;
+                if (await _vaultTimeoutService.IsLoggedOutByTimeoutAsync())
+                {
+                    // TODO implement orgIdentifier flow to SSO Login page, same as email flow below
+                    // var orgIdentifier = await _stateService.GetOrgIdentifierAsync();
+
+                    var email = await _stateService.GetEmailAsync();
+                    Current.MainPage = new NavigationPage(new LoginPage(email, Options));
+                }
+                else
+                {
+                    Current.MainPage = new NavigationPage(new HomePage(Options));
+                }
             }
         }
 

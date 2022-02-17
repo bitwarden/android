@@ -30,11 +30,11 @@ namespace Bit.Core.Services
             _policyCache = null;
         }
 
-        public async Task<IEnumerable<Policy>> GetAll(PolicyType? type)
+        public async Task<IEnumerable<Policy>> GetAll(PolicyType? type, string userId = null)
         {
             if (_policyCache == null)
             {
-                var policies = await _stateService.GetEncryptedPoliciesAsync();
+                var policies = await _stateService.GetEncryptedPoliciesAsync(userId);
                 if (policies == null)
                 {
                     return null;
@@ -52,26 +52,26 @@ namespace Bit.Core.Services
             }
         }
 
-        public async Task Replace(Dictionary<string, PolicyData> policies)
+        public async Task Replace(Dictionary<string, PolicyData> policies, string userId = null)
         {
-            await _stateService.SetEncryptedPoliciesAsync(policies);
+            await _stateService.SetEncryptedPoliciesAsync(policies, userId);
             _policyCache = null;
         }
 
-        public async Task Clear(string userId)
+        public async Task ClearAsync(string userId)
         {
             await _stateService.SetEncryptedPoliciesAsync(null, userId);
             _policyCache = null;
         }
 
         public async Task<MasterPasswordPolicyOptions> GetMasterPasswordPolicyOptions(
-            IEnumerable<Policy> policies = null)
+            IEnumerable<Policy> policies = null, string userId = null)
         {
             MasterPasswordPolicyOptions enforcedOptions = null;
 
             if (policies == null)
             {
-                policies = await GetAll(PolicyType.MasterPassword);
+                policies = await GetAll(PolicyType.MasterPassword, userId);
             }
             else
             {
@@ -193,14 +193,14 @@ namespace Bit.Core.Services
             return new Tuple<ResetPasswordPolicyOptions, bool>(resetPasswordPolicyOptions, policy != null);
         }
 
-        public async Task<bool> PolicyAppliesToUser(PolicyType policyType, Func<Policy, bool> policyFilter)
+        public async Task<bool> PolicyAppliesToUser(PolicyType policyType, Func<Policy, bool> policyFilter, string userId = null)
         {
-            var policies = await GetAll(policyType);
+            var policies = await GetAll(policyType, userId);
             if (policies == null)
             {
                 return false;
             }
-            var organizations = await _organizationService.GetAllAsync();
+            var organizations = await _organizationService.GetAllAsync(userId);
 
             IEnumerable<Policy> filteredPolicies;
 

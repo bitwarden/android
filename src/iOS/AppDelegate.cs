@@ -8,6 +8,7 @@ using Bit.App.Services;
 using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
+using Bit.Core.Enums;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Bit.iOS.Core.Utilities;
@@ -161,7 +162,7 @@ namespace Bit.iOS
                 else if (message.Command == "vaultTimeoutActionChanged")
                 {
                     var timeoutAction = await _stateService.GetVaultTimeoutActionAsync();
-                    if (timeoutAction == "logOut")
+                    if (timeoutAction == VaultTimeoutAction.Logout)
                     {
                         var userId = await _stateService.GetActiveUserIdAsync();
                         // TODO make specific to userId

@@ -24,6 +24,7 @@ namespace Bit.App.Pages
         private readonly IMessagingService _messagingService;
 
         private bool _showPassword;
+        private bool _showCancelButton;
         private string _email;
         private string _masterPassword;
 
@@ -44,6 +45,7 @@ namespace Bit.App.Pages
 
             AccountSwitchingOverlayViewModel = new AccountSwitchingOverlayViewModel(_stateService, _messagingService)
             {
+                AllowAddAccountRow = true,
                 AllowActiveAccountSelection = true
             };
         }
@@ -58,6 +60,12 @@ namespace Bit.App.Pages
                 });
         }
 
+        public bool ShowCancelButton
+        {
+            get => _showCancelButton;
+            set => SetProperty(ref _showCancelButton, value);
+        }
+        
         public string Email
         {
             get => _email;

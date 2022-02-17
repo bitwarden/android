@@ -53,11 +53,11 @@ namespace Bit.App.Pages
                 new KeyValuePair<string, int?>(AppResources.Never, null),
                 new KeyValuePair<string, int?>(AppResources.Custom, CustomVaultTimeoutValue),
             };
-        private List<KeyValuePair<string, string>> _vaultTimeoutActions =
-            new List<KeyValuePair<string, string>>
+        private List<KeyValuePair<string, VaultTimeoutAction>> _vaultTimeoutActions =
+            new List<KeyValuePair<string, VaultTimeoutAction>>
             {
-                new KeyValuePair<string, string>(AppResources.Lock, "lock"),
-                new KeyValuePair<string, string>(AppResources.LogOut, "logOut"),
+                new KeyValuePair<string, VaultTimeoutAction>(AppResources.Lock, VaultTimeoutAction.Lock),
+                new KeyValuePair<string, VaultTimeoutAction>(AppResources.LogOut, VaultTimeoutAction.Logout),
             };
 
         private Policy _vaultTimeoutPolicy;
@@ -109,7 +109,7 @@ namespace Bit.App.Pages
 
             _vaultTimeout = await _vaultTimeoutService.GetVaultTimeout();
             _vaultTimeoutDisplayValue = _vaultTimeouts.FirstOrDefault(o => o.Value == _vaultTimeout).Key;
-            var action = await _stateService.GetVaultTimeoutActionAsync() ?? "lock";
+            var action = await _stateService.GetVaultTimeoutActionAsync() ?? VaultTimeoutAction.Lock;
             _vaultTimeoutActionDisplayValue = _vaultTimeoutActions.FirstOrDefault(o => o.Value == action).Key;
             var pinSet = await _vaultTimeoutService.IsPinLockSetAsync();
             _pin = pinSet.Item1 || pinSet.Item2;
@@ -526,7 +526,7 @@ namespace Bit.App.Pages
             return true;
         }
 
-        private string GetVaultTimeoutActionFromKey(string key)
+        private VaultTimeoutAction GetVaultTimeoutActionFromKey(string key)
         {
             return _vaultTimeoutActions.FirstOrDefault(o => o.Key == key).Value;
         }

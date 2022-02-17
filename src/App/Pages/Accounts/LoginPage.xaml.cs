@@ -30,12 +30,16 @@ namespace Bit.App.Pages
                 await _accountListOverlay.HideAsync();
                 await Navigation.PopModalAsync();
             };
+            if (!string.IsNullOrWhiteSpace(email))
+            {
+                _email.IsEnabled = false;
+            }
+            else
+            {
+                _vm.ShowCancelButton = true;
+            }
             _vm.Email = email;
             MasterPasswordEntry = _masterPassword;
-            if (Device.RuntimePlatform == Device.Android)
-            {
-                ToolbarItems.RemoveAt(0);
-            }
 
             _email.ReturnType = ReturnType.Next;
             _email.ReturnCommand = new Command(() => _masterPassword.Focus());
@@ -49,9 +53,14 @@ namespace Bit.App.Pages
                 ToolbarItems.Add(_getPasswordHint);
             }
 
-            if (!_appOptions?.IosExtension ?? false)
+            if (_appOptions?.IosExtension ?? false)
             {
-                ToolbarItems.Remove(_closeItem);
+                _vm.ShowCancelButton = true;
+            }
+
+            if (_appOptions?.HideAccountSwitcher ?? false)
+            {
+                ToolbarItems.Remove(_accountAvatar);
             }
         }
 
@@ -63,13 +72,9 @@ namespace Bit.App.Pages
             _mainContent.Content = _mainLayout;
             _accountAvatar?.OnAppearing();
 
-            if (await ShowAccountSwitcherAsync())
+            if (!_appOptions?.HideAccountSwitcher ?? false)
             {
                 _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
-            }
-            else
-            {
-                ToolbarItems.Remove(_accountAvatar);
             }
             await _vm.InitAsync();
             if (!_inputFocused)
@@ -112,7 +117,7 @@ namespace Bit.App.Pages
             }
         }
 
-        private void Close_Clicked(object sender, EventArgs e)
+        private void Cancel_Clicked(object sender, EventArgs e)
         {
             if (DoOnce())
             {

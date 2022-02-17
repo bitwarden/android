@@ -88,13 +88,19 @@ namespace Bit.Core.Services
             var vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             foreach (var account in accountList)
             {
-                var accountView = new AccountView(account, account.Profile.UserId == _state.ActiveUserId);
+                var isActiveAccount = account.Profile.UserId == _state.ActiveUserId;
+                var accountView = new AccountView(account, isActiveAccount);
+                if (isActiveAccount)
+                {
+                    AccountViews.Add(accountView);
+                    continue;
+                }
                 var isLocked = await vaultTimeoutService.IsLockedAsync(accountView.UserId);
                 var shouldTimeout = await vaultTimeoutService.ShouldTimeoutAsync(accountView.UserId);
                 if (isLocked || shouldTimeout)
                 {
                     var action = account.Settings.VaultTimeoutAction;
-                    accountView.AuthStatus = action == "logOut" ? AuthenticationStatus.LoggedOut
+                    accountView.AuthStatus = action == VaultTimeoutAction.Logout ? AuthenticationStatus.LoggedOut
                         : AuthenticationStatus.Locked;
                 }
                 else
@@ -136,11 +142,8 @@ namespace Bit.Core.Services
                     {
                         continue;
                     }
-                    if (await IsAuthenticatedAsync(uid))
-                    {
-                        await SetActiveUserAsync(uid);
-                        break;
-                    }
+                    await SetActiveUserAsync(uid);
+                    break;
                 }
             }
         }
@@ -423,6 +426,13 @@ namespace Bit.Core.Services
             ))?.Profile?.Name;
         }
 
+        public async Task<string> GetOrgIdentifierAsync(string userId = null)
+        {
+            return (await GetAccountAsync(
+                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync())
+            ))?.Profile?.OrgIdentifier;
+        }
+
         public async Task<long?> GetLastActiveTimeAsync(string userId = null)
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
@@ -455,14 +465,14 @@ namespace Bit.Core.Services
             await SaveAccountAsync(account, reconciledOptions);
         }
 
-        public async Task<string> GetVaultTimeoutActionAsync(string userId = null)
+        public async Task<VaultTimeoutAction?> GetVaultTimeoutActionAsync(string userId = null)
         {
             return (await GetAccountAsync(
                 ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync())
             ))?.Settings?.VaultTimeoutAction;
         }
 
-        public async Task SetVaultTimeoutActionAsync(string value, string userId = null)
+        public async Task SetVaultTimeoutActionAsync(VaultTimeoutAction? value, string userId = null)
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
                 await GetDefaultStorageOptionsAsync());
@@ -1347,7 +1357,7 @@ namespace Bit.Core.Services
             }
             if (account.Settings.VaultTimeoutAction == null)
             {
-                account.Settings.VaultTimeoutAction = "lock";
+                account.Settings.VaultTimeoutAction = VaultTimeoutAction.Lock;
             }
             await SetThemeAsync(currentTheme, account.Profile.UserId);
             
