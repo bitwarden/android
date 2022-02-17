@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AuthenticationServices;
 using Bit.Core.Abstractions;
+using Bit.Core.Enums;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
 
@@ -17,7 +18,7 @@ namespace Bit.iOS.Core.Utilities
                 var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
                 var stateService = ServiceContainer.Resolve<IStateService>("stateService");
                 var timeoutAction = await stateService.GetVaultTimeoutActionAsync();
-                if (timeoutAction == "logOut")
+                if (timeoutAction == VaultTimeoutAction.Logout)
                 {
                     return;
                 }
@@ -50,7 +51,7 @@ namespace Bit.iOS.Core.Utilities
         {
             var stateService = ServiceContainer.Resolve<IStateService>("stateService");
             var timeoutAction = await stateService.GetVaultTimeoutActionAsync();
-            if (timeoutAction == "logOut")
+            if (timeoutAction == VaultTimeoutAction.Logout)
             {
                 return false;
             }

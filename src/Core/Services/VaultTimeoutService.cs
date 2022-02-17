@@ -67,6 +67,13 @@ namespace Bit.Core.Services
             }
             return !hasKey;
         }
+        
+        public async Task<bool> IsLoggedOutByTimeoutAsync(string userId = null)
+        {
+            var authed = await _stateService.IsAuthenticatedAsync(userId);
+            var email = await _stateService.GetEmailAsync(userId);
+            return !authed && !string.IsNullOrWhiteSpace(email);
+        }
 
         public async Task CheckVaultTimeoutAsync()
         {
@@ -89,7 +96,7 @@ namespace Bit.Core.Services
                 return false;
             }
             var vaultTimeoutAction = await _stateService.GetVaultTimeoutActionAsync(userId);
-            if (vaultTimeoutAction == "lock" && await IsLockedAsync(userId))
+            if (vaultTimeoutAction == VaultTimeoutAction.Lock && await IsLockedAsync(userId))
             {
                 return false;
             }
@@ -119,7 +126,7 @@ namespace Bit.Core.Services
         public async Task ExecuteTimeoutActionAsync(string userId = null)
         {
             var action = await _stateService.GetVaultTimeoutActionAsync(userId);
-            if (action == "logOut")
+            if (action == VaultTimeoutAction.Logout)
             {
                 await LogOutAsync(false, userId);
             }
@@ -180,7 +187,7 @@ namespace Bit.Core.Services
             }
         }
 
-        public async Task SetVaultTimeoutOptionsAsync(int? timeout, string action)
+        public async Task SetVaultTimeoutOptionsAsync(int? timeout, VaultTimeoutAction? action)
         {
             await _stateService.SetVaultTimeoutAsync(timeout);
             await _stateService.SetVaultTimeoutActionAsync(action);
@@ -208,10 +215,10 @@ namespace Bit.Core.Services
         }
 
         public async Task<int?> GetVaultTimeout(string userId = null) {
-            var vaultTimeout = await _stateService.GetVaultTimeoutAsync();
+            var vaultTimeout = await _stateService.GetVaultTimeoutAsync(userId);
 
-            if (await _policyService.PolicyAppliesToUser(PolicyType.MaximumVaultTimeout)) {
-                var policy = (await _policyService.GetAll(PolicyType.MaximumVaultTimeout)).First();
+            if (await _policyService.PolicyAppliesToUser(PolicyType.MaximumVaultTimeout, null, userId)) {
+                var policy = (await _policyService.GetAll(PolicyType.MaximumVaultTimeout, userId)).First();
                 // Remove negative values, and ensure it's smaller than maximum allowed value according to policy
                 var policyTimeout = _policyService.GetPolicyInt(policy, "minutes");
                 if (!policyTimeout.HasValue)
@@ -227,7 +234,7 @@ namespace Bit.Core.Services
 
                 // We really shouldn't need to set the value here, but multiple services relies on this value being correct.
                 if (vaultTimeout != timeout) {
-                    await _stateService.SetVaultTimeoutAsync(timeout);
+                    await _stateService.SetVaultTimeoutAsync(timeout, userId);
                 }
 
                 return timeout;

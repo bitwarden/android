@@ -24,8 +24,6 @@
                 UseOriginalImage="True"
                 AutomationProperties.IsInAccessibleTree="True"
                 AutomationProperties.Name="{u:I18n Account}" />
-        <ToolbarItem x:Name="_closeItem" x:Key="closeItem" Text="{u:I18n Close}"
-                     Clicked="Close_Clicked" Order="Primary" Priority="-1" />
     </ContentPage.ToolbarItems>
 
     <ContentPage.Resources>
@@ -52,7 +50,17 @@
                                 x:Name="_email"
                                 Text="{Binding Email}"
                                 Keyboard="Email"
-                                StyleClass="box-value" />
+                                StyleClass="box-value">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Disabled">
+                                            <VisualState.Setters>
+                                                <Setter Property="TextColor" Value="{DynamicResource MutedColor}" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                </Entry>
                         </StackLayout>
                         <Grid StyleClass="box-row">
                             <Grid.RowDefinitions>
@@ -94,6 +102,9 @@
                         <Button Text="{u:I18n LogIn}" 
                                 StyleClass="btn-primary"
                                 Clicked="LogIn_Clicked" />
+                        <Button Text="{u:I18n Cancel}"
+                                IsVisible="{Binding ShowCancelButton}"
+                                Clicked="Cancel_Clicked" />
                     </StackLayout>
                 </StackLayout>
             </ScrollView>

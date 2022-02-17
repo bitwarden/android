@@ -43,6 +43,7 @@ namespace Bit.Core.Models.Domain
                 Email = copy.Email;
                 Name = copy.Name;
                 Stamp = copy.Stamp;
+                OrgIdentifier = copy.OrgIdentifier;
                 KdfType = copy.KdfType;
                 KdfIterations = copy.KdfIterations;
                 EmailVerified = copy.EmailVerified;
@@ -53,6 +54,7 @@ namespace Bit.Core.Models.Domain
             public string Email;
             public string Name;
             public string Stamp;
+            public string OrgIdentifier;
             public KdfType? KdfType;
             public int? KdfIterations;
             public bool? EmailVerified;
@@ -98,7 +100,7 @@ namespace Bit.Core.Models.Domain
             public EnvironmentUrlData EnvironmentUrls;
             public EncString PinProtected;
             public int? VaultTimeout;
-            public string VaultTimeoutAction;
+            public VaultTimeoutAction? VaultTimeoutAction;
         }
 
         public class AccountKeys

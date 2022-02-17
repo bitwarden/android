@@ -23,8 +23,6 @@
             UseOriginalImage="True"
             AutomationProperties.IsInAccessibleTree="True"
             AutomationProperties.Name="{u:I18n Account}" />
-        <ToolbarItem x:Name="_closeItem" x:Key="closeItem" Text="{u:I18n Close}"
-                     Clicked="Close_Clicked" Order="Primary" Priority="-1" />
         <ToolbarItem
             Icon="cog_environment.png" Clicked="Environment_Clicked" Order="Primary"
             AutomationProperties.IsInAccessibleTree="True"
@@ -51,6 +49,10 @@
                                 Clicked="Register_Clicked" />
                         <Button Text="{u:I18n LogInSso}"
                                 Clicked="LogInSso_Clicked" />
+                        <Button Text="{u:I18n Cancel}"
+                                IsVisible="{Binding ShowCancelButton}"
+                                Margin="0,10,0,0"
+                                Clicked="Cancel_Clicked" />
                     </StackLayout>
                 </StackLayout>
             </StackLayout>

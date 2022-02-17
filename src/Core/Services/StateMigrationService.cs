@@ -193,7 +193,8 @@ namespace Bit.Core.Services
             {
                 EnvironmentUrls = environmentUrls,
                 VaultTimeout = vaultTimeout,
-                VaultTimeoutAction = vaultTimeoutAction,
+                VaultTimeoutAction =
+                    vaultTimeoutAction == "logout" ? VaultTimeoutAction.Logout : VaultTimeoutAction.Lock,
             };
             if (!string.IsNullOrWhiteSpace(pinProtected))
             {

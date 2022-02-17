@@ -52,12 +52,13 @@ namespace Bit.Core.Abstractions
         Task SetAutofillTileAddedAsync(bool? value);
         Task<string> GetEmailAsync(string userId = null);
         Task<string> GetNameAsync(string userId = null);
+        Task<string> GetOrgIdentifierAsync(string userId = null);
         Task<long?> GetLastActiveTimeAsync(string userId = null);
         Task SetLastActiveTimeAsync(long? value, string userId = null);
         Task<int?> GetVaultTimeoutAsync(string userId = null);
         Task SetVaultTimeoutAsync(int? value, string userId = null);
-        Task<string> GetVaultTimeoutActionAsync(string userId = null);
-        Task SetVaultTimeoutActionAsync(string value, string userId = null);
+        Task<VaultTimeoutAction?> GetVaultTimeoutActionAsync(string userId = null);
+        Task SetVaultTimeoutActionAsync(VaultTimeoutAction? value, string userId = null);
         Task<DateTime?> GetLastFileCacheClearAsync(string userId = null);
         Task SetLastFileCacheClearAsync(DateTime? value, string userId = null);
         Task<PreviousPageInfo> GetPreviousPageInfoAsync(string userId = null);

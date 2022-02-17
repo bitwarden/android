@@ -11,6 +11,8 @@ namespace Bit.App.Pages
         private readonly IStateService _stateService;
         private readonly IMessagingService _messagingService;
 
+        private bool _showCancelButton;
+
         public HomeViewModel()
         {
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
@@ -24,8 +26,13 @@ namespace Bit.App.Pages
             };
         }
 
-        public AccountSwitchingOverlayViewModel AccountSwitchingOverlayViewModel { get; }
+        public bool ShowCancelButton
+        {
+            get => _showCancelButton;
+            set => SetProperty(ref _showCancelButton, value);
+        }
 
+        public AccountSwitchingOverlayViewModel AccountSwitchingOverlayViewModel { get; }
         public Action StartLoginAction { get; set; }
         public Action StartRegisterAction { get; set; }
         public Action StartSsoLoginAction { get; set; }

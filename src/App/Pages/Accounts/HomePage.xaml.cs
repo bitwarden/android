@@ -27,9 +27,14 @@ namespace Bit.App.Pages
             _vm.StartEnvironmentAction = () => Device.BeginInvokeOnMainThread(async () => await StartEnvironmentAsync());
             UpdateLogo();
 
-            if (!_appOptions?.IosExtension ?? false)
+            if (_appOptions?.IosExtension ?? false)
             {
-                ToolbarItems.Remove(_closeItem);
+                _vm.ShowCancelButton = true;
+            }
+
+            if (_appOptions?.HideAccountSwitcher ?? false)
+            {
+                ToolbarItems.Remove(_accountAvatar);
             }
         }
 
@@ -45,13 +50,9 @@ namespace Bit.App.Pages
             _mainContent.Content = _mainLayout;
             _accountAvatar?.OnAppearing();
 
-            if (await ShowAccountSwitcherAsync())
+            if (!_appOptions?.HideAccountSwitcher ?? false)
             {
                 _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
-            }
-            else
-            {
-                ToolbarItems.Remove(_accountAvatar);
             }
             _broadcasterService.Subscribe(nameof(HomePage), async (message) =>
             {
@@ -87,7 +88,7 @@ namespace Bit.App.Pages
             _logo.Source = !ThemeManager.UsingLightTheme ? "logo_white.png" : "logo.png";
         }
         
-        private void Close_Clicked(object sender, EventArgs e)
+        private void Cancel_Clicked(object sender, EventArgs e)
         {
             if (DoOnce())
             {

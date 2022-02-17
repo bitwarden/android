@@ -460,6 +460,7 @@ namespace Bit.App.Utilities
             var vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             var stateService = ServiceContainer.Resolve<IStateService>("stateService");
             var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            var policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
             var searchService = ServiceContainer.Resolve<ISearchService>("searchService");
 
             if (userId == null)
@@ -477,7 +478,11 @@ namespace Bit.App.Utilities
                 cryptoService.ClearKeysAsync(userId),
                 settingsService.ClearAsync(userId),
                 vaultTimeoutService.ClearAsync(userId),
+                policyService.ClearAsync(userId),
                 stateService.LogoutAccountAsync(userId, userInitiated));
+
+            stateService.BiometricLocked = true;
+            searchService.ClearIndex();
 
             // check if we switched accounts automatically
             if (userInitiated && await stateService.GetActiveUserIdAsync() != null)
@@ -488,8 +493,6 @@ namespace Bit.App.Utilities
                 var platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
                 platformUtilsService.ShowToast("info", null, AppResources.AccountSwitchedAutomatically);
             }
-            stateService.BiometricLocked = true;
-            searchService.ClearIndex();
         }
 
         public static async Task OnAccountSwitchAsync()
@@ -504,6 +507,7 @@ namespace Bit.App.Utilities
             var passwordGenerationService = ServiceContainer.Resolve<IPasswordGenerationService>(
                 "passwordGenerationService");
             var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            var policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
             var searchService = ServiceContainer.Resolve<ISearchService>("searchService");
 
             await environmentService.SetUrlsFromStorageAsync();
@@ -517,6 +521,7 @@ namespace Bit.App.Utilities
             folderService.ClearCache();
             collectionService.ClearCache();
             passwordGenerationService.ClearCache();
+            policyService.ClearCache();
             searchService.ClearIndex();
         }
     }
