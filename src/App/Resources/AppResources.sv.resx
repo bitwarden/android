@@ -430,7 +430,7 @@
     <value>Ändra e-postadress</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
-    <value>You can change your email address on the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>Du kan ändra din e-postadress på bitwardens webbvalv. Vill du besöka webbplatsen nu?</value>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
     <value>Ändra huvudlösenord</value>
@@ -786,7 +786,7 @@
     <value>Du letar efter en inloggning som kan automatiskt fyllas i för "{0}".</value>
   </data>
   <data name="LearnOrg" xml:space="preserve">
-    <value>Learn About Organizations</value>
+    <value>Lär dig om organisationer</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
     <value>Kan inte öppna appen "{0}".</value>
@@ -1388,7 +1388,7 @@
     <value>Det finns inga samlingar att visa.</value>
   </data>
   <data name="MovedItemToOrg" xml:space="preserve">
-    <value>{0} moved to {1}.</value>
+    <value>{0} flyttade till {1}.</value>
     <comment>ex: Item moved to Organization.</comment>
   </data>
   <data name="ItemShared" xml:space="preserve">
@@ -1404,13 +1404,13 @@
     <value>Dela objekt</value>
   </data>
   <data name="MoveToOrganization" xml:space="preserve">
-    <value>Move to Organization</value>
+    <value>Flytta till organisation</value>
   </data>
   <data name="NoOrgsToList" xml:space="preserve">
     <value>Inga organisationer att lista.</value>
   </data>
   <data name="MoveToOrgDesc" xml:space="preserve">
-    <value>Choose an organization that you wish to move this item to. Moving to an organization transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</value>
+    <value>Välj en organisation som du vill flytta detta objektet till. Flytt till en organisation överför ägandet av objektet till den organisationen. Du kommer inte längre att vara direkt ägare till detta objekt när det har flyttats.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
     <value>Antal ord</value>
@@ -1441,7 +1441,7 @@
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="LearnOrgConfirmation" xml:space="preserve">
-    <value>Bitwarden allows you to share your vault items with others by using an organization account. Would you like to visit the bitwarden.com website to learn more?</value>
+    <value>Bitwarden gör det möjligt för dig att dela ditt valvs objekt med andra genom att använda ett organisationskonto. Vill du besöka bitwarden.com för att lära dig mer?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
     <value>Exportera valv</value>
@@ -1456,7 +1456,7 @@
     <value>Lås upp</value>
   </data>
   <data name="UnlockVault" xml:space="preserve">
-    <value>Unlock Vault</value>
+    <value>Lås upp valv</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minuter</value>
@@ -1834,7 +1834,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AllSends" xml:space="preserve">
-    <value>All Sends</value>
+    <value>Alla försändelser</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Sends" xml:space="preserve">
@@ -1966,7 +1966,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendUpdated" xml:space="preserve">
-    <value>Send updated.</value>
+    <value>Send uppdaterad.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NewSendCreated" xml:space="preserve">
@@ -2028,34 +2028,34 @@
     <value>Denna åtgärd är skyddad. För att fortsätta, vänligen verifiera din identitet genom att ange ditt huvudlösenord.</value>
   </data>
   <data name="CaptchaRequired" xml:space="preserve">
-    <value>Captcha Required</value>
+    <value>CAPTCHA krävs</value>
   </data>
   <data name="CaptchaFailed" xml:space="preserve">
     <value>Captcha misslyckades. Vänligen försök igen.</value>
   </data>
   <data name="UpdatedMasterPassword" xml:space="preserve">
-    <value>Updated Master Password</value>
+    <value>Huvudlösenord uppdaterades</value>
   </data>
   <data name="UpdateMasterPassword" xml:space="preserve">
-    <value>Update Master Password</value>
+    <value>Uppdatera huvudlösenord</value>
   </data>
   <data name="UpdateMasterPasswordWarning" xml:space="preserve">
-    <value>Your Master Password was recently changed by an administrator in your organization. In order to access the vault, you must update your Master Password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
+    <value>Ditt huvudlösenord ändrades nyligen av en administratör i din organisation. För att få tillgång till valvet måste du uppdatera ditt huvudlösenord nu. Om du fortsätter kommer du att loggas ut från din nuvarande session, vilket kräver att du loggar in igen. Aktiva sessioner på andra enheter kan komma att vara aktiva i upp till en timme.</value>
   </data>
   <data name="UpdatingPassword" xml:space="preserve">
-    <value>Updating Password</value>
+    <value>Uppdaterar lösenord</value>
   </data>
   <data name="UpdatePasswordError" xml:space="preserve">
-    <value>Currently unable to update password</value>
+    <value>Det går för närvarande inte att uppdatera lösenordet</value>
   </data>
   <data name="RemoveMasterPassword" xml:space="preserve">
-    <value>Remove Master Password</value>
+    <value>Ta bort huvudlösenord</value>
   </data>
   <data name="RemoveMasterPasswordWarning" xml:space="preserve">
-    <value>{0} is using SSO with customer-managed encryption. Continuing will remove your Master Password from your account and require SSO to login.</value>
+    <value>{0} använder SSO med kundhanterad kryptering. Fortsätter du så kommer ditt huvudlösenord att tas bort från ditt konto och kräva SSO för att logga in.</value>
   </data>
   <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
-    <value>If you do not want to remove your Master Password, you may leave this organization.</value>
+    <value>Om du inte vill ta bort ditt huvudlösenord kan du lämna denna organisation.</value>
   </data>
   <data name="LeaveOrganization" xml:space="preserve">
     <value>Lämna organisation</value>
@@ -2067,52 +2067,52 @@
     <value>FIDO2 WebAuthn</value>
   </data>
   <data name="Fido2Instruction" xml:space="preserve">
-    <value>To continue, have your FIDO2 WebAuthn enabled security key ready, then follow the instructions after clicking 'Authenticate WebAuthn' on the next screen.</value>
+    <value>För att fortsätta, ha din FIDO2 WebAuthn aktiverad säkerhetsnyckel redo, följ sedan instruktionerna efter att du klickat på "Authenticate WebAuthn" på nästa skärm.</value>
   </data>
   <data name="Fido2Desc" xml:space="preserve">
-    <value>Authentication using FIDO2 WebAuthn, you can authenticate using an external security key.</value>
+    <value>Autentisering med FIDO2 WebAuthn, du kan autentisera med en extern säkerhetsnyckel.</value>
   </data>
   <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
     <value>Autentisera WebAuthn</value>
   </data>
   <data name="Fido2ReturnToApp" xml:space="preserve">
-    <value>Return to App</value>
+    <value>Återvänd till app</value>
   </data>
   <data name="Fido2CheckBrowser" xml:space="preserve">
-    <value>Please make sure your default browser supports WebAuthn and try again.</value>
+    <value>Kontrollera att din standardwebbläsare stöder WebAuthn och försök igen.</value>
   </data>
   <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
-    <value>This organization has an enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password.</value>
+    <value>Denna organisation har en företagspolicy som automatiskt registrerar dig för lösenordsåterställning. Deltagandet gör det möjligt för organisationsadministratörer att ändra ditt huvudlösenord.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>Your organization policies are affecting your vault timeout. Maximum allowed Vault Timeout is {0} hour(s) and {1} minute(s)</value>
+    <value>Dina organisationsprinciper påverkar ditt valvs tid för timeout. Maximal tillåten tid innan timeout är {0} timme(ar) och {1} minut(er)</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
-    <value>Your vault timeout exceeds the restrictions set by your organization.</value>
+    <value>Ditt valvs tid för timeout överskrider de begränsningar som fastställts av din organisation.</value>
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
-    <value>One or more organization policies prevents your from exporting your personal vault.</value>
+    <value>En eller flera organisationsprinciper hindrar dig från att exportera ditt personliga valv.</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Radera konto</value>
   </data>
   <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
-    <value>Deleting your account is permanent</value>
+    <value>Radering av ditt konto är permanent</value>
   </data>
   <data name="DeleteAccountExplanation" xml:space="preserve">
     <value>Ditt konto och all associerad data raderas och kan inte återställas. Är du säker på att du vill fortsätta?</value>
   </data>
   <data name="DeletingYourAccount" xml:space="preserve">
-    <value>Deleting your account</value>
+    <value>Raderar ditt konto</value>
   </data>
   <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
-    <value>Your account has been permanently deleted</value>
+    <value>Ditt konto har raderats permanent.</value>
   </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Ogiltig verifieringskod.</value>
   </data>
   <data name="RequestOTP" xml:space="preserve">
-    <value>Request one-time password</value>
+    <value>Begär engångslösenord</value>
   </data>
   <data name="SendCode" xml:space="preserve">
     <value>Skicka kod</value>
@@ -2121,7 +2121,7 @@
     <value>Skickar</value>
   </data>
   <data name="CopySendLinkOnSave" xml:space="preserve">
-    <value>Copy Send link on save</value>
+    <value>Kopiera Send länk vid sparning</value>
   </data>
   <data name="SendingCode" xml:space="preserve">
     <value>Skickar kod</value>
@@ -2130,13 +2130,13 @@
     <value>Verifierar</value>
   </data>
   <data name="ResendCode" xml:space="preserve">
-    <value>Resend Code</value>
+    <value>Skicka koden igen</value>
   </data>
   <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
     <value>En verifieringskod skickades till din e-postadress</value>
   </data>
   <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
-    <value>An error occurred while sending a verification code to your email. Please try again</value>
+    <value>Ett fel inträffade när en verifieringskod skulle skickas till din e-post. Försök igen</value>
   </data>
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
     <value>Ange verifieringskoden som skickades till din e-postadress</value>

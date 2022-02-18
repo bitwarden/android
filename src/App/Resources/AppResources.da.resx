@@ -1150,10 +1150,10 @@
     <value>Autoudfyld hjælpefunktion</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>Bitwarden autoudfyld tjenesten bruger Androids AutoFyld framework til at hjælpe med at udfylde logins, kreditkort og identitetsoplysninger i andre apps på din enhed.</value>
+    <value>Bitwarden autoudfyld tjenesten bruger Androids AutoFyld framework til at hjælpe med at udfylde loginoplysninger i andre apps på din enhed.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Brug Bitwarden autoudfyld tjenesten til at udfylde logins, kreditkort og identitetsoplysninger i andre apps.</value>
+    <value>Brug Bitwarden autoudfyld tjenesten til at udfylde loginoplysninger i andre apps.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Åbn autoudfyld indstillinger</value>

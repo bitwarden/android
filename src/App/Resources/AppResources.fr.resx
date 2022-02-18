@@ -1150,10 +1150,10 @@
     <value>Service d'accessibilité pour le remplissage automatique</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>Le service de remplissage automatique de Bitwarden utilise l'outil de remplissage automatique d'Android pour aider à saisir les identifiants, les cartes de crédit et les informations d'identité dans d'autres applications sur votre appareil.</value>
+    <value>Le service de saisie automatique de Bitwarden utilise l'outil de saisie automatique d'Android pour aider à saisir les identifiants, les cartes de crédit et les informations d'identité dans d'autres applis sur votre appareil.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Utilisez le service d'accessibilité de Bitwarden pour le remplissage automatique de vos identifiants.</value>
+    <value>Utilisez le service d'accessibilité de Bitwarden pour la saisie automatique de vos identifiants.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Ouvrir les paramètres de remplissage automatique</value>

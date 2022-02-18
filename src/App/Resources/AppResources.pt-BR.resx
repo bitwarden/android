@@ -1153,7 +1153,7 @@
     <value>O serviço de autopreenchimento do Bitwarden utiliza a Estrutura de Autopreenchimento do Android para ajudar no preenchimento de credenciais, cartões de crédito, e informação de identidade em outros aplicativos do seu dispositivo.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Utilize o serviço de autopreenchimento do Bitwarden para preencher automaticamente suas credenciais, cartões de crédito e informação de identidade em outros aplicativos.</value>
+    <value>Use o serviço de acessibilidade do bitwarden para preencher automaticamente suas credenciais.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Abrir Configurações de Autopreenchimento</value>
