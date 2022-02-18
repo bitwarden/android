@@ -937,5 +937,11 @@ namespace Bit.Droid.Services
                 Context.ClipboardService) as Android.Content.ClipboardManager;
             clipboardManager.PrimaryClip = ClipData.NewPlainText("bitwarden", text);
         }
+
+        public float GetSystemFontSizeScale()
+        {
+            var activity = CrossCurrentActivity.Current?.Activity as MainActivity;
+            return activity?.Resources?.Configuration?.FontScale ?? 1;
+        }
     }
 }

@@ -2111,7 +2111,7 @@
     <value>Doğrulama kodu geçersiz.</value>
   </data>
   <data name="RequestOTP" xml:space="preserve">
-    <value>Request one-time password</value>
+    <value>Tek kullanımlık şifre iste</value>
   </data>
   <data name="SendCode" xml:space="preserve">
     <value>Kod gönder</value>
@@ -2120,24 +2120,24 @@
     <value>Gönderiliyor</value>
   </data>
   <data name="CopySendLinkOnSave" xml:space="preserve">
-    <value>Copy Send link on save</value>
+    <value>Send linkini kayıtta kopyala</value>
   </data>
   <data name="SendingCode" xml:space="preserve">
-    <value>Sending code</value>
+    <value>Kod yollanıyor</value>
   </data>
   <data name="Verifying" xml:space="preserve">
-    <value>Verifying</value>
+    <value>Doğrulanıyor</value>
   </data>
   <data name="ResendCode" xml:space="preserve">
-    <value>Resend Code</value>
+    <value>Kodu Tekrar Yolla</value>
   </data>
   <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
-    <value>A verification code was sent to your email</value>
+    <value>Epostanıza bir doğrulama kodu yollandı</value>
   </data>
   <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
-    <value>An error occurred while sending a verification code to your email. Please try again</value>
+    <value>Epostanıza doğrulama kodu yollarken bir sorun oluştu. Lütfen daha sonra tekrar deneyin</value>
   </data>
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
-    <value>Enter the verification code that was sent to your email</value>
+    <value>Epostanıza yollanmış doğrulama kodunu girin</value>
   </data>
 </root>

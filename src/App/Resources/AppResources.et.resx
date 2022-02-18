@@ -827,7 +827,7 @@
     <value>Kaheastmelise sisselogimise valikud</value>
   </data>
   <data name="UseAnotherTwoStepMethod" xml:space="preserve">
-    <value>Kasuta teist kaheastmelist sisselogimise meetodit</value>
+    <value>Kasuta teist meetodit</value>
   </data>
   <data name="VerificationEmailNotSent" xml:space="preserve">
     <value>Kinnitus e-kirja saatmine ebaõnnestus. Proovi uuesti.</value>

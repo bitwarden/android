@@ -239,9 +239,9 @@
     <Style TargetType="Label"
            Class="list-icon"
            ApplyToDerivedTypes="True">
-        <Setter Property="WidthRequest"
+        <Setter Property="MinimumWidthRequest"
                 Value="26" />
-        <Setter Property="HeightRequest"
+        <Setter Property="MinimumHeightRequest"
                 Value="26" />
         <Setter Property="HorizontalTextAlignment"
                 Value="Center" />

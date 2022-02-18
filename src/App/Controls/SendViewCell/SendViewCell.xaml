@@ -19,7 +19,7 @@
     </Grid.RowDefinitions>
 
     <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="40" />
+        <ColumnDefinition Width="40" x:Name="_iconColumn" />
         <ColumnDefinition Width="*" />
         <ColumnDefinition Width="60" />
     </Grid.ColumnDefinitions>
@@ -31,6 +31,7 @@
         VerticalOptions="Center"
         StyleClass="list-icon, list-icon-platform"
         Text="{Binding Send, Converter={StaticResource sendIconGlyphConverter}}"
+        ShouldUpdateFontSizeDynamicallyForAccesibility="True"
         AutomationProperties.IsInAccessibleTree="False" />
 
     <Grid RowSpacing="0" ColumnSpacing="0" Grid.Row="0" Grid.Column="1" VerticalOptions="Center" Padding="0, 7">

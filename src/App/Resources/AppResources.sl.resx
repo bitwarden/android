@@ -1150,10 +1150,10 @@
     <value>Storitev za samodejno izpolnjevanje</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>The Bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device.</value>
+    <value>The Bitwarden auto-fill service uses the Android Autofill Framework to assist in filling login information into other apps on your device.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Use the Bitwarden auto-fill service to fill logins, credit cards, and identity information into other apps.</value>
+    <value>Use the Bitwarden auto-fill service to fill login information into other apps.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Nastavitve samodejnega izpolnjevanja</value>

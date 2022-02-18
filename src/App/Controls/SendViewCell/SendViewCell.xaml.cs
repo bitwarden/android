@@ -1,5 +1,7 @@
 using System;
+using Bit.App.Abstractions;
 using Bit.Core.Models.View;
+using Bit.Core.Utilities;
 using Xamarin.Forms;
 
 namespace Bit.App.Controls
@@ -18,6 +20,9 @@ namespace Bit.App.Controls
         public SendViewCell()
         {
             InitializeComponent();
+
+            var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            _iconColumn.Width = new GridLength(40 * deviceActionService.GetSystemFontSizeScale(), GridUnitType.Absolute);
         }
 
         public SendView Send

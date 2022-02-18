@@ -1153,7 +1153,7 @@
     <value>Bitwarden služba automatického vypĺňania využíva Android Autofill Framework pre zjednodušenie vypĺňania prihlasovacích údajov, kreditných kariet a identít v aplikáciách vo vašom zariadení.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Použite službu automatického vypĺňania Bitwardenu na vypĺňanie prihlasovacích údajov, kreditných kariet a informácii identít do iných aplikácií.</value>
+    <value>Použite službu automatického vypĺňania Bitwardenu na vypĺňanie prihlasovacích údajov do iných aplikácií.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Otvoriť nastavenia automatického vypĺňania</value>
@@ -1923,7 +1923,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Vypnúť tento Send, aby k nemu nikto nemal prístup.</value>
+    <value>Vypnúť tento Send, aby k nemu nikto nemal prístup</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
@@ -1991,7 +1991,7 @@
     <value>Vlastné</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
-    <value>Po uložení zdieľať tento Send.</value>
+    <value>Po uložení zdieľať tento Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
@@ -2003,7 +2003,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
-    <value>Skryť moju emailovú adresu pred príjemcami.</value>
+    <value>Skryť moju emailovú adresu pred príjemcami</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
     <value>Jedno alebo viac pravidiel organizácie ovplyvňujú vaše možnosti funkcie Send.</value>

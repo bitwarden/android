@@ -587,6 +587,13 @@ namespace Bit.iOS.Core.Services
             throw new NotImplementedException();
         }
 
+        public float GetSystemFontSizeScale()
+        {
+            var tempHeight = 20f;
+            var scaledHeight = (float)new UIFontMetrics(UIFontTextStyle.Body.GetConstant()).GetScaledValue(tempHeight);
+            return scaledHeight / tempHeight;
+        }
+
         public class PickerDelegate : UIDocumentPickerDelegate
         {
             private readonly DeviceActionService _deviceActionService;
