@@ -1153,7 +1153,7 @@
     <value>Usługa autouzupełniania Bitwarden wykorzystuje funkcję Androida, aby wypełniać dane logowania, kart kredytowych i osobistych informacji w aplikacjach na Twoim urządzeniu.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Użyj usługi autouzupełniania Bitwarden, aby wypełniać dane logowania, kart kredytowych i informacje osobiste w innych aplikacjach.</value>
+    <value>Użyj usługi autouzupełniania Bitwarden, aby wypełnić dane logowania, dane kart kredytowych i informacje osobiste w innych aplikacjach.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Otwórz ustawienia autouzupełniania</value>
