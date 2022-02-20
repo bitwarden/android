@@ -101,7 +101,7 @@ namespace Bit.iOS.Core.Controllers
             else
             {
                 _pinSet = _vaultTimeoutService.IsPinLockSetAsync().GetAwaiter().GetResult();
-                _pinLock = (_pinSet.Item1 && _stateService.GetPinProtectedAsync() != null) || _pinSet.Item2;
+                _pinLock = (_pinSet.Item1 && await _stateService.GetPinProtectedKeyAsync() != null) || _pinSet.Item2;
                 _biometricLock = _vaultTimeoutService.IsBiometricLockSetAsync().GetAwaiter().GetResult() &&
                     _cryptoService.HasKeyAsync().GetAwaiter().GetResult();
                 _biometricIntegrityValid = _biometricService.ValidateIntegrityAsync(BiometricIntegrityKey).GetAwaiter()
@@ -225,7 +225,7 @@ namespace Bit.iOS.Core.Controllers
                     {
                         var key = await _cryptoService.MakeKeyFromPinAsync(inputtedValue, email,
                             kdf.GetValueOrDefault(KdfType.PBKDF2_SHA256), kdfIterations.GetValueOrDefault(5000),
-                            await _stateService.GetPinProtectedCachedAsync());
+                            await _stateService.GetPinProtectedKeyAsync());
                         var encKey = await _cryptoService.GetEncKeyAsync(key);
                         var protectedPin = await _stateService.GetProtectedPinAsync();
                         var decPin = await _cryptoService.DecryptToUtf8Async(new EncString(protectedPin), encKey);
@@ -285,7 +285,7 @@ namespace Bit.iOS.Core.Controllers
                         var decPin = await _cryptoService.DecryptToUtf8Async(new EncString(protectedPin), encKey);
                         var pinKey = await _cryptoService.MakePinKeyAysnc(decPin, email,
                             kdf.GetValueOrDefault(KdfType.PBKDF2_SHA256), kdfIterations.GetValueOrDefault(5000));
-                        await _stateService.SetPinProtectedCachedAsync(await _cryptoService.EncryptAsync(key2.Key, pinKey));
+                        await _stateService.SetPinProtectedKeyAsync(await _cryptoService.EncryptAsync(key2.Key, pinKey));
                     }
                     await AppHelpers.ResetInvalidUnlockAttemptsAsync();
                     await SetKeyAndContinueAsync(key2, true);
