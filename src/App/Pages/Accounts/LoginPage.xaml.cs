@@ -156,7 +156,6 @@ namespace Bit.App.Pages
             }
             else if (selection == AppResources.RemoveAccount)
             {
-                await _accountListOverlay.HideAsync();
                 await _vm.RemoveAccountAsync();
             }
         }
