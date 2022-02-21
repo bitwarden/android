@@ -21,8 +21,10 @@ namespace Bit.App.Controls
         {
             InitializeComponent();
 
-            var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
-            _iconColumn.Width = new GridLength(40 * deviceActionService.GetSystemFontSizeScale(), GridUnitType.Absolute);
+            var fontScale = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService").GetSystemFontSizeScale();
+            _iconColumn.Width = new GridLength(40 * fontScale, GridUnitType.Absolute);
+            _iconImage.WidthRequest = 22 * fontScale;
+            _iconImage.HeightRequest = 22 * fontScale;
         }
 
         public bool? WebsiteIconsEnabled
