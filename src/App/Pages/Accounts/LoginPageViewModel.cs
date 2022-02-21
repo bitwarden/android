@@ -101,7 +101,7 @@ namespace Bit.App.Pages
             }
         }
 
-        public async Task LogInAsync(bool showLoading = true)
+        public async Task LogInAsync(bool showLoading = true, bool checkForExistingAccount = false)
         {
             if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
             {
@@ -133,6 +133,23 @@ namespace Bit.App.Pages
             ShowPassword = false;
             try
             {
+                if (checkForExistingAccount)
+                {
+                    var userId = await _stateService.GetUserIdAsync(Email);
+                    if (!string.IsNullOrWhiteSpace(userId))
+                    {
+                        var switchToAccount = await _platformUtilsService.ShowDialogAsync(
+                            AppResources.SwitchToAlreadyAddedAccountConfirmation,
+                            AppResources.AccountAlreadyAdded, AppResources.Yes, AppResources.Cancel);
+                        if (switchToAccount)
+                        {
+                            await _stateService.SetActiveUserAsync(userId);
+                            _messagingService.Send("switchedAccount");
+                        }
+                        return;
+                    }
+                }
+
                 if (showLoading)
                 {
                     await _deviceActionService.ShowLoadingAsync(AppResources.LoggingIn);
@@ -189,6 +206,16 @@ namespace Bit.App.Pages
             var entry = (Page as LoginPage).MasterPasswordEntry;
             entry.Focus();
             entry.CursorPosition = String.IsNullOrEmpty(MasterPassword) ? 0 : MasterPassword.Length;
+        }
+
+        public async Task RemoveAccountAsync()
+        {
+            var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.RemoveAccountConfirmation,
+                AppResources.RemoveAccount, AppResources.Yes, AppResources.Cancel);
+            if (confirmed)
+            {
+                _messagingService.Send("logout");
+            }
         }
     }
 }

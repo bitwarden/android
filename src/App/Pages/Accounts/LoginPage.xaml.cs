@@ -53,6 +53,11 @@ namespace Bit.App.Pages
                 ToolbarItems.Add(_getPasswordHint);
             }
 
+            if (Device.RuntimePlatform == Device.Android && !_email.IsEnabled)
+            {
+                ToolbarItems.Add(_removeAccount);
+            }
+
             if (_appOptions?.IosExtension ?? false)
             {
                 _vm.ShowCancelButton = true;
@@ -105,7 +110,7 @@ namespace Bit.App.Pages
         {
             if (DoOnce())
             {
-                await _vm.LogInAsync();
+                await _vm.LogInAsync(true, _email.IsEnabled);
             }
         }
 
@@ -114,6 +119,15 @@ namespace Bit.App.Pages
             if (DoOnce())
             {
                 Navigation.PushModalAsync(new NavigationPage(new HintPage()));
+            }
+        }
+
+        private async void RemoveAccount_Clicked(object sender, EventArgs e)
+        {
+            await _accountListOverlay.HideAsync();
+            if (DoOnce())
+            {
+                await _vm.RemoveAccountAsync();
             }
         }
 
@@ -134,11 +148,16 @@ namespace Bit.App.Pages
             }
 
             var selection = await DisplayActionSheet(AppResources.Options, 
-                AppResources.Cancel, null, AppResources.GetPasswordHint);
+                AppResources.Cancel, null, AppResources.GetPasswordHint, AppResources.RemoveAccount);
 
             if (selection == AppResources.GetPasswordHint)
             {
                 await Navigation.PushModalAsync(new NavigationPage(new HintPage()));
+            }
+            else if (selection == AppResources.RemoveAccount)
+            {
+                await _accountListOverlay.HideAsync();
+                await _vm.RemoveAccountAsync();
             }
         }
 

@@ -67,6 +67,28 @@ namespace Bit.Core.Services
             return await GetAccessTokenAsync(userId) != null;
         }
 
+        public async Task<string> GetUserIdAsync(string email)
+        {
+            if (email == null)
+            {
+                throw new Exception("email cannot be null");
+            }
+
+            await CheckStateAsync();
+            if (_state?.Accounts != null)
+            {
+                foreach (var account in _state.Accounts)
+                {
+                    var accountEmail = account.Value?.Profile?.Email;
+                    if (accountEmail != null && accountEmail == email)
+                    {
+                        return account.Value.Profile.UserId;
+                    }
+                }
+            }
+            return null;
+        }
+
         public async Task RefreshAccountViewsAsync(bool allowAddAccountRow)
         {
             await CheckStateAsync();
@@ -841,6 +863,26 @@ namespace Bit.Core.Services
                 await GetDefaultStorageOptionsAsync());
             var key = Constants.ThemeKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
+        }
+
+        public async Task ApplyThemeGloballyAsync(string value)
+        {
+            // TODO remove this method (ApplyThemeGlobally) to restore per-account theme support
+            await CheckStateAsync();
+            if (_state?.Accounts != null)
+            {
+                var activeUserId = await GetActiveUserIdAsync();
+                foreach (var account in _state.Accounts)
+                {
+                    var uid = account.Value?.Profile?.UserId;
+                    if (uid == null || uid == activeUserId)
+                    {
+                        // active user theme already set, skip
+                        continue;
+                    }
+                    await SetThemeAsync(value, uid);
+                }
+            }
         }
 
         public async Task<bool?> GetAddSitePromptShownAsync(string userId = null)

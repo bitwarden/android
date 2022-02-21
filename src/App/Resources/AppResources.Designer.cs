@@ -311,6 +311,30 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string RemoveAccount {
+            get {
+                return ResourceManager.GetString("RemoveAccount", resourceCulture);
+            }
+        }
+        
+        public static string RemoveAccountConfirmation {
+            get {
+                return ResourceManager.GetString("RemoveAccountConfirmation", resourceCulture);
+            }
+        }
+        
+        public static string AccountAlreadyAdded {
+            get {
+                return ResourceManager.GetString("AccountAlreadyAdded", resourceCulture);
+            }
+        }
+        
+        public static string SwitchToAlreadyAddedAccountConfirmation {
+            get {
+                return ResourceManager.GetString("SwitchToAlreadyAddedAccountConfirmation", resourceCulture);
+            }
+        }
+        
         public static string MasterPassword {
             get {
                 return ResourceManager.GetString("MasterPassword", resourceCulture);
