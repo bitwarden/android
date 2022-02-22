@@ -504,6 +504,7 @@ namespace Bit.App.Utilities
             var cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
             var folderService = ServiceContainer.Resolve<IFolderService>("folderService");
             var collectionService = ServiceContainer.Resolve<ICollectionService>("collectionService");
+            var sendService = ServiceContainer.Resolve<ISendService>("sendService");
             var passwordGenerationService = ServiceContainer.Resolve<IPasswordGenerationService>(
                 "passwordGenerationService");
             var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
@@ -520,6 +521,7 @@ namespace Bit.App.Utilities
             settingsService.ClearCache();
             folderService.ClearCache();
             collectionService.ClearCache();
+            sendService.ClearCache();
             passwordGenerationService.ClearCache();
             policyService.ClearCache();
             searchService.ClearIndex();
