@@ -28,8 +28,8 @@ namespace Bit.Core.Abstractions
         Task SetProtectedPinAsync(string value, string userId = null);
         Task<string> GetPinProtectedAsync(string userId = null);
         Task SetPinProtectedAsync(string value, string userId = null);
-        Task<EncString> GetPinProtectedCachedAsync(string userId = null);
-        Task SetPinProtectedCachedAsync(EncString value, string userId = null);
+        Task<EncString> GetPinProtectedKeyAsync(string userId = null);
+        Task SetPinProtectedKeyAsync(EncString value, string userId = null);
         Task<KdfType?> GetKdfTypeAsync(string userId = null);
         Task SetKdfTypeAsync(KdfType? value, string userId = null);
         Task<int?> GetKdfIterationsAsync(string userId = null);

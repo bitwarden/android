@@ -353,7 +353,7 @@ namespace Bit.App.Pages
                     {
                         var encPin = await _cryptoService.EncryptAsync(pin);
                         await _stateService.SetProtectedPinAsync(encPin.EncryptedString);
-                        await _stateService.SetPinProtectedCachedAsync(pinProtectedKey);
+                        await _stateService.SetPinProtectedKeyAsync(pinProtectedKey);
                     }
                     else
                     {

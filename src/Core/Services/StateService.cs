@@ -238,19 +238,19 @@ namespace Bit.Core.Services
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-        public async Task<EncString> GetPinProtectedCachedAsync(string userId = null)
+        public async Task<EncString> GetPinProtectedKeyAsync(string userId = null)
         {
             return (await GetAccountAsync(
-                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync())
-            ))?.Settings?.PinProtected;
+                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultInMemoryOptionsAsync())
+            ))?.Keys?.PinProtectedKey;
         }
 
-        public async Task SetPinProtectedCachedAsync(EncString value, string userId = null)
+        public async Task SetPinProtectedKeyAsync(EncString value, string userId = null)
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
-                await GetDefaultStorageOptionsAsync());
+                await GetDefaultInMemoryOptionsAsync());
             var account = await GetAccountAsync(reconciledOptions);
-            account.Settings.PinProtected = value;
+            account.Keys.PinProtectedKey = value;
             await SaveAccountAsync(account, reconciledOptions);
         }
 
@@ -1243,7 +1243,6 @@ namespace Bit.Core.Services
                 {
                     _state.Accounts[userId].Tokens.AccessToken = null;
                     _state.Accounts[userId].Tokens.RefreshToken = null;
-                    _state.Accounts[userId].Settings.PinProtected = null;
                     _state.Accounts[userId].Keys.Key = null;
                 }
             }
@@ -1265,7 +1264,6 @@ namespace Bit.Core.Services
                 {
                     state.Accounts[userId].Tokens.AccessToken = null;
                     state.Accounts[userId].Tokens.RefreshToken = null;
-                    state.Accounts[userId].Settings.PinProtected = null;
                 }
                 stateModified = true;
             }

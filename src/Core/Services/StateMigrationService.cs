@@ -186,7 +186,6 @@ namespace Bit.Core.Services
                 }
             );
             var environmentUrls = await GetValueAsync<EnvironmentUrlData>(Storage.Prefs, V2Keys.EnvironmentUrlsKey);
-            var pinProtected = await GetValueAsync<string>(Storage.LiteDb, V2Keys.PinProtectedKey);
             var vaultTimeout = await GetValueAsync<int?>(Storage.Prefs, V2Keys.VaultTimeoutKey);
             var vaultTimeoutAction = await GetValueAsync<string>(Storage.Prefs, V2Keys.VaultTimeoutActionKey);
             account.Settings = new Account.AccountSettings()
@@ -196,10 +195,6 @@ namespace Bit.Core.Services
                 VaultTimeoutAction =
                     vaultTimeoutAction == "logout" ? VaultTimeoutAction.Logout : VaultTimeoutAction.Lock,
             };
-            if (!string.IsNullOrWhiteSpace(pinProtected))
-            {
-                account.Settings.PinProtected = new EncString(pinProtected);
-            }
             var state = new State { Accounts = new Dictionary<string, Account> { [userId] = account } };
             state.ActiveUserId = userId;
             await SetValueAsync(Storage.LiteDb, Constants.StateKey, state);
@@ -213,6 +208,8 @@ namespace Bit.Core.Services
             await SetValueAsync(Storage.LiteDb, Constants.BiometricUnlockKey(userId), biometricUnlock);
             var protectedPin = await GetValueAsync<string>(Storage.LiteDb, V2Keys.ProtectedPin);
             await SetValueAsync(Storage.LiteDb, Constants.ProtectedPinKey(userId), protectedPin);
+            var pinProtectedKey = await GetValueAsync<string>(Storage.LiteDb, V2Keys.PinProtectedKey);
+            await SetValueAsync(Storage.LiteDb, Constants.PinProtectedKey(userId), pinProtectedKey);
             var defaultUriMatch = await GetValueAsync<int?>(Storage.Prefs, V2Keys.DefaultUriMatch);
             await SetValueAsync(Storage.LiteDb, Constants.DefaultUriMatchKey(userId), defaultUriMatch);
             var disableAutoTotpCopy = await GetValueAsync<bool?>(Storage.Prefs, V2Keys.DisableAutoTotpCopyKey);

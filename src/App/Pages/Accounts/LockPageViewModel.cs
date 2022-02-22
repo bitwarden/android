@@ -40,7 +40,8 @@ namespace Bit.App.Pages
         private string _biometricButtonText;
         private string _loggedInAsText;
         private string _lockedVerifyText;
-        private Tuple<bool, bool> _pinSet;
+        private bool _isPinProtected;
+        private bool _isPinProtectedWithKey;
 
         public LockPageViewModel()
         {
@@ -134,8 +135,9 @@ namespace Bit.App.Pages
 
         public async Task InitAsync()
         {
-            _pinSet = await _vaultTimeoutService.IsPinLockSetAsync();
-            PinLock = (_pinSet.Item1 && _stateService.GetPinProtectedAsync() != null) || _pinSet.Item2;
+            (_isPinProtected, _isPinProtectedWithKey) = await _vaultTimeoutService.IsPinLockSetAsync();
+            PinLock = (_isPinProtected && await _stateService.GetPinProtectedKeyAsync() != null) ||
+                      _isPinProtectedWithKey;
             BiometricLock = await _vaultTimeoutService.IsBiometricLockSetAsync() && await _cryptoService.HasKeyAsync();
 
             // Users with key connector and without biometric or pin has no MP to unlock with
@@ -226,11 +228,11 @@ namespace Bit.App.Pages
                 var failed = true;
                 try
                 {
-                    if (_pinSet.Item1)
+                    if (_isPinProtected)
                     {
                         var key = await _cryptoService.MakeKeyFromPinAsync(Pin, _email,
                             kdf.GetValueOrDefault(KdfType.PBKDF2_SHA256), kdfIterations.GetValueOrDefault(5000),
-                            await _stateService.GetPinProtectedCachedAsync());
+                            await _stateService.GetPinProtectedKeyAsync());
                         var encKey = await _cryptoService.GetEncKeyAsync(key);
                         var protectedPin = await _stateService.GetProtectedPinAsync();
                         var decPin = await _cryptoService.DecryptToUtf8Async(new EncString(protectedPin), encKey);
@@ -299,14 +301,14 @@ namespace Bit.App.Pages
                 }
                 if (passwordValid)
                 {
-                    if (_pinSet.Item1)
+                    if (_isPinProtected)
                     {
                         var protectedPin = await _stateService.GetProtectedPinAsync();
                         var encKey = await _cryptoService.GetEncKeyAsync(key);
                         var decPin = await _cryptoService.DecryptToUtf8Async(new EncString(protectedPin), encKey);
                         var pinKey = await _cryptoService.MakePinKeyAysnc(decPin, _email,
                             kdf.GetValueOrDefault(KdfType.PBKDF2_SHA256), kdfIterations.GetValueOrDefault(5000));
-                        await _stateService.SetPinProtectedCachedAsync(await _cryptoService.EncryptAsync(key.Key, pinKey));
+                        await _stateService.SetPinProtectedKeyAsync(await _cryptoService.EncryptAsync(key.Key, pinKey));
                     }
                     MasterPassword = string.Empty;
                     await AppHelpers.ResetInvalidUnlockAttemptsAsync();

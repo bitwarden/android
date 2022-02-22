@@ -92,13 +92,11 @@ namespace Bit.Core.Models.Domain
                 }
 
                 EnvironmentUrls = copy.EnvironmentUrls;
-                PinProtected = copy.PinProtected;
                 VaultTimeout = copy.VaultTimeout;
                 VaultTimeoutAction = copy.VaultTimeoutAction;
             }
 
             public EnvironmentUrlData EnvironmentUrls;
-            public EncString PinProtected;
             public int? VaultTimeout;
             public VaultTimeoutAction? VaultTimeoutAction;
         }
@@ -106,6 +104,7 @@ namespace Bit.Core.Models.Domain
         public class AccountKeys
         {
             public SymmetricCryptoKey Key;
+            public EncString PinProtectedKey;
         }
     }
 }
