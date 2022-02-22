@@ -15,6 +15,7 @@ namespace Bit.Core.Abstractions
         Task<string> GetActiveUserIdAsync();
         Task SetActiveUserAsync(string userId);
         Task<bool> IsAuthenticatedAsync(string userId = null);
+        Task<string> GetUserIdAsync(string email);
         Task RefreshAccountViewsAsync(bool allowAddAccountRow);
         Task AddAccountAsync(Account account);
         Task LogoutAccountAsync(string userId, bool userInitiated);
@@ -105,6 +106,7 @@ namespace Bit.Core.Abstractions
         Task SetRememberedOrgIdentifierAsync(string value);
         Task<string> GetThemeAsync(string userId = null);
         Task SetThemeAsync(string value, string userId = null);
+        Task ApplyThemeGloballyAsync(string value);
         Task<bool?> GetAddSitePromptShownAsync(string userId = null);
         Task SetAddSitePromptShownAsync(bool? value, string userId = null);
         Task<bool?> GetPushInitialPromptShownAsync();

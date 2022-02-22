@@ -206,6 +206,7 @@ namespace Bit.App.Pages
                 await _stateService.SetThemeAsync(theme);
                 ThemeManager.SetTheme(Application.Current.Resources);
                 _messagingService.Send("updatedTheme");
+                _stateService.ApplyThemeGloballyAsync(theme).FireAndForget();
             }
         }
 

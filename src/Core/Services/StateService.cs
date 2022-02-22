@@ -67,6 +67,28 @@ namespace Bit.Core.Services
             return await GetAccessTokenAsync(userId) != null;
         }
 
+        public async Task<string> GetUserIdAsync(string email)
+        {
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                throw new ArgumentNullException(nameof(email));
+            }
+
+            await CheckStateAsync();
+            if (_state?.Accounts != null)
+            {
+                foreach (var account in _state.Accounts)
+                {
+                    var accountEmail = account.Value?.Profile?.Email;
+                    if (accountEmail == email)
+                    {
+                        return account.Value.Profile.UserId;
+                    }
+                }
+            }
+            return null;
+        }
+
         public async Task RefreshAccountViewsAsync(bool allowAddAccountRow)
         {
             await CheckStateAsync();
@@ -124,9 +146,9 @@ namespace Bit.Core.Services
 
         public async Task LogoutAccountAsync(string userId, bool userInitiated)
         {
-            if (userId == null)
+            if (string.IsNullOrWhiteSpace(userId))
             {
-                throw new Exception("userId cannot be null");
+                throw new ArgumentNullException(nameof(userId));
             }
 
             await CheckStateAsync();
@@ -843,6 +865,26 @@ namespace Bit.Core.Services
             await SetValueAsync(key, value, reconciledOptions);
         }
 
+        public async Task ApplyThemeGloballyAsync(string value)
+        {
+            // TODO remove this method (ApplyThemeGlobally) to restore per-account theme support
+            await CheckStateAsync();
+            if (_state?.Accounts == null)
+            {
+                return;
+            }
+            var activeUserId = await GetActiveUserIdAsync();
+            foreach (var account in _state.Accounts)
+            {
+                var uid = account.Value?.Profile?.UserId;
+                // skip active user (theme already set)
+                if (uid != null && uid != activeUserId)
+                {
+                    await SetThemeAsync(value, uid);
+                }
+            }
+        }
+
         public async Task<bool?> GetAddSitePromptShownAsync(string userId = null)
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
@@ -1225,9 +1267,9 @@ namespace Bit.Core.Services
 
         private async Task RemoveAccountAsync(string userId, bool userInitiated)
         {
-            if (userId == null)
+            if (string.IsNullOrWhiteSpace(userId))
             {
-                throw new Exception("userId cannot be null");
+                throw new ArgumentNullException(nameof(userId));
             }
 
             var email = await GetEmailAsync(userId);
@@ -1468,9 +1510,9 @@ namespace Bit.Core.Services
 
         private async Task ValidateUserAsync(string userId)
         {
-            if (string.IsNullOrEmpty(userId))
+            if (string.IsNullOrWhiteSpace(userId))
             {
-                throw new Exception("userId cannot be null or empty");
+                throw new ArgumentNullException(nameof(userId));
             }
             await CheckStateAsync();
             var accounts = _state?.Accounts;

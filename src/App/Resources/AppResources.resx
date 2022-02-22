@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Are you sure you want to log out?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Remove Account</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Are you sure you want to remove this account?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Account Already Added</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Would you like to switch to it now?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Master Password</value>
     <comment>Label for a master password.</comment>
