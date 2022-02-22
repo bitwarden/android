@@ -8,6 +8,9 @@ using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Exceptions;
 using Bit.Core.Utilities;
+#if !FDROID
+using Microsoft.AppCenter.Crashes;
+#endif
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -210,11 +213,20 @@ namespace Bit.App.Pages
 
         public async Task RemoveAccountAsync()
         {
-            var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.RemoveAccountConfirmation,
-                AppResources.RemoveAccount, AppResources.Yes, AppResources.Cancel);
-            if (confirmed)
+            try
             {
-                _messagingService.Send("logout");
+                var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.RemoveAccountConfirmation,
+                    AppResources.RemoveAccount, AppResources.Yes, AppResources.Cancel);
+                if (confirmed)
+                {
+                    _messagingService.Send("logout");
+                }
+            }
+            catch (Exception e)
+            {
+#if !FDROID
+                Crashes.TrackError(e);
+#endif
             }
         }
     }
