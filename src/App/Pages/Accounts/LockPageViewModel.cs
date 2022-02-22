@@ -40,7 +40,8 @@ namespace Bit.App.Pages
         private string _biometricButtonText;
         private string _loggedInAsText;
         private string _lockedVerifyText;
-        private Tuple<bool, bool> _pinSet;
+        private bool _isPinProtected;
+        private bool _isPinProtectedWithKey;
 
         public LockPageViewModel()
         {
@@ -134,8 +135,9 @@ namespace Bit.App.Pages
 
         public async Task InitAsync()
         {
-            _pinSet = await _vaultTimeoutService.IsPinLockSetAsync();
-            PinLock = (_pinSet.Item1 && await _stateService.GetPinProtectedKeyAsync() != null) || _pinSet.Item2;
+            (_isPinProtected, _isPinProtectedWithKey) = await _vaultTimeoutService.IsPinLockSetAsync();
+            PinLock = (_isPinProtected && await _stateService.GetPinProtectedKeyAsync() != null) ||
+                      _isPinProtectedWithKey;
             BiometricLock = await _vaultTimeoutService.IsBiometricLockSetAsync() && await _cryptoService.HasKeyAsync();
 
             // Users with key connector and without biometric or pin has no MP to unlock with
@@ -226,7 +228,7 @@ namespace Bit.App.Pages
                 var failed = true;
                 try
                 {
-                    if (_pinSet.Item1)
+                    if (_isPinProtected)
                     {
                         var key = await _cryptoService.MakeKeyFromPinAsync(Pin, _email,
                             kdf.GetValueOrDefault(KdfType.PBKDF2_SHA256), kdfIterations.GetValueOrDefault(5000),
@@ -299,7 +301,7 @@ namespace Bit.App.Pages
                 }
                 if (passwordValid)
                 {
-                    if (_pinSet.Item1)
+                    if (_isPinProtected)
                     {
                         var protectedPin = await _stateService.GetProtectedPinAsync();
                         var encKey = await _cryptoService.GetEncKeyAsync(key);

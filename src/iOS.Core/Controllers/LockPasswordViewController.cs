@@ -28,7 +28,8 @@ namespace Bit.iOS.Core.Controllers
         private IPlatformUtilsService _platformUtilsService;
         private IBiometricService _biometricService;
         private IKeyConnectorService _keyConnectorService;
-        private Tuple<bool, bool> _pinSet;
+        private bool _isPinProtected;
+        private bool _isPinProtectedWithKey;
         private bool _pinLock;
         private bool _biometricLock;
         private bool _biometricIntegrityValid = true;
@@ -94,18 +95,19 @@ namespace Bit.iOS.Core.Controllers
             if (autofillExtension && await _stateService.GetPasswordRepromptAutofillAsync())
             {
                 _passwordReprompt = true;
-                _pinSet = Tuple.Create(false, false);
+                _isPinProtected = false;
+                _isPinProtectedWithKey = false;
                 _pinLock = false;
                 _biometricLock = false;
             }
             else
             {
-                _pinSet = _vaultTimeoutService.IsPinLockSetAsync().GetAwaiter().GetResult();
-                _pinLock = (_pinSet.Item1 && await _stateService.GetPinProtectedKeyAsync() != null) || _pinSet.Item2;
-                _biometricLock = _vaultTimeoutService.IsBiometricLockSetAsync().GetAwaiter().GetResult() &&
-                    _cryptoService.HasKeyAsync().GetAwaiter().GetResult();
-                _biometricIntegrityValid = _biometricService.ValidateIntegrityAsync(BiometricIntegrityKey).GetAwaiter()
-                    .GetResult();
+                (_isPinProtected, _isPinProtectedWithKey) = await _vaultTimeoutService.IsPinLockSetAsync();
+                _pinLock = (_isPinProtected && await _stateService.GetPinProtectedKeyAsync() != null) ||
+                           _isPinProtectedWithKey;
+                _biometricLock = await _vaultTimeoutService.IsBiometricLockSetAsync() &&
+                                 await _cryptoService.HasKeyAsync();
+                _biometricIntegrityValid = await _biometricService.ValidateIntegrityAsync(BiometricIntegrityKey);
                 _usesKeyConnector = await _keyConnectorService.GetUsesKeyConnector();
                 _biometricUnlockOnly = _usesKeyConnector && _biometricLock && !_pinLock;
             }
@@ -221,7 +223,7 @@ namespace Bit.iOS.Core.Controllers
                 var failed = true;
                 try
                 {
-                    if (_pinSet.Item1)
+                    if (_isPinProtected)
                     {
                         var key = await _cryptoService.MakeKeyFromPinAsync(inputtedValue, email,
                             kdf.GetValueOrDefault(KdfType.PBKDF2_SHA256), kdfIterations.GetValueOrDefault(5000),
@@ -278,7 +280,7 @@ namespace Bit.iOS.Core.Controllers
                 var passwordValid = await _cryptoService.CompareAndUpdateKeyHashAsync(inputtedValue, key2);
                 if (passwordValid)
                 {
-                    if (_pinSet.Item1)
+                    if (_isPinProtected)
                     {
                         var protectedPin = await _stateService.GetProtectedPinAsync();
                         var encKey = await _cryptoService.GetEncKeyAsync(key2);

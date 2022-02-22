@@ -145,8 +145,9 @@ namespace Bit.Core.Services
             }
 
             if (await _keyConnectorService.GetUsesKeyConnector()) {
-                var pinSet = await IsPinLockSetAsync(userId);
-                var pinLock = (pinSet.Item1 && await _stateService.GetPinProtectedKeyAsync(userId) != null) || pinSet.Item2;
+                var (isPinProtected, isPinProtectedWithKey) = await IsPinLockSetAsync(userId);
+                var pinLock = (isPinProtected && await _stateService.GetPinProtectedKeyAsync(userId) != null) ||
+                              isPinProtectedWithKey;
 
                 if (!pinLock && !await IsBiometricLockSetAsync())
                 {
