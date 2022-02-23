@@ -141,15 +141,12 @@ namespace Bit.App.Pages
                     var userId = await _stateService.GetUserIdAsync(Email);
                     if (!string.IsNullOrWhiteSpace(userId))
                     {
-                        var switchToAccount = await _platformUtilsService.ShowDialogAsync(
-                            AppResources.SwitchToAlreadyAddedAccountConfirmation,
-                            AppResources.AccountAlreadyAdded, AppResources.Yes, AppResources.Cancel);
-                        if (switchToAccount)
+                        var userEnvUrls = await _stateService.GetEnvironmentUrlsAsync(userId);
+                        if (userEnvUrls?.Base == _environmentService.BaseUrl)
                         {
-                            await _stateService.SetActiveUserAsync(userId);
-                            _messagingService.Send("switchedAccount");
+                            await PromptToSwitchToExistingAccountAsync(userId);
+                            return;
                         }
-                        return;
                     }
                 }
 
@@ -227,6 +224,18 @@ namespace Bit.App.Pages
 #if !FDROID
                 Crashes.TrackError(e);
 #endif
+            }
+        }
+
+        private async Task PromptToSwitchToExistingAccountAsync(string userId)
+        {
+            var switchToAccount = await _platformUtilsService.ShowDialogAsync(
+                AppResources.SwitchToAlreadyAddedAccountConfirmation,
+                AppResources.AccountAlreadyAdded, AppResources.Yes, AppResources.Cancel);
+            if (switchToAccount)
+            {
+                await _stateService.SetActiveUserAsync(userId);
+                _messagingService.Send("switchedAccount");
             }
         }
     }
