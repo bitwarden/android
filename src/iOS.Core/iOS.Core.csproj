@@ -156,6 +156,7 @@
     <Compile Include="NFCReaderDelegate.cs" />
     <Compile Include="Renderers\CustomButtonRenderer.cs" />
     <Compile Include="Renderers\CustomContentPageRenderer.cs" />
+    <Compile Include="Renderers\CustomNavigationRenderer.cs" />
     <Compile Include="Renderers\ExtendedDatePickerRenderer.cs" />
     <Compile Include="Renderers\CustomEditorRenderer.cs" />
     <Compile Include="Renderers\CustomEntryRenderer.cs" />
@@ -193,6 +194,7 @@
     <Compile Include="Effects\ScrollEnabledEffect.cs" />
     <Compile Include="Services\ClipboardService.cs" />
     <Compile Include="Utilities\FontElementExtensions.cs" />
+    <Compile Include="Effects\ScrollViewContentInsetAdjustmentBehaviorEffect.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\App\App.csproj">

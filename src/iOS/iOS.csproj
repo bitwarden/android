@@ -143,6 +143,7 @@
     <None Include="Info.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <BundleResource Include="Resources\MaterialIcons_Regular.ttf" />
+    <BundleResource Include="Resources\bwi-font.ttf" />
     <ImageAsset Include="Resources\Assets.xcassets\AppIcons.appiconset\Contents.json">
       <Visible>false</Visible>
     </ImageAsset>
@@ -155,19 +156,21 @@
     <ImageAsset Include="Resources\Assets.xcassets\LaunchScreen.imageset\logo_white%403x.png" />
     <ImageAsset Include="Resources\Assets.xcassets\ic_warning.imageset\Contents.json" />
     <ImageAsset Include="Resources\Assets.xcassets\ic_warning.imageset\ic_warning-1.pdf" />
-    <BundleResource Include="Resources\bwi-font.ttf" />
-    <BundleResource Include="Resources\cog%403x.png" />
-    <BundleResource Include="Resources\cog%402x.png" />
-    <BundleResource Include="Resources\cog.png" />
-    <BundleResource Include="Resources\send%403x.png" />
-    <BundleResource Include="Resources\send%402x.png" />
+    <BundleResource Include="Resources\cog_environment.png" />
+    <BundleResource Include="Resources\cog_environment%402x.png" />
+    <BundleResource Include="Resources\cog_environment%403x.png" />
+    <BundleResource Include="Resources\cog_settings.png" />
+    <BundleResource Include="Resources\cog_settings%402x.png" />
+    <BundleResource Include="Resources\cog_settings%403x.png" />
     <BundleResource Include="Resources\send.png" />
+    <BundleResource Include="Resources\send%402x.png" />
+    <BundleResource Include="Resources\send%403x.png" />
     <BundleResource Include="Resources\search.png" />
     <BundleResource Include="Resources\search%402x.png" />
     <BundleResource Include="Resources\search%403x.png" />
-    <BundleResource Include="Resources\generate%403x.png" />
-    <BundleResource Include="Resources\generate%402x.png" />
     <BundleResource Include="Resources\generate.png" />
+    <BundleResource Include="Resources\generate%402x.png" />
+    <BundleResource Include="Resources\generate%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="LaunchScreen.storyboard" />

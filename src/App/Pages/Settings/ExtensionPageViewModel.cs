@@ -7,12 +7,7 @@ namespace Bit.App.Pages
 {
     public class ExtensionPageViewModel : BaseViewModel
     {
-        private const string StartedKey = "appExtensionStarted";
-        private const string ActivatedKey = "appExtensionActivated";
-
         private readonly IMessagingService _messagingService;
-        private readonly IStorageService _storageService;
-        private readonly IPlatformUtilsService _platformUtilsService;
 
         private bool _started;
         private bool _activated;
@@ -20,8 +15,6 @@ namespace Bit.App.Pages
         public ExtensionPageViewModel()
         {
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
-            _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
-            _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             PageTitle = AppResources.AppExtension;
         }
 
@@ -52,10 +45,8 @@ namespace Bit.App.Pages
 
         public async Task InitAsync()
         {
-            var started = await _storageService.GetAsync<bool?>(StartedKey);
-            var activated = await _storageService.GetAsync<bool?>(ActivatedKey);
-            Started = started.GetValueOrDefault();
-            Activated = activated.GetValueOrDefault();
+            Started = false;
+            Activated = false;
         }
 
         public void ShowExtension()

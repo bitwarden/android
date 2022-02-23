@@ -31,7 +31,7 @@ namespace Bit.iOS.ShareExtension
         private NFCNdefReaderSession _nfcSession = null;
         private Core.NFCReaderDelegate _nfcDelegate = null;
 
-        readonly LazyResolve<IUserService> _userService = new LazyResolve<IUserService>("userService");
+        readonly LazyResolve<IStateService> _stateService = new LazyResolve<IStateService>("stateervice");
         readonly LazyResolve<IVaultTimeoutService> _vaultTimeoutService = new LazyResolve<IVaultTimeoutService>("vaultTimeoutService");
         readonly LazyResolve<IDeviceActionService> _deviceActionService = new LazyResolve<IDeviceActionService>("deviceActionService");
         readonly LazyResolve<IEventService> _eventService = new LazyResolve<IEventService>("eventService");
@@ -148,7 +148,7 @@ namespace Bit.iOS.ShareExtension
             };
 
             var app = new App.App(appOptions);
-            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesToPage(sendAddEditPage);
 
             var navigationPage = new NavigationPage(sendAddEditPage);
@@ -224,7 +224,7 @@ namespace Bit.iOS.ShareExtension
             iOSCoreHelpers.Bootstrap();
 
             var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.SetTheme(app.Resources);
 
             iOSCoreHelpers.AppearanceAdjustments();
             _nfcDelegate = new NFCReaderDelegate((success, message) =>
@@ -239,7 +239,7 @@ namespace Bit.iOS.ShareExtension
 
         private Task<bool> IsAuthed()
         {
-            return _userService.Value.IsAuthenticatedAsync();
+            return _stateService.Value.IsAuthenticatedAsync();
         }
 
         private void LogoutIfAuthed()
@@ -248,7 +248,7 @@ namespace Bit.iOS.ShareExtension
             {
                 if (await IsAuthed())
                 {
-                    await AppHelpers.LogOutAsync();
+                    await AppHelpers.LogOutAsync(await _stateService.Value.GetActiveUserIdAsync());
                     if (_deviceActionService.Value.SystemMajorVersion() >= 12)
                     {
                         await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
@@ -261,7 +261,7 @@ namespace Bit.iOS.ShareExtension
         {
             var homePage = new HomePage();
             var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesToPage(homePage);
             if (homePage.BindingContext is HomeViewModel vm)
             {
@@ -284,7 +284,7 @@ namespace Bit.iOS.ShareExtension
         {
             var environmentPage = new EnvironmentPage();
             var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesToPage(environmentPage);
             if (environmentPage.BindingContext is EnvironmentPageViewModel vm)
             {
@@ -302,7 +302,7 @@ namespace Bit.iOS.ShareExtension
         {
             var registerPage = new RegisterPage(null);
             var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesToPage(registerPage);
             if (registerPage.BindingContext is RegisterPageViewModel vm)
             {
@@ -320,7 +320,7 @@ namespace Bit.iOS.ShareExtension
         {
             var loginPage = new LoginPage(email);
             var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesToPage(loginPage);
             if (loginPage.BindingContext is LoginPageViewModel vm)
             {
@@ -342,7 +342,7 @@ namespace Bit.iOS.ShareExtension
         {
             var loginPage = new LoginSsoPage();
             var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesToPage(loginPage);
             if (loginPage.BindingContext is LoginSsoPageViewModel vm)
             {
@@ -365,7 +365,7 @@ namespace Bit.iOS.ShareExtension
         {
             var twoFactorPage = new TwoFactorPage();
             var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesToPage(twoFactorPage);
             if (twoFactorPage.BindingContext is TwoFactorPageViewModel vm)
             {
@@ -392,7 +392,7 @@ namespace Bit.iOS.ShareExtension
         {
             var setPasswordPage = new SetPasswordPage();
             var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesToPage(setPasswordPage);
             if (setPasswordPage.BindingContext is SetPasswordPageViewModel vm)
             {
@@ -411,7 +411,7 @@ namespace Bit.iOS.ShareExtension
         {
             var updateTempPasswordPage = new UpdateTempPasswordPage();
             var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesToPage(updateTempPasswordPage);
             if (updateTempPasswordPage.BindingContext is UpdateTempPasswordPageViewModel vm)
             {

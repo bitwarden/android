@@ -32,7 +32,7 @@ namespace Bit.Droid
         private IDeviceActionService _deviceActionService;
         private IMessagingService _messagingService;
         private IBroadcasterService _broadcasterService;
-        private IUserService _userService;
+        private IStateService _stateService;
         private IAppIdService _appIdService;
         private IEventService _eventService;
         private PendingIntent _eventUploadPendingIntent;
@@ -53,7 +53,7 @@ namespace Bit.Droid
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
-            _userService = ServiceContainer.Resolve<IUserService>("userService");
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _appIdService = ServiceContainer.Resolve<IAppIdService>("appIdService");
             _eventService = ServiceContainer.Resolve<IEventService>("eventService");
 
@@ -70,7 +70,7 @@ namespace Bit.Droid
             }
 
 #if !FDROID
-            var appCenterHelper = new AppCenterHelper(_appIdService, _userService);
+            var appCenterHelper = new AppCenterHelper(_appIdService, _stateService);
             var appCenterTask = appCenterHelper.InitAsync();
 #endif
 
@@ -375,7 +375,7 @@ namespace Bit.Droid
         {
             Window?.SetStatusBarColor(ThemeHelpers.NavBarBackgroundColor);
             Window?.DecorView.SetBackgroundColor(ThemeHelpers.BackgroundColor);
-            ThemeHelpers.SetAppearance(ThemeManager.GetTheme(true), ThemeManager.OsDarkModeEnabled());
+            ThemeHelpers.SetAppearance(ThemeManager.GetTheme(), ThemeManager.OsDarkModeEnabled());
         }
 
         private void ExitApp()

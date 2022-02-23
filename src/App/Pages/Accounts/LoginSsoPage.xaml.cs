@@ -10,8 +10,6 @@ namespace Bit.App.Pages
 {
     public partial class LoginSsoPage : BaseContentPage
     {
-        private readonly IStorageService _storageService;
-        private readonly IMessagingService _messagingService;
         private readonly IVaultTimeoutService _vaultTimeoutService;
         private readonly LoginSsoPageViewModel _vm;
         private readonly AppOptions _appOptions;
@@ -20,10 +18,7 @@ namespace Bit.App.Pages
 
         public LoginSsoPage(AppOptions appOptions = null)
         {
-            _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
-            _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
-            _messagingService.Send("showStatusBar", true);
             _appOptions = appOptions;
             InitializeComponent();
             _vm = BindingContext as LoginSsoPageViewModel;
@@ -36,7 +31,6 @@ namespace Bit.App.Pages
                 () => Device.BeginInvokeOnMainThread(async () => await UpdateTempPasswordAsync());
             _vm.CloseAction = async () =>
             {
-                _messagingService.Send("showStatusBar", false);
                 await Navigation.PopModalAsync();
             };
             if (Device.RuntimePlatform == Device.Android)

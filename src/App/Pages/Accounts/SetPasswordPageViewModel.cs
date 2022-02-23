@@ -7,7 +7,6 @@ using Bit.Core.Models.Request;
 using Bit.Core.Utilities;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -24,7 +23,7 @@ namespace Bit.App.Pages
         private readonly IApiService _apiService;
         private readonly ICryptoService _cryptoService;
         private readonly IPlatformUtilsService _platformUtilsService;
-        private readonly IUserService _userService;
+        private readonly IStateService _stateService;
         private readonly IPolicyService _policyService;
         private readonly IPasswordGenerationService _passwordGenerationService;
         private readonly II18nService _i18nService;
@@ -41,7 +40,7 @@ namespace Bit.App.Pages
             _apiService = ServiceContainer.Resolve<IApiService>("apiService");
             _cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
-            _userService = ServiceContainer.Resolve<IUserService>("userService");
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
             _passwordGenerationService =
                 ServiceContainer.Resolve<IPasswordGenerationService>("passwordGenerationService");
@@ -160,7 +159,7 @@ namespace Bit.App.Pages
 
             var kdf = KdfType.PBKDF2_SHA256;
             var kdfIterations = 100000;
-            var email = await _userService.GetEmailAsync();
+            var email = await _stateService.GetEmailAsync();
             var key = await _cryptoService.MakeKeyAsync(MasterPassword, email, kdf, kdfIterations);
             var masterPasswordHash = await _cryptoService.HashPasswordAsync(MasterPassword, key, HashPurpose.ServerAuthorization);
             var localMasterPasswordHash = await _cryptoService.HashPasswordAsync(MasterPassword, key, HashPurpose.LocalAuthorization);
@@ -197,8 +196,8 @@ namespace Bit.App.Pages
                 await _deviceActionService.ShowLoadingAsync(AppResources.CreatingAccount);
                 // Set Password and relevant information
                 await _apiService.SetPasswordAsync(request);
-                await _userService.SetInformationAsync(await _userService.GetUserIdAsync(),
-                    await _userService.GetEmailAsync(), kdf, kdfIterations);
+                await _stateService.SetKdfTypeAsync(kdf);
+                await _stateService.SetKdfIterationsAsync(kdfIterations);
                 await _cryptoService.SetKeyAsync(key);
                 await _cryptoService.SetKeyHashAsync(localMasterPasswordHash);
                 await _cryptoService.SetEncKeyAsync(encKey.Item2.EncryptedString);
@@ -217,7 +216,7 @@ namespace Bit.App.Pages
                     {
                         ResetPasswordKey = encryptedKey.EncryptedString
                     };
-                    var userId = await _userService.GetUserIdAsync();
+                    var userId = await _stateService.GetActiveUserIdAsync();
                     // Enroll user
                     await _apiService.PutOrganizationUserResetPasswordEnrollmentAsync(OrgId, userId, resetRequest);
                 }
@@ -290,7 +289,7 @@ namespace Bit.App.Pages
 
         private async Task<List<string>> GetPasswordStrengthUserInput()
         {
-            var email = await _userService.GetEmailAsync();
+            var email = await _stateService.GetEmailAsync();
             List<string> userInput = null;
             var atPosition = email.IndexOf('@');
             if (atPosition > -1)

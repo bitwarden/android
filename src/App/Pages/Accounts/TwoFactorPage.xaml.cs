@@ -14,8 +14,6 @@ namespace Bit.App.Pages
     {
         private readonly IBroadcasterService _broadcasterService;
         private readonly IMessagingService _messagingService;
-        private readonly IStorageService _storageService;
-        private readonly IVaultTimeoutService _vaultTimeoutService;
         private readonly AppOptions _appOptions;
 
         private TwoFactorPageViewModel _vm;
@@ -30,10 +28,8 @@ namespace Bit.App.Pages
             _authingWithSso = authingWithSso ?? false;
             _appOptions = appOptions;
             _orgIdentifier = orgIdentifier;
-            _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
-            _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             _vm = BindingContext as TwoFactorPageViewModel;
             _vm.Page = this;
             _vm.StartSetPasswordAction = () =>

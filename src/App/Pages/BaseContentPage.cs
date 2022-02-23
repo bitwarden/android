@@ -1,10 +1,10 @@
-﻿using Bit.Core;
-using Bit.Core.Abstractions;
-using Bit.Core.Utilities;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
+using Bit.App.Controls;
 using Bit.App.Utilities;
+using Bit.Core.Abstractions;
+using Bit.Core.Utilities;
 using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
@@ -13,7 +13,7 @@ namespace Bit.App.Pages
 {
     public class BaseContentPage : ContentPage
     {
-        private IStorageService _storageService;
+        private IStateService _stateService;
         private IDeviceActionService _deviceActionService;
 
         protected int ShowModalAnimationDelay = 400;
@@ -32,16 +32,16 @@ namespace Bit.App.Pages
 
         public bool IsThemeDirty { get; set; }
 
-        protected override void OnAppearing()
+        protected async override void OnAppearing()
         {
             base.OnAppearing();
-
+            
             if (IsThemeDirty)
             {
                 UpdateOnThemeChanged();
             }
-
-            SaveActivity();
+            
+            await SaveActivityAsync();
         }
 
         public bool DoOnce(Action action = null, int milliseconds = 1000)
@@ -54,6 +54,12 @@ namespace Bit.App.Pages
             LastPageAction = DateTime.UtcNow;
             action?.Invoke();
             return true;
+        }
+
+        public virtual Task UpdateOnThemeChanged()
+        {
+            IsThemeDirty = false;
+            return Task.CompletedTask;
         }
 
         protected void SetActivityIndicator(ContentView targetView = null)
@@ -114,11 +120,25 @@ namespace Bit.App.Pages
             });
         }
 
+        protected async Task<bool> ShowAccountSwitcherAsync()
+        {
+            return await _stateService.GetActiveUserIdAsync() != null;
+        }
+
+        protected async Task<AvatarImageSource> GetAvatarImageSourceAsync(bool useCurrentActiveAccount = true)
+        {
+            if (useCurrentActiveAccount)
+            {
+                return new AvatarImageSource(await _stateService.GetNameAsync(), await _stateService.GetEmailAsync());
+            }
+            return new AvatarImageSource();
+        }
+
         private void SetServices()
         {
-            if (_storageService == null)
+            if (_stateService == null)
             {
-                _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+                _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             }
             if (_deviceActionService == null)
             {
@@ -126,16 +146,10 @@ namespace Bit.App.Pages
             }
         }
 
-        private void SaveActivity()
+        private async Task SaveActivityAsync()
         {
             SetServices();
-            _storageService.SaveAsync(Constants.LastActiveTimeKey, _deviceActionService.GetActiveTime());
-        }
-
-        public virtual Task UpdateOnThemeChanged()
-        {
-            IsThemeDirty = false;
-            return Task.CompletedTask;
+            await _stateService.SetLastActiveTimeAsync(_deviceActionService.GetActiveTime());
         }
     }
 }

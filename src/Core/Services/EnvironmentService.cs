@@ -9,14 +9,14 @@ namespace Bit.Core.Services
     public class EnvironmentService : IEnvironmentService
     {
         private readonly IApiService _apiService;
-        private readonly IStorageService _storageService;
+        private readonly IStateService _stateService;
 
         public EnvironmentService(
             IApiService apiService,
-            IStorageService storageService)
+            IStateService stateService)
         {
             _apiService = apiService;
-            _storageService = storageService;
+            _stateService = stateService;
         }
 
         public string BaseUrl { get; set; }
@@ -42,7 +42,11 @@ namespace Bit.Core.Services
 
         public async Task SetUrlsFromStorageAsync()
         {
-            var urls = await _storageService.GetAsync<EnvironmentUrlData>(Constants.EnvironmentUrlsKey);
+            var urls = await _stateService.GetEnvironmentUrlsAsync();
+            if (urls == null)
+            {
+                urls = await _stateService.GetPreAuthEnvironmentUrlsAsync();
+            }
             if (urls == null)
             {
                 urls = new EnvironmentUrlData();
@@ -72,7 +76,7 @@ namespace Bit.Core.Services
             urls.Icons = FormatUrl(urls.Icons);
             urls.Notifications = FormatUrl(urls.Notifications);
             urls.Events = FormatUrl(urls.Events);
-            await _storageService.SaveAsync(Constants.EnvironmentUrlsKey, urls);
+            await _stateService.SetPreAuthEnvironmentUrlsAsync(urls);
             BaseUrl = urls.Base;
             WebVaultUrl = urls.WebVault;
             ApiUrl = urls.Api;

@@ -35,7 +35,7 @@ namespace Bit.Droid.Services
 {
     public class DeviceActionService : IDeviceActionService
     {
-        private readonly IStorageService _storageService;
+        private readonly IStateService _stateService;
         private readonly IMessagingService _messagingService;
         private readonly IBroadcasterService _broadcasterService;
         private readonly Func<IEventService> _eventServiceFunc;
@@ -47,12 +47,12 @@ namespace Bit.Droid.Services
         private string _userAgent;
 
         public DeviceActionService(
-            IStorageService storageService,
+            IStateService stateService,
             IMessagingService messagingService,
             IBroadcasterService broadcasterService,
             Func<IEventService> eventServiceFunc)
         {
-            _storageService = storageService;
+            _stateService = stateService;
             _messagingService = messagingService;
             _broadcasterService = broadcasterService;
             _eventServiceFunc = eventServiceFunc;
@@ -333,7 +333,7 @@ namespace Bit.Droid.Services
             try
             {
                 DeleteDir(CrossCurrentActivity.Current.Activity.CacheDir);
-                await _storageService.SaveAsync(Constants.LastFileCacheClearKey, DateTime.UtcNow);
+                await _stateService.SetLastFileCacheClearAsync(DateTime.UtcNow);
             }
             catch (Exception) { }
         }
@@ -916,9 +916,8 @@ namespace Bit.Droid.Services
         {
             if (!string.IsNullOrWhiteSpace(cipher?.Login?.Totp))
             {
-                var userService = ServiceContainer.Resolve<IUserService>("userService");
-                var autoCopyDisabled = await _storageService.GetAsync<bool?>(Constants.DisableAutoTotpCopyKey);
-                var canAccessPremium = await userService.CanAccessPremiumAsync();
+                var autoCopyDisabled = await _stateService.GetDisableAutoTotpCopyAsync();
+                var canAccessPremium = await _stateService.CanAccessPremiumAsync();
                 if ((canAccessPremium || cipher.OrganizationUseTotp) && !autoCopyDisabled.GetValueOrDefault())
                 {
                     var totpService = ServiceContainer.Resolve<ITotpService>("totpService");

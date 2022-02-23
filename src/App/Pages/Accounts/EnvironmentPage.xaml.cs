@@ -10,14 +10,11 @@ namespace Bit.App.Pages
     public partial class EnvironmentPage : BaseContentPage
     {
         private readonly IPlatformUtilsService _platformUtilsService;
-        private readonly IMessagingService _messagingService;
         private readonly EnvironmentPageViewModel _vm;
 
         public EnvironmentPage()
         {
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
-            _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
-            _messagingService.Send("showStatusBar", true);
             InitializeComponent();
             _vm = BindingContext as EnvironmentPageViewModel;
             _vm.Page = this;
@@ -35,7 +32,6 @@ namespace Bit.App.Pages
             _vm.SubmitSuccessAction = () => Device.BeginInvokeOnMainThread(async () => await SubmitSuccessAsync());
             _vm.CloseAction = async () =>
             {
-                _messagingService.Send("showStatusBar", false);
                 await Navigation.PopModalAsync();
             };
         }

@@ -22,64 +22,65 @@ namespace Bit.Core.Utilities
 
             var platformUtilsService = Resolve<IPlatformUtilsService>("platformUtilsService");
             var storageService = Resolve<IStorageService>("storageService");
-            var secureStorageService = Resolve<IStorageService>("secureStorageService");
+            var stateService = Resolve<IStateService>("stateService");
             var i18nService = Resolve<II18nService>("i18nService");
             var messagingService = Resolve<IMessagingService>("messagingService");
             var cryptoFunctionService = Resolve<ICryptoFunctionService>("cryptoFunctionService");
             var cryptoService = Resolve<ICryptoService>("cryptoService");
             SearchService searchService = null;
 
-            var stateService = new StateService();
-            var tokenService = new TokenService(storageService);
-            var apiService = new ApiService(tokenService, platformUtilsService, (bool expired) =>
+            var tokenService = new TokenService(stateService);
+            var apiService = new ApiService(tokenService, platformUtilsService, (extras) =>
             {
-                messagingService.Send("logout", expired);
+                messagingService.Send("logout", extras);
                 return Task.FromResult(0);
             }, customUserAgent);
             var appIdService = new AppIdService(storageService);
-            var userService = new UserService(storageService, tokenService);
-            var settingsService = new SettingsService(userService, storageService);
+            var organizationService = new OrganizationService(stateService);
+            var settingsService = new SettingsService(stateService);
             var fileUploadService = new FileUploadService(apiService);
-            var cipherService = new CipherService(cryptoService, userService, settingsService, apiService, fileUploadService,
-                storageService, i18nService, () => searchService, clearCipherCacheKey, allClearCipherCacheKeys);
-            var folderService = new FolderService(cryptoService, userService, apiService, storageService,
-                i18nService, cipherService);
-            var collectionService = new CollectionService(cryptoService, userService, storageService, i18nService);
-            var sendService = new SendService(cryptoService, userService, apiService, fileUploadService, storageService,
-                i18nService, cryptoFunctionService);
+            var cipherService = new CipherService(cryptoService, stateService, settingsService, apiService, 
+                fileUploadService, storageService, i18nService, () => searchService, clearCipherCacheKey, 
+                allClearCipherCacheKeys);
+            var folderService = new FolderService(cryptoService, stateService, apiService, i18nService, cipherService);
+            var collectionService = new CollectionService(cryptoService, stateService, i18nService);
+            var sendService = new SendService(cryptoService, stateService, apiService, fileUploadService, i18nService,
+                cryptoFunctionService);
             searchService = new SearchService(cipherService, sendService);
-            var policyService = new PolicyService(storageService, userService);
-            var keyConnectorService = new KeyConnectorService(userService, cryptoService, storageService, tokenService, apiService);
-            var vaultTimeoutService = new VaultTimeoutService(cryptoService, userService, platformUtilsService,
-                storageService, folderService, cipherService, collectionService, searchService, messagingService, tokenService,
-                policyService, keyConnectorService, null, (expired) =>
+            var policyService = new PolicyService(stateService, organizationService);
+            var keyConnectorService = new KeyConnectorService(stateService, cryptoService, tokenService, apiService,
+                organizationService);
+            var vaultTimeoutService = new VaultTimeoutService(cryptoService, stateService, platformUtilsService,
+                folderService, cipherService, collectionService, searchService, messagingService, tokenService,
+                policyService, keyConnectorService, null, (extras) =>
                 {
-                    messagingService.Send("logout", expired);
+                    messagingService.Send("logout", extras);
                     return Task.FromResult(0);
                 });
-            var syncService = new SyncService(userService, apiService, settingsService, folderService,
-                cipherService, cryptoService, collectionService, storageService, messagingService, policyService, sendService,
-                keyConnectorService, (bool expired) =>
+            var syncService = new SyncService(stateService, apiService, settingsService, folderService, cipherService, 
+                cryptoService, collectionService, organizationService, messagingService, policyService, sendService,
+                keyConnectorService, (extras) =>
                 {
-                    messagingService.Send("logout", expired);
+                    messagingService.Send("logout", extras);
                     return Task.FromResult(0);
                 });
-            var passwordGenerationService = new PasswordGenerationService(cryptoService, storageService,
+            var passwordGenerationService = new PasswordGenerationService(cryptoService, stateService,
                 cryptoFunctionService, policyService);
-            var totpService = new TotpService(storageService, cryptoFunctionService);
-            var authService = new AuthService(cryptoService, cryptoFunctionService, apiService, userService, tokenService, appIdService,
-                i18nService, platformUtilsService, messagingService, vaultTimeoutService, keyConnectorService);
+            var totpService = new TotpService(stateService, cryptoFunctionService);
+            var authService = new AuthService(cryptoService, cryptoFunctionService, apiService, stateService, 
+                tokenService, appIdService, i18nService, platformUtilsService, messagingService, vaultTimeoutService, 
+                keyConnectorService);
             var exportService = new ExportService(folderService, cipherService, cryptoService);
             var auditService = new AuditService(cryptoFunctionService, apiService);
-            var environmentService = new EnvironmentService(apiService, storageService);
-            var eventService = new EventService(storageService, apiService, userService, cipherService);
-            var userVerificationService = new UserVerificationService(apiService, platformUtilsService, i18nService, cryptoService);
+            var environmentService = new EnvironmentService(apiService, stateService);
+            var eventService = new EventService(apiService, stateService, organizationService, cipherService);
+            var userVerificationService = new UserVerificationService(apiService, platformUtilsService, i18nService, 
+                cryptoService);
 
-            Register<IStateService>("stateService", stateService);
             Register<ITokenService>("tokenService", tokenService);
             Register<IApiService>("apiService", apiService);
             Register<IAppIdService>("appIdService", appIdService);
-            Register<IUserService>("userService", userService);
+            Register<IOrganizationService>("organizationService", organizationService);
             Register<ISettingsService>("settingsService", settingsService);
             Register<ICipherService>("cipherService", cipherService);
             Register<IFolderService>("folderService", folderService);

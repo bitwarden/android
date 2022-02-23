@@ -25,12 +25,12 @@ namespace Bit.Core.Services
         private readonly HttpClient _httpClient = new HttpClient();
         private readonly ITokenService _tokenService;
         private readonly IPlatformUtilsService _platformUtilsService;
-        private readonly Func<bool, Task> _logoutCallbackAsync;
+        private readonly Func<Tuple<string, bool, bool>, Task> _logoutCallbackAsync;
 
         public ApiService(
             ITokenService tokenService,
             IPlatformUtilsService platformUtilsService,
-            Func<bool, Task> logoutCallbackAsync,
+            Func<Tuple<string, bool, bool>, Task> logoutCallbackAsync,
             string customUserAgent = null)
         {
             _tokenService = tokenService;
@@ -709,7 +709,7 @@ namespace Bit.Core.Services
                     response.StatusCode == HttpStatusCode.Forbidden
                 ))
             {
-                await _logoutCallbackAsync(true);
+                await _logoutCallbackAsync(new Tuple<string, bool, bool>(null, false, true));
                 return null;
             }
             try

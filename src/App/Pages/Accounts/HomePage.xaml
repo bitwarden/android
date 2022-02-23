@@ -6,49 +6,74 @@
     xmlns:pages="clr-namespace:Bit.App.Pages"
     xmlns:controls="clr-namespace:Bit.App.Controls"
     xmlns:u="clr-namespace:Bit.App.Utilities"
-    xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
     x:DataType="pages:HomeViewModel"
     Title="{Binding PageTitle}">
     <ContentPage.BindingContext>
         <pages:HomeViewModel />
     </ContentPage.BindingContext>
-    
+
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="{u:I18n Close}" Clicked="Close_Clicked" Order="Primary" Priority="-1" />
+        <controls:ExtendedToolbarItem
+            x:Name="_accountAvatar"
+            x:Key="accountAvatar"
+            IconImageSource="{Binding AvatarImageSource}"
+            Command="{Binding Source={x:Reference _accountListOverlay}, Path=ToggleVisibililtyCommand}"
+            Order="Primary"
+            Priority="-1"
+            UseOriginalImage="True"
+            AutomationProperties.IsInAccessibleTree="True"
+            AutomationProperties.Name="{u:I18n Account}" />
+        <ToolbarItem
+            Icon="cog_environment.png" Clicked="Environment_Clicked" Order="Primary"
+            AutomationProperties.IsInAccessibleTree="True"
+            AutomationProperties.Name="{u:I18n Options}" />
     </ContentPage.ToolbarItems>
 
-    <StackLayout Spacing="0" Padding="10, 5">
-        <controls:IconButton Text="{Binding Source={x:Static core:BitwardenIcons.Cog}}"
-                           StyleClass="btn-muted, btn-icon, btn-icon-platform"
-                           HorizontalOptions="Start"
-                           Clicked="Environment_Clicked"
-                           AutomationProperties.IsInAccessibleTree="True"
-                           AutomationProperties.Name="{u:I18n Options}">
-            <controls:IconButton.Margin>
-                <OnPlatform x:TypeArguments="Thickness">
-                    <On Platform="iOS" Value="0, 10, 0, 0" />
-                    <On Platform="Android" Value="0" />
-                </OnPlatform>
-            </controls:IconButton.Margin>
-        </controls:IconButton>
-        <StackLayout VerticalOptions="CenterAndExpand" Spacing="20">
-            <Image
-                x:Name="_logo"
-                Source="logo.png"
-                VerticalOptions="Center" />
-            <Label Text="{u:I18n LoginOrCreateNewAccount}"
-                   StyleClass="text-lg"
-                   HorizontalTextAlignment="Center"></Label>
-            <StackLayout Spacing="5">
-                <Button Text="{u:I18n LogIn}" 
-                        StyleClass="btn-primary"
-                        Clicked="LogIn_Clicked" />
-                <Button Text="{u:I18n CreateAccount}"
-                        Clicked="Register_Clicked" />
-                <Button Text="{u:I18n LogInSso}"
-                        Clicked="LogInSso_Clicked" />
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <StackLayout x:Name="_mainLayout" x:Key="mainLayout" Spacing="0" Padding="10, 5">
+                <StackLayout VerticalOptions="CenterAndExpand" Spacing="20">
+                    <Image
+                        x:Name="_logo"
+                        Source="logo.png"
+                        VerticalOptions="Center" />
+                    <Label Text="{u:I18n LoginOrCreateNewAccount}"
+                           StyleClass="text-lg"
+                           HorizontalTextAlignment="Center">
+                    </Label>
+                    <StackLayout Spacing="5">
+                        <Button Text="{u:I18n LogIn}"
+                                StyleClass="btn-primary"
+                                Clicked="LogIn_Clicked" />
+                        <Button Text="{u:I18n CreateAccount}"
+                                Clicked="Register_Clicked" />
+                        <Button Text="{u:I18n LogInSso}"
+                                Clicked="LogInSso_Clicked" />
+                        <Button Text="{u:I18n Cancel}"
+                                IsVisible="{Binding ShowCancelButton}"
+                                Margin="0,10,0,0"
+                                Clicked="Cancel_Clicked" />
+                    </StackLayout>
+                </StackLayout>
             </StackLayout>
-        </StackLayout>
-    </StackLayout>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <AbsoluteLayout
+        x:Name="_absLayout"
+        VerticalOptions="FillAndExpand"
+        HorizontalOptions="FillAndExpand">
+        <ContentView
+            x:Name="_mainContent"
+            AbsoluteLayout.LayoutFlags="All"
+            AbsoluteLayout.LayoutBounds="0, 0, 1, 1">
+        </ContentView>
+
+        <controls:AccountSwitchingOverlayView
+            x:Name="_accountListOverlay"
+            AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+            AbsoluteLayout.LayoutFlags="All"
+            BindingContext="{Binding AccountSwitchingOverlayViewModel}"/>
+    </AbsoluteLayout>
 
 </pages:BaseContentPage>

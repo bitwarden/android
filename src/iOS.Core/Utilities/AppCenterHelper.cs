@@ -11,22 +11,22 @@ namespace Bit.iOS.Core.Utilities
         private const string AppSecret = "51f96ae5-68ba-45f6-99a1-8ad9f63046c3";
 
         private readonly IAppIdService _appIdService;
-        private readonly IUserService _userService;
+        private readonly IStateService _stateService;
 
         private string _userId;
         private string _appId;
 
         public AppCenterHelper(
             IAppIdService appIdService,
-            IUserService userService)
+            IStateService stateService)
         {
             _appIdService = appIdService;
-            _userService = userService;
+            _stateService = stateService;
         }
 
         public async Task InitAsync()
         {
-            _userId = await _userService.GetUserIdAsync();
+            _userId = await _stateService.GetActiveUserIdAsync();
             _appId = await _appIdService.GetAppIdAsync();
             
             AppCenter.Start(AppSecret, typeof(Crashes));

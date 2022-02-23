@@ -1,8 +1,8 @@
 ﻿using System;
 using Bit.App.Models;
-using Bit.App.Services;
 using Bit.App.Styles;
-using Bit.Core;
+using Bit.Core.Abstractions;
+using Bit.Core.Utilities;
 using Xamarin.Forms;
 using System.Linq;
 using System.Threading.Tasks;
@@ -110,16 +110,15 @@ namespace Bit.App.Utilities
             }
         }
 
-        public static void SetTheme(bool android, ResourceDictionary resources)
+        public static void SetTheme(ResourceDictionary resources)
         {
-            SetThemeStyle(GetTheme(android), resources);
+            SetThemeStyle(GetTheme(), resources);
         }
 
-        public static string GetTheme(bool android)
+        public static string GetTheme()
         {
-            return Xamarin.Essentials.Preferences.Get(
-                string.Format(PreferencesStorageService.KeyFormat, Constants.ThemeKey), default(string),
-                !android ? "group.com.8bit.bitwarden" : default(string));
+            var stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            return stateService.GetThemeAsync().GetAwaiter().GetResult();
         }
 
         public static bool OsDarkModeEnabled()
