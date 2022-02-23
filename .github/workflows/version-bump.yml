@@ -27,7 +27,7 @@ jobs:
           ref: version_bump_${{ github.event.inputs.version_number }}
 
       - name: Bump Version - Android XML
-        uses: bitwarden/gh-actions/version-bump@03ad9a873c39cdc95dd8d77dbbda67f84db43945
+        uses: bitwarden/gh-actions/version-bump@6f6ac44e93df2aaacfb46018dbeffffaad4a18e8
         with:
           version: ${{ github.event.inputs.version_number }}
           file_path: "./src/Android/Properties/AndroidManifest.xml"
