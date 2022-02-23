@@ -7,7 +7,7 @@ on:
       - 'l10n_master'
       - 'gh-pages'
     paths-ignore:
-      - "./github/workflows/**"
+      - '.github/workflows/**'
 
 jobs:
   cloc:
