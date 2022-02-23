@@ -338,7 +338,7 @@
                         <Entry
                             x:Name="_identityFirstNameEntry"
                             Text="{Binding Cipher.Identity.FirstName}"
-                            StyleClass="box-value" />
+                            StyleClass="box-value,capitalize-word-input"/>
                     </StackLayout>
                     <StackLayout StyleClass="box-row, box-row-input">
                         <Label
@@ -347,7 +347,7 @@
                         <Entry
                             x:Name="_identityMiddleNameEntry"
                             Text="{Binding Cipher.Identity.MiddleName}"
-                            StyleClass="box-value" />
+                            StyleClass="box-value,capitalize-word-input" />
                     </StackLayout>
                     <StackLayout StyleClass="box-row, box-row-input">
                         <Label
@@ -356,7 +356,7 @@
                         <Entry
                             x:Name="_identityLastNameEntry"
                             Text="{Binding Cipher.Identity.LastName}"
-                            StyleClass="box-value" />
+                            StyleClass="box-value,capitalize-word-input" />
                     </StackLayout>
                     <StackLayout StyleClass="box-row, box-row-input">
                         <Label
@@ -420,6 +420,7 @@
                         <Entry
                             x:Name="_identityPhoneEntry"
                             Text="{Binding Cipher.Identity.Phone}"
+                            Keyboard="Telephone"
                             StyleClass="box-value" />
                     </StackLayout>
                     <StackLayout StyleClass="box-row, box-row-input">
@@ -456,7 +457,7 @@
                         <Entry
                             x:Name="_identityCityEntry"
                             Text="{Binding Cipher.Identity.City}"
-                            StyleClass="box-value" />
+                            StyleClass="box-value,capitalize-sentence-input" />
                     </StackLayout>
                     <StackLayout StyleClass="box-row, box-row-input">
                         <Label
@@ -465,7 +466,7 @@
                         <Entry
                             x:Name="_identityStateEntry"
                             Text="{Binding Cipher.Identity.State}"
-                            StyleClass="box-value" />
+                            StyleClass="box-value,capitalize-sentence-input" />
                     </StackLayout>
                     <StackLayout StyleClass="box-row, box-row-input">
                         <Label
@@ -483,7 +484,7 @@
                         <Entry
                             x:Name="_identityCountryEntry"
                             Text="{Binding Cipher.Identity.Country}"
-                            StyleClass="box-value" />
+                            StyleClass="box-value,capitalize-sentence-input" />
                     </StackLayout>
                 </StackLayout>
             </StackLayout>
