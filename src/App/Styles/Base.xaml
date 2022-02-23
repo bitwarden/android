@@ -463,4 +463,28 @@
         <Setter Property="TextColor"
                 Value="{DynamicResource TextColor}" />
     </Style>
+
+    <!--Entry-->
+    <Style TargetType="InputView"
+           Class="capitalize-word-input"
+           ApplyToDerivedTypes="True">
+        <Setter Property="Keyboard">
+            <Keyboard x:FactoryMethod="Create">
+                <x:Arguments>
+                    <KeyboardFlags>CapitalizeWord</KeyboardFlags>
+                </x:Arguments>
+            </Keyboard>
+        </Setter>
+    </Style>
+    <Style TargetType="InputView"
+           Class="capitalize-sentence-input"
+           ApplyToDerivedTypes="True">
+        <Setter Property="Keyboard">
+            <Keyboard x:FactoryMethod="Create">
+                <x:Arguments>
+                    <KeyboardFlags>CapitalizeSentence</KeyboardFlags>
+                </x:Arguments>
+            </Keyboard>
+        </Setter>
+    </Style>
 </ResourceDictionary>
