@@ -22,7 +22,7 @@ jobs:
       branch-name: ${{ steps.branch.outputs.branch-name }}
     steps:
       - name: Branch check
-        if: github.event.inputs.release_type == 'Initial Release'
+        if: github.event.inputs.release_type != 'dry-run'
         run: |
           if [[ "$GITHUB_REF" != "refs/heads/rc" ]] && [[ "$GITHUB_REF" != "refs/heads/hotfix" ]]; then
             echo "==================================="
