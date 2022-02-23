@@ -156,7 +156,7 @@ namespace Bit.App.Pages
 #endif
                 return;
             }
-            var webVault = _environmentService.GetWebVaultUrl();
+            var webVault = _environmentService.GetWebVaultUrl(true);
             if (string.IsNullOrWhiteSpace(webVault))
             {
                 webVault = "https://bitwarden.com";
