@@ -70,6 +70,7 @@ namespace Bit.Core.Abstractions
         Task SetLastBuildAsync(string value);
         Task<bool?> GetDisableFaviconAsync(string userId = null);
         Task SetDisableFaviconAsync(bool? value, string userId = null);
+        Task ApplyDisableFaviconGloballyAsync(bool? value);
         Task<bool?> GetDisableAutoTotpCopyAsync(string userId = null);
         Task SetDisableAutoTotpCopyAsync(bool? value, string userId = null);
         Task<bool?> GetInlineAutofillEnabledAsync(string userId = null);

@@ -187,6 +187,7 @@ namespace Bit.App.Pages
             if (_inited)
             {
                 await _stateService.SetDisableFaviconAsync(DisableFavicon);
+                _stateService.ApplyDisableFaviconGloballyAsync(DisableFavicon).FireAndForget();
             }
         }
 

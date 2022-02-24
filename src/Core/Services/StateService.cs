@@ -581,6 +581,26 @@ namespace Bit.Core.Services
             await SetValueAsync(key, value, reconciledOptions);
         }
 
+        public async Task ApplyDisableFaviconGloballyAsync(bool? value)
+        {
+            // TODO remove this method (ApplyDisableFaviconGloballyAsync) to restore per-account icon support
+            await CheckStateAsync();
+            if (_state?.Accounts == null)
+            {
+                return;
+            }
+            var activeUserId = await GetActiveUserIdAsync();
+            foreach (var account in _state.Accounts)
+            {
+                var uid = account.Value?.Profile?.UserId;
+                // skip active user (theme already set)
+                if (uid != null && uid != activeUserId)
+                {
+                    await SetDisableFaviconAsync(value, uid);
+                }
+            }
+        }
+
         public async Task<bool?> GetDisableAutoTotpCopyAsync(string userId = null)
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
