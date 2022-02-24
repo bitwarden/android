@@ -21,7 +21,7 @@ namespace Bit.Core.Services
         private State _state;
         private bool _migrationChecked;
 
-        public bool BiometricLocked { get; set; }
+        public bool BiometricLocked { get; set; } = true;
 
         public List<AccountView> AccountViews { get; set; }
 
