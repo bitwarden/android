@@ -579,26 +579,9 @@ namespace Bit.Core.Services
                 await GetDefaultStorageOptionsAsync());
             var key = Constants.DisableFaviconKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
-        }
 
-        public async Task ApplyDisableFaviconGloballyAsync(bool? value)
-        {
-            // TODO remove this method (ApplyDisableFaviconGloballyAsync) to restore per-account icon support
-            await CheckStateAsync();
-            if (_state?.Accounts == null)
-            {
-                return;
-            }
-            var activeUserId = await GetActiveUserIdAsync();
-            foreach (var account in _state.Accounts)
-            {
-                var uid = account.Value?.Profile?.UserId;
-                // skip active user (theme already set)
-                if (uid != null && uid != activeUserId)
-                {
-                    await SetDisableFaviconAsync(value, uid);
-                }
-            }
+            // TODO remove this to restore per-account DisableFavicon support
+            SetValueGloballyAsync(Constants.DisableFaviconKey, value, reconciledOptions).FireAndForget();
         }
 
         public async Task<bool?> GetDisableAutoTotpCopyAsync(string userId = null)
@@ -883,26 +866,9 @@ namespace Bit.Core.Services
                 await GetDefaultStorageOptionsAsync());
             var key = Constants.ThemeKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
-        }
 
-        public async Task ApplyThemeGloballyAsync(string value)
-        {
-            // TODO remove this method (ApplyThemeGlobally) to restore per-account theme support
-            await CheckStateAsync();
-            if (_state?.Accounts == null)
-            {
-                return;
-            }
-            var activeUserId = await GetActiveUserIdAsync();
-            foreach (var account in _state.Accounts)
-            {
-                var uid = account.Value?.Profile?.UserId;
-                // skip active user (theme already set)
-                if (uid != null && uid != activeUserId)
-                {
-                    await SetThemeAsync(value, uid);
-                }
-            }
+            // TODO remove this to restore per-account Theme support
+            SetValueGloballyAsync(Constants.ThemeKey, value, reconciledOptions).FireAndForget();
         }
 
         public async Task<bool?> GetAddSitePromptShownAsync(string userId = null)
@@ -1203,6 +1169,25 @@ namespace Bit.Core.Services
             }
             Log("SET", options, key, JsonConvert.SerializeObject(value));
             await GetStorageService(options).SaveAsync(key, value);
+        }
+
+        private async Task SetValueGloballyAsync<T>(Func<string, string> keyPrefix, T value, StorageOptions options)
+        {
+            await CheckStateAsync();
+            if (_state?.Accounts == null)
+            {
+                return;
+            }
+            // userId from options was already applied, skip those
+            var userIdToSkip = options.UserId;
+            foreach (var account in _state.Accounts)
+            {
+                var uid = account.Value?.Profile?.UserId;
+                if (uid != null && uid != userIdToSkip)
+                {
+                    await SetValueAsync(keyPrefix(uid), value, options);
+                }
+            }
         }
 
         private IStorageService GetStorageService(StorageOptions options)

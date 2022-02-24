@@ -187,7 +187,6 @@ namespace Bit.App.Pages
             if (_inited)
             {
                 await _stateService.SetDisableFaviconAsync(DisableFavicon);
-                _stateService.ApplyDisableFaviconGloballyAsync(DisableFavicon).FireAndForget();
             }
         }
 
@@ -207,7 +206,6 @@ namespace Bit.App.Pages
                 await _stateService.SetThemeAsync(theme);
                 ThemeManager.SetTheme(Application.Current.Resources);
                 _messagingService.Send("updatedTheme");
-                _stateService.ApplyThemeGloballyAsync(theme).FireAndForget();
             }
         }
 

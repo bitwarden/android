@@ -70,7 +70,6 @@ namespace Bit.Core.Abstractions
         Task SetLastBuildAsync(string value);
         Task<bool?> GetDisableFaviconAsync(string userId = null);
         Task SetDisableFaviconAsync(bool? value, string userId = null);
-        Task ApplyDisableFaviconGloballyAsync(bool? value);
         Task<bool?> GetDisableAutoTotpCopyAsync(string userId = null);
         Task SetDisableAutoTotpCopyAsync(bool? value, string userId = null);
         Task<bool?> GetInlineAutofillEnabledAsync(string userId = null);
@@ -107,7 +106,6 @@ namespace Bit.Core.Abstractions
         Task SetRememberedOrgIdentifierAsync(string value);
         Task<string> GetThemeAsync(string userId = null);
         Task SetThemeAsync(string value, string userId = null);
-        Task ApplyThemeGloballyAsync(string value);
         Task<bool?> GetAddSitePromptShownAsync(string userId = null);
         Task SetAddSitePromptShownAsync(bool? value, string userId = null);
         Task<bool?> GetPushInitialPromptShownAsync();
