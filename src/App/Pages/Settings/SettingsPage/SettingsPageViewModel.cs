@@ -190,12 +190,7 @@ namespace Bit.App.Pages
 
         public void WebVault()
         {
-            var url = _environmentService.GetWebVaultUrl();
-            if (url == null)
-            {
-                url = "https://vault.bitwarden.com";
-            }
-            _platformUtilsService.LaunchUri(url);
+            _platformUtilsService.LaunchUri(_environmentService.GetWebVaultUrl());
         }
 
         public async Task ShareAsync()
@@ -214,7 +209,7 @@ namespace Bit.App.Pages
                 AppResources.TwoStepLogin, AppResources.Yes, AppResources.Cancel);
             if (confirmed)
             {
-                _platformUtilsService.LaunchUri("https://bitwarden.com/help/setup-two-step-login/");
+                _platformUtilsService.LaunchUri($"{_environmentService.GetWebVaultUrl()}/#/settings");
             }
         }
 
@@ -224,7 +219,7 @@ namespace Bit.App.Pages
                 AppResources.ChangeMasterPassword, AppResources.Yes, AppResources.Cancel);
             if (confirmed)
             {
-                _platformUtilsService.LaunchUri("https://bitwarden.com/help/master-password/#change-your-master-password");
+                _platformUtilsService.LaunchUri($"{_environmentService.GetWebVaultUrl()}/#/settings");
             }
         }
 

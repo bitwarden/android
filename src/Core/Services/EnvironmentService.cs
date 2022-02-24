@@ -1,13 +1,16 @@
-﻿using Bit.Core.Abstractions;
+﻿using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using Bit.Core.Abstractions;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.Domain;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Bit.Core.Services
 {
     public class EnvironmentService : IEnvironmentService
     {
+        private const string DEFAULT_WEB_VAULT_URL = "https://vault.bitwarden.com";
+        private const string DEFAULT_WEB_SEND_URL = "https://send.bitwarden.com/#";
+
         private readonly IApiService _apiService;
         private readonly IStateService _stateService;
 
@@ -27,17 +30,24 @@ namespace Bit.Core.Services
         public string NotificationsUrl { get; set; }
         public string EventsUrl { get; set; }
 
-        public string GetWebVaultUrl()
+        public string GetWebVaultUrl(bool returnNullIfDefault = false)
         {
             if (!string.IsNullOrWhiteSpace(WebVaultUrl))
             {
                 return WebVaultUrl;
             }
-            else if (!string.IsNullOrWhiteSpace(BaseUrl))
+
+            if (!string.IsNullOrWhiteSpace(BaseUrl))
             {
                 return BaseUrl;
             }
-            return null;
+
+            return returnNullIfDefault ? (string)null : DEFAULT_WEB_VAULT_URL;
+        }
+
+        public string GetWebSendUrl()
+        {
+            return GetWebVaultUrl(true) is string webVaultUrl ? $"{webVaultUrl}/#/send/" : DEFAULT_WEB_SEND_URL;
         }
 
         public async Task SetUrlsFromStorageAsync()

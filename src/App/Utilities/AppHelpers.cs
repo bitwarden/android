@@ -225,12 +225,7 @@ namespace Bit.App.Utilities
         private static string GetSendUrl(SendView send)
         {
             var environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
-            var webVaultUrl = environmentService.GetWebVaultUrl();
-            if (webVaultUrl != null)
-            {
-                return webVaultUrl + "/#/send/" + send.AccessId + "/" + send.UrlB64Key;
-            }
-            return "https://send.bitwarden.com/#" + send.AccessId + "/" + send.UrlB64Key;
+            return environmentService.GetWebSendUrl() + send.AccessId + "/" + send.UrlB64Key;
         }
 
         public static async Task<bool> RemoveSendPasswordAsync(string sendId)
