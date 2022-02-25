@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -767,6 +767,8 @@ namespace Bit.App.Pages
                 }
             }
         }
+
+        public FormattedString ColoredHiddenValue => PasswordFormatter.FormatPassword(_field.Value);
 
         public Command ToggleHiddenValueCommand { get; set; }
 
