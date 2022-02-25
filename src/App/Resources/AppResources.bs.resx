@@ -164,7 +164,7 @@
     <comment>Title for page that we use to give credit to resources that we use.</comment>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Obriši</value>
+    <value>Izbriši</value>
     <comment>Delete an entity (verb).</comment>
   </data>
   <data name="Deleting" xml:space="preserve">
@@ -186,37 +186,37 @@
     <comment>Short label for an email address.</comment>
   </data>
   <data name="EmailAddress" xml:space="preserve">
-    <value>Adresa e-pošte</value>
+    <value>E-Mail adresa</value>
     <comment>Full label for a email address.</comment>
   </data>
   <data name="EmailUs" xml:space="preserve">
-    <value>Pošaljite nam e-poštu</value>
+    <value>Pošaljite nam E-Mail </value>
   </data>
   <data name="EmailUsDescription" xml:space="preserve">
-    <value>Pošaljite nam e-poštu direktno da biste dobili pomoć ili ostavili povratne informacije.</value>
+    <value>Pošaljite nam E-Mail direktno da biste dobili pomoć ili ostavili povratne informacije.</value>
   </data>
   <data name="EnterPIN" xml:space="preserve">
     <value>Unesite Vaš PIN kod.</value>
   </data>
   <data name="Favorites" xml:space="preserve">
-    <value>Omiljene</value>
+    <value>Omiljene stavke</value>
     <comment>Title for your favorite items in the vault.</comment>
   </data>
   <data name="FileBugReport" xml:space="preserve">
-    <value>Podnesite izveštaj o grešci</value>
+    <value>Podnesite izvještaj o greški </value>
   </data>
   <data name="FileBugReportDescription" xml:space="preserve">
-    <value>Otvorite izdanje u našem GitHub spremištu.</value>
+    <value>Prijavi problem u našem GitHub repozitoriju.</value>
   </data>
   <data name="FingerprintDirection" xml:space="preserve">
-    <value>Verifikujte pomoću otiska prsta.</value>
+    <value>Upotrijebite otisak prsta da biste nastavili.</value>
   </data>
   <data name="Folder" xml:space="preserve">
     <value>Folder</value>
     <comment>Label for a folder.</comment>
   </data>
   <data name="FolderCreated" xml:space="preserve">
-    <value>Kreirana je novi folder.</value>
+    <value>Kreiran je novi Folder.</value>
   </data>
   <data name="FolderDeleted" xml:space="preserve">
     <value>Folder je izbrisan.</value>
@@ -226,20 +226,20 @@
     <comment>Items that have no folder specified go in this special "catch-all" folder.</comment>
   </data>
   <data name="Folders" xml:space="preserve">
-    <value>Fascikle</value>
+    <value>Folderi</value>
   </data>
   <data name="FolderUpdated" xml:space="preserve">
     <value>Folder ažuriran.</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
-    <value>Idite na vebsajt</value>
+    <value>Posjetite web stranicu</value>
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="HelpAndFeedback" xml:space="preserve">
     <value>Pomoć i povratne informacije</value>
   </data>
   <data name="Hide" xml:space="preserve">
-    <value>Sakrijte</value>
+    <value>Sakrij</value>
     <comment>Hide a secret value that is currently shown (password).</comment>
   </data>
   <data name="InternetConnectionRequiredMessage" xml:space="preserve">
@@ -247,7 +247,7 @@
     <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
-    <value>Internet veza obavezna</value>
+    <value>Neophodna je internet veza</value>
     <comment>Title for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InvalidMasterPassword" xml:space="preserve">
@@ -257,7 +257,7 @@
     <value>Nevažeći PIN. Pokušajte ponovo.</value>
   </data>
   <data name="Launch" xml:space="preserve">
-    <value>Pokrenite</value>
+    <value>Otvori web stranicu</value>
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="LogIn" xml:space="preserve">
@@ -269,11 +269,23 @@
     <comment>Title for login page. (noun)</comment>
   </data>
   <data name="LogOut" xml:space="preserve">
-    <value>Odjavite se</value>
+    <value>Odjava</value>
     <comment>The log out button text (verb).</comment>
   </data>
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Da li ste sigurni da želite da se odjavite?</value>
+  </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Obriši račun</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Da li ste sigurni da želite ukloniti ovaj račun?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Račun je već dodan</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Da li želite da se prebacite na njega sada?</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Glavna lozinka</value>
@@ -701,7 +713,7 @@
     <value>Otključajte pomoću PIN koda</value>
   </data>
   <data name="Validating" xml:space="preserve">
-    <value>Validacija</value>
+    <value>Potvrđivanje</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="VerificationCode" xml:space="preserve">
@@ -1012,10 +1024,10 @@
     <value>April</value>
   </data>
   <data name="August" xml:space="preserve">
-    <value>Avgust</value>
+    <value>August</value>
   </data>
   <data name="Brand" xml:space="preserve">
-    <value>Brend</value>
+    <value>Vrsta kartice</value>
   </data>
   <data name="CardholderName" xml:space="preserve">
     <value>Ime vlasnika kartice</value>
@@ -1039,7 +1051,7 @@
     <value>Mjesec roka upotrebe</value>
   </data>
   <data name="ExpirationYear" xml:space="preserve">
-    <value>Godina roka upotrebe</value>
+    <value>Godina isteka</value>
   </data>
   <data name="February" xml:space="preserve">
     <value>Februar</value>
@@ -1099,13 +1111,13 @@
     <value>Septembar</value>
   </data>
   <data name="SSN" xml:space="preserve">
-    <value>JMBG</value>
+    <value>Broj socijalnog osiguranja / JMBG</value>
   </data>
   <data name="StateProvince" xml:space="preserve">
     <value>Država / Pokrajina</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Titula</value>
+    <value>Naslov</value>
   </data>
   <data name="ZipPostalCode" xml:space="preserve">
     <value>Poštanski broj</value>
@@ -1187,7 +1199,7 @@
     <value>Skriven</value>
   </data>
   <data name="FieldTypeLinked" xml:space="preserve">
-    <value>Povezano</value>
+    <value>Povezano sa</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Tekst</value>
@@ -2091,6 +2103,21 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Jedno ili više pravila organizacija onemogućuje izvoz osobnog trezora. </value>
+  </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Dodaj račun</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Otključano </value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Zaključano</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Odjavljeno</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Prebačeni ste na sljedeći dostupan račun </value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Obriši račun</value>

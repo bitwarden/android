@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Sigur doriți să vă deconectați?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Eliminare cont</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Sunteți sigur că doriți să eliminați acest cont?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Cont deja adăugat</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Vreți să comutați la el acum?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Parolă principală</value>
     <comment>Label for a master password.</comment>
@@ -2091,6 +2103,21 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Una sau mai multe politici ale organizației vă împiedică să exportați seiful personal.</value>
+  </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Adăugare cont</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Deblocat</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Blocat</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Deconectat</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Comutat la următorul cont disponibil</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Ștergere cont</value>

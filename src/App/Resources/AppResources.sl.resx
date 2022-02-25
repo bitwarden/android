@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Ste prepričani, da se želite odjaviti?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Remove Account</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Are you sure you want to remove this account?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Account Already Added</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Would you like to switch to it now?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Glavno geslo</value>
     <comment>Label for a master password.</comment>
@@ -2092,6 +2104,21 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>One or more organization policies prevents your from exporting your personal vault.</value>
+  </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Add Account</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Unlocked</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Locked</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Logged Out</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Switched to next available account</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Izbriši račun</value>

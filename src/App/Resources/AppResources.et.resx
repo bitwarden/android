@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Oled kindel, et soovid välja logida?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Eemalda konto</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Oled kindel, et soovid selle konto eemaldada?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Konto on juba lisatud </value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Kas soovid kohe vahetada? </value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Ülemparool</value>
     <comment>Label for a master password.</comment>
@@ -2091,6 +2103,21 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Üks või enam organisatsiooni poliitikat ei võimalda sul oma personaalset hoidlat eksportida.</value>
+  </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Lisa konto</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Lukustamata</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Lukustatud</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Välja logitud </value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Vahetati järgmise saadaoleva konto peale</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Kustuta konto</value>

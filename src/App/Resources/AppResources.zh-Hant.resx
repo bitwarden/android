@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>您確定要登出嗎？</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>移除帳戶</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>確定要移除這個帳戶嗎？</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>帳戶已添加</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>您想現在就切換到它嗎？</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>主密碼</value>
     <comment>Label for a master password.</comment>
@@ -1150,10 +1162,10 @@
     <value>自動填入無障礙服務</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>Bitwarden 自動填入服務使用 Android 自動填入框架來幫助您將登入資料、信用卡和身分信息填入至裝置上的其他應用程式中。</value>
+    <value>Bitwarden 自動填入服務使用 Android 自動填入框架來協助將登入信息填入至你裝置上的其他應用程式中。</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>使用 Bitwarden 自動填入服務將登入資料、信用卡和身分信息填入到其他應用程式中。</value>
+    <value>使用 Bitwarden 自動填入服務將登入信息填入到其他應用程式中。</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>打開自動填入設定</value>
@@ -1923,7 +1935,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>停用此 Send 以阻止任何人存取它。</value>
+    <value>停用此 Send 以阻止任何人存取它</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
@@ -1991,7 +2003,7 @@
     <value>自訂</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
-    <value>儲存時分享此 Send。</value>
+    <value>儲存時分享此 Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
@@ -2003,7 +2015,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
-    <value>對收件人隱藏我的電子郵件位址。</value>
+    <value>對收件人隱藏我的電子郵件位址</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
     <value>一個或多個組織原则正影響您的 Send 選項。</value>
@@ -2091,6 +2103,21 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>一或多個組織策略不允許您匯出個人密碼庫。</value>
+  </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>新增帳戶</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>已解鎖</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>已鎖定</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>已登出</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>已切換到下一個可用的帳戶</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>刪除帳戶</value>
