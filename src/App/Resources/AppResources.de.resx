@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Bist du sicher, dass du dich abmelden möchtest?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Konto entfernen</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Möchten Sie das Konto wirklich entfernen?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Konto bereits hinzugefügt</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Möchten Sie jetzt darauf umschalten?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Masterpasswort</value>
     <comment>Label for a master password.</comment>
@@ -1455,6 +1467,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>Entsperren</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Tresor entsperren</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 Minuten</value>
   </data>
@@ -1470,6 +1485,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Dein Tresor ist gesperrt. Gebe deinen PIN-Code ein um fortzufahren.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Dein Tresor ist gesperrt. Überprüfe deine Identität, um fortzufahren.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Dunkel</value>
@@ -1611,8 +1629,14 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Gib das Masterpasswort ein, um deine Tresordaten zu exportieren.</value>
   </data>
-    <data name="ExportVaultOTPDescription" xml:space="preserve">
-    <value>Gebe den Verifizierungscode ein, um deine Tresordaten zu exportieren.</value>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Einen Bestätigungscode an deine E-Mail senden</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Code gesendet!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Bestätige deine Identität, um fortzufahren.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Dieser Export enthält deine Tresordaten in einem unverschlüsseltem Format. Du solltest sie nicht speichern oder über unsichere Kanäle (z. B. E-Mail) senden. Lösche sie sofort nach ihrer Verwendung.</value>
@@ -1878,7 +1902,7 @@
     <value>Maximale Zugriffsanzahl</value>
   </data>
   <data name="MaximumAccessCountInfo" xml:space="preserve">
-    <value>Falls aktiviert, können Benutzer nicht mehr auf diesesn Send zugreifen, sobald die maximale Zugriffsanzahl erreicht ist.</value>
+    <value>Falls aktiviert, können Benutzer nicht mehr auf dieses Send zugreifen, sobald die maximale Zugriffsanzahl erreicht ist.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="MaximumAccessCountReached" xml:space="preserve">
@@ -2080,10 +2104,67 @@
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Eine oder mehrere Unternehmensrichtlinien verhindern es, dass du deinen persönlichen Tresor exportieren kannst.</value>
   </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Konto hinzufügen</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Entsperrt</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Gesperrt</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Ausgeloggt</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Zum nächsten verfügbaren Konto gewechselt</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Konto löschen</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Das Löschen deines Kontos ist unwiderruflich</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Dein Konto und alle damit verbundenen Daten werden gelöscht und sind nicht wiederherstellbar. Bist du sicher, dass du fortfahren möchtest?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Löschen deines Kontos</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Dein Konto wurde unwiderruflich gelöscht.</value>
+  </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Ungültiger Bestätigungscode.</value>
   </data>
-    <data name="RequestOTP" xml:space="preserve">
+  <data name="RequestOTP" xml:space="preserve">
     <value>Einmalpasswort anfordern</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Send Code</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Sende</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>Send Link beim Speichern kopieren</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>Sende code</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>Überprüfen</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>Code erneut senden</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>Ein Bestätigungscode wurde an deine E-Mail-Adresse gesendet.</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>Beim Senden des Bestätigungscodes an deine E-Mail-Adresse ist ein Fehler aufgetreten. Bitte versuche es erneut</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>Gib den Bestätigungscode ein, der an deine E-Mail-Adresse gesendet wurde</value>
   </data>
 </root>

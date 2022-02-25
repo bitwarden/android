@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ViewCell xmlns="http://xamarin.com/schemas/2014/forms"
+          xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+          xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+          x:Class="Bit.App.Controls.AccountViewCell"
+          xmlns:controls="clr-namespace:Bit.App.Controls"
+          xmlns:u="clr-namespace:Bit.App.Utilities"
+          x:DataType="controls:AccountViewCellViewModel">
+    <Grid RowSpacing="0"
+          ColumnSpacing="0">
+
+        <Grid.Resources>
+            <u:InverseBoolConverter x:Key="inverseBool" />
+        </Grid.Resources>
+
+        <Grid
+            IsVisible="{Binding IsAccount}"
+            VerticalOptions="CenterAndExpand">
+            
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Image
+                Grid.Column="0"
+                Source="{Binding AvatarImageSource}"
+                HorizontalOptions="Center"
+                Margin="10,0"
+                VerticalOptions="Center" />
+
+            <Grid
+                Grid.Column="1"
+                RowSpacing="1"
+                VerticalOptions="Center">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Label
+                    Grid.Row="0"
+                    Text="{Binding AccountView.Email}"
+                    IsVisible="{Binding IsActive}"
+                    StyleClass="list-title"
+                    LineBreakMode="TailTruncation" />
+                <Label
+                    Grid.Row="0"
+                    Text="{Binding AccountView.Email}"
+                    IsVisible="{Binding IsActive, Converter={StaticResource inverseBool}}"
+                    StyleClass="list-title"
+                    TextColor="{DynamicResource MutedColor}"
+                    LineBreakMode="TailTruncation" />
+                <Label
+                    Grid.Row="1"
+                    IsVisible="{Binding ShowHostname}"
+                    Text="{Binding AccountView.Hostname}"
+                    StyleClass="list-sub"
+                    LineBreakMode="TailTruncation" />
+                <Label
+                    Grid.Row="2"
+                    Text="{u:I18n AccountUnlocked}"
+                    IsVisible="{Binding IsUnlocked}"
+                    StyleClass="list-sub"
+                    FontAttributes="Italic"
+                    TextTransform="Lowercase"
+                    LineBreakMode="TailTruncation" />
+                <Label
+                    Grid.Row="2"
+                    Text="{u:I18n AccountLocked}"
+                    IsVisible="{Binding IsLocked}"
+                    StyleClass="list-sub"
+                    FontAttributes="Italic"
+                    TextTransform="Lowercase"
+                    LineBreakMode="TailTruncation" />
+                <Label
+                    Grid.Row="2"
+                    Text="{u:I18n AccountLoggedOut}"
+                    IsVisible="{Binding IsLoggedOut}"
+                    StyleClass="list-sub"
+                    FontAttributes="Italic"
+                    TextTransform="Lowercase"
+                    LineBreakMode="TailTruncation" />
+            </Grid>
+
+            <controls:IconLabel
+                Grid.Column="2"
+                Text="{Binding AuthStatusIconNotActive}" 
+                IsVisible="{Binding IsActive, Converter={StaticResource inverseBool}}"
+                Margin="12,0"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                StyleClass="list-icon, list-icon-platform" />
+            <controls:IconLabel
+                Grid.Column="2"
+                Text="{Binding AuthStatusIconActive}" 
+                IsVisible="{Binding IsActive}"
+                Margin="12,0"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                StyleClass="list-icon, list-icon-platform"
+                TextColor="{DynamicResource TextColor}"/>
+        </Grid>
+
+        <Grid
+            IsVisible="{Binding IsAccount, Converter={StaticResource inverseBool}}"
+            VerticalOptions="CenterAndExpand">
+            
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Image
+                Grid.Column="0"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                Margin="14,0"
+                WidthRequest="{OnPlatform 24, iOS=24, Android=26}"
+                HeightRequest="{OnPlatform 24, iOS=24, Android=26}"
+                Source="plus.png"
+                xct:IconTintColorEffect.TintColor="{DynamicResource TextColor}"
+                AutomationProperties.IsInAccessibleTree="False" />
+            <Label
+                Text="{u:I18n AddAccount}"
+                StyleClass="list-title"
+                LineBreakMode="TailTruncation"
+                VerticalOptions="Center"
+                Grid.Column="1" />
+        </Grid>
+    </Grid>
+</ViewCell>

@@ -140,7 +140,7 @@
     <comment>Navigate back to the previous screen.</comment>
   </data>
   <data name="Bitwarden" xml:space="preserve">
-    <value>Битуорден</value>
+    <value>Bitwarden</value>
     <comment>App name. Shouldn't ever change.</comment>
   </data>
   <data name="Cancel" xml:space="preserve">
@@ -182,11 +182,11 @@
     <value>Редактиране на папка</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>Е-поща</value>
+    <value>Имейл</value>
     <comment>Short label for an email address.</comment>
   </data>
   <data name="EmailAddress" xml:space="preserve">
-    <value>Е-поща</value>
+    <value>Имейл адрес</value>
     <comment>Full label for a email address.</comment>
   </data>
   <data name="EmailUs" xml:space="preserve">
@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Сигурни ли сте, че искате да се отпишете?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Премахване на регистрацията</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Наистина ли искате да премахнете тази регистрация?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Регистрацията вече е добавена</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Искате ли да превключите към нея сега?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Главна парола</value>
     <comment>Label for a master password.</comment>
@@ -288,7 +300,7 @@
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Наименование</value>
+    <value>Име</value>
     <comment>Label for an entity name.</comment>
   </data>
   <data name="No" xml:space="preserve">
@@ -1455,6 +1467,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>Отключване</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Отключване на трезора</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 минути</value>
   </data>
@@ -1470,6 +1485,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Трезорът е заключен. Въведете своя ПИН, за да продължите.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Трезорът е заключен. Потвърдете самоличността си, за да продължите.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Тъмен</value>
@@ -1611,8 +1629,14 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Въведете главната парола, за да изнесете данните.</value>
   </data>
-    <data name="ExportVaultOTPDescription" xml:space="preserve">
-    <value>Въведете кода за потвърждаване, за да изнесете данните от трезора си.</value>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Изпращане на код за потвърждаване до Вашата ел. поща</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Кодът е изпратен!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Потвърдете самоличността си, за да продължите.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Данните от трезора ви ще се изнесат в незащитен формат. Не го пращайте по незащитени канали като е-поща. Изтрийте файла незабавно след като свършите работата си с него.</value>
@@ -2018,7 +2042,8 @@
     <value>Captcha Required</value>
   </data>
   <data name="CaptchaFailed" xml:space="preserve">
-    <value>Captcha Failed. Please try again.</value>
+    <value>
+Грешка. Моля опитайте пак</value>
   </data>
   <data name="UpdatedMasterPassword" xml:space="preserve">
     <value>Главната парола е променена</value>
@@ -2060,7 +2085,7 @@
     <value>Идентификация чрез FIDO2 WebAuthn – можете да се идентифицирате чрез външен ключ за сигурност.</value>
   </data>
   <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
-    <value>Authenticate WebAuthn</value>
+    <value>Идентификация WebAuthn</value>
   </data>
   <data name="Fido2ReturnToApp" xml:space="preserve">
     <value>Назад към приложението</value>
@@ -2080,10 +2105,67 @@
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Една или повече от настройките на организацията Ви не позволяват да изнасяте личния си трезор.</value>
   </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Добавяне на регистрация</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Отключено</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Заключено</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Отписано</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Превключено към следващата налична регистрация</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Изтриване на регистрацията</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Изтриването на регистрацията е необратимо</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Регистрацията Ви и всички свързани с нея данни ще бъдат изтрити и няма да могат да бъдат възстановени. Наистина ли искате да продължите?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Изтриване на регистрацията Ви</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Регистрацията Ви беше изтрита необратимо</value>
+  </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Грешен код за потвърждаване</value>
   </data>
-    <data name="RequestOTP" xml:space="preserve">
+  <data name="RequestOTP" xml:space="preserve">
     <value>Заявка за еднократна парола</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Изпращане на кода</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Изпращане…</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>Копиране на връзката на изпращането при запазване</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>Изпращане на кода</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>Потвърждаване</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>Повторно изпращане на кода</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>На Вашата е-поща беше изпратен код за потвърждаване</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>Възникна грешка при изпращането на кода за потвърждаване до Вашата е-поща. Моля, опитайте отново</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>Въведете кода за потвърждаване, който беше изпратен на Вашата е-поща</value>
   </data>
 </root>

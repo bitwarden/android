@@ -276,6 +276,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Είστε σίγουροι ότι θέλετε να αποσυνδεθείτε;</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Remove Account</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Are you sure you want to remove this account?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Account Already Added</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Would you like to switch to it now?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Κύριος Κωδικός</value>
     <comment>Label for a master password.</comment>
@@ -1061,7 +1073,7 @@
     <value>Επίθετο</value>
   </data>
   <data name="FullName" xml:space="preserve">
-    <value>Full Name</value>
+    <value>Ονοματεπώνυμο</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Αριθμός Άδειας</value>
@@ -1188,7 +1200,7 @@
     <value>Κρυφό</value>
   </data>
   <data name="FieldTypeLinked" xml:space="preserve">
-    <value>Linked</value>
+    <value>Συνδεδεμένο</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Κείμενο</value>
@@ -1456,6 +1468,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>Ξεκλείδωμα</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Ξεκλείδωμα Vault</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 λεπτά</value>
   </data>
@@ -1471,6 +1486,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Το vault σας είναι κλειδωμένο. Επαληθεύστε τον κωδικό PIN για να συνεχίσετε.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Το vault σας είναι κλειδωμένο. Επαληθεύστε την ταυτότητα σας για να συνεχίσετε.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Σκοτεινό</value>
@@ -1612,8 +1630,14 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Εισαγάγετε τον κύριο κωδικό για εξαγωγή των δεδομένων vault.</value>
   </data>
-    <data name="ExportVaultOTPDescription" xml:space="preserve">
-    <value>Enter the verification code to export your vault data.</value>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Στείλτε έναν κωδικό επαλήθευσης στο email σας</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Ο Κωδικός Στάλθηκε</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Επιβεβαιώστε την ταυτότητα σας για να συνεχίσετε.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Αυτή η εξαγωγή περιέχει τα δεδομένα σε μη κρυπτογραφημένη μορφή. Δεν πρέπει να αποθηκεύετε ή να στείλετε το εξαγόμενο αρχείο μέσω μη ασφαλών τρόπων (όπως μέσω email). Διαγράψτε το αμέσως μόλις τελειώσετε με τη χρήση του.</value>
@@ -2037,19 +2061,19 @@
     <value>Δεν είναι δυνατή η ενημέρωση του κωδικού πρόσβασης</value>
   </data>
   <data name="RemoveMasterPassword" xml:space="preserve">
-    <value>Remove Master Password</value>
+    <value>Αφαίρεση Κύριου Κωδικού Πρόσβασης</value>
   </data>
   <data name="RemoveMasterPasswordWarning" xml:space="preserve">
-    <value>{0} is using SSO with customer-managed encryption. Continuing will remove your Master Password from your account and require SSO to login.</value>
+    <value>{0} χρησιμοποιεί SSO με κρυπτογράφηση διαχείρισης πελατών. Συνεχίζοντας θα καταργήσετε τον Κύριο Κωδικό από το λογαριασμό σας και θα απαιτήσετε SSO για να συνδεθείτε.</value>
   </data>
   <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
-    <value>If you do not want to remove your Master Password, you may leave this organization.</value>
+    <value>Αν δεν θέλετε να αφαιρέσετε τον Κύριο Κωδικό Πρόσβασης, μπορείτε να φύγετε από αυτόν τον οργανισμό.</value>
   </data>
   <data name="LeaveOrganization" xml:space="preserve">
-    <value>Leave Organization</value>
+    <value>Αποχώρηση από τον οργανισμό</value>
   </data>
   <data name="LeaveOrganizationName" xml:space="preserve">
-    <value>Leave {0}?</value>
+    <value>Αποχώρηση {0}?</value>
   </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
@@ -2081,10 +2105,67 @@
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Μία ή περισσότερες οργανωτικές πολιτικές αποτρέπουν την εξαγωγή του προσωπικού vault.</value>
   </data>
-  <data name="InvalidVerificationCode" xml:space="preserve">
-    <value>Invalid Verification Code.</value>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Add Account</value>
   </data>
-    <data name="RequestOTP" xml:space="preserve">
-    <value>Request one-time password</value>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Unlocked</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Locked</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Logged Out</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Switched to next available account</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Διαγραφή Λογαριασμού</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Η διαγραφή του λογαριασμού σας είναι μόνιμη</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Ο λογαριασμός σας και όλα τα σχετικά δεδομένα θα διαγραφούν και δεν θα ανακτηθούν. Είστε σίγουροι ότι θέλετε να συνεχίσετε?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Διαγραφή του λογαριασμού σας</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Ο λογαριασμός σας έχει διαγραφεί οριστικά</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>Μη Έγκυρος Κωδικός Επαλήθευσης.</value>
+  </data>
+  <data name="RequestOTP" xml:space="preserve">
+    <value>Αιτηθείτε τον κωδικό πρόσβασης μιας χρήσης</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Αποστολή Κωδικού</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Αποστολή....</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>Αντιγράψτε το σύνδεσμο αποστολής κατά την αποθήκευση</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>Αποστολή κωδικού</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>Επαλήθευση</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>Επαναποστολή κωδικού</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>Ένας κωδικός επαλήθευσης έχει σταλεί στο email σας.</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>Παρουσιάστηκε σφάλμα κατά την αποστολή κωδικού επαλήθευσης στο email σας. Παρακαλούμε προσπαθήστε ξανά</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>Εισάγετε τον κωδικό επαλήθευσης που έχει σταλεί στο email σας</value>
   </data>
 </root>

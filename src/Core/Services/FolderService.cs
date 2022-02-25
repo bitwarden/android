@@ -15,30 +15,25 @@ namespace Bit.Core.Services
 {
     public class FolderService : IFolderService
     {
-        private const string Keys_CiphersFormat = "ciphers_{0}";
-        private const string Keys_FoldersFormat = "folders_{0}";
         private const char NestingDelimiter = '/';
 
         private List<FolderView> _decryptedFolderCache;
         private readonly ICryptoService _cryptoService;
-        private readonly IUserService _userService;
+        private readonly IStateService _stateService;
         private readonly IApiService _apiService;
-        private readonly IStorageService _storageService;
         private readonly II18nService _i18nService;
         private readonly ICipherService _cipherService;
 
         public FolderService(
             ICryptoService cryptoService,
-            IUserService userService,
+            IStateService stateService,
             IApiService apiService,
-            IStorageService storageService,
             II18nService i18nService,
             ICipherService cipherService)
         {
             _cryptoService = cryptoService;
-            _userService = userService;
+            _stateService = stateService;
             _apiService = apiService;
-            _storageService = storageService;
             _i18nService = i18nService;
             _cipherService = cipherService;
         }
@@ -60,9 +55,7 @@ namespace Bit.Core.Services
 
         public async Task<Folder> GetAsync(string id)
         {
-            var userId = await _userService.GetUserIdAsync();
-            var folders = await _storageService.GetAsync<Dictionary<string, FolderData>>(
-                string.Format(Keys_FoldersFormat, userId));
+            var folders = await _stateService.GetEncryptedFoldersAsync();
             if (!folders?.ContainsKey(id) ?? true)
             {
                 return null;
@@ -72,9 +65,7 @@ namespace Bit.Core.Services
 
         public async Task<List<Folder>> GetAllAsync()
         {
-            var userId = await _userService.GetUserIdAsync();
-            var folders = await _storageService.GetAsync<Dictionary<string, FolderData>>(
-                string.Format(Keys_FoldersFormat, userId));
+            var folders = await _stateService.GetEncryptedFoldersAsync();
             var response = folders?.Select(f => new Folder(f.Value));
             return response?.ToList() ?? new List<Folder>();
         }
@@ -153,16 +144,14 @@ namespace Bit.Core.Services
             {
                 response = await _apiService.PutFolderAsync(folder.Id, request);
             }
-            var userId = await _userService.GetUserIdAsync();
+            var userId = await _stateService.GetActiveUserIdAsync();
             var data = new FolderData(response, userId);
             await UpsertAsync(data);
         }
 
         public async Task UpsertAsync(FolderData folder)
         {
-            var userId = await _userService.GetUserIdAsync();
-            var storageKey = string.Format(Keys_FoldersFormat, userId);
-            var folders = await _storageService.GetAsync<Dictionary<string, FolderData>>(storageKey);
+            var folders = await _stateService.GetEncryptedFoldersAsync();
             if (folders == null)
             {
                 folders = new Dictionary<string, FolderData>();
@@ -172,15 +161,13 @@ namespace Bit.Core.Services
                 folders.Add(folder.Id, null);
             }
             folders[folder.Id] = folder;
-            await _storageService.SaveAsync(storageKey, folders);
+            await _stateService.SetEncryptedFoldersAsync(folders);
             _decryptedFolderCache = null;
         }
 
         public async Task UpsertAsync(List<FolderData> folder)
         {
-            var userId = await _userService.GetUserIdAsync();
-            var storageKey = string.Format(Keys_FoldersFormat, userId);
-            var folders = await _storageService.GetAsync<Dictionary<string, FolderData>>(storageKey);
+            var folders = await _stateService.GetEncryptedFoldersAsync();
             if (folders == null)
             {
                 folders = new Dictionary<string, FolderData>();
@@ -193,39 +180,35 @@ namespace Bit.Core.Services
                 }
                 folders[f.Id] = f;
             }
-            await _storageService.SaveAsync(storageKey, folders);
+            await _stateService.SetEncryptedFoldersAsync(folders);
             _decryptedFolderCache = null;
         }
 
         public async Task ReplaceAsync(Dictionary<string, FolderData> folders)
         {
-            var userId = await _userService.GetUserIdAsync();
-            await _storageService.SaveAsync(string.Format(Keys_FoldersFormat, userId), folders);
+            await _stateService.SetEncryptedFoldersAsync(folders);
             _decryptedFolderCache = null;
         }
 
         public async Task ClearAsync(string userId)
         {
-            await _storageService.RemoveAsync(string.Format(Keys_FoldersFormat, userId));
+            await _stateService.SetEncryptedFoldersAsync(null, userId);
             _decryptedFolderCache = null;
         }
 
         public async Task DeleteAsync(string id)
         {
-            var userId = await _userService.GetUserIdAsync();
-            var folderKey = string.Format(Keys_FoldersFormat, userId);
-            var folders = await _storageService.GetAsync<Dictionary<string, FolderData>>(folderKey);
+            var folders = await _stateService.GetEncryptedFoldersAsync();
             if (folders == null || !folders.ContainsKey(id))
             {
                 return;
             }
             folders.Remove(id);
-            await _storageService.SaveAsync(folderKey, folders);
+            await _stateService.SetEncryptedFoldersAsync(folders);
             _decryptedFolderCache = null;
 
             // Items in a deleted folder are re-assigned to "No Folder"
-            var ciphers = await _storageService.GetAsync<Dictionary<string, CipherData>>(
-                string.Format(Keys_CiphersFormat, userId));
+            var ciphers = await _stateService.GetEncryptedCiphersAsync();
             if (ciphers != null)
             {
                 var updates = new List<CipherData>();

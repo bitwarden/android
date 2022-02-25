@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Er du sikker på, at du vil logge ud?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Fjern konto</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Er du sikker på, at du vil fjerne denne konto?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Konto allerede tilføjet</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Vil du skifte til den nu?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Hovedadgangskode</value>
     <comment>Label for a master password.</comment>
@@ -1150,10 +1162,10 @@
     <value>Autoudfyld hjælpefunktion</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>Bitwarden autoudfyld tjenesten bruger Androids AutoFyld framework til at hjælpe med at udfylde logins, kreditkort og identitetsoplysninger i andre apps på din enhed.</value>
+    <value>Bitwarden autoudfyld tjenesten bruger Androids AutoFyld framework til at hjælpe med at udfylde loginoplysninger i andre apps på din enhed.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Brug Bitwarden autoudfyld tjenesten til at udfylde logins, kreditkort og identitetsoplysninger i andre apps.</value>
+    <value>Brug Bitwarden autoudfyld tjenesten til at udfylde loginoplysninger i andre apps.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Åbn autoudfyld indstillinger</value>
@@ -1455,6 +1467,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>Lås op</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Lås boks op</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minutter</value>
   </data>
@@ -1470,6 +1485,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Din boks er låst. Bekræft din pinkode for at fortsætte.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Din boks er låst. Bekræft din identitet for at fortsætte.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Mørk</value>
@@ -1611,8 +1629,14 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Angiv din hovedadgangskode for at eksportere boksdata.</value>
   </data>
-    <data name="ExportVaultOTPDescription" xml:space="preserve">
-    <value>Angiv bekræftelseskoden for at eksportere dine boks-data.</value>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Send en bekræftelseskode til din e-mail</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Kode sendt!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Bekræft din identitet for at fortsætte.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Denne eksport indeholder dine boksdata i en ukrypteret form. Du bør ikke gemme eller sende den eksporterede fil via usikre kanaler (f.eks. e-mail). Slet den straks efter at du er færdig med at bruge den.</value>
@@ -1911,7 +1935,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Deaktivér denne Send, så ingen kan tilgå den.</value>
+    <value>Deaktivér denne Send, så ingen kan tilgå den</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
@@ -1979,7 +2003,7 @@
     <value>Tilpasset</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
-    <value>Del denne Send, når den gemmes.</value>
+    <value>Del denne Send, når den gemmes</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
@@ -1991,7 +2015,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
-    <value>Skjul min e-mailadresse for modtagere.</value>
+    <value>Skjul min e-mailadresse for modtagere</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
     <value>Én eller flere organisationspolitikker påvirker dine Send-valgmuligheder.</value>
@@ -2080,10 +2104,67 @@
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>En eller flere organisationspolitikker forhindrer eksport af din personlige boks.</value>
   </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Tilføj konto</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Låst op</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Låst</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Logget ud</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Skiftede til næste tilgængelige konto</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Slet konto</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Sletning af din konto er permanent</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Din konto og alle tilknyttede data vil blive slettet og kan ikke gendannes. Er du sikker på, at du vil fortsætte?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Sletter din konto</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Din konto er blevet permanent slettet</value>
+  </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Ugyldig bekræftelseskode</value>
   </data>
-    <data name="RequestOTP" xml:space="preserve">
+  <data name="RequestOTP" xml:space="preserve">
     <value>Anmod om engangsadgangskode</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Send kode</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Sender</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>Kopiér Send-link ved gem</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>Sender kode</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>Bekræfter</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>Send kode igen</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>En bekræftelseskode blev sendt til din e-mail</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>Der opstod en fejl under afsendelse af en bekræftelseskode til din e-mail. Prøv igen</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>Indtast den bekræftelseskode, der blev sendt til din e-mail</value>
   </data>
 </root>

@@ -2,7 +2,6 @@
 using Bit.App.Abstractions;
 using Bit.App.Pages;
 using Bit.App.Resources;
-using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
@@ -14,6 +13,7 @@ using System.Threading.Tasks;
 using Bit.App.Models;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
+using Bit.Core.Models.Data;
 using Newtonsoft.Json;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -27,6 +27,8 @@ namespace Bit.App.Utilities
             var platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             var eventService = ServiceContainer.Resolve<IEventService>("eventService");
             var vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
+            var clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
+
             var options = new List<string> { AppResources.View };
             if (!cipher.IsDeleted)
             {
@@ -44,8 +46,8 @@ namespace Bit.App.Utilities
                 }
                 if (!string.IsNullOrWhiteSpace(cipher.Login.Totp))
                 {
-                    var userService = ServiceContainer.Resolve<IUserService>("userService");
-                    var canAccessPremium = await userService.CanAccessPremiumAsync();
+                    var stateService = ServiceContainer.Resolve<IStateService>("stateService");
+                    var canAccessPremium = await stateService.CanAccessPremiumAsync();
                     if (canAccessPremium || cipher.OrganizationUseTotp)
                     {
                         options.Add(AppResources.CopyTotp);
@@ -92,7 +94,7 @@ namespace Bit.App.Utilities
             }
             else if (selection == AppResources.CopyUsername)
             {
-                await platformUtilsService.CopyToClipboardAsync(cipher.Login.Username);
+                await clipboardService.CopyTextAsync(cipher.Login.Username);
                 platformUtilsService.ShowToast("info", null,
                     string.Format(AppResources.ValueHasBeenCopied, AppResources.Username));
             }
@@ -100,7 +102,7 @@ namespace Bit.App.Utilities
             {
                 if (cipher.Reprompt == CipherRepromptType.None || await passwordRepromptService.ShowPasswordPromptAsync())
                 {
-                    await platformUtilsService.CopyToClipboardAsync(cipher.Login.Password);
+                    await clipboardService.CopyTextAsync(cipher.Login.Password);
                     platformUtilsService.ShowToast("info", null,
                         string.Format(AppResources.ValueHasBeenCopied, AppResources.Password));
                     var task = eventService.CollectAsync(Core.Enums.EventType.Cipher_ClientCopiedPassword, cipher.Id);
@@ -114,7 +116,7 @@ namespace Bit.App.Utilities
                     var totp = await totpService.GetCodeAsync(cipher.Login.Totp);
                     if (!string.IsNullOrWhiteSpace(totp))
                     {
-                        await platformUtilsService.CopyToClipboardAsync(totp);
+                        await clipboardService.CopyTextAsync(totp);
                         platformUtilsService.ShowToast("info", null,
                             string.Format(AppResources.ValueHasBeenCopied, AppResources.VerificationCodeTotp));
                     }
@@ -128,7 +130,7 @@ namespace Bit.App.Utilities
             {
                 if (cipher.Reprompt == CipherRepromptType.None || await passwordRepromptService.ShowPasswordPromptAsync())
                 {
-                    await platformUtilsService.CopyToClipboardAsync(cipher.Card.Number);
+                    await clipboardService.CopyTextAsync(cipher.Card.Number);
                     platformUtilsService.ShowToast("info", null,
                         string.Format(AppResources.ValueHasBeenCopied, AppResources.Number));
                 }
@@ -137,7 +139,7 @@ namespace Bit.App.Utilities
             {
                 if (cipher.Reprompt == CipherRepromptType.None || await passwordRepromptService.ShowPasswordPromptAsync())
                 {
-                    await platformUtilsService.CopyToClipboardAsync(cipher.Card.Code);
+                    await clipboardService.CopyTextAsync(cipher.Card.Code);
                     platformUtilsService.ShowToast("info", null,
                         string.Format(AppResources.ValueHasBeenCopied, AppResources.SecurityCode));
                     var task = eventService.CollectAsync(Core.Enums.EventType.Cipher_ClientCopiedCardCode, cipher.Id);
@@ -145,7 +147,7 @@ namespace Bit.App.Utilities
             }
             else if (selection == AppResources.CopyNotes)
             {
-                await platformUtilsService.CopyToClipboardAsync(cipher.Notes);
+                await clipboardService.CopyTextAsync(cipher.Notes);
                 platformUtilsService.ShowToast("info", null,
                     string.Format(AppResources.ValueHasBeenCopied, AppResources.Notes));
             }
@@ -200,7 +202,8 @@ namespace Bit.App.Utilities
                 return;
             }
             var platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
-            await platformUtilsService.CopyToClipboardAsync(GetSendUrl(send));
+            var clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
+            await clipboardService.CopyTextAsync(GetSendUrl(send));
             platformUtilsService.ShowToast("info", null,
                 string.Format(AppResources.ValueHasBeenCopied, AppResources.SendLink));
         }
@@ -222,12 +225,7 @@ namespace Bit.App.Utilities
         private static string GetSendUrl(SendView send)
         {
             var environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
-            var webVaultUrl = environmentService.GetWebVaultUrl();
-            if (webVaultUrl != null)
-            {
-                return webVaultUrl + "/#/send/" + send.AccessId + "/" + send.UrlB64Key;
-            }
-            return "https://send.bitwarden.com/#" + send.AccessId + "/" + send.UrlB64Key;
+            return environmentService.GetWebSendUrl() + send.AccessId + "/" + send.UrlB64Key;
         }
 
         public static async Task<bool> RemoveSendPasswordAsync(string sendId)
@@ -327,33 +325,15 @@ namespace Bit.App.Utilities
         }
 
         public static async Task<bool> PerformUpdateTasksAsync(ISyncService syncService,
-            IDeviceActionService deviceActionService, IStorageService storageService)
+            IDeviceActionService deviceActionService, IStateService stateService)
         {
             var currentBuild = deviceActionService.GetBuildNumber();
-            var lastBuild = await storageService.GetAsync<string>(Constants.LastBuildKey);
-            if (lastBuild == null)
-            {
-                // Installed
-                var currentTimeout = await storageService.GetAsync<int?>(Constants.VaultTimeoutKey);
-                if (currentTimeout == null)
-                {
-                    await storageService.SaveAsync(Constants.VaultTimeoutKey, 15);
-                }
-
-                var currentAction = await storageService.GetAsync<string>(Constants.VaultTimeoutActionKey);
-                if (currentAction == null)
-                {
-                    await storageService.SaveAsync(Constants.VaultTimeoutActionKey, "lock");
-                }
-            }
-            else if (lastBuild != currentBuild)
+            var lastBuild = await stateService.GetLastBuildAsync();
+            if (lastBuild == null || lastBuild != currentBuild)
             {
                 // Updated
                 var tasks = Task.Run(() => syncService.FullSyncAsync(true));
-            }
-            if (lastBuild != currentBuild)
-            {
-                await storageService.SaveAsync(Constants.LastBuildKey, currentBuild);
+                await stateService.SetLastBuildAsync(currentBuild);
                 return true;
             }
             return false;
@@ -415,35 +395,34 @@ namespace Bit.App.Utilities
 
         public static async Task<PreviousPageInfo> ClearPreviousPage()
         {
-            var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
-            var previousPage = await storageService.GetAsync<PreviousPageInfo>(Constants.PreviousPageKey);
+            var stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            var previousPage = await stateService.GetPreviousPageInfoAsync();
             if (previousPage != null)
             {
-                await storageService.RemoveAsync(Constants.PreviousPageKey);
+                await stateService.SetPreviousPageInfoAsync(null);
             }
             return previousPage;
         }
 
         public static async Task<int> IncrementInvalidUnlockAttemptsAsync()
         {
-            var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
-            var invalidUnlockAttempts = await storageService.GetAsync<int>(Constants.InvalidUnlockAttempts); 
+            var stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            var invalidUnlockAttempts = await stateService.GetInvalidUnlockAttemptsAsync(); 
             invalidUnlockAttempts++;
-            await storageService.SaveAsync(Constants.InvalidUnlockAttempts, invalidUnlockAttempts);
+            await stateService.SetInvalidUnlockAttemptsAsync(invalidUnlockAttempts);
             return invalidUnlockAttempts;
         }
         
         public static async Task ResetInvalidUnlockAttemptsAsync()
         {
-            var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
-            await storageService.RemoveAsync(Constants.InvalidUnlockAttempts);
+            var stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            await stateService.SetInvalidUnlockAttemptsAsync(null);
         }
 
         public static async Task<bool> IsVaultTimeoutImmediateAsync()
         {
-            var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
-            
-            var vaultTimeoutMinutes = await storageService.GetAsync<int?>(Constants.VaultTimeoutKey);
+            var stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            var vaultTimeoutMinutes = await stateService.GetVaultTimeoutAsync();
             if (vaultTimeoutMinutes.GetValueOrDefault(-1) == 0)
             {
                 return true;
@@ -463,10 +442,8 @@ namespace Bit.App.Utilities
             return Convert.ToBase64String(Encoding.UTF8.GetBytes(multiByteEscaped));
         }
 
-        public static async Task LogOutAsync()
+        public static async Task LogOutAsync(string userId, bool userInitiated = false)
         {
-            var userService = ServiceContainer.Resolve<IUserService>("userService");
-            var syncService = ServiceContainer.Resolve<ISyncService>("syncService");
             var tokenService = ServiceContainer.Resolve<ITokenService>("tokenService");
             var cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
             var settingsService = ServiceContainer.Resolve<ISettingsService>("settingsService");
@@ -478,23 +455,70 @@ namespace Bit.App.Utilities
             var vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             var stateService = ServiceContainer.Resolve<IStateService>("stateService");
             var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            var policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
             var searchService = ServiceContainer.Resolve<ISearchService>("searchService");
 
-            var userId = await userService.GetUserIdAsync();
+            if (userId == null)
+            {
+                userId = await stateService.GetActiveUserIdAsync();
+            }
+
             await Task.WhenAll(
-                syncService.SetLastSyncAsync(DateTime.MinValue),
-                tokenService.ClearTokenAsync(),
-                cryptoService.ClearKeysAsync(),
-                userService.ClearAsync(),
-                settingsService.ClearAsync(userId),
                 cipherService.ClearAsync(userId),
                 folderService.ClearAsync(userId),
                 collectionService.ClearAsync(userId),
-                passwordGenerationService.ClearAsync(),
-                vaultTimeoutService.ClearAsync(),
-                stateService.PurgeAsync(),
+                passwordGenerationService.ClearAsync(userId),
+                deviceActionService.ClearCacheAsync(),
+                tokenService.ClearTokenAsync(userId),
+                cryptoService.ClearKeysAsync(userId),
+                settingsService.ClearAsync(userId),
+                vaultTimeoutService.ClearAsync(userId),
+                policyService.ClearAsync(userId),
+                stateService.LogoutAccountAsync(userId, userInitiated));
+
+            stateService.BiometricLocked = true;
+            searchService.ClearIndex();
+
+            // check if we switched accounts automatically
+            if (userInitiated && await stateService.GetActiveUserIdAsync() != null)
+            {
+                var messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
+                messagingService.Send("switchedAccount");
+                
+                var platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
+                platformUtilsService.ShowToast("info", null, AppResources.AccountSwitchedAutomatically);
+            }
+        }
+
+        public static async Task OnAccountSwitchAsync()
+        {
+            var environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
+            var tokenService = ServiceContainer.Resolve<ITokenService>("tokenService");
+            var cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
+            var settingsService = ServiceContainer.Resolve<ISettingsService>("settingsService");
+            var cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
+            var folderService = ServiceContainer.Resolve<IFolderService>("folderService");
+            var collectionService = ServiceContainer.Resolve<ICollectionService>("collectionService");
+            var sendService = ServiceContainer.Resolve<ISendService>("sendService");
+            var passwordGenerationService = ServiceContainer.Resolve<IPasswordGenerationService>(
+                "passwordGenerationService");
+            var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            var policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
+            var searchService = ServiceContainer.Resolve<ISearchService>("searchService");
+
+            await environmentService.SetUrlsFromStorageAsync();
+
+            await Task.WhenAll(
+                cipherService.ClearCacheAsync(),
                 deviceActionService.ClearCacheAsync());
-            vaultTimeoutService.BiometricLocked = true;
+            tokenService.ClearCache();
+            cryptoService.ClearCache();
+            settingsService.ClearCache();
+            folderService.ClearCache();
+            collectionService.ClearCache();
+            sendService.ClearCache();
+            passwordGenerationService.ClearCache();
+            policyService.ClearCache();
             searchService.ClearIndex();
         }
     }

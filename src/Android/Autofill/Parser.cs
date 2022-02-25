@@ -80,13 +80,13 @@ namespace Bit.Droid.Autofill
             }
         }
 
-        public async Task<bool> ShouldAutofillAsync(IStorageService storageService)
+        public async Task<bool> ShouldAutofillAsync(IStateService stateService)
         {
             var fillable = !string.IsNullOrWhiteSpace(Uri) && !AutofillHelpers.BlacklistedUris.Contains(Uri) &&
                 FieldCollection != null && FieldCollection.Fillable;
             if (fillable)
             {
-                var blacklistedUris = await storageService.GetAsync<List<string>>(Constants.AutofillBlacklistedUrisKey);
+                var blacklistedUris = await stateService.GetAutofillBlacklistedUrisAsync();
                 if (blacklistedUris != null && blacklistedUris.Count > 0)
                 {
                     fillable = !new HashSet<string>(blacklistedUris).Contains(Uri);

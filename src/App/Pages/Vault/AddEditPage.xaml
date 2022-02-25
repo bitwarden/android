@@ -9,6 +9,7 @@
     xmlns:views="clr-namespace:Bit.Core.Models.View;assembly=BitwardenCore"
     xmlns:behaviors="clr-namespace:Bit.App.Behaviors"
     xmlns:effects="clr-namespace:Bit.App.Effects"
+    xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
     x:DataType="pages:AddEditPageViewModel"
     x:Name="_page"
     Title="{Binding PageTitle}">
@@ -142,9 +143,9 @@
                             IsSpellCheckEnabled="False"
                             IsTextPredictionEnabled="False"
                             IsEnabled="{Binding Cipher.ViewPassword}"/>
-                        <controls:FaButton 
+                        <controls:IconButton 
                             StyleClass="box-row-button, box-row-button-platform"
-                            Text="&#xf058;"
+                            Text="{Binding Source={x:Static core:BitwardenIcons.CheckCircle}}"
                             Command="{Binding CheckPasswordCommand}"
                             Grid.Row="0"
                             Grid.Column="1"
@@ -152,7 +153,7 @@
                             AutomationProperties.IsInAccessibleTree="True"
                             AutomationProperties.Name="{u:I18n CheckPassword}"
                             IsVisible="{Binding Cipher.ViewPassword}" />
-                        <controls:FaButton 
+                        <controls:IconButton 
                             StyleClass="box-row-button, box-row-button-platform"
                             Text="{Binding ShowPasswordIcon}"
                             Command="{Binding TogglePasswordCommand}"
@@ -162,9 +163,9 @@
                             AutomationProperties.IsInAccessibleTree="True"
                             AutomationProperties.Name="{u:I18n ToggleVisibility}"
                             IsVisible="{Binding Cipher.ViewPassword}" />
-                        <controls:FaButton 
+                        <controls:IconButton 
                             StyleClass="box-row-button, box-row-button-platform"
-                            Text="&#xf021;"
+                            Text="{Binding Source={x:Static core:BitwardenIcons.Generate}}"
                             Command="{Binding GeneratePasswordCommand}"
                             Grid.Row="0"
                             Grid.Column="3"
@@ -199,9 +200,9 @@
                             Grid.Row="1"
                             Grid.Column="0"
                             Grid.ColumnSpan="{Binding TotpColumnSpan}" />
-                        <controls:FaButton 
+                        <controls:IconButton 
                             StyleClass="box-row-button, box-row-button-platform"
-                            Text="&#xf030;"
+                            Text="{Binding Source={x:Static core:BitwardenIcons.Camera}}"
                             Clicked="ScanTotp_Clicked"
                             Grid.Row="0"
                             Grid.Column="1"
@@ -244,7 +245,7 @@
                             IsPassword="{Binding ShowCardNumber, Converter={StaticResource inverseBool}}"
                             IsSpellCheckEnabled="False"
                             IsTextPredictionEnabled="False" />
-                        <controls:FaButton 
+                        <controls:IconButton 
                             StyleClass="box-row-button, box-row-button-platform"
                             Text="{Binding ShowCardNumberIcon}"
                             Command="{Binding ToggleCardNumberCommand}"
@@ -308,7 +309,7 @@
                             IsPassword="{Binding ShowCardCode, Converter={StaticResource inverseBool}}"
                             IsSpellCheckEnabled="False"
                             IsTextPredictionEnabled="False" />
-                        <controls:FaButton 
+                        <controls:IconButton 
                             StyleClass="box-row-button, box-row-button-platform"
                             Text="{Binding ShowCardCodeIcon}"
                             Command="{Binding ToggleCardCodeCommand}"
@@ -337,7 +338,7 @@
                         <Entry
                             x:Name="_identityFirstNameEntry"
                             Text="{Binding Cipher.Identity.FirstName}"
-                            StyleClass="box-value" />
+                            StyleClass="box-value,capitalize-word-input"/>
                     </StackLayout>
                     <StackLayout StyleClass="box-row, box-row-input">
                         <Label
@@ -346,7 +347,7 @@
                         <Entry
                             x:Name="_identityMiddleNameEntry"
                             Text="{Binding Cipher.Identity.MiddleName}"
-                            StyleClass="box-value" />
+                            StyleClass="box-value,capitalize-word-input" />
                     </StackLayout>
                     <StackLayout StyleClass="box-row, box-row-input">
                         <Label
@@ -355,7 +356,7 @@
                         <Entry
                             x:Name="_identityLastNameEntry"
                             Text="{Binding Cipher.Identity.LastName}"
-                            StyleClass="box-value" />
+                            StyleClass="box-value,capitalize-word-input" />
                     </StackLayout>
                     <StackLayout StyleClass="box-row, box-row-input">
                         <Label
@@ -419,6 +420,7 @@
                         <Entry
                             x:Name="_identityPhoneEntry"
                             Text="{Binding Cipher.Identity.Phone}"
+                            Keyboard="Telephone"
                             StyleClass="box-value" />
                     </StackLayout>
                     <StackLayout StyleClass="box-row, box-row-input">
@@ -455,7 +457,7 @@
                         <Entry
                             x:Name="_identityCityEntry"
                             Text="{Binding Cipher.Identity.City}"
-                            StyleClass="box-value" />
+                            StyleClass="box-value,capitalize-sentence-input" />
                     </StackLayout>
                     <StackLayout StyleClass="box-row, box-row-input">
                         <Label
@@ -464,7 +466,7 @@
                         <Entry
                             x:Name="_identityStateEntry"
                             Text="{Binding Cipher.Identity.State}"
-                            StyleClass="box-value" />
+                            StyleClass="box-value,capitalize-sentence-input" />
                     </StackLayout>
                     <StackLayout StyleClass="box-row, box-row-input">
                         <Label
@@ -482,7 +484,7 @@
                         <Entry
                             x:Name="_identityCountryEntry"
                             Text="{Binding Cipher.Identity.Country}"
-                            StyleClass="box-value" />
+                            StyleClass="box-value,capitalize-sentence-input" />
                     </StackLayout>
                 </StackLayout>
             </StackLayout>
@@ -514,9 +516,9 @@
                                     StyleClass="box-value"
                                     Grid.Row="1"
                                     Grid.Column="0" />
-                                <controls:FaButton
+                                <controls:IconButton
                                     StyleClass="box-row-button, box-row-button-platform"
-                                    Text="&#xf013;"
+                                    Text="{Binding Source={x:Static core:BitwardenIcons.Cog}}"
                                     Command="{Binding BindingContext.UriOptionsCommand, Source={x:Reference _page}}"
                                     CommandParameter="{Binding .}"
                                     Grid.Row="0"
@@ -560,9 +562,9 @@
                     <Label
                         Text="{u:I18n PasswordPrompt}"
                         StyleClass="box-label-regular" />
-                    <controls:FaButton 
+                    <controls:IconButton 
                         StyleClass="box-row-button, box-row-button-platform"
-                        Text="&#xf29c;"
+                        Text="{Binding Source={x:Static core:BitwardenIcons.QuestionCircle}}"
                         Command="{Binding PasswordPromptHelpCommand}"
                         TextColor="{DynamicResource MutedColor}"
                         AutomationProperties.IsInAccessibleTree="True"
@@ -672,7 +674,7 @@
                                         Grid.Column="1"
                                         Grid.RowSpan="2"
                                         IsVisible="{Binding IsBooleanType}" />
-                                    <controls:FaButton 
+                                    <controls:IconButton 
                                         StyleClass="box-row-button, box-row-button-platform"
                                         Text="{Binding ShowHiddenValueIcon}"
                                         Command="{Binding ToggleHiddenValueCommand}"
@@ -682,9 +684,9 @@
                                         Grid.RowSpan="2"
                                         AutomationProperties.IsInAccessibleTree="True"
                                         AutomationProperties.Name="{u:I18n ToggleVisibility}" />
-                                    <controls:FaButton 
+                                    <controls:IconButton 
                                         StyleClass="box-row-button, box-row-button-platform"
-                                        Text="&#xf013;"
+                                        Text="{Binding Source={x:Static core:BitwardenIcons.Cog}}"
                                         Command="{Binding BindingContext.FieldOptionsCommand, Source={x:Reference _page}}"
                                         CommandParameter="{Binding .}"
                                         Grid.Row="0"

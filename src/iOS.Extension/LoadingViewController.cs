@@ -415,7 +415,7 @@ namespace Bit.iOS.Extension
             }
             iOSCoreHelpers.Bootstrap();
             var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.SetTheme(app.Resources);
             iOSCoreHelpers.AppearanceAdjustments();
             _nfcDelegate = new NFCReaderDelegate((success, message) =>
                 messagingService.Send("gotYubiKeyOTP", message));
@@ -430,8 +430,8 @@ namespace Bit.iOS.Extension
 
         private Task<bool> IsAuthed()
         {
-            var userService = ServiceContainer.Resolve<IUserService>("userService");
-            return userService.IsAuthenticatedAsync();
+            var stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            return stateService.IsAuthenticatedAsync();
         }
 
         private void LogoutIfAuthed()
@@ -440,7 +440,8 @@ namespace Bit.iOS.Extension
             {
                 if (await IsAuthed())
                 {
-                    await AppHelpers.LogOutAsync();
+                    var stateService = ServiceContainer.Resolve<IStateService>("stateService");
+                    await AppHelpers.LogOutAsync(await stateService.GetActiveUserIdAsync());
                     var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
                     if (deviceActionService.SystemMajorVersion() >= 12)
                     {
@@ -454,7 +455,7 @@ namespace Bit.iOS.Extension
         {
             var homePage = new HomePage();
             var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesToPage(homePage);
             if (homePage.BindingContext is HomeViewModel vm)
             {
@@ -477,7 +478,7 @@ namespace Bit.iOS.Extension
         {
             var environmentPage = new EnvironmentPage();
             var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesToPage(environmentPage);
             if (environmentPage.BindingContext is EnvironmentPageViewModel vm)
             {
@@ -495,7 +496,7 @@ namespace Bit.iOS.Extension
         {
             var registerPage = new RegisterPage(null);
             var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesToPage(registerPage);
             if (registerPage.BindingContext is RegisterPageViewModel vm)
             {
@@ -513,7 +514,7 @@ namespace Bit.iOS.Extension
         {
             var loginPage = new LoginPage(email);
             var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesToPage(loginPage);
             if (loginPage.BindingContext is LoginPageViewModel vm)
             {
@@ -535,7 +536,7 @@ namespace Bit.iOS.Extension
         {
             var loginPage = new LoginSsoPage();
             var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesToPage(loginPage);
             if (loginPage.BindingContext is LoginSsoPageViewModel vm)
             {
@@ -558,7 +559,7 @@ namespace Bit.iOS.Extension
         {
             var twoFactorPage = new TwoFactorPage();
             var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesToPage(twoFactorPage);
             if (twoFactorPage.BindingContext is TwoFactorPageViewModel vm)
             {
@@ -585,7 +586,7 @@ namespace Bit.iOS.Extension
         {
             var setPasswordPage = new SetPasswordPage();
             var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesToPage(setPasswordPage);
             if (setPasswordPage.BindingContext is SetPasswordPageViewModel vm)
             {
@@ -604,7 +605,7 @@ namespace Bit.iOS.Extension
         {
             var updateTempPasswordPage = new UpdateTempPasswordPage();
             var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesToPage(updateTempPasswordPage);
             if (updateTempPasswordPage.BindingContext is UpdateTempPasswordPageViewModel vm)
             {

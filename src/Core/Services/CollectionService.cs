@@ -13,24 +13,20 @@ namespace Bit.Core.Services
 {
     public class CollectionService : ICollectionService
     {
-        private const string Keys_CollectionsFormat = "collections_{0}";
         private const char NestingDelimiter = '/';
 
         private List<CollectionView> _decryptedCollectionCache;
         private readonly ICryptoService _cryptoService;
-        private readonly IUserService _userService;
-        private readonly IStorageService _storageService;
+        private readonly IStateService _stateService;
         private readonly II18nService _i18nService;
 
         public CollectionService(
             ICryptoService cryptoService,
-            IUserService userService,
-            IStorageService storageService,
+            IStateService stateService,
             II18nService i18nService)
         {
             _cryptoService = cryptoService;
-            _userService = userService;
-            _storageService = storageService;
+            _stateService = stateService;
             _i18nService = i18nService;
         }
 
@@ -83,9 +79,7 @@ namespace Bit.Core.Services
 
         public async Task<Collection> GetAsync(string id)
         {
-            var userId = await _userService.GetUserIdAsync();
-            var collections = await _storageService.GetAsync<Dictionary<string, CollectionData>>(
-                string.Format(Keys_CollectionsFormat, userId));
+            var collections = await _stateService.GetEncryptedCollectionsAsync();
             if (!collections?.ContainsKey(id) ?? true)
             {
                 return null;
@@ -95,9 +89,7 @@ namespace Bit.Core.Services
 
         public async Task<List<Collection>> GetAllAsync()
         {
-            var userId = await _userService.GetUserIdAsync();
-            var collections = await _storageService.GetAsync<Dictionary<string, CollectionData>>(
-                string.Format(Keys_CollectionsFormat, userId));
+            var collections = await _stateService.GetEncryptedCollectionsAsync();
             var response = collections?.Select(c => new Collection(c.Value));
             return response?.ToList() ?? new List<Collection>();
         }
@@ -148,9 +140,7 @@ namespace Bit.Core.Services
 
         public async Task UpsertAsync(CollectionData collection)
         {
-            var userId = await _userService.GetUserIdAsync();
-            var storageKey = string.Format(Keys_CollectionsFormat, userId);
-            var collections = await _storageService.GetAsync<Dictionary<string, CollectionData>>(storageKey);
+            var collections = await _stateService.GetEncryptedCollectionsAsync();
             if (collections == null)
             {
                 collections = new Dictionary<string, CollectionData>();
@@ -160,15 +150,13 @@ namespace Bit.Core.Services
                 collections.Add(collection.Id, null);
             }
             collections[collection.Id] = collection;
-            await _storageService.SaveAsync(storageKey, collections);
+            await _stateService.SetEncryptedCollectionsAsync(collections);
             _decryptedCollectionCache = null;
         }
 
         public async Task UpsertAsync(List<CollectionData> collection)
         {
-            var userId = await _userService.GetUserIdAsync();
-            var storageKey = string.Format(Keys_CollectionsFormat, userId);
-            var collections = await _storageService.GetAsync<Dictionary<string, CollectionData>>(storageKey);
+            var collections = await _stateService.GetEncryptedCollectionsAsync();
             if (collections == null)
             {
                 collections = new Dictionary<string, CollectionData>();
@@ -181,34 +169,31 @@ namespace Bit.Core.Services
                 }
                 collections[c.Id] = c;
             }
-            await _storageService.SaveAsync(storageKey, collections);
+            await _stateService.SetEncryptedCollectionsAsync(collections);
             _decryptedCollectionCache = null;
         }
 
         public async Task ReplaceAsync(Dictionary<string, CollectionData> collections)
         {
-            var userId = await _userService.GetUserIdAsync();
-            await _storageService.SaveAsync(string.Format(Keys_CollectionsFormat, userId), collections);
+            await _stateService.SetEncryptedCollectionsAsync(collections);
             _decryptedCollectionCache = null;
         }
 
         public async Task ClearAsync(string userId)
         {
-            await _storageService.RemoveAsync(string.Format(Keys_CollectionsFormat, userId));
+            await _stateService.SetEncryptedCollectionsAsync(null, userId);
             _decryptedCollectionCache = null;
         }
 
         public async Task DeleteAsync(string id)
         {
-            var userId = await _userService.GetUserIdAsync();
-            var collectionKey = string.Format(Keys_CollectionsFormat, userId);
-            var collections = await _storageService.GetAsync<Dictionary<string, CollectionData>>(collectionKey);
+            var collections = await _stateService.GetEncryptedCollectionsAsync();
             if (collections == null || !collections.ContainsKey(id))
             {
                 return;
             }
             collections.Remove(id);
-            await _storageService.SaveAsync(collectionKey, collections);
+            await _stateService.SetEncryptedCollectionsAsync(collections);
             _decryptedCollectionCache = null;
         }
 

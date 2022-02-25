@@ -8,6 +8,7 @@ using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Utilities;
+using Bit.Core;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -137,7 +138,7 @@ namespace Bit.App.Pages
 
         public Command TogglePasswordCommand { get; }
 
-        public string ShowPasswordIcon => ShowPassword ? "" : "";
+        public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
 
         public void TogglePassword()
         {

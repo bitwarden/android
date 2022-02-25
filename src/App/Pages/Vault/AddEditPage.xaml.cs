@@ -2,7 +2,6 @@
 using Bit.App.Models;
 using Bit.App.Resources;
 using Bit.App.Utilities;
-using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Utilities;
@@ -18,7 +17,7 @@ namespace Bit.App.Pages
     public partial class AddEditPage : BaseContentPage
     {
         private readonly AppOptions _appOptions;
-        private readonly IStorageService _storageService;
+        private readonly IStateService _stateService;
         private readonly IDeviceActionService _deviceActionService;
         private readonly IVaultTimeoutService _vaultTimeoutService;
         private readonly IKeyConnectorService _keyConnectorService;
@@ -38,7 +37,7 @@ namespace Bit.App.Pages
             bool cloneMode = false,
             ViewPage viewPage = null)
         {
-            _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             _keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
@@ -333,10 +332,10 @@ namespace Bit.App.Pages
                 {
                     return;
                 }
-                var addLoginShown = await _storageService.GetAsync<bool?>(Constants.AddSitePromptShownKey);
+                var addLoginShown = await _stateService.GetAddSitePromptShownAsync();
                 if (_vm.Cipher.Type == CipherType.Login && !_fromAutofill && !addLoginShown.GetValueOrDefault())
                 {
-                    await _storageService.SaveAsync(Constants.AddSitePromptShownKey, true);
+                    await _stateService.SetAddSitePromptShownAsync(true);
                     if (Device.RuntimePlatform == Device.iOS)
                     {
                         if (_deviceActionService.SystemMajorVersion() < 12)

@@ -311,6 +311,30 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string RemoveAccount {
+            get {
+                return ResourceManager.GetString("RemoveAccount", resourceCulture);
+            }
+        }
+        
+        public static string RemoveAccountConfirmation {
+            get {
+                return ResourceManager.GetString("RemoveAccountConfirmation", resourceCulture);
+            }
+        }
+        
+        public static string AccountAlreadyAdded {
+            get {
+                return ResourceManager.GetString("AccountAlreadyAdded", resourceCulture);
+            }
+        }
+        
+        public static string SwitchToAlreadyAddedAccountConfirmation {
+            get {
+                return ResourceManager.GetString("SwitchToAlreadyAddedAccountConfirmation", resourceCulture);
+            }
+        }
+        
         public static string MasterPassword {
             get {
                 return ResourceManager.GetString("MasterPassword", resourceCulture);
@@ -3719,6 +3743,36 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string AddAccount {
+            get {
+                return ResourceManager.GetString("AddAccount", resourceCulture);
+            }
+        }
+        
+        public static string AccountUnlocked {
+            get {
+                return ResourceManager.GetString("AccountUnlocked", resourceCulture);
+            }
+        }
+        
+        public static string AccountLocked {
+            get {
+                return ResourceManager.GetString("AccountLocked", resourceCulture);
+            }
+        }
+        
+        public static string AccountLoggedOut {
+            get {
+                return ResourceManager.GetString("AccountLoggedOut", resourceCulture);
+            }
+        }
+        
+        public static string AccountSwitchedAutomatically {
+            get {
+                return ResourceManager.GetString("AccountSwitchedAutomatically", resourceCulture);
+            }
+        }
+        
         public static string DeleteAccount {
             get {
                 return ResourceManager.GetString("DeleteAccount", resourceCulture);
@@ -3764,6 +3818,48 @@ namespace Bit.App.Resources {
         public static string Sending {
             get {
                 return ResourceManager.GetString("Sending", resourceCulture);
+            }
+        }
+        
+        public static string CopySendLinkOnSave {
+            get {
+                return ResourceManager.GetString("CopySendLinkOnSave", resourceCulture);
+            }
+        }
+        
+        public static string SendingCode {
+            get {
+                return ResourceManager.GetString("SendingCode", resourceCulture);
+            }
+        }
+        
+        public static string Verifying {
+            get {
+                return ResourceManager.GetString("Verifying", resourceCulture);
+            }
+        }
+        
+        public static string ResendCode {
+            get {
+                return ResourceManager.GetString("ResendCode", resourceCulture);
+            }
+        }
+        
+        public static string AVerificationCodeWasSentToYourEmail {
+            get {
+                return ResourceManager.GetString("AVerificationCodeWasSentToYourEmail", resourceCulture);
+            }
+        }
+        
+        public static string AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain {
+            get {
+                return ResourceManager.GetString("AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain", resourceCulture);
+            }
+        }
+        
+        public static string EnterTheVerificationCodeThatWasSentToYourEmail {
+            get {
+                return ResourceManager.GetString("EnterTheVerificationCodeThatWasSentToYourEmail", resourceCulture);
             }
         }
     }

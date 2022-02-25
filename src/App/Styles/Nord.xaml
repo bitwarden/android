@@ -13,6 +13,7 @@
     <Color x:Key="PasswordSpecialColor">#d08770</Color>
     <Color x:Key="ButtonColor">#d8dee9</Color>
     <Color x:Key="InputPlaceholderColor">#7b88a1</Color>
+    <Color x:Key="DangerPressedColor">#953C44</Color>
 
     <Color x:Key="BackgroundColor">#3b4252</Color>
     <Color x:Key="SplashBackgroundColor">#2e3440</Color>
@@ -57,6 +58,7 @@
     <Color x:Key="ButtonBorderColor">#5E6A82</Color>
     <Color x:Key="ButtonTextColor">#e5e9f0</Color>
     <Color x:Key="ButtonTextColorDisabled">#aaaaaa</Color>
+    <Color x:Key="ButtonTextColorOpacity">#99e5e9f0</Color>
 
     <Color x:Key="FabColor">#81a1c1</Color>
     <Color x:Key="FabPressedColor">#81a1c1</Color>

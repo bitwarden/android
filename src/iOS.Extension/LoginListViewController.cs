@@ -9,8 +9,6 @@ using MobileCoreServices;
 using Bit.iOS.Core.Controllers;
 using Bit.App.Resources;
 using Bit.iOS.Core.Views;
-using Bit.Core.Utilities;
-using Bit.Core.Abstractions;
 
 namespace Bit.iOS.Extension
 {
@@ -127,9 +125,7 @@ namespace Bit.iOS.Extension
                 if (_controller.CanAutoFill() && !string.IsNullOrWhiteSpace(item.Password))
                 {
                     string totp = null;
-                    var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
-                    var disableTotpCopy = storageService.GetAsync<bool?>(
-                        Bit.Core.Constants.DisableAutoTotpCopyKey).GetAwaiter().GetResult();
+                    var disableTotpCopy = _stateService.GetDisableAutoTotpCopyAsync().GetAwaiter().GetResult();
                     if (!disableTotpCopy.GetValueOrDefault(false))
                     {
                         totp = GetTotpAsync(item).GetAwaiter().GetResult();

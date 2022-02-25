@@ -1,16 +1,19 @@
-﻿using Bit.App.Abstractions;
-using Bit.App.Models;
+﻿using System;
+using System.Threading.Tasks;
+using Bit.App.Abstractions;
+using Bit.App.Controls;
 using Bit.App.Resources;
+using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
-using Bit.Core.Utilities;
-using System;
-using System.Threading.Tasks;
-using Bit.App.Utilities;
 using Bit.Core.Models.Request;
+using Bit.Core.Utilities;
 using Xamarin.Forms;
+#if !FDROID
+using Microsoft.AppCenter.Crashes;
+#endif
 
 namespace Bit.App.Pages
 {
@@ -21,10 +24,7 @@ namespace Bit.App.Pages
         private readonly IDeviceActionService _deviceActionService;
         private readonly IVaultTimeoutService _vaultTimeoutService;
         private readonly ICryptoService _cryptoService;
-        private readonly IStorageService _storageService;
-        private readonly IUserService _userService;
         private readonly IMessagingService _messagingService;
-        private readonly IStorageService _secureStorageService;
         private readonly IEnvironmentService _environmentService;
         private readonly IStateService _stateService;
         private readonly IBiometricService _biometricService;
@@ -40,7 +40,8 @@ namespace Bit.App.Pages
         private string _biometricButtonText;
         private string _loggedInAsText;
         private string _lockedVerifyText;
-        private Tuple<bool, bool> _pinSet;
+        private bool _isPinProtected;
+        private bool _isPinProtectedWithKey;
 
         public LockPageViewModel()
         {
@@ -49,10 +50,7 @@ namespace Bit.App.Pages
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             _cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
-            _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
-            _userService = ServiceContainer.Resolve<IUserService>("userService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
-            _secureStorageService = ServiceContainer.Resolve<IStorageService>("secureStorageService");
             _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _biometricService = ServiceContainer.Resolve<IBiometricService>("biometricService");
@@ -61,6 +59,12 @@ namespace Bit.App.Pages
             PageTitle = AppResources.VerifyMasterPassword;
             TogglePasswordCommand = new Command(TogglePassword);
             SubmitCommand = new Command(async () => await SubmitAsync());
+
+            AccountSwitchingOverlayViewModel = new AccountSwitchingOverlayViewModel(_stateService, _messagingService)
+            {
+                AllowAddAccountRow = true,
+                AllowActiveAccountSelection = true
+            };
         }
 
         public bool ShowPassword
@@ -120,27 +124,39 @@ namespace Bit.App.Pages
             set => SetProperty(ref _lockedVerifyText, value);
         }
 
+        public AccountSwitchingOverlayViewModel AccountSwitchingOverlayViewModel { get; }
+
         public Command SubmitCommand { get; }
         public Command TogglePasswordCommand { get; }
-        public string ShowPasswordIcon => ShowPassword ? "" : "";
+        public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public string MasterPassword { get; set; }
         public string Pin { get; set; }
         public Action UnlockedAction { get; set; }
 
         public async Task InitAsync()
         {
-            _pinSet = await _vaultTimeoutService.IsPinLockSetAsync();
-            PinLock = (_pinSet.Item1 && _vaultTimeoutService.PinProtectedKey != null) || _pinSet.Item2;
+            (_isPinProtected, _isPinProtectedWithKey) = await _vaultTimeoutService.IsPinLockSetAsync();
+            PinLock = (_isPinProtected && await _stateService.GetPinProtectedKeyAsync() != null) ||
+                      _isPinProtectedWithKey;
             BiometricLock = await _vaultTimeoutService.IsBiometricLockSetAsync() && await _cryptoService.HasKeyAsync();
 
             // Users with key connector and without biometric or pin has no MP to unlock with
             _usingKeyConnector = await _keyConnectorService.GetUsesKeyConnector();
-            if ( _usingKeyConnector && !(BiometricLock || PinLock))
+            if (_usingKeyConnector && !(BiometricLock || PinLock))
             {
                 await _vaultTimeoutService.LogOutAsync();
+                return;
             }
-            _email = await _userService.GetEmailAsync();
-            var webVault = _environmentService.GetWebVaultUrl();
+            _email = await _stateService.GetEmailAsync();
+            if (string.IsNullOrWhiteSpace(_email))
+            {
+                await _vaultTimeoutService.LogOutAsync();
+#if !FDROID
+                Crashes.TrackError(new NullReferenceException("Email not found in storage"));
+#endif
+                return;
+            }
+            var webVault = _environmentService.GetWebVaultUrl(true);
             if (string.IsNullOrWhiteSpace(webVault))
             {
                 webVault = "https://bitwarden.com";
@@ -204,21 +220,21 @@ namespace Bit.App.Pages
             }
 
             ShowPassword = false;
-            var kdf = await _userService.GetKdfAsync();
-            var kdfIterations = await _userService.GetKdfIterationsAsync();
+            var kdf = await _stateService.GetKdfTypeAsync();
+            var kdfIterations = await _stateService.GetKdfIterationsAsync();
 
             if (PinLock)
             {
                 var failed = true;
                 try
                 {
-                    if (_pinSet.Item1)
+                    if (_isPinProtected)
                     {
                         var key = await _cryptoService.MakeKeyFromPinAsync(Pin, _email,
                             kdf.GetValueOrDefault(KdfType.PBKDF2_SHA256), kdfIterations.GetValueOrDefault(5000),
-                            _vaultTimeoutService.PinProtectedKey);
+                            await _stateService.GetPinProtectedKeyAsync());
                         var encKey = await _cryptoService.GetEncKeyAsync(key);
-                        var protectedPin = await _storageService.GetAsync<string>(Constants.ProtectedPin);
+                        var protectedPin = await _stateService.GetProtectedPinAsync();
                         var decPin = await _cryptoService.DecryptToUtf8Async(new EncString(protectedPin), encKey);
                         failed = decPin != Pin;
                         if (!failed)
@@ -285,14 +301,14 @@ namespace Bit.App.Pages
                 }
                 if (passwordValid)
                 {
-                    if (_pinSet.Item1)
+                    if (_isPinProtected)
                     {
-                        var protectedPin = await _storageService.GetAsync<string>(Constants.ProtectedPin);
+                        var protectedPin = await _stateService.GetProtectedPinAsync();
                         var encKey = await _cryptoService.GetEncKeyAsync(key);
                         var decPin = await _cryptoService.DecryptToUtf8Async(new EncString(protectedPin), encKey);
                         var pinKey = await _cryptoService.MakePinKeyAysnc(decPin, _email,
                             kdf.GetValueOrDefault(KdfType.PBKDF2_SHA256), kdfIterations.GetValueOrDefault(5000));
-                        _vaultTimeoutService.PinProtectedKey = await _cryptoService.EncryptAsync(key.Key, pinKey);
+                        await _stateService.SetPinProtectedKeyAsync(await _cryptoService.EncryptAsync(key.Key, pinKey));
                     }
                     MasterPassword = string.Empty;
                     await AppHelpers.ResetInvalidUnlockAttemptsAsync();
@@ -358,7 +374,7 @@ namespace Bit.App.Pages
                     page.MasterPasswordEntry.Focus();
                 }
             });
-            _vaultTimeoutService.BiometricLocked = !success;
+            _stateService.BiometricLocked = !success;
             if (success)
             {
                 await DoContinueAsync();
@@ -377,9 +393,7 @@ namespace Bit.App.Pages
 
         private async Task DoContinueAsync()
         {
-            _vaultTimeoutService.BiometricLocked = false;
-            var disableFavicon = await _storageService.GetAsync<bool?>(Constants.DisableFaviconKey);
-            await _stateService.SaveAsync(Constants.DisableFaviconKey, disableFavicon.GetValueOrDefault());
+            _stateService.BiometricLocked = false;
             _messagingService.Send("unlocked");
             UnlockedAction?.Invoke();
         }

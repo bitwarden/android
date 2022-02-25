@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Biztos, hogy ki szeretnél jelentkezni?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Fiók eltávolítása</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Biztosan törlésre kerüljön ez a fiók?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>A fiók már hozzáadásra került.</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Szeretnénk most átkapcsolni erre?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Mesterjelszó</value>
     <comment>Label for a master password.</comment>
@@ -820,7 +832,7 @@
     <comment>Remember my two-step login</comment>
   </data>
   <data name="SendVerificationCodeAgain" xml:space="preserve">
-    <value>Megerősítő kód újraküldése email-ben</value>
+    <value>Send megerősítő kód újraküldése emailben</value>
     <comment>For 2FA</comment>
   </data>
   <data name="TwoStepLoginOptions" xml:space="preserve">
@@ -830,7 +842,7 @@
     <value>Más kétlépcsős bejelentkezés használata</value>
   </data>
   <data name="VerificationEmailNotSent" xml:space="preserve">
-    <value>Nem sikerült elküldeni a megerősítő e-mailt. Próbáld újra.</value>
+    <value>Nem sikerült elküldeni a megerősítő emailt. Próbáljuk újra.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
@@ -1153,7 +1165,7 @@
     <value>A Bitwarden automatikus kitöltési szolgáltatása az Android automatikus kitöltő keretrendszerét használja a bejelentkezési adatok, hitelkártyaadatok és azonosítóadatok kitöltésére az eszközén telepített más alkalmazásokban.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>A Bitwarden automatikus kitöltési szolgáltatásának használatával kitöltheti a bejelentkezési, hitelkártya- és azonosító adatokat más alkalmazásokban.</value>
+    <value>A Bitwarden automatikus kitöltési szolgáltatásának használatával kitöltheted a bejelentkezési, hitelkártya- és azonosítóadatokat más alkalmazásokban.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Automatikus kitöltés beállításainak megnyitása</value>
@@ -1455,6 +1467,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>Feloldás</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Széf feloldása</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 perc</value>
   </data>
@@ -1470,6 +1485,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>A széf zárolva van. A folytatáshoz adjuk meg a pinkódot.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>A széf zárolásra került. A folytatáshoz ellenőrizni kell az azonosítást.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Sötét</value>
@@ -1611,8 +1629,14 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>A mesterjelszó megadása a széfadatok exportálásához.</value>
   </data>
-    <data name="ExportVaultOTPDescription" xml:space="preserve">
-    <value>Az ellenőrzőkód megadása a széfadatok exportálásához.</value>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Ellenőrző kód elküldése a saját email címre</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>A kód elküldésre került.</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>A folytatáshoz meg kell erősíteni a személyazonosságot.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Az exportált széfadatok titkosítatlan formátumban kerülnek elmentésre. Ne tároljuk sehol, illetve ne küldjük el senkinek a fájlt nem biztonságos felületeken (például email). Használat után azonnal töröljük.</value>
@@ -1817,11 +1841,11 @@
     <value>Egy szervezeti házirend befolyásolja a tulajdonjog beállításait.</value>
   </data>
   <data name="Send" xml:space="preserve">
-    <value>Küldés</value>
+    <value>Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AllSends" xml:space="preserve">
-    <value>Összes küldés</value>
+    <value>Összes Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Sends" xml:space="preserve">
@@ -1829,7 +1853,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NameInfo" xml:space="preserve">
-    <value>Barátságos név a Küldés leírására.</value>
+    <value>Barátságos név a Send elem leírására.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="TypeText" xml:space="preserve">
@@ -1839,7 +1863,7 @@
     <value>A küldendő szöveg.</value>
   </data>
   <data name="HideTextByDefault" xml:space="preserve">
-    <value>A Küldés elérésekor alapértelmezés szerint a szöveg elrejtése</value>
+    <value>A Send elérésekor alapértelmezés szerint a szöveg elrejtése</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="TypeFile" xml:space="preserve">
@@ -1868,7 +1892,7 @@
     <value>Lejárati idő</value>
   </data>
   <data name="ExpirationDateInfo" xml:space="preserve">
-    <value>Beállítva a hozzáférés ehhez a Küldéshez lejár a meghatározott időpontban.</value>
+    <value>Beállítva a hozzáférés ehhez a Send elemhez lejár a meghatározott időpontban.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Expired" xml:space="preserve">
@@ -1878,7 +1902,7 @@
     <value>Maximális elérési szám</value>
   </data>
   <data name="MaximumAccessCountInfo" xml:space="preserve">
-    <value>Beállítva a Küldés elérhetetlen lesz a meghatározott hozzáférések számának elérése után.</value>
+    <value>Beállítva a Send elérhetetlen lesz a meghatározott hozzáférések számának elérése után.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="MaximumAccessCountReached" xml:space="preserve">
@@ -1891,7 +1915,7 @@
     <value>Új jelszó</value>
   </data>
   <data name="PasswordInfo" xml:space="preserve">
-    <value>Opcionálissan egy jelszó kérhető a felhasználóktól a Küldés eléréséhez.</value>
+    <value>Opcionálissan egy jelszó kérhető a felhasználóktól a Send eléréséhez.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="RemovePassword" xml:space="preserve">
@@ -1901,21 +1925,21 @@
     <value>Biztosan eltávolításra kerüljön ez a jelszó?</value>
   </data>
   <data name="RemovingSendPassword" xml:space="preserve">
-    <value>Jelszó eltávolítása</value>
+    <value>Jelszó eltávolítása..</value>
   </data>
   <data name="SendPasswordRemoved" xml:space="preserve">
-    <value>A jelszó eltávolításra került</value>
+    <value>A jelszó eltávolításra került.</value>
   </data>
   <data name="NotesInfo" xml:space="preserve">
-    <value>Személyes megjegyzések erről a Küldésről.</value>
+    <value>Személyes megjegyzések erről a Sendről.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>A Küldés letiltásával mindenki hozzáférése megvonható.</value>
+    <value>A Send letiltásával mindenki hozzáférése megvonható.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
-    <value>A fiókban nincsenek küldések.</value>
+    <value>A fiókban nincsenek Send elemek.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddASend" xml:space="preserve">
@@ -1929,35 +1953,35 @@
     <value>Hivatkozás megosztása</value>
   </data>
   <data name="SendLink" xml:space="preserve">
-    <value>Hivatkozás küldése</value>
+    <value>Send hivatkozás</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SearchSends" xml:space="preserve">
-    <value>Küldés keresése</value>
+    <value>Send elemek keresése</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="EditSend" xml:space="preserve">
-    <value>Küldés szerkesztése</value>
+    <value>Send szerkesztése</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddSend" xml:space="preserve">
-    <value>Küldés hozzáadása</value>
+    <value>Send hozzáadása</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AreYouSureDeleteSend" xml:space="preserve">
-    <value>Biztosan törlésre kerüljön ez a küldés?</value>
+    <value>Biztosan törlésre kerüljön ez a Send elem?</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDeleted" xml:space="preserve">
-    <value>A küldés törlésre került.</value>
+    <value>A Send elem törlésre került.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendUpdated" xml:space="preserve">
-    <value>A küldés frissítésre került.</value>
+    <value>A Send elem frissítésre került.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NewSendCreated" xml:space="preserve">
-    <value>Az új küldés létrejött.</value>
+    <value>Az új Send elem létrejött.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="OneDay" xml:space="preserve">
@@ -1979,15 +2003,15 @@
     <value>Egyedi</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
-    <value>A Küldés megosztása mentéskor.</value>
+    <value>A Send elem megosztása mentéskor.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
-    <value>A vállalati házirend miatt csak egy meglévő Küldés törölhető.</value>
+    <value>A vállalati házirend miatt csak egy meglévő Send elem törölhető.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AboutSend" xml:space="preserve">
-    <value>A küldésről</value>
+    <value>A Sendről</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
@@ -2080,10 +2104,67 @@
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Egy vagy több szervezeti házirend tiltja a személyes széf exportálását.</value>
   </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Fiók hozzáadása</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Feloldva</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Lezárva</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Megtörtént a kijelentkezés.</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Megtörtént az átkapcsolás a következő elérhető fiókra.</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Fiók törlése</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>A fiók törlése végleges.</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>A fiók és az összes társított adat törlésre kerül és nem állítható vissza. Biztosan folytassuk?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>A fiók törlése folyamatban van.</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>A fiók véglegesen törlésre került.</value>
+  </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Az ellenőrző kód érvénytelen.</value>
   </data>
-    <data name="RequestOTP" xml:space="preserve">
+  <data name="RequestOTP" xml:space="preserve">
     <value>Egyszeri jelszó kérése</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Send kód</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Küldés...</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>Send hivatkozás másolása mentéskor</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>Küldési kód</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>Ellenőrzés</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>Újraküldési kód</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>Egy ellenőrző kód lett elküldve a saját email címre.</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>Hiba történt az ellenőrző kód saját email címre történő elküldésekor. Próbáljuk újra.</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>Az emailben elküldött ellenőrző kód megadása</value>
   </data>
 </root>

@@ -23,7 +23,7 @@ namespace Bit.iOS.Core.Views
         private IEnumerable<CipherViewModel> _allItems = new List<CipherViewModel>();
         protected ICipherService _cipherService;
         protected ITotpService _totpService;
-        protected IUserService _userService;
+        protected IStateService _stateService;
         protected ISearchService _searchService;
         private AppExtensionContext _context;
         private UIViewController _controller;
@@ -32,7 +32,7 @@ namespace Bit.iOS.Core.Views
         {
             _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
             _totpService = ServiceContainer.Resolve<ITotpService>("totpService");
-            _userService = ServiceContainer.Resolve<IUserService>("userService");
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _searchService = ServiceContainer.Resolve<ISearchService>("searchService");
             _context = context;
             _controller = controller;
@@ -135,7 +135,7 @@ namespace Bit.iOS.Core.Views
         public async Task<string> GetTotpAsync(CipherViewModel item)
         {
             string totp = null;
-            var accessPremium = await _userService.CanAccessPremiumAsync();
+            var accessPremium = await _stateService.CanAccessPremiumAsync();
             if (accessPremium || (item?.CipherView.OrganizationUseTotp ?? false))
             {
                 if (item != null && !string.IsNullOrWhiteSpace(item.Totp))

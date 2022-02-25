@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>您確定要登出嗎？</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>移除帳戶</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>確定要移除這個帳戶嗎？</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>帳戶已添加</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>您想現在就切換到它嗎？</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>主密碼</value>
     <comment>Label for a master password.</comment>
@@ -884,7 +896,7 @@
     <value>將相機對準 QR code 。</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
-    <value>掃描 QR Code</value>
+    <value>掃描 QR 碼</value>
   </data>
   <data name="Camera" xml:space="preserve">
     <value>相機</value>
@@ -1150,10 +1162,10 @@
     <value>自動填入無障礙服務</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>Bitwarden 自動填入服務使用 Android 自動填入框架來幫助您將登入資料、信用卡和身分信息填入至裝置上的其他應用程式中。</value>
+    <value>Bitwarden 自動填入服務使用 Android 自動填入框架來協助將登入信息填入至你裝置上的其他應用程式中。</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>使用 Bitwarden 自動填入服務將登入資料、信用卡和身分信息填入到其他應用程式中。</value>
+    <value>使用 Bitwarden 自動填入服務將登入信息填入到其他應用程式中。</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>打開自動填入設定</value>
@@ -1184,13 +1196,13 @@
     <value>布林值</value>
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
-    <value>隱藏</value>
+    <value>隱藏型</value>
   </data>
   <data name="FieldTypeLinked" xml:space="preserve">
-    <value>已連結</value>
+    <value>連結型</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
-    <value>文字</value>
+    <value>文字型</value>
   </data>
   <data name="NewCustomField" xml:space="preserve">
     <value>新增自訂欄位</value>
@@ -1455,6 +1467,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>解鎖</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>解鎖密碼庫</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 分鐘</value>
   </data>
@@ -1470,6 +1485,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>密碼庫已鎖定。驗證 PIN 碼以繼續。</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>您的密碼庫已上鎖。請驗證身份後繼續。</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>深色</value>
@@ -1611,8 +1629,14 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>輸入您的主密碼以匯出密碼庫資料。</value>
   </data>
-    <data name="ExportVaultOTPDescription" xml:space="preserve">
-    <value>輸入驗證碼以匯出您的密碼庫資料。</value>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>傳送驗證碼到您的信箱</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>驗證碼已傳送！</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>請先確認身分後再繼續。</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>此匯出包含未加密格式的密碼庫檔案。您不應將它存放或經由不安全的方式（例如電子郵件）傳送。用完後請立即將它刪除。</value>
@@ -1868,7 +1892,7 @@
     <value>逾期時間</value>
   </data>
   <data name="ExpirationDateInfo" xml:space="preserve">
-    <value>如果設定，對此 Send 的存取將在指定的日期和時間后逾期。</value>
+    <value>如果設定此選項，對此 Send 的存取將在指定的日期和時間後逾期。</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Expired" xml:space="preserve">
@@ -1878,7 +1902,7 @@
     <value>最大存取次數</value>
   </data>
   <data name="MaximumAccessCountInfo" xml:space="preserve">
-    <value>如果設定，達到最大存取次數后，使用者將無法再次存取此 Send。</value>
+    <value>如果設定此選項，當達到最大存取次數時，使用者將無法再次存取此 Send。</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="MaximumAccessCountReached" xml:space="preserve">
@@ -1911,7 +1935,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>停用此 Send 以阻止任何人存取它。</value>
+    <value>停用此 Send 以阻止任何人存取它</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
@@ -1979,7 +2003,7 @@
     <value>自訂</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
-    <value>儲存時分享此 Send。</value>
+    <value>儲存時分享此 Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
@@ -1991,7 +2015,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
-    <value>對收件人隱藏我的電子郵件位址。</value>
+    <value>對收件人隱藏我的電子郵件位址</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
     <value>一個或多個組織原则正影響您的 Send 選項。</value>
@@ -2036,13 +2060,13 @@
     <value>當前無法更新密碼</value>
   </data>
   <data name="RemoveMasterPassword" xml:space="preserve">
-    <value>移除主控密碼</value>
+    <value>移除主密碼</value>
   </data>
   <data name="RemoveMasterPasswordWarning" xml:space="preserve">
-    <value>{0} 正使用客戶管理加密的 SSO。繼續操作將從您的帳戶中移除主控密碼並要求 SSO 登入。</value>
+    <value>{0} 正使用客戶管理加密的 SSO。繼續操作將從您的帳戶中移除主密碼並要求 SSO 登入。</value>
   </data>
   <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
-    <value>如果您不想移除主控密碼，您可以離開此組織。</value>
+    <value>如果您不想移除主密碼，您可以離開這個組織。</value>
   </data>
   <data name="LeaveOrganization" xml:space="preserve">
     <value>離開組織</value>
@@ -2080,10 +2104,67 @@
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>一或多個組織策略不允許您匯出個人密碼庫。</value>
   </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>新增帳戶</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>已解鎖</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>已鎖定</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>已登出</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>已切換到下一個可用的帳戶</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>刪除帳戶</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>「刪除帳戶」不可逆</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>您的帳戶及相關資料都會被清得一乾二凈，無法復原。是否繼續？</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>正在刪除您的帳戶</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>已永久刪除您的帳戶</value>
+  </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>無效的驗證碼。</value>
   </data>
-    <data name="RequestOTP" xml:space="preserve">
+  <data name="RequestOTP" xml:space="preserve">
     <value>請求一次性密碼</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>傳送驗證碼</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>傳送中</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>儲存時複製 Send 連結</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>正在傳送驗證碼</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>正在驗證</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>重新傳送驗證碼</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>驗證碼已傳送到您的電子信箱</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>將驗證碼傳送至您的電子信箱時發生錯誤。請重試</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>輸入傳送到您電子信箱的驗證碼</value>
   </data>
 </root>

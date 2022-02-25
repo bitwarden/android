@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Ste prepričani, da se želite odjaviti?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Remove Account</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Are you sure you want to remove this account?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Account Already Added</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Would you like to switch to it now?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Glavno geslo</value>
     <comment>Label for a master password.</comment>
@@ -412,10 +424,10 @@
     <value>Izogib dvoumnih znakov</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>Bitwarden App Extension</value>
+    <value>Razširitev aplikacije Bitwarden</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the Bitwarden App Extension. Learn more about using the Bitwarden App Extension by navigating to the "Settings" screen.</value>
+    <value>Najlažji način za dodajanje novih prijav v svoj trezor je iz razširitve Bitwarden. Preberite več o uporabi razširitve aplikacije Bitwarden tako, da se pomaknete na zaslon »Nastavitve«.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
     <value>Uporabite Bitwarden v brskalniku Safari in ostalih aplikacijah za samodejno izpolnjevanje obrazcev za vpis. </value>
@@ -424,13 +436,13 @@
     <value>Bitwarden storitev samodejnega izpolnjevanja obrazcev</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Use the Bitwarden accessibility service to auto-fill your logins.</value>
+    <value>Za samodejno izpolnjevanje prijav uporabite storitev za dostopnost Bitwarden.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Spremeni e-poštni naslov</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
-    <value>You can change your email address on the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>Svoje glavno geslo lahko spremenite na bitwarden.com spletnem trezorju. Želite to stran obiskati sedaj? </value>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
     <value>Spremeni glavno geslo</value>
@@ -480,13 +492,13 @@
     <value>Pripravljeni ste za vpis!</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
-    <value>Your logins are now easily accessible from Safari, Chrome, and other supported apps.</value>
+    <value>Vaše prijave so sedaj enostavno dostopne iz Safarija, Chroma in drugih podprtih aplikacij.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
-    <value>In Safari and Chrome, find Bitwarden using the share icon (hint: scroll to the right on the bottom row of the share menu).</value>
+    <value>V Safariju in Chromu poiščite Bitwarden z ikono za skupno rabo (namig: pomaknite se v desno v spodnji vrstici menija za skupno rabo).</value>
   </data>
   <data name="ExtensionTapIcon" xml:space="preserve">
-    <value>Tap the Bitwarden icon in the menu to launch the extension.</value>
+    <value>Pritisnite na ikono BitWardena v meniju da zaženete razširitev.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
     <value>To turn on Bitwarden in Safari and other apps, tap the "more" icon on the bottom row of the menu.</value>
@@ -625,10 +637,10 @@
     <value>Namig za geslo</value>
   </data>
   <data name="PasswordHintAlert" xml:space="preserve">
-    <value>We've sent you an email with your master password hint.</value>
+    <value>Poslali smo vam e-poštno spročilo z namigom za vaše glavno geslo.</value>
   </data>
   <data name="PasswordOverrideAlert" xml:space="preserve">
-    <value>Are you sure you want to overwrite the current password?</value>
+    <value>Ali ste prepričani, da želite prepisati vaše trenutno geslo?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
     <value>Bitwarden keeps your vault automatically synced by using push notifications. For the best possible experience, please select "Allow" on the following prompt when asked to enable push notifications.</value>
@@ -638,13 +650,13 @@
     <value>Oceni aplikacijo</value>
   </data>
   <data name="RateTheAppDescription" xml:space="preserve">
-    <value>Please consider helping us out with a good review!</value>
+    <value>Prosimo, pomagajte nam z dobro kritiko!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
-    <value>Regenerate Password</value>
+    <value>Ponovno generiraj geslo</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
-    <value>Re-type Master Password</value>
+    <value>Ponovno vnesite glavno geslo</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
     <value>Išči v trezorju</value>
@@ -659,13 +671,13 @@
     <value>Nastavi PIN</value>
   </data>
   <data name="SetPINDirection" xml:space="preserve">
-    <value>Enter a 4 digit PIN code to unlock the app with.</value>
+    <value>Vnesite 4 mestno PIN številko za odklep aplikacije.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
-    <value>Item Information</value>
+    <value>Informacije o vnosu</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Item updated.</value>
+    <value>Vnos je posodobljen.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Pošiljanje...</value>
@@ -682,7 +694,7 @@
     <value>Sinhronizacija neuspešna.</value>
   </data>
   <data name="SyncVaultNow" xml:space="preserve">
-    <value>Sync Vault Now</value>
+    <value>Sinhroniziraj trezor zdaj</value>
   </data>
   <data name="TouchID" xml:space="preserve">
     <value>Touch ID</value>
@@ -692,7 +704,7 @@
     <value>Prijava v dveh korakih</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Two-step login makes your account more secure by requiring you to verify your login with another device such as a security key, authenticator app, SMS, phone call, or email. Two-step login can be enabled on the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>Avtentikacija v dveh korakih naredi vaš račun bolj varen, saj od vas zahteva, da svojo prijavo preverite z drugo napravo, kot je varnostni ključ, aplikacija za preverjanje pristnosti, SMS, telefonski klic ali e-pošta. V spletnem trezorju bitwarden.com je lahko omogočite prijavo v dveh korakih. Ali želite spletno stran obiskati sedaj?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Odkleni z {0}</value>
@@ -738,19 +750,19 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceOverlay" xml:space="preserve">
-    <value>When you select an input field and see a Bitwarden auto-fill overlay, you can tap it to launch the auto-fill service.</value>
+    <value>Ko izberete vnosno polje in vidite prekrivni element samodejnega izpolnjevanja Bitwarden, pritisnite nanj, da zaženete storitev samodejnega izpolnjevanja.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
-    <value>Tap this notification to auto-fill an item from your vault.</value>
+    <value>Pritisnite na to obvestilo, da samodejno izpolnite element iz svojega trezorja.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
-    <value>Open Accessibility Settings</value>
+    <value>Odpri nastavitve dostopnosti</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
-    <value>1. On the Android Accessibility Settings screen, touch "Bitwarden" under the Services heading.</value>
+    <value>1. Na zaslonu z nastavitvami dostopnosti za Android, se dotaknite »Bitwarden« pod naslovom Storitve.</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
-    <value>2. Switch on the toggle and press OK to accept.</value>
+    <value>2. Preklopite in pritisnite OK, da sprejmete.</value>
   </data>
   <data name="Disabled" xml:space="preserve">
     <value>Onemogočeno</value>
@@ -768,10 +780,10 @@
     <value>Samodejno izpolnjevanje</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
-    <value>Do you want to auto-fill or view this item?</value>
+    <value>Želite samodejno izpolniti ali videti ta vnos?</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>Are you sure you want to auto-fill this item? It is not a complete match for "{0}".</value>
+    <value>Ali ste prepričani, da želite samodejno izpolniti ta element? Ujemanje ni popolno za "{0}".</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
     <value>Ujemajoči vnosi</value>
@@ -783,13 +795,13 @@
     <value>Iskanje</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
-    <value>You are searching for an auto-fill item for "{0}".</value>
+    <value>Iščete element samodejnega izpolnjevanja za "{0}".</value>
   </data>
   <data name="LearnOrg" xml:space="preserve">
-    <value>Learn About Organizations</value>
+    <value>Več o organizacijah </value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
-    <value>Cannot open the app "{0}".</value>
+    <value>Aplikacije ne gre odpreti "{0}".</value>
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
   </data>
   <data name="AuthenticatorAppTitle" xml:space="preserve">
@@ -801,7 +813,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeEmail" xml:space="preserve">
-    <value>Enter the 6 digit verification code that was emailed to {0}.</value>
+    <value>Vnesite 6-mestno verifikacijsko kodo, ki vam je bila poslana na {0}.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
@@ -932,7 +944,7 @@
     <value>Največja velikost datoteke je 100 MB.</value>
   </data>
   <data name="UpdateKey" xml:space="preserve">
-    <value>You cannot use this feature until you update your encryption key.</value>
+    <value>Te funkcije ne morete koristiti, dokler dokler ne posodobite vašega ključa za šifriranje.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Preberite več</value>
@@ -941,16 +953,16 @@
     <value>URL naslov API strežnika</value>
   </data>
   <data name="CustomEnvironment" xml:space="preserve">
-    <value>Custom Environment</value>
+    <value>Okolje po meri</value>
   </data>
   <data name="CustomEnvironmentFooter" xml:space="preserve">
-    <value>For advanced users. You can specify the base URL of each service independently.</value>
+    <value>Za napredne uporabnike. Lahko specificirate osnovni URL, ločeno za vsako storitev.</value>
   </data>
   <data name="EnvironmentSaved" xml:space="preserve">
-    <value>The environment URLs have been saved.</value>
+    <value>Okoljski URLji so bili shranjeni</value>
   </data>
   <data name="FormattedIncorrectly" xml:space="preserve">
-    <value>{0} is not correctly formatted.</value>
+    <value>{0} ni pravilno formatiran.</value>
     <comment>Validation error when something is not formatted correctly, such as a URL or email address.</comment>
   </data>
   <data name="IdentityUrl" xml:space="preserve">
@@ -958,7 +970,7 @@
     <comment>"Identity" refers to an identity server. See more context here https://en.wikipedia.org/wiki/Identity_management</comment>
   </data>
   <data name="SelfHostedEnvironment" xml:space="preserve">
-    <value>Self-hosted Environment</value>
+    <value>Okolje z lastnim gostovanjem</value>
   </data>
   <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
     <value>Specify the base URL of your on-premise hosted Bitwarden installation.</value>
@@ -1150,10 +1162,10 @@
     <value>Storitev za samodejno izpolnjevanje</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>The Bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device.</value>
+    <value>The Bitwarden auto-fill service uses the Android Autofill Framework to assist in filling login information into other apps on your device.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Use the Bitwarden auto-fill service to fill logins, credit cards, and identity information into other apps.</value>
+    <value>Use the Bitwarden auto-fill service to fill login information into other apps.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Nastavitve samodejnega izpolnjevanja</value>
@@ -1246,19 +1258,19 @@
     <comment>An entity of multiple related people (ex. a team or business organization).</comment>
   </data>
   <data name="HoldYubikeyNearTop" xml:space="preserve">
-    <value>Hold your Yubikey near the top of the device.</value>
+    <value>Držite vaš Yubikey ob vrhu naprave.</value>
   </data>
   <data name="TryAgain" xml:space="preserve">
     <value>Poskusite znova</value>
   </data>
   <data name="YubiKeyInstructionIos" xml:space="preserve">
-    <value>To continue, hold your YubiKey NEO against the back of the device.</value>
+    <value>Za nadaljevanje držite YubiKey NEO ob hrbtni strani naprave.</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
     <value>The accessibility service may be helpful to use when apps do not support the standard auto-fill service.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
-    <value>Password Updated</value>
+    <value>Geslo je bilo posodobljeno</value>
     <comment>ex. Date this password was updated</comment>
   </data>
   <data name="DateUpdated" xml:space="preserve">
@@ -1455,6 +1467,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>Odkleni</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Unlock Vault</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minut</value>
   </data>
@@ -1470,6 +1485,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Vaš trezor je zaklenjen. Potrdite PIN kodo za nadaljevanje.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Your vault is locked. Verify your identity to continue.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Temno</value>
@@ -1611,8 +1629,14 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Vnesite vaše glavno geslo za izvoz podatkov iz vašega trezorja.</value>
   </data>
-    <data name="ExportVaultOTPDescription" xml:space="preserve">
-    <value>Vnesti verifikacijsko kodo za izvoz podatkov trezorja.</value>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Pošlji verifikacijsko kodo po e-pošti</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Koda poslana!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Potrdite svojo identiteto za nadaljevanje.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>This export contains your vault data in an unencrypted format. You should not store or send the exported file over unsecure channels (such as email). Delete it immediately after you are done using it.</value>
@@ -1912,7 +1936,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Disable this Send so that no one can access it.</value>
+    <value>Disable this Send so that no one can access it</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
@@ -2081,10 +2105,67 @@
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>One or more organization policies prevents your from exporting your personal vault.</value>
   </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Add Account</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Unlocked</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Locked</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Logged Out</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Switched to next available account</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Izbriši račun</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Brisanje vašega računa je trajno</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Vaš račun in vsi povezani podatki bodo izbrisani, obnovitev ne bo mogoča. Ali ste prepričani, da želite nadaljevati?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Vaš račun se briše</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Vaš račun je bil trajno izbrisan</value>
+  </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Invalid Verification Code.</value>
   </data>
-    <data name="RequestOTP" xml:space="preserve">
+  <data name="RequestOTP" xml:space="preserve">
     <value>Request one-time password</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Pošlji kodo</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Pošiljam..</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>Copy Send link on save</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>Pošlji kodo</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>Verifying</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>Resend Code</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>A verification code was sent to your email</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>An error occurred while sending a verification code to your email. Please try again</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>Enter the verification code that was sent to your email</value>
   </data>
 </root>

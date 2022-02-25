@@ -13,6 +13,7 @@ namespace Bit.App.Pages
     {
         private readonly IPasswordGenerationService _passwordGenerationService;
         private readonly IPlatformUtilsService _platformUtilsService;
+        private readonly IClipboardService _clipboardService;
 
         private PasswordGenerationOptions _options;
         private PasswordGeneratorPolicyOptions _enforcedPolicyOptions;
@@ -38,6 +39,8 @@ namespace Bit.App.Pages
             _passwordGenerationService = ServiceContainer.Resolve<IPasswordGenerationService>(
                 "passwordGenerationService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
+            _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
+
             PageTitle = AppResources.PasswordGenerator;
             TypeOptions = new List<string> { AppResources.Password, AppResources.Passphrase };
         }
@@ -305,7 +308,7 @@ namespace Bit.App.Pages
 
         public async Task CopyAsync()
         {
-            await _platformUtilsService.CopyToClipboardAsync(Password);
+            await _clipboardService.CopyTextAsync(Password);
             _platformUtilsService.ShowToast("success", null,
                 string.Format(AppResources.ValueHasBeenCopied, AppResources.Password));
         }

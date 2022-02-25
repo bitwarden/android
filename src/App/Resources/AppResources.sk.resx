@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Naozaj sa chcete odhlásiť?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Odstrániť účet</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Naozaj chcete odstrániť tento účet?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Účet je už pridaný</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Chceli by ste naň prejsť teraz?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Hlavné heslo</value>
     <comment>Label for a master password.</comment>
@@ -1153,7 +1165,7 @@
     <value>Bitwarden služba automatického vypĺňania využíva Android Autofill Framework pre zjednodušenie vypĺňania prihlasovacích údajov, kreditných kariet a identít v aplikáciách vo vašom zariadení.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Použite službu automatického vypĺňania Bitwardenu na vypĺňanie prihlasovacích údajov, kreditných kariet a informácii identít do iných aplikácií.</value>
+    <value>Použite službu automatického vypĺňania Bitwardenu na vypĺňanie prihlasovacích údajov do iných aplikácií.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Otvoriť nastavenia automatického vypĺňania</value>
@@ -1455,6 +1467,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>Odomknúť</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Odomknúť trezor</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minút</value>
   </data>
@@ -1470,6 +1485,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Váš trezor je uzamknutý. Overte sa PIN kódom ak chcete pokračovať.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Váš trezor je uzamknutý. Ak chcete pokračovať, overte svoju identitu.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Tmavý</value>
@@ -1611,8 +1629,14 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Zadajte vaše hlavné heslo pre export údajov trezoru.</value>
   </data>
-    <data name="ExportVaultOTPDescription" xml:space="preserve">
-    <value>Ak chcete exportovať údaje trezora, zadajte overovací kód.</value>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Poslať overovací kód na váš e-mail</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Kód bol odoslaný!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Ak chcete pokračovať, potvrďte svoju identitu.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Tento export obsahuje vaše dáta v nešifrovanom formáte. Nemali by ste ich ukladať, ani posielať cez nezabezpečené kanály (napr. email). Okamžite ho odstráňte, keď ho prestanete používať.</value>
@@ -1911,7 +1935,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Vypnúť tento Send, aby k nemu nikto nemal prístup.</value>
+    <value>Vypnúť tento Send, aby k nemu nikto nemal prístup</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
@@ -1979,7 +2003,7 @@
     <value>Vlastné</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
-    <value>Po uložení zdieľať tento Send.</value>
+    <value>Po uložení zdieľať tento Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
@@ -1991,7 +2015,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
-    <value>Skryť moju emailovú adresu pred príjemcami.</value>
+    <value>Skryť moju emailovú adresu pred príjemcami</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
     <value>Jedno alebo viac pravidiel organizácie ovplyvňujú vaše možnosti funkcie Send.</value>
@@ -2080,10 +2104,67 @@
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Jedna alebo viacero zásad organizácie vám bráni exportovať váš osobný trezor.</value>
   </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Pridať účet</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Odomknutý</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Zamknutý</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Odhlásený</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Prepnuté na ďalší dostupný účet</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Odstrániť účet</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Odstránenie účtu je trvalé</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Váš účet a všetky súvisiace údaje budú vymazané a neobnoviteľné. Naozaj chcete pokračovať?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Odstraňuje sa účet</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Váš účet bol natrvalo odstránený</value>
+  </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Neplatný verifikačný kód.</value>
   </data>
-    <data name="RequestOTP" xml:space="preserve">
+  <data name="RequestOTP" xml:space="preserve">
     <value>Vyžiadať jednorazové heslo</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Odoslať kód</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Odosiela sa</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>Kopírovať odkaz Sendu pri uložení</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>Odosiela sa kód</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>Overuje sa</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>Znova odoslať kód</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>Na váš e-mail bol odoslaný overovací kód</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>Pri odosielaní overovacieho kódu na váš e-mail došlo k chybe. Skúste to, prosím, znova</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>Zadajte overovací kód, ktorý vám bol zaslaný na e-mail</value>
   </data>
 </root>

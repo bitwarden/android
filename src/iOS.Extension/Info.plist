@@ -11,7 +11,7 @@
 	<key>CFBundleIdentifier</key>
 	<string>com.8bit.bitwarden.find-login-action-extension</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.14.3</string>
+	<string>2.16.3</string>
 	<key>CFBundleLocalizations</key>
 	<array>
 		<string>en</string>
@@ -67,11 +67,11 @@
 	<array/>
 	<key>UIAppFonts</key>
 	<array>
-		<string>FontAwesome.ttf</string>
+		<string>bwi-font.ttf</string>
 		<string>MaterialIcons_Regular.ttf</string>
 	</array>
-    <key>CADisableMinimumFrameDurationOnPhone</key>
-    <true/>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 	<key>UIRequiredDeviceCapabilities</key>
 	<dict>
 		<key>arm64</key>
@@ -96,14 +96,14 @@
 		SUBQUERY (
 			$extensionItem.attachments,
 			$attachment,
-				ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO &quot;public.url&quot;
-			||  ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO &quot;public.plain-text&quot;
-			||  ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO &quot;org.appextension.find-login-action&quot;
-			||  ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO &quot;org.appextension.save-login-action&quot;
-			||  ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO &quot;org.appextension.change-password-action&quot;
-			||  ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO &quot;org.appextension.fill-webview-action&quot;
-			||  ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO &quot;org.appextension.fill-browser-action&quot;
-            ||  ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO &quot;com.8bit.bitwarden.extension-setup&quot;
+				ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.url"
+			||  ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.plain-text"
+			||  ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "org.appextension.find-login-action"
+			||  ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "org.appextension.save-login-action"
+			||  ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "org.appextension.change-password-action"
+			||  ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "org.appextension.fill-webview-action"
+			||  ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "org.appextension.fill-browser-action"
+            ||  ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "com.8bit.bitwarden.extension-setup"
 		).@count == $extensionItem.attachments.@count
 	).@count == 1</string>
 		</dict>

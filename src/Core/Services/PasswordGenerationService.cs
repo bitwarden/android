@@ -14,8 +14,6 @@ namespace Bit.Core.Services
 {
     public class PasswordGenerationService : IPasswordGenerationService
     {
-        private const string Keys_Options = "passwordGenerationOptions";
-        private const string Keys_History = "generatedPasswordHistory";
         private const int MaxPasswordsInHistory = 100;
         private const string LowercaseCharSet = "abcdefghijkmnopqrstuvwxyz";
         private const string UppercaseCharSet = "ABCDEFGHJKLMNPQRSTUVWXYZ";
@@ -23,7 +21,7 @@ namespace Bit.Core.Services
         private const string SpecialCharSet = "!@#$%^&*";
 
         private readonly ICryptoService _cryptoService;
-        private readonly IStorageService _storageService;
+        private readonly IStateService _stateService;
         private readonly ICryptoFunctionService _cryptoFunctionService;
         private readonly IPolicyService _policyService;
         private PasswordGenerationOptions _defaultOptions = new PasswordGenerationOptions(true);
@@ -32,12 +30,12 @@ namespace Bit.Core.Services
 
         public PasswordGenerationService(
             ICryptoService cryptoService,
-            IStorageService storageService,
+            IStateService stateService,
             ICryptoFunctionService cryptoFunctionService,
             IPolicyService policyService)
         {
             _cryptoService = cryptoService;
-            _storageService = storageService;
+            _stateService = stateService;
             _cryptoFunctionService = cryptoFunctionService;
             _policyService = policyService;
         }
@@ -160,6 +158,12 @@ namespace Bit.Core.Services
             return password.ToString();
         }
 
+        public void ClearCache()
+        {
+            _optionsCache = null;
+            _history = null;
+        }
+
         public async Task<string> GeneratePassphraseAsync(PasswordGenerationOptions options)
         {
             options.Merge(_defaultOptions);
@@ -204,7 +208,7 @@ namespace Bit.Core.Services
         {
             if (_optionsCache == null)
             {
-                var options = await _storageService.GetAsync<PasswordGenerationOptions>(Keys_Options);
+                var options = await _stateService.GetPasswordGenerationOptionsAsync();
                 if (options == null)
                 {
                     _optionsCache = _defaultOptions;
@@ -432,7 +436,7 @@ namespace Bit.Core.Services
 
         public async Task SaveOptionsAsync(PasswordGenerationOptions options)
         {
-            await _storageService.SaveAsync(Keys_Options, options);
+            await _stateService.SetPasswordGenerationOptionsAsync(options);
             _optionsCache = options;
         }
 
@@ -445,7 +449,7 @@ namespace Bit.Core.Services
             }
             if (_history == null)
             {
-                var encrypted = await _storageService.GetAsync<List<GeneratedPasswordHistory>>(Keys_History);
+                var encrypted = await _stateService.GetEncryptedPasswordGenerationHistory();
                 _history = await DecryptHistoryAsync(encrypted);
             }
             return _history ?? new List<GeneratedPasswordHistory>();
@@ -473,13 +477,13 @@ namespace Bit.Core.Services
             }
             var newHistory = await EncryptHistoryAsync(currentHistory);
             token.ThrowIfCancellationRequested();
-            await _storageService.SaveAsync(Keys_History, newHistory);
+            await _stateService.SetEncryptedPasswordGenerationHistoryAsync(newHistory);
         }
 
-        public async Task ClearAsync()
+        public async Task ClearAsync(string userId = null)
         {
             _history = new List<GeneratedPasswordHistory>();
-            await _storageService.RemoveAsync(Keys_History);
+            await _stateService.SetEncryptedPasswordGenerationHistoryAsync(null, userId);
         }
 
         public Result PasswordStrength(string password, List<string> userInputs = null)

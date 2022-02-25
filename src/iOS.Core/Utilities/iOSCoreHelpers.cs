@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Models;
+using Bit.App.Pages;
 using Bit.App.Resources;
 using Bit.App.Services;
 using Bit.App.Utilities;
@@ -28,7 +29,7 @@ namespace Bit.iOS.Core.Utilities
         {
             var appCenterHelper = new AppCenterHelper(
                 ServiceContainer.Resolve<IAppIdService>("appIdService"),
-                ServiceContainer.Resolve<IUserService>("userService"));
+                ServiceContainer.Resolve<IStateService>("stateService"));
             var appCenterTask = appCenterHelper.InitAsync();
         }
 
@@ -56,12 +57,16 @@ namespace Bit.iOS.Core.Utilities
                 () => ServiceContainer.Resolve<IAppIdService>("appIdService").GetAppIdAsync());
             var cryptoPrimitiveService = new CryptoPrimitiveService();
             var mobileStorageService = new MobileStorageService(preferencesStorage, liteDbStorage);
-            var deviceActionService = new DeviceActionService(mobileStorageService, messagingService);
+            var stateService = new StateService(mobileStorageService, secureStorageService);
+            var stateMigrationService =
+                new StateMigrationService(liteDbStorage, preferencesStorage, secureStorageService);
+            var deviceActionService = new DeviceActionService(stateService, messagingService);
+            var clipboardService = new ClipboardService(stateService);
             var platformUtilsService = new MobilePlatformUtilsService(deviceActionService, messagingService,
                 broadcasterService);
             var biometricService = new BiometricService(mobileStorageService);
             var cryptoFunctionService = new PclCryptoFunctionService(cryptoPrimitiveService);
-            var cryptoService = new CryptoService(mobileStorageService, secureStorageService, cryptoFunctionService);
+            var cryptoService = new CryptoService(stateService, cryptoFunctionService);
             var passwordRepromptService = new MobilePasswordRepromptService(platformUtilsService, cryptoService);
 
             ServiceContainer.Register<IBroadcasterService>("broadcasterService", broadcasterService);
@@ -71,7 +76,10 @@ namespace Bit.iOS.Core.Utilities
             ServiceContainer.Register<ICryptoPrimitiveService>("cryptoPrimitiveService", cryptoPrimitiveService);
             ServiceContainer.Register<IStorageService>("storageService", mobileStorageService);
             ServiceContainer.Register<IStorageService>("secureStorageService", secureStorageService);
+            ServiceContainer.Register<IStateService>("stateService", stateService);
+            ServiceContainer.Register<IStateMigrationService>("stateMigrationService", stateMigrationService);
             ServiceContainer.Register<IDeviceActionService>("deviceActionService", deviceActionService);
+            ServiceContainer.Register<IClipboardService>("clipboardService", clipboardService);
             ServiceContainer.Register<IPlatformUtilsService>("platformUtilsService", platformUtilsService);
             ServiceContainer.Register<IBiometricService>("biometricService", biometricService);
             ServiceContainer.Register<ICryptoFunctionService>("cryptoFunctionService", cryptoFunctionService);
@@ -91,7 +99,7 @@ namespace Bit.iOS.Core.Utilities
 
         public static void AppearanceAdjustments()
         {
-            ThemeHelpers.SetAppearance(ThemeManager.GetTheme(false), ThemeManager.OsDarkModeEnabled());
+            ThemeHelpers.SetAppearance(ThemeManager.GetTheme(), ThemeManager.OsDarkModeEnabled());
             UIApplication.SharedApplication.StatusBarHidden = false;
             UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.LightContent;
         }
@@ -113,7 +121,7 @@ namespace Bit.iOS.Core.Utilities
                     NSRunLoop.Main.BeginInvokeOnMainThread(async () =>
                     {
                         var result = await deviceActionService.DisplayAlertAsync(details.Title, details.Text,
-                           details.CancelText, details.ConfirmText);
+                           details.CancelText, confirmText);
                         var confirmed = result == details.ConfirmText;
                         messagingService.Send("showDialogResolve", new Tuple<int, bool>(details.DialogId, confirmed));
                     });
@@ -146,11 +154,23 @@ namespace Bit.iOS.Core.Utilities
 
         private static async Task BootstrapAsync(Func<Task> postBootstrapFunc = null)
         {
-            var disableFavicon = await ServiceContainer.Resolve<IStorageService>("storageService").GetAsync<bool?>(
-                Bit.Core.Constants.DisableFaviconKey);
-            await ServiceContainer.Resolve<IStateService>("stateService").SaveAsync(
-                Bit.Core.Constants.DisableFaviconKey, disableFavicon);
             await ServiceContainer.Resolve<IEnvironmentService>("environmentService").SetUrlsFromStorageAsync();
+
+            // TODO: Update when https://github.com/bitwarden/mobile/pull/1662 gets merged
+            var deleteAccountActionFlowExecutioner = new DeleteAccountActionFlowExecutioner(
+                ServiceContainer.Resolve<IApiService>("apiService"),
+                ServiceContainer.Resolve<IMessagingService>("messagingService"),
+                ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService"),
+                ServiceContainer.Resolve<IDeviceActionService>("deviceActionService"),
+                ServiceContainer.Resolve<ILogger>("logger"));
+            ServiceContainer.Register<IDeleteAccountActionFlowExecutioner>("deleteAccountActionFlowExecutioner", deleteAccountActionFlowExecutioner);
+
+            var verificationActionsFlowHelper = new VerificationActionsFlowHelper(
+                ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService"),
+                ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService"),
+                ServiceContainer.Resolve<ICryptoService>("cryptoService"));
+            ServiceContainer.Register<IVerificationActionsFlowHelper>("verificationActionsFlowHelper", verificationActionsFlowHelper);
+
             if (postBootstrapFunc != null)
             {
                 await postBootstrapFunc.Invoke();

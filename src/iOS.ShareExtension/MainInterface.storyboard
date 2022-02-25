@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="2vH-Do-uhk">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Loading View Controller-->
+        <scene sceneID="kFr-IN-5GS">
+            <objects>
+                <viewController id="bHU-LX-EpF" customClass="LoadingViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="8LE-gl-yDT"/>
+                        <viewControllerLayoutGuide type="bottom" id="MuK-nA-9iu"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="z2O-Vp-jY9">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" image="logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="Zdy-yw-n0p">
+                                <rect key="frame" x="66" y="352" width="282" height="44"/>
+                            </imageView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="Zdy-yw-n0p" firstAttribute="centerX" secondItem="z2O-Vp-jY9" secondAttribute="centerX" id="6DT-HB-vS5"/>
+                            <constraint firstItem="Zdy-yw-n0p" firstAttribute="centerY" secondItem="z2O-Vp-jY9" secondAttribute="centerY" constant="-30" id="o9N-Tv-Iwq"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="74l-Va-Vqa"/>
+                    <connections>
+                        <outlet property="Logo" destination="Zdy-yw-n0p" id="1Qk-EK-0BO"/>
+                        <segue destination="rh6-Mf-4Ja" kind="presentation" identifier="lockPasswordSegue" id="ZUl-jv-5se"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="yJx-cc-wzs" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-374" y="560"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="Wgx-vz-XqL">
+            <objects>
+                <navigationController definesPresentationContext="YES" id="2vH-Do-uhk" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" hidden="YES" contentMode="scaleToFill" translucent="NO" id="JoO-jQ-16M">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="bHU-LX-EpF" kind="relationship" relationship="rootViewController" id="iCF-2M-a2O"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="QQp-Im-2CU" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1097" y="564"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="Tzp-2o-9k7">
+            <objects>
+                <navigationController definesPresentationContext="YES" id="rh6-Mf-4Ja" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="UDq-kw-Ue7">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="85y-W9-d8q" kind="relationship" relationship="rootViewController" id="TeA-GE-A22"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="BVV-5B-aim" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-375" y="1262"/>
+        </scene>
+        <!--Verify Master Password-->
+        <scene sceneID="OEb-ak-BVc">
+            <objects>
+                <tableViewController id="85y-W9-d8q" customClass="LockPasswordViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="9on-wf-zdb">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="786"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <connections>
+                            <outlet property="dataSource" destination="85y-W9-d8q" id="3il-RO-S3K"/>
+                            <outlet property="delegate" destination="85y-W9-d8q" id="bLb-h4-pr3"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Verify Master Password" id="qL3-iV-6Ld">
+                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="d8j-HZ-erD">
+                            <connections>
+                                <action selector="CancelButton_Activated:" destination="85y-W9-d8q" id="p54-B0-Vyf"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Submit" id="8a7-Vz-SJA">
+                            <connections>
+                                <action selector="SubmitButton_Activated:" destination="85y-W9-d8q" id="P8A-7O-lpY"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="_cancelButton" destination="d8j-HZ-erD" id="wlI-el-Snh"/>
+                        <outlet property="_mainTableView" destination="9on-wf-zdb" id="ltj-yY-5ue"/>
+                        <outlet property="_navItem" destination="qL3-iV-6Ld" id="Grb-Ta-NCF"/>
+                        <outlet property="_submitButton" destination="8a7-Vz-SJA" id="LS8-6Y-Wkp"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="5by-Sa-d9m" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="335" y="1260"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="logo.png" width="282" height="44"/>
+    </resources>
+</document>

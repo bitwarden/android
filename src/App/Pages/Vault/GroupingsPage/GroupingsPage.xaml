@@ -15,6 +15,15 @@
     </ContentPage.BindingContext>
 
     <ContentPage.ToolbarItems>
+        <controls:ExtendedToolbarItem
+            x:Name="_accountAvatar"
+            IconImageSource="{Binding AvatarImageSource}"
+            Command="{Binding Source={x:Reference _accountListOverlay}, Path=ToggleVisibililtyCommand}"
+            Order="Primary"
+            Priority="-1"
+            UseOriginalImage="True"
+            AutomationProperties.IsInAccessibleTree="True"
+            AutomationProperties.Name="{u:I18n Account}" />
         <ToolbarItem Icon="search.png" Clicked="Search_Clicked"
                      AutomationProperties.IsInAccessibleTree="True"
                      AutomationProperties.Name="{u:I18n Search}" />
@@ -47,14 +56,15 @@
                           x:DataType="pages:GroupingsPageListItem">
                 <controls:ExtendedStackLayout Orientation="Horizontal" 
                                               StyleClass="list-row, list-row-platform">
-                    <controls:FaLabel Text="{Binding Icon, Mode=OneWay}"
+                    <controls:IconLabel Text="{Binding Icon, Mode=OneWay}"
                                       HorizontalOptions="Start"
                                       VerticalOptions="Center"
-                                      StyleClass="list-icon, list-icon-platform">
-                        <controls:FaLabel.Effects>
+                                      StyleClass="list-icon, list-icon-platform"
+                                      ShouldUpdateFontSizeDynamicallyForAccesibility="True">
+                        <controls:IconLabel.Effects>
                             <effects:FixedSizeEffect />
-                        </controls:FaLabel.Effects>
-                    </controls:FaLabel>
+                        </controls:IconLabel.Effects>
+                    </controls:IconLabel>
                     <Label Text="{Binding Name, Mode=OneWay}"
                            LineBreakMode="TailTruncation"
                            HorizontalOptions="FillAndExpand"
@@ -135,6 +145,8 @@
             AbsoluteLayout.LayoutFlags="All"
             AbsoluteLayout.LayoutBounds="0, 0, 1, 1">
         </ContentView>
+        
+        <!-- Android FAB -->
         <Button
             x:Name="_fab"
             Image="plus.png"
@@ -148,6 +160,13 @@
                 <effects:FabShadowEffect />
             </Button.Effects>
         </Button>
+
+        <controls:AccountSwitchingOverlayView
+            x:Name="_accountListOverlay"
+            AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+            AbsoluteLayout.LayoutFlags="All"
+            MainFab="{Binding Source={x:Reference _fab}, Path=.}"
+            BindingContext="{Binding AccountSwitchingOverlayViewModel}"/>
     </AbsoluteLayout>
 
 </pages:BaseContentPage>

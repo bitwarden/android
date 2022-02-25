@@ -1,9 +1,14 @@
 ﻿using System;
 using Bit.App.Models;
-using Bit.App.Services;
 using Bit.App.Styles;
-using Bit.Core;
+using Bit.Core.Abstractions;
+using Bit.Core.Utilities;
 using Xamarin.Forms;
+using System.Linq;
+using System.Threading.Tasks;
+#if !FDROID
+using Microsoft.AppCenter.Crashes;
+#endif
 
 namespace Bit.App.Utilities
 {
@@ -12,76 +17,108 @@ namespace Bit.App.Utilities
         public static bool UsingLightTheme = true;
         public static Func<ResourceDictionary> Resources = () => null;
 
+        public static bool IsThemeDirty = false;
+
         public static void SetThemeStyle(string name, ResourceDictionary resources)
         {
-            Resources = () => resources;
+            try
+            {
+                Resources = () => resources;
 
-            // Reset styles
-            resources.Clear();
-            resources.MergedDictionaries.Clear();
-
-            // Variables
-            resources.MergedDictionaries.Add(new Variables());
-
-            // Themed variables
-            if (name == "dark")
-            {
-                resources.MergedDictionaries.Add(new Dark());
-                UsingLightTheme = false;
-            }
-            else if (name == "black")
-            {
-                resources.MergedDictionaries.Add(new Black());
-                UsingLightTheme = false;
-            }
-            else if (name == "nord")
-            {
-                resources.MergedDictionaries.Add(new Nord());
-                UsingLightTheme = false;
-            }
-            else if (name == "light")
-            {
-                resources.MergedDictionaries.Add(new Light());
-                UsingLightTheme = true;
-            }
-            else
-            {
-                if (OsDarkModeEnabled())
+                var newTheme = NeedsThemeUpdate(name, resources);
+                if (newTheme is null)
                 {
-                    resources.MergedDictionaries.Add(new Dark());
-                    UsingLightTheme = false;
+                    return;
                 }
-                else
+
+                var currentTheme = resources.MergedDictionaries.FirstOrDefault(md => md is IThemeResourceDictionary);
+                if (currentTheme != null)
                 {
-                    resources.MergedDictionaries.Add(new Light());
-                    UsingLightTheme = true;
+                    resources.MergedDictionaries.Remove(currentTheme);
+                    resources.MergedDictionaries.Add(newTheme);
+                    UsingLightTheme = newTheme is Light;
+                    IsThemeDirty = true;
+                    return;
+                }
+
+                // Reset styles
+                resources.Clear();
+                resources.MergedDictionaries.Clear();
+
+                // Variables
+                resources.MergedDictionaries.Add(new Variables());
+
+                // Theme
+                resources.MergedDictionaries.Add(newTheme);
+                UsingLightTheme = newTheme is Light;
+
+                // Base styles
+                resources.MergedDictionaries.Add(new Base());
+
+                // Platform styles
+                if (Device.RuntimePlatform == Device.Android)
+                {
+                    resources.MergedDictionaries.Add(new Android());
+                }
+                else if (Device.RuntimePlatform == Device.iOS)
+                {
+                    resources.MergedDictionaries.Add(new iOS());
                 }
             }
-
-            // Base styles
-            resources.MergedDictionaries.Add(new Base());
-
-            // Platform styles
-            if (Device.RuntimePlatform == Device.Android)
+            catch (InvalidOperationException ioex) when (ioex.Message != null && ioex.Message.StartsWith("Collection was modified"))
             {
-                resources.MergedDictionaries.Add(new Android());
+                // https://github.com/bitwarden/mobile/issues/1689 There are certain scenarios where this might cause "collection was modified; enumeration operation may not execute"
+                // the way I found to prevent this for now was to catch the exception here and move on.
+                // Because on the screens that I found it to happen, the screen is being closed while trying to apply the resources
+                // so we shouldn't be introducing any issues.
+                // TODO: Maybe something like this https://github.com/matteobortolazzo/HtmlLabelPlugin/pull/113 can be implemented to avoid this
+                // on html labels.
             }
-            else if (Device.RuntimePlatform == Device.iOS)
+            catch (Exception ex)
             {
-                resources.MergedDictionaries.Add(new iOS());
+#if !FDROID
+                Crashes.TrackError(ex);
+#endif
             }
         }
 
-        public static void SetTheme(bool android, ResourceDictionary resources)
+        static ResourceDictionary CheckAndGetThemeForMergedDictionaries(Type themeType, ResourceDictionary resources)
         {
-            SetThemeStyle(GetTheme(android), resources);
+            return resources.MergedDictionaries.Any(rd => rd.GetType() == themeType)
+                ? null
+                : Activator.CreateInstance(themeType) as ResourceDictionary;
         }
 
-        public static string GetTheme(bool android)
+        static ResourceDictionary NeedsThemeUpdate(string themeName, ResourceDictionary resources)
         {
-            return Xamarin.Essentials.Preferences.Get(
-                string.Format(PreferencesStorageService.KeyFormat, Constants.ThemeKey), default(string),
-                !android ? "group.com.8bit.bitwarden" : default(string));
+            switch (themeName)
+            {
+                case "dark":
+                    return CheckAndGetThemeForMergedDictionaries(typeof(Dark), resources);
+                case "black":
+                    return CheckAndGetThemeForMergedDictionaries(typeof(Black), resources);
+                case "nord":
+                    return CheckAndGetThemeForMergedDictionaries(typeof(Nord), resources);
+                case "light":
+                    return CheckAndGetThemeForMergedDictionaries(typeof(Light), resources);
+                default:
+                    if (OsDarkModeEnabled())
+                    {
+                        return CheckAndGetThemeForMergedDictionaries(typeof(Dark), resources);
+                    }
+                    return CheckAndGetThemeForMergedDictionaries(typeof(Light), resources);
+            }
+        }
+
+        public static void SetTheme(ResourceDictionary resources)
+        {
+            SetThemeStyle(GetTheme(), resources);
+        }
+
+        public static string GetTheme()
+        {
+            var stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            return stateService.GetThemeAsync().GetAwaiter().GetResult();
         }
 
         public static bool OsDarkModeEnabled()
@@ -106,6 +143,35 @@ namespace Bit.App.Utilities
         public static Color GetResourceColor(string color)
         {
             return (Color)Resources()[color];
+        }
+
+        public static async Task UpdateThemeOnPagesAsync()
+        {
+            try
+            {
+                if (IsThemeDirty)
+                {
+                    IsThemeDirty = false;
+
+                    await Application.Current.MainPage.TraverseNavigationRecursivelyAsync(async p =>
+                    {
+                        if (p is IThemeDirtablePage themeDirtablePage)
+                        {
+                            themeDirtablePage.IsThemeDirty = true;
+                            if (p.IsVisible)
+                            {
+                                await themeDirtablePage.UpdateOnThemeChanged();
+                            }
+                        }
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+#if !FDROID
+                Crashes.TrackError(ex);
+#endif
+            }
         }
     }
 }

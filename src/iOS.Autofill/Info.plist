@@ -11,7 +11,7 @@
 	<key>CFBundleIdentifier</key>
 	<string>com.8bit.bitwarden.autofill</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.14.3</string>
+	<string>2.16.3</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>CFBundleLocalizations</key>
@@ -69,11 +69,11 @@
 	<array/>
 	<key>UIAppFonts</key>
 	<array>
-		<string>FontAwesome.ttf</string>
+		<string>bwi-font.ttf</string>
 		<string>MaterialIcons_Regular.ttf</string>
 	</array>
-    <key>CADisableMinimumFrameDurationOnPhone</key>
-    <true/>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 	<key>UIRequiredDeviceCapabilities</key>
 	<dict>
 		<key>arm64</key>

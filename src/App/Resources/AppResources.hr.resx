@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Sigurno se želiš odjaviti?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Remove Account</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Are you sure you want to remove this account?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Account Already Added</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Would you like to switch to it now?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Glavna lozinka</value>
     <comment>Label for a master password.</comment>
@@ -1060,7 +1072,7 @@
     <value>Prezime</value>
   </data>
   <data name="FullName" xml:space="preserve">
-    <value>Full Name</value>
+    <value>Ime i prezime</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Broj vozačke dozvole</value>
@@ -1153,7 +1165,7 @@
     <value>Usluga Bitwarden auto-ispune koristi Android Autofill Framework za pomoć pri ispunjavanju prijava, platnih kartica i identifikacijskih podataka u drugim aplikacijama na tvojem uređaju.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Koristi uslugu Bitwarden auto-ispune za ispunjavanje prijava, platnih kartica i identifikacijskih podataka u drugim aplikacijama.</value>
+    <value>Upotrijebite uslugu pristupačnosti usluge bitwarden da biste automatski ispunili prijave.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Otvori postavke auto-ispune</value>
@@ -1187,7 +1199,7 @@
     <value>Skriveno</value>
   </data>
   <data name="FieldTypeLinked" xml:space="preserve">
-    <value>Linked</value>
+    <value>Povezano</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Tekst</value>
@@ -1455,6 +1467,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>Otključaj</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Otključaj trezor</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minuta</value>
   </data>
@@ -1470,6 +1485,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Tvoj trezor je zaključan. Potvrdi PIN-om za nastavak.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Tvoj trezor je zaključan. Potvrdi glavnu lozinku za nastavak.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Tamna</value>
@@ -1611,8 +1629,14 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Unesi glavnu lozinku za izvoz podataka iz trezora.</value>
   </data>
-    <data name="ExportVaultOTPDescription" xml:space="preserve">
-    <value>Enter the verification code to export your vault data.</value>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Slanje verifikacijskog kôda e-poštom</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Kôd poslan</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Potvrdite lozinku za nastavak.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Ovaj izvoz sadrži podatke trezora u nešifriranom obliku! Izvezenu datoteku se ne bi smjelo pohranjivati ili slati putem nesigurnih kanala (npr. e-poštom). Izbriši ju odmah nakon završetka korištenja.</value>
@@ -2036,19 +2060,19 @@
     <value>Trenutno nije moguće ažurirati lozinku</value>
   </data>
   <data name="RemoveMasterPassword" xml:space="preserve">
-    <value>Remove Master Password</value>
+    <value>Ukloni glavnu lozinku</value>
   </data>
   <data name="RemoveMasterPasswordWarning" xml:space="preserve">
-    <value>{0} is using SSO with customer-managed encryption. Continuing will remove your Master Password from your account and require SSO to login.</value>
+    <value>{0} koristi SSO s korisnički upravljanim šifriranjem. Tvoja glavna lozinka biti će uklonjena, a za prijavu će biti potreban SSO.</value>
   </data>
   <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
-    <value>If you do not want to remove your Master Password, you may leave this organization.</value>
+    <value>Ako ne želiš ukloniti svoju glavnu lozinku, možeš napustiti ovu organizaciju.</value>
   </data>
   <data name="LeaveOrganization" xml:space="preserve">
-    <value>Leave Organization</value>
+    <value>Napusti organizaciju</value>
   </data>
   <data name="LeaveOrganizationName" xml:space="preserve">
-    <value>Leave {0}?</value>
+    <value>Napusti {0}?</value>
   </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
@@ -2080,10 +2104,67 @@
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Jedno ili više pravila organizacija onemogućuje izvoz osobnog trezora. </value>
   </data>
-  <data name="InvalidVerificationCode" xml:space="preserve">
-    <value>Invalid Verification Code.</value>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Add Account</value>
   </data>
-    <data name="RequestOTP" xml:space="preserve">
-    <value>Request one-time password</value>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Unlocked</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Locked</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Logged Out</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Switched to next available account</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Obriši račun</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Brisanje tvog računa je nepovratno</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Tvoj račun i svi povezani podaci biti će nepovratno obrisani. Sigurno želiš nastaviti?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Brisanje tvog računa</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Tvoj račun je trajno obrisan.</value>
+  </data>
+  <data name="InvalidVerificationCode" xml:space="preserve">
+    <value>Nevažeći kôd za provjeru</value>
+  </data>
+  <data name="RequestOTP" xml:space="preserve">
+    <value>Zatražite jednokratnu lozinku</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Pošalji kôd</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Šaljem</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>Kopiraj Send link nakon spremanja</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>Šaljem kod</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>Potvrđivanje</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>Ponovno pošalji kod</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>Kod za potvrdu je poslan na vaš e-mail.</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>Došlo je do pogreške prilikom slanja kontrolnog koda na vaš email. Molim te pokušaj ponovno</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>Unesite kontrolni kod koji vam je poslan na email</value>
   </data>
 </root>

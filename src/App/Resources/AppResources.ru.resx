@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Вы действительно хотите выйти?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Удалить учетную запись</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Вы действительно хотите удалить эту учетную запись?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Учетная запись уже добавлена</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Хотите переключиться на нее?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Мастер-пароль</value>
     <comment>Label for a master password.</comment>
@@ -1455,6 +1467,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>Разблокировать</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Разблокировать хранилище</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 минут</value>
   </data>
@@ -1470,6 +1485,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Ваше хранилище заблокировано. Для продолжения введите PIN-код.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Ваше хранилище заблокировано. Подтвердите свою личность, чтобы продолжить</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Темная</value>
@@ -1611,8 +1629,14 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Для экспорта данных из хранилища введите мастер-пароль.</value>
   </data>
-    <data name="ExportVaultOTPDescription" xml:space="preserve">
-    <value>Введите проверочный код для экспорта данных хранилища.</value>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Отправить код подтверждения на ваш email</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Код отправлен!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Подтвердите вашу личность, чтобы продолжить.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Экспортируемый файл содержит данные вашего хранилища в незашифрованном формате. Его не следует хранить или отправлять по небезопасным каналам (например по электронной почте). Удалите его сразу после использования.</value>
@@ -1991,7 +2015,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
-    <value>Скрыть мой адрес электронной почты от получателей.</value>
+    <value>Скрыть мой адрес email от получателей</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
     <value>На параметры Send влияют одна или несколько политик организации.</value>
@@ -2080,10 +2104,67 @@
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Экспорт вашего личного хранилища запрещен одной или несколькими политиками организации.</value>
   </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Добавить учетную запись</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Разблокировано</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Заблокировано</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Вы вышли из учетной записи</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Переключено на следующую доступную учетную запись</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Удалить аккаунт</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Удаление аккаунта отменить невозможно</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Ваш аккаунт и все связанные с ним данные будут удалены и восстановлению не подлежат. Вы уверены, что хотите продолжить?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Удаление вашего аккаунта</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Ваш аккаунт был удален навсегда</value>
+  </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Неверный код подтверждения.</value>
   </data>
-    <data name="RequestOTP" xml:space="preserve">
+  <data name="RequestOTP" xml:space="preserve">
     <value>Запросить одноразовый пароль</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Отправить код</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Отправка</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>Скопировать ссылку на Send для сохранения</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>Отправка кода</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>Проверка</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>Отправить код повторно</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>Код подтверждения отправлен на вашу электронную почту.</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>Ошибка отправки кода подтверждения на вашу почту. Попробуйте еще раз</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>Введите код подтверждения, отправленный вам на почту</value>
   </data>
 </root>

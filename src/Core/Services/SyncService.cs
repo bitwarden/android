@@ -12,45 +12,43 @@ namespace Bit.Core.Services
 {
     public class SyncService : ISyncService
     {
-        private const string Keys_LastSyncFormat = "lastSync_{0}";
-
-        private readonly IUserService _userService;
+        private readonly IStateService _stateService;
         private readonly IApiService _apiService;
         private readonly ISettingsService _settingsService;
         private readonly IFolderService _folderService;
         private readonly ICipherService _cipherService;
         private readonly ICryptoService _cryptoService;
         private readonly ICollectionService _collectionService;
-        private readonly IStorageService _storageService;
+        private readonly IOrganizationService _organizationService;
         private readonly IMessagingService _messagingService;
         private readonly IPolicyService _policyService;
         private readonly ISendService _sendService;
         private readonly IKeyConnectorService _keyConnectorService;
-        private readonly Func<bool, Task> _logoutCallbackAsync;
+        private readonly Func<Tuple<string, bool, bool>, Task> _logoutCallbackAsync;
 
         public SyncService(
-            IUserService userService,
+            IStateService stateService,
             IApiService apiService,
             ISettingsService settingsService,
             IFolderService folderService,
             ICipherService cipherService,
             ICryptoService cryptoService,
             ICollectionService collectionService,
-            IStorageService storageService,
+            IOrganizationService organizationService,
             IMessagingService messagingService,
             IPolicyService policyService,
             ISendService sendService,
             IKeyConnectorService keyConnectorService,
-            Func<bool, Task> logoutCallbackAsync)
+            Func<Tuple<string, bool, bool>, Task> logoutCallbackAsync)
         {
-            _userService = userService;
+            _stateService = stateService;
             _apiService = apiService;
             _settingsService = settingsService;
             _folderService = folderService;
             _cipherService = cipherService;
             _cryptoService = cryptoService;
             _collectionService = collectionService;
-            _storageService = storageService;
+            _organizationService = organizationService;
             _messagingService = messagingService;
             _policyService = policyService;
             _sendService = sendService;
@@ -62,28 +60,26 @@ namespace Bit.Core.Services
 
         public async Task<DateTime?> GetLastSyncAsync()
         {
-            var userId = await _userService.GetUserIdAsync();
-            if (userId == null)
+            if (await _stateService.GetActiveUserIdAsync() == null)
             {
                 return null;
             }
-            return await _storageService.GetAsync<DateTime?>(string.Format(Keys_LastSyncFormat, userId));
+            return await _stateService.GetLastSyncAsync();
         }
 
         public async Task SetLastSyncAsync(DateTime date)
         {
-            var userId = await _userService.GetUserIdAsync();
-            if (userId == null)
+            if (await _stateService.GetActiveUserIdAsync() == null)
             {
                 return;
             }
-            await _storageService.SaveAsync(string.Format(Keys_LastSyncFormat, userId), date);
+            await _stateService.SetLastSyncAsync(date);
         }
 
         public async Task<bool> FullSyncAsync(bool forceSync, bool allowThrowOnError = false)
         {
             SyncStarted();
-            var isAuthenticated = await _userService.IsAuthenticatedAsync();
+            var isAuthenticated = await _stateService.IsAuthenticatedAsync();
             if (!isAuthenticated)
             {
                 return SyncCompleted(false);
@@ -101,7 +97,7 @@ namespace Bit.Core.Services
                 await SetLastSyncAsync(now);
                 return SyncCompleted(false);
             }
-            var userId = await _userService.GetUserIdAsync();
+            var userId = await _stateService.GetActiveUserIdAsync();
             try
             {
                 var response = await _apiService.GetSyncAsync();
@@ -131,7 +127,7 @@ namespace Bit.Core.Services
         public async Task<bool> SyncUpsertFolderAsync(SyncFolderNotification notification, bool isEdit)
         {
             SyncStarted();
-            if (await _userService.IsAuthenticatedAsync())
+            if (await _stateService.IsAuthenticatedAsync())
             {
                 try
                 {
@@ -142,7 +138,7 @@ namespace Bit.Core.Services
                         var remoteFolder = await _apiService.GetFolderAsync(notification.Id);
                         if (remoteFolder != null)
                         {
-                            var userId = await _userService.GetUserIdAsync();
+                            var userId = await _stateService.GetActiveUserIdAsync();
                             await _folderService.UpsertAsync(new FolderData(remoteFolder, userId));
                             _messagingService.Send("syncedUpsertedFolder", new Dictionary<string, string>
                             {
@@ -160,7 +156,7 @@ namespace Bit.Core.Services
         public async Task<bool> SyncDeleteFolderAsync(SyncFolderNotification notification)
         {
             SyncStarted();
-            if (await _userService.IsAuthenticatedAsync())
+            if (await _stateService.IsAuthenticatedAsync())
             {
                 await _folderService.DeleteAsync(notification.Id);
                 _messagingService.Send("syncedDeletedFolder", new Dictionary<string, string>
@@ -175,7 +171,7 @@ namespace Bit.Core.Services
         public async Task<bool> SyncUpsertCipherAsync(SyncCipherNotification notification, bool isEdit)
         {
             SyncStarted();
-            if (await _userService.IsAuthenticatedAsync())
+            if (await _stateService.IsAuthenticatedAsync())
             {
                 try
                 {
@@ -230,7 +226,7 @@ namespace Bit.Core.Services
                         var remoteCipher = await _apiService.GetCipherAsync(notification.Id);
                         if (remoteCipher != null)
                         {
-                            var userId = await _userService.GetUserIdAsync();
+                            var userId = await _stateService.GetActiveUserIdAsync();
                             await _cipherService.UpsertAsync(new CipherData(remoteCipher, userId));
                             _messagingService.Send("syncedUpsertedCipher", new Dictionary<string, string>
                             {
@@ -259,7 +255,7 @@ namespace Bit.Core.Services
         public async Task<bool> SyncDeleteCipherAsync(SyncCipherNotification notification)
         {
             SyncStarted();
-            if (await _userService.IsAuthenticatedAsync())
+            if (await _stateService.IsAuthenticatedAsync())
             {
                 await _cipherService.DeleteAsync(notification.Id);
                 _messagingService.Send("syncedDeletedCipher", new Dictionary<string, string>
@@ -315,23 +311,22 @@ namespace Bit.Core.Services
 
         private async Task SyncProfileAsync(ProfileResponse response)
         {
-            var stamp = await _userService.GetSecurityStampAsync();
+            var stamp = await _stateService.GetSecurityStampAsync();
             if (stamp != null && stamp != response.SecurityStamp)
             {
                 if (_logoutCallbackAsync != null)
                 {
-                    await _logoutCallbackAsync(true);
+                    await _logoutCallbackAsync(new Tuple<string, bool, bool>(response.Id, false, true));
                 }
                 return;
             }
             await _cryptoService.SetEncKeyAsync(response.Key);
             await _cryptoService.SetEncPrivateKeyAsync(response.PrivateKey);
             await _cryptoService.SetOrgKeysAsync(response.Organizations);
-            await _userService.SetSecurityStampAsync(response.SecurityStamp);
+            await _stateService.SetSecurityStampAsync(response.SecurityStamp);
             var organizations = response.Organizations.ToDictionary(o => o.Id, o => new OrganizationData(o));
-            await _userService.ReplaceOrganizationsAsync(organizations);
-            await _userService.SetEmailVerifiedAsync(response.EmailVerified);
-            await _userService.SetForcePasswordReset(response.ForcePasswordReset);
+            await _organizationService.ReplaceAsync(organizations);
+            await _stateService.SetEmailVerifiedAsync(response.EmailVerified);
             await _keyConnectorService.SetUsesKeyConnector(response.UsesKeyConnector);
         }
 
