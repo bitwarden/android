@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Bist du sicher, dass du dich abmelden möchtest?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Konto entfernen</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Möchten Sie das Konto wirklich entfernen?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Konto bereits hinzugefügt</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Möchten Sie jetzt darauf umschalten?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Masterpasswort</value>
     <comment>Label for a master password.</comment>
@@ -2091,6 +2103,21 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Eine oder mehrere Unternehmensrichtlinien verhindern es, dass du deinen persönlichen Tresor exportieren kannst.</value>
+  </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Konto hinzufügen</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Entsperrt</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Gesperrt</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Ausgeloggt</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Zum nächsten verfügbaren Konto gewechselt</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Konto löschen</value>

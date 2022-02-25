@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Êtes-vous sûr de vouloir vous déconnecter ?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Retirer le compte</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir retirer ce compte ?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Le compte a déjà été ajouté</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Souhaitez-vous y passer maintenant ?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Mot de passe maître</value>
     <comment>Label for a master password.</comment>
@@ -2091,6 +2103,21 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Une ou plusieurs politiques d'organisation vous empêchent d'exporter votre coffre personnel.</value>
+  </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Ajouter un compte</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Déverrouillé</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Verrouillé</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Déconnecté</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Passage au prochain compte disponible</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Supprimer le compte</value>

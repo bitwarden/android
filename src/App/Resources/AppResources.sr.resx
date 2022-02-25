@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Заиста желите да се одјавите?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Уклони налог</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Да ли сте сигурни да желите да уклоните овај налог?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Налог је већ додат</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Да ли желите да га отворите сада?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Главна Лозинка</value>
     <comment>Label for a master password.</comment>
@@ -2094,6 +2106,21 @@
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Једна или више полиса ваше организације вас спречава да извезете ваш сеф.</value>
   </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Додај налог</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Откључано</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Закључано</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Одјављено</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Пребацили сте се на следећи доступни налог</value>
+  </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Избриши Налог</value>
   </data>
@@ -2113,7 +2140,7 @@
     <value>Неисправан верификациони код.</value>
   </data>
   <data name="RequestOTP" xml:space="preserve">
-    <value>Request one-time password</value>
+    <value>Захтевај једнократну лозинку</value>
   </data>
   <data name="SendCode" xml:space="preserve">
     <value>Пошаљи код</value>
@@ -2122,24 +2149,24 @@
     <value>Слање</value>
   </data>
   <data name="CopySendLinkOnSave" xml:space="preserve">
-    <value>Copy Send link on save</value>
+    <value>Копирај линк за Send након чувања</value>
   </data>
   <data name="SendingCode" xml:space="preserve">
-    <value>Sending code</value>
+    <value>Слање кôда</value>
   </data>
   <data name="Verifying" xml:space="preserve">
-    <value>Verifying</value>
+    <value>Проверавање</value>
   </data>
   <data name="ResendCode" xml:space="preserve">
-    <value>Resend Code</value>
+    <value>Понови слање кôда</value>
   </data>
   <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
-    <value>A verification code was sent to your email</value>
+    <value>Верификациони кôд је послат на вашу е-пошту</value>
   </data>
   <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
-    <value>An error occurred while sending a verification code to your email. Please try again</value>
+    <value>Дошло је до грешке при слању верификационог кôда на вашу е-пошту. Покушајте поново</value>
   </data>
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
-    <value>Enter the verification code that was sent to your email</value>
+    <value>Унесите верификациони кôд који је послат на Вашу е-адресу</value>
   </data>
 </root>

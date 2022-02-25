@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Çıkmak istediğinize emin misiniz?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Hesabı kaldır</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Bu hesabı kaldırmak istediğinizden emin misiniz?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Hesap zaten eklenmiş</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Bu hesaba geçmek ister misiniz?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Ana parola</value>
     <comment>Label for a master password.</comment>
@@ -1150,10 +1162,10 @@
     <value>Otomatik doldur erişilebilirlik hizmeti</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>Bitwarden otomatik doldurma hizmeti; hesap, kredi kartı ve kimlik bilgilerini cihazınızdaki diğer uygulamalarda doldurmaya yardımcı olmak için Android Otomatik Doldurma Sistemi'ni kullanır.</value>
+    <value>Bitwarden otomatik doldurma hizmeti, cihazınızdaki diğer uygulamalarda hesap bilgilerini doldurmak için Android Otomatik Doldurma Sistemi'ni kullanır.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Diğer uygulamalarda hesap, kredi kartı ve kimlik bilgilerinizi doldurmak için Bitwarden otomatik doldurma hizmetini kullanabilirsiniz.</value>
+    <value>Diğer uygulamalarda hesap bilgilerinizi doldurmak için Bitwarden otomatik doldurma hizmetini kullanabilirsiniz.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Otomatik doldurma ayarlarını aç</value>
@@ -1923,7 +1935,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Kimsenin erişememesi için bu Send'i devre dışı bırak.</value>
+    <value>Kimsenin erişememesi için bu Send'i devre dışı bırak</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
@@ -1991,7 +2003,7 @@
     <value>Özel</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
-    <value>Bu Send'i kaydettikten sonra paylaş.</value>
+    <value>Bu Send'i kaydettikten sonra paylaş</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
@@ -2003,7 +2015,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
-    <value>E-posta adresimi alıcılardan gizle.</value>
+    <value>E-posta adresimi alıcılardan gizle</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
     <value>Bir veya daha fazla kuruluş ilkesi Send seçeneklerinizi etkiliyor.</value>
@@ -2092,6 +2104,21 @@
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Bir veya daha fazla kuruluş ilkesi, kişisel kasanızı dışa aktarmanızı engelliyor.</value>
   </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Hesap ekle</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Kilitli değil</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Kilitli</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Çıkış yapıldı</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Bir sonraki hesaba geçildi</value>
+  </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Hesabı sil</value>
   </data>
@@ -2111,7 +2138,7 @@
     <value>Doğrulama kodu geçersiz.</value>
   </data>
   <data name="RequestOTP" xml:space="preserve">
-    <value>Tek kullanımlık şifre iste</value>
+    <value>Tek kullanımlık parola iste</value>
   </data>
   <data name="SendCode" xml:space="preserve">
     <value>Kod gönder</value>
@@ -2120,24 +2147,24 @@
     <value>Gönderiliyor</value>
   </data>
   <data name="CopySendLinkOnSave" xml:space="preserve">
-    <value>Send linkini kayıtta kopyala</value>
+    <value>Kaydederken Send bağlantısını kopyala</value>
   </data>
   <data name="SendingCode" xml:space="preserve">
-    <value>Kod yollanıyor</value>
+    <value>Kod gönderiliyor</value>
   </data>
   <data name="Verifying" xml:space="preserve">
     <value>Doğrulanıyor</value>
   </data>
   <data name="ResendCode" xml:space="preserve">
-    <value>Kodu Tekrar Yolla</value>
+    <value>Kodu yeniden gönder</value>
   </data>
   <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
-    <value>Epostanıza bir doğrulama kodu yollandı</value>
+    <value>E-posta adresinize doğrulama kodu gönderildi</value>
   </data>
   <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
-    <value>Epostanıza doğrulama kodu yollarken bir sorun oluştu. Lütfen daha sonra tekrar deneyin</value>
+    <value>E-posta adresinize doğrulama kodu gönderilirken bir sorun oluştu. Lütfen daha sonra tekrar deneyin</value>
   </data>
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
-    <value>Epostanıza yollanmış doğrulama kodunu girin</value>
+    <value>E-posta adresinize gönderilen doğrulama kodunu girin</value>
   </data>
 </root>

@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Czy na pewno chcesz się wylogować?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Usuń konto</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Czy na pewno chcesz usunąć to konto?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Konto zostało już dodane</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Czy chcesz przełączyć się na nie teraz?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Hasło główne</value>
     <comment>Label for a master password.</comment>
@@ -2091,6 +2103,21 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Co najmniej jedna zasada organizacji uniemożliwia wyeksportowanie Twojego sejfu.</value>
+  </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Dodaj konto</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Odblokowane</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Zablokowane</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Wylogowano</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Przełączono na następne dostępne konto</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Usuń konto</value>
