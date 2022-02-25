@@ -1,21 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Bit.App.Abstractions;
+using Bit.App.Controls;
 using Bit.App.Models;
 using Bit.App.Resources;
+using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Bit.App.Controls;
-using Bit.Core;
 using Xamarin.Forms;
-#if !FDROID
-using Microsoft.AppCenter.Crashes;
-#endif
 
 namespace Bit.App.Pages
 {
@@ -32,6 +29,8 @@ namespace Bit.App.Pages
         private readonly IMessagingService _messagingService;
         private readonly IEventService _eventService;
         private readonly IPolicyService _policyService;
+        private readonly ILogger _logger;
+
         private CipherView _cipher;
         private bool _showNotesSeparator;
         private bool _showPassword;
@@ -68,7 +67,7 @@ namespace Bit.App.Pages
                 new KeyValuePair<UriMatchType?, string>(UriMatchType.Exact, AppResources.Exact),
                 new KeyValuePair<UriMatchType?, string>(UriMatchType.Never, AppResources.Never)
             };
-
+        
         public AddEditPageViewModel()
         {
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
@@ -82,6 +81,8 @@ namespace Bit.App.Pages
             _collectionService = ServiceContainer.Resolve<ICollectionService>("collectionService");
             _eventService = ServiceContainer.Resolve<IEventService>("eventService");
             _policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
+            _logger = ServiceContainer.Resolve<ILogger>("logger");
+
             GeneratePasswordCommand = new Command(GeneratePassword);
             TogglePasswordCommand = new Command(TogglePassword);
             ToggleCardNumberCommand = new Command(ToggleCardNumber);
@@ -538,9 +539,7 @@ namespace Bit.App.Pages
             }
             catch(Exception genex)
             {
-#if !FDROID
-                Crashes.TrackError(genex);
-#endif
+                _logger.Exception(genex);
                 await _deviceActionService.HideLoadingAsync();
             }
             return false;

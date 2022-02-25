@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
-#if !FDROID
-using Microsoft.AppCenter.Crashes;
-#endif
+using Bit.Core.Abstractions;
+using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
@@ -23,14 +22,14 @@ namespace Bit.App.Controls
             set => SetValue(MainFabProperty, value);
         }
 
+        readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
+
         public AccountSwitchingOverlayView()
         {
             InitializeComponent();
 
             ToggleVisibililtyCommand = new AsyncCommand(ToggleVisibilityAsync,
-#if !FDROID
-                onException: ex => Crashes.TrackError(ex),
-#endif
+                onException: ex => _logger.Value.Exception(ex),
                 allowsMultipleExecutions: false);
         }
 
@@ -110,9 +109,7 @@ namespace Bit.App.Controls
             }
             catch (Exception ex)
             {
-#if !FDROID
-                Crashes.TrackError(ex);
-#endif
+                _logger.Value.Exception(ex);
             }
         }
 
@@ -133,9 +130,7 @@ namespace Bit.App.Controls
             }
             catch (Exception ex)
             {
-#if !FDROID
-                Crashes.TrackError(ex);
-#endif
+                _logger.Value.Exception(ex);
             }
         }
     }

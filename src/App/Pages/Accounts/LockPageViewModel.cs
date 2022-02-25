@@ -11,9 +11,6 @@ using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
-#if !FDROID
-using Microsoft.AppCenter.Crashes;
-#endif
 
 namespace Bit.App.Pages
 {
@@ -29,6 +26,7 @@ namespace Bit.App.Pages
         private readonly IStateService _stateService;
         private readonly IBiometricService _biometricService;
         private readonly IKeyConnectorService _keyConnectorService;
+        private readonly ILogger _logger;
 
         private string _email;
         private bool _showPassword;
@@ -55,12 +53,13 @@ namespace Bit.App.Pages
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _biometricService = ServiceContainer.Resolve<IBiometricService>("biometricService");
             _keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
+            _logger = ServiceContainer.Resolve<ILogger>("logger");
 
             PageTitle = AppResources.VerifyMasterPassword;
             TogglePasswordCommand = new Command(TogglePassword);
             SubmitCommand = new Command(async () => await SubmitAsync());
 
-            AccountSwitchingOverlayViewModel = new AccountSwitchingOverlayViewModel(_stateService, _messagingService)
+            AccountSwitchingOverlayViewModel = new AccountSwitchingOverlayViewModel(_stateService, _messagingService, _logger)
             {
                 AllowAddAccountRow = true,
                 AllowActiveAccountSelection = true
@@ -151,9 +150,7 @@ namespace Bit.App.Pages
             if (string.IsNullOrWhiteSpace(_email))
             {
                 await _vaultTimeoutService.LogOutAsync();
-#if !FDROID
-                Crashes.TrackError(new NullReferenceException("Email not found in storage"));
-#endif
+                _logger.Exception(new NullReferenceException("Email not found in storage"));
                 return;
             }
             var webVault = _environmentService.GetWebVaultUrl(true);

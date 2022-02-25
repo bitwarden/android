@@ -45,6 +45,7 @@ namespace Bit.App.Pages
         private readonly IMessagingService _messagingService;
         private readonly IStateService _stateService;
         private readonly IPasswordRepromptService _passwordRepromptService;
+        private readonly ILogger _logger;
 
         public GroupingsPageViewModel()
         {
@@ -58,6 +59,7 @@ namespace Bit.App.Pages
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _passwordRepromptService = ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService");
+            _logger = ServiceContainer.Resolve<ILogger>("logger");
 
             Loading = true;
             PageTitle = AppResources.MyVault;
@@ -69,7 +71,7 @@ namespace Bit.App.Pages
             });
             CipherOptionsCommand = new Command<CipherView>(CipherOptionsAsync);
 
-            AccountSwitchingOverlayViewModel = new AccountSwitchingOverlayViewModel(_stateService, _messagingService)
+            AccountSwitchingOverlayViewModel = new AccountSwitchingOverlayViewModel(_stateService, _messagingService, _logger)
             {
                 AllowAddAccountRow = true
             };

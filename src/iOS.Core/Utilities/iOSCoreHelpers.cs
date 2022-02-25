@@ -42,7 +42,7 @@ namespace Bit.iOS.Core.Utilities
 
             if (ServiceContainer.Resolve<ILogger>("logger", true) == null)
             {
-                ServiceContainer.Register<ILogger>("logger", new Logger());
+                ServiceContainer.Register<ILogger>("logger", Logger.Instance);
             }
 
             var preferencesStorage = new PreferencesStorageService(AppGroupId);

@@ -92,7 +92,7 @@ namespace Bit.Droid
 #if FDROID
             ServiceContainer.Register<ILogger>("logger", new StubLogger());
 #else
-            ServiceContainer.Register<ILogger>("logger", new Logger());
+            ServiceContainer.Register<ILogger>("logger", Logger.Instance);
 #endif
 
             // Note: This might cause a race condition. Investigate more.

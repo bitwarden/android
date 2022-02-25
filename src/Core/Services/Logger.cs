@@ -12,6 +12,23 @@ namespace Bit.Core.Services
 {
     public class Logger : ILogger
     {
+        static ILogger _instance;
+        public static ILogger Instance
+        {
+            get
+            {
+                if (_instance is null)
+                {
+                    _instance = new Logger();
+                }
+                return _instance;
+            }
+        }
+
+        protected Logger()
+        {
+        }
+
         public void Error(string message,
                           IDictionary<string, string> extraData = null,
                           [CallerMemberName] string memberName = "",

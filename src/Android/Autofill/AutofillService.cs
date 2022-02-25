@@ -1,4 +1,7 @@
-﻿using Android;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Android;
 using Android.App;
 using Android.Content;
 using Android.OS;
@@ -9,12 +12,6 @@ using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Utilities;
-#if !FDROID
-using Microsoft.AppCenter.Crashes;
-#endif
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Bit.Droid.Autofill
 {
@@ -28,6 +25,7 @@ namespace Bit.Droid.Autofill
         private IVaultTimeoutService _vaultTimeoutService;
         private IPolicyService _policyService;
         private IStateService _stateService;
+        private LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
 
         public async override void OnFillRequest(FillRequest request, CancellationSignal cancellationSignal,
             FillCallback callback)
@@ -84,9 +82,7 @@ namespace Bit.Droid.Autofill
             }
             catch (Exception e)
             {
-#if !FDROID
-                Crashes.TrackError(e);
-#endif
+                _logger.Value.Exception(e);
             }
         }
 
@@ -160,9 +156,7 @@ namespace Bit.Droid.Autofill
             }
             catch (Exception e)
             {
-#if !FDROID
-                Crashes.TrackError(e);
-#endif
+                _logger.Value.Exception(e);
             }
         }
     }
