@@ -476,7 +476,6 @@ namespace Bit.App.Utilities
                 policyService.ClearAsync(userId),
                 stateService.LogoutAccountAsync(userId, userInitiated));
 
-            stateService.BiometricLocked = true;
             searchService.ClearIndex();
 
             // check if we switched accounts automatically
