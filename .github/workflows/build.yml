@@ -8,6 +8,8 @@ on:
       - 'gh-pages'
     paths-ignore:
       - '.github/workflows/**'
+  workflow_dispatch:
+    inputs: {}
 
 jobs:
   cloc:
