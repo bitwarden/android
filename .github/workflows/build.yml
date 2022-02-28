@@ -179,7 +179,12 @@ jobs:
           if-no-files-found: error
 
       - name: Deploy to Play Store
-        if: true
+        if: |
+            (github.ref == 'refs/heads/master'
+              && needs.setup.outputs.rc_branch_exists == 0
+              && needs.setup.outputs.hotfix_branch_exists == 0)
+            || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
+            || github.ref == 'refs/heads/hotfix'
         run: |
           PUBLISHER_PATH="$GITHUB_WORKSPACE/store/google/Publisher/bin/Release/netcoreapp3.1/Publisher.dll"
           CREDS_PATH="$HOME/secrets/play_creds.json"
