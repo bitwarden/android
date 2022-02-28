@@ -1,4 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
 <resources>
-  <integer name="launchModeAPIlevel">2</integer>
+    <!--J: 這裡應該是用來建立啟動模式的，預設只有一種啟動模式-->
+    <integer name="launchModeAPIlevel">2</integer>
 </resources>
