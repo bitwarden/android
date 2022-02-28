@@ -1377,6 +1377,7 @@ namespace Bit.Core.Services
         {
             await CheckStateAsync();
             var currentTheme = await GetThemeAsync();
+            var currentDisableFavicons = await GetDisableFaviconAsync();
 
             account.Settings.EnvironmentUrls = await GetPreAuthEnvironmentUrlsAsync();
 
@@ -1405,6 +1406,7 @@ namespace Bit.Core.Services
                 account.Settings.VaultTimeoutAction = VaultTimeoutAction.Lock;
             }
             await SetThemeAsync(currentTheme, account.Profile.UserId);
+            await SetDisableFaviconAsync(currentDisableFavicons, account.Profile.UserId);
             
             state.Accounts[account.Profile.UserId] = account;
             await SaveStateToStorageAsync(state);
