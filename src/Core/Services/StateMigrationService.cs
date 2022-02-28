@@ -326,19 +326,19 @@ namespace Bit.Core.Services
                 return lastVersion.Value;
             }
 
-            // check for original v1 migration 
-            var envUrlsLiteDb = await GetValueAsync<EnvironmentUrlData>(Storage.LiteDb, V1Keys.EnvironmentUrlsKey);
-            if (envUrlsLiteDb != null)
+            // check for v1 state 
+            var v1EnvUrls = await GetValueAsync<EnvironmentUrlData>(Storage.LiteDb, V1Keys.EnvironmentUrlsKey);
+            if (v1EnvUrls != null)
             {
                 // environmentUrls still in LiteDB (never migrated to prefs), this is v1
                 return 1;
             }
 
-            // check for original v2 migration
-            var envUrlsPrefs = await GetValueAsync<EnvironmentUrlData>(Storage.Prefs, V2Keys.EnvironmentUrlsKey);
-            if (envUrlsPrefs != null)
+            // check for v2 state
+            var v2UserId = await GetValueAsync<string>(Storage.LiteDb, V2Keys.Keys_UserId);
+            if (v2UserId != null)
             {
-                // environmentUrls in Prefs (migrated from LiteDB), this is v2
+                // standalone userId still exists (never moved to Account object), this is v2
                 return 2;
             }
 
