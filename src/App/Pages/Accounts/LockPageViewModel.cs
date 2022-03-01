@@ -374,7 +374,7 @@ namespace Bit.App.Pages
                     page.MasterPasswordEntry.Focus();
                 }
             });
-            _stateService.BiometricLocked = !success;
+            await _stateService.SetBiometricLockedAsync(!success);
             if (success)
             {
                 await DoContinueAsync();
@@ -393,7 +393,7 @@ namespace Bit.App.Pages
 
         private async Task DoContinueAsync()
         {
-            _stateService.BiometricLocked = false;
+            await _stateService.SetBiometricLockedAsync(false);
             _messagingService.Send("unlocked");
             UnlockedAction?.Invoke();
         }

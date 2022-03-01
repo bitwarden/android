@@ -8,7 +8,7 @@ namespace Bit.Core.Models.Domain
         public AccountProfile Profile;
         public AccountTokens Tokens;
         public AccountSettings Settings;
-        public AccountKeys Keys;
+        public AccountVolatileData VolatileData;
 
         public Account() { }
 
@@ -17,12 +17,12 @@ namespace Bit.Core.Models.Domain
             Profile = profile;
             Tokens = tokens;
             Settings = new AccountSettings();
-            Keys = new AccountKeys();
+            VolatileData = new AccountVolatileData();
         }
 
         public Account(Account account)
         {
-            // Copy constructor excludes Keys (for storage)
+            // Copy constructor excludes VolatileData (for storage)
             Profile = new AccountProfile(account.Profile);
             Tokens = new AccountTokens(account.Tokens);
             Settings = new AccountSettings(account.Settings);
@@ -101,10 +101,11 @@ namespace Bit.Core.Models.Domain
             public VaultTimeoutAction? VaultTimeoutAction;
         }
 
-        public class AccountKeys
+        public class AccountVolatileData
         {
             public SymmetricCryptoKey Key;
             public EncString PinProtectedKey;
+            public bool? BiometricLocked;
         }
     }
 }

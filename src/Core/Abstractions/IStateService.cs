@@ -10,7 +10,6 @@ namespace Bit.Core.Abstractions
 {
     public interface IStateService
     {
-        bool BiometricLocked { get; set; }
         List<AccountView> AccountViews { get; }
         Task<string> GetActiveUserIdAsync();
         Task SetActiveUserAsync(string userId);
@@ -24,6 +23,8 @@ namespace Bit.Core.Abstractions
         Task<EnvironmentUrlData> GetEnvironmentUrlsAsync(string userId = null);
         Task<bool?> GetBiometricUnlockAsync(string userId = null);
         Task SetBiometricUnlockAsync(bool? value, string userId = null);
+        Task<bool> GetBiometricLockedAsync(string userId = null);
+        Task SetBiometricLockedAsync(bool value, string userId = null);
         Task<bool> CanAccessPremiumAsync(string userId = null);
         Task<string> GetProtectedPinAsync(string userId = null);
         Task SetProtectedPinAsync(string value, string userId = null);
