@@ -27,10 +27,12 @@ namespace Bit.iOS.Core.Utilities
 
         public static void RegisterAppCenter()
         {
+#if !DEBUG
             var appCenterHelper = new AppCenterHelper(
                 ServiceContainer.Resolve<IAppIdService>("appIdService"),
                 ServiceContainer.Resolve<IStateService>("stateService"));
             var appCenterTask = appCenterHelper.InitAsync();
+#endif
         }
 
         public static void RegisterLocalServices()
@@ -42,7 +44,11 @@ namespace Bit.iOS.Core.Utilities
 
             if (ServiceContainer.Resolve<ILogger>("logger", true) == null)
             {
+#if DEBUG
+                ServiceContainer.Register<ILogger>("logger", DebugLogger.Instance);
+#else
                 ServiceContainer.Register<ILogger>("logger", Logger.Instance);
+#endif
             }
 
             var preferencesStorage = new PreferencesStorageService(AppGroupId);

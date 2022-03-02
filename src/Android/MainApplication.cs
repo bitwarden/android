@@ -91,6 +91,8 @@ namespace Bit.Droid
             ServiceContainer.Register<INativeLogService>("nativeLogService", new AndroidLogService());
 #if FDROID
             ServiceContainer.Register<ILogger>("logger", new StubLogger());
+#elif DEBUG
+            ServiceContainer.Register<ILogger>("logger", DebugLogger.Instance);
 #else
             ServiceContainer.Register<ILogger>("logger", Logger.Instance);
 #endif

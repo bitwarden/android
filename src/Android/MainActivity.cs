@@ -69,7 +69,7 @@ namespace Bit.Droid
                 Window.AddFlags(Android.Views.WindowManagerFlags.Secure);
             }
 
-#if !FDROID
+#if !DEBUG && !FDROID
             var appCenterHelper = new AppCenterHelper(_appIdService, _stateService);
             var appCenterTask = appCenterHelper.InitAsync();
 #endif

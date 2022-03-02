@@ -1,14 +1,12 @@
 ﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Bit.App.Models;
 using Bit.App.Styles;
 using Bit.Core.Abstractions;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
-using System.Linq;
-using System.Threading.Tasks;
-#if !FDROID
-using Microsoft.AppCenter.Crashes;
-#endif
 
 namespace Bit.App.Utilities
 {
@@ -76,9 +74,7 @@ namespace Bit.App.Utilities
             }
             catch (Exception ex)
             {
-#if !FDROID
-                Crashes.TrackError(ex);
-#endif
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
             }
         }
 
@@ -168,9 +164,7 @@ namespace Bit.App.Utilities
             }
             catch (Exception ex)
             {
-#if !FDROID
-                Crashes.TrackError(ex);
-#endif
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
             }
         }
     }

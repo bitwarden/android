@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Bit.Core.Abstractions;
-#if !FDROID
-using Microsoft.AppCenter.Crashes;
-#endif
+using Bit.Core.Services;
 
 namespace Bit.Core.Utilities
 {
@@ -23,18 +20,7 @@ namespace Bit.Core.Utilities
             }
             catch (Exception ex)
             {
-                if (ServiceContainer.Resolve<ILogger>("logger", true) is ILogger logger)
-                {
-                    logger.Exception(ex);
-                }
-                else
-                {
-#if !FDROID
-                    // just in case the task throws the exception in a moment where the logger can't be resolved
-                    // we need to track the error as well
-                    Crashes.TrackError(ex);
-#endif
-                }
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
                 onException?.Invoke(ex);
             }
         }
