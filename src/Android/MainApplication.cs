@@ -53,7 +53,8 @@ namespace Bit.Droid
                     ServiceContainer.Resolve<IApiService>("apiService"),
                     ServiceContainer.Resolve<IMessagingService>("messagingService"),
                     ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService"),
-                    ServiceContainer.Resolve<IDeviceActionService>("deviceActionService"));
+                    ServiceContainer.Resolve<IDeviceActionService>("deviceActionService"),
+                    ServiceContainer.Resolve<ILogger>("logger"));
                 ServiceContainer.Register<IDeleteAccountActionFlowExecutioner>("deleteAccountActionFlowExecutioner", deleteAccountActionFlowExecutioner);
 
                 var verificationActionsFlowHelper = new VerificationActionsFlowHelper(
@@ -87,7 +88,14 @@ namespace Bit.Droid
 
         private void RegisterLocalServices()
         {
-            ServiceContainer.Register<ILogService>("logService", new AndroidLogService());
+            ServiceContainer.Register<INativeLogService>("nativeLogService", new AndroidLogService());
+#if FDROID
+            ServiceContainer.Register<ILogger>("logger", new StubLogger());
+#elif DEBUG
+            ServiceContainer.Register<ILogger>("logger", DebugLogger.Instance);
+#else
+            ServiceContainer.Register<ILogger>("logger", Logger.Instance);
+#endif
 
             // Note: This might cause a race condition. Investigate more.
             Task.Run(() =>

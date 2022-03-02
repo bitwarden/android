@@ -10,9 +10,6 @@ using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
-#if !FDROID
-using Microsoft.AppCenter.Crashes;
-#endif
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -25,6 +22,7 @@ namespace Bit.App.Pages
         private readonly IMessagingService _messagingService;
         private readonly IStateService _stateService;
         private readonly ISendService _sendService;
+        private readonly ILogger _logger;
         private bool _sendEnabled;
         private bool _canAccessPremium;
         private bool _emailVerified;
@@ -58,6 +56,8 @@ namespace Bit.App.Pages
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _sendService = ServiceContainer.Resolve<ISendService>("sendService");
+            _logger = ServiceContainer.Resolve<ILogger>("logger");
+
             TogglePasswordCommand = new Command(TogglePassword);
 
             TypeOptions = new List<KeyValuePair<string, SendType>>
@@ -455,9 +455,7 @@ namespace Bit.App.Pages
             catch (Exception ex)
             {
                 await _deviceActionService.HideLoadingAsync();
-#if !FDROID
-                Crashes.TrackError(ex);
-#endif
+                _logger.Exception(ex);
                 await _platformUtilsService.ShowDialogAsync(AppResources.AnErrorHasOccurred);
             }
             return false;

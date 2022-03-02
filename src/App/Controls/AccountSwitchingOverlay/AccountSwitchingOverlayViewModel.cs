@@ -4,7 +4,6 @@ using System.Windows.Input;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
-using Microsoft.AppCenter.Crashes;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
@@ -16,15 +15,14 @@ namespace Bit.App.Controls
         private readonly IMessagingService _messagingService;
 
         public AccountSwitchingOverlayViewModel(IStateService stateService,
-            IMessagingService messagingService)
+            IMessagingService messagingService,
+            ILogger logger)
         {
             _stateService = stateService;
             _messagingService = messagingService;
             
             SelectAccountCommand = new AsyncCommand<AccountViewCellViewModel>(SelectAccountAsync,
-#if !FDROID
-                onException: ex => Crashes.TrackError(ex),
-#endif
+                onException: ex => logger.Exception(ex),
                 allowsMultipleExecutions: false);
         }
 

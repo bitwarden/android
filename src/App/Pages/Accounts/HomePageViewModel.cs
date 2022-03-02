@@ -17,10 +17,11 @@ namespace Bit.App.Pages
         {
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
+            var logger = ServiceContainer.Resolve<ILogger>("logger");
 
             PageTitle = AppResources.Bitwarden;
 
-            AccountSwitchingOverlayViewModel = new AccountSwitchingOverlayViewModel(_stateService, _messagingService)
+            AccountSwitchingOverlayViewModel = new AccountSwitchingOverlayViewModel(_stateService, _messagingService, logger)
             {
                 AllowActiveAccountSelection = true
             };

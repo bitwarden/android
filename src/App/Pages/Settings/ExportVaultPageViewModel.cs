@@ -1,17 +1,14 @@
 ﻿using System;
-using Bit.App.Abstractions;
-using Bit.App.Resources;
-using Bit.Core.Abstractions;
-using Bit.Core.Utilities;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Bit.App.Abstractions;
+using Bit.App.Resources;
+using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
+using Bit.Core.Utilities;
 using Bit.Core;
-#if !FDROID
-using Microsoft.AppCenter.Crashes;
-#endif
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -26,6 +23,7 @@ namespace Bit.App.Pages
         private readonly IKeyConnectorService _keyConnectorService;
         private readonly IUserVerificationService _userVerificationService;
         private readonly IApiService _apiService;
+        private readonly ILogger _logger;
 
         private int _fileFormatSelectedIndex;
         private string _exportWarningMessage;
@@ -48,6 +46,7 @@ namespace Bit.App.Pages
             _keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
             _userVerificationService = ServiceContainer.Resolve<IUserVerificationService>("userVerificationService");
             _apiService = ServiceContainer.Resolve<IApiService>("apiService");
+            _logger = ServiceContainer.Resolve<ILogger>("logger");
 
             PageTitle = AppResources.ExportVault;
             TogglePasswordCommand = new Command(TogglePassword);
@@ -189,9 +188,7 @@ namespace Bit.App.Pages
                 ClearResult();
                 await _platformUtilsService.ShowDialogAsync(_i18nService.T("ExportVaultFailure"));
                 System.Diagnostics.Debug.WriteLine(">>> {0}: {1}", ex.GetType(), ex.StackTrace);
-#if !FDROID
-                Crashes.TrackError(ex);
-#endif
+                _logger.Exception(ex);
             }
         }
 

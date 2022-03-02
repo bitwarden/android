@@ -8,9 +8,6 @@ using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Exceptions;
 using Bit.Core.Utilities;
-#if !FDROID
-using Microsoft.AppCenter.Crashes;
-#endif
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -25,6 +22,7 @@ namespace Bit.App.Pages
         private readonly IEnvironmentService _environmentService;
         private readonly II18nService _i18nService;
         private readonly IMessagingService _messagingService;
+        private readonly ILogger _logger;
 
         private bool _showPassword;
         private bool _showCancelButton;
@@ -41,12 +39,13 @@ namespace Bit.App.Pages
             _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
             _i18nService = ServiceContainer.Resolve<II18nService>("i18nService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
+            _logger = ServiceContainer.Resolve<ILogger>("logger");
 
             PageTitle = AppResources.Bitwarden;
             TogglePasswordCommand = new Command(TogglePassword);
             LogInCommand = new Command(async () => await LogInAsync());
 
-            AccountSwitchingOverlayViewModel = new AccountSwitchingOverlayViewModel(_stateService, _messagingService)
+            AccountSwitchingOverlayViewModel = new AccountSwitchingOverlayViewModel(_stateService, _messagingService, _logger)
             {
                 AllowAddAccountRow = true,
                 AllowActiveAccountSelection = true
@@ -221,9 +220,7 @@ namespace Bit.App.Pages
             }
             catch (Exception e)
             {
-#if !FDROID
-                Crashes.TrackError(e);
-#endif
+                _logger.Exception(e);
             }
         }
 
