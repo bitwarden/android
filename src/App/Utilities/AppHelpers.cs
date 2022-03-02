@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using Bit.App.Abstractions;
 using Bit.App.Pages;
 using Bit.App.Resources;
@@ -439,7 +440,7 @@ namespace Bit.App.Utilities
 
             var escaped = Uri.EscapeDataString(JsonConvert.SerializeObject(obj));
             var multiByteEscaped = Regex.Replace(escaped, "%([0-9A-F]{2})", EncodeMultibyte);
-            return Convert.ToBase64String(Encoding.UTF8.GetBytes(multiByteEscaped));
+            return WebUtility.UrlEncode(Convert.ToBase64String(Encoding.UTF8.GetBytes(multiByteEscaped)));
         }
 
         public static async Task LogOutAsync(string userId, bool userInitiated = false)
