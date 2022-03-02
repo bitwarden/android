@@ -21,8 +21,6 @@ namespace Bit.Core.Services
         private State _state;
         private bool _migrationChecked;
 
-        public bool BiometricLocked { get; set; } = true;
-
         public List<AccountView> AccountViews { get; set; }
 
         public StateService(IStorageService storageService, IStorageService secureStorageService)
@@ -204,6 +202,22 @@ namespace Bit.Core.Services
             var key = Constants.BiometricUnlockKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
+        
+        public async Task<bool> GetBiometricLockedAsync(string userId = null)
+        {
+            return (await GetAccountAsync(
+                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultInMemoryOptionsAsync())
+            ))?.VolatileData?.BiometricLocked ?? true;
+        }
+
+        public async Task SetBiometricLockedAsync(bool value, string userId = null)
+        {
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultInMemoryOptionsAsync());
+            var account = await GetAccountAsync(reconciledOptions);
+            account.VolatileData.BiometricLocked = value;
+            await SaveAccountAsync(account, reconciledOptions);
+        }
 
         public async Task<bool> CanAccessPremiumAsync(string userId = null)
         {
@@ -264,7 +278,7 @@ namespace Bit.Core.Services
         {
             return (await GetAccountAsync(
                 ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultInMemoryOptionsAsync())
-            ))?.Keys?.PinProtectedKey;
+            ))?.VolatileData?.PinProtectedKey;
         }
 
         public async Task SetPinProtectedKeyAsync(EncString value, string userId = null)
@@ -272,7 +286,7 @@ namespace Bit.Core.Services
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
                 await GetDefaultInMemoryOptionsAsync());
             var account = await GetAccountAsync(reconciledOptions);
-            account.Keys.PinProtectedKey = value;
+            account.VolatileData.PinProtectedKey = value;
             await SaveAccountAsync(account, reconciledOptions);
         }
 
@@ -328,7 +342,7 @@ namespace Bit.Core.Services
         {
             return (await GetAccountAsync(
                 ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultInMemoryOptionsAsync())
-            ))?.Keys?.Key;
+            ))?.VolatileData?.Key;
         }
 
         public async Task SetKeyDecryptedAsync(SymmetricCryptoKey value, string userId = null)
@@ -336,7 +350,7 @@ namespace Bit.Core.Services
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
                 await GetDefaultInMemoryOptionsAsync());
             var account = await GetAccountAsync(reconciledOptions);
-            account.Keys.Key = value;
+            account.VolatileData.Key = value;
             await SaveAccountAsync(account, reconciledOptions);
         }
 
@@ -1207,9 +1221,9 @@ namespace Bit.Core.Services
             // Memory
             if (_state?.Accounts?.ContainsKey(options.UserId) ?? false)
             {
-                if (_state.Accounts[options.UserId].Keys == null)
+                if (_state.Accounts[options.UserId].VolatileData == null)
                 {
-                    _state.Accounts[options.UserId].Keys = new Account.AccountKeys();
+                    _state.Accounts[options.UserId].VolatileData = new Account.AccountVolatileData();
                 }
                 return _state.Accounts[options.UserId];
             }
@@ -1218,9 +1232,9 @@ namespace Bit.Core.Services
             _state = await GetStateFromStorageAsync();
             if (_state?.Accounts?.ContainsKey(options.UserId) ?? false)
             {
-                if (_state.Accounts[options.UserId].Keys == null)
+                if (_state.Accounts[options.UserId].VolatileData == null)
                 {
-                    _state.Accounts[options.UserId].Keys = new Account.AccountKeys();
+                    _state.Accounts[options.UserId].VolatileData = new Account.AccountVolatileData();
                 }
                 return _state.Accounts[options.UserId];
             }
@@ -1290,7 +1304,8 @@ namespace Bit.Core.Services
                 {
                     _state.Accounts[userId].Tokens.AccessToken = null;
                     _state.Accounts[userId].Tokens.RefreshToken = null;
-                    _state.Accounts[userId].Keys.Key = null;
+                    _state.Accounts[userId].VolatileData.Key = null;
+                    _state.Accounts[userId].VolatileData.BiometricLocked = null;
                 }
             }
             if (userInitiated && _state?.ActiveUserId == userId)
@@ -1377,6 +1392,7 @@ namespace Bit.Core.Services
         {
             await CheckStateAsync();
             var currentTheme = await GetThemeAsync();
+            var currentDisableFavicons = await GetDisableFaviconAsync();
 
             account.Settings.EnvironmentUrls = await GetPreAuthEnvironmentUrlsAsync();
 
@@ -1405,6 +1421,7 @@ namespace Bit.Core.Services
                 account.Settings.VaultTimeoutAction = VaultTimeoutAction.Lock;
             }
             await SetThemeAsync(currentTheme, account.Profile.UserId);
+            await SetDisableFaviconAsync(currentDisableFavicons, account.Profile.UserId);
             
             state.Accounts[account.Profile.UserId] = account;
             await SaveStateToStorageAsync(state);

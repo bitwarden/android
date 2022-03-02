@@ -8,6 +8,8 @@ on:
       - 'gh-pages'
     paths-ignore:
       - '.github/workflows/**'
+  workflow_dispatch:
+    inputs: {}
 
 jobs:
   cloc:
@@ -186,7 +188,7 @@ jobs:
             || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
             || github.ref == 'refs/heads/hotfix'
         run: |
-          PUBLISHER_PATH="$GITHUB_WORKSPACE/store/google/Publisher/bin/Release/netcoreapp2.0/Publisher.dll"
+          PUBLISHER_PATH="$GITHUB_WORKSPACE/store/google/Publisher/bin/Release/netcoreapp3.1/Publisher.dll"
           CREDS_PATH="$HOME/secrets/play_creds.json"
           AAB_PATH="$GITHUB_WORKSPACE/com.x8bit.bitwarden.aab"
           TRACK="internal"

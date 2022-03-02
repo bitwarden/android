@@ -393,7 +393,7 @@ namespace Bit.App.Pages
             {
                 await _stateService.SetBiometricUnlockAsync(null);
             }
-            _stateService.BiometricLocked = false;
+            await _stateService.SetBiometricLockedAsync(false);
             await _cryptoService.ToggleKeyAsync();
             BuildList();
         }

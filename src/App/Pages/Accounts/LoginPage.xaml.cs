@@ -147,8 +147,10 @@ namespace Bit.App.Pages
                 return;
             }
 
-            var selection = await DisplayActionSheet(AppResources.Options, 
-                AppResources.Cancel, null, AppResources.GetPasswordHint, AppResources.RemoveAccount);
+            var buttons = _email.IsEnabled ? new[] { AppResources.GetPasswordHint }
+                : new[] { AppResources.GetPasswordHint, AppResources.RemoveAccount };
+            var selection = await DisplayActionSheet(AppResources.Options,
+                AppResources.Cancel, null, buttons);
 
             if (selection == AppResources.GetPasswordHint)
             {

@@ -314,7 +314,7 @@ namespace Bit.iOS.Core.Controllers
             var success = await _platformUtilsService.AuthenticateBiometricAsync(null,
                 _pinLock ? AppResources.PIN : AppResources.MasterPassword,
                 () => MasterPasswordCell.TextField.BecomeFirstResponder());
-            _stateService.BiometricLocked = !success;
+            await _stateService.SetBiometricLockedAsync(!success);
             if (success)
             {
                 DoContinue();
@@ -356,7 +356,7 @@ namespace Bit.iOS.Core.Controllers
                 await _stateService.SetPasswordVerifiedAutofillAsync(true);
             }
             await EnableBiometricsIfNeeded();
-            _stateService.BiometricLocked = false;
+            await _stateService.SetBiometricLockedAsync(false);
             MasterPasswordCell.TextField.ResignFirstResponder();
             Success();
         }

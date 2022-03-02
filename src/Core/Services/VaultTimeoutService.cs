@@ -60,7 +60,7 @@ namespace Bit.Core.Services
             if (hasKey)
             {
                 var biometricSet = await IsBiometricLockSetAsync(userId);
-                if (biometricSet && _stateService.BiometricLocked)
+                if (biometricSet && await _stateService.GetBiometricLockedAsync(userId))
                 {
                     return true;
                 }
@@ -158,8 +158,9 @@ namespace Bit.Core.Services
 
             if (allowSoftLock)
             {
-                _stateService.BiometricLocked = await IsBiometricLockSetAsync();
-                if (_stateService.BiometricLocked)
+                var isBiometricLockSet = await IsBiometricLockSetAsync(userId);
+                await _stateService.SetBiometricLockedAsync(isBiometricLockSet, userId);
+                if (isBiometricLockSet)
                 {
                     _messagingService.Send("locked", userInitiated);
                     _lockedCallback?.Invoke(userInitiated);

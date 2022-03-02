@@ -445,7 +445,7 @@ namespace Bit.Core.Services
 
             }
 
-            _stateService.BiometricLocked = false;
+            await _stateService.SetBiometricLockedAsync(false);
             _messagingService.Send("loggedIn");
             return result;
         }
