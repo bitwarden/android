@@ -29,7 +29,7 @@
                 ItemsSource="{Binding BindingContext.AccountViews, Source={x:Reference _mainOverlay}}"
                 BackgroundColor="{DynamicResource BackgroundColor}"
                 VerticalOptions="Start"
-                RowHeight="{OnPlatform 70, iOS=70, Android=74}"
+                RowHeight="{Binding AccountListRowHeight, Source={x:Reference _mainOverlay}}"
                 effects:ScrollViewContentInsetAdjustmentBehaviorEffect.ContentInsetAdjustmentBehavior="Never">
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="view:AccountView">

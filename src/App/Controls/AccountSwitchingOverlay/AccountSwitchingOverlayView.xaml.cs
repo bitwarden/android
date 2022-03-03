@@ -61,6 +61,8 @@ namespace Bit.App.Controls
 
         public ICommand LongPressAccountCommand { get; }
 
+        public int AccountListRowHeight => Device.RuntimePlatform == Device.Android ? 74 : 70;
+
         public async Task ToggleVisibilityAsync()
         {
             if (IsVisible)
@@ -75,12 +77,23 @@ namespace Bit.App.Controls
 
         public async Task ShowAsync()
         {
-            await ViewModel?.RefreshAccountViewsAsync();
+            if (ViewModel == null)
+            {
+                return;
+            }
+
+            await ViewModel.RefreshAccountViewsAsync();
 
             await Device.InvokeOnMainThreadAsync(async () =>
             {
                 // start listView in default (off-screen) position
                 await _accountListContainer.TranslateTo(0, _accountListContainer.Height * -1, 0);
+
+                // re-measure in case accounts have been removed without changing screens
+                if (ViewModel.AccountViews != null)
+                {
+                    _accountListView.HeightRequest = AccountListRowHeight * ViewModel.AccountViews.Count;
+                }
 
                 // set overlay opacity to zero before making visible and start fade-in
                 Opacity = 0;
