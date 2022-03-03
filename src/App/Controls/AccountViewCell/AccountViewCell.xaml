@@ -5,9 +5,15 @@
           x:Class="Bit.App.Controls.AccountViewCell"
           xmlns:controls="clr-namespace:Bit.App.Controls"
           xmlns:u="clr-namespace:Bit.App.Utilities"
+          x:Name="_accountView"
           x:DataType="controls:AccountViewCellViewModel">
     <Grid RowSpacing="0"
-          ColumnSpacing="0">
+          ColumnSpacing="0"
+          xct:TouchEffect.NativeAnimation="True"
+          xct:TouchEffect.Command="{Binding SelectAccountCommand, Source={x:Reference _accountView}}"
+          xct:TouchEffect.CommandParameter="{Binding .}"
+          xct:TouchEffect.LongPressCommand="{Binding LongPressAccountCommand, Source={x:Reference _accountView}}"
+          xct:TouchEffect.LongPressCommandParameter="{Binding .}">
 
         <Grid.Resources>
             <u:InverseBoolConverter x:Key="inverseBool" />
@@ -71,7 +77,7 @@
                 <Label
                     Grid.Row="2"
                     Text="{u:I18n AccountUnlocked}"
-                    IsVisible="{Binding IsUnlocked}"
+                    IsVisible="{Binding IsUnlockedAndNotActive}"
                     StyleClass="list-sub"
                     FontAttributes="Italic"
                     TextTransform="Lowercase"
@@ -79,7 +85,7 @@
                 <Label
                     Grid.Row="2"
                     Text="{u:I18n AccountLocked}"
-                    IsVisible="{Binding IsLocked}"
+                    IsVisible="{Binding IsLockedAndNotActive}"
                     StyleClass="list-sub"
                     FontAttributes="Italic"
                     TextTransform="Lowercase"
@@ -87,7 +93,7 @@
                 <Label
                     Grid.Row="2"
                     Text="{u:I18n AccountLoggedOut}"
-                    IsVisible="{Binding IsLoggedOut}"
+                    IsVisible="{Binding IsLoggedOutAndNotActive}"
                     StyleClass="list-sub"
                     FontAttributes="Italic"
                     TextTransform="Lowercase"

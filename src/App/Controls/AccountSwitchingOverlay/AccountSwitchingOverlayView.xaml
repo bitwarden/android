@@ -27,7 +27,6 @@
             <ListView
                 x:Name="_accountListView"
                 ItemsSource="{Binding BindingContext.AccountViews, Source={x:Reference _mainOverlay}}"
-                ItemSelected="AccountRow_Selected"
                 BackgroundColor="{DynamicResource BackgroundColor}"
                 VerticalOptions="Start"
                 RowHeight="{OnPlatform 70, iOS=70, Android=74}"
@@ -35,7 +34,10 @@
                 <ListView.ItemTemplate>
                     <DataTemplate x:DataType="view:AccountView">
                         <controls:AccountViewCell
-                            Account="{Binding .}" />
+                            Account="{Binding .}"
+                            SelectAccountCommand="{Binding SelectAccountCommand, Source={x:Reference _mainOverlay}}"
+                            LongPressAccountCommand="{Binding LongPressAccountCommand, Source={x:Reference _mainOverlay}}"
+                            />
                     </DataTemplate>
                 </ListView.ItemTemplate>
                 <ListView.Effects>

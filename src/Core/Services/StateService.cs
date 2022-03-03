@@ -42,6 +42,16 @@ namespace Bit.Core.Services
             return activeUserId;
         }
 
+        public async Task<bool> IsActiveAccount(string userId = null)
+        {
+            if (userId == null)
+            {
+                return true;
+            }
+            await CheckStateAsync();
+            return userId == await GetActiveUserIdAsync();
+        }
+
         public async Task SetActiveUserAsync(string userId)
         {
             if (userId != null)
@@ -110,18 +120,16 @@ namespace Bit.Core.Services
             {
                 var isActiveAccount = account.Profile.UserId == _state.ActiveUserId;
                 var accountView = new AccountView(account, isActiveAccount);
-                if (isActiveAccount)
+
+                if (await vaultTimeoutService.IsLoggedOutByTimeoutAsync(accountView.UserId) ||
+                    await vaultTimeoutService.ShouldLogOutByTimeoutAsync(accountView.UserId))
                 {
-                    AccountViews.Add(accountView);
-                    continue;
+                    accountView.AuthStatus = AuthenticationStatus.LoggedOut;
                 }
-                var isLocked = await vaultTimeoutService.IsLockedAsync(accountView.UserId);
-                var shouldTimeout = await vaultTimeoutService.ShouldTimeoutAsync(accountView.UserId);
-                if (isLocked || shouldTimeout)
+                else if (await vaultTimeoutService.IsLockedAsync(accountView.UserId) ||
+                         await vaultTimeoutService.ShouldLockAsync(accountView.UserId))
                 {
-                    var action = account.Settings.VaultTimeoutAction;
-                    accountView.AuthStatus = action == VaultTimeoutAction.Logout ? AuthenticationStatus.LoggedOut
-                        : AuthenticationStatus.Locked;
+                    accountView.AuthStatus = AuthenticationStatus.Locked;
                 }
                 else
                 {

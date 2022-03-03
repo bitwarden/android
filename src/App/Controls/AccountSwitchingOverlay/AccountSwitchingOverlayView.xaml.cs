@@ -10,11 +10,23 @@ namespace Bit.App.Controls
 {
     public partial class AccountSwitchingOverlayView : ContentView
     {
+        public static readonly BindableProperty MainPageProperty = BindableProperty.Create(
+            nameof(MainPage),
+            typeof(ContentPage),
+            typeof(AccountSwitchingOverlayView),
+            defaultBindingMode: BindingMode.OneWay);
+
         public static readonly BindableProperty MainFabProperty = BindableProperty.Create(
             nameof(MainFab),
             typeof(View),
             typeof(AccountSwitchingOverlayView),
             defaultBindingMode: BindingMode.OneWay);
+
+        public ContentPage MainPage
+        {
+            get => (ContentPage)GetValue(MainPageProperty);
+            set => SetValue(MainPageProperty, value);
+        }
 
         public View MainFab
         {
@@ -31,11 +43,23 @@ namespace Bit.App.Controls
             ToggleVisibililtyCommand = new AsyncCommand(ToggleVisibilityAsync,
                 onException: ex => _logger.Value.Exception(ex),
                 allowsMultipleExecutions: false);
+
+            SelectAccountCommand = new AsyncCommand<AccountViewCellViewModel>(SelectAccountAsync,
+                onException: ex => _logger.Value.Exception(ex),
+                allowsMultipleExecutions: false);
+
+            LongPressAccountCommand = new AsyncCommand<AccountViewCellViewModel>(LongPressAccountAsync,
+                onException: ex => _logger.Value.Exception(ex),
+                allowsMultipleExecutions: false);
         }
 
         public AccountSwitchingOverlayViewModel ViewModel => BindingContext as AccountSwitchingOverlayViewModel;
 
         public ICommand ToggleVisibililtyCommand { get; }
+
+        public ICommand SelectAccountCommand { get; }
+
+        public ICommand LongPressAccountCommand { get; }
 
         public async Task ToggleVisibilityAsync()
         {
@@ -113,20 +137,34 @@ namespace Bit.App.Controls
             }
         }
 
-        async void AccountRow_Selected(object sender, SelectedItemChangedEventArgs e)
+        private async Task SelectAccountAsync(AccountViewCellViewModel item)
         {
             try
             {
-                if (!(e.SelectedItem is AccountViewCellViewModel item))
-                {
-                    return;
-                }
-
-                ((ListView)sender).SelectedItem = null;
                 await Task.Delay(100);
                 await HideAsync();
 
                 ViewModel?.SelectAccountCommand?.Execute(item);
+            }
+            catch (Exception ex)
+            {
+                _logger.Value.Exception(ex);
+            }
+        }
+
+        private async Task LongPressAccountAsync(AccountViewCellViewModel item)
+        {
+            if (!item.IsAccount)
+            {
+                return;
+            }
+            try
+            {
+                await Task.Delay(100);
+                await HideAsync();
+
+                ViewModel?.LongPressAccountCommand?.Execute(
+                    new Tuple<ContentPage, AccountViewCellViewModel>(MainPage, item));
             }
             catch (Exception ex)
             {
