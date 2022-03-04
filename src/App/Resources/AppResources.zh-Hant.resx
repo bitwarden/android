@@ -282,7 +282,7 @@
     <value>確定要移除這個帳戶嗎？</value>
   </data>
   <data name="AccountAlreadyAdded" xml:space="preserve">
-    <value>帳戶已添加</value>
+    <value>帳戶已加入</value>
   </data>
   <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
     <value>您想現在就切換到它嗎？</value>

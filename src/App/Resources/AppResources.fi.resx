@@ -2117,7 +2117,7 @@
     <value>Kirjauduttu ulos</value>
   </data>
   <data name="AccountSwitchedAutomatically" xml:space="preserve">
-    <value>Siirry seuraavaan käytettävissä olevaan tiliin</value>
+    <value>Vaihdettu seuraavaan käytettävissä olevaan tiliin</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Poista tili</value>

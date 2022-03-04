@@ -276,16 +276,16 @@
     <value>¿Estás seguro de querer cerrar sesión?</value>
   </data>
   <data name="RemoveAccount" xml:space="preserve">
-    <value>Remove Account</value>
+    <value>Eliminar cuenta</value>
   </data>
   <data name="RemoveAccountConfirmation" xml:space="preserve">
-    <value>Are you sure you want to remove this account?</value>
+    <value>¿Está seguro que desea eliminar esta cuenta?</value>
   </data>
   <data name="AccountAlreadyAdded" xml:space="preserve">
-    <value>Account Already Added</value>
+    <value>Cuenta ya añadida</value>
   </data>
   <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
-    <value>Would you like to switch to it now?</value>
+    <value>¿Quieres cambiarlo ahora?</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Contraseña maestra</value>
@@ -2063,7 +2063,7 @@
     <value>Remueve Contraseña Maestra</value>
   </data>
   <data name="RemoveMasterPasswordWarning" xml:space="preserve">
-    <value>{0} is using SSO with customer-managed encryption. Continuing will remove your Master Password from your account and require SSO to login.</value>
+    <value>{0} está usando SSO con el cifrado administrado por el cliente. Continuar eliminará su contraseña maestra de su cuenta y requerirá SSO para iniciar sesión.</value>
   </data>
   <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
     <value>Si no desea eliminar su contraseña maestra, puede abandonar esta organización.</value>
@@ -2105,25 +2105,25 @@
     <value>Una o más políticas de organización impiden que usted exporte su caja fuerte personal.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
-    <value>Add Account</value>
+    <value>Añadir cuenta</value>
   </data>
   <data name="AccountUnlocked" xml:space="preserve">
-    <value>Unlocked</value>
+    <value>Desbloqueado</value>
   </data>
   <data name="AccountLocked" xml:space="preserve">
-    <value>Locked</value>
+    <value>Bloqueado</value>
   </data>
   <data name="AccountLoggedOut" xml:space="preserve">
-    <value>Logged Out</value>
+    <value>Desconectado</value>
   </data>
   <data name="AccountSwitchedAutomatically" xml:space="preserve">
-    <value>Switched to next available account</value>
+    <value>Cambiado a la siguiente cuenta disponible</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
-    <value>Delete Account</value>
+    <value>Eliminar cuenta</value>
   </data>
   <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
-    <value>Deleting your account is permanent</value>
+    <value>Eliminar tu cuenta es permanente</value>
   </data>
   <data name="DeleteAccountExplanation" xml:space="preserve">
     <value>Tu cuenta y todos los datos asociados serán borrados e irrecuperables. ¿Estás seguro de que quieres continuar?</value>
@@ -2138,7 +2138,7 @@
     <value>Código de verificación no válido.</value>
   </data>
   <data name="RequestOTP" xml:space="preserve">
-    <value>Request one-time password</value>
+    <value>Solicitar contraseña de una sola vez</value>
   </data>
   <data name="SendCode" xml:space="preserve">
     <value>Enviar código</value>
@@ -2147,24 +2147,24 @@
     <value>Enviando</value>
   </data>
   <data name="CopySendLinkOnSave" xml:space="preserve">
-    <value>Copy Send link on save</value>
+    <value>Copiar enlace Enviar al guardar</value>
   </data>
   <data name="SendingCode" xml:space="preserve">
-    <value>Sending code</value>
+    <value>Enviando código...</value>
   </data>
   <data name="Verifying" xml:space="preserve">
-    <value>Verifying</value>
+    <value>Verificando...</value>
   </data>
   <data name="ResendCode" xml:space="preserve">
-    <value>Resend Code</value>
+    <value>Reenviar código</value>
   </data>
   <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
-    <value>A verification code was sent to your email</value>
+    <value>Se ha enviado un código de verificación a tu correo electrónico</value>
   </data>
   <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
-    <value>An error occurred while sending a verification code to your email. Please try again</value>
+    <value>Se ha producido un error al enviar un código de verificación a tu correo electrónico. Por favor, inténtalo de nuevo</value>
   </data>
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
-    <value>Enter the verification code that was sent to your email</value>
+    <value>Introduce el código de verificación enviado a tu correo electrónico</value>
   </data>
 </root>
