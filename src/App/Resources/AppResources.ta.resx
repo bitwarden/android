@@ -276,16 +276,16 @@
     <value>நிச்சயமாக வெளியேற விரும்புகிறீரா?</value>
   </data>
   <data name="RemoveAccount" xml:space="preserve">
-    <value>Remove Account</value>
+    <value>கணக்கை நீக்கு</value>
   </data>
   <data name="RemoveAccountConfirmation" xml:space="preserve">
-    <value>Are you sure you want to remove this account?</value>
+    <value>இக்கணக்கை நிச்சயமாக நீக்க வேண்டுமா?</value>
   </data>
   <data name="AccountAlreadyAdded" xml:space="preserve">
-    <value>Account Already Added</value>
+    <value>கணக்கு ஏற்கனவே சேர்க்கப்பட்டது</value>
   </data>
   <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
-    <value>Would you like to switch to it now?</value>
+    <value>அதற்கு இப்போது நிலைமாற விரும்புகிறீரா?</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>பிரதான கடவுச்சொல்</value>
@@ -1812,16 +1812,16 @@
     <value>அணுகல்தன்மை பயன்படுத்து</value>
   </data>
   <data name="AccessibilityDescription" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. When enabled, we'll display a popup when login fields are selected.</value>
+    <value>செயலிகளிலும் இணையம் முழுதுமுள்ள உமது உள்நுழைவுகளைத் தன்னிரப்ப Bitwarden அணுகல்தன்மை சேவை பயன்படுத்து. இயக்கப்பட்டால், உள்நுழைவு புலங்கள் தேர்ந்தெடுக்கப்படும்போது நாங்கள் ஒரு popup காட்டுவோம்.</value>
   </data>
   <data name="AccessibilityDescription2" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. (Requires Draw-Over to be enabled as well)</value>
+    <value>செயலிகளிலும் இணையம் முழுதுமுள்ள உமது உள்நுழைவுகளைத் தன்னிரப்ப Bitwarden அணுகல்தன்மை சேவை பயன்படுத்து. (மேலே-வரைதலும் இயங்க வேண்டும்)</value>
   </data>
   <data name="AccessibilityDescription3" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to use the Autofill Quick-Action Tile, and/or show a popup using Draw-Over (if enabled).</value>
+    <value>தன்னிரப்பு விரைவுச்செயல் ஓடு பயன்படுத்த மற்றும்/அல்லது மேலே-வரைதல்(இயங்கினால்) கொண்டு popup காட்ட Bitwarden அணுகல்தன்மை சேவை பயன்படுத்து.</value>
   </data>
   <data name="AccessibilityDescription4" xml:space="preserve">
-    <value>Required to use the Autofill Quick-Action Tile, or to augment the Autofill Service by using Draw-Over (if enabled).</value>
+    <value>தன்னிரப்பு விரைவுச்செயல் ஓடு பயன்படுத்தவோ மேலே-வரைதல்(இயங்கினால்) கொண்டு தன்னிரப்பிச் சேவையை ஆதரவுமிகுதியாக்கவோ தேவைப்படுகிறது.</value>
   </data>
   <data name="DrawOver" xml:space="preserve">
     <value>மேலே-வரைதல் பயன்படுத்து</value>
@@ -1830,10 +1830,10 @@
     <value>இயக்கினால், உள்நுழைவு புலங்கள் தேர்ந்தெடுக்கப்படும்போது ஒரு popup காண்பிக்க  Bitwarden அணுகல்தன்மை சேவையை அனுமதிக்கிறது.</value>
   </data>
   <data name="DrawOverDescription2" xml:space="preserve">
-    <value>If enabled, the Bitwarden Accessibility Service will display a popup when login fields are selected to assist with auto-filling your logins.</value>
+    <value>இயக்கினால், உள்நுழைவு புலங்கள் தேர்ந்தெடுக்கப்படும்போது உமது உள்நுழைவுகளைத் தன்னிரப்ப உதவ Bitwarden அணுகல்தன்மை சேவை ஒரு popup காண்பிக்கும்.</value>
   </data>
   <data name="DrawOverDescription3" xml:space="preserve">
-    <value>If enabled, accessibility will show a popup to augment the Autofill Service for older apps that don't support the Android Autofill Framework.</value>
+    <value>இயக்கினால், Android தன்னிரப்பி சட்டகத்தை ஆதரிக்காப் பழைய செயலிகளுக்காகத் தன்னிரப்பி சேவையை ஆதரவுமிகுதியாக்க, அணுகல்தன்மை ஒரு popup காட்டும்.</value>
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
     <value>முனைவகக் கொள்கை காரணமாக, உருப்படிகளை உம் சொந்த பெட்டகத்தில் சேமிப்பதிலிருந்து கட்டுப்படுத்தப்படுகிறீர். உரிமை விருப்பத்தை நிறுவனத்திற்கு மாற்றிக் கிடைக்கும் தொகுப்புகளிலிருந்து தேர்வுசெய்க.</value>
@@ -2106,19 +2106,19 @@
     <value>ஒன்று அ மேற்பட்ட நிறுவன கொள்கைகள் உம் சொந்த பெட்டகத்தை ஏற்றுமதிசெய்வதைத் தவிர்க்கிறது.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
-    <value>Add Account</value>
+    <value>கணக்கைச் சேர்</value>
   </data>
   <data name="AccountUnlocked" xml:space="preserve">
-    <value>Unlocked</value>
+    <value>பூட்டவிழ்க்கப்பட்டது</value>
   </data>
   <data name="AccountLocked" xml:space="preserve">
-    <value>Locked</value>
+    <value>பூட்டப்பட்டது</value>
   </data>
   <data name="AccountLoggedOut" xml:space="preserve">
-    <value>Logged Out</value>
+    <value>விடுபதியப்பட்டது</value>
   </data>
   <data name="AccountSwitchedAutomatically" xml:space="preserve">
-    <value>Switched to next available account</value>
+    <value>அடுத்து கிடைத்த கணக்கிற்கு நிலைமாறியது</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>கணக்கை அழி</value>

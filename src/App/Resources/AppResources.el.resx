@@ -277,16 +277,16 @@
     <value>Είστε σίγουροι ότι θέλετε να αποσυνδεθείτε;</value>
   </data>
   <data name="RemoveAccount" xml:space="preserve">
-    <value>Remove Account</value>
+    <value>Αφαίρεση λογαριασμού</value>
   </data>
   <data name="RemoveAccountConfirmation" xml:space="preserve">
-    <value>Are you sure you want to remove this account?</value>
+    <value>Είστε βέβαιοι ότι θέλετε να καταργήσετε αυτόν τον λογαριασμό?</value>
   </data>
   <data name="AccountAlreadyAdded" xml:space="preserve">
-    <value>Account Already Added</value>
+    <value>Ο Λογαριασμός Προστέθηκε Ήδη</value>
   </data>
   <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
-    <value>Would you like to switch to it now?</value>
+    <value>Θα θέλατε να το αλλάξετε τώρα?</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Κύριος Κωδικός</value>
@@ -2106,19 +2106,19 @@
     <value>Μία ή περισσότερες οργανωτικές πολιτικές αποτρέπουν την εξαγωγή του προσωπικού vault.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
-    <value>Add Account</value>
+    <value>Προσθήκη Λογαριασμού</value>
   </data>
   <data name="AccountUnlocked" xml:space="preserve">
-    <value>Unlocked</value>
+    <value>Ξεκλειδώθηκε</value>
   </data>
   <data name="AccountLocked" xml:space="preserve">
-    <value>Locked</value>
+    <value>Κλειδωμένο</value>
   </data>
   <data name="AccountLoggedOut" xml:space="preserve">
-    <value>Logged Out</value>
+    <value>Αποσυνδεθήκατε</value>
   </data>
   <data name="AccountSwitchedAutomatically" xml:space="preserve">
-    <value>Switched to next available account</value>
+    <value>Μετάβαση στον επόμενο διαθέσιμο λογαριασμό</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Διαγραφή Λογαριασμού</value>
