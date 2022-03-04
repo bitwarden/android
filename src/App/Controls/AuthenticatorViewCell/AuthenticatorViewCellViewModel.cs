@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Bit.App.Utilities;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
@@ -8,7 +9,7 @@ namespace Bit.App.Controls
     public class AuthenticatorViewCellViewModel : ExtendedViewModel
     {
         private CipherView _cipher;
-        private string _totpCodeFormatted = "938928";
+        private string _totpCodeFormatted = "938 928";
         private string _totpSec;
         private bool _websiteIconsEnabled;
         private string _iconImageSource = string.Empty;
@@ -64,6 +65,39 @@ namespace Bit.App.Controls
             }
 
         }
+
+        public void UpdateTotpSec(long totpSec)
+        {
+            _totpSec = totpSec.ToString();
+        }
+
+        //private async Task TotpUpdateCodeAsync()
+        //{
+        //    if (Cipher == null || Cipher.Type != Core.Enums.CipherType.Login || Cipher.Login.Totp == null)
+        //    {
+        //        _totpInterval = null;
+        //        return;
+        //    }
+        //    _totpCode = await _totpService.GetCodeAsync(Cipher.Login.Totp);
+        //    if (_totpCode != null)
+        //    {
+        //        if (_totpCode.Length > 4)
+        //        {
+        //            var half = (int)Math.Floor(_totpCode.Length / 2M);
+        //            TotpCodeFormatted = string.Format("{0} {1}", _totpCode.Substring(0, half),
+        //                _totpCode.Substring(half));
+        //        }
+        //        else
+        //        {
+        //            TotpCodeFormatted = _totpCode;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        TotpCodeFormatted = null;
+        //        _totpInterval = null;
+        //    }
+        //}
     }
 }
 

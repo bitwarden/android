@@ -1,5 +1,6 @@
 ﻿using Bit.App.Resources;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
@@ -14,6 +15,8 @@ namespace Bit.App.Pages
         #region Members
 
         private readonly IBroadcasterService _broadcasterService;
+        private readonly ISyncService _syncService;
+        private readonly ICipherService _cipherService;
         private AuthenticatorPageViewModel _vm;
         private readonly bool _fromTabPage;
         private readonly Action<string> _selectAction;
@@ -26,6 +29,8 @@ namespace Bit.App.Pages
             //_tabsPage = tabsPage;
             InitializeComponent();
             //_broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
+            _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
+            _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
             _vm = BindingContext as AuthenticatorPageViewModel;
             //_vm.Page = this;
             //_fromTabPage = fromTabPage;
@@ -47,7 +52,7 @@ namespace Bit.App.Pages
 
         public async Task InitAsync()
         {
-            await _vm.InitAsync();
+            await _vm.LoadAsync();
         }
 
         protected async override void OnAppearing()
@@ -67,7 +72,36 @@ namespace Bit.App.Pages
             //        });
             //    }
             //});
+
+            await LoadOnAppearedAsync(_mainLayout, false, async () =>
+            {
+                if (!_syncService.SyncInProgress || (await _cipherService.GetAllAsync()).Any())
+                {
+                    try
+                    {
+                        await _vm.LoadAsync();
+                    }
+                    catch (Exception e) when (e.Message.Contains("No key."))
+                    {
+                        await Task.Delay(1000);
+                        await _vm.LoadAsync();
+                    }
+                }
+                else
+                {
+                    await Task.Delay(5000);
+                    if (!_vm.Loaded)
+                    {
+                        await _vm.LoadAsync();
+                    }
+                }
+
+                AdjustToolbar();
+                //await CheckAddRequest();
+            }, _mainContent);
+
         }
+
         
 
         private async void Search_Clicked(object sender, EventArgs e)
@@ -132,6 +166,11 @@ namespace Bit.App.Pages
             base.OnDisappearing();
             //_broadcasterService.Unsubscribe(nameof(GeneratorPage));
         }
-        
+
+        private void AdjustToolbar()
+        {
+            //_addItem.IsEnabled = !_vm.Deleted;
+            //_addItem.IconImageSource = _vm.Deleted ? null : "plus.png";
+        }
     }
 }

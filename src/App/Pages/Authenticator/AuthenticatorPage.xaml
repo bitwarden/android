@@ -8,7 +8,8 @@
     xmlns:pages="clr-namespace:Bit.App.Pages"
     xmlns:controls="clr-namespace:Bit.App.Controls"
     x:DataType="pages:AuthenticatorPageViewModel"
-    Title="{Binding PageTitle}">
+    Title="{Binding PageTitle}"
+    x:Name="_page">
 
     <ContentPage.BindingContext>
         <pages:AuthenticatorPageViewModel />
@@ -40,31 +41,31 @@
                          AutomationProperties.Name="{u:I18n AddItem}" />
 
             <DataTemplate x:Key="authenticatorTemplate"
-                          x:DataType="pages:SendGroupingsPageListItem">
-                <controls:AuthenticatorViewCell />
+                          x:DataType="pages:AuthenticatorPageListItem">
+                <controls:AuthenticatorViewCell 
+                    Cipher="{Binding Cipher}"
+                    WebsiteIconsEnabled="{Binding BindingContext.WebsiteIconsEnabled, Source={x:Reference _page}}"
+                    TotpSec="{Binding TotpSec}"/>
             </DataTemplate>
 
             <StackLayout x:Key="mainLayout" x:Name="_mainLayout">
-                <RefreshView
-                IsVisible="{Binding ShowList}"
-                IsRefreshing="{Binding Refreshing}"
-                Command="{Binding RefreshCommand}">
+                <RefreshView>
                     <controls:ExtendedCollectionView
                         ItemsSource="{Binding Items}"
-                        ItemTemplate="{StaticResource authenticatorTemplate}"
                         VerticalOptions="FillAndExpand"
                         SelectionMode="Single"
                         SelectionChanged="RowSelected"
                         StyleClass="list, list-platform">
 
+                        <controls:ExtendedCollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="pages:AuthenticatorPageListItem">
+                                <controls:AuthenticatorViewCell />
+                            </DataTemplate>
+                        </controls:ExtendedCollectionView.ItemTemplate>
 
                     </controls:ExtendedCollectionView>
                 </RefreshView>
 
-                <StackLayout
-                    IsVisible="{Binding ShowList}">
-
-                </StackLayout>
             </StackLayout>
         </ResourceDictionary>
     </ContentPage.Resources>
