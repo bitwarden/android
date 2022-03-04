@@ -141,8 +141,12 @@ namespace Bit.Core.Services
         }
 
         public Task<AuthResult> LogInTwoFactorAsync(TwoFactorProviderType twoFactorProvider, string twoFactorToken,
-            bool? remember = null)
+            string captchaToken, bool? remember = null)
         {
+            if (captchaToken != null)
+            {
+                CaptchaToken = captchaToken;
+            }
             return LogInHelperAsync(Email, MasterPasswordHash, LocalMasterPasswordHash, Code, CodeVerifier, SsoRedirectUrl, _key,
                 twoFactorProvider, twoFactorToken, remember, CaptchaToken);
         }
