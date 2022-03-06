@@ -3,7 +3,7 @@ using System;
 
 namespace Bit.Core.Services
 {
-    public class ConsoleLogService : ILogService
+    public class ConsoleLogService : INativeLogService
     {
         public void Debug(string message)
         {

@@ -3,7 +3,7 @@ using System;
 
 namespace Bit.Core.Services
 {
-    public class AndroidLogService : ILogService
+    public class AndroidLogService : INativeLogService
     {
         private static readonly string _tag = "BITWARDEN";
 

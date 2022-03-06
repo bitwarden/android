@@ -32,21 +32,19 @@ namespace Bit.App.Pages
 
         private readonly ISendService _sendService;
         private readonly ISyncService _syncService;
-        private readonly IUserService _userService;
+        private readonly IStateService _stateService;
         private readonly IVaultTimeoutService _vaultTimeoutService;
         private readonly IDeviceActionService _deviceActionService;
         private readonly IPlatformUtilsService _platformUtilsService;
-        private readonly IStorageService _storageService;
 
         public SendGroupingsPageViewModel()
         {
             _sendService = ServiceContainer.Resolve<ISendService>("sendService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
-            _userService = ServiceContainer.Resolve<IUserService>("userService");
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
-            _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
 
             Loading = true;
             PageTitle = AppResources.Send;
@@ -116,7 +114,7 @@ namespace Bit.App.Pages
             {
                 return;
             }
-            var authed = await _userService.IsAuthenticatedAsync();
+            var authed = await _stateService.IsAuthenticatedAsync();
             if (!authed)
             {
                 return;
@@ -125,7 +123,7 @@ namespace Bit.App.Pages
             {
                 return;
             }
-            if (await _storageService.GetAsync<bool>(Constants.SyncOnRefreshKey) && Refreshing && !SyncRefreshing)
+            if (await _stateService.GetSyncOnRefreshAsync() && Refreshing && !SyncRefreshing)
             {
                 SyncRefreshing = true;
                 await _syncService.FullSyncAsync(false);

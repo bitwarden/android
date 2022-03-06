@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Sigur doriți să vă deconectați?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Eliminare cont</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Sunteți sigur că doriți să eliminați acest cont?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Cont deja adăugat</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Vreți să comutați la el acum?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Parolă principală</value>
     <comment>Label for a master password.</comment>
@@ -1150,10 +1162,10 @@
     <value>Serviciul de accesibilitate pentru auto-completare</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>Serviciul de auto-completare Bitwarden folosește Android Autofill Framework pentru a asista completarea informațiilor de autentificare și a celor asociate cardurilor și identităților în alte aplicații de pe dispozitivul dvs.</value>
+    <value>Serviciul de autocompletare Bitwarden folosește Android Autofill Framework pentru a ajuta la completarea informațiilor de autentificare în alte aplicații de pe dispozitivul dumneavoastră.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Serviciul de auto-completare Bitwarden se folosește pentru a completa informațiile de autentificare și cele asociate cardurilor și identităților în alte aplicații.</value>
+    <value>Folosiți serviciul de autocompletare Bitwarden pentru a completa informațiile de autentificare în alte aplicații.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Setări de auto-completare</value>
@@ -2091,6 +2103,21 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Una sau mai multe politici ale organizației vă împiedică să exportați seiful personal.</value>
+  </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Adăugare cont</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Deblocat</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Blocat</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Deconectat</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Comutat la următorul cont disponibil</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Ștergere cont</value>

@@ -15,12 +15,13 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AppCenter.Crashes" Version="4.4.0" />
     <PackageReference Include="Plugin.Fingerprint" Version="2.1.4" />
+    <PackageReference Include="SkiaSharp.Views.Forms" Version="2.80.3" />
+    <PackageReference Include="Xamarin.CommunityToolkit" Version="1.3.2" />
     <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
     <PackageReference Include="Xamarin.FFImageLoading.Forms" Version="2.4.11.982" />
-    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2125" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2291" />
     <PackageReference Include="ZXing.Net.Mobile" Version="2.4.1" />
     <PackageReference Include="ZXing.Net.Mobile.Forms" Version="2.4.1" />
-    <PackageReference Include="Xamarin.CommunityToolkit" Version="1.3.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -121,17 +122,20 @@
       <DependentUpon>SendGroupingsPage.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Remove="Pages\Accounts\AccountsPopupPage.xaml.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Resources\" />
     <Folder Include="Behaviors\" />
+    <Folder Include="Controls\AccountSwitchingOverlay\" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Update="Controls\CipherViewCell\CipherViewCell.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Remove="Pages\Accounts\AccountsPopupPage.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -416,5 +420,6 @@
   <ItemGroup>
     <None Remove="Behaviors\" />
     <None Remove="Xamarin.CommunityToolkit" />
+    <None Remove="Controls\AccountSwitchingOverlay\" />
   </ItemGroup>
 </Project>

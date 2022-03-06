@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using Bit.App.Abstractions;
+using Bit.Core.Services;
 using Foundation;
-using Microsoft.AppCenter.Crashes;
 using Newtonsoft.Json.Linq;
 using UserNotifications;
 using Xamarin.Forms;
@@ -45,7 +45,7 @@ namespace Bit.iOS.Services
             }
             catch (Exception ex)
             {
-                Crashes.TrackError(ex);
+                Logger.Instance.Exception(ex);
             }
         }
 

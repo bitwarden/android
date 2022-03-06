@@ -18,6 +18,8 @@
     <None Remove="Models\Request\IdentityToken\" />
     <None Remove="Misc\" />
     <None Remove="Misc\LogInStrategies\" />
+    <None Remove="Microsoft.AppCenter.Crashes" />
+    <None Remove="Services\Logging\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,5 +40,6 @@
     <Folder Include="Models\Request\IdentityToken\" />
     <Folder Include="Misc\" />
     <Folder Include="Misc\LogInStrategies\" />
+    <Folder Include="Services\Logging\" />
   </ItemGroup>
 </Project>

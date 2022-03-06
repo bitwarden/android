@@ -1,10 +1,9 @@
-﻿using Bit.App.Models;
-using Bit.App.Resources;
-using Bit.Core.Abstractions;
-using Bit.Core.Utilities;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using Bit.App.Models;
+using Bit.App.Resources;
 using Bit.App.Utilities;
+using Bit.Core.Utilities;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -62,7 +61,14 @@ namespace Bit.App.Pages
             {
                 return;
             }
+
             _appeared = true;
+            _mainContent.Content = _mainLayout;
+
+            _accountAvatar?.OnAppearing();
+
+            _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
+
             await _vm.InitAsync();
             if (!_vm.BiometricLock)
             {
@@ -93,6 +99,23 @@ namespace Bit.App.Pages
             }
         }
 
+        protected override bool OnBackButtonPressed()
+        {
+            if (_accountListOverlay.IsVisible)
+            {
+                _accountListOverlay.HideAsync().FireAndForget();
+                return true;
+            }
+            return false;
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+
+            _accountAvatar?.OnDisappearing();
+        }
+
         private void Unlock_Clicked(object sender, EventArgs e)
         {
             if (DoOnce())
@@ -107,6 +130,7 @@ namespace Bit.App.Pages
 
         private async void LogOut_Clicked(object sender, EventArgs e)
         {
+            await _accountListOverlay.HideAsync();
             if (DoOnce())
             {
                 await _vm.LogOutAsync();
@@ -123,6 +147,8 @@ namespace Bit.App.Pages
 
         private async void More_Clicked(object sender, System.EventArgs e)
         {
+            await _accountListOverlay.HideAsync();
+
             if (!DoOnce())
             {
                 return;

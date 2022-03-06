@@ -311,6 +311,30 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string RemoveAccount {
+            get {
+                return ResourceManager.GetString("RemoveAccount", resourceCulture);
+            }
+        }
+        
+        public static string RemoveAccountConfirmation {
+            get {
+                return ResourceManager.GetString("RemoveAccountConfirmation", resourceCulture);
+            }
+        }
+        
+        public static string AccountAlreadyAdded {
+            get {
+                return ResourceManager.GetString("AccountAlreadyAdded", resourceCulture);
+            }
+        }
+        
+        public static string SwitchToAlreadyAddedAccountConfirmation {
+            get {
+                return ResourceManager.GetString("SwitchToAlreadyAddedAccountConfirmation", resourceCulture);
+            }
+        }
+        
         public static string MasterPassword {
             get {
                 return ResourceManager.GetString("MasterPassword", resourceCulture);
@@ -3716,6 +3740,36 @@ namespace Bit.App.Resources {
         public static string DisablePersonalVaultExportPolicyInEffect {
             get {
                 return ResourceManager.GetString("DisablePersonalVaultExportPolicyInEffect", resourceCulture);
+            }
+        }
+        
+        public static string AddAccount {
+            get {
+                return ResourceManager.GetString("AddAccount", resourceCulture);
+            }
+        }
+        
+        public static string AccountUnlocked {
+            get {
+                return ResourceManager.GetString("AccountUnlocked", resourceCulture);
+            }
+        }
+        
+        public static string AccountLocked {
+            get {
+                return ResourceManager.GetString("AccountLocked", resourceCulture);
+            }
+        }
+        
+        public static string AccountLoggedOut {
+            get {
+                return ResourceManager.GetString("AccountLoggedOut", resourceCulture);
+            }
+        }
+        
+        public static string AccountSwitchedAutomatically {
+            get {
+                return ResourceManager.GetString("AccountSwitchedAutomatically", resourceCulture);
             }
         }
         

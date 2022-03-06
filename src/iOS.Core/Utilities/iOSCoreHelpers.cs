@@ -27,17 +27,28 @@ namespace Bit.iOS.Core.Utilities
 
         public static void RegisterAppCenter()
         {
+#if !DEBUG
             var appCenterHelper = new AppCenterHelper(
                 ServiceContainer.Resolve<IAppIdService>("appIdService"),
-                ServiceContainer.Resolve<IUserService>("userService"));
+                ServiceContainer.Resolve<IStateService>("stateService"));
             var appCenterTask = appCenterHelper.InitAsync();
+#endif
         }
 
         public static void RegisterLocalServices()
         {
-            if (ServiceContainer.Resolve<ILogService>("logService", true) == null)
+            if (ServiceContainer.Resolve<INativeLogService>("nativeLogService", true) == null)
             {
-                ServiceContainer.Register<ILogService>("logService", new ConsoleLogService());
+                ServiceContainer.Register<INativeLogService>("nativeLogService", new ConsoleLogService());
+            }
+
+            if (ServiceContainer.Resolve<ILogger>("logger", true) == null)
+            {
+#if DEBUG
+                ServiceContainer.Register<ILogger>("logger", DebugLogger.Instance);
+#else
+                ServiceContainer.Register<ILogger>("logger", Logger.Instance);
+#endif
             }
 
             var preferencesStorage = new PreferencesStorageService(AppGroupId);
@@ -52,13 +63,16 @@ namespace Bit.iOS.Core.Utilities
                 () => ServiceContainer.Resolve<IAppIdService>("appIdService").GetAppIdAsync());
             var cryptoPrimitiveService = new CryptoPrimitiveService();
             var mobileStorageService = new MobileStorageService(preferencesStorage, liteDbStorage);
-            var deviceActionService = new DeviceActionService(mobileStorageService, messagingService);
-            var clipboardService = new ClipboardService(mobileStorageService);
+            var stateService = new StateService(mobileStorageService, secureStorageService);
+            var stateMigrationService =
+                new StateMigrationService(liteDbStorage, preferencesStorage, secureStorageService);
+            var deviceActionService = new DeviceActionService(stateService, messagingService);
+            var clipboardService = new ClipboardService(stateService);
             var platformUtilsService = new MobilePlatformUtilsService(deviceActionService, messagingService,
                 broadcasterService);
             var biometricService = new BiometricService(mobileStorageService);
             var cryptoFunctionService = new PclCryptoFunctionService(cryptoPrimitiveService);
-            var cryptoService = new CryptoService(mobileStorageService, secureStorageService, cryptoFunctionService);
+            var cryptoService = new CryptoService(stateService, cryptoFunctionService);
             var passwordRepromptService = new MobilePasswordRepromptService(platformUtilsService, cryptoService);
 
             ServiceContainer.Register<IBroadcasterService>("broadcasterService", broadcasterService);
@@ -68,6 +82,8 @@ namespace Bit.iOS.Core.Utilities
             ServiceContainer.Register<ICryptoPrimitiveService>("cryptoPrimitiveService", cryptoPrimitiveService);
             ServiceContainer.Register<IStorageService>("storageService", mobileStorageService);
             ServiceContainer.Register<IStorageService>("secureStorageService", secureStorageService);
+            ServiceContainer.Register<IStateService>("stateService", stateService);
+            ServiceContainer.Register<IStateMigrationService>("stateMigrationService", stateMigrationService);
             ServiceContainer.Register<IDeviceActionService>("deviceActionService", deviceActionService);
             ServiceContainer.Register<IClipboardService>("clipboardService", clipboardService);
             ServiceContainer.Register<IPlatformUtilsService>("platformUtilsService", platformUtilsService);
@@ -89,7 +105,7 @@ namespace Bit.iOS.Core.Utilities
 
         public static void AppearanceAdjustments()
         {
-            ThemeHelpers.SetAppearance(ThemeManager.GetTheme(false), ThemeManager.OsDarkModeEnabled());
+            ThemeHelpers.SetAppearance(ThemeManager.GetTheme(), ThemeManager.OsDarkModeEnabled());
             UIApplication.SharedApplication.StatusBarHidden = false;
             UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.LightContent;
         }
@@ -144,10 +160,6 @@ namespace Bit.iOS.Core.Utilities
 
         private static async Task BootstrapAsync(Func<Task> postBootstrapFunc = null)
         {
-            var disableFavicon = await ServiceContainer.Resolve<IStorageService>("storageService").GetAsync<bool?>(
-                Bit.Core.Constants.DisableFaviconKey);
-            await ServiceContainer.Resolve<IStateService>("stateService").SaveAsync(
-                Bit.Core.Constants.DisableFaviconKey, disableFavicon);
             await ServiceContainer.Resolve<IEnvironmentService>("environmentService").SetUrlsFromStorageAsync();
 
             // TODO: Update when https://github.com/bitwarden/mobile/pull/1662 gets merged
@@ -155,7 +167,8 @@ namespace Bit.iOS.Core.Utilities
                 ServiceContainer.Resolve<IApiService>("apiService"),
                 ServiceContainer.Resolve<IMessagingService>("messagingService"),
                 ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService"),
-                ServiceContainer.Resolve<IDeviceActionService>("deviceActionService"));
+                ServiceContainer.Resolve<IDeviceActionService>("deviceActionService"),
+                ServiceContainer.Resolve<ILogger>("logger"));
             ServiceContainer.Register<IDeleteAccountActionFlowExecutioner>("deleteAccountActionFlowExecutioner", deleteAccountActionFlowExecutioner);
 
             var verificationActionsFlowHelper = new VerificationActionsFlowHelper(

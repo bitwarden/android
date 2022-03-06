@@ -8,6 +8,7 @@ using Bit.App.Services;
 using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
+using Bit.Core.Enums;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Bit.iOS.Core.Utilities;
@@ -35,7 +36,7 @@ namespace Bit.iOS
         private IMessagingService _messagingService;
         private IBroadcasterService _broadcasterService;
         private IStorageService _storageService;
-        private IVaultTimeoutService _vaultTimeoutService;
+        private IStateService _stateService;
         private IEventService _eventService;
 
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
@@ -47,7 +48,7 @@ namespace Bit.iOS
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
-            _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _eventService = ServiceContainer.Resolve<IEventService>("eventService");
 
             LoadApplication(new App.App(null));
@@ -87,11 +88,6 @@ namespace Bit.iOS
                 else if (message.Command == "showAppExtension")
                 {
                     Device.BeginInvokeOnMainThread(() => ShowAppExtension((ExtensionPageViewModel)message.Data));
-                }
-                else if (message.Command == "showStatusBar")
-                {
-                    Device.BeginInvokeOnMainThread(() =>
-                        UIApplication.SharedApplication.SetStatusBarHidden(!(bool)message.Data, false));
                 }
                 else if (message.Command == "syncCompleted")
                 {
@@ -146,11 +142,16 @@ namespace Bit.iOS
                         await ASHelpers.ReplaceAllIdentities();
                     }
                 }
-                else if (message.Command == "loggedOut")
+                else if (message.Command == "logout")
                 {
                     if (_deviceActionService.SystemMajorVersion() >= 12)
                     {
-                        await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
+                        var extras = message.Data as Tuple<string, bool, bool>;
+                        var userId = extras?.Item1;
+                        var userInitiated = extras?.Item2;
+                        var expired = extras?.Item3;
+                        // TODO make specific to userId
+                        // await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
                     }
                 }
                 else if ((message.Command == "softDeletedCipher" || message.Command == "restoredCipher")
@@ -160,10 +161,12 @@ namespace Bit.iOS
                 }
                 else if (message.Command == "vaultTimeoutActionChanged")
                 {
-                    var timeoutAction = await _storageService.GetAsync<string>(Constants.VaultTimeoutActionKey);
-                    if (timeoutAction == "logOut")
+                    var timeoutAction = await _stateService.GetVaultTimeoutActionAsync();
+                    if (timeoutAction == VaultTimeoutAction.Logout)
                     {
-                        await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
+                        var userId = await _stateService.GetActiveUserIdAsync();
+                        // TODO make specific to userId
+                        // await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
                     }
                     else
                     {
@@ -195,13 +198,12 @@ namespace Bit.iOS
             UIApplication.SharedApplication.KeyWindow.AddSubview(view);
             UIApplication.SharedApplication.KeyWindow.BringSubviewToFront(view);
             UIApplication.SharedApplication.KeyWindow.EndEditing(true);
-            UIApplication.SharedApplication.SetStatusBarHidden(true, false);
             base.OnResignActivation(uiApplication);
         }
 
         public override void DidEnterBackground(UIApplication uiApplication)
         {
-            _storageService?.SaveAsync(Constants.LastActiveTimeKey, _deviceActionService.GetActiveTime());
+            _stateService?.SetLastActiveTimeAsync(_deviceActionService.GetActiveTime());
             _messagingService?.Send("slept");
             base.DidEnterBackground(uiApplication);
         }
@@ -214,7 +216,6 @@ namespace Bit.iOS
             if (view != null)
             {
                 view.RemoveFromSuperview();
-                UIApplication.SharedApplication.SetStatusBarHidden(false, false);
             }
 
             ThemeManager.UpdateThemeOnPagesAsync();
@@ -286,7 +287,7 @@ namespace Bit.iOS
             }
 
             // Migration services
-            ServiceContainer.Register<ILogService>("logService", new ConsoleLogService());
+            ServiceContainer.Register<INativeLogService>("nativeLogService", new ConsoleLogService());
 
             // Note: This might cause a race condition. Investigate more.
             Task.Run(() =>

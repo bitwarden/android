@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>ログアウトしてもよろしいですか？</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>アカウントを削除</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>このアカウントを削除してもよろしいですか？</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>アカウントは追加済みです</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>今すぐ切り替えますか？</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>マスターパスワード</value>
     <comment>Label for a master password.</comment>
@@ -2091,6 +2103,21 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>1 つまたは複数の組織ポリシーにより、個人の保管庫をエクスポートできません。</value>
+  </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>アカウントを追加</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>ロック解除済み</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>ロック済み</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>ログアウト済み</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>次の利用可能なアカウントに切り替えました</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>アカウントの削除</value>

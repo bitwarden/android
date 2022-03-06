@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>정말 로그아웃하시겠습니까?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>계정 제거</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>정말로 이 계정을 삭제하시겠어요?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>이미 추가된 계정입니다</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>해당 계정으로 전환할까요?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>마스터 비밀번호</value>
     <comment>Label for a master password.</comment>
@@ -2092,26 +2104,41 @@
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>하나 이상의 조직 정책이 개인 보관함을 내보내는 것을 제한하고 있습니다.</value>
   </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>계정 추가</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>잠금 해제됨</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>잠김</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>로그아웃됨</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>사용 가능한 다음 계정으로 전환함</value>
+  </data>
   <data name="DeleteAccount" xml:space="preserve">
-    <value>Delete Account</value>
+    <value>계정 삭제</value>
   </data>
   <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
-    <value>Deleting your account is permanent</value>
+    <value>계정 삭제는 영구적입니다</value>
   </data>
   <data name="DeleteAccountExplanation" xml:space="preserve">
-    <value>Your account and all associated data will be erased and unrecoverable. Are you sure you want to continue?</value>
+    <value>계정과 모든 관련 데이터가 지워지며 복구할 수 없습니다. 정말로 계속하실건가요?</value>
   </data>
   <data name="DeletingYourAccount" xml:space="preserve">
-    <value>Deleting your account</value>
+    <value>계정을 삭제하는 중</value>
   </data>
   <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
-    <value>Your account has been permanently deleted</value>
+    <value>계정이 영구적으로 삭제되었습니다</value>
   </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>잘못된 검증 코드입니다.</value>
   </data>
   <data name="RequestOTP" xml:space="preserve">
-    <value>Request one-time password</value>
+    <value>일회용 코드(OTP) 요청하기</value>
   </data>
   <data name="SendCode" xml:space="preserve">
     <value>코드 전송</value>
@@ -2120,24 +2147,24 @@
     <value>전송 중</value>
   </data>
   <data name="CopySendLinkOnSave" xml:space="preserve">
-    <value>Copy Send link on save</value>
+    <value>저장 시에 Send 링크 복사하기</value>
   </data>
   <data name="SendingCode" xml:space="preserve">
-    <value>Sending code</value>
+    <value>코드 전송 증</value>
   </data>
   <data name="Verifying" xml:space="preserve">
-    <value>Verifying</value>
+    <value>인증 중</value>
   </data>
   <data name="ResendCode" xml:space="preserve">
-    <value>Resend Code</value>
+    <value>코드 재전송</value>
   </data>
   <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
-    <value>A verification code was sent to your email</value>
+    <value>인증 코드를 이메일로 보냈습니다</value>
   </data>
   <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
-    <value>An error occurred while sending a verification code to your email. Please try again</value>
+    <value>이메일로 인증 코드를 보내는 동안 오류가 발생했습니다. 다시 시도해주세요</value>
   </data>
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
-    <value>Enter the verification code that was sent to your email</value>
+    <value>이메일로 전송된 인증 코드를 입력해주세요</value>
   </data>
 </root>

@@ -17,8 +17,8 @@ namespace Bit.App.Pages
         private readonly IDeviceActionService _deviceActionService;
         private readonly ICipherService _cipherService;
         private readonly ICryptoService _cryptoService;
-        private readonly IUserService _userService;
-        private readonly IVaultTimeoutService _timeoutService;
+        private readonly IStateService _stateService;
+        private readonly IVaultTimeoutService _vaultTimeoutService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private CipherView _cipher;
         private Cipher _cipherDomain;
@@ -33,8 +33,8 @@ namespace Bit.App.Pages
             _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
             _cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
-            _userService = ServiceContainer.Resolve<IUserService>("userService");
-            _timeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             Attachments = new ExtendedObservableCollection<AttachmentView>();
             DeleteAttachmentCommand = new Command<AttachmentView>(DeleteAsync);
             PageTitle = AppResources.Attachments;
@@ -66,7 +66,7 @@ namespace Bit.App.Pages
             Cipher = await _cipherDomain.DecryptAsync();
             LoadAttachments();
             _hasUpdatedKey = await _cryptoService.HasEncKeyAsync();
-            var canAccessPremium = await _userService.CanAccessPremiumAsync();
+            var canAccessPremium = await _stateService.CanAccessPremiumAsync();
             _canAccessAttachments = canAccessPremium || Cipher.OrganizationId != null;
             if (!_canAccessAttachments)
             {
@@ -140,7 +140,7 @@ namespace Bit.App.Pages
             // Prevent Android from locking if vault timeout set to "immediate"
             if (Device.RuntimePlatform == Device.Android)
             {
-                _timeoutService.DelayLockAndLogoutMs = 60000;
+                _vaultTimeoutService.DelayLockAndLogoutMs = 60000;
             }
             await _deviceActionService.SelectFileAsync();
         }

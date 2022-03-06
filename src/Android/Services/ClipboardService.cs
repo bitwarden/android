@@ -12,12 +12,12 @@ namespace Bit.Droid.Services
 {
     public class ClipboardService : IClipboardService
     {
-        private readonly IStorageService _storageService;
+        private readonly IStateService _stateService;
         private readonly Lazy<PendingIntent> _clearClipboardPendingIntent;
 
-        public ClipboardService(IStorageService storageService)
+        public ClipboardService(IStateService stateService)
         {
-            _storageService = storageService;
+            _stateService = stateService;
 
             _clearClipboardPendingIntent = new Lazy<PendingIntent>(() =>
                 PendingIntent.GetBroadcast(CrossCurrentActivity.Current.Activity,
@@ -39,7 +39,7 @@ namespace Bit.Droid.Services
             if (clearMs < 0)
             {
                 // if not set then we need to check if the user set this config
-                var clearSeconds = await _storageService.GetAsync<int?>(Constants.ClearClipboardKey);
+                var clearSeconds = await _stateService.GetClearClipboardAsync();
                 if (clearSeconds != null)
                 {
                     clearMs = clearSeconds.Value * 1000;

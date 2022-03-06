@@ -12,31 +12,31 @@ namespace Bit.Core.Services
 {
     public class EventService : IEventService
     {
-        private readonly IStorageService _storageService;
         private readonly IApiService _apiService;
-        private readonly IUserService _userService;
+        private readonly IStateService _stateService;
+        private readonly IOrganizationService _organizationService;
         private readonly ICipherService _cipherService;
 
         public EventService(
-            IStorageService storageService,
             IApiService apiService,
-            IUserService userService,
+            IStateService stateService,
+            IOrganizationService organizationService,
             ICipherService cipherService)
         {
-            _storageService = storageService;
             _apiService = apiService;
-            _userService = userService;
+            _stateService = stateService;
+            _organizationService = organizationService;
             _cipherService = cipherService;
         }
 
         public async Task CollectAsync(EventType eventType, string cipherId = null, bool uploadImmediately = false)
         {
-            var authed = await _userService.IsAuthenticatedAsync();
+            var authed = await _stateService.IsAuthenticatedAsync();
             if (!authed)
             {
                 return;
             }
-            var organizations = await _userService.GetAllOrganizationAsync();
+            var organizations = await _organizationService.GetAllAsync();
             if (organizations == null)
             {
                 return;
@@ -54,7 +54,7 @@ namespace Bit.Core.Services
                     return;
                 }
             }
-            var eventCollection = await _storageService.GetAsync<List<EventData>>(Constants.EventCollectionKey);
+            var eventCollection = await _stateService.GetEventCollectionAsync();
             if (eventCollection == null)
             {
                 eventCollection = new List<EventData>();
@@ -65,7 +65,7 @@ namespace Bit.Core.Services
                 CipherId = cipherId,
                 Date = DateTime.UtcNow
             });
-            await _storageService.SaveAsync(Constants.EventCollectionKey, eventCollection);
+            await _stateService.SetEventCollectionAsync(eventCollection);
             if (uploadImmediately)
             {
                 await UploadEventsAsync();
@@ -74,12 +74,12 @@ namespace Bit.Core.Services
 
         public async Task UploadEventsAsync()
         {
-            var authed = await _userService.IsAuthenticatedAsync();
+            var authed = await _stateService.IsAuthenticatedAsync();
             if (!authed)
             {
                 return;
             }
-            var eventCollection = await _storageService.GetAsync<List<EventData>>(Constants.EventCollectionKey);
+            var eventCollection = await _stateService.GetEventCollectionAsync();
             if (eventCollection == null || !eventCollection.Any())
             {
                 return;
@@ -100,7 +100,7 @@ namespace Bit.Core.Services
 
         public async Task ClearEventsAsync()
         {
-            await _storageService.RemoveAsync(Constants.EventCollectionKey);
+            await _stateService.SetEventCollectionAsync(null);
         }
     }
 }

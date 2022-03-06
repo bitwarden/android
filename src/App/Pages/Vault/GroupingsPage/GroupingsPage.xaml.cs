@@ -1,14 +1,13 @@
-﻿using Bit.App.Abstractions;
-using Bit.App.Models;
-using Bit.App.Resources;
-using Bit.Core;
-using Bit.Core.Abstractions;
-using Bit.Core.Enums;
-using Bit.Core.Utilities;
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Bit.App.Abstractions;
 using Bit.App.Controls;
+using Bit.App.Resources;
+using Bit.Core.Abstractions;
+using Bit.Core.Enums;
+using Bit.Core.Models.Data;
+using Bit.Core.Utilities;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -18,7 +17,7 @@ namespace Bit.App.Pages
         private readonly IBroadcasterService _broadcasterService;
         private readonly ISyncService _syncService;
         private readonly IPushNotificationService _pushNotificationService;
-        private readonly IStorageService _storageService;
+        private readonly IStateService _stateService;
         private readonly IVaultTimeoutService _vaultTimeoutService;
         private readonly ICipherService _cipherService;
         private readonly IDeviceActionService _deviceActionService;
@@ -37,7 +36,7 @@ namespace Bit.App.Pages
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
             _pushNotificationService = ServiceContainer.Resolve<IPushNotificationService>("pushNotificationService");
-            _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
@@ -70,6 +69,10 @@ namespace Bit.App.Pages
                 _absLayout.Children.Remove(_fab);
                 ToolbarItems.Remove(_addItem);
             }
+            if (!mainPage)
+            {
+                ToolbarItems.Remove(_accountAvatar);
+            }
         }
 
         protected async override void OnAppearing()
@@ -78,6 +81,12 @@ namespace Bit.App.Pages
             if (_syncService.SyncInProgress)
             {
                 IsBusy = true;
+            }
+
+            _accountAvatar?.OnAppearing();
+            if (_vm.MainPage)
+            {
+                _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
             }
 
             _broadcasterService.Subscribe(_pageName, async (message) =>
@@ -100,7 +109,6 @@ namespace Bit.App.Pages
                 }
             });
 
-            var migratedFromV1 = await _storageService.GetAsync<bool?>(Constants.MigratedFromV1);
             await LoadOnAppearedAsync(_mainLayout, false, async () =>
             {
                 if (!_syncService.SyncInProgress || (await _cipherService.GetAllAsync()).Any())
@@ -123,18 +131,6 @@ namespace Bit.App.Pages
                         await _vm.LoadAsync();
                     }
                 }
-                // Forced sync if for some reason we have no data after a v1 migration
-                if (_vm.MainPage && !_syncService.SyncInProgress && migratedFromV1.GetValueOrDefault() &&
-                    !_vm.HasCiphers &&
-                    Xamarin.Essentials.Connectivity.NetworkAccess != Xamarin.Essentials.NetworkAccess.None)
-                {
-                    var triedV1ReSync = await _storageService.GetAsync<bool?>(Constants.TriedV1Resync);
-                    if (!triedV1ReSync.GetValueOrDefault())
-                    {
-                        await _storageService.SaveAsync(Constants.TriedV1Resync, true);
-                        await _syncService.FullSyncAsync(true);
-                    }
-                }
                 await ShowPreviousPageAsync();
                 AdjustToolbar();
             }, _mainContent);
@@ -145,14 +141,14 @@ namespace Bit.App.Pages
             }
 
             // Push registration
-            var lastPushRegistration = await _storageService.GetAsync<DateTime?>(Constants.PushLastRegistrationDateKey);
+            var lastPushRegistration = await _stateService.GetPushLastRegistrationDateAsync();
             lastPushRegistration = lastPushRegistration.GetValueOrDefault(DateTime.MinValue);
             if (Device.RuntimePlatform == Device.iOS)
             {
-                var pushPromptShow = await _storageService.GetAsync<bool?>(Constants.PushInitialPromptShownKey);
+                var pushPromptShow = await _stateService.GetPushInitialPromptShownAsync();
                 if (!pushPromptShow.GetValueOrDefault(false))
                 {
-                    await _storageService.SaveAsync(Constants.PushInitialPromptShownKey, true);
+                    await _stateService.SetPushInitialPromptShownAsync(true);
                     await DisplayAlert(AppResources.EnableAutomaticSyncing, AppResources.PushNotificationAlert,
                         AppResources.OkGotIt);
                 }
@@ -168,22 +164,17 @@ namespace Bit.App.Pages
                 {
                     await _pushNotificationService.RegisterAsync();
                 }
-                if (!_deviceActionService.AutofillAccessibilityServiceRunning()
-                    && !_deviceActionService.AutofillServiceEnabled())
-                {
-                    if (migratedFromV1.GetValueOrDefault())
-                    {
-                        var migratedFromV1AutofillPromptShown = await _storageService.GetAsync<bool?>(
-                            Constants.MigratedFromV1AutofillPromptShown);
-                        if (!migratedFromV1AutofillPromptShown.GetValueOrDefault())
-                        {
-                            await DisplayAlert(AppResources.Autofill,
-                                AppResources.AutofillServiceNotEnabled, AppResources.Ok);
-                        }
-                    }
-                }
-                await _storageService.SaveAsync(Constants.MigratedFromV1AutofillPromptShown, true);
             }
+        }
+
+        protected override bool OnBackButtonPressed()
+        {
+            if (_accountListOverlay.IsVisible)
+            {
+                _accountListOverlay.HideAsync().FireAndForget();
+                return true;
+            }
+            return false;
         }
 
         protected override void OnDisappearing()
@@ -192,6 +183,7 @@ namespace Bit.App.Pages
             IsBusy = false;
             _broadcasterService.Unsubscribe(_pageName);
             _vm.DisableRefreshing();
+            _accountAvatar?.OnDisappearing();
         }
 
         private async void RowSelected(object sender, SelectionChangedEventArgs e)
@@ -230,6 +222,7 @@ namespace Bit.App.Pages
 
         private async void Search_Clicked(object sender, EventArgs e)
         {
+            await _accountListOverlay.HideAsync();
             if (DoOnce())
             {
                 var page = new CiphersPage(_vm.Filter, _vm.FolderId != null, _vm.CollectionId != null,
@@ -240,21 +233,31 @@ namespace Bit.App.Pages
 
         private async void Sync_Clicked(object sender, EventArgs e)
         {
+            await _accountListOverlay.HideAsync();
             await _vm.SyncAsync();
         }
 
         private async void Lock_Clicked(object sender, EventArgs e)
         {
+            await _accountListOverlay.HideAsync();
             await _vaultTimeoutService.LockAsync(true, true);
         }
 
         private async void Exit_Clicked(object sender, EventArgs e)
         {
+            await _accountListOverlay.HideAsync();
             await _vm.ExitAsync();
         }
 
         private async void AddButton_Clicked(object sender, EventArgs e)
         {
+            var skipAction = _accountListOverlay.IsVisible && Device.RuntimePlatform == Device.Android;
+            await _accountListOverlay.HideAsync();
+            if (skipAction)
+            {
+                // Account list in the process of closing via tapping on invisible FAB, skip this attempt
+                return;
+            }
             if (!_vm.Deleted && DoOnce())
             {
                 var page = new AddEditPage(null, _vm.Type, _vm.FolderId, _vm.CollectionId);
@@ -268,6 +271,7 @@ namespace Bit.App.Pages
             {
                 return;
             }
+            await _accountListOverlay.HideAsync();
             if (_previousPage.Page == "view" && !string.IsNullOrWhiteSpace(_previousPage.CipherId))
             {
                 await Navigation.PushModalAsync(new NavigationPage(new ViewPage(_previousPage.CipherId)));
@@ -283,6 +287,11 @@ namespace Bit.App.Pages
         {
             _addItem.IsEnabled = !_vm.Deleted;
             _addItem.IconImageSource = _vm.Deleted ? null : "plus.png";
+        }
+
+        public async Task HideAccountSwitchingOverlayAsync()
+        {
+            await _accountListOverlay.HideAsync();
         }
     }
 }

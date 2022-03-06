@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Naozaj sa chcete odhlásiť?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Odstrániť účet</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Naozaj chcete odstrániť tento účet?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Účet je už pridaný</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Chceli by ste naň prejsť teraz?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Hlavné heslo</value>
     <comment>Label for a master password.</comment>
@@ -1153,7 +1165,7 @@
     <value>Bitwarden služba automatického vypĺňania využíva Android Autofill Framework pre zjednodušenie vypĺňania prihlasovacích údajov, kreditných kariet a identít v aplikáciách vo vašom zariadení.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Použite službu automatického vypĺňania Bitwardenu na vypĺňanie prihlasovacích údajov, kreditných kariet a informácii identít do iných aplikácií.</value>
+    <value>Použite službu automatického vypĺňania Bitwardenu na vypĺňanie prihlasovacích údajov do iných aplikácií.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Otvoriť nastavenia automatického vypĺňania</value>
@@ -1923,7 +1935,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Vypnúť tento Send, aby k nemu nikto nemal prístup.</value>
+    <value>Vypnúť tento Send, aby k nemu nikto nemal prístup</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
@@ -1991,7 +2003,7 @@
     <value>Vlastné</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
-    <value>Po uložení zdieľať tento Send.</value>
+    <value>Po uložení zdieľať tento Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
@@ -2003,7 +2015,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
-    <value>Skryť moju emailovú adresu pred príjemcami.</value>
+    <value>Skryť moju emailovú adresu pred príjemcami</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
     <value>Jedno alebo viac pravidiel organizácie ovplyvňujú vaše možnosti funkcie Send.</value>
@@ -2091,6 +2103,21 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Jedna alebo viacero zásad organizácie vám bráni exportovať váš osobný trezor.</value>
+  </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Pridať účet</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Odomknutý</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Zamknutý</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Odhlásený</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Prepnuté na ďalší dostupný účet</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Odstrániť účet</value>

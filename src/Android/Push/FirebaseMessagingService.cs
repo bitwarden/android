@@ -16,10 +16,10 @@ namespace Bit.Droid.Push
     {
         public async override void OnNewToken(string token)
         {
-            var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+            var stateService = ServiceContainer.Resolve<IStateService>("stateService");
             var pushNotificationService = ServiceContainer.Resolve<IPushNotificationService>("pushNotificationService");
             
-            await storageService.SaveAsync(Core.Constants.PushRegisteredTokenKey, token);
+            await stateService.SetPushRegisteredTokenAsync(token);
             await pushNotificationService.RegisterAsync();
         }
         

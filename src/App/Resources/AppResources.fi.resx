@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Haluatko varmasti kirjautua ulos?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Poista tili</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Haluatko varmasti poistaa tämän tilin?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Tili on jo lisätty</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Haluatko vaihtaa siihen nyt?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Pääsalasana</value>
     <comment>Label for a master password.</comment>
@@ -1150,10 +1162,10 @@
     <value>Automaattisen täytön esteettömyyspalvelu</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>Bitwardenin automaattisen täytön palvelu käyttää Android Autofill Framework -rajapintaa kirjautumistietojen, korttien ja henkilöllisyyksien täyttöön laitteesi sovelluksissa.</value>
+    <value>Bitwardenin automaattisen täytön palvelu käyttää Android Autofill Framework -rajapintaa kirjautumistietojen täyttöön laitteen sovelluksissa.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Käytä Bitwardenin esteettömyyspalvelua kirjautumistietojen, korttien ja henkilöllisyyksien automaattiseen täyttöön sovelluksissa.</value>
+    <value>Käytä Bitwardenin automaattisen täytön palvelua kirjautumistietojen täyttöön sovelluksissa.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Avaa "Automaattinen täyttö -palvelu" -asetukset</value>
@@ -1923,7 +1935,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Poista Send käytöstä, jottei kukaan voi avata sitä.</value>
+    <value>Poista Send käytöstä, jottei kukaan voi avata sitä</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
@@ -1991,7 +2003,7 @@
     <value>Mukautettu</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
-    <value>Jaa Send tallennettaessa.</value>
+    <value>Jaa Send tallennettaessa</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
@@ -2003,7 +2015,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
-    <value>Piilota sähköpostiosoitteeni vastaanottajilta.</value>
+    <value>Piilota sähköpostiosoitteeni vastaanottajilta</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
     <value>Yksi tai useampi organisaatiokäytäntö vaikuttaa Send-asetuksiisi.</value>
@@ -2091,6 +2103,21 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Yksi tai useampi organisaation käytäntö estää henkilökohtaisen holvisi viennin.</value>
+  </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Lisää tili</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Avattu</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Lukittu</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Kirjauduttu ulos</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Vaihdettu seuraavaan käytettävissä olevaan tiliin</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Poista tili</value>

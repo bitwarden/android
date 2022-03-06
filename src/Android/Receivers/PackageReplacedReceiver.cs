@@ -1,5 +1,4 @@
-﻿using System;
-using Android.App;
+﻿using Android.App;
 using Android.Content;
 using Bit.App.Abstractions;
 using Bit.App.Utilities;
@@ -14,9 +13,10 @@ namespace Bit.Droid.Receivers
     {
         public override async void OnReceive(Context context, Intent intent)
         {
-            var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
-            await AppHelpers.PerformUpdateTasksAsync(ServiceContainer.Resolve<ISyncService>("syncService"),
-                ServiceContainer.Resolve<IDeviceActionService>("deviceActionService"), storageService);
+            await AppHelpers.PerformUpdateTasksAsync(
+                ServiceContainer.Resolve<ISyncService>("syncService"),
+                ServiceContainer.Resolve<IDeviceActionService>("deviceActionService"), 
+                ServiceContainer.Resolve<IStateService>("stateService"));
         }
     }
 }

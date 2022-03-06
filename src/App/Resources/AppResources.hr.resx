@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Sigurno se želiš odjaviti?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Remove Account</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Are you sure you want to remove this account?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Account Already Added</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Would you like to switch to it now?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Glavna lozinka</value>
     <comment>Label for a master password.</comment>
@@ -1153,7 +1165,7 @@
     <value>Usluga Bitwarden auto-ispune koristi Android Autofill Framework za pomoć pri ispunjavanju prijava, platnih kartica i identifikacijskih podataka u drugim aplikacijama na tvojem uređaju.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Koristi uslugu Bitwarden auto-ispune za ispunjavanje prijava, platnih kartica i identifikacijskih podataka u drugim aplikacijama.</value>
+    <value>Upotrijebite uslugu pristupačnosti usluge bitwarden da biste automatski ispunili prijave.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Otvori postavke auto-ispune</value>
@@ -2091,6 +2103,21 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Jedno ili više pravila organizacija onemogućuje izvoz osobnog trezora. </value>
+  </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Add Account</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Unlocked</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Locked</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Logged Out</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Switched to next available account</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Obriši račun</value>

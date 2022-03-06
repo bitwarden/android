@@ -8,10 +8,8 @@ using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -88,8 +86,7 @@ namespace Bit.App.Pages
 
         public async Task LoadAsync()
         {
-            WebsiteIconsEnabled = !(await _stateService.GetAsync<bool?>(Constants.DisableFaviconKey))
-                .GetValueOrDefault();
+            WebsiteIconsEnabled = !(await _stateService.GetDisableFaviconAsync()).GetValueOrDefault();
             ShowList = false;
             var groupedItems = new List<GroupingsPageListGroup>();
             var ciphers = await _cipherService.GetAllDecryptedByUrlAsync(Uri, null);

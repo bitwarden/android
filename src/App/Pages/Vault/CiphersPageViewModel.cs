@@ -76,8 +76,7 @@ namespace Bit.App.Pages
 
         public async Task InitAsync()
         {
-            WebsiteIconsEnabled = !(await _stateService.GetAsync<bool?>(Constants.DisableFaviconKey))
-                .GetValueOrDefault();
+            WebsiteIconsEnabled = !(await _stateService.GetDisableFaviconAsync()).GetValueOrDefault();
             if (!string.IsNullOrWhiteSpace((Page as CiphersPage).SearchBar.Text))
             {
                 Search((Page as CiphersPage).SearchBar.Text, 200);

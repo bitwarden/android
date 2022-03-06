@@ -7,9 +7,6 @@ using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Utilities;
-#if !FDROID
-using Microsoft.AppCenter.Crashes;
-#endif
 using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
@@ -21,6 +18,7 @@ namespace Bit.App.Pages
     {
         private readonly IBroadcasterService _broadcasterService;
         private readonly IVaultTimeoutService _vaultTimeoutService;
+        private readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
 
         private AppOptions _appOptions;
         private SendAddEditPageViewModel _vm;
@@ -55,9 +53,10 @@ namespace Bit.App.Pages
                 _vm.SegmentedButtonFontSize = 13;
                 _vm.SegmentedButtonMargins = new Thickness(0, 10, 0, 0);
                 _vm.EditorMargins = new Thickness(0, 5, 0, 0);
-                _btnOptions.WidthRequest = 70;
-                _btnOptionsDown.WidthRequest = 30;
-                _btnOptionsUp.WidthRequest = 30;
+                // Review this when https://github.com/bitwarden/mobile/pull/1454 workaround can be reverted
+                //_btnOptions.WidthRequest = 70;
+                //_btnOptionsDown.WidthRequest = 30;
+                //_btnOptionsUp.WidthRequest = 30;
             }
             else if (Device.RuntimePlatform == Device.iOS)
             {
@@ -131,9 +130,7 @@ namespace Bit.App.Pages
             }
             catch (Exception ex)
             {
-#if !FDROID
-                Crashes.TrackError(ex);
-#endif
+                _logger.Value.Exception(ex);
                 await CloseAsync();
             }
         }

@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Biztos, hogy ki szeretnél jelentkezni?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Fiók eltávolítása</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Biztosan törlésre kerüljön ez a fiók?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>A fiók már hozzáadásra került.</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Szeretnénk most átkapcsolni erre?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Mesterjelszó</value>
     <comment>Label for a master password.</comment>
@@ -1153,7 +1165,7 @@
     <value>A Bitwarden automatikus kitöltési szolgáltatása az Android automatikus kitöltő keretrendszerét használja a bejelentkezési adatok, hitelkártyaadatok és azonosítóadatok kitöltésére az eszközén telepített más alkalmazásokban.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>A Bitwarden automatikus kitöltési szolgáltatásának használatával kitöltheti a bejelentkezési, hitelkártya- és azonosító adatokat más alkalmazásokban.</value>
+    <value>A Bitwarden automatikus kitöltési szolgáltatás használata a bejelentkezési-, hitelkártya- és azonosítóadatok kitöltéséhez más alkalmazásokban.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Automatikus kitöltés beállításainak megnyitása</value>
@@ -2091,6 +2103,21 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Egy vagy több szervezeti házirend tiltja a személyes széf exportálását.</value>
+  </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Fiók hozzáadása</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Feloldva</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Lezárva</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Megtörtént a kijelentkezés.</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Megtörtént az átkapcsolás a következő elérhető fiókra.</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Fiók törlése</value>

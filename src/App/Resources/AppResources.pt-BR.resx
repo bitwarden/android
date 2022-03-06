@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Tem certeza que deseja sair?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Remover conta</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Tem certeza que deseja remover essa conta?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Conta já adicionada</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Você gostaria de mudar para ela agora?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Senha Mestra</value>
     <comment>Label for a master password.</comment>
@@ -1153,7 +1165,7 @@
     <value>O serviço de autopreenchimento do Bitwarden utiliza a Estrutura de Autopreenchimento do Android para ajudar no preenchimento de credenciais, cartões de crédito, e informação de identidade em outros aplicativos do seu dispositivo.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Utilize o serviço de autopreenchimento do Bitwarden para preencher automaticamente suas credenciais, cartões de crédito e informação de identidade em outros aplicativos.</value>
+    <value>Use o serviço de acessibilidade do bitwarden para preencher automaticamente suas credenciais.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Abrir Configurações de Autopreenchimento</value>
@@ -2092,6 +2104,21 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Uma ou mais políticas da organização impedem que você exporte seu cofre pessoal.</value>
+  </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Adicionar conta</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Desbloqueada</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Bloqueada</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Desconectada</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Alterada para a próxima conta disponível</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Excluir Conta</value>

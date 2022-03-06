@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Er du sikker på, at du vil logge ud?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Fjern konto</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Er du sikker på, at du vil fjerne denne konto?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Konto allerede tilføjet</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Vil du skifte til den nu?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Hovedadgangskode</value>
     <comment>Label for a master password.</comment>
@@ -1150,10 +1162,10 @@
     <value>Autoudfyld hjælpefunktion</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>Bitwarden autoudfyld tjenesten bruger Androids AutoFyld framework til at hjælpe med at udfylde logins, kreditkort og identitetsoplysninger i andre apps på din enhed.</value>
+    <value>Bitwarden autoudfyld tjenesten bruger Androids AutoFyld framework til at hjælpe med at udfylde loginoplysninger i andre apps på din enhed.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Brug Bitwarden autoudfyld tjenesten til at udfylde logins, kreditkort og identitetsoplysninger i andre apps.</value>
+    <value>Brug Bitwarden autoudfyld tjenesten til at udfylde loginoplysninger i andre apps.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Åbn autoudfyld indstillinger</value>
@@ -2091,6 +2103,21 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>En eller flere organisationspolitikker forhindrer eksport af din personlige boks.</value>
+  </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Tilføj konto</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Låst op</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Låst</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Logget ud</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Skiftede til næste tilgængelige konto</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Slet konto</value>
