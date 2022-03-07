@@ -42,7 +42,7 @@ namespace Bit.Core.Services
             return activeUserId;
         }
 
-        public async Task<bool> IsActiveAccount(string userId = null)
+        public async Task<bool> IsActiveAccountAsync(string userId = null)
         {
             if (userId == null)
             {

@@ -12,7 +12,7 @@ namespace Bit.Core.Abstractions
     {
         List<AccountView> AccountViews { get; }
         Task<string> GetActiveUserIdAsync();
-        Task<bool> IsActiveAccount(string userId = null);
+        Task<bool> IsActiveAccountAsync(string userId = null);
         Task SetActiveUserAsync(string userId);
         Task<bool> IsAuthenticatedAsync(string userId = null);
         Task<string> GetUserIdAsync(string email);

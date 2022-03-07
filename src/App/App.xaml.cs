@@ -73,11 +73,9 @@ namespace Bit.App
                 }
                 else if (message.Command == "locked")
                 {
-                    var extras = message.Data as Tuple<string, bool>;
-                    var userId = extras?.Item1;
-                    var userInitiated = extras?.Item2;
-                    Device.BeginInvokeOnMainThread(async () =>
-                        await LockedAsync(userId, userInitiated.GetValueOrDefault()));
+                    var (userId, userInitiated) =
+                        message.Data as Tuple<string, bool> ?? new Tuple<string, bool>(null, false);
+                    Device.BeginInvokeOnMainThread(async () => await LockedAsync(userId, userInitiated));
                 }
                 else if (message.Command == "lockVault")
                 {
@@ -85,12 +83,9 @@ namespace Bit.App
                 }
                 else if (message.Command == "logout")
                 {
-                    var extras = message.Data as Tuple<string, bool, bool>;
-                    var userId = extras?.Item1;
-                    var userInitiated = extras?.Item2;
-                    var expired = extras?.Item3;
-                    Device.BeginInvokeOnMainThread(async () =>
-                        await LogOutAsync(userId, userInitiated, expired));
+                    var (userId, userInitiated, expired) =
+                        message.Data as Tuple<string, bool, bool> ?? new Tuple<string, bool, bool>(null, true, false);
+                    Device.BeginInvokeOnMainThread(async () => await LogOutAsync(userId, userInitiated, expired));
                 }
                 else if (message.Command == "loggedOut")
                 {
@@ -262,13 +257,13 @@ namespace Bit.App
             new System.Globalization.UmAlQuraCalendar();
         }
 
-        private async Task LogOutAsync(string userId, bool? userInitiated, bool? expired)
+        private async Task LogOutAsync(string userId, bool userInitiated, bool expired)
         {
-            await AppHelpers.LogOutAsync(userId, userInitiated.GetValueOrDefault(true));
+            await AppHelpers.LogOutAsync(userId, userInitiated);
             await SetMainPageAsync();
             _authService.LogOut(() =>
             {
-                if (expired.GetValueOrDefault())
+                if (expired)
                 {
                     _platformUtilsService.ShowToast("warning", null, AppResources.LoginExpired);
                 }
@@ -432,7 +427,7 @@ namespace Bit.App
 
         private async Task LockedAsync(string userId, bool autoPromptBiometric)
         {
-            if (!await _stateService.IsActiveAccount(userId))
+            if (!await _stateService.IsActiveAccountAsync(userId))
             {
                 _platformUtilsService.ShowToast("info", null, AppResources.AccountLockedSuccessfully);
                 return;

@@ -240,6 +240,13 @@ namespace Bit.App.Utilities
                     await platformUtilsService.ShowDialogAsync(text, title, AppResources.Yes, AppResources.Cancel);
                 if (confirmed)
                 {
+                    var stateService = ServiceContainer.Resolve<IStateService>("stateService");
+                    if (await stateService.IsActiveAccountAsync(userId))
+                    {
+                        var messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
+                        messagingService.Send("logout");
+                        return selection;
+                    }
                     await LogOutAsync(userId, true);
                 }
             }
@@ -509,7 +516,7 @@ namespace Bit.App.Utilities
             var policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
             var searchService = ServiceContainer.Resolve<ISearchService>("searchService");
 
-            var isActiveAccount = await stateService.IsActiveAccount(userId);
+            var isActiveAccount = await stateService.IsActiveAccountAsync(userId);
 
             if (userId == null)
             {
