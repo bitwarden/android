@@ -19,8 +19,8 @@ namespace Bit.Core.Services
         private readonly ITokenService _tokenService;
         private readonly IPolicyService _policyService;
         private readonly IKeyConnectorService _keyConnectorService;
-        private readonly Func<Tuple<string, bool>, Task> _lockedCallback;
-        private readonly Func<Tuple<string, bool, bool>, Task> _loggedOutCallback;
+        private readonly Func<(string userId, bool userInitiated), Task> _lockedCallback;
+        private readonly Func<(string userId, bool userInitiated, bool expired), Task> _loggedOutCallback;
 
         public VaultTimeoutService(
             ICryptoService cryptoService,
@@ -34,8 +34,8 @@ namespace Bit.Core.Services
             ITokenService tokenService,
             IPolicyService policyService,
             IKeyConnectorService keyConnectorService,
-            Func<Tuple<string, bool>, Task> lockedCallback,
-            Func<Tuple<string, bool, bool>, Task> loggedOutCallback)
+            Func<(string userId, bool userInitiated), Task> lockedCallback,
+            Func<(string userId, bool userInitiated, bool expired), Task> loggedOutCallback)
         {
             _cryptoService = cryptoService;
             _stateService = stateService;
@@ -70,12 +70,9 @@ namespace Bit.Core.Services
 
         public async Task<bool> ShouldLockAsync(string userId = null)
         {
-            if (await ShouldTimeoutAsync(userId))
-            {
-                var action = await _stateService.GetVaultTimeoutActionAsync(userId);
-                return action == VaultTimeoutAction.Lock;
-            }
-            return false;
+            return await ShouldTimeoutAsync(userId)
+                   &&
+                   await _stateService.GetVaultTimeoutActionAsync(userId) == VaultTimeoutAction.Lock;
         }
 
         public async Task<bool> IsLoggedOutByTimeoutAsync(string userId = null)
@@ -87,12 +84,9 @@ namespace Bit.Core.Services
 
         public async Task<bool> ShouldLogOutByTimeoutAsync(string userId = null)
         {
-            if (await ShouldTimeoutAsync(userId))
-            {
-                var action = await _stateService.GetVaultTimeoutActionAsync(userId);
-                return action == VaultTimeoutAction.Logout;
-            }
-            return false;
+            return await ShouldTimeoutAsync(userId)
+                   &&
+                   await _stateService.GetVaultTimeoutActionAsync(userId) == VaultTimeoutAction.Logout;
         }
 
         public async Task CheckVaultTimeoutAsync()
@@ -164,7 +158,7 @@ namespace Bit.Core.Services
                 return;
             }
 
-            var isActiveAccount = await _stateService.IsActiveAccount(userId);
+            var isActiveAccount = await _stateService.IsActiveAccountAsync(userId);
 
             if (userId == null)
             {
@@ -189,7 +183,7 @@ namespace Bit.Core.Services
                 await _stateService.SetBiometricLockedAsync(isBiometricLockSet, userId);
                 if (isBiometricLockSet)
                 {
-                    _lockedCallback?.Invoke(new Tuple<string, bool>(userId, userInitiated));
+                    _lockedCallback?.Invoke((userId, userInitiated));
                     return;
                 }
             }
@@ -206,14 +200,14 @@ namespace Bit.Core.Services
                 _collectionService.ClearCache();
                 _searchService.ClearIndex();
             }
-            _lockedCallback?.Invoke(new Tuple<string, bool>(userId, userInitiated));
+            _lockedCallback?.Invoke((userId, userInitiated));
         }
         
         public async Task LogOutAsync(bool userInitiated = true, string userId = null)
         {
             if(_loggedOutCallback != null)
             {
-                await _loggedOutCallback.Invoke(new Tuple<string, bool, bool>(userId, userInitiated, false));
+                await _loggedOutCallback.Invoke((userId, userInitiated, false));
             }
         }
 

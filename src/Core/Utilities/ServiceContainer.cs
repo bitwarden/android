@@ -33,7 +33,7 @@ namespace Bit.Core.Utilities
             var apiService = new ApiService(tokenService, platformUtilsService, (extras) =>
             {
                 messagingService.Send("logout", extras);
-                return Task.FromResult(0);
+                return Task.CompletedTask;
             }, customUserAgent);
             var appIdService = new AppIdService(storageService);
             var organizationService = new OrganizationService(stateService);
@@ -56,19 +56,19 @@ namespace Bit.Core.Utilities
                 (extras) =>
                 {
                     messagingService.Send("locked", extras);
-                    return Task.FromResult(0);
+                    return Task.CompletedTask;
                 }, 
                 (extras) =>
                 {
                     messagingService.Send("logout", extras);
-                    return Task.FromResult(0);
+                    return Task.CompletedTask;
                 });
             var syncService = new SyncService(stateService, apiService, settingsService, folderService, cipherService, 
                 cryptoService, collectionService, organizationService, messagingService, policyService, sendService,
                 keyConnectorService, (extras) =>
                 {
                     messagingService.Send("logout", extras);
-                    return Task.FromResult(0);
+                    return Task.CompletedTask;
                 });
             var passwordGenerationService = new PasswordGenerationService(cryptoService, stateService,
                 cryptoFunctionService, policyService);
