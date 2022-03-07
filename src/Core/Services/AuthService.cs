@@ -50,49 +50,6 @@ namespace Bit.Core.Services
             _messagingService = messagingService;
             _keyConnectorService = keyConnectorService;
             _setCryptoKeys = setCryptoKeys;
-
-            TwoFactorProviders = new Dictionary<TwoFactorProviderType, TwoFactorProvider>();
-            TwoFactorProviders.Add(TwoFactorProviderType.Authenticator, new TwoFactorProvider
-            {
-                Type = TwoFactorProviderType.Authenticator,
-                Priority = 1,
-                Sort = 1
-            });
-            TwoFactorProviders.Add(TwoFactorProviderType.YubiKey, new TwoFactorProvider
-            {
-                Type = TwoFactorProviderType.YubiKey,
-                Priority = 3,
-                Sort = 2,
-                Premium = true
-            });
-            TwoFactorProviders.Add(TwoFactorProviderType.Duo, new TwoFactorProvider
-            {
-                Type = TwoFactorProviderType.Duo,
-                Name = "Duo",
-                Priority = 2,
-                Sort = 3,
-                Premium = true
-            });
-            TwoFactorProviders.Add(TwoFactorProviderType.OrganizationDuo, new TwoFactorProvider
-            {
-                Type = TwoFactorProviderType.OrganizationDuo,
-                Name = "Duo (Organization)",
-                Priority = 10,
-                Sort = 4
-            });
-            TwoFactorProviders.Add(TwoFactorProviderType.Fido2WebAuthn, new TwoFactorProvider
-            {
-                Type = TwoFactorProviderType.Fido2WebAuthn,
-                Priority = 4,
-                Sort = 5,
-                Premium = true
-            });
-            TwoFactorProviders.Add(TwoFactorProviderType.Email, new TwoFactorProvider
-            {
-                Type = TwoFactorProviderType.Email,
-                Priority = 0,
-                Sort = 6,
-            });
         }
 
         public string Email { get; set; }
@@ -105,24 +62,6 @@ namespace Bit.Core.Services
         public Dictionary<TwoFactorProviderType, TwoFactorProvider> TwoFactorProviders { get; set; }
         public Dictionary<TwoFactorProviderType, Dictionary<string, object>> TwoFactorProvidersData { get; set; }
         public TwoFactorProviderType? SelectedTwoFactorProviderType { get; set; }
-
-        public void Init()
-        {
-            TwoFactorProviders[TwoFactorProviderType.Email].Name = _i18nService.T("Email");
-            TwoFactorProviders[TwoFactorProviderType.Email].Description = _i18nService.T("EmailDesc");
-            TwoFactorProviders[TwoFactorProviderType.Authenticator].Name = _i18nService.T("AuthenticatorAppTitle");
-            TwoFactorProviders[TwoFactorProviderType.Authenticator].Description =
-                _i18nService.T("AuthenticatorAppDesc");
-            TwoFactorProviders[TwoFactorProviderType.Duo].Description = _i18nService.T("DuoDesc");
-            TwoFactorProviders[TwoFactorProviderType.OrganizationDuo].Name =
-                string.Format("Duo ({0})", _i18nService.T("Organization"));
-            TwoFactorProviders[TwoFactorProviderType.OrganizationDuo].Description =
-                _i18nService.T("DuoOrganizationDesc");
-            TwoFactorProviders[TwoFactorProviderType.Fido2WebAuthn].Name = _i18nService.T("Fido2Title");
-            TwoFactorProviders[TwoFactorProviderType.Fido2WebAuthn].Description = _i18nService.T("Fido2Desc");
-            TwoFactorProviders[TwoFactorProviderType.YubiKey].Name = _i18nService.T("YubiKeyTitle");
-            TwoFactorProviders[TwoFactorProviderType.YubiKey].Description = _i18nService.T("YubiKeyDesc");
-        }
 
         public async Task<AuthResult> LogInAsync(string email, string masterPassword, string captchaToken)
         {
@@ -170,74 +109,6 @@ namespace Bit.Core.Services
         {
             callback.Invoke();
             _messagingService.Send("loggedOut");
-        }
-
-        public List<TwoFactorProvider> GetSupportedTwoFactorProviders()
-        {
-            var providers = new List<TwoFactorProvider>();
-            if (TwoFactorProvidersData == null)
-            {
-                return providers;
-            }
-            if (TwoFactorProvidersData.ContainsKey(TwoFactorProviderType.OrganizationDuo) &&
-                _platformUtilsService.SupportsDuo())
-            {
-                providers.Add(TwoFactorProviders[TwoFactorProviderType.OrganizationDuo]);
-            }
-            if (TwoFactorProvidersData.ContainsKey(TwoFactorProviderType.Authenticator))
-            {
-                providers.Add(TwoFactorProviders[TwoFactorProviderType.Authenticator]);
-            }
-            if (TwoFactorProvidersData.ContainsKey(TwoFactorProviderType.YubiKey))
-            {
-                providers.Add(TwoFactorProviders[TwoFactorProviderType.YubiKey]);
-            }
-            if (TwoFactorProvidersData.ContainsKey(TwoFactorProviderType.Duo) && _platformUtilsService.SupportsDuo())
-            {
-                providers.Add(TwoFactorProviders[TwoFactorProviderType.Duo]);
-            }
-            if (TwoFactorProvidersData.ContainsKey(TwoFactorProviderType.Fido2WebAuthn) &&
-                _platformUtilsService.SupportsFido2())
-            {
-                providers.Add(TwoFactorProviders[TwoFactorProviderType.Fido2WebAuthn]);
-            }
-            if (TwoFactorProvidersData.ContainsKey(TwoFactorProviderType.Email))
-            {
-                providers.Add(TwoFactorProviders[TwoFactorProviderType.Email]);
-            }
-            return providers;
-        }
-
-        public TwoFactorProviderType? GetDefaultTwoFactorProvider(bool fido2Supported)
-        {
-            if (TwoFactorProvidersData == null)
-            {
-                return null;
-            }
-            if (SelectedTwoFactorProviderType != null &&
-                TwoFactorProvidersData.ContainsKey(SelectedTwoFactorProviderType.Value))
-            {
-                return SelectedTwoFactorProviderType.Value;
-            }
-            TwoFactorProviderType? providerType = null;
-            var providerPriority = -1;
-            foreach (var providerKvp in TwoFactorProvidersData)
-            {
-                if (TwoFactorProviders.ContainsKey(providerKvp.Key))
-                {
-                    var provider = TwoFactorProviders[providerKvp.Key];
-                    if (provider.Priority > providerPriority)
-                    {
-                        if (providerKvp.Key == TwoFactorProviderType.Fido2WebAuthn && !fido2Supported)
-                        {
-                            continue;
-                        }
-                        providerType = providerKvp.Key;
-                        providerPriority = provider.Priority;
-                    }
-                }
-            }
-            return providerType;
         }
 
         public bool AuthingWithSso()

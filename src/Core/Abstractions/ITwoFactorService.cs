@@ -3,18 +3,21 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
+using Bit.Core.Models.Response;
 
 namespace Bit.Core.Abstractions
 {
     public interface ITwoFactorService
     {
         void Init();
+        List<TwoFactorProvider> GetSupportedProviders();
+        TwoFactorProviderType? GetDefaultProvider(bool fido2Supported);
 
+        void SetSelectedProvider(TwoFactorProviderType type);
+        void ClearSelectedProvider();
 
-        TwoFactorProviderType? SelectedTwoFactorProviderType { get; set; }
-        Dictionary<TwoFactorProviderType, TwoFactorProvider> TwoFactorProviders { get; set; }
-        Dictionary<TwoFactorProviderType, Dictionary<string, object>> TwoFactorProvidersData { get; set; }
-
-        TwoFactorProviderType? GetDefaultTwoFactorProvider(bool fido2Supported);
+        void SetProviders(IdentityTwoFactorResponse response);
+        void ClearProviders();
+        Dictionary<TwoFactorProviderType, Dictionary<string, object>> GetProviders();
     }
 }
