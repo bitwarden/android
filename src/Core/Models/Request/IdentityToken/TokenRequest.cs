@@ -24,7 +24,7 @@ namespace Bit.Core.Models.Request.IdentityToken
             TwoFactor = twoFactor;
         }
 
-        protected virtual Dictionary<string, string> ToIdentityToken(string clientId)
+        public virtual Dictionary<string, string> ToIdentityToken(string clientId)
         {
             var obj = new Dictionary<string, string>
             {

@@ -18,7 +18,7 @@ namespace Bit.Core.Models.Request.IdentityToken
             CaptchaToken = captchaToken;
         }
 
-        protected override Dictionary<string, string> ToIdentityToken(string clientId)
+        public override Dictionary<string, string> ToIdentityToken(string clientId)
         {
             var obj = base.ToIdentityToken(clientId);
 

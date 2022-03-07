@@ -53,7 +53,7 @@ namespace Bit.Core.Misc.LogInStrategies {
 
         protected async Task<AuthResult> StartLogInAsync()
         {
-            _twoFactorService.clearSelectedProvider();
+            _twoFactorService.ClearSelectedProvider();
 
             var response = await _apiService.PostIdentityTokenAsync(TokenRequest);
 
@@ -159,7 +159,7 @@ namespace Bit.Core.Misc.LogInStrategies {
 
             await OnSuccessfulLoginAsync(response);
 
-            _stateService.BiometricLocked = false;
+            await _stateService.SetBiometricLockedAsync(false);
             _messagingService.Send("loggedIn");
 
             return result;

@@ -15,7 +15,7 @@ namespace Bit.Core.Models.Request.IdentityToken
             RedirectUri = RedirectUri;
         }
 
-        protected override Dictionary<string, string> ToIdentityToken(string clientId)
+        public override Dictionary<string, string> ToIdentityToken(string clientId)
         {
             var obj = base.ToIdentityToken(clientId);
             

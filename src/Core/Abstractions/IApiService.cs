@@ -1,5 +1,6 @@
 ﻿using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
+using Bit.Core.Models.Request.IdentityToken;
 using Bit.Core.Models.Response;
 using System;
 using System.Collections.Generic;
