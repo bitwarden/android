@@ -76,6 +76,7 @@ namespace Bit.Core.Utilities
             var eventService = new EventService(apiService, stateService, organizationService, cipherService);
             var userVerificationService = new UserVerificationService(apiService, platformUtilsService, i18nService, 
                 cryptoService);
+            var twoFactorService = new TwoFactorService(i18nService, platformUtilsService);
 
             Register<ITokenService>("tokenService", tokenService);
             Register<IApiService>("apiService", apiService);
@@ -99,6 +100,7 @@ namespace Bit.Core.Utilities
             Register<IEventService>("eventService", eventService);
             Register<IKeyConnectorService>("keyConnectorService", keyConnectorService);
             Register<IUserVerificationService>("userVerificationService", userVerificationService);
+            Register<ITwoFactorService>("twoFactorService", twoFactorService);
         }
 
         public static void Register<T>(string serviceName, T obj)

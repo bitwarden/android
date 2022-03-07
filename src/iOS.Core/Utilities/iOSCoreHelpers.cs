@@ -96,7 +96,7 @@ namespace Bit.iOS.Core.Utilities
         public static void Bootstrap(Func<Task> postBootstrapFunc = null)
         {
             (ServiceContainer.Resolve<II18nService>("i18nService") as MobileI18nService).Init();
-            ServiceContainer.Resolve<IAuthService>("authService").Init();
+            ServiceContainer.Resolve<ITwoFactorService>("twoFactorService").Init();
             (ServiceContainer.
                 Resolve<IPlatformUtilsService>("platformUtilsService") as MobilePlatformUtilsService).Init();
             // Note: This is not awaited

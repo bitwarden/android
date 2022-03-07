@@ -170,7 +170,7 @@ namespace Bit.Droid
         private void Bootstrap()
         {
             (ServiceContainer.Resolve<II18nService>("i18nService") as MobileI18nService).Init();
-            ServiceContainer.Resolve<IAuthService>("authService").Init();
+            ServiceContainer.Resolve<ITwoFactorService>("twoFactorService").Init();
             // Note: This is not awaited
             var bootstrapTask = BootstrapAsync();
         }
