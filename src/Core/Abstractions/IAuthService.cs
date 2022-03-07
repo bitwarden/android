@@ -11,7 +11,7 @@ namespace Bit.Core.Abstractions
         string MasterPasswordHash { get; }
 
         Task<AuthResult> LogInAsync(LogInCredentials credentials);
-        Task<AuthResult> LogInTwoFactorAsync(TokenRequestTwoFactor twoFactor);
+        Task<AuthResult> LogInTwoFactorAsync(TokenRequestTwoFactor twoFactor, string captchaResponse);
         void LogOut(Action callback);
         Task<SymmetricCryptoKey> MakePreloginKeyAsync(string masterPassword, string email);
         bool AuthingWithSso();

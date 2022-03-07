@@ -45,7 +45,7 @@ namespace Bit.Core.Misc.LogInStrategies {
 
         public abstract Task<AuthResult> LogInAsync(LogInCredentials credentials);
 
-        public Task<AuthResult> LogInTwoFactorAsync(TokenRequestTwoFactor twoFactor)
+        public Task<AuthResult> LogInTwoFactorAsync(TokenRequestTwoFactor twoFactor, string captchaResponse)
         {
             TokenRequest.SetTwoFactor(twoFactor);
             return StartLogInAsync();
