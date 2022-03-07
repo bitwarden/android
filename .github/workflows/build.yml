@@ -241,6 +241,7 @@ jobs:
         run: |
           $androidPath = $($env:GITHUB_WORKSPACE + "/src/Android/Android.csproj");
           $appPath = $($env:GITHUB_WORKSPACE + "/src/App/App.csproj");
+          $corePath = $($env:GITHUB_WORKSPACE + "/src/Core/Core.csproj");
 
           $androidManifest = $($env:GITHUB_WORKSPACE + "/src/Android/Properties/AndroidManifest.xml");
 
@@ -306,6 +307,18 @@ jobs:
           $appCenterNode.ParentNode.RemoveChild($appCenterNode);
 
           $xml.Save($appPath);
+
+          Write-Output "########################################"
+          Write-Output "##### Uninstall from Core.csproj"
+          Write-Output "########################################"
+
+          $xml=New-Object XML;
+          $xml.Load($corePath);
+
+          $appCenterNode=$xml.SelectSingleNode("/Project/ItemGroup/PackageReference[@Include='Microsoft.AppCenter.Crashes']");
+          $appCenterNode.ParentNode.RemoveChild($appCenterNode);
+
+          $xml.Save($corePath);
         shell: pwsh
 
       - name: Restore packages
