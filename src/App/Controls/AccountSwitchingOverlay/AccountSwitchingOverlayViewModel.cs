@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
@@ -24,6 +26,10 @@ namespace Bit.App.Controls
             SelectAccountCommand = new AsyncCommand<AccountViewCellViewModel>(SelectAccountAsync,
                 onException: ex => logger.Exception(ex),
                 allowsMultipleExecutions: false);
+            
+            LongPressAccountCommand = new AsyncCommand<Tuple<ContentPage, AccountViewCellViewModel>>(LongPressAccountAsync,
+                onException: ex => logger.Exception(ex),
+                allowsMultipleExecutions: false);
         }
 
         // this needs to be a new list every time for the binding to get updated,
@@ -36,6 +42,8 @@ namespace Bit.App.Controls
         public bool AllowAddAccountRow { get; set; }
 
         public ICommand SelectAccountCommand { get; }
+
+        public ICommand LongPressAccountCommand { get; }
 
         private async Task SelectAccountAsync(AccountViewCellViewModel item)
         {
@@ -54,6 +62,15 @@ namespace Bit.App.Controls
             else
             {
                 _messagingService.Send("addAccount");
+            }
+        }
+
+        private async Task LongPressAccountAsync(Tuple<ContentPage, AccountViewCellViewModel> item)
+        {
+            var (page, account) = item;
+            if (account.AccountView.IsAccount)
+            {
+                await AppHelpers.AccountListOptions(page, account);
             }
         }
 

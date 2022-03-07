@@ -68,6 +68,7 @@ namespace Bit.Core.Services
                 _apiService.SetUrls(envUrls);
                 return;
             }
+            BaseUrl = urls.Base;
             WebVaultUrl = urls.WebVault;
             ApiUrl = envUrls.Api = urls.Api;
             IdentityUrl = envUrls.Identity = urls.Identity;

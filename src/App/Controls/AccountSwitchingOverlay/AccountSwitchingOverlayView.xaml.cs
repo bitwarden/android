@@ -10,11 +10,23 @@ namespace Bit.App.Controls
 {
     public partial class AccountSwitchingOverlayView : ContentView
     {
+        public static readonly BindableProperty MainPageProperty = BindableProperty.Create(
+            nameof(MainPage),
+            typeof(ContentPage),
+            typeof(AccountSwitchingOverlayView),
+            defaultBindingMode: BindingMode.OneWay);
+
         public static readonly BindableProperty MainFabProperty = BindableProperty.Create(
             nameof(MainFab),
             typeof(View),
             typeof(AccountSwitchingOverlayView),
             defaultBindingMode: BindingMode.OneWay);
+
+        public ContentPage MainPage
+        {
+            get => (ContentPage)GetValue(MainPageProperty);
+            set => SetValue(MainPageProperty, value);
+        }
 
         public View MainFab
         {
@@ -31,11 +43,25 @@ namespace Bit.App.Controls
             ToggleVisibililtyCommand = new AsyncCommand(ToggleVisibilityAsync,
                 onException: ex => _logger.Value.Exception(ex),
                 allowsMultipleExecutions: false);
+
+            SelectAccountCommand = new AsyncCommand<AccountViewCellViewModel>(SelectAccountAsync,
+                onException: ex => _logger.Value.Exception(ex),
+                allowsMultipleExecutions: false);
+
+            LongPressAccountCommand = new AsyncCommand<AccountViewCellViewModel>(LongPressAccountAsync,
+                onException: ex => _logger.Value.Exception(ex),
+                allowsMultipleExecutions: false);
         }
 
         public AccountSwitchingOverlayViewModel ViewModel => BindingContext as AccountSwitchingOverlayViewModel;
 
         public ICommand ToggleVisibililtyCommand { get; }
+
+        public ICommand SelectAccountCommand { get; }
+
+        public ICommand LongPressAccountCommand { get; }
+
+        public int AccountListRowHeight => Device.RuntimePlatform == Device.Android ? 74 : 70;
 
         public async Task ToggleVisibilityAsync()
         {
@@ -51,12 +77,23 @@ namespace Bit.App.Controls
 
         public async Task ShowAsync()
         {
-            await ViewModel?.RefreshAccountViewsAsync();
+            if (ViewModel == null)
+            {
+                return;
+            }
+
+            await ViewModel.RefreshAccountViewsAsync();
 
             await Device.InvokeOnMainThreadAsync(async () =>
             {
                 // start listView in default (off-screen) position
                 await _accountListContainer.TranslateTo(0, _accountListContainer.Height * -1, 0);
+
+                // re-measure in case accounts have been removed without changing screens
+                if (ViewModel.AccountViews != null)
+                {
+                    _accountListView.HeightRequest = AccountListRowHeight * ViewModel.AccountViews.Count;
+                }
 
                 // set overlay opacity to zero before making visible and start fade-in
                 Opacity = 0;
@@ -113,20 +150,34 @@ namespace Bit.App.Controls
             }
         }
 
-        async void AccountRow_Selected(object sender, SelectedItemChangedEventArgs e)
+        private async Task SelectAccountAsync(AccountViewCellViewModel item)
         {
             try
             {
-                if (!(e.SelectedItem is AccountViewCellViewModel item))
-                {
-                    return;
-                }
-
-                ((ListView)sender).SelectedItem = null;
                 await Task.Delay(100);
                 await HideAsync();
 
                 ViewModel?.SelectAccountCommand?.Execute(item);
+            }
+            catch (Exception ex)
+            {
+                _logger.Value.Exception(ex);
+            }
+        }
+
+        private async Task LongPressAccountAsync(AccountViewCellViewModel item)
+        {
+            if (!item.IsAccount)
+            {
+                return;
+            }
+            try
+            {
+                await Task.Delay(100);
+                await HideAsync();
+
+                ViewModel?.LongPressAccountCommand?.Execute(
+                    new Tuple<ContentPage, AccountViewCellViewModel>(MainPage, item));
             }
             catch (Exception ex)
             {

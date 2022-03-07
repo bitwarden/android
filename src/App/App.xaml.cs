@@ -73,7 +73,11 @@ namespace Bit.App
                 }
                 else if (message.Command == "locked")
                 {
-                    await LockedAsync(!(message.Data as bool?).GetValueOrDefault());
+                    var extras = message.Data as Tuple<string, bool>;
+                    var userId = extras?.Item1;
+                    var userInitiated = extras?.Item2;
+                    Device.BeginInvokeOnMainThread(async () =>
+                        await LockedAsync(userId, userInitiated.GetValueOrDefault()));
                 }
                 else if (message.Command == "lockVault")
                 {
@@ -283,10 +287,9 @@ namespace Bit.App
         private async Task SwitchedAccountAsync()
         {
             await AppHelpers.OnAccountSwitchAsync();
-            var shouldTimeout = await _vaultTimeoutService.ShouldTimeoutAsync();
             Device.BeginInvokeOnMainThread(async () =>
             {
-                if (shouldTimeout)
+                if (await _vaultTimeoutService.ShouldTimeoutAsync())
                 {
                     await _vaultTimeoutService.ExecuteTimeoutActionAsync();
                 }
@@ -304,24 +307,20 @@ namespace Bit.App
             var authed = await _stateService.IsAuthenticatedAsync();
             if (authed)
             {
-                var isLocked = await _vaultTimeoutService.IsLockedAsync();
-                var shouldTimeout = await _vaultTimeoutService.ShouldTimeoutAsync();
-                if (isLocked || shouldTimeout)
+                if (await _vaultTimeoutService.IsLoggedOutByTimeoutAsync() ||
+                    await _vaultTimeoutService.ShouldLogOutByTimeoutAsync())
                 {
-                    var vaultTimeoutAction = await _stateService.GetVaultTimeoutActionAsync();
-                    if (vaultTimeoutAction == VaultTimeoutAction.Logout)
-                    {
-                        // TODO implement orgIdentifier flow to SSO Login page, same as email flow below
-                        // var orgIdentifier = await _stateService.GetOrgIdentifierAsync();
-                        
-                        var email = await _stateService.GetEmailAsync();
-                        Options.HideAccountSwitcher = await _stateService.GetActiveUserIdAsync() == null;
-                        Current.MainPage = new NavigationPage(new LoginPage(email, Options));
-                    }
-                    else
-                    {
-                        Current.MainPage = new NavigationPage(new LockPage(Options));
-                    }
+                    // TODO implement orgIdentifier flow to SSO Login page, same as email flow below
+                    // var orgIdentifier = await _stateService.GetOrgIdentifierAsync();
+
+                    var email = await _stateService.GetEmailAsync();
+                    Options.HideAccountSwitcher = await _stateService.GetActiveUserIdAsync() == null;
+                    Current.MainPage = new NavigationPage(new LoginPage(email, Options));
+                }
+                else if (await _vaultTimeoutService.IsLockedAsync() || 
+                         await _vaultTimeoutService.ShouldLockAsync())
+                {
+                    Current.MainPage = new NavigationPage(new LockPage(Options));
                 }
                 else if (Options.FromAutofillFramework && Options.SaveType.HasValue)
                 {
@@ -343,7 +342,8 @@ namespace Bit.App
             else
             {
                 Options.HideAccountSwitcher = await _stateService.GetActiveUserIdAsync() == null;
-                if (await _vaultTimeoutService.IsLoggedOutByTimeoutAsync())
+                if (await _vaultTimeoutService.IsLoggedOutByTimeoutAsync() ||
+                    await _vaultTimeoutService.ShouldLogOutByTimeoutAsync())
                 {
                     // TODO implement orgIdentifier flow to SSO Login page, same as email flow below
                     // var orgIdentifier = await _stateService.GetOrgIdentifierAsync();
@@ -430,8 +430,14 @@ namespace Bit.App
             });
         }
 
-        private async Task LockedAsync(bool autoPromptBiometric)
+        private async Task LockedAsync(string userId, bool autoPromptBiometric)
         {
+            if (!await _stateService.IsActiveAccount(userId))
+            {
+                _platformUtilsService.ShowToast("info", null, AppResources.AccountLockedSuccessfully);
+                return;
+            }
+
             if (autoPromptBiometric && Device.RuntimePlatform == Device.iOS)
             {
                 var vaultTimeout = await _stateService.GetVaultTimeoutAsync();

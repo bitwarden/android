@@ -19,7 +19,7 @@ namespace Bit.Core.Services
         private readonly ITokenService _tokenService;
         private readonly IPolicyService _policyService;
         private readonly IKeyConnectorService _keyConnectorService;
-        private readonly Action<bool> _lockedCallback;
+        private readonly Func<Tuple<string, bool>, Task> _lockedCallback;
         private readonly Func<Tuple<string, bool, bool>, Task> _loggedOutCallback;
 
         public VaultTimeoutService(
@@ -34,7 +34,7 @@ namespace Bit.Core.Services
             ITokenService tokenService,
             IPolicyService policyService,
             IKeyConnectorService keyConnectorService,
-            Action<bool> lockedCallback,
+            Func<Tuple<string, bool>, Task> lockedCallback,
             Func<Tuple<string, bool, bool>, Task> loggedOutCallback)
         {
             _cryptoService = cryptoService;
@@ -67,12 +67,32 @@ namespace Bit.Core.Services
             }
             return !hasKey;
         }
-        
+
+        public async Task<bool> ShouldLockAsync(string userId = null)
+        {
+            if (await ShouldTimeoutAsync(userId))
+            {
+                var action = await _stateService.GetVaultTimeoutActionAsync(userId);
+                return action == VaultTimeoutAction.Lock;
+            }
+            return false;
+        }
+
         public async Task<bool> IsLoggedOutByTimeoutAsync(string userId = null)
         {
             var authed = await _stateService.IsAuthenticatedAsync(userId);
             var email = await _stateService.GetEmailAsync(userId);
             return !authed && !string.IsNullOrWhiteSpace(email);
+        }
+
+        public async Task<bool> ShouldLogOutByTimeoutAsync(string userId = null)
+        {
+            if (await ShouldTimeoutAsync(userId))
+            {
+                var action = await _stateService.GetVaultTimeoutActionAsync(userId);
+                return action == VaultTimeoutAction.Logout;
+            }
+            return false;
         }
 
         public async Task CheckVaultTimeoutAsync()
@@ -144,6 +164,13 @@ namespace Bit.Core.Services
                 return;
             }
 
+            var isActiveAccount = await _stateService.IsActiveAccount(userId);
+
+            if (userId == null)
+            {
+                userId = await _stateService.GetActiveUserIdAsync();
+            }
+
             if (await _keyConnectorService.GetUsesKeyConnector()) {
                 var (isPinProtected, isPinProtectedWithKey) = await IsPinLockSetAsync(userId);
                 var pinLock = (isPinProtected && await _stateService.GetPinProtectedKeyAsync(userId) != null) ||
@@ -162,8 +189,7 @@ namespace Bit.Core.Services
                 await _stateService.SetBiometricLockedAsync(isBiometricLockSet, userId);
                 if (isBiometricLockSet)
                 {
-                    _messagingService.Send("locked", userInitiated);
-                    _lockedCallback?.Invoke(userInitiated);
+                    _lockedCallback?.Invoke(new Tuple<string, bool>(userId, userInitiated));
                     return;
                 }
             }
@@ -173,12 +199,14 @@ namespace Bit.Core.Services
                 _cryptoService.ClearKeyPairAsync(true, userId),
                 _cryptoService.ClearEncKeyAsync(true, userId));
 
-            _folderService.ClearCache();
-            await _cipherService.ClearCacheAsync();
-            _collectionService.ClearCache();
-            _searchService.ClearIndex();
-            _messagingService.Send("locked", userInitiated);
-            _lockedCallback?.Invoke(userInitiated);
+            if (isActiveAccount)
+            {
+                _folderService.ClearCache();
+                await _cipherService.ClearCacheAsync();
+                _collectionService.ClearCache();
+                _searchService.ClearIndex();
+            }
+            _lockedCallback?.Invoke(new Tuple<string, bool>(userId, userInitiated));
         }
         
         public async Task LogOutAsync(bool userInitiated = true, string userId = null)

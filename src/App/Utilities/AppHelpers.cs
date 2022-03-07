@@ -11,6 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Bit.App.Controls;
 using Bit.App.Models;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
@@ -192,6 +193,55 @@ namespace Bit.App.Utilities
             else if (selection == AppResources.Delete)
             {
                 await DeleteSendAsync(send.Id);
+            }
+            return selection;
+        }
+
+        public static async Task<string> AccountListOptions(ContentPage page, AccountViewCellViewModel accountViewCell)
+        {
+            var vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
+            var platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
+
+            var userId = accountViewCell.AccountView.UserId;
+
+            List<string> options;
+            if (await vaultTimeoutService.IsLoggedOutByTimeoutAsync(userId) ||
+                await vaultTimeoutService.ShouldLogOutByTimeoutAsync(userId))
+            {
+                options = new List<string> { AppResources.RemoveAccount };
+            }
+            else if (await vaultTimeoutService.IsLockedAsync(userId) ||
+                     await vaultTimeoutService.ShouldLockAsync(userId))
+            {
+                options = new List<string> { AppResources.LogOut };
+            }
+            else
+            {
+                options = new List<string> { AppResources.Lock, AppResources.LogOut };
+            }
+
+            var accountSummary = accountViewCell.AccountView.Email;
+            if (!string.IsNullOrWhiteSpace(accountViewCell.AccountView.Hostname))
+            {
+                accountSummary += "\n" + accountViewCell.AccountView.Hostname;
+            }
+            var selection = await page.DisplayActionSheet(accountSummary, AppResources.Cancel, null, options.ToArray());
+
+            if (selection == AppResources.Lock)
+            {
+                await vaultTimeoutService.LockAsync(true, true, userId);
+            }
+            else if (selection == AppResources.LogOut || selection == AppResources.RemoveAccount)
+            {
+                var title = selection == AppResources.LogOut ? AppResources.LogOut : AppResources.RemoveAccount;
+                var text = (selection == AppResources.LogOut ? AppResources.LogoutConfirmation
+                    : AppResources.RemoveAccountConfirmation) + "\n\n" + accountSummary;
+                var confirmed =
+                    await platformUtilsService.ShowDialogAsync(text, title, AppResources.Yes, AppResources.Cancel);
+                if (confirmed)
+                {
+                    await LogOutAsync(userId, true);
+                }
             }
             return selection;
         }
@@ -459,6 +509,8 @@ namespace Bit.App.Utilities
             var policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
             var searchService = ServiceContainer.Resolve<ISearchService>("searchService");
 
+            var isActiveAccount = await stateService.IsActiveAccount(userId);
+
             if (userId == null)
             {
                 userId = await stateService.GetActiveUserIdAsync();
@@ -479,14 +531,33 @@ namespace Bit.App.Utilities
 
             searchService.ClearIndex();
 
-            // check if we switched accounts automatically
-            if (userInitiated && await stateService.GetActiveUserIdAsync() != null)
+            if (!userInitiated)
+            {
+                return;
+            }
+
+            // check if we switched active accounts automatically
+            if (isActiveAccount && await stateService.GetActiveUserIdAsync() != null)
             {
                 var messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
                 messagingService.Send("switchedAccount");
-                
+
                 var platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
                 platformUtilsService.ShowToast("info", null, AppResources.AccountSwitchedAutomatically);
+                return;
+            }
+
+            // check if we logged out a non-active account
+            if (!isActiveAccount)
+            {
+                var platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
+                if (await vaultTimeoutService.IsLoggedOutByTimeoutAsync(userId) ||
+                    await vaultTimeoutService.ShouldLogOutByTimeoutAsync())
+                {
+                    platformUtilsService.ShowToast("info", null, AppResources.AccountRemovedSuccessfully);
+                    return;
+                }
+                platformUtilsService.ShowToast("info", null, AppResources.AccountLoggedOutSuccessfully);
             }
         }
 

@@ -48,14 +48,29 @@ namespace Bit.App.Controls
             get => AccountView.AuthStatus == AuthenticationStatus.Unlocked;
         }
 
+        public bool IsUnlockedAndNotActive
+        {
+            get => IsUnlocked && !IsActive;
+        }
+
         public bool IsLocked
         {
             get => AccountView.AuthStatus == AuthenticationStatus.Locked;
         }
 
+        public bool IsLockedAndNotActive
+        {
+            get => IsLocked && !IsActive;
+        }
+
         public bool IsLoggedOut
         {
             get => AccountView.AuthStatus == AuthenticationStatus.LoggedOut;
+        }
+
+        public bool IsLoggedOutAndNotActive
+        {
+            get => IsLoggedOut && !IsActive;
         }
 
         public string AuthStatusIconActive

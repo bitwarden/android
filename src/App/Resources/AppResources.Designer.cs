@@ -3773,6 +3773,24 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string AccountLockedSuccessfully {
+            get {
+                return ResourceManager.GetString("AccountLockedSuccessfully", resourceCulture);
+            }
+        }
+        
+        public static string AccountLoggedOutSuccessfully {
+            get {
+                return ResourceManager.GetString("AccountLoggedOutSuccessfully", resourceCulture);
+            }
+        }
+        
+        public static string AccountRemovedSuccessfully {
+            get {
+                return ResourceManager.GetString("AccountRemovedSuccessfully", resourceCulture);
+            }
+        }
+        
         public static string DeleteAccount {
             get {
                 return ResourceManager.GetString("DeleteAccount", resourceCulture);
@@ -3806,6 +3824,12 @@ namespace Bit.App.Resources {
         public static string InvalidVerificationCode {
             get {
                 return ResourceManager.GetString("InvalidVerificationCode", resourceCulture);
+            }
+        }
+        
+        public static string RequestOTP {
+            get {
+                return ResourceManager.GetString("RequestOTP", resourceCulture);
             }
         }
         
