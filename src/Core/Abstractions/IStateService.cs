@@ -55,6 +55,7 @@ namespace Bit.Core.Abstractions
         Task SetAutofillTileAddedAsync(bool? value);
         Task<string> GetEmailAsync(string userId = null);
         Task<string> GetNameAsync(string userId = null);
+        Task SetNameAsync(string value, string userId = null);
         Task<string> GetOrgIdentifierAsync(string userId = null);
         Task<long?> GetLastActiveTimeAsync(string userId = null);
         Task SetLastActiveTimeAsync(long? value, string userId = null);
