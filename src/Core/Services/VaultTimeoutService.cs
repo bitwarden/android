@@ -19,8 +19,8 @@ namespace Bit.Core.Services
         private readonly ITokenService _tokenService;
         private readonly IPolicyService _policyService;
         private readonly IKeyConnectorService _keyConnectorService;
-        private readonly Func<(string userId, bool userInitiated), Task> _lockedCallback;
-        private readonly Func<(string userId, bool userInitiated, bool expired), Task> _loggedOutCallback;
+        private readonly Func<Tuple<string, bool>, Task> _lockedCallback;
+        private readonly Func<Tuple<string, bool, bool>, Task> _loggedOutCallback;
 
         public VaultTimeoutService(
             ICryptoService cryptoService,
@@ -34,8 +34,8 @@ namespace Bit.Core.Services
             ITokenService tokenService,
             IPolicyService policyService,
             IKeyConnectorService keyConnectorService,
-            Func<(string userId, bool userInitiated), Task> lockedCallback,
-            Func<(string userId, bool userInitiated, bool expired), Task> loggedOutCallback)
+            Func<Tuple<string, bool>, Task> lockedCallback,
+            Func<Tuple<string, bool, bool>, Task> loggedOutCallback)
         {
             _cryptoService = cryptoService;
             _stateService = stateService;
@@ -183,7 +183,7 @@ namespace Bit.Core.Services
                 await _stateService.SetBiometricLockedAsync(isBiometricLockSet, userId);
                 if (isBiometricLockSet)
                 {
-                    _lockedCallback?.Invoke((userId, userInitiated));
+                    _lockedCallback?.Invoke(new Tuple<string, bool>(userId, userInitiated));
                     return;
                 }
             }
@@ -200,14 +200,14 @@ namespace Bit.Core.Services
                 _collectionService.ClearCache();
                 _searchService.ClearIndex();
             }
-            _lockedCallback?.Invoke((userId, userInitiated));
+            _lockedCallback?.Invoke(new Tuple<string, bool>(userId, userInitiated));
         }
         
         public async Task LogOutAsync(bool userInitiated = true, string userId = null)
         {
             if(_loggedOutCallback != null)
             {
-                await _loggedOutCallback.Invoke((userId, userInitiated, false));
+                await _loggedOutCallback.Invoke(new Tuple<string, bool, bool>(userId, userInitiated, false));
             }
         }
 
