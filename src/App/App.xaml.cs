@@ -73,8 +73,9 @@ namespace Bit.App
                 }
                 else if (message.Command == "locked")
                 {
-                    var (userId, userInitiated) =
-                        message.Data as Tuple<string, bool> ?? new Tuple<string, bool>(null, false);
+                    var extras = message.Data as Tuple<string, bool>;
+                    var userId = extras?.Item1;
+                    var userInitiated = extras?.Item2 ?? false;
                     Device.BeginInvokeOnMainThread(async () => await LockedAsync(userId, userInitiated));
                 }
                 else if (message.Command == "lockVault")
@@ -83,8 +84,10 @@ namespace Bit.App
                 }
                 else if (message.Command == "logout")
                 {
-                    var (userId, userInitiated, expired) =
-                        message.Data as Tuple<string, bool, bool> ?? new Tuple<string, bool, bool>(null, true, false);
+                    var extras = message.Data as Tuple<string, bool, bool>;
+                    var userId = extras?.Item1;
+                    var userInitiated = extras?.Item2 ?? true;
+                    var expired = extras?.Item3 ?? false;
                     Device.BeginInvokeOnMainThread(async () => await LogOutAsync(userId, userInitiated, expired));
                 }
                 else if (message.Command == "loggedOut")
