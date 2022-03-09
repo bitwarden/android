@@ -470,6 +470,15 @@ namespace Bit.Core.Services
             ))?.Profile?.Name;
         }
 
+        public async Task SetNameAsync(string value, string userId = null)
+        {
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            var account = await GetAccountAsync(reconciledOptions);
+            account.Profile.Name = value;
+            await SaveAccountAsync(account, reconciledOptions);
+        }
+
         public async Task<string> GetOrgIdentifierAsync(string userId = null)
         {
             return (await GetAccountAsync(
