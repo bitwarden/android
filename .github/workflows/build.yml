@@ -43,7 +43,7 @@ jobs:
             echo "::set-output name=rc_branch_exists::0"
           fi
 
-          if [[ $(git ls-remote --heads origin hotfix) ]]; then
+          if [[ $(git ls-remote --heads origin hotfix-rc) ]]; then
             echo "::set-output name=hotfix_branch_exists::1"
           else
             echo "::set-output name=hotfix_branch_exists::0"
@@ -182,7 +182,7 @@ jobs:
               && needs.setup.outputs.rc_branch_exists == 0
               && needs.setup.outputs.hotfix_branch_exists == 0)
             || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
-            || github.ref == 'refs/heads/hotfix'
+            || github.ref == 'refs/heads/hotfix-rc'
         run: |
           PUBLISHER_PATH="$GITHUB_WORKSPACE/store/google/Publisher/bin/Release/netcoreapp2.0/Publisher.dll"
           CREDS_PATH="$HOME/secrets/play_creds.json"
@@ -514,7 +514,7 @@ jobs:
               && needs.setup.outputs.rc_branch_exists == 0
               && needs.setup.outputs.hotfix_branch_exists == 0)
             || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
-            || github.ref == 'refs/heads/hotfix'
+            || github.ref == 'refs/heads/hotfix-rc'
         uses: actions/setup-node@v2
         with:
           node-version: '14'
@@ -526,7 +526,7 @@ jobs:
               && needs.setup.outputs.rc_branch_exists == 0
               && needs.setup.outputs.hotfix_branch_exists == 0)
             || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
-            || github.ref == 'refs/heads/hotfix'
+            || github.ref == 'refs/heads/hotfix-rc'
         env:
           APPCENTER_IOS_TOKEN: ${{ steps.retrieve-secrets.outputs.appcenter-ios-token }}
         run: |
@@ -539,7 +539,7 @@ jobs:
               && needs.setup.outputs.rc_branch_exists == 0
               && needs.setup.outputs.hotfix_branch_exists == 0)
             || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
-            || github.ref == 'refs/heads/hotfix'
+            || github.ref == 'refs/heads/hotfix-rc'
         env:
           APPLE_ID_USERNAME: ${{ secrets.APPLE_ID_USERNAME }}
           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
@@ -602,7 +602,7 @@ jobs:
         if: |
             (github.ref == 'refs/heads/master')
             || (github.ref == 'refs/heads/rc')
-            || (github.ref == 'refs/heads/hotfix')
+            || (github.ref == 'refs/heads/hotfix-rc')
         env:
           CLOC_STATUS: ${{ needs.cloc.result }}
           ANDROID_STATUS: ${{ needs.android.result }}
