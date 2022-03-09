@@ -71,7 +71,7 @@ namespace Bit.iOS.Core.Renderers
                         {
                             try
                             {
-                                uiBarButtonItem.Image = uiBarButtonItem.Image.ImageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal);
+                                uiBarButtonItem.Image = uiBarButtonItem.Image?.ImageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal);
                             }
                             catch (ObjectDisposedException)
                             {

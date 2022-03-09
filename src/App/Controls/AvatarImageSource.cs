@@ -62,6 +62,10 @@ namespace Bit.App.Controls
                 upperData = _data.ToUpper();
                 chars = GetFirstLetters(upperData, 2);
             }
+            else
+            {
+                chars = upperData = _data.ToUpper();
+            }
 
             var bgColor = StringToColor(upperData);
             var textColor = Color.White;
@@ -122,7 +126,7 @@ namespace Bit.App.Controls
             {
                 return data.Substring(0, 2);
             }
-            return null;
+            return data;
         }
 
         private Color StringToColor(string str)
