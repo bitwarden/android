@@ -74,6 +74,12 @@ namespace Bit.Droid
             var appCenterTask = appCenterHelper.InitAsync();
 #endif
 
+            var toplayout = Window?.DecorView?.RootView;
+            if (toplayout != null)
+            {
+                toplayout.FilterTouchesWhenObscured = true;
+            }
+
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             Xamarin.Forms.Forms.Init(this, savedInstanceState);
             _appOptions = GetOptions();
