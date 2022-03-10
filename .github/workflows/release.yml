@@ -12,7 +12,7 @@ on:
         options:
           - Initial Release
           - Redeploy
-          - dry-run
+          - Dry Run
 
 jobs:
   release:
@@ -22,7 +22,7 @@ jobs:
       branch-name: ${{ steps.branch.outputs.branch-name }}
     steps:
       - name: Branch check
-        if: github.event.inputs.release_type != 'dry-run'
+        if: github.event.inputs.release_type != 'Dry Run'
         run: |
           if [[ "$GITHUB_REF" != "refs/heads/rc" ]] && [[ "$GITHUB_REF" != "refs/heads/hotfix-rc" ]]; then
             echo "==================================="
@@ -75,7 +75,7 @@ jobs:
         run: zip -r Bitwarden\ iOS.zip Bitwarden\ iOS
 
       - name: Create release
-        if: github.event.inputs.release_type != 'dry-run'
+        if: github.event.inputs.release_type != 'Dry Run'
         uses: ncipollo/release-action@40bb172bd05f266cf9ba4ff965cb61e9ee5f6d01  # v1.9.0
         with:
           artifacts: "./com.x8bit.bitwarden.aab/com.x8bit.bitwarden.aab,
@@ -171,5 +171,5 @@ jobs:
           cd $GITHUB_WORKSPACE
 
       - name: Deploy to gh-pages
-        if: github.event.inputs.release_type != 'dry-run'
+        if: github.event.inputs.release_type != 'Dry Run'
         run: npm run deploy
