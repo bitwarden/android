@@ -222,6 +222,14 @@
                 Value="{DynamicResource MutedColor}" />
     </Style>
     <Style TargetType="Label"
+           Class="accountlist-title">
+    </Style>
+    <Style TargetType="Label"
+           Class="accountlist-sub">
+        <Setter Property="TextColor"
+                Value="{DynamicResource MutedColor}" />
+    </Style>
+    <Style TargetType="Label"
            ApplyToDerivedTypes="True"
            Class="list-title-icon">
         <Setter Property="FontSize"
