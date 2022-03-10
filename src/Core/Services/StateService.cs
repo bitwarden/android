@@ -48,7 +48,6 @@ namespace Bit.Core.Services
             {
                 return true;
             }
-            await CheckStateAsync();
             return userId == await GetActiveUserIdAsync();
         }
 
@@ -160,8 +159,9 @@ namespace Bit.Core.Services
             await CheckStateAsync();
             await RemoveAccountAsync(userId, userInitiated);
 
-            // If user initiated logout (not vault timeout) find the next user to make active, if any
-            if (userInitiated && _state?.Accounts != null)
+            // If user initiated logout (not vault timeout) and ActiveUserId is null after account removal, find the
+            // next user to make active, if any
+            if (userInitiated && _state?.ActiveUserId == null && _state?.Accounts != null)
             {
                 foreach (var account in _state.Accounts)
                 {
@@ -534,20 +534,18 @@ namespace Bit.Core.Services
             await SaveAccountAsync(account, reconciledOptions);
         }
 
-        public async Task<DateTime?> GetLastFileCacheClearAsync(string userId = null)
+        public async Task<DateTime?> GetLastFileCacheClearAsync()
         {
-            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
-                await GetDefaultStorageOptionsAsync());
+            var options = await GetDefaultStorageOptionsAsync();
             var key = Constants.LastFileCacheClearKey;
-            return await GetValueAsync<DateTime?>(key, reconciledOptions);
+            return await GetValueAsync<DateTime?>(key, options);
         }
 
-        public async Task SetLastFileCacheClearAsync(DateTime? value, string userId = null)
+        public async Task SetLastFileCacheClearAsync(DateTime? value)
         {
-            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
-                await GetDefaultStorageOptionsAsync());
+            var options = await GetDefaultStorageOptionsAsync();
             var key = Constants.LastFileCacheClearKey;
-            await SetValueAsync(key, value, reconciledOptions);
+            await SetValueAsync(key, value, options);
         }
 
         public async Task<PreviousPageInfo> GetPreviousPageInfoAsync(string userId = null)
@@ -1204,6 +1202,11 @@ namespace Bit.Core.Services
 
         private async Task SetValueGloballyAsync<T>(Func<string, string> keyPrefix, T value, StorageOptions options)
         {
+            if (value == null)
+            {
+                // don't remove values globally
+                return;
+            }
             await CheckStateAsync();
             if (_state?.Accounts == null)
             {
@@ -1246,14 +1249,11 @@ namespace Bit.Core.Services
             }
 
             // Storage
-            _state = await GetStateFromStorageAsync();
-            if (_state?.Accounts?.ContainsKey(options.UserId) ?? false)
+            var state = await GetStateFromStorageAsync();
+            if (state?.Accounts?.ContainsKey(options.UserId) ?? false)
             {
-                if (_state.Accounts[options.UserId].VolatileData == null)
-                {
-                    _state.Accounts[options.UserId].VolatileData = new Account.AccountVolatileData();
-                }
-                return _state.Accounts[options.UserId];
+                state.Accounts[options.UserId].VolatileData = new Account.AccountVolatileData();
+                return state.Accounts[options.UserId];
             }
 
             return null;
@@ -1321,8 +1321,7 @@ namespace Bit.Core.Services
                 {
                     _state.Accounts[userId].Tokens.AccessToken = null;
                     _state.Accounts[userId].Tokens.RefreshToken = null;
-                    _state.Accounts[userId].VolatileData.Key = null;
-                    _state.Accounts[userId].VolatileData.BiometricLocked = null;
+                    _state.Accounts[userId].VolatileData = null;
                 }
             }
             if (userInitiated && _state?.ActiveUserId == userId)
@@ -1366,7 +1365,6 @@ namespace Bit.Core.Services
             await SetOrgKeysEncryptedAsync(null, userId);
             await SetPrivateKeyEncryptedAsync(null, userId);
             await SetLastActiveTimeAsync(null, userId);
-            await SetLastFileCacheClearAsync(null, userId);
             await SetPreviousPageInfoAsync(null, userId);
             await SetInvalidUnlockAttemptsAsync(null, userId);
             await SetLocalDataAsync(null, userId);
