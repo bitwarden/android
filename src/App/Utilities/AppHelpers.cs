@@ -502,41 +502,25 @@ namespace Bit.App.Utilities
 
         public static async Task LogOutAsync(string userId, bool userInitiated = false)
         {
-            var tokenService = ServiceContainer.Resolve<ITokenService>("tokenService");
-            var cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
-            var settingsService = ServiceContainer.Resolve<ISettingsService>("settingsService");
-            var cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
-            var folderService = ServiceContainer.Resolve<IFolderService>("folderService");
-            var collectionService = ServiceContainer.Resolve<ICollectionService>("collectionService");
-            var passwordGenerationService = ServiceContainer.Resolve<IPasswordGenerationService>(
-                "passwordGenerationService");
-            var vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             var stateService = ServiceContainer.Resolve<IStateService>("stateService");
-            var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
-            var policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
-            var searchService = ServiceContainer.Resolve<ISearchService>("searchService");
+            var vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
 
             var isActiveAccount = await stateService.IsActiveAccountAsync(userId);
+
+            var isAccountRemoval = await vaultTimeoutService.IsLoggedOutByTimeoutAsync(userId) ||
+                                   await vaultTimeoutService.ShouldLogOutByTimeoutAsync(userId);
 
             if (userId == null)
             {
                 userId = await stateService.GetActiveUserIdAsync();
             }
 
-            await Task.WhenAll(
-                cipherService.ClearAsync(userId),
-                folderService.ClearAsync(userId),
-                collectionService.ClearAsync(userId),
-                passwordGenerationService.ClearAsync(userId),
-                deviceActionService.ClearCacheAsync(),
-                tokenService.ClearTokenAsync(userId),
-                cryptoService.ClearKeysAsync(userId),
-                settingsService.ClearAsync(userId),
-                vaultTimeoutService.ClearAsync(userId),
-                policyService.ClearAsync(userId),
-                stateService.LogoutAccountAsync(userId, userInitiated));
+            await stateService.LogoutAccountAsync(userId, userInitiated);
 
-            searchService.ClearIndex();
+            if (isActiveAccount)
+            {
+                await ClearServiceCacheAsync();
+            }
 
             if (!userInitiated)
             {
@@ -558,8 +542,7 @@ namespace Bit.App.Utilities
             if (!isActiveAccount)
             {
                 var platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
-                if (await vaultTimeoutService.IsLoggedOutByTimeoutAsync(userId) ||
-                    await vaultTimeoutService.ShouldLogOutByTimeoutAsync())
+                if (isAccountRemoval)
                 {
                     platformUtilsService.ShowToast("info", null, AppResources.AccountRemovedSuccessfully);
                     return;
@@ -571,6 +554,12 @@ namespace Bit.App.Utilities
         public static async Task OnAccountSwitchAsync()
         {
             var environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
+            await environmentService.SetUrlsFromStorageAsync();
+            await ClearServiceCacheAsync();
+        }
+
+        public static async Task ClearServiceCacheAsync()
+        {
             var tokenService = ServiceContainer.Resolve<ITokenService>("tokenService");
             var cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
             var settingsService = ServiceContainer.Resolve<ISettingsService>("settingsService");
@@ -583,8 +572,6 @@ namespace Bit.App.Utilities
             var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             var policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
             var searchService = ServiceContainer.Resolve<ISearchService>("searchService");
-
-            await environmentService.SetUrlsFromStorageAsync();
 
             await Task.WhenAll(
                 cipherService.ClearCacheAsync(),
