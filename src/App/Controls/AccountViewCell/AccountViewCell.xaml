@@ -59,26 +59,26 @@
                     Grid.Row="0"
                     Text="{Binding AccountView.Email}"
                     IsVisible="{Binding IsActive}"
-                    StyleClass="list-title"
+                    StyleClass="accountlist-title, accountlist-title-platform"
                     LineBreakMode="TailTruncation" />
                 <Label
                     Grid.Row="0"
                     Text="{Binding AccountView.Email}"
                     IsVisible="{Binding IsActive, Converter={StaticResource inverseBool}}"
-                    StyleClass="list-title"
+                    StyleClass="accountlist-title, accountlist-title-platform"
                     TextColor="{DynamicResource MutedColor}"
                     LineBreakMode="TailTruncation" />
                 <Label
                     Grid.Row="1"
                     IsVisible="{Binding ShowHostname}"
                     Text="{Binding AccountView.Hostname}"
-                    StyleClass="list-sub"
+                    StyleClass="accountlist-sub, accountlist-sub-platform"
                     LineBreakMode="TailTruncation" />
                 <Label
                     Grid.Row="2"
                     Text="{u:I18n AccountUnlocked}"
                     IsVisible="{Binding IsUnlockedAndNotActive}"
-                    StyleClass="list-sub"
+                    StyleClass="accountlist-sub, accountlist-sub-platform"
                     FontAttributes="Italic"
                     TextTransform="Lowercase"
                     LineBreakMode="TailTruncation" />
@@ -86,7 +86,7 @@
                     Grid.Row="2"
                     Text="{u:I18n AccountLocked}"
                     IsVisible="{Binding IsLockedAndNotActive}"
-                    StyleClass="list-sub"
+                    StyleClass="accountlist-sub, accountlist-sub-platform"
                     FontAttributes="Italic"
                     TextTransform="Lowercase"
                     LineBreakMode="TailTruncation" />
@@ -94,7 +94,7 @@
                     Grid.Row="2"
                     Text="{u:I18n AccountLoggedOut}"
                     IsVisible="{Binding IsLoggedOutAndNotActive}"
-                    StyleClass="list-sub"
+                    StyleClass="accountlist-sub, accountlist-sub-platform"
                     FontAttributes="Italic"
                     TextTransform="Lowercase"
                     LineBreakMode="TailTruncation" />
@@ -144,7 +144,7 @@
                 AutomationProperties.IsInAccessibleTree="False" />
             <Label
                 Text="{u:I18n AddAccount}"
-                StyleClass="list-title"
+                StyleClass="accountlist-title, accountlist-title-platform"
                 LineBreakMode="TailTruncation"
                 VerticalOptions="Center"
                 Grid.Column="1" />
