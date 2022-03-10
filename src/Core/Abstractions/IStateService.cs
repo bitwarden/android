@@ -63,8 +63,8 @@ namespace Bit.Core.Abstractions
         Task SetVaultTimeoutAsync(int? value, string userId = null);
         Task<VaultTimeoutAction?> GetVaultTimeoutActionAsync(string userId = null);
         Task SetVaultTimeoutActionAsync(VaultTimeoutAction? value, string userId = null);
-        Task<DateTime?> GetLastFileCacheClearAsync(string userId = null);
-        Task SetLastFileCacheClearAsync(DateTime? value, string userId = null);
+        Task<DateTime?> GetLastFileCacheClearAsync();
+        Task SetLastFileCacheClearAsync(DateTime? value);
         Task<PreviousPageInfo> GetPreviousPageInfoAsync(string userId = null);
         Task SetPreviousPageInfoAsync(PreviousPageInfo value, string userId = null);
         Task<int> GetInvalidUnlockAttemptsAsync(string userId = null);
