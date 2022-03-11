@@ -2119,6 +2119,15 @@
   <data name="AccountSwitchedAutomatically" xml:space="preserve">
     <value>Vaihdettu seuraavaan käytettävissä olevaan tiliin</value>
   </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>Tili lukittu</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>Tilin uloskirjaus onnistui</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>Tilin poisto onnistui</value>
+  </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Poista tili</value>
   </data>

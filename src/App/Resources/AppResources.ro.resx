@@ -2119,6 +2119,15 @@
   <data name="AccountSwitchedAutomatically" xml:space="preserve">
     <value>Comutat la următorul cont disponibil</value>
   </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>Cont blocat</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>Contul s-a deconectat cu succes</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>Cont eliminat cu succes</value>
+  </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Ștergere cont</value>
   </data>

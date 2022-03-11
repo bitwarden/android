@@ -2119,6 +2119,15 @@
   <data name="AccountSwitchedAutomatically" xml:space="preserve">
     <value>Vahetati järgmise saadaoleva konto peale</value>
   </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>Kasutajakonto on lukus</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>Konto on edukalt välja logitud</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>Konto on edukalt eemaldatud</value>
+  </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Kustuta konto</value>
   </data>

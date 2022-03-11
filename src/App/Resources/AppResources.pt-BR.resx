@@ -1162,7 +1162,7 @@
     <value>Serviço de Acessibilidade de Autopreenchimento</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>O serviço de autopreenchimento do Bitwarden utiliza a Estrutura de Autopreenchimento do Android para ajudar no preenchimento de credenciais, cartões de crédito, e informação de identidade em outros aplicativos do seu dispositivo.</value>
+    <value>O serviço de autopreenchimento do Bitwarden usa a Estrutura de Preenchimento Automático do Android para auxiliar no preenchimento de credenciais em outros aplicativos no seu dispositivo.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
     <value>Use o serviço de acessibilidade do bitwarden para preencher automaticamente suas credenciais.</value>
@@ -2119,6 +2119,15 @@
   </data>
   <data name="AccountSwitchedAutomatically" xml:space="preserve">
     <value>Alterada para a próxima conta disponível</value>
+  </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>Conta Bloqueada</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>Conta desconectada com sucesso</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>Conta removida com sucesso</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Excluir Conta</value>

@@ -2119,6 +2119,15 @@
   <data name="AccountSwitchedAutomatically" xml:space="preserve">
     <value>已切換到下一個可用的帳戶</value>
   </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>帳戶已鎖定</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>帳戶已成功登出</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>帳戶已成功移除</value>
+  </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>刪除帳戶</value>
   </data>

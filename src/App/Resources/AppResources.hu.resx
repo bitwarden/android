@@ -2119,6 +2119,15 @@
   <data name="AccountSwitchedAutomatically" xml:space="preserve">
     <value>Megtörtént az átkapcsolás a következő elérhető fiókra.</value>
   </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>A fiók lezárásra került.</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>A fiókból kijelentkezés sikeres volt.</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>A fiók eltávolítása sikeres volt.</value>
+  </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Fiók törlése</value>
   </data>
