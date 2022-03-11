@@ -2119,6 +2119,15 @@
   <data name="AccountSwitchedAutomatically" xml:space="preserve">
     <value>Переключено на следующую доступную учетную запись</value>
   </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>Учетная запись заблокирована</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>Вы успешно вышли из учетной записи</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>Учетная запись успешно удалена</value>
+  </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Удалить аккаунт</value>
   </data>

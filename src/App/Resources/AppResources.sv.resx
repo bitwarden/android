@@ -1162,10 +1162,10 @@
     <value>Tillgänglighetstjänst för automatisk ifyllnad</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>Bitwardens tillgänglighetstjänst för automatisk ifyllnad använder Android Autofill Framework för att assistera med att fylla i inloggningar, kreditkort och identitetsinformation inuti andra appar på din enhet.</value>
+    <value>The Bitwarden auto-fill service uses the Android Autofill Framework to assist in filling login information into other apps on your device.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Använd Bitwardens tillgänglighetstjänst för att automatiskt fylla i inloggningar, kreditkort och identitetsinformation inuti andra appar.</value>
+    <value>Use the Bitwarden auto-fill service to fill login information into other apps.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Öppna inställningar för automatisk ifyllnad</value>
@@ -2119,6 +2119,15 @@
   </data>
   <data name="AccountSwitchedAutomatically" xml:space="preserve">
     <value>Switched to next available account</value>
+  </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>Account Locked</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>Account logged out successfully</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>Account removed successfully</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Radera konto</value>

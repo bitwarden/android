@@ -2119,6 +2119,15 @@
   <data name="AccountSwitchedAutomatically" xml:space="preserve">
     <value>Prepnuté na ďalší dostupný účet</value>
   </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>Zamknutý účet</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>Účet bol úspešne odhlásený</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>Účet bol úspešne odstránený</value>
+  </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Odstrániť účet</value>
   </data>

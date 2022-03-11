@@ -2119,6 +2119,15 @@
   <data name="AccountSwitchedAutomatically" xml:space="preserve">
     <value>Pārslēdzās uz nākamo pieejamo kontu</value>
   </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>Konts ir slēgts</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>Izrakstīšanās no konta bija veiksmīga</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>Konts tika veiksmīgi noņemts</value>
+  </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Dzēst kontu</value>
   </data>

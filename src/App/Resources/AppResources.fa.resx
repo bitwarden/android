@@ -2120,6 +2120,15 @@
   <data name="AccountSwitchedAutomatically" xml:space="preserve">
     <value>به حساب بعدی موجود تغییر کرد</value>
   </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>حساب قفل شده است</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>حساب کاربری با موفقیت خارج شد</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>حساب کاربری با موفقیت حذف شد</value>
+  </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>حذف حساب</value>
   </data>

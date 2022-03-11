@@ -2119,6 +2119,15 @@
   <data name="AccountSwitchedAutomatically" xml:space="preserve">
     <value>次の利用可能なアカウントに切り替えました</value>
   </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>アカウントをロックしました</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>ログアウトしました</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>アカウントを削除しました</value>
+  </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>アカウントの削除</value>
   </data>

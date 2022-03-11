@@ -2119,6 +2119,15 @@
   <data name="AccountSwitchedAutomatically" xml:space="preserve">
     <value>Zum nächsten verfügbaren Konto gewechselt</value>
   </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>Konto gesperrt</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>Konto erfolgreich abgemeldet</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>Konto erfolgreich gelöscht</value>
+  </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Konto löschen</value>
   </data>

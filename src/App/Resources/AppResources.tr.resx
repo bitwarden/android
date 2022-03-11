@@ -2119,6 +2119,15 @@
   <data name="AccountSwitchedAutomatically" xml:space="preserve">
     <value>Bir sonraki hesaba geçildi</value>
   </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>Hesap kilitlendi</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>Başarıyla çıkış yapıldı</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>Hesap başarıyla kaldırıldı</value>
+  </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Hesabı sil</value>
   </data>
