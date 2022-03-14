@@ -10,6 +10,7 @@ using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
 using Xamarin.Forms;
 using ZXing.Client.Result;
+using Xamarin.CommunityToolkit.ObjectModel;
 
 namespace Bit.App.Pages
 {
@@ -79,11 +80,11 @@ namespace Bit.App.Pages
             _keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
             _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
 
-            GroupedItems = new ExtendedObservableCollection<SettingsPageListGroup>();
+            GroupedItems = new ObservableRangeCollection<SettingsPageListGroup>();
             PageTitle = AppResources.Settings;
         }
 
-        public ExtendedObservableCollection<SettingsPageListGroup> GroupedItems { get; set; }
+        public ObservableRangeCollection<SettingsPageListGroup> GroupedItems { get; set; }
 
         public async Task InitAsync()
         {
@@ -400,6 +401,8 @@ namespace Bit.App.Pages
 
         public void BuildList()
         {
+            GroupedItems.Clear();
+
             var doUpper = Device.RuntimePlatform != Device.Android;
             var autofillItems = new List<SettingsPageListItem>();
             if (Device.RuntimePlatform == Device.Android)
@@ -501,7 +504,7 @@ namespace Bit.App.Pages
                 new SettingsPageListItem { Name = AppResources.RateTheApp },
                 new SettingsPageListItem { Name = AppResources.DeleteAccount }
             };
-            GroupedItems.ResetWithRange(new List<SettingsPageListGroup>
+            GroupedItems.AddRange(new List<SettingsPageListGroup>
             {
                 new SettingsPageListGroup(autofillItems, AppResources.Autofill, doUpper, true),
                 new SettingsPageListGroup(manageItems, AppResources.Manage, doUpper),
