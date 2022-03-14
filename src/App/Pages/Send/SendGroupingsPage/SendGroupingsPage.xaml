@@ -124,8 +124,7 @@
                                     Spacing="0" Padding="0" VerticalOptions="FillAndExpand"
                                     StyleClass="list-row-header-container, list-row-header-container-platform">
                                     <BoxView
-                                        StyleClass="list-section-separator-top, list-section-separator-top-platform"
-                                        IsVisible="{Binding First, Converter={StaticResource inverseBool}}" />
+                                        StyleClass="list-section-separator-top, list-section-separator-top-platform" />
                                     <StackLayout StyleClass="list-row-header, list-row-header-platform">
                                         <Label
                                             Text="{Binding Name}"
