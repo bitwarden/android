@@ -80,11 +80,11 @@ namespace Bit.App.Pages
             _keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
             _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
 
-            GroupedItems = new ObservableRangeCollection<SettingsPageListGroup>();
+            GroupedItems = new ObservableRangeCollection<ISettingsPageListItem>();
             PageTitle = AppResources.Settings;
         }
 
-        public ObservableRangeCollection<SettingsPageListGroup> GroupedItems { get; set; }
+        public ObservableRangeCollection<ISettingsPageListItem> GroupedItems { get; set; }
 
         public async Task InitAsync()
         {
@@ -401,8 +401,6 @@ namespace Bit.App.Pages
 
         public void BuildList()
         {
-            GroupedItems.Clear();
-
             var doUpper = Device.RuntimePlatform != Device.Android;
             var autofillItems = new List<SettingsPageListItem>();
             if (Device.RuntimePlatform == Device.Android)
@@ -504,7 +502,9 @@ namespace Bit.App.Pages
                 new SettingsPageListItem { Name = AppResources.RateTheApp },
                 new SettingsPageListItem { Name = AppResources.DeleteAccount }
             };
-            GroupedItems.AddRange(new List<SettingsPageListGroup>
+
+            // TODO: improve this. Leaving this as is to reduce error possibility on the hotfix.
+            var settingsListGroupItems = new List<SettingsPageListGroup>()
             {
                 new SettingsPageListGroup(autofillItems, AppResources.Autofill, doUpper, true),
                 new SettingsPageListGroup(manageItems, AppResources.Manage, doUpper),
@@ -512,7 +512,14 @@ namespace Bit.App.Pages
                 new SettingsPageListGroup(accountItems, AppResources.Account, doUpper),
                 new SettingsPageListGroup(toolsItems, AppResources.Tools, doUpper),
                 new SettingsPageListGroup(otherItems, AppResources.Other, doUpper)
-            });
+            };
+            var settingsItems = new List<ISettingsPageListItem>();
+            foreach (var itemGroup in settingsListGroupItems)
+            {
+                settingsItems.Add(new SettingsPageHeaderListItem(itemGroup.Name));
+                settingsItems.AddRange(itemGroup);
+            }
+            GroupedItems.ReplaceRange(settingsItems);
         }
 
         private bool IncludeLinksWithSubscriptionInfo()
