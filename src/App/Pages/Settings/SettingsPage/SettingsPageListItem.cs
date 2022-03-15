@@ -1,12 +1,11 @@
 ﻿using System;
 using Bit.App.Resources;
 using Bit.App.Utilities;
-using System.Collections.Generic;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
-    public class SettingsPageListItem
+    public class SettingsPageListItem : ISettingsPageListItem
     {
         public string Icon { get; set; }
         public string Name { get; set; }
