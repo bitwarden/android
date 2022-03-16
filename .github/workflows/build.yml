@@ -536,7 +536,7 @@ jobs:
         uses: actions/setup-node@9ced9a43a244f3ac94f13bfd896db8c8f30da67a
         with:
           node-version: '14'
-      - run: npm install -g appcenter-cli
+        run: npm install -g appcenter-cli
 
       - name: Upload dSYMs to App Center
         if: |
