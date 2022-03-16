@@ -526,18 +526,13 @@ jobs:
             ./bitwarden-export/dSYMs/*.*
           if-no-files-found: error
 
-      - name: Setup Node
-        if: |
-            (github.ref == 'refs/heads/master'
-              && needs.setup.outputs.rc_branch_exists == 0
-              && needs.setup.outputs.hotfix_branch_exists == 0)
-            || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
-            || github.ref == 'refs/heads/hotfix-rc'
-        uses: actions/setup-node@9ced9a43a244f3ac94f13bfd896db8c8f30da67a
-        with:
-          node-version: '14'
-
       - name: Install AppCenter CLI
+        if: |
+          (github.ref == 'refs/heads/master'
+            && needs.setup.outputs.rc_branch_exists == 0
+            && needs.setup.outputs.hotfix_branch_exists == 0)
+          || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
+          || github.ref == 'refs/heads/hotfix-rc'
         run: npm install -g appcenter-cli
 
       - name: Upload dSYMs to App Center
