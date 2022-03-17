@@ -521,13 +521,36 @@ namespace Bit.App.Pages
                 new SettingsPageListGroup(toolsItems, AppResources.Tools, doUpper),
                 new SettingsPageListGroup(otherItems, AppResources.Other, doUpper)
             };
-            var settingsItems = new List<ISettingsPageListItem>();
-            foreach (var itemGroup in settingsListGroupItems)
+
+            // TODO: refactor this
+            if (Device.RuntimePlatform == Device.Android)
             {
-                settingsItems.Add(new SettingsPageHeaderListItem(itemGroup.Name));
-                settingsItems.AddRange(itemGroup);
+                var items = new List<ISettingsPageListItem>();
+                foreach (var itemGroup in settingsListGroupItems)
+                {
+                    items.Add(new SettingsPageHeaderListItem(itemGroup.Name));
+                    items.AddRange(itemGroup);
+                }
+
+                GroupedItems.ReplaceRange(items);
             }
-            GroupedItems.ReplaceRange(settingsItems);
+            else
+            {
+                Device.InvokeOnMainThreadAsync(async () =>
+                {
+                    // HACK: This waitings are to avoid crash on iOS
+                    GroupedItems.Clear();
+                    await Task.Delay(60);
+
+                    foreach (var itemGroup in settingsListGroupItems)
+                    {
+                        GroupedItems.Add(new SettingsPageHeaderListItem(itemGroup.Name));
+                        await Task.Delay(60);
+
+                        GroupedItems.AddRange(itemGroup);
+                    }
+                }).FireAndForget();
+            }
         }
 
         private bool IncludeLinksWithSubscriptionInfo()

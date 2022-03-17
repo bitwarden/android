@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -65,7 +66,7 @@ namespace Bit.App.Pages
 
             Loading = true;
             PageTitle = AppResources.MyVault;
-            GroupedItems = new ExtendedObservableCollection<GroupingsPageListGroup>();
+            GroupedItems = new ObservableRangeCollection<IGroupingsPageListItem>();
             RefreshCommand = new Command(async () =>
             {
                 Refreshing = true;
@@ -139,7 +140,7 @@ namespace Bit.App.Pages
             get => _websiteIconsEnabled;
             set => SetProperty(ref _websiteIconsEnabled, value);
         }
-        public ExtendedObservableCollection<GroupingsPageListGroup> GroupedItems { get; set; }
+        public ObservableRangeCollection<IGroupingsPageListItem> GroupedItems { get; set; }
         public Command RefreshCommand { get; set; }
         public Command<CipherView> CipherOptionsCommand { get; set; }
         public bool LoadedOnce { get; set; }
@@ -271,12 +272,38 @@ namespace Bit.App.Pages
                     {
                         new GroupingsPageListItem()
                         {
-                            IsTrash = true, 
+                            IsTrash = true,
                             ItemCount = _deletedCount.ToString("N0")
                         }
                     }, AppResources.Trash, _deletedCount, uppercaseGroupNames, false));
                 }
-                GroupedItems.ResetWithRange(groupedItems);
+
+                // TODO: refactor this
+                if (Device.RuntimePlatform == Device.Android)
+                {
+                    var items = new List<IGroupingsPageListItem>();
+                    foreach (var itemGroup in groupedItems)
+                    {
+                        items.Add(new GroupingsPageHeaderListItem(itemGroup.Name, itemGroup.ItemCount));
+                        items.AddRange(itemGroup);
+                    }
+
+                    GroupedItems.ReplaceRange(items);
+                }
+                else
+                {
+                    // HACK: This waitings are to avoid crash on iOS
+                    GroupedItems.Clear();
+                    await Task.Delay(60);
+
+                    foreach (var itemGroup in groupedItems)
+                    {
+                        GroupedItems.Add(new GroupingsPageHeaderListItem(itemGroup.Name, itemGroup.ItemCount));
+                        await Task.Delay(60);
+
+                        GroupedItems.AddRange(itemGroup);
+                    }
+                }
             }
             finally
             {
