@@ -10,6 +10,7 @@ using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using DeviceType = Bit.Core.Enums.DeviceType;
@@ -48,7 +49,7 @@ namespace Bit.App.Pages
 
             Loading = true;
             PageTitle = AppResources.Send;
-            GroupedSends = new ExtendedObservableCollection<SendGroupingsPageListGroup>();
+            GroupedSends = new ObservableRangeCollection<ISendGroupingsPageListItem>();
             RefreshCommand = new Command(async () =>
             {
                 Refreshing = true;
@@ -103,7 +104,7 @@ namespace Bit.App.Pages
             get => _showList;
             set => SetProperty(ref _showList, value);
         }
-        public ExtendedObservableCollection<SendGroupingsPageListGroup> GroupedSends { get; set; }
+        public ObservableRangeCollection<ISendGroupingsPageListItem> GroupedSends { get; set; }
         public Command RefreshCommand { get; set; }
         public Command<SendView> SendOptionsCommand { get; set; }
         public bool LoadedOnce { get; set; }
@@ -175,7 +176,33 @@ namespace Bit.App.Pages
                         MainPage ? AppResources.AllSends : AppResources.Sends, sendsListItems.Count,
                         uppercaseGroupNames, !MainPage));
                 }
-                GroupedSends.ResetWithRange(groupedSends);
+
+                // TODO: refactor this
+                if (Device.RuntimePlatform == Device.Android)
+                {
+                    var items = new List<ISendGroupingsPageListItem>();
+                    foreach (var itemGroup in groupedSends)
+                    {
+                        items.Add(new SendGroupingsPageHeaderListItem(itemGroup.Name, itemGroup.ItemCount));
+                        items.AddRange(itemGroup);
+                    }
+
+                    GroupedSends.ReplaceRange(items);
+                }
+                else
+                {
+                    // HACK: This waitings are to avoid crash on iOS
+                    GroupedSends.Clear();
+                    await Task.Delay(60);
+
+                    foreach (var itemGroup in groupedSends)
+                    {
+                        GroupedSends.Add(new SendGroupingsPageHeaderListItem(itemGroup.Name, itemGroup.ItemCount));
+                        await Task.Delay(60);
+
+                        GroupedSends.AddRange(itemGroup);
+                    }
+                }
             }
             finally
             {
