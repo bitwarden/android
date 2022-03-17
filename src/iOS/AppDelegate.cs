@@ -146,12 +146,7 @@ namespace Bit.iOS
                 {
                     if (_deviceActionService.SystemMajorVersion() >= 12)
                     {
-                        var extras = message.Data as Tuple<string, bool, bool>;
-                        var userId = extras?.Item1;
-                        var userInitiated = extras?.Item2;
-                        var expired = extras?.Item3;
-                        // TODO make specific to userId
-                        // await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
+                        await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
                     }
                 }
                 else if ((message.Command == "softDeletedCipher" || message.Command == "restoredCipher")
@@ -164,9 +159,7 @@ namespace Bit.iOS
                     var timeoutAction = await _stateService.GetVaultTimeoutActionAsync();
                     if (timeoutAction == VaultTimeoutAction.Logout)
                     {
-                        var userId = await _stateService.GetActiveUserIdAsync();
-                        // TODO make specific to userId
-                        // await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
+                        await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
                     }
                     else
                     {

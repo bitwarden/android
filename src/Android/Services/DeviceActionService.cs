@@ -943,5 +943,10 @@ namespace Bit.Droid.Services
             var activity = CrossCurrentActivity.Current?.Activity as MainActivity;
             return activity?.Resources?.Configuration?.FontScale ?? 1;
         }
+        
+        public async Task OnAccountSwitchCompleteAsync()
+        {
+            // for any Android-specific cleanup required after switching accounts
+        }
     }
 }

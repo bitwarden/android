@@ -29,6 +29,8 @@ namespace Bit.App.Services
             Constants.iOSAutoFillBiometricIntegrityKey,
             Constants.iOSExtensionClearCiphersCacheKey,
             Constants.iOSExtensionBiometricIntegrityKey,
+            Constants.iOSShareExtensionClearCiphersCacheKey,
+            Constants.iOSShareExtensionBiometricIntegrityKey,
             Constants.RememberedEmailKey,
             Constants.RememberedOrgIdentifierKey,
         };
