@@ -20,11 +20,13 @@ namespace Bit.iOS.Core.Utilities
                 var timeoutAction = await stateService.GetVaultTimeoutActionAsync();
                 if (timeoutAction == VaultTimeoutAction.Logout)
                 {
+                    await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
                     return;
                 }
                 var vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
                 if (await vaultTimeoutService.IsLockedAsync())
                 {
+                    await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
                     await storageService.SaveAsync(Constants.AutofillNeedsIdentityReplacementKey, true);
                     return;
                 }
@@ -43,7 +45,9 @@ namespace Bit.iOS.Core.Utilities
                 {
                     await ASCredentialIdentityStore.SharedStore?.ReplaceCredentialIdentitiesAsync(identities.ToArray());
                     await storageService.SaveAsync(Constants.AutofillNeedsIdentityReplacementKey, false);
+                    return;
                 }
+                await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
             }
         }
 

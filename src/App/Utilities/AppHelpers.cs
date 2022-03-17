@@ -556,6 +556,8 @@ namespace Bit.App.Utilities
             var environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
             await environmentService.SetUrlsFromStorageAsync();
             await ClearServiceCacheAsync();
+            var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            await deviceActionService.OnAccountSwitchCompleteAsync();
         }
 
         public static async Task ClearServiceCacheAsync()

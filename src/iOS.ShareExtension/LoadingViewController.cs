@@ -31,7 +31,7 @@ namespace Bit.iOS.ShareExtension
         private NFCNdefReaderSession _nfcSession = null;
         private Core.NFCReaderDelegate _nfcDelegate = null;
 
-        readonly LazyResolve<IStateService> _stateService = new LazyResolve<IStateService>("stateervice");
+        readonly LazyResolve<IStateService> _stateService = new LazyResolve<IStateService>("stateService");
         readonly LazyResolve<IVaultTimeoutService> _vaultTimeoutService = new LazyResolve<IVaultTimeoutService>("vaultTimeoutService");
         readonly LazyResolve<IDeviceActionService> _deviceActionService = new LazyResolve<IDeviceActionService>("deviceActionService");
         readonly LazyResolve<IEventService> _eventService = new LazyResolve<IEventService>("eventService");
@@ -215,7 +215,7 @@ namespace Bit.iOS.ShareExtension
             iOSCoreHelpers.RegisterLocalServices();
             var messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             ServiceContainer.Init(_deviceActionService.Value.DeviceUserAgent,
-                Bit.Core.Constants.iOSExtensionClearCiphersCacheKey, Bit.Core.Constants.iOSAllClearCipherCacheKeys);
+                Bit.Core.Constants.iOSShareExtensionClearCiphersCacheKey, Bit.Core.Constants.iOSAllClearCipherCacheKeys);
             if (!_initedAppCenter)
             {
                 iOSCoreHelpers.RegisterAppCenter();
