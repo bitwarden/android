@@ -594,6 +594,11 @@ namespace Bit.iOS.Core.Services
             return scaledHeight / tempHeight;
         }
 
+        public async Task OnAccountSwitchCompleteAsync()
+        {
+            await ASHelpers.ReplaceAllIdentities();
+        }
+
         public class PickerDelegate : UIDocumentPickerDelegate
         {
             private readonly DeviceActionService _deviceActionService;
