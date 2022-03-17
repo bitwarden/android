@@ -23,6 +23,8 @@
         public static string iOSAutoFillBiometricIntegrityKey = "iOSAutoFillBiometricIntegrityState";
         public static string iOSExtensionClearCiphersCacheKey = "iOSExtensionClearCiphersCache";
         public static string iOSExtensionBiometricIntegrityKey = "iOSExtensionBiometricIntegrityState";
+        public static string iOSShareExtensionClearCiphersCacheKey = "iOSShareExtensionClearCiphersCache";
+        public static string iOSShareExtensionBiometricIntegrityKey = "iOSShareExtensionBiometricIntegrityState";
         public static string EventCollectionKey = "eventCollection";
         public static string RememberedEmailKey = "rememberedEmail";
         public static string RememberedOrgIdentifierKey = "rememberedOrgIdentifier";
@@ -39,7 +41,8 @@
         {
             ClearCiphersCacheKey,
             iOSAutoFillClearCiphersCacheKey,
-            iOSExtensionClearCiphersCacheKey
+            iOSExtensionClearCiphersCacheKey,
+            iOSShareExtensionClearCiphersCacheKey
         };
         
         public static string CiphersKey(string userId) => $"ciphers_{userId}";

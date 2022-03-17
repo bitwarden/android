@@ -428,7 +428,7 @@ namespace Bit.App
             });
         }
 
-        private async Task LockedAsync(string userId, bool autoPromptBiometric)
+        private async Task LockedAsync(string userId, bool userInitiated)
         {
             if (!await _stateService.IsActiveAccountAsync(userId))
             {
@@ -436,6 +436,7 @@ namespace Bit.App
                 return;
             }
 
+            var autoPromptBiometric = !userInitiated;
             if (autoPromptBiometric && Device.RuntimePlatform == Device.iOS)
             {
                 var vaultTimeout = await _stateService.GetVaultTimeoutAsync();
