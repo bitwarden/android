@@ -276,16 +276,16 @@
     <value>Segur que voleu tancar la sessió?</value>
   </data>
   <data name="RemoveAccount" xml:space="preserve">
-    <value>Remove Account</value>
+    <value>Suprimeix el compte</value>
   </data>
   <data name="RemoveAccountConfirmation" xml:space="preserve">
-    <value>Are you sure you want to remove this account?</value>
+    <value>Voleu suprimir el compte?</value>
   </data>
   <data name="AccountAlreadyAdded" xml:space="preserve">
-    <value>Account Already Added</value>
+    <value>El compte ja s'ha afegit</value>
   </data>
   <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
-    <value>Would you like to switch to it now?</value>
+    <value>T'agradaria canviar-lo ara?</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Contrasenya mestra</value>
@@ -2105,28 +2105,28 @@
     <value>Una o més polítiques d'organització us impedeixen exportar la vostra caixa forta.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
-    <value>Add Account</value>
+    <value>Afig compte</value>
   </data>
   <data name="AccountUnlocked" xml:space="preserve">
-    <value>Unlocked</value>
+    <value>Desbloquejat</value>
   </data>
   <data name="AccountLocked" xml:space="preserve">
-    <value>Locked</value>
+    <value>Bloquejat</value>
   </data>
   <data name="AccountLoggedOut" xml:space="preserve">
-    <value>Logged Out</value>
+    <value>Sessió tancada</value>
   </data>
   <data name="AccountSwitchedAutomatically" xml:space="preserve">
-    <value>Switched to next available account</value>
+    <value>S'ha canviat al següent compte disponible</value>
   </data>
   <data name="AccountLockedSuccessfully" xml:space="preserve">
-    <value>Account Locked</value>
+    <value>Compte bloquejat</value>
   </data>
   <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
-    <value>Account logged out successfully</value>
+    <value>El compte s'ha tancat correctament</value>
   </data>
   <data name="AccountRemovedSuccessfully" xml:space="preserve">
-    <value>Account removed successfully</value>
+    <value>El compte s'ha suprimit correctament</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Suprimeix el compte</value>

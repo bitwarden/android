@@ -1165,7 +1165,7 @@
     <value>Le service de saisie automatique de Bitwarden utilise l'outil de saisie automatique d'Android pour aider à saisir les identifiants, les cartes de crédit et les informations d'identité dans d'autres applis sur votre appareil.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Utilisez le service d'accessibilité de Bitwarden pour la saisie automatique de vos identifiants.</value>
+    <value>Utilisez le service de remplissage automatique de Bitwarden pour remplir les informations de connexion dans d'autres applications.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Ouvrir les paramètres de remplissage automatique</value>
@@ -1935,7 +1935,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Désactiver ce Send pour que personne ne puisse y accéder.</value>
+    <value>Désactiver cet envoi pour que personne ne puisse y accéder.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
@@ -2123,10 +2123,10 @@
     <value>Compte verrouillé</value>
   </data>
   <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
-    <value>Account logged out successfully</value>
+    <value>Compte déconnecté avec succès</value>
   </data>
   <data name="AccountRemovedSuccessfully" xml:space="preserve">
-    <value>Account removed successfully</value>
+    <value>Compte supprimé avec succès</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Supprimer le compte</value>

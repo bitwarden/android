@@ -276,13 +276,13 @@
     <value>Er du sikker på at du vil logge av?</value>
   </data>
   <data name="RemoveAccount" xml:space="preserve">
-    <value>Remove Account</value>
+    <value>Fjern konto</value>
   </data>
   <data name="RemoveAccountConfirmation" xml:space="preserve">
-    <value>Are you sure you want to remove this account?</value>
+    <value>Er du sikker på at du vil fjerne denne kontoen?</value>
   </data>
   <data name="AccountAlreadyAdded" xml:space="preserve">
-    <value>Account Already Added</value>
+    <value>Kontoen er allerede lagt til</value>
   </data>
   <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
     <value>Would you like to switch to it now?</value>
@@ -2106,13 +2106,13 @@
     <value>En eller flere organisasjonsoppsettsregler hindrer deg i å eksportere ditt personlige hvelv.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
-    <value>Add Account</value>
+    <value>Legg til konto</value>
   </data>
   <data name="AccountUnlocked" xml:space="preserve">
-    <value>Unlocked</value>
+    <value>Ulåst</value>
   </data>
   <data name="AccountLocked" xml:space="preserve">
-    <value>Locked</value>
+    <value>Låst</value>
   </data>
   <data name="AccountLoggedOut" xml:space="preserve">
     <value>Logged Out</value>

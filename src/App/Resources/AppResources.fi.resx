@@ -1538,7 +1538,7 @@
     <value>Oletus (järjestelmä)</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
-    <value>Kopioi muistiinpanot</value>
+    <value>Kopioi merkinnät</value>
   </data>
   <data name="Exit" xml:space="preserve">
     <value>Poistu</value>
@@ -1569,7 +1569,7 @@
     <value>Kun sovellus käynnistetään uudelleen</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>Automaattinen täyttö tekee Bitwarden-holvisi käytöstä sivustoilla ja muissa sovelluksissa helppoa. Näyttää siltä, ettei automaattista täyttöä ole otettu käyttöön. Voit tehdä sen "Asetukset" -näytöstä.</value>
+    <value>Automaattinen täyttö tekee Bitwarden-holvisi käytöstä sivustoilla ja muissa sovelluksissa helppoa. Näyttää siltä, ettei automaattista täyttöä ole otettu käyttöön. Voit tehdä sen "Asetukset" -ruudusta.</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
     <value>Teema vaihtuu kun sovellus käynnistetään uudelleen.</value>
@@ -1931,7 +1931,7 @@
     <value>Salasana on poistettu.</value>
   </data>
   <data name="NotesInfo" xml:space="preserve">
-    <value>Yksityiset muistiinpanot tästä Sendistä.</value>
+    <value>Yksityisiä merkintöjä tästä Sendistä.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
