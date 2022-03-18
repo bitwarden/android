@@ -279,7 +279,9 @@ namespace Bit.App.Pages
                 }
 
                 // TODO: refactor this
-                if (Device.RuntimePlatform == Device.Android)
+                if (Device.RuntimePlatform == Device.Android
+                    ||
+                    GroupedItems.Any())
                 {
                     var items = new List<IGroupingsPageListItem>();
                     foreach (var itemGroup in groupedItems)
@@ -292,16 +294,30 @@ namespace Bit.App.Pages
                 }
                 else
                 {
-                    // HACK: This waitings are to avoid crash on iOS
-                    GroupedItems.Clear();
-                    await Task.Delay(60);
-
+                    // HACK: we need this on iOS, so that it doesn't crash when adding coming from an empty list
+                    var first = true;
+                    var items = new List<IGroupingsPageListItem>();
                     foreach (var itemGroup in groupedItems)
                     {
-                        GroupedItems.Add(new GroupingsPageHeaderListItem(itemGroup.Name, itemGroup.ItemCount));
-                        await Task.Delay(60);
+                        if (!first)
+                        {
+                            items.Add(new GroupingsPageHeaderListItem(itemGroup.Name, itemGroup.ItemCount));
+                        }
+                        else
+                        {
+                            first = false;
+                        }
+                        items.AddRange(itemGroup);
+                    }
 
-                        GroupedItems.AddRange(itemGroup);
+                    if (groupedItems.Any())
+                    {
+                        GroupedItems.ReplaceRange(new List<IGroupingsPageListItem> { new GroupingsPageHeaderListItem(groupedItems[0].Name, groupedItems[0].ItemCount) });
+                        GroupedItems.AddRange(items);
+                    }
+                    else
+                    {
+                        GroupedItems.Clear();
                     }
                 }
             }
