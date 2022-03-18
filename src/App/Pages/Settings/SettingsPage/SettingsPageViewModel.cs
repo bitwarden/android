@@ -515,7 +515,9 @@ namespace Bit.App.Pages
             };
 
             // TODO: refactor this
-            if (Device.RuntimePlatform == Device.Android)
+            if (Device.RuntimePlatform == Device.Android
+                ||
+                GroupedItems.Any())
             {
                 var items = new List<ISettingsPageListItem>();
                 foreach (var itemGroup in settingsListGroupItems)
@@ -528,20 +530,31 @@ namespace Bit.App.Pages
             }
             else
             {
-                Device.InvokeOnMainThreadAsync(async () =>
+                // HACK: we need this on iOS, so that it doesn't crash when adding coming from an empty list
+                var first = true;
+                var items = new List<ISettingsPageListItem>();
+                foreach (var itemGroup in settingsListGroupItems)
                 {
-                    // HACK: This waitings are to avoid crash on iOS
-                    GroupedItems.Clear();
-                    await Task.Delay(60);
-
-                    foreach (var itemGroup in settingsListGroupItems)
+                    if (!first)
                     {
-                        GroupedItems.Add(new SettingsPageHeaderListItem(itemGroup.Name));
-                        await Task.Delay(60);
-
-                        GroupedItems.AddRange(itemGroup);
+                        items.Add(new SettingsPageHeaderListItem(itemGroup.Name));
                     }
-                }).FireAndForget();
+                    else
+                    {
+                        first = false;
+                    }
+                    items.AddRange(itemGroup);
+                }
+
+                if (settingsListGroupItems.Any())
+                {
+                    GroupedItems.ReplaceRange(new List<ISettingsPageListItem> { new SettingsPageHeaderListItem(settingsListGroupItems[0].Name) });
+                    GroupedItems.AddRange(items);
+                }
+                else
+                {
+                    GroupedItems.Clear();
+                }
             }
         }
 

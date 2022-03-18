@@ -178,7 +178,9 @@ namespace Bit.App.Pages
                 }
 
                 // TODO: refactor this
-                if (Device.RuntimePlatform == Device.Android)
+                if (Device.RuntimePlatform == Device.Android
+                    ||
+                    GroupedSends.Any())
                 {
                     var items = new List<ISendGroupingsPageListItem>();
                     foreach (var itemGroup in groupedSends)
@@ -191,16 +193,30 @@ namespace Bit.App.Pages
                 }
                 else
                 {
-                    // HACK: This waitings are to avoid crash on iOS
-                    GroupedSends.Clear();
-                    await Task.Delay(60);
-
+                    // HACK: we need this on iOS, so that it doesn't crash when adding coming from an empty list
+                    var first = true;
+                    var items = new List<ISendGroupingsPageListItem>();
                     foreach (var itemGroup in groupedSends)
                     {
-                        GroupedSends.Add(new SendGroupingsPageHeaderListItem(itemGroup.Name, itemGroup.ItemCount));
-                        await Task.Delay(60);
+                        if (!first)
+                        {
+                            items.Add(new SendGroupingsPageHeaderListItem(itemGroup.Name, itemGroup.ItemCount));
+                        }
+                        else
+                        {
+                            first = false;
+                        }
+                        items.AddRange(itemGroup);
+                    }
 
-                        GroupedSends.AddRange(itemGroup);
+                    if (groupedSends.Any())
+                    {
+                        GroupedSends.ReplaceRange(new List<ISendGroupingsPageListItem> { new SendGroupingsPageHeaderListItem(groupedSends[0].Name, groupedSends[0].ItemCount) });
+                        GroupedSends.AddRange(items);
+                    }
+                    else
+                    {
+                        GroupedSends.Clear();
                     }
                 }
             }
