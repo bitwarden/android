@@ -1,7 +1,6 @@
 ﻿using System;
 using Bit.Core.Abstractions;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Bit.Core.Enums;
@@ -9,7 +8,6 @@ using Bit.Core.Models.Data;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
-using Newtonsoft.Json;
 
 namespace Bit.Core.Services
 {
@@ -1183,20 +1181,16 @@ namespace Bit.Core.Services
 
         private async Task<T> GetValueAsync<T>(string key, StorageOptions options)
         {
-            var value = await GetStorageService(options).GetAsync<T>(key);
-            Log("GET", options, key, JsonConvert.SerializeObject(value));
-            return value;
+            return await GetStorageService(options).GetAsync<T>(key);
         }
 
         private async Task SetValueAsync<T>(string key, T value, StorageOptions options)
         {
             if (value == null)
             {
-                Log("REMOVE", options, key, null);
                 await GetStorageService(options).RemoveAsync(key);
                 return;
             }
-            Log("SET", options, key, JsonConvert.SerializeObject(value));
             await GetStorageService(options).SaveAsync(key, value);
         }
 
@@ -1512,19 +1506,12 @@ namespace Bit.Core.Services
 
         private async Task<State> GetStateFromStorageAsync()
         {
-            var state = await _storageService.GetAsync<State>(Constants.StateKey);
-            // TODO Remove logging once all bugs are squished
-            Debug.WriteLine(JsonConvert.SerializeObject(state, Formatting.Indented),
-                ">>> GetStateFromStorageAsync()");
-            return state;
+            return await _storageService.GetAsync<State>(Constants.StateKey);
         }
 
         private async Task SaveStateToStorageAsync(State state)
         {
             await _storageService.SaveAsync(Constants.StateKey, state);
-            // TODO Remove logging once all bugs are squished
-            Debug.WriteLine(JsonConvert.SerializeObject(state, Formatting.Indented),
-                ">>> SaveStateToStorageAsync()");
         }
 
         private async Task CheckStateAsync()
@@ -1566,18 +1553,6 @@ namespace Bit.Core.Services
                 }
             }
             throw new Exception("User does not exist in account list");
-        }
-
-        private void Log(string tag, StorageOptions options, string key, string value)
-        {
-            // TODO Remove this once all bugs are squished
-            var text = options?.UseSecureStorage ?? false ? "SECURE / " : "";
-            text += "Key: " + key + " / ";
-            if (value != null)
-            {
-                text += "Value: " + value;
-            }
-            Debug.WriteLine(text, ">>> " + tag);
         }
     }
 }
