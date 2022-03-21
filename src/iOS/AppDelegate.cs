@@ -24,6 +24,8 @@ namespace Bit.iOS
     [Register("AppDelegate")]
     public partial class AppDelegate : FormsApplicationDelegate
     {
+        const int SPLASH_VIEW_TAG = 4321;
+
         private NFCNdefReaderSession _nfcSession = null;
         private iOSPushNotificationHandler _pushHandler = null;
         private Core.NFCReaderDelegate _nfcDelegate = null;
@@ -175,7 +177,7 @@ namespace Bit.iOS
         {
             var view = new UIView(UIApplication.SharedApplication.KeyWindow.Frame)
             {
-                Tag = 4321
+                Tag = SPLASH_VIEW_TAG
             };
             var backgroundView = new UIView(UIApplication.SharedApplication.KeyWindow.Frame)
             {
@@ -205,11 +207,9 @@ namespace Bit.iOS
         {
             base.OnActivated(uiApplication);
             UIApplication.SharedApplication.ApplicationIconBadgeNumber = 0;
-            var view = UIApplication.SharedApplication.KeyWindow.ViewWithTag(4321);
-            if (view != null)
-            {
-                view.RemoveFromSuperview();
-            }
+            UIApplication.SharedApplication.KeyWindow?
+                .ViewWithTag(SPLASH_VIEW_TAG)?
+                .RemoveFromSuperview();
 
             ThemeManager.UpdateThemeOnPagesAsync();
         }
