@@ -2120,13 +2120,13 @@
     <value>Prebačeni ste na sljedeći dostupan račun </value>
   </data>
   <data name="AccountLockedSuccessfully" xml:space="preserve">
-    <value>Account Locked</value>
+    <value>Račun zaključan </value>
   </data>
   <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
-    <value>Account logged out successfully</value>
+    <value>Uspješno odjavljeni sa računa </value>
   </data>
   <data name="AccountRemovedSuccessfully" xml:space="preserve">
-    <value>Account removed successfully</value>
+    <value>Račun je uspješno uklonjen</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Obriši račun</value>

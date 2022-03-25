@@ -1428,7 +1428,7 @@
     <value>Počet slov</value>
   </data>
   <data name="Passphrase" xml:space="preserve">
-    <value>Heslo</value>
+    <value>Prístupová fráza</value>
   </data>
   <data name="WordSeparator" xml:space="preserve">
     <value>Oddeľovač slov</value>

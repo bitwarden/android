@@ -1299,7 +1299,7 @@
     <value>1. Gehe in die iOS Einstellungen</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Drücke "Passwörter &amp; Accounts"</value>
+    <value>2. Tippe auf "Passwörter"</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
     <value>3. Tippe auf "Automatisch ausfüllen"</value>

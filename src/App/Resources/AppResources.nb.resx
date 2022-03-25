@@ -1299,7 +1299,7 @@
     <value>1. Gå til iOS-appen «Innstillinger»</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Trykk på «Passord og kontoer»</value>
+    <value>2. Trykk på "Passord og kontoer"</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
     <value>3. Trykk «Autoutfyll passord»</value>
