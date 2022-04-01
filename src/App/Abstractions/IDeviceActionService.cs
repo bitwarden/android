@@ -35,6 +35,7 @@ namespace Bit.App.Abstractions
         void Background();
         bool AutofillAccessibilityServiceRunning();
         bool AutofillAccessibilityOverlayPermitted();
+        bool HasAutofillService();
         bool AutofillServiceEnabled();
         void DisableAutofillService();
         bool AutofillServicesEnabled();

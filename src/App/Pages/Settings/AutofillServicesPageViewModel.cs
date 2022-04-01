@@ -192,7 +192,8 @@ namespace Bit.App.Pages
         
         public void UpdateEnabled()
         {
-            AutofillServiceToggled = _deviceActionService.AutofillServiceEnabled();
+            AutofillServiceToggled =
+                _deviceActionService.HasAutofillService() && _deviceActionService.AutofillServiceEnabled();
             AccessibilityToggled = _deviceActionService.AutofillAccessibilityServiceRunning();
             DrawOverToggled = _deviceActionService.AutofillAccessibilityOverlayPermitted();
         }

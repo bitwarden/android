@@ -43,23 +43,22 @@ namespace Bit.Droid.Services
 
         public Task<bool> ValidateIntegrityAsync(string bioIntegrityKey = null)
         {
-            // bioIntegrityKey used in iOS only
             if (Build.VERSION.SdkInt < BuildVersionCodes.M)
-            {
-                return Task.FromResult(true);
-            }
-
-            _keystore.Load(null);
-            IKey key = _keystore.GetKey(KeyName, null);
-            Cipher cipher = Cipher.GetInstance(Transformation);
-
-            if (key == null || cipher == null)
             {
                 return Task.FromResult(true);
             }
 
             try
             {
+                _keystore.Load(null);
+                var key = _keystore.GetKey(KeyName, null);
+                var cipher = Cipher.GetInstance(Transformation);
+
+                if (key == null || cipher == null)
+                {
+                    return Task.FromResult(true);
+                }
+
                 cipher.Init(CipherMode.EncryptMode, key);
             }
             catch (KeyPermanentlyInvalidatedException e)
