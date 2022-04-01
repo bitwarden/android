@@ -1299,7 +1299,7 @@
     <value>1. Siirry iOS:n "Asetukset" -sovellukseen</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Napauta "Salasanat ja tilit"</value>
+    <value>2. Napauta "Salasanat"</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
     <value>3. Napauta "Täytä salasanat automaattisesti"</value>
