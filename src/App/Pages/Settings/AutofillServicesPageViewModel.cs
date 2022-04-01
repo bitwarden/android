@@ -4,7 +4,6 @@ using Bit.App.Resources;
 using Bit.App.Services;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
-using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
@@ -194,7 +193,7 @@ namespace Bit.App.Pages
         public void UpdateEnabled()
         {
             AutofillServiceToggled =
-                Device.RuntimePlatform == Device.Android && _deviceActionService.AutofillServiceEnabled();
+                _deviceActionService.HasAutofillService() && _deviceActionService.AutofillServiceEnabled();
             AccessibilityToggled = _deviceActionService.AutofillAccessibilityServiceRunning();
             DrawOverToggled = _deviceActionService.AutofillAccessibilityOverlayPermitted();
         }

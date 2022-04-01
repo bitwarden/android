@@ -734,6 +734,11 @@ namespace Bit.Droid.Services
             return Accessibility.AccessibilityHelpers.OverlayPermitted();
         }
 
+        public bool HasAutofillService()
+        {
+            return true;
+        }
+
         public void OpenAccessibilityOverlayPermissionSettings()
         {
             var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
