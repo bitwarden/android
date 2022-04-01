@@ -674,7 +674,7 @@ namespace Bit.Droid.Services
             else
             {
                 var data = new Intent();
-                if (cipher == null)
+                if (cipher?.Login == null)
                 {
                     data.PutExtra("canceled", "true");
                 }

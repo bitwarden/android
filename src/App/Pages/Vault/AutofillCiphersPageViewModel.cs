@@ -66,9 +66,9 @@ namespace Bit.App.Pages
         public void Init(AppOptions appOptions)
         {
             _appOptions = appOptions;
-            Uri = appOptions.Uri;
+            Uri = appOptions?.Uri;
             string name = null;
-            if (Uri.StartsWith(Constants.AndroidAppProtocol))
+            if (Uri?.StartsWith(Constants.AndroidAppProtocol) ?? false)
             {
                 name = Uri.Substring(Constants.AndroidAppProtocol.Length);
             }
