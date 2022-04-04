@@ -56,7 +56,8 @@
                                 x:Name="_email"
                                 Text="{Binding Email}"
                                 Keyboard="Email"
-                                StyleClass="box-value">
+                                StyleClass="box-value"
+                                AutomationId="email_input">
                                 <VisualStateManager.VisualStateGroups>
                                     <VisualStateGroup x:Name="CommonStates">
                                         <VisualState x:Name="Disabled">
@@ -92,7 +93,8 @@
                                 Grid.Row="1"
                                 Grid.Column="0"
                                 ReturnType="Go"
-                                ReturnCommand="{Binding LogInCommand}" />
+                                ReturnCommand="{Binding LogInCommand}"
+                                AutomationId="password_input"/>
                             <controls:IconButton
                                 StyleClass="box-row-button, box-row-button-platform"
                                 Text="{Binding ShowPasswordIcon}"
@@ -107,10 +109,12 @@
                     <StackLayout Padding="10, 0">
                         <Button Text="{u:I18n LogIn}" 
                                 StyleClass="btn-primary"
-                                Clicked="LogIn_Clicked" />
+                                Clicked="LogIn_Clicked"
+                                AutomationId="loginpage_login_button"/>
                         <Button Text="{u:I18n Cancel}"
                                 IsVisible="{Binding ShowCancelButton}"
-                                Clicked="Cancel_Clicked" />
+                                Clicked="Cancel_Clicked"
+                                AutomationId="cancel_button"/>
                     </StackLayout>
                 </StackLayout>
             </ScrollView>

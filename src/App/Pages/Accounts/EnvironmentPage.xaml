@@ -14,7 +14,7 @@
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="{u:I18n Cancel}" Clicked="Close_Clicked" Order="Primary" Priority="-1" />
-        <ToolbarItem Text="{u:I18n Save}" Clicked="Submit_Clicked" />
+        <ToolbarItem Text="{u:I18n Save}" Clicked="Submit_Clicked" AutomationId="save_button"/>
     </ContentPage.ToolbarItems>
 
     <ScrollView>
@@ -34,7 +34,8 @@
                         Placeholder="ex. https://bitwarden.company.com"
                         StyleClass="box-value"
                         ReturnType="Go"
-                        ReturnCommand="{Binding SubmitCommand}" />
+                        ReturnCommand="{Binding SubmitCommand}"
+                        AutomationId="server_input"/>
                 </StackLayout>
                 <Label
                     Text="{u:I18n SelfHostedEnvironmentFooter}"

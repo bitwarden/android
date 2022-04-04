@@ -23,7 +23,7 @@
             Priority="-1"
             UseOriginalImage="True"
             AutomationProperties.IsInAccessibleTree="True"
-            AutomationProperties.Name="{u:I18n Account}" />
+            AutomationProperties.Name="{u:I18n Account}"/>
         <ToolbarItem
             Icon="cog_environment.png" Clicked="Environment_Clicked" Order="Primary"
             AutomationProperties.IsInAccessibleTree="True"
@@ -37,15 +37,18 @@
                     <Image
                         x:Name="_logo"
                         Source="logo.png"
-                        VerticalOptions="Center" />
+                        VerticalOptions="Center"
+                        AutomationId="logo_image"
+                        />
                     <Label Text="{u:I18n LoginOrCreateNewAccount}"
                            StyleClass="text-lg"
-                           HorizontalTextAlignment="Center">
-                    </Label>
+                           HorizontalTextAlignment="Center"/>
+
                     <StackLayout Spacing="5">
                         <Button Text="{u:I18n LogIn}"
                                 StyleClass="btn-primary"
-                                Clicked="LogIn_Clicked" />
+                                Clicked="LogIn_Clicked"
+                                AutomationId="homepage_login_button"/>
                         <Button Text="{u:I18n CreateAccount}"
                                 Clicked="Register_Clicked" />
                         <Button Text="{u:I18n LogInSso}"
