@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{23FB637B-1705-485F-9464-078FCAF361A8}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Bit.UiTests</RootNamespace>
+    <AssemblyName>UiTests</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+    <LangVersion>9.0</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+
+  <ItemGroup>
+
+    <PackageReference Include="Xamarin.UITest" Version="3.2.6" />
+    <PackageReference Include="NUnit" Version="3.13.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Categories\SmokeTest.cs" />
+    <Compile Include="Extensions\IAppExtension.cs" />
+    <Compile Include="Setup\SimulatorManager\InstrumentsRunner.cs" />
+    <Compile Include="Setup\SimulatorManager\IosSimulatorsManager.cs" />
+    <Compile Include="Setup\SimulatorManager\Simulator.cs" />
+    <Compile Include="Setup\AppManager.cs" />
+    <Compile Include="Setup\BasePage.cs" />
+    <Compile Include="Setup\BaseTestFixture.cs" />
+    <Compile Include="Setup\Csharp9Support.cs" />
+    <Compile Include="Setup\PlatformQuery.cs" />
+    <Compile Include="Helpers\CustomWaitTimes.cs" />
+    <Compile Include="Helpers\AppState.cs" />
+    <Compile Include="Tests\LoginTests.cs" />
+    <Compile Include="Pages\Accounts\EnvironmentPage.cs" />
+    <Compile Include="Pages\Accounts\HomePage.cs" />
+    <Compile Include="Pages\Accounts\LoginPage.cs" />
+    <Compile Include="Pages\TabsPage.cs" />
+    <Compile Include="Pages\ExamplePage.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+</Project>
