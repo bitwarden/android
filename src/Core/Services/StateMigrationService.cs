@@ -92,6 +92,7 @@ namespace Bit.Core.Services
             internal const string SyncOnRefreshKey = "syncOnRefresh";
             internal const string VaultTimeoutKey = "lockOption";
             internal const string VaultTimeoutActionKey = "vaultTimeoutAction";
+            internal const string ScreenshotsAllowedKey = "screenshotsAllowed";
             internal const string LastActiveTimeKey = "lastActiveTime";
             internal const string BiometricUnlockKey = "fingerprintUnlock";
             internal const string ProtectedPin = "protectedPin";
@@ -188,12 +189,14 @@ namespace Bit.Core.Services
             var environmentUrls = await GetValueAsync<EnvironmentUrlData>(Storage.Prefs, V2Keys.EnvironmentUrlsKey);
             var vaultTimeout = await GetValueAsync<int?>(Storage.Prefs, V2Keys.VaultTimeoutKey);
             var vaultTimeoutAction = await GetValueAsync<string>(Storage.Prefs, V2Keys.VaultTimeoutActionKey);
+            var screenshotsAllowed = await GetValueAsync<bool>(Storage.Prefs, V2Keys.ScreenshotsAllowedKey);
             account.Settings = new Account.AccountSettings()
             {
                 EnvironmentUrls = environmentUrls,
                 VaultTimeout = vaultTimeout,
                 VaultTimeoutAction =
                     vaultTimeoutAction == "logout" ? VaultTimeoutAction.Logout : VaultTimeoutAction.Lock,
+                ScreenshotsAllowed = screenshotsAllowed
             };
             var state = new State { Accounts = new Dictionary<string, Account> { [userId] = account } };
             state.ActiveUserId = userId;

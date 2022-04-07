@@ -948,5 +948,18 @@ namespace Bit.Droid.Services
         {
             // for any Android-specific cleanup required after switching accounts
         }
+
+        public async Task SetSecureFlagAsync()
+        {
+            if (CoreHelpers.InDebugMode()) return;
+
+            var activity = CrossCurrentActivity.Current?.Activity;
+            if (await _stateService.GetScreenshotsAllowedAsync() ?? false)
+            {
+                activity.Window.ClearFlags(WindowManagerFlags.Secure);
+                return;
+            }
+            activity.Window.AddFlags(WindowManagerFlags.Secure);
+        }
     }
 }

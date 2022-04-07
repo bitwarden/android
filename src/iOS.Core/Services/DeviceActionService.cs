@@ -599,6 +599,12 @@ namespace Bit.iOS.Core.Services
             await ASHelpers.ReplaceAllIdentities();
         }
 
+        public Task SetSecureFlagAsync()
+        {
+            // only used by Android
+            return Task.CompletedTask;
+        }
+
         public class PickerDelegate : UIDocumentPickerDelegate
         {
             private readonly DeviceActionService _deviceActionService;

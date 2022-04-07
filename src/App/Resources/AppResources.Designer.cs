@@ -1102,10 +1102,19 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("TouchID", resourceCulture);
             }
         }
-        
-        public static string TwoStepLogin {
+
+        public static string TwoStepLogin
+        {
             get {
                 return ResourceManager.GetString("TwoStepLogin", resourceCulture);
+            }
+        }
+
+        public static string AllowScreenshots
+        {
+            get {
+                //TODO: insert string "Allow Screenshots" in resources and remove condition from the next line of code
+                return ResourceManager.GetString("AllowScreenshots", resourceCulture)?? "Allow Screenshots";
             }
         }
         

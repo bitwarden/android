@@ -167,6 +167,10 @@ namespace Bit.App.Pages
             {
                 await _vm.UpdatePinAsync();
             }
+            else if (item.Name == AppResources.AllowScreenshots)
+            {
+                await _vm.UpdateScreenshotsAllowed();
+            }
             else
             {
                 var biometricName = AppResources.Biometrics;

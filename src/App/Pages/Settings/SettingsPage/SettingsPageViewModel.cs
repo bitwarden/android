@@ -29,12 +29,14 @@ namespace Bit.App.Pages
         private readonly ILocalizeService _localizeService;
         private readonly IKeyConnectorService _keyConnectorService;
         private readonly IClipboardService _clipboardService;
+        private readonly IStorageService _storageService;
 
         private const int CustomVaultTimeoutValue = -100;
 
         private bool _supportsBiometric;
         private bool _pin;
         private bool _biometric;
+        private bool _screenshotsAllowed;
         private string _lastSyncDate;
         private string _vaultTimeoutDisplayValue;
         private string _vaultTimeoutActionDisplayValue;
@@ -115,6 +117,7 @@ namespace Bit.App.Pages
             var pinSet = await _vaultTimeoutService.IsPinLockSetAsync();
             _pin = pinSet.Item1 || pinSet.Item2;
             _biometric = await _vaultTimeoutService.IsBiometricLockSetAsync();
+            _screenshotsAllowed = await _stateService.GetScreenshotsAllowedAsync() ?? false;
 
             if (_vaultTimeoutDisplayValue == null)
             {
@@ -428,7 +431,7 @@ namespace Bit.App.Pages
             var securityItems = new List<SettingsPageListItem>
             {
                 new SettingsPageListItem { Name = AppResources.VaultTimeout, SubLabel = _vaultTimeoutDisplayValue },
-                new SettingsPageListItem 
+                new SettingsPageListItem
                 {
                     Name = AppResources.VaultTimeoutAction,
                     SubLabel = _vaultTimeoutActionDisplayValue
@@ -439,8 +442,18 @@ namespace Bit.App.Pages
                     SubLabel = _pin ? AppResources.Enabled : AppResources.Disabled
                 },
                 new SettingsPageListItem { Name = AppResources.LockNow },
-                new SettingsPageListItem { Name = AppResources.TwoStepLogin }
+                new SettingsPageListItem { Name = AppResources.TwoStepLogin },
+                
             };
+            if (Device.RuntimePlatform == Device.Android)
+            {
+                var item = new SettingsPageListItem
+                {
+                    Name = AppResources.AllowScreenshots,
+                    SubLabel = _screenshotsAllowed ? AppResources.Enabled : AppResources.Disabled
+                };
+                securityItems.Insert(securityItems.Count, item);
+            }
             if (_supportsBiometric || _biometric)
             {
                 var biometricName = AppResources.Biometrics;
@@ -575,6 +588,14 @@ namespace Bit.App.Pages
         private int? GetVaultTimeoutFromKey(string key)
         {
             return _vaultTimeouts.FirstOrDefault(o => o.Key == key).Value;
+        }
+
+        public async Task UpdateScreenshotsAllowed()
+        {
+            await _stateService.SetScreenshotsAllowedAsync(!_screenshotsAllowed);
+            _screenshotsAllowed = !_screenshotsAllowed;
+            await _deviceActionService.SetSecureFlagAsync();
+            BuildList();
         }
     }
 }

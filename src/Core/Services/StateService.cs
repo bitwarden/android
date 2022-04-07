@@ -532,6 +532,22 @@ namespace Bit.Core.Services
             await SaveAccountAsync(account, reconciledOptions);
         }
 
+        public async Task<bool?> GetScreenshotsAllowedAsync(string userId = null)
+        {
+            return (await GetAccountAsync(
+                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync())
+            ))?.Settings?.ScreenshotsAllowed;
+        }
+
+        public async Task SetScreenshotsAllowedAsync(bool value, string userId = null)
+        {
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            var account = await GetAccountAsync(reconciledOptions);
+            account.Settings.ScreenshotsAllowed = value;
+            await SaveAccountAsync(account, reconciledOptions);
+        }
+
         public async Task<DateTime?> GetLastFileCacheClearAsync()
         {
             var options = await GetDefaultStorageOptionsAsync();
@@ -1418,6 +1434,7 @@ namespace Bit.Core.Services
                 var existingAccount = state.Accounts[account.Profile.UserId];
                 account.Settings.VaultTimeout = existingAccount.Settings.VaultTimeout;
                 account.Settings.VaultTimeoutAction = existingAccount.Settings.VaultTimeoutAction;
+                account.Settings.ScreenshotsAllowed = existingAccount.Settings.ScreenshotsAllowed;
             }
             
             // New account defaults
@@ -1428,6 +1445,10 @@ namespace Bit.Core.Services
             if (account.Settings.VaultTimeoutAction == null)
             {
                 account.Settings.VaultTimeoutAction = VaultTimeoutAction.Lock;
+            }
+            if (account.Settings.ScreenshotsAllowed == null)
+            {
+                account.Settings.ScreenshotsAllowed = false;
             }
             await SetThemeAsync(currentTheme, account.Profile.UserId);
             await SetDisableFaviconAsync(currentDisableFavicons, account.Profile.UserId);
