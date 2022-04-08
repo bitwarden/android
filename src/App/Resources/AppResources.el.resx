@@ -2121,13 +2121,13 @@
     <value>Μετάβαση στον επόμενο διαθέσιμο λογαριασμό</value>
   </data>
   <data name="AccountLockedSuccessfully" xml:space="preserve">
-    <value>Account Locked</value>
+    <value>Κλειδωμένος Λογαριασμός</value>
   </data>
   <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
-    <value>Account logged out successfully</value>
+    <value>Ο λογαριασμός αποσυνδέθηκε επιτυχώς</value>
   </data>
   <data name="AccountRemovedSuccessfully" xml:space="preserve">
-    <value>Account removed successfully</value>
+    <value>Ο λογαριασμός αφαιρέθηκε επιτυχώς</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Διαγραφή Λογαριασμού</value>
