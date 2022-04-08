@@ -64,10 +64,10 @@ namespace Bit.Droid
             Intent?.Validate();
 
             base.OnCreate(savedInstanceState);
-            if (!CoreHelpers.InDebugMode())
-            {
-                Window.AddFlags(Android.Views.WindowManagerFlags.Secure);
-            }
+            //if (!CoreHelpers.InDebugMode())
+            //{
+            //    Window.AddFlags(Android.Views.WindowManagerFlags.Secure);
+            //}
 
 #if !DEBUG && !FDROID
             var appCenterHelper = new AppCenterHelper(_appIdService, _stateService);
