@@ -674,7 +674,7 @@ namespace Bit.Droid.Services
             else
             {
                 var data = new Intent();
-                if (cipher == null)
+                if (cipher?.Login == null)
                 {
                     data.PutExtra("canceled", "true");
                 }
@@ -732,6 +732,11 @@ namespace Bit.Droid.Services
         public bool AutofillAccessibilityOverlayPermitted()
         {
             return Accessibility.AccessibilityHelpers.OverlayPermitted();
+        }
+
+        public bool HasAutofillService()
+        {
+            return true;
         }
 
         public void OpenAccessibilityOverlayPermissionSettings()
@@ -942,6 +947,11 @@ namespace Bit.Droid.Services
         {
             var activity = CrossCurrentActivity.Current?.Activity as MainActivity;
             return activity?.Resources?.Configuration?.FontScale ?? 1;
+        }
+        
+        public async Task OnAccountSwitchCompleteAsync()
+        {
+            // for any Android-specific cleanup required after switching accounts
         }
     }
 }

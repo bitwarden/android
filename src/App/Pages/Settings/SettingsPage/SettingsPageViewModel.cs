@@ -10,6 +10,7 @@ using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
 using Xamarin.Forms;
 using ZXing.Client.Result;
+using Xamarin.CommunityToolkit.ObjectModel;
 
 namespace Bit.App.Pages
 {
@@ -79,11 +80,11 @@ namespace Bit.App.Pages
             _keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
             _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
 
-            GroupedItems = new ExtendedObservableCollection<SettingsPageListGroup>();
+            GroupedItems = new ObservableRangeCollection<ISettingsPageListItem>();
             PageTitle = AppResources.Settings;
         }
 
-        public ExtendedObservableCollection<SettingsPageListGroup> GroupedItems { get; set; }
+        public ObservableRangeCollection<ISettingsPageListItem> GroupedItems { get; set; }
 
         public async Task InitAsync()
         {
@@ -501,7 +502,9 @@ namespace Bit.App.Pages
                 new SettingsPageListItem { Name = AppResources.RateTheApp },
                 new SettingsPageListItem { Name = AppResources.DeleteAccount }
             };
-            GroupedItems.ResetWithRange(new List<SettingsPageListGroup>
+
+            // TODO: improve this. Leaving this as is to reduce error possibility on the hotfix.
+            var settingsListGroupItems = new List<SettingsPageListGroup>()
             {
                 new SettingsPageListGroup(autofillItems, AppResources.Autofill, doUpper, true),
                 new SettingsPageListGroup(manageItems, AppResources.Manage, doUpper),
@@ -509,7 +512,50 @@ namespace Bit.App.Pages
                 new SettingsPageListGroup(accountItems, AppResources.Account, doUpper),
                 new SettingsPageListGroup(toolsItems, AppResources.Tools, doUpper),
                 new SettingsPageListGroup(otherItems, AppResources.Other, doUpper)
-            });
+            };
+
+            // TODO: refactor this
+            if (Device.RuntimePlatform == Device.Android
+                ||
+                GroupedItems.Any())
+            {
+                var items = new List<ISettingsPageListItem>();
+                foreach (var itemGroup in settingsListGroupItems)
+                {
+                    items.Add(new SettingsPageHeaderListItem(itemGroup.Name));
+                    items.AddRange(itemGroup);
+                }
+
+                GroupedItems.ReplaceRange(items);
+            }
+            else
+            {
+                // HACK: we need this on iOS, so that it doesn't crash when adding coming from an empty list
+                var first = true;
+                var items = new List<ISettingsPageListItem>();
+                foreach (var itemGroup in settingsListGroupItems)
+                {
+                    if (!first)
+                    {
+                        items.Add(new SettingsPageHeaderListItem(itemGroup.Name));
+                    }
+                    else
+                    {
+                        first = false;
+                    }
+                    items.AddRange(itemGroup);
+                }
+
+                if (settingsListGroupItems.Any())
+                {
+                    GroupedItems.ReplaceRange(new List<ISettingsPageListItem> { new SettingsPageHeaderListItem(settingsListGroupItems[0].Name) });
+                    GroupedItems.AddRange(items);
+                }
+                else
+                {
+                    GroupedItems.Clear();
+                }
+            }
         }
 
         private bool IncludeLinksWithSubscriptionInfo()

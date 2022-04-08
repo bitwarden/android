@@ -24,6 +24,8 @@ namespace Bit.iOS
     [Register("AppDelegate")]
     public partial class AppDelegate : FormsApplicationDelegate
     {
+        const int SPLASH_VIEW_TAG = 4321;
+
         private NFCNdefReaderSession _nfcSession = null;
         private iOSPushNotificationHandler _pushHandler = null;
         private Core.NFCReaderDelegate _nfcDelegate = null;
@@ -146,12 +148,7 @@ namespace Bit.iOS
                 {
                     if (_deviceActionService.SystemMajorVersion() >= 12)
                     {
-                        var extras = message.Data as Tuple<string, bool, bool>;
-                        var userId = extras?.Item1;
-                        var userInitiated = extras?.Item2;
-                        var expired = extras?.Item3;
-                        // TODO make specific to userId
-                        // await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
+                        await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
                     }
                 }
                 else if ((message.Command == "softDeletedCipher" || message.Command == "restoredCipher")
@@ -164,9 +161,7 @@ namespace Bit.iOS
                     var timeoutAction = await _stateService.GetVaultTimeoutActionAsync();
                     if (timeoutAction == VaultTimeoutAction.Logout)
                     {
-                        var userId = await _stateService.GetActiveUserIdAsync();
-                        // TODO make specific to userId
-                        // await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
+                        await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
                     }
                     else
                     {
@@ -182,7 +177,7 @@ namespace Bit.iOS
         {
             var view = new UIView(UIApplication.SharedApplication.KeyWindow.Frame)
             {
-                Tag = 4321
+                Tag = SPLASH_VIEW_TAG
             };
             var backgroundView = new UIView(UIApplication.SharedApplication.KeyWindow.Frame)
             {
@@ -212,11 +207,9 @@ namespace Bit.iOS
         {
             base.OnActivated(uiApplication);
             UIApplication.SharedApplication.ApplicationIconBadgeNumber = 0;
-            var view = UIApplication.SharedApplication.KeyWindow.ViewWithTag(4321);
-            if (view != null)
-            {
-                view.RemoveFromSuperview();
-            }
+            UIApplication.SharedApplication.KeyWindow?
+                .ViewWithTag(SPLASH_VIEW_TAG)?
+                .RemoveFromSuperview();
 
             ThemeManager.UpdateThemeOnPagesAsync();
         }
@@ -235,11 +228,7 @@ namespace Bit.iOS
 
         public override bool OpenUrl(UIApplication app, NSUrl url, NSDictionary options)
         {
-            if (Xamarin.Essentials.Platform.OpenUrl(app, url, options))
-            {
-                return true;
-            }
-            return base.OpenUrl(app, url, options);
+            return Xamarin.Essentials.Platform.OpenUrl(app, url, options);
         }
 
         public override bool ContinueUserActivity(UIApplication application, NSUserActivity userActivity,

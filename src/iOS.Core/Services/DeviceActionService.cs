@@ -392,6 +392,11 @@ namespace Bit.iOS.Core.Services
             throw new NotImplementedException();
         }
 
+        public bool HasAutofillService()
+        {
+            return false;
+        }
+
         public bool AutofillServiceEnabled()
         {
             throw new NotImplementedException();
@@ -592,6 +597,11 @@ namespace Bit.iOS.Core.Services
             var tempHeight = 20f;
             var scaledHeight = (float)new UIFontMetrics(UIFontTextStyle.Body.GetConstant()).GetScaledValue(tempHeight);
             return scaledHeight / tempHeight;
+        }
+
+        public async Task OnAccountSwitchCompleteAsync()
+        {
+            await ASHelpers.ReplaceAllIdentities();
         }
 
         public class PickerDelegate : UIDocumentPickerDelegate

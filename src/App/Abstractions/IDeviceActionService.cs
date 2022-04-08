@@ -35,6 +35,7 @@ namespace Bit.App.Abstractions
         void Background();
         bool AutofillAccessibilityServiceRunning();
         bool AutofillAccessibilityOverlayPermitted();
+        bool HasAutofillService();
         bool AutofillServiceEnabled();
         void DisableAutofillService();
         bool AutofillServicesEnabled();
@@ -46,5 +47,6 @@ namespace Bit.App.Abstractions
         void CloseMainApp();
         bool SupportsFido2();
         float GetSystemFontSizeScale();
+        Task OnAccountSwitchCompleteAsync();
     }
 }

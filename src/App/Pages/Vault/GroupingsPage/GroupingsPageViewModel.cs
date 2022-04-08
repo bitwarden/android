@@ -11,6 +11,7 @@ using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -63,7 +64,7 @@ namespace Bit.App.Pages
 
             Loading = true;
             PageTitle = AppResources.MyVault;
-            GroupedItems = new ExtendedObservableCollection<GroupingsPageListGroup>();
+            GroupedItems = new ObservableRangeCollection<IGroupingsPageListItem>();
             RefreshCommand = new Command(async () =>
             {
                 Refreshing = true;
@@ -144,7 +145,7 @@ namespace Bit.App.Pages
 
         public AccountSwitchingOverlayViewModel AccountSwitchingOverlayViewModel { get; }
 
-        public ExtendedObservableCollection<GroupingsPageListGroup> GroupedItems { get; set; }
+        public ObservableRangeCollection<IGroupingsPageListItem> GroupedItems { get; set; }
         public Command RefreshCommand { get; set; }
         public Command<CipherView> CipherOptionsCommand { get; set; }
         public bool LoadedOnce { get; set; }
@@ -275,12 +276,54 @@ namespace Bit.App.Pages
                     {
                         new GroupingsPageListItem()
                         {
-                            IsTrash = true, 
+                            IsTrash = true,
                             ItemCount = _deletedCount.ToString("N0")
                         }
                     }, AppResources.Trash, _deletedCount, uppercaseGroupNames, false));
                 }
-                GroupedItems.ResetWithRange(groupedItems);
+
+                // TODO: refactor this
+                if (Device.RuntimePlatform == Device.Android
+                    ||
+                    GroupedItems.Any())
+                {
+                    var items = new List<IGroupingsPageListItem>();
+                    foreach (var itemGroup in groupedItems)
+                    {
+                        items.Add(new GroupingsPageHeaderListItem(itemGroup.Name, itemGroup.ItemCount));
+                        items.AddRange(itemGroup);
+                    }
+
+                    GroupedItems.ReplaceRange(items);
+                }
+                else
+                {
+                    // HACK: we need this on iOS, so that it doesn't crash when adding coming from an empty list
+                    var first = true;
+                    var items = new List<IGroupingsPageListItem>();
+                    foreach (var itemGroup in groupedItems)
+                    {
+                        if (!first)
+                        {
+                            items.Add(new GroupingsPageHeaderListItem(itemGroup.Name, itemGroup.ItemCount));
+                        }
+                        else
+                        {
+                            first = false;
+                        }
+                        items.AddRange(itemGroup);
+                    }
+
+                    if (groupedItems.Any())
+                    {
+                        GroupedItems.ReplaceRange(new List<IGroupingsPageListItem> { new GroupingsPageHeaderListItem(groupedItems[0].Name, groupedItems[0].ItemCount) });
+                        GroupedItems.AddRange(items);
+                    }
+                    else
+                    {
+                        GroupedItems.Clear();
+                    }
+                }
             }
             finally
             {

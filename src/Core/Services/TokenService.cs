@@ -208,6 +208,10 @@ namespace Bit.Core.Services
             if (_accessTokenForDecoding == null)
             {
                 await GetTokenAsync();
+                if (_accessTokenForDecoding == null)
+                {
+                    return false;
+                }
             }
             var decoded = DecodeToken();
             if (decoded?["amr"] == null)

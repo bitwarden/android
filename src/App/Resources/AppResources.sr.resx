@@ -2122,13 +2122,13 @@
     <value>Пребацили сте се на следећи доступни налог</value>
   </data>
   <data name="AccountLockedSuccessfully" xml:space="preserve">
-    <value>Account Locked</value>
+    <value>Налог закључан</value>
   </data>
   <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
-    <value>Account logged out successfully</value>
+    <value>Успешно одјављивање</value>
   </data>
   <data name="AccountRemovedSuccessfully" xml:space="preserve">
-    <value>Account removed successfully</value>
+    <value>Налог je успешно уклоњен</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Избриши Налог</value>
