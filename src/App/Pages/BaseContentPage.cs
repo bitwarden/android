@@ -70,6 +70,7 @@ namespace Bit.App.Pages
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 HorizontalOptions = LayoutOptions.Center,
                 Color = ThemeManager.GetResourceColor("PrimaryColor"),
+                AutomationId = "activity_indicator"
             };
             if (targetView != null)
             {
