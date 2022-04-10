@@ -2,6 +2,7 @@
 using System.Linq;
 using Bit.App.Controls;
 using Bit.App.Resources;
+using Bit.Core.Enums;
 using Bit.Core.Models.View;
 using Xamarin.Forms;
 
@@ -12,15 +13,22 @@ namespace Bit.App.Pages
         private SendsPageViewModel _vm;
         private bool _hasFocused;
 
-        public SendsPage(Func<SendView, bool> filter, bool type = false)
+        public SendsPage(Func<SendView, bool> filter, SendType? type = null)
         {
             InitializeComponent();
             _vm = BindingContext as SendsPageViewModel;
             _vm.Page = this;
             _vm.Filter = filter;
-            if (type)
+            if (type != null)
             {
-                _vm.PageTitle = AppResources.SearchType;
+                if (type == SendType.File)
+                {
+                    _vm.PageTitle = AppResources.SearchFileSends;
+                }
+                else if (type == SendType.Text)
+                {
+                    _vm.PageTitle = AppResources.SearchTextSends;
+                }
             }
             else
             {
@@ -33,6 +41,7 @@ namespace Bit.App.Pages
                 _searchBar.Placeholder = AppResources.Search;
                 _mainLayout.Children.Insert(0, _searchBar);
                 _mainLayout.Children.Insert(1, _separator);
+                ShowModalAnimationDelay = 0;
             }
             else
             {

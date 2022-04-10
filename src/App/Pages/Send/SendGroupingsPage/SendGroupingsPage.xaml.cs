@@ -160,7 +160,7 @@ namespace Bit.App.Pages
         {
             if (DoOnce())
             {
-                var page = new SendsPage(_vm.Filter, _vm.Type != null);
+                var page = new SendsPage(_vm.Filter, _vm.Type);
                 await Navigation.PushModalAsync(new NavigationPage(page));
             }
         }
