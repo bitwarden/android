@@ -14,7 +14,7 @@ Here is how you can get involved:
   
 * **Write documentation:** Submit a pull request to the [Bitwarden help repository](https://github.com/bitwarden/help)
   
-* **Help other users:** Go to the [User-to-User Support category](https://community.bitwarden.com/c/support/) on the Community Forums
+* **Help other users:** Go to the [Ask the Bitward Community](https://community.bitwarden.com/c/support/) on the Community Forums
   
 * **Translate:** See the localization (i10n) section below
 
@@ -35,6 +35,6 @@ We use a translation tool called [Crowdin](https://crowdin.com) to help manage o
 
 If you are interested in helping translate the Bitwarden mobile app into another language (or make a translation correction), please register an account at Crowdin and join our project here: https://crowdin.com/project/bitwarden-mobile
 
-If the language that you are interested in translating is not already listed, create a new account on Crowdin, join the project, and contact the project owner (https://crowdin.com/profile/kspearrin).
+If the language that you are interested in translating is not already listed, create a new account on Crowdin, join the project, and contact the project owner (https://crowdin.com/profile/dwbit).
 
 You can read Crowdin's getting started guide for translators here: https://support.crowdin.com/crowdin-intro/
