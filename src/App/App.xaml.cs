@@ -208,7 +208,10 @@ namespace Bit.App
                 {
                     await _stateService.SetLastActiveTimeAsync(_deviceActionService.GetActiveTime());
                 }
-                SetTabsPageFromAutofill(isLocked);
+                if (!SetTabsPageFromAutofill(isLocked))
+                {
+                    ClearAutofillUri();
+                }
                 await SleptAsync();
             }
         }
@@ -365,7 +368,15 @@ namespace Bit.App
             }
         }
 
-        private void SetTabsPageFromAutofill(bool isLocked)
+        private void ClearAutofillUri()
+        {
+            if (Device.RuntimePlatform == Device.Android && !string.IsNullOrWhiteSpace(Options.Uri))
+            {
+                Options.Uri = null;
+            }
+        }
+
+        private bool SetTabsPageFromAutofill(bool isLocked)
         {
             if (Device.RuntimePlatform == Device.Android && !string.IsNullOrWhiteSpace(Options.Uri) &&
                 !Options.FromAutofillFramework)
@@ -385,7 +396,9 @@ namespace Bit.App
                         }
                     });
                 });
+                return true;
             }
+            return false;
         }
 
         private void Prime()
