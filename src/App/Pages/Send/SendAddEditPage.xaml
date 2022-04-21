@@ -256,23 +256,24 @@
                                 x:Name="_btnOptions"
                                 StyleClass="box-row-button"
                                 TextColor="{DynamicResource PrimaryColor}"
-                                Margin="0" />
+                                Margin="0"
+                                Clicked="ToggleOptions_Clicked"/>
                             <controls:IconButton
                                 x:Name="_btnOptionsUp"
                                 Text="{Binding Source={x:Static core:BitwardenIcons.ChevronUp}}"
                                 StyleClass="box-row-button"
                                 TextColor="{DynamicResource PrimaryColor}"
                                 Clicked="ToggleOptions_Clicked"
-                                IsVisible="False" />
+                                IsVisible="{Binding ShowOptions}" />
                             <controls:IconButton
                                 x:Name="_btnOptionsDown"
                                 Text="{Binding Source={x:Static core:BitwardenIcons.AngleDown}}"
                                 StyleClass="box-row-button"
                                 TextColor="{DynamicResource PrimaryColor}"
                                 Clicked="ToggleOptions_Clicked"
-                                IsVisible="False" />
+                                IsVisible="{Binding ShowOptions, Converter={StaticResource inverseBool}}" />
                         </StackLayout>
-                        <StackLayout IsVisible="True">
+                        <StackLayout IsVisible="{Binding ShowOptions}">
                             <StackLayout
                                 StyleClass="box-row"
                                 Margin="0,10,0,0">
