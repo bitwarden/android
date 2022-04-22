@@ -78,6 +78,9 @@
     android:name="com.google.android.captiveportallogin"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
+    android:name="com.iode.firefox"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
     android:name="com.jamal2367.styx"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package

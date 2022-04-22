@@ -54,6 +54,7 @@ namespace Bit.Droid.Accessibility
             new Browser("com.google.android.apps.chrome", "url_bar"),
             new Browser("com.google.android.apps.chrome_dev", "url_bar"),
             // Rem. for "com.google.android.captiveportallogin": URL displayed in ActionBar subtitle without viewId.
+            new Browser("com.iode.firefox", "mozac_browser_toolbar_url_view"),
             new Browser("com.jamal2367.styx", "search"),
             new Browser("com.kiwibrowser.browser", "url_bar"),
             new Browser("com.kiwibrowser.browser.dev", "url_bar"),

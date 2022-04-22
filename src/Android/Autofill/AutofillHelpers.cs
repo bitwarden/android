@@ -73,6 +73,7 @@ namespace Bit.Droid.Autofill
             "com.google.android.apps.chrome",
             "com.google.android.apps.chrome_dev",
             "com.google.android.captiveportallogin",
+            "com.iode.firefox",
             "com.jamal2367.styx",
             "com.kiwibrowser.browser",
             "com.kiwibrowser.browser.dev",
