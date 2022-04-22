@@ -84,7 +84,7 @@
     <PackageReference Include="Xamarin.AndroidX.MediaRouter" Version="1.2.5.2" />
     <PackageReference Include="Xamarin.AndroidX.Migration" Version="1.0.8" />
     <PackageReference Include="Xamarin.Essentials">
-      <Version>1.7.1</Version>
+      <Version>1.7.2</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Firebase.Messaging">
       <Version>122.0.0</Version>

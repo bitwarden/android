@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
-using Bit.App.Controls;
 using Bit.App.Models;
 using Bit.App.Resources;
 using Bit.Core;
@@ -44,7 +43,6 @@ namespace Bit.App.Pages
         private int _ownershipSelectedIndex;
         private bool _hasCollections;
         private string _previousCipherId;
-        private DateTime _lastHandledScrollTime;
         private List<Core.Models.View.CollectionView> _writeableCollections;
         private string[] _additionalCipherProperties = new string[]
         {
@@ -168,7 +166,7 @@ namespace Bit.App.Pages
         public ExtendedObservableCollection<LoginUriView> Uris { get; set; }
         public ExtendedObservableCollection<AddEditPageFieldViewModel> Fields { get; set; }
         public ExtendedObservableCollection<CollectionViewModel> Collections { get; set; }
-        public RepeaterView CollectionsRepeaterView { get; set; }
+
         public int TypeSelectedIndex
         {
             get => _typeSelectedIndex;
@@ -821,30 +819,13 @@ namespace Bit.App.Pages
             {
                 var cols = _writeableCollections.Where(c => c.OrganizationId == Cipher.OrganizationId)
                     .Select(c => new CollectionViewModel { Collection = c }).ToList();
-                HasCollections = cols.Any();
                 Collections.ResetWithRange(cols);
-                Collections = new ExtendedObservableCollection<CollectionViewModel>(cols);
             }
             else
             {
-                HasCollections = false;
                 Collections.ResetWithRange(new List<CollectionViewModel>());
-                Collections = new ExtendedObservableCollection<CollectionViewModel>(new List<CollectionViewModel>());
             }
-        }
-
-        public void HandleScroll()
-        {
-            // workaround for https://github.com/xamarin/Xamarin.Forms/issues/13607
-            // required for org ownership/collections to render properly in XF4.5+
-            if (!HasCollections ||
-                EditMode ||
-                (DateTime.Now - _lastHandledScrollTime < TimeSpan.FromMilliseconds(200)))
-            {
-                return;
-            }
-            CollectionsRepeaterView.ItemsSource = Collections;
-            _lastHandledScrollTime = DateTime.Now;
+            HasCollections = Collections.Any();
         }
 
         private void TriggerCipherChanged()
