@@ -532,19 +532,19 @@ namespace Bit.Core.Services
             await SaveAccountAsync(account, reconciledOptions);
         }
 
-        public async Task<bool?> GetScreenshotsAllowedAsync(string userId = null)
+        public async Task<bool> GetScreenCaptureAllowedAsync(string userId = null)
         {
             return (await GetAccountAsync(
                 ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync())
-            ))?.Settings?.ScreenshotsAllowed;
+            ))?.Settings?.ScreenCaptureAllowed ?? false;
         }
 
-        public async Task SetScreenshotsAllowedAsync(bool value, string userId = null)
+        public async Task SetScreenCaptureAllowedAsync(bool value, string userId = null)
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
                 await GetDefaultStorageOptionsAsync());
             var account = await GetAccountAsync(reconciledOptions);
-            account.Settings.ScreenshotsAllowed = value;
+            account.Settings.ScreenCaptureAllowed = value;
             await SaveAccountAsync(account, reconciledOptions);
         }
 
@@ -1434,7 +1434,7 @@ namespace Bit.Core.Services
                 var existingAccount = state.Accounts[account.Profile.UserId];
                 account.Settings.VaultTimeout = existingAccount.Settings.VaultTimeout;
                 account.Settings.VaultTimeoutAction = existingAccount.Settings.VaultTimeoutAction;
-                account.Settings.ScreenshotsAllowed = existingAccount.Settings.ScreenshotsAllowed;
+                account.Settings.ScreenCaptureAllowed = existingAccount.Settings.ScreenCaptureAllowed;
             }
             
             // New account defaults
@@ -1446,9 +1446,9 @@ namespace Bit.Core.Services
             {
                 account.Settings.VaultTimeoutAction = VaultTimeoutAction.Lock;
             }
-            if (account.Settings.ScreenshotsAllowed == null)
+            if (account.Settings.ScreenCaptureAllowed == null)
             {
-                account.Settings.ScreenshotsAllowed = false;
+                account.Settings.ScreenCaptureAllowed = false;
             }
             await SetThemeAsync(currentTheme, account.Profile.UserId);
             await SetDisableFaviconAsync(currentDisableFavicons, account.Profile.UserId);

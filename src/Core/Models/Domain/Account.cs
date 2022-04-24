@@ -94,13 +94,13 @@ namespace Bit.Core.Models.Domain
                 EnvironmentUrls = copy.EnvironmentUrls;
                 VaultTimeout = copy.VaultTimeout;
                 VaultTimeoutAction = copy.VaultTimeoutAction;
-                ScreenshotsAllowed = copy.ScreenshotsAllowed;
+                ScreenCaptureAllowed = copy.ScreenCaptureAllowed;
             }
 
             public EnvironmentUrlData EnvironmentUrls;
             public int? VaultTimeout;
             public VaultTimeoutAction? VaultTimeoutAction;
-            public bool? ScreenshotsAllowed;
+            public bool? ScreenCaptureAllowed;
         }
 
         public class AccountVolatileData

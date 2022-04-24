@@ -282,11 +282,8 @@ namespace Bit.App.Pages
                     }, AppResources.Trash, _deletedCount, uppercaseGroupNames, false));
                 }
 
-                if (Device.RuntimePlatform == Device.Android)
-                {
-                    await _deviceActionService.SetSecureFlagAsync();
-                }
-
+                await _deviceActionService.SetSecureFlagAsync();
+                
                 // TODO: refactor this
                 if (Device.RuntimePlatform == Device.Android
                     ||

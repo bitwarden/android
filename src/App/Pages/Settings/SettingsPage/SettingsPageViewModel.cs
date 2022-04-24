@@ -36,7 +36,7 @@ namespace Bit.App.Pages
         private bool _supportsBiometric;
         private bool _pin;
         private bool _biometric;
-        private bool _screenshotsAllowed;
+        private bool _screenCaptureAllowed;
         private string _lastSyncDate;
         private string _vaultTimeoutDisplayValue;
         private string _vaultTimeoutActionDisplayValue;
@@ -117,7 +117,7 @@ namespace Bit.App.Pages
             var pinSet = await _vaultTimeoutService.IsPinLockSetAsync();
             _pin = pinSet.Item1 || pinSet.Item2;
             _biometric = await _vaultTimeoutService.IsBiometricLockSetAsync();
-            _screenshotsAllowed = await _stateService.GetScreenshotsAllowedAsync() ?? false;
+            _screenCaptureAllowed = await _stateService.GetScreenCaptureAllowedAsync();
 
             if (_vaultTimeoutDisplayValue == null)
             {
@@ -449,8 +449,8 @@ namespace Bit.App.Pages
             {
                 var item = new SettingsPageListItem
                 {
-                    Name = AppResources.AllowScreenshots,
-                    SubLabel = _screenshotsAllowed ? AppResources.Enabled : AppResources.Disabled
+                    Name = AppResources.AllowScreenCapture,
+                    SubLabel = _screenCaptureAllowed ? AppResources.Enabled : AppResources.Disabled
                 };
                 securityItems.Insert(securityItems.Count, item);
             }
@@ -590,10 +590,10 @@ namespace Bit.App.Pages
             return _vaultTimeouts.FirstOrDefault(o => o.Key == key).Value;
         }
 
-        public async Task UpdateScreenshotsAllowed()
+        public async Task SetScreenCaptureAllowedAsync()
         {
-            await _stateService.SetScreenshotsAllowedAsync(!_screenshotsAllowed);
-            _screenshotsAllowed = !_screenshotsAllowed;
+            await _stateService.SetScreenCaptureAllowedAsync(!_screenCaptureAllowed);
+            _screenCaptureAllowed = !_screenCaptureAllowed;
             await _deviceActionService.SetSecureFlagAsync();
             BuildList();
         }

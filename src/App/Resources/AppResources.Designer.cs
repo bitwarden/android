@@ -1110,11 +1110,11 @@ namespace Bit.App.Resources {
             }
         }
 
-        public static string AllowScreenshots
+        public static string AllowScreenCapture
         {
             get {
-                //TODO: insert string "Allow Screenshots" in resources and remove condition from the next line of code
-                return ResourceManager.GetString("AllowScreenshots", resourceCulture)?? "Allow Screenshots";
+                //TODO: insert string "Allow Screen Capture" in resources and remove condition from the next line of code
+                return ResourceManager.GetString("AllowScreenCapture", resourceCulture)?? "Allow Screen Capture";
             }
         }
         

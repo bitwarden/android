@@ -167,9 +167,9 @@ namespace Bit.App.Pages
             {
                 await _vm.UpdatePinAsync();
             }
-            else if (item.Name == AppResources.AllowScreenshots)
+            else if (item.Name == AppResources.AllowScreenCapture)
             {
-                await _vm.UpdateScreenshotsAllowed();
+                await _vm.SetScreenCaptureAllowedAsync();
             }
             else
             {
