@@ -282,7 +282,7 @@ namespace Bit.App.Pages
                     }, AppResources.Trash, _deletedCount, uppercaseGroupNames, false));
                 }
 
-                await _deviceActionService.SetSecureFlagAsync();
+                await _deviceActionService.SetScreenCaptureAllowedAsync();
                 
                 // TODO: refactor this
                 if (Device.RuntimePlatform == Device.Android

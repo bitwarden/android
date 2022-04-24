@@ -65,6 +65,7 @@ namespace Bit.App.Pages
 
         private Policy _vaultTimeoutPolicy;
         private int? _vaultTimeout;
+        private SettingsPageListItem _screenCaptureListItem;
 
         public SettingsPageViewModel()
         {
@@ -442,18 +443,8 @@ namespace Bit.App.Pages
                     SubLabel = _pin ? AppResources.Enabled : AppResources.Disabled
                 },
                 new SettingsPageListItem { Name = AppResources.LockNow },
-                new SettingsPageListItem { Name = AppResources.TwoStepLogin },
-                
+                new SettingsPageListItem { Name = AppResources.TwoStepLogin }
             };
-            if (Device.RuntimePlatform == Device.Android)
-            {
-                var item = new SettingsPageListItem
-                {
-                    Name = AppResources.AllowScreenCapture,
-                    SubLabel = _screenCaptureAllowed ? AppResources.Enabled : AppResources.Disabled
-                };
-                securityItems.Insert(securityItems.Count, item);
-            }
             if (_supportsBiometric || _biometric)
             {
                 var biometricName = AppResources.Biometrics;
@@ -487,6 +478,15 @@ namespace Bit.App.Pages
                         maximumTimeout % 60),
                     UseFrame = true,
                 });
+            }
+            if (Device.RuntimePlatform == Device.Android)
+            {
+                _screenCaptureListItem = new SettingsPageListItem
+                {
+                    Name = AppResources.AllowScreenCapture,
+                    SubLabel = _screenCaptureAllowed ? AppResources.Enabled : AppResources.Disabled
+                };
+                securityItems.Insert(securityItems.Count, _screenCaptureListItem);
             }
             var accountItems = new List<SettingsPageListItem>
             {
@@ -592,9 +592,10 @@ namespace Bit.App.Pages
 
         public async Task SetScreenCaptureAllowedAsync()
         {
-            await _stateService.SetScreenCaptureAllowedAsync(!_screenCaptureAllowed);
-            _screenCaptureAllowed = !_screenCaptureAllowed;
-            await _deviceActionService.SetSecureFlagAsync();
+            var _screenCaptureCurrentState = _screenCaptureListItem.SubLabel.Equals(AppResources.Enabled);
+            await _stateService.SetScreenCaptureAllowedAsync(!_screenCaptureCurrentState);
+            _screenCaptureAllowed = !_screenCaptureCurrentState;
+            await _deviceActionService.SetScreenCaptureAllowedAsync();
             BuildList();
         }
     }

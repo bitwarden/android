@@ -599,9 +599,9 @@ namespace Bit.iOS.Core.Services
             await ASHelpers.ReplaceAllIdentities();
         }
 
-        public Task SetSecureFlagAsync()
+        public Task SetScreenCaptureAllowedAsync()
         {
-            // only used by Android
+            // only used by Android. Not possible in iOS
             return Task.CompletedTask;
         }
 

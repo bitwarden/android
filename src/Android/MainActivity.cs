@@ -65,7 +65,7 @@ namespace Bit.Droid
 
             base.OnCreate(savedInstanceState);
 
-            await _deviceActionService.SetSecureFlagAsync();
+            await _deviceActionService.SetScreenCaptureAllowedAsync();
 
 #if !DEBUG && !FDROID
             var appCenterHelper = new AppCenterHelper(_appIdService, _stateService);
