@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Opravdu se chcete odhlásit?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Odebrat účet</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Opravdu si přejete tento účet odebrat?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Účet byl již přidán</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Would you like to switch to it now?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Hlavní heslo</value>
     <comment>Label for a master password.</comment>
@@ -2042,10 +2054,10 @@
     <value>Your Master Password was recently changed by an administrator in your organization. In order to access the vault, you must update your Master Password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
   </data>
   <data name="UpdatingPassword" xml:space="preserve">
-    <value>Updating Password</value>
+    <value>Aktualizace hesla</value>
   </data>
   <data name="UpdatePasswordError" xml:space="preserve">
-    <value>Currently unable to update password</value>
+    <value>Aktuálně nelze aktualizovat heslo</value>
   </data>
   <data name="RemoveMasterPassword" xml:space="preserve">
     <value>Odstranit hlavní heslo</value>
@@ -2057,7 +2069,7 @@
     <value>If you do not want to remove your Master Password, you may leave this organization.</value>
   </data>
   <data name="LeaveOrganization" xml:space="preserve">
-    <value>Leave Organization</value>
+    <value>Opustit organizaci</value>
   </data>
   <data name="LeaveOrganizationName" xml:space="preserve">
     <value>Leave {0}?</value>
@@ -2092,6 +2104,30 @@
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Jedna nebo více zásad organizace vám brání v exportu vašeho osobního trezoru.</value>
   </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Přidat účet</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Odemčen</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Uzamčen</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Odhlášen</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Přepnuto na další dostupný účet</value>
+  </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>Account Locked</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>Account logged out successfully</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>Account removed successfully</value>
+  </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Odstranit účet</value>
   </data>
@@ -2111,7 +2147,7 @@
     <value>Neplatný ověřovací kód.</value>
   </data>
   <data name="RequestOTP" xml:space="preserve">
-    <value>Request one-time password</value>
+    <value>Vyžádat jednorázové heslo</value>
   </data>
   <data name="SendCode" xml:space="preserve">
     <value>Poslat kód</value>
@@ -2120,19 +2156,19 @@
     <value>Odesílání</value>
   </data>
   <data name="CopySendLinkOnSave" xml:space="preserve">
-    <value>Copy Send link on save</value>
+    <value>Při uložení zkopírovat odkaz na Send</value>
   </data>
   <data name="SendingCode" xml:space="preserve">
-    <value>Sending code</value>
+    <value>Odesílání kódu</value>
   </data>
   <data name="Verifying" xml:space="preserve">
-    <value>Verifying</value>
+    <value>Ověřování</value>
   </data>
   <data name="ResendCode" xml:space="preserve">
-    <value>Resend Code</value>
+    <value>Znovu odeslat kód</value>
   </data>
   <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
-    <value>A verification code was sent to your email</value>
+    <value>Ověřovací kód byl odeslán na váš e-mail</value>
   </data>
   <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
     <value>An error occurred while sending a verification code to your email. Please try again</value>

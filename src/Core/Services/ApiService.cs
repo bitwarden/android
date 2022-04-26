@@ -1,4 +1,5 @@
 ﻿using Bit.Core.Abstractions;
+using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
@@ -24,12 +25,12 @@ namespace Bit.Core.Services
         private readonly HttpClient _httpClient = new HttpClient();
         private readonly ITokenService _tokenService;
         private readonly IPlatformUtilsService _platformUtilsService;
-        private readonly Func<bool, Task> _logoutCallbackAsync;
+        private readonly Func<Tuple<string, bool, bool>, Task> _logoutCallbackAsync;
 
         public ApiService(
             ITokenService tokenService,
             IPlatformUtilsService platformUtilsService,
-            Func<bool, Task> logoutCallbackAsync,
+            Func<Tuple<string, bool, bool>, Task> logoutCallbackAsync,
             string customUserAgent = null)
         {
             _tokenService = tokenService;
@@ -37,6 +38,8 @@ namespace Bit.Core.Services
             _logoutCallbackAsync = logoutCallbackAsync;
             var device = (int)_platformUtilsService.GetDevice();
             _httpClient.DefaultRequestHeaders.Add("Device-Type", device.ToString());
+            _httpClient.DefaultRequestHeaders.Add("Bitwarden-Client-Name", _platformUtilsService.GetClientType().GetString());
+            _httpClient.DefaultRequestHeaders.Add("Bitwarden-Client-Version", _platformUtilsService.GetApplicationVersion());
             if (!string.IsNullOrWhiteSpace(customUserAgent))
             {
                 _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(customUserAgent);
@@ -87,7 +90,7 @@ namespace Bit.Core.Services
                 Version = new Version(1, 0),
                 RequestUri = new Uri(string.Concat(IdentityBaseUrl, "/connect/token")),
                 Method = HttpMethod.Post,
-                Content = new FormUrlEncodedContent(request.ToIdentityToken(_platformUtilsService.IdentityClientId))
+                Content = new FormUrlEncodedContent(request.ToIdentityToken(_platformUtilsService.GetClientType().GetString()))
             };
             requestMessage.Headers.Add("Accept", "application/json");
             request.AlterIdentityTokenHeaders(requestMessage.Headers);
@@ -706,7 +709,7 @@ namespace Bit.Core.Services
                     response.StatusCode == HttpStatusCode.Forbidden
                 ))
             {
-                await _logoutCallbackAsync(true);
+                await _logoutCallbackAsync(new Tuple<string, bool, bool>(null, false, true));
                 return null;
             }
             try

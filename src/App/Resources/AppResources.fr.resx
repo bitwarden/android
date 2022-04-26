@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Êtes-vous sûr de vouloir vous déconnecter ?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Retirer le compte</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir retirer ce compte ?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Le compte a déjà été ajouté</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Souhaitez-vous y passer maintenant ?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Mot de passe maître</value>
     <comment>Label for a master password.</comment>
@@ -1150,10 +1162,10 @@
     <value>Service d'accessibilité pour le remplissage automatique</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>Le service de remplissage automatique de Bitwarden utilise l'outil de remplissage automatique d'Android pour aider à saisir les identifiants, les cartes de crédit et les informations d'identité dans d'autres applications sur votre appareil.</value>
+    <value>Le service de saisie automatique de Bitwarden utilise l'outil de saisie automatique d'Android pour aider à saisir les identifiants, les cartes de crédit et les informations d'identité dans d'autres applis sur votre appareil.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Utilisez le service d'accessibilité de Bitwarden pour le remplissage automatique de vos identifiants.</value>
+    <value>Utilisez le service de remplissage automatique de Bitwarden pour remplir les informations de connexion dans d'autres applications.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Ouvrir les paramètres de remplissage automatique</value>
@@ -1287,7 +1299,7 @@
     <value>1. Allez dans l'application "Réglages" d'iOS</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Appuyez sur "Mots de passe et comptes"</value>
+    <value>2. Appuyez sur "Mots de passes et comptes"</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
     <value>3. Appuyez sur "Préremplir mots de passe"</value>
@@ -1923,7 +1935,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Désactiver ce Send pour que personne ne puisse y accéder.</value>
+    <value>Désactiver cet envoi pour que personne ne puisse y accéder.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
@@ -2091,6 +2103,30 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Une ou plusieurs politiques d'organisation vous empêchent d'exporter votre coffre personnel.</value>
+  </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Ajouter un compte</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Déverrouillé</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Verrouillé</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Déconnecté</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Passage au prochain compte disponible</value>
+  </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>Compte verrouillé</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>Compte déconnecté avec succès</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>Compte supprimé avec succès</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Supprimer le compte</value>

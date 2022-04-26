@@ -1,4 +1,7 @@
-﻿using Android;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Android;
 using Android.App;
 using Android.Content;
 using Android.OS;
@@ -9,12 +12,6 @@ using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Utilities;
-#if !FDROID
-using Microsoft.AppCenter.Crashes;
-#endif
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Bit.Droid.Autofill
 {
@@ -26,9 +23,9 @@ namespace Bit.Droid.Autofill
     {
         private ICipherService _cipherService;
         private IVaultTimeoutService _vaultTimeoutService;
-        private IStorageService _storageService;
         private IPolicyService _policyService;
-        private IUserService _userService;
+        private IStateService _stateService;
+        private LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
 
         public async override void OnFillRequest(FillRequest request, CancellationSignal cancellationSignal,
             FillCallback callback)
@@ -44,18 +41,18 @@ namespace Bit.Droid.Autofill
                 var parser = new Parser(structure, ApplicationContext);
                 parser.Parse();
 
-                if (_storageService == null)
+                if (_stateService == null)
                 {
-                    _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+                    _stateService = ServiceContainer.Resolve<IStateService>("stateService");
                 }
 
-                var shouldAutofill = await parser.ShouldAutofillAsync(_storageService);
+                var shouldAutofill = await parser.ShouldAutofillAsync(_stateService);
                 if (!shouldAutofill)
                 {
                     return;
                 }
 
-                var inlineAutofillEnabled = await _storageService.GetAsync<bool?>(Constants.InlineAutofillEnabledKey) ?? true;
+                var inlineAutofillEnabled = await _stateService.GetInlineAutofillEnabledAsync() ?? true;
 
                 if (_vaultTimeoutService == null)
                 {
@@ -76,7 +73,7 @@ namespace Bit.Droid.Autofill
 
                 // build response
                 var response = AutofillHelpers.CreateFillResponse(parser, items, locked, inlineAutofillEnabled, request);
-                var disableSavePrompt = await _storageService.GetAsync<bool?>(Constants.AutofillDisableSavePromptKey);
+                var disableSavePrompt = await _stateService.GetAutofillDisableSavePromptAsync();
                 if (!disableSavePrompt.GetValueOrDefault())
                 {
                     AutofillHelpers.AddSaveInfo(parser, request, response, parser.FieldCollection);
@@ -85,9 +82,7 @@ namespace Bit.Droid.Autofill
             }
             catch (Exception e)
             {
-#if !FDROID
-                Crashes.TrackError(e);
-#endif
+                _logger.Value.Exception(e);
             }
         }
 
@@ -101,12 +96,12 @@ namespace Bit.Droid.Autofill
                     return;
                 }
 
-                if (_storageService == null)
+                if (_stateService == null)
                 {
-                    _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+                    _stateService = ServiceContainer.Resolve<IStateService>("stateService");
                 }
 
-                var disableSavePrompt = await _storageService.GetAsync<bool?>(Constants.AutofillDisableSavePromptKey);
+                var disableSavePrompt = await _stateService.GetAutofillDisableSavePromptAsync();
                 if (disableSavePrompt.GetValueOrDefault())
                 {
                     return;
@@ -161,9 +156,7 @@ namespace Bit.Droid.Autofill
             }
             catch (Exception e)
             {
-#if !FDROID
-                Crashes.TrackError(e);
-#endif
+                _logger.Value.Exception(e);
             }
         }
     }

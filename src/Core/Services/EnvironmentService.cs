@@ -1,22 +1,25 @@
-﻿using Bit.Core.Abstractions;
+﻿using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using Bit.Core.Abstractions;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.Domain;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Bit.Core.Services
 {
     public class EnvironmentService : IEnvironmentService
     {
+        private const string DEFAULT_WEB_VAULT_URL = "https://vault.bitwarden.com";
+        private const string DEFAULT_WEB_SEND_URL = "https://send.bitwarden.com/#";
+
         private readonly IApiService _apiService;
-        private readonly IStorageService _storageService;
+        private readonly IStateService _stateService;
 
         public EnvironmentService(
             IApiService apiService,
-            IStorageService storageService)
+            IStateService stateService)
         {
             _apiService = apiService;
-            _storageService = storageService;
+            _stateService = stateService;
         }
 
         public string BaseUrl { get; set; }
@@ -27,22 +30,33 @@ namespace Bit.Core.Services
         public string NotificationsUrl { get; set; }
         public string EventsUrl { get; set; }
 
-        public string GetWebVaultUrl()
+        public string GetWebVaultUrl(bool returnNullIfDefault = false)
         {
             if (!string.IsNullOrWhiteSpace(WebVaultUrl))
             {
                 return WebVaultUrl;
             }
-            else if (!string.IsNullOrWhiteSpace(BaseUrl))
+
+            if (!string.IsNullOrWhiteSpace(BaseUrl))
             {
                 return BaseUrl;
             }
-            return null;
+
+            return returnNullIfDefault ? (string)null : DEFAULT_WEB_VAULT_URL;
+        }
+
+        public string GetWebSendUrl()
+        {
+            return GetWebVaultUrl(true) is string webVaultUrl ? $"{webVaultUrl}/#/send/" : DEFAULT_WEB_SEND_URL;
         }
 
         public async Task SetUrlsFromStorageAsync()
         {
-            var urls = await _storageService.GetAsync<EnvironmentUrlData>(Constants.EnvironmentUrlsKey);
+            var urls = await _stateService.GetEnvironmentUrlsAsync();
+            if (urls == null)
+            {
+                urls = await _stateService.GetPreAuthEnvironmentUrlsAsync();
+            }
             if (urls == null)
             {
                 urls = new EnvironmentUrlData();
@@ -54,6 +68,7 @@ namespace Bit.Core.Services
                 _apiService.SetUrls(envUrls);
                 return;
             }
+            BaseUrl = urls.Base;
             WebVaultUrl = urls.WebVault;
             ApiUrl = envUrls.Api = urls.Api;
             IdentityUrl = envUrls.Identity = urls.Identity;
@@ -72,7 +87,7 @@ namespace Bit.Core.Services
             urls.Icons = FormatUrl(urls.Icons);
             urls.Notifications = FormatUrl(urls.Notifications);
             urls.Events = FormatUrl(urls.Events);
-            await _storageService.SaveAsync(Constants.EnvironmentUrlsKey, urls);
+            await _stateService.SetPreAuthEnvironmentUrlsAsync(urls);
             BaseUrl = urls.Base;
             WebVaultUrl = urls.WebVault;
             ApiUrl = urls.Api;

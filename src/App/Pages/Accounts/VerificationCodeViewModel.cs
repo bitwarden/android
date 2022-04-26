@@ -1,18 +1,16 @@
 ﻿using System;
+using System.Threading.Tasks;
+using System.Windows.Input;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
-using Bit.Core.Abstractions;
-using Bit.Core.Utilities;
-using System.Threading.Tasks;
-using Bit.Core.Exceptions;
-using Xamarin.Forms;
-using Xamarin.CommunityToolkit.ObjectModel;
-using System.Windows.Input;
 using Bit.App.Utilities;
 using Bit.Core;
-#if !FDROID
-using Microsoft.AppCenter.Crashes;
-#endif
+using Bit.Core.Abstractions;
+using Bit.Core.Enums;
+using Bit.Core.Exceptions;
+using Bit.Core.Utilities;
+using Xamarin.CommunityToolkit.ObjectModel;
+using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
@@ -23,6 +21,7 @@ namespace Bit.App.Pages
         private readonly IUserVerificationService _userVerificationService;
         private readonly IApiService _apiService;
         private readonly IVerificationActionsFlowHelper _verificationActionsFlowHelper;
+        private readonly ILogger _logger;
 
         private bool _showPassword;
         private string _secret, _mainActionText, _sendCodeStatus;
@@ -34,6 +33,7 @@ namespace Bit.App.Pages
             _userVerificationService = ServiceContainer.Resolve<IUserVerificationService>("userVerificationService");
             _apiService = ServiceContainer.Resolve<IApiService>("apiService");
             _verificationActionsFlowHelper = ServiceContainer.Resolve<IVerificationActionsFlowHelper>("verificationActionsFlowHelper");
+            _logger = ServiceContainer.Resolve<ILogger>("logger");
 
             PageTitle = AppResources.VerificationCode;
             
@@ -117,9 +117,7 @@ namespace Bit.App.Pages
             }
             catch (Exception ex)
             {
-#if !FDROID
-                Crashes.TrackError(ex);
-#endif
+                _logger.Exception(ex);
                 await _deviceActionService.HideLoadingAsync();
                 SendCodeStatus = AppResources.AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain;
             }
@@ -144,7 +142,7 @@ namespace Bit.App.Pages
 
                 await _deviceActionService.ShowLoadingAsync(AppResources.Verifying);
 
-                if (!await _userVerificationService.VerifyUser(Secret, Core.Enums.VerificationType.OTP))
+                if (!await _userVerificationService.VerifyUser(Secret, VerificationType.OTP))
                 {
                     await _deviceActionService.HideLoadingAsync();
                     return;
@@ -154,6 +152,7 @@ namespace Bit.App.Pages
 
                 var parameters = _verificationActionsFlowHelper.GetParameters();
                 parameters.Secret = Secret;
+                parameters.VerificationType = VerificationType.OTP;
                 await _verificationActionsFlowHelper.ExecuteAsync(parameters);
 
                 Secret = string.Empty;
@@ -169,9 +168,7 @@ namespace Bit.App.Pages
             }
             catch (Exception ex)
             {
-#if !FDROID
-                Crashes.TrackError(ex);
-#endif
+                _logger.Exception(ex);
                 await _deviceActionService.HideLoadingAsync();
             }
         }

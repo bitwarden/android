@@ -1,16 +1,17 @@
-﻿using Bit.App.Abstractions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Bit.App.Abstractions;
+using Bit.App.Controls;
 using Bit.App.Resources;
 using Bit.App.Utilities;
-using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -39,14 +40,13 @@ namespace Bit.App.Pages
         private readonly IFolderService _folderService;
         private readonly ICollectionService _collectionService;
         private readonly ISyncService _syncService;
-        private readonly IUserService _userService;
         private readonly IVaultTimeoutService _vaultTimeoutService;
         private readonly IDeviceActionService _deviceActionService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IMessagingService _messagingService;
         private readonly IStateService _stateService;
-        private readonly IStorageService _storageService;
         private readonly IPasswordRepromptService _passwordRepromptService;
+        private readonly ILogger _logger;
 
         public GroupingsPageViewModel()
         {
@@ -54,24 +54,28 @@ namespace Bit.App.Pages
             _folderService = ServiceContainer.Resolve<IFolderService>("folderService");
             _collectionService = ServiceContainer.Resolve<ICollectionService>("collectionService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
-            _userService = ServiceContainer.Resolve<IUserService>("userService");
             _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
-            _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _passwordRepromptService = ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService");
+            _logger = ServiceContainer.Resolve<ILogger>("logger");
 
             Loading = true;
             PageTitle = AppResources.MyVault;
-            GroupedItems = new ExtendedObservableCollection<GroupingsPageListGroup>();
+            GroupedItems = new ObservableRangeCollection<IGroupingsPageListItem>();
             RefreshCommand = new Command(async () =>
             {
                 Refreshing = true;
                 await LoadAsync();
             });
             CipherOptionsCommand = new Command<CipherView>(CipherOptionsAsync);
+
+            AccountSwitchingOverlayViewModel = new AccountSwitchingOverlayViewModel(_stateService, _messagingService, _logger)
+            {
+                AllowAddAccountRow = true
+            };
         }
 
         public bool MainPage { get; set; }
@@ -80,7 +84,6 @@ namespace Bit.App.Pages
         public string CollectionId { get; set; }
         public Func<CipherView, bool> Filter { get; set; }
         public bool Deleted { get; set; }
-
         public bool HasCiphers { get; set; }
         public bool HasFolders { get; set; }
         public bool HasCollections { get; set; }
@@ -139,7 +142,10 @@ namespace Bit.App.Pages
             get => _websiteIconsEnabled;
             set => SetProperty(ref _websiteIconsEnabled, value);
         }
-        public ExtendedObservableCollection<GroupingsPageListGroup> GroupedItems { get; set; }
+
+        public AccountSwitchingOverlayViewModel AccountSwitchingOverlayViewModel { get; }
+
+        public ObservableRangeCollection<IGroupingsPageListItem> GroupedItems { get; set; }
         public Command RefreshCommand { get; set; }
         public Command<CipherView> CipherOptionsCommand { get; set; }
         public bool LoadedOnce { get; set; }
@@ -150,7 +156,7 @@ namespace Bit.App.Pages
             {
                 return;
             }
-            var authed = await _userService.IsAuthenticatedAsync();
+            var authed = await _stateService.IsAuthenticatedAsync();
             if (!authed)
             {
                 return;
@@ -159,7 +165,7 @@ namespace Bit.App.Pages
             {
                 return;
             }
-            if (await _storageService.GetAsync<bool>(Constants.SyncOnRefreshKey) && Refreshing && !SyncRefreshing)
+            if (await _stateService.GetSyncOnRefreshAsync() && Refreshing && !SyncRefreshing)
             {
                 SyncRefreshing = true;
                 await _syncService.FullSyncAsync(false);
@@ -175,8 +181,7 @@ namespace Bit.App.Pages
             var groupedItems = new List<GroupingsPageListGroup>();
             var page = Page as GroupingsPage;
 
-            WebsiteIconsEnabled = !(await _stateService.GetAsync<bool?>(Constants.DisableFaviconKey))
-                .GetValueOrDefault();
+            WebsiteIconsEnabled = !(await _stateService.GetDisableFaviconAsync()).GetValueOrDefault();
             try
             {
                 await LoadDataAsync();
@@ -271,12 +276,54 @@ namespace Bit.App.Pages
                     {
                         new GroupingsPageListItem()
                         {
-                            IsTrash = true, 
+                            IsTrash = true,
                             ItemCount = _deletedCount.ToString("N0")
                         }
                     }, AppResources.Trash, _deletedCount, uppercaseGroupNames, false));
                 }
-                GroupedItems.ResetWithRange(groupedItems);
+
+                // TODO: refactor this
+                if (Device.RuntimePlatform == Device.Android
+                    ||
+                    GroupedItems.Any())
+                {
+                    var items = new List<IGroupingsPageListItem>();
+                    foreach (var itemGroup in groupedItems)
+                    {
+                        items.Add(new GroupingsPageHeaderListItem(itemGroup.Name, itemGroup.ItemCount));
+                        items.AddRange(itemGroup);
+                    }
+
+                    GroupedItems.ReplaceRange(items);
+                }
+                else
+                {
+                    // HACK: we need this on iOS, so that it doesn't crash when adding coming from an empty list
+                    var first = true;
+                    var items = new List<IGroupingsPageListItem>();
+                    foreach (var itemGroup in groupedItems)
+                    {
+                        if (!first)
+                        {
+                            items.Add(new GroupingsPageHeaderListItem(itemGroup.Name, itemGroup.ItemCount));
+                        }
+                        else
+                        {
+                            first = false;
+                        }
+                        items.AddRange(itemGroup);
+                    }
+
+                    if (groupedItems.Any())
+                    {
+                        GroupedItems.ReplaceRange(new List<IGroupingsPageListItem> { new GroupingsPageHeaderListItem(groupedItems[0].Name, groupedItems[0].ItemCount) });
+                        GroupedItems.AddRange(items);
+                    }
+                    else
+                    {
+                        GroupedItems.Clear();
+                    }
+                }
             }
             finally
             {

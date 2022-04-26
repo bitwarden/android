@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Вы действительно хотите выйти?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Удалить учетную запись</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Вы действительно хотите удалить эту учетную запись?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Учетная запись уже добавлена</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Хотите переключиться на нее?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Мастер-пароль</value>
     <comment>Label for a master password.</comment>
@@ -1287,7 +1299,7 @@
     <value>1. Перейдите в 'Настройки' iOS</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Нажмите 'Пароли и учетные записи'</value>
+    <value>2. Нажмите 'Пароли'</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
     <value>3. Нажмите 'Автозаполнение паролей'</value>
@@ -2003,7 +2015,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
-    <value>Скрыть мой адрес электронной почты от получателей.</value>
+    <value>Скрыть мой адрес email от получателей</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
     <value>На параметры Send влияют одна или несколько политик организации.</value>
@@ -2091,6 +2103,30 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Экспорт вашего личного хранилища запрещен одной или несколькими политиками организации.</value>
+  </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Добавить учетную запись</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Разблокировано</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Заблокировано</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Вы вышли из учетной записи</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Переключено на следующую доступную учетную запись</value>
+  </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>Учетная запись заблокирована</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>Вы успешно вышли из учетной записи</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>Учетная запись успешно удалена</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Удалить аккаунт</value>

@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Çıxış etmək istədiyinizə əminsiniz?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Hesabı sil</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Bu istifadəçini silmək istədiyinizə əminsiniz?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Hesab artıq əlavə edildi</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Buna indi keçmək istəyirsiniz?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Ana parol</value>
     <comment>Label for a master password.</comment>
@@ -2092,6 +2104,30 @@
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Bir və ya daha çox təşkilat siyasəti, fərdi anbarınızı ixrac etməyinizin qarşısını alır.</value>
   </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Hesab əlavə et</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Kilidi açıldı</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Kilidli</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Çıxış edildi</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Növbəti mövcud hesaba keçildi</value>
+  </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>Hesab kilidlidir</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>Hesabdan uğurla çıxış edildi</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>Hesab uğurla silindi</value>
+  </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Hesabı sil</value>
   </data>
@@ -2111,7 +2147,7 @@
     <value>Etibarsız təsdiqləmə kodu</value>
   </data>
   <data name="RequestOTP" xml:space="preserve">
-    <value>Request one-time password</value>
+    <value>Tək istifadəlik parol tələb et</value>
   </data>
   <data name="SendCode" xml:space="preserve">
     <value>Kod göndər</value>
@@ -2120,24 +2156,24 @@
     <value>Göndərilir</value>
   </data>
   <data name="CopySendLinkOnSave" xml:space="preserve">
-    <value>Copy Send link on save</value>
+    <value>Send bağlantısını saxlamaq üçün kopyala</value>
   </data>
   <data name="SendingCode" xml:space="preserve">
-    <value>Sending code</value>
+    <value>Kod göndərilir</value>
   </data>
   <data name="Verifying" xml:space="preserve">
-    <value>Verifying</value>
+    <value>Təsdiqlənir</value>
   </data>
   <data name="ResendCode" xml:space="preserve">
-    <value>Resend Code</value>
+    <value>Kodu təkrar göndər</value>
   </data>
   <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
-    <value>A verification code was sent to your email</value>
+    <value>Təsdiqləmə kodu e-poçtunuza göndərildi</value>
   </data>
   <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
-    <value>An error occurred while sending a verification code to your email. Please try again</value>
+    <value>E-poçtunuza təsdiqləmə kodu göndərilərkən bir xəta baş verdi. Zəhmət olmasa yenidən sınayın</value>
   </data>
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
-    <value>Enter the verification code that was sent to your email</value>
+    <value>E-poçtunuza göndərilmiş təsdiqləmə kodunu daxil edin</value>
   </data>
 </root>

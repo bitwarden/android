@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Tem certeza que deseja sair?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Remover conta</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Tem certeza que deseja remover essa conta?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Conta já adicionada</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Você gostaria de mudar para ela agora?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Senha Mestra</value>
     <comment>Label for a master password.</comment>
@@ -1150,10 +1162,10 @@
     <value>Serviço de Acessibilidade de Autopreenchimento</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>O serviço de autopreenchimento do Bitwarden utiliza a Estrutura de Autopreenchimento do Android para ajudar no preenchimento de credenciais, cartões de crédito, e informação de identidade em outros aplicativos do seu dispositivo.</value>
+    <value>O serviço de autopreenchimento do Bitwarden usa a Estrutura de Preenchimento Automático do Android para auxiliar no preenchimento de credenciais em outros aplicativos no seu dispositivo.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Utilize o serviço de autopreenchimento do Bitwarden para preencher automaticamente suas credenciais, cartões de crédito e informação de identidade em outros aplicativos.</value>
+    <value>Use o serviço de acessibilidade do bitwarden para preencher automaticamente suas credenciais.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Abrir Configurações de Autopreenchimento</value>
@@ -1924,7 +1936,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Desative este Send para que ninguém possa acessá-lo.</value>
+    <value>Desabilite este Send para que ninguém possa acessá-lo.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
@@ -2092,6 +2104,30 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Uma ou mais políticas da organização impedem que você exporte seu cofre pessoal.</value>
+  </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Adicionar conta</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Desbloqueada</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Bloqueada</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Desconectada</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Alterada para a próxima conta disponível</value>
+  </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>Conta Bloqueada</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>Conta desconectada com sucesso</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>Conta removida com sucesso</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Excluir Conta</value>

@@ -92,7 +92,7 @@
         <Setter Property="TextColor"
                 Value="{DynamicResource ButtonTextColor}" />
         <Setter Property="FontSize"
-                Value="18" />
+                Value="Medium" />
         <Setter Property="CornerRadius"
                 Value="5" />
         <Setter Property="Margin"
@@ -126,7 +126,7 @@
         <Setter Property="TextColor"
                 Value="{DynamicResource ButtonPrimaryTextColor}" />
         <Setter Property="FontSize"
-                Value="18" />
+                Value="Medium" />
         <Setter Property="FontAttributes"
                 Value="Bold" />
         <Setter Property="CornerRadius"
@@ -297,6 +297,18 @@
                 Value="37" />
         <Setter Property="FontSize"
                 Value="25" />
+    </Style>
+    <Style TargetType="Label"
+           Class="accountlist-title-platform"
+           ApplyToDerivedTypes="True">
+        <Setter Property="FontSize"
+                Value="Body" />
+    </Style>
+    <Style TargetType="Label"
+           Class="accountlist-sub-platform"
+           ApplyToDerivedTypes="True">
+        <Setter Property="FontSize"
+                Value="Caption" />
     </Style>
     
     <!-- Box -->

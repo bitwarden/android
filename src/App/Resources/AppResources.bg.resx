@@ -140,7 +140,7 @@
     <comment>Navigate back to the previous screen.</comment>
   </data>
   <data name="Bitwarden" xml:space="preserve">
-    <value>Битуорден</value>
+    <value>Bitwarden</value>
     <comment>App name. Shouldn't ever change.</comment>
   </data>
   <data name="Cancel" xml:space="preserve">
@@ -182,11 +182,11 @@
     <value>Редактиране на папка</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>Е-поща</value>
+    <value>Имейл</value>
     <comment>Short label for an email address.</comment>
   </data>
   <data name="EmailAddress" xml:space="preserve">
-    <value>Е-поща</value>
+    <value>Имейл адрес</value>
     <comment>Full label for a email address.</comment>
   </data>
   <data name="EmailUs" xml:space="preserve">
@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Сигурни ли сте, че искате да се отпишете?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Премахване на регистрацията</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Наистина ли искате да премахнете тази регистрация?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Регистрацията вече е добавена</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Искате ли да превключите към нея сега?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Главна парола</value>
     <comment>Label for a master password.</comment>
@@ -288,7 +300,7 @@
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Наименование</value>
+    <value>Име</value>
     <comment>Label for an entity name.</comment>
   </data>
   <data name="No" xml:space="preserve">
@@ -2092,6 +2104,30 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Една или повече от настройките на организацията Ви не позволяват да изнасяте личния си трезор.</value>
+  </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Добавяне на регистрация</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Отключено</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Заключено</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Отписано</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Превключено към следващата налична регистрация</value>
+  </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>Регистрацията е заключена</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>Отписването от регистрацията беше успешно</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>Регистрацията беше премахната успешно</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Изтриване на регистрацията</value>

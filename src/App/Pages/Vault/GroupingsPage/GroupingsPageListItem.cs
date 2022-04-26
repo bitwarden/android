@@ -5,7 +5,7 @@ using Bit.Core.Models.View;
 
 namespace Bit.App.Pages
 {
-    public class GroupingsPageListItem
+    public class GroupingsPageListItem : IGroupingsPageListItem
     {
         private string _icon;
         private string _name;
@@ -76,11 +76,11 @@ namespace Bit.App.Pages
                 }
                 else if (Folder != null)
                 {
-                    _icon = Folder.Id == null ? BitwardenIcons.FolderOpen : BitwardenIcons.FolderOpenF;
+                    _icon = BitwardenIcons.Folder;
                 }
                 else if (Collection != null)
                 {
-                    _icon = BitwardenIcons.Globe;
+                    _icon = BitwardenIcons.Collection;
                 }
                 else if (Type != null)
                 {

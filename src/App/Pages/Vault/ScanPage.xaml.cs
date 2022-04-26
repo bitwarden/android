@@ -1,5 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
+using Bit.Core.Abstractions;
+using Bit.Core.Utilities;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -8,8 +12,10 @@ namespace Bit.App.Pages
     {
         private readonly Action<string> _callback;
 
-        private DateTime? _timerStarted = null;
-        private TimeSpan _timerMaxLength = TimeSpan.FromMinutes(3);
+        private CancellationTokenSource _autofocusCts;
+        private Task _continuousAutofocusTask;
+
+        private readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
 
         public ScanPage(Action<string> callback)
         {
@@ -32,22 +38,44 @@ namespace Bit.App.Pages
         {
             base.OnAppearing();
             _zxing.IsScanning = true;
-            _timerStarted = DateTime.Now;
-            Device.StartTimer(new TimeSpan(0, 0, 2), () =>
+
+            // Fix for Autofocus, now it's done every 2 seconds so that the user does't have to do it
+            // https://github.com/Redth/ZXing.Net.Mobile/issues/414
+            _autofocusCts?.Cancel();
+            _autofocusCts = new CancellationTokenSource(TimeSpan.FromMinutes(3));
+
+            var autofocusCts = _autofocusCts;
+            _continuousAutofocusTask = Task.Run(async () =>
             {
-                if (_timerStarted == null || (DateTime.Now - _timerStarted) > _timerMaxLength)
+                try
                 {
-                    return false;
+                    while (!autofocusCts.IsCancellationRequested)
+                    {
+                        await Task.Delay(TimeSpan.FromSeconds(2), autofocusCts.Token);
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            if (!autofocusCts.IsCancellationRequested)
+                            {
+                                _zxing.AutoFocus();
+                            }
+                        });
+                    }
                 }
-                _zxing.AutoFocus();
-                return true;
-            });
+                catch (TaskCanceledException) { }
+                catch (Exception ex)
+                {
+                    _logger.Value.Exception(ex);
+                }
+            }, autofocusCts.Token);
         }
 
-        protected override void OnDisappearing()
+        protected override async void OnDisappearing()
         {
-            _timerStarted = null;
+            _autofocusCts?.Cancel();
+
+            await _continuousAutofocusTask;
             _zxing.IsScanning = false;
+
             base.OnDisappearing();
         }
 

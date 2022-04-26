@@ -4,9 +4,6 @@ using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.Domain;
 using Bit.Core.Utilities;
-#if !FDROID
-using Microsoft.AppCenter.Crashes;
-#endif
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -16,6 +13,7 @@ namespace Bit.App.Pages
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IPasswordGenerationService _passwordGenerationService;
         private readonly IClipboardService _clipboardService;
+        private readonly ILogger _logger;
 
         private bool _showNoData;
 
@@ -24,6 +22,7 @@ namespace Bit.App.Pages
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _passwordGenerationService = ServiceContainer.Resolve<IPasswordGenerationService>("passwordGenerationService");
             _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
+            _logger = ServiceContainer.Resolve<ILogger>("logger");
 
             PageTitle = AppResources.PasswordHistory;
             History = new ExtendedObservableCollection<GeneratedPasswordHistory>();
@@ -42,8 +41,11 @@ namespace Bit.App.Pages
         public async Task InitAsync()
         {
             var history = await _passwordGenerationService.GetHistoryAsync();
-            History.ResetWithRange(history ?? new List<GeneratedPasswordHistory>());
-            ShowNoData = History.Count == 0;
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                History.ResetWithRange(history ?? new List<GeneratedPasswordHistory>());
+                ShowNoData = History.Count == 0;
+            });
         }
 
         public async Task ClearAsync()
@@ -70,9 +72,7 @@ namespace Bit.App.Pages
             }
             catch (System.Exception ex)
             {
-#if !FDROID
-                Crashes.TrackError(ex);
-#endif
+                _logger.Exception(ex);
             }
         }
     }

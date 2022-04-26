@@ -7,9 +7,6 @@ using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Utilities;
-#if !FDROID
-using Microsoft.AppCenter.Crashes;
-#endif
 using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
@@ -21,6 +18,7 @@ namespace Bit.App.Pages
     {
         private readonly IBroadcasterService _broadcasterService;
         private readonly IVaultTimeoutService _vaultTimeoutService;
+        private readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
 
         private AppOptions _appOptions;
         private SendAddEditPageViewModel _vm;
@@ -131,9 +129,7 @@ namespace Bit.App.Pages
             }
             catch (Exception ex)
             {
-#if !FDROID
-                Crashes.TrackError(ex);
-#endif
+                _logger.Value.Exception(ex);
                 await CloseAsync();
             }
         }

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-#if !FDROID
-using Microsoft.AppCenter.Crashes;
-#endif
+using Bit.Core.Services;
 
 namespace Bit.Core.Utilities
 {
@@ -22,9 +20,7 @@ namespace Bit.Core.Utilities
             }
             catch (Exception ex)
             {
-#if !FDROID
-                Crashes.TrackError(ex);
-#endif
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
                 onException?.Invoke(ex);
             }
         }

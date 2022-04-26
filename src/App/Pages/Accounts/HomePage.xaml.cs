@@ -1,9 +1,9 @@
-﻿using Bit.App.Models;
+﻿using System;
+using System.Threading.Tasks;
+using Bit.App.Models;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
-using System;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -12,13 +12,10 @@ namespace Bit.App.Pages
     {
         private readonly HomeViewModel _vm;
         private readonly AppOptions _appOptions;
-        private IMessagingService _messagingService;
         private IBroadcasterService _broadcasterService;
 
         public HomePage(AppOptions appOptions = null)
         {
-            _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
-            _messagingService.Send("showStatusBar", false);
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _appOptions = appOptions;
             InitializeComponent();
@@ -29,6 +26,16 @@ namespace Bit.App.Pages
             _vm.StartSsoLoginAction = () => Device.BeginInvokeOnMainThread(async () => await StartSsoLoginAsync());
             _vm.StartEnvironmentAction = () => Device.BeginInvokeOnMainThread(async () => await StartEnvironmentAsync());
             UpdateLogo();
+
+            if (_appOptions?.IosExtension ?? false)
+            {
+                _vm.ShowCancelButton = true;
+            }
+
+            if (_appOptions?.HideAccountSwitcher ?? false)
+            {
+                ToolbarItems.Remove(_accountAvatar);
+            }
         }
 
         public async Task DismissRegisterPageAndLogInAsync(string email)
@@ -37,10 +44,16 @@ namespace Bit.App.Pages
             await Navigation.PushModalAsync(new NavigationPage(new LoginPage(email, _appOptions)));
         }
 
-        protected override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
-            _messagingService.Send("showStatusBar", false);
+            _mainContent.Content = _mainLayout;
+            _accountAvatar?.OnAppearing();
+
+            if (!_appOptions?.HideAccountSwitcher ?? false)
+            {
+                _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
+            }
             _broadcasterService.Subscribe(nameof(HomePage), async (message) =>
             {
                 if (message.Command == "updatedTheme")
@@ -53,10 +66,21 @@ namespace Bit.App.Pages
             });
         }
 
+        protected override bool OnBackButtonPressed()
+        {
+            if (_accountListOverlay.IsVisible)
+            {
+                _accountListOverlay.HideAsync().FireAndForget();
+                return true;
+            }
+            return false;
+        }
+
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
             _broadcasterService.Unsubscribe(nameof(HomePage));
+            _accountAvatar?.OnDisappearing();
         }
 
         private void UpdateLogo()
@@ -64,7 +88,7 @@ namespace Bit.App.Pages
             _logo.Source = !ThemeManager.UsingLightTheme ? "logo_white.png" : "logo.png";
         }
         
-        private void Close_Clicked(object sender, EventArgs e)
+        private void Cancel_Clicked(object sender, EventArgs e)
         {
             if (DoOnce())
             {
@@ -124,6 +148,7 @@ namespace Bit.App.Pages
         
         private async Task StartEnvironmentAsync()
         {
+            await _accountListOverlay.HideAsync();
             var page = new EnvironmentPage();
             await Navigation.PushModalAsync(new NavigationPage(page));
         }

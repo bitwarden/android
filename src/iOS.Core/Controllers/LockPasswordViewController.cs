@@ -23,13 +23,13 @@ namespace Bit.iOS.Core.Controllers
         private IVaultTimeoutService _vaultTimeoutService;
         private ICryptoService _cryptoService;
         private IDeviceActionService _deviceActionService;
-        private IUserService _userService;
-        private IStorageService _storageService;
+        private IStateService _stateService;
         private IStorageService _secureStorageService;
         private IPlatformUtilsService _platformUtilsService;
         private IBiometricService _biometricService;
         private IKeyConnectorService _keyConnectorService;
-        private Tuple<bool, bool> _pinSet;
+        private bool _isPinProtected;
+        private bool _isPinProtectedWithKey;
         private bool _pinLock;
         private bool _biometricLock;
         private bool _biometricIntegrityValid = true;
@@ -59,6 +59,7 @@ namespace Bit.iOS.Core.Controllers
             get
             {
                 var cell = new UITableViewCell();
+                cell.BackgroundColor = ThemeHelpers.BackgroundColor;
                 if (_biometricIntegrityValid)
                 {
                     var biometricButtonText = _deviceActionService.SupportsFaceBiometric() ?
@@ -83,8 +84,7 @@ namespace Bit.iOS.Core.Controllers
             _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             _cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
-            _userService = ServiceContainer.Resolve<IUserService>("userService");
-            _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _secureStorageService = ServiceContainer.Resolve<IStorageService>("secureStorageService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _biometricService = ServiceContainer.Resolve<IBiometricService>("biometricService");
@@ -92,21 +92,22 @@ namespace Bit.iOS.Core.Controllers
 
             // We re-use the lock screen for autofill extension to verify master password
             // when trying to access protected items.
-            if (autofillExtension && await _storageService.GetAsync<bool>(Bit.Core.Constants.PasswordRepromptAutofillKey))
+            if (autofillExtension && await _stateService.GetPasswordRepromptAutofillAsync())
             {
                 _passwordReprompt = true;
-                _pinSet = Tuple.Create(false, false);
+                _isPinProtected = false;
+                _isPinProtectedWithKey = false;
                 _pinLock = false;
                 _biometricLock = false;
             }
             else
             {
-                _pinSet = _vaultTimeoutService.IsPinLockSetAsync().GetAwaiter().GetResult();
-                _pinLock = (_pinSet.Item1 && _vaultTimeoutService.PinProtectedKey != null) || _pinSet.Item2;
-                _biometricLock = _vaultTimeoutService.IsBiometricLockSetAsync().GetAwaiter().GetResult() &&
-                    _cryptoService.HasKeyAsync().GetAwaiter().GetResult();
-                _biometricIntegrityValid = _biometricService.ValidateIntegrityAsync(BiometricIntegrityKey).GetAwaiter()
-                    .GetResult();
+                (_isPinProtected, _isPinProtectedWithKey) = await _vaultTimeoutService.IsPinLockSetAsync();
+                _pinLock = (_isPinProtected && await _stateService.GetPinProtectedKeyAsync() != null) ||
+                           _isPinProtectedWithKey;
+                _biometricLock = await _vaultTimeoutService.IsBiometricLockSetAsync() &&
+                                 await _cryptoService.HasKeyAsync();
+                _biometricIntegrityValid = await _biometricService.ValidateIntegrityAsync(BiometricIntegrityKey);
                 _usesKeyConnector = await _keyConnectorService.GetUsesKeyConnector();
                 _biometricUnlockOnly = _usesKeyConnector && _biometricLock && !_pinLock;
             }
@@ -212,9 +213,9 @@ namespace Bit.iOS.Core.Controllers
                 return;
             }
 
-            var email = await _userService.GetEmailAsync();
-            var kdf = await _userService.GetKdfAsync();
-            var kdfIterations = await _userService.GetKdfIterationsAsync();
+            var email = await _stateService.GetEmailAsync();
+            var kdf = await _stateService.GetKdfTypeAsync();
+            var kdfIterations = await _stateService.GetKdfIterationsAsync();
             var inputtedValue = MasterPasswordCell.TextField.Text;
 
             if (_pinLock)
@@ -222,13 +223,13 @@ namespace Bit.iOS.Core.Controllers
                 var failed = true;
                 try
                 {
-                    if (_pinSet.Item1)
+                    if (_isPinProtected)
                     {
                         var key = await _cryptoService.MakeKeyFromPinAsync(inputtedValue, email,
                             kdf.GetValueOrDefault(KdfType.PBKDF2_SHA256), kdfIterations.GetValueOrDefault(5000),
-                            _vaultTimeoutService.PinProtectedKey);
+                            await _stateService.GetPinProtectedKeyAsync());
                         var encKey = await _cryptoService.GetEncKeyAsync(key);
-                        var protectedPin = await _storageService.GetAsync<string>(Bit.Core.Constants.ProtectedPin);
+                        var protectedPin = await _stateService.GetProtectedPinAsync();
                         var decPin = await _cryptoService.DecryptToUtf8Async(new EncString(protectedPin), encKey);
                         failed = decPin != inputtedValue;
                         if (!failed)
@@ -279,14 +280,14 @@ namespace Bit.iOS.Core.Controllers
                 var passwordValid = await _cryptoService.CompareAndUpdateKeyHashAsync(inputtedValue, key2);
                 if (passwordValid)
                 {
-                    if (_pinSet.Item1)
+                    if (_isPinProtected)
                     {
-                        var protectedPin = await _storageService.GetAsync<string>(Bit.Core.Constants.ProtectedPin);
+                        var protectedPin = await _stateService.GetProtectedPinAsync();
                         var encKey = await _cryptoService.GetEncKeyAsync(key2);
                         var decPin = await _cryptoService.DecryptToUtf8Async(new EncString(protectedPin), encKey);
                         var pinKey = await _cryptoService.MakePinKeyAysnc(decPin, email,
                             kdf.GetValueOrDefault(KdfType.PBKDF2_SHA256), kdfIterations.GetValueOrDefault(5000));
-                        _vaultTimeoutService.PinProtectedKey = await _cryptoService.EncryptAsync(key2.Key, pinKey);
+                        await _stateService.SetPinProtectedKeyAsync(await _cryptoService.EncryptAsync(key2.Key, pinKey));
                     }
                     await AppHelpers.ResetInvalidUnlockAttemptsAsync();
                     await SetKeyAndContinueAsync(key2, true);
@@ -313,7 +314,7 @@ namespace Bit.iOS.Core.Controllers
             var success = await _platformUtilsService.AuthenticateBiometricAsync(null,
                 _pinLock ? AppResources.PIN : AppResources.MasterPassword,
                 () => MasterPasswordCell.TextField.BecomeFirstResponder());
-            _vaultTimeoutService.BiometricLocked = !success;
+            await _stateService.SetBiometricLockedAsync(!success);
             if (success)
             {
                 DoContinue();
@@ -324,7 +325,7 @@ namespace Bit.iOS.Core.Controllers
         {
             var loginPage = new LoginSsoPage();
             var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesToPage(loginPage);
             if (loginPage.BindingContext is LoginSsoPageViewModel vm)
             {
@@ -352,10 +353,10 @@ namespace Bit.iOS.Core.Controllers
         {
             if (masterPassword)
             {
-                await _storageService.SaveAsync(Bit.Core.Constants.PasswordVerifiedAutofillKey, true);
+                await _stateService.SetPasswordVerifiedAutofillAsync(true);
             }
             await EnableBiometricsIfNeeded();
-            _vaultTimeoutService.BiometricLocked = false;
+            await _stateService.SetBiometricLockedAsync(false);
             MasterPasswordCell.TextField.ResignFirstResponder();
             Success();
         }
@@ -384,7 +385,7 @@ namespace Bit.iOS.Core.Controllers
         
         private async Task LogOutAsync()
         {
-            await AppHelpers.LogOutAsync();
+            await AppHelpers.LogOutAsync(await _stateService.GetActiveUserIdAsync());
             var authService = ServiceContainer.Resolve<IAuthService>("authService");
             authService.LogOut(() =>
             {

@@ -9,13 +9,14 @@ namespace Bit.Core.Abstractions
 {
     public interface ICryptoService
     {
-        Task ClearEncKeyAsync(bool memoryOnly = false);
-        Task ClearKeyAsync();
-        Task ClearKeyHashAsync();
-        Task ClearKeyPairAsync(bool memoryOnly = false);
-        Task ClearKeysAsync();
-        Task ClearOrgKeysAsync(bool memoryOnly = false);
-        Task ClearPinProtectedKeyAsync();
+        Task ClearEncKeyAsync(bool memoryOnly = false, string userId = null);
+        Task ClearKeyAsync(string userId = null);
+        Task ClearKeyHashAsync(string userId = null);
+        Task ClearKeyPairAsync(bool memoryOnly = false, string userId = null);
+        Task ClearKeysAsync(string userId = null);
+        Task ClearOrgKeysAsync(bool memoryOnly = false, string userId = null);
+        Task ClearPinProtectedKeyAsync(string userId = null);
+        void ClearCache();
         Task<byte[]> DecryptFromBytesAsync(byte[] encBytes, SymmetricCryptoKey key);
         Task<byte[]> DecryptToBytesAsync(EncString encString, SymmetricCryptoKey key = null);
         Task<string> DecryptToUtf8Async(EncString encString, SymmetricCryptoKey key = null);
@@ -24,7 +25,7 @@ namespace Bit.Core.Abstractions
         Task<EncByteArray> EncryptToBytesAsync(byte[] plainValue, SymmetricCryptoKey key = null);
         Task<SymmetricCryptoKey> GetEncKeyAsync(SymmetricCryptoKey key = null);
         Task<List<string>> GetFingerprintAsync(string userId, byte[] publicKey = null);
-        Task<SymmetricCryptoKey> GetKeyAsync();
+        Task<SymmetricCryptoKey> GetKeyAsync(string userId = null);
         Task<string> GetKeyHashAsync();
         Task<SymmetricCryptoKey> GetOrgKeyAsync(string orgId);
         Task<Dictionary<string, SymmetricCryptoKey>> GetOrgKeysAsync();
@@ -33,7 +34,7 @@ namespace Bit.Core.Abstractions
         Task<bool> CompareAndUpdateKeyHashAsync(string masterPassword, SymmetricCryptoKey key);
         Task<bool> HasEncKeyAsync();
         Task<string> HashPasswordAsync(string password, SymmetricCryptoKey key, HashPurpose hashPurpose = HashPurpose.ServerAuthorization);
-        Task<bool> HasKeyAsync();
+        Task<bool> HasKeyAsync(string userId = null);
         Task<Tuple<SymmetricCryptoKey, EncString>> MakeEncKeyAsync(SymmetricCryptoKey key);
         Task<SymmetricCryptoKey> MakeKeyAsync(string password, string salt, KdfType? kdf, int? kdfIterations);
         Task<SymmetricCryptoKey> MakeKeyFromPinAsync(string pin, string salt, KdfType kdf, int kdfIterations,

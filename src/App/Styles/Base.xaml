@@ -222,6 +222,14 @@
                 Value="{DynamicResource MutedColor}" />
     </Style>
     <Style TargetType="Label"
+           Class="accountlist-title">
+    </Style>
+    <Style TargetType="Label"
+           Class="accountlist-sub">
+        <Setter Property="TextColor"
+                Value="{DynamicResource MutedColor}" />
+    </Style>
+    <Style TargetType="Label"
            ApplyToDerivedTypes="True"
            Class="list-title-icon">
         <Setter Property="FontSize"
@@ -239,9 +247,9 @@
     <Style TargetType="Label"
            Class="list-icon"
            ApplyToDerivedTypes="True">
-        <Setter Property="WidthRequest"
+        <Setter Property="MinimumWidthRequest"
                 Value="26" />
-        <Setter Property="HeightRequest"
+        <Setter Property="MinimumHeightRequest"
                 Value="26" />
         <Setter Property="HorizontalTextAlignment"
                 Value="Center" />
@@ -363,7 +371,7 @@
         <Setter Property="Orientation"
                 Value="Horizontal" />
         <Setter Property="Spacing"
-                Value="10" />
+                Value="5" />
     </Style>
     <Style TargetType="Button"
            ApplyToDerivedTypes="True"
@@ -462,5 +470,29 @@
                 Value="Medium" />
         <Setter Property="TextColor"
                 Value="{DynamicResource TextColor}" />
+    </Style>
+
+    <!--Entry-->
+    <Style TargetType="InputView"
+           Class="capitalize-word-input"
+           ApplyToDerivedTypes="True">
+        <Setter Property="Keyboard">
+            <Keyboard x:FactoryMethod="Create">
+                <x:Arguments>
+                    <KeyboardFlags>CapitalizeWord</KeyboardFlags>
+                </x:Arguments>
+            </Keyboard>
+        </Setter>
+    </Style>
+    <Style TargetType="InputView"
+           Class="capitalize-sentence-input"
+           ApplyToDerivedTypes="True">
+        <Setter Property="Keyboard">
+            <Keyboard x:FactoryMethod="Create">
+                <x:Arguments>
+                    <KeyboardFlags>CapitalizeSentence</KeyboardFlags>
+                </x:Arguments>
+            </Keyboard>
+        </Setter>
     </Style>
 </ResourceDictionary>

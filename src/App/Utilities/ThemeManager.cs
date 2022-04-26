@@ -1,14 +1,12 @@
 ﻿using System;
-using Bit.App.Models;
-using Bit.App.Services;
-using Bit.App.Styles;
-using Bit.Core;
-using Xamarin.Forms;
 using System.Linq;
 using System.Threading.Tasks;
-#if !FDROID
-using Microsoft.AppCenter.Crashes;
-#endif
+using Bit.App.Models;
+using Bit.App.Styles;
+using Bit.Core.Abstractions;
+using Bit.Core.Services;
+using Bit.Core.Utilities;
+using Xamarin.Forms;
 
 namespace Bit.App.Utilities
 {
@@ -76,9 +74,7 @@ namespace Bit.App.Utilities
             }
             catch (Exception ex)
             {
-#if !FDROID
-                Crashes.TrackError(ex);
-#endif
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
             }
         }
 
@@ -110,16 +106,15 @@ namespace Bit.App.Utilities
             }
         }
 
-        public static void SetTheme(bool android, ResourceDictionary resources)
+        public static void SetTheme(ResourceDictionary resources)
         {
-            SetThemeStyle(GetTheme(android), resources);
+            SetThemeStyle(GetTheme(), resources);
         }
 
-        public static string GetTheme(bool android)
+        public static string GetTheme()
         {
-            return Xamarin.Essentials.Preferences.Get(
-                string.Format(PreferencesStorageService.KeyFormat, Constants.ThemeKey), default(string),
-                !android ? "group.com.8bit.bitwarden" : default(string));
+            var stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            return stateService.GetThemeAsync().GetAwaiter().GetResult();
         }
 
         public static bool OsDarkModeEnabled()
@@ -169,9 +164,7 @@ namespace Bit.App.Utilities
             }
             catch (Exception ex)
             {
-#if !FDROID
-                Crashes.TrackError(ex);
-#endif
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
             }
         }
     }

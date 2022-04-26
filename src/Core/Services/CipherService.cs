@@ -19,15 +19,11 @@ namespace Bit.Core.Services
 {
     public class CipherService : ICipherService
     {
-        private const string Keys_CiphersFormat = "ciphers_{0}";
-        private const string Keys_LocalData = "ciphersLocalData";
-        private const string Keys_NeverDomains = "neverDomains";
-
         private readonly string[] _ignoredSearchTerms = new string[] { "com", "net", "org", "android",
             "io", "co", "uk", "au", "nz", "fr", "de", "tv", "info", "app", "apps", "eu", "me", "dev", "jp", "mobile" };
         private List<CipherView> _decryptedCipherCache;
         private readonly ICryptoService _cryptoService;
-        private readonly IUserService _userService;
+        private readonly IStateService _stateService;
         private readonly ISettingsService _settingsService;
         private readonly IApiService _apiService;
         private readonly IFileUploadService _fileUploadService;
@@ -45,7 +41,7 @@ namespace Bit.Core.Services
 
         public CipherService(
             ICryptoService cryptoService,
-            IUserService userService,
+            IStateService stateService,
             ISettingsService settingsService,
             IApiService apiService,
             IFileUploadService fileUploadService,
@@ -56,7 +52,7 @@ namespace Bit.Core.Services
             string[] allClearCipherCacheKeys)
         {
             _cryptoService = cryptoService;
-            _userService = userService;
+            _stateService = stateService;
             _settingsService = settingsService;
             _apiService = apiService;
             _fileUploadService = fileUploadService;
@@ -211,11 +207,8 @@ namespace Bit.Core.Services
 
         public async Task<Cipher> GetAsync(string id)
         {
-            var userId = await _userService.GetUserIdAsync();
-            var localData = await _storageService.GetAsync<Dictionary<string, Dictionary<string, object>>>(
-                Keys_LocalData);
-            var ciphers = await _storageService.GetAsync<Dictionary<string, CipherData>>(
-                string.Format(Keys_CiphersFormat, userId));
+            var localData = await _stateService.GetLocalDataAsync();
+            var ciphers = await _stateService.GetEncryptedCiphersAsync();
             if (!ciphers?.ContainsKey(id) ?? true)
             {
                 return null;
@@ -226,11 +219,8 @@ namespace Bit.Core.Services
 
         public async Task<List<Cipher>> GetAllAsync()
         {
-            var userId = await _userService.GetUserIdAsync();
-            var localData = await _storageService.GetAsync<Dictionary<string, Dictionary<string, object>>>(
-                Keys_LocalData);
-            var ciphers = await _storageService.GetAsync<Dictionary<string, CipherData>>(
-                string.Format(Keys_CiphersFormat, userId));
+            var localData = await _stateService.GetLocalDataAsync();
+            var ciphers = await _stateService.GetEncryptedCiphersAsync();
             var response = ciphers?.Select(c => new Cipher(c.Value, false,
                 localData?.ContainsKey(c.Key) ?? false ? localData[c.Key] : null));
             return response?.ToList() ?? new List<Cipher>();
@@ -347,7 +337,7 @@ namespace Bit.Core.Services
             var others = new List<CipherView>();
             var ciphers = await ciphersTask;
 
-            var defaultMatch = (UriMatchType?)(await _storageService.GetAsync<int?>(Constants.DefaultUriMatch));
+            var defaultMatch = (UriMatchType?)(await _stateService.GetDefaultUriMatchAsync());
             if (defaultMatch == null)
             {
                 defaultMatch = UriMatchType.Domain;
@@ -457,8 +447,7 @@ namespace Bit.Core.Services
 
         public async Task UpdateLastUsedDateAsync(string id)
         {
-            var ciphersLocalData = await _storageService.GetAsync<Dictionary<string, Dictionary<string, object>>>(
-                Keys_LocalData);
+            var ciphersLocalData = await _stateService.GetLocalDataAsync();
             if (ciphersLocalData == null)
             {
                 ciphersLocalData = new Dictionary<string, Dictionary<string, object>>();
@@ -476,7 +465,7 @@ namespace Bit.Core.Services
                 ciphersLocalData[id].Add("lastUsedDate", DateTime.UtcNow);
             }
 
-            await _storageService.SaveAsync(Keys_LocalData, ciphersLocalData);
+            await _stateService.SetLocalDataAsync(ciphersLocalData);
             // Update cache
             if (DecryptedCipherCache == null)
             {
@@ -495,13 +484,13 @@ namespace Bit.Core.Services
             {
                 return;
             }
-            var domains = await _storageService.GetAsync<HashSet<string>>(Keys_NeverDomains);
+            var domains = await _stateService.GetNeverDomainsAsync();
             if (domains == null)
             {
                 domains = new HashSet<string>();
             }
             domains.Add(domain);
-            await _storageService.SaveAsync(Keys_NeverDomains, domains);
+            await _stateService.SetNeverDomainsAsync(domains);
         }
 
         public async Task SaveWithServerAsync(Cipher cipher)
@@ -526,7 +515,7 @@ namespace Bit.Core.Services
                 var request = new CipherRequest(cipher);
                 response = await _apiService.PutCipherAsync(cipher.Id, request);
             }
-            var userId = await _userService.GetUserIdAsync();
+            var userId = await _stateService.GetActiveUserIdAsync();
             var data = new CipherData(response, userId, cipher.CollectionIds);
             await UpsertAsync(data);
         }
@@ -550,7 +539,7 @@ namespace Bit.Core.Services
             var encCipher = await EncryptAsync(cipher);
             var request = new CipherShareRequest(encCipher);
             var response = await _apiService.PutShareCipherAsync(cipher.Id, request);
-            var userId = await _userService.GetUserIdAsync();
+            var userId = await _stateService.GetActiveUserIdAsync();
             var data = new CipherData(response, userId, collectionIds);
             await UpsertAsync(data);
         }
@@ -581,7 +570,7 @@ namespace Bit.Core.Services
                 response = await LegacyServerAttachmentFileUploadAsync(cipher.Id, encFileName, encFileData, orgEncAttachmentKey);
             }
 
-            var userId = await _userService.GetUserIdAsync();
+            var userId = await _stateService.GetActiveUserIdAsync();
             var cData = new CipherData(response, userId, cipher.CollectionIds);
             await UpsertAsync(cData);
             return new Cipher(cData);
@@ -602,16 +591,14 @@ namespace Bit.Core.Services
         {
             var request = new CipherCollectionsRequest(cipher.CollectionIds?.ToList());
             await _apiService.PutCipherCollectionsAsync(cipher.Id, request);
-            var userId = await _userService.GetUserIdAsync();
+            var userId = await _stateService.GetActiveUserIdAsync();
             var data = cipher.ToCipherData(userId);
             await UpsertAsync(data);
         }
 
         public async Task UpsertAsync(CipherData cipher)
         {
-            var userId = await _userService.GetUserIdAsync();
-            var storageKey = string.Format(Keys_CiphersFormat, userId);
-            var ciphers = await _storageService.GetAsync<Dictionary<string, CipherData>>(storageKey);
+            var ciphers = await _stateService.GetEncryptedCiphersAsync();
             if (ciphers == null)
             {
                 ciphers = new Dictionary<string, CipherData>();
@@ -621,15 +608,13 @@ namespace Bit.Core.Services
                 ciphers.Add(cipher.Id, null);
             }
             ciphers[cipher.Id] = cipher;
-            await _storageService.SaveAsync(storageKey, ciphers);
+            await _stateService.SetEncryptedCiphersAsync(ciphers);
             await ClearCacheAsync();
         }
 
         public async Task UpsertAsync(List<CipherData> cipher)
         {
-            var userId = await _userService.GetUserIdAsync();
-            var storageKey = string.Format(Keys_CiphersFormat, userId);
-            var ciphers = await _storageService.GetAsync<Dictionary<string, CipherData>>(storageKey);
+            var ciphers = await _stateService.GetEncryptedCiphersAsync();
             if (ciphers == null)
             {
                 ciphers = new Dictionary<string, CipherData>();
@@ -642,28 +627,25 @@ namespace Bit.Core.Services
                 }
                 ciphers[c.Id] = c;
             }
-            await _storageService.SaveAsync(storageKey, ciphers);
+            await _stateService.SetEncryptedCiphersAsync(ciphers);
             await ClearCacheAsync();
         }
 
         public async Task ReplaceAsync(Dictionary<string, CipherData> ciphers)
         {
-            var userId = await _userService.GetUserIdAsync();
-            await _storageService.SaveAsync(string.Format(Keys_CiphersFormat, userId), ciphers);
+            await _stateService.SetEncryptedCiphersAsync(ciphers);
             await ClearCacheAsync();
         }
 
         public async Task ClearAsync(string userId)
         {
-            await _storageService.RemoveAsync(string.Format(Keys_CiphersFormat, userId));
+            await _stateService.SetEncryptedCiphersAsync(null, userId);
             await ClearCacheAsync();
         }
 
         public async Task DeleteAsync(string id)
         {
-            var userId = await _userService.GetUserIdAsync();
-            var cipherKey = string.Format(Keys_CiphersFormat, userId);
-            var ciphers = await _storageService.GetAsync<Dictionary<string, CipherData>>(cipherKey);
+            var ciphers = await _stateService.GetEncryptedCiphersAsync();
             if (ciphers == null)
             {
                 return;
@@ -673,15 +655,13 @@ namespace Bit.Core.Services
                 return;
             }
             ciphers.Remove(id);
-            await _storageService.SaveAsync(cipherKey, ciphers);
+            await _stateService.SetEncryptedCiphersAsync(ciphers);
             await ClearCacheAsync();
         }
 
         public async Task DeleteAsync(List<string> ids)
         {
-            var userId = await _userService.GetUserIdAsync();
-            var cipherKey = string.Format(Keys_CiphersFormat, userId);
-            var ciphers = await _storageService.GetAsync<Dictionary<string, CipherData>>(cipherKey);
+            var ciphers = await _stateService.GetEncryptedCiphersAsync();
             if (ciphers == null)
             {
                 return;
@@ -694,7 +674,7 @@ namespace Bit.Core.Services
                 }
                 ciphers.Remove(id);
             }
-            await _storageService.SaveAsync(cipherKey, ciphers);
+            await _stateService.SetEncryptedCiphersAsync(ciphers);
             await ClearCacheAsync();
         }
 
@@ -706,9 +686,7 @@ namespace Bit.Core.Services
 
         public async Task DeleteAttachmentAsync(string id, string attachmentId)
         {
-            var userId = await _userService.GetUserIdAsync();
-            var cipherKey = string.Format(Keys_CiphersFormat, userId);
-            var ciphers = await _storageService.GetAsync<Dictionary<string, CipherData>>(cipherKey);
+            var ciphers = await _stateService.GetEncryptedCiphersAsync();
             if (ciphers == null || !ciphers.ContainsKey(id) || ciphers[id].Attachments == null)
             {
                 return;
@@ -718,7 +696,7 @@ namespace Bit.Core.Services
             {
                 ciphers[id].Attachments.Remove(attachment);
             }
-            await _storageService.SaveAsync(cipherKey, ciphers);
+            await _stateService.SetEncryptedCiphersAsync(ciphers);
             await ClearCacheAsync();
         }
 
@@ -771,9 +749,7 @@ namespace Bit.Core.Services
 
         public async Task SoftDeleteWithServerAsync(string id)
         {
-            var userId = await _userService.GetUserIdAsync();
-            var cipherKey = string.Format(Keys_CiphersFormat, userId);
-            var ciphers = await _storageService.GetAsync<Dictionary<string, CipherData>>(cipherKey);
+            var ciphers = await _stateService.GetEncryptedCiphersAsync();
             if (ciphers == null)
             {
                 return;
@@ -785,15 +761,13 @@ namespace Bit.Core.Services
 
             await _apiService.PutDeleteCipherAsync(id);
             ciphers[id].DeletedDate = DateTime.UtcNow;
-            await _storageService.SaveAsync(cipherKey, ciphers);
+            await _stateService.SetEncryptedCiphersAsync(ciphers);
             await ClearCacheAsync();
         }
 
         public async Task RestoreWithServerAsync(string id)
         {
-            var userId = await _userService.GetUserIdAsync();
-            var cipherKey = string.Format(Keys_CiphersFormat, userId);
-            var ciphers = await _storageService.GetAsync<Dictionary<string, CipherData>>(cipherKey);
+            var ciphers = await _stateService.GetEncryptedCiphersAsync();
             if (ciphers == null)
             {
                 return;
@@ -805,7 +779,7 @@ namespace Bit.Core.Services
             var response = await _apiService.PutRestoreCipherAsync(id);
             ciphers[id].DeletedDate = null;
             ciphers[id].RevisionDate = response.RevisionDate;
-            await _storageService.SaveAsync(cipherKey, ciphers);
+            await _stateService.SetEncryptedCiphersAsync(ciphers);
             await ClearCacheAsync();
         }
 

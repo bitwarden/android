@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>האם אתה בטוח שברצונך להתנתק?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>הסר/י חשבון</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>האם את/ה בטוח/ה שברצונך להסיר חשבון זה?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>החשבון כבר נוסף</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>האם תרצה לעבור אליו עכשיו?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>סיסמה ראשית</value>
     <comment>Label for a master password.</comment>
@@ -1061,7 +1073,7 @@ Bitwarden בעזרת פתיחת חלון "הגדרות".</value>
     <value>שם משפחה</value>
   </data>
   <data name="FullName" xml:space="preserve">
-    <value>Full Name</value>
+    <value>שם מלא</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>מספר רשיון</value>
@@ -1188,7 +1200,7 @@ Bitwarden בעזרת פתיחת חלון "הגדרות".</value>
     <value>מוסתר</value>
   </data>
   <data name="FieldTypeLinked" xml:space="preserve">
-    <value>Linked</value>
+    <value>מקושר</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>טקסט</value>
@@ -1460,7 +1472,7 @@ Bitwarden בעזרת פתיחת חלון "הגדרות".</value>
     <value>בטל נעילה</value>
   </data>
   <data name="UnlockVault" xml:space="preserve">
-    <value>Unlock Vault</value>
+    <value>פתח נעילת כספת</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 דקות</value>
@@ -1479,7 +1491,7 @@ Bitwarden בעזרת פתיחת חלון "הגדרות".</value>
     <value>הכספת שלך נעולה. הזן את קוד הPIN שלך כדי להמשיך.</value>
   </data>
   <data name="VaultLockedIdentity" xml:space="preserve">
-    <value>Your vault is locked. Verify your identity to continue.</value>
+    <value>הכספת שלך נעולה. אמת את זהותך כדי להמשיך.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>כהה</value>
@@ -1622,13 +1634,13 @@ Bitwarden בעזרת פתיחת חלון "הגדרות".</value>
     <value>הזן את הסיסמה הראשית שלך עבור יצוא המידע מהכספת.</value>
   </data>
   <data name="SendVerificationCodeToEmail" xml:space="preserve">
-    <value>Send a verification code to your email</value>
+    <value>שליחת קוד אימות לדוא״ל שלך</value>
   </data>
   <data name="CodeSent" xml:space="preserve">
-    <value>Code Sent!</value>
+    <value>קוד נשלח!</value>
   </data>
   <data name="ConfirmYourIdentity" xml:space="preserve">
-    <value>Confirm your identity to continue.</value>
+    <value>אשר את זהותך כדי להמשיך.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>הקובץ מכיל את פרטי הכספת שלך בפורמט לא מוצפן. מומלץ להעביר את הקובץ רק בדרכים מוצפנות, ומאוד לא מומלץ לשמור או לשלוח את הקובץ הזה בדרכים לא מוצפנות (כדוגמת סתם אימייל). מחק את הקובץ מיד לאחר שסיימת את השימוש בו.</value>
@@ -2054,19 +2066,19 @@ Bitwarden בעזרת פתיחת חלון "הגדרות".</value>
     <value>כרגע לא ניתן לעדכן את הסיסמה</value>
   </data>
   <data name="RemoveMasterPassword" xml:space="preserve">
-    <value>Remove Master Password</value>
+    <value>הסרת סיסמה ראשית</value>
   </data>
   <data name="RemoveMasterPasswordWarning" xml:space="preserve">
-    <value>{0} is using SSO with customer-managed encryption. Continuing will remove your Master Password from your account and require SSO to login.</value>
+    <value>{0} משתמש/ת ב־SSO עם הצפנה בניהול לקוחות. המשך התהליך יסיר את סיסמת האב שלך מחשבונך וידרוש SSO כדי להתחבר.</value>
   </data>
   <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
-    <value>If you do not want to remove your Master Password, you may leave this organization.</value>
+    <value>אם אינך רוצה להסיר את הסיסמה הראשית שלך, תוכל לעזוב את הארגון הזה.</value>
   </data>
   <data name="LeaveOrganization" xml:space="preserve">
-    <value>Leave Organization</value>
+    <value>עזוב ארגון</value>
   </data>
   <data name="LeaveOrganizationName" xml:space="preserve">
-    <value>Leave {0}?</value>
+    <value>לעזוב את {0}?</value>
   </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>אימות אינטרנט באמצעות FIDO2</value>
@@ -2099,52 +2111,77 @@ Bitwarden בעזרת פתיחת חלון "הגדרות".</value>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>מדיניות אחת או יותר של הארגון שלך מונעות ממך לייצא את הכספת האישית שלך.</value>
   </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>הוספת חשבון</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>פתוח</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>נעול</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>בוצעה יציאה</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>הוחלף לחשבון הזמין הבא</value>
+  </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>החשבון נעול</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>נותק בהצלחה מהחשבון</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>חשבון נמחק בהצלחה</value>
+  </data>
   <data name="DeleteAccount" xml:space="preserve">
-    <value>Delete Account</value>
+    <value>מחק חשבון</value>
   </data>
   <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
-    <value>Deleting your account is permanent</value>
+    <value>מחיקת חשבונך היא לצמיתות</value>
   </data>
   <data name="DeleteAccountExplanation" xml:space="preserve">
-    <value>Your account and all associated data will be erased and unrecoverable. Are you sure you want to continue?</value>
+    <value>החשבון שלך וכל הנתונים הקשורים יימחקו ולא ניתן יהיה לשחזרם. האם את/ה בטוח/ה שאת/ה רוצה להמשיך?
+</value>
   </data>
   <data name="DeletingYourAccount" xml:space="preserve">
-    <value>Deleting your account</value>
+    <value>מוחק את החשבון שלך</value>
   </data>
   <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
-    <value>Your account has been permanently deleted</value>
+    <value>חשבונך נמחק לצמיתות</value>
   </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
-    <value>Invalid Verification Code.</value>
+    <value>קוד אימות שגוי.</value>
   </data>
   <data name="RequestOTP" xml:space="preserve">
-    <value>Request one-time password</value>
+    <value>בקשת סיסמה חד־פעמית</value>
   </data>
   <data name="SendCode" xml:space="preserve">
-    <value>Send Code</value>
+    <value>שליחת קוד</value>
   </data>
   <data name="Sending" xml:space="preserve">
-    <value>Sending</value>
+    <value>בשליחה</value>
   </data>
   <data name="CopySendLinkOnSave" xml:space="preserve">
-    <value>Copy Send link on save</value>
+    <value>העתק קישור שליחה בעת שמירה</value>
   </data>
   <data name="SendingCode" xml:space="preserve">
-    <value>Sending code</value>
+    <value>שליחת קוד</value>
   </data>
   <data name="Verifying" xml:space="preserve">
-    <value>Verifying</value>
+    <value>אימות</value>
   </data>
   <data name="ResendCode" xml:space="preserve">
-    <value>Resend Code</value>
+    <value>שליחת קוד בשנית</value>
   </data>
   <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
-    <value>A verification code was sent to your email</value>
+    <value>קוד אימות נשלח לדוא"ל שלך</value>
   </data>
   <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
-    <value>An error occurred while sending a verification code to your email. Please try again</value>
+    <value>אירעה שגיאה בעת שליחת קוד אימות לדוא"ל שלך. בבקשה נסה שוב</value>
   </data>
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
-    <value>Enter the verification code that was sent to your email</value>
+    <value>הזן את קוד האימות שנשלח לדוא"ל שלך</value>
   </data>
 </root>

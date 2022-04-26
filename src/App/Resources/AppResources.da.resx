@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Er du sikker på, at du vil logge ud?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Fjern konto</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Er du sikker på, at du vil fjerne denne konto?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Konto allerede tilføjet</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Vil du skifte til den nu?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Hovedadgangskode</value>
     <comment>Label for a master password.</comment>
@@ -1150,10 +1162,10 @@
     <value>Autoudfyld hjælpefunktion</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>Bitwarden autoudfyld tjenesten bruger Androids AutoFyld framework til at hjælpe med at udfylde logins, kreditkort og identitetsoplysninger i andre apps på din enhed.</value>
+    <value>Bitwarden autoudfyld tjenesten bruger Androids AutoFyld framework til at hjælpe med at udfylde loginoplysninger i andre apps på din enhed.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Brug Bitwarden autoudfyld tjenesten til at udfylde logins, kreditkort og identitetsoplysninger i andre apps.</value>
+    <value>Brug Bitwarden autoudfyld tjenesten til at udfylde loginoplysninger i andre apps.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Åbn autoudfyld indstillinger</value>
@@ -1923,7 +1935,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Deaktivér denne Send, så ingen kan tilgå den.</value>
+    <value>Deaktivér denne Send, så ingen kan tilgå den</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
@@ -1991,7 +2003,7 @@
     <value>Tilpasset</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
-    <value>Del denne Send, når den gemmes.</value>
+    <value>Del denne Send, når den gemmes</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
@@ -2003,7 +2015,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
-    <value>Skjul min e-mailadresse for modtagere.</value>
+    <value>Skjul min e-mailadresse for modtagere</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
     <value>Én eller flere organisationspolitikker påvirker dine Send-valgmuligheder.</value>
@@ -2091,6 +2103,30 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>En eller flere organisationspolitikker forhindrer eksport af din personlige boks.</value>
+  </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Tilføj konto</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Låst op</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Låst</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Logget ud</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Skiftede til næste tilgængelige konto</value>
+  </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>Konto låst</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>Konto logget ud</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>Konto fjernet</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Slet konto</value>

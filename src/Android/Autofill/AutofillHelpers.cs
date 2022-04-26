@@ -51,6 +51,8 @@ namespace Bit.Droid.Autofill
         //   - ... to keep this list in sync with values in AccessibilityHelpers.SupportedBrowsers [Section A], too.
         public static HashSet<string> CompatBrowsers = new HashSet<string>
         {
+            "alook.browser",
+            "alook.browser.google",
             "com.amazon.cloud9",
             "com.android.browser",
             "com.android.chrome",

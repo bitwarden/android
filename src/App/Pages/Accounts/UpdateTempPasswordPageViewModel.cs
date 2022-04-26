@@ -43,9 +43,9 @@ namespace Bit.App.Pages
             }
             
             // Retrieve details for key generation
-            var kdf = await _userService.GetKdfAsync();
-            var kdfIterations = await _userService.GetKdfIterationsAsync();
-            var email = await _userService.GetEmailAsync();
+            var kdf = await _stateService.GetKdfTypeAsync();
+            var kdfIterations = await _stateService.GetKdfIterationsAsync();
+            var email = await _stateService.GetEmailAsync();
             
             // Create new key and hash new password
             var key = await _cryptoService.MakeKeyAsync(MasterPassword, email, kdf, kdfIterations);

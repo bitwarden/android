@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>آیا مطمئنید که می‌خواهید خارج شوید؟</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>حذف حساب</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>آیا از حذف این حساب اطمینان دارید؟</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>حساب قبلا اضافه شده</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value> آیا می خواهید همین الان تعویض کنید؟</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>کلمه عبور اصلی</value>
     <comment>Label for a master password.</comment>
@@ -2093,6 +2105,30 @@
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>یک یا چند خط مشی سازمان از صادرات گاوصندوق شخصی شما جلوگیری می کند.</value>
   </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>افزودن حساب کاربری</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>باز شده</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>قفل شده</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>خارج شده</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>به حساب بعدی موجود تغییر کرد</value>
+  </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>حساب قفل شده است</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>حساب کاربری با موفقیت خارج شد</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>حساب کاربری با موفقیت حذف شد</value>
+  </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>حذف حساب</value>
   </data>
@@ -2112,7 +2148,7 @@
     <value>کد تایید نامعتبر است.</value>
   </data>
   <data name="RequestOTP" xml:space="preserve">
-    <value>Request one-time password</value>
+    <value>درخواست رمز یکبار مصرف</value>
   </data>
   <data name="SendCode" xml:space="preserve">
     <value>ارسال کد</value>
@@ -2121,7 +2157,7 @@
     <value>درحال ارسال</value>
   </data>
   <data name="CopySendLinkOnSave" xml:space="preserve">
-    <value>Copy Send link on save</value>
+    <value>لینک ارسال را در ذخیره کپی کن</value>
   </data>
   <data name="SendingCode" xml:space="preserve">
     <value>درحال ارسال کد</value>

@@ -2,6 +2,7 @@
 using Bit.App.Models;
 using Bit.App.Resources;
 using Bit.Core.Abstractions;
+using Bit.Core.Models.Data;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
 
@@ -45,7 +46,7 @@ namespace Bit.App.Pages
             var settingsPage = new NavigationPage(new SettingsPage(this))
             {
                 Title = AppResources.Settings,
-                IconImageSource = "cog.png"
+                IconImageSource = "cog_settings.png"
             };
             Children.Add(settingsPage);
 
@@ -102,8 +103,13 @@ namespace Bit.App.Pages
         {
             if (CurrentPage is NavigationPage navPage)
             {
+                if (_groupingsPage?.RootPage is GroupingsPage groupingsPage)
+                {
+                    await groupingsPage.HideAccountSwitchingOverlayAsync();
+                }
+
                 _messagingService.Send("updatedTheme");
-                if (navPage.RootPage is GroupingsPage groupingsPage)
+                if (navPage.RootPage is GroupingsPage)
                 {
                     // Load something?
                 }
@@ -115,6 +121,14 @@ namespace Bit.App.Pages
                 {
                     await settingsPage.InitAsync();
                 }
+            }
+        }
+
+        public void OnPageReselected()
+        {
+            if (_groupingsPage?.RootPage is GroupingsPage groupingsPage)
+            {
+                groupingsPage.HideAccountSwitchingOverlayAsync().FireAndForget();
             }
         }
     }

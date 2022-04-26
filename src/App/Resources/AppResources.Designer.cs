@@ -311,6 +311,30 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string RemoveAccount {
+            get {
+                return ResourceManager.GetString("RemoveAccount", resourceCulture);
+            }
+        }
+        
+        public static string RemoveAccountConfirmation {
+            get {
+                return ResourceManager.GetString("RemoveAccountConfirmation", resourceCulture);
+            }
+        }
+        
+        public static string AccountAlreadyAdded {
+            get {
+                return ResourceManager.GetString("AccountAlreadyAdded", resourceCulture);
+            }
+        }
+        
+        public static string SwitchToAlreadyAddedAccountConfirmation {
+            get {
+                return ResourceManager.GetString("SwitchToAlreadyAddedAccountConfirmation", resourceCulture);
+            }
+        }
+        
         public static string MasterPassword {
             get {
                 return ResourceManager.GetString("MasterPassword", resourceCulture);
@@ -2363,15 +2387,21 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string SearchFolder {
+        public static string SearchFileSends {
             get {
-                return ResourceManager.GetString("SearchFolder", resourceCulture);
+                return ResourceManager.GetString("SearchFileSends", resourceCulture);
             }
         }
         
-        public static string SearchType {
+        public static string SearchTextSends {
             get {
-                return ResourceManager.GetString("SearchType", resourceCulture);
+                return ResourceManager.GetString("SearchTextSends", resourceCulture);
+            }
+        }
+        
+        public static string SearchGroup {
+            get {
+                return ResourceManager.GetString("SearchGroup", resourceCulture);
             }
         }
         
@@ -3719,6 +3749,54 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string AddAccount {
+            get {
+                return ResourceManager.GetString("AddAccount", resourceCulture);
+            }
+        }
+        
+        public static string AccountUnlocked {
+            get {
+                return ResourceManager.GetString("AccountUnlocked", resourceCulture);
+            }
+        }
+        
+        public static string AccountLocked {
+            get {
+                return ResourceManager.GetString("AccountLocked", resourceCulture);
+            }
+        }
+        
+        public static string AccountLoggedOut {
+            get {
+                return ResourceManager.GetString("AccountLoggedOut", resourceCulture);
+            }
+        }
+        
+        public static string AccountSwitchedAutomatically {
+            get {
+                return ResourceManager.GetString("AccountSwitchedAutomatically", resourceCulture);
+            }
+        }
+        
+        public static string AccountLockedSuccessfully {
+            get {
+                return ResourceManager.GetString("AccountLockedSuccessfully", resourceCulture);
+            }
+        }
+        
+        public static string AccountLoggedOutSuccessfully {
+            get {
+                return ResourceManager.GetString("AccountLoggedOutSuccessfully", resourceCulture);
+            }
+        }
+        
+        public static string AccountRemovedSuccessfully {
+            get {
+                return ResourceManager.GetString("AccountRemovedSuccessfully", resourceCulture);
+            }
+        }
+        
         public static string DeleteAccount {
             get {
                 return ResourceManager.GetString("DeleteAccount", resourceCulture);
@@ -3752,6 +3830,12 @@ namespace Bit.App.Resources {
         public static string InvalidVerificationCode {
             get {
                 return ResourceManager.GetString("InvalidVerificationCode", resourceCulture);
+            }
+        }
+        
+        public static string RequestOTP {
+            get {
+                return ResourceManager.GetString("RequestOTP", resourceCulture);
             }
         }
         
