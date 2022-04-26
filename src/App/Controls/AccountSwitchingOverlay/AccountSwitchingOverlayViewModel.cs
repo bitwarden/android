@@ -22,11 +22,11 @@ namespace Bit.App.Controls
         {
             _stateService = stateService;
             _messagingService = messagingService;
-            
+
             SelectAccountCommand = new AsyncCommand<AccountViewCellViewModel>(SelectAccountAsync,
                 onException: ex => logger.Exception(ex),
                 allowsMultipleExecutions: false);
-            
+
             LongPressAccountCommand = new AsyncCommand<Tuple<ContentPage, AccountViewCellViewModel>>(LongPressAccountAsync,
                 onException: ex => logger.Exception(ex),
                 allowsMultipleExecutions: false);

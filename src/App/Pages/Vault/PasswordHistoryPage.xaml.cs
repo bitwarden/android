@@ -23,7 +23,8 @@ namespace Bit.App.Pages
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            await LoadOnAppearedAsync(_mainLayout, true, async () => {
+            await LoadOnAppearedAsync(_mainLayout, true, async () =>
+            {
                 await _vm.InitAsync();
             });
         }

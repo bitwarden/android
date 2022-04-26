@@ -6,7 +6,7 @@ namespace Bit.App.Controls
     {
         public static readonly BindableProperty StepperBackgroundColorProperty = BindableProperty.Create(
             nameof(StepperBackgroundColor), typeof(Color), typeof(ExtendedStepper), Color.Default);
-        
+
         public static readonly BindableProperty StepperForegroundColorProperty = BindableProperty.Create(
             nameof(StepperForegroundColor), typeof(Color), typeof(ExtendedStepper), Color.Default);
 
@@ -15,7 +15,7 @@ namespace Bit.App.Controls
             get => (Color)GetValue(StepperBackgroundColorProperty);
             set => SetValue(StepperBackgroundColorProperty, value);
         }
-        
+
         public Color StepperForegroundColor
         {
             get => (Color)GetValue(StepperForegroundColorProperty);

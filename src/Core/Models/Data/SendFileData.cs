@@ -1,4 +1,4 @@
-using System.Drawing;
+﻿using System.Drawing;
 using Bit.Core.Models.Api;
 
 namespace Bit.Core.Models.Data

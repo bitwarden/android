@@ -1,8 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Bit.Core.Abstractions;
-using System;
 using Bit.Core.Utilities;
 
 namespace Bit.App.Services

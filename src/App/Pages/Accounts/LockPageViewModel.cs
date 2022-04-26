@@ -272,7 +272,7 @@ namespace Bit.App.Pages
                 var key = await _cryptoService.MakeKeyAsync(MasterPassword, _email, kdf, kdfIterations);
                 var storedKeyHash = await _cryptoService.GetKeyHashAsync();
                 var passwordValid = false;
-                
+
                 if (storedKeyHash != null)
                 {
                     passwordValid = await _cryptoService.CompareAndUpdateKeyHashAsync(MasterPassword, key);

@@ -4,8 +4,8 @@ namespace Bit.App.Effects
 {
     public class FabShadowEffect : RoutingEffect
     {
-        public FabShadowEffect() 
-            : base("Bitwarden.FabShadowEffect") 
+        public FabShadowEffect()
+            : base("Bitwarden.FabShadowEffect")
         { }
     }
 }

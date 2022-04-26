@@ -63,7 +63,7 @@ namespace Bit.Core.Services
         private class V1Keys
         {
             internal const string EnvironmentUrlsKey = "environmentUrls";
-            
+
         }
 
         private async Task MigrateFrom1To2Async()

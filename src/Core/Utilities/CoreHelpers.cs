@@ -1,9 +1,9 @@
-﻿using Bit.Core.Models.Domain;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Bit.Core.Models.Domain;
+using Newtonsoft.Json;
 
 namespace Bit.Core.Utilities
 {
@@ -194,7 +194,7 @@ namespace Bit.Core.Utilities
             }
             return JsonConvert.SerializeObject(obj, jsonSerializationSettings);
         }
-        
+
         public static string SerializeJson(object obj, JsonSerializerSettings jsonSerializationSettings)
         {
             return JsonConvert.SerializeObject(obj, jsonSerializationSettings);

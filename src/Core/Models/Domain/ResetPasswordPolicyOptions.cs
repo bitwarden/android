@@ -1,4 +1,4 @@
-namespace Bit.Core.Models.Domain
+﻿namespace Bit.Core.Models.Domain
 {
     public class ResetPasswordPolicyOptions
     {

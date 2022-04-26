@@ -1,16 +1,16 @@
-﻿using Bit.App.Abstractions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using Bit.App.Abstractions;
 using Bit.App.Resources;
+using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.Request;
 using Bit.Core.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using Bit.App.Utilities;
 using Newtonsoft.Json;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -113,7 +113,7 @@ namespace Bit.App.Pages
         public Action StartSetPasswordAction { get; set; }
         public Action CloseAction { get; set; }
         public Action UpdateTempPasswordAction { get; set; }
-        
+
         protected override II18nService i18nService => _i18nService;
         protected override IEnvironmentService environmentService => _environmentService;
         protected override IDeviceActionService deviceActionService => _deviceActionService;
@@ -293,7 +293,7 @@ namespace Bit.App.Pages
                     await _deviceActionService.ShowLoadingAsync(AppResources.Validating);
                 }
                 var result = await _authService.LogInTwoFactorAsync(SelectedProviderType.Value, Token, _captchaToken, Remember);
-                
+
                 if (result.CaptchaNeeded)
                 {
                     if (await HandleCaptchaAsync(result.CaptchaSiteKey))
@@ -304,12 +304,12 @@ namespace Bit.App.Pages
                     return;
                 }
                 _captchaToken = null;
-                
+
                 var task = Task.Run(() => _syncService.FullSyncAsync(true));
                 await _deviceActionService.HideLoadingAsync();
                 _messagingService.Send("listenYubiKeyOTP", false);
                 _broadcasterService.Unsubscribe(nameof(TwoFactorPage));
-                
+
                 if (_authingWithSso && result.ResetMasterPassword)
                 {
                     StartSetPasswordAction?.Invoke();
@@ -317,7 +317,7 @@ namespace Bit.App.Pages
                 else if (result.ForcePasswordReset)
                 {
                     UpdateTempPasswordAction?.Invoke();
-                } 
+                }
                 else
                 {
                     TwoFactorAuthSuccessAction?.Invoke();

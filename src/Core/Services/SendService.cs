@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -200,7 +200,8 @@ namespace Bit.Core.Services
                         response = await _apiService.PostSendAsync(request);
                         break;
                     case SendType.File:
-                        try{
+                        try
+                        {
                             var uploadDataResponse = await _apiService.PostFileTypeSendAsync(request);
                             response = uploadDataResponse.SendResponse;
 
@@ -212,7 +213,8 @@ namespace Bit.Core.Services
                         }
                         catch
                         {
-                            if (response != default){
+                            if (response != default)
+                            {
                                 await _apiService.DeleteSendAsync(response.Id);
                             }
                             throw;
@@ -234,7 +236,8 @@ namespace Bit.Core.Services
         }
 
         [Obsolete("Mar 25 2021: This method has been deprecated in favor of direct uploads. This method still exists for backward compatibility with old server versions.")]
-        private async Task<SendResponse> LegacyServerSendFileUpload(SendRequest request, Send send, EncByteArray encryptedFileData) {
+        private async Task<SendResponse> LegacyServerSendFileUpload(SendRequest request, Send send, EncByteArray encryptedFileData)
+        {
             var fd = new MultipartFormDataContent($"--BWMobileFormBoundary{DateTime.UtcNow.Ticks}")
                         {
                             { new StringContent(JsonConvert.SerializeObject(request)), "model" },

@@ -40,7 +40,7 @@ namespace Bit.App.Pages
         private TimeSpan? _expirationTime;
         private bool _isOverridingPickers;
         private int? _maxAccessCount;
-        private string[] _additionalSendProperties = new []
+        private string[] _additionalSendProperties = new[]
         {
             nameof(IsText),
             nameof(IsFile),
@@ -209,7 +209,7 @@ namespace Bit.App.Pages
         {
             get => _showPassword;
             set => SetProperty(ref _showPassword, value,
-                additionalPropertyNames: new []
+                additionalPropertyNames: new[]
                 {
                     nameof(ShowPasswordIcon)
                 });
@@ -237,7 +237,7 @@ namespace Bit.App.Pages
             PageTitle = EditMode ? AppResources.EditSend : AppResources.AddSend;
             _canAccessPremium = await _stateService.CanAccessPremiumAsync();
             _emailVerified = await _stateService.GetEmailVerifiedAsync();
-            SendEnabled = ! await AppHelpers.IsSendDisabledByPolicyAsync();
+            SendEnabled = !await AppHelpers.IsSendDisabledByPolicyAsync();
             DisableHideEmail = await AppHelpers.IsHideEmailDisabledByPolicyAsync();
             SendOptionsPolicyInEffect = SendEnabled && DisableHideEmail;
         }
@@ -381,7 +381,7 @@ namespace Bit.App.Pages
 
             UpdateSendData();
 
-            if (string.IsNullOrWhiteSpace(NewPassword)) 
+            if (string.IsNullOrWhiteSpace(NewPassword))
             {
                 NewPassword = null;
             }
@@ -521,7 +521,7 @@ namespace Bit.App.Pages
                     {
                         await _platformUtilsService.ShowDialogAsync(AppResources.SendFileEmailVerificationRequired);
                     }
-                    
+
                     if (IsAddFromShare && Device.RuntimePlatform == Device.Android)
                     {
                         _deviceActionService.CloseMainApp();

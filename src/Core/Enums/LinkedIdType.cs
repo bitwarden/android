@@ -1,6 +1,7 @@
-namespace Bit.Core.Enums {
-    
-    public enum LinkedIdType: int
+﻿namespace Bit.Core.Enums
+{
+
+    public enum LinkedIdType : int
     {
         // Login
         Login_Username = 100,

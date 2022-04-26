@@ -112,13 +112,13 @@ namespace Bit.App.Controls
 
         private string GetFirstLetters(string data, int charCount)
         {
-            var parts  = data.Split();
+            var parts = data.Split();
             if (parts.Length > 1 && charCount <= 2)
             {
                 var text = "";
                 for (int i = 0; i < charCount; i++)
                 {
-                    text += parts[i].Substring(0,1);
+                    text += parts[i].Substring(0, 1);
                 }
                 return text;
             }

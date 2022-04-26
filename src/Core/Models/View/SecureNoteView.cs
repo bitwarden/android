@@ -1,6 +1,6 @@
-﻿using Bit.Core.Enums;
+﻿using System.Collections.Generic;
+using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
-using System.Collections.Generic;
 
 namespace Bit.Core.Models.View
 {
