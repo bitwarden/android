@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Bit.Core.Enums;
 using Bit.Core.Models.Response;
 
@@ -38,7 +38,7 @@ namespace Bit.Core.Models.Data
                     break;
             }
         }
-        
+
         public string Id { get; set; }
         public string AccessId { get; set; }
         public string UserId { get; set; }

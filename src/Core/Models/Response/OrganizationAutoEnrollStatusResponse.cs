@@ -1,4 +1,4 @@
-namespace Bit.Core.Models.Response
+﻿namespace Bit.Core.Models.Response
 {
     public class OrganizationAutoEnrollStatusResponse
     {

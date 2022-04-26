@@ -1,6 +1,6 @@
-﻿using Bit.Core.Abstractions;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using Bit.Core.Abstractions;
 
 namespace Bit.Core.Services
 {

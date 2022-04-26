@@ -27,7 +27,7 @@ namespace Bit.App.Pages
         private PreviousPageInfo _previousPage;
 
         public GroupingsPage(bool mainPage, CipherType? type = null, string folderId = null,
-            string collectionId = null, string pageTitle = null, PreviousPageInfo previousPage = null, 
+            string collectionId = null, string pageTitle = null, PreviousPageInfo previousPage = null,
             bool deleted = false)
         {
             _pageName = string.Concat(nameof(GroupingsPage), "_", DateTime.UtcNow.Ticks);
@@ -117,7 +117,7 @@ namespace Bit.App.Pages
                     {
                         await _vm.LoadAsync();
                     }
-                    catch (Exception e) when(e.Message.Contains("No key."))
+                    catch (Exception e) when (e.Message.Contains("No key."))
                     {
                         await Task.Delay(1000);
                         await _vm.LoadAsync();

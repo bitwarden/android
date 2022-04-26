@@ -1,13 +1,13 @@
-﻿using Bit.Core.Abstractions;
-using Bit.Core.Models.Domain;
-using Bit.Core.Utilities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Bit.Core.Abstractions;
 using Bit.Core.Enums;
+using Bit.Core.Models.Domain;
+using Bit.Core.Utilities;
 using Zxcvbn;
 
 namespace Bit.Core.Services
@@ -384,7 +384,7 @@ namespace Bit.Core.Services
                 {
                     enforcedOptions.Capitalize = true;
                 }
-                
+
                 var includeNumber = GetPolicyBool(currentPolicy, "includeNumber");
                 if (includeNumber != null && (bool)includeNumber)
                 {
@@ -420,7 +420,7 @@ namespace Bit.Core.Services
             }
             return null;
         }
-        
+
         private string GetPolicyString(Policy policy, string key)
         {
             if (policy.Data.ContainsKey(key))
@@ -596,7 +596,7 @@ namespace Bit.Core.Services
             {
                 options.WordSeparator = options.WordSeparator[0].ToString();
             }
-            
+
             SanitizePasswordLength(options, false);
         }
 
@@ -683,13 +683,13 @@ namespace Bit.Core.Services
             if (options.Uppercase.GetValueOrDefault() && options.MinUppercase.GetValueOrDefault() <= 0)
             {
                 minUppercaseCalc = 1;
-            } 
+            }
             else if (!options.Uppercase.GetValueOrDefault())
             {
                 minUppercaseCalc = 0;
             }
 
-            if (options.Lowercase.GetValueOrDefault() && options.MinLowercase.GetValueOrDefault() <= 0) 
+            if (options.Lowercase.GetValueOrDefault() && options.MinLowercase.GetValueOrDefault() <= 0)
             {
                 minLowercaseCalc = 1;
             }
@@ -701,7 +701,7 @@ namespace Bit.Core.Services
             if (options.Number.GetValueOrDefault() && options.MinNumber.GetValueOrDefault() <= 0)
             {
                 minNumberCalc = 1;
-            } 
+            }
             else if (!options.Number.GetValueOrDefault())
             {
                 minNumberCalc = 0;
@@ -710,7 +710,7 @@ namespace Bit.Core.Services
             if (options.Special.GetValueOrDefault() && options.MinSpecial.GetValueOrDefault() <= 0)
             {
                 minSpecialCalc = 1;
-            } 
+            }
             else if (!options.Special.GetValueOrDefault())
             {
                 minSpecialCalc = 0;

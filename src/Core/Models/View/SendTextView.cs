@@ -1,4 +1,4 @@
-using Bit.Core.Models.Domain;
+﻿using Bit.Core.Models.Domain;
 
 namespace Bit.Core.Models.View
 {

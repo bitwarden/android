@@ -1,21 +1,21 @@
 ﻿using System;
-using System.Net;
-using Bit.App.Abstractions;
-using Bit.App.Pages;
-using Bit.App.Resources;
-using Bit.Core.Abstractions;
-using Bit.Core.Models.View;
-using Bit.Core.Utilities;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.App.Models;
+using Bit.App.Pages;
+using Bit.App.Resources;
+using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.Data;
+using Bit.Core.Models.View;
+using Bit.Core.Utilities;
 using Newtonsoft.Json;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -279,7 +279,7 @@ namespace Bit.App.Utilities
                 Subject = send.Name
             });
         }
-        
+
         private static string GetSendUrl(SendView send)
         {
             var environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
@@ -465,12 +465,12 @@ namespace Bit.App.Utilities
         public static async Task<int> IncrementInvalidUnlockAttemptsAsync()
         {
             var stateService = ServiceContainer.Resolve<IStateService>("stateService");
-            var invalidUnlockAttempts = await stateService.GetInvalidUnlockAttemptsAsync(); 
+            var invalidUnlockAttempts = await stateService.GetInvalidUnlockAttemptsAsync();
             invalidUnlockAttempts++;
             await stateService.SetInvalidUnlockAttemptsAsync(invalidUnlockAttempts);
             return invalidUnlockAttempts;
         }
-        
+
         public static async Task ResetInvalidUnlockAttemptsAsync()
         {
             var stateService = ServiceContainer.Resolve<IStateService>("stateService");

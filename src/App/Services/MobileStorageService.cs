@@ -1,8 +1,8 @@
-﻿using Bit.Core;
-using Bit.Core.Abstractions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Bit.Core;
+using Bit.Core.Abstractions;
 
 namespace Bit.App.Services
 {

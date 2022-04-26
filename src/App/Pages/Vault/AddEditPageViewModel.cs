@@ -65,7 +65,7 @@ namespace Bit.App.Pages
                 new KeyValuePair<UriMatchType?, string>(UriMatchType.Exact, AppResources.Exact),
                 new KeyValuePair<UriMatchType?, string>(UriMatchType.Never, AppResources.Never)
             };
-        
+
         public AddEditPageViewModel()
         {
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
@@ -350,7 +350,7 @@ namespace Bit.App.Pages
                     {
                         Cipher.Name += " - " + AppResources.Clone;
                         // If not allowing personal ownership, update cipher's org Id to prompt downstream changes
-                        if (Cipher.OrganizationId == null && !AllowPersonal) 
+                        if (Cipher.OrganizationId == null && !AllowPersonal)
                         {
                             Cipher.OrganizationId = OrganizationId;
                         }
@@ -399,7 +399,7 @@ namespace Bit.App.Pages
                     IdentityTitleOptions.FindIndex(k => k.Value == Cipher.Identity.Title);
                 OwnershipSelectedIndex = string.IsNullOrWhiteSpace(Cipher.OrganizationId) ? 0 :
                     OwnershipOptions.FindIndex(k => k.Value == Cipher.OrganizationId);
-                
+
                 // If the selected organization is on Index 0 and we've removed the personal option, force refresh
                 if (!AllowPersonal && OwnershipSelectedIndex == 0)
                 {
@@ -451,11 +451,11 @@ namespace Bit.App.Pages
                     AppResources.Ok);
                 return false;
             }
-            
+
             if ((!EditMode || CloneMode) && !AllowPersonal && string.IsNullOrWhiteSpace(Cipher.OrganizationId))
             {
                 await Page.DisplayAlert(AppResources.AnErrorHasOccurred,
-                    AppResources.PersonalOwnershipSubmitError,AppResources.Ok);
+                    AppResources.PersonalOwnershipSubmitError, AppResources.Ok);
                 return false;
             }
 
@@ -535,7 +535,7 @@ namespace Bit.App.Pages
                         AppResources.AnErrorHasOccurred);
                 }
             }
-            catch(Exception genex)
+            catch (Exception genex)
             {
                 _logger.Exception(genex);
                 await _deviceActionService.HideLoadingAsync();

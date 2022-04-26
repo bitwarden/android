@@ -1,8 +1,8 @@
 ﻿using System;
-using Bit.Core.Abstractions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.Domain;
@@ -208,7 +208,7 @@ namespace Bit.Core.Services
             var key = Constants.BiometricUnlockKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
-        
+
         public async Task<bool> GetBiometricLockedAsync(string userId = null)
         {
             return (await GetAccountAsync(
@@ -1419,7 +1419,7 @@ namespace Bit.Core.Services
                 account.Settings.VaultTimeout = existingAccount.Settings.VaultTimeout;
                 account.Settings.VaultTimeoutAction = existingAccount.Settings.VaultTimeoutAction;
             }
-            
+
             // New account defaults
             if (account.Settings.VaultTimeout == null)
             {
@@ -1431,7 +1431,7 @@ namespace Bit.Core.Services
             }
             await SetThemeAsync(currentTheme, account.Profile.UserId);
             await SetDisableFaviconAsync(currentDisableFavicons, account.Profile.UserId);
-            
+
             state.Accounts[account.Profile.UserId] = account;
             await SaveStateToStorageAsync(state);
 

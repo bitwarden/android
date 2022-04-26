@@ -1,17 +1,17 @@
-#if !FDROID
+﻿#if !FDROID
+using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
+using Bit.App.Abstractions;
+using Bit.Core;
+using Bit.Core.Abstractions;
+using Bit.Core.Enums;
+using Bit.Core.Exceptions;
+using Bit.Core.Models.Response;
+using Bit.Core.Utilities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Bit.App.Abstractions;
-using System;
 using Xamarin.Forms;
-using Bit.Core.Abstractions;
-using Bit.Core.Utilities;
-using System.Threading.Tasks;
-using Bit.Core.Enums;
-using Bit.Core;
-using Bit.Core.Models.Response;
-using Bit.Core.Exceptions;
 
 namespace Bit.App.Services
 {

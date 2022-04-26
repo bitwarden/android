@@ -1,9 +1,9 @@
-﻿using Bit.App.Models;
+﻿using System;
+using System.Threading.Tasks;
+using Bit.App.Models;
+using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
-using System;
-using System.Threading.Tasks;
-using Bit.App.Utilities;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -99,7 +99,7 @@ namespace Bit.App.Pages
             var page = new SetPasswordPage(_appOptions, _vm.OrgIdentifier);
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
-        
+
         private async Task UpdateTempPasswordAsync()
         {
             var page = new UpdateTempPasswordPage();

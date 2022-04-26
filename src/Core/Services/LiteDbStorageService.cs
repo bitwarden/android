@@ -1,9 +1,9 @@
-﻿using Bit.Core.Abstractions;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using Bit.Core.Abstractions;
 using LiteDB;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Bit.Core.Services
 {
