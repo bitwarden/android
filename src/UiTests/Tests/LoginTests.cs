@@ -9,19 +9,18 @@ namespace Bit.UiTests.Tests
 {
     public class LoginTests : BaseTestFixture
     {
-        private const string _testServerUrl = "zamboni";
-        private const string _email = "zamboni";
-        private const string _password = "zamboni";
+        record AccountCredentials(string ServerUrl, string Email, string Password);
+
+        private AccountCredentials[] _accounts =
+        {
+            new ("", "", ""),
+            new ("", "", ""),
+            new ("", "", ""),
+        };
 
         public LoginTests(Platform platform)
             : base(platform)
         {
-        }
-
-        //[Test] 
-        public void OpenREPL()
-        {
-            App.Repl();
         }
 
         [Test]
@@ -33,28 +32,53 @@ namespace Bit.UiTests.Tests
             App.Screenshot("App loaded with success!");
         }
 
-        [Test]
+        //[Test]
         public void LoginWithSuccess()
         {
+            Login(_accounts[0]);
+            new TabsPage();
+            App.Repl();
 
-            new HomePage()
-                .TapEnvironmentAndNavigate();
+            App.Screenshot("After logging in with success, I can see the vault");
+        }
 
-            new EnvironmentPage()
-                .InputServerUrl(_testServerUrl)
-                .TapSaveAndNavigate();
+        [Test]
+        public void AccountSwitchWithSuccess()
+        {
+            Login(_accounts[0], true);
+            new TabsPage()
+                .TapAccountSwitchingAvatar()
+                .TapAccountSwitchingAddAccount();
+
+            Login(_accounts[1]);
+            new TabsPage()
+                .TapAccountSwitchingAvatar()
+                .TapAccountSwitchingAddAccount();
+
+            Login(_accounts[2]);
+
+            new TabsPage()
+                .TapAccountSwitchingAvatar();
+        }
+
+        private void Login(AccountCredentials account, bool changeEnvironment = false)
+        {
+            if (changeEnvironment)
+            {
+                new HomePage()
+                    .TapEnvironmentAndNavigate();
+                new EnvironmentPage()
+                    .InputServerUrl(account.ServerUrl)
+                    .TapSaveAndNavigate();
+            }
 
             new HomePage()
                 .TapLoginAndNavigate();
 
             new LoginPage()
-                .InputEmail(_email)
-                .InputPassword(_password)
+                .InputEmail(account.Email)
+                .InputPassword(account.Password)
                 .TapLoginAndNavigate();
-
-            new TabsPage();
-
-            App.Screenshot("After logging in with success, I can see the vault");
         }
     }
 }

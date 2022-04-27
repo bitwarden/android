@@ -4,14 +4,11 @@ namespace Bit.UITests.Helpers
 {
     public static class AppState
     {
-        public static void CallBackdoor(this IApp app, string paramExample)
-        {
-            var args = new object[]
-            {
-                paramExample,
-            };
 
-            app.Invoke("Zamboni", args);
+        public static void EnableScreenshots(this IApp app)
+        {
+            //TODO placeholder, mobile app needs the service / setting to enable Android screenshots first
+            app.Invoke("Zamboni");
         }
     }
 }

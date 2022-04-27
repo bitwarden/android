@@ -24,5 +24,11 @@ namespace Bit.UITests.Extensions
             app.WaitForElement(elementQuery);
             app.Tap(elementQuery);
         }
+
+        public static void WaitAndScreenshot(this IApp app, string screenshotTitle)
+        {
+            app.Wait(1); //screenshots tend to be too fast and not capture the previous actions
+            app.Screenshot(screenshotTitle);
+        }
     }
 }

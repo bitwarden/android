@@ -6,7 +6,7 @@ namespace Bit.UITests.Helpers
     public class CustomWaitTimes : IWaitTimes
     {
         private readonly TimeSpan _timeout;
-        public static readonly TimeSpan DefaultCustomTimeout = TimeSpan.FromSeconds(30);
+        public static readonly TimeSpan DefaultCustomTimeout = TimeSpan.FromSeconds(10);
 
         public CustomWaitTimes()
         {

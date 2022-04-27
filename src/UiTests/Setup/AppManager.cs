@@ -13,7 +13,7 @@ namespace Bit.UITests.Setup
 
         private const string AndroidPackageName = "com.x8bit.bitwarden";
         private const string IosBundleId = "com.x8bit.bitwarden";
-        private static readonly string _apkPath = Path.Combine(_slnPath, "Android", "bin", "Debug", $"{AndroidPackageName}.apk");
+        private static readonly string _apkPath = Path.Combine(_slnPath, "Android", "bin", "release", $"{AndroidPackageName}-Signed.apk");
         private static readonly string _iosPath = Path.Combine("..", "..", "..", $"{IosBundleId}.app");
 
         private static IApp _app;

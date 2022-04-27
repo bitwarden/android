@@ -1,4 +1,5 @@
-﻿using Bit.UITests.Setup;
+﻿using Bit.UITests.Extensions;
+using Bit.UITests.Setup;
 using Query = System.Func<Xamarin.UITest.Queries.AppQuery, Xamarin.UITest.Queries.AppQuery>;
 
 namespace Bit.UITests.Pages.Accounts
@@ -41,10 +42,10 @@ namespace Bit.UITests.Pages.Accounts
 
         public EnvironmentPage InputServerUrl(string serverUrl)
         {
-            App.Tap(_serverUrlInput);
-            App.EnterText(serverUrl);
+            App.ClearText(_serverUrlInput);
+            App.EnterText(_serverUrlInput, serverUrl);
             App.DismissKeyboard();
-            App.Screenshot("After inserting the server url, I can see the field filled");
+            App.WaitAndScreenshot("After inserting the server url, I can see the field filled");
             return this;
         }
     }

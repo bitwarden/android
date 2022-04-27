@@ -1,4 +1,5 @@
 ﻿using System;
+using Bit.UITests.Extensions;
 using Bit.UITests.Setup;
 using Query = System.Func<Xamarin.UITest.Queries.AppQuery, Xamarin.UITest.Queries.AppQuery>;
 
@@ -69,8 +70,8 @@ namespace Bit.UITests.Pages.Accounts
 
         public LoginPage InputEmail(string email)
         {
-            App.Tap(_emailInput);
-            App.EnterText(email);
+            App.ClearText(_emailInput);
+            App.EnterText(_emailInput, email);
             App.DismissKeyboard();
             return this;
         }
@@ -79,9 +80,8 @@ namespace Bit.UITests.Pages.Accounts
         {
             App.Tap(_passwordInput);
             App.EnterText(password);
-            App.DismissKeyboard();
-
-            App.Screenshot("After I input the email and password fields, I can see both fields filled");
+            App.DismissKeyboard();            
+            App.WaitAndScreenshot("After I input the email and password fields, I can see both fields filled");
 
             return this;
         }

@@ -3,6 +3,7 @@ using Bit.UITests.Extensions;
 using Bit.UITests.Helpers;
 using NUnit.Framework;
 using Xamarin.UITest;
+using Query = System.Func<Xamarin.UITest.Queries.AppQuery, Xamarin.UITest.Queries.AppQuery>;
 
 namespace Bit.UITests.Setup
 {
@@ -14,6 +15,8 @@ namespace Bit.UITests.Setup
             AssertOnPage(CustomWaitTimes.DefaultCustomTimeout);
             App.Screenshot("On " + GetType().Name);
         }
+
+        protected readonly Query LoadingIndicator = x => x.Marked("activity_indicator");
 
         protected IApp App => AppManager.App;
 
