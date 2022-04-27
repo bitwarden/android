@@ -1,4 +1,4 @@
-using System.Net;
+﻿using System.Net;
 using Newtonsoft.Json.Linq;
 
 namespace Bit.Core.Models.Response

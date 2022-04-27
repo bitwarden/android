@@ -1,4 +1,4 @@
-using Bit.Core.Models.Data;
+﻿using Bit.Core.Models.Data;
 using Bit.Core.Models.Response;
 using Bit.Core.Test.AutoFixture;
 using Bit.Test.Common;

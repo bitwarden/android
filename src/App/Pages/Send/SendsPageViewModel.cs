@@ -35,11 +35,11 @@ namespace Bit.App.Pages
             get => _sendEnabled;
             set => SetProperty(ref _sendEnabled, value);
         }
-        
+
         public bool ShowNoData
         {
             get => _showNoData;
-            set => SetProperty(ref _showNoData, value, additionalPropertyNames: new []
+            set => SetProperty(ref _showNoData, value, additionalPropertyNames: new[]
             {
                 nameof(ShowSearchDirection)
             });
@@ -48,7 +48,7 @@ namespace Bit.App.Pages
         public bool ShowList
         {
             get => _showList;
-            set => SetProperty(ref _showList, value, additionalPropertyNames: new []
+            set => SetProperty(ref _showList, value, additionalPropertyNames: new[]
             {
                 nameof(ShowSearchDirection)
             });
@@ -58,7 +58,7 @@ namespace Bit.App.Pages
 
         public async Task InitAsync()
         {
-            SendEnabled = ! await AppHelpers.IsSendDisabledByPolicyAsync();
+            SendEnabled = !await AppHelpers.IsSendDisabledByPolicyAsync();
             if (!string.IsNullOrWhiteSpace((Page as SendsPage).SearchBar.Text))
             {
                 Search((Page as SendsPage).SearchBar.Text, 200);

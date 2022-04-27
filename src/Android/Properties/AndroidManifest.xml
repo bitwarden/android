@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" android:versionCode="1" android:versionName="2.17.1" android:installLocation="internalOnly" package="com.x8bit.bitwarden">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" android:versionCode="1" android:versionName="2.18.1" android:installLocation="internalOnly" package="com.x8bit.bitwarden">
 
   <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="30"/>
 

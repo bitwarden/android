@@ -35,12 +35,12 @@ namespace Bit.App.Pages
         protected async override void OnAppearing()
         {
             base.OnAppearing();
-            
+
             if (IsThemeDirty)
             {
                 UpdateOnThemeChanged();
             }
-            
+
             await SaveActivityAsync();
         }
 

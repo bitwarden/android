@@ -99,7 +99,7 @@ namespace Bit.App.Controls
                 Opacity = 0;
                 IsVisible = true;
                 this.FadeTo(1, 100);
-                
+
                 if (Device.RuntimePlatform == Device.Android && MainFab != null)
                 {
                     // start fab fade-out

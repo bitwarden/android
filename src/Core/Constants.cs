@@ -31,12 +31,12 @@
         public const int SelectFileRequestCode = 42;
         public const int SelectFilePermissionRequestCode = 43;
         public const int SaveFileRequestCode = 44;
-        
+
         public static readonly string[] AndroidAllClearCipherCacheKeys =
         {
             ClearCiphersCacheKey
         };
-        
+
         public static readonly string[] iOSAllClearCipherCacheKeys =
         {
             ClearCiphersCacheKey,
@@ -44,7 +44,7 @@
             iOSExtensionClearCiphersCacheKey,
             iOSShareExtensionClearCiphersCacheKey
         };
-        
+
         public static string CiphersKey(string userId) => $"ciphers_{userId}";
         public static string FoldersKey(string userId) => $"folders_{userId}";
         public static string CollectionsKey(string userId) => $"collections_{userId}";

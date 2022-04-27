@@ -1,4 +1,9 @@
-﻿using Bit.App.Abstractions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Bit.Core;
 using Bit.Core.Abstractions;
@@ -6,11 +11,6 @@ using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -107,7 +107,7 @@ namespace Bit.App.Pages
                     }
                     try
                     {
-                        ciphers = await _searchService.SearchCiphersAsync(searchText, 
+                        ciphers = await _searchService.SearchCiphersAsync(searchText,
                             Filter ?? (c => c.IsDeleted == Deleted), null, cts.Token);
                         cts.Token.ThrowIfCancellationRequested();
                     }

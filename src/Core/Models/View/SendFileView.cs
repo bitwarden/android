@@ -1,4 +1,4 @@
-using System.Dynamic;
+﻿using System.Dynamic;
 using Bit.Core.Models.Domain;
 
 namespace Bit.Core.Models.View

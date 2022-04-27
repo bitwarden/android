@@ -31,7 +31,8 @@ namespace Bit.App.Pages
         {
             base.OnAppearing();
 
-            await LoadOnAppearedAsync(_mainLayout, true, async () => {
+            await LoadOnAppearedAsync(_mainLayout, true, async () =>
+            {
                 await _vm.InitAsync();
             });
         }

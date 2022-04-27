@@ -2387,15 +2387,21 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string SearchFolder {
+        public static string SearchFileSends {
             get {
-                return ResourceManager.GetString("SearchFolder", resourceCulture);
+                return ResourceManager.GetString("SearchFileSends", resourceCulture);
             }
         }
         
-        public static string SearchType {
+        public static string SearchTextSends {
             get {
-                return ResourceManager.GetString("SearchType", resourceCulture);
+                return ResourceManager.GetString("SearchTextSends", resourceCulture);
+            }
+        }
+        
+        public static string SearchGroup {
+            get {
+                return ResourceManager.GetString("SearchGroup", resourceCulture);
             }
         }
         

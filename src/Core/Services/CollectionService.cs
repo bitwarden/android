@@ -1,13 +1,13 @@
-﻿using Bit.Core.Abstractions;
-using Bit.Core.Models.Data;
-using Bit.Core.Models.Domain;
-using Bit.Core.Models.View;
-using Bit.Core.Utilities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Bit.Core.Abstractions;
+using Bit.Core.Models.Data;
+using Bit.Core.Models.Domain;
+using Bit.Core.Models.View;
+using Bit.Core.Utilities;
 
 namespace Bit.Core.Services
 {

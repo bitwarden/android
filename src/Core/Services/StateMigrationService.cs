@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.Domain;
 using Bit.Core.Utilities;
-using Newtonsoft.Json;
 
 namespace Bit.Core.Services
 {
@@ -65,7 +63,7 @@ namespace Bit.Core.Services
         private class V1Keys
         {
             internal const string EnvironmentUrlsKey = "environmentUrls";
-            
+
         }
 
         private async Task MigrateFrom1To2Async()
@@ -354,7 +352,6 @@ namespace Bit.Core.Services
         private async Task<T> GetValueAsync<T>(Storage storage, string key)
         {
             var value = await GetStorageService(storage).GetAsync<T>(key);
-            Log("GET", storage, key, JsonConvert.SerializeObject(value));
             return value;
         }
 
@@ -365,13 +362,11 @@ namespace Bit.Core.Services
                 await RemoveValueAsync(storage, key);
                 return;
             }
-            Log("SET", storage, key, JsonConvert.SerializeObject(value));
             await GetStorageService(storage).SaveAsync(key, value);
         }
 
         private async Task RemoveValueAsync(Storage storage, string key)
         {
-            Log("REMOVE", storage, key, null);
             await GetStorageService(storage).RemoveAsync(key);
         }
 
@@ -386,30 +381,6 @@ namespace Bit.Core.Services
                 default:
                     return _liteDbStorageService;
             }
-        }
-
-        private void Log(string tag, Storage storage, string key, string value)
-        {
-            // TODO Remove this once all bugs are squished
-            string text;
-            switch (storage)
-            {
-                case Storage.Secure:
-                    text = "SECURE / ";
-                    break;
-                case Storage.Prefs:
-                    text = "PREFS / ";
-                    break;
-                default:
-                    text = "LITEDB / ";
-                    break;
-            }
-            text += "Key: " + key + " / ";
-            if (value != null)
-            {
-                text += "Value: " + value;
-            }
-            Debug.WriteLine(text, ">>> " + tag);
         }
     }
 }

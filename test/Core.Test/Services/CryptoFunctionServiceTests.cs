@@ -1,11 +1,11 @@
-
+﻿
 using System;
-using System.Threading.Tasks;
-using Xunit;
-using Bit.Core.Services;
-using Bit.Core.Enums;
-using Bit.Test.Common.AutoFixture.Attributes;
 using System.Text;
+using System.Threading.Tasks;
+using Bit.Core.Enums;
+using Bit.Core.Services;
+using Bit.Test.Common.AutoFixture.Attributes;
+using Xunit;
 
 namespace Bit.Core.Test.Services
 {

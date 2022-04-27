@@ -177,7 +177,7 @@ namespace Bit.App.Pages
             var previousPage = await AppHelpers.ClearPreviousPage();
             Application.Current.MainPage = new TabsPage(_appOptions, previousPage);
         }
-        
+
         private async Task UpdateTempPasswordAsync()
         {
             var page = new UpdateTempPasswordPage();

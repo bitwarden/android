@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -52,7 +52,7 @@ namespace Bit.Core.Test.Services
                 .Returns(data);
             sutProvider.GetDependency<ICryptoService>().MakeEncKeyAsync(Arg.Any<SymmetricCryptoKey>()).Returns(new Tuple<SymmetricCryptoKey, EncString>(null, encKey));
             sutProvider.GetDependency<IApiService>().PostCipherAttachmentAsync(cipher.Id, Arg.Any<AttachmentRequest>())
-                .Throws(new ApiException(new ErrorResponse {StatusCode = statusCode}));
+                .Throws(new ApiException(new ErrorResponse { StatusCode = statusCode }));
             sutProvider.GetDependency<IApiService>().PostCipherAttachmentLegacyAsync(cipher.Id, Arg.Any<MultipartFormDataContent>())
                 .Returns(response);
 
@@ -76,7 +76,7 @@ namespace Bit.Core.Test.Services
             sutProvider.GetDependency<IApiService>().PostCipherAttachmentAsync(cipher.Id, Arg.Any<AttachmentRequest>())
                 .Throws(expectedException);
 
-            var actualException = await Assert.ThrowsAsync<ApiException>(async () => 
+            var actualException = await Assert.ThrowsAsync<ApiException>(async () =>
                 await sutProvider.Sut.SaveAttachmentRawWithServerAsync(cipher, fileName, data.Buffer));
 
             Assert.Equal(expectedException.Error.StatusCode, actualException.Error.StatusCode);

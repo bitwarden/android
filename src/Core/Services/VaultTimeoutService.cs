@@ -1,7 +1,7 @@
-﻿using Bit.Core.Abstractions;
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 
 namespace Bit.Core.Services
@@ -165,7 +165,8 @@ namespace Bit.Core.Services
                 userId = await _stateService.GetActiveUserIdAsync();
             }
 
-            if (await _keyConnectorService.GetUsesKeyConnector()) {
+            if (await _keyConnectorService.GetUsesKeyConnector())
+            {
                 var (isPinProtected, isPinProtectedWithKey) = await IsPinLockSetAsync(userId);
                 var pinLock = (isPinProtected && await _stateService.GetPinProtectedKeyAsync(userId) != null) ||
                               isPinProtectedWithKey;
@@ -202,10 +203,10 @@ namespace Bit.Core.Services
             }
             _lockedCallback?.Invoke(new Tuple<string, bool>(userId, userInitiated));
         }
-        
+
         public async Task LogOutAsync(bool userInitiated = true, string userId = null)
         {
-            if(_loggedOutCallback != null)
+            if (_loggedOutCallback != null)
             {
                 await _loggedOutCallback.Invoke(new Tuple<string, bool, bool>(userId, userInitiated, false));
             }
@@ -238,10 +239,12 @@ namespace Bit.Core.Services
             await _stateService.SetProtectedPinAsync(null, userId);
         }
 
-        public async Task<int?> GetVaultTimeout(string userId = null) {
+        public async Task<int?> GetVaultTimeout(string userId = null)
+        {
             var vaultTimeout = await _stateService.GetVaultTimeoutAsync(userId);
 
-            if (await _policyService.PolicyAppliesToUser(PolicyType.MaximumVaultTimeout, null, userId)) {
+            if (await _policyService.PolicyAppliesToUser(PolicyType.MaximumVaultTimeout, null, userId))
+            {
                 var policy = (await _policyService.GetAll(PolicyType.MaximumVaultTimeout, userId)).First();
                 // Remove negative values, and ensure it's smaller than maximum allowed value according to policy
                 var policyTimeout = _policyService.GetPolicyInt(policy, "minutes");
@@ -252,12 +255,14 @@ namespace Bit.Core.Services
 
                 var timeout = vaultTimeout.HasValue ? Math.Min(vaultTimeout.Value, policyTimeout.Value) : policyTimeout.Value;
 
-                if (timeout < 0) {
+                if (timeout < 0)
+                {
                     timeout = policyTimeout.Value;
                 }
 
                 // We really shouldn't need to set the value here, but multiple services relies on this value being correct.
-                if (vaultTimeout != timeout) {
+                if (vaultTimeout != timeout)
+                {
                     await _stateService.SetVaultTimeoutAsync(timeout, userId);
                 }
 
