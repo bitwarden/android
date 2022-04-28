@@ -1,5 +1,5 @@
-﻿using Bit.Core.Models.Domain;
-using System;
+﻿using System;
+using Bit.Core.Models.Domain;
 
 namespace Bit.Core.Abstractions
 {

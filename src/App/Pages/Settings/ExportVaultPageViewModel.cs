@@ -4,11 +4,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
+using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Utilities;
-using Bit.Core;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -77,7 +77,7 @@ namespace Bit.App.Pages
                 InstructionText = _i18nService.T("ExportVaultMasterPasswordDescription");
                 SecretName = _i18nService.T("MasterPassword");
             }
-            
+
             UpdateWarning();
         }
 
@@ -109,7 +109,7 @@ namespace Bit.App.Pages
         {
             get => _showPassword;
             set => SetProperty(ref _showPassword, value,
-                additionalPropertyNames: new string[] {nameof(ShowPasswordIcon)});
+                additionalPropertyNames: new string[] { nameof(ShowPasswordIcon) });
         }
 
         public bool UseOTPVerification

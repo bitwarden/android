@@ -67,7 +67,7 @@ namespace Bit.App.Pages
             get => _showCancelButton;
             set => SetProperty(ref _showCancelButton, value);
         }
-        
+
         public string Email
         {
             get => _email;

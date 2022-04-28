@@ -1,7 +1,7 @@
-﻿using Bit.Core.Models.Api;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Bit.Core.Models.Api;
 
 namespace Bit.Core.Models.Data
 {

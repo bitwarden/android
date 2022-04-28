@@ -1,4 +1,8 @@
-﻿using Bit.App.Abstractions;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Bit.App.Abstractions;
+using Bit.App.Controls;
 using Bit.App.Models;
 using Bit.App.Resources;
 using Bit.App.Utilities;
@@ -8,11 +12,7 @@ using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Xamarin.CommunityToolkit.ObjectModel;
-using Bit.App.Controls;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -44,7 +44,7 @@ namespace Bit.App.Pages
 
             GroupedItems = new ObservableRangeCollection<IGroupingsPageListItem>();
             CipherOptionsCommand = new Command<CipherView>(CipherOptionsAsync);
-            
+
             AccountSwitchingOverlayViewModel = new AccountSwitchingOverlayViewModel(_stateService, _messagingService, _logger)
             {
                 AllowAddAccountRow = false

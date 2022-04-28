@@ -105,6 +105,14 @@ jobs:
       - name: Restore packages
         run: nuget restore
 
+      - name: Restore tools
+        run: dotnet tool restore
+        shell: pwsh
+
+      - name: Verify Format
+        run: dotnet tool run dotnet-format --check
+        shell: pwsh
+
       - name: Run Core tests
         run: dotnet test test/Core.Test/Core.Test.csproj
 

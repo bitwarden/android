@@ -1,11 +1,11 @@
-﻿using Google.Apis.AndroidPublisher.v3;
-using Google.Apis.AndroidPublisher.v3.Data;
-using Google.Apis.Auth.OAuth2;
-using Google.Apis.Services;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Google.Apis.AndroidPublisher.v3;
+using Google.Apis.AndroidPublisher.v3.Data;
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Services;
 
 namespace Bit.Publisher
 {

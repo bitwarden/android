@@ -1,6 +1,6 @@
-﻿using Bit.Core.Enums;
-using System;
+﻿using System;
 using System.Linq;
+using Bit.Core.Enums;
 
 namespace Bit.Core.Models.Domain
 {

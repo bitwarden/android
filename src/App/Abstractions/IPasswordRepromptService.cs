@@ -7,7 +7,7 @@ namespace Bit.App.Abstractions
         string[] ProtectedFields { get; }
 
         Task<bool> ShowPasswordPromptAsync();
-        
+
         Task<(string password, bool valid)> ShowPasswordPromptAndGetItAsync();
 
         Task<bool> Enabled();

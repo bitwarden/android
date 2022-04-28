@@ -36,7 +36,7 @@ namespace Bit.App.Pages
             _logger = ServiceContainer.Resolve<ILogger>("logger");
 
             PageTitle = AppResources.VerificationCode;
-            
+
             TogglePasswordCommand = new Command(TogglePassword);
             MainActionCommand = new AsyncCommand(MainActionAsync, allowsMultipleExecutions: false);
             RequestOTPCommand = new AsyncCommand(RequestOTPAsync, allowsMultipleExecutions: false);
@@ -60,7 +60,7 @@ namespace Bit.App.Pages
             get => _mainActionText;
             set => SetProperty(ref _mainActionText, value);
         }
-        
+
         public string SendCodeStatus
         {
             get => _sendCodeStatus;

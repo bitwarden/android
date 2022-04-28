@@ -1,15 +1,15 @@
-﻿using Bit.App.Abstractions;
+﻿using System;
+using System.Threading.Tasks;
+using Bit.App.Abstractions;
 using Bit.App.Models;
 using Bit.App.Pages;
 using Bit.App.Resources;
 using Bit.App.Services;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
+using Bit.Core.Enums;
 using Bit.Core.Models.Data;
 using Bit.Core.Utilities;
-using System;
-using System.Threading.Tasks;
-using Bit.Core.Enums;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -318,7 +318,7 @@ namespace Bit.App
                     Options.HideAccountSwitcher = await _stateService.GetActiveUserIdAsync() == null;
                     Current.MainPage = new NavigationPage(new LoginPage(email, Options));
                 }
-                else if (await _vaultTimeoutService.IsLockedAsync() || 
+                else if (await _vaultTimeoutService.IsLockedAsync() ||
                          await _vaultTimeoutService.ShouldLockAsync())
                 {
                     Current.MainPage = new NavigationPage(new LockPage(Options));

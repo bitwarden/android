@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bit.App.Models;
@@ -337,10 +337,10 @@ namespace Bit.App.Pages
 
             _vm.IsAddFromShare = true;
             _vm.CopyInsteadOfShareAfterSaving = _appOptions.CopyInsteadOfShareAfterSaving;
-            
+
             var name = _appOptions.CreateSend.Item2;
             _vm.Send.Name = name;
-            
+
             var type = _appOptions.CreateSend.Item1;
             if (type == SendType.File)
             {

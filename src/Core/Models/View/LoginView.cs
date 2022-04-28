@@ -1,8 +1,8 @@
-﻿using Bit.Core.Models.Domain;
-using Bit.Core.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Bit.Core.Enums;
+using Bit.Core.Models.Domain;
 
 namespace Bit.Core.Models.View
 {

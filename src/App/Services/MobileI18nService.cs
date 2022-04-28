@@ -1,11 +1,11 @@
-﻿using Bit.App.Resources;
-using Bit.Core.Abstractions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 using System.Resources;
 using System.Threading;
+using Bit.App.Resources;
+using Bit.Core.Abstractions;
 
 namespace Bit.App.Services
 {

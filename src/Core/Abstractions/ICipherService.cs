@@ -20,7 +20,7 @@ namespace Bit.Core.Abstractions
         Task<Cipher> EncryptAsync(CipherView model, SymmetricCryptoKey key = null, Cipher originalCipher = null);
         Task<List<Cipher>> GetAllAsync();
         Task<List<CipherView>> GetAllDecryptedAsync();
-        Task<Tuple<List<CipherView>, List<CipherView>, List<CipherView>>> GetAllDecryptedByUrlAsync(string url, 
+        Task<Tuple<List<CipherView>, List<CipherView>, List<CipherView>>> GetAllDecryptedByUrlAsync(string url,
             List<CipherType> includeOtherTypes = null);
         Task<List<CipherView>> GetAllDecryptedForGroupingAsync(string groupingId, bool folder = true);
         Task<List<CipherView>> GetAllDecryptedForUrlAsync(string url);

@@ -115,7 +115,7 @@ namespace Bit.App.Pages
         public Action StartSetPasswordAction { get; set; }
         public Action CloseAction { get; set; }
         public Action UpdateTempPasswordAction { get; set; }
-        
+
         protected override II18nService i18nService => _i18nService;
         protected override IEnvironmentService environmentService => _environmentService;
         protected override IDeviceActionService deviceActionService => _deviceActionService;
@@ -295,7 +295,7 @@ namespace Bit.App.Pages
                     await _deviceActionService.ShowLoadingAsync(AppResources.Validating);
                 }
                 var result = await _authService.LogInTwoFactorAsync(SelectedProviderType.Value, Token, _captchaToken, Remember);
-                
+
                 if (result.CaptchaNeeded)
                 {
                     if (await HandleCaptchaAsync(result.CaptchaSiteKey))
@@ -306,12 +306,12 @@ namespace Bit.App.Pages
                     return;
                 }
                 _captchaToken = null;
-                
+
                 var task = Task.Run(() => _syncService.FullSyncAsync(true));
                 await _deviceActionService.HideLoadingAsync();
                 _messagingService.Send("listenYubiKeyOTP", false);
                 _broadcasterService.Unsubscribe(nameof(TwoFactorPage));
-                
+
                 if (_authingWithSso && result.ResetMasterPassword)
                 {
                     StartSetPasswordAction?.Invoke();
@@ -319,7 +319,7 @@ namespace Bit.App.Pages
                 else if (result.ForcePasswordReset)
                 {
                     UpdateTempPasswordAction?.Invoke();
-                } 
+                }
                 else
                 {
                     TwoFactorAuthSuccessAction?.Invoke();

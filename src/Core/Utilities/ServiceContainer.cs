@@ -1,8 +1,8 @@
-﻿using Bit.Core.Abstractions;
-using Bit.Core.Services;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Bit.Core.Abstractions;
+using Bit.Core.Services;
 
 namespace Bit.Core.Utilities
 {
@@ -11,7 +11,7 @@ namespace Bit.Core.Utilities
         public static Dictionary<string, object> RegisteredServices { get; set; } = new Dictionary<string, object>();
         public static bool Inited { get; set; }
 
-        public static void Init(string customUserAgent = null, string clearCipherCacheKey = null, 
+        public static void Init(string customUserAgent = null, string clearCipherCacheKey = null,
             string[] allClearCipherCacheKeys = null)
         {
             if (Inited)
@@ -39,8 +39,8 @@ namespace Bit.Core.Utilities
             var organizationService = new OrganizationService(stateService);
             var settingsService = new SettingsService(stateService);
             var fileUploadService = new FileUploadService(apiService);
-            var cipherService = new CipherService(cryptoService, stateService, settingsService, apiService, 
-                fileUploadService, storageService, i18nService, () => searchService, clearCipherCacheKey, 
+            var cipherService = new CipherService(cryptoService, stateService, settingsService, apiService,
+                fileUploadService, storageService, i18nService, () => searchService, clearCipherCacheKey,
                 allClearCipherCacheKeys);
             var folderService = new FolderService(cryptoService, stateService, apiService, i18nService, cipherService);
             var collectionService = new CollectionService(cryptoService, stateService, i18nService);
@@ -52,18 +52,18 @@ namespace Bit.Core.Utilities
                 organizationService);
             var vaultTimeoutService = new VaultTimeoutService(cryptoService, stateService, platformUtilsService,
                 folderService, cipherService, collectionService, searchService, messagingService, tokenService,
-                policyService, keyConnectorService, 
+                policyService, keyConnectorService,
                 (extras) =>
                 {
                     messagingService.Send("locked", extras);
                     return Task.CompletedTask;
-                }, 
+                },
                 (extras) =>
                 {
                     messagingService.Send("logout", extras);
                     return Task.CompletedTask;
                 });
-            var syncService = new SyncService(stateService, apiService, settingsService, folderService, cipherService, 
+            var syncService = new SyncService(stateService, apiService, settingsService, folderService, cipherService,
                 cryptoService, collectionService, organizationService, messagingService, policyService, sendService,
                 keyConnectorService, (extras) =>
                 {
@@ -73,14 +73,14 @@ namespace Bit.Core.Utilities
             var passwordGenerationService = new PasswordGenerationService(cryptoService, stateService,
                 cryptoFunctionService, policyService);
             var totpService = new TotpService(stateService, cryptoFunctionService);
-            var authService = new AuthService(cryptoService, cryptoFunctionService, apiService, stateService, 
-                tokenService, appIdService, i18nService, platformUtilsService, messagingService, vaultTimeoutService, 
+            var authService = new AuthService(cryptoService, cryptoFunctionService, apiService, stateService,
+                tokenService, appIdService, i18nService, platformUtilsService, messagingService, vaultTimeoutService,
                 keyConnectorService);
             var exportService = new ExportService(folderService, cipherService, cryptoService);
             var auditService = new AuditService(cryptoFunctionService, apiService);
             var environmentService = new EnvironmentService(apiService, stateService);
             var eventService = new EventService(apiService, stateService, organizationService, cipherService);
-            var userVerificationService = new UserVerificationService(apiService, platformUtilsService, i18nService, 
+            var userVerificationService = new UserVerificationService(apiService, platformUtilsService, i18nService,
                 cryptoService);
 
             Register<ITokenService>("tokenService", tokenService);

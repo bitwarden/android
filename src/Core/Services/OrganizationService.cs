@@ -1,9 +1,9 @@
-﻿using Bit.Core.Abstractions;
-using Bit.Core.Models.Data;
-using Bit.Core.Models.Domain;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Bit.Core.Abstractions;
+using Bit.Core.Models.Data;
+using Bit.Core.Models.Domain;
 
 namespace Bit.Core.Services
 {

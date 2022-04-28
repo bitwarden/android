@@ -1,5 +1,5 @@
-﻿using Bit.Core.Abstractions;
-using System;
+﻿using System;
+using Bit.Core.Abstractions;
 
 namespace Bit.Core.Services
 {
