@@ -3892,5 +3892,17 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("EnterTheVerificationCodeThatWasSentToYourEmail", resourceCulture);
             }
         }
+        
+        public static string ReportAppLogs {
+            get {
+                return ResourceManager.GetString("ReportAppLogs", resourceCulture);
+            }
+        }
+        
+        public static string ReportAppLogsDescription {
+            get {
+                return ResourceManager.GetString("ReportAppLogsDescription", resourceCulture);
+            }
+        }
     }
 }
