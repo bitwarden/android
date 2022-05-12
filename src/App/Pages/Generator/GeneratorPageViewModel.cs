@@ -137,7 +137,7 @@ namespace Bit.App.Pages
             {
                 if (SetProperty(ref _avoidAmbiguous, value))
                 {
-                    _options.Ambiguous = !value;
+                    _options.AvoidAmbiguous = value;
                     var task = SaveOptionsAsync();
                 }
             }
@@ -315,7 +315,7 @@ namespace Bit.App.Pages
 
         private void LoadFromOptions()
         {
-            AvoidAmbiguous = !_options.Ambiguous.GetValueOrDefault();
+            AvoidAmbiguous = _options.AvoidAmbiguous.GetValueOrDefault();
             TypeSelectedIndex = _options.Type == "passphrase" ? 1 : 0;
             IsPassword = TypeSelectedIndex == 0;
             MinNumber = _options.MinNumber.GetValueOrDefault();
@@ -333,7 +333,7 @@ namespace Bit.App.Pages
 
         private void SetOptions()
         {
-            _options.Ambiguous = !AvoidAmbiguous;
+            _options.AvoidAmbiguous = AvoidAmbiguous;
             _options.Type = TypeSelectedIndex == 1 ? "passphrase" : "password";
             _options.MinNumber = MinNumber;
             _options.MinSpecial = MinSpecial;
