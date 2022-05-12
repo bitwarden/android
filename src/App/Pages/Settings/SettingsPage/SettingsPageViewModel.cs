@@ -310,7 +310,6 @@ namespace Bit.App.Pages
             await Microsoft.AppCenter.Crashes.Crashes.SetEnabledAsync(enableAppcenter);
             _appCenterReportsEnabled = await Microsoft.AppCenter.Crashes.Crashes.IsEnabledAsync();
             _appCenterReportsDisplayValue = _appCenterReportsEnabled ? AppResources.Enabled : AppResources.Disabled;
-            Microsoft.AppCenter.Crashes.Crashes.TrackError(new Exception("asdasdasd"));
             BuildList();
 #endif
         }
