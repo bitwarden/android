@@ -1,4 +1,4 @@
-using AutoFixture.AutoNSubstitute;
+﻿using AutoFixture.AutoNSubstitute;
 
 namespace Bit.Test.Common.AutoFixture.Attributes
 {

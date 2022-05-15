@@ -59,7 +59,7 @@ namespace Bit.App.Pages
 
         async void OnTimePickerPropertyChanged(object sender, PropertyChangedEventArgs args)
         {
-            var s = (TimePicker) sender;
+            var s = (TimePicker)sender;
             var time = s.Time.TotalMinutes;
             if (s.IsFocused && args.PropertyName == "Time")
             {

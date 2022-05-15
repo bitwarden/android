@@ -1,7 +1,7 @@
-﻿using Bit.App.Resources;
+﻿using System.Threading.Tasks;
+using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
-using System.Threading.Tasks;
 
 namespace Bit.App.Pages
 {

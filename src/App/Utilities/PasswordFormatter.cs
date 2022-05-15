@@ -42,7 +42,7 @@ namespace Bit.App.Utilities
             {
                 result += "<div style=\"display:inline-block; align-items:center; justify-content:center; text-align:center; word-break:break-all; white-space:pre-wrap; min-width:0\">";
             }
-            
+
             // Start with an otherwise uncovered case so we will definitely enter the "something changed"
             // state.
             var currentType = CharType.None;
@@ -72,7 +72,7 @@ namespace Bit.App.Utilities
                     {
                         result += "</span>";
                     }
-                    
+
                     currentType = charType;
 
                     // Switch the color if it is not a normal text. Otherwise leave the
@@ -110,13 +110,13 @@ namespace Bit.App.Utilities
             {
                 result += "</span>";
             }
-            
+
             // Close off iOS div
             if (Device.RuntimePlatform == Device.iOS)
             {
                 result += "</div>";
             }
-            
+
             return result;
         }
     }

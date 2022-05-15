@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
@@ -37,11 +37,14 @@ namespace Bit.App.Pages
             bool cancelled = false;
             try
             {
+                // PrefersEphemeralWebBrowserSession should be false to allow access to the hCaptcha accessibility
+                // cookie set in the default browser
+                // https://www.hcaptcha.com/accessibility
                 var options = new WebAuthenticatorOptions
                 {
                     Url = new Uri(url),
                     CallbackUrl = new Uri(callbackUri),
-                    PrefersEphemeralWebBrowserSession = true,
+                    PrefersEphemeralWebBrowserSession = false,
                 };
                 authResult = await WebAuthenticator.AuthenticateAsync(options);
             }

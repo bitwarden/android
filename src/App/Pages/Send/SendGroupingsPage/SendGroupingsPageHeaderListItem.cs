@@ -9,6 +9,6 @@
         }
 
         public string Title { get; }
-        public string ItemCount { get;  }
+        public string ItemCount { get; }
     }
 }

@@ -49,12 +49,12 @@ namespace Bit.App.Pages
                 _vm.ToggleAutofillService();
             }
         }
-        
+
         private void ToggleInlineAutofill(object sender, EventArgs e)
         {
             _vm.ToggleInlineAutofill();
         }
-        
+
         private void ToggleAccessibility(object sender, EventArgs e)
         {
             if (DoOnce())
@@ -62,7 +62,7 @@ namespace Bit.App.Pages
                 _vm.ToggleAccessibility();
             }
         }
-        
+
         private void ToggleDrawOver(object sender, EventArgs e)
         {
             if (DoOnce())

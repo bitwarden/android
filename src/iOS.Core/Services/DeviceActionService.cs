@@ -392,6 +392,11 @@ namespace Bit.iOS.Core.Services
             throw new NotImplementedException();
         }
 
+        public bool HasAutofillService()
+        {
+            return false;
+        }
+
         public bool AutofillServiceEnabled()
         {
             throw new NotImplementedException();

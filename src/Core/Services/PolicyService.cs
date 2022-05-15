@@ -24,7 +24,7 @@ namespace Bit.Core.Services
             _stateService = stateService;
             _organizationService = organizationService;
         }
-        
+
         public void ClearCache()
         {
             _policyCache = null;

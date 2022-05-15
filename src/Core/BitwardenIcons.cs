@@ -1,4 +1,4 @@
-namespace Bit.Core
+﻿namespace Bit.Core
 {
     public static class BitwardenIcons
     {

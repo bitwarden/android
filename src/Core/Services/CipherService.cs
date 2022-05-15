@@ -1,4 +1,11 @@
-﻿using Bit.Core.Abstractions;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net.Http;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.Data;
@@ -7,13 +14,6 @@ using Bit.Core.Models.Request;
 using Bit.Core.Models.Response;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net.Http;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Bit.Core.Services
 {
@@ -48,7 +48,7 @@ namespace Bit.Core.Services
             IStorageService storageService,
             II18nService i18nService,
             Func<ISearchService> searchService,
-            string clearCipherCacheKey, 
+            string clearCipherCacheKey,
             string[] allClearCipherCacheKeys)
         {
             _cryptoService = cryptoService;

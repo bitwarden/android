@@ -1,7 +1,7 @@
-﻿using Bit.Core.Models.Domain;
-using Bit.Core.Enums;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Bit.Core.Enums;
+using Bit.Core.Models.Domain;
 
 namespace Bit.Core.Models.View
 {

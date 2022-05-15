@@ -21,11 +21,6 @@
 
 
 
-## Testing requirements
-<!--What functionality requires testing by QA? This includes testing new behavior and regression testing-->
-
-
-
 ## Before you submit
 - [ ] I have added **unit tests** where it makes sense to do so (encouraged but not required)
 - [ ] This change requires a **documentation update** (notify the documentation team)

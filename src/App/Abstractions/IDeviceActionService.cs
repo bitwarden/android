@@ -1,6 +1,6 @@
-﻿using Bit.Core.Enums;
+﻿using System.Threading.Tasks;
+using Bit.Core.Enums;
 using Bit.Core.Models.View;
-using System.Threading.Tasks;
 
 namespace Bit.App.Abstractions
 {
@@ -35,6 +35,7 @@ namespace Bit.App.Abstractions
         void Background();
         bool AutofillAccessibilityServiceRunning();
         bool AutofillAccessibilityOverlayPermitted();
+        bool HasAutofillService();
         bool AutofillServiceEnabled();
         void DisableAutofillService();
         bool AutofillServicesEnabled();

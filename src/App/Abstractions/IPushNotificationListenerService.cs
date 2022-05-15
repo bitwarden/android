@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace Bit.App.Abstractions
 {
