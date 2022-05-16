@@ -3893,15 +3893,15 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string ReportAppLogs {
+        public static string ReportCrashLogs {
             get {
-                return ResourceManager.GetString("ReportAppLogs", resourceCulture);
+                return ResourceManager.GetString("ReportCrashLogs", resourceCulture);
             }
         }
         
-        public static string ReportAppLogsDescription {
+        public static string ReportCrashLogsDescription {
             get {
-                return ResourceManager.GetString("ReportAppLogsDescription", resourceCulture);
+                return ResourceManager.GetString("ReportCrashLogsDescription", resourceCulture);
             }
         }
     }

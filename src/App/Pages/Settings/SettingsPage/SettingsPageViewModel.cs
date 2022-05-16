@@ -7,6 +7,7 @@ using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
@@ -28,7 +29,7 @@ namespace Bit.App.Pages
         private readonly ILocalizeService _localizeService;
         private readonly IKeyConnectorService _keyConnectorService;
         private readonly IClipboardService _clipboardService;
-
+        private readonly ILogger _loggerService;
         private const int CustomVaultTimeoutValue = -100;
 
         private bool _supportsBiometric;
@@ -38,6 +39,7 @@ namespace Bit.App.Pages
         private string _vaultTimeoutDisplayValue;
         private string _vaultTimeoutActionDisplayValue;
         private bool _showChangeMasterPassword;
+        private bool _reportLoggingEnabled;
 
         private List<KeyValuePair<string, int?>> _vaultTimeouts =
             new List<KeyValuePair<string, int?>>
@@ -60,13 +62,8 @@ namespace Bit.App.Pages
                 new KeyValuePair<string, VaultTimeoutAction>(AppResources.LogOut, VaultTimeoutAction.Logout),
             };
 
-        private readonly List<string> _appcenterActions = new List<string> { AppResources.Yes, AppResources.No };
-
         private Policy _vaultTimeoutPolicy;
         private int? _vaultTimeout;
-
-        private string _appCenterReportsDisplayValue;
-        private bool _appCenterReportsEnabled;
 
         public SettingsPageViewModel()
         {
@@ -83,6 +80,7 @@ namespace Bit.App.Pages
             _localizeService = ServiceContainer.Resolve<ILocalizeService>("localizeService");
             _keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
             _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
+            _loggerService = ServiceContainer.Resolve<ILogger>("logger");
 
             GroupedItems = new ObservableRangeCollection<ISettingsPageListItem>();
             PageTitle = AppResources.Settings;
@@ -127,11 +125,7 @@ namespace Bit.App.Pages
 
             _showChangeMasterPassword = IncludeLinksWithSubscriptionInfo() &&
                 !await _keyConnectorService.GetUsesKeyConnector();
-
-#if !FDROID && !DEBUG
-            _appCenterReportsEnabled = await Microsoft.AppCenter.Crashes.Crashes.IsEnabledAsync();
-            _appCenterReportsDisplayValue = _appCenterReportsEnabled ? AppResources.Yes : AppResources.No; 
-#endif
+            _reportLoggingEnabled = await _loggerService.IsEnabled();
             BuildList();
         }
 
@@ -294,24 +288,25 @@ namespace Bit.App.Pages
             }
         }
 
-        public async Task AppCenterReportingAsync()
+        public async Task LoggerReportingAsync()
         {
-#if !FDROID && !DEBUG
-            var options = _appcenterActions.Select(s => s == _appCenterReportsDisplayValue ? $"✓ {s}" : s).ToArray();
-            var selection = await Page.DisplayActionSheet(AppResources.ReportAppLogsDescription, AppResources.Cancel, null, options);
+            var loggerEnabled = await _loggerService.IsEnabled();
+            var options = new[]
+            {
+                    CreateSelectableOption(AppResources.Yes, loggerEnabled),
+                    CreateSelectableOption(AppResources.No, !loggerEnabled),
+            };
+
+            var selection = await Page.DisplayActionSheet(AppResources.ReportCrashLogsDescription, AppResources.Cancel, null, options);
 
             if (selection == null || selection == AppResources.Cancel)
             {
                 return;
             }
 
-            var cleanSelection = selection.Replace("✓ ", string.Empty);
-            var enableAppcenter = cleanSelection == AppResources.Yes;
-            await Microsoft.AppCenter.Crashes.Crashes.SetEnabledAsync(enableAppcenter);
-            _appCenterReportsEnabled = await Microsoft.AppCenter.Crashes.Crashes.IsEnabledAsync();
-            _appCenterReportsDisplayValue = _appCenterReportsEnabled ? AppResources.Enabled : AppResources.Disabled;
+            await _loggerService.SetEnabled(CompareSelection(selection, AppResources.Yes));
+            _reportLoggingEnabled = await _loggerService.IsEnabled();
             BuildList();
-#endif
         }
 
         public async Task VaultTimeoutActionAsync()
@@ -528,11 +523,11 @@ namespace Bit.App.Pages
                 new SettingsPageListItem { Name = AppResources.Options },
                 new SettingsPageListItem { Name = AppResources.About },
                 new SettingsPageListItem { Name = AppResources.HelpAndFeedback },
-#if !FDROID && !DEBUG
+#if !FDROID 
                 new SettingsPageListItem
                 {
-                    Name = AppResources.ReportAppLogs,
-                    SubLabel =  _appCenterReportsEnabled ? AppResources.Enabled : AppResources.Disabled,
+                    Name = AppResources.ReportCrashLogs,
+                    SubLabel = _reportLoggingEnabled ? AppResources.Enabled : AppResources.Disabled,
                 },
 #endif
                 new SettingsPageListItem { Name = AppResources.RateTheApp },
@@ -612,5 +607,9 @@ namespace Bit.App.Pages
         {
             return _vaultTimeouts.FirstOrDefault(o => o.Key == key).Value;
         }
+
+        private string CreateSelectableOption(string option, bool selected) => selected ? $"✓ {option}" : option;
+
+        private bool CompareSelection(string selection, string compareTo) =>  selection == compareTo || selection == $"✓ {compareTo}";
     }
 }

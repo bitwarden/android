@@ -167,9 +167,9 @@ namespace Bit.App.Pages
             {
                 await _vm.UpdatePinAsync();
             }
-            else if (item.Name == AppResources.ReportAppLogs)
+            else if (item.Name == AppResources.ReportCrashLogs)
             {
-                await _vm.AppCenterReportingAsync();
+                await _vm.LoggerReportingAsync();
             }
             else
             {

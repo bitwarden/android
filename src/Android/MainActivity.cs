@@ -69,11 +69,6 @@ namespace Bit.Droid
                 Window.AddFlags(Android.Views.WindowManagerFlags.Secure);
             }
 
-#if !DEBUG && !FDROID
-            var appCenterHelper = new AppCenterHelper(_appIdService, _stateService);
-            var appCenterTask = appCenterHelper.InitAsync();
-#endif
-
             var toplayout = Window?.DecorView?.RootView;
             if (toplayout != null)
             {
@@ -84,6 +79,8 @@ namespace Bit.Droid
             Xamarin.Forms.Forms.Init(this, savedInstanceState);
             _appOptions = GetOptions();
             LoadApplication(new App.App(_appOptions));
+
+            ServiceContainer.Resolve<ILogger>("logger").InitAsync();
 
             _broadcasterService.Subscribe(_activityKey, (message) =>
             {
