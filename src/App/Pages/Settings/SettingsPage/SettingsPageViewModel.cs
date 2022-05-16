@@ -610,6 +610,6 @@ namespace Bit.App.Pages
 
         private string CreateSelectableOption(string option, bool selected) => selected ? $"✓ {option}" : option;
 
-        private bool CompareSelection(string selection, string compareTo) =>  selection == compareTo || selection == $"✓ {compareTo}";
+        private bool CompareSelection(string selection, string compareTo) => selection == compareTo || selection == $"✓ {compareTo}";
     }
 }
