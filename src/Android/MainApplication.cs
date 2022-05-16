@@ -20,6 +20,7 @@ using System.Net.Http;
 using System.Net;
 using Bit.App.Utilities;
 using Bit.App.Pages;
+using Bit.App.Utilities.AccountManagement;
 #if !FDROID
 using Android.Gms.Security;
 #endif
@@ -62,6 +63,15 @@ namespace Bit.Droid
                     ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService"),
                     ServiceContainer.Resolve<ICryptoService>("cryptoService"));
                 ServiceContainer.Register<IVerificationActionsFlowHelper>("verificationActionsFlowHelper", verificationActionsFlowHelper);
+
+                var accountsManager = new AccountsManager(
+                    ServiceContainer.Resolve<IBroadcasterService>("broadcasterService"),
+                    ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService"),
+                    ServiceContainer.Resolve<IStorageService>("secureStorageService"),
+                    ServiceContainer.Resolve<IStateService>("stateService"),
+                    ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService"),
+                    ServiceContainer.Resolve<IAuthService>("authService"));
+                ServiceContainer.Register<IAccountsManager>("accountsManager", accountsManager);
             }
 #if !FDROID
             if (Build.VERSION.SdkInt <= BuildVersionCodes.Kitkat)

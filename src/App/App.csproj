@@ -129,6 +129,7 @@
     <Folder Include="Resources\" />
     <Folder Include="Behaviors\" />
     <Folder Include="Controls\AccountSwitchingOverlay\" />
+    <Folder Include="Utilities\AccountManagement\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -421,5 +422,6 @@
     <None Remove="Behaviors\" />
     <None Remove="Xamarin.CommunityToolkit" />
     <None Remove="Controls\AccountSwitchingOverlay\" />
+    <None Remove="Utilities\AccountManagement\" />
   </ItemGroup>
 </Project>

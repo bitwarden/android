@@ -1,19 +1,20 @@
 using System;
+using Bit.App.Abstractions;
+using Bit.App.Controls;
+using Bit.App.Resources;
+using Bit.Core.Abstractions;
+using Bit.Core.Utilities;
 using Bit.iOS.Autofill.Models;
+using Bit.iOS.Autofill.Utilities;
+using Bit.iOS.Core.Controllers;
+using Bit.iOS.Core.Utilities;
+using Bit.iOS.Core.Views;
 using Foundation;
 using UIKit;
-using Bit.iOS.Core.Controllers;
-using Bit.App.Resources;
-using Bit.iOS.Core.Views;
-using Bit.iOS.Autofill.Utilities;
-using Bit.iOS.Core.Utilities;
-using Bit.Core.Utilities;
-using Bit.Core.Abstractions;
-using Bit.App.Abstractions;
 
 namespace Bit.iOS.Autofill
 {
-    public partial class LoginListViewController : ExtendedUITableViewController
+    public partial class LoginListViewController : ExtendedUIViewController
     {
         public LoginListViewController(IntPtr handle)
             : base(handle)
@@ -25,6 +26,9 @@ namespace Bit.iOS.Autofill
         public Context Context { get; set; }
         public CredentialProviderViewController CPViewController { get; set; }
         public IPasswordRepromptService PasswordRepromptService { get; private set; }
+
+        AccountSwitchingOverlayView _accountSwitchingOverlayView;
+        AccountSwitchingOverlayHelper _accountSwitchingOverlayHelper;
 
         public async override void ViewDidLoad()
         {
@@ -44,6 +48,20 @@ namespace Bit.iOS.Autofill
             {
                 await ASHelpers.ReplaceAllIdentities();
             }
+
+            _accountSwitchingOverlayHelper = new AccountSwitchingOverlayHelper();
+            AccountSwitchingBarButton.Image = await _accountSwitchingOverlayHelper.CreateAvatarImageAsync();
+
+            _accountSwitchingOverlayView = _accountSwitchingOverlayHelper.CreateAccountSwitchingOverlayView(OverlayView);
+        }
+
+        partial void AccountSwitchingBarButton_Activated(UIBarButtonItem sender)
+        {
+            var overlayVisible = _accountSwitchingOverlayView.IsVisible;
+            _accountSwitchingOverlayView.ToggleVisibililtyCommand.Execute(null);
+            OverlayView.Hidden = false;
+            OverlayView.UserInteractionEnabled = !overlayVisible;
+            OverlayView.Subviews[0].UserInteractionEnabled = !overlayVisible;
         }
 
         partial void CancelBarButton_Activated(UIBarButtonItem sender)
@@ -99,13 +117,11 @@ namespace Bit.iOS.Autofill
 
         public class TableSource : ExtensionTableSource
         {
-            private Context _context;
             private LoginListViewController _controller;
 
             public TableSource(LoginListViewController controller)
                 : base(controller.Context, controller)
             {
-                _context = controller.Context;
                 _controller = controller;
             }
 

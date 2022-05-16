@@ -7,6 +7,7 @@ using Bit.App.Pages;
 using Bit.App.Resources;
 using Bit.App.Services;
 using Bit.App.Utilities;
+using Bit.App.Utilities.AccountManagement;
 using Bit.Core.Abstractions;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
@@ -176,6 +177,15 @@ namespace Bit.iOS.Core.Utilities
                 ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService"),
                 ServiceContainer.Resolve<ICryptoService>("cryptoService"));
             ServiceContainer.Register<IVerificationActionsFlowHelper>("verificationActionsFlowHelper", verificationActionsFlowHelper);
+
+            var accountsManager = new AccountsManager(
+                ServiceContainer.Resolve<IBroadcasterService>("broadcasterService"),
+                ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService"),
+                ServiceContainer.Resolve<IStorageService>("secureStorageService"),
+                ServiceContainer.Resolve<IStateService>("stateService"),
+                ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService"),
+                ServiceContainer.Resolve<IAuthService>("authService"));
+            ServiceContainer.Register<IAccountsManager>("accountsManager", accountsManager);
 
             if (postBootstrapFunc != null)
             {
