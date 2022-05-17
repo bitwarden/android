@@ -69,6 +69,8 @@ namespace Bit.Droid
                 Window.AddFlags(Android.Views.WindowManagerFlags.Secure);
             }
 
+            ServiceContainer.Resolve<ILogger>("logger").InitAsync();
+
             var toplayout = Window?.DecorView?.RootView;
             if (toplayout != null)
             {
@@ -80,7 +82,6 @@ namespace Bit.Droid
             _appOptions = GetOptions();
             LoadApplication(new App.App(_appOptions));
 
-            ServiceContainer.Resolve<ILogger>("logger").InitAsync();
 
             _broadcasterService.Subscribe(_activityKey, (message) =>
             {

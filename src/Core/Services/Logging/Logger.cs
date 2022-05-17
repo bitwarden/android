@@ -73,7 +73,7 @@ namespace Bit.Core.Services
                     AppCenter.Start(iOSAppSecret, typeof(Crashes));
                     break;
                 default:
-                    return;
+                    throw new AppCenterException("Cannot start AppCenter. Device type is not configured.");
 
             }
 

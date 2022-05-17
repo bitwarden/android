@@ -290,11 +290,11 @@ namespace Bit.App.Pages
 
         public async Task LoggerReportingAsync()
         {
-            var loggerEnabled = await _loggerService.IsEnabled();
+            _reportLoggingEnabled = await _loggerService.IsEnabled();
             var options = new[]
             {
-                    CreateSelectableOption(AppResources.Yes, loggerEnabled),
-                    CreateSelectableOption(AppResources.No, !loggerEnabled),
+                    CreateSelectableOption(AppResources.Yes, _reportLoggingEnabled),
+                    CreateSelectableOption(AppResources.No, !_reportLoggingEnabled),
             };
 
             var selection = await Page.DisplayActionSheet(AppResources.ReportCrashLogsDescription, AppResources.Cancel, null, options);
