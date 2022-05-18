@@ -93,7 +93,7 @@ namespace Bit.Core.Services
             // Build out other character sets
             var allCharSet = string.Empty;
             var lowercaseCharSet = LowercaseCharSet;
-            if (options.Ambiguous.GetValueOrDefault())
+            if (options.AllowAmbiguousChar.GetValueOrDefault())
             {
                 lowercaseCharSet = string.Concat(lowercaseCharSet, "l");
             }
@@ -103,7 +103,7 @@ namespace Bit.Core.Services
             }
 
             var uppercaseCharSet = UppercaseCharSet;
-            if (options.Ambiguous.GetValueOrDefault())
+            if (options.AllowAmbiguousChar.GetValueOrDefault())
             {
                 uppercaseCharSet = string.Concat(uppercaseCharSet, "IO");
             }
@@ -113,7 +113,7 @@ namespace Bit.Core.Services
             }
 
             var numberCharSet = NumberCharSet;
-            if (options.Ambiguous.GetValueOrDefault())
+            if (options.AllowAmbiguousChar.GetValueOrDefault())
             {
                 numberCharSet = string.Concat(numberCharSet, "01");
             }
