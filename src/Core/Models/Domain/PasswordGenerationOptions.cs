@@ -9,7 +9,7 @@
             if (defaultOptions)
             {
                 Length = 14;
-                Ambiguous = false;
+                AllowAmbiguousChar = true;
                 Number = true;
                 MinNumber = 1;
                 Uppercase = true;
@@ -27,7 +27,7 @@
         }
 
         public int? Length { get; set; }
-        public bool? Ambiguous { get; set; }
+        public bool? AllowAmbiguousChar { get; set; }
         public bool? Number { get; set; }
         public int? MinNumber { get; set; }
         public bool? Uppercase { get; set; }
@@ -45,7 +45,7 @@
         public void Merge(PasswordGenerationOptions defaults)
         {
             Length = Length ?? defaults.Length;
-            Ambiguous = Ambiguous ?? defaults.Ambiguous;
+            AllowAmbiguousChar = AllowAmbiguousChar ?? defaults.AllowAmbiguousChar;
             Number = Number ?? defaults.Number;
             MinNumber = MinNumber ?? defaults.MinNumber;
             Uppercase = Uppercase ?? defaults.Uppercase;
