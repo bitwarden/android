@@ -3,11 +3,10 @@ using System.Threading.Tasks;
 using Android.OS;
 using Android.Security.Keystore;
 using Bit.Core.Abstractions;
+using Bit.Core.Services;
+using Bit.Core.Utilities;
 using Java.Security;
 using Javax.Crypto;
-#if !FDROID
-using Microsoft.AppCenter.Crashes;
-#endif
 
 namespace Bit.Droid.Services
 {
@@ -74,9 +73,7 @@ namespace Bit.Droid.Services
             catch (InvalidKeyException e)
             {
                 // Fallback for old bitwarden users without a key
-#if !FDROID
-                Crashes.TrackError(e);
-#endif
+                LoggerHelper.LogEvenIfCantBeResolved(e);
                 CreateKey();
             }
 
@@ -101,9 +98,7 @@ namespace Bit.Droid.Services
             {
                 // Catch silently to allow biometrics to function on devices that are in a state where key generation
                 // is not functioning
-#if !FDROID
-                Crashes.TrackError(e);
-#endif
+                LoggerHelper.LogEvenIfCantBeResolved(e);
             }
         }
     }
