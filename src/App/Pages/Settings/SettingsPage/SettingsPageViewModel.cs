@@ -290,7 +290,6 @@ namespace Bit.App.Pages
 
         public async Task LoggerReportingAsync()
         {
-            _reportLoggingEnabled = await _loggerService.IsEnabled();
             var options = new[]
             {
                     CreateSelectableOption(AppResources.Yes, _reportLoggingEnabled),
