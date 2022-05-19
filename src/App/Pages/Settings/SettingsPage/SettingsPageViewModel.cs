@@ -7,10 +7,10 @@ using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
-using ZXing.Client.Result;
 
 namespace Bit.App.Pages
 {
@@ -29,6 +29,7 @@ namespace Bit.App.Pages
         private readonly ILocalizeService _localizeService;
         private readonly IKeyConnectorService _keyConnectorService;
         private readonly IClipboardService _clipboardService;
+        private readonly ILogger _loggerService;
         private readonly IStorageService _storageService;
 
         private const int CustomVaultTimeoutValue = -100;
@@ -41,6 +42,7 @@ namespace Bit.App.Pages
         private string _vaultTimeoutDisplayValue;
         private string _vaultTimeoutActionDisplayValue;
         private bool _showChangeMasterPassword;
+        private bool _reportLoggingEnabled;
 
         private List<KeyValuePair<string, int?>> _vaultTimeouts =
             new List<KeyValuePair<string, int?>>
@@ -82,6 +84,7 @@ namespace Bit.App.Pages
             _localizeService = ServiceContainer.Resolve<ILocalizeService>("localizeService");
             _keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
             _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
+            _loggerService = ServiceContainer.Resolve<ILogger>("logger");
 
             GroupedItems = new ObservableRangeCollection<ISettingsPageListItem>();
             PageTitle = AppResources.Settings;
@@ -127,7 +130,7 @@ namespace Bit.App.Pages
 
             _showChangeMasterPassword = IncludeLinksWithSubscriptionInfo() &&
                 !await _keyConnectorService.GetUsesKeyConnector();
-
+            _reportLoggingEnabled = await _loggerService.IsEnabled();
             BuildList();
         }
 
@@ -288,6 +291,26 @@ namespace Bit.App.Pages
             {
                 await Device.InvokeOnMainThreadAsync(BuildList);
             }
+        }
+
+        public async Task LoggerReportingAsync()
+        {
+            var options = new[]
+            {
+                    CreateSelectableOption(AppResources.Yes, _reportLoggingEnabled),
+                    CreateSelectableOption(AppResources.No, !_reportLoggingEnabled),
+            };
+
+            var selection = await Page.DisplayActionSheet(AppResources.ReportCrashLogsDescription, AppResources.Cancel, null, options);
+
+            if (selection == null || selection == AppResources.Cancel)
+            {
+                return;
+            }
+
+            await _loggerService.SetEnabled(CompareSelection(selection, AppResources.Yes));
+            _reportLoggingEnabled = await _loggerService.IsEnabled();
+            BuildList();
         }
 
         public async Task VaultTimeoutActionAsync()
@@ -507,11 +530,19 @@ namespace Bit.App.Pages
                 toolsItems.Add(new SettingsPageListItem { Name = AppResources.LearnOrg });
                 toolsItems.Add(new SettingsPageListItem { Name = AppResources.WebVault });
             }
+
             var otherItems = new List<SettingsPageListItem>
             {
                 new SettingsPageListItem { Name = AppResources.Options },
                 new SettingsPageListItem { Name = AppResources.About },
                 new SettingsPageListItem { Name = AppResources.HelpAndFeedback },
+#if !FDROID 
+                new SettingsPageListItem
+                {
+                    Name = AppResources.ReportCrashLogs,
+                    SubLabel = _reportLoggingEnabled ? AppResources.Enabled : AppResources.Disabled,
+                },
+#endif
                 new SettingsPageListItem { Name = AppResources.RateTheApp },
                 new SettingsPageListItem { Name = AppResources.DeleteAccount }
             };
@@ -589,6 +620,10 @@ namespace Bit.App.Pages
         {
             return _vaultTimeouts.FirstOrDefault(o => o.Key == key).Value;
         }
+
+        private string CreateSelectableOption(string option, bool selected) => selected ? $"✓ {option}" : option;
+
+        private bool CompareSelection(string selection, string compareTo) => selection == compareTo || selection == $"✓ {compareTo}";
 
         public async Task SetScreenCaptureAllowedAsync()
         {

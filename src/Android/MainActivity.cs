@@ -67,10 +67,7 @@ namespace Bit.Droid
 
             await _deviceActionService.SetScreenCaptureAllowedAsync();
 
-#if !DEBUG && !FDROID
-            var appCenterHelper = new AppCenterHelper(_appIdService, _stateService);
-            var appCenterTask = appCenterHelper.InitAsync();
-#endif
+            ServiceContainer.Resolve<ILogger>("logger").InitAsync();
 
             var toplayout = Window?.DecorView?.RootView;
             if (toplayout != null)
@@ -82,6 +79,7 @@ namespace Bit.Droid
             Xamarin.Forms.Forms.Init(this, savedInstanceState);
             _appOptions = GetOptions();
             LoadApplication(new App.App(_appOptions));
+
 
             _broadcasterService.Subscribe(_activityKey, (message) =>
             {
