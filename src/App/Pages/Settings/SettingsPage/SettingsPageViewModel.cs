@@ -30,11 +30,14 @@ namespace Bit.App.Pages
         private readonly IKeyConnectorService _keyConnectorService;
         private readonly IClipboardService _clipboardService;
         private readonly ILogger _loggerService;
+        private readonly IStorageService _storageService;
+
         private const int CustomVaultTimeoutValue = -100;
 
         private bool _supportsBiometric;
         private bool _pin;
         private bool _biometric;
+        private bool _screenCaptureAllowed;
         private string _lastSyncDate;
         private string _vaultTimeoutDisplayValue;
         private string _vaultTimeoutActionDisplayValue;
@@ -64,6 +67,7 @@ namespace Bit.App.Pages
 
         private Policy _vaultTimeoutPolicy;
         private int? _vaultTimeout;
+        private SettingsPageListItem _screenCaptureListItem;
 
         public SettingsPageViewModel()
         {
@@ -117,6 +121,7 @@ namespace Bit.App.Pages
             var pinSet = await _vaultTimeoutService.IsPinLockSetAsync();
             _pin = pinSet.Item1 || pinSet.Item2;
             _biometric = await _vaultTimeoutService.IsBiometricLockSetAsync();
+            _screenCaptureAllowed = await _stateService.GetScreenCaptureAllowedAsync();
 
             if (_vaultTimeoutDisplayValue == null)
             {
@@ -497,6 +502,15 @@ namespace Bit.App.Pages
                     UseFrame = true,
                 });
             }
+            if (Device.RuntimePlatform == Device.Android)
+            {
+                _screenCaptureListItem = new SettingsPageListItem
+                {
+                    Name = AppResources.AllowScreenCapture,
+                    SubLabel = _screenCaptureAllowed ? AppResources.Enabled : AppResources.Disabled
+                };
+                securityItems.Insert(securityItems.Count, _screenCaptureListItem);
+            }
             var accountItems = new List<SettingsPageListItem>
             {
                 new SettingsPageListItem { Name = AppResources.FingerprintPhrase },
@@ -610,5 +624,14 @@ namespace Bit.App.Pages
         private string CreateSelectableOption(string option, bool selected) => selected ? $"✓ {option}" : option;
 
         private bool CompareSelection(string selection, string compareTo) => selection == compareTo || selection == $"✓ {compareTo}";
+
+        public async Task SetScreenCaptureAllowedAsync()
+        {
+            var _screenCaptureCurrentState = _screenCaptureListItem.SubLabel.Equals(AppResources.Enabled);
+            await _stateService.SetScreenCaptureAllowedAsync(!_screenCaptureCurrentState);
+            _screenCaptureAllowed = !_screenCaptureCurrentState;
+            await _deviceActionService.SetScreenCaptureAllowedAsync();
+            BuildList();
+        }
     }
 }

@@ -41,7 +41,7 @@ namespace Bit.Droid
         private Java.Util.Regex.Pattern _otpPattern =
             Java.Util.Regex.Pattern.Compile("^.*?([cbdefghijklnrtuv]{32,64})$");
 
-        protected override void OnCreate(Bundle savedInstanceState)
+        protected override async void OnCreate(Bundle savedInstanceState)
         {
             var eventUploadIntent = new Intent(this, typeof(EventUploadReceiver));
             _eventUploadPendingIntent = PendingIntent.GetBroadcast(this, 0, eventUploadIntent,
@@ -64,10 +64,8 @@ namespace Bit.Droid
             Intent?.Validate();
 
             base.OnCreate(savedInstanceState);
-            if (!CoreHelpers.InDebugMode())
-            {
-                Window.AddFlags(Android.Views.WindowManagerFlags.Secure);
-            }
+
+            await _deviceActionService.SetScreenCaptureAllowedAsync();
 
             ServiceContainer.Resolve<ILogger>("logger").InitAsync();
 

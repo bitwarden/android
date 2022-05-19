@@ -170,6 +170,10 @@ namespace Bit.App.Pages
             else if (item.Name == AppResources.ReportCrashLogs)
             {
                 await _vm.LoggerReportingAsync();
+			}
+            else if (item.Name == AppResources.AllowScreenCapture)
+            {
+                await _vm.SetScreenCaptureAllowedAsync();
             }
             else
             {
