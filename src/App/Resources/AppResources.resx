@@ -2181,4 +2181,10 @@
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
     <value>Enter the verification code that was sent to your email</value>
   </data>
+  <data name="ReportCrashLogs" xml:space="preserve">
+    <value>Report crash logs</value>
+  </data>
+  <data name="ReportCrashLogsDescription" xml:space="preserve">
+    <value>Help Bitwarden improve app stability by allowing crash reports.</value>
+  </data>
 </root>

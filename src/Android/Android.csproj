@@ -145,7 +145,6 @@
     <Compile Include="Tiles\GeneratorTileService.cs" />
     <Compile Include="Tiles\MyVaultTileService.cs" />
     <Compile Include="Utilities\AndroidHelpers.cs" />
-    <Compile Include="Utilities\AppCenterHelper.cs" />
     <Compile Include="Utilities\ThemeHelpers.cs" />
     <Compile Include="WebAuthCallbackActivity.cs" />
     <Compile Include="Renderers\SelectableLabelRenderer.cs" />

@@ -23,7 +23,7 @@ namespace Bit.App.Pages
         private bool _lowercase;
         private bool _number;
         private bool _special;
-        private bool _avoidAmbiguous;
+        private bool _allowAmbiguousChars;
         private int _minNumber;
         private int _minSpecial;
         private int _length = 5;
@@ -130,17 +130,27 @@ namespace Bit.App.Pages
             }
         }
 
-        public bool AvoidAmbiguous
+        public bool AllowAmbiguousChars
         {
-            get => _avoidAmbiguous;
+            get => _allowAmbiguousChars;
             set
             {
-                if (SetProperty(ref _avoidAmbiguous, value))
+                if (SetProperty(ref _allowAmbiguousChars, value,
+                    additionalPropertyNames: new string[]
+                    {
+                        nameof(AvoidAmbiguousChars)
+                    }))
                 {
-                    _options.Ambiguous = !value;
+                    _options.AllowAmbiguousChar = value;
                     var task = SaveOptionsAsync();
                 }
             }
+        }
+
+        public bool AvoidAmbiguousChars
+        {
+            get => !AllowAmbiguousChars;
+            set => AllowAmbiguousChars = !value;
         }
 
         public int MinNumber
@@ -315,7 +325,7 @@ namespace Bit.App.Pages
 
         private void LoadFromOptions()
         {
-            AvoidAmbiguous = !_options.Ambiguous.GetValueOrDefault();
+            AllowAmbiguousChars = _options.AllowAmbiguousChar.GetValueOrDefault();
             TypeSelectedIndex = _options.Type == "passphrase" ? 1 : 0;
             IsPassword = TypeSelectedIndex == 0;
             MinNumber = _options.MinNumber.GetValueOrDefault();
@@ -333,7 +343,7 @@ namespace Bit.App.Pages
 
         private void SetOptions()
         {
-            _options.Ambiguous = !AvoidAmbiguous;
+            _options.AllowAmbiguousChar = AllowAmbiguousChars;
             _options.Type = TypeSelectedIndex == 1 ? "passphrase" : "password";
             _options.MinNumber = MinNumber;
             _options.MinSpecial = MinSpecial;

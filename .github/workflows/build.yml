@@ -305,18 +305,6 @@ jobs:
           $xml.Save($androidPath);
 
           Write-Output "########################################"
-          Write-Output "##### Uninstall from App.csproj"
-          Write-Output "########################################"
-
-          $xml=New-Object XML;
-          $xml.Load($appPath);
-
-          $appCenterNode=$xml.SelectSingleNode("/Project/ItemGroup/PackageReference[@Include='Microsoft.AppCenter.Crashes']");
-          $appCenterNode.ParentNode.RemoveChild($appCenterNode);
-
-          $xml.Save($appPath);
-
-          Write-Output "########################################"
           Write-Output "##### Uninstall from Core.csproj"
           Write-Output "########################################"
 

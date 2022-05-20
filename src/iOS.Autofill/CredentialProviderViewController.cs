@@ -22,7 +22,6 @@ namespace Bit.iOS.Autofill
     public partial class CredentialProviderViewController : ASCredentialProviderViewController, IAccountsManagerHost
     {
         private Context _context;
-        private bool _initedAppCenter;
         private NFCNdefReaderSession _nfcSession = null;
         private Core.NFCReaderDelegate _nfcDelegate = null;
         private IAccountsManager _accountsManager;
@@ -330,11 +329,7 @@ namespace Bit.iOS.Autofill
             var messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             ServiceContainer.Init(deviceActionService.DeviceUserAgent, 
                 Bit.Core.Constants.iOSAutoFillClearCiphersCacheKey, Bit.Core.Constants.iOSAllClearCipherCacheKeys);
-            if (!_initedAppCenter)
-            {
-                iOSCoreHelpers.RegisterAppCenter();
-                _initedAppCenter = true;
-            }
+            iOSCoreHelpers.InitLogger();
             iOSCoreHelpers.Bootstrap();
             var appOptions = new AppOptions { IosExtension = true };
             var app = new App.App(appOptions);
