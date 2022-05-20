@@ -7,8 +7,8 @@ using Bit.App.Resources;
 using Bit.App.Services;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
-using Bit.Core.Enums;
 using Bit.Core.Models.Data;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -51,124 +51,130 @@ namespace Bit.App
             Bootstrap();
             _broadcasterService.Subscribe(nameof(App), async (message) =>
             {
-                if (message.Command == "showDialog")
+                try
                 {
-                    var details = message.Data as DialogDetails;
-                    var confirmed = true;
-                    var confirmText = string.IsNullOrWhiteSpace(details.ConfirmText) ?
-                        AppResources.Ok : details.ConfirmText;
-                    Device.BeginInvokeOnMainThread(async () =>
+                    if (message.Command == "showDialog")
                     {
-                        if (!string.IsNullOrWhiteSpace(details.CancelText))
+                        var details = message.Data as DialogDetails;
+                        var confirmed = true;
+                        var confirmText = string.IsNullOrWhiteSpace(details.ConfirmText) ?
+                            AppResources.Ok : details.ConfirmText;
+                        Device.BeginInvokeOnMainThread(async () =>
                         {
-                            confirmed = await Current.MainPage.DisplayAlert(details.Title, details.Text, confirmText,
-                                details.CancelText);
-                        }
-                        else
-                        {
-                            await Current.MainPage.DisplayAlert(details.Title, details.Text, confirmText);
-                        }
-                        _messagingService.Send("showDialogResolve", new Tuple<int, bool>(details.DialogId, confirmed));
-                    });
-                }
-                else if (message.Command == "locked")
-                {
-                    var extras = message.Data as Tuple<string, bool>;
-                    var userId = extras?.Item1;
-                    var userInitiated = extras?.Item2 ?? false;
-                    Device.BeginInvokeOnMainThread(async () => await LockedAsync(userId, userInitiated));
-                }
-                else if (message.Command == "lockVault")
-                {
-                    await _vaultTimeoutService.LockAsync(true);
-                }
-                else if (message.Command == "logout")
-                {
-                    var extras = message.Data as Tuple<string, bool, bool>;
-                    var userId = extras?.Item1;
-                    var userInitiated = extras?.Item2 ?? true;
-                    var expired = extras?.Item3 ?? false;
-                    Device.BeginInvokeOnMainThread(async () => await LogOutAsync(userId, userInitiated, expired));
-                }
-                else if (message.Command == "loggedOut")
-                {
-                    // Clean up old migrated key if they ever log out.
-                    await _secureStorageService.RemoveAsync("oldKey");
-                }
-                else if (message.Command == "resumed")
-                {
-                    if (Device.RuntimePlatform == Device.iOS)
+                            if (!string.IsNullOrWhiteSpace(details.CancelText))
+                            {
+                                confirmed = await Current.MainPage.DisplayAlert(details.Title, details.Text, confirmText,
+                                    details.CancelText);
+                            }
+                            else
+                            {
+                                await Current.MainPage.DisplayAlert(details.Title, details.Text, confirmText);
+                            }
+                            _messagingService.Send("showDialogResolve", new Tuple<int, bool>(details.DialogId, confirmed));
+                        });
+                    }
+                    else if (message.Command == "locked")
                     {
-                        ResumedAsync().FireAndForget();
+                        var extras = message.Data as Tuple<string, bool>;
+                        var userId = extras?.Item1;
+                        var userInitiated = extras?.Item2 ?? false;
+                        Device.BeginInvokeOnMainThread(async () => await LockedAsync(userId, userInitiated));
+                    }
+                    else if (message.Command == "lockVault")
+                    {
+                        await _vaultTimeoutService.LockAsync(true);
+                    }
+                    else if (message.Command == "logout")
+                    {
+                        var extras = message.Data as Tuple<string, bool, bool>;
+                        var userId = extras?.Item1;
+                        var userInitiated = extras?.Item2 ?? true;
+                        var expired = extras?.Item3 ?? false;
+                        Device.BeginInvokeOnMainThread(async () => await LogOutAsync(userId, userInitiated, expired));
+                    }
+                    else if (message.Command == "loggedOut")
+                    {
+                        // Clean up old migrated key if they ever log out.
+                        await _secureStorageService.RemoveAsync("oldKey");
+                    }
+                    else if (message.Command == "resumed")
+                    {
+                        if (Device.RuntimePlatform == Device.iOS)
+                        {
+                            ResumedAsync().FireAndForget();
+                        }
+                    }
+                    else if (message.Command == "slept")
+                    {
+                        if (Device.RuntimePlatform == Device.iOS)
+                        {
+                            await SleptAsync();
+                        }
+                    }
+                    else if (message.Command == "addAccount")
+                    {
+                        await AddAccount();
+                    }
+                    else if (message.Command == "accountAdded")
+                    {
+                        await UpdateThemeAsync();
+                    }
+                    else if (message.Command == "switchedAccount")
+                    {
+                        await SwitchedAccountAsync();
+                    }
+                    else if (message.Command == "migrated")
+                    {
+                        await Task.Delay(1000);
+                        await SetMainPageAsync();
+                    }
+                    else if (message.Command == "popAllAndGoToTabGenerator" ||
+                        message.Command == "popAllAndGoToTabMyVault" ||
+                        message.Command == "popAllAndGoToTabSend" ||
+                        message.Command == "popAllAndGoToAutofillCiphers")
+                    {
+                        Device.BeginInvokeOnMainThread(async () =>
+                        {
+                            if (Current.MainPage is TabsPage tabsPage)
+                            {
+                                while (tabsPage.Navigation.ModalStack.Count > 0)
+                                {
+                                    await tabsPage.Navigation.PopModalAsync(false);
+                                }
+                                if (message.Command == "popAllAndGoToAutofillCiphers")
+                                {
+                                    Current.MainPage = new NavigationPage(new AutofillCiphersPage(Options));
+                                }
+                                else if (message.Command == "popAllAndGoToTabMyVault")
+                                {
+                                    Options.MyVaultTile = false;
+                                    tabsPage.ResetToVaultPage();
+                                }
+                                else if (message.Command == "popAllAndGoToTabGenerator")
+                                {
+                                    Options.GeneratorTile = false;
+                                    tabsPage.ResetToGeneratorPage();
+                                }
+                                else if (message.Command == "popAllAndGoToTabSend")
+                                {
+                                    tabsPage.ResetToSendPage();
+                                }
+                            }
+                        });
+                    }
+                    else if (message.Command == "convertAccountToKeyConnector")
+                    {
+                        Device.BeginInvokeOnMainThread(async () =>
+                        {
+                            await Application.Current.MainPage.Navigation.PushModalAsync(
+                                new NavigationPage(new RemoveMasterPasswordPage()));
+                        });
                     }
                 }
-                else if (message.Command == "slept")
+                catch (Exception ex)
                 {
-                    if (Device.RuntimePlatform == Device.iOS)
-                    {
-                        await SleptAsync();
-                    }
+                    LoggerHelper.LogEvenIfCantBeResolved(ex);
                 }
-                else if (message.Command == "addAccount")
-                {
-                    await AddAccount();
-                }
-                else if (message.Command == "accountAdded")
-                {
-                    await UpdateThemeAsync();
-                }
-                else if (message.Command == "switchedAccount")
-                {
-                    await SwitchedAccountAsync();
-                }
-                else if (message.Command == "migrated")
-                {
-                    await Task.Delay(1000);
-                    await SetMainPageAsync();
-                }
-                else if (message.Command == "popAllAndGoToTabGenerator" ||
-                    message.Command == "popAllAndGoToTabMyVault" ||
-                    message.Command == "popAllAndGoToTabSend" ||
-                    message.Command == "popAllAndGoToAutofillCiphers")
-                {
-                    Device.BeginInvokeOnMainThread(async () =>
-                    {
-                        if (Current.MainPage is TabsPage tabsPage)
-                        {
-                            while (tabsPage.Navigation.ModalStack.Count > 0)
-                            {
-                                await tabsPage.Navigation.PopModalAsync(false);
-                            }
-                            if (message.Command == "popAllAndGoToAutofillCiphers")
-                            {
-                                Current.MainPage = new NavigationPage(new AutofillCiphersPage(Options));
-                            }
-                            else if (message.Command == "popAllAndGoToTabMyVault")
-                            {
-                                Options.MyVaultTile = false;
-                                tabsPage.ResetToVaultPage();
-                            }
-                            else if (message.Command == "popAllAndGoToTabGenerator")
-                            {
-                                Options.GeneratorTile = false;
-                                tabsPage.ResetToGeneratorPage();
-                            }
-                            else if (message.Command == "popAllAndGoToTabSend")
-                            {
-                                tabsPage.ResetToSendPage();
-                            }
-                        }
-                    });
-                }
-                else if (message.Command == "convertAccountToKeyConnector")
-                {
-                    Device.BeginInvokeOnMainThread(async () =>
-                    {
-                        await Application.Current.MainPage.Navigation.PushModalAsync(
-                            new NavigationPage(new RemoveMasterPasswordPage()));
-                    });
-                }
-
             });
         }
 
