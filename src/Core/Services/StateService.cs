@@ -1372,10 +1372,6 @@ namespace Bit.Core.Services
             await SetEncryptedPasswordGenerationHistoryAsync(null, userId);
             await SetEncryptedSendsAsync(null, userId);
             await SetSettingsAsync(null, userId);
-            if (!string.IsNullOrWhiteSpace(email))
-            {
-                await SetTwoFactorTokenAsync(null, email);
-            }
 
             if (userInitiated)
             {
