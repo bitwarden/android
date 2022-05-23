@@ -55,7 +55,7 @@ namespace Bit.App.Pages
                 await _vm.SubmitAsync();
             }
         }
-        
+
         private async Task RegistrationSuccessAsync(HomePage homePage)
         {
             if (homePage != null)

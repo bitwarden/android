@@ -732,7 +732,6 @@
                     <BoxView StyleClass="box-row-separator" />
                 </StackLayout>
                 <controls:RepeaterView 
-                    x:Name="_collectionsRepeaterView" 
                     ItemsSource="{Binding Collections}"
                     IsVisible="{Binding HasCollections}">
                     <controls:RepeaterView.ItemTemplate>

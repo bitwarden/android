@@ -1,7 +1,7 @@
-﻿using Bit.Core.Enums;
+﻿using System.Threading.Tasks;
+using Bit.Core.Enums;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.View;
-using System.Threading.Tasks;
 
 namespace Bit.Core.Models.Domain
 {

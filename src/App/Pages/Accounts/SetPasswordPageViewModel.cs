@@ -1,17 +1,17 @@
-﻿using Bit.App.Abstractions;
-using Bit.App.Resources;
-using Bit.Core.Abstractions;
-using Bit.Core.Enums;
-using Bit.Core.Exceptions;
-using Bit.Core.Models.Request;
-using Bit.Core.Utilities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Bit.App.Abstractions;
+using Bit.App.Resources;
 using Bit.Core;
+using Bit.Core.Abstractions;
+using Bit.Core.Enums;
+using Bit.Core.Exceptions;
 using Bit.Core.Models.Domain;
+using Bit.Core.Models.Request;
+using Bit.Core.Utilities;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -63,7 +63,7 @@ namespace Bit.App.Pages
             get => _isPolicyInEffect;
             set => SetProperty(ref _isPolicyInEffect, value);
         }
-        
+
         public bool ResetPasswordAutoEnroll
         {
             get => _resetPasswordAutoEnroll;
@@ -220,7 +220,7 @@ namespace Bit.App.Pages
                     // Enroll user
                     await _apiService.PutOrganizationUserResetPasswordEnrollmentAsync(OrgId, userId, resetRequest);
                 }
-                
+
                 await _deviceActionService.HideLoadingAsync();
                 SetPasswordSuccessAction?.Invoke();
             }

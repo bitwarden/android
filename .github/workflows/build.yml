@@ -105,6 +105,14 @@ jobs:
       - name: Restore packages
         run: nuget restore
 
+      - name: Restore tools
+        run: dotnet tool restore
+        shell: pwsh
+
+      - name: Verify Format
+        run: dotnet tool run dotnet-format --check
+        shell: pwsh
+
       - name: Run Core tests
         run: dotnet test test/Core.Test/Core.Test.csproj
 
@@ -295,18 +303,6 @@ jobs:
           $safetyNetNode.ParentNode.RemoveChild($safetyNetNode);
 
           $xml.Save($androidPath);
-
-          Write-Output "########################################"
-          Write-Output "##### Uninstall from App.csproj"
-          Write-Output "########################################"
-
-          $xml=New-Object XML;
-          $xml.Load($appPath);
-
-          $appCenterNode=$xml.SelectSingleNode("/Project/ItemGroup/PackageReference[@Include='Microsoft.AppCenter.Crashes']");
-          $appCenterNode.ParentNode.RemoveChild($appCenterNode);
-
-          $xml.Save($appPath);
 
           Write-Output "########################################"
           Write-Output "##### Uninstall from Core.csproj"
@@ -544,7 +540,7 @@ jobs:
             || github.ref == 'refs/heads/hotfix-rc'
         env:
           APPCENTER_IOS_TOKEN: ${{ steps.retrieve-secrets.outputs.appcenter-ios-token }}
-        run: appcenter crashes upload-symbols -a kspearrin/bitwarden -s "./bitwarden-export/dSYMs" --token $APPCENTER_IOS_TOKEN
+        run: appcenter crashes upload-symbols -a bitwarden/bitwarden -s "./bitwarden-export/dSYMs" --token $APPCENTER_IOS_TOKEN
         shell: bash
 
       - name: Deploy to App Store

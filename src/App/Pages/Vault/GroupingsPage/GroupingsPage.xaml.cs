@@ -27,7 +27,7 @@ namespace Bit.App.Pages
         private PreviousPageInfo _previousPage;
 
         public GroupingsPage(bool mainPage, CipherType? type = null, string folderId = null,
-            string collectionId = null, string pageTitle = null, PreviousPageInfo previousPage = null, 
+            string collectionId = null, string pageTitle = null, PreviousPageInfo previousPage = null,
             bool deleted = false)
         {
             _pageName = string.Concat(nameof(GroupingsPage), "_", DateTime.UtcNow.Ticks);
@@ -117,7 +117,7 @@ namespace Bit.App.Pages
                     {
                         await _vm.LoadAsync();
                     }
-                    catch (Exception e) when(e.Message.Contains("No key."))
+                    catch (Exception e) when (e.Message.Contains("No key."))
                     {
                         await Task.Delay(1000);
                         await _vm.LoadAsync();
@@ -225,8 +225,7 @@ namespace Bit.App.Pages
             await _accountListOverlay.HideAsync();
             if (DoOnce())
             {
-                var page = new CiphersPage(_vm.Filter, _vm.FolderId != null, _vm.CollectionId != null,
-                    _vm.Type != null, deleted: _vm.Deleted);
+                var page = new CiphersPage(_vm.Filter, _vm.MainPage ? null : _vm.PageTitle, deleted: _vm.Deleted);
                 await Navigation.PushModalAsync(new NavigationPage(page));
             }
         }

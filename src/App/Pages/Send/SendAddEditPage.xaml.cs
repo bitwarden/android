@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bit.App.Models;
@@ -53,10 +53,9 @@ namespace Bit.App.Pages
                 _vm.SegmentedButtonFontSize = 13;
                 _vm.SegmentedButtonMargins = new Thickness(0, 10, 0, 0);
                 _vm.EditorMargins = new Thickness(0, 5, 0, 0);
-                // Review this when https://github.com/bitwarden/mobile/pull/1454 workaround can be reverted
-                //_btnOptions.WidthRequest = 70;
-                //_btnOptionsDown.WidthRequest = 30;
-                //_btnOptionsUp.WidthRequest = 30;
+                _btnOptions.WidthRequest = 70;
+                _btnOptionsDown.WidthRequest = 30;
+                _btnOptionsUp.WidthRequest = 30;
             }
             else if (Device.RuntimePlatform == Device.iOS)
             {
@@ -338,10 +337,10 @@ namespace Bit.App.Pages
 
             _vm.IsAddFromShare = true;
             _vm.CopyInsteadOfShareAfterSaving = _appOptions.CopyInsteadOfShareAfterSaving;
-            
+
             var name = _appOptions.CreateSend.Item2;
             _vm.Send.Name = name;
-            
+
             var type = _appOptions.CreateSend.Item1;
             if (type == SendType.File)
             {

@@ -1,12 +1,12 @@
-﻿using Bit.Core.Abstractions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Bit.Core.Abstractions;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.Response;
 using Bit.Core.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Bit.Core.Services
 {
@@ -378,7 +378,7 @@ namespace Bit.Core.Services
 
         private async Task SyncSendsAsync(string userId, List<SendResponse> response)
         {
-            var sends = response?.ToDictionary(s => s.Id, s => new SendData(s, userId)) ?? 
+            var sends = response?.ToDictionary(s => s.Id, s => new SendData(s, userId)) ??
                 new Dictionary<string, SendData>();
             await _sendService.ReplaceAsync(sends);
         }

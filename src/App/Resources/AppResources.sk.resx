@@ -1299,7 +1299,7 @@
     <value>1. Prejdite do aplikácie "Nastavenia" pre iOS</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Ťuknite na položku "Heslá &amp; účty"</value>
+    <value>2. Ťuknite na položku "Heslá"</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
     <value>3. Klepnite na možnosť "Automaticky vypĺňať heslá"</value>
@@ -1428,7 +1428,7 @@
     <value>Počet slov</value>
   </data>
   <data name="Passphrase" xml:space="preserve">
-    <value>Heslo</value>
+    <value>Prístupová fráza</value>
   </data>
   <data name="WordSeparator" xml:space="preserve">
     <value>Oddeľovač slov</value>

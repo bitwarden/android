@@ -15,7 +15,18 @@
     </ContentPage.BindingContext>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Icon="search.png" Clicked="Search_Clicked" />
+        <controls:ExtendedToolbarItem
+            x:Name="_accountAvatar"
+            IconImageSource="{Binding AvatarImageSource}"
+            Command="{Binding Source={x:Reference _accountListOverlay}, Path=ToggleVisibililtyCommand}"
+            Order="Primary"
+            Priority="-1"
+            UseOriginalImage="True"
+            AutomationProperties.IsInAccessibleTree="True"
+            AutomationProperties.Name="{u:I18n Account}" />
+        <ToolbarItem Icon="search.png" Clicked="Search_Clicked"
+                     AutomationProperties.IsInAccessibleTree="True"
+                     AutomationProperties.Name="{u:I18n Search}" />
     </ContentPage.ToolbarItems>
 
     <ContentPage.Resources>
@@ -58,7 +69,7 @@
                     VerticalOptions="CenterAndExpand"
                     Padding="20, 0"
                     Spacing="20"
-                    IsVisible="{Binding ShowList, Converter={StaticResource inverseBool}}">
+                    IsVisible="{Binding ShowNoData}">
                     <Label
                         Text="{Binding NoDataText}"
                         HorizontalTextAlignment="Center"></Label>
@@ -88,6 +99,8 @@
             AbsoluteLayout.LayoutFlags="All"
             AbsoluteLayout.LayoutBounds="0, 0, 1, 1">
         </ContentView>
+        
+        <!-- Android FAB -->
         <Button
             x:Name="_fab"
             Image="plus.png"
@@ -99,6 +112,14 @@
                 <effects:FabShadowEffect />
             </Button.Effects>
         </Button>
+        
+        <controls:AccountSwitchingOverlayView
+            x:Name="_accountListOverlay"
+            AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+            AbsoluteLayout.LayoutFlags="All"
+            MainPage="{Binding Source={x:Reference _page}}"
+            MainFab="{Binding Source={x:Reference _fab}, Path=.}"
+            BindingContext="{Binding AccountSwitchingOverlayViewModel}"/>
     </AbsoluteLayout>
 
 </pages:BaseContentPage>

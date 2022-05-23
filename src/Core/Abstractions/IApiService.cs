@@ -1,10 +1,10 @@
-﻿using Bit.Core.Models.Domain;
-using Bit.Core.Models.Request;
-using Bit.Core.Models.Response;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Bit.Core.Models.Domain;
+using Bit.Core.Models.Request;
+using Bit.Core.Models.Response;
 
 namespace Bit.Core.Abstractions
 {

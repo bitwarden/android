@@ -9,6 +9,7 @@ using Bit.App.Pages;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Bit.iOS.Core;
 using Bit.iOS.Core.Controllers;
@@ -17,7 +18,6 @@ using Bit.iOS.Core.Views;
 using Bit.iOS.ShareExtension.Models;
 using CoreNFC;
 using Foundation;
-using Microsoft.AppCenter.Crashes;
 using MobileCoreServices;
 using UIKit;
 using Xamarin.Forms;
@@ -27,7 +27,6 @@ namespace Bit.iOS.ShareExtension
     public partial class LoadingViewController : ExtendedUIViewController
     {
         private Context _context = new Context();
-        private bool _initedAppCenter;
         private NFCNdefReaderSession _nfcSession = null;
         private Core.NFCReaderDelegate _nfcDelegate = null;
 
@@ -99,7 +98,7 @@ namespace Bit.iOS.ShareExtension
             }
             catch (Exception ex)
             {
-                Crashes.TrackError(ex);
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
             }
         }
 
@@ -216,11 +215,7 @@ namespace Bit.iOS.ShareExtension
             var messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             ServiceContainer.Init(_deviceActionService.Value.DeviceUserAgent,
                 Bit.Core.Constants.iOSShareExtensionClearCiphersCacheKey, Bit.Core.Constants.iOSAllClearCipherCacheKeys);
-            if (!_initedAppCenter)
-            {
-                iOSCoreHelpers.RegisterAppCenter();
-                _initedAppCenter = true;
-            }
+            iOSCoreHelpers.InitLogger();
             iOSCoreHelpers.Bootstrap();
 
             var app = new App.App(new AppOptions { IosExtension = true });

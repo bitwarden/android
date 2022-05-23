@@ -659,7 +659,7 @@
     <value>Re-type Master Password</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
-    <value>Search vault</value>
+    <value>Search Vault</value>
   </data>
   <data name="Security" xml:space="preserve">
     <value>Security</value>
@@ -1372,11 +1372,15 @@
   <data name="SearchCollection" xml:space="preserve">
     <value>Search collection</value>
   </data>
-  <data name="SearchFolder" xml:space="preserve">
-    <value>Search folder</value>
+  <data name="SearchFileSends" xml:space="preserve">
+    <value>Search File Sends</value>
   </data>
-  <data name="SearchType" xml:space="preserve">
-    <value>Search type</value>
+  <data name="SearchTextSends" xml:space="preserve">
+    <value>Search Text Sends</value>
+  </data>
+  <data name="SearchGroup" xml:space="preserve">
+    <value>Search {0}</value>
+    <comment>ex: Search Logins</comment>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Type</value>
@@ -1538,7 +1542,7 @@
     <value>Default (System)</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
-    <value>Copy Notes</value>
+    <value>Copy Note</value>
   </data>
   <data name="Exit" xml:space="preserve">
     <value>Exit</value>
@@ -2176,5 +2180,11 @@
   </data>
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
     <value>Enter the verification code that was sent to your email</value>
+  </data>
+  <data name="ReportCrashLogs" xml:space="preserve">
+    <value>Report crash logs</value>
+  </data>
+  <data name="ReportCrashLogsDescription" xml:space="preserve">
+    <value>Help Bitwarden improve app stability by allowing crash reports.</value>
   </data>
 </root>

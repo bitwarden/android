@@ -1,15 +1,15 @@
-﻿using Bit.App.Abstractions;
+﻿using System;
+using System.Threading.Tasks;
+using Bit.App.Abstractions;
 using Bit.App.Models;
 using Bit.App.Pages;
 using Bit.App.Resources;
 using Bit.App.Services;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
+using Bit.Core.Enums;
 using Bit.Core.Models.Data;
 using Bit.Core.Utilities;
-using System;
-using System.Threading.Tasks;
-using Bit.Core.Enums;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -208,7 +208,10 @@ namespace Bit.App
                 {
                     await _stateService.SetLastActiveTimeAsync(_deviceActionService.GetActiveTime());
                 }
-                SetTabsPageFromAutofill(isLocked);
+                if (!SetTabsPageFromAutofill(isLocked))
+                {
+                    ClearAutofillUri();
+                }
                 await SleptAsync();
             }
         }
@@ -315,7 +318,7 @@ namespace Bit.App
                     Options.HideAccountSwitcher = await _stateService.GetActiveUserIdAsync() == null;
                     Current.MainPage = new NavigationPage(new LoginPage(email, Options));
                 }
-                else if (await _vaultTimeoutService.IsLockedAsync() || 
+                else if (await _vaultTimeoutService.IsLockedAsync() ||
                          await _vaultTimeoutService.ShouldLockAsync())
                 {
                     Current.MainPage = new NavigationPage(new LockPage(Options));
@@ -365,7 +368,15 @@ namespace Bit.App
             }
         }
 
-        private void SetTabsPageFromAutofill(bool isLocked)
+        private void ClearAutofillUri()
+        {
+            if (Device.RuntimePlatform == Device.Android && !string.IsNullOrWhiteSpace(Options.Uri))
+            {
+                Options.Uri = null;
+            }
+        }
+
+        private bool SetTabsPageFromAutofill(bool isLocked)
         {
             if (Device.RuntimePlatform == Device.Android && !string.IsNullOrWhiteSpace(Options.Uri) &&
                 !Options.FromAutofillFramework)
@@ -385,7 +396,9 @@ namespace Bit.App
                         }
                     });
                 });
+                return true;
             }
+            return false;
         }
 
         private void Prime()

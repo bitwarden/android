@@ -277,7 +277,7 @@
                                 StyleClass="box-label-regular"
                                 HorizontalOptions="StartAndExpand" />
                             <Switch
-                                IsToggled="{Binding AvoidAmbiguous}"
+                                IsToggled="{Binding AvoidAmbiguousChars}"
                                 StyleClass="box-value"
                                 HorizontalOptions="End" />
                         </StackLayout>

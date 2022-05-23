@@ -1,7 +1,7 @@
-﻿using Bit.Core.Abstractions;
-using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Bit.Core.Abstractions;
+using Newtonsoft.Json.Linq;
 
 namespace Bit.Core.Services
 {

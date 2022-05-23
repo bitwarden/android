@@ -1299,7 +1299,7 @@
     <value>1. Перейдите в 'Настройки' iOS</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Нажмите 'Пароли и учетные записи'</value>
+    <value>2. Нажмите 'Пароли'</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
     <value>3. Нажмите 'Автозаполнение паролей'</value>

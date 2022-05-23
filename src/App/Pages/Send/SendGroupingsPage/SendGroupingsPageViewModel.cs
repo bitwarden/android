@@ -136,7 +136,7 @@ namespace Bit.App.Pages
             ShowNoData = false;
             Loading = true;
             ShowList = false;
-            SendEnabled = ! await AppHelpers.IsSendDisabledByPolicyAsync();
+            SendEnabled = !await AppHelpers.IsSendDisabledByPolicyAsync();
             var groupedSends = new List<SendGroupingsPageListGroup>();
             var page = Page as SendGroupingsPage;
 
