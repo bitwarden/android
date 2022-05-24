@@ -3299,6 +3299,12 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string Text {
+            get {
+                return ResourceManager.GetString("Text", resourceCulture);
+            }
+        }
+        
         public static string TypeText {
             get {
                 return ResourceManager.GetString("TypeText", resourceCulture);
@@ -3326,6 +3332,18 @@ namespace Bit.App.Resources {
         public static string TypeFileInfo {
             get {
                 return ResourceManager.GetString("TypeFileInfo", resourceCulture);
+            }
+        }
+        
+        public static string TypeIsSelected {
+            get {
+                return ResourceManager.GetString("TypeIsSelected", resourceCulture);
+            }
+        }
+        
+        public static string TypeIsNotSelected {
+            get {
+                return ResourceManager.GetString("TypeIsNotSelected", resourceCulture);
             }
         }
         

@@ -126,6 +126,7 @@ namespace Bit.App.Pages
                     }
                     AdjustToolbar();
                 });
+                SetAccessibilityLabels();
             }
             catch (Exception ex)
             {
@@ -173,6 +174,7 @@ namespace Bit.App.Pages
             {
                 RequestFocus(_nameEntry);
             }
+            SetAccessibilityLabels();
         }
 
         private async void FileType_Clicked(object sender, EventArgs eventArgs)
@@ -184,6 +186,7 @@ namespace Bit.App.Pages
             {
                 RequestFocus(_nameEntry);
             }
+            SetAccessibilityLabels();
         }
 
         private void OnMaxAccessCountTextChanged(object sender, TextChangedEventArgs e)
@@ -355,6 +358,12 @@ namespace Bit.App.Pages
                 TextType_Clicked(null, null);
             }
             _appOptions.CreateSend = null;
+        }
+
+        private void SetAccessibilityLabels()
+        {
+            AutomationProperties.SetHelpText(_typeFileButton, _vm.FileTypeAccessibilityLabel);
+            AutomationProperties.SetHelpText(_typeTextButton, _vm.TextTypeAccessibilityLabel);
         }
     }
 }

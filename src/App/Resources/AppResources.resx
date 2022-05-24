@@ -1861,6 +1861,9 @@
     <value>A friendly name to describe this Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
+  <data name="Text" xml:space="preserve">
+    <value>Text</value>
+  </data>
   <data name="TypeText" xml:space="preserve">
     <value>Text</value>
   </data>
@@ -1876,6 +1879,12 @@
   </data>
   <data name="TypeFileInfo" xml:space="preserve">
     <value>The file you want to send.</value>
+  </data>
+  <data name="TypeIsSelected" xml:space="preserve">
+    <value>type is, selected.</value>
+  </data>
+  <data name="TypeIsNotSelected" xml:space="preserve">
+    <value>type is, not selected, click to select.</value>
   </data>
   <data name="DeletionDate" xml:space="preserve">
     <value>Deletion Date</value>
