@@ -1880,11 +1880,17 @@
   <data name="TypeFileInfo" xml:space="preserve">
     <value>The file you want to send.</value>
   </data>
-  <data name="TypeIsSelected" xml:space="preserve">
-    <value>type is, selected.</value>
+  <data name="FileTypeIsSelected" xml:space="preserve">
+    <value>File type is, selected.</value>
   </data>
-  <data name="TypeIsNotSelected" xml:space="preserve">
-    <value>type is, not selected, click to select.</value>
+  <data name="FileTypeIsNotSelected" xml:space="preserve">
+    <value>File type is, not selected, click to select.</value>
+  </data>
+  <data name="TextTypeIsSelected" xml:space="preserve">
+    <value>Text type is, selected.</value>
+  </data>
+  <data name="TextTypeIsNotSelected" xml:space="preserve">
+    <value>Text type is, not selected, click to select.</value>
   </data>
   <data name="DeletionDate" xml:space="preserve">
     <value>Deletion Date</value>

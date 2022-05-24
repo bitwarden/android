@@ -23,7 +23,6 @@ namespace Bit.App.Pages
         private readonly IStateService _stateService;
         private readonly ISendService _sendService;
         private readonly ILogger _logger;
-        private readonly II18nService _i18nService;
         private bool _sendEnabled;
         private bool _canAccessPremium;
         private bool _emailVerified;
@@ -45,6 +44,8 @@ namespace Bit.App.Pages
         {
             nameof(IsText),
             nameof(IsFile),
+            nameof(FileTypeAccessibilityLabel),
+            nameof(TextTypeAccessibilityLabel)
         };
         private bool _disableHideEmail;
         private bool _sendOptionsPolicyInEffect;
@@ -58,7 +59,6 @@ namespace Bit.App.Pages
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _sendService = ServiceContainer.Resolve<ISendService>("sendService");
             _logger = ServiceContainer.Resolve<ILogger>("logger");
-            _i18nService = ServiceContainer.Resolve<II18nService>("i18nService");
 
             TogglePasswordCommand = new Command(TogglePassword);
 
@@ -233,8 +233,8 @@ namespace Bit.App.Pages
         public bool ShowDeletionCustomPickers => EditMode || DeletionDateTypeSelectedIndex == 6;
         public bool ShowExpirationCustomPickers => EditMode || ExpirationDateTypeSelectedIndex == 7;
         public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
-        public string FileTypeAccessibilityLabel => $"{_i18nService.T("File")} {_i18nService.T(IsFile ? "TypeIsSelected" : "TypeIsNotSelected")}";
-        public string TextTypeAccessibilityLabel => $"{_i18nService.T("Text")} {_i18nService.T(IsText ? "TypeIsSelected" : "TypeIsNotSelected")}";
+        public string FileTypeAccessibilityLabel => IsFile ? AppResources.FileTypeIsSelected : AppResources.FileTypeIsNotSelected;
+        public string TextTypeAccessibilityLabel => IsText ? AppResources.TextTypeIsSelected : AppResources.TextTypeIsNotSelected;
 
         public async Task InitAsync()
         {

@@ -3335,15 +3335,27 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string TypeIsSelected {
+        public static string FileTypeIsSelected {
             get {
-                return ResourceManager.GetString("TypeIsSelected", resourceCulture);
+                return ResourceManager.GetString("FileTypeIsSelected", resourceCulture);
             }
         }
         
-        public static string TypeIsNotSelected {
+        public static string FileTypeIsNotSelected {
             get {
-                return ResourceManager.GetString("TypeIsNotSelected", resourceCulture);
+                return ResourceManager.GetString("FileTypeIsNotSelected", resourceCulture);
+            }
+        }
+        
+        public static string TextTypeIsSelected {
+            get {
+                return ResourceManager.GetString("TextTypeIsSelected", resourceCulture);
+            }
+        }
+        
+        public static string TextTypeIsNotSelected {
+            get {
+                return ResourceManager.GetString("TextTypeIsNotSelected", resourceCulture);
             }
         }
         
