@@ -113,7 +113,6 @@
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
                                 <Button
-                                    x:Name="_typeFileButton"
                                     Text="{u:I18n TypeFile}"
                                     StyleClass="segmented-button"
                                     IsEnabled="{Binding IsText}"
@@ -126,7 +125,6 @@
                                     Grid.Column="0">
                                 </Button>
                                 <Button
-                                    x:Name="_typeTextButton"
                                     Text="{u:I18n TypeText}"
                                     StyleClass="segmented-button"
                                     IsEnabled="{Binding IsFile}"
