@@ -2187,4 +2187,10 @@
   <data name="ReportCrashLogsDescription" xml:space="preserve">
     <value>Help Bitwarden improve app stability by allowing crash reports.</value>
   </data>
+  <data name="OptionsExpanded" xml:space="preserve">
+    <value>Options are expanded, tap to collapse.</value>
+  </data>
+  <data name="OptionsCollapsed" xml:space="preserve">
+    <value>Options are collapsed, tap to expand.</value>
+  </data>
 </root>

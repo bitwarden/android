@@ -3904,5 +3904,17 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("ReportCrashLogsDescription", resourceCulture);
             }
         }
+        
+        public static string OptionsExpanded {
+            get {
+                return ResourceManager.GetString("OptionsExpanded", resourceCulture);
+            }
+        }
+        
+        public static string OptionsCollapsed {
+            get {
+                return ResourceManager.GetString("OptionsCollapsed", resourceCulture);
+            }
+        }
     }
 }

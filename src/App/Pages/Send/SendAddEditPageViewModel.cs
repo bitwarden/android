@@ -102,6 +102,7 @@ namespace Bit.App.Pages
         public bool DisableHideEmailControl { get; set; }
         public bool IsAddFromShare { get; set; }
         public string ShareOnSaveText => CopyInsteadOfShareAfterSaving ? AppResources.CopySendLinkOnSave : AppResources.ShareOnSave;
+        public string OptionsAccessilibityText => ShowOptions ? AppResources.OptionsExpanded : AppResources.OptionsCollapsed;
         public List<KeyValuePair<string, SendType>> TypeOptions { get; }
         public List<KeyValuePair<string, string>> DeletionTypeOptions { get; }
         public List<KeyValuePair<string, string>> ExpirationTypeOptions { get; }
@@ -134,7 +135,11 @@ namespace Bit.App.Pages
         public bool ShowOptions
         {
             get => _showOptions;
-            set => SetProperty(ref _showOptions, value);
+            set => SetProperty(ref _showOptions, value,
+                additionalPropertyNames: new[]
+                {
+                    nameof(OptionsAccessilibityText)
+                });
         }
         public int ExpirationDateTypeSelectedIndex
         {

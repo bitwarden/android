@@ -250,28 +250,33 @@
                         </StackLayout>
                         <StackLayout
                             Orientation="Horizontal"
-                            Spacing="0">
+                            Spacing="0"
+                            AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.Name="{Binding OptionsAccessilibityText}">
+                            <StackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="ToggleOptions_Clicked"/>
+                            </StackLayout.GestureRecognizers>
                             <Button
                                 Text="{u:I18n Options}"
                                 x:Name="_btnOptions"
                                 StyleClass="box-row-button"
                                 TextColor="{DynamicResource PrimaryColor}"
                                 Margin="0"
-                                Clicked="ToggleOptions_Clicked"/>
+                                AutomationProperties.IsInAccessibleTree="False"/>
                             <controls:IconButton
                                 x:Name="_btnOptionsUp"
                                 Text="{Binding Source={x:Static core:BitwardenIcons.ChevronUp}}"
                                 StyleClass="box-row-button"
                                 TextColor="{DynamicResource PrimaryColor}"
-                                Clicked="ToggleOptions_Clicked"
-                                IsVisible="{Binding ShowOptions}" />
+                                IsVisible="{Binding ShowOptions}" 
+                                AutomationProperties.IsInAccessibleTree="False"/>
                             <controls:IconButton
                                 x:Name="_btnOptionsDown"
                                 Text="{Binding Source={x:Static core:BitwardenIcons.AngleDown}}"
                                 StyleClass="box-row-button"
                                 TextColor="{DynamicResource PrimaryColor}"
-                                Clicked="ToggleOptions_Clicked"
-                                IsVisible="{Binding ShowOptions, Converter={StaticResource inverseBool}}" />
+                                IsVisible="{Binding ShowOptions, Converter={StaticResource inverseBool}}" 
+                                AutomationProperties.IsInAccessibleTree="False"/>
                         </StackLayout>
                         <StackLayout IsVisible="{Binding ShowOptions}">
                             <StackLayout
