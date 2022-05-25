@@ -3904,5 +3904,29 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("ReportCrashLogsDescription", resourceCulture);
             }
         }
+        
+        public static string UppercaseAtoZ {
+            get {
+                return ResourceManager.GetString("UppercaseAtoZ", resourceCulture);
+            }
+        }
+        
+        public static string LowercaseAtoZ {
+            get {
+                return ResourceManager.GetString("LowercaseAtoZ", resourceCulture);
+            }
+        }
+        
+        public static string NumbersZeroToNine {
+            get {
+                return ResourceManager.GetString("NumbersZeroToNine", resourceCulture);
+            }
+        }
+        
+        public static string SpecialCharacters {
+            get {
+                return ResourceManager.GetString("SpecialCharacters", resourceCulture);
+            }
+        }
     }
 }
