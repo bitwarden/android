@@ -1881,16 +1881,16 @@
     <value>The file you want to send.</value>
   </data>
   <data name="FileTypeIsSelected" xml:space="preserve">
-    <value>File type is, selected.</value>
+    <value>File type is selected.</value>
   </data>
   <data name="FileTypeIsNotSelected" xml:space="preserve">
-    <value>File type is, not selected, tap to select.</value>
+    <value>File type is not selected, tap to select.</value>
   </data>
   <data name="TextTypeIsSelected" xml:space="preserve">
-    <value>Text type is, selected.</value>
+    <value>Text type is selected.</value>
   </data>
   <data name="TextTypeIsNotSelected" xml:space="preserve">
-    <value>Text type is, not selected, tap to select.</value>
+    <value>Text type is not selected, tap to select.</value>
   </data>
   <data name="DeletionDate" xml:space="preserve">
     <value>Deletion Date</value>
