@@ -121,6 +121,7 @@
                                     Clicked="FileType_Clicked"
                                     AutomationProperties.IsInAccessibleTree="True"
                                     AutomationProperties.Name="{u:I18n File}"
+                                    AutomationProperties.HelpText="{Binding FileTypeAccessibilityLabel}"
                                     Grid.Column="0">
                                 </Button>
                                 <Button
@@ -132,6 +133,7 @@
                                     Clicked="TextType_Clicked"
                                     AutomationProperties.IsInAccessibleTree="True"
                                     AutomationProperties.Name="{u:I18n Text}"
+                                    AutomationProperties.HelpText="{Binding TextTypeAccessibilityLabel}"
                                     Grid.Column="1">
                                 </Button>
                             </Grid>

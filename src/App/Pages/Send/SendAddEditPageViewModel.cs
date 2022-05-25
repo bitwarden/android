@@ -44,6 +44,8 @@ namespace Bit.App.Pages
         {
             nameof(IsText),
             nameof(IsFile),
+            nameof(FileTypeAccessibilityLabel),
+            nameof(TextTypeAccessibilityLabel)
         };
         private bool _disableHideEmail;
         private bool _sendOptionsPolicyInEffect;
@@ -236,6 +238,8 @@ namespace Bit.App.Pages
         public bool ShowDeletionCustomPickers => EditMode || DeletionDateTypeSelectedIndex == 6;
         public bool ShowExpirationCustomPickers => EditMode || ExpirationDateTypeSelectedIndex == 7;
         public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
+        public string FileTypeAccessibilityLabel => IsFile ? AppResources.FileTypeIsSelected : AppResources.FileTypeIsNotSelected;
+        public string TextTypeAccessibilityLabel => IsText ? AppResources.TextTypeIsSelected : AppResources.TextTypeIsNotSelected;
 
         public async Task InitAsync()
         {
