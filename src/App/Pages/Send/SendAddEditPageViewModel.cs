@@ -61,6 +61,7 @@ namespace Bit.App.Pages
             _logger = ServiceContainer.Resolve<ILogger>("logger");
 
             TogglePasswordCommand = new Command(TogglePassword);
+            ToggleOptionsCommand = new Command(ToggleOptions);
 
             TypeOptions = new List<KeyValuePair<string, SendType>>
             {
@@ -91,6 +92,7 @@ namespace Bit.App.Pages
         }
 
         public Command TogglePasswordCommand { get; set; }
+        public Command ToggleOptionsCommand { get; set; }
         public string SendId { get; set; }
         public int SegmentedButtonHeight { get; set; }
         public int SegmentedButtonFontSize { get; set; }

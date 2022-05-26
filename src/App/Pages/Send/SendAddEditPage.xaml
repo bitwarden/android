@@ -2,6 +2,7 @@
 <pages:BaseContentPage
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
     x:Class="Bit.App.Pages.SendAddEditPage"
     xmlns:pages="clr-namespace:Bit.App.Pages"
     xmlns:u="clr-namespace:Bit.App.Utilities"
@@ -253,11 +254,9 @@
                         <StackLayout
                             Orientation="Horizontal"
                             Spacing="0"
+                            xct:TouchEffect.Command="{Binding ToggleOptionsCommand}"
                             AutomationProperties.IsInAccessibleTree="True"
                             AutomationProperties.Name="{Binding OptionsAccessilibityText}">
-                            <StackLayout.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="ToggleOptions_Clicked"/>
-                            </StackLayout.GestureRecognizers>
                             <Button
                                 Text="{u:I18n Options}"
                                 x:Name="_btnOptions"
