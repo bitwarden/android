@@ -3299,6 +3299,12 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string Text {
+            get {
+                return ResourceManager.GetString("Text", resourceCulture);
+            }
+        }
+        
         public static string TypeText {
             get {
                 return ResourceManager.GetString("TypeText", resourceCulture);
@@ -3326,6 +3332,30 @@ namespace Bit.App.Resources {
         public static string TypeFileInfo {
             get {
                 return ResourceManager.GetString("TypeFileInfo", resourceCulture);
+            }
+        }
+        
+        public static string FileTypeIsSelected {
+            get {
+                return ResourceManager.GetString("FileTypeIsSelected", resourceCulture);
+            }
+        }
+        
+        public static string FileTypeIsNotSelected {
+            get {
+                return ResourceManager.GetString("FileTypeIsNotSelected", resourceCulture);
+            }
+        }
+        
+        public static string TextTypeIsSelected {
+            get {
+                return ResourceManager.GetString("TextTypeIsSelected", resourceCulture);
+            }
+        }
+        
+        public static string TextTypeIsNotSelected {
+            get {
+                return ResourceManager.GetString("TextTypeIsNotSelected", resourceCulture);
             }
         }
         
@@ -3902,6 +3932,30 @@ namespace Bit.App.Resources {
         public static string ReportCrashLogsDescription {
             get {
                 return ResourceManager.GetString("ReportCrashLogsDescription", resourceCulture);
+            }
+        }
+        
+        public static string UppercaseAtoZ {
+            get {
+                return ResourceManager.GetString("UppercaseAtoZ", resourceCulture);
+            }
+        }
+        
+        public static string LowercaseAtoZ {
+            get {
+                return ResourceManager.GetString("LowercaseAtoZ", resourceCulture);
+            }
+        }
+        
+        public static string NumbersZeroToNine {
+            get {
+                return ResourceManager.GetString("NumbersZeroToNine", resourceCulture);
+            }
+        }
+        
+        public static string SpecialCharacters {
+            get {
+                return ResourceManager.GetString("SpecialCharacters", resourceCulture);
             }
         }
     }

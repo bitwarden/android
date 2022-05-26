@@ -346,6 +346,7 @@ namespace Bit.Core.Services
                 TwoFactorProvidersData = response.TwoFactorResponse.TwoFactorProviders2;
                 result.TwoFactorProviders = response.TwoFactorResponse.TwoFactorProviders2;
                 CaptchaToken = response.TwoFactorResponse.CaptchaToken;
+                await _tokenService.ClearTwoFactorTokenAsync(email);
                 return result;
             }
 

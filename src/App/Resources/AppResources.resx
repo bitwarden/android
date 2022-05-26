@@ -1861,6 +1861,9 @@
     <value>A friendly name to describe this Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
+  <data name="Text" xml:space="preserve">
+    <value>Text</value>
+  </data>
   <data name="TypeText" xml:space="preserve">
     <value>Text</value>
   </data>
@@ -1876,6 +1879,18 @@
   </data>
   <data name="TypeFileInfo" xml:space="preserve">
     <value>The file you want to send.</value>
+  </data>
+  <data name="FileTypeIsSelected" xml:space="preserve">
+    <value>File type is selected.</value>
+  </data>
+  <data name="FileTypeIsNotSelected" xml:space="preserve">
+    <value>File type is not selected, tap to select.</value>
+  </data>
+  <data name="TextTypeIsSelected" xml:space="preserve">
+    <value>Text type is selected.</value>
+  </data>
+  <data name="TextTypeIsNotSelected" xml:space="preserve">
+    <value>Text type is not selected, tap to select.</value>
   </data>
   <data name="DeletionDate" xml:space="preserve">
     <value>Deletion Date</value>
@@ -2186,5 +2201,17 @@
   </data>
   <data name="ReportCrashLogsDescription" xml:space="preserve">
     <value>Help Bitwarden improve app stability by allowing crash reports.</value>
+  </data>
+  <data name="UppercaseAtoZ" xml:space="preserve">
+    <value>Uppercase (A to Z)</value>
+  </data>
+  <data name="LowercaseAtoZ" xml:space="preserve">
+    <value>Lowercase (A to Z)</value>
+  </data>
+  <data name="NumbersZeroToNine" xml:space="preserve">
+    <value>Numbers (0 to 9)</value>
+  </data>
+  <data name="SpecialCharacters" xml:space="preserve">
+    <value>Special Characters (!@#$%^&amp;*)</value>
   </data>
 </root>
