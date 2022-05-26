@@ -105,6 +105,7 @@
                         Grid.Column="1"
                         AutomationProperties.IsInAccessibleTree="True"
                         AutomationProperties.Name="{u:I18n ToggleVisibility}"
+                        AutomationProperties.HelpText="{Binding PasswordVisibilityAccessibilityText}"
                         IsVisible="{Binding UseOTPVerification, Converter={StaticResource inverseBool}}"/>
                     <Label
                         Text="{u:I18n ConfirmYourIdentity}"

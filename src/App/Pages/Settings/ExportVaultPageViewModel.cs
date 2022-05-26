@@ -109,7 +109,11 @@ namespace Bit.App.Pages
         {
             get => _showPassword;
             set => SetProperty(ref _showPassword, value,
-                additionalPropertyNames: new string[] { nameof(ShowPasswordIcon) });
+                additionalPropertyNames: new string[]
+                {
+                    nameof(ShowPasswordIcon),
+                    nameof(PasswordVisibilityAccessibilityText),
+                });
         }
 
         public bool UseOTPVerification
@@ -139,6 +143,7 @@ namespace Bit.App.Pages
         public Command TogglePasswordCommand { get; }
 
         public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
+        public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisible : AppResources.PasswordIsNotVisible;
 
         public void TogglePassword()
         {

@@ -3958,5 +3958,17 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("SpecialCharacters", resourceCulture);
             }
         }
+        
+        public static string PasswordIsVisible {
+            get {
+                return ResourceManager.GetString("PasswordIsVisible", resourceCulture);
+            }
+        }
+        
+        public static string PasswordIsNotVisible {
+            get {
+                return ResourceManager.GetString("PasswordIsNotVisible", resourceCulture);
+            }
+        }
     }
 }

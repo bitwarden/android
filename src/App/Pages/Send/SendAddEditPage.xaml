@@ -440,7 +440,8 @@
                                         Command="{Binding TogglePasswordCommand}"
                                         Margin="10,0,0,0"
                                         AutomationProperties.IsInAccessibleTree="True"
-                                        AutomationProperties.Name="{u:I18n ToggleVisibility}" />
+                                        AutomationProperties.Name="{u:I18n ToggleVisibility}"
+                                        AutomationProperties.HelpText="{Binding PasswordVisibilityAccessibilityText}" />
                                 </StackLayout>
                                 <Label
                                     Text="{u:I18n PasswordInfo}"
