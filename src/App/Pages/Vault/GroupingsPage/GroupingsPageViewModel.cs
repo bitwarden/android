@@ -10,7 +10,6 @@ using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.View;
-using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
@@ -51,6 +50,7 @@ namespace Bit.App.Pages
         private readonly IStateService _stateService;
         private readonly IPasswordRepromptService _passwordRepromptService;
         private readonly IOrganizationService _organizationService;
+        private readonly IPolicyService _policyService;
         private readonly ILogger _logger;
 
         public GroupingsPageViewModel()
@@ -65,7 +65,8 @@ namespace Bit.App.Pages
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _passwordRepromptService = ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService");
-            _organizationService = ServiceContainer.Resolve<OrganizationService>("organizationService");
+            _organizationService = ServiceContainer.Resolve<IOrganizationService>("organizationService");
+            _policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
             _logger = ServiceContainer.Resolve<ILogger>("logger");
 
             Loading = true;
@@ -76,6 +77,7 @@ namespace Bit.App.Pages
                 await LoadAsync();
             });
             CipherOptionsCommand = new Command<CipherView>(CipherOptionsAsync);
+            VaultFilterCommand = new Command(async () => await VaultFilterOptionsAsync());
 
             AccountSwitchingOverlayViewModel = new AccountSwitchingOverlayViewModel(_stateService, _messagingService, _logger)
             {
@@ -158,7 +160,7 @@ namespace Bit.App.Pages
             {
                 if (_vaultFilterSelection == null || _vaultFilterSelection == AppResources.AllVaults)
                 {
-                    return string.Format(AppResources.VaultFilterDescription, AppResources.VaultFilterDescriptionAll);
+                    return string.Format(AppResources.VaultFilterDescription, AppResources.All);
                 }
                 return string.Format(AppResources.VaultFilterDescription, _vaultFilterSelection);
             }
@@ -170,6 +172,7 @@ namespace Bit.App.Pages
         public ObservableRangeCollection<IGroupingsPageListItem> GroupedItems { get; set; }
         public Command RefreshCommand { get; set; }
         public Command<CipherView> CipherOptionsCommand { get; set; }
+        public Command VaultFilterCommand { get; }
         public bool LoadedOnce { get; set; }
 
         public async Task LoadAsync()
@@ -197,7 +200,11 @@ namespace Bit.App.Pages
             _organizations = await _organizationService.GetAllAsync();
             if (MainPage)
             {
-                ShowVaultFilter = await AppHelpers.IsShowingVaultFilterAsync();
+                ShowVaultFilter = await _policyService.ShouldShowVaultFilterAsync();
+                if (ShowVaultFilter && _vaultFilterSelection == null)
+                {
+                    _vaultFilterSelection = AppResources.AllVaults;
+                }
                 PageTitle = ShowVaultFilter ? AppResources.Vaults : AppResources.MyVault;
             }
 
@@ -373,20 +380,28 @@ namespace Bit.App.Pages
 
         public async Task VaultFilterOptionsAsync()
         {
-            var options = new List<string> { AppResources.AllVaults, AppResources.MyVault };
-            if (_organizations.Any())
+            try
             {
-                options.AddRange(_organizations.Select(o => o.Name));
+                var options = new List<string> { AppResources.AllVaults, AppResources.MyVault };
+                if (_organizations.Any())
+                {
+                    options.AddRange(_organizations.Select(o => o.Name));
+                }
+                var selection = await Page.DisplayActionSheet(AppResources.FilterByVault, AppResources.Cancel, null,
+                    options.ToArray());
+                if (selection == AppResources.Cancel ||
+                    (_vaultFilterSelection == null && selection == AppResources.AllVaults) ||
+                    (_vaultFilterSelection != null && _vaultFilterSelection == selection))
+                {
+                    return;
+                }
+                VaultFilterDescription = selection;
+                await LoadAsync();
             }
-            var selection = await Page.DisplayActionSheet(AppResources.FilterByVault, AppResources.Cancel, null, options.ToArray());
-            if (selection == AppResources.Cancel ||
-                (_vaultFilterSelection == null && selection == AppResources.AllVaults) ||
-                (_vaultFilterSelection != null && _vaultFilterSelection == selection))
+            catch (Exception ex)
             {
-                return;
+                _logger.Exception(ex);
             }
-            VaultFilterDescription = selection;
-            await LoadAsync();
         }
 
         public async Task SelectCipherAsync(CipherView cipher)
@@ -472,22 +487,7 @@ namespace Bit.App.Pages
 
         private async Task LoadDataAsync()
         {
-            string orgId = null;
-            var decCiphers = await _cipherService.GetAllDecryptedAsync();
-            if (IsVaultFilterMyVault)
-            {
-                _allCiphers = decCiphers.Where(c => c.OrganizationId == null).ToList();
-            }
-            else if (IsVaultFilterOrgVault)
-            {
-                orgId = await GetVaultFilterOrgIdAsync();
-                _allCiphers = decCiphers.Where(c => c.OrganizationId == orgId).ToList();
-            }
-            else
-            {
-                _allCiphers = decCiphers;
-            }
-
+            var orgId = await FillAllCiphersAndGetOrgIdIfNeededAsync();
             NoDataText = AppResources.NoItems;
             HasCiphers = _allCiphers.Any();
             FavoriteCiphers?.Clear();
@@ -502,23 +502,7 @@ namespace Bit.App.Pages
 
             if (MainPage)
             {
-                var decFolders = await _folderService.GetAllDecryptedAsync();
-                var decCollections = await _collectionService.GetAllDecryptedAsync();
-                if (IsVaultFilterMyVault)
-                {
-                    Folders = BuildFolders(decFolders);
-                    Collections = null;
-                }
-                else if (IsVaultFilterOrgVault && !string.IsNullOrWhiteSpace(orgId))
-                {
-                    Folders = BuildFolders(decFolders);
-                    Collections = decCollections?.Where(c => c.OrganizationId == orgId).ToList();
-                }
-                else
-                {
-                    Folders = decFolders;
-                    Collections = decCollections;
-                }
+                await FillFoldersAndCollectionsAsync(orgId);
                 NestedFolders = await _folderService.GetAllNestedAsync(Folders);
                 HasFolders = NestedFolders.Any(f => f.Node?.Id != null);
                 NestedCollections = Collections != null ? await _collectionService.GetAllNestedAsync(Collections) : null;
@@ -642,40 +626,61 @@ namespace Bit.App.Pages
             }
         }
 
-        private bool IsVaultFilterMyVault =>
-            _vaultFilterSelection != null && _vaultFilterSelection == AppResources.MyVault;
-
-        private bool IsVaultFilterOrgVault =>
-            _vaultFilterSelection != null && _vaultFilterSelection != AppResources.AllVaults &&
-            _vaultFilterSelection != AppResources.MyVault;
-
-        private async Task<string> GetVaultFilterOrgIdAsync()
+        private async Task<string> FillAllCiphersAndGetOrgIdIfNeededAsync()
         {
-            foreach (var org in _organizations)
+            string orgId = null;
+            var decCiphers = await _cipherService.GetAllDecryptedAsync();
+            if (IsVaultFilterMyVault)
             {
-                if (org.Name == _vaultFilterSelection)
-                {
-                    return org.Id;
-                }
+                _allCiphers = decCiphers.Where(c => c.OrganizationId == null).ToList();
             }
-            return null;
+            else if (IsVaultFilterOrgVault)
+            {
+                orgId = GetVaultFilterOrgId();
+                _allCiphers = decCiphers.Where(c => c.OrganizationId == orgId).ToList();
+            }
+            else
+            {
+                _allCiphers = decCiphers;
+            }
+            return orgId;
+        }
+
+        private async Task FillFoldersAndCollectionsAsync(string orgId)
+        {
+            var decFolders = await _folderService.GetAllDecryptedAsync();
+            var decCollections = await _collectionService.GetAllDecryptedAsync();
+            if (IsVaultFilterMyVault)
+            {
+                Folders = BuildFolders(decFolders);
+                Collections = null;
+            }
+            else if (IsVaultFilterOrgVault && !string.IsNullOrWhiteSpace(orgId))
+            {
+                Folders = BuildFolders(decFolders);
+                Collections = decCollections?.Where(c => c.OrganizationId == orgId).ToList();
+            }
+            else
+            {
+                Folders = decFolders;
+                Collections = decCollections;
+            }
+        }
+
+        private bool IsVaultFilterMyVault => _vaultFilterSelection == AppResources.MyVault;
+
+        private bool IsVaultFilterOrgVault => _vaultFilterSelection != AppResources.AllVaults &&
+                                              _vaultFilterSelection != AppResources.MyVault;
+
+        private string GetVaultFilterOrgId()
+        {
+            return _organizations?.FirstOrDefault(o => o.Name == _vaultFilterSelection)?.Id;
         }
 
         private List<FolderView> BuildFolders(List<FolderView> decFolders)
         {
-            List<FolderView> folders = null;
-            foreach (var folder in decFolders)
-            {
-                if (_allCiphers.Any(c => c.FolderId == folder.Id))
-                {
-                    if (folders == null)
-                    {
-                        folders = new List<FolderView>();
-                    }
-                    folders.Add(folder);
-                }
-            }
-            return folders;
+            var folders = decFolders.Where(f => _allCiphers.Any(c => c.FolderId == f.Id)).ToList();
+            return folders.Any() ? folders : null;
         }
 
         private async void CipherOptionsAsync(CipherView cipher)

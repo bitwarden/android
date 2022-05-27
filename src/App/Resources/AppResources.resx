@@ -2232,7 +2232,7 @@
   <data name="VaultFilterDescription" xml:space="preserve">
     <value>Vault: {0}</value>
   </data>
-  <data name="VaultFilterDescriptionAll" xml:space="preserve">
+  <data name="All" xml:space="preserve">
     <value>All</value>
   </data>
 </root>

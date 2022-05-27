@@ -15,7 +15,6 @@ using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.View;
-using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Newtonsoft.Json;
 using Xamarin.Essentials;
@@ -381,17 +380,6 @@ namespace Bit.App.Utilities
 
             return await policyService.PolicyAppliesToUser(PolicyType.SendOptions,
                 policy => policy.Data.ContainsKey("disableHideEmail") && (bool)policy.Data["disableHideEmail"]);
-        }
-
-        public static async Task<bool> IsShowingVaultFilterAsync()
-        {
-            var organizationService = ServiceContainer.Resolve<OrganizationService>("organizationService");
-            var policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
-
-            var organizations = await organizationService.GetAllAsync();
-            var personalOwnershipPolicyApplies =
-                await policyService.PolicyAppliesToUser(PolicyType.PersonalOwnership);
-            return (organizations?.Any() ?? false) && !personalOwnershipPolicyApplies;
         }
 
         public static async Task<bool> PerformUpdateTasksAsync(ISyncService syncService,

@@ -6,6 +6,7 @@
     xmlns:u="clr-namespace:Bit.App.Utilities"
     xmlns:effects="clr-namespace:Bit.App.Effects"
     xmlns:controls="clr-namespace:Bit.App.Controls"
+    xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
     x:DataType="pages:GroupingsPageViewModel"
     Title="{Binding PageTitle}"
     x:Name="_page">
@@ -121,9 +122,9 @@
                         AutomationProperties.IsInAccessibleTree="True"
                         AutomationProperties.Name="{u:I18n Filter}" />
                     <controls:MiButton
-                        Text="&#xe5d3;"
+                        Text="{Binding Source={x:Static core:BitwardenIcons.ViewCellMenu}}"
                         StyleClass="list-row-button, list-row-button-platform, btn-disabled"
-                        Clicked="VaultFilter_Clicked"
+                        Command="{Binding VaultFilterCommand}"
                         VerticalOptions="Center"
                         HorizontalOptions="End"
                         AutomationProperties.IsInAccessibleTree="True"

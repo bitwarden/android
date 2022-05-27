@@ -1,8 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Bit.App.Effects;
 using Bit.App.Models;
 using Bit.App.Resources;
-using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.Data;
 using Bit.Core.Utilities;
@@ -15,6 +15,7 @@ namespace Bit.App.Pages
         private readonly IBroadcasterService _broadcasterService;
         private readonly IMessagingService _messagingService;
         private readonly IKeyConnectorService _keyConnectorService;
+        private readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
 
         private NavigationPage _groupingsPage;
         private NavigationPage _sendGroupingsPage;
@@ -152,8 +153,16 @@ namespace Bit.App.Pages
 
         private async Task UpdateVaultButtonTitleAsync()
         {
-            var isShowingVaultFilter = await AppHelpers.IsShowingVaultFilterAsync();
-            _groupingsPage.Title = isShowingVaultFilter ? AppResources.Vaults : AppResources.MyVault;
+            try
+            {
+                var policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
+                var isShowingVaultFilter = await policyService.ShouldShowVaultFilterAsync();
+                _groupingsPage.Title = isShowingVaultFilter ? AppResources.Vaults : AppResources.MyVault;
+            }
+            catch (Exception ex)
+            {
+                _logger.Value.Exception(ex);
+            }
         }
     }
 }

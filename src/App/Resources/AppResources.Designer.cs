@@ -3995,9 +3995,9 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string VaultFilterDescriptionAll {
+        public static string All {
             get {
-                return ResourceManager.GetString("VaultFilterDescriptionAll", resourceCulture);
+                return ResourceManager.GetString("All", resourceCulture);
             }
         }
     }

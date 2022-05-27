@@ -234,11 +234,6 @@ namespace Bit.App.Pages
             }
         }
 
-        private async void VaultFilter_Clicked(object sender, EventArgs e)
-        {
-            await _vm.VaultFilterOptionsAsync();
-        }
-
         private async void Sync_Clicked(object sender, EventArgs e)
         {
             await _accountListOverlay.HideAsync();
