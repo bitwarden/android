@@ -12,6 +12,7 @@ namespace Bit.App.Pages
 {
     public class TabsPage : TabbedPage
     {
+        private readonly IBroadcasterService _broadcasterService;
         private readonly IMessagingService _messagingService;
         private readonly IKeyConnectorService _keyConnectorService;
 
@@ -21,6 +22,7 @@ namespace Bit.App.Pages
 
         public TabsPage(AppOptions appOptions = null, PreviousPageInfo previousPage = null)
         {
+            _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
 
@@ -80,11 +82,24 @@ namespace Bit.App.Pages
         protected override async void OnAppearing()
         {
             base.OnAppearing();
+            _broadcasterService.Subscribe(nameof(TabsPage), async (message) =>
+            {
+                if (message.Command == "syncCompleted")
+                {
+                    Device.BeginInvokeOnMainThread(async () => await UpdateVaultButtonTitleAsync());
+                }
+            });
             await UpdateVaultButtonTitleAsync();
             if (await _keyConnectorService.UserNeedsMigration())
             {
                 _messagingService.Send("convertAccountToKeyConnector");
             }
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            _broadcasterService.Unsubscribe(nameof(TabsPage));
         }
 
         public void ResetToVaultPage()
