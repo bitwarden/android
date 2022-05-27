@@ -209,11 +209,6 @@ namespace Bit.App.Pages
             }
         }
 
-        private void ToggleOptions_Clicked(object sender, EventArgs e)
-        {
-            _vm.ToggleOptions();
-        }
-
         private void ClearExpirationDate_Clicked(object sender, EventArgs e)
         {
             if (DoOnce())

@@ -61,6 +61,7 @@ namespace Bit.App.Pages
             _logger = ServiceContainer.Resolve<ILogger>("logger");
 
             TogglePasswordCommand = new Command(TogglePassword);
+            ToggleOptionsCommand = new Command(ToggleOptions);
 
             TypeOptions = new List<KeyValuePair<string, SendType>>
             {
@@ -91,6 +92,7 @@ namespace Bit.App.Pages
         }
 
         public Command TogglePasswordCommand { get; set; }
+        public Command ToggleOptionsCommand { get; set; }
         public string SendId { get; set; }
         public int SegmentedButtonHeight { get; set; }
         public int SegmentedButtonFontSize { get; set; }
@@ -104,6 +106,7 @@ namespace Bit.App.Pages
         public bool DisableHideEmailControl { get; set; }
         public bool IsAddFromShare { get; set; }
         public string ShareOnSaveText => CopyInsteadOfShareAfterSaving ? AppResources.CopySendLinkOnSave : AppResources.ShareOnSave;
+        public string OptionsAccessilibityText => ShowOptions ? AppResources.OptionsExpanded : AppResources.OptionsCollapsed;
         public List<KeyValuePair<string, SendType>> TypeOptions { get; }
         public List<KeyValuePair<string, string>> DeletionTypeOptions { get; }
         public List<KeyValuePair<string, string>> ExpirationTypeOptions { get; }
@@ -136,7 +139,11 @@ namespace Bit.App.Pages
         public bool ShowOptions
         {
             get => _showOptions;
-            set => SetProperty(ref _showOptions, value);
+            set => SetProperty(ref _showOptions, value,
+                additionalPropertyNames: new[]
+                {
+                    nameof(OptionsAccessilibityText)
+                });
         }
         public int ExpirationDateTypeSelectedIndex
         {
