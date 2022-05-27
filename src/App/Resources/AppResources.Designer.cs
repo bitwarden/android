@@ -3935,6 +3935,18 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string OptionsExpanded {
+            get {
+                return ResourceManager.GetString("OptionsExpanded", resourceCulture);
+            }
+        }
+        
+        public static string OptionsCollapsed {
+            get {
+                return ResourceManager.GetString("OptionsCollapsed", resourceCulture);
+            }
+        }
+        
         public static string UppercaseAtoZ {
             get {
                 return ResourceManager.GetString("UppercaseAtoZ", resourceCulture);
