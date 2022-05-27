@@ -1,6 +1,8 @@
-﻿using Bit.App.Effects;
+﻿using System.Threading.Tasks;
+using Bit.App.Effects;
 using Bit.App.Models;
 using Bit.App.Resources;
+using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.Data;
 using Bit.Core.Utilities;
@@ -78,6 +80,7 @@ namespace Bit.App.Pages
         protected override async void OnAppearing()
         {
             base.OnAppearing();
+            await UpdateVaultButtonTitleAsync();
             if (await _keyConnectorService.UserNeedsMigration())
             {
                 _messagingService.Send("convertAccountToKeyConnector");
@@ -130,6 +133,12 @@ namespace Bit.App.Pages
             {
                 groupingsPage.HideAccountSwitchingOverlayAsync().FireAndForget();
             }
+        }
+
+        private async Task UpdateVaultButtonTitleAsync()
+        {
+            var isShowingVaultFilter = await AppHelpers.IsShowingVaultFilterAsync();
+            _groupingsPage.Title = isShowingVaultFilter ? AppResources.Vaults : AppResources.MyVault;
         }
     }
 }
