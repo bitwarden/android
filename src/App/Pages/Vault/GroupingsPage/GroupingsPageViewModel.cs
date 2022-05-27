@@ -642,7 +642,7 @@ namespace Bit.App.Pages
             }
         }
 
-        private bool IsVaultFilterMyVault => 
+        private bool IsVaultFilterMyVault =>
             _vaultFilterSelection != null && _vaultFilterSelection == AppResources.MyVault;
 
         private bool IsVaultFilterOrgVault =>

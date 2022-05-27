@@ -387,10 +387,10 @@ namespace Bit.App.Utilities
         {
             var organizationService = ServiceContainer.Resolve<OrganizationService>("organizationService");
             var policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
-            
+
             var organizations = await organizationService.GetAllAsync();
             var personalOwnershipPolicyApplies =
-                    await policyService.PolicyAppliesToUser(PolicyType.PersonalOwnership);
+                await policyService.PolicyAppliesToUser(PolicyType.PersonalOwnership);
             return (organizations?.Any() ?? false) && !personalOwnershipPolicyApplies;
         }
 
