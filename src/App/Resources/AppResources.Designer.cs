@@ -3958,5 +3958,11 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("SpecialCharacters", resourceCulture);
             }
         }
+        
+        public static string GoBack {
+            get {
+                return ResourceManager.GetString("GoBack", resourceCulture);
+            }
+        }
     }
 }
