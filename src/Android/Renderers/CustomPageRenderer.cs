@@ -24,7 +24,7 @@ namespace Bit.Droid.Renderers
             var toolbar = context.FindViewById<Toolbar>(Resource.Id.toolbar);
             if(toolbar != null)
             {
-                toolbar.NavigationContentDescription = AppResources.GoBack;
+                toolbar.NavigationContentDescription = AppResources.TapToGoBack;
             }
         }
     }

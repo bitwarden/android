@@ -2214,7 +2214,7 @@
   <data name="SpecialCharacters" xml:space="preserve">
     <value>Special Characters (!@#$%^&amp;*)</value>
   </data>
-  <data name="GoBack" xml:space="preserve">
+  <data name="TapToGoBack" xml:space="preserve">
     <value>Tap to go back</value>
   </data>
 </root>

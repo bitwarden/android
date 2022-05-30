@@ -3959,9 +3959,9 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string GoBack {
+        public static string TapToGoBack {
             get {
-                return ResourceManager.GetString("GoBack", resourceCulture);
+                return ResourceManager.GetString("TapToGoBack", resourceCulture);
             }
         }
     }
