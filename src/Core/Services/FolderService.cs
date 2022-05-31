@@ -107,9 +107,12 @@ namespace Bit.Core.Services
             return _decryptedFolderCache;
         }
 
-        public async Task<List<TreeNode<FolderView>>> GetAllNestedAsync()
+        public async Task<List<TreeNode<FolderView>>> GetAllNestedAsync(List<FolderView> folders = null)
         {
-            var folders = await GetAllDecryptedAsync();
+            if (folders == null)
+            {
+                folders = await GetAllDecryptedAsync();
+            }
             var nodes = new List<TreeNode<FolderView>>();
             foreach (var f in folders)
             {

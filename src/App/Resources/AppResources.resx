@@ -2202,6 +2202,12 @@
   <data name="ReportCrashLogsDescription" xml:space="preserve">
     <value>Help Bitwarden improve app stability by allowing crash reports.</value>
   </data>
+  <data name="OptionsExpanded" xml:space="preserve">
+    <value>Options are expanded, tap to collapse.</value>
+  </data>
+  <data name="OptionsCollapsed" xml:space="preserve">
+    <value>Options are collapsed, tap to expand.</value>
+  </data>
   <data name="UppercaseAtoZ" xml:space="preserve">
     <value>Uppercase (A to Z)</value>
   </data>
@@ -2219,5 +2225,20 @@
   </data>
   <data name="PasswordIsNotVisibleTapToShow" xml:space="preserve">
     <value>Password is not visible, tap to show.</value>
+  </data>
+  <data name="FilterByVault" xml:space="preserve">
+    <value>Filter items by vault</value>
+  </data>
+  <data name="AllVaults" xml:space="preserve">
+    <value>All Vaults</value>
+  </data>
+  <data name="Vaults" xml:space="preserve">
+    <value>Vaults</value>
+  </data>
+  <data name="VaultFilterDescription" xml:space="preserve">
+    <value>Vault: {0}</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>All</value>
   </data>
 </root>
