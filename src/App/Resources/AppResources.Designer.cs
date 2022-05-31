@@ -3959,15 +3959,15 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string PasswordIsVisible {
+        public static string PasswordIsVisibleTapToHide {
             get {
-                return ResourceManager.GetString("PasswordIsVisible", resourceCulture);
+                return ResourceManager.GetString("PasswordIsVisibleTapToHide", resourceCulture);
             }
         }
         
-        public static string PasswordIsNotVisible {
+        public static string PasswordIsNotVisibleTapToShow {
             get {
-                return ResourceManager.GetString("PasswordIsNotVisible", resourceCulture);
+                return ResourceManager.GetString("PasswordIsNotVisibleTapToShow", resourceCulture);
             }
         }
     }

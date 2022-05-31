@@ -129,7 +129,7 @@ namespace Bit.App.Pages
         public Command SubmitCommand { get; }
         public Command TogglePasswordCommand { get; }
         public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
-        public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisible : AppResources.PasswordIsNotVisible;
+        public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
         public string MasterPassword { get; set; }
         public string Pin { get; set; }
         public Action UnlockedAction { get; set; }

@@ -90,7 +90,7 @@ namespace Bit.App.Pages
         public Command TogglePasswordCommand { get; }
         public Command ToggleConfirmPasswordCommand { get; }
         public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
-        public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisible : AppResources.PasswordIsNotVisible;
+        public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
         public string MasterPassword { get; set; }
         public string ConfirmMasterPassword { get; set; }
         public string Hint { get; set; }

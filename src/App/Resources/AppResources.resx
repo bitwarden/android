@@ -2214,10 +2214,10 @@
   <data name="SpecialCharacters" xml:space="preserve">
     <value>Special Characters (!@#$%^&amp;*)</value>
   </data>
-  <data name="PasswordIsVisible" xml:space="preserve">
+  <data name="PasswordIsVisibleTapToHide" xml:space="preserve">
     <value>Password is visible, tap to hide.</value>
   </data>
-  <data name="PasswordIsNotVisible" xml:space="preserve">
+  <data name="PasswordIsNotVisibleTapToShow" xml:space="preserve">
     <value>Password is not visible, tap to show.</value>
   </data>
 </root>

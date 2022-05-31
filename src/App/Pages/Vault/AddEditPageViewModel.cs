@@ -299,7 +299,7 @@ namespace Bit.App.Pages
         public int TotpColumnSpan => Cipher.ViewPassword ? 1 : 2;
         public bool AllowPersonal { get; set; }
         public bool PasswordPrompt => Cipher.Reprompt != CipherRepromptType.None;
-        public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisible : AppResources.PasswordIsNotVisible;
+        public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
 
         public void Init()
         {
