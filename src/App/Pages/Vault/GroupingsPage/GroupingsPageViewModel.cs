@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.App.Resources;
@@ -77,7 +78,9 @@ namespace Bit.App.Pages
                 await LoadAsync();
             });
             CipherOptionsCommand = new Command<CipherView>(CipherOptionsAsync);
-            VaultFilterCommand = new Command(async () => await VaultFilterOptionsAsync());
+            VaultFilterCommand = new AsyncCommand(VaultFilterOptionsAsync,
+                onException: ex => _logger.Exception(ex),
+                allowsMultipleExecutions: false);
 
             AccountSwitchingOverlayViewModel = new AccountSwitchingOverlayViewModel(_stateService, _messagingService, _logger)
             {
@@ -94,8 +97,9 @@ namespace Bit.App.Pages
         public bool HasCiphers { get; set; }
         public bool HasFolders { get; set; }
         public bool HasCollections { get; set; }
-        public bool ShowNoFolderCipherGroup => (NoFolderCiphers?.Count ?? int.MaxValue) < NoFolderListSize &&
-            (!Collections?.Any() ?? true);
+        public bool ShowNoFolderCipherGroup => NoFolderCiphers != null
+                                               && NoFolderCiphers.Count < NoFolderListSize
+                                               && (Collections is null || !Collections.Any());
         public List<CipherView> Ciphers { get; set; }
         public List<CipherView> FavoriteCiphers { get; set; }
         public List<CipherView> NoFolderCiphers { get; set; }
@@ -172,7 +176,7 @@ namespace Bit.App.Pages
         public ObservableRangeCollection<IGroupingsPageListItem> GroupedItems { get; set; }
         public Command RefreshCommand { get; set; }
         public Command<CipherView> CipherOptionsCommand { get; set; }
-        public Command VaultFilterCommand { get; }
+        public ICommand VaultFilterCommand { get; }
         public bool LoadedOnce { get; set; }
 
         public async Task LoadAsync()
@@ -380,28 +384,21 @@ namespace Bit.App.Pages
 
         public async Task VaultFilterOptionsAsync()
         {
-            try
+            var options = new List<string> { AppResources.AllVaults, AppResources.MyVault };
+            if (_organizations.Any())
             {
-                var options = new List<string> { AppResources.AllVaults, AppResources.MyVault };
-                if (_organizations.Any())
-                {
-                    options.AddRange(_organizations.Select(o => o.Name));
-                }
-                var selection = await Page.DisplayActionSheet(AppResources.FilterByVault, AppResources.Cancel, null,
-                    options.ToArray());
-                if (selection == AppResources.Cancel ||
-                    (_vaultFilterSelection == null && selection == AppResources.AllVaults) ||
-                    (_vaultFilterSelection != null && _vaultFilterSelection == selection))
-                {
-                    return;
-                }
-                VaultFilterDescription = selection;
-                await LoadAsync();
+                options.AddRange(_organizations.Select(o => o.Name));
             }
-            catch (Exception ex)
+            var selection = await Page.DisplayActionSheet(AppResources.FilterByVault, AppResources.Cancel, null,
+                options.ToArray());
+            if (selection == AppResources.Cancel ||
+                (_vaultFilterSelection == null && selection == AppResources.AllVaults) ||
+                (_vaultFilterSelection != null && _vaultFilterSelection == selection))
             {
-                _logger.Exception(ex);
+                return;
             }
+            VaultFilterDescription = selection;
+            await LoadAsync();
         }
 
         public async Task SelectCipherAsync(CipherView cipher)
