@@ -3970,5 +3970,35 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("SpecialCharacters", resourceCulture);
             }
         }
+        
+        public static string FilterByVault {
+            get {
+                return ResourceManager.GetString("FilterByVault", resourceCulture);
+            }
+        }
+        
+        public static string AllVaults {
+            get {
+                return ResourceManager.GetString("AllVaults", resourceCulture);
+            }
+        }
+        
+        public static string Vaults {
+            get {
+                return ResourceManager.GetString("Vaults", resourceCulture);
+            }
+        }
+        
+        public static string VaultFilterDescription {
+            get {
+                return ResourceManager.GetString("VaultFilterDescription", resourceCulture);
+            }
+        }
+        
+        public static string All {
+            get {
+                return ResourceManager.GetString("All", resourceCulture);
+            }
+        }
     }
 }

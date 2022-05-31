@@ -27,8 +27,8 @@ namespace Bit.App.Pages
         private PreviousPageInfo _previousPage;
 
         public GroupingsPage(bool mainPage, CipherType? type = null, string folderId = null,
-            string collectionId = null, string pageTitle = null, PreviousPageInfo previousPage = null,
-            bool deleted = false)
+            string collectionId = null, string pageTitle = null, string vaultFilterSelection = null,
+            PreviousPageInfo previousPage = null, bool deleted = false)
         {
             _pageName = string.Concat(nameof(GroupingsPage), "_", DateTime.UtcNow.Ticks);
             InitializeComponent();
@@ -51,6 +51,10 @@ namespace Bit.App.Pages
             if (pageTitle != null)
             {
                 _vm.PageTitle = pageTitle;
+            }
+            if (vaultFilterSelection != null)
+            {
+                _vm.VaultFilterDescription = vaultFilterSelection;
             }
 
             if (Device.RuntimePlatform == Device.iOS)
