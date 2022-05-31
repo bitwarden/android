@@ -111,5 +111,6 @@
         public const string EyeSlash = "\xe96d";
         public const string File = "\xe96e";
         public const string Paste = "\xe96f";
+        public const string ViewCellMenu = "\xe5d3";
     }
 }
