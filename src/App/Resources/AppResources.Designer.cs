@@ -3935,6 +3935,18 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string OptionsExpanded {
+            get {
+                return ResourceManager.GetString("OptionsExpanded", resourceCulture);
+            }
+        }
+        
+        public static string OptionsCollapsed {
+            get {
+                return ResourceManager.GetString("OptionsCollapsed", resourceCulture);
+            }
+        }
+        
         public static string UppercaseAtoZ {
             get {
                 return ResourceManager.GetString("UppercaseAtoZ", resourceCulture);
@@ -3962,6 +3974,48 @@ namespace Bit.App.Resources {
         public static string TapToGoBack {
             get {
                 return ResourceManager.GetString("TapToGoBack", resourceCulture);
+            }
+        }
+        
+        public static string PasswordIsVisibleTapToHide {
+            get {
+                return ResourceManager.GetString("PasswordIsVisibleTapToHide", resourceCulture);
+            }
+        }
+        
+        public static string PasswordIsNotVisibleTapToShow {
+            get {
+                return ResourceManager.GetString("PasswordIsNotVisibleTapToShow", resourceCulture);
+            }
+        }
+        
+        public static string FilterByVault {
+            get {
+                return ResourceManager.GetString("FilterByVault", resourceCulture);
+            }
+        }
+        
+        public static string AllVaults {
+            get {
+                return ResourceManager.GetString("AllVaults", resourceCulture);
+            }
+        }
+        
+        public static string Vaults {
+            get {
+                return ResourceManager.GetString("Vaults", resourceCulture);
+            }
+        }
+        
+        public static string VaultFilterDescription {
+            get {
+                return ResourceManager.GetString("VaultFilterDescription", resourceCulture);
+            }
+        }
+        
+        public static string All {
+            get {
+                return ResourceManager.GetString("All", resourceCulture);
             }
         }
     }
