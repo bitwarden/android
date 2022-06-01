@@ -2220,6 +2220,9 @@
   <data name="SpecialCharacters" xml:space="preserve">
     <value>Special Characters (!@#$%^&amp;*)</value>
   </data>
+  <data name="TapToGoBack" xml:space="preserve">
+    <value>Tap to go back</value>
+  </data>
   <data name="PasswordIsVisibleTapToHide" xml:space="preserve">
     <value>Password is visible, tap to hide.</value>
   </data>

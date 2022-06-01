@@ -3971,6 +3971,12 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string TapToGoBack {
+            get {
+                return ResourceManager.GetString("TapToGoBack", resourceCulture);
+            }
+        }
+        
         public static string PasswordIsVisibleTapToHide {
             get {
                 return ResourceManager.GetString("PasswordIsVisibleTapToHide", resourceCulture);
