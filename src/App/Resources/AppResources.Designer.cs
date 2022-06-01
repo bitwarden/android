@@ -3971,6 +3971,18 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string PasswordIsVisibleTapToHide {
+            get {
+                return ResourceManager.GetString("PasswordIsVisibleTapToHide", resourceCulture);
+            }
+        }
+        
+        public static string PasswordIsNotVisibleTapToShow {
+            get {
+                return ResourceManager.GetString("PasswordIsNotVisibleTapToShow", resourceCulture);
+            }
+        }
+        
         public static string FilterByVault {
             get {
                 return ResourceManager.GetString("FilterByVault", resourceCulture);
