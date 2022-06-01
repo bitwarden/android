@@ -7,12 +7,12 @@ using Bit.Droid.Renderers;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
-[assembly: ExportRenderer(typeof(ContentPage), typeof(AndroidNavigationPageRenderer))]
+[assembly: ExportRenderer(typeof(ContentPage), typeof(CustomPageRenderer))]
 namespace Bit.Droid.Renderers
 {
-    public class AndroidNavigationPageRenderer : PageRenderer
+    public class CustomPageRenderer : PageRenderer
     {
-        public AndroidNavigationPageRenderer(Context context) : base(context)
+        public CustomPageRenderer(Context context) : base(context)
         {
         }
 
