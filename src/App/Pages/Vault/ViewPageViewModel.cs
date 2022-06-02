@@ -754,12 +754,12 @@ namespace Bit.App.Pages
             {
                 if (IsBooleanType)
                 {
-                    return _field.Value == "true" ? "" : "";
+                    return _field.Value == "true" ? BitwardenIcons.Square : BitwardenIcons.CheckSquare;
                 }
                 else if (IsLinkedType)
                 {
                     var i18nKey = _cipher.LinkedFieldI18nKey(Field.LinkedId.GetValueOrDefault());
-                    return " " + _i18nService.T(i18nKey);
+                    return BitwardenIcons.Link + _i18nService.T(i18nKey);
                 }
                 else
                 {
