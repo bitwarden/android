@@ -34,29 +34,13 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579  # v2.4.0
 
-      - name: Retrieve Mobile release version
-        id: retrieve-mobile-version
-        run: |
-          ver=$(sed -E -n '/^<manifest/s/^.*[ ]android:versionName="([^"]+)".*$/\1/p' \
-          ./src/Android/Properties/AndroidManifest.xml | tr -d '"')
-          echo "::set-output name=mobile_version::${ver}"
-        shell: bash
-
-      - name: Check to make sure Mobile release version has been bumped
-        if: ${{ github.event.inputs.release_type == 'Initial Release' }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          latest_ver=$(hub release -L 1 -f '%T')
-          latest_ver=${latest_ver:1}
-          echo "Latest version: $latest_ver"
-          ver=${{ steps.retrieve-mobile-version.outputs.mobile_version }}
-          echo "Version: $ver"
-          if [ "$latest_ver" = "$ver" ]; then
-            echo "Version has not been bumped!"
-            exit 1
-          fi
-        shell: bash
+      - name: Check Release Version
+        id: version
+        uses: bitwarden/gh-actions/release-version-check@8f055ef543c7433c967a1b9b04a0f230923233bb
+        with:
+          release-type: ${{ github.event.inputs.release_type }}
+          project-type: xamarin
+          file: src/Android/Properties/AndroidManifest.xml
 
       - name: Get branch name
         id: branch
@@ -83,8 +67,8 @@ jobs:
                       ./com.x8bit.bitwarden-fdroid.apk/com.x8bit.bitwarden-fdroid.apk,
                       ./Bitwarden iOS.zip"
           commit: ${{ github.sha }}
-          tag: v${{ steps.retrieve-mobile-version.outputs.mobile_version }}
-          name: Version ${{ steps.retrieve-mobile-version.outputs.mobile_version }}
+          tag: v${{ steps.version.outputs.verison }}
+          name: Version ${{ steps.version.outputs.version }}
           body: "<insert release notes here>"
           token: ${{ secrets.GITHUB_TOKEN }}
           draft: true
