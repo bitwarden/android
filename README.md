@@ -12,16 +12,7 @@ The Bitwarden mobile application is written in C# with Xamarin Android, Xamarin 
 
 # Build/Run
 
-**Requirements**
-
-- [Visual Studio](https://visualstudio.microsoft.com/)
-- [Xamarin](https://docs.microsoft.com/en-us/xamarin/get-started/installation/?pivots=windows)
-
-**Run the app**
-
-- Open the solution file in Visual Studio.
-- Restore the nuget packages.
-- Build and run the app.
+Build instructions for all Bitwarden applications are located in our [Contributing Documentation](https://contributing.bitwarden.com/). This also includes contributing guidelines, recommended tooling, code style tips, and lots of other great information to get you started.
 
 # We're Hiring!
 
@@ -29,8 +20,7 @@ Interested in contributing in a big way? Consider joining our team! We're hiring
 
 # Contribute
 
-Code contributions are welcome! Visual Studio with Xamarin is required to work on this project. Please commit any pull requests against the `master` branch.
-Learn more about how to contribute by reading the [`CONTRIBUTING.md`](CONTRIBUTING.md) file.
+Code contributions are welcome! Please commit any pull requests against the `master` branch. Learn more about how to contribute by reading the [Contributing Guidelines](https://contributing.bitwarden.com/contributing/). Check out the [Contributing Documentation](https://contributing.bitwarden.com/) for how to get started with your first contribution.
 
 Security audits and feedback are welcome. Please open an issue or email us privately if the report is sensitive in nature. You can read our security policy in the [`SECURITY.md`](SECURITY.md) file.
 
@@ -45,11 +35,3 @@ We recently migrated to using dotnet-format as code formatter. All previous bran
 5. Commit
 6. Run `git merge -Xours 04539af2a66668b6e85476d5cf318c9150ec4357`
 7. Push
-
-#### Git blame
-
-We also recommend that you configure git to ignore the prettier revision using:
-
-```bash
-git config blame.ignoreRevsFile .git-blame-ignore-revs
-```
