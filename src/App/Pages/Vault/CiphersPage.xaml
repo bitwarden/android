@@ -33,7 +33,9 @@
                     Text="&#xe5c4;"
                     VerticalOptions="CenterAndExpand"
                     Clicked="BackButton_Clicked"
-                    x:Name="_backButton" />
+                    x:Name="_backButton"
+                    AutomationProperties.IsInAccessibleTree="True"
+                    AutomationProperties.Name="{u:I18n TapToGoBack}"/>
                 <controls:ExtendedSearchBar
                     x:Name="_searchBar"
                     HorizontalOptions="FillAndExpand"

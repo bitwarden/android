@@ -150,6 +150,7 @@
     <Compile Include="Renderers\SelectableLabelRenderer.cs" />
     <Compile Include="Services\ClipboardService.cs" />
     <Compile Include="Utilities\IntentExtensions.cs" />
+    <Compile Include="Renderers\CustomPageRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\bwi-font.ttf" />
