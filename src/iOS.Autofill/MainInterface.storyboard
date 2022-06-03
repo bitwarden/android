@@ -5,6 +5,7 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -343,48 +344,102 @@
                         </textAttributes>
                     </navigationBar>
                     <connections>
-                        <segue destination="7413" kind="relationship" relationship="rootViewController" id="8266"/>
+                        <segue destination="cn5-F4-59n" kind="relationship" relationship="rootViewController" id="Q23-VB-h61"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6858" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="390" y="1407"/>
+            <point key="canvasLocation" x="120" y="1407"/>
         </scene>
         <!--Verify Master Password-->
-        <scene sceneID="7412">
+        <scene sceneID="5CE-bQ-Rfq">
             <objects>
-                <tableViewController id="7413" customClass="LockPasswordViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="7414">
+                <viewController id="cn5-F4-59n" customClass="LockPasswordViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="0qM-RN-J2i" userLabel="Main View">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="786"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <connections>
-                            <outlet property="dataSource" destination="7413" id="7415"/>
-                            <outlet property="delegate" destination="7413" id="7416"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="Verify Master Password" id="8265">
-                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="8268">
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="FcI-Ph-m9e">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="786"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="oQZ-wW-5uB">
+                                        <rect key="frame" x="0.0" y="49.5" width="414" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="oQZ-wW-5uB" id="SUk-LD-cXo">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="1cB-yn-7ii">
+                                        <rect key="frame" x="0.0" y="93.5" width="414" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="1cB-yn-7ii" id="xFt-Jc-feN">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="Fzo-Cj-aM4">
+                                        <rect key="frame" x="0.0" y="137.5" width="414" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Fzo-Cj-aM4" id="vSb-0G-Bic">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                                <sections/>
+                            </tableView>
+                            <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sDX-BN-qLw" userLabel="OverlayView">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="786"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="uMZ-kT-NSt"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="FcI-Ph-m9e" firstAttribute="top" secondItem="uMZ-kT-NSt" secondAttribute="top" id="68e-VU-o4s"/>
+                            <constraint firstItem="uMZ-kT-NSt" firstAttribute="bottom" secondItem="FcI-Ph-m9e" secondAttribute="bottom" id="7UM-br-sxz"/>
+                            <constraint firstItem="uMZ-kT-NSt" firstAttribute="bottom" secondItem="sDX-BN-qLw" secondAttribute="bottom" id="QGT-ck-8TL"/>
+                            <constraint firstItem="sDX-BN-qLw" firstAttribute="leading" secondItem="uMZ-kT-NSt" secondAttribute="leading" id="aVW-Nw-awb"/>
+                            <constraint firstItem="uMZ-kT-NSt" firstAttribute="trailing" secondItem="sDX-BN-qLw" secondAttribute="trailing" id="f5n-9J-y3c"/>
+                            <constraint firstItem="FcI-Ph-m9e" firstAttribute="leading" secondItem="uMZ-kT-NSt" secondAttribute="leading" id="sKL-iw-CWd"/>
+                            <constraint firstItem="uMZ-kT-NSt" firstAttribute="trailing" secondItem="FcI-Ph-m9e" secondAttribute="trailing" id="xgg-of-dPl"/>
+                            <constraint firstItem="sDX-BN-qLw" firstAttribute="top" secondItem="uMZ-kT-NSt" secondAttribute="top" id="yO9-oz-zRn"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Verify Master Password" id="NCb-RV-Vqq">
+                        <leftBarButtonItems>
+                            <barButtonItem title="Cancel" id="Xoh-Zv-hhd">
+                                <connections>
+                                    <action selector="CancelButton_Activated:" destination="cn5-F4-59n" id="1gM-mE-phn"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="Account" image="person.2" catalog="system" style="plain" id="nwd-aM-kFD" userLabel="Accoutn Switching Button">
+                                <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <action selector="AccountSwitchingBarButton_Activated:" destination="cn5-F4-59n" id="vVZ-IM-rkU"/>
+                                </connections>
+                            </barButtonItem>
+                        </leftBarButtonItems>
+                        <barButtonItem key="rightBarButtonItem" title="Submit" id="gju-yD-EmI">
                             <connections>
-                                <action selector="CancelButton_Activated:" destination="7413" id="8287"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="Submit" id="8269">
-                            <connections>
-                                <action selector="SubmitButton_Activated:" destination="7413" id="8288"/>
+                                <action selector="SubmitButton_Activated:" destination="cn5-F4-59n" id="O1U-fk-BDh"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="CancelButton" destination="8268" id="name-outlet-8268"/>
-                        <outlet property="MainTableView" destination="7414" id="name-outlet-7414"/>
-                        <outlet property="NavItem" destination="8265" id="name-outlet-8265"/>
-                        <outlet property="SubmitButton" destination="8269" id="name-outlet-8269"/>
+                        <outlet property="AccountSwitchingBarButton" destination="nwd-aM-kFD" id="T8F-CN-2il"/>
+                        <outlet property="CancelButton" destination="Xoh-Zv-hhd" id="mwi-4K-maj"/>
+                        <outlet property="MainTableView" destination="FcI-Ph-m9e" id="Ybv-5r-VGA"/>
+                        <outlet property="NavItem" destination="NCb-RV-Vqq" id="L9b-At-x0A"/>
+                        <outlet property="OverlayView" destination="sDX-BN-qLw" id="veu-q4-CeW"/>
+                        <outlet property="SubmitButton" destination="gju-yD-EmI" id="mjg-yP-09M"/>
                     </connections>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="7419" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vNI-gq-ubp" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="955" y="1407"/>
+            <point key="canvasLocation" x="836" y="1407"/>
         </scene>
         <!--Setup View Controller-->
         <scene sceneID="10573">
@@ -554,6 +609,9 @@
         <image name="person.2" catalog="system" width="128" height="81"/>
         <systemColor name="darkTextColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
     </resources>
 </document>

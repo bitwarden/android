@@ -18,9 +18,7 @@ using Bit.Core;
 
 namespace Bit.iOS.Core.Controllers
 {
-    // TODO: Leaving this here until all inheritance is changed to use BaseLockPasswordViewController instead of UITableViewController
-    [Obsolete("Use BaseLockPasswordViewController instead")]
-    public abstract class LockPasswordViewController : ExtendedUITableViewController
+    public abstract class BaseLockPasswordViewController : ExtendedUIViewController
     {
         private IVaultTimeoutService _vaultTimeoutService;
         private ICryptoService _cryptoService;
@@ -41,7 +39,7 @@ namespace Bit.iOS.Core.Controllers
 
         protected bool autofillExtension = false;
 
-        public LockPasswordViewController(IntPtr handle)
+        public BaseLockPasswordViewController(IntPtr handle)
             : base(handle)
         { }
 
@@ -80,6 +78,8 @@ namespace Bit.iOS.Core.Controllers
                 return cell;
             }
         }
+
+        public abstract UITableView TableView { get; }
 
         public override async void ViewDidLoad()
         {
@@ -126,7 +126,7 @@ namespace Bit.iOS.Core.Controllers
             {
                 BaseNavItem.Title = AppResources.VerifyMasterPassword;
             }
-            
+
             BaseCancelButton.Title = AppResources.Cancel;
 
             if (_biometricUnlockOnly)
@@ -157,10 +157,17 @@ namespace Bit.iOS.Core.Controllers
                 }
                 MasterPasswordCell.Button.TitleLabel.Font = UIFont.FromName("bwi-font", 28f);
                 MasterPasswordCell.Button.SetTitle(BitwardenIcons.Eye, UIControlState.Normal);
-                MasterPasswordCell.Button.TouchUpInside += (sender, e) => {
+                MasterPasswordCell.Button.TouchUpInside += (sender, e) =>
+                {
                     MasterPasswordCell.TextField.SecureTextEntry = !MasterPasswordCell.TextField.SecureTextEntry;
                     MasterPasswordCell.Button.SetTitle(MasterPasswordCell.TextField.SecureTextEntry ? BitwardenIcons.Eye : BitwardenIcons.EyeSlash, UIControlState.Normal);
                 };
+            }
+
+            if (TableView != null)
+            {
+                TableView.BackgroundColor = ThemeHelpers.BackgroundColor;
+                TableView.SeparatorColor = ThemeHelpers.SeparatorColor;
             }
 
             TableView.RowHeight = UITableView.AutomaticDimension;
@@ -267,7 +274,7 @@ namespace Bit.iOS.Core.Controllers
             else
             {
                 var key2 = await _cryptoService.MakeKeyAsync(inputtedValue, email, kdf, kdfIterations);
-                
+
                 var storedKeyHash = await _cryptoService.GetKeyHashAsync();
                 if (storedKeyHash == null)
                 {
@@ -377,14 +384,14 @@ namespace Bit.iOS.Core.Controllers
             var alert = Dialogs.CreateAlert(AppResources.AnErrorHasOccurred,
                 string.Format(null, _pinLock ? AppResources.PIN : AppResources.InvalidMasterPassword),
                 AppResources.Ok, (a) =>
-                    {
+                {
 
-                        MasterPasswordCell.TextField.Text = string.Empty;
-                        MasterPasswordCell.TextField.BecomeFirstResponder();
-                    });
+                    MasterPasswordCell.TextField.Text = string.Empty;
+                    MasterPasswordCell.TextField.BecomeFirstResponder();
+                });
             PresentViewController(alert, true, null);
         }
-        
+
         private async Task LogOutAsync()
         {
             await AppHelpers.LogOutAsync(await _stateService.GetActiveUserIdAsync());
@@ -397,9 +404,9 @@ namespace Bit.iOS.Core.Controllers
 
         public class TableSource : ExtendedUITableViewSource
         {
-            private LockPasswordViewController _controller;
+            private readonly BaseLockPasswordViewController _controller;
 
-            public TableSource(LockPasswordViewController controller)
+            public TableSource(BaseLockPasswordViewController controller)
             {
                 _controller = controller;
             }
@@ -499,3 +506,4 @@ namespace Bit.iOS.Core.Controllers
         }
     }
 }
+

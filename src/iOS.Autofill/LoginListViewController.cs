@@ -9,6 +9,7 @@ using Bit.iOS.Autofill.Utilities;
 using Bit.iOS.Core.Controllers;
 using Bit.iOS.Core.Utilities;
 using Bit.iOS.Core.Views;
+using CoreFoundation;
 using Foundation;
 using UIKit;
 
@@ -30,9 +31,16 @@ namespace Bit.iOS.Autofill
         AccountSwitchingOverlayView _accountSwitchingOverlayView;
         AccountSwitchingOverlayHelper _accountSwitchingOverlayHelper;
 
+        LazyResolve<IBroadcasterService> _broadcasterService = new LazyResolve<IBroadcasterService>("broadcasterService");
+        LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
+        bool _alreadyLoadItemsOnce = false;
+
         public async override void ViewDidLoad()
         {
             base.ViewDidLoad();
+
+            SubscribeSyncCompleted();
+
             NavItem.Title = AppResources.Items;
             CancelBarButton.Title = AppResources.Cancel;
 
@@ -40,6 +48,8 @@ namespace Bit.iOS.Autofill
             TableView.EstimatedRowHeight = 44;
             TableView.Source = new TableSource(this);
             await ((TableSource)TableView.Source).LoadItemsAsync();
+
+            _alreadyLoadItemsOnce = true;
 
             var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             var needsAutofillReplacement = await storageService.GetAsync<bool?>(
@@ -57,11 +67,7 @@ namespace Bit.iOS.Autofill
 
         partial void AccountSwitchingBarButton_Activated(UIBarButtonItem sender)
         {
-            var overlayVisible = _accountSwitchingOverlayView.IsVisible;
-            _accountSwitchingOverlayView.ToggleVisibililtyCommand.Execute(null);
-            OverlayView.Hidden = false;
-            OverlayView.UserInteractionEnabled = !overlayVisible;
-            OverlayView.Subviews[0].UserInteractionEnabled = !overlayVisible;
+            _accountSwitchingOverlayHelper.OnToolbarItemActivated(_accountSwitchingOverlayView, OverlayView);
         }
 
         partial void CancelBarButton_Activated(UIBarButtonItem sender)
@@ -104,6 +110,35 @@ namespace Bit.iOS.Autofill
                         new CustomPresentationControllerDelegate(searchLoginController.DismissModalAction);
                 }
             }
+        }
+
+        private void SubscribeSyncCompleted()
+        {
+            _broadcasterService.Value.Subscribe(nameof(LoginListViewController), message =>
+            {
+                if (message.Command == "syncCompleted" && _alreadyLoadItemsOnce)
+                {
+                    DispatchQueue.MainQueue.DispatchAsync(async () =>
+                    {
+                        try
+                        {
+                            await ((TableSource)TableView.Source).LoadItemsAsync();
+                            TableView.ReloadData();
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.Value.Exception(ex);
+                        }
+                    });
+                }
+            });
+        }
+
+        public override void ViewDidUnload()
+        {
+            base.ViewDidUnload();
+
+            _broadcasterService.Value.Unsubscribe(nameof(LoginListViewController));
         }
 
         public void DismissModal()

@@ -543,6 +543,7 @@ namespace Bit.iOS.Autofill
                     DismissViewController(false, () => PerformSegue("lockPasswordSegue", this));
                     break;
                 case NavigationTarget.AutofillCiphers:
+                case NavigationTarget.Home:
                     DismissViewController(false, () => PerformSegue("loginListSegue", this));
                     break;
             }

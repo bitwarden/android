@@ -30,7 +30,10 @@ namespace Bit.iOS.Core.Utilities
 
         public AccountSwitchingOverlayView CreateAccountSwitchingOverlayView(UIView containerView)
         {
-            var overlay = new AccountSwitchingOverlayView();
+            var overlay = new AccountSwitchingOverlayView()
+            {
+                LongPressAccountEnabled = false
+            };
 
             var vm = new AccountSwitchingOverlayViewModel(_stateService, _messagingService, _logger);
             overlay.BindingContext = vm;
@@ -52,6 +55,15 @@ namespace Bit.iOS.Core.Utilities
             containerView.Hidden = true;
 
             return overlay;
+        }
+
+        public void OnToolbarItemActivated(AccountSwitchingOverlayView accountSwitchingOverlayView, UIView containerView)
+        {
+            var overlayVisible = accountSwitchingOverlayView.IsVisible;
+            accountSwitchingOverlayView.ToggleVisibililtyCommand.Execute(null);
+            containerView.Hidden = false;
+            containerView.UserInteractionEnabled = !overlayVisible;
+            containerView.Subviews[0].UserInteractionEnabled = !overlayVisible;
         }
     }
 }
