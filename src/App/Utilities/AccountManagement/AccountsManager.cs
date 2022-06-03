@@ -172,7 +172,7 @@ namespace Bit.App.Utilities.AccountManagement
             }
 
             await _accountsManagerHost.SetPreviousPageInfoAsync();
-            
+
             Device.BeginInvokeOnMainThread(() => _accountsManagerHost.Navigate(NavigationTarget.Lock, new LockNavigationParams(autoPromptBiometric)));
         }
 
