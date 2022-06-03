@@ -196,6 +196,7 @@
     <Compile Include="Effects\ScrollViewContentInsetAdjustmentBehaviorEffect.cs" />
     <Compile Include="Utilities\AccountSwitchingOverlayHelper.cs" />
     <Compile Include="Utilities\ImageSourceExtensions.cs" />
+    <Compile Include="Controllers\BaseLockPasswordViewController.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\App\App.csproj">
