@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Bit.App.Effects;
 using Bit.App.Models;
+using Bit.App.Pages.Authenticator;
 using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.Data;
@@ -36,7 +37,7 @@ namespace Bit.App.Pages
 
             Children.Add(_groupingsPage);
 
-            _authenticatorPage = new NavigationPage(new Authenticator.AuthenticatorPage(true, null, this))
+            _authenticatorPage = new NavigationPage(new AuthenticatorPage(true, null, this))
             {
                 Title = AppResources.Authenticator,
                 IconImageSource = "info.png"

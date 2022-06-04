@@ -9,6 +9,10 @@
     x:DataType="authenticator:AuthenticatorPageViewModel"
     Title="{Binding PageTitle}">
 
+    <ContentPage.BindingContext>
+        <authenticator:AuthenticatorPageViewModel />
+    </ContentPage.BindingContext>
+
     <StackLayout>
         <RefreshView
         IsVisible="{Binding ShowList}"

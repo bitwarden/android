@@ -23,13 +23,13 @@ namespace Bit.App.Pages.Authenticator
 
         public AuthenticatorPage(bool fromTabPage, Action<string> selectAction = null, TabsPage tabsPage = null)
         {
-            //_tabsPage = tabsPage;
+            _tabsPage = tabsPage;
             InitializeComponent();
-            //_broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
+            _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _vm = BindingContext as AuthenticatorPageViewModel;
-            //_vm.Page = this;
-            //_fromTabPage = fromTabPage;
-            //_selectAction = selectAction;
+            _vm.Page = this;
+            _fromTabPage = fromTabPage;
+            _selectAction = selectAction;
             //var isIos = Device.RuntimePlatform == Device.iOS;
             //if (selectAction != null)
             //{
@@ -64,20 +64,20 @@ namespace Bit.App.Pages.Authenticator
         protected async override void OnAppearing()
         {
             base.OnAppearing();
-            //if (!_fromTabPage)
-            //{
-            //    await InitAsync();
-            //}
-            //_broadcasterService.Subscribe(nameof(GeneratorPage), async (message) =>
-            //{
-            //    if (message.Command == "updatedTheme")
-            //    {
-            //        Device.BeginInvokeOnMainThread(() =>
-            //        {
-            //            //_vm.RedrawPassword();
-            //        });
-            //    }
-            //});
+            if (!_fromTabPage)
+            {
+                await InitAsync();
+            }
+            _broadcasterService.Subscribe(nameof(GeneratorPage), async (message) =>
+            {
+                if (message.Command == "updatedTheme")
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        //_vm.RedrawPassword();
+                    });
+                }
+            });
         }
         
         protected override void OnDisappearing()

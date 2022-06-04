@@ -13,7 +13,7 @@ namespace Bit.App.Pages.Authenticator
         private readonly IClipboardService _clipboardService;
         private bool _showList = true;
         private bool _refreshing;
-        private readonly IUserService _userService;
+        private readonly IStateService _stateService;
         private readonly IVaultTimeoutService _vaultTimeoutService;
 
         #endregion
@@ -22,7 +22,7 @@ namespace Bit.App.Pages.Authenticator
 
         public AuthenticatorPageViewModel()
         {
-            _userService = ServiceContainer.Resolve<IUserService>("userService");
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
         }
 
@@ -30,7 +30,7 @@ namespace Bit.App.Pages.Authenticator
 
         #region Methods
 
-        public async Task InitAsync() { }
+        public async Task InitAsync() { await LoadAsync(); }
 
         public async Task CopyAsync()
         {
@@ -41,7 +41,7 @@ namespace Bit.App.Pages.Authenticator
 
         public async Task LoadAsync()
         {
-            var authed = await _userService.IsAuthenticatedAsync();
+            var authed = await _stateService.IsAuthenticatedAsync();
             if (!authed)
             {
                 return;
