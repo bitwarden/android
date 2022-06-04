@@ -1,21 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Models;
 using Bit.App.Resources;
+using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Bit.App.Controls;
-using Bit.Core;
 using Xamarin.Forms;
-#if !FDROID
-using Microsoft.AppCenter.Crashes;
-#endif
 
 namespace Bit.App.Pages
 {
@@ -25,12 +21,15 @@ namespace Bit.App.Pages
         private readonly ICipherService _cipherService;
         private readonly IFolderService _folderService;
         private readonly ICollectionService _collectionService;
-        private readonly IUserService _userService;
+        private readonly IStateService _stateService;
+        private readonly IOrganizationService _organizationService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IAuditService _auditService;
         private readonly IMessagingService _messagingService;
         private readonly IEventService _eventService;
         private readonly IPolicyService _policyService;
+        private readonly ILogger _logger;
+
         private CipherView _cipher;
         private bool _showNotesSeparator;
         private bool _showPassword;
@@ -44,7 +43,6 @@ namespace Bit.App.Pages
         private int _ownershipSelectedIndex;
         private bool _hasCollections;
         private string _previousCipherId;
-        private DateTime _lastHandledScrollTime;
         private List<Core.Models.View.CollectionView> _writeableCollections;
         private string[] _additionalCipherProperties = new string[]
         {
@@ -73,13 +71,16 @@ namespace Bit.App.Pages
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
             _folderService = ServiceContainer.Resolve<IFolderService>("folderService");
-            _userService = ServiceContainer.Resolve<IUserService>("userService");
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            _organizationService = ServiceContainer.Resolve<IOrganizationService>("organizationService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _auditService = ServiceContainer.Resolve<IAuditService>("auditService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _collectionService = ServiceContainer.Resolve<ICollectionService>("collectionService");
             _eventService = ServiceContainer.Resolve<IEventService>("eventService");
             _policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
+            _logger = ServiceContainer.Resolve<ILogger>("logger");
+
             GeneratePasswordCommand = new Command(GeneratePassword);
             TogglePasswordCommand = new Command(TogglePassword);
             ToggleCardNumberCommand = new Command(ToggleCardNumber);
@@ -165,7 +166,7 @@ namespace Bit.App.Pages
         public ExtendedObservableCollection<LoginUriView> Uris { get; set; }
         public ExtendedObservableCollection<AddEditPageFieldViewModel> Fields { get; set; }
         public ExtendedObservableCollection<CollectionViewModel> Collections { get; set; }
-        public RepeaterView CollectionsRepeaterView { get; set; }
+
         public int TypeSelectedIndex
         {
             get => _typeSelectedIndex;
@@ -248,7 +249,8 @@ namespace Bit.App.Pages
             set => SetProperty(ref _showPassword, value,
                 additionalPropertyNames: new string[]
                 {
-                    nameof(ShowPasswordIcon)
+                    nameof(ShowPasswordIcon),
+                    nameof(PasswordVisibilityAccessibilityText)
                 });
         }
         public bool ShowCardNumber
@@ -297,6 +299,7 @@ namespace Bit.App.Pages
         public int TotpColumnSpan => Cipher.ViewPassword ? 1 : 2;
         public bool AllowPersonal { get; set; }
         public bool PasswordPrompt => Cipher.Reprompt != CipherRepromptType.None;
+        public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
 
         public void Init()
         {
@@ -305,9 +308,9 @@ namespace Bit.App.Pages
 
         public async Task<bool> LoadAsync(AppOptions appOptions = null)
         {
-            var myEmail = await _userService.GetEmailAsync();
+            var myEmail = await _stateService.GetEmailAsync();
             OwnershipOptions.Add(new KeyValuePair<string, string>(myEmail, null));
-            var orgs = await _userService.GetAllOrganizationAsync();
+            var orgs = await _organizationService.GetAllAsync();
             foreach (var org in orgs.OrderBy(o => o.Name))
             {
                 if (org.Enabled && org.Status == OrganizationUserStatusType.Confirmed)
@@ -349,7 +352,7 @@ namespace Bit.App.Pages
                     {
                         Cipher.Name += " - " + AppResources.Clone;
                         // If not allowing personal ownership, update cipher's org Id to prompt downstream changes
-                        if (Cipher.OrganizationId == null && !AllowPersonal) 
+                        if (Cipher.OrganizationId == null && !AllowPersonal)
                         {
                             Cipher.OrganizationId = OrganizationId;
                         }
@@ -398,7 +401,7 @@ namespace Bit.App.Pages
                     IdentityTitleOptions.FindIndex(k => k.Value == Cipher.Identity.Title);
                 OwnershipSelectedIndex = string.IsNullOrWhiteSpace(Cipher.OrganizationId) ? 0 :
                     OwnershipOptions.FindIndex(k => k.Value == Cipher.OrganizationId);
-                
+
                 // If the selected organization is on Index 0 and we've removed the personal option, force refresh
                 if (!AllowPersonal && OwnershipSelectedIndex == 0)
                 {
@@ -450,11 +453,11 @@ namespace Bit.App.Pages
                     AppResources.Ok);
                 return false;
             }
-            
+
             if ((!EditMode || CloneMode) && !AllowPersonal && string.IsNullOrWhiteSpace(Cipher.OrganizationId))
             {
                 await Page.DisplayAlert(AppResources.AnErrorHasOccurred,
-                    AppResources.PersonalOwnershipSubmitError,AppResources.Ok);
+                    AppResources.PersonalOwnershipSubmitError, AppResources.Ok);
                 return false;
             }
 
@@ -534,11 +537,9 @@ namespace Bit.App.Pages
                         AppResources.AnErrorHasOccurred);
                 }
             }
-            catch(Exception genex)
+            catch (Exception genex)
             {
-#if !FDROID
-                Crashes.TrackError(genex);
-#endif
+                _logger.Exception(genex);
                 await _deviceActionService.HideLoadingAsync();
             }
             return false;
@@ -820,30 +821,13 @@ namespace Bit.App.Pages
             {
                 var cols = _writeableCollections.Where(c => c.OrganizationId == Cipher.OrganizationId)
                     .Select(c => new CollectionViewModel { Collection = c }).ToList();
-                HasCollections = cols.Any();
                 Collections.ResetWithRange(cols);
-                Collections = new ExtendedObservableCollection<CollectionViewModel>(cols);
             }
             else
             {
-                HasCollections = false;
                 Collections.ResetWithRange(new List<CollectionViewModel>());
-                Collections = new ExtendedObservableCollection<CollectionViewModel>(new List<CollectionViewModel>());
             }
-        }
-
-        public void HandleScroll()
-        {
-            // workaround for https://github.com/xamarin/Xamarin.Forms/issues/13607
-            // required for org ownership/collections to render properly in XF4.5+
-            if (!HasCollections ||
-                EditMode ||
-                (DateTime.Now - _lastHandledScrollTime < TimeSpan.FromMilliseconds(200)))
-            {
-                return;
-            }
-            CollectionsRepeaterView.ItemsSource = Collections;
-            _lastHandledScrollTime = DateTime.Now;
+            HasCollections = Collections.Any();
         }
 
         private void TriggerCipherChanged()

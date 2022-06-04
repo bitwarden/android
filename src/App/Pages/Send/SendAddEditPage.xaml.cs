@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bit.App.Models;
@@ -7,9 +7,6 @@ using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Utilities;
-#if !FDROID
-using Microsoft.AppCenter.Crashes;
-#endif
 using Xamarin.Forms;
 using Xamarin.Forms.PlatformConfiguration;
 using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
@@ -21,6 +18,7 @@ namespace Bit.App.Pages
     {
         private readonly IBroadcasterService _broadcasterService;
         private readonly IVaultTimeoutService _vaultTimeoutService;
+        private readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
 
         private AppOptions _appOptions;
         private SendAddEditPageViewModel _vm;
@@ -131,9 +129,7 @@ namespace Bit.App.Pages
             }
             catch (Exception ex)
             {
-#if !FDROID
-                Crashes.TrackError(ex);
-#endif
+                _logger.Value.Exception(ex);
                 await CloseAsync();
             }
         }
@@ -211,11 +207,6 @@ namespace Bit.App.Pages
             {
                 await _vm.ChooseFileAsync();
             }
-        }
-
-        private void ToggleOptions_Clicked(object sender, EventArgs e)
-        {
-            _vm.ToggleOptions();
         }
 
         private void ClearExpirationDate_Clicked(object sender, EventArgs e)
@@ -341,10 +332,10 @@ namespace Bit.App.Pages
 
             _vm.IsAddFromShare = true;
             _vm.CopyInsteadOfShareAfterSaving = _appOptions.CopyInsteadOfShareAfterSaving;
-            
+
             var name = _appOptions.CreateSend.Item2;
             _vm.Send.Name = name;
-            
+
             var type = _appOptions.CreateSend.Item1;
             if (type == SendType.File)
             {

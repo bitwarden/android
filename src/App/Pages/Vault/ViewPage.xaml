@@ -145,6 +145,7 @@
                                     Grid.RowSpan="2"
                                     AutomationProperties.IsInAccessibleTree="True"
                                     AutomationProperties.Name="{u:I18n ToggleVisibility}"
+                                    AutomationProperties.HelpText="{Binding PasswordVisibilityAccessibilityText}"
                                     IsVisible="{Binding Cipher.ViewPassword}" />
                                 <controls:IconButton 
                                     StyleClass="box-row-button, box-row-button-platform"
@@ -579,8 +580,8 @@
                                                          Grid.Row="1"
                                                          Grid.Column="0">
                                                 <controls:MonoLabel
-                                                    Text="{Binding ValueText, Mode=OneWay}"
-                                                    StyleClass="box-value"
+                                                    Text="{Binding ColoredHiddenValue, Mode=OneWay}"
+                                                    StyleClass="box-value, text-html"
                                                     IsVisible="{Binding ShowHiddenValue}" />
                                                 <controls:MonoLabel
                                                     Text="{Binding Field.MaskedValue, Mode=OneWay}"

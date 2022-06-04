@@ -5,9 +5,6 @@ using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Exceptions;
 using Bit.Core.Utilities;
-#if !FDROID
-using Microsoft.AppCenter.Crashes;
-#endif
 
 namespace Bit.App.Pages
 {
@@ -15,11 +12,13 @@ namespace Bit.App.Pages
     {
         readonly IPlatformUtilsService _platformUtilsService;
         readonly IVerificationActionsFlowHelper _verificationActionsFlowHelper;
+        readonly ILogger _logger;
 
         public DeleteAccountViewModel()
         {
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _verificationActionsFlowHelper = ServiceContainer.Resolve<IVerificationActionsFlowHelper>("verificationActionsFlowHelper");
+            _logger = ServiceContainer.Resolve<ILogger>("logger");
 
             PageTitle = AppResources.DeleteAccount;
         }
@@ -44,9 +43,7 @@ namespace Bit.App.Pages
             }
             catch (System.Exception ex)
             {
-#if !FDROID
-                Crashes.TrackError(ex);
-#endif
+                _logger.Exception(ex);
                 await _platformUtilsService.ShowDialogAsync(AppResources.AnErrorHasOccurred);
             }
         }
@@ -60,16 +57,19 @@ namespace Bit.App.Pages
         readonly IMessagingService _messagingService;
         readonly IPlatformUtilsService _platformUtilsService;
         readonly IDeviceActionService _deviceActionService;
+        readonly ILogger _logger;
 
         public DeleteAccountActionFlowExecutioner(IApiService apiService,
             IMessagingService messagingService,
             IPlatformUtilsService platformUtilsService,
-            IDeviceActionService deviceActionService)
+            IDeviceActionService deviceActionService,
+            ILogger logger)
         {
             _apiService = apiService;
             _messagingService = messagingService;
             _platformUtilsService = platformUtilsService;
             _deviceActionService = deviceActionService;
+            _logger = logger;
         }
 
         public async Task Execute(IActionFlowParmeters parameters)
@@ -102,9 +102,7 @@ namespace Bit.App.Pages
             catch (System.Exception ex)
             {
                 await _deviceActionService.HideLoadingAsync();
-#if !FDROID
-                Crashes.TrackError(ex);
-#endif
+                _logger.Exception(ex);
                 await _platformUtilsService.ShowDialogAsync(AppResources.AnErrorHasOccurred);
             }
         }

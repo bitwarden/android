@@ -1,9 +1,9 @@
-﻿using Bit.App.Resources;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -41,8 +41,11 @@ namespace Bit.App.Pages
         {
             var cipher = await _cipherService.GetAsync(CipherId);
             var decCipher = await cipher.DecryptAsync();
-            History.ResetWithRange(decCipher.PasswordHistory ?? new List<PasswordHistoryView>());
-            ShowNoData = History.Count == 0;
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                History.ResetWithRange(decCipher.PasswordHistory ?? new List<PasswordHistoryView>());
+                ShowNoData = History.Count == 0;
+            });
         }
 
         private async void CopyAsync(PasswordHistoryView ph)

@@ -1,14 +1,13 @@
-﻿using Bit.App.Abstractions;
-using Bit.App.Resources;
-using Bit.Core;
-using Bit.Core.Abstractions;
-using Bit.Core.Utilities;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using Bit.App.Abstractions;
+using Bit.App.Resources;
 using Bit.App.Utilities;
+using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.Domain;
+using Bit.Core.Utilities;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -16,16 +15,12 @@ namespace Bit.App.Pages
 {
     public class LoginSsoPageViewModel : BaseViewModel
     {
-        private const string Keys_RememberedOrgIdentifier = "rememberedOrgIdentifier";
-        private const string Keys_RememberOrgIdentifier = "rememberOrgIdentifier";
-
         private readonly IDeviceActionService _deviceActionService;
         private readonly IAuthService _authService;
         private readonly ISyncService _syncService;
         private readonly IApiService _apiService;
         private readonly IPasswordGenerationService _passwordGenerationService;
         private readonly ICryptoFunctionService _cryptoFunctionService;
-        private readonly IStorageService _storageService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IStateService _stateService;
 
@@ -40,7 +35,6 @@ namespace Bit.App.Pages
             _passwordGenerationService =
                 ServiceContainer.Resolve<IPasswordGenerationService>("passwordGenerationService");
             _cryptoFunctionService = ServiceContainer.Resolve<ICryptoFunctionService>("cryptoFunctionService");
-            _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
 
@@ -55,7 +49,6 @@ namespace Bit.App.Pages
         }
 
         public Command LogInCommand { get; }
-        public bool RememberOrgIdentifier { get; set; }
         public Action StartTwoFactorAction { get; set; }
         public Action StartSetPasswordAction { get; set; }
         public Action SsoAuthSuccessAction { get; set; }
@@ -66,10 +59,8 @@ namespace Bit.App.Pages
         {
             if (string.IsNullOrWhiteSpace(OrgIdentifier))
             {
-                OrgIdentifier = await _storageService.GetAsync<string>(Keys_RememberedOrgIdentifier);
+                OrgIdentifier = await _stateService.GetRememberedOrgIdentifierAsync();
             }
-            var rememberOrgIdentifier = await _storageService.GetAsync<bool?>(Keys_RememberOrgIdentifier);
-            RememberOrgIdentifier = rememberOrgIdentifier.GetValueOrDefault(true);
         }
 
         public async Task LogInAsync()
@@ -170,14 +161,7 @@ namespace Bit.App.Pages
             {
                 var response = await _authService.LogInSsoAsync(code, codeVerifier, redirectUri, orgId);
                 await AppHelpers.ResetInvalidUnlockAttemptsAsync();
-                if (RememberOrgIdentifier)
-                {
-                    await _storageService.SaveAsync(Keys_RememberedOrgIdentifier, OrgIdentifier);
-                }
-                else
-                {
-                    await _storageService.RemoveAsync(Keys_RememberedOrgIdentifier);
-                }
+                await _stateService.SetRememberedOrgIdentifierAsync(OrgIdentifier);
                 await _deviceActionService.HideLoadingAsync();
                 if (response.TwoFactor)
                 {
@@ -186,15 +170,13 @@ namespace Bit.App.Pages
                 else if (response.ResetMasterPassword)
                 {
                     StartSetPasswordAction?.Invoke();
-                } 
+                }
                 else if (response.ForcePasswordReset)
                 {
                     UpdateTempPasswordAction?.Invoke();
                 }
                 else
                 {
-                    var disableFavicon = await _storageService.GetAsync<bool?>(Constants.DisableFaviconKey);
-                    await _stateService.SaveAsync(Constants.DisableFaviconKey, disableFavicon.GetValueOrDefault());
                     var task = Task.Run(async () => await _syncService.FullSyncAsync(true));
                     SsoAuthSuccessAction?.Invoke();
                 }

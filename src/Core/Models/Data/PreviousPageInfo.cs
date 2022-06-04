@@ -1,4 +1,4 @@
-﻿namespace Bit.App.Models
+﻿namespace Bit.Core.Models.Data
 {
     public class PreviousPageInfo
     {

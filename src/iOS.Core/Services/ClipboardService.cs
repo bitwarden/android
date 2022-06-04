@@ -9,11 +9,11 @@ namespace Bit.iOS.Core.Services
 {
     public class ClipboardService : IClipboardService
     {
-        private readonly IStorageService _storageService;
+        private readonly IStateService _stateService;
 
-        public ClipboardService(IStorageService storageService)
+        public ClipboardService(IStateService stateService)
         {
-            _storageService = storageService;
+            _stateService = stateService;
         }
 
         public async Task CopyTextAsync(string text, int expiresInMs = -1)
@@ -21,7 +21,7 @@ namespace Bit.iOS.Core.Services
             int clearSeconds = -1;
             if (expiresInMs < 0)
             {
-                clearSeconds = await _storageService.GetAsync<int?>(Bit.Core.Constants.ClearClipboardKey) ?? -1;
+                clearSeconds = await _stateService.GetClearClipboardAsync() ?? -1;
             }
             else
             {

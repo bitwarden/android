@@ -41,12 +41,11 @@ namespace Bit.iOS.Autofill.Utilities
             if (!string.IsNullOrWhiteSpace(item.Username) && !string.IsNullOrWhiteSpace(item.Password))
             {
                 string totp = null;
-                var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
-                var disableTotpCopy = await storageService.GetAsync<bool?>(Bit.Core.Constants.DisableAutoTotpCopyKey);
+                var stateService = ServiceContainer.Resolve<IStateService>("stateService");
+                var disableTotpCopy = await stateService.GetDisableAutoTotpCopyAsync();
                 if (!disableTotpCopy.GetValueOrDefault(false))
                 {
-                    var userService = ServiceContainer.Resolve<IUserService>("userService");
-                    var canAccessPremiumAsync = await userService.CanAccessPremiumAsync();
+                    var canAccessPremiumAsync = await stateService.CanAccessPremiumAsync();
                     if (!string.IsNullOrWhiteSpace(item.Totp) &&
                         (canAccessPremiumAsync || item.CipherView.OrganizationUseTotp))
                     {

@@ -1,19 +1,16 @@
 ﻿using System;
+using System.Threading.Tasks;
+using System.Windows.Input;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
-using Bit.Core.Abstractions;
-using Bit.Core.Utilities;
-using System.Threading.Tasks;
-using Bit.Core.Exceptions;
-using Xamarin.Forms;
-using Xamarin.CommunityToolkit.ObjectModel;
-using System.Windows.Input;
 using Bit.App.Utilities;
 using Bit.Core;
+using Bit.Core.Abstractions;
 using Bit.Core.Enums;
-#if !FDROID
-using Microsoft.AppCenter.Crashes;
-#endif
+using Bit.Core.Exceptions;
+using Bit.Core.Utilities;
+using Xamarin.CommunityToolkit.ObjectModel;
+using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
@@ -24,6 +21,7 @@ namespace Bit.App.Pages
         private readonly IUserVerificationService _userVerificationService;
         private readonly IApiService _apiService;
         private readonly IVerificationActionsFlowHelper _verificationActionsFlowHelper;
+        private readonly ILogger _logger;
 
         private bool _showPassword;
         private string _secret, _mainActionText, _sendCodeStatus;
@@ -35,9 +33,10 @@ namespace Bit.App.Pages
             _userVerificationService = ServiceContainer.Resolve<IUserVerificationService>("userVerificationService");
             _apiService = ServiceContainer.Resolve<IApiService>("apiService");
             _verificationActionsFlowHelper = ServiceContainer.Resolve<IVerificationActionsFlowHelper>("verificationActionsFlowHelper");
+            _logger = ServiceContainer.Resolve<ILogger>("logger");
 
             PageTitle = AppResources.VerificationCode;
-            
+
             TogglePasswordCommand = new Command(TogglePassword);
             MainActionCommand = new AsyncCommand(MainActionAsync, allowsMultipleExecutions: false);
             RequestOTPCommand = new AsyncCommand(RequestOTPAsync, allowsMultipleExecutions: false);
@@ -61,7 +60,7 @@ namespace Bit.App.Pages
             get => _mainActionText;
             set => SetProperty(ref _mainActionText, value);
         }
-        
+
         public string SendCodeStatus
         {
             get => _sendCodeStatus;
@@ -118,9 +117,7 @@ namespace Bit.App.Pages
             }
             catch (Exception ex)
             {
-#if !FDROID
-                Crashes.TrackError(ex);
-#endif
+                _logger.Exception(ex);
                 await _deviceActionService.HideLoadingAsync();
                 SendCodeStatus = AppResources.AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain;
             }
@@ -171,9 +168,7 @@ namespace Bit.App.Pages
             }
             catch (Exception ex)
             {
-#if !FDROID
-                Crashes.TrackError(ex);
-#endif
+                _logger.Exception(ex);
                 await _deviceActionService.HideLoadingAsync();
             }
         }

@@ -22,6 +22,7 @@ namespace Bit.App.Models
         public bool IosExtension { get; set; }
         public Tuple<SendType, string, byte[], string> CreateSend { get; set; }
         public bool CopyInsteadOfShareAfterSaving { get; set; }
+        public bool HideAccountSwitcher { get; set; }
 
         public void SetAllFrom(AppOptions o)
         {
@@ -46,6 +47,7 @@ namespace Bit.App.Models
             IosExtension = o.IosExtension;
             CreateSend = o.CreateSend;
             CopyInsteadOfShareAfterSaving = o.CopyInsteadOfShareAfterSaving;
+            HideAccountSwitcher = o.HideAccountSwitcher;
         }
     }
 }

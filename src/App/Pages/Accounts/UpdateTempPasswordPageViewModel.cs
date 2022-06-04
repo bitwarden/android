@@ -1,6 +1,6 @@
-using Bit.App.Resources;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using Bit.App.Resources;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.Request;
 using Xamarin.Forms;
@@ -16,7 +16,7 @@ namespace Bit.App.Pages
             ToggleConfirmPasswordCommand = new Command(ToggleConfirmPassword);
             SubmitCommand = new Command(async () => await SubmitAsync());
         }
-        
+
         public Command SubmitCommand { get; }
         public Command TogglePasswordCommand { get; }
         public Command ToggleConfirmPasswordCommand { get; }
@@ -37,23 +37,23 @@ namespace Bit.App.Pages
 
         public async Task SubmitAsync()
         {
-            if (!await ValidateMasterPasswordAsync()) 
+            if (!await ValidateMasterPasswordAsync())
             {
                 return;
             }
-            
+
             // Retrieve details for key generation
-            var kdf = await _userService.GetKdfAsync();
-            var kdfIterations = await _userService.GetKdfIterationsAsync();
-            var email = await _userService.GetEmailAsync();
-            
+            var kdf = await _stateService.GetKdfTypeAsync();
+            var kdfIterations = await _stateService.GetKdfIterationsAsync();
+            var email = await _stateService.GetEmailAsync();
+
             // Create new key and hash new password
             var key = await _cryptoService.MakeKeyAsync(MasterPassword, email, kdf, kdfIterations);
             var masterPasswordHash = await _cryptoService.HashPasswordAsync(MasterPassword, key);
-            
+
             // Create new encKey for the User
             var newEncKey = await _cryptoService.RemakeEncKeyAsync(key);
-            
+
             // Create request
             var request = new UpdateTempPasswordRequest
             {
@@ -61,7 +61,7 @@ namespace Bit.App.Pages
                 NewMasterPasswordHash = masterPasswordHash,
                 MasterPasswordHint = Hint
             };
-            
+
             // Initiate API action
             try
             {

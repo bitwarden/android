@@ -15,7 +15,7 @@ namespace Bit.Core.Abstractions
         Task<Folder> EncryptAsync(FolderView model, SymmetricCryptoKey key = null);
         Task<List<Folder>> GetAllAsync();
         Task<List<FolderView>> GetAllDecryptedAsync();
-        Task<List<TreeNode<FolderView>>> GetAllNestedAsync();
+        Task<List<TreeNode<FolderView>>> GetAllNestedAsync(List<FolderView> folders = null);
         Task<Folder> GetAsync(string id);
         Task<TreeNode<FolderView>> GetNestedAsync(string id);
         Task ReplaceAsync(Dictionary<string, FolderData> folders);

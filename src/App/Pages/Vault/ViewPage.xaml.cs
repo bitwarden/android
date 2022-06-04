@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -216,7 +216,7 @@ namespace Bit.App.Pages
                 return;
             }
 
-            var options = new List<string> {AppResources.Attachments};
+            var options = new List<string> { AppResources.Attachments };
             if (_vm.Cipher.OrganizationId == null)
             {
                 options.Add(AppResources.Clone);

@@ -13,7 +13,8 @@ namespace Bit.Core.Abstractions
         string WebVaultUrl { get; set; }
         string EventsUrl { get; set; }
 
-        string GetWebVaultUrl();
+        string GetWebVaultUrl(bool returnNullIfDefault = false);
+        string GetWebSendUrl();
         Task<EnvironmentUrlData> SetUrlsAsync(EnvironmentUrlData urls);
         Task SetUrlsFromStorageAsync();
     }

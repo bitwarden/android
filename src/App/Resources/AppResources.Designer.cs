@@ -311,6 +311,30 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string RemoveAccount {
+            get {
+                return ResourceManager.GetString("RemoveAccount", resourceCulture);
+            }
+        }
+        
+        public static string RemoveAccountConfirmation {
+            get {
+                return ResourceManager.GetString("RemoveAccountConfirmation", resourceCulture);
+            }
+        }
+        
+        public static string AccountAlreadyAdded {
+            get {
+                return ResourceManager.GetString("AccountAlreadyAdded", resourceCulture);
+            }
+        }
+        
+        public static string SwitchToAlreadyAddedAccountConfirmation {
+            get {
+                return ResourceManager.GetString("SwitchToAlreadyAddedAccountConfirmation", resourceCulture);
+            }
+        }
+        
         public static string MasterPassword {
             get {
                 return ResourceManager.GetString("MasterPassword", resourceCulture);
@@ -2369,15 +2393,21 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string SearchFolder {
+        public static string SearchFileSends {
             get {
-                return ResourceManager.GetString("SearchFolder", resourceCulture);
+                return ResourceManager.GetString("SearchFileSends", resourceCulture);
             }
         }
         
-        public static string SearchType {
+        public static string SearchTextSends {
             get {
-                return ResourceManager.GetString("SearchType", resourceCulture);
+                return ResourceManager.GetString("SearchTextSends", resourceCulture);
+            }
+        }
+        
+        public static string SearchGroup {
+            get {
+                return ResourceManager.GetString("SearchGroup", resourceCulture);
             }
         }
         
@@ -3275,6 +3305,12 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string Text {
+            get {
+                return ResourceManager.GetString("Text", resourceCulture);
+            }
+        }
+        
         public static string TypeText {
             get {
                 return ResourceManager.GetString("TypeText", resourceCulture);
@@ -3302,6 +3338,30 @@ namespace Bit.App.Resources {
         public static string TypeFileInfo {
             get {
                 return ResourceManager.GetString("TypeFileInfo", resourceCulture);
+            }
+        }
+        
+        public static string FileTypeIsSelected {
+            get {
+                return ResourceManager.GetString("FileTypeIsSelected", resourceCulture);
+            }
+        }
+        
+        public static string FileTypeIsNotSelected {
+            get {
+                return ResourceManager.GetString("FileTypeIsNotSelected", resourceCulture);
+            }
+        }
+        
+        public static string TextTypeIsSelected {
+            get {
+                return ResourceManager.GetString("TextTypeIsSelected", resourceCulture);
+            }
+        }
+        
+        public static string TextTypeIsNotSelected {
+            get {
+                return ResourceManager.GetString("TextTypeIsNotSelected", resourceCulture);
             }
         }
         
@@ -3725,6 +3785,54 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string AddAccount {
+            get {
+                return ResourceManager.GetString("AddAccount", resourceCulture);
+            }
+        }
+        
+        public static string AccountUnlocked {
+            get {
+                return ResourceManager.GetString("AccountUnlocked", resourceCulture);
+            }
+        }
+        
+        public static string AccountLocked {
+            get {
+                return ResourceManager.GetString("AccountLocked", resourceCulture);
+            }
+        }
+        
+        public static string AccountLoggedOut {
+            get {
+                return ResourceManager.GetString("AccountLoggedOut", resourceCulture);
+            }
+        }
+        
+        public static string AccountSwitchedAutomatically {
+            get {
+                return ResourceManager.GetString("AccountSwitchedAutomatically", resourceCulture);
+            }
+        }
+        
+        public static string AccountLockedSuccessfully {
+            get {
+                return ResourceManager.GetString("AccountLockedSuccessfully", resourceCulture);
+            }
+        }
+        
+        public static string AccountLoggedOutSuccessfully {
+            get {
+                return ResourceManager.GetString("AccountLoggedOutSuccessfully", resourceCulture);
+            }
+        }
+        
+        public static string AccountRemovedSuccessfully {
+            get {
+                return ResourceManager.GetString("AccountRemovedSuccessfully", resourceCulture);
+            }
+        }
+        
         public static string DeleteAccount {
             get {
                 return ResourceManager.GetString("DeleteAccount", resourceCulture);
@@ -3818,6 +3926,102 @@ namespace Bit.App.Resources {
         public static string EnterTheVerificationCodeThatWasSentToYourEmail {
             get {
                 return ResourceManager.GetString("EnterTheVerificationCodeThatWasSentToYourEmail", resourceCulture);
+            }
+        }
+        
+        public static string ReportCrashLogs {
+            get {
+                return ResourceManager.GetString("ReportCrashLogs", resourceCulture);
+            }
+        }
+        
+        public static string ReportCrashLogsDescription {
+            get {
+                return ResourceManager.GetString("ReportCrashLogsDescription", resourceCulture);
+            }
+        }
+        
+        public static string OptionsExpanded {
+            get {
+                return ResourceManager.GetString("OptionsExpanded", resourceCulture);
+            }
+        }
+        
+        public static string OptionsCollapsed {
+            get {
+                return ResourceManager.GetString("OptionsCollapsed", resourceCulture);
+            }
+        }
+        
+        public static string UppercaseAtoZ {
+            get {
+                return ResourceManager.GetString("UppercaseAtoZ", resourceCulture);
+            }
+        }
+        
+        public static string LowercaseAtoZ {
+            get {
+                return ResourceManager.GetString("LowercaseAtoZ", resourceCulture);
+            }
+        }
+        
+        public static string NumbersZeroToNine {
+            get {
+                return ResourceManager.GetString("NumbersZeroToNine", resourceCulture);
+            }
+        }
+        
+        public static string SpecialCharacters {
+            get {
+                return ResourceManager.GetString("SpecialCharacters", resourceCulture);
+            }
+        }
+        
+        public static string TapToGoBack {
+            get {
+                return ResourceManager.GetString("TapToGoBack", resourceCulture);
+            }
+        }
+        
+        public static string PasswordIsVisibleTapToHide {
+            get {
+                return ResourceManager.GetString("PasswordIsVisibleTapToHide", resourceCulture);
+            }
+        }
+        
+        public static string PasswordIsNotVisibleTapToShow {
+            get {
+                return ResourceManager.GetString("PasswordIsNotVisibleTapToShow", resourceCulture);
+            }
+        }
+        
+        public static string FilterByVault {
+            get {
+                return ResourceManager.GetString("FilterByVault", resourceCulture);
+            }
+        }
+        
+        public static string AllVaults {
+            get {
+                return ResourceManager.GetString("AllVaults", resourceCulture);
+            }
+        }
+        
+        public static string Vaults {
+            get {
+                return ResourceManager.GetString("Vaults", resourceCulture);
+            }
+        }
+        
+        public static string VaultFilterDescription {
+            get {
+                return ResourceManager.GetString("VaultFilterDescription", resourceCulture);
+            }
+        }
+        
+        public static string All {
+            get {
+                return ResourceManager.GetString("All", resourceCulture);
             }
         }
     }

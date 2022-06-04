@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
@@ -27,23 +27,24 @@ namespace Bit.App.Pages
                 captchaRequiredText = AppResources.CaptchaRequired,
             });
 
-            var url = environmentService.GetWebVaultUrl();
-            if (url == null)
-            {
-                url = "https://vault.bitwarden.com";
-            }
-            url += "/captcha-mobile-connector.html?" + "data=" + data +
-                "&parent=" + Uri.EscapeDataString(callbackUri) + "&v=1";
+            var url = environmentService.GetWebVaultUrl() +
+                      "/captcha-mobile-connector.html?" +
+                      "data=" + data +
+                      "&parent=" + Uri.EscapeDataString(callbackUri) +
+                      "&v=1";
 
             WebAuthenticatorResult authResult = null;
             bool cancelled = false;
             try
             {
+                // PrefersEphemeralWebBrowserSession should be false to allow access to the hCaptcha accessibility
+                // cookie set in the default browser
+                // https://www.hcaptcha.com/accessibility
                 var options = new WebAuthenticatorOptions
                 {
                     Url = new Uri(url),
                     CallbackUrl = new Uri(callbackUri),
-                    PrefersEphemeralWebBrowserSession = true,
+                    PrefersEphemeralWebBrowserSession = false,
                 };
                 authResult = await WebAuthenticator.AuthenticateAsync(options);
             }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using Bit.App.Utilities;
-using Microsoft.AppCenter.Crashes;
+using Bit.Core.Services;
 using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
@@ -39,7 +39,7 @@ namespace Bit.iOS.Core.Utilities
             }
             catch (Exception e)
             {
-                Crashes.TrackError(e);
+                Logger.Instance.Exception(e);
             }
             finally
             {

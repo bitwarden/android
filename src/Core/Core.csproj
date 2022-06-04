@@ -15,6 +15,8 @@
   <ItemGroup>
     <None Remove="Resources\eff_long_word_list.txt" />
     <None Remove="Resources\public_suffix_list.dat" />
+    <None Remove="Microsoft.AppCenter.Crashes" />
+    <None Remove="Services\Logging\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,4 +33,7 @@
     <PackageReference Include="Microsoft.AppCenter.Crashes" Version="4.4.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\Logging\" />
+  </ItemGroup>
 </Project>

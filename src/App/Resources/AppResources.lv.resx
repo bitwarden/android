@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Vai tiešām izrakstīties?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Noņemt kontu</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Vai tiešām noņemt šo kontu?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Konts jau ir pievienots</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Vai pārslēgties uz to?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Galvenā parole</value>
     <comment>Label for a master password.</comment>
@@ -2091,6 +2103,30 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Viens vai vairāki apvienības nosacījumi neļauj izgūt privātās glabātavas saturu.</value>
+  </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Pievienot kontu</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Atslēgts</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Slēgts</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Izrakstījies</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Pārslēdzās uz nākamo pieejamo kontu</value>
+  </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>Konts ir slēgts</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>Izrakstīšanās no konta bija veiksmīga</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>Konts tika veiksmīgi noņemts</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Dzēst kontu</value>

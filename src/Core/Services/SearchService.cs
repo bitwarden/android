@@ -1,10 +1,10 @@
-﻿using Bit.Core.Abstractions;
-using Bit.Core.Models.View;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Bit.Core.Abstractions;
+using Bit.Core.Models.View;
 
 namespace Bit.Core.Services
 {
@@ -74,28 +74,34 @@ namespace Bit.Core.Services
             CancellationToken ct = default, bool deleted = false)
         {
             ct.ThrowIfCancellationRequested();
+            var matchedCiphers = new List<CipherView>();
+            var lowPriorityMatchedCiphers = new List<CipherView>();
             query = query.Trim().ToLower();
-            return ciphers.Where(c =>
+
+            foreach (var c in ciphers)
             {
                 ct.ThrowIfCancellationRequested();
                 if (c.Name?.ToLower().Contains(query) ?? false)
                 {
-                    return true;
+                    matchedCiphers.Add(c);
                 }
-                if (query.Length >= 8 && c.Id.StartsWith(query))
+                else if (query.Length >= 8 && c.Id.StartsWith(query))
                 {
-                    return true;
+                    lowPriorityMatchedCiphers.Add(c);
                 }
-                if (c.SubTitle?.ToLower().Contains(query) ?? false)
+                else if (c.SubTitle?.ToLower().Contains(query) ?? false)
                 {
-                    return true;
+                    lowPriorityMatchedCiphers.Add(c);
                 }
-                if (c.Login?.Uri?.ToLower()?.Contains(query) ?? false)
+                else if (c.Login?.Uri?.ToLower()?.Contains(query) ?? false)
                 {
-                    return true;
+                    lowPriorityMatchedCiphers.Add(c);
                 }
-                return false;
-            }).ToList();
+            }
+
+            ct.ThrowIfCancellationRequested();
+            matchedCiphers.AddRange(lowPriorityMatchedCiphers);
+            return matchedCiphers;
         }
 
         public async Task<List<SendView>> SearchSendsAsync(string query, Func<SendView, bool> filter = null,
@@ -133,25 +139,31 @@ namespace Bit.Core.Services
         public List<SendView> SearchSendsBasic(List<SendView> sends, string query, CancellationToken ct = default,
             bool deleted = false)
         {
+            var matchedSends = new List<SendView>();
+            var lowPriorityMatchSends = new List<SendView>();
             ct.ThrowIfCancellationRequested();
             query = query.Trim().ToLower();
-            return sends.Where(s =>
+
+            foreach (var s in sends)
             {
                 ct.ThrowIfCancellationRequested();
                 if (s.Name?.ToLower().Contains(query) ?? false)
                 {
-                    return true;
+                    matchedSends.Add(s);
                 }
-                if (s.Text?.Text?.ToLower().Contains(query) ?? false)
+                else if (s.Text?.Text?.ToLower().Contains(query) ?? false)
                 {
-                    return true;
+                    lowPriorityMatchSends.Add(s);
                 }
-                if (s.File?.FileName?.ToLower()?.Contains(query) ?? false)
+                else if (s.File?.FileName?.ToLower()?.Contains(query) ?? false)
                 {
-                    return true;
+                    lowPriorityMatchSends.Add(s);
                 }
-                return false;
-            }).ToList();
+            }
+
+            ct.ThrowIfCancellationRequested();
+            matchedSends.AddRange(lowPriorityMatchSends);
+            return matchedSends;
         }
     }
 }

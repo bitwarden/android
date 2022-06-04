@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AuthenticationServices;
 using Bit.Core.Abstractions;
+using Bit.Core.Enums;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
 
@@ -15,14 +16,17 @@ namespace Bit.iOS.Core.Utilities
             if (await AutofillEnabled())
             {
                 var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
-                var timeoutAction = await storageService.GetAsync<string>(Bit.Core.Constants.VaultTimeoutActionKey);
-                if (timeoutAction == "logOut")
+                var stateService = ServiceContainer.Resolve<IStateService>("stateService");
+                var timeoutAction = await stateService.GetVaultTimeoutActionAsync();
+                if (timeoutAction == VaultTimeoutAction.Logout)
                 {
+                    await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
                     return;
                 }
                 var vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
                 if (await vaultTimeoutService.IsLockedAsync())
                 {
+                    await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
                     await storageService.SaveAsync(Constants.AutofillNeedsIdentityReplacementKey, true);
                     return;
                 }
@@ -41,15 +45,17 @@ namespace Bit.iOS.Core.Utilities
                 {
                     await ASCredentialIdentityStore.SharedStore?.ReplaceCredentialIdentitiesAsync(identities.ToArray());
                     await storageService.SaveAsync(Constants.AutofillNeedsIdentityReplacementKey, false);
+                    return;
                 }
+                await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
             }
         }
 
         public static async Task<bool> IdentitiesCanIncremental()
         {
-            var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
-            var timeoutAction = await storageService.GetAsync<string>(Bit.Core.Constants.VaultTimeoutActionKey);
-            if (timeoutAction == "logOut")
+            var stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            var timeoutAction = await stateService.GetVaultTimeoutActionAsync();
+            if (timeoutAction == VaultTimeoutAction.Logout)
             {
                 return false;
             }

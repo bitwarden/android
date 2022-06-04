@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Bit.Core.Enums;
 using Bit.Core.Models.Api;
 using Bit.Core.Models.Domain;
@@ -23,7 +23,7 @@ namespace Bit.Core.Models.Request
 
         public SendRequest(Send send, long? fileLength)
         {
-            Type = send.Type ;
+            Type = send.Type;
             FileLength = fileLength;
             Name = send.Name?.EncryptedString;
             Notes = send.Notes?.EncryptedString;

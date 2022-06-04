@@ -10,6 +10,7 @@ using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using DeviceType = Bit.Core.Enums.DeviceType;
@@ -32,25 +33,23 @@ namespace Bit.App.Pages
 
         private readonly ISendService _sendService;
         private readonly ISyncService _syncService;
-        private readonly IUserService _userService;
+        private readonly IStateService _stateService;
         private readonly IVaultTimeoutService _vaultTimeoutService;
         private readonly IDeviceActionService _deviceActionService;
         private readonly IPlatformUtilsService _platformUtilsService;
-        private readonly IStorageService _storageService;
 
         public SendGroupingsPageViewModel()
         {
             _sendService = ServiceContainer.Resolve<ISendService>("sendService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
-            _userService = ServiceContainer.Resolve<IUserService>("userService");
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
-            _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
 
             Loading = true;
             PageTitle = AppResources.Send;
-            GroupedSends = new ExtendedObservableCollection<SendGroupingsPageListGroup>();
+            GroupedSends = new ObservableRangeCollection<ISendGroupingsPageListItem>();
             RefreshCommand = new Command(async () =>
             {
                 Refreshing = true;
@@ -105,7 +104,7 @@ namespace Bit.App.Pages
             get => _showList;
             set => SetProperty(ref _showList, value);
         }
-        public ExtendedObservableCollection<SendGroupingsPageListGroup> GroupedSends { get; set; }
+        public ObservableRangeCollection<ISendGroupingsPageListItem> GroupedSends { get; set; }
         public Command RefreshCommand { get; set; }
         public Command<SendView> SendOptionsCommand { get; set; }
         public bool LoadedOnce { get; set; }
@@ -116,7 +115,7 @@ namespace Bit.App.Pages
             {
                 return;
             }
-            var authed = await _userService.IsAuthenticatedAsync();
+            var authed = await _stateService.IsAuthenticatedAsync();
             if (!authed)
             {
                 return;
@@ -125,7 +124,7 @@ namespace Bit.App.Pages
             {
                 return;
             }
-            if (await _storageService.GetAsync<bool>(Constants.SyncOnRefreshKey) && Refreshing && !SyncRefreshing)
+            if (await _stateService.GetSyncOnRefreshAsync() && Refreshing && !SyncRefreshing)
             {
                 SyncRefreshing = true;
                 await _syncService.FullSyncAsync(false);
@@ -137,7 +136,7 @@ namespace Bit.App.Pages
             ShowNoData = false;
             Loading = true;
             ShowList = false;
-            SendEnabled = ! await AppHelpers.IsSendDisabledByPolicyAsync();
+            SendEnabled = !await AppHelpers.IsSendDisabledByPolicyAsync();
             var groupedSends = new List<SendGroupingsPageListGroup>();
             var page = Page as SendGroupingsPage;
 
@@ -177,7 +176,49 @@ namespace Bit.App.Pages
                         MainPage ? AppResources.AllSends : AppResources.Sends, sendsListItems.Count,
                         uppercaseGroupNames, !MainPage));
                 }
-                GroupedSends.ResetWithRange(groupedSends);
+
+                // TODO: refactor this
+                if (Device.RuntimePlatform == Device.Android
+                    ||
+                    GroupedSends.Any())
+                {
+                    var items = new List<ISendGroupingsPageListItem>();
+                    foreach (var itemGroup in groupedSends)
+                    {
+                        items.Add(new SendGroupingsPageHeaderListItem(itemGroup.Name, itemGroup.ItemCount));
+                        items.AddRange(itemGroup);
+                    }
+
+                    GroupedSends.ReplaceRange(items);
+                }
+                else
+                {
+                    // HACK: we need this on iOS, so that it doesn't crash when adding coming from an empty list
+                    var first = true;
+                    var items = new List<ISendGroupingsPageListItem>();
+                    foreach (var itemGroup in groupedSends)
+                    {
+                        if (!first)
+                        {
+                            items.Add(new SendGroupingsPageHeaderListItem(itemGroup.Name, itemGroup.ItemCount));
+                        }
+                        else
+                        {
+                            first = false;
+                        }
+                        items.AddRange(itemGroup);
+                    }
+
+                    if (groupedSends.Any())
+                    {
+                        GroupedSends.ReplaceRange(new List<ISendGroupingsPageListItem> { new SendGroupingsPageHeaderListItem(groupedSends[0].Name, groupedSends[0].ItemCount) });
+                        GroupedSends.AddRange(items);
+                    }
+                    else
+                    {
+                        GroupedSends.Clear();
+                    }
+                }
             }
             finally
             {

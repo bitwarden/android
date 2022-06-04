@@ -1,7 +1,9 @@
 ﻿using Android.Content;
 using Android.Views;
+using Bit.App.Pages;
 using Bit.Droid.Renderers;
 using Google.Android.Material.BottomNavigation;
+using Google.Android.Material.Navigation;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using Xamarin.Forms.Platform.Android.AppCompat;
@@ -9,7 +11,7 @@ using Xamarin.Forms.Platform.Android.AppCompat;
 [assembly: ExportRenderer(typeof(TabbedPage), typeof(CustomTabbedRenderer))]
 namespace Bit.Droid.Renderers
 {
-    public class CustomTabbedRenderer : TabbedPageRenderer, BottomNavigationView.IOnNavigationItemReselectedListener
+    public class CustomTabbedRenderer : TabbedPageRenderer, NavigationBarView.IOnItemReselectedListener
     {
         private TabbedPage _page;
 
@@ -21,7 +23,7 @@ namespace Bit.Droid.Renderers
             if (e.NewElement != null)
             {
                 _page = e.NewElement;
-                GetBottomNavigationView()?.SetOnNavigationItemReselectedListener(this);
+                GetBottomNavigationView()?.SetOnItemReselectedListener(this);
             }
             else
             {
@@ -53,6 +55,10 @@ namespace Bit.Droid.Renderers
         {
             if (_page?.CurrentPage?.Navigation != null && _page.CurrentPage.Navigation.NavigationStack.Count > 0)
             {
+                if (_page is TabsPage tabsPage)
+                {
+                    tabsPage.OnPageReselected();
+                }
                 Device.BeginInvokeOnMainThread(async () => await _page.CurrentPage.Navigation.PopToRootAsync());
             }
         }

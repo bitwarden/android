@@ -1,21 +1,19 @@
-﻿using Bit.Core.Abstractions;
-using Bit.Core.Models.Domain;
-using Bit.Core.Utilities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Bit.Core.Abstractions;
 using Bit.Core.Enums;
+using Bit.Core.Models.Domain;
+using Bit.Core.Utilities;
 using Zxcvbn;
 
 namespace Bit.Core.Services
 {
     public class PasswordGenerationService : IPasswordGenerationService
     {
-        private const string Keys_Options = "passwordGenerationOptions";
-        private const string Keys_History = "generatedPasswordHistory";
         private const int MaxPasswordsInHistory = 100;
         private const string LowercaseCharSet = "abcdefghijkmnopqrstuvwxyz";
         private const string UppercaseCharSet = "ABCDEFGHJKLMNPQRSTUVWXYZ";
@@ -23,7 +21,7 @@ namespace Bit.Core.Services
         private const string SpecialCharSet = "!@#$%^&*";
 
         private readonly ICryptoService _cryptoService;
-        private readonly IStorageService _storageService;
+        private readonly IStateService _stateService;
         private readonly ICryptoFunctionService _cryptoFunctionService;
         private readonly IPolicyService _policyService;
         private PasswordGenerationOptions _defaultOptions = new PasswordGenerationOptions(true);
@@ -32,12 +30,12 @@ namespace Bit.Core.Services
 
         public PasswordGenerationService(
             ICryptoService cryptoService,
-            IStorageService storageService,
+            IStateService stateService,
             ICryptoFunctionService cryptoFunctionService,
             IPolicyService policyService)
         {
             _cryptoService = cryptoService;
-            _storageService = storageService;
+            _stateService = stateService;
             _cryptoFunctionService = cryptoFunctionService;
             _policyService = policyService;
         }
@@ -95,7 +93,7 @@ namespace Bit.Core.Services
             // Build out other character sets
             var allCharSet = string.Empty;
             var lowercaseCharSet = LowercaseCharSet;
-            if (options.Ambiguous.GetValueOrDefault())
+            if (options.AllowAmbiguousChar.GetValueOrDefault())
             {
                 lowercaseCharSet = string.Concat(lowercaseCharSet, "l");
             }
@@ -105,7 +103,7 @@ namespace Bit.Core.Services
             }
 
             var uppercaseCharSet = UppercaseCharSet;
-            if (options.Ambiguous.GetValueOrDefault())
+            if (options.AllowAmbiguousChar.GetValueOrDefault())
             {
                 uppercaseCharSet = string.Concat(uppercaseCharSet, "IO");
             }
@@ -115,7 +113,7 @@ namespace Bit.Core.Services
             }
 
             var numberCharSet = NumberCharSet;
-            if (options.Ambiguous.GetValueOrDefault())
+            if (options.AllowAmbiguousChar.GetValueOrDefault())
             {
                 numberCharSet = string.Concat(numberCharSet, "01");
             }
@@ -158,6 +156,12 @@ namespace Bit.Core.Services
             }
 
             return password.ToString();
+        }
+
+        public void ClearCache()
+        {
+            _optionsCache = null;
+            _history = null;
         }
 
         public async Task<string> GeneratePassphraseAsync(PasswordGenerationOptions options)
@@ -204,7 +208,7 @@ namespace Bit.Core.Services
         {
             if (_optionsCache == null)
             {
-                var options = await _storageService.GetAsync<PasswordGenerationOptions>(Keys_Options);
+                var options = await _stateService.GetPasswordGenerationOptionsAsync();
                 if (options == null)
                 {
                     _optionsCache = _defaultOptions;
@@ -380,7 +384,7 @@ namespace Bit.Core.Services
                 {
                     enforcedOptions.Capitalize = true;
                 }
-                
+
                 var includeNumber = GetPolicyBool(currentPolicy, "includeNumber");
                 if (includeNumber != null && (bool)includeNumber)
                 {
@@ -416,7 +420,7 @@ namespace Bit.Core.Services
             }
             return null;
         }
-        
+
         private string GetPolicyString(Policy policy, string key)
         {
             if (policy.Data.ContainsKey(key))
@@ -432,7 +436,7 @@ namespace Bit.Core.Services
 
         public async Task SaveOptionsAsync(PasswordGenerationOptions options)
         {
-            await _storageService.SaveAsync(Keys_Options, options);
+            await _stateService.SetPasswordGenerationOptionsAsync(options);
             _optionsCache = options;
         }
 
@@ -445,7 +449,7 @@ namespace Bit.Core.Services
             }
             if (_history == null)
             {
-                var encrypted = await _storageService.GetAsync<List<GeneratedPasswordHistory>>(Keys_History);
+                var encrypted = await _stateService.GetEncryptedPasswordGenerationHistory();
                 _history = await DecryptHistoryAsync(encrypted);
             }
             return _history ?? new List<GeneratedPasswordHistory>();
@@ -473,13 +477,13 @@ namespace Bit.Core.Services
             }
             var newHistory = await EncryptHistoryAsync(currentHistory);
             token.ThrowIfCancellationRequested();
-            await _storageService.SaveAsync(Keys_History, newHistory);
+            await _stateService.SetEncryptedPasswordGenerationHistoryAsync(newHistory);
         }
 
-        public async Task ClearAsync()
+        public async Task ClearAsync(string userId = null)
         {
             _history = new List<GeneratedPasswordHistory>();
-            await _storageService.RemoveAsync(Keys_History);
+            await _stateService.SetEncryptedPasswordGenerationHistoryAsync(null, userId);
         }
 
         public Result PasswordStrength(string password, List<string> userInputs = null)
@@ -592,7 +596,7 @@ namespace Bit.Core.Services
             {
                 options.WordSeparator = options.WordSeparator[0].ToString();
             }
-            
+
             SanitizePasswordLength(options, false);
         }
 
@@ -679,13 +683,13 @@ namespace Bit.Core.Services
             if (options.Uppercase.GetValueOrDefault() && options.MinUppercase.GetValueOrDefault() <= 0)
             {
                 minUppercaseCalc = 1;
-            } 
+            }
             else if (!options.Uppercase.GetValueOrDefault())
             {
                 minUppercaseCalc = 0;
             }
 
-            if (options.Lowercase.GetValueOrDefault() && options.MinLowercase.GetValueOrDefault() <= 0) 
+            if (options.Lowercase.GetValueOrDefault() && options.MinLowercase.GetValueOrDefault() <= 0)
             {
                 minLowercaseCalc = 1;
             }
@@ -697,7 +701,7 @@ namespace Bit.Core.Services
             if (options.Number.GetValueOrDefault() && options.MinNumber.GetValueOrDefault() <= 0)
             {
                 minNumberCalc = 1;
-            } 
+            }
             else if (!options.Number.GetValueOrDefault())
             {
                 minNumberCalc = 0;
@@ -706,7 +710,7 @@ namespace Bit.Core.Services
             if (options.Special.GetValueOrDefault() && options.MinSpecial.GetValueOrDefault() <= 0)
             {
                 minSpecialCalc = 1;
-            } 
+            }
             else if (!options.Special.GetValueOrDefault())
             {
                 minSpecialCalc = 0;

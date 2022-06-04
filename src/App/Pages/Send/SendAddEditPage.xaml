@@ -2,6 +2,7 @@
 <pages:BaseContentPage
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
     x:Class="Bit.App.Pages.SendAddEditPage"
     xmlns:pages="clr-namespace:Bit.App.Pages"
     xmlns:u="clr-namespace:Bit.App.Utilities"
@@ -121,6 +122,7 @@
                                     Clicked="FileType_Clicked"
                                     AutomationProperties.IsInAccessibleTree="True"
                                     AutomationProperties.Name="{u:I18n File}"
+                                    AutomationProperties.HelpText="{Binding FileTypeAccessibilityLabel}"
                                     Grid.Column="0">
                                 </Button>
                                 <Button
@@ -132,6 +134,7 @@
                                     Clicked="TextType_Clicked"
                                     AutomationProperties.IsInAccessibleTree="True"
                                     AutomationProperties.Name="{u:I18n Text}"
+                                    AutomationProperties.HelpText="{Binding TextTypeAccessibilityLabel}"
                                     Grid.Column="1">
                                 </Button>
                             </Grid>
@@ -250,29 +253,33 @@
                         </StackLayout>
                         <StackLayout
                             Orientation="Horizontal"
-                            Spacing="0">
+                            Spacing="0"
+                            xct:TouchEffect.Command="{Binding ToggleOptionsCommand}"
+                            AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.Name="{Binding OptionsAccessilibityText}">
                             <Button
                                 Text="{u:I18n Options}"
                                 x:Name="_btnOptions"
                                 StyleClass="box-row-button"
                                 TextColor="{DynamicResource PrimaryColor}"
-                                Margin="0" />
+                                Margin="0"
+                                AutomationProperties.IsInAccessibleTree="False"/>
                             <controls:IconButton
                                 x:Name="_btnOptionsUp"
                                 Text="{Binding Source={x:Static core:BitwardenIcons.ChevronUp}}"
                                 StyleClass="box-row-button"
                                 TextColor="{DynamicResource PrimaryColor}"
-                                Clicked="ToggleOptions_Clicked"
-                                IsVisible="False" />
+                                IsVisible="{Binding ShowOptions}" 
+                                AutomationProperties.IsInAccessibleTree="False"/>
                             <controls:IconButton
                                 x:Name="_btnOptionsDown"
                                 Text="{Binding Source={x:Static core:BitwardenIcons.AngleDown}}"
                                 StyleClass="box-row-button"
                                 TextColor="{DynamicResource PrimaryColor}"
-                                Clicked="ToggleOptions_Clicked"
-                                IsVisible="False" />
+                                IsVisible="{Binding ShowOptions, Converter={StaticResource inverseBool}}" 
+                                AutomationProperties.IsInAccessibleTree="False"/>
                         </StackLayout>
-                        <StackLayout IsVisible="True">
+                        <StackLayout IsVisible="{Binding ShowOptions}">
                             <StackLayout
                                 StyleClass="box-row"
                                 Margin="0,10,0,0">
@@ -437,7 +444,8 @@
                                         Command="{Binding TogglePasswordCommand}"
                                         Margin="10,0,0,0"
                                         AutomationProperties.IsInAccessibleTree="True"
-                                        AutomationProperties.Name="{u:I18n ToggleVisibility}" />
+                                        AutomationProperties.Name="{u:I18n ToggleVisibility}"
+                                        AutomationProperties.HelpText="{Binding PasswordVisibilityAccessibilityText}" />
                                 </StackLayout>
                                 <Label
                                     Text="{u:I18n PasswordInfo}"

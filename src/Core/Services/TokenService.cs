@@ -1,136 +1,108 @@
-﻿using Bit.Core.Abstractions;
-using Bit.Core.Utilities;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Linq;
+using Bit.Core.Abstractions;
+using Bit.Core.Enums;
+using Bit.Core.Utilities;
+using Newtonsoft.Json.Linq;
 
 namespace Bit.Core.Services
 {
     public class TokenService : ITokenService
     {
-        private readonly IStorageService _storageService;
+        private readonly IStateService _stateService;
 
-        private string _token;
-        private JObject _decodedToken;
-        private string _refreshToken;
+        private string _accessTokenForDecoding;
+        private JObject _decodedAccessToken;
 
-        private const string Keys_AccessToken = "accessToken";
-        private const string Keys_RefreshToken = "refreshToken";
-        private const string Keys_TwoFactorTokenFormat = "twoFactorToken_{0}";
-
-        public TokenService(IStorageService storageService)
+        public TokenService(IStateService stateService)
         {
-            _storageService = storageService;
+            _stateService = stateService;
         }
 
         public async Task SetTokensAsync(string accessToken, string refreshToken)
         {
             await Task.WhenAll(
-                SetTokenAsync(accessToken),
+                SetAccessTokenAsync(accessToken),
                 SetRefreshTokenAsync(refreshToken));
         }
 
-        public async Task SetTokenAsync(string token)
+        public async Task SetAccessTokenAsync(string accessToken, bool forDecodeOnly = false)
         {
-            _token = token;
-            _decodedToken = null;
-
-            if (await SkipTokenStorage())
+            _accessTokenForDecoding = accessToken;
+            _decodedAccessToken = null;
+            if (!forDecodeOnly)
             {
-                // If we have a vault timeout and the action is log out, don't store token
-                return;
+                await _stateService.SetAccessTokenAsync(accessToken, await SkipTokenStorage());
             }
-            
-            await _storageService.SaveAsync(Keys_AccessToken, token);
         }
 
         public async Task<string> GetTokenAsync()
         {
-            if (_token != null)
-            {
-                return _token;
-            }
-            _token = await _storageService.GetAsync<string>(Keys_AccessToken);
-            return _token;
+            _accessTokenForDecoding = await _stateService.GetAccessTokenAsync();
+            return _accessTokenForDecoding;
         }
 
         public async Task SetRefreshTokenAsync(string refreshToken)
         {
-            _refreshToken = refreshToken;
-
-            if (await SkipTokenStorage())
-            {
-                // If we have a vault timeout and the action is log out, don't store token
-                return;
-            }
-            
-            await _storageService.SaveAsync(Keys_RefreshToken, refreshToken);
+            await _stateService.SetRefreshTokenAsync(refreshToken, await SkipTokenStorage());
         }
 
         public async Task<string> GetRefreshTokenAsync()
         {
-            if (_refreshToken != null)
-            {
-                return _refreshToken;
-            }
-            _refreshToken = await _storageService.GetAsync<string>(Keys_RefreshToken);
-            return _refreshToken;
+            return await _stateService.GetRefreshTokenAsync();
         }
 
         public async Task ToggleTokensAsync()
         {
+            // load and re-save tokens to reflect latest value of SkipTokenStorage()
             var token = await GetTokenAsync();
             var refreshToken = await GetRefreshTokenAsync();
-            if (await SkipTokenStorage())
-            {
-                await ClearTokenAsync();
-                _token = token;
-                _refreshToken = refreshToken;
-                return;
-            }
-
-            await SetTokenAsync(token);
+            await SetAccessTokenAsync(token);
             await SetRefreshTokenAsync(refreshToken);
         }
 
         public async Task SetTwoFactorTokenAsync(string token, string email)
         {
-            await _storageService.SaveAsync(string.Format(Keys_TwoFactorTokenFormat, email), token);
+            await _stateService.SetTwoFactorTokenAsync(token, email);
         }
 
         public async Task<string> GetTwoFactorTokenAsync(string email)
         {
-            return await _storageService.GetAsync<string>(string.Format(Keys_TwoFactorTokenFormat, email));
+            return await _stateService.GetTwoFactorTokenAsync(email);
         }
 
         public async Task ClearTwoFactorTokenAsync(string email)
         {
-            await _storageService.RemoveAsync(string.Format(Keys_TwoFactorTokenFormat, email));
+            await _stateService.SetTwoFactorTokenAsync(null, email);
         }
 
-        public async Task ClearTokenAsync()
+        public async Task ClearTokenAsync(string userId = null)
         {
-            _token = null;
-            _decodedToken = null;
-            _refreshToken = null;
+            ClearCache();
             await Task.WhenAll(
-                _storageService.RemoveAsync(Keys_AccessToken),
-                _storageService.RemoveAsync(Keys_RefreshToken));
+                _stateService.SetAccessTokenAsync(null, false, userId),
+                _stateService.SetRefreshTokenAsync(null, false, userId));
+        }
+
+        public void ClearCache()
+        {
+            _accessTokenForDecoding = null;
+            _decodedAccessToken = null;
         }
 
         public JObject DecodeToken()
         {
-            if (_decodedToken != null)
+            if (_decodedAccessToken != null)
             {
-                return _decodedToken;
+                return _decodedAccessToken;
             }
-            if (_token == null)
+            if (_accessTokenForDecoding == null)
             {
-                throw new InvalidOperationException("Token not found.");
+                throw new InvalidOperationException("Access token not found.");
             }
-            var parts = _token.Split('.');
+            var parts = _accessTokenForDecoding.Split('.');
             if (parts.Length != 3)
             {
                 throw new InvalidOperationException("JWT must have 3 parts.");
@@ -140,8 +112,8 @@ namespace Bit.Core.Services
             {
                 throw new InvalidOperationException("Cannot decode the token.");
             }
-            _decodedToken = JObject.Parse(Encoding.UTF8.GetString(decodedBytes));
-            return _decodedToken;
+            _decodedAccessToken = JObject.Parse(Encoding.UTF8.GetString(decodedBytes));
+            return _decodedAccessToken;
         }
 
         public DateTime? GetTokenExpirationDate()
@@ -231,8 +203,16 @@ namespace Bit.Core.Services
             return decoded["iss"].Value<string>();
         }
 
-        public bool GetIsExternal()
+        public async Task<bool> GetIsExternal()
         {
+            if (_accessTokenForDecoding == null)
+            {
+                await GetTokenAsync();
+                if (_accessTokenForDecoding == null)
+                {
+                    return false;
+                }
+            }
             var decoded = DecodeToken();
             if (decoded?["amr"] == null)
             {
@@ -243,9 +223,9 @@ namespace Bit.Core.Services
 
         private async Task<bool> SkipTokenStorage()
         {
-            var timeout = await _storageService.GetAsync<int?>(Constants.VaultTimeoutKey);
-            var action = await _storageService.GetAsync<string>(Constants.VaultTimeoutActionKey);
-            return timeout.HasValue && action == "logOut";
+            var timeout = await _stateService.GetVaultTimeoutAsync();
+            var action = await _stateService.GetVaultTimeoutActionAsync();
+            return timeout.HasValue && action == VaultTimeoutAction.Logout;
         }
     }
 }

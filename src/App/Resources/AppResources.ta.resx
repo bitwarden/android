@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>நிச்சயமாக வெளியேற விரும்புகிறீரா?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>கணக்கை நீக்கு</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>இக்கணக்கை நிச்சயமாக நீக்க வேண்டுமா?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>கணக்கு ஏற்கனவே சேர்க்கப்பட்டது</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>அதற்கு இப்போது நிலைமாற விரும்புகிறீரா?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>பிரதான கடவுச்சொல்</value>
     <comment>Label for a master password.</comment>
@@ -1151,10 +1163,10 @@
     <value>தன்னிரப்பி அணுகல்தன்மை சேவை</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>Bitwarden தன்னிரப்பி சேவை உள்நுழைவுகள், கடனட்டைகள், மற்றும் அடையாள தகவலை உம் சாதனத்திலிருக்கும் பிற செயலிகளினுள்ளே நிரப்புதலில் உதவ Android தன்னிரப்பி சட்டகத்தை பயன்படுத்துகிறது.</value>
+    <value>Bitwarden தன்னிரப்பி சேவை உள்நுழைவு தகவலை உம் சாதனத்திலிருக்கும் பிற செயலிகளினுள்ளே நிரப்ப உதவ Android தன்னிரப்பி சட்டகத்தைப் பயன்படுத்துகிறது.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>உள்நுழைவுகள், கடனட்டைகள், மற்றும் அடையாள தகவலை பிற செயலிகளினுள்ளே நிரப்ப Bitwarden தன்னிரப்பி சேவையை பயன்படுத்து.</value>
+    <value>பிற செயலிகளினுள்ளே உள்நுழைவு தகவலை நிரப்ப Bitwarden தன்னிரப்பி சேவை பயன்படுத்து.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>தன்னிரப்பல் அமைவுகளைத் திற</value>
@@ -1288,7 +1300,7 @@
     <value>௧. iOS "அமைவுகள்" செயலிக்குச் செல்</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. "கடவுச்சொற்கள் &amp; கணக்குகள்"ஐத் தட்டு</value>
+    <value>2. "கடவுச்சொற்கள்"ஐத் தட்டு</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
     <value>3. "கடவுச்சொற்கள் தன்னிரப்பல்"ஐத் தட்டு</value>
@@ -1558,7 +1570,7 @@
     <value>செயலி மறுதொடக்கத்தில்</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>Auto-fill makes it easy to securely access your Bitwarden vault from other websites and apps. It looks like you have not enabled an auto-fill service for Bitwarden. Enable auto-fill for Bitwarden from the "Settings" screen.</value>
+    <value>மற்ற வலைத்தளங்கள் மற்றும் செயலிகளிலிருந்து உம் Bitwarden பெட்டகத்தைப் பாதுகாப்பாக அணுகுவதைத் தன்னிரப்பி எளிதாக்கும். நீங்கள் Bitwardenற்கு தன்னிரப்பி சேவையை இயக்கவில்லை போலும். "அமைவுகள்" திரையில் Bitwardenற்கு தன்னிரப்பியை இயக்குக.</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
     <value>உமது தோற்ற மாற்றங்கள்  செயலி மறுதுவக்கும்போது செயலாகும்.</value>
@@ -1725,10 +1737,10 @@
     <value>கீழ் இழுக்கும் சைகையுடன் பெட்டகத்தை ஒத்திசைத்தல்.</value>
   </data>
   <data name="LogInSso" xml:space="preserve">
-    <value>Enterprise Single Sign-On</value>
+    <value>முனைவகம் ஒற்றை உள்நுழைவு(SSO)</value>
   </data>
   <data name="LogInSsoSummary" xml:space="preserve">
-    <value>Quickly log in using your organization's single sign-on portal. Please enter your organization's identifier to begin.</value>
+    <value>உம் நிறுவனத்தின் ஒற்றை உள்நுழைவு புறையத்துடன் விரைவாக உள்நுழை. தொடங்க உம் நிறுவன அடையாளங்காட்டியை உள்ளிடவும்.</value>
   </data>
   <data name="OrgIdentifier" xml:space="preserve">
     <value>நிறுவன அடையாளங்காட்டி</value>
@@ -1794,22 +1806,22 @@
     <value>உள்ளக தன்னிரப்பி பயன்படுத்து</value>
   </data>
   <data name="InlineAutofillDescription" xml:space="preserve">
-    <value>Use inline autofill if your selected IME (keyboard) supports it. If your configuration is not supported (or this option is disabled), the default Autofill overlay will be used.</value>
+    <value>உம் தேர்ந்தெடுத்த IME (விசைப்பலகை) ஆதரித்தால் உள்வரி தன்னிரப்பி பயன்படுத்துக. உம் உள்ளமைவு ஆதரிக்கப்படவில்லையெனில் (அ இவ்விருப்பம் முடங்கியிருப்பின்), இயல்பிருப்பு தன்னிரப்பி மேலடுக்கு பயன்படுத்தப்படும்.</value>
   </data>
   <data name="Accessibility" xml:space="preserve">
     <value>அணுகல்தன்மை பயன்படுத்து</value>
   </data>
   <data name="AccessibilityDescription" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. When enabled, we'll display a popup when login fields are selected.</value>
+    <value>செயலிகளிலும் இணையம் முழுதுமுள்ள உமது உள்நுழைவுகளைத் தன்னிரப்ப Bitwarden அணுகல்தன்மை சேவை பயன்படுத்து. இயக்கப்பட்டால், உள்நுழைவு புலங்கள் தேர்ந்தெடுக்கப்படும்போது நாங்கள் ஒரு popup காட்டுவோம்.</value>
   </data>
   <data name="AccessibilityDescription2" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. (Requires Draw-Over to be enabled as well)</value>
+    <value>செயலிகளிலும் இணையம் முழுதுமுள்ள உமது உள்நுழைவுகளைத் தன்னிரப்ப Bitwarden அணுகல்தன்மை சேவை பயன்படுத்து. (மேலே-வரைதலும் இயங்க வேண்டும்)</value>
   </data>
   <data name="AccessibilityDescription3" xml:space="preserve">
-    <value>Use the Bitwarden Accessibility Service to use the Autofill Quick-Action Tile, and/or show a popup using Draw-Over (if enabled).</value>
+    <value>தன்னிரப்பு விரைவுச்செயல் ஓடு பயன்படுத்த மற்றும்/அல்லது மேலே-வரைதல்(இயங்கினால்) கொண்டு popup காட்ட Bitwarden அணுகல்தன்மை சேவை பயன்படுத்து.</value>
   </data>
   <data name="AccessibilityDescription4" xml:space="preserve">
-    <value>Required to use the Autofill Quick-Action Tile, or to augment the Autofill Service by using Draw-Over (if enabled).</value>
+    <value>தன்னிரப்பு விரைவுச்செயல் ஓடு பயன்படுத்தவோ மேலே-வரைதல்(இயங்கினால்) கொண்டு தன்னிரப்பிச் சேவையை ஆதரவுமிகுதியாக்கவோ தேவைப்படுகிறது.</value>
   </data>
   <data name="DrawOver" xml:space="preserve">
     <value>மேலே-வரைதல் பயன்படுத்து</value>
@@ -1818,13 +1830,13 @@
     <value>இயக்கினால், உள்நுழைவு புலங்கள் தேர்ந்தெடுக்கப்படும்போது ஒரு popup காண்பிக்க  Bitwarden அணுகல்தன்மை சேவையை அனுமதிக்கிறது.</value>
   </data>
   <data name="DrawOverDescription2" xml:space="preserve">
-    <value>If enabled, the Bitwarden Accessibility Service will display a popup when login fields are selected to assist with auto-filling your logins.</value>
+    <value>இயக்கினால், உள்நுழைவு புலங்கள் தேர்ந்தெடுக்கப்படும்போது உமது உள்நுழைவுகளைத் தன்னிரப்ப உதவ Bitwarden அணுகல்தன்மை சேவை ஒரு popup காண்பிக்கும்.</value>
   </data>
   <data name="DrawOverDescription3" xml:space="preserve">
-    <value>If enabled, accessibility will show a popup to augment the Autofill Service for older apps that don't support the Android Autofill Framework.</value>
+    <value>இயக்கினால், Android தன்னிரப்பி சட்டகத்தை ஆதரிக்காப் பழைய செயலிகளுக்காகத் தன்னிரப்பி சேவையை ஆதரவுமிகுதியாக்க, அணுகல்தன்மை ஒரு popup காட்டும்.</value>
   </data>
   <data name="PersonalOwnershipSubmitError" xml:space="preserve">
-    <value>Due to an Enterprise Policy, you are restricted from saving items to your personal vault. Change the Ownership option to an organization and choose from available Collections.</value>
+    <value>முனைவகக் கொள்கை காரணமாக, உருப்படிகளை உம் சொந்த பெட்டகத்தில் சேமிப்பதிலிருந்து கட்டுப்படுத்தப்படுகிறீர். உரிமை விருப்பத்தை நிறுவனத்திற்கு மாற்றிக் கிடைக்கும் தொகுப்புகளிலிருந்து தேர்வுசெய்க.</value>
   </data>
   <data name="PersonalOwnershipPolicyInEffect" xml:space="preserve">
     <value>ஒரு நிறுவன கொள்கை உம் உரிமை விருப்பங்களைப் பாதிக்கிறது.</value>
@@ -1924,7 +1936,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>இந்த Send-ஐ முடக்குக எனவே யாரும் இதை அணுக இயலாது.</value>
+    <value>இந்த Send-ஐ முடக்குக எனவே யாருமிதை அணுகவியலாது</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
@@ -1992,7 +2004,7 @@
     <value>தனிபயன்</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
-    <value>சேமிப்பின்மீது இந்த Send ஐ பகிர்.</value>
+    <value>சேமிக்கையில் இந்த Send ஐப் பகிர்</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
@@ -2004,7 +2016,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
-    <value>பெருநர்களிடமிருந்து என் மின்னஞ்சல் முகவரியை மறை.</value>
+    <value>பெறுநர்களிடமிருந்து என் மின்னஞ்சல் முகவரியை மறை</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
     <value>ஒன்று அ மேற்பட்ட நிறுவன கொள்கைகள் உமது Send தெரிவுகளை பாதிக்கிறது.</value>
@@ -2034,7 +2046,7 @@
     <value>கேப்ட்ச்சா தோல்வி. மீண்டும் முயலவும்.</value>
   </data>
   <data name="UpdatedMasterPassword" xml:space="preserve">
-    <value>Updated Master Password</value>
+    <value>புதுப்பிக்கப்பட்ட பிரதான கடவுச்சொல்</value>
   </data>
   <data name="UpdateMasterPassword" xml:space="preserve">
     <value>பிரதான கடவுச்சொல்லைப் புதுப்பி</value>
@@ -2082,7 +2094,7 @@
     <value>தயவுசெய்து உம் இயல்புநிலை உலாவி WebAuthn-ஐ ஆதரிக்குமென்பதை உறுதிப்படுத்தி மீண்டும் முயலவும்.</value>
   </data>
   <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
-    <value>This organization has an enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password.</value>
+    <value>உம்மைத் தானாகக் கடவுச்சொல் அகரமாக்கலில் சேர்க்கும் முனைவகக் கொள்கை இந்நிறுவனத்திடமுள்ளது. சேர்க்கையானது உம் பிரதான கடவுச்சொல்லை நிறுவன நிர்வாகிகள் மாற்ற அனுமதிக்கும்.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
     <value>உம் நிறுவன கொள்கைகள் உம் பெட்டக நேரமுடிவைப் பாதிக்கிறது. அனுமதிக்கப்பட்ட அதிகபட்ச பெட்டக நேரமுடிவு {0} மணிநேரம் மற்றும் {1} நிமிடம(கள்) ஆகும்</value>
@@ -2092,6 +2104,30 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>ஒன்று அ மேற்பட்ட நிறுவன கொள்கைகள் உம் சொந்த பெட்டகத்தை ஏற்றுமதிசெய்வதைத் தவிர்க்கிறது.</value>
+  </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>கணக்கைச் சேர்</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>பூட்டவிழ்க்கப்பட்டது</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>பூட்டப்பட்டது</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>விடுபதியப்பட்டது</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>அடுத்து கிடைத்த கணக்கிற்கு நிலைமாறியது</value>
+  </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>Account Locked</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>Account logged out successfully</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>Account removed successfully</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>கணக்கை அழி</value>

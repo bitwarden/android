@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Segur que voleu tancar la sessió?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Suprimeix el compte</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Voleu suprimir el compte?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>El compte ja s'ha afegit</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>T'agradaria canviar-lo ara?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Contrasenya mestra</value>
     <comment>Label for a master password.</comment>
@@ -2091,6 +2103,30 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Una o més polítiques d'organització us impedeixen exportar la vostra caixa forta.</value>
+  </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Afig compte</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Desbloquejat</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Bloquejat</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Sessió tancada</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>S'ha canviat al següent compte disponible</value>
+  </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>Compte bloquejat</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>El compte s'ha tancat correctament</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>El compte s'ha suprimit correctament</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Suprimeix el compte</value>

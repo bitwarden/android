@@ -105,7 +105,7 @@
         <Setter Property="TextColor"
                 Value="{DynamicResource ButtonTextColor}" />
         <Setter Property="FontSize"
-                Value="18" />
+                Value="Medium" />
         <Setter Property="Margin"
                 Value="0, 5, 0, 0" />
         <Setter Property="VisualStateManager.VisualStateGroups">
@@ -143,7 +143,7 @@
         <Setter Property="TextColor"
                 Value="{DynamicResource ButtonPrimaryTextColor}" />
         <Setter Property="FontSize"
-                Value="18" />
+                Value="Medium" />
         <Setter Property="FontAttributes"
                 Value="Bold" />
         <Setter Property="Margin"
@@ -319,6 +319,16 @@
                 Value="37" />
         <Setter Property="FontSize"
                 Value="25" />
+    </Style>
+    <Style TargetType="Label"
+           Class="accountlist-title-platform"
+           ApplyToDerivedTypes="True">
+    </Style>
+    <Style TargetType="Label"
+           Class="accountlist-sub-platform"
+           ApplyToDerivedTypes="True">
+        <Setter Property="FontSize"
+                Value="Small" />
     </Style>
 
     <!-- Box -->

@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AppCenter.Crashes;
+using Bit.Core.Abstractions;
+using Bit.Core.Utilities;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -13,6 +14,8 @@ namespace Bit.App.Pages
 
         private CancellationTokenSource _autofocusCts;
         private Task _continuousAutofocusTask;
+
+        private readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
 
         public ScanPage(Action<string> callback)
         {
@@ -61,9 +64,7 @@ namespace Bit.App.Pages
                 catch (TaskCanceledException) { }
                 catch (Exception ex)
                 {
-#if !FDROID
-                    Crashes.TrackError(ex);
-#endif
+                    _logger.Value.Exception(ex);
                 }
             }, autofocusCts.Token);
         }
