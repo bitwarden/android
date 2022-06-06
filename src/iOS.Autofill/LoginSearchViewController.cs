@@ -36,6 +36,7 @@ namespace Bit.iOS.Autofill
             if (!ThemeHelpers.LightTheme)
             {
                 SearchBar.KeyboardAppearance = UIKeyboardAppearance.Dark;
+                SearchBar.ApplyDarkThemesColors();
             }
 
             TableView.RowHeight = UITableView.AutomaticDimension;
