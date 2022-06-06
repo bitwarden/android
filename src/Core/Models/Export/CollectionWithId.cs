@@ -10,7 +10,7 @@ namespace Bit.Core.Models.Export
             Id = obj.Id;
         }
 
-        public CollectionWithId(Domain.Collection obj): base(obj)
+        public CollectionWithId(Domain.Collection obj) : base(obj)
         {
             Id = obj.Id;
         }

@@ -1,11 +1,11 @@
-using AutoFixture;
+﻿using AutoFixture;
+using Bit.Core.Enums;
 using Bit.Core.Models.Api;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
 using Bit.Core.Models.Response;
 using Bit.Core.Models.View;
-using Bit.Core.Enums;
 
 namespace Bit.Core.Test.AutoFixture
 {

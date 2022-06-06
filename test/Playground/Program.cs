@@ -1,6 +1,6 @@
-﻿using Bit.Core.Services;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using Bit.Core.Services;
 
 namespace Bit.Playground
 {

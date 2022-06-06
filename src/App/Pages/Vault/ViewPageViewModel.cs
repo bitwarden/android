@@ -5,16 +5,12 @@ using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Bit.App.Utilities;
+using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Bit.Core;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -23,7 +19,7 @@ namespace Bit.App.Pages
     {
         private readonly IDeviceActionService _deviceActionService;
         private readonly ICipherService _cipherService;
-        private readonly IUserService _userService;
+        private readonly IStateService _stateService;
         private readonly ITotpService _totpService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IAuditService _auditService;
@@ -53,7 +49,7 @@ namespace Bit.App.Pages
         {
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
-            _userService = ServiceContainer.Resolve<IUserService>("userService");
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _totpService = ServiceContainer.Resolve<ITotpService>("totpService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _auditService = ServiceContainer.Resolve<IAuditService>("auditService");
@@ -124,7 +120,8 @@ namespace Bit.App.Pages
             set => SetProperty(ref _showPassword, value,
                 additionalPropertyNames: new string[]
                 {
-                    nameof(ShowPasswordIcon)
+                    nameof(ShowPasswordIcon),
+                    nameof(PasswordVisibilityAccessibilityText)
                 });
         }
         public bool ShowCardNumber
@@ -217,6 +214,7 @@ namespace Bit.App.Pages
         public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public string ShowCardNumberIcon => ShowCardNumber ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public string ShowCardCodeIcon => ShowCardCode ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
+        public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
         public string TotpCodeFormatted
         {
             get => _totpCodeFormatted;
@@ -237,7 +235,7 @@ namespace Bit.App.Pages
             set
             {
                 SetProperty(ref _totpLow, value);
-                Page.Resources["textTotp"] =  ThemeManager.Resources()[value ? "text-danger" : "text-default"];
+                Page.Resources["textTotp"] = ThemeManager.Resources()[value ? "text-danger" : "text-default"];
             }
         }
         public bool IsDeleted => Cipher.IsDeleted;
@@ -253,7 +251,7 @@ namespace Bit.App.Pages
                 return false;
             }
             Cipher = await cipher.DecryptAsync();
-            CanAccessPremium = await _userService.CanAccessPremiumAsync();
+            CanAccessPremium = await _stateService.CanAccessPremiumAsync();
             Fields = Cipher.Fields?.Select(f => new ViewPageFieldViewModel(this, Cipher, f)).ToList();
 
             if (Cipher.Type == Core.Enums.CipherType.Login && !string.IsNullOrWhiteSpace(Cipher.Login.Totp) &&
@@ -289,7 +287,7 @@ namespace Bit.App.Pages
 
         public async void TogglePassword()
         {
-            if (! await PromptPasswordAsync())
+            if (!await PromptPasswordAsync())
             {
                 return;
             }
@@ -617,7 +615,7 @@ namespace Bit.App.Pages
             _attachmentData = null;
             _attachmentFilename = null;
         }
-        
+
         private async void CopyAsync(string id, string text = null)
         {
             if (_passwordRepromptService.ProtectedFields.Contains(id) && !await PromptPasswordAsync())
@@ -758,12 +756,12 @@ namespace Bit.App.Pages
             {
                 if (IsBooleanType)
                 {
-                    return _field.Value == "true" ? "" : "";
+                    return _field.Value == "true" ? BitwardenIcons.Square : BitwardenIcons.CheckSquare;
                 }
                 else if (IsLinkedType)
                 {
                     var i18nKey = _cipher.LinkedFieldI18nKey(Field.LinkedId.GetValueOrDefault());
-                    return " " + _i18nService.T(i18nKey);
+                    return BitwardenIcons.Link + _i18nService.T(i18nKey);
                 }
                 else
                 {
@@ -771,6 +769,8 @@ namespace Bit.App.Pages
                 }
             }
         }
+
+        public FormattedString ColoredHiddenValue => PasswordFormatter.FormatPassword(_field.Value);
 
         public Command ToggleHiddenValueCommand { get; set; }
 

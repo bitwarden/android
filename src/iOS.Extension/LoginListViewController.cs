@@ -9,8 +9,8 @@ using MobileCoreServices;
 using Bit.iOS.Core.Controllers;
 using Bit.App.Resources;
 using Bit.iOS.Core.Views;
+using Bit.App.Abstractions;
 using Bit.Core.Utilities;
-using Bit.Core.Abstractions;
 
 namespace Bit.iOS.Extension
 {
@@ -20,10 +20,12 @@ namespace Bit.iOS.Extension
             : base(handle)
         {
             DismissModalAction = Cancel;
+            PasswordRepromptService = ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService");
         }
 
         public Context Context { get; set; }
         public LoadingViewController LoadingController { get; set; }
+        public IPasswordRepromptService PasswordRepromptService { get; private set; }
 
         public async override void ViewDidLoad()
         {
@@ -106,7 +108,7 @@ namespace Bit.iOS.Extension
                 _controller = controller;
             }
 
-            public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
+            public async override void RowSelected(UITableView tableView, NSIndexPath indexPath)
             {
                 tableView.DeselectRow(indexPath, true);
                 tableView.EndEditing(true);
@@ -124,12 +126,15 @@ namespace Bit.iOS.Extension
                     return;
                 }
 
+                if (item.Reprompt != Bit.Core.Enums.CipherRepromptType.None && !await _controller.PasswordRepromptService.ShowPasswordPromptAsync())
+                {
+                    return;
+                }
+
                 if (_controller.CanAutoFill() && !string.IsNullOrWhiteSpace(item.Password))
                 {
                     string totp = null;
-                    var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
-                    var disableTotpCopy = storageService.GetAsync<bool?>(
-                        Bit.Core.Constants.DisableAutoTotpCopyKey).GetAwaiter().GetResult();
+                    var disableTotpCopy = _stateService.GetDisableAutoTotpCopyAsync().GetAwaiter().GetResult();
                     if (!disableTotpCopy.GetValueOrDefault(false))
                     {
                         totp = GetTotpAsync(item).GetAwaiter().GetResult();

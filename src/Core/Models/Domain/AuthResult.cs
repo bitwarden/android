@@ -1,5 +1,5 @@
-﻿using Bit.Core.Enums;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Bit.Core.Enums;
 
 namespace Bit.Core.Models.Domain
 {

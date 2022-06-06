@@ -14,7 +14,7 @@ using Xamarin.Forms;
 namespace Bit.App.Services
 {
     public class MobilePlatformUtilsService : IPlatformUtilsService
-    { 
+    {
         private static readonly Random _random = new Random();
 
         private const int DialogPromiseExpiration = 600000; // 10 minutes

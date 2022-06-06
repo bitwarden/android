@@ -12,6 +12,12 @@
 <autofill-service xmlns:android="http://schemas.android.com/apk/res/android"
     android:supportsInlineSuggestions="true">
   <compatibility-package
+    android:name="alook.browser"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
+    android:name="alook.browser.google"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
     android:name="com.amazon.cloud9"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package

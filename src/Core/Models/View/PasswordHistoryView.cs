@@ -1,5 +1,5 @@
-﻿using Bit.Core.Models.Domain;
-using System;
+﻿using System;
+using Bit.Core.Models.Domain;
 
 namespace Bit.Core.Models.View
 {
@@ -11,7 +11,7 @@ namespace Bit.Core.Models.View
         {
             LastUsedDate = ph.LastUsedDate;
         }
-        
+
         public string Password { get; set; }
         public DateTime LastUsedDate { get; set; }
     }

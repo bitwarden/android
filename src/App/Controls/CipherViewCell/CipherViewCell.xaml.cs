@@ -1,11 +1,16 @@
 ﻿using System;
+using Bit.App.Abstractions;
 using Bit.Core.Models.View;
+using Bit.Core.Utilities;
 using Xamarin.Forms;
 
 namespace Bit.App.Controls
 {
     public partial class CipherViewCell : ExtendedGrid
     {
+        private const int ICON_COLUMN_DEFAULT_WIDTH = 40;
+        private const int ICON_IMAGE_DEFAULT_WIDTH = 22;
+
         public static readonly BindableProperty CipherProperty = BindableProperty.Create(
             nameof(Cipher), typeof(CipherView), typeof(CipherViewCell), default(CipherView), BindingMode.OneWay);
 
@@ -18,6 +23,11 @@ namespace Bit.App.Controls
         public CipherViewCell()
         {
             InitializeComponent();
+
+            var fontScale = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService").GetSystemFontSizeScale();
+            _iconColumn.Width = new GridLength(ICON_COLUMN_DEFAULT_WIDTH * fontScale, GridUnitType.Absolute);
+            _iconImage.WidthRequest = ICON_IMAGE_DEFAULT_WIDTH * fontScale;
+            _iconImage.HeightRequest = ICON_IMAGE_DEFAULT_WIDTH * fontScale;
         }
 
         public bool? WebsiteIconsEnabled

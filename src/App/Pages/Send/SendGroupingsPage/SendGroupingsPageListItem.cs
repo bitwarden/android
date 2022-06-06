@@ -5,7 +5,7 @@ using Bit.Core.Models.View;
 
 namespace Bit.App.Pages
 {
-    public class SendGroupingsPageListItem
+    public class SendGroupingsPageListItem : ISendGroupingsPageListItem
     {
         private string _icon;
         private string _name;

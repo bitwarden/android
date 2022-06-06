@@ -196,7 +196,7 @@
     <value>Inviaci un'email per ottenere aiuto o fare una segnalazione.</value>
   </data>
   <data name="EnterPIN" xml:space="preserve">
-    <value>Inserisci il tuo PIN.</value>
+    <value>Digita il tuo PIN.</value>
   </data>
   <data name="Favorites" xml:space="preserve">
     <value>Preferiti</value>
@@ -247,7 +247,7 @@
     <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
-    <value>Connessione ad Internet richiesta</value>
+    <value>Connessione a Internet richiesta</value>
     <comment>Title for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InvalidMasterPassword" xml:space="preserve">
@@ -274,6 +274,18 @@
   </data>
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Sei sicuro di volerti disconnettere?</value>
+  </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Rimuovi account</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Sei sicuro di voler rimuovere questo account?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Account già aggiunto</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Vuoi passarci adesso?</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Password principale</value>
@@ -366,7 +378,7 @@
     <value>Verifica impronta</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
-    <value>Verifica Password Principale</value>
+    <value>Verifica password principale</value>
   </data>
   <data name="VerifyPIN" xml:space="preserve">
     <value>Verifica PIN</value>
@@ -381,7 +393,7 @@
     <value>Visita il nostro sito</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Visita il nostro sito per ottenere aiuto, notizie, mandarci una email e/o imparare di più su come usare Bitwarden.</value>
+    <value>Visita il nostro sito per ottenere aiuto, notizie, mandarci un'email e/o imparare di più su come usare Bitwarden.</value>
   </data>
   <data name="Website" xml:space="preserve">
     <value>Sito web</value>
@@ -418,7 +430,7 @@
     <value>Il modo più semplice per aggiungere nuovi login alla tua cassaforte è dall'estensione dell'applicazione Bitwarden. Scopri di più sull'utilizzo dell'estensione dell'applicazione Bitwarden navigando nella schermata "Impostazioni".</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>Usa Bitwarden su Safari e altre app per auto-completare i tuoi login.</value>
+    <value>Usa Bitwarden su Safari e altre applicazioni per auto-completare i tuoi login.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
     <value>Servizio auto-completamento di Bitwarden</value>
@@ -436,7 +448,7 @@
     <value>Cambia password principale</value>
   </data>
   <data name="ChangePasswordConfirmation" xml:space="preserve">
-    <value>Puoi cambiare la tua password principale solo sulla cassaforte online di bitwarden.com. Vuoi visitare ora il sito?</value>
+    <value>Puoi cambiare la tua password principale solo sulla cassaforte in linea di bitwarden.com. Vuoi visitare ora il sito?</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Chiudi</value>
@@ -455,7 +467,7 @@
     <value>Modifica elemento</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
-    <value>Abilita la sincronizzazione automatica</value>
+    <value>Abilita sincronizzazione automatica</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
     <value>Inserisci l'indirizzo email del tuo account per ricevere il suggerimento della password principale.</value>
@@ -467,7 +479,7 @@
     <value>Quasi fatto!</value>
   </data>
   <data name="ExtensionEnable" xml:space="preserve">
-    <value>Abilita l'Estensione App</value>
+    <value>Abilita l'estensione dell'applicazione</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
     <value>Su Safari, trova Bitwarden utilizzando l'icona di condivisione (suggerimento: scorri a destra sulla riga inferiore del menu).</value>
@@ -477,7 +489,7 @@
     <value>Ottieni accesso immediato alle tue password!</value>
   </data>
   <data name="ExtensionReady" xml:space="preserve">
-    <value>Sei pronto a fare il login!</value>
+    <value>Sei pronto ad accedere!</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
     <value>I tuoi login sono ora facilmente accessibili da Safari, Chrome e altre applicazioni supportate.</value>
@@ -498,10 +510,10 @@
     <value>Impronta</value>
   </data>
   <data name="GeneratePassword" xml:space="preserve">
-    <value>Genera Password</value>
+    <value>Genera password</value>
   </data>
   <data name="GetPasswordHint" xml:space="preserve">
-    <value>Ottenere il suggerimento per la password principale</value>
+    <value>Ottieni il suggerimento per la password principale</value>
   </data>
   <data name="ImportItems" xml:space="preserve">
     <value>Importa elementi</value>
@@ -543,7 +555,7 @@
     <value>Azione timeout cassaforte</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
-    <value>La disconnessione rimuove tutti gli accessi alla tua cassaforte e richiede l'autenticazione online dopo il periodo di scadenza. Sei sicuro di voler utilizzare questa impostazione?</value>
+    <value>La disconnessione rimuove tutti gli accessi alla tua cassaforte e richiede l'autenticazione in linea dopo il periodo di scadenza. Sei sicuro di voler utilizzare questa impostazione?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>Connessione in corso...</value>
@@ -562,10 +574,10 @@
     <value>La password principale è la password che utilizzi per accedere alla tua cassaforte. È molto importante che tu non la dimentichi. Non c'è modo di recuperare questa password nel caso che tu la dimenticassi.</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
-    <value>Indizio per la Password Principale (opzionale)</value>
+    <value>Suggerimento per la password principale (facoltativo)</value>
   </data>
   <data name="MasterPasswordHintDescription" xml:space="preserve">
-    <value>Un indizio per la password principale può aiutarti a ricordarla nel caso te la dimenticassi.</value>
+    <value>Un suggerimento per la password principale può aiutarti a ricordarla nel caso la dimenticassi.</value>
   </data>
   <data name="MasterPasswordLengthValMessage" xml:space="preserve">
     <value>La password principale deve essere lunga almeno 8 caratteri.</value>
@@ -582,7 +594,7 @@
     <value>Altre impostazioni</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>È necessario accedere all'app di Bitwarden principale prima di poter utilizzare l'estensione.</value>
+    <value>È necessario accedere all'applicazione principale di Bitwarden prima di poter utilizzare l'estensione.</value>
   </data>
   <data name="Never" xml:space="preserve">
     <value>Mai</value>
@@ -607,7 +619,7 @@
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>Le opzioni predefinite sono impostate dal generatore di password dell'app principale Bitwarden.</value>
+    <value>Le opzioni predefinite sono impostate dal generatore di password dell'applicazione principale Bitwarden.</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>Opzioni</value>
@@ -619,7 +631,7 @@
     <value>Password generata.</value>
   </data>
   <data name="PasswordGenerator" xml:space="preserve">
-    <value>Generatore di Password</value>
+    <value>Generatore di password</value>
   </data>
   <data name="PasswordHint" xml:space="preserve">
     <value>Suggerimento password</value>
@@ -644,7 +656,7 @@
     <value>Rigenera password</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
-    <value>Ri-digita la tua password principale</value>
+    <value>Ri-digita la password principale</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
     <value>Cerca nella cassaforte</value>
@@ -659,7 +671,7 @@
     <value>Imposta PIN</value>
   </data>
   <data name="SetPINDirection" xml:space="preserve">
-    <value>Immetti un codice PIN a 4 cifre per sbloccare l'applicazione.</value>
+    <value>Digita un codice PIN a 4 cifre per sbloccare l'applicazione.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
     <value>Informazioni elemento</value>
@@ -692,7 +704,7 @@
     <value>Verifica in due passaggi</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>L'autenticazione in due passaggi rende il tuo account più sicuro, richiedendo di verificare l'accesso con un altro dispositivo come una chiave di sicurezza, app di autenticazione, SMS, telefonata o email. Può essere abilitata su bitwarden.com. Vuoi visitare il sito ora?</value>
+    <value>L'autenticazione in due passaggi rende il tuo account più sicuro, richiedendo di verificare l'accesso con un altro dispositivo come una chiave di sicurezza, applicazione di autenticazione, SMS, telefonata o email. Può essere abilitata su bitwarden.com. Vuoi visitare il sito ora?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Sblocca con {0}</value>
@@ -747,7 +759,7 @@
     <value>Apri impostazioni di accessibilità</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
-    <value>1. Nella schermata impostazioni di accessibilità di Android, tocca "Bitwarden".</value>
+    <value>1. Nella schermata impostazioni di accessibilità di Android, tocca "Bitwarden" nella gestione dei servizi.</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
     <value>2. Attiva l'interruttore e premi OK per accettare.</value>
@@ -1585,7 +1597,7 @@
     <value>Verifica biometrica</value>
   </data>
   <data name="Biometrics" xml:space="preserve">
-    <value>Dati biometrici</value>
+    <value>dati biometrici</value>
   </data>
   <data name="UseBiometricsToUnlock" xml:space="preserve">
     <value>Sblocca con dati biometrici</value>
@@ -1653,7 +1665,7 @@
     <comment>Clone an entity (verb).</comment>
   </data>
   <data name="PasswordGeneratorPolicyInEffect" xml:space="preserve">
-    <value>Una o più policy dell'organizzazione controllano le impostazioni del tuo generatore</value>
+    <value>Una o più politiche dell'organizzazione stanno influenzando le impostazioni del tuo generatore</value>
   </data>
   <data name="Open" xml:space="preserve">
     <value>Apri</value>
@@ -1914,7 +1926,7 @@
     <value>Sei sicuro di voler rimuovere la password?</value>
   </data>
   <data name="RemovingSendPassword" xml:space="preserve">
-    <value>Rimuovo la password</value>
+    <value>Rimozione password</value>
   </data>
   <data name="SendPasswordRemoved" xml:space="preserve">
     <value>La password è stata rimossa.</value>
@@ -2040,10 +2052,10 @@
     <value>Aggiorna password principale</value>
   </data>
   <data name="UpdateMasterPasswordWarning" xml:space="preserve">
-    <value>La tua password principale è stata recentemente modificata da un amministratore nella tua organizzazione. Per accedere alla cassaforte, devi aggiornarla ora. Procedendo sarai disconnesso dalla sessione attuale, richiedendo di effettuare nuovamente l'accesso. Le sessioni attive su altri dispositivi possono continuare a rimanere attive per un massimo di un'ora.</value>
+    <value>La tua password principale è stata recentemente modificata da un amministratore nella tua organizzazione. Per accedere alla cassaforte, aggiorna ora la password principale. Procedendo sarai disconnesso dalla sessione attuale e ti sarà richiesto di effettuare nuovamente l'accesso. Le sessioni attive su altri dispositivi potrebbero continuare a rimanere attive per un massimo di un'ora.</value>
   </data>
   <data name="UpdatingPassword" xml:space="preserve">
-    <value>Aggiornamento password in corso</value>
+    <value>Aggiornamento password</value>
   </data>
   <data name="UpdatePasswordError" xml:space="preserve">
     <value>Attualmente non è possibile aggiornare la password</value>
@@ -2082,7 +2094,7 @@
     <value>Assicurati che il browser predefinito supporti WebAuthn e riprova.</value>
   </data>
   <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
-    <value>Questa organizzazione ha una policy aziendale che ti iscriverà automaticamente al ripristino della password. Ciò permetterà agli amministratori dell'organizzazione di cambiare la tua password principale.</value>
+    <value>Questa organizzazione ha una politica aziendale che ti iscriverà automaticamente al ripristino della password. Ciò permetterà agli amministratori dell'organizzazione di cambiare la tua password principale.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
     <value>Le policy dell'organizzazione controllano il timeout della tua cassaforte. Il tempo massimo consentito è di $HOURS$ ore e $MINUTES$ minuti</value>
@@ -2092,6 +2104,30 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Una o più policy dell'organizzazione ti impediscono di esportare la tua cassaforte personale.</value>
+  </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Aggiungi account</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Sbloccato</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Bloccato</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Disconnesso</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Passato all'account successivo disponibile</value>
+  </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>Account bloccato</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>Account disconnesso correttamente</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>Account rimosso correttamente</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Elimina account</value>

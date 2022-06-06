@@ -1,35 +1,35 @@
-﻿using Bit.App.Abstractions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using Bit.App.Abstractions;
 using Bit.App.Resources;
-using Bit.Core;
+using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.Request;
 using Bit.Core.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using Bit.App.Utilities;
 using Newtonsoft.Json;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
-    public class TwoFactorPageViewModel : BaseViewModel
+    public class TwoFactorPageViewModel : CaptchaProtectedViewModel
     {
         private readonly IDeviceActionService _deviceActionService;
         private readonly IAuthService _authService;
         private readonly ISyncService _syncService;
-        private readonly IStorageService _storageService;
         private readonly IApiService _apiService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IEnvironmentService _environmentService;
         private readonly IMessagingService _messagingService;
         private readonly IBroadcasterService _broadcasterService;
         private readonly IStateService _stateService;
+        private readonly II18nService _i18nService;
+        private readonly IAppIdService _appIdService;
 
         private TwoFactorProviderType? _selectedProviderType;
         private string _totpInstruction;
@@ -43,13 +43,14 @@ namespace Bit.App.Pages
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _authService = ServiceContainer.Resolve<IAuthService>("authService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
-            _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _apiService = ServiceContainer.Resolve<IApiService>("apiService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
-            _stateService = ServiceContainer.Resolve<IStateService>("stateService"); 
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            _i18nService = ServiceContainer.Resolve<II18nService>("i18nService");
+            _appIdService = ServiceContainer.Resolve<IAppIdService>("appIdService");
 
             PageTitle = AppResources.TwoStepLogin;
             SubmitCommand = new Command(async () => await SubmitAsync());
@@ -114,6 +115,11 @@ namespace Bit.App.Pages
         public Action StartSetPasswordAction { get; set; }
         public Action CloseAction { get; set; }
         public Action UpdateTempPasswordAction { get; set; }
+
+        protected override II18nService i18nService => _i18nService;
+        protected override IEnvironmentService environmentService => _environmentService;
+        protected override IDeviceActionService deviceActionService => _deviceActionService;
+        protected override IPlatformUtilsService platformUtilsService => _platformUtilsService;
 
         public void Init()
         {
@@ -288,11 +294,24 @@ namespace Bit.App.Pages
                 {
                     await _deviceActionService.ShowLoadingAsync(AppResources.Validating);
                 }
-                var result = await _authService.LogInTwoFactorAsync(SelectedProviderType.Value, Token, Remember);
+                var result = await _authService.LogInTwoFactorAsync(SelectedProviderType.Value, Token, _captchaToken, Remember);
+
+                if (result.CaptchaNeeded)
+                {
+                    if (await HandleCaptchaAsync(result.CaptchaSiteKey))
+                    {
+                        await SubmitAsync(false);
+                        _captchaToken = null;
+                    }
+                    return;
+                }
+                _captchaToken = null;
+
                 var task = Task.Run(() => _syncService.FullSyncAsync(true));
                 await _deviceActionService.HideLoadingAsync();
                 _messagingService.Send("listenYubiKeyOTP", false);
                 _broadcasterService.Unsubscribe(nameof(TwoFactorPage));
+
                 if (_authingWithSso && result.ResetMasterPassword)
                 {
                     StartSetPasswordAction?.Invoke();
@@ -300,16 +319,15 @@ namespace Bit.App.Pages
                 else if (result.ForcePasswordReset)
                 {
                     UpdateTempPasswordAction?.Invoke();
-                } 
+                }
                 else
                 {
-                    var disableFavicon = await _storageService.GetAsync<bool?>(Constants.DisableFaviconKey);
-                    await _stateService.SaveAsync(Constants.DisableFaviconKey, disableFavicon.GetValueOrDefault());
                     TwoFactorAuthSuccessAction?.Invoke();
                 }
             }
             catch (ApiException e)
             {
+                _captchaToken = null;
                 await _deviceActionService.HideLoadingAsync();
                 if (e?.Error != null)
                 {
@@ -364,7 +382,8 @@ namespace Bit.App.Pages
                 var request = new TwoFactorEmailRequest
                 {
                     Email = _authService.Email,
-                    MasterPasswordHash = _authService.MasterPasswordHash
+                    MasterPasswordHash = _authService.MasterPasswordHash,
+                    DeviceIdentifier = await _appIdService.GetAppIdAsync()
                 };
                 await _apiService.PostTwoFactorEmailAsync(request);
                 if (showLoading)

@@ -1,17 +1,17 @@
-using System;
+﻿using System;
 using System.Linq;
-using Bit.Core.Models.Data;
-using Bit.Core.Models.Domain;
-using Bit.Test.Common;
 using System.Text;
+using AutoFixture.AutoNSubstitute;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
+using Bit.Core.Models.Data;
+using Bit.Core.Models.Domain;
+using Bit.Core.Test.AutoFixture;
 using Bit.Core.Utilities;
+using Bit.Test.Common;
 using Bit.Test.Common.AutoFixture.Attributes;
 using NSubstitute;
 using Xunit;
-using Bit.Core.Test.AutoFixture;
-using AutoFixture.AutoNSubstitute;
 
 namespace Bit.Core.Test.Models.Domain
 {

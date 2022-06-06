@@ -1,6 +1,6 @@
 ﻿namespace Bit.Core.Enums
 {
-    public enum ClientType: byte
+    public enum ClientType : byte
     {
         Web = 1,
         Browser = 2,

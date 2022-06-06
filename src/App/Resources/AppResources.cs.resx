@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Opravdu se chcete odhlásit?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Odebrat účet</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Opravdu si přejete tento účet odebrat?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Účet byl již přidán</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Would you like to switch to it now?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Hlavní heslo</value>
     <comment>Label for a master password.</comment>
@@ -2091,6 +2103,30 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Jedna nebo více zásad organizace vám brání v exportu vašeho osobního trezoru.</value>
+  </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Přidat účet</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Odemčen</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Uzamčen</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Odhlášen</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Přepnuto na další dostupný účet</value>
+  </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>Account Locked</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>Account logged out successfully</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>Account removed successfully</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Odstranit účet</value>

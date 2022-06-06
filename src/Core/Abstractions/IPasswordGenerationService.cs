@@ -8,7 +8,8 @@ namespace Bit.Core.Abstractions
     public interface IPasswordGenerationService
     {
         Task AddHistoryAsync(string password, CancellationToken token = default(CancellationToken));
-        Task ClearAsync();
+        Task ClearAsync(string userId = null);
+        void ClearCache();
         Task<string> GeneratePassphraseAsync(PasswordGenerationOptions options);
         Task<string> GeneratePasswordAsync(PasswordGenerationOptions options);
         Task<List<GeneratedPasswordHistory>> GetHistoryAsync();

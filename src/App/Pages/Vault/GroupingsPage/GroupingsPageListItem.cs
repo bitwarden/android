@@ -5,7 +5,7 @@ using Bit.Core.Models.View;
 
 namespace Bit.App.Pages
 {
-    public class GroupingsPageListItem
+    public class GroupingsPageListItem : IGroupingsPageListItem
     {
         private string _icon;
         private string _name;

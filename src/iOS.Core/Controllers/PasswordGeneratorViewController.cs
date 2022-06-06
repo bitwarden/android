@@ -101,7 +101,7 @@ namespace Bit.iOS.Core.Controllers
             MinNumbersCell.Value = options.MinNumber.GetValueOrDefault(1);
             MinSpecialCell.Value = options.MinSpecial.GetValueOrDefault(1);
             LengthCell.Value = options.Length.GetValueOrDefault(14);
-            AmbiguousCell.Switch.On = options.Ambiguous.GetValueOrDefault();
+            AmbiguousCell.Switch.On = !options.AllowAmbiguousChar.GetValueOrDefault();
 
             NumWordsCell.Value = options.NumWords.GetValueOrDefault(3);
             WordSeparatorCell.TextField.Text = options.WordSeparator ?? "";
@@ -219,7 +219,7 @@ namespace Bit.iOS.Core.Controllers
                     Special = SpecialCell.Switch.On,
                     MinSpecial = MinSpecialCell.Value,
                     MinNumber = MinNumbersCell.Value,
-                    Ambiguous = AmbiguousCell.Switch.On,
+                    AllowAmbiguousChar = !AmbiguousCell.Switch.On,
                     NumWords = NumWordsCell.Value,
                     WordSeparator = WordSeparatorCell.TextField.Text,
                     Capitalize = CapitalizeCell.Switch.On,

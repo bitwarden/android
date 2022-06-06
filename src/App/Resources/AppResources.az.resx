@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Çıxış etmək istədiyinizə əminsiniz?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Hesabı sil</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Bu istifadəçini silmək istədiyinizə əminsiniz?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Hesab artıq əlavə edildi</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Buna indi keçmək istəyirsiniz?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Ana parol</value>
     <comment>Label for a master password.</comment>
@@ -2091,6 +2103,30 @@
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Bir və ya daha çox təşkilat siyasəti, fərdi anbarınızı ixrac etməyinizin qarşısını alır.</value>
+  </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Hesab əlavə et</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Kilidi açıldı</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Kilidli</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Çıxış edildi</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Növbəti mövcud hesaba keçildi</value>
+  </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>Hesab kilidlidir</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>Hesabdan uğurla çıxış edildi</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>Hesab uğurla silindi</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Hesabı sil</value>
