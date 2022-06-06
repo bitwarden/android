@@ -3,35 +3,92 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="Bit.App.Controls.AuthenticatorViewCell"
     xmlns:controls="clr-namespace:Bit.App.Controls"
+    xmlns:pages="clr-namespace:Bit.App.Pages"
     xmlns:u="clr-namespace:Bit.App.Utilities"
     xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
     xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
     StyleClass="list-row, list-row-platform"
     RowSpacing="0"
     ColumnSpacing="0"
-    x:DataType="controls:AuthenticatorViewCellViewModel">
+    x:DataType="pages:AuthenticatorPageListItem">
+
+    <Grid.Resources>
+          <u:IconGlyphConverter x:Key="iconGlyphConverter"/>
+          <u:IconImageConverter x:Key="iconImageConverter"/>
+          <u:InverseBoolConverter x:Key="inverseBool" />
+          <u:StringHasValueConverter x:Key="stringHasValueConverter" />
+    </Grid.Resources>
 
     <Grid.RowDefinitions>
         <RowDefinition Height="Auto" />
-        <RowDefinition Height="*" />
     </Grid.RowDefinitions>
 
     <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="40" />
         <ColumnDefinition Width="*" />
-        <ColumnDefinition Width="Auto" />
-        <ColumnDefinition Width="Auto" />
+        <ColumnDefinition Width="60" />
     </Grid.ColumnDefinitions>
 
-    <Label
-        Text="Figma"
-        StyleClass="box-label"
-        Grid.Row="0"
-        Grid.Column="0" />
-    <controls:MonoLabel
-        Text="{Binding TotpCodeFormatted, Mode=OneWay}"
-        StyleClass="box-value"
-        Grid.Row="1"
-        Grid.Column="0" />
+    <controls:IconLabel
+        Grid.Column="0"
+        HorizontalOptions="Center"
+        VerticalOptions="Center"
+        StyleClass="list-icon, list-icon-platform"
+        IsVisible="{Binding ShowIconImage, Converter={StaticResource inverseBool}}"
+        Text="{Binding Cipher, Converter={StaticResource iconGlyphConverter}}"
+        AutomationProperties.IsInAccessibleTree="False" />
+
+    <ff:CachedImage
+        Grid.Column="0"
+        BitmapOptimizations="True"
+        ErrorPlaceholder="login.png"
+        LoadingPlaceholder="login.png"
+        HorizontalOptions="Center"
+        VerticalOptions="Center"
+        WidthRequest="22"
+        HeightRequest="22"
+        IsVisible="{Binding ShowIconImage}"
+        Source="{Binding IconImageSource, Mode=OneTime}"
+        AutomationProperties.IsInAccessibleTree="False" />
+
+    <Grid RowSpacing="0" ColumnSpacing="0" Grid.Row="0" Grid.Column="1" VerticalOptions="Center" Padding="0, 7">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <controls:MonoLabel
+            LineBreakMode="TailTruncation"
+            Grid.Column="0"
+            Grid.Row="0"
+            Grid.ColumnSpan="3"
+            StyleClass="list-title, list-title-platform"
+            Text="{Binding TotpCodeFormatted, Mode=OneWay}" />
+        <Label 
+            LineBreakMode="TailTruncation"
+            Grid.Column="0"
+            Grid.Row="1"
+            StyleClass="list-subtitle, list-subtitle-platform"
+            Text="{Binding Cipher.Name}" />
+        <controls:IconLabel
+            Grid.Column="1"
+            Grid.Row="1"
+            HorizontalOptions="Start"
+            VerticalOptions="Center"
+            StyleClass="list-title-icon"
+            Margin="5, 0, 0, 0"
+            Text="{Binding Source={x:Static core:BitwardenIcons.Collection}}"
+            IsVisible="{Binding Cipher.Shared, Mode=OneTime}"
+            AutomationProperties.IsInAccessibleTree="True"
+            AutomationProperties.Name="{u:I18n Shared}" />
+    </Grid>
+
     <Label
         Text="{Binding TotpSec, Mode=OneWay}"
         Style="{DynamicResource textTotp}"
@@ -50,6 +107,7 @@
         Grid.Row="0"
         Grid.Column="2"
         Grid.RowSpan="2"
+        Padding="0,0,1,0"
         AutomationProperties.IsInAccessibleTree="True"
         AutomationProperties.Name="{u:I18n CopyTotp}" />
 </controls:ExtendedGrid>
