@@ -45,6 +45,8 @@ namespace Bit.App.Pages
             _autofocusCts = new CancellationTokenSource(TimeSpan.FromMinutes(3));
 
             var autofocusCts = _autofocusCts;
+            // this task is needed to be awaited OnDisappearing to avoid some crashes
+            // when changing the value of _zxing.IsScanning
             _continuousAutofocusTask = Task.Run(async () =>
             {
                 try
@@ -52,7 +54,7 @@ namespace Bit.App.Pages
                     while (!autofocusCts.IsCancellationRequested)
                     {
                         await Task.Delay(TimeSpan.FromSeconds(2), autofocusCts.Token);
-                        Device.BeginInvokeOnMainThread(() =>
+                        await Device.InvokeOnMainThreadAsync(() =>
                         {
                             if (!autofocusCts.IsCancellationRequested)
                             {
@@ -73,7 +75,10 @@ namespace Bit.App.Pages
         {
             _autofocusCts?.Cancel();
 
-            await _continuousAutofocusTask;
+            if (_continuousAutofocusTask != null)
+            {
+                await _continuousAutofocusTask;
+            }
             _zxing.IsScanning = false;
 
             base.OnDisappearing();
