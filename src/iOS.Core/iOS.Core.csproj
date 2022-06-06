@@ -138,6 +138,7 @@
   <ItemGroup>
     <Folder Include="Resources\" />
     <Folder Include="Effects\" />
+    <Folder Include="Renderers\CollectionView\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
@@ -194,6 +195,8 @@
     <Compile Include="Services\ClipboardService.cs" />
     <Compile Include="Utilities\FontElementExtensions.cs" />
     <Compile Include="Effects\ScrollViewContentInsetAdjustmentBehaviorEffect.cs" />
+    <Compile Include="Renderers\CollectionView\ExtendedCollectionViewRenderer.cs" />
+    <Compile Include="Renderers\CollectionView\ExtendedGroupableItemsViewController.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\App\App.csproj">
