@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <pages:BaseContentPage
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -66,7 +66,8 @@
                VerticalOptions="FillAndExpand"
                SelectionMode="Single"
                SelectionChanged="RowSelected"
-               StyleClass="list, list-platform">
+               StyleClass="list, list-platform"
+               ExtraDataForLogging="Sends Page">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="views:SendView">
                     <controls:SendViewCell

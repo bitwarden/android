@@ -138,6 +138,7 @@
   <ItemGroup>
     <Folder Include="Resources\" />
     <Folder Include="Effects\" />
+    <Folder Include="Renderers\CollectionView\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
@@ -197,6 +198,9 @@
     <Compile Include="Utilities\AccountSwitchingOverlayHelper.cs" />
     <Compile Include="Utilities\ImageSourceExtensions.cs" />
     <Compile Include="Controllers\BaseLockPasswordViewController.cs" />
+    <Compile Include="Renderers\CollectionView\ExtendedCollectionViewRenderer.cs" />
+    <Compile Include="Renderers\CollectionView\ExtendedGroupableItemsViewController.cs" />
+    <Compile Include="Utilities\UISearchBarExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\App\App.csproj">
