@@ -4024,5 +4024,11 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("All", resourceCulture);
             }
         }
+        
+        public static string DisplayItemsContainingTOTP {
+            get {
+                return ResourceManager.GetString("DisplayItemsContainingTOTP", resourceCulture);
+            }
+        }
     }
 }

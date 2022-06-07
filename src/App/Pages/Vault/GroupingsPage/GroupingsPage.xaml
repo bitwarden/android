@@ -53,6 +53,14 @@
                     WebsiteIconsEnabled="{Binding BindingContext.WebsiteIconsEnabled, Source={x:Reference _page}}" />
             </DataTemplate>
 
+            <DataTemplate x:Key="authenticatorTemplate"
+                          x:DataType="pages:GroupingsPageTOTPListItem">
+                <controls:AuthenticatorViewCell 
+                    Cipher="{Binding Cipher}"
+                    WebsiteIconsEnabled="{Binding BindingContext.WebsiteIconsEnabled, Source={x:Reference _page}}"
+                    TotpSec="{Binding TotpSec}"/>
+            </DataTemplate>
+
             <DataTemplate x:Key="groupTemplate"
                           x:DataType="pages:GroupingsPageListItem">
                 <controls:ExtendedStackLayout Orientation="Horizontal" 
@@ -104,6 +112,7 @@
             <pages:GroupingsPageListItemSelector x:Key="listItemDataTemplateSelector"
                                                  HeaderTemplate="{StaticResource headerTemplate}"
                                                  CipherTemplate="{StaticResource cipherTemplate}"
+                                                 AuthenticatorTemplate="{StaticResource authenticatorTemplate}"
                                                  GroupTemplate="{StaticResource groupTemplate}" />
 
             <StackLayout x:Key="mainLayout" x:Name="_mainLayout">
@@ -129,6 +138,29 @@
                         HorizontalOptions="End"
                         AutomationProperties.IsInAccessibleTree="True"
                         AutomationProperties.Name="{u:I18n Filter}" />
+                </StackLayout>
+
+                <StackLayout
+                    IsVisible="{Binding ShowTOTPFilter}"
+                    Orientation="Horizontal"
+                    HorizontalOptions="FillAndExpand"
+                    Margin="0,5,10,0">
+                    <Label
+                        Text="{u:I18n DisplayItemsContainingTOTP}"
+                        LineBreakMode="TailTruncation"
+                        Margin="10,0"
+                        StyleClass="text-md, text-muted"
+                        VerticalOptions="Center"
+                        HorizontalOptions="StartAndExpand"
+                        AutomationProperties.IsInAccessibleTree="True"
+                        AutomationProperties.Name="{u:I18n DisplayItemsContainingTOTP}" />
+                    <Switch
+                        IsToggled="{Binding TOTPFilterEnable}"
+                        StyleClass="box-value"
+                        HorizontalOptions="End"
+                        Toggled="Switch_Toggled"
+                        AutomationProperties.IsInAccessibleTree="True"
+                        AutomationProperties.Name="{u:I18n DisplayItemsContainingTOTP}"  />
                 </StackLayout>
 
                 <StackLayout

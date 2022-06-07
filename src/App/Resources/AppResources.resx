@@ -2248,4 +2248,7 @@
   <data name="All" xml:space="preserve">
     <value>All</value>
   </data>
+  <data name="DisplayItemsContainingTOTP" xml:space="preserve">
+    <value>Display items containing TOTP</value>
+  </data>
 </root>

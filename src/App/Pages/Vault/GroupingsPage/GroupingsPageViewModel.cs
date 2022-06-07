@@ -31,6 +31,8 @@ namespace Bit.App.Pages
         private bool _websiteIconsEnabled;
         private bool _syncRefreshing;
         private bool _showVaultFilter;
+        private bool _showTOTPFilter;
+        private bool _totpFilterEnable;
         private string _vaultFilterSelection;
         private string _noDataText;
         private List<Organization> _organizations;
@@ -79,6 +81,9 @@ namespace Bit.App.Pages
             });
             CipherOptionsCommand = new Command<CipherView>(CipherOptionsAsync);
             VaultFilterCommand = new AsyncCommand(VaultFilterOptionsAsync,
+                onException: ex => _logger.Exception(ex),
+                allowsMultipleExecutions: false);
+            TOTPFilterCommand = new AsyncCommand(TOTPFilterAsync,
                 onException: ex => _logger.Exception(ex),
                 allowsMultipleExecutions: false);
 
@@ -158,6 +163,17 @@ namespace Bit.App.Pages
             get => _showVaultFilter;
             set => SetProperty(ref _showVaultFilter, value);
         }
+        public bool ShowTOTPFilter
+        {
+            get => _showTOTPFilter;
+            set => SetProperty(ref _showTOTPFilter, value);
+        }
+        public bool TOTPFilterEnable
+        {
+            get => _totpFilterEnable;
+            set => SetProperty(ref _totpFilterEnable, value);
+        }
+
         public string VaultFilterDescription
         {
             get
@@ -177,6 +193,7 @@ namespace Bit.App.Pages
         public Command RefreshCommand { get; set; }
         public Command<CipherView> CipherOptionsCommand { get; set; }
         public ICommand VaultFilterCommand { get; }
+        public ICommand TOTPFilterCommand { get; }
         public bool LoadedOnce { get; set; }
 
         public async Task LoadAsync()
@@ -211,13 +228,14 @@ namespace Bit.App.Pages
                 }
                 PageTitle = ShowVaultFilter ? AppResources.Vaults : AppResources.MyVault;
             }
-
             _doingLoad = true;
             LoadedOnce = true;
             ShowNoData = false;
             Loading = true;
             ShowList = false;
             ShowAddCipherButton = !Deleted;
+            ShowTOTPFilter = Type == CipherType.Login;
+
             var groupedItems = new List<GroupingsPageListGroup>();
             var page = Page as GroupingsPage;
 
@@ -297,10 +315,36 @@ namespace Bit.App.Pages
                 }
                 if (Ciphers?.Any() ?? false)
                 {
-                    var ciphersListItems = Ciphers.Where(c => c.IsDeleted == Deleted)
-                        .Select(c => new GroupingsPageListItem { Cipher = c }).ToList();
-                    groupedItems.Add(new GroupingsPageListGroup(ciphersListItems, AppResources.Items,
-                        ciphersListItems.Count, uppercaseGroupNames, !MainPage && !groupedItems.Any()));
+                    if (TOTPFilterEnable)
+                    {
+                        var ciphersListItems = Ciphers.Where(c => c.IsDeleted == Deleted && !string.IsNullOrEmpty(c.Login.Totp))
+                            .Select(c => new GroupingsPageTOTPListItem(c, true)).ToList();
+                        groupedItems.Add(new GroupingsPageListGroup(ciphersListItems, AppResources.Items,
+                            ciphersListItems.Count, uppercaseGroupNames, !MainPage && !groupedItems.Any()));
+
+                        foreach (var item in ciphersListItems)
+                        {
+                            item.TotpUpdateCodeAsync();
+                        }
+                        Device.StartTimer(new TimeSpan(0, 0, 1), () =>
+                        {
+                            if (Type != CipherType.Login)
+                                return false;
+
+                            foreach (var item in ciphersListItems)
+                            {
+                                item.TotpTickAsync();
+                            }
+                            return true;
+                        }); 
+                    }
+                    else
+                    {
+                        var ciphersListItems = Ciphers.Where(c => c.IsDeleted == Deleted)
+                            .Select(c => new GroupingsPageListItem { Cipher = c }).ToList();
+                        groupedItems.Add(new GroupingsPageListGroup(ciphersListItems, AppResources.Items,
+                            ciphersListItems.Count, uppercaseGroupNames, !MainPage && !groupedItems.Any()));
+                    }
                 }
                 if (ShowNoFolderCipherGroup)
                 {
@@ -410,6 +454,11 @@ namespace Bit.App.Pages
                 return;
             }
             VaultFilterDescription = selection;
+            await LoadAsync();
+        }
+
+        public async Task TOTPFilterAsync()
+        {
             await LoadAsync();
         }
 

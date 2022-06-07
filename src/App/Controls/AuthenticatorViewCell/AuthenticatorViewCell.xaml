@@ -10,7 +10,7 @@
     StyleClass="list-row, list-row-platform"
     RowSpacing="0"
     ColumnSpacing="0"
-    x:DataType="pages:AuthenticatorPageListItem">
+    x:DataType="pages:GroupingsPageTOTPListItem">
 
     <Grid.Resources>
           <u:IconGlyphConverter x:Key="iconGlyphConverter"/>

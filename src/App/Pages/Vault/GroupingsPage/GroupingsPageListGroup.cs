@@ -2,13 +2,13 @@
 
 namespace Bit.App.Pages
 {
-    public class GroupingsPageListGroup : List<GroupingsPageListItem>
+    public class GroupingsPageListGroup : List<IGroupingsPageListItem>
     {
         public GroupingsPageListGroup(string name, int count, bool doUpper = true, bool first = false)
-            : this(new List<GroupingsPageListItem>(), name, count, doUpper, first)
+            : this(new List<IGroupingsPageListItem>(), name, count, doUpper, first)
         { }
 
-        public GroupingsPageListGroup(List<GroupingsPageListItem> groupItems, string name, int count,
+        public GroupingsPageListGroup(IEnumerable<IGroupingsPageListItem> groupItems, string name, int count,
             bool doUpper = true, bool first = false)
         {
             AddRange(groupItems);

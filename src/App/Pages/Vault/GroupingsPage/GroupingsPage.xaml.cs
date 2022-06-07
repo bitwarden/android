@@ -296,5 +296,10 @@ namespace Bit.App.Pages
         {
             await _accountListOverlay.HideAsync();
         }
+
+        void Switch_Toggled(System.Object sender, Xamarin.Forms.ToggledEventArgs e)
+        {
+            _vm.TOTPFilterCommand.Execute(null);
+        }
     }
 }
