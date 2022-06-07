@@ -266,9 +266,9 @@ namespace Bit.App.Pages
             if (IsVaultFilterOrgVault)
             {
                 var orgId = GetVaultFilterOrgId();
-                return  decCiphers.Where(c => c.OrganizationId == orgId).ToList();
+                return decCiphers.Where(c => c.OrganizationId == orgId).ToList();
             }
-            return  decCiphers;
+            return decCiphers;
         }
 
         private bool IsVaultFilterMyVault => _vaultFilterSelection == AppResources.MyVault;
