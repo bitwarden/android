@@ -83,7 +83,7 @@ namespace Bit.App.Pages
             VaultFilterCommand = new AsyncCommand(VaultFilterOptionsAsync,
                 onException: ex => _logger.Exception(ex),
                 allowsMultipleExecutions: false);
-            TOTPFilterCommand = new AsyncCommand(TOTPFilterAsync,
+            TOTPFilterCommand = new AsyncCommand(LoadDataAsync,
                 onException: ex => _logger.Exception(ex),
                 allowsMultipleExecutions: false);
 
@@ -454,11 +454,6 @@ namespace Bit.App.Pages
                 return;
             }
             VaultFilterDescription = selection;
-            await LoadAsync();
-        }
-
-        public async Task TOTPFilterAsync()
-        {
             await LoadAsync();
         }
 
