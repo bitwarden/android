@@ -197,6 +197,7 @@
     <Compile Include="Effects\ScrollViewContentInsetAdjustmentBehaviorEffect.cs" />
     <Compile Include="Renderers\CollectionView\ExtendedCollectionViewRenderer.cs" />
     <Compile Include="Renderers\CollectionView\ExtendedGroupableItemsViewController.cs" />
+    <Compile Include="Utilities\UISearchBarExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\App\App.csproj">
