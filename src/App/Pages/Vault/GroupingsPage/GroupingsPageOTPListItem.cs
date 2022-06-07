@@ -23,7 +23,7 @@ namespace Bit.App.Pages
         //private DateTime? _totpInterval = null;
 
         private CipherView _cipher;
-            
+
         private bool _websiteIconsEnabled;
         private string _iconImageSource = string.Empty;
 
@@ -43,7 +43,6 @@ namespace Bit.App.Pages
             interval = _totpService.GetTimeInterval(Cipher.Login.Totp);
         }
 
-        
         public Command CopyCommand { get; set; }
 
         public CipherView Cipher
