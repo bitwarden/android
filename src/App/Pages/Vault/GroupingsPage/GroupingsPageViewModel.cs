@@ -413,6 +413,11 @@ namespace Bit.App.Pages
             await LoadAsync();
         }
 
+        public string GetVaultFilterOrgId()
+        {
+            return _organizations?.FirstOrDefault(o => o.Name == _vaultFilterSelection)?.Id;
+        }
+
         public async Task SelectCipherAsync(CipherView cipher)
         {
             var page = new ViewPage(cipher.Id);
@@ -680,11 +685,6 @@ namespace Bit.App.Pages
 
         private bool IsVaultFilterOrgVault => _vaultFilterSelection != AppResources.AllVaults &&
                                               _vaultFilterSelection != AppResources.MyVault;
-
-        private string GetVaultFilterOrgId()
-        {
-            return _organizations?.FirstOrDefault(o => o.Name == _vaultFilterSelection)?.Id;
-        }
 
         private List<FolderView> BuildFolders(List<FolderView> decFolders)
         {

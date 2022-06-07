@@ -263,7 +263,7 @@ namespace Bit.App.Pages
             }
             if (!_vm.Deleted && DoOnce())
             {
-                var page = new AddEditPage(null, _vm.Type, _vm.FolderId, _vm.CollectionId);
+                var page = new AddEditPage(null, _vm.Type, _vm.FolderId, _vm.CollectionId, _vm.GetVaultFilterOrgId());
                 await Navigation.PushModalAsync(new NavigationPage(page));
             }
         }

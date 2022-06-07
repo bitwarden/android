@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
+using Bit.Core.Models.Domain;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -23,11 +26,17 @@ namespace Bit.App.Pages
         private readonly IDeviceActionService _deviceActionService;
         private readonly IStateService _stateService;
         private readonly IPasswordRepromptService _passwordRepromptService;
+        private readonly IOrganizationService _organizationService;
+        private readonly IPolicyService _policyService;
         private CancellationTokenSource _searchCancellationTokenSource;
+        private readonly ILogger _logger;
 
+        private bool _showVaultFilter;
+        private string _vaultFilterSelection;
         private bool _showNoData;
         private bool _showList;
         private bool _websiteIconsEnabled;
+        private List<Organization> _organizations;
 
         public CiphersPageViewModel()
         {
@@ -37,12 +46,19 @@ namespace Bit.App.Pages
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _passwordRepromptService = ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService");
+            _organizationService = ServiceContainer.Resolve<IOrganizationService>("organizationService");
+            _policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
+            _logger = ServiceContainer.Resolve<ILogger>("logger");
 
             Ciphers = new ExtendedObservableCollection<CipherView>();
             CipherOptionsCommand = new Command<CipherView>(CipherOptionsAsync);
+            VaultFilterCommand = new AsyncCommand(VaultFilterOptionsAsync,
+                onException: ex => _logger.Exception(ex),
+                allowsMultipleExecutions: false);
         }
 
         public Command CipherOptionsCommand { get; set; }
+        public ICommand VaultFilterCommand { get; }
         public ExtendedObservableCollection<CipherView> Ciphers { get; set; }
         public Func<CipherView, bool> Filter { get; set; }
         public string AutofillUrl { get; set; }
@@ -65,6 +81,23 @@ namespace Bit.App.Pages
                 nameof(ShowSearchDirection)
             });
         }
+        public bool ShowVaultFilter
+        {
+            get => _showVaultFilter;
+            set => SetProperty(ref _showVaultFilter, value);
+        }
+        public string VaultFilterDescription
+        {
+            get
+            {
+                if (_vaultFilterSelection == null || _vaultFilterSelection == AppResources.AllVaults)
+                {
+                    return string.Format(AppResources.VaultFilterDescription, AppResources.All);
+                }
+                return string.Format(AppResources.VaultFilterDescription, _vaultFilterSelection);
+            }
+            set => SetProperty(ref _vaultFilterSelection, value);
+        }
 
         public bool ShowSearchDirection => !ShowList && !ShowNoData;
 
@@ -76,11 +109,14 @@ namespace Bit.App.Pages
 
         public async Task InitAsync()
         {
-            WebsiteIconsEnabled = !(await _stateService.GetDisableFaviconAsync()).GetValueOrDefault();
-            if (!string.IsNullOrWhiteSpace((Page as CiphersPage).SearchBar.Text))
+            _organizations = await _organizationService.GetAllAsync();
+            ShowVaultFilter = await _policyService.ShouldShowVaultFilterAsync();
+            if (ShowVaultFilter && _vaultFilterSelection == null)
             {
-                Search((Page as CiphersPage).SearchBar.Text, 200);
+                _vaultFilterSelection = AppResources.AllVaults;
             }
+            WebsiteIconsEnabled = !(await _stateService.GetDisableFaviconAsync()).GetValueOrDefault();
+            PerformSearchIfPopulated();
         }
 
         public void Search(string searchText, int? timeout = null)
@@ -107,8 +143,9 @@ namespace Bit.App.Pages
                     }
                     try
                     {
+                        var vaultFilteredCiphers = await GetAllCiphersAsync();
                         ciphers = await _searchService.SearchCiphersAsync(searchText,
-                            Filter ?? (c => c.IsDeleted == Deleted), null, cts.Token);
+                            Filter ?? (c => c.IsDeleted == Deleted), vaultFilteredCiphers, cts.Token);
                         cts.Token.ThrowIfCancellationRequested();
                     }
                     catch (OperationCanceledException)
@@ -190,6 +227,58 @@ namespace Bit.App.Pages
                     _deviceActionService.Autofill(cipher);
                 }
             }
+        }
+
+        private void PerformSearchIfPopulated()
+        {
+            if (!string.IsNullOrWhiteSpace((Page as CiphersPage).SearchBar.Text))
+            {
+                Search((Page as CiphersPage).SearchBar.Text, 200);
+            }
+        }
+
+        private async Task VaultFilterOptionsAsync()
+        {
+            var options = new List<string> { AppResources.AllVaults, AppResources.MyVault };
+            if (_organizations.Any())
+            {
+                options.AddRange(_organizations.Select(o => o.Name));
+            }
+            var selection = await Page.DisplayActionSheet(AppResources.FilterByVault, AppResources.Cancel, null,
+                options.ToArray());
+            if (selection == AppResources.Cancel ||
+                (_vaultFilterSelection == null && selection == AppResources.AllVaults) ||
+                (_vaultFilterSelection != null && _vaultFilterSelection == selection))
+            {
+                return;
+            }
+            VaultFilterDescription = selection;
+            PerformSearchIfPopulated();
+        }
+
+        private async Task<List<CipherView>> GetAllCiphersAsync()
+        {
+            var decCiphers = await _cipherService.GetAllDecryptedAsync();
+            if (IsVaultFilterMyVault)
+            {
+                return decCiphers.Where(c => c.OrganizationId == null).ToList();
+            }
+            if (IsVaultFilterOrgVault)
+            {
+                var orgId = GetVaultFilterOrgId();
+                return  decCiphers.Where(c => c.OrganizationId == orgId).ToList();
+            }
+            return  decCiphers;
+        }
+
+        private bool IsVaultFilterMyVault => _vaultFilterSelection == AppResources.MyVault;
+
+        private bool IsVaultFilterOrgVault => _vaultFilterSelection != AppResources.AllVaults &&
+                                              _vaultFilterSelection != AppResources.MyVault;
+
+        private string GetVaultFilterOrgId()
+        {
+            return _organizations?.FirstOrDefault(o => o.Name == _vaultFilterSelection)?.Id;
         }
 
         private async void CipherOptionsAsync(CipherView cipher)
