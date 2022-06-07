@@ -127,7 +127,6 @@
   <ItemGroup>
     <Folder Include="Resources\" />
     <Folder Include="Behaviors\" />
-    <Folder Include="Pages\Authenticator\" />
     <Folder Include="Controls\AccountSwitchingOverlay\" />
   </ItemGroup>
 
