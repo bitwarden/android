@@ -133,7 +133,7 @@
                         <subviews>
                             <tableView opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="2305">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="737"/>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" textLabel="3763" detailTextLabel="3764" rowHeight="44" style="IBUITableViewCellStyleSubtitle" id="3761">
                                         <rect key="frame" x="0.0" y="44.5" width="414" height="44"/>
@@ -171,6 +171,7 @@
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="BQW-dG-XMM"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="Tq0-Ep-tHr" firstAttribute="leading" secondItem="BQW-dG-XMM" secondAttribute="leading" id="4wL-FF-CVk"/>
                             <constraint firstItem="BQW-dG-XMM" firstAttribute="trailing" secondItem="Tq0-Ep-tHr" secondAttribute="trailing" id="5BV-0y-vU1"/>

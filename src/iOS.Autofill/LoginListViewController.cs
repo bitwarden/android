@@ -46,6 +46,7 @@ namespace Bit.iOS.Autofill
 
             TableView.RowHeight = UITableView.AutomaticDimension;
             TableView.EstimatedRowHeight = 44;
+            TableView.BackgroundColor = ThemeHelpers.BackgroundColor;
             TableView.Source = new TableSource(this);
             await ((TableSource)TableView.Source).LoadItemsAsync();
 
