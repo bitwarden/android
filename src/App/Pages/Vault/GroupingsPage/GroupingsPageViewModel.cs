@@ -399,7 +399,7 @@ namespace Bit.App.Pages
             var options = new List<string> { AppResources.AllVaults, AppResources.MyVault };
             if (_organizations.Any())
             {
-                options.AddRange(_organizations.Select(o => o.Name));
+                options.AddRange(_organizations.OrderBy(o => o.Name).Select(o => o.Name));
             }
             var selection = await Page.DisplayActionSheet(AppResources.FilterByVault, AppResources.Cancel, null,
                 options.ToArray());
