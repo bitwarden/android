@@ -296,7 +296,7 @@ namespace Bit.App.Pages
                     CreateSelectableOption(AppResources.No, !_reportLoggingEnabled),
             };
 
-            var selection = await Page.DisplayActionSheet(AppResources.ReportCrashLogsDescription, AppResources.Cancel, null, options);
+            var selection = await Page.DisplayActionSheet(AppResources.SubmitCrashLogsDescription, AppResources.Cancel, null, options);
 
             if (selection == null || selection == AppResources.Cancel)
             {
@@ -525,7 +525,7 @@ namespace Bit.App.Pages
 #if !FDROID 
                 new SettingsPageListItem
                 {
-                    Name = AppResources.ReportCrashLogs,
+                    Name = AppResources.SubmitCrashLogs,
                     SubLabel = _reportLoggingEnabled ? AppResources.Enabled : AppResources.Disabled,
                 },
 #endif
