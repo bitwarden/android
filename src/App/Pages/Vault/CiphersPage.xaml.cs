@@ -34,10 +34,7 @@ namespace Bit.App.Pages
             {
                 _vm.PageTitle = AppResources.SearchVault;
             }
-            if (vaultFilterSelection != null)
-            {
-                _vm.VaultFilterDescription = vaultFilterSelection;
-            }
+            _vm.VaultFilterDescription = vaultFilterSelection;
 
             if (Device.RuntimePlatform == Device.iOS)
             {

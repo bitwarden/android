@@ -246,7 +246,7 @@ namespace Bit.App.Pages
             }
             var selection = await Page.DisplayActionSheet(AppResources.FilterByVault, AppResources.Cancel, null,
                 options.ToArray());
-            if (selection == AppResources.Cancel ||
+            if (selection == null || selection == AppResources.Cancel ||
                 (_vaultFilterSelection == null && selection == AppResources.AllVaults) ||
                 (_vaultFilterSelection != null && _vaultFilterSelection == selection))
             {

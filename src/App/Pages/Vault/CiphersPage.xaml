@@ -72,7 +72,7 @@
                 AutomationProperties.IsInAccessibleTree="True"
                 AutomationProperties.Name="{u:I18n Filter}" />
         </StackLayout>
-        <BoxView StyleClass="list-section-separator-bottom, list-section-separator-bottom-platform" />
+        <BoxView StyleClass="box-row-separator" />
 
         <controls:IconLabel IsVisible="{Binding ShowSearchDirection}"
                Text="{Binding Source={x:Static core:BitwardenIcons.Search}}"
