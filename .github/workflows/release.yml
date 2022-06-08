@@ -67,7 +67,7 @@ jobs:
                       ./com.x8bit.bitwarden-fdroid.apk/com.x8bit.bitwarden-fdroid.apk,
                       ./Bitwarden iOS.zip"
           commit: ${{ github.sha }}
-          tag: v${{ steps.version.outputs.verison }}
+          tag: v${{ steps.version.outputs.version }}
           name: Version ${{ steps.version.outputs.version }}
           body: "<insert release notes here>"
           token: ${{ secrets.GITHUB_TOKEN }}
