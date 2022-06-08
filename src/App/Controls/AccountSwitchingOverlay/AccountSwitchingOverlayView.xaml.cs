@@ -63,6 +63,8 @@ namespace Bit.App.Controls
 
         public int AccountListRowHeight => Device.RuntimePlatform == Device.Android ? 74 : 70;
 
+        public bool LongPressAccountEnabled { get; set; } = true;
+
         public async Task ToggleVisibilityAsync()
         {
             if (IsVisible)
@@ -167,7 +169,7 @@ namespace Bit.App.Controls
 
         private async Task LongPressAccountAsync(AccountViewCellViewModel item)
         {
-            if (!item.IsAccount)
+            if (!LongPressAccountEnabled || !item.IsAccount)
             {
                 return;
             }
