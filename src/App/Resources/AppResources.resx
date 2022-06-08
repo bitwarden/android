@@ -2196,11 +2196,11 @@
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
     <value>Enter the verification code that was sent to your email</value>
   </data>
-  <data name="ReportCrashLogs" xml:space="preserve">
-    <value>Report crash logs</value>
+  <data name="SubmitCrashLogs" xml:space="preserve">
+    <value>Submit crash logs</value>
   </data>
-  <data name="ReportCrashLogsDescription" xml:space="preserve">
-    <value>Help Bitwarden improve app stability by allowing crash reports.</value>
+  <data name="SubmitCrashLogsDescription" xml:space="preserve">
+    <value>Help Bitwarden improve app stability by submitting crash reports.</value>
   </data>
   <data name="OptionsExpanded" xml:space="preserve">
     <value>Options are expanded, tap to collapse.</value>

@@ -403,7 +403,7 @@ namespace Bit.App.Pages
             }
             var selection = await Page.DisplayActionSheet(AppResources.FilterByVault, AppResources.Cancel, null,
                 options.ToArray());
-            if (selection == AppResources.Cancel ||
+            if (selection == null || selection == AppResources.Cancel ||
                 (_vaultFilterSelection == null && selection == AppResources.AllVaults) ||
                 (_vaultFilterSelection != null && _vaultFilterSelection == selection))
             {
@@ -411,6 +411,11 @@ namespace Bit.App.Pages
             }
             VaultFilterDescription = selection;
             await LoadAsync();
+        }
+
+        public string GetVaultFilterOrgId()
+        {
+            return _organizations?.FirstOrDefault(o => o.Name == _vaultFilterSelection)?.Id;
         }
 
         public async Task SelectCipherAsync(CipherView cipher)
@@ -680,11 +685,6 @@ namespace Bit.App.Pages
 
         private bool IsVaultFilterOrgVault => _vaultFilterSelection != AppResources.AllVaults &&
                                               _vaultFilterSelection != AppResources.MyVault;
-
-        private string GetVaultFilterOrgId()
-        {
-            return _organizations?.FirstOrDefault(o => o.Name == _vaultFilterSelection)?.Id;
-        }
 
         private List<FolderView> BuildFolders(List<FolderView> decFolders)
         {
