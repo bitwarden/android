@@ -30,6 +30,7 @@ namespace Bit.App.Pages
             CipherType? type = null,
             string folderId = null,
             string collectionId = null,
+            string organizationId = null,
             string name = null,
             string uri = null,
             bool fromAutofill = false,
@@ -51,6 +52,7 @@ namespace Bit.App.Pages
             _vm.CipherId = cipherId;
             _vm.FolderId = folderId == "none" ? null : folderId;
             _vm.CollectionIds = collectionId != null ? new HashSet<string>(new List<string> { collectionId }) : null;
+            _vm.OrganizationId = organizationId;
             _vm.Type = type;
             _vm.DefaultName = name ?? appOptions?.SaveName;
             _vm.DefaultUri = uri ?? appOptions?.Uri;
