@@ -12,7 +12,6 @@ using Bit.Core.Abstractions;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Bit.Droid.Services;
-using Bit.Droid.Utilities;
 using Plugin.CurrentActivity;
 using Plugin.Fingerprint;
 using Xamarin.Android.Net;
@@ -134,7 +133,8 @@ namespace Bit.Droid
             var stateService = new StateService(mobileStorageService, secureStorageService);
             var stateMigrationService =
                 new StateMigrationService(liteDbStorage, preferencesStorage, secureStorageService);
-            var deviceActionService = new DeviceActionService(stateService, messagingService,
+            var clipboardService = new ClipboardService(stateService);
+            var deviceActionService = new DeviceActionService(clipboardService, stateService, messagingService,
                 broadcasterService, () => ServiceContainer.Resolve<IEventService>("eventService"));
             var platformUtilsService = new MobilePlatformUtilsService(deviceActionService, messagingService,
                 broadcasterService);
@@ -152,7 +152,7 @@ namespace Bit.Droid
             ServiceContainer.Register<IStorageService>("secureStorageService", secureStorageService);
             ServiceContainer.Register<IStateService>("stateService", stateService);
             ServiceContainer.Register<IStateMigrationService>("stateMigrationService", stateMigrationService);
-            ServiceContainer.Register<IClipboardService>("clipboardService", new ClipboardService(stateService));
+            ServiceContainer.Register<IClipboardService>("clipboardService", clipboardService);
             ServiceContainer.Register<IDeviceActionService>("deviceActionService", deviceActionService);
             ServiceContainer.Register<IPlatformUtilsService>("platformUtilsService", platformUtilsService);
             ServiceContainer.Register<IBiometricService>("biometricService", biometricService);

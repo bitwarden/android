@@ -319,8 +319,11 @@ namespace Bit.App.Pages
         public async Task CopyAsync()
         {
             await _clipboardService.CopyTextAsync(Password);
-            _platformUtilsService.ShowToast("success", null,
-                string.Format(AppResources.ValueHasBeenCopied, AppResources.Password));
+            if (!_clipboardService.CopyNotificationHandledByOs())
+            {
+                _platformUtilsService.ShowToast("success", null,
+                    string.Format(AppResources.ValueHasBeenCopied, AppResources.Password));
+            }
         }
 
         private void LoadFromOptions()

@@ -58,8 +58,11 @@ namespace Bit.App.Pages
         private async void CopyAsync(GeneratedPasswordHistory ph)
         {
             await _clipboardService.CopyTextAsync(ph.Password);
-            _platformUtilsService.ShowToast("info", null,
+            if (!_clipboardService.CopyNotificationHandledByOs())
+            {
+                _platformUtilsService.ShowToast("info", null,
                 string.Format(AppResources.ValueHasBeenCopied, AppResources.Password));
+            }
         }
 
         public async Task UpdateOnThemeChanged()

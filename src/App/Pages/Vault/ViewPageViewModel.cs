@@ -661,7 +661,7 @@ namespace Bit.App.Pages
             if (text != null)
             {
                 await _clipboardService.CopyTextAsync(text);
-                if (!string.IsNullOrWhiteSpace(name))
+                if (!_clipboardService.CopyNotificationHandledByOs() && !string.IsNullOrWhiteSpace(name))
                 {
                     _platformUtilsService.ShowToast("info", null, string.Format(AppResources.ValueHasBeenCopied, name));
                 }
