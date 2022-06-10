@@ -51,8 +51,7 @@ namespace Bit.App.Pages
         private async void CopyAsync(PasswordHistoryView ph)
         {
             await _clipboardService.CopyTextAsync(ph.Password);
-            _platformUtilsService.ShowToast("info", null,
-                string.Format(AppResources.ValueHasBeenCopied, AppResources.Password));
+            _platformUtilsService.ShowToastForCopiedValue(AppResources.Password);
         }
     }
 }

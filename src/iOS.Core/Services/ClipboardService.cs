@@ -16,8 +16,10 @@ namespace Bit.iOS.Core.Services
             _stateService = stateService;
         }
 
-        public async Task CopyTextAsync(string text, int expiresInMs = -1)
+        public async Task CopyTextAsync(string text, int expiresInMs = -1, bool isSensitive = true)
         {
+            // isSensitive is only used by Android for now
+
             int clearSeconds = -1;
             if (expiresInMs < 0)
             {
@@ -35,6 +37,12 @@ namespace Bit.iOS.Core.Services
                 LocalOnly = true,
                 ExpirationDate = clearSeconds > 0 ? NSDate.FromTimeIntervalSinceNow(clearSeconds) : null
             }));
+        }
+
+        public bool IsCopyNotificationHandledByPlatform()
+        {
+            // return true for any future versions of iOS that notify the user when text is copied to the clipboard
+            return false;
         }
     }
 }
