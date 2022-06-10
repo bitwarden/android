@@ -663,7 +663,7 @@ namespace Bit.App.Pages
                 await _clipboardService.CopyTextAsync(text);
                 if (!string.IsNullOrWhiteSpace(name))
                 {
-                    AppHelpers.ShowToastForCopiedValue(_platformUtilsService, _clipboardService, name);
+                    _platformUtilsService.ShowToastForCopiedValue(name);
                 }
                 if (id == "LoginPassword")
                 {

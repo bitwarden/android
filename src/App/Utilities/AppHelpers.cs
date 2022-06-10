@@ -97,14 +97,14 @@ namespace Bit.App.Utilities
             else if (selection == AppResources.CopyUsername)
             {
                 await clipboardService.CopyTextAsync(cipher.Login.Username);
-                ShowToastForCopiedValue(platformUtilsService, clipboardService, AppResources.Username);
+                platformUtilsService.ShowToastForCopiedValue(AppResources.Username);
             }
             else if (selection == AppResources.CopyPassword)
             {
                 if (cipher.Reprompt == CipherRepromptType.None || await passwordRepromptService.ShowPasswordPromptAsync())
                 {
                     await clipboardService.CopyTextAsync(cipher.Login.Password);
-                    ShowToastForCopiedValue(platformUtilsService, clipboardService, AppResources.Password);
+                    platformUtilsService.ShowToastForCopiedValue(AppResources.Password);
                     var task = eventService.CollectAsync(Core.Enums.EventType.Cipher_ClientCopiedPassword, cipher.Id);
                 }
             }
@@ -117,7 +117,7 @@ namespace Bit.App.Utilities
                     if (!string.IsNullOrWhiteSpace(totp))
                     {
                         await clipboardService.CopyTextAsync(totp);
-                        ShowToastForCopiedValue(platformUtilsService, clipboardService, AppResources.VerificationCodeTotp);
+                        platformUtilsService.ShowToastForCopiedValue(AppResources.VerificationCodeTotp);
                     }
                 }
             }
@@ -130,7 +130,7 @@ namespace Bit.App.Utilities
                 if (cipher.Reprompt == CipherRepromptType.None || await passwordRepromptService.ShowPasswordPromptAsync())
                 {
                     await clipboardService.CopyTextAsync(cipher.Card.Number);
-                    ShowToastForCopiedValue(platformUtilsService, clipboardService, AppResources.Number);
+                    platformUtilsService.ShowToastForCopiedValue(AppResources.Number);
                 }
             }
             else if (selection == AppResources.CopySecurityCode)
@@ -138,14 +138,14 @@ namespace Bit.App.Utilities
                 if (cipher.Reprompt == CipherRepromptType.None || await passwordRepromptService.ShowPasswordPromptAsync())
                 {
                     await clipboardService.CopyTextAsync(cipher.Card.Code);
-                    ShowToastForCopiedValue(platformUtilsService, clipboardService, AppResources.SecurityCode);
+                    platformUtilsService.ShowToastForCopiedValue(AppResources.SecurityCode);
                     var task = eventService.CollectAsync(Core.Enums.EventType.Cipher_ClientCopiedCardCode, cipher.Id);
                 }
             }
             else if (selection == AppResources.CopyNotes)
             {
                 await clipboardService.CopyTextAsync(cipher.Notes);
-                ShowToastForCopiedValue(platformUtilsService, clipboardService, AppResources.Notes);
+                platformUtilsService.ShowToastForCopiedValue(AppResources.Notes);
             }
             return selection;
         }
@@ -256,17 +256,7 @@ namespace Bit.App.Utilities
             var platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             var clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
             await clipboardService.CopyTextAsync(GetSendUrl(send));
-            ShowToastForCopiedValue(platformUtilsService, clipboardService, AppResources.SendLink);
-        }
-
-        public static void ShowToastForCopiedValue(IPlatformUtilsService platformUtilsService,
-            IClipboardService clipboardService, string valueNameCopied)
-        {
-            if (!clipboardService.IsCopyNotificationHandledByPlatform())
-            {
-                platformUtilsService.ShowToast("info", null,
-                    string.Format(AppResources.ValueHasBeenCopied, valueNameCopied));
-            }
+            platformUtilsService.ShowToastForCopiedValue(AppResources.SendLink);
         }
 
         public static async Task ShareSendUrlAsync(SendView send)

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bit.App.Resources;
-using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
@@ -52,7 +51,7 @@ namespace Bit.App.Pages
         private async void CopyAsync(PasswordHistoryView ph)
         {
             await _clipboardService.CopyTextAsync(ph.Password);
-            AppHelpers.ShowToastForCopiedValue(_platformUtilsService, _clipboardService, AppResources.Password);
+            _platformUtilsService.ShowToastForCopiedValue(AppResources.Password);
         }
     }
 }

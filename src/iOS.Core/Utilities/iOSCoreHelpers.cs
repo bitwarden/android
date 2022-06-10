@@ -64,8 +64,8 @@ namespace Bit.iOS.Core.Utilities
                 new StateMigrationService(liteDbStorage, preferencesStorage, secureStorageService);
             var deviceActionService = new DeviceActionService(stateService, messagingService);
             var clipboardService = new ClipboardService(stateService);
-            var platformUtilsService = new MobilePlatformUtilsService(deviceActionService, messagingService,
-                broadcasterService);
+            var platformUtilsService = new MobilePlatformUtilsService(deviceActionService, clipboardService,
+                messagingService, broadcasterService);
             var biometricService = new BiometricService(mobileStorageService);
             var cryptoFunctionService = new PclCryptoFunctionService(cryptoPrimitiveService);
             var cryptoService = new CryptoService(stateService, cryptoFunctionService);

@@ -136,8 +136,8 @@ namespace Bit.Droid
             var clipboardService = new ClipboardService(stateService);
             var deviceActionService = new DeviceActionService(clipboardService, stateService, messagingService,
                 broadcasterService, () => ServiceContainer.Resolve<IEventService>("eventService"));
-            var platformUtilsService = new MobilePlatformUtilsService(deviceActionService, messagingService,
-                broadcasterService);
+            var platformUtilsService = new MobilePlatformUtilsService(deviceActionService, clipboardService,
+                messagingService, broadcasterService);
             var biometricService = new BiometricService();
             var cryptoFunctionService = new PclCryptoFunctionService(cryptoPrimitiveService);
             var cryptoService = new CryptoService(stateService, cryptoFunctionService);

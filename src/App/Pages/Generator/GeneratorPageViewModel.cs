@@ -5,7 +5,6 @@ using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.Domain;
 using Bit.Core.Utilities;
-using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
@@ -319,7 +318,7 @@ namespace Bit.App.Pages
         public async Task CopyAsync()
         {
             await _clipboardService.CopyTextAsync(Password);
-            AppHelpers.ShowToastForCopiedValue(_platformUtilsService, _clipboardService, AppResources.Password);
+            _platformUtilsService.ShowToastForCopiedValue(AppResources.Password);
         }
 
         private void LoadFromOptions()
