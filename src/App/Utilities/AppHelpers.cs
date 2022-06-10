@@ -97,22 +97,14 @@ namespace Bit.App.Utilities
             else if (selection == AppResources.CopyUsername)
             {
                 await clipboardService.CopyTextAsync(cipher.Login.Username);
-                if (!clipboardService.CopyNotificationHandledByOs())
-                {
-                    platformUtilsService.ShowToast("info", null,
-                        string.Format(AppResources.ValueHasBeenCopied, AppResources.Username));
-                }
+                ShowToastForCopiedValue(platformUtilsService, clipboardService, AppResources.Username);
             }
             else if (selection == AppResources.CopyPassword)
             {
                 if (cipher.Reprompt == CipherRepromptType.None || await passwordRepromptService.ShowPasswordPromptAsync())
                 {
                     await clipboardService.CopyTextAsync(cipher.Login.Password);
-                    if (!clipboardService.CopyNotificationHandledByOs())
-                    {
-                        platformUtilsService.ShowToast("info", null,
-                            string.Format(AppResources.ValueHasBeenCopied, AppResources.Password));
-                    }
+                    ShowToastForCopiedValue(platformUtilsService, clipboardService, AppResources.Password);
                     var task = eventService.CollectAsync(Core.Enums.EventType.Cipher_ClientCopiedPassword, cipher.Id);
                 }
             }
@@ -125,11 +117,7 @@ namespace Bit.App.Utilities
                     if (!string.IsNullOrWhiteSpace(totp))
                     {
                         await clipboardService.CopyTextAsync(totp);
-                        if (!clipboardService.CopyNotificationHandledByOs())
-                        {
-                            platformUtilsService.ShowToast("info", null,
-                                string.Format(AppResources.ValueHasBeenCopied, AppResources.VerificationCodeTotp));
-                        }
+                        ShowToastForCopiedValue(platformUtilsService, clipboardService, AppResources.VerificationCodeTotp);
                     }
                 }
             }
@@ -142,11 +130,7 @@ namespace Bit.App.Utilities
                 if (cipher.Reprompt == CipherRepromptType.None || await passwordRepromptService.ShowPasswordPromptAsync())
                 {
                     await clipboardService.CopyTextAsync(cipher.Card.Number);
-                    if (!clipboardService.CopyNotificationHandledByOs())
-                    {
-                        platformUtilsService.ShowToast("info", null,
-                            string.Format(AppResources.ValueHasBeenCopied, AppResources.Number));
-                    }
+                    ShowToastForCopiedValue(platformUtilsService, clipboardService, AppResources.Number);
                 }
             }
             else if (selection == AppResources.CopySecurityCode)
@@ -154,22 +138,14 @@ namespace Bit.App.Utilities
                 if (cipher.Reprompt == CipherRepromptType.None || await passwordRepromptService.ShowPasswordPromptAsync())
                 {
                     await clipboardService.CopyTextAsync(cipher.Card.Code);
-                    if (!clipboardService.CopyNotificationHandledByOs())
-                    {
-                        platformUtilsService.ShowToast("info", null,
-                            string.Format(AppResources.ValueHasBeenCopied, AppResources.SecurityCode));
-                    }
+                    ShowToastForCopiedValue(platformUtilsService, clipboardService, AppResources.SecurityCode);
                     var task = eventService.CollectAsync(Core.Enums.EventType.Cipher_ClientCopiedCardCode, cipher.Id);
                 }
             }
             else if (selection == AppResources.CopyNotes)
             {
                 await clipboardService.CopyTextAsync(cipher.Notes);
-                if (!clipboardService.CopyNotificationHandledByOs())
-                {
-                    platformUtilsService.ShowToast("info", null,
-                        string.Format(AppResources.ValueHasBeenCopied, AppResources.Notes));
-                }
+                ShowToastForCopiedValue(platformUtilsService, clipboardService, AppResources.Notes);
             }
             return selection;
         }
@@ -280,10 +256,16 @@ namespace Bit.App.Utilities
             var platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             var clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
             await clipboardService.CopyTextAsync(GetSendUrl(send));
-            if (!clipboardService.CopyNotificationHandledByOs())
+            ShowToastForCopiedValue(platformUtilsService, clipboardService, AppResources.SendLink);
+        }
+
+        public static void ShowToastForCopiedValue(IPlatformUtilsService platformUtilsService,
+            IClipboardService clipboardService, string valueNameCopied)
+        {
+            if (!clipboardService.IsCopyNotificationHandledByPlatform())
             {
                 platformUtilsService.ShowToast("info", null,
-                    string.Format(AppResources.ValueHasBeenCopied, AppResources.SendLink));
+                    string.Format(AppResources.ValueHasBeenCopied, valueNameCopied));
             }
         }
 

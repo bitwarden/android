@@ -17,8 +17,8 @@ namespace Bit.Core.Abstractions
         Task CopyTextAsync(string text, int expiresInMs = -1, bool isSensitive = true);
 
         /// <summary>
-        /// Returns true if the OS provides its own notification when text is copied to the clipboard
+        /// Returns true if the platform provides its own notification when text is copied to the clipboard
         /// </summary>
-        bool CopyNotificationHandledByOs();
+        bool IsCopyNotificationHandledByPlatform();
     }
 }

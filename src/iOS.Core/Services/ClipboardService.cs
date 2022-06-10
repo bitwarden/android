@@ -39,7 +39,7 @@ namespace Bit.iOS.Core.Services
             }));
         }
 
-        public bool CopyNotificationHandledByOs()
+        public bool IsCopyNotificationHandledByPlatform()
         {
             // return true for any future versions of iOS that notify the user when text is copied to the clipboard
             return false;

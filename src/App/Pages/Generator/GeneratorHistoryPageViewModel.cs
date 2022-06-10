@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bit.App.Resources;
+using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.Domain;
 using Bit.Core.Utilities;
@@ -58,11 +59,7 @@ namespace Bit.App.Pages
         private async void CopyAsync(GeneratedPasswordHistory ph)
         {
             await _clipboardService.CopyTextAsync(ph.Password);
-            if (!_clipboardService.CopyNotificationHandledByOs())
-            {
-                _platformUtilsService.ShowToast("info", null,
-                string.Format(AppResources.ValueHasBeenCopied, AppResources.Password));
-            }
+            AppHelpers.ShowToastForCopiedValue(_platformUtilsService, _clipboardService, AppResources.Password);
         }
 
         public async Task UpdateOnThemeChanged()

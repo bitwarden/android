@@ -41,7 +41,7 @@ namespace Bit.Droid.Services
             await ClearClipboardAlarmAsync(expiresInMs);
         }
 
-        public bool CopyNotificationHandledByOs()
+        public bool IsCopyNotificationHandledByPlatform()
         {
             // Android 13+ provides built-in notification when text is copied to the clipboard
             return (int)Build.VERSION.SdkInt >= 33;
