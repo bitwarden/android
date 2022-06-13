@@ -31,6 +31,7 @@ namespace Bit.App.Pages
         private bool _websiteIconsEnabled;
         private bool _syncRefreshing;
         private bool _showVaultFilter;
+        private bool _hideMyVaultFilterOption;
         private string _vaultFilterSelection;
         private string _noDataText;
         private List<Organization> _organizations;
@@ -205,9 +206,13 @@ namespace Bit.App.Pages
             if (MainPage)
             {
                 ShowVaultFilter = await _policyService.ShouldShowVaultFilterAsync();
-                if (ShowVaultFilter && _vaultFilterSelection == null)
+                if (ShowVaultFilter)
                 {
-                    _vaultFilterSelection = AppResources.AllVaults;
+                    _hideMyVaultFilterOption = await _policyService.PolicyAppliesToUser(PolicyType.PersonalOwnership);
+                    if (_vaultFilterSelection == null)
+                    {
+                        _vaultFilterSelection = AppResources.AllVaults;
+                    }
                 }
                 PageTitle = ShowVaultFilter ? AppResources.Vaults : AppResources.MyVault;
             }
@@ -396,7 +401,11 @@ namespace Bit.App.Pages
 
         public async Task VaultFilterOptionsAsync()
         {
-            var options = new List<string> { AppResources.AllVaults, AppResources.MyVault };
+            var options = new List<string> { AppResources.AllVaults };
+            if (!_hideMyVaultFilterOption)
+            {
+                options.Add(AppResources.MyVault);
+            }
             if (_organizations.Any())
             {
                 options.AddRange(_organizations.OrderBy(o => o.Name).Select(o => o.Name));

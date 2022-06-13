@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
-using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
@@ -32,6 +31,7 @@ namespace Bit.App.Pages
         private readonly ILogger _logger;
 
         private bool _showVaultFilter;
+        private bool _hideMyVaultFilterOption;
         private string _vaultFilterSelection;
         private bool _showNoData;
         private bool _showList;
@@ -111,9 +111,13 @@ namespace Bit.App.Pages
         {
             _organizations = await _organizationService.GetAllAsync();
             ShowVaultFilter = await _policyService.ShouldShowVaultFilterAsync();
-            if (ShowVaultFilter && _vaultFilterSelection == null)
+            if (ShowVaultFilter)
             {
-                _vaultFilterSelection = AppResources.AllVaults;
+                _hideMyVaultFilterOption = await _policyService.PolicyAppliesToUser(PolicyType.PersonalOwnership);
+                if (_vaultFilterSelection == null)
+                {
+                    _vaultFilterSelection = AppResources.AllVaults;
+                }
             }
             WebsiteIconsEnabled = !(await _stateService.GetDisableFaviconAsync()).GetValueOrDefault();
             PerformSearchIfPopulated();
@@ -239,7 +243,11 @@ namespace Bit.App.Pages
 
         private async Task VaultFilterOptionsAsync()
         {
-            var options = new List<string> { AppResources.AllVaults, AppResources.MyVault };
+            var options = new List<string> { AppResources.AllVaults };
+            if (!_hideMyVaultFilterOption)
+            {
+                options.Add(AppResources.MyVault);
+            }
             if (_organizations.Any())
             {
                 options.AddRange(_organizations.OrderBy(o => o.Name).Select(o => o.Name));
