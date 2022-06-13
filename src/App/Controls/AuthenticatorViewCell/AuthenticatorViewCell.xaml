@@ -27,6 +27,8 @@
         <ColumnDefinition Width="40" />
         <ColumnDefinition Width="*" />
         <ColumnDefinition Width="60" />
+        <ColumnDefinition Width="Auto" />
+        <ColumnDefinition Width="40" />
     </Grid.ColumnDefinitions>
 
     <controls:IconLabel
@@ -51,7 +53,13 @@
         Source="{Binding IconImageSource, Mode=OneTime}"
         AutomationProperties.IsInAccessibleTree="False" />
 
-    <Grid RowSpacing="0" ColumnSpacing="0" Grid.Row="0" Grid.Column="1" VerticalOptions="Center" Padding="0, 7">
+    <Grid 
+        RowSpacing="0"
+        ColumnSpacing="0"
+        Grid.Row="0"
+        Grid.Column="1"
+        VerticalOptions="Center"
+        Padding="0, 7">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -76,36 +84,46 @@
             Grid.Row="1"
             StyleClass="list-subtitle, list-subtitle-platform"
             Text="{Binding Cipher.Name}" />
-        <controls:IconLabel
-            Grid.Column="1"
-            Grid.Row="1"
-            HorizontalOptions="Start"
-            VerticalOptions="Center"
-            StyleClass="list-title-icon"
-            Margin="5, 0, 0, 0"
-            Text="{Binding Source={x:Static core:BitwardenIcons.Collection}}"
-            IsVisible="{Binding Cipher.Shared, Mode=OneTime}"
-            AutomationProperties.IsInAccessibleTree="True"
-            AutomationProperties.Name="{u:I18n Shared}" />
     </Grid>
 
+    <controls:CircularProgressbarView
+        Progress="{Binding Progress}" 
+        Margin="0, 10, 0, 0"
+        Grid.Row="0"
+        Grid.Column="2"
+        Grid.RowSpan="2"
+        VerticalOptions="CenterAndExpand" />
+    
     <Label
         Text="{Binding TotpSec, Mode=OneWay}"
         Style="{DynamicResource textTotp}"
-        Margin="0, 0, 10, 0"
+        Margin="0, 0, 0, 10"
         Grid.Row="0"
-        Grid.Column="1"
+        Grid.Column="2"
         Grid.RowSpan="2"
-        HorizontalOptions="End"
-        HorizontalTextAlignment="End"
+        StyleClass="text-sm"
+        HorizontalTextAlignment="Center"
+        VerticalOptions="CenterAndExpand" /> 
+
+    <Label
+        Text="{Binding TotpCodeFormatted, Mode=OneWay}"
+        Style="{DynamicResource textTotp}"
+        Margin="0, 0, 0, 0"
+        Grid.Row="0"
+        Grid.Column="3"
+        Grid.RowSpan="2"
+        StyleClass="text-sm"
+        HorizontalOptions="CenterAndExpand"
+        HorizontalTextAlignment="Center"
         VerticalOptions="CenterAndExpand" />
+
     <controls:IconButton 
         StyleClass="box-row-button, box-row-button-platform"
         Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
         Command="{Binding CopyCommand}"
         CommandParameter="LoginTotp"
         Grid.Row="0"
-        Grid.Column="2"
+        Grid.Column="4"
         Grid.RowSpan="2"
         Padding="0,0,1,0"
         AutomationProperties.IsInAccessibleTree="True"

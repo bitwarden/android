@@ -1,10 +1,7 @@
 using System;
 using System.Threading.Tasks;
-using Bit.App.Resources;
 using Bit.App.Utilities;
-using Bit.Core;
 using Bit.Core.Abstractions;
-using Bit.Core.Enums;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
@@ -13,23 +10,15 @@ namespace Bit.App.Pages
 {
     public class GroupingsPageTOTPListItem : ExtendedViewModel, IGroupingsPageListItem
     {
-        //private string _totpCode;
         private readonly ITotpService _totpService;
-
-        //public CipherView Cipher { get; set; }
-        //public CipherType? Type { get; set; }
-        //public int interval { get; set; }
-        //public long TotpSec { get; set; }
-        //private DateTime? _totpInterval = null;
-
         private CipherView _cipher;
 
         private bool _websiteIconsEnabled;
         private string _iconImageSource = string.Empty;
 
         public int interval { get; set; }
+        private double _progress;
         private string _totpSec;
-
         private string _totpCode;
         private string _totpCodeFormatted = "938 928";
 
@@ -62,7 +51,11 @@ namespace Bit.App.Pages
             get => _totpSec;
             set => SetProperty(ref _totpSec, value);
         }
-
+        public double Progress
+        {
+            get => _progress;
+            set => SetProperty(ref _progress, value);
+        }
         public bool WebsiteIconsEnabled
         {
             get => _websiteIconsEnabled;
@@ -95,6 +88,7 @@ namespace Bit.App.Pages
             var mod = epoc % interval;
             var totpSec = interval - mod;
             TotpSec = totpSec.ToString();
+            Progress = totpSec * 100 / 30;
             //TotpLow = totpSec < 7;
             if (mod == 0)
             {

@@ -185,6 +185,7 @@ namespace Bit.App.Pages
         {
             base.OnDisappearing();
             IsBusy = false;
+            _vm.TOTPFilterEnable = false;
             _broadcasterService.Unsubscribe(_pageName);
             _vm.DisableRefreshing();
             _accountAvatar?.OnDisappearing();

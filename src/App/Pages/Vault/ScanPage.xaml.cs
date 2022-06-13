@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -89,6 +90,7 @@ namespace Bit.App.Pages
             {
                 if (text.StartsWith("otpauth://totp"))
                 {
+                    Vibration.Vibrate();
                     _callback(text);
                     return;
                 }
@@ -100,6 +102,7 @@ namespace Bit.App.Pages
                     {
                         if (part.StartsWith("secret="))
                         {
+                            Vibration.Vibrate();
                             _callback(part.Substring(7)?.ToUpperInvariant());
                             return;
                         }

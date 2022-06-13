@@ -1,4 +1,5 @@
 using System;
+using Bit.App.Pages;
 using Bit.App.Utilities;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
@@ -111,7 +112,7 @@ namespace Bit.App.Controls
 
         private void MoreButton_Clicked(object sender, EventArgs e)
         {
-            var cipher = ((sender as MiButton)?.BindingContext as AuthenticatorViewCellViewModel)?.Cipher;
+            var cipher = ((sender as MiButton)?.BindingContext as GroupingsPageTOTPListItem)?.Cipher;
             if (cipher != null)
             {
                 //ButtonCommand?.Execute(cipher);

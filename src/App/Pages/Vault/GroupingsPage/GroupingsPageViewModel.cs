@@ -83,7 +83,7 @@ namespace Bit.App.Pages
             VaultFilterCommand = new AsyncCommand(VaultFilterOptionsAsync,
                 onException: ex => _logger.Exception(ex),
                 allowsMultipleExecutions: false);
-            TOTPFilterCommand = new AsyncCommand(LoadDataAsync,
+            TOTPFilterCommand = new AsyncCommand(LoadAsync,
                 onException: ex => _logger.Exception(ex),
                 allowsMultipleExecutions: false);
 
@@ -324,18 +324,15 @@ namespace Bit.App.Pages
 
                         foreach (var item in ciphersListItems)
                         {
-                            item.TotpUpdateCodeAsync();
+                            await item.TotpUpdateCodeAsync();
                         }
                         Device.StartTimer(new TimeSpan(0, 0, 1), () =>
                         {
-                            if (Type != CipherType.Login)
-                                return false;
-
                             foreach (var item in ciphersListItems)
                             {
                                 item.TotpTickAsync();
                             }
-                            return true;
+                            return TOTPFilterEnable;
                         }); 
                     }
                     else

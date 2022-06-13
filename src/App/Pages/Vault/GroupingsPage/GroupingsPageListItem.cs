@@ -2,6 +2,7 @@
 using Bit.Core;
 using Bit.Core.Enums;
 using Bit.Core.Models.View;
+using Bit.Core.Utilities;
 
 namespace Bit.App.Pages
 {
