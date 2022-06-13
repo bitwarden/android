@@ -250,8 +250,7 @@ namespace Bit.Core.Services
         public async Task<bool> ShouldShowVaultFilterAsync()
         {
             var organizations = await _organizationService.GetAllAsync();
-            var personalOwnershipPolicyApplies = await PolicyAppliesToUser(PolicyType.PersonalOwnership);
-            return (organizations?.Any() ?? false) && !personalOwnershipPolicyApplies;
+            return organizations?.Any() ?? false;
         }
 
         private bool? GetPolicyBool(Policy policy, string key)
