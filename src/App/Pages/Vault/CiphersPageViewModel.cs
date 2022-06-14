@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
-using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
-using Bit.Core.Models.Domain;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
@@ -18,7 +15,7 @@ using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
-    public class CiphersPageViewModel : BaseViewModel
+    public class CiphersPageViewModel : VaultFilterViewModel
     {
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly ICipherService _cipherService;
@@ -31,12 +28,9 @@ namespace Bit.App.Pages
         private CancellationTokenSource _searchCancellationTokenSource;
         private readonly ILogger _logger;
 
-        private bool _showVaultFilter;
-        private string _vaultFilterSelection;
         private bool _showNoData;
         private bool _showList;
         private bool _websiteIconsEnabled;
-        private List<Organization> _organizations;
 
         public CiphersPageViewModel()
         {
@@ -52,17 +46,18 @@ namespace Bit.App.Pages
 
             Ciphers = new ExtendedObservableCollection<CipherView>();
             CipherOptionsCommand = new Command<CipherView>(CipherOptionsAsync);
-            VaultFilterCommand = new AsyncCommand(VaultFilterOptionsAsync,
-                onException: ex => _logger.Exception(ex),
-                allowsMultipleExecutions: false);
         }
 
         public Command CipherOptionsCommand { get; set; }
-        public ICommand VaultFilterCommand { get; }
         public ExtendedObservableCollection<CipherView> Ciphers { get; set; }
         public Func<CipherView, bool> Filter { get; set; }
         public string AutofillUrl { get; set; }
         public bool Deleted { get; set; }
+
+        protected override ICipherService cipherService => _cipherService;
+        protected override IPolicyService policyService => _policyService;
+        protected override IOrganizationService organizationService => _organizationService;
+        protected override ILogger logger => _logger;
 
         public bool ShowNoData
         {
@@ -81,23 +76,6 @@ namespace Bit.App.Pages
                 nameof(ShowSearchDirection)
             });
         }
-        public bool ShowVaultFilter
-        {
-            get => _showVaultFilter;
-            set => SetProperty(ref _showVaultFilter, value);
-        }
-        public string VaultFilterDescription
-        {
-            get
-            {
-                if (_vaultFilterSelection == null || _vaultFilterSelection == AppResources.AllVaults)
-                {
-                    return string.Format(AppResources.VaultFilterDescription, AppResources.All);
-                }
-                return string.Format(AppResources.VaultFilterDescription, _vaultFilterSelection);
-            }
-            set => SetProperty(ref _vaultFilterSelection, value);
-        }
 
         public bool ShowSearchDirection => !ShowList && !ShowNoData;
 
@@ -109,12 +87,7 @@ namespace Bit.App.Pages
 
         public async Task InitAsync()
         {
-            _organizations = await _organizationService.GetAllAsync();
-            ShowVaultFilter = await _policyService.ShouldShowVaultFilterAsync();
-            if (ShowVaultFilter && _vaultFilterSelection == null)
-            {
-                _vaultFilterSelection = AppResources.AllVaults;
-            }
+            await InitVaultFilterAsync();
             WebsiteIconsEnabled = !(await _stateService.GetDisableFaviconAsync()).GetValueOrDefault();
             PerformSearchIfPopulated();
         }
@@ -237,48 +210,9 @@ namespace Bit.App.Pages
             }
         }
 
-        private async Task VaultFilterOptionsAsync()
+        protected override async Task OnVaultFilterSelectedAsync()
         {
-            var options = new List<string> { AppResources.AllVaults, AppResources.MyVault };
-            if (_organizations.Any())
-            {
-                options.AddRange(_organizations.OrderBy(o => o.Name).Select(o => o.Name));
-            }
-            var selection = await Page.DisplayActionSheet(AppResources.FilterByVault, AppResources.Cancel, null,
-                options.ToArray());
-            if (selection == null || selection == AppResources.Cancel ||
-                (_vaultFilterSelection == null && selection == AppResources.AllVaults) ||
-                (_vaultFilterSelection != null && _vaultFilterSelection == selection))
-            {
-                return;
-            }
-            VaultFilterDescription = selection;
             PerformSearchIfPopulated();
-        }
-
-        private async Task<List<CipherView>> GetAllCiphersAsync()
-        {
-            var decCiphers = await _cipherService.GetAllDecryptedAsync();
-            if (IsVaultFilterMyVault)
-            {
-                return decCiphers.Where(c => c.OrganizationId == null).ToList();
-            }
-            if (IsVaultFilterOrgVault)
-            {
-                var orgId = GetVaultFilterOrgId();
-                return decCiphers.Where(c => c.OrganizationId == orgId).ToList();
-            }
-            return decCiphers;
-        }
-
-        private bool IsVaultFilterMyVault => _vaultFilterSelection == AppResources.MyVault;
-
-        private bool IsVaultFilterOrgVault => _vaultFilterSelection != AppResources.AllVaults &&
-                                              _vaultFilterSelection != AppResources.MyVault;
-
-        private string GetVaultFilterOrgId()
-        {
-            return _organizations?.FirstOrDefault(o => o.Name == _vaultFilterSelection)?.Id;
         }
 
         private async void CipherOptionsAsync(CipherView cipher)
