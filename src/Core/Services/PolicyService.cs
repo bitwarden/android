@@ -249,6 +249,12 @@ namespace Bit.Core.Services
 
         public async Task<bool> ShouldShowVaultFilterAsync()
         {
+            var personalOwnershipPolicyApplies = await PolicyAppliesToUser(PolicyType.PersonalOwnership);
+            var singleOrgPolicyApplies = await PolicyAppliesToUser(PolicyType.OnlyOrg);
+            if (personalOwnershipPolicyApplies && singleOrgPolicyApplies)
+            {
+                return false;
+            }
             var organizations = await _organizationService.GetAllAsync();
             return organizations?.Any() ?? false;
         }
