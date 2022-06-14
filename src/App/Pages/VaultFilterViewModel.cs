@@ -7,6 +7,7 @@ using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.View;
+using Xamarin.CommunityToolkit.ObjectModel;
 
 namespace Bit.App.Pages
 {
@@ -15,11 +16,19 @@ namespace Bit.App.Pages
         protected abstract ICipherService cipherService { get; }
         protected abstract IPolicyService policyService { get; }
         protected abstract IOrganizationService organizationService { get; }
+        protected abstract ILogger logger { get; }
 
         protected bool _showVaultFilter;
         protected bool _hideMyVaultFilterOption;
         protected string _vaultFilterSelection;
         protected List<Organization> _organizations;
+
+        public VaultFilterViewModel()
+        {
+            VaultFilterCommand = new AsyncCommand(VaultFilterOptionsAsync,
+                onException: ex => logger.Exception(ex),
+                allowsMultipleExecutions: false);
+        }
 
         public ICommand VaultFilterCommand { get; set; }
 

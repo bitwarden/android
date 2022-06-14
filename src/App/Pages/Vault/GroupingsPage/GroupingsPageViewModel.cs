@@ -74,9 +74,6 @@ namespace Bit.App.Pages
                 await LoadAsync();
             });
             CipherOptionsCommand = new Command<CipherView>(CipherOptionsAsync);
-            VaultFilterCommand = new AsyncCommand(VaultFilterOptionsAsync,
-                onException: ex => _logger.Exception(ex),
-                allowsMultipleExecutions: false);
 
             AccountSwitchingOverlayViewModel = new AccountSwitchingOverlayViewModel(_stateService, _messagingService, _logger)
             {
@@ -107,6 +104,7 @@ namespace Bit.App.Pages
         protected override ICipherService cipherService => _cipherService;
         protected override IPolicyService policyService => _policyService;
         protected override IOrganizationService organizationService => _organizationService;
+        protected override ILogger logger => _logger;
 
         public bool Refreshing
         {
