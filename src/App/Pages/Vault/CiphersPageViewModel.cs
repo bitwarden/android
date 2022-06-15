@@ -88,6 +88,7 @@ namespace Bit.App.Pages
         public async Task InitAsync()
         {
             await InitVaultFilterAsync();
+            await ShowVaultFilterIfNeededAsync();
             WebsiteIconsEnabled = !(await _stateService.GetDisableFaviconAsync()).GetValueOrDefault();
             PerformSearchIfPopulated();
         }

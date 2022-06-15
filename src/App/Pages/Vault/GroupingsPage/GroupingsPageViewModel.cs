@@ -181,9 +181,10 @@ namespace Bit.App.Pages
                 return;
             }
 
+            await InitVaultFilterAsync();
             if (MainPage)
             {
-                await InitVaultFilterAsync();
+                await ShowVaultFilterIfNeededAsync();
                 PageTitle = ShowVaultFilter ? AppResources.Vaults : AppResources.MyVault;
             }
 

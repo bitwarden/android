@@ -77,6 +77,10 @@ namespace Bit.App.Pages
                     VaultFilterDescription = AppResources.AllVaults;
                 }
             }
+        }
+
+        protected async Task ShowVaultFilterIfNeededAsync()
+        {
             await Task.Delay(100);
             ShowVaultFilter = await policyService.ShouldShowVaultFilterAsync();
         }
