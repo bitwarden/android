@@ -64,7 +64,6 @@ namespace Bit.App.Pages
 
         protected async Task InitVaultFilterAsync()
         {
-            ShowVaultFilter = await policyService.ShouldShowVaultFilterAsync();
             _organizations = await organizationService.GetAllAsync();
             if (_organizations?.Any() ?? false)
             {
@@ -79,6 +78,8 @@ namespace Bit.App.Pages
                     VaultFilterDescription = AppResources.AllVaults;
                 }
             }
+            await Task.Delay(100);
+            ShowVaultFilter = await policyService.ShouldShowVaultFilterAsync();
         }
 
         protected async Task<List<CipherView>> GetAllCiphersAsync()
