@@ -61,7 +61,7 @@ namespace Bit.App.Pages
         protected bool IsVaultFilterOrgVault => _vaultFilterSelection != AppResources.AllVaults &&
                                                 _vaultFilterSelection != AppResources.MyVault;
 
-        protected async Task InitVaultFilterAsync()
+        protected async Task InitVaultFilterAsync(bool shouldUpdateShowVaultFilter)
         {
             _organizations = await organizationService.GetAllAsync();
             if (_organizations?.Any() ?? false)
@@ -77,12 +77,11 @@ namespace Bit.App.Pages
                     VaultFilterDescription = AppResources.AllVaults;
                 }
             }
-        }
-
-        protected async Task ShowVaultFilterIfNeededAsync()
-        {
-            await Task.Delay(100);
-            ShowVaultFilter = await policyService.ShouldShowVaultFilterAsync();
+            if (shouldUpdateShowVaultFilter)
+            {
+                await Task.Delay(100);
+                ShowVaultFilter = await policyService.ShouldShowVaultFilterAsync();
+            }
         }
 
         protected async Task<List<CipherView>> GetAllCiphersAsync()
