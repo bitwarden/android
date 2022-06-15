@@ -20,7 +20,6 @@ namespace Bit.App.Pages
 
         protected bool _showVaultFilter;
         protected bool _personalOwnershipPolicyApplies;
-        protected bool _singleOrgPolicyApplies;
         protected string _vaultFilterSelection;
         protected List<Organization> _organizations;
 
@@ -68,8 +67,8 @@ namespace Bit.App.Pages
             if (_organizations?.Any() ?? false)
             {
                 _personalOwnershipPolicyApplies = await policyService.PolicyAppliesToUser(PolicyType.PersonalOwnership);
-                _singleOrgPolicyApplies = await policyService.PolicyAppliesToUser(PolicyType.OnlyOrg);
-                if (_personalOwnershipPolicyApplies && _singleOrgPolicyApplies)
+                var singleOrgPolicyApplies = await policyService.PolicyAppliesToUser(PolicyType.OnlyOrg);
+                if (_personalOwnershipPolicyApplies && singleOrgPolicyApplies)
                 {
                     VaultFilterDescription = _organizations.First().Name;
                 }
