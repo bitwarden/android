@@ -202,6 +202,7 @@ namespace Bit.App
 
         private async Task ResumedAsync()
         {
+            await _stateService.CheckExtensionActiveUserAndSwitchIfNeededAsync();
             await _vaultTimeoutService.CheckVaultTimeoutAsync();
             _messagingService.Send("startEventTimer");
             await UpdateThemeAsync();

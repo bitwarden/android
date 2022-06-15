@@ -59,7 +59,7 @@ namespace Bit.iOS.Core.Utilities
                 () => ServiceContainer.Resolve<IAppIdService>("appIdService").GetAppIdAsync());
             var cryptoPrimitiveService = new CryptoPrimitiveService();
             var mobileStorageService = new MobileStorageService(preferencesStorage, liteDbStorage);
-            var stateService = new StateService(mobileStorageService, secureStorageService);
+            var stateService = new StateService(mobileStorageService, secureStorageService, messagingService);
             var stateMigrationService =
                 new StateMigrationService(liteDbStorage, preferencesStorage, secureStorageService);
             var deviceActionService = new DeviceActionService(stateService, messagingService);

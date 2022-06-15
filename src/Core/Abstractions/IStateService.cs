@@ -14,6 +14,7 @@ namespace Bit.Core.Abstractions
         Task<string> GetActiveUserIdAsync();
         Task<bool> IsActiveAccountAsync(string userId = null);
         Task SetActiveUserAsync(string userId);
+        Task CheckExtensionActiveUserAndSwitchIfNeededAsync();
         Task<bool> IsAuthenticatedAsync(string userId = null);
         Task<string> GetUserIdAsync(string email);
         Task RefreshAccountViewsAsync(bool allowAddAccountRow);
@@ -145,5 +146,6 @@ namespace Bit.Core.Abstractions
         Task SetRefreshTokenAsync(string value, bool skipTokenStorage, string userId = null);
         Task<string> GetTwoFactorTokenAsync(string email = null);
         Task SetTwoFactorTokenAsync(string value, string email = null);
+        Task SaveExtensionActiveUserIdToStorageAsync(string userId);
     }
 }

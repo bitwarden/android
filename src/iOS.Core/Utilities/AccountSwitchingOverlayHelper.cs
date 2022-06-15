@@ -35,7 +35,10 @@ namespace Bit.iOS.Core.Utilities
                 LongPressAccountEnabled = false
             };
 
-            var vm = new AccountSwitchingOverlayViewModel(_stateService, _messagingService, _logger);
+            var vm = new AccountSwitchingOverlayViewModel(_stateService, _messagingService, _logger)
+            {
+                FromIOSExtension = true
+            };
             overlay.BindingContext = vm;
 
             var renderer = Platform.CreateRenderer(overlay.Content);
