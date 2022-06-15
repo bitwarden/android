@@ -33,6 +33,7 @@ namespace Bit.App.Services
             Constants.iOSShareExtensionBiometricIntegrityKey,
             Constants.RememberedEmailKey,
             Constants.RememberedOrgIdentifierKey,
+            Constants.iOSExtensionActiveUserIdKey
         };
 
         public MobileStorageService(
