@@ -19,7 +19,7 @@ namespace Bit.App.Pages
         protected abstract ILogger logger { get; }
 
         protected bool _showVaultFilter;
-        protected bool _hideMyVaultFilterOption;
+        protected bool _personalOwnershipPolicyApplies;
         protected string _vaultFilterSelection;
         protected List<Organization> _organizations;
 
@@ -64,15 +64,21 @@ namespace Bit.App.Pages
         protected async Task InitVaultFilterAsync()
         {
             _organizations = await organizationService.GetAllAsync();
-            ShowVaultFilter = await policyService.ShouldShowVaultFilterAsync();
-            if (ShowVaultFilter)
+            if (_organizations?.Any() ?? false)
             {
-                _hideMyVaultFilterOption = await policyService.PolicyAppliesToUser(PolicyType.PersonalOwnership);
-                if (_vaultFilterSelection == null)
+                _personalOwnershipPolicyApplies = await policyService.PolicyAppliesToUser(PolicyType.PersonalOwnership);
+                var singleOrgPolicyApplies = await policyService.PolicyAppliesToUser(PolicyType.OnlyOrg);
+                if (_personalOwnershipPolicyApplies && singleOrgPolicyApplies)
                 {
-                    _vaultFilterSelection = AppResources.AllVaults;
+                    VaultFilterDescription = _organizations.First().Name;
+                }
+                else if (_vaultFilterSelection == null)
+                {
+                    VaultFilterDescription = AppResources.AllVaults;
                 }
             }
+            await Task.Delay(100);
+            ShowVaultFilter = await policyService.ShouldShowVaultFilterAsync();
         }
 
         protected async Task<List<CipherView>> GetAllCiphersAsync()
@@ -93,7 +99,7 @@ namespace Bit.App.Pages
         protected async Task VaultFilterOptionsAsync()
         {
             var options = new List<string> { AppResources.AllVaults };
-            if (!_hideMyVaultFilterOption)
+            if (!_personalOwnershipPolicyApplies)
             {
                 options.Add(AppResources.MyVault);
             }
