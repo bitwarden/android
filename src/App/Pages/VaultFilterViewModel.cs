@@ -19,7 +19,8 @@ namespace Bit.App.Pages
         protected abstract ILogger logger { get; }
 
         protected bool _showVaultFilter;
-        protected bool _hideMyVaultFilterOption;
+        protected bool _personalOwnershipPolicyApplies;
+        protected bool _singleOrgPolicyApplies;
         protected string _vaultFilterSelection;
         protected List<Organization> _organizations;
 
@@ -63,14 +64,19 @@ namespace Bit.App.Pages
 
         protected async Task InitVaultFilterAsync()
         {
-            _organizations = await organizationService.GetAllAsync();
             ShowVaultFilter = await policyService.ShouldShowVaultFilterAsync();
-            if (ShowVaultFilter)
+            _organizations = await organizationService.GetAllAsync();
+            if (_organizations?.Any() ?? false)
             {
-                _hideMyVaultFilterOption = await policyService.PolicyAppliesToUser(PolicyType.PersonalOwnership);
-                if (_vaultFilterSelection == null)
+                _personalOwnershipPolicyApplies = await policyService.PolicyAppliesToUser(PolicyType.PersonalOwnership);
+                _singleOrgPolicyApplies = await policyService.PolicyAppliesToUser(PolicyType.OnlyOrg);
+                if (_personalOwnershipPolicyApplies && _singleOrgPolicyApplies)
                 {
-                    _vaultFilterSelection = AppResources.AllVaults;
+                    VaultFilterDescription = _organizations.First().Name;
+                }
+                else if (_vaultFilterSelection == null)
+                {
+                    VaultFilterDescription = AppResources.AllVaults;
                 }
             }
         }
@@ -93,7 +99,7 @@ namespace Bit.App.Pages
         protected async Task VaultFilterOptionsAsync()
         {
             var options = new List<string> { AppResources.AllVaults };
-            if (!_hideMyVaultFilterOption)
+            if (!_personalOwnershipPolicyApplies)
             {
                 options.Add(AppResources.MyVault);
             }
