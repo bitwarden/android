@@ -130,7 +130,7 @@ namespace Bit.Droid
             var secureStorageService = new SecureStorageService();
             var cryptoPrimitiveService = new CryptoPrimitiveService();
             var mobileStorageService = new MobileStorageService(preferencesStorage, liteDbStorage);
-            var stateService = new StateService(mobileStorageService, secureStorageService);
+            var stateService = new StateService(mobileStorageService, secureStorageService, messagingService);
             var stateMigrationService =
                 new StateMigrationService(liteDbStorage, preferencesStorage, secureStorageService);
             var clipboardService = new ClipboardService(stateService);

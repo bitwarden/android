@@ -15,16 +15,20 @@ namespace Bit.Core.Services
     {
         private readonly IStorageService _storageService;
         private readonly IStorageService _secureStorageService;
+        private readonly IMessagingService _messagingService;
 
         private State _state;
         private bool _migrationChecked;
 
         public List<AccountView> AccountViews { get; set; }
 
-        public StateService(IStorageService storageService, IStorageService secureStorageService)
+        public StateService(IStorageService storageService,
+                            IStorageService secureStorageService,
+                            IMessagingService messagingService)
         {
             _storageService = storageService;
             _secureStorageService = secureStorageService;
+            _messagingService = messagingService;
         }
 
         public async Task<string> GetActiveUserIdAsync()
@@ -65,6 +69,28 @@ namespace Bit.Core.Services
             await SetRememberedEmailAsync(await GetEmailAsync());
             await SetRememberedOrgIdentifierAsync(await GetRememberedOrgIdentifierAsync());
             await SetPreAuthEnvironmentUrlsAsync(await GetEnvironmentUrlsAsync());
+        }
+
+        public async Task CheckExtensionActiveUserAndSwitchIfNeededAsync()
+        {
+            var extensionUserId = await GetExtensionActiveUserIdFromStorageAsync();
+            if (string.IsNullOrEmpty(extensionUserId))
+            {
+                return;
+            }
+
+            if (_state?.ActiveUserId == extensionUserId)
+            {
+                // Clear the value in case the user changes the active user from the app
+                // so if that happens and the user sends the app to background and comes back
+                // the user is not changed again.
+                await SaveExtensionActiveUserIdToStorageAsync(null);
+                return;
+            }
+
+            await SetActiveUserAsync(extensionUserId);
+            await SaveExtensionActiveUserIdToStorageAsync(null);
+            _messagingService.Send(AccountsManagerMessageCommands.SWITCHED_ACCOUNT);
         }
 
         public async Task<bool> IsAuthenticatedAsync(string userId = null)
@@ -1508,6 +1534,16 @@ namespace Bit.Core.Services
         private async Task SaveStateToStorageAsync(State state)
         {
             await _storageService.SaveAsync(Constants.StateKey, state);
+        }
+
+        private async Task<string> GetExtensionActiveUserIdFromStorageAsync()
+        {
+            return await _storageService.GetAsync<string>(Constants.iOSExtensionActiveUserIdKey);
+        }
+
+        public async Task SaveExtensionActiveUserIdToStorageAsync(string userId)
+        {
+            await _storageService.SaveAsync(Constants.iOSExtensionActiveUserIdKey, userId);
         }
 
         private async Task CheckStateAsync()

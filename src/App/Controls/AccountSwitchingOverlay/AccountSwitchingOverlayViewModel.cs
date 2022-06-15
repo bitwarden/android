@@ -45,23 +45,28 @@ namespace Bit.App.Controls
 
         public ICommand LongPressAccountCommand { get; }
 
+        public bool FromIOSExtension { get; set; }
+
         private async Task SelectAccountAsync(AccountViewCellViewModel item)
         {
-            if (item.AccountView.IsAccount)
+            if (!item.AccountView.IsAccount)
             {
-                if (!item.AccountView.IsActive)
+                _messagingService.Send(AccountsManagerMessageCommands.ADD_ACCOUNT);
+                return;
+            }
+
+            if (!item.AccountView.IsActive)
+            {
+                await _stateService.SetActiveUserAsync(item.AccountView.UserId);
+                _messagingService.Send(AccountsManagerMessageCommands.SWITCHED_ACCOUNT);
+                if (FromIOSExtension)
                 {
-                    await _stateService.SetActiveUserAsync(item.AccountView.UserId);
-                    _messagingService.Send("switchedAccount");
-                }
-                else if (AllowActiveAccountSelection)
-                {
-                    _messagingService.Send("switchedAccount");
+                    await _stateService.SaveExtensionActiveUserIdToStorageAsync(item.AccountView.UserId);
                 }
             }
-            else
+            else if (AllowActiveAccountSelection)
             {
-                _messagingService.Send("addAccount");
+                _messagingService.Send(AccountsManagerMessageCommands.SWITCHED_ACCOUNT);
             }
         }
 
