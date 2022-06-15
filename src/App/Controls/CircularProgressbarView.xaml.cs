@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace Bit.App.Controls
@@ -12,8 +13,6 @@ namespace Bit.App.Controls
 
         public static readonly BindableProperty ProgressProperty = BindableProperty.Create(
             "Progress", typeof(double), typeof(CircularProgressbarView), propertyChanged: OnProgressChanged);
-
-        public SKColor Color => Progress > 90 ? SKColors.Red : SKColors.Blue;
 
         public double Progress
         {
@@ -30,8 +29,9 @@ namespace Bit.App.Controls
         public CircularProgressbarView()
         {
             InitializeComponent();
-            var circle = new Circle(25, (info) => new SKPoint((float)info.Width / 2, (float)info.Height / 2));
-            _progressDrawer = new ProgressDrawer(SkCanvasView, circle, () => (float)Progress, 5, SKColors.White, Color);
+            var pixels = DeviceDisplay.MainDisplayInfo.Density * 15;
+            var circle = new Circle((float)pixels, (info) => new SKPoint((float)info.Width / 2, (float)info.Height / 2));
+            _progressDrawer = new ProgressDrawer(SkCanvasView, circle, () => (float)Progress, 5, SKColors.White, SKColors.Blue, SKColors.Red);
         }
     }
 
@@ -48,59 +48,22 @@ namespace Bit.App.Controls
         public float Redius { get; set; }
         public SKRect Rect => new SKRect(Center.X - Redius, Center.Y - Redius, Center.X + Redius, Center.Y + Redius);
 
-        public class ProgressDrawer
-        {
-
-            public ProgressDrawer(SKCanvasView canvas, Circle circle, Func<float> progress, float strokeWidth, SKColor progressColor, SKColor foregroundColor)
-            {
-                canvas.PaintSurface += (sender, args) =>
-                {
-                    circle.CalculateCenter(args.Info);
-                    args.Surface.Canvas.Clear();
-                    DrawCircle(args.Surface.Canvas, circle, strokeWidth, progressColor);
-                    DrawArc(args.Surface.Canvas, circle, progress, strokeWidth, foregroundColor);
-
-                };
-            }
-
-            private void DrawCircle(SKCanvas canvas, Circle circle, float strokewidth, SKColor color)
-            {
-                canvas.DrawCircle(circle.Center, circle.Redius,
-                    new SKPaint()
-                    {
-                        StrokeWidth = strokewidth,
-                        Color = color,
-                        IsStroke = true,
-                        IsAntialias = true,
-                    });
-
-            }
-
-            private void DrawArc(SKCanvas canvas, Circle circle, Func<float> progress, float strokewidth, SKColor color)
-            {
-                var angle = progress.Invoke() * 3.6f;
-                canvas.DrawArc(circle.Rect, 270, angle, false,
-                    new SKPaint() { StrokeWidth = strokewidth, Color = color, IsStroke = true, IsAntialias = true });
-            }
-
-        }
-
         public void CalculateCenter(SKImageInfo argsInfo)
         {
             Center = _centerfunc.Invoke(argsInfo);
         }
     }
+
     public class ProgressDrawer
     {
-        public ProgressDrawer(SKCanvasView canvas, Circle circle, Func<float> progress, float strokeWidth, SKColor progressColor, SKColor foregroundColor)
+        public ProgressDrawer(SKCanvasView canvas, Circle circle, Func<float> progress, float strokeWidth, SKColor progressColor, SKColor foregroundColor, SKColor progressEndColor)
         {
             canvas.PaintSurface += (sender, args) =>
             {
                 circle.CalculateCenter(args.Info);
                 args.Surface.Canvas.Clear();
                 DrawCircle(args.Surface.Canvas, circle, strokeWidth, progressColor);
-                DrawArc(args.Surface.Canvas, circle, progress, strokeWidth, foregroundColor);
-
+                DrawArc(args.Surface.Canvas, circle, progress, strokeWidth, foregroundColor, progressEndColor);
             };
         }
 
@@ -116,11 +79,16 @@ namespace Bit.App.Controls
                 });
         }
 
-        private void DrawArc(SKCanvas canvas, Circle circle, Func<float> progress, float strokewidth, SKColor color)
+        private void DrawArc(SKCanvas canvas, Circle circle, Func<float> progress, float strokewidth, SKColor color, SKColor progressEndColor)
         {
-            var angle = progress.Invoke() * 3.6f;
+            var progressValue = progress.Invoke();
+            var angle = progressValue * 3.6f;
             canvas.DrawArc(circle.Rect, 270, angle, false,
-                new SKPaint() { StrokeWidth = strokewidth, Color = color, IsStroke = true,
+                new SKPaint()
+                {
+                    StrokeWidth = strokewidth,
+                    Color = progressValue < 20f ? progressEndColor : color,
+                    IsStroke = true,
                     IsAntialias = true
                 });
         }

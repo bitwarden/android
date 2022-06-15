@@ -10,6 +10,7 @@
     StyleClass="list-row, list-row-platform"
     RowSpacing="0"
     ColumnSpacing="0"
+    HorizontalOptions="FillAndExpand"
     x:DataType="pages:GroupingsPageTOTPListItem">
 
     <Grid.Resources>
@@ -26,8 +27,8 @@
     <Grid.ColumnDefinitions>
         <ColumnDefinition Width="40" />
         <ColumnDefinition Width="*" />
-        <ColumnDefinition Width="60" />
-        <ColumnDefinition Width="Auto" />
+        <ColumnDefinition Width="40" />
+        <ColumnDefinition Width="Auto"/>
         <ColumnDefinition Width="40" />
     </Grid.ColumnDefinitions>
 
@@ -59,63 +60,55 @@
         Grid.Row="0"
         Grid.Column="1"
         VerticalOptions="Center"
+        HorizontalOptions="FillAndExpand"
         Padding="0, 7">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-
         <controls:MonoLabel
             LineBreakMode="TailTruncation"
             Grid.Column="0"
             Grid.Row="0"
-            Grid.ColumnSpan="3"
             StyleClass="list-title, list-title-platform"
-            Text="{Binding TotpCodeFormatted, Mode=OneWay}" />
+            Text="{Binding Cipher.Name}" />
         <Label 
             LineBreakMode="TailTruncation"
             Grid.Column="0"
             Grid.Row="1"
             StyleClass="list-subtitle, list-subtitle-platform"
-            Text="{Binding Cipher.Name}" />
+            Text="{Binding Cipher.SubTitle}" />
     </Grid>
 
     <controls:CircularProgressbarView
         Progress="{Binding Progress}" 
-        Margin="0, 10, 0, 0"
         Grid.Row="0"
         Grid.Column="2"
-        Grid.RowSpan="2"
+        HorizontalOptions="FillAndExpand"
         VerticalOptions="CenterAndExpand" />
     
     <Label
         Text="{Binding TotpSec, Mode=OneWay}"
         Style="{DynamicResource textTotp}"
-        Margin="0, 0, 0, 10"
         Grid.Row="0"
         Grid.Column="2"
-        Grid.RowSpan="2"
         StyleClass="text-sm"
-        HorizontalTextAlignment="Center"
-        VerticalOptions="CenterAndExpand" /> 
+        XAlign="Center"
+        YAlign="Center"
+        HorizontalOptions="FillAndExpand"
+        VerticalOptions="FillAndExpand"/> 
 
-    <Label
+    <controls:MonoLabel
         Text="{Binding TotpCodeFormatted, Mode=OneWay}"
         Style="{DynamicResource textTotp}"
-        Margin="0, 0, 0, 0"
         Grid.Row="0"
         Grid.Column="3"
-        Grid.RowSpan="2"
-        StyleClass="text-sm"
-        HorizontalOptions="CenterAndExpand"
-        HorizontalTextAlignment="Center"
-        VerticalOptions="CenterAndExpand" />
+        StyleClass="list-title, list-title-platform"
+        XAlign="Center"
+        YAlign="Center"
+        HorizontalOptions="FillAndExpand"
+        VerticalOptions="FillAndExpand" />
 
     <controls:IconButton 
         StyleClass="box-row-button, box-row-button-platform"
@@ -124,8 +117,9 @@
         CommandParameter="LoginTotp"
         Grid.Row="0"
         Grid.Column="4"
-        Grid.RowSpan="2"
         Padding="0,0,1,0"
+        HorizontalOptions="FillAndExpand"
+        VerticalOptions="CenterAndExpand"
         AutomationProperties.IsInAccessibleTree="True"
         AutomationProperties.Name="{u:I18n CopyTotp}" />
 </controls:ExtendedGrid>
