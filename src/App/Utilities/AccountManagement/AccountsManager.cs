@@ -6,21 +6,11 @@ using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
+using Bit.Core.Utilities;
 using Xamarin.Forms;
 
 namespace Bit.App.Utilities.AccountManagement
 {
-    public static class AccountsManagerMessageCommands
-    {
-        public const string LOCKED = "locked";
-        public const string LOCK_VAULT = "lockVault";
-        public const string LOGOUT = "logout";
-        public const string LOGGED_OUT = "loggedOut";
-        public const string ADD_ACCOUNT = "addAccount";
-        public const string ACCOUNT_ADDED = "accountAdded";
-        public const string SWITCHED_ACCOUNT = "switchedAccount";
-    }
-
     public class AccountsManager : IAccountsManager
     {
         private readonly IBroadcasterService _broadcasterService;
@@ -209,7 +199,7 @@ namespace Bit.App.Utilities.AccountManagement
         private async Task SwitchedAccountAsync()
         {
             await AppHelpers.OnAccountSwitchAsync();
-            Device.BeginInvokeOnMainThread(async () =>
+            await Device.InvokeOnMainThreadAsync(async () =>
             {
                 if (await _vaultTimeoutService.ShouldTimeoutAsync())
                 {

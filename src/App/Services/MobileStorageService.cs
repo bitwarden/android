@@ -25,6 +25,7 @@ namespace Bit.App.Services
             Constants.LastBuildKey,
             Constants.ClearCiphersCacheKey,
             Constants.BiometricIntegrityKey,
+            Constants.iOSExtensionActiveUserIdKey,
             Constants.iOSAutoFillClearCiphersCacheKey,
             Constants.iOSAutoFillBiometricIntegrityKey,
             Constants.iOSExtensionClearCiphersCacheKey,
@@ -32,7 +33,7 @@ namespace Bit.App.Services
             Constants.iOSShareExtensionClearCiphersCacheKey,
             Constants.iOSShareExtensionBiometricIntegrityKey,
             Constants.RememberedEmailKey,
-            Constants.RememberedOrgIdentifierKey,
+            Constants.RememberedOrgIdentifierKey
         };
 
         public MobileStorageService(
