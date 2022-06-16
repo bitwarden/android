@@ -68,11 +68,7 @@ namespace Bit.App.Pages
             {
                 _personalOwnershipPolicyApplies = await policyService.PolicyAppliesToUser(PolicyType.PersonalOwnership);
                 var singleOrgPolicyApplies = await policyService.PolicyAppliesToUser(PolicyType.OnlyOrg);
-                if (_personalOwnershipPolicyApplies && singleOrgPolicyApplies)
-                {
-                    VaultFilterDescription = _organizations.First().Name;
-                }
-                else if (_vaultFilterSelection == null)
+                if (_vaultFilterSelection == null || (_personalOwnershipPolicyApplies && singleOrgPolicyApplies))
                 {
                     VaultFilterDescription = AppResources.AllVaults;
                 }
