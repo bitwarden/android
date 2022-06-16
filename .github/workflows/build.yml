@@ -63,7 +63,7 @@ jobs:
       - name: Setup NuGet
         uses: nuget/setup-nuget@b2bc17b761a1d88cab755a776c7922eb26eefbfa  # v1.0.6
         with:
-          nuget-version: 5.9.x
+          nuget-version: 5.9.0.7134
 
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@ab534842b4bdf384b8aaf93765dc6f721d9f5fab
@@ -217,7 +217,7 @@ jobs:
       - name: Setup NuGet
         uses: nuget/setup-nuget@b2bc17b761a1d88cab755a776c7922eb26eefbfa  # v1.0.6
         with:
-          nuget-version: 5.9.x
+          nuget-version: 5.9.0.7134
 
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@ab534842b4bdf384b8aaf93765dc6f721d9f5fab
@@ -381,7 +381,7 @@ jobs:
       - name: Setup NuGet
         uses: nuget/setup-nuget@b2bc17b761a1d88cab755a776c7922eb26eefbfa  # v1.0.6
         with:
-          nuget-version: 5.9.x
+          nuget-version: 5.9.0.7134
 
       - name: Print environment
         run: |
