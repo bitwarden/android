@@ -65,6 +65,8 @@ namespace Bit.App.Controls
 
         public bool LongPressAccountEnabled { get; set; } = true;
 
+        public Action AfterHide { get; set; }
+
         public async Task ToggleVisibilityAsync()
         {
             if (IsVisible)
@@ -137,6 +139,8 @@ namespace Bit.App.Controls
 
                 // remove overlay
                 IsVisible = false;
+
+                AfterHide?.Invoke();
             });
         }
 

@@ -32,7 +32,14 @@ namespace Bit.iOS.Core.Utilities
         {
             var overlay = new AccountSwitchingOverlayView()
             {
-                LongPressAccountEnabled = false
+                LongPressAccountEnabled = false,
+                AfterHide = () =>
+                {
+                    if (containerView != null)
+                    {
+                        containerView.Hidden = true;
+                    }
+                }
             };
 
             var vm = new AccountSwitchingOverlayViewModel(_stateService, _messagingService, _logger)
@@ -40,6 +47,7 @@ namespace Bit.iOS.Core.Utilities
                 FromIOSExtension = true
             };
             overlay.BindingContext = vm;
+            overlay.IsVisible = false;
 
             var renderer = Platform.CreateRenderer(overlay.Content);
             renderer.SetElementSize(new Size(containerView.Frame.Size.Width, containerView.Frame.Size.Height));
@@ -63,8 +71,13 @@ namespace Bit.iOS.Core.Utilities
         public void OnToolbarItemActivated(AccountSwitchingOverlayView accountSwitchingOverlayView, UIView containerView)
         {
             var overlayVisible = accountSwitchingOverlayView.IsVisible;
+            if (!overlayVisible)
+            {
+                // So that the animation doesn't break we only care about showing it
+                // and the hiding if done through AccountSwitchingOverlayView -> AfterHide
+                containerView.Hidden = false;
+            }
             accountSwitchingOverlayView.ToggleVisibililtyCommand.Execute(null);
-            containerView.Hidden = false;
             containerView.UserInteractionEnabled = !overlayVisible;
             containerView.Subviews[0].UserInteractionEnabled = !overlayVisible;
         }
