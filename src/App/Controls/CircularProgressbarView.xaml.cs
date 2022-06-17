@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
 using Xamarin.Essentials;
@@ -20,6 +21,12 @@ namespace Bit.App.Controls
             set { SetValue(ProgressProperty, value); }
         }
 
+        public float Radius { get; set; }
+        public float StrokeWidth { get; set; }
+        public Color ProgressColor { get; set; }
+        public Color EndingProgressColor { get; set; }
+        public Color BackgroundProgressColor { get; set; }
+
         private static void OnProgressChanged(BindableObject bindable, object oldvalue, object newvalue)
         {
             var context = bindable as CircularProgressbarView;
@@ -29,9 +36,16 @@ namespace Bit.App.Controls
         public CircularProgressbarView()
         {
             InitializeComponent();
-            var pixels = DeviceDisplay.MainDisplayInfo.Density * 15;
-            var circle = new Circle((float)pixels, (info) => new SKPoint((float)info.Width / 2, (float)info.Height / 2));
-            _progressDrawer = new ProgressDrawer(SkCanvasView, circle, () => (float)Progress, 5, SKColors.White, SKColors.Blue, SKColors.Red);
+        }
+
+        protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            base.OnPropertyChanged(propertyName);
+            if(propertyName == nameof(Progress) && _progressDrawer == null)
+            {
+                var circle = new Circle(Radius * (float)DeviceDisplay.MainDisplayInfo.Density, (info) => new SKPoint((float)info.Width / 2, (float)info.Height / 2));
+                _progressDrawer = new ProgressDrawer(SkCanvasView, circle, () => (float)Progress, StrokeWidth * (float)DeviceDisplay.MainDisplayInfo.Density, BackgroundProgressColor.ToSKColor(), ProgressColor.ToSKColor(), EndingProgressColor.ToSKColor());
+            }
         }
     }
 

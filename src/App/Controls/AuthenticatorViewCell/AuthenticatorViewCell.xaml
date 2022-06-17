@@ -61,7 +61,7 @@
         Grid.Column="1"
         VerticalOptions="Center"
         HorizontalOptions="FillAndExpand"
-        Padding="0, 7">
+        Padding="0, 15, 15, 10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -82,7 +82,12 @@
     </Grid>
 
     <controls:CircularProgressbarView
-        Progress="{Binding Progress}" 
+        Progress="{Binding Progress}"
+        ProgressColor="{StaticResource PrimaryColor}"
+        EndingProgressColor="{StaticResource DangerColor}"
+        BackgroundProgressColor="{StaticResource BackgroundColor}"
+        StrokeWidth="3"
+        Radius="15"
         Grid.Row="0"
         Grid.Column="2"
         HorizontalOptions="FillAndExpand"
@@ -102,9 +107,10 @@
     <controls:MonoLabel
         Text="{Binding TotpCodeFormatted, Mode=OneWay}"
         Style="{DynamicResource textTotp}"
+        Margin="2,0,0,0"
         Grid.Row="0"
         Grid.Column="3"
-        StyleClass="list-title, list-title-platform"
+        StyleClass="text-lg"
         XAlign="Center"
         YAlign="Center"
         HorizontalOptions="FillAndExpand"
@@ -118,8 +124,8 @@
         Grid.Row="0"
         Grid.Column="4"
         Padding="0,0,1,0"
-        HorizontalOptions="FillAndExpand"
-        VerticalOptions="CenterAndExpand"
+        HorizontalOptions="Center"
+        VerticalOptions="Center"
         AutomationProperties.IsInAccessibleTree="True"
         AutomationProperties.Name="{u:I18n CopyTotp}" />
 </controls:ExtendedGrid>
