@@ -23,6 +23,7 @@ namespace Bit.App.Pages
         private bool _disableAutoTotpCopy;
         private int _clearClipboardSelectedIndex;
         private int _themeSelectedIndex;
+        private int _autoDarkThemeSelectedIndex;
         private int _uriMatchSelectedIndex;
         private bool _inited;
         private bool _updatingAutofill;
@@ -58,6 +59,12 @@ namespace Bit.App.Pages
                 new KeyValuePair<string, string>("black", AppResources.Black),
                 new KeyValuePair<string, string>("nord", "Nord"),
             };
+            AutoDarkThemeOptions = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("dark", AppResources.Dark),
+                new KeyValuePair<string, string>("black", AppResources.Black),
+                new KeyValuePair<string, string>("nord", "Nord"),
+            };
             UriMatchOptions = new List<KeyValuePair<UriMatchType?, string>>
             {
                 new KeyValuePair<UriMatchType?, string>(UriMatchType.Domain, AppResources.BaseDomain),
@@ -71,6 +78,7 @@ namespace Bit.App.Pages
 
         public List<KeyValuePair<int?, string>> ClearClipboardOptions { get; set; }
         public List<KeyValuePair<string, string>> ThemeOptions { get; set; }
+        public List<KeyValuePair<string, string>> AutoDarkThemeOptions { get; set; }
         public List<KeyValuePair<UriMatchType?, string>> UriMatchOptions { get; set; }
 
         public int ClearClipboardSelectedIndex
@@ -90,7 +98,23 @@ namespace Bit.App.Pages
             get => _themeSelectedIndex;
             set
             {
-                if (SetProperty(ref _themeSelectedIndex, value))
+                if (SetProperty(ref _themeSelectedIndex, value,
+                        additionalPropertyNames: new[] { nameof(ShowAutoDarkThemeOptions) })
+                   )
+                {
+                    var task = SaveThemeAsync();
+                }
+            }
+        }
+
+        public bool ShowAutoDarkThemeOptions => ThemeOptions[ThemeSelectedIndex].Key == null;
+
+        public int AutoDarkThemeSelectedIndex
+        {
+            get => _autoDarkThemeSelectedIndex;
+            set
+            {
+                if (SetProperty(ref _autoDarkThemeSelectedIndex, value))
                 {
                     var task = SaveThemeAsync();
                 }
@@ -166,6 +190,8 @@ namespace Bit.App.Pages
             DisableFavicon = (await _stateService.GetDisableFaviconAsync()).GetValueOrDefault();
             var theme = await _stateService.GetThemeAsync();
             ThemeSelectedIndex = ThemeOptions.FindIndex(k => k.Key == theme);
+            var autoDarkTheme = await _stateService.GetAutoDarkThemeAsync() ?? "dark";
+            AutoDarkThemeSelectedIndex = AutoDarkThemeOptions.FindIndex(k => k.Key == autoDarkTheme);
             var defaultUriMatch = await _stateService.GetDefaultUriMatchAsync();
             UriMatchSelectedIndex = defaultUriMatch == null ? 0 :
                 UriMatchOptions.FindIndex(k => (int?)k.Key == defaultUriMatch);
@@ -204,6 +230,8 @@ namespace Bit.App.Pages
             {
                 var theme = ThemeOptions[ThemeSelectedIndex].Key;
                 await _stateService.SetThemeAsync(theme);
+                var autoDarkTheme = AutoDarkThemeOptions[AutoDarkThemeSelectedIndex].Key;
+                await _stateService.SetAutoDarkThemeAsync(autoDarkTheme);
                 ThemeManager.SetTheme(Application.Current.Resources);
                 _messagingService.Send("updatedTheme");
             }
