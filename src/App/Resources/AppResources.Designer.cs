@@ -1919,15 +1919,15 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string DisableWebsiteIcons {
+        public static string WebsiteIcons {
             get {
-                return ResourceManager.GetString("DisableWebsiteIcons", resourceCulture);
+                return ResourceManager.GetString("WebsiteIcons", resourceCulture);
             }
         }
         
-        public static string DisableWebsiteIconsDescription {
+        public static string WebsiteIconsDescription {
             get {
-                return ResourceManager.GetString("DisableWebsiteIconsDescription", resourceCulture);
+                return ResourceManager.GetString("WebsiteIconsDescription", resourceCulture);
             }
         }
         

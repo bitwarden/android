@@ -98,16 +98,16 @@
             <StackLayout StyleClass="box">
                 <StackLayout StyleClass="box-row, box-row-switch">
                     <Label
-                        Text="{u:I18n DisableWebsiteIcons}"
+                        Text="{u:I18n WebsiteIcons}"
                         StyleClass="box-label-regular"
                         HorizontalOptions="StartAndExpand" />
                     <Switch
-                        IsToggled="{Binding DisableFavicon}"
+                        IsToggled="{Binding Favicon}"
                         StyleClass="box-value"
                         HorizontalOptions="End" />
                 </StackLayout>
                 <Label
-                    Text="{u:I18n DisableWebsiteIconsDescription}"
+                    Text="{u:I18n WebsiteIconsDescription}"
                     StyleClass="box-footer-label, box-footer-label-switch" />
             </StackLayout>
             <StackLayout StyleClass="box" IsVisible="{Binding ShowAndroidAutofillSettings}">

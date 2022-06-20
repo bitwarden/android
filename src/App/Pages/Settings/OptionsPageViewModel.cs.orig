@@ -138,7 +138,11 @@ namespace Bit.App.Pages
             {
                 if (SetProperty(ref _favicon, value))
                 {
-                    UpdateFaviconAsync().FireAndForget();
+<<<<<<< HEAD
+                    UpdateDisableFaviconAsync().FireAndForget();
+=======
+                    var task = UpdateFaviconAsync();
+>>>>>>> 89a5e3a2 (feat: update show icons settings)
                 }
             }
         }
