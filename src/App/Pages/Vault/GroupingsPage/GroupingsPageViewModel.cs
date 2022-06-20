@@ -228,13 +228,14 @@ namespace Bit.App.Pages
                 }
                 PageTitle = ShowVaultFilter ? AppResources.Vaults : AppResources.MyVault;
             }
+            var canAccessPremium = await _stateService.CanAccessPremiumAsync();
             _doingLoad = true;
             LoadedOnce = true;
             ShowNoData = false;
             Loading = true;
             ShowList = false;
             ShowAddCipherButton = !Deleted;
-            ShowTOTPFilter = Type == CipherType.Login;
+            ShowTOTPFilter = Type == CipherType.Login && canAccessPremium;
 
             var groupedItems = new List<GroupingsPageListGroup>();
             var page = Page as GroupingsPage;
