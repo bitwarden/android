@@ -907,11 +907,11 @@
   <data name="CopyTotp" xml:space="preserve">
     <value>Copy TOTP</value>
   </data>
-  <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>If your login has an authenticator key attached to it, the TOTP verification code is automatically copied to your clipboard whenever you auto-fill the login.</value>
+  <data name="AutoTotpCopyDescription" xml:space="preserve">
+    <value>If a login has an authenticator key, copy the TOTP verification code to your clip-board when you auto-fill the login.</value>
   </data>
-  <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>Disable Automatic TOTP Copy</value>
+  <data name="AutoTotpCopy" xml:space="preserve">
+    <value>Copy TOTP Automatically</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
     <value>A premium membership is required to use this feature.</value>

@@ -12,7 +12,6 @@ namespace Bit.App.Pages
 {
     public class OptionsPageViewModel : BaseViewModel
     {
-        private readonly ITotpService _totpService;
         private readonly IStateService _stateService;
         private readonly IMessagingService _messagingService;
 
@@ -20,7 +19,7 @@ namespace Bit.App.Pages
         private bool _autofillDisableSavePrompt;
         private string _autofillBlacklistedUris;
         private bool _disableFavicon;
-        private bool _disableAutoTotpCopy;
+        private bool _autoTotpCopy;
         private int _clearClipboardSelectedIndex;
         private int _themeSelectedIndex;
         private int _autoDarkThemeSelectedIndex;
@@ -31,7 +30,6 @@ namespace Bit.App.Pages
 
         public OptionsPageViewModel()
         {
-            _totpService = ServiceContainer.Resolve<ITotpService>("totpService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
 
@@ -145,12 +143,12 @@ namespace Bit.App.Pages
             }
         }
 
-        public bool DisableAutoTotpCopy
+        public bool AutoTotpCopy
         {
-            get => _disableAutoTotpCopy;
+            get => _autoTotpCopy;
             set
             {
-                if (SetProperty(ref _disableAutoTotpCopy, value))
+                if (SetProperty(ref _autoTotpCopy, value))
                 {
                     UpdateAutoTotpCopyAsync().FireAndForget();
                 }
@@ -186,7 +184,7 @@ namespace Bit.App.Pages
             AutofillDisableSavePrompt = (await _stateService.GetAutofillDisableSavePromptAsync()).GetValueOrDefault();
             var blacklistedUrisList = await _stateService.GetAutofillBlacklistedUrisAsync();
             AutofillBlacklistedUris = blacklistedUrisList != null ? string.Join(", ", blacklistedUrisList) : null;
-            DisableAutoTotpCopy = !(await _totpService.IsAutoCopyEnabledAsync());
+            AutoTotpCopy = !(await _stateService.GetDisableAutoTotpCopyAsync() ?? false);
             DisableFavicon = (await _stateService.GetDisableFaviconAsync()).GetValueOrDefault();
             var theme = await _stateService.GetThemeAsync();
             ThemeSelectedIndex = ThemeOptions.FindIndex(k => k.Key == theme);
@@ -204,7 +202,7 @@ namespace Bit.App.Pages
         {
             if (_inited)
             {
-                await _stateService.SetDisableAutoTotpCopyAsync(DisableAutoTotpCopy);
+                await _stateService.SetDisableAutoTotpCopyAsync(!AutoTotpCopy);
             }
         }
 
