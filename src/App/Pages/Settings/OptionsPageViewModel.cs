@@ -16,7 +16,7 @@ namespace Bit.App.Pages
         private readonly IMessagingService _messagingService;
 
 
-        private bool _autofillDisableSavePrompt;
+        private bool _autofillSavePrompt;
         private string _autofillBlacklistedUris;
         private bool _favicon;
         private bool _autoTotpCopy;
@@ -155,14 +155,14 @@ namespace Bit.App.Pages
             }
         }
 
-        public bool AutofillDisableSavePrompt
+        public bool AutofillSavePrompt
         {
-            get => _autofillDisableSavePrompt;
+            get => _autofillSavePrompt;
             set
             {
-                if (SetProperty(ref _autofillDisableSavePrompt, value))
+                if (SetProperty(ref _autofillSavePrompt, value))
                 {
-                    UpdateAutofillDisableSavePromptAsync().FireAndForget();
+                    UpdateAutofillSavePromptAsync().FireAndForget();
                 }
             }
         }
@@ -181,7 +181,7 @@ namespace Bit.App.Pages
 
         public async Task InitAsync()
         {
-            AutofillDisableSavePrompt = (await _stateService.GetAutofillDisableSavePromptAsync()).GetValueOrDefault();
+            AutofillSavePrompt = !(await _stateService.GetAutofillDisableSavePromptAsync()).GetValueOrDefault();
             var blacklistedUrisList = await _stateService.GetAutofillBlacklistedUrisAsync();
             AutofillBlacklistedUris = blacklistedUrisList != null ? string.Join(", ", blacklistedUrisList) : null;
             AutoTotpCopy = !(await _stateService.GetDisableAutoTotpCopyAsync() ?? false);
@@ -241,11 +241,11 @@ namespace Bit.App.Pages
             }
         }
 
-        private async Task UpdateAutofillDisableSavePromptAsync()
+        private async Task UpdateAutofillSavePromptAsync()
         {
             if (_inited)
             {
-                await _stateService.SetAutofillDisableSavePromptAsync(AutofillDisableSavePrompt);
+                await _stateService.SetAutofillDisableSavePromptAsync(!AutofillSavePrompt);
             }
         }
 

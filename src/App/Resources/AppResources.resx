@@ -1573,11 +1573,11 @@
   <data name="BlacklistedUrisDescription" xml:space="preserve">
     <value>URIs that are blacklisted will not offer auto-fill. The list should be comma separated. Ex: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
-  <data name="DisableSavePrompt" xml:space="preserve">
-    <value>Disable Save Prompt</value>
+  <data name="SavePrompt" xml:space="preserve">
+    <value>Ask to add login</value>
   </data>
-  <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>The "Save Prompt" automatically prompts you to save new items to your vault whenever you enter them for the first time.</value>
+  <data name="SavePromptDescription" xml:space="preserve">
+    <value>Ask to add an item if one isn't found in your vault.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
     <value>On App Restart</value>

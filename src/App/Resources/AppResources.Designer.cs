@@ -2759,15 +2759,15 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string DisableSavePrompt {
+        public static string SavePrompt {
             get {
-                return ResourceManager.GetString("DisableSavePrompt", resourceCulture);
+                return ResourceManager.GetString("SavePrompt", resourceCulture);
             }
         }
         
-        public static string DisableSavePromptDescription {
+        public static string SavePromptDescription {
             get {
-                return ResourceManager.GetString("DisableSavePromptDescription", resourceCulture);
+                return ResourceManager.GetString("SavePromptDescription", resourceCulture);
             }
         }
         
