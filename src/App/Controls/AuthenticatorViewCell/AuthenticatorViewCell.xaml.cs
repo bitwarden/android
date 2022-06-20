@@ -18,9 +18,6 @@ namespace Bit.App.Controls
         public static readonly BindableProperty TotpSecProperty = BindableProperty.Create(
             nameof(TotpSec), typeof(long), typeof(AuthenticatorViewCell));
 
-        //public static readonly BindableProperty ButtonCommandProperty = BindableProperty.Create(
-        //    nameof(ButtonCommand), typeof(Command<CipherView>), typeof(AuthenticatorViewCell));
-
         public AuthenticatorViewCell()
         {
             InitializeComponent();
@@ -72,51 +69,6 @@ namespace Bit.App.Controls
         {
             get => _totpCodeFormatted;
             set => _totpCodeFormatted = value;
-        }
-
-
-        //public Command<CipherView> ButtonCommand
-        //{
-        //    get => GetValue(ButtonCommandProperty) as Command<CipherView>;
-        //    set => SetValue(ButtonCommandProperty, value);
-        //}
-
-        //protected override void OnPropertyChanged(string propertyName = null)
-        //{
-        //    base.OnPropertyChanged(propertyName);
-        //    if (propertyName == CipherProperty.PropertyName)
-        //    {
-        //        if (Cipher == null)
-        //        {
-        //            return;
-        //        }
-        //        _cipherLabel.Text = Cipher.Name;
-        //    }
-        //    else if (propertyName == WebsiteIconsEnabledProperty.PropertyName)
-        //    {
-        //        if (Cipher == null)
-        //        {
-        //            return;
-        //        }
-        //        ((AuthenticatorViewCellViewModel)BindingContext).WebsiteIconsEnabled = WebsiteIconsEnabled ?? false;
-        //    }
-        //    else if (propertyName == TotpSecProperty.PropertyName)
-        //    {
-        //        if (Cipher == null)
-        //        {
-        //            return;
-        //        }
-        //        ((AuthenticatorViewCellViewModel)BindingContext).UpdateTotpSec(TotpSec);
-        //    }
-        //}
-
-        private void MoreButton_Clicked(object sender, EventArgs e)
-        {
-            var cipher = ((sender as MiButton)?.BindingContext as GroupingsPageTOTPListItem)?.Cipher;
-            if (cipher != null)
-            {
-                //ButtonCommand?.Execute(cipher);
-            }
         }
     }
 }
