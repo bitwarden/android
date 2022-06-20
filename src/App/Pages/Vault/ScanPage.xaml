@@ -1,14 +1,25 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<pages:BaseContentPage 
+﻿<?xml version="1.0" encoding="utf-8"?>
+<pages:BaseContentPage
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="Bit.App.Pages.ScanPage"
     xmlns:pages="clr-namespace:Bit.App.Pages"
     xmlns:u="clr-namespace:Bit.App.Utilities"
+    xmlns:controls="clr-namespace:Bit.App.Controls"
     xmlns:zxing="clr-namespace:ZXing.Net.Mobile.Forms;assembly=ZXing.Net.Mobile.Forms"
     x:Name="_page"
     Title="{u:I18n ScanQrTitle}">
-
+    
+    <ContentPage.BindingContext>
+        <pages:ScanPageViewModel />
+    </ContentPage.BindingContext>
+    
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <u:InverseBoolConverter x:Key="inverseBool" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="{u:I18n Cancel}" Clicked="Close_Clicked" Order="Primary" Priority="-1" />
     </ContentPage.ToolbarItems>
@@ -24,7 +35,40 @@
             AutomationId="zxingScannerView"
             OnScanResult="OnScanResult">
         </zxing:ZXingScannerView>
-
+        <Grid
+            VerticalOptions="FillAndExpand"
+            HorizontalOptions="FillAndExpand"
+            IsVisible="{Binding ShowScanner, Converter={StaticResource inverseBool}}"
+            BackgroundColor="{DynamicResource BackgroundColor}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <StackLayout
+                VerticalOptions="Center"
+                HorizontalOptions="FillAndExpand"
+                Grid.Column="0"
+                Grid.Row="0"
+                Grid.RowSpan="2"
+                Margin="30,0">
+                <Label
+                    Text="{u:I18n EnterCodeManually}"
+                    FontSize="30" />
+                <Label
+                    Text="{u:I18n AuthenticatorKey}"
+                    StyleClass="box-label" />
+                <controls:MonoEntry
+                    x:Name="_loginTotpEntry"
+                    Text="{Binding TotpAuthenticationKey}"
+                    IsSpellCheckEnabled="False"
+                    IsTextPredictionEnabled="False"
+                    StyleClass="box-value" />
+                <Button 
+                    Text="{u:I18n AddTotp}" 
+                    StyleClass="box-button-row"/>
+            </StackLayout>
+        </Grid>
         <Grid
             VerticalOptions="FillAndExpand"
             HorizontalOptions="FillAndExpand"
@@ -34,31 +78,6 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-
-            <BoxView
-                Grid.Column="0"
-                Grid.Row="0"
-                VerticalOptions="Fill"
-                HorizontalOptions="FillAndExpand"
-                BackgroundColor="Black"
-                Opacity="0.7" />
-
-            <Label
-                Text="{u:I18n CameraInstructionTop}"
-                AutomationId="zxingDefaultOverlay_TopTextLabel"
-                Grid.Column="0"
-                Grid.Row="0"
-                VerticalOptions="Center"
-                HorizontalOptions="Center"
-                TextColor="White" />
-
-            <BoxView
-                Grid.Column="0"
-                Grid.Row="1"
-                VerticalOptions="Fill"
-                HorizontalOptions="FillAndExpand"
-                BackgroundColor="Transparent" />
-
             <BoxView
                 Grid.Column="0"
                 Grid.Row="2"
@@ -66,17 +85,37 @@
                 HorizontalOptions="FillAndExpand"
                 BackgroundColor="Black"
                 Opacity="0.7" />
-
+            <StackLayout
+                VerticalOptions="Start"
+                HorizontalOptions="Center"
+                Grid.Column="0"
+                Grid.Row="2">
+                <Label
+                    Text="{u:I18n CameraInstructionTop}"
+                    AutomationId="zxingDefaultOverlay_TopTextLabel"
+                    Margin="0,15,0,0"
+                    HorizontalOptions="Center"
+                    StyleClass="text-sm"
+                    TextColor="White" />
+                <Label
+                    Text="{u:I18n CameraInstructionBottom}"
+                    AutomationId="zxingDefaultOverlay_TopTextLabel"
+                    HorizontalOptions="Center"
+                    StyleClass="text-sm"
+                    TextColor="White" />
+            </StackLayout>
             <Label
-                Text="{u:I18n CameraInstructionBottom}"
-                AutomationId="zxingDefaultOverlay_BottomTextLabel"
+                FormattedText="{Binding ToggleScanModeLabel}"
                 Grid.Column="0"
                 Grid.Row="2"
-                VerticalOptions="Center"
-                HorizontalOptions="Center"
-                TextColor="White" />
+                Margin="0,15"
+                StyleClass="text-sm"
+                VerticalOptions="End"
+                HorizontalOptions="Center" >
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="ToggleScanMode_OnTapped" />
+                </Label.GestureRecognizers>
+            </Label>
         </Grid>
-
     </Grid>
-
 </pages:BaseContentPage>

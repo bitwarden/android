@@ -11,6 +11,7 @@ namespace Bit.App.Pages
 {
     public partial class ScanPage : BaseContentPage
     {
+        private ScanPageViewModel ViewModel => BindingContext as ScanPageViewModel;
         private readonly Action<string> _callback;
 
         private CancellationTokenSource _autofocusCts;
@@ -118,6 +119,11 @@ namespace Bit.App.Pages
             {
                 await Navigation.PopModalAsync();
             }
+        }
+
+        private void ToggleScanMode_OnTapped(object sender, EventArgs e)
+        {
+            ViewModel.ToggleScanModeCommand.Execute(null);
         }
     }
 }

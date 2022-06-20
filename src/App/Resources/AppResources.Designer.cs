@@ -4040,5 +4040,35 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("ToViewVerificationCodes", resourceCulture);
             }
         }
+        
+        public static string CannotAddAuthenticatorKey {
+            get {
+                return ResourceManager.GetString("CannotAddAuthenticatorKey", resourceCulture);
+            }
+        }
+        
+        public static string ScanQRCode {
+            get {
+                return ResourceManager.GetString("ScanQRCode", resourceCulture);
+            }
+        }
+        
+        public static string CannotScanQRCode {
+            get {
+                return ResourceManager.GetString("CannotScanQRCode", resourceCulture);
+            }
+        }
+        
+        public static string EnterCodeManually {
+            get {
+                return ResourceManager.GetString("EnterCodeManually", resourceCulture);
+            }
+        }
+        
+        public static string AddTotp {
+            get {
+                return ResourceManager.GetString("AddTotp", resourceCulture);
+            }
+        }
     }
 }
