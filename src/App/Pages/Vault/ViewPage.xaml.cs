@@ -323,5 +323,10 @@ namespace Bit.App.Pages
                 ToolbarItems.Insert(1, _editItem);
             }
         }
+
+        private void UpgradeToPremiumTotp_Tapped(object sender, System.EventArgs e)
+        {
+            _vm.LaunchGetPremiumMembershipURI();
+        }
     }
 }

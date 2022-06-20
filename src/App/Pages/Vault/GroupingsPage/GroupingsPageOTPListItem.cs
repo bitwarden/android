@@ -1,9 +1,11 @@
 using System;
 using System.Threading.Tasks;
+using Bit.App.Resources;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -11,6 +13,8 @@ namespace Bit.App.Pages
     public class GroupingsPageTOTPListItem : ExtendedViewModel, IGroupingsPageListItem
     {
         private readonly ITotpService _totpService;
+        private readonly IPlatformUtilsService _platformUtilsService;
+        private readonly IClipboardService _clipboardService;
         private CipherView _cipher;
 
         private bool _websiteIconsEnabled;
@@ -26,13 +30,20 @@ namespace Bit.App.Pages
         public GroupingsPageTOTPListItem(CipherView cipherView, bool websiteIconsEnabled)
         {
             _totpService = ServiceContainer.Resolve<ITotpService>("totpService");
+            _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
+            _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
 
             Cipher = cipherView;
             WebsiteIconsEnabled = websiteIconsEnabled;
             interval = _totpService.GetTimeInterval(Cipher.Login.Totp);
+            CopyCommand = new AsyncCommand(CopyToClipboardAsync,
+                 onException: ex => _logger.Value.Exception(ex),
+                 allowsMultipleExecutions: false);
         }
 
-        public Command CopyCommand { get; set; }
+        readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
+
+        public AsyncCommand CopyCommand { get; set; }
 
         public CipherView Cipher
         {
@@ -80,6 +91,12 @@ namespace Bit.App.Pages
                 return _iconImageSource;
             }
 
+        }
+
+        public async Task CopyToClipboardAsync()
+        {
+            await _clipboardService.CopyTextAsync(TotpCodeFormatted);
+            _platformUtilsService.ShowToast("info", null, string.Format(AppResources.ValueHasBeenCopied, AppResources.VerificationCodeTotp));
         }
 
         public async Task TotpTickAsync()

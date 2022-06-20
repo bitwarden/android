@@ -165,36 +165,52 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="40" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
                                 <Label
                                     Text="{u:I18n VerificationCodeTotp}"
                                     StyleClass="box-label"
                                     Grid.Row="0"
-                                    Grid.Column="0" />
+                                    Grid.Column="0"/>
                                 <controls:MonoLabel
                                     Text="{Binding TotpCodeFormatted, Mode=OneWay}"
                                     StyleClass="box-value"
                                     Grid.Row="1"
-                                    Grid.Column="0" />
-                                <Label
-                                    Text="{Binding TotpSec, Mode=OneWay}"
-                                    Style="{DynamicResource textTotp}"
-                                    Margin="0, 0, 10, 0"
+                                    Grid.Column="0" 
+                                    VerticalTextAlignment="Start"
+                                    VerticalOptions="Start"/>
+                                <controls:CircularProgressbarView
+                                    Progress="{Binding TotpProgress}"
+                                    ProgressColor="{StaticResource PrimaryColor}"
+                                    EndingProgressColor="{StaticResource DangerColor}"
+                                    BackgroundProgressColor="{StaticResource BackgroundColor}"
+                                    StrokeWidth="3"
+                                    Radius="15"
                                     Grid.Row="0"
                                     Grid.Column="1"
                                     Grid.RowSpan="2"
-                                    HorizontalOptions="End"
-                                    HorizontalTextAlignment="End"
-                                    VerticalOptions="CenterAndExpand" />
+                                    HorizontalOptions="FillAndExpand"
+                                    VerticalOptions="FillAndExpand" />
+                                <Label
+                                    Text="{Binding TotpSec, Mode=OneWay}"
+                                    Style="{DynamicResource textTotp}"
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    Grid.RowSpan="2"
+                                    VerticalTextAlignment="Center"
+                                    HorizontalTextAlignment="Center"
+                                    HorizontalOptions="FillAndExpand"
+                                    VerticalOptions="FillAndExpand"  />
                                 <controls:IconButton 
                                     StyleClass="box-row-button, box-row-button-platform"
                                     Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
                                     Command="{Binding CopyCommand}"
+                                    IsVisible="{Binding CanAccessPremium}"
                                     CommandParameter="LoginTotp"
                                     Grid.Row="0"
                                     Grid.Column="2"
@@ -202,6 +218,15 @@
                                     AutomationProperties.IsInAccessibleTree="True"
                                     AutomationProperties.Name="{u:I18n CopyTotp}" />
                             </Grid>
+                            <Label FormattedText="{Binding UpgradeToPremiumTotpText}"
+                                   StyleClass="box-footer-label"
+                                   IsVisible="{Binding CanAccessPremium , Converter={StaticResource inverseBool}}"
+                                   Margin="0,5"
+                                   HorizontalOptions="StartAndExpand">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="UpgradeToPremiumTotp_Tapped" />
+                                </Label.GestureRecognizers>
+                            </Label>
                             <BoxView StyleClass="box-row-separator" IsVisible="{Binding ShowTotp}" />
                         </StackLayout>
                         <StackLayout IsVisible="{Binding IsCard}" Spacing="0" Padding="0">
