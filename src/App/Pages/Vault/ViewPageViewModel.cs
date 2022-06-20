@@ -203,6 +203,26 @@ namespace Bit.App.Pages
                 return fs;
             }
         }
+
+        public FormattedString UpgradeToPremiumTotpText
+        {
+            get
+            {
+                var fs = new FormattedString();
+                fs.Spans.Add(new Span
+                {
+                    Text = "Upgrade to premium ",
+                    TextColor = ThemeManager.GetResourceColor("PrimaryColor")
+                });
+                fs.Spans.Add(new Span
+                {
+                    Text = "to view verification codes",
+                    TextColor = ThemeManager.GetResourceColor("MutedColor")
+                });
+                return fs;
+            }
+        }
+        
         public bool ShowUris => IsLogin && Cipher.Login.HasUris;
         public bool ShowIdentityAddress => IsIdentity && (
             !string.IsNullOrWhiteSpace(Cipher.Identity.Address1) ||
@@ -217,7 +237,7 @@ namespace Bit.App.Pages
         public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
         public string TotpCodeFormatted
         {
-            get => _totpCodeFormatted;
+            get => _canAccessPremium ? _totpCodeFormatted : "--- ---";
             set => SetProperty(ref _totpCodeFormatted, value,
                 additionalPropertyNames: new string[]
                 {
@@ -227,7 +247,11 @@ namespace Bit.App.Pages
         public string TotpSec
         {
             get => _totpSec;
-            set => SetProperty(ref _totpSec, value);
+            set => SetProperty(ref _totpSec, value,
+                additionalPropertyNames: new string[]
+                {
+                    nameof(TotpProgress)
+                });
         }
         public bool TotpLow
         {
@@ -238,6 +262,7 @@ namespace Bit.App.Pages
                 Page.Resources["textTotp"] = ThemeManager.Resources()[value ? "text-danger" : "text-default"];
             }
         }
+        public double TotpProgress => string.IsNullOrEmpty(TotpSec) ? 0 : double.Parse(TotpSec) * 100 / 30;
         public bool IsDeleted => Cipher.IsDeleted;
         public bool CanEdit => !Cipher.IsDeleted;
 
@@ -706,6 +731,11 @@ namespace Bit.App.Pages
             }
 
             return _passwordReprompted = await _passwordRepromptService.ShowPasswordPromptAsync();
+        }
+
+        public void LaunchGetPremiumMembershipURI()
+        {
+            _platformUtilsService.LaunchUri("https://bitwarden.com/pricing/");
         }
     }
 
