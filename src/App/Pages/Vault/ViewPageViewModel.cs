@@ -211,12 +211,12 @@ namespace Bit.App.Pages
                 var fs = new FormattedString();
                 fs.Spans.Add(new Span
                 {
-                    Text = "Upgrade to premium ",
+                    Text = AppResources.UpgradeToPremium,
                     TextColor = ThemeManager.GetResourceColor("PrimaryColor")
                 });
                 fs.Spans.Add(new Span
                 {
-                    Text = "to view verification codes",
+                    Text = AppResources.ToViewVerificationCodes,
                     TextColor = ThemeManager.GetResourceColor("MutedColor")
                 });
                 return fs;

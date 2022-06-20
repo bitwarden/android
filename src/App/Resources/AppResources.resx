@@ -2251,4 +2251,10 @@
   <data name="DisplayItemsContainingTOTP" xml:space="preserve">
     <value>Display items containing TOTP</value>
   </data>
+  <data name="UpgradeToPremium" xml:space="preserve">
+    <value>Upgrade to  premium </value>
+  </data>
+  <data name="ToViewVerificationCodes" xml:space="preserve">
+    <value>to view verification codes</value>
+  </data>
 </root>
