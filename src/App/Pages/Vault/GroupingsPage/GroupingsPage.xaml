@@ -141,7 +141,7 @@
                 </StackLayout>
 
                 <StackLayout
-                    IsVisible="{Binding ShowTOTPFilter}"
+                    IsVisible="{Binding ShowTotpFilter}"
                     Orientation="Horizontal"
                     HorizontalOptions="FillAndExpand"
                     Margin="0,5,10,0">
@@ -155,12 +155,10 @@
                         AutomationProperties.IsInAccessibleTree="True"
                         AutomationProperties.Name="{u:I18n DisplayItemsContainingTOTP}" />
                     <Switch
-                        IsToggled="{Binding TOTPFilterEnable}"
+                        IsToggled="{Binding TotpFilterEnable}"
                         StyleClass="box-value"
                         HorizontalOptions="End"
-                        Toggled="Switch_Toggled"
-                        AutomationProperties.IsInAccessibleTree="True"
-                        AutomationProperties.Name="{u:I18n DisplayItemsContainingTOTP}"  />
+                        Toggled="TotpFilter_Toggled"  />
                 </StackLayout>
 
                 <StackLayout
