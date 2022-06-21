@@ -17,6 +17,11 @@ namespace Bit.App.Utilities
 
         public static bool IsThemeDirty = false;
 
+        public const string Light = "light";
+        public const string Dark = "dark";
+        public const string Black = "black";
+        public const string Nord = "nord";
+
         public static void SetThemeStyle(string name, string autoDarkName, ResourceDictionary resources)
         {
             try
@@ -89,22 +94,22 @@ namespace Bit.App.Utilities
         {
             switch (themeName)
             {
-                case "dark":
+                case Dark:
                     return CheckAndGetThemeForMergedDictionaries(typeof(Dark), resources);
-                case "black":
+                case Black:
                     return CheckAndGetThemeForMergedDictionaries(typeof(Black), resources);
-                case "nord":
+                case Nord:
                     return CheckAndGetThemeForMergedDictionaries(typeof(Nord), resources);
-                case "light":
+                case Light:
                     return CheckAndGetThemeForMergedDictionaries(typeof(Light), resources);
                 default:
                     if (OsDarkModeEnabled())
                     {
                         switch (autoDarkThemeName)
                         {
-                            case "black":
+                            case Black:
                                 return CheckAndGetThemeForMergedDictionaries(typeof(Black), resources);
-                            case "nord":
+                            case Nord:
                                 return CheckAndGetThemeForMergedDictionaries(typeof(Nord), resources);
                             default:
                                 return CheckAndGetThemeForMergedDictionaries(typeof(Dark), resources);

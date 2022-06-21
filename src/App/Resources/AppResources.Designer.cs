@@ -2697,15 +2697,15 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string AutoDarkTheme {
+        public static string DefaultDarkTheme {
             get {
-                return ResourceManager.GetString("AutoDarkTheme", resourceCulture);
+                return ResourceManager.GetString("DefaultDarkTheme", resourceCulture);
             }
         }
         
-        public static string AutoDarkThemeDescription {
+        public static string DefaultDarkThemeDescription {
             get {
-                return ResourceManager.GetString("AutoDarkThemeDescription", resourceCulture);
+                return ResourceManager.GetString("DefaultDarkThemeDescription", resourceCulture);
             }
         }
         
@@ -2736,6 +2736,12 @@ namespace Bit.App.Resources {
         public static string Black {
             get {
                 return ResourceManager.GetString("Black", resourceCulture);
+            }
+        }
+        
+        public static string Nord {
+            get {
+                return ResourceManager.GetString("Nord", resourceCulture);
             }
         }
         

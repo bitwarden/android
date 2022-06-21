@@ -38,7 +38,7 @@
                 IsVisible="{Binding ShowAutoDarkThemeOptions}">
                 <StackLayout StyleClass="box-row, box-row-input, box-row-input-options-platform">
                     <Label
-                        Text="{u:I18n AutoDarkTheme}"
+                        Text="{u:I18n DefaultDarkTheme}"
                         StyleClass="box-label" />
                     <Picker
                         x:Name="_autoDarkThemePicker"
@@ -48,7 +48,7 @@
                 </StackLayout>
                 <Label
                     StyleClass="box-footer-label"
-                    Text="{u:I18n AutoDarkThemeDescription}" />
+                    Text="{u:I18n DefaultDarkThemeDescription}" />
             </StackLayout>
             <StackLayout StyleClass="box">
                 <StackLayout StyleClass="box-row, box-row-input, box-row-input-options-platform">

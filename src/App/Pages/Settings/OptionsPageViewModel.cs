@@ -54,16 +54,16 @@ namespace Bit.App.Pages
             ThemeOptions = new List<KeyValuePair<string, string>>
             {
                 new KeyValuePair<string, string>(null, AppResources.ThemeDefault),
-                new KeyValuePair<string, string>("light", AppResources.Light),
-                new KeyValuePair<string, string>("dark", AppResources.Dark),
-                new KeyValuePair<string, string>("black", AppResources.Black),
-                new KeyValuePair<string, string>("nord", "Nord"),
+                new KeyValuePair<string, string>(ThemeManager.Light, AppResources.Light),
+                new KeyValuePair<string, string>(ThemeManager.Dark, AppResources.Dark),
+                new KeyValuePair<string, string>(ThemeManager.Black, AppResources.Black),
+                new KeyValuePair<string, string>(ThemeManager.Nord, AppResources.Nord),
             };
             AutoDarkThemeOptions = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>("dark", AppResources.Dark),
-                new KeyValuePair<string, string>("black", AppResources.Black),
-                new KeyValuePair<string, string>("nord", "Nord"),
+                new KeyValuePair<string, string>(ThemeManager.Dark, AppResources.Dark),
+                new KeyValuePair<string, string>(ThemeManager.Black, AppResources.Black),
+                new KeyValuePair<string, string>(ThemeManager.Nord, AppResources.Nord),
             };
             UriMatchOptions = new List<KeyValuePair<UriMatchType?, string>>
             {
@@ -88,7 +88,7 @@ namespace Bit.App.Pages
             {
                 if (SetProperty(ref _clearClipboardSelectedIndex, value))
                 {
-                    var task = SaveClipboardChangedAsync();
+                    SaveClipboardChangedAsync().FireAndForget();
                 }
             }
         }
@@ -102,7 +102,7 @@ namespace Bit.App.Pages
                         additionalPropertyNames: new[] { nameof(ShowAutoDarkThemeOptions) })
                    )
                 {
-                    var task = SaveThemeAsync();
+                    SaveThemeAsync().FireAndForget();
                 }
             }
         }
@@ -116,7 +116,7 @@ namespace Bit.App.Pages
             {
                 if (SetProperty(ref _autoDarkThemeSelectedIndex, value))
                 {
-                    var task = SaveThemeAsync();
+                    SaveThemeAsync().FireAndForget();
                 }
             }
         }
@@ -128,7 +128,7 @@ namespace Bit.App.Pages
             {
                 if (SetProperty(ref _uriMatchSelectedIndex, value))
                 {
-                    var task = SaveDefaultUriAsync();
+                    SaveDefaultUriAsync().FireAndForget();
                 }
             }
         }
@@ -140,7 +140,7 @@ namespace Bit.App.Pages
             {
                 if (SetProperty(ref _disableFavicon, value))
                 {
-                    var task = UpdateDisableFaviconAsync();
+                    UpdateDisableFaviconAsync().FireAndForget();
                 }
             }
         }
@@ -152,7 +152,7 @@ namespace Bit.App.Pages
             {
                 if (SetProperty(ref _disableAutoTotpCopy, value))
                 {
-                    var task = UpdateAutoTotpCopyAsync();
+                    UpdateAutoTotpCopyAsync().FireAndForget();
                 }
             }
         }
@@ -164,7 +164,7 @@ namespace Bit.App.Pages
             {
                 if (SetProperty(ref _autofillDisableSavePrompt, value))
                 {
-                    var task = UpdateAutofillDisableSavePromptAsync();
+                    UpdateAutofillDisableSavePromptAsync().FireAndForget();
                 }
             }
         }
@@ -228,10 +228,8 @@ namespace Bit.App.Pages
         {
             if (_inited && ThemeSelectedIndex > -1)
             {
-                var theme = ThemeOptions[ThemeSelectedIndex].Key;
-                await _stateService.SetThemeAsync(theme);
-                var autoDarkTheme = AutoDarkThemeOptions[AutoDarkThemeSelectedIndex].Key;
-                await _stateService.SetAutoDarkThemeAsync(autoDarkTheme);
+                await _stateService.SetThemeAsync(ThemeOptions[ThemeSelectedIndex].Key);
+                await _stateService.SetAutoDarkThemeAsync(AutoDarkThemeOptions[AutoDarkThemeSelectedIndex].Key);
                 ThemeManager.SetTheme(Application.Current.Resources);
                 _messagingService.Send("updatedTheme");
             }
