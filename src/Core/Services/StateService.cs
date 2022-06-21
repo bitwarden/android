@@ -924,6 +924,25 @@ namespace Bit.Core.Services
             SetValueGloballyAsync(Constants.ThemeKey, value, reconciledOptions).FireAndForget();
         }
 
+        public async Task<string> GetAutoDarkThemeAsync(string userId = null)
+        {
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            var key = Constants.AutoDarkThemeKey(reconciledOptions.UserId);
+            return await GetValueAsync<string>(key, reconciledOptions);
+        }
+
+        public async Task SetAutoDarkThemeAsync(string value, string userId = null)
+        {
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            var key = Constants.AutoDarkThemeKey(reconciledOptions.UserId);
+            await SetValueAsync(key, value, reconciledOptions);
+
+            // TODO remove this to restore per-account Theme support
+            SetValueGloballyAsync(Constants.AutoDarkThemeKey, value, reconciledOptions).FireAndForget();
+        }
+
         public async Task<bool?> GetAddSitePromptShownAsync(string userId = null)
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
@@ -1414,6 +1433,7 @@ namespace Bit.Core.Services
                 await SetPasswordVerifiedAutofillAsync(null, userId);
                 await SetSyncOnRefreshAsync(null, userId);
                 await SetThemeAsync(null, userId);
+                await SetAutoDarkThemeAsync(null, userId);
                 await SetAddSitePromptShownAsync(null, userId);
                 await SetPasswordGenerationOptionsAsync(null, userId);
             }
@@ -1423,6 +1443,7 @@ namespace Bit.Core.Services
         {
             await CheckStateAsync();
             var currentTheme = await GetThemeAsync();
+            var currentAutoDarkTheme = await GetAutoDarkThemeAsync();
             var currentDisableFavicons = await GetDisableFaviconAsync();
 
             account.Settings.EnvironmentUrls = await GetPreAuthEnvironmentUrlsAsync();
@@ -1452,6 +1473,7 @@ namespace Bit.Core.Services
                 account.Settings.VaultTimeoutAction = VaultTimeoutAction.Lock;
             }
             await SetThemeAsync(currentTheme, account.Profile.UserId);
+            await SetAutoDarkThemeAsync(currentAutoDarkTheme, account.Profile.UserId);
             await SetDisableFaviconAsync(currentDisableFavicons, account.Profile.UserId);
 
             state.Accounts[account.Profile.UserId] = account;
