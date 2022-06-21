@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
+using SkiaSharp;
+using SkiaSharp.Views.Forms;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -16,6 +20,9 @@ namespace Bit.App.Pages
 
         private CancellationTokenSource _autofocusCts;
         private Task _continuousAutofocusTask;
+        private Color _greenColor;
+        private SKColor _blueSKColor;
+        private SKColor _greenSKColor;
 
         private readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
 
@@ -34,6 +41,10 @@ namespace Bit.App.Pages
             {
                 ToolbarItems.RemoveAt(0);
             }
+
+            _greenColor = ThemeManager.GetResourceColor("SuccessColor");
+            _greenSKColor = _greenColor.ToSKColor();
+            _blueSKColor = ThemeManager.GetResourceColor("PrimaryColor").ToSKColor();
         }
 
         protected override void OnAppearing()
@@ -69,6 +80,8 @@ namespace Bit.App.Pages
                     _logger.Value.Exception(ex);
                 }
             }, autofocusCts.Token);
+            _pageIsActive = true;
+            AnimationLoop();
         }
 
         protected override async void OnDisappearing()
@@ -78,6 +91,7 @@ namespace Bit.App.Pages
             await _continuousAutofocusTask;
             _zxing.IsScanning = false;
 
+            _pageIsActive = false;
             base.OnDisappearing();
         }
 
@@ -91,8 +105,12 @@ namespace Bit.App.Pages
             {
                 if (text.StartsWith("otpauth://totp"))
                 {
-                    Vibration.Vibrate();
-                    _callback(text);
+                    Task.Run(async () =>
+                    {
+                        _qrcodeFound = true;
+                        await Task.Delay(2000);
+                        _callback(text);
+                    });
                     return;
                 }
                 else if (Uri.TryCreate(text, UriKind.Absolute, out Uri uri) &&
@@ -103,8 +121,12 @@ namespace Bit.App.Pages
                     {
                         if (part.StartsWith("secret="))
                         {
-                            Vibration.Vibrate();
-                            _callback(part.Substring(7)?.ToUpperInvariant());
+                            Task.Run(async () =>
+                            {
+                                _qrcodeFound = true;
+                                await Task.Delay(2000);
+                                _callback(part.Substring(7)?.ToUpperInvariant());
+                            });
                             return;
                         }
                     }
@@ -124,6 +146,66 @@ namespace Bit.App.Pages
         private void ToggleScanMode_OnTapped(object sender, EventArgs e)
         {
             ViewModel.ToggleScanModeCommand.Execute(null);
+        }
+        
+        private void OnCanvasViewPaintSurface(object sender, SKPaintSurfaceEventArgs args)
+        {
+            SKImageInfo info = args.Info;
+            SKSurface surface = args.Surface;
+            SKCanvas canvas = surface.Canvas;
+            var margins = 20;
+            var maxSquareSize = (Math.Min(info.Height, info.Width)*0.9f - margins) * _scale;
+            var squareSize = maxSquareSize;
+            var lineSize = squareSize * 0.15f;
+            var startXPoint = (info.Width / 2) - (squareSize / 2);
+            var startYPoint = (info.Height / 2) - (squareSize / 2);
+            canvas.Clear(SKColors.Transparent);
+
+            using (SKPaint strokePaint = new SKPaint
+                   {
+                       Color = _qrcodeFound ? _greenSKColor : _blueSKColor,
+                       StrokeWidth = 9*_scale,
+                       StrokeCap = SKStrokeCap.Round,
+                   })
+            {
+                canvas.Scale(1,1);
+                //top left
+                canvas.DrawLine (startXPoint, startYPoint, startXPoint, startYPoint+lineSize, strokePaint);
+                canvas.DrawLine (startXPoint, startYPoint, startXPoint+lineSize, startYPoint, strokePaint);
+                //bot left
+                canvas.DrawLine (startXPoint, startYPoint+squareSize, startXPoint, startYPoint+squareSize-lineSize, strokePaint);
+                canvas.DrawLine (startXPoint, startYPoint+squareSize, startXPoint+lineSize, startYPoint+squareSize, strokePaint);
+                //top right
+                canvas.DrawLine (startXPoint+squareSize, startYPoint, startXPoint+squareSize-lineSize, startYPoint, strokePaint);
+                canvas.DrawLine (startXPoint+squareSize, startYPoint, startXPoint+squareSize, startYPoint+lineSize, strokePaint);
+                //bot right
+                canvas.DrawLine (startXPoint+squareSize, startYPoint+squareSize, startXPoint+squareSize-lineSize, startYPoint+squareSize, strokePaint);
+                canvas.DrawLine (startXPoint+squareSize, startYPoint+squareSize, startXPoint+squareSize, startYPoint+squareSize-lineSize, strokePaint);
+            }
+        }
+        
+        Stopwatch _stopwatch = new Stopwatch();
+        bool _pageIsActive;
+        bool _qrcodeFound = false;
+        float _scale;   
+        async Task AnimationLoop()
+        {
+            _stopwatch.Start();
+            while (_pageIsActive)
+            {
+                var t = _stopwatch.Elapsed.TotalSeconds % 2 / 2;
+                _scale = (20-(1-(float)Math.Sin(4*Math.PI*t))) / 20;
+                SkCanvasView.InvalidateSurface();
+                await Task.Delay(TimeSpan.FromSeconds(1.0 / 30));
+                if (_qrcodeFound && _scale > 0.98f)
+                {
+                    Vibration.Vibrate();
+                    _checkIcon.TextColor = _greenColor;
+                    SkCanvasView.InvalidateSurface();
+                    break;
+                }
+            }
+            _stopwatch.Stop();
         }
     }
 }

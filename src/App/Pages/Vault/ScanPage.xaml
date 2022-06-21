@@ -6,6 +6,8 @@
     xmlns:pages="clr-namespace:Bit.App.Pages"
     xmlns:u="clr-namespace:Bit.App.Utilities"
     xmlns:controls="clr-namespace:Bit.App.Controls"
+    xmlns:forms="clr-namespace:SkiaSharp.Views.Forms;assembly=SkiaSharp.Views.Forms"
+    xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
     xmlns:zxing="clr-namespace:ZXing.Net.Mobile.Forms;assembly=ZXing.Net.Mobile.Forms"
     x:Name="_page"
     Title="{u:I18n ScanQrTitle}">
@@ -27,14 +29,12 @@
     <Grid
         VerticalOptions="FillAndExpand"
         HorizontalOptions="FillAndExpand">
-
         <zxing:ZXingScannerView
             x:Name="_zxing"
             HorizontalOptions="FillAndExpand"
             VerticalOptions="FillAndExpand"
             AutomationId="zxingScannerView"
-            OnScanResult="OnScanResult">
-        </zxing:ZXingScannerView>
+            OnScanResult="OnScanResult"/>
         <Grid
             VerticalOptions="FillAndExpand"
             HorizontalOptions="FillAndExpand"
@@ -78,6 +78,31 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
+            <StackLayout
+                VerticalOptions="Center"
+                HorizontalOptions="FillAndExpand"
+                Grid.Column="0"
+                Grid.Row="0"
+                Grid.RowSpan="2"
+                Margin="30,0">
+                
+                <forms:SKCanvasView x:Name="SkCanvasView" 
+                                    Margin="0,50,0,0"
+                                    WidthRequest="250"
+                                    HeightRequest="250"
+                                    VerticalOptions="Center" 
+                                    HorizontalOptions="Center"
+                                    PaintSurface="OnCanvasViewPaintSurface"/>
+                    
+                <controls:IconButton 
+                    x:Name="_checkIcon"
+                    StyleClass="box-row-button, box-row-button-platform"
+                    Text="{Binding Source={x:Static core:BitwardenIcons.CheckCircle}}"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Start"
+                    FontSize="30"
+                    TextColor="Transparent"/>
+            </StackLayout>
             <BoxView
                 Grid.Column="0"
                 Grid.Row="2"
