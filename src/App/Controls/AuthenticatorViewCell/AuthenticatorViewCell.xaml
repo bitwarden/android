@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <controls:ExtendedGrid xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="Bit.App.Controls.AuthenticatorViewCell"
-    xmlns:controls="clr-namespace:Bit.App.Controls"
-    xmlns:pages="clr-namespace:Bit.App.Pages"
-    xmlns:u="clr-namespace:Bit.App.Utilities"
-    xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
-    xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
-    StyleClass="list-row, list-row-platform"
-    RowSpacing="0"
-    ColumnSpacing="0"
-    HorizontalOptions="FillAndExpand"
-    x:DataType="pages:GroupingsPageTOTPListItem">
+                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                       x:Class="Bit.App.Controls.AuthenticatorViewCell"
+                       xmlns:controls="clr-namespace:Bit.App.Controls"
+                       xmlns:pages="clr-namespace:Bit.App.Pages"
+                       xmlns:u="clr-namespace:Bit.App.Utilities"
+                       xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
+                       xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
+                       StyleClass="list-row, list-row-platform"
+                       RowSpacing="0"
+                       ColumnSpacing="0"
+                       HorizontalOptions="FillAndExpand"
+                       x:DataType="pages:GroupingsPageTOTPListItem">
 
     <Grid.Resources>
-          <u:IconGlyphConverter x:Key="iconGlyphConverter"/>
-          <u:IconImageConverter x:Key="iconImageConverter"/>
-          <u:InverseBoolConverter x:Key="inverseBool" />
-          <u:StringHasValueConverter x:Key="stringHasValueConverter" />
+        <u:IconGlyphConverter x:Key="iconGlyphConverter" />
+        <u:IconImageConverter x:Key="iconImageConverter" />
+        <u:InverseBoolConverter x:Key="inverseBool" />
+        <u:StringHasValueConverter x:Key="stringHasValueConverter" />
     </Grid.Resources>
 
     <Grid.RowDefinitions>
@@ -28,7 +28,7 @@
         <ColumnDefinition Width="40" />
         <ColumnDefinition Width="*" />
         <ColumnDefinition Width="40" />
-        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto" />
         <ColumnDefinition Width="40" />
     </Grid.ColumnDefinitions>
 
@@ -54,7 +54,7 @@
         Source="{Binding IconImageSource, Mode=OneTime}"
         AutomationProperties.IsInAccessibleTree="False" />
 
-    <Grid 
+    <Grid
         RowSpacing="0"
         ColumnSpacing="0"
         Grid.Row="0"
@@ -73,7 +73,7 @@
             Grid.Row="0"
             StyleClass="list-title, list-title-platform"
             Text="{Binding Cipher.Name}" />
-        <Label 
+        <Label
             LineBreakMode="TailTruncation"
             Grid.Column="0"
             Grid.Row="1"
@@ -92,7 +92,7 @@
         Grid.Column="2"
         HorizontalOptions="FillAndExpand"
         VerticalOptions="CenterAndExpand" />
-    
+
     <Label
         Text="{Binding TotpSec, Mode=OneWay}"
         Style="{DynamicResource textTotp}"
@@ -102,21 +102,37 @@
         XAlign="Center"
         YAlign="Center"
         HorizontalOptions="FillAndExpand"
-        VerticalOptions="FillAndExpand"/> 
-
-    <controls:MonoLabel
-        Text="{Binding TotpCodeFormatted, Mode=OneWay}"
-        Style="{DynamicResource textTotp}"
-        Margin="2,0,0,0"
+        VerticalOptions="FillAndExpand" />
+    
+    <StackLayout
         Grid.Row="0"
         Grid.Column="3"
-        StyleClass="text-lg"
-        XAlign="Center"
-        YAlign="Center"
+        Margin="3,0,2,0"
+        Spacing="5"
+        Orientation="Horizontal"
         HorizontalOptions="FillAndExpand"
-        VerticalOptions="FillAndExpand" />
+        VerticalOptions="FillAndExpand">
 
-    <controls:IconButton 
+        <controls:MonoLabel
+            Text="{Binding TotpCodeFormattedStart, Mode=OneWay}"
+            Style="{DynamicResource textTotp}"
+            StyleClass="text-lg"
+            HorizontalTextAlignment="Center"
+            VerticalTextAlignment="Center"
+            HorizontalOptions="Center"
+            VerticalOptions="FillAndExpand" />
+        
+        <controls:MonoLabel
+            Text="{Binding TotpCodeFormattedEnd, Mode=OneWay}"
+            Style="{DynamicResource textTotp}"
+            StyleClass="text-lg"
+            HorizontalTextAlignment="Center"
+            VerticalTextAlignment="Center"
+            HorizontalOptions="Center"
+            VerticalOptions="FillAndExpand" />
+    </StackLayout>
+
+    <controls:IconButton
         StyleClass="box-row-button, box-row-button-platform"
         Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
         Command="{Binding CopyCommand}"

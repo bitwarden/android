@@ -54,9 +54,14 @@ namespace Bit.App.Pages
         public string TotpCodeFormatted
         {
             get => _totpCodeFormatted;
-            set => SetProperty(ref _totpCodeFormatted, value);
+            set => SetProperty(ref _totpCodeFormatted, value,
+                additionalPropertyNames: new string[]
+                {
+                    nameof(TotpCodeFormattedStart),
+                    nameof(TotpCodeFormattedEnd),
+                });
         }
-
+        
         public string TotpSec
         {
             get => _totpSec;
@@ -92,6 +97,10 @@ namespace Bit.App.Pages
             }
 
         }
+
+        public string TotpCodeFormattedStart => TotpCodeFormatted?.Split(' ')[0];
+        
+        public string TotpCodeFormattedEnd => TotpCodeFormatted?.Split(' ')[1];
 
         public async Task CopyToClipboardAsync()
         {
