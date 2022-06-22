@@ -2266,10 +2266,22 @@
   <data name="CannotScanQRCode" xml:space="preserve">
     <value>Cannot scan QR Code? </value>
   </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Authenticator Key</value>
+  </data>
   <data name="EnterCodeManually" xml:space="preserve">
-    <value>Enter code manually</value>
+    <value>Enter Key Manually</value>
   </data>
   <data name="AddTotp" xml:space="preserve">
     <value>Add TOTP</value>
+  </data>
+  <data name="SetupTOTP" xml:space="preserve">
+    <value>Set up TOTP</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>Once the key is successfully entered,</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value>select Add TOTP to store the key safely</value>
   </data>
 </root>

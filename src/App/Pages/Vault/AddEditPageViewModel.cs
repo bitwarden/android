@@ -29,6 +29,7 @@ namespace Bit.App.Pages
         private readonly IEventService _eventService;
         private readonly IPolicyService _policyService;
         private readonly ILogger _logger;
+        private readonly IClipboardService _clipboardService;
 
         private CipherView _cipher;
         private bool _showNotesSeparator;
@@ -53,6 +54,7 @@ namespace Bit.App.Pages
             nameof(ShowUris),
             nameof(ShowAttachments),
             nameof(ShowCollections),
+            nameof(HasTotpValue)
         };
         private List<KeyValuePair<UriMatchType?, string>> _matchDetectionOptions =
             new List<KeyValuePair<UriMatchType?, string>>
@@ -80,6 +82,7 @@ namespace Bit.App.Pages
             _eventService = ServiceContainer.Resolve<IEventService>("eventService");
             _policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
             _logger = ServiceContainer.Resolve<ILogger>("logger");
+            _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
 
             GeneratePasswordCommand = new Command(GeneratePassword);
             TogglePasswordCommand = new Command(TogglePassword);
@@ -89,6 +92,7 @@ namespace Bit.App.Pages
             UriOptionsCommand = new Command<LoginUriView>(UriOptions);
             FieldOptionsCommand = new Command<AddEditPageFieldViewModel>(FieldOptions);
             PasswordPromptHelpCommand = new Command(PasswordPromptHelp);
+            CopyCommand = new Command(CopyTotpClipboard);
             Uris = new ExtendedObservableCollection<LoginUriView>();
             Fields = new ExtendedObservableCollection<AddEditPageFieldViewModel>();
             Collections = new ExtendedObservableCollection<CollectionViewModel>();
@@ -150,6 +154,7 @@ namespace Bit.App.Pages
         public Command UriOptionsCommand { get; set; }
         public Command FieldOptionsCommand { get; set; }
         public Command PasswordPromptHelpCommand { get; set; }
+        public Command CopyCommand { get; set; }
         public string CipherId { get; set; }
         public string OrganizationId { get; set; }
         public string FolderId { get; set; }
@@ -300,7 +305,8 @@ namespace Bit.App.Pages
         public bool AllowPersonal { get; set; }
         public bool PasswordPrompt => Cipher.Reprompt != CipherRepromptType.None;
         public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
-
+        public bool HasTotpValue => !string.IsNullOrEmpty(Cipher.Login.Totp);
+        public string SetupTotpText => $"{BitwardenIcons.Camera} {AppResources.SetupTOTP}";
         public void Init()
         {
             PageTitle = EditMode && !CloneMode ? AppResources.EditItem : AppResources.AddItem;
@@ -857,6 +863,11 @@ namespace Bit.App.Pages
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.PasswordSafe);
             }
+        }
+        private async void CopyTotpClipboard()
+        {
+            await _clipboardService.CopyTextAsync(_cipher.Login.Totp);
+            _platformUtilsService.ShowToast("info", null, string.Format(AppResources.ValueHasBeenCopied, AppResources.AuthenticatorKeyScanner));
         }
     }
 
