@@ -67,7 +67,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <controls:MonoLabel
+        <Label
             LineBreakMode="TailTruncation"
             Grid.Column="0"
             Grid.Row="0"
