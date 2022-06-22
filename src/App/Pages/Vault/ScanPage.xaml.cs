@@ -17,12 +17,15 @@ namespace Bit.App.Pages
     {
         private ScanPageViewModel ViewModel => BindingContext as ScanPageViewModel;
         private readonly Action<string> _callback;
-
         private CancellationTokenSource _autofocusCts;
         private Task _continuousAutofocusTask;
-        private Color _greenColor;
-        private SKColor _blueSKColor;
-        private SKColor _greenSKColor;
+        private readonly Color _greenColor;
+        private readonly SKColor _blueSKColor;
+        private readonly SKColor _greenSKColor;
+        private readonly Stopwatch _stopwatch;
+        private bool _pageIsActive;
+        private bool _qrcodeFound;
+        private float _scale;   
 
         private readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
 
@@ -45,6 +48,8 @@ namespace Bit.App.Pages
             _greenColor = ThemeManager.GetResourceColor("SuccessColor");
             _greenSKColor = _greenColor.ToSKColor();
             _blueSKColor = ThemeManager.GetResourceColor("PrimaryColor").ToSKColor();
+            _stopwatch = new Stopwatch();
+            _qrcodeFound = false;
         }
 
         protected override void OnAppearing()
@@ -88,16 +93,14 @@ namespace Bit.App.Pages
                 }
             }, autofocusCts.Token);
             _pageIsActive = true;
-            AnimationLoop();
+            AnimationLoopAsync();
         }
 
         protected override async void OnDisappearing()
         {
             _autofocusCts?.Cancel();
-
             await _continuousAutofocusTask;
             _zxing.IsScanning = false;
-
             _pageIsActive = false;
             base.OnDisappearing();
         }
@@ -111,7 +114,7 @@ namespace Bit.App.Pages
             {
                 if (text.StartsWith("otpauth://totp"))
                 {
-                    await QRCodeFound();
+                    await QrCodeFoundAsync();
                     _callback(text);
                     return;
                 }
@@ -123,7 +126,7 @@ namespace Bit.App.Pages
                     {
                         if (part.StartsWith("secret="))
                         {
-                            await QRCodeFound();
+                            await QrCodeFoundAsync();
                             _callback(part.Substring(7)?.ToUpperInvariant());
                             return;
                         }
@@ -133,7 +136,7 @@ namespace Bit.App.Pages
             _callback(null);
         }
 
-        private async Task QRCodeFound()
+        private async Task QrCodeFoundAsync()
         {
             _qrcodeFound = true;
             Vibration.Vibrate();
@@ -149,16 +152,47 @@ namespace Bit.App.Pages
             }
         }
 
+        private void AddAuthenticationKey_OnClicked(object sender, EventArgs e)
+        {
+            var text = ViewModel.TotpAuthenticationKey;
+            if (!string.IsNullOrWhiteSpace(text))
+            {
+                if (text.StartsWith("otpauth://totp"))
+                {
+                    _callback(text);
+                    return;
+                }
+                else if (Uri.TryCreate(text, UriKind.Absolute, out Uri uri) &&
+                         !string.IsNullOrWhiteSpace(uri?.Query))
+                {
+                    var queryParts = uri.Query.Substring(1).ToLowerInvariant().Split('&');
+                    foreach (var part in queryParts)
+                    {
+                        if (part.StartsWith("secret="))
+                        {
+                            _callback(part.Substring(7)?.ToUpperInvariant());
+                            return;
+                        }
+                    }
+                }
+            }
+            _callback(null);
+        }
+        
         private void ToggleScanMode_OnTapped(object sender, EventArgs e)
         {
             ViewModel.ToggleScanModeCommand.Execute(null);
+            if (!ViewModel.ShowScanner)
+            {
+                _authenticationKeyEntry.Focus();
+            }
         }
         
         private void OnCanvasViewPaintSurface(object sender, SKPaintSurfaceEventArgs args)
         {
-            SKImageInfo info = args.Info;
-            SKSurface surface = args.Surface;
-            SKCanvas canvas = surface.Canvas;
+            var info = args.Info;
+            var surface = args.Surface;
+            var canvas = surface.Canvas;
             var margins = 20;
             var maxSquareSize = (Math.Min(info.Height, info.Width)*0.9f - margins) * _scale;
             var squareSize = maxSquareSize;
@@ -167,10 +201,10 @@ namespace Bit.App.Pages
             var startYPoint = (info.Height / 2) - (squareSize / 2);
             canvas.Clear(SKColors.Transparent);
 
-            using (SKPaint strokePaint = new SKPaint
+            using (var strokePaint = new SKPaint
                    {
                        Color = _qrcodeFound ? _greenSKColor : _blueSKColor,
-                       StrokeWidth = 9*_scale,
+                       StrokeWidth = 9 * _scale,
                        StrokeCap = SKStrokeCap.Round,
                    })
             {
@@ -189,12 +223,7 @@ namespace Bit.App.Pages
                 canvas.DrawLine (startXPoint+squareSize, startYPoint+squareSize, startXPoint+squareSize, startYPoint+squareSize-lineSize, strokePaint);
             }
         }
-        
-        Stopwatch _stopwatch = new Stopwatch();
-        bool _pageIsActive;
-        bool _qrcodeFound = false;
-        float _scale;   
-        async Task AnimationLoop()
+        async Task AnimationLoopAsync()
         {
             _stopwatch.Start();
             while (_pageIsActive)
@@ -203,7 +232,7 @@ namespace Bit.App.Pages
                 _scale = (20-(1-(float)Math.Sin(4*Math.PI*t))) / 20;
                 SkCanvasView.InvalidateSurface();
                 await Task.Delay(TimeSpan.FromSeconds(1.0 / 30));
-                if (_qrcodeFound && _scale > 0.98f)
+                if(_qrcodeFound && _scale > 0.98f)
                 {
                     _checkIcon.TextColor = _greenColor;
                     SkCanvasView.InvalidateSurface();
