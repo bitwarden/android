@@ -202,6 +202,7 @@ namespace Bit.App.Pages
         {
             if (_inited)
             {
+                // TODO: [PS-961] Fix negative function names
                 await _stateService.SetDisableAutoTotpCopyAsync(!AutoTotpCopy);
             }
         }
@@ -210,6 +211,7 @@ namespace Bit.App.Pages
         {
             if (_inited)
             {
+                // TODO: [PS-961] Fix negative function names
                 await _stateService.SetDisableFaviconAsync(!Favicon);
             }
         }
@@ -245,6 +247,7 @@ namespace Bit.App.Pages
         {
             if (_inited)
             {
+                // TODO: [PS-961] Fix negative function names
                 await _stateService.SetAutofillDisableSavePromptAsync(!AutofillSavePrompt);
             }
         }
