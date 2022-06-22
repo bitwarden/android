@@ -69,7 +69,14 @@ namespace Bit.App.Pages
                         {
                             if (!autofocusCts.IsCancellationRequested)
                             {
-                                _zxing.AutoFocus();
+                                try
+                                {
+                                    _zxing.AutoFocus();
+                                }
+                                catch (Exception ex)
+                                {
+                                    _logger.Value.Exception(ex);
+                                }
                             }
                         });
                     }
@@ -95,7 +102,7 @@ namespace Bit.App.Pages
             base.OnDisappearing();
         }
 
-        private void OnScanResult(ZXing.Result result)
+        private async void OnScanResult(ZXing.Result result)
         {
             // Stop analysis until we navigate away so we don't keep reading barcodes
             _zxing.IsAnalyzing = false;
@@ -104,14 +111,8 @@ namespace Bit.App.Pages
             {
                 if (text.StartsWith("otpauth://totp"))
                 {
-                    Task.Run(async () =>
-                    {
-                        _qrcodeFound = true;
-                        Vibration.Vibrate();
-                        await Task.Delay(1000);
-                        _zxing.IsScanning = false;
-                        _callback(text);
-                    });
+                    await QRCodeFound();
+                    _callback(text);
                     return;
                 }
                 else if (Uri.TryCreate(text, UriKind.Absolute, out Uri uri) &&
@@ -122,20 +123,22 @@ namespace Bit.App.Pages
                     {
                         if (part.StartsWith("secret="))
                         {
-                            Task.Run(async () =>
-                            {
-                                _qrcodeFound = true;
-                                Vibration.Vibrate();
-                                await Task.Delay(1000);
-                                _zxing.IsScanning = false;
-                                _callback(part.Substring(7)?.ToUpperInvariant());
-                            });
+                            await QRCodeFound();
+                            _callback(part.Substring(7)?.ToUpperInvariant());
                             return;
                         }
                     }
                 }
             }
             _callback(null);
+        }
+
+        private async Task QRCodeFound()
+        {
+            _qrcodeFound = true;
+            Vibration.Vibrate();
+            await Task.Delay(1000);
+            _zxing.IsScanning = false;
         }
 
         private async void Close_Clicked(object sender, System.EventArgs e)
