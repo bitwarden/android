@@ -1481,15 +1481,15 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string AutoTotpCopyDescription {
+        public static string CopyTotpAutomaticallyDescription {
             get {
-                return ResourceManager.GetString("AutoTotpCopyDescription", resourceCulture);
+                return ResourceManager.GetString("CopyTotpAutomaticallyDescription", resourceCulture);
             }
         }
         
-        public static string AutoTotpCopy {
+        public static string CopyTotpAutomatically {
             get {
-                return ResourceManager.GetString("AutoTotpCopy", resourceCulture);
+                return ResourceManager.GetString("CopyTotpAutomatically", resourceCulture);
             }
         }
         
@@ -1919,15 +1919,15 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string WebsiteIcons {
+        public static string ShowWebsiteIcons {
             get {
-                return ResourceManager.GetString("WebsiteIcons", resourceCulture);
+                return ResourceManager.GetString("ShowWebsiteIcons", resourceCulture);
             }
         }
         
-        public static string WebsiteIconsDescription {
+        public static string ShowWebsiteIconsDescription {
             get {
-                return ResourceManager.GetString("WebsiteIconsDescription", resourceCulture);
+                return ResourceManager.GetString("ShowWebsiteIconsDescription", resourceCulture);
             }
         }
         
@@ -2759,15 +2759,15 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string SavePrompt {
+        public static string AskToAddLogin {
             get {
-                return ResourceManager.GetString("SavePrompt", resourceCulture);
+                return ResourceManager.GetString("AskToAddLogin", resourceCulture);
             }
         }
         
-        public static string SavePromptDescription {
+        public static string AskToAddLoginDescription {
             get {
-                return ResourceManager.GetString("SavePromptDescription", resourceCulture);
+                return ResourceManager.GetString("AskToAddLoginDescription", resourceCulture);
             }
         }
         

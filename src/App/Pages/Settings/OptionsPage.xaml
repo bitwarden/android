@@ -83,7 +83,7 @@
             <StackLayout StyleClass="box">
                 <StackLayout StyleClass="box-row, box-row-switch">
                     <Label
-                        Text="{u:I18n AutoTotpCopy}"
+                        Text="{u:I18n CopyTotpAutomatically}"
                         StyleClass="box-label-regular"
                         HorizontalOptions="StartAndExpand" />
                     <Switch
@@ -92,13 +92,13 @@
                         HorizontalOptions="End" />
                 </StackLayout>
                 <Label
-                    Text="{u:I18n AutoTotpCopyDescription}"
+                    Text="{u:I18n CopyTotpAutomaticallyDescription}"
                     StyleClass="box-footer-label, box-footer-label-switch" />
             </StackLayout>
             <StackLayout StyleClass="box">
                 <StackLayout StyleClass="box-row, box-row-switch">
                     <Label
-                        Text="{u:I18n WebsiteIcons}"
+                        Text="{u:I18n ShowWebsiteIcons}"
                         StyleClass="box-label-regular"
                         HorizontalOptions="StartAndExpand" />
                     <Switch
@@ -107,7 +107,7 @@
                         HorizontalOptions="End" />
                 </StackLayout>
                 <Label
-                    Text="{u:I18n WebsiteIconsDescription}"
+                    Text="{u:I18n ShowWebsiteIconsDescription}"
                     StyleClass="box-footer-label, box-footer-label-switch" />
             </StackLayout>
             <StackLayout StyleClass="box" IsVisible="{Binding ShowAndroidAutofillSettings}">
@@ -117,7 +117,7 @@
                 </StackLayout>
                 <StackLayout StyleClass="box-row, box-row-switch">
                     <Label
-                        Text="{u:I18n SavePrompt}"
+                        Text="{u:I18n AskToAddLogin}"
                         StyleClass="box-label-regular"
                         HorizontalOptions="StartAndExpand" />
                     <Switch
@@ -126,7 +126,7 @@
                         HorizontalOptions="End" />
                 </StackLayout>
                 <Label
-                    Text="{u:I18n SavePromptDescription}"
+                    Text="{u:I18n AskToAddLoginDescription}"
                     StyleClass="box-footer-label, box-footer-label-switch" />
             </StackLayout>
             <StackLayout StyleClass="box" IsVisible="{Binding ShowAndroidAutofillSettings}">

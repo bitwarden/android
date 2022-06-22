@@ -907,10 +907,10 @@
   <data name="CopyTotp" xml:space="preserve">
     <value>Copy TOTP</value>
   </data>
-  <data name="AutoTotpCopyDescription" xml:space="preserve">
+  <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
     <value>If a login has an authenticator key, copy the TOTP verification code to your clip-board when you auto-fill the login.</value>
   </data>
-  <data name="AutoTotpCopy" xml:space="preserve">
+  <data name="CopyTotpAutomatically" xml:space="preserve">
     <value>Copy TOTP automatically</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
@@ -1128,10 +1128,10 @@
   <data name="Expiration" xml:space="preserve">
     <value>Expiration</value>
   </data>
-  <data name="WebsiteIcons" xml:space="preserve">
+  <data name="ShowWebsiteIcons" xml:space="preserve">
     <value>Show website icons</value>
   </data>
-  <data name="WebsiteIconsDescription" xml:space="preserve">
+  <data name="ShowWebsiteIconsDescription" xml:space="preserve">
     <value>Show a recognizable image next to each login.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
@@ -1573,10 +1573,10 @@
   <data name="BlacklistedUrisDescription" xml:space="preserve">
     <value>URIs that are blacklisted will not offer auto-fill. The list should be comma separated. Ex: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
-  <data name="SavePrompt" xml:space="preserve">
+  <data name="AskToAddLogin" xml:space="preserve">
     <value>Ask to add login</value>
   </data>
-  <data name="SavePromptDescription" xml:space="preserve">
+  <data name="AskToAddLoginDescription" xml:space="preserve">
     <value>Ask to add an item if one isn't found in your vault.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
