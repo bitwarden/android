@@ -17,7 +17,9 @@ namespace Bit.App.Pages
         }
 
         public Command ToggleScanModeCommand { get; set; }
-
+        public string ScanQrPageTitle => ShowScanner ? AppResources.ScanQrTitle : AppResources.AuthenticatorKeyScanner;
+        public string CameraInstructionTop => ShowScanner ? AppResources.CameraInstructionTop : AppResources.OnceTheKeyIsSuccessfullyEntered;
+        public string CameraInstructionBottom => ShowScanner ? AppResources.CameraInstructionBottom : AppResources.SelectAddTotpToStoreTheKeySafely;
         public string TotpAuthenticationKey
         {
             get => _totpAuthenticationKey;
@@ -33,7 +35,10 @@ namespace Bit.App.Pages
             set => SetProperty(ref _showScanner, value,
                 additionalPropertyNames: new string[]
                 {
-                    nameof(ToggleScanModeLabel)
+                    nameof(ToggleScanModeLabel),
+                    nameof(ScanQrPageTitle),
+                    nameof(CameraInstructionTop),
+                    nameof(CameraInstructionBottom)
                 });
         }
         

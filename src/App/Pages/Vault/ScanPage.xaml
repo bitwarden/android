@@ -10,18 +10,18 @@
     xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
     xmlns:zxing="clr-namespace:ZXing.Net.Mobile.Forms;assembly=ZXing.Net.Mobile.Forms"
     x:Name="_page"
-    Title="{u:I18n ScanQrTitle}">
-    
+    Title="{Binding ScanQrPageTitle}">
+
     <ContentPage.BindingContext>
         <pages:ScanPageViewModel />
     </ContentPage.BindingContext>
-    
+
     <ContentPage.Resources>
         <ResourceDictionary>
             <u:InverseBoolConverter x:Key="inverseBool" />
         </ResourceDictionary>
     </ContentPage.Resources>
-    
+
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="{u:I18n Cancel}" Clicked="Close_Clicked" Order="Primary" Priority="-1" />
     </ContentPage.ToolbarItems>
@@ -44,13 +44,42 @@
             Grid.Row="0"
             Grid.RowSpan="3"
             OnScanResult="OnScanResult"/>
+        <StackLayout
+            VerticalOptions="Center"
+            HorizontalOptions="FillAndExpand"
+            IsVisible="{Binding ShowScanner}"
+            Grid.Column="0"
+            Grid.Row="0"
+            Grid.RowSpan="2"
+            Margin="30,0">
+
+            <forms:SKCanvasView
+                x:Name="SkCanvasView" 
+                Margin="0,50,0,0"
+                WidthRequest="250"
+                HeightRequest="250"
+                IsVisible="{Binding ShowScanner}"
+                VerticalOptions="Center" 
+                HorizontalOptions="Center"
+                PaintSurface="OnCanvasViewPaintSurface"/>
+
+            <controls:IconButton 
+                x:Name="_checkIcon"
+                IsVisible="{Binding ShowScanner}"
+                StyleClass="box-row-button, box-row-button-platform"
+                Text="{Binding Source={x:Static core:BitwardenIcons.CheckCircle}}"
+                HorizontalOptions="Center"
+                VerticalOptions="Start"
+                FontSize="30"
+                TextColor="Transparent"/>
+        </StackLayout>
         <BoxView
             Grid.Column="0"
             Grid.Row="0"
             Grid.RowSpan="2"
             IsVisible="{Binding ShowScanner, Converter={StaticResource inverseBool}}"
             BackgroundColor="{DynamicResource BackgroundColor}"/>
-            <StackLayout
+        <StackLayout
                 VerticalOptions="Center"
                 HorizontalOptions="FillAndExpand"
                 IsVisible="{Binding ShowScanner, Converter={StaticResource inverseBool}}"
@@ -58,76 +87,50 @@
                 Grid.Row="0"
                 Grid.RowSpan="2"
                 Margin="30,0">
-                <Label
+            <Label
                     Text="{u:I18n EnterCodeManually}"
                     FontSize="30" />
-                <Label
-                    Text="{u:I18n AuthenticatorKey}"
+            <Label
+                    Text="{u:I18n AuthenticatorKeyScanner}"
                     StyleClass="box-label" />
-                <controls:MonoEntry
+            <controls:MonoEntry
                     x:Name="_authenticationKeyEntry"
                     Text="{Binding TotpAuthenticationKey}"
                     IsSpellCheckEnabled="False"
                     IsTextPredictionEnabled="False"
                     StyleClass="box-value" />
-                <Button 
+            <Button 
                     Text="{u:I18n AddTotp}" 
                     StyleClass="box-button-row"
                     Clicked="AddAuthenticationKey_OnClicked"/>
-            </StackLayout>
-            <StackLayout
-                VerticalOptions="Center"
-                HorizontalOptions="FillAndExpand"
-                IsVisible="{Binding ShowScanner}"
-                Grid.Column="0"
-                Grid.Row="0"
-                Grid.RowSpan="2"
-                Margin="30,0">
-                
-                <forms:SKCanvasView x:Name="SkCanvasView" 
-                                    Margin="0,50,0,0"
-                                    WidthRequest="250"
-                                    HeightRequest="250"
-                                    VerticalOptions="Center" 
-                                    HorizontalOptions="Center"
-                                    PaintSurface="OnCanvasViewPaintSurface"/>
-                    
-                <controls:IconButton 
-                    x:Name="_checkIcon"
-                    StyleClass="box-row-button, box-row-button-platform"
-                    Text="{Binding Source={x:Static core:BitwardenIcons.CheckCircle}}"
-                    HorizontalOptions="Center"
-                    VerticalOptions="Start"
-                    FontSize="30"
-                    TextColor="Transparent"/>
-            </StackLayout>
-            <BoxView
+        </StackLayout>
+        <BoxView
                 Grid.Column="0"
                 Grid.Row="2"
                 VerticalOptions="Fill"
                 HorizontalOptions="FillAndExpand"
                 BackgroundColor="Black"
                 Opacity="0.7" />
-            <StackLayout
+        <StackLayout
                 VerticalOptions="Start"
                 HorizontalOptions="Center"
                 Grid.Column="0"
                 Grid.Row="2">
-                <Label
-                    Text="{u:I18n CameraInstructionTop}"
+            <Label
+                    Text="{Binding CameraInstructionTop}"
                     AutomationId="zxingDefaultOverlay_TopTextLabel"
-                    Margin="0,15,0,0"
+                    Margin="30,15,30,0"
                     HorizontalOptions="Center"
                     StyleClass="text-sm"
                     TextColor="White" />
-                <Label
-                    Text="{u:I18n CameraInstructionBottom}"
+            <Label
+                    Text="{Binding CameraInstructionBottom}"
                     AutomationId="zxingDefaultOverlay_BottomTextLabel"
                     HorizontalOptions="Center"
                     StyleClass="text-sm"
                     TextColor="White" />
-            </StackLayout>
-            <Label
+        </StackLayout>
+        <Label
                 FormattedText="{Binding ToggleScanModeLabel}"
                 Grid.Column="0"
                 Grid.Row="2"
@@ -135,9 +138,9 @@
                 StyleClass="text-sm"
                 VerticalOptions="End"
                 HorizontalOptions="Center" >
-                <Label.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="ToggleScanMode_OnTapped" />
-                </Label.GestureRecognizers>
-            </Label>
-        </Grid>
+            <Label.GestureRecognizers>
+                <TapGestureRecognizer Tapped="ToggleScanMode_OnTapped" />
+            </Label.GestureRecognizers>
+        </Label>
+    </Grid>
 </pages:BaseContentPage>
