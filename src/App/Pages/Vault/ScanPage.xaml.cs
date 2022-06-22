@@ -99,7 +99,6 @@ namespace Bit.App.Pages
         {
             // Stop analysis until we navigate away so we don't keep reading barcodes
             _zxing.IsAnalyzing = false;
-            _zxing.IsScanning = false;
             var text = result?.Text;
             if (!string.IsNullOrWhiteSpace(text))
             {
@@ -108,7 +107,9 @@ namespace Bit.App.Pages
                     Task.Run(async () =>
                     {
                         _qrcodeFound = true;
-                        await Task.Delay(2000);
+                        Vibration.Vibrate();
+                        await Task.Delay(1000);
+                        _zxing.IsScanning = false;
                         _callback(text);
                     });
                     return;
@@ -124,7 +125,9 @@ namespace Bit.App.Pages
                             Task.Run(async () =>
                             {
                                 _qrcodeFound = true;
-                                await Task.Delay(2000);
+                                Vibration.Vibrate();
+                                await Task.Delay(1000);
+                                _zxing.IsScanning = false;
                                 _callback(part.Substring(7)?.ToUpperInvariant());
                             });
                             return;
@@ -199,7 +202,6 @@ namespace Bit.App.Pages
                 await Task.Delay(TimeSpan.FromSeconds(1.0 / 30));
                 if (_qrcodeFound && _scale > 0.98f)
                 {
-                    Vibration.Vibrate();
                     _checkIcon.TextColor = _greenColor;
                     SkCanvasView.InvalidateSurface();
                     break;
