@@ -50,7 +50,7 @@ namespace Bit.App.Pages
                 fs.Spans.Add(new Span
                 {
                     Text = ShowScanner ? AppResources.CannotScanQRCode : AppResources.CannotAddAuthenticatorKey,
-                    TextColor = ThemeManager.GetResourceColor("BackgroundColor")
+                    TextColor = ThemeManager.GetResourceColor("TitleTextColor")
                 });
                 fs.Spans.Add(new Span
                 {

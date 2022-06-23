@@ -191,23 +191,26 @@
                             StyleClass="box-label"
                             Grid.Row="0"
                             Grid.Column="0" />
-                        <Button 
-                            IsVisible="{Binding HasTotpValue, Converter={StaticResource inverseBool}}"
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            Grid.ColumnSpan="3"
-                            Clicked="ScanTotp_Clicked"/>
-                        <controls:IconLabel 
-                            Text="{Binding SetupTotpText}" 
+                        <Frame 
                             IsVisible="{Binding HasTotpValue, Converter={StaticResource inverseBool}}" 
                             Margin="0,5,0,0"
-                            HorizontalOptions="Center"
+                            StyleClass="btn-icon-row"
+                            HorizontalOptions="FillAndExpand"
                             VerticalOptions="FillAndExpand"
-                            VerticalTextAlignment="Center"
                             Padding="0"
                             Grid.Row="1"
                             Grid.Column="0"
-                            Grid.ColumnSpan="3" />
+                            Grid.ColumnSpan="3">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="ScanTotp_Clicked" />
+                            </Frame.GestureRecognizers>
+                            <controls:IconLabel 
+                                Text="{Binding SetupTotpText}" 
+                                Margin="0,15,0,15"
+                                HorizontalOptions="Center"
+                                VerticalOptions="FillAndExpand"
+                                VerticalTextAlignment="Center" />
+                        </Frame>
                         <controls:MonoEntry
                             x:Name="_loginTotpEntry"
                             Text="{Binding Cipher.Login.Totp}"
