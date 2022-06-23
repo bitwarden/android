@@ -864,6 +864,7 @@ namespace Bit.App.Pages
                 await _platformUtilsService.ShowDialogAsync(AppResources.PasswordSafe);
             }
         }
+
         private async void CopyTotpClipboard()
         {
             await _clipboardService.CopyTextAsync(_cipher.Login.Totp);

@@ -192,12 +192,22 @@
                             Grid.Row="0"
                             Grid.Column="0" />
                         <Button 
-                            Text="{Binding SetupTotpText}" 
                             IsVisible="{Binding HasTotpValue, Converter={StaticResource inverseBool}}"
                             Grid.Row="1"
                             Grid.Column="0"
                             Grid.ColumnSpan="3"
                             Clicked="ScanTotp_Clicked"/>
+                        <controls:IconLabel 
+                            Text="{Binding SetupTotpText}" 
+                            IsVisible="{Binding HasTotpValue, Converter={StaticResource inverseBool}}" 
+                            Margin="0,5,0,0"
+                            HorizontalOptions="Center"
+                            VerticalOptions="FillAndExpand"
+                            VerticalTextAlignment="Center"
+                            Padding="0"
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="3" />
                         <controls:MonoEntry
                             x:Name="_loginTotpEntry"
                             Text="{Binding Cipher.Login.Totp}"
