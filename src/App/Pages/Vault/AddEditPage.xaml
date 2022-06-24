@@ -206,7 +206,7 @@
                             </Frame.GestureRecognizers>
                             <controls:IconLabel 
                                 Text="{Binding SetupTotpText}" 
-                                Margin="0,15,0,15"
+                                Padding="0,15"
                                 HorizontalOptions="Center"
                                 VerticalOptions="FillAndExpand"
                                 VerticalTextAlignment="Center" />
