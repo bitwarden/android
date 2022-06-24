@@ -89,6 +89,8 @@
                 Value="5" />
         <Setter Property="Margin"
                 Value="0, 5, 0, 0" />
+        <Setter Property="HasShadow"
+                Value="False" />
         <Setter Property="VisualStateManager.VisualStateGroups">
             <VisualStateGroupList>
                 <VisualStateGroup x:Name="CommonStates">
