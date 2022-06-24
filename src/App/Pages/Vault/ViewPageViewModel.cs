@@ -732,11 +732,6 @@ namespace Bit.App.Pages
 
             return _passwordReprompted = await _passwordRepromptService.ShowPasswordPromptAsync();
         }
-
-        public void LaunchGetPremiumMembershipURI()
-        {
-            _platformUtilsService.LaunchUri("https://bitwarden.com/pricing/");
-        }
     }
 
     public class ViewPageFieldViewModel : ExtendedViewModel

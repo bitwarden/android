@@ -222,11 +222,7 @@
                                    StyleClass="box-footer-label"
                                    IsVisible="{Binding CanAccessPremium , Converter={StaticResource inverseBool}}"
                                    Margin="0,5"
-                                   HorizontalOptions="StartAndExpand">
-                                <Label.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="UpgradeToPremiumTotp_Tapped" />
-                                </Label.GestureRecognizers>
-                            </Label>
+                                   HorizontalOptions="StartAndExpand"/>
                             <BoxView StyleClass="box-row-separator" IsVisible="{Binding ShowTotp}" />
                         </StackLayout>
                         <StackLayout IsVisible="{Binding IsCard}" Spacing="0" Padding="0">
