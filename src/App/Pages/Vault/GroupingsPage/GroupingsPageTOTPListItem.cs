@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using Bit.App.Resources;
 using Bit.App.Utilities;
@@ -61,7 +61,7 @@ namespace Bit.App.Pages
                     nameof(TotpCodeFormattedEnd),
                 });
         }
-        
+
         public string TotpSec
         {
             get => _totpSec;
@@ -99,7 +99,7 @@ namespace Bit.App.Pages
         }
 
         public string TotpCodeFormattedStart => TotpCodeFormatted?.Split(' ')[0];
-        
+
         public string TotpCodeFormattedEnd => TotpCodeFormatted?.Split(' ')[1];
 
         public async Task CopyToClipboardAsync()

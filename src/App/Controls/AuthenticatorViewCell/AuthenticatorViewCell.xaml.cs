@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Bit.App.Pages;
 using Bit.App.Utilities;
 using Bit.Core.Models.View;

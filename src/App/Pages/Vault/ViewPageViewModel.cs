@@ -222,7 +222,7 @@ namespace Bit.App.Pages
                 return fs;
             }
         }
-        
+
         public bool ShowUris => IsLogin && Cipher.Login.HasUris;
         public bool ShowIdentityAddress => IsIdentity && (
             !string.IsNullOrWhiteSpace(Cipher.Identity.Address1) ||

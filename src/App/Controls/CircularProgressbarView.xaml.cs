@@ -41,7 +41,7 @@ namespace Bit.App.Controls
         protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             base.OnPropertyChanged(propertyName);
-            if(propertyName == nameof(Progress) && _progressDrawer == null)
+            if (propertyName == nameof(Progress) && _progressDrawer == null)
             {
                 var circle = new Circle(Radius * (float)DeviceDisplay.MainDisplayInfo.Density, (info) => new SKPoint((float)info.Width / 2, (float)info.Height / 2));
                 _progressDrawer = new ProgressDrawer(SkCanvasView, circle, () => (float)Progress, StrokeWidth * (float)DeviceDisplay.MainDisplayInfo.Density, BackgroundProgressColor.ToSKColor(), ProgressColor.ToSKColor(), EndingProgressColor.ToSKColor());

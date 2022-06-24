@@ -5,7 +5,7 @@ using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
-    public class ScanPageViewModel: BaseViewModel
+    public class ScanPageViewModel : BaseViewModel
     {
         private bool _showScanner;
         private string _totpAuthenticationKey;
@@ -41,7 +41,7 @@ namespace Bit.App.Pages
                     nameof(CameraInstructionBottom)
                 });
         }
-        
+
         public FormattedString ToggleScanModeLabel
         {
             get
@@ -60,7 +60,7 @@ namespace Bit.App.Pages
                 return fs;
             }
         }
-        
+
         private void ToggleScanAsync()
         {
             ShowScanner = !ShowScanner;

@@ -25,7 +25,7 @@ namespace Bit.App.Pages
         private readonly Stopwatch _stopwatch;
         private bool _pageIsActive;
         private bool _qrcodeFound;
-        private float _scale;   
+        private float _scale;
 
         private readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
 
@@ -183,7 +183,7 @@ namespace Bit.App.Pages
             }
             _callback(null);
         }
-        
+
         private void ToggleScanMode_OnTapped(object sender, EventArgs e)
         {
             ViewModel.ToggleScanModeCommand.Execute(null);
@@ -192,14 +192,14 @@ namespace Bit.App.Pages
                 _authenticationKeyEntry.Focus();
             }
         }
-        
+
         private void OnCanvasViewPaintSurface(object sender, SKPaintSurfaceEventArgs args)
         {
             var info = args.Info;
             var surface = args.Surface;
             var canvas = surface.Canvas;
             var margins = 20;
-            var maxSquareSize = (Math.Min(info.Height, info.Width)*0.9f - margins) * _scale;
+            var maxSquareSize = (Math.Min(info.Height, info.Width) * 0.9f - margins) * _scale;
             var squareSize = maxSquareSize;
             var lineSize = squareSize * 0.15f;
             var startXPoint = (info.Width / 2) - (squareSize / 2);
@@ -207,25 +207,25 @@ namespace Bit.App.Pages
             canvas.Clear(SKColors.Transparent);
 
             using (var strokePaint = new SKPaint
-                   {
-                       Color = _qrcodeFound ? _greenSKColor : _blueSKColor,
-                       StrokeWidth = 9 * _scale,
-                       StrokeCap = SKStrokeCap.Round,
-                   })
             {
-                canvas.Scale(1,1);
+                Color = _qrcodeFound ? _greenSKColor : _blueSKColor,
+                StrokeWidth = 9 * _scale,
+                StrokeCap = SKStrokeCap.Round,
+            })
+            {
+                canvas.Scale(1, 1);
                 //top left
-                canvas.DrawLine (startXPoint, startYPoint, startXPoint, startYPoint+lineSize, strokePaint);
-                canvas.DrawLine (startXPoint, startYPoint, startXPoint+lineSize, startYPoint, strokePaint);
+                canvas.DrawLine(startXPoint, startYPoint, startXPoint, startYPoint + lineSize, strokePaint);
+                canvas.DrawLine(startXPoint, startYPoint, startXPoint + lineSize, startYPoint, strokePaint);
                 //bot left
-                canvas.DrawLine (startXPoint, startYPoint+squareSize, startXPoint, startYPoint+squareSize-lineSize, strokePaint);
-                canvas.DrawLine (startXPoint, startYPoint+squareSize, startXPoint+lineSize, startYPoint+squareSize, strokePaint);
+                canvas.DrawLine(startXPoint, startYPoint + squareSize, startXPoint, startYPoint + squareSize - lineSize, strokePaint);
+                canvas.DrawLine(startXPoint, startYPoint + squareSize, startXPoint + lineSize, startYPoint + squareSize, strokePaint);
                 //top right
-                canvas.DrawLine (startXPoint+squareSize, startYPoint, startXPoint+squareSize-lineSize, startYPoint, strokePaint);
-                canvas.DrawLine (startXPoint+squareSize, startYPoint, startXPoint+squareSize, startYPoint+lineSize, strokePaint);
+                canvas.DrawLine(startXPoint + squareSize, startYPoint, startXPoint + squareSize - lineSize, startYPoint, strokePaint);
+                canvas.DrawLine(startXPoint + squareSize, startYPoint, startXPoint + squareSize, startYPoint + lineSize, strokePaint);
                 //bot right
-                canvas.DrawLine (startXPoint+squareSize, startYPoint+squareSize, startXPoint+squareSize-lineSize, startYPoint+squareSize, strokePaint);
-                canvas.DrawLine (startXPoint+squareSize, startYPoint+squareSize, startXPoint+squareSize, startYPoint+squareSize-lineSize, strokePaint);
+                canvas.DrawLine(startXPoint + squareSize, startYPoint + squareSize, startXPoint + squareSize - lineSize, startYPoint + squareSize, strokePaint);
+                canvas.DrawLine(startXPoint + squareSize, startYPoint + squareSize, startXPoint + squareSize, startYPoint + squareSize - lineSize, strokePaint);
             }
         }
         async Task AnimationLoopAsync()
@@ -234,10 +234,10 @@ namespace Bit.App.Pages
             while (_pageIsActive)
             {
                 var t = _stopwatch.Elapsed.TotalSeconds % 2 / 2;
-                _scale = (20-(1-(float)Math.Sin(4*Math.PI*t))) / 20;
+                _scale = (20 - (1 - (float)Math.Sin(4 * Math.PI * t))) / 20;
                 SkCanvasView.InvalidateSurface();
                 await Task.Delay(TimeSpan.FromSeconds(1.0 / 30));
-                if(_qrcodeFound && _scale > 0.98f)
+                if (_qrcodeFound && _scale > 0.98f)
                 {
                     _checkIcon.TextColor = _greenColor;
                     SkCanvasView.InvalidateSurface();

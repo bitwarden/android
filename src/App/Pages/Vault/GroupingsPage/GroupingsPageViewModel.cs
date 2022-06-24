@@ -310,7 +310,7 @@ namespace Bit.App.Pages
                                 item.TotpTickAsync();
                             }
                             return TotpFilterEnable;
-                        }); 
+                        });
                     }
                     else
                     {
