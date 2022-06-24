@@ -688,7 +688,7 @@ namespace Bit.App.Pages
                 await _clipboardService.CopyTextAsync(text);
                 if (!string.IsNullOrWhiteSpace(name))
                 {
-                    _platformUtilsService.ShowToast("info", null, string.Format(AppResources.ValueHasBeenCopied, name));
+                    _platformUtilsService.ShowToastForCopiedValue(name);
                 }
                 if (id == "LoginPassword")
                 {

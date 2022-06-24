@@ -1545,6 +1545,12 @@
   <data name="ThemeDefault" xml:space="preserve">
     <value>Default (System)</value>
   </data>
+  <data name="DefaultDarkTheme" xml:space="preserve">
+    <value>Default Dark Theme</value>
+  </data>
+  <data name="DefaultDarkThemeDescription" xml:space="preserve">
+    <value>Choose the dark theme to use when using Default (System) theme while your device's dark mode is enabled</value>
+  </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Copy Note</value>
   </data>
@@ -1560,6 +1566,10 @@
   <data name="Black" xml:space="preserve">
     <value>Black</value>
     <comment>The color black</comment>
+  </data>
+  <data name="Nord" xml:space="preserve">
+    <value>Nord</value>
+    <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="BlacklistedUris" xml:space="preserve">
     <value>Blacklisted URIs</value>
@@ -2200,11 +2210,11 @@
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
     <value>Enter the verification code that was sent to your email</value>
   </data>
-  <data name="ReportCrashLogs" xml:space="preserve">
-    <value>Report crash logs</value>
+  <data name="SubmitCrashLogs" xml:space="preserve">
+    <value>Submit crash logs</value>
   </data>
-  <data name="ReportCrashLogsDescription" xml:space="preserve">
-    <value>Help Bitwarden improve app stability by allowing crash reports.</value>
+  <data name="SubmitCrashLogsDescription" xml:space="preserve">
+    <value>Help Bitwarden improve app stability by submitting crash reports.</value>
   </data>
   <data name="OptionsExpanded" xml:space="preserve">
     <value>Options are expanded, tap to collapse.</value>

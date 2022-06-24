@@ -14,6 +14,7 @@ namespace Bit.Core.Abstractions
         Task<string> GetActiveUserIdAsync();
         Task<bool> IsActiveAccountAsync(string userId = null);
         Task SetActiveUserAsync(string userId);
+        Task CheckExtensionActiveUserAndSwitchIfNeededAsync();
         Task<bool> IsAuthenticatedAsync(string userId = null);
         Task<string> GetUserIdAsync(string email);
         Task RefreshAccountViewsAsync(bool allowAddAccountRow);
@@ -109,6 +110,8 @@ namespace Bit.Core.Abstractions
         Task SetRememberedOrgIdentifierAsync(string value);
         Task<string> GetThemeAsync(string userId = null);
         Task SetThemeAsync(string value, string userId = null);
+        Task<string> GetAutoDarkThemeAsync(string userId = null);
+        Task SetAutoDarkThemeAsync(string value, string userId = null);
         Task<bool?> GetAddSitePromptShownAsync(string userId = null);
         Task SetAddSitePromptShownAsync(bool? value, string userId = null);
         Task<bool?> GetPushInitialPromptShownAsync();
@@ -145,5 +148,6 @@ namespace Bit.Core.Abstractions
         Task SetRefreshTokenAsync(string value, bool skipTokenStorage, string userId = null);
         Task<string> GetTwoFactorTokenAsync(string email = null);
         Task SetTwoFactorTokenAsync(string value, string email = null);
+        Task SaveExtensionActiveUserIdToStorageAsync(string userId);
     }
 }

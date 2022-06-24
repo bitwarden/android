@@ -85,7 +85,8 @@
                     ItemTemplate="{StaticResource listItemDataTemplateSelector}"
                     SelectionMode="Single"
                     SelectionChanged="RowSelected"
-                    StyleClass="list, list-platform" />
+                    StyleClass="list, list-platform"
+                    ExtraDataForLogging="Autofill Ciphers Page" />
             </StackLayout>
         </ResourceDictionary>
     </ContentPage.Resources>
