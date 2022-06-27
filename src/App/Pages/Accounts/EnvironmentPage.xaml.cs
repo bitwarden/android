@@ -38,10 +38,7 @@ namespace Bit.App.Pages
 
         private async void Submit_Clicked(object sender, EventArgs e)
         {
-            if (DoOnce())
-            {
                 await _vm.SubmitAsync();
-            }
         }
 
         private async Task SubmitSuccessAsync()

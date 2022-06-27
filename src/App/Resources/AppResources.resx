@@ -2254,4 +2254,7 @@
   <data name="All" xml:space="preserve">
     <value>All</value>
   </data>
+  <data name="EnvironmentPageUrlsError" xml:space="preserve">
+    <value>One or more of the URLs entered are invalid. Please revise it and try to save again.</value>
+  </data>
 </root>

@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
-using Xamarin.Forms;
+using Xamarin.CommunityToolkit.ObjectModel;
 
 namespace Bit.App.Pages
 {
     public class EnvironmentPageViewModel : BaseViewModel
     {
         private readonly IEnvironmentService _environmentService;
+        private bool _validForm;
+        private bool _baseUrlValid;
 
         public EnvironmentPageViewModel()
         {
@@ -22,10 +25,10 @@ namespace Bit.App.Pages
             IdentityUrl = _environmentService.IdentityUrl;
             IconsUrl = _environmentService.IconsUrl;
             NotificationsUrls = _environmentService.NotificationsUrl;
-            SubmitCommand = new Command(async () => await SubmitAsync());
+            SubmitCommand = new AsyncCommand(SubmitAsync, allowsMultipleExecutions: false);
         }
 
-        public Command SubmitCommand { get; }
+        public ICommand SubmitCommand { get; }
         public string BaseUrl { get; set; }
         public string ApiUrl { get; set; }
         public string IdentityUrl { get; set; }
@@ -35,8 +38,20 @@ namespace Bit.App.Pages
         public Action SubmitSuccessAction { get; set; }
         public Action CloseAction { get; set; }
 
+        public bool BaseUrlValid { get; set; }
+        public bool ApiUrlValid { get; set; }
+        public bool IdentityUrlValid { get; set; }
+        public bool WebVaultUrlValid { get; set; }
+        public bool IconsUrlValid { get; set; }
+
         public async Task SubmitAsync()
         {
+            if (!FormValidation())
+            {
+                await Page.DisplayAlert(AppResources.AnErrorHasOccurred, AppResources.EnvironmentPageUrlsError, AppResources.Ok);
+                return;
+            }
+
             var resUrls = await _environmentService.SetUrlsAsync(new Core.Models.Data.EnvironmentUrlData
             {
                 Base = BaseUrl,
@@ -56,6 +71,17 @@ namespace Bit.App.Pages
             NotificationsUrls = resUrls.Notifications;
 
             SubmitSuccessAction?.Invoke();
+        }
+
+        public bool FormValidation()
+        {
+            BaseUrlValid = string.IsNullOrEmpty(BaseUrl) || Uri.IsWellFormedUriString(BaseUrl, UriKind.Relative);
+            ApiUrlValid = string.IsNullOrEmpty(ApiUrl) || Uri.IsWellFormedUriString(BaseUrl, UriKind.Relative);
+            IdentityUrlValid = string.IsNullOrEmpty(IdentityUrl) || Uri.IsWellFormedUriString(BaseUrl, UriKind.Relative);
+            WebVaultUrlValid = string.IsNullOrEmpty(WebVaultUrl) || Uri.IsWellFormedUriString(BaseUrl, UriKind.Relative);
+            IconsUrlValid = string.IsNullOrEmpty(IconsUrl) || Uri.IsWellFormedUriString(BaseUrl, UriKind.Relative);
+
+            return BaseUrlValid && ApiUrlValid && IdentityUrlValid && WebVaultUrlValid && IconsUrlValid;
         }
     }
 }
