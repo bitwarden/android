@@ -547,7 +547,7 @@ namespace Bit.Core.Services
             return accessToken;
         }
 
-        public async Task<object> PreValidateSso(string identifier)
+        public async Task<SsoPrevalidateResponse> PreValidateSso(string identifier)
         {
             var path = "/account/prevalidate?domainHint=" + WebUtility.UrlEncode(identifier);
             using (var requestMessage = new HttpRequestMessage())
@@ -571,7 +571,8 @@ namespace Bit.Core.Services
                     var error = await HandleErrorAsync(response, false, true);
                     throw new ApiException(error);
                 }
-                return null;
+                var responseJsonString = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<SsoPrevalidateResponse>(responseJsonString);
             }
         }
 
