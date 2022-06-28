@@ -591,11 +591,11 @@ namespace Bit.Core.Services
 
                 if (!ApiBaseUrl.Equals("https://api.bitwarden.com") && !Uri.IsWellFormedUriString(ApiBaseUrl, UriKind.Relative))
                 {
-                        throw new ApiException(new ErrorResponse
-                        {
-                            StatusCode = HttpStatusCode.BadGateway,
-                            Message = "One or more URLs saved in the Settings are incorrect. Please revise it and try to log in again."
-                        });
+                    throw new ApiException(new ErrorResponse
+                    {
+                        StatusCode = HttpStatusCode.BadGateway,
+                        Message = "One or more URLs saved in the Settings are incorrect. Please revise it and try to log in again."
+                    });
                 }
 
                 requestMessage.RequestUri = new Uri(string.Concat(ApiBaseUrl, path));
