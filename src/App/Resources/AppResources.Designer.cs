@@ -4047,15 +4047,9 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string UpgradeToPremium {
+        public static string PremiumSubscriptionRequired {
             get {
-                return ResourceManager.GetString("UpgradeToPremium", resourceCulture);
-            }
-        }
-        
-        public static string ToViewVerificationCodes {
-            get {
-                return ResourceManager.GetString("ToViewVerificationCodes", resourceCulture);
+                return ResourceManager.GetString("PremiumSubscriptionRequired", resourceCulture);
             }
         }
         

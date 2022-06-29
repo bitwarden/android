@@ -204,24 +204,8 @@ namespace Bit.App.Pages
             }
         }
 
-        public FormattedString UpgradeToPremiumTotpText
-        {
-            get
-            {
-                var fs = new FormattedString();
-                fs.Spans.Add(new Span
-                {
-                    Text = AppResources.UpgradeToPremium,
-                    TextColor = ThemeManager.GetResourceColor("PrimaryColor")
-                });
-                fs.Spans.Add(new Span
-                {
-                    Text = AppResources.ToViewVerificationCodes,
-                    TextColor = ThemeManager.GetResourceColor("MutedColor")
-                });
-                return fs;
-            }
-        }
+        public string UpgradeToPremiumTotpText => AppResources.PremiumSubscriptionRequired;
+        public bool ShowUpgradePremiumTotpText => !CanAccessPremium && ShowTotp;
 
         public bool ShowUris => IsLogin && Cipher.Login.HasUris;
         public bool ShowIdentityAddress => IsIdentity && (
