@@ -83,10 +83,10 @@ namespace Bit.iOS.Core.Utilities
         {
             if (string.IsNullOrWhiteSpace(theme) && osDarkModeEnabled)
             {
-                theme = "dark";
+                theme = ThemeManager.Dark;
             }
 
-            if (theme == "dark" || theme == "black" || theme == "nord")
+            if (theme == ThemeManager.Dark || theme == ThemeManager.Black || theme == ThemeManager.Nord)
             {
                 LightTheme = false;
             }

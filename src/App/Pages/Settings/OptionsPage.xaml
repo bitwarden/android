@@ -33,6 +33,23 @@
                     StyleClass="box-footer-label"
                     Text="{u:I18n ThemeDescription}" />
             </StackLayout>
+            <StackLayout
+                StyleClass="box"
+                IsVisible="{Binding ShowAutoDarkThemeOptions}">
+                <StackLayout StyleClass="box-row, box-row-input, box-row-input-options-platform">
+                    <Label
+                        Text="{u:I18n DefaultDarkTheme}"
+                        StyleClass="box-label" />
+                    <Picker
+                        x:Name="_autoDarkThemePicker"
+                        ItemsSource="{Binding AutoDarkThemeOptions, Mode=OneTime}"
+                        SelectedIndex="{Binding AutoDarkThemeSelectedIndex}"
+                        StyleClass="box-value" />
+                </StackLayout>
+                <Label
+                    StyleClass="box-footer-label"
+                    Text="{u:I18n DefaultDarkThemeDescription}" />
+            </StackLayout>
             <StackLayout StyleClass="box">
                 <StackLayout StyleClass="box-row, box-row-input, box-row-input-options-platform">
                     <Label

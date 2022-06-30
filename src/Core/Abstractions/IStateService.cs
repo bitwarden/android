@@ -110,6 +110,8 @@ namespace Bit.Core.Abstractions
         Task SetRememberedOrgIdentifierAsync(string value);
         Task<string> GetThemeAsync(string userId = null);
         Task SetThemeAsync(string value, string userId = null);
+        Task<string> GetAutoDarkThemeAsync(string userId = null);
+        Task SetAutoDarkThemeAsync(string value, string userId = null);
         Task<bool?> GetAddSitePromptShownAsync(string userId = null);
         Task SetAddSitePromptShownAsync(bool? value, string userId = null);
         Task<bool?> GetPushInitialPromptShownAsync();
