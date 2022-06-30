@@ -7,10 +7,10 @@ using Xamarin.Forms;
 namespace Bit.App.Pages
 {
     public partial class SendAddOnlyOptionsView : ContentView
-    {    
-        public SendAddOnlyOptionsView ()
+    {
+        public SendAddOnlyOptionsView()
         {
-            InitializeComponent ();
+            InitializeComponent();
         }
 
         private SendAddEditPageViewModel ViewModel => BindingContext as SendAddEditPageViewModel;
@@ -82,7 +82,7 @@ namespace Bit.App.Pages
         {
             await base.LoadViewAsync();
 
-            if(Content is SendAddOnlyOptionsView optionsView)
+            if (Content is SendAddOnlyOptionsView optionsView)
             {
                 optionsView.SetMainScrollView(MainScrollView);
             }

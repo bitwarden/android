@@ -6,9 +6,9 @@ namespace Bit.App.Controls
 {
     public partial class DateTimePicker : Grid
     {
-        public DateTimePicker ()
+        public DateTimePicker()
         {
-            InitializeComponent ();
+            InitializeComponent();
         }
 
         protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
