@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <pages:BaseContentPage
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -303,14 +303,14 @@
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
                                     <controls:ExtendedDatePicker
-                                        NullableDate="{Binding DeletionDate, Mode=TwoWay}"
+                                        NullableDate="{Binding DeletionDateTimeViewModel.Date, Mode=TwoWay}"
                                         Format="d"
                                         IsEnabled="{Binding SendEnabled}"
                                         AutomationProperties.IsInAccessibleTree="True"
                                         AutomationProperties.Name="{u:I18n DeletionDate}"
                                         Grid.Column="0" />
                                     <controls:ExtendedTimePicker
-                                        NullableTime="{Binding DeletionTime, Mode=TwoWay}"
+                                        NullableTime="{Binding DeletionDateTimeViewModel.Time, Mode=TwoWay}"
                                         Format="t"
                                         IsEnabled="{Binding SendEnabled}"
                                         AutomationProperties.IsInAccessibleTree="True"
@@ -343,7 +343,7 @@
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
                                     <controls:ExtendedDatePicker
-                                        NullableDate="{Binding ExpirationDate, Mode=TwoWay}"
+                                        NullableDate="{Binding ExpirationDateTimeViewModel.Date, Mode=TwoWay}"
                                         PlaceHolder="mm/dd/yyyy"
                                         Format="d"
                                         IsEnabled="{Binding SendEnabled}"
@@ -351,7 +351,7 @@
                                         AutomationProperties.Name="{u:I18n ExpirationDate}"
                                         Grid.Column="0" />
                                     <controls:ExtendedTimePicker
-                                        NullableTime="{Binding ExpirationTime, Mode=TwoWay}"
+                                        NullableTime="{Binding ExpirationDateTimeViewModel.Time, Mode=TwoWay}"
                                         PlaceHolder="--:-- --"
                                         Format="t"
                                         IsEnabled="{Binding SendEnabled}"

@@ -10,9 +10,9 @@ namespace Bit.iOS.Core.Utilities
 {
     public class AccountSwitchingOverlayHelper
     {
-        IStateService _stateService;
-        IMessagingService _messagingService;
-        ILogger _logger;
+        readonly IStateService _stateService;
+        readonly IMessagingService _messagingService;
+        readonly ILogger _logger;
 
         public AccountSwitchingOverlayHelper()
         {
@@ -24,8 +24,10 @@ namespace Bit.iOS.Core.Utilities
         public async Task<UIImage> CreateAvatarImageAsync()
         {
             var avatarImageSource = new AvatarImageSource(await _stateService.GetNameAsync(), await _stateService.GetEmailAsync());
-            var avatarUIImage = await avatarImageSource.GetNativeImageAsync();
-            return avatarUIImage.ImageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal);
+            using (var avatarUIImage = await avatarImageSource.GetNativeImageAsync())
+            {
+                return avatarUIImage.ImageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal);
+            }
         }
 
         public AccountSwitchingOverlayView CreateAccountSwitchingOverlayView(UIView containerView)

@@ -26,7 +26,6 @@
     <MtouchLink>None</MtouchLink>
     <MtouchArch>x86_64</MtouchArch>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
-    <DeviceSpecificBuild>false</DeviceSpecificBuild>
     <MtouchVerbosity></MtouchVerbosity>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <AssemblyName>BitwardeniOSShareExtension</AssemblyName>
@@ -192,6 +191,10 @@
     <Compile Include="LockPasswordViewController.cs" />
     <Compile Include="LockPasswordViewController.designer.cs">
       <DependentUpon>LockPasswordViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ExtensionNavigationController.cs" />
+    <Compile Include="ExtensionNavigationController.designer.cs">
+      <DependentUpon>ExtensionNavigationController.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

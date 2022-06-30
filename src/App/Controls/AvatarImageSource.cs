@@ -50,7 +50,7 @@ namespace Bit.App.Controls
 
         private Stream Draw()
         {
-            string chars = null;
+            string chars;
             string upperData = null;
 
             if (string.IsNullOrEmpty(_data))
@@ -71,43 +71,62 @@ namespace Bit.App.Controls
             var textColor = Color.White;
             var size = 50;
 
-            var bitmap = new SKBitmap(
-                size * 2,
+            using (var bitmap = new SKBitmap(size * 2,
                 size * 2,
                 SKImageInfo.PlatformColorType,
-                SKAlphaType.Premul);
-            var canvas = new SKCanvas(bitmap);
-            canvas.Clear(SKColors.Transparent);
-
-            var midX = canvas.LocalClipBounds.Size.ToSizeI().Width / 2;
-            var midY = canvas.LocalClipBounds.Size.ToSizeI().Height / 2;
-            var radius = midX - midX / 5;
-
-            var circlePaint = new SKPaint
+                SKAlphaType.Premul))
             {
-                IsAntialias = true,
-                Style = SKPaintStyle.Fill,
-                StrokeJoin = SKStrokeJoin.Miter,
-                Color = SKColor.Parse(bgColor.ToHex())
-            };
-            canvas.DrawCircle(midX, midY, radius, circlePaint);
+                using (var canvas = new SKCanvas(bitmap))
+                {
+                    canvas.Clear(SKColors.Transparent);
+                    using (var paint = new SKPaint
+                    {
+                        IsAntialias = true,
+                        Style = SKPaintStyle.Fill,
+                        StrokeJoin = SKStrokeJoin.Miter,
+                        Color = SKColor.Parse(bgColor.ToHex())
+                    })
+                    {
+                        var midX = canvas.LocalClipBounds.Size.ToSizeI().Width / 2;
+                        var midY = canvas.LocalClipBounds.Size.ToSizeI().Height / 2;
+                        var radius = midX - midX / 5;
 
-            var typeface = SKTypeface.FromFamilyName("Arial", SKFontStyle.Normal);
-            var textSize = midX / 1.3f;
-            var textPaint = new SKPaint
-            {
-                IsAntialias = true,
-                Style = SKPaintStyle.Fill,
-                Color = SKColor.Parse(textColor.ToHex()),
-                TextSize = textSize,
-                TextAlign = SKTextAlign.Center,
-                Typeface = typeface
-            };
-            var rect = new SKRect();
-            textPaint.MeasureText(chars, ref rect);
-            canvas.DrawText(chars, midX, midY + rect.Height / 2, textPaint);
+                        using (var circlePaint = new SKPaint
+                        {
+                            IsAntialias = true,
+                            Style = SKPaintStyle.Fill,
+                            StrokeJoin = SKStrokeJoin.Miter,
+                            Color = SKColor.Parse(bgColor.ToHex())
+                        })
+                        {
+                            canvas.DrawCircle(midX, midY, radius, circlePaint);
 
-            return SKImage.FromBitmap(bitmap).Encode(SKEncodedImageFormat.Png, 100).AsStream();
+                            var typeface = SKTypeface.FromFamilyName("Arial", SKFontStyle.Normal);
+                            var textSize = midX / 1.3f;
+                            using (var textPaint = new SKPaint
+                            {
+                                IsAntialias = true,
+                                Style = SKPaintStyle.Fill,
+                                Color = SKColor.Parse(textColor.ToHex()),
+                                TextSize = textSize,
+                                TextAlign = SKTextAlign.Center,
+                                Typeface = typeface
+                            })
+                            {
+                                var rect = new SKRect();
+                                textPaint.MeasureText(chars, ref rect);
+                                canvas.DrawText(chars, midX, midY + rect.Height / 2, textPaint);
+
+                                using (var img = SKImage.FromBitmap(bitmap))
+                                {
+                                    var data = img.Encode(SKEncodedImageFormat.Png, 100);
+                                    return data?.AsStream(true);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         private string GetFirstLetters(string data, int charCount)

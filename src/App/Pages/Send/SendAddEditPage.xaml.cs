@@ -23,7 +23,6 @@ namespace Bit.App.Pages
         private AppOptions _appOptions;
         private SendAddEditPageViewModel _vm;
 
-        public Action OnClose { get; set; }
         public Action AfterSubmit { get; set; }
 
         public SendAddEditPage(
@@ -136,14 +135,7 @@ namespace Bit.App.Pages
 
         private async Task CloseAsync()
         {
-            if (OnClose is null)
-            {
-                await Navigation.PopModalAsync();
-            }
-            else
-            {
-                OnClose();
-            }
+            await Navigation.PopModalAsync();
         }
 
         protected override bool OnBackButtonPressed()
