@@ -109,8 +109,11 @@ namespace Bit.App.Pages
                 DatePlaceholder = "mm/dd/yyyy",
                 TimePlaceholder = "--:-- --"
             };
+
+            AccountSwitchingOverlayViewModel = new AccountSwitchingOverlayViewModel(_stateService, _messagingService, _logger);
         }
 
+        public AccountSwitchingOverlayViewModel AccountSwitchingOverlayViewModel { get; }
         public Command TogglePasswordCommand { get; set; }
         public Command ToggleOptionsCommand { get; set; }
         public string SendId { get; set; }

@@ -26,6 +26,8 @@ namespace Bit.iOS.ShareExtension
 {
     public partial class LoadingViewController : ExtendedUIViewController, IAccountsManagerHost
     {
+        const string STORYBOARD_NAME = "MainInterface";
+
         private Context _context = new Context();
         private NFCNdefReaderSession _nfcSession = null;
         private Core.NFCReaderDelegate _nfcDelegate = null;
@@ -34,10 +36,11 @@ namespace Bit.iOS.ShareExtension
         readonly LazyResolve<IStateService> _stateService = new LazyResolve<IStateService>("stateService");
         readonly LazyResolve<IVaultTimeoutService> _vaultTimeoutService = new LazyResolve<IVaultTimeoutService>("vaultTimeoutService");
 
-        Lazy<UIStoryboard> _storyboard = new Lazy<UIStoryboard>(() => UIStoryboard.FromName("MainInterface", null));
+        Lazy<UIStoryboard> _storyboard = new Lazy<UIStoryboard>(() => UIStoryboard.FromName(STORYBOARD_NAME, null));
 
         private App.App _app = null;
         private UIViewController _currentModalController;
+        private bool _presentingOnNavigationPage;
 
         private ExtensionNavigationController ExtNavigationController
         {
@@ -120,26 +123,35 @@ namespace Bit.iOS.ShareExtension
             var viewController = _storyboard.Value.InstantiateViewController("lockVC") as LockPasswordViewController;
             viewController.LoadingController = this;
             viewController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            ExtNavigationController.PushViewController(viewController, true);
+
+            if (_presentingOnNavigationPage)
+            {
+                _presentingOnNavigationPage = false;
+                DismissViewController(true, () => ExtNavigationController.PushViewController(viewController, true));
+            }
+            else
+            {
+                ExtNavigationController.PushViewController(viewController, true);
+            }
         }
 
         public void DismissLockAndContinue()
         {
             Debug.WriteLine("BW Log, Dismissing lock controller.");
 
-            _currentModalController?.Dispose();
-            _currentModalController = null;
-
-            if (_storyboard.IsValueCreated)
-            {
-                _storyboard.Value.Dispose();
-                _storyboard = null;
-            }
+            ClearBeforeNavigating();
 
             DismissViewController(false, () => ContinueOnAsync().FireAndForget());
         }
 
         private void DismissAndLaunch(Action pageToLaunch)
+        {
+            ClearBeforeNavigating();
+
+            DismissViewController(false, pageToLaunch);
+        }
+
+        void ClearBeforeNavigating()
         {
             _currentModalController?.Dispose();
             _currentModalController = null;
@@ -148,9 +160,8 @@ namespace Bit.iOS.ShareExtension
             {
                 _storyboard.Value.Dispose();
                 _storyboard = null;
+                _storyboard = new Lazy<UIStoryboard>(() => UIStoryboard.FromName(STORYBOARD_NAME, null));
             }
-
-            DismissViewController(false, pageToLaunch);
         }
 
         private async Task ContinueOnAsync()
@@ -189,6 +200,7 @@ namespace Bit.iOS.ShareExtension
             var navigationPage = new NavigationPage(page);
             _currentModalController = navigationPage.CreateViewController();
             _currentModalController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
+            _presentingOnNavigationPage = true;
             PresentViewController(_currentModalController, true, null);
         }
 

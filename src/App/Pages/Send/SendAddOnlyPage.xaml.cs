@@ -73,6 +73,10 @@ namespace Bit.App.Pages
                     await CloseAsync();
                     return;
                 }
+
+                _accountAvatar?.OnAppearing();
+                await Device.InvokeOnMainThreadAsync(async () => _vm.AvatarImageSource = await GetAvatarImageSourceAsync());
+
                 await HandleCreateRequest();
                 if (string.IsNullOrWhiteSpace(_vm.Send?.Name))
                 {
@@ -85,6 +89,12 @@ namespace Bit.App.Pages
                 _logger.Value.Exception(ex);
                 await CloseAsync();
             }
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            _accountAvatar?.OnDisappearing();
         }
 
         private async Task CloseAsync()
