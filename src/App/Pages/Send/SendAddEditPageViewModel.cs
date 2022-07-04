@@ -644,5 +644,10 @@ namespace Bit.App.Pages
                 DateTimeKind.Local
             );
         }
+
+        internal void TriggerSendTextPropertyChanged()
+        {
+            Device.BeginInvokeOnMainThread(() => TriggerPropertyChanged(nameof(Send)));
+        }
     }
 }

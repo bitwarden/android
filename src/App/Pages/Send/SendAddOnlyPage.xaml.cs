@@ -157,6 +157,7 @@ namespace Bit.App.Pages
             {
                 var text = _appOptions.CreateSend.Item4;
                 _vm.Send.Text.Text = text;
+                _vm.TriggerSendTextPropertyChanged();
             }
             _appOptions.CreateSend = null;
 
