@@ -66,7 +66,7 @@ namespace Bit.App.Pages
             _policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
             _cipherHelper = ServiceContainer.Resolve<ICipherHelper>("cipherHelper");
             _logger = ServiceContainer.Resolve<ILogger>("logger");
-            
+
             Loading = true;
             GroupedItems = new ObservableRangeCollection<IGroupingsPageListItem>();
             RefreshCommand = new Command(async () =>
