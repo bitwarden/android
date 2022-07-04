@@ -425,16 +425,16 @@ namespace Bit.iOS.ShareExtension
             switch (navTarget)
             {
                 case NavigationTarget.HomeLogin:
-                    LaunchHomePage();
+                    ExecuteLaunch(LaunchHomePage);
                     break;
                 case NavigationTarget.Login:
                     if (navParams is LoginNavigationParams loginParams)
                     {
-                        LaunchLoginFlow(loginParams.Email);
+                        ExecuteLaunch(() => LaunchLoginFlow(loginParams.Email));
                     }
                     else
                     {
-                        LaunchLoginFlow();
+                        ExecuteLaunch(() => LaunchLoginFlow());
                     }
                     break;
                 case NavigationTarget.Lock:
@@ -443,6 +443,18 @@ namespace Bit.iOS.ShareExtension
                 case NavigationTarget.Home:
                     DismissLockAndContinue();
                     break;
+            }
+        }
+
+        private void ExecuteLaunch(Action launchAction)
+        {
+            if (_presentingOnNavigationPage)
+            {
+                DismissAndLaunch(launchAction);
+            }
+            else
+            {
+                launchAction();
             }
         }
 
