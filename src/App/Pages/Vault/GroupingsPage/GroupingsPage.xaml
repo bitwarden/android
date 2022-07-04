@@ -53,6 +53,45 @@
                     WebsiteIconsEnabled="{Binding BindingContext.WebsiteIconsEnabled, Source={x:Reference _page}}" />
             </DataTemplate>
 
+            <DataTemplate x:Key="loginCipherTemplate"
+                          x:DataType="pages:GroupingsPageListItem">
+                <SwipeView Threshold="{Binding Source={x:Reference _page}, Path=SwipeThreshold}">
+                    <SwipeView.LeftItems>
+                        <SwipeItems Mode="Execute">
+                            <SwipeItem Text="{u:I18n CopyUsername}"
+                                   BackgroundColor="{DynamicResource PrimaryColor}"
+                                   Command="{Binding Source={x:Reference _page}, Path=BindingContext.CopyUsernameItemCommand}"
+                                   CommandParameter="{Binding .}">
+                                <SwipeItem.IconImageSource>
+                                    <controls:IconFontImageSource
+                                        Glyph="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
+                                        Color="{DynamicResource TextColor}"/>
+                                </SwipeItem.IconImageSource>
+                            </SwipeItem>
+                        </SwipeItems>
+                    </SwipeView.LeftItems>
+                    <SwipeView.RightItems>
+                        <SwipeItems Mode="Execute">
+                            <SwipeItem Text="{u:I18n CopyPassword}"
+                                   BackgroundColor="{DynamicResource PrimaryColor}"
+                                   Command="{Binding Source={x:Reference _page}, Path=BindingContext.CopyPasswordItemCommand}"
+                                   CommandParameter="{Binding .}">
+                                <SwipeItem.IconImageSource>
+                                    <controls:IconFontImageSource
+                                        Glyph="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
+                                        Color="{DynamicResource TextColor}"/>
+                                </SwipeItem.IconImageSource>
+                            </SwipeItem>
+                        </SwipeItems>
+                    </SwipeView.RightItems>
+                    <controls:CipherViewCell
+                        Cipher="{Binding Cipher}"
+                        ButtonCommand="{Binding BindingContext.CipherOptionsCommand, Source={x:Reference _page}}"
+                        WebsiteIconsEnabled="{Binding BindingContext.WebsiteIconsEnabled, Source={x:Reference _page}}"
+                        BackgroundColor="{DynamicResource BackgroundColor}"/>
+                </SwipeView>
+            </DataTemplate>
+
             <DataTemplate x:Key="groupTemplate"
                           x:DataType="pages:GroupingsPageListItem">
                 <controls:ExtendedStackLayout Orientation="Horizontal" 
@@ -104,7 +143,8 @@
             <pages:GroupingsPageListItemSelector x:Key="listItemDataTemplateSelector"
                                                  HeaderTemplate="{StaticResource headerTemplate}"
                                                  CipherTemplate="{StaticResource cipherTemplate}"
-                                                 GroupTemplate="{StaticResource groupTemplate}" />
+                                                 GroupTemplate="{StaticResource groupTemplate}" 
+                                                 LoginCipherTemplate="{StaticResource loginCipherTemplate}" />
 
             <StackLayout x:Key="mainLayout" x:Name="_mainLayout">
                 <StackLayout

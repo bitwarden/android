@@ -26,6 +26,19 @@ namespace Bit.App.Pages
 
         private PreviousPageInfo _previousPage;
 
+        double _swipeThreshold;
+        public double SwipeThreshold
+        {
+            get
+            {
+                if (_swipeThreshold == default)
+                {
+                    _swipeThreshold = (Content?.Width ?? 500) / 2;
+                }
+                return _swipeThreshold;
+            }
+        }
+
         public GroupingsPage(bool mainPage, CipherType? type = null, string folderId = null,
             string collectionId = null, string pageTitle = null, string vaultFilterSelection = null,
             PreviousPageInfo previousPage = null, bool deleted = false)

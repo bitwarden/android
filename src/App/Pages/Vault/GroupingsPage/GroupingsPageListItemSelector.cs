@@ -7,6 +7,7 @@ namespace Bit.App.Pages
         public DataTemplate HeaderTemplate { get; set; }
         public DataTemplate CipherTemplate { get; set; }
         public DataTemplate GroupTemplate { get; set; }
+        public DataTemplate LoginCipherTemplate { get; set; }
 
         protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
         {
@@ -17,7 +18,14 @@ namespace Bit.App.Pages
 
             if (item is GroupingsPageListItem listItem)
             {
-                return listItem.Cipher != null ? CipherTemplate : GroupTemplate;
+                if (listItem.Cipher is null)
+                {
+                    return GroupTemplate;
+                }
+
+                return listItem.Cipher.Type == Core.Enums.CipherType.Login && LoginCipherTemplate != null
+                        ? LoginCipherTemplate
+                        : CipherTemplate;
             }
             return null;
         }

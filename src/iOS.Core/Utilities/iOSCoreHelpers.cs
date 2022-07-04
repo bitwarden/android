@@ -8,6 +8,7 @@ using Bit.App.Resources;
 using Bit.App.Services;
 using Bit.App.Utilities;
 using Bit.App.Utilities.AccountManagement;
+using Bit.App.Utilities.Helpers;
 using Bit.Core.Abstractions;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
@@ -181,6 +182,15 @@ namespace Bit.iOS.Core.Utilities
                 ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService"),
                 ServiceContainer.Resolve<IAuthService>("authService"));
             ServiceContainer.Register<IAccountsManager>("accountsManager", accountsManager);
+
+            var cipherHelper = new CipherHelper(
+                ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService"),
+                ServiceContainer.Resolve<IEventService>("eventService"),
+                ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService"),
+                ServiceContainer.Resolve<IClipboardService>("clipboardService"),
+                ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService")
+            );
+            ServiceContainer.Register<ICipherHelper>("cipherHelper", cipherHelper);
 
             if (postBootstrapFunc != null)
             {

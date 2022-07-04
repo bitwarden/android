@@ -6,6 +6,7 @@ using Bit.App.Controls;
 using Bit.App.Models;
 using Bit.App.Resources;
 using Bit.App.Utilities;
+using Bit.App.Utilities.Helpers;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
@@ -25,6 +26,7 @@ namespace Bit.App.Pages
         private readonly IStateService _stateService;
         private readonly IPasswordRepromptService _passwordRepromptService;
         private readonly IMessagingService _messagingService;
+        private readonly ICipherHelper _cipherHelper;
         private readonly ILogger _logger;
 
         private bool _showNoData;
@@ -40,6 +42,7 @@ namespace Bit.App.Pages
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _passwordRepromptService = ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
+            _cipherHelper = ServiceContainer.Resolve<ICipherHelper>("cipherHelper");
             _logger = ServiceContainer.Resolve<ILogger>("logger");
 
             GroupedItems = new ObservableRangeCollection<IGroupingsPageListItem>();
@@ -180,7 +183,7 @@ namespace Bit.App.Pages
             }
             if (_deviceActionService.SystemMajorVersion() < 21)
             {
-                await AppHelpers.CipherListOptions(Page, cipher, _passwordRepromptService);
+                await _cipherHelper.ShowCipherOptionsAsync(Page, cipher);
             }
             else
             {
@@ -241,7 +244,7 @@ namespace Bit.App.Pages
         {
             if ((Page as BaseContentPage).DoOnce())
             {
-                await AppHelpers.CipherListOptions(Page, cipher, _passwordRepromptService);
+                await _cipherHelper.ShowCipherOptionsAsync(Page, cipher);
             }
         }
     }

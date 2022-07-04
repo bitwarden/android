@@ -6,6 +6,7 @@ using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.App.Resources;
 using Bit.App.Utilities;
+using Bit.App.Utilities.Helpers;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
@@ -45,9 +46,9 @@ namespace Bit.App.Pages
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IMessagingService _messagingService;
         private readonly IStateService _stateService;
-        private readonly IPasswordRepromptService _passwordRepromptService;
         private readonly IOrganizationService _organizationService;
         private readonly IPolicyService _policyService;
+        private readonly ICipherHelper _cipherHelper;
         private readonly ILogger _logger;
 
         public GroupingsPageViewModel()
@@ -61,11 +62,11 @@ namespace Bit.App.Pages
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
-            _passwordRepromptService = ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService");
             _organizationService = ServiceContainer.Resolve<IOrganizationService>("organizationService");
             _policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
+            _cipherHelper = ServiceContainer.Resolve<ICipherHelper>("cipherHelper");
             _logger = ServiceContainer.Resolve<ILogger>("logger");
-
+            
             Loading = true;
             GroupedItems = new ObservableRangeCollection<IGroupingsPageListItem>();
             RefreshCommand = new Command(async () =>
@@ -74,6 +75,8 @@ namespace Bit.App.Pages
                 await LoadAsync();
             });
             CipherOptionsCommand = new Command<CipherView>(CipherOptionsAsync);
+            CopyUsernameItemCommand = new AsyncCommand<IGroupingsPageListItem>(CopyUsernameItemAsync, onException: ex => _logger.Exception(ex), allowsMultipleExecutions: false);
+            CopyPasswordItemCommand = new AsyncCommand<IGroupingsPageListItem>(CopyPasswordItemAsync, onException: ex => _logger.Exception(ex), allowsMultipleExecutions: false);
 
             AccountSwitchingOverlayViewModel = new AccountSwitchingOverlayViewModel(_stateService, _messagingService, _logger)
             {
@@ -157,6 +160,9 @@ namespace Bit.App.Pages
         public ObservableRangeCollection<IGroupingsPageListItem> GroupedItems { get; set; }
         public Command RefreshCommand { get; set; }
         public Command<CipherView> CipherOptionsCommand { get; set; }
+        public IAsyncCommand<IGroupingsPageListItem> CopyUsernameItemCommand { get; }
+        public IAsyncCommand<IGroupingsPageListItem> CopyPasswordItemCommand { get; }
+
         public bool LoadedOnce { get; set; }
 
         public async Task LoadAsync()
@@ -628,7 +634,23 @@ namespace Bit.App.Pages
         {
             if ((Page as BaseContentPage).DoOnce())
             {
-                await AppHelpers.CipherListOptions(Page, cipher, _passwordRepromptService);
+                await _cipherHelper.ShowCipherOptionsAsync(Page, cipher);
+            }
+        }
+
+        private async Task CopyUsernameItemAsync(IGroupingsPageListItem listItem)
+        {
+            if (listItem is GroupingsPageListItem groupPageListItem && groupPageListItem.Cipher?.Type == CipherType.Login)
+            {
+                await _cipherHelper.CopyUsernameAsync(groupPageListItem.Cipher);
+            }
+        }
+
+        private async Task CopyPasswordItemAsync(IGroupingsPageListItem listItem)
+        {
+            if (listItem is GroupingsPageListItem groupPageListItem && groupPageListItem.Cipher?.Type == CipherType.Login)
+            {
+                await _cipherHelper.CopyPasswordAsync(groupPageListItem.Cipher);
             }
         }
     }

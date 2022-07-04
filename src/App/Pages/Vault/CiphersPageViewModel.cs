@@ -5,12 +5,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
+using Bit.App.Utilities.Helpers;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
-using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -25,6 +25,7 @@ namespace Bit.App.Pages
         private readonly IPasswordRepromptService _passwordRepromptService;
         private readonly IOrganizationService _organizationService;
         private readonly IPolicyService _policyService;
+        private readonly ICipherHelper _cipherHelper;
         private CancellationTokenSource _searchCancellationTokenSource;
         private readonly ILogger _logger;
 
@@ -42,6 +43,7 @@ namespace Bit.App.Pages
             _passwordRepromptService = ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService");
             _organizationService = ServiceContainer.Resolve<IOrganizationService>("organizationService");
             _policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
+            _cipherHelper = ServiceContainer.Resolve<ICipherHelper>("cipherHelper");
             _logger = ServiceContainer.Resolve<ILogger>("logger");
 
             Ciphers = new ExtendedObservableCollection<CipherView>();
@@ -193,7 +195,7 @@ namespace Bit.App.Pages
                 }
                 if (_deviceActionService.SystemMajorVersion() < 21)
                 {
-                    await Utilities.AppHelpers.CipherListOptions(Page, cipher, _passwordRepromptService);
+                    await _cipherHelper.ShowCipherOptionsAsync(Page, cipher);
                 }
                 else
                 {
@@ -219,7 +221,7 @@ namespace Bit.App.Pages
         {
             if ((Page as BaseContentPage).DoOnce())
             {
-                await Utilities.AppHelpers.CipherListOptions(Page, cipher, _passwordRepromptService);
+                await _cipherHelper.ShowCipherOptionsAsync(Page, cipher);
             }
         }
     }
