@@ -11,8 +11,6 @@ namespace Bit.App.Pages
     public class EnvironmentPageViewModel : BaseViewModel
     {
         private readonly IEnvironmentService _environmentService;
-        private bool _validForm;
-        private bool _baseUrlValid;
 
         public EnvironmentPageViewModel()
         {
@@ -38,15 +36,9 @@ namespace Bit.App.Pages
         public Action SubmitSuccessAction { get; set; }
         public Action CloseAction { get; set; }
 
-        public bool BaseUrlValid { get; set; }
-        public bool ApiUrlValid { get; set; }
-        public bool IdentityUrlValid { get; set; }
-        public bool WebVaultUrlValid { get; set; }
-        public bool IconsUrlValid { get; set; }
-
         public async Task SubmitAsync()
         {
-            if (!FormValidation())
+            if (!ValidateUrls())
             {
                 await Page.DisplayAlert(AppResources.AnErrorHasOccurred, AppResources.EnvironmentPageUrlsError, AppResources.Ok);
                 return;
@@ -73,15 +65,18 @@ namespace Bit.App.Pages
             SubmitSuccessAction?.Invoke();
         }
 
-        public bool FormValidation()
+        public bool ValidateUrls()
         {
-            BaseUrlValid = string.IsNullOrEmpty(BaseUrl) || Uri.IsWellFormedUriString(BaseUrl, UriKind.Relative);
-            ApiUrlValid = string.IsNullOrEmpty(ApiUrl) || Uri.IsWellFormedUriString(BaseUrl, UriKind.Relative);
-            IdentityUrlValid = string.IsNullOrEmpty(IdentityUrl) || Uri.IsWellFormedUriString(BaseUrl, UriKind.Relative);
-            WebVaultUrlValid = string.IsNullOrEmpty(WebVaultUrl) || Uri.IsWellFormedUriString(BaseUrl, UriKind.Relative);
-            IconsUrlValid = string.IsNullOrEmpty(IconsUrl) || Uri.IsWellFormedUriString(BaseUrl, UriKind.Relative);
+            bool IsUrlValid(string url)
+            {
+                return string.IsNullOrEmpty(url) || Uri.IsWellFormedUriString(url, UriKind.Absolute);
+            }
 
-            return BaseUrlValid && ApiUrlValid && IdentityUrlValid && WebVaultUrlValid && IconsUrlValid;
+            return IsUrlValid(BaseUrl)
+                && IsUrlValid(ApiUrl)
+                && IsUrlValid(IdentityUrl)
+                && IsUrlValid(WebVaultUrl)
+                && IsUrlValid(IconsUrl);
         }
     }
 }
