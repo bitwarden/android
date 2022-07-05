@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -255,7 +255,7 @@ namespace Bit.App.Pages
             }
             Cipher = await cipher.DecryptAsync();
             CanAccessPremium = await _stateService.CanAccessPremiumAsync();
-            
+
             Fields = Cipher.Fields?
                         .Select(f => _customFieldItemFactory.CreateCustomFieldItem(f, false, Cipher, this, CopyFieldCommand, null))
                         .ToList();

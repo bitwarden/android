@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
+using Bit.App.Lists.ItemViewModels.CustomFields;
 using Bit.App.Models;
 using Bit.App.Resources;
 using Bit.Core;
@@ -13,7 +14,6 @@ using Bit.Core.Models.View;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
 using View = Xamarin.Forms.View;
-using Bit.App.Lists.ItemViewModels.CustomFields;
 
 namespace Bit.App.Pages
 {
@@ -709,11 +709,11 @@ namespace Bit.App.Pages
                 }
                 var type = fieldTypeOptions.FirstOrDefault(f => f.Value == typeSelection).Key;
                 Fields.Add(_customFieldItemFactory.CreateCustomFieldItem(new FieldView
-                           {
-                               Type = type,
-                               Name = string.IsNullOrWhiteSpace(name) ? null : name,
-                               NewField = true,
-                           }, true, Cipher, null, null, FieldOptionsCommand));
+                {
+                    Type = type,
+                    Name = string.IsNullOrWhiteSpace(name) ? null : name,
+                    NewField = true,
+                }, true, Cipher, null, null, FieldOptionsCommand));
             }
         }
 

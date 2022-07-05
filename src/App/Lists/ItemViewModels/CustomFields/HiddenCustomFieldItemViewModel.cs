@@ -48,7 +48,7 @@ namespace Bit.App.Lists.ItemViewModels.CustomFields
             set => SetProperty(ref _showHiddenValue, value);
         }
 
-        public bool ShowViewHidden => _cipher.ViewPassword || (_isEditing && _field.NewField);
+        public bool ShowViewHidden => _cipher.ViewPassword || (_isEditing && _field.NewField);
 
         public override bool ShowCopyButton => !_isEditing && _cipher.ViewPassword && !string.IsNullOrWhiteSpace(Field.Value);
 
