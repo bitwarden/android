@@ -349,7 +349,7 @@ namespace Bit.App.Pages
                 _messagingService.Send("logout");
             }
         }
-        
+
         public void TogglePassword()
         {
             ShowPassword = !ShowPassword;
