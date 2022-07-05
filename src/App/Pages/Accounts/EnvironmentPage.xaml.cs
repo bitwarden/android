@@ -36,11 +36,6 @@ namespace Bit.App.Pages
             };
         }
 
-        private async void Submit_Clicked(object sender, EventArgs e)
-        {
-            await _vm.SubmitAsync();
-        }
-
         private async Task SubmitSuccessAsync()
         {
             _platformUtilsService.ShowToast("success", null, AppResources.EnvironmentSaved);
