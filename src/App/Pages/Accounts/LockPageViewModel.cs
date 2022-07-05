@@ -10,6 +10,7 @@ using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
 using Bit.Core.Utilities;
+using Xamarin.CommunityToolkit.Helpers;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -27,6 +28,7 @@ namespace Bit.App.Pages
         private readonly IBiometricService _biometricService;
         private readonly IKeyConnectorService _keyConnectorService;
         private readonly ILogger _logger;
+        private readonly WeakEventManager<int?> _secretEntryFocusWeakEventManager = new WeakEventManager<int?>();
 
         private string _email;
         private bool _showPassword;
@@ -133,6 +135,11 @@ namespace Bit.App.Pages
         public string MasterPassword { get; set; }
         public string Pin { get; set; }
         public Action UnlockedAction { get; set; }
+        public event Action<int?> FocusSecretEntry
+        {
+            add => _secretEntryFocusWeakEventManager.AddEventHandler(value);
+            remove => _secretEntryFocusWeakEventManager.RemoveEventHandler(value);
+        }
 
         public async Task InitAsync()
         {
@@ -342,15 +349,12 @@ namespace Bit.App.Pages
                 _messagingService.Send("logout");
             }
         }
-
+        
         public void TogglePassword()
         {
             ShowPassword = !ShowPassword;
-            var page = (Page as LockPage);
-            var entry = PinLock ? page.PinEntry : page.MasterPasswordEntry;
-            var str = PinLock ? Pin : MasterPassword;
-            entry.Focus();
-            entry.CursorPosition = String.IsNullOrEmpty(str) ? 0 : str.Length;
+            var secret = PinLock ? Pin : MasterPassword;
+            _secretEntryFocusWeakEventManager.RaiseEvent(string.IsNullOrEmpty(secret) ? 0 : secret.Length, nameof(FocusSecretEntry));
         }
 
         public async Task PromptBiometricAsync()
@@ -361,18 +365,8 @@ namespace Bit.App.Pages
                 return;
             }
             var success = await _platformUtilsService.AuthenticateBiometricAsync(null,
-            PinLock ? AppResources.PIN : AppResources.MasterPassword, () =>
-            {
-                var page = Page as LockPage;
-                if (PinLock)
-                {
-                    page.PinEntry.Focus();
-                }
-                else
-                {
-                    page.MasterPasswordEntry.Focus();
-                }
-            });
+                PinLock ? AppResources.PIN : AppResources.MasterPassword,
+                () => _secretEntryFocusWeakEventManager.RaiseEvent((int?)null, nameof(FocusSecretEntry)));
             await _stateService.SetBiometricLockedAsync(!success);
             if (success)
             {
