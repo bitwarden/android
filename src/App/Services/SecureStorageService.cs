@@ -1,7 +1,7 @@
-﻿using Bit.Core.Abstractions;
+﻿using System.Threading.Tasks;
+using Bit.Core.Abstractions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using System.Threading.Tasks;
 
 namespace Bit.App.Services
 {

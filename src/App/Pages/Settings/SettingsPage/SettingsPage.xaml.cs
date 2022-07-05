@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
@@ -45,9 +46,20 @@ namespace Bit.App.Pages
             return base.OnBackButtonPressed();
         }
 
+        void ActivateTimePicker(object sender, EventArgs args)
+        {
+            var stackLayout = (ExtendedStackLayout)sender;
+            SettingsPageListItem item = (SettingsPageListItem)stackLayout.BindingContext;
+            if (item.ShowTimeInput)
+            {
+                var timePicker = stackLayout.Children.Where(x => x is TimePicker).FirstOrDefault();
+                ((TimePicker)timePicker)?.Focus();
+            }
+        }
+
         async void OnTimePickerPropertyChanged(object sender, PropertyChangedEventArgs args)
         {
-            var s = (TimePicker) sender;
+            var s = (TimePicker)sender;
             var time = s.Time.TotalMinutes;
             if (s.IsFocused && args.PropertyName == "Time")
             {
@@ -154,6 +166,10 @@ namespace Bit.App.Pages
             else if (item.Name == AppResources.UnlockWithPIN)
             {
                 await _vm.UpdatePinAsync();
+            }
+            else if (item.Name == AppResources.SubmitCrashLogs)
+            {
+                await _vm.LoggerReportingAsync();
             }
             else
             {

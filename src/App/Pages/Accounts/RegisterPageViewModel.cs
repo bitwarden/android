@@ -1,13 +1,14 @@
-﻿using Bit.App.Abstractions;
+﻿using System;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using Bit.App.Abstractions;
 using Bit.App.Resources;
+using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.Request;
 using Bit.Core.Utilities;
-using System;
-using System.Threading.Tasks;
-using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -38,7 +39,7 @@ namespace Bit.App.Pages
             SubmitCommand = new Command(async () => await SubmitAsync());
             ShowTerms = !_platformUtilsService.IsSelfHost();
         }
-        
+
         public ICommand PoliciesClickCommand => new Command<string>((url) =>
         {
             _platformUtilsService.LaunchUri(url);
@@ -50,28 +51,30 @@ namespace Bit.App.Pages
             set => SetProperty(ref _showPassword, value,
                 additionalPropertyNames: new string[]
                 {
-                    nameof(ShowPasswordIcon)
+                    nameof(ShowPasswordIcon),
+                    nameof(PasswordVisibilityAccessibilityText)
                 });
         }
-        
+
         public bool AcceptPolicies
         {
             get => _acceptPolicies;
             set => SetProperty(ref _acceptPolicies, value);
         }
-        
+
         public Thickness SwitchMargin
         {
-            get => Device.RuntimePlatform == Device.Android 
-                ? new Thickness(0, 0, 0, 0) 
+            get => Device.RuntimePlatform == Device.Android
+                ? new Thickness(0, 0, 0, 0)
                 : new Thickness(0, 0, 10, 0);
         }
-        
+
         public bool ShowTerms { get; set; }
         public Command SubmitCommand { get; }
         public Command TogglePasswordCommand { get; }
         public Command ToggleConfirmPasswordCommand { get; }
-        public string ShowPasswordIcon => ShowPassword ? "" : "";
+        public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
+        public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
         public string Name { get; set; }
         public string Email { get; set; }
         public string MasterPassword { get; set; }
@@ -135,7 +138,7 @@ namespace Bit.App.Pages
             }
 
             // TODO: Password strength check?
-            
+
             if (showLoading)
             {
                 await _deviceActionService.ShowLoadingAsync(AppResources.CreatingAccount);

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bit.App.Models;
@@ -18,9 +18,13 @@ namespace Bit.App.Pages
     {
         private readonly IBroadcasterService _broadcasterService;
         private readonly IVaultTimeoutService _vaultTimeoutService;
+        private readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
 
         private AppOptions _appOptions;
         private SendAddEditPageViewModel _vm;
+
+        public Action OnClose { get; set; }
+        public Action AfterSubmit { get; set; }
 
         public SendAddEditPage(
             AppOptions appOptions = null,
@@ -82,42 +86,64 @@ namespace Bit.App.Pages
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            if (!await AppHelpers.IsVaultTimeoutImmediateAsync())
+
+            try
             {
-                await _vaultTimeoutService.CheckVaultTimeoutAsync();
-            }
-            if (await _vaultTimeoutService.IsLockedAsync())
-            {
-                return;
-            }
-            await _vm.InitAsync();
-            _broadcasterService.Subscribe(nameof(SendAddEditPage), message =>
-            {
-                if (message.Command == "selectFileResult")
+                if (!await AppHelpers.IsVaultTimeoutImmediateAsync())
                 {
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        var data = message.Data as Tuple<byte[], string>;
-                        _vm.FileData = data.Item1;
-                        _vm.FileName = data.Item2;
-                    });
+                    await _vaultTimeoutService.CheckVaultTimeoutAsync();
                 }
-            });
-            await LoadOnAppearedAsync(_scrollView, true, async () =>
-            {
-                var success = await _vm.LoadAsync();
-                if (!success)
+                if (await _vaultTimeoutService.IsLockedAsync())
                 {
-                    await Navigation.PopModalAsync();
                     return;
                 }
-                await HandleCreateRequest();
-                if (!_vm.EditMode && string.IsNullOrWhiteSpace(_vm.Send?.Name))
+                await _vm.InitAsync();
+                _broadcasterService.Subscribe(nameof(SendAddEditPage), message =>
                 {
-                    RequestFocus(_nameEntry);
-                }
-                AdjustToolbar();
-            });
+                    if (message.Command == "selectFileResult")
+                    {
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            var data = message.Data as Tuple<byte[], string>;
+                            _vm.FileData = data.Item1;
+                            _vm.FileName = data.Item2;
+                        });
+                    }
+                });
+
+                await LoadOnAppearedAsync(_scrollView, true, async () =>
+                {
+                    var success = await _vm.LoadAsync();
+                    if (!success)
+                    {
+                        await CloseAsync();
+                        return;
+                    }
+                    await HandleCreateRequest();
+                    if (!_vm.EditMode && string.IsNullOrWhiteSpace(_vm.Send?.Name))
+                    {
+                        RequestFocus(_nameEntry);
+                    }
+                    AdjustToolbar();
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.Value.Exception(ex);
+                await CloseAsync();
+            }
+        }
+
+        private async Task CloseAsync()
+        {
+            if (OnClose is null)
+            {
+                await Navigation.PopModalAsync();
+            }
+            else
+            {
+                OnClose();
+            }
         }
 
         protected override bool OnBackButtonPressed()
@@ -183,11 +209,6 @@ namespace Bit.App.Pages
             }
         }
 
-        private void ToggleOptions_Clicked(object sender, EventArgs e)
-        {
-            _vm.ToggleOptions();
-        }
-
         private void ClearExpirationDate_Clicked(object sender, EventArgs e)
         {
             if (DoOnce())
@@ -200,7 +221,11 @@ namespace Bit.App.Pages
         {
             if (DoOnce())
             {
-                await _vm.SubmitAsync();
+                var submitted = await _vm.SubmitAsync();
+                if (submitted)
+                {
+                    AfterSubmit?.Invoke();
+                }
             }
         }
 
@@ -234,7 +259,7 @@ namespace Bit.App.Pages
             {
                 if (await _vm.DeleteAsync())
                 {
-                    await Navigation.PopModalAsync();
+                    await CloseAsync();
                 }
             }
         }
@@ -274,7 +299,7 @@ namespace Bit.App.Pages
             {
                 if (await _vm.DeleteAsync())
                 {
-                    await Navigation.PopModalAsync();
+                    await CloseAsync();
                 }
             }
         }
@@ -283,7 +308,7 @@ namespace Bit.App.Pages
         {
             if (DoOnce())
             {
-                await Navigation.PopModalAsync();
+                await CloseAsync();
             }
         }
 
@@ -306,10 +331,11 @@ namespace Bit.App.Pages
             }
 
             _vm.IsAddFromShare = true;
-            
+            _vm.CopyInsteadOfShareAfterSaving = _appOptions.CopyInsteadOfShareAfterSaving;
+
             var name = _appOptions.CreateSend.Item2;
             _vm.Send.Name = name;
-            
+
             var type = _appOptions.CreateSend.Item1;
             if (type == SendType.File)
             {

@@ -1,16 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Models;
 using Bit.App.Resources;
+using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Bit.App.Controls;
 using Xamarin.Forms;
 using View = Xamarin.Forms.View;
 using Bit.App.Lists.ItemViewModels.CustomFields;
@@ -23,13 +23,15 @@ namespace Bit.App.Pages
         private readonly ICipherService _cipherService;
         private readonly IFolderService _folderService;
         private readonly ICollectionService _collectionService;
-        private readonly IUserService _userService;
+        private readonly IStateService _stateService;
+        private readonly IOrganizationService _organizationService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IAuditService _auditService;
         private readonly IMessagingService _messagingService;
         private readonly IEventService _eventService;
         private readonly IPolicyService _policyService;
         private readonly ICustomFieldItemFactory _customFieldItemFactory;
+        private readonly ILogger _logger;
 
         private CipherView _cipher;
         private bool _showNotesSeparator;
@@ -44,7 +46,6 @@ namespace Bit.App.Pages
         private int _ownershipSelectedIndex;
         private bool _hasCollections;
         private string _previousCipherId;
-        private DateTime _lastHandledScrollTime;
         private List<Core.Models.View.CollectionView> _writeableCollections;
         private string[] _additionalCipherProperties = new string[]
         {
@@ -73,7 +74,8 @@ namespace Bit.App.Pages
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
             _folderService = ServiceContainer.Resolve<IFolderService>("folderService");
-            _userService = ServiceContainer.Resolve<IUserService>("userService");
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            _organizationService = ServiceContainer.Resolve<IOrganizationService>("organizationService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _auditService = ServiceContainer.Resolve<IAuditService>("auditService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
@@ -81,6 +83,7 @@ namespace Bit.App.Pages
             _eventService = ServiceContainer.Resolve<IEventService>("eventService");
             _policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
             _customFieldItemFactory = ServiceContainer.Resolve<ICustomFieldItemFactory>("customFieldItemFactory");
+            _logger = ServiceContainer.Resolve<ILogger>("logger");
 
             GeneratePasswordCommand = new Command(GeneratePassword);
             TogglePasswordCommand = new Command(TogglePassword);
@@ -167,7 +170,7 @@ namespace Bit.App.Pages
         public ExtendedObservableCollection<LoginUriView> Uris { get; set; }
         public ExtendedObservableCollection<ICustomFieldItemViewModel> Fields { get; set; }
         public ExtendedObservableCollection<CollectionViewModel> Collections { get; set; }
-        public RepeaterView CollectionsRepeaterView { get; set; }
+
         public int TypeSelectedIndex
         {
             get => _typeSelectedIndex;
@@ -250,7 +253,8 @@ namespace Bit.App.Pages
             set => SetProperty(ref _showPassword, value,
                 additionalPropertyNames: new string[]
                 {
-                    nameof(ShowPasswordIcon)
+                    nameof(ShowPasswordIcon),
+                    nameof(PasswordVisibilityAccessibilityText)
                 });
         }
         public bool ShowCardNumber
@@ -292,13 +296,14 @@ namespace Bit.App.Pages
         public bool IsSecureNote => Cipher?.Type == CipherType.SecureNote;
         public bool ShowUris => IsLogin && Cipher.Login.HasUris;
         public bool ShowAttachments => Cipher.HasAttachments;
-        public string ShowPasswordIcon => ShowPassword ? "" : "";
-        public string ShowCardNumberIcon => ShowCardNumber ? "" : "";
-        public string ShowCardCodeIcon => ShowCardCode ? "" : "";
+        public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
+        public string ShowCardNumberIcon => ShowCardNumber ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
+        public string ShowCardCodeIcon => ShowCardCode ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public int PasswordFieldColSpan => Cipher.ViewPassword ? 1 : 4;
         public int TotpColumnSpan => Cipher.ViewPassword ? 1 : 2;
         public bool AllowPersonal { get; set; }
         public bool PasswordPrompt => Cipher.Reprompt != CipherRepromptType.None;
+        public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
 
         public void Init()
         {
@@ -307,9 +312,9 @@ namespace Bit.App.Pages
 
         public async Task<bool> LoadAsync(AppOptions appOptions = null)
         {
-            var myEmail = await _userService.GetEmailAsync();
+            var myEmail = await _stateService.GetEmailAsync();
             OwnershipOptions.Add(new KeyValuePair<string, string>(myEmail, null));
-            var orgs = await _userService.GetAllOrganizationAsync();
+            var orgs = await _organizationService.GetAllAsync();
             foreach (var org in orgs.OrderBy(o => o.Name))
             {
                 if (org.Enabled && org.Status == OrganizationUserStatusType.Confirmed)
@@ -351,7 +356,7 @@ namespace Bit.App.Pages
                     {
                         Cipher.Name += " - " + AppResources.Clone;
                         // If not allowing personal ownership, update cipher's org Id to prompt downstream changes
-                        if (Cipher.OrganizationId == null && !AllowPersonal) 
+                        if (Cipher.OrganizationId == null && !AllowPersonal)
                         {
                             Cipher.OrganizationId = OrganizationId;
                         }
@@ -400,7 +405,7 @@ namespace Bit.App.Pages
                     IdentityTitleOptions.FindIndex(k => k.Value == Cipher.Identity.Title);
                 OwnershipSelectedIndex = string.IsNullOrWhiteSpace(Cipher.OrganizationId) ? 0 :
                     OwnershipOptions.FindIndex(k => k.Value == Cipher.OrganizationId);
-                
+
                 // If the selected organization is on Index 0 and we've removed the personal option, force refresh
                 if (!AllowPersonal && OwnershipSelectedIndex == 0)
                 {
@@ -452,11 +457,11 @@ namespace Bit.App.Pages
                     AppResources.Ok);
                 return false;
             }
-            
+
             if ((!EditMode || CloneMode) && !AllowPersonal && string.IsNullOrWhiteSpace(Cipher.OrganizationId))
             {
                 await Page.DisplayAlert(AppResources.AnErrorHasOccurred,
-                    AppResources.PersonalOwnershipSubmitError,AppResources.Ok);
+                    AppResources.PersonalOwnershipSubmitError, AppResources.Ok);
                 return false;
             }
 
@@ -498,9 +503,12 @@ namespace Bit.App.Pages
             try
             {
                 await _deviceActionService.ShowLoadingAsync(AppResources.Saving);
+
                 await _cipherService.SaveWithServerAsync(cipher);
                 Cipher.Id = cipher.Id;
+
                 await _deviceActionService.HideLoadingAsync();
+
                 _platformUtilsService.ShowToast("success", null,
                     EditMode && !CloneMode ? AppResources.ItemUpdated : AppResources.NewItemCreated);
                 _messagingService.Send(EditMode && !CloneMode ? "editedCipher" : "addedCipher", Cipher.Id);
@@ -516,18 +524,27 @@ namespace Bit.App.Pages
                     {
                         ViewPage?.UpdateCipherId(this.Cipher.Id);
                     }
-                    await Page.Navigation.PopModalAsync();
+                    // if the app is tombstoned then PopModalAsync would throw index out of bounds
+                    if (Page.Navigation?.ModalStack?.Count > 0)
+                    {
+                        await Page.Navigation.PopModalAsync();
+                    }
                 }
                 return true;
             }
-            catch (ApiException e)
+            catch (ApiException apiEx)
             {
                 await _deviceActionService.HideLoadingAsync();
-                if (e?.Error != null)
+                if (apiEx?.Error != null)
                 {
-                    await _platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(),
+                    await _platformUtilsService.ShowDialogAsync(apiEx.Error.GetSingleMessage(),
                         AppResources.AnErrorHasOccurred);
                 }
+            }
+            catch (Exception genex)
+            {
+                _logger.Exception(genex);
+                await _deviceActionService.HideLoadingAsync();
             }
             return false;
         }
@@ -747,7 +764,7 @@ namespace Bit.App.Pages
 
         public void PasswordPromptHelp()
         {
-            _platformUtilsService.LaunchUri("https://bitwarden.com/help/article/managing-items/#protect-individual-items");
+            _platformUtilsService.LaunchUri("https://bitwarden.com/help/managing-items/#protect-individual-items");
         }
 
         private void TypeChanged()
@@ -808,30 +825,13 @@ namespace Bit.App.Pages
             {
                 var cols = _writeableCollections.Where(c => c.OrganizationId == Cipher.OrganizationId)
                     .Select(c => new CollectionViewModel { Collection = c }).ToList();
-                HasCollections = cols.Any();
                 Collections.ResetWithRange(cols);
-                Collections = new ExtendedObservableCollection<CollectionViewModel>(cols);
             }
             else
             {
-                HasCollections = false;
                 Collections.ResetWithRange(new List<CollectionViewModel>());
-                Collections = new ExtendedObservableCollection<CollectionViewModel>(new List<CollectionViewModel>());
             }
-        }
-
-        public void HandleScroll()
-        {
-            // workaround for https://github.com/xamarin/Xamarin.Forms/issues/13607
-            // required for org ownership/collections to render properly in XF4.5+
-            if (!HasCollections ||
-                EditMode ||
-                (DateTime.Now - _lastHandledScrollTime < TimeSpan.FromMilliseconds(200)))
-            {
-                return;
-            }
-            CollectionsRepeaterView.ItemsSource = Collections;
-            _lastHandledScrollTime = DateTime.Now;
+            HasCollections = Collections.Any();
         }
 
         private void TriggerCipherChanged()
@@ -860,6 +860,115 @@ namespace Bit.App.Pages
             else
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.PasswordSafe);
+            }
+        }
+    }
+
+    public class AddEditPageFieldViewModel : ExtendedViewModel
+    {
+        private II18nService _i18nService;
+        private FieldView _field;
+        private CipherView _cipher;
+        private bool _showHiddenValue;
+        private bool _booleanValue;
+        private int _linkedFieldOptionSelectedIndex;
+        private string[] _additionalFieldProperties = new string[]
+        {
+            nameof(IsBooleanType),
+            nameof(IsHiddenType),
+            nameof(IsTextType),
+            nameof(IsLinkedType),
+        };
+
+        public AddEditPageFieldViewModel(CipherView cipher, FieldView field)
+        {
+            _i18nService = ServiceContainer.Resolve<II18nService>("i18nService");
+            _cipher = cipher;
+            Field = field;
+            ToggleHiddenValueCommand = new Command(ToggleHiddenValue);
+            BooleanValue = IsBooleanType && field.Value == "true";
+            LinkedFieldOptionSelectedIndex = !Field.LinkedId.HasValue ? 0 :
+                LinkedFieldOptions.FindIndex(lfo => lfo.Value == Field.LinkedId.Value);
+        }
+
+        public FieldView Field
+        {
+            get => _field;
+            set => SetProperty(ref _field, value, additionalPropertyNames: _additionalFieldProperties);
+        }
+
+        public bool ShowHiddenValue
+        {
+            get => _showHiddenValue;
+            set => SetProperty(ref _showHiddenValue, value,
+                additionalPropertyNames: new string[]
+                {
+                    nameof(ShowHiddenValueIcon)
+                });
+        }
+
+        public bool BooleanValue
+        {
+            get => _booleanValue;
+            set
+            {
+                SetProperty(ref _booleanValue, value);
+                if (IsBooleanType)
+                {
+                    Field.Value = value ? "true" : "false";
+                }
+            }
+        }
+
+        public int LinkedFieldOptionSelectedIndex
+        {
+            get => _linkedFieldOptionSelectedIndex;
+            set
+            {
+                if (SetProperty(ref _linkedFieldOptionSelectedIndex, value))
+                {
+                    LinkedFieldValueChanged();
+                }
+            }
+        }
+
+        public List<KeyValuePair<string, LinkedIdType>> LinkedFieldOptions
+        {
+            get => _cipher.LinkedFieldOptions?
+                .Select(kvp => new KeyValuePair<string, LinkedIdType>(_i18nService.T(kvp.Key), kvp.Value))
+                .ToList();
+        }
+
+        public Command ToggleHiddenValueCommand { get; set; }
+
+        public string ShowHiddenValueIcon => _showHiddenValue ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
+        public bool IsTextType => _field.Type == FieldType.Text;
+        public bool IsBooleanType => _field.Type == FieldType.Boolean;
+        public bool IsHiddenType => _field.Type == FieldType.Hidden;
+        public bool IsLinkedType => _field.Type == FieldType.Linked;
+        public bool ShowViewHidden => IsHiddenType && (_cipher.ViewPassword || _field.NewField);
+
+        public void ToggleHiddenValue()
+        {
+            ShowHiddenValue = !ShowHiddenValue;
+            if (ShowHiddenValue && _cipher?.Id != null)
+            {
+                var eventService = ServiceContainer.Resolve<IEventService>("eventService");
+                var task = eventService.CollectAsync(EventType.Cipher_ClientToggledHiddenFieldVisible, _cipher.Id);
+            }
+        }
+
+        public void TriggerFieldChanged()
+        {
+            TriggerPropertyChanged(nameof(Field), _additionalFieldProperties);
+        }
+
+        private void LinkedFieldValueChanged()
+        {
+            if (Field != null && LinkedFieldOptionSelectedIndex > -1)
+            {
+                Field.LinkedId = LinkedFieldOptions.Find(lfo =>
+                    lfo.Value == LinkedFieldOptions[LinkedFieldOptionSelectedIndex].Value).Value;
             }
         }
     }

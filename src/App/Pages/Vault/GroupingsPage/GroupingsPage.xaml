@@ -6,6 +6,7 @@
     xmlns:u="clr-namespace:Bit.App.Utilities"
     xmlns:effects="clr-namespace:Bit.App.Effects"
     xmlns:controls="clr-namespace:Bit.App.Controls"
+    xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
     x:DataType="pages:GroupingsPageViewModel"
     Title="{Binding PageTitle}"
     x:Name="_page">
@@ -15,6 +16,15 @@
     </ContentPage.BindingContext>
 
     <ContentPage.ToolbarItems>
+        <controls:ExtendedToolbarItem
+            x:Name="_accountAvatar"
+            IconImageSource="{Binding AvatarImageSource}"
+            Command="{Binding Source={x:Reference _accountListOverlay}, Path=ToggleVisibililtyCommand}"
+            Order="Primary"
+            Priority="-1"
+            UseOriginalImage="True"
+            AutomationProperties.IsInAccessibleTree="True"
+            AutomationProperties.Name="{u:I18n Account}" />
         <ToolbarItem Icon="search.png" Clicked="Search_Clicked"
                      AutomationProperties.IsInAccessibleTree="True"
                      AutomationProperties.Name="{u:I18n Search}" />
@@ -46,33 +56,81 @@
             <DataTemplate x:Key="groupTemplate"
                           x:DataType="pages:GroupingsPageListItem">
                 <controls:ExtendedStackLayout Orientation="Horizontal" 
-                                              StyleClass="list-row, list-row-platform">
-                    <controls:FaLabel Text="{Binding Icon, Mode=OneWay}"
-                                      HorizontalOptions="Start"
-                                      VerticalOptions="Center"
-                                      StyleClass="list-icon, list-icon-platform">
-                        <controls:FaLabel.Effects>
+                                                StyleClass="list-row, list-row-platform">
+                    <controls:IconLabel Text="{Binding Icon, Mode=OneWay}"
+                                        HorizontalOptions="Start"
+                                        VerticalOptions="Center"
+                                        StyleClass="list-icon, list-icon-platform"
+                                        ShouldUpdateFontSizeDynamicallyForAccesibility="True">
+                        <controls:IconLabel.Effects>
                             <effects:FixedSizeEffect />
-                        </controls:FaLabel.Effects>
-                    </controls:FaLabel>
+                        </controls:IconLabel.Effects>
+                    </controls:IconLabel>
                     <Label Text="{Binding Name, Mode=OneWay}"
-                           LineBreakMode="TailTruncation"
-                           HorizontalOptions="FillAndExpand"
-                           VerticalOptions="CenterAndExpand"
-                           StyleClass="list-title"/>
+                            LineBreakMode="TailTruncation"
+                            HorizontalOptions="FillAndExpand"
+                            VerticalOptions="CenterAndExpand"
+                            StyleClass="list-title"/>
                     <Label Text="{Binding ItemCount, Mode=OneWay}"
-                           HorizontalOptions="End"
-                           VerticalOptions="CenterAndExpand"
-                           HorizontalTextAlignment="End"
-                           StyleClass="list-sub"/>
+                            HorizontalOptions="End"
+                            VerticalOptions="CenterAndExpand"
+                            HorizontalTextAlignment="End"
+                            StyleClass="list-sub"/>
                 </controls:ExtendedStackLayout>
             </DataTemplate>
 
+            <DataTemplate
+                x:Key="headerTemplate"
+                x:DataType="pages:GroupingsPageHeaderListItem">
+                <StackLayout
+                    Spacing="0"
+                    Padding="0"
+                    VerticalOptions="FillAndExpand"
+                    StyleClass="list-row-header-container, list-row-header-container-platform">
+                    <BoxView
+                        StyleClass="list-section-separator-top, list-section-separator-top-platform" />
+                    <StackLayout StyleClass="list-row-header, list-row-header-platform">
+                        <Label
+                            Text="{Binding Title}"
+                            StyleClass="list-header, list-header-platform" />
+                        <Label
+                            Text="{Binding ItemCount}"
+                            StyleClass="list-header-sub" />
+                    </StackLayout>
+                    <BoxView StyleClass="list-section-separator-bottom, list-section-separator-bottom-platform" />
+                </StackLayout>
+	        </DataTemplate>
+
             <pages:GroupingsPageListItemSelector x:Key="listItemDataTemplateSelector"
+                                                 HeaderTemplate="{StaticResource headerTemplate}"
                                                  CipherTemplate="{StaticResource cipherTemplate}"
                                                  GroupTemplate="{StaticResource groupTemplate}" />
 
             <StackLayout x:Key="mainLayout" x:Name="_mainLayout">
+                <StackLayout
+                    IsVisible="{Binding ShowVaultFilter}"
+                    Orientation="Horizontal"
+                    HorizontalOptions="FillAndExpand"
+                    Margin="0,5,0,0">
+                    <Label
+                        Text="{Binding VaultFilterDescription}"
+                        LineBreakMode="TailTruncation"
+                        Margin="10,0"
+                        StyleClass="text-md, text-muted"
+                        VerticalOptions="Center"
+                        HorizontalOptions="StartAndExpand"
+                        AutomationProperties.IsInAccessibleTree="True"
+                        AutomationProperties.Name="{u:I18n Filter}" />
+                    <controls:MiButton
+                        Text="{Binding Source={x:Static core:BitwardenIcons.ViewCellMenu}}"
+                        StyleClass="list-row-button-text, list-row-button-platform"
+                        Command="{Binding VaultFilterCommand}"
+                        VerticalOptions="Center"
+                        HorizontalOptions="End"
+                        AutomationProperties.IsInAccessibleTree="True"
+                        AutomationProperties.Name="{u:I18n Filter}" />
+                </StackLayout>
+
                 <StackLayout
                     VerticalOptions="CenterAndExpand"
                     Padding="20, 0"
@@ -95,32 +153,10 @@
                         ItemsSource="{Binding GroupedItems}"
                         VerticalOptions="FillAndExpand"
                         ItemTemplate="{StaticResource listItemDataTemplateSelector}"
-                        IsGrouped="True"
                         SelectionMode="Single"
                         SelectionChanged="RowSelected"
-                        StyleClass="list, list-platform">
-
-                        <CollectionView.GroupHeaderTemplate>
-                            <DataTemplate x:DataType="pages:GroupingsPageListGroup">
-                                <StackLayout
-                                    Spacing="0" Padding="0" VerticalOptions="FillAndExpand"
-                                    StyleClass="list-row-header-container, list-row-header-container-platform">
-                                    <BoxView
-                                        StyleClass="list-section-separator-top, list-section-separator-top-platform"
-                                        IsVisible="{Binding First, Converter={StaticResource inverseBool}}" />
-                                    <StackLayout StyleClass="list-row-header, list-row-header-platform">
-                                        <Label
-                                            Text="{Binding Name}"
-                                            StyleClass="list-header, list-header-platform" />
-                                        <Label
-                                            Text="{Binding ItemCount}"
-                                            StyleClass="list-header-sub" />
-                                    </StackLayout>
-                                    <BoxView StyleClass="list-section-separator-bottom, list-section-separator-bottom-platform" />
-                                </StackLayout>
-                            </DataTemplate>
-                        </CollectionView.GroupHeaderTemplate>
-                    </controls:ExtendedCollectionView>
+                        StyleClass="list, list-platform"
+                        ExtraDataForLogging="Groupings Page" />
                 </RefreshView>
             </StackLayout>
         </ResourceDictionary>
@@ -135,6 +171,8 @@
             AbsoluteLayout.LayoutFlags="All"
             AbsoluteLayout.LayoutBounds="0, 0, 1, 1">
         </ContentView>
+        
+        <!-- Android FAB -->
         <Button
             x:Name="_fab"
             Image="plus.png"
@@ -148,6 +186,14 @@
                 <effects:FabShadowEffect />
             </Button.Effects>
         </Button>
+
+        <controls:AccountSwitchingOverlayView
+            x:Name="_accountListOverlay"
+            AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+            AbsoluteLayout.LayoutFlags="All"
+            MainPage="{Binding Source={x:Reference _page}}"
+            MainFab="{Binding Source={x:Reference _fab}, Path=.}"
+            BindingContext="{Binding AccountSwitchingOverlayViewModel}"/>
     </AbsoluteLayout>
 
 </pages:BaseContentPage>

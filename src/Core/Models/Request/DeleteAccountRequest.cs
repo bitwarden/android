@@ -3,5 +3,7 @@
     public class DeleteAccountRequest
     {
         public string MasterPasswordHash { get; set; }
+
+        public string OTP { get; set; }
     }
 }

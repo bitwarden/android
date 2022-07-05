@@ -1,59 +1,89 @@
 // WARNING
 //
-// This file has been generated automatically by Visual Studio from the outlets and
-// actions declared in your storyboard file.
-// Manual changes to this file will not be maintained.
+// This file has been generated automatically by Visual Studio to store outlets and
+// actions made in the UI designer. If it is removed, they will be lost.
+// Manual changes to this file may not be handled correctly.
 //
 using Foundation;
-using System;
 using System.CodeDom.Compiler;
-using UIKit;
 
 namespace Bit.iOS.Autofill
 {
-    [Register ("LoginListViewController")]
-    partial class LoginListViewController
-    {
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIBarButtonItem AddBarButton { get; set; }
+	[Register ("LoginListViewController")]
+	partial class LoginListViewController
+	{
+		[Outlet]
+		UIKit.UIBarButtonItem AccountSwitchingBarButton { get; set; }
 
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIBarButtonItem CancelBarButton { get; set; }
+		[Outlet]
+		[GeneratedCode ("iOS Designer", "1.0")]
+		UIKit.UIBarButtonItem AddBarButton { get; set; }
 
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UINavigationItem NavItem { get; set; }
+		[Outlet]
+		[GeneratedCode ("iOS Designer", "1.0")]
+		UIKit.UIBarButtonItem CancelBarButton { get; set; }
 
-        [Action ("AddBarButton_Activated:")]
-        [GeneratedCode ("iOS Designer", "1.0")]
-        partial void AddBarButton_Activated (UIKit.UIBarButtonItem sender);
+		[Outlet]
+		UIKit.UIView MainView { get; set; }
 
-        [Action ("CancelBarButton_Activated:")]
-        [GeneratedCode ("iOS Designer", "1.0")]
-        partial void CancelBarButton_Activated (UIKit.UIBarButtonItem sender);
+		[Outlet]
+		[GeneratedCode ("iOS Designer", "1.0")]
+		UIKit.UINavigationItem NavItem { get; set; }
 
-        [Action ("SearchBarButton_Activated:")]
-        [GeneratedCode ("iOS Designer", "1.0")]
-        partial void SearchBarButton_Activated (UIKit.UIBarButtonItem sender);
+		[Outlet]
+		UIKit.UIView OverlayView { get; set; }
 
-        void ReleaseDesignerOutlets ()
-        {
-            if (AddBarButton != null) {
-                AddBarButton.Dispose ();
-                AddBarButton = null;
-            }
+		[Outlet]
+		UIKit.UITableView TableView { get; set; }
 
-            if (CancelBarButton != null) {
-                CancelBarButton.Dispose ();
-                CancelBarButton = null;
-            }
+		[Action ("AccountSwitchingBarButton_Activated:")]
+		partial void AccountSwitchingBarButton_Activated (UIKit.UIBarButtonItem sender);
 
-            if (NavItem != null) {
-                NavItem.Dispose ();
-                NavItem = null;
-            }
-        }
-    }
+		[Action ("AddBarButton_Activated:")]
+		partial void AddBarButton_Activated (UIKit.UIBarButtonItem sender);
+
+		[Action ("CancelBarButton_Activated:")]
+		partial void CancelBarButton_Activated (UIKit.UIBarButtonItem sender);
+
+		[Action ("SearchBarButton_Activated:")]
+		partial void SearchBarButton_Activated (UIKit.UIBarButtonItem sender);
+		
+		void ReleaseDesignerOutlets ()
+		{
+			if (AddBarButton != null) {
+				AddBarButton.Dispose ();
+				AddBarButton = null;
+			}
+
+			if (CancelBarButton != null) {
+				CancelBarButton.Dispose ();
+				CancelBarButton = null;
+			}
+
+			if (MainView != null) {
+				MainView.Dispose ();
+				MainView = null;
+			}
+
+			if (NavItem != null) {
+				NavItem.Dispose ();
+				NavItem = null;
+			}
+
+			if (OverlayView != null) {
+				OverlayView.Dispose ();
+				OverlayView = null;
+			}
+
+			if (TableView != null) {
+				TableView.Dispose ();
+				TableView = null;
+			}
+
+			if (AccountSwitchingBarButton != null) {
+				AccountSwitchingBarButton.Dispose ();
+				AccountSwitchingBarButton = null;
+			}
+		}
+	}
 }

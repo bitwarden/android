@@ -1,10 +1,12 @@
-﻿using Bit.App.Resources;
-using System;
+﻿using System;
+using System.Threading.Tasks;
+using Bit.App.Resources;
+using Bit.App.Styles;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
-    public partial class GeneratorHistoryPage : BaseContentPage
+    public partial class GeneratorHistoryPage : BaseContentPage, IThemeDirtablePage
     {
         private GeneratorHistoryPageViewModel _vm;
 
@@ -28,7 +30,9 @@ namespace Bit.App.Pages
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            await LoadOnAppearedAsync(_mainLayout, true, async () => {
+
+            await LoadOnAppearedAsync(_mainLayout, true, async () =>
+            {
                 await _vm.InitAsync();
             });
         }
@@ -58,6 +62,13 @@ namespace Bit.App.Pages
             {
                 await _vm.ClearAsync();
             }
+        }
+
+        public override async Task UpdateOnThemeChanged()
+        {
+            await base.UpdateOnThemeChanged();
+
+            await _vm?.UpdateOnThemeChanged();
         }
     }
 }

@@ -1,7 +1,7 @@
-﻿using Bit.Core.Models.View;
-using System;
+﻿using System;
 using System.Linq;
 using Bit.App.Controls;
+using Bit.Core.Models.View;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages

@@ -2,7 +2,7 @@
 
 namespace Bit.App.Styles
 {
-    public partial class Light : ResourceDictionary
+    public partial class Light : ResourceDictionary, IThemeResourceDictionary
     {
         public Light()
         {

@@ -1,16 +1,17 @@
-﻿using Bit.App.Abstractions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Bit.App.Abstractions;
 using Bit.App.Lists.ItemViewModels.CustomFields;
 using Bit.App.Resources;
 using Bit.App.Utilities;
+using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -19,7 +20,7 @@ namespace Bit.App.Pages
     {
         private readonly IDeviceActionService _deviceActionService;
         private readonly ICipherService _cipherService;
-        private readonly IUserService _userService;
+        private readonly IStateService _stateService;
         private readonly ITotpService _totpService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IAuditService _auditService;
@@ -28,6 +29,7 @@ namespace Bit.App.Pages
         private readonly IPasswordRepromptService _passwordRepromptService;
         private readonly ILocalizeService _localizeService;
         private readonly ICustomFieldItemFactory _customFieldItemFactory;
+        private readonly IClipboardService _clipboardService;
 
         private CipherView _cipher;
         private List<ICustomFieldItemViewModel> _fields;
@@ -49,7 +51,7 @@ namespace Bit.App.Pages
         {
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
-            _userService = ServiceContainer.Resolve<IUserService>("userService");
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _totpService = ServiceContainer.Resolve<ITotpService>("totpService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _auditService = ServiceContainer.Resolve<IAuditService>("auditService");
@@ -58,6 +60,7 @@ namespace Bit.App.Pages
             _passwordRepromptService = ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService");
             _localizeService = ServiceContainer.Resolve<ILocalizeService>("localizeService");
             _customFieldItemFactory = ServiceContainer.Resolve<ICustomFieldItemFactory>("customFieldItemFactory");
+            _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
 
             CopyCommand = new Command<string>((id) => CopyAsync(id, null));
             CopyUriCommand = new Command<LoginUriView>(CopyUri);
@@ -120,7 +123,8 @@ namespace Bit.App.Pages
             set => SetProperty(ref _showPassword, value,
                 additionalPropertyNames: new string[]
                 {
-                    nameof(ShowPasswordIcon)
+                    nameof(ShowPasswordIcon),
+                    nameof(PasswordVisibilityAccessibilityText)
                 });
         }
         public bool ShowCardNumber
@@ -210,9 +214,10 @@ namespace Bit.App.Pages
         public bool ShowAttachments => Cipher.HasAttachments && (CanAccessPremium || Cipher.OrganizationId != null);
         public bool ShowTotp => IsLogin && !string.IsNullOrWhiteSpace(Cipher.Login.Totp) &&
             !string.IsNullOrWhiteSpace(TotpCodeFormatted);
-        public string ShowPasswordIcon => ShowPassword ? "" : "";
-        public string ShowCardNumberIcon => ShowCardNumber ? "" : "";
-        public string ShowCardCodeIcon => ShowCardCode ? "" : "";
+        public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
+        public string ShowCardNumberIcon => ShowCardNumber ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
+        public string ShowCardCodeIcon => ShowCardCode ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
+        public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
         public string TotpCodeFormatted
         {
             get => _totpCodeFormatted;
@@ -233,7 +238,7 @@ namespace Bit.App.Pages
             set
             {
                 SetProperty(ref _totpLow, value);
-                Page.Resources["textTotp"] =  ThemeManager.Resources()[value ? "text-danger" : "text-default"];
+                Page.Resources["textTotp"] = ThemeManager.Resources()[value ? "text-danger" : "text-default"];
             }
         }
         public bool IsDeleted => Cipher.IsDeleted;
@@ -249,19 +254,11 @@ namespace Bit.App.Pages
                 return false;
             }
             Cipher = await cipher.DecryptAsync();
-            CanAccessPremium = await _userService.CanAccessPremiumAsync();
-            try
-            {
-
+            CanAccessPremium = await _stateService.CanAccessPremiumAsync();
+            
             Fields = Cipher.Fields?
                         .Select(f => _customFieldItemFactory.CreateCustomFieldItem(f, false, Cipher, this, CopyFieldCommand, null))
                         .ToList();
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
 
             if (Cipher.Type == Core.Enums.CipherType.Login && !string.IsNullOrWhiteSpace(Cipher.Login.Totp) &&
                 (Cipher.OrganizationUseTotp || CanAccessPremium))
@@ -296,7 +293,7 @@ namespace Bit.App.Pages
 
         public async void TogglePassword()
         {
-            if (! await PromptPasswordAsync())
+            if (!await PromptPasswordAsync())
             {
                 return;
             }
@@ -624,7 +621,7 @@ namespace Bit.App.Pages
             _attachmentData = null;
             _attachmentFilename = null;
         }
-        
+
         private async void CopyAsync(string id, string text = null)
         {
             if (_passwordRepromptService.ProtectedFields.Contains(id) && !await PromptPasswordAsync())
@@ -669,10 +666,10 @@ namespace Bit.App.Pages
 
             if (text != null)
             {
-                await _platformUtilsService.CopyToClipboardAsync(text);
+                await _clipboardService.CopyTextAsync(text);
                 if (!string.IsNullOrWhiteSpace(name))
                 {
-                    _platformUtilsService.ShowToast("info", null, string.Format(AppResources.ValueHasBeenCopied, name));
+                    _platformUtilsService.ShowToastForCopiedValue(name);
                 }
                 if (id == "LoginPassword")
                 {
@@ -715,6 +712,98 @@ namespace Bit.App.Pages
             }
 
             return _passwordReprompted = await _passwordRepromptService.ShowPasswordPromptAsync();
+        }
+    }
+
+    public class ViewPageFieldViewModel : ExtendedViewModel
+    {
+        private II18nService _i18nService;
+        private ViewPageViewModel _vm;
+        private FieldView _field;
+        private CipherView _cipher;
+        private bool _showHiddenValue;
+
+        public ViewPageFieldViewModel(ViewPageViewModel vm, CipherView cipher, FieldView field)
+        {
+            _i18nService = ServiceContainer.Resolve<II18nService>("i18nService");
+            _vm = vm;
+            _cipher = cipher;
+            Field = field;
+            ToggleHiddenValueCommand = new Command(ToggleHiddenValue);
+        }
+
+        public FieldView Field
+        {
+            get => _field;
+            set => SetProperty(ref _field, value,
+                additionalPropertyNames: new string[]
+                {
+                    nameof(ValueText),
+                    nameof(IsBooleanType),
+                    nameof(IsHiddenType),
+                    nameof(IsTextType),
+                    nameof(ShowCopyButton),
+                });
+        }
+
+        public bool ShowHiddenValue
+        {
+            get => _showHiddenValue;
+            set => SetProperty(ref _showHiddenValue, value,
+                additionalPropertyNames: new string[]
+                {
+                    nameof(ShowHiddenValueIcon)
+                });
+        }
+
+        public string ValueText
+        {
+            get
+            {
+                if (IsBooleanType)
+                {
+                    return _field.Value == "true" ? BitwardenIcons.Square : BitwardenIcons.CheckSquare;
+                }
+                else if (IsLinkedType)
+                {
+                    var i18nKey = _cipher.LinkedFieldI18nKey(Field.LinkedId.GetValueOrDefault());
+                    return BitwardenIcons.Link + _i18nService.T(i18nKey);
+                }
+                else
+                {
+                    return _field.Value;
+                }
+            }
+        }
+
+        public FormattedString ColoredHiddenValue => PasswordFormatter.FormatPassword(_field.Value);
+
+        public Command ToggleHiddenValueCommand { get; set; }
+
+        public string ShowHiddenValueIcon => _showHiddenValue ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
+        public bool IsTextType => _field.Type == Core.Enums.FieldType.Text;
+        public bool IsBooleanType => _field.Type == Core.Enums.FieldType.Boolean;
+        public bool IsHiddenType => _field.Type == Core.Enums.FieldType.Hidden;
+        public bool IsLinkedType => _field.Type == Core.Enums.FieldType.Linked;
+        public bool ShowViewHidden => IsHiddenType && _cipher.ViewPassword;
+        public bool ShowCopyButton => _field.Type != Core.Enums.FieldType.Boolean &&
+            !string.IsNullOrWhiteSpace(_field.Value) &&
+            !(IsHiddenType && !_cipher.ViewPassword) &&
+            _field.Type != FieldType.Linked;
+
+        public async void ToggleHiddenValue()
+        {
+            if (!await _vm.PromptPasswordAsync())
+            {
+                return;
+            }
+            ShowHiddenValue = !ShowHiddenValue;
+            if (ShowHiddenValue)
+            {
+                var eventService = ServiceContainer.Resolve<IEventService>("eventService");
+                var task = eventService.CollectAsync(
+                    Core.Enums.EventType.Cipher_ClientToggledHiddenFieldVisible, _cipher.Id);
+            }
         }
     }
 }

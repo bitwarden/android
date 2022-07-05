@@ -15,7 +15,18 @@
     </ContentPage.BindingContext>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Icon="search.png" Clicked="Search_Clicked" />
+        <controls:ExtendedToolbarItem
+            x:Name="_accountAvatar"
+            IconImageSource="{Binding AvatarImageSource}"
+            Command="{Binding Source={x:Reference _accountListOverlay}, Path=ToggleVisibililtyCommand}"
+            Order="Primary"
+            Priority="-1"
+            UseOriginalImage="True"
+            AutomationProperties.IsInAccessibleTree="True"
+            AutomationProperties.Name="{u:I18n Account}" />
+        <ToolbarItem Icon="search.png" Clicked="Search_Clicked"
+                     AutomationProperties.IsInAccessibleTree="True"
+                     AutomationProperties.Name="{u:I18n Search}" />
     </ContentPage.ToolbarItems>
 
     <ContentPage.Resources>
@@ -29,8 +40,28 @@
                     ButtonCommand="{Binding BindingContext.CipherOptionsCommand, Source={x:Reference _page}}"
                     WebsiteIconsEnabled="{Binding BindingContext.WebsiteIconsEnabled, Source={x:Reference _page}}" />
             </DataTemplate>
+            
+            <DataTemplate
+                x:Key="headerTemplate"
+                x:DataType="pages:GroupingsPageHeaderListItem">
+                <StackLayout
+                    Spacing="0" Padding="0" VerticalOptions="FillAndExpand"
+                    StyleClass="list-row-header-container, list-row-header-container-platform">
+                    <BoxView
+                        StyleClass="list-section-separator-top, list-section-separator-top-platform" />
+                    <StackLayout StyleClass="list-row-header, list-row-header-platform">
+                        <Label
+                            Text="{Binding Title}"
+                            StyleClass="list-header, list-header-platform" />
+                        <Label
+                            Text="{Binding ItemCount}"
+                            StyleClass="list-header-sub" />
+                    </StackLayout>
+                </StackLayout>
+	        </DataTemplate>
 
             <pages:GroupingsPageListItemSelector x:Key="listItemDataTemplateSelector"
+                                                 HeaderTemplate="{StaticResource headerTemplate}"
                                                  CipherTemplate="{StaticResource cipherTemplate}" />
 
             <StackLayout x:Key="mainLayout" x:Name="_mainLayout">
@@ -38,7 +69,7 @@
                     VerticalOptions="CenterAndExpand"
                     Padding="20, 0"
                     Spacing="20"
-                    IsVisible="{Binding ShowList, Converter={StaticResource inverseBool}}">
+                    IsVisible="{Binding ShowNoData}">
                     <Label
                         Text="{Binding NoDataText}"
                         HorizontalTextAlignment="Center"></Label>
@@ -52,30 +83,10 @@
                     ItemsSource="{Binding GroupedItems}"
                     VerticalOptions="FillAndExpand"
                     ItemTemplate="{StaticResource listItemDataTemplateSelector}"
-                    IsGrouped="True"
                     SelectionMode="Single"
                     SelectionChanged="RowSelected"
-                    StyleClass="list, list-platform">
-
-                    <CollectionView.GroupHeaderTemplate>
-                        <DataTemplate x:DataType="pages:GroupingsPageListGroup">
-                            <StackLayout
-                                Spacing="0" Padding="0" VerticalOptions="FillAndExpand"
-                                StyleClass="list-row-header-container, list-row-header-container-platform">
-                                <BoxView
-                                    StyleClass="list-section-separator-top, list-section-separator-top-platform" />
-                                <StackLayout StyleClass="list-row-header, list-row-header-platform">
-                                    <Label
-                                        Text="{Binding Name}"
-                                        StyleClass="list-header, list-header-platform" />
-                                    <Label
-                                        Text="{Binding ItemCount}"
-                                        StyleClass="list-header-sub" />
-                                </StackLayout>
-                            </StackLayout>
-                        </DataTemplate>
-                    </CollectionView.GroupHeaderTemplate>
-                </controls:ExtendedCollectionView>
+                    StyleClass="list, list-platform"
+                    ExtraDataForLogging="Autofill Ciphers Page" />
             </StackLayout>
         </ResourceDictionary>
     </ContentPage.Resources>
@@ -89,6 +100,8 @@
             AbsoluteLayout.LayoutFlags="All"
             AbsoluteLayout.LayoutBounds="0, 0, 1, 1">
         </ContentView>
+        
+        <!-- Android FAB -->
         <Button
             x:Name="_fab"
             Image="plus.png"
@@ -100,6 +113,14 @@
                 <effects:FabShadowEffect />
             </Button.Effects>
         </Button>
+        
+        <controls:AccountSwitchingOverlayView
+            x:Name="_accountListOverlay"
+            AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+            AbsoluteLayout.LayoutFlags="All"
+            MainPage="{Binding Source={x:Reference _page}}"
+            MainFab="{Binding Source={x:Reference _fab}, Path=.}"
+            BindingContext="{Binding AccountSwitchingOverlayViewModel}"/>
     </AbsoluteLayout>
 
 </pages:BaseContentPage>

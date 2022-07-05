@@ -1,10 +1,10 @@
-﻿using Bit.App.Abstractions;
+﻿using System;
+using System.Linq;
+using Bit.App.Abstractions;
+using Bit.App.Controls;
 using Bit.App.Resources;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
-using System;
-using System.Linq;
-using Bit.App.Controls;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -17,8 +17,8 @@ namespace Bit.App.Pages
         private CiphersPageViewModel _vm;
         private bool _hasFocused;
 
-        public CiphersPage(Func<CipherView, bool> filter, bool folder = false, bool collection = false,
-            bool type = false, string autofillUrl = null, bool deleted = false)
+        public CiphersPage(Func<CipherView, bool> filter, string pageTitle = null, string vaultFilterSelection = null,
+            string autofillUrl = null, bool deleted = false)
         {
             InitializeComponent();
             _vm = BindingContext as CiphersPageViewModel;
@@ -26,26 +26,15 @@ namespace Bit.App.Pages
             _vm.Filter = filter;
             _vm.AutofillUrl = _autofillUrl = autofillUrl;
             _vm.Deleted = deleted;
-            if (deleted)
+            if (pageTitle != null)
             {
-                _vm.PageTitle = AppResources.SearchTrash;
-            }
-            else if (folder)
-            {
-                _vm.PageTitle = AppResources.SearchFolder;
-            }
-            else if (collection)
-            {
-                _vm.PageTitle = AppResources.SearchCollection;
-            }
-            else if (type)
-            {
-                _vm.PageTitle = AppResources.SearchType;
+                _vm.PageTitle = string.Format(AppResources.SearchGroup, pageTitle);
             }
             else
             {
                 _vm.PageTitle = AppResources.SearchVault;
             }
+            _vm.VaultFilterDescription = vaultFilterSelection;
 
             if (Device.RuntimePlatform == Device.iOS)
             {
@@ -53,6 +42,7 @@ namespace Bit.App.Pages
                 _searchBar.Placeholder = AppResources.Search;
                 _mainLayout.Children.Insert(0, _searchBar);
                 _mainLayout.Children.Insert(1, _separator);
+                ShowModalAnimationDelay = 0;
             }
             else
             {

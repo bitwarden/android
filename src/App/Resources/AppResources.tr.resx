@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Çıkmak istediğinize emin misiniz?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Hesabı kaldır</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Bu hesabı kaldırmak istediğinizden emin misiniz?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Hesap zaten eklenmiş</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Bu hesaba geçmek ister misiniz?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Ana parola</value>
     <comment>Label for a master password.</comment>
@@ -1150,10 +1162,10 @@
     <value>Otomatik doldur erişilebilirlik hizmeti</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>Bitwarden otomatik doldurma hizmeti; hesap, kredi kartı ve kimlik bilgilerini cihazınızdaki diğer uygulamalarda doldurmaya yardımcı olmak için Android Otomatik Doldurma Sistemi'ni kullanır.</value>
+    <value>Bitwarden otomatik doldurma hizmeti, cihazınızdaki diğer uygulamalarda hesap bilgilerini doldurmak için Android Otomatik Doldurma Sistemi'ni kullanır.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Diğer uygulamalarda hesap, kredi kartı ve kimlik bilgilerinizi doldurmak için Bitwarden otomatik doldurma hizmetini kullanabilirsiniz.</value>
+    <value>Diğer uygulamalarda hesap bilgilerinizi doldurmak için Bitwarden otomatik doldurma hizmetini kullanabilirsiniz.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Otomatik doldurma ayarlarını aç</value>
@@ -1455,6 +1467,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>Kilidi aç</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Kasa Kilidini Aç</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 dakika</value>
   </data>
@@ -1470,6 +1485,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Kasanız kilitlendi. Devam etmek için PIN kodunuzu doğrulayın.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Kasanız kilitli. Devam etmek için kimliğinizi doğrulayın.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Koyu</value>
@@ -1611,8 +1629,14 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Kasadaki verilerinizi dışa aktarmak için ana parolanızı girin.</value>
   </data>
-    <data name="ExportVaultOTPDescription" xml:space="preserve">
-    <value>Kasa verilerinizi dışa aktarmak için doğrulama kodunu girin.</value>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>E-posta adresime doğrulama kodu gönder</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Kod gönderildi!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Devam etmek için kimliğinizi doğrulayın.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Dışa aktarılan dosyadaki verileriniz şifrelenmemiş olacak. Bu dosyayı güvensiz yöntemlerle (örn. e-posta) göndermemeli ve saklamamalısınız. İşiniz bittikten sonra dosyayı hemen silin.</value>
@@ -1911,7 +1935,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Kimsenin erişememesi için bu Send'i devre dışı bırak.</value>
+    <value>Kimsenin erişememesi için bu Send'i devre dışı bırak</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
@@ -1979,7 +2003,7 @@
     <value>Özel</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
-    <value>Bu Send'i kaydettikten sonra paylaş.</value>
+    <value>Bu Send'i kaydettikten sonra paylaş</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
@@ -1991,7 +2015,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
-    <value>E-posta adresimi alıcılardan gizle.</value>
+    <value>E-posta adresimi alıcılardan gizle</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
     <value>Bir veya daha fazla kuruluş ilkesi Send seçeneklerinizi etkiliyor.</value>
@@ -2018,7 +2042,7 @@
     <value>Captcha gerekiyor</value>
   </data>
   <data name="CaptchaFailed" xml:space="preserve">
-    <value>Captcha güvenlik Başarısız.  Lütfen tekrar deneyin.</value>
+    <value>Captcha başarısız oldu. Lütfen yeniden deneyin.</value>
   </data>
   <data name="UpdatedMasterPassword" xml:space="preserve">
     <value>Ana parola güncellendi</value>
@@ -2027,13 +2051,13 @@
     <value>Ana parolayı güncelle</value>
   </data>
   <data name="UpdateMasterPasswordWarning" xml:space="preserve">
-    <value>Ana Parolanız yakın zamanda kuruluşunuzdaki bir yönetici tarafından değiştirildi.  Kasaya erişmek için Ana Parolanızı şimdi güncellemelisiniz.  Devam etmek, mevcut oturumunuzdan çıkmanıza neden olacak ve tekrar oturum açmanızı gerektirecektir. Diğer cihazlardaki etkin oturumlar bir saate kadar etkin kalmaya devam edebilir.</value>
+    <value>Ana parolanız kuruluşunuzdaki bir yönetici tarafından yakın zamanda değiştirildi. Kasanıza erişmek için ana parolanızı güncellemelisiniz. Devam ettiğinizde oturumunuz kapanacak ve yeniden oturum açmanız gerekecektir. Diğer cihazlardaki aktif oturumlar bir saate kadar aktif kalabilir.</value>
   </data>
   <data name="UpdatingPassword" xml:space="preserve">
     <value>Parola güncelleniyor</value>
   </data>
   <data name="UpdatePasswordError" xml:space="preserve">
-    <value>Şu anda şifre güncellenemiyor</value>
+    <value>Şu anda parola güncellenemiyor</value>
   </data>
   <data name="RemoveMasterPassword" xml:space="preserve">
     <value>Ana parolayı kaldır</value>
@@ -2054,25 +2078,25 @@
     <value>FIDO2 WebAuthn</value>
   </data>
   <data name="Fido2Instruction" xml:space="preserve">
-    <value>Devam etmek için FIDO2 WebAuthn etkin güvenlik anahtarınızı hazır bulundurun, ardından sonraki ekranda 'WebAuthn'u Doğrula'yı tıkladıktan sonra talimatları izleyin.</value>
+    <value>Devam etmek için FIDO2 WebAuthn uyumlu güvenlik anahtarınızı hazır bulundurun ve sonraki ekranda "WebAuthn ile doğrula"ya tıkladıktan sonra talimatları izleyin.</value>
   </data>
   <data name="Fido2Desc" xml:space="preserve">
-    <value>FIDO2 WebAuthn kullanarak kimlik doğrulama, harici bir güvenlik anahtarı kullanarak kimlik doğrulaması yapabilirsiniz.</value>
+    <value>FIDO2 WebAuthn ile kimlik doğrulamada harici bir güvenlik anahtarı kullanarak kimliğinizi doğrulayabilirsiniz.</value>
   </data>
   <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
-    <value>WebAuthn'de Kimlik Doğrulama</value>
+    <value>WebAutn ile doğrula</value>
   </data>
   <data name="Fido2ReturnToApp" xml:space="preserve">
     <value>Uygulamaya dön</value>
   </data>
   <data name="Fido2CheckBrowser" xml:space="preserve">
-    <value>Lütfen varsayılan tarayıcınızın WebAuthn'u desteklediğinden emin olun ve tekrar deneyin.</value>
+    <value>Lütfen varsayılan tarayıcınızın WebAuthn'i desteklediğini kontrol edip tekrar deneyin.</value>
   </data>
   <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
-    <value>Bu kuruluş, sizi otomatik olarak parola sıfırlama işlemine kaydedecek bir kurumsal ilkeye sahiptir.  Kayıt, kuruluş yöneticilerinin ana parolanızı değiştirmesine olanak tanır.</value>
+    <value>Bu kuruluşun sizi otomatik olarak parola sıfırlamaya ekleyen bir ilkesi bulunmakta. Bu ilkeye eklenmek, kuruluş yöneticilerinin ana parolanızı değiştirebilmesini sağlar.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>Kuruluş ilkeleriniz kasa zaman aşımınızı etkiliyor.  İzin verilen maksimum Kasa Zaman Aşımı {0} saat ve {1} dakikadır</value>
+    <value>Kuruluş ilkeleriniz kasa zaman aşımınızı etkiliyor. İzin verilen maksimum kasa zaman aşımı {0} saat {1} dakikadır</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
     <value>Kasa zaman aşımınız, kuruluşunuz tarafından belirlenen kısıtlamaları aşıyor.</value>
@@ -2080,10 +2104,76 @@
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Bir veya daha fazla kuruluş ilkesi, kişisel kasanızı dışa aktarmanızı engelliyor.</value>
   </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Hesap ekle</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Kilitli değil</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Kilitli</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Çıkış yapıldı</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Bir sonraki hesaba geçildi</value>
+  </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>Hesap kilitlendi</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>Başarıyla çıkış yapıldı</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>Hesap başarıyla kaldırıldı</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Hesabı sil</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Silinen hesaplar geri getirilemez</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Hesabınız ve içindeki tüm veriler kalıcı olarak silinecektir. Devam etmek istediğinizden emin misiniz?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Hesabınız siliniyor</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Hesabınız kalıcı olarak silinmiştir</value>
+  </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Doğrulama kodu geçersiz.</value>
   </data>
-    <data name="RequestOTP" xml:space="preserve">
+  <data name="RequestOTP" xml:space="preserve">
     <value>Tek kullanımlık parola iste</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Kod gönder</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Gönderiliyor</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>Kaydederken Send bağlantısını kopyala</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>Kod gönderiliyor</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>Doğrulanıyor</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>Kodu yeniden gönder</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>E-posta adresinize doğrulama kodu gönderildi</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>E-posta adresinize doğrulama kodu gönderilirken bir sorun oluştu. Lütfen daha sonra tekrar deneyin</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>E-posta adresinize gönderilen doğrulama kodunu girin</value>
   </data>
 </root>

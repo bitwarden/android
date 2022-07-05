@@ -6,6 +6,7 @@
     xmlns:u="clr-namespace:Bit.App.Utilities"
     xmlns:controls="clr-namespace:Bit.App.Controls"
     xmlns:cfvm="clr-namespace:Bit.App.Lists.ItemViewModels.CustomFields"
+    xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
     x:DataType="cfvm:BooleanCustomFieldItemViewModel"
     Spacing="0" Padding="0">
     <StackLayout.Resources>
@@ -42,7 +43,7 @@
             Grid.Row="0"
             Grid.Column="0"
             Grid.RowSpan="2" />
-        <controls:FaLabel
+        <controls:IconLabel
             Text="{Binding BooleanValue, Mode=OneWay, Converter={StaticResource iconGlyphConverter}, ConverterParameter={x:Static u:BooleanGlyphType.Checkbox}}"
             StyleClass="box-value"
             Grid.Row="1"
@@ -55,9 +56,9 @@
             Grid.Row="0"
             Grid.Column="1"
             Grid.RowSpan="2" />
-        <controls:FaButton 
+        <controls:IconButton 
             StyleClass="box-row-button, box-row-button-platform"
-            Text="&#xf013;"
+            Text="{Binding Source={x:Static core:BitwardenIcons.Cog}}"
             Command="{Binding FieldOptionsCommand}"
             IsVisible="{Binding IsEditing}"
             Grid.Row="0"

@@ -1,6 +1,6 @@
-﻿using Bit.Core.Enums;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using Bit.Core.Enums;
 
 namespace Bit.Core.Abstractions
 {

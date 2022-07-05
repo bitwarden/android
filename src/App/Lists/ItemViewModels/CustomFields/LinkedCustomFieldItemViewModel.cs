@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
-using Bit.App.Utilities;
+using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.View;
@@ -23,6 +23,11 @@ namespace Bit.App.Lists.ItemViewModels.CustomFields
             LinkedFieldOptionSelectedIndex = Field.LinkedId.HasValue
                 ? LinkedFieldOptions.FindIndex(lfo => lfo.Value == Field.LinkedId.Value)
                 : 0;
+
+            if (isEditing && Field.LinkedId is null)
+            {
+                field.LinkedId = LinkedFieldOptions[0].Value;
+            }
         }
 
         public override string ValueText
@@ -30,7 +35,7 @@ namespace Bit.App.Lists.ItemViewModels.CustomFields
             get
             {
                 var i18nKey = _cipher.LinkedFieldI18nKey(Field.LinkedId.GetValueOrDefault());
-                return $"{IconGlyphExtensions.GetLinkedGlyph()} {_i18nService.T(i18nKey)}";
+                return $"{BitwardenIcons.Link} {_i18nService.T(i18nKey)}";
             }
         }
 

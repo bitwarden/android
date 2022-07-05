@@ -4,6 +4,7 @@
     x:Class="Bit.App.Controls.SendViewCell"
     xmlns:controls="clr-namespace:Bit.App.Controls"
     xmlns:u="clr-namespace:Bit.App.Utilities"
+    xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
     StyleClass="list-row, list-row-platform"
     RowSpacing="0"
     ColumnSpacing="0"
@@ -18,18 +19,19 @@
     </Grid.RowDefinitions>
 
     <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="40" />
+        <ColumnDefinition Width="40" x:Name="_iconColumn" />
         <ColumnDefinition Width="*" />
         <ColumnDefinition Width="60" />
     </Grid.ColumnDefinitions>
 
-    <controls:FaLabel
+    <controls:IconLabel
         Grid.Row="0"
         Grid.Column="0"
         HorizontalOptions="Center"
         VerticalOptions="Center"
         StyleClass="list-icon, list-icon-platform"
         Text="{Binding Send, Converter={StaticResource sendIconGlyphConverter}}"
+        ShouldUpdateFontSizeDynamicallyForAccesibility="True"
         AutomationProperties.IsInAccessibleTree="False" />
 
     <Grid RowSpacing="0" ColumnSpacing="0" Grid.Row="0" Grid.Column="1" VerticalOptions="Center" Padding="0, 7">
@@ -60,58 +62,58 @@
             Grid.ColumnSpan="6"
             StyleClass="list-subtitle, list-subtitle-platform"
             Text="{Binding Send.DisplayDate}" />
-        <controls:FaLabel
+        <controls:IconLabel
             Grid.Column="1"
             Grid.Row="0"
             HorizontalOptions="Start"
             VerticalOptions="Center"
             StyleClass="list-title-icon"
             Margin="5, 0, 0, 0"
-            Text="&#xf071;"
+            Text="{Binding Source={x:Static core:BitwardenIcons.ExclamationTriangle}}"
             IsVisible="{Binding Send.Disabled, Mode=OneTime}"
             AutomationProperties.IsInAccessibleTree="True"
             AutomationProperties.Name="{u:I18n Disabled}" />
-        <controls:FaLabel
+        <controls:IconLabel
             Grid.Column="2"
             Grid.Row="0"
             HorizontalOptions="Start"
             VerticalOptions="Center"
             StyleClass="list-title-icon"
             Margin="5, 0, 0, 0"
-            Text="&#xf084;"
+            Text="{Binding Source={x:Static core:BitwardenIcons.Key}}"
             IsVisible="{Binding Send.HasPassword, Mode=OneTime}"
             AutomationProperties.IsInAccessibleTree="True"
             AutomationProperties.Name="{u:I18n Password}" />
-        <controls:FaLabel
+        <controls:IconLabel
             Grid.Column="3"
             Grid.Row="0"
             HorizontalOptions="Start"
             VerticalOptions="Center"
             StyleClass="list-title-icon"
             Margin="5, 0, 0, 0"
-            Text="&#xf05e;"
+            Text="{Binding Source={x:Static core:BitwardenIcons.Ban}}"
             IsVisible="{Binding Send.MaxAccessCountReached, Mode=OneTime}"
             AutomationProperties.IsInAccessibleTree="True"
             AutomationProperties.Name="{u:I18n MaxAccessCountReached}" />
-        <controls:FaLabel
+        <controls:IconLabel
             Grid.Column="4"
             Grid.Row="0"
             HorizontalOptions="Start"
             VerticalOptions="Center"
             StyleClass="list-title-icon"
             Margin="5, 0, 0, 0"
-            Text="&#xf017;"
+            Text="{Binding Source={x:Static core:BitwardenIcons.Clock}}"
             IsVisible="{Binding Send.Expired, Mode=OneTime}"
             AutomationProperties.IsInAccessibleTree="True"
             AutomationProperties.Name="{u:I18n Expired}" />
-        <controls:FaLabel
+        <controls:IconLabel
             Grid.Column="5"
             Grid.Row="0"
             HorizontalOptions="Start"
             VerticalOptions="Center"
             StyleClass="list-title-icon"
             Margin="5, 0, 0, 0"
-            Text="&#xf1f8;"
+            Text="{Binding Source={x:Static core:BitwardenIcons.Trash}}"
             IsVisible="{Binding Send.PendingDelete, Mode=OneTime}"
             AutomationProperties.IsInAccessibleTree="True"
             AutomationProperties.Name="{u:I18n PendingDelete}" />
@@ -120,7 +122,7 @@
     <controls:MiButton
         Grid.Row="0"
         Grid.Column="2"
-        Text="&#xe5d3;"
+        Text="{Binding Source={x:Static core:BitwardenIcons.ViewCellMenu}}"
         IsVisible="{Binding ShowOptions, Mode=OneWay}"
         StyleClass="list-row-button, list-row-button-platform, btn-disabled"
         Clicked="MoreButton_Clicked"

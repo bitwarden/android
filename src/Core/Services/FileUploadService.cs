@@ -1,11 +1,12 @@
+﻿using System;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
+using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Response;
-using Bit.Core.Enums;
-using System;
 
-namespace Bit.Core.Services {
+namespace Bit.Core.Services
+{
     public class FileUploadService : IFileUploadService
     {
         public FileUploadService(ApiService apiService)
@@ -41,7 +42,8 @@ namespace Bit.Core.Services {
                     default:
                         throw new Exception($"Unkown file upload type: {uploadData.FileUploadType}");
                 }
-            } catch
+            }
+            catch
             {
                 await _apiService.DeleteCipherAttachmentAsync(uploadData.CipherResponse.Id, uploadData.AttachmentId);
                 throw;
@@ -64,6 +66,7 @@ namespace Bit.Core.Services {
                             var response = await _apiService.RenewFileUploadUrlAsync(uploadData.SendResponse.Id, uploadData.SendResponse.File.Id);
                             return response.Url;
                         };
+
                         await _azureFileUploadService.Upload(uploadData.Url, encryptedFileData, renewalCallback);
                         break;
                     default:

@@ -2,7 +2,7 @@
 
 namespace Bit.App.Styles
 {
-    public partial class Nord : ResourceDictionary
+    public partial class Nord : ResourceDictionary, IThemeResourceDictionary
     {
         public Nord()
         {

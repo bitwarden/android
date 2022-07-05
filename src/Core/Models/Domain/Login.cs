@@ -1,9 +1,9 @@
-﻿using Bit.Core.Models.Data;
-using Bit.Core.Models.View;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Bit.Core.Models.Data;
+using Bit.Core.Models.View;
 
 namespace Bit.Core.Models.Domain
 {

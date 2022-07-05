@@ -1,6 +1,6 @@
-using Newtonsoft.Json.Linq;
+﻿using System.Threading.Tasks;
 using Bit.App.Abstractions;
-using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace Bit.App.Services
 {

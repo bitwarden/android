@@ -1,8 +1,8 @@
-﻿using Bit.Core;
-using Bit.Core.Abstractions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Bit.Core;
+using Bit.Core.Abstractions;
 
 namespace Bit.App.Services
 {
@@ -13,40 +13,28 @@ namespace Bit.App.Services
 
         private readonly HashSet<string> _preferenceStorageKeys = new HashSet<string>
         {
-            Constants.VaultTimeoutKey,
-            Constants.VaultTimeoutActionKey,
-            Constants.ThemeKey,
-            Constants.DefaultUriMatch,
-            Constants.DisableAutoTotpCopyKey,
-            Constants.DisableFaviconKey,
-            Constants.ClearClipboardKey,
-            Constants.AutofillDisableSavePromptKey,
-            Constants.LastActiveTimeKey,
+            Constants.StateVersionKey,
+            Constants.PreAuthEnvironmentUrlsKey,
+            Constants.AutofillTileAdded,
+            Constants.AddSitePromptShownKey,
             Constants.PushInitialPromptShownKey,
             Constants.LastFileCacheClearKey,
             Constants.PushLastRegistrationDateKey,
             Constants.PushRegisteredTokenKey,
             Constants.PushCurrentTokenKey,
             Constants.LastBuildKey,
-            Constants.MigratedFromV1,
-            Constants.MigratedFromV1AutofillPromptShown,
-            Constants.TriedV1Resync,
             Constants.ClearCiphersCacheKey,
             Constants.BiometricIntegrityKey,
+            Constants.iOSExtensionActiveUserIdKey,
             Constants.iOSAutoFillClearCiphersCacheKey,
             Constants.iOSAutoFillBiometricIntegrityKey,
             Constants.iOSExtensionClearCiphersCacheKey,
             Constants.iOSExtensionBiometricIntegrityKey,
-            Constants.EnvironmentUrlsKey,
-            Constants.InlineAutofillEnabledKey,
-            Constants.InvalidUnlockAttempts,
+            Constants.iOSShareExtensionClearCiphersCacheKey,
+            Constants.iOSShareExtensionBiometricIntegrityKey,
+            Constants.RememberedEmailKey,
+            Constants.RememberedOrgIdentifierKey
         };
-
-        private readonly HashSet<string> _migrateToPreferences = new HashSet<string>
-        {
-            Constants.EnvironmentUrlsKey,
-        };
-        private readonly HashSet<string> _haveMigratedToPreferences = new HashSet<string>();
 
         public MobileStorageService(
             IStorageService preferenceStorageService,
@@ -60,24 +48,9 @@ namespace Bit.App.Services
         {
             if (_preferenceStorageKeys.Contains(key))
             {
-                var prefValue = await _preferencesStorageService.GetAsync<T>(key);
-                if (prefValue != null || !_migrateToPreferences.Contains(key) ||
-                    _haveMigratedToPreferences.Contains(key))
-                {
-                    return prefValue;
-                }
+                return await _preferencesStorageService.GetAsync<T>(key);
             }
-            var liteDbValue = await _liteDbStorageService.GetAsync<T>(key);
-            if (_migrateToPreferences.Contains(key))
-            {
-                if (liteDbValue != null)
-                {
-                    await _preferencesStorageService.SaveAsync(key, liteDbValue);
-                    await _liteDbStorageService.RemoveAsync(key);
-                }
-                _haveMigratedToPreferences.Add(key);
-            }
-            return liteDbValue;
+            return await _liteDbStorageService.GetAsync<T>(key);
         }
 
         public Task SaveAsync<T>(string key, T obj)

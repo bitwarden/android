@@ -1,6 +1,4 @@
-﻿using Bit.Core.Abstractions;
-using Bit.Core.Utilities;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using Bit.App.Models;
 using Bit.App.Utilities;
@@ -10,14 +8,11 @@ namespace Bit.App.Pages
 {
     public partial class SetPasswordPage : BaseContentPage
     {
-        private readonly IMessagingService _messagingService;
         private readonly SetPasswordPageViewModel _vm;
         private readonly AppOptions _appOptions;
 
         public SetPasswordPage(AppOptions appOptions = null, string orgIdentifier = null)
         {
-            _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
-            _messagingService.Send("showStatusBar", true);
             _appOptions = appOptions;
             InitializeComponent();
             _vm = BindingContext as SetPasswordPageViewModel;
@@ -26,7 +21,6 @@ namespace Bit.App.Pages
                 () => Device.BeginInvokeOnMainThread(async () => await SetPasswordSuccessAsync());
             _vm.CloseAction = async () =>
             {
-                _messagingService.Send("showStatusBar", false);
                 await Navigation.PopModalAsync();
             };
             _vm.OrgIdentifier = orgIdentifier;

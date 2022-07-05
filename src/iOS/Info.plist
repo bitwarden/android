@@ -11,7 +11,7 @@
 	<key>CFBundleIdentifier</key>
 	<string>com.8bit.bitwarden</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.14.3</string>
+	<string>2022.6.1</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>CFBundleIconName</key>
@@ -105,7 +105,7 @@
 	<true/>
 	<key>UIAppFonts</key>
 	<array>
-		<string>FontAwesome.ttf</string>
+		<string>bwi-font.ttf</string>
 		<string>MaterialIcons_Regular.ttf</string>
 	</array>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -113,8 +113,8 @@
 		<key>arm64</key>
 		<true/>
 	</dict>
-    <key>CADisableMinimumFrameDurationOnPhone</key>
-    <true/>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 	<key>XSAppIconAssets</key>
 	<string>Resources/Assets.xcassets/AppIcons.appiconset</string>
 	<key>ITSAppUsesNonExemptEncryption</key>

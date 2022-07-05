@@ -1,9 +1,9 @@
-﻿using Bit.App.Resources;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -12,6 +12,7 @@ namespace Bit.App.Pages
     {
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly ICipherService _cipherService;
+        private readonly IClipboardService _clipboardService;
 
         private bool _showNoData;
 
@@ -19,6 +20,7 @@ namespace Bit.App.Pages
         {
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
+            _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
 
             PageTitle = AppResources.PasswordHistory;
             History = new ExtendedObservableCollection<PasswordHistoryView>();
@@ -39,15 +41,17 @@ namespace Bit.App.Pages
         {
             var cipher = await _cipherService.GetAsync(CipherId);
             var decCipher = await cipher.DecryptAsync();
-            History.ResetWithRange(decCipher.PasswordHistory ?? new List<PasswordHistoryView>());
-            ShowNoData = History.Count == 0;
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                History.ResetWithRange(decCipher.PasswordHistory ?? new List<PasswordHistoryView>());
+                ShowNoData = History.Count == 0;
+            });
         }
 
         private async void CopyAsync(PasswordHistoryView ph)
         {
-            await _platformUtilsService.CopyToClipboardAsync(ph.Password);
-            _platformUtilsService.ShowToast("info", null,
-                string.Format(AppResources.ValueHasBeenCopied, AppResources.Password));
+            await _clipboardService.CopyTextAsync(ph.Password);
+            _platformUtilsService.ShowToastForCopiedValue(AppResources.Password);
         }
     }
 }

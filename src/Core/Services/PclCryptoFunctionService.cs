@@ -1,10 +1,10 @@
-﻿using Bit.Core.Abstractions;
-using Bit.Core.Enums;
-using PCLCrypto;
-using System;
+﻿using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Bit.Core.Abstractions;
+using Bit.Core.Enums;
+using PCLCrypto;
 using static PCLCrypto.WinRTCrypto;
 
 namespace Bit.Core.Services

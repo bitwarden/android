@@ -1,7 +1,7 @@
+﻿using System;
+using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
-using System;
-using Bit.App.Resources;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -14,32 +14,29 @@ namespace Bit.App.Pages
         private readonly string _pageName;
 
         public UpdateTempPasswordPage()
-        {  
+        {
             // Service Init
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
-            
-            // Service Use
-            _messagingService.Send("showStatusBar", true);
-            
+
             // Binding
             InitializeComponent();
             _pageName = string.Concat(nameof(UpdateTempPasswordPage), "_", DateTime.UtcNow.Ticks);
             _vm = BindingContext as UpdateTempPasswordPageViewModel;
             _vm.Page = this;
             SetActivityIndicator();
-            
+
             // Actions Declaration
             _vm.LogOutAction = () =>
             {
                 _messagingService.Send("logout");
             };
             _vm.UpdateTempPasswordSuccessAction = () => Device.BeginInvokeOnMainThread(UpdateTempPasswordSuccess);
-            
+
             // Link fields that will be referenced in codebehind
             MasterPasswordEntry = _masterPassword;
             ConfirmMasterPasswordEntry = _confirmMasterPassword;
-            
+
             // Return Types and Commands
             _masterPassword.ReturnType = ReturnType.Next;
             _masterPassword.ReturnCommand = new Command(() => _confirmMasterPassword.Focus());
@@ -80,7 +77,7 @@ namespace Bit.App.Pages
                 }
             }
         }
-        
+
         private void UpdateTempPasswordSuccess()
         {
             _messagingService.Send("logout");

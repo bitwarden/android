@@ -1,4 +1,10 @@
-﻿using Bit.App.Resources;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
@@ -6,12 +12,6 @@ using Bit.iOS.Core.Controllers;
 using Bit.iOS.Core.Models;
 using Bit.iOS.Core.Utilities;
 using Foundation;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using UIKit;
 
 namespace Bit.iOS.Core.Views
@@ -23,7 +23,7 @@ namespace Bit.iOS.Core.Views
         private IEnumerable<CipherViewModel> _allItems = new List<CipherViewModel>();
         protected ICipherService _cipherService;
         protected ITotpService _totpService;
-        protected IUserService _userService;
+        protected IStateService _stateService;
         protected ISearchService _searchService;
         private AppExtensionContext _context;
         private UIViewController _controller;
@@ -32,7 +32,7 @@ namespace Bit.iOS.Core.Views
         {
             _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
             _totpService = ServiceContainer.Resolve<ITotpService>("totpService");
-            _userService = ServiceContainer.Resolve<IUserService>("userService");
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _searchService = ServiceContainer.Resolve<ISearchService>("searchService");
             _context = context;
             _controller = controller;
@@ -122,7 +122,10 @@ namespace Bit.iOS.Core.Views
 
         public override void WillDisplay(UITableView tableView, UITableViewCell cell, NSIndexPath indexPath)
         {
-            if (Items == null || Items.Count() == 0 || cell == null)
+            if (Items == null
+                || !Items.Any()
+                || cell?.TextLabel == null
+                || cell.DetailTextLabel == null)
             {
                 return;
             }
@@ -135,7 +138,7 @@ namespace Bit.iOS.Core.Views
         public async Task<string> GetTotpAsync(CipherViewModel item)
         {
             string totp = null;
-            var accessPremium = await _userService.CanAccessPremiumAsync();
+            var accessPremium = await _stateService.CanAccessPremiumAsync();
             if (accessPremium || (item?.CipherView.OrganizationUseTotp ?? false))
             {
                 if (item != null && !string.IsNullOrWhiteSpace(item.Totp))

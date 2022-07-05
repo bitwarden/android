@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Czy na pewno chcesz się wylogować?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Usuń konto</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Czy na pewno chcesz usunąć to konto?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Konto zostało już dodane</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Czy chcesz przełączyć się teraz?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Hasło główne</value>
     <comment>Label for a master password.</comment>
@@ -1150,10 +1162,10 @@
     <value>Usługa ułatwienia dostępu</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>Usługa autouzupełniania Bitwarden wykorzystuje funkcję Androida, aby wypełniać dane logowania, kart kredytowych i osobistych informacji w aplikacjach na Twoim urządzeniu.</value>
+    <value>Usługa autouzupełniania Bitwarden wykorzystuje funkcję Androida, aby wypełnić dane logowania w innych aplikacjach na Twoim urządzeniu.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Użyj usługi autouzupełniania Bitwarden, aby wypełniać dane logowania, kart kredytowych i informacje osobiste w innych aplikacjach.</value>
+    <value>Użyj usługi autouzupełniania Bitwarden, aby wypełnić dane logowania w innych aplikacjach.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Otwórz ustawienia autouzupełniania</value>
@@ -1287,7 +1299,7 @@
     <value>1. przejdź do Ustawień systemu iOS</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Dotknij "Hasła i konta"</value>
+    <value>2. Dotknij "Hasła"</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
     <value>3. Dotknij opcji "Usługa autouzupełniania"</value>
@@ -1455,6 +1467,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>Odblokuj</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Odblokuj sejf</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minut</value>
   </data>
@@ -1470,6 +1485,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Sejf jest zablokowany. Wpisz kod PIN, aby kontynuować.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Sejf jest zablokowany. Zweryfikuj swoją tożsamość, aby kontynuować.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Ciemny</value>
@@ -1611,8 +1629,14 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Wpisz hasło główne, aby wyeksportować dane z sejfu.</value>
   </data>
-    <data name="ExportVaultOTPDescription" xml:space="preserve">
-    <value>Wpisz kod weryfikacyjny, aby wyeksportować dane z sejfu.</value>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Wyślij kod weryfikacyjny na adres e-mail</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Kod został wysłany!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Potwierdź swoją tożsamość, aby kontynuować.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Plik zawiera dane sejfu w niezaszyfrowanym formacie. Nie powinieneś go przechowywać, ani przesyłać poprzez niezabezpieczone kanały (takie jak poczta e-mail). Skasuj go natychmiast po użyciu.</value>
@@ -1911,7 +1935,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Wyłącz wysyłkę, aby nikt nie miał do niej dostępu.</value>
+    <value>Wyłącz wysyłkę, aby nikt nie miał do niej dostępu</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
@@ -1979,7 +2003,7 @@
     <value>Niestandardowe</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
-    <value>Udostępnij wysyłkę po zapisaniu.</value>
+    <value>Udostępnij wysyłkę po zapisaniu</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
@@ -1991,7 +2015,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
-    <value>Ukryj mój adres e-mail przed odbiorcami.</value>
+    <value>Ukryj mój adres e-mail przed odbiorcami</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
     <value>Co najmniej jedna zasada organizacji wpływa na ustawienia wysyłek.</value>
@@ -2080,10 +2104,76 @@
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Co najmniej jedna zasada organizacji uniemożliwia wyeksportowanie Twojego sejfu.</value>
   </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Dodaj konto</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Odblokowane</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Zablokowane</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Wylogowano</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Przełączono na następne dostępne konto</value>
+  </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>Konto zostało zablokowane</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>Wylogowano z konta</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>Konto zostało usunięte</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Usuń konto</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Usunięcie konta jest nieodwracalne</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Konto i wszystkie powiązane z nim dane zostaną trwale usunięte. Czy na pewno chcesz usunąć konto?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Usuwanie konta</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Konto zostało trwale usunięte</value>
+  </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Kod weryfikacyjny jest nieprawidłowy.</value>
   </data>
-    <data name="RequestOTP" xml:space="preserve">
+  <data name="RequestOTP" xml:space="preserve">
     <value>Poproś o jednorazowe hasło</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Wyślij kod</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Wysyłanie</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>Kopiuj link wysyłki po zapisaniu</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>Wysyłanie kodu</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>Weryfikowanie</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>Wyślij ponownie kod</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>Kod weryfikacyjny został wysłany na adres e-mail.</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>Wystąpił błąd podczas wysyłania kodu weryfikacyjnego na adres e-mail. Spróbuj ponownie</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>Wpisz kod weryfikacyjny, który został wysłany na adres e-mail</value>
   </data>
 </root>

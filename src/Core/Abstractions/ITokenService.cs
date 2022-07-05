@@ -6,15 +6,16 @@ namespace Bit.Core.Abstractions
 {
     public interface ITokenService
     {
-        Task ClearTokenAsync();
+        Task ClearTokenAsync(string userId = null);
         Task ClearTwoFactorTokenAsync(string email);
+        void ClearCache();
         JObject DecodeToken();
         string GetEmail();
         bool GetEmailVerified();
         string GetIssuer();
         string GetName();
         bool GetPremium();
-        bool GetIsExternal();
+        Task<bool> GetIsExternal();
         Task<string> GetRefreshTokenAsync();
         Task<string> GetTokenAsync();
         Task ToggleTokensAsync();
@@ -22,7 +23,7 @@ namespace Bit.Core.Abstractions
         Task<string> GetTwoFactorTokenAsync(string email);
         string GetUserId();
         Task SetRefreshTokenAsync(string refreshToken);
-        Task SetTokenAsync(string token);
+        Task SetAccessTokenAsync(string token, bool forDecodeOnly = false);
         Task SetTokensAsync(string accessToken, string refreshToken);
         Task SetTwoFactorTokenAsync(string token, string email);
         bool TokenNeedsRefresh(int minutes = 5);

@@ -1,28 +1,32 @@
-﻿using AuthenticationServices;
+﻿using System;
+using System.Threading.Tasks;
+using AuthenticationServices;
 using Bit.App.Abstractions;
+using Bit.App.Models;
+using Bit.App.Pages;
+using Bit.App.Utilities;
+using Bit.App.Utilities.AccountManagement;
 using Bit.Core.Abstractions;
+using Bit.Core.Enums;
 using Bit.Core.Utilities;
 using Bit.iOS.Autofill.Models;
 using Bit.iOS.Core.Utilities;
-using Foundation;
-using System;
-using System.Threading.Tasks;
-using Bit.App.Pages;
-using UIKit;
-using Xamarin.Forms;
-using Bit.App.Utilities;
-using Bit.App.Models;
 using Bit.iOS.Core.Views;
 using CoreNFC;
+using Foundation;
+using UIKit;
+using Xamarin.Forms;
 
 namespace Bit.iOS.Autofill
 {
-    public partial class CredentialProviderViewController : ASCredentialProviderViewController
+    public partial class CredentialProviderViewController : ASCredentialProviderViewController, IAccountsManagerHost
     {
         private Context _context;
-        private bool _initedAppCenter;
         private NFCNdefReaderSession _nfcSession = null;
         private Core.NFCReaderDelegate _nfcDelegate = null;
+        private IAccountsManager _accountsManager;
+
+        private readonly LazyResolve<IStateService> _stateService = new LazyResolve<IStateService>("stateService");
 
         public CredentialProviderViewController(IntPtr handle)
             : base(handle)
@@ -57,7 +61,7 @@ namespace Bit.iOS.Autofill
             }
             if (!await IsAuthed())
             {
-                LaunchHomePage();
+                await _accountsManager.NavigateOnAccountChangeAsync(false);
             }
             else if (await IsLocked())
             {
@@ -79,9 +83,8 @@ namespace Bit.iOS.Autofill
         public override async void ProvideCredentialWithoutUserInteraction(ASPasswordCredentialIdentity credentialIdentity)
         {
             InitAppIfNeeded();
-            var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
-            await storageService.SaveAsync(Bit.Core.Constants.PasswordRepromptAutofillKey, false);
-            await storageService.SaveAsync(Bit.Core.Constants.PasswordVerifiedAutofillKey, false);
+            await _stateService.Value.SetPasswordRepromptAutofillAsync(false);
+            await _stateService.Value.SetPasswordVerifiedAutofillAsync(false);
             if (!await IsAuthed() || await IsLocked())
             {
                 var err = new NSError(new NSString("ASExtensionErrorDomain"),
@@ -98,7 +101,7 @@ namespace Bit.iOS.Autofill
             InitAppIfNeeded();
             if (!await IsAuthed())
             {
-                LaunchHomePage();
+                await _accountsManager.NavigateOnAccountChangeAsync(false);
                 return;
             }
             _context.CredentialIdentity = credentialIdentity;
@@ -111,7 +114,7 @@ namespace Bit.iOS.Autofill
             _context.Configuring = true;
             if (!await IsAuthed())
             {
-                LaunchHomePage();
+                await _accountsManager.NavigateOnAccountChangeAsync(false);
                 return;
             }
             CheckLock(() => PerformSegue("setupSegue", this));
@@ -230,7 +233,6 @@ namespace Bit.iOS.Autofill
                 return;
             }
 
-            var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             var decCipher = await cipher.DecryptAsync();
             if (decCipher.Reprompt != Bit.Core.Enums.CipherRepromptType.None)
             {
@@ -238,13 +240,13 @@ namespace Bit.iOS.Autofill
                 // already verified the password.
                 if (!userInteraction)
                 {
-                    await storageService.SaveAsync(Bit.Core.Constants.PasswordRepromptAutofillKey, true);
+                    await _stateService.Value.SetPasswordRepromptAutofillAsync(true);
                     var err = new NSError(new NSString("ASExtensionErrorDomain"),
                     Convert.ToInt32(ASExtensionErrorCode.UserInteractionRequired), null);
                     ExtensionContext?.CancelRequest(err);
                     return;
                 }
-                else if (!await storageService.GetAsync<bool>(Bit.Core.Constants.PasswordVerifiedAutofillKey))
+                else if (!await _stateService.Value.GetPasswordVerifiedAutofillAsync())
                 {
                     // Add a timeout to resolve keyboard not always showing up.
                     await Task.Delay(250);
@@ -259,11 +261,10 @@ namespace Bit.iOS.Autofill
                 }
             }
             string totpCode = null;
-            var disableTotpCopy = await storageService.GetAsync<bool?>(Bit.Core.Constants.DisableAutoTotpCopyKey);
+            var disableTotpCopy = await _stateService.Value.GetDisableAutoTotpCopyAsync();
             if (!disableTotpCopy.GetValueOrDefault(false))
             {
-                var userService = ServiceContainer.Resolve<IUserService>("userService");
-                var canAccessPremiumAsync = await userService.CanAccessPremiumAsync();
+                var canAccessPremiumAsync = await _stateService.Value.CanAccessPremiumAsync();
                 if (!string.IsNullOrWhiteSpace(decCipher.Login.Totp) &&
                     (canAccessPremiumAsync || cipher.OrganizationUseTotp))
                 {
@@ -277,8 +278,7 @@ namespace Bit.iOS.Autofill
 
         private async void CheckLock(Action notLockedAction)
         {
-            var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
-            if (await IsLocked() || await storageService.GetAsync<bool>(Bit.Core.Constants.PasswordRepromptAutofillKey))
+            if (await IsLocked() || await _stateService.Value.GetPasswordRepromptAutofillAsync())
             {
                 PerformSegue("lockPasswordSegue", this);
             }
@@ -296,8 +296,7 @@ namespace Bit.iOS.Autofill
 
         private Task<bool> IsAuthed()
         {
-            var userService = ServiceContainer.Resolve<IUserService>("userService");
-            return userService.IsAuthenticatedAsync();
+            return _stateService.Value.IsAuthenticatedAsync();
         }
 
         private void LogoutIfAuthed()
@@ -306,7 +305,7 @@ namespace Bit.iOS.Autofill
             {
                 if (await IsAuthed())
                 {
-                    await AppHelpers.LogOutAsync();
+                    await AppHelpers.LogOutAsync(await _stateService.Value.GetActiveUserIdAsync());
                     var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
                     if (deviceActionService.SystemMajorVersion() >= 12)
                     {
@@ -330,18 +329,18 @@ namespace Bit.iOS.Autofill
             var messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             ServiceContainer.Init(deviceActionService.DeviceUserAgent, 
                 Bit.Core.Constants.iOSAutoFillClearCiphersCacheKey, Bit.Core.Constants.iOSAllClearCipherCacheKeys);
-            if (!_initedAppCenter)
-            {
-                iOSCoreHelpers.RegisterAppCenter();
-                _initedAppCenter = true;
-            }
+            iOSCoreHelpers.InitLogger();
             iOSCoreHelpers.Bootstrap();
-            var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(false, app.Resources);
+            var appOptions = new AppOptions { IosExtension = true };
+            var app = new App.App(appOptions);
+            ThemeManager.SetTheme(app.Resources);
             iOSCoreHelpers.AppearanceAdjustments();
             _nfcDelegate = new Core.NFCReaderDelegate((success, message) =>
                 messagingService.Send("gotYubiKeyOTP", message));
             iOSCoreHelpers.SubscribeBroadcastReceiver(this, _nfcSession, _nfcDelegate);
+
+            _accountsManager = ServiceContainer.Resolve<IAccountsManager>("accountsManager");
+            _accountsManager.Init(() => appOptions, this);
         }
 
         private void InitAppIfNeeded()
@@ -356,7 +355,7 @@ namespace Bit.iOS.Autofill
         {
             var homePage = new HomePage();
             var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesToPage(homePage);
             if (homePage.BindingContext is HomeViewModel vm)
             {
@@ -379,7 +378,7 @@ namespace Bit.iOS.Autofill
         {
             var environmentPage = new EnvironmentPage();
             var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesToPage(environmentPage);
             if (environmentPage.BindingContext is EnvironmentPageViewModel vm)
             {
@@ -397,7 +396,7 @@ namespace Bit.iOS.Autofill
         {
             var registerPage = new RegisterPage(null);
             var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesToPage(registerPage);
             if (registerPage.BindingContext is RegisterPageViewModel vm)
             {
@@ -415,7 +414,7 @@ namespace Bit.iOS.Autofill
         {
             var loginPage = new LoginPage(email);
             var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesToPage(loginPage);
             if (loginPage.BindingContext is LoginPageViewModel vm)
             {
@@ -437,7 +436,7 @@ namespace Bit.iOS.Autofill
         {
             var loginPage = new LoginSsoPage();
             var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesToPage(loginPage);
             if (loginPage.BindingContext is LoginSsoPageViewModel vm)
             {
@@ -460,7 +459,7 @@ namespace Bit.iOS.Autofill
         {
             var twoFactorPage = new TwoFactorPage(authingWithSso);
             var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesToPage(twoFactorPage);
             if (twoFactorPage.BindingContext is TwoFactorPageViewModel vm)
             {
@@ -487,7 +486,7 @@ namespace Bit.iOS.Autofill
         {
             var setPasswordPage = new SetPasswordPage();
             var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesToPage(setPasswordPage);
             if (setPasswordPage.BindingContext is SetPasswordPageViewModel vm)
             {
@@ -506,7 +505,7 @@ namespace Bit.iOS.Autofill
         {
             var updateTempPasswordPage = new UpdateTempPasswordPage();
             var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(false, app.Resources);
+            ThemeManager.SetTheme(app.Resources);
             ThemeManager.ApplyResourcesToPage(updateTempPasswordPage);
             if (updateTempPasswordPage.BindingContext is UpdateTempPasswordPageViewModel vm)
             {
@@ -518,6 +517,36 @@ namespace Bit.iOS.Autofill
             var updateTempPasswordController = navigationPage.CreateViewController();
             updateTempPasswordController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
             PresentViewController(updateTempPasswordController, true, null);
+        }
+
+        public Task SetPreviousPageInfoAsync() => Task.CompletedTask;
+        public Task UpdateThemeAsync() => Task.CompletedTask;
+
+        public void Navigate(NavigationTarget navTarget, INavigationParams navParams = null)
+        {
+            switch (navTarget)
+            {
+                case NavigationTarget.HomeLogin:
+                    DismissViewController(false, () => LaunchHomePage());
+                    break;
+                case NavigationTarget.Login:
+                    if (navParams is LoginNavigationParams loginParams)
+                    {
+                        DismissViewController(false, () => LaunchLoginFlow(loginParams.Email));
+                    }
+                    else
+                    {
+                        DismissViewController(false, () => LaunchLoginFlow());
+                    }
+                    break;
+                case NavigationTarget.Lock:
+                    DismissViewController(false, () => PerformSegue("lockPasswordSegue", this));
+                    break;
+                case NavigationTarget.AutofillCiphers:
+                case NavigationTarget.Home:
+                    DismissViewController(false, () => PerformSegue("loginListSegue", this));
+                    break;
+            }
         }
     }
 }

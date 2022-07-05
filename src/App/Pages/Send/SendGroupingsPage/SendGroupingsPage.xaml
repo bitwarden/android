@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <pages:BaseContentPage xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="Bit.App.Pages.SendGroupingsPage"
@@ -51,14 +51,15 @@
                           x:DataType="pages:SendGroupingsPageListItem">
                 <controls:ExtendedStackLayout Orientation="Horizontal" 
                                               StyleClass="list-row, list-row-platform">
-                    <controls:FaLabel Text="{Binding Icon, Mode=OneWay}"
+                    <controls:IconLabel Text="{Binding Icon, Mode=OneWay}"
                                       HorizontalOptions="Start"
                                       VerticalOptions="Center"
-                                      StyleClass="list-icon, list-icon-platform">
-                        <controls:FaLabel.Effects>
+                                      StyleClass="list-icon, list-icon-platform"
+                                      ShouldUpdateFontSizeDynamicallyForAccesibility="True">
+                        <controls:IconLabel.Effects>
                             <effects:FixedSizeEffect />
-                        </controls:FaLabel.Effects>
-                    </controls:FaLabel>
+                        </controls:IconLabel.Effects>
+                    </controls:IconLabel>
                     <Label Text="{Binding Name, Mode=OneWay}"
                            LineBreakMode="TailTruncation"
                            HorizontalOptions="FillAndExpand"
@@ -72,7 +73,29 @@
                 </controls:ExtendedStackLayout>
             </DataTemplate>
 
+            <DataTemplate
+                x:Key="headerTemplate"
+                x:DataType="pages:SendGroupingsPageHeaderListItem">
+                <StackLayout
+                    Spacing="0" Padding="0" VerticalOptions="FillAndExpand"
+                    StyleClass="list-row-header-container, list-row-header-container-platform">
+                    <BoxView
+                        StyleClass="list-section-separator-top, list-section-separator-top-platform" />
+                    <StackLayout StyleClass="list-row-header, list-row-header-platform">
+                        <Label
+                            Text="{Binding Title}"
+                            StyleClass="list-header, list-header-platform" />
+                        <Label
+                            Text="{Binding ItemCount}"
+                            StyleClass="list-header-sub" />
+                    </StackLayout>
+                    <BoxView
+                        StyleClass="list-section-separator-bottom, list-section-separator-bottom-platform" />
+                </StackLayout>
+	        </DataTemplate>
+
             <pages:SendGroupingsPageListItemSelector x:Key="sendListItemDataTemplateSelector"
+                                                     HeaderTemplate="{StaticResource headerTemplate}"
                                                      SendTemplate="{StaticResource sendTemplate}"
                                                      GroupTemplate="{StaticResource sendGroupTemplate}" />
 
@@ -113,33 +136,10 @@
                         ItemsSource="{Binding GroupedSends}"
                         VerticalOptions="FillAndExpand"
                         ItemTemplate="{StaticResource sendListItemDataTemplateSelector}"
-                        IsGrouped="True"
                         SelectionMode="Single"
                         SelectionChanged="RowSelected"
-                        StyleClass="list, list-platform">
-
-                        <CollectionView.GroupHeaderTemplate>
-                            <DataTemplate x:DataType="pages:SendGroupingsPageListGroup">
-                                <StackLayout
-                                    Spacing="0" Padding="0" VerticalOptions="FillAndExpand"
-                                    StyleClass="list-row-header-container, list-row-header-container-platform">
-                                    <BoxView
-                                        StyleClass="list-section-separator-top, list-section-separator-top-platform"
-                                        IsVisible="{Binding First, Converter={StaticResource inverseBool}}" />
-                                    <StackLayout StyleClass="list-row-header, list-row-header-platform">
-                                        <Label
-                                            Text="{Binding Name}"
-                                            StyleClass="list-header, list-header-platform" />
-                                        <Label
-                                            Text="{Binding ItemCount}"
-                                            StyleClass="list-header-sub" />
-                                    </StackLayout>
-                                    <BoxView
-                                        StyleClass="list-section-separator-bottom, list-section-separator-bottom-platform" />
-                                </StackLayout>
-                            </DataTemplate>
-                        </CollectionView.GroupHeaderTemplate>
-                    </controls:ExtendedCollectionView>
+                        StyleClass="list, list-platform"
+                        ExtraDataForLogging="Send Groupings Page" />
                 </RefreshView>
             </StackLayout>
         </ResourceDictionary>

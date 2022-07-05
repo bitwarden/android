@@ -1,5 +1,5 @@
-﻿using Bit.Core.Models.Response;
-using System;
+﻿using System;
+using Bit.Core.Models.Response;
 
 namespace Bit.Core.Models.Data
 {

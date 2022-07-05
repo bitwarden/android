@@ -7,6 +7,7 @@
     xmlns:controls="clr-namespace:Bit.App.Controls"
     xmlns:u="clr-namespace:Bit.App.Utilities"
     xmlns:domain="clr-namespace:Bit.Core.Models.Domain;assembly=BitwardenCore"
+    xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
     x:DataType="pages:GeneratorHistoryPageViewModel"
     x:Name="_page"
     Title="{Binding PageTitle}">
@@ -47,7 +48,8 @@
                   IsVisible="{Binding ShowNoData, Converter={StaticResource inverseBool}}"
                   ItemsSource="{Binding History}"
                   VerticalOptions="FillAndExpand"
-                  StyleClass="list, list-platform">
+                  StyleClass="list, list-platform"
+                  ExtraDataForLogging="Generator History Page">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="domain:GeneratedPasswordHistory">
                     <Grid
@@ -75,9 +77,9 @@
                             Grid.Row="1"
                             StyleClass="list-subtitle, list-subtitle-platform"
                             Text="{Binding Date, Mode=OneWay, Converter={StaticResource dateTime}}" />
-                        <controls:FaButton
+                        <controls:IconButton
                             StyleClass="list-row-button, list-row-button-platform"
-                            Text="&#xf0ea;"
+                            Text="{Binding Source={x:Static core:BitwardenIcons.Paste}}"
                             Command="{Binding BindingContext.CopyCommand, Source={x:Reference _page}}"
                             CommandParameter="{Binding .}"
                             Grid.Row="0"

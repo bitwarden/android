@@ -45,20 +45,65 @@
                            VerticalOptions="CenterAndExpand"
                            TextColor="{Binding SubLabelColor}"
                            StyleClass="list-sub" />
-                    <TimePicker IsVisible="{Binding ShowTimeInput}"
-                                Time="{Binding Time}" Format="HH:mm"
+                </controls:ExtendedStackLayout>
+            </DataTemplate>
+            <DataTemplate
+                x:Key="timePickerTemplate"
+                x:DataType="pages:SettingsPageListItem">
+                <controls:ExtendedStackLayout Orientation="Horizontal"
+                             StyleClass="list-row, list-row-platform">
+                    <Frame
+                        IsVisible="{Binding UseFrame}"
+                        Padding="10"
+                        HasShadow="False"
+                        BackgroundColor="Transparent"
+                        BorderColor="Accent">
+                        <Label
+                            Text="{Binding Name, Mode=OneWay}"
+                            StyleClass="text-muted, text-sm, text-bold"
+                            HorizontalTextAlignment="Center" />
+                    </Frame>
+                    <Label IsVisible="{Binding UseFrame, Converter={StaticResource inverseBool}}"
+                           Text="{Binding Name, Mode=OneWay}"
+                           LineBreakMode="{Binding LineBreakMode}"
+                           HorizontalOptions="StartAndExpand"
+                           VerticalOptions="CenterAndExpand"
+                           StyleClass="list-title"/>
+                    <TimePicker Time="{Binding Time}" Format="HH:mm"
                                 PropertyChanged="OnTimePickerPropertyChanged"
                                 HorizontalOptions="End"
                                 VerticalOptions="Center"
                                 FontSize="Small"
                                 TextColor="{Binding SubLabelColor}"
-                                StyleClass="list-sub" Margin="-5" />
+                                StyleClass="list-sub" Margin="-5"/>
+                    <controls:ExtendedStackLayout.GestureRecognizers>
+			            <TapGestureRecognizer Tapped="ActivateTimePicker"/>
+		            </controls:ExtendedStackLayout.GestureRecognizers>
                 </controls:ExtendedStackLayout>
-            </DataTemplate>
+	        </DataTemplate>
+
+            <DataTemplate
+                x:Key="headerTemplate"
+                x:DataType="pages:SettingsPageHeaderListItem">
+                <StackLayout
+                    Padding="0" Spacing="0" VerticalOptions="FillAndExpand"
+                    StyleClass="list-row-header-container, list-row-header-container-platform">
+                    <BoxView
+                        StyleClass="list-section-separator-top, list-section-separator-top-platform" />
+                    <StackLayout StyleClass="list-row-header, list-row-header-platform">
+                        <Label
+                            Text="{Binding Title}"
+                            StyleClass="list-header, list-header-platform" />
+                    </StackLayout>
+                    <BoxView StyleClass="list-section-separator-bottom, list-section-separator-bottom-platform" />
+                </StackLayout>
+	        </DataTemplate>
 
             <pages:SettingsPageListItemSelector
                 x:Key="listItemDataTemplateSelector"
-                RegularTemplate="{StaticResource regularTemplate}" />
+                HeaderTemplate="{StaticResource headerTemplate}"
+                RegularTemplate="{StaticResource regularTemplate}"
+                TimePickerTemplate="{StaticResource timePickerTemplate}" />
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -66,28 +111,9 @@
         ItemsSource="{Binding GroupedItems}"
         VerticalOptions="FillAndExpand"
         ItemTemplate="{StaticResource listItemDataTemplateSelector}"
-        IsGrouped="True"
         SelectionMode="Single"
         SelectionChanged="RowSelected"
-        StyleClass="list, list-platform">
-
-        <CollectionView.GroupHeaderTemplate>
-            <DataTemplate x:DataType="pages:SettingsPageListGroup">
-                <StackLayout
-                    Padding="0" Spacing="0" VerticalOptions="FillAndExpand"
-                    StyleClass="list-row-header-container, list-row-header-container-platform">
-                    <BoxView
-                        StyleClass="list-section-separator-top, list-section-separator-top-platform"
-                        IsVisible="{Binding First, Converter={StaticResource inverseBool}}" />
-                    <StackLayout StyleClass="list-row-header, list-row-header-platform">
-                        <Label
-                            Text="{Binding Name}"
-                            StyleClass="list-header, list-header-platform" />
-                    </StackLayout>
-                    <BoxView StyleClass="list-section-separator-bottom, list-section-separator-bottom-platform" />
-                </StackLayout>
-            </DataTemplate>
-        </CollectionView.GroupHeaderTemplate>
-    </controls:ExtendedCollectionView>
+        StyleClass="list, list-platform"
+        ExtraDataForLogging="Settings Page" />
 
 </pages:BaseContentPage>

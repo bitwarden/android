@@ -38,7 +38,8 @@
                           VerticalOptions="FillAndExpand"
                           SelectionMode="Single"
                           SelectionChanged="RowSelected"
-                          StyleClass="list, list-platform">
+                          StyleClass="list, list-platform"
+                          ExtraDataForLogging="Folders Page">
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="views:FolderView">
                             <controls:ExtendedStackLayout

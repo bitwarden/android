@@ -1,33 +1,36 @@
-#if !FDROID
+﻿#if !FDROID
+using System;
 using System.Diagnostics;
+using System.Threading.Tasks;
+using Bit.App.Abstractions;
+using Bit.Core;
+using Bit.Core.Abstractions;
+using Bit.Core.Enums;
+using Bit.Core.Exceptions;
+using Bit.Core.Models.Response;
+using Bit.Core.Utilities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Bit.App.Abstractions;
-using System;
 using Xamarin.Forms;
-using Bit.Core.Abstractions;
-using Bit.Core.Utilities;
-using System.Threading.Tasks;
-using Bit.Core.Enums;
-using Bit.Core;
-using Bit.Core.Models.Response;
-using Bit.Core.Exceptions;
 
 namespace Bit.App.Services
 {
     public class PushNotificationListenerService : IPushNotificationListenerService
     {
+        const string TAG = "##PUSH NOTIFICATIONS";
+
         private bool _showNotification;
         private bool _resolved;
-        private IStorageService _storageService;
         private ISyncService _syncService;
-        private IUserService _userService;
+        private IStateService _stateService;
         private IAppIdService _appIdService;
         private IApiService _apiService;
         private IMessagingService _messagingService;
 
         public async Task OnMessageAsync(JObject value, string deviceType)
         {
+            Debug.WriteLine($"{TAG} OnMessageAsync called");
+
             Resolve();
             if (value == null)
             {
@@ -35,7 +38,7 @@ namespace Bit.App.Services
             }
 
             _showNotification = false;
-            Debug.WriteLine("Message Arrived: {0}", JsonConvert.SerializeObject(value));
+            Debug.WriteLine($"{TAG} Message Arrived: {JsonConvert.SerializeObject(value)}");
 
             NotificationResponse notification = null;
             if (deviceType == Device.Android)
@@ -52,14 +55,16 @@ namespace Bit.App.Services
                 notification = dataToken.ToObject<NotificationResponse>();
             }
 
+            Debug.WriteLine($"{TAG} - Notification object created: t:{notification?.Type} - p:{notification?.Payload}");
+
             var appId = await _appIdService.GetAppIdAsync();
             if (notification?.Payload == null || notification.ContextId == appId)
             {
                 return;
             }
 
-            var myUserId = await _userService.GetUserIdAsync();
-            var isAuthenticated = await _userService.IsAuthenticatedAsync();
+            var myUserId = await _stateService.GetActiveUserIdAsync();
+            var isAuthenticated = await _stateService.IsAuthenticatedAsync();
             switch (notification.Type)
             {
                 case NotificationType.SyncCipherUpdate:
@@ -128,39 +133,59 @@ namespace Bit.App.Services
         public async Task OnRegisteredAsync(string token, string deviceType)
         {
             Resolve();
-            Debug.WriteLine(string.Format("Push Notification - Device Registered - Token : {0}", token));
-            var isAuthenticated = await _userService.IsAuthenticatedAsync();
+            Debug.WriteLine($"{TAG} - Device Registered - Token : {token}");
+            var isAuthenticated = await _stateService.IsAuthenticatedAsync();
             if (!isAuthenticated)
             {
+                Debug.WriteLine($"{TAG} - not auth");
                 return;
             }
 
             var appId = await _appIdService.GetAppIdAsync();
             try
             {
+#if DEBUG
+                await _stateService.SetPushInstallationRegistrationErrorAsync(null);
+#endif
+
                 await _apiService.PutDeviceTokenAsync(appId,
                     new Core.Models.Request.DeviceTokenRequest { PushToken = token });
-                Debug.WriteLine("Registered device with server.");
-                await _storageService.SaveAsync(Constants.PushLastRegistrationDateKey, DateTime.UtcNow);
+
+                Debug.WriteLine($"{TAG} Registered device with server.");
+
+                await _stateService.SetPushLastRegistrationDateAsync(DateTime.UtcNow);
                 if (deviceType == Device.Android)
                 {
-                    await _storageService.SaveAsync(Constants.PushCurrentTokenKey, token);
+                    await _stateService.SetPushCurrentTokenAsync(token);
                 }
             }
+#if DEBUG
+            catch (ApiException apiEx)
+            {
+                Debug.WriteLine($"{TAG} Failed to register device.");
+
+                await _stateService.SetPushInstallationRegistrationErrorAsync(apiEx.Error?.Message);
+            }
+            catch (Exception e)
+            {
+                await _stateService.SetPushInstallationRegistrationErrorAsync(e.Message);
+                throw;
+            }
+#else
             catch (ApiException)
             {
-                Debug.WriteLine("Failed to register device.");
             }
+#endif
         }
 
         public void OnUnregistered(string deviceType)
         {
-            Debug.WriteLine("Push Notification - Device Unnregistered");
+            Debug.WriteLine($"{TAG} - Device Unnregistered");
         }
 
         public void OnError(string message, string deviceType)
         {
-            Debug.WriteLine(string.Format("Push notification error - {0}", message));
+            Debug.WriteLine($"{TAG} error - {message}");
         }
 
         public bool ShouldShowNotification()
@@ -174,9 +199,8 @@ namespace Bit.App.Services
             {
                 return;
             }
-            _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
-            _userService = ServiceContainer.Resolve<IUserService>("userService");
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _appIdService = ServiceContainer.Resolve<IAppIdService>("appIdService");
             _apiService = ServiceContainer.Resolve<IApiService>("apiService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");

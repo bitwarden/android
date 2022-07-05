@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Sigur doriți să vă deconectați?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Eliminare cont</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Sunteți sigur că doriți să eliminați acest cont?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Cont deja adăugat</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Vreți să comutați la el acum?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Parolă principală</value>
     <comment>Label for a master password.</comment>
@@ -1150,10 +1162,10 @@
     <value>Serviciul de accesibilitate pentru auto-completare</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>Serviciul de auto-completare Bitwarden folosește Android Autofill Framework pentru a asista completarea informațiilor de autentificare și a celor asociate cardurilor și identităților în alte aplicații de pe dispozitivul dvs.</value>
+    <value>Serviciul de autocompletare Bitwarden folosește Android Autofill Framework pentru a ajuta la completarea informațiilor de autentificare în alte aplicații de pe dispozitivul dumneavoastră.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Serviciul de auto-completare Bitwarden se folosește pentru a completa informațiile de autentificare și cele asociate cardurilor și identităților în alte aplicații.</value>
+    <value>Folosiți serviciul de autocompletare Bitwarden pentru a completa informațiile de autentificare în alte aplicații.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Setări de auto-completare</value>
@@ -1287,7 +1299,7 @@
     <value>1. Accesați Setările iOS</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Selectați "Parole și Conturi"</value>
+    <value>2. Selectați „Parole”</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
     <value>3. Selectați "Auto-completare parole"</value>
@@ -1455,6 +1467,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>Deblocare</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Deblocare seif</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 de minute</value>
   </data>
@@ -1470,6 +1485,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Seiful dvs. este blocat. Verificați codul PIN pentru a continua.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Seiful dvs. este blocat. Verificați-vă identitatea pentru a continua.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Întunecat</value>
@@ -1611,8 +1629,14 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Introduceți parola principală pentru a exporta datele seifului.</value>
   </data>
-    <data name="ExportVaultOTPDescription" xml:space="preserve">
-    <value>Introduceți codul de verificare pentru a exporta datele seifului.</value>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Trimite un cod de verificare la adresa dvs. de e-mail</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Cod trimis</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Confirmați-vă identitatea pentru a continua.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Acest export conține datele dvs. din seif în format necriptat. Nu ar trebui să stocați sau să trimiteți fișierul pe canale nesecurizate (cum ar fi e-mail). Ștergeți-l imediat după ce nu îl mai folosiți.</value>
@@ -1911,7 +1935,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Dezactivați acest Send astfel încât nimeni să nu-l poată accesa.</value>
+    <value>Dezactivați acest Send pentru ca nimeni să nu-l poată accesa</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
@@ -1979,7 +2003,7 @@
     <value>Personalizat</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
-    <value>Partajați această Send după salvare.</value>
+    <value>Partajați această Send după salvare</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
@@ -1991,7 +2015,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
-    <value>Ascundeți adresa mea de e-mail de la destinatari.</value>
+    <value>Ascundeți adresa mea de e-mail de la destinatari</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
     <value>Una sau mai multe politici organizaționale vă afectează opțiunile Send-ului.</value>
@@ -2080,10 +2104,76 @@
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Una sau mai multe politici ale organizației vă împiedică să exportați seiful personal.</value>
   </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Adăugare cont</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Deblocat</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Blocat</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Deconectat</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Comutat la următorul cont disponibil</value>
+  </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>Cont blocat</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>Contul s-a deconectat cu succes</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>Cont eliminat cu succes</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Ștergere cont</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Ștergerea contului dvs. este permanentă</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Contul dvs. și toate datele asociate vor fi șterse și nu vor putea fi recuperate. Sunteți sigur ca vreți sa continuați?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Ștergerea contului dvs.</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Contul dvs. a fost șters definitiv</value>
+  </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Cod de verificare nevalid.</value>
   </data>
-    <data name="RequestOTP" xml:space="preserve">
+  <data name="RequestOTP" xml:space="preserve">
     <value>Solicitare de parolă unică</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Trimitere cod</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Se trimite</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>Copiați linkul Send-ului la salvare</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>Se trimite codul</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>Se verifică</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>Trimiteți un cod nou</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>Un cod de verificare a fost trimis la adresa dvs. de e-mail</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>S-a produs o eroare la trimiterea codului de verificare la adresa dvs. de e-mail. Vă rugăm să încercați din nou</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>Introduceți codul de verificare care v-a fost trimis prin e-mail.</value>
   </data>
 </root>

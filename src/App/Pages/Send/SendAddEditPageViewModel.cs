@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Bit.App.Utilities;
+using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
@@ -19,8 +20,9 @@ namespace Bit.App.Pages
         private readonly IDeviceActionService _deviceActionService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IMessagingService _messagingService;
-        private readonly IUserService _userService;
+        private readonly IStateService _stateService;
         private readonly ISendService _sendService;
+        private readonly ILogger _logger;
         private bool _sendEnabled;
         private bool _canAccessPremium;
         private bool _emailVerified;
@@ -38,22 +40,28 @@ namespace Bit.App.Pages
         private TimeSpan? _expirationTime;
         private bool _isOverridingPickers;
         private int? _maxAccessCount;
-        private string[] _additionalSendProperties = new []
+        private string[] _additionalSendProperties = new[]
         {
             nameof(IsText),
             nameof(IsFile),
+            nameof(FileTypeAccessibilityLabel),
+            nameof(TextTypeAccessibilityLabel)
         };
         private bool _disableHideEmail;
         private bool _sendOptionsPolicyInEffect;
+        private bool _copyInsteadOfShareAfterSaving;
 
         public SendAddEditPageViewModel()
         {
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
-            _userService = ServiceContainer.Resolve<IUserService>("userService");
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _sendService = ServiceContainer.Resolve<ISendService>("sendService");
+            _logger = ServiceContainer.Resolve<ILogger>("logger");
+
             TogglePasswordCommand = new Command(TogglePassword);
+            ToggleOptionsCommand = new Command(ToggleOptions);
 
             TypeOptions = new List<KeyValuePair<string, SendType>>
             {
@@ -84,6 +92,7 @@ namespace Bit.App.Pages
         }
 
         public Command TogglePasswordCommand { get; set; }
+        public Command ToggleOptionsCommand { get; set; }
         public string SendId { get; set; }
         public int SegmentedButtonHeight { get; set; }
         public int SegmentedButtonFontSize { get; set; }
@@ -96,6 +105,8 @@ namespace Bit.App.Pages
         public bool ShareOnSave { get; set; }
         public bool DisableHideEmailControl { get; set; }
         public bool IsAddFromShare { get; set; }
+        public string ShareOnSaveText => CopyInsteadOfShareAfterSaving ? AppResources.CopySendLinkOnSave : AppResources.ShareOnSave;
+        public string OptionsAccessilibityText => ShowOptions ? AppResources.OptionsExpanded : AppResources.OptionsCollapsed;
         public List<KeyValuePair<string, SendType>> TypeOptions { get; }
         public List<KeyValuePair<string, string>> DeletionTypeOptions { get; }
         public List<KeyValuePair<string, string>> ExpirationTypeOptions { get; }
@@ -128,7 +139,11 @@ namespace Bit.App.Pages
         public bool ShowOptions
         {
             get => _showOptions;
-            set => SetProperty(ref _showOptions, value);
+            set => SetProperty(ref _showOptions, value,
+                additionalPropertyNames: new[]
+                {
+                    nameof(OptionsAccessilibityText)
+                });
         }
         public int ExpirationDateTypeSelectedIndex
         {
@@ -174,6 +189,15 @@ namespace Bit.App.Pages
                 }
             }
         }
+        public bool CopyInsteadOfShareAfterSaving
+        {
+            get => _copyInsteadOfShareAfterSaving;
+            set
+            {
+                SetProperty(ref _copyInsteadOfShareAfterSaving, value);
+                TriggerPropertyChanged(nameof(ShareOnSaveText));
+            }
+        }
         public SendView Send
         {
             get => _send;
@@ -194,9 +218,10 @@ namespace Bit.App.Pages
         {
             get => _showPassword;
             set => SetProperty(ref _showPassword, value,
-                additionalPropertyNames: new []
+                additionalPropertyNames: new[]
                 {
-                    nameof(ShowPasswordIcon)
+                    nameof(ShowPasswordIcon),
+                    nameof(PasswordVisibilityAccessibilityText)
                 });
         }
         public bool DisableHideEmail
@@ -215,14 +240,17 @@ namespace Bit.App.Pages
         public bool IsFile => Send?.Type == SendType.File;
         public bool ShowDeletionCustomPickers => EditMode || DeletionDateTypeSelectedIndex == 6;
         public bool ShowExpirationCustomPickers => EditMode || ExpirationDateTypeSelectedIndex == 7;
-        public string ShowPasswordIcon => ShowPassword ? "" : "";
+        public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
+        public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
+        public string FileTypeAccessibilityLabel => IsFile ? AppResources.FileTypeIsSelected : AppResources.FileTypeIsNotSelected;
+        public string TextTypeAccessibilityLabel => IsText ? AppResources.TextTypeIsSelected : AppResources.TextTypeIsNotSelected;
 
         public async Task InitAsync()
         {
             PageTitle = EditMode ? AppResources.EditSend : AppResources.AddSend;
-            _canAccessPremium = await _userService.CanAccessPremiumAsync();
-            _emailVerified = await _userService.GetEmailVerifiedAsync();
-            SendEnabled = ! await AppHelpers.IsSendDisabledByPolicyAsync();
+            _canAccessPremium = await _stateService.CanAccessPremiumAsync();
+            _emailVerified = await _stateService.GetEmailVerifiedAsync();
+            SendEnabled = !await AppHelpers.IsSendDisabledByPolicyAsync();
             DisableHideEmail = await AppHelpers.IsHideEmailDisabledByPolicyAsync();
             SendOptionsPolicyInEffect = SendEnabled && DisableHideEmail;
         }
@@ -366,7 +394,7 @@ namespace Bit.App.Pages
 
             UpdateSendData();
 
-            if (string.IsNullOrWhiteSpace(NewPassword)) 
+            if (string.IsNullOrWhiteSpace(NewPassword))
             {
                 NewPassword = null;
             }
@@ -396,25 +424,36 @@ namespace Bit.App.Pages
                     EditMode ? AppResources.SendUpdated : AppResources.NewSendCreated);
                 }
 
-                if (IsAddFromShare && Device.RuntimePlatform == Device.Android)
+                if (!CopyInsteadOfShareAfterSaving)
                 {
-                    _deviceActionService.CloseMainApp();
+                    await CloseAsync();
                 }
-                else
-                {
-                    await Page.Navigation.PopModalAsync();
-                }
-                
+
                 if (ShareOnSave)
                 {
                     var savedSend = await _sendService.GetAsync(sendId);
                     if (savedSend != null)
                     {
                         var savedSendView = await savedSend.DecryptAsync();
-                        await AppHelpers.ShareSendUrlAsync(savedSendView);
+                        if (CopyInsteadOfShareAfterSaving)
+                        {
+                            await AppHelpers.CopySendUrlAsync(savedSendView);
+
+                            // wait so that the user sees the message before the view gets dismissed
+                            await Task.Delay(1300);
+                        }
+                        else
+                        {
+                            await AppHelpers.ShareSendUrlAsync(savedSendView);
+                        }
                     }
                 }
-                
+
+                if (CopyInsteadOfShareAfterSaving)
+                {
+                    await CloseAsync();
+                }
+
                 return true;
             }
             catch (ApiException e)
@@ -426,7 +465,33 @@ namespace Bit.App.Pages
                         AppResources.AnErrorHasOccurred);
                 }
             }
+            catch (Exception ex)
+            {
+                await _deviceActionService.HideLoadingAsync();
+                _logger.Exception(ex);
+                await _platformUtilsService.ShowDialogAsync(AppResources.AnErrorHasOccurred);
+            }
             return false;
+        }
+
+        private async Task CloseAsync()
+        {
+            if (IsAddFromShare)
+            {
+                if (Device.RuntimePlatform == Device.Android)
+                {
+                    _deviceActionService.CloseMainApp();
+                    return;
+                }
+
+                if (Page is SendAddEditPage sendPage && sendPage.OnClose != null)
+                {
+                    sendPage.OnClose();
+                    return;
+                }
+            }
+
+            await Page.Navigation.PopModalAsync();
         }
 
         public async Task<bool> RemovePasswordAsync()
@@ -454,14 +519,7 @@ namespace Bit.App.Pages
             if (!SendEnabled)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.SendDisabledWarning);
-                if (IsAddFromShare && Device.RuntimePlatform == Device.Android)
-                {
-                    _deviceActionService.CloseMainApp();
-                }
-                else
-                {
-                    await Page.Navigation.PopModalAsync();
-                }
+                await CloseAsync();
                 return;
             }
             if (Send != null)
@@ -476,7 +534,7 @@ namespace Bit.App.Pages
                     {
                         await _platformUtilsService.ShowDialogAsync(AppResources.SendFileEmailVerificationRequired);
                     }
-                    
+
                     if (IsAddFromShare && Device.RuntimePlatform == Device.Android)
                     {
                         _deviceActionService.CloseMainApp();

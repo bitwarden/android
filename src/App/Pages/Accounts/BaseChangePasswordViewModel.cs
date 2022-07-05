@@ -1,12 +1,12 @@
-using Bit.App.Resources;
-using Bit.Core.Abstractions;
-using Bit.Core.Utilities;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
+using Bit.App.Resources;
+using Bit.Core.Abstractions;
 using Bit.Core.Models.Domain;
+using Bit.Core.Utilities;
 using Xamarin.Essentials;
 
 namespace Bit.App.Pages
@@ -14,7 +14,7 @@ namespace Bit.App.Pages
     public class BaseChangePasswordViewModel : BaseViewModel
     {
         protected readonly IPlatformUtilsService _platformUtilsService;
-        protected readonly IUserService _userService;
+        protected readonly IStateService _stateService;
         protected readonly IPolicyService _policyService;
         protected readonly IPasswordGenerationService _passwordGenerationService;
         protected readonly II18nService _i18nService;
@@ -31,7 +31,7 @@ namespace Bit.App.Pages
         protected BaseChangePasswordViewModel()
         {
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
-            _userService = ServiceContainer.Resolve<IUserService>("userService");
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
             _passwordGenerationService =
                 ServiceContainer.Resolve<IPasswordGenerationService>("passwordGenerationService");
@@ -46,7 +46,11 @@ namespace Bit.App.Pages
         {
             get => _showPassword;
             set => SetProperty(ref _showPassword, value,
-                additionalPropertyNames: new[] { nameof(ShowPasswordIcon) });
+                additionalPropertyNames: new[]
+                {
+                    nameof(ShowPasswordIcon),
+                    nameof(PasswordVisibilityAccessibilityText)
+                });
         }
 
         public bool IsPolicyInEffect
@@ -66,8 +70,9 @@ namespace Bit.App.Pages
             get => _policy;
             set => SetProperty(ref _policy, value);
         }
-        
+
         public string ShowPasswordIcon => ShowPassword ? "" : "";
+        public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
         public string MasterPassword { get; set; }
         public string ConfirmMasterPassword { get; set; }
         public string Hint { get; set; }
@@ -84,7 +89,7 @@ namespace Bit.App.Pages
                 await CheckPasswordPolicy();
             }
         }
-        
+
         private async Task CheckPasswordPolicy()
         {
             Policy = await _policyService.GetMasterPasswordPolicyOptions();
@@ -166,13 +171,13 @@ namespace Bit.App.Pages
                     AppResources.AnErrorHasOccurred, AppResources.Ok);
                 return false;
             }
-            
+
             return true;
         }
 
         private async Task<List<string>> GetPasswordStrengthUserInput()
         {
-            var email = await _userService.GetEmailAsync();
+            var email = await _stateService.GetEmailAsync();
             List<string> userInput = null;
             var atPosition = email.IndexOf('@');
             if (atPosition > -1)

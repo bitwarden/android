@@ -10,7 +10,7 @@ namespace Bit.Core.Utilities
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected bool SetProperty<T>(ref T backingStore, T value, Action onChanged = null,
-            [CallerMemberName]string propertyName = "", string[] additionalPropertyNames = null)
+            [CallerMemberName] string propertyName = "", string[] additionalPropertyNames = null)
         {
             if (EqualityComparer<T>.Default.Equals(backingStore, value))
             {

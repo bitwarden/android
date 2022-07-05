@@ -36,6 +36,10 @@ namespace Bit.Droid.Utilities
         {
             get => ThemeManager.GetResourceColor("SwitchThumbColor").ToAndroid();
         }
+        public static Color TextColor
+        {
+            get => ThemeManager.GetResourceColor("TextColor").ToAndroid();
+        }
         
         public static void SetAppearance(string theme, bool osDarkModeEnabled)
         {
@@ -55,10 +59,10 @@ namespace Bit.Droid.Utilities
         {
             if (string.IsNullOrWhiteSpace(theme) && osDarkModeEnabled)
             {
-                theme = "dark";
+                theme = ThemeManager.Dark;
             }
 
-            if (theme == "dark" || theme == "black" || theme == "nord")
+            if (theme == ThemeManager.Dark || theme == ThemeManager.Black || theme == ThemeManager.Nord)
             {
                 LightTheme = false;
             }

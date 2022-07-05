@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Oled kindel, et soovid välja logida?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Eemalda konto</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Oled kindel, et soovid selle konto eemaldada?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Konto on juba lisatud </value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Kas soovid kohe vahetada? </value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Ülemparool</value>
     <comment>Label for a master password.</comment>
@@ -711,7 +723,7 @@
     <value>Kirje vaatamine</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>Bitwardeni Veebihoidla</value>
+    <value>Bitwarden veebihoidla</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Kaotasid autentimise rakenduse?</value>
@@ -827,7 +839,7 @@
     <value>Kaheastmelise sisselogimise valikud</value>
   </data>
   <data name="UseAnotherTwoStepMethod" xml:space="preserve">
-    <value>Kasuta teist kaheastmelist sisselogimise meetodit</value>
+    <value>Kasuta teist meetodit</value>
   </data>
   <data name="VerificationEmailNotSent" xml:space="preserve">
     <value>Kinnitus e-kirja saatmine ebaõnnestus. Proovi uuesti.</value>
@@ -1246,13 +1258,13 @@
     <comment>An entity of multiple related people (ex. a team or business organization).</comment>
   </data>
   <data name="HoldYubikeyNearTop" xml:space="preserve">
-    <value>Hoia oma Yubikey seadme ülaosa ligidal.</value>
+    <value>Hoia oma Yubikey seadme ülaosa lähedal.</value>
   </data>
   <data name="TryAgain" xml:space="preserve">
     <value>Proovi uuesti</value>
   </data>
   <data name="YubiKeyInstructionIos" xml:space="preserve">
-    <value>Jätkamiseks hoia YubiKey NEO-d oma seadme tagumise poole vastu.</value>
+    <value>Jätkamiseks hoia oma YubiKey NEO seadme tagumise poole vastas.</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
     <value>Juurdepääsetavuse teenus võib abiks olla olukordades, kus rakendused ei toeta standardset automaattäite teenust.</value>
@@ -1455,6 +1467,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>Lukusta lahti</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Hoidla lahtilukustamine</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minuti pärast</value>
   </data>
@@ -1470,6 +1485,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Hoidla on lukus. Jätkamiseks sisesta PIN kood.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Hoidla on lukus. Jätkamiseks kinnita oma identiteet.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Tume</value>
@@ -1611,8 +1629,14 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Hoidlas olevate andmete eksportimiseks on vajalik ülemparooli sisestamine.</value>
   </data>
-    <data name="ExportVaultOTPDescription" xml:space="preserve">
-    <value>Sisesta hoidla andmete eksportimiseks kinnituskood.</value>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Saada kinnituskood oma e-postile</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Kood on saadetud!</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Jätkamiseks kinnita oma identiteet.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Eksporditav fail sisaldab hoidla sisu, mis on krüpteeringuta. Seda faili ei tohiks kaua käidelda ning mitte mingil juhul ebaturvaliselt saata (näiteks e-postiga). Kustuta see koheselt pärast kasutamist.</value>
@@ -2080,10 +2104,76 @@
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Üks või enam organisatsiooni poliitikat ei võimalda sul oma personaalset hoidlat eksportida.</value>
   </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Lisa konto</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Lukustamata</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Lukustatud</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Välja logitud </value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Vahetati järgmise saadaoleva konto peale</value>
+  </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>Kasutajakonto on lukus</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>Konto on edukalt välja logitud</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>Konto on edukalt eemaldatud</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Kustuta konto</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Konto kustutamist ei saa ennistada</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Konto koos kõikide andmetega kustutatakse ning seda ei saa taastada. Oled kindel, et soovid jätkata? </value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Konto kustutamine </value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Sinu konto on lõplikult kustutatud</value>
+  </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Vale kinnituskood</value>
   </data>
-    <data name="RequestOTP" xml:space="preserve">
+  <data name="RequestOTP" xml:space="preserve">
     <value>Küsi ühekordset parooli</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Saada kood</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Saatmine</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>Kopeeri Sendi link ja salvesta</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>Koodi saatmine</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>Tuvastamine</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>Saada kood uuesti</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>Kinnituskood on saadetud e-posti aadressile.</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>Kinnituskoodi saatmisel ilmnes tõrge. Palun proovi uuesti</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>Kinnituskood on edukalt e-posti aadressile saadetud.</value>
   </data>
 </root>

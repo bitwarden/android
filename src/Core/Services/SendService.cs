@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -20,9 +20,8 @@ namespace Bit.Core.Services
     {
         private List<SendView> _decryptedSendsCache;
         private readonly ICryptoService _cryptoService;
-        private readonly IUserService _userService;
+        private readonly IStateService _stateService;
         private readonly IApiService _apiService;
-        private readonly IStorageService _storageService;
         private readonly II18nService _i18nService;
         private readonly ICryptoFunctionService _cryptoFunctionService;
         private Task<List<SendView>> _getAllDecryptedTask;
@@ -30,27 +29,23 @@ namespace Bit.Core.Services
 
         public SendService(
             ICryptoService cryptoService,
-            IUserService userService,
+            IStateService stateService,
             IApiService apiService,
             IFileUploadService fileUploadService,
-            IStorageService storageService,
             II18nService i18nService,
             ICryptoFunctionService cryptoFunctionService)
         {
             _cryptoService = cryptoService;
-            _userService = userService;
+            _stateService = stateService;
             _apiService = apiService;
             _fileUploadService = fileUploadService;
-            _storageService = storageService;
             _i18nService = i18nService;
             _cryptoFunctionService = cryptoFunctionService;
         }
 
-        public static string GetSendKey(string userId) => string.Format("sends_{0}", userId);
-
         public async Task ClearAsync(string userId)
         {
-            await _storageService.RemoveAsync(GetSendKey(userId));
+            await _stateService.SetEncryptedSendsAsync(null, userId);
             ClearCache();
         }
 
@@ -58,8 +53,7 @@ namespace Bit.Core.Services
 
         public async Task DeleteAsync(params string[] ids)
         {
-            var userId = await _userService.GetUserIdAsync();
-            var sends = await _storageService.GetAsync<Dictionary<string, SendData>>(GetSendKey(userId));
+            var sends = await _stateService.GetEncryptedSendsAsync();
 
             if (sends == null)
             {
@@ -71,7 +65,7 @@ namespace Bit.Core.Services
                 sends.Remove(id);
             }
 
-            await _storageService.SaveAsync(GetSendKey(userId), sends);
+            await _stateService.SetEncryptedSendsAsync(sends);
             ClearCache();
         }
 
@@ -138,8 +132,7 @@ namespace Bit.Core.Services
 
         public async Task<List<Send>> GetAllAsync()
         {
-            var userId = await _userService.GetUserIdAsync();
-            var sends = await _storageService.GetAsync<Dictionary<string, SendData>>(GetSendKey(userId));
+            var sends = await _stateService.GetEncryptedSendsAsync();
             return sends?.Select(kvp => new Send(kvp.Value)).ToList() ?? new List<Send>();
         }
 
@@ -179,8 +172,7 @@ namespace Bit.Core.Services
 
         public async Task<Send> GetAsync(string id)
         {
-            var userId = await _userService.GetUserIdAsync();
-            var sends = await _storageService.GetAsync<Dictionary<string, SendData>>(GetSendKey(userId));
+            var sends = await _stateService.GetEncryptedSendsAsync();
 
             if (sends == null || !sends.ContainsKey(id))
             {
@@ -192,8 +184,7 @@ namespace Bit.Core.Services
 
         public async Task ReplaceAsync(Dictionary<string, SendData> sends)
         {
-            var userId = await _userService.GetUserIdAsync();
-            await _storageService.SaveAsync(GetSendKey(userId), sends);
+            await _stateService.SetEncryptedSendsAsync(sends);
             _decryptedSendsCache = null;
         }
 
@@ -209,7 +200,8 @@ namespace Bit.Core.Services
                         response = await _apiService.PostSendAsync(request);
                         break;
                     case SendType.File:
-                        try{
+                        try
+                        {
                             var uploadDataResponse = await _apiService.PostFileTypeSendAsync(request);
                             response = uploadDataResponse.SendResponse;
 
@@ -219,12 +211,13 @@ namespace Bit.Core.Services
                         {
                             response = await LegacyServerSendFileUpload(request, send, encryptedFileData);
                         }
-                        catch (Exception e) 
+                        catch
                         {
-                            if (response != default){
+                            if (response != default)
+                            {
                                 await _apiService.DeleteSendAsync(response.Id);
                             }
-                            throw e;
+                            throw;
                         }
                         break;
                     default:
@@ -237,13 +230,14 @@ namespace Bit.Core.Services
                 response = await _apiService.PutSendAsync(send.Id, request);
             }
 
-            var userId = await _userService.GetUserIdAsync();
+            var userId = await _stateService.GetActiveUserIdAsync();
             await UpsertAsync(new SendData(response, userId));
             return response.Id;
         }
 
         [Obsolete("Mar 25 2021: This method has been deprecated in favor of direct uploads. This method still exists for backward compatibility with old server versions.")]
-        private async Task<SendResponse> LegacyServerSendFileUpload(SendRequest request, Send send, EncByteArray encryptedFileData) {
+        private async Task<SendResponse> LegacyServerSendFileUpload(SendRequest request, Send send, EncByteArray encryptedFileData)
+        {
             var fd = new MultipartFormDataContent($"--BWMobileFormBoundary{DateTime.UtcNow.Ticks}")
                         {
                             { new StringContent(JsonConvert.SerializeObject(request)), "model" },
@@ -255,8 +249,7 @@ namespace Bit.Core.Services
 
         public async Task UpsertAsync(params SendData[] sends)
         {
-            var userId = await _userService.GetUserIdAsync();
-            var knownSends = await _storageService.GetAsync<Dictionary<string, SendData>>(GetSendKey(userId)) ??
+            var knownSends = await _stateService.GetEncryptedSendsAsync() ??
                 new Dictionary<string, SendData>();
 
             foreach (var send in sends)
@@ -264,14 +257,14 @@ namespace Bit.Core.Services
                 knownSends[send.Id] = send;
             }
 
-            await _storageService.SaveAsync(GetSendKey(userId), knownSends);
+            await _stateService.SetEncryptedSendsAsync(knownSends);
             _decryptedSendsCache = null;
         }
 
         public async Task RemovePasswordWithServerAsync(string id)
         {
             var response = await _apiService.PutSendRemovePasswordAsync(id);
-            var userId = await _userService.GetUserIdAsync();
+            var userId = await _stateService.GetActiveUserIdAsync();
             await UpsertAsync(new SendData(response, userId));
         }
 

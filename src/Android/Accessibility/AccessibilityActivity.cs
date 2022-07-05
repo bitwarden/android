@@ -6,6 +6,7 @@ using Android.Views;
 using System;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
+using Bit.Droid.Utilities;
 
 namespace Bit.Droid.Accessibility
 {
@@ -17,6 +18,7 @@ namespace Bit.Droid.Accessibility
 
         protected override void OnCreate(Bundle bundle)
         {
+            Intent?.Validate();
             base.OnCreate(bundle);
             HandleIntent(Intent, 932473);
         }

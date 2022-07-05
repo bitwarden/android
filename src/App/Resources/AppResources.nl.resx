@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Weet je zeker dat je wilt uitloggen?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Remove Account</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Are you sure you want to remove this account?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Account Already Added</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Would you like to switch to it now?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Hoofdwachtwoord</value>
     <comment>Label for a master password.</comment>
@@ -1455,6 +1467,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>Ontgrendelen</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Kluis ontgrendelen</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minuten</value>
   </data>
@@ -1470,6 +1485,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Je kluis is vergrendeld. Voer je PIN-code in om door te gaan.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Je kluis is vergrendeld. Bevestig je identiteit om door te gaan.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Donker</value>
@@ -1611,8 +1629,14 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Voer je hoofdwachtwoord in om de kluisgegevens te exporteren.</value>
   </data>
-    <data name="ExportVaultOTPDescription" xml:space="preserve">
-    <value>Voer de verificatiecode in om je kluisgegevens te exporteren.</value>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Stuur een verificatiecode naar je e-mail</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Code verstuurd</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Bevestig je identiteit om door te gaan.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Deze export bevat jouw kluisgegevens in een niet-versleutelde opmaak. Je moet het geëxporteerde bestand niet opslaan of verzenden over onbeveiligde kanalen (zoals e-mail). Verwijder het exportbestand direct na gebruik.</value>
@@ -2080,10 +2104,76 @@
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Organisatiebeleid voorkomt dat je je persoonlijke kluis exporteert.</value>
   </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Add Account</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Unlocked</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Locked</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Logged Out</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Switched to next available account</value>
+  </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>Account geblokkeerd</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>Account succesvol uitgelogd</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>Account succesvol verwijderd</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Account verwijderen</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Het verwijderen van je account is definitief</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Je account en alle bijbehorende gegevens worden onherstelbaar gewist. Weet je zeker dat je wilt doorgaan?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Je account verwijderen</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Jouw account is definitief verwijderd</value>
+  </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Ongeldige verificatiecode.</value>
   </data>
-    <data name="RequestOTP" xml:space="preserve">
+  <data name="RequestOTP" xml:space="preserve">
     <value>Eenmalig wachtwoord aanvragen</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Code versturen</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Versturen</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>Send-link kopiëren bij opslaan</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>Code versturen…</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>Verifiëren</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>Code opnieuw versturen</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>Er is een verificatiecode naar je e-mailadres gestuurd.</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>Er is een fout opgetreden tijdens het verzenden van een verificatiecode naar je e-mail. Probeer het opnieuw</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>Voer de verificatiecode in die we naar je e-mail is gestuurd</value>
   </data>
 </root>

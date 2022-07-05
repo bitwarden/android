@@ -13,6 +13,7 @@ using Android.OS;
 using Android.Provider;
 using Android.Text;
 using Android.Text.Method;
+using Android.Views;
 using Android.Views.Autofill;
 using Android.Views.InputMethods;
 using Android.Webkit;
@@ -27,28 +28,34 @@ using Bit.Core.Enums;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
 using Bit.Droid.Autofill;
+using Bit.Droid.Utilities;
 using Plugin.CurrentActivity;
 
 namespace Bit.Droid.Services
 {
     public class DeviceActionService : IDeviceActionService
     {
-        private readonly IStorageService _storageService;
+        private readonly IClipboardService _clipboardService;
+        private readonly IStateService _stateService;
         private readonly IMessagingService _messagingService;
         private readonly IBroadcasterService _broadcasterService;
         private readonly Func<IEventService> _eventServiceFunc;
-        private ProgressDialog _progressDialog;
+        private AlertDialog _progressDialog;
+        object _progressDialogLock = new object();
+
         private bool _cameraPermissionsDenied;
         private Toast _toast;
         private string _userAgent;
 
         public DeviceActionService(
-            IStorageService storageService,
+            IClipboardService clipboardService,
+            IStateService stateService,
             IMessagingService messagingService,
             IBroadcasterService broadcasterService,
             Func<IEventService> eventServiceFunc)
         {
-            _storageService = storageService;
+            _clipboardService = clipboardService;
+            _stateService = stateService;
             _messagingService = messagingService;
             _broadcasterService = broadcasterService;
             _eventServiceFunc = eventServiceFunc;
@@ -108,22 +115,101 @@ namespace Bit.Droid.Services
             {
                 await HideLoadingAsync();
             }
-            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
-            _progressDialog = new ProgressDialog(activity);
-            _progressDialog.SetMessage(text);
-            _progressDialog.SetCancelable(false);
+
+            var activity = CrossCurrentActivity.Current.Activity;
+            var inflater = (LayoutInflater)activity.GetSystemService(Context.LayoutInflaterService);
+            var dialogView = inflater.Inflate(Resource.Layout.progress_dialog_layout, null);
+            
+            var txtLoading = dialogView.FindViewById<TextView>(Resource.Id.txtLoading);
+            txtLoading.Text = text;
+            txtLoading.SetTextColor(ThemeHelpers.TextColor);
+
+            _progressDialog = new AlertDialog.Builder(activity)
+                .SetView(dialogView)
+                .SetCancelable(false)
+                .Create();
             _progressDialog.Show();
         }
 
         public Task HideLoadingAsync()
         {
-            if (_progressDialog != null)
+            // Based on https://github.com/redth-org/AndHUD/blob/master/AndHUD/AndHUD.cs
+            lock (_progressDialogLock)
             {
-                _progressDialog.Dismiss();
-                _progressDialog.Dispose();
-                _progressDialog = null;
+                if (_progressDialog is null)
+                {
+                    return Task.CompletedTask;
+                }
+
+                void actionDismiss()
+                {
+                    try
+                    {
+                        if (IsAlive(_progressDialog) && IsAlive(_progressDialog.Window))
+                        {
+                            _progressDialog.Hide();
+                            _progressDialog.Dismiss();
+                        }
+                    }
+                    catch
+                    {
+                        // ignore
+                    }
+
+                    _progressDialog = null;
+                }
+
+                // First try the SynchronizationContext
+                if (Application.SynchronizationContext != null)
+                {
+                    Application.SynchronizationContext.Send(state => actionDismiss(), null);
+                    return Task.CompletedTask;
+                }
+
+                // Otherwise try OwnerActivity on dialog
+                var ownerActivity = _progressDialog?.OwnerActivity;
+                if (IsAlive(ownerActivity))
+                {
+                    ownerActivity.RunOnUiThread(actionDismiss);
+                    return Task.CompletedTask;
+                }
+
+                // Otherwise try get it from the Window Context
+                if (_progressDialog?.Window?.Context is Activity windowActivity && IsAlive(windowActivity))
+                {
+                    windowActivity.RunOnUiThread(actionDismiss);
+                    return Task.CompletedTask;
+                }
+
+                // Finally if all else fails, let's see if current activity is MainActivity
+                if (CrossCurrentActivity.Current.Activity is MainActivity activity && IsAlive(activity))
+                {
+                    activity.RunOnUiThread(actionDismiss);
+                    return Task.CompletedTask;
+                }
+
+                return Task.CompletedTask;
             }
-            return Task.FromResult(0);
+        }
+
+        bool IsAlive(Java.Lang.Object @object)
+        {
+            if (@object == null)
+                return false;
+
+            if (@object.Handle == IntPtr.Zero)
+                return false;
+
+            if (@object is Activity activity)
+            {
+                if (activity.IsFinishing)
+                    return false;
+
+                if (activity.IsDestroyed)
+                    return false;
+            }
+
+            return true;
         }
 
         public bool OpenFile(byte[] fileData, string id, string fileName)
@@ -250,7 +336,7 @@ namespace Bit.Droid.Services
             try
             {
                 DeleteDir(CrossCurrentActivity.Current.Activity.CacheDir);
-                await _storageService.SaveAsync(Constants.LastFileCacheClearKey, DateTime.UtcNow);
+                await _stateService.SetLastFileCacheClearAsync(DateTime.UtcNow);
             }
             catch (Exception) { }
         }
@@ -591,7 +677,7 @@ namespace Bit.Droid.Services
             else
             {
                 var data = new Intent();
-                if (cipher == null)
+                if (cipher?.Login == null)
                 {
                     data.PutExtra("canceled", "true");
                 }
@@ -649,6 +735,11 @@ namespace Bit.Droid.Services
         public bool AutofillAccessibilityOverlayPermitted()
         {
             return Accessibility.AccessibilityHelpers.OverlayPermitted();
+        }
+
+        public bool HasAutofillService()
+        {
+            return true;
         }
 
         public void OpenAccessibilityOverlayPermissionSettings()
@@ -833,27 +924,29 @@ namespace Bit.Droid.Services
         {
             if (!string.IsNullOrWhiteSpace(cipher?.Login?.Totp))
             {
-                var userService = ServiceContainer.Resolve<IUserService>("userService");
-                var autoCopyDisabled = await _storageService.GetAsync<bool?>(Constants.DisableAutoTotpCopyKey);
-                var canAccessPremium = await userService.CanAccessPremiumAsync();
+                var autoCopyDisabled = await _stateService.GetDisableAutoTotpCopyAsync();
+                var canAccessPremium = await _stateService.CanAccessPremiumAsync();
                 if ((canAccessPremium || cipher.OrganizationUseTotp) && !autoCopyDisabled.GetValueOrDefault())
                 {
                     var totpService = ServiceContainer.Resolve<ITotpService>("totpService");
                     var totp = await totpService.GetCodeAsync(cipher.Login.Totp);
                     if (totp != null)
                     {
-                        CopyToClipboard(totp);
+                        await _clipboardService.CopyTextAsync(totp);
                     }
                 }
             }
         }
 
-        private void CopyToClipboard(string text)
+        public float GetSystemFontSizeScale()
         {
-            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
-            var clipboardManager = activity.GetSystemService(
-                Context.ClipboardService) as Android.Content.ClipboardManager;
-            clipboardManager.PrimaryClip = ClipData.NewPlainText("bitwarden", text);
+            var activity = CrossCurrentActivity.Current?.Activity as MainActivity;
+            return activity?.Resources?.Configuration?.FontScale ?? 1;
+        }
+        
+        public async Task OnAccountSwitchCompleteAsync()
+        {
+            // for any Android-specific cleanup required after switching accounts
         }
     }
 }

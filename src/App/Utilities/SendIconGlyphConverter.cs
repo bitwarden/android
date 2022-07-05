@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using Bit.Core;
 using Bit.Core.Enums;
 using Bit.Core.Models.View;
 using Xamarin.Forms;
@@ -19,10 +20,10 @@ namespace Bit.App.Utilities
             switch (send.Type)
             {
                 case SendType.Text:
-                    icon = "\uf0f6"; // fa-file-text-o
+                    icon = BitwardenIcons.FileText;
                     break;
                 case SendType.File:
-                    icon = "\uf016"; // fa-file-o
+                    icon = BitwardenIcons.File;
                     break;
             }
             return icon;

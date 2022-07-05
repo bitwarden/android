@@ -3,9 +3,11 @@ using System.IO;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Models;
+using Bit.App.Pages;
 using Bit.App.Resources;
 using Bit.App.Services;
 using Bit.App.Utilities;
+using Bit.App.Utilities.AccountManagement;
 using Bit.Core.Abstractions;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
@@ -24,19 +26,25 @@ namespace Bit.iOS.Core.Utilities
         public static string AppGroupId = "group.com.8bit.bitwarden";
         public static string AccessGroup = "LTZ2PFU5D6.com.8bit.bitwarden";
 
-        public static void RegisterAppCenter()
+        public static void InitLogger()
         {
-            var appCenterHelper = new AppCenterHelper(
-                ServiceContainer.Resolve<IAppIdService>("appIdService"),
-                ServiceContainer.Resolve<IUserService>("userService"));
-            var appCenterTask = appCenterHelper.InitAsync();
+            ServiceContainer.Resolve<ILogger>("logger").InitAsync();
         }
 
         public static void RegisterLocalServices()
         {
-            if (ServiceContainer.Resolve<ILogService>("logService", true) == null)
+            if (ServiceContainer.Resolve<INativeLogService>("nativeLogService", true) == null)
             {
-                ServiceContainer.Register<ILogService>("logService", new ConsoleLogService());
+                ServiceContainer.Register<INativeLogService>("nativeLogService", new ConsoleLogService());
+            }
+
+            if (ServiceContainer.Resolve<ILogger>("logger", true) == null)
+            {
+#if DEBUG
+                ServiceContainer.Register<ILogger>("logger", DebugLogger.Instance);
+#else
+                ServiceContainer.Register<ILogger>("logger", Logger.Instance);
+#endif
             }
 
             var preferencesStorage = new PreferencesStorageService(AppGroupId);
@@ -51,12 +59,16 @@ namespace Bit.iOS.Core.Utilities
                 () => ServiceContainer.Resolve<IAppIdService>("appIdService").GetAppIdAsync());
             var cryptoPrimitiveService = new CryptoPrimitiveService();
             var mobileStorageService = new MobileStorageService(preferencesStorage, liteDbStorage);
-            var deviceActionService = new DeviceActionService(mobileStorageService, messagingService);
-            var platformUtilsService = new MobilePlatformUtilsService(deviceActionService, messagingService,
-                broadcasterService);
+            var stateService = new StateService(mobileStorageService, secureStorageService, messagingService);
+            var stateMigrationService =
+                new StateMigrationService(liteDbStorage, preferencesStorage, secureStorageService);
+            var deviceActionService = new DeviceActionService(stateService, messagingService);
+            var clipboardService = new ClipboardService(stateService);
+            var platformUtilsService = new MobilePlatformUtilsService(deviceActionService, clipboardService,
+                messagingService, broadcasterService);
             var biometricService = new BiometricService(mobileStorageService);
             var cryptoFunctionService = new PclCryptoFunctionService(cryptoPrimitiveService);
-            var cryptoService = new CryptoService(mobileStorageService, secureStorageService, cryptoFunctionService);
+            var cryptoService = new CryptoService(stateService, cryptoFunctionService);
             var passwordRepromptService = new MobilePasswordRepromptService(platformUtilsService, cryptoService);
 
             ServiceContainer.Register<IBroadcasterService>("broadcasterService", broadcasterService);
@@ -66,7 +78,10 @@ namespace Bit.iOS.Core.Utilities
             ServiceContainer.Register<ICryptoPrimitiveService>("cryptoPrimitiveService", cryptoPrimitiveService);
             ServiceContainer.Register<IStorageService>("storageService", mobileStorageService);
             ServiceContainer.Register<IStorageService>("secureStorageService", secureStorageService);
+            ServiceContainer.Register<IStateService>("stateService", stateService);
+            ServiceContainer.Register<IStateMigrationService>("stateMigrationService", stateMigrationService);
             ServiceContainer.Register<IDeviceActionService>("deviceActionService", deviceActionService);
+            ServiceContainer.Register<IClipboardService>("clipboardService", clipboardService);
             ServiceContainer.Register<IPlatformUtilsService>("platformUtilsService", platformUtilsService);
             ServiceContainer.Register<IBiometricService>("biometricService", biometricService);
             ServiceContainer.Register<ICryptoFunctionService>("cryptoFunctionService", cryptoFunctionService);
@@ -86,7 +101,7 @@ namespace Bit.iOS.Core.Utilities
 
         public static void AppearanceAdjustments()
         {
-            ThemeHelpers.SetAppearance(ThemeManager.GetTheme(false), ThemeManager.OsDarkModeEnabled());
+            ThemeHelpers.SetAppearance(ThemeManager.GetTheme(), ThemeManager.OsDarkModeEnabled());
             UIApplication.SharedApplication.StatusBarHidden = false;
             UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.LightContent;
         }
@@ -108,7 +123,7 @@ namespace Bit.iOS.Core.Utilities
                     NSRunLoop.Main.BeginInvokeOnMainThread(async () =>
                     {
                         var result = await deviceActionService.DisplayAlertAsync(details.Title, details.Text,
-                           details.CancelText, details.ConfirmText);
+                           details.CancelText, confirmText);
                         var confirmed = result == details.ConfirmText;
                         messagingService.Send("showDialogResolve", new Tuple<int, bool>(details.DialogId, confirmed));
                     });
@@ -141,13 +156,32 @@ namespace Bit.iOS.Core.Utilities
 
         private static async Task BootstrapAsync(Func<Task> postBootstrapFunc = null)
         {
-            var disableFavicon = await ServiceContainer.Resolve<IStorageService>("storageService").GetAsync<bool?>(
-                Bit.Core.Constants.DisableFaviconKey);
-            await ServiceContainer.Resolve<IStateService>("stateService").SaveAsync(
-                Bit.Core.Constants.DisableFaviconKey, disableFavicon);
             await ServiceContainer.Resolve<IEnvironmentService>("environmentService").SetUrlsFromStorageAsync();
 
             InitializeAppSetup();
+            // TODO: Update when https://github.com/bitwarden/mobile/pull/1662 gets merged
+            var deleteAccountActionFlowExecutioner = new DeleteAccountActionFlowExecutioner(
+                ServiceContainer.Resolve<IApiService>("apiService"),
+                ServiceContainer.Resolve<IMessagingService>("messagingService"),
+                ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService"),
+                ServiceContainer.Resolve<IDeviceActionService>("deviceActionService"),
+                ServiceContainer.Resolve<ILogger>("logger"));
+            ServiceContainer.Register<IDeleteAccountActionFlowExecutioner>("deleteAccountActionFlowExecutioner", deleteAccountActionFlowExecutioner);
+
+            var verificationActionsFlowHelper = new VerificationActionsFlowHelper(
+                ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService"),
+                ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService"),
+                ServiceContainer.Resolve<ICryptoService>("cryptoService"));
+            ServiceContainer.Register<IVerificationActionsFlowHelper>("verificationActionsFlowHelper", verificationActionsFlowHelper);
+
+            var accountsManager = new AccountsManager(
+                ServiceContainer.Resolve<IBroadcasterService>("broadcasterService"),
+                ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService"),
+                ServiceContainer.Resolve<IStorageService>("secureStorageService"),
+                ServiceContainer.Resolve<IStateService>("stateService"),
+                ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService"),
+                ServiceContainer.Resolve<IAuthService>("authService"));
+            ServiceContainer.Register<IAccountsManager>("accountsManager", accountsManager);
 
             if (postBootstrapFunc != null)
             {

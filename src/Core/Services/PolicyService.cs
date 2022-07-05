@@ -12,33 +12,29 @@ namespace Bit.Core.Services
 {
     public class PolicyService : IPolicyService
     {
-        private const string Keys_PoliciesPrefix = "policies_{0}";
-        
-        private readonly IStorageService _storageService;
-        private readonly IUserService _userService;
+        private readonly IStateService _stateService;
+        private readonly IOrganizationService _organizationService;
 
         private IEnumerable<Policy> _policyCache;
 
         public PolicyService(
-            IStorageService storageService,
-            IUserService userService)
+            IStateService stateService,
+            IOrganizationService organizationService)
         {
-            _storageService = storageService;
-            _userService = userService;
+            _stateService = stateService;
+            _organizationService = organizationService;
         }
-        
+
         public void ClearCache()
         {
             _policyCache = null;
         }
 
-        public async Task<IEnumerable<Policy>> GetAll(PolicyType? type)
+        public async Task<IEnumerable<Policy>> GetAll(PolicyType? type, string userId = null)
         {
             if (_policyCache == null)
             {
-                var userId = await _userService.GetUserIdAsync();
-                var policies = await _storageService.GetAsync<Dictionary<string, PolicyData>>(
-                    string.Format(Keys_PoliciesPrefix, userId));
+                var policies = await _stateService.GetEncryptedPoliciesAsync(userId);
                 if (policies == null)
                 {
                     return null;
@@ -56,27 +52,26 @@ namespace Bit.Core.Services
             }
         }
 
-        public async Task Replace(Dictionary<string, PolicyData> policies)
+        public async Task Replace(Dictionary<string, PolicyData> policies, string userId = null)
         {
-            var userId = await _userService.GetUserIdAsync();
-            await _storageService.SaveAsync(string.Format(Keys_PoliciesPrefix, userId), policies);
+            await _stateService.SetEncryptedPoliciesAsync(policies, userId);
             _policyCache = null;
         }
 
-        public async Task Clear(string userId)
+        public async Task ClearAsync(string userId)
         {
-            await _storageService.RemoveAsync(string.Format(Keys_PoliciesPrefix, userId));
+            await _stateService.SetEncryptedPoliciesAsync(null, userId);
             _policyCache = null;
         }
 
         public async Task<MasterPasswordPolicyOptions> GetMasterPasswordPolicyOptions(
-            IEnumerable<Policy> policies = null)
+            IEnumerable<Policy> policies = null, string userId = null)
         {
             MasterPasswordPolicyOptions enforcedOptions = null;
 
             if (policies == null)
             {
-                policies = await GetAll(PolicyType.MasterPassword);
+                policies = await GetAll(PolicyType.MasterPassword, userId);
             }
             else
             {
@@ -198,14 +193,15 @@ namespace Bit.Core.Services
             return new Tuple<ResetPasswordPolicyOptions, bool>(resetPasswordPolicyOptions, policy != null);
         }
 
-        public async Task<bool> PolicyAppliesToUser(PolicyType policyType, Func<Policy, bool> policyFilter)
+        public async Task<bool> PolicyAppliesToUser(PolicyType policyType, Func<Policy, bool> policyFilter = null,
+            string userId = null)
         {
-            var policies = await GetAll(policyType);
+            var policies = await GetAll(policyType, userId);
             if (policies == null)
             {
                 return false;
             }
-            var organizations = await _userService.GetAllOrganizationAsync();
+            var organizations = await _organizationService.GetAllAsync(userId);
 
             IEnumerable<Policy> filteredPolicies;
 
@@ -249,6 +245,18 @@ namespace Bit.Core.Services
                 }
             }
             return null;
+        }
+
+        public async Task<bool> ShouldShowVaultFilterAsync()
+        {
+            var personalOwnershipPolicyApplies = await PolicyAppliesToUser(PolicyType.PersonalOwnership);
+            var singleOrgPolicyApplies = await PolicyAppliesToUser(PolicyType.OnlyOrg);
+            if (personalOwnershipPolicyApplies && singleOrgPolicyApplies)
+            {
+                return false;
+            }
+            var organizations = await _organizationService.GetAllAsync();
+            return organizations?.Any() ?? false;
         }
 
         private bool? GetPolicyBool(Policy policy, string key)

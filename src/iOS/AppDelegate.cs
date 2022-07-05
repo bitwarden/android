@@ -8,6 +8,7 @@ using Bit.App.Services;
 using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
+using Bit.Core.Enums;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Bit.iOS.Core.Utilities;
@@ -23,6 +24,8 @@ namespace Bit.iOS
     [Register("AppDelegate")]
     public partial class AppDelegate : FormsApplicationDelegate
     {
+        const int SPLASH_VIEW_TAG = 4321;
+
         private NFCNdefReaderSession _nfcSession = null;
         private iOSPushNotificationHandler _pushHandler = null;
         private Core.NFCReaderDelegate _nfcDelegate = null;
@@ -35,7 +38,7 @@ namespace Bit.iOS
         private IMessagingService _messagingService;
         private IBroadcasterService _broadcasterService;
         private IStorageService _storageService;
-        private IVaultTimeoutService _vaultTimeoutService;
+        private IStateService _stateService;
         private IEventService _eventService;
 
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
@@ -47,7 +50,7 @@ namespace Bit.iOS
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
-            _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _eventService = ServiceContainer.Resolve<IEventService>("eventService");
 
             LoadApplication(new App.App(null));
@@ -71,14 +74,6 @@ namespace Bit.iOS
                         iOSCoreHelpers.AppearanceAdjustments();
                     });
                 }
-                else if (message.Command == "copiedToClipboard")
-                {
-
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        var task = ClearClipboardTimerAsync(message.Data as Tuple<string, int?, bool>);
-                    });
-                }
                 else if (message.Command == "listenYubiKeyOTP")
                 {
                     iOSCoreHelpers.ListenYubiKey((bool)message.Data, _deviceActionService, _nfcSession, _nfcDelegate);
@@ -95,11 +90,6 @@ namespace Bit.iOS
                 else if (message.Command == "showAppExtension")
                 {
                     Device.BeginInvokeOnMainThread(() => ShowAppExtension((ExtensionPageViewModel)message.Data));
-                }
-                else if (message.Command == "showStatusBar")
-                {
-                    Device.BeginInvokeOnMainThread(() =>
-                        UIApplication.SharedApplication.SetStatusBarHidden(!(bool)message.Data, false));
                 }
                 else if (message.Command == "syncCompleted")
                 {
@@ -154,7 +144,7 @@ namespace Bit.iOS
                         await ASHelpers.ReplaceAllIdentities();
                     }
                 }
-                else if (message.Command == "loggedOut")
+                else if (message.Command == "logout")
                 {
                     if (_deviceActionService.SystemMajorVersion() >= 12)
                     {
@@ -168,8 +158,8 @@ namespace Bit.iOS
                 }
                 else if (message.Command == "vaultTimeoutActionChanged")
                 {
-                    var timeoutAction = await _storageService.GetAsync<string>(Constants.VaultTimeoutActionKey);
-                    if (timeoutAction == "logOut")
+                    var timeoutAction = await _stateService.GetVaultTimeoutActionAsync();
+                    if (timeoutAction == VaultTimeoutAction.Logout)
                     {
                         await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
                     }
@@ -183,20 +173,11 @@ namespace Bit.iOS
             return base.FinishedLaunching(app, options);
         }
 
-        public override void DidEnterBackground(UIApplication uiApplication)
+        public override void OnResignActivation(UIApplication uiApplication)
         {
-            _storageService.SaveAsync(Constants.LastActiveTimeKey, _deviceActionService.GetActiveTime());
-            _messagingService.Send("slept");
-
-            if (UIApplication.SharedApplication.KeyWindow == null)
-            {
-                // Despite IDE warning, KeyWindow is null here during app termination in iOS 15
-                return;
-            }
-
             var view = new UIView(UIApplication.SharedApplication.KeyWindow.Frame)
             {
-                Tag = 4321
+                Tag = SPLASH_VIEW_TAG
             };
             var backgroundView = new UIView(UIApplication.SharedApplication.KeyWindow.Frame)
             {
@@ -212,7 +193,13 @@ namespace Bit.iOS
             UIApplication.SharedApplication.KeyWindow.AddSubview(view);
             UIApplication.SharedApplication.KeyWindow.BringSubviewToFront(view);
             UIApplication.SharedApplication.KeyWindow.EndEditing(true);
-            UIApplication.SharedApplication.SetStatusBarHidden(true, false);
+            base.OnResignActivation(uiApplication);
+        }
+
+        public override void DidEnterBackground(UIApplication uiApplication)
+        {
+            _stateService?.SetLastActiveTimeAsync(_deviceActionService.GetActiveTime());
+            _messagingService?.Send("slept");
             base.DidEnterBackground(uiApplication);
         }
 
@@ -220,17 +207,16 @@ namespace Bit.iOS
         {
             base.OnActivated(uiApplication);
             UIApplication.SharedApplication.ApplicationIconBadgeNumber = 0;
-            var view = UIApplication.SharedApplication.KeyWindow.ViewWithTag(4321);
-            if (view != null)
-            {
-                view.RemoveFromSuperview();
-                UIApplication.SharedApplication.SetStatusBarHidden(false, false);
-            }
+            UIApplication.SharedApplication.KeyWindow?
+                .ViewWithTag(SPLASH_VIEW_TAG)?
+                .RemoveFromSuperview();
+
+            ThemeManager.UpdateThemeOnPagesAsync();
         }
 
         public override void WillEnterForeground(UIApplication uiApplication)
         {
-            _messagingService.Send("resumed");
+            _messagingService?.Send("resumed");
             base.WillEnterForeground(uiApplication);
         }
 
@@ -242,11 +228,7 @@ namespace Bit.iOS
 
         public override bool OpenUrl(UIApplication app, NSUrl url, NSDictionary options)
         {
-            if (Xamarin.Essentials.Platform.OpenUrl(app, url, options))
-            {
-                return true;
-            }
-            return base.OpenUrl(app, url, options);
+            return Xamarin.Essentials.Platform.OpenUrl(app, url, options);
         }
 
         public override bool ContinueUserActivity(UIApplication application, NSUserActivity userActivity,
@@ -294,7 +276,7 @@ namespace Bit.iOS
             }
 
             // Migration services
-            ServiceContainer.Register<ILogService>("logService", new ConsoleLogService());
+            ServiceContainer.Register<INativeLogService>("nativeLogService", new ConsoleLogService());
 
             // Note: This might cause a race condition. Investigate more.
             Task.Run(() =>
@@ -312,7 +294,7 @@ namespace Bit.iOS
             var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             ServiceContainer.Init(deviceActionService.DeviceUserAgent, Constants.ClearCiphersCacheKey, 
                 Constants.iOSAllClearCipherCacheKeys);
-            iOSCoreHelpers.RegisterAppCenter();
+            iOSCoreHelpers.InitLogger();
             _pushHandler = new iOSPushNotificationHandler(
                 ServiceContainer.Resolve<IPushNotificationListenerService>("pushNotificationListenerService"));
             _nfcDelegate = new Core.NFCReaderDelegate((success, message) =>
@@ -329,61 +311,6 @@ namespace Bit.iOS
             var iosPushNotificationService = new iOSPushNotificationService();
             ServiceContainer.Register<IPushNotificationService>(
                 "pushNotificationService", iosPushNotificationService);
-        }
-
-        private async Task ClearClipboardTimerAsync(Tuple<string, int?, bool> data)
-        {
-            if (data.Item3)
-            {
-                return;
-            }
-            var clearMs = data.Item2;
-            if (clearMs == null)
-            {
-                var clearSeconds = await _storageService.GetAsync<int?>(Constants.ClearClipboardKey);
-                if (clearSeconds != null)
-                {
-                    clearMs = clearSeconds.Value * 1000;
-                }
-            }
-            if (clearMs == null)
-            {
-                return;
-            }
-            if (_clipboardBackgroundTaskId > 0)
-            {
-                UIApplication.SharedApplication.EndBackgroundTask(_clipboardBackgroundTaskId);
-                _clipboardBackgroundTaskId = 0;
-            }
-            _clipboardBackgroundTaskId = UIApplication.SharedApplication.BeginBackgroundTask(() =>
-            {
-                UIApplication.SharedApplication.EndBackgroundTask(_clipboardBackgroundTaskId);
-                _clipboardBackgroundTaskId = 0;
-            });
-            _clipboardTimer?.Invalidate();
-            _clipboardTimer?.Dispose();
-            _clipboardTimer = null;
-            var lastClipboardChangeCount = UIPasteboard.General.ChangeCount;
-            var clearMsSpan = TimeSpan.FromMilliseconds(clearMs.Value);
-            _clipboardTimer = NSTimer.CreateScheduledTimer(clearMsSpan, timer =>
-            {
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    var changeNow = UIPasteboard.General.ChangeCount;
-                    if (changeNow == 0 || lastClipboardChangeCount == changeNow)
-                    {
-                        UIPasteboard.General.String = string.Empty;
-                    }
-                    _clipboardTimer?.Invalidate();
-                    _clipboardTimer?.Dispose();
-                    _clipboardTimer = null;
-                    if (_clipboardBackgroundTaskId > 0)
-                    {
-                        UIApplication.SharedApplication.EndBackgroundTask(_clipboardBackgroundTaskId);
-                        _clipboardBackgroundTaskId = 0;
-                    }
-                });
-            });
         }
 
         private void ShowAppExtension(ExtensionPageViewModel extensionPageViewModel)

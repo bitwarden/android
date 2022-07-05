@@ -122,17 +122,36 @@
     <comment>Max 30 characters</comment>
   </data>
   <data name="ShortDescription" xml:space="preserve">
-    <value>bitwarden is a login and password manager that helps keep you safe while online.</value>
+    <value>Bitwarden ช่วยจัดการข้อมูลล็อกอินและรหัสผ่านให้คุณออนไลน์ได้อย่างปลอดภัย</value>
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>bitwarden is the easiest and safest way to store all of your logins and passwords while conveniently keeping them synced between all of your devices.
+    <value>Bitwarden, Inc. เป็นบริษัทแม่ของ 8bit Solutions LLC
 
-Password theft is a serious problem. The websites and apps that you use are under attack every day. Security breaches occur and your passwords are stolen. When you reuse the same passwords across apps and websites hackers can easily access your email, bank, and other important accounts.
+ได้รับการระบุชื่อเป็น โปรแกรมจัดการรหัสผ่านที่ดีที่สุด โดย The Verge, U.S. News &amp; World Report, CNET,  และที่อื่นๆ
 
-Security experts recommend that you use a different, randomly generated password for every account that you create. But how do you manage all those passwords? bitwarden makes it easy for you to create, store, and access your passwords.
+สามารถจัดการ จัดเก็บ ปกป้อง และแชร์รหัสผ่านไม่จำกัดจำนวนระหว่างอุปกรณ์ต่างๆ โดยไม่จำกัดจำนวนจากที่ไหนก็ได้ Bitwarden เสนอโซลูชันจัดการรหัสผ่านโอเพนซอร์สให้กับทุกคน ไม่ว่าจะอยู่ที่บ้าน ที่ทำงาน หรือนอกสถานที่
 
-bitwarden stores all of your logins in an encrypted vault that syncs across all of your devices. Since it's fully encrypted before it ever leaves your device, only you have access to your data. Not even the team at bitwarden can read your data, even if we wanted to. Your data is sealed with AES-256 bit encryption, salted hashing, and PBKDF2 SHA-256.</value>
+สามารถส่มสร้างรหัสผ่านที่ปลอดภัยและไม่ซ้ำกัน ตามเงื่อนไขความปลอดภัยที่กำหนดได้ สำหรับเว็บไซต์ทุกแห่งที่คุณใช้งานบ่อย
+
+Bitwarden Send สามารถส่งข้อมูลที่ถูกเข้ารหัส --- ไฟล์ หรือ ข้อความ -- ตรงไปยังใครก็ได้ได้อย่างรวดเร็ว
+
+Bitwarden มีแผนแบบ Teams และ Enterprise สำหรับบริษัทต่างๆ ซึางคุณสามารถแชร์รหัสผ่านกับเพื่อนร่วมงานได้อย่างปลอดภัย
+
+ทำไมควรเลือก Bitwarden:
+
+การเข้ารหัสมาตรฐานโลก
+รหัสผ่านจะได้รับการปกป้องด้วยการเข้ารหัสชั้นสูง (AES-256 บิต,  salted hashtag, และ PBKDF2 SHA-256) แบบต้นทางถึงปลายทาง เพื่อให้ข้อมูลของคุณปลอดภัยและเป็นส่วนตัว
+
+มีตัวช่วยส่มสร้างรหัสผ่าน
+สามารถสุ่มสร้างรหัสผ่านที่ปลอดภัยและไม่ซ้ำกัน ตามเงื่อนไขความปลอดภัยที่กำหนดได้ สำหรับเว็บไซต์ทุกแห่งที่คุณใช้งานบ่อย
+
+แปลเป็นภาษาต่างๆ ทั่วโลก
+Bitwarden ได้รับการแปลเป็นภาษาต่างๆ กว่า 40 ภาษา และกำลังเพิ่มขึ้นเรื่อยๆ ด้วยความสนับสนุนจากชุมชนผู้ใช้งานทั่วโลก
+
+แอปพลิเคชันข้ามแพลตฟอร์ม
+ปกป้องและแชร์ข้อมูลอ่อนไหวใน Bitwarden Vault จากเว็บเบราว์เซอร์ อุปกรณ์มือถือ หรือเดสท็อป หรือช่องทางอื่นๆ
+</value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
@@ -148,9 +167,14 @@ bitwarden stores all of your logins in an encrypted vault that syncs across all 
     <value>ปกป้องห้องนิรภัยของคุณด้วยลายนิ้วมือ, รหัส PIN, หรือรหัสผ่านหลัก</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>ป้อนข้อมูลการเข้าสู่ระบบอัตโนมัติจากภายในเว็บเบราเซอร์และแอปอื่น ๆ ได้อย่างรวดเร็ว</value>
+    <value>กรอกข้อมูลการล็อกอินอัตโนมัติจากภายในเว็บเบราว์เซอร์และแอปอื่นๆ ได้อย่างรวดเร็ว</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>ซิงค์และเข้าถึงห้องนิรภัยของคุณจากหลายอุปกรณ์</value>
+    <value>ซิงค์และเข้าถึงห้องนิรภัยของคุณจากหลายอุปกรณ์
+
+- มือถือ
+- แท็บเล็ต
+- เดสก์ท็อป
+- เว็บ</value>
   </data>
 </root>

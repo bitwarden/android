@@ -7,11 +7,25 @@
     xmlns:controls="clr-namespace:Bit.App.Controls"
     xmlns:u="clr-namespace:Bit.App.Utilities"
     x:DataType="pages:LoginPageViewModel"
+    x:Name="_page"
     Title="{Binding PageTitle}">
     
     <ContentPage.BindingContext>
         <pages:LoginPageViewModel />
     </ContentPage.BindingContext>
+
+    <ContentPage.ToolbarItems>
+        <controls:ExtendedToolbarItem
+                x:Name="_accountAvatar"
+                x:Key="accountAvatar"
+                IconImageSource="{Binding AvatarImageSource}"
+                Command="{Binding Source={x:Reference _accountListOverlay}, Path=ToggleVisibililtyCommand}"
+                Order="Primary"
+                Priority="-1"
+                UseOriginalImage="True"
+                AutomationProperties.IsInAccessibleTree="True"
+                AutomationProperties.Name="{u:I18n Account}" />
+    </ContentPage.ToolbarItems>
 
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -24,69 +38,102 @@
                 x:Key="getPasswordHint"
                 x:Name="_getPasswordHint"
                 Clicked="Hint_Clicked" 
-                Order="Secondary"/>
+                Order="Secondary" />
+            <ToolbarItem Text="{u:I18n RemoveAccount}"
+                x:Key="removeAccount"
+                x:Name="_removeAccount"
+                Clicked="RemoveAccount_Clicked" 
+                Order="Secondary" />
+
+            <ScrollView x:Name="_mainLayout" x:Key="mainLayout">
+                <StackLayout Spacing="20">
+                    <StackLayout StyleClass="box">
+                        <StackLayout StyleClass="box-row">
+                            <Label
+                                Text="{u:I18n EmailAddress}"
+                                StyleClass="box-label" />
+                            <Entry
+                                x:Name="_email"
+                                Text="{Binding Email}"
+                                Keyboard="Email"
+                                StyleClass="box-value">
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Disabled">
+                                            <VisualState.Setters>
+                                                <Setter Property="TextColor" Value="{DynamicResource MutedColor}" />
+                                            </VisualState.Setters>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                                </Entry>
+                        </StackLayout>
+                        <Grid StyleClass="box-row">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Label
+                                Text="{u:I18n MasterPassword}"
+                                StyleClass="box-label"
+                                Grid.Row="0"
+                                Grid.Column="0" />
+                            <controls:MonoEntry
+                                x:Name="_masterPassword"
+                                Text="{Binding MasterPassword}"
+                                StyleClass="box-value"
+                                IsSpellCheckEnabled="False"
+                                IsTextPredictionEnabled="False"
+                                IsPassword="{Binding ShowPassword, Converter={StaticResource inverseBool}}"
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                ReturnType="Go"
+                                ReturnCommand="{Binding LogInCommand}" />
+                            <controls:IconButton
+                                StyleClass="box-row-button, box-row-button-platform"
+                                Text="{Binding ShowPasswordIcon}"
+                                Command="{Binding TogglePasswordCommand}"
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Grid.RowSpan="2"
+                                AutomationProperties.IsInAccessibleTree="True"
+                                AutomationProperties.Name="{u:I18n ToggleVisibility}"
+                                AutomationProperties.HelpText="{Binding PasswordVisibilityAccessibilityText}"/>
+                        </Grid>
+                    </StackLayout>
+                    <StackLayout Padding="10, 0">
+                        <Button Text="{u:I18n LogIn}" 
+                                StyleClass="btn-primary"
+                                Clicked="LogIn_Clicked" />
+                        <Button Text="{u:I18n Cancel}"
+                                IsVisible="{Binding ShowCancelButton}"
+                                Clicked="Cancel_Clicked" />
+                    </StackLayout>
+                </StackLayout>
+            </ScrollView>
         </ResourceDictionary>
     </ContentPage.Resources>
+    
+    <AbsoluteLayout
+        x:Name="_absLayout"
+        VerticalOptions="FillAndExpand"
+        HorizontalOptions="FillAndExpand">
+        <ContentView
+            x:Name="_mainContent"
+            AbsoluteLayout.LayoutFlags="All"
+            AbsoluteLayout.LayoutBounds="0, 0, 1, 1">
+        </ContentView>
 
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="{u:I18n Close}" Clicked="Close_Clicked" Order="Primary" Priority="-1" />
-    </ContentPage.ToolbarItems>
-
-    <ScrollView>
-        <StackLayout Spacing="20">
-            <StackLayout StyleClass="box">
-                <StackLayout StyleClass="box-row">
-                    <Label
-                        Text="{u:I18n EmailAddress}"
-                        StyleClass="box-label" />
-                    <Entry
-                        x:Name="_email"
-                        Text="{Binding Email}"
-                        Keyboard="Email"
-                        StyleClass="box-value" />
-                </StackLayout>
-                <Grid StyleClass="box-row">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    <Label
-                        Text="{u:I18n MasterPassword}"
-                        StyleClass="box-label"
-                        Grid.Row="0"
-                        Grid.Column="0" />
-                    <controls:MonoEntry
-                        x:Name="_masterPassword"
-                        Text="{Binding MasterPassword}"
-                        StyleClass="box-value"
-                        IsSpellCheckEnabled="False"
-                        IsTextPredictionEnabled="False"
-                        IsPassword="{Binding ShowPassword, Converter={StaticResource inverseBool}}"
-                        Grid.Row="1"
-                        Grid.Column="0"
-                        ReturnType="Go"
-                        ReturnCommand="{Binding LogInCommand}" />
-                    <controls:FaButton
-                        StyleClass="box-row-button, box-row-button-platform"
-                        Text="{Binding ShowPasswordIcon}"
-                        Command="{Binding TogglePasswordCommand}"
-                        Grid.Row="0"
-                        Grid.Column="1"
-                        Grid.RowSpan="2"
-                        AutomationProperties.IsInAccessibleTree="True"
-                        AutomationProperties.Name="{u:I18n ToggleVisibility}" />
-                </Grid>
-            </StackLayout>
-            <StackLayout Padding="10, 0">
-                <Button Text="{u:I18n LogIn}" 
-                        StyleClass="btn-primary"
-                        Clicked="LogIn_Clicked" />
-            </StackLayout>
-        </StackLayout>
-    </ScrollView>
+        <controls:AccountSwitchingOverlayView
+            x:Name="_accountListOverlay"
+            AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+            AbsoluteLayout.LayoutFlags="All"
+            MainPage="{Binding Source={x:Reference _page}}"
+            BindingContext="{Binding AccountSwitchingOverlayViewModel}"/>
+    </AbsoluteLayout>
 
 </pages:BaseContentPage>

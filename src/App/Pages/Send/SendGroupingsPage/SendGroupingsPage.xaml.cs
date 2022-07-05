@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Bit.App.Controls;
@@ -133,7 +133,7 @@ namespace Bit.App.Pages
                 }
             }
         }
-        
+
         private async void RowSelected(object sender, SelectionChangedEventArgs e)
         {
             ((ExtendedCollectionView)sender).SelectedItem = null;
@@ -160,7 +160,7 @@ namespace Bit.App.Pages
         {
             if (DoOnce())
             {
-                var page = new SendsPage(_vm.Filter, _vm.Type != null);
+                var page = new SendsPage(_vm.Filter, _vm.Type);
                 await Navigation.PushModalAsync(new NavigationPage(page));
             }
         }
@@ -174,7 +174,7 @@ namespace Bit.App.Pages
         {
             await _vaultTimeoutService.LockAsync(true, true);
         }
-        
+
         private void About_Clicked(object sender, EventArgs e)
         {
             _vm.ShowAbout();

@@ -1,13 +1,13 @@
-﻿using Bit.App.Abstractions;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -17,7 +17,8 @@ namespace Bit.App.Pages
         private readonly IDeviceActionService _deviceActionService;
         private readonly ICipherService _cipherService;
         private readonly ICryptoService _cryptoService;
-        private readonly IUserService _userService;
+        private readonly IStateService _stateService;
+        private readonly IVaultTimeoutService _vaultTimeoutService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private CipherView _cipher;
         private Cipher _cipherDomain;
@@ -32,7 +33,8 @@ namespace Bit.App.Pages
             _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
             _cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
-            _userService = ServiceContainer.Resolve<IUserService>("userService");
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             Attachments = new ExtendedObservableCollection<AttachmentView>();
             DeleteAttachmentCommand = new Command<AttachmentView>(DeleteAsync);
             PageTitle = AppResources.Attachments;
@@ -64,7 +66,7 @@ namespace Bit.App.Pages
             Cipher = await _cipherDomain.DecryptAsync();
             LoadAttachments();
             _hasUpdatedKey = await _cryptoService.HasEncKeyAsync();
-            var canAccessPremium = await _userService.CanAccessPremiumAsync();
+            var canAccessPremium = await _stateService.CanAccessPremiumAsync();
             _canAccessAttachments = canAccessPremium || Cipher.OrganizationId != null;
             if (!_canAccessAttachments)
             {
@@ -76,7 +78,7 @@ namespace Bit.App.Pages
                     AppResources.FeatureUnavailable, AppResources.LearnMore, AppResources.Cancel);
                 if (confirmed)
                 {
-                    _platformUtilsService.LaunchUri("https://help.bitwarden.com/article/update-encryption-key/");
+                    _platformUtilsService.LaunchUri("https://bitwarden.com/help/account-encryption-key/#rotate-your-encryption-key");
                 }
             }
         }
@@ -135,6 +137,11 @@ namespace Bit.App.Pages
 
         public async Task ChooseFileAsync()
         {
+            // Prevent Android from locking if vault timeout set to "immediate"
+            if (Device.RuntimePlatform == Device.Android)
+            {
+                _vaultTimeoutService.DelayLockAndLogoutMs = 60000;
+            }
             await _deviceActionService.SelectFileAsync();
         }
 

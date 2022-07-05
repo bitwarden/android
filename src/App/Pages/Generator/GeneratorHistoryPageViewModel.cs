@@ -1,9 +1,9 @@
-﻿using Bit.App.Resources;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.Domain;
 using Bit.Core.Utilities;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -12,14 +12,17 @@ namespace Bit.App.Pages
     {
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IPasswordGenerationService _passwordGenerationService;
+        private readonly IClipboardService _clipboardService;
+        private readonly ILogger _logger;
 
         private bool _showNoData;
 
         public GeneratorHistoryPageViewModel()
         {
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
-            _passwordGenerationService = ServiceContainer.Resolve<IPasswordGenerationService>(
-                "passwordGenerationService");
+            _passwordGenerationService = ServiceContainer.Resolve<IPasswordGenerationService>("passwordGenerationService");
+            _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
+            _logger = ServiceContainer.Resolve<ILogger>("logger");
 
             PageTitle = AppResources.PasswordHistory;
             History = new ExtendedObservableCollection<GeneratedPasswordHistory>();
@@ -38,8 +41,11 @@ namespace Bit.App.Pages
         public async Task InitAsync()
         {
             var history = await _passwordGenerationService.GetHistoryAsync();
-            History.ResetWithRange(history ?? new List<GeneratedPasswordHistory>());
-            ShowNoData = History.Count == 0;
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                History.ResetWithRange(history ?? new List<GeneratedPasswordHistory>());
+                ShowNoData = History.Count == 0;
+            });
         }
 
         public async Task ClearAsync()
@@ -51,9 +57,22 @@ namespace Bit.App.Pages
 
         private async void CopyAsync(GeneratedPasswordHistory ph)
         {
-            await _platformUtilsService.CopyToClipboardAsync(ph.Password);
-            _platformUtilsService.ShowToast("info", null,
-                string.Format(AppResources.ValueHasBeenCopied, AppResources.Password));
+            await _clipboardService.CopyTextAsync(ph.Password);
+            _platformUtilsService.ShowToastForCopiedValue(AppResources.Password);
+        }
+
+        public async Task UpdateOnThemeChanged()
+        {
+            try
+            {
+                await Device.InvokeOnMainThreadAsync(() => History.ResetWithRange(new List<GeneratedPasswordHistory>()));
+
+                await InitAsync();
+            }
+            catch (System.Exception ex)
+            {
+                _logger.Exception(ex);
+            }
         }
     }
 }

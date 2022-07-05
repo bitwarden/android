@@ -1,10 +1,11 @@
 ﻿using Bit.App.Resources;
+using Bit.Core;
 using Bit.Core.Enums;
 using Bit.Core.Models.View;
 
 namespace Bit.App.Pages
 {
-    public class GroupingsPageListItem
+    public class GroupingsPageListItem : IGroupingsPageListItem
     {
         private string _icon;
         private string _name;
@@ -71,34 +72,34 @@ namespace Bit.App.Pages
                 }
                 if (IsTrash)
                 {
-                    _icon = "\uf014"; // fa-trash-o
+                    _icon = BitwardenIcons.Trash;
                 }
                 else if (Folder != null)
                 {
-                    _icon = Folder.Id == null ? "\uf115" : "\uf07c"; // fa-folder-open-o : fa-folder-open
+                    _icon = BitwardenIcons.Folder;
                 }
                 else if (Collection != null)
                 {
-                    _icon = "\uf1b2"; // fa-cube
+                    _icon = BitwardenIcons.Collection;
                 }
                 else if (Type != null)
                 {
                     switch (Type.Value)
                     {
                         case CipherType.Login:
-                            _icon = "\uf0ac"; // fa-globe
+                            _icon = BitwardenIcons.Globe;
                             break;
                         case CipherType.SecureNote:
-                            _icon = "\uf24a"; // fa-sticky-note-o
+                            _icon = BitwardenIcons.StickyNote;
                             break;
                         case CipherType.Card:
-                            _icon = "\uf09d"; // fa-credit-card
+                            _icon = BitwardenIcons.CreditCard;
                             break;
                         case CipherType.Identity:
-                            _icon = "\uf2c3"; // fa-id-card-o
+                            _icon = BitwardenIcons.IdCard;
                             break;
                         default:
-                            _icon = "\uf0ac"; // fa-globe
+                            _icon = BitwardenIcons.Globe;
                             break;
                     }
                 }

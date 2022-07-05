@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Haluatko varmasti kirjautua ulos?</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>Poista tili</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>Haluatko varmasti poistaa tämän tilin?</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>Tili on jo lisätty</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>Haluatko vaihtaa siihen nyt?</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Pääsalasana</value>
     <comment>Label for a master password.</comment>
@@ -1150,10 +1162,10 @@
     <value>Automaattisen täytön esteettömyyspalvelu</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>Bitwardenin automaattisen täytön palvelu käyttää Android Autofill Framework -rajapintaa kirjautumistietojen, korttien ja henkilöllisyyksien täyttöön laitteesi sovelluksissa.</value>
+    <value>Bitwardenin automaattisen täytön palvelu käyttää Android Autofill Framework -rajapintaa kirjautumistietojen täyttöön laitteen sovelluksissa.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Käytä Bitwardenin esteettömyyspalvelua kirjautumistietojen, korttien ja henkilöllisyyksien automaattiseen täyttöön sovelluksissa.</value>
+    <value>Käytä Bitwardenin automaattisen täytön palvelua kirjautumistietojen täyttöön sovelluksissa.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Avaa "Automaattinen täyttö -palvelu" -asetukset</value>
@@ -1287,7 +1299,7 @@
     <value>1. Siirry iOS:n "Asetukset" -sovellukseen</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Napauta "Salasanat ja tilit"</value>
+    <value>2. Napauta "Salasanat"</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
     <value>3. Napauta "Täytä salasanat automaattisesti"</value>
@@ -1455,6 +1467,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>Avaa</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>Avaa holvi</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 minuuttia</value>
   </data>
@@ -1470,6 +1485,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Holvisi on lukittu. Vahvista PIN-koodisi jatkaaksesi.</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>Holvisi on lukittu. Vahvista henkilöllisyytesi jatkaaksesi.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Tumma</value>
@@ -1520,7 +1538,7 @@
     <value>Oletus (järjestelmä)</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
-    <value>Kopioi muistiinpanot</value>
+    <value>Kopioi merkinnät</value>
   </data>
   <data name="Exit" xml:space="preserve">
     <value>Poistu</value>
@@ -1551,7 +1569,7 @@
     <value>Kun sovellus käynnistetään uudelleen</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>Automaattinen täyttö tekee Bitwarden-holvisi käytöstä sivustoilla ja muissa sovelluksissa helppoa. Näyttää siltä, ettei automaattista täyttöä ole otettu käyttöön. Voit tehdä sen "Asetukset" -näytöstä.</value>
+    <value>Automaattinen täyttö tekee Bitwarden-holvisi käytöstä sivustoilla ja muissa sovelluksissa helppoa. Näyttää siltä, ettei automaattista täyttöä ole otettu käyttöön. Voit tehdä sen "Asetukset" -ruudusta.</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
     <value>Teema vaihtuu kun sovellus käynnistetään uudelleen.</value>
@@ -1611,8 +1629,14 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>Syötä pääsalasanasi viedäksesi holvisi tiedot.</value>
   </data>
-    <data name="ExportVaultOTPDescription" xml:space="preserve">
-    <value>Syötä todennuskoodi viedäksesi holvisi tiedot.</value>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>Lähetä vahvistuskoodi sähköpostiisi</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>Koodi lähetetty</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>Vahvista henkilöllisyytesi jatkaaksesi.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Tämä vienti sisältää holvisi tiedot salaamattomassa muodossa. Sinun ei tulisi säilyttää tai lähettää vietyä tiedostoa suojaamattomien kanavien (kuten sähköpostin) välityksellä. Poista se välittömästi kun sille ei enää ole käyttöä.</value>
@@ -1907,11 +1931,11 @@
     <value>Salasana on poistettu.</value>
   </data>
   <data name="NotesInfo" xml:space="preserve">
-    <value>Yksityiset muistiinpanot tästä Sendistä.</value>
+    <value>Yksityisiä merkintöjä tästä Sendistä.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Poista Send käytöstä, jottei kukaan voi avata sitä.</value>
+    <value>Poista Send käytöstä, jottei kukaan voi avata sitä</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
@@ -1979,7 +2003,7 @@
     <value>Mukautettu</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
-    <value>Jaa Send tallennettaessa.</value>
+    <value>Jaa Send tallennettaessa</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
@@ -1991,7 +2015,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
-    <value>Piilota sähköpostiosoitteeni vastaanottajilta.</value>
+    <value>Piilota sähköpostiosoitteeni vastaanottajilta</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
     <value>Yksi tai useampi organisaatiokäytäntö vaikuttaa Send-asetuksiisi.</value>
@@ -2080,10 +2104,76 @@
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Yksi tai useampi organisaation käytäntö estää henkilökohtaisen holvisi viennin.</value>
   </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>Lisää tili</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>Avattu</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>Lukittu</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>Kirjauduttu ulos</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>Vaihdettu seuraavaan käytettävissä olevaan tiliin</value>
+  </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>Tili lukittu</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>Tilin uloskirjaus onnistui</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>Tilin poisto onnistui</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>Poista tili</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>Tilin poisto on pysyvä toimenpide</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>Tilisi ja kaikki siihen liittyvät tiedot poistetaan, eikä niitä voida palauttaa. Haluatko varmasti jatkaa?</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>Tiliäsi poistetaan</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>Tilisi on poistettu pysyvästi</value>
+  </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Virheellinen todennuskoodi.</value>
   </data>
-    <data name="RequestOTP" xml:space="preserve">
+  <data name="RequestOTP" xml:space="preserve">
     <value>Pyydä kertakäyttöinen salasana</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>Lähetä koodi</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>Lähetetään</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>Kopioi Send-linkki tallennettaessa</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>Koodia lähetetään</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>Todennetaan</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>Lähetä koodi uudelleen</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>Todennuskoodi lähetettiin sähköpostiisi.</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>Todennuskoodin lähetyksessä sähköpostiisi tapahtui virhe. Yritä uudelleen</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>Syötä sähköpostiisi lähetetty todennuskoodi</value>
   </data>
 </root>

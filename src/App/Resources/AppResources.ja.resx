@@ -275,6 +275,18 @@
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>ログアウトしてもよろしいですか？</value>
   </data>
+  <data name="RemoveAccount" xml:space="preserve">
+    <value>アカウントを削除</value>
+  </data>
+  <data name="RemoveAccountConfirmation" xml:space="preserve">
+    <value>このアカウントを削除してもよろしいですか？</value>
+  </data>
+  <data name="AccountAlreadyAdded" xml:space="preserve">
+    <value>アカウントは追加済みです</value>
+  </data>
+  <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
+    <value>今すぐ切り替えますか？</value>
+  </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>マスターパスワード</value>
     <comment>Label for a master password.</comment>
@@ -1455,6 +1467,9 @@
   <data name="Unlock" xml:space="preserve">
     <value>ロック解除</value>
   </data>
+  <data name="UnlockVault" xml:space="preserve">
+    <value>保管庫のロックを解除</value>
+  </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30分</value>
   </data>
@@ -1470,6 +1485,9 @@
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>保管庫がロックされています。PIN コードで認証してください。</value>
+  </data>
+  <data name="VaultLockedIdentity" xml:space="preserve">
+    <value>保管庫がロックされています。続行するには本人確認を行ってください。</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>ダーク</value>
@@ -1611,8 +1629,14 @@
   <data name="ExportVaultMasterPasswordDescription" xml:space="preserve">
     <value>保管庫のデータをエクスポートするには、マスターパスワードを入力してください。</value>
   </data>
-    <data name="ExportVaultOTPDescription" xml:space="preserve">
-    <value>保管庫のデータをエクスポートするための確認コードを入力してください。</value>
+  <data name="SendVerificationCodeToEmail" xml:space="preserve">
+    <value>確認コードをメールに送信</value>
+  </data>
+  <data name="CodeSent" xml:space="preserve">
+    <value>確認コードを送信しました。</value>
+  </data>
+  <data name="ConfirmYourIdentity" xml:space="preserve">
+    <value>続行するには本人確認を行ってください。</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>このエクスポートデータは暗号化されていない形式の保管庫データを含んでいます。メールなどのセキュリティ保護されていない方法で共有したり保管したりしないでください。使用した後はすぐに削除してください。</value>
@@ -2080,10 +2104,76 @@
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>1 つまたは複数の組織ポリシーにより、個人の保管庫をエクスポートできません。</value>
   </data>
+  <data name="AddAccount" xml:space="preserve">
+    <value>アカウントを追加</value>
+  </data>
+  <data name="AccountUnlocked" xml:space="preserve">
+    <value>ロック解除済み</value>
+  </data>
+  <data name="AccountLocked" xml:space="preserve">
+    <value>ロック済み</value>
+  </data>
+  <data name="AccountLoggedOut" xml:space="preserve">
+    <value>ログアウト済み</value>
+  </data>
+  <data name="AccountSwitchedAutomatically" xml:space="preserve">
+    <value>次の利用可能なアカウントに切り替えました</value>
+  </data>
+  <data name="AccountLockedSuccessfully" xml:space="preserve">
+    <value>アカウントをロックしました</value>
+  </data>
+  <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
+    <value>ログアウトしました</value>
+  </data>
+  <data name="AccountRemovedSuccessfully" xml:space="preserve">
+    <value>アカウントを削除しました</value>
+  </data>
+  <data name="DeleteAccount" xml:space="preserve">
+    <value>アカウントの削除</value>
+  </data>
+  <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
+    <value>アカウントを完全に削除します</value>
+  </data>
+  <data name="DeleteAccountExplanation" xml:space="preserve">
+    <value>アカウントと関連するすべてのデータが消去され、回復不能になります。続行しますか？</value>
+  </data>
+  <data name="DeletingYourAccount" xml:space="preserve">
+    <value>アカウントを削除中</value>
+  </data>
+  <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
+    <value>アカウントを完全に削除しました</value>
+  </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>認証コードが無効です。</value>
   </data>
-    <data name="RequestOTP" xml:space="preserve">
+  <data name="RequestOTP" xml:space="preserve">
     <value>ワンタイムパスワードを要求する</value>
+  </data>
+  <data name="SendCode" xml:space="preserve">
+    <value>コードを送信</value>
+  </data>
+  <data name="Sending" xml:space="preserve">
+    <value>送信中</value>
+  </data>
+  <data name="CopySendLinkOnSave" xml:space="preserve">
+    <value>保存時に Send リンクをコピー</value>
+  </data>
+  <data name="SendingCode" xml:space="preserve">
+    <value>コードを送信中</value>
+  </data>
+  <data name="Verifying" xml:space="preserve">
+    <value>検証中</value>
+  </data>
+  <data name="ResendCode" xml:space="preserve">
+    <value>コードを再送信</value>
+  </data>
+  <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
+    <value>確認コードをあなたのメールアドレスに送信しました</value>
+  </data>
+  <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
+    <value>確認コードの送信中にエラーが発生しました。もう一度やり直してください。</value>
+  </data>
+  <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
+    <value>メールアドレスに送信された確認コードを入力してください</value>
   </data>
 </root>
