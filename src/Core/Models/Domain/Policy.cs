@@ -16,7 +16,7 @@ namespace Bit.Core.Models.Domain
             Data = obj.Data;
             Enabled = obj.Enabled;
         }
-        
+
         public string Id { get; set; }
         public string OrganizationId { get; set; }
         public PolicyType Type { get; set; }

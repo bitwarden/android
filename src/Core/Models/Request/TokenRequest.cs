@@ -1,9 +1,9 @@
-﻿using Bit.Core.Enums;
-using Bit.Core.Utilities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net.Http.Headers;
 using System.Text;
+using Bit.Core.Enums;
+using Bit.Core.Utilities;
 
 namespace Bit.Core.Models.Request
 {

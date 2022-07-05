@@ -1,28 +1,28 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
+using Bit.Core.Enums;
+using Bit.Core.Exceptions;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.Domain;
+using Bit.Core.Models.Request;
 using Bit.Core.Models.Response;
+using Bit.Core.Models.View;
 using Bit.Core.Services;
+using Bit.Core.Test.AutoFixture;
 using Bit.Core.Utilities;
-using Bit.Core.Enums;
 using Bit.Test.Common;
 using Bit.Test.Common.AutoFixture;
 using Bit.Test.Common.AutoFixture.Attributes;
 using Newtonsoft.Json;
 using NSubstitute;
-using Xunit;
-using System.Text;
-using System.Net.Http;
-using Bit.Core.Models.Request;
-using Bit.Core.Test.AutoFixture;
-using System.Linq.Expressions;
-using Bit.Core.Models.View;
-using Bit.Core.Exceptions;
 using NSubstitute.ExceptionExtensions;
+using Xunit;
 
 namespace Bit.Core.Test.Services
 {
@@ -143,7 +143,7 @@ namespace Bit.Core.Test.Services
         {
             // TODO restore this once race condition is fixed or GHA can re-run jobs on individual platforms
             return;
-            
+
             var sendDataDict = sendDatas.ToDictionary(d => d.Id, d => d);
             sutProvider.GetDependency<ICryptoService>().HasKeyAsync().Returns(true);
             ServiceContainer.Register("cryptoService", sutProvider.GetDependency<ICryptoService>());

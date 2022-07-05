@@ -1,9 +1,9 @@
-﻿using Bit.Core.Enums;
-using Bit.Core.Models.Domain;
-using Bit.Core.Utilities;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Bit.Core.Enums;
+using Bit.Core.Models.Domain;
+using Bit.Core.Utilities;
 
 namespace Bit.Core.Models.View
 {

@@ -72,7 +72,8 @@ namespace Bit.App.Pages
             set => SetProperty(ref _showPassword, value,
                 additionalPropertyNames: new string[]
                 {
-                    nameof(ShowPasswordIcon)
+                    nameof(ShowPasswordIcon),
+                    nameof(PasswordVisibilityAccessibilityText),
                 });
         }
 
@@ -128,6 +129,7 @@ namespace Bit.App.Pages
         public Command SubmitCommand { get; }
         public Command TogglePasswordCommand { get; }
         public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
+        public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
         public string MasterPassword { get; set; }
         public string Pin { get; set; }
         public Action UnlockedAction { get; set; }
@@ -272,7 +274,7 @@ namespace Bit.App.Pages
                 var key = await _cryptoService.MakeKeyAsync(MasterPassword, _email, kdf, kdfIterations);
                 var storedKeyHash = await _cryptoService.GetKeyHashAsync();
                 var passwordValid = false;
-                
+
                 if (storedKeyHash != null)
                 {
                     passwordValid = await _cryptoService.CompareAndUpdateKeyHashAsync(MasterPassword, key);

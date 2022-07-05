@@ -183,52 +183,68 @@
                             <Label
                                 Text="A-Z"
                                 StyleClass="box-label-regular"
-                                HorizontalOptions="StartAndExpand" />
+                                HorizontalOptions="StartAndExpand" 
+                                AutomationProperties.IsInAccessibleTree="True"
+                                AutomationProperties.Name="{u:I18n UppercaseAtoZ}"/>
                             <Switch
                                 IsToggled="{Binding Uppercase}"
                                 IsEnabled="{Binding EnforcedPolicyOptions.UseUppercase,
                                     Converter={StaticResource inverseBool}}"
                                 StyleClass="box-value"
-                                HorizontalOptions="End" />
+                                HorizontalOptions="End" 
+                                AutomationProperties.IsInAccessibleTree="True"
+                                AutomationProperties.Name="{u:I18n UppercaseAtoZ}"/>
                         </StackLayout>
                         <BoxView StyleClass="box-row-separator" />
                         <StackLayout StyleClass="box-row, box-row-switch">
                             <Label
                                 Text="a-z"
                                 StyleClass="box-label-regular"
-                                HorizontalOptions="StartAndExpand" />
+                                HorizontalOptions="StartAndExpand" 
+                                AutomationProperties.IsInAccessibleTree="True"
+                                AutomationProperties.Name="{u:I18n LowercaseAtoZ}"/>
                             <Switch
                                 IsToggled="{Binding Lowercase}"
                                 IsEnabled="{Binding EnforcedPolicyOptions.UseLowercase,
                                     Converter={StaticResource inverseBool}}"
                                 StyleClass="box-value"
-                                HorizontalOptions="End" />
+                                HorizontalOptions="End"
+                                AutomationProperties.IsInAccessibleTree="True"
+                                AutomationProperties.Name="{u:I18n LowercaseAtoZ}" />
                         </StackLayout>
                         <BoxView StyleClass="box-row-separator" />
                         <StackLayout StyleClass="box-row, box-row-switch">
                             <Label
                                 Text="0-9"
                                 StyleClass="box-label-regular"
-                                HorizontalOptions="StartAndExpand" />
+                                HorizontalOptions="StartAndExpand" 
+                                AutomationProperties.IsInAccessibleTree="True"
+                                AutomationProperties.Name="{u:I18n NumbersZeroToNine}"/>
                             <Switch
                                 IsToggled="{Binding Number}"
                                 IsEnabled="{Binding EnforcedPolicyOptions.UseNumbers,
                                     Converter={StaticResource inverseBool}}"
                                 StyleClass="box-value"
-                                HorizontalOptions="End" />
+                                HorizontalOptions="End" 
+                                AutomationProperties.IsInAccessibleTree="True"
+                                AutomationProperties.Name="{u:I18n NumbersZeroToNine}"/>
                         </StackLayout>
                         <BoxView StyleClass="box-row-separator" />
                         <StackLayout StyleClass="box-row, box-row-switch">
                             <Label
                                 Text="!@#$%^&amp;*"
                                 StyleClass="box-label-regular"
-                                HorizontalOptions="StartAndExpand" />
+                                HorizontalOptions="StartAndExpand" 
+                                AutomationProperties.IsInAccessibleTree="True"
+                                AutomationProperties.Name="{u:I18n SpecialCharacters}"/>
                             <Switch
                                 IsToggled="{Binding Special}"
                                 IsEnabled="{Binding EnforcedPolicyOptions.UseSpecial,
                                     Converter={StaticResource inverseBool}}"
                                 StyleClass="box-value"
-                                HorizontalOptions="End" />
+                                HorizontalOptions="End"
+                                AutomationProperties.IsInAccessibleTree="True"
+                                AutomationProperties.Name="{u:I18n SpecialCharacters}"/>
                         </StackLayout>
                         <BoxView StyleClass="box-row-separator" />
                         <StackLayout StyleClass="box-row, box-row-stepper">
@@ -277,7 +293,7 @@
                                 StyleClass="box-label-regular"
                                 HorizontalOptions="StartAndExpand" />
                             <Switch
-                                IsToggled="{Binding AvoidAmbiguous}"
+                                IsToggled="{Binding AvoidAmbiguousChars}"
                                 StyleClass="box-value"
                                 HorizontalOptions="End" />
                         </StackLayout>

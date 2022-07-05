@@ -17,13 +17,18 @@ namespace Bit.App.Utilities
 
         public static bool IsThemeDirty = false;
 
-        public static void SetThemeStyle(string name, ResourceDictionary resources)
+        public const string Light = "light";
+        public const string Dark = "dark";
+        public const string Black = "black";
+        public const string Nord = "nord";
+
+        public static void SetThemeStyle(string name, string autoDarkName, ResourceDictionary resources)
         {
             try
             {
                 Resources = () => resources;
 
-                var newTheme = NeedsThemeUpdate(name, resources);
+                var newTheme = NeedsThemeUpdate(name, autoDarkName, resources);
                 if (newTheme is null)
                 {
                     return;
@@ -85,22 +90,30 @@ namespace Bit.App.Utilities
                 : Activator.CreateInstance(themeType) as ResourceDictionary;
         }
 
-        static ResourceDictionary NeedsThemeUpdate(string themeName, ResourceDictionary resources)
+        static ResourceDictionary NeedsThemeUpdate(string themeName, string autoDarkThemeName, ResourceDictionary resources)
         {
             switch (themeName)
             {
-                case "dark":
+                case Dark:
                     return CheckAndGetThemeForMergedDictionaries(typeof(Dark), resources);
-                case "black":
+                case Black:
                     return CheckAndGetThemeForMergedDictionaries(typeof(Black), resources);
-                case "nord":
+                case Nord:
                     return CheckAndGetThemeForMergedDictionaries(typeof(Nord), resources);
-                case "light":
+                case Light:
                     return CheckAndGetThemeForMergedDictionaries(typeof(Light), resources);
                 default:
                     if (OsDarkModeEnabled())
                     {
-                        return CheckAndGetThemeForMergedDictionaries(typeof(Dark), resources);
+                        switch (autoDarkThemeName)
+                        {
+                            case Black:
+                                return CheckAndGetThemeForMergedDictionaries(typeof(Black), resources);
+                            case Nord:
+                                return CheckAndGetThemeForMergedDictionaries(typeof(Nord), resources);
+                            default:
+                                return CheckAndGetThemeForMergedDictionaries(typeof(Dark), resources);
+                        }
                     }
                     return CheckAndGetThemeForMergedDictionaries(typeof(Light), resources);
             }
@@ -108,13 +121,19 @@ namespace Bit.App.Utilities
 
         public static void SetTheme(ResourceDictionary resources)
         {
-            SetThemeStyle(GetTheme(), resources);
+            SetThemeStyle(GetTheme(), GetAutoDarkTheme(), resources);
         }
 
         public static string GetTheme()
         {
             var stateService = ServiceContainer.Resolve<IStateService>("stateService");
             return stateService.GetThemeAsync().GetAwaiter().GetResult();
+        }
+
+        public static string GetAutoDarkTheme()
+        {
+            var stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            return stateService.GetAutoDarkThemeAsync().GetAwaiter().GetResult();
         }
 
         public static bool OsDarkModeEnabled()

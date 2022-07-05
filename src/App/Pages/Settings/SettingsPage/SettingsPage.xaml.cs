@@ -59,7 +59,7 @@ namespace Bit.App.Pages
 
         async void OnTimePickerPropertyChanged(object sender, PropertyChangedEventArgs args)
         {
-            var s = (TimePicker) sender;
+            var s = (TimePicker)sender;
             var time = s.Time.TotalMinutes;
             if (s.IsFocused && args.PropertyName == "Time")
             {
@@ -166,6 +166,10 @@ namespace Bit.App.Pages
             else if (item.Name == AppResources.UnlockWithPIN)
             {
                 await _vm.UpdatePinAsync();
+            }
+            else if (item.Name == AppResources.SubmitCrashLogs)
+            {
+                await _vm.LoggerReportingAsync();
             }
             else
             {

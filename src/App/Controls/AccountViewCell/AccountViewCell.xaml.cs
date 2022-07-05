@@ -1,5 +1,5 @@
+﻿using System.Windows.Input;
 using Bit.Core.Models.View;
-using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace Bit.App.Controls

@@ -80,63 +80,63 @@ namespace Bit.Core.Services
                 throw new Exception($"Cannot upload file, exceeds maximum size of {blockSize * MAX_BLOCKS_PER_BLOB}");
             }
 
-                while (blockIndex < numBlocks)
-                {
-                    uri = await RenewUriIfNecessary(uri, renewalFunc);
-                    var blockUriBuilder = new UriBuilder(uri);
-                    var blockId = EncodeBlockId(blockIndex);
-                    var blockParams = HttpUtility.ParseQueryString(blockUriBuilder.Query);
-                    blockParams.Add("comp", "block");
-                    blockParams.Add("blockid", blockId);
-                    blockUriBuilder.Query = blockParams.ToString();
-
-                    using (var requestMessage = new HttpRequestMessage())
-                    {
-                        requestMessage.Headers.Add("x-ms-date", DateTime.UtcNow.ToString("R"));
-                        requestMessage.Headers.Add("x-ms-version", baseParams["sv"]);
-                        requestMessage.Headers.Add("x-ms-blob-type", "BlockBlob");
-
-                        requestMessage.Content = new ByteArrayContent(data.Buffer.Skip(blockIndex * blockSize).Take(blockSize).ToArray());
-                        requestMessage.Version = new Version(1, 0);
-                        requestMessage.Method = HttpMethod.Put;
-                        requestMessage.RequestUri = blockUriBuilder.Uri;
-
-                        var blockResponse = await _httpClient.SendAsync(requestMessage);
-
-                        if (blockResponse.StatusCode != HttpStatusCode.Created)
-                        {
-                            throw new Exception("Failed to create Azure block");
-                        }
-                    }
-
-                    blocksStaged.Add(blockId);
-                    blockIndex++;
-                }
+            while (blockIndex < numBlocks)
+            {
+                uri = await RenewUriIfNecessary(uri, renewalFunc);
+                var blockUriBuilder = new UriBuilder(uri);
+                var blockId = EncodeBlockId(blockIndex);
+                var blockParams = HttpUtility.ParseQueryString(blockUriBuilder.Query);
+                blockParams.Add("comp", "block");
+                blockParams.Add("blockid", blockId);
+                blockUriBuilder.Query = blockParams.ToString();
 
                 using (var requestMessage = new HttpRequestMessage())
                 {
-                    uri = await RenewUriIfNecessary(uri, renewalFunc);
-                    var blockListXml = GenerateBlockListXml(blocksStaged);
-                    var blockListUriBuilder = new UriBuilder(uri);
-                    var blockListParams = HttpUtility.ParseQueryString(blockListUriBuilder.Query);
-                    blockListParams.Add("comp", "blocklist");
-                    blockListUriBuilder.Query = blockListParams.ToString();
-
                     requestMessage.Headers.Add("x-ms-date", DateTime.UtcNow.ToString("R"));
                     requestMessage.Headers.Add("x-ms-version", baseParams["sv"]);
+                    requestMessage.Headers.Add("x-ms-blob-type", "BlockBlob");
 
-                    requestMessage.Content = new StringContent(blockListXml);
+                    requestMessage.Content = new ByteArrayContent(data.Buffer.Skip(blockIndex * blockSize).Take(blockSize).ToArray());
                     requestMessage.Version = new Version(1, 0);
                     requestMessage.Method = HttpMethod.Put;
-                    requestMessage.RequestUri = blockListUriBuilder.Uri;
+                    requestMessage.RequestUri = blockUriBuilder.Uri;
 
-                    var blockListResponse = await _httpClient.SendAsync(requestMessage);
+                    var blockResponse = await _httpClient.SendAsync(requestMessage);
 
-                    if (blockListResponse.StatusCode != HttpStatusCode.Created)
+                    if (blockResponse.StatusCode != HttpStatusCode.Created)
                     {
-                        throw new Exception("Failed to PUT Azure block list");
+                        throw new Exception("Failed to create Azure block");
                     }
                 }
+
+                blocksStaged.Add(blockId);
+                blockIndex++;
+            }
+
+            using (var requestMessage = new HttpRequestMessage())
+            {
+                uri = await RenewUriIfNecessary(uri, renewalFunc);
+                var blockListXml = GenerateBlockListXml(blocksStaged);
+                var blockListUriBuilder = new UriBuilder(uri);
+                var blockListParams = HttpUtility.ParseQueryString(blockListUriBuilder.Query);
+                blockListParams.Add("comp", "blocklist");
+                blockListUriBuilder.Query = blockListParams.ToString();
+
+                requestMessage.Headers.Add("x-ms-date", DateTime.UtcNow.ToString("R"));
+                requestMessage.Headers.Add("x-ms-version", baseParams["sv"]);
+
+                requestMessage.Content = new StringContent(blockListXml);
+                requestMessage.Version = new Version(1, 0);
+                requestMessage.Method = HttpMethod.Put;
+                requestMessage.RequestUri = blockListUriBuilder.Uri;
+
+                var blockListResponse = await _httpClient.SendAsync(requestMessage);
+
+                if (blockListResponse.StatusCode != HttpStatusCode.Created)
+                {
+                    throw new Exception("Failed to PUT Azure block list");
+                }
+            }
         }
 
         private async Task<string> RenewUriIfNecessary(string uri, Func<Task<string>> renewalFunc)
@@ -153,7 +153,7 @@ namespace Bit.Core.Services
         private string GenerateBlockListXml(List<string> blocksStaged)
         {
             var xml = new StringBuilder("<?xml version=\"1.0\" encoding=\"utf-8\"?><BlockList>");
-            foreach(var blockId in blocksStaged)
+            foreach (var blockId in blocksStaged)
             {
                 xml.Append($"<Latest>{blockId}</Latest>");
             }
@@ -180,7 +180,7 @@ namespace Bit.Core.Services
                 maxSize = 104857600L; // 100 MiB
             }
 
-            return maxSize > MAX_MOBILE_BLOCK_SIZE ? (int)MAX_MOBILE_BLOCK_SIZE : (int) maxSize;
+            return maxSize > MAX_MOBILE_BLOCK_SIZE ? (int)MAX_MOBILE_BLOCK_SIZE : (int)maxSize;
         }
 
         private int CompareAzureVersions(string a, string b)

@@ -1,4 +1,10 @@
-﻿using Bit.Core.Abstractions;
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
+using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.Domain;
@@ -7,12 +13,6 @@ using Bit.Core.Models.Response;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
-using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Bit.Core.Services
 {
@@ -202,7 +202,7 @@ namespace Bit.Core.Services
         {
             return SendAsync<DeleteAccountRequest, object>(HttpMethod.Delete, "/accounts", request, true, false);
         }
-        
+
         public Task PostConvertToKeyConnector()
         {
             return SendAsync<object, object>(HttpMethod.Post, "/accounts/convert-to-key-connector", null, true, false);
@@ -438,9 +438,9 @@ namespace Bit.Core.Services
         }
 
         #endregion
-        
+
         #region Organizations APIs
-        
+
         public Task<OrganizationKeysResponse> GetOrganizationKeysAsync(string id)
         {
             return SendAsync<object, OrganizationKeysResponse>(HttpMethod.Get, $"/organizations/{id}/keys", null, true, true);
@@ -547,7 +547,7 @@ namespace Bit.Core.Services
             return accessToken;
         }
 
-        public async Task<object> PreValidateSso(string identifier)
+        public async Task<SsoPrevalidateResponse> PreValidateSso(string identifier)
         {
             var path = "/account/prevalidate?domainHint=" + WebUtility.UrlEncode(identifier);
             using (var requestMessage = new HttpRequestMessage())
@@ -556,7 +556,7 @@ namespace Bit.Core.Services
                 requestMessage.Method = HttpMethod.Get;
                 requestMessage.RequestUri = new Uri(string.Concat(IdentityBaseUrl, path));
                 requestMessage.Headers.Add("Accept", "application/json");
-                
+
                 HttpResponseMessage response;
                 try
                 {
@@ -571,7 +571,8 @@ namespace Bit.Core.Services
                     var error = await HandleErrorAsync(response, false, true);
                     throw new ApiException(error);
                 }
-                return null;
+                var responseJsonString = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<SsoPrevalidateResponse>(responseJsonString);
             }
         }
 

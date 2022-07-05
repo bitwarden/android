@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 
 namespace Bit.Core.Services
@@ -17,5 +18,11 @@ namespace Bit.Core.Services
         public void Exception(Exception ex)
         {
         }
+
+        public Task InitAsync() => Task.CompletedTask;
+
+        public Task<bool> IsEnabled() => Task.FromResult(false);
+
+        public Task SetEnabled(bool value) => Task.CompletedTask;
     }
 }

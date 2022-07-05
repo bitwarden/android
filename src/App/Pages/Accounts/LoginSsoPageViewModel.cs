@@ -1,13 +1,13 @@
-﻿using Bit.App.Abstractions;
-using Bit.App.Resources;
-using Bit.Core.Abstractions;
-using Bit.Core.Utilities;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using Bit.App.Abstractions;
+using Bit.App.Resources;
 using Bit.App.Utilities;
+using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.Domain;
+using Bit.Core.Utilities;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -81,10 +81,12 @@ namespace Bit.App.Pages
             }
 
             await _deviceActionService.ShowLoadingAsync(AppResources.LoggingIn);
+            string ssoToken;
 
             try
             {
-                await _apiService.PreValidateSso(OrgIdentifier);
+                var response = await _apiService.PreValidateSso(OrgIdentifier);
+                ssoToken = response.Token;
             }
             catch (ApiException e)
             {
@@ -112,7 +114,8 @@ namespace Bit.App.Pages
                       "response_type=code&scope=api%20offline_access&" +
                       "state=" + state + "&code_challenge=" + codeChallenge + "&" +
                       "code_challenge_method=S256&response_mode=query&" +
-                      "domain_hint=" + Uri.EscapeDataString(OrgIdentifier);
+                      "domain_hint=" + Uri.EscapeDataString(OrgIdentifier) + "&" +
+                      "ssoToken=" + Uri.EscapeDataString(ssoToken);
 
             WebAuthenticatorResult authResult = null;
             try
@@ -170,7 +173,7 @@ namespace Bit.App.Pages
                 else if (response.ResetMasterPassword)
                 {
                     StartSetPasswordAction?.Invoke();
-                } 
+                }
                 else if (response.ForcePasswordReset)
                 {
                     UpdateTempPasswordAction?.Invoke();

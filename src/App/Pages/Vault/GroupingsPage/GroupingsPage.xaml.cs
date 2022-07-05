@@ -27,8 +27,8 @@ namespace Bit.App.Pages
         private PreviousPageInfo _previousPage;
 
         public GroupingsPage(bool mainPage, CipherType? type = null, string folderId = null,
-            string collectionId = null, string pageTitle = null, PreviousPageInfo previousPage = null, 
-            bool deleted = false)
+            string collectionId = null, string pageTitle = null, string vaultFilterSelection = null,
+            PreviousPageInfo previousPage = null, bool deleted = false)
         {
             _pageName = string.Concat(nameof(GroupingsPage), "_", DateTime.UtcNow.Ticks);
             InitializeComponent();
@@ -51,6 +51,10 @@ namespace Bit.App.Pages
             if (pageTitle != null)
             {
                 _vm.PageTitle = pageTitle;
+            }
+            if (vaultFilterSelection != null)
+            {
+                _vm.VaultFilterDescription = vaultFilterSelection;
             }
 
             if (Device.RuntimePlatform == Device.iOS)
@@ -117,7 +121,7 @@ namespace Bit.App.Pages
                     {
                         await _vm.LoadAsync();
                     }
-                    catch (Exception e) when(e.Message.Contains("No key."))
+                    catch (Exception e) when (e.Message.Contains("No key."))
                     {
                         await Task.Delay(1000);
                         await _vm.LoadAsync();
@@ -225,8 +229,7 @@ namespace Bit.App.Pages
             await _accountListOverlay.HideAsync();
             if (DoOnce())
             {
-                var page = new CiphersPage(_vm.Filter, _vm.FolderId != null, _vm.CollectionId != null,
-                    _vm.Type != null, deleted: _vm.Deleted);
+                var page = new CiphersPage(_vm.Filter, _vm.MainPage ? null : _vm.PageTitle, deleted: _vm.Deleted);
                 await Navigation.PushModalAsync(new NavigationPage(page));
             }
         }
@@ -260,7 +263,7 @@ namespace Bit.App.Pages
             }
             if (!_vm.Deleted && DoOnce())
             {
-                var page = new AddEditPage(null, _vm.Type, _vm.FolderId, _vm.CollectionId);
+                var page = new AddEditPage(null, _vm.Type, _vm.FolderId, _vm.CollectionId, _vm.GetVaultFilterOrgId());
                 await Navigation.PushModalAsync(new NavigationPage(page));
             }
         }

@@ -41,8 +41,11 @@ namespace Bit.App.Pages
         public async Task InitAsync()
         {
             var history = await _passwordGenerationService.GetHistoryAsync();
-            History.ResetWithRange(history ?? new List<GeneratedPasswordHistory>());
-            ShowNoData = History.Count == 0;
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                History.ResetWithRange(history ?? new List<GeneratedPasswordHistory>());
+                ShowNoData = History.Count == 0;
+            });
         }
 
         public async Task ClearAsync()
@@ -55,8 +58,7 @@ namespace Bit.App.Pages
         private async void CopyAsync(GeneratedPasswordHistory ph)
         {
             await _clipboardService.CopyTextAsync(ph.Password);
-            _platformUtilsService.ShowToast("info", null,
-                string.Format(AppResources.ValueHasBeenCopied, AppResources.Password));
+            _platformUtilsService.ShowToastForCopiedValue(AppResources.Password);
         }
 
         public async Task UpdateOnThemeChanged()

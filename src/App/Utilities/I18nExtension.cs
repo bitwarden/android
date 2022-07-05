@@ -1,6 +1,6 @@
-﻿using Bit.Core.Abstractions;
+﻿using System;
+using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
-using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 

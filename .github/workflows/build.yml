@@ -60,6 +60,11 @@ jobs:
     runs-on: windows-2019
     needs: setup
     steps:
+      - name: Setup NuGet
+        uses: nuget/setup-nuget@b2bc17b761a1d88cab755a776c7922eb26eefbfa  # v1.0.6
+        with:
+          nuget-version: 5.9.0
+
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@ab534842b4bdf384b8aaf93765dc6f721d9f5fab
 
@@ -104,6 +109,14 @@ jobs:
 
       - name: Restore packages
         run: nuget restore
+
+      - name: Restore tools
+        run: dotnet tool restore
+        shell: pwsh
+
+      - name: Verify Format
+        run: dotnet tool run dotnet-format --check
+        shell: pwsh
 
       - name: Run Core tests
         run: dotnet test test/Core.Test/Core.Test.csproj
@@ -201,6 +214,11 @@ jobs:
     name: F-Droid Build
     runs-on: windows-2019
     steps:
+      - name: Setup NuGet
+        uses: nuget/setup-nuget@b2bc17b761a1d88cab755a776c7922eb26eefbfa  # v1.0.6
+        with:
+          nuget-version: 5.9.0
+
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@ab534842b4bdf384b8aaf93765dc6f721d9f5fab
 
@@ -297,18 +315,6 @@ jobs:
           $xml.Save($androidPath);
 
           Write-Output "########################################"
-          Write-Output "##### Uninstall from App.csproj"
-          Write-Output "########################################"
-
-          $xml=New-Object XML;
-          $xml.Load($appPath);
-
-          $appCenterNode=$xml.SelectSingleNode("/Project/ItemGroup/PackageReference[@Include='Microsoft.AppCenter.Crashes']");
-          $appCenterNode.ParentNode.RemoveChild($appCenterNode);
-
-          $xml.Save($appPath);
-
-          Write-Output "########################################"
           Write-Output "##### Uninstall from Core.csproj"
           Write-Output "########################################"
 
@@ -372,6 +378,11 @@ jobs:
     runs-on: macos-11
     needs: setup
     steps:
+      - name: Setup NuGet
+        uses: nuget/setup-nuget@b2bc17b761a1d88cab755a776c7922eb26eefbfa  # v1.0.6
+        with:
+          nuget-version: 5.9.0
+
       - name: Print environment
         run: |
           nuget help | grep Version
@@ -544,7 +555,7 @@ jobs:
             || github.ref == 'refs/heads/hotfix-rc'
         env:
           APPCENTER_IOS_TOKEN: ${{ steps.retrieve-secrets.outputs.appcenter-ios-token }}
-        run: appcenter crashes upload-symbols -a kspearrin/bitwarden -s "./bitwarden-export/dSYMs" --token $APPCENTER_IOS_TOKEN
+        run: appcenter crashes upload-symbols -a bitwarden/bitwarden -s "./bitwarden-export/dSYMs" --token $APPCENTER_IOS_TOKEN
         shell: bash
 
       - name: Deploy to App Store

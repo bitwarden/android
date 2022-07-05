@@ -1,15 +1,15 @@
-﻿using Bit.Core.Abstractions;
+﻿using System;
+using System.Threading.Tasks;
+using Bit.Core.Abstractions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using System;
-using System.Threading.Tasks;
 
 namespace Bit.App.Services
 {
     public class PreferencesStorageService : IStorageService
     {
         public static string KeyFormat = "bwPreferencesStorage:{0}";
-        
+
         private readonly string _sharedName;
         private readonly JsonSerializerSettings _jsonSettings = new JsonSerializerSettings
         {

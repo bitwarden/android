@@ -1,8 +1,8 @@
-﻿using Bit.Core;
-using Bit.Core.Abstractions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Bit.Core;
+using Bit.Core.Abstractions;
 
 namespace Bit.App.Services
 {
@@ -25,6 +25,7 @@ namespace Bit.App.Services
             Constants.LastBuildKey,
             Constants.ClearCiphersCacheKey,
             Constants.BiometricIntegrityKey,
+            Constants.iOSExtensionActiveUserIdKey,
             Constants.iOSAutoFillClearCiphersCacheKey,
             Constants.iOSAutoFillBiometricIntegrityKey,
             Constants.iOSExtensionClearCiphersCacheKey,
@@ -32,7 +33,7 @@ namespace Bit.App.Services
             Constants.iOSShareExtensionClearCiphersCacheKey,
             Constants.iOSShareExtensionBiometricIntegrityKey,
             Constants.RememberedEmailKey,
-            Constants.RememberedOrgIdentifierKey,
+            Constants.RememberedOrgIdentifierKey
         };
 
         public MobileStorageService(

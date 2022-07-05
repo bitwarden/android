@@ -1,11 +1,11 @@
-﻿using Bit.Core.Abstractions;
-using Bit.Core.Exceptions;
-using Bit.Core.Models.Response;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Bit.Core.Abstractions;
+using Bit.Core.Exceptions;
+using Bit.Core.Models.Response;
 
 namespace Bit.Core.Services
 {

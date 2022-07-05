@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bit.Core.Enums;
@@ -20,5 +20,6 @@ namespace Bit.Core.Abstractions
             string orgId);
         Task<bool> PolicyAppliesToUser(PolicyType policyType, Func<Policy, bool> policyFilter = null, string userId = null);
         int? GetPolicyInt(Policy policy, string key);
+        Task<bool> ShouldShowVaultFilterAsync();
     }
 }

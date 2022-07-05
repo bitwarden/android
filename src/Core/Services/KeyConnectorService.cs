@@ -36,7 +36,7 @@ namespace Bit.Core.Services
             catch (Exception e)
             {
                 throw new Exception("Unable to reach Key Connector", e);
-            }            
+            }
         }
 
         public async Task SetUsesKeyConnector(bool usesKeyConnector)

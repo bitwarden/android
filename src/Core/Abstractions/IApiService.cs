@@ -1,10 +1,10 @@
-﻿using Bit.Core.Models.Domain;
-using Bit.Core.Models.Request;
-using Bit.Core.Models.Response;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Bit.Core.Models.Domain;
+using Bit.Core.Models.Request;
+using Bit.Core.Models.Response;
 
 namespace Bit.Core.Abstractions
 {
@@ -44,7 +44,7 @@ namespace Bit.Core.Abstractions
         Task PutDeleteCipherAsync(string id);
         Task<CipherResponse> PutRestoreCipherAsync(string id);
         Task RefreshIdentityTokenAsync();
-        Task<object> PreValidateSso(string identifier);
+        Task<SsoPrevalidateResponse> PreValidateSso(string identifier);
         Task<TResponse> SendAsync<TRequest, TResponse>(HttpMethod method, string path,
             TRequest body, bool authed, bool hasResponse, bool logoutOnUnauthorized = true);
         void SetUrls(EnvironmentUrls urls);

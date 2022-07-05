@@ -1,16 +1,16 @@
-﻿using Bit.App.Abstractions;
-using Bit.App.Resources;
-using Bit.Core.Abstractions;
-using Bit.Core.Utilities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Bit.App.Abstractions;
+using Bit.App.Resources;
+using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
-using Xamarin.Forms;
-using ZXing.Client.Result;
+using Bit.Core.Services;
+using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
+using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
@@ -29,7 +29,7 @@ namespace Bit.App.Pages
         private readonly ILocalizeService _localizeService;
         private readonly IKeyConnectorService _keyConnectorService;
         private readonly IClipboardService _clipboardService;
-
+        private readonly ILogger _loggerService;
         private const int CustomVaultTimeoutValue = -100;
 
         private bool _supportsBiometric;
@@ -39,6 +39,7 @@ namespace Bit.App.Pages
         private string _vaultTimeoutDisplayValue;
         private string _vaultTimeoutActionDisplayValue;
         private bool _showChangeMasterPassword;
+        private bool _reportLoggingEnabled;
 
         private List<KeyValuePair<string, int?>> _vaultTimeouts =
             new List<KeyValuePair<string, int?>>
@@ -79,6 +80,7 @@ namespace Bit.App.Pages
             _localizeService = ServiceContainer.Resolve<ILocalizeService>("localizeService");
             _keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
             _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
+            _loggerService = ServiceContainer.Resolve<ILogger>("logger");
 
             GroupedItems = new ObservableRangeCollection<ISettingsPageListItem>();
             PageTitle = AppResources.Settings;
@@ -123,7 +125,7 @@ namespace Bit.App.Pages
 
             _showChangeMasterPassword = IncludeLinksWithSubscriptionInfo() &&
                 !await _keyConnectorService.GetUsesKeyConnector();
-
+            _reportLoggingEnabled = await _loggerService.IsEnabled();
             BuildList();
         }
 
@@ -286,6 +288,26 @@ namespace Bit.App.Pages
             }
         }
 
+        public async Task LoggerReportingAsync()
+        {
+            var options = new[]
+            {
+                    CreateSelectableOption(AppResources.Yes, _reportLoggingEnabled),
+                    CreateSelectableOption(AppResources.No, !_reportLoggingEnabled),
+            };
+
+            var selection = await Page.DisplayActionSheet(AppResources.SubmitCrashLogsDescription, AppResources.Cancel, null, options);
+
+            if (selection == null || selection == AppResources.Cancel)
+            {
+                return;
+            }
+
+            await _loggerService.SetEnabled(CompareSelection(selection, AppResources.Yes));
+            _reportLoggingEnabled = await _loggerService.IsEnabled();
+            BuildList();
+        }
+
         public async Task VaultTimeoutActionAsync()
         {
             var options = _vaultTimeoutActions.Select(o =>
@@ -428,7 +450,7 @@ namespace Bit.App.Pages
             var securityItems = new List<SettingsPageListItem>
             {
                 new SettingsPageListItem { Name = AppResources.VaultTimeout, SubLabel = _vaultTimeoutDisplayValue },
-                new SettingsPageListItem 
+                new SettingsPageListItem
                 {
                     Name = AppResources.VaultTimeoutAction,
                     SubLabel = _vaultTimeoutActionDisplayValue
@@ -494,11 +516,19 @@ namespace Bit.App.Pages
                 toolsItems.Add(new SettingsPageListItem { Name = AppResources.LearnOrg });
                 toolsItems.Add(new SettingsPageListItem { Name = AppResources.WebVault });
             }
+
             var otherItems = new List<SettingsPageListItem>
             {
                 new SettingsPageListItem { Name = AppResources.Options },
                 new SettingsPageListItem { Name = AppResources.About },
                 new SettingsPageListItem { Name = AppResources.HelpAndFeedback },
+#if !FDROID 
+                new SettingsPageListItem
+                {
+                    Name = AppResources.SubmitCrashLogs,
+                    SubLabel = _reportLoggingEnabled ? AppResources.Enabled : AppResources.Disabled,
+                },
+#endif
                 new SettingsPageListItem { Name = AppResources.RateTheApp },
                 new SettingsPageListItem { Name = AppResources.DeleteAccount }
             };
@@ -576,5 +606,9 @@ namespace Bit.App.Pages
         {
             return _vaultTimeouts.FirstOrDefault(o => o.Key == key).Value;
         }
+
+        private string CreateSelectableOption(string option, bool selected) => selected ? $"✓ {option}" : option;
+
+        private bool CompareSelection(string selection, string compareTo) => selection == compareTo || selection == $"✓ {compareTo}";
     }
 }

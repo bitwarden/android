@@ -48,7 +48,8 @@
                   IsVisible="{Binding ShowNoData, Converter={StaticResource inverseBool}}"
                   ItemsSource="{Binding History}"
                   VerticalOptions="FillAndExpand"
-                  StyleClass="list, list-platform">
+                  StyleClass="list, list-platform"
+                  ExtraDataForLogging="Generator History Page">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="domain:GeneratedPasswordHistory">
                     <Grid

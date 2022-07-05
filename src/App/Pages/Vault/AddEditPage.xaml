@@ -162,6 +162,7 @@
                             Grid.RowSpan="2"
                             AutomationProperties.IsInAccessibleTree="True"
                             AutomationProperties.Name="{u:I18n ToggleVisibility}"
+                            AutomationProperties.HelpText="{Binding PasswordVisibilityAccessibilityText}"
                             IsVisible="{Binding Cipher.ViewPassword}" />
                         <controls:IconButton 
                             StyleClass="box-row-button, box-row-button-platform"
@@ -732,7 +733,6 @@
                     <BoxView StyleClass="box-row-separator" />
                 </StackLayout>
                 <controls:RepeaterView 
-                    x:Name="_collectionsRepeaterView" 
                     ItemsSource="{Binding Collections}"
                     IsVisible="{Binding HasCollections}">
                     <controls:RepeaterView.ItemTemplate>

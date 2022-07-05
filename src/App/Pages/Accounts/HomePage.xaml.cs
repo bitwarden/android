@@ -87,7 +87,7 @@ namespace Bit.App.Pages
         {
             _logo.Source = !ThemeManager.UsingLightTheme ? "logo_white.png" : "logo.png";
         }
-        
+
         private void Cancel_Clicked(object sender, EventArgs e)
         {
             if (DoOnce())
@@ -117,7 +117,7 @@ namespace Bit.App.Pages
                 _vm.StartRegisterAction();
             }
         }
-        
+
         private async Task StartRegisterAsync()
         {
             var page = new RegisterPage(this);
@@ -145,7 +145,7 @@ namespace Bit.App.Pages
                 _vm.StartEnvironmentAction();
             }
         }
-        
+
         private async Task StartEnvironmentAsync()
         {
             await _accountListOverlay.HideAsync();

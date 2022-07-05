@@ -1,4 +1,8 @@
-﻿using Bit.App.Abstractions;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Bit.App.Abstractions;
+using Bit.App.Controls;
 using Bit.App.Models;
 using Bit.App.Resources;
 using Bit.App.Utilities;
@@ -8,9 +12,6 @@ using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
@@ -23,8 +24,10 @@ namespace Bit.App.Pages
         private readonly ICipherService _cipherService;
         private readonly IStateService _stateService;
         private readonly IPasswordRepromptService _passwordRepromptService;
+        private readonly IMessagingService _messagingService;
+        private readonly ILogger _logger;
 
-        private AppOptions _appOptions;
+        private bool _showNoData;
         private bool _showList;
         private string _noDataText;
         private bool _websiteIconsEnabled;
@@ -36,15 +39,30 @@ namespace Bit.App.Pages
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _passwordRepromptService = ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService");
+            _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
+            _logger = ServiceContainer.Resolve<ILogger>("logger");
 
             GroupedItems = new ObservableRangeCollection<IGroupingsPageListItem>();
             CipherOptionsCommand = new Command<CipherView>(CipherOptionsAsync);
+
+            AccountSwitchingOverlayViewModel = new AccountSwitchingOverlayViewModel(_stateService, _messagingService, _logger)
+            {
+                AllowAddAccountRow = false
+            };
         }
 
         public string Name { get; set; }
         public string Uri { get; set; }
         public Command CipherOptionsCommand { get; set; }
+        public bool LoadedOnce { get; set; }
         public ObservableRangeCollection<IGroupingsPageListItem> GroupedItems { get; set; }
+        public AccountSwitchingOverlayViewModel AccountSwitchingOverlayViewModel { get; }
+
+        public bool ShowNoData
+        {
+            get => _showNoData;
+            set => SetProperty(ref _showNoData, value);
+        }
 
         public bool ShowList
         {
@@ -65,10 +83,9 @@ namespace Bit.App.Pages
 
         public void Init(AppOptions appOptions)
         {
-            _appOptions = appOptions;
-            Uri = appOptions.Uri;
+            Uri = appOptions?.Uri;
             string name = null;
-            if (Uri.StartsWith(Constants.AndroidAppProtocol))
+            if (Uri?.StartsWith(Constants.AndroidAppProtocol) ?? false)
             {
                 name = Uri.Substring(Constants.AndroidAppProtocol.Length);
             }
@@ -87,8 +104,10 @@ namespace Bit.App.Pages
 
         public async Task LoadAsync()
         {
-            WebsiteIconsEnabled = !(await _stateService.GetDisableFaviconAsync()).GetValueOrDefault();
+            LoadedOnce = true;
             ShowList = false;
+            ShowNoData = false;
+            WebsiteIconsEnabled = !(await _stateService.GetDisableFaviconAsync()).GetValueOrDefault();
             var groupedItems = new List<GroupingsPageListGroup>();
             var ciphers = await _cipherService.GetAllDecryptedByUrlAsync(Uri, null);
             var matching = ciphers.Item1?.Select(c => new GroupingsPageListItem { Cipher = c }).ToList();
@@ -150,6 +169,7 @@ namespace Bit.App.Pages
                 }
             }
             ShowList = groupedItems.Any();
+            ShowNoData = !ShowList;
         }
 
         public async Task SelectCipherAsync(CipherView cipher, bool fuzzy)

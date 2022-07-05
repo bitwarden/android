@@ -84,7 +84,7 @@
     <PackageReference Include="Xamarin.AndroidX.MediaRouter" Version="1.2.5.2" />
     <PackageReference Include="Xamarin.AndroidX.Migration" Version="1.0.8" />
     <PackageReference Include="Xamarin.Essentials">
-      <Version>1.7.1</Version>
+      <Version>1.7.3</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Firebase.Messaging">
       <Version>122.0.0</Version>
@@ -145,12 +145,12 @@
     <Compile Include="Tiles\GeneratorTileService.cs" />
     <Compile Include="Tiles\MyVaultTileService.cs" />
     <Compile Include="Utilities\AndroidHelpers.cs" />
-    <Compile Include="Utilities\AppCenterHelper.cs" />
     <Compile Include="Utilities\ThemeHelpers.cs" />
     <Compile Include="WebAuthCallbackActivity.cs" />
     <Compile Include="Renderers\SelectableLabelRenderer.cs" />
     <Compile Include="Services\ClipboardService.cs" />
     <Compile Include="Utilities\IntentExtensions.cs" />
+    <Compile Include="Renderers\CustomPageRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\bwi-font.ttf" />

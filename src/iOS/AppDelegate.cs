@@ -294,7 +294,7 @@ namespace Bit.iOS
             var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             ServiceContainer.Init(deviceActionService.DeviceUserAgent, Constants.ClearCiphersCacheKey, 
                 Constants.iOSAllClearCipherCacheKeys);
-            iOSCoreHelpers.RegisterAppCenter();
+            iOSCoreHelpers.InitLogger();
             _pushHandler = new iOSPushNotificationHandler(
                 ServiceContainer.Resolve<IPushNotificationListenerService>("pushNotificationListenerService"));
             _nfcDelegate = new Core.NFCReaderDelegate((success, message) =>

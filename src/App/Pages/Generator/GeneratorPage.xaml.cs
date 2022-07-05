@@ -12,7 +12,7 @@ namespace Bit.App.Pages
     public partial class GeneratorPage : BaseContentPage, IThemeDirtablePage
     {
         private readonly IBroadcasterService _broadcasterService;
-        
+
         private GeneratorPageViewModel _vm;
         private readonly bool _fromTabPage;
         private readonly Action<string> _selectAction;
@@ -77,7 +77,7 @@ namespace Bit.App.Pages
                 }
             });
         }
-        
+
         protected override void OnDisappearing()
         {
             base.OnDisappearing();

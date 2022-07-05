@@ -68,7 +68,8 @@
                         Grid.Column="1"
                         Grid.RowSpan="2"
                         AutomationProperties.IsInAccessibleTree="True"
-                        AutomationProperties.Name="{u:I18n ToggleVisibility}" />
+                        AutomationProperties.Name="{u:I18n ToggleVisibility}" 
+                        AutomationProperties.HelpText="{Binding PasswordVisibilityAccessibilityText}"/>
                 </Grid>
                 <Label
                     Text="{u:I18n MasterPasswordDescription}"
@@ -106,7 +107,8 @@
                         Grid.Column="1"
                         Grid.RowSpan="2"
                         AutomationProperties.IsInAccessibleTree="True"
-                        AutomationProperties.Name="{u:I18n ToggleVisibility}" />
+                        AutomationProperties.Name="{u:I18n ToggleVisibility}"
+                        AutomationProperties.HelpText="{Binding PasswordVisibilityAccessibilityText}" />
                 </Grid>
                 <StackLayout StyleClass="box-row">
                     <Label
