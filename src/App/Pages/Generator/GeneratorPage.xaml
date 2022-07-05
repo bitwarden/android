@@ -89,7 +89,7 @@
                     </StackLayout>
                     <StackLayout StyleClass="box-row, box-row-input">
                         <Label
-                            Text="{u:I18n Type}"
+                            Text="{u:I18n PasswordType}"
                             StyleClass="box-label" />
                         <Picker
                             x:Name="_typePicker"

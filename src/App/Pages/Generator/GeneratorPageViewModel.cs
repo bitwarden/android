@@ -40,7 +40,7 @@ namespace Bit.App.Pages
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
 
-            PageTitle = AppResources.PasswordGenerator;
+            PageTitle = AppResources.Generator;
             TypeOptions = new List<string> { AppResources.Password, AppResources.Passphrase };
         }
 

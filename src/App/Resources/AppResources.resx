@@ -2254,4 +2254,7 @@
   <data name="All" xml:space="preserve">
     <value>All</value>
   </data>
+    <data name="PasswordType" xml:space="preserve">
+    <value>Password Type</value>
+  </data>
 </root>
