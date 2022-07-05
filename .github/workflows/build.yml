@@ -60,6 +60,11 @@ jobs:
     runs-on: windows-2019
     needs: setup
     steps:
+      - name: Setup NuGet
+        uses: nuget/setup-nuget@b2bc17b761a1d88cab755a776c7922eb26eefbfa  # v1.0.6
+        with:
+          nuget-version: 5.9.0
+
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@ab534842b4bdf384b8aaf93765dc6f721d9f5fab
 
@@ -209,6 +214,11 @@ jobs:
     name: F-Droid Build
     runs-on: windows-2019
     steps:
+      - name: Setup NuGet
+        uses: nuget/setup-nuget@b2bc17b761a1d88cab755a776c7922eb26eefbfa  # v1.0.6
+        with:
+          nuget-version: 5.9.0
+
       - name: Set up MSBuild
         uses: microsoft/setup-msbuild@ab534842b4bdf384b8aaf93765dc6f721d9f5fab
 
@@ -368,6 +378,11 @@ jobs:
     runs-on: macos-11
     needs: setup
     steps:
+      - name: Setup NuGet
+        uses: nuget/setup-nuget@b2bc17b761a1d88cab755a776c7922eb26eefbfa  # v1.0.6
+        with:
+          nuget-version: 5.9.0
+
       - name: Print environment
         run: |
           nuget help | grep Version

@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
-using Bit.Core;
+using Android.OS;
 using Bit.Core.Abstractions;
 using Bit.Droid.Receivers;
 using Plugin.CurrentActivity;
@@ -26,11 +26,39 @@ namespace Bit.Droid.Services
                                            PendingIntentFlags.UpdateCurrent));
         }
 
-        public async Task CopyTextAsync(string text, int expiresInMs = -1)
+        public async Task CopyTextAsync(string text, int expiresInMs = -1, bool isSensitive = true)
         {
-            await Clipboard.SetTextAsync(text);
+             // Xamarin.Essentials.Clipboard currently doesn't support the IS_SENSITIVE flag for API 33+
+            if ((int)Build.VERSION.SdkInt < 33)
+            {
+                await Clipboard.SetTextAsync(text);
+            }
+            else
+            {
+                CopyToClipboard(text, isSensitive);
+            }
 
             await ClearClipboardAlarmAsync(expiresInMs);
+        }
+
+        public bool IsCopyNotificationHandledByPlatform()
+        {
+            // Android 13+ provides built-in notification when text is copied to the clipboard
+            return (int)Build.VERSION.SdkInt >= 33;
+        }
+
+        private void CopyToClipboard(string text, bool isSensitive = true)
+        {
+            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            var clipboardManager = activity.GetSystemService(
+                Context.ClipboardService) as Android.Content.ClipboardManager;
+            var clipData = ClipData.NewPlainText("bitwarden", text);
+            if (isSensitive)
+            {
+                clipData.Description.Extras ??= new PersistableBundle();
+                clipData.Description.Extras.PutBoolean("android.content.extra.IS_SENSITIVE", true);
+            }
+            clipboardManager.PrimaryClip = clipData;
         }
 
         private async Task ClearClipboardAlarmAsync(int expiresInMs = -1)

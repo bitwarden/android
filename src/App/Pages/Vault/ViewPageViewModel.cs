@@ -120,7 +120,8 @@ namespace Bit.App.Pages
             set => SetProperty(ref _showPassword, value,
                 additionalPropertyNames: new string[]
                 {
-                    nameof(ShowPasswordIcon)
+                    nameof(ShowPasswordIcon),
+                    nameof(PasswordVisibilityAccessibilityText)
                 });
         }
         public bool ShowCardNumber
@@ -213,6 +214,7 @@ namespace Bit.App.Pages
         public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public string ShowCardNumberIcon => ShowCardNumber ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public string ShowCardCodeIcon => ShowCardCode ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
+        public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
         public string TotpCodeFormatted
         {
             get => _totpCodeFormatted;
@@ -661,7 +663,7 @@ namespace Bit.App.Pages
                 await _clipboardService.CopyTextAsync(text);
                 if (!string.IsNullOrWhiteSpace(name))
                 {
-                    _platformUtilsService.ShowToast("info", null, string.Format(AppResources.ValueHasBeenCopied, name));
+                    _platformUtilsService.ShowToastForCopiedValue(name);
                 }
                 if (id == "LoginPassword")
                 {
@@ -754,12 +756,12 @@ namespace Bit.App.Pages
             {
                 if (IsBooleanType)
                 {
-                    return _field.Value == "true" ? "" : "";
+                    return _field.Value == "true" ? BitwardenIcons.Square : BitwardenIcons.CheckSquare;
                 }
                 else if (IsLinkedType)
                 {
                     var i18nKey = _cipher.LinkedFieldI18nKey(Field.LinkedId.GetValueOrDefault());
-                    return " " + _i18nService.T(i18nKey);
+                    return BitwardenIcons.Link + _i18nService.T(i18nKey);
                 }
                 else
                 {

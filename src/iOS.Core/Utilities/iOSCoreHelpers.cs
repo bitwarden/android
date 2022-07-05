@@ -7,6 +7,7 @@ using Bit.App.Pages;
 using Bit.App.Resources;
 using Bit.App.Services;
 using Bit.App.Utilities;
+using Bit.App.Utilities.AccountManagement;
 using Bit.Core.Abstractions;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
@@ -60,13 +61,13 @@ namespace Bit.iOS.Core.Utilities
                 () => ServiceContainer.Resolve<IAppIdService>("appIdService").GetAppIdAsync());
             var cryptoPrimitiveService = new CryptoPrimitiveService();
             var mobileStorageService = new MobileStorageService(preferencesStorage, liteDbStorage);
-            var stateService = new StateService(mobileStorageService, secureStorageService);
+            var stateService = new StateService(mobileStorageService, secureStorageService, messagingService);
             var stateMigrationService =
                 new StateMigrationService(liteDbStorage, preferencesStorage, secureStorageService);
             var deviceActionService = new DeviceActionService(stateService, messagingService);
             var clipboardService = new ClipboardService(stateService);
-            var platformUtilsService = new MobilePlatformUtilsService(deviceActionService, messagingService,
-                broadcasterService);
+            var platformUtilsService = new MobilePlatformUtilsService(deviceActionService, clipboardService,
+                messagingService, broadcasterService);
             var biometricService = new BiometricService(mobileStorageService);
             var cryptoFunctionService = new PclCryptoFunctionService(cryptoPrimitiveService);
             var cryptoService = new CryptoService(stateService, cryptoFunctionService);
@@ -173,6 +174,15 @@ namespace Bit.iOS.Core.Utilities
                 ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService"),
                 ServiceContainer.Resolve<ICryptoService>("cryptoService"));
             ServiceContainer.Register<IVerificationActionsFlowHelper>("verificationActionsFlowHelper", verificationActionsFlowHelper);
+
+            var accountsManager = new AccountsManager(
+                ServiceContainer.Resolve<IBroadcasterService>("broadcasterService"),
+                ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService"),
+                ServiceContainer.Resolve<IStorageService>("secureStorageService"),
+                ServiceContainer.Resolve<IStateService>("stateService"),
+                ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService"),
+                ServiceContainer.Resolve<IAuthService>("authService"));
+            ServiceContainer.Register<IAccountsManager>("accountsManager", accountsManager);
 
             if (postBootstrapFunc != null)
             {

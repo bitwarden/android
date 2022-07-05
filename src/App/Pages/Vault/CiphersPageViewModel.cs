@@ -5,17 +5,17 @@ using System.Threading;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
-using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
-    public class CiphersPageViewModel : BaseViewModel
+    public class CiphersPageViewModel : VaultFilterViewModel
     {
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly ICipherService _cipherService;
@@ -23,7 +23,10 @@ namespace Bit.App.Pages
         private readonly IDeviceActionService _deviceActionService;
         private readonly IStateService _stateService;
         private readonly IPasswordRepromptService _passwordRepromptService;
+        private readonly IOrganizationService _organizationService;
+        private readonly IPolicyService _policyService;
         private CancellationTokenSource _searchCancellationTokenSource;
+        private readonly ILogger _logger;
 
         private bool _showNoData;
         private bool _showList;
@@ -37,6 +40,9 @@ namespace Bit.App.Pages
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _passwordRepromptService = ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService");
+            _organizationService = ServiceContainer.Resolve<IOrganizationService>("organizationService");
+            _policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
+            _logger = ServiceContainer.Resolve<ILogger>("logger");
 
             Ciphers = new ExtendedObservableCollection<CipherView>();
             CipherOptionsCommand = new Command<CipherView>(CipherOptionsAsync);
@@ -47,6 +53,11 @@ namespace Bit.App.Pages
         public Func<CipherView, bool> Filter { get; set; }
         public string AutofillUrl { get; set; }
         public bool Deleted { get; set; }
+
+        protected override ICipherService cipherService => _cipherService;
+        protected override IPolicyService policyService => _policyService;
+        protected override IOrganizationService organizationService => _organizationService;
+        protected override ILogger logger => _logger;
 
         public bool ShowNoData
         {
@@ -76,11 +87,9 @@ namespace Bit.App.Pages
 
         public async Task InitAsync()
         {
+            await InitVaultFilterAsync(true);
             WebsiteIconsEnabled = !(await _stateService.GetDisableFaviconAsync()).GetValueOrDefault();
-            if (!string.IsNullOrWhiteSpace((Page as CiphersPage).SearchBar.Text))
-            {
-                Search((Page as CiphersPage).SearchBar.Text, 200);
-            }
+            PerformSearchIfPopulated();
         }
 
         public void Search(string searchText, int? timeout = null)
@@ -107,8 +116,9 @@ namespace Bit.App.Pages
                     }
                     try
                     {
+                        var vaultFilteredCiphers = await GetAllCiphersAsync();
                         ciphers = await _searchService.SearchCiphersAsync(searchText,
-                            Filter ?? (c => c.IsDeleted == Deleted), null, cts.Token);
+                            Filter ?? (c => c.IsDeleted == Deleted), vaultFilteredCiphers, cts.Token);
                         cts.Token.ThrowIfCancellationRequested();
                     }
                     catch (OperationCanceledException)
@@ -190,6 +200,19 @@ namespace Bit.App.Pages
                     _deviceActionService.Autofill(cipher);
                 }
             }
+        }
+
+        private void PerformSearchIfPopulated()
+        {
+            if (!string.IsNullOrWhiteSpace((Page as CiphersPage).SearchBar.Text))
+            {
+                Search((Page as CiphersPage).SearchBar.Text, 200);
+            }
+        }
+
+        protected override async Task OnVaultFilterSelectedAsync()
+        {
+            PerformSearchIfPopulated();
         }
 
         private async void CipherOptionsAsync(CipherView cipher)

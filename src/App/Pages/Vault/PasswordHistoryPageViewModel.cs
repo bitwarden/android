@@ -41,15 +41,17 @@ namespace Bit.App.Pages
         {
             var cipher = await _cipherService.GetAsync(CipherId);
             var decCipher = await cipher.DecryptAsync();
-            History.ResetWithRange(decCipher.PasswordHistory ?? new List<PasswordHistoryView>());
-            ShowNoData = History.Count == 0;
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                History.ResetWithRange(decCipher.PasswordHistory ?? new List<PasswordHistoryView>());
+                ShowNoData = History.Count == 0;
+            });
         }
 
         private async void CopyAsync(PasswordHistoryView ph)
         {
             await _clipboardService.CopyTextAsync(ph.Password);
-            _platformUtilsService.ShowToast("info", null,
-                string.Format(AppResources.ValueHasBeenCopied, AppResources.Password));
+            _platformUtilsService.ShowToastForCopiedValue(AppResources.Password);
         }
     }
 }

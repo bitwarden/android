@@ -6,6 +6,7 @@
     xmlns:u="clr-namespace:Bit.App.Utilities"
     xmlns:effects="clr-namespace:Bit.App.Effects"
     xmlns:controls="clr-namespace:Bit.App.Controls"
+    xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
     x:DataType="pages:GroupingsPageViewModel"
     Title="{Binding PageTitle}"
     x:Name="_page">
@@ -107,6 +108,30 @@
 
             <StackLayout x:Key="mainLayout" x:Name="_mainLayout">
                 <StackLayout
+                    IsVisible="{Binding ShowVaultFilter}"
+                    Orientation="Horizontal"
+                    HorizontalOptions="FillAndExpand"
+                    Margin="0,5,0,0">
+                    <Label
+                        Text="{Binding VaultFilterDescription}"
+                        LineBreakMode="TailTruncation"
+                        Margin="10,0"
+                        StyleClass="text-md, text-muted"
+                        VerticalOptions="Center"
+                        HorizontalOptions="StartAndExpand"
+                        AutomationProperties.IsInAccessibleTree="True"
+                        AutomationProperties.Name="{u:I18n Filter}" />
+                    <controls:MiButton
+                        Text="{Binding Source={x:Static core:BitwardenIcons.ViewCellMenu}}"
+                        StyleClass="list-row-button-text, list-row-button-platform"
+                        Command="{Binding VaultFilterCommand}"
+                        VerticalOptions="Center"
+                        HorizontalOptions="End"
+                        AutomationProperties.IsInAccessibleTree="True"
+                        AutomationProperties.Name="{u:I18n Filter}" />
+                </StackLayout>
+
+                <StackLayout
                     VerticalOptions="CenterAndExpand"
                     Padding="20, 0"
                     Spacing="20"
@@ -130,7 +155,8 @@
                         ItemTemplate="{StaticResource listItemDataTemplateSelector}"
                         SelectionMode="Single"
                         SelectionChanged="RowSelected"
-                        StyleClass="list, list-platform" />
+                        StyleClass="list, list-platform"
+                        ExtraDataForLogging="Groupings Page" />
                 </RefreshView>
             </StackLayout>
         </ResourceDictionary>

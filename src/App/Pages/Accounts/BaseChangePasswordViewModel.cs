@@ -46,7 +46,11 @@ namespace Bit.App.Pages
         {
             get => _showPassword;
             set => SetProperty(ref _showPassword, value,
-                additionalPropertyNames: new[] { nameof(ShowPasswordIcon) });
+                additionalPropertyNames: new[]
+                {
+                    nameof(ShowPasswordIcon),
+                    nameof(PasswordVisibilityAccessibilityText)
+                });
         }
 
         public bool IsPolicyInEffect
@@ -68,6 +72,7 @@ namespace Bit.App.Pages
         }
 
         public string ShowPasswordIcon => ShowPassword ? "" : "";
+        public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
         public string MasterPassword { get; set; }
         public string ConfirmMasterPassword { get; set; }
         public string Hint { get; set; }
