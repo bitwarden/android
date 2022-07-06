@@ -219,7 +219,8 @@ namespace Bit.App.Pages
                     // Request
                     var resetRequest = new OrganizationUserResetPasswordEnrollmentRequest
                     {
-                        ResetPasswordKey = encryptedKey.EncryptedString
+                        ResetPasswordKey = encryptedKey.EncryptedString,
+                        MasterPasswordHash = masterPasswordHash,
                     };
                     var userId = await _stateService.GetActiveUserIdAsync();
                     // Enroll user
