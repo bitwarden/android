@@ -2254,4 +2254,7 @@
   <data name="All" xml:space="preserve">
     <value>All</value>
   </data>
+  <data name="NeverLockWarning" xml:space="preserve">
+    <value>Setting your lock options to "Never" stores your vault's encryption key on your device. If you use this option you should ensure that you keep your device properly protected.</value>
+  </data>
 </root>
