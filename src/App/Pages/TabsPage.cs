@@ -18,7 +18,6 @@ namespace Bit.App.Pages
         private readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
 
         private NavigationPage _groupingsPage;
-        private NavigationPage _authenticatorPage;
         private NavigationPage _sendGroupingsPage;
         private NavigationPage _generatorPage;
 
@@ -33,7 +32,6 @@ namespace Bit.App.Pages
                 Title = AppResources.MyVault,
                 IconImageSource = "lock.png"
             };
-
             Children.Add(_groupingsPage);
 
             _sendGroupingsPage = new NavigationPage(new SendGroupingsPage(true, null, null, appOptions))
