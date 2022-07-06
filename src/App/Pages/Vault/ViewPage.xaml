@@ -166,7 +166,6 @@
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="*" />
                                     <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
@@ -180,6 +179,7 @@
                                     Grid.Column="0" />
                                 <controls:MonoLabel
                                     Text="{Binding TotpCodeFormatted, Mode=OneWay}"
+                                    IsVisible="{Binding ShowUpgradePremiumTotpText, Converter={StaticResource inverseBool}}"
                                     StyleClass="box-value"
                                     Grid.Row="1"
                                     Grid.Column="0"
@@ -222,10 +222,9 @@
                                     Text="{Binding UpgradeToPremiumTotpText}"
                                     StyleClass="box-footer-label"
                                     IsVisible="{Binding ShowUpgradePremiumTotpText}"
-                                    Margin="0,2"
+                                    Margin="0,5,0,2"
                                     Grid.Column="0"
-                                    Grid.Row="3"
-                                    Grid.ColumnSpan="3"
+                                    Grid.Row="1"
                                     HorizontalOptions="FillAndExpand" />
                             </Grid>
                             <BoxView StyleClass="box-row-separator" IsVisible="{Binding ShowTotp}" />
