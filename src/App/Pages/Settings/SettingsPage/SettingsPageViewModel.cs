@@ -257,6 +257,10 @@ namespace Bit.App.Pages
                 }
                 var cleanSelection = selection.Replace("✓ ", string.Empty);
                 var selectionOption = _vaultTimeouts.FirstOrDefault(o => o.Key == cleanSelection);
+                if (selectionOption.Value == null && selectionOption.Value != oldTimeout)
+                {
+                    await _platformUtilsService.ShowDialogAsync(AppResources.NeverLockWarning, null, AppResources.Ok);
+                }
                 _vaultTimeoutDisplayValue = selectionOption.Key;
                 newTimeout = selectionOption.Value;
             }
