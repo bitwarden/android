@@ -257,9 +257,17 @@ namespace Bit.App.Pages
                 }
                 var cleanSelection = selection.Replace("✓ ", string.Empty);
                 var selectionOption = _vaultTimeouts.FirstOrDefault(o => o.Key == cleanSelection);
+
+                // Check if the selected Timeout action is "Never" and if it's different from the previous selected value
                 if (selectionOption.Value == null && selectionOption.Value != oldTimeout)
                 {
-                    await _platformUtilsService.ShowDialogAsync(AppResources.NeverLockWarning, null, AppResources.Ok);
+                    var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.NeverLockWarning,
+                        AppResources.Warning, AppResources.Yes, AppResources.Cancel);
+                    if (!confirmed)
+                    {
+                        // Revert the vault timeout value
+                        selectionOption = _vaultTimeouts.FirstOrDefault(o => o.Value == oldTimeout);
+                    }
                 }
                 _vaultTimeoutDisplayValue = selectionOption.Key;
                 newTimeout = selectionOption.Value;
