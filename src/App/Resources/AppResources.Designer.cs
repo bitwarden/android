@@ -4106,5 +4106,13 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("SelectAddTotpToStoreTheKeySafely", resourceCulture);
             }
         }
+
+        public static string NeverLockWarning
+        {
+            get
+            {
+                return ResourceManager.GetString("NeverLockWarning", resourceCulture);
+            }
+        }
     }
 }
