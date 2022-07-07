@@ -136,6 +136,7 @@
                 Grid.Row="2"
                 Margin="0,15"
                 StyleClass="text-sm"
+                FontAttributes="Bold"
                 VerticalOptions="End"
                 HorizontalOptions="Center" >
             <Label.GestureRecognizers>

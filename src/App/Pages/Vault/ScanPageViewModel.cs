@@ -55,7 +55,7 @@ namespace Bit.App.Pages
                 fs.Spans.Add(new Span
                 {
                     Text = ShowScanner ? AppResources.EnterCodeManually : AppResources.ScanQRCode,
-                    TextColor = ThemeManager.GetResourceColor("PrimaryColor")
+                    TextColor = ThemeManager.GetResourceColor("ScanningToggleModeTextColor")
                 });
                 return fs;
             }
