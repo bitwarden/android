@@ -8,24 +8,58 @@ namespace Bit.App.Services
 {
     public class BroadcasterService : IBroadcasterService
     {
+        private readonly ILogger _logger;
         private readonly Dictionary<string, Action<Message>> _subscribers = new Dictionary<string, Action<Message>>();
         private object _myLock = new object();
 
-        public void Send(Message message, string id = null)
+        public BroadcasterService(ILogger logger)
+        {
+            _logger = logger;
+        }
+
+        public void Send(Message message)
         {
             lock (_myLock)
             {
-                if (!string.IsNullOrWhiteSpace(id))
-                {
-                    if (_subscribers.ContainsKey(id))
-                    {
-                        Task.Run(() => _subscribers[id].Invoke(message));
-                    }
-                    return;
-                }
                 foreach (var sub in _subscribers)
                 {
-                    Task.Run(() => sub.Value.Invoke(message));
+                    Task.Run(() =>
+                    {
+                        try
+                        {
+                            sub.Value(message);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.Exception(ex);
+                        }
+                    });
+                }
+            }
+        }
+
+        public void Send(Message message, string id)
+        {
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return;
+            }
+
+            lock (_myLock)
+            {
+                if (_subscribers.TryGetValue(id, out var action))
+                {
+                    Task.Run(() =>
+                    {
+                        try
+                        {
+                            action(message);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.Exception(ex);
+                        }
+                    });
                 }
             }
         }
@@ -34,14 +68,7 @@ namespace Bit.App.Services
         {
             lock (_myLock)
             {
-                if (_subscribers.ContainsKey(id))
-                {
-                    _subscribers[id] = messageCallback;
-                }
-                else
-                {
-                    _subscribers.Add(id, messageCallback);
-                }
+                _subscribers[id] = messageCallback;
             }
         }
 
