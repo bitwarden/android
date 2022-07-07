@@ -11,6 +11,7 @@ namespace Bit.App.Pages
     public class EnvironmentPageViewModel : BaseViewModel
     {
         private readonly IEnvironmentService _environmentService;
+        readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
 
         public EnvironmentPageViewModel()
         {
@@ -23,7 +24,7 @@ namespace Bit.App.Pages
             IdentityUrl = _environmentService.IdentityUrl;
             IconsUrl = _environmentService.IconsUrl;
             NotificationsUrls = _environmentService.NotificationsUrl;
-            SubmitCommand = new AsyncCommand(SubmitAsync, allowsMultipleExecutions: false);
+            SubmitCommand = new AsyncCommand(SubmitAsync, onException: ex => OnSubmitException(ex), allowsMultipleExecutions: false);
         }
 
         public ICommand SubmitCommand { get; }
@@ -77,6 +78,12 @@ namespace Bit.App.Pages
                 && IsUrlValid(IdentityUrl)
                 && IsUrlValid(WebVaultUrl)
                 && IsUrlValid(IconsUrl);
+        }
+
+        private void OnSubmitException(Exception ex)
+        {
+            _logger.Value.Exception(ex);
+            Page.DisplayAlert(AppResources.AnErrorHasOccurred, AppResources.GenericErrorMessage, AppResources.Ok);
         }
     }
 }

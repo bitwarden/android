@@ -4042,5 +4042,11 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("EnvironmentPageUrlsError", resourceCulture);
             }
         }
+        
+        public static string GenericErrorMessage {
+            get {
+                return ResourceManager.GetString("GenericErrorMessage", resourceCulture);
+            }
+        }
     }
 }

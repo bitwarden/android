@@ -2257,4 +2257,7 @@
   <data name="EnvironmentPageUrlsError" xml:space="preserve">
     <value>One or more of the URLs entered are invalid. Please revise it and try to save again.</value>
   </data>
+  <data name="GenericErrorMessage" xml:space="preserve">
+    <value>We were unable to process your request. Please try again or contact us.</value>
+  </data>
 </root>
