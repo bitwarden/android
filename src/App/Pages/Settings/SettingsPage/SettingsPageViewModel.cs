@@ -265,8 +265,7 @@ namespace Bit.App.Pages
                         AppResources.Warning, AppResources.Yes, AppResources.Cancel);
                     if (!confirmed)
                     {
-                        // Revert the vault timeout value
-                        selectionOption = _vaultTimeouts.FirstOrDefault(o => o.Value == oldTimeout);
+                        return;
                     }
                 }
                 _vaultTimeoutDisplayValue = selectionOption.Key;
