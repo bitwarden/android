@@ -206,22 +206,20 @@ namespace Bit.App.Pages
 
         public string UpgradeToPremiumTotpText => AppResources.PremiumSubscriptionRequired;
         public bool ShowUpgradePremiumTotpText => !CanAccessPremium && ShowTotp;
-
         public bool ShowUris => IsLogin && Cipher.Login.HasUris;
         public bool ShowIdentityAddress => IsIdentity && (
             !string.IsNullOrWhiteSpace(Cipher.Identity.Address1) ||
             !string.IsNullOrWhiteSpace(Cipher.Identity.City) ||
             !string.IsNullOrWhiteSpace(Cipher.Identity.Country));
         public bool ShowAttachments => Cipher.HasAttachments && (CanAccessPremium || Cipher.OrganizationId != null);
-        public bool ShowTotp => IsLogin && !string.IsNullOrWhiteSpace(Cipher.Login.Totp) &&
-            !string.IsNullOrWhiteSpace(TotpCodeFormatted);
+        public bool ShowTotp => IsLogin && !string.IsNullOrWhiteSpace(Cipher.Login.Totp);
         public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public string ShowCardNumberIcon => ShowCardNumber ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public string ShowCardCodeIcon => ShowCardCode ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
         public string TotpCodeFormatted
         {
-            get => _canAccessPremium ? _totpCodeFormatted : "--- ---";
+            get => _canAccessPremium ? _totpCodeFormatted : string.Empty;
             set => SetProperty(ref _totpCodeFormatted, value,
                 additionalPropertyNames: new string[]
                 {
