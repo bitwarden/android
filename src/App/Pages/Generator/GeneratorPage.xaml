@@ -6,6 +6,7 @@
     xmlns:pages="clr-namespace:Bit.App.Pages"
     xmlns:controls="clr-namespace:Bit.App.Controls"
     xmlns:u="clr-namespace:Bit.App.Utilities"
+    xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
     x:DataType="pages:GeneratorPageViewModel"
     Title="{Binding PageTitle}">
     <ContentPage.BindingContext>
@@ -66,22 +67,44 @@
                                 HorizontalTextAlignment="Center" />
                         </Frame>
                     </Grid>
+                </StackLayout>
+                <Grid StyleClass="box-row" 
+                                  IsVisible="true">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
                     <controls:MonoLabel
                         x:Name="lblPassword"
                         StyleClass="text-lg, text-html"
                         Text="{Binding ColoredPassword, Mode=OneWay}"
                         Margin="0, 20"
-                        HorizontalTextAlignment="Center"
-                        HorizontalOptions="CenterAndExpand"
-                        LineBreakMode="CharacterWrap" />
-                    <Button Text="{u:I18n RegeneratePassword}"
-                            StyleClass="btn-primary"
-                            HorizontalOptions="FillAndExpand"
-                            Clicked="Regenerate_Clicked"></Button>
-                    <Button Text="{u:I18n CopyPassword}"
-                            HorizontalOptions="FillAndExpand"
-                            Clicked="Copy_Clicked"></Button>
-                </StackLayout>
+                        HorizontalTextAlignment="Start"
+                        HorizontalOptions="StartAndExpand" />
+                    <controls:IconButton 
+                        StyleClass="box-row-button, box-row-button-platform"
+                        Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
+                        Clicked="Copy_Clicked"
+                        CommandParameter="LoginPassword"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Grid.RowSpan="2"
+                        AutomationProperties.IsInAccessibleTree="True"
+                        AutomationProperties.Name="{u:I18n CopyPassword}" />
+                    <controls:IconButton 
+                        StyleClass="box-row-button, box-row-button-platform"
+                        Text="{Binding Source={x:Static core:BitwardenIcons.Generate}}"
+                        Clicked="Regenerate_Clicked"
+                        Grid.Row="0"
+                        Grid.Column="2"
+                        Grid.RowSpan="2"
+                        AutomationProperties.IsInAccessibleTree="True"
+                        AutomationProperties.Name="{u:I18n GeneratePassword}" />
+                </Grid>
                 <StackLayout StyleClass="box">
                     <StackLayout StyleClass="box-row-header">
                         <Label Text="{u:I18n Options, Header=True}"
