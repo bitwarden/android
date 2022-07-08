@@ -38,13 +38,15 @@ namespace Bit.iOS.Core.Utilities
                 ServiceContainer.Register<INativeLogService>("nativeLogService", new ConsoleLogService());
             }
 
+            ILogger logger = null;
             if (ServiceContainer.Resolve<ILogger>("logger", true) == null)
             {
 #if DEBUG
-                ServiceContainer.Register<ILogger>("logger", DebugLogger.Instance);
+                logger = DebugLogger.Instance;
 #else
-                ServiceContainer.Register<ILogger>("logger", Logger.Instance);
+                logger = Logger.Instance;
 #endif
+                ServiceContainer.Register("logger", logger);
             }
 
             var preferencesStorage = new PreferencesStorageService(AppGroupId);
@@ -52,7 +54,7 @@ namespace Bit.iOS.Core.Utilities
             var liteDbStorage = new LiteDbStorageService(
                 Path.Combine(appGroupContainer.Path, "Library", "bitwarden.db"));
             var localizeService = new LocalizeService();
-            var broadcasterService = new BroadcasterService();
+            var broadcasterService = new BroadcasterService(logger);
             var messagingService = new MobileBroadcasterMessagingService(broadcasterService);
             var i18nService = new MobileI18nService(localizeService.GetCurrentCultureInfo());
             var secureStorageService = new KeyChainStorageService(AppId, AccessGroup,
