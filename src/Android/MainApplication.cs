@@ -101,12 +101,13 @@ namespace Bit.Droid
         {
             ServiceContainer.Register<INativeLogService>("nativeLogService", new AndroidLogService());
 #if FDROID
-            ServiceContainer.Register<ILogger>("logger", new StubLogger());
+            var logger = new StubLogger();
 #elif DEBUG
-            ServiceContainer.Register<ILogger>("logger", DebugLogger.Instance);
+            var logger = DebugLogger.Instance;
 #else
-            ServiceContainer.Register<ILogger>("logger", Logger.Instance);
+            var logger = Logger.Instance;
 #endif
+            ServiceContainer.Register("logger", logger);
 
             // Note: This might cause a race condition. Investigate more.
             Task.Run(() =>
@@ -126,7 +127,7 @@ namespace Bit.Droid
             var documentsPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
             var liteDbStorage = new LiteDbStorageService(Path.Combine(documentsPath, "bitwarden.db"));
             var localizeService = new LocalizeService();
-            var broadcasterService = new BroadcasterService();
+            var broadcasterService = new BroadcasterService(logger);
             var messagingService = new MobileBroadcasterMessagingService(broadcasterService);
             var i18nService = new MobileI18nService(localizeService.GetCurrentCultureInfo());
             var secureStorageService = new SecureStorageService();

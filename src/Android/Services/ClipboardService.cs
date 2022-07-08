@@ -28,17 +28,25 @@ namespace Bit.Droid.Services
 
         public async Task CopyTextAsync(string text, int expiresInMs = -1, bool isSensitive = true)
         {
-             // Xamarin.Essentials.Clipboard currently doesn't support the IS_SENSITIVE flag for API 33+
-            if ((int)Build.VERSION.SdkInt < 33)
+            try
             {
-                await Clipboard.SetTextAsync(text);
-            }
-            else
-            {
-                CopyToClipboard(text, isSensitive);
-            }
+                 // Xamarin.Essentials.Clipboard currently doesn't support the IS_SENSITIVE flag for API 33+
+                if ((int)Build.VERSION.SdkInt < 33)
+                {
+                    await Clipboard.SetTextAsync(text);
+                }
+                else
+                {
+                    CopyToClipboard(text, isSensitive);
+                }
 
-            await ClearClipboardAlarmAsync(expiresInMs);
+                await ClearClipboardAlarmAsync(expiresInMs);
+            }
+            catch (Java.Lang.SecurityException ex) when (ex.Message.Contains("does not belong to"))
+            {
+                // #1962 Just ignore, the content is copied either way but there is some app interfiering in the process
+                // that the OS catches and just throws this exception.
+            }
         }
 
         public bool IsCopyNotificationHandledByPlatform()

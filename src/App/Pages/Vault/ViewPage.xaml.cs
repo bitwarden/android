@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bit.App.Resources;
 using Bit.Core.Abstractions;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
 
@@ -56,37 +57,44 @@ namespace Bit.App.Pages
 
             _broadcasterService.Subscribe(nameof(ViewPage), async (message) =>
             {
-                if (message.Command == "syncStarted")
+                try
                 {
-                    Device.BeginInvokeOnMainThread(() => IsBusy = true);
-                }
-                else if (message.Command == "syncCompleted")
-                {
-                    await Task.Delay(500);
-                    Device.BeginInvokeOnMainThread(() =>
+                    if (message.Command == "syncStarted")
                     {
-                        IsBusy = false;
-                        if (message.Data is Dictionary<string, object> data && data.ContainsKey("successfully"))
+                        Device.BeginInvokeOnMainThread(() => IsBusy = true);
+                    }
+                    else if (message.Command == "syncCompleted")
+                    {
+                        await Task.Delay(500);
+                        Device.BeginInvokeOnMainThread(() =>
                         {
-                            var success = data["successfully"] as bool?;
-                            if (success.GetValueOrDefault())
+                            IsBusy = false;
+                            if (message.Data is Dictionary<string, object> data && data.ContainsKey("successfully"))
                             {
-                                var task = _vm.LoadAsync(() => AdjustToolbar());
+                                var success = data["successfully"] as bool?;
+                                if (success.GetValueOrDefault())
+                                {
+                                    var task = _vm.LoadAsync(() => AdjustToolbar());
+                                }
                             }
-                        }
-                    });
-                }
-                else if (message.Command == "selectSaveFileResult")
-                {
-                    Device.BeginInvokeOnMainThread(() =>
+                        });
+                    }
+                    else if (message.Command == "selectSaveFileResult")
                     {
-                        var data = message.Data as Tuple<string, string>;
-                        if (data == null)
+                        Device.BeginInvokeOnMainThread(() =>
                         {
-                            return;
-                        }
-                        _vm.SaveFileSelected(data.Item1, data.Item2);
-                    });
+                            var data = message.Data as Tuple<string, string>;
+                            if (data == null)
+                            {
+                                return;
+                            }
+                            _vm.SaveFileSelected(data.Item1, data.Item2);
+                        });
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LoggerHelper.LogEvenIfCantBeResolved(ex);
                 }
             });
             await LoadOnAppearedAsync(_scrollView, true, async () =>
