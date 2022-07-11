@@ -6,6 +6,5 @@ namespace Bit.Core.Abstractions
     {
         Task<string> GetCodeAsync(string key);
         int GetTimeInterval(string key);
-        Task<bool> IsAutoCopyEnabledAsync();
     }
 }
