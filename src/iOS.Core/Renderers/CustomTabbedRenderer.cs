@@ -21,7 +21,7 @@ namespace Bit.iOS.Core.Renderers
         public CustomTabbedRenderer()
         {
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
-            _broadcasterService.Subscribe(nameof(CustomTabbedRenderer), async (message) =>
+            _broadcasterService.Subscribe(nameof(CustomTabbedRenderer), (message) =>
             {
                 if (message.Command == "updatedTheme")
                 {
