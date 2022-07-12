@@ -70,7 +70,7 @@
                 Text="{Binding Source={x:Static core:BitwardenIcons.CheckCircle}}"
                 HorizontalOptions="Center"
                 VerticalOptions="Start"
-                FontSize="30"
+                FontSize="Title"
                 TextColor="Transparent"/>
         </StackLayout>
         <BoxView
@@ -88,8 +88,8 @@
                 Grid.RowSpan="2"
                 Margin="30,0">
             <Label
-                    Text="{u:I18n EnterCodeManually}"
-                    FontSize="30" />
+                    Text="{u:I18n EnterKeyManually}"
+                    FontSize="Title" />
             <Label
                     Text="{u:I18n AuthenticatorKeyScanner}"
                     StyleClass="box-label" />
@@ -121,12 +121,7 @@
                     AutomationId="zxingDefaultOverlay_TopTextLabel"
                     Margin="30,15,30,0"
                     HorizontalOptions="Center"
-                    StyleClass="text-sm"
-                    TextColor="White" />
-            <Label
-                    Text="{Binding CameraInstructionBottom}"
-                    AutomationId="zxingDefaultOverlay_BottomTextLabel"
-                    HorizontalOptions="Center"
+                    HorizontalTextAlignment="Center"
                     StyleClass="text-sm"
                     TextColor="White" />
         </StackLayout>

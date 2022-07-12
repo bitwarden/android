@@ -189,11 +189,11 @@ namespace Bit.App.Pages
             return false;
         }
 
-        protected override void OnDisappearing()
+        protected override async void OnDisappearing()
         {
             base.OnDisappearing();
             IsBusy = false;
-            _vm.TotpFilterEnable = false;
+            await _vm.StopCiphersTotpTick();
             _broadcasterService.Unsubscribe(_pageName);
             _vm.DisableRefreshing();
             _accountAvatar?.OnDisappearing();
@@ -304,11 +304,6 @@ namespace Bit.App.Pages
         public async Task HideAccountSwitchingOverlayAsync()
         {
             await _accountListOverlay.HideAsync();
-        }
-
-        void TotpFilter_Toggled(System.Object sender, Xamarin.Forms.ToggledEventArgs e)
-        {
-            _vm.TotpFilterCommand.Execute(null);
         }
     }
 }

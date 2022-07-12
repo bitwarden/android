@@ -112,33 +112,44 @@ namespace Bit.App.Pages
 
         private async void OnScanResult(ZXing.Result result)
         {
-            // Stop analysis until we navigate away so we don't keep reading barcodes
-            _zxing.IsAnalyzing = false;
-            var text = result?.Text;
-            if (!string.IsNullOrWhiteSpace(text))
+            try
             {
-                if (text.StartsWith("otpauth://totp"))
+                // Stop analysis until we navigate away so we don't keep reading barcodes
+                _zxing.IsAnalyzing = false;
+                var text = result?.Text;
+                if (!string.IsNullOrWhiteSpace(text))
                 {
-                    await QrCodeFoundAsync();
-                    _callback(text);
-                    return;
-                }
-                else if (Uri.TryCreate(text, UriKind.Absolute, out Uri uri) &&
-                    !string.IsNullOrWhiteSpace(uri?.Query))
-                {
-                    var queryParts = uri.Query.Substring(1).ToLowerInvariant().Split('&');
-                    foreach (var part in queryParts)
+                    if (text.StartsWith("otpauth://totp"))
                     {
-                        if (part.StartsWith("secret="))
+                        await QrCodeFoundAsync();
+                        _callback(text);
+                        return;
+                    }
+                    else if (Uri.TryCreate(text, UriKind.Absolute, out Uri uri) &&
+                        !string.IsNullOrWhiteSpace(uri?.Query))
+                    {
+                        var queryParts = uri.Query.Substring(1).ToLowerInvariant().Split('&');
+                        foreach (var part in queryParts)
                         {
-                            await QrCodeFoundAsync();
-                            _callback(part.Substring(7)?.ToUpperInvariant());
-                            return;
+                            if (part.StartsWith("secret="))
+                            {
+                                await QrCodeFoundAsync();
+                                var subResult = part.Substring(7);
+                                if (!string.IsNullOrEmpty(subResult))
+                                {
+                                    _callback(subResult.ToUpperInvariant());
+                                }
+                                return;
+                            }
                         }
                     }
                 }
+                _callback(null);
             }
-            _callback(null);
+            catch (Exception ex)
+            {
+                _logger?.Value?.Exception(ex);
+            }
         }
 
         private async Task QrCodeFoundAsync()
@@ -228,23 +239,35 @@ namespace Bit.App.Pages
                 canvas.DrawLine(startXPoint + squareSize, startYPoint + squareSize, startXPoint + squareSize, startYPoint + squareSize - lineSize, strokePaint);
             }
         }
+
         async Task AnimationLoopAsync()
         {
-            _stopwatch.Start();
-            while (_pageIsActive)
+            try
             {
-                var t = _stopwatch.Elapsed.TotalSeconds % 2 / 2;
-                _scale = (20 - (1 - (float)Math.Sin(4 * Math.PI * t))) / 20;
-                SkCanvasView.InvalidateSurface();
-                await Task.Delay(TimeSpan.FromSeconds(1.0 / 30));
-                if (_qrcodeFound && _scale > 0.98f)
+                _stopwatch.Start();
+                while (_pageIsActive)
                 {
-                    _checkIcon.TextColor = _greenColor;
+                    var t = _stopwatch.Elapsed.TotalSeconds % 2 / 2;
+                    _scale = (20 - (1 - (float)Math.Sin(4 * Math.PI * t))) / 20;
                     SkCanvasView.InvalidateSurface();
-                    break;
+                    await Task.Delay(TimeSpan.FromSeconds(1.0 / 30));
+                    if (_qrcodeFound && _scale > 0.98f)
+                    {
+                        _checkIcon.TextColor = _greenColor;
+                        SkCanvasView.InvalidateSurface();
+                        break;
+                    }
                 }
+                _stopwatch.Stop();
             }
-            _stopwatch.Stop();
+            catch (Exception ex)
+            {
+                _logger?.Value?.Exception(ex);
+            }
+            finally
+            {
+                _stopwatch?.Stop();
+            }
         }
     }
 }

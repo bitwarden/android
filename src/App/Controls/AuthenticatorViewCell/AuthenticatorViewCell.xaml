@@ -9,30 +9,23 @@
                        xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
                        StyleClass="list-row, list-row-platform"
                        HorizontalOptions="FillAndExpand"
-                       x:DataType="pages:GroupingsPageTOTPListItem">
+                       x:DataType="pages:GroupingsPageTOTPListItem"
+                       ColumnDefinitions="40,*,40,Auto,40"
+                       RowSpacing="0"
+                       Padding="0,10,0,0"
+                       RowDefinitions="Auto,Auto">
 
     <Grid.Resources>
         <u:IconGlyphConverter x:Key="iconGlyphConverter" />
         <u:InverseBoolConverter x:Key="inverseBool" />
     </Grid.Resources>
 
-    <Grid.RowDefinitions>
-        <RowDefinition Height="Auto" />
-    </Grid.RowDefinitions>
-
-    <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="40" />
-        <ColumnDefinition Width="*" />
-        <ColumnDefinition Width="40" />
-        <ColumnDefinition Width="Auto" />
-        <ColumnDefinition Width="40" />
-    </Grid.ColumnDefinitions>
-
     <controls:IconLabel
         Grid.Column="0"
         HorizontalOptions="Center"
         VerticalOptions="Center"
         StyleClass="list-icon, list-icon-platform"
+        Grid.RowSpan="2"
         IsVisible="{Binding ShowIconImage, Converter={StaticResource inverseBool}}"
         Text="{Binding Cipher, Converter={StaticResource iconGlyphConverter}}"
         AutomationProperties.IsInAccessibleTree="False" />
@@ -46,47 +39,35 @@
         VerticalOptions="Center"
         WidthRequest="22"
         HeightRequest="22"
+        Grid.RowSpan="2"
         IsVisible="{Binding ShowIconImage}"
         Source="{Binding IconImageSource, Mode=OneTime}"
         AutomationProperties.IsInAccessibleTree="False" />
 
-    <Grid
-        RowSpacing="0"
-        ColumnSpacing="0"
-        Grid.Row="0"
+    <Label
+        LineBreakMode="TailTruncation"
         Grid.Column="1"
-        VerticalOptions="Center"
-        HorizontalOptions="FillAndExpand"
-        Padding="0, 15, 15, 10">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
+        Grid.Row="0"
+        VerticalTextAlignment="End"
+        VerticalOptions="End"
+        StyleClass="list-title, list-title-platform"
+        Text="{Binding Cipher.Name}" />
 
-        <Label
-            LineBreakMode="TailTruncation"
-            Grid.Column="0"
-            Grid.Row="0"
-            StyleClass="list-title, list-title-platform"
-            Text="{Binding Cipher.Name}" />
-        <Label
-            LineBreakMode="TailTruncation"
-            Grid.Column="0"
-            Grid.Row="1"
-            StyleClass="list-subtitle, list-subtitle-platform"
-            Text="{Binding Cipher.SubTitle}" />
-    </Grid>
+    <Label
+        LineBreakMode="TailTruncation"
+        Grid.Column="1"
+        Grid.Row="1"
+        VerticalTextAlignment="Start"
+        VerticalOptions="Start"
+        StyleClass="list-subtitle, list-subtitle-platform"
+        Text="{Binding Cipher.SubTitle}" />
 
     <controls:CircularProgressbarView
         Progress="{Binding Progress}"
-        ProgressColor="{StaticResource PrimaryColor}"
-        EndingProgressColor="{StaticResource DangerColor}"
-        BackgroundProgressColor="{StaticResource BackgroundColor}"
-        StrokeWidth="3"
-        Radius="15"
         Grid.Row="0"
         Grid.Column="2"
-        HorizontalOptions="FillAndExpand"
+        Grid.RowSpan="2"
+        HorizontalOptions="Fill"
         VerticalOptions="CenterAndExpand" />
 
     <Label
@@ -94,20 +75,22 @@
         Style="{DynamicResource textTotp}"
         Grid.Row="0"
         Grid.Column="2"
+        Grid.RowSpan="2"
         StyleClass="text-sm"
-        XAlign="Center"
-        YAlign="Center"
-        HorizontalOptions="FillAndExpand"
-        VerticalOptions="FillAndExpand" />
+        HorizontalTextAlignment="Center"
+        HorizontalOptions="Fill"
+        VerticalTextAlignment="Center"
+        VerticalOptions="Fill" />
     
     <StackLayout
         Grid.Row="0"
         Grid.Column="3"
         Margin="3,0,2,0"
         Spacing="5"
+        Grid.RowSpan="2"
         Orientation="Horizontal"
-        HorizontalOptions="FillAndExpand"
-        VerticalOptions="FillAndExpand">
+        HorizontalOptions="Fill"
+        VerticalOptions="Fill">
 
         <controls:MonoLabel
             Text="{Binding TotpCodeFormattedStart, Mode=OneWay}"
@@ -135,6 +118,7 @@
         CommandParameter="LoginTotp"
         Grid.Row="0"
         Grid.Column="4"
+        Grid.RowSpan="2"
         Padding="0,0,1,0"
         HorizontalOptions="Center"
         VerticalOptions="Center"

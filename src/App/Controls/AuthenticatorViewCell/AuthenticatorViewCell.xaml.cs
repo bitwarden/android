@@ -63,12 +63,5 @@ namespace Bit.App.Controls
             }
 
         }
-
-        private string _totpCodeFormatted = "938 928";
-        public string TotpCodeFormatted
-        {
-            get => _totpCodeFormatted;
-            set => _totpCodeFormatted = value;
-        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Bit.App.Abstractions;
@@ -22,7 +23,6 @@ namespace Bit.App.Pages
         private readonly IDeviceActionService _deviceActionService;
         private readonly ICipherService _cipherService;
         private readonly IStateService _stateService;
-        private readonly ITotpService _totpService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IAuditService _auditService;
         private readonly IMessagingService _messagingService;
@@ -47,13 +47,15 @@ namespace Bit.App.Pages
         private byte[] _attachmentData;
         private string _attachmentFilename;
         private bool _passwordReprompted;
+        private TotpHelper _totpTickHelper;
+        private CancellationTokenSource _totpTickCancellationToken;
+        private Task _totpTickTask;
 
         public ViewPageViewModel()
         {
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
-            _totpService = ServiceContainer.Resolve<ITotpService>("totpService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _auditService = ServiceContainer.Resolve<IAuditService>("auditService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
@@ -208,7 +210,6 @@ namespace Bit.App.Pages
             }
         }
 
-        public string UpgradeToPremiumTotpText => AppResources.PremiumSubscriptionRequired;
         public bool ShowUpgradePremiumTotpText => !CanAccessPremium && ShowTotp;
         public bool ShowUris => IsLogin && Cipher.Login.HasUris;
         public bool ShowIdentityAddress => IsIdentity && (
@@ -254,7 +255,6 @@ namespace Bit.App.Pages
 
         public async Task<bool> LoadAsync(Action finishedLoadingAction = null)
         {
-            CleanUp();
             var cipher = await _cipherService.GetAsync(CipherId);
             if (cipher == null)
             {
@@ -268,19 +268,10 @@ namespace Bit.App.Pages
             if (Cipher.Type == Core.Enums.CipherType.Login && !string.IsNullOrWhiteSpace(Cipher.Login.Totp) &&
                 (Cipher.OrganizationUseTotp || CanAccessPremium))
             {
-                await TotpUpdateCodeAsync();
-                var interval = _totpService.GetTimeInterval(Cipher.Login.Totp);
-                await TotpTickAsync(interval);
-                _totpInterval = DateTime.UtcNow;
-                Device.StartTimer(new TimeSpan(0, 0, 1), () =>
-                {
-                    if (_totpInterval == null)
-                    {
-                        return false;
-                    }
-                    var task = TotpTickAsync(interval);
-                    return true;
-                });
+                _totpTickHelper = new TotpHelper(Cipher);
+                _totpTickCancellationToken?.Cancel();
+                _totpTickCancellationToken = new CancellationTokenSource();
+                _totpTickTask = new TimerTask(StartCiphersTotpTick, _totpTickCancellationToken).Run();
             }
             if (_previousCipherId != CipherId)
             {
@@ -291,9 +282,20 @@ namespace Bit.App.Pages
             return true;
         }
 
-        public void CleanUp()
+        private async void StartCiphersTotpTick()
         {
-            _totpInterval = null;
+            await _totpTickHelper.GenerateNewTotpValues();
+            TotpSec = _totpTickHelper.TotpSec;
+            TotpCodeFormatted = _totpTickHelper.TotpCodeFormatted;
+        }
+
+        public async Task StopCiphersTotpTick()
+        {
+            _totpTickCancellationToken?.Cancel();
+            if (_totpTickTask != null)
+            {
+                await _totpTickTask;
+            }
         }
 
         public async void TogglePassword()
@@ -419,47 +421,6 @@ namespace Bit.App.Pages
                 }
             }
             return false;
-        }
-
-        private async Task TotpUpdateCodeAsync()
-        {
-            if (Cipher == null || Cipher.Type != Core.Enums.CipherType.Login || Cipher.Login.Totp == null)
-            {
-                _totpInterval = null;
-                return;
-            }
-            _totpCode = await _totpService.GetCodeAsync(Cipher.Login.Totp);
-            if (_totpCode != null)
-            {
-                if (_totpCode.Length > 4)
-                {
-                    var half = (int)Math.Floor(_totpCode.Length / 2M);
-                    TotpCodeFormatted = string.Format("{0} {1}", _totpCode.Substring(0, half),
-                        _totpCode.Substring(half));
-                }
-                else
-                {
-                    TotpCodeFormatted = _totpCode;
-                }
-            }
-            else
-            {
-                TotpCodeFormatted = null;
-                _totpInterval = null;
-            }
-        }
-
-        private async Task TotpTickAsync(int intervalSeconds)
-        {
-            var epoc = CoreHelpers.EpocUtcNow() / 1000;
-            var mod = epoc % intervalSeconds;
-            var totpSec = intervalSeconds - mod;
-            TotpSec = totpSec.ToString();
-            TotpLow = totpSec < 7;
-            if (mod == 0)
-            {
-                await TotpUpdateCodeAsync();
-            }
         }
 
         private async void CheckPasswordAsync()
@@ -647,7 +608,7 @@ namespace Bit.App.Pages
             }
             else if (id == "LoginTotp")
             {
-                text = _totpCode;
+                text = TotpCodeFormatted.Replace(" ", string.Empty);
                 name = AppResources.VerificationCodeTotp;
             }
             else if (id == "LoginUri")

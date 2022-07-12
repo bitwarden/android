@@ -6,6 +6,7 @@
     xmlns:u="clr-namespace:Bit.App.Utilities"
     xmlns:effects="clr-namespace:Bit.App.Effects"
     xmlns:controls="clr-namespace:Bit.App.Controls"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
     xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
     x:DataType="pages:GroupingsPageViewModel"
     Title="{Binding PageTitle}"
@@ -143,7 +144,6 @@
                 <StackLayout
                     IsVisible="{Binding ShowTotpFilter}"
                     Orientation="Horizontal"
-                    HorizontalOptions="FillAndExpand"
                     Margin="0,5,10,0">
                     <Label
                         Text="{u:I18n DisplayItemsContainingTOTP}"
@@ -158,7 +158,14 @@
                         IsToggled="{Binding TotpFilterEnable}"
                         StyleClass="box-value"
                         HorizontalOptions="End"
-                        Toggled="TotpFilter_Toggled"  />
+                        AutomationProperties.IsInAccessibleTree="True"
+                        AutomationProperties.Name="{Binding ShowTotpCodesAccessibilityText}">
+                        <Switch.Behaviors>
+                            <xct:EventToCommandBehavior
+                                EventName="Toggled"
+                                Command="{Binding TotpFilterCommand}" />
+                        </Switch.Behaviors>
+                    </Switch>
                 </StackLayout>
 
                 <StackLayout

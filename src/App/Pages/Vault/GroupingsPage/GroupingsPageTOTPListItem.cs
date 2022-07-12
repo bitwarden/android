@@ -12,6 +12,7 @@ namespace Bit.App.Pages
 {
     public class GroupingsPageTOTPListItem : ExtendedViewModel, IGroupingsPageListItem
     {
+        private readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
         private readonly ITotpService _totpService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IClipboardService _clipboardService;
@@ -23,8 +24,8 @@ namespace Bit.App.Pages
         public int interval { get; set; }
         private double _progress;
         private string _totpSec;
-        private string _totpCode;
-        private string _totpCodeFormatted = "938 928";
+        private string _totpCodeFormatted;
+        private TotpHelper _totpTickHelper;
 
 
         public GroupingsPageTOTPListItem(CipherView cipherView, bool websiteIconsEnabled)
@@ -39,9 +40,8 @@ namespace Bit.App.Pages
             CopyCommand = new AsyncCommand(CopyToClipboardAsync,
                  onException: ex => _logger.Value.Exception(ex),
                  allowsMultipleExecutions: false);
+            _totpTickHelper = new TotpHelper(cipherView);
         }
-
-        readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
 
         public AsyncCommand CopyCommand { get; set; }
 
@@ -110,39 +110,10 @@ namespace Bit.App.Pages
 
         public async Task TotpTickAsync()
         {
-            var epoc = CoreHelpers.EpocUtcNow() / 1000;
-            var mod = epoc % interval;
-            var totpSec = interval - mod;
-            TotpSec = totpSec.ToString();
-            Progress = totpSec * 100 / 30;
-            //TotpLow = totpSec < 7;
-            if (mod == 0)
-            {
-                await TotpUpdateCodeAsync();
-            }
-
-        }
-
-        public async Task TotpUpdateCodeAsync()
-        {
-            _totpCode = await _totpService.GetCodeAsync(Cipher.Login.Totp);
-            if (_totpCode != null)
-            {
-                if (_totpCode.Length > 4)
-                {
-                    var half = (int)Math.Floor(_totpCode.Length / 2M);
-                    TotpCodeFormatted = string.Format("{0} {1}", _totpCode.Substring(0, half),
-                        _totpCode.Substring(half));
-                }
-                else
-                {
-                    TotpCodeFormatted = _totpCode;
-                }
-            }
-            else
-            {
-                TotpCodeFormatted = null;
-            }
+            await _totpTickHelper.GenerateNewTotpValues();
+            TotpSec = _totpTickHelper.TotpSec;
+            Progress = _totpTickHelper.Progress;
+            TotpCodeFormatted = _totpTickHelper.TotpCodeFormatted;
         }
     }
 }

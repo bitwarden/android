@@ -505,4 +505,17 @@
             </Keyboard>
         </Setter>
     </Style>
+    
+    <Style TargetType="controls:CircularProgressbarView">
+        <Setter Property="ProgressColor"
+                Value="{DynamicResource PrimaryColor}" />
+        <Setter Property="EndingProgressColor"
+                Value="{DynamicResource DangerColor}" />
+        <Setter Property="BackgroundProgressColor"
+                Value="{DynamicResource BackgroundColor}" />
+        <Setter Property="StrokeWidth"
+                Value="3" />
+        <Setter Property="Radius"
+                Value="15" />
+    </Style>
 </ResourceDictionary>

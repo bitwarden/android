@@ -187,11 +187,6 @@
                                     VerticalOptions="Start" />
                                 <controls:CircularProgressbarView
                                     Progress="{Binding TotpProgress}"
-                                    ProgressColor="{StaticResource PrimaryColor}"
-                                    EndingProgressColor="{StaticResource DangerColor}"
-                                    BackgroundProgressColor="{StaticResource BackgroundColor}"
-                                    StrokeWidth="3"
-                                    Radius="15"
                                     Grid.Row="0"
                                     Grid.Column="1"
                                     Grid.RowSpan="2"
@@ -203,6 +198,7 @@
                                     Grid.Row="0"
                                     Grid.Column="1"
                                     Grid.RowSpan="2"
+                                    StyleClass="text-sm"
                                     VerticalTextAlignment="Center"
                                     HorizontalTextAlignment="Center"
                                     HorizontalOptions="FillAndExpand"
@@ -219,7 +215,7 @@
                                     AutomationProperties.IsInAccessibleTree="True"
                                     AutomationProperties.Name="{u:I18n CopyTotp}" />
                                 <Label
-                                    Text="{Binding UpgradeToPremiumTotpText}"
+                                    Text="{u:I18n UpgradeToPremiumTotpText}"
                                     StyleClass="box-footer-label"
                                     IsVisible="{Binding ShowUpgradePremiumTotpText}"
                                     Margin="0,5,0,2"

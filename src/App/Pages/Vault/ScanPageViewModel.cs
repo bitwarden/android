@@ -7,19 +7,17 @@ namespace Bit.App.Pages
 {
     public class ScanPageViewModel : BaseViewModel
     {
-        private bool _showScanner;
+        private bool _showScanner = true;
         private string _totpAuthenticationKey;
 
         public ScanPageViewModel()
         {
-            ShowScanner = true;
-            ToggleScanModeCommand = new Command(ToggleScanAsync);
+            ToggleScanModeCommand = new Command(() => ShowScanner = !ShowScanner);
         }
 
         public Command ToggleScanModeCommand { get; set; }
         public string ScanQrPageTitle => ShowScanner ? AppResources.ScanQrTitle : AppResources.AuthenticatorKeyScanner;
-        public string CameraInstructionTop => ShowScanner ? AppResources.CameraInstructionTop : AppResources.OnceTheKeyIsSuccessfullyEntered;
-        public string CameraInstructionBottom => ShowScanner ? AppResources.CameraInstructionBottom : AppResources.SelectAddTotpToStoreTheKeySafely;
+        public string CameraInstructionTop => ShowScanner ? AppResources.PointYourCameraAtTheQRCode : AppResources.OnceTheKeyIsSuccessfullyEntered;
         public string TotpAuthenticationKey
         {
             get => _totpAuthenticationKey;
@@ -37,8 +35,7 @@ namespace Bit.App.Pages
                 {
                     nameof(ToggleScanModeLabel),
                     nameof(ScanQrPageTitle),
-                    nameof(CameraInstructionTop),
-                    nameof(CameraInstructionBottom)
+                    nameof(CameraInstructionTop)
                 });
         }
 
@@ -54,16 +51,11 @@ namespace Bit.App.Pages
                 });
                 fs.Spans.Add(new Span
                 {
-                    Text = ShowScanner ? AppResources.EnterCodeManually : AppResources.ScanQRCode,
+                    Text = ShowScanner ? AppResources.EnterKeyManually : AppResources.ScanQRCode,
                     TextColor = ThemeManager.GetResourceColor("ScanningToggleModeTextColor")
                 });
                 return fs;
             }
-        }
-
-        private void ToggleScanAsync()
-        {
-            ShowScanner = !ShowScanner;
         }
     }
 }

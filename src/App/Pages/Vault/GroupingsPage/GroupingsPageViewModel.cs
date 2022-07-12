@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Bit.App.Abstractions;
@@ -38,7 +39,8 @@ namespace Bit.App.Pages
         private Dictionary<string, int> _collectionCounts = new Dictionary<string, int>();
         private Dictionary<CipherType, int> _typeCounts = new Dictionary<CipherType, int>();
         private int _deletedCount = 0;
-
+        private CancellationTokenSource _totpTickCancellationToken;
+        private Task _totpTickTask;
         private readonly ICipherService _cipherService;
         private readonly IFolderService _folderService;
         private readonly ICollectionService _collectionService;
@@ -99,6 +101,9 @@ namespace Bit.App.Pages
         public bool HasCiphers { get; set; }
         public bool HasFolders { get; set; }
         public bool HasCollections { get; set; }
+        public string ShowTotpCodesAccessibilityText => TotpFilterEnable ?
+            AppResources.AuthenticationCodesListIsVisibleActivateToShowCipherList
+            : AppResources.CipherListIsVisibleActivateToShowAuthenticationCodesList; 
         public bool ShowNoFolderCipherGroup => NoFolderCiphers != null
                                                && NoFolderCiphers.Count < NoFolderListSize
                                                && (Collections is null || !Collections.Any());
@@ -292,33 +297,7 @@ namespace Bit.App.Pages
                 }
                 if (Ciphers?.Any() ?? false)
                 {
-                    if (TotpFilterEnable)
-                    {
-                        var ciphersListItems = Ciphers.Where(c => c.IsDeleted == Deleted && !string.IsNullOrEmpty(c.Login.Totp))
-                            .Select(c => new GroupingsPageTOTPListItem(c, true)).ToList();
-                        groupedItems.Add(new GroupingsPageListGroup(ciphersListItems, AppResources.Items,
-                            ciphersListItems.Count, uppercaseGroupNames, !MainPage && !groupedItems.Any()));
-
-                        foreach (var item in ciphersListItems)
-                        {
-                            await item.TotpUpdateCodeAsync();
-                        }
-                        Device.StartTimer(new TimeSpan(0, 0, 1), () =>
-                        {
-                            foreach (var item in ciphersListItems)
-                            {
-                                item.TotpTickAsync();
-                            }
-                            return TotpFilterEnable;
-                        });
-                    }
-                    else
-                    {
-                        var ciphersListItems = Ciphers.Where(c => c.IsDeleted == Deleted)
-                            .Select(c => new GroupingsPageListItem { Cipher = c }).ToList();
-                        groupedItems.Add(new GroupingsPageListGroup(ciphersListItems, AppResources.Items,
-                            ciphersListItems.Count, uppercaseGroupNames, !MainPage && !groupedItems.Any()));
-                    }
+                    CreateCipherGroupedItems(ref groupedItems);
                 }
                 if (ShowNoFolderCipherGroup)
                 {
@@ -403,6 +382,45 @@ namespace Bit.App.Pages
                 ShowNoData = (MainPage && !HasCiphers) || !groupedItems.Any();
                 ShowList = !ShowNoData;
                 DisableRefreshing();
+            }
+        }
+
+        private void CreateCipherGroupedItems(ref List<GroupingsPageListGroup> groupedItems)
+        {
+            var uppercaseGroupNames = _deviceActionService.DeviceType == DeviceType.iOS;
+            _totpTickCancellationToken?.Cancel();
+            if (TotpFilterEnable)
+            {
+                var ciphersListItems = Ciphers.Where(c => c.IsDeleted == Deleted && !string.IsNullOrEmpty(c.Login.Totp))
+                    .Select(c => new GroupingsPageTOTPListItem(c, true)).ToList();
+                groupedItems.Add(new GroupingsPageListGroup(ciphersListItems, AppResources.Items,
+                    ciphersListItems.Count, uppercaseGroupNames, !MainPage && !groupedItems.Any()));
+
+                StartCiphersTotpTick(ciphersListItems);
+            }
+            else
+            {
+                var ciphersListItems = Ciphers.Where(c => c.IsDeleted == Deleted)
+                    .Select(c => new GroupingsPageListItem { Cipher = c }).ToList();
+                groupedItems.Add(new GroupingsPageListGroup(ciphersListItems, AppResources.Items,
+                    ciphersListItems.Count, uppercaseGroupNames, !MainPage && !groupedItems.Any()));
+            }
+        }
+
+        private void StartCiphersTotpTick(List<GroupingsPageTOTPListItem> ciphersListItems)
+        {
+            _totpTickCancellationToken?.Cancel();
+            _totpTickCancellationToken = new CancellationTokenSource();
+            _totpTickTask = new TimerTask(() => { ciphersListItems.ForEach(i => i.TotpTickAsync()); }, _totpTickCancellationToken).Run();
+        }
+
+        public async Task StopCiphersTotpTick()
+        {
+            TotpFilterEnable = false;
+            _totpTickCancellationToken?.Cancel();
+            if (_totpTickTask != null)
+            {
+                await _totpTickTask;
             }
         }
 

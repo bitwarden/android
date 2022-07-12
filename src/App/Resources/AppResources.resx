@@ -893,11 +893,9 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>Cannot read authenticator key.</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>Scanning will happen automatically.</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Point your camera at the QR code.</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Point your camera at the QR Code.
+Scanning will happen automatically.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>Scan QR Code</value>
@@ -2276,22 +2274,29 @@
   <data name="AuthenticatorKeyScanner" xml:space="preserve">
     <value>Authenticator Key</value>
   </data>
-  <data name="EnterCodeManually" xml:space="preserve">
+  <data name="EnterKeyManually" xml:space="preserve">
     <value>Enter Key Manually</value>
   </data>
   <data name="AddTotp" xml:space="preserve">
     <value>Add TOTP</value>
   </data>
-  <data name="SetupTOTP" xml:space="preserve">
+  <data name="SetupTotp" xml:space="preserve">
     <value>Set up TOTP</value>
   </data>
   <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
-    <value>Once the key is successfully entered,</value>
+    <value>Once the key is successfully entered,
+select Add TOTP to store the key safely</value>
   </data>
   <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
-    <value>select Add TOTP to store the key safely</value>
+    <value></value>
   </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Setting your lock options to “Never” keeps your vault available to anyone with access to your device. If you use this option, you should ensure that you keep your device properly protected.</value>
+  </data>
+  <data name="CipherListIsVisibleActivateToShowAuthenticationCodesList" xml:space="preserve">
+    <value>Cipher list is visible, activate to show authentication codes list.</value>
+  </data>
+  <data name="AuthenticationCodesListIsVisibleActivateToShowCipherList" xml:space="preserve">
+    <value>Authentication codes list is visible, activate to show cipher list.</value>
   </data>
 </root>
