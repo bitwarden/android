@@ -30,7 +30,7 @@ namespace Bit.App.Pages
         private string _wordSeparator;
         private bool _capitalize;
         private bool _includeNumber;
-        private int _typeSelectedIndex;
+        private int _passwordTypeSelectedIndex;
         private bool _doneIniting;
 
         public GeneratorPageViewModel()
@@ -41,10 +41,10 @@ namespace Bit.App.Pages
             _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
 
             PageTitle = AppResources.Generator;
-            TypeOptions = new List<string> { AppResources.Password, AppResources.Passphrase };
+            PasswordTypeOptions = new List<string> { AppResources.Password, AppResources.Passphrase };
         }
 
-        public List<string> TypeOptions { get; set; }
+        public List<string> PasswordTypeOptions { get; set; }
 
         public string Password
         {
@@ -247,12 +247,12 @@ namespace Bit.App.Pages
 
         public bool IsPolicyInEffect => _enforcedPolicyOptions.InEffect();
 
-        public int TypeSelectedIndex
+        public int PasswordTypeSelectedIndex
         {
-            get => _typeSelectedIndex;
+            get => _passwordTypeSelectedIndex;
             set
             {
-                if (SetProperty(ref _typeSelectedIndex, value))
+                if (SetProperty(ref _passwordTypeSelectedIndex, value))
                 {
                     IsPassword = value == 0;
                     var task = SaveOptionsAsync();
@@ -324,8 +324,8 @@ namespace Bit.App.Pages
         private void LoadFromOptions()
         {
             AllowAmbiguousChars = _options.AllowAmbiguousChar.GetValueOrDefault();
-            TypeSelectedIndex = _options.Type == "passphrase" ? 1 : 0;
-            IsPassword = TypeSelectedIndex == 0;
+            PasswordTypeSelectedIndex = _options.Type == "passphrase" ? 1 : 0;
+            IsPassword = PasswordTypeSelectedIndex == 0;
             MinNumber = _options.MinNumber.GetValueOrDefault();
             MinSpecial = _options.MinSpecial.GetValueOrDefault();
             Special = _options.Special.GetValueOrDefault();
@@ -342,7 +342,7 @@ namespace Bit.App.Pages
         private void SetOptions()
         {
             _options.AllowAmbiguousChar = AllowAmbiguousChars;
-            _options.Type = TypeSelectedIndex == 1 ? "passphrase" : "password";
+            _options.Type = PasswordTypeSelectedIndex == 1 ? "passphrase" : "password";
             _options.MinNumber = MinNumber;
             _options.MinSpecial = MinSpecial;
             _options.Special = Special;

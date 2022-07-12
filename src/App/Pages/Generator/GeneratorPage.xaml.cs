@@ -49,7 +49,7 @@ namespace Bit.App.Pages
             }
             if (isIos)
             {
-                _typePicker.On<Xamarin.Forms.PlatformConfiguration.iOS>().SetUpdateMode(UpdateMode.WhenFinished);
+                _passwordTypePicker.On<Xamarin.Forms.PlatformConfiguration.iOS>().SetUpdateMode(UpdateMode.WhenFinished);
             }
         }
 

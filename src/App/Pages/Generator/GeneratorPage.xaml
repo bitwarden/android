@@ -115,9 +115,9 @@
                             Text="{u:I18n PasswordType}"
                             StyleClass="box-label" />
                         <Picker
-                            x:Name="_typePicker"
-                            ItemsSource="{Binding TypeOptions, Mode=OneTime}"
-                            SelectedIndex="{Binding TypeSelectedIndex}"
+                            x:Name="_passwordTypePicker"
+                            ItemsSource="{Binding PasswordTypeOptions, Mode=OneTime}"
+                            SelectedIndex="{Binding PasswordTypeSelectedIndex}"
                             StyleClass="box-value" />
                     </StackLayout>
                     <StackLayout Spacing="0"
