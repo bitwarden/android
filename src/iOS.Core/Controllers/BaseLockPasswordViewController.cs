@@ -28,6 +28,7 @@ namespace Bit.iOS.Core.Controllers
         private IPlatformUtilsService _platformUtilsService;
         private IBiometricService _biometricService;
         private IKeyConnectorService _keyConnectorService;
+        private IAccountsManager _accountManager;
         private bool _isPinProtected;
         private bool _isPinProtectedWithKey;
         private bool _pinLock;
@@ -84,7 +85,7 @@ namespace Bit.iOS.Core.Controllers
         }
 
         public abstract UITableView TableView { get; }
-
+        
         public override async void ViewDidLoad()
         {
             _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
@@ -95,6 +96,7 @@ namespace Bit.iOS.Core.Controllers
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _biometricService = ServiceContainer.Resolve<IBiometricService>("biometricService");
             _keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
+            _accountManager = ServiceContainer.Resolve<IAccountsManager>("accountsManager");
 
             // We re-use the lock screen for autofill extension to verify master password
             // when trying to access protected items.
@@ -265,13 +267,7 @@ namespace Bit.iOS.Core.Controllers
                 }
                 if (failed)
                 {
-                    var invalidUnlockAttempts = await AppHelpers.IncrementInvalidUnlockAttemptsAsync();
-                    if (invalidUnlockAttempts >= 5)
-                    {
-                        await LogOutAsync();
-                        return;
-                    }
-                    InvalidValue();
+                    await HandleFailedCredentialsAsync();
                 }
             }
             else
@@ -306,15 +302,20 @@ namespace Bit.iOS.Core.Controllers
                 }
                 else
                 {
-                    var invalidUnlockAttempts = await AppHelpers.IncrementInvalidUnlockAttemptsAsync();
-                    if (invalidUnlockAttempts >= 5)
-                    {
-                        await LogOutAsync();
-                        return;
-                    }
-                    InvalidValue();
+                    await HandleFailedCredentialsAsync();
                 }
             }
+        }
+
+        private async Task HandleFailedCredentialsAsync()
+        {
+            var invalidUnlockAttempts = await AppHelpers.IncrementInvalidUnlockAttemptsAsync();
+            if (invalidUnlockAttempts >= 5)
+            {
+                await _accountManager.LogOutAsync(await _stateService.GetActiveUserIdAsync(), false, false);
+                return;
+            }
+            InvalidValue();
         }
 
         public async Task PromptBiometricAsync()
@@ -393,16 +394,6 @@ namespace Bit.iOS.Core.Controllers
                     MasterPasswordCell.TextField.BecomeFirstResponder();
                 });
             PresentViewController(alert, true, null);
-        }
-
-        private async Task LogOutAsync()
-        {
-            await AppHelpers.LogOutAsync(await _stateService.GetActiveUserIdAsync());
-            var authService = ServiceContainer.Resolve<IAuthService>("authService");
-            authService.LogOut(() =>
-            {
-                Cancel?.Invoke();
-            });
         }
 
         protected override void Dispose(bool disposing)

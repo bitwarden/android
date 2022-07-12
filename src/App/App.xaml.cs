@@ -301,7 +301,7 @@ namespace Bit.App
                 UpdateThemeAsync();
             };
             Current.MainPage = new NavigationPage(new HomePage(Options));
-            var mainPageTask = _accountsManager.NavigateOnAccountChangeAsync();
+            _accountsManager.NavigateOnAccountChangeAsync().FireAndForget();
             ServiceContainer.Resolve<MobilePlatformUtilsService>("platformUtilsService").Init();
         }
 
