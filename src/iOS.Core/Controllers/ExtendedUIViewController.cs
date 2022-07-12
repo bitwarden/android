@@ -7,7 +7,11 @@ namespace Bit.iOS.Core.Controllers
     public class ExtendedUIViewController : UIViewController
     {
         public Action DismissModalAction { get; set; }
-        
+
+        public ExtendedUIViewController()
+        {
+        }
+
         public ExtendedUIViewController(IntPtr handle)
             : base(handle)
         {
@@ -28,16 +32,28 @@ namespace Bit.iOS.Core.Controllers
             {
                 View.BackgroundColor = ThemeHelpers.BackgroundColor;
             }
-            if (NavigationController?.NavigationBar != null)
+            UpdateNavigationBarTheme();
+        }
+
+        protected virtual void UpdateNavigationBarTheme()
+        {
+            UpdateNavigationBarTheme(NavigationController?.NavigationBar);
+        }
+
+        protected void UpdateNavigationBarTheme(UINavigationBar navBar)
+        {
+            if (navBar is null)
             {
-                NavigationController.NavigationBar.BarTintColor = ThemeHelpers.NavBarBackgroundColor;
-                NavigationController.NavigationBar.BackgroundColor = ThemeHelpers.NavBarBackgroundColor;
-                NavigationController.NavigationBar.TintColor = ThemeHelpers.NavBarTextColor;
-                NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes
-                {
-                    ForegroundColor = ThemeHelpers.NavBarTextColor
-                };
+                return;
             }
+
+            navBar.BarTintColor = ThemeHelpers.NavBarBackgroundColor;
+            navBar.BackgroundColor = ThemeHelpers.NavBarBackgroundColor;
+            navBar.TintColor = ThemeHelpers.NavBarTextColor;
+            navBar.TitleTextAttributes = new UIStringAttributes
+            {
+                ForegroundColor = ThemeHelpers.NavBarTextColor
+            };
         }
     }
 }

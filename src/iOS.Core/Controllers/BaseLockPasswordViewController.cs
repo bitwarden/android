@@ -1,20 +1,20 @@
 ﻿using System;
-using UIKit;
-using Foundation;
-using Bit.iOS.Core.Views;
-using Bit.App.Resources;
-using Bit.iOS.Core.Utilities;
-using Bit.App.Abstractions;
-using Bit.Core.Abstractions;
-using Bit.Core.Utilities;
 using System.Threading.Tasks;
-using Bit.App.Utilities;
-using Bit.Core.Models.Domain;
-using Bit.Core.Enums;
-using Bit.App.Pages;
+using Bit.App.Abstractions;
 using Bit.App.Models;
-using Xamarin.Forms;
+using Bit.App.Pages;
+using Bit.App.Resources;
+using Bit.App.Utilities;
 using Bit.Core;
+using Bit.Core.Abstractions;
+using Bit.Core.Enums;
+using Bit.Core.Models.Domain;
+using Bit.Core.Utilities;
+using Bit.iOS.Core.Utilities;
+using Bit.iOS.Core.Views;
+using Foundation;
+using UIKit;
+using Xamarin.Forms;
 
 namespace Bit.iOS.Core.Controllers
 {
@@ -38,6 +38,10 @@ namespace Bit.iOS.Core.Controllers
         private bool _biometricUnlockOnly = false;
 
         protected bool autofillExtension = false;
+
+        public BaseLockPasswordViewController()
+        {
+        }
 
         public BaseLockPasswordViewController(IntPtr handle)
             : base(handle)
@@ -168,12 +172,11 @@ namespace Bit.iOS.Core.Controllers
             {
                 TableView.BackgroundColor = ThemeHelpers.BackgroundColor;
                 TableView.SeparatorColor = ThemeHelpers.SeparatorColor;
+                TableView.RowHeight = UITableView.AutomaticDimension;
+                TableView.EstimatedRowHeight = 70;
+                TableView.Source = new TableSource(this);
+                TableView.AllowsSelection = true;
             }
-
-            TableView.RowHeight = UITableView.AutomaticDimension;
-            TableView.EstimatedRowHeight = 70;
-            TableView.Source = new TableSource(this);
-            TableView.AllowsSelection = true;
 
             base.ViewDidLoad();
 
@@ -191,7 +194,7 @@ namespace Bit.iOS.Core.Controllers
             }
         }
 
-        public override async void ViewDidAppear(bool animated)
+        public override void ViewDidAppear(bool animated)
         {
             base.ViewDidAppear(animated);
 
@@ -402,28 +405,43 @@ namespace Bit.iOS.Core.Controllers
             });
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+
+            MasterPasswordCell?.Dispose();
+            MasterPasswordCell = null;
+
+            TableView?.Dispose();
+        }
+
         public class TableSource : ExtendedUITableViewSource
         {
-            private readonly BaseLockPasswordViewController _controller;
+            private readonly WeakReference<BaseLockPasswordViewController> _controller;
 
             public TableSource(BaseLockPasswordViewController controller)
             {
-                _controller = controller;
+                _controller = new WeakReference<BaseLockPasswordViewController>(controller);
             }
 
             public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
             {
+                if (!_controller.TryGetTarget(out var controller))
+                {
+                    return new ExtendedUITableViewCell();
+                }
+
                 if (indexPath.Section == 0)
                 {
                     if (indexPath.Row == 0)
                     {
-                        if (_controller._biometricUnlockOnly)
+                        if (controller._biometricUnlockOnly)
                         {
-                            return _controller.BiometricCell;
+                            return controller.BiometricCell;
                         }
                         else
                         {
-                            return _controller.MasterPasswordCell;
+                            return controller.MasterPasswordCell;
                         }
                     }
                 }
@@ -431,7 +449,7 @@ namespace Bit.iOS.Core.Controllers
                 {
                     if (indexPath.Row == 0)
                     {
-                        if (_controller._passwordReprompt)
+                        if (controller._passwordReprompt)
                         {
                             var cell = new ExtendedUITableViewCell();
                             cell.TextLabel.TextColor = ThemeHelpers.DangerColor;
@@ -441,9 +459,9 @@ namespace Bit.iOS.Core.Controllers
                             cell.TextLabel.Text = AppResources.PasswordConfirmationDesc;
                             return cell;
                         }
-                        else if (!_controller._biometricUnlockOnly)
+                        else if (!controller._biometricUnlockOnly)
                         {
-                            return _controller.BiometricCell;
+                            return controller.BiometricCell;
                         }
                     }
                 }
@@ -457,8 +475,13 @@ namespace Bit.iOS.Core.Controllers
 
             public override nint NumberOfSections(UITableView tableView)
             {
-                return (!_controller._biometricUnlockOnly && _controller._biometricLock) ||
-                    _controller._passwordReprompt
+                if (!_controller.TryGetTarget(out var controller))
+                {
+                    return 0;
+                }
+
+                return (!controller._biometricUnlockOnly && controller._biometricLock) ||
+                    controller._passwordReprompt
                     ? 2
                     : 1;
             }
@@ -484,13 +507,18 @@ namespace Bit.iOS.Core.Controllers
 
             public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
             {
+                if (!_controller.TryGetTarget(out var controller))
+                {
+                    return;
+                }
+
                 tableView.DeselectRow(indexPath, true);
                 tableView.EndEditing(true);
                 if (indexPath.Row == 0 &&
-                    ((_controller._biometricUnlockOnly && indexPath.Section == 0) ||
+                    ((controller._biometricUnlockOnly && indexPath.Section == 0) ||
                     indexPath.Section == 1))
                 {
-                    var task = _controller.PromptBiometricAsync();
+                    var task = controller.PromptBiometricAsync();
                     return;
                 }
                 var cell = tableView.CellAt(indexPath);
