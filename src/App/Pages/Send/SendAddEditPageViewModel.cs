@@ -264,10 +264,8 @@ namespace Bit.App.Pages
                         return false;
                     }
                     Send = await send.DecryptAsync();
-                    DeletionDateTimeViewModel.Date = Send.DeletionDate.ToLocalTime();
-                    DeletionDateTimeViewModel.Time = DeletionDateTimeViewModel.Date.Value.TimeOfDay;
-                    ExpirationDateTimeViewModel.Date = Send.ExpirationDate?.ToLocalTime();
-                    ExpirationDateTimeViewModel.Time = ExpirationDateTimeViewModel.Date?.TimeOfDay;
+                    DeletionDateTimeViewModel.DateTime = Send.DeletionDate.ToLocalTime();
+                    ExpirationDateTimeViewModel.DateTime = Send.ExpirationDate?.ToLocalTime();
                 }
                 else
                 {
@@ -276,8 +274,7 @@ namespace Bit.App.Pages
                     {
                         Type = Type.GetValueOrDefault(defaultType),
                     };
-                    DeletionDateTimeViewModel.Date = DateTimeNow().AddDays(7);
-                    DeletionDateTimeViewModel.Time = DeletionDateTimeViewModel.Date.Value.TimeOfDay;
+                    DeletionDateTimeViewModel.DateTime = DateTimeNow().AddDays(7);
                     DeletionDateTypeSelectedIndex = 4;
                     ExpirationDateTypeSelectedIndex = 0;
                 }
@@ -301,8 +298,7 @@ namespace Bit.App.Pages
         public void ClearExpirationDate()
         {
             _isOverridingPickers = true;
-            ExpirationDateTimeViewModel.Date = null;
-            ExpirationDateTimeViewModel.Time = null;
+            ExpirationDateTimeViewModel.DateTime = null;
             _isOverridingPickers = false;
         }
 
@@ -317,7 +313,7 @@ namespace Bit.App.Pages
             // deletion date
             if (ShowDeletionCustomPickers)
             {
-                Send.DeletionDate = DeletionDateTimeViewModel.Date.Value.Add(DeletionDateTimeViewModel.Time.Value).ToUniversalTime();
+                Send.DeletionDate = DeletionDateTimeViewModel.DateTime.Value.ToUniversalTime();
             }
             else
             {
@@ -325,9 +321,9 @@ namespace Bit.App.Pages
             }
 
             // expiration date
-            if (ShowExpirationCustomPickers && ExpirationDateTimeViewModel.Date.HasValue && ExpirationDateTimeViewModel.Time.HasValue)
+            if (ShowExpirationCustomPickers && ExpirationDateTimeViewModel.DateTime.HasValue)
             {
-                Send.ExpirationDate = ExpirationDateTimeViewModel.Date.Value.Date.Add(ExpirationDateTimeViewModel.Time.Value).ToUniversalTime();
+                Send.ExpirationDate = ExpirationDateTimeViewModel.DateTime.Value.ToUniversalTime();
             }
             else if (_simpleExpirationDateTime.HasValue)
             {

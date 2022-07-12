@@ -45,5 +45,26 @@ namespace Bit.App.Controls
 
         public string DatePlaceholder { get; set; }
         public string TimePlaceholder { get; set; }
+
+        public DateTime? DateTime
+        {
+            get
+            {
+                if (Date.HasValue)
+                {
+                    if (Time.HasValue)
+                    {
+                        return Date.Value.Add(Time.Value);
+                    }
+                    return Date;
+                }
+                return null;
+            }
+            set
+            {
+                Date = value?.Date;
+                Time = value?.Date.TimeOfDay;
+            }
+        }
     }
 }
