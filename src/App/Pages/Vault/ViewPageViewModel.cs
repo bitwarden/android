@@ -750,7 +750,7 @@ namespace Bit.App.Pages
             {
                 if (IsBooleanType)
                 {
-                    return _field.Value == "true" ? BitwardenIcons.Square : BitwardenIcons.CheckSquare;
+                    return _field.Value == "true" ? BitwardenIcons.CheckSquare : BitwardenIcons.Square;
                 }
                 else if (IsLinkedType)
                 {
