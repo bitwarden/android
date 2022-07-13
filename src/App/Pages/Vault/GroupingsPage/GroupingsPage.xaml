@@ -151,15 +151,11 @@
                         Margin="10,0"
                         StyleClass="text-md, text-muted"
                         VerticalOptions="Center"
-                        HorizontalOptions="StartAndExpand"
-                        AutomationProperties.IsInAccessibleTree="True"
-                        AutomationProperties.Name="{u:I18n DisplayItemsContainingTOTP}" />
+                        HorizontalOptions="StartAndExpand" />
                     <Switch
                         IsToggled="{Binding TotpFilterEnable}"
                         StyleClass="box-value"
-                        HorizontalOptions="End"
-                        AutomationProperties.IsInAccessibleTree="True"
-                        AutomationProperties.Name="{Binding ShowTotpCodesAccessibilityText}">
+                        HorizontalOptions="End">
                         <Switch.Behaviors>
                             <xct:EventToCommandBehavior
                                 EventName="Toggled"
