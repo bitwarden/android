@@ -2260,4 +2260,7 @@
   <data name="PasswordType" xml:space="preserve">
     <value>Password Type</value>
   </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>What would you like to generate?</value>
+  </data>
 </root>

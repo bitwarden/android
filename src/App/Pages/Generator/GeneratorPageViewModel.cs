@@ -30,6 +30,7 @@ namespace Bit.App.Pages
         private string _wordSeparator;
         private bool _capitalize;
         private bool _includeNumber;
+        private int _typeSelectedIndex;
         private int _passwordTypeSelectedIndex;
         private bool _doneIniting;
 
@@ -41,8 +42,11 @@ namespace Bit.App.Pages
             _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
 
             PageTitle = AppResources.Generator;
+            TypeOptions = new List<string> { AppResources.Password, AppResources.Username };
             PasswordTypeOptions = new List<string> { AppResources.Password, AppResources.Passphrase };
         }
+
+        public List<string> TypeOptions { get; set; }
 
         public List<string> PasswordTypeOptions { get; set; }
 
@@ -246,6 +250,19 @@ namespace Bit.App.Pages
         }
 
         public bool IsPolicyInEffect => _enforcedPolicyOptions.InEffect();
+
+        public int TypeSelectedIndex
+        {
+            get => _typeSelectedIndex;
+            set
+            {
+                if (SetProperty(ref _typeSelectedIndex, value))
+                {
+                    IsPassword = value == 0;
+                    var task = SaveOptionsAsync();
+                }
+            }
+        }
 
         public int PasswordTypeSelectedIndex
         {

@@ -4048,5 +4048,11 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("PasswordType", resourceCulture);
             }
         }
+        
+        public static string WhatWouldYouLikeToGenerate {
+            get {
+                return ResourceManager.GetString("WhatWouldYouLikeToGenerate", resourceCulture);
+            }
+        }
     }
 }
