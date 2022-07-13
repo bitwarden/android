@@ -22,7 +22,7 @@ namespace Bit.App.Utilities
         public string TotpSec { get; private set; }
         public string TotpCodeFormatted { get; private set; }
         public double Progress { get; private set; }
-        
+
         public async Task GenerateNewTotpValues()
         {
             var epoc = CoreHelpers.EpocUtcNow() / 1000;

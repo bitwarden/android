@@ -103,7 +103,7 @@ namespace Bit.App.Pages
         public bool HasCollections { get; set; }
         public string ShowTotpCodesAccessibilityText => TotpFilterEnable ?
             AppResources.AuthenticationCodesListIsVisibleActivateToShowCipherList
-            : AppResources.CipherListIsVisibleActivateToShowAuthenticationCodesList; 
+            : AppResources.CipherListIsVisibleActivateToShowAuthenticationCodesList;
         public bool ShowNoFolderCipherGroup => NoFolderCiphers != null
                                                && NoFolderCiphers.Count < NoFolderListSize
                                                && (Collections is null || !Collections.Any());

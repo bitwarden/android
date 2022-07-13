@@ -82,7 +82,7 @@ namespace Bit.App.Controls
         protected override void OnPaintSurface(SKPaintSurfaceEventArgs e)
         {
             base.OnPaintSurface(e);
-            if(_circle != null)
+            if (_circle != null)
             {
                 _circle.CalculateCenter(e.Info);
                 e.Surface.Canvas.Clear();
