@@ -4054,5 +4054,35 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("WhatWouldYouLikeToGenerate", resourceCulture);
             }
         }
+        
+        public static string UsernameType {
+            get {
+                return ResourceManager.GetString("UsernameType", resourceCulture);
+            }
+        }
+        
+        public static string PlusAddressedEmail {
+            get {
+                return ResourceManager.GetString("PlusAddressedEmail", resourceCulture);
+            }
+        }
+        
+        public static string CatchAllEmail {
+            get {
+                return ResourceManager.GetString("CatchAllEmail", resourceCulture);
+            }
+        }
+        
+        public static string ForwardedEmailAlias {
+            get {
+                return ResourceManager.GetString("ForwardedEmailAlias", resourceCulture);
+            }
+        }
+        
+        public static string RandomWord {
+            get {
+                return ResourceManager.GetString("RandomWord", resourceCulture);
+            }
+        }
     }
 }

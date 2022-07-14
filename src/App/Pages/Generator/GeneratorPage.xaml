@@ -120,7 +120,27 @@
                             StyleClass="box-value" />
                     </StackLayout>
                 </StackLayout>
-                <StackLayout StyleClass="box">
+                <!--USERNAME OPTIONS-->
+                <StackLayout StyleClass="box"
+                             IsVisible="{Binding IsUsername}">
+                    <StackLayout StyleClass="box-row-header">
+                        <Label Text="{u:I18n Options, Header=True}"
+                               StyleClass="box-header, box-header-platform" />
+                    </StackLayout>
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label
+                            Text="{u:I18n UsernameType}"
+                            StyleClass="box-label" />
+                        <Picker
+                            x:Name="_usernameTypePicker"
+                            ItemsSource="{Binding UsernameTypeOptions, Mode=OneTime}"
+                            SelectedIndex="{Binding UsernameTypeSelectedIndex}"
+                            StyleClass="box-value" />
+                    </StackLayout>
+                </StackLayout>
+                <!--PASSWORD OPTIONS-->
+                <StackLayout StyleClass="box"
+                             IsVisible="{Binding IsUsername, Converter={StaticResource inverseBool}}">
                     <StackLayout StyleClass="box-row-header">
                         <Label Text="{u:I18n Options, Header=True}"
                                StyleClass="box-header, box-header-platform" />

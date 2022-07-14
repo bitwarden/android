@@ -18,6 +18,7 @@ namespace Bit.App.Pages
         private PasswordGeneratorPolicyOptions _enforcedPolicyOptions;
         private string _password;
         private bool _isPassword;
+        private bool _isUsername;
         private bool _uppercase;
         private bool _lowercase;
         private bool _number;
@@ -32,6 +33,7 @@ namespace Bit.App.Pages
         private bool _includeNumber;
         private int _typeSelectedIndex;
         private int _passwordTypeSelectedIndex;
+        private int _usernameTypeSelectedIndex;
         private bool _doneIniting;
 
         public GeneratorPageViewModel()
@@ -44,11 +46,12 @@ namespace Bit.App.Pages
             PageTitle = AppResources.Generator;
             TypeOptions = new List<string> { AppResources.Password, AppResources.Username };
             PasswordTypeOptions = new List<string> { AppResources.Password, AppResources.Passphrase };
+            UsernameTypeOptions = new List<string> { AppResources.PlusAddressedEmail, AppResources.CatchAllEmail, AppResources.ForwardedEmailAlias, AppResources.RandomWord };
         }
 
         public List<string> TypeOptions { get; set; }
-
         public List<string> PasswordTypeOptions { get; set; }
+        public List<string> UsernameTypeOptions { get; set; }
 
         public string Password
         {
@@ -66,6 +69,12 @@ namespace Bit.App.Pages
         {
             get => _isPassword;
             set => SetProperty(ref _isPassword, value);
+        }
+
+        public bool IsUsername
+        {
+            get => _isUsername;
+            set => SetProperty(ref _isUsername, value);
         }
 
         public int Length
@@ -258,7 +267,7 @@ namespace Bit.App.Pages
             {
                 if (SetProperty(ref _typeSelectedIndex, value))
                 {
-                    IsPassword = value == 0;
+                    IsUsername = value == 1;
                     var task = SaveOptionsAsync();
                 }
             }
@@ -272,6 +281,18 @@ namespace Bit.App.Pages
                 if (SetProperty(ref _passwordTypeSelectedIndex, value))
                 {
                     IsPassword = value == 0;
+                    var task = SaveOptionsAsync();
+                }
+            }
+        }
+
+        public int UsernameTypeSelectedIndex
+        {
+            get => _usernameTypeSelectedIndex;
+            set
+            {
+                if (SetProperty(ref _usernameTypeSelectedIndex, value))
+                {
                     var task = SaveOptionsAsync();
                 }
             }
