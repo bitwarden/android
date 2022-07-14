@@ -83,7 +83,7 @@ jobs:
     name: F-Droid Release
     runs-on: ubuntu-20.04
     needs: release
-    if: inputs.fdroid_publish == 'true'
+    if: inputs.fdroid_publish
     steps:
       - name: Checkout repo
         uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579  # v2.4.0
