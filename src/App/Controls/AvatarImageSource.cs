@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using SkiaSharp;
@@ -131,21 +132,23 @@ namespace Bit.App.Controls
 
         private string GetFirstLetters(string data, int charCount)
         {
-            var parts = data.Split();
+            var sanitizedData = data.Trim();
+            var parts = sanitizedData.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
             if (parts.Length > 1 && charCount <= 2)
             {
-                var text = "";
-                for (int i = 0; i < charCount; i++)
+                var text = string.Empty;
+                for (var i = 0; i < charCount; i++)
                 {
-                    text += parts[i].Substring(0, 1);
+                    text += parts[i][0];
                 }
                 return text;
             }
-            if (data.Length > 2)
+            if (sanitizedData.Length > 2)
             {
-                return data.Substring(0, 2);
+                return sanitizedData.Substring(0, 2);
             }
-            return data;
+            return sanitizedData;
         }
 
         private Color StringToColor(string str)
