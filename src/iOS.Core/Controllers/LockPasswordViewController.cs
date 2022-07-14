@@ -18,6 +18,8 @@ using Bit.Core;
 
 namespace Bit.iOS.Core.Controllers
 {
+    // TODO: Leaving this here until all inheritance is changed to use BaseLockPasswordViewController instead of UITableViewController
+    [Obsolete("Use BaseLockPasswordViewController instead")]
     public abstract class LockPasswordViewController : ExtendedUITableViewController
     {
         private IVaultTimeoutService _vaultTimeoutService;
@@ -182,7 +184,7 @@ namespace Bit.iOS.Core.Controllers
             }
         }
 
-        public override async void ViewDidAppear(bool animated)
+        public override void ViewDidAppear(bool animated)
         {
             base.ViewDidAppear(animated);
 

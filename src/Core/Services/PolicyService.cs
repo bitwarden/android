@@ -193,7 +193,8 @@ namespace Bit.Core.Services
             return new Tuple<ResetPasswordPolicyOptions, bool>(resetPasswordPolicyOptions, policy != null);
         }
 
-        public async Task<bool> PolicyAppliesToUser(PolicyType policyType, Func<Policy, bool> policyFilter, string userId = null)
+        public async Task<bool> PolicyAppliesToUser(PolicyType policyType, Func<Policy, bool> policyFilter = null,
+            string userId = null)
         {
             var policies = await GetAll(policyType, userId);
             if (policies == null)
@@ -244,6 +245,18 @@ namespace Bit.Core.Services
                 }
             }
             return null;
+        }
+
+        public async Task<bool> ShouldShowVaultFilterAsync()
+        {
+            var personalOwnershipPolicyApplies = await PolicyAppliesToUser(PolicyType.PersonalOwnership);
+            var singleOrgPolicyApplies = await PolicyAppliesToUser(PolicyType.OnlyOrg);
+            if (personalOwnershipPolicyApplies && singleOrgPolicyApplies)
+            {
+                return false;
+            }
+            var organizations = await _organizationService.GetAllAsync();
+            return organizations?.Any() ?? false;
         }
 
         private bool? GetPolicyBool(Policy policy, string key)

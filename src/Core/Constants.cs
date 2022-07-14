@@ -25,6 +25,7 @@
         public static string iOSExtensionBiometricIntegrityKey = "iOSExtensionBiometricIntegrityState";
         public static string iOSShareExtensionClearCiphersCacheKey = "iOSShareExtensionClearCiphersCache";
         public static string iOSShareExtensionBiometricIntegrityKey = "iOSShareExtensionBiometricIntegrityState";
+        public static string iOSExtensionActiveUserIdKey = "iOSExtensionActiveUserId";
         public static string EventCollectionKey = "eventCollection";
         public static string RememberedEmailKey = "rememberedEmail";
         public static string RememberedOrgIdentifierKey = "rememberedOrgIdentifier";
@@ -72,6 +73,7 @@
         public static string DisableFaviconKey(string userId) => $"disableFavicon_{userId}";
         public static string DefaultUriMatchKey(string userId) => $"defaultUriMatch_{userId}";
         public static string ThemeKey(string userId) => $"theme_{userId}";
+        public static string AutoDarkThemeKey(string userId) => $"autoDarkTheme_{userId}";
         public static string DisableAutoTotpCopyKey(string userId) => $"disableAutoTotpCopy_{userId}";
         public static string PreviousPageKey(string userId) => $"previousPage_{userId}";
         public static string PasswordRepromptAutofillKey(string userId) => $"passwordRepromptAutofillKey_{userId}";

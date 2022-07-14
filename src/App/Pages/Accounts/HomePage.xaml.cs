@@ -54,7 +54,7 @@ namespace Bit.App.Pages
             {
                 _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
             }
-            _broadcasterService.Subscribe(nameof(HomePage), async (message) =>
+            _broadcasterService.Subscribe(nameof(HomePage), (message) =>
             {
                 if (message.Command == "updatedTheme")
                 {

@@ -13,7 +13,8 @@ namespace Bit.App.Controls
         public AccountViewCellViewModel(AccountView accountView)
         {
             AccountView = accountView;
-            AvatarImageSource = new AvatarImageSource(AccountView.Name, AccountView.Email);
+            AvatarImageSource = ServiceContainer.Resolve<IAvatarImageSourcePool>("avatarImageSourcePool")
+                                                ?.GetOrCreateAvatar(AccountView.Name, AccountView.Email);
         }
 
         public AccountView AccountView

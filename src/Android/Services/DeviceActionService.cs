@@ -35,6 +35,7 @@ namespace Bit.Droid.Services
 {
     public class DeviceActionService : IDeviceActionService
     {
+        private readonly IClipboardService _clipboardService;
         private readonly IStateService _stateService;
         private readonly IMessagingService _messagingService;
         private readonly IBroadcasterService _broadcasterService;
@@ -47,11 +48,13 @@ namespace Bit.Droid.Services
         private string _userAgent;
 
         public DeviceActionService(
+            IClipboardService clipboardService,
             IStateService stateService,
             IMessagingService messagingService,
             IBroadcasterService broadcasterService,
             Func<IEventService> eventServiceFunc)
         {
+            _clipboardService = clipboardService;
             _stateService = stateService;
             _messagingService = messagingService;
             _broadcasterService = broadcasterService;
@@ -929,18 +932,10 @@ namespace Bit.Droid.Services
                     var totp = await totpService.GetCodeAsync(cipher.Login.Totp);
                     if (totp != null)
                     {
-                        CopyToClipboard(totp);
+                        await _clipboardService.CopyTextAsync(totp);
                     }
                 }
             }
-        }
-
-        private void CopyToClipboard(string text)
-        {
-            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
-            var clipboardManager = activity.GetSystemService(
-                Context.ClipboardService) as Android.Content.ClipboardManager;
-            clipboardManager.PrimaryClip = ClipData.NewPlainText("bitwarden", text);
         }
 
         public float GetSystemFontSizeScale()

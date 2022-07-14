@@ -262,6 +262,17 @@ namespace Bit.App.Pages
                 }
                 var cleanSelection = selection.Replace("✓ ", string.Empty);
                 var selectionOption = _vaultTimeouts.FirstOrDefault(o => o.Key == cleanSelection);
+
+                // Check if the selected Timeout action is "Never" and if it's different from the previous selected value
+                if (selectionOption.Value == null && selectionOption.Value != oldTimeout)
+                {
+                    var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.NeverLockWarning,
+                        AppResources.Warning, AppResources.Yes, AppResources.Cancel);
+                    if (!confirmed)
+                    {
+                        return;
+                    }
+                }
                 _vaultTimeoutDisplayValue = selectionOption.Key;
                 newTimeout = selectionOption.Value;
             }
@@ -301,7 +312,7 @@ namespace Bit.App.Pages
                     CreateSelectableOption(AppResources.No, !_reportLoggingEnabled),
             };
 
-            var selection = await Page.DisplayActionSheet(AppResources.ReportCrashLogsDescription, AppResources.Cancel, null, options);
+            var selection = await Page.DisplayActionSheet(AppResources.SubmitCrashLogsDescription, AppResources.Cancel, null, options);
 
             if (selection == null || selection == AppResources.Cancel)
             {
@@ -539,7 +550,7 @@ namespace Bit.App.Pages
 #if !FDROID 
                 new SettingsPageListItem
                 {
-                    Name = AppResources.ReportCrashLogs,
+                    Name = AppResources.SubmitCrashLogs,
                     SubLabel = _reportLoggingEnabled ? AppResources.Enabled : AppResources.Disabled,
                 },
 #endif

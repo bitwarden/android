@@ -55,7 +55,11 @@ namespace Bit.App.Pages
         {
             get => _showPassword;
             set => SetProperty(ref _showPassword, value,
-                additionalPropertyNames: new[] { nameof(ShowPasswordIcon) });
+                additionalPropertyNames: new[]
+                {
+                    nameof(ShowPasswordIcon),
+                    nameof(PasswordVisibilityAccessibilityText)
+                });
         }
 
         public bool IsPolicyInEffect
@@ -86,6 +90,7 @@ namespace Bit.App.Pages
         public Command TogglePasswordCommand { get; }
         public Command ToggleConfirmPasswordCommand { get; }
         public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
+        public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
         public string MasterPassword { get; set; }
         public string ConfirmMasterPassword { get; set; }
         public string Hint { get; set; }
@@ -214,7 +219,8 @@ namespace Bit.App.Pages
                     // Request
                     var resetRequest = new OrganizationUserResetPasswordEnrollmentRequest
                     {
-                        ResetPasswordKey = encryptedKey.EncryptedString
+                        ResetPasswordKey = encryptedKey.EncryptedString,
+                        MasterPasswordHash = masterPasswordHash,
                     };
                     var userId = await _stateService.GetActiveUserIdAsync();
                     // Enroll user

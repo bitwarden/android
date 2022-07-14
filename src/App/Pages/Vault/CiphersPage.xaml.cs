@@ -17,7 +17,8 @@ namespace Bit.App.Pages
         private CiphersPageViewModel _vm;
         private bool _hasFocused;
 
-        public CiphersPage(Func<CipherView, bool> filter, string pageTitle = null, string autofillUrl = null, bool deleted = false)
+        public CiphersPage(Func<CipherView, bool> filter, string pageTitle = null, string vaultFilterSelection = null,
+            string autofillUrl = null, bool deleted = false)
         {
             InitializeComponent();
             _vm = BindingContext as CiphersPageViewModel;
@@ -33,6 +34,7 @@ namespace Bit.App.Pages
             {
                 _vm.PageTitle = AppResources.SearchVault;
             }
+            _vm.VaultFilterDescription = vaultFilterSelection;
 
             if (Device.RuntimePlatform == Device.iOS)
             {

@@ -15,7 +15,7 @@ namespace Bit.iOS.Autofill.Utilities
     {
         public async static Task TableRowSelectedAsync(UITableView tableView, NSIndexPath indexPath,
             ExtensionTableSource tableSource, CredentialProviderViewController cpViewController,
-            UITableViewController controller, IPasswordRepromptService passwordRepromptService,
+            UIViewController controller, IPasswordRepromptService passwordRepromptService,
             string loginAddSegue)
         {
             tableView.DeselectRow(indexPath, true);

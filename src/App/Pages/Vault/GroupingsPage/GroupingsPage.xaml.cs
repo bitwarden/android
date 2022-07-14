@@ -7,6 +7,7 @@ using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Data;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
 
@@ -27,8 +28,8 @@ namespace Bit.App.Pages
         private PreviousPageInfo _previousPage;
 
         public GroupingsPage(bool mainPage, CipherType? type = null, string folderId = null,
-            string collectionId = null, string pageTitle = null, PreviousPageInfo previousPage = null,
-            bool deleted = false)
+            string collectionId = null, string pageTitle = null, string vaultFilterSelection = null,
+            PreviousPageInfo previousPage = null, bool deleted = false)
         {
             _pageName = string.Concat(nameof(GroupingsPage), "_", DateTime.UtcNow.Ticks);
             InitializeComponent();
@@ -51,6 +52,10 @@ namespace Bit.App.Pages
             if (pageTitle != null)
             {
                 _vm.PageTitle = pageTitle;
+            }
+            if (vaultFilterSelection != null)
+            {
+                _vm.VaultFilterDescription = vaultFilterSelection;
             }
 
             if (Device.RuntimePlatform == Device.iOS)
@@ -91,21 +96,28 @@ namespace Bit.App.Pages
 
             _broadcasterService.Subscribe(_pageName, async (message) =>
             {
-                if (message.Command == "syncStarted")
+                try
                 {
-                    Device.BeginInvokeOnMainThread(() => IsBusy = true);
-                }
-                else if (message.Command == "syncCompleted")
-                {
-                    await Task.Delay(500);
-                    Device.BeginInvokeOnMainThread(() =>
+                    if (message.Command == "syncStarted")
                     {
-                        IsBusy = false;
-                        if (_vm.LoadedOnce)
+                        Device.BeginInvokeOnMainThread(() => IsBusy = true);
+                    }
+                    else if (message.Command == "syncCompleted")
+                    {
+                        await Task.Delay(500);
+                        Device.BeginInvokeOnMainThread(() =>
                         {
-                            var task = _vm.LoadAsync();
-                        }
-                    });
+                            IsBusy = false;
+                            if (_vm.LoadedOnce)
+                            {
+                                var task = _vm.LoadAsync();
+                            }
+                        });
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LoggerHelper.LogEvenIfCantBeResolved(ex);
                 }
             });
 
@@ -259,7 +271,7 @@ namespace Bit.App.Pages
             }
             if (!_vm.Deleted && DoOnce())
             {
-                var page = new AddEditPage(null, _vm.Type, _vm.FolderId, _vm.CollectionId);
+                var page = new AddEditPage(null, _vm.Type, _vm.FolderId, _vm.CollectionId, _vm.GetVaultFilterOrgId());
                 await Navigation.PushModalAsync(new NavigationPage(page));
             }
         }

@@ -25,8 +25,6 @@ namespace Bit.App.Pages
             _vm = BindingContext as LockPageViewModel;
             _vm.Page = this;
             _vm.UnlockedAction = () => Device.BeginInvokeOnMainThread(async () => await UnlockedAsync());
-            MasterPasswordEntry = _masterPassword;
-            PinEntry = _pin;
 
             if (Device.RuntimePlatform == Device.iOS)
             {
@@ -38,8 +36,17 @@ namespace Bit.App.Pages
             }
         }
 
-        public Entry MasterPasswordEntry { get; set; }
-        public Entry PinEntry { get; set; }
+        public Entry SecretEntry
+        {
+            get
+            {
+                if (_vm?.PinLock ?? false)
+                {
+                    return _pin;
+                }
+                return _masterPassword;
+            }
+        }
 
         public async Task PromptBiometricAfterResumeAsync()
         {
@@ -70,16 +77,12 @@ namespace Bit.App.Pages
             _vm.AvatarImageSource = await GetAvatarImageSourceAsync();
 
             await _vm.InitAsync();
+
+            _vm.FocusSecretEntry += PerformFocusSecretEntry;
+
             if (!_vm.BiometricLock)
             {
-                if (_vm.PinLock)
-                {
-                    RequestFocus(PinEntry);
-                }
-                else
-                {
-                    RequestFocus(MasterPasswordEntry);
-                }
+                RequestFocus(SecretEntry);
             }
             else
             {
@@ -97,6 +100,18 @@ namespace Bit.App.Pages
                     });
                 }
             }
+        }
+
+        private void PerformFocusSecretEntry(int? cursorPosition)
+        {
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                SecretEntry.Focus();
+                if (cursorPosition.HasValue)
+                {
+                    SecretEntry.CursorPosition = cursorPosition.Value;
+                }
+            });
         }
 
         protected override bool OnBackButtonPressed()

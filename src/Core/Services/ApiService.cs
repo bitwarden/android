@@ -547,7 +547,7 @@ namespace Bit.Core.Services
             return accessToken;
         }
 
-        public async Task<object> PreValidateSso(string identifier)
+        public async Task<SsoPrevalidateResponse> PreValidateSso(string identifier)
         {
             var path = "/account/prevalidate?domainHint=" + WebUtility.UrlEncode(identifier);
             using (var requestMessage = new HttpRequestMessage())
@@ -571,7 +571,8 @@ namespace Bit.Core.Services
                     var error = await HandleErrorAsync(response, false, true);
                     throw new ApiException(error);
                 }
-                return null;
+                var responseJsonString = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<SsoPrevalidateResponse>(responseJsonString);
             }
         }
 
@@ -588,7 +589,19 @@ namespace Bit.Core.Services
             {
                 requestMessage.Version = new Version(1, 0);
                 requestMessage.Method = method;
+
+                if (!Uri.IsWellFormedUriString(ApiBaseUrl, UriKind.Absolute))
+                {
+                    throw new ApiException(new ErrorResponse
+                    {
+                        StatusCode = HttpStatusCode.BadGateway,
+                        //Note: This message is hardcoded until AppResources.resx gets moved into Core.csproj
+                        Message = "One or more URLs saved in the Settings are incorrect. Please revise it and try to log in again."
+                    });
+                }
+
                 requestMessage.RequestUri = new Uri(string.Concat(ApiBaseUrl, path));
+
                 if (body != null)
                 {
                     var bodyType = body.GetType();

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Bit.App.Utilities;
@@ -11,6 +12,7 @@ using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -28,6 +30,7 @@ namespace Bit.App.Pages
         private readonly IPasswordRepromptService _passwordRepromptService;
         private readonly ILocalizeService _localizeService;
         private readonly IClipboardService _clipboardService;
+        private readonly ILogger _logger;
 
         private CipherView _cipher;
         private List<ViewPageFieldViewModel> _fields;
@@ -58,10 +61,11 @@ namespace Bit.App.Pages
             _passwordRepromptService = ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService");
             _localizeService = ServiceContainer.Resolve<ILocalizeService>("localizeService");
             _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
+            _logger = ServiceContainer.Resolve<ILogger>("logger");
 
-            CopyCommand = new Command<string>((id) => CopyAsync(id, null));
-            CopyUriCommand = new Command<LoginUriView>(CopyUri);
-            CopyFieldCommand = new Command<FieldView>(CopyField);
+            CopyCommand = new AsyncCommand<string>((id) => CopyAsync(id, null), onException: ex => _logger.Exception(ex), allowsMultipleExecutions: false);
+            CopyUriCommand = new AsyncCommand<LoginUriView>(uriView => CopyAsync("LoginUri", uriView.Uri), onException: ex => _logger.Exception(ex), allowsMultipleExecutions: false);
+            CopyFieldCommand = new AsyncCommand<FieldView>(field => CopyAsync(field.Type == FieldType.Hidden ? "H_FieldValue" : "FieldValue", field.Value), onException: ex => _logger.Exception(ex), allowsMultipleExecutions: false);
             LaunchUriCommand = new Command<LoginUriView>(LaunchUri);
             TogglePasswordCommand = new Command(TogglePassword);
             ToggleCardNumberCommand = new Command(ToggleCardNumber);
@@ -72,9 +76,9 @@ namespace Bit.App.Pages
             PageTitle = AppResources.ViewItem;
         }
 
-        public Command CopyCommand { get; set; }
-        public Command CopyUriCommand { get; set; }
-        public Command CopyFieldCommand { get; set; }
+        public ICommand CopyCommand { get; set; }
+        public ICommand CopyUriCommand { get; set; }
+        public ICommand CopyFieldCommand { get; set; }
         public Command LaunchUriCommand { get; set; }
         public Command TogglePasswordCommand { get; set; }
         public Command ToggleCardNumberCommand { get; set; }
@@ -120,7 +124,8 @@ namespace Bit.App.Pages
             set => SetProperty(ref _showPassword, value,
                 additionalPropertyNames: new string[]
                 {
-                    nameof(ShowPasswordIcon)
+                    nameof(ShowPasswordIcon),
+                    nameof(PasswordVisibilityAccessibilityText)
                 });
         }
         public bool ShowCardNumber
@@ -213,6 +218,7 @@ namespace Bit.App.Pages
         public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public string ShowCardNumberIcon => ShowCardNumber ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public string ShowCardCodeIcon => ShowCardCode ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
+        public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
         public string TotpCodeFormatted
         {
             get => _totpCodeFormatted;
@@ -614,7 +620,7 @@ namespace Bit.App.Pages
             _attachmentFilename = null;
         }
 
-        private async void CopyAsync(string id, string text = null)
+        private async Task CopyAsync(string id, string text = null)
         {
             if (_passwordRepromptService.ProtectedFields.Contains(id) && !await PromptPasswordAsync())
             {
@@ -661,7 +667,7 @@ namespace Bit.App.Pages
                 await _clipboardService.CopyTextAsync(text);
                 if (!string.IsNullOrWhiteSpace(name))
                 {
-                    _platformUtilsService.ShowToast("info", null, string.Format(AppResources.ValueHasBeenCopied, name));
+                    _platformUtilsService.ShowToastForCopiedValue(name);
                 }
                 if (id == "LoginPassword")
                 {
@@ -676,16 +682,6 @@ namespace Bit.App.Pages
                     await _eventService.CollectAsync(Core.Enums.EventType.Cipher_ClientCopiedHiddenField, CipherId);
                 }
             }
-        }
-
-        private void CopyUri(LoginUriView uri)
-        {
-            CopyAsync("LoginUri", uri.Uri);
-        }
-
-        private void CopyField(FieldView field)
-        {
-            CopyAsync(field.Type == Core.Enums.FieldType.Hidden ? "H_FieldValue" : "FieldValue", field.Value);
         }
 
         private void LaunchUri(LoginUriView uri)
@@ -754,12 +750,12 @@ namespace Bit.App.Pages
             {
                 if (IsBooleanType)
                 {
-                    return _field.Value == "true" ? "" : "";
+                    return _field.Value == "true" ? BitwardenIcons.CheckSquare : BitwardenIcons.Square;
                 }
                 else if (IsLinkedType)
                 {
                     var i18nKey = _cipher.LinkedFieldI18nKey(Field.LinkedId.GetValueOrDefault());
-                    return " " + _i18nService.T(i18nKey);
+                    return BitwardenIcons.Link + _i18nService.T(i18nKey);
                 }
                 else
                 {

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="2vH-Do-uhk">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="2vH-Do-uhk">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -11,10 +13,6 @@
         <scene sceneID="kFr-IN-5GS">
             <objects>
                 <viewController id="bHU-LX-EpF" customClass="LoadingViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="8LE-gl-yDT"/>
-                        <viewControllerLayoutGuide type="bottom" id="MuK-nA-9iu"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="z2O-Vp-jY9">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="808"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -23,25 +21,25 @@
                                 <rect key="frame" x="66" y="352" width="282" height="44"/>
                             </imageView>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="jNx-Vd-K6U"/>
                         <constraints>
-                            <constraint firstItem="Zdy-yw-n0p" firstAttribute="centerX" secondItem="z2O-Vp-jY9" secondAttribute="centerX" id="6DT-HB-vS5"/>
+                            <constraint firstItem="Zdy-yw-n0p" firstAttribute="centerX" secondItem="jNx-Vd-K6U" secondAttribute="centerX" id="6DT-HB-vS5"/>
                             <constraint firstItem="Zdy-yw-n0p" firstAttribute="centerY" secondItem="z2O-Vp-jY9" secondAttribute="centerY" constant="-30" id="o9N-Tv-Iwq"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="74l-Va-Vqa"/>
                     <connections>
                         <outlet property="Logo" destination="Zdy-yw-n0p" id="1Qk-EK-0BO"/>
-                        <segue destination="rh6-Mf-4Ja" kind="presentation" identifier="lockPasswordSegue" id="ZUl-jv-5se"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yJx-cc-wzs" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-374" y="560"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Extension Navigation Controller-->
         <scene sceneID="Wgx-vz-XqL">
             <objects>
-                <navigationController definesPresentationContext="YES" id="2vH-Do-uhk" sceneMemberID="viewController">
+                <navigationController definesPresentationContext="YES" id="2vH-Do-uhk" customClass="ExtensionNavigationController" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" hidden="YES" contentMode="scaleToFill" translucent="NO" id="JoO-jQ-16M">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
@@ -54,60 +52,89 @@
             </objects>
             <point key="canvasLocation" x="-1097" y="564"/>
         </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="Tzp-2o-9k7">
+        <!--Lock Password View Controller-->
+        <scene sceneID="vQB-cT-8IC">
             <objects>
-                <navigationController definesPresentationContext="YES" id="rh6-Mf-4Ja" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="UDq-kw-Ue7">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="85y-W9-d8q" kind="relationship" relationship="rootViewController" id="TeA-GE-A22"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="BVV-5B-aim" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-375" y="1262"/>
-        </scene>
-        <!--Verify Master Password-->
-        <scene sceneID="OEb-ak-BVc">
-            <objects>
-                <tableViewController id="85y-W9-d8q" customClass="LockPasswordViewController" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="9on-wf-zdb">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="786"/>
+                <viewController storyboardIdentifier="lockVC" id="Vi7-LV-nWW" customClass="LockPasswordViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Vfd-7B-19G">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <connections>
-                            <outlet property="dataSource" destination="85y-W9-d8q" id="3il-RO-S3K"/>
-                            <outlet property="delegate" destination="85y-W9-d8q" id="bLb-h4-pr3"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="Verify Master Password" id="qL3-iV-6Ld">
-                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="d8j-HZ-erD">
-                            <connections>
-                                <action selector="CancelButton_Activated:" destination="85y-W9-d8q" id="p54-B0-Vyf"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="Submit" id="8a7-Vz-SJA">
-                            <connections>
-                                <action selector="SubmitButton_Activated:" destination="85y-W9-d8q" id="P8A-7O-lpY"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="M1A-84-x5l">
+                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </tableView>
+                            <view userInteractionEnabled="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ijE-Pa-OBq" userLabel="OverlayView">
+                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                            <navigationBar contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fav-Fz-6ZK">
+                                <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                                <items>
+                                    <navigationItem title="Verify Master Password" id="aka-In-IYk">
+                                        <leftBarButtonItems>
+                                            <barButtonItem title="Cancel" id="LrG-Qx-w4Q">
+                                                <connections>
+                                                    <action selector="CancelButton_Activated:" destination="Vi7-LV-nWW" id="qyZ-i9-Dwz"/>
+                                                </connections>
+                                            </barButtonItem>
+                                            <barButtonItem title="Item" image="person.2" catalog="system" style="plain" id="nlD-Xn-HtM" userLabel="Account Switching Button">
+                                                <color key="tintColor" systemColor="systemBackgroundColor"/>
+                                                <connections>
+                                                    <action selector="AccountSwitchingButton_Activated:" destination="Vi7-LV-nWW" id="G3U-rv-UOl"/>
+                                                </connections>
+                                            </barButtonItem>
+                                        </leftBarButtonItems>
+                                        <barButtonItem key="rightBarButtonItem" title="Submit" id="oQD-QK-YPB">
+                                            <connections>
+                                                <action selector="SubmitButton_Activated:" destination="Vi7-LV-nWW" id="DgO-TS-MPf"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="barPosition">
+                                        <integer key="value" value="3"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </navigationBar>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="SSW-s3-JwL"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="M1A-84-x5l" firstAttribute="leading" secondItem="SSW-s3-JwL" secondAttribute="leading" id="3Es-aL-5Og"/>
+                            <constraint firstItem="ijE-Pa-OBq" firstAttribute="leading" secondItem="SSW-s3-JwL" secondAttribute="leading" id="6Lj-CR-OFz"/>
+                            <constraint firstItem="fav-Fz-6ZK" firstAttribute="leading" secondItem="SSW-s3-JwL" secondAttribute="leading" id="BEJ-gh-NAq"/>
+                            <constraint firstItem="fav-Fz-6ZK" firstAttribute="top" secondItem="SSW-s3-JwL" secondAttribute="top" id="CLE-2p-LI3"/>
+                            <constraint firstItem="SSW-s3-JwL" firstAttribute="trailing" secondItem="M1A-84-x5l" secondAttribute="trailing" id="GaL-B0-2Lg"/>
+                            <constraint firstItem="SSW-s3-JwL" firstAttribute="bottom" secondItem="M1A-84-x5l" secondAttribute="bottom" id="LG1-vj-VhW"/>
+                            <constraint firstItem="SSW-s3-JwL" firstAttribute="trailing" secondItem="ijE-Pa-OBq" secondAttribute="trailing" id="Q3J-Wa-mnY"/>
+                            <constraint firstItem="ijE-Pa-OBq" firstAttribute="top" secondItem="fav-Fz-6ZK" secondAttribute="bottom" id="h8T-rn-ZPU"/>
+                            <constraint firstItem="SSW-s3-JwL" firstAttribute="trailing" secondItem="fav-Fz-6ZK" secondAttribute="trailing" id="tux-AN-Z92"/>
+                            <constraint firstItem="SSW-s3-JwL" firstAttribute="bottom" secondItem="ijE-Pa-OBq" secondAttribute="bottom" id="zLh-RX-eSc"/>
+                            <constraint firstItem="M1A-84-x5l" firstAttribute="top" secondItem="fav-Fz-6ZK" secondAttribute="bottom" id="zgM-he-DYl"/>
+                        </constraints>
+                    </view>
                     <connections>
-                        <outlet property="_cancelButton" destination="d8j-HZ-erD" id="wlI-el-Snh"/>
-                        <outlet property="_mainTableView" destination="9on-wf-zdb" id="ltj-yY-5ue"/>
-                        <outlet property="_navItem" destination="qL3-iV-6Ld" id="Grb-Ta-NCF"/>
-                        <outlet property="_submitButton" destination="8a7-Vz-SJA" id="LS8-6Y-Wkp"/>
+                        <outlet property="_accountSwitchingButton" destination="nlD-Xn-HtM" id="SSG-zv-bAc"/>
+                        <outlet property="_cancelButton" destination="LrG-Qx-w4Q" id="aag-ZZ-Ifs"/>
+                        <outlet property="_mainTableView" destination="M1A-84-x5l" id="pA4-ao-Fhu"/>
+                        <outlet property="_navBar" destination="fav-Fz-6ZK" id="Q9p-Dw-ipx"/>
+                        <outlet property="_navItem" destination="aka-In-IYk" id="www-Lt-x1g"/>
+                        <outlet property="_overlayView" destination="ijE-Pa-OBq" id="n9e-Lg-4WO"/>
+                        <outlet property="_submitButton" destination="oQD-QK-YPB" id="SEp-KK-YeP"/>
                     </connections>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="5by-Sa-d9m" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Czu-9n-yKC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="335" y="1260"/>
+            <point key="canvasLocation" x="403" y="560"/>
         </scene>
     </scenes>
     <resources>
         <image name="logo.png" width="282" height="44"/>
+        <image name="person.2" catalog="system" width="128" height="81"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

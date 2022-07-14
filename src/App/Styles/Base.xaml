@@ -270,6 +270,16 @@
     </Style>
     <Style TargetType="Button"
            ApplyToDerivedTypes="True"
+           Class="list-row-button-text">
+        <Setter Property="BackgroundColor"
+                Value="Transparent" />
+        <Setter Property="Padding"
+                Value="0" />
+        <Setter Property="TextColor"
+                Value="{DynamicResource ButtonTextColor}" />
+    </Style>
+    <Style TargetType="Button"
+           ApplyToDerivedTypes="True"
            Class="segmented-button">
         <Setter Property="BackgroundColor"
                 Value="Transparent" />

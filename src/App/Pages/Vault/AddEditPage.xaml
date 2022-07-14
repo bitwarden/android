@@ -162,6 +162,7 @@
                             Grid.RowSpan="2"
                             AutomationProperties.IsInAccessibleTree="True"
                             AutomationProperties.Name="{u:I18n ToggleVisibility}"
+                            AutomationProperties.HelpText="{Binding PasswordVisibilityAccessibilityText}"
                             IsVisible="{Binding Cipher.ViewPassword}" />
                         <controls:IconButton 
                             StyleClass="box-row-button, box-row-button-platform"

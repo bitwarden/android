@@ -12,7 +12,6 @@ using Bit.Core.Abstractions;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Bit.Droid.Services;
-using Bit.Droid.Utilities;
 using Plugin.CurrentActivity;
 using Plugin.Fingerprint;
 using Xamarin.Android.Net;
@@ -20,6 +19,8 @@ using System.Net.Http;
 using System.Net;
 using Bit.App.Utilities;
 using Bit.App.Pages;
+using Bit.App.Utilities.AccountManagement;
+using Bit.App.Controls;
 #if !FDROID
 using Android.Gms.Security;
 #endif
@@ -62,6 +63,16 @@ namespace Bit.Droid
                     ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService"),
                     ServiceContainer.Resolve<ICryptoService>("cryptoService"));
                 ServiceContainer.Register<IVerificationActionsFlowHelper>("verificationActionsFlowHelper", verificationActionsFlowHelper);
+
+                var accountsManager = new AccountsManager(
+                    ServiceContainer.Resolve<IBroadcasterService>("broadcasterService"),
+                    ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService"),
+                    ServiceContainer.Resolve<IStorageService>("secureStorageService"),
+                    ServiceContainer.Resolve<IStateService>("stateService"),
+                    ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService"),
+                    ServiceContainer.Resolve<IAuthService>("authService"),
+                    ServiceContainer.Resolve<ILogger>("logger"));
+                ServiceContainer.Register<IAccountsManager>("accountsManager", accountsManager);
             }
 #if !FDROID
             if (Build.VERSION.SdkInt <= BuildVersionCodes.Kitkat)
@@ -90,12 +101,13 @@ namespace Bit.Droid
         {
             ServiceContainer.Register<INativeLogService>("nativeLogService", new AndroidLogService());
 #if FDROID
-            ServiceContainer.Register<ILogger>("logger", new StubLogger());
+            var logger = new StubLogger();
 #elif DEBUG
-            ServiceContainer.Register<ILogger>("logger", DebugLogger.Instance);
+            var logger = DebugLogger.Instance;
 #else
-            ServiceContainer.Register<ILogger>("logger", Logger.Instance);
+            var logger = Logger.Instance;
 #endif
+            ServiceContainer.Register("logger", logger);
 
             // Note: This might cause a race condition. Investigate more.
             Task.Run(() =>
@@ -115,19 +127,20 @@ namespace Bit.Droid
             var documentsPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
             var liteDbStorage = new LiteDbStorageService(Path.Combine(documentsPath, "bitwarden.db"));
             var localizeService = new LocalizeService();
-            var broadcasterService = new BroadcasterService();
+            var broadcasterService = new BroadcasterService(logger);
             var messagingService = new MobileBroadcasterMessagingService(broadcasterService);
             var i18nService = new MobileI18nService(localizeService.GetCurrentCultureInfo());
             var secureStorageService = new SecureStorageService();
             var cryptoPrimitiveService = new CryptoPrimitiveService();
             var mobileStorageService = new MobileStorageService(preferencesStorage, liteDbStorage);
-            var stateService = new StateService(mobileStorageService, secureStorageService);
+            var stateService = new StateService(mobileStorageService, secureStorageService, messagingService);
             var stateMigrationService =
                 new StateMigrationService(liteDbStorage, preferencesStorage, secureStorageService);
-            var deviceActionService = new DeviceActionService(stateService, messagingService,
+            var clipboardService = new ClipboardService(stateService);
+            var deviceActionService = new DeviceActionService(clipboardService, stateService, messagingService,
                 broadcasterService, () => ServiceContainer.Resolve<IEventService>("eventService"));
-            var platformUtilsService = new MobilePlatformUtilsService(deviceActionService, messagingService,
-                broadcasterService);
+            var platformUtilsService = new MobilePlatformUtilsService(deviceActionService, clipboardService,
+                messagingService, broadcasterService);
             var biometricService = new BiometricService();
             var cryptoFunctionService = new PclCryptoFunctionService(cryptoPrimitiveService);
             var cryptoService = new CryptoService(stateService, cryptoFunctionService);
@@ -142,13 +155,14 @@ namespace Bit.Droid
             ServiceContainer.Register<IStorageService>("secureStorageService", secureStorageService);
             ServiceContainer.Register<IStateService>("stateService", stateService);
             ServiceContainer.Register<IStateMigrationService>("stateMigrationService", stateMigrationService);
-            ServiceContainer.Register<IClipboardService>("clipboardService", new ClipboardService(stateService));
+            ServiceContainer.Register<IClipboardService>("clipboardService", clipboardService);
             ServiceContainer.Register<IDeviceActionService>("deviceActionService", deviceActionService);
             ServiceContainer.Register<IPlatformUtilsService>("platformUtilsService", platformUtilsService);
             ServiceContainer.Register<IBiometricService>("biometricService", biometricService);
             ServiceContainer.Register<ICryptoFunctionService>("cryptoFunctionService", cryptoFunctionService);
             ServiceContainer.Register<ICryptoService>("cryptoService", cryptoService);
             ServiceContainer.Register<IPasswordRepromptService>("passwordRepromptService", passwordRepromptService);
+            ServiceContainer.Register<IAvatarImageSourcePool>("avatarImageSourcePool", new AvatarImageSourcePool());
 
             // Push
 #if FDROID
