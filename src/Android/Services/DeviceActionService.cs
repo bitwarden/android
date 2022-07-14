@@ -951,15 +951,18 @@ namespace Bit.Droid.Services
 
         public async Task SetScreenCaptureAllowedAsync()
         {
-            if (CoreHelpers.InDebugMode()) return;
+            if (CoreHelpers.ForceScreenCaptureEnabled())
+            {
+                return;
+            }
 
             var activity = CrossCurrentActivity.Current?.Activity;
             if (await _stateService.GetScreenCaptureAllowedAsync())
             {
-                activity.Window.ClearFlags(WindowManagerFlags.Secure);
+                activity.RunOnUiThread(() => activity.Window.ClearFlags(WindowManagerFlags.Secure));
                 return;
             }
-            activity.Window.AddFlags(WindowManagerFlags.Secure);
+            activity.RunOnUiThread(() => activity.Window.AddFlags(WindowManagerFlags.Secure));
         }
     }
 }

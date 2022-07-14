@@ -2263,4 +2263,10 @@
   <data name="GenericErrorMessage" xml:space="preserve">
     <value>We were unable to process your request. Please try again or contact us.</value>
   </data>
+  <data name="AllowScreenCapture" xml:space="preserve">
+    <value>Allow Screen Capture</value>
+  </data>
+  <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
+    <value>Are you sure you want to enable Screen Capture?</value>
+  </data>
 </root>

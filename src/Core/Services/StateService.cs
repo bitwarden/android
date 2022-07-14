@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
@@ -560,6 +561,11 @@ namespace Bit.Core.Services
 
         public async Task<bool> GetScreenCaptureAllowedAsync(string userId = null)
         {
+            if (CoreHelpers.ForceScreenCaptureEnabled())
+            {
+                return true;
+            }
+
             return (await GetAccountAsync(
                 ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync())
             ))?.Settings?.ScreenCaptureAllowed ?? false;
@@ -1488,10 +1494,6 @@ namespace Bit.Core.Services
             if (account.Settings.VaultTimeoutAction == null)
             {
                 account.Settings.VaultTimeoutAction = VaultTimeoutAction.Lock;
-            }
-            if (account.Settings.ScreenCaptureAllowed == null)
-            {
-                account.Settings.ScreenCaptureAllowed = false;
             }
             await SetThemeAsync(currentTheme, account.Profile.UserId);
             await SetAutoDarkThemeAsync(currentAutoDarkTheme, account.Profile.UserId);

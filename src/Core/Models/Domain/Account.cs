@@ -100,7 +100,7 @@ namespace Bit.Core.Models.Domain
             public EnvironmentUrlData EnvironmentUrls;
             public int? VaultTimeout;
             public VaultTimeoutAction? VaultTimeoutAction;
-            public bool? ScreenCaptureAllowed;
+            public bool ScreenCaptureAllowed;
         }
 
         public class AccountVolatileData

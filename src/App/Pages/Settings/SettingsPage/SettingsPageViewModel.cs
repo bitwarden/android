@@ -7,7 +7,6 @@ using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
-using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
@@ -30,7 +29,6 @@ namespace Bit.App.Pages
         private readonly IKeyConnectorService _keyConnectorService;
         private readonly IClipboardService _clipboardService;
         private readonly ILogger _loggerService;
-        private readonly IStorageService _storageService;
 
         private const int CustomVaultTimeoutValue = -100;
 
@@ -67,7 +65,6 @@ namespace Bit.App.Pages
 
         private Policy _vaultTimeoutPolicy;
         private int? _vaultTimeout;
-        private SettingsPageListItem _screenCaptureListItem;
 
         public SettingsPageViewModel()
         {
@@ -515,12 +512,11 @@ namespace Bit.App.Pages
             }
             if (Device.RuntimePlatform == Device.Android)
             {
-                _screenCaptureListItem = new SettingsPageListItem
+                securityItems.Add(new SettingsPageListItem
                 {
                     Name = AppResources.AllowScreenCapture,
                     SubLabel = _screenCaptureAllowed ? AppResources.Enabled : AppResources.Disabled
-                };
-                securityItems.Insert(securityItems.Count, _screenCaptureListItem);
+                });
             }
             var accountItems = new List<SettingsPageListItem>
             {
@@ -547,7 +543,7 @@ namespace Bit.App.Pages
                 new SettingsPageListItem { Name = AppResources.Options },
                 new SettingsPageListItem { Name = AppResources.About },
                 new SettingsPageListItem { Name = AppResources.HelpAndFeedback },
-#if !FDROID 
+#if !FDROID
                 new SettingsPageListItem
                 {
                     Name = AppResources.SubmitCrashLogs,
@@ -638,11 +634,30 @@ namespace Bit.App.Pages
 
         public async Task SetScreenCaptureAllowedAsync()
         {
-            var _screenCaptureCurrentState = _screenCaptureListItem.SubLabel.Equals(AppResources.Enabled);
-            await _stateService.SetScreenCaptureAllowedAsync(!_screenCaptureCurrentState);
-            _screenCaptureAllowed = !_screenCaptureCurrentState;
-            await _deviceActionService.SetScreenCaptureAllowedAsync();
-            BuildList();
+            if (CoreHelpers.ForceScreenCaptureEnabled())
+            {
+                return;
+            }
+
+            try
+            {
+                if (!_screenCaptureAllowed
+                    &&
+                    !await Page.DisplayAlert(AppResources.AllowScreenCapture, AppResources.AreYouSureYouWantToEnableScreenCapture, AppResources.Yes, AppResources.No))
+                {
+                    return;
+                }
+
+                await _stateService.SetScreenCaptureAllowedAsync(!_screenCaptureAllowed);
+                _screenCaptureAllowed = !_screenCaptureAllowed;
+                await _deviceActionService.SetScreenCaptureAllowedAsync();
+                BuildList();
+            }
+            catch (Exception ex)
+            {
+                _loggerService.Exception(ex);
+                await Page.DisplayAlert(AppResources.AnErrorHasOccurred, AppResources.GenericErrorMessage, AppResources.Ok);
+            }
         }
     }
 }

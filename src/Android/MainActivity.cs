@@ -65,7 +65,10 @@ namespace Bit.Droid
 
             base.OnCreate(savedInstanceState);
 
-            await _deviceActionService.SetScreenCaptureAllowedAsync();
+            _deviceActionService.SetScreenCaptureAllowedAsync().FireAndForget(_ =>
+            {
+                Window.AddFlags(Android.Views.WindowManagerFlags.Secure);
+            });
 
             ServiceContainer.Resolve<ILogger>("logger").InitAsync();
 
