@@ -120,6 +120,9 @@
     android:name="com.opera.browser.beta"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
+    android:name="com.opera.gx"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
     android:name="com.opera.mini.native"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package

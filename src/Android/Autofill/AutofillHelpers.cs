@@ -87,6 +87,7 @@ namespace Bit.Droid.Autofill
             "com.naver.whale",
             "com.opera.browser",
             "com.opera.browser.beta",
+            "com.opera.gx",
             "com.opera.mini.native",
             "com.opera.mini.native.beta",
             "com.opera.touch",
