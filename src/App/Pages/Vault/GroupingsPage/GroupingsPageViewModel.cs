@@ -298,7 +298,7 @@ namespace Bit.App.Pages
                         }
                     }, AppResources.Trash, _deletedCount, uppercaseGroupNames, false));
                 }
-                
+
                 // TODO: refactor this
                 if (Device.RuntimePlatform == Device.Android
                     ||
