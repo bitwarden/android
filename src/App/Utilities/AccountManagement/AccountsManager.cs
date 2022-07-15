@@ -123,7 +123,11 @@ namespace Bit.App.Utilities.AccountManagement
                         await _vaultTimeoutService.LockAsync(true);
                         break;
                     case AccountsManagerMessageCommands.LOGOUT:
-                        await Device.InvokeOnMainThreadAsync(() => LogOutAsync(message.Data as Tuple<string, bool, bool>));
+                        var extras = message.Data as Tuple<string, bool, bool>;
+                        var userId = extras?.Item1;
+                        var userInitiated = extras?.Item2 ?? true;
+                        var expired = extras?.Item3 ?? false;
+                        await Device.InvokeOnMainThreadAsync(() => LogOutAsync(userId, userInitiated, expired));
                         break;
                     case AccountsManagerMessageCommands.LOGGED_OUT:
                         // Clean up old migrated key if they ever log out.
@@ -181,12 +185,8 @@ namespace Bit.App.Utilities.AccountManagement
             });
         }
 
-        private async Task LogOutAsync(Tuple<string, bool, bool> extras)
+        public async Task LogOutAsync(string userId, bool userInitiated, bool expired)
         {
-            var userId = extras?.Item1;
-            var userInitiated = extras?.Item2 ?? true;
-            var expired = extras?.Item3 ?? false;
-
             await AppHelpers.LogOutAsync(userId, userInitiated);
             await NavigateOnAccountChangeAsync();
             _authService.LogOut(() =>

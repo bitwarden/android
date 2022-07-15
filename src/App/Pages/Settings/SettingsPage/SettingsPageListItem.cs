@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Bit.App.Resources;
 using Bit.App.Utilities;
 using Xamarin.Forms;
@@ -12,6 +13,8 @@ namespace Bit.App.Pages
         public string SubLabel { get; set; }
         public TimeSpan? Time { get; set; }
         public bool UseFrame { get; set; }
+        public Func<Task> ExecuteAsync { get; set; }
+
         public bool SubLabelTextEnabled => SubLabel == AppResources.Enabled;
         public string LineBreakMode => SubLabel == null ? "TailTruncation" : "";
         public bool ShowSubLabel => SubLabel.Length != 0;
