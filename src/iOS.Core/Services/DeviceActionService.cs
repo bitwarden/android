@@ -604,6 +604,12 @@ namespace Bit.iOS.Core.Services
             await ASHelpers.ReplaceAllIdentities();
         }
 
+        public Task SetScreenCaptureAllowedAsync()
+        {
+            // only used by Android. Not possible in iOS
+            return Task.CompletedTask;
+        }
+
         public class PickerDelegate : UIDocumentPickerDelegate
         {
             private readonly DeviceActionService _deviceActionService;

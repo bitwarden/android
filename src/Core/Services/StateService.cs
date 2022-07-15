@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
@@ -555,6 +556,27 @@ namespace Bit.Core.Services
                 await GetDefaultStorageOptionsAsync());
             var account = await GetAccountAsync(reconciledOptions);
             account.Settings.VaultTimeoutAction = value;
+            await SaveAccountAsync(account, reconciledOptions);
+        }
+
+        public async Task<bool> GetScreenCaptureAllowedAsync(string userId = null)
+        {
+            if (CoreHelpers.ForceScreenCaptureEnabled())
+            {
+                return true;
+            }
+
+            return (await GetAccountAsync(
+                ReconcileOptions(new StorageOptions { UserId = userId }, await GetDefaultStorageOptionsAsync())
+            ))?.Settings?.ScreenCaptureAllowed ?? false;
+        }
+
+        public async Task SetScreenCaptureAllowedAsync(bool value, string userId = null)
+        {
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            var account = await GetAccountAsync(reconciledOptions);
+            account.Settings.ScreenCaptureAllowed = value;
             await SaveAccountAsync(account, reconciledOptions);
         }
 
@@ -1461,6 +1483,7 @@ namespace Bit.Core.Services
                 var existingAccount = state.Accounts[account.Profile.UserId];
                 account.Settings.VaultTimeout = existingAccount.Settings.VaultTimeout;
                 account.Settings.VaultTimeoutAction = existingAccount.Settings.VaultTimeoutAction;
+                account.Settings.ScreenCaptureAllowed = existingAccount.Settings.ScreenCaptureAllowed;
             }
 
             // New account defaults
