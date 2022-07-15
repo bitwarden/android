@@ -8,7 +8,6 @@ using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
-using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
@@ -31,11 +30,13 @@ namespace Bit.App.Pages
         private readonly IKeyConnectorService _keyConnectorService;
         private readonly IClipboardService _clipboardService;
         private readonly ILogger _loggerService;
+
         private const int CustomVaultTimeoutValue = -100;
 
         private bool _supportsBiometric;
         private bool _pin;
         private bool _biometric;
+        private bool _screenCaptureAllowed;
         private string _lastSyncDate;
         private string _vaultTimeoutDisplayValue;
         private string _vaultTimeoutActionDisplayValue;
@@ -122,6 +123,7 @@ namespace Bit.App.Pages
             var pinSet = await _vaultTimeoutService.IsPinLockSetAsync();
             _pin = pinSet.Item1 || pinSet.Item2;
             _biometric = await _vaultTimeoutService.IsBiometricLockSetAsync();
+            _screenCaptureAllowed = await _stateService.GetScreenCaptureAllowedAsync();
 
             if (_vaultTimeoutDisplayValue == null)
             {
@@ -547,6 +549,15 @@ namespace Bit.App.Pages
                     UseFrame = true,
                 });
             }
+            if (Device.RuntimePlatform == Device.Android)
+            {
+                securityItems.Add(new SettingsPageListItem
+                {
+                    Name = AppResources.AllowScreenCapture,
+                    SubLabel = _screenCaptureAllowed ? AppResources.Enabled : AppResources.Disabled,
+                    ExecuteAsync = () => SetScreenCaptureAllowedAsync()
+                });
+            }
             var accountItems = new List<SettingsPageListItem>
             {
                 new SettingsPageListItem
@@ -709,5 +720,33 @@ namespace Bit.App.Pages
         private string CreateSelectableOption(string option, bool selected) => selected ? $"✓ {option}" : option;
 
         private bool CompareSelection(string selection, string compareTo) => selection == compareTo || selection == $"✓ {compareTo}";
+
+        public async Task SetScreenCaptureAllowedAsync()
+        {
+            if (CoreHelpers.ForceScreenCaptureEnabled())
+            {
+                return;
+            }
+
+            try
+            {
+                if (!_screenCaptureAllowed
+                    &&
+                    !await Page.DisplayAlert(AppResources.AllowScreenCapture, AppResources.AreYouSureYouWantToEnableScreenCapture, AppResources.Yes, AppResources.No))
+                {
+                    return;
+                }
+
+                await _stateService.SetScreenCaptureAllowedAsync(!_screenCaptureAllowed);
+                _screenCaptureAllowed = !_screenCaptureAllowed;
+                await _deviceActionService.SetScreenCaptureAllowedAsync();
+                BuildList();
+            }
+            catch (Exception ex)
+            {
+                _loggerService.Exception(ex);
+                await Page.DisplayAlert(AppResources.AnErrorHasOccurred, AppResources.GenericErrorMessage, AppResources.Ok);
+            }
+        }
     }
 }

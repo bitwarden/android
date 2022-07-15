@@ -64,10 +64,11 @@ namespace Bit.Droid
             Intent?.Validate();
 
             base.OnCreate(savedInstanceState);
-            if (!CoreHelpers.InDebugMode())
+
+            _deviceActionService.SetScreenCaptureAllowedAsync().FireAndForget(_ =>
             {
                 Window.AddFlags(Android.Views.WindowManagerFlags.Secure);
-            }
+            });
 
             ServiceContainer.Resolve<ILogger>("logger").InitAsync();
 

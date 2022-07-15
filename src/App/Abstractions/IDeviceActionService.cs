@@ -48,5 +48,6 @@ namespace Bit.App.Abstractions
         bool SupportsFido2();
         float GetSystemFontSizeScale();
         Task OnAccountSwitchCompleteAsync();
+        Task SetScreenCaptureAllowedAsync();
     }
 }
