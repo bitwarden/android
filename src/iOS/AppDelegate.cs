@@ -59,114 +59,121 @@ namespace Bit.iOS
 
             _broadcasterService.Subscribe(nameof(AppDelegate), async (message) =>
             {
-                if (message.Command == "startEventTimer")
+                try
                 {
-                    StartEventTimer();
-                }
-                else if (message.Command == "stopEventTimer")
-                {
-                    var task = StopEventTimerAsync();
-                }
-                else if (message.Command == "updatedTheme")
-                {
-                    Device.BeginInvokeOnMainThread(() =>
+                    if (message.Command == "startEventTimer")
                     {
-                        iOSCoreHelpers.AppearanceAdjustments();
-                    });
-                }
-                else if (message.Command == "listenYubiKeyOTP")
-                {
-                    iOSCoreHelpers.ListenYubiKey((bool)message.Data, _deviceActionService, _nfcSession, _nfcDelegate);
-                }
-                else if (message.Command == "unlocked")
-                {
-                    var needsAutofillReplacement = await _storageService.GetAsync<bool?>(
-                        Core.Constants.AutofillNeedsIdentityReplacementKey);
-                    if (needsAutofillReplacement.GetValueOrDefault())
+                        StartEventTimer();
+                    }
+                    else if (message.Command == "stopEventTimer")
+                    {
+                        var task = StopEventTimerAsync();
+                    }
+                    else if (message.Command == "updatedTheme")
+                    {
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            iOSCoreHelpers.AppearanceAdjustments();
+                        });
+                    }
+                    else if (message.Command == "listenYubiKeyOTP")
+                    {
+                        iOSCoreHelpers.ListenYubiKey((bool)message.Data, _deviceActionService, _nfcSession, _nfcDelegate);
+                    }
+                    else if (message.Command == "unlocked")
+                    {
+                        var needsAutofillReplacement = await _storageService.GetAsync<bool?>(
+                            Core.Constants.AutofillNeedsIdentityReplacementKey);
+                        if (needsAutofillReplacement.GetValueOrDefault())
+                        {
+                            await ASHelpers.ReplaceAllIdentities();
+                        }
+                    }
+                    else if (message.Command == "showAppExtension")
+                    {
+                        Device.BeginInvokeOnMainThread(() => ShowAppExtension((ExtensionPageViewModel)message.Data));
+                    }
+                    else if (message.Command == "syncCompleted")
+                    {
+                        if (message.Data is Dictionary<string, object> data && data.ContainsKey("successfully"))
+                        {
+                            var success = data["successfully"] as bool?;
+                            if (success.GetValueOrDefault() && _deviceActionService.SystemMajorVersion() >= 12)
+                            {
+                                await ASHelpers.ReplaceAllIdentities();
+                            }
+                        }
+                    }
+                    else if (message.Command == "addedCipher" || message.Command == "editedCipher" ||
+                        message.Command == "restoredCipher")
+                    {
+                        if (_deviceActionService.SystemMajorVersion() >= 12)
+                        {
+                            if (await ASHelpers.IdentitiesCanIncremental())
+                            {
+                                var cipherId = message.Data as string;
+                                if (message.Command == "addedCipher" && !string.IsNullOrWhiteSpace(cipherId))
+                                {
+                                    var identity = await ASHelpers.GetCipherIdentityAsync(cipherId);
+                                    if (identity == null)
+                                    {
+                                        return;
+                                    }
+                                    await ASCredentialIdentityStore.SharedStore?.SaveCredentialIdentitiesAsync(
+                                        new ASPasswordCredentialIdentity[] { identity });
+                                    return;
+                                }
+                            }
+                            await ASHelpers.ReplaceAllIdentities();
+                        }
+                    }
+                    else if (message.Command == "deletedCipher" || message.Command == "softDeletedCipher")
+                    {
+                        if (_deviceActionService.SystemMajorVersion() >= 12)
+                        {
+                            if (await ASHelpers.IdentitiesCanIncremental())
+                            {
+                                var identity = ASHelpers.ToCredentialIdentity(
+                                    message.Data as Bit.Core.Models.View.CipherView);
+                                if (identity == null)
+                                {
+                                    return;
+                                }
+                                await ASCredentialIdentityStore.SharedStore?.RemoveCredentialIdentitiesAsync(
+                                    new ASPasswordCredentialIdentity[] { identity });
+                                return;
+                            }
+                            await ASHelpers.ReplaceAllIdentities();
+                        }
+                    }
+                    else if (message.Command == "logout")
+                    {
+                        if (_deviceActionService.SystemMajorVersion() >= 12)
+                        {
+                            await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
+                        }
+                    }
+                    else if ((message.Command == "softDeletedCipher" || message.Command == "restoredCipher")
+                        && _deviceActionService.SystemMajorVersion() >= 12)
                     {
                         await ASHelpers.ReplaceAllIdentities();
                     }
-                }
-                else if (message.Command == "showAppExtension")
-                {
-                    Device.BeginInvokeOnMainThread(() => ShowAppExtension((ExtensionPageViewModel)message.Data));
-                }
-                else if (message.Command == "syncCompleted")
-                {
-                    if (message.Data is Dictionary<string, object> data && data.ContainsKey("successfully"))
+                    else if (message.Command == "vaultTimeoutActionChanged")
                     {
-                        var success = data["successfully"] as bool?;
-                        if (success.GetValueOrDefault() && _deviceActionService.SystemMajorVersion() >= 12)
+                        var timeoutAction = await _stateService.GetVaultTimeoutActionAsync();
+                        if (timeoutAction == VaultTimeoutAction.Logout)
+                        {
+                            await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
+                        }
+                        else
                         {
                             await ASHelpers.ReplaceAllIdentities();
                         }
                     }
                 }
-                else if (message.Command == "addedCipher" || message.Command == "editedCipher" ||
-                    message.Command == "restoredCipher")
+                catch (Exception ex)
                 {
-                    if (_deviceActionService.SystemMajorVersion() >= 12)
-                    {
-                        if (await ASHelpers.IdentitiesCanIncremental())
-                        {
-                            var cipherId = message.Data as string;
-                            if (message.Command == "addedCipher" && !string.IsNullOrWhiteSpace(cipherId))
-                            {
-                                var identity = await ASHelpers.GetCipherIdentityAsync(cipherId);
-                                if (identity == null)
-                                {
-                                    return;
-                                }
-                                await ASCredentialIdentityStore.SharedStore?.SaveCredentialIdentitiesAsync(
-                                    new ASPasswordCredentialIdentity[] { identity });
-                                return;
-                            }
-                        }
-                        await ASHelpers.ReplaceAllIdentities();
-                    }
-                }
-                else if (message.Command == "deletedCipher" || message.Command == "softDeletedCipher")
-                {
-                    if (_deviceActionService.SystemMajorVersion() >= 12)
-                    {
-                        if (await ASHelpers.IdentitiesCanIncremental())
-                        {
-                            var identity = ASHelpers.ToCredentialIdentity(
-                                message.Data as Bit.Core.Models.View.CipherView);
-                            if (identity == null)
-                            {
-                                return;
-                            }
-                            await ASCredentialIdentityStore.SharedStore?.RemoveCredentialIdentitiesAsync(
-                                new ASPasswordCredentialIdentity[] { identity });
-                            return;
-                        }
-                        await ASHelpers.ReplaceAllIdentities();
-                    }
-                }
-                else if (message.Command == "logout")
-                {
-                    if (_deviceActionService.SystemMajorVersion() >= 12)
-                    {
-                        await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
-                    }
-                }
-                else if ((message.Command == "softDeletedCipher" || message.Command == "restoredCipher")
-                    && _deviceActionService.SystemMajorVersion() >= 12)
-                {
-                    await ASHelpers.ReplaceAllIdentities();
-                }
-                else if (message.Command == "vaultTimeoutActionChanged")
-                {
-                    var timeoutAction = await _stateService.GetVaultTimeoutActionAsync();
-                    if (timeoutAction == VaultTimeoutAction.Logout)
-                    {
-                        await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
-                    }
-                    else
-                    {
-                        await ASHelpers.ReplaceAllIdentities();
-                    }
+                    LoggerHelper.LogEvenIfCantBeResolved(ex);
                 }
             });
 

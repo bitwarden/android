@@ -6,6 +6,7 @@ using Bit.App.Models;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
 
@@ -55,21 +56,28 @@ namespace Bit.App.Pages
 
             _broadcasterService.Subscribe(nameof(AutofillCiphersPage), async (message) =>
             {
-                if (message.Command == "syncStarted")
+                try
                 {
-                    Device.BeginInvokeOnMainThread(() => IsBusy = true);
-                }
-                else if (message.Command == "syncCompleted")
-                {
-                    await Task.Delay(500);
-                    Device.BeginInvokeOnMainThread(() =>
+                    if (message.Command == "syncStarted")
                     {
-                        IsBusy = false;
-                        if (_vm.LoadedOnce)
+                        Device.BeginInvokeOnMainThread(() => IsBusy = true);
+                    }
+                    else if (message.Command == "syncCompleted")
+                    {
+                        await Task.Delay(500);
+                        Device.BeginInvokeOnMainThread(() =>
                         {
-                            var task = _vm.LoadAsync();
-                        }
-                    });
+                            IsBusy = false;
+                            if (_vm.LoadedOnce)
+                            {
+                                var task = _vm.LoadAsync();
+                            }
+                        });
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LoggerHelper.LogEvenIfCantBeResolved(ex);
                 }
             });
 

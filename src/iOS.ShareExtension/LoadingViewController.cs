@@ -7,11 +7,11 @@ using Bit.App.Abstractions;
 using Bit.App.Models;
 using Bit.App.Pages;
 using Bit.App.Utilities;
+using Bit.App.Utilities.AccountManagement;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
-using Bit.iOS.Core;
 using Bit.iOS.Core.Controllers;
 using Bit.iOS.Core.Utilities;
 using Bit.iOS.Core.Views;
@@ -24,16 +24,33 @@ using Xamarin.Forms;
 
 namespace Bit.iOS.ShareExtension
 {
-    public partial class LoadingViewController : ExtendedUIViewController
+    public partial class LoadingViewController : ExtendedUIViewController, IAccountsManagerHost
     {
+        const string STORYBOARD_NAME = "MainInterface";
+
         private Context _context = new Context();
         private NFCNdefReaderSession _nfcSession = null;
         private Core.NFCReaderDelegate _nfcDelegate = null;
+        private IAccountsManager _accountsManager;
 
         readonly LazyResolve<IStateService> _stateService = new LazyResolve<IStateService>("stateService");
         readonly LazyResolve<IVaultTimeoutService> _vaultTimeoutService = new LazyResolve<IVaultTimeoutService>("vaultTimeoutService");
-        readonly LazyResolve<IDeviceActionService> _deviceActionService = new LazyResolve<IDeviceActionService>("deviceActionService");
-        readonly LazyResolve<IEventService> _eventService = new LazyResolve<IEventService>("eventService");
+
+        Lazy<UIStoryboard> _storyboard = new Lazy<UIStoryboard>(() => UIStoryboard.FromName(STORYBOARD_NAME, null));
+
+        private App.App _app = null;
+        private UIViewController _currentModalController;
+        private bool _presentingOnNavigationPage;
+
+        private ExtensionNavigationController ExtNavigationController
+        {
+            get
+            {
+                NavigationController.PresentationController.Delegate =
+                    new CustomPresentationControllerDelegate(CompleteRequest);
+                return NavigationController as ExtensionNavigationController;
+            }
+        }
 
         public LoadingViewController(IntPtr handle)
             : base(handle)
@@ -41,39 +58,38 @@ namespace Bit.iOS.ShareExtension
 
         public override void ViewDidLoad()
         {
-            InitApp();
+            iOSCoreHelpers.InitApp(this, Bit.Core.Constants.iOSShareExtensionClearCiphersCacheKey,
+                _nfcSession, out _nfcDelegate, out _accountsManager);
 
             base.ViewDidLoad();
 
             Logo.Image = new UIImage(ThemeHelpers.LightTheme ? "logo.png" : "logo_white.png");
             View.BackgroundColor = ThemeHelpers.SplashBackgroundColor;
             _context.ExtensionContext = ExtensionContext;
+            _context.ProviderType = GetProviderTypeFromExtensionInputItems();
+        }
 
+        /// <summary>
+        /// Gets the provider <see cref="UTType"/> given the input items
+        /// </summary>
+        private string GetProviderTypeFromExtensionInputItems()
+        {
             foreach (var item in ExtensionContext.InputItems)
             {
-                var processed = false;
                 foreach (var itemProvider in item.Attachments)
                 {
                     if (itemProvider.HasItemConformingTo(UTType.PlainText))
                     {
-                        _context.ProviderType = UTType.PlainText;
-
-                        processed = true;
-                        break;
+                        return UTType.PlainText;
                     }
-                    else if (itemProvider.HasItemConformingTo(UTType.Data))
+
+                    if (itemProvider.HasItemConformingTo(UTType.Data))
                     {
-                        _context.ProviderType = UTType.Data;
-
-                        processed = true;
-                        break;
+                        return UTType.Data;
                     }
-                }
-                if (processed)
-                {
-                    break;
                 }
             }
+            return null;
         }
 
         public override async void ViewDidAppear(bool animated)
@@ -84,12 +100,12 @@ namespace Bit.iOS.ShareExtension
             {
                 if (!await IsAuthed())
                 {
-                    LaunchHomePage();
+                    await _accountsManager.NavigateOnAccountChangeAsync(false);
                     return;
                 }
                 else if (await IsLocked())
                 {
-                    PerformSegue("lockPasswordSegue", this);
+                    NavigateToLockViewController();
                 }
                 else
                 {
@@ -102,22 +118,50 @@ namespace Bit.iOS.ShareExtension
             }
         }
 
-        public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
+        void NavigateToLockViewController()
         {
-            if (segue.DestinationViewController is UINavigationController navController
-                &&
-                navController.TopViewController is LockPasswordViewController passwordViewController)
+            var viewController = _storyboard.Value.InstantiateViewController("lockVC") as LockPasswordViewController;
+            viewController.LoadingController = this;
+            viewController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
+
+            if (_presentingOnNavigationPage)
             {
-                passwordViewController.LoadingController = this;
-                segue.DestinationViewController.PresentationController.Delegate =
-                    new CustomPresentationControllerDelegate(passwordViewController.DismissModalAction);
+                _presentingOnNavigationPage = false;
+                DismissViewController(true, () => ExtNavigationController.PushViewController(viewController, true));
+            }
+            else
+            {
+                ExtNavigationController.PushViewController(viewController, true);
             }
         }
 
         public void DismissLockAndContinue()
         {
             Debug.WriteLine("BW Log, Dismissing lock controller.");
+
+            ClearBeforeNavigating();
+
             DismissViewController(false, () => ContinueOnAsync().FireAndForget());
+        }
+
+        private void DismissAndLaunch(Action pageToLaunch)
+        {
+            ClearBeforeNavigating();
+
+            DismissViewController(false, pageToLaunch);
+        }
+
+        void ClearBeforeNavigating()
+        {
+            _currentModalController?.Dispose();
+            _currentModalController = null;
+
+            if (_storyboard.IsValueCreated)
+            {
+                _storyboard.Value.Dispose();
+                _storyboard = null;
+                _storyboard = new Lazy<UIStoryboard>(() => UIStoryboard.FromName(STORYBOARD_NAME, null));
+            }
         }
 
         private async Task ContinueOnAsync()
@@ -140,20 +184,24 @@ namespace Bit.iOS.ShareExtension
                 CreateSend = createSend,
                 CopyInsteadOfShareAfterSaving = true
             };
-            var sendAddEditPage = new SendAddEditPage(appOptions)
+            var sendPage = new SendAddOnlyPage(appOptions)
             {
                 OnClose = () => CompleteRequest(),
                 AfterSubmit = () => CompleteRequest()
             };
 
-            var app = new App.App(appOptions);
-            ThemeManager.SetTheme(app.Resources);
-            ThemeManager.ApplyResourcesToPage(sendAddEditPage);
+            SetupAppAndApplyResources(sendPage);
 
-            var navigationPage = new NavigationPage(sendAddEditPage);
-            var sendAddEditController = navigationPage.CreateViewController();
-            sendAddEditController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            PresentViewController(sendAddEditController, true, null);
+            NavigateToPage(sendPage);
+        }
+
+        private void NavigateToPage(ContentPage page)
+        {
+            var navigationPage = new NavigationPage(page);
+            _currentModalController = navigationPage.CreateViewController();
+            _currentModalController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
+            _presentingOnNavigationPage = true;
+            PresentViewController(_currentModalController, true, null);
         }
 
         private async Task<(string, byte[])> LoadDataBytesAsync()
@@ -202,31 +250,6 @@ namespace Bit.iOS.ShareExtension
             });
         }
 
-        private void InitApp()
-        {
-            // Init Xamarin Forms
-            Forms.Init();
-
-            if (ServiceContainer.RegisteredServices.Count > 0)
-            {
-                ServiceContainer.Reset();
-            }
-            iOSCoreHelpers.RegisterLocalServices();
-            var messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
-            ServiceContainer.Init(_deviceActionService.Value.DeviceUserAgent,
-                Bit.Core.Constants.iOSShareExtensionClearCiphersCacheKey, Bit.Core.Constants.iOSAllClearCipherCacheKeys);
-            iOSCoreHelpers.InitLogger();
-            iOSCoreHelpers.Bootstrap();
-
-            var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(app.Resources);
-
-            iOSCoreHelpers.AppearanceAdjustments();
-            _nfcDelegate = new NFCReaderDelegate((success, message) =>
-                messagingService.Send("gotYubiKeyOTP", message));
-            iOSCoreHelpers.SubscribeBroadcastReceiver(this, _nfcSession, _nfcDelegate);
-        }
-
         private Task<bool> IsLocked()
         {
             return _vaultTimeoutService.Value.IsLockedAsync();
@@ -244,7 +267,7 @@ namespace Bit.iOS.ShareExtension
                 if (await IsAuthed())
                 {
                     await AppHelpers.LogOutAsync(await _stateService.Value.GetActiveUserIdAsync());
-                    if (_deviceActionService.Value.SystemMajorVersion() >= 12)
+                    if (UIDevice.CurrentDevice.CheckSystemVersion(12, 0))
                     {
                         await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
                     }
@@ -252,83 +275,75 @@ namespace Bit.iOS.ShareExtension
             });
         }
 
+        private App.App SetupAppAndApplyResources(ContentPage page)
+        {
+            if (_app is null)
+            {
+                var app = new App.App(new AppOptions { IosExtension = true });
+                ThemeManager.SetTheme(app.Resources);
+            }
+            ThemeManager.ApplyResourcesToPage(page);
+            return _app;
+        }
+
         private void LaunchHomePage()
         {
             var homePage = new HomePage();
-            var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(app.Resources);
-            ThemeManager.ApplyResourcesToPage(homePage);
+            SetupAppAndApplyResources(homePage);
             if (homePage.BindingContext is HomeViewModel vm)
             {
-                vm.StartLoginAction = () => DismissViewController(false, () => LaunchLoginFlow());
-                vm.StartRegisterAction = () => DismissViewController(false, () => LaunchRegisterFlow());
-                vm.StartSsoLoginAction = () => DismissViewController(false, () => LaunchLoginSsoFlow());
-                vm.StartEnvironmentAction = () => DismissViewController(false, () => LaunchEnvironmentFlow());
+                vm.StartLoginAction = () => DismissAndLaunch(() => LaunchLoginFlow());
+                vm.StartRegisterAction = () => DismissAndLaunch(() => LaunchRegisterFlow());
+                vm.StartSsoLoginAction = () => DismissAndLaunch(() => LaunchLoginSsoFlow());
+                vm.StartEnvironmentAction = () => DismissAndLaunch(() => LaunchEnvironmentFlow());
                 vm.CloseAction = () => CompleteRequest();
             }
 
-            var navigationPage = new NavigationPage(homePage);
-            var loginController = navigationPage.CreateViewController();
-            loginController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            PresentViewController(loginController, true, null);
-
+            NavigateToPage(homePage);
             LogoutIfAuthed();
         }
 
         private void LaunchEnvironmentFlow()
         {
             var environmentPage = new EnvironmentPage();
-            var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(app.Resources);
+            SetupAppAndApplyResources(environmentPage);
             ThemeManager.ApplyResourcesToPage(environmentPage);
             if (environmentPage.BindingContext is EnvironmentPageViewModel vm)
             {
-                vm.SubmitSuccessAction = () => DismissViewController(false, () => LaunchHomePage());
-                vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
+                vm.SubmitSuccessAction = () => DismissAndLaunch(() => LaunchHomePage());
+                vm.CloseAction = () => DismissAndLaunch(() => LaunchHomePage());
             }
 
-            var navigationPage = new NavigationPage(environmentPage);
-            var loginController = navigationPage.CreateViewController();
-            loginController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            PresentViewController(loginController, true, null);
+            NavigateToPage(environmentPage);
         }
 
         private void LaunchRegisterFlow()
         {
             var registerPage = new RegisterPage(null);
-            var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(app.Resources);
-            ThemeManager.ApplyResourcesToPage(registerPage);
+            SetupAppAndApplyResources(registerPage);
             if (registerPage.BindingContext is RegisterPageViewModel vm)
             {
-                vm.RegistrationSuccess = () => DismissViewController(false, () => LaunchLoginFlow(vm.Email));
-                vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
+                vm.RegistrationSuccess = () => DismissAndLaunch(() => LaunchLoginFlow(vm.Email));
+                vm.CloseAction = () => DismissAndLaunch(() => LaunchHomePage());
             }
-
-            var navigationPage = new NavigationPage(registerPage);
-            var loginController = navigationPage.CreateViewController();
-            loginController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            PresentViewController(loginController, true, null);
+            NavigateToPage(registerPage);
         }
 
         private void LaunchLoginFlow(string email = null)
         {
             var loginPage = new LoginPage(email);
-            var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(app.Resources);
-            ThemeManager.ApplyResourcesToPage(loginPage);
+            SetupAppAndApplyResources(loginPage);
             if (loginPage.BindingContext is LoginPageViewModel vm)
             {
-                vm.StartTwoFactorAction = () => DismissViewController(false, () => LaunchTwoFactorFlow(false));
-                vm.UpdateTempPasswordAction = () => DismissViewController(false, () => LaunchUpdateTempPasswordFlow());
-                vm.LogInSuccessAction = () => DismissLockAndContinue();
+                vm.StartTwoFactorAction = () => DismissAndLaunch(() => LaunchTwoFactorFlow(false));
+                vm.UpdateTempPasswordAction = () => DismissAndLaunch(() => LaunchUpdateTempPasswordFlow());
+                vm.LogInSuccessAction = () =>
+                {
+                    DismissLockAndContinue();
+                };
                 vm.CloseAction = () => CompleteRequest();
             }
-
-            var navigationPage = new NavigationPage(loginPage);
-            var loginController = navigationPage.CreateViewController();
-            loginController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            PresentViewController(loginController, true, null);
+            NavigateToPage(loginPage);
 
             LogoutIfAuthed();
         }
@@ -336,22 +351,16 @@ namespace Bit.iOS.ShareExtension
         private void LaunchLoginSsoFlow()
         {
             var loginPage = new LoginSsoPage();
-            var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(app.Resources);
-            ThemeManager.ApplyResourcesToPage(loginPage);
+            SetupAppAndApplyResources(loginPage);
             if (loginPage.BindingContext is LoginSsoPageViewModel vm)
             {
-                vm.StartTwoFactorAction = () => DismissViewController(false, () => LaunchTwoFactorFlow(true));
-                vm.StartSetPasswordAction = () => DismissViewController(false, () => LaunchSetPasswordFlow());
-                vm.UpdateTempPasswordAction = () => DismissViewController(false, () => LaunchUpdateTempPasswordFlow());
+                vm.StartTwoFactorAction = () => DismissAndLaunch(() => LaunchTwoFactorFlow(true));
+                vm.StartSetPasswordAction = () => DismissAndLaunch(() => LaunchSetPasswordFlow());
+                vm.UpdateTempPasswordAction = () => DismissAndLaunch(() => LaunchUpdateTempPasswordFlow());
                 vm.SsoAuthSuccessAction = () => DismissLockAndContinue();
-                vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
+                vm.CloseAction = () => DismissAndLaunch(() => LaunchHomePage());
             }
-
-            var navigationPage = new NavigationPage(loginPage);
-            var loginController = navigationPage.CreateViewController();
-            loginController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            PresentViewController(loginController, true, null);
+            NavigateToPage(loginPage);
 
             LogoutIfAuthed();
         }
@@ -359,65 +368,97 @@ namespace Bit.iOS.ShareExtension
         private void LaunchTwoFactorFlow(bool authingWithSso)
         {
             var twoFactorPage = new TwoFactorPage();
-            var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(app.Resources);
-            ThemeManager.ApplyResourcesToPage(twoFactorPage);
+            SetupAppAndApplyResources(twoFactorPage);
             if (twoFactorPage.BindingContext is TwoFactorPageViewModel vm)
             {
                 vm.TwoFactorAuthSuccessAction = () => DismissLockAndContinue();
-                vm.StartSetPasswordAction = () => DismissViewController(false, () => LaunchSetPasswordFlow());
+                vm.StartSetPasswordAction = () => DismissAndLaunch(() => LaunchSetPasswordFlow());
                 if (authingWithSso)
                 {
-                    vm.CloseAction = () => DismissViewController(false, () => LaunchLoginSsoFlow());
+                    vm.CloseAction = () => DismissAndLaunch(() => LaunchLoginSsoFlow());
                 }
                 else
                 {
-                    vm.CloseAction = () => DismissViewController(false, () => LaunchLoginFlow());
+                    vm.CloseAction = () => DismissAndLaunch(() => LaunchLoginFlow());
                 }
-                vm.UpdateTempPasswordAction = () => DismissViewController(false, () => LaunchUpdateTempPasswordFlow());
+                vm.UpdateTempPasswordAction = () => DismissAndLaunch(() => LaunchUpdateTempPasswordFlow());
             }
-
-            var navigationPage = new NavigationPage(twoFactorPage);
-            var twoFactorController = navigationPage.CreateViewController();
-            twoFactorController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            PresentViewController(twoFactorController, true, null);
+            NavigateToPage(twoFactorPage);
         }
 
         private void LaunchSetPasswordFlow()
         {
             var setPasswordPage = new SetPasswordPage();
-            var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(app.Resources);
-            ThemeManager.ApplyResourcesToPage(setPasswordPage);
+            SetupAppAndApplyResources(setPasswordPage);
             if (setPasswordPage.BindingContext is SetPasswordPageViewModel vm)
             {
-                vm.UpdateTempPasswordAction = () => DismissViewController(false, () => LaunchUpdateTempPasswordFlow());
+                vm.UpdateTempPasswordAction = () => DismissAndLaunch(() => LaunchUpdateTempPasswordFlow());
                 vm.SetPasswordSuccessAction = () => DismissLockAndContinue();
-                vm.CloseAction = () => DismissViewController(false, () => LaunchHomePage());
+                vm.CloseAction = () => DismissAndLaunch(() => LaunchHomePage());
             }
-
-            var navigationPage = new NavigationPage(setPasswordPage);
-            var setPasswordController = navigationPage.CreateViewController();
-            setPasswordController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            PresentViewController(setPasswordController, true, null);
+            NavigateToPage(setPasswordPage);
         }
 
         private void LaunchUpdateTempPasswordFlow()
         {
             var updateTempPasswordPage = new UpdateTempPasswordPage();
-            var app = new App.App(new AppOptions { IosExtension = true });
-            ThemeManager.SetTheme(app.Resources);
-            ThemeManager.ApplyResourcesToPage(updateTempPasswordPage);
+            SetupAppAndApplyResources(updateTempPasswordPage);
             if (updateTempPasswordPage.BindingContext is UpdateTempPasswordPageViewModel vm)
             {
-                vm.UpdateTempPasswordSuccessAction = () => DismissViewController(false, () => LaunchHomePage());
-                vm.LogOutAction = () => DismissViewController(false, () => LaunchHomePage());
+                vm.UpdateTempPasswordSuccessAction = () => DismissAndLaunch(() => LaunchHomePage());
+                vm.LogOutAction = () => DismissAndLaunch(() => LaunchHomePage());
+            }
+            NavigateToPage(updateTempPasswordPage);
+        }
+
+        public void Navigate(NavigationTarget navTarget, INavigationParams navParams = null)
+        {
+            if (ExtNavigationController?.ViewControllers?.Any() ?? false)
+            {
+                ExtNavigationController.PopViewController(false);
+            }
+            else if (ExtNavigationController?.ModalViewController != null)
+            {
+                ExtNavigationController.DismissModalViewController(false);
             }
 
-            var navigationPage = new NavigationPage(updateTempPasswordPage);
-            var updateTempPasswordController = navigationPage.CreateViewController();
-            updateTempPasswordController.ModalPresentationStyle = UIModalPresentationStyle.FullScreen;
-            PresentViewController(updateTempPasswordController, true, null);
+            switch (navTarget)
+            {
+                case NavigationTarget.HomeLogin:
+                    ExecuteLaunch(LaunchHomePage);
+                    break;
+                case NavigationTarget.Login:
+                    if (navParams is LoginNavigationParams loginParams)
+                    {
+                        ExecuteLaunch(() => LaunchLoginFlow(loginParams.Email));
+                    }
+                    else
+                    {
+                        ExecuteLaunch(() => LaunchLoginFlow());
+                    }
+                    break;
+                case NavigationTarget.Lock:
+                    NavigateToLockViewController();
+                    break;
+                case NavigationTarget.Home:
+                    DismissLockAndContinue();
+                    break;
+            }
         }
+
+        private void ExecuteLaunch(Action launchAction)
+        {
+            if (_presentingOnNavigationPage)
+            {
+                DismissAndLaunch(launchAction);
+            }
+            else
+            {
+                launchAction();
+            }
+        }
+
+        public Task SetPreviousPageInfoAsync() => Task.CompletedTask;
+        public Task UpdateThemeAsync() => Task.CompletedTask;
     }
 }

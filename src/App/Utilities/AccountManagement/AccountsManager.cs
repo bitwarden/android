@@ -19,6 +19,7 @@ namespace Bit.App.Utilities.AccountManagement
         private readonly IStateService _stateService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IAuthService _authService;
+        private readonly ILogger _logger;
 
         Func<AppOptions> _getOptionsFunc;
         private IAccountsManagerHost _accountsManagerHost;
@@ -28,7 +29,8 @@ namespace Bit.App.Utilities.AccountManagement
                                IStorageService secureStorageService,
                                IStateService stateService,
                                IPlatformUtilsService platformUtilsService,
-                               IAuthService authService)
+                               IAuthService authService,
+                               ILogger logger)
         {
             _broadcasterService = broadcasterService;
             _vaultTimeoutService = vaultTimeoutService;
@@ -36,6 +38,7 @@ namespace Bit.App.Utilities.AccountManagement
             _stateService = stateService;
             _platformUtilsService = platformUtilsService;
             _authService = authService;
+            _logger = logger;
         }
 
         private AppOptions Options => _getOptionsFunc?.Invoke() ?? new AppOptions { IosExtension = true };
@@ -109,42 +112,49 @@ namespace Bit.App.Utilities.AccountManagement
 
         private async void OnMessage(Message message)
         {
-            switch (message.Command)
+            try
             {
-                case AccountsManagerMessageCommands.LOCKED:
-                    Locked(message.Data as Tuple<string, bool>);
-                    break;
-                case AccountsManagerMessageCommands.LOCK_VAULT:
-                    await _vaultTimeoutService.LockAsync(true);
-                    break;
-                case AccountsManagerMessageCommands.LOGOUT:
-                    LogOut(message.Data as Tuple<string, bool, bool>);
-                    break;
-                case AccountsManagerMessageCommands.LOGGED_OUT:
-                    // Clean up old migrated key if they ever log out.
-                    await _secureStorageService.RemoveAsync("oldKey");
-                    break;
-                case AccountsManagerMessageCommands.ADD_ACCOUNT:
-                    AddAccount();
-                    break;
-                case AccountsManagerMessageCommands.ACCOUNT_ADDED:
-                    await _accountsManagerHost.UpdateThemeAsync();
-                    break;
-                case AccountsManagerMessageCommands.SWITCHED_ACCOUNT:
-                    await SwitchedAccountAsync();
-                    break;
+                switch (message.Command)
+                {
+                    case AccountsManagerMessageCommands.LOCKED:
+                        await Device.InvokeOnMainThreadAsync(() => LockedAsync(message.Data as Tuple<string, bool>));
+                        break;
+                    case AccountsManagerMessageCommands.LOCK_VAULT:
+                        await _vaultTimeoutService.LockAsync(true);
+                        break;
+                    case AccountsManagerMessageCommands.LOGOUT:
+                        var extras = message.Data as Tuple<string, bool, bool>;
+                        var userId = extras?.Item1;
+                        var userInitiated = extras?.Item2 ?? true;
+                        var expired = extras?.Item3 ?? false;
+                        await Device.InvokeOnMainThreadAsync(() => LogOutAsync(userId, userInitiated, expired));
+                        break;
+                    case AccountsManagerMessageCommands.LOGGED_OUT:
+                        // Clean up old migrated key if they ever log out.
+                        await _secureStorageService.RemoveAsync("oldKey");
+                        break;
+                    case AccountsManagerMessageCommands.ADD_ACCOUNT:
+                        await AddAccountAsync();
+                        break;
+                    case AccountsManagerMessageCommands.ACCOUNT_ADDED:
+                        await _accountsManagerHost.UpdateThemeAsync();
+                        break;
+                    case AccountsManagerMessageCommands.SWITCHED_ACCOUNT:
+                        await SwitchedAccountAsync();
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Exception(ex);
             }
         }
 
-        private void Locked(Tuple<string, bool> extras)
+        private async Task LockedAsync(Tuple<string, bool> extras)
         {
             var userId = extras?.Item1;
             var userInitiated = extras?.Item2 ?? false;
-            Device.BeginInvokeOnMainThread(async () => await LockedAsync(userId, userInitiated));
-        }
 
-        private async Task LockedAsync(string userId, bool userInitiated)
-        {
             if (!await _stateService.IsActiveAccountAsync(userId))
             {
                 _platformUtilsService.ShowToast("info", null, AppResources.AccountLockedSuccessfully);
@@ -163,27 +173,19 @@ namespace Bit.App.Utilities.AccountManagement
 
             await _accountsManagerHost.SetPreviousPageInfoAsync();
 
-            Device.BeginInvokeOnMainThread(() => _accountsManagerHost.Navigate(NavigationTarget.Lock, new LockNavigationParams(autoPromptBiometric)));
+            await Device.InvokeOnMainThreadAsync(() => _accountsManagerHost.Navigate(NavigationTarget.Lock, new LockNavigationParams(autoPromptBiometric)));
         }
 
-        private void AddAccount()
+        private async Task AddAccountAsync()
         {
-            Device.BeginInvokeOnMainThread(() =>
+            await Device.InvokeOnMainThreadAsync(() =>
             {
                 Options.HideAccountSwitcher = false;
                 _accountsManagerHost.Navigate(NavigationTarget.HomeLogin);
             });
         }
 
-        private void LogOut(Tuple<string, bool, bool> extras)
-        {
-            var userId = extras?.Item1;
-            var userInitiated = extras?.Item2 ?? true;
-            var expired = extras?.Item3 ?? false;
-            Device.BeginInvokeOnMainThread(async () => await LogOutAsync(userId, userInitiated, expired));
-        }
-
-        private async Task LogOutAsync(string userId, bool userInitiated, bool expired)
+        public async Task LogOutAsync(string userId, bool userInitiated, bool expired)
         {
             await AppHelpers.LogOutAsync(userId, userInitiated);
             await NavigateOnAccountChangeAsync();
