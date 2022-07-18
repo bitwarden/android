@@ -148,6 +148,8 @@ namespace Bit.Core.Abstractions
         Task SetRefreshTokenAsync(string value, bool skipTokenStorage, string userId = null);
         Task<string> GetTwoFactorTokenAsync(string email = null);
         Task SetTwoFactorTokenAsync(string value, string email = null);
+        Task<bool> GetScreenCaptureAllowedAsync(string userId = null);
+        Task SetScreenCaptureAllowedAsync(bool value, string userId = null);
         Task SaveExtensionActiveUserIdToStorageAsync(string userId);
     }
 }

@@ -1481,15 +1481,15 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string DisableAutoTotpCopyDescription {
+        public static string CopyTotpAutomaticallyDescription {
             get {
-                return ResourceManager.GetString("DisableAutoTotpCopyDescription", resourceCulture);
+                return ResourceManager.GetString("CopyTotpAutomaticallyDescription", resourceCulture);
             }
         }
         
-        public static string DisableAutoTotpCopy {
+        public static string CopyTotpAutomatically {
             get {
-                return ResourceManager.GetString("DisableAutoTotpCopy", resourceCulture);
+                return ResourceManager.GetString("CopyTotpAutomatically", resourceCulture);
             }
         }
         
@@ -1919,15 +1919,15 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string DisableWebsiteIcons {
+        public static string ShowWebsiteIcons {
             get {
-                return ResourceManager.GetString("DisableWebsiteIcons", resourceCulture);
+                return ResourceManager.GetString("ShowWebsiteIcons", resourceCulture);
             }
         }
         
-        public static string DisableWebsiteIconsDescription {
+        public static string ShowWebsiteIconsDescription {
             get {
-                return ResourceManager.GetString("DisableWebsiteIconsDescription", resourceCulture);
+                return ResourceManager.GetString("ShowWebsiteIconsDescription", resourceCulture);
             }
         }
         
@@ -2759,15 +2759,15 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string DisableSavePrompt {
+        public static string AskToAddLogin {
             get {
-                return ResourceManager.GetString("DisableSavePrompt", resourceCulture);
+                return ResourceManager.GetString("AskToAddLogin", resourceCulture);
             }
         }
         
-        public static string DisableSavePromptDescription {
+        public static string AskToAddLoginDescription {
             get {
-                return ResourceManager.GetString("DisableSavePromptDescription", resourceCulture);
+                return ResourceManager.GetString("AskToAddLoginDescription", resourceCulture);
             }
         }
         
@@ -4118,6 +4118,30 @@ namespace Bit.App.Resources {
         public static string AuthenticationCodesListIsVisibleActivateToShowCipherList {
             get {
                 return ResourceManager.GetString("AuthenticationCodesListIsVisibleActivateToShowCipherList", resourceCulture);
+            }
+        }
+        
+        public static string EnvironmentPageUrlsError {
+            get {
+                return ResourceManager.GetString("EnvironmentPageUrlsError", resourceCulture);
+            }
+        }
+        
+        public static string GenericErrorMessage {
+            get {
+                return ResourceManager.GetString("GenericErrorMessage", resourceCulture);
+            }
+        }
+        
+        public static string AllowScreenCapture {
+            get {
+                return ResourceManager.GetString("AllowScreenCapture", resourceCulture);
+            }
+        }
+        
+        public static string AreYouSureYouWantToEnableScreenCapture {
+            get {
+                return ResourceManager.GetString("AreYouSureYouWantToEnableScreenCapture", resourceCulture);
             }
         }
     }

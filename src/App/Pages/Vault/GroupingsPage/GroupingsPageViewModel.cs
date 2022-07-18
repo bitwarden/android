@@ -204,6 +204,8 @@ namespace Bit.App.Pages
                 return;
             }
 
+            _deviceActionService.SetScreenCaptureAllowedAsync().FireAndForget();
+
             await InitVaultFilterAsync(MainPage);
             if (MainPage)
             {

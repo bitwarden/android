@@ -129,12 +129,10 @@
     <Folder Include="Behaviors\" />
     <Folder Include="Controls\AccountSwitchingOverlay\" />
     <Folder Include="Utilities\AccountManagement\" />
+    <Folder Include="Controls\DateTime\" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Controls\CipherViewCell\CipherViewCell.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Remove="Pages\Accounts\AccountsPopupPage.xaml" />
   </ItemGroup>
 
@@ -160,12 +158,6 @@
     <Compile Update="Styles\Android.xaml.cs">
       <DependentUpon>Android.xaml</DependentUpon>
     </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="Styles\Base.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
@@ -422,5 +414,6 @@
     <None Remove="Xamarin.CommunityToolkit" />
     <None Remove="Controls\AccountSwitchingOverlay\" />
     <None Remove="Utilities\AccountManagement\" />
+    <None Remove="Controls\DateTime\" />
   </ItemGroup>
 </Project>

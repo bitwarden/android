@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
+using Bit.App.Controls;
 using Bit.App.Resources;
 using Bit.App.Utilities;
 using Bit.Core;
@@ -23,7 +24,7 @@ namespace Bit.App.Pages
         private readonly IStateService _stateService;
         private readonly ISendService _sendService;
         private readonly ILogger _logger;
-        private bool _sendEnabled;
+        private bool _sendEnabled = true;
         private bool _canAccessPremium;
         private bool _emailVerified;
         private SendView _send;
@@ -33,11 +34,7 @@ namespace Bit.App.Pages
         private int _deletionDateTypeSelectedIndex;
         private int _expirationDateTypeSelectedIndex;
         private DateTime _simpleDeletionDateTime;
-        private DateTime _deletionDate;
-        private TimeSpan _deletionTime;
         private DateTime? _simpleExpirationDateTime;
-        private DateTime? _expirationDate;
-        private TimeSpan? _expirationTime;
         private bool _isOverridingPickers;
         private int? _maxAccessCount;
         private string[] _additionalSendProperties = new[]
@@ -89,8 +86,34 @@ namespace Bit.App.Pages
                 new KeyValuePair<string, string>(AppResources.ThirtyDays, AppResources.ThirtyDays),
                 new KeyValuePair<string, string>(AppResources.Custom, AppResources.Custom),
             };
+
+            DeletionDateTimeViewModel = new DateTimeViewModel(AppResources.DeletionDate, AppResources.DeletionTime);
+            ExpirationDateTimeViewModel = new DateTimeViewModel(AppResources.ExpirationDate, AppResources.ExpirationTime)
+            {
+                OnDateChanged = date =>
+                {
+                    if (!_isOverridingPickers && !ExpirationDateTimeViewModel.Time.HasValue)
+                    {
+                        // auto-set time to current time upon setting date
+                        ExpirationDateTimeViewModel.Time = DateTimeNow().TimeOfDay;
+                    }
+                },
+                OnTimeChanged = time =>
+                {
+                    if (!_isOverridingPickers && !ExpirationDateTimeViewModel.Date.HasValue)
+                    {
+                        // auto-set date to current date upon setting time
+                        ExpirationDateTimeViewModel.Date = DateTime.Today;
+                    }
+                },
+                DatePlaceholder = "mm/dd/yyyy",
+                TimePlaceholder = "--:-- --"
+            };
+
+            AccountSwitchingOverlayViewModel = new AccountSwitchingOverlayViewModel(_stateService, _messagingService, _logger);
         }
 
+        public AccountSwitchingOverlayViewModel AccountSwitchingOverlayViewModel { get; }
         public Command TogglePasswordCommand { get; set; }
         public Command ToggleOptionsCommand { get; set; }
         public string SendId { get; set; }
@@ -126,23 +149,14 @@ namespace Bit.App.Pages
                 }
             }
         }
-        public DateTime DeletionDate
-        {
-            get => _deletionDate;
-            set => SetProperty(ref _deletionDate, value);
-        }
-        public TimeSpan DeletionTime
-        {
-            get => _deletionTime;
-            set => SetProperty(ref _deletionTime, value);
-        }
         public bool ShowOptions
         {
             get => _showOptions;
             set => SetProperty(ref _showOptions, value,
                 additionalPropertyNames: new[]
                 {
-                    nameof(OptionsAccessilibityText)
+                    nameof(OptionsAccessilibityText),
+                    nameof(OptionsShowHideIcon)
                 });
         }
         public int ExpirationDateTypeSelectedIndex
@@ -156,28 +170,7 @@ namespace Bit.App.Pages
                 }
             }
         }
-        public DateTime? ExpirationDate
-        {
-            get => _expirationDate;
-            set
-            {
-                if (SetProperty(ref _expirationDate, value))
-                {
-                    ExpirationDateChanged();
-                }
-            }
-        }
-        public TimeSpan? ExpirationTime
-        {
-            get => _expirationTime;
-            set
-            {
-                if (SetProperty(ref _expirationTime, value))
-                {
-                    ExpirationTimeChanged();
-                }
-            }
-        }
+
         public int? MaxAccessCount
         {
             get => _maxAccessCount;
@@ -205,7 +198,7 @@ namespace Bit.App.Pages
         }
         public string FileName
         {
-            get => _fileName;
+            get => _fileName ?? AppResources.NoFileChosen;
             set
             {
                 if (SetProperty(ref _fileName, value))
@@ -240,10 +233,13 @@ namespace Bit.App.Pages
         public bool IsFile => Send?.Type == SendType.File;
         public bool ShowDeletionCustomPickers => EditMode || DeletionDateTypeSelectedIndex == 6;
         public bool ShowExpirationCustomPickers => EditMode || ExpirationDateTypeSelectedIndex == 7;
+        public DateTimeViewModel DeletionDateTimeViewModel { get; }
+        public DateTimeViewModel ExpirationDateTimeViewModel { get; }
         public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
         public string FileTypeAccessibilityLabel => IsFile ? AppResources.FileTypeIsSelected : AppResources.FileTypeIsNotSelected;
         public string TextTypeAccessibilityLabel => IsText ? AppResources.TextTypeIsSelected : AppResources.TextTypeIsNotSelected;
+        public string OptionsShowHideIcon => ShowOptions ? BitwardenIcons.ChevronUp : BitwardenIcons.AngleDown;
 
         public async Task InitAsync()
         {
@@ -268,10 +264,8 @@ namespace Bit.App.Pages
                         return false;
                     }
                     Send = await send.DecryptAsync();
-                    DeletionDate = Send.DeletionDate.ToLocalTime();
-                    DeletionTime = DeletionDate.TimeOfDay;
-                    ExpirationDate = Send.ExpirationDate?.ToLocalTime();
-                    ExpirationTime = ExpirationDate?.TimeOfDay;
+                    DeletionDateTimeViewModel.DateTime = Send.DeletionDate.ToLocalTime();
+                    ExpirationDateTimeViewModel.DateTime = Send.ExpirationDate?.ToLocalTime();
                 }
                 else
                 {
@@ -280,8 +274,7 @@ namespace Bit.App.Pages
                     {
                         Type = Type.GetValueOrDefault(defaultType),
                     };
-                    _deletionDate = DateTimeNow().AddDays(7);
-                    _deletionTime = DeletionDate.TimeOfDay;
+                    DeletionDateTimeViewModel.DateTime = DateTimeNow().AddDays(7);
                     DeletionDateTypeSelectedIndex = 4;
                     ExpirationDateTypeSelectedIndex = 0;
                 }
@@ -305,23 +298,22 @@ namespace Bit.App.Pages
         public void ClearExpirationDate()
         {
             _isOverridingPickers = true;
-            ExpirationDate = null;
-            ExpirationTime = null;
+            ExpirationDateTimeViewModel.DateTime = null;
             _isOverridingPickers = false;
         }
 
         private void UpdateSendData()
         {
             // filename
-            if (Send.File != null && FileName != null)
+            if (Send.File != null && _fileName != null)
             {
-                Send.File.FileName = FileName;
+                Send.File.FileName = _fileName;
             }
 
             // deletion date
             if (ShowDeletionCustomPickers)
             {
-                Send.DeletionDate = DeletionDate.Date.Add(DeletionTime).ToUniversalTime();
+                Send.DeletionDate = DeletionDateTimeViewModel.DateTime.Value.ToUniversalTime();
             }
             else
             {
@@ -329,9 +321,9 @@ namespace Bit.App.Pages
             }
 
             // expiration date
-            if (ShowExpirationCustomPickers && ExpirationDate.HasValue && ExpirationTime.HasValue)
+            if (ShowExpirationCustomPickers && ExpirationDateTimeViewModel.DateTime.HasValue)
             {
-                Send.ExpirationDate = ExpirationDate.Value.Date.Add(ExpirationTime.Value).ToUniversalTime();
+                Send.ExpirationDate = ExpirationDateTimeViewModel.DateTime.Value.ToUniversalTime();
             }
             else if (_simpleExpirationDateTime.HasValue)
             {
@@ -484,7 +476,7 @@ namespace Bit.App.Pages
                     return;
                 }
 
-                if (Page is SendAddEditPage sendPage && sendPage.OnClose != null)
+                if (Page is SendAddOnlyPage sendPage && sendPage.OnClose != null)
                 {
                     sendPage.OnClose();
                     return;
@@ -625,24 +617,6 @@ namespace Bit.App.Pages
             }
         }
 
-        private void ExpirationDateChanged()
-        {
-            if (!_isOverridingPickers && !ExpirationTime.HasValue)
-            {
-                // auto-set time to current time upon setting date
-                ExpirationTime = DateTimeNow().TimeOfDay;
-            }
-        }
-
-        private void ExpirationTimeChanged()
-        {
-            if (!_isOverridingPickers && !ExpirationDate.HasValue)
-            {
-                // auto-set date to current date upon setting time
-                ExpirationDate = DateTime.Today;
-            }
-        }
-
         private void MaxAccessCountChanged()
         {
             Send.MaxAccessCount = _maxAccessCount;
@@ -665,6 +639,11 @@ namespace Bit.App.Pages
                 0,
                 DateTimeKind.Local
             );
+        }
+
+        internal void TriggerSendTextPropertyChanged()
+        {
+            Device.BeginInvokeOnMainThread(() => TriggerPropertyChanged(nameof(Send)));
         }
     }
 }

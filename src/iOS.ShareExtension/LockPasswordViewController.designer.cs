@@ -13,16 +13,28 @@ namespace Bit.iOS.ShareExtension
 	partial class LockPasswordViewController
 	{
 		[Outlet]
+		UIKit.UIBarButtonItem _accountSwitchingButton { get; set; }
+
+		[Outlet]
 		UIKit.UIBarButtonItem _cancelButton { get; set; }
 
 		[Outlet]
 		UIKit.UITableView _mainTableView { get; set; }
 
 		[Outlet]
+		UIKit.UINavigationBar _navBar { get; set; }
+
+		[Outlet]
 		UIKit.UINavigationItem _navItem { get; set; }
 
 		[Outlet]
+		UIKit.UIView _overlayView { get; set; }
+
+		[Outlet]
 		UIKit.UIBarButtonItem _submitButton { get; set; }
+
+		[Action ("AccountSwitchingButton_Activated:")]
+		partial void AccountSwitchingButton_Activated (UIKit.UIBarButtonItem sender);
 
 		[Action ("CancelButton_Activated:")]
 		partial void CancelButton_Activated (UIKit.UIBarButtonItem sender);
@@ -32,6 +44,11 @@ namespace Bit.iOS.ShareExtension
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (_accountSwitchingButton != null) {
+				_accountSwitchingButton.Dispose ();
+				_accountSwitchingButton = null;
+			}
+
 			if (_cancelButton != null) {
 				_cancelButton.Dispose ();
 				_cancelButton = null;
@@ -47,9 +64,19 @@ namespace Bit.iOS.ShareExtension
 				_navItem = null;
 			}
 
+			if (_overlayView != null) {
+				_overlayView.Dispose ();
+				_overlayView = null;
+			}
+
 			if (_submitButton != null) {
 				_submitButton.Dispose ();
 				_submitButton = null;
+			}
+
+			if (_navBar != null) {
+				_navBar.Dispose ();
+				_navBar = null;
 			}
 		}
 	}

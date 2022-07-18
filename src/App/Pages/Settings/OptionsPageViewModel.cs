@@ -12,15 +12,14 @@ namespace Bit.App.Pages
 {
     public class OptionsPageViewModel : BaseViewModel
     {
-        private readonly ITotpService _totpService;
         private readonly IStateService _stateService;
         private readonly IMessagingService _messagingService;
 
 
-        private bool _autofillDisableSavePrompt;
+        private bool _autofillSavePrompt;
         private string _autofillBlacklistedUris;
-        private bool _disableFavicon;
-        private bool _disableAutoTotpCopy;
+        private bool _favicon;
+        private bool _autoTotpCopy;
         private int _clearClipboardSelectedIndex;
         private int _themeSelectedIndex;
         private int _autoDarkThemeSelectedIndex;
@@ -31,7 +30,6 @@ namespace Bit.App.Pages
 
         public OptionsPageViewModel()
         {
-            _totpService = ServiceContainer.Resolve<ITotpService>("totpService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
 
@@ -133,38 +131,38 @@ namespace Bit.App.Pages
             }
         }
 
-        public bool DisableFavicon
+        public bool Favicon
         {
-            get => _disableFavicon;
+            get => _favicon;
             set
             {
-                if (SetProperty(ref _disableFavicon, value))
+                if (SetProperty(ref _favicon, value))
                 {
-                    UpdateDisableFaviconAsync().FireAndForget();
+                    UpdateFaviconAsync().FireAndForget();
                 }
             }
         }
 
-        public bool DisableAutoTotpCopy
+        public bool AutoTotpCopy
         {
-            get => _disableAutoTotpCopy;
+            get => _autoTotpCopy;
             set
             {
-                if (SetProperty(ref _disableAutoTotpCopy, value))
+                if (SetProperty(ref _autoTotpCopy, value))
                 {
                     UpdateAutoTotpCopyAsync().FireAndForget();
                 }
             }
         }
 
-        public bool AutofillDisableSavePrompt
+        public bool AutofillSavePrompt
         {
-            get => _autofillDisableSavePrompt;
+            get => _autofillSavePrompt;
             set
             {
-                if (SetProperty(ref _autofillDisableSavePrompt, value))
+                if (SetProperty(ref _autofillSavePrompt, value))
                 {
-                    UpdateAutofillDisableSavePromptAsync().FireAndForget();
+                    UpdateAutofillSavePromptAsync().FireAndForget();
                 }
             }
         }
@@ -183,11 +181,11 @@ namespace Bit.App.Pages
 
         public async Task InitAsync()
         {
-            AutofillDisableSavePrompt = (await _stateService.GetAutofillDisableSavePromptAsync()).GetValueOrDefault();
+            AutofillSavePrompt = !(await _stateService.GetAutofillDisableSavePromptAsync()).GetValueOrDefault();
             var blacklistedUrisList = await _stateService.GetAutofillBlacklistedUrisAsync();
             AutofillBlacklistedUris = blacklistedUrisList != null ? string.Join(", ", blacklistedUrisList) : null;
-            DisableAutoTotpCopy = !(await _totpService.IsAutoCopyEnabledAsync());
-            DisableFavicon = (await _stateService.GetDisableFaviconAsync()).GetValueOrDefault();
+            AutoTotpCopy = !(await _stateService.GetDisableAutoTotpCopyAsync() ?? false);
+            Favicon = !(await _stateService.GetDisableFaviconAsync()).GetValueOrDefault();
             var theme = await _stateService.GetThemeAsync();
             ThemeSelectedIndex = ThemeOptions.FindIndex(k => k.Key == theme);
             var autoDarkTheme = await _stateService.GetAutoDarkThemeAsync() ?? "dark";
@@ -204,15 +202,17 @@ namespace Bit.App.Pages
         {
             if (_inited)
             {
-                await _stateService.SetDisableAutoTotpCopyAsync(DisableAutoTotpCopy);
+                // TODO: [PS-961] Fix negative function names
+                await _stateService.SetDisableAutoTotpCopyAsync(!AutoTotpCopy);
             }
         }
 
-        private async Task UpdateDisableFaviconAsync()
+        private async Task UpdateFaviconAsync()
         {
             if (_inited)
             {
-                await _stateService.SetDisableFaviconAsync(DisableFavicon);
+                // TODO: [PS-961] Fix negative function names
+                await _stateService.SetDisableFaviconAsync(!Favicon);
             }
         }
 
@@ -243,11 +243,12 @@ namespace Bit.App.Pages
             }
         }
 
-        private async Task UpdateAutofillDisableSavePromptAsync()
+        private async Task UpdateAutofillSavePromptAsync()
         {
             if (_inited)
             {
-                await _stateService.SetAutofillDisableSavePromptAsync(AutofillDisableSavePrompt);
+                // TODO: [PS-961] Fix negative function names
+                await _stateService.SetAutofillDisableSavePromptAsync(!AutofillSavePrompt);
             }
         }
 
