@@ -93,7 +93,7 @@ namespace Bit.App.Pages
             UriOptionsCommand = new Command<LoginUriView>(UriOptions);
             FieldOptionsCommand = new Command<AddEditPageFieldViewModel>(FieldOptions);
             PasswordPromptHelpCommand = new Command(PasswordPromptHelp);
-            CopyCommand = new AsyncCommand(CopyTotpClipboardAsync);
+            CopyCommand = new AsyncCommand(CopyTotpClipboardAsync, onException: ex => _logger.Exception(ex), allowsMultipleExecutions: false);
             Uris = new ExtendedObservableCollection<LoginUriView>();
             Fields = new ExtendedObservableCollection<AddEditPageFieldViewModel>();
             Collections = new ExtendedObservableCollection<CollectionViewModel>();

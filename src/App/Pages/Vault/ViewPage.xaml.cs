@@ -107,12 +107,12 @@ namespace Bit.App.Pages
             }, _mainContent);
         }
 
-        protected override async void OnDisappearing()
+        protected override void OnDisappearing()
         {
             base.OnDisappearing();
             IsBusy = false;
             _broadcasterService.Unsubscribe(nameof(ViewPage));
-            await _vm.StopCiphersTotpTick();
+            _vm.StopCiphersTotpTick();
         }
 
         private async void PasswordHistory_Tapped(object sender, System.EventArgs e)

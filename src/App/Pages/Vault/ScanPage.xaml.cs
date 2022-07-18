@@ -258,7 +258,6 @@ namespace Bit.App.Pages
                         break;
                     }
                 }
-                _stopwatch.Stop();
             }
             catch (Exception ex)
             {
