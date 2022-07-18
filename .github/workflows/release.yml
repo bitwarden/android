@@ -65,17 +65,26 @@ jobs:
           echo "::set-output name=branch-name::$BRANCH_NAME"
 
       - name: Download all artifacts
+        if: ${{ github.event.inputs.release_type != 'Dry Run' }}
         uses: dawidd6/action-download-artifact@575b1e4167df67acf7e692af784566618b23c71e  # v2.17.10
         with:
           workflow: build.yml
           workflow_conclusion: success
           branch: ${{ steps.branch.outputs.branch-name }}
 
+      - name: Download all artifacts
+        if: ${{ github.event.inputs.release_type == 'Dry Run' }}
+        uses: dawidd6/action-download-artifact@575b1e4167df67acf7e692af784566618b23c71e  # v2.17.10
+        with:
+          workflow: build.yml
+          workflow_conclusion: success
+          branch: master
+
       - name: Prep Bitwarden iOS release asset
         run: zip -r Bitwarden\ iOS.zip Bitwarden\ iOS
 
       - name: Create release
-        if: github.event.inputs.release_type != 'Dry Run'
+        if: ${{ github.event.inputs.release_type != 'Dry Run' }}
         uses: ncipollo/release-action@40bb172bd05f266cf9ba4ff965cb61e9ee5f6d01  # v1.9.0
         with:
           artifacts: "./com.x8bit.bitwarden.aab/com.x8bit.bitwarden.aab,
@@ -99,11 +108,21 @@ jobs:
         uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579  # v2.4.0
 
       - name: Download F-Droid .apk artifact
+        if: ${{ github.event.inputs.release_type != 'Dry Run' }}
         uses: dawidd6/action-download-artifact@575b1e4167df67acf7e692af784566618b23c71e  # v2.17.10
         with:
           workflow: build.yml
           workflow_conclusion: success
           branch: ${{ needs.release.outputs.branch-name }}
+          name: com.x8bit.bitwarden-fdroid.apk
+
+      - name: Download F-Droid .apk artifact
+        if: ${{ github.event.inputs.release_type == 'Dry Run' }}
+        uses: dawidd6/action-download-artifact@575b1e4167df67acf7e692af784566618b23c71e  # v2.17.10
+        with:
+          workflow: build.yml
+          workflow_conclusion: success
+          branch: master
           name: com.x8bit.bitwarden-fdroid.apk
 
       - name: Set up Node
@@ -171,5 +190,5 @@ jobs:
           cd $GITHUB_WORKSPACE
 
       - name: Deploy to gh-pages
-        if: github.event.inputs.release_type != 'Dry Run'
+        if: ${{ github.event.inputs.release_type != 'Dry Run' }}
         run: npm run deploy
