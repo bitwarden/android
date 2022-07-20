@@ -751,7 +751,7 @@ namespace Bit.App.Pages
             {
                 if (IsBooleanType)
                 {
-                    return _field.Value == "true" ? BitwardenIcons.CheckSquare : BitwardenIcons.Square;
+                    return _field.BoolValue ? BitwardenIcons.CheckSquare : BitwardenIcons.Square;
                 }
                 else if (IsLinkedType)
                 {
@@ -771,7 +771,7 @@ namespace Bit.App.Pages
             {
                 if (IsBooleanType)
                 {
-                    return _field.Value == "true" ? AppResources.Enabled : AppResources.Disabled;
+                    return _field.BoolValue ? AppResources.Enabled : AppResources.Disabled;
                 }
 
                 return ValueText;
