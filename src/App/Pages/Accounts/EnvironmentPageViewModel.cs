@@ -70,23 +70,7 @@ namespace Bit.App.Pages
         {
             bool IsUrlValid(string url)
             {
-                if (string.IsNullOrEmpty(url))
-                {
-                    return true;
-                }
-
-                if(url.StartsWith("https://"))
-                {
-                    url = url.Remove(0, 8);
-                }
-                else
-                {
-                    if (url.StartsWith("http://"))
-                    {
-                        url = url.Remove(0, 7);
-                    }
-                }
-                return Uri.IsWellFormedUriString(url, UriKind.Relative);
+                return string.IsNullOrEmpty(url) || Uri.IsWellFormedUriString(url, UriKind.RelativeOrAbsolute);
             }
 
             return IsUrlValid(BaseUrl)
