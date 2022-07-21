@@ -571,6 +571,8 @@
                                                 IsVisible="{Binding IsLinkedType}" />
                                             <controls:IconLabel
                                                 Text="{Binding ValueText, Mode=OneWay}"
+                                                AutomationProperties.IsInAccessibleTree="true"
+                                                AutomationProperties.Name="{Binding ValueAccessibilityText, Mode=OneWay}"
                                                 StyleClass="box-value"
                                                 Grid.Row="1"
                                                 Grid.Column="0"
