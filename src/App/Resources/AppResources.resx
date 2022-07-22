@@ -418,7 +418,7 @@
     <value>Use the Bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
-    <value>Auto-fill Service</value>
+    <value>Auto-fill service</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>Avoid Ambiguous Characters</value>
@@ -445,7 +445,7 @@
     <value>You can change your email address on the bitwarden.com web vault. Do you want to visit the website now?</value>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
-    <value>Change Master Password</value>
+    <value>Change master password</value>
   </data>
   <data name="ChangePasswordConfirmation" xml:space="preserve">
     <value>You can change your master password on the bitwarden.com web vault. Do you want to visit the website now?</value>
@@ -473,13 +473,13 @@
     <value>Enter your account email address to receive your master password hint.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
-    <value>Re-enable App Extension</value>
+    <value>Re-enable app extension</value>
   </data>
   <data name="ExtensionAlmostDone" xml:space="preserve">
     <value>Almost done!</value>
   </data>
   <data name="ExtensionEnable" xml:space="preserve">
-    <value>Enable App Extension</value>
+    <value>Enable app extension</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
     <value>In Safari, find Bitwarden using the share icon (hint: scroll to the right on the bottom row of the menu).</value>
@@ -694,7 +694,7 @@
     <value>Syncing failed.</value>
   </data>
   <data name="SyncVaultNow" xml:space="preserve">
-    <value>Sync Vault Now</value>
+    <value>Sync vault now</value>
   </data>
   <data name="TouchID" xml:space="preserve">
     <value>Touch ID</value>
@@ -723,7 +723,7 @@
     <value>View Item</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>Bitwarden Web Vault</value>
+    <value>Bitwarden web vault</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Lost authenticator app?</value>
@@ -733,7 +733,7 @@
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">
-    <value>Extension Activated!</value>
+    <value>Extension activated!</value>
   </data>
   <data name="Icons" xml:space="preserve">
     <value>Icons</value>
@@ -804,7 +804,7 @@
     <value>You are searching for an auto-fill item for "{0}".</value>
   </data>
   <data name="LearnOrg" xml:space="preserve">
-    <value>Learn About Organizations</value>
+    <value>Learn about organizations</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
     <value>Cannot open the app "{0}".</value>
@@ -1548,10 +1548,10 @@
     <value>Default (System)</value>
   </data>
   <data name="DefaultDarkTheme" xml:space="preserve">
-    <value>Default Dark Theme</value>
+    <value>Default dark theme</value>
   </data>
   <data name="DefaultDarkThemeDescription" xml:space="preserve">
-    <value>Choose the dark theme to use when using Default (System) theme while your device's dark mode is enabled</value>
+    <value>Choose the dark theme to use when using Default (System) theme while your device's dark mode is enabled.</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Copy Note</value>
@@ -1820,16 +1820,16 @@
     <value>Bitwarden needs attention - Enable "Draw-Over" in "Auto-fill Services" from Bitwarden Settings</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
-    <value>Auto-fill Services</value>
+    <value>Auto-fill services</value>
   </data>
   <data name="InlineAutofill" xml:space="preserve">
-    <value>Use Inline Autofill</value>
+    <value>Use inline autofill</value>
   </data>
   <data name="InlineAutofillDescription" xml:space="preserve">
     <value>Use inline autofill if your selected IME (keyboard) supports it. If your configuration is not supported (or this option is disabled), the default Autofill overlay will be used.</value>
   </data>
   <data name="Accessibility" xml:space="preserve">
-    <value>Use Accessibility</value>
+    <value>Use accessibility</value>
   </data>
   <data name="AccessibilityDescription" xml:space="preserve">
     <value>Use the Bitwarden Accessibility Service to auto-fill your logins across apps and the web. When enabled, we'll display a popup when login fields are selected.</value>
@@ -1844,7 +1844,7 @@
     <value>Required to use the Autofill Quick-Action Tile, or to augment the Autofill Service by using Draw-Over (if enabled).</value>
   </data>
   <data name="DrawOver" xml:space="preserve">
-    <value>Use Draw-Over</value>
+    <value>Use draw-over</value>
   </data>
   <data name="DrawOverDescription" xml:space="preserve">
     <value>When enabled, allows the Bitwarden Accessibility Service to display a popup when login fields are selected.</value>
@@ -2270,7 +2270,7 @@
     <value>We were unable to process your request. Please try again or contact us.</value>
   </data>
   <data name="AllowScreenCapture" xml:space="preserve">
-    <value>Allow Screen Capture</value>
+    <value>Allow screen capture</value>
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Are you sure you want to enable Screen Capture?</value>
