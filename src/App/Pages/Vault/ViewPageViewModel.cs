@@ -70,8 +70,8 @@ namespace Bit.App.Pages
             TogglePasswordCommand = new Command(TogglePassword);
             ToggleCardNumberCommand = new Command(ToggleCardNumber);
             ToggleCardCodeCommand = new Command(ToggleCardCode);
-            CheckPasswordCommand = new Command(CheckPasswordAsync);
-            DownloadAttachmentCommand = new Command<AttachmentView>(DownloadAttachmentAsync);
+            CheckPasswordCommand = new AsyncCommand(CheckPasswordAsync, allowsMultipleExecutions: false);
+            DownloadAttachmentCommand = new AsyncCommand<AttachmentView>(DownloadAttachmentAsync, allowsMultipleExecutions: false);
 
             PageTitle = AppResources.ViewItem;
         }
@@ -83,8 +83,8 @@ namespace Bit.App.Pages
         public Command TogglePasswordCommand { get; set; }
         public Command ToggleCardNumberCommand { get; set; }
         public Command ToggleCardCodeCommand { get; set; }
-        public Command CheckPasswordCommand { get; set; }
-        public Command DownloadAttachmentCommand { get; set; }
+        public AsyncCommand CheckPasswordCommand { get; set; }
+        public AsyncCommand<AttachmentView> DownloadAttachmentCommand { get; set; }
         public string CipherId { get; set; }
         public CipherView Cipher
         {
@@ -455,12 +455,8 @@ namespace Bit.App.Pages
             }
         }
 
-        private async void CheckPasswordAsync()
+        private async Task CheckPasswordAsync()
         {
-            if (!(Page as BaseContentPage).DoOnce())
-            {
-                return;
-            }
             if (string.IsNullOrWhiteSpace(Cipher.Login?.Password))
             {
                 return;
@@ -472,25 +468,40 @@ namespace Bit.App.Pages
                 return;
             }
             await _deviceActionService.ShowLoadingAsync(AppResources.CheckingPassword);
-            var matches = await _auditService.PasswordLeakedAsync(Cipher.Login.Password);
-            await _deviceActionService.HideLoadingAsync();
-            if (matches > 0)
+            try
             {
-                await _platformUtilsService.ShowDialogAsync(string.Format(AppResources.PasswordExposed,
-                    matches.ToString("N0")));
+                var matches = await _auditService.PasswordLeakedAsync(Cipher.Login.Password);
+                await _deviceActionService.HideLoadingAsync();
+                if (matches > 0)
+                {
+                    await _platformUtilsService.ShowDialogAsync(string.Format(AppResources.PasswordExposed,
+                        matches.ToString("N0")));
+                }
+                else
+                {
+                    await _platformUtilsService.ShowDialogAsync(AppResources.PasswordSafe);
+                }
             }
-            else
+            catch(ApiException apiException)
             {
-                await _platformUtilsService.ShowDialogAsync(AppResources.PasswordSafe);
+                _logger.Exception(apiException);
+                await _deviceActionService.HideLoadingAsync();
+                if (apiException?.Error != null)
+                {
+                    await _platformUtilsService.ShowDialogAsync(apiException.Error.GetSingleMessage(),
+                        AppResources.AnErrorHasOccurred);
+                }
+            }
+            catch(Exception ex)
+            {
+                _logger.Exception(ex);
+                await _deviceActionService.HideLoadingAsync();
+                await _platformUtilsService.ShowDialogAsync(AppResources.AnErrorHasOccurred);
             }
         }
 
-        private async void DownloadAttachmentAsync(AttachmentView attachment)
+        private async Task DownloadAttachmentAsync(AttachmentView attachment)
         {
-            if (!(Page as BaseContentPage).DoOnce())
-            {
-                return;
-            }
             if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
@@ -561,9 +572,11 @@ namespace Bit.App.Pages
                     OpenAttachment(data, attachment);
                 }
             }
-            catch
+            catch(Exception ex)
             {
+                _logger.Exception(ex);
                 await _deviceActionService.HideLoadingAsync();
+                await _platformUtilsService.ShowDialogAsync(AppResources.AnErrorHasOccurred);
             }
         }
 

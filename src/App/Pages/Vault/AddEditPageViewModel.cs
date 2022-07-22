@@ -11,6 +11,7 @@ using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -85,7 +86,7 @@ namespace Bit.App.Pages
             TogglePasswordCommand = new Command(TogglePassword);
             ToggleCardNumberCommand = new Command(ToggleCardNumber);
             ToggleCardCodeCommand = new Command(ToggleCardCode);
-            CheckPasswordCommand = new Command(CheckPasswordAsync);
+            CheckPasswordCommand = new AsyncCommand(CheckPasswordAsync, allowsMultipleExecutions:false);
             UriOptionsCommand = new Command<LoginUriView>(UriOptions);
             FieldOptionsCommand = new Command<AddEditPageFieldViewModel>(FieldOptions);
             PasswordPromptHelpCommand = new Command(PasswordPromptHelp);
@@ -146,7 +147,7 @@ namespace Bit.App.Pages
         public Command TogglePasswordCommand { get; set; }
         public Command ToggleCardNumberCommand { get; set; }
         public Command ToggleCardCodeCommand { get; set; }
-        public Command CheckPasswordCommand { get; set; }
+        public AsyncCommand CheckPasswordCommand { get; set; }
         public Command UriOptionsCommand { get; set; }
         public Command FieldOptionsCommand { get; set; }
         public Command PasswordPromptHelpCommand { get; set; }
@@ -835,27 +836,44 @@ namespace Bit.App.Pages
             TriggerPropertyChanged(nameof(Cipher), _additionalCipherProperties);
         }
 
-        private async void CheckPasswordAsync()
+        private async Task CheckPasswordAsync()
         {
-            if (!(Page as BaseContentPage).DoOnce())
-            {
-                return;
-            }
             if (string.IsNullOrWhiteSpace(Cipher.Login?.Password))
             {
                 return;
             }
+
             await _deviceActionService.ShowLoadingAsync(AppResources.CheckingPassword);
-            var matches = await _auditService.PasswordLeakedAsync(Cipher.Login.Password);
-            await _deviceActionService.HideLoadingAsync();
-            if (matches > 0)
+            try
             {
-                await _platformUtilsService.ShowDialogAsync(string.Format(AppResources.PasswordExposed,
-                    matches.ToString("N0")));
+                var matches = await _auditService.PasswordLeakedAsync(Cipher.Login.Password);
+                await _deviceActionService.HideLoadingAsync();
+                if (matches > 0)
+                {
+                    await _platformUtilsService.ShowDialogAsync(string.Format(AppResources.PasswordExposed,
+                        matches.ToString("N0")));
+                }
+                else
+                {
+                    await _platformUtilsService.ShowDialogAsync(AppResources.PasswordSafe);
+                }
             }
-            else
+            catch (ApiException apiException)
             {
-                await _platformUtilsService.ShowDialogAsync(AppResources.PasswordSafe);
+                _logger.Exception(apiException);
+                await _deviceActionService.HideLoadingAsync();
+                apiException.Error = new Core.Models.Response.ErrorResponse();
+                if (apiException?.Error != null)
+                {
+                    await _platformUtilsService.ShowDialogAsync(apiException.Error.GetSingleMessage(),
+                        AppResources.AnErrorHasOccurred);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Exception(ex);
+                await _deviceActionService.HideLoadingAsync();
+                await _platformUtilsService.ShowDialogAsync(AppResources.AnErrorHasOccurred);
             }
         }
     }
