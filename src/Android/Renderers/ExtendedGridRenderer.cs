@@ -14,7 +14,7 @@ namespace Bit.Droid.Renderers
         protected override void OnElementChanged(ElementChangedEventArgs<View> elementChangedEvent)
         {
             base.OnElementChanged(elementChangedEvent);
-            if (elementChangedEvent.NewElement != null)
+            if (elementChangedEvent.NewElement is ExtendedGrid extGrid && extGrid.ApplyRipple)
             {
                 SetBackgroundResource(Resource.Drawable.list_item_bg);
             }

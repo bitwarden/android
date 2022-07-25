@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.App.Resources;
-using Bit.App.Utilities;
 using Bit.App.Utilities.Helpers;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
@@ -645,6 +644,14 @@ namespace Bit.App.Pages
             if (listItem is GroupingsPageListItem groupPageListItem && groupPageListItem.Cipher?.Type == CipherType.Login)
             {
                 await _cipherHelper.CopyUsernameAsync(groupPageListItem.Cipher);
+
+                try
+                {
+                    Xamarin.Essentials.Vibration.Vibrate();
+                }
+                catch (Xamarin.Essentials.FeatureNotSupportedException)
+                {
+                }                
             }
         }
 
@@ -653,6 +660,14 @@ namespace Bit.App.Pages
             if (listItem is GroupingsPageListItem groupPageListItem && groupPageListItem.Cipher?.Type == CipherType.Login)
             {
                 await _cipherHelper.CopyPasswordAsync(groupPageListItem.Cipher);
+
+                try
+                {
+                    Xamarin.Essentials.Vibration.Vibrate();
+                }
+                catch (Xamarin.Essentials.FeatureNotSupportedException)
+                {
+                }
             }
         }
     }

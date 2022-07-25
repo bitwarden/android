@@ -53,41 +53,39 @@
                     WebsiteIconsEnabled="{Binding BindingContext.WebsiteIconsEnabled, Source={x:Reference _page}}" />
             </DataTemplate>
 
+            <!--Threshold="{Binding Source={x:Reference _page}, Path=SwipeThreshold}"-->
             <DataTemplate x:Key="loginCipherTemplate"
                           x:DataType="pages:GroupingsPageListItem">
-                <SwipeView Threshold="{Binding Source={x:Reference _page}, Path=SwipeThreshold}">
+                <SwipeView>
                     <SwipeView.LeftItems>
-                        <SwipeItems Mode="Execute">
-                            <SwipeItem Text="{u:I18n CopyUsername}"
-                                   BackgroundColor="{DynamicResource PrimaryColor}"
-                                   Command="{Binding Source={x:Reference _page}, Path=BindingContext.CopyUsernameItemCommand}"
-                                   CommandParameter="{Binding .}">
-                                <SwipeItem.IconImageSource>
-                                    <controls:IconFontImageSource
-                                        Glyph="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
-                                        Color="{DynamicResource TextColor}"/>
-                                </SwipeItem.IconImageSource>
-                            </SwipeItem>
-                        </SwipeItems>
-                    </SwipeView.LeftItems>
-                    <SwipeView.RightItems>
-                        <SwipeItems Mode="Execute">
-                            <SwipeItem Text="{u:I18n CopyPassword}"
+                        <SwipeItems>
+                            <SwipeItem
                                    BackgroundColor="{DynamicResource PrimaryColor}"
                                    Command="{Binding Source={x:Reference _page}, Path=BindingContext.CopyPasswordItemCommand}"
                                    CommandParameter="{Binding .}">
                                 <SwipeItem.IconImageSource>
                                     <controls:IconFontImageSource
-                                        Glyph="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
+                                        Glyph="{Binding Source={x:Static core:BitwardenIcons.Key}}"
+                                        Color="{DynamicResource TextColor}" />
+                                </SwipeItem.IconImageSource>
+                            </SwipeItem>
+                            <SwipeItem
+                                   BackgroundColor="{DynamicResource InfoColor}"
+                                   Command="{Binding Source={x:Reference _page}, Path=BindingContext.CopyUsernameItemCommand}"
+                                   CommandParameter="{Binding .}">
+                                <SwipeItem.IconImageSource>
+                                    <controls:IconFontImageSource
+                                        Glyph="{Binding Source={x:Static core:BitwardenIcons.User}}"
                                         Color="{DynamicResource TextColor}"/>
                                 </SwipeItem.IconImageSource>
                             </SwipeItem>
                         </SwipeItems>
-                    </SwipeView.RightItems>
+                    </SwipeView.LeftItems>
                     <controls:CipherViewCell
                         Cipher="{Binding Cipher}"
                         ButtonCommand="{Binding BindingContext.CipherOptionsCommand, Source={x:Reference _page}}"
                         WebsiteIconsEnabled="{Binding BindingContext.WebsiteIconsEnabled, Source={x:Reference _page}}"
+                        ApplyRipple="False"
                         BackgroundColor="{DynamicResource BackgroundColor}"/>
                 </SwipeView>
             </DataTemplate>
