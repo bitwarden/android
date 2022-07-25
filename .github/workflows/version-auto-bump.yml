@@ -1,0 +1,121 @@
+---
+name: Version Auto Bump
+
+on:
+  release:
+    types: [published]
+
+
+jobs:
+
+  setup:
+    name: "Setup"
+    runs-on: ubuntu-20.04
+    outputs:
+      version_number: ${{ steps.version.outputs.new-version }}
+    steps:
+      - name: Checkout Branch
+        uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579
+
+      - name: Get version to bump
+        id: version
+        run: |
+          CURR_MAJOR=$(echo ${{ github.event.release.tag }} | sed -r 's/v([0-9]{4}\.[0-9]\.)([0-9])/\1/'
+          CURR_VER=$(echo ${{ github.event.release.tag }} | sed -r 's/v([0-9]{4}\.[0-9]\.)([0-9])/\2/'
+          echo $CURR_VER
+
+          ((CURR_VER++))
+          NEW_VER=$CURR_MAJOR$CURR_VER
+
+          echo "::set-output name=new-version::$NEW_VER"
+
+  bump_version:
+    name: "Create version_bump branch"
+    runs-on: ubuntu-20.04
+    needs:
+      - setup
+    steps:
+      - name: Checkout Branch
+        uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579
+
+      - name: Create Version Branch
+        run: |
+          git switch -c version_bump_${{ needs.setup.outputs.version_number}}
+
+      - name: Bump Version - Android XML
+        uses: bitwarden/gh-actions/version-bump@03ad9a873c39cdc95dd8d77dbbda67f84db43945
+        with:
+          version: ${{ needs.setup.outputs.version_number}}
+          file_path: "./src/Android/Properties/AndroidManifest.xml"
+
+      - name: Bump Version - iOS.Autofill
+        uses: bitwarden/gh-actions/version-bump@03ad9a873c39cdc95dd8d77dbbda67f84db43945
+        with:
+          version: ${{ needs.setup.outputs.version_number}}
+          file_path: "./src/iOS.Autofill/Info.plist"
+
+      - name: Bump Version - iOS.Extension
+        uses: bitwarden/gh-actions/version-bump@03ad9a873c39cdc95dd8d77dbbda67f84db43945
+        with:
+          version: ${{ needs.setup.outputs.version_number}}
+          file_path: "./src/iOS.Extension/Info.plist"
+
+      - name: Bump Version - iOS.ShareExtension
+        uses: bitwarden/gh-actions/version-bump@03ad9a873c39cdc95dd8d77dbbda67f84db43945
+        with:
+          version: ${{ needs.setup.outputs.version_number}}
+          file_path: "./src/iOS.ShareExtension/Info.plist"
+
+      - name: Bump Version - iOS
+        uses: bitwarden/gh-actions/version-bump@03ad9a873c39cdc95dd8d77dbbda67f84db43945
+        with:
+          version: ${{ needs.setup.outputs.version_number}}
+          file_path: "./src/iOS/Info.plist"
+
+      - name: Setup git
+        run: |
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+
+      - name: Check if version changed
+        id: version-changed
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "::set-output name=changes_to_commit::TRUE"
+          else
+            echo "::set-output name=changes_to_commit::FALSE"
+            echo "No changes to commit!";
+          fi
+
+      - name: Commit files
+        if: ${{ steps.version-changed.outputs.changes_to_commit == 'TRUE' }}
+        run: |
+          git commit -m "Bumped version to ${{ needs.setup.outputs.version_number}}" -a
+
+      - name: Push changes
+        if: ${{ steps.version-changed.outputs.changes_to_commit == 'TRUE' }}
+        run: git push -u origin version_bump_${{ needs.setup.outputs.version_number}}
+
+      - name: Create Version PR
+        if: ${{ steps.version-changed.outputs.changes_to_commit == 'TRUE' }}
+        env:
+          PR_BRANCH: "version_bump_${{ needs.setup.outputs.version_number}}"
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          BASE_BRANCH: master
+          TITLE: "Bump version to ${{ needs.setup.outputs.version_number}}"
+        run: |
+          gh pr create --title "$TITLE" \
+            --base "$BASE" \
+            --head "$PR_BRANCH" \
+            --label "version update" \
+            --label "automated pr" \
+            --body "
+              ## Type of change
+              - [ ] Bug fix
+              - [ ] New feature development
+              - [ ] Tech debt (refactoring, code cleanup, dependency upgrades, etc)
+              - [ ] Build/deploy pipeline (DevOps)
+              - [X] Other
+
+              ## Objective
+              Automated version bump to ${{ needs.setup.outputs.version_number}}"
