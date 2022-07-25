@@ -84,6 +84,12 @@ namespace Bit.iOS.Core.Services
                 HideLoadingAsync().GetAwaiter().GetResult();
             }
 
+            var vc = GetPresentedViewController();
+            if (vc is null)
+            {
+                return Task.CompletedTask;
+            }    
+
             var result = new TaskCompletionSource<int>();
 
             var loadingIndicator = new UIActivityIndicatorView(new CGRect(10, 5, 50, 50));
@@ -96,8 +102,7 @@ namespace Bit.iOS.Core.Services
             _progressAlert.View.TintColor = UIColor.Black;
             _progressAlert.View.Add(loadingIndicator);
 
-            var vc = GetPresentedViewController();
-            vc?.PresentViewController(_progressAlert, false, () => result.TrySetResult(0));
+            vc.PresentViewController(_progressAlert, false, () => result.TrySetResult(0));
             return result.Task;
         }
 
@@ -205,6 +210,12 @@ namespace Bit.iOS.Core.Services
             string text = null, string okButtonText = null, string cancelButtonText = null,
             bool numericKeyboard = false, bool autofocus = true, bool password = false)
         {
+            var vc = GetPresentedViewController();
+            if (vc is null)
+            {
+                return null;
+            }
+
             var result = new TaskCompletionSource<string>();
             var alert = UIAlertController.Create(title ?? string.Empty, description, UIAlertControllerStyle.Alert);
             UITextField input = null;
@@ -234,8 +245,7 @@ namespace Bit.iOS.Core.Services
                     input.KeyboardAppearance = UIKeyboardAppearance.Dark;
                 }
             });
-            var vc = GetPresentedViewController();
-            vc?.PresentViewController(alert, true, null);
+            vc.PresentViewController(alert, true, null);
             return result.Task;
         }
 
@@ -312,6 +322,12 @@ namespace Bit.iOS.Core.Services
 
         public Task<string> DisplayAlertAsync(string title, string message, string cancel, params string[] buttons)
         {
+            var vc = GetPresentedViewController();
+            if (vc is null)
+            {
+                return null;
+            }
+
             var result = new TaskCompletionSource<string>();
             var alert = UIAlertController.Create(title ?? string.Empty, message, UIAlertControllerStyle.Alert);
             if (!string.IsNullOrWhiteSpace(cancel))
@@ -328,8 +344,7 @@ namespace Bit.iOS.Core.Services
                     result.TrySetResult(button);
                 }));
             }
-            var vc = GetPresentedViewController();
-            vc?.PresentViewController(alert, true, null);
+            vc.PresentViewController(alert, true, null);
             return result.Task;
         }
 
@@ -340,8 +355,12 @@ namespace Bit.iOS.Core.Services
             {
                 return app.MainPage.DisplayActionSheet(title, cancel, destruction, buttons);
             }
-            var result = new TaskCompletionSource<string>();
             var vc = GetPresentedViewController();
+            if (vc is null)
+            {
+                return null;
+            }
+            var result = new TaskCompletionSource<string>();
             var sheet = UIAlertController.Create(title, null, UIAlertControllerStyle.ActionSheet);
             if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad)
             {
