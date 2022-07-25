@@ -203,7 +203,6 @@
     <Compile Include="Utilities\UISearchBarExtensions.cs" />
     <Compile Include="Renderers\CollectionView\CollectionException.cs" />
     <Compile Include="Renderers\CollectionView\ExtendedGroupableItemsViewDelegator.cs" />
-    <Compile Include="Utilities\UIViewControllerExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\App\App.csproj">
