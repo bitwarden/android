@@ -108,6 +108,7 @@ namespace Bit.App.Pages
                     nameof(ShowIdentityAddress),
                     nameof(IsDeleted),
                     nameof(CanEdit),
+                    nameof(ShowUpgradePremiumTotpText)
                 });
         }
         public List<ViewPageFieldViewModel> Fields
