@@ -45,12 +45,12 @@ namespace Bit.App.Pages
         protected async override void OnDisappearing()
         {
             base.OnDisappearing();
-            await _vm.UpdateAutofillBlacklistedUris();
+            await _vm.UpdateAutofillBlockedUris();
         }
 
-        private async void BlacklistedUrisEditor_Unfocused(object sender, FocusEventArgs e)
+        private async void AutofillBlockedUrisEditor_Unfocused(object sender, FocusEventArgs e)
         {
-            await _vm.UpdateAutofillBlacklistedUris();
+            await _vm.UpdateAutofillBlockedUris();
         }
 
         private async void Close_Clicked(object sender, System.EventArgs e)
