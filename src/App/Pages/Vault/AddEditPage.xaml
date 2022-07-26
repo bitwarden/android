@@ -107,7 +107,7 @@
                         StyleClass="box-value" />
                 </StackLayout>
                 <StackLayout IsVisible="{Binding IsLogin}" Spacing="0" Padding="0">
-                    <StackLayout StyleClass="box-row, box-row-input">
+                    <!--<StackLayout StyleClass="box-row, box-row-input">
                         <Label
                             Text="{u:I18n Username}"
                             StyleClass="box-label" />
@@ -115,7 +115,37 @@
                             x:Name="_loginUsernameEntry"
                             Text="{Binding Cipher.Login.Username}"
                             StyleClass="box-value" />
-                    </StackLayout>
+                    </StackLayout>-->
+                    <Grid StyleClass="box-row, box-row-input">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                         <Label
+                            Text="{u:I18n Username}"
+                            StyleClass="box-label"
+                            Grid.Row="0"
+                            Grid.Column="0" />
+                        <Entry
+                            x:Name="_loginUsernameEntry"
+                            Text="{Binding Cipher.Login.Username}"
+                            StyleClass="box-value" 
+                            Grid.Row="1"
+                            Grid.Column="0"/>
+                        <controls:IconButton 
+                            StyleClass="box-row-button, box-row-button-platform"
+                            Text="{Binding Source={x:Static core:BitwardenIcons.Generate}}"
+                            Command="{Binding GenerateUsernameCommand}"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Grid.RowSpan="2"
+                            AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.Name="{u:I18n GenerateUsername}" />
+                    </Grid>
                     <Grid StyleClass="box-row, box-row-input">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />

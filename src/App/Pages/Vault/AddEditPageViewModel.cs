@@ -89,6 +89,7 @@ namespace Bit.App.Pages
             UriOptionsCommand = new Command<LoginUriView>(UriOptions);
             FieldOptionsCommand = new Command<AddEditPageFieldViewModel>(FieldOptions);
             PasswordPromptHelpCommand = new Command(PasswordPromptHelp);
+            GenerateUsernameCommand = new Command(GenerateUsername);
             Uris = new ExtendedObservableCollection<LoginUriView>();
             Fields = new ExtendedObservableCollection<AddEditPageFieldViewModel>();
             Collections = new ExtendedObservableCollection<CollectionViewModel>();
@@ -150,6 +151,7 @@ namespace Bit.App.Pages
         public Command UriOptionsCommand { get; set; }
         public Command FieldOptionsCommand { get; set; }
         public Command PasswordPromptHelpCommand { get; set; }
+        public Command GenerateUsernameCommand { get; set; }
         public string CipherId { get; set; }
         public string OrganizationId { get; set; }
         public string FolderId { get; set; }
@@ -598,6 +600,26 @@ namespace Bit.App.Pages
                 TriggerCipherChanged();
                 await Page.Navigation.PopModalAsync();
             });
+            await Page.Navigation.PushModalAsync(new NavigationPage(page));
+        }
+
+        public async void GenerateUsername()
+        {
+            if (!string.IsNullOrWhiteSpace(Cipher?.Login?.Username))
+            {
+                var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.UsernameOverrideAlert,
+                    null, AppResources.Yes, AppResources.No);
+                if (!confirmed)
+                {
+                    return;
+                }
+            }
+            var page = new GeneratorPage(false, async (username) =>
+            {
+                Cipher.Login.Username = username;
+                TriggerCipherChanged();
+                await Page.Navigation.PopModalAsync();
+            }, isUsernameGenerator:true);
             await Page.Navigation.PushModalAsync(new NavigationPage(page));
         }
 

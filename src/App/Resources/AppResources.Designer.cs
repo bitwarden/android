@@ -4132,5 +4132,17 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("APIAccessToken", resourceCulture);
             }
         }
+        
+        public static string UsernameOverrideAlert {
+            get {
+                return ResourceManager.GetString("UsernameOverrideAlert", resourceCulture);
+            }
+        }
+        
+        public static string GenerateUsername {
+            get {
+                return ResourceManager.GetString("GenerateUsername", resourceCulture);
+            }
+        }
     }
 }

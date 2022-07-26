@@ -2302,4 +2302,10 @@
   <data name="APIAccessToken" xml:space="preserve">
     <value>API Access Token</value>
   </data>
+  <data name="UsernameOverrideAlert" xml:space="preserve">
+    <value>Are you sure you want to overwrite the current username?</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>Generate Username</value>
+  </data>
 </root>
