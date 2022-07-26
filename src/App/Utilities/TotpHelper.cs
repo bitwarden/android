@@ -9,16 +9,16 @@ namespace Bit.App.Utilities
     public class TotpHelper
     {
         private ITotpService _totpService;
-        private CipherView _cipher;
         private int _interval;
 
         public TotpHelper(CipherView cipher)
         {
             _totpService = ServiceContainer.Resolve<ITotpService>("totpService");
-            _cipher = cipher;
+            Cipher = cipher;
             _interval = _totpService.GetTimeInterval(cipher?.Login?.Totp);
         }
 
+        public CipherView Cipher { get; private set; }
         public string TotpSec { get; private set; }
         public string TotpCodeFormatted { get; private set; }
         public double Progress { get; private set; }
@@ -38,20 +38,24 @@ namespace Bit.App.Utilities
 
         private async Task<string> TotpUpdateCodeAsync()
         {
-            var totpCode = await _totpService.GetCodeAsync(_cipher?.Login?.Totp);
-            if (totpCode == null)
+            var totpCode = await _totpService.GetCodeAsync(Cipher?.Login?.Totp);
+            if (totpCode != null)
+            {
+                if (totpCode.Length > 4)
+                {
+                    var half = (int)Math.Floor(totpCode.Length / 2M);
+                    return string.Format("{0} {1}", totpCode.Substring(0, half),
+                        totpCode.Substring(half));
+                }
+                else
+                {
+                    return totpCode;
+                }
+            }
+            else
             {
                 return null;
             }
-
-            if (totpCode.Length <= 4)
-            {
-                return totpCode;
-            }
-
-            var half = (int)Math.Floor(totpCode.Length / 2M);
-            return string.Format("{0} {1}", totpCode.Substring(0, half),
-                totpCode.Substring(half));
         }
     }
 }

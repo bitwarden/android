@@ -6,7 +6,6 @@ using Bit.Core.Abstractions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -112,12 +111,9 @@ namespace Bit.App.Pages
         public async Task TotpTickAsync()
         {
             await _totpTickHelper.GenerateNewTotpValues();
-            MainThread.BeginInvokeOnMainThread(() =>
-            {
-                TotpSec = _totpTickHelper.TotpSec;
-                Progress = _totpTickHelper.Progress;
-                TotpCodeFormatted = _totpTickHelper.TotpCodeFormatted;
-            });
+            TotpSec = _totpTickHelper.TotpSec;
+            Progress = _totpTickHelper.Progress;
+            TotpCodeFormatted = _totpTickHelper.TotpCodeFormatted;
         }
     }
 }

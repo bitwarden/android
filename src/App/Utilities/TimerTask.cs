@@ -2,53 +2,53 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
+using Bit.Core.Utilities;
 using Xamarin.Forms;
 
 namespace Bit.App.Utilities
 {
     public class TimerTask
     {
-        private readonly ILogger _logger;
+        private readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
         private readonly Action _action;
         private readonly CancellationTokenSource _cancellationToken;
 
-        public TimerTask(ILogger logger, Action action, CancellationTokenSource cancellationToken)
+        public TimerTask(Action action, CancellationTokenSource cancellationToken)
         {
-            _logger = logger;
-            _action = action ?? throw new ArgumentNullException();
+            _action = action;
             _cancellationToken = cancellationToken;
         }
 
-        public Task RunPeriodic(TimeSpan? interval = null)
+        public Task Run()
         {
-            interval = interval ?? TimeSpan.FromSeconds(1);
             return Task.Run(async () =>
             {
                 try
                 {
                     while (!_cancellationToken.IsCancellationRequested)
                     {
+                        await Task.Delay(TimeSpan.FromSeconds(1), _cancellationToken.Token);
                         await Device.InvokeOnMainThreadAsync(() =>
                         {
                             if (!_cancellationToken.IsCancellationRequested)
                             {
                                 try
                                 {
-                                    _action();
+                                    _action?.Invoke();
                                 }
                                 catch (Exception ex)
                                 {
-                                    _logger?.Exception(ex);
+                                    _logger?.Value?.Exception(ex);
                                 }
                             }
                         });
-                        await Task.Delay(interval.Value, _cancellationToken.Token);
+                        Console.WriteLine("TESTES TASK RUNNING");
                     }
                 }
                 catch (TaskCanceledException) { }
                 catch (Exception ex)
                 {
-                    _logger?.Exception(ex);
+                    _logger?.Value?.Exception(ex);
                 }
             }, _cancellationToken.Token);
         }

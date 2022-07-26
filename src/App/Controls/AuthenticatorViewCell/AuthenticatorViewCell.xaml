@@ -13,7 +13,7 @@
                        ColumnDefinitions="40,*,40,Auto,40"
                        RowSpacing="0"
                        Padding="0,10,0,0"
-                       RowDefinitions="*,*">
+                       RowDefinitions="Auto,Auto">
 
     <Grid.Resources>
         <u:IconGlyphConverter x:Key="iconGlyphConverter" />
@@ -48,8 +48,8 @@
         LineBreakMode="TailTruncation"
         Grid.Column="1"
         Grid.Row="0"
-        VerticalTextAlignment="Center"
-        VerticalOptions="Fill"
+        VerticalTextAlignment="End"
+        VerticalOptions="End"
         StyleClass="list-title, list-title-platform"
         Text="{Binding Cipher.Name}" />
 
@@ -57,8 +57,8 @@
         LineBreakMode="TailTruncation"
         Grid.Column="1"
         Grid.Row="1"
-        VerticalTextAlignment="Center"
-        VerticalOptions="Fill"
+        VerticalTextAlignment="Start"
+        VerticalOptions="Start"
         StyleClass="list-subtitle, list-subtitle-platform"
         Text="{Binding Cipher.SubTitle}" />
 

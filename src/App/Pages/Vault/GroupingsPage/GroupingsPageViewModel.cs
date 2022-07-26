@@ -39,7 +39,7 @@ namespace Bit.App.Pages
         private Dictionary<string, int> _collectionCounts = new Dictionary<string, int>();
         private Dictionary<CipherType, int> _typeCounts = new Dictionary<CipherType, int>();
         private int _deletedCount = 0;
-        private CancellationTokenSource _totpTickCts;
+        private CancellationTokenSource _totpTickCancellationToken;
         private Task _totpTickTask;
         private readonly ICipherService _cipherService;
         private readonly IFolderService _folderService;
@@ -299,7 +299,7 @@ namespace Bit.App.Pages
                 }
                 if (Ciphers?.Any() ?? false)
                 {
-                    CreateCipherGroupedItems(groupedItems);
+                    CreateCipherGroupedItems(ref groupedItems);
                 }
                 if (ShowNoFolderCipherGroup)
                 {
@@ -387,10 +387,10 @@ namespace Bit.App.Pages
             }
         }
 
-        private void CreateCipherGroupedItems(List<GroupingsPageListGroup> groupedItems)
+        private void CreateCipherGroupedItems(ref List<GroupingsPageListGroup> groupedItems)
         {
             var uppercaseGroupNames = _deviceActionService.DeviceType == DeviceType.iOS;
-            _totpTickCts?.Cancel();
+            _totpTickCancellationToken?.Cancel();
             if (TotpFilterEnable)
             {
                 var ciphersListItems = Ciphers.Where(c => c.IsDeleted == Deleted && !string.IsNullOrEmpty(c.Login.Totp))
@@ -411,14 +411,15 @@ namespace Bit.App.Pages
 
         private void StartCiphersTotpTick(List<GroupingsPageTOTPListItem> ciphersListItems)
         {
-            _totpTickCts?.Cancel();
-            _totpTickCts = new CancellationTokenSource();
-            _totpTickTask = new TimerTask(logger, () => ciphersListItems.ForEach(i => i.TotpTickAsync()), _totpTickCts).RunPeriodic();
+            _totpTickCancellationToken?.Cancel();
+            _totpTickCancellationToken = new CancellationTokenSource();
+            _totpTickTask = new TimerTask(() => { ciphersListItems.ForEach(i => i.TotpTickAsync()); }, _totpTickCancellationToken).Run();
         }
 
         public async Task StopCiphersTotpTick()
         {
-            _totpTickCts?.Cancel();
+            TotpFilterEnable = false;
+            _totpTickCancellationToken?.Cancel();
             if (_totpTickTask != null)
             {
                 await _totpTickTask;

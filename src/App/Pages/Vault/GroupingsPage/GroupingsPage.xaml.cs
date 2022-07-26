@@ -193,7 +193,7 @@ namespace Bit.App.Pages
         {
             base.OnDisappearing();
             IsBusy = false;
-            _vm.StopCiphersTotpTick();
+            await _vm.StopCiphersTotpTick();
             _broadcasterService.Unsubscribe(_pageName);
             _vm.DisableRefreshing();
             _accountAvatar?.OnDisappearing();
@@ -206,13 +206,6 @@ namespace Bit.App.Pages
             {
                 return;
             }
-
-            if (e.CurrentSelection?.FirstOrDefault() is GroupingsPageTOTPListItem totpItem)
-            {
-                await _vm.SelectCipherAsync(totpItem.Cipher);
-                return;
-            }
-
             if (!(e.CurrentSelection?.FirstOrDefault() is GroupingsPageListItem item))
             {
                 return;
