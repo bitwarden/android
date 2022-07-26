@@ -4084,5 +4084,53 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("RandomWord", resourceCulture);
             }
         }
+        
+        public static string EmailRequired {
+            get {
+                return ResourceManager.GetString("EmailRequired", resourceCulture);
+            }
+        }
+        
+        public static string DomainNameRequired {
+            get {
+                return ResourceManager.GetString("DomainNameRequired", resourceCulture);
+            }
+        }
+        
+        public static string APIKeyRequired {
+            get {
+                return ResourceManager.GetString("APIKeyRequired", resourceCulture);
+            }
+        }
+        
+        public static string Service {
+            get {
+                return ResourceManager.GetString("Service", resourceCulture);
+            }
+        }
+        
+        public static string AnonAddy {
+            get {
+                return ResourceManager.GetString("AnonAddy", resourceCulture);
+            }
+        }
+        
+        public static string FirefoxRelay {
+            get {
+                return ResourceManager.GetString("FirefoxRelay", resourceCulture);
+            }
+        }
+        
+        public static string SimpleLogin {
+            get {
+                return ResourceManager.GetString("SimpleLogin", resourceCulture);
+            }
+        }
+        
+        public static string APIAccessToken {
+            get {
+                return ResourceManager.GetString("APIAccessToken", resourceCulture);
+            }
+        }
     }
 }

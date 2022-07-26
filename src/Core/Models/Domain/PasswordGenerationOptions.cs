@@ -23,6 +23,8 @@
                 WordSeparator = "-";
                 Capitalize = false;
                 IncludeNumber = false;
+                RandomWordUsernameCapitalize = false;
+                RandomWordUsernameIncludeNumber = false;
             }
         }
 
@@ -41,6 +43,8 @@
         public string WordSeparator { get; set; }
         public bool? Capitalize { get; set; }
         public bool? IncludeNumber { get; set; }
+        public bool? RandomWordUsernameCapitalize { get; set; }
+        public bool? RandomWordUsernameIncludeNumber { get; set; }
 
         public void Merge(PasswordGenerationOptions defaults)
         {
@@ -59,6 +63,8 @@
             WordSeparator = WordSeparator ?? defaults.WordSeparator;
             Capitalize = Capitalize ?? defaults.Capitalize;
             IncludeNumber = IncludeNumber ?? defaults.IncludeNumber;
+            RandomWordUsernameCapitalize = RandomWordUsernameCapitalize ?? defaults.RandomWordUsernameCapitalize;
+            RandomWordUsernameIncludeNumber = RandomWordUsernameIncludeNumber ?? defaults.RandomWordUsernameIncludeNumber;
         }
     }
 }

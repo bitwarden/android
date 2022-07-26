@@ -5,6 +5,7 @@ using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.Domain;
 using Bit.Core.Utilities;
+using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
@@ -34,7 +35,16 @@ namespace Bit.App.Pages
         private int _typeSelectedIndex;
         private int _passwordTypeSelectedIndex;
         private int _usernameTypeSelectedIndex;
+        private int _serviceTypeSelectedIndex;
         private bool _doneIniting;
+        private string _plusAddressedEmail;
+        private string _catchAllEmailDomain;
+        private string _anonAddyApiAccessToken;
+        private string _anonAddyDomainName;
+        private string _firefoxRelayApiAccessToken;
+        private string _simpleLoginApiKey;
+        private bool _randomWordUsernameCapitalize;
+        private bool _randomWordUsernameIncludeNumber;
 
         public GeneratorPageViewModel()
         {
@@ -47,11 +57,17 @@ namespace Bit.App.Pages
             TypeOptions = new List<string> { AppResources.Password, AppResources.Username };
             PasswordTypeOptions = new List<string> { AppResources.Password, AppResources.Passphrase };
             UsernameTypeOptions = new List<string> { AppResources.PlusAddressedEmail, AppResources.CatchAllEmail, AppResources.ForwardedEmailAlias, AppResources.RandomWord };
+            ServiceTypeOptions = new List<string> { AppResources.AnonAddy, AppResources.FirefoxRelay, AppResources.SimpleLogin};
+
+            UsernameTypePromptHelpCommand = new Command(UsernameTypePromptHelp);
         }
 
         public List<string> TypeOptions { get; set; }
         public List<string> PasswordTypeOptions { get; set; }
         public List<string> UsernameTypeOptions { get; set; }
+        public List<string> ServiceTypeOptions { get; set; }
+
+        public Command UsernameTypePromptHelpCommand { get; set; }
 
         public string Password
         {
@@ -248,6 +264,18 @@ namespace Bit.App.Pages
             }
         }
 
+        public string PlusAddressedEmail
+        {
+            get => _plusAddressedEmail;
+            set
+            {
+                if(SetProperty(ref _plusAddressedEmail, value))
+                {
+                    _plusAddressedEmail = value;
+                }
+            }
+        }
+
         public PasswordGeneratorPolicyOptions EnforcedPolicyOptions
         {
             get => _enforcedPolicyOptions;
@@ -293,6 +321,111 @@ namespace Bit.App.Pages
             {
                 if (SetProperty(ref _usernameTypeSelectedIndex, value))
                 {
+                    _usernameTypeSelectedIndex = value;
+                    var task = SaveOptionsAsync();
+                }
+            }
+        }
+
+        public int ServiceTypeSelectedIndex
+        {
+            get => _serviceTypeSelectedIndex;
+            set
+            {
+                if (SetProperty(ref _serviceTypeSelectedIndex, value))
+                {
+                    _serviceTypeSelectedIndex = value;
+                    var task = SaveOptionsAsync();
+                }
+            }
+        }
+
+        public string CatchAllEmailDomain
+        {
+            get => _catchAllEmailDomain;
+            set
+            {
+                if (SetProperty(ref _catchAllEmailDomain, value))
+                {
+                    _catchAllEmailDomain = value;
+                    var task = SaveOptionsAsync();
+                }
+            }
+        }
+
+        public string AnonAddyApiAccessToken
+        {
+            get => _anonAddyApiAccessToken;
+            set
+            {
+                if (SetProperty(ref _anonAddyApiAccessToken, value))
+                {
+                    _anonAddyApiAccessToken = value;
+                    var task = SaveOptionsAsync();
+                }
+            }
+        }
+
+        public string AnonAddyDomainName
+        {
+            get => _anonAddyDomainName;
+            set
+            {
+                if (SetProperty(ref _anonAddyDomainName, value))
+                {
+                    _anonAddyDomainName = value;
+                    var task = SaveOptionsAsync();
+                }
+            }
+        }
+
+        public string FirefoxRelayApiAccessToken
+        {
+            get => _firefoxRelayApiAccessToken;
+            set
+            {
+                if (SetProperty(ref _firefoxRelayApiAccessToken, value))
+                {
+                    _firefoxRelayApiAccessToken = value;
+                    var task = SaveOptionsAsync();
+                }
+            }
+        }
+
+        public string SimpleLoginApiKey
+        {
+            get => _simpleLoginApiKey;
+            set
+            {
+                if (SetProperty(ref _simpleLoginApiKey, value))
+                {
+                    _simpleLoginApiKey = value;
+                    var task = SaveOptionsAsync();
+                }
+            }
+        }
+
+        public bool RandomWordUsernameCapitalize
+        {
+            get => _randomWordUsernameCapitalize;
+            set
+            {
+                if (SetProperty(ref _randomWordUsernameCapitalize, value))
+                {
+                    _randomWordUsernameCapitalize = value;
+                    var task = SaveOptionsAsync();
+                }
+            }
+        }
+
+        public bool RandomWordUsernameIncludeNumber
+        {
+            get => _randomWordUsernameIncludeNumber;
+            set
+            {
+                if (SetProperty(ref _randomWordUsernameIncludeNumber, value))
+                {
+                    _randomWordUsernameIncludeNumber = value;
                     var task = SaveOptionsAsync();
                 }
             }
@@ -359,6 +492,11 @@ namespace Bit.App.Pages
             _platformUtilsService.ShowToastForCopiedValue(AppResources.Password);
         }
 
+        public void UsernameTypePromptHelp()
+        {
+            _platformUtilsService.LaunchUri("https://bitwarden.com/help/generator/#username-types");
+        }
+
         private void LoadFromOptions()
         {
             AllowAmbiguousChars = _options.AllowAmbiguousChar.GetValueOrDefault();
@@ -375,6 +513,8 @@ namespace Bit.App.Pages
             Length = _options.Length.GetValueOrDefault(5);
             Capitalize = _options.Capitalize.GetValueOrDefault();
             IncludeNumber = _options.IncludeNumber.GetValueOrDefault();
+            RandomWordUsernameCapitalize = _options.RandomWordUsernameCapitalize.GetValueOrDefault();
+            RandomWordUsernameIncludeNumber = _options.RandomWordUsernameIncludeNumber.GetValueOrDefault();
         }
 
         private void SetOptions()
@@ -392,6 +532,8 @@ namespace Bit.App.Pages
             _options.Length = Length;
             _options.Capitalize = Capitalize;
             _options.IncludeNumber = IncludeNumber;
+            _options.RandomWordUsernameCapitalize = RandomWordUsernameCapitalize;
+            _options.RandomWordUsernameIncludeNumber = RandomWordUsernameIncludeNumber;
         }
     }
 }

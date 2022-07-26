@@ -2278,4 +2278,28 @@
   <data name="RandomWord" xml:space="preserve">
     <value>Random Word</value>
   </data>
+  <data name="EmailRequired" xml:space="preserve">
+    <value>Email (required)</value>
+  </data>
+  <data name="DomainNameRequired" xml:space="preserve">
+    <value>Domain Name (required)</value>
+  </data>
+  <data name="APIKeyRequired" xml:space="preserve">
+    <value>API Key (required)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Service</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>API Access Token</value>
+  </data>
 </root>

@@ -16,6 +16,7 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <u:InverseBoolConverter x:Key="inverseBool" />
+            <u:PickerIndexToBoolConverter x:Key="pickerIndexToBool" />
             <ToolbarItem Text="{u:I18n Cancel}" Clicked="Close_Clicked" Order="Primary" Priority="-1"
                          x:Name="_closeItem" x:Key="closeItem" />
             <ToolbarItem Text="{u:I18n Select}"
@@ -128,14 +129,133 @@
                                StyleClass="box-header, box-header-platform" />
                     </StackLayout>
                     <StackLayout StyleClass="box-row, box-row-input">
-                        <Label
-                            Text="{u:I18n UsernameType}"
-                            StyleClass="box-label" />
+                        <StackLayout Orientation="Horizontal">
+                            <Label
+                                Text="{u:I18n UsernameType}"
+                                StyleClass="box-label"
+                                VerticalOptions="Center"/>
+                            <controls:IconButton 
+                                StyleClass="box-row-button, box-row-button-platform"
+                                Text="{Binding Source={x:Static core:BitwardenIcons.QuestionCircle}}"
+                                Command="{Binding UsernameTypePromptHelpCommand}"
+                                TextColor="{DynamicResource HyperlinkColor}"
+                                AutomationProperties.IsInAccessibleTree="True"
+                                AutomationProperties.Name="{u:I18n ToggleVisibility}"
+                                VerticalOptions="Center"/>
+                        </StackLayout>
                         <Picker
                             x:Name="_usernameTypePicker"
                             ItemsSource="{Binding UsernameTypeOptions, Mode=OneTime}"
                             SelectedIndex="{Binding UsernameTypeSelectedIndex}"
                             StyleClass="box-value" />
+                    </StackLayout>
+                    <!--PLUS ADDRESSED EMAIL OPTIONS-->
+                    <StackLayout StyleClass="box-row, box-row-input"
+                                 IsVisible="{Binding UsernameTypeSelectedIndex, Converter={StaticResource pickerIndexToBool}, ConverterParameter=0}">
+                        <Label
+                            Text="{u:I18n EmailRequired}"
+                            StyleClass="box-label" />
+                        <Entry
+                            x:Name="_plusAddressedEmailEntry"
+                            Text="{Binding PlusAddressedEmail}"
+                            StyleClass="box-value" />
+                    </StackLayout>                    
+                    <!--CATCH-ALL EMAIL OPTIONS-->
+                    <StackLayout StyleClass="box-row, box-row-input"
+                                 IsVisible="{Binding UsernameTypeSelectedIndex, Converter={StaticResource pickerIndexToBool}, ConverterParameter=1}">
+                        <Label
+                            Text="{u:I18n DomainNameRequired}"
+                            StyleClass="box-label" />
+                        <Entry
+                            x:Name="_catchAllEmailDomainNameEntry"
+                            Text="{Binding CatchAllEmailDomain}"
+                            StyleClass="box-value" />
+                    </StackLayout>
+                    <!--FORWARDED EMAIL OPTIONS-->
+                    <StackLayout StyleClass="box-row, box-row-input"
+                                 IsVisible="{Binding UsernameTypeSelectedIndex, Converter={StaticResource pickerIndexToBool}, ConverterParameter=2}">
+                        <StackLayout StyleClass="box-row">
+                            <Label
+                                Text="{u:I18n Service}"
+                                StyleClass="box-label" />
+                            <Picker
+                                x:Name="_serviceTypePicker"
+                                ItemsSource="{Binding ServiceTypeOptions, Mode=OneTime}"
+                                SelectedIndex="{Binding ServiceTypeSelectedIndex}"
+                                StyleClass="box-value" />
+                        </StackLayout>
+                        <!--ANONADDY OPTIONS-->
+                        <StackLayout StyleClass="box-row"
+                                     IsVisible="{Binding ServiceTypeSelectedIndex, Converter={StaticResource pickerIndexToBool}, ConverterParameter=0}">
+                            <Label
+                                Text="{u:I18n APIAccessToken}"
+                                StyleClass="box-label" />
+                            <Entry
+                                x:Name="_anonAddyApiAccessTokenEntry"
+                                Text="{Binding AnonAddyApiAccessToken}"
+                                IsPassword="true"
+                                StyleClass="box-value" />
+                            <Label
+                                Text="{u:I18n DomainNameRequired}"
+                                StyleClass="box-label" />
+                            <Entry
+                                x:Name="_anonAddyDomainNameEntry"
+                                Text="{Binding AnonAddyDomainName}"
+                                StyleClass="box-value" />
+                        </StackLayout>
+                        <!--FIREFOX REALY OPTIONS-->
+                        <StackLayout StyleClass="box-row"
+                                     IsVisible="{Binding ServiceTypeSelectedIndex, Converter={StaticResource pickerIndexToBool}, ConverterParameter=1}">
+                            <Label
+                                Text="{u:I18n APIAccessToken}"
+                                StyleClass="box-label" />
+                            <Entry
+                                x:Name="_firefoxRelayApiAccessTokenEntry"
+                                Text="{Binding FirefoxRelayApiAccessToken}"
+                                IsPassword="true"
+                                StyleClass="box-value" />
+                        </StackLayout>
+                        <!--SIMPLELOGIN OPTIONS-->
+                        <StackLayout StyleClass="box-row"
+                                     IsVisible="{Binding ServiceTypeSelectedIndex, Converter={StaticResource pickerIndexToBool}, ConverterParameter=2}">
+                            <Label
+                                Text="{u:I18n APIKeyRequired}"
+                                StyleClass="box-label" />
+                            <Entry
+                                x:Name="_simpleLoginApiKeyEntry"
+                                Text="{Binding SimpleLoginApiKey}"
+                                IsPassword="true"
+                                StyleClass="box-value" />
+                        </StackLayout> 
+                    </StackLayout>                    
+                    <!--RANDOM WORD OPTIONS-->
+                    <StackLayout StyleClass="box-row, box-row-input"
+                                 IsVisible="{Binding UsernameTypeSelectedIndex, Converter={StaticResource pickerIndexToBool}, ConverterParameter=3}">
+                        <StackLayout StyleClass="box-row, box-row-switch">
+                            <Label
+                                Text="{u:I18n Capitalize}"
+                                StyleClass="box-label-regular"
+                                HorizontalOptions="StartAndExpand" />
+                            <Switch
+                                IsToggled="{Binding RandomWordUsernameCapitalize}"
+                                IsEnabled="{Binding EnforcedPolicyOptions.RandomWordUsernameCapitalize,
+                                    Converter={StaticResource inverseBool}}"
+                                StyleClass="box-value"
+                                HorizontalOptions="End" />
+                        </StackLayout>
+                        <BoxView StyleClass="box-row-separator" />
+                        <StackLayout StyleClass="box-row, box-row-switch">
+                            <Label
+                                Text="{u:I18n IncludeNumber}"
+                                StyleClass="box-label-regular"
+                                HorizontalOptions="StartAndExpand" />
+                            <Switch
+                                IsToggled="{Binding RandomWordUsernameIncludeNumber}"
+                                IsEnabled="{Binding EnforcedPolicyOptions.RandomWordUsernameIncludeNumber,
+                                    Converter={StaticResource inverseBool}}"
+                                StyleClass="box-value"
+                                HorizontalOptions="End" />
+                        </StackLayout>
                     </StackLayout>
                 </StackLayout>
                 <!--PASSWORD OPTIONS-->
