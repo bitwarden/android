@@ -45,6 +45,7 @@ namespace Bit.App.Pages
         private string _simpleLoginApiKey;
         private bool _randomWordUsernameCapitalize;
         private bool _randomWordUsernameIncludeNumber;
+        private bool _showTypePicker;
 
         public GeneratorPageViewModel()
         {
@@ -91,6 +92,12 @@ namespace Bit.App.Pages
         {
             get => _isUsername;
             set => SetProperty(ref _isUsername, value);
+        }
+
+        public bool ShowTypePicker
+        {
+            get => _showTypePicker;
+            set => SetProperty(ref _showTypePicker, value);
         }
 
         public int Length

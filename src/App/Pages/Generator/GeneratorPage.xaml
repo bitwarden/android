@@ -109,7 +109,9 @@
                     </Grid>
                 <BoxView StyleClass="box-row-separator" />
                 </StackLayout>
-                <StackLayout StyleClass="box">
+                <StackLayout
+                    StyleClass="box"
+                    IsVisible="{Binding ShowTypePicker}">
                     <StackLayout StyleClass="box-row">
                         <Label
                             Text="{u:I18n WhatWouldYouLikeToGenerate}"
