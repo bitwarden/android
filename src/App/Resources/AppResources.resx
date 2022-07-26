@@ -1573,11 +1573,11 @@
     <value>Nord</value>
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
-  <data name="BlacklistedUris" xml:space="preserve">
-    <value>Blacklisted URIs</value>
+  <data name="AutofillBlockedUris" xml:space="preserve">
+    <value>Auto-fill blocked URIs</value>
   </data>
-  <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>URIs that are blacklisted will not offer auto-fill. The list should be comma separated. Ex: "https://twitter.com, androidapp://com.twitter.android".</value>
+  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
+    <value>Auto-fill will not be offered for blocked URIs. Separate multiple URIs with a comma. For example: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>Ask to add login</value>
