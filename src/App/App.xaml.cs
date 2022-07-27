@@ -330,12 +330,12 @@ namespace Bit.App
                 var topPage = tabbedPage.Navigation.ModalStack[tabbedPage.Navigation.ModalStack.Count - 1];
                 if (topPage is NavigationPage navPage)
                 {
-                    if (navPage.CurrentPage is CipherDetailPage cipherDetailPage)
+                    if (navPage.CurrentPage is CipherDetailsPage cipherDetailsPage)
                     {
                         lastPageBeforeLock = new PreviousPageInfo
                         {
                             Page = "view",
-                            CipherId = cipherDetailPage.ViewModel.CipherId
+                            CipherId = cipherDetailsPage.ViewModel.CipherId
                         };
                     }
                     else if (navPage.CurrentPage is CipherAddEditPage cipherAddEditPage && cipherAddEditPage.ViewModel.EditMode)

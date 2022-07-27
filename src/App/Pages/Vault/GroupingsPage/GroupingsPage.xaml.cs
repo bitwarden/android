@@ -285,7 +285,7 @@ namespace Bit.App.Pages
             await _accountListOverlay.HideAsync();
             if (_previousPage.Page == "view" && !string.IsNullOrWhiteSpace(_previousPage.CipherId))
             {
-                await Navigation.PushModalAsync(new NavigationPage(new CipherDetailPage(_previousPage.CipherId)));
+                await Navigation.PushModalAsync(new NavigationPage(new CipherDetailsPage(_previousPage.CipherId)));
             }
             else if (_previousPage.Page == "edit" && !string.IsNullOrWhiteSpace(_previousPage.CipherId))
             {

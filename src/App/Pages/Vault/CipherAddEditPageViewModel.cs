@@ -274,7 +274,7 @@ namespace Bit.App.Pages
         public bool ShowOwnershipOptions => !EditMode || CloneMode;
         public bool OwnershipPolicyInEffect => ShowOwnershipOptions && !AllowPersonal;
         public bool CloneMode { get; set; }
-        public CipherDetailPage CipherDetailPage { get; set; }
+        public CipherDetailsPage CipherDetailsPage { get; set; }
         public bool IsLogin => Cipher?.Type == CipherType.Login;
         public bool IsIdentity => Cipher?.Type == CipherType.Identity;
         public bool IsCard => Cipher?.Type == CipherType.Card;
@@ -507,7 +507,7 @@ namespace Bit.App.Pages
                 {
                     if (CloneMode)
                     {
-                        CipherDetailPage?.UpdateCipherId(this.Cipher.Id);
+                        CipherDetailsPage?.UpdateCipherId(this.Cipher.Id);
                     }
                     // if the app is tombstoned then PopModalAsync would throw index out of bounds
                     if (Page.Navigation?.ModalStack?.Count > 0)

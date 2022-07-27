@@ -36,7 +36,7 @@ namespace Bit.App.Pages
             bool fromAutofill = false,
             AppOptions appOptions = null,
             bool cloneMode = false,
-            CipherDetailPage viewPage = null)
+            CipherDetailsPage cipherDetailsPage = null)
         {
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
@@ -57,7 +57,7 @@ namespace Bit.App.Pages
             _vm.DefaultName = name ?? appOptions?.SaveName;
             _vm.DefaultUri = uri ?? appOptions?.Uri;
             _vm.CloneMode = cloneMode;
-            _vm.CipherDetailPage = viewPage;
+            _vm.CipherDetailsPage = cipherDetailsPage;
             _vm.Init();
             SetActivityIndicator();
             if (_vm.EditMode && !_vm.CloneMode && Device.RuntimePlatform == Device.Android)

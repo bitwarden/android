@@ -378,7 +378,7 @@ namespace Bit.App.Pages
 
         public async Task SelectCipherAsync(CipherView cipher)
         {
-            var page = new CipherDetailPage(cipher.Id);
+            var page = new CipherDetailsPage(cipher.Id);
             await Page.Navigation.PushModalAsync(new NavigationPage(page));
         }
 

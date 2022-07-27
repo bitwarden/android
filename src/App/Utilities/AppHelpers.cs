@@ -85,7 +85,7 @@ namespace Bit.App.Utilities
             }
             else if (selection == AppResources.View)
             {
-                await page.Navigation.PushModalAsync(new NavigationPage(new CipherDetailPage(cipher.Id)));
+                await page.Navigation.PushModalAsync(new NavigationPage(new CipherDetailsPage(cipher.Id)));
             }
             else if (selection == AppResources.Edit)
             {

@@ -98,7 +98,7 @@
       <DependentUpon>PasswordHistoryPage.xaml</DependentUpon>
     </Compile>
     <Compile Update="Pages\Vault\CipherDetailPage.xaml.cs">
-      <DependentUpon>CipherDetailPage.xaml</DependentUpon>
+      <DependentUpon>CipherDetailsPage.xaml</DependentUpon>
     </Compile>
     <Compile Update="Pages\Vault\CipherAddEditPage.xaml.cs">
       <DependentUpon>CipherAddEditPage.xaml</DependentUpon>
