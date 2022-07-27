@@ -2759,15 +2759,15 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string BlacklistedUris {
+        public static string AutofillBlockedUris {
             get {
-                return ResourceManager.GetString("BlacklistedUris", resourceCulture);
+                return ResourceManager.GetString("AutofillBlockedUris", resourceCulture);
             }
         }
         
-        public static string BlacklistedUrisDescription {
+        public static string AutofillBlockedUrisDescription {
             get {
-                return ResourceManager.GetString("BlacklistedUrisDescription", resourceCulture);
+                return ResourceManager.GetString("AutofillBlockedUrisDescription", resourceCulture);
             }
         }
         
