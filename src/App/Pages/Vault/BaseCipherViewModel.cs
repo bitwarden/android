@@ -12,18 +12,13 @@ namespace Bit.App.Pages
 {
     public abstract class BaseCipherViewModel : BaseViewModel
     {
-        private CipherView _cipher;
         private readonly IAuditService _auditService;
         protected readonly IDeviceActionService _deviceActionService;
         protected readonly ILogger _logger;
         protected readonly IPlatformUtilsService _platformUtilsService;
+        private CipherView _cipher;
         protected abstract string[] AdditionalPropertiesToRaiseOnCipherChanged { get; }
 
-        public CipherView Cipher
-        {
-            get => _cipher;
-            set => SetProperty(ref _cipher, value, additionalPropertyNames: AdditionalPropertiesToRaiseOnCipherChanged);
-        }
         public AsyncCommand CheckPasswordCommand { get; }
 
         public BaseCipherViewModel()
@@ -34,6 +29,12 @@ namespace Bit.App.Pages
             _logger = ServiceContainer.Resolve<ILogger>("logger");
 
             CheckPasswordCommand = new AsyncCommand(CheckPasswordAsync, allowsMultipleExecutions: false);
+        }
+
+        public CipherView Cipher
+        {
+            get => _cipher;
+            set => SetProperty(ref _cipher, value, additionalPropertyNames: AdditionalPropertiesToRaiseOnCipherChanged);
         }
 
         protected async Task CheckPasswordAsync()
