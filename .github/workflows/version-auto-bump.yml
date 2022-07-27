@@ -39,8 +39,7 @@ jobs:
         uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579
 
       - name: Create Version Branch
-        run: |
-          git switch -c version_bump_${{ needs.setup.outputs.version_number}}
+        run: git switch -c version_bump_${{ needs.setup.outputs.version_number}}
 
       - name: Bump Version - Android XML
         uses: bitwarden/gh-actions/version-bump@03ad9a873c39cdc95dd8d77dbbda67f84db43945
