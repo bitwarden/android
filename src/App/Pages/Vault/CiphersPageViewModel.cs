@@ -10,7 +10,6 @@ using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
-using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -157,7 +156,7 @@ namespace Bit.App.Pages
             }
             if (selection == AppResources.View || string.IsNullOrWhiteSpace(AutofillUrl))
             {
-                var page = new ViewPage(cipher.Id);
+                var page = new CipherDetailPage(cipher.Id);
                 await Page.Navigation.PushModalAsync(new NavigationPage(page));
             }
             else if (selection == AppResources.Autofill || selection == AppResources.AutofillAndSave)

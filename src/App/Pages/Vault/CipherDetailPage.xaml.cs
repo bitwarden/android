@@ -9,18 +9,18 @@ using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
-    public partial class ViewPage : BaseContentPage
+    public partial class CipherDetailPage : BaseContentPage
     {
         private readonly IBroadcasterService _broadcasterService;
         private readonly ISyncService _syncService;
-        private ViewPageViewModel _vm;
+        private CipherDetailPageViewModel _vm;
 
-        public ViewPage(string cipherId)
+        public CipherDetailPage(string cipherId)
         {
             InitializeComponent();
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
-            _vm = BindingContext as ViewPageViewModel;
+            _vm = BindingContext as CipherDetailPageViewModel;
             _vm.Page = this;
             _vm.CipherId = cipherId;
             SetActivityIndicator(_mainContent);
@@ -40,7 +40,7 @@ namespace Bit.App.Pages
             }
         }
 
-        public ViewPageViewModel ViewModel => _vm;
+        public CipherDetailPageViewModel ViewModel => _vm;
 
         public void UpdateCipherId(string cipherId)
         {
@@ -55,7 +55,7 @@ namespace Bit.App.Pages
                 IsBusy = true;
             }
 
-            _broadcasterService.Subscribe(nameof(ViewPage), async (message) =>
+            _broadcasterService.Subscribe(nameof(CipherDetailPage), async (message) =>
             {
                 try
                 {
@@ -111,7 +111,7 @@ namespace Bit.App.Pages
         {
             base.OnDisappearing();
             IsBusy = false;
-            _broadcasterService.Unsubscribe(nameof(ViewPage));
+            _broadcasterService.Unsubscribe(nameof(CipherDetailPage));
             _vm.CleanUp();
         }
 
@@ -140,7 +140,7 @@ namespace Bit.App.Pages
                     {
                         return;
                     }
-                    await Navigation.PushModalAsync(new NavigationPage(new AddEditPage(_vm.CipherId)));
+                    await Navigation.PushModalAsync(new NavigationPage(new CipherAddEditPage(_vm.CipherId)));
                 }
             }
         }
@@ -212,7 +212,7 @@ namespace Bit.App.Pages
                 {
                     return;
                 }
-                var page = new AddEditPage(_vm.CipherId, cloneMode: true, viewPage: this);
+                var page = new CipherAddEditPage(_vm.CipherId, cloneMode: true, viewPage: this);
                 await Navigation.PushModalAsync(new NavigationPage(page));
             }
         }
@@ -267,7 +267,7 @@ namespace Bit.App.Pages
             }
             else if (selection == AppResources.Clone)
             {
-                var page = new AddEditPage(_vm.CipherId, cloneMode: true, viewPage: this);
+                var page = new CipherAddEditPage(_vm.CipherId, cloneMode: true, viewPage: this);
                 await Navigation.PushModalAsync(new NavigationPage(page));
             }
         }

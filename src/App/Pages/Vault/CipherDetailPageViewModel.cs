@@ -17,7 +17,7 @@ using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
-    public class ViewPageViewModel : BaseCipherViewModel
+    public class CipherDetailPageViewModel : BaseCipherViewModel
     {
         private readonly ICipherService _cipherService;
         private readonly IStateService _stateService;
@@ -29,7 +29,7 @@ namespace Bit.App.Pages
         private readonly IClipboardService _clipboardService;
 
         private CipherView _cipher;
-        private List<ViewPageFieldViewModel> _fields;
+        private List<CipherDetailPageFieldViewModel> _fields;
         private bool _canAccessPremium;
         private bool _showPassword;
         private bool _showCardNumber;
@@ -44,7 +44,7 @@ namespace Bit.App.Pages
         private string _attachmentFilename;
         private bool _passwordReprompted;
 
-        public ViewPageViewModel()
+        public CipherDetailPageViewModel()
         {
             _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
@@ -98,7 +98,7 @@ namespace Bit.App.Pages
                     nameof(CanEdit),
                 });
         }
-        public List<ViewPageFieldViewModel> Fields
+        public List<CipherDetailPageFieldViewModel> Fields
         {
             get => _fields;
             set => SetProperty(ref _fields, value);
@@ -246,7 +246,7 @@ namespace Bit.App.Pages
             }
             Cipher = await cipher.DecryptAsync();
             CanAccessPremium = await _stateService.CanAccessPremiumAsync();
-            Fields = Cipher.Fields?.Select(f => new ViewPageFieldViewModel(this, Cipher, f)).ToList();
+            Fields = Cipher.Fields?.Select(f => new CipherDetailPageFieldViewModel(this, Cipher, f)).ToList();
 
             if (Cipher.Type == Core.Enums.CipherType.Login && !string.IsNullOrWhiteSpace(Cipher.Login.Totp) &&
                 (Cipher.OrganizationUseTotp || CanAccessPremium))
@@ -661,15 +661,15 @@ namespace Bit.App.Pages
         }
     }
 
-    public class ViewPageFieldViewModel : ExtendedViewModel
+    public class CipherDetailPageFieldViewModel : ExtendedViewModel
     {
         private II18nService _i18nService;
-        private ViewPageViewModel _vm;
+        private CipherDetailPageViewModel _vm;
         private FieldView _field;
         private CipherView _cipher;
         private bool _showHiddenValue;
 
-        public ViewPageFieldViewModel(ViewPageViewModel vm, CipherView cipher, FieldView field)
+        public CipherDetailPageFieldViewModel(CipherDetailPageViewModel vm, CipherView cipher, FieldView field)
         {
             _i18nService = ServiceContainer.Resolve<II18nService>("i18nService");
             _vm = vm;

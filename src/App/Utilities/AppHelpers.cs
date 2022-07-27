@@ -85,13 +85,13 @@ namespace Bit.App.Utilities
             }
             else if (selection == AppResources.View)
             {
-                await page.Navigation.PushModalAsync(new NavigationPage(new ViewPage(cipher.Id)));
+                await page.Navigation.PushModalAsync(new NavigationPage(new CipherDetailPage(cipher.Id)));
             }
             else if (selection == AppResources.Edit)
             {
                 if (cipher.Reprompt == CipherRepromptType.None || await passwordRepromptService.ShowPasswordPromptAsync())
                 {
-                    await page.Navigation.PushModalAsync(new NavigationPage(new AddEditPage(cipher.Id)));
+                    await page.Navigation.PushModalAsync(new NavigationPage(new CipherAddEditPage(cipher.Id)));
                 }
             }
             else if (selection == AppResources.CopyUsername)
@@ -427,7 +427,7 @@ namespace Bit.App.Utilities
             {
                 if (appOptions.FromAutofillFramework && appOptions.SaveType.HasValue)
                 {
-                    Application.Current.MainPage = new NavigationPage(new AddEditPage(appOptions: appOptions));
+                    Application.Current.MainPage = new NavigationPage(new CipherAddEditPage(appOptions: appOptions));
                     return true;
                 }
                 if (appOptions.Uri != null)

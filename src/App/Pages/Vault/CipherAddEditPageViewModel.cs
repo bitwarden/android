@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Bit.App.Abstractions;
 using Bit.App.Models;
 using Bit.App.Resources;
 using Bit.Core;
@@ -11,12 +10,11 @@ using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
-using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
-    public class AddEditPageViewModel : BaseCipherViewModel
+    public class CipherAddEditPageViewModel : BaseCipherViewModel
     {
         private readonly ICipherService _cipherService;
         private readonly IFolderService _folderService;
@@ -63,7 +61,7 @@ namespace Bit.App.Pages
                 new KeyValuePair<UriMatchType?, string>(UriMatchType.Never, AppResources.Never)
             };
 
-        public AddEditPageViewModel()
+        public CipherAddEditPageViewModel()
         {
             _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
             _folderService = ServiceContainer.Resolve<IFolderService>("folderService");
@@ -79,10 +77,10 @@ namespace Bit.App.Pages
             ToggleCardNumberCommand = new Command(ToggleCardNumber);
             ToggleCardCodeCommand = new Command(ToggleCardCode);
             UriOptionsCommand = new Command<LoginUriView>(UriOptions);
-            FieldOptionsCommand = new Command<AddEditPageFieldViewModel>(FieldOptions);
+            FieldOptionsCommand = new Command<CipherAddEditPageFieldViewModel>(FieldOptions);
             PasswordPromptHelpCommand = new Command(PasswordPromptHelp);
             Uris = new ExtendedObservableCollection<LoginUriView>();
-            Fields = new ExtendedObservableCollection<AddEditPageFieldViewModel>();
+            Fields = new ExtendedObservableCollection<CipherAddEditPageFieldViewModel>();
             Collections = new ExtendedObservableCollection<CollectionViewModel>();
             AllowPersonal = true;
 
@@ -155,7 +153,7 @@ namespace Bit.App.Pages
         public List<KeyValuePair<string, string>> FolderOptions { get; set; }
         public List<KeyValuePair<string, string>> OwnershipOptions { get; set; }
         public ExtendedObservableCollection<LoginUriView> Uris { get; set; }
-        public ExtendedObservableCollection<AddEditPageFieldViewModel> Fields { get; set; }
+        public ExtendedObservableCollection<CipherAddEditPageFieldViewModel> Fields { get; set; }
         public ExtendedObservableCollection<CollectionViewModel> Collections { get; set; }
 
         public int TypeSelectedIndex
@@ -276,7 +274,7 @@ namespace Bit.App.Pages
         public bool ShowOwnershipOptions => !EditMode || CloneMode;
         public bool OwnershipPolicyInEffect => ShowOwnershipOptions && !AllowPersonal;
         public bool CloneMode { get; set; }
-        public ViewPage ViewPage { get; set; }
+        public CipherDetailPage CipherDetailPage { get; set; }
         public bool IsLogin => Cipher?.Type == CipherType.Login;
         public bool IsIdentity => Cipher?.Type == CipherType.Identity;
         public bool IsCard => Cipher?.Type == CipherType.Card;
@@ -412,7 +410,7 @@ namespace Bit.App.Pages
                 }
                 if (Cipher.Fields != null)
                 {
-                    Fields.ResetWithRange(Cipher.Fields?.Select(f => new AddEditPageFieldViewModel(Cipher, f)));
+                    Fields.ResetWithRange(Cipher.Fields?.Select(f => new CipherAddEditPageFieldViewModel(Cipher, f)));
                 }
             }
 
@@ -500,7 +498,7 @@ namespace Bit.App.Pages
                     EditMode && !CloneMode ? AppResources.ItemUpdated : AppResources.NewItemCreated);
                 _messagingService.Send(EditMode && !CloneMode ? "editedCipher" : "addedCipher", Cipher.Id);
 
-                if (Page is AddEditPage page && page.FromAutofillFramework)
+                if (Page is CipherAddEditPage page && page.FromAutofillFramework)
                 {
                     // Close and go back to app
                     _deviceActionService.CloseAutofill();
@@ -509,7 +507,7 @@ namespace Bit.App.Pages
                 {
                     if (CloneMode)
                     {
-                        ViewPage?.UpdateCipherId(this.Cipher.Id);
+                        CipherDetailPage?.UpdateCipherId(this.Cipher.Id);
                     }
                     // if the app is tombstoned then PopModalAsync would throw index out of bounds
                     if (Page.Navigation?.ModalStack?.Count > 0)
@@ -594,7 +592,7 @@ namespace Bit.App.Pages
 
         public async void UriOptions(LoginUriView uri)
         {
-            if (!(Page as AddEditPage).DoOnce())
+            if (!(Page as CipherAddEditPage).DoOnce())
             {
                 return;
             }
@@ -630,9 +628,9 @@ namespace Bit.App.Pages
             Uris.Add(new LoginUriView());
         }
 
-        public async void FieldOptions(AddEditPageFieldViewModel field)
+        public async void FieldOptions(CipherAddEditPageFieldViewModel field)
         {
-            if (!(Page as AddEditPage).DoOnce())
+            if (!(Page as CipherAddEditPage).DoOnce())
             {
                 return;
             }
@@ -692,10 +690,10 @@ namespace Bit.App.Pages
                 }
                 if (Fields == null)
                 {
-                    Fields = new ExtendedObservableCollection<AddEditPageFieldViewModel>();
+                    Fields = new ExtendedObservableCollection<CipherAddEditPageFieldViewModel>();
                 }
                 var type = fieldTypeOptions.FirstOrDefault(f => f.Value == typeSelection).Key;
-                Fields.Add(new AddEditPageFieldViewModel(Cipher, new FieldView
+                Fields.Add(new CipherAddEditPageFieldViewModel(Cipher, new FieldView
                 {
                     Type = type,
                     Name = string.IsNullOrWhiteSpace(name) ? null : name,
@@ -827,7 +825,7 @@ namespace Bit.App.Pages
         }
     }
 
-    public class AddEditPageFieldViewModel : ExtendedViewModel
+    public class CipherAddEditPageFieldViewModel : ExtendedViewModel
     {
         private II18nService _i18nService;
         private FieldView _field;
@@ -843,7 +841,7 @@ namespace Bit.App.Pages
             nameof(IsLinkedType),
         };
 
-        public AddEditPageFieldViewModel(CipherView cipher, FieldView field)
+        public CipherAddEditPageFieldViewModel(CipherView cipher, FieldView field)
         {
             _i18nService = ServiceContainer.Resolve<II18nService>("i18nService");
             _cipher = cipher;

@@ -14,7 +14,7 @@ using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
 
 namespace Bit.App.Pages
 {
-    public partial class AddEditPage : BaseContentPage
+    public partial class CipherAddEditPage : BaseContentPage
     {
         private readonly AppOptions _appOptions;
         private readonly IStateService _stateService;
@@ -22,10 +22,10 @@ namespace Bit.App.Pages
         private readonly IVaultTimeoutService _vaultTimeoutService;
         private readonly IKeyConnectorService _keyConnectorService;
 
-        private AddEditPageViewModel _vm;
+        private CipherAddEditPageViewModel _vm;
         private bool _fromAutofill;
 
-        public AddEditPage(
+        public CipherAddEditPage(
             string cipherId = null,
             CipherType? type = null,
             string folderId = null,
@@ -36,7 +36,7 @@ namespace Bit.App.Pages
             bool fromAutofill = false,
             AppOptions appOptions = null,
             bool cloneMode = false,
-            ViewPage viewPage = null)
+            CipherDetailPage viewPage = null)
         {
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
@@ -47,7 +47,7 @@ namespace Bit.App.Pages
             _fromAutofill = fromAutofill;
             FromAutofillFramework = _appOptions?.FromAutofillFramework ?? false;
             InitializeComponent();
-            _vm = BindingContext as AddEditPageViewModel;
+            _vm = BindingContext as CipherAddEditPageViewModel;
             _vm.Page = this;
             _vm.CipherId = cipherId;
             _vm.FolderId = folderId == "none" ? null : folderId;
@@ -57,7 +57,7 @@ namespace Bit.App.Pages
             _vm.DefaultName = name ?? appOptions?.SaveName;
             _vm.DefaultUri = uri ?? appOptions?.Uri;
             _vm.CloneMode = cloneMode;
-            _vm.ViewPage = viewPage;
+            _vm.CipherDetailPage = viewPage;
             _vm.Init();
             SetActivityIndicator();
             if (_vm.EditMode && !_vm.CloneMode && Device.RuntimePlatform == Device.Android)
@@ -145,7 +145,7 @@ namespace Bit.App.Pages
         }
 
         public bool FromAutofillFramework { get; set; }
-        public AddEditPageViewModel ViewModel => _vm;
+        public CipherAddEditPageViewModel ViewModel => _vm;
 
         protected override async void OnAppearing()
         {

@@ -56,7 +56,6 @@ namespace Bit.App.Pages
             {
                 _logger.Exception(apiException);
                 await _deviceActionService.HideLoadingAsync();
-                apiException.Error = new Core.Models.Response.ErrorResponse();
                 if (apiException?.Error != null)
                 {
                     await _platformUtilsService.ShowDialogAsync(apiException.Error.GetSingleMessage(),
