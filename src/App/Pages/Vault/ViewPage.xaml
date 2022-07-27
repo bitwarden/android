@@ -215,7 +215,7 @@
                                     AutomationProperties.IsInAccessibleTree="True"
                                     AutomationProperties.Name="{u:I18n CopyTotp}" />
                                 <Label
-                                    Text="{u:I18n UpgradeToPremiumTotpText}"
+                                    Text="{u:I18n PremiumSubscriptionRequired}"
                                     StyleClass="box-footer-label"
                                     IsVisible="{Binding ShowUpgradePremiumTotpText}"
                                     Margin="0,5,0,2"

@@ -105,7 +105,7 @@ namespace Bit.App.Controls
 
         private void DrawArc(SKCanvas canvas, Circle circle, Func<float> progress, float strokewidth, SKColor color, SKColor progressEndColor)
         {
-            var progressValue = progress.Invoke();
+            var progressValue = progress();
             var angle = progressValue * 3.6f;
             canvas.DrawArc(circle.Rect, 270, angle, false,
                 new SKPaint()

@@ -108,6 +108,7 @@ namespace Bit.App.Pages
                     nameof(ShowIdentityAddress),
                     nameof(IsDeleted),
                     nameof(CanEdit),
+                    nameof(ShowUpgradePremiumTotpText)
                 });
         }
         public List<ViewPageFieldViewModel> Fields
@@ -271,7 +272,7 @@ namespace Bit.App.Pages
                 _totpTickHelper = new TotpHelper(Cipher);
                 _totpTickCancellationToken?.Cancel();
                 _totpTickCancellationToken = new CancellationTokenSource();
-                _totpTickTask = new TimerTask(StartCiphersTotpTick, _totpTickCancellationToken).Run();
+                _totpTickTask = new TimerTask(_logger, StartCiphersTotpTick, _totpTickCancellationToken).RunPeriodic();
             }
             if (_previousCipherId != CipherId)
             {
@@ -284,9 +285,16 @@ namespace Bit.App.Pages
 
         private async void StartCiphersTotpTick()
         {
-            await _totpTickHelper.GenerateNewTotpValues();
-            TotpSec = _totpTickHelper.TotpSec;
-            TotpCodeFormatted = _totpTickHelper.TotpCodeFormatted;
+            try
+            {
+                await _totpTickHelper.GenerateNewTotpValues();
+                TotpSec = _totpTickHelper.TotpSec;
+                TotpCodeFormatted = _totpTickHelper.TotpCodeFormatted;
+            }
+            catch (Exception ex)
+            {
+                _logger.Exception(ex);
+            }
         }
 
         public async Task StopCiphersTotpTick()
