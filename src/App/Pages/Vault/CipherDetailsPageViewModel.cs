@@ -28,7 +28,6 @@ namespace Bit.App.Pages
         private readonly ILocalizeService _localizeService;
         private readonly IClipboardService _clipboardService;
 
-        private CipherView _cipher;
         private List<CipherDetailsPageFieldViewModel> _fields;
         private bool _canAccessPremium;
         private bool _showPassword;
@@ -76,28 +75,23 @@ namespace Bit.App.Pages
         public Command ToggleCardCodeCommand { get; set; }
         public AsyncCommand<AttachmentView> DownloadAttachmentCommand { get; set; }
         public string CipherId { get; set; }
-        public override CipherView Cipher
+        protected override string[] AdditionalPropertiesToRaiseOnCipherChanged => new string[]
         {
-            get => _cipher;
-            set => SetProperty(ref _cipher, value,
-                additionalPropertyNames: new string[]
-                {
-                    nameof(IsLogin),
-                    nameof(IsIdentity),
-                    nameof(IsCard),
-                    nameof(IsSecureNote),
-                    nameof(ShowUris),
-                    nameof(ShowAttachments),
-                    nameof(ShowTotp),
-                    nameof(ColoredPassword),
-                    nameof(UpdatedText),
-                    nameof(PasswordUpdatedText),
-                    nameof(PasswordHistoryText),
-                    nameof(ShowIdentityAddress),
-                    nameof(IsDeleted),
-                    nameof(CanEdit),
-                });
-        }
+            nameof(IsLogin),
+            nameof(IsIdentity),
+            nameof(IsCard),
+            nameof(IsSecureNote),
+            nameof(ShowUris),
+            nameof(ShowAttachments),
+            nameof(ShowTotp),
+            nameof(ColoredPassword),
+            nameof(UpdatedText),
+            nameof(PasswordUpdatedText),
+            nameof(PasswordHistoryText),
+            nameof(ShowIdentityAddress),
+            nameof(IsDeleted),
+            nameof(CanEdit),
+        };
         public List<CipherDetailsPageFieldViewModel> Fields
         {
             get => _fields;

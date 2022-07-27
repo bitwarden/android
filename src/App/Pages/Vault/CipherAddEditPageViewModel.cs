@@ -25,7 +25,6 @@ namespace Bit.App.Pages
         private readonly IEventService _eventService;
         private readonly IPolicyService _policyService;
 
-        private CipherView _cipher;
         private bool _showNotesSeparator;
         private bool _showPassword;
         private bool _showCardNumber;
@@ -39,7 +38,7 @@ namespace Bit.App.Pages
         private bool _hasCollections;
         private string _previousCipherId;
         private List<Core.Models.View.CollectionView> _writeableCollections;
-        private string[] _additionalCipherProperties = new string[]
+        protected override string[] AdditionalPropertiesToRaiseOnCipherChanged => new string[]
         {
             nameof(IsLogin),
             nameof(IsIdentity),
@@ -49,6 +48,7 @@ namespace Bit.App.Pages
             nameof(ShowAttachments),
             nameof(ShowCollections),
         };
+
         private List<KeyValuePair<UriMatchType?, string>> _matchDetectionOptions =
             new List<KeyValuePair<UriMatchType?, string>>
             {
@@ -221,11 +221,6 @@ namespace Bit.App.Pages
                     OrganizationChanged();
                 }
             }
-        }
-        public override CipherView Cipher
-        {
-            get => _cipher;
-            set => SetProperty(ref _cipher, value, additionalPropertyNames: _additionalCipherProperties);
         }
         public bool ShowNotesSeparator
         {
@@ -821,7 +816,7 @@ namespace Bit.App.Pages
 
         private void TriggerCipherChanged()
         {
-            TriggerPropertyChanged(nameof(Cipher), _additionalCipherProperties);
+            TriggerPropertyChanged(nameof(Cipher), AdditionalPropertiesToRaiseOnCipherChanged);
         }
     }
 

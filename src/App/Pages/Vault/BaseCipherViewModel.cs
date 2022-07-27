@@ -12,13 +12,15 @@ namespace Bit.App.Pages
 {
     public abstract class BaseCipherViewModel : BaseViewModel
     {
+        private CipherView _cipher;
         private readonly IAuditService _auditService;
         protected readonly IDeviceActionService _deviceActionService;
         protected readonly ILogger _logger;
         protected readonly IPlatformUtilsService _platformUtilsService;
+        protected abstract string[] AdditionalPropertiesToRaiseOnCipherChanged { get; }
 
-        public abstract CipherView Cipher { get; set; }
-        public AsyncCommand CheckPasswordCommand { get; set; }
+        public CipherView Cipher { get => _cipher; set => SetProperty(ref _cipher, value, additionalPropertyNames: AdditionalPropertiesToRaiseOnCipherChanged); }
+        public AsyncCommand CheckPasswordCommand { get; }
 
         public BaseCipherViewModel()
         {
@@ -34,7 +36,7 @@ namespace Bit.App.Pages
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(Cipher.Login?.Password))
+                if (string.IsNullOrWhiteSpace(Cipher?.Login?.Password))
                 {
                     return;
                 }
@@ -42,15 +44,10 @@ namespace Bit.App.Pages
                 await _deviceActionService.ShowLoadingAsync(AppResources.CheckingPassword);
                 var matches = await _auditService.PasswordLeakedAsync(Cipher.Login.Password);
                 await _deviceActionService.HideLoadingAsync();
-                if (matches > 0)
-                {
-                    await _platformUtilsService.ShowDialogAsync(string.Format(AppResources.PasswordExposed,
-                        matches.ToString("N0")));
-                }
-                else
-                {
-                    await _platformUtilsService.ShowDialogAsync(AppResources.PasswordSafe);
-                }
+
+                await _platformUtilsService.ShowDialogAsync(matches > 0
+                ? string.Format(AppResources.PasswordExposed, matches.ToString("N0"))
+                : AppResources.PasswordSafe);
             }
             catch (ApiException apiException)
             {
