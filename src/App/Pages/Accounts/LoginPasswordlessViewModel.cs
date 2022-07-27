@@ -6,12 +6,16 @@ using Bit.Core.Utilities;
 using Xamarin.Forms;
 using Bit.App.Utilities;
 using System.Linq;
+using Xamarin.CommunityToolkit.ObjectModel;
+using System.Windows.Input;
 
 namespace Bit.App.Pages
 {
     public class LoginPasswordlessViewModel : BaseViewModel
     {
-        private IStateService _stateService;
+        private IAuthService _authService;
+        private IPlatformUtilsService _platformUtilsService;
+        private ILogger _logger;
         private string _logInAttempByLabel;
         private string _deviceType;
         private FormattedString _fingerprintPhraseFormatted;
@@ -24,9 +28,23 @@ namespace Bit.App.Pages
 
         public LoginPasswordlessViewModel()
         {
-            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            _authService = ServiceContainer.Resolve<IAuthService>("authService");
+            _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
+            _logger = ServiceContainer.Resolve<ILogger>("logger");
+
             PageTitle = AppResources.LogInRequested;
+
+            AcceptRequestCommand = new AsyncCommand(AcceptRequestAsync,
+                onException: ex => _logger.Exception(ex),
+                allowsMultipleExecutions: false);
+            RejectRequestCommand = new AsyncCommand(RejectRequestAsync,
+                onException: ex => _logger.Exception(ex),
+                allowsMultipleExecutions: false);
         }
+
+        public ICommand AcceptRequestCommand { get; }
+
+        public ICommand RejectRequestCommand { get; }
 
         public string Email
         {
@@ -138,6 +156,34 @@ namespace Bit.App.Pages
             }
 
             return RequestDate.ToShortTimeString();
+        }
+
+        private async Task AcceptRequestAsync()
+        {
+            try
+            {
+                var res = await _authService.LogInPasswordlessAcceptAsync();
+                await ((LoginPasswordlessPage)this.Page).Close();
+                _platformUtilsService.ShowToast("info", null, AppResources.LogInAccepted);
+            }
+            catch (Exception ex)
+            {
+                _logger.Exception(ex);
+            }
+        }
+
+        private async Task RejectRequestAsync()
+        {
+            try
+            {
+                var res = await _authService.LogInPasswordlessRejectAsync();
+                await ((LoginPasswordlessPage)this.Page).Close();
+                _platformUtilsService.ShowToast("info", null, AppResources.LogInDenied);
+            }
+            catch (Exception ex)
+            {
+                _logger.Exception(ex);
+            }
         }
     }
 }

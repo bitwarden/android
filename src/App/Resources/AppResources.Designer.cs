@@ -4132,5 +4132,17 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("MinutesAgo", resourceCulture);
             }
         }
+        
+        public static string LogInAccepted {
+            get {
+                return ResourceManager.GetString("LogInAccepted", resourceCulture);
+            }
+        }
+        
+        public static string LogInDenied {
+            get {
+                return ResourceManager.GetString("LogInDenied", resourceCulture);
+            }
+        }
     }
 }

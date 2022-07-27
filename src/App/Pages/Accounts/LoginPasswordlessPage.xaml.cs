@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Bit.App.Pages
 {
@@ -20,6 +21,11 @@ namespace Bit.App.Pages
         }
 
         private async void Close_Clicked(object sender, System.EventArgs e)
+        {
+            await Close();
+        }
+
+        public async Task Close()
         {
             if (DoOnce())
             {

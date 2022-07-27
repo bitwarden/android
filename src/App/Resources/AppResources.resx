@@ -2305,4 +2305,10 @@
   <data name="MinutesAgo" xml:space="preserve">
     <value>minutes ago</value>
   </data>
+  <data name="LogInAccepted" xml:space="preserve">
+    <value>Log in accepted</value>
+  </data>
+  <data name="LogInDenied" xml:space="preserve">
+    <value>Log in denied</value>
+  </data>
 </root>

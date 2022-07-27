@@ -25,6 +25,11 @@ namespace Bit.Core.Abstractions
         Task<AuthResult> LogInSsoAsync(string code, string codeVerifier, string redirectUrl, string orgId);
         Task<AuthResult> LogInCompleteAsync(string email, string masterPassword, TwoFactorProviderType twoFactorProvider, string twoFactorToken, bool? remember = null);
         Task<AuthResult> LogInTwoFactorAsync(TwoFactorProviderType twoFactorProvider, string twoFactorToken, string captchaToken, bool? remember = null);
+
+        Task<AuthResult> GetLogInPasswordlessRequestsAsync();
+        Task<AuthResult> LogInPasswordlessAcceptAsync();
+        Task<AuthResult> LogInPasswordlessRejectAsync();
+
         void LogOut(Action callback);
         void Init();
     }
