@@ -1,10 +1,12 @@
-﻿namespace Bit.App.Pages
+﻿using System;
+
+namespace Bit.App.Pages
 {
     public partial class LoginPasswordlessPage : BaseContentPage
     {
         private LoginPasswordlessViewModel _vm;
 
-        public LoginPasswordlessPage(string email, string deviceType, string ipAddress, string location, string fingerprintPhrase)
+        public LoginPasswordlessPage(string fingerprintPhrase, string email, string deviceType, string ipAddress, string location, DateTime requestDate)
         {
             InitializeComponent();
             _vm = BindingContext as LoginPasswordlessViewModel;
@@ -14,12 +16,7 @@
             _vm.IpAddress = ipAddress;
             _vm.NearLocation = location;
             _vm.FingerprintPhrase = fingerprintPhrase;
-        }
-
-        protected override void OnAppearing()
-        {
-            _vm.InitAsync();
-            base.OnAppearing();
+            _vm.RequestDate = requestDate;
         }
 
         private async void Close_Clicked(object sender, System.EventArgs e)

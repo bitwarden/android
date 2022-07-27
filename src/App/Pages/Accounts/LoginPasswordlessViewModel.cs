@@ -12,17 +12,15 @@ namespace Bit.App.Pages
     public class LoginPasswordlessViewModel : BaseViewModel
     {
         private IStateService _stateService;
-
-        public string Email { get; set; }
-        public string LogInAttempByLabel { get; set; }
-        public string FingerprintPhrase { get; set; }
-        public FormattedString FingerprintPhraseFormatted { get; set; }
-        public string DeviceType { get; set; }
-        public string IpAddress { get; set; }
-        public string NearLocation { get; set; }
-        public string TimeOfRequest { get; set; }
-        public DateTime RequestDate { get; set; }
-
+        private string _logInAttempByLabel;
+        private string _deviceType;
+        private FormattedString _fingerprintPhraseFormatted;
+        private string _fingerprintPhrase;
+        private string _email;
+        private string _timeOfRequest;
+        private DateTime _requestDate;
+        private string _nearLocation;
+        private string _ipAddress;
 
         public LoginPasswordlessViewModel()
         {
@@ -30,17 +28,78 @@ namespace Bit.App.Pages
             PageTitle = AppResources.LogInRequested;
         }
 
-        public async Task InitAsync()
+        public string Email
         {
-            LogInAttempByLabel = string.Format(AppResources.LogInAttemptByOn, Email, "bitwarden login test");
-            FingerprintPhraseFormatted = CreateFingerprintPhrase();
-            TimeOfRequest = CreateRequestDate();
-            UpdateScreen();
+            get => _email;
+            set
+            {
+                LogInAttempByLabel = string.Format(AppResources.LogInAttemptByOn, value, "bitwarden login test");
+                SetProperty(ref _email, value);
+            }
         }
 
-        private FormattedString CreateFingerprintPhrase()
+        public string FingerprintPhrase
         {
-            var fingerprintList = FingerprintPhrase.Split('-').ToList();
+            get => _fingerprintPhrase;
+            set
+            {
+                FingerprintPhraseFormatted = CreateFingerprintPhrase(value);
+                SetProperty(ref _fingerprintPhrase, value);
+            }
+        }
+
+        public FormattedString FingerprintPhraseFormatted
+        {
+            get => _fingerprintPhraseFormatted;
+            set => SetProperty(ref _fingerprintPhraseFormatted, value);
+        }
+
+        public string LogInAttempByLabel
+        {
+            get => _logInAttempByLabel;
+            set => SetProperty(ref _logInAttempByLabel, value);
+        }
+
+        public string DeviceType
+        {
+            get => _deviceType;
+            set => SetProperty(ref _deviceType, value);
+        }
+
+        public string IpAddress
+        {
+            get => _ipAddress;
+            set => SetProperty(ref _ipAddress, value);
+        }
+
+        public string NearLocation
+        {
+            get => _nearLocation;
+            set => SetProperty(ref _nearLocation, value);
+        }
+
+        public DateTime RequestDate
+        {
+            get => _requestDate;
+            set
+            {
+                TimeOfRequestText = CreateRequestDate();
+                SetProperty(ref _requestDate, value);
+            }
+        }
+
+        public string TimeOfRequestText
+        {
+            get => _timeOfRequest;
+            set
+            {
+                SetProperty(ref _timeOfRequest, value);
+            }
+        }
+
+        private FormattedString CreateFingerprintPhrase(string fingerprintPhrase)
+        {
+            var fingerprintList = fingerprintPhrase.Split('-').ToList();
             var fs = new FormattedString();
             var lastFingerprint = fingerprintList.LastOrDefault();
 
@@ -79,16 +138,6 @@ namespace Bit.App.Pages
             }
 
             return RequestDate.ToShortTimeString();
-        }
-
-        public void UpdateScreen()
-        {
-            TriggerPropertyChanged(nameof(LogInAttempByLabel));
-            TriggerPropertyChanged(nameof(FingerprintPhraseFormatted));
-            TriggerPropertyChanged(nameof(DeviceType));
-            TriggerPropertyChanged(nameof(IpAddress));
-            TriggerPropertyChanged(nameof(NearLocation));
-            TriggerPropertyChanged(nameof(TimeOfRequest));
         }
     }
 }
