@@ -16,20 +16,16 @@ using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
-    public class AddEditPageViewModel : BaseViewModel
+    public class AddEditPageViewModel : BaseCipherViewModel
     {
-        private readonly IDeviceActionService _deviceActionService;
         private readonly ICipherService _cipherService;
         private readonly IFolderService _folderService;
         private readonly ICollectionService _collectionService;
         private readonly IStateService _stateService;
         private readonly IOrganizationService _organizationService;
-        private readonly IPlatformUtilsService _platformUtilsService;
-        private readonly IAuditService _auditService;
         private readonly IMessagingService _messagingService;
         private readonly IEventService _eventService;
         private readonly IPolicyService _policyService;
-        private readonly ILogger _logger;
 
         private CipherView _cipher;
         private bool _showNotesSeparator;
@@ -69,24 +65,19 @@ namespace Bit.App.Pages
 
         public AddEditPageViewModel()
         {
-            _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
             _folderService = ServiceContainer.Resolve<IFolderService>("folderService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _organizationService = ServiceContainer.Resolve<IOrganizationService>("organizationService");
-            _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
-            _auditService = ServiceContainer.Resolve<IAuditService>("auditService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _collectionService = ServiceContainer.Resolve<ICollectionService>("collectionService");
             _eventService = ServiceContainer.Resolve<IEventService>("eventService");
             _policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
-            _logger = ServiceContainer.Resolve<ILogger>("logger");
 
             GeneratePasswordCommand = new Command(GeneratePassword);
             TogglePasswordCommand = new Command(TogglePassword);
             ToggleCardNumberCommand = new Command(ToggleCardNumber);
             ToggleCardCodeCommand = new Command(ToggleCardCode);
-            CheckPasswordCommand = new AsyncCommand(CheckPasswordAsync, allowsMultipleExecutions:false);
             UriOptionsCommand = new Command<LoginUriView>(UriOptions);
             FieldOptionsCommand = new Command<AddEditPageFieldViewModel>(FieldOptions);
             PasswordPromptHelpCommand = new Command(PasswordPromptHelp);
@@ -147,7 +138,6 @@ namespace Bit.App.Pages
         public Command TogglePasswordCommand { get; set; }
         public Command ToggleCardNumberCommand { get; set; }
         public Command ToggleCardCodeCommand { get; set; }
-        public AsyncCommand CheckPasswordCommand { get; set; }
         public Command UriOptionsCommand { get; set; }
         public Command FieldOptionsCommand { get; set; }
         public Command PasswordPromptHelpCommand { get; set; }
@@ -234,7 +224,7 @@ namespace Bit.App.Pages
                 }
             }
         }
-        public CipherView Cipher
+        public override CipherView Cipher
         {
             get => _cipher;
             set => SetProperty(ref _cipher, value, additionalPropertyNames: _additionalCipherProperties);
@@ -834,47 +824,6 @@ namespace Bit.App.Pages
         private void TriggerCipherChanged()
         {
             TriggerPropertyChanged(nameof(Cipher), _additionalCipherProperties);
-        }
-
-        private async Task CheckPasswordAsync()
-        {
-            if (string.IsNullOrWhiteSpace(Cipher.Login?.Password))
-            {
-                return;
-            }
-
-            await _deviceActionService.ShowLoadingAsync(AppResources.CheckingPassword);
-            try
-            {
-                var matches = await _auditService.PasswordLeakedAsync(Cipher.Login.Password);
-                await _deviceActionService.HideLoadingAsync();
-                if (matches > 0)
-                {
-                    await _platformUtilsService.ShowDialogAsync(string.Format(AppResources.PasswordExposed,
-                        matches.ToString("N0")));
-                }
-                else
-                {
-                    await _platformUtilsService.ShowDialogAsync(AppResources.PasswordSafe);
-                }
-            }
-            catch (ApiException apiException)
-            {
-                _logger.Exception(apiException);
-                await _deviceActionService.HideLoadingAsync();
-                apiException.Error = new Core.Models.Response.ErrorResponse();
-                if (apiException?.Error != null)
-                {
-                    await _platformUtilsService.ShowDialogAsync(apiException.Error.GetSingleMessage(),
-                        AppResources.AnErrorHasOccurred);
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.Exception(ex);
-                await _deviceActionService.HideLoadingAsync();
-                await _platformUtilsService.ShowDialogAsync(AppResources.AnErrorHasOccurred);
-            }
         }
     }
 

@@ -17,20 +17,16 @@ using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
-    public class ViewPageViewModel : BaseViewModel
+    public class ViewPageViewModel : BaseCipherViewModel
     {
-        private readonly IDeviceActionService _deviceActionService;
         private readonly ICipherService _cipherService;
         private readonly IStateService _stateService;
         private readonly ITotpService _totpService;
-        private readonly IPlatformUtilsService _platformUtilsService;
-        private readonly IAuditService _auditService;
         private readonly IMessagingService _messagingService;
         private readonly IEventService _eventService;
         private readonly IPasswordRepromptService _passwordRepromptService;
         private readonly ILocalizeService _localizeService;
         private readonly IClipboardService _clipboardService;
-        private readonly ILogger _logger;
 
         private CipherView _cipher;
         private List<ViewPageFieldViewModel> _fields;
@@ -50,18 +46,14 @@ namespace Bit.App.Pages
 
         public ViewPageViewModel()
         {
-            _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _totpService = ServiceContainer.Resolve<ITotpService>("totpService");
-            _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
-            _auditService = ServiceContainer.Resolve<IAuditService>("auditService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _eventService = ServiceContainer.Resolve<IEventService>("eventService");
             _passwordRepromptService = ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService");
             _localizeService = ServiceContainer.Resolve<ILocalizeService>("localizeService");
             _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
-            _logger = ServiceContainer.Resolve<ILogger>("logger");
 
             CopyCommand = new AsyncCommand<string>((id) => CopyAsync(id, null), onException: ex => _logger.Exception(ex), allowsMultipleExecutions: false);
             CopyUriCommand = new AsyncCommand<LoginUriView>(uriView => CopyAsync("LoginUri", uriView.Uri), onException: ex => _logger.Exception(ex), allowsMultipleExecutions: false);
@@ -70,7 +62,6 @@ namespace Bit.App.Pages
             TogglePasswordCommand = new Command(TogglePassword);
             ToggleCardNumberCommand = new Command(ToggleCardNumber);
             ToggleCardCodeCommand = new Command(ToggleCardCode);
-            CheckPasswordCommand = new AsyncCommand(CheckPasswordAsync, allowsMultipleExecutions: false);
             DownloadAttachmentCommand = new AsyncCommand<AttachmentView>(DownloadAttachmentAsync, allowsMultipleExecutions: false);
 
             PageTitle = AppResources.ViewItem;
@@ -83,10 +74,9 @@ namespace Bit.App.Pages
         public Command TogglePasswordCommand { get; set; }
         public Command ToggleCardNumberCommand { get; set; }
         public Command ToggleCardCodeCommand { get; set; }
-        public AsyncCommand CheckPasswordCommand { get; set; }
         public AsyncCommand<AttachmentView> DownloadAttachmentCommand { get; set; }
         public string CipherId { get; set; }
-        public CipherView Cipher
+        public override CipherView Cipher
         {
             get => _cipher;
             set => SetProperty(ref _cipher, value,
@@ -455,97 +445,52 @@ namespace Bit.App.Pages
             }
         }
 
-        private async Task CheckPasswordAsync()
-        {
-            if (string.IsNullOrWhiteSpace(Cipher.Login?.Password))
-            {
-                return;
-            }
-            if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
-            {
-                await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
-                    AppResources.InternetConnectionRequiredTitle);
-                return;
-            }
-            await _deviceActionService.ShowLoadingAsync(AppResources.CheckingPassword);
-            try
-            {
-                var matches = await _auditService.PasswordLeakedAsync(Cipher.Login.Password);
-                await _deviceActionService.HideLoadingAsync();
-                if (matches > 0)
-                {
-                    await _platformUtilsService.ShowDialogAsync(string.Format(AppResources.PasswordExposed,
-                        matches.ToString("N0")));
-                }
-                else
-                {
-                    await _platformUtilsService.ShowDialogAsync(AppResources.PasswordSafe);
-                }
-            }
-            catch(ApiException apiException)
-            {
-                _logger.Exception(apiException);
-                await _deviceActionService.HideLoadingAsync();
-                if (apiException?.Error != null)
-                {
-                    await _platformUtilsService.ShowDialogAsync(apiException.Error.GetSingleMessage(),
-                        AppResources.AnErrorHasOccurred);
-                }
-            }
-            catch(Exception ex)
-            {
-                _logger.Exception(ex);
-                await _deviceActionService.HideLoadingAsync();
-                await _platformUtilsService.ShowDialogAsync(AppResources.AnErrorHasOccurred);
-            }
-        }
-
         private async Task DownloadAttachmentAsync(AttachmentView attachment)
         {
-            if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
-            {
-                await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
-                    AppResources.InternetConnectionRequiredTitle);
-                return;
-            }
-            if (Cipher.OrganizationId == null && !CanAccessPremium)
-            {
-                await _platformUtilsService.ShowDialogAsync(AppResources.PremiumRequired);
-                return;
-            }
-            if (attachment.FileSize >= 10485760) // 10 MB
-            {
-                var confirmed = await _platformUtilsService.ShowDialogAsync(
-                    string.Format(AppResources.AttachmentLargeWarning, attachment.SizeName), null,
-                    AppResources.Yes, AppResources.No);
-                if (!confirmed)
-                {
-                    return;
-                }
-            }
-
-            var canOpenFile = true;
-            if (!_deviceActionService.CanOpenFile(attachment.FileName))
-            {
-                if (Device.RuntimePlatform == Device.iOS)
-                {
-                    // iOS is currently hardcoded to always return CanOpenFile == true, but should it ever return false
-                    // for any reason we want to be sure to catch it here.
-                    await _platformUtilsService.ShowDialogAsync(AppResources.UnableToOpenFile);
-                    return;
-                }
-
-                canOpenFile = false;
-            }
-
-            if (!await PromptPasswordAsync())
-            {
-                return;
-            }
-
-            await _deviceActionService.ShowLoadingAsync(AppResources.Downloading);
             try
             {
+                if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
+                {
+                    await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
+                        AppResources.InternetConnectionRequiredTitle);
+                    return;
+                }
+                if (Cipher.OrganizationId == null && !CanAccessPremium)
+                {
+                    await _platformUtilsService.ShowDialogAsync(AppResources.PremiumRequired);
+                    return;
+                }
+                if (attachment.FileSize >= 10485760) // 10 MB
+                {
+                    var confirmed = await _platformUtilsService.ShowDialogAsync(
+                        string.Format(AppResources.AttachmentLargeWarning, attachment.SizeName), null,
+                        AppResources.Yes, AppResources.No);
+                    if (!confirmed)
+                    {
+                        return;
+                    }
+                }
+
+                var canOpenFile = true;
+                if (!_deviceActionService.CanOpenFile(attachment.FileName))
+                {
+                    if (Device.RuntimePlatform == Device.iOS)
+                    {
+                        // iOS is currently hardcoded to always return CanOpenFile == true, but should it ever return false
+                        // for any reason we want to be sure to catch it here.
+                        await _platformUtilsService.ShowDialogAsync(AppResources.UnableToOpenFile);
+                        return;
+                    }
+
+                    canOpenFile = false;
+                }
+
+                if (!await PromptPasswordAsync())
+                {
+                    return;
+                }
+
+                await _deviceActionService.ShowLoadingAsync(AppResources.Downloading);
                 var data = await _cipherService.DownloadAndDecryptAttachmentAsync(Cipher.Id, attachment, Cipher.OrganizationId);
                 await _deviceActionService.HideLoadingAsync();
                 if (data == null)
@@ -572,7 +517,7 @@ namespace Bit.App.Pages
                     OpenAttachment(data, attachment);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.Exception(ex);
                 await _deviceActionService.HideLoadingAsync();
