@@ -137,11 +137,11 @@ namespace Bit.App.Pages
             }
             if (_appOptions.FillType.HasValue && _appOptions.FillType != CipherType.Login)
             {
-                var pageForOther = new AddEditPage(type: _appOptions.FillType, fromAutofill: true);
+                var pageForOther = new CipherAddEditPage(type: _appOptions.FillType, fromAutofill: true);
                 await Navigation.PushModalAsync(new NavigationPage(pageForOther));
                 return;
             }
-            var pageForLogin = new AddEditPage(null, CipherType.Login, uri: _vm.Uri, name: _vm.Name,
+            var pageForLogin = new CipherAddEditPage(null, CipherType.Login, uri: _vm.Uri, name: _vm.Name,
                 fromAutofill: true);
             await Navigation.PushModalAsync(new NavigationPage(pageForLogin));
         }
