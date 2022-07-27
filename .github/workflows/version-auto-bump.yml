@@ -4,6 +4,8 @@ name: Version Auto Bump
 on:
   release:
     types: [published]
+  # For testing only
+  workflow_dispatch:
 
 
 jobs:
@@ -27,95 +29,40 @@ jobs:
           ((CURR_VER++))
           NEW_VER=$CURR_MAJOR$CURR_VER
 
+          echo $NEW_VER
+
           echo "::set-output name=new-version::$NEW_VER"
 
-  bump_version:
-    name: "Create version_bump branch"
+  trigger_version_bump:
+    name: "Trigger version bump workflow"
     runs-on: ubuntu-20.04
     needs:
       - setup
     steps:
-      - name: Checkout Branch
-        uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579
+      - name: Login to Azure
+        uses: Azure/login@ec3c14589bd3e9312b3cc8c41e6860e258df9010
+        with:
+          creds: ${{ secrets.AZURE_PROD_KV_CREDENTIALS }}
 
-      - name: Create Version Branch
+      - name: Retrieve secrets
+        id: retrieve-secrets
+        env:
+          KEYVAULT: bitwarden-prod-kv
+          SECRET: "github-pat-bitwarden-devops-bot-repo-scope"
         run: |
-          git switch -c version_bump_${{ needs.setup.outputs.version_number}}
+          VALUE=$(az keyvault secret show --vault-name $KEYVAULT --name $SECRET --query value --output tsv)
+          echo "::add-mask::$VALUE"
+          echo "::set-output name=$SECRET::$VALUE"
 
-      - name: Bump Version - Android XML
-        uses: bitwarden/gh-actions/version-bump@03ad9a873c39cdc95dd8d77dbbda67f84db43945
-        with:
-          version: ${{ needs.setup.outputs.version_number}}
-          file_path: "./src/Android/Properties/AndroidManifest.xml"
-
-      - name: Bump Version - iOS.Autofill
-        uses: bitwarden/gh-actions/version-bump@03ad9a873c39cdc95dd8d77dbbda67f84db43945
-        with:
-          version: ${{ needs.setup.outputs.version_number}}
-          file_path: "./src/iOS.Autofill/Info.plist"
-
-      - name: Bump Version - iOS.Extension
-        uses: bitwarden/gh-actions/version-bump@03ad9a873c39cdc95dd8d77dbbda67f84db43945
-        with:
-          version: ${{ needs.setup.outputs.version_number}}
-          file_path: "./src/iOS.Extension/Info.plist"
-
-      - name: Bump Version - iOS.ShareExtension
-        uses: bitwarden/gh-actions/version-bump@03ad9a873c39cdc95dd8d77dbbda67f84db43945
-        with:
-          version: ${{ needs.setup.outputs.version_number}}
-          file_path: "./src/iOS.ShareExtension/Info.plist"
-
-      - name: Bump Version - iOS
-        uses: bitwarden/gh-actions/version-bump@03ad9a873c39cdc95dd8d77dbbda67f84db43945
-        with:
-          version: ${{ needs.setup.outputs.version_number}}
-          file_path: "./src/iOS/Info.plist"
-
-      - name: Setup git
+      - name: Call GitHub API to trigger workflow bump
+        env:
+          TOKEN: ${{ steps.retrieve-secrets.outputs.github-pat-bitwarden-devops-bot-repo-scope }}
+          VERSION: ${{ needs.setup.outputs.version_number}}
         run: |
-          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-
-      - name: Check if version changed
-        id: version-changed
-        run: |
-          if [ -n "$(git status --porcelain)" ]; then
-            echo "::set-output name=changes_to_commit::TRUE"
-          else
-            echo "::set-output name=changes_to_commit::FALSE"
-            echo "No changes to commit!";
-          fi
-
-      - name: Commit files
-        if: ${{ steps.version-changed.outputs.changes_to_commit == 'TRUE' }}
-        run: |
-          git commit -m "Bumped version to ${{ needs.setup.outputs.version_number}}" -a
-
-      # - name: Push changes
-      #   if: ${{ steps.version-changed.outputs.changes_to_commit == 'TRUE' }}
-      #   run: git push -u origin version_bump_${{ needs.setup.outputs.version_number}}
-
-      # - name: Create Version PR
-      #   if: ${{ steps.version-changed.outputs.changes_to_commit == 'TRUE' }}
-      #   env:
-      #     PR_BRANCH: "version_bump_${{ needs.setup.outputs.version_number}}"
-      #     GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-      #     BASE_BRANCH: master
-      #     TITLE: "Bump version to ${{ needs.setup.outputs.version_number}}"
-      #   run: |
-      #     gh pr create --title "$TITLE" \
-      #       --base "$BASE" \
-      #       --head "$PR_BRANCH" \
-      #       --label "version update" \
-      #       --label "automated pr" \
-      #       --body "
-      #         ## Type of change
-      #         - [ ] Bug fix
-      #         - [ ] New feature development
-      #         - [ ] Tech debt (refactoring, code cleanup, dependency upgrades, etc)
-      #         - [ ] Build/deploy pipeline (DevOps)
-      #         - [X] Other
-
-      #         ## Objective
-      #         Automated version bump to ${{ needs.setup.outputs.version_number}}"
+          JSON_STRING=$(printf '{"ref":"master", "inputs": { "version_number":"%s"}}' "$VERSION")
+          curl \
+            -X POST \
+            -i -u bitwarden-devops-bot:$TOKEN \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/bitwarden/mobile/actions/workflows/version-bump.yml/dispatches \
+            -d $JSON_STRING
