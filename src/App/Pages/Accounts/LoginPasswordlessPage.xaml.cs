@@ -1,16 +1,25 @@
-﻿using Bit.App.Models;
-using Bit.App.Resources;
-using Bit.App.Utilities;
-using Bit.Core.Utilities;
-using Xamarin.Forms;
-
-namespace Bit.App.Pages
+﻿namespace Bit.App.Pages
 {
-    public partial class LoginPasswordlessPage : Bit.App.Pages.BaseContentPage
+    public partial class LoginPasswordlessPage : BaseContentPage
     {
-        public LoginPasswordlessPage()
+        private LoginPasswordlessViewModel _vm;
+
+        public LoginPasswordlessPage(string email, string deviceType, string ipAddress, string location, string fingerprintPhrase)
         {
             InitializeComponent();
+            _vm = BindingContext as LoginPasswordlessViewModel;
+            _vm.Page = this;
+            _vm.Email = email;
+            _vm.DeviceType = deviceType;
+            _vm.IpAddress = ipAddress;
+            _vm.NearLocation = location;
+            _vm.FingerprintPhrase = fingerprintPhrase;
+        }
+
+        protected override void OnAppearing()
+        {
+            _vm.InitAsync();
+            base.OnAppearing();
         }
 
         private async void Close_Clicked(object sender, System.EventArgs e)

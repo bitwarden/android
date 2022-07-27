@@ -2269,4 +2269,40 @@
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Are you sure you want to enable Screen Capture?</value>
   </data>
+  <data name="LogInRequested" xml:space="preserve">
+    <value>Log in requested</value>
+  </data>
+  <data name="AreYouTryingToLogIn" xml:space="preserve">
+    <value>Are you trying to log in?</value>
+  </data>
+  <data name="LogInAttemptByOn" xml:space="preserve">
+    <value>Log in attempt by {0} on {1}</value>
+  </data>
+  <data name="FingerprintPhrase" xml:space="preserve">
+    <value>Fingerprint phrase</value>
+  </data>
+  <data name="DeviceType" xml:space="preserve">
+    <value>Device Type</value>
+  </data>
+  <data name="IpAddress" xml:space="preserve">
+    <value>IP Address</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Time</value>
+  </data>
+  <data name="Near" xml:space="preserve">
+    <value>Near</value>
+  </data>
+  <data name="ConfirmLogIn" xml:space="preserve">
+    <value>Confirm Log In</value>
+  </data>
+  <data name="DenyLogIn" xml:space="preserve">
+    <value>Deny Log In</value>
+  </data>
+  <data name="JustNow" xml:space="preserve">
+    <value>Just Now</value>
+  </data>
+  <data name="MinutesAgo" xml:space="preserve">
+    <value>minutes ago</value>
+  </data>
 </root>
