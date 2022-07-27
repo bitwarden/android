@@ -19,7 +19,11 @@ namespace Bit.App.Pages
         protected readonly IPlatformUtilsService _platformUtilsService;
         protected abstract string[] AdditionalPropertiesToRaiseOnCipherChanged { get; }
 
-        public CipherView Cipher { get => _cipher; set => SetProperty(ref _cipher, value, additionalPropertyNames: AdditionalPropertiesToRaiseOnCipherChanged); }
+        public CipherView Cipher
+        {
+            get => _cipher;
+            set => SetProperty(ref _cipher, value, additionalPropertyNames: AdditionalPropertiesToRaiseOnCipherChanged);
+        }
         public AsyncCommand CheckPasswordCommand { get; }
 
         public BaseCipherViewModel()
@@ -46,8 +50,8 @@ namespace Bit.App.Pages
                 await _deviceActionService.HideLoadingAsync();
 
                 await _platformUtilsService.ShowDialogAsync(matches > 0
-                ? string.Format(AppResources.PasswordExposed, matches.ToString("N0"))
-                : AppResources.PasswordSafe);
+                    ? string.Format(AppResources.PasswordExposed, matches.ToString("N0"))
+                    : AppResources.PasswordSafe);
             }
             catch (ApiException apiException)
             {
