@@ -54,15 +54,15 @@ jobs:
           echo "::add-mask::$VALUE"
           echo "::set-output name=$SECRET::$VALUE"
 
-      - name: Call GitHub API to trigger workflow bump
-        env:
-          TOKEN: ${{ steps.retrieve-secrets.outputs.github-pat-bitwarden-devops-bot-repo-scope }}
-          VERSION: ${{ needs.setup.outputs.version_number}}
-        run: |
-          JSON_STRING=$(printf '{"ref":"master", "inputs": { "version_number":"%s"}}' "$VERSION")
-          curl \
-            -X POST \
-            -i -u bitwarden-devops-bot:$TOKEN \
-            -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/bitwarden/mobile/actions/workflows/version-bump.yml/dispatches \
-            -d $JSON_STRING
+      # - name: Call GitHub API to trigger workflow bump
+      #   env:
+      #     TOKEN: ${{ steps.retrieve-secrets.outputs.github-pat-bitwarden-devops-bot-repo-scope }}
+      #     VERSION: ${{ needs.setup.outputs.version_number}}
+      #   run: |
+      #     JSON_STRING=$(printf '{"ref":"master", "inputs": { "version_number":"%s"}}' "$VERSION")
+      #     curl \
+      #       -X POST \
+      #       -i -u bitwarden-devops-bot:$TOKEN \
+      #       -H "Accept: application/vnd.github.v3+json" \
+      #       https://api.github.com/repos/bitwarden/mobile/actions/workflows/version-bump.yml/dispatches \
+      #       -d $JSON_STRING
