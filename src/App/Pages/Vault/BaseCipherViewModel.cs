@@ -19,8 +19,6 @@ namespace Bit.App.Pages
         private CipherView _cipher;
         protected abstract string[] AdditionalPropertiesToRaiseOnCipherChanged { get; }
 
-        public AsyncCommand CheckPasswordCommand { get; }
-
         public BaseCipherViewModel()
         {
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
@@ -36,6 +34,8 @@ namespace Bit.App.Pages
             get => _cipher;
             set => SetProperty(ref _cipher, value, additionalPropertyNames: AdditionalPropertiesToRaiseOnCipherChanged);
         }
+
+        public AsyncCommand CheckPasswordCommand { get; }
 
         protected async Task CheckPasswordAsync()
         {
