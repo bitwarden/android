@@ -1,13 +1,13 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Bit.App.Resources;
+using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
-using Xamarin.Forms;
-using Bit.App.Utilities;
-using System.Linq;
 using Xamarin.CommunityToolkit.ObjectModel;
-using System.Windows.Input;
+using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
@@ -128,7 +128,7 @@ namespace Bit.App.Pages
                     Text = fingerprint
                 });
 
-                if(fingerprint == lastFingerprint)
+                if (fingerprint == lastFingerprint)
                 {
                     break;
                 }
@@ -139,18 +139,18 @@ namespace Bit.App.Pages
                     TextColor = ThemeManager.GetResourceColor("DangerColor")
                 });
             }
-           
+
             return fs;
         }
 
         private string CreateRequestDate()
         {
             var minutesSinceRequest = RequestDate.ToUniversalTime().Minute - DateTime.UtcNow.Minute;
-            if(minutesSinceRequest < 5)
+            if (minutesSinceRequest < 5)
             {
-                return  AppResources.JustNow;
+                return AppResources.JustNow;
             }
-            if(minutesSinceRequest < 59)
+            if (minutesSinceRequest < 59)
             {
                 return $"{minutesSinceRequest} {AppResources.MinutesAgo}";
             }
