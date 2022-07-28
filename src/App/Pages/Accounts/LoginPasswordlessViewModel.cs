@@ -46,12 +46,14 @@ namespace Bit.App.Pages
 
         public ICommand RejectRequestCommand { get; }
 
+        public string Origin { get; set; }
+
         public string Email
         {
             get => _email;
             set
             {
-                LogInAttempByLabel = string.Format(AppResources.LogInAttemptByOn, value, "bitwarden login test");
+                LogInAttempByLabel = string.Format(AppResources.LogInAttemptByOn, value, Origin);
                 SetProperty(ref _email, value);
             }
         }
