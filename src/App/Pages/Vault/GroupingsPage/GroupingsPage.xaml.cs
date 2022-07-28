@@ -271,7 +271,7 @@ namespace Bit.App.Pages
             }
             if (!_vm.Deleted && DoOnce())
             {
-                var page = new AddEditPage(null, _vm.Type, _vm.FolderId, _vm.CollectionId, _vm.GetVaultFilterOrgId());
+                var page = new CipherAddEditPage(null, _vm.Type, _vm.FolderId, _vm.CollectionId, _vm.GetVaultFilterOrgId());
                 await Navigation.PushModalAsync(new NavigationPage(page));
             }
         }
@@ -285,11 +285,11 @@ namespace Bit.App.Pages
             await _accountListOverlay.HideAsync();
             if (_previousPage.Page == "view" && !string.IsNullOrWhiteSpace(_previousPage.CipherId))
             {
-                await Navigation.PushModalAsync(new NavigationPage(new ViewPage(_previousPage.CipherId)));
+                await Navigation.PushModalAsync(new NavigationPage(new CipherDetailsPage(_previousPage.CipherId)));
             }
             else if (_previousPage.Page == "edit" && !string.IsNullOrWhiteSpace(_previousPage.CipherId))
             {
-                await Navigation.PushModalAsync(new NavigationPage(new AddEditPage(_previousPage.CipherId)));
+                await Navigation.PushModalAsync(new NavigationPage(new CipherAddEditPage(_previousPage.CipherId)));
             }
             _previousPage = null;
         }
