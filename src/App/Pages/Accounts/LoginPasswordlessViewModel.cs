@@ -163,7 +163,7 @@ namespace Bit.App.Pages
             try
             {
                 var res = await _authService.LogInPasswordlessAcceptAsync();
-                await ((LoginPasswordlessPage)this.Page).Close();
+                await Page.Navigation.PopModalAsync();
                 _platformUtilsService.ShowToast("info", null, AppResources.LogInAccepted);
             }
             catch (Exception ex)
@@ -177,7 +177,7 @@ namespace Bit.App.Pages
             try
             {
                 var res = await _authService.LogInPasswordlessRejectAsync();
-                await ((LoginPasswordlessPage)this.Page).Close();
+                await Page.Navigation.PopModalAsync();
                 _platformUtilsService.ShowToast("info", null, AppResources.LogInDenied);
             }
             catch (Exception ex)

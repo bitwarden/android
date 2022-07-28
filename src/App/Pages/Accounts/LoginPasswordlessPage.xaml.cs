@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
@@ -18,14 +19,14 @@ namespace Bit.App.Pages
             _vm.NearLocation = location;
             _vm.FingerprintPhrase = fingerprintPhrase;
             _vm.RequestDate = requestDate;
+
+            if (Device.RuntimePlatform == Device.iOS)
+            {
+                ToolbarItems.Add(_closeItem);
+            }
         }
 
         private async void Close_Clicked(object sender, System.EventArgs e)
-        {
-            await Close();
-        }
-
-        public async Task Close()
         {
             if (DoOnce())
             {
