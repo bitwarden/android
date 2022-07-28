@@ -1,0 +1,15 @@
+name: Version Auto Bump
+
+on:
+  # For testing only
+  workflow_dispatch:
+    inputs: {}
+
+jobs:
+
+  setup:
+    name: "Setup"
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Stub for testing
+        run: echo "this is a stub"
