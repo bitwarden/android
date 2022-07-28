@@ -38,6 +38,7 @@ namespace Bit.iOS.ShareExtension
 
         Lazy<UIStoryboard> _storyboard = new Lazy<UIStoryboard>(() => UIStoryboard.FromName(STORYBOARD_NAME, null));
 
+        private readonly Lazy<AppOptions> _appOptions = new Lazy<AppOptions>(() => new AppOptions { IosExtension = true });
         private App.App _app = null;
         private UIViewController _currentModalController;
         private bool _presentingOnNavigationPage;
@@ -279,10 +280,10 @@ namespace Bit.iOS.ShareExtension
         {
             if (_app is null)
             {
-                var app = new App.App(new AppOptions { IosExtension = true });
+                var app = new App.App(_appOptions.Value);
                 ThemeManager.SetTheme(app.Resources);
             }
-            ThemeManager.ApplyResourcesToPage(page);
+            ThemeManager.ApplyResourcesTo(page);
             return _app;
         }
 
@@ -307,7 +308,7 @@ namespace Bit.iOS.ShareExtension
         {
             var environmentPage = new EnvironmentPage();
             SetupAppAndApplyResources(environmentPage);
-            ThemeManager.ApplyResourcesToPage(environmentPage);
+            ThemeManager.ApplyResourcesTo(environmentPage);
             if (environmentPage.BindingContext is EnvironmentPageViewModel vm)
             {
                 vm.SubmitSuccessAction = () => DismissAndLaunch(() => LaunchHomePage());
@@ -331,7 +332,7 @@ namespace Bit.iOS.ShareExtension
 
         private void LaunchLoginFlow(string email = null)
         {
-            var loginPage = new LoginPage(email);
+            var loginPage = new LoginPage(email, _appOptions.Value);
             SetupAppAndApplyResources(loginPage);
             if (loginPage.BindingContext is LoginPageViewModel vm)
             {
