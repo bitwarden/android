@@ -13,13 +13,18 @@ namespace Bit.App.Pages
             InitializeComponent();
             _vm = BindingContext as LoginPasswordlessViewModel;
             _vm.Page = this;
-            _vm.Origin = origin;
-            _vm.Email = email;
-            _vm.DeviceType = deviceType;
-            _vm.IpAddress = ipAddress;
-            _vm.NearLocation = location;
-            _vm.FingerprintPhrase = fingerprintPhrase;
-            _vm.RequestDate = requestDate;
+
+            _vm.LoginRequest = new LoginPasswordlessDetails()
+            {
+                Origin = origin,
+                Email = email,
+                DeviceType = deviceType,
+                IpAddress = ipAddress,
+                NearLocation = location,
+                FingerprintPhrase = fingerprintPhrase,
+                RequestDate = requestDate,
+            };
+
             if (Device.RuntimePlatform == Device.iOS)
             {
                 ToolbarItems.Add(_closeItem);

@@ -2281,7 +2281,7 @@
   <data name="AreYouTryingToLogIn" xml:space="preserve">
     <value>Are you trying to log in?</value>
   </data>
-  <data name="LogInAttemptByOn" xml:space="preserve">
+  <data name="LogInAttemptByXOnY" xml:space="preserve">
     <value>Log in attempt by {0} on {1}</value>
   </data>
   <data name="FingerprintPhrase" xml:space="preserve">
@@ -2309,7 +2309,7 @@
     <value>Just Now</value>
   </data>
   <data name="MinutesAgo" xml:space="preserve">
-    <value>minutes ago</value>
+    <value>{0} minutes ago</value>
   </data>
   <data name="LogInAccepted" xml:space="preserve">
     <value>Log in accepted</value>

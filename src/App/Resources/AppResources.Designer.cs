@@ -4091,9 +4091,9 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string LogInAttemptByOn {
+        public static string LogInAttemptByXOnY {
             get {
-                return ResourceManager.GetString("LogInAttemptByOn", resourceCulture);
+                return ResourceManager.GetString("LogInAttemptByXOnY", resourceCulture);
             }
         }
         
