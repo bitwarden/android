@@ -42,13 +42,13 @@ namespace Bit.App.Utilities.Helpers
             }
             else if (selection == AppResources.View)
             {
-                await page.Navigation.PushModalAsync(new NavigationPage(new ViewPage(cipher.Id)));
+                await page.Navigation.PushModalAsync(new NavigationPage(new CipherDetailsPage(cipher.Id)));
             }
             else if (selection == AppResources.Edit)
             {
                 if (await RepromptPasswordIfNeededAsync(cipher))
                 {
-                    await page.Navigation.PushModalAsync(new NavigationPage(new AddEditPage(cipher.Id)));
+                    await page.Navigation.PushModalAsync(new NavigationPage(new CipherAddEditPage(cipher.Id)));
                 }
             }
             else if (selection == AppResources.CopyUsername)

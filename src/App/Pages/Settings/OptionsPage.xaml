@@ -132,20 +132,20 @@
             <StackLayout StyleClass="box" IsVisible="{Binding ShowAndroidAutofillSettings}">
                 <StackLayout StyleClass="box-row, box-row-input">
                     <Label
-                        Text="{u:I18n BlacklistedUris}"
+                        Text="{u:I18n AutofillBlockedUris}"
                         StyleClass="box-label" />
                     <Editor
-                        x:Name="_blacklistedUrisEditor"
-                        Text="{Binding AutofillBlacklistedUris}"
+                        x:Name="_autofillBlockedUrisEditor"
+                        Text="{Binding AutofillBlockedUris}"
                         StyleClass="box-value"
                         AutoSize="TextChanges"
                         IsSpellCheckEnabled="False"
                         IsTextPredictionEnabled="False"
                         Keyboard="Url"
-                        Unfocused="BlacklistedUrisEditor_Unfocused" />
+                        Unfocused="AutofillBlockedUrisEditor_Unfocused" />
                 </StackLayout>
                 <Label
-                    Text="{u:I18n BlacklistedUrisDescription}"
+                    Text="{u:I18n AutofillBlockedUrisDescription}"
                     StyleClass="box-footer-label" />
             </StackLayout>
         </StackLayout>

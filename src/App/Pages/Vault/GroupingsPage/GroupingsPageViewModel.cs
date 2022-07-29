@@ -303,7 +303,7 @@ namespace Bit.App.Pages
                         }
                     }, AppResources.Trash, _deletedCount, uppercaseGroupNames, false));
                 }
-                
+
                 // TODO: refactor this
                 if (Device.RuntimePlatform == Device.Android
                     ||
@@ -383,7 +383,7 @@ namespace Bit.App.Pages
 
         public async Task SelectCipherAsync(CipherView cipher)
         {
-            var page = new ViewPage(cipher.Id);
+            var page = new CipherDetailsPage(cipher.Id);
             await Page.Navigation.PushModalAsync(new NavigationPage(page));
         }
 

@@ -301,7 +301,7 @@ namespace Bit.App.Utilities
             {
                 if (appOptions.FromAutofillFramework && appOptions.SaveType.HasValue)
                 {
-                    Application.Current.MainPage = new NavigationPage(new AddEditPage(appOptions: appOptions));
+                    Application.Current.MainPage = new NavigationPage(new CipherAddEditPage(appOptions: appOptions));
                     return true;
                 }
                 if (appOptions.Uri != null)

@@ -159,7 +159,7 @@ namespace Bit.App.Pages
             }
             if (selection == AppResources.View || string.IsNullOrWhiteSpace(AutofillUrl))
             {
-                var page = new ViewPage(cipher.Id);
+                var page = new CipherDetailsPage(cipher.Id);
                 await Page.Navigation.PushModalAsync(new NavigationPage(page));
             }
             else if (selection == AppResources.Autofill || selection == AppResources.AutofillAndSave)
