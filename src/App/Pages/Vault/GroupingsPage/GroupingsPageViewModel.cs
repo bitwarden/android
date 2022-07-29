@@ -651,7 +651,7 @@ namespace Bit.App.Pages
                 }
                 catch (Xamarin.Essentials.FeatureNotSupportedException)
                 {
-                }                
+                }
             }
         }
 
