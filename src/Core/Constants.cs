@@ -29,7 +29,7 @@
         public static string EventCollectionKey = "eventCollection";
         public static string RememberedEmailKey = "rememberedEmail";
         public static string RememberedOrgIdentifierKey = "rememberedOrgIdentifier";
-        public static string FingerprintPhraseSeparator = "-";
+        public const string FingerprintPhraseSeparator = "-";
         public const int SelectFileRequestCode = 42;
         public const int SelectFilePermissionRequestCode = 43;
         public const int SaveFileRequestCode = 44;

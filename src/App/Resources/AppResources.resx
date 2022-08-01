@@ -2308,7 +2308,7 @@
   <data name="JustNow" xml:space="preserve">
     <value>Just Now</value>
   </data>
-  <data name="MinutesAgo" xml:space="preserve">
+  <data name="XMinutesAgo" xml:space="preserve">
     <value>{0} minutes ago</value>
   </data>
   <data name="LogInAccepted" xml:space="preserve">

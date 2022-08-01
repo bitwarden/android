@@ -4139,9 +4139,9 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string MinutesAgo {
+        public static string XMinutesAgo {
             get {
-                return ResourceManager.GetString("MinutesAgo", resourceCulture);
+                return ResourceManager.GetString("XMinutesAgo", resourceCulture);
             }
         }
         

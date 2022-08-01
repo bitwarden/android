@@ -8,22 +8,13 @@ namespace Bit.App.Pages
     {
         private LoginPasswordlessViewModel _vm;
 
-        public LoginPasswordlessPage(string fingerprintPhrase, string email, string deviceType, string ipAddress, string location, string origin, DateTime requestDate)
+        public LoginPasswordlessPage(LoginPasswordlessDetails loginPasswordlessDetails)
         {
             InitializeComponent();
             _vm = BindingContext as LoginPasswordlessViewModel;
             _vm.Page = this;
 
-            _vm.LoginRequest = new LoginPasswordlessDetails()
-            {
-                Origin = origin,
-                Email = email,
-                DeviceType = deviceType,
-                IpAddress = ipAddress,
-                NearLocation = location,
-                FingerprintPhrase = fingerprintPhrase,
-                RequestDate = requestDate,
-            };
+            _vm.LoginRequest = loginPasswordlessDetails;
 
             if (Device.RuntimePlatform == Device.iOS)
             {

@@ -31,10 +31,10 @@ namespace Bit.App.Pages
             PageTitle = AppResources.LogInRequested;
 
             AcceptRequestCommand = new AsyncCommand(AcceptRequestAsync,
-                onException: ex => HandleServerErrorException(ex),
+                onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
             RejectRequestCommand = new AsyncCommand(RejectRequestAsync,
-                onException: ex => HandleServerErrorException(ex),
+                onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
         }
 
@@ -101,7 +101,7 @@ namespace Bit.App.Pages
             }
             if (minutesSinceRequest < 59)
             {
-                return string.Format(AppResources.MinutesAgo, minutesSinceRequest);
+                return string.Format(AppResources.XMinutesAgo, minutesSinceRequest);
             }
 
             return requestDate.ToShortTimeString();
@@ -125,9 +125,9 @@ namespace Bit.App.Pages
             _platformUtilsService.ShowToast("info", null, AppResources.LogInDenied);
         }
 
-        private void HandleServerErrorException(Exception ex)
+        private void HandleException(Exception ex)
         {
-            Xamarin.Essentials.MainThread.BeginInvokeOnMainThread(async () =>
+            Xamarin.Essentials.MainThread.InvokeOnMainThreadAsync(async () =>
             {
                 await _deviceActionService.HideLoadingAsync();
                 await _platformUtilsService.ShowDialogAsync(AppResources.GenericErrorMessage);
