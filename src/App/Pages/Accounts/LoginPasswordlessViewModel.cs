@@ -129,8 +129,8 @@ namespace Bit.App.Pages
         {
             Xamarin.Essentials.MainThread.InvokeOnMainThreadAsync(async () =>
             {
-                await _deviceActionService.HideLoadingAsync();
-                await _platformUtilsService.ShowDialogAsync(AppResources.GenericErrorMessage);
+                _deviceActionService.HideLoadingAsync().FireAndForget();
+                _platformUtilsService.ShowDialogAsync(AppResources.GenericErrorMessage).FireAndForget();
             });
             _logger.Exception(ex);
         }
