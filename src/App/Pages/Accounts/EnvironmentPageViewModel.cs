@@ -2,20 +2,24 @@
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Bit.App.Resources;
+using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
+using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
     public class EnvironmentPageViewModel : BaseViewModel
     {
         private readonly IEnvironmentService _environmentService;
+        private readonly IPlatformUtilsService _platformUtilsService;
         readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
 
         public EnvironmentPageViewModel()
         {
             _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
+            _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
 
             PageTitle = AppResources.Settings;
             BaseUrl = _environmentService.BaseUrl;
@@ -25,9 +29,13 @@ namespace Bit.App.Pages
             IconsUrl = _environmentService.IconsUrl;
             NotificationsUrls = _environmentService.NotificationsUrl;
             SubmitCommand = new AsyncCommand(SubmitAsync, onException: ex => OnSubmitException(ex), allowsMultipleExecutions: false);
+            AboutCommand = new AsyncCommand(AppHelpers.ShowAppVersionAsync, allowsMultipleExecutions: false);
+            HelpAndFeedbackCommand = new AsyncCommand(HelpAndFeedbackAsync, allowsMultipleExecutions: false);
         }
 
         public ICommand SubmitCommand { get; }
+        public ICommand AboutCommand { get; }
+        public ICommand HelpAndFeedbackCommand { get; }
         public string BaseUrl { get; set; }
         public string ApiUrl { get; set; }
         public string IdentityUrl { get; set; }
@@ -84,6 +92,11 @@ namespace Bit.App.Pages
         {
             _logger.Value.Exception(ex);
             Page.DisplayAlert(AppResources.AnErrorHasOccurred, AppResources.GenericErrorMessage, AppResources.Ok);
+        }
+
+        private async Task HelpAndFeedbackAsync()
+        {
+            await Device.InvokeOnMainThreadAsync(() => _platformUtilsService.LaunchUri("https://bitwarden.com/help/"));
         }
     }
 }

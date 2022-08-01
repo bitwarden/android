@@ -91,6 +91,28 @@
                     Text="{u:I18n CustomEnvironmentFooter}"
                     StyleClass="box-footer-label" />
             </StackLayout>
+            <StackLayout StyleClass="box">
+                <StackLayout StyleClass="box-row-header">
+                    <Label Text="{u:I18n Other, Header=True}"
+                           StyleClass="box-header, box-header-platform" />
+                    <StackLayout StyleClass="box-row">
+                        <Label Text="{u:I18n About}"
+                               StyleClass="box-label" >
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding AboutCommand}" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </StackLayout>
+                    <StackLayout StyleClass="box-row">
+                        <Label Text="{u:I18n HelpAndFeedback}"
+                               StyleClass="box-label">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding HelpAndFeedbackCommand}" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </StackLayout>
+                </StackLayout>        
+            </StackLayout>
         </StackLayout>
     </ScrollView>
 
