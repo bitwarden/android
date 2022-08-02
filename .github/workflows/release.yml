@@ -63,12 +63,6 @@ jobs:
           description: 'Deployment ${{ steps.version.outputs.version }} from branch ${{ steps.branch.outputs.branch-name }}'
           task: release
       
-      - name: Update deployment status to In Progress
-        uses: chrnorm/deployment-status@07b3930847f65e71c9c6802ff5a402f6dfb46b86
-        with:
-          token: '${{ secrets.GITHUB_TOKEN }}'
-          state: 'in_progress'
-          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
 
       - name: Download all artifacts
         if: ${{ github.event.inputs.release_type != 'Dry Run' }}
