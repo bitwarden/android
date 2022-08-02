@@ -4078,5 +4078,83 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("AreYouSureYouWantToEnableScreenCapture", resourceCulture);
             }
         }
+        
+        public static string LogInRequested {
+            get {
+                return ResourceManager.GetString("LogInRequested", resourceCulture);
+            }
+        }
+        
+        public static string AreYouTryingToLogIn {
+            get {
+                return ResourceManager.GetString("AreYouTryingToLogIn", resourceCulture);
+            }
+        }
+        
+        public static string LogInAttemptByXOnY {
+            get {
+                return ResourceManager.GetString("LogInAttemptByXOnY", resourceCulture);
+            }
+        }
+        
+        public static string DeviceType {
+            get {
+                return ResourceManager.GetString("DeviceType", resourceCulture);
+            }
+        }
+        
+        public static string IpAddress {
+            get {
+                return ResourceManager.GetString("IpAddress", resourceCulture);
+            }
+        }
+        
+        public static string Time {
+            get {
+                return ResourceManager.GetString("Time", resourceCulture);
+            }
+        }
+        
+        public static string Near {
+            get {
+                return ResourceManager.GetString("Near", resourceCulture);
+            }
+        }
+        
+        public static string ConfirmLogIn {
+            get {
+                return ResourceManager.GetString("ConfirmLogIn", resourceCulture);
+            }
+        }
+        
+        public static string DenyLogIn {
+            get {
+                return ResourceManager.GetString("DenyLogIn", resourceCulture);
+            }
+        }
+        
+        public static string JustNow {
+            get {
+                return ResourceManager.GetString("JustNow", resourceCulture);
+            }
+        }
+        
+        public static string XMinutesAgo {
+            get {
+                return ResourceManager.GetString("XMinutesAgo", resourceCulture);
+            }
+        }
+        
+        public static string LogInAccepted {
+            get {
+                return ResourceManager.GetString("LogInAccepted", resourceCulture);
+            }
+        }
+        
+        public static string LogInDenied {
+            get {
+                return ResourceManager.GetString("LogInDenied", resourceCulture);
+            }
+        }
     }
 }

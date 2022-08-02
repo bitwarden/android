@@ -468,5 +468,9 @@ namespace Bit.Core.Services
             TwoFactorProvidersData = null;
             SelectedTwoFactorProviderType = null;
         }
+
+        public async Task<AuthResult> GetLogInPasswordlessRequestsAsync() => await Task.FromResult<AuthResult>(new AuthResult());
+        public async Task<AuthResult> LogInPasswordlessAcceptAsync() => await Task.FromResult<AuthResult>(new AuthResult());
+        public async Task<AuthResult> LogInPasswordlessRejectAsync() => await Task.FromResult<AuthResult>(new AuthResult());
     }
 }

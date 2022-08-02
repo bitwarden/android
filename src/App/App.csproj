@@ -122,6 +122,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Remove="Pages\Accounts\AccountsPopupPage.xaml.cs" />
+    <Compile Update="Pages\Accounts\LoginPasswordlessPage.xaml.cs">
+      <DependentUpon>LoginPasswordlessPage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
