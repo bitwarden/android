@@ -58,8 +58,9 @@ jobs:
         id: deployment
         with:
           token: '${{ secrets.GITHUB_TOKEN }}'
-          environment: 'Mobile - Production'
-          description: 'Deployment ${{ steps.version.outputs.version }} from branch ${{ branch.branch-name }}'
+          initial-status: 'in_progress'
+          environment: 'production'
+          description: 'Deployment ${{ steps.version.outputs.version }} from branch ${{ steps.branch.outputs.branch-name }}'
           task: release
       
       - name: Update deployment status to In Progress
