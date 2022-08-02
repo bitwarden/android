@@ -104,7 +104,7 @@ jobs:
           draft: true
 
       - name: Update deployment status to Success
-        if: success()
+        if: ${{ success() }}
         uses: chrnorm/deployment-status@07b3930847f65e71c9c6802ff5a402f6dfb46b86
         with:
           token: '${{ secrets.GITHUB_TOKEN }}'
