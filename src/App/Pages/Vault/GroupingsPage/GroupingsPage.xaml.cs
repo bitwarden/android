@@ -29,7 +29,7 @@ namespace Bit.App.Pages
 
         public GroupingsPage(bool mainPage, CipherType? type = null, string folderId = null,
             string collectionId = null, string pageTitle = null, string vaultFilterSelection = null,
-            PreviousPageInfo previousPage = null, bool deleted = false)
+            PreviousPageInfo previousPage = null, bool deleted = false, bool showTotp = false)
         {
             _pageName = string.Concat(nameof(GroupingsPage), "_", DateTime.UtcNow.Ticks);
             InitializeComponent();
@@ -48,6 +48,7 @@ namespace Bit.App.Pages
             _vm.FolderId = folderId;
             _vm.CollectionId = collectionId;
             _vm.Deleted = deleted;
+            _vm.ShowTotp = showTotp;
             _previousPage = previousPage;
             if (pageTitle != null)
             {
@@ -69,7 +70,7 @@ namespace Bit.App.Pages
                 ToolbarItems.Add(_lockItem);
                 ToolbarItems.Add(_exitItem);
             }
-            if (deleted)
+            if (deleted || showTotp)
             {
                 _absLayout.Children.Remove(_fab);
                 ToolbarItems.Remove(_addItem);
@@ -193,7 +194,7 @@ namespace Bit.App.Pages
         {
             base.OnDisappearing();
             IsBusy = false;
-            _vm.StopCiphersTotpTick();
+            _vm.StopCiphersTotpTick().FireAndForget();
             _broadcasterService.Unsubscribe(_pageName);
             _vm.DisableRefreshing();
             _accountAvatar?.OnDisappearing();
@@ -221,6 +222,10 @@ namespace Bit.App.Pages
             if (item.IsTrash)
             {
                 await _vm.SelectTrashAsync();
+            }
+            else if (item.IsTotpCode)
+            {
+                await _vm.SelectTotpCodesAsync();
             }
             else if (item.Cipher != null)
             {

@@ -2262,8 +2262,11 @@ Scanning will happen automatically.</value>
   <data name="All" xml:space="preserve">
     <value>All</value>
   </data>
-  <data name="DisplayItemsContainingTOTP" xml:space="preserve">
-    <value>Display items containing TOTP</value>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Verification Codes</value>
   </data>
   <data name="PremiumSubscriptionRequired" xml:space="preserve">
     <value>Premium subscription required</value>

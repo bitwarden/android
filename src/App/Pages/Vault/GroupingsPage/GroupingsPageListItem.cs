@@ -17,6 +17,7 @@ namespace Bit.App.Pages
         public string ItemCount { get; set; }
         public bool FuzzyAutofill { get; set; }
         public bool IsTrash { get; set; }
+        public bool IsTotpCode { get; set; }
 
         public string Name
         {
@@ -37,6 +38,10 @@ namespace Bit.App.Pages
                 else if (Collection != null)
                 {
                     _name = Collection.Name;
+                }
+                else if (IsTotpCode)
+                {
+                    _name = AppResources.VerificationCodes;
                 }
                 else if (Type != null)
                 {
@@ -81,6 +86,10 @@ namespace Bit.App.Pages
                 else if (Collection != null)
                 {
                     _icon = BitwardenIcons.Collection;
+                }
+                else if (IsTotpCode)
+                {
+                    _icon = BitwardenIcons.Clock;
                 }
                 else if (Type != null)
                 {

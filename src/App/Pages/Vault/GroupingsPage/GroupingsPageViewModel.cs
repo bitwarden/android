@@ -82,9 +82,6 @@ namespace Bit.App.Pages
             VaultFilterCommand = new AsyncCommand(VaultFilterOptionsAsync,
                 onException: ex => _logger.Exception(ex),
                 allowsMultipleExecutions: false);
-            TotpFilterCommand = new AsyncCommand(LoadAsync,
-                onException: ex => _logger.Exception(ex),
-                allowsMultipleExecutions: false);
 
             AccountSwitchingOverlayViewModel = new AccountSwitchingOverlayViewModel(_stateService, _messagingService, _logger)
             {
@@ -108,6 +105,7 @@ namespace Bit.App.Pages
                                                && NoFolderCiphers.Count < NoFolderListSize
                                                && (Collections is null || !Collections.Any());
         public List<CipherView> Ciphers { get; set; }
+        public List<CipherView> TOTPCiphers { get; set; }
         public List<CipherView> FavoriteCiphers { get; set; }
         public List<CipherView> NoFolderCiphers { get; set; }
         public List<FolderView> Folders { get; set; }
@@ -165,7 +163,7 @@ namespace Bit.App.Pages
             get => _websiteIconsEnabled;
             set => SetProperty(ref _websiteIconsEnabled, value);
         }
-        public bool ShowTotpFilter
+        public bool ShowTotp
         {
             get => _showTotpFilter;
             set => SetProperty(ref _showTotpFilter, value);
@@ -179,7 +177,6 @@ namespace Bit.App.Pages
         public ObservableRangeCollection<IGroupingsPageListItem> GroupedItems { get; set; }
         public Command RefreshCommand { get; set; }
         public Command<CipherView> CipherOptionsCommand { get; set; }
-        public ICommand TotpFilterCommand { get; }
         public bool LoadedOnce { get; set; }
 
         public async Task LoadAsync()
@@ -218,7 +215,6 @@ namespace Bit.App.Pages
             Loading = true;
             ShowList = false;
             ShowAddCipherButton = !Deleted;
-            ShowTotpFilter = Type == CipherType.Login && canAccessPremium;
 
             var groupedItems = new List<GroupingsPageListGroup>();
             var page = Page as GroupingsPage;
@@ -243,6 +239,20 @@ namespace Bit.App.Pages
                 }
                 if (MainPage)
                 {
+                    if (TOTPCiphers.Any())
+                    {
+                        groupedItems.Add(new GroupingsPageListGroup(
+                        AppResources.Totp, 1, uppercaseGroupNames, false)
+                        {
+                            new GroupingsPageListItem
+                            {
+                                IsTotpCode = true,
+                                Type = CipherType.Login,
+                                ItemCount = TOTPCiphers.Count().ToString("N0")
+                            }
+                        });
+                    }
+
                     groupedItems.Add(new GroupingsPageListGroup(
                         AppResources.Types, 4, uppercaseGroupNames, !hasFavorites)
                     {
@@ -391,10 +401,9 @@ namespace Bit.App.Pages
         {
             var uppercaseGroupNames = _deviceActionService.DeviceType == DeviceType.iOS;
             _totpTickCts?.Cancel();
-            if (TotpFilterEnable)
+            if (ShowTotp)
             {
-                var ciphersListItems = Ciphers.Where(c => c.IsDeleted == Deleted && !string.IsNullOrEmpty(c.Login.Totp))
-                    .Select(c => new GroupingsPageTOTPListItem(c, true)).ToList();
+                var ciphersListItems = TOTPCiphers.Select(c => new GroupingsPageTOTPListItem(c, true)).ToList();
                 groupedItems.Add(new GroupingsPageListGroup(ciphersListItems, AppResources.Items,
                     ciphersListItems.Count, uppercaseGroupNames, !MainPage && !groupedItems.Any()));
 
@@ -485,6 +494,13 @@ namespace Bit.App.Pages
             await Page.Navigation.PushAsync(page);
         }
 
+        public async Task SelectTotpCodesAsync()
+        {
+            var page = new GroupingsPage(false, CipherType.Login, null, null, AppResources.VerificationCodes, _vaultFilterSelection, null,
+                false, true);
+            await Page.Navigation.PushAsync(page);
+        }
+
         public async Task ExitAsync()
         {
             var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.ExitConfirmation,
@@ -522,6 +538,7 @@ namespace Bit.App.Pages
             NoDataText = AppResources.NoItems;
             _allCiphers = await GetAllCiphersAsync();
             HasCiphers = _allCiphers.Any();
+            TOTPCiphers = _allCiphers.Where(c =>c.IsDeleted == Deleted && c.Type == CipherType.Login && !string.IsNullOrEmpty(c.Login?.Totp)).ToList();
             FavoriteCiphers?.Clear();
             NoFolderCiphers?.Clear();
             _folderCounts.Clear();
@@ -546,6 +563,10 @@ namespace Bit.App.Pages
                 {
                     Filter = c => c.IsDeleted;
                     NoDataText = AppResources.NoItemsTrash;
+                }
+                else if (ShowTotp)
+                {
+                    Filter = c => c.Type == CipherType.Login && !c.IsDeleted && !string.IsNullOrEmpty(c.Login?.Totp);
                 }
                 else if (Type != null)
                 {
