@@ -300,7 +300,7 @@ namespace Bit.App.Pages
                         collectionListItems.Count, uppercaseGroupNames, !MainPage));
                 }
                 if (Ciphers?.Any() ?? false)
-                {   
+                {
                     CreateCipherGroupedItems(groupedItems);
                 }
                 if (ShowTotp && (!TOTPCiphers?.Any() ?? false))
@@ -535,7 +535,7 @@ namespace Bit.App.Pages
             NoDataText = AppResources.NoItems;
             _allCiphers = await GetAllCiphersAsync();
             HasCiphers = _allCiphers.Any();
-            TOTPCiphers = _allCiphers.Where(c =>c.IsDeleted == Deleted && c.Type == CipherType.Login && !string.IsNullOrEmpty(c.Login?.Totp)).ToList();
+            TOTPCiphers = _allCiphers.Where(c => c.IsDeleted == Deleted && c.Type == CipherType.Login && !string.IsNullOrEmpty(c.Login?.Totp)).ToList();
             FavoriteCiphers?.Clear();
             NoFolderCiphers?.Clear();
             _folderCounts.Clear();
