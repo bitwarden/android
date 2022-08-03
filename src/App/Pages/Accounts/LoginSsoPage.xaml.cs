@@ -74,7 +74,7 @@ namespace Bit.App.Pages
             if (DoOnce())
             {
                 CopyAppOptions();
-                _vm.LogInCommand.ExecuteAsync();
+                _vm.LogInCommand.Execute(null);
             }
         }
 

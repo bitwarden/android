@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Bit.App.Utilities;
@@ -16,6 +17,8 @@ namespace Bit.App.Pages
 {
     public class LoginSsoPageViewModel : BaseViewModel
     {
+
+        private const string RedirectUri = "bitwarden://sso-callback";
         private readonly IDeviceActionService _deviceActionService;
         private readonly IAuthService _authService;
         private readonly ISyncService _syncService;
@@ -43,7 +46,7 @@ namespace Bit.App.Pages
 
 
             PageTitle = AppResources.Bitwarden;
-            LogInCommand = new AsyncCommand(async () => await LogInAsync());
+            LogInCommand = new AsyncCommand(LogInAsync, allowsMultipleExecutions: false);
         }
 
         public string OrgIdentifier
@@ -52,7 +55,7 @@ namespace Bit.App.Pages
             set => SetProperty(ref _orgIdentifier, value);
         }
 
-        public AsyncCommand LogInCommand { get; }
+        public ICommand LogInCommand { get; }
         public Action StartTwoFactorAction { get; set; }
         public Action StartSetPasswordAction { get; set; }
         public Action SsoAuthSuccessAction { get; set; }
@@ -90,8 +93,9 @@ namespace Bit.App.Pages
 
                 var response = await _apiService.PreValidateSso(OrgIdentifier);
 
-                if (response == null || string.IsNullOrWhiteSpace(response.Token))
+                if (string.IsNullOrWhiteSpace(response?.Token))
                 {
+                    _logger.Error(response is null ? "Login SSO Error: response is null" : "Login SSO Error: response.Token is null or whitespace");
                     await _deviceActionService.HideLoadingAsync();
                     await _platformUtilsService.ShowDialogAsync(AppResources.LoginSsoError);
                     return;
@@ -109,11 +113,9 @@ namespace Bit.App.Pages
 
                 var state = await _passwordGenerationService.GeneratePasswordAsync(passwordOptions);
 
-                var redirectUri = "bitwarden://sso-callback";
-
                 var url = _apiService.IdentityBaseUrl + "/connect/authorize?" +
                           "client_id=" + _platformUtilsService.GetClientType().GetString() + "&" +
-                          "redirect_uri=" + Uri.EscapeDataString(redirectUri) + "&" +
+                          "redirect_uri=" + Uri.EscapeDataString(RedirectUri) + "&" +
                           "response_type=code&scope=api%20offline_access&" +
                           "state=" + state + "&code_challenge=" + codeChallenge + "&" +
                           "code_challenge_method=S256&response_mode=query&" +
@@ -123,13 +125,13 @@ namespace Bit.App.Pages
                 WebAuthenticatorResult authResult = null;
 
                 authResult = await WebAuthenticator.AuthenticateAsync(new Uri(url),
-                    new Uri(redirectUri));
+                    new Uri(RedirectUri));
 
 
                 var code = GetResultCode(authResult, state);
                 if (!string.IsNullOrEmpty(code))
                 {
-                    await LogIn(code, codeVerifier, redirectUri, OrgIdentifier);
+                    await LogIn(code, codeVerifier, OrgIdentifier);
                 }
                 else
                 {
@@ -142,23 +144,19 @@ namespace Bit.App.Pages
             {
                 _logger.Exception(e);
                 await _deviceActionService.HideLoadingAsync();
-                await _platformUtilsService.ShowDialogAsync(
-                    (e?.Error != null ? e.Error.GetSingleMessage() : AppResources.LoginSsoError),
+                await _platformUtilsService.ShowDialogAsync(e?.Error?.GetSingleMessage() ?? AppResources.LoginSsoError,
                     AppResources.AnErrorHasOccurred);
-                return;
             }
             catch (TaskCanceledException)
             {
                 // user canceled
                 await _deviceActionService.HideLoadingAsync();
-                return;
             }
             catch (Exception ex)
             {
                 _logger.Exception(ex);
                 await _deviceActionService.HideLoadingAsync();
                 await _platformUtilsService.ShowDialogAsync(AppResources.GenericErrorMessage, AppResources.AnErrorHasOccurred);
-                return;
             }
         }
 
@@ -177,11 +175,11 @@ namespace Bit.App.Pages
             return code;
         }
 
-        private async Task LogIn(string code, string codeVerifier, string redirectUri, string orgId)
+        private async Task LogIn(string code, string codeVerifier, string orgId)
         {
             try
             {
-                var response = await _authService.LogInSsoAsync(code, codeVerifier, redirectUri, orgId);
+                var response = await _authService.LogInSsoAsync(code, codeVerifier, RedirectUri, orgId);
                 await AppHelpers.ResetInvalidUnlockAttemptsAsync();
                 await _stateService.SetRememberedOrgIdentifierAsync(OrgIdentifier);
                 await _deviceActionService.HideLoadingAsync();
