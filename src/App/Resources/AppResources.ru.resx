@@ -269,7 +269,7 @@
     <comment>Title for login page. (noun)</comment>
   </data>
   <data name="LogOut" xml:space="preserve">
-    <value>Выйти</value>
+    <value>Выход</value>
     <comment>The log out button text (verb).</comment>
   </data>
   <data name="LogoutConfirmation" xml:space="preserve">
@@ -473,13 +473,13 @@
     <value>Введите email аккаунта для получения подсказки к мастер-паролю.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
-    <value>Повторно включить расширение</value>
+    <value>Повторно включить расширение приложения</value>
   </data>
   <data name="ExtensionAlmostDone" xml:space="preserve">
     <value>Почти готово!</value>
   </data>
   <data name="ExtensionEnable" xml:space="preserve">
-    <value>Включить расширение</value>
+    <value>Включить расширение приложения</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
     <value>В Safari, используя значок 'Поделиться' найдите Bitwarden (прокрутите вправо в нижней строке меню).</value>
@@ -694,7 +694,7 @@
     <value>Сбой синхронизации.</value>
   </data>
   <data name="SyncVaultNow" xml:space="preserve">
-    <value>Синхронизировать сейчас</value>
+    <value>Синхронизировать</value>
   </data>
   <data name="TouchID" xml:space="preserve">
     <value>Touch ID</value>
@@ -769,6 +769,12 @@
   </data>
   <data name="Enabled" xml:space="preserve">
     <value>Включено</value>
+  </data>
+  <data name="Off" xml:space="preserve">
+    <value>Выкл.</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>Вкл.</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>Статус</value>
@@ -907,11 +913,11 @@
   <data name="CopyTotp" xml:space="preserve">
     <value>Скопировать TOTP</value>
   </data>
-  <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>Если к вашему логину прикреплен ключ проверки подлинности, то код подтверждения TOTP будет скопирован при автозаполнении логина.</value>
+  <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
+    <value>Если к вашему логину прикреплен ключ аутентификации, то код подтверждения TOTP будет скопирован при автозаполнении логина.</value>
   </data>
-  <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>Отключить копирование TOTP</value>
+  <data name="CopyTotpAutomatically" xml:space="preserve">
+    <value>Копировать TOTP автоматически</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
     <value>Для использования этой функции требуется Премиум.</value>
@@ -1128,11 +1134,11 @@
   <data name="Expiration" xml:space="preserve">
     <value>Срок действия</value>
   </data>
-  <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>Отключить значки веб-сайтов</value>
+  <data name="ShowWebsiteIcons" xml:space="preserve">
+    <value>Показать значки сайтов</value>
   </data>
-  <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Значки веб-сайтов отображаются рядом с каждым элементом в вашем хранилище.</value>
+  <data name="ShowWebsiteIconsDescription" xml:space="preserve">
+    <value>Отображать узнаваемое изображение рядом с каждым логином.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>URL-адрес сервера значков</value>
@@ -1372,11 +1378,15 @@
   <data name="SearchCollection" xml:space="preserve">
     <value>Поиск в коллекции</value>
   </data>
-  <data name="SearchFolder" xml:space="preserve">
-    <value>Поиск в папке</value>
+  <data name="SearchFileSends" xml:space="preserve">
+    <value>Поиск файловых Send</value>
   </data>
-  <data name="SearchType" xml:space="preserve">
-    <value>Тип поиска</value>
+  <data name="SearchTextSends" xml:space="preserve">
+    <value>Поиск текстовых Send</value>
+  </data>
+  <data name="SearchGroup" xml:space="preserve">
+    <value>Поиск {0}</value>
+    <comment>ex: Search Logins</comment>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Тип</value>
@@ -1459,7 +1469,7 @@
     <value>Экспортировать хранилище</value>
   </data>
   <data name="LockNow" xml:space="preserve">
-    <value>Заблокировать сейчас</value>
+    <value>Заблокировать</value>
   </data>
   <data name="PIN" xml:space="preserve">
     <value>PIN-код</value>
@@ -1513,11 +1523,11 @@
     <value>2 минуты</value>
   </data>
   <data name="ClearClipboard" xml:space="preserve">
-    <value>Очистка буфера обмена</value>
+    <value>Очистить буфер обмена</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="ClearClipboardDescription" xml:space="preserve">
-    <value>Автоматически очищать скопированные значения в вашем буфере обмена.</value>
+    <value>Автоматически удалять скопированные значения из буфера обмена.</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="DefaultUriMatchDetection" xml:space="preserve">
@@ -1537,6 +1547,12 @@
   <data name="ThemeDefault" xml:space="preserve">
     <value>По умолчанию (системная)</value>
   </data>
+  <data name="DefaultDarkTheme" xml:space="preserve">
+    <value>Темная тема по умолчанию</value>
+  </data>
+  <data name="DefaultDarkThemeDescription" xml:space="preserve">
+    <value>Выберите темную тему для использования в случае включения темы по умолчанию (системной) при включенном темном режиме вашего устройства.</value>
+  </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Скопировать заметки</value>
   </data>
@@ -1553,17 +1569,21 @@
     <value>Черная</value>
     <comment>The color black</comment>
   </data>
-  <data name="BlacklistedUris" xml:space="preserve">
-    <value>Внесенные в черный список URI</value>
+  <data name="Nord" xml:space="preserve">
+    <value>Nord</value>
+    <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
-  <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>Для URI, внесенных в черный список, автоматическое заполнение предлагаться не будет. Список приложений должен быть разделен запятыми. Например: "https://twitter.com, androidapp://com.twitter.android".</value>
+  <data name="AutofillBlockedUris" xml:space="preserve">
+    <value>Автозаполнение заблокированных URI</value>
   </data>
-  <data name="DisableSavePrompt" xml:space="preserve">
-    <value>Отключить запрос о сохранении</value>
+  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
+    <value>Автозаполнение не будет предлагаться для заблокированных URI. Разделяйте несколько URI запятой. Например: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
-  <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>Уведомление о сохранении автоматически предложит вам сохранить новые элементы в ваше хранилище.</value>
+  <data name="AskToAddLogin" xml:space="preserve">
+    <value>Спрашивать при добавлении логина</value>
+  </data>
+  <data name="AskToAddLoginDescription" xml:space="preserve">
+    <value>Запросить добавление элемента, если его нет в вашем хранилище.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
     <value>При перезапуске приложения</value>
@@ -1856,6 +1876,9 @@
     <value>Понятное имя для описания этой Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
+  <data name="Text" xml:space="preserve">
+    <value>Текст</value>
+  </data>
   <data name="TypeText" xml:space="preserve">
     <value>Текст</value>
   </data>
@@ -1871,6 +1894,18 @@
   </data>
   <data name="TypeFileInfo" xml:space="preserve">
     <value>Файл, который вы хотите отправить.</value>
+  </data>
+  <data name="FileTypeIsSelected" xml:space="preserve">
+    <value>Тип файла выбран.</value>
+  </data>
+  <data name="FileTypeIsNotSelected" xml:space="preserve">
+    <value>Тип файла не выбран, коснитесь, чтобы выбрать.</value>
+  </data>
+  <data name="TextTypeIsSelected" xml:space="preserve">
+    <value>Тип текста выбран.</value>
+  </data>
+  <data name="TextTypeIsNotSelected" xml:space="preserve">
+    <value>Тип текста не выбран, коснитесь, чтобы выбрать.</value>
   </data>
   <data name="DeletionDate" xml:space="preserve">
     <value>Срок удаления</value>
@@ -2135,7 +2170,7 @@
     <value>Удаление аккаунта отменить невозможно</value>
   </data>
   <data name="DeleteAccountExplanation" xml:space="preserve">
-    <value>Ваш аккаунт и все связанные с ним данные будут удалены и восстановлению не подлежат. Вы уверены, что хотите продолжить?</value>
+    <value>Ваш аккаунт и все данные хранилища будут удалены и восстановлению не подлежат. Вы уверены, что хотите продолжить?</value>
   </data>
   <data name="DeletingYourAccount" xml:space="preserve">
     <value>Удаление вашего аккаунта</value>
@@ -2175,5 +2210,68 @@
   </data>
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
     <value>Введите код подтверждения, отправленный вам на почту</value>
+  </data>
+  <data name="SubmitCrashLogs" xml:space="preserve">
+    <value>Отправлять отчеты о сбоях</value>
+  </data>
+  <data name="SubmitCrashLogsDescription" xml:space="preserve">
+    <value>Помогите Bitwarden улучшить стабильность приложения, отправляя отчеты о сбоях</value>
+  </data>
+  <data name="OptionsExpanded" xml:space="preserve">
+    <value>Настройки развернуты, коснитесь, чтобы свернуть.</value>
+  </data>
+  <data name="OptionsCollapsed" xml:space="preserve">
+    <value>Настройки свернуты, нажмите, чтобы развернуть.</value>
+  </data>
+  <data name="UppercaseAtoZ" xml:space="preserve">
+    <value>Прописные буквы (A-Z)</value>
+  </data>
+  <data name="LowercaseAtoZ" xml:space="preserve">
+    <value>Строчные буквы (A-Z)</value>
+  </data>
+  <data name="NumbersZeroToNine" xml:space="preserve">
+    <value>Цифры (0-9)</value>
+  </data>
+  <data name="SpecialCharacters" xml:space="preserve">
+    <value>Специальные символы (!@#$%^&amp;*)</value>
+  </data>
+  <data name="TapToGoBack" xml:space="preserve">
+    <value>Нажмите, чтобы вернуться</value>
+  </data>
+  <data name="PasswordIsVisibleTapToHide" xml:space="preserve">
+    <value>Пароль виден, нажмите, чтобы скрыть.</value>
+  </data>
+  <data name="PasswordIsNotVisibleTapToShow" xml:space="preserve">
+    <value>Пароль не виден, нажмите, чтобы показать.</value>
+  </data>
+  <data name="FilterByVault" xml:space="preserve">
+    <value>Фильтровать элементы по хранилищу</value>
+  </data>
+  <data name="AllVaults" xml:space="preserve">
+    <value>Все хранилища</value>
+  </data>
+  <data name="Vaults" xml:space="preserve">
+    <value>Хранилища</value>
+  </data>
+  <data name="VaultFilterDescription" xml:space="preserve">
+    <value>Хранилище: {0}</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Все</value>
+  </data>
+  <data name="NeverLockWarning" xml:space="preserve">
+    <value>При установке опции блокировки на "Никогда" хранилище будет доступно любому, кто имеет доступ к вашему устройству, поэтому убедитесь, что устройство защищено должным образом.</value>
+  </data>
+  <data name="EnvironmentPageUrlsError" xml:space="preserve">
+    <value>Один или несколько введенных URL-адресов неверны. Пожалуйста, проверьте их и попробуйте сохранить снова.</value>
+  </data>
+  <data name="GenericErrorMessage" xml:space="preserve">
+    <value>Нам не удалось обработать ваш запрос. Пожалуйста, попробуйте снова или свяжитесь с нами.</value>
+  </data>
+  <data name="AllowScreenCapture" xml:space="preserve">
+    <value>Разрешить скриншоты</value>
+  </data>
+  <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
+    <value>Вы уверены, что хотите разрешить скриншоты?</value>
   </data>
 </root>

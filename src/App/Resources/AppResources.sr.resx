@@ -770,6 +770,12 @@
   <data name="Enabled" xml:space="preserve">
     <value>Омогућено</value>
   </data>
+  <data name="Off" xml:space="preserve">
+    <value>Не</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>Да</value>
+  </data>
   <data name="Status" xml:space="preserve">
     <value>Статус</value>
   </data>
@@ -907,11 +913,11 @@
   <data name="CopyTotp" xml:space="preserve">
     <value>Копирај једнократни код</value>
   </data>
-  <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>Ако је за вашу пријаву приложен аутентификациони кључ, једнократни код се аутоматски копира у вашу привремену меморију кад год ауто-попуните пријаву.</value>
+  <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
+    <value>Ако пријава има кључ за аутентификацију, копирајте ТОТП верификациони кôд у остави када аутоматски попуните пријаву.</value>
   </data>
-  <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>Угаси аутоматско копирање једнократног кода</value>
+  <data name="CopyTotpAutomatically" xml:space="preserve">
+    <value>Аутоматски копирај једнократни кôд</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
     <value>Премијум је потребно за употребу ове способности.</value>
@@ -1128,11 +1134,11 @@
   <data name="Expiration" xml:space="preserve">
     <value>Истек</value>
   </data>
-  <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>Угаси иконице сајта</value>
+  <data name="ShowWebsiteIcons" xml:space="preserve">
+    <value>Прикажи иконе сајтова</value>
   </data>
-  <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Иконе веб сајта пружају препознатљиву слику поред сваке пријаву у сефу.</value>
+  <data name="ShowWebsiteIconsDescription" xml:space="preserve">
+    <value>Прикажи препознатљиву слику поред сваке ставке за пријаву.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>УРЛ сервера иконице</value>
@@ -1372,11 +1378,15 @@
   <data name="SearchCollection" xml:space="preserve">
     <value>Претражи колекцију</value>
   </data>
-  <data name="SearchFolder" xml:space="preserve">
-    <value>Претражи фасциклу</value>
+  <data name="SearchFileSends" xml:space="preserve">
+    <value>Тражи „Send“ датотеке</value>
   </data>
-  <data name="SearchType" xml:space="preserve">
-    <value>Тип претраге</value>
+  <data name="SearchTextSends" xml:space="preserve">
+    <value>Тражи „Send“ текст</value>
+  </data>
+  <data name="SearchGroup" xml:space="preserve">
+    <value>Претражи {0}</value>
+    <comment>ex: Search Logins</comment>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Тип</value>
@@ -1537,6 +1547,12 @@
   <data name="ThemeDefault" xml:space="preserve">
     <value>Подразумевано (системско)</value>
   </data>
+  <data name="DefaultDarkTheme" xml:space="preserve">
+    <value>Подразумевана тамна тема</value>
+  </data>
+  <data name="DefaultDarkThemeDescription" xml:space="preserve">
+    <value>Одаберите тамну тему коју ћете користити када користите подразумевану (системску) тему док је тамни режим вашег уређаја омогућен</value>
+  </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Копирај белешке</value>
   </data>
@@ -1553,17 +1569,21 @@
     <value>Црно</value>
     <comment>The color black</comment>
   </data>
-  <data name="BlacklistedUris" xml:space="preserve">
-    <value>УРЛ на црној листи</value>
+  <data name="Nord" xml:space="preserve">
+    <value>Nord</value>
+    <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
-  <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>УРЛ који су на црној листи неће понудити ауто-попуњавање. Списак треба одвојити зарезом. Нпр: „https://twitter.com, androidapp://com.twitter.android“.</value>
+  <data name="AutofillBlockedUris" xml:space="preserve">
+    <value>Ауто-попуни клокиране УРЛ</value>
   </data>
-  <data name="DisableSavePrompt" xml:space="preserve">
-    <value>Онемогући упит за сачувавање</value>
+  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
+    <value>Ауто-пуњење неће радити за блокиране УРЛ. Одвојите више УРЛ са зарезом. Нпр: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
-  <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>Нотификација Сашувавања аутоматски тражи да нове предмете сачувате у свом сефу кад год их први пут унесете.</value>
+  <data name="AskToAddLogin" xml:space="preserve">
+    <value>Питај да се дода пријава</value>
+  </data>
+  <data name="AskToAddLoginDescription" xml:space="preserve">
+    <value>Затражи да се дода ставка ако она није пронађена у вашем сефу.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
     <value>На поновно покретање</value>
@@ -1857,6 +1877,9 @@
     <value>Име да се опише овај „Send“.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
+  <data name="Text" xml:space="preserve">
+    <value>Текст</value>
+  </data>
   <data name="TypeText" xml:space="preserve">
     <value>Текст</value>
   </data>
@@ -1872,6 +1895,18 @@
   </data>
   <data name="TypeFileInfo" xml:space="preserve">
     <value>Датотека коју желиш да пошаљеш.</value>
+  </data>
+  <data name="FileTypeIsSelected" xml:space="preserve">
+    <value>Тип датотеке је изабран.</value>
+  </data>
+  <data name="FileTypeIsNotSelected" xml:space="preserve">
+    <value>Тип датотеке није изабран, пипните за одабир.</value>
+  </data>
+  <data name="TextTypeIsSelected" xml:space="preserve">
+    <value>Тип текста је изабран.</value>
+  </data>
+  <data name="TextTypeIsNotSelected" xml:space="preserve">
+    <value>Тип текста није изабран, пипните за одабир.</value>
   </data>
   <data name="DeletionDate" xml:space="preserve">
     <value>Брисање после</value>
@@ -2177,5 +2212,68 @@
   </data>
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
     <value>Унесите верификациони кôд који је послат на Вашу е-адресу</value>
+  </data>
+  <data name="SubmitCrashLogs" xml:space="preserve">
+    <value>Пошаљите евиденцију о паду</value>
+  </data>
+  <data name="SubmitCrashLogsDescription" xml:space="preserve">
+    <value>Помозите Bitwarden-у да побољша стабилност апликације слањем извештаја о паду.</value>
+  </data>
+  <data name="OptionsExpanded" xml:space="preserve">
+    <value>Опције су проширене, додирните да бисте скупили.</value>
+  </data>
+  <data name="OptionsCollapsed" xml:space="preserve">
+    <value>Опције су скупљене, додирните да бисте проширили.</value>
+  </data>
+  <data name="UppercaseAtoZ" xml:space="preserve">
+    <value>Велика слова (A-Z)</value>
+  </data>
+  <data name="LowercaseAtoZ" xml:space="preserve">
+    <value>Мала слова (A-Z)</value>
+  </data>
+  <data name="NumbersZeroToNine" xml:space="preserve">
+    <value>Цифре (0-9)</value>
+  </data>
+  <data name="SpecialCharacters" xml:space="preserve">
+    <value>Специјална слова (!@#$%^&amp;*)</value>
+  </data>
+  <data name="TapToGoBack" xml:space="preserve">
+    <value>Додирните за уназад</value>
+  </data>
+  <data name="PasswordIsVisibleTapToHide" xml:space="preserve">
+    <value>Лозинка се види, додирните да је сакријете.</value>
+  </data>
+  <data name="PasswordIsNotVisibleTapToShow" xml:space="preserve">
+    <value>Лозинка је сакривена, додирните да се види.</value>
+  </data>
+  <data name="FilterByVault" xml:space="preserve">
+    <value>Филтрирати ставке из сефа</value>
+  </data>
+  <data name="AllVaults" xml:space="preserve">
+    <value>Сви Сефови</value>
+  </data>
+  <data name="Vaults" xml:space="preserve">
+    <value>Сефови</value>
+  </data>
+  <data name="VaultFilterDescription" xml:space="preserve">
+    <value>Сеф: {0}</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Све</value>
+  </data>
+  <data name="NeverLockWarning" xml:space="preserve">
+    <value>Постављањем опција закључавања на „Никад“, ваш сеф остаје доступан свима који имају приступ вашем уређају. Ако користите ову опцију, требало би да будете сигурни да ћете свој уређај правилно заштитити.</value>
+  </data>
+  <data name="EnvironmentPageUrlsError" xml:space="preserve">
+    <value>Једна или више унетих УРЛ адреса су неважеће. Проверите их и покушајте поново да сачувате.</value>
+  </data>
+  <data name="GenericErrorMessage" xml:space="preserve">
+    <value>Ваш захтев није успео да буде обрађен. Покушајте поново или нас контактирајте.</value>
+  </data>
+  <data name="AllowScreenCapture" xml:space="preserve">
+    <value>Дозволи снимање екрана</value>
+  </data>
+  <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
+    <value>Да ли сте сигурни да желите да укључите снимање екрана?</value>
   </data>
 </root>

@@ -770,6 +770,12 @@
   <data name="Enabled" xml:space="preserve">
     <value>켜짐</value>
   </data>
+  <data name="Off" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>On</value>
+  </data>
   <data name="Status" xml:space="preserve">
     <value>상태</value>
   </data>
@@ -907,11 +913,11 @@
   <data name="CopyTotp" xml:space="preserve">
     <value>TOTP 복사</value>
   </data>
-  <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>로그인에 인증 키가 연결되어 있을 경우, 그 로그인을 자동 완성할 때마다 TOTP 인증 코드가 클립보드에 자동으로 복사됩니다.</value>
+  <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
+    <value>If a login has an authenticator key, copy the TOTP verification code to your clip-board when you auto-fill the login.</value>
   </data>
-  <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>TOTP 자동 복사 사용 안 함</value>
+  <data name="CopyTotpAutomatically" xml:space="preserve">
+    <value>Copy TOTP automatically</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
     <value>이 기능을 사용하려면 프리미엄 멤버십이 필요합니다.</value>
@@ -1128,11 +1134,11 @@
   <data name="Expiration" xml:space="preserve">
     <value>만료</value>
   </data>
-  <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>웹 사이트 아이콘 사용 안 함</value>
+  <data name="ShowWebsiteIcons" xml:space="preserve">
+    <value>Show website icons</value>
   </data>
-  <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>웹 사이트 아이콘을 사용하면 보관함 각 항목 옆에 이미지를 보여줍니다.</value>
+  <data name="ShowWebsiteIconsDescription" xml:space="preserve">
+    <value>Show a recognizable image next to each login.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>아이콘 서버 URL</value>
@@ -1372,11 +1378,15 @@
   <data name="SearchCollection" xml:space="preserve">
     <value>컬렉션 검색</value>
   </data>
-  <data name="SearchFolder" xml:space="preserve">
-    <value>폴더 검색</value>
+  <data name="SearchFileSends" xml:space="preserve">
+    <value>Search File Sends</value>
   </data>
-  <data name="SearchType" xml:space="preserve">
-    <value>유형 검색</value>
+  <data name="SearchTextSends" xml:space="preserve">
+    <value>Search Text Sends</value>
+  </data>
+  <data name="SearchGroup" xml:space="preserve">
+    <value>{0} 검색</value>
+    <comment>ex: Search Logins</comment>
   </data>
   <data name="Type" xml:space="preserve">
     <value>유형</value>
@@ -1537,6 +1547,12 @@
   <data name="ThemeDefault" xml:space="preserve">
     <value>시스템 설정과 같이</value>
   </data>
+  <data name="DefaultDarkTheme" xml:space="preserve">
+    <value>Default dark theme</value>
+  </data>
+  <data name="DefaultDarkThemeDescription" xml:space="preserve">
+    <value>Choose the dark theme to use when using Default (System) theme while your device's dark mode is enabled.</value>
+  </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>메모 복사</value>
   </data>
@@ -1553,17 +1569,21 @@
     <value>검은 테마</value>
     <comment>The color black</comment>
   </data>
-  <data name="BlacklistedUris" xml:space="preserve">
-    <value>URI 블랙리스트</value>
+  <data name="Nord" xml:space="preserve">
+    <value>Nord</value>
+    <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
-  <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>블랙리스트에 있는 URI는 자동 완성에 나타나지 않습니다. 각 항목은 쉼표로 구분합니다. 예) "https://twitter.com, androidapp://com.twitter.android".</value>
+  <data name="AutofillBlockedUris" xml:space="preserve">
+    <value>Auto-fill blocked URIs</value>
   </data>
-  <data name="DisableSavePrompt" xml:space="preserve">
-    <value>저장 대화 상자 사용 안 함</value>
+  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
+    <value>Auto-fill will not be offered for blocked URIs. Separate multiple URIs with a comma. For example: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
-  <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>저장 대화 상자를 사용하면 항목을 처음 입력할 때마다 보관함에 그 항목을 추가할 것인지 물어봅니다.</value>
+  <data name="AskToAddLogin" xml:space="preserve">
+    <value>Ask to add login</value>
+  </data>
+  <data name="AskToAddLoginDescription" xml:space="preserve">
+    <value>Ask to add an item if one isn't found in your vault.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
     <value>앱 재시작 시</value>
@@ -1856,6 +1876,9 @@
     <value>이 Send의 이름</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
+  <data name="Text" xml:space="preserve">
+    <value>텍스트</value>
+  </data>
   <data name="TypeText" xml:space="preserve">
     <value>텍스트</value>
   </data>
@@ -1871,6 +1894,18 @@
   </data>
   <data name="TypeFileInfo" xml:space="preserve">
     <value>전송하려는 파일</value>
+  </data>
+  <data name="FileTypeIsSelected" xml:space="preserve">
+    <value>파일 유형이 선택되었습니다.</value>
+  </data>
+  <data name="FileTypeIsNotSelected" xml:space="preserve">
+    <value>파일 유형이 선택되지 않았습니다. 탭해서 선택하세요.</value>
+  </data>
+  <data name="TextTypeIsSelected" xml:space="preserve">
+    <value>텍스트 유형이 선택되었습니다.</value>
+  </data>
+  <data name="TextTypeIsNotSelected" xml:space="preserve">
+    <value>텍스트 유형이 선택되지 않았습니다. 탭해서 선택하세요.</value>
   </data>
   <data name="DeletionDate" xml:space="preserve">
     <value>삭제 날짜</value>
@@ -2175,5 +2210,68 @@
   </data>
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
     <value>이메일로 전송된 인증 코드를 입력해주세요</value>
+  </data>
+  <data name="SubmitCrashLogs" xml:space="preserve">
+    <value>Submit crash logs</value>
+  </data>
+  <data name="SubmitCrashLogsDescription" xml:space="preserve">
+    <value>Help Bitwarden improve app stability by submitting crash reports.</value>
+  </data>
+  <data name="OptionsExpanded" xml:space="preserve">
+    <value>설정이 펼쳐졌습니다. 탭해서 접을 수 있습니다.</value>
+  </data>
+  <data name="OptionsCollapsed" xml:space="preserve">
+    <value>설정이 접혀있습니다. 탭해서 펼칠 수 있습니다.</value>
+  </data>
+  <data name="UppercaseAtoZ" xml:space="preserve">
+    <value>대문자 (A-Z)</value>
+  </data>
+  <data name="LowercaseAtoZ" xml:space="preserve">
+    <value>소문자 (a-z)</value>
+  </data>
+  <data name="NumbersZeroToNine" xml:space="preserve">
+    <value>숫자 (0-9)</value>
+  </data>
+  <data name="SpecialCharacters" xml:space="preserve">
+    <value>특수문자 (!@#$%^&amp;*)</value>
+  </data>
+  <data name="TapToGoBack" xml:space="preserve">
+    <value>Tap to go back</value>
+  </data>
+  <data name="PasswordIsVisibleTapToHide" xml:space="preserve">
+    <value>Password is visible, tap to hide.</value>
+  </data>
+  <data name="PasswordIsNotVisibleTapToShow" xml:space="preserve">
+    <value>Password is not visible, tap to show.</value>
+  </data>
+  <data name="FilterByVault" xml:space="preserve">
+    <value>Filter items by vault</value>
+  </data>
+  <data name="AllVaults" xml:space="preserve">
+    <value>모든 보관함</value>
+  </data>
+  <data name="Vaults" xml:space="preserve">
+    <value>보관함</value>
+  </data>
+  <data name="VaultFilterDescription" xml:space="preserve">
+    <value>보관함: {0}</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>모두</value>
+  </data>
+  <data name="NeverLockWarning" xml:space="preserve">
+    <value>Setting your lock options to “Never” keeps your vault available to anyone with access to your device. If you use this option, you should ensure that you keep your device properly protected.</value>
+  </data>
+  <data name="EnvironmentPageUrlsError" xml:space="preserve">
+    <value>One or more of the URLs entered are invalid. Please revise it and try to save again.</value>
+  </data>
+  <data name="GenericErrorMessage" xml:space="preserve">
+    <value>We were unable to process your request. Please try again or contact us.</value>
+  </data>
+  <data name="AllowScreenCapture" xml:space="preserve">
+    <value>Allow screen capture</value>
+  </data>
+  <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
+    <value>Are you sure you want to enable Screen Capture?</value>
   </data>
 </root>
