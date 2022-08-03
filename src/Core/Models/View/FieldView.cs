@@ -19,5 +19,6 @@ namespace Bit.Core.Models.View
         public string MaskedValue => Value != null ? "••••••••" : null;
         public bool NewField { get; set; }
         public LinkedIdType? LinkedId { get; set; }
+        public bool BoolValue => bool.TryParse(Value, out var b) && b;
     }
 }

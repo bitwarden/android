@@ -17,7 +17,7 @@ namespace Bit.App.Pages
 
 
         private bool _autofillSavePrompt;
-        private string _autofillBlacklistedUris;
+        private string _autofillBlockedUris;
         private bool _favicon;
         private bool _autoTotpCopy;
         private int _clearClipboardSelectedIndex;
@@ -167,10 +167,10 @@ namespace Bit.App.Pages
             }
         }
 
-        public string AutofillBlacklistedUris
+        public string AutofillBlockedUris
         {
-            get => _autofillBlacklistedUris;
-            set => SetProperty(ref _autofillBlacklistedUris, value);
+            get => _autofillBlockedUris;
+            set => SetProperty(ref _autofillBlockedUris, value);
         }
 
         public bool ShowAndroidAutofillSettings
@@ -182,8 +182,8 @@ namespace Bit.App.Pages
         public async Task InitAsync()
         {
             AutofillSavePrompt = !(await _stateService.GetAutofillDisableSavePromptAsync()).GetValueOrDefault();
-            var blacklistedUrisList = await _stateService.GetAutofillBlacklistedUrisAsync();
-            AutofillBlacklistedUris = blacklistedUrisList != null ? string.Join(", ", blacklistedUrisList) : null;
+            var blockedUrisList = await _stateService.GetAutofillBlacklistedUrisAsync();
+            AutofillBlockedUris = blockedUrisList != null ? string.Join(", ", blockedUrisList) : null;
             AutoTotpCopy = !(await _stateService.GetDisableAutoTotpCopyAsync() ?? false);
             Favicon = !(await _stateService.GetDisableFaviconAsync()).GetValueOrDefault();
             var theme = await _stateService.GetThemeAsync();
@@ -252,19 +252,19 @@ namespace Bit.App.Pages
             }
         }
 
-        public async Task UpdateAutofillBlacklistedUris()
+        public async Task UpdateAutofillBlockedUris()
         {
             if (_inited)
             {
-                if (string.IsNullOrWhiteSpace(AutofillBlacklistedUris))
+                if (string.IsNullOrWhiteSpace(AutofillBlockedUris))
                 {
                     await _stateService.SetAutofillBlacklistedUrisAsync(null);
-                    AutofillBlacklistedUris = null;
+                    AutofillBlockedUris = null;
                     return;
                 }
                 try
                 {
-                    var csv = AutofillBlacklistedUris;
+                    var csv = AutofillBlockedUris;
                     var urisList = new List<string>();
                     foreach (var uri in csv.Split(','))
                     {
@@ -281,7 +281,7 @@ namespace Bit.App.Pages
                         urisList.Add(cleanedUri);
                     }
                     await _stateService.SetAutofillBlacklistedUrisAsync(urisList);
-                    AutofillBlacklistedUris = string.Join(", ", urisList);
+                    AutofillBlockedUris = string.Join(", ", urisList);
                 }
                 catch { }
             }

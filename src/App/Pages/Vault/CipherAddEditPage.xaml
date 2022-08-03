@@ -2,7 +2,7 @@
 <pages:BaseContentPage 
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="Bit.App.Pages.AddEditPage"
+    x:Class="Bit.App.Pages.CipherAddEditPage"
     xmlns:pages="clr-namespace:Bit.App.Pages"
     xmlns:u="clr-namespace:Bit.App.Utilities"
     xmlns:controls="clr-namespace:Bit.App.Controls"
@@ -10,11 +10,11 @@
     xmlns:behaviors="clr-namespace:Bit.App.Behaviors"
     xmlns:effects="clr-namespace:Bit.App.Effects"
     xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
-    x:DataType="pages:AddEditPageViewModel"
+    x:DataType="pages:CipherAddEditPageViewModel"
     x:Name="_page"
     Title="{Binding PageTitle}">
     <ContentPage.BindingContext>
-        <pages:AddEditPageViewModel />
+        <pages:CipherAddEditPageViewModel />
     </ContentPage.BindingContext>
 
     <ContentPage.ToolbarItems>
@@ -638,7 +638,7 @@
                 </StackLayout>
                 <controls:RepeaterView ItemsSource="{Binding Fields}">
                     <controls:RepeaterView.ItemTemplate>
-                        <DataTemplate x:DataType="pages:AddEditPageFieldViewModel">
+                        <DataTemplate x:DataType="pages:CipherAddEditPageFieldViewModel">
                             <StackLayout Spacing="0" Padding="0">
                                 <Grid StyleClass="box-row, box-row-input">
                                     <Grid.RowDefinitions>

@@ -330,20 +330,20 @@ namespace Bit.App
                 var topPage = tabbedPage.Navigation.ModalStack[tabbedPage.Navigation.ModalStack.Count - 1];
                 if (topPage is NavigationPage navPage)
                 {
-                    if (navPage.CurrentPage is ViewPage viewPage)
+                    if (navPage.CurrentPage is CipherDetailsPage cipherDetailsPage)
                     {
                         lastPageBeforeLock = new PreviousPageInfo
                         {
                             Page = "view",
-                            CipherId = viewPage.ViewModel.CipherId
+                            CipherId = cipherDetailsPage.ViewModel.CipherId
                         };
                     }
-                    else if (navPage.CurrentPage is AddEditPage addEditPage && addEditPage.ViewModel.EditMode)
+                    else if (navPage.CurrentPage is CipherAddEditPage cipherAddEditPage && cipherAddEditPage.ViewModel.EditMode)
                     {
                         lastPageBeforeLock = new PreviousPageInfo
                         {
                             Page = "edit",
-                            CipherId = addEditPage.ViewModel.CipherId
+                            CipherId = cipherAddEditPage.ViewModel.CipherId
                         };
                     }
                 }
@@ -378,7 +378,7 @@ namespace Bit.App
                     Current.MainPage = new TabsPage(Options);
                     break;
                 case NavigationTarget.AddEditCipher:
-                    Current.MainPage = new NavigationPage(new AddEditPage(appOptions: Options));
+                    Current.MainPage = new NavigationPage(new CipherAddEditPage(appOptions: Options));
                     break;
                 case NavigationTarget.AutofillCiphers:
                     Current.MainPage = new NavigationPage(new AutofillCiphersPage(Options));
