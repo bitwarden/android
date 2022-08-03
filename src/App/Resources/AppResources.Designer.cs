@@ -4127,18 +4127,6 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string CipherListIsVisibleActivateToShowAuthenticationCodesList {
-            get {
-                return ResourceManager.GetString("CipherListIsVisibleActivateToShowAuthenticationCodesList", resourceCulture);
-            }
-        }
-        
-        public static string AuthenticationCodesListIsVisibleActivateToShowCipherList {
-            get {
-                return ResourceManager.GetString("AuthenticationCodesListIsVisibleActivateToShowCipherList", resourceCulture);
-            }
-        }
-        
         public static string EnvironmentPageUrlsError {
             get {
                 return ResourceManager.GetString("EnvironmentPageUrlsError", resourceCulture);

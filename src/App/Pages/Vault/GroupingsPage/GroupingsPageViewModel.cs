@@ -98,9 +98,6 @@ namespace Bit.App.Pages
         public bool HasCiphers { get; set; }
         public bool HasFolders { get; set; }
         public bool HasCollections { get; set; }
-        public string ShowTotpCodesAccessibilityText => TotpFilterEnable ?
-            AppResources.AuthenticationCodesListIsVisibleActivateToShowCipherList
-            : AppResources.CipherListIsVisibleActivateToShowAuthenticationCodesList;
         public bool ShowNoFolderCipherGroup => NoFolderCiphers != null
                                                && NoFolderCiphers.Count < NoFolderListSize
                                                && (Collections is null || !Collections.Any());
@@ -168,11 +165,6 @@ namespace Bit.App.Pages
             get => _showTotpFilter;
             set => SetProperty(ref _showTotpFilter, value);
         }
-        public bool TotpFilterEnable
-        {
-            get => _totpFilterEnable;
-            set => SetProperty(ref _totpFilterEnable, value);
-        }
         public AccountSwitchingOverlayViewModel AccountSwitchingOverlayViewModel { get; }
         public ObservableRangeCollection<IGroupingsPageListItem> GroupedItems { get; set; }
         public Command RefreshCommand { get; set; }
@@ -239,7 +231,7 @@ namespace Bit.App.Pages
                 }
                 if (MainPage)
                 {
-                    if (TOTPCiphers.Any())
+                    if (TOTPCiphers.Any() && canAccessPremium)
                     {
                         groupedItems.Add(new GroupingsPageListGroup(
                         AppResources.Totp, 1, uppercaseGroupNames, false)
@@ -308,8 +300,13 @@ namespace Bit.App.Pages
                         collectionListItems.Count, uppercaseGroupNames, !MainPage));
                 }
                 if (Ciphers?.Any() ?? false)
-                {
+                {   
                     CreateCipherGroupedItems(groupedItems);
+                }
+                if (ShowTotp && (!TOTPCiphers?.Any() ?? false))
+                {
+                    Page.Navigation.PopAsync();
+                    return;
                 }
                 if (ShowNoFolderCipherGroup)
                 {

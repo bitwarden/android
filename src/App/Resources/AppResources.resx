@@ -2302,12 +2302,6 @@ select Add TOTP to store the key safely</value>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Setting your lock options to “Never” keeps your vault available to anyone with access to your device. If you use this option, you should ensure that you keep your device properly protected.</value>
   </data>
-  <data name="CipherListIsVisibleActivateToShowAuthenticationCodesList" xml:space="preserve">
-    <value>Cipher list is visible, activate to show authentication codes list.</value>
-  </data>
-  <data name="AuthenticationCodesListIsVisibleActivateToShowCipherList" xml:space="preserve">
-    <value>Authentication codes list is visible, activate to show cipher list.</value>
-  </data>
   <data name="EnvironmentPageUrlsError" xml:space="preserve">
     <value>One or more of the URLs entered are invalid. Please revise it and try to save again.</value>
   </data>
