@@ -69,12 +69,12 @@ namespace Bit.App.Pages
             }
         }
 
-        private async void LogIn_Clicked(object sender, EventArgs e)
+        private void LogIn_Clicked(object sender, EventArgs e)
         {
             if (DoOnce())
             {
                 CopyAppOptions();
-                await _vm.LogInAsync();
+                _vm.LogInCommand.ExecuteAsync();
             }
         }
 
