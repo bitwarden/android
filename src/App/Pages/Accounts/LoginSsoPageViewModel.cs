@@ -11,14 +11,13 @@ using Bit.Core.Models.Domain;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Essentials;
-using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
     public class LoginSsoPageViewModel : BaseViewModel
     {
+        private const string REDIRECT_URI = "bitwarden://sso-callback";
 
-        private const string RedirectUri = "bitwarden://sso-callback";
         private readonly IDeviceActionService _deviceActionService;
         private readonly IAuthService _authService;
         private readonly ISyncService _syncService;
@@ -101,7 +100,7 @@ namespace Bit.App.Pages
                     return;
                 }
 
-                string ssoToken = response.Token;
+                var ssoToken = response.Token;
 
 
                 var passwordOptions = new PasswordGenerationOptions(true);
@@ -115,7 +114,7 @@ namespace Bit.App.Pages
 
                 var url = _apiService.IdentityBaseUrl + "/connect/authorize?" +
                           "client_id=" + _platformUtilsService.GetClientType().GetString() + "&" +
-                          "redirect_uri=" + Uri.EscapeDataString(RedirectUri) + "&" +
+                          "redirect_uri=" + Uri.EscapeDataString(REDIRECT_URI) + "&" +
                           "response_type=code&scope=api%20offline_access&" +
                           "state=" + state + "&code_challenge=" + codeChallenge + "&" +
                           "code_challenge_method=S256&response_mode=query&" +
@@ -125,7 +124,7 @@ namespace Bit.App.Pages
                 WebAuthenticatorResult authResult = null;
 
                 authResult = await WebAuthenticator.AuthenticateAsync(new Uri(url),
-                    new Uri(RedirectUri));
+                    new Uri(REDIRECT_URI));
 
 
                 var code = GetResultCode(authResult, state);
@@ -179,7 +178,7 @@ namespace Bit.App.Pages
         {
             try
             {
-                var response = await _authService.LogInSsoAsync(code, codeVerifier, RedirectUri, orgId);
+                var response = await _authService.LogInSsoAsync(code, codeVerifier, REDIRECT_URI, orgId);
                 await AppHelpers.ResetInvalidUnlockAttemptsAsync();
                 await _stateService.SetRememberedOrgIdentifierAsync(OrgIdentifier);
                 await _deviceActionService.HideLoadingAsync();
