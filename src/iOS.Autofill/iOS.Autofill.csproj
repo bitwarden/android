@@ -254,6 +254,17 @@
     <BundleResource Include="Resources\logo_white%403x.png" />
   </ItemGroup>
   <ItemGroup>
+    <BundleResource Include="..\iOS\Resources\more_vert.png">
+      <Link>Resources\more_vert.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\iOS\Resources\more_vert%402x.png">
+      <Link>Resources\more_vert%402x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\iOS\Resources\more_vert%403x.png">
+      <Link>Resources\more_vert%403x.png</Link>
+    </BundleResource>
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Microsoft.AppCenter.Crashes">
       <Version>4.4.0</Version>
     </PackageReference>

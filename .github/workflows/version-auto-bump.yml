@@ -1,0 +1,67 @@
+---
+name: Version Auto Bump
+
+on:
+  release:
+    types: [published]
+
+jobs:
+
+  setup:
+    name: "Setup"
+    runs-on: ubuntu-20.04
+    outputs:
+      version_number: ${{ steps.version.outputs.new-version }}
+    steps:
+      - name: Checkout Branch
+        uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579
+
+      - name: Get version to bump
+        id: version
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag }}
+        run: |
+          CURR_MAJOR=$(echo $RELEASE_TAG | sed -r 's/v([0-9]{4}\.[0-9]\.)([0-9])/\1/')
+          CURR_VER=$(echo $RELEASE_TAG | sed -r 's/v([0-9]{4}\.[0-9]\.)([0-9])/\2/')
+          echo $CURR_VER
+
+          ((CURR_VER++))
+          NEW_VER=$CURR_MAJOR$CURR_VER
+
+          echo $NEW_VER
+
+          echo "::set-output name=new-version::$NEW_VER"
+
+  trigger_version_bump:
+    name: "Trigger version bump workflow"
+    runs-on: ubuntu-20.04
+    needs:
+      - setup
+    steps:
+      - name: Login to Azure
+        uses: Azure/login@ec3c14589bd3e9312b3cc8c41e6860e258df9010
+        with:
+          creds: ${{ secrets.AZURE_PROD_KV_CREDENTIALS }}
+
+      - name: Retrieve secrets
+        id: retrieve-secrets
+        env:
+          KEYVAULT: bitwarden-prod-kv
+          SECRET: "github-pat-bitwarden-devops-bot-repo-scope"
+        run: |
+          VALUE=$(az keyvault secret show --vault-name $KEYVAULT --name $SECRET --query value --output tsv)
+          echo "::add-mask::$VALUE"
+          echo "::set-output name=$SECRET::$VALUE"
+
+      - name: Call GitHub API to trigger workflow bump
+        env:
+          TOKEN: ${{ steps.retrieve-secrets.outputs.github-pat-bitwarden-devops-bot-repo-scope }}
+          VERSION: ${{ needs.setup.outputs.version_number}}
+        run: |
+          JSON_STRING=$(printf '{"ref":"master", "inputs": { "version_number":"%s"}}' "$VERSION")
+          curl \
+            -X POST \
+            -i -u bitwarden-devops-bot:$TOKEN \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/bitwarden/mobile/actions/workflows/version-bump.yml/dispatches \
+            -d $JSON_STRING

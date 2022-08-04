@@ -89,6 +89,12 @@ namespace Bit.iOS.Core.Services
                 return Task.CompletedTask;
             }
 
+            var vc = GetPresentedViewController();
+            if (vc is null)
+            {
+                return Task.CompletedTask;
+            }    
+
             var result = new TaskCompletionSource<int>();
 
             var loadingIndicator = new UIActivityIndicatorView(new CGRect(10, 5, 50, 50));
