@@ -1241,6 +1241,18 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string Off {
+            get {
+                return ResourceManager.GetString("Off", resourceCulture);
+            }
+        }
+        
+        public static string On {
+            get {
+                return ResourceManager.GetString("On", resourceCulture);
+            }
+        }
+        
         public static string Status {
             get {
                 return ResourceManager.GetString("Status", resourceCulture);
@@ -2747,15 +2759,15 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string BlacklistedUris {
+        public static string AutofillBlockedUris {
             get {
-                return ResourceManager.GetString("BlacklistedUris", resourceCulture);
+                return ResourceManager.GetString("AutofillBlockedUris", resourceCulture);
             }
         }
         
-        public static string BlacklistedUrisDescription {
+        public static string AutofillBlockedUrisDescription {
             get {
-                return ResourceManager.GetString("BlacklistedUrisDescription", resourceCulture);
+                return ResourceManager.GetString("AutofillBlockedUrisDescription", resourceCulture);
             }
         }
         

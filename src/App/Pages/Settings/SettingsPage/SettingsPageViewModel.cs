@@ -450,7 +450,7 @@ namespace Bit.App.Pages
                 autofillItems.Add(new SettingsPageListItem
                 {
                     Name = AppResources.AutofillServices,
-                    SubLabel = _deviceActionService.AutofillServicesEnabled() ? AppResources.Enabled : AppResources.Disabled,
+                    SubLabel = _deviceActionService.AutofillServicesEnabled() ? AppResources.On : AppResources.Off,
                     ExecuteAsync = () => Page.Navigation.PushModalAsync(new NavigationPage(new AutofillServicesPage(Page as SettingsPage)))
                 });
             }
@@ -500,7 +500,7 @@ namespace Bit.App.Pages
                 new SettingsPageListItem
                 {
                     Name = AppResources.UnlockWithPIN,
-                    SubLabel = _pin ? AppResources.Enabled : AppResources.Disabled,
+                    SubLabel = _pin ? AppResources.On : AppResources.Off,
                     ExecuteAsync = () => UpdatePinAsync()
                 },
                 new SettingsPageListItem
@@ -525,7 +525,7 @@ namespace Bit.App.Pages
                 var item = new SettingsPageListItem
                 {
                     Name = string.Format(AppResources.UnlockWith, biometricName),
-                    SubLabel = _biometric ? AppResources.Enabled : AppResources.Disabled,
+                    SubLabel = _biometric ? AppResources.On : AppResources.Off,
                     ExecuteAsync = () => UpdateBiometricAsync()
                 };
                 securityItems.Insert(2, item);
@@ -554,7 +554,7 @@ namespace Bit.App.Pages
                 securityItems.Add(new SettingsPageListItem
                 {
                     Name = AppResources.AllowScreenCapture,
-                    SubLabel = _screenCaptureAllowed ? AppResources.Enabled : AppResources.Disabled,
+                    SubLabel = _screenCaptureAllowed ? AppResources.On : AppResources.Off,
                     ExecuteAsync = () => SetScreenCaptureAllowedAsync()
                 });
             }
@@ -627,7 +627,7 @@ namespace Bit.App.Pages
                 new SettingsPageListItem
                 {
                     Name = AppResources.SubmitCrashLogs,
-                    SubLabel = _reportLoggingEnabled ? AppResources.Enabled : AppResources.Disabled,
+                    SubLabel = _reportLoggingEnabled ? AppResources.On : AppResources.Off,
                     ExecuteAsync = () => LoggerReportingAsync()
                 },
 #endif
