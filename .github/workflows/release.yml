@@ -13,6 +13,11 @@ on:
           - Initial Release
           - Redeploy
           - Dry Run
+      fdroid_publish:
+        description: 'Publish to f-droid store'
+        required: true
+        default: true
+        type: boolean
 
 jobs:
   release:
@@ -48,18 +53,38 @@ jobs:
           BRANCH_NAME=$(basename ${{ github.ref }})
           echo "::set-output name=branch-name::$BRANCH_NAME"
 
+      - name: Create GitHub deployment
+        uses: chrnorm/deployment-action@1b599fe41a0ef1f95191e7f2eec4743f2d7dfc48
+        id: deployment
+        with:
+          token: '${{ secrets.GITHUB_TOKEN }}'
+          initial-status: 'in_progress'
+          environment: 'production'
+          description: 'Deployment ${{ steps.version.outputs.version }} from branch ${{ steps.branch.outputs.branch-name }}'
+          task: release
+      
+
       - name: Download all artifacts
+        if: ${{ github.event.inputs.release_type != 'Dry Run' }}
         uses: dawidd6/action-download-artifact@575b1e4167df67acf7e692af784566618b23c71e  # v2.17.10
         with:
           workflow: build.yml
           workflow_conclusion: success
           branch: ${{ steps.branch.outputs.branch-name }}
 
+      - name: Download all artifacts
+        if: ${{ github.event.inputs.release_type == 'Dry Run' }}
+        uses: dawidd6/action-download-artifact@575b1e4167df67acf7e692af784566618b23c71e  # v2.17.10
+        with:
+          workflow: build.yml
+          workflow_conclusion: success
+          branch: master
+
       - name: Prep Bitwarden iOS release asset
         run: zip -r Bitwarden\ iOS.zip Bitwarden\ iOS
 
       - name: Create release
-        if: github.event.inputs.release_type != 'Dry Run'
+        if: ${{ github.event.inputs.release_type != 'Dry Run' }}
         uses: ncipollo/release-action@40bb172bd05f266cf9ba4ff965cb61e9ee5f6d01  # v1.9.0
         with:
           artifacts: "./com.x8bit.bitwarden.aab/com.x8bit.bitwarden.aab,
@@ -73,21 +98,48 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           draft: true
 
+      - name: Update deployment status to Success
+        if: ${{ success() }}
+        uses: chrnorm/deployment-status@07b3930847f65e71c9c6802ff5a402f6dfb46b86
+        with:
+          token: '${{ secrets.GITHUB_TOKEN }}'
+          state: 'success'
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+
+      - name: Update deployment status to Failure
+        if: ${{ failure() }}
+        uses: chrnorm/deployment-status@07b3930847f65e71c9c6802ff5a402f6dfb46b86
+        with:
+          token: '${{ secrets.GITHUB_TOKEN }}'
+          state: 'failure'
+          deployment-id: ${{ steps.deployment.outputs.deployment_id }}
+
 
   f-droid:
     name: F-Droid Release
     runs-on: ubuntu-20.04
     needs: release
+    if: inputs.fdroid_publish
     steps:
       - name: Checkout repo
         uses: actions/checkout@ec3a7ce113134d7a93b817d10a8272cb61118579  # v2.4.0
 
       - name: Download F-Droid .apk artifact
+        if: ${{ github.event.inputs.release_type != 'Dry Run' }}
         uses: dawidd6/action-download-artifact@575b1e4167df67acf7e692af784566618b23c71e  # v2.17.10
         with:
           workflow: build.yml
           workflow_conclusion: success
           branch: ${{ needs.release.outputs.branch-name }}
+          name: com.x8bit.bitwarden-fdroid.apk
+
+      - name: Download F-Droid .apk artifact
+        if: ${{ github.event.inputs.release_type == 'Dry Run' }}
+        uses: dawidd6/action-download-artifact@575b1e4167df67acf7e692af784566618b23c71e  # v2.17.10
+        with:
+          workflow: build.yml
+          workflow_conclusion: success
+          branch: master
           name: com.x8bit.bitwarden-fdroid.apk
 
       - name: Set up Node
@@ -155,5 +207,5 @@ jobs:
           cd $GITHUB_WORKSPACE
 
       - name: Deploy to gh-pages
-        if: github.event.inputs.release_type != 'Dry Run'
+        if: ${{ github.event.inputs.release_type != 'Dry Run' }}
         run: npm run deploy

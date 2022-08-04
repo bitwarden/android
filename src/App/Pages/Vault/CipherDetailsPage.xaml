@@ -2,18 +2,18 @@
 <pages:BaseContentPage 
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="Bit.App.Pages.ViewPage"
+    x:Class="Bit.App.Pages.CipherDetailsPage"
     xmlns:pages="clr-namespace:Bit.App.Pages"
     xmlns:u="clr-namespace:Bit.App.Utilities"
     xmlns:controls="clr-namespace:Bit.App.Controls"
     xmlns:effects="clr-namespace:Bit.App.Effects"
     xmlns:views="clr-namespace:Bit.Core.Models.View;assembly=BitwardenCore"
     xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
-    x:DataType="pages:ViewPageViewModel"
+    x:DataType="pages:CipherDetailsPageViewModel"
     x:Name="_page"
     Title="{Binding PageTitle}">
     <ContentPage.BindingContext>
-        <pages:ViewPageViewModel />
+        <pages:CipherDetailsPageViewModel />
     </ContentPage.BindingContext>
 
     <ContentPage.Resources>
@@ -540,7 +540,7 @@
                         </StackLayout>
                         <controls:RepeaterView ItemsSource="{Binding Fields}">
                             <controls:RepeaterView.ItemTemplate>
-                                <DataTemplate x:DataType="pages:ViewPageFieldViewModel">
+                                <DataTemplate x:DataType="pages:CipherDetailsPageFieldViewModel">
                                     <StackLayout Spacing="0" Padding="0">
                                         <Grid StyleClass="box-row">
                                             <Grid.RowDefinitions>
@@ -571,6 +571,8 @@
                                                 IsVisible="{Binding IsLinkedType}" />
                                             <controls:IconLabel
                                                 Text="{Binding ValueText, Mode=OneWay}"
+                                                AutomationProperties.IsInAccessibleTree="true"
+                                                AutomationProperties.Name="{Binding ValueAccessibilityText, Mode=OneWay}"
                                                 StyleClass="box-value"
                                                 Grid.Row="1"
                                                 Grid.Column="0"

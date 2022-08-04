@@ -6,6 +6,7 @@ using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
+using Bit.Core.Utilities;
 
 namespace Bit.Core.Services
 {
@@ -173,7 +174,7 @@ namespace Bit.Core.Services
         public void LogOut(Action callback)
         {
             callback.Invoke();
-            _messagingService.Send("loggedOut");
+            _messagingService.Send(AccountsManagerMessageCommands.LOGGED_OUT);
         }
 
         public List<TwoFactorProvider> GetSupportedTwoFactorProviders()

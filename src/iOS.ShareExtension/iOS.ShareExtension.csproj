@@ -26,7 +26,6 @@
     <MtouchLink>None</MtouchLink>
     <MtouchArch>x86_64</MtouchArch>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
-    <DeviceSpecificBuild>false</DeviceSpecificBuild>
     <MtouchVerbosity></MtouchVerbosity>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <AssemblyName>BitwardeniOSShareExtension</AssemblyName>
@@ -193,6 +192,10 @@
     <Compile Include="LockPasswordViewController.designer.cs">
       <DependentUpon>LockPasswordViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="ExtensionNavigationController.cs" />
+    <Compile Include="ExtensionNavigationController.designer.cs">
+      <DependentUpon>ExtensionNavigationController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\App\App.csproj">
@@ -223,6 +226,15 @@
     </BundleResource>
     <BundleResource Include="..\iOS\Resources\logo.png">
       <Link>Resources\logo.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\iOS\Resources\more_vert.png">
+      <Link>Resources\more_vert.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\iOS\Resources\more_vert%402x.png">
+      <Link>Resources\more_vert%402x.png</Link>
+    </BundleResource>
+    <BundleResource Include="..\iOS\Resources\more_vert%403x.png">
+      <Link>Resources\more_vert%403x.png</Link>
     </BundleResource>
     <BundleResource Include="..\iOS\Resources\bwi-font.ttf">
       <Link>Resources\bwi-font.ttf</Link>

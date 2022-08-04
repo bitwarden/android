@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
-using Xamarin.Forms;
+using Xamarin.CommunityToolkit.ObjectModel;
 
 namespace Bit.App.Pages
 {
     public class EnvironmentPageViewModel : BaseViewModel
     {
         private readonly IEnvironmentService _environmentService;
+        readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
 
         public EnvironmentPageViewModel()
         {
@@ -22,10 +24,10 @@ namespace Bit.App.Pages
             IdentityUrl = _environmentService.IdentityUrl;
             IconsUrl = _environmentService.IconsUrl;
             NotificationsUrls = _environmentService.NotificationsUrl;
-            SubmitCommand = new Command(async () => await SubmitAsync());
+            SubmitCommand = new AsyncCommand(SubmitAsync, onException: ex => OnSubmitException(ex), allowsMultipleExecutions: false);
         }
 
-        public Command SubmitCommand { get; }
+        public ICommand SubmitCommand { get; }
         public string BaseUrl { get; set; }
         public string ApiUrl { get; set; }
         public string IdentityUrl { get; set; }
@@ -37,6 +39,12 @@ namespace Bit.App.Pages
 
         public async Task SubmitAsync()
         {
+            if (!ValidateUrls())
+            {
+                await Page.DisplayAlert(AppResources.AnErrorHasOccurred, AppResources.EnvironmentPageUrlsError, AppResources.Ok);
+                return;
+            }
+
             var resUrls = await _environmentService.SetUrlsAsync(new Core.Models.Data.EnvironmentUrlData
             {
                 Base = BaseUrl,
@@ -56,6 +64,26 @@ namespace Bit.App.Pages
             NotificationsUrls = resUrls.Notifications;
 
             SubmitSuccessAction?.Invoke();
+        }
+
+        public bool ValidateUrls()
+        {
+            bool IsUrlValid(string url)
+            {
+                return string.IsNullOrEmpty(url) || Uri.IsWellFormedUriString(url, UriKind.RelativeOrAbsolute);
+            }
+
+            return IsUrlValid(BaseUrl)
+                && IsUrlValid(ApiUrl)
+                && IsUrlValid(IdentityUrl)
+                && IsUrlValid(WebVaultUrl)
+                && IsUrlValid(IconsUrl);
+        }
+
+        private void OnSubmitException(Exception ex)
+        {
+            _logger.Value.Exception(ex);
+            Page.DisplayAlert(AppResources.AnErrorHasOccurred, AppResources.GenericErrorMessage, AppResources.Ok);
         }
     }
 }

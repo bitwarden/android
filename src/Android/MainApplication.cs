@@ -20,6 +20,7 @@ using System.Net;
 using Bit.App.Utilities;
 using Bit.App.Pages;
 using Bit.App.Utilities.AccountManagement;
+using Bit.App.Controls;
 #if !FDROID
 using Android.Gms.Security;
 #endif
@@ -69,7 +70,8 @@ namespace Bit.Droid
                     ServiceContainer.Resolve<IStorageService>("secureStorageService"),
                     ServiceContainer.Resolve<IStateService>("stateService"),
                     ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService"),
-                    ServiceContainer.Resolve<IAuthService>("authService"));
+                    ServiceContainer.Resolve<IAuthService>("authService"),
+                    ServiceContainer.Resolve<ILogger>("logger"));
                 ServiceContainer.Register<IAccountsManager>("accountsManager", accountsManager);
             }
 #if !FDROID
@@ -160,6 +162,7 @@ namespace Bit.Droid
             ServiceContainer.Register<ICryptoFunctionService>("cryptoFunctionService", cryptoFunctionService);
             ServiceContainer.Register<ICryptoService>("cryptoService", cryptoService);
             ServiceContainer.Register<IPasswordRepromptService>("passwordRepromptService", passwordRepromptService);
+            ServiceContainer.Register<IAvatarImageSourcePool>("avatarImageSourcePool", new AvatarImageSourcePool());
 
             // Push
 #if FDROID
