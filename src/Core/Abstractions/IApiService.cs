@@ -82,5 +82,8 @@ namespace Bit.Core.Abstractions
         Task<SendResponse> PutSendAsync(string id, SendRequest request);
         Task<SendResponse> PutSendRemovePasswordAsync(string id);
         Task DeleteSendAsync(string id);
+        Task<string> GetUsernameFromFirefoxRelay(string url, string apiToken);
+        Task<string> GetUsernameFromSimpleLogin(string url, string apiToken);
+        Task<string> GetUsernameFromAnonAddy(string url, string apiToken, string domain);
     }
 }

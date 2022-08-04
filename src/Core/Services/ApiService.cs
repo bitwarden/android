@@ -688,6 +688,98 @@ namespace Bit.Core.Services
             }
         }
 
+        public async Task<string> GetUsernameFromFirefoxRelay(string url, string apiToken)
+        {
+            using (var requestMessage = new HttpRequestMessage())
+            {
+                requestMessage.Version = new Version(1, 0);
+                requestMessage.Method = HttpMethod.Post;
+                requestMessage.RequestUri = new Uri(url);
+                requestMessage.Headers.Add("Accept", "application/json");
+                requestMessage.Headers.Add("Authorization", $"Token {apiToken}");
+
+                HttpResponseMessage response;
+                try
+                {
+                    response = await _httpClient.SendAsync(requestMessage);
+                }
+                catch (Exception e)
+                {
+                    throw new ApiException(HandleWebError(e));
+                }
+                if (!response.IsSuccessStatusCode)
+                {
+                    var error = await HandleErrorAsync(response, false, true);
+                    throw new ApiException(error);
+                }
+                var responseJsonString = await response.Content.ReadAsStringAsync();
+                var result = JObject.Parse(responseJsonString);
+
+                return result["full_address"]?.ToString();
+            }
+        }
+
+        public async Task<string> GetUsernameFromSimpleLogin(string url, string apiToken)
+        {
+            using (var requestMessage = new HttpRequestMessage())
+            {
+                requestMessage.Version = new Version(1, 0);
+                requestMessage.Method = HttpMethod.Post;
+                requestMessage.RequestUri = new Uri(url);
+                requestMessage.Headers.Add("Accept", "application/json");
+                requestMessage.Headers.Add("Authentication", apiToken);
+
+                HttpResponseMessage response;
+                try
+                {
+                    response = await _httpClient.SendAsync(requestMessage);
+                }
+                catch (Exception e)
+                {
+                    throw new ApiException(HandleWebError(e));
+                }
+                if (!response.IsSuccessStatusCode)
+                {
+                    var error = await HandleErrorAsync(response, false, true);
+                    throw new ApiException(error);
+                }
+                var responseJsonString = await response.Content.ReadAsStringAsync();
+                var result = JObject.Parse(responseJsonString);
+
+                return result["alias"]?.ToString();
+            }
+        }
+
+        public async Task<string> GetUsernameFromAnonAddy(string url, string apiToken, string domain)
+        {
+            using (var requestMessage = new HttpRequestMessage())
+            {
+                requestMessage.Version = new Version(1, 0);
+                requestMessage.Method = HttpMethod.Post;
+                requestMessage.RequestUri = new Uri(url);
+                requestMessage.Headers.Add("Accept", "application/json");
+                requestMessage.Headers.Add("Authorization", $"Bearer {apiToken}");
+
+                HttpResponseMessage response;
+                try
+                {
+                    response = await _httpClient.SendAsync(requestMessage);
+                }
+                catch (Exception e)
+                {
+                    throw new ApiException(HandleWebError(e));
+                }
+                if (!response.IsSuccessStatusCode)
+                {
+                    var error = await HandleErrorAsync(response, false, true);
+                    throw new ApiException(error);
+                }
+                var result = JObject.Parse(await response.Content.ReadAsStringAsync());
+
+                return result["data"]?["email"]?.ToString();
+            }
+        }
+
         private ErrorResponse HandleWebError(Exception e)
         {
             return new ErrorResponse

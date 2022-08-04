@@ -619,7 +619,7 @@ namespace Bit.App.Pages
                 Cipher.Login.Username = username;
                 TriggerCipherChanged();
                 await Page.Navigation.PopModalAsync();
-            }, isUsernameGenerator:true);
+            }, isUsernameGenerator:true, website:Cipher?.Login?.Uri);
             await Page.Navigation.PushModalAsync(new NavigationPage(page));
         }
 

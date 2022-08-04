@@ -2308,4 +2308,10 @@
   <data name="GenerateUsername" xml:space="preserve">
     <value>Generate Username</value>
   </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>Email Type</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>Website (required)</value>
+  </data>
 </root>

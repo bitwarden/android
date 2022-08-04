@@ -18,7 +18,7 @@ namespace Bit.App.Pages
         private readonly Action<string> _selectAction;
         private readonly TabsPage _tabsPage;
 
-        public GeneratorPage(bool fromTabPage, Action<string> selectAction = null, TabsPage tabsPage = null, bool isUsernameGenerator = false)
+        public GeneratorPage(bool fromTabPage, Action<string> selectAction = null, TabsPage tabsPage = null, bool isUsernameGenerator = false, string website = null)
         {
             _tabsPage = tabsPage;
             InitializeComponent();
@@ -29,6 +29,7 @@ namespace Bit.App.Pages
             _selectAction = selectAction;
             _vm.ShowTypePicker = fromTabPage;
             _vm.IsUsername = isUsernameGenerator;
+            _vm.Website = website;
             var isIos = Device.RuntimePlatform == Device.iOS;
             if (selectAction != null)
             {
@@ -55,6 +56,8 @@ namespace Bit.App.Pages
                 _passwordTypePicker.On<Xamarin.Forms.PlatformConfiguration.iOS>().SetUpdateMode(UpdateMode.WhenFinished);
                 _usernameTypePicker.On<Xamarin.Forms.PlatformConfiguration.iOS>().SetUpdateMode(UpdateMode.WhenFinished);
                 _serviceTypePicker.On<Xamarin.Forms.PlatformConfiguration.iOS>().SetUpdateMode(UpdateMode.WhenFinished);
+                _plusAddressedEmailTypePicker.On<Xamarin.Forms.PlatformConfiguration.iOS>().SetUpdateMode(UpdateMode.WhenFinished);
+                _catchallEmailTypePicker.On<Xamarin.Forms.PlatformConfiguration.iOS>().SetUpdateMode(UpdateMode.WhenFinished);
             }
         }
 

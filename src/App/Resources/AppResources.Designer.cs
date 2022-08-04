@@ -4144,5 +4144,17 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("GenerateUsername", resourceCulture);
             }
         }
+        
+        public static string EmailType {
+            get {
+                return ResourceManager.GetString("EmailType", resourceCulture);
+            }
+        }
+        
+        public static string WebsiteRequired {
+            get {
+                return ResourceManager.GetString("WebsiteRequired", resourceCulture);
+            }
+        }
     }
 }

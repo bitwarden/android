@@ -161,6 +161,23 @@
                             x:Name="_plusAddressedEmailEntry"
                             Text="{Binding PlusAddressedEmail}"
                             StyleClass="box-value" />
+                        <StackLayout IsVisible="{Binding ShowUsernameEmailType}">
+                            <Label
+                                Text="{u:I18n EmailType}"
+                                StyleClass="box-label" />
+                            <Picker
+                                x:Name="_plusAddressedEmailTypePicker"
+                                ItemsSource="{Binding UsernameEmailTypeOptions, Mode=OneTime}"
+                                SelectedIndex="{Binding PlusAddressedEmailTypeSelectedIndex}"
+                                StyleClass="box-value" />
+                            <Label
+                                Text="{u:I18n Website}"
+                                StyleClass="box-label" />
+                            <Entry
+                                x:Name="_plusAddressedEmailWebsiteEntry"
+                                Text="{Binding PlusAddressedEmailWebsite}"
+                                StyleClass="box-value" />
+                        </StackLayout> 
                     </StackLayout>                    
                     <!--CATCH-ALL EMAIL OPTIONS-->
                     <StackLayout StyleClass="box-row, box-row-input"
@@ -172,6 +189,24 @@
                             x:Name="_catchAllEmailDomainNameEntry"
                             Text="{Binding CatchAllEmailDomain}"
                             StyleClass="box-value" />
+                        <StackLayout StyleClass="box"
+                             IsVisible="{Binding ShowUsernameEmailType}">
+                            <Label
+                                Text="{u:I18n EmailType}"
+                                StyleClass="box-label" />
+                            <Picker
+                                x:Name="_catchallEmailTypePicker"
+                                ItemsSource="{Binding UsernameEmailTypeOptions, Mode=OneTime}"
+                                SelectedIndex="{Binding CatchAllEmailTypeSelectedIndex}"
+                                StyleClass="box-value" />
+                            <Label
+                                Text="{u:I18n Website}"
+                                StyleClass="box-label" />
+                            <Entry
+                                x:Name="_catchallEmailWebsiteEntry"
+                                Text="{Binding CatchAllEmailWebsite}"
+                                StyleClass="box-value" />
+                        </StackLayout>
                     </StackLayout>
                     <!--FORWARDED EMAIL OPTIONS-->
                     <StackLayout StyleClass="box-row, box-row-input"
