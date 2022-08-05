@@ -386,7 +386,7 @@ namespace Bit.App.Pages
         {
             if (canAccessPremium && (TOTPCiphers?.Any() ?? false))
             {
-                groupedItems.Add(new GroupingsPageListGroup(
+                groupedItems.Insert(0, new GroupingsPageListGroup(
                     AppResources.Totp, 1, uppercaseGroupNames, false)
                         {
                             new GroupingsPageListItem
