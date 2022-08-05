@@ -721,8 +721,7 @@ namespace Bit.Core.Services
                 }
                 if (!response.IsSuccessStatusCode)
                 {
-                    var error = await HandleErrorAsync(response, false, true);
-                    throw new ApiException(error);
+                    throw new ApiException();
                 }
                 var responseJsonString = await response.Content.ReadAsStringAsync();
                 var result = JObject.Parse(responseJsonString);
@@ -752,9 +751,9 @@ namespace Bit.Core.Services
                 }
                 if (!response.IsSuccessStatusCode)
                 {
-                    var error = await HandleErrorAsync(response, false, true);
-                    throw new ApiException(error);
+                    throw new ApiException();
                 }
+
                 var responseJsonString = await response.Content.ReadAsStringAsync();
                 var result = JObject.Parse(responseJsonString);
 
@@ -783,8 +782,7 @@ namespace Bit.Core.Services
                 }
                 if (!response.IsSuccessStatusCode)
                 {
-                    var error = await HandleErrorAsync(response, false, true);
-                    throw new ApiException(error);
+                    throw new ApiException();
                 }
                 var result = JObject.Parse(await response.Content.ReadAsStringAsync());
 

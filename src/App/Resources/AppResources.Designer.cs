@@ -4192,5 +4192,11 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("WebsiteRequired", resourceCulture);
             }
         }
+        
+        public static string ExternalApiErrorMessage {
+            get {
+                return ResourceManager.GetString("ExternalApiErrorMessage", resourceCulture);
+            }
+        }
     }
 }

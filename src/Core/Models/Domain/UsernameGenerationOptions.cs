@@ -18,8 +18,7 @@ namespace Bit.Core.Models.Domain
                 SimpleLoginApiKey = string.Empty;
                 AnonAddyApiAccessToken = string.Empty;
                 AnonAddyDomainName = string.Empty;
-                PlusAddressedEmailWebsite = string.Empty;
-                CatchAllEmailWebsite = string.Empty;
+                EmailWebsite = string.Empty;
             }
         }
 
@@ -35,8 +34,7 @@ namespace Bit.Core.Models.Domain
         public string SimpleLoginApiKey { get; set; }
         public string AnonAddyApiAccessToken { get; set; }
         public string AnonAddyDomainName { get; set; }
-        public string PlusAddressedEmailWebsite { get; set; }
-        public string CatchAllEmailWebsite { get; set; }
+        public string EmailWebsite { get; set; }
 
         public void Merge(UsernameGenerationOptions defaults)
         {
@@ -48,8 +46,7 @@ namespace Bit.Core.Models.Domain
             SimpleLoginApiKey = SimpleLoginApiKey ?? defaults.SimpleLoginApiKey;
             AnonAddyApiAccessToken = AnonAddyApiAccessToken ?? defaults.AnonAddyApiAccessToken;
             AnonAddyDomainName = AnonAddyDomainName ?? defaults.AnonAddyDomainName;
-            PlusAddressedEmailWebsite = PlusAddressedEmailWebsite ?? defaults.PlusAddressedEmailWebsite;
-            CatchAllEmailWebsite = CatchAllEmailWebsite ?? defaults.CatchAllEmailWebsite;
+            EmailWebsite = EmailWebsite ?? defaults.EmailWebsite;
         }
     }
 }

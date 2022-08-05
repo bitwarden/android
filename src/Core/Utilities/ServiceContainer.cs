@@ -84,7 +84,7 @@ namespace Bit.Core.Utilities
             var eventService = new EventService(apiService, stateService, organizationService, cipherService);
             var userVerificationService = new UserVerificationService(apiService, platformUtilsService, i18nService,
                 cryptoService);
-            var usernameGenerationService = new UsernameGenerationService(cryptoService, apiService);
+            var usernameGenerationService = new UsernameGenerationService(cryptoService, apiService, stateService);
 
             Register<ITokenService>("tokenService", tokenService);
             Register<IApiService>("apiService", apiService);

@@ -14,15 +14,19 @@ namespace Bit.Core.Services
     {
         private readonly ICryptoService _cryptoService;
         private readonly IApiService _apiService;
+        private readonly IStateService _stateService;
         private UsernameGenerationOptions _defaultOptions = new UsernameGenerationOptions(true);
+        private UsernameGenerationOptions _optionsCache;
 
         public UsernameGenerationService(
             ICryptoService cryptoService,
-            IApiService apiService
+            IApiService apiService,
+            IStateService stateService
             )
         {
             _cryptoService = cryptoService;
             _apiService = apiService;
+            _stateService = stateService;
         }
 
         public async Task<string> GenerateUsernameAsync(UsernameGenerationOptions options)
@@ -40,6 +44,30 @@ namespace Bit.Core.Services
                 default:
                     return string.Empty;
             }
+        }
+
+        public async Task<UsernameGenerationOptions> GetOptionsAsync()
+        {
+            if (_optionsCache == null)
+            {
+                var options = await _stateService.GetUsernameGenerationOptionsAsync();
+                if (options == null)
+                {
+                    _optionsCache = _defaultOptions;
+                }
+                else
+                {
+                    options.Merge(_defaultOptions);
+                    _optionsCache = options;
+                }
+            }
+
+            return _optionsCache;
+        }
+
+        public void ClearCache()
+        {
+            _optionsCache = null;
         }
 
         private async Task<string> GenerateRandomWordAsync(UsernameGenerationOptions options)
@@ -101,7 +129,7 @@ namespace Bit.Core.Services
             }
             else
             {
-                generatedString = options.PlusAddressedEmailWebsite;
+                generatedString = options.EmailWebsite;
             }
 
             return emailBeginning + "+" + generatedString + "@" + emailEnding;
@@ -124,7 +152,7 @@ namespace Bit.Core.Services
             }
             else
             {
-                generatedString = options.CatchAllEmailWebsite;
+                generatedString = options.EmailWebsite;
             }
 
             return generatedString + "@" + catchAllEmailDomain;

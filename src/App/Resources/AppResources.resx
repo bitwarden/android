@@ -2332,4 +2332,7 @@
   <data name="WebsiteRequired" xml:space="preserve">
     <value>Website (required)</value>
   </data>
+  <data name="ExternalApiErrorMessage" xml:space="preserve">
+    <value>Unknown {0} error occurred.</value>
+  </data>
 </root>

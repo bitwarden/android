@@ -29,7 +29,7 @@ namespace Bit.App.Pages
             _selectAction = selectAction;
             _vm.ShowTypePicker = fromTabPage;
             _vm.IsUsername = isUsernameGenerator;
-            _vm.Website = website;
+            _vm.EmailWebsite = website;
             var isIos = Device.RuntimePlatform == Device.iOS;
             if (selectAction != null)
             {
@@ -107,6 +107,7 @@ namespace Bit.App.Pages
 
         private async void Regenerate_Clicked(object sender, EventArgs e)
         {
+            //Remove this method after proper testing and before final PR
             await _vm.RegenerateAsync();
         }
 

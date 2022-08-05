@@ -100,7 +100,7 @@
                         <controls:IconButton 
                             StyleClass="box-row-button, box-row-button-platform"
                             Text="{Binding Source={x:Static core:BitwardenIcons.Generate}}"
-                            Clicked="Regenerate_Clicked"
+                            Command="{Binding RegenerateCommand}"
                             Grid.Row="0"
                             Grid.Column="2"
                             Grid.RowSpan="2"
@@ -161,7 +161,8 @@
                             x:Name="_plusAddressedEmailEntry"
                             Text="{Binding PlusAddressedEmail}"
                             StyleClass="box-value" />
-                        <StackLayout IsVisible="{Binding ShowUsernameEmailType}">
+                        <StackLayout IsVisible="{Binding ShowUsernameEmailType}"
+                                     StyleClass="box-row-input">
                             <Label
                                 Text="{u:I18n EmailType}"
                                 StyleClass="box-label" />
@@ -173,10 +174,10 @@
                             <Label
                                 Text="{u:I18n Website}"
                                 StyleClass="box-label" />
-                            <Entry
-                                x:Name="_plusAddressedEmailWebsiteEntry"
-                                Text="{Binding PlusAddressedEmailWebsite}"
+                            <Label
+                                Text="{Binding EmailWebsite}"
                                 StyleClass="box-value" />
+                            <BoxView StyleClass="box-row-separator" />
                         </StackLayout> 
                     </StackLayout>                    
                     <!--CATCH-ALL EMAIL OPTIONS-->
@@ -189,8 +190,8 @@
                             x:Name="_catchAllEmailDomainNameEntry"
                             Text="{Binding CatchAllEmailDomain}"
                             StyleClass="box-value" />
-                        <StackLayout StyleClass="box"
-                             IsVisible="{Binding ShowUsernameEmailType}">
+                        <StackLayout IsVisible="{Binding ShowUsernameEmailType}"
+                                     StyleClass="box-row-input">
                             <Label
                                 Text="{u:I18n EmailType}"
                                 StyleClass="box-label" />
@@ -202,10 +203,10 @@
                             <Label
                                 Text="{u:I18n Website}"
                                 StyleClass="box-label" />
-                            <Entry
-                                x:Name="_catchallEmailWebsiteEntry"
-                                Text="{Binding CatchAllEmailWebsite}"
-                                StyleClass="box-value" />
+                            <Label
+                                Text="{Binding EmailWebsite}"
+                                StyleClass="box-value"/>
+                            <BoxView StyleClass="box-row-separator" />
                         </StackLayout>
                     </StackLayout>
                     <!--FORWARDED EMAIL OPTIONS-->
@@ -222,7 +223,7 @@
                                 StyleClass="box-value" />
                         </StackLayout>
                         <!--ANONADDY OPTIONS-->
-                        <StackLayout StyleClass="box-row"
+                        <StackLayout StyleClass="box-row-input"
                                      IsVisible="{Binding ServiceTypeSelectedIndex, Converter={StaticResource pickerIndexToBool}, ConverterParameter=0}">
                             <Label
                                 Text="{u:I18n APIAccessToken}"
@@ -253,7 +254,7 @@
                                 StyleClass="box-value" />
                         </StackLayout>
                         <!--SIMPLELOGIN OPTIONS-->
-                        <StackLayout StyleClass="box-row"
+                        <StackLayout StyleClass="box-row-input"
                                      IsVisible="{Binding ServiceTypeSelectedIndex, Converter={StaticResource pickerIndexToBool}, ConverterParameter=2}">
                             <Label
                                 Text="{u:I18n APIKeyRequired}"
