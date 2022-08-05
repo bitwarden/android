@@ -202,46 +202,53 @@ namespace Bit.App.Pages
 
         private async void RowSelected(object sender, SelectionChangedEventArgs e)
         {
-            ((ExtendedCollectionView)sender).SelectedItem = null;
-            if (!DoOnce())
+            try
             {
-                return;
-            }
+                ((ExtendedCollectionView)sender).SelectedItem = null;
+                if (!DoOnce())
+                {
+                    return;
+                }
 
-            if (e.CurrentSelection?.FirstOrDefault() is GroupingsPageTOTPListItem totpItem)
-            {
-                await _vm.SelectCipherAsync(totpItem.Cipher);
-                return;
-            }
+                if (e.CurrentSelection?.FirstOrDefault() is GroupingsPageTOTPListItem totpItem)
+                {
+                    await _vm.SelectCipherAsync(totpItem.Cipher);
+                    return;
+                }
 
-            if (!(e.CurrentSelection?.FirstOrDefault() is GroupingsPageListItem item))
-            {
-                return;
-            }
+                if (!(e.CurrentSelection?.FirstOrDefault() is GroupingsPageListItem item))
+                {
+                    return;
+                }
 
-            if (item.IsTrash)
-            {
-                await _vm.SelectTrashAsync();
+                if (item.IsTrash)
+                {
+                    await _vm.SelectTrashAsync();
+                }
+                else if (item.IsTotpCode)
+                {
+                    await _vm.SelectTotpCodesAsync();
+                }
+                else if (item.Cipher != null)
+                {
+                    await _vm.SelectCipherAsync(item.Cipher);
+                }
+                else if (item.Folder != null)
+                {
+                    await _vm.SelectFolderAsync(item.Folder);
+                }
+                else if (item.Collection != null)
+                {
+                    await _vm.SelectCollectionAsync(item.Collection);
+                }
+                else if (item.Type != null)
+                {
+                    await _vm.SelectTypeAsync(item.Type.Value);
+                }
             }
-            else if (item.IsTotpCode)
+            catch (Exception ex)
             {
-                await _vm.SelectTotpCodesAsync();
-            }
-            else if (item.Cipher != null)
-            {
-                await _vm.SelectCipherAsync(item.Cipher);
-            }
-            else if (item.Folder != null)
-            {
-                await _vm.SelectFolderAsync(item.Folder);
-            }
-            else if (item.Collection != null)
-            {
-                await _vm.SelectCollectionAsync(item.Collection);
-            }
-            else if (item.Type != null)
-            {
-                await _vm.SelectTypeAsync(item.Type.Value);
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
             }
         }
 

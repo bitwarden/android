@@ -231,19 +231,7 @@ namespace Bit.App.Pages
                 }
                 if (MainPage)
                 {
-                    if (TOTPCiphers.Any() && canAccessPremium)
-                    {
-                        groupedItems.Add(new GroupingsPageListGroup(
-                        AppResources.Totp, 1, uppercaseGroupNames, false)
-                        {
-                            new GroupingsPageListItem
-                            {
-                                IsTotpCode = true,
-                                Type = CipherType.Login,
-                                ItemCount = TOTPCiphers.Count().ToString("N0")
-                            }
-                        });
-                    }
+                    AddTotpGroupItem(canAccessPremium, groupedItems, uppercaseGroupNames);
 
                     groupedItems.Add(new GroupingsPageListGroup(
                         AppResources.Types, 4, uppercaseGroupNames, !hasFavorites)
@@ -391,6 +379,23 @@ namespace Bit.App.Pages
                 ShowNoData = (MainPage && !HasCiphers) || !groupedItems.Any();
                 ShowList = !ShowNoData;
                 DisableRefreshing();
+            }
+        }
+
+        private void AddTotpGroupItem(bool canAccessPremium, List<GroupingsPageListGroup> groupedItems, bool uppercaseGroupNames)
+        {
+            if (canAccessPremium && (TOTPCiphers?.Any() ?? false))
+            {
+                groupedItems.Add(new GroupingsPageListGroup(
+                    AppResources.Totp, 1, uppercaseGroupNames, false)
+                        {
+                            new GroupingsPageListItem
+                            {
+                                IsTotpCode = true,
+                                Type = CipherType.Login,
+                                ItemCount = TOTPCiphers.Count().ToString("N0")
+                            }
+                        });
             }
         }
 
