@@ -118,63 +118,62 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Title" xml:space="preserve">
-    <value>Bitwarden Password Manager</value>
+    <value>Bitwarden passordhandsamar</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="ShortDescription" xml:space="preserve">
-    <value>Bitwarden is a login and password manager that helps keep you safe while online.</value>
+    <value>Bitwarden er ein innskrivings- og passordhandsamar som ytar deg hjelp til å vera trygg på nett.</value>
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>Bitwarden, Inc. is the parent company of 8bit Solutions LLC.
+    <value>Bitwarden, Inc. er modersamskipnaden til 8bit Solutions LLC.
 
-NAMED BEST PASSWORD MANAGER BY THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, AND MORE.
+KÅRA BESTE PASSORDHANDSAMAR AV THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET OG FLEIRE.
 
-Manage, store, secure, and share unlimited passwords across unlimited devices from anywhere. Bitwarden delivers open source password management solutions to everyone, whether at  home, at work, or on the go.
+Handsama, tak vare på, verj og del uavgrensa mange passord på tvers av eit uavgrensa tal einingar kvar som helst. Bitwarden ytar opne kjeldekode-passordhandsamingsløysingar til kven som helst, frå heimen, på jobb eller på farten.
 
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+Laga sterke, særeigne og tilfeldige passord grunna i tryggleikskrav for kva enn nettstad du vitjar ofte.
 
-Bitwarden Send quickly transmits encrypted information --- files and plaintext -- directly to anyone.
+Bitwarden Send sender beint ut kryptert informasjon --- filer og rein tekst --- til kven enn.
 
-Bitwarden offers Teams and Enterprise plans for companies so you can securely share passwords with colleagues.
+Bitwarden tilbyd Teams- og Enterprise-planar til verksemder slik at ein trygt kan dela passord med kollegaar.
 
-Why Choose Bitwarden:
+Grunnar å velja Bitwarden:
 
-World-Class Encryption
-Passwords are protected with advanced end-to-end encryption (AES-256 bit, salted hashtag, and PBKDF2 SHA-256) so your data stays secure and private.
+Kryptering i verdsklasse
+Passord er verna med avansert og end-to-end-kryptering (AES-256 bit, salted hashtag og PBKDF2 SHA-256) slik at dataa dine held seg trygge og personlege.
 
-Built-in Password Generator
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+Innebygt passordsmed
+Laga sterke, særeigne og tilfeldige passord grunna i tryggleikskrav for kva enn nettstad du vitjar ofte.
 
-Global Translations
-Bitwarden translations exist in 40 languages and are growing, thanks to our global community.
+Verdsfemnande omsetjingar
+Bitwarden omsetjingar finst i 40 mål og veks framleis, takk vere vårt verdsfemnande samfunn.
 
-Cross-Platform Applications
-Secure and share sensitive data within your Bitwarden Vault from any browser, mobile device, or desktop OS, and more.
-</value>
+Cross-platform appar
+Verj og del sensitiv data i Bitwarden kvelvet ditt frå kva enn nettlesar, mobile eining, skrivebordsoperativsystem og meir!</value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
-    <value>A secure and free password manager for all of your devices</value>
+    <value>Ein trygg og gratis passordhandsamar til alle einingane dine</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Manage all your logins and passwords from a secure vault</value>
+    <value>Handsama alle innskrivingane og passorda dine frå eit trygt kvelv</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Automatically generate strong, random, and secure passwords</value>
+    <value>Laga sterke, trygge og tilfeldige passord automatisk</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Protect your vault with fingerprint, PIN code, or master password</value>
+    <value>Verj kvelvet ditt med fingeravtrykk, PIN-kode eller hovudpassord</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Quickly auto-fill logins from within your web browser and other apps</value>
+    <value>Fyll ut innskrivingane dine ubede og snøgt gjennom nettlesaren din og andre appar</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Sync and access your vault from multiple devices
+    <value>Synkroniser og få tilgjenge til kvelvet ditt frå fleire einingar
 
-- Phone
-- Tablet
-- Desktop
-- Web</value>
+- Telefon
+- Nettbrett
+- Skrivebord
+- Nettlesar</value>
   </data>
 </root>

@@ -770,6 +770,12 @@
   <data name="Enabled" xml:space="preserve">
     <value>有効</value>
   </data>
+  <data name="Off" xml:space="preserve">
+    <value>オフ</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>オン</value>
+  </data>
   <data name="Status" xml:space="preserve">
     <value>状態</value>
   </data>
@@ -907,11 +913,11 @@
   <data name="CopyTotp" xml:space="preserve">
     <value>TOTP のコピー</value>
   </data>
-  <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>ログイン情報に認証キーが添付されている場合、自動入力した時に認証コードが自動的にクリップボードへコピーされます。</value>
+  <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
+    <value>ログイン情報に認証キーがある場合は、自動入力時にクリップボードに TOTP 認証コードをコピーします。</value>
   </data>
-  <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>認証コードの自動コピーを無効化</value>
+  <data name="CopyTotpAutomatically" xml:space="preserve">
+    <value>TOTP を自動的にコピー</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
     <value>この機能を使うにはプレミアム会員になってください。</value>
@@ -1128,11 +1134,11 @@
   <data name="Expiration" xml:space="preserve">
     <value>有効期限</value>
   </data>
-  <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>ウェブサイトアイコンの無効化</value>
+  <data name="ShowWebsiteIcons" xml:space="preserve">
+    <value>ウェブサイトのアイコンを表示</value>
   </data>
-  <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>保管庫のアイテム毎にウェブサイトのアイコンを表示します。</value>
+  <data name="ShowWebsiteIconsDescription" xml:space="preserve">
+    <value>ログイン情報の隣にアイコン画像を表示します</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>アイコンのサーバー URL</value>
@@ -1372,11 +1378,15 @@
   <data name="SearchCollection" xml:space="preserve">
     <value>コレクションの検索</value>
   </data>
-  <data name="SearchFolder" xml:space="preserve">
-    <value>フォルダーの検索</value>
+  <data name="SearchFileSends" xml:space="preserve">
+    <value>Send ファイルを検索</value>
   </data>
-  <data name="SearchType" xml:space="preserve">
-    <value>タイプの検索</value>
+  <data name="SearchTextSends" xml:space="preserve">
+    <value>Send テキストを検索</value>
+  </data>
+  <data name="SearchGroup" xml:space="preserve">
+    <value>{0} を検索</value>
+    <comment>ex: Search Logins</comment>
   </data>
   <data name="Type" xml:space="preserve">
     <value>タイプ</value>
@@ -1445,7 +1455,7 @@
     <value>表示するフォルダーがありません。</value>
   </data>
   <data name="FingerprintPhrase" xml:space="preserve">
-    <value>パスフレーズ</value>
+    <value>指紋句</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="YourAccountsFingerprint" xml:space="preserve">
@@ -1537,6 +1547,12 @@
   <data name="ThemeDefault" xml:space="preserve">
     <value>デフォルト (システム)</value>
   </data>
+  <data name="DefaultDarkTheme" xml:space="preserve">
+    <value>デフォルトのダークテーマ</value>
+  </data>
+  <data name="DefaultDarkThemeDescription" xml:space="preserve">
+    <value>デバイスでダークモードが有効になっている間、デフォルト（システム）テーマを使用するときに使用するダークテーマを選択してください</value>
+  </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>メモをコピー</value>
   </data>
@@ -1553,17 +1569,21 @@
     <value>ブラック</value>
     <comment>The color black</comment>
   </data>
-  <data name="BlacklistedUris" xml:space="preserve">
-    <value>URI ブラックリスト</value>
+  <data name="Nord" xml:space="preserve">
+    <value>Nord</value>
+    <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
-  <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>ブラックリストに入れたURIでは自動入力を行いません。リストはコンマで区切ってください。（例）"https://twitter.com, androidapp://com.twitter.android"</value>
+  <data name="AutofillBlockedUris" xml:space="preserve">
+    <value>自動入力をブロックする URI</value>
   </data>
-  <data name="DisableSavePrompt" xml:space="preserve">
-    <value>保存プロンプトを無効化</value>
+  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
+    <value>自動入力をさせない URI を指定してください。複数の URI をコンマで区切ってください。例: "https://twitter.com, androidapp://com.twitter.android"</value>
   </data>
-  <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>新しいアイテムを入力したとき、保管庫に保存するかどうか尋ねるためのプロンプトを自動的に表示します。</value>
+  <data name="AskToAddLogin" xml:space="preserve">
+    <value>ログイン情報の追加を尋ねる</value>
+  </data>
+  <data name="AskToAddLoginDescription" xml:space="preserve">
+    <value>保管庫にアイテムが見つからない場合に、追加するか尋ねます。</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
     <value>アプリ再起動時</value>
@@ -1856,6 +1876,9 @@
     <value>この Send を説明するわかりやすい名前</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
+  <data name="Text" xml:space="preserve">
+    <value>テキスト</value>
+  </data>
   <data name="TypeText" xml:space="preserve">
     <value>テキスト</value>
   </data>
@@ -1871,6 +1894,18 @@
   </data>
   <data name="TypeFileInfo" xml:space="preserve">
     <value>送信するファイル</value>
+  </data>
+  <data name="FileTypeIsSelected" xml:space="preserve">
+    <value>ファイルの種類を選択しました。</value>
+  </data>
+  <data name="FileTypeIsNotSelected" xml:space="preserve">
+    <value>ファイルの種類が選択されていません。タップして選択してください。</value>
+  </data>
+  <data name="TextTypeIsSelected" xml:space="preserve">
+    <value>テキストの種類を選択しました。</value>
+  </data>
+  <data name="TextTypeIsNotSelected" xml:space="preserve">
+    <value>テキストの種類が選択されていません。タップして選択してください。</value>
   </data>
   <data name="DeletionDate" xml:space="preserve">
     <value>削除日</value>
@@ -2175,5 +2210,68 @@
   </data>
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
     <value>メールアドレスに送信された確認コードを入力してください</value>
+  </data>
+  <data name="SubmitCrashLogs" xml:space="preserve">
+    <value>クラッシュログを送信</value>
+  </data>
+  <data name="SubmitCrashLogsDescription" xml:space="preserve">
+    <value>クラッシュレポートを送信すると、Bitwarden アプリの安定性を向上させるために役立ちます。</value>
+  </data>
+  <data name="OptionsExpanded" xml:space="preserve">
+    <value>オプションを展開しました。タップして折りたたみます。</value>
+  </data>
+  <data name="OptionsCollapsed" xml:space="preserve">
+    <value>オプションが折りたたまれています。タップすると展開します。</value>
+  </data>
+  <data name="UppercaseAtoZ" xml:space="preserve">
+    <value>大文字（A～Z）</value>
+  </data>
+  <data name="LowercaseAtoZ" xml:space="preserve">
+    <value>小文字（a～z）</value>
+  </data>
+  <data name="NumbersZeroToNine" xml:space="preserve">
+    <value>数値 (0～9)</value>
+  </data>
+  <data name="SpecialCharacters" xml:space="preserve">
+    <value>特殊文字（!@#$%^&amp;*)</value>
+  </data>
+  <data name="TapToGoBack" xml:space="preserve">
+    <value>タップして戻る</value>
+  </data>
+  <data name="PasswordIsVisibleTapToHide" xml:space="preserve">
+    <value>パスワードが表示されています。タップして非表示にします。</value>
+  </data>
+  <data name="PasswordIsNotVisibleTapToShow" xml:space="preserve">
+    <value>パスワードは非表示です。タップして表示します。</value>
+  </data>
+  <data name="FilterByVault" xml:space="preserve">
+    <value>アイテムを保管庫でフィルター</value>
+  </data>
+  <data name="AllVaults" xml:space="preserve">
+    <value>すべての保管庫</value>
+  </data>
+  <data name="Vaults" xml:space="preserve">
+    <value>保管庫</value>
+  </data>
+  <data name="VaultFilterDescription" xml:space="preserve">
+    <value>保管庫: {0}</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>すべて</value>
+  </data>
+  <data name="NeverLockWarning" xml:space="preserve">
+    <value>ロックオプションを「なし」に設定すると、あなたのデバイスを操作できる誰もが保管庫を見られます。 このオプションを使用する場合は、デバイスを適切に保護しておく必要があります。</value>
+  </data>
+  <data name="EnvironmentPageUrlsError" xml:space="preserve">
+    <value>入力されたURLのうち1つ以上が無効です。変更して再度保存してください。</value>
+  </data>
+  <data name="GenericErrorMessage" xml:space="preserve">
+    <value>リクエストを処理できませんでした。もう一度やり直すか、お問い合わせください。</value>
+  </data>
+  <data name="AllowScreenCapture" xml:space="preserve">
+    <value>スクリーンショットを許可</value>
+  </data>
+  <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
+    <value>スクリーンショットを撮影できるようにしてもよろしいですか？</value>
   </data>
 </root>

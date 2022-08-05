@@ -276,7 +276,7 @@
     <value>Tem certeza que deseja sair?</value>
   </data>
   <data name="RemoveAccount" xml:space="preserve">
-    <value>Remover conta</value>
+    <value>Remover Conta</value>
   </data>
   <data name="RemoveAccountConfirmation" xml:space="preserve">
     <value>Tem certeza que deseja remover essa conta?</value>
@@ -371,7 +371,7 @@
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
-    <value>{0} foi copiado.</value>
+    <value>{0} foi copiado(a).</value>
     <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
@@ -659,7 +659,7 @@
     <value>Digite novamente a Senha Mestra</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
-    <value>Pesquisar cofre</value>
+    <value>Pesquisar Cofre</value>
   </data>
   <data name="Security" xml:space="preserve">
     <value>Segurança</value>
@@ -723,7 +723,7 @@
     <value>Ver Item</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>Cofre Web do Bitwarden</value>
+    <value>Cofre Web bitwarden</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Perdeu o aplicativo autenticador?</value>
@@ -769,6 +769,12 @@
   </data>
   <data name="Enabled" xml:space="preserve">
     <value>Ativado</value>
+  </data>
+  <data name="Off" xml:space="preserve">
+    <value>Desligado</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>Ligado</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>Estado</value>
@@ -907,11 +913,11 @@
   <data name="CopyTotp" xml:space="preserve">
     <value>Copiar TOTP</value>
   </data>
-  <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>Se a sua credencial tiver uma chave de autenticação anexada, o código de verificação TOTP será copiado automaticamente para a área de transferência quando preencher automaticamente a credencial.</value>
+  <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
+    <value>Se um login tiver uma chave de autenticação, copie o código de verificação TOTP para sua área de transferência quando você preencher automaticamente o login.</value>
   </data>
-  <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>Desativar Cópia Automática de TOTP</value>
+  <data name="CopyTotpAutomatically" xml:space="preserve">
+    <value>Copiar TOTP automaticamente</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
     <value>Uma conta premium é necessária para usar esse recurso.</value>
@@ -1128,11 +1134,11 @@
   <data name="Expiration" xml:space="preserve">
     <value>Vencimento</value>
   </data>
-  <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>Desativar Ícones de Sites</value>
+  <data name="ShowWebsiteIcons" xml:space="preserve">
+    <value>Mostrar ícones dos sites</value>
   </data>
-  <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>O ícone do site fornece uma imagem reconhecível próximo de cada item de credencial no seu cofre.</value>
+  <data name="ShowWebsiteIconsDescription" xml:space="preserve">
+    <value>Mostre uma imagem reconhecível ao lado de cada login.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>URL do Servidor de Ícones</value>
@@ -1165,7 +1171,7 @@
     <value>O serviço de autopreenchimento do Bitwarden usa a Estrutura de Preenchimento Automático do Android para auxiliar no preenchimento de credenciais em outros aplicativos no seu dispositivo.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Use o serviço de acessibilidade do bitwarden para preencher automaticamente suas credenciais.</value>
+    <value>Use o serviço de autopreenchimento do Bitwarden para preencher suas credenciais em outros aplicativos.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Abrir Configurações de Autopreenchimento</value>
@@ -1299,7 +1305,7 @@
     <value>1. Acesse o aplicativo "Ajustes" do iOS</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Toque em "Senhas e Contas"</value>
+    <value>2. Toque em "Senhas"</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
     <value>3. Toque em "Preencher Senhas"</value>
@@ -1372,11 +1378,15 @@
   <data name="SearchCollection" xml:space="preserve">
     <value>Pesquisar coleção</value>
   </data>
-  <data name="SearchFolder" xml:space="preserve">
-    <value>Pesquisar pasta</value>
+  <data name="SearchFileSends" xml:space="preserve">
+    <value>Pesquisar Sends de Arquivo</value>
   </data>
-  <data name="SearchType" xml:space="preserve">
-    <value>Pesquisar tipo</value>
+  <data name="SearchTextSends" xml:space="preserve">
+    <value>Pesquisar Sends de Texto</value>
+  </data>
+  <data name="SearchGroup" xml:space="preserve">
+    <value>Pesquisar {0}</value>
+    <comment>ex: Search Logins</comment>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Tipo</value>
@@ -1537,8 +1547,14 @@
   <data name="ThemeDefault" xml:space="preserve">
     <value>Padrão (Sistema)</value>
   </data>
+  <data name="DefaultDarkTheme" xml:space="preserve">
+    <value>Tema Escuro Padrão</value>
+  </data>
+  <data name="DefaultDarkThemeDescription" xml:space="preserve">
+    <value>Escolha o tema escuro a ser usado ao usar o tema Padrão (Sistema) enquanto o modo escuro do seu dispositivo estiver ativado</value>
+  </data>
   <data name="CopyNotes" xml:space="preserve">
-    <value>Copiar Notas</value>
+    <value>Copiar Nota</value>
   </data>
   <data name="Exit" xml:space="preserve">
     <value>Sair</value>
@@ -1553,17 +1569,21 @@
     <value>Preto</value>
     <comment>The color black</comment>
   </data>
-  <data name="BlacklistedUris" xml:space="preserve">
-    <value>URIs na lista negra</value>
+  <data name="Nord" xml:space="preserve">
+    <value>Nord</value>
+    <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
-  <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>Os URIs que estão na lista negra não oferecem autopreenchimento. A lista deve ser separada por vírgulas. Ex.: "https://twitter.com, androidapp://com.twitter.android".</value>
+  <data name="AutofillBlockedUris" xml:space="preserve">
+    <value>Auto-preencher URIs bloqueadas</value>
   </data>
-  <data name="DisableSavePrompt" xml:space="preserve">
-    <value>Desativar Solicitação de Salvamento</value>
+  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
+    <value>O preenchimento automático não será oferecido para URIs bloqueados. Separe vários URIs com uma vírgula. Por exemplo: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
-  <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>A "Solicitação de Salvamento" solicita automaticamente que você salve novos itens no seu cofre sempre que você inseri-los pela primeira vez.</value>
+  <data name="AskToAddLogin" xml:space="preserve">
+    <value>Pedir para adicionar uma conta</value>
+  </data>
+  <data name="AskToAddLoginDescription" xml:space="preserve">
+    <value>Pedir para adicionar um item se um não for encontrado no seu cofre.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
     <value>Ao Reiniciar o App</value>
@@ -1857,6 +1877,9 @@
     <value>Um nome amigável para descrever este Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
+  <data name="Text" xml:space="preserve">
+    <value>Texto</value>
+  </data>
   <data name="TypeText" xml:space="preserve">
     <value>Texto</value>
   </data>
@@ -1872,6 +1895,18 @@
   </data>
   <data name="TypeFileInfo" xml:space="preserve">
     <value>O arquivo que você deseja enviar.</value>
+  </data>
+  <data name="FileTypeIsSelected" xml:space="preserve">
+    <value>O tipo de arquivo está selecionado.</value>
+  </data>
+  <data name="FileTypeIsNotSelected" xml:space="preserve">
+    <value>O tipo de arquivo não está selecionado, toque para selecionar.</value>
+  </data>
+  <data name="TextTypeIsSelected" xml:space="preserve">
+    <value>O tipo de texto está selecionado.</value>
+  </data>
+  <data name="TextTypeIsNotSelected" xml:space="preserve">
+    <value>O tipo de texto não está selecionado, toque para selecionar.</value>
   </data>
   <data name="DeletionDate" xml:space="preserve">
     <value>Data de Exclusão</value>
@@ -1936,7 +1971,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Desabilite este Send para que ninguém possa acessá-lo.</value>
+    <value>Desabilite este Send para que ninguém possa acessá-lo</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
@@ -2004,7 +2039,7 @@
     <value>Personalizado</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
-    <value>Compartilhar este Send após salvar.</value>
+    <value>Compartilhe este Send após salvar</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendDisabledWarning" xml:space="preserve">
@@ -2016,7 +2051,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
-    <value>Ocultar meu endereço de e-mail dos destinatários.</value>
+    <value>Ocultar meu endereço de e-mail dos destinatários</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
     <value>Uma ou mais políticas da organização estão afetando as suas opções de Send.</value>
@@ -2176,5 +2211,68 @@
   </data>
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
     <value>Digite o código de verificação enviado para seu e-mail</value>
+  </data>
+  <data name="SubmitCrashLogs" xml:space="preserve">
+    <value>Enviar registros de erros</value>
+  </data>
+  <data name="SubmitCrashLogsDescription" xml:space="preserve">
+    <value>Ajude o Bitwarden a melhorar a estabilidade do aplicativo submetendo relatórios de travamentos.</value>
+  </data>
+  <data name="OptionsExpanded" xml:space="preserve">
+    <value>Opções expandidas, toque para recolher.</value>
+  </data>
+  <data name="OptionsCollapsed" xml:space="preserve">
+    <value>Opções recolhidas, toque para expandir.</value>
+  </data>
+  <data name="UppercaseAtoZ" xml:space="preserve">
+    <value>Maiúsculo (A a Z)</value>
+  </data>
+  <data name="LowercaseAtoZ" xml:space="preserve">
+    <value>Minúsculo (A a Z)</value>
+  </data>
+  <data name="NumbersZeroToNine" xml:space="preserve">
+    <value>Números (0 a 9)</value>
+  </data>
+  <data name="SpecialCharacters" xml:space="preserve">
+    <value>Caracteres Especiais (!@#$%^&amp;*)</value>
+  </data>
+  <data name="TapToGoBack" xml:space="preserve">
+    <value>Toque para voltar</value>
+  </data>
+  <data name="PasswordIsVisibleTapToHide" xml:space="preserve">
+    <value>A senha está visível, toque para ocultar.</value>
+  </data>
+  <data name="PasswordIsNotVisibleTapToShow" xml:space="preserve">
+    <value>A senha não está visível, toque para mostrar.</value>
+  </data>
+  <data name="FilterByVault" xml:space="preserve">
+    <value>Filtrar itens por cofre</value>
+  </data>
+  <data name="AllVaults" xml:space="preserve">
+    <value>Todos os Cofres</value>
+  </data>
+  <data name="Vaults" xml:space="preserve">
+    <value>Cofres</value>
+  </data>
+  <data name="VaultFilterDescription" xml:space="preserve">
+    <value>Cofre: {0}</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Todos</value>
+  </data>
+  <data name="NeverLockWarning" xml:space="preserve">
+    <value>Definir suas opções de bloqueio para "Nunca" mantém o cofre disponível para qualquer pessoa com acesso ao seu dispositivo. Se usar esta opção, você deverá garantir que manterá seu dispositivo devidamente protegido.</value>
+  </data>
+  <data name="EnvironmentPageUrlsError" xml:space="preserve">
+    <value>Um ou mais dos URLs inseridos são inválidos. Por favor, revise-os e tente salvar novamente.</value>
+  </data>
+  <data name="GenericErrorMessage" xml:space="preserve">
+    <value>Não foi possível processar o seu pedido. Por favor, tente novamente ou entre em contato conosco.</value>
+  </data>
+  <data name="AllowScreenCapture" xml:space="preserve">
+    <value>Permitir Captura de Tela</value>
+  </data>
+  <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
+    <value>Tem certeza de que deseja ativar a Captura de Tela?</value>
   </data>
 </root>
