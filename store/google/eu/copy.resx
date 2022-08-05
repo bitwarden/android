@@ -117,55 +117,64 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Name" xml:space="preserve">
-    <value>Bitwarden - Менеджер паролей</value>
+  <data name="Title" xml:space="preserve">
+    <value>Bitwarden - Pasahitz kudeatzailea</value>
     <comment>Max 30 characters</comment>
   </data>
-  <data name="Description" xml:space="preserve">
-    <value>Bitwarden, Inc. является материнской компанией 8bit Solutions LLC.
+  <data name="ShortDescription" xml:space="preserve">
+    <value>Bitwarden sarrera eta pasahitz administratzailea da, eta seguru mantentzen laguntzen dizu linean zauden bitartean.</value>
+    <comment>Max 80 characters</comment>
+  </data>
+  <data name="FullDesciption" xml:space="preserve">
+    <value>Bitwarden, Inc. 8bit Solutions LLC-ren enpresa matrizea da.
 
-НАЗВАН ЛУЧШИМ ДИСПЕТЧЕРОМ ПАРОЛЕЙ VERGE, US NEWS &amp; WORLD REPORT, CNET И МНОГИМИ ДРУГИМИ.
+THE VERGE, U.S. NEWS &amp; WORLD REPORT ETA CNET ENPRESEK PASAHITZ-ADMINISTRATZAILE ONENA izendatu dute, besteak beste.
 
-Управляйте, храните, защищайте и делитесь неограниченным количеством паролей на неограниченном количестве устройств из любого места. Bitwarden предоставляет решения с открытым исходным кодом по управлению паролями для всех, дома, на работе или в дороге.
+Gailu guztien artean pasahitz mugagabeak kudeatu, biltegiratu, babestu eta partekatzen ditu. Bitwardenek kode irekiko pasahitzak administratzeko irtenbideak eskaintzen ditu, bai etxean, bai lanean, bai bidaiatzen ari zaren bitartean.
 
-Создавайте надежные, уникальные и случайные пароли на основе требований безопасности для каждого посещаемого вами веб-сайта.
+Pasahitz sendoak, bakarrak eta ausazkoak sortzen ditu, webgune bakoitzaren segurtasun-baldintzetan oinarrituta.
 
-Bitwarden Send быстро передает зашифрованную информацию - файлы и простой текст - напрямую кому угодно.
+Bitwarden Bidalketak-ek azkar transmititzen dio zifratutako informazioa --- artxiboak eta testu sinplea -- edozein pertsonari zuzenean.
 
-Bitwarden предлагает для компаний планы Teams и Enterprise, чтобы вы могли безопасно делиться паролями с коллегами.
+Bitwarden-ek Taldeak eta Enpresak planak eskaintzen ditu, enpresa bereko lankideek pasahitzak modu seguruan parteka ditzaten.
 
-Почему выбирают Bitwarden:
+Zergatik aukeratu Bitwarden:
 
-Шифрование мирового класса
-Пароли защищены передовым сквозным шифрованием (AES-256 bit, соленый хэштег и PBKDF2 SHA-256), поэтому ваши данные остаются в безопасности и конфиденциальности.
+Mundu-mailako zifratzea
+Pasahitzak muturretik muturrerako zifratze aurreratuarekin babestuta daude (AES-256 bit, salted hashtag eta PBKDF2 SHA-256), zure informazioa seguru eta pribatu egon dadin.
 
-Встроенный генератор паролей
-Создавайте надежные, уникальные и случайные пароли на основе требований безопасности для каждого посещаемого вами веб-сайта.
+Pasahitzen sortzailea
+Pasahitz sendoak, bakarrak eta ausazkoak sortzen ditu, web gune bakoitzaren segurtasun-baldintzetan oinarrituta.
 
- Глобальные переводы
- Переводы Bitwarden существуют на 40 языках и постоянно растут благодаря нашему глобальному сообществу.
+Itzulpenak
+Bitwarden 40 hizkuntzatan dago, eta gero eta gehiago dira, gure komunitate globalari esker.
 
- Кросс-платформенные приложения
- Защищайте и делитесь конфиденциальными данными в вашем Bitwarden Vault из любого браузера, мобильного устройства, настольной ОС и т. д.</value>
+Plataforma anitzeko aplikazioak
+Babestu eta partekatu zure Bitwarden kutxa gotorraren informazio konfidentziala edozein nabigatzailetatik, gailu mugikorretatik, mahaigaineko aplikaziotik eta gehiagotatik.
+</value>
   <comment>Max 4000 characters</comment>
   </data>
-  <data name="Keywords" xml:space="preserve">
-    <value>bit warden,8bit,пароль,бесплатный менеджер паролей,менеджер паролей,менеджер логинов</value>
-    <comment>Max 100 characters</comment>
+  <data name="FeatureGraphic" xml:space="preserve">
+    <value>Zure gailu guztietarako pasahitzen kudeatzaile seguru eta doakoa</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Управляйте всеми своими логинами и паролями из защищенного хранилища</value>
+    <value>Kudeatu zure erabiltzaile eta pasahitz guztiak kutxa gotor seguru batetik</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Генерируйте сильные, случайные и надежные пароли</value>
+    <value>Pasahitz sendoak, ausazkoak eta seguruak automatikoki sortzen ditu</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Защитите ваше хранилище при помощи Touch ID, PIN-кода или мастер-пароля</value>
+    <value>Babestu kutxa gotorra hatz digitalarekin, PIN kodearekin edo pasahitz nagusiarekin</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Автозаполнение логинов в Safari, Chrome и сотнях других приложений</value>
+    <value>Zure web nabigatzailearen eta beste aplikazio batzuen beharrik gabe automatikoki betetzen ditu saio hasierak</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Синхронизация и доступ к хранилищу с нескольких устройств</value>
+    <value>Sinkronizatu eta sartu zure kutxa gotorrean hainbat gailutatik
+
+- Mugikorra
+- Tableta
+- Mahaigaina
+- Webgunea</value>
   </data>
 </root>

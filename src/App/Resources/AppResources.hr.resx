@@ -276,16 +276,16 @@
     <value>Sigurno se želiš odjaviti?</value>
   </data>
   <data name="RemoveAccount" xml:space="preserve">
-    <value>Remove Account</value>
+    <value>Ukloni račun</value>
   </data>
   <data name="RemoveAccountConfirmation" xml:space="preserve">
-    <value>Are you sure you want to remove this account?</value>
+    <value>Sigurno želiš ukoniti ovaj račun?</value>
   </data>
   <data name="AccountAlreadyAdded" xml:space="preserve">
-    <value>Account Already Added</value>
+    <value>Račun je već dodan</value>
   </data>
   <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
-    <value>Would you like to switch to it now?</value>
+    <value>Želiš li se sada prebaciti na njega?</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Glavna lozinka</value>
@@ -770,6 +770,12 @@
   <data name="Enabled" xml:space="preserve">
     <value>Omogućeno</value>
   </data>
+  <data name="Off" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>On</value>
+  </data>
   <data name="Status" xml:space="preserve">
     <value>Status</value>
   </data>
@@ -798,7 +804,7 @@
     <value>Tražiš stavku auto-ispune za „{0}”.</value>
   </data>
   <data name="LearnOrg" xml:space="preserve">
-    <value>Više o organzacijama </value>
+    <value>Više o organizacijama </value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
     <value>Nije moguće otvoriti aplikaciju „{0}”.</value>
@@ -907,11 +913,11 @@
   <data name="CopyTotp" xml:space="preserve">
     <value>Kopiraj TOTP</value>
   </data>
-  <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>Ako se za prijavu koristi dvostruka autentifikacija, TOTP kontrolni kôd se automatski kopira u međuspremnik nakon auto-ispune korisničkog imena i lozinke.</value>
+  <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
+    <value>If a login has an authenticator key, copy the TOTP verification code to your clip-board when you auto-fill the login.</value>
   </data>
-  <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>Onemogući automatsko kopiranje TOTP</value>
+  <data name="CopyTotpAutomatically" xml:space="preserve">
+    <value>Copy TOTP automatically</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
     <value>Za korištenje ove značajke potrebno je premium članstvo.</value>
@@ -1128,11 +1134,11 @@
   <data name="Expiration" xml:space="preserve">
     <value>Istek</value>
   </data>
-  <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>Onemogući ikone web mjesta</value>
+  <data name="ShowWebsiteIcons" xml:space="preserve">
+    <value>Show website icons</value>
   </data>
-  <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Prepoznatljive ikone web mjesta prikazuju se pored prijava u tvojem trezoru.</value>
+  <data name="ShowWebsiteIconsDescription" xml:space="preserve">
+    <value>Show a recognizable image next to each login.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>URL poslužitelja ikona</value>
@@ -1372,11 +1378,15 @@
   <data name="SearchCollection" xml:space="preserve">
     <value>Pretraživanje zbirke</value>
   </data>
-  <data name="SearchFolder" xml:space="preserve">
-    <value>Pretraživanje mape</value>
+  <data name="SearchFileSends" xml:space="preserve">
+    <value>Pretraži datoteke za slanje</value>
   </data>
-  <data name="SearchType" xml:space="preserve">
-    <value>Pretraži ovu vrstu</value>
+  <data name="SearchTextSends" xml:space="preserve">
+    <value>Pretraži tekstove za slanje</value>
+  </data>
+  <data name="SearchGroup" xml:space="preserve">
+    <value>Pretraži {0}</value>
+    <comment>ex: Search Logins</comment>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Vrsta</value>
@@ -1537,6 +1547,12 @@
   <data name="ThemeDefault" xml:space="preserve">
     <value>Zadana (sustav)</value>
   </data>
+  <data name="DefaultDarkTheme" xml:space="preserve">
+    <value>Default dark theme</value>
+  </data>
+  <data name="DefaultDarkThemeDescription" xml:space="preserve">
+    <value>Choose the dark theme to use when using Default (System) theme while your device's dark mode is enabled.</value>
+  </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Kopiraj bilješke</value>
   </data>
@@ -1553,17 +1569,21 @@
     <value>Crna</value>
     <comment>The color black</comment>
   </data>
-  <data name="BlacklistedUris" xml:space="preserve">
-    <value>Crna lista URI-ja</value>
+  <data name="Nord" xml:space="preserve">
+    <value>Nord</value>
+    <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
-  <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>URI na crnoj listi neće nuditi auto-ispunu. Popis treba odvojiti zarezima. Npr.: „https://webstranica.com, androidapp://com.aplikcacija.android”.</value>
+  <data name="AutofillBlockedUris" xml:space="preserve">
+    <value>Auto-fill blocked URIs</value>
   </data>
-  <data name="DisableSavePrompt" xml:space="preserve">
-    <value>Onemogući upit za spremanje</value>
+  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
+    <value>Auto-fill will not be offered for blocked URIs. Separate multiple URIs with a comma. For example: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
-  <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>Upit za spremanje novih stavki automatski se pojavlju nakon prepoznatog prvog unosa novih stavki.</value>
+  <data name="AskToAddLogin" xml:space="preserve">
+    <value>Ask to add login</value>
+  </data>
+  <data name="AskToAddLoginDescription" xml:space="preserve">
+    <value>Ask to add an item if one isn't found in your vault.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
     <value>Kod ponovnog pokretanja</value>
@@ -1856,6 +1876,9 @@
     <value>Nadimak za ovaj Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
+  <data name="Text" xml:space="preserve">
+    <value>Tekst</value>
+  </data>
   <data name="TypeText" xml:space="preserve">
     <value>Tekst</value>
   </data>
@@ -1871,6 +1894,18 @@
   </data>
   <data name="TypeFileInfo" xml:space="preserve">
     <value>Datoteka koju želiš poslati</value>
+  </data>
+  <data name="FileTypeIsSelected" xml:space="preserve">
+    <value>Odabrana je vrsta datoteke.</value>
+  </data>
+  <data name="FileTypeIsNotSelected" xml:space="preserve">
+    <value>Vrsta datoteke nije odabrana, dodirnite za odabir.</value>
+  </data>
+  <data name="TextTypeIsSelected" xml:space="preserve">
+    <value>Vrsta teksta je odabrana.</value>
+  </data>
+  <data name="TextTypeIsNotSelected" xml:space="preserve">
+    <value>Vrsta teksta nije odabrana, dodirnite za odabir.</value>
   </data>
   <data name="DeletionDate" xml:space="preserve">
     <value>Obriši za</value>
@@ -2105,28 +2140,28 @@
     <value>Jedno ili više pravila organizacija onemogućuje izvoz osobnog trezora. </value>
   </data>
   <data name="AddAccount" xml:space="preserve">
-    <value>Add Account</value>
+    <value>Dodaj račun</value>
   </data>
   <data name="AccountUnlocked" xml:space="preserve">
-    <value>Unlocked</value>
+    <value>Otključano</value>
   </data>
   <data name="AccountLocked" xml:space="preserve">
-    <value>Locked</value>
+    <value>Zaključano</value>
   </data>
   <data name="AccountLoggedOut" xml:space="preserve">
-    <value>Logged Out</value>
+    <value>Odjavljen</value>
   </data>
   <data name="AccountSwitchedAutomatically" xml:space="preserve">
-    <value>Switched to next available account</value>
+    <value>Prebačen na sljedeći dostupni račun </value>
   </data>
   <data name="AccountLockedSuccessfully" xml:space="preserve">
-    <value>Account Locked</value>
+    <value>Račun je zaključan</value>
   </data>
   <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
-    <value>Account logged out successfully</value>
+    <value>Račun uspješno odjavljen</value>
   </data>
   <data name="AccountRemovedSuccessfully" xml:space="preserve">
-    <value>Account removed successfully</value>
+    <value>Račun uspješno uklonjen</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Obriši račun</value>
@@ -2175,5 +2210,68 @@
   </data>
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
     <value>Unesite kontrolni kod koji vam je poslan na email</value>
+  </data>
+  <data name="SubmitCrashLogs" xml:space="preserve">
+    <value>Pošaljite dnevnik pogrešaka</value>
+  </data>
+  <data name="SubmitCrashLogsDescription" xml:space="preserve">
+    <value>Pomozite Bitwardenu poboljšati stabilnost aplikacije šaljući izvješća o rušenju.</value>
+  </data>
+  <data name="OptionsExpanded" xml:space="preserve">
+    <value>Opcije su proširene, dodirnite za sažimanje.</value>
+  </data>
+  <data name="OptionsCollapsed" xml:space="preserve">
+    <value>Opcije su sažete, dodirnite za proširenje.</value>
+  </data>
+  <data name="UppercaseAtoZ" xml:space="preserve">
+    <value>Velika slova (A-Z)</value>
+  </data>
+  <data name="LowercaseAtoZ" xml:space="preserve">
+    <value>Mala slova (a-z)</value>
+  </data>
+  <data name="NumbersZeroToNine" xml:space="preserve">
+    <value>Brojevi (0-9)</value>
+  </data>
+  <data name="SpecialCharacters" xml:space="preserve">
+    <value>Posebni znakovi (!@#$%^&amp;*)</value>
+  </data>
+  <data name="TapToGoBack" xml:space="preserve">
+    <value>Dodirnite za povratak</value>
+  </data>
+  <data name="PasswordIsVisibleTapToHide" xml:space="preserve">
+    <value>Lozinka je vidljiva, dodirnite za skrivanje.</value>
+  </data>
+  <data name="PasswordIsNotVisibleTapToShow" xml:space="preserve">
+    <value>Lozinka nije vidljiva, dodirnite za prikaz.</value>
+  </data>
+  <data name="FilterByVault" xml:space="preserve">
+    <value>Filtrirajte stavke prema trezoru</value>
+  </data>
+  <data name="AllVaults" xml:space="preserve">
+    <value>Svi trezori</value>
+  </data>
+  <data name="Vaults" xml:space="preserve">
+    <value>Trezori</value>
+  </data>
+  <data name="VaultFilterDescription" xml:space="preserve">
+    <value>Trezor: {0}</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Sve</value>
+  </data>
+  <data name="NeverLockWarning" xml:space="preserve">
+    <value>Setting your lock options to “Never” keeps your vault available to anyone with access to your device. If you use this option, you should ensure that you keep your device properly protected.</value>
+  </data>
+  <data name="EnvironmentPageUrlsError" xml:space="preserve">
+    <value>One or more of the URLs entered are invalid. Please revise it and try to save again.</value>
+  </data>
+  <data name="GenericErrorMessage" xml:space="preserve">
+    <value>We were unable to process your request. Please try again or contact us.</value>
+  </data>
+  <data name="AllowScreenCapture" xml:space="preserve">
+    <value>Allow screen capture</value>
+  </data>
+  <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
+    <value>Are you sure you want to enable Screen Capture?</value>
   </data>
 </root>

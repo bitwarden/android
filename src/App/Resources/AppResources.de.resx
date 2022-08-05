@@ -279,7 +279,7 @@
     <value>Konto entfernen</value>
   </data>
   <data name="RemoveAccountConfirmation" xml:space="preserve">
-    <value>Möchten Sie das Konto wirklich entfernen?</value>
+    <value>Möchten Sie dieses Konto wirklich entfernen?</value>
   </data>
   <data name="AccountAlreadyAdded" xml:space="preserve">
     <value>Konto bereits hinzugefügt</value>
@@ -770,6 +770,12 @@
   <data name="Enabled" xml:space="preserve">
     <value>Aktiviert</value>
   </data>
+  <data name="Off" xml:space="preserve">
+    <value>Aus</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>Ein</value>
+  </data>
   <data name="Status" xml:space="preserve">
     <value>Status</value>
   </data>
@@ -907,11 +913,11 @@
   <data name="CopyTotp" xml:space="preserve">
     <value>TOTP kopieren</value>
   </data>
-  <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>Ist ein Authentifizierungsschlüssel mit deinen Zugangsdaten verknüpft, wird der TOTP Bestätigungscode automatisch in die Zwischenablage kopiert, wenn du die Zugangsdaten einfügen lässt.</value>
+  <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
+    <value>Falls Zugangsdaten einen Authentifizierungsschlüssel haben, den TOTP-Verifizierungsscode nach dem automatischen Ausfüllen in die Zwischenablage kopieren.</value>
   </data>
-  <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>Automatisches Kopieren des TOTP deaktivieren</value>
+  <data name="CopyTotpAutomatically" xml:space="preserve">
+    <value>TOTP automatisch kopieren</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
     <value>Für diese Funktion benötigst du eine Premiummitgliedschaft.</value>
@@ -1128,11 +1134,11 @@
   <data name="Expiration" xml:space="preserve">
     <value>Gültig bis</value>
   </data>
-  <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>Icons der Website deaktivieren</value>
+  <data name="ShowWebsiteIcons" xml:space="preserve">
+    <value>Zeige Webseiten-Icons</value>
   </data>
-  <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Website-Symbole zeigen ein erkennbares Bild neben jedem Login in deinem Tresor.</value>
+  <data name="ShowWebsiteIconsDescription" xml:space="preserve">
+    <value>Ein wiedererkennbares Bild neben jeden Zugangsdaten anzeigen.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>Icons Server URL</value>
@@ -1372,11 +1378,15 @@
   <data name="SearchCollection" xml:space="preserve">
     <value>Sammlung durchsuchen</value>
   </data>
-  <data name="SearchFolder" xml:space="preserve">
-    <value>Ordner durchsuchen</value>
+  <data name="SearchFileSends" xml:space="preserve">
+    <value>Versendete Dateien suchen</value>
   </data>
-  <data name="SearchType" xml:space="preserve">
-    <value>Suchmodus</value>
+  <data name="SearchTextSends" xml:space="preserve">
+    <value>Versendete Texte suchen</value>
+  </data>
+  <data name="SearchGroup" xml:space="preserve">
+    <value>Suche {0}</value>
+    <comment>ex: Search Logins</comment>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Typ</value>
@@ -1445,7 +1455,7 @@
     <value>Keine Ordner zum Auflisten vorhanden.</value>
   </data>
   <data name="FingerprintPhrase" xml:space="preserve">
-    <value>Prüfschlüssel</value>
+    <value>Fingerabdruck-Phrase</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="YourAccountsFingerprint" xml:space="preserve">
@@ -1537,6 +1547,12 @@
   <data name="ThemeDefault" xml:space="preserve">
     <value>Standard (System)</value>
   </data>
+  <data name="DefaultDarkTheme" xml:space="preserve">
+    <value>Dunkles Standard Design</value>
+  </data>
+  <data name="DefaultDarkThemeDescription" xml:space="preserve">
+    <value>Wähle das zu verwendende dunkle Design aus, das bei der Auswahl vom Standard (System) Design verwendet werden soll, während der Dunkelmodus deines Geräts aktiviert ist</value>
+  </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Notizen kopieren</value>
   </data>
@@ -1553,20 +1569,24 @@
     <value>Schwarz</value>
     <comment>The color black</comment>
   </data>
-  <data name="BlacklistedUris" xml:space="preserve">
-    <value>Gesperrte URIs</value>
+  <data name="Nord" xml:space="preserve">
+    <value>Nord</value>
+    <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
-  <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>URIs auf der Sperrliste, werden nicht automatisch ausgefüllt. Die Listeneinträge sollten durch Komma getrennt sein. Z.B.: "https://twitter.com, androidapp://com.twitter.android".</value>
+  <data name="AutofillBlockedUris" xml:space="preserve">
+    <value>Blockierte URIs automatisch ausfüllen</value>
   </data>
-  <data name="DisableSavePrompt" xml:space="preserve">
-    <value>Speicherdialog deaktivieren</value>
+  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
+    <value>Auto-Ausfüllen wird für blockierte URIs nicht angeboten. Trenne mehrere URIs mit einem Komma. Beispiel: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
-  <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>Der "Speicherdialog" fordert dich automatisch dazu auf, neue Einträge in deinem Tresor zu speichern, wenn du diese zum ersten Mal eingibst.</value>
+  <data name="AskToAddLogin" xml:space="preserve">
+    <value>Danach fragen Zugangsdaten hinzuzufügen</value>
+  </data>
+  <data name="AskToAddLoginDescription" xml:space="preserve">
+    <value>Wenn ein Eintrag nicht in deinem Tresor gefunden wurde, danach fragen.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
-    <value>Bei App Neustart</value>
+    <value>Beim Neustart der App</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
     <value>Automatisches Ausfüllen vereinfacht es, sicher auf deinen Bitwarden Tresor über andere Webseiten und Apps zuzugreifen. Es sieht aus, als ob du den automatischen Ausfülldienst für Bitwarden nicht aktiviert hast. Aktiviere automatisches Ausfüllen in der "Einstellungen" Ansicht.</value>
@@ -1575,7 +1595,7 @@
     <value>Deine Änderungen am Aussehen der App werden beim nächsten Neustart der App angewendet.</value>
   </data>
   <data name="Capitalize" xml:space="preserve">
-    <value>Großschreiben</value>
+    <value>Wortanfänge großschreiben</value>
     <comment>ex. Uppercase the first character of a word.</comment>
   </data>
   <data name="IncludeNumber" xml:space="preserve">
@@ -1856,6 +1876,9 @@
     <value>Ein eigener Name, um dieses Send zu beschreiben.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
+  <data name="Text" xml:space="preserve">
+    <value>Text</value>
+  </data>
   <data name="TypeText" xml:space="preserve">
     <value>Text</value>
   </data>
@@ -1871,6 +1894,18 @@
   </data>
   <data name="TypeFileInfo" xml:space="preserve">
     <value>Die Datei, die du senden möchtest.</value>
+  </data>
+  <data name="FileTypeIsSelected" xml:space="preserve">
+    <value>Dateityp ist ausgewählt.</value>
+  </data>
+  <data name="FileTypeIsNotSelected" xml:space="preserve">
+    <value>Dateityp ist nicht ausgewählt, tippen zum Auswählen.</value>
+  </data>
+  <data name="TextTypeIsSelected" xml:space="preserve">
+    <value>Texttyp ist ausgewählt.</value>
+  </data>
+  <data name="TextTypeIsNotSelected" xml:space="preserve">
+    <value>Texttyp ist nicht ausgewählt, tippen zum Auswählen.</value>
   </data>
   <data name="DeletionDate" xml:space="preserve">
     <value>Löschdatum</value>
@@ -2015,7 +2050,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
-    <value>Meine E-Mail-Adresse vor den Empfängern ausblenden.</value>
+    <value>Meine E-Mail-Adresse vor den Empfängern verstecken.</value>
   </data>
   <data name="SendOptionsPolicyInEffect" xml:space="preserve">
     <value>Eine oder mehrere Organisationsrichtlinien beeinflussen deine Send Einstellungen.</value>
@@ -2026,7 +2061,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFileEmailVerificationRequired" xml:space="preserve">
-    <value>Du musst deine E-Mail verifizieren, um diese Funktion nutzen zu können.</value>
+    <value>Sie müssen Ihre E-Mail-Adresse verifizieren, um diese Funktion nutzen zu können.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PasswordPrompt" xml:space="preserve">
@@ -2036,7 +2071,7 @@
     <value>Master-Passwort bestätigen</value>
   </data>
   <data name="PasswordConfirmationDesc" xml:space="preserve">
-    <value>Diese Aktion ist geschützt. Um fortzufahren, gib bitte dein Master-Passwort erneut ein, um deine Identität zu bestätigen.</value>
+    <value>Diese Aktion ist geschützt. Um fortzufahren, geben Sie bitte Ihr Master-Passwort erneut ein, um Ihre Identität zu bestätigen.</value>
   </data>
   <data name="CaptchaRequired" xml:space="preserve">
     <value>Captcha erforderlich</value>
@@ -2126,7 +2161,7 @@
     <value>Konto erfolgreich abgemeldet</value>
   </data>
   <data name="AccountRemovedSuccessfully" xml:space="preserve">
-    <value>Konto erfolgreich gelöscht</value>
+    <value>Konto erfolgreich entfernt</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Konto löschen</value>
@@ -2175,5 +2210,68 @@
   </data>
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
     <value>Gib den Bestätigungscode ein, der an deine E-Mail-Adresse gesendet wurde</value>
+  </data>
+  <data name="SubmitCrashLogs" xml:space="preserve">
+    <value>Absturzprotokolle melden</value>
+  </data>
+  <data name="SubmitCrashLogsDescription" xml:space="preserve">
+    <value>Hilf Bitwarden die Stabilität der App zu verbessern, indem du das Melden von Absturzberichten zulässt.</value>
+  </data>
+  <data name="OptionsExpanded" xml:space="preserve">
+    <value>Optionen sind ausgeklappt, tippen zum einklappen.</value>
+  </data>
+  <data name="OptionsCollapsed" xml:space="preserve">
+    <value>Optionen sind eingeklappt, tippe zum ausklappen.</value>
+  </data>
+  <data name="UppercaseAtoZ" xml:space="preserve">
+    <value>Großbuchstaben (A bis Z)</value>
+  </data>
+  <data name="LowercaseAtoZ" xml:space="preserve">
+    <value>Kleinbuchstaben (A bis Z)</value>
+  </data>
+  <data name="NumbersZeroToNine" xml:space="preserve">
+    <value>Zahlen (0 bis 9)</value>
+  </data>
+  <data name="SpecialCharacters" xml:space="preserve">
+    <value>Sonderzeichen (!@#$%^&amp;*)</value>
+  </data>
+  <data name="TapToGoBack" xml:space="preserve">
+    <value>Tippen, um zurück zu gehen</value>
+  </data>
+  <data name="PasswordIsVisibleTapToHide" xml:space="preserve">
+    <value>Passwort ist sichtbar, tippen um es auszublenden.</value>
+  </data>
+  <data name="PasswordIsNotVisibleTapToShow" xml:space="preserve">
+    <value>Passwort ist nicht sichtbar, tippen um es einzublenden.</value>
+  </data>
+  <data name="FilterByVault" xml:space="preserve">
+    <value>Objekte nach Tresor filtern</value>
+  </data>
+  <data name="AllVaults" xml:space="preserve">
+    <value>Alle Tresore</value>
+  </data>
+  <data name="Vaults" xml:space="preserve">
+    <value>Tresore</value>
+  </data>
+  <data name="VaultFilterDescription" xml:space="preserve">
+    <value>Tresor: {0}</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Alle</value>
+  </data>
+  <data name="NeverLockWarning" xml:space="preserve">
+    <value>Wenn du deine Sperroptionen auf „Nie“ einstellst, bleibt dein Tresor für jeden zugänglich, der Zugriff auf dein Gerät hat. Wenn du diese Option verwendest, solltest du sicherstellen, dass du dein Gerät angemessen schützt.</value>
+  </data>
+  <data name="EnvironmentPageUrlsError" xml:space="preserve">
+    <value>Eine oder mehrere der eingegebenen URLs sind ungültig. Bitte überprüfe sie und versuche erneut zu speichern.</value>
+  </data>
+  <data name="GenericErrorMessage" xml:space="preserve">
+    <value>Wir konnten deine Anfrage nicht bearbeiten. Bitte versuche es erneut oder kontaktiere uns.</value>
+  </data>
+  <data name="AllowScreenCapture" xml:space="preserve">
+    <value>Bildschirmaufnahme erlauben</value>
+  </data>
+  <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
+    <value>Bist du sicher, dass du die Bildschirmaufnahme aktivieren möchtest?</value>
   </data>
 </root>

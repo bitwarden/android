@@ -770,6 +770,12 @@
   <data name="Enabled" xml:space="preserve">
     <value>Включено</value>
   </data>
+  <data name="Off" xml:space="preserve">
+    <value>Изключено</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>Включено</value>
+  </data>
   <data name="Status" xml:space="preserve">
     <value>Състояние</value>
   </data>
@@ -907,11 +913,11 @@
   <data name="CopyTotp" xml:space="preserve">
     <value>Копиране на кода за потвърждаване</value>
   </data>
-  <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
+  <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
     <value>Ако към вписването има и удостоверителен ключ, кодът за потвърждаване се копира автоматично в буфера при автоматично дописване.</value>
   </data>
-  <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>Без автоматично копиране на временни, еднократни пароли</value>
+  <data name="CopyTotpAutomatically" xml:space="preserve">
+    <value>Автоматично копиране на TOTP</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
     <value>За да се възползвате от тази възможност, трябва да ползвате платен абонамент.</value>
@@ -1128,11 +1134,11 @@
   <data name="Expiration" xml:space="preserve">
     <value>Изтичане</value>
   </data>
-  <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>Изключване на иконките на сайтовете</value>
+  <data name="ShowWebsiteIcons" xml:space="preserve">
+    <value>Показване на иконките на уеб сайтовете</value>
   </data>
-  <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Иконките на сайтовете са разпознаваемо изображение за всеки запис в трезора.</value>
+  <data name="ShowWebsiteIconsDescription" xml:space="preserve">
+    <value>Показване на разпознаваемо изображение до всеки запис.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>Адрес на сървъра с иконки</value>
@@ -1372,11 +1378,15 @@
   <data name="SearchCollection" xml:space="preserve">
     <value>Търсене в колекцията</value>
   </data>
-  <data name="SearchFolder" xml:space="preserve">
-    <value>Търсене в папката</value>
+  <data name="SearchFileSends" xml:space="preserve">
+    <value>Търсене в изпратените файлове</value>
   </data>
-  <data name="SearchType" xml:space="preserve">
-    <value>Търсене по вид</value>
+  <data name="SearchTextSends" xml:space="preserve">
+    <value>Търсене в изпратените текстове</value>
+  </data>
+  <data name="SearchGroup" xml:space="preserve">
+    <value>Търсене на {0}</value>
+    <comment>ex: Search Logins</comment>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Вид</value>
@@ -1537,6 +1547,12 @@
   <data name="ThemeDefault" xml:space="preserve">
     <value>По подразбиране (от системата)</value>
   </data>
+  <data name="DefaultDarkTheme" xml:space="preserve">
+    <value>Стандартен тъмен облик</value>
+  </data>
+  <data name="DefaultDarkThemeDescription" xml:space="preserve">
+    <value>Изберете тъмния облик, който да се ползва, когато е избран стандартният (от системата) облик и тъмният режим на устройството Ви е включен.</value>
+  </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Копиране на бележките</value>
   </data>
@@ -1553,17 +1569,21 @@
     <value>Запрет</value>
     <comment>The color black</comment>
   </data>
-  <data name="BlacklistedUris" xml:space="preserve">
-    <value>Адреси под запрет</value>
+  <data name="Nord" xml:space="preserve">
+    <value>Норд</value>
+    <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
-  <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>Няма да се предлага автоматично дописване във формулярите с адреси под запрет. За разделител в списъка ползвайте запетая. Напр: „https://twitter.com, androidapp://com.twitter.android“.</value>
+  <data name="AutofillBlockedUris" xml:space="preserve">
+    <value>Блокирани за авт. попълване адреси</value>
   </data>
-  <data name="DisableSavePrompt" xml:space="preserve">
-    <value>Без напомняне за запомняне</value>
+  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
+    <value>За посочените блокирани адреси няма да се прави автоматично попълване. Разделяйте отделните адреси със запетая. Пример: „https://twitter.com, androidapp://com.twitter.android“.</value>
   </data>
-  <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>Дали да бъдете автоматично подканени да запазите в трезора данни за вписване, които въвеждате за първи път.</value>
+  <data name="AskToAddLogin" xml:space="preserve">
+    <value>Питане за добавяне на запис</value>
+  </data>
+  <data name="AskToAddLoginDescription" xml:space="preserve">
+    <value>Питане за добавяне на запис, ако такъв не бъде намерен в трезора Ви.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
     <value>При рестартиране на приложението</value>
@@ -1856,6 +1876,9 @@
     <value>Описателно име за това изпращане.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
+  <data name="Text" xml:space="preserve">
+    <value>Текст</value>
+  </data>
   <data name="TypeText" xml:space="preserve">
     <value>Текст</value>
   </data>
@@ -1871,6 +1894,18 @@
   </data>
   <data name="TypeFileInfo" xml:space="preserve">
     <value>Файл за изпращане.</value>
+  </data>
+  <data name="FileTypeIsSelected" xml:space="preserve">
+    <value>Избран е файлов тип.</value>
+  </data>
+  <data name="FileTypeIsNotSelected" xml:space="preserve">
+    <value>Не е избран файлов тип. Докоснете за избор.</value>
+  </data>
+  <data name="TextTypeIsSelected" xml:space="preserve">
+    <value>Избран е текстов тип.</value>
+  </data>
+  <data name="TextTypeIsNotSelected" xml:space="preserve">
+    <value>Не е избран текстов тип. Докоснете за избор.</value>
   </data>
   <data name="DeletionDate" xml:space="preserve">
     <value>Дата на изтриване</value>
@@ -2176,5 +2211,68 @@
   </data>
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
     <value>Въведете кода за потвърждаване, който беше изпратен на Вашата е-поща</value>
+  </data>
+  <data name="SubmitCrashLogs" xml:space="preserve">
+    <value>Изпращане на доклади за сривовете</value>
+  </data>
+  <data name="SubmitCrashLogsDescription" xml:space="preserve">
+    <value>Помогнете на Битуордън в подобряването на стабилността на приложението, като изпращате доклади относно сривовете.</value>
+  </data>
+  <data name="OptionsExpanded" xml:space="preserve">
+    <value>Възможностите са разгънати. Докоснете за свиване.</value>
+  </data>
+  <data name="OptionsCollapsed" xml:space="preserve">
+    <value>Възможностите са свити. Докоснете за разгъване.</value>
+  </data>
+  <data name="UppercaseAtoZ" xml:space="preserve">
+    <value>Главни букви (A-Z)</value>
+  </data>
+  <data name="LowercaseAtoZ" xml:space="preserve">
+    <value>Малки букви (a-z)</value>
+  </data>
+  <data name="NumbersZeroToNine" xml:space="preserve">
+    <value>Числа (0-9)</value>
+  </data>
+  <data name="SpecialCharacters" xml:space="preserve">
+    <value>Специални знаци (!@#$%^&amp;*)</value>
+  </data>
+  <data name="TapToGoBack" xml:space="preserve">
+    <value>Досокнете за връщане назад</value>
+  </data>
+  <data name="PasswordIsVisibleTapToHide" xml:space="preserve">
+    <value>Паролата е видима. Докоснете за скриване.</value>
+  </data>
+  <data name="PasswordIsNotVisibleTapToShow" xml:space="preserve">
+    <value>Паролата не е видима. Докоснете за показване.</value>
+  </data>
+  <data name="FilterByVault" xml:space="preserve">
+    <value>Филтриране на записите по трезор</value>
+  </data>
+  <data name="AllVaults" xml:space="preserve">
+    <value>Всички трезори</value>
+  </data>
+  <data name="Vaults" xml:space="preserve">
+    <value>Трезори</value>
+  </data>
+  <data name="VaultFilterDescription" xml:space="preserve">
+    <value>Трезор: {0}</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Всички</value>
+  </data>
+  <data name="NeverLockWarning" xml:space="preserve">
+    <value>Ако изберете „Никога“ като настройка за заключването, трезорът Ви ще бъде достъпен за всеки, който има досег с устройството. Ако използвате тази настройка, трябва да се уверите, че устройството Ви е удачно защитено.</value>
+  </data>
+  <data name="EnvironmentPageUrlsError" xml:space="preserve">
+    <value>Един или повече от въведените адреси са неправилни. Прегледайте ги и ги поправете, а след това опитайте да запазите отново.</value>
+  </data>
+  <data name="GenericErrorMessage" xml:space="preserve">
+    <value>Не може да обработим заявката ви. Моля опитайте отново или се свържете с нас.</value>
+  </data>
+  <data name="AllowScreenCapture" xml:space="preserve">
+    <value>Позволяване на заснемане на екрана</value>
+  </data>
+  <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
+    <value>Наистина ли искате да разрешите заснемането на екрана?</value>
   </data>
 </root>
