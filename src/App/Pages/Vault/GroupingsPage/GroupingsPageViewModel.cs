@@ -384,7 +384,7 @@ namespace Bit.App.Pages
 
         private void AddTotpGroupItem(bool canAccessPremium, List<GroupingsPageListGroup> groupedItems, bool uppercaseGroupNames)
         {
-            if (canAccessPremium && (TOTPCiphers?.Any() ?? false))
+            if (canAccessPremium && TOTPCiphers?.Any() == true)
             {
                 groupedItems.Insert(0, new GroupingsPageListGroup(
                     AppResources.Totp, 1, uppercaseGroupNames, false)

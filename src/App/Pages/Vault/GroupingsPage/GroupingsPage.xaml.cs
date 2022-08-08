@@ -22,6 +22,7 @@ namespace Bit.App.Pages
         private readonly IVaultTimeoutService _vaultTimeoutService;
         private readonly ICipherService _cipherService;
         private readonly IDeviceActionService _deviceActionService;
+        private readonly IPlatformUtilsService _platformUtilsService;
         private readonly GroupingsPageViewModel _vm;
         private readonly string _pageName;
 
@@ -41,6 +42,7 @@ namespace Bit.App.Pages
             _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _vm = BindingContext as GroupingsPageViewModel;
             _vm.Page = this;
             _vm.MainPage = mainPage;
@@ -249,6 +251,7 @@ namespace Bit.App.Pages
             catch (Exception ex)
             {
                 LoggerHelper.LogEvenIfCantBeResolved(ex);
+                _platformUtilsService.ShowDialogAsync(AppResources.AnErrorHasOccurred, AppResources.GenericErrorMessage, AppResources.Ok).FireAndForget();
             }
         }
 
