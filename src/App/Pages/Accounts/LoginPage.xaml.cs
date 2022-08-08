@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Bit.App.Models;
-using Bit.App.Resources;
 using Bit.App.Utilities;
+using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
 
@@ -14,6 +14,8 @@ namespace Bit.App.Pages
         private readonly AppOptions _appOptions;
 
         private bool _inputFocused;
+
+        readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
 
         public LoginPage(string email = null, AppOptions appOptions = null)
         {
@@ -30,11 +32,10 @@ namespace Bit.App.Pages
                 await _accountListOverlay.HideAsync();
                 await Navigation.PopModalAsync();
             };
-            if (!string.IsNullOrWhiteSpace(email))
-            {
-                _email.IsEnabled = false;
-            }
-            else
+            _vm.IsEmailEnabled = string.IsNullOrWhiteSpace(email);
+            _vm.IsIosExtension = _appOptions?.IosExtension ?? false;
+
+            if (_vm.IsEmailEnabled)
             {
                 _vm.ShowCancelButton = true;
             }
@@ -53,7 +54,7 @@ namespace Bit.App.Pages
                 ToolbarItems.Add(_getPasswordHint);
             }
 
-            if (Device.RuntimePlatform == Device.Android && !_email.IsEnabled)
+            if (Device.RuntimePlatform == Device.Android && !_vm.IsEmailEnabled)
             {
                 ToolbarItems.Add(_removeAccount);
             }
@@ -110,7 +111,7 @@ namespace Bit.App.Pages
         {
             if (DoOnce())
             {
-                await _vm.LogInAsync(true, _email.IsEnabled);
+                await _vm.LogInAsync(true, _vm.IsEmailEnabled);
             }
         }
 
@@ -139,26 +140,16 @@ namespace Bit.App.Pages
             }
         }
 
-        private async void More_Clicked(object sender, System.EventArgs e)
+        private async void More_Clicked(object sender, EventArgs e)
         {
-            await _accountListOverlay.HideAsync();
-            if (!DoOnce())
+            try
             {
-                return;
+                await _accountListOverlay.HideAsync();
+                _vm.MoreCommand.Execute(null);
             }
-
-            var buttons = _email.IsEnabled ? new[] { AppResources.GetPasswordHint }
-                : new[] { AppResources.GetPasswordHint, AppResources.RemoveAccount };
-            var selection = await DisplayActionSheet(AppResources.Options,
-                AppResources.Cancel, null, buttons);
-
-            if (selection == AppResources.GetPasswordHint)
+            catch (Exception ex)
             {
-                await Navigation.PushModalAsync(new NavigationPage(new HintPage()));
-            }
-            else if (selection == AppResources.RemoveAccount)
-            {
-                await _vm.RemoveAccountAsync();
+                _logger.Value.Exception(ex);
             }
         }
 

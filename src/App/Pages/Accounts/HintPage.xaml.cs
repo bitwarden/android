@@ -1,5 +1,4 @@
-﻿using System;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
@@ -22,14 +21,6 @@ namespace Bit.App.Pages
         {
             base.OnAppearing();
             RequestFocus(_email);
-        }
-
-        private async void Submit_Clicked(object sender, EventArgs e)
-        {
-            if (DoOnce())
-            {
-                await _vm.SubmitAsync();
-            }
         }
 
         private async void Close_Clicked(object sender, System.EventArgs e)

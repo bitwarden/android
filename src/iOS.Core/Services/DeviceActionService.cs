@@ -83,12 +83,11 @@ namespace Bit.iOS.Core.Services
             {
                 HideLoadingAsync().GetAwaiter().GetResult();
             }
-
             var vc = GetPresentedViewController();
             if (vc is null)
             {
                 return Task.CompletedTask;
-            }    
+            }
 
             var result = new TaskCompletionSource<int>();
 
@@ -360,6 +359,7 @@ namespace Bit.iOS.Core.Services
             {
                 return null;
             }
+
             var result = new TaskCompletionSource<string>();
             var sheet = UIAlertController.Create(title, null, UIAlertControllerStyle.ActionSheet);
             if (UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad)

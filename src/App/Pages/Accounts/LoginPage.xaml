@@ -55,6 +55,7 @@
                             <Entry
                                 x:Name="_email"
                                 Text="{Binding Email}"
+                                IsEnabled="{Binding IsEmailEnabled}"
                                 Keyboard="Email"
                                 StyleClass="box-value">
                                 <VisualStateManager.VisualStateGroups>
