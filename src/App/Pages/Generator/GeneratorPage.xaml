@@ -276,8 +276,6 @@
                                 HorizontalOptions="StartAndExpand" />
                             <Switch
                                 IsToggled="{Binding RandomWordUsernameCapitalize}"
-                                IsEnabled="{Binding EnforcedPolicyOptions.RandomWordUsernameCapitalize,
-                                    Converter={StaticResource inverseBool}}"
                                 StyleClass="box-value"
                                 HorizontalOptions="End" />
                         </StackLayout>
@@ -289,8 +287,6 @@
                                 HorizontalOptions="StartAndExpand" />
                             <Switch
                                 IsToggled="{Binding RandomWordUsernameIncludeNumber}"
-                                IsEnabled="{Binding EnforcedPolicyOptions.RandomWordUsernameIncludeNumber,
-                                    Converter={StaticResource inverseBool}}"
                                 StyleClass="box-value"
                                 HorizontalOptions="End" />
                         </StackLayout>

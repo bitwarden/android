@@ -13,8 +13,6 @@
         public int MinNumberOfWords { get; set; }
         public bool Capitalize { get; set; }
         public bool IncludeNumber { get; set; }
-        public bool RandomWordUsernameCapitalize { get; set; }
-        public bool RandomWordUsernameIncludeNumber { get; set; }
 
         public bool InEffect()
         {
@@ -28,9 +26,7 @@
                 UseSpecial ||
                 MinNumberOfWords > 0 ||
                 Capitalize ||
-                IncludeNumber ||
-                RandomWordUsernameCapitalize ||
-                RandomWordUsernameIncludeNumber;
+                IncludeNumber;
         }
     }
 }
