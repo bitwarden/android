@@ -140,30 +140,6 @@
                         AutomationProperties.IsInAccessibleTree="True"
                         AutomationProperties.Name="{u:I18n Filter}" />
                 </StackLayout>
-
-                <StackLayout
-                    IsVisible="{Binding ShowTotpFilter}"
-                    Orientation="Horizontal"
-                    Margin="0,5,10,0">
-                    <Label
-                        Text="{u:I18n DisplayItemsContainingTOTP}"
-                        LineBreakMode="TailTruncation"
-                        Margin="10,0"
-                        StyleClass="text-md, text-muted"
-                        VerticalOptions="Center"
-                        HorizontalOptions="StartAndExpand" />
-                    <Switch
-                        IsToggled="{Binding TotpFilterEnable}"
-                        StyleClass="box-value"
-                        HorizontalOptions="End">
-                        <Switch.Behaviors>
-                            <xct:EventToCommandBehavior
-                                EventName="Toggled"
-                                Command="{Binding TotpFilterCommand}" />
-                        </Switch.Behaviors>
-                    </Switch>
-                </StackLayout>
-
                 <StackLayout
                     VerticalOptions="CenterAndExpand"
                     Padding="20, 0"

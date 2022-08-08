@@ -4049,9 +4049,15 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string DisplayItemsContainingTOTP {
+        public static string Totp {
             get {
-                return ResourceManager.GetString("DisplayItemsContainingTOTP", resourceCulture);
+                return ResourceManager.GetString("Totp", resourceCulture);
+            }
+        }
+        
+        public static string VerificationCodes {
+            get {
+                return ResourceManager.GetString("VerificationCodes", resourceCulture);
             }
         }
         
@@ -4118,18 +4124,6 @@ namespace Bit.App.Resources {
         public static string NeverLockWarning {
             get {
                 return ResourceManager.GetString("NeverLockWarning", resourceCulture);
-            }
-        }
-        
-        public static string CipherListIsVisibleActivateToShowAuthenticationCodesList {
-            get {
-                return ResourceManager.GetString("CipherListIsVisibleActivateToShowAuthenticationCodesList", resourceCulture);
-            }
-        }
-        
-        public static string AuthenticationCodesListIsVisibleActivateToShowCipherList {
-            get {
-                return ResourceManager.GetString("AuthenticationCodesListIsVisibleActivateToShowCipherList", resourceCulture);
             }
         }
         
