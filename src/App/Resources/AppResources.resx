@@ -2317,4 +2317,13 @@
   <data name="LogInDenied" xml:space="preserve">
     <value>Log in denied</value>
   </data>
+  <data name="ApproveLoginRequests" xml:space="preserve">
+    <value>Approve login requests</value>
+  </data>
+  <data name="OpenSettingsAlert" xml:space="preserve">
+    <value>Bitwarden lets you use passwordless login by using push notifications. For the best possible experience, please enable push notifications in the application settings.</value>
+  </data>
+  <data name="OpenSettings" xml:space="preserve">
+    <value>Open Settings</value>
+  </data>
 </root>

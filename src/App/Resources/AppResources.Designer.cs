@@ -4156,5 +4156,23 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("LogInDenied", resourceCulture);
             }
         }
+        
+        public static string ApproveLoginRequests {
+            get {
+                return ResourceManager.GetString("ApproveLoginRequests", resourceCulture);
+            }
+        }
+        
+        public static string OpenSettingsAlert {
+            get {
+                return ResourceManager.GetString("OpenSettingsAlert", resourceCulture);
+            }
+        }
+        
+        public static string OpenSettings {
+            get {
+                return ResourceManager.GetString("OpenSettings", resourceCulture);
+            }
+        }
     }
 }
