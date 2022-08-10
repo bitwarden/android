@@ -4163,15 +4163,21 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string OpenSettingsAlert {
+        public static string AllowNotifications {
             get {
-                return ResourceManager.GetString("OpenSettingsAlert", resourceCulture);
+                return ResourceManager.GetString("AllowNotifications", resourceCulture);
             }
         }
         
-        public static string OpenSettings {
+        public static string ReceivePushNotificationsForNewLoginRequests {
             get {
-                return ResourceManager.GetString("OpenSettings", resourceCulture);
+                return ResourceManager.GetString("ReceivePushNotificationsForNewLoginRequests", resourceCulture);
+            }
+        }
+        
+        public static string NoThanks {
+            get {
+                return ResourceManager.GetString("NoThanks", resourceCulture);
             }
         }
     }

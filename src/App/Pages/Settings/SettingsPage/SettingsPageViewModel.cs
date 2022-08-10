@@ -348,7 +348,7 @@ namespace Bit.App.Pages
             await _stateService.SetApprovePasswordlessLoginsAsync(_approvePasswordlessLoginRequests);
             if(_approvePasswordlessLoginRequests && !_pushNotificationService.IsRegisteredForPush)
             {
-                var openAppSettingsResult = await _platformUtilsService.ShowDialogAsync(AppResources.OpenSettingsAlert,title: "", confirmText: AppResources.OpenSettings, cancelText: AppResources.Cancel);
+                var openAppSettingsResult = await _platformUtilsService.ShowDialogAsync(AppResources.ReceivePushNotificationsForNewLoginRequests, title: string.Empty, confirmText: AppResources.Settings, cancelText: AppResources.NoThanks);
 
                 if (openAppSettingsResult)
                 {
