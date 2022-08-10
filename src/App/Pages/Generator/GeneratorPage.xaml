@@ -69,7 +69,8 @@
                         </Frame>
                     </Grid>
                 </StackLayout>
-                <StackLayout StyleClass="box">
+                <StackLayout StyleClass="box"                             
+                             IsVisible="{Binding IsUsername, Converter={StaticResource inverseBool}}">
                     <Grid StyleClass="box-row" 
                         IsVisible="true">
                         <Grid.RowDefinitions>
@@ -106,6 +107,47 @@
                             Grid.RowSpan="2"
                             AutomationProperties.IsInAccessibleTree="True"
                             AutomationProperties.Name="{u:I18n GeneratePassword}" />
+                    </Grid>
+                <BoxView StyleClass="box-row-separator" />
+                </StackLayout>
+                <StackLayout StyleClass="box"                             
+                             IsVisible="{Binding IsUsername}">
+                    <Grid StyleClass="box-row" 
+                        IsVisible="true">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <controls:MonoLabel
+                            x:Name="lblUsername"
+                            StyleClass="text-lg, text-html"
+                            Text="{Binding ColoredUsername, Mode=OneWay}"
+                            Margin="0, 20"
+                            HorizontalTextAlignment="Start"
+                            HorizontalOptions="StartAndExpand" />
+                        <controls:IconButton 
+                            StyleClass="box-row-button, box-row-button-platform"
+                            Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
+                            Clicked="Copy_Clicked"
+                            CommandParameter="LoginUsername"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Grid.RowSpan="2"
+                            AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.Name="{u:I18n CopyUsername}" />
+                        <controls:IconButton 
+                            StyleClass="box-row-button, box-row-button-platform"
+                            Text="{Binding Source={x:Static core:BitwardenIcons.Generate}}"
+                            Command="{Binding RegenerateUsernameCommand}"
+                            Grid.Row="0"
+                            Grid.Column="2"
+                            Grid.RowSpan="2"
+                            AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.Name="{u:I18n GenerateUsername}" />
                     </Grid>
                 <BoxView StyleClass="box-row-separator" />
                 </StackLayout>
@@ -150,6 +192,18 @@
                             ItemsSource="{Binding UsernameTypeOptions, Mode=OneTime}"
                             SelectedIndex="{Binding UsernameTypeSelectedIndex}"
                             StyleClass="box-value" />
+                        <Label
+                            IsVisible="{Binding UsernameTypeSelectedIndex, Converter={StaticResource pickerIndexToBool}, ConverterParameter=0}"
+                            StyleClass="box-footer-label"
+                            Text="{u:I18n PlusAddressedEmailDescription}" />
+                        <Label
+                            IsVisible="{Binding UsernameTypeSelectedIndex, Converter={StaticResource pickerIndexToBool}, ConverterParameter=1}"
+                            StyleClass="box-footer-label"
+                            Text="{u:I18n CatchAllEmailDescription}" />
+                        <Label
+                            IsVisible="{Binding UsernameTypeSelectedIndex, Converter={StaticResource pickerIndexToBool}, ConverterParameter=2}"
+                            StyleClass="box-footer-label"
+                            Text="{u:I18n ForwardedEmailDescription}" />
                     </StackLayout>
                     <!--PLUS ADDRESSED EMAIL OPTIONS-->
                     <StackLayout StyleClass="box-row, box-row-input"

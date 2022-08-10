@@ -8,5 +8,6 @@ namespace Bit.Core.Abstractions
         Task<string> GenerateUsernameAsync(UsernameGenerationOptions options);
         void ClearCache();
         Task<UsernameGenerationOptions> GetOptionsAsync();
+        Task SaveOptionsAsync(UsernameGenerationOptions options);
     }
 }

@@ -4198,5 +4198,23 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("ExternalApiErrorMessage", resourceCulture);
             }
         }
+        
+        public static string PlusAddressedEmailDescription {
+            get {
+                return ResourceManager.GetString("PlusAddressedEmailDescription", resourceCulture);
+            }
+        }
+        
+        public static string CatchAllEmailDescription {
+            get {
+                return ResourceManager.GetString("CatchAllEmailDescription", resourceCulture);
+            }
+        }
+        
+        public static string ForwardedEmailDescription {
+            get {
+                return ResourceManager.GetString("ForwardedEmailDescription", resourceCulture);
+            }
+        }
     }
 }

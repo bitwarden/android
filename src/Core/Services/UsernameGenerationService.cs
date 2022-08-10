@@ -12,6 +12,7 @@ namespace Bit.Core.Services
 {
     public class UsernameGenerationService : IUsernameGenerationService
     {
+        private const string DefaultGenerated = "-";
         private readonly ICryptoService _cryptoService;
         private readonly IApiService _apiService;
         private readonly IStateService _stateService;
@@ -64,6 +65,11 @@ namespace Bit.Core.Services
 
             return _optionsCache;
         }
+        public async Task SaveOptionsAsync(UsernameGenerationOptions options)
+        {
+            await _stateService.SetUsernameGenerationOptionsAsync(options);
+            _optionsCache = options;
+        }
 
         public void ClearCache()
         {
@@ -92,7 +98,7 @@ namespace Bit.Core.Services
             {
                 randomWord = EEFLongWordList.Instance.List[wordIndex];
             }
-            
+
             if (options.RandomWordUsernameIncludeNumber.GetValueOrDefault())
             {
                 randomWord = await AppendRandomNumberToRandomWordAsync(randomWord);
@@ -107,9 +113,9 @@ namespace Bit.Core.Services
             string generatedString = string.Empty;
             var adressedEmail = options.PlusAddressedEmail;
 
-            if(string.IsNullOrWhiteSpace(adressedEmail) || adressedEmail.Length < 3)
+            if (string.IsNullOrWhiteSpace(adressedEmail) || adressedEmail.Length < 3)
             {
-                return adressedEmail;
+                return DefaultGenerated;
             }
 
             var atIndex = adressedEmail.IndexOf("@");
@@ -143,10 +149,10 @@ namespace Bit.Core.Services
 
             if (string.IsNullOrWhiteSpace(catchAllEmailDomain))
             {
-                return catchAllEmailDomain;
+                return DefaultGenerated;
             }
 
-            if(options.CatchAllEmailType == UsernameEmailType.Random)
+            if (options.CatchAllEmailType == UsernameEmailType.Random)
             {
                 generatedString = await RandomStringAsync(8);
             }
@@ -167,25 +173,25 @@ namespace Bit.Core.Services
                 case ForwardedEmailServiceType.AnonAddy:
                     if (string.IsNullOrWhiteSpace(options.AnonAddyApiAccessToken) || string.IsNullOrWhiteSpace(options.AnonAddyDomainName))
                     {
-                        return string.Empty;
+                        return DefaultGenerated;
                     }
                     return await GetAnonAddyUsername(options.AnonAddyApiAccessToken, options.AnonAddyDomainName);
 
                 case ForwardedEmailServiceType.FirefoxRelay:
                     if (string.IsNullOrWhiteSpace(options.FirefoxRelayApiAccessToken))
                     {
-                        return string.Empty;
+                        return DefaultGenerated;
                     }
                     return await GetFirefoxRelayUsername(options.FirefoxRelayApiAccessToken);
 
                 case ForwardedEmailServiceType.SimpleLogin:
                     if (string.IsNullOrWhiteSpace(options.SimpleLoginApiKey))
                     {
-                        return string.Empty;
+                        return DefaultGenerated;
                     }
                     return await GetSimpleLoginUsername(options.SimpleLoginApiKey);
                 default:
-                    return string.Empty;
+                    return DefaultGenerated;
             }
         }
 
@@ -214,11 +220,13 @@ namespace Bit.Core.Services
         {
             var str = "";
             var charSet = "abcdefghijklmnopqrstuvwxyz1234567890";
+
             for (var i = 0; i < length; i++)
             {
                 var randomCharIndex = await _cryptoService.RandomNumberAsync(0, charSet.Length - 1);
                 str += charSet[randomCharIndex];
             }
+
             return str;
         }
 
@@ -234,7 +242,7 @@ namespace Bit.Core.Services
                 return word;
             }
 
-            var randomNumber = await _cryptoService.RandomNumberAsync(1, 9999); 
+            var randomNumber = await _cryptoService.RandomNumberAsync(1, 9999);
 
             return word + randomNumber.ToString("0000");
         }

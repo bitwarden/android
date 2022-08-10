@@ -105,12 +105,6 @@ namespace Bit.App.Pages
             return base.OnBackButtonPressed();
         }
 
-        private async void Regenerate_Clicked(object sender, EventArgs e)
-        {
-            //Remove this method after proper testing and before final PR
-            await _vm.RegenerateAsync();
-        }
-
         private async void Copy_Clicked(object sender, EventArgs e)
         {
             await _vm.CopyAsync();
@@ -133,7 +127,14 @@ namespace Bit.App.Pages
 
         private void Select_Clicked(object sender, EventArgs e)
         {
-            _selectAction?.Invoke(_vm.Password);
+            if (_vm.IsUsername)
+            {
+                _selectAction?.Invoke(_vm.Username);
+            }
+            else
+            {
+                _selectAction?.Invoke(_vm.Password);
+            }
         }
 
         private async void History_Clicked(object sender, EventArgs e)
@@ -160,6 +161,7 @@ namespace Bit.App.Pages
             await base.UpdateOnThemeChanged();
 
             await Device.InvokeOnMainThreadAsync(() => _vm?.RedrawPassword());
+            await Device.InvokeOnMainThreadAsync(() => _vm?.RedrawUsername());
         }
     }
 }
