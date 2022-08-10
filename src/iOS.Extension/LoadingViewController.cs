@@ -451,7 +451,7 @@ namespace Bit.iOS.Extension
             var homePage = new HomePage();
             var app = new App.App(new AppOptions { IosExtension = true });
             ThemeManager.SetTheme(app.Resources);
-            ThemeManager.ApplyResourcesToPage(homePage);
+            ThemeManager.ApplyResourcesTo(homePage);
             if (homePage.BindingContext is HomeViewModel vm)
             {
                 vm.StartLoginAction = () => DismissViewController(false, () => LaunchLoginFlow());
@@ -474,7 +474,7 @@ namespace Bit.iOS.Extension
             var environmentPage = new EnvironmentPage();
             var app = new App.App(new AppOptions { IosExtension = true });
             ThemeManager.SetTheme(app.Resources);
-            ThemeManager.ApplyResourcesToPage(environmentPage);
+            ThemeManager.ApplyResourcesTo(environmentPage);
             if (environmentPage.BindingContext is EnvironmentPageViewModel vm)
             {
                 vm.SubmitSuccessAction = () => DismissViewController(false, () => LaunchHomePage());
@@ -492,7 +492,7 @@ namespace Bit.iOS.Extension
             var registerPage = new RegisterPage(null);
             var app = new App.App(new AppOptions { IosExtension = true });
             ThemeManager.SetTheme(app.Resources);
-            ThemeManager.ApplyResourcesToPage(registerPage);
+            ThemeManager.ApplyResourcesTo(registerPage);
             if (registerPage.BindingContext is RegisterPageViewModel vm)
             {
                 vm.RegistrationSuccess = () => DismissViewController(false, () => LaunchLoginFlow(vm.Email));
@@ -507,10 +507,11 @@ namespace Bit.iOS.Extension
 
         private void LaunchLoginFlow(string email = null)
         {
-            var loginPage = new LoginPage(email);
-            var app = new App.App(new AppOptions { IosExtension = true });
+            var appOptions = new AppOptions { IosExtension = true };
+            var app = new App.App(appOptions);
+            var loginPage = new LoginPage(email, appOptions);
             ThemeManager.SetTheme(app.Resources);
-            ThemeManager.ApplyResourcesToPage(loginPage);
+            ThemeManager.ApplyResourcesTo(loginPage);
             if (loginPage.BindingContext is LoginPageViewModel vm)
             {
                 vm.StartTwoFactorAction = () => DismissViewController(false, () => LaunchTwoFactorFlow(false));
@@ -532,7 +533,7 @@ namespace Bit.iOS.Extension
             var loginPage = new LoginSsoPage();
             var app = new App.App(new AppOptions { IosExtension = true });
             ThemeManager.SetTheme(app.Resources);
-            ThemeManager.ApplyResourcesToPage(loginPage);
+            ThemeManager.ApplyResourcesTo(loginPage);
             if (loginPage.BindingContext is LoginSsoPageViewModel vm)
             {
                 vm.StartTwoFactorAction = () => DismissViewController(false, () => LaunchTwoFactorFlow(true));
@@ -555,7 +556,7 @@ namespace Bit.iOS.Extension
             var twoFactorPage = new TwoFactorPage();
             var app = new App.App(new AppOptions { IosExtension = true });
             ThemeManager.SetTheme(app.Resources);
-            ThemeManager.ApplyResourcesToPage(twoFactorPage);
+            ThemeManager.ApplyResourcesTo(twoFactorPage);
             if (twoFactorPage.BindingContext is TwoFactorPageViewModel vm)
             {
                 vm.TwoFactorAuthSuccessAction = () => DismissLockAndContinue();
@@ -582,7 +583,7 @@ namespace Bit.iOS.Extension
             var setPasswordPage = new SetPasswordPage();
             var app = new App.App(new AppOptions { IosExtension = true });
             ThemeManager.SetTheme(app.Resources);
-            ThemeManager.ApplyResourcesToPage(setPasswordPage);
+            ThemeManager.ApplyResourcesTo(setPasswordPage);
             if (setPasswordPage.BindingContext is SetPasswordPageViewModel vm)
             {
                 vm.UpdateTempPasswordAction = () => DismissViewController(false, () => LaunchUpdateTempPasswordFlow());
@@ -601,7 +602,7 @@ namespace Bit.iOS.Extension
             var updateTempPasswordPage = new UpdateTempPasswordPage();
             var app = new App.App(new AppOptions { IosExtension = true });
             ThemeManager.SetTheme(app.Resources);
-            ThemeManager.ApplyResourcesToPage(updateTempPasswordPage);
+            ThemeManager.ApplyResourcesTo(updateTempPasswordPage);
             if (updateTempPasswordPage.BindingContext is UpdateTempPasswordPageViewModel vm)
             {
                 vm.UpdateTempPasswordSuccessAction = () => DismissViewController(false, () => LaunchHomePage());

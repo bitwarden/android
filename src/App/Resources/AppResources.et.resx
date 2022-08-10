@@ -770,6 +770,12 @@
   <data name="Enabled" xml:space="preserve">
     <value>Lubatud</value>
   </data>
+  <data name="Off" xml:space="preserve">
+    <value>Väljas</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>Sees</value>
+  </data>
   <data name="Status" xml:space="preserve">
     <value>Olek:</value>
   </data>
@@ -907,11 +913,11 @@
   <data name="CopyTotp" xml:space="preserve">
     <value>Kopeeri TOTP</value>
   </data>
-  <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>Kui sinu sisselogimise andmetele on juurde lisatud autentimise võti, kopeeritakse TOTP kood automaattäite kasutamisel lõikepuhvrisse.</value>
+  <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
+    <value>Kui sisselogimise andmetele on juurde lisatud autentimise võti, kopeeri TOTP kood automaattäite kasutamisel lõikepuhvrisse.</value>
   </data>
-  <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>Keela automaatne TOTP kopeerimine</value>
+  <data name="CopyTotpAutomatically" xml:space="preserve">
+    <value>TOTP automaatne kopeerimine</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
     <value>Selle funktsiooni kasutamiseks on vajalik tasulist kontot omada.</value>
@@ -1128,11 +1134,11 @@
   <data name="Expiration" xml:space="preserve">
     <value>Aegumine</value>
   </data>
-  <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>Keela veebilehel ikoonid</value>
+  <data name="ShowWebsiteIcons" xml:space="preserve">
+    <value>Kuva veebilehtede ikoone</value>
   </data>
-  <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Ikoonid aitavad hoidlas olevaid veebilehti paremini ära tunda.</value>
+  <data name="ShowWebsiteIconsDescription" xml:space="preserve">
+    <value>Kuva iga kirje kõrval lehekülje ikooni.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>Ikoonide serveri URL</value>
@@ -1372,11 +1378,15 @@
   <data name="SearchCollection" xml:space="preserve">
     <value>Otsi kogumikku</value>
   </data>
-  <data name="SearchFolder" xml:space="preserve">
-    <value>Otsi kausta</value>
+  <data name="SearchFileSends" xml:space="preserve">
+    <value>Otsi failiga Sende</value>
   </data>
-  <data name="SearchType" xml:space="preserve">
-    <value>Otsingu tüüp</value>
+  <data name="SearchTextSends" xml:space="preserve">
+    <value>Otsi tekstiga Sende</value>
+  </data>
+  <data name="SearchGroup" xml:space="preserve">
+    <value>Otsi {0}</value>
+    <comment>ex: Search Logins</comment>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Tüüp</value>
@@ -1537,6 +1547,12 @@
   <data name="ThemeDefault" xml:space="preserve">
     <value>Vaikeväärtus (süsteem)</value>
   </data>
+  <data name="DefaultDarkTheme" xml:space="preserve">
+    <value>Vaikimisi tume teema</value>
+  </data>
+  <data name="DefaultDarkThemeDescription" xml:space="preserve">
+    <value>Kui kasutad vaikimisi (süsteemset) teemat ja seadme tume režiim on sisse lülitatud, siis valitakse vaikimisi tume teema</value>
+  </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Kopeeri märkus</value>
   </data>
@@ -1553,17 +1569,21 @@
     <value>Must</value>
     <comment>The color black</comment>
   </data>
-  <data name="BlacklistedUris" xml:space="preserve">
-    <value>Musta nimekirja URI-d</value>
+  <data name="Nord" xml:space="preserve">
+    <value>Nord</value>
+    <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
-  <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>Musta nimekirja pandud URI-de puhul ei pakuta automaattäitmist. Eralda nimed komaga. Nt: "https://twitter.com, androidapp://com.twitter.android".</value>
+  <data name="AutofillBlockedUris" xml:space="preserve">
+    <value>Täida blokeeritud URId automaatselt</value>
   </data>
-  <data name="DisableSavePrompt" xml:space="preserve">
-    <value>Keela "Lisa konto andmed"</value>
+  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
+    <value>Blokeeritud URIdele ei pakuta automaattäidet. Eralda erinevad URId komaga. Nt nagu: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
-  <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>"Lisa konto andmed" märguanne ilmub pärast esimest sisselogimist ning võimaldab kontoandmeid salvestada.</value>
+  <data name="AskToAddLogin" xml:space="preserve">
+    <value>Küsi "Lisa konto andmed"</value>
+  </data>
+  <data name="AskToAddLoginDescription" xml:space="preserve">
+    <value>Pakub kontoandmete salvestamist, kui see on hoidlast puudu.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
     <value>Äpi taaskäivitamisel</value>
@@ -1856,6 +1876,9 @@
     <value>Sisesta Sendi nimi (kohustuslik).</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
+  <data name="Text" xml:space="preserve">
+    <value>Tekst</value>
+  </data>
   <data name="TypeText" xml:space="preserve">
     <value>Tekst</value>
   </data>
@@ -1871,6 +1894,18 @@
   </data>
   <data name="TypeFileInfo" xml:space="preserve">
     <value>Fail, mida soovid saata.</value>
+  </data>
+  <data name="FileTypeIsSelected" xml:space="preserve">
+    <value>Failitüüp on valitud.</value>
+  </data>
+  <data name="FileTypeIsNotSelected" xml:space="preserve">
+    <value>Failitüüp pole valitud. Vajuta, et valida.</value>
+  </data>
+  <data name="TextTypeIsSelected" xml:space="preserve">
+    <value>Tekstitüüp on valitud.</value>
+  </data>
+  <data name="TextTypeIsNotSelected" xml:space="preserve">
+    <value>Tekstitüüp pole valitud. Vajuta, et valida.</value>
   </data>
   <data name="DeletionDate" xml:space="preserve">
     <value>Kustutamise kuupäev</value>
@@ -2175,5 +2210,68 @@
   </data>
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
     <value>Kinnituskood on edukalt e-posti aadressile saadetud.</value>
+  </data>
+  <data name="SubmitCrashLogs" xml:space="preserve">
+    <value>Saada krahhiaruandeid</value>
+  </data>
+  <data name="SubmitCrashLogsDescription" xml:space="preserve">
+    <value>Aita Bitwardenil rakendust paremaks muuta, teavitades programmi tõrgetest.</value>
+  </data>
+  <data name="OptionsExpanded" xml:space="preserve">
+    <value>Valikud on avatud. Vajuta, et need peita.</value>
+  </data>
+  <data name="OptionsCollapsed" xml:space="preserve">
+    <value>Valikud on peidetud. Vajuta, et need kuvada.</value>
+  </data>
+  <data name="UppercaseAtoZ" xml:space="preserve">
+    <value>Suurtähed (A-Z) </value>
+  </data>
+  <data name="LowercaseAtoZ" xml:space="preserve">
+    <value>Väiketähed (A-Z)</value>
+  </data>
+  <data name="NumbersZeroToNine" xml:space="preserve">
+    <value>Numbrid (0-9)</value>
+  </data>
+  <data name="SpecialCharacters" xml:space="preserve">
+    <value>Erimärgid (!@#$%^&amp;*)</value>
+  </data>
+  <data name="TapToGoBack" xml:space="preserve">
+    <value>Vajuta tagasi minemiseks</value>
+  </data>
+  <data name="PasswordIsVisibleTapToHide" xml:space="preserve">
+    <value>Salasõna on nähtav. Vajuta, et see peita.</value>
+  </data>
+  <data name="PasswordIsNotVisibleTapToShow" xml:space="preserve">
+    <value>Salasõna ei ole nähtav. Vajuta, et seda kuvada.</value>
+  </data>
+  <data name="FilterByVault" xml:space="preserve">
+    <value>Sorteeri kirjeid hoidla alusel</value>
+  </data>
+  <data name="AllVaults" xml:space="preserve">
+    <value>Kõik hoidlad</value>
+  </data>
+  <data name="Vaults" xml:space="preserve">
+    <value>Hoidlad</value>
+  </data>
+  <data name="VaultFilterDescription" xml:space="preserve">
+    <value>Hoidla: {0}</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Kõik</value>
+  </data>
+  <data name="NeverLockWarning" xml:space="preserve">
+    <value>Kõik, kes pääsevad sinu telefoni, saavad valikuga "Mitte kunagi" ka sinu hoidlat vaadata. Veendu, et seda tõesti teha soovid.</value>
+  </data>
+  <data name="EnvironmentPageUrlsError" xml:space="preserve">
+    <value>Üks või enam sisestatud URLi on valed. Palun kontrolli neid ja proovi seejärel uuesti.</value>
+  </data>
+  <data name="GenericErrorMessage" xml:space="preserve">
+    <value>Päringu töötlemine ebaõnnestus. Palun proovi uuesti või võta meiega ühendust.</value>
+  </data>
+  <data name="AllowScreenCapture" xml:space="preserve">
+    <value>Luba ekraanikuva salvestamine</value>
+  </data>
+  <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
+    <value>Oled kindel, et soovid lubada ekraanikuva salvestamist?</value>
   </data>
 </root>

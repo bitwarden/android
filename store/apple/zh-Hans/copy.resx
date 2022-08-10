@@ -150,7 +150,7 @@ Bitwarden 的翻译有 40 种语言，而且还在不断增加，感谢我们的
   <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
-    <value>bitwarden,8位,密码,免费密码管理器,密码管理器,登录管理器</value>
+    <value>bitwarden,8bit,密码,免费密码管理器,密码管理器,登录管理器</value>
     <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">

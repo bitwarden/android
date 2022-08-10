@@ -479,7 +479,7 @@
     <value>Prawie gotowe!</value>
   </data>
   <data name="ExtensionEnable" xml:space="preserve">
-    <value>Włącz Rozszerzenie Aplikacji</value>
+    <value>Włącz rozszerzenie aplikacji</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
     <value>W Safari, znajdź Bitwarden przy użyciu ikony udostępniania (podpowiedź: przewiń dolny rząd menu do prawej strony).</value>
@@ -498,10 +498,10 @@
     <value>W przeglądarce Safari i Chrome, znajdź Bitwarden przy użyciu ikony udostępniania (podpowiedź: przewiń dolny rząd menu udostępniania do prawej strony).</value>
   </data>
   <data name="ExtensionTapIcon" xml:space="preserve">
-    <value>Naciśnij ikonę Bitwarden w menu, aby uruchomić rozszerzenie.</value>
+    <value>Dotknij ikonę Bitwarden w menu, aby uruchomić rozszerzenie.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>Aby włączyć Bbitwarden w Safari i innych aplikacjach, dotknij ikonę "więcej" w dolnym rzędzie menu.</value>
+    <value>Aby włączyć Bitwarden w Safari i innych aplikacjach, dotknij ikonę "więcej" w dolnym rzędzie menu.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
     <value>Ulubione</value>
@@ -770,6 +770,12 @@
   <data name="Enabled" xml:space="preserve">
     <value>Włączone</value>
   </data>
+  <data name="Off" xml:space="preserve">
+    <value>Wyłączone</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>Włączone</value>
+  </data>
   <data name="Status" xml:space="preserve">
     <value>Status</value>
   </data>
@@ -907,11 +913,11 @@
   <data name="CopyTotp" xml:space="preserve">
     <value>Kopiuj kod TOTP</value>
   </data>
-  <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
+  <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
     <value>Jeśli dane logowania posiadają dołączony klucz uwierzytelniający TOTP, kod weryfikacyjny jest automatycznie kopiowany do schowka przy każdym autouzupełnieniu danych logowania.</value>
   </data>
-  <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>Wyłącz automatyczne kopiowanie kodu TOTP</value>
+  <data name="CopyTotpAutomatically" xml:space="preserve">
+    <value>Kopiuj TOTP automatycznie</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
     <value>Konto Premium jest wymagane, aby skorzystać z tej funkcji.</value>
@@ -1128,11 +1134,11 @@
   <data name="Expiration" xml:space="preserve">
     <value>Data wygaśnięcia</value>
   </data>
-  <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>Wyłącz ikony stron</value>
+  <data name="ShowWebsiteIcons" xml:space="preserve">
+    <value>Pokaż ikony witryn</value>
   </data>
-  <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Wyświetlaj rozpoznawalną ikonę serwisu obok danych logowania w sejfie.</value>
+  <data name="ShowWebsiteIconsDescription" xml:space="preserve">
+    <value>Pokaż rozpoznawalny obraz obok każdych danych logowania.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>Adres URL serwera ikon</value>
@@ -1372,11 +1378,15 @@
   <data name="SearchCollection" xml:space="preserve">
     <value>Szukaj w kolekcji</value>
   </data>
-  <data name="SearchFolder" xml:space="preserve">
-    <value>Szukaj w folderze</value>
+  <data name="SearchFileSends" xml:space="preserve">
+    <value>Szukaj w wysłanych plikach</value>
   </data>
-  <data name="SearchType" xml:space="preserve">
-    <value>Szukaj elementu</value>
+  <data name="SearchTextSends" xml:space="preserve">
+    <value>Szukaj w wysłanych tekstach</value>
+  </data>
+  <data name="SearchGroup" xml:space="preserve">
+    <value>Szukaj {0}</value>
+    <comment>ex: Search Logins</comment>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Rodzaj</value>
@@ -1537,8 +1547,14 @@
   <data name="ThemeDefault" xml:space="preserve">
     <value>Domyślny (systemowy)</value>
   </data>
+  <data name="DefaultDarkTheme" xml:space="preserve">
+    <value>Domyślny ciemny motyw</value>
+  </data>
+  <data name="DefaultDarkThemeDescription" xml:space="preserve">
+    <value>Wybierz ciemny motyw podczas korzystania z domyślnego (systemowego) motywu, kiedy włączony jest tryb ciemny urządzenia</value>
+  </data>
   <data name="CopyNotes" xml:space="preserve">
-    <value>Kopiuj notatki</value>
+    <value>Kopiuj notatkę</value>
   </data>
   <data name="Exit" xml:space="preserve">
     <value>Wyjdź</value>
@@ -1553,17 +1569,21 @@
     <value>Czarny</value>
     <comment>The color black</comment>
   </data>
-  <data name="BlacklistedUris" xml:space="preserve">
-    <value>Zablokowane adresy URI</value>
+  <data name="Nord" xml:space="preserve">
+    <value>Nord</value>
+    <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
-  <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>Zablokowane adresy URI nie będą oferowały autouzupełniania. Adresy powinny być oddzielone przecinkami. Np.: "https://twitter.com, androidapp://com.twitter.android".</value>
+  <data name="AutofillBlockedUris" xml:space="preserve">
+    <value>Autouzupełnianie zablokowanych identyfikatorów URI</value>
   </data>
-  <data name="DisableSavePrompt" xml:space="preserve">
-    <value>Wyłącz monit o zapisywanie</value>
+  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
+    <value>Autouzupełnianie nie będzie oferowane w przypadku zablokowanych identyfikatorów URI. Oddziel wiele identyfikatorów URI przecinkami. Na przykład: „https://twitter.com, androidapp://com.twitter.android”.</value>
   </data>
-  <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>"Monit o zapisywanie" automatycznie zapyta Cię o zapisanie nowych elementów do sejfu za każdym razem, gdy wpiszesz je po raz pierwszy.</value>
+  <data name="AskToAddLogin" xml:space="preserve">
+    <value>Poproś o dodanie danych logowania</value>
+  </data>
+  <data name="AskToAddLoginDescription" xml:space="preserve">
+    <value>Poproś o dodanie elementu, jeśli nie zostanie on znaleziony w Twoim sejfie.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
     <value>Po restarcie aplikacji</value>
@@ -1856,6 +1876,9 @@
     <value>Nazwa wysyłki.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
+  <data name="Text" xml:space="preserve">
+    <value>Tekst</value>
+  </data>
   <data name="TypeText" xml:space="preserve">
     <value>Tekst</value>
   </data>
@@ -1871,6 +1894,18 @@
   </data>
   <data name="TypeFileInfo" xml:space="preserve">
     <value>Plik, który chcesz wysłać.</value>
+  </data>
+  <data name="FileTypeIsSelected" xml:space="preserve">
+    <value>Wybrano typ pliku.</value>
+  </data>
+  <data name="FileTypeIsNotSelected" xml:space="preserve">
+    <value>Nie wybrano typu pliku, dotknij, aby go wybrać.</value>
+  </data>
+  <data name="TextTypeIsSelected" xml:space="preserve">
+    <value>Wybrano typ tekstowy.</value>
+  </data>
+  <data name="TextTypeIsNotSelected" xml:space="preserve">
+    <value>Nie wybrano typu tekstowego, dotknij, aby go wybrać.</value>
   </data>
   <data name="DeletionDate" xml:space="preserve">
     <value>Data usunięcia</value>
@@ -2175,5 +2210,68 @@
   </data>
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
     <value>Wpisz kod weryfikacyjny, który został wysłany na adres e-mail</value>
+  </data>
+  <data name="SubmitCrashLogs" xml:space="preserve">
+    <value>Wyślij logi awarii</value>
+  </data>
+  <data name="SubmitCrashLogsDescription" xml:space="preserve">
+    <value>Pomóż Bitwarden poprawić stabilność aplikacji, przesyłając raporty o awariach.</value>
+  </data>
+  <data name="OptionsExpanded" xml:space="preserve">
+    <value>Opcje są rozwinięte. Kliknij, aby zwinąć.</value>
+  </data>
+  <data name="OptionsCollapsed" xml:space="preserve">
+    <value>Opcje są zwinięte. Kliknij, aby rozwinąć.</value>
+  </data>
+  <data name="UppercaseAtoZ" xml:space="preserve">
+    <value>Wielkie litery (A-Z)</value>
+  </data>
+  <data name="LowercaseAtoZ" xml:space="preserve">
+    <value>Małe litery (a-z)</value>
+  </data>
+  <data name="NumbersZeroToNine" xml:space="preserve">
+    <value>Cyfry (0-9)</value>
+  </data>
+  <data name="SpecialCharacters" xml:space="preserve">
+    <value>Znaki specjalne (!@#$%^&amp;*)</value>
+  </data>
+  <data name="TapToGoBack" xml:space="preserve">
+    <value>Dotknij, aby wrócić</value>
+  </data>
+  <data name="PasswordIsVisibleTapToHide" xml:space="preserve">
+    <value>Hasło jest widoczne, dotknij, aby je ukryć.</value>
+  </data>
+  <data name="PasswordIsNotVisibleTapToShow" xml:space="preserve">
+    <value>Hasło jest niewidoczne, dotknij, aby je pokazać.</value>
+  </data>
+  <data name="FilterByVault" xml:space="preserve">
+    <value>Filtruj elementy według sejfu</value>
+  </data>
+  <data name="AllVaults" xml:space="preserve">
+    <value>Wszystkie sejfy</value>
+  </data>
+  <data name="Vaults" xml:space="preserve">
+    <value>Sejfy</value>
+  </data>
+  <data name="VaultFilterDescription" xml:space="preserve">
+    <value>Sejf: {0}</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Wszystkie</value>
+  </data>
+  <data name="NeverLockWarning" xml:space="preserve">
+    <value>Ustawienie opcji blokady na „Nigdy” sprawi, że sejf będzie dostępny dla każdego, kto ma dostęp do urządzenia. Jeśli korzystasz z tej opcji, upewnij się, że urządzenie jest odpowiednio chronione.</value>
+  </data>
+  <data name="EnvironmentPageUrlsError" xml:space="preserve">
+    <value>Co najmniej jeden ze wpisanych adresów URL jest nieprawidłowy. Popraw je i spróbuj ponownie zapisać.</value>
+  </data>
+  <data name="GenericErrorMessage" xml:space="preserve">
+    <value>Nie mogliśmy przetworzyć żądania. Spróbuj ponownie lub skontaktuj się z nami.</value>
+  </data>
+  <data name="AllowScreenCapture" xml:space="preserve">
+    <value>Pozwól na robienie zrzutów ekranu</value>
+  </data>
+  <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
+    <value>Jesteś pewien, że chcesz włączyć możliwość robienia zrzutów ekranu?</value>
   </data>
 </root>
