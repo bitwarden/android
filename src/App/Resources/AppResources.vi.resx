@@ -771,10 +771,10 @@
     <value>Kích hoạt</value>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Off</value>
+    <value>Tắt</value>
   </data>
   <data name="On" xml:space="preserve">
-    <value>On</value>
+    <value>Bật</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>Trạng thái</value>
@@ -1205,7 +1205,7 @@
     <value>Ẩn</value>
   </data>
   <data name="FieldTypeLinked" xml:space="preserve">
-    <value>Linked</value>
+    <value>Đã liên kết</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Văn bản</value>
@@ -1426,7 +1426,7 @@
     <value>Chia sẻ mục này</value>
   </data>
   <data name="MoveToOrganization" xml:space="preserve">
-    <value>Move to Organization</value>
+    <value>Chuyển tới Tổ chức</value>
   </data>
   <data name="NoOrgsToList" xml:space="preserve">
     <value>Không có tổ chức để liệt kê.</value>
@@ -1497,7 +1497,7 @@
     <value>Kho của bạn đã bị khóa. Xác minh mã PIN của bạn để mở.</value>
   </data>
   <data name="VaultLockedIdentity" xml:space="preserve">
-    <value>Your vault is locked. Verify your identity to continue.</value>
+    <value>Kho của bạn đã bị khoá. Hãy xác minh danh tính của bạn để tiếp tục.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Tối</value>
@@ -2035,7 +2035,7 @@
     <value>30 ngày</value>
   </data>
   <data name="Custom" xml:space="preserve">
-    <value>Custom</value>
+    <value>Tùy chỉnh</value>
   </data>
   <data name="ShareOnSave" xml:space="preserve">
     <value>Share this Send upon save</value>
@@ -2046,7 +2046,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AboutSend" xml:space="preserve">
-    <value>About Send</value>
+    <value>Về Send</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="HideEmail" xml:space="preserve">
@@ -2092,7 +2092,7 @@
     <value>Đang cập nhật Mật khẩu</value>
   </data>
   <data name="UpdatePasswordError" xml:space="preserve">
-    <value>Currently unable to update password</value>
+    <value>Hiện không thể cập nhật mật khẩu</value>
   </data>
   <data name="RemoveMasterPassword" xml:space="preserve">
     <value>Xóa mật khẩu chính</value>
@@ -2119,7 +2119,7 @@
     <value>Authentication using FIDO2 WebAuthn, you can authenticate using an external security key.</value>
   </data>
   <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
-    <value>Authenticate WebAuthn</value>
+    <value>Xác thực WebAuthn</value>
   </data>
   <data name="Fido2ReturnToApp" xml:space="preserve">
     <value>Return to App</value>
@@ -2140,22 +2140,22 @@
     <value>One or more organization policies prevents your from exporting your personal vault.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
-    <value>Add Account</value>
+    <value>Thêm tài khoản</value>
   </data>
   <data name="AccountUnlocked" xml:space="preserve">
-    <value>Unlocked</value>
+    <value>Đã mở khóa</value>
   </data>
   <data name="AccountLocked" xml:space="preserve">
-    <value>Locked</value>
+    <value>Đã khóa</value>
   </data>
   <data name="AccountLoggedOut" xml:space="preserve">
-    <value>Logged Out</value>
+    <value>Đã đăng xuất</value>
   </data>
   <data name="AccountSwitchedAutomatically" xml:space="preserve">
-    <value>Switched to next available account</value>
+    <value>Đã đổi sang tài khoản có sẵn kế tiếp</value>
   </data>
   <data name="AccountLockedSuccessfully" xml:space="preserve">
-    <value>Account Locked</value>
+    <value>Đã khoá tài khoản</value>
   </data>
   <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
     <value>Account logged out successfully</value>
@@ -2164,7 +2164,7 @@
     <value>Account removed successfully</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
-    <value>Delete account</value>
+    <value>Xoá tài khoản</value>
   </data>
   <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
     <value>Deleting your account is permanent</value>
@@ -2173,10 +2173,10 @@
     <value>Your account and all vault data will be erased and unrecoverable. Are you sure you want to continue?</value>
   </data>
   <data name="DeletingYourAccount" xml:space="preserve">
-    <value>Deleting your account</value>
+    <value>Đang xoá tài khoản của bạn</value>
   </data>
   <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
-    <value>Your account has been permanently deleted</value>
+    <value>Tài khoản của bạn đã được xóa vĩnh viễn</value>
   </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
     <value>Invalid Verification Code.</value>
@@ -2185,10 +2185,10 @@
     <value>Request one-time password</value>
   </data>
   <data name="SendCode" xml:space="preserve">
-    <value>Send Code</value>
+    <value>Gửi mã</value>
   </data>
   <data name="Sending" xml:space="preserve">
-    <value>Sending</value>
+    <value>Đang gửi</value>
   </data>
   <data name="CopySendLinkOnSave" xml:space="preserve">
     <value>Copy Send link on save</value>
@@ -2236,7 +2236,7 @@
     <value>Special Characters (!@#$%^&amp;*)</value>
   </data>
   <data name="TapToGoBack" xml:space="preserve">
-    <value>Tap to go back</value>
+    <value>Chạm để trở lại</value>
   </data>
   <data name="PasswordIsVisibleTapToHide" xml:space="preserve">
     <value>Password is visible, tap to hide.</value>
@@ -2251,13 +2251,13 @@
     <value>Tất cả kho</value>
   </data>
   <data name="Vaults" xml:space="preserve">
-    <value>Vaults</value>
+    <value>Kho</value>
   </data>
   <data name="VaultFilterDescription" xml:space="preserve">
     <value>Kho: {0}</value>
   </data>
   <data name="All" xml:space="preserve">
-    <value>All</value>
+    <value>Tất cả</value>
   </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Setting your lock options to “Never” keeps your vault available to anyone with access to your device. If you use this option, you should ensure that you keep your device properly protected.</value>
