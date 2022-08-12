@@ -801,7 +801,7 @@
     <value>搜尋</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
-    <value>您正在搜尋用於「{0}」的自動登入項目。</value>
+    <value>您正在搜尋用於「{0}」的自動填入項目。</value>
   </data>
   <data name="LearnOrg" xml:space="preserve">
     <value>了解組織</value>
@@ -1577,7 +1577,7 @@
     <value>自動填入已阻止的 URI</value>
   </data>
   <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>不會在阻止的 URI 提供自動填入功能。多個 URI 用逗號分隔，範例：「https://twitter.com, androidapp://com.twitter.android」。</value>
+    <value>不會對已阻止的 URI 提供自動填入功能。多個 URI 用逗號分隔，範例：「https://twitter.com, androidapp://com.twitter.android」。</value>
   </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>詢問新增登入資料</value>

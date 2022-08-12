@@ -276,16 +276,16 @@
     <value>Вы ўпэўнены, што хочаце выйсці?</value>
   </data>
   <data name="RemoveAccount" xml:space="preserve">
-    <value>Remove Account</value>
+    <value>Выдаліць уліковы запіс</value>
   </data>
   <data name="RemoveAccountConfirmation" xml:space="preserve">
-    <value>Are you sure you want to remove this account?</value>
+    <value>Вы ўпэўнены, што хочаце выдаліць уліковы запіс?</value>
   </data>
   <data name="AccountAlreadyAdded" xml:space="preserve">
-    <value>Account Already Added</value>
+    <value>Уліковы запіс ужо дададзены</value>
   </data>
   <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
-    <value>Would you like to switch to it now?</value>
+    <value>Хочаце пераключыцца на яго зараз?</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Асноўны пароль</value>

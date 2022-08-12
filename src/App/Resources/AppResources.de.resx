@@ -2212,10 +2212,10 @@
     <value>Gib den Bestätigungscode ein, der an deine E-Mail-Adresse gesendet wurde</value>
   </data>
   <data name="SubmitCrashLogs" xml:space="preserve">
-    <value>Absturzprotokolle melden</value>
+    <value>Absturzprotokolle senden</value>
   </data>
   <data name="SubmitCrashLogsDescription" xml:space="preserve">
-    <value>Hilf Bitwarden die Stabilität der App zu verbessern, indem du das Melden von Absturzberichten zulässt.</value>
+    <value>Hilf Bitwarden die Stabilität der App zu verbessern, indem du Absturzberichte sendest.</value>
   </data>
   <data name="OptionsExpanded" xml:space="preserve">
     <value>Optionen sind ausgeklappt, tippen zum einklappen.</value>

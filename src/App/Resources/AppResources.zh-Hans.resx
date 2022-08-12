@@ -801,7 +801,7 @@
     <value>搜索</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
-    <value>你正在为“{0}”搜索自动填充项目。</value>
+    <value>你正在搜索用于「{0}」的自动填充项目。</value>
   </data>
   <data name="LearnOrg" xml:space="preserve">
     <value>了解组织</value>
@@ -2224,7 +2224,7 @@
     <value>选项已折叠，点击展开。</value>
   </data>
   <data name="UppercaseAtoZ" xml:space="preserve">
-    <value>大写（A到Z）</value>
+    <value>大写 (A-Z)</value>
   </data>
   <data name="LowercaseAtoZ" xml:space="preserve">
     <value>小写 (a-z)</value>
