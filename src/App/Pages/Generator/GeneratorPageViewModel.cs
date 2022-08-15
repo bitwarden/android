@@ -53,8 +53,8 @@ namespace Bit.App.Pages
         private string _anonAddyDomainName;
         private string _firefoxRelayApiAccessToken;
         private string _simpleLoginApiKey;
-        private bool _randomWordUsernameCapitalize;
-        private bool _randomWordUsernameIncludeNumber;
+        private bool _capitalizeRandomWordUsername;
+        private bool _includeNumberRandomWordUsername;
         private bool _showTypePicker;
         private string _emailWebsite;
         private bool _showUsernameEmailType;
@@ -459,10 +459,10 @@ namespace Bit.App.Pages
 
         public bool CapitalizeRandomWordUsername
         {
-            get => _randomWordUsernameCapitalize;
+            get => _capitalizeRandomWordUsername;
             set
             {
-                if (SetProperty(ref _randomWordUsernameCapitalize, value))
+                if (SetProperty(ref _capitalizeRandomWordUsername, value))
                 {
                     _usernameOptions.RandomWordUsernameCapitalize = value;
                     var task = SaveUsernameOptionsAsync();
@@ -470,12 +470,12 @@ namespace Bit.App.Pages
             }
         }
 
-        public bool RandomWordUsernameIncludeNumber
+        public bool IncludeNumberRandomWordUsername
         {
-            get => _randomWordUsernameIncludeNumber;
+            get => _includeNumberRandomWordUsername;
             set
             {
-                if (SetProperty(ref _randomWordUsernameIncludeNumber, value))
+                if (SetProperty(ref _includeNumberRandomWordUsername, value))
                 {
                     _usernameOptions.RandomWordUsernameIncludeNumber = value;
                     var task = SaveUsernameOptionsAsync();
@@ -651,7 +651,7 @@ namespace Bit.App.Pages
         private void LoadFromUsernameOptions()
         {
             CapitalizeRandomWordUsername = _usernameOptions.RandomWordUsernameCapitalize.GetValueOrDefault();
-            RandomWordUsernameIncludeNumber = _usernameOptions.RandomWordUsernameIncludeNumber.GetValueOrDefault();
+            IncludeNumberRandomWordUsername = _usernameOptions.RandomWordUsernameIncludeNumber.GetValueOrDefault();
             SimpleLoginApiKey = _usernameOptions.SimpleLoginApiKey;
             AnonAddyApiAccessToken = _usernameOptions.AnonAddyApiAccessToken;
             AnonAddyDomainName = _usernameOptions.AnonAddyDomainName;
@@ -680,7 +680,7 @@ namespace Bit.App.Pages
         private void SetUsernameOptions()
         {
             _usernameOptions.RandomWordUsernameCapitalize = CapitalizeRandomWordUsername;
-            _usernameOptions.RandomWordUsernameIncludeNumber = RandomWordUsernameIncludeNumber;
+            _usernameOptions.RandomWordUsernameIncludeNumber = IncludeNumberRandomWordUsername;
             _usernameOptions.PlusAddressedEmail = PlusAddressedEmail;
             _usernameOptions.CatchAllEmailDomain = CatchAllEmailDomain;
             _usernameOptions.FirefoxRelayApiAccessToken = FirefoxRelayApiAccessToken;

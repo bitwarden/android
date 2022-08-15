@@ -275,7 +275,7 @@
                                 StyleClass="box-label-regular"
                                 HorizontalOptions="StartAndExpand" />
                             <Switch
-                                IsToggled="{Binding RandomWordUsernameCapitalize}"
+                                IsToggled="{Binding CapitalizeRandomWordUsername}"
                                 StyleClass="box-value"
                                 HorizontalOptions="End" />
                         </StackLayout>
@@ -286,7 +286,7 @@
                                 StyleClass="box-label-regular"
                                 HorizontalOptions="StartAndExpand" />
                             <Switch
-                                IsToggled="{Binding RandomWordUsernameIncludeNumber}"
+                                IsToggled="{Binding IncludeNumberRandomWordUsername}"
                                 StyleClass="box-value"
                                 HorizontalOptions="End" />
                         </StackLayout>
