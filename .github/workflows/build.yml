@@ -57,7 +57,7 @@ jobs:
 
   android:
     name: Android
-    runs-on: windows-2019
+    runs-on: windows-2022
     needs: setup
     steps:
       - name: Setup NuGet
@@ -212,7 +212,7 @@ jobs:
 
   f-droid:
     name: F-Droid Build
-    runs-on: windows-2019
+    runs-on: windows-2022
     steps:
       - name: Setup NuGet
         uses: nuget/setup-nuget@b2bc17b761a1d88cab755a776c7922eb26eefbfa  # v1.0.6
