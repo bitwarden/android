@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Bit.App.Resources;
 using Bit.App.Utilities;
+using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
@@ -58,7 +59,9 @@ namespace Bit.App.Pages
         private bool _showTypePicker;
         private string _emailWebsite;
         private bool _showUsernameEmailType;
-        private string _usernameTypeDescriptionLabel;
+        private bool _showFirefoxRelayApiAccessToken;
+        private bool _showAnonAddyApiAccessToken;
+        private bool _showSimpleLoginApiKey;
 
         public GeneratorPageViewModel()
         {
@@ -78,6 +81,8 @@ namespace Bit.App.Pages
             UsernameTypePromptHelpCommand = new Command(UsernameTypePromptHelp);
             RegenerateCommand = new AsyncCommand(RegenerateAsync, onException: ex => _logger.Value.Exception(ex), allowsMultipleExecutions: false);
             RegenerateUsernameCommand = new AsyncCommand(RegenerateUsernameAsync, onException: ex => OnSubmitException(ex), allowsMultipleExecutions: false);
+            ToggleForwardedEmailHiddenValueCommand = new AsyncCommand(ToggleForwardedEmailHiddenValueAsync, onException: ex => _logger.Value.Exception(ex), allowsMultipleExecutions: false);
+
             _typeSelected = AppResources.Password;
         }
 
@@ -90,6 +95,7 @@ namespace Bit.App.Pages
         public Command UsernameTypePromptHelpCommand { get; set; }
         public ICommand RegenerateCommand { get; set; }
         public ICommand RegenerateUsernameCommand { get; set; }
+        public ICommand ToggleForwardedEmailHiddenValueCommand { get; set; }
 
         public string Password
         {
@@ -421,6 +427,21 @@ namespace Bit.App.Pages
             }
         }
 
+        public bool ShowAnonAddyApiAccessToken
+        {
+            get
+            {
+                return _showAnonAddyApiAccessToken;
+            }
+            set => SetProperty(ref _showAnonAddyApiAccessToken, value,
+                additionalPropertyNames: new string[]
+                {
+                    nameof(ShowAnonAddyHiddenValueIcon)
+                });
+        }
+
+        public string ShowAnonAddyHiddenValueIcon => _showAnonAddyApiAccessToken ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
+
         public string AnonAddyDomainName
         {
             get => _anonAddyDomainName;
@@ -445,6 +466,21 @@ namespace Bit.App.Pages
             }
         }
 
+        public bool ShowFirefoxRelayApiAccessToken
+        {
+            get
+            {
+                return _showFirefoxRelayApiAccessToken;
+            }
+            set => SetProperty(ref _showFirefoxRelayApiAccessToken, value,
+                additionalPropertyNames: new string[]
+                {
+                    nameof(ShowFirefoxRelayHiddenValueIcon)
+                });
+        }
+
+        public string ShowFirefoxRelayHiddenValueIcon => _showFirefoxRelayApiAccessToken ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
+
         public string SimpleLoginApiKey
         {
             get => _simpleLoginApiKey;
@@ -456,6 +492,21 @@ namespace Bit.App.Pages
                 }
             }
         }
+
+        public bool ShowSimpleLoginApiKey
+        {
+            get
+            {
+                return _showSimpleLoginApiKey;
+            }
+            set => SetProperty(ref _showSimpleLoginApiKey, value,
+                additionalPropertyNames: new string[]
+                {
+                    nameof(ShowSimpleLoginHiddenValueIcon)
+                });
+        }
+
+        public string ShowSimpleLoginHiddenValueIcon => _showSimpleLoginApiKey ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
 
         public bool CapitalizeRandomWordUsername
         {
@@ -714,6 +765,22 @@ namespace Bit.App.Pages
                     return AppResources.ForwardedEmailDescription;
                 default:
                     return string.Empty;
+            }
+        }
+
+        private async Task ToggleForwardedEmailHiddenValueAsync()
+        {
+            switch ((ForwardedEmailServiceType)ServiceTypeSelectedIndex)
+            {
+                case ForwardedEmailServiceType.AnonAddy:
+                    ShowAnonAddyApiAccessToken = !ShowAnonAddyApiAccessToken;
+                    break;
+                case ForwardedEmailServiceType.FirefoxRelay:
+                    ShowFirefoxRelayApiAccessToken = !ShowFirefoxRelayApiAccessToken;
+                    break;
+                case ForwardedEmailServiceType.SimpleLogin:
+                    ShowSimpleLoginApiKey = !ShowSimpleLoginApiKey;
+                    break;
             }
         }
     }
