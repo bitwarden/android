@@ -1244,12 +1244,11 @@ namespace Bit.Core.Services
             await SetValueAsync(key, value, reconciledOptions);
         }
 
-
         public async Task<bool> GetApprovePasswordlessLoginsAsync(string userId = null)
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
                 await GetDefaultStorageOptionsAsync());
-            var key = Constants.ApprovePasswordlessLogins;
+            var key = Constants.ApprovePasswordlessLoginsKey(reconciledOptions.UserId);
             return await GetValueAsync<bool?>(key, reconciledOptions) ?? false;
         }
 
@@ -1257,7 +1256,7 @@ namespace Bit.Core.Services
         {
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
                 await GetDefaultStorageOptionsAsync());
-            var key = Constants.ApprovePasswordlessLogins;
+            var key = Constants.ApprovePasswordlessLoginsKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
         // Helpers
@@ -1475,6 +1474,7 @@ namespace Bit.Core.Services
                 await SetAutoDarkThemeAsync(null, userId);
                 await SetAddSitePromptShownAsync(null, userId);
                 await SetPasswordGenerationOptionsAsync(null, userId);
+                await SetApprovePasswordlessLoginsAsync(null, userId);
             }
         }
 

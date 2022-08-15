@@ -346,18 +346,26 @@ namespace Bit.App.Pages
 
             _approvePasswordlessLoginRequests = CompareSelection(selection, AppResources.Yes);
             await _stateService.SetApprovePasswordlessLoginsAsync(_approvePasswordlessLoginRequests);
-            if(_approvePasswordlessLoginRequests && !_pushNotificationService.IsRegisteredForPush)
-            {
-                var openAppSettingsResult = await _platformUtilsService.ShowDialogAsync(AppResources.ReceivePushNotificationsForNewLoginRequests, title: string.Empty, confirmText: AppResources.Settings, cancelText: AppResources.NoThanks);
-
-                if (openAppSettingsResult)
-                {
-                    _deviceActionService.OpenAppSettings();
-                    _pushNotificationService.RegisterAsync().FireAndForget();
-                }
-            }
 
             BuildList();
+
+            if (!_approvePasswordlessLoginRequests)
+            {
+                return;
+            }
+
+            var notificationsSettingsEnabled = await _pushNotificationService.GetNotificationsSettingsEnabledAsync();
+            if (notificationsSettingsEnabled)
+            {
+                return;
+            }
+
+            var openAppSettingsResult = await _platformUtilsService.ShowDialogAsync(AppResources.ReceivePushNotificationsForNewLoginRequests, title: string.Empty, confirmText: AppResources.Settings, cancelText: AppResources.NoThanks);
+            if (openAppSettingsResult)
+            {
+                _deviceActionService.OpenAppSettings();
+            }
+
         }
 
         public async Task VaultTimeoutActionAsync()
