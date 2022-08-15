@@ -337,7 +337,7 @@ namespace Bit.App.Pages
                     CreateSelectableOption(AppResources.No, !_approvePasswordlessLoginRequests),
             };
 
-            var selection = await Page.DisplayActionSheet(AppResources.SubmitCrashLogsDescription, AppResources.Cancel, null, options);
+            var selection = await Page.DisplayActionSheet(AppResources.UseThisDeviceToApproveLoginRequests, AppResources.Cancel, null, options);
 
             if (selection == null || selection == AppResources.Cancel)
             {

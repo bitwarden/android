@@ -2320,6 +2320,9 @@
   <data name="ApproveLoginRequests" xml:space="preserve">
     <value>Approve login requests</value>
   </data>
+  <data name="UseThisDeviceToApproveLoginRequests" xml:space="preserve">
+    <value>Use this device to approve login requests made from other devices.</value>
+  </data>
   <data name="AllowNotifications" xml:space="preserve">
     <value>Allow notifications</value>
   </data>
