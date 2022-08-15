@@ -43,196 +43,146 @@
         in ContentView.-->
     <ContentView>
         <ScrollView Padding="0, 0, 0, 20">
-            <StackLayout Spacing="0" Padding="0">
-                <StackLayout StyleClass="box">
-                    <Grid IsVisible="{Binding IsPolicyInEffect}"
-                          Margin="0, 12, 0, 0"
-                          RowSpacing="0"
-                          ColumnSpacing="0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <Frame Padding="10"
-                               Margin="0"
-                               HasShadow="False"
-                               BackgroundColor="Transparent"
-                               BorderColor="Accent">
-                            <Label
-                                Text="{u:I18n PasswordGeneratorPolicyInEffect}"
-                                StyleClass="text-muted, text-sm, text-bold"
-                                HorizontalTextAlignment="Center" />
-                        </Frame>
-                    </Grid>
-                </StackLayout>
-                <StackLayout StyleClass="box"                             
-                             IsVisible="{Binding IsUsername, Converter={StaticResource inverseBool}}">
-                    <Grid StyleClass="box-row" 
-                        IsVisible="true">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <controls:MonoLabel
-                            x:Name="lblPassword"
-                            StyleClass="text-lg, text-html"
-                            Text="{Binding ColoredPassword, Mode=OneWay}"
-                            Margin="0, 20"
-                            HorizontalTextAlignment="Start"
-                            HorizontalOptions="StartAndExpand" />
-                        <controls:IconButton 
-                            StyleClass="box-row-button, box-row-button-platform"
-                            Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
-                            Clicked="Copy_Clicked"
-                            CommandParameter="LoginPassword"
-                            Grid.Row="0"
-                            Grid.Column="1"
-                            Grid.RowSpan="2"
-                            AutomationProperties.IsInAccessibleTree="True"
-                            AutomationProperties.Name="{u:I18n CopyPassword}" />
-                        <controls:IconButton 
-                            StyleClass="box-row-button, box-row-button-platform"
-                            Text="{Binding Source={x:Static core:BitwardenIcons.Generate}}"
-                            Command="{Binding RegenerateCommand}"
-                            Grid.Row="0"
-                            Grid.Column="2"
-                            Grid.RowSpan="2"
-                            AutomationProperties.IsInAccessibleTree="True"
-                            AutomationProperties.Name="{u:I18n GeneratePassword}" />
-                    </Grid>
-                <BoxView StyleClass="box-row-separator" />
-                </StackLayout>
-                <StackLayout StyleClass="box"                             
-                             IsVisible="{Binding IsUsername}">
-                    <Grid StyleClass="box-row" 
-                        IsVisible="true">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <controls:MonoLabel
-                            x:Name="lblUsername"
-                            StyleClass="text-lg, text-html"
-                            Text="{Binding ColoredUsername, Mode=OneWay}"
-                            Margin="0, 20"
-                            HorizontalTextAlignment="Start"
-                            HorizontalOptions="StartAndExpand" />
-                        <controls:IconButton 
-                            StyleClass="box-row-button, box-row-button-platform"
-                            Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
-                            Clicked="Copy_Clicked"
-                            CommandParameter="LoginUsername"
-                            Grid.Row="0"
-                            Grid.Column="1"
-                            Grid.RowSpan="2"
-                            AutomationProperties.IsInAccessibleTree="True"
-                            AutomationProperties.Name="{u:I18n CopyUsername}" />
-                        <controls:IconButton 
-                            StyleClass="box-row-button, box-row-button-platform"
-                            Text="{Binding Source={x:Static core:BitwardenIcons.Generate}}"
-                            Command="{Binding RegenerateUsernameCommand}"
-                            Grid.Row="0"
-                            Grid.Column="2"
-                            Grid.RowSpan="2"
-                            AutomationProperties.IsInAccessibleTree="True"
-                            AutomationProperties.Name="{u:I18n GenerateUsername}" />
-                    </Grid>
-                <BoxView StyleClass="box-row-separator" />
-                </StackLayout>
-                <StackLayout
-                    StyleClass="box"
-                    IsVisible="{Binding ShowTypePicker}">
-                    <StackLayout StyleClass="box-row">
+            <StackLayout Spacing="0"
+                         Padding="10,0">
+                <Grid IsVisible="{Binding IsPolicyInEffect}"
+                        Margin="0, 12, 0, 0"
+                        Padding="10,0"
+                        RowSpacing="0"
+                        ColumnSpacing="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Frame Padding="10"
+                            Margin="0"
+                            HasShadow="False"
+                            BackgroundColor="Transparent"
+                            BorderColor="Accent">
                         <Label
-                            Text="{u:I18n WhatWouldYouLikeToGenerate}"
-                            StyleClass="box-label" />
-                        <Picker
-                            x:Name="_typePicker"
-                            ItemsSource="{Binding TypeOptions, Mode=OneTime}"
-                            SelectedIndex="{Binding TypeSelectedIndex}"
-                            StyleClass="box-value" />
-                    </StackLayout>
-                </StackLayout>
-                <!--USERNAME OPTIONS-->
+                            Text="{u:I18n PasswordGeneratorPolicyInEffect}"
+                            StyleClass="text-muted, text-sm, text-bold"
+                            HorizontalTextAlignment="Center" />
+                    </Frame>
+                </Grid>
+                <Grid IsVisible="{Binding IsUsername, Converter={StaticResource inverseBool}}"
+                        StyleClass="box-row"
+                        RowDefinitions="Auto"
+                        ColumnDefinitions="*,Auto,Auto">
+                    <controls:MonoLabel
+                        x:Name="lblPassword"
+                        StyleClass="text-lg, text-html"
+                        Text="{Binding ColoredPassword, Mode=OneWay}"
+                        Margin="0, 20"
+                        HorizontalTextAlignment="Start"
+                        HorizontalOptions="StartAndExpand" />
+                    <controls:IconButton 
+                        StyleClass="box-row-button, box-row-button-platform"
+                        Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
+                        Clicked="Copy_Clicked"
+                        Grid.Column="1"
+                        AutomationProperties.IsInAccessibleTree="True"
+                        AutomationProperties.Name="{u:I18n CopyPassword}" />
+                    <controls:IconButton 
+                        StyleClass="box-row-button, box-row-button-platform"
+                        Text="{Binding Source={x:Static core:BitwardenIcons.Generate}}"
+                        Command="{Binding RegenerateCommand}"
+                        Grid.Column="2"
+                        AutomationProperties.IsInAccessibleTree="True"
+                        AutomationProperties.Name="{u:I18n GeneratePassword}" />
+                </Grid>
+                <BoxView StyleClass="box-row-separator"/>
+                <Grid IsVisible="{Binding IsUsername}"
+                        StyleClass="box-row"                  
+                        RowDefinitions="Auto"
+                        ColumnDefinitions="*,Auto,Auto">
+                    <controls:MonoLabel
+                        x:Name="lblUsername"
+                        StyleClass="text-lg, text-html"
+                        Text="{Binding ColoredUsername, Mode=OneWay}"
+                        Margin="0, 20"
+                        HorizontalOptions="Start" />
+                    <controls:IconButton 
+                        StyleClass="box-row-button, box-row-button-platform"
+                        Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
+                        Clicked="Copy_Clicked"
+                        Grid.Column="1"
+                        AutomationProperties.IsInAccessibleTree="True"
+                        AutomationProperties.Name="{u:I18n CopyUsername}" />
+                    <controls:IconButton 
+                        StyleClass="box-row-button, box-row-button-platform"
+                        Text="{Binding Source={x:Static core:BitwardenIcons.Generate}}"
+                        Command="{Binding RegenerateUsernameCommand}"
+                        Grid.Column="2"
+                        AutomationProperties.IsInAccessibleTree="True"
+                        AutomationProperties.Name="{u:I18n GenerateUsername}" />
+                </Grid>
                 <StackLayout StyleClass="box"
-                             IsVisible="{Binding IsUsername}">
-                    <StackLayout StyleClass="box-row-header">
-                        <Label Text="{u:I18n Options, Header=True}"
-                               StyleClass="box-header, box-header-platform" />
+                             IsVisible="{Binding ShowTypePicker}"
+                             Padding="0,10">
+                    <Label
+                        Text="{u:I18n WhatWouldYouLikeToGenerate}"
+                        StyleClass="box-label" />
+                    <Picker
+                        x:Name="_typePicker"
+                        ItemsSource="{Binding TypeOptions, Mode=OneTime}"
+                        SelectedItem="{Binding TypeSelected}"
+                        StyleClass="box-value" />
+                </StackLayout>
+                <Label Text="{u:I18n Options, Header=True}"
+                       StyleClass="box-header, box-header-platform" />
+                <!--USERNAME OPTIONS-->
+                <StackLayout IsVisible="{Binding IsUsername}">
+                    <StackLayout Orientation="Horizontal">
+                        <Label
+                            Text="{u:I18n UsernameType}"
+                            StyleClass="box-label"
+                            VerticalOptions="Center"/>
+                        <controls:IconButton 
+                            StyleClass="box-row-button, box-row-button-platform"
+                            Text="{Binding Source={x:Static core:BitwardenIcons.QuestionCircle}}"
+                            Command="{Binding UsernameTypePromptHelpCommand}"
+                            TextColor="{DynamicResource HyperlinkColor}"
+                            AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.Name="{u:I18n UsernamePromptHelpLink}"
+                            VerticalOptions="Center"/>
                     </StackLayout>
-                    <StackLayout StyleClass="box-row, box-row-input">
-                        <StackLayout Orientation="Horizontal">
-                            <Label
-                                Text="{u:I18n UsernameType}"
-                                StyleClass="box-label"
-                                VerticalOptions="Center"/>
-                            <controls:IconButton 
-                                StyleClass="box-row-button, box-row-button-platform"
-                                Text="{Binding Source={x:Static core:BitwardenIcons.QuestionCircle}}"
-                                Command="{Binding UsernameTypePromptHelpCommand}"
-                                TextColor="{DynamicResource HyperlinkColor}"
-                                AutomationProperties.IsInAccessibleTree="True"
-                                AutomationProperties.Name="{u:I18n ToggleVisibility}"
-                                VerticalOptions="Center"/>
-                        </StackLayout>
-                        <Picker
-                            x:Name="_usernameTypePicker"
-                            ItemsSource="{Binding UsernameTypeOptions, Mode=OneTime}"
-                            SelectedIndex="{Binding UsernameTypeSelectedIndex}"
-                            StyleClass="box-value" />
-                        <Label
-                            IsVisible="{Binding UsernameTypeSelectedIndex, Converter={StaticResource pickerIndexToBool}, ConverterParameter=0}"
-                            StyleClass="box-footer-label"
-                            Text="{u:I18n PlusAddressedEmailDescription}" />
-                        <Label
-                            IsVisible="{Binding UsernameTypeSelectedIndex, Converter={StaticResource pickerIndexToBool}, ConverterParameter=1}"
-                            StyleClass="box-footer-label"
-                            Text="{u:I18n CatchAllEmailDescription}" />
-                        <Label
-                            IsVisible="{Binding UsernameTypeSelectedIndex, Converter={StaticResource pickerIndexToBool}, ConverterParameter=2}"
-                            StyleClass="box-footer-label"
-                            Text="{u:I18n ForwardedEmailDescription}" />
-                    </StackLayout>
+                    <Picker
+                        x:Name="_usernameTypePicker"
+                        ItemsSource="{Binding UsernameTypeOptions, Mode=OneTime}"
+                        SelectedIndex="{Binding UsernameTypeSelectedIndex}"
+                        StyleClass="box-value" />
+                    <Label
+                        StyleClass="box-footer-label"
+                        Text="{Binding UsernameTypeDescriptionLabel}" />
                     <!--PLUS ADDRESSED EMAIL OPTIONS-->
                     <StackLayout StyleClass="box-row, box-row-input"
                                  IsVisible="{Binding UsernameTypeSelectedIndex, Converter={StaticResource pickerIndexToBool}, ConverterParameter=0}">
-                        <Label
-                            Text="{u:I18n EmailRequired}"
+                        <Label Text="{u:I18n EmailRequired}"
                             StyleClass="box-label" />
-                        <Entry
-                            x:Name="_plusAddressedEmailEntry"
+                        <Entry x:Name="_plusAddressedEmailEntry"
                             Text="{Binding PlusAddressedEmail}"
                             StyleClass="box-value" />
-                        <StackLayout IsVisible="{Binding ShowUsernameEmailType}"
-                                     StyleClass="box-row-input">
-                            <Label
-                                Text="{u:I18n EmailType}"
-                                StyleClass="box-label" />
-                            <Picker
-                                x:Name="_plusAddressedEmailTypePicker"
-                                ItemsSource="{Binding UsernameEmailTypeOptions, Mode=OneTime}"
-                                SelectedIndex="{Binding PlusAddressedEmailTypeSelectedIndex}"
-                                StyleClass="box-value" />
-                            <Label
-                                Text="{u:I18n Website}"
-                                StyleClass="box-label" />
-                            <Label
-                                Text="{Binding EmailWebsite}"
-                                StyleClass="box-value" />
-                            <BoxView StyleClass="box-row-separator" />
-                        </StackLayout> 
+                        <Label IsVisible="{Binding ShowUsernameEmailType}"
+                            Text="{u:I18n EmailType}"
+                            StyleClass="box-label" />
+                        <Picker IsVisible="{Binding ShowUsernameEmailType}"
+                            x:Name="_plusAddressedEmailTypePicker"
+                            ItemsSource="{Binding UsernameEmailTypeOptions, Mode=OneTime}"
+                            SelectedIndex="{Binding PlusAddressedEmailTypeSelectedIndex}"
+                            StyleClass="box-value" />
+                        <Label IsVisible="{Binding ShowUsernameEmailType}"
+                            Text="{u:I18n Website}"
+                            StyleClass="box-label" />
+                        <Label IsVisible="{Binding ShowUsernameEmailType}"
+                            Text="{Binding EmailWebsite}"
+                            StyleClass="box-value" />
+                        <BoxView IsVisible="{Binding ShowUsernameEmailType}"
+                            StyleClass="box-row-separator" />
                     </StackLayout>                    
                     <!--CATCH-ALL EMAIL OPTIONS-->
                     <StackLayout StyleClass="box-row, box-row-input"
@@ -244,38 +194,34 @@
                             x:Name="_catchAllEmailDomainNameEntry"
                             Text="{Binding CatchAllEmailDomain}"
                             StyleClass="box-value" />
-                        <StackLayout IsVisible="{Binding ShowUsernameEmailType}"
-                                     StyleClass="box-row-input">
-                            <Label
-                                Text="{u:I18n EmailType}"
-                                StyleClass="box-label" />
-                            <Picker
-                                x:Name="_catchallEmailTypePicker"
-                                ItemsSource="{Binding UsernameEmailTypeOptions, Mode=OneTime}"
-                                SelectedIndex="{Binding CatchAllEmailTypeSelectedIndex}"
-                                StyleClass="box-value" />
-                            <Label
-                                Text="{u:I18n Website}"
-                                StyleClass="box-label" />
-                            <Label
-                                Text="{Binding EmailWebsite}"
-                                StyleClass="box-value"/>
-                            <BoxView StyleClass="box-row-separator" />
-                        </StackLayout>
+                        <Label IsVisible="{Binding ShowUsernameEmailType}"
+                            Text="{u:I18n EmailType}"
+                            StyleClass="box-label" />
+                        <Picker IsVisible="{Binding ShowUsernameEmailType}"
+                            x:Name="_catchallEmailTypePicker"
+                            ItemsSource="{Binding UsernameEmailTypeOptions, Mode=OneTime}"
+                            SelectedIndex="{Binding CatchAllEmailTypeSelectedIndex}"
+                            StyleClass="box-value" />
+                        <Label IsVisible="{Binding ShowUsernameEmailType}"
+                            Text="{u:I18n Website}"
+                            StyleClass="box-label" />
+                        <Label IsVisible="{Binding ShowUsernameEmailType}"
+                            Text="{Binding EmailWebsite}"
+                            StyleClass="box-value"/>
+                        <BoxView IsVisible="{Binding ShowUsernameEmailType}"
+                            StyleClass="box-row-separator" />
                     </StackLayout>
                     <!--FORWARDED EMAIL OPTIONS-->
                     <StackLayout StyleClass="box-row, box-row-input"
                                  IsVisible="{Binding UsernameTypeSelectedIndex, Converter={StaticResource pickerIndexToBool}, ConverterParameter=2}">
-                        <StackLayout StyleClass="box-row">
-                            <Label
-                                Text="{u:I18n Service}"
-                                StyleClass="box-label" />
-                            <Picker
-                                x:Name="_serviceTypePicker"
-                                ItemsSource="{Binding ServiceTypeOptions, Mode=OneTime}"
-                                SelectedIndex="{Binding ServiceTypeSelectedIndex}"
-                                StyleClass="box-value" />
-                        </StackLayout>
+                        <Label
+                            Text="{u:I18n Service}"
+                            StyleClass="box-label" />
+                        <Picker
+                            x:Name="_serviceTypePicker"
+                            ItemsSource="{Binding ServiceTypeOptions, Mode=OneTime}"
+                            SelectedIndex="{Binding ServiceTypeSelectedIndex}"
+                            StyleClass="box-value" />
                         <!--ANONADDY OPTIONS-->
                         <StackLayout StyleClass="box-row-input"
                                      IsVisible="{Binding ServiceTypeSelectedIndex, Converter={StaticResource pickerIndexToBool}, ConverterParameter=0}">
@@ -347,12 +293,7 @@
                     </StackLayout>
                 </StackLayout>
                 <!--PASSWORD OPTIONS-->
-                <StackLayout StyleClass="box"
-                             IsVisible="{Binding IsUsername, Converter={StaticResource inverseBool}}">
-                    <StackLayout StyleClass="box-row-header">
-                        <Label Text="{u:I18n Options, Header=True}"
-                               StyleClass="box-header, box-header-platform" />
-                    </StackLayout>
+                <StackLayout IsVisible="{Binding IsUsername, Converter={StaticResource inverseBool}}">
                     <StackLayout StyleClass="box-row, box-row-input">
                         <Label
                             Text="{u:I18n PasswordType}"

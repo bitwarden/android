@@ -40,7 +40,7 @@ namespace Bit.App.Pages
         private bool _capitalize;
         private bool _includeNumber;
         private string _username;
-        private int _typeSelectedIndex;
+        private string _typeSelected;
         private int _passwordTypeSelectedIndex;
         private int _usernameTypeSelectedIndex;
         private int _serviceTypeSelectedIndex;
@@ -58,6 +58,7 @@ namespace Bit.App.Pages
         private bool _showTypePicker;
         private string _emailWebsite;
         private bool _showUsernameEmailType;
+        private string _usernameTypeDescriptionLabel;
 
         public GeneratorPageViewModel()
         {
@@ -77,6 +78,7 @@ namespace Bit.App.Pages
             UsernameTypePromptHelpCommand = new Command(UsernameTypePromptHelp);
             RegenerateCommand = new AsyncCommand(RegenerateAsync, onException: ex => _logger.Value.Exception(ex), allowsMultipleExecutions: false);
             RegenerateUsernameCommand = new AsyncCommand(RegenerateUsernameAsync, onException: ex => OnSubmitException(ex), allowsMultipleExecutions: false);
+            _typeSelected = AppResources.Password;
         }
 
         public List<string> TypeOptions { get; set; }
@@ -331,14 +333,14 @@ namespace Bit.App.Pages
 
         public bool IsPolicyInEffect => _enforcedPolicyOptions.InEffect();
 
-        public int TypeSelectedIndex
+        public string TypeSelected
         {
-            get => _typeSelectedIndex;
+            get => _typeSelected;
             set
             {
-                if (SetProperty(ref _typeSelectedIndex, value))
+                if (SetProperty(ref _typeSelected, value))
                 {
-                    IsUsername = value == 1;
+                    IsUsername = value == AppResources.Username;
                     var task = SaveOptionsAsync();
                     task = SaveUsernameOptionsAsync(false);
                 }
@@ -368,7 +370,16 @@ namespace Bit.App.Pages
                     _usernameOptions.Type = (UsernameType)value;
                     Username = "-";
                     var task = SaveUsernameOptionsAsync(false);
+                    TriggerPropertyChanged(nameof(UsernameTypeDescriptionLabel));
                 }
+            }
+        }
+
+        public string UsernameTypeDescriptionLabel
+        {
+            get
+            {
+                return GetUsernameTypeLabelDescription(UsernameTypeSelectedIndex);
             }
         }
 
@@ -446,7 +457,7 @@ namespace Bit.App.Pages
             }
         }
 
-        public bool RandomWordUsernameCapitalize
+        public bool CapitalizeRandomWordUsername
         {
             get => _randomWordUsernameCapitalize;
             set
@@ -639,7 +650,7 @@ namespace Bit.App.Pages
 
         private void LoadFromUsernameOptions()
         {
-            RandomWordUsernameCapitalize = _usernameOptions.RandomWordUsernameCapitalize.GetValueOrDefault();
+            CapitalizeRandomWordUsername = _usernameOptions.RandomWordUsernameCapitalize.GetValueOrDefault();
             RandomWordUsernameIncludeNumber = _usernameOptions.RandomWordUsernameIncludeNumber.GetValueOrDefault();
             SimpleLoginApiKey = _usernameOptions.SimpleLoginApiKey;
             AnonAddyApiAccessToken = _usernameOptions.AnonAddyApiAccessToken;
@@ -668,7 +679,7 @@ namespace Bit.App.Pages
 
         private void SetUsernameOptions()
         {
-            _usernameOptions.RandomWordUsernameCapitalize = RandomWordUsernameCapitalize;
+            _usernameOptions.RandomWordUsernameCapitalize = CapitalizeRandomWordUsername;
             _usernameOptions.RandomWordUsernameIncludeNumber = RandomWordUsernameIncludeNumber;
             _usernameOptions.PlusAddressedEmail = PlusAddressedEmail;
             _usernameOptions.CatchAllEmailDomain = CatchAllEmailDomain;
@@ -681,7 +692,6 @@ namespace Bit.App.Pages
             _usernameOptions.PlusAddressedEmailType = (UsernameEmailType)PlusAddressedEmailTypeSelectedIndex;
             _usernameOptions.CatchAllEmailType = (UsernameEmailType)CatchAllEmailTypeSelectedIndex;
             _usernameOptions.EmailWebsite = EmailWebsite;
-
         }
 
         private async void OnSubmitException(Exception ex)
@@ -690,6 +700,21 @@ namespace Bit.App.Pages
             var apiName = ((ForwardedEmailServiceType)ServiceTypeSelectedIndex).GetString();
 
             await Device.InvokeOnMainThreadAsync(() => Page.DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ExternalApiErrorMessage, apiName), AppResources.Ok));
+        }
+
+        private string GetUsernameTypeLabelDescription(int value)
+        {
+            switch ((UsernameType)value)
+            {
+                case UsernameType.PlusAddressedEmail:
+                    return AppResources.PlusAddressedEmailDescription;
+                case UsernameType.CatchAllEmail:
+                    return AppResources.CatchAllEmailDescription;
+                case UsernameType.ForwardedEmailAlias:
+                    return AppResources.ForwardedEmailDescription;
+                default:
+                    return string.Empty;
+            }
         }
     }
 }
