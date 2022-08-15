@@ -4156,5 +4156,35 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("LogInDenied", resourceCulture);
             }
         }
+        
+        public static string ApproveLoginRequests {
+            get {
+                return ResourceManager.GetString("ApproveLoginRequests", resourceCulture);
+            }
+        }
+        
+        public static string UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices {
+            get {
+                return ResourceManager.GetString("UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices", resourceCulture);
+            }
+        }
+        
+        public static string AllowNotifications {
+            get {
+                return ResourceManager.GetString("AllowNotifications", resourceCulture);
+            }
+        }
+        
+        public static string ReceivePushNotificationsForNewLoginRequests {
+            get {
+                return ResourceManager.GetString("ReceivePushNotificationsForNewLoginRequests", resourceCulture);
+            }
+        }
+        
+        public static string NoThanks {
+            get {
+                return ResourceManager.GetString("NoThanks", resourceCulture);
+            }
+        }
     }
 }
