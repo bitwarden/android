@@ -7,7 +7,7 @@ namespace Bit.App.Services
     {
         public bool IsRegisteredForPush => false;
 
-        public Task<bool> GetNotificationsSettingsEnabledAsync()
+        public Task<bool> AreNotificationsSettingsEnabledAsync()
         {
             return Task.FromResult(false);
         }

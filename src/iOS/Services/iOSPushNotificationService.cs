@@ -19,13 +19,10 @@ namespace Bit.iOS.Services
 
         public bool IsRegisteredForPush => UIApplication.SharedApplication.IsRegisteredForRemoteNotifications;
 
-        public async Task<bool> GetNotificationsSettingsEnabledAsync()
+        public async Task<bool> AreNotificationsSettingsEnabledAsync()
         {
-            var tcs = new TaskCompletionSource<bool>();
-            UNUserNotificationCenter.Current.GetNotificationSettings((settings) => {
-                tcs.SetResult(settings.AlertSetting == UNNotificationSetting.Enabled);
-            });
-            return await tcs.Task;
+            var settings = await UNUserNotificationCenter.Current.GetNotificationSettingsAsync();
+            return settings.AlertSetting == UNNotificationSetting.Enabled;
         }
 
         public async Task RegisterAsync()

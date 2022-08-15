@@ -23,7 +23,7 @@ namespace Bit.Droid.Services
 
         public bool IsRegisteredForPush => NotificationManagerCompat.From(Android.App.Application.Context)?.AreNotificationsEnabled() ?? false;
 
-        public Task<bool> GetNotificationsSettingsEnabledAsync()
+        public Task<bool> AreNotificationsSettingsEnabledAsync()
         {
             return Task.FromResult(IsRegisteredForPush);
         }

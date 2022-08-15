@@ -4163,9 +4163,9 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string UseThisDeviceToApproveLoginRequests {
+        public static string UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices {
             get {
-                return ResourceManager.GetString("UseThisDeviceToApproveLoginRequests", resourceCulture);
+                return ResourceManager.GetString("UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices", resourceCulture);
             }
         }
         

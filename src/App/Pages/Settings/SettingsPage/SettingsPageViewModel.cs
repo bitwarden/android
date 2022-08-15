@@ -84,7 +84,7 @@ namespace Bit.App.Pages
             _keyConnectorService = ServiceContainer.Resolve<IKeyConnectorService>("keyConnectorService");
             _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
             _loggerService = ServiceContainer.Resolve<ILogger>("logger");
-            _pushNotificationService = ServiceContainer.Resolve<IPushNotificationService>("pushNotificationService");
+            _pushNotificationService = ServiceContainer.Resolve<IPushNotificationService>();
 
             GroupedItems = new ObservableRangeCollection<ISettingsPageListItem>();
             PageTitle = AppResources.Settings;
@@ -337,7 +337,7 @@ namespace Bit.App.Pages
                     CreateSelectableOption(AppResources.No, !_approvePasswordlessLoginRequests),
             };
 
-            var selection = await Page.DisplayActionSheet(AppResources.UseThisDeviceToApproveLoginRequests, AppResources.Cancel, null, options);
+            var selection = await Page.DisplayActionSheet(AppResources.UseThisDeviceToApproveLoginRequestsMadeFromOtherDevices, AppResources.Cancel, null, options);
 
             if (selection == null || selection == AppResources.Cancel)
             {
@@ -349,13 +349,7 @@ namespace Bit.App.Pages
 
             BuildList();
 
-            if (!_approvePasswordlessLoginRequests)
-            {
-                return;
-            }
-
-            var notificationsSettingsEnabled = await _pushNotificationService.GetNotificationsSettingsEnabledAsync();
-            if (notificationsSettingsEnabled)
+            if (!_approvePasswordlessLoginRequests || await _pushNotificationService.AreNotificationsSettingsEnabledAsync())
             {
                 return;
             }
@@ -365,7 +359,6 @@ namespace Bit.App.Pages
             {
                 _deviceActionService.OpenAppSettings();
             }
-
         }
 
         public async Task VaultTimeoutActionAsync()
