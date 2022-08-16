@@ -129,8 +129,7 @@
                                 Text="{Binding WordSeparator}"
                                 IsSpellCheckEnabled="False"
                                 IsTextPredictionEnabled="False"
-                                StyleClass="box-value"
-                                >
+                                StyleClass="box-value">
                                 <Entry.Effects>
                                     <effects:NoEmojiKeyboardEffect />
                                 </Entry.Effects>
