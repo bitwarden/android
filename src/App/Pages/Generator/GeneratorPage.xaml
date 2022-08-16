@@ -81,7 +81,7 @@
                     <controls:IconButton 
                         StyleClass="box-row-button, box-row-button-platform"
                         Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
-                        Clicked="Copy_Clicked"
+                        Command="{Binding CopyCommand}"
                         Grid.Column="1"
                         AutomationProperties.IsInAccessibleTree="True"
                         AutomationProperties.Name="{u:I18n CopyPassword}" />
@@ -106,7 +106,7 @@
                     <controls:IconButton 
                         StyleClass="box-row-button, box-row-button-platform"
                         Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
-                        Clicked="Copy_Clicked"
+                        Command="{Binding CopyCommand}"
                         Grid.Column="1"
                         AutomationProperties.IsInAccessibleTree="True"
                         AutomationProperties.Name="{u:I18n CopyUsername}" />
@@ -127,8 +127,8 @@
                         StyleClass="box-label" />
                     <Picker
                         x:Name="_typePicker"
-                        ItemsSource="{Binding TypeOptions, Mode=OneTime}"
-                        SelectedItem="{Binding TypeSelected}"
+                        ItemsSource="{Binding GeneratorTypeOptions, Mode=OneTime}"
+                        SelectedItem="{Binding GeneratorTypeSelected}"
                         StyleClass="box-value" />
                 </StackLayout>
                 <Label Text="{u:I18n Options, Header=True}"

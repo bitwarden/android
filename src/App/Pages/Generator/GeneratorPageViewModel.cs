@@ -41,7 +41,7 @@ namespace Bit.App.Pages
         private bool _capitalize;
         private bool _includeNumber;
         private string _username;
-        private string _typeSelected;
+        private string _generatorTypeSelected;
         private int _passwordTypeSelectedIndex;
         private int _usernameTypeSelectedIndex;
         private int _serviceTypeSelectedIndex;
@@ -71,21 +71,22 @@ namespace Bit.App.Pages
             _usernameGenerationService = ServiceContainer.Resolve<IUsernameGenerationService>();
 
             PageTitle = AppResources.Generator;
-            TypeOptions = new List<string> { AppResources.Password, AppResources.Username };
+            GeneratorTypeOptions = new List<string> { AppResources.Password, AppResources.Username };
             PasswordTypeOptions = new List<string> { AppResources.Password, AppResources.Passphrase };
             UsernameTypeOptions = new List<string> { AppResources.PlusAddressedEmail, AppResources.CatchAllEmail, AppResources.ForwardedEmailAlias, AppResources.RandomWord };
             ServiceTypeOptions = new List<string> { AppResources.AnonAddy, AppResources.FirefoxRelay, AppResources.SimpleLogin };
             UsernameEmailTypeOptions = new List<string> { AppResources.Random, AppResources.Website };
 
             UsernameTypePromptHelpCommand = new Command(UsernameTypePromptHelp);
-            RegenerateCommand = new AsyncCommand(RegenerateAsync, onException: ex => _logger.Value.Exception(ex), allowsMultipleExecutions: false);
+            RegenerateCommand = new AsyncCommand(RegenerateAsync, onException: ex => OnSubmitException(ex), allowsMultipleExecutions: false);
             RegenerateUsernameCommand = new AsyncCommand(RegenerateUsernameAsync, onException: ex => OnSubmitException(ex), allowsMultipleExecutions: false);
-            ToggleForwardedEmailHiddenValueCommand = new AsyncCommand(ToggleForwardedEmailHiddenValueAsync, onException: ex => _logger.Value.Exception(ex), allowsMultipleExecutions: false);
+            ToggleForwardedEmailHiddenValueCommand = new AsyncCommand(ToggleForwardedEmailHiddenValueAsync, onException: ex => OnSubmitException(ex), allowsMultipleExecutions: false);
+            CopyCommand = new AsyncCommand(CopyAsync, onException: ex => OnSubmitException(ex), allowsMultipleExecutions: false);
 
-            _typeSelected = AppResources.Password;
+            _generatorTypeSelected = AppResources.Password;
         }
 
-        public List<string> TypeOptions { get; set; }
+        public List<string> GeneratorTypeOptions { get; set; }
         public List<string> PasswordTypeOptions { get; set; }
         public List<string> UsernameTypeOptions { get; set; }
         public List<string> ServiceTypeOptions { get; set; }
@@ -95,6 +96,7 @@ namespace Bit.App.Pages
         public ICommand RegenerateCommand { get; set; }
         public ICommand RegenerateUsernameCommand { get; set; }
         public ICommand ToggleForwardedEmailHiddenValueCommand { get; set; }
+        public ICommand CopyCommand { get; set; }
 
         public string Password
         {
@@ -338,12 +340,12 @@ namespace Bit.App.Pages
 
         public bool IsPolicyInEffect => _enforcedPolicyOptions.InEffect();
 
-        public string TypeSelected
+        public string GeneratorTypeSelected
         {
-            get => _typeSelected;
+            get => _generatorTypeSelected;
             set
             {
-                if (SetProperty(ref _typeSelected, value))
+                if (SetProperty(ref _generatorTypeSelected, value))
                 {
                     IsUsername = value == AppResources.Username;
                     var task = SaveOptionsAsync();
@@ -663,21 +665,21 @@ namespace Bit.App.Pages
 
         public async Task CopyAsync()
         {
-            if (IsUsername)
-            {
-                await _clipboardService.CopyTextAsync(Username);
-                _platformUtilsService.ShowToastForCopiedValue(AppResources.Username);
-            }
-            else
-            {
-                await _clipboardService.CopyTextAsync(Password);
-                _platformUtilsService.ShowToastForCopiedValue(AppResources.Password);
-            }
+            await _clipboardService.CopyTextAsync(IsUsername ? Username : Password);
+            _platformUtilsService.ShowToastForCopiedValue(IsUsername ? AppResources.Username : AppResources.Password);
         }
 
         public void UsernameTypePromptHelp()
         {
-            _platformUtilsService.LaunchUri("https://bitwarden.com/help/generator/#username-types");
+            try
+            {
+                _platformUtilsService.LaunchUri("https://bitwarden.com/help/generator/#username-types");
+            }
+            catch (Exception ex)
+            {
+                _logger.Value.Exception(ex);
+                Page.DisplayAlert(AppResources.AnErrorHasOccurred, AppResources.GenericErrorMessage, AppResources.Ok);
+            }
         }
 
         private void LoadFromOptions()
@@ -747,9 +749,16 @@ namespace Bit.App.Pages
         private async void OnSubmitException(Exception ex)
         {
             _logger.Value.Exception(ex);
-            var apiName = ((ForwardedEmailServiceType)ServiceTypeSelectedIndex).GetString();
 
-            await Device.InvokeOnMainThreadAsync(() => Page.DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ExternalApiErrorMessage, apiName), AppResources.Ok));
+            if (IsUsername && (UsernameType)UsernameTypeSelectedIndex == UsernameType.ForwardedEmailAlias)
+            {
+                await Device.InvokeOnMainThreadAsync(() => Page.DisplayAlert(
+                    AppResources.AnErrorHasOccurred, string.Format(AppResources.ExternalApiErrorMessage, ((ForwardedEmailServiceType)ServiceTypeSelectedIndex).GetString()), AppResources.Ok));
+            }
+            else
+            {
+                await Device.InvokeOnMainThreadAsync(() => Page.DisplayAlert(AppResources.AnErrorHasOccurred, AppResources.GenericErrorMessage, AppResources.Ok));
+            }
         }
 
         private string GetUsernameTypeLabelDescription(int value)

@@ -102,11 +102,6 @@ namespace Bit.App.Pages
             return base.OnBackButtonPressed();
         }
 
-        private async void Copy_Clicked(object sender, EventArgs e)
-        {
-            await _vm.CopyAsync();
-        }
-
         private async void More_Clicked(object sender, EventArgs e)
         {
             if (!DoOnce())
@@ -152,7 +147,7 @@ namespace Bit.App.Pages
 
             await Device.InvokeOnMainThreadAsync(() =>
             {
-                if(_vm != null)
+                if (_vm != null)
                 {
                     if (_vm.IsUsername)
                     {
