@@ -65,18 +65,17 @@ namespace Bit.App.Pages
 
         public GeneratorPageViewModel()
         {
-            _passwordGenerationService = ServiceContainer.Resolve<IPasswordGenerationService>(
-                "passwordGenerationService");
-            _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
-            _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
-            _usernameGenerationService = ServiceContainer.Resolve<IUsernameGenerationService>("usernameGenerationService");
+            _passwordGenerationService = ServiceContainer.Resolve<IPasswordGenerationService>();
+            _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>();
+            _clipboardService = ServiceContainer.Resolve<IClipboardService>();
+            _usernameGenerationService = ServiceContainer.Resolve<IUsernameGenerationService>();
 
             PageTitle = AppResources.Generator;
             TypeOptions = new List<string> { AppResources.Password, AppResources.Username };
             PasswordTypeOptions = new List<string> { AppResources.Password, AppResources.Passphrase };
             UsernameTypeOptions = new List<string> { AppResources.PlusAddressedEmail, AppResources.CatchAllEmail, AppResources.ForwardedEmailAlias, AppResources.RandomWord };
             ServiceTypeOptions = new List<string> { AppResources.AnonAddy, AppResources.FirefoxRelay, AppResources.SimpleLogin };
-            UsernameEmailTypeOptions = new List<string> { "Random", "Website" };
+            UsernameEmailTypeOptions = new List<string> { AppResources.Random, AppResources.Website };
 
             UsernameTypePromptHelpCommand = new Command(UsernameTypePromptHelp);
             RegenerateCommand = new AsyncCommand(RegenerateAsync, onException: ex => _logger.Value.Exception(ex), allowsMultipleExecutions: false);

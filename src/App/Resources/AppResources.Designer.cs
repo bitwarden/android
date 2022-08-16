@@ -4216,5 +4216,11 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("ForwardedEmailDescription", resourceCulture);
             }
         }
+        
+        public static string Random {
+            get {
+                return ResourceManager.GetString("Random", resourceCulture);
+            }
+        }
     }
 }

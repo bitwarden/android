@@ -2344,4 +2344,7 @@
   <data name="ForwardedEmailDescription" xml:space="preserve">
     <value>Generate an email alias with an external forwarding service.</value>
   </data>
+  <data name="Random" xml:space="preserve">
+    <value>Random</value>
+  </data>
 </root>
