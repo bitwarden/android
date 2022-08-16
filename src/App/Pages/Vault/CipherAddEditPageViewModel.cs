@@ -603,7 +603,7 @@ namespace Bit.App.Pages
                 Cipher.Login.Username = username;
                 TriggerCipherChanged();
                 await Page.Navigation.PopModalAsync();
-            }, isUsernameGenerator: true, website: Cipher?.Name);
+            }, isUsernameGenerator: true, emailWebsite: Cipher?.Name);
             await Page.Navigation.PushModalAsync(new NavigationPage(page));
         }
 
