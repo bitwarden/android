@@ -10,7 +10,7 @@ namespace Bit.Droid.Effects
     {
         protected override void OnAttached()
         {
-            if (Control != null && Control is EditText editText)
+            if (Control is EditText editText)
             {
                 editText.InputType = Android.Text.InputTypes.ClassText | Android.Text.InputTypes.TextVariationVisiblePassword | Android.Text.InputTypes.TextFlagMultiLine;
             }
