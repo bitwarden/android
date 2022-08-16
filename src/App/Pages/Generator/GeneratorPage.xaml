@@ -292,30 +292,30 @@
                         </Grid>
                     </StackLayout>                    
                     <!--RANDOM WORD OPTIONS-->
-                    <StackLayout StyleClass="box-row, box-row-input"
-                                 IsVisible="{Binding UsernameTypeSelectedIndex, Converter={StaticResource pickerIndexToBool}, ConverterParameter=3}">
-                        <StackLayout StyleClass="box-row, box-row-switch">
-                            <Label
-                                Text="{u:I18n Capitalize}"
-                                StyleClass="box-label-regular"
-                                HorizontalOptions="StartAndExpand" />
-                            <Switch
-                                IsToggled="{Binding CapitalizeRandomWordUsername}"
-                                StyleClass="box-value"
-                                HorizontalOptions="End" />
-                        </StackLayout>
-                        <BoxView StyleClass="box-row-separator" />
-                        <StackLayout StyleClass="box-row, box-row-switch">
-                            <Label
-                                Text="{u:I18n IncludeNumber}"
-                                StyleClass="box-label-regular"
-                                HorizontalOptions="StartAndExpand" />
-                            <Switch
-                                IsToggled="{Binding IncludeNumberRandomWordUsername}"
-                                StyleClass="box-value"
-                                HorizontalOptions="End" />
-                        </StackLayout>
-                    </StackLayout>
+                    <Grid IsVisible="{Binding UsernameTypeSelectedIndex, Converter={StaticResource pickerIndexToBool}, ConverterParameter=3}">
+                        <Label
+                            Text="{u:I18n Capitalize}"
+                            StyleClass="box-label-regular"
+                            HorizontalOptions="StartAndExpand" />
+                        <Switch
+                            IsToggled="{Binding CapitalizeRandomWordUsername}"
+                            StyleClass="box-value"
+                            HorizontalOptions="End" />
+                    </Grid>
+                    <BoxView IsVisible="{Binding UsernameTypeSelectedIndex, Converter={StaticResource pickerIndexToBool}, ConverterParameter=3}"
+                        StyleClass="box-row-separator" />
+                    <Grid IsVisible="{Binding UsernameTypeSelectedIndex, Converter={StaticResource pickerIndexToBool}, ConverterParameter=3}">
+                        <Label
+                            Text="{u:I18n IncludeNumber}"
+                            StyleClass="box-label-regular"
+                            HorizontalOptions="StartAndExpand" />
+                        <Switch
+                            IsToggled="{Binding IncludeNumberRandomWordUsername}"
+                            StyleClass="box-value"
+                            HorizontalOptions="End" />
+                    </Grid>
+                    <BoxView IsVisible="{Binding UsernameTypeSelectedIndex, Converter={StaticResource pickerIndexToBool}, ConverterParameter=3}"
+                        StyleClass="box-row-separator" />
                 </StackLayout>
                 <!--PASSWORD OPTIONS-->
                 <StackLayout IsVisible="{Binding IsUsername, Converter={StaticResource inverseBool}}">
