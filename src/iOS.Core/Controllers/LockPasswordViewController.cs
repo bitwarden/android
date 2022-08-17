@@ -328,7 +328,7 @@ namespace Bit.iOS.Core.Controllers
             var loginPage = new LoginSsoPage();
             var app = new App.App(new AppOptions { IosExtension = true });
             ThemeManager.SetTheme(app.Resources);
-            ThemeManager.ApplyResourcesToPage(loginPage);
+            ThemeManager.ApplyResourcesTo(loginPage);
             if (loginPage.BindingContext is LoginSsoPageViewModel vm)
             {
                 vm.SsoAuthSuccessAction = () => DoContinue();

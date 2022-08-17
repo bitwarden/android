@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Bit.App.Utilities;
@@ -12,6 +13,7 @@ using Bit.Core.Exceptions;
 using Bit.Core.Models.Request;
 using Bit.Core.Utilities;
 using Newtonsoft.Json;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -30,6 +32,7 @@ namespace Bit.App.Pages
         private readonly IStateService _stateService;
         private readonly II18nService _i18nService;
         private readonly IAppIdService _appIdService;
+        private readonly ILogger _logger;
 
         private TwoFactorProviderType? _selectedProviderType;
         private string _totpInstruction;
@@ -51,9 +54,11 @@ namespace Bit.App.Pages
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _i18nService = ServiceContainer.Resolve<II18nService>("i18nService");
             _appIdService = ServiceContainer.Resolve<IAppIdService>("appIdService");
+            _logger = ServiceContainer.Resolve<ILogger>();
 
             PageTitle = AppResources.TwoStepLogin;
             SubmitCommand = new Command(async () => await SubmitAsync());
+            MoreCommand = new AsyncCommand(MoreAsync, onException: _logger.Exception, allowsMultipleExecutions: false);
         }
 
         public string TotpInstruction
@@ -111,6 +116,7 @@ namespace Bit.App.Pages
             });
         }
         public Command SubmitCommand { get; }
+        public ICommand MoreCommand { get; }
         public Action TwoFactorAuthSuccessAction { get; set; }
         public Action StartSetPasswordAction { get; set; }
         public Action CloseAction { get; set; }
@@ -334,6 +340,15 @@ namespace Bit.App.Pages
                     await _platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(),
                         AppResources.AnErrorHasOccurred, AppResources.Ok);
                 }
+            }
+        }
+
+        private async Task MoreAsync()
+        {
+            var selection = await _deviceActionService.DisplayActionSheetAsync(AppResources.Options, AppResources.Cancel, null, AppResources.UseAnotherTwoStepMethod);
+            if (selection == AppResources.UseAnotherTwoStepMethod)
+            {
+                await AnotherMethodAsync();
             }
         }
 
