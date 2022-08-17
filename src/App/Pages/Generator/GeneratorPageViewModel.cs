@@ -118,8 +118,8 @@ namespace Bit.App.Pages
                 });
         }
 
-        public string ColoredPassword => PasswordFormatter.FormatPassword(Password);
-        public string ColoredUsername => PasswordFormatter.FormatPassword(Username);
+        public string ColoredPassword => GeneratedValueFormatter.Format(Password);
+        public string ColoredUsername => GeneratedValueFormatter.Format(Username);
 
         public bool IsPassword
         {
