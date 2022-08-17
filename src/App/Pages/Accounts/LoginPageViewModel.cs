@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.App.Resources;
@@ -8,6 +9,7 @@ using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Exceptions;
 using Bit.Core.Utilities;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -28,6 +30,7 @@ namespace Bit.App.Pages
         private bool _showCancelButton;
         private string _email;
         private string _masterPassword;
+        private bool _isEmailEnabled;
 
         public LoginPageViewModel()
         {
@@ -44,6 +47,7 @@ namespace Bit.App.Pages
             PageTitle = AppResources.Bitwarden;
             TogglePasswordCommand = new Command(TogglePassword);
             LogInCommand = new Command(async () => await LogInAsync());
+            MoreCommand = new AsyncCommand(MoreAsync, onException: _logger.Exception, allowsMultipleExecutions: false);
 
             AccountSwitchingOverlayViewModel = new AccountSwitchingOverlayViewModel(_stateService, _messagingService, _logger)
             {
@@ -81,10 +85,19 @@ namespace Bit.App.Pages
             set => SetProperty(ref _masterPassword, value);
         }
 
+        public bool IsEmailEnabled
+        {
+            get => _isEmailEnabled;
+            set => SetProperty(ref _isEmailEnabled, value);
+        }
+
+        public bool IsIosExtension { get; set; }
+
         public AccountSwitchingOverlayViewModel AccountSwitchingOverlayViewModel { get; }
 
         public Command LogInCommand { get; }
         public Command TogglePasswordCommand { get; }
+        public ICommand MoreCommand { get; internal set; }
         public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
         public Action StartTwoFactorAction { get; set; }
@@ -198,6 +211,28 @@ namespace Bit.App.Pages
                     await _platformUtilsService.ShowDialogAsync(e.Error.GetSingleMessage(),
                         AppResources.AnErrorHasOccurred, AppResources.Ok);
                 }
+            }
+        }
+
+        private async Task MoreAsync()
+        {
+            var buttons = IsEmailEnabled
+                ? new[] { AppResources.GetPasswordHint }
+                : new[] { AppResources.GetPasswordHint, AppResources.RemoveAccount };
+            var selection = await _deviceActionService.DisplayActionSheetAsync(AppResources.Options, AppResources.Cancel, null, buttons);
+
+            if (selection == AppResources.GetPasswordHint)
+            {
+                var hintNavigationPage = new NavigationPage(new HintPage());
+                if (IsIosExtension)
+                {
+                    ThemeManager.ApplyResourcesTo(hintNavigationPage);
+                }
+                await Page.Navigation.PushModalAsync(hintNavigationPage);
+            }
+            else if (selection == AppResources.RemoveAccount)
+            {
+                await RemoveAccountAsync();
             }
         }
 

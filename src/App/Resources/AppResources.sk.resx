@@ -770,6 +770,12 @@
   <data name="Enabled" xml:space="preserve">
     <value>Zapnuté</value>
   </data>
+  <data name="Off" xml:space="preserve">
+    <value>Vypnuté</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>Zapnuté</value>
+  </data>
   <data name="Status" xml:space="preserve">
     <value>Stav</value>
   </data>
@@ -907,11 +913,11 @@
   <data name="CopyTotp" xml:space="preserve">
     <value>Kopírovať TOTP</value>
   </data>
-  <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>Ak je kľúč overovateľa spojený s vašim prihlásením, TOTP verifikačný kód bude automaticky skopírovaný do schránky vždy, keď použijete automatické vypĺňanie.</value>
+  <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
+    <value>Ak má prihlásenie nastavený kľúč overovateľa, TOTP verifikačný kód bude automaticky skopírovaný do schránky vždy, keď použijete automatické vypĺňanie.</value>
   </data>
-  <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>Zakázať automatické kopírovanie TOTP</value>
+  <data name="CopyTotpAutomatically" xml:space="preserve">
+    <value>Automaticky kopírovať TOTP</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
     <value>Pre použitie tejto funkcie je potrebné prémiové členstvo.</value>
@@ -1128,11 +1134,11 @@
   <data name="Expiration" xml:space="preserve">
     <value>Expirácia</value>
   </data>
-  <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>Zakázať ikony webových stránok</value>
+  <data name="ShowWebsiteIcons" xml:space="preserve">
+    <value>Zobrazovať favikony stránok</value>
   </data>
-  <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Ikony stránok poskytujú rozoznateľný obrázok vedľa každého prihlasovacieho údaju vo webovom trezore.</value>
+  <data name="ShowWebsiteIconsDescription" xml:space="preserve">
+    <value>Pri každom prihlásení zobrazí rozpoznateľný obrázok.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>URL servera ikôn</value>
@@ -1372,11 +1378,15 @@
   <data name="SearchCollection" xml:space="preserve">
     <value>Hľadať v zbierke</value>
   </data>
-  <data name="SearchFolder" xml:space="preserve">
-    <value>Prehľadávať priečinok</value>
+  <data name="SearchFileSends" xml:space="preserve">
+    <value>Hľadať súborové Sendy</value>
   </data>
-  <data name="SearchType" xml:space="preserve">
-    <value>Typ vyhľadávania</value>
+  <data name="SearchTextSends" xml:space="preserve">
+    <value>Hľadať textové Sendy</value>
+  </data>
+  <data name="SearchGroup" xml:space="preserve">
+    <value>Hľadať {0}</value>
+    <comment>ex: Search Logins</comment>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Typ</value>
@@ -1521,7 +1531,7 @@
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="DefaultUriMatchDetection" xml:space="preserve">
-    <value>Predvolené mapovanie</value>
+    <value>Predvolený spôsob detekcie zhody URI</value>
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
@@ -1537,8 +1547,14 @@
   <data name="ThemeDefault" xml:space="preserve">
     <value>Predvolené systémom</value>
   </data>
+  <data name="DefaultDarkTheme" xml:space="preserve">
+    <value>Predvolený tmavý motív</value>
+  </data>
+  <data name="DefaultDarkThemeDescription" xml:space="preserve">
+    <value>Vyberte tmavý motív, ktorý sa použije ako Predvolený (Systém), keď bude zapnutý tmavý režim na zariadení</value>
+  </data>
   <data name="CopyNotes" xml:space="preserve">
-    <value>Kopírovať poznámky</value>
+    <value>Kopírovať poznámku</value>
   </data>
   <data name="Exit" xml:space="preserve">
     <value>Ukončiť</value>
@@ -1553,17 +1569,21 @@
     <value>Čierna</value>
     <comment>The color black</comment>
   </data>
-  <data name="BlacklistedUris" xml:space="preserve">
-    <value>Zakázané URI</value>
+  <data name="Nord" xml:space="preserve">
+    <value>Nord</value>
+    <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
-  <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>URIs that are blacklisted will not offer auto-fill. The list of apps should be comma separated. Ex: "https://twitter.com, androidapp://com.twitter.android".</value>
+  <data name="AutofillBlockedUris" xml:space="preserve">
+    <value>Blokované URI pre automatické vypĺňanie</value>
   </data>
-  <data name="DisableSavePrompt" xml:space="preserve">
-    <value>Nepýtať sa na ukládanie</value>
+  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
+    <value>Automatické vypĺňanie sa nebude ponúkať pre zablokované URI. Viaceré URI oddeľte čiarkou. Napríklad: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
-  <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>"Notifikácia Pridať prihlasovacie údaje" vás automaticky upozorní na uloženie nových údajov do vášho trezoru vždy, keď sa s nimi prihlasujete po prvý krát.</value>
+  <data name="AskToAddLogin" xml:space="preserve">
+    <value>Požiadať o pridanie prihlásenia</value>
+  </data>
+  <data name="AskToAddLoginDescription" xml:space="preserve">
+    <value>Opýtať sa na pridanie prihlasovacích údajov ak ich ešte nemáte v trezore.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
     <value>Po reštarte aplikácie</value>
@@ -1856,6 +1876,9 @@
     <value>Priateľský názov pre popísanie tohto Sendu.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
+  <data name="Text" xml:space="preserve">
+    <value>Text</value>
+  </data>
   <data name="TypeText" xml:space="preserve">
     <value>Text</value>
   </data>
@@ -1871,6 +1894,18 @@
   </data>
   <data name="TypeFileInfo" xml:space="preserve">
     <value>Súbor, ktorý chcete odoslať.</value>
+  </data>
+  <data name="FileTypeIsSelected" xml:space="preserve">
+    <value>Typ súboru je vybraný.</value>
+  </data>
+  <data name="FileTypeIsNotSelected" xml:space="preserve">
+    <value>Typ súboru nie je vybraný, klepnutím vyberte.</value>
+  </data>
+  <data name="TextTypeIsSelected" xml:space="preserve">
+    <value>Typ textu je vybraný.</value>
+  </data>
+  <data name="TextTypeIsNotSelected" xml:space="preserve">
+    <value>Typ textu nie je vybraný, klepnutím vyberte.</value>
   </data>
   <data name="DeletionDate" xml:space="preserve">
     <value>Dátum odstránenia</value>
@@ -2175,5 +2210,68 @@
   </data>
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
     <value>Zadajte overovací kód, ktorý vám bol zaslaný na e-mail</value>
+  </data>
+  <data name="SubmitCrashLogs" xml:space="preserve">
+    <value>Odoslať logy o zlyhaní</value>
+  </data>
+  <data name="SubmitCrashLogsDescription" xml:space="preserve">
+    <value>Pomôžte Bitwardenu zlepšiť stabilitu aplikácie odoslaním hlásenia o zlyhaní.</value>
+  </data>
+  <data name="OptionsExpanded" xml:space="preserve">
+    <value>Možnosti sú rozbalené, ťuknutím na položku ich zbalíte.</value>
+  </data>
+  <data name="OptionsCollapsed" xml:space="preserve">
+    <value>Možnosti sú zbalené, ťuknutím na položku ich rozbalíte.</value>
+  </data>
+  <data name="UppercaseAtoZ" xml:space="preserve">
+    <value>Veľké písmená (A až Z)</value>
+  </data>
+  <data name="LowercaseAtoZ" xml:space="preserve">
+    <value>Malé písmená (a až z)</value>
+  </data>
+  <data name="NumbersZeroToNine" xml:space="preserve">
+    <value>Čísla (0 až 9)</value>
+  </data>
+  <data name="SpecialCharacters" xml:space="preserve">
+    <value>Špeciálne znaky (!@#$%^&amp;*)</value>
+  </data>
+  <data name="TapToGoBack" xml:space="preserve">
+    <value>Ťuknutím sa vrátite</value>
+  </data>
+  <data name="PasswordIsVisibleTapToHide" xml:space="preserve">
+    <value>Heslo je viditeľné, ťuknutím ho skryjete.</value>
+  </data>
+  <data name="PasswordIsNotVisibleTapToShow" xml:space="preserve">
+    <value>Heslo nie je viditeľné, ťuknutím ho zobrazíte.</value>
+  </data>
+  <data name="FilterByVault" xml:space="preserve">
+    <value>Filtrovať položky podľa trezora</value>
+  </data>
+  <data name="AllVaults" xml:space="preserve">
+    <value>Všetky trezory</value>
+  </data>
+  <data name="Vaults" xml:space="preserve">
+    <value>Trezory</value>
+  </data>
+  <data name="VaultFilterDescription" xml:space="preserve">
+    <value>Trezor: {0}</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Všetky</value>
+  </data>
+  <data name="NeverLockWarning" xml:space="preserve">
+    <value>Nastavením možností uzamknutia na možnosť "Nikdy" zostane váš trezor dostupný pre každého, kto má prístup k vášmu zariadeniu. Ak používate túto možnosť, mali by ste zabezpečiť, aby bolo vaše zariadenie riadne chránené.</value>
+  </data>
+  <data name="EnvironmentPageUrlsError" xml:space="preserve">
+    <value>Jedna alebo viacero zadaných adries URL sú neplatné. Opravte ich a skúste ich uložiť znova.</value>
+  </data>
+  <data name="GenericErrorMessage" xml:space="preserve">
+    <value>Vašu žiadosť sa nám nepodarilo spracovať. Skúste to, prosím, znova alebo nás kontaktujte.</value>
+  </data>
+  <data name="AllowScreenCapture" xml:space="preserve">
+    <value>Povoliť snímanie obrazovky</value>
+  </data>
+  <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
+    <value>Naozaj chcete povoliť snímanie obrazovky?</value>
   </data>
 </root>

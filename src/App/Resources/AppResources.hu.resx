@@ -412,7 +412,7 @@
     <value>Elem hozzáadása</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
-    <value>App kiterjesztés</value>
+    <value>Alkalmazáskiegészítő</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
     <value>A Bitwarden kisegítő szolgáltatás használata bejelentkezések automatikus kitöltéséhez alkalmazásból és weben.</value>
@@ -445,7 +445,7 @@
     <value>E-mail címedet a bitwarden.com webes széfében tudod megváltoztatni. Szeretnéd meglátogatni most a weboldalt?</value>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
-    <value>Mesterjelszó módosítása</value>
+    <value>Mesterjelszó megváltoztatása</value>
   </data>
   <data name="ChangePasswordConfirmation" xml:space="preserve">
     <value>Mesterjelszavadat a bitwarden.com webes széfében tudod megváltoztatni. Szeretnéd meglátogatni most a weboldalt?</value>
@@ -473,13 +473,13 @@
     <value>Írd be a fiókod e-mail címét, hogy megkapd a mesterjelszó emlékeztetőt.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
-    <value>Alkalmazás újra engedélyezése</value>
+    <value>Alkalmazáskiegészítő újraengedélyezése</value>
   </data>
   <data name="ExtensionAlmostDone" xml:space="preserve">
     <value>Mindjárt kész!</value>
   </data>
   <data name="ExtensionEnable" xml:space="preserve">
-    <value>Bővítmény engedélyezése</value>
+    <value>Alkalmazáskiegészítő engedélyezése</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
     <value>A Safariban keressük meg a Bitwardent a megosztás ikon használatával (tipp: gördítés a menü alsó sorának jobb oldalára).</value>
@@ -549,10 +549,10 @@
     <value>Azonnal</value>
   </data>
   <data name="VaultTimeout" xml:space="preserve">
-    <value>Széf időkifutás</value>
+    <value>Széf időkorlátja</value>
   </data>
   <data name="VaultTimeoutAction" xml:space="preserve">
-    <value>Széf időkifutás művelet</value>
+    <value>Művelet a széf időkorlátjának túllépésekor</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
     <value>Kijelentkezve az összes széf elérés eltávolításra kerül és webes hitelesítésre van szükség az időkifutás után. Biztosan szeretnénk használni ezt a beállítást?</value>
@@ -733,7 +733,7 @@
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">
-    <value>Kiterjesztés aktiválva!</value>
+    <value>A kiegészítő aktiválva.</value>
   </data>
   <data name="Icons" xml:space="preserve">
     <value>Ikonok</value>
@@ -769,6 +769,12 @@
   </data>
   <data name="Enabled" xml:space="preserve">
     <value>Engedélyezve</value>
+  </data>
+  <data name="Off" xml:space="preserve">
+    <value>Ki</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>Be</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>Állapot</value>
@@ -907,11 +913,11 @@
   <data name="CopyTotp" xml:space="preserve">
     <value>Egyszeri jelszó másolása</value>
   </data>
-  <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>Ha a bejelentkezésedhez csatolva van egy hitelesítő kód, az egyszeri ellenőrző kód automatikusan másolva lesz a vágólapra a bejelentkezés automatikus kitöltése esetén.</value>
+  <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
+    <value>Ha a bejelentkezéshez csatolva van egy hitelesítő kulcs, a TOTP ellenőrző kód automatikusan a vágólapra kerül, amikor a bejelentkezési adatok automatikus kitöltésénél.</value>
   </data>
-  <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>Egyszeri jelszó automatikus másolás tiltása</value>
+  <data name="CopyTotpAutomatically" xml:space="preserve">
+    <value>TOTP automatikus másolása</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
     <value>A funkció használatához prémium tagság szükséges.</value>
@@ -1128,11 +1134,11 @@
   <data name="Expiration" xml:space="preserve">
     <value>Lejárat</value>
   </data>
-  <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>Webhelyikonok letiltása</value>
+  <data name="ShowWebsiteIcons" xml:space="preserve">
+    <value>Webhely ikonok megjelenítése</value>
   </data>
-  <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>A webhelyek ikonjai segítségével kép alapján felismerhetők a széfbe történő bejelentkezések.</value>
+  <data name="ShowWebsiteIconsDescription" xml:space="preserve">
+    <value>Felismerhető kép megjelenítése minden bejelentkezés mellett.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>Ikonszerver webcím</value>
@@ -1372,11 +1378,15 @@
   <data name="SearchCollection" xml:space="preserve">
     <value>Gyűjtemény keresése</value>
   </data>
-  <data name="SearchFolder" xml:space="preserve">
-    <value>Mappa keresése</value>
+  <data name="SearchFileSends" xml:space="preserve">
+    <value>Fájl Sends elemek keresése</value>
   </data>
-  <data name="SearchType" xml:space="preserve">
-    <value>Típus keresése</value>
+  <data name="SearchTextSends" xml:space="preserve">
+    <value>Szöveges Sends elemek keresése</value>
+  </data>
+  <data name="SearchGroup" xml:space="preserve">
+    <value>{0} keresése</value>
+    <comment>ex: Search Logins</comment>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Típus</value>
@@ -1445,7 +1455,7 @@
     <value>Nincsenek megjeleníthető mappák.</value>
   </data>
   <data name="FingerprintPhrase" xml:space="preserve">
-    <value>Ujjlenyomat mondat</value>
+    <value>Ujjlenyomat-kifejezés</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="YourAccountsFingerprint" xml:space="preserve">
@@ -1521,7 +1531,7 @@
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="DefaultUriMatchDetection" xml:space="preserve">
-    <value>Alapértelmezett találatfelismerés</value>
+    <value>URI-egyezések alapértelmezett felismerése</value>
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
@@ -1536,6 +1546,12 @@
   </data>
   <data name="ThemeDefault" xml:space="preserve">
     <value>Alapértelmezett (rendszer)</value>
+  </data>
+  <data name="DefaultDarkTheme" xml:space="preserve">
+    <value>Alapértelmezett sötét téma</value>
+  </data>
+  <data name="DefaultDarkThemeDescription" xml:space="preserve">
+    <value>A sötét téma választása használatra, ha az Alapértelmezett (Rendszer) témát használjuk az eszköz bekapcsolt sötét módja mellett.</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Jegyzetek másolása</value>
@@ -1553,17 +1569,21 @@
     <value>Fekete</value>
     <comment>The color black</comment>
   </data>
-  <data name="BlacklistedUris" xml:space="preserve">
-    <value>Feketelistán levő URI elemek</value>
+  <data name="Nord" xml:space="preserve">
+    <value>Nord</value>
+    <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
-  <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>A feketelistán levő URI elemek nem érintik az automatikus kitöltést. Az alkalmazások listáját vesszővel kell elválasztani. Példa: "https://twitter.com, androidapp://com.twitter.android".</value>
+  <data name="AutofillBlockedUris" xml:space="preserve">
+    <value>Automatikus kitöltés elől blokkolt URI elemek</value>
   </data>
-  <data name="DisableSavePrompt" xml:space="preserve">
-    <value>Mentés kérés letiltása</value>
+  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
+    <value>A blokkolt URI elemek esetében az automatikus kitöltés nem kerül felajánlásra. Több URI elemet vesszővel kell elválasztani. Például: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
-  <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>A "Bejelentkezés kérés" automatikusan felajánlja a bejelentkezés széfbe mentését az első bejelentkezéskor.</value>
+  <data name="AskToAddLogin" xml:space="preserve">
+    <value>Bejelentkezés hozzáadás kérése</value>
+  </data>
+  <data name="AskToAddLoginDescription" xml:space="preserve">
+    <value>Kérjünk egy elem hozzáadást, ha az nem található a széfben.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
     <value>Újraindításkor</value>
@@ -1799,7 +1819,7 @@
     <value>A Bitwarden figyelmet igényel - Engedélyezzük Bitwarden beállításokban a  "Felülrajzolás" opciót az "Automatikus kitöltési szolgáltatások" résznél.</value>
   </data>
   <data name="AutofillServices" xml:space="preserve">
-    <value>Automatikus kitöltés</value>
+    <value>Automatikus kitöltési szolgáltatások</value>
   </data>
   <data name="InlineAutofill" xml:space="preserve">
     <value>Szövegközi automatikus kitöltés használata</value>
@@ -1823,7 +1843,7 @@
     <value>Szükséges az Automatikus kitöltés gyorsműveleti csempe használatához, vagy az automatikus kitöltési szolgáltatás bővítéséhez a Felülrajzolás használatával (ha engedélyezve van).</value>
   </data>
   <data name="DrawOver" xml:space="preserve">
-    <value>Felülrajzolás használata</value>
+    <value>Átfedő megjelenítés használata</value>
   </data>
   <data name="DrawOverDescription" xml:space="preserve">
     <value>Engedélyezve a Bitwarden Akadálymentes Szolgáltatás egy felbukkanó ablakot jelenít meg, amikor a bejelentkezési mezők kiválasztottak.</value>
@@ -1856,6 +1876,9 @@
     <value>Barátságos név a Send elem leírására.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
+  <data name="Text" xml:space="preserve">
+    <value>Szöveg</value>
+  </data>
   <data name="TypeText" xml:space="preserve">
     <value>Szöveg</value>
   </data>
@@ -1871,6 +1894,18 @@
   </data>
   <data name="TypeFileInfo" xml:space="preserve">
     <value>A küldendő fájl.</value>
+  </data>
+  <data name="FileTypeIsSelected" xml:space="preserve">
+    <value>A fájltípus kiválasztásra került.</value>
+  </data>
+  <data name="FileTypeIsNotSelected" xml:space="preserve">
+    <value>A fájltípus nem lett kiválasztva, koppintsunk a kiválasztáshoz.</value>
+  </data>
+  <data name="TextTypeIsSelected" xml:space="preserve">
+    <value>A szövegtípus kiválasztásra került.</value>
+  </data>
+  <data name="TextTypeIsNotSelected" xml:space="preserve">
+    <value>A szövegtípus nem lett kiválasztva, koppintsunk a kiválasztáshoz.</value>
   </data>
   <data name="DeletionDate" xml:space="preserve">
     <value>Törlési dátum</value>
@@ -2175,5 +2210,68 @@
   </data>
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
     <value>Az emailben elküldött ellenőrző kód megadása</value>
+  </data>
+  <data name="SubmitCrashLogs" xml:space="preserve">
+    <value>Összeomlási naplózások beküldése</value>
+  </data>
+  <data name="SubmitCrashLogsDescription" xml:space="preserve">
+    <value>Segítség a Bitwardennek az alkalmazás stabbilitás továbbfejlesztésében összeomlási naplózási jelentésekkel.</value>
+  </data>
+  <data name="OptionsExpanded" xml:space="preserve">
+    <value>Az opciók nyitottak, koppintásra bezárulnak.</value>
+  </data>
+  <data name="OptionsCollapsed" xml:space="preserve">
+    <value>Az opciók bezártak, koppintásra kinyílnak.</value>
+  </data>
+  <data name="UppercaseAtoZ" xml:space="preserve">
+    <value>Nagybetűs (A-Z)</value>
+  </data>
+  <data name="LowercaseAtoZ" xml:space="preserve">
+    <value>Kisbetűs (a-z)</value>
+  </data>
+  <data name="NumbersZeroToNine" xml:space="preserve">
+    <value>Számok (0-9)</value>
+  </data>
+  <data name="SpecialCharacters" xml:space="preserve">
+    <value>Speciális karakterek (!@#$%^&amp;*)</value>
+  </data>
+  <data name="TapToGoBack" xml:space="preserve">
+    <value>Koppintás a visszalépéshez</value>
+  </data>
+  <data name="PasswordIsVisibleTapToHide" xml:space="preserve">
+    <value>A jelszó látható, koppintással elrejthető.</value>
+  </data>
+  <data name="PasswordIsNotVisibleTapToShow" xml:space="preserve">
+    <value>A jelszó nem látható, koppintással megjeleníthető.</value>
+  </data>
+  <data name="FilterByVault" xml:space="preserve">
+    <value>Elemek szűrése széf szerint</value>
+  </data>
+  <data name="AllVaults" xml:space="preserve">
+    <value>Összes széf</value>
+  </data>
+  <data name="Vaults" xml:space="preserve">
+    <value>Széfek</value>
+  </data>
+  <data name="VaultFilterDescription" xml:space="preserve">
+    <value>Széf: {0}</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Összes</value>
+  </data>
+  <data name="NeverLockWarning" xml:space="preserve">
+    <value>Ha a zárolási lehetőségeket "Soha” értékre állítjuk, akkor a széf bárki számára elérhető lesz, aki hozzáfér az eszközhöz. Ha ezt az opciót használjuk, akkor gondoskodni kell arról, hogy az eszköz megfelelően védett legyen.</value>
+  </data>
+  <data name="EnvironmentPageUrlsError" xml:space="preserve">
+    <value>A beírt webcímek közül egy vagy több érvénytelen. Vizsgáljuk át és próbáljuk meg újra elmenteni.</value>
+  </data>
+  <data name="GenericErrorMessage" xml:space="preserve">
+    <value>Nem lehetett feldolgozni a kérést. Próbáljuk újra vagy vegyük fel a kapcsolatot a Bitwarden szolgáltatóval.</value>
+  </data>
+  <data name="AllowScreenCapture" xml:space="preserve">
+    <value>Képernyőrögzítés engedélyezése</value>
+  </data>
+  <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
+    <value>Biztosan engedélyzni szeretnénk a képernyőrögzítést?</value>
   </data>
 </root>

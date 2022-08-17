@@ -6,6 +6,7 @@
     xmlns:pages="clr-namespace:Bit.App.Pages"
     xmlns:controls="clr-namespace:Bit.App.Controls"
     xmlns:u="clr-namespace:Bit.App.Utilities"
+    xmlns:effects="clr-namespace:Bit.App.Effects"
     x:DataType="pages:GeneratorPageViewModel"
     Title="{Binding PageTitle}">
     <ContentPage.BindingContext>
@@ -128,7 +129,11 @@
                                 Text="{Binding WordSeparator}"
                                 IsSpellCheckEnabled="False"
                                 IsTextPredictionEnabled="False"
-                                StyleClass="box-value" />
+                                StyleClass="box-value">
+                                <Entry.Effects>
+                                    <effects:NoEmojiKeyboardEffect />
+                                </Entry.Effects>
+                            </Entry>
                         </StackLayout>
                         <StackLayout StyleClass="box-row, box-row-switch">
                             <Label
