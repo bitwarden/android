@@ -10,8 +10,6 @@ namespace Bit.Core.Models.Domain
         {
             if (defaultOptions)
             {
-                RandomWordUsernameCapitalize = false;
-                RandomWordUsernameIncludeNumber = false;
                 PlusAddressedEmail = string.Empty;
                 CatchAllEmailDomain = string.Empty;
                 FirefoxRelayApiAccessToken = string.Empty;
@@ -26,8 +24,8 @@ namespace Bit.Core.Models.Domain
         public ForwardedEmailServiceType ServiceType { get; set; }
         public UsernameEmailType PlusAddressedEmailType { get; set; }
         public UsernameEmailType CatchAllEmailType { get; set; }
-        public bool? RandomWordUsernameCapitalize { get; set; }
-        public bool? RandomWordUsernameIncludeNumber { get; set; }
+        public bool CapitalizeRandomWordUsername { get; set; }
+        public bool IncludeNumberRandomWordUsername { get; set; }
         public string PlusAddressedEmail { get; set; }
         public string CatchAllEmailDomain { get; set; }
         public string FirefoxRelayApiAccessToken { get; set; }
@@ -38,8 +36,6 @@ namespace Bit.Core.Models.Domain
 
         public void Merge(UsernameGenerationOptions defaults)
         {
-            RandomWordUsernameCapitalize = RandomWordUsernameCapitalize ?? defaults.RandomWordUsernameCapitalize;
-            RandomWordUsernameIncludeNumber = RandomWordUsernameIncludeNumber ?? defaults.RandomWordUsernameIncludeNumber;
             PlusAddressedEmail = PlusAddressedEmail ?? defaults.PlusAddressedEmail;
             CatchAllEmailDomain = CatchAllEmailDomain ?? defaults.CatchAllEmailDomain;
             FirefoxRelayApiAccessToken = FirefoxRelayApiAccessToken ?? defaults.FirefoxRelayApiAccessToken;

@@ -80,17 +80,10 @@ namespace Bit.Core.Services
         {
             options.Merge(_defaultOptions);
             string randomWord = null;
-            if (options.RandomWordUsernameCapitalize == null)
-            {
-                options.RandomWordUsernameCapitalize = false;
-            }
-            if (options.RandomWordUsernameIncludeNumber == null)
-            {
-                options.RandomWordUsernameIncludeNumber = false;
-            }
+
             var listLength = EEFLongWordList.Instance.List.Count - 1;
             var wordIndex = await _cryptoService.RandomNumberAsync(0, listLength);
-            if (options.RandomWordUsernameCapitalize.GetValueOrDefault())
+            if (options.CapitalizeRandomWordUsername)
             {
                 randomWord = Capitalize(EEFLongWordList.Instance.List[wordIndex]);
             }
@@ -99,7 +92,7 @@ namespace Bit.Core.Services
                 randomWord = EEFLongWordList.Instance.List[wordIndex];
             }
 
-            if (options.RandomWordUsernameIncludeNumber.GetValueOrDefault())
+            if (options.IncludeNumberRandomWordUsername)
             {
                 randomWord = await AppendRandomNumberToRandomWordAsync(randomWord);
             }
