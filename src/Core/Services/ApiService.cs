@@ -69,15 +69,15 @@ namespace Bit.Core.Services
             // Production
             if (string.IsNullOrWhiteSpace(ApiBaseUrl))
             {
-                ApiBaseUrl = "https://api.bitwarden.com";
+                ApiBaseUrl = "https://api.qa.bitwarden.pw";
             }
             if (string.IsNullOrWhiteSpace(IdentityBaseUrl))
             {
-                IdentityBaseUrl = "https://identity.bitwarden.com";
+                IdentityBaseUrl = "https://identity.qa.bitwarden.pw";
             }
             if (string.IsNullOrWhiteSpace(EventsBaseUrl))
             {
-                EventsBaseUrl = "https://events.bitwarden.com";
+                EventsBaseUrl = "https://events.qa.bitwarden.com.pw";
             }
         }
 
@@ -530,6 +530,21 @@ namespace Bit.Core.Services
                     throw new ApiException(error);
                 }
             }
+        }
+
+        #endregion
+
+        #region PasswordlessLogin
+
+        public Task<PasswordlessLoginResponse> GetPasswordlessLoginAsync(string id)
+        {
+            return SendAsync<object, PasswordlessLoginResponse>(HttpMethod.Get, $"/auth-requests/{id}", null, true, false);
+        }
+
+        public Task<PasswordlessLoginResponse> PutPasswordlessLoginAsync(string id, string key, string masterPasswordHash, string deviceIdentifier, bool requestApproved)
+        {
+            var request = new PasswordlessLoginRequest(key, masterPasswordHash, deviceIdentifier, requestApproved);
+            return SendAsync<object, PasswordlessLoginResponse>(HttpMethod.Put, $"/auth-requests/{id}", request, true, false);
         }
 
         #endregion
