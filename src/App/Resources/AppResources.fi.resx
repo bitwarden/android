@@ -299,6 +299,10 @@
     <value>Oma holvi</value>
     <comment>The title for the vault page.</comment>
   </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Todentaja</value>
+    <comment>Authenticator TOTP feature</comment>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Nimi</value>
     <comment>Label for an entity name.</comment>
@@ -895,11 +899,9 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>Todennusavaimen luku epäonnistui.</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>Koodi luetaan automaattisesti.</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Kohdista kamerasi QR-koodiin.</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Kohdista kamera QR-koodiin.
+Koodi luetaan automaattisesti.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>Lue QR-koodi</value>
@@ -1650,7 +1652,7 @@
     <value>Syötä pääsalasanasi viedäksesi holvisi tiedot.</value>
   </data>
   <data name="SendVerificationCodeToEmail" xml:space="preserve">
-    <value>Lähetä vahvistuskoodi sähköpostiisi</value>
+    <value>Lähetä todennuskoodi sähköpostiisi</value>
   </data>
   <data name="CodeSent" xml:space="preserve">
     <value>Koodi lähetetty</value>
@@ -2258,6 +2260,43 @@
   </data>
   <data name="All" xml:space="preserve">
     <value>Kaikki</value>
+  </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Todennuskoodit</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>Premium-tilaus vaaditaan</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>Etkö voi lisätä todennusavainta? </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>Lue QR-koodi</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>Etkö voi lukea QR-koodia? </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Todentajan avain</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Syötä koodi manuaalisesti</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>Lisää TOTP</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>Määritä TOTP</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>Kun koodi on syötetty oikein, tallenna avain
+turvallisesti valitsemalla "Lisää TOTP"</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value></value>
   </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Käyttämällä lukitusasetusta "Ei koskaan"? Tallentuu holvisi salausavain laitteellesi. Jos käytät asetusta, varmista, että laite on suojattu hyvin.</value>

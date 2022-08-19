@@ -299,6 +299,10 @@
     <value>Anbarım</value>
     <comment>The title for the vault page.</comment>
   </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Kimlik təsdiqləyici</value>
+    <comment>Authenticator TOTP feature</comment>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Ad</value>
     <comment>Label for an entity name.</comment>
@@ -895,11 +899,9 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>Kimlik təsdiqləyici açarı oxuna bilmir.</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>Skan avtomatik olaraq icra ediləcək.</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Kameranı QR koduna yönləndirin.</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Kameranızı QR koduna yönəldin.
+Skan prosesi avtomatik baş tutacaq.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>QR kodu skan edin</value>
@@ -2258,6 +2260,42 @@
   </data>
   <data name="All" xml:space="preserve">
     <value>Hamısı</value>
+  </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Təsdiqləmə kodları</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>Premium abunəlik tələb olunur</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>Kimlik təsdiqləyici açarı oxuna bilmir? </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>QR kodu skan edin</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>QR kodunu skan edə bilmədiniz? </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Kimlik təsdiqləyici açarı</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Kodu əllə daxil et</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>TOTP əlavə et</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>TOTP quraşdır</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>Açar uğurla daxil edildikdən sonra, açarı güvənli şəkildə saxlamaq üçün "TOTP əlavə et"i seçin</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value></value>
   </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Kilid seçimlərini "Heç vaxt" olaraq tənzimləmək, anbarınızı cihazınıza müraciəti olan hər kəsə əlçatan edir. Bu seçimi istifadə etsəniz, cihazınızı düzgün qoruduğunuza əmin olmalısınız.</value>
