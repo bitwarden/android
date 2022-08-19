@@ -7,6 +7,7 @@ using Bit.App.Resources;
 using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
+using Bit.Core.Enums;
 using Bit.Core.Utilities;
 using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
@@ -30,10 +31,10 @@ namespace Bit.App.Pages
 
             PageTitle = AppResources.LogInRequested;
 
-            AcceptRequestCommand = new AsyncCommand(AcceptRequestAsync,
+            AcceptRequestCommand = new AsyncCommand(() => PasswordlessLoginAsync(true),
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
-            RejectRequestCommand = new AsyncCommand(RejectRequestAsync,
+            RejectRequestCommand = new AsyncCommand(() => PasswordlessLoginAsync(false),
                 onException: ex => HandleException(ex),
                 allowsMultipleExecutions: false);
         }
@@ -92,6 +93,15 @@ namespace Bit.App.Pages
             }
         }
 
+        private async Task PasswordlessLoginAsync(bool approveRequest)
+        {
+            await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
+            var res = await _authService.PasswordlessLoginAsync(LoginRequest.Id, LoginRequest.PubKey, approveRequest);
+            await _deviceActionService.HideLoadingAsync();
+            await Page.Navigation.PopModalAsync();
+            _platformUtilsService.ShowToast("info", null, approveRequest ? AppResources.LogInAccepted : AppResources.LogInDenied);
+        }
+
         private string CreateRequestDate(DateTime requestDate)
         {
             var minutesSinceRequest = requestDate.ToUniversalTime().Minute - DateTime.UtcNow.Minute;
@@ -105,24 +115,6 @@ namespace Bit.App.Pages
             }
 
             return requestDate.ToShortTimeString();
-        }
-
-        private async Task AcceptRequestAsync()
-        {
-            await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
-            var res = await _authService.LogInPasswordlessAcceptAsync();
-            await _deviceActionService.HideLoadingAsync();
-            await Page.Navigation.PopModalAsync();
-            _platformUtilsService.ShowToast("info", null, AppResources.LogInAccepted);
-        }
-
-        private async Task RejectRequestAsync()
-        {
-            await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
-            var res = await _authService.LogInPasswordlessRejectAsync();
-            await _deviceActionService.HideLoadingAsync();
-            await Page.Navigation.PopModalAsync();
-            _platformUtilsService.ShowToast("info", null, AppResources.LogInDenied);
         }
 
         private void HandleException(Exception ex)
@@ -140,6 +132,12 @@ namespace Bit.App.Pages
     // For now this will work to trigger property changes. 
     public class LoginPasswordlessDetails
     {
+        public string Id { get; set; }
+
+        public string Key { get; set; }
+
+        public string PubKey { get; set; }
+
         public string Origin { get; set; }
 
         public string Email { get; set; }
@@ -148,7 +146,7 @@ namespace Bit.App.Pages
 
         public DateTime RequestDate { get; set; }
 
-        public string DeviceType { get; set; }
+        public DeviceType DeviceType { get; set; }
 
         public string IpAddress { get; set; }
 

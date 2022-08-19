@@ -83,7 +83,7 @@ namespace Bit.Core.Abstractions
         Task<SendResponse> PutSendRemovePasswordAsync(string id);
         Task DeleteSendAsync(string id);
 
-        Task<PasswordlessLoginResponse> GetPasswordlessLoginAsync(string id);
-        Task<PasswordlessLoginResponse> PutPasswordlessLoginAsync(string id, string key, string masterPasswordHash, string deviceIdentifier, bool requestApproved);
+        Task<PasswordlessLoginResponse> GetAuthRequestAsync(string id);
+        Task<PasswordlessLoginResponse> PutAuthRequestAsync(string id, string key, string masterPasswordHash, string deviceIdentifier, bool requestApproved);
     }
 }

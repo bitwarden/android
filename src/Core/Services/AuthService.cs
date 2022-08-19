@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
+using Bit.Core.Models.Response;
 using Bit.Core.Utilities;
 
 namespace Bit.Core.Services
@@ -469,5 +471,19 @@ namespace Bit.Core.Services
             SelectedTwoFactorProviderType = null;
         }
 
+        public async Task<PasswordlessLoginResponse> GetPasswordlessLoginRequestByIdAsync(string id)
+        {
+            return await _apiService.GetAuthRequestAsync(id);
+        }
+
+        public async Task<PasswordlessLoginResponse> PasswordlessLoginAsync(string id, string pubKey, bool requestApproved)
+        {
+            var publicKey = CoreHelpers.Base64UrlDecode(pubKey);
+            var masterKey = await _cryptoService.GetKeyAsync();
+            var encryptedKey = await _cryptoService.RsaEncryptAsync(masterKey.EncKey, publicKey);
+            var encryptedMasterPassword = await _cryptoService.RsaEncryptAsync(Encoding.UTF8.GetBytes(MasterPasswordHash), publicKey);
+            var deviceId = await _appIdService.GetAppIdAsync();
+            return await _apiService.PutAuthRequestAsync(id, encryptedKey.EncryptedString, encryptedMasterPassword.EncryptedString, deviceId, requestApproved);
+        }
     }
 }
