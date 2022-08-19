@@ -299,6 +299,10 @@
     <value>Моє сховище</value>
     <comment>The title for the vault page.</comment>
   </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Автентифікатор</value>
+    <comment>Authenticator TOTP feature</comment>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Назва</value>
     <comment>Label for an entity name.</comment>
@@ -895,11 +899,9 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>Не вдається прочитати ключ авторизації.</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>Сканування відбудеться автоматично.</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Наведіть свою камеру на QR-код.</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Наведіть свою камеру на QR-код.
+Сканування відбудеться автоматично.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>Сканувати QR-код</value>
@@ -2258,6 +2260,43 @@
   </data>
   <data name="All" xml:space="preserve">
     <value>Усі</value>
+  </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Коди підтвердження</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>Необхідна передплата преміум</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>Не вдається додати ключ авторизації? </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>Сканувати QR-код</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>Не вдається сканувати QR-код? </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Ключ авторизації</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Введіть ключ вручну</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>Додати TOTP</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>Налаштувати TOTP</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>Після успішного введення ключа виберіть
+Додати TOTP для надійного збереження ключа</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value></value>
   </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Встановивши параметр блокування "Ніколи", ви залишаєте своє сховище відкритим будь-кому, хто зможе отримати доступ до вашого пристрою. Користуючись цим параметром, ви маєте бути впевненими в тому, що ваш пристрій надійно захищений.</value>
