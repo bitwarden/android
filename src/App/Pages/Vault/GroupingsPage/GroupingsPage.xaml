@@ -6,6 +6,7 @@
     xmlns:u="clr-namespace:Bit.App.Utilities"
     xmlns:effects="clr-namespace:Bit.App.Effects"
     xmlns:controls="clr-namespace:Bit.App.Controls"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
     xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
     x:DataType="pages:GroupingsPageViewModel"
     Title="{Binding PageTitle}"
@@ -51,6 +52,14 @@
                     Cipher="{Binding Cipher}"
                     ButtonCommand="{Binding BindingContext.CipherOptionsCommand, Source={x:Reference _page}}"
                     WebsiteIconsEnabled="{Binding BindingContext.WebsiteIconsEnabled, Source={x:Reference _page}}" />
+            </DataTemplate>
+
+            <DataTemplate x:Key="authenticatorTemplate"
+                          x:DataType="pages:GroupingsPageTOTPListItem">
+                <controls:AuthenticatorViewCell 
+                    Cipher="{Binding Cipher}"
+                    WebsiteIconsEnabled="{Binding BindingContext.WebsiteIconsEnabled, Source={x:Reference _page}}"
+                    TotpSec="{Binding TotpSec}"/>
             </DataTemplate>
 
             <DataTemplate x:Key="groupTemplate"
@@ -104,6 +113,7 @@
             <pages:GroupingsPageListItemSelector x:Key="listItemDataTemplateSelector"
                                                  HeaderTemplate="{StaticResource headerTemplate}"
                                                  CipherTemplate="{StaticResource cipherTemplate}"
+                                                 AuthenticatorTemplate="{StaticResource authenticatorTemplate}"
                                                  GroupTemplate="{StaticResource groupTemplate}" />
 
             <StackLayout x:Key="mainLayout" x:Name="_mainLayout">
@@ -130,7 +140,6 @@
                         AutomationProperties.IsInAccessibleTree="True"
                         AutomationProperties.Name="{u:I18n Filter}" />
                 </StackLayout>
-
                 <StackLayout
                     VerticalOptions="CenterAndExpand"
                     Padding="20, 0"

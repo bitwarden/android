@@ -299,6 +299,10 @@
     <value>Minu hoidla</value>
     <comment>The title for the vault page.</comment>
   </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Autentikaator</value>
+    <comment>Authenticator TOTP feature</comment>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Nimi</value>
     <comment>Label for an entity name.</comment>
@@ -895,11 +899,9 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>Autentimise võtme lugemine nurjus.</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>Skaneering toimub automaatselt.</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Suuna telefoni kaamera QR koodile.</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Suuna kaamera QR koodile.
+Skaneerimine toimub automaatselt.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>Skanneeri QR kood</value>
@@ -2258,6 +2260,43 @@
   </data>
   <data name="All" xml:space="preserve">
     <value>Kõik</value>
+  </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Kinnituskoodid</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>Vajalik on Premium versioon</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>Ei suuda autentimise võtit lisada? </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>Skanneeri QR kood</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>Ei suuda QR koodi skaneerida? </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Autentimise võti</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Sisesta kood käsitsi</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>Lisa TOTP</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>Seadista TOTP</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>Pärast võtme edukat sisestamist vajuta
+"Lisa TOTP", et see võti turvaliselt talletada</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value></value>
   </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Kõik, kes pääsevad sinu telefoni, saavad valikuga "Mitte kunagi" ka sinu hoidlat vaadata. Veendu, et seda tõesti teha soovid.</value>

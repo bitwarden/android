@@ -353,6 +353,12 @@ namespace Bit.App.Resources {
             }
         }
         
+        public static string Authenticator {
+            get {
+                return ResourceManager.GetString("Authenticator", resourceCulture);
+            }
+        }
+        
         public static string Name {
             get {
                 return ResourceManager.GetString("Name", resourceCulture);
@@ -1457,15 +1463,9 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string CameraInstructionBottom {
+        public static string PointYourCameraAtTheQRCode {
             get {
-                return ResourceManager.GetString("CameraInstructionBottom", resourceCulture);
-            }
-        }
-        
-        public static string CameraInstructionTop {
-            get {
-                return ResourceManager.GetString("CameraInstructionTop", resourceCulture);
+                return ResourceManager.GetString("PointYourCameraAtTheQRCode", resourceCulture);
             }
         }
         
@@ -4046,6 +4046,78 @@ namespace Bit.App.Resources {
         public static string All {
             get {
                 return ResourceManager.GetString("All", resourceCulture);
+            }
+        }
+        
+        public static string Totp {
+            get {
+                return ResourceManager.GetString("Totp", resourceCulture);
+            }
+        }
+        
+        public static string VerificationCodes {
+            get {
+                return ResourceManager.GetString("VerificationCodes", resourceCulture);
+            }
+        }
+        
+        public static string PremiumSubscriptionRequired {
+            get {
+                return ResourceManager.GetString("PremiumSubscriptionRequired", resourceCulture);
+            }
+        }
+        
+        public static string CannotAddAuthenticatorKey {
+            get {
+                return ResourceManager.GetString("CannotAddAuthenticatorKey", resourceCulture);
+            }
+        }
+        
+        public static string ScanQRCode {
+            get {
+                return ResourceManager.GetString("ScanQRCode", resourceCulture);
+            }
+        }
+        
+        public static string CannotScanQRCode {
+            get {
+                return ResourceManager.GetString("CannotScanQRCode", resourceCulture);
+            }
+        }
+        
+        public static string AuthenticatorKeyScanner {
+            get {
+                return ResourceManager.GetString("AuthenticatorKeyScanner", resourceCulture);
+            }
+        }
+        
+        public static string EnterKeyManually {
+            get {
+                return ResourceManager.GetString("EnterKeyManually", resourceCulture);
+            }
+        }
+        
+        public static string AddTotp {
+            get {
+                return ResourceManager.GetString("AddTotp", resourceCulture);
+            }
+        }
+        
+        public static string SetupTotp {
+            get {
+                return ResourceManager.GetString("SetupTotp", resourceCulture);
+            }
+        }
+        
+        public static string OnceTheKeyIsSuccessfullyEntered {
+            get {
+                return ResourceManager.GetString("OnceTheKeyIsSuccessfullyEntered", resourceCulture);
+            }
+        }
+        
+        public static string SelectAddTotpToStoreTheKeySafely {
+            get {
+                return ResourceManager.GetString("SelectAddTotpToStoreTheKeySafely", resourceCulture);
             }
         }
         

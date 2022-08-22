@@ -299,6 +299,10 @@
     <value>My kluis</value>
     <comment>The title for the vault page.</comment>
   </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Authenticator</value>
+    <comment>Authenticator TOTP feature</comment>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Naam</value>
     <comment>Label for an entity name.</comment>
@@ -771,10 +775,10 @@
     <value>Geaktiveer</value>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Off</value>
+    <value>Af</value>
   </data>
   <data name="On" xml:space="preserve">
-    <value>On</value>
+    <value>Aan</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>Status</value>
@@ -895,11 +899,9 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>Kan nie waarmerksleutel lees nie.</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>Skandering gebeur outomaties.</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Rig u kamera op die QR-kode.</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Point your camera at the QR Code.
+Scanning will happen automatically.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>Skandeer QR-kode</value>
@@ -1574,10 +1576,10 @@
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
-    <value>Auto-fill blocked URIs</value>
+    <value>Versperde URI’s vir outovul</value>
   </data>
   <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>Auto-fill will not be offered for blocked URIs. Separate multiple URIs with a comma. For example: "https://twitter.com, androidapp://com.twitter.android".</value>
+    <value>Outovul sal nie vir versperde URI’s gebied word nie. Skei meerdere URI’s met ’n komma. Byvoorbeeld: “https://twitter.com, androidapp://com.twitter.android”.</value>
   </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>Vra om aantekening toe te voeg</value>
@@ -2259,19 +2261,56 @@
   <data name="All" xml:space="preserve">
     <value>Alle</value>
   </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Verification Codes</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>Premium subscription required</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>Cannot add authenticator key? </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>Scan QR Code</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>Cannot scan QR Code? </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Authenticator Key</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Enter Key Manually</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>Add TOTP</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>Set up TOTP</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>Once the key is successfully entered,
+select Add TOTP to store the key safely</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value></value>
+  </data>
   <data name="NeverLockWarning" xml:space="preserve">
-    <value>Setting your lock options to “Never” keeps your vault available to anyone with access to your device. If you use this option, you should ensure that you keep your device properly protected.</value>
+    <value>Deur u vergrendelopsies na “Nooit” te stel, is u kluis beskikbaar aan enigeen met toegang tot u toestel. Indien u hierdie opsie gebruik moet u seker maak dat u u toestel voldoende beskerm.</value>
   </data>
   <data name="EnvironmentPageUrlsError" xml:space="preserve">
-    <value>One or more of the URLs entered are invalid. Please revise it and try to save again.</value>
+    <value>Een of meer ingevoerde bronadresse is ongeldig. Hersien dit asb. en probeer weer bewaar.</value>
   </data>
   <data name="GenericErrorMessage" xml:space="preserve">
-    <value>We were unable to process your request. Please try again or contact us.</value>
+    <value>Ons kon nie u versoek verwerk nie. Probeer asb. weer of kontak ons.</value>
   </data>
   <data name="AllowScreenCapture" xml:space="preserve">
-    <value>Allow screen capture</value>
+    <value>Laat skermopname toe</value>
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
-    <value>Are you sure you want to enable Screen Capture?</value>
+    <value>Is u seker u wil skermopname aktiveer?</value>
   </data>
 </root>

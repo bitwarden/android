@@ -299,6 +299,10 @@
     <value>Széfem</value>
     <comment>The title for the vault page.</comment>
   </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Hitelesítés</value>
+    <comment>Authenticator TOTP feature</comment>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Név</value>
     <comment>Label for an entity name.</comment>
@@ -895,11 +899,8 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>Nem lehet olvasni a hitelesítő kulcsot.</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>A szkennelés automatikusan megtörténik.</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Irányítsd a kamerát a QR-kódra.</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Irányítsa a kamerát a QR-kódra.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>QR kód beolvasása</value>
@@ -2258,6 +2259,43 @@
   </data>
   <data name="All" xml:space="preserve">
     <value>Összes</value>
+  </data>
+  <data name="Totp" xml:space="preserve">
+    <value>Idő alapú egyszer használatos jelszó (TOTP)</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Hitelesítő kód</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>Prémium előfizetés szükséges</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>Cannot add authenticator key? </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>QR kód beolvasása</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>Nem sikerül beolvasni a QR kódot? </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Authenticator Key</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Kód megadása manuálisan</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>TOTP hozzáadása</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>TOTP beállítása</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>Once the key is successfully entered,
+select Add TOTP to store the key safely</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value></value>
   </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Ha a zárolási lehetőségeket "Soha” értékre állítjuk, akkor a széf bárki számára elérhető lesz, aki hozzáfér az eszközhöz. Ha ezt az opciót használjuk, akkor gondoskodni kell arról, hogy az eszköz megfelelően védett legyen.</value>

@@ -214,17 +214,39 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <Label
                             Text="{u:I18n AuthenticatorKey}"
                             StyleClass="box-label"
                             Grid.Row="0"
                             Grid.Column="0" />
+                        <Frame 
+                            IsVisible="{Binding HasTotpValue, Converter={StaticResource inverseBool}}" 
+                            Margin="0,5,0,0"
+                            StyleClass="btn-icon-row"
+                            HorizontalOptions="FillAndExpand"
+                            VerticalOptions="FillAndExpand"
+                            Padding="0"
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="3">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="ScanTotp_Clicked" />
+                            </Frame.GestureRecognizers>
+                            <controls:IconLabel 
+                                Text="{Binding SetupTotpText}" 
+                                Padding="0,15"
+                                HorizontalOptions="Center"
+                                VerticalOptions="FillAndExpand"
+                                VerticalTextAlignment="Center" />
+                        </Frame>
                         <controls:MonoEntry
                             x:Name="_loginTotpEntry"
                             Text="{Binding Cipher.Login.Totp}"
                             IsSpellCheckEnabled="False"
                             IsTextPredictionEnabled="False"
+                            IsVisible="{Binding HasTotpValue}"
                             IsPassword="{Binding Cipher.ViewPassword, Converter={StaticResource inverseBool}}"
                             IsEnabled="{Binding Cipher.ViewPassword}"
                             StyleClass="box-value"
@@ -233,12 +255,20 @@
                             Grid.ColumnSpan="{Binding TotpColumnSpan}" />
                         <controls:IconButton 
                             StyleClass="box-row-button, box-row-button-platform"
+                            Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
+                            Command="{Binding CopyCommand}"
+                            IsVisible="{Binding HasTotpValue}"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Grid.RowSpan="2" />
+                        <controls:IconButton 
+                            StyleClass="box-row-button, box-row-button-platform"
                             Text="{Binding Source={x:Static core:BitwardenIcons.Camera}}"
                             Clicked="ScanTotp_Clicked"
                             Grid.Row="0"
-                            Grid.Column="1"
+                            Grid.Column="2"
                             Grid.RowSpan="2"
-                            IsVisible="{Binding Cipher.ViewPassword}"
+                            IsVisible="{Binding HasTotpValue}"
                             AutomationProperties.IsInAccessibleTree="True"
                             AutomationProperties.Name="{u:I18n ScanQrTitle}" />
                     </Grid>

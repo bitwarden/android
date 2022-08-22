@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <pages:BaseContentPage 
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -7,6 +7,7 @@
     xmlns:pages="clr-namespace:Bit.App.Pages"
     xmlns:controls="clr-namespace:Bit.App.Controls"
     xmlns:u="clr-namespace:Bit.App.Utilities"
+    xmlns:effects="clr-namespace:Bit.App.Effects"
     xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
     xmlns:enums="clr-namespace:Bit.Core.Enums;assembly=BitwardenCore"
     x:DataType="pages:GeneratorPageViewModel"
@@ -362,7 +363,11 @@
                                 Text="{Binding WordSeparator}"
                                 IsSpellCheckEnabled="False"
                                 IsTextPredictionEnabled="False"
-                                StyleClass="box-value" />
+                                StyleClass="box-value">
+                                <Entry.Effects>
+                                    <effects:NoEmojiKeyboardEffect />
+                                </Entry.Effects>
+                            </Entry>
                         </StackLayout>
                         <StackLayout StyleClass="box-row, box-row-switch">
                             <Label

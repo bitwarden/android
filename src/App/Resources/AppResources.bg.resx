@@ -261,11 +261,11 @@
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="LogIn" xml:space="preserve">
-    <value>Вписване</value>
+    <value>Вход</value>
     <comment>The login button text (verb).</comment>
   </data>
   <data name="LogInNoun" xml:space="preserve">
-    <value>Вписване</value>
+    <value>Вход</value>
     <comment>Title for login page. (noun)</comment>
   </data>
   <data name="LogOut" xml:space="preserve">
@@ -298,6 +298,10 @@
   <data name="MyVault" xml:space="preserve">
     <value>Моят трезор</value>
     <comment>The title for the vault page.</comment>
+  </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Authenticator</value>
+    <comment>Authenticator TOTP feature</comment>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Име</value>
@@ -393,7 +397,7 @@
     <value>Посетете нашия сайт</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Посетете сайта ни за помощ, новини, начини да се свържете с нас и как да ползвате Битуорден.</value>
+    <value>Посетете сайта ни за помощ, новини, начини да се свържете с нас и как да ползвате Bitwarden.</value>
   </data>
   <data name="Website" xml:space="preserve">
     <value>Сайт</value>
@@ -415,7 +419,7 @@
     <value>Разширение</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Автоматично дописване на полетата във формулярите в приложенията и уеб чрез услугата за достъпност на Битуорден.</value>
+    <value>Автоматично дописване на полетата във формулярите в приложенията и уеб чрез услугата за достъпност на Bitwarden.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Услуга за автоматично дописване</value>
@@ -424,7 +428,7 @@
     <value>Без нееднозначни знаци</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>Разширение за програмите на Битуорден</value>
+    <value>Разширение за програмите на Bitwarden</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
     <value>Най-лесният начин да добавяте нови записи в трезора е чрез разширението за програмите на Битуорден. Може да научите повече за него в екрана за настройките.</value>
@@ -439,7 +443,7 @@
     <value>Автоматично дописване на формулярите за вписване с услугата за достъпност на Битуорден.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
-    <value>Промяна на адреса за е-поща</value>
+    <value>Промяна на имейла</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
     <value>Адресът ви за е-поща може да се промени чрез сайта bitwarden.com. Искате ли да го посетите?</value>
@@ -457,7 +461,7 @@
     <value>Продължаване</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
-    <value>Създаване на абонамент</value>
+    <value>Регистрация</value>
   </data>
   <data name="CreatingAccount" xml:space="preserve">
     <value>Създаване на сметката...</value>
@@ -510,7 +514,7 @@
     <value>Отпечатък</value>
   </data>
   <data name="GeneratePassword" xml:space="preserve">
-    <value>Нова парола</value>
+    <value>Генериране на парола</value>
   </data>
   <data name="GetPasswordHint" xml:space="preserve">
     <value>Получаване на подсказка за главната парола</value>
@@ -562,7 +566,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="LoginOrCreateNewAccount" xml:space="preserve">
-    <value>Впишете се или създайте нов абонамент, за да достъпите защитен трезор.</value>
+    <value>Влезте или се регистрирайте, за да имате достъп до вашия защитен трезор.</value>
   </data>
   <data name="Manage" xml:space="preserve">
     <value>Управление</value>
@@ -895,11 +899,9 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>Удостоверителният ключ не може да се прочете.</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>Сканирането става автоматично.</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Насочете камерата към QR кода.</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Насочете камерата към QR кода.
+Сканирането ще се извърши автоматично.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>Сканиране на QR код</value>
@@ -1063,7 +1065,7 @@
     <value>февруари</value>
   </data>
   <data name="FirstName" xml:space="preserve">
-    <value>Собствено име</value>
+    <value>Име</value>
   </data>
   <data name="January" xml:space="preserve">
     <value>януари</value>
@@ -1075,7 +1077,7 @@
     <value>юни</value>
   </data>
   <data name="LastName" xml:space="preserve">
-    <value>Фамилно име</value>
+    <value>Фамилия</value>
   </data>
   <data name="FullName" xml:space="preserve">
     <value>Пълно име</value>
@@ -1144,7 +1146,7 @@
     <value>Адрес на сървъра с иконки</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Автоматично дописване с Битуорден</value>
+    <value>Автоматично дописване с Bitwarden</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
     <value>Трезорът е заключен</value>
@@ -2259,6 +2261,43 @@
   </data>
   <data name="All" xml:space="preserve">
     <value>Всички</value>
+  </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Кодове за потвърждаване</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>Изисква се платен абонамент</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>Не можете да добавите удостоверителен ключ? </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>Сканиране на QR код</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>Не можете да сканирате QR кода? </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Ключ за удостоверяване</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Ръчно въвеждане на кода</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>Add TOTP</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>Set up TOTP</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>Once the key is successfully entered,
+select Add TOTP to store the key safely</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value></value>
   </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Ако изберете „Никога“ като настройка за заключването, трезорът Ви ще бъде достъпен за всеки, който има досег с устройството. Ако използвате тази настройка, трябва да се уверите, че устройството Ви е удачно защитено.</value>

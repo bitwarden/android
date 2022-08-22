@@ -299,6 +299,10 @@
     <value>என் பெட்டகம்</value>
     <comment>The title for the vault page.</comment>
   </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Authenticator</value>
+    <comment>Authenticator TOTP feature</comment>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>பெயர்</value>
     <comment>Label for an entity name.</comment>
@@ -549,10 +553,10 @@
     <value>உடனடியாக</value>
   </data>
   <data name="VaultTimeout" xml:space="preserve">
-    <value>பெட்டகம் நேரமுடிவு</value>
+    <value>பெட்டக நேரமுடிவு</value>
   </data>
   <data name="VaultTimeoutAction" xml:space="preserve">
-    <value>பெட்டகம் நேரமுடிவு செயல்</value>
+    <value>பெட்டக நேரமுடிவு செயல்</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
     <value>வெளியேறுதல் உமது பெட்டகத்திற்கான எல்லா அணுகலையுமகற்றும் மற்றும் நேரமுடிவு காலத்திற்குப் பிறகு இயங்கலை அங்கீகாரம் தேவைப்படுகிறது. இவ்வமைப்பை உறுதியாக பயன்படுத்த வேண்டுமா?</value>
@@ -659,7 +663,7 @@
     <value>பிரதான கடவுச்சொல்லை மீண்டும் தட்டு</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
-    <value>பெட்டகத்தை தேடுக</value>
+    <value>பெட்டகத்தைத் தேடுக</value>
   </data>
   <data name="Security" xml:space="preserve">
     <value>பாதுகாப்பு</value>
@@ -771,10 +775,10 @@
     <value>இயக்கத்தில்</value>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Off</value>
+    <value>அணைவு</value>
   </data>
   <data name="On" xml:space="preserve">
-    <value>On</value>
+    <value>எழிவு</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>நிலை</value>
@@ -896,11 +900,9 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>அங்கீகார விசையை படிக்க இயலவில்லை.</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>வருடல் தானாக நடக்கும்.</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>உங்கள் படக்கருவியை வி.ம(QR) குறியீட்டில் சுட்டிக்காட்டுங்கள்.</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Point your camera at the QR Code.
+Scanning will happen automatically.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>வி.ம(QR) குறியீட்டை வருடல் செய்க</value>
@@ -918,7 +920,7 @@
     <value>If a login has an authenticator key, copy the TOTP verification code to your clip-board when you auto-fill the login.</value>
   </data>
   <data name="CopyTotpAutomatically" xml:space="preserve">
-    <value>Copy TOTP automatically</value>
+    <value>TOTPஐத் தானாக நகலெடு</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
     <value>இவ்வம்சத்தை பயன்படுத்த உயர்தர உறுப்பினர் தகுதி தேவை.</value>
@@ -1136,7 +1138,7 @@
     <value>காலாவதி</value>
   </data>
   <data name="ShowWebsiteIcons" xml:space="preserve">
-    <value>Show website icons</value>
+    <value>வலைத்தள படவுருக்களைக் காட்டு</value>
   </data>
   <data name="ShowWebsiteIconsDescription" xml:space="preserve">
     <value>Show a recognizable image next to each login.</value>
@@ -1555,7 +1557,7 @@
     <value>உமது சாதனத்தின் இருட்பயன்முறை இயங்குகையில் இயல்புநிலை (முறைமை) நிற அமைப்பைப் பயன்படுத்தும்போது பயன்படுத்தவேண்டிய இருள் நிற அமைப்பைத் தெரிவுசெய்</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
-    <value>குறிப்புகளை நகலெடு</value>
+    <value>குறிப்பை நகலெடு</value>
   </data>
   <data name="Exit" xml:space="preserve">
     <value>வெளியேறு</value>
@@ -1581,7 +1583,7 @@
     <value>Auto-fill will not be offered for blocked URIs. Separate multiple URIs with a comma. For example: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
   <data name="AskToAddLogin" xml:space="preserve">
-    <value>Ask to add login</value>
+    <value>உள்நுழைவைச் சேர்க்க கேள்</value>
   </data>
   <data name="AskToAddLoginDescription" xml:space="preserve">
     <value>Ask to add an item if one isn't found in your vault.</value>
@@ -2156,7 +2158,7 @@
     <value>அடுத்து கிடைத்த கணக்கிற்கு நிலைமாறியது</value>
   </data>
   <data name="AccountLockedSuccessfully" xml:space="preserve">
-    <value>Account Locked</value>
+    <value>கணக்கு பூட்டப்பட்டது</value>
   </data>
   <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
     <value>கணக்கிலிருந்து வெளியேறல் வெற்றி</value>
@@ -2260,6 +2262,43 @@
   <data name="All" xml:space="preserve">
     <value>எல்லாம்</value>
   </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Verification Codes</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>Premium subscription required</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>Cannot add authenticator key? </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>Scan QR Code</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>Cannot scan QR Code? </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Authenticator Key</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Enter Key Manually</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>Add TOTP</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>Set up TOTP</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>Once the key is successfully entered,
+select Add TOTP to store the key safely</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value></value>
+  </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Setting your lock options to “Never” keeps your vault available to anyone with access to your device. If you use this option, you should ensure that you keep your device properly protected.</value>
   </data>
@@ -2270,9 +2309,9 @@
     <value>We were unable to process your request. Please try again or contact us.</value>
   </data>
   <data name="AllowScreenCapture" xml:space="preserve">
-    <value>Allow screen capture</value>
+    <value>திரைப்பிடிப்பை அனுமதி</value>
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
-    <value>Are you sure you want to enable Screen Capture?</value>
+    <value>திரைப்பிடிப்பை நிச்சயமாக இயக்கவா?</value>
   </data>
 </root>

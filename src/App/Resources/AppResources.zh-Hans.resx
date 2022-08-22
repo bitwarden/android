@@ -299,6 +299,10 @@
     <value>密码库</value>
     <comment>The title for the vault page.</comment>
   </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>身份验证器</value>
+    <comment>Authenticator TOTP feature</comment>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>名称</value>
     <comment>Label for an entity name.</comment>
@@ -801,7 +805,7 @@
     <value>搜索</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
-    <value>你正在为“{0}”搜索自动填充项目。</value>
+    <value>你正在搜索用于「{0}」的自动填充项目。</value>
   </data>
   <data name="LearnOrg" xml:space="preserve">
     <value>了解组织</value>
@@ -895,11 +899,9 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>无法读取验证器密钥。</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>将会自动扫描。</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>将相机对准 QR 码。</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>将您的摄像头对准二维码。
+扫描将自动完成。</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>扫描 QR 码</value>
@@ -1577,7 +1579,7 @@
     <value>自动填充已屏蔽的 URI</value>
   </data>
   <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>不会为被阻止的 URI 提供自动填充功能。用逗号分隔多个URI。例如："https://twitter.com, androidapp://com.twitter.android"。</value>
+    <value>不会为被阻止的 URI 提供自动填充功能。用逗号分隔多个 URI。例如：「 https://twitter.com, androidapp://com.twitter.android」。</value>
   </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>询问添加登录</value>
@@ -2224,7 +2226,7 @@
     <value>选项已折叠，点击展开。</value>
   </data>
   <data name="UppercaseAtoZ" xml:space="preserve">
-    <value>大写（A到Z）</value>
+    <value>大写 (A-Z)</value>
   </data>
   <data name="LowercaseAtoZ" xml:space="preserve">
     <value>小写 (a-z)</value>
@@ -2258,6 +2260,43 @@
   </data>
   <data name="All" xml:space="preserve">
     <value>全部</value>
+  </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>验证码</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>需要订阅高级版</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>无法添加验证器密钥？</value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>扫描二维码</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>无法扫描二维码？ </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>验证器密钥</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>手动输入密钥</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>添加 TOTP</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>设置 TOTP</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>成功输入密钥后，
+选择“添加 TOTP”即可安全地存储密钥</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value></value>
   </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>将锁定选项设置为「从不」可让任何能够访问您的设备的人都可以使用您的密码库。如果您使用此选项，则应确保您的设备得到妥善的保护。</value>

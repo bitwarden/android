@@ -299,6 +299,10 @@
     <value>Mon coffre</value>
     <comment>The title for the vault page.</comment>
   </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Authentification</value>
+    <comment>Authenticator TOTP feature</comment>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Nom</value>
     <comment>Label for an entity name.</comment>
@@ -895,11 +899,9 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>Impossible de lire la clé d'authentification.</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>Le scan se fera automatiquement.</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Pointez votre appareil photo sur le QR code.</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Pointez votre caméra sur le QR Code.
+La numérisation se fera automatiquement.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>Scanner le QR code</value>
@@ -2258,6 +2260,43 @@
   </data>
   <data name="All" xml:space="preserve">
     <value>Tous</value>
+  </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Codes de vérification</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>Abonnement Premium requis</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>Cannot add authenticator key? </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>Scanner le QR code</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>Impossible de scanner le QR Code ? </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Clé d'authentification</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Saisir la clé manuellement</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>Ajouter un TOTP</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>Configurer le TOTP</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>Une fois que la clé est entrée avec succès,
+sélectionnez Ajouter TOTP pour stocker la clé en toute sécurité</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value></value>
   </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Définir vos options de verrouillage sur "Jamais" garde votre coffre ouvert à n'importe qui ayant accès à votre appareil. Si vous utilisez cette option, vous devez vous assurer que votre appareil est bien protégé.</value>
