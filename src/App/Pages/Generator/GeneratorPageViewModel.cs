@@ -52,8 +52,6 @@ namespace Bit.App.Pages
         private bool _showFirefoxRelayApiAccessToken;
         private bool _showAnonAddyApiAccessToken;
         private bool _showSimpleLoginApiKey;
-        private UsernameType _usernameTypeSelected;
-        private ForwardedEmailServiceType _forwardedEmailServiceSelected;
         private UsernameEmailType _catchAllEmailTypeSelected;
         private UsernameEmailType _plusAddressedEmailTypeSelected;
 
@@ -383,12 +381,12 @@ namespace Bit.App.Pages
 
         public UsernameType UsernameTypeSelected
         {
-            get => _usernameTypeSelected;
+            get => _usernameOptions.Type;
             set
             {
-                if (_usernameTypeSelected != value)
+                if (_usernameOptions.Type != value)
                 {
-                    _usernameTypeSelected = value;
+                    _usernameOptions.Type = value;
                     Username = DEFAULT_USERNAME;
                     TriggerPropertyChanged(nameof(UsernameTypeSelected));
                     TriggerPropertyChanged(nameof(UsernameTypeDescriptionLabel));
@@ -402,12 +400,12 @@ namespace Bit.App.Pages
 
         public ForwardedEmailServiceType ForwardedEmailServiceSelected
         {
-            get => _forwardedEmailServiceSelected;
+            get => _usernameOptions.ServiceType;
             set
             {
-                if (_forwardedEmailServiceSelected != value)
+                if (_usernameOptions.ServiceType != value)
                 {
-                    _forwardedEmailServiceSelected = value;
+                    _usernameOptions.ServiceType = value;
                     Username = DEFAULT_USERNAME;
                     TriggerPropertyChanged(nameof(ForwardedEmailServiceSelected));
                     SaveUsernameOptionsAsync(false).FireAndForget();
@@ -593,10 +591,7 @@ namespace Bit.App.Pages
             {
                 if (SetProperty(ref _emailWebsite, value))
                 {
-                    if (!string.IsNullOrWhiteSpace(_emailWebsite))
-                    {
-                        ShowUsernameEmailType = true;
-                    }
+                    ShowUsernameEmailType = !string.IsNullOrWhiteSpace(_emailWebsite);                    
                 }
             }
         }

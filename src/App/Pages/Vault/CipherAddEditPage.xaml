@@ -107,24 +107,9 @@
                         StyleClass="box-value" />
                 </StackLayout>
                 <StackLayout IsVisible="{Binding IsLogin}" Spacing="0" Padding="0">
-                    <!--<StackLayout StyleClass="box-row, box-row-input">
-                        <Label
-                            Text="{u:I18n Username}"
-                            StyleClass="box-label" />
-                        <Entry
-                            x:Name="_loginUsernameEntry"
-                            Text="{Binding Cipher.Login.Username}"
-                            StyleClass="box-value" />
-                    </StackLayout>-->
-                    <Grid StyleClass="box-row, box-row-input">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
+                    <Grid StyleClass="box-row, box-row-input"
+                        RowDefinitions="Auto,*"
+                        ColumnDefinitions="*,Auto">
                          <Label
                             Text="{u:I18n Username}"
                             StyleClass="box-label"
