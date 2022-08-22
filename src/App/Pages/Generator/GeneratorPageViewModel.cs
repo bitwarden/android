@@ -618,7 +618,7 @@ namespace Bit.App.Pages
 
         public async Task RegenerateUsernameAsync()
         {
-            Username = await _usernameGenerationService.GenerateUsernameAsync(_usernameOptions);
+            Username = await _usernameGenerationService.GenerateAsync(_usernameOptions);
         }
 
         public void RedrawPassword()

@@ -30,7 +30,7 @@ namespace Bit.Core.Services
             _stateService = stateService;
         }
 
-        public async Task<string> GenerateUsernameAsync(UsernameGenerationOptions options)
+        public async Task<string> GenerateAsync(UsernameGenerationOptions options)
         {
             switch (options.Type)
             {

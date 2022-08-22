@@ -5,7 +5,7 @@ namespace Bit.Core.Abstractions
 {
     public interface IUsernameGenerationService
     {
-        Task<string> GenerateUsernameAsync(UsernameGenerationOptions options);
+        Task<string> GenerateAsync(UsernameGenerationOptions options);
         void ClearCache();
         Task<UsernameGenerationOptions> GetOptionsAsync();
         Task SaveOptionsAsync(UsernameGenerationOptions options);
