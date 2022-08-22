@@ -2349,17 +2349,20 @@ select Add TOTP to store the key safely</value>
   </data>
   <data name="AnonAddy" xml:space="preserve">
     <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
   </data>
   <data name="FirefoxRelay" xml:space="preserve">
     <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
   </data>
   <data name="SimpleLogin" xml:space="preserve">
     <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
   <data name="APIAccessToken" xml:space="preserve">
     <value>API Access Token</value>
   </data>
-  <data name="UsernameOverrideAlert" xml:space="preserve">
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
     <value>Are you sure you want to overwrite the current username?</value>
   </data>
   <data name="GenerateUsername" xml:space="preserve">
@@ -2371,7 +2374,7 @@ select Add TOTP to store the key safely</value>
   <data name="WebsiteRequired" xml:space="preserve">
     <value>Website (required)</value>
   </data>
-  <data name="ExternalApiErrorMessage" xml:space="preserve">
+  <data name="UnknownXErrorMessage" xml:space="preserve">
     <value>Unknown {0} error occurred.</value>
   </data>
   <data name="PlusAddressedEmailDescription" xml:space="preserve">

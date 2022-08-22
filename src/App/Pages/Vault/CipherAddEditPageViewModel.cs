@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -597,7 +597,7 @@ namespace Bit.App.Pages
         public async Task GenerateUsernameAsync()
         {
             if (!string.IsNullOrWhiteSpace(Cipher?.Login?.Username)
-                && await _platformUtilsService.ShowDialogAsync(AppResources.UsernameOverrideAlert, null, AppResources.Yes, AppResources.No))
+                && await _platformUtilsService.ShowDialogAsync(AppResources.AreYouSureYouWantToOverwriteTheCurrentUsername, null, AppResources.Yes, AppResources.No))
             {
                 return;
             }

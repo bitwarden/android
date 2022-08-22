@@ -4241,9 +4241,9 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string UsernameOverrideAlert {
+        public static string AreYouSureYouWantToOverwriteTheCurrentUsername {
             get {
-                return ResourceManager.GetString("UsernameOverrideAlert", resourceCulture);
+                return ResourceManager.GetString("AreYouSureYouWantToOverwriteTheCurrentUsername", resourceCulture);
             }
         }
         
@@ -4265,9 +4265,9 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string ExternalApiErrorMessage {
+        public static string UnknownXErrorMessage {
             get {
-                return ResourceManager.GetString("ExternalApiErrorMessage", resourceCulture);
+                return ResourceManager.GetString("UnknownXErrorMessage", resourceCulture);
             }
         }
         

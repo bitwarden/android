@@ -767,7 +767,7 @@ namespace Bit.App.Pages
             if (IsUsername && UsernameTypeSelected == UsernameType.ForwardedEmailAlias)
             {
                 await Device.InvokeOnMainThreadAsync(() => Page.DisplayAlert(
-                    AppResources.AnErrorHasOccurred, string.Format(AppResources.ExternalApiErrorMessage, ForwardedEmailServiceSelected), AppResources.Ok));
+                    AppResources.AnErrorHasOccurred, string.Format(AppResources.UnknownXErrorMessage, ForwardedEmailServiceSelected), AppResources.Ok));
             }
             else
             {
