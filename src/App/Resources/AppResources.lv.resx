@@ -299,6 +299,10 @@
     <value>Mana glabātava</value>
     <comment>The title for the vault page.</comment>
   </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Autentificētājs</value>
+    <comment>Authenticator TOTP feature</comment>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Nosaukums</value>
     <comment>Label for an entity name.</comment>
@@ -895,11 +899,9 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>Nevar nolasīt autentificētāja atslēgu.</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>Nolasīšana notiks automātiski.</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Kamera ir jāvērš uz kvadrātkodu.</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Kamera jāpavērš pret kvadrātkodu.
+Nolasīšana notiks automātiski.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>Nolasīt kvadrātkodu</value>
@@ -2258,6 +2260,43 @@
   </data>
   <data name="All" xml:space="preserve">
     <value>Visi</value>
+  </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Apstiprinājuma kodi</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>Nepieciešams Premium abonements</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>Nevar pievienot autentificētāja atslēgu? </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>Nolasīt kvadrātkodu</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>Nevar nolasīt kvadrātkodu? </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Autentificētāja atslēga</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Ievadīt atslēgu pašrocīgi</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>Pievienot TOTP</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>Uzstādīt TOTP</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>Tiklīdz atslēga ir veiksmīgi ievadīta,
+jāizvēlas "Pievienot TOTP", lai droši glabātu atslēgu.</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value></value>
   </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Aizslēgšanas iespējas iestatīšana uz "Nekad" padara glabātavu pieejamu ikvienam, kam ir piekļuve ierīcei. Ja šis iestatījums tiek izmantots, jānodrošina, ka ierīce ir pienācīgi aizsargāta.</value>

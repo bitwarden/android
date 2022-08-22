@@ -299,6 +299,10 @@
     <value>密碼庫</value>
     <comment>The title for the vault page.</comment>
   </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>驗證器</value>
+    <comment>Authenticator TOTP feature</comment>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>名稱</value>
     <comment>Label for an entity name.</comment>
@@ -895,11 +899,9 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>無法讀取驗證器金鑰。</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>掃描會自動執行。</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>將相機對準 QR code 。</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Point your camera at the QR Code.
+Scanning will happen automatically.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>掃描 QR Code</value>
@@ -2258,6 +2260,43 @@
   </data>
   <data name="All" xml:space="preserve">
     <value>全部</value>
+  </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>驗證碼</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>需要進階版訂閲</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>無法添加驗證器金鑰嗎？ </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>掃描 QR 碼</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>無法掃描 QR Code 嗎？ </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>驗證器金鑰</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>手動輸入金鑰</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>新增 TOTP</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>設定 TOTP</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>Once the key is successfully entered,
+select Add TOTP to store the key safely</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value></value>
   </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>將鎖定選項設定為「從不」可讓任何能夠存取您的裝置的人都可以使用您的密碼庫。 如果您使用此選項，則應確保您的裝置得到妥善的保護。</value>

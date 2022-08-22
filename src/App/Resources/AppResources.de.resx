@@ -279,13 +279,13 @@
     <value>Konto entfernen</value>
   </data>
   <data name="RemoveAccountConfirmation" xml:space="preserve">
-    <value>Möchten Sie dieses Konto wirklich entfernen?</value>
+    <value>Möchtest du dieses Konto wirklich entfernen?</value>
   </data>
   <data name="AccountAlreadyAdded" xml:space="preserve">
     <value>Konto bereits hinzugefügt</value>
   </data>
   <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
-    <value>Möchten Sie jetzt darauf umschalten?</value>
+    <value>Möchtest du jetzt darauf umschalten?</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Masterpasswort</value>
@@ -298,6 +298,10 @@
   <data name="MyVault" xml:space="preserve">
     <value>Mein Tresor</value>
     <comment>The title for the vault page.</comment>
+  </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Authenticator</value>
+    <comment>Authenticator TOTP feature</comment>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Name</value>
@@ -895,11 +899,9 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>Authentifizierungsschlüssel kann nicht gelesen werden.</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>Der Scan wird automatisch durchgeführt.</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Richte deine Kamera auf den QR Code.</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Richte deine Kamera auf den QR Code.
+Das Scannen erfolgt automatisch.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>QR Code scannen</value>
@@ -1685,7 +1687,7 @@
     <comment>Clone an entity (verb).</comment>
   </data>
   <data name="PasswordGeneratorPolicyInEffect" xml:space="preserve">
-    <value>Eine oder mehrere Organisationsrichtlinien beeinflussen dein Generator-Einstellungen.</value>
+    <value>Eine oder mehrere Organisationsrichtlinien beeinflussen deine Generator-Einstellungen</value>
   </data>
   <data name="Open" xml:space="preserve">
     <value>Öffnen</value>
@@ -2061,7 +2063,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFileEmailVerificationRequired" xml:space="preserve">
-    <value>Sie müssen Ihre E-Mail-Adresse verifizieren, um diese Funktion nutzen zu können.</value>
+    <value>Du musst deine E-Mail verifizieren, um Dateien mit Send zu verwenden. Du kannst deine E-Mail im Web-Tresor verifizieren.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="PasswordPrompt" xml:space="preserve">
@@ -2071,7 +2073,7 @@
     <value>Master-Passwort bestätigen</value>
   </data>
   <data name="PasswordConfirmationDesc" xml:space="preserve">
-    <value>Diese Aktion ist geschützt. Um fortzufahren, geben Sie bitte Ihr Master-Passwort erneut ein, um Ihre Identität zu bestätigen.</value>
+    <value>Diese Aktion ist geschützt. Um fortzufahren, gib bitte dein Master-Passwort erneut ein, um deine Identität zu bestätigen.</value>
   </data>
   <data name="CaptchaRequired" xml:space="preserve">
     <value>Captcha erforderlich</value>
@@ -2258,6 +2260,42 @@
   </data>
   <data name="All" xml:space="preserve">
     <value>Alle</value>
+  </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Verifizierungscodes</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>Premium-Abonnement erforderlich</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>Authentifizierungsschlüssel lässt sich nicht hinzufügen? </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>QR Code scannen</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>QR Code kann nicht gescannt werden? </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Authentifizierungsschlüssel</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Schlüssel manuell eingeben</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>TOTP hinzufügen</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>TOTP einrichten</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>Sobald der Schlüssel erfolgreich eingegeben wurde, wähle TOTP hinzufügen, um den Schlüssel sicher abzuspeichern</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value></value>
   </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Wenn du deine Sperroptionen auf „Nie“ einstellst, bleibt dein Tresor für jeden zugänglich, der Zugriff auf dein Gerät hat. Wenn du diese Option verwendest, solltest du sicherstellen, dass du dein Gerät angemessen schützt.</value>

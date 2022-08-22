@@ -299,6 +299,10 @@
     <value>Min boks</value>
     <comment>The title for the vault page.</comment>
   </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Autentifikator</value>
+    <comment>Authenticator TOTP feature</comment>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Navn</value>
     <comment>Label for an entity name.</comment>
@@ -895,11 +899,9 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>Kan ikke læse autentificeringsnøgle.</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>Skanning vil ske automatisk.</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Peg dit kamera mod QR-koden.</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Ret kameraet mod QR-koden.
+Skanning vil ske automatisk.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>Skan QR-kode</value>
@@ -2258,6 +2260,43 @@
   </data>
   <data name="All" xml:space="preserve">
     <value>Alle</value>
+  </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Bekræftelseskoder</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>Premium-abonnement kræves</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>Kan ikke tilføje autentificeringsnøgle?</value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>Skan QR-kode</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>Kan ikke skanne QR-kode? </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Autentificeringsnøgle</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Angiv nøgle manuelt</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>Tilføj TOTP</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>Opsæt TOTP</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>Når nøglen er angivet,
+vælg Tilføj TOTP for at gemme nøglen sikkert</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value></value>
   </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Sættes låseindstillingen til “Aldrig”, er din boks tilgængelig for alle med adgang til enheden. Bruges denne mulighed, så vær sikker på, at din enhed er ordentligt beskyttet.</value>
