@@ -43,7 +43,7 @@ namespace Bit.App.Pages
         private bool _capitalize;
         private bool _includeNumber;
         private string _username;
-        private string _generatorTypeSelected;
+        private GeneratorType _generatorTypeSelected;
         private int _passwordTypeSelectedIndex;
         private bool _doneIniting;
         private bool _showTypePicker;
@@ -63,7 +63,10 @@ namespace Bit.App.Pages
             _usernameGenerationService = ServiceContainer.Resolve<IUsernameGenerationService>();
 
             PageTitle = AppResources.Generator;
-            GeneratorTypeOptions = new List<string> { AppResources.Password, AppResources.Username };
+            GeneratorTypeOptions = new List<GeneratorType> {
+                GeneratorType.Password,
+                GeneratorType.Username
+            };
             PasswordTypeOptions = new List<string> { AppResources.Password, AppResources.Passphrase };
 
             UsernameTypeOptions = new List<UsernameType> {
@@ -90,11 +93,9 @@ namespace Bit.App.Pages
             RegenerateUsernameCommand = new AsyncCommand(RegenerateUsernameAsync, onException: ex => OnSubmitException(ex), allowsMultipleExecutions: false);
             ToggleForwardedEmailHiddenValueCommand = new AsyncCommand(ToggleForwardedEmailHiddenValueAsync, onException: ex => OnSubmitException(ex), allowsMultipleExecutions: false);
             CopyCommand = new AsyncCommand(CopyAsync, onException: ex => OnSubmitException(ex), allowsMultipleExecutions: false);
-
-            _generatorTypeSelected = PasswordTypeOptions[0];
         }
 
-        public List<string> GeneratorTypeOptions { get; set; }
+        public List<GeneratorType> GeneratorTypeOptions { get; set; }
         public List<string> PasswordTypeOptions { get; set; }
         public List<UsernameType> UsernameTypeOptions { get; set; }
         public List<ForwardedEmailServiceType> ForwardedEmailServiceTypeOptions { get; set; }
@@ -350,14 +351,14 @@ namespace Bit.App.Pages
 
         public bool IsPolicyInEffect => _enforcedPolicyOptions.InEffect();
 
-        public string GeneratorTypeSelected
+        public GeneratorType GeneratorTypeSelected
         {
             get => _generatorTypeSelected;
             set
             {
                 if (SetProperty(ref _generatorTypeSelected, value))
                 {
-                    IsUsername = value == AppResources.Username;
+                    IsUsername = value == GeneratorType.Username;
                     TriggerPropertyChanged(nameof(GeneratorTypeSelected));
                     SaveOptionsAsync().FireAndForget();
                     SaveUsernameOptionsAsync(false).FireAndForget();
