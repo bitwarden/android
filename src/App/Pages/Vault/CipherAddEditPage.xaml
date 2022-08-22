@@ -112,20 +112,16 @@
                         ColumnDefinitions="*,Auto">
                          <Label
                             Text="{u:I18n Username}"
-                            StyleClass="box-label"
-                            Grid.Row="0"
-                            Grid.Column="0" />
+                            StyleClass="box-label"/>
                         <Entry
                             x:Name="_loginUsernameEntry"
                             Text="{Binding Cipher.Login.Username}"
                             StyleClass="box-value" 
-                            Grid.Row="1"
-                            Grid.Column="0"/>
+                            Grid.Row="1"/>
                         <controls:IconButton 
                             StyleClass="box-row-button, box-row-button-platform"
                             Text="{Binding Source={x:Static core:BitwardenIcons.Generate}}"
                             Command="{Binding GenerateUsernameCommand}"
-                            Grid.Row="0"
                             Grid.Column="1"
                             Grid.RowSpan="2"
                             AutomationProperties.IsInAccessibleTree="True"

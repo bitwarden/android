@@ -547,7 +547,7 @@ namespace Bit.App.Pages
             get => _usernameOptions.IncludeNumberRandomWordUsername;
             set
             {
-                if(_usernameOptions.IncludeNumberRandomWordUsername != value)
+                if (_usernameOptions.IncludeNumberRandomWordUsername != value)
                 {
                     _usernameOptions.IncludeNumberRandomWordUsername = value;
                     TriggerPropertyChanged(nameof(IncludeNumberRandomWordUsername));
@@ -575,7 +575,7 @@ namespace Bit.App.Pages
             get => _catchAllEmailTypeSelected;
             set
             {
-                if(_catchAllEmailTypeSelected != value)
+                if (_catchAllEmailTypeSelected != value)
                 {
                     _catchAllEmailTypeSelected = value;
                     TriggerPropertyChanged(nameof(CatchAllEmailTypeSelected));
@@ -591,7 +591,7 @@ namespace Bit.App.Pages
             {
                 if (SetProperty(ref _emailWebsite, value))
                 {
-                    ShowUsernameEmailType = !string.IsNullOrWhiteSpace(_emailWebsite);                    
+                    ShowUsernameEmailType = !string.IsNullOrWhiteSpace(_emailWebsite);
                 }
             }
         }

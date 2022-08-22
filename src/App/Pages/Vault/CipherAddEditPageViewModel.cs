@@ -84,7 +84,7 @@ namespace Bit.App.Pages
             FieldOptionsCommand = new Command<CipherAddEditPageFieldViewModel>(FieldOptions);
             PasswordPromptHelpCommand = new Command(PasswordPromptHelp);
             CopyCommand = new AsyncCommand(CopyTotpClipboardAsync, onException: ex => _logger.Exception(ex), allowsMultipleExecutions: false);
-            GenerateUsernameCommand = new Command(GenerateUsername);
+            GenerateUsernameCommand = new AsyncCommand(GenerateUsernameAsync, onException: ex => OnGenerateUsernameException(ex), allowsMultipleExecutions: false);
             Uris = new ExtendedObservableCollection<LoginUriView>();
             Fields = new ExtendedObservableCollection<CipherAddEditPageFieldViewModel>();
             Collections = new ExtendedObservableCollection<CollectionViewModel>();
@@ -146,7 +146,7 @@ namespace Bit.App.Pages
         public Command FieldOptionsCommand { get; set; }
         public Command PasswordPromptHelpCommand { get; set; }
         public AsyncCommand CopyCommand { get; set; }
-        public Command GenerateUsernameCommand { get; set; }
+        public AsyncCommand GenerateUsernameCommand { get; set; }
         public string CipherId { get; set; }
         public string OrganizationId { get; set; }
         public string FolderId { get; set; }
@@ -594,22 +594,26 @@ namespace Bit.App.Pages
             await Page.Navigation.PushModalAsync(new NavigationPage(page));
         }
 
-        public async void GenerateUsername()
+        public async Task GenerateUsernameAsync()
         {
-            if (!string.IsNullOrWhiteSpace(Cipher?.Login?.Username))
+            if (!string.IsNullOrWhiteSpace(Cipher?.Login?.Username)
+                && await _platformUtilsService.ShowDialogAsync(AppResources.UsernameOverrideAlert, null, AppResources.Yes, AppResources.No))
             {
-                var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.UsernameOverrideAlert,
-                    null, AppResources.Yes, AppResources.No);
-                if (!confirmed)
-                {
-                    return;
-                }
+                return;
             }
+
             var page = new GeneratorPage(false, async (username) =>
             {
-                Cipher.Login.Username = username;
-                TriggerCipherChanged();
-                await Page.Navigation.PopModalAsync();
+                try
+                {
+                    Cipher.Login.Username = username;
+                    TriggerCipherChanged();
+                    await Page.Navigation.PopModalAsync();
+                }
+                catch (Exception ex)
+                {
+                    OnGenerateUsernameException(ex);
+                }
             }, isUsernameGenerator: true, emailWebsite: Cipher?.Name);
             await Page.Navigation.PushModalAsync(new NavigationPage(page));
         }
@@ -859,6 +863,12 @@ namespace Bit.App.Pages
             {
                 _logger.Exception(ex);
             }
+        }
+
+        private async void OnGenerateUsernameException(Exception ex)
+        {
+            _logger.Exception(ex);
+            await Page.DisplayAlert(AppResources.AnErrorHasOccurred, AppResources.GenericErrorMessage, AppResources.Ok);
         }
     }
 
