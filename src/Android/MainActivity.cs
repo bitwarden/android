@@ -5,9 +5,12 @@ using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
+using Android.Graphics;
 using Android.Nfc;
 using Android.OS;
 using Android.Runtime;
+using Android.Util;
+using Android.Views;
 using AndroidX.Core.Content;
 using Bit.App.Abstractions;
 using Bit.App.Models;
@@ -45,7 +48,7 @@ namespace Bit.Droid
         {
             var eventUploadIntent = new Intent(this, typeof(EventUploadReceiver));
             _eventUploadPendingIntent = PendingIntent.GetBroadcast(this, 0, eventUploadIntent,
-                PendingIntentFlags.UpdateCurrent);
+                PendingIntentFlags.UpdateCurrent | PendingIntentFlags.Mutable);
 
             var policy = new StrictMode.ThreadPolicy.Builder().PermitAll().Build();
             StrictMode.SetThreadPolicy(policy);
@@ -273,7 +276,7 @@ namespace Bit.Droid
             {
                 var intent = new Intent(this, Class);
                 intent.AddFlags(ActivityFlags.SingleTop);
-                var pendingIntent = PendingIntent.GetActivity(this, 0, intent, 0);
+                var pendingIntent = PendingIntent.GetActivity(this, 0, intent, PendingIntentFlags.Mutable);
                 // register for all NDEF tags starting with http och https
                 var ndef = new IntentFilter(NfcAdapter.ActionNdefDiscovered);
                 ndef.AddDataScheme("http");
