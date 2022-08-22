@@ -2,11 +2,13 @@
 <pages:BaseContentPage 
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
     x:Class="Bit.App.Pages.GeneratorPage"
     xmlns:pages="clr-namespace:Bit.App.Pages"
     xmlns:controls="clr-namespace:Bit.App.Controls"
     xmlns:u="clr-namespace:Bit.App.Utilities"
     xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
+    xmlns:enums="clr-namespace:Bit.Core.Enums;assembly=BitwardenCore"
     x:DataType="pages:GeneratorPageViewModel"
     Title="{Binding PageTitle}">
     <ContentPage.BindingContext>
@@ -16,7 +18,7 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <u:InverseBoolConverter x:Key="inverseBool" />
-            <u:PickerIndexToBoolConverter x:Key="pickerIndexToBool" />
+            <xct:EnumToBoolConverter x:Key="enumToBool"/>
             <ToolbarItem Text="{u:I18n Cancel}" Clicked="Close_Clicked" Order="Primary" Priority="-1"
                          x:Name="_closeItem" x:Key="closeItem" />
             <ToolbarItem Text="{u:I18n Select}"
@@ -152,14 +154,14 @@
                     <Picker
                         x:Name="_usernameTypePicker"
                         ItemsSource="{Binding UsernameTypeOptions, Mode=OneTime}"
-                        SelectedIndex="{Binding UsernameTypeSelectedIndex}"
+                        SelectedItem="{Binding UsernameTypeSelected}"
                         StyleClass="box-value" />
                     <Label
                         StyleClass="box-footer-label"
                         Text="{Binding UsernameTypeDescriptionLabel}" />
                     <!--PLUS ADDRESSED EMAIL OPTIONS-->
                     <StackLayout StyleClass="box-row, box-row-input"
-                                 IsVisible="{Binding UsernameTypeSelectedIndex, Converter={StaticResource pickerIndexToBool}, ConverterParameter=0}">
+                                 IsVisible="{Binding UsernameTypeSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:UsernameType.PlusAddressedEmail}}">
                         <Label Text="{u:I18n EmailRequired}"
                             StyleClass="box-label" />
                         <Entry x:Name="_plusAddressedEmailEntry"
@@ -171,7 +173,7 @@
                         <Picker IsVisible="{Binding ShowUsernameEmailType}"
                             x:Name="_plusAddressedEmailTypePicker"
                             ItemsSource="{Binding UsernameEmailTypeOptions, Mode=OneTime}"
-                            SelectedIndex="{Binding PlusAddressedEmailTypeSelectedIndex}"
+                            SelectedItem="{Binding PlusAddressedEmailTypeSelected}"
                             StyleClass="box-value" />
                         <Label IsVisible="{Binding ShowUsernameEmailType}"
                             Text="{u:I18n Website}"
@@ -184,7 +186,7 @@
                     </StackLayout>                    
                     <!--CATCH-ALL EMAIL OPTIONS-->
                     <StackLayout StyleClass="box-row, box-row-input"
-                                 IsVisible="{Binding UsernameTypeSelectedIndex, Converter={StaticResource pickerIndexToBool}, ConverterParameter=1}">
+                                 IsVisible="{Binding UsernameTypeSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:UsernameType.CatchAllEmail}}">
                         <Label
                             Text="{u:I18n DomainNameRequired}"
                             StyleClass="box-label" />
@@ -198,7 +200,7 @@
                         <Picker IsVisible="{Binding ShowUsernameEmailType}"
                             x:Name="_catchallEmailTypePicker"
                             ItemsSource="{Binding UsernameEmailTypeOptions, Mode=OneTime}"
-                            SelectedIndex="{Binding CatchAllEmailTypeSelectedIndex}"
+                            SelectedItem="{Binding CatchAllEmailTypeSelected}"
                             StyleClass="box-value" />
                         <Label IsVisible="{Binding ShowUsernameEmailType}"
                             Text="{u:I18n Website}"
@@ -211,17 +213,17 @@
                     </StackLayout>
                     <!--FORWARDED EMAIL OPTIONS-->
                     <StackLayout StyleClass="box-row, box-row-input"
-                                 IsVisible="{Binding UsernameTypeSelectedIndex, Converter={StaticResource pickerIndexToBool}, ConverterParameter=2}">
+                                 IsVisible="{Binding UsernameTypeSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:UsernameType.ForwardedEmailAlias}}">
                         <Label
                             Text="{u:I18n Service}"
                             StyleClass="box-label" />
                         <Picker
                             x:Name="_serviceTypePicker"
-                            ItemsSource="{Binding ServiceTypeOptions, Mode=OneTime}"
-                            SelectedIndex="{Binding ServiceTypeSelectedIndex}"
+                            ItemsSource="{Binding ForwardedEmailServiceTypeOptions, Mode=OneTime}"
+                            SelectedItem="{Binding ForwardedEmailServiceSelected}"
                             StyleClass="box-value" />
                         <!--ANONADDY OPTIONS-->
-                        <Grid IsVisible="{Binding ServiceTypeSelectedIndex, Converter={StaticResource pickerIndexToBool}, ConverterParameter=0}"
+                        <Grid IsVisible="{Binding ForwardedEmailServiceSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:ForwardedEmailServiceType.AnonAddy}}"
                               Grid.RowDefinitions="Auto,*"
                               Grid.ColumnDefinitions="*,Auto">
                             <Label
@@ -240,17 +242,17 @@
                                 Grid.Row="1"
                                 Grid.Column="1"/>
                         </Grid>
-                        <Label IsVisible="{Binding ServiceTypeSelectedIndex, Converter={StaticResource pickerIndexToBool}, ConverterParameter=0}"
+                        <Label IsVisible="{Binding ForwardedEmailServiceSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:ForwardedEmailServiceType.AnonAddy}}"
                             Text="{u:I18n DomainNameRequired}"
                             StyleClass="box-label"
                             Margin="0,10,0,0"/>
-                        <Entry IsVisible="{Binding ServiceTypeSelectedIndex, Converter={StaticResource pickerIndexToBool}, ConverterParameter=0}"
+                        <Entry IsVisible="{Binding ForwardedEmailServiceSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:ForwardedEmailServiceType.AnonAddy}}"
                             x:Name="_anonAddyDomainNameEntry"
                             Text="{Binding AnonAddyDomainName}"
                             StyleClass="box-value"/>
                         <!--FIREFOX RELAY OPTIONS-->
                         <Grid StyleClass="box-row, box-row-input"
-                              IsVisible="{Binding ServiceTypeSelectedIndex, Converter={StaticResource pickerIndexToBool}, ConverterParameter=1}"
+                              IsVisible="{Binding ForwardedEmailServiceSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:ForwardedEmailServiceType.FirefoxRelay}}"
                               Grid.RowDefinitions="Auto,*"
                               Grid.ColumnDefinitions="*,Auto">
                             <Label
@@ -271,7 +273,7 @@
                         </Grid>
                         <!--SIMPLELOGIN OPTIONS-->
                         <Grid StyleClass="box-row, box-row-input"
-                              IsVisible="{Binding ServiceTypeSelectedIndex, Converter={StaticResource pickerIndexToBool}, ConverterParameter=2}"
+                              IsVisible="{Binding ForwardedEmailServiceSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:ForwardedEmailServiceType.SimpleLogin}}"
                               Grid.RowDefinitions="Auto,*"
                               Grid.ColumnDefinitions="*,Auto">
                             <Label
@@ -292,7 +294,7 @@
                         </Grid>
                     </StackLayout>                    
                     <!--RANDOM WORD OPTIONS-->
-                    <Grid IsVisible="{Binding UsernameTypeSelectedIndex, Converter={StaticResource pickerIndexToBool}, ConverterParameter=3}">
+                    <Grid IsVisible="{Binding UsernameTypeSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:UsernameType.RandomWord}}">
                         <Label
                             Text="{u:I18n Capitalize}"
                             StyleClass="box-label-regular"
@@ -302,9 +304,9 @@
                             StyleClass="box-value"
                             HorizontalOptions="End" />
                     </Grid>
-                    <BoxView IsVisible="{Binding UsernameTypeSelectedIndex, Converter={StaticResource pickerIndexToBool}, ConverterParameter=3}"
+                    <BoxView IsVisible="{Binding UsernameTypeSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:UsernameType.RandomWord}}"
                         StyleClass="box-row-separator" />
-                    <Grid IsVisible="{Binding UsernameTypeSelectedIndex, Converter={StaticResource pickerIndexToBool}, ConverterParameter=3}">
+                    <Grid IsVisible="{Binding UsernameTypeSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:UsernameType.RandomWord}}">
                         <Label
                             Text="{u:I18n IncludeNumber}"
                             StyleClass="box-label-regular"
@@ -314,7 +316,7 @@
                             StyleClass="box-value"
                             HorizontalOptions="End" />
                     </Grid>
-                    <BoxView IsVisible="{Binding UsernameTypeSelectedIndex, Converter={StaticResource pickerIndexToBool}, ConverterParameter=3}"
+                    <BoxView IsVisible="{Binding UsernameTypeSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:UsernameType.RandomWord}}"
                         StyleClass="box-row-separator" />
                 </StackLayout>
                 <!--PASSWORD OPTIONS-->

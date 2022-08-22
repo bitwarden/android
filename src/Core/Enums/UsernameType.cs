@@ -1,6 +1,6 @@
 ﻿namespace Bit.Core.Enums
 {
-    public enum UsernameType : byte
+    public enum UsernameType
     {
         PlusAddressedEmail = 0,
         CatchAllEmail = 1,

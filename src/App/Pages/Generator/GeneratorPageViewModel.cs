@@ -52,6 +52,10 @@ namespace Bit.App.Pages
         private bool _showFirefoxRelayApiAccessToken;
         private bool _showAnonAddyApiAccessToken;
         private bool _showSimpleLoginApiKey;
+        private UsernameType _usernameTypeSelected;
+        private ForwardedEmailServiceType _forwardedEmailServiceSelected;
+        private UsernameEmailType _catchAllEmailTypeSelected;
+        private UsernameEmailType _plusAddressedEmailTypeSelected;
 
         public GeneratorPageViewModel()
         {
@@ -63,9 +67,25 @@ namespace Bit.App.Pages
             PageTitle = AppResources.Generator;
             GeneratorTypeOptions = new List<string> { AppResources.Password, AppResources.Username };
             PasswordTypeOptions = new List<string> { AppResources.Password, AppResources.Passphrase };
-            UsernameTypeOptions = new List<string> { AppResources.PlusAddressedEmail, AppResources.CatchAllEmail, AppResources.ForwardedEmailAlias, AppResources.RandomWord };
-            ServiceTypeOptions = new List<string> { AppResources.AnonAddy, AppResources.FirefoxRelay, AppResources.SimpleLogin };
-            UsernameEmailTypeOptions = new List<string> { AppResources.Random, AppResources.Website };
+
+            UsernameTypeOptions = new List<UsernameType> {
+                UsernameType.PlusAddressedEmail,
+                UsernameType.CatchAllEmail,
+                UsernameType.ForwardedEmailAlias,
+                UsernameType.RandomWord
+            };
+
+            ForwardedEmailServiceTypeOptions = new List<ForwardedEmailServiceType> {
+                ForwardedEmailServiceType.AnonAddy,
+                ForwardedEmailServiceType.FirefoxRelay,
+                ForwardedEmailServiceType.SimpleLogin
+            };
+
+            UsernameEmailTypeOptions = new List<UsernameEmailType>
+            {
+                UsernameEmailType.Random,
+                UsernameEmailType.Website
+            };
 
             UsernameTypePromptHelpCommand = new Command(UsernameTypePromptHelp);
             RegenerateCommand = new AsyncCommand(RegenerateAsync, onException: ex => OnSubmitException(ex), allowsMultipleExecutions: false);
@@ -73,14 +93,14 @@ namespace Bit.App.Pages
             ToggleForwardedEmailHiddenValueCommand = new AsyncCommand(ToggleForwardedEmailHiddenValueAsync, onException: ex => OnSubmitException(ex), allowsMultipleExecutions: false);
             CopyCommand = new AsyncCommand(CopyAsync, onException: ex => OnSubmitException(ex), allowsMultipleExecutions: false);
 
-            _generatorTypeSelected = AppResources.Password;
+            _generatorTypeSelected = PasswordTypeOptions[0];
         }
 
         public List<string> GeneratorTypeOptions { get; set; }
         public List<string> PasswordTypeOptions { get; set; }
-        public List<string> UsernameTypeOptions { get; set; }
-        public List<string> ServiceTypeOptions { get; set; }
-        public List<string> UsernameEmailTypeOptions { get; set; }
+        public List<UsernameType> UsernameTypeOptions { get; set; }
+        public List<ForwardedEmailServiceType> ForwardedEmailServiceTypeOptions { get; set; }
+        public List<UsernameEmailType> UsernameEmailTypeOptions { get; set; }
 
         public Command UsernameTypePromptHelpCommand { get; set; }
         public ICommand RegenerateCommand { get; set; }
@@ -361,39 +381,35 @@ namespace Bit.App.Pages
             }
         }
 
-        public int UsernameTypeSelectedIndex
+        public UsernameType UsernameTypeSelected
         {
-            get => (int)_usernameOptions.Type;
+            get => _usernameTypeSelected;
             set
             {
-                if(_usernameOptions.Type != (UsernameType)value)
+                if (_usernameTypeSelected != value)
                 {
-                    _usernameOptions.Type = (UsernameType)value;
+                    _usernameTypeSelected = value;
                     Username = DEFAULT_USERNAME;
-                    TriggerPropertyChanged(nameof(UsernameTypeSelectedIndex));
+                    TriggerPropertyChanged(nameof(UsernameTypeSelected));
+                    TriggerPropertyChanged(nameof(UsernameTypeDescriptionLabel));
                     SaveUsernameOptionsAsync(false).FireAndForget();
                 }
             }
         }
 
-        public string UsernameTypeDescriptionLabel
-        {
-            get
-            {
-                return GetUsernameTypeLabelDescription(UsernameTypeSelectedIndex);
-            }
-        }
+        public string UsernameTypeDescriptionLabel => GetUsernameTypeLabelDescription(UsernameTypeSelected);
 
-        public int ServiceTypeSelectedIndex
+
+        public ForwardedEmailServiceType ForwardedEmailServiceSelected
         {
-            get => (int)_usernameOptions.ServiceType;
+            get => _forwardedEmailServiceSelected;
             set
             {
-                if (_usernameOptions.ServiceType != (ForwardedEmailServiceType)value)
+                if (_forwardedEmailServiceSelected != value)
                 {
-                    _usernameOptions.ServiceType = (ForwardedEmailServiceType)value;
+                    _forwardedEmailServiceSelected = value;
                     Username = DEFAULT_USERNAME;
-                    TriggerPropertyChanged(nameof(ServiceTypeSelectedIndex));
+                    TriggerPropertyChanged(nameof(ForwardedEmailServiceSelected));
                     SaveUsernameOptionsAsync(false).FireAndForget();
                 }
             }
@@ -542,29 +558,29 @@ namespace Bit.App.Pages
             }
         }
 
-        public int PlusAddressedEmailTypeSelectedIndex
+        public UsernameEmailType PlusAddressedEmailTypeSelected
         {
-            get => (int)_usernameOptions.PlusAddressedEmailType;
+            get => _plusAddressedEmailTypeSelected;
             set
             {
-                if (_usernameOptions.PlusAddressedEmailType != (UsernameEmailType)value)
+                if (_plusAddressedEmailTypeSelected != value)
                 {
-                    _usernameOptions.PlusAddressedEmailType = (UsernameEmailType)value;
-                    TriggerPropertyChanged(nameof(PlusAddressedEmailTypeSelectedIndex));
+                    _plusAddressedEmailTypeSelected = value;
+                    TriggerPropertyChanged(nameof(PlusAddressedEmailTypeSelected));
                     SaveUsernameOptionsAsync(false).FireAndForget();
                 }
             }
         }
 
-        public int CatchAllEmailTypeSelectedIndex
+        public UsernameEmailType CatchAllEmailTypeSelected
         {
-            get => (int)_usernameOptions.CatchAllEmailType;
+            get => _catchAllEmailTypeSelected;
             set
             {
-                if(_usernameOptions.CatchAllEmailType != (UsernameEmailType)value)
+                if(_catchAllEmailTypeSelected != value)
                 {
-                    _usernameOptions.CatchAllEmailType = (UsernameEmailType)value;
-                    TriggerPropertyChanged(nameof(CatchAllEmailTypeSelectedIndex));
+                    _catchAllEmailTypeSelected = value;
+                    TriggerPropertyChanged(nameof(CatchAllEmailTypeSelected));
                     SaveUsernameOptionsAsync(false).FireAndForget();
                 }
             }
@@ -713,8 +729,8 @@ namespace Bit.App.Pages
 
         private void TriggerUsernameProperties()
         {
-            TriggerPropertyChanged(nameof(CatchAllEmailTypeSelectedIndex));
-            TriggerPropertyChanged(nameof(PlusAddressedEmailTypeSelectedIndex));
+            TriggerPropertyChanged(nameof(CatchAllEmailTypeSelected));
+            TriggerPropertyChanged(nameof(PlusAddressedEmailTypeSelected));
             TriggerPropertyChanged(nameof(IncludeNumberRandomWordUsername));
             TriggerPropertyChanged(nameof(CapitalizeRandomWordUsername));
             TriggerPropertyChanged(nameof(SimpleLoginApiKey));
@@ -722,12 +738,13 @@ namespace Bit.App.Pages
             TriggerPropertyChanged(nameof(AnonAddyDomainName));
             TriggerPropertyChanged(nameof(AnonAddyApiAccessToken));
             TriggerPropertyChanged(nameof(CatchAllEmailDomain));
-            TriggerPropertyChanged(nameof(ServiceTypeSelectedIndex));
-            TriggerPropertyChanged(nameof(UsernameTypeSelectedIndex));
+            TriggerPropertyChanged(nameof(ForwardedEmailServiceSelected));
+            TriggerPropertyChanged(nameof(UsernameTypeSelected));
             TriggerPropertyChanged(nameof(PasswordTypeSelectedIndex));
             TriggerPropertyChanged(nameof(GeneratorTypeSelected));
             TriggerPropertyChanged(nameof(PlusAddressedEmail));
             TriggerPropertyChanged(nameof(GeneratorTypeSelected));
+            TriggerPropertyChanged(nameof(UsernameTypeDescriptionLabel));
         }
 
         private void SetOptions()
@@ -751,10 +768,10 @@ namespace Bit.App.Pages
         {
             _logger.Value.Exception(ex);
 
-            if (IsUsername && (UsernameType)UsernameTypeSelectedIndex == UsernameType.ForwardedEmailAlias)
+            if (IsUsername && UsernameTypeSelected == UsernameType.ForwardedEmailAlias)
             {
                 await Device.InvokeOnMainThreadAsync(() => Page.DisplayAlert(
-                    AppResources.AnErrorHasOccurred, string.Format(AppResources.ExternalApiErrorMessage, ((ForwardedEmailServiceType)ServiceTypeSelectedIndex).GetString()), AppResources.Ok));
+                    AppResources.AnErrorHasOccurred, string.Format(AppResources.ExternalApiErrorMessage, ForwardedEmailServiceSelected), AppResources.Ok));
             }
             else
             {
@@ -762,9 +779,9 @@ namespace Bit.App.Pages
             }
         }
 
-        private string GetUsernameTypeLabelDescription(int value)
+        private string GetUsernameTypeLabelDescription(UsernameType value)
         {
-            switch ((UsernameType)value)
+            switch (value)
             {
                 case UsernameType.PlusAddressedEmail:
                     return AppResources.PlusAddressedEmailDescription;
@@ -779,7 +796,7 @@ namespace Bit.App.Pages
 
         private async Task ToggleForwardedEmailHiddenValueAsync()
         {
-            switch ((ForwardedEmailServiceType)ServiceTypeSelectedIndex)
+            switch (ForwardedEmailServiceSelected)
             {
                 case ForwardedEmailServiceType.AnonAddy:
                     ShowAnonAddyApiAccessToken = !ShowAnonAddyApiAccessToken;

@@ -1,6 +1,6 @@
 ﻿namespace Bit.Core.Enums
 {
-    public enum ForwardedEmailServiceType : byte
+    public enum ForwardedEmailServiceType
     {
         AnonAddy = 0,
         FirefoxRelay = 1,
