@@ -105,7 +105,7 @@ namespace Bit.App.Pages
 
         public async Task CopyToClipboardAsync()
         {
-            await _clipboardService.CopyTextAsync(TotpCodeFormatted);
+            await _clipboardService.CopyTextAsync(TotpCodeFormatted?.Replace(" ", string.Empty));
             _platformUtilsService.ShowToast("info", null, string.Format(AppResources.ValueHasBeenCopied, AppResources.VerificationCodeTotp));
         }
 

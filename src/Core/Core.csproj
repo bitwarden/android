@@ -17,6 +17,7 @@
     <None Remove="Resources\public_suffix_list.dat" />
     <None Remove="Microsoft.AppCenter.Crashes" />
     <None Remove="Services\Logging\" />
+    <None Remove="Attributes\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,5 +36,6 @@
 
   <ItemGroup>
     <Folder Include="Services\Logging\" />
+    <Folder Include="Attributes\" />
   </ItemGroup>
 </Project>

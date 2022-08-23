@@ -170,27 +170,10 @@ namespace Bit.App.Pages
 
         private void AddAuthenticationKey_OnClicked(object sender, EventArgs e)
         {
-            var text = ViewModel.TotpAuthenticationKey;
-            if (!string.IsNullOrWhiteSpace(text))
+            if (!string.IsNullOrWhiteSpace(ViewModel.TotpAuthenticationKey))
             {
-                if (text.StartsWith("otpauth://totp"))
-                {
-                    _callback(text);
-                    return;
-                }
-                else if (Uri.TryCreate(text, UriKind.Absolute, out Uri uri) &&
-                         !string.IsNullOrWhiteSpace(uri?.Query))
-                {
-                    var queryParts = uri.Query.Substring(1).ToLowerInvariant().Split('&');
-                    foreach (var part in queryParts)
-                    {
-                        if (part.StartsWith("secret="))
-                        {
-                            _callback(part.Substring(7)?.ToUpperInvariant());
-                            return;
-                        }
-                    }
-                }
+                _callback(ViewModel.TotpAuthenticationKey);
+                return;
             }
             _callback(null);
         }
