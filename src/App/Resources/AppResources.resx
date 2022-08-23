@@ -2335,13 +2335,13 @@ select Add TOTP to store the key safely</value>
   <data name="RandomWord" xml:space="preserve">
     <value>Random Word</value>
   </data>
-  <data name="EmailRequired" xml:space="preserve">
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
     <value>Email (required)</value>
   </data>
-  <data name="DomainNameRequired" xml:space="preserve">
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
     <value>Domain Name (required)</value>
   </data>
-  <data name="APIKeyRequired" xml:space="preserve">
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
     <value>API Key (required)</value>
   </data>
   <data name="Service" xml:space="preserve">

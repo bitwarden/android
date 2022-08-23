@@ -4193,21 +4193,21 @@ namespace Bit.App.Resources {
             }
         }
         
-        public static string EmailRequired {
+        public static string EmailRequiredParenthesis {
             get {
-                return ResourceManager.GetString("EmailRequired", resourceCulture);
+                return ResourceManager.GetString("EmailRequiredParenthesis", resourceCulture);
             }
         }
         
-        public static string DomainNameRequired {
+        public static string DomainNameRequiredParenthesis {
             get {
-                return ResourceManager.GetString("DomainNameRequired", resourceCulture);
+                return ResourceManager.GetString("DomainNameRequiredParenthesis", resourceCulture);
             }
         }
         
-        public static string APIKeyRequired {
+        public static string APIKeyRequiredParenthesis {
             get {
-                return ResourceManager.GetString("APIKeyRequired", resourceCulture);
+                return ResourceManager.GetString("APIKeyRequiredParenthesis", resourceCulture);
             }
         }
         
