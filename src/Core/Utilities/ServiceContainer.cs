@@ -108,7 +108,7 @@ namespace Bit.Core.Utilities
             Register<IEventService>("eventService", eventService);
             Register<IKeyConnectorService>("keyConnectorService", keyConnectorService);
             Register<IUserVerificationService>("userVerificationService", userVerificationService);
-            Register<IUsernameGenerationService>("usernameGenerationService", usernameGenerationService);
+            Register<IUsernameGenerationService>(usernameGenerationService);
         }
 
         public static void Register<T>(string serviceName, T obj)

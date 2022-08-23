@@ -6,19 +6,16 @@ namespace Bit.Core.Models.Domain
     {
         public UsernameGenerationOptions() { }
 
-        public UsernameGenerationOptions(bool defaultOptions)
+        public static UsernameGenerationOptions CreateDefault() => new UsernameGenerationOptions
         {
-            if (defaultOptions)
-            {
-                PlusAddressedEmail = string.Empty;
-                CatchAllEmailDomain = string.Empty;
-                FirefoxRelayApiAccessToken = string.Empty;
-                SimpleLoginApiKey = string.Empty;
-                AnonAddyApiAccessToken = string.Empty;
-                AnonAddyDomainName = string.Empty;
-                EmailWebsite = string.Empty;
-            }
-        }
+            PlusAddressedEmail = string.Empty,
+            CatchAllEmailDomain = string.Empty,
+            FirefoxRelayApiAccessToken = string.Empty,
+            SimpleLoginApiKey = string.Empty,
+            AnonAddyApiAccessToken = string.Empty,
+            AnonAddyDomainName = string.Empty,
+            EmailWebsite = string.Empty
+        };
 
         public UsernameType Type { get; set; }
         public ForwardedEmailServiceType ServiceType { get; set; }
