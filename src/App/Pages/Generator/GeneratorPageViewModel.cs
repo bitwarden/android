@@ -54,6 +54,7 @@ namespace Bit.App.Pages
         private bool _showSimpleLoginApiKey;
         private UsernameEmailType _catchAllEmailTypeSelected;
         private UsernameEmailType _plusAddressedEmailTypeSelected;
+        private bool _editMode;
 
         public GeneratorPageViewModel()
         {
@@ -148,10 +149,18 @@ namespace Bit.App.Pages
             set => SetProperty(ref _showTypePicker, value);
         }
 
+        public bool EditMode
+        {
+            get => _editMode;
+            set => SetProperty(ref _editMode, value, additionalPropertyNames: new string[]
+                    {
+                        nameof(ShowUsernameEmailType)
+                    });
+        }
+
         public bool ShowUsernameEmailType
         {
-            get => _showUsernameEmailType;
-            set => SetProperty(ref _showUsernameEmailType, value);
+            get => !string.IsNullOrWhiteSpace(EmailWebsite) || EditMode;
         }
 
         public int Length
@@ -562,10 +571,9 @@ namespace Bit.App.Pages
             get => _plusAddressedEmailTypeSelected;
             set
             {
-                if (_plusAddressedEmailTypeSelected != value)
+                if (SetProperty(ref _plusAddressedEmailTypeSelected, value))
                 {
-                    _plusAddressedEmailTypeSelected = value;
-                    TriggerPropertyChanged(nameof(PlusAddressedEmailTypeSelected));
+                    _usernameOptions.PlusAddressedEmailType = value;
                     SaveUsernameOptionsAsync(false).FireAndForget();
                 }
             }
@@ -576,10 +584,9 @@ namespace Bit.App.Pages
             get => _catchAllEmailTypeSelected;
             set
             {
-                if (_catchAllEmailTypeSelected != value)
+                if (SetProperty(ref _catchAllEmailTypeSelected, value))
                 {
-                    _catchAllEmailTypeSelected = value;
-                    TriggerPropertyChanged(nameof(CatchAllEmailTypeSelected));
+                    _usernameOptions.CatchAllEmailType = value;
                     SaveUsernameOptionsAsync(false).FireAndForget();
                 }
             }
@@ -588,13 +595,10 @@ namespace Bit.App.Pages
         public string EmailWebsite
         {
             get => _emailWebsite;
-            set
-            {
-                if (SetProperty(ref _emailWebsite, value))
-                {
-                    ShowUsernameEmailType = !string.IsNullOrWhiteSpace(_emailWebsite);
-                }
-            }
+            set => SetProperty(ref _emailWebsite, value, additionalPropertyNames: new string[]
+                    {
+                        nameof(ShowUsernameEmailType)
+                    });
         }
 
         public async Task InitAsync()
@@ -604,6 +608,11 @@ namespace Bit.App.Pages
             await RegenerateAsync();
 
             _usernameOptions = await _usernameGenerationService.GetOptionsAsync();
+
+            if (!EditMode)
+            {
+                _usernameOptions.CatchAllEmailType = _usernameOptions.PlusAddressedEmailType = UsernameEmailType.Random;
+            }
             TriggerUsernameProperties();
             Username = DEFAULT_USERNAME;
 

@@ -597,7 +597,7 @@ namespace Bit.App.Pages
         public async Task GenerateUsernameAsync()
         {
             if (!string.IsNullOrWhiteSpace(Cipher?.Login?.Username)
-                && await _platformUtilsService.ShowDialogAsync(AppResources.AreYouSureYouWantToOverwriteTheCurrentUsername, null, AppResources.Yes, AppResources.No))
+                && !await _platformUtilsService.ShowDialogAsync(AppResources.AreYouSureYouWantToOverwriteTheCurrentUsername, null, AppResources.Yes, AppResources.No))
             {
                 return;
             }
@@ -614,7 +614,7 @@ namespace Bit.App.Pages
                 {
                     OnGenerateUsernameException(ex);
                 }
-            }, isUsernameGenerator: true, emailWebsite: Cipher?.Name);
+            }, isUsernameGenerator: true, emailWebsite: Cipher?.Name, editMode: true);
             await Page.Navigation.PushModalAsync(new NavigationPage(page));
         }
 
