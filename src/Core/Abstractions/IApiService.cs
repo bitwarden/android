@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
 using Bit.Core.Models.Response;
@@ -82,8 +83,6 @@ namespace Bit.Core.Abstractions
         Task<SendResponse> PutSendAsync(string id, SendRequest request);
         Task<SendResponse> PutSendRemovePasswordAsync(string id);
         Task DeleteSendAsync(string id);
-        Task<string> GetUsernameFromFirefoxRelay(string url, string apiToken);
-        Task<string> GetUsernameFromSimpleLogin(string url, string apiToken);
-        Task<string> GetUsernameFromAnonAddy(string url, string apiToken, string domain);
+        Task<string> GetUsernameFromAsync(ForwardedEmailServiceType service, UsernameGeneratorConfig config);
     }
 }

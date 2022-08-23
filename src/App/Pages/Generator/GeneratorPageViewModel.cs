@@ -48,7 +48,6 @@ namespace Bit.App.Pages
         private bool _doneIniting;
         private bool _showTypePicker;
         private string _emailWebsite;
-        private bool _showUsernameEmailType;
         private bool _showFirefoxRelayApiAccessToken;
         private bool _showAnonAddyApiAccessToken;
         private bool _showSimpleLoginApiKey;

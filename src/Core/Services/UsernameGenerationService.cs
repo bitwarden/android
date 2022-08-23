@@ -162,46 +162,41 @@ namespace Bit.Core.Services
                     {
                         return DEFAULT_GENERATED;
                     }
-                    return await GetAnonAddyUsername(options.AnonAddyApiAccessToken, options.AnonAddyDomainName);
+                    return await _apiService.GetUsernameFromAsync(ForwardedEmailServiceType.AnonAddy,
+                        new UsernameGeneratorConfig()
+                        {
+                            ApiToken = options.AnonAddyApiAccessToken,
+                            Domain = options.AnonAddyDomainName,
+                            Url = "https://app.anonaddy.com/api/v1/aliases"
+                        });
 
                 case ForwardedEmailServiceType.FirefoxRelay:
                     if (string.IsNullOrWhiteSpace(options.FirefoxRelayApiAccessToken))
                     {
                         return DEFAULT_GENERATED;
                     }
-                    return await GetFirefoxRelayUsername(options.FirefoxRelayApiAccessToken);
+                    return await _apiService.GetUsernameFromAsync(ForwardedEmailServiceType.FirefoxRelay,
+                        new UsernameGeneratorConfig()
+                        {
+                            ApiToken = options.FirefoxRelayApiAccessToken,
+                            Url = "https://relay.firefox.com/api/v1/relayaddresses/"
+                        });
 
                 case ForwardedEmailServiceType.SimpleLogin:
                     if (string.IsNullOrWhiteSpace(options.SimpleLoginApiKey))
                     {
                         return DEFAULT_GENERATED;
                     }
-                    return await GetSimpleLoginUsername(options.SimpleLoginApiKey);
+                    return await _apiService.GetUsernameFromAsync(ForwardedEmailServiceType.SimpleLogin,
+                        new UsernameGeneratorConfig()
+                        {
+                            ApiToken = options.SimpleLoginApiKey,
+                            Url = "https://app.simplelogin.io/api/alias/random/new"
+                        });
                 default:
                     _logger.Value.Error("Error UsernameGenerationService: ForwardedEmailServiceType not implemented.");
                     return DEFAULT_GENERATED;
             }
-        }
-
-        private async Task<string> GetFirefoxRelayUsername(string apiToken)
-        {
-            var url = "https://relay.firefox.com/api/v1/relayaddresses/";
-
-            return await _apiService.GetUsernameFromFirefoxRelay(url, apiToken);
-        }
-
-        private async Task<string> GetSimpleLoginUsername(string apiToken)
-        {
-            var url = "https://app.simplelogin.io/api/alias/random/new";
-
-            return await _apiService.GetUsernameFromSimpleLogin(url, apiToken);
-        }
-
-        private async Task<string> GetAnonAddyUsername(string apiToken, string domain)
-        {
-            var url = "https://app.anonaddy.com/api/v1/aliases";
-
-            return await _apiService.GetUsernameFromAnonAddy(url, apiToken, domain);
         }
 
         private async Task<string> RandomStringAsync(int length)

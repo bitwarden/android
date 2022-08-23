@@ -700,15 +700,31 @@ namespace Bit.Core.Services
             }
         }
 
-        public async Task<string> GetUsernameFromFirefoxRelay(string url, string apiToken)
+        public async Task<string> GetUsernameFromAsync(ForwardedEmailServiceType service, UsernameGeneratorConfig config)
         {
             using (var requestMessage = new HttpRequestMessage())
             {
                 requestMessage.Version = new Version(1, 0);
                 requestMessage.Method = HttpMethod.Post;
-                requestMessage.RequestUri = new Uri(url);
+                requestMessage.RequestUri = new Uri(config.Url);
                 requestMessage.Headers.Add("Accept", "application/json");
-                requestMessage.Headers.Add("Authorization", $"Token {apiToken}");
+
+                switch (service)
+                {
+                    case ForwardedEmailServiceType.AnonAddy:
+                        requestMessage.Headers.Add("Authorization", $"Bearer {config.ApiToken}");
+                        requestMessage.Content = new FormUrlEncodedContent(new Dictionary<string, string>
+                        {
+                            ["domain"] = config.Domain
+                        });
+                        break;
+                    case ForwardedEmailServiceType.FirefoxRelay:
+                        requestMessage.Headers.Add("Authorization", $"Token {config.ApiToken}");
+                        break;
+                    case ForwardedEmailServiceType.SimpleLogin:
+                        requestMessage.Headers.Add("Authentication", config.ApiToken);
+                        break;
+                }
 
                 HttpResponseMessage response;
                 try
@@ -726,67 +742,17 @@ namespace Bit.Core.Services
                 var responseJsonString = await response.Content.ReadAsStringAsync();
                 var result = JObject.Parse(responseJsonString);
 
-                return result["full_address"]?.ToString();
-            }
-        }
-
-        public async Task<string> GetUsernameFromSimpleLogin(string url, string apiToken)
-        {
-            using (var requestMessage = new HttpRequestMessage())
-            {
-                requestMessage.Version = new Version(1, 0);
-                requestMessage.Method = HttpMethod.Post;
-                requestMessage.RequestUri = new Uri(url);
-                requestMessage.Headers.Add("Accept", "application/json");
-                requestMessage.Headers.Add("Authentication", apiToken);
-
-                HttpResponseMessage response;
-                try
+                switch (service)
                 {
-                    response = await _httpClient.SendAsync(requestMessage);
+                    case ForwardedEmailServiceType.AnonAddy:
+                        return result["data"]?["email"]?.ToString();
+                    case ForwardedEmailServiceType.FirefoxRelay:
+                        return result["full_address"]?.ToString();
+                    case ForwardedEmailServiceType.SimpleLogin:
+                        return result["alias"]?.ToString();
+                    default:
+                        return string.Empty;
                 }
-                catch (Exception e)
-                {
-                    throw new ApiException(HandleWebError(e));
-                }
-                if (!response.IsSuccessStatusCode)
-                {
-                    throw new ApiException();
-                }
-
-                var responseJsonString = await response.Content.ReadAsStringAsync();
-                var result = JObject.Parse(responseJsonString);
-
-                return result["alias"]?.ToString();
-            }
-        }
-
-        public async Task<string> GetUsernameFromAnonAddy(string url, string apiToken, string domain)
-        {
-            using (var requestMessage = new HttpRequestMessage())
-            {
-                requestMessage.Version = new Version(1, 0);
-                requestMessage.Method = HttpMethod.Post;
-                requestMessage.RequestUri = new Uri(url);
-                requestMessage.Headers.Add("Accept", "application/json");
-                requestMessage.Headers.Add("Authorization", $"Bearer {apiToken}");
-
-                HttpResponseMessage response;
-                try
-                {
-                    response = await _httpClient.SendAsync(requestMessage);
-                }
-                catch (Exception e)
-                {
-                    throw new ApiException(HandleWebError(e));
-                }
-                if (!response.IsSuccessStatusCode)
-                {
-                    throw new ApiException();
-                }
-                var result = JObject.Parse(await response.Content.ReadAsStringAsync());
-
-                return result["data"]?["email"]?.ToString();
             }
         }
 
