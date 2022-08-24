@@ -19,6 +19,7 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <u:InverseBoolConverter x:Key="inverseBool" />
+            <u:LocalizableEnumConverter x:Key="localizableEnum" />
             <xct:EnumToBoolConverter x:Key="enumToBool"/>
             <ToolbarItem Text="{u:I18n Cancel}" Clicked="Close_Clicked" Order="Primary" Priority="-1"
                          x:Name="_closeItem" x:Key="closeItem" />
@@ -132,6 +133,7 @@
                         x:Name="_typePicker"
                         ItemsSource="{Binding GeneratorTypeOptions, Mode=OneTime}"
                         SelectedItem="{Binding GeneratorTypeSelected}"
+                        ItemDisplayBinding="{Binding ., Converter={StaticResource localizableEnum}}"
                         StyleClass="box-value" />
                 </StackLayout>
                 <Label Text="{u:I18n Options, Header=True}"
@@ -156,6 +158,7 @@
                         x:Name="_usernameTypePicker"
                         ItemsSource="{Binding UsernameTypeOptions, Mode=OneTime}"
                         SelectedItem="{Binding UsernameTypeSelected}"
+                        ItemDisplayBinding="{Binding ., Converter={StaticResource localizableEnum}}"
                         StyleClass="box-value" />
                     <Label
                         StyleClass="box-footer-label"
@@ -175,6 +178,7 @@
                             x:Name="_plusAddressedEmailTypePicker"
                             ItemsSource="{Binding UsernameEmailTypeOptions, Mode=OneTime}"
                             SelectedItem="{Binding PlusAddressedEmailTypeSelected}"
+                            ItemDisplayBinding="{Binding ., Converter={StaticResource localizableEnum}}"
                             StyleClass="box-value" />
                         <Label IsVisible="{Binding ShowUsernameEmailType}"
                             Text="{u:I18n Website}"
@@ -202,6 +206,7 @@
                             x:Name="_catchallEmailTypePicker"
                             ItemsSource="{Binding UsernameEmailTypeOptions, Mode=OneTime}"
                             SelectedItem="{Binding CatchAllEmailTypeSelected}"
+                            ItemDisplayBinding="{Binding ., Converter={StaticResource localizableEnum}}"
                             StyleClass="box-value" />
                         <Label IsVisible="{Binding ShowUsernameEmailType}"
                             Text="{u:I18n Website}"
@@ -222,6 +227,7 @@
                             x:Name="_serviceTypePicker"
                             ItemsSource="{Binding ForwardedEmailServiceTypeOptions, Mode=OneTime}"
                             SelectedItem="{Binding ForwardedEmailServiceSelected}"
+                            ItemDisplayBinding="{Binding ., Converter={StaticResource localizableEnum}}"
                             StyleClass="box-value" />
                         <!--ANONADDY OPTIONS-->
                         <Grid IsVisible="{Binding ForwardedEmailServiceSelected, Converter={StaticResource enumToBool}, ConverterParameter={x:Static enums:ForwardedEmailServiceType.AnonAddy}}"
