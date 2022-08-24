@@ -737,7 +737,12 @@ namespace Bit.Core.Services
                 }
                 if (!response.IsSuccessStatusCode)
                 {
-                    throw new ApiException();
+                    throw new ApiException(new ErrorResponse
+                    {
+                        StatusCode = response.StatusCode,
+                        Message = (response.StatusCode == HttpStatusCode.BadRequest) ?
+                            "Exception message: Provided key or token is invalid." : $"Exception message: Unknown {service} error occurred."
+                    });
                 }
                 var responseJsonString = await response.Content.ReadAsStringAsync();
                 var result = JObject.Parse(responseJsonString);
