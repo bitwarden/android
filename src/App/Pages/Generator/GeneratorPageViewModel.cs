@@ -394,7 +394,7 @@ namespace Bit.App.Pages
                 if (_usernameOptions.Type != value)
                 {
                     _usernameOptions.Type = value;
-                    Username = Constants.DefaultGenerated;
+                    Username = Constants.DefaultUsernameGenerated;
                     TriggerPropertyChanged(nameof(UsernameTypeSelected), new string[] { nameof(UsernameTypeDescriptionLabel) });
                     SaveUsernameOptionsAsync(false).FireAndForget();
                 }
@@ -412,7 +412,7 @@ namespace Bit.App.Pages
                 if (_usernameOptions.ServiceType != value)
                 {
                     _usernameOptions.ServiceType = value;
-                    Username = Constants.DefaultGenerated;
+                    Username = Constants.DefaultUsernameGenerated;
                     TriggerPropertyChanged(nameof(ForwardedEmailServiceSelected));
                     SaveUsernameOptionsAsync(false).FireAndForget();
                 }
@@ -610,7 +610,7 @@ namespace Bit.App.Pages
                 _usernameOptions.CatchAllEmailType = _usernameOptions.PlusAddressedEmailType = UsernameEmailType.Random;
             }
             TriggerUsernamePropertiesChanged();
-            Username = Constants.DefaultGenerated;
+            Username = Constants.DefaultUsernameGenerated;
 
             _doneIniting = true;
         }

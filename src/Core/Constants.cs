@@ -5,7 +5,7 @@
         public const int MaxAccounts = 5;
         public const string AndroidAppProtocol = "androidapp://";
         public const string iOSAppProtocol = "iosapp://";
-        public const string DefaultGenerated = "-";
+        public const string DefaultUsernameGenerated = "-";
         public static string StateVersionKey = "stateVersion";
         public static string StateKey = "state";
         public static string PreAuthEnvironmentUrlsKey = "preAuthEnvironmentUrls";
