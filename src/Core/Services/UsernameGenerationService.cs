@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
@@ -12,12 +8,11 @@ namespace Bit.Core.Services
 {
     public class UsernameGenerationService : IUsernameGenerationService
     {
-        private const string DEFAULT_GENERATED = "-";
         private const string CATCH_ALL_EMAIL_DOMAIN_FORMAT = "{0}@{1}";
         private readonly ICryptoService _cryptoService;
         private readonly IApiService _apiService;
         private readonly IStateService _stateService;
-        private readonly UsernameGenerationOptions _defaultOptions = UsernameGenerationOptions.CreateDefault();
+        private readonly UsernameGenerationOptions _defaultOptions = new UsernameGenerationOptions();
         readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
         private UsernameGenerationOptions _optionsCache;
 
@@ -44,7 +39,7 @@ namespace Bit.Core.Services
                 case UsernameType.RandomWord:
                     return await GenerateRandomWordAsync(options);
                 default:
-                    _logger.Value.Error("Error UsernameGenerationService: UsernameType not implemented.");
+                    _logger.Value.Error($"Error UsernameGenerationService: UsernameType {options.Type} not implemented.");
                     return string.Empty;
             }
         }
@@ -54,15 +49,9 @@ namespace Bit.Core.Services
             if (_optionsCache == null)
             {
                 var options = await _stateService.GetUsernameGenerationOptionsAsync();
-                if (options == null)
-                {
-                    _optionsCache = _defaultOptions;
-                }
-                else
-                {
-                    options.Merge(_defaultOptions);
-                    _optionsCache = options;
-                }
+
+                options?.Merge(_defaultOptions);
+                _optionsCache = options ?? new UsernameGenerationOptions();
             }
 
             return _optionsCache;
@@ -89,7 +78,7 @@ namespace Bit.Core.Services
             if (string.IsNullOrWhiteSpace(randomWord))
             {
                 _logger.Value.Error($"Error UsernameGenerationService: EEFLongWordList has NullOrWhiteSpace value at {wordIndex} index.");
-                return DEFAULT_GENERATED;
+                return Constants.DefaultGenerated;
             }
 
             if (options.CapitalizeRandomWordUsername)
@@ -111,7 +100,7 @@ namespace Bit.Core.Services
 
             if (string.IsNullOrWhiteSpace(options.PlusAddressedEmail) || options.PlusAddressedEmail.Length < 3)
             {
-                return DEFAULT_GENERATED;
+                return Constants.DefaultGenerated;
             }
 
             var atIndex = options.PlusAddressedEmail.IndexOf("@");
@@ -135,11 +124,10 @@ namespace Bit.Core.Services
         {
             options.Merge(_defaultOptions);
             var catchAllEmailDomain = options.CatchAllEmailDomain;
-            string generatedString = string.Empty;
 
             if (string.IsNullOrWhiteSpace(catchAllEmailDomain))
             {
-                return DEFAULT_GENERATED;
+                return Constants.DefaultGenerated;
             }
 
             if (options.CatchAllEmailType == UsernameEmailType.Random)
@@ -160,7 +148,7 @@ namespace Bit.Core.Services
                 case ForwardedEmailServiceType.AnonAddy:
                     if (string.IsNullOrWhiteSpace(options.AnonAddyApiAccessToken) || string.IsNullOrWhiteSpace(options.AnonAddyDomainName))
                     {
-                        return DEFAULT_GENERATED;
+                        return Constants.DefaultGenerated;
                     }
                     return await _apiService.GetUsernameFromAsync(ForwardedEmailServiceType.AnonAddy,
                         new UsernameGeneratorConfig()
@@ -173,7 +161,7 @@ namespace Bit.Core.Services
                 case ForwardedEmailServiceType.FirefoxRelay:
                     if (string.IsNullOrWhiteSpace(options.FirefoxRelayApiAccessToken))
                     {
-                        return DEFAULT_GENERATED;
+                        return Constants.DefaultGenerated;
                     }
                     return await _apiService.GetUsernameFromAsync(ForwardedEmailServiceType.FirefoxRelay,
                         new UsernameGeneratorConfig()
@@ -185,7 +173,7 @@ namespace Bit.Core.Services
                 case ForwardedEmailServiceType.SimpleLogin:
                     if (string.IsNullOrWhiteSpace(options.SimpleLoginApiKey))
                     {
-                        return DEFAULT_GENERATED;
+                        return Constants.DefaultGenerated;
                     }
                     return await _apiService.GetUsernameFromAsync(ForwardedEmailServiceType.SimpleLogin,
                         new UsernameGeneratorConfig()
@@ -194,8 +182,8 @@ namespace Bit.Core.Services
                             Url = "https://app.simplelogin.io/api/alias/random/new"
                         });
                 default:
-                    _logger.Value.Error("Error UsernameGenerationService: ForwardedEmailServiceType not implemented.");
-                    return DEFAULT_GENERATED;
+                    _logger.Value.Error($"Error UsernameGenerationService: ForwardedEmailServiceType {options.ServiceType} not implemented.");
+                    return Constants.DefaultGenerated;
             }
         }
 

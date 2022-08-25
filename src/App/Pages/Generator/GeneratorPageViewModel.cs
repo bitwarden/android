@@ -16,8 +16,6 @@ namespace Bit.App.Pages
 {
     public class GeneratorPageViewModel : BaseViewModel
     {
-        private const string DEFAULT_USERNAME = "-";
-
         private readonly IPasswordGenerationService _passwordGenerationService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IClipboardService _clipboardService;
@@ -396,9 +394,8 @@ namespace Bit.App.Pages
                 if (_usernameOptions.Type != value)
                 {
                     _usernameOptions.Type = value;
-                    Username = DEFAULT_USERNAME;
-                    TriggerPropertyChanged(nameof(UsernameTypeSelected));
-                    TriggerPropertyChanged(nameof(UsernameTypeDescriptionLabel));
+                    Username = Constants.DefaultGenerated;
+                    TriggerPropertyChanged(nameof(UsernameTypeSelected), new string[] { nameof(UsernameTypeDescriptionLabel) });
                     SaveUsernameOptionsAsync(false).FireAndForget();
                 }
             }
@@ -415,7 +412,7 @@ namespace Bit.App.Pages
                 if (_usernameOptions.ServiceType != value)
                 {
                     _usernameOptions.ServiceType = value;
-                    Username = DEFAULT_USERNAME;
+                    Username = Constants.DefaultGenerated;
                     TriggerPropertyChanged(nameof(ForwardedEmailServiceSelected));
                     SaveUsernameOptionsAsync(false).FireAndForget();
                 }
@@ -612,8 +609,8 @@ namespace Bit.App.Pages
             {
                 _usernameOptions.CatchAllEmailType = _usernameOptions.PlusAddressedEmailType = UsernameEmailType.Random;
             }
-            TriggerUsernameProperties();
-            Username = DEFAULT_USERNAME;
+            TriggerUsernamePropertiesChanged();
+            Username = Constants.DefaultGenerated;
 
             _doneIniting = true;
         }
@@ -731,7 +728,7 @@ namespace Bit.App.Pages
             IncludeNumber = _options.IncludeNumber.GetValueOrDefault();
         }
 
-        private void TriggerUsernameProperties()
+        private void TriggerUsernamePropertiesChanged()
         {
             TriggerPropertyChanged(nameof(CatchAllEmailTypeSelected));
             TriggerPropertyChanged(nameof(PlusAddressedEmailTypeSelected));

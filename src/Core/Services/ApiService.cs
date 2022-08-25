@@ -740,8 +740,7 @@ namespace Bit.Core.Services
                     throw new ApiException(new ErrorResponse
                     {
                         StatusCode = response.StatusCode,
-                        Message = (response.StatusCode == HttpStatusCode.BadRequest) ?
-                            "Exception message: Provided key or token is invalid." : $"Exception message: Unknown {service} error occurred."
+                        Message = $"{service} error: {(int)response.StatusCode} {response.ReasonPhrase}."
                     });
                 }
                 var responseJsonString = await response.Content.ReadAsStringAsync();
