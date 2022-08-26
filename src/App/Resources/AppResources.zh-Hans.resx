@@ -1579,7 +1579,7 @@
     <value>自动填充已屏蔽的 URI</value>
   </data>
   <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>不会为被阻止的 URI 提供自动填充功能。用逗号分隔多个 URI。例如：「 https://twitter.com, androidapp://com.twitter.android」。</value>
+    <value>不会对已阻止的 URI 提供自动填充功能。使用逗号分隔多个 URI。例如：「 https://twitter.com, androidapp://com.twitter.android」。</value>
   </data>
   <data name="AskToAddLogin" xml:space="preserve">
     <value>询问添加登录</value>
@@ -2268,7 +2268,7 @@
     <value>验证码</value>
   </data>
   <data name="PremiumSubscriptionRequired" xml:space="preserve">
-    <value>需要订阅高级版</value>
+    <value>需要高级版订阅</value>
   </data>
   <data name="CannotAddAuthenticatorKey" xml:space="preserve">
     <value>无法添加验证器密钥？</value>
@@ -2293,7 +2293,7 @@
   </data>
   <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
     <value>成功输入密钥后，
-选择“添加 TOTP”即可安全地存储密钥</value>
+选择「添加 TOTP」即可安全地存储密钥</value>
   </data>
   <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
     <value></value>
