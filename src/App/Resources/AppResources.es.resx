@@ -299,6 +299,10 @@
     <value>Mi caja fuerte</value>
     <comment>The title for the vault page.</comment>
   </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Authenticator</value>
+    <comment>Authenticator TOTP feature</comment>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Nombre</value>
     <comment>Label for an entity name.</comment>
@@ -418,7 +422,7 @@
     <value>Utiliza el servicio de accesibilidad de Bitwarden para autorellenar entradas entre aplicaciones y sitios web.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
-    <value>Servicio de autocompletado</value>
+    <value>Servicio de autorrellenado</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>Evitar caracteres ambiguos</value>
@@ -770,6 +774,12 @@
   <data name="Enabled" xml:space="preserve">
     <value>Activado</value>
   </data>
+  <data name="Off" xml:space="preserve">
+    <value>Off</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>On</value>
+  </data>
   <data name="Status" xml:space="preserve">
     <value>Estado</value>
   </data>
@@ -889,11 +899,9 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>No se pudo leer la clave de autenticación.</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>El escaneo será automático.</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Apunta tu cámara el código QR.</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Point your camera at the QR Code.
+Scanning will happen automatically.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>Escanear código QR</value>
@@ -907,11 +915,11 @@
   <data name="CopyTotp" xml:space="preserve">
     <value>Copiar código TOTP</value>
   </data>
-  <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>Si tu entrada tiene una clave de autenticación adjunta, el código de verificación TOTP es copiado automáticamente al portapapeles cuando autorellenas una entrada.</value>
+  <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
+    <value>If a login has an authenticator key, copy the TOTP verification code to your clip-board when you auto-fill the login.</value>
   </data>
-  <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>Deshabilitar copiado automático de códigos TOTP</value>
+  <data name="CopyTotpAutomatically" xml:space="preserve">
+    <value>Copy TOTP automatically</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
     <value>Se quiere membrasía Premium para poder utilizar esta característica.</value>
@@ -1128,11 +1136,11 @@
   <data name="Expiration" xml:space="preserve">
     <value>Expiración</value>
   </data>
-  <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>Deshabilitar iconos del sitio web</value>
+  <data name="ShowWebsiteIcons" xml:space="preserve">
+    <value>Show website icons</value>
   </data>
-  <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Los iconos del sitio web añaden una imagen reconocible al lado de cada entrada de tu caja fuerte.</value>
+  <data name="ShowWebsiteIconsDescription" xml:space="preserve">
+    <value>Show a recognizable image next to each login.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>URL del servidor de iconos</value>
@@ -1372,11 +1380,15 @@
   <data name="SearchCollection" xml:space="preserve">
     <value>Buscar colección</value>
   </data>
-  <data name="SearchFolder" xml:space="preserve">
-    <value>Buscar carpeta</value>
+  <data name="SearchFileSends" xml:space="preserve">
+    <value>Buscar Sends de archivos</value>
   </data>
-  <data name="SearchType" xml:space="preserve">
-    <value>Tipo de búsqueda</value>
+  <data name="SearchTextSends" xml:space="preserve">
+    <value>Buscar Sends de texto</value>
+  </data>
+  <data name="SearchGroup" xml:space="preserve">
+    <value>Buscar {0}</value>
+    <comment>ex: Search Logins</comment>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Tipo</value>
@@ -1537,6 +1549,12 @@
   <data name="ThemeDefault" xml:space="preserve">
     <value>Por defecto (Sistema)</value>
   </data>
+  <data name="DefaultDarkTheme" xml:space="preserve">
+    <value>Default dark theme</value>
+  </data>
+  <data name="DefaultDarkThemeDescription" xml:space="preserve">
+    <value>Choose the dark theme to use when using Default (System) theme while your device's dark mode is enabled.</value>
+  </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Copiar notas</value>
   </data>
@@ -1553,17 +1571,21 @@
     <value>Negro</value>
     <comment>The color black</comment>
   </data>
-  <data name="BlacklistedUris" xml:space="preserve">
-    <value>URIs en lista negra</value>
+  <data name="Nord" xml:space="preserve">
+    <value>Nord</value>
+    <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
-  <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>URIs que están en la lista negra no ofrecerán auto-relleno. La lista de aplicaciones debe ser separada por comas. Ej: "https://twitter.com, androidapp://com.twitter.android".</value>
+  <data name="AutofillBlockedUris" xml:space="preserve">
+    <value>Auto-fill blocked URIs</value>
   </data>
-  <data name="DisableSavePrompt" xml:space="preserve">
-    <value>Desactivar el aviso de guardado</value>
+  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
+    <value>Auto-fill will not be offered for blocked URIs. Separate multiple URIs with a comma. For example: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
-  <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>El "aviso de guardado" pregunta automáticamente si quiere guardar nuevas entradas en su caja fuerte cuando se identifica en un sitio web por primera vez.</value>
+  <data name="AskToAddLogin" xml:space="preserve">
+    <value>Ask to add login</value>
+  </data>
+  <data name="AskToAddLoginDescription" xml:space="preserve">
+    <value>Ask to add an item if one isn't found in your vault.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
     <value>Al reiniciar la aplicación</value>
@@ -1856,6 +1878,9 @@
     <value>Un nombre amigable para describir este Envío.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
+  <data name="Text" xml:space="preserve">
+    <value>Texto</value>
+  </data>
   <data name="TypeText" xml:space="preserve">
     <value>Texto</value>
   </data>
@@ -1871,6 +1896,18 @@
   </data>
   <data name="TypeFileInfo" xml:space="preserve">
     <value>El archivo que quieres enviar.</value>
+  </data>
+  <data name="FileTypeIsSelected" xml:space="preserve">
+    <value>El tipo de archivo está seleccionado.</value>
+  </data>
+  <data name="FileTypeIsNotSelected" xml:space="preserve">
+    <value>El tipo de archivo no está seleccionado, toque para seleccionar.</value>
+  </data>
+  <data name="TextTypeIsSelected" xml:space="preserve">
+    <value>El tipo de texto está seleccionado.</value>
+  </data>
+  <data name="TextTypeIsNotSelected" xml:space="preserve">
+    <value>El tipo de texto no está seleccionado, toque para seleccionar.</value>
   </data>
   <data name="DeletionDate" xml:space="preserve">
     <value>Fecha de eliminación</value>
@@ -2120,13 +2157,13 @@
     <value>Cambiado a la siguiente cuenta disponible</value>
   </data>
   <data name="AccountLockedSuccessfully" xml:space="preserve">
-    <value>Account Locked</value>
+    <value>Cuenta bloqueada</value>
   </data>
   <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
-    <value>Account logged out successfully</value>
+    <value>Sesión cerrada con éxito</value>
   </data>
   <data name="AccountRemovedSuccessfully" xml:space="preserve">
-    <value>Account removed successfully</value>
+    <value>Cuenta eliminada con éxito</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
     <value>Eliminar cuenta</value>
@@ -2175,5 +2212,106 @@
   </data>
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
     <value>Introduce el código de verificación enviado a tu correo electrónico</value>
+  </data>
+  <data name="SubmitCrashLogs" xml:space="preserve">
+    <value>Submit crash logs</value>
+  </data>
+  <data name="SubmitCrashLogsDescription" xml:space="preserve">
+    <value>Help Bitwarden improve app stability by submitting crash reports.</value>
+  </data>
+  <data name="OptionsExpanded" xml:space="preserve">
+    <value>Las opciones están expandidas, toque para colapsar.</value>
+  </data>
+  <data name="OptionsCollapsed" xml:space="preserve">
+    <value>Las opciones están colapsadas, toque para expandir.</value>
+  </data>
+  <data name="UppercaseAtoZ" xml:space="preserve">
+    <value>Mayúsculas (A a la Z)</value>
+  </data>
+  <data name="LowercaseAtoZ" xml:space="preserve">
+    <value>Minúsculas (A a la Z)
+</value>
+  </data>
+  <data name="NumbersZeroToNine" xml:space="preserve">
+    <value>Números (0 al 9)</value>
+  </data>
+  <data name="SpecialCharacters" xml:space="preserve">
+    <value>Carácteres especiales (!@#$%^&amp;*)</value>
+  </data>
+  <data name="TapToGoBack" xml:space="preserve">
+    <value>Toque para regresar</value>
+  </data>
+  <data name="PasswordIsVisibleTapToHide" xml:space="preserve">
+    <value>La contraseña es visible, toque para ocultar.</value>
+  </data>
+  <data name="PasswordIsNotVisibleTapToShow" xml:space="preserve">
+    <value>La contraseña no está visible, toque para mostrar.</value>
+  </data>
+  <data name="FilterByVault" xml:space="preserve">
+    <value>Filtrar elementos por bóveda</value>
+  </data>
+  <data name="AllVaults" xml:space="preserve">
+    <value>Todas las bóvedas</value>
+  </data>
+  <data name="Vaults" xml:space="preserve">
+    <value>Bóvedas</value>
+  </data>
+  <data name="VaultFilterDescription" xml:space="preserve">
+    <value>Bóveda: {0}</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Todo</value>
+  </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Verification Codes</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>Premium subscription required</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>Cannot add authenticator key? </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>Scan QR Code</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>Cannot scan QR Code? </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Authenticator Key</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Enter Key Manually</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>Add TOTP</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>Set up TOTP</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>Once the key is successfully entered,
+select Add TOTP to store the key safely</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="NeverLockWarning" xml:space="preserve">
+    <value>Setting your lock options to “Never” keeps your vault available to anyone with access to your device. If you use this option, you should ensure that you keep your device properly protected.</value>
+  </data>
+  <data name="EnvironmentPageUrlsError" xml:space="preserve">
+    <value>One or more of the URLs entered are invalid. Please revise it and try to save again.</value>
+  </data>
+  <data name="GenericErrorMessage" xml:space="preserve">
+    <value>We were unable to process your request. Please try again or contact us.</value>
+  </data>
+  <data name="AllowScreenCapture" xml:space="preserve">
+    <value>Allow screen capture</value>
+  </data>
+  <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
+    <value>Are you sure you want to enable Screen Capture?</value>
   </data>
 </root>

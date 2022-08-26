@@ -299,6 +299,10 @@
     <value>La meua caixa forta</value>
     <comment>The title for the vault page.</comment>
   </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Autenticador</value>
+    <comment>Authenticator TOTP feature</comment>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Nom</value>
     <comment>Label for an entity name.</comment>
@@ -770,6 +774,12 @@
   <data name="Enabled" xml:space="preserve">
     <value>Habilitat</value>
   </data>
+  <data name="Off" xml:space="preserve">
+    <value>Desactivat</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>Activat</value>
+  </data>
   <data name="Status" xml:space="preserve">
     <value>Estat</value>
   </data>
@@ -889,11 +899,9 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>No es pot llegir la clau d'autenticació.</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>L'escaneig serà automàtic.</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Dirigiu la càmera al codi QR.</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Apunteu la càmera cap al codi QR.
+L'escaneig es farà automàticament.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>Escaneja el codi QR</value>
@@ -907,11 +915,11 @@
   <data name="CopyTotp" xml:space="preserve">
     <value>Copia TOTP</value>
   </data>
-  <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
+  <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
     <value>Si el vostre inici de sessió té una clau d'autenticació associada, el codi de verificació TOTP es copiarà al vostre porta-retalls quan s'òmpliga automàticament l'inici de sessió.</value>
   </data>
-  <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>Deshabilita la còpia TOTP automàtica</value>
+  <data name="CopyTotpAutomatically" xml:space="preserve">
+    <value>Copia TOTP automaticament</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
     <value>Cal una subscripció premium per utilitzar aquesta característica.</value>
@@ -1128,11 +1136,11 @@
   <data name="Expiration" xml:space="preserve">
     <value>Caducitat</value>
   </data>
-  <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>Deshabilita icones del lloc web</value>
+  <data name="ShowWebsiteIcons" xml:space="preserve">
+    <value>Mostra les icones del lloc web</value>
   </data>
-  <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Les icones del lloc web proporcionen una imatge que es pot reconèixer al costat de cada element d'inici de sessió a la vostra caixa forta.</value>
+  <data name="ShowWebsiteIconsDescription" xml:space="preserve">
+    <value>Mostra una imatge reconeixible al costat de cada inici de sessió.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>URL del servidor d'icones</value>
@@ -1299,7 +1307,7 @@
     <value>1. Aneu a l'aplicació "Configuració" de l'iOS</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Toqueu "Contrasenyes i comptes"</value>
+    <value>2. Toqueu "Contrasenyes"</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
     <value>3. Toqueu "Emplenament automàtic de contrasenyes"</value>
@@ -1372,11 +1380,15 @@
   <data name="SearchCollection" xml:space="preserve">
     <value>Cerca a la col·lecció</value>
   </data>
-  <data name="SearchFolder" xml:space="preserve">
-    <value>Cerca a la carpeta</value>
+  <data name="SearchFileSends" xml:space="preserve">
+    <value>Cerca fitxers Sends</value>
   </data>
-  <data name="SearchType" xml:space="preserve">
-    <value>Tipus de cerca</value>
+  <data name="SearchTextSends" xml:space="preserve">
+    <value>Cerca Sends de text</value>
+  </data>
+  <data name="SearchGroup" xml:space="preserve">
+    <value>Cerca {0}</value>
+    <comment>ex: Search Logins</comment>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Tipus</value>
@@ -1513,7 +1525,7 @@
     <value>2 minuts</value>
   </data>
   <data name="ClearClipboard" xml:space="preserve">
-    <value>Neteja el porta-retalls</value>
+    <value>Buida el porta-retalls</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="ClearClipboardDescription" xml:space="preserve">
@@ -1537,8 +1549,14 @@
   <data name="ThemeDefault" xml:space="preserve">
     <value>Per defecte (Sistema)</value>
   </data>
+  <data name="DefaultDarkTheme" xml:space="preserve">
+    <value>Tema fosc per defecte</value>
+  </data>
+  <data name="DefaultDarkThemeDescription" xml:space="preserve">
+    <value>Tria el tema fosc quan feu servir el tema predeterminat (sistema) mentre el mode fosc del vostre dispositiu està habilitat</value>
+  </data>
   <data name="CopyNotes" xml:space="preserve">
-    <value>Copia notes</value>
+    <value>Copia nota</value>
   </data>
   <data name="Exit" xml:space="preserve">
     <value>Tanca</value>
@@ -1553,17 +1571,21 @@
     <value>Negre</value>
     <comment>The color black</comment>
   </data>
-  <data name="BlacklistedUris" xml:space="preserve">
-    <value>URl a la llista negra</value>
+  <data name="Nord" xml:space="preserve">
+    <value>Nord</value>
+    <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
-  <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>Els URI que es mostren a la llista negra no oferiran l’emplenament automàtic. La llista ha de estar separada per comes. Ex: "https://twitter.com, androidapp: //com.twitter.android".</value>
+  <data name="AutofillBlockedUris" xml:space="preserve">
+    <value>Emplena automàticament els URI bloquejats</value>
   </data>
-  <data name="DisableSavePrompt" xml:space="preserve">
-    <value>Desactiva Guarda elements nous</value>
+  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
+    <value>L'emplenament automàtic no s'oferirà per als URI bloquejats. Separeu diversos URI amb una coma. Per exemple: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
-  <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>"Guarda elements nous" demanarà automàticament que guardeu elements nous al magatzem cada volta que els introduïu per primera vegada.</value>
+  <data name="AskToAddLogin" xml:space="preserve">
+    <value>Sol·licita afegir els inicis de sessió</value>
+  </data>
+  <data name="AskToAddLoginDescription" xml:space="preserve">
+    <value>Sol·licita afegir un element si no se'n troba cap a la caixa forta.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
     <value>En reiniciar l'aplicació</value>
@@ -1856,6 +1878,9 @@
     <value>Un nom apropiat per descriure aquest Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
+  <data name="Text" xml:space="preserve">
+    <value>Text</value>
+  </data>
   <data name="TypeText" xml:space="preserve">
     <value>Text</value>
   </data>
@@ -1871,6 +1896,18 @@
   </data>
   <data name="TypeFileInfo" xml:space="preserve">
     <value>El fitxer que voleu enviar.</value>
+  </data>
+  <data name="FileTypeIsSelected" xml:space="preserve">
+    <value>El tipus de fitxer està seleccionat.</value>
+  </data>
+  <data name="FileTypeIsNotSelected" xml:space="preserve">
+    <value>El tipus de fitxer no està seleccionat, toqueu per a seleccionar-lo.</value>
+  </data>
+  <data name="TextTypeIsSelected" xml:space="preserve">
+    <value>El tipus de text està seleccionat.</value>
+  </data>
+  <data name="TextTypeIsNotSelected" xml:space="preserve">
+    <value>El tipus de text no està seleccionat, toqueu per a seleccionar-lo.</value>
   </data>
   <data name="DeletionDate" xml:space="preserve">
     <value>Data de supressió</value>
@@ -2175,5 +2212,105 @@
   </data>
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
     <value>Introduïu el codi de verificació que s’ha enviat al vostre correu</value>
+  </data>
+  <data name="SubmitCrashLogs" xml:space="preserve">
+    <value>Envieu registres d'error</value>
+  </data>
+  <data name="SubmitCrashLogsDescription" xml:space="preserve">
+    <value>Ajudeu Bitwarden a millorar l'estabilitat de l'aplicació enviant els registres d'error</value>
+  </data>
+  <data name="OptionsExpanded" xml:space="preserve">
+    <value>Les opcions estan ampliades, toqueu per contraure.</value>
+  </data>
+  <data name="OptionsCollapsed" xml:space="preserve">
+    <value>Les opcions estan reduïdes, toqueu per ampliar.</value>
+  </data>
+  <data name="UppercaseAtoZ" xml:space="preserve">
+    <value>Majúscules (A a la Z)</value>
+  </data>
+  <data name="LowercaseAtoZ" xml:space="preserve">
+    <value>Minúscules (A a la Z)</value>
+  </data>
+  <data name="NumbersZeroToNine" xml:space="preserve">
+    <value>Números (0 al 9)</value>
+  </data>
+  <data name="SpecialCharacters" xml:space="preserve">
+    <value>Caràcters especials (!@#$%^&amp;*)</value>
+  </data>
+  <data name="TapToGoBack" xml:space="preserve">
+    <value>Toca per a tornar arrere</value>
+  </data>
+  <data name="PasswordIsVisibleTapToHide" xml:space="preserve">
+    <value>La contrasenya és visible, toqueu per amagar-la.</value>
+  </data>
+  <data name="PasswordIsNotVisibleTapToShow" xml:space="preserve">
+    <value>La contrasenya no és visible, toqueu per mostrar-la.</value>
+  </data>
+  <data name="FilterByVault" xml:space="preserve">
+    <value>Filtra artícless per caixa forta</value>
+  </data>
+  <data name="AllVaults" xml:space="preserve">
+    <value>Totes les caixes fortes</value>
+  </data>
+  <data name="Vaults" xml:space="preserve">
+    <value>Caixes fortes</value>
+  </data>
+  <data name="VaultFilterDescription" xml:space="preserve">
+    <value>Caixa forta: {0}</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Totes</value>
+  </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Codis de verificació</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>Cal una subscripció premium</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>No es pot afegir la clau d'autenticació? </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>Escaneja el codi QR</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>No podeu escanejar el codi QR? </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Clau autenticadora</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Introdueix la clau manualment</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>Afegeix TOTP</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>Configura TOTP</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>Una vegada introduïda la clau correctament,
+seleccioneu Afegeix TOTP per emmagatzemar la clau de manera segura</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="NeverLockWarning" xml:space="preserve">
+    <value>Si configureu les opcions de bloqueig a "Mai", la vostra caixa forta està disponible per a qualsevol persona amb accés al vostre dispositiu. Si utilitzeu aquesta opció, hauríeu d'assegurar-vos de mantenir el vostre dispositiu correctament protegit.</value>
+  </data>
+  <data name="EnvironmentPageUrlsError" xml:space="preserve">
+    <value>Un o més dels URL introduïts no són vàlids. Reviseu-ho i torneu a provar de guardar-ho.</value>
+  </data>
+  <data name="GenericErrorMessage" xml:space="preserve">
+    <value>No hem pogut processar la vostra sol·licitud. Torneu-ho a provar o contacteu amb nosaltres.</value>
+  </data>
+  <data name="AllowScreenCapture" xml:space="preserve">
+    <value>Permet capturar la pantalla</value>
+  </data>
+  <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
+    <value>Segur que voleu activar la captura de pantalla?</value>
   </data>
 </root>

@@ -236,7 +236,7 @@
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="HelpAndFeedback" xml:space="preserve">
-    <value>Допомога і зворотній зв'язок</value>
+    <value>Допомога та зворотний зв'язок</value>
   </data>
   <data name="Hide" xml:space="preserve">
     <value>Приховати</value>
@@ -298,6 +298,10 @@
   <data name="MyVault" xml:space="preserve">
     <value>Моє сховище</value>
     <comment>The title for the vault page.</comment>
+  </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Автентифікатор</value>
+    <comment>Authenticator TOTP feature</comment>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Назва</value>
@@ -412,7 +416,7 @@
     <value>Додати запис</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
-    <value>Розширення</value>
+    <value>Розширення програми</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
     <value>Використовуйте службу спеціальних можливостей Bitwarden, щоб автоматично вводити паролі в програмах та на вебсайтах.</value>
@@ -516,7 +520,7 @@
     <value>Отримати підказку для головного пароля</value>
   </data>
   <data name="ImportItems" xml:space="preserve">
-    <value>Імпорт записів</value>
+    <value>Імпортувати записи</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
     <value>Ви можете робити масовий імпорт записів зі сховища на bitwarden.com. Хочете перейти на вебсайт зараз?</value>
@@ -580,7 +584,7 @@
     <value>Якщо ви забудете головний пароль, підказка може допомогти вам згадати його.</value>
   </data>
   <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Довжина головного пароля повинна бути не менше 8 символів.</value>
+    <value>Довжина головного пароля має бути принаймні 8 символів.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Мінімум цифр</value>
@@ -594,7 +598,7 @@
     <value>Додаткові налаштування</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>Ви повинні увійти в основну програму Bitwarden, щоб використовувати розширення.</value>
+    <value>Потрібно увійти в основну програму Bitwarden, щоб використовувати розширення.</value>
   </data>
   <data name="Never" xml:space="preserve">
     <value>Ніколи</value>
@@ -659,7 +663,7 @@
     <value>Введіть головний пароль ще раз</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
-    <value>Пошук</value>
+    <value>Шукати у сховищі</value>
   </data>
   <data name="Security" xml:space="preserve">
     <value>Безпека</value>
@@ -769,6 +773,12 @@
   </data>
   <data name="Enabled" xml:space="preserve">
     <value>Увімкнено</value>
+  </data>
+  <data name="Off" xml:space="preserve">
+    <value>Вимк</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>Увімк</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>Статус</value>
@@ -889,11 +899,9 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>Не вдається прочитати ключ авторизації.</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>Сканування відбудеться автоматично.</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Наведіть свою камеру на QR-код.</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Наведіть свою камеру на QR-код.
+Сканування відбудеться автоматично.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>Сканувати QR-код</value>
@@ -907,11 +915,11 @@
   <data name="CopyTotp" xml:space="preserve">
     <value>Копіювати TOTP</value>
   </data>
-  <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>Якщо ваш запис має вкладений ключ авторизації, код підтвердження TOTP автоматично копіюється до буфера обміну щоразу при автозаповненні.</value>
+  <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
+    <value>Якщо запис має ключ авторизації, копіювати код підтвердження TOTP до буфера обміну під час автозаповнення.</value>
   </data>
-  <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>Вимкнути авто-копіювання TOTP</value>
+  <data name="CopyTotpAutomatically" xml:space="preserve">
+    <value>Автоматично копіювати коди TOTP</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
     <value>Для використання цієї функції необхідний преміум статус.</value>
@@ -1128,11 +1136,11 @@
   <data name="Expiration" xml:space="preserve">
     <value>Термін дії</value>
   </data>
-  <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>Вимкнути піктограми вебсайтів</value>
+  <data name="ShowWebsiteIcons" xml:space="preserve">
+    <value>Показувати піктограми вебсайтів</value>
   </data>
-  <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Впізнавані піктограми вебсайтів додаються біля кожного запису вашого сховища.</value>
+  <data name="ShowWebsiteIconsDescription" xml:space="preserve">
+    <value>Показувати впізнаване зображення біля кожного запису.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>URL-адреса сервера піктограм</value>
@@ -1281,7 +1289,7 @@
     <value>Автозаповнення активовано!</value>
   </data>
   <data name="MustLogInMainAppAutofill" xml:space="preserve">
-    <value>Ви повинні увійти в основну програму Bitwarden, щоб використовувати автозаповнення.</value>
+    <value>Потрібно увійти в основну програму Bitwarden, щоб використовувати автозаповнення.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
     <value>Тепер ви можете легко отримувати доступ до своїх записів з клавіатури під час входу в програмах і на вебсайтах.</value>
@@ -1370,13 +1378,17 @@
     <value>Немає записів.</value>
   </data>
   <data name="SearchCollection" xml:space="preserve">
-    <value>Пошук в збірках</value>
+    <value>Шукати в збірці</value>
   </data>
-  <data name="SearchFolder" xml:space="preserve">
-    <value>Пошук теки</value>
+  <data name="SearchFileSends" xml:space="preserve">
+    <value>Шукати відправлені файли</value>
   </data>
-  <data name="SearchType" xml:space="preserve">
-    <value>Пошук за типом</value>
+  <data name="SearchTextSends" xml:space="preserve">
+    <value>Шукати відправлений текст</value>
+  </data>
+  <data name="SearchGroup" xml:space="preserve">
+    <value>Шукати {0}</value>
+    <comment>ex: Search Logins</comment>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Тип</value>
@@ -1407,7 +1419,7 @@
     <value>Надано спільний доступ для запису.</value>
   </data>
   <data name="SelectOneCollection" xml:space="preserve">
-    <value>Ви повинні обрати принаймні одну збірку.</value>
+    <value>Необхідно вибрати принаймні одну збірку.</value>
   </data>
   <data name="Share" xml:space="preserve">
     <value>Поділитися</value>
@@ -1445,7 +1457,7 @@
     <value>Немає тек.</value>
   </data>
   <data name="FingerprintPhrase" xml:space="preserve">
-    <value>Фраза відбитку</value>
+    <value>Фраза відбитка</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="YourAccountsFingerprint" xml:space="preserve">
@@ -1456,10 +1468,10 @@
     <value>Bitwarden дозволяє вам надавати доступ до елементів свого сховища іншим за допомогою облікового запису організації. Чи не бажаєте перейти на вебсайт bitwarden.com, щоб дізнатися більше?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
-    <value>Експорт сховища</value>
+    <value>Експортувати сховище</value>
   </data>
   <data name="LockNow" xml:space="preserve">
-    <value>Заблокувати зараз</value>
+    <value>Блокувати зараз</value>
   </data>
   <data name="PIN" xml:space="preserve">
     <value>PIN-код</value>
@@ -1537,8 +1549,14 @@
   <data name="ThemeDefault" xml:space="preserve">
     <value>Типова (Система)</value>
   </data>
+  <data name="DefaultDarkTheme" xml:space="preserve">
+    <value>Типова темна тема</value>
+  </data>
+  <data name="DefaultDarkThemeDescription" xml:space="preserve">
+    <value>Використовуйте темну тему разом із системними налаштуваннями, коли вона увімкнена для пристрою.</value>
+  </data>
   <data name="CopyNotes" xml:space="preserve">
-    <value>Копіювати нотатки</value>
+    <value>Копіювати нотатку</value>
   </data>
   <data name="Exit" xml:space="preserve">
     <value>Вийти</value>
@@ -1553,20 +1571,24 @@
     <value>Чорна</value>
     <comment>The color black</comment>
   </data>
-  <data name="BlacklistedUris" xml:space="preserve">
-    <value>Чорний список URI</value>
+  <data name="Nord" xml:space="preserve">
+    <value>Норд</value>
+    <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
-  <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>Для URI-адрес, що містяться в чорному списку, не пропонуватиметься автозаповнення. Список повинен бути розділений комами. Наприклад: "https://twitter.com, androidapp://com.twitter.android".</value>
+  <data name="AutofillBlockedUris" xml:space="preserve">
+    <value>Заблоковані для автозаповнення URI</value>
   </data>
-  <data name="DisableSavePrompt" xml:space="preserve">
-    <value>Вимкнути запит про збереження</value>
+  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
+    <value>Автозаповнення не пропонуватиметься для заблокованих URI-адрес. Розділяйте різні URI комою. Наприклад: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
-  <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>Запит про збереження автоматично пропонує вам зберегти нові записи до вашого сховища, щоразу, коли ви вперше заповнюєте облікові дані.</value>
+  <data name="AskToAddLogin" xml:space="preserve">
+    <value>Запитувати про додавання запису</value>
+  </data>
+  <data name="AskToAddLoginDescription" xml:space="preserve">
+    <value>Запитувати про додавання запису, якщо його немає у вашому сховищі.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
-    <value>При перезапуску програми</value>
+    <value>Під час перезапуску програми</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
     <value>Автозаповнення дозволяє безпечно отримувати доступ до вашого сховища Bitwarden з інших вебсайтів та програм. Схоже, що ви не активували функцію автозаповнення Bitwarden. Увімкніть автозаповнення на екрані налаштувань.</value>
@@ -1642,7 +1664,7 @@
     <value>Експортовані дані вашого сховища знаходяться в незашифрованому вигляді. Вам не слід зберігати чи надсилати їх через незахищені канали (наприклад, е-поштою). Після використання негайно видаліть їх.</value>
   </data>
   <data name="EncExportKeyWarning" xml:space="preserve">
-    <value>Цей експорт шифрує ваші дані за допомогою ключа шифрування облікового запису. Якщо ви коли-небудь оновите ключ шифрування облікового запису, ви повинні виконати експорт знову, оскільки не зможете розшифрувати цей файл експорту.</value>
+    <value>Цей експорт шифрує ваші дані за допомогою ключа шифрування облікового запису. Якщо ви коли-небудь оновите ключ шифрування облікового запису, необхідно виконати експорт знову, оскільки не зможете розшифрувати цей файл експорту.</value>
   </data>
   <data name="EncExportAccountWarning" xml:space="preserve">
     <value>Ключі шифрування є унікальними для кожного облікового запису Bitwarden, тому ви не можете імпортувати зашифрований експорт в інший обліковий запис.</value>
@@ -1708,7 +1730,7 @@
     <comment>(noun) Location of deleted items which have not yet been permanently deleted</comment>
   </data>
   <data name="SearchTrash" xml:space="preserve">
-    <value>Пошук у смітнику</value>
+    <value>Шукати в смітнику</value>
     <comment>(action prompt) Label for the search text field when viewing the trash folder</comment>
   </data>
   <data name="DoYouReallyWantToPermanentlyDeleteCipher" xml:space="preserve">
@@ -1856,6 +1878,9 @@
     <value>Опис цього відправлення.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
+  <data name="Text" xml:space="preserve">
+    <value>Текст</value>
+  </data>
   <data name="TypeText" xml:space="preserve">
     <value>Текст</value>
   </data>
@@ -1871,6 +1896,18 @@
   </data>
   <data name="TypeFileInfo" xml:space="preserve">
     <value>Файл, який ви хочете відправити.</value>
+  </data>
+  <data name="FileTypeIsSelected" xml:space="preserve">
+    <value>Тип файлу вибрано.</value>
+  </data>
+  <data name="FileTypeIsNotSelected" xml:space="preserve">
+    <value>Тип файлу не вибрано. Торкніться, щоб вибрати.</value>
+  </data>
+  <data name="TextTypeIsSelected" xml:space="preserve">
+    <value>Тип тексту вибрано.</value>
+  </data>
+  <data name="TextTypeIsNotSelected" xml:space="preserve">
+    <value>Тип тексту не вибрано. Торкніться, щоб вибрати.</value>
   </data>
   <data name="DeletionDate" xml:space="preserve">
     <value>Дата видалення</value>
@@ -1957,7 +1994,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SearchSends" xml:space="preserve">
-    <value>Пошук відправлень</value>
+    <value>Шукати відправлення</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="EditSend" xml:space="preserve">
@@ -2051,7 +2088,7 @@
     <value>Оновити головний пароль</value>
   </data>
   <data name="UpdateMasterPasswordWarning" xml:space="preserve">
-    <value>Ваш головний пароль нещодавно був змінений адміністратором організації. Щоб отримати доступ до сховища, ви повинні оновити свій головний пароль зараз. Продовживши, ви вийдете з поточного сеансу, після чого необхідно буде повторно виконати вхід. Сеанси на інших пристроях можуть залишатися активними протягом однієї години.</value>
+    <value>Ваш головний пароль нещодавно був змінений адміністратором організації. Щоб отримати доступ до сховища, вам необхідно оновити свій головний пароль зараз. Продовживши, ви вийдете з поточного сеансу, після чого потрібно буде повторно виконати вхід. Сеанси на інших пристроях можуть залишатися активними протягом однієї години.</value>
   </data>
   <data name="UpdatingPassword" xml:space="preserve">
     <value>Оновлення пароля</value>
@@ -2135,7 +2172,7 @@
     <value>Видалення облікового запису остаточне</value>
   </data>
   <data name="DeleteAccountExplanation" xml:space="preserve">
-    <value>Ваш обліковий запис та всі пов'язані дані буде стерто без можливості відновлення. Ви дійсно хочете продовжити?</value>
+    <value>Ваш обліковий запис та всі дані сховища буде стерто без можливості відновлення. Ви дійсно хочете продовжити?</value>
   </data>
   <data name="DeletingYourAccount" xml:space="preserve">
     <value>Видалення облікового запису</value>
@@ -2175,5 +2212,105 @@
   </data>
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
     <value>Введіть код підтвердження, надісланий на вашу електронну пошту</value>
+  </data>
+  <data name="SubmitCrashLogs" xml:space="preserve">
+    <value>Надсилати звіти про збої</value>
+  </data>
+  <data name="SubmitCrashLogsDescription" xml:space="preserve">
+    <value>Допоможіть Bitwarden вдосконалити стабільність програми, надсилаючи звіти про збої.</value>
+  </data>
+  <data name="OptionsExpanded" xml:space="preserve">
+    <value>Налаштування розгорнуто. Торкніться, щоб згорнути.</value>
+  </data>
+  <data name="OptionsCollapsed" xml:space="preserve">
+    <value>Налаштування згорнуто. Торкніться, щоб розгорнути.</value>
+  </data>
+  <data name="UppercaseAtoZ" xml:space="preserve">
+    <value>Верхній регістр (A - Z)</value>
+  </data>
+  <data name="LowercaseAtoZ" xml:space="preserve">
+    <value>Нижній регістр (A - Z)</value>
+  </data>
+  <data name="NumbersZeroToNine" xml:space="preserve">
+    <value>Числа (0 - 9)</value>
+  </data>
+  <data name="SpecialCharacters" xml:space="preserve">
+    <value>Спеціальні символи (!@#$%^&amp;*)</value>
+  </data>
+  <data name="TapToGoBack" xml:space="preserve">
+    <value>Торкніться, щоб повернутися</value>
+  </data>
+  <data name="PasswordIsVisibleTapToHide" xml:space="preserve">
+    <value>Пароль видимий. Торкніться, щоб приховати.</value>
+  </data>
+  <data name="PasswordIsNotVisibleTapToShow" xml:space="preserve">
+    <value>Пароль прихований. Торкніться, щоб показати.</value>
+  </data>
+  <data name="FilterByVault" xml:space="preserve">
+    <value>Фільтрувати елементи за сховищем</value>
+  </data>
+  <data name="AllVaults" xml:space="preserve">
+    <value>Усі сховища</value>
+  </data>
+  <data name="Vaults" xml:space="preserve">
+    <value>Сховища</value>
+  </data>
+  <data name="VaultFilterDescription" xml:space="preserve">
+    <value>Сховище: {0}</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Усі</value>
+  </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Коди підтвердження</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>Необхідна передплата преміум</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>Не вдається додати ключ авторизації? </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>Сканувати QR-код</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>Не вдається сканувати QR-код? </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Ключ авторизації</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Введіть ключ вручну</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>Додати TOTP</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>Налаштувати TOTP</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>Після успішного введення ключа виберіть
+Додати TOTP для надійного збереження ключа</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="NeverLockWarning" xml:space="preserve">
+    <value>Встановивши параметр блокування "Ніколи", ви залишаєте своє сховище відкритим будь-кому, хто зможе отримати доступ до вашого пристрою. Користуючись цим параметром, ви маєте бути впевненими в тому, що ваш пристрій надійно захищений.</value>
+  </data>
+  <data name="EnvironmentPageUrlsError" xml:space="preserve">
+    <value>Одна чи більше введених URL-адрес недійсні. Перевірте їх та спробуйте зберегти знову.</value>
+  </data>
+  <data name="GenericErrorMessage" xml:space="preserve">
+    <value>Нам не вдалося обробити ваш запит. Спробуйте ще раз або зв'яжіться з нами.</value>
+  </data>
+  <data name="AllowScreenCapture" xml:space="preserve">
+    <value>Дозволити знімки екрана</value>
+  </data>
+  <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
+    <value>Ви дійсно хочете увімкнути знімки екрана?</value>
   </data>
 </root>

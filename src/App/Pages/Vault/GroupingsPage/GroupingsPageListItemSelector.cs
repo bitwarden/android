@@ -8,12 +8,18 @@ namespace Bit.App.Pages
         public DataTemplate CipherTemplate { get; set; }
         public DataTemplate GroupTemplate { get; set; }
         public DataTemplate LoginCipherTemplate { get; set; }
+        public DataTemplate AuthenticatorTemplate { get; set; }
 
         protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
         {
             if (item is GroupingsPageHeaderListItem)
             {
                 return HeaderTemplate;
+            }
+
+            if (item is GroupingsPageTOTPListItem)
+            {
+                return AuthenticatorTemplate;
             }
 
             if (item is GroupingsPageListItem listItem)
@@ -27,6 +33,7 @@ namespace Bit.App.Pages
                         ? LoginCipherTemplate
                         : CipherTemplate;
             }
+
             return null;
         }
     }

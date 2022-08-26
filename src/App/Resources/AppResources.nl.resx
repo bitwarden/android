@@ -276,16 +276,16 @@
     <value>Weet je zeker dat je wilt uitloggen?</value>
   </data>
   <data name="RemoveAccount" xml:space="preserve">
-    <value>Remove Account</value>
+    <value>Verwijder account</value>
   </data>
   <data name="RemoveAccountConfirmation" xml:space="preserve">
-    <value>Are you sure you want to remove this account?</value>
+    <value>Weet je zeker dat je dit account wilt verwijderen?</value>
   </data>
   <data name="AccountAlreadyAdded" xml:space="preserve">
-    <value>Account Already Added</value>
+    <value>Account is al toegevoegd</value>
   </data>
   <data name="SwitchToAlreadyAddedAccountConfirmation" xml:space="preserve">
-    <value>Would you like to switch to it now?</value>
+    <value>Wil je er nu naar overschakelen?</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Hoofdwachtwoord</value>
@@ -298,6 +298,10 @@
   <data name="MyVault" xml:space="preserve">
     <value>Mijn kluis</value>
     <comment>The title for the vault page.</comment>
+  </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Authenticator</value>
+    <comment>Authenticator TOTP feature</comment>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Naam</value>
@@ -770,6 +774,12 @@
   <data name="Enabled" xml:space="preserve">
     <value>Ingeschakeld</value>
   </data>
+  <data name="Off" xml:space="preserve">
+    <value>Uit</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>Aan</value>
+  </data>
   <data name="Status" xml:space="preserve">
     <value>Status</value>
   </data>
@@ -889,11 +899,9 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>Kan de authenticatiecode niet lezen.</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>Het scannen gaat automatisch.</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Richt je camera op de QR-code.</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Richt je camera op de QR-code.
+Het scannen gebeurt automatisch.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>QR-code scannen</value>
@@ -907,11 +915,11 @@
   <data name="CopyTotp" xml:space="preserve">
     <value>TOTP kopiëren</value>
   </data>
-  <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>Als je login gekoppeld is met een authenticatiecode, wordt de TOTP-verificatiecode automatisch naar het klembord gekopieerd bij het automatisch invullen van de login.</value>
+  <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
+    <value>Als een login een authenticatiecode heeft, de TOTP-verificatiecode automatisch naar het klembord kopiëren bij het automatisch invullen van de inloggegevens.</value>
   </data>
-  <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>Automatisch kopiëren TOTP uitschakelen</value>
+  <data name="CopyTotpAutomatically" xml:space="preserve">
+    <value>TOTP automatisch kopiëren</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
     <value>Je hebt een Premium-abonnement nodig om deze functionaliteit te kunnen gebruiken.</value>
@@ -1128,11 +1136,11 @@
   <data name="Expiration" xml:space="preserve">
     <value>Vervaldatum</value>
   </data>
-  <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>Websitepictogrammen uitschakelen</value>
+  <data name="ShowWebsiteIcons" xml:space="preserve">
+    <value>Websitepictogrammen weergeven</value>
   </data>
-  <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Websitepictogrammen geven een herkenbare afbeelding naast elk item in je kluis.</value>
+  <data name="ShowWebsiteIconsDescription" xml:space="preserve">
+    <value>Een herkenbare afbeelding naast iedere login weergeven.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>Pictogrammenserver-URL</value>
@@ -1372,11 +1380,15 @@
   <data name="SearchCollection" xml:space="preserve">
     <value>Verzameling doorzoeken</value>
   </data>
-  <data name="SearchFolder" xml:space="preserve">
-    <value>Map doorzoeken</value>
+  <data name="SearchFileSends" xml:space="preserve">
+    <value>Bestand-Sends zoeken</value>
   </data>
-  <data name="SearchType" xml:space="preserve">
-    <value>Categorie doorzoeken</value>
+  <data name="SearchTextSends" xml:space="preserve">
+    <value>Tekst-Sends zoeken</value>
+  </data>
+  <data name="SearchGroup" xml:space="preserve">
+    <value>Zoek {0}:</value>
+    <comment>ex: Search Logins</comment>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Categorie</value>
@@ -1537,6 +1549,12 @@
   <data name="ThemeDefault" xml:space="preserve">
     <value>Standaard (Systeem)</value>
   </data>
+  <data name="DefaultDarkTheme" xml:space="preserve">
+    <value>Standaard donkere thema</value>
+  </data>
+  <data name="DefaultDarkThemeDescription" xml:space="preserve">
+    <value>Kies welk donkere thema te gebruiken als standaard (systeem) thema wanneer de donkere modus van je apparaat is ingeschakeld.</value>
+  </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Notities kopiëren</value>
   </data>
@@ -1553,17 +1571,21 @@
     <value>Zwart</value>
     <comment>The color black</comment>
   </data>
-  <data name="BlacklistedUris" xml:space="preserve">
-    <value>Geblokkeerde URI's</value>
+  <data name="Nord" xml:space="preserve">
+    <value>Nord</value>
+    <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
-  <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>Geblokkeerde URI's worden niet automatisch ingevuld. De lijst moet met komma's gescheiden zijn. Bijv: "https://twitter.com, androidapp://com.twitter.android".</value>
+  <data name="AutofillBlockedUris" xml:space="preserve">
+    <value>Automatisch invullen geblokkeerde URI's</value>
   </data>
-  <data name="DisableSavePrompt" xml:space="preserve">
-    <value>"Notificatie bij nieuwe site" uitschakelen</value>
+  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
+    <value>Automatisch invullen niet aanbieden voor geblokkeerde URIs. Scheid meerdere URI's met een komma. Bijvoorbeeld: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
-  <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>De "Notificatie bij nieuwe site" vraagt automatisch om nieuwe sites op te slaan in je kluis wanneer je voor de eerste keer inlogt.</value>
+  <data name="AskToAddLogin" xml:space="preserve">
+    <value>Vragen login toe te voegen</value>
+  </data>
+  <data name="AskToAddLoginDescription" xml:space="preserve">
+    <value>Vraag om een item toe te voegen als deze niet in je kluis is gevonden.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
     <value>Na opnieuw starten</value>
@@ -1856,6 +1878,9 @@
     <value>Een vriendelijke naam om deze Send te beschrijven.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
+  <data name="Text" xml:space="preserve">
+    <value>Tekst</value>
+  </data>
   <data name="TypeText" xml:space="preserve">
     <value>Tekst</value>
   </data>
@@ -1871,6 +1896,18 @@
   </data>
   <data name="TypeFileInfo" xml:space="preserve">
     <value>Het bestand dat je wilt versturen.</value>
+  </data>
+  <data name="FileTypeIsSelected" xml:space="preserve">
+    <value>Bestandstype geselecteerd.</value>
+  </data>
+  <data name="FileTypeIsNotSelected" xml:space="preserve">
+    <value>Bestandstype niet geselecteerd, tik om te selecteren.</value>
+  </data>
+  <data name="TextTypeIsSelected" xml:space="preserve">
+    <value>Teksttype is geselecteerd.</value>
+  </data>
+  <data name="TextTypeIsNotSelected" xml:space="preserve">
+    <value>Teksttype niet geselecteerd, tik om te selecteren.</value>
   </data>
   <data name="DeletionDate" xml:space="preserve">
     <value>Verwijderingsdatum</value>
@@ -2105,19 +2142,19 @@
     <value>Organisatiebeleid voorkomt dat je je persoonlijke kluis exporteert.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
-    <value>Add Account</value>
+    <value>Voeg account toe.</value>
   </data>
   <data name="AccountUnlocked" xml:space="preserve">
-    <value>Unlocked</value>
+    <value>Ontgrendeld</value>
   </data>
   <data name="AccountLocked" xml:space="preserve">
-    <value>Locked</value>
+    <value>Vergrendeld</value>
   </data>
   <data name="AccountLoggedOut" xml:space="preserve">
-    <value>Logged Out</value>
+    <value>Uitgelogd</value>
   </data>
   <data name="AccountSwitchedAutomatically" xml:space="preserve">
-    <value>Switched to next available account</value>
+    <value>Overgeschakeld naar volgende beschikbare account</value>
   </data>
   <data name="AccountLockedSuccessfully" xml:space="preserve">
     <value>Account geblokkeerd</value>
@@ -2175,5 +2212,105 @@
   </data>
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
     <value>Voer de verificatiecode in die we naar je e-mail is gestuurd</value>
+  </data>
+  <data name="SubmitCrashLogs" xml:space="preserve">
+    <value>Submit crash logs</value>
+  </data>
+  <data name="SubmitCrashLogsDescription" xml:space="preserve">
+    <value>Help Bitwarden improve app stability by submitting crash reports.</value>
+  </data>
+  <data name="OptionsExpanded" xml:space="preserve">
+    <value>Opties zijn uitgebreid, tik om te storten.</value>
+  </data>
+  <data name="OptionsCollapsed" xml:space="preserve">
+    <value>Opties zijn gestort, tik om uit te breiden.</value>
+  </data>
+  <data name="UppercaseAtoZ" xml:space="preserve">
+    <value>Hoofdletters (A tot Z)</value>
+  </data>
+  <data name="LowercaseAtoZ" xml:space="preserve">
+    <value>Kleine letters (A tot Z)</value>
+  </data>
+  <data name="NumbersZeroToNine" xml:space="preserve">
+    <value>Cijfers (0 tot 9)</value>
+  </data>
+  <data name="SpecialCharacters" xml:space="preserve">
+    <value>Speciale tekens (!@#$%^&amp;*)</value>
+  </data>
+  <data name="TapToGoBack" xml:space="preserve">
+    <value>Tik voor teruggaan</value>
+  </data>
+  <data name="PasswordIsVisibleTapToHide" xml:space="preserve">
+    <value>Wachtwoord is zichtbaar, tik om te verbergen.</value>
+  </data>
+  <data name="PasswordIsNotVisibleTapToShow" xml:space="preserve">
+    <value>Wachtwoord is niet zichtbaar, tik om weer te geven.</value>
+  </data>
+  <data name="FilterByVault" xml:space="preserve">
+    <value>Items bij kluis filteren</value>
+  </data>
+  <data name="AllVaults" xml:space="preserve">
+    <value>Alle kluizen</value>
+  </data>
+  <data name="Vaults" xml:space="preserve">
+    <value>Kluizen</value>
+  </data>
+  <data name="VaultFilterDescription" xml:space="preserve">
+    <value>Kluis: {0}</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Alles</value>
+  </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Verificatiecodes</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>Premium-abonnement vereist</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>Kun je de authenticatiesleutel niet toevoegen? </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>QR-code scannen</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>Kun je de QR-code niet scannen? </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Authenticatiesleutel</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Sleutel handmatig invoeren</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>TOTP toevoegen</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>TOTP instellen</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>Zodra je de sleutel goed hebt ingevoerd,
+kies je TOTP toevoegen om de sleutel veilig op te slaan</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="NeverLockWarning" xml:space="preserve">
+    <value>De vergrendelingsoptie "Nooit" houdt je kluis beschikbaar voor iedereen met toegang tot je apparaat. Als je deze optie gebruikt, moet je ervoor zorgen dat je je apparaat naar behoren beschermt.</value>
+  </data>
+  <data name="EnvironmentPageUrlsError" xml:space="preserve">
+    <value>One or more of the URLs entered are invalid. Please revise it and try to save again.</value>
+  </data>
+  <data name="GenericErrorMessage" xml:space="preserve">
+    <value>We were unable to process your request. Please try again or contact us.</value>
+  </data>
+  <data name="AllowScreenCapture" xml:space="preserve">
+    <value>Schermopname toestaan</value>
+  </data>
+  <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
+    <value>Weet je zeker dat je schermopname wilt inschakelen?</value>
   </data>
 </root>

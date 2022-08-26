@@ -6,6 +6,7 @@
     xmlns:u="clr-namespace:Bit.App.Utilities"
     xmlns:effects="clr-namespace:Bit.App.Effects"
     xmlns:controls="clr-namespace:Bit.App.Controls"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
     xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
     x:DataType="pages:GroupingsPageViewModel"
     Title="{Binding PageTitle}"
@@ -89,6 +90,13 @@
                         BackgroundColor="{DynamicResource BackgroundColor}"/>
                 </SwipeView>
             </DataTemplate>
+            <DataTemplate x:Key="authenticatorTemplate"
+                          x:DataType="pages:GroupingsPageTOTPListItem">
+                <controls:AuthenticatorViewCell 
+                    Cipher="{Binding Cipher}"
+                    WebsiteIconsEnabled="{Binding BindingContext.WebsiteIconsEnabled, Source={x:Reference _page}}"
+                    TotpSec="{Binding TotpSec}"/>
+            </DataTemplate>
 
             <DataTemplate x:Key="groupTemplate"
                           x:DataType="pages:GroupingsPageListItem">
@@ -142,6 +150,7 @@
                                                  HeaderTemplate="{StaticResource headerTemplate}"
                                                  CipherTemplate="{StaticResource cipherTemplate}"
                                                  GroupTemplate="{StaticResource groupTemplate}" 
+                                                 AuthenticatorTemplate="{StaticResource authenticatorTemplate}"
                                                  LoginCipherTemplate="{StaticResource loginCipherTemplate}" />
 
             <StackLayout x:Key="mainLayout" x:Name="_mainLayout">
@@ -168,7 +177,6 @@
                         AutomationProperties.IsInAccessibleTree="True"
                         AutomationProperties.Name="{u:I18n Filter}" />
                 </StackLayout>
-
                 <StackLayout
                     VerticalOptions="CenterAndExpand"
                     Padding="20, 0"

@@ -30,7 +30,7 @@ jobs:
           secrets: "crowdin-api-token"
 
       - name: Download translations
-        uses: crowdin/github-action@e39093fd75daae7859c68eded4b43d42ec78d8ea
+        uses: crowdin/github-action@12143a68c213f3c6d9913c9e5023224f7231face
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CROWDIN_API_TOKEN: ${{ steps.retrieve-secrets.outputs.crowdin-api-token }}

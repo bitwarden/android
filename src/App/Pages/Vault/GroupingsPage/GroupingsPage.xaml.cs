@@ -22,6 +22,7 @@ namespace Bit.App.Pages
         private readonly IVaultTimeoutService _vaultTimeoutService;
         private readonly ICipherService _cipherService;
         private readonly IDeviceActionService _deviceActionService;
+        private readonly IPlatformUtilsService _platformUtilsService;
         private readonly GroupingsPageViewModel _vm;
         private readonly string _pageName;
 
@@ -42,7 +43,7 @@ namespace Bit.App.Pages
 
         public GroupingsPage(bool mainPage, CipherType? type = null, string folderId = null,
             string collectionId = null, string pageTitle = null, string vaultFilterSelection = null,
-            PreviousPageInfo previousPage = null, bool deleted = false)
+            PreviousPageInfo previousPage = null, bool deleted = false, bool showTotp = false)
         {
             _pageName = string.Concat(nameof(GroupingsPage), "_", DateTime.UtcNow.Ticks);
             InitializeComponent();
@@ -54,6 +55,7 @@ namespace Bit.App.Pages
             _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _vm = BindingContext as GroupingsPageViewModel;
             _vm.Page = this;
             _vm.MainPage = mainPage;
@@ -61,6 +63,7 @@ namespace Bit.App.Pages
             _vm.FolderId = folderId;
             _vm.CollectionId = collectionId;
             _vm.Deleted = deleted;
+            _vm.ShowTotp = showTotp;
             _previousPage = previousPage;
             if (pageTitle != null)
             {
@@ -82,7 +85,7 @@ namespace Bit.App.Pages
                 ToolbarItems.Add(_lockItem);
                 ToolbarItems.Add(_exitItem);
             }
-            if (deleted)
+            if (deleted || showTotp)
             {
                 _absLayout.Children.Remove(_fab);
                 ToolbarItems.Remove(_addItem);
@@ -202,10 +205,11 @@ namespace Bit.App.Pages
             return false;
         }
 
-        protected override void OnDisappearing()
+        protected override async void OnDisappearing()
         {
             base.OnDisappearing();
             IsBusy = false;
+            _vm.StopCiphersTotpTick().FireAndForget();
             _broadcasterService.Unsubscribe(_pageName);
             _vm.DisableRefreshing();
             _accountAvatar?.OnDisappearing();
@@ -213,35 +217,54 @@ namespace Bit.App.Pages
 
         private async void RowSelected(object sender, SelectionChangedEventArgs e)
         {
-            ((ExtendedCollectionView)sender).SelectedItem = null;
-            if (!DoOnce())
+            try
             {
-                return;
-            }
-            if (!(e.CurrentSelection?.FirstOrDefault() is GroupingsPageListItem item))
-            {
-                return;
-            }
+                ((ExtendedCollectionView)sender).SelectedItem = null;
+                if (!DoOnce())
+                {
+                    return;
+                }
 
-            if (item.IsTrash)
-            {
-                await _vm.SelectTrashAsync();
+                if (e.CurrentSelection?.FirstOrDefault() is GroupingsPageTOTPListItem totpItem)
+                {
+                    await _vm.SelectCipherAsync(totpItem.Cipher);
+                    return;
+                }
+
+                if (!(e.CurrentSelection?.FirstOrDefault() is GroupingsPageListItem item))
+                {
+                    return;
+                }
+
+                if (item.IsTrash)
+                {
+                    await _vm.SelectTrashAsync();
+                }
+                else if (item.IsTotpCode)
+                {
+                    await _vm.SelectTotpCodesAsync();
+                }
+                else if (item.Cipher != null)
+                {
+                    await _vm.SelectCipherAsync(item.Cipher);
+                }
+                else if (item.Folder != null)
+                {
+                    await _vm.SelectFolderAsync(item.Folder);
+                }
+                else if (item.Collection != null)
+                {
+                    await _vm.SelectCollectionAsync(item.Collection);
+                }
+                else if (item.Type != null)
+                {
+                    await _vm.SelectTypeAsync(item.Type.Value);
+                }
             }
-            else if (item.Cipher != null)
+            catch (Exception ex)
             {
-                await _vm.SelectCipherAsync(item.Cipher);
-            }
-            else if (item.Folder != null)
-            {
-                await _vm.SelectFolderAsync(item.Folder);
-            }
-            else if (item.Collection != null)
-            {
-                await _vm.SelectCollectionAsync(item.Collection);
-            }
-            else if (item.Type != null)
-            {
-                await _vm.SelectTypeAsync(item.Type.Value);
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
+                _platformUtilsService.ShowDialogAsync(AppResources.AnErrorHasOccurred, AppResources.GenericErrorMessage, AppResources.Ok).FireAndForget();
             }
         }
 
