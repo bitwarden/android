@@ -107,15 +107,26 @@
                         StyleClass="box-value" />
                 </StackLayout>
                 <StackLayout IsVisible="{Binding IsLogin}" Spacing="0" Padding="0">
-                    <StackLayout StyleClass="box-row, box-row-input">
-                        <Label
+                    <Grid StyleClass="box-row, box-row-input"
+                        RowDefinitions="Auto,*"
+                        ColumnDefinitions="*,Auto">
+                         <Label
                             Text="{u:I18n Username}"
-                            StyleClass="box-label" />
+                            StyleClass="box-label"/>
                         <Entry
                             x:Name="_loginUsernameEntry"
                             Text="{Binding Cipher.Login.Username}"
-                            StyleClass="box-value" />
-                    </StackLayout>
+                            StyleClass="box-value" 
+                            Grid.Row="1"/>
+                        <controls:IconButton 
+                            StyleClass="box-row-button, box-row-button-platform"
+                            Text="{Binding Source={x:Static core:BitwardenIcons.Generate}}"
+                            Command="{Binding GenerateUsernameCommand}"
+                            Grid.Column="1"
+                            Grid.RowSpan="2"
+                            AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.Name="{u:I18n GenerateUsername}" />
+                    </Grid>
                     <Grid StyleClass="box-row, box-row-input">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
