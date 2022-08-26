@@ -300,7 +300,7 @@
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Authenticator" xml:space="preserve">
-    <value>Authenticator</value>
+    <value>Аўтэнтыфікатар</value>
     <comment>Authenticator TOTP feature</comment>
   </data>
   <data name="Name" xml:space="preserve">
@@ -327,7 +327,7 @@
     <comment>Button text for a save operation (verb).</comment>
   </data>
   <data name="Move" xml:space="preserve">
-    <value>Move</value>
+    <value>Перамясціць</value>
   </data>
   <data name="Saving" xml:space="preserve">
     <value>Захаванне...</value>
@@ -775,10 +775,10 @@
     <value>Уключана</value>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Off</value>
+    <value>Выкл.</value>
   </data>
   <data name="On" xml:space="preserve">
-    <value>On</value>
+    <value>Укл.</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>Стан</value>
@@ -808,7 +808,7 @@
     <value>Вы шукаеце элемент аўтазапаўнення для "{0}".</value>
   </data>
   <data name="LearnOrg" xml:space="preserve">
-    <value>Learn about organizations</value>
+    <value>Даведацца пра арганізацыі</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
     <value>Немагчыма адкрыць праграму "{0}".</value>
@@ -900,8 +900,7 @@
     <value>Немагчыма прачытаць ключ праверкі аутэнтычнасці.</value>
   </data>
   <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
-    <value>Point your camera at the QR Code.
-Scanning will happen automatically.</value>
+    <value>Навядзіце камеру на QR-код. Сканаванне адбудзецца аўтаматычна.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>Сканаваць QR -код</value>
@@ -919,7 +918,7 @@ Scanning will happen automatically.</value>
     <value>If a login has an authenticator key, copy the TOTP verification code to your clip-board when you auto-fill the login.</value>
   </data>
   <data name="CopyTotpAutomatically" xml:space="preserve">
-    <value>Copy TOTP automatically</value>
+    <value>Капіяваць TOTP аўтаматычна</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
     <value>Для выкарыстання гэтай функцыі патрабуецца прэміяльны статус.</value>
@@ -1080,7 +1079,7 @@ Scanning will happen automatically.</value>
     <value>Прозвішча</value>
   </data>
   <data name="FullName" xml:space="preserve">
-    <value>Full Name</value>
+    <value>Поўнае імя</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Нумар ліцэнзіі</value>
@@ -1137,7 +1136,7 @@ Scanning will happen automatically.</value>
     <value>Тэрмін дзеяння</value>
   </data>
   <data name="ShowWebsiteIcons" xml:space="preserve">
-    <value>Show website icons</value>
+    <value>Паказваць значкі вэб-сайтаў</value>
   </data>
   <data name="ShowWebsiteIconsDescription" xml:space="preserve">
     <value>Show a recognizable image next to each login.</value>
@@ -1207,7 +1206,7 @@ Scanning will happen automatically.</value>
     <value>Схавана</value>
   </data>
   <data name="FieldTypeLinked" xml:space="preserve">
-    <value>Linked</value>
+    <value>Звязана</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Тэкст</value>
@@ -1381,13 +1380,13 @@ Scanning will happen automatically.</value>
     <value>Пошук у калекцыі</value>
   </data>
   <data name="SearchFileSends" xml:space="preserve">
-    <value>Search File Sends</value>
+    <value>Пошук файлаў Send</value>
   </data>
   <data name="SearchTextSends" xml:space="preserve">
-    <value>Search Text Sends</value>
+    <value>Пошук тэкставых Send</value>
   </data>
   <data name="SearchGroup" xml:space="preserve">
-    <value>Search {0}</value>
+    <value>Пошук {0}</value>
     <comment>ex: Search Logins</comment>
   </data>
   <data name="Type" xml:space="preserve">
@@ -1412,7 +1411,7 @@ Scanning will happen automatically.</value>
     <value>Няма калекцый для паказу.</value>
   </data>
   <data name="MovedItemToOrg" xml:space="preserve">
-    <value>{0} moved to {1}.</value>
+    <value>{0} перамешчана ў {1}.</value>
     <comment>ex: Item moved to Organization.</comment>
   </data>
   <data name="ItemShared" xml:space="preserve">
@@ -1428,13 +1427,13 @@ Scanning will happen automatically.</value>
     <value>Абагуліць элемент</value>
   </data>
   <data name="MoveToOrganization" xml:space="preserve">
-    <value>Move to Organization</value>
+    <value>Перамясціць у арганізацыю</value>
   </data>
   <data name="NoOrgsToList" xml:space="preserve">
     <value>Няма арганізацый для паказу.</value>
   </data>
   <data name="MoveToOrgDesc" xml:space="preserve">
-    <value>Choose an organization that you wish to move this item to. Moving to an organization transfers ownership of the item to that organization. You will no longer be the direct owner of this item once it has been moved.</value>
+    <value>Выберыце арганізацыю, у якую вы хочаце перамясціць гэты элемент. Пры перамяшчэнні ў арганізацыю ўсе правы ўласнасці на дадзены элемент пяройдуць да гэтай арганізацыі. Вы больш не будзеце адзіным уласнікам гэтага элемента пасля яго перамяшчэння.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
     <value>Колькасць слоў</value>
@@ -1480,7 +1479,7 @@ Scanning will happen automatically.</value>
     <value>Разблакіраваць</value>
   </data>
   <data name="UnlockVault" xml:space="preserve">
-    <value>Unlock Vault</value>
+    <value>Разблакіраваць сховішча</value>
   </data>
   <data name="ThirtyMinutes" xml:space="preserve">
     <value>30 хвілін</value>
