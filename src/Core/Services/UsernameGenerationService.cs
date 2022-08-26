@@ -12,7 +12,6 @@ namespace Bit.Core.Services
         private readonly ICryptoService _cryptoService;
         private readonly IApiService _apiService;
         private readonly IStateService _stateService;
-        private readonly UsernameGenerationOptions _defaultOptions = new UsernameGenerationOptions();
         readonly LazyResolve<ILogger> _logger = new LazyResolve<ILogger>("logger");
         private UsernameGenerationOptions _optionsCache;
 
