@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
+using Android.Content.Res;
 using Android.Nfc;
 using Android.OS;
 using Android.Runtime;
@@ -18,7 +19,9 @@ using Bit.Core.Enums;
 using Bit.Core.Utilities;
 using Bit.Droid.Receivers;
 using Bit.Droid.Utilities;
+using Xamarin.Essentials;
 using ZXing.Net.Mobile.Android;
+using FileProvider = AndroidX.Core.Content.FileProvider;
 
 namespace Bit.Droid
 {
@@ -82,7 +85,7 @@ namespace Bit.Droid
             Xamarin.Forms.Forms.Init(this, savedInstanceState);
             _appOptions = GetOptions();
             LoadApplication(new App.App(_appOptions));
-
+            DisableAndroidFontScale();
 
             _broadcasterService.Subscribe(_activityKey, (message) =>
             {
@@ -400,6 +403,13 @@ namespace Bit.Droid
             var alarmManager = GetSystemService(AlarmService) as AlarmManager;
             alarmManager.Cancel(_eventUploadPendingIntent);
             await _eventService.UploadEventsAsync();
+        }
+
+        private void DisableAndroidFontScale()
+        {
+            //As we are using NamedSizes the xamarin will change the font size. So we are disabling the Android scaling.
+            Resources.Configuration.FontScale = 1f;
+            BaseContext.Resources.DisplayMetrics.ScaledDensity = Resources.Configuration.FontScale * (float)DeviceDisplay.MainDisplayInfo.Density;
         }
     }
 }
