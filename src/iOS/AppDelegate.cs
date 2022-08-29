@@ -16,6 +16,7 @@ using Bit.iOS.Services;
 using CoreNFC;
 using Foundation;
 using UIKit;
+using WatchConnectivity;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
@@ -56,6 +57,8 @@ namespace Bit.iOS
             LoadApplication(new App.App(null));
             iOSCoreHelpers.AppearanceAdjustments();
             ZXing.Net.Mobile.Forms.iOS.Platform.Init();
+
+            WCSessionManager.SharedManager.StartSession();
 
             _broadcasterService.Subscribe(nameof(AppDelegate), async (message) =>
             {

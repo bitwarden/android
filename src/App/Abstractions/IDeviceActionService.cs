@@ -8,6 +8,8 @@ namespace Bit.App.Abstractions
     {
         string DeviceUserAgent { get; }
         DeviceType DeviceType { get; }
+        bool IsWatchReachable { get; }
+
         void Toast(string text, bool longDuration = false);
         bool LaunchApp(string appName);
         Task ShowLoadingAsync(string text);

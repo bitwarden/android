@@ -134,6 +134,14 @@
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Default' ">
     <AppExtensionDebugBundleId />
   </PropertyGroup>
+  <PropertyGroup>
+    <WatchAppBuildPath Condition=" '$(Configuration)' == 'Debug' ">$(Home)/Library/Developer/Xcode/DerivedData/bitwarden-cbtqsueryycvflfzbsoteofskiyr/Build/Products</WatchAppBuildPath>
+    <WatchAppBuildPath Condition=" '$(Configuration)' != 'Debug' ">$(MSBuildProjectDirectory)/../bitwarden/DerivedData/Build/Products</WatchAppBuildPath>
+    <WatchAppBundle>bitwarden WatchKit App.app</WatchAppBundle>
+    <WatchAppConfiguration Condition=" '$(Platform)' == 'iPhoneSimulator' ">watchsimulator</WatchAppConfiguration>
+    <WatchAppConfiguration Condition=" '$(Platform)' == 'iPhone' ">watchos</WatchAppConfiguration>
+    <WatchAppBundleFullPath>$(WatchAppBuildPath)/$(Configuration)-$(WatchAppConfiguration)/$(WatchAppBundle)</WatchAppBundleFullPath>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
@@ -406,4 +414,17 @@
     <Folder Include="Resources\Assets.xcassets\LaunchScreen.imageset\" />
     <Folder Include="Resources\Assets.xcassets\ic_warning.imageset\" />
   </ItemGroup>
+  <ItemGroup Condition=" '$(Configuration)' == 'Debug' AND Exists('$(WatchAppBundleFullPath)') ">
+      <_ResolvedWatchAppReferences Include="$(WatchAppBundleFullPath)" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(Configuration)' != 'Debug' ">
+      <_ResolvedWatchAppReferences Include="$(WatchAppBundleFullPath)" />
+  </ItemGroup>
+  <PropertyGroup Condition=" '$(_ResolvedWatchAppReferences)' != '' ">
+      <CodesignExtraArgs>--deep</CodesignExtraArgs>
+  </PropertyGroup>
+  <Target Name="PrintWatchAppBundleStatus" BeforeTargets="Build">
+      <Message Text="WatchAppBundleFullPath: '$(WatchAppBundleFullPath)' exists" Condition=" Exists('$(WatchAppBundleFullPath)') " />
+      <Message Text="WatchAppBundleFullPath: '$(WatchAppBundleFullPath)' does NOT exist" Condition=" !Exists('$(WatchAppBundleFullPath)') " />
+  </Target>
 </Project>

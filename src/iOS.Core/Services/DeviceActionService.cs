@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -16,6 +17,7 @@ using LocalAuthentication;
 using MobileCoreServices;
 using Photos;
 using UIKit;
+using WatchConnectivity;
 using Xamarin.Forms;
 
 namespace Bit.iOS.Core.Services
@@ -34,6 +36,14 @@ namespace Bit.iOS.Core.Services
         {
             _stateService = stateService;
             _messagingService = messagingService;
+
+            WCSessionManager.SharedManager.ApplicationContextUpdated += SharedManager_MessagedReceived;
+            WCSessionManager.SharedManager.MessagedReceived += SharedManager_MessagedReceived;
+        }
+
+        private void SharedManager_MessagedReceived(WCSession session, Dictionary<string, object> applicationContext)
+        {
+            _messagingService.Send("wcmessage", applicationContext);
         }
 
         public string DeviceUserAgent
@@ -50,6 +60,8 @@ namespace Bit.iOS.Core.Services
         }
 
         public DeviceType DeviceType => DeviceType.iOS;
+
+        public bool IsWatchReachable => WCSessionManager.SharedManager.IsSessionReachable;
 
         public bool LaunchApp(string appName)
         {
@@ -75,6 +87,15 @@ namespace Bit.iOS.Core.Services
                 _toast?.Dispose();
                 _toast = null;
             };
+
+
+
+            WCSessionManager.SharedManager.UpdateApplicationContext(new Dictionary<string, object>() { { "message", $"totp app context test" } });
+            WCSessionManager.SharedManager.SendMessage(new Dictionary<string, object>() { { "message", $"totp test" } });
+
+
+
+
         }
 
         public Task ShowLoadingAsync(string text)

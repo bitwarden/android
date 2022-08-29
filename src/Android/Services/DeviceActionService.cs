@@ -84,6 +84,8 @@ namespace Bit.Droid.Services
 
         public DeviceType DeviceType => DeviceType.Android;
 
+        public bool IsWatchReachable => false;
+
         public void Toast(string text, bool longDuration = false)
         {
             if (_toast != null)
