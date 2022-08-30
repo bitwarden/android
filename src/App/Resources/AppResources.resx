@@ -2284,9 +2284,6 @@
   <data name="LogInAttemptByXOnY" xml:space="preserve">
     <value>Log in attempt by {0} on {1}</value>
   </data>
-  <data name="FingerprintPhrase" xml:space="preserve">
-    <value>Fingerprint phrase</value>
-  </data>
   <data name="DeviceType" xml:space="preserve">
     <value>Device Type</value>
   </data>
