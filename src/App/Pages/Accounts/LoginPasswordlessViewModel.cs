@@ -96,7 +96,7 @@ namespace Bit.App.Pages
         private async Task PasswordlessLoginAsync(bool approveRequest)
         {
             await _deviceActionService.ShowLoadingAsync(AppResources.Loading);
-            var res = await _authService.PasswordlessLoginAsync(LoginRequest.Id, LoginRequest.PubKey, approveRequest);
+            await _authService.PasswordlessLoginAsync(LoginRequest.Id, LoginRequest.PubKey, approveRequest);
             await _deviceActionService.HideLoadingAsync();
             await Page.Navigation.PopModalAsync();
             _platformUtilsService.ShowToast("info", null, approveRequest ? AppResources.LogInAccepted : AppResources.LogInDenied);
@@ -128,8 +128,6 @@ namespace Bit.App.Pages
         }
     }
 
-    // TODO (andre bispo) After having the service that gets the peding login request, maybe create a domain object.
-    // For now this will work to trigger property changes. 
     public class LoginPasswordlessDetails
     {
         public string Id { get; set; }
