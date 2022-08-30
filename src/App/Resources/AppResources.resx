@@ -2284,9 +2284,6 @@
   <data name="LogInAttemptByXOnY" xml:space="preserve">
     <value>Log in attempt by {0} on {1}</value>
   </data>
-  <data name="FingerprintPhrase" xml:space="preserve">
-    <value>Fingerprint phrase</value>
-  </data>
   <data name="DeviceType" xml:space="preserve">
     <value>Device Type</value>
   </data>
@@ -2331,5 +2328,11 @@
   </data>
   <data name="NoThanks" xml:space="preserve">
     <value>No thanks</value>
+  </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>Confirm log in attempt for</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>All notifications</value>
   </data>
 </root>

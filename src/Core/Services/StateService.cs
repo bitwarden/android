@@ -7,6 +7,7 @@ using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.Domain;
+using Bit.Core.Models.Response;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
 
@@ -1257,6 +1258,22 @@ namespace Bit.Core.Services
             var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
                 await GetDefaultStorageOptionsAsync());
             var key = Constants.ApprovePasswordlessLoginsKey(reconciledOptions.UserId);
+            await SetValueAsync(key, value, reconciledOptions);
+        }
+
+        public async Task<PasswordlessRequestNotification> GetPasswordlessLoginNotificationAsync(string userId = null)
+        {
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            var key = Constants.PasswordlessLoginNofiticationKey(reconciledOptions.UserId);
+            return await GetValueAsync<PasswordlessRequestNotification>(key, reconciledOptions);
+        }
+
+        public async Task SetPasswordlessLoginNotificationAsync(PasswordlessRequestNotification value, string userId = null)
+        {
+            var reconciledOptions = ReconcileOptions(new StorageOptions { UserId = userId },
+                await GetDefaultStorageOptionsAsync());
+            var key = Constants.PasswordlessLoginNofiticationKey(reconciledOptions.UserId);
             await SetValueAsync(key, value, reconciledOptions);
         }
         // Helpers

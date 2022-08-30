@@ -17,6 +17,7 @@ namespace Bit.App.Pages
     {
         private IDeviceActionService _deviceActionService;
         private IAuthService _authService;
+        private IPushNotificationService _pushNotificationService;
         private IPlatformUtilsService _platformUtilsService;
         private ILogger _logger;
         private LoginPasswordlessDetails _resquest;
@@ -26,6 +27,7 @@ namespace Bit.App.Pages
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _authService = ServiceContainer.Resolve<IAuthService>("authService");
+            _pushNotificationService = ServiceContainer.Resolve<IPushNotificationService>();
             _logger = ServiceContainer.Resolve<ILogger>("logger");
 
             PageTitle = AppResources.LogInRequested;
@@ -113,6 +115,7 @@ namespace Bit.App.Pages
             var res = await _authService.LogInPasswordlessAcceptAsync();
             await _deviceActionService.HideLoadingAsync();
             await Page.Navigation.PopModalAsync();
+            _pushNotificationService.DismissLocalNotification(Constants.PasswordlessNotificationId);
             _platformUtilsService.ShowToast("info", null, AppResources.LogInAccepted);
         }
 
@@ -122,6 +125,7 @@ namespace Bit.App.Pages
             var res = await _authService.LogInPasswordlessRejectAsync();
             await _deviceActionService.HideLoadingAsync();
             await Page.Navigation.PopModalAsync();
+            _pushNotificationService.DismissLocalNotification(Constants.PasswordlessNotificationId);
             _platformUtilsService.ShowToast("info", null, AppResources.LogInDenied);
         }
 

@@ -11,6 +11,7 @@ using Android.Runtime;
 using AndroidX.Core.Content;
 using Bit.App.Abstractions;
 using Bit.App.Models;
+using Bit.App.Resources;
 using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
@@ -81,8 +82,8 @@ namespace Bit.Droid
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             Xamarin.Forms.Forms.Init(this, savedInstanceState);
             _appOptions = GetOptions();
+            CreateNotificationChannel();
             LoadApplication(new App.App(_appOptions));
-
 
             _broadcasterService.Subscribe(_activityKey, (message) =>
             {
@@ -400,6 +401,23 @@ namespace Bit.Droid
             var alarmManager = GetSystemService(AlarmService) as AlarmManager;
             alarmManager.Cancel(_eventUploadPendingIntent);
             await _eventService.UploadEventsAsync();
+        }
+
+        private void CreateNotificationChannel()
+        {
+#if !FDROID
+            if (Build.VERSION.SdkInt < BuildVersionCodes.O)
+            {
+                // Notification channels are new in API 26 (and not a part of the
+                // support library). There is no need to create a notification
+                // channel on older versions of Android.
+                return;
+            }
+
+            var channel = new NotificationChannel(Constants.AndroidNotificationChannelId, AppResources.AllNotifications, NotificationImportance.Default);
+            var notificationManager = (NotificationManager)GetSystemService(NotificationService);
+            notificationManager?.CreateNotificationChannel(channel);
+#endif
         }
     }
 }

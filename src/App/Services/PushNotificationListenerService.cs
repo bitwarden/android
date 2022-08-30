@@ -1,8 +1,11 @@
 ﻿#if !FDROID
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
+using Bit.App.Pages;
+using Bit.App.Resources;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
@@ -26,6 +29,7 @@ namespace Bit.App.Services
         private IAppIdService _appIdService;
         private IApiService _apiService;
         private IMessagingService _messagingService;
+        private IPushNotificationService _pushNotificationService;
 
         public async Task OnMessageAsync(JObject value, string deviceType)
         {
@@ -125,6 +129,27 @@ namespace Bit.App.Services
                         _messagingService.Send("logout");
                     }
                     break;
+                case NotificationType.AuthRequestResponse:
+                    var passwordlessLoginMessage = JsonConvert.DeserializeObject<PasswordlessRequestNotification>(notification.Payload);
+
+                    // if the user has not enabled passwordless logins ignore requests
+                    if (!await _stateService.GetApprovePasswordlessLoginsAsync(passwordlessLoginMessage?.UserId))
+                    {
+                        return;
+                    }
+
+                    // if there is a request modal opened ignore all incoming requests
+                    if(App.Current.MainPage.Navigation.ModalStack.Any(p => ((NavigationPage)p).CurrentPage is LoginPasswordlessPage))
+                    {
+                        return;
+                    }
+
+                    await _stateService.SetPasswordlessLoginNotificationAsync(passwordlessLoginMessage, passwordlessLoginMessage?.UserId);
+                    var userEmail = await _stateService.GetEmailAsync(passwordlessLoginMessage?.UserId);
+
+                    _pushNotificationService.SendLocalNotification(AppResources.LogInRequested, $"{AppResources.ConfimLogInAttempForX} {userEmail}.", Constants.PasswordlessNotificationId);
+                    _messagingService.Send("passwordlessLoginRequest", passwordlessLoginMessage);
+                    break;
                 default:
                     break;
             }
@@ -204,6 +229,7 @@ namespace Bit.App.Services
             _appIdService = ServiceContainer.Resolve<IAppIdService>("appIdService");
             _apiService = ServiceContainer.Resolve<IApiService>("apiService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
+            _pushNotificationService = ServiceContainer.Resolve<IPushNotificationService>();
             _resolved = true;
         }
     }

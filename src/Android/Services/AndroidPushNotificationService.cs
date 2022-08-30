@@ -1,8 +1,11 @@
 ﻿#if !FDROID
 using System;
 using System.Threading.Tasks;
+using Android.App;
+using Android.Content;
 using AndroidX.Core.App;
 using Bit.App.Abstractions;
+using Bit.Core;
 using Bit.Core.Abstractions;
 using Xamarin.Forms;
 
@@ -51,6 +54,31 @@ namespace Bit.Droid.Services
         {
             // Do we ever need to unregister?
             return Task.FromResult(0);
+        }
+
+        public void DismissLocalNotification(string notificationId)
+        {
+            var notificationManager = NotificationManagerCompat.From(Android.App.Application.Context);
+            notificationManager.Cancel(int.Parse(notificationId));
+        }
+
+        public void SendLocalNotification(string title, string message, string notificationId = null)
+        {
+            notificationId = notificationId ?? new Random().Next(1000, 999999).ToString();
+            var context = Android.App.Application.Context;
+            var intent = new Intent(context, typeof(MainActivity));
+            var pendingIntent = PendingIntent.GetActivity(context, new Random().Next(1000, 999999), intent, PendingIntentFlags.OneShot);
+            var builder = new NotificationCompat.Builder(context, Constants.AndroidNotificationChannelId)
+               .SetContentIntent(pendingIntent)
+               .SetContentTitle(title)
+               .SetContentText(message)
+               .SetSmallIcon(Resource.Mipmap.ic_launcher)
+               .SetAutoCancel(true);
+
+            // Build the notification:
+            var notification = builder.Build();
+            var notificationManager = NotificationManagerCompat.From(context);
+            notificationManager.Notify(int.Parse(notificationId), notification);
         }
     }
 }
