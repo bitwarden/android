@@ -38,6 +38,7 @@ namespace Bit.Droid
         private IStateService _stateService;
         private IAppIdService _appIdService;
         private IEventService _eventService;
+        private ILogger _logger;
         private PendingIntent _eventUploadPendingIntent;
         private AppOptions _appOptions;
         private string _activityKey = $"{nameof(MainActivity)}_{Java.Lang.JavaSystem.CurrentTimeMillis().ToString()}";
@@ -59,6 +60,7 @@ namespace Bit.Droid
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _appIdService = ServiceContainer.Resolve<IAppIdService>("appIdService");
             _eventService = ServiceContainer.Resolve<IEventService>("eventService");
+            _logger = ServiceContainer.Resolve<ILogger>("logger");
 
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
@@ -73,7 +75,7 @@ namespace Bit.Droid
                 Window.AddFlags(Android.Views.WindowManagerFlags.Secure);
             });
 
-            ServiceContainer.Resolve<ILogger>("logger").InitAsync();
+            _logger.InitAsync();
 
             var toplayout = Window?.DecorView?.RootView;
             if (toplayout != null)
@@ -407,9 +409,16 @@ namespace Bit.Droid
 
         private void DisableAndroidFontScale()
         {
-            //As we are using NamedSizes the xamarin will change the font size. So we are disabling the Android scaling.
-            Resources.Configuration.FontScale = 1f;
-            BaseContext.Resources.DisplayMetrics.ScaledDensity = Resources.Configuration.FontScale * (float)DeviceDisplay.MainDisplayInfo.Density;
+            try
+            {
+                //As we are using NamedSizes the xamarin will change the font size. So we are disabling the Android scaling.
+                Resources.Configuration.FontScale = 1f;
+                BaseContext.Resources.DisplayMetrics.ScaledDensity = Resources.Configuration.FontScale * (float)DeviceDisplay.MainDisplayInfo.Density;
+            }
+            catch (Exception e)
+            {
+                _logger.Exception(e);
+            }
         }
     }
 }
