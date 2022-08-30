@@ -16,11 +16,11 @@
         SyncSettings = 10,
 
         LogOut = 11,
-        
+
         SyncSendCreate = 12,
         SyncSendUpdate = 13,
         SyncSendDelete = 14,
-        
+
         AuthRequest = 15,
         AuthRequestResponse = 16,
     }
