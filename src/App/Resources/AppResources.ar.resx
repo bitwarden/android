@@ -299,6 +299,10 @@
     <value>خزانتي</value>
     <comment>The title for the vault page.</comment>
   </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>المصادقة</value>
+    <comment>Authenticator TOTP feature</comment>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>الاسم</value>
     <comment>Label for an entity name.</comment>
@@ -895,11 +899,9 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>لا يمكن قراءة مفتاح المصادقة.</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>سيتم الفحص تلقائياً.</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>حدد الكاميرا الخاصة بك في رمز QR.</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>حدد الكاميرا الخاصة بك على رمز QR.
+سيتم الفحص تلقائيا.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>مسح رمز QR</value>
@@ -2259,6 +2261,43 @@
   </data>
   <data name="All" xml:space="preserve">
     <value>الكل</value>
+  </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>رموز التحقق</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>الاشتراك المميز مطلوب</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>لا يمكن إضافة مفتاح المصادقة؟ </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>مسح رمز QR</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>لا يمكن مسح رمز QR؟ </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>مفتاح المصادقة</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>أدخل المفتاح يدوياً</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>إضافة TOTP</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>إعداد TOTP</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>بمجرد إدخال المفتاح بنجاح،
+حدد إضافة TOTP لتخزين المفتاح بأمان</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value></value>
   </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>تعيين خيارات قفل الخاص بك إلى "مطلقا" يبقي خزنتك متاحةً لأي شخص لديه حق الوصول إلى جهازك. إذا كنت تستخدم هذا الخيار، يجب أن تتأكد من الحفاظ على حماية جهازك بشكل صحيح.</value>

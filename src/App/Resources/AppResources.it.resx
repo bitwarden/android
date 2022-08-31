@@ -299,6 +299,10 @@
     <value>Cassaforte</value>
     <comment>The title for the vault page.</comment>
   </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Autenticatore</value>
+    <comment>Authenticator TOTP feature</comment>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Nome</value>
     <comment>Label for an entity name.</comment>
@@ -895,11 +899,8 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>Impossibile leggere chiave di autenticazione.</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>La scansione è automatica.</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Punta la fotocamera sul codice QR.</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Punta il QR code con la fotocamera. La scansione avverrà automaticamente.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>Scansione codice QR</value>
@@ -2259,6 +2260,43 @@
   </data>
   <data name="All" xml:space="preserve">
     <value>Tutte</value>
+  </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Codici di verifica</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>È richiesto un abbonamento Premium</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>Non riesci ad aggiungere la chiave di autenticazione? </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>Scansiona codice QR</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>Non riesci a scansionare il codice QR? </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Chiave di autenticazione</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Inserisci la chiave manualmente</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>Aggiungi TOTP</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>Imposta TOTP</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>Una volta inserita la chiave,
+seleziona Aggiungi TOTP per salvare la chiave in modo sicuro</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value></value>
   </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Impostare le opzioni di blocco su “Mai” fa sì che la tua cassaforte sia a disposizione di chiunque abbia accesso al tuo dispositivo. Se si utilizza questa opzione, è necessario assicurarsi di mantenere il dispositivo adeguatamente protetto.</value>

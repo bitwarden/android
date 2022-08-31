@@ -299,6 +299,10 @@
     <value>ನನ್ನ ವಾಲ್ಟ್</value>
     <comment>The title for the vault page.</comment>
   </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Authenticator</value>
+    <comment>Authenticator TOTP feature</comment>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>ಹೆಸರು</value>
     <comment>Label for an entity name.</comment>
@@ -896,11 +900,9 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>ದೃಢೀಕರಣ ಕೀಲಿಯನ್ನು ಓದಲಾಗುವುದಿಲ್ಲ.</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>ಸ್ಕ್ಯಾನಿಂಗ್ ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಸಂಭವಿಸುತ್ತದೆ.</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>ನಿಮ್ಮ ಕ್ಯಾಮೆರಾವನ್ನು QR ಕೋಡ್‌ನಲ್ಲಿ ಸೂಚಿಸಿ.</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Point your camera at the QR Code.
+Scanning will happen automatically.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>QR ಕೋಡ್‌ ಸ್ಕ್ಯಾನ್‌ ಮಾಡಿ</value>
@@ -2259,6 +2261,43 @@
   </data>
   <data name="All" xml:space="preserve">
     <value>All</value>
+  </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Verification Codes</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>Premium subscription required</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>Cannot add authenticator key? </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>Scan QR Code</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>Cannot scan QR Code? </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Authenticator Key</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Enter Key Manually</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>Add TOTP</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>Set up TOTP</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>Once the key is successfully entered,
+select Add TOTP to store the key safely</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value></value>
   </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Setting your lock options to “Never” keeps your vault available to anyone with access to your device. If you use this option, you should ensure that you keep your device properly protected.</value>

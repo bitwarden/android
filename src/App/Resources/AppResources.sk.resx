@@ -299,6 +299,10 @@
     <value>Môj trezor</value>
     <comment>The title for the vault page.</comment>
   </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Authenticator</value>
+    <comment>Authenticator TOTP feature</comment>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Meno</value>
     <comment>Label for an entity name.</comment>
@@ -895,11 +899,9 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>Overovací kľúč sa nedá čítať.</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>Skenovanie prebehne automaticky.</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Namierte fotoaparát na QR kód.</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Namierte fotoaparát na kód QR.
+Skenovanie prebehne automaticky.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>Skenovať QR kód</value>
@@ -2258,6 +2260,43 @@
   </data>
   <data name="All" xml:space="preserve">
     <value>Všetky</value>
+  </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Overovacie kódy</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>Vyžaduje sa predplatné Prémium</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>Overovací kľúč sa nedá pridať? </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>Skenovať QR kód</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>QR kód sa nedá skenovať? </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Kľúč z aplikácie Authenticator</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Zadajte kľúč manuálne</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>Pridať TOTP</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>Nastaviť TOTP</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>Po úspešnom zadaní kľúča, vyberte možnosť
+Pridať TOTP, aby ste kľúč bezpečne uložili</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value></value>
   </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Nastavením možností uzamknutia na možnosť "Nikdy" zostane váš trezor dostupný pre každého, kto má prístup k vášmu zariadeniu. Ak používate túto možnosť, mali by ste zabezpečiť, aby bolo vaše zariadenie riadne chránené.</value>

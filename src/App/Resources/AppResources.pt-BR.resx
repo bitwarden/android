@@ -299,6 +299,10 @@
     <value>Meu Cofre</value>
     <comment>The title for the vault page.</comment>
   </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Autenticação</value>
+    <comment>Authenticator TOTP feature</comment>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Nome</value>
     <comment>Label for an entity name.</comment>
@@ -895,11 +899,9 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>Não é possível ler a chave do autenticador.</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>O escaneamento acontecerá automaticamente.</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Aponte sua câmera para o QR code.</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Aponte a câmera para o QR Code.
+A leitura será feita automaticamente.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>Escanear Código QR</value>
@@ -1574,7 +1576,7 @@
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
-    <value>Auto-preencher URIs bloqueadas</value>
+    <value>Preencher automaticamente URIs bloqueadas</value>
   </data>
   <data name="AutofillBlockedUrisDescription" xml:space="preserve">
     <value>O preenchimento automático não será oferecido para URIs bloqueados. Separe vários URIs com uma vírgula. Por exemplo: "https://twitter.com, androidapp://com.twitter.android".</value>
@@ -2259,6 +2261,43 @@
   </data>
   <data name="All" xml:space="preserve">
     <value>Todos</value>
+  </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Códigos de Verificação</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>Necessário assinatura Premium</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>Não foi possível adicionar chave de autenticação? </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>Escanear QR Code</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>Não foi possível escanear o QR Code? </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Chave de Autenticação</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Insira manualmente a chave</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>Adicionar TOTP</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>Configurar TOTP</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>Assim que a chave for inserida corretamente,
+selecione Adicionar TOTP para armazenar a chave de forma segura</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value></value>
   </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Definir suas opções de bloqueio para "Nunca" mantém o cofre disponível para qualquer pessoa com acesso ao seu dispositivo. Se usar esta opção, você deverá garantir que manterá seu dispositivo devidamente protegido.</value>

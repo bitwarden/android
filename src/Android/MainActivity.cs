@@ -6,6 +6,7 @@ using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using Android.Graphics;
+using Android.Content.Res;
 using Android.Nfc;
 using Android.OS;
 using Android.Runtime;
@@ -21,7 +22,9 @@ using Bit.Core.Enums;
 using Bit.Core.Utilities;
 using Bit.Droid.Receivers;
 using Bit.Droid.Utilities;
+using Xamarin.Essentials;
 using ZXing.Net.Mobile.Android;
+using FileProvider = AndroidX.Core.Content.FileProvider;
 
 namespace Bit.Droid
 {
@@ -38,6 +41,7 @@ namespace Bit.Droid
         private IStateService _stateService;
         private IAppIdService _appIdService;
         private IEventService _eventService;
+        private ILogger _logger;
         private PendingIntent _eventUploadPendingIntent;
         private AppOptions _appOptions;
         private string _activityKey = $"{nameof(MainActivity)}_{Java.Lang.JavaSystem.CurrentTimeMillis().ToString()}";
@@ -59,6 +63,7 @@ namespace Bit.Droid
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _appIdService = ServiceContainer.Resolve<IAppIdService>("appIdService");
             _eventService = ServiceContainer.Resolve<IEventService>("eventService");
+            _logger = ServiceContainer.Resolve<ILogger>("logger");
 
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
@@ -73,7 +78,7 @@ namespace Bit.Droid
                 Window.AddFlags(Android.Views.WindowManagerFlags.Secure);
             });
 
-            ServiceContainer.Resolve<ILogger>("logger").InitAsync();
+            _logger.InitAsync();
 
             var toplayout = Window?.DecorView?.RootView;
             if (toplayout != null)
@@ -85,7 +90,7 @@ namespace Bit.Droid
             Xamarin.Forms.Forms.Init(this, savedInstanceState);
             _appOptions = GetOptions();
             LoadApplication(new App.App(_appOptions));
-
+            DisableAndroidFontScale();
 
             _broadcasterService.Subscribe(_activityKey, (message) =>
             {
@@ -403,6 +408,20 @@ namespace Bit.Droid
             var alarmManager = GetSystemService(AlarmService) as AlarmManager;
             alarmManager.Cancel(_eventUploadPendingIntent);
             await _eventService.UploadEventsAsync();
+        }
+
+        private void DisableAndroidFontScale()
+        {
+            try
+            {
+                //As we are using NamedSizes the xamarin will change the font size. So we are disabling the Android scaling.
+                Resources.Configuration.FontScale = 1f;
+                BaseContext.Resources.DisplayMetrics.ScaledDensity = Resources.Configuration.FontScale * (float)DeviceDisplay.MainDisplayInfo.Density;
+            }
+            catch (Exception e)
+            {
+                _logger.Exception(e);
+            }
         }
     }
 }

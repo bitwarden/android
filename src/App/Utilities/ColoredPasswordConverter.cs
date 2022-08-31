@@ -16,7 +16,7 @@ namespace Bit.App.Utilities
             {
                 return string.Empty;
             }
-            return PasswordFormatter.FormatPassword((string)value);
+            return GeneratedValueFormatter.Format((string)value);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter,

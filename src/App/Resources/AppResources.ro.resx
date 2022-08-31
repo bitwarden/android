@@ -299,6 +299,10 @@
     <value>Seiful meu</value>
     <comment>The title for the vault page.</comment>
   </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Authenticator</value>
+    <comment>Authenticator TOTP feature</comment>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Denumire</value>
     <comment>Label for an entity name.</comment>
@@ -895,11 +899,9 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>Nu se poate citi cheia de autentificare.</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>Scanarea va avea loc automat.</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Îndreptați camera spre codul QR.</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Îndreptați camera spre codul QR.
+Scanarea se va face automat.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>Scanare cod QR</value>
@@ -2258,6 +2260,43 @@
   </data>
   <data name="All" xml:space="preserve">
     <value>Toate</value>
+  </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Coduri de verificare</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>Este necesar un abonament Premium</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>Nu puteți adăuga cheia authenticator? </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>Scanare cod QR</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>Nu puteți scana codul QR? </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Cheie authenticator</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Introduceți cheia manual</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>Adăugare TOTP</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>Configurare TOTP</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>După ce cheia este introdusă corect,
+selectați „Adăugare TOTP” pentru a stoca cheia în siguranță</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value></value>
   </data>
   <data name="NeverLockWarning" xml:space="preserve">
     <value>Setarea opțiunilor de blocare la „Niciodată” face ca seiful dvs. să fie disponibil oricui are acces la acesta. Dacă utilizați această opțiune, trebuie să vă asigurați că vă păstrați dispozitivul protejat corespunzător.</value>
