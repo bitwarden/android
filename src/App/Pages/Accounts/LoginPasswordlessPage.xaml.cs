@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
