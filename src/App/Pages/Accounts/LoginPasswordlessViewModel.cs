@@ -51,6 +51,8 @@ namespace Bit.App.Pages
 
         public string TimeOfRequestText => CreateRequestDate(LoginRequest.RequestDate);
 
+        public bool ShowIpAddress => !string.IsNullOrEmpty(LoginRequest?.IpAddress);
+        
         public LoginPasswordlessDetails LoginRequest
         {
             get => _resquest;
@@ -150,7 +152,5 @@ namespace Bit.App.Pages
         public DeviceType DeviceType { get; set; }
 
         public string IpAddress { get; set; }
-
-        public string NearLocation { get; set; }
     }
 }

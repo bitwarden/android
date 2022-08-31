@@ -160,11 +160,18 @@ namespace Bit.App
             {
                 return;
             }
+
             // Delay to wait for the vault page to appear
             await Task.Delay(2000);
-            //TODO Temporary until merge from services
-            var loginRequestData = await _authService.GetLogInPasswordlessRequestsAsync();
-            var page = new LoginPasswordlessPage(new LoginPasswordlessDetails());
+            var loginRequestData = await _authService.GetPasswordlessLoginRequestByIdAsync(notification.Id);
+            var page = new LoginPasswordlessPage(new LoginPasswordlessDetails()
+            {
+                IpAddress = loginRequestData.RequestIpAddress,
+                Email = await _stateService.GetEmailAsync(),
+                FingerprintPhrase = loginRequestData.RequestFingerprint,
+                RequestDate = loginRequestData.CreationDate,
+                DeviceType = loginRequestData.RequestDeviceType
+            });
             await _stateService.SetPasswordlessLoginNotificationAsync(null);
             await Application.Current.MainPage.Navigation.PushModalAsync(new NavigationPage(page));
         }
