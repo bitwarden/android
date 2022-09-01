@@ -173,7 +173,7 @@ namespace Bit.App
                 DeviceType = loginRequestData.RequestDeviceType
             });
             await _stateService.SetPasswordlessLoginNotificationAsync(null);
-            Device.BeginInvokeOnMainThread(async () => await Application.Current.MainPage.Navigation.PushModalAsync(new NavigationPage(page)));
+            await Device.InvokeOnMainThreadAsync(async () => await Application.Current.MainPage.Navigation.PushModalAsync(new NavigationPage(page)));
         }
 
         public AppOptions Options { get; private set; }
