@@ -83,6 +83,7 @@ namespace Bit.iOS.Services
         public void WillPresentNotification(UNUserNotificationCenter center, UNNotification notification, Action<UNNotificationPresentationOptions> completionHandler)
         {
             Debug.WriteLine($"{TAG} WillPresentNotification {notification?.Request?.Content?.UserInfo}");
+            OnMessageReceived(notification?.Request?.Content?.UserInfo);
             completionHandler(UNNotificationPresentationOptions.Alert);
         }
 

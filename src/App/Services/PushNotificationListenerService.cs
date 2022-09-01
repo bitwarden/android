@@ -139,7 +139,7 @@ namespace Bit.App.Services
                     }
 
                     // if there is a request modal opened ignore all incoming requests
-                    if (App.Current.MainPage.Navigation.ModalStack.Any(p => ((NavigationPage)p).CurrentPage is LoginPasswordlessPage))
+                    if (App.Current.MainPage.Navigation.ModalStack.Any(p => p is NavigationPage navPage && navPage.CurrentPage is LoginPasswordlessPage))
                     {
                         return;
                     }
@@ -147,7 +147,7 @@ namespace Bit.App.Services
                     await _stateService.SetPasswordlessLoginNotificationAsync(passwordlessLoginMessage, passwordlessLoginMessage?.UserId);
                     var userEmail = await _stateService.GetEmailAsync(passwordlessLoginMessage?.UserId);
 
-                    _pushNotificationService.SendLocalNotification(AppResources.LogInRequested, $"{AppResources.ConfimLogInAttempForX} {userEmail}.", Constants.PasswordlessNotificationId);
+                    _pushNotificationService.SendLocalNotification(AppResources.LogInRequested, String.Format(AppResources.ConfimLogInAttempForX, userEmail), Constants.PasswordlessNotificationId);
                     _messagingService.Send("passwordlessLoginRequest", passwordlessLoginMessage);
                     break;
                 default:

@@ -138,7 +138,7 @@ namespace Bit.App
                     }
                     else if (message.Command == "passwordlessLoginRequest" || message.Command == "unlocked")
                     {
-                        Device.BeginInvokeOnMainThread(() => CheckPasswordlessLoginRequestsAsync().FireAndForget());
+                        CheckPasswordlessLoginRequestsAsync().FireAndForget();
                     }
                 }
                 catch (Exception ex)
@@ -173,7 +173,7 @@ namespace Bit.App
                 DeviceType = loginRequestData.RequestDeviceType
             });
             await _stateService.SetPasswordlessLoginNotificationAsync(null);
-            await Application.Current.MainPage.Navigation.PushModalAsync(new NavigationPage(page));
+            Device.BeginInvokeOnMainThread(async () => await Application.Current.MainPage.Navigation.PushModalAsync(new NavigationPage(page)));
         }
 
         public AppOptions Options { get; private set; }

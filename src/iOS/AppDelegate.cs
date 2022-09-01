@@ -304,7 +304,6 @@ namespace Bit.iOS
             iOSCoreHelpers.InitLogger();
             _pushHandler = new iOSPushNotificationHandler(
                 ServiceContainer.Resolve<IPushNotificationListenerService>("pushNotificationListenerService"));
-            UNUserNotificationCenter.Current.Delegate = _pushHandler;
             _nfcDelegate = new Core.NFCReaderDelegate((success, message) =>
                 _messagingService.Send("gotYubiKeyOTP", message));
 

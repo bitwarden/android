@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
+using Bit.Core.Services;
 using Foundation;
 using UIKit;
 using UserNotifications;
@@ -68,22 +69,25 @@ namespace Bit.iOS.Services
             return Task.FromResult(0);
         }
 
-        public void SendLocalNotification(string title, string message, string notificationId = null)
+        public void SendLocalNotification(string title, string message, string notificationId)
         {
+            if (string.IsNullOrEmpty(notificationId))
+            {
+                throw new ArgumentNullException("notificationId cannot be null or empty.");
+            }
+
             var content = new UNMutableNotificationContent()
             {
                 Title = title,
                 Body = message
             };
 
-            notificationId = notificationId ?? new Random().Next(1000, 999999).ToString();
-
             var request = UNNotificationRequest.FromIdentifier(notificationId, content, null);
             UNUserNotificationCenter.Current.AddNotificationRequest(request, (err) =>
             {
                 if (err != null)
                 {
-                    throw new Exception($"Failed to schedule notification: {err}");
+                    Logger.Instance.Exception(new Exception($"Failed to schedule notification: {err}"));
                 }
             });
         }

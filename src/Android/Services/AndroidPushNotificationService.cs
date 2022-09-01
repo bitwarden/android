@@ -58,16 +58,23 @@ namespace Bit.Droid.Services
 
         public void DismissLocalNotification(string notificationId)
         {
-            var notificationManager = NotificationManagerCompat.From(Android.App.Application.Context);
-            notificationManager.Cancel(int.Parse(notificationId));
+            if (int.TryParse(notificationId, out int intNotificationId))
+            {
+                var notificationManager = NotificationManagerCompat.From(Android.App.Application.Context);
+                notificationManager.Cancel(intNotificationId);
+            }
         }
 
-        public void SendLocalNotification(string title, string message, string notificationId = null)
+        public void SendLocalNotification(string title, string message, string notificationId)
         {
-            notificationId = notificationId ?? new Random().Next(1000, 999999).ToString();
+            if (string.IsNullOrEmpty(notificationId))
+            {
+                throw new ArgumentNullException("notificationId cannot be null or empty.");
+            }
+            
             var context = Android.App.Application.Context;
             var intent = new Intent(context, typeof(MainActivity));
-            var pendingIntent = PendingIntent.GetActivity(context, new Random().Next(1000, 999999), intent, PendingIntentFlags.OneShot);
+            var pendingIntent = PendingIntent.GetActivity(context, 20220801, intent, PendingIntentFlags.OneShot);
             var builder = new NotificationCompat.Builder(context, Constants.AndroidNotificationChannelId)
                .SetContentIntent(pendingIntent)
                .SetContentTitle(title)
@@ -75,10 +82,8 @@ namespace Bit.Droid.Services
                .SetSmallIcon(Resource.Mipmap.ic_launcher)
                .SetAutoCancel(true);
 
-            // Build the notification:
-            var notification = builder.Build();
             var notificationManager = NotificationManagerCompat.From(context);
-            notificationManager.Notify(int.Parse(notificationId), notification);
+            notificationManager.Notify(int.Parse(notificationId), builder.Build());
         }
     }
 }

@@ -415,8 +415,10 @@ namespace Bit.Droid
             }
 
             var channel = new NotificationChannel(Constants.AndroidNotificationChannelId, AppResources.AllNotifications, NotificationImportance.Default);
-            var notificationManager = (NotificationManager)GetSystemService(NotificationService);
-            notificationManager?.CreateNotificationChannel(channel);
+            if(GetSystemService(NotificationService) is NotificationManager notificationManager)
+            {
+                notificationManager.CreateNotificationChannel(channel);
+            }
 #endif
         }
     }

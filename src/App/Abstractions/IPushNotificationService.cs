@@ -10,7 +10,7 @@ namespace Bit.App.Abstractions
         Task<string> GetTokenAsync();
         Task RegisterAsync();
         Task UnregisterAsync();
-        void SendLocalNotification(string title, string message, string notificationId = null);
+        void SendLocalNotification(string title, string message, string notificationId);
         void DismissLocalNotification(string notificationId);
     }
 }
