@@ -485,6 +485,9 @@ jobs:
           perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./src/iOS.Extension/Info.plist
           perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./src/iOS.Autofill/Info.plist
           perl -0777 -pi.bak -e 's/<key>CFBundleVersion<\/key>\s*<string>1<\/string>/<key>CFBundleVersion<\/key>\n\t<string>'"$BUILD_NUMBER"'<\/string>/' ./src/iOS.ShareExtension/Info.plist
+          cd src/watchOS/bitwarden
+          agvtool new-version -all  $BUILD_NUMBER
+          cd ../../..
         shell: bash
 
       - name: Update Entitlements
@@ -543,6 +546,19 @@ jobs:
           WATCH_APP_EXTENSION_UUID=$(grep UUID -A1 -a $WATCH_APP_EXTENSION_PROFILE_PATH | grep -io "[-A-F0-9]\{36\}")
           cp $WATCH_APP_EXTENSION_PROFILE_PATH "$PROFILES_DIR_PATH/$WATCH_APP_EXTENSION_UUID.mobileprovision"
         shell: bash
+
+      - name: Bulid WatchApp
+        run: |
+          $configuration = "Release";
+
+          Write-Output "########################################"
+          Write-Output "##### Build WatchApp with $configuration Configuration for $platform Platform"
+          Write-Output "########################################"
+          xcodebuild -configuration $configuration -target bitwarden\ WatchKit\ App -archive -archivePath "$($env:GITHUB_WORKSPACE + "/src/watchOS/bitwarden")"
+
+          Write-Output "########################################"
+          Write-Output "##### Done"
+          Write-Output "########################################"
 
       - name: Restore packages
         run: nuget restore

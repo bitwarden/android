@@ -136,7 +136,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <WatchAppBuildPath Condition=" '$(Configuration)' == 'Debug' ">$(Home)/Library/Developer/Xcode/DerivedData/bitwarden-cbtqsueryycvflfzbsoteofskiyr/Build/Products</WatchAppBuildPath>
-    <WatchAppBuildPath Condition=" '$(Configuration)' != 'Debug' ">$(MSBuildProjectDirectory)/../bitwarden/DerivedData/Build/Products</WatchAppBuildPath>
+    <WatchAppBuildPath Condition=" '$(Configuration)' != 'Debug' ">$(MSBuildProjectDirectory)/../watchOS/bitwarden/DerivedData/Build/Products</WatchAppBuildPath>
     <WatchAppBundle>bitwarden WatchKit App.app</WatchAppBundle>
     <WatchAppConfiguration Condition=" '$(Platform)' == 'iPhoneSimulator' ">watchsimulator</WatchAppConfiguration>
     <WatchAppConfiguration Condition=" '$(Platform)' == 'iPhone' ">watchos</WatchAppConfiguration>
