@@ -139,7 +139,7 @@ namespace Bit.App.Services
                     }
 
                     // if there is a request modal opened ignore all incoming requests
-                    if(App.Current.MainPage.Navigation.ModalStack.Any(p => ((NavigationPage)p).CurrentPage is LoginPasswordlessPage))
+                    if (App.Current.MainPage.Navigation.ModalStack.Any(p => ((NavigationPage)p).CurrentPage is LoginPasswordlessPage))
                     {
                         return;
                     }

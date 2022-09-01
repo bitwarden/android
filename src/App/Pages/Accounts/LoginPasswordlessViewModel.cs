@@ -52,7 +52,7 @@ namespace Bit.App.Pages
         public string TimeOfRequestText => CreateRequestDate(LoginRequest.RequestDate);
 
         public bool ShowIpAddress => !string.IsNullOrEmpty(LoginRequest?.IpAddress);
-        
+
         public LoginPasswordlessDetails LoginRequest
         {
             get => _resquest;

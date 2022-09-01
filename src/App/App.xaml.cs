@@ -147,10 +147,10 @@ namespace Bit.App
                 }
             });
         }
-        
+
         private async Task CheckPasswordlessLoginRequestsAsync()
         {
-            if(await _vaultTimeoutService.IsLockedAsync())
+            if (await _vaultTimeoutService.IsLockedAsync())
             {
                 return;
             }
