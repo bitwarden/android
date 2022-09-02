@@ -552,9 +552,7 @@ jobs:
           echo "########################################"
           echo "##### Build WatchApp with Release Configuration"
           echo "########################################"
-
-          ls
-
+          
           xcodebuild archive -workspace ./src/watchOS/bitwarden/bitwarden.xcodeproj/project.xcworkspace -configuration Release -scheme bitwarden\ WatchKit\ App -archivePath ./src/watchOS/bitwarden
 
           echo "########################################"
