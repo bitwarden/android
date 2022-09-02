@@ -549,12 +549,10 @@ jobs:
 
       - name: Bulid WatchApp
         run: |
-          $configuration = "Release";
-
           echo "########################################"
-          echo "##### Build WatchApp with $configuration Configuration for $platform Platform"
+          echo "##### Build WatchApp with Release Configuration"
           echo "########################################"
-          xcodebuild archive -configuration $configuration -scheme bitwarden\ WatchKit\ App -archivePath "$($env:GITHUB_WORKSPACE + "/src/watchOS/bitwarden")"
+          xcodebuild archive -configuration Release -scheme bitwarden\ WatchKit\ App -archivePath ./src/watchOS/bitwarden
 
           echo "########################################"
           echo "##### Done"
