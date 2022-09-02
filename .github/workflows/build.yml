@@ -551,14 +551,14 @@ jobs:
         run: |
           $configuration = "Release";
 
-          Write-Output "########################################"
-          Write-Output "##### Build WatchApp with $configuration Configuration for $platform Platform"
-          Write-Output "########################################"
+          echo "########################################"
+          echo "##### Build WatchApp with $configuration Configuration for $platform Platform"
+          echo "########################################"
           xcodebuild archive -configuration $configuration -scheme bitwarden\ WatchKit\ App -archivePath "$($env:GITHUB_WORKSPACE + "/src/watchOS/bitwarden")"
 
-          Write-Output "########################################"
-          Write-Output "##### Done"
-          Write-Output "########################################"
+          echo "########################################"
+          echo "##### Done"
+          echo "########################################"
         shell: bash
 
       - name: Restore packages
