@@ -554,7 +554,7 @@ jobs:
           Write-Output "########################################"
           Write-Output "##### Build WatchApp with $configuration Configuration for $platform Platform"
           Write-Output "########################################"
-          xcodebuild -configuration $configuration -target bitwarden\ WatchKit\ App -archive -archivePath "$($env:GITHUB_WORKSPACE + "/src/watchOS/bitwarden")"
+          xcodebuild archive -configuration $configuration -scheme bitwarden\ WatchKit\ App -archivePath "$($env:GITHUB_WORKSPACE + "/src/watchOS/bitwarden")"
 
           Write-Output "########################################"
           Write-Output "##### Done"
