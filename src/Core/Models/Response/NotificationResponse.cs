@@ -33,4 +33,10 @@ namespace Bit.Core.Models.Response
         public string UserId { get; set; }
         public DateTime Date { get; set; }
     }
+
+    public class PasswordlessRequestNotification
+    {
+        public string UserId { get; set; }
+        public string Id { get; set; }
+    }
 }

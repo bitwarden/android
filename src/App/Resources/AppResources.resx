@@ -2329,4 +2329,10 @@
   <data name="NoThanks" xml:space="preserve">
     <value>No thanks</value>
   </data>
+  <data name="ConfimLogInAttempForX" xml:space="preserve">
+    <value>Confirm log in attempt for {0}</value>
+  </data>
+  <data name="AllNotifications" xml:space="preserve">
+    <value>All notifications</value>
+  </data>
 </root>

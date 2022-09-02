@@ -25,9 +25,7 @@ namespace Bit.App
         private readonly IStateService _stateService;
         private readonly IVaultTimeoutService _vaultTimeoutService;
         private readonly ISyncService _syncService;
-        private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IAuthService _authService;
-        private readonly IStorageService _secureStorageService;
         private readonly IDeviceActionService _deviceActionService;
         private readonly IAccountsManager _accountsManager;
 
@@ -47,8 +45,6 @@ namespace Bit.App
             _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
             _authService = ServiceContainer.Resolve<IAuthService>("authService");
-            _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
-            _secureStorageService = ServiceContainer.Resolve<IStorageService>("secureStorageService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _accountsManager = ServiceContainer.Resolve<IAccountsManager>("accountsManager");
 
@@ -140,12 +136,44 @@ namespace Bit.App
                                 new NavigationPage(new RemoveMasterPasswordPage()));
                         });
                     }
+                    else if (message.Command == "passwordlessLoginRequest" || message.Command == "unlocked")
+                    {
+                        CheckPasswordlessLoginRequestsAsync().FireAndForget();
+                    }
                 }
                 catch (Exception ex)
                 {
                     LoggerHelper.LogEvenIfCantBeResolved(ex);
                 }
             });
+        }
+
+        private async Task CheckPasswordlessLoginRequestsAsync()
+        {
+            if (await _vaultTimeoutService.IsLockedAsync())
+            {
+                return;
+            }
+
+            var notification = await _stateService.GetPasswordlessLoginNotificationAsync();
+            if (notification == null)
+            {
+                return;
+            }
+
+            // Delay to wait for the vault page to appear
+            await Task.Delay(2000);
+            var loginRequestData = await _authService.GetPasswordlessLoginRequestByIdAsync(notification.Id);
+            var page = new LoginPasswordlessPage(new LoginPasswordlessDetails()
+            {
+                IpAddress = loginRequestData.RequestIpAddress,
+                Email = await _stateService.GetEmailAsync(),
+                FingerprintPhrase = loginRequestData.RequestFingerprint,
+                RequestDate = loginRequestData.CreationDate,
+                DeviceType = loginRequestData.RequestDeviceType
+            });
+            await _stateService.SetPasswordlessLoginNotificationAsync(null);
+            await Device.InvokeOnMainThreadAsync(async () => await Application.Current.MainPage.Navigation.PushModalAsync(new NavigationPage(page)));
         }
 
         public AppOptions Options { get; private set; }

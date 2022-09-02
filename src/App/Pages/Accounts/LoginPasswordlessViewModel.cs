@@ -18,6 +18,7 @@ namespace Bit.App.Pages
     {
         private IDeviceActionService _deviceActionService;
         private IAuthService _authService;
+        private IPushNotificationService _pushNotificationService;
         private IPlatformUtilsService _platformUtilsService;
         private ILogger _logger;
         private LoginPasswordlessDetails _resquest;
@@ -27,6 +28,7 @@ namespace Bit.App.Pages
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _authService = ServiceContainer.Resolve<IAuthService>("authService");
+            _pushNotificationService = ServiceContainer.Resolve<IPushNotificationService>();
             _logger = ServiceContainer.Resolve<ILogger>("logger");
 
             PageTitle = AppResources.LogInRequested;
@@ -48,6 +50,8 @@ namespace Bit.App.Pages
         public string LogInAttemptByLabel => string.Format(AppResources.LogInAttemptByXOnY, LoginRequest.Email, LoginRequest.Origin);
 
         public string TimeOfRequestText => CreateRequestDate(LoginRequest.RequestDate);
+
+        public bool ShowIpAddress => !string.IsNullOrEmpty(LoginRequest?.IpAddress);
 
         public LoginPasswordlessDetails LoginRequest
         {
@@ -99,6 +103,7 @@ namespace Bit.App.Pages
             await _authService.PasswordlessLoginAsync(LoginRequest.Id, LoginRequest.PubKey, approveRequest);
             await _deviceActionService.HideLoadingAsync();
             await Page.Navigation.PopModalAsync();
+            _pushNotificationService.DismissLocalNotification(Constants.PasswordlessNotificationId);
             _platformUtilsService.ShowToast("info", null, approveRequest ? AppResources.LogInAccepted : AppResources.LogInDenied);
         }
 
@@ -147,7 +152,5 @@ namespace Bit.App.Pages
         public DeviceType DeviceType { get; set; }
 
         public string IpAddress { get; set; }
-
-        public string NearLocation { get; set; }
     }
 }

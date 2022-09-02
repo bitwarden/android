@@ -4186,5 +4186,17 @@ namespace Bit.App.Resources {
                 return ResourceManager.GetString("NoThanks", resourceCulture);
             }
         }
+        
+        public static string ConfimLogInAttempForX {
+            get {
+                return ResourceManager.GetString("ConfimLogInAttempForX", resourceCulture);
+            }
+        }
+        
+        public static string AllNotifications {
+            get {
+                return ResourceManager.GetString("AllNotifications", resourceCulture);
+            }
+        }
     }
 }

@@ -30,6 +30,8 @@
         public static string RememberedEmailKey = "rememberedEmail";
         public static string RememberedOrgIdentifierKey = "rememberedOrgIdentifier";
         public const string FingerprintPhraseSeparator = "-";
+        public const string PasswordlessNotificationId = "26072022";
+        public const string AndroidNotificationChannelId = "general_notification_channel";
         public const int SelectFileRequestCode = 42;
         public const int SelectFilePermissionRequestCode = 43;
         public const int SaveFileRequestCode = 44;
@@ -85,5 +87,6 @@
         public static string LastSyncKey(string userId) => $"lastSync_{userId}";
         public static string BiometricUnlockKey(string userId) => $"biometricUnlock_{userId}";
         public static string ApprovePasswordlessLoginsKey(string userId) => $"approvePasswordlessLogins_{userId}";
+        public static string PasswordlessLoginNofiticationKey(string userId) => $"passwordlessLoginNofitication_{userId}";
     }
 }
