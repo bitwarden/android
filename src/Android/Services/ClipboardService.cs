@@ -23,7 +23,7 @@ namespace Bit.Droid.Services
                 PendingIntent.GetBroadcast(CrossCurrentActivity.Current.Activity,
                                            0,
                                            new Intent(CrossCurrentActivity.Current.Activity, typeof(ClearClipboardAlarmReceiver)),
-                                           PendingIntentFlags.UpdateCurrent | PendingIntentFlags.Mutable));
+                                           PendingIntentFlags.UpdateCurrent | PendingIntentFlags.Immutable));
         }
 
         public async Task CopyTextAsync(string text, int expiresInMs = -1, bool isSensitive = true)
