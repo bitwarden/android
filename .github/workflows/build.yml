@@ -567,9 +567,9 @@ jobs:
           echo "########################################"
           echo "##### Done"
           echo "########################################"
-          cd src/watchOS/bitwarden
+          cd src/watchOS
           ls -R
-          cd ../../..
+          cd ../..
         shell: bash
 
       - name: Restore packages
