@@ -24,7 +24,7 @@ namespace Bit.Droid.Services
                 PendingIntent.GetBroadcast(CrossCurrentActivity.Current.Activity,
                                            0,
                                            new Intent(CrossCurrentActivity.Current.Activity, typeof(ClearClipboardAlarmReceiver)),
-                                           AndroidHelpers.PendingIntentMutability(PendingIntentFlags.UpdateCurrent, false)));
+                                           AndroidHelpers.AddPendingIntentMutability(PendingIntentFlags.UpdateCurrent, false)));
         }
 
         public async Task CopyTextAsync(string text, int expiresInMs = -1, bool isSensitive = true)

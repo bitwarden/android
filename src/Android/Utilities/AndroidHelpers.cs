@@ -50,10 +50,10 @@ namespace Bit.Droid.Utilities
             }
         }
 
-        public static PendingIntentFlags PendingIntentMutability(PendingIntentFlags pendingIntentFlags, bool isMutable)
+        public static PendingIntentFlags AddPendingIntentMutability(PendingIntentFlags pendingIntentFlags, bool isMutable)
         {
             //Mutable flag was added on API level 31
-            if ((isMutable && Build.VERSION.SdkInt > BuildVersionCodes.R) || Build.VERSION.SdkInt < BuildVersionCodes.M)
+            if (isMutable && Build.VERSION.SdkInt > BuildVersionCodes.R)
             {
                 return pendingIntentFlags | PendingIntentFlags.Mutable;
             }

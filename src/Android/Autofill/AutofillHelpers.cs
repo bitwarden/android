@@ -271,7 +271,7 @@ namespace Bit.Droid.Autofill
                 return null;
             }
             intent.PutExtra("autofillFrameworkUri", uri);
-            var pendingIntent = PendingIntent.GetActivity(context, ++_pendingIntentId, intent, AndroidHelpers.PendingIntentMutability(PendingIntentFlags.CancelCurrent, true));
+            var pendingIntent = PendingIntent.GetActivity(context, ++_pendingIntentId, intent, AndroidHelpers.AddPendingIntentMutability(PendingIntentFlags.CancelCurrent, true));
 
             var overlayPresentation = BuildOverlayPresentation(
                 AppResources.AutofillWithBitwarden,
@@ -324,7 +324,7 @@ namespace Bit.Droid.Autofill
                 // InlinePresentation requires nonNull pending intent (even though we only utilize one for the
                 // "my vault" presentation) so we're including an empty one here
                 pendingIntent = PendingIntent.GetService(context, 0, new Intent(),
-                    AndroidHelpers.PendingIntentMutability(PendingIntentFlags.OneShot | PendingIntentFlags.UpdateCurrent, true));
+                    AndroidHelpers.AddPendingIntentMutability(PendingIntentFlags.OneShot | PendingIntentFlags.UpdateCurrent, true));
             }
             var slice = CreateInlinePresentationSlice(
                 inlinePresentationSpec,
