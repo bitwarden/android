@@ -49,7 +49,7 @@ namespace Bit.Droid
         {
             var eventUploadIntent = new Intent(this, typeof(EventUploadReceiver));
             _eventUploadPendingIntent = PendingIntent.GetBroadcast(this, 0, eventUploadIntent,
-                PendingIntentFlags.UpdateCurrent | PendingIntentFlags.Immutable);
+                AndroidHelpers.PendingIntentMutability(PendingIntentFlags.UpdateCurrent, false));
 
             var policy = new StrictMode.ThreadPolicy.Builder().PermitAll().Build();
             StrictMode.SetThreadPolicy(policy);
@@ -278,7 +278,7 @@ namespace Bit.Droid
             {
                 var intent = new Intent(this, Class);
                 intent.AddFlags(ActivityFlags.SingleTop);
-                var pendingIntent = PendingIntent.GetActivity(this, 0, intent, PendingIntentFlags.Immutable);
+                var pendingIntent = PendingIntent.GetActivity(this, 0, intent, AndroidHelpers.PendingIntentMutability(0, false));
                 // register for all NDEF tags starting with http och https
                 var ndef = new IntentFilter(NfcAdapter.ActionNdefDiscovered);
                 ndef.AddDataScheme("http");
