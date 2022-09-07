@@ -151,5 +151,7 @@ namespace Bit.Core.Abstractions
         Task<bool> GetScreenCaptureAllowedAsync(string userId = null);
         Task SetScreenCaptureAllowedAsync(bool value, string userId = null);
         Task SaveExtensionActiveUserIdToStorageAsync(string userId);
+        Task<UsernameGenerationOptions> GetUsernameGenerationOptionsAsync(string userId = null);
+        Task SetUsernameGenerationOptionsAsync(UsernameGenerationOptions value, string userId = null);
     }
 }

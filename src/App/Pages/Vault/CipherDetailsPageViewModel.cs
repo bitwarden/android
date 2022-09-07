@@ -141,7 +141,7 @@ namespace Bit.App.Pages
         public bool IsIdentity => Cipher?.Type == Core.Enums.CipherType.Identity;
         public bool IsCard => Cipher?.Type == Core.Enums.CipherType.Card;
         public bool IsSecureNote => Cipher?.Type == Core.Enums.CipherType.SecureNote;
-        public FormattedString ColoredPassword => PasswordFormatter.FormatPassword(Cipher.Login.Password);
+        public FormattedString ColoredPassword => GeneratedValueFormatter.Format(Cipher.Login.Password);
         public FormattedString UpdatedText
         {
             get
@@ -751,7 +751,7 @@ namespace Bit.App.Pages
             }
         }
 
-        public FormattedString ColoredHiddenValue => PasswordFormatter.FormatPassword(_field.Value);
+        public FormattedString ColoredHiddenValue => GeneratedValueFormatter.Format(_field.Value);
 
         public Command ToggleHiddenValueCommand { get; set; }
 

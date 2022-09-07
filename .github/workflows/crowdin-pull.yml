@@ -24,10 +24,17 @@ jobs:
 
       - name: Retrieve secrets
         id: retrieve-secrets
-        uses: Azure/get-keyvault-secrets@80ccd3fafe5662407cc2e55f202ee34bfff8c403
-        with:
-          keyvault: "bitwarden-prod-kv"
-          secrets: "crowdin-api-token"
+        env:
+          KEYVAULT: bitwarden-prod-kv
+          SECRETS: |
+            crowdin-api-token
+        run: |
+          for i in ${SECRETS//,/ }
+          do
+            VALUE=$(az keyvault secret show --vault-name $KEYVAULT --name $i --query value --output tsv)
+            echo "::add-mask::$VALUE"
+            echo "::set-output name=$i::$VALUE"
+          done
 
       - name: Download translations
         uses: crowdin/github-action@12143a68c213f3c6d9913c9e5023224f7231face

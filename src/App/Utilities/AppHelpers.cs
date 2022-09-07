@@ -441,6 +441,8 @@ namespace Bit.App.Utilities
             var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             var policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
             var searchService = ServiceContainer.Resolve<ISearchService>("searchService");
+            var usernameGenerationService = ServiceContainer.Resolve<IUsernameGenerationService>(
+                "usernameGenerationService");
 
             await Task.WhenAll(
                 cipherService.ClearCacheAsync(),
@@ -454,6 +456,7 @@ namespace Bit.App.Utilities
             passwordGenerationService.ClearCache();
             policyService.ClearCache();
             searchService.ClearIndex();
+            usernameGenerationService.ClearCache();
         }
     }
 }

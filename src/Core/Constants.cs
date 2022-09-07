@@ -5,6 +5,7 @@
         public const int MaxAccounts = 5;
         public const string AndroidAppProtocol = "androidapp://";
         public const string iOSAppProtocol = "iosapp://";
+        public const string DefaultUsernameGenerated = "-";
         public static string StateVersionKey = "stateVersion";
         public static string StateKey = "state";
         public static string PreAuthEnvironmentUrlsKey = "preAuthEnvironmentUrls";
@@ -83,5 +84,6 @@
         public static string ProtectedPinKey(string userId) => $"protectedPin_{userId}";
         public static string LastSyncKey(string userId) => $"lastSync_{userId}";
         public static string BiometricUnlockKey(string userId) => $"biometricUnlock_{userId}";
+        public static string UsernameGenOptionsKey(string userId) => $"usernameGenerationOptions_{userId}";
     }
 }
