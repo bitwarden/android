@@ -299,6 +299,10 @@
     <value>Oma holvi</value>
     <comment>The title for the vault page.</comment>
   </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Todentaja</value>
+    <comment>Authenticator TOTP feature</comment>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Nimi</value>
     <comment>Label for an entity name.</comment>
@@ -552,10 +556,10 @@
     <value>Holvin aikakatkaisu</value>
   </data>
   <data name="VaultTimeoutAction" xml:space="preserve">
-    <value>Holvin aikakatkaisun toiminto</value>
+    <value>Holvin aikakatkaisutoiminto</value>
   </data>
   <data name="VaultTimeoutLogOutConfirmation" xml:space="preserve">
-    <value>Uloskirjautuminen estää pääsyn holviisi ja vaatii ajan umpeuduttua todennuksen internet-yhteyden välityksellä. Haluatko varmasti käyttää tätä asetusta?</value>
+    <value>Uloskirjautuminen estää pääsyn holviisi ja vaatii ajan umpeuduttua todennuksen Internet-yhteyden välityksellä. Haluatko varmasti käyttää asetusta?</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>Kirjaudutaan sisään…</value>
@@ -580,7 +584,7 @@
     <value>Pääsalasanan vihje voi auttaa sinua muistamaan unohtamasi salasanan.</value>
   </data>
   <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Pääsalasanan on oltava vähintään 8 merkkiä pitkä.</value>
+    <value>Pääsalasanan tulee sisältää ainakin 8 merkkiä.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Numeroita vähintään</value>
@@ -770,6 +774,12 @@
   <data name="Enabled" xml:space="preserve">
     <value>Käytössä</value>
   </data>
+  <data name="Off" xml:space="preserve">
+    <value>Ei käytössä</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>Käytössä</value>
+  </data>
   <data name="Status" xml:space="preserve">
     <value>Tila</value>
   </data>
@@ -863,7 +873,7 @@
     <value>Liitteet</value>
   </data>
   <data name="UnableToDownloadFile" xml:space="preserve">
-    <value>Tiedoston lataaminen epäonnistui.</value>
+    <value>Tiedostoa ei voitu ladata.</value>
   </data>
   <data name="UnableToOpenFile" xml:space="preserve">
     <value>Laitteesi ei voi avata tämän tyyppistä tiedostoa.</value>
@@ -889,11 +899,9 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>Todennusavaimen luku epäonnistui.</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>Koodi luetaan automaattisesti.</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Kohdista kamerasi QR-koodiin.</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Kohdista kamera QR-koodiin.
+Koodi luetaan automaattisesti.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>Lue QR-koodi</value>
@@ -907,11 +915,11 @@
   <data name="CopyTotp" xml:space="preserve">
     <value>Kopioi TOTP-todennuskoodi</value>
   </data>
-  <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>Jos kirjautumistietoosi on liitetty kaksivaiheisen todennusmenetelmän avain, kopioidaan kaksivaiheisen kirjautumisen TOTP-todennuskoodi automaattisesti leikepöydälle kun suoritat kohteen automaattisen täytön.</value>
+  <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
+    <value>Jos kirjautumistieto sisältää kaksivaiheisen todennusmenetelmän avaimen, kopioidaan TOTP-todennuskoodi leikepöydälle kohteen automaattisen täytön yhteydessä.</value>
   </data>
-  <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>Älä kopioi TOTP-todennuskoodeja automaattisesti</value>
+  <data name="CopyTotpAutomatically" xml:space="preserve">
+    <value>Kopioi TOTP-koodi automaattisesti</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
     <value>Käyttääksesi tätä toimintoa tarvitset Premium-jäsenyyden.</value>
@@ -970,7 +978,7 @@
     <comment>"Identity" refers to an identity server. See more context here https://en.wikipedia.org/wiki/Identity_management</comment>
   </data>
   <data name="SelfHostedEnvironment" xml:space="preserve">
-    <value>Oma palvelinympäristö</value>
+    <value>Itse ylläpidetty palvelinympäristö</value>
   </data>
   <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
     <value>Määritä omassa palvelinympäristössäsi suoritettavan Bitwarden-asennuksen pääverkkotunnus.</value>
@@ -1128,11 +1136,11 @@
   <data name="Expiration" xml:space="preserve">
     <value>Erääntymisaika</value>
   </data>
-  <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>Älä näytä sivustojen kuvakkeita</value>
+  <data name="ShowWebsiteIcons" xml:space="preserve">
+    <value>Näytä verkkosivustojen kuvakkeet</value>
   </data>
-  <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Kirjautumistietojen vieressä näytettävät sivustojen kuvakkeet helpottavat kohteiden tunnistusta.</value>
+  <data name="ShowWebsiteIconsDescription" xml:space="preserve">
+    <value>Näytä tunnistettava kuva jokaiselle kirjautumistiedolle.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>Kuvakepalvelimen URL</value>
@@ -1187,7 +1195,7 @@
     <value>Windows Hello</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
-    <value>Androidin automaattisen täytön asetusten automaattinen avaus ei onnistunut. Voit avata asetukset itse seuraavasti: "Asetukset" &gt; "Järjestelmä" &gt; "Kielet ja syöttötapa" &gt; "Lisäasetukset" &gt; "Automaattinen täyttö -palvelu".</value>
+    <value>Androidin automaattisen täytön asetuksia ei voitu avata automaattisesti. Voit avata asetukset itse seuraavasti: "Asetukset" &gt; "Järjestelmä" &gt; "Kielet ja syöttötapa" &gt; "Lisäasetukset" &gt; "Automaattinen täyttö -palvelu".</value>
   </data>
   <data name="CustomFieldName" xml:space="preserve">
     <value>Lisäkentän nimi</value>
@@ -1372,11 +1380,15 @@
   <data name="SearchCollection" xml:space="preserve">
     <value>Hae kokoelmasta</value>
   </data>
-  <data name="SearchFolder" xml:space="preserve">
-    <value>Hae kansiosta</value>
+  <data name="SearchFileSends" xml:space="preserve">
+    <value>Hae tiedosto-Sendeistä</value>
   </data>
-  <data name="SearchType" xml:space="preserve">
-    <value>Hae tyypeistä</value>
+  <data name="SearchTextSends" xml:space="preserve">
+    <value>Hae teksti-Sendeistä</value>
+  </data>
+  <data name="SearchGroup" xml:space="preserve">
+    <value>Hae - {0}</value>
+    <comment>ex: Search Logins</comment>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Tyyppi</value>
@@ -1537,6 +1549,12 @@
   <data name="ThemeDefault" xml:space="preserve">
     <value>Oletus (järjestelmä)</value>
   </data>
+  <data name="DefaultDarkTheme" xml:space="preserve">
+    <value>Oletusarvoinen tumma teema</value>
+  </data>
+  <data name="DefaultDarkThemeDescription" xml:space="preserve">
+    <value>Valitse Oletus (järjestelmä) -asetuksen oletusarvoinen tumma teema, jota käytetään laitteen tumman tilan ollessa käytössä.</value>
+  </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Kopioi merkinnät</value>
   </data>
@@ -1553,17 +1571,21 @@
     <value>Musta</value>
     <comment>The color black</comment>
   </data>
-  <data name="BlacklistedUris" xml:space="preserve">
-    <value>Estolistalla olevat URI:t</value>
+  <data name="Nord" xml:space="preserve">
+    <value>Nord</value>
+    <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
-  <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>Estolistalla olevat URI:t eivät tarjoa automaattista täyttöä. Erota listan kohteet pilkulla. Esim. "https://twitter.com, androidapp://com.twitter.android".</value>
+  <data name="AutofillBlockedUris" xml:space="preserve">
+    <value>Täytä estetyt URI:t automaattisesti</value>
   </data>
-  <data name="DisableSavePrompt" xml:space="preserve">
-    <value>Poista tallennuskehote käytöstä</value>
+  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
+    <value>Automaattista täyttöä ei tarjota estetyille URI-osoitteille. Erota useat osoitteet pilkuilla. Esimerkiksi: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
-  <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>Tallennuskehote kysyy, haluatko tallentaa uudet kirjautumistiedot holviisi kun käytät niitä ensimmäistä kertaa.</value>
+  <data name="AskToAddLogin" xml:space="preserve">
+    <value>Kysy lisätäänkö kirjautimistieto</value>
+  </data>
+  <data name="AskToAddLoginDescription" xml:space="preserve">
+    <value>Kysy lisätäänkö uusi kohde, jos holvissa ei vielä ole sopivaa kohdetta.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
     <value>Kun sovellus käynnistetään uudelleen</value>
@@ -1630,7 +1652,7 @@
     <value>Syötä pääsalasanasi viedäksesi holvisi tiedot.</value>
   </data>
   <data name="SendVerificationCodeToEmail" xml:space="preserve">
-    <value>Lähetä vahvistuskoodi sähköpostiisi</value>
+    <value>Lähetä todennuskoodi sähköpostiisi</value>
   </data>
   <data name="CodeSent" xml:space="preserve">
     <value>Koodi lähetetty</value>
@@ -1736,7 +1758,7 @@
     <value>Synkronoidaan holvi alasveto-eleellä.</value>
   </data>
   <data name="LogInSso" xml:space="preserve">
-    <value>Yrityksen kertakirjautuminen (SSO)</value>
+    <value>Kertakirjautuminen (SSO)</value>
   </data>
   <data name="LogInSsoSummary" xml:space="preserve">
     <value>Kirjaudu sisään käyttäen organisaatiosi kertakirjautumista (SSO). Syötä organisaatiosi tunniste aloittaaksesi.</value>
@@ -1745,7 +1767,7 @@
     <value>Organisaation tunniste</value>
   </data>
   <data name="LoginSsoError" xml:space="preserve">
-    <value>Kertakirjautuminen (SSO) ei tällä hetkellä ole käytettävissä</value>
+    <value>Kertakirjautuminen (SSO) ei tällä hetkellä onnistu</value>
   </data>
   <data name="SetMasterPassword" xml:space="preserve">
     <value>Aseta pääsalasana</value>
@@ -1784,7 +1806,7 @@
     <value>Ladataan</value>
   </data>
   <data name="AcceptPolicies" xml:space="preserve">
-    <value>Aktivoimalla tämän valinnan hyväksyt seuraavat:</value>
+    <value>Aktivoimalla tämän valinnan hyväksyt seuraavat: </value>
   </data>
   <data name="AcceptPoliciesError" xml:space="preserve">
     <value>Käyttöehtoja ja tietosuojakäytäntöä ei ole vahvistettu.</value>
@@ -1856,6 +1878,9 @@
     <value>Kuvaava nimi Sendille.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
+  <data name="Text" xml:space="preserve">
+    <value>Teksti</value>
+  </data>
   <data name="TypeText" xml:space="preserve">
     <value>Teksti</value>
   </data>
@@ -1871,6 +1896,18 @@
   </data>
   <data name="TypeFileInfo" xml:space="preserve">
     <value>Tiedosto, jonka haluat lähettää.</value>
+  </data>
+  <data name="FileTypeIsSelected" xml:space="preserve">
+    <value>Tiedostotyyppi on valittu.</value>
+  </data>
+  <data name="FileTypeIsNotSelected" xml:space="preserve">
+    <value>Tiedostotyyppiä ei ole valittu, valitse napauttamalla.</value>
+  </data>
+  <data name="TextTypeIsSelected" xml:space="preserve">
+    <value>Tekstityyppi on valittu.</value>
+  </data>
+  <data name="TextTypeIsNotSelected" xml:space="preserve">
+    <value>Tekstityyppiä ei ole valittu, valitse napauttamalla.</value>
   </data>
   <data name="DeletionDate" xml:space="preserve">
     <value>Poistoajankohta</value>
@@ -2096,10 +2133,10 @@
     <value>Organisaatiolla on käytäntö, joka liittää tilisi automaattisesti salasanan palautusapuun. Liitos sallii organisaation ylläpitäjien vaihtaa pääsalasanasi.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>Organisaatiosi käytännöt vaikuttavat holvisi aikakatkaisuun. Suurin sallittu viive on {0} tunti(a) ja {1} minuutti(a)</value>
+    <value>Organisaatiosi käytännöt vaikuttavat holvisi aikakatkaisuun. Suurin sallittu aika on {0} tunti(a) ja {1} minuutti(a)</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
-    <value>Holvisi aikakatkaisuviive ylittää organisaatiosi asettamat rajoitukset.</value>
+    <value>Holvisi aikakatkaisu ylittää organisaatiosi asettamat rajoitukset.</value>
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Yksi tai useampi organisaation käytäntö estää henkilökohtaisen holvisi viennin.</value>
@@ -2175,5 +2212,105 @@
   </data>
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
     <value>Syötä sähköpostiisi lähetetty todennuskoodi</value>
+  </data>
+  <data name="SubmitCrashLogs" xml:space="preserve">
+    <value>Lähetä kaatumislokit</value>
+  </data>
+  <data name="SubmitCrashLogsDescription" xml:space="preserve">
+    <value>Auta Bitwardenia parantamaan sovelluksen vakautta lähettämällä kaatumislokit.</value>
+  </data>
+  <data name="OptionsExpanded" xml:space="preserve">
+    <value>Valinnat on laajennettu, tiivistä napauttamalla.</value>
+  </data>
+  <data name="OptionsCollapsed" xml:space="preserve">
+    <value>Valinnat on tiivistetty, laajenna napauttamalla.</value>
+  </data>
+  <data name="UppercaseAtoZ" xml:space="preserve">
+    <value>Isot kirjaimet (A-Z)</value>
+  </data>
+  <data name="LowercaseAtoZ" xml:space="preserve">
+    <value>Pienet kirjaimet (A-Z)</value>
+  </data>
+  <data name="NumbersZeroToNine" xml:space="preserve">
+    <value>Numerot (0-9)</value>
+  </data>
+  <data name="SpecialCharacters" xml:space="preserve">
+    <value>Erikoismerkit (!@#$%^&amp;*)</value>
+  </data>
+  <data name="TapToGoBack" xml:space="preserve">
+    <value>Palaa napauttamalla</value>
+  </data>
+  <data name="PasswordIsVisibleTapToHide" xml:space="preserve">
+    <value>Salasana on näkyvissä, piilota napauttamalla.</value>
+  </data>
+  <data name="PasswordIsNotVisibleTapToShow" xml:space="preserve">
+    <value>Salasana on piilotettu, näytä napauttamalla.</value>
+  </data>
+  <data name="FilterByVault" xml:space="preserve">
+    <value>Suodata kohteet holvin perusteella</value>
+  </data>
+  <data name="AllVaults" xml:space="preserve">
+    <value>Kaikki holvit</value>
+  </data>
+  <data name="Vaults" xml:space="preserve">
+    <value>Holvit</value>
+  </data>
+  <data name="VaultFilterDescription" xml:space="preserve">
+    <value>Holvi: {0}</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Kaikki</value>
+  </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Todennuskoodit</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>Premium-tilaus vaaditaan</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>Etkö voi lisätä todennusavainta? </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>Lue QR-koodi</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>Etkö voi lukea QR-koodia? </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Todentajan avain</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Syötä koodi manuaalisesti</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>Lisää TOTP</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>Määritä TOTP</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>Kun koodi on syötetty oikein, tallenna avain
+turvallisesti valitsemalla "Lisää TOTP"</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="NeverLockWarning" xml:space="preserve">
+    <value>Käyttämällä lukitusasetusta "Ei koskaan"? Tallentuu holvisi salausavain laitteellesi. Jos käytät asetusta, varmista, että laite on suojattu hyvin.</value>
+  </data>
+  <data name="EnvironmentPageUrlsError" xml:space="preserve">
+    <value>Yksi tai useampi syötetyistä URL-osoitteista on virheellinen. Tarkista virheet ja yritä tallennusta uudelleen.</value>
+  </data>
+  <data name="GenericErrorMessage" xml:space="preserve">
+    <value>Pyyntöäsi ei voitu käsitellä. Yritä uudelleen tai ota meihin yhteyttä.</value>
+  </data>
+  <data name="AllowScreenCapture" xml:space="preserve">
+    <value>Salli kuvakaappaus</value>
+  </data>
+  <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
+    <value>Haluatko varmasti sallia kuvankaappauksen?</value>
   </data>
 </root>

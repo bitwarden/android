@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Bit.App.Controls;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
@@ -10,9 +11,11 @@ namespace Bit.iOS.Core.Utilities
 {
     public class AccountSwitchingOverlayHelper
     {
-        IStateService _stateService;
-        IMessagingService _messagingService;
-        ILogger _logger;
+        const string DEFAULT_SYSTEM_AVATAR_IMAGE = "person.2";
+        
+        readonly IStateService _stateService;
+        readonly IMessagingService _messagingService;
+        readonly ILogger _logger;
 
         public AccountSwitchingOverlayHelper()
         {
@@ -23,9 +26,24 @@ namespace Bit.iOS.Core.Utilities
 
         public async Task<UIImage> CreateAvatarImageAsync()
         {
-            var avatarImageSource = new AvatarImageSource(await _stateService.GetNameAsync(), await _stateService.GetEmailAsync());
-            var avatarUIImage = await avatarImageSource.GetNativeImageAsync();
-            return avatarUIImage.ImageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal);
+            try
+            {
+                if (_stateService is null)
+                {
+                    throw new NullReferenceException(nameof(_stateService));
+                }
+                
+                var avatarImageSource = new AvatarImageSource(await _stateService.GetNameAsync(), await _stateService.GetEmailAsync());
+                using (var avatarUIImage = await avatarImageSource.GetNativeImageAsync())
+                {
+                    return avatarUIImage?.ImageWithRenderingMode(UIImageRenderingMode.AlwaysOriginal) ?? UIImage.GetSystemImage(DEFAULT_SYSTEM_AVATAR_IMAGE);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Exception(ex);
+                return UIImage.GetSystemImage(DEFAULT_SYSTEM_AVATAR_IMAGE);
+            }
         }
 
         public AccountSwitchingOverlayView CreateAccountSwitchingOverlayView(UIView containerView)

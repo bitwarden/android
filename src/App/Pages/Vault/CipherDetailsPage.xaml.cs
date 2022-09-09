@@ -3,23 +3,24 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bit.App.Resources;
 using Bit.Core.Abstractions;
+using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
-    public partial class ViewPage : BaseContentPage
+    public partial class CipherDetailsPage : BaseContentPage
     {
         private readonly IBroadcasterService _broadcasterService;
         private readonly ISyncService _syncService;
-        private ViewPageViewModel _vm;
+        private CipherDetailsPageViewModel _vm;
 
-        public ViewPage(string cipherId)
+        public CipherDetailsPage(string cipherId)
         {
             InitializeComponent();
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
-            _vm = BindingContext as ViewPageViewModel;
+            _vm = BindingContext as CipherDetailsPageViewModel;
             _vm.Page = this;
             _vm.CipherId = cipherId;
             SetActivityIndicator(_mainContent);
@@ -39,7 +40,7 @@ namespace Bit.App.Pages
             }
         }
 
-        public ViewPageViewModel ViewModel => _vm;
+        public CipherDetailsPageViewModel ViewModel => _vm;
 
         public void UpdateCipherId(string cipherId)
         {
@@ -54,39 +55,46 @@ namespace Bit.App.Pages
                 IsBusy = true;
             }
 
-            _broadcasterService.Subscribe(nameof(ViewPage), async (message) =>
+            _broadcasterService.Subscribe(nameof(CipherDetailsPage), async (message) =>
             {
-                if (message.Command == "syncStarted")
+                try
                 {
-                    Device.BeginInvokeOnMainThread(() => IsBusy = true);
-                }
-                else if (message.Command == "syncCompleted")
-                {
-                    await Task.Delay(500);
-                    Device.BeginInvokeOnMainThread(() =>
+                    if (message.Command == "syncStarted")
                     {
-                        IsBusy = false;
-                        if (message.Data is Dictionary<string, object> data && data.ContainsKey("successfully"))
+                        Device.BeginInvokeOnMainThread(() => IsBusy = true);
+                    }
+                    else if (message.Command == "syncCompleted")
+                    {
+                        await Task.Delay(500);
+                        Device.BeginInvokeOnMainThread(() =>
                         {
-                            var success = data["successfully"] as bool?;
-                            if (success.GetValueOrDefault())
+                            IsBusy = false;
+                            if (message.Data is Dictionary<string, object> data && data.ContainsKey("successfully"))
                             {
-                                var task = _vm.LoadAsync(() => AdjustToolbar());
+                                var success = data["successfully"] as bool?;
+                                if (success.GetValueOrDefault())
+                                {
+                                    var task = _vm.LoadAsync(() => AdjustToolbar());
+                                }
                             }
-                        }
-                    });
-                }
-                else if (message.Command == "selectSaveFileResult")
-                {
-                    Device.BeginInvokeOnMainThread(() =>
+                        });
+                    }
+                    else if (message.Command == "selectSaveFileResult")
                     {
-                        var data = message.Data as Tuple<string, string>;
-                        if (data == null)
+                        Device.BeginInvokeOnMainThread(() =>
                         {
-                            return;
-                        }
-                        _vm.SaveFileSelected(data.Item1, data.Item2);
-                    });
+                            var data = message.Data as Tuple<string, string>;
+                            if (data == null)
+                            {
+                                return;
+                            }
+                            _vm.SaveFileSelected(data.Item1, data.Item2);
+                        });
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LoggerHelper.LogEvenIfCantBeResolved(ex);
                 }
             });
             await LoadOnAppearedAsync(_scrollView, true, async () =>
@@ -103,8 +111,8 @@ namespace Bit.App.Pages
         {
             base.OnDisappearing();
             IsBusy = false;
-            _broadcasterService.Unsubscribe(nameof(ViewPage));
-            _vm.CleanUp();
+            _vm.StopCiphersTotpTick().FireAndForget();
+            _broadcasterService.Unsubscribe(nameof(CipherDetailsPage));
         }
 
         private async void PasswordHistory_Tapped(object sender, System.EventArgs e)
@@ -132,7 +140,7 @@ namespace Bit.App.Pages
                     {
                         return;
                     }
-                    await Navigation.PushModalAsync(new NavigationPage(new AddEditPage(_vm.CipherId)));
+                    await Navigation.PushModalAsync(new NavigationPage(new CipherAddEditPage(_vm.CipherId)));
                 }
             }
         }
@@ -204,7 +212,7 @@ namespace Bit.App.Pages
                 {
                     return;
                 }
-                var page = new AddEditPage(_vm.CipherId, cloneMode: true, viewPage: this);
+                var page = new CipherAddEditPage(_vm.CipherId, cloneMode: true, cipherDetailsPage: this);
                 await Navigation.PushModalAsync(new NavigationPage(page));
             }
         }
@@ -259,7 +267,7 @@ namespace Bit.App.Pages
             }
             else if (selection == AppResources.Clone)
             {
-                var page = new AddEditPage(_vm.CipherId, cloneMode: true, viewPage: this);
+                var page = new CipherAddEditPage(_vm.CipherId, cloneMode: true, cipherDetailsPage: this);
                 await Navigation.PushModalAsync(new NavigationPage(page));
             }
         }

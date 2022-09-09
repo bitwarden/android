@@ -299,6 +299,10 @@
     <value>Mana glabātava</value>
     <comment>The title for the vault page.</comment>
   </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Autentificētājs</value>
+    <comment>Authenticator TOTP feature</comment>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Nosaukums</value>
     <comment>Label for an entity name.</comment>
@@ -770,6 +774,12 @@
   <data name="Enabled" xml:space="preserve">
     <value>Iespējots</value>
   </data>
+  <data name="Off" xml:space="preserve">
+    <value>Izslēgts</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>Ieslēgts</value>
+  </data>
   <data name="Status" xml:space="preserve">
     <value>Stāvoklis</value>
   </data>
@@ -889,11 +899,9 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>Nevar nolasīt autentificētāja atslēgu.</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>Nolasīšana notiks automātiski.</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Kamera ir jāvērš uz kvadrātkodu.</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Kamera jāpavērš pret kvadrātkodu.
+Nolasīšana notiks automātiski.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>Nolasīt kvadrātkodu</value>
@@ -907,11 +915,11 @@
   <data name="CopyTotp" xml:space="preserve">
     <value>Ievietot TOTP starpliktuvē</value>
   </data>
-  <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>Ja pierakstīšanās datiem ir pievienota autentificētāja atslēga, TOTP apstiprinājuma kods tiks automātiski pārkopēts uz starpliktuvi, kad vien tiks automātiski aizpildīta pierakstīšanās veidne.</value>
+  <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
+    <value>Ja pierakstīšanās vienumam ir autentificētāja atslēga, TOTP apstiprinājuma kods tiek ievietots starpliktuvē automātiskās aizpildes laikā.</value>
   </data>
-  <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>Atspējot automātisku TOTP ievietošanu starpliktuvē</value>
+  <data name="CopyTotpAutomatically" xml:space="preserve">
+    <value>Automātiski ievietot TOTP starpliktuvē</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
     <value>Ir nepieciešama Premium dalība, lai izmantotu šo iespēju.</value>
@@ -1128,11 +1136,11 @@
   <data name="Expiration" xml:space="preserve">
     <value>Derīgums</value>
   </data>
-  <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>Atspējot tīmekļa vietņu ikonas</value>
+  <data name="ShowWebsiteIcons" xml:space="preserve">
+    <value>Rādīt vietņu ikonas</value>
   </data>
-  <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Tīmekļa vietņu ikonas nodrošina atpazīstamu attēlu pie katra glabātavas pieteikšanās vienuma.</value>
+  <data name="ShowWebsiteIconsDescription" xml:space="preserve">
+    <value>Attēlot atpazīstamu attēlu pie katra pierakstīšanās vienuma.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>Ikonu servera URL</value>
@@ -1372,11 +1380,15 @@
   <data name="SearchCollection" xml:space="preserve">
     <value>Meklēt krājumā</value>
   </data>
-  <data name="SearchFolder" xml:space="preserve">
-    <value>Meklēt mapē</value>
+  <data name="SearchFileSends" xml:space="preserve">
+    <value>Meklēt datņu "Sends"</value>
   </data>
-  <data name="SearchType" xml:space="preserve">
-    <value>Meklēt veidu</value>
+  <data name="SearchTextSends" xml:space="preserve">
+    <value>Meklēt teksta "Sends"</value>
+  </data>
+  <data name="SearchGroup" xml:space="preserve">
+    <value>Meklēt {0}</value>
+    <comment>ex: Search Logins</comment>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Veids</value>
@@ -1537,6 +1549,12 @@
   <data name="ThemeDefault" xml:space="preserve">
     <value>Noklusējuma (sistēmas)</value>
   </data>
+  <data name="DefaultDarkTheme" xml:space="preserve">
+    <value>Noklusējuma tumšais izskats</value>
+  </data>
+  <data name="DefaultDarkThemeDescription" xml:space="preserve">
+    <value>Izvēlēties tumšo izskatu, ko pielietot, kad tiek izmantotots noklusējuma (sistēmas) izskats, kad ir iespējots ierīces tumšais režīms.</value>
+  </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Ievietot piezīmes starpliktuvē</value>
   </data>
@@ -1553,17 +1571,21 @@
     <value>Melns</value>
     <comment>The color black</comment>
   </data>
-  <data name="BlacklistedUris" xml:space="preserve">
-    <value>Melnajā sarakstā ievietoti URI</value>
+  <data name="Nord" xml:space="preserve">
+    <value>Nord</value>
+    <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
-  <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>Automātiskā aizpilde netiks piedāvāta URI, kas ir ievietoti melnajā sarakstā. Sarakstā ir jābūt ar komatu atdalītām vērtībām. Piemēram: "https://twitter.com, androidapp://com.twitter.android".</value>
+  <data name="AutofillBlockedUris" xml:space="preserve">
+    <value>Automātiskā aizpilde aizturētajos URI</value>
   </data>
-  <data name="DisableSavePrompt" xml:space="preserve">
-    <value>Atspējot saglabāšanas uzvedni</value>
+  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
+    <value>Automātiskā aizpilde aizturētajos URI netiks piedāvāta. Vairākus URI jāatdala ar komatu. Piemēram, "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
-  <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>"Saglabāšanas uzvedne" automātiski vaicā, vai glabātavā ievietot jaunus vienumus, kad vien ievades veidne tiek aizpildīta pirmo reizi.</value>
+  <data name="AskToAddLogin" xml:space="preserve">
+    <value>Vaicāt, lai pievienotu pierakstīšanās vienumu</value>
+  </data>
+  <data name="AskToAddLoginDescription" xml:space="preserve">
+    <value>Vaicāt pievienot vienumu, ja tāds nav atrodams glabātavā.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
     <value>Pārsāknējot lietotni</value>
@@ -1856,6 +1878,9 @@
     <value>Lasāms nosaukums, kas apraksta šo "Send".</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
+  <data name="Text" xml:space="preserve">
+    <value>Teksts</value>
+  </data>
   <data name="TypeText" xml:space="preserve">
     <value>Teksts</value>
   </data>
@@ -1871,6 +1896,18 @@
   </data>
   <data name="TypeFileInfo" xml:space="preserve">
     <value>Datne, kuru ir vēlme nosūtīt.</value>
+  </data>
+  <data name="FileTypeIsSelected" xml:space="preserve">
+    <value>Datnes veids ir atlasīts.</value>
+  </data>
+  <data name="FileTypeIsNotSelected" xml:space="preserve">
+    <value>Datnes veids nav atlasīts, piesist, lai to izdarītu.</value>
+  </data>
+  <data name="TextTypeIsSelected" xml:space="preserve">
+    <value>Teksta veids ir atlasīts.</value>
+  </data>
+  <data name="TextTypeIsNotSelected" xml:space="preserve">
+    <value>Teksta veids nav atlasīts, piesist, lai to izdarītu.</value>
   </data>
   <data name="DeletionDate" xml:space="preserve">
     <value>Dzēšanas datums</value>
@@ -2099,7 +2136,7 @@
     <value>Apvienības nosacījumi ietekmē glabātavas noildzi. Lielākā atļautā glabātavas noildze ir {0} stunda(s) un {1} minūte(s)</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
-    <value>Glabātavas noildze pāŗsniedz apvienības uzstādītos ierobežojumus.</value>
+    <value>Glabātavas noildze pārsniedz apvienības uzstādītos ierobežojumus.</value>
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
     <value>Viens vai vairāki apvienības nosacījumi neļauj izgūt privātās glabātavas saturu.</value>
@@ -2175,5 +2212,105 @@
   </data>
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
     <value>Ievadīt pārbaudes kodu, kas tika nosūtīts e-pastā</value>
+  </data>
+  <data name="SubmitCrashLogs" xml:space="preserve">
+    <value>Iesniegt avāriju ierakstus</value>
+  </data>
+  <data name="SubmitCrashLogsDescription" xml:space="preserve">
+    <value>Avāriju ziņojumu iesniegšana palīdz Bitwarden uzlabot lietotnes noturību.</value>
+  </data>
+  <data name="OptionsExpanded" xml:space="preserve">
+    <value>Iespējas ir izvērstas, piesist, lai sakļautu.</value>
+  </data>
+  <data name="OptionsCollapsed" xml:space="preserve">
+    <value>Iespējas ir sakļautas, piesist, lai izvērstu.</value>
+  </data>
+  <data name="UppercaseAtoZ" xml:space="preserve">
+    <value>Lielie burti (A līdz Z)</value>
+  </data>
+  <data name="LowercaseAtoZ" xml:space="preserve">
+    <value>Mazie burti (A līdz Z)</value>
+  </data>
+  <data name="NumbersZeroToNine" xml:space="preserve">
+    <value>Cipari (0 līdz 9)</value>
+  </data>
+  <data name="SpecialCharacters" xml:space="preserve">
+    <value>Īpašās rakstzīmes (!@#$%^&amp;*)</value>
+  </data>
+  <data name="TapToGoBack" xml:space="preserve">
+    <value>Piesist, lai atgrieztos</value>
+  </data>
+  <data name="PasswordIsVisibleTapToHide" xml:space="preserve">
+    <value>Parole ir redzama, piesist, lai paslēptu.</value>
+  </data>
+  <data name="PasswordIsNotVisibleTapToShow" xml:space="preserve">
+    <value>Parole nav redzama, piesist, lai parādītu.</value>
+  </data>
+  <data name="FilterByVault" xml:space="preserve">
+    <value>Atlasīt vienumus pēc glabātavas</value>
+  </data>
+  <data name="AllVaults" xml:space="preserve">
+    <value>Visas glabātavas</value>
+  </data>
+  <data name="Vaults" xml:space="preserve">
+    <value>Glabātavas</value>
+  </data>
+  <data name="VaultFilterDescription" xml:space="preserve">
+    <value>Glabātava: {0}</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Visi</value>
+  </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Apstiprinājuma kodi</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>Nepieciešams Premium abonements</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>Nevar pievienot autentificētāja atslēgu? </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>Nolasīt kvadrātkodu</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>Nevar nolasīt kvadrātkodu? </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Autentificētāja atslēga</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Ievadīt atslēgu pašrocīgi</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>Pievienot TOTP</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>Uzstādīt TOTP</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>Tiklīdz atslēga ir veiksmīgi ievadīta,
+jāizvēlas "Pievienot TOTP", lai droši glabātu atslēgu.</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="NeverLockWarning" xml:space="preserve">
+    <value>Aizslēgšanas iespējas iestatīšana uz "Nekad" padara glabātavu pieejamu ikvienam, kam ir piekļuve ierīcei. Ja šis iestatījums tiek izmantots, jānodrošina, ka ierīce ir pienācīgi aizsargāta.</value>
+  </data>
+  <data name="EnvironmentPageUrlsError" xml:space="preserve">
+    <value>Viens vai vairāki no ievadītajiem URL ir nederīgi. Lūgums pārskatīt un mēģināt atkārtoti saglabāt.</value>
+  </data>
+  <data name="GenericErrorMessage" xml:space="preserve">
+    <value>Nebija iespējams apstrādāt pieprasījumu. Lūgums mēģināt vēlreiz vai sazināties ar mums.</value>
+  </data>
+  <data name="AllowScreenCapture" xml:space="preserve">
+    <value>Atļaut ekrāna tveršanu</value>
+  </data>
+  <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
+    <value>Vai tiešām iespējot ekrāna tveršanu?</value>
   </data>
 </root>

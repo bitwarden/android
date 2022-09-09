@@ -2,7 +2,7 @@
 <pages:BaseContentPage 
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="Bit.App.Pages.AddEditPage"
+    x:Class="Bit.App.Pages.CipherAddEditPage"
     xmlns:pages="clr-namespace:Bit.App.Pages"
     xmlns:u="clr-namespace:Bit.App.Utilities"
     xmlns:controls="clr-namespace:Bit.App.Controls"
@@ -12,11 +12,11 @@
     xmlns:dts="clr-namespace:Bit.App.Lists.DataTemplateSelectors"
     xmlns:il="clr-namespace:Bit.App.Lists.ItemLayouts.CustomFields"
     xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
-    x:DataType="pages:AddEditPageViewModel"
+    x:DataType="pages:CipherAddEditPageViewModel"
     x:Name="_page"
     Title="{Binding PageTitle}">
     <ContentPage.BindingContext>
-        <pages:AddEditPageViewModel />
+        <pages:CipherAddEditPageViewModel />
     </ContentPage.BindingContext>
 
     <ContentPage.ToolbarItems>
@@ -128,15 +128,26 @@
                         StyleClass="box-value" />
                 </StackLayout>
                 <StackLayout IsVisible="{Binding IsLogin}" Spacing="0" Padding="0">
-                    <StackLayout StyleClass="box-row, box-row-input">
-                        <Label
+                    <Grid StyleClass="box-row, box-row-input"
+                        RowDefinitions="Auto,*"
+                        ColumnDefinitions="*,Auto">
+                         <Label
                             Text="{u:I18n Username}"
-                            StyleClass="box-label" />
+                            StyleClass="box-label"/>
                         <Entry
                             x:Name="_loginUsernameEntry"
                             Text="{Binding Cipher.Login.Username}"
-                            StyleClass="box-value" />
-                    </StackLayout>
+                            StyleClass="box-value" 
+                            Grid.Row="1"/>
+                        <controls:IconButton 
+                            StyleClass="box-row-button, box-row-button-platform"
+                            Text="{Binding Source={x:Static core:BitwardenIcons.Generate}}"
+                            Command="{Binding GenerateUsernameCommand}"
+                            Grid.Column="1"
+                            Grid.RowSpan="2"
+                            AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.Name="{u:I18n GenerateUsername}" />
+                    </Grid>
                     <Grid StyleClass="box-row, box-row-input">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
@@ -205,17 +216,39 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <Label
                             Text="{u:I18n AuthenticatorKey}"
                             StyleClass="box-label"
                             Grid.Row="0"
                             Grid.Column="0" />
+                        <Frame 
+                            IsVisible="{Binding HasTotpValue, Converter={StaticResource inverseBool}}" 
+                            Margin="0,5,0,0"
+                            StyleClass="btn-icon-row"
+                            HorizontalOptions="FillAndExpand"
+                            VerticalOptions="FillAndExpand"
+                            Padding="0"
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="3">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="ScanTotp_Clicked" />
+                            </Frame.GestureRecognizers>
+                            <controls:IconLabel 
+                                Text="{Binding SetupTotpText}" 
+                                Padding="0,15"
+                                HorizontalOptions="Center"
+                                VerticalOptions="FillAndExpand"
+                                VerticalTextAlignment="Center" />
+                        </Frame>
                         <controls:MonoEntry
                             x:Name="_loginTotpEntry"
                             Text="{Binding Cipher.Login.Totp}"
                             IsSpellCheckEnabled="False"
                             IsTextPredictionEnabled="False"
+                            IsVisible="{Binding HasTotpValue}"
                             IsPassword="{Binding Cipher.ViewPassword, Converter={StaticResource inverseBool}}"
                             IsEnabled="{Binding Cipher.ViewPassword}"
                             StyleClass="box-value"
@@ -224,12 +257,20 @@
                             Grid.ColumnSpan="{Binding TotpColumnSpan}" />
                         <controls:IconButton 
                             StyleClass="box-row-button, box-row-button-platform"
+                            Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
+                            Command="{Binding CopyCommand}"
+                            IsVisible="{Binding HasTotpValue}"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Grid.RowSpan="2" />
+                        <controls:IconButton 
+                            StyleClass="box-row-button, box-row-button-platform"
                             Text="{Binding Source={x:Static core:BitwardenIcons.Camera}}"
                             Clicked="ScanTotp_Clicked"
                             Grid.Row="0"
-                            Grid.Column="1"
+                            Grid.Column="2"
                             Grid.RowSpan="2"
-                            IsVisible="{Binding Cipher.ViewPassword}"
+                            IsVisible="{Binding HasTotpValue}"
                             AutomationProperties.IsInAccessibleTree="True"
                             AutomationProperties.Name="{u:I18n ScanQrTitle}" />
                     </Grid>

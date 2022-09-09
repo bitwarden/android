@@ -98,11 +98,11 @@
     <Compile Update="Pages\Vault\PasswordHistoryPage.xaml.cs">
       <DependentUpon>PasswordHistoryPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Pages\Vault\AddEditPage.xaml.cs">
-      <DependentUpon>AddEditPage.xaml</DependentUpon>
+    <Compile Update="Pages\Vault\CipherDetailsPage.xaml.cs">
+      <DependentUpon>CipherDetailsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Pages\Vault\ViewPage.xaml.cs">
-      <DependentUpon>ViewPage.xaml</DependentUpon>
+    <Compile Update="Pages\Vault\CipherAddEditPage.xaml.cs">
+      <DependentUpon>CipherAddEditPage.xaml</DependentUpon>
     </Compile>
     <Compile Update="Pages\Settings\SettingsPage\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
@@ -136,12 +136,10 @@
     <Folder Include="Lists\ItemViewModels\CustomFields\" />
     <Folder Include="Controls\AccountSwitchingOverlay\" />
     <Folder Include="Utilities\AccountManagement\" />
+    <Folder Include="Controls\DateTime\" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Controls\CipherViewCell\CipherViewCell.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Remove="Pages\Accounts\AccountsPopupPage.xaml" />
   </ItemGroup>
 
@@ -167,12 +165,6 @@
     <Compile Update="Styles\Android.xaml.cs">
       <DependentUpon>Android.xaml</DependentUpon>
     </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="Styles\Base.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
@@ -435,5 +427,6 @@
     <None Remove="Lists\ItemViewModels\CustomFields\" />
     <None Remove="Controls\AccountSwitchingOverlay\" />
     <None Remove="Utilities\AccountManagement\" />
+    <None Remove="Controls\DateTime\" />
   </ItemGroup>
 </Project>

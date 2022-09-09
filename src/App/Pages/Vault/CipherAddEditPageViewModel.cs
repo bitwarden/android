@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Bit.App.Abstractions;
 using Bit.App.Lists.ItemViewModels.CustomFields;
 using Bit.App.Models;
 using Bit.App.Resources;
@@ -12,28 +11,24 @@ using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
-using View = Xamarin.Forms.View;
 
 namespace Bit.App.Pages
 {
-    public class AddEditPageViewModel : BaseViewModel
+    public class CipherAddEditPageViewModel : BaseCipherViewModel
     {
-        private readonly IDeviceActionService _deviceActionService;
         private readonly ICipherService _cipherService;
         private readonly IFolderService _folderService;
         private readonly ICollectionService _collectionService;
         private readonly IStateService _stateService;
         private readonly IOrganizationService _organizationService;
-        private readonly IPlatformUtilsService _platformUtilsService;
-        private readonly IAuditService _auditService;
         private readonly IMessagingService _messagingService;
         private readonly IEventService _eventService;
         private readonly IPolicyService _policyService;
         private readonly ICustomFieldItemFactory _customFieldItemFactory;
-        private readonly ILogger _logger;
+        private readonly IClipboardService _clipboardService;
 
-        private CipherView _cipher;
         private bool _showNotesSeparator;
         private bool _showPassword;
         private bool _showCardNumber;
@@ -47,7 +42,7 @@ namespace Bit.App.Pages
         private bool _hasCollections;
         private string _previousCipherId;
         private List<Core.Models.View.CollectionView> _writeableCollections;
-        private string[] _additionalCipherProperties = new string[]
+        protected override string[] AdditionalPropertiesToRaiseOnCipherChanged => new string[]
         {
             nameof(IsLogin),
             nameof(IsIdentity),
@@ -56,7 +51,9 @@ namespace Bit.App.Pages
             nameof(ShowUris),
             nameof(ShowAttachments),
             nameof(ShowCollections),
+            nameof(HasTotpValue)
         };
+
         private List<KeyValuePair<UriMatchType?, string>> _matchDetectionOptions =
             new List<KeyValuePair<UriMatchType?, string>>
             {
@@ -69,30 +66,28 @@ namespace Bit.App.Pages
                 new KeyValuePair<UriMatchType?, string>(UriMatchType.Never, AppResources.Never)
             };
 
-        public AddEditPageViewModel()
+        public CipherAddEditPageViewModel()
         {
-            _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
             _folderService = ServiceContainer.Resolve<IFolderService>("folderService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _organizationService = ServiceContainer.Resolve<IOrganizationService>("organizationService");
-            _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
-            _auditService = ServiceContainer.Resolve<IAuditService>("auditService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _collectionService = ServiceContainer.Resolve<ICollectionService>("collectionService");
             _eventService = ServiceContainer.Resolve<IEventService>("eventService");
             _policyService = ServiceContainer.Resolve<IPolicyService>("policyService");
             _customFieldItemFactory = ServiceContainer.Resolve<ICustomFieldItemFactory>("customFieldItemFactory");
-            _logger = ServiceContainer.Resolve<ILogger>("logger");
+            _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
 
             GeneratePasswordCommand = new Command(GeneratePassword);
             TogglePasswordCommand = new Command(TogglePassword);
             ToggleCardNumberCommand = new Command(ToggleCardNumber);
             ToggleCardCodeCommand = new Command(ToggleCardCode);
-            CheckPasswordCommand = new Command(CheckPasswordAsync);
             UriOptionsCommand = new Command<LoginUriView>(UriOptions);
             FieldOptionsCommand = new Command<ICustomFieldItemViewModel>(FieldOptions);
             PasswordPromptHelpCommand = new Command(PasswordPromptHelp);
+            CopyCommand = new AsyncCommand(CopyTotpClipboardAsync, onException: ex => _logger.Exception(ex), allowsMultipleExecutions: false);
+            GenerateUsernameCommand = new AsyncCommand(GenerateUsernameAsync, onException: ex => OnGenerateUsernameException(ex), allowsMultipleExecutions: false);
             Uris = new ExtendedObservableCollection<LoginUriView>();
             Fields = new ExtendedObservableCollection<ICustomFieldItemViewModel>();
             Collections = new ExtendedObservableCollection<CollectionViewModel>();
@@ -150,10 +145,11 @@ namespace Bit.App.Pages
         public Command TogglePasswordCommand { get; set; }
         public Command ToggleCardNumberCommand { get; set; }
         public Command ToggleCardCodeCommand { get; set; }
-        public Command CheckPasswordCommand { get; set; }
         public Command UriOptionsCommand { get; set; }
         public Command FieldOptionsCommand { get; set; }
         public Command PasswordPromptHelpCommand { get; set; }
+        public AsyncCommand CopyCommand { get; set; }
+        public AsyncCommand GenerateUsernameCommand { get; set; }
         public string CipherId { get; set; }
         public string OrganizationId { get; set; }
         public string FolderId { get; set; }
@@ -237,11 +233,6 @@ namespace Bit.App.Pages
                 }
             }
         }
-        public CipherView Cipher
-        {
-            get => _cipher;
-            set => SetProperty(ref _cipher, value, additionalPropertyNames: _additionalCipherProperties);
-        }
         public bool ShowNotesSeparator
         {
             get => _showNotesSeparator;
@@ -289,7 +280,7 @@ namespace Bit.App.Pages
         public bool ShowOwnershipOptions => !EditMode || CloneMode;
         public bool OwnershipPolicyInEffect => ShowOwnershipOptions && !AllowPersonal;
         public bool CloneMode { get; set; }
-        public ViewPage ViewPage { get; set; }
+        public CipherDetailsPage CipherDetailsPage { get; set; }
         public bool IsLogin => Cipher?.Type == CipherType.Login;
         public bool IsIdentity => Cipher?.Type == CipherType.Identity;
         public bool IsCard => Cipher?.Type == CipherType.Card;
@@ -304,7 +295,8 @@ namespace Bit.App.Pages
         public bool AllowPersonal { get; set; }
         public bool PasswordPrompt => Cipher.Reprompt != CipherRepromptType.None;
         public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
-
+        public bool HasTotpValue => IsLogin && !string.IsNullOrEmpty(Cipher?.Login?.Totp);
+        public string SetupTotpText => $"{BitwardenIcons.Camera} {AppResources.SetupTotp}";
         public void Init()
         {
             PageTitle = EditMode && !CloneMode ? AppResources.EditItem : AppResources.AddItem;
@@ -513,7 +505,7 @@ namespace Bit.App.Pages
                     EditMode && !CloneMode ? AppResources.ItemUpdated : AppResources.NewItemCreated);
                 _messagingService.Send(EditMode && !CloneMode ? "editedCipher" : "addedCipher", Cipher.Id);
 
-                if (Page is AddEditPage page && page.FromAutofillFramework)
+                if (Page is CipherAddEditPage page && page.FromAutofillFramework)
                 {
                     // Close and go back to app
                     _deviceActionService.CloseAutofill();
@@ -522,7 +514,7 @@ namespace Bit.App.Pages
                 {
                     if (CloneMode)
                     {
-                        ViewPage?.UpdateCipherId(this.Cipher.Id);
+                        CipherDetailsPage?.UpdateCipherId(this.Cipher.Id);
                     }
                     // if the app is tombstoned then PopModalAsync would throw index out of bounds
                     if (Page.Navigation?.ModalStack?.Count > 0)
@@ -605,9 +597,33 @@ namespace Bit.App.Pages
             await Page.Navigation.PushModalAsync(new NavigationPage(page));
         }
 
+        public async Task GenerateUsernameAsync()
+        {
+            if (!string.IsNullOrWhiteSpace(Cipher?.Login?.Username)
+                && !await _platformUtilsService.ShowDialogAsync(AppResources.AreYouSureYouWantToOverwriteTheCurrentUsername, null, AppResources.Yes, AppResources.No))
+            {
+                return;
+            }
+
+            var page = new GeneratorPage(false, async (username) =>
+            {
+                try
+                {
+                    Cipher.Login.Username = username;
+                    TriggerCipherChanged();
+                    await Page.Navigation.PopModalAsync();
+                }
+                catch (Exception ex)
+                {
+                    OnGenerateUsernameException(ex);
+                }
+            }, isUsernameGenerator: true, emailWebsite: Cipher?.Name, editMode: true);
+            await Page.Navigation.PushModalAsync(new NavigationPage(page));
+        }
+
         public async void UriOptions(LoginUriView uri)
         {
-            if (!(Page as AddEditPage).DoOnce())
+            if (!(Page as CipherAddEditPage).DoOnce())
             {
                 return;
             }
@@ -645,7 +661,7 @@ namespace Bit.App.Pages
 
         public async void FieldOptions(ICustomFieldItemViewModel field)
         {
-            if (!(Page as AddEditPage).DoOnce())
+            if (!(Page as CipherAddEditPage).DoOnce())
             {
                 return;
             }
@@ -836,140 +852,26 @@ namespace Bit.App.Pages
 
         private void TriggerCipherChanged()
         {
-            TriggerPropertyChanged(nameof(Cipher), _additionalCipherProperties);
+            TriggerPropertyChanged(nameof(Cipher), AdditionalPropertiesToRaiseOnCipherChanged);
         }
 
-        private async void CheckPasswordAsync()
+        private async Task CopyTotpClipboardAsync()
         {
-            if (!(Page as BaseContentPage).DoOnce())
+            try
             {
-                return;
+                await _clipboardService.CopyTextAsync(Cipher.Login.Totp);
+                _platformUtilsService.ShowToast("info", null, string.Format(AppResources.ValueHasBeenCopied, AppResources.AuthenticatorKeyScanner));
             }
-            if (string.IsNullOrWhiteSpace(Cipher.Login?.Password))
+            catch (Exception ex)
             {
-                return;
-            }
-            await _deviceActionService.ShowLoadingAsync(AppResources.CheckingPassword);
-            var matches = await _auditService.PasswordLeakedAsync(Cipher.Login.Password);
-            await _deviceActionService.HideLoadingAsync();
-            if (matches > 0)
-            {
-                await _platformUtilsService.ShowDialogAsync(string.Format(AppResources.PasswordExposed,
-                    matches.ToString("N0")));
-            }
-            else
-            {
-                await _platformUtilsService.ShowDialogAsync(AppResources.PasswordSafe);
-            }
-        }
-    }
-
-    public class AddEditPageFieldViewModel : ExtendedViewModel
-    {
-        private II18nService _i18nService;
-        private FieldView _field;
-        private CipherView _cipher;
-        private bool _showHiddenValue;
-        private bool _booleanValue;
-        private int _linkedFieldOptionSelectedIndex;
-        private string[] _additionalFieldProperties = new string[]
-        {
-            nameof(IsBooleanType),
-            nameof(IsHiddenType),
-            nameof(IsTextType),
-            nameof(IsLinkedType),
-        };
-
-        public AddEditPageFieldViewModel(CipherView cipher, FieldView field)
-        {
-            _i18nService = ServiceContainer.Resolve<II18nService>("i18nService");
-            _cipher = cipher;
-            Field = field;
-            ToggleHiddenValueCommand = new Command(ToggleHiddenValue);
-            BooleanValue = IsBooleanType && field.Value == "true";
-            LinkedFieldOptionSelectedIndex = !Field.LinkedId.HasValue ? 0 :
-                LinkedFieldOptions.FindIndex(lfo => lfo.Value == Field.LinkedId.Value);
-        }
-
-        public FieldView Field
-        {
-            get => _field;
-            set => SetProperty(ref _field, value, additionalPropertyNames: _additionalFieldProperties);
-        }
-
-        public bool ShowHiddenValue
-        {
-            get => _showHiddenValue;
-            set => SetProperty(ref _showHiddenValue, value,
-                additionalPropertyNames: new string[]
-                {
-                    nameof(ShowHiddenValueIcon)
-                });
-        }
-
-        public bool BooleanValue
-        {
-            get => _booleanValue;
-            set
-            {
-                SetProperty(ref _booleanValue, value);
-                if (IsBooleanType)
-                {
-                    Field.Value = value ? "true" : "false";
-                }
+                _logger.Exception(ex);
             }
         }
 
-        public int LinkedFieldOptionSelectedIndex
+        private async void OnGenerateUsernameException(Exception ex)
         {
-            get => _linkedFieldOptionSelectedIndex;
-            set
-            {
-                if (SetProperty(ref _linkedFieldOptionSelectedIndex, value))
-                {
-                    LinkedFieldValueChanged();
-                }
-            }
-        }
-
-        public List<KeyValuePair<string, LinkedIdType>> LinkedFieldOptions
-        {
-            get => _cipher.LinkedFieldOptions?
-                .Select(kvp => new KeyValuePair<string, LinkedIdType>(_i18nService.T(kvp.Key), kvp.Value))
-                .ToList();
-        }
-
-        public Command ToggleHiddenValueCommand { get; set; }
-
-        public string ShowHiddenValueIcon => _showHiddenValue ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
-        public bool IsTextType => _field.Type == FieldType.Text;
-        public bool IsBooleanType => _field.Type == FieldType.Boolean;
-        public bool IsHiddenType => _field.Type == FieldType.Hidden;
-        public bool IsLinkedType => _field.Type == FieldType.Linked;
-        public bool ShowViewHidden => IsHiddenType && (_cipher.ViewPassword || _field.NewField);
-
-        public void ToggleHiddenValue()
-        {
-            ShowHiddenValue = !ShowHiddenValue;
-            if (ShowHiddenValue && _cipher?.Id != null)
-            {
-                var eventService = ServiceContainer.Resolve<IEventService>("eventService");
-                var task = eventService.CollectAsync(EventType.Cipher_ClientToggledHiddenFieldVisible, _cipher.Id);
-            }
-        }
-
-        public void TriggerFieldChanged()
-        {
-            TriggerPropertyChanged(nameof(Field), _additionalFieldProperties);
-        }
-
-        private void LinkedFieldValueChanged()
-        {
-            if (Field != null && LinkedFieldOptionSelectedIndex > -1)
-            {
-                Field.LinkedId = LinkedFieldOptions.Find(lfo =>
-                    lfo.Value == LinkedFieldOptions[LinkedFieldOptionSelectedIndex].Value).Value;
-            }
+            _logger.Exception(ex);
+            await Page.DisplayAlert(AppResources.AnErrorHasOccurred, AppResources.GenericErrorMessage, AppResources.Ok);
         }
     }
 }

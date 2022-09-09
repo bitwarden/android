@@ -17,15 +17,19 @@
         <ToolbarItem Text="{u:I18n Cancel}" Clicked="Close_Clicked" Order="Primary" Priority="-1"
                      x:Name="_cancelItem" />
     </ContentPage.ToolbarItems>
-
+            
     <ContentPage.Resources>
         <ResourceDictionary>
             <u:InverseBoolConverter x:Key="inverseBool" />
             <u:IsNullConverter x:Key="isNull" />
-            <ToolbarItem Icon="more_vert.png" Clicked="More_Clicked" Order="Primary"
-                x:Name="_moreItem" x:Key="moreItem"
-                 AutomationProperties.IsInAccessibleTree="True"
-                 AutomationProperties.Name="{u:I18n Options}" />
+            <ToolbarItem 
+                x:Name="_moreItem"
+                x:Key="moreItem"
+                Icon="more_vert.png"
+                Order="Primary"
+                Command="{Binding MoreCommand}"
+                AutomationProperties.IsInAccessibleTree="True"
+                AutomationProperties.Name="{u:I18n Options}" />
             <ToolbarItem Text="{u:I18n UseAnotherTwoStepMethod}" 
                 Clicked="Methods_Clicked" 
                 Order="Secondary"

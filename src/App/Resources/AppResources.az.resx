@@ -299,6 +299,10 @@
     <value>Anbarım</value>
     <comment>The title for the vault page.</comment>
   </data>
+  <data name="Authenticator" xml:space="preserve">
+    <value>Kimlik təsdiqləyici</value>
+    <comment>Authenticator TOTP feature</comment>
+  </data>
   <data name="Name" xml:space="preserve">
     <value>Ad</value>
     <comment>Label for an entity name.</comment>
@@ -770,6 +774,12 @@
   <data name="Enabled" xml:space="preserve">
     <value>Fəallaşdırıldı</value>
   </data>
+  <data name="Off" xml:space="preserve">
+    <value>Bağlı</value>
+  </data>
+  <data name="On" xml:space="preserve">
+    <value>Açıq</value>
+  </data>
   <data name="Status" xml:space="preserve">
     <value>Vəziyyət</value>
   </data>
@@ -889,11 +899,9 @@
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>Kimlik təsdiqləyici açarı oxuna bilmir.</value>
   </data>
-  <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>Skan avtomatik olaraq icra ediləcək.</value>
-  </data>
-  <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Kameranı QR koduna yönləndirin.</value>
+  <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
+    <value>Kameranızı QR koduna yönəldin.
+Skan prosesi avtomatik baş tutacaq.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>QR kodu skan edin</value>
@@ -907,11 +915,11 @@
   <data name="CopyTotp" xml:space="preserve">
     <value>TOTP-ni kopyala</value>
   </data>
-  <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>Hesabınıza əlavə edilən kimlik təsdiqləyici açarı varsa, giriş məlumatları avto-doldurulanda TOTP təsdiqləmə kodu da avtomatik olaraq lövhəyə kopyalanacaq.</value>
+  <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
+    <value>Bir girişin, kimlik təsdiqləyici açarı varsa, giriş məlumatları avto-doldurulanda TOTP təsdiqləmə kodunu kopyalayın.</value>
   </data>
-  <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>Avtomatik TOTP kopyalamasını sıradan çıxart</value>
+  <data name="CopyTotpAutomatically" xml:space="preserve">
+    <value>TOTP-ni avtomatik kopyala</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
     <value>Bu özəlliyi istifadə etmək üçün premium üzvlük lazımdır.</value>
@@ -1128,11 +1136,11 @@
   <data name="Expiration" xml:space="preserve">
     <value>Bitmə vaxtı</value>
   </data>
-  <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>Veb sayt nişanlarını sıradan çıxart</value>
+  <data name="ShowWebsiteIcons" xml:space="preserve">
+    <value>Veb sayt nişanlarını göstər</value>
   </data>
-  <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Veb sayt nişanları, anbarınızda hər bir giriş elementinin yanında tanımağınıza kömək edən bir təsvir təqdim edir.</value>
+  <data name="ShowWebsiteIconsDescription" xml:space="preserve">
+    <value>Hər girişin yanında tanına bilən təsvir göstər.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>Nişan server URL-si</value>
@@ -1372,11 +1380,15 @@
   <data name="SearchCollection" xml:space="preserve">
     <value>Kolleksiya axtar</value>
   </data>
-  <data name="SearchFolder" xml:space="preserve">
-    <value>Qovluq axtar</value>
+  <data name="SearchFileSends" xml:space="preserve">
+    <value>Fayl "Send"lərini axtar</value>
   </data>
-  <data name="SearchType" xml:space="preserve">
-    <value>Axtarış növü</value>
+  <data name="SearchTextSends" xml:space="preserve">
+    <value>Mətn "Send"lərini axtar</value>
+  </data>
+  <data name="SearchGroup" xml:space="preserve">
+    <value>Axtar: {0}</value>
+    <comment>ex: Search Logins</comment>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Növ</value>
@@ -1537,6 +1549,12 @@
   <data name="ThemeDefault" xml:space="preserve">
     <value>İlkin (Sistem)</value>
   </data>
+  <data name="DefaultDarkTheme" xml:space="preserve">
+    <value>İlkin tünd tema</value>
+  </data>
+  <data name="DefaultDarkThemeDescription" xml:space="preserve">
+    <value>Cihazınızda tünd rejim fəal olanda İlkin (Sistem) temanı istifadə edərkən istifadə ediləcək tünd temanı seçin</value>
+  </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Qeydləri kopyala</value>
   </data>
@@ -1553,17 +1571,21 @@
     <value>Qara</value>
     <comment>The color black</comment>
   </data>
-  <data name="BlacklistedUris" xml:space="preserve">
-    <value>Qara siyahıdakı URI-lər</value>
+  <data name="Nord" xml:space="preserve">
+    <value>Nord</value>
+    <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
-  <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>Qara siyahıdakı URI-lərə avto-doldurma təklif edilməyəcək. Siyahı vergüllə ayrılmalıdır. Məs. "https://twitter.com, androidapp://com.twitter.android".</value>
+  <data name="AutofillBlockedUris" xml:space="preserve">
+    <value>Əngəllənən URI-lərin avto-doldurulması</value>
   </data>
-  <data name="DisableSavePrompt" xml:space="preserve">
-    <value>Saxlama istəyini sıradan çıxart</value>
+  <data name="AutofillBlockedUrisDescription" xml:space="preserve">
+    <value>Əngəllənən URI-lər üçün avto-doldurma təklif edilmir. Çoxlu URI-ni vergüllə ayırır. Nümunə: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
-  <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>"Saxlama istəyi", ilk dəfə istifadə etdiyiniz məlumatları anbarda saxlamaq istəyib-istəmədiyinizi avtomatik olaraq soruşur.</value>
+  <data name="AskToAddLogin" xml:space="preserve">
+    <value>Giriş əlavə etmək üçün soruş</value>
+  </data>
+  <data name="AskToAddLoginDescription" xml:space="preserve">
+    <value>Anbarınızda yoxdursa, bir element əlavə etməyi soruşun.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
     <value>Tətbiq yenidən başladılanda</value>
@@ -1856,6 +1878,9 @@
     <value>Bu "Send"i açıqlayan bir ad.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
+  <data name="Text" xml:space="preserve">
+    <value>Mətn</value>
+  </data>
   <data name="TypeText" xml:space="preserve">
     <value>Mətn</value>
   </data>
@@ -1871,6 +1896,18 @@
   </data>
   <data name="TypeFileInfo" xml:space="preserve">
     <value>Göndərmək istədiyiniz fayl.</value>
+  </data>
+  <data name="FileTypeIsSelected" xml:space="preserve">
+    <value>Fayl növü seçildi.</value>
+  </data>
+  <data name="FileTypeIsNotSelected" xml:space="preserve">
+    <value>Fayl növü seçilmədi, seçmək üçün toxunun.</value>
+  </data>
+  <data name="TextTypeIsSelected" xml:space="preserve">
+    <value>Mətn növü seçildi.</value>
+  </data>
+  <data name="TextTypeIsNotSelected" xml:space="preserve">
+    <value>Mətn növü seçilmədi, seçmək üçün toxunun.</value>
   </data>
   <data name="DeletionDate" xml:space="preserve">
     <value>Silinmə tarixi</value>
@@ -2175,5 +2212,104 @@
   </data>
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
     <value>E-poçtunuza göndərilmiş təsdiqləmə kodunu daxil edin</value>
+  </data>
+  <data name="SubmitCrashLogs" xml:space="preserve">
+    <value>Çökmə jurnallarını göndər</value>
+  </data>
+  <data name="SubmitCrashLogsDescription" xml:space="preserve">
+    <value>Çökmə hesabatlarını göndərərək Bitwarden-in tətbiq stabilliyini yaxşılaşdırmasına kömək edin.</value>
+  </data>
+  <data name="OptionsExpanded" xml:space="preserve">
+    <value>Seçimlər genişləndirildi, yığcamlaşdırmaq üçün toxunun.</value>
+  </data>
+  <data name="OptionsCollapsed" xml:space="preserve">
+    <value>Seçimlər yığcamlaşdırıldı, genişləndirmək üçün toxunun.</value>
+  </data>
+  <data name="UppercaseAtoZ" xml:space="preserve">
+    <value>Böyük hərf (A-Z)</value>
+  </data>
+  <data name="LowercaseAtoZ" xml:space="preserve">
+    <value>Kiçik hərf (Z-A)</value>
+  </data>
+  <data name="NumbersZeroToNine" xml:space="preserve">
+    <value>Rəqəmlər (0-9)</value>
+  </data>
+  <data name="SpecialCharacters" xml:space="preserve">
+    <value>Xüsusi simvollar (!@#$%^&amp;*)</value>
+  </data>
+  <data name="TapToGoBack" xml:space="preserve">
+    <value>Geriyə getmək üçün toxun</value>
+  </data>
+  <data name="PasswordIsVisibleTapToHide" xml:space="preserve">
+    <value>Parol görünür, gizlətmək üçün toxunun.</value>
+  </data>
+  <data name="PasswordIsNotVisibleTapToShow" xml:space="preserve">
+    <value>Parol görünmür, göstərmək üçün toxunun.</value>
+  </data>
+  <data name="FilterByVault" xml:space="preserve">
+    <value>Elementləri anbara görə filtrlə</value>
+  </data>
+  <data name="AllVaults" xml:space="preserve">
+    <value>Bütün anbarlar</value>
+  </data>
+  <data name="Vaults" xml:space="preserve">
+    <value>Anbarlar</value>
+  </data>
+  <data name="VaultFilterDescription" xml:space="preserve">
+    <value>Anbar: {0}</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Hamısı</value>
+  </data>
+  <data name="Totp" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="VerificationCodes" xml:space="preserve">
+    <value>Təsdiqləmə kodları</value>
+  </data>
+  <data name="PremiumSubscriptionRequired" xml:space="preserve">
+    <value>Premium abunəlik tələb olunur</value>
+  </data>
+  <data name="CannotAddAuthenticatorKey" xml:space="preserve">
+    <value>Kimlik təsdiqləyici açarı oxuna bilmir? </value>
+  </data>
+  <data name="ScanQRCode" xml:space="preserve">
+    <value>QR kodu skan edin</value>
+  </data>
+  <data name="CannotScanQRCode" xml:space="preserve">
+    <value>QR kodunu skan edə bilmədiniz? </value>
+  </data>
+  <data name="AuthenticatorKeyScanner" xml:space="preserve">
+    <value>Kimlik təsdiqləyici açarı</value>
+  </data>
+  <data name="EnterKeyManually" xml:space="preserve">
+    <value>Kodu əllə daxil et</value>
+  </data>
+  <data name="AddTotp" xml:space="preserve">
+    <value>TOTP əlavə et</value>
+  </data>
+  <data name="SetupTotp" xml:space="preserve">
+    <value>TOTP quraşdır</value>
+  </data>
+  <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
+    <value>Açar uğurla daxil edildikdən sonra, açarı güvənli şəkildə saxlamaq üçün "TOTP əlavə et"i seçin</value>
+  </data>
+  <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
+    <value></value>
+  </data>
+  <data name="NeverLockWarning" xml:space="preserve">
+    <value>Kilid seçimlərini "Heç vaxt" olaraq tənzimləmək, anbarınızı cihazınıza müraciəti olan hər kəsə əlçatan edir. Bu seçimi istifadə etsəniz, cihazınızı düzgün qoruduğunuza əmin olmalısınız.</value>
+  </data>
+  <data name="EnvironmentPageUrlsError" xml:space="preserve">
+    <value>Daxil edilən bir və ya daha çox URL yararsızdır. Zəhmət olmasa nəzər salın və yenidən saxlamağa çalışın.</value>
+  </data>
+  <data name="GenericErrorMessage" xml:space="preserve">
+    <value>Tələbinizi emal edə bilmədik. Zəhmət olmasa yenidən sınayın və ya bizimlə əlaqə saxlayın.</value>
+  </data>
+  <data name="AllowScreenCapture" xml:space="preserve">
+    <value>Ekranı çəkməyə icazə ver</value>
+  </data>
+  <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
+    <value>Ekranın çəkilməsini fəallaşdırmaq istədiyinizə əminsiniz?</value>
   </data>
 </root>

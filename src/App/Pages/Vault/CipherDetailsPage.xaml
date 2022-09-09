@@ -1,8 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<pages:BaseContentPage 
+﻿<?xml version="1.0" encoding="utf-8"?>
+<pages:BaseContentPage
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="Bit.App.Pages.ViewPage"
+    x:Class="Bit.App.Pages.CipherDetailsPage"
     xmlns:pages="clr-namespace:Bit.App.Pages"
     xmlns:u="clr-namespace:Bit.App.Utilities"
     xmlns:controls="clr-namespace:Bit.App.Controls"
@@ -11,11 +11,11 @@
     xmlns:dts="clr-namespace:Bit.App.Lists.DataTemplateSelectors"
     xmlns:il="clr-namespace:Bit.App.Lists.ItemLayouts.CustomFields"
     xmlns:core="clr-namespace:Bit.Core;assembly=BitwardenCore"
-    x:DataType="pages:ViewPageViewModel"
+    x:DataType="pages:CipherDetailsPageViewModel"
     x:Name="_page"
     Title="{Binding PageTitle}">
     <ContentPage.BindingContext>
-        <pages:ViewPageViewModel />
+        <pages:CipherDetailsPageViewModel />
     </ContentPage.BindingContext>
 
     <ContentPage.Resources>
@@ -24,15 +24,15 @@
             <u:StringHasValueConverter x:Key="stringHasValue" />
             <u:IsNotNullConverter x:Key="notNull" />
             <ToolbarItem Text="{u:I18n Collections}"
-                     x:Key="collectionsItem"
-                     x:Name="_collectionsItem"
-                     Clicked="Collections_Clicked"
-                     Order="Secondary" />
+                         x:Key="collectionsItem"
+                         x:Name="_collectionsItem"
+                         Clicked="Collections_Clicked"
+                         Order="Secondary" />
             <ToolbarItem Text="{u:I18n MoveToOrganization}"
-                     x:Key="shareItem"
-                     x:Name="_shareItem"
-                     Clicked="Share_Clicked"
-                     Order="Secondary" />
+                         x:Key="shareItem"
+                         x:Name="_shareItem"
+                         Clicked="Share_Clicked"
+                         Order="Secondary" />
             <ToolbarItem Text="{u:I18n Close}" Clicked="Close_Clicked" Order="Primary" Priority="-1"
                          x:Name="_closeItem" x:Key="closeItem" />
             <ToolbarItem Clicked="EditToolbarItem_Clicked" Order="Primary"
@@ -104,7 +104,7 @@
                                     StyleClass="box-value"
                                     Grid.Row="1"
                                     Grid.Column="0" />
-                                <controls:IconButton 
+                                <controls:IconButton
                                     StyleClass="box-row-button, box-row-button-platform"
                                     Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
                                     Command="{Binding CopyCommand}"
@@ -117,7 +117,7 @@
                             </Grid>
                             <BoxView StyleClass="box-row-separator"
                                      IsVisible="{Binding Cipher.Login.Username, Converter={StaticResource stringHasValue}}" />
-                            <Grid StyleClass="box-row" 
+                            <Grid StyleClass="box-row"
                                   IsVisible="{Binding Cipher.Login.Password, Converter={StaticResource stringHasValue}}">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
@@ -147,7 +147,7 @@
                                     Grid.Column="0"
                                     LineBreakMode="CharacterWrap"
                                     IsVisible="{Binding ShowPassword}" />
-                                <controls:IconButton 
+                                <controls:IconButton
                                     StyleClass="box-row-button, box-row-button-platform"
                                     Text="{Binding Source={x:Static core:BitwardenIcons.CheckCircle}}"
                                     Command="{Binding CheckPasswordCommand}"
@@ -157,7 +157,7 @@
                                     AutomationProperties.IsInAccessibleTree="True"
                                     AutomationProperties.Name="{u:I18n CheckPassword}"
                                     IsVisible="{Binding Cipher.ViewPassword}" />
-                                <controls:IconButton 
+                                <controls:IconButton
                                     StyleClass="box-row-button, box-row-button-platform"
                                     Text="{Binding ShowPasswordIcon}"
                                     Command="{Binding TogglePasswordCommand}"
@@ -168,7 +168,7 @@
                                     AutomationProperties.Name="{u:I18n ToggleVisibility}"
                                     AutomationProperties.HelpText="{Binding PasswordVisibilityAccessibilityText}"
                                     IsVisible="{Binding Cipher.ViewPassword}" />
-                                <controls:IconButton 
+                                <controls:IconButton
                                     StyleClass="box-row-button, box-row-button-platform"
                                     Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
                                     Command="{Binding CopyCommand}"
@@ -186,10 +186,11 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="40" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
                                 <Label
@@ -199,29 +200,49 @@
                                     Grid.Column="0" />
                                 <controls:MonoLabel
                                     Text="{Binding TotpCodeFormatted, Mode=OneWay}"
+                                    IsVisible="{Binding ShowUpgradePremiumTotpText, Converter={StaticResource inverseBool}}"
                                     StyleClass="box-value"
                                     Grid.Row="1"
-                                    Grid.Column="0" />
-                                <Label
-                                    Text="{Binding TotpSec, Mode=OneWay}"
-                                    Style="{DynamicResource textTotp}"
-                                    Margin="0, 0, 10, 0"
+                                    Grid.Column="0"
+                                    VerticalTextAlignment="Start"
+                                    VerticalOptions="Start" />
+                                <controls:CircularProgressbarView
+                                    Progress="{Binding TotpProgress}"
                                     Grid.Row="0"
                                     Grid.Column="1"
                                     Grid.RowSpan="2"
-                                    HorizontalOptions="End"
-                                    HorizontalTextAlignment="End"
-                                    VerticalOptions="CenterAndExpand" />
-                                <controls:IconButton 
+                                    HorizontalOptions="FillAndExpand"
+                                    VerticalOptions="FillAndExpand" />
+                                <Label
+                                    Text="{Binding TotpSec, Mode=OneWay}"
+                                    Style="{DynamicResource textTotp}"
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    Grid.RowSpan="2"
+                                    StyleClass="text-sm"
+                                    VerticalTextAlignment="Center"
+                                    HorizontalTextAlignment="Center"
+                                    HorizontalOptions="FillAndExpand"
+                                    VerticalOptions="FillAndExpand" />
+                                <controls:IconButton
                                     StyleClass="box-row-button, box-row-button-platform"
                                     Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
                                     Command="{Binding CopyCommand}"
+                                    IsVisible="{Binding CanAccessPremium}"
                                     CommandParameter="LoginTotp"
                                     Grid.Row="0"
                                     Grid.Column="2"
                                     Grid.RowSpan="2"
                                     AutomationProperties.IsInAccessibleTree="True"
                                     AutomationProperties.Name="{u:I18n CopyTotp}" />
+                                <Label
+                                    Text="{u:I18n PremiumSubscriptionRequired}"
+                                    StyleClass="box-footer-label"
+                                    IsVisible="{Binding ShowUpgradePremiumTotpText}"
+                                    Margin="0,5,0,2"
+                                    Grid.Column="0"
+                                    Grid.Row="1"
+                                    HorizontalOptions="FillAndExpand" />
                             </Grid>
                             <BoxView StyleClass="box-row-separator" IsVisible="{Binding ShowTotp}" />
                         </StackLayout>
@@ -265,7 +286,7 @@
                                     Grid.Row="1"
                                     Grid.Column="0"
                                     IsVisible="{Binding ShowCardNumber}" />
-                                <controls:IconButton 
+                                <controls:IconButton
                                     StyleClass="box-row-button, box-row-button-platform"
                                     Text="{Binding ShowCardNumberIcon}"
                                     Command="{Binding ToggleCardNumberCommand}"
@@ -274,7 +295,7 @@
                                     Grid.RowSpan="2"
                                     AutomationProperties.IsInAccessibleTree="True"
                                     AutomationProperties.Name="{u:I18n ToggleVisibility}" />
-                                <controls:IconButton 
+                                <controls:IconButton
                                     StyleClass="box-row-button, box-row-button-platform"
                                     Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
                                     Command="{Binding CopyCommand}"
@@ -337,7 +358,7 @@
                                     Grid.Row="1"
                                     Grid.Column="0"
                                     IsVisible="{Binding ShowCardCode}" />
-                                <controls:IconButton 
+                                <controls:IconButton
                                     StyleClass="box-row-button, box-row-button-platform"
                                     Text="{Binding ShowCardCodeIcon}"
                                     Command="{Binding ToggleCardCodeCommand}"
@@ -346,7 +367,7 @@
                                     Grid.RowSpan="2"
                                     AutomationProperties.IsInAccessibleTree="True"
                                     AutomationProperties.Name="{u:I18n ToggleVisibility}" />
-                                <controls:IconButton 
+                                <controls:IconButton
                                     StyleClass="box-row-button, box-row-button-platform"
                                     Text="{Binding Source={x:Static core:BitwardenIcons.Clone}}"
                                     Command="{Binding CopyCommand}"
@@ -550,7 +571,7 @@
                         <StackLayout StyleClass="box-row">
                             <controls:SelectableLabel
                                 Text="{Binding Cipher.Notes, Mode=OneWay}"
-                                StyleClass="box-value"/>
+                                StyleClass="box-value" />
                         </StackLayout>
                         <BoxView StyleClass="box-row-separator" />
                     </StackLayout>
@@ -584,7 +605,7 @@
                                                 StyleClass="box-sub-label"
                                                 HorizontalTextAlignment="End"
                                                 VerticalTextAlignment="Center" />
-                                            <controls:IconButton 
+                                            <controls:IconButton
                                                 StyleClass="box-row-button, box-row-button-platform"
                                                 Text="{Binding Source={x:Static core:BitwardenIcons.Download}}"
                                                 Command="{Binding BindingContext.DownloadAttachmentCommand, Source={x:Reference _page}}"

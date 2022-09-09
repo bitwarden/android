@@ -147,11 +147,11 @@ namespace Bit.App.Utilities
             return Application.Current.RequestedTheme == OSAppTheme.Dark;
         }
 
-        public static void ApplyResourcesToPage(ContentPage page)
+        public static void ApplyResourcesTo(VisualElement element)
         {
             foreach (var resourceDict in Resources().MergedDictionaries)
             {
-                page.Resources.Add(resourceDict);
+                element.Resources.Add(resourceDict);
             }
         }
 

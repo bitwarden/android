@@ -191,7 +191,7 @@ namespace Bit.Core.Services
                 EnvironmentUrls = environmentUrls,
                 VaultTimeout = vaultTimeout,
                 VaultTimeoutAction =
-                    vaultTimeoutAction == "logout" ? VaultTimeoutAction.Logout : VaultTimeoutAction.Lock,
+                    vaultTimeoutAction == "logout" ? VaultTimeoutAction.Logout : VaultTimeoutAction.Lock
             };
             var state = new State { Accounts = new Dictionary<string, Account> { [userId] = account } };
             state.ActiveUserId = userId;

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Bit.App.Abstractions;
 using Bit.App.Lists.ItemViewModels.CustomFields;
 using Bit.App.Resources;
@@ -12,18 +14,17 @@ using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
+using Xamarin.CommunityToolkit.ObjectModel;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
-    public class ViewPageViewModel : BaseViewModel, IPasswordPromptable
+    public class CipherDetailsPageViewModel : BaseCipherViewModel, IPasswordPromptable
     {
-        private readonly IDeviceActionService _deviceActionService;
         private readonly ICipherService _cipherService;
         private readonly IStateService _stateService;
-        private readonly ITotpService _totpService;
-        private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IAuditService _auditService;
+        private readonly ITotpService _totpService;
         private readonly IMessagingService _messagingService;
         private readonly IEventService _eventService;
         private readonly IPasswordRepromptService _passwordRepromptService;
@@ -31,7 +32,6 @@ namespace Bit.App.Pages
         private readonly ICustomFieldItemFactory _customFieldItemFactory;
         private readonly IClipboardService _clipboardService;
 
-        private CipherView _cipher;
         private List<ICustomFieldItemViewModel> _fields;
         private bool _canAccessPremium;
         private bool _showPassword;
@@ -46,15 +46,16 @@ namespace Bit.App.Pages
         private byte[] _attachmentData;
         private string _attachmentFilename;
         private bool _passwordReprompted;
+        private TotpHelper _totpTickHelper;
+        private CancellationTokenSource _totpTickCancellationToken;
+        private Task _totpTickTask;
 
-        public ViewPageViewModel()
+        public CipherDetailsPageViewModel()
         {
-            _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
-            _totpService = ServiceContainer.Resolve<ITotpService>("totpService");
-            _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _auditService = ServiceContainer.Resolve<IAuditService>("auditService");
+            _totpService = ServiceContainer.Resolve<ITotpService>("totpService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _eventService = ServiceContainer.Resolve<IEventService>("eventService");
             _passwordRepromptService = ServiceContainer.Resolve<IPasswordRepromptService>("passwordRepromptService");
@@ -62,51 +63,45 @@ namespace Bit.App.Pages
             _customFieldItemFactory = ServiceContainer.Resolve<ICustomFieldItemFactory>("customFieldItemFactory");
             _clipboardService = ServiceContainer.Resolve<IClipboardService>("clipboardService");
 
-            CopyCommand = new Command<string>((id) => CopyAsync(id, null));
-            CopyUriCommand = new Command<LoginUriView>(CopyUri);
-            CopyFieldCommand = new Command<FieldView>(CopyField);
+            CopyCommand = new AsyncCommand<string>((id) => CopyAsync(id, null), onException: ex => _logger.Exception(ex), allowsMultipleExecutions: false);
+            CopyUriCommand = new AsyncCommand<LoginUriView>(uriView => CopyAsync("LoginUri", uriView.Uri), onException: ex => _logger.Exception(ex), allowsMultipleExecutions: false);
+            CopyFieldCommand = new AsyncCommand<FieldView>(field => CopyAsync(field.Type == FieldType.Hidden ? "H_FieldValue" : "FieldValue", field.Value), onException: ex => _logger.Exception(ex), allowsMultipleExecutions: false);
             LaunchUriCommand = new Command<LoginUriView>(LaunchUri);
             TogglePasswordCommand = new Command(TogglePassword);
             ToggleCardNumberCommand = new Command(ToggleCardNumber);
             ToggleCardCodeCommand = new Command(ToggleCardCode);
-            CheckPasswordCommand = new Command(CheckPasswordAsync);
-            DownloadAttachmentCommand = new Command<AttachmentView>(DownloadAttachmentAsync);
+            DownloadAttachmentCommand = new AsyncCommand<AttachmentView>(DownloadAttachmentAsync, allowsMultipleExecutions: false);
 
             PageTitle = AppResources.ViewItem;
         }
 
-        public Command CopyCommand { get; set; }
-        public Command CopyUriCommand { get; set; }
-        public Command CopyFieldCommand { get; set; }
+        public ICommand CopyCommand { get; set; }
+        public ICommand CopyUriCommand { get; set; }
+        public ICommand CopyFieldCommand { get; set; }
         public Command LaunchUriCommand { get; set; }
         public Command TogglePasswordCommand { get; set; }
         public Command ToggleCardNumberCommand { get; set; }
         public Command ToggleCardCodeCommand { get; set; }
-        public Command CheckPasswordCommand { get; set; }
-        public Command DownloadAttachmentCommand { get; set; }
+        public AsyncCommand<AttachmentView> DownloadAttachmentCommand { get; set; }
         public string CipherId { get; set; }
-        public CipherView Cipher
+        protected override string[] AdditionalPropertiesToRaiseOnCipherChanged => new string[]
         {
-            get => _cipher;
-            set => SetProperty(ref _cipher, value,
-                additionalPropertyNames: new string[]
-                {
-                    nameof(IsLogin),
-                    nameof(IsIdentity),
-                    nameof(IsCard),
-                    nameof(IsSecureNote),
-                    nameof(ShowUris),
-                    nameof(ShowAttachments),
-                    nameof(ShowTotp),
-                    nameof(ColoredPassword),
-                    nameof(UpdatedText),
-                    nameof(PasswordUpdatedText),
-                    nameof(PasswordHistoryText),
-                    nameof(ShowIdentityAddress),
-                    nameof(IsDeleted),
-                    nameof(CanEdit),
-                });
-        }
+            nameof(IsLogin),
+            nameof(IsIdentity),
+            nameof(IsCard),
+            nameof(IsSecureNote),
+            nameof(ShowUris),
+            nameof(ShowAttachments),
+            nameof(ShowTotp),
+            nameof(ColoredPassword),
+            nameof(UpdatedText),
+            nameof(PasswordUpdatedText),
+            nameof(PasswordHistoryText),
+            nameof(ShowIdentityAddress),
+            nameof(IsDeleted),
+            nameof(CanEdit),
+            nameof(ShowUpgradePremiumTotpText)
+        };
         public List<ICustomFieldItemViewModel> Fields
         {
             get => _fields;
@@ -149,7 +144,7 @@ namespace Bit.App.Pages
         public bool IsIdentity => Cipher?.Type == Core.Enums.CipherType.Identity;
         public bool IsCard => Cipher?.Type == Core.Enums.CipherType.Card;
         public bool IsSecureNote => Cipher?.Type == Core.Enums.CipherType.SecureNote;
-        public FormattedString ColoredPassword => PasswordFormatter.FormatPassword(Cipher.Login.Password);
+        public FormattedString ColoredPassword => GeneratedValueFormatter.Format(Cipher.Login.Password);
         public FormattedString UpdatedText
         {
             get
@@ -206,21 +201,22 @@ namespace Bit.App.Pages
                 return fs;
             }
         }
+
+        public bool ShowUpgradePremiumTotpText => !CanAccessPremium && ShowTotp;
         public bool ShowUris => IsLogin && Cipher.Login.HasUris;
         public bool ShowIdentityAddress => IsIdentity && (
             !string.IsNullOrWhiteSpace(Cipher.Identity.Address1) ||
             !string.IsNullOrWhiteSpace(Cipher.Identity.City) ||
             !string.IsNullOrWhiteSpace(Cipher.Identity.Country));
         public bool ShowAttachments => Cipher.HasAttachments && (CanAccessPremium || Cipher.OrganizationId != null);
-        public bool ShowTotp => IsLogin && !string.IsNullOrWhiteSpace(Cipher.Login.Totp) &&
-            !string.IsNullOrWhiteSpace(TotpCodeFormatted);
+        public bool ShowTotp => IsLogin && !string.IsNullOrWhiteSpace(Cipher.Login.Totp);
         public string ShowPasswordIcon => ShowPassword ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public string ShowCardNumberIcon => ShowCardNumber ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public string ShowCardCodeIcon => ShowCardCode ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
         public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
         public string TotpCodeFormatted
         {
-            get => _totpCodeFormatted;
+            get => _canAccessPremium ? _totpCodeFormatted : string.Empty;
             set => SetProperty(ref _totpCodeFormatted, value,
                 additionalPropertyNames: new string[]
                 {
@@ -230,7 +226,11 @@ namespace Bit.App.Pages
         public string TotpSec
         {
             get => _totpSec;
-            set => SetProperty(ref _totpSec, value);
+            set => SetProperty(ref _totpSec, value,
+                additionalPropertyNames: new string[]
+                {
+                    nameof(TotpProgress)
+                });
         }
         public bool TotpLow
         {
@@ -241,12 +241,12 @@ namespace Bit.App.Pages
                 Page.Resources["textTotp"] = ThemeManager.Resources()[value ? "text-danger" : "text-default"];
             }
         }
+        public double TotpProgress => string.IsNullOrEmpty(TotpSec) ? 0 : double.Parse(TotpSec) * 100 / 30;
         public bool IsDeleted => Cipher.IsDeleted;
         public bool CanEdit => !Cipher.IsDeleted;
 
         public async Task<bool> LoadAsync(Action finishedLoadingAction = null)
         {
-            CleanUp();
             var cipher = await _cipherService.GetAsync(CipherId);
             if (cipher == null)
             {
@@ -263,19 +263,10 @@ namespace Bit.App.Pages
             if (Cipher.Type == Core.Enums.CipherType.Login && !string.IsNullOrWhiteSpace(Cipher.Login.Totp) &&
                 (Cipher.OrganizationUseTotp || CanAccessPremium))
             {
-                await TotpUpdateCodeAsync();
-                var interval = _totpService.GetTimeInterval(Cipher.Login.Totp);
-                await TotpTickAsync(interval);
-                _totpInterval = DateTime.UtcNow;
-                Device.StartTimer(new TimeSpan(0, 0, 1), () =>
-                {
-                    if (_totpInterval == null)
-                    {
-                        return false;
-                    }
-                    var task = TotpTickAsync(interval);
-                    return true;
-                });
+                _totpTickHelper = new TotpHelper(Cipher);
+                _totpTickCancellationToken?.Cancel();
+                _totpTickCancellationToken = new CancellationTokenSource();
+                _totpTickTask = new TimerTask(_logger, StartCiphersTotpTick, _totpTickCancellationToken).RunPeriodic();
             }
             if (_previousCipherId != CipherId)
             {
@@ -286,9 +277,27 @@ namespace Bit.App.Pages
             return true;
         }
 
-        public void CleanUp()
+        private async void StartCiphersTotpTick()
         {
-            _totpInterval = null;
+            try
+            {
+                await _totpTickHelper.GenerateNewTotpValues();
+                TotpSec = _totpTickHelper.TotpSec;
+                TotpCodeFormatted = _totpTickHelper.TotpCodeFormatted;
+            }
+            catch (Exception ex)
+            {
+                _logger.Exception(ex);
+            }
+        }
+
+        public async Task StopCiphersTotpTick()
+        {
+            _totpTickCancellationToken?.Cancel();
+            if (_totpTickTask != null)
+            {
+                await _totpTickTask;
+            }
         }
 
         public async void TogglePassword()
@@ -457,86 +466,52 @@ namespace Bit.App.Pages
             }
         }
 
-        private async void CheckPasswordAsync()
+        private async Task DownloadAttachmentAsync(AttachmentView attachment)
         {
-            if (!(Page as BaseContentPage).DoOnce())
-            {
-                return;
-            }
-            if (string.IsNullOrWhiteSpace(Cipher.Login?.Password))
-            {
-                return;
-            }
-            if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
-            {
-                await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
-                    AppResources.InternetConnectionRequiredTitle);
-                return;
-            }
-            await _deviceActionService.ShowLoadingAsync(AppResources.CheckingPassword);
-            var matches = await _auditService.PasswordLeakedAsync(Cipher.Login.Password);
-            await _deviceActionService.HideLoadingAsync();
-            if (matches > 0)
-            {
-                await _platformUtilsService.ShowDialogAsync(string.Format(AppResources.PasswordExposed,
-                    matches.ToString("N0")));
-            }
-            else
-            {
-                await _platformUtilsService.ShowDialogAsync(AppResources.PasswordSafe);
-            }
-        }
-
-        private async void DownloadAttachmentAsync(AttachmentView attachment)
-        {
-            if (!(Page as BaseContentPage).DoOnce())
-            {
-                return;
-            }
-            if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
-            {
-                await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
-                    AppResources.InternetConnectionRequiredTitle);
-                return;
-            }
-            if (Cipher.OrganizationId == null && !CanAccessPremium)
-            {
-                await _platformUtilsService.ShowDialogAsync(AppResources.PremiumRequired);
-                return;
-            }
-            if (attachment.FileSize >= 10485760) // 10 MB
-            {
-                var confirmed = await _platformUtilsService.ShowDialogAsync(
-                    string.Format(AppResources.AttachmentLargeWarning, attachment.SizeName), null,
-                    AppResources.Yes, AppResources.No);
-                if (!confirmed)
-                {
-                    return;
-                }
-            }
-
-            var canOpenFile = true;
-            if (!_deviceActionService.CanOpenFile(attachment.FileName))
-            {
-                if (Device.RuntimePlatform == Device.iOS)
-                {
-                    // iOS is currently hardcoded to always return CanOpenFile == true, but should it ever return false
-                    // for any reason we want to be sure to catch it here.
-                    await _platformUtilsService.ShowDialogAsync(AppResources.UnableToOpenFile);
-                    return;
-                }
-
-                canOpenFile = false;
-            }
-
-            if (!await PromptPasswordAsync())
-            {
-                return;
-            }
-
-            await _deviceActionService.ShowLoadingAsync(AppResources.Downloading);
             try
             {
+                if (Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
+                {
+                    await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
+                        AppResources.InternetConnectionRequiredTitle);
+                    return;
+                }
+                if (Cipher.OrganizationId == null && !CanAccessPremium)
+                {
+                    await _platformUtilsService.ShowDialogAsync(AppResources.PremiumRequired);
+                    return;
+                }
+                if (attachment.FileSize >= 10485760) // 10 MB
+                {
+                    var confirmed = await _platformUtilsService.ShowDialogAsync(
+                        string.Format(AppResources.AttachmentLargeWarning, attachment.SizeName), null,
+                        AppResources.Yes, AppResources.No);
+                    if (!confirmed)
+                    {
+                        return;
+                    }
+                }
+
+                var canOpenFile = true;
+                if (!_deviceActionService.CanOpenFile(attachment.FileName))
+                {
+                    if (Device.RuntimePlatform == Device.iOS)
+                    {
+                        // iOS is currently hardcoded to always return CanOpenFile == true, but should it ever return false
+                        // for any reason we want to be sure to catch it here.
+                        await _platformUtilsService.ShowDialogAsync(AppResources.UnableToOpenFile);
+                        return;
+                    }
+
+                    canOpenFile = false;
+                }
+
+                if (!await PromptPasswordAsync())
+                {
+                    return;
+                }
+
+                await _deviceActionService.ShowLoadingAsync(AppResources.Downloading);
                 var data = await _cipherService.DownloadAndDecryptAttachmentAsync(Cipher.Id, attachment, Cipher.OrganizationId);
                 await _deviceActionService.HideLoadingAsync();
                 if (data == null)
@@ -563,9 +538,11 @@ namespace Bit.App.Pages
                     OpenAttachment(data, attachment);
                 }
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.Exception(ex);
                 await _deviceActionService.HideLoadingAsync();
+                await _platformUtilsService.ShowDialogAsync(AppResources.AnErrorHasOccurred);
             }
         }
 
@@ -622,7 +599,7 @@ namespace Bit.App.Pages
             _attachmentFilename = null;
         }
 
-        private async void CopyAsync(string id, string text = null)
+        private async Task CopyAsync(string id, string text = null)
         {
             if (_passwordRepromptService.ProtectedFields.Contains(id) && !await PromptPasswordAsync())
             {
@@ -642,7 +619,7 @@ namespace Bit.App.Pages
             }
             else if (id == "LoginTotp")
             {
-                text = _totpCode;
+                text = TotpCodeFormatted.Replace(" ", string.Empty);
                 name = AppResources.VerificationCodeTotp;
             }
             else if (id == "LoginUri")
@@ -686,16 +663,6 @@ namespace Bit.App.Pages
             }
         }
 
-        private void CopyUri(LoginUriView uri)
-        {
-            CopyAsync("LoginUri", uri.Uri);
-        }
-
-        private void CopyField(FieldView field)
-        {
-            CopyAsync(field.Type == Core.Enums.FieldType.Hidden ? "H_FieldValue" : "FieldValue", field.Value);
-        }
-
         private void LaunchUri(LoginUriView uri)
         {
             if (uri.CanLaunch && (Page as BaseContentPage).DoOnce())
@@ -712,98 +679,6 @@ namespace Bit.App.Pages
             }
 
             return _passwordReprompted = await _passwordRepromptService.ShowPasswordPromptAsync();
-        }
-    }
-
-    public class ViewPageFieldViewModel : ExtendedViewModel
-    {
-        private II18nService _i18nService;
-        private ViewPageViewModel _vm;
-        private FieldView _field;
-        private CipherView _cipher;
-        private bool _showHiddenValue;
-
-        public ViewPageFieldViewModel(ViewPageViewModel vm, CipherView cipher, FieldView field)
-        {
-            _i18nService = ServiceContainer.Resolve<II18nService>("i18nService");
-            _vm = vm;
-            _cipher = cipher;
-            Field = field;
-            ToggleHiddenValueCommand = new Command(ToggleHiddenValue);
-        }
-
-        public FieldView Field
-        {
-            get => _field;
-            set => SetProperty(ref _field, value,
-                additionalPropertyNames: new string[]
-                {
-                    nameof(ValueText),
-                    nameof(IsBooleanType),
-                    nameof(IsHiddenType),
-                    nameof(IsTextType),
-                    nameof(ShowCopyButton),
-                });
-        }
-
-        public bool ShowHiddenValue
-        {
-            get => _showHiddenValue;
-            set => SetProperty(ref _showHiddenValue, value,
-                additionalPropertyNames: new string[]
-                {
-                    nameof(ShowHiddenValueIcon)
-                });
-        }
-
-        public string ValueText
-        {
-            get
-            {
-                if (IsBooleanType)
-                {
-                    return _field.Value == "true" ? BitwardenIcons.Square : BitwardenIcons.CheckSquare;
-                }
-                else if (IsLinkedType)
-                {
-                    var i18nKey = _cipher.LinkedFieldI18nKey(Field.LinkedId.GetValueOrDefault());
-                    return BitwardenIcons.Link + _i18nService.T(i18nKey);
-                }
-                else
-                {
-                    return _field.Value;
-                }
-            }
-        }
-
-        public FormattedString ColoredHiddenValue => PasswordFormatter.FormatPassword(_field.Value);
-
-        public Command ToggleHiddenValueCommand { get; set; }
-
-        public string ShowHiddenValueIcon => _showHiddenValue ? BitwardenIcons.EyeSlash : BitwardenIcons.Eye;
-        public bool IsTextType => _field.Type == Core.Enums.FieldType.Text;
-        public bool IsBooleanType => _field.Type == Core.Enums.FieldType.Boolean;
-        public bool IsHiddenType => _field.Type == Core.Enums.FieldType.Hidden;
-        public bool IsLinkedType => _field.Type == Core.Enums.FieldType.Linked;
-        public bool ShowViewHidden => IsHiddenType && _cipher.ViewPassword;
-        public bool ShowCopyButton => _field.Type != Core.Enums.FieldType.Boolean &&
-            !string.IsNullOrWhiteSpace(_field.Value) &&
-            !(IsHiddenType && !_cipher.ViewPassword) &&
-            _field.Type != FieldType.Linked;
-
-        public async void ToggleHiddenValue()
-        {
-            if (!await _vm.PromptPasswordAsync())
-            {
-                return;
-            }
-            ShowHiddenValue = !ShowHiddenValue;
-            if (ShowHiddenValue)
-            {
-                var eventService = ServiceContainer.Resolve<IEventService>("eventService");
-                var task = eventService.CollectAsync(
-                    Core.Enums.EventType.Cipher_ClientToggledHiddenFieldVisible, _cipher.Id);
-            }
         }
     }
 }

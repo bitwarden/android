@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
+using Bit.App.Controls;
 using Bit.App.Models;
 using Bit.App.Pages;
 using Bit.App.Resources;
@@ -15,6 +16,7 @@ using Bit.iOS.Core.Services;
 using CoreNFC;
 using Foundation;
 using UIKit;
+using Xamarin.Forms;
 
 namespace Bit.iOS.Core.Utilities
 {
@@ -25,6 +27,42 @@ namespace Bit.iOS.Core.Utilities
         public static string AppExtensionId = "com.8bit.bitwarden.find-login-action-extension";
         public static string AppGroupId = "group.com.8bit.bitwarden";
         public static string AccessGroup = "LTZ2PFU5D6.com.8bit.bitwarden";
+
+        public static void InitApp<T>(T rootController,
+            string clearCipherCacheKey,
+            NFCNdefReaderSession nfcSession,
+            out NFCReaderDelegate nfcDelegate,
+            out IAccountsManager accountsManager)
+            where T : UIViewController, IAccountsManagerHost
+        {
+            Forms.Init();
+
+            if (ServiceContainer.RegisteredServices.Count > 0)
+            {
+                ServiceContainer.Reset();
+            }
+            RegisterLocalServices();
+            var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            var messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
+            ServiceContainer.Init(deviceActionService.DeviceUserAgent,
+                                  clearCipherCacheKey,
+                                  Bit.Core.Constants.iOSAllClearCipherCacheKeys);   
+            InitLogger();
+            Bootstrap();
+
+            var appOptions = new AppOptions { IosExtension = true };
+            var app = new App.App(appOptions);
+            ThemeManager.SetTheme(app.Resources);
+
+            AppearanceAdjustments();
+
+            nfcDelegate = new Core.NFCReaderDelegate((success, message) =>
+                messagingService.Send("gotYubiKeyOTP", message));
+            SubscribeBroadcastReceiver(rootController, nfcSession, nfcDelegate);
+
+            accountsManager = ServiceContainer.Resolve<IAccountsManager>("accountsManager");
+            accountsManager.Init(() => appOptions, rootController);
+        }
 
         public static void InitLogger()
         {
@@ -38,13 +76,15 @@ namespace Bit.iOS.Core.Utilities
                 ServiceContainer.Register<INativeLogService>("nativeLogService", new ConsoleLogService());
             }
 
+            ILogger logger = null;
             if (ServiceContainer.Resolve<ILogger>("logger", true) == null)
             {
 #if DEBUG
-                ServiceContainer.Register<ILogger>("logger", DebugLogger.Instance);
+                logger = DebugLogger.Instance;
 #else
-                ServiceContainer.Register<ILogger>("logger", Logger.Instance);
+                logger = Logger.Instance;
 #endif
+                ServiceContainer.Register("logger", logger);
             }
 
             var preferencesStorage = new PreferencesStorageService(AppGroupId);
@@ -52,7 +92,7 @@ namespace Bit.iOS.Core.Utilities
             var liteDbStorage = new LiteDbStorageService(
                 Path.Combine(appGroupContainer.Path, "Library", "bitwarden.db"));
             var localizeService = new LocalizeService();
-            var broadcasterService = new BroadcasterService();
+            var broadcasterService = new BroadcasterService(logger);
             var messagingService = new MobileBroadcasterMessagingService(broadcasterService);
             var i18nService = new MobileI18nService(localizeService.GetCurrentCultureInfo());
             var secureStorageService = new KeyChainStorageService(AppId, AccessGroup,
@@ -87,6 +127,7 @@ namespace Bit.iOS.Core.Utilities
             ServiceContainer.Register<ICryptoFunctionService>("cryptoFunctionService", cryptoFunctionService);
             ServiceContainer.Register<ICryptoService>("cryptoService", cryptoService);
             ServiceContainer.Register<IPasswordRepromptService>("passwordRepromptService", passwordRepromptService);
+            ServiceContainer.Register<IAvatarImageSourcePool>("avatarImageSourcePool", new AvatarImageSourcePool());
         }
 
         public static void Bootstrap(Func<Task> postBootstrapFunc = null)
@@ -180,7 +221,8 @@ namespace Bit.iOS.Core.Utilities
                 ServiceContainer.Resolve<IStorageService>("secureStorageService"),
                 ServiceContainer.Resolve<IStateService>("stateService"),
                 ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService"),
-                ServiceContainer.Resolve<IAuthService>("authService"));
+                ServiceContainer.Resolve<IAuthService>("authService"),
+                ServiceContainer.Resolve<ILogger>("logger"));
             ServiceContainer.Register<IAccountsManager>("accountsManager", accountsManager);
 
             if (postBootstrapFunc != null)
