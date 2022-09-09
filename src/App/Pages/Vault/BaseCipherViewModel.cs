@@ -73,4 +73,3 @@ namespace Bit.App.Pages
         }
     }
 }
-
