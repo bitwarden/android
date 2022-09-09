@@ -2302,15 +2302,90 @@ seleziona Aggiungi TOTP per salvare la chiave in modo sicuro</value>
     <value>Impostare le opzioni di blocco su “Mai” fa sì che la tua cassaforte sia a disposizione di chiunque abbia accesso al tuo dispositivo. Se si utilizza questa opzione, è necessario assicurarsi di mantenere il dispositivo adeguatamente protetto.</value>
   </data>
   <data name="EnvironmentPageUrlsError" xml:space="preserve">
-    <value>One or more of the URLs entered are invalid. Please revise it and try to save again.</value>
+    <value>Uno o più degli URL inseriti non sono validi. Si prega di verificare e provare a salvare di nuovo.</value>
   </data>
   <data name="GenericErrorMessage" xml:space="preserve">
-    <value>We were unable to process your request. Please try again or contact us.</value>
+    <value>Non siamo stati in grado di elaborare la tua richiesta. Riprova o contattaci.</value>
   </data>
   <data name="AllowScreenCapture" xml:space="preserve">
     <value>Permetti cattura dello schermo</value>
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Sei sicuro di voler attivare la cattura dello schermo?</value>
+  </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>Tipo di password</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>Cosa vorresti generare?</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>Tipo di nome utente</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>Indirizzo email alternativo</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>Email catch-all</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>Alias email inoltrata</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>Parola casuale</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>Email (obbligatoria)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>Nome Dominio (obbligatorio)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>Chiave API (obbligatoria)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Servizio</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>FirefoxRelay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>Token di accesso API</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>Sei sicuro di voler sovrascrivere il nome utente attuale?</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>Genera nome utente</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>Tipo di email</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>Sito web (obbligatorio)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>Si è verificato un errore {0} sconosciuto.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>Usa le funzionalità di sub-indirizzamento del tuo fornitore di posta elettronica</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>Usa la casella di posta catch-all di dominio.</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>Genera un alias email con un servizio di inoltro esterno.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>Casuale</value>
   </data>
 </root>

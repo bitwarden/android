@@ -449,7 +449,7 @@
     <value>Du kannst deine E-Mail Adresse im Bitwarden.com Web-Tresor ändern. Möchtest du die Seite jetzt öffnen?</value>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
-    <value>Masterpasswort ändern</value>
+    <value>Master-Password ändern</value>
   </data>
   <data name="ChangePasswordConfirmation" xml:space="preserve">
     <value>Du kannst dein Master-Passwort im Bitwarden.com Web-Tresor ändern. Möchtest du die Seite jetzt öffnen?</value>
@@ -2088,7 +2088,7 @@ Das Scannen erfolgt automatisch.</value>
     <value>Master-Passwort aktualisieren</value>
   </data>
   <data name="UpdateMasterPasswordWarning" xml:space="preserve">
-    <value>Dein Master-Passwort wurde kürzlich von einem Administrator deiner Organisation geändert. Um auf den Tresor zuzugreifen, musst du dein Master-Passwort jetzt aktualisieren. Wenn Du fortfährst, wirst du aus der aktuellen Sitzung abgemeldet und eine erneute Anmeldung ist erforderlich. Aktive Sitzungen auf anderen Geräten können bis zu einer Stunde weiterhin aktiv bleiben.</value>
+    <value>Dein Master-Passwort wurde kürzlich von einem Administrator Deiner Organisation geändert. Um auf den Tresor zuzugreifen, musst Du Dein Master-Passwort jetzt aktualisieren. Wenn Du fortfährst, wirst Du aus der aktuellen Sitzung abgemeldet und wirst Dich erneut anmelden müssen. Aktive Sitzungen auf anderen Geräten können bis zu einer Stunde weiterhin aktiv bleiben.</value>
   </data>
   <data name="UpdatingPassword" xml:space="preserve">
     <value>Passwort wird aktualisiert</value>
@@ -2311,5 +2311,80 @@ Das Scannen erfolgt automatisch.</value>
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Bist du sicher, dass du die Bildschirmaufnahme aktivieren möchtest?</value>
+  </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>Passworttyp</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>Was möchtest du generieren?</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>Benutzernamentyp</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>Mit Plus adressierte E-Mail</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>Catch-All E-Mail-Adresse</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>Weitergeleitetes E-Mail-Alias</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>Zufälliges Wort</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>E-Mail (erforderlich)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>Domain-Name (erforderlich)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>API-Schlüssel (erforderlich)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Dienst</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>API-Zugangs-Token</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>Bist Du sicher, dass Du den aktuellen Benutzernamen überschreiben möchtest?</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>Benutzernamen generieren</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>E-Mail-Typ</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>Webseite (erforderlich)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>Unbekannter {0} Fehler aufgetreten.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>Verwende die Unteradressierungsmöglichkeiten Deines E-Mail-Providers</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>Verwende den konfigurierten Catch-All-Posteingang deiner Domain.</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>Generiere ein E-Mail-Alias mit einem externen Weiterleitungsdienst.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>Zufällig</value>
   </data>
 </root>

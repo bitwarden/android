@@ -2313,4 +2313,79 @@ Skaneerimine toimub automaatselt.</value>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Oled kindel, et soovid lubada ekraanikuva salvestamist?</value>
   </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>Parooli tüüp</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>Mida sa soovid genereerida?</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>Kasutajanime tüüp</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>Plussiga e-posti aadress</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>Kogumisaadress</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>Edastav e-posti alias</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>Juhuslik sõna</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>E-post (vajalik)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>Domeeni nimi (vajalik)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>API võti (vajalik)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Teenus</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>API ligipääsu võti</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>Oled kindel, et soovid praegust kasutajanime üle kirjutada?</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>Genereeri kasutajanimi</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>E-posti tüüp</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>Veebileht (vajalik)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>Tekkis tundmatu tõrge {0}.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>Kasuta e-posti teenuspakkuja alamadressimise võimalusi</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>Kasuta domeenipõhist kogumisaadressi.</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>Genereeri e-posti alias, kasutades selleks välist teenuspakkujat.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>Juhuslik</value>
+  </data>
 </root>
