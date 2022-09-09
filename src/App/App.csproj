@@ -21,6 +21,7 @@
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2478" />
     <PackageReference Include="ZXing.Net.Mobile" Version="2.4.1" />
     <PackageReference Include="ZXing.Net.Mobile.Forms" Version="2.4.1" />
+    <PackageReference Include="Xamarin.CommunityToolkit" Version="1.3.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -127,6 +128,12 @@
   <ItemGroup>
     <Folder Include="Resources\" />
     <Folder Include="Behaviors\" />
+    <Folder Include="Lists\" />
+    <Folder Include="Lists\ItemLayouts\" />
+    <Folder Include="Lists\DataTemplateSelectors\" />
+    <Folder Include="Lists\ItemLayouts\CustomFields\" />
+    <Folder Include="Lists\ItemViewModels\" />
+    <Folder Include="Lists\ItemViewModels\CustomFields\" />
     <Folder Include="Controls\AccountSwitchingOverlay\" />
     <Folder Include="Utilities\AccountManagement\" />
     <Folder Include="Utilities\Helpers\" />
@@ -413,6 +420,12 @@
   <ItemGroup>
     <None Remove="Behaviors\" />
     <None Remove="Xamarin.CommunityToolkit" />
+    <None Remove="Lists\" />
+    <None Remove="Lists\DataTemplates\" />
+    <None Remove="Lists\DataTemplateSelectors\" />
+    <None Remove="Lists\DataTemplates\CustomFields\" />
+    <None Remove="Lists\ItemViewModels\" />
+    <None Remove="Lists\ItemViewModels\CustomFields\" />
     <None Remove="Controls\AccountSwitchingOverlay\" />
     <None Remove="Utilities\AccountManagement\" />
     <None Remove="Utilities\Helpers\" />

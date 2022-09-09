@@ -126,15 +126,32 @@
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>תוכנת Bitwarden היא הדרך הקלה והבטוחה לשמירת הסיסמאות שלך ועוזרת לסנכרן את הסיסמאות בין המכשירים שברשותך. 
+    <value>Bitwarden, Inc. is the parent company of 8bit Solutions LLC.
 
-גניבת סיסמאות היא בעיה רצינית. אתרים ואפליקציות מותקפים באופן יום יומי. פירצות אבטחה קורות מדי פעם ומאגרי סיסמאות נחשפים במלואם. כשאתה משתמש באותה סיסמה עבור כמה אתרים או אפליקציות, ההאקרים יכולים לנצל את אותה הסיסמה עבור אותם האתרים והאפליקציות ויכולים להשיג גישה למייל, לבנק, ולחשבונות חשובים אחרים.
+NAMED BEST PASSWORD MANAGER BY THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, AND MORE.
 
-מומחי אבטחה ממליצים להשתמש בסיסמאות שונות ורנדומליות עבור כל חשבון שאתה יוצר. אבל איך תנהל את כל הסיסמאות הללו? תוכנת Bitwarden עוזרת לך ליצור, לשמור, ולגשת לכל הסיסמאות שלך.
+Manage, store, secure, and share unlimited passwords across unlimited devices from anywhere. Bitwarden delivers open source password management solutions to everyone, whether at  home, at work, or on the go.
 
-תוכנת Bitwarden מאחסנת את כל הפרטים בכספת מוצפנת שמסתנכנרת בין כל המכשירים שלך. מאחר שהמידע מוצפן עוד לפני שהוא יוצר מהמכשיר שלך, רק לך יש גישה למידע. גם הצוות שלנו בBitwarden לא יכול לקרוא את המידע, אפילו אם תרצה. המידע שלך מוצפן עם הצפנת AES-256 bit, salted hashing, וPBKDF2 SHA-256.
+Generate strong, unique, and random passwords based on security requirements for every website you frequent.
 
-תוכנת Bitwarden היא 100% תוכנת קוד פתוח. קוד המקור של Bitwarden מאוחסן בGitHub וכל מי שרוצה יכול לתת ביקורת, הערות, ולתרום מזמנו לפיתוח הקוד של Bitwarden.</value>
+Bitwarden Send quickly transmits encrypted information --- files and plaintext -- directly to anyone.
+
+Bitwarden offers Teams and Enterprise plans for companies so you can securely share passwords with colleagues.
+
+Why Choose Bitwarden:
+
+World-Class Encryption
+Passwords are protected with advanced end-to-end encryption (AES-256 bit, salted hashtag, and PBKDF2 SHA-256) so your data stays secure and private.
+
+Built-in Password Generator
+Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+
+Global Translations
+Bitwarden translations exist in 40 languages and are growing, thanks to our global community.
+
+Cross-Platform Applications
+Secure and share sensitive data within your Bitwarden Vault from any browser, mobile device, or desktop OS, and more.
+</value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">

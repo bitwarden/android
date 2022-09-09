@@ -200,6 +200,7 @@ namespace Bit.iOS.Core.Utilities
         {
             await ServiceContainer.Resolve<IEnvironmentService>("environmentService").SetUrlsFromStorageAsync();
 
+            InitializeAppSetup();
             // TODO: Update when https://github.com/bitwarden/mobile/pull/1662 gets merged
             var deleteAccountActionFlowExecutioner = new DeleteAccountActionFlowExecutioner(
                 ServiceContainer.Resolve<IApiService>("apiService"),
@@ -238,6 +239,13 @@ namespace Bit.iOS.Core.Utilities
             {
                 await postBootstrapFunc.Invoke();
             }
+        }
+
+        private static void InitializeAppSetup()
+        {
+            var appSetup = new AppSetup();
+            appSetup.InitializeServicesLastChance();
+            ServiceContainer.Register<IAppSetup>("appSetup", appSetup);
         }
     }
 }

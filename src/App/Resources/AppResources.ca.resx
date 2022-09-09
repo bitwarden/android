@@ -2313,4 +2313,79 @@ seleccioneu Afegeix TOTP per emmagatzemar la clau de manera segura</value>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Segur que voleu activar la captura de pantalla?</value>
   </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>Tipus de contrasenya</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>Què voleu generar?</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>Tipus de nom d'usuari</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>Adreça amb sufix</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>Captura tot el correu electrònic</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>Àlies de correu electrònic reenviat</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>Paraula aleatòria</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>Correu electrònic (obligatori)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>Nom de domini (obligatori)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>Clau API (obligatòria)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Servei</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>Token d'accés a l'API</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>Segur que voleu sobreescriure el nom d'usuari actual?</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>Genera un nom d'usuari</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>Tipus de correu electrònic</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>Pàgina web (obligatòria)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>S'ha produït un error {0} desconegut.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>Utilitzeu les capacitats de subadreçament del vostre proveïdor de correu electrònic</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>Utilitzeu la safata d'entrada global configurada del vostre domini.</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>Genera un àlies de correu electrònic amb un servei de reenviament extern.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>Aleatori</value>
+  </data>
 </root>

@@ -300,7 +300,7 @@
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Authenticator" xml:space="preserve">
-    <value>Authenticator</value>
+    <value>Аутентификатор</value>
     <comment>Authenticator TOTP feature</comment>
   </data>
   <data name="Name" xml:space="preserve">
@@ -900,8 +900,8 @@
     <value>Не могу да читам верификациони код.</value>
   </data>
   <data name="PointYourCameraAtTheQRCode" xml:space="preserve">
-    <value>Point your camera at the QR Code.
-Scanning will happen automatically.</value>
+    <value>Усмерите камеру на QR кôд.
+Скенирање ће се десити аутоматски.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>Скенирај QR код</value>
@@ -2264,38 +2264,38 @@ Scanning will happen automatically.</value>
     <value>Све</value>
   </data>
   <data name="Totp" xml:space="preserve">
-    <value>TOTP</value>
+    <value>ТОТП</value>
   </data>
   <data name="VerificationCodes" xml:space="preserve">
-    <value>Verification Codes</value>
+    <value>Верификациони кодови</value>
   </data>
   <data name="PremiumSubscriptionRequired" xml:space="preserve">
-    <value>Premium subscription required</value>
+    <value>Premium претплата је потребна</value>
   </data>
   <data name="CannotAddAuthenticatorKey" xml:space="preserve">
-    <value>Cannot add authenticator key? </value>
+    <value>Не може да се дода верификациони код? </value>
   </data>
   <data name="ScanQRCode" xml:space="preserve">
-    <value>Scan QR Code</value>
+    <value>Скенирај QR код</value>
   </data>
   <data name="CannotScanQRCode" xml:space="preserve">
-    <value>Cannot scan QR Code? </value>
+    <value>Не мигу да скенирам QR код? </value>
   </data>
   <data name="AuthenticatorKeyScanner" xml:space="preserve">
-    <value>Authenticator Key</value>
+    <value>Кључ аутентификатора</value>
   </data>
   <data name="EnterKeyManually" xml:space="preserve">
-    <value>Enter Key Manually</value>
+    <value>Унесите кључ ручно</value>
   </data>
   <data name="AddTotp" xml:space="preserve">
-    <value>Add TOTP</value>
+    <value>Додати ТОТП</value>
   </data>
   <data name="SetupTotp" xml:space="preserve">
-    <value>Set up TOTP</value>
+    <value>Подесити ТОТП</value>
   </data>
   <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
-    <value>Once the key is successfully entered,
-select Add TOTP to store the key safely</value>
+    <value>Када се кључ успешно унесе,
+одабрати Додати ТОТП да би сигурносно сачували кључ</value>
   </data>
   <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
     <value></value>
@@ -2314,5 +2314,80 @@ select Add TOTP to store the key safely</value>
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Да ли сте сигурни да желите да укључите снимање екрана?</value>
+  </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>Тип лозинке</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>Шта желите да генеришете?</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>Тип имена</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>Плус имејл адресе</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>„Ухвати све“ е-порука</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>Forwarded Email Alias</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>Случајна реч</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>Е-пошта (обавезно)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>Име домена (обавезно)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>API кључ (обавезно)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Сервис</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>Приступни АПИ токен</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>Сигурно преписати тренутно име?</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>Генериши име</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>Тип имејла</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>Вебсајт (обавезно)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>Непозната {0} грешка.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>Use your email provider's subaddress capabilities</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>Use your domain's configured catch-all inbox.</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>Генеришите псеудоним е-поште помоћу екстерне услуге прослеђивања.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>Случајно</value>
   </data>
 </root>

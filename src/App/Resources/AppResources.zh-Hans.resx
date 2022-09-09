@@ -2313,4 +2313,79 @@
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>确定要启用屏幕截图吗？</value>
   </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>密码类型</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>您想要生成什么？</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>用户名类型</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>附加地址电子邮件</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>Catch-all 电子邮件</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>转发的电子邮件别名</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>随机单词</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>电子邮件地址（必填）</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>域名（必填）</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>API 密钥（必填）</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>服务</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>API 访问令牌</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>您确定要覆盖当前用户名吗？</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>生成用户名</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>电子邮件类型</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>网站（必填）</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>发生未知的 {0} 错误。</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>使用您的电子邮件提供商的子地址功能</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>使用您的域名配置的 Catch-all 收件箱。</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>使用外部转发服务生成一个电子邮件别名。</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>随机</value>
+  </data>
 </root>

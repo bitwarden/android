@@ -49,6 +49,7 @@ namespace Bit.Droid
                 var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
                 ServiceContainer.Init(deviceActionService.DeviceUserAgent, Constants.ClearCiphersCacheKey,
                     Constants.AndroidAllClearCipherCacheKeys);
+                InitializeAppSetup();
 
                 // TODO: Update when https://github.com/bitwarden/mobile/pull/1662 gets merged
                 var deleteAccountActionFlowExecutioner = new DeleteAccountActionFlowExecutioner(
@@ -202,6 +203,13 @@ namespace Bit.Droid
         private async Task BootstrapAsync()
         {
             await ServiceContainer.Resolve<IEnvironmentService>("environmentService").SetUrlsFromStorageAsync();
+        }
+
+        private void InitializeAppSetup()
+        {
+            var appSetup = new AppSetup();
+            appSetup.InitializeServicesLastChance();
+            ServiceContainer.Register<IAppSetup>("appSetup", appSetup);
         }
     }
 }
