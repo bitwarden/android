@@ -126,15 +126,32 @@
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>Το Bitwarden είναι ο ευκολότερος και ασφαλέστερος τρόπος για να αποθηκεύσετε όλες τις συνδέσεις και τους κωδικούς πρόσβασης σας, διατηρώντας παράλληλα το συγχρονισμό μεταξύ όλων των συσκευών σας. Η επέκταση της εφαρμογής Bitwarden σάς επιτρέπει να συνδεθείτε γρήγορα σε οποιαδήποτε ιστοσελίδα μέσω του Safari ή του Chrome και υποστηρίζεται από εκατοντάδες άλλες δημοφιλείς εφαρμογές.
+    <value>Bitwarden, Inc. is the parent company of 8bit Solutions LLC.
 
-Η κλοπή κωδικού πρόσβασης είναι ένα σοβαρό πρόβλημα. Οι ιστοσελίδες και οι εφαρμογές που χρησιμοποιείτε, βρίσκονται υπό επίθεση κάθε μέρα. Παραβιάσεις ασφαλείας συμβαίνουν και οι κωδικοί ίσως κλαπούν. Όταν επαναχρησιμοποιείτε τους ίδιους κωδικούς πρόσβασης σε εφαρμογές και ιστοσελίδες, οι χάκερ μπορούν εύκολα να έχουν πρόσβαση στο ηλεκτρονικό σας ταχυδρομείο, στην τράπεζα σας και σε άλλους σημαντικούς λογαριασμούς.
+NAMED BEST PASSWORD MANAGER BY THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, AND MORE.
 
-Οι ειδικοί ασφαλείας συστήνουν να χρησιμοποιείτε διαφορετικό, τυχαία δημιουργημένο κωδικό πρόσβασης για κάθε λογαριασμό που δημιουργείτε. Αλλά πώς διαχειρίζεστε όλους αυτούς τους κωδικούς πρόσβασης; Το Bitwarden σας διευκολύνει να δημιουργείτε, να αποθηκεύετε και να έχετε πρόσβαση στους κωδικούς πρόσβασης σας.
+Manage, store, secure, and share unlimited passwords across unlimited devices from anywhere. Bitwarden delivers open source password management solutions to everyone, whether at  home, at work, or on the go.
 
-Το Bitwarden αποθηκεύει όλες τις συνδέσεις σας σε κρυπτογραφημένη μορφή, που συγχρονίζεται σε όλες τις συσκευές σας. Δεδομένου ότι είναι πλήρως κρυπτογραφημένο, μόνο εσείς έχετε πρόσβαση στα δεδομένα σας. Ούτε η ομάδα του Bitwarden δε μπορεί να διαβάσει τα δεδομένα σας, ακόμα κι αν θέλουμε. Τα δεδομένα σας είναι σφραγισμένα με κρυπτογράφηση AES-256 bit, salted hashing και PBKDF2 SHA-256.
+Generate strong, unique, and random passwords based on security requirements for every website you frequent.
 
-Το Bitwarden είναι ένα 100% ανοικτού κώδικα λογισμικό. Ο πηγαίος κώδικας για το Bitwarden φιλοξενείται στο GitHub και ο καθένας είναι ελεύθερος να επανεξετάσει, να ελέγξει και να συνεισφέρει στον κώδικα βάσης του Bitwarden.</value>
+Bitwarden Send quickly transmits encrypted information --- files and plaintext -- directly to anyone.
+
+Bitwarden offers Teams and Enterprise plans for companies so you can securely share passwords with colleagues.
+
+Why Choose Bitwarden:
+
+World-Class Encryption
+Passwords are protected with advanced end-to-end encryption (AES-256 bit, salted hashtag, and PBKDF2 SHA-256) so your data stays secure and private.
+
+Built-in Password Generator
+Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+
+Global Translations
+Bitwarden translations exist in 40 languages and are growing, thanks to our global community.
+
+Cross-Platform Applications
+Secure and share sensitive data within your Bitwarden Vault from any browser, mobile device, or desktop OS, and more.
+</value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">

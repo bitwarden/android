@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Name" xml:space="preserve">
-    <value>Bitwarden പാസ്സ്‌വേഡ് മാനേജർ </value>
+    <value>Bitwarden Password Manager</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
@@ -151,27 +151,22 @@ Secure and share sensitive data within your Bitwarden Vault from any browser, mo
   <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
-    <value>bit warden,8bit, പാസ്സ്‌വേഡ്, സൗജന്യ പാസ്സ്‌വേഡ് മാനേജർ ,സൗജന്യ പാസ്സ്‌വേഡ് മാനേജർ, ലോഗിൻ മാനേജർ </value>
+    <value>bit warden,8bit,password,free password manager,password manager,login manager</value>
     <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>നിങ്ങളുടെ എല്ലാ ലോഗിനുകളും പാസ്‌വേഡുകളും സുരക്ഷിത വാൾട്ടിൽ  നിന്ന് കൈകാര്യം ചെയ്യുക</value>
+    <value>Manage all your logins and passwords from a secure vault</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>ശക്തവും ക്രമരഹിതവും സുരക്ഷിതവുമായ പാസ്‌വേഡുകൾ യാന്ത്രികമായി സൃഷ്‌ടിക്കുക</value>
+    <value>Automatically generate strong, random, and secure passwords</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Touch ID, ഫിംഗർപ്രിന്റ്, പിൻ കോഡ് അല്ലെങ്കിൽ മാസ്റ്റർ പാസ്‌വേഡ് ഉപയോഗിച്ച് നിങ്ങളുടെ വാൾട്  സുരക്ഷിതമാക്കുക </value>
+    <value>Protect your vault with Touch ID, PIN code, or master password</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Safari, Chrome മറ്റു നൂറു കണക്കിനു ആപ്പ്ളിക്കേഷനുകളിൽ ലോഗിനുകൾ തന്നെ പൂരിപ്പിക്കുക </value>
+    <value>Auto-fill logins from Safari, Chrome, and hundreds of other apps</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>ഒന്നിലധികം ഉപകരണങ്ങളിൽ നിന്ന് നിങ്ങളുടെ വാൾട്  സമന്വയിപ്പിച്ച് ആക്‌സസ്സുചെയ്യുക
-
-- ഫോൺ
-- ടാബ്‌ലെറ്റ്
-- ഡെസ്ക്ടോപ്പ്
-- വെബ്</value>
+    <value>Sync and access your vault from multiple devices</value>
   </data>
 </root>

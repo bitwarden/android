@@ -2312,4 +2312,79 @@ Kod otomatik olarak taranacaktır.</value>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Ekran Yakalama özelliğini etkinleştirmek istediğinizden emin misiniz?</value>
   </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>Parola türü</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>Ne oluşturmak istersiniz?</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>Kullanıcı adı türü</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>Artı adresli e-posta</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>Catch-all e-posta</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>İletilen e-posta maskesi</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>Rastgele kelime</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>E-posta (gerekli)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>Alan adı (gerekli)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>API anahtarı (gerekli)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Servis</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>API erişim token'ı</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>Kullanıcı adının üzerine kaydetmek istediğinizden emin misiniz?</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>Kullanıcı adı oluştur</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>E-posta türü</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>Web sitesi (gerekli)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>Bilinmeyen {0} hata oluştu.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>Use your email provider's subaddress capabilities</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>Alan adınızın tüm iletileri yakalamaya ayarlanmış adresini kullanın.</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>Harici bir yönlendirme servisiyle e-posta maskesi oluştur.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>Rastgele</value>
+  </data>
 </root>
