@@ -7,6 +7,7 @@ using System.Windows.Input;
 using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.App.Resources;
+using Bit.App.Utilities;
 using Bit.App.Utilities.Helpers;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
@@ -79,8 +80,7 @@ namespace Bit.App.Pages
                 await LoadAsync();
             });
             CipherOptionsCommand = new Command<CipherView>(CipherOptionsAsync);
-            CopyUsernameItemCommand = new AsyncCommand<IGroupingsPageListItem>(CopyUsernameItemAsync, onException: ex => _logger.Exception(ex), allowsMultipleExecutions: false);
-            CopyPasswordItemCommand = new AsyncCommand<IGroupingsPageListItem>(CopyPasswordItemAsync, onException: ex => _logger.Exception(ex), allowsMultipleExecutions: false);
+            SwipeItemActionCommand = new AsyncCommand<IGroupingsPageListItem>(SwipeItemActionAsync, onException: ex => _logger.Exception(ex), allowsMultipleExecutions: false);
             VaultFilterCommand = new AsyncCommand(VaultFilterOptionsAsync,
                 onException: ex => _logger.Exception(ex),
                 allowsMultipleExecutions: false);
@@ -171,8 +171,7 @@ namespace Bit.App.Pages
         public ObservableRangeCollection<IGroupingsPageListItem> GroupedItems { get; set; }
         public Command RefreshCommand { get; set; }
         public Command<CipherView> CipherOptionsCommand { get; set; }
-        public IAsyncCommand<IGroupingsPageListItem> CopyUsernameItemCommand { get; }
-        public IAsyncCommand<IGroupingsPageListItem> CopyPasswordItemCommand { get; }
+        public IAsyncCommand<IGroupingsPageListItem> SwipeItemActionCommand { get; }
 
         public bool LoadedOnce { get; set; }
 
@@ -722,27 +721,31 @@ namespace Bit.App.Pages
             }
         }
 
-        private async Task CopyUsernameItemAsync(IGroupingsPageListItem listItem)
+        private async Task SwipeItemActionAsync(IGroupingsPageListItem listItem)
         {
-            if (listItem is GroupingsPageListItem groupPageListItem && groupPageListItem.Cipher?.Type == CipherType.Login)
+            if (listItem is GroupingsPageListItem groupPageListItem && groupPageListItem.Cipher is CipherView cipher)
             {
-                await _cipherHelper.CopyUsernameAsync(groupPageListItem.Cipher);
-
-                try
+                switch (cipher.Type)
                 {
-                    Xamarin.Essentials.Vibration.Vibrate();
+                    case CipherType.Login:
+                        if (string.IsNullOrEmpty(cipher.Login?.Password) || !await _cipherHelper.CopyPasswordAsync(cipher))
+                        {
+                            return;
+                        }
+                        break;
+                    case CipherType.Card:
+                        if (!await _cipherHelper.CopyCardNumberAsync(cipher))
+                        {
+                            return;
+                        }
+                        break;
+                    case CipherType.SecureNote:
+                        await _cipherHelper.CopyNotesAsync(cipher);
+                        break;
+                    default:
+                        _logger.Error($"The cipher type {cipher.Type} does not have any swipe action associated");
+                        return;
                 }
-                catch (Xamarin.Essentials.FeatureNotSupportedException)
-                {
-                }
-            }
-        }
-
-        private async Task CopyPasswordItemAsync(IGroupingsPageListItem listItem)
-        {
-            if (listItem is GroupingsPageListItem groupPageListItem && groupPageListItem.Cipher?.Type == CipherType.Login)
-            {
-                await _cipherHelper.CopyPasswordAsync(groupPageListItem.Cipher);
 
                 try
                 {

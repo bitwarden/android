@@ -33,7 +33,9 @@
 
     <ContentPage.Resources>
         <ResourceDictionary>
-            <u:InverseBoolConverter x:Key="inverseBool" />
+            <xct:IsNotNullOrEmptyConverter x:Key="isNotNullOrEmptyConverter" />
+            <u:CipherTypeToSwipeActionGlyphConverter x:Key="cipherTypeToSwipeActionGlyphConverter" />
+            <u:CipherToSwipeBackgroundColor x:Key="cipherToSwipeBackgroundColor" />
 
             <ToolbarItem x:Name="_syncItem" x:Key="syncItem" Text="{u:I18n Sync}"
                          Clicked="Sync_Clicked" Order="Secondary" />
@@ -53,32 +55,16 @@
                     ButtonCommand="{Binding BindingContext.CipherOptionsCommand, Source={x:Reference _page}}"
                     WebsiteIconsEnabled="{Binding BindingContext.WebsiteIconsEnabled, Source={x:Reference _page}}" />
             </DataTemplate>
-
-            <!--Threshold="{Binding Source={x:Reference _page}, Path=SwipeThreshold}"-->
-            <DataTemplate x:Key="loginCipherTemplate"
+            <DataTemplate x:Key="swipeableCipherTemplate"
                           x:DataType="pages:GroupingsPageListItem">
-                <SwipeView>
+                <SwipeView Threshold="{Binding Source={x:Reference _page}, Path=SwipeThreshold}">
                     <SwipeView.LeftItems>
-                        <SwipeItems>
+                        <SwipeItems Mode="Execute">
                             <SwipeItem
-                                   BackgroundColor="{DynamicResource PrimaryColor}"
-                                   Command="{Binding Source={x:Reference _page}, Path=BindingContext.CopyPasswordItemCommand}"
-                                   CommandParameter="{Binding .}">
-                                <SwipeItem.IconImageSource>
-                                    <controls:IconFontImageSource
-                                        Glyph="{Binding Source={x:Static core:BitwardenIcons.Key}}"
-                                        Color="{DynamicResource TextColor}" />
-                                </SwipeItem.IconImageSource>
-                            </SwipeItem>
-                            <SwipeItem
-                                   BackgroundColor="{DynamicResource InfoColor}"
-                                   Command="{Binding Source={x:Reference _page}, Path=BindingContext.CopyUsernameItemCommand}"
-                                   CommandParameter="{Binding .}">
-                                <SwipeItem.IconImageSource>
-                                    <controls:IconFontImageSource
-                                        Glyph="{Binding Source={x:Static core:BitwardenIcons.User}}"
-                                        Color="{DynamicResource TextColor}"/>
-                                </SwipeItem.IconImageSource>
+                                   BackgroundColor="{Binding Cipher, Converter={StaticResource cipherToSwipeBackgroundColor}}"
+                                   Command="{Binding Source={x:Reference _page}, Path=BindingContext.SwipeItemActionCommand}"
+                                   CommandParameter="{Binding .}"
+                                   IconImageSource="{Binding Cipher.Type, Converter={StaticResource cipherTypeToSwipeActionGlyphConverter}}">
                             </SwipeItem>
                         </SwipeItems>
                     </SwipeView.LeftItems>
@@ -90,6 +76,7 @@
                         BackgroundColor="{DynamicResource BackgroundColor}"/>
                 </SwipeView>
             </DataTemplate>
+
             <DataTemplate x:Key="authenticatorTemplate"
                           x:DataType="pages:GroupingsPageTOTPListItem">
                 <controls:AuthenticatorViewCell 
@@ -151,7 +138,7 @@
                                                  CipherTemplate="{StaticResource cipherTemplate}"
                                                  GroupTemplate="{StaticResource groupTemplate}" 
                                                  AuthenticatorTemplate="{StaticResource authenticatorTemplate}"
-                                                 LoginCipherTemplate="{StaticResource loginCipherTemplate}" />
+                                                 SwipeableCipherTemplate="{StaticResource swipeableCipherTemplate}" />
 
             <StackLayout x:Key="mainLayout" x:Name="_mainLayout">
                 <StackLayout

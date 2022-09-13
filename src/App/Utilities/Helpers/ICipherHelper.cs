@@ -8,6 +8,8 @@ namespace Bit.App.Utilities.Helpers
     {
         Task<string> ShowCipherOptionsAsync(Page page, CipherView cipher);
         Task CopyUsernameAsync(CipherView cipher);
-        Task CopyPasswordAsync(CipherView cipher);
+        Task<bool> CopyPasswordAsync(CipherView cipher);
+        Task<bool> CopyCardNumberAsync(CipherView cipher);
+        Task CopyNotesAsync(CipherView cipher);
     }
 }

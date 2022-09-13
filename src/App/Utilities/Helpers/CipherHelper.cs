@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Pages;
@@ -78,11 +79,7 @@ namespace Bit.App.Utilities.Helpers
             }
             else if (selection == AppResources.CopyNumber)
             {
-                if (await RepromptPasswordIfNeededAsync(cipher))
-                {
-                    await _clipboardService.CopyTextAsync(cipher.Card.Number);
-                    _platformUtilsService.ShowToastForCopiedValue(AppResources.Number);
-                }
+                await CopyCardNumberAsync(cipher);
             }
             else if (selection == AppResources.CopySecurityCode)
             {
@@ -95,8 +92,7 @@ namespace Bit.App.Utilities.Helpers
             }
             else if (selection == AppResources.CopyNotes)
             {
-                await _clipboardService.CopyTextAsync(cipher.Notes);
-                _platformUtilsService.ShowToastForCopiedValue(AppResources.Notes);
+                await CopyNotesAsync(cipher);
             }
             return selection;
         }
@@ -107,14 +103,35 @@ namespace Bit.App.Utilities.Helpers
             _platformUtilsService.ShowToastForCopiedValue(AppResources.Username);
         }
 
-        public async Task CopyPasswordAsync(CipherView cipher)
+        public async Task<bool> CopyPasswordAsync(CipherView cipher)
         {
             if (await RepromptPasswordIfNeededAsync(cipher))
             {
                 await _clipboardService.CopyTextAsync(cipher.Login.Password);
                 _platformUtilsService.ShowToastForCopiedValue(AppResources.Password);
                 _eventService.CollectAsync(EventType.Cipher_ClientCopiedPassword, cipher.Id).FireAndForget();
+
+                return true;
             }
+            return false;
+        }
+        
+        public async Task<bool> CopyCardNumberAsync(CipherView cipher)
+        {
+            if (await RepromptPasswordIfNeededAsync(cipher))
+            {
+                await _clipboardService.CopyTextAsync(cipher.Card.Number);
+                _platformUtilsService.ShowToastForCopiedValue(AppResources.Number);
+
+                return true;
+            }
+            return false;
+        }
+
+        public async Task CopyNotesAsync(CipherView cipher)
+        {
+            await _clipboardService.CopyTextAsync(cipher.Notes);
+            _platformUtilsService.ShowToastForCopiedValue(AppResources.Notes);
         }
 
         private async Task<string[]> GetCipherOptionsAsync(CipherView cipher)
