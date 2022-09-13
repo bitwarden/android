@@ -115,7 +115,7 @@ namespace Bit.App.Utilities.Helpers
             }
             return false;
         }
-        
+
         public async Task<bool> CopyCardNumberAsync(CipherView cipher)
         {
             if (await RepromptPasswordIfNeededAsync(cipher))
