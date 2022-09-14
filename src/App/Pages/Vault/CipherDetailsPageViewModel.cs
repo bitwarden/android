@@ -216,7 +216,7 @@ namespace Bit.App.Pages
         public string PasswordVisibilityAccessibilityText => ShowPassword ? AppResources.PasswordIsVisibleTapToHide : AppResources.PasswordIsNotVisibleTapToShow;
         public string TotpCodeFormatted
         {
-            get => ShowUpgradePremiumTotpText ? string.Empty :_totpCodeFormatted;
+            get => ShowUpgradePremiumTotpText ? string.Empty : _totpCodeFormatted;
             set => SetProperty(ref _totpCodeFormatted, value,
                 additionalPropertyNames: new string[]
                 {
