@@ -2313,4 +2313,79 @@ sélectionnez Ajouter TOTP pour stocker la clé en toute sécurité</value>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Êtes-vous sûr de vouloir activer la capture d'écran ?</value>
   </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>Type de mot de passe</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>Que souhaitez-vous générer ?</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>Type de Nom d'Utilisateur</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>Plus Addressed Email</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>Collecteur d'e-mail</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>Alias d'email transféré</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>Mot aléatoire</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>E-mail (requis)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>Nom de domaine (requis)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>Clé API (requise)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Service</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>Jeton d'accès API</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>Are you sure you want to overwrite the current username?</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>Générer un nom d'utilisateur</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>Type d'email</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>Site web (requis)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>L'erreur {0} inconnue est survenue.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>Use your email provider's subaddress capabilities</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>Use your domain's configured catch-all inbox.</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>Générer un alias d'email avec un service de transfert externe.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>Aléatoire</value>
+  </data>
 </root>

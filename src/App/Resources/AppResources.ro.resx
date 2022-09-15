@@ -2313,4 +2313,79 @@ selectați „Adăugare TOTP” pentru a stoca cheia în siguranță</value>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Sunteți sigur că doriți să activați Captura de ecran?</value>
   </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>Tip de parolă</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>Ce doriți să generați?</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>Tip de nume de utilizator</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>Plus e-mail adresat</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>E-mail Catch-all</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>Alias de e-mail redirecționat</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>Cuvânt aleatoriu</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>E-mail (obligatoriu)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>Nume de domeniu (obligatoriu)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>Cheie API (obligatoriu)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Serviciu</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>Token de acces API</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>Sunteți sigur că doriți să suprascrieți numele de utilizator curent?</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>Generare nume de utilizator</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>Tip e-mail</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>Website (obligatoriu)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>A survenit o eroare {0} necunoscută.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>Utilizați capacitățile de subadresare ale furnizorului dvs. de e-mail</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>Utilizați inbox-ul catch-all configurat pentru domeniul dvs.</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>Generați un alias de e-mail cu un serviciu de redirecționare extern.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>Aleatoriu</value>
+  </data>
 </root>

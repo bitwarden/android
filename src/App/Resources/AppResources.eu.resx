@@ -2312,4 +2312,79 @@
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>Ziur al zaude pantaila-argazkia gaitu nahi duzula?</value>
   </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>Pasahitz mota</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>Zer sortu nahi duzu?</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>Erabiltzaile izen mota</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>Atzizkidun emaila</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>Harrapatu email guztiak</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>Emaileko ezizena berbidalia</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>Ausazko hitza</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>Emaila (beharrezkoa)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>Domeinu izena (beharrezkoa)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>API gakoa (beharrezkoa)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Zerbitzua</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>Token sarbide API-a</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>Ziur al zaude erabiltzaile-izena berridatzi nahi duzula?</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>Sortu erabiltzaile izena</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>Email mota</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>Webgunea (beharrezkoa)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>{0} akats ezezaguna gertatu da.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>Erabili emailaren hornitzailearen azpihelbideratze gaitasunak</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>Erabili zure domeinuan konfiguratutako sarrerako ontzia.</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>Emaileko ezizen bat sortu kanpoko bidalketa zerbitzu batekin.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>Ausazkoa</value>
+  </data>
 </root>
