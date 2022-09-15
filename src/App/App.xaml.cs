@@ -166,6 +166,8 @@ namespace Bit.App
             var loginRequestData = await _authService.GetPasswordlessLoginRequestByIdAsync(notification.Id);
             var page = new LoginPasswordlessPage(new LoginPasswordlessDetails()
             {
+                PubKey = loginRequestData.PublicKey,
+                Id = loginRequestData.Id,
                 IpAddress = loginRequestData.RequestIpAddress,
                 Email = await _stateService.GetEmailAsync(),
                 FingerprintPhrase = loginRequestData.RequestFingerprint,

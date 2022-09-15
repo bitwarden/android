@@ -129,7 +129,7 @@ namespace Bit.App.Services
                         _messagingService.Send("logout");
                     }
                     break;
-                case NotificationType.AuthRequestResponse:
+                case NotificationType.AuthRequest:
                     var passwordlessLoginMessage = JsonConvert.DeserializeObject<PasswordlessRequestNotification>(notification.Payload);
 
                     // if the user has not enabled passwordless logins ignore requests

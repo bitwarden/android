@@ -481,7 +481,7 @@ namespace Bit.Core.Services
             var publicKey = CoreHelpers.Base64UrlDecode(pubKey);
             var masterKey = await _cryptoService.GetKeyAsync();
             var encryptedKey = await _cryptoService.RsaEncryptAsync(masterKey.EncKey, publicKey);
-            var encryptedMasterPassword = await _cryptoService.RsaEncryptAsync(Encoding.UTF8.GetBytes(MasterPasswordHash), publicKey);
+            var encryptedMasterPassword = await _cryptoService.RsaEncryptAsync(Encoding.UTF8.GetBytes(await _stateService.GetKeyHashAsync()), publicKey);
             var deviceId = await _appIdService.GetAppIdAsync();
             return await _apiService.PutAuthRequestAsync(id, encryptedKey.EncryptedString, encryptedMasterPassword.EncryptedString, deviceId, requestApproved);
         }
