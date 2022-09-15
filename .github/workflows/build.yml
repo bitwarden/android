@@ -198,6 +198,11 @@ jobs:
 
           Copy-Item $signedApkPath $signedApkDestPath
         shell: pwsh
+        
+      - name: Create artifact
+        run: |
+          rm com.x8bit.bitwarden.aab
+          echo "Hello there" > com.x8bit.bitwarden.aab
 
       - name: Upload Play Store .aab artifact
         uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
