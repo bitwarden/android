@@ -43,7 +43,7 @@ namespace Bit.Core.Services
                         throw new Exception($"Unkown file upload type: {uploadData.FileUploadType}");
                 }
             }
-            catch
+            catch(Exception e)
             {
                 await _apiService.DeleteCipherAttachmentAsync(uploadData.CipherResponse.Id, uploadData.AttachmentId);
                 throw;

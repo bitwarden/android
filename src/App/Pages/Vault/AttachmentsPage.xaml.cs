@@ -51,11 +51,11 @@ namespace Bit.App.Pages
             }
         }
 
-        private async void Save_Clicked(object sender, EventArgs e)
+        private void Save_Clicked(object sender, EventArgs e)
         {
             if (DoOnce())
             {
-                await _vm.SubmitAsync();
+                _vm.SubmitAsyncCommand.Execute(null);
             }
         }
 
