@@ -705,7 +705,7 @@
     <comment>What Apple calls their fingerprint reader.</comment>
   </data>
   <data name="TwoStepLogin" xml:space="preserve">
-    <value>Identification à double facteurs</value>
+    <value>Identification en deux étapes</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
     <value>L'authentification en deux étapes sécurise davantage votre compte en exigeant que chaque connexion soit confirmée par un autre dispositif tel qu'une clé de sécurité, une application d'authentification, un SMS, un appel téléphonique ou un courriel. Cette option peut être activée depuis le coffre web sur bitwarden.com. Voulez-vous y accéder maintenant ?</value>
@@ -727,7 +727,7 @@
     <value>Afficher l'élément</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>Coffre web bitwarden</value>
+    <value>Coffre web Bitwarden</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Application d'authentification perdue ?</value>
@@ -2362,7 +2362,7 @@ sélectionnez Ajouter TOTP pour stocker la clé en toute sécurité</value>
     <value>Jeton d'accès API</value>
   </data>
   <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
-    <value>Are you sure you want to overwrite the current username?</value>
+    <value>Êtes-vous sûr(e) de vouloir remplacer le nom d'utilisateur actuel ?</value>
   </data>
   <data name="GenerateUsername" xml:space="preserve">
     <value>Générer un nom d'utilisateur</value>

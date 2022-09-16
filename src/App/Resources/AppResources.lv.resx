@@ -819,11 +819,11 @@
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeApp" xml:space="preserve">
-    <value>Ievadi 6 ciparu apstiprinājuma kodu no autentificētāja lietotnes!</value>
+    <value>Jāievada 6 ciparu apstiprinājuma kods no autentificētāja lietotnes.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeEmail" xml:space="preserve">
-    <value>Ievadi 6 ciparu apstiprinājuma kodu, kas tika nosūtīts uz $EMAIL$!</value>
+    <value>Jāievada 6 ciparu apstiprinājuma kods, kas tika nosūtīts uz {0}.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
