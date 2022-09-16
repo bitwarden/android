@@ -30,7 +30,6 @@ namespace Bit.App.Pages
         private bool _hasUpdatedKey;
         private bool _canAccessAttachments;
         private string _fileName;
-        public ICommand SubmitAsyncCommand { get; }
 
         public AttachmentsPageViewModel()
         {
@@ -40,7 +39,7 @@ namespace Bit.App.Pages
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
-            _logger = ServiceContainer.Resolve<ILogger>("logger");
+            _logger = ServiceContainer.Resolve<ILogger>();
             Attachments = new ExtendedObservableCollection<AttachmentView>();
             DeleteAttachmentCommand = new Command<AttachmentView>(DeleteAsync);
             SubmitAsyncCommand = new AsyncCommand(SubmitAsync, allowsMultipleExecutions: false);
@@ -66,6 +65,7 @@ namespace Bit.App.Pages
         }
         public byte[] FileData { get; set; }
         public Command DeleteAttachmentCommand { get; set; }
+        public ICommand SubmitAsyncCommand { get; }
 
         public async Task InitAsync()
         {

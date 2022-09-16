@@ -53,10 +53,7 @@ namespace Bit.App.Pages
 
         private void Save_Clicked(object sender, EventArgs e)
         {
-            if (DoOnce())
-            {
                 _vm.SubmitAsyncCommand.Execute(null);
-            }
         }
 
         private async void ChooseFile_Clicked(object sender, EventArgs e)
