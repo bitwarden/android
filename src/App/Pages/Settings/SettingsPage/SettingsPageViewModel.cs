@@ -20,6 +20,7 @@ namespace Bit.App.Pages
         private readonly ICryptoService _cryptoService;
         private readonly IStateService _stateService;
         private readonly IDeviceActionService _deviceActionService;
+        private readonly IAutofillHandler _autofillHandler;        
         private readonly IEnvironmentService _environmentService;
         private readonly IMessagingService _messagingService;
         private readonly IVaultTimeoutService _vaultTimeoutService;
@@ -73,6 +74,7 @@ namespace Bit.App.Pages
             _cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            _autofillHandler = ServiceContainer.Resolve<IAutofillHandler>();            
             _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");
@@ -419,7 +421,7 @@ namespace Bit.App.Pages
             else if (await _platformUtilsService.SupportsBiometricAsync())
             {
                 _biometric = await _platformUtilsService.AuthenticateBiometricAsync(null,
-                    _deviceActionService.DeviceType == Core.Enums.DeviceType.Android ? "." : null);
+                    Device.RuntimePlatform == Device.Android ? "." : null);
             }
             if (_biometric == current)
             {
@@ -450,7 +452,7 @@ namespace Bit.App.Pages
                 autofillItems.Add(new SettingsPageListItem
                 {
                     Name = AppResources.AutofillServices,
-                    SubLabel = _deviceActionService.AutofillServicesEnabled() ? AppResources.On : AppResources.Off,
+                    SubLabel = _autofillHandler.AutofillServicesEnabled() ? AppResources.On : AppResources.Off,
                     ExecuteAsync = () => Page.Navigation.PushModalAsync(new NavigationPage(new AutofillServicesPage(Page as SettingsPage)))
                 });
             }

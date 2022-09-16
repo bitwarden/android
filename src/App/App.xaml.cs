@@ -29,6 +29,7 @@ namespace Bit.App
         private readonly IAuthService _authService;
         private readonly IStorageService _secureStorageService;
         private readonly IDeviceActionService _deviceActionService;
+        private readonly IFileService _fileService;        
         private readonly IAccountsManager _accountsManager;
 
         private static bool _isResumed;
@@ -50,6 +51,7 @@ namespace Bit.App
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _secureStorageService = ServiceContainer.Resolve<IStorageService>("secureStorageService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            _fileService = ServiceContainer.Resolve<IFileService>();
             _accountsManager = ServiceContainer.Resolve<IAccountsManager>("accountsManager");
 
             _accountsManager.Init(() => Options, this);
@@ -245,7 +247,7 @@ namespace Bit.App
             var lastClear = await _stateService.GetLastFileCacheClearAsync();
             if ((DateTime.UtcNow - lastClear.GetValueOrDefault(DateTime.MinValue)).TotalDays >= 1)
             {
-                var task = Task.Run(() => _deviceActionService.ClearCacheAsync());
+                var task = Task.Run(() => _fileService.ClearCacheAsync());
             }
         }
 
