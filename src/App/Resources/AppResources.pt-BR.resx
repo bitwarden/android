@@ -2324,13 +2324,13 @@ selecione Adicionar TOTP para armazenar a chave de forma segura</value>
     <value>Tipo de Nome de Usuário</value>
   </data>
   <data name="PlusAddressedEmail" xml:space="preserve">
-    <value>Plus Addressed Email</value>
+    <value>E-mail endereçado mais</value>
   </data>
   <data name="CatchAllEmail" xml:space="preserve">
-    <value>Catch-all Email</value>
+    <value>E-mail pega-tudo</value>
   </data>
   <data name="ForwardedEmailAlias" xml:space="preserve">
-    <value>Forwarded Email Alias</value>
+    <value>Alias de E-mail Encaminhado</value>
   </data>
   <data name="RandomWord" xml:space="preserve">
     <value>Palavra Aleatória</value>
@@ -2342,7 +2342,7 @@ selecione Adicionar TOTP para armazenar a chave de forma segura</value>
     <value>Nome do Domínio (obrigatório)</value>
   </data>
   <data name="APIKeyRequiredParenthesis" xml:space="preserve">
-    <value>API Key (required)</value>
+    <value>Chave de API (obrigatória)</value>
   </data>
   <data name="Service" xml:space="preserve">
     <value>Serviço</value>
@@ -2375,16 +2375,16 @@ selecione Adicionar TOTP para armazenar a chave de forma segura</value>
     <value>Website (obrigatório)</value>
   </data>
   <data name="UnknownXErrorMessage" xml:space="preserve">
-    <value>Unknown {0} error occurred.</value>
+    <value>Ocorreu um erro desconhecido {0}.</value>
   </data>
   <data name="PlusAddressedEmailDescription" xml:space="preserve">
-    <value>Use your email provider's subaddress capabilities</value>
+    <value>Use os recursos de subendereço do seu provedor de e-mail</value>
   </data>
   <data name="CatchAllEmailDescription" xml:space="preserve">
-    <value>Use your domain's configured catch-all inbox.</value>
+    <value>Use a caixa de entrada "pega-tudo" configurada do seu domínio.</value>
   </data>
   <data name="ForwardedEmailDescription" xml:space="preserve">
-    <value>Generate an email alias with an external forwarding service.</value>
+    <value>Gere um alias de e-mail com um serviço de encaminhamento externo.</value>
   </data>
   <data name="Random" xml:space="preserve">
     <value>Aleatória</value>

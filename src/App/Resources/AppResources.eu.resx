@@ -296,7 +296,7 @@
     <comment>Text to define that there are more options things to see.</comment>
   </data>
   <data name="MyVault" xml:space="preserve">
-    <value>Nire Kutxa Gotorra</value>
+    <value>Kutxa Gotorra</value>
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Authenticator" xml:space="preserve">
@@ -371,7 +371,7 @@
     <comment>Label for a username.</comment>
   </data>
   <data name="ValidationFieldRequired" xml:space="preserve">
-    <value>{0} eremua ezinbestekoa da.</value>
+    <value>{0} ezinbestekoa da.</value>
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
@@ -1016,7 +1016,7 @@
     <value>Saio-hasiera</value>
   </data>
   <data name="TypeSecureNote" xml:space="preserve">
-    <value>Ohar segurua</value>
+    <value>Ohar seguruak</value>
   </data>
   <data name="Address1" xml:space="preserve">
     <value>1go helbidea</value>
@@ -1151,7 +1151,7 @@
     <value>Kutxa gotorra blokeatuta dago</value>
   </data>
   <data name="GoToMyVault" xml:space="preserve">
-    <value>Joan nire kutxa gotorrera</value>
+    <value>Joan kutxa gotorrera</value>
   </data>
   <data name="Collections" xml:space="preserve">
     <value>Bildumak</value>
@@ -1952,7 +1952,7 @@
     <value>Pasahitz berria</value>
   </data>
   <data name="PasswordInfo" xml:space="preserve">
-    <value>Nahi izanez gero, pasahitza eskatu erabiltzaileak bidalketa honetara sar daitezen.</value>
+    <value>Nahi izanez gero, pasahitza eskatu erabiltzaileak Send honetara sar daitezen.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="RemovePassword" xml:space="preserve">

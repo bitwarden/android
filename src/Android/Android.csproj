@@ -15,7 +15,7 @@
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
-    <TargetFrameworkVersion>v11.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v12.1</TargetFrameworkVersion>
     <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -215,6 +215,9 @@
     <AndroidResource Include="Resources\values\colors.xml" />
     <AndroidResource Include="Resources\values\manifest.xml" />
     <AndroidResource Include="Resources\values-v30\manifest.xml" />
+    <AndroidResource Include="Resources\drawable-v26\splash_screen_round.xml" />
+    <AndroidResource Include="Resources\drawable\logo_rounded.xml" />
+    <AndroidResource Include="Resources\drawable-night-v26\splash_screen_round.xml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\splash_screen.xml" />
@@ -282,6 +285,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\values-v30\" />
+    <Folder Include="Resources\drawable-v26\" />
+    <Folder Include="Resources\drawable-night-v26\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

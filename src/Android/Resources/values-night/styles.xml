@@ -4,6 +4,7 @@
   <style name="LaunchTheme" parent="BaseTheme">
     <item name="android:windowBackground">@drawable/splash_screen_dark</item>
     <item name="android:windowNoTitle">true</item>
+    <item name="android:windowSplashScreenAnimatedIcon">@drawable/splash_screen_round</item>
   </style>
 
   <style name="BaseTheme" parent="Theme.AppCompat">

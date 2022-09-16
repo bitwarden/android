@@ -19,6 +19,7 @@ using AndroidX.AutoFill.Inline;
 using AndroidX.AutoFill.Inline.V1;
 using Bit.Core.Abstractions;
 using SaveFlags = Android.Service.Autofill.SaveFlags;
+using Bit.Droid.Utilities;
 
 namespace Bit.Droid.Autofill
 {
@@ -270,8 +271,7 @@ namespace Bit.Droid.Autofill
                 return null;
             }
             intent.PutExtra("autofillFrameworkUri", uri);
-            var pendingIntent = PendingIntent.GetActivity(context, ++_pendingIntentId, intent,
-                PendingIntentFlags.CancelCurrent);
+            var pendingIntent = PendingIntent.GetActivity(context, ++_pendingIntentId, intent, AndroidHelpers.AddPendingIntentMutabilityFlag(PendingIntentFlags.CancelCurrent, true));
 
             var overlayPresentation = BuildOverlayPresentation(
                 AppResources.AutofillWithBitwarden,
@@ -324,7 +324,7 @@ namespace Bit.Droid.Autofill
                 // InlinePresentation requires nonNull pending intent (even though we only utilize one for the
                 // "my vault" presentation) so we're including an empty one here
                 pendingIntent = PendingIntent.GetService(context, 0, new Intent(),
-                    PendingIntentFlags.OneShot | PendingIntentFlags.UpdateCurrent);
+                    AndroidHelpers.AddPendingIntentMutabilityFlag(PendingIntentFlags.OneShot | PendingIntentFlags.UpdateCurrent, true));
             }
             var slice = CreateInlinePresentationSlice(
                 inlinePresentationSpec,
