@@ -29,10 +29,9 @@ VariantConfig GetVariant() => variant switch{
     _ => new Dev()
 };
 
-GitVersion _gitVersion;
-var _slnPath = Path.Combine("");
-var _iosPath = Path.Combine(_slnPath, "src", "iOS");
-var _droidPath = Path.Combine(_slnPath, "src", "Android");
+GitVersion _gitVersion; //will be set by GetGitInfo task
+var _slnPath = Path.Combine(""); //base path used to access files
+string _iOSMainBundleId = string.Empty; //will be set by UpdateiOSPlist task
 
 string CreateFeatureBranch(string prevVersionName, GitVersion git) => $"{prevVersionName}-{git.BranchName.Replace("/","-")}";
 string GetVersionName(string prevVersionName, VariantConfig buildVariant, GitVersion git) => buildVariant is Prod? prevVersionName : CreateFeatureBranch(prevVersionName, git); 
@@ -70,7 +69,7 @@ Task("UpdateAndroidManifest")
 	.Does(()=> 
 	{
 		var buildVariant = GetVariant();
-		var manifestPath = Path.Combine(_droidPath, "Properties", "AndroidManifest.xml");
+		var manifestPath = Path.Combine(_slnPath, "src", "Android", "Properties", "AndroidManifest.xml");
  		var manifest = DeserializeAppManifest(manifestPath);
 
 		var prevVersionCode = manifest.VersionCode;
@@ -91,18 +90,48 @@ Task("UpdateAndroidManifest")
 	});
 
 //iOS
-Task("UpdateiOSIcon")
-	.Does(()=>{
-		//TODO
-		Information($"Updating IOS App Icon");
-	});
+private void UpdateiOSInfoPlist(string plistPath, VariantConfig buildVariant, GitVersion git, bool mainApp = false)
+{
+    var plistFile = File(plistPath);
+    dynamic plist = DeserializePlist(plistFile);
 
-Task("UpdateiOSEntitlements")
-	.IsDependentOn("GetGitInfo")
-	.Does(()=> {
-		
-        var buildVariant = GetVariant();
-        var entitlementsPath = Path.Combine(_iosPath, "Entitlements.plist");
+    var prevVersionName = plist["CFBundleShortVersionString"];
+    var prevVersionString = plist["CFBundleVersion"];
+    var prevVersion = int.Parse(plist["CFBundleVersion"]);
+    var prevBundleId = plist["CFBundleIdentifier"];
+    var newVersion = CreateBuildNumber(prevVersion).ToString();
+    var versionName = GetVersionName(prevVersionName, buildVariant, git);
+
+    if(mainApp)
+    {
+        _iOSMainBundleId = plist["CFBundleIdentifier"];
+    }
+
+    if(string.IsNullOrEmpty(_iOSMainBundleId))
+    {
+        throw new Exception("iOS Main Bundle ID wasn't set, UpdateiOSPlist task needs to run first");
+    }
+
+    var newBundleId = prevBundleId.Replace(_iOSMainBundleId, buildVariant.iOSBundleId);
+    plist["CFBundleName"] = buildVariant.AppName;
+    plist["CFBundleDisplayName"] = buildVariant.AppName;
+
+    
+    plist["CFBundleVersion"] = newVersion;
+    plist["CFBundleShortVersionString"] = versionName;
+    plist["CFBundleIdentifier"] = newBundleId;
+
+    SerializePlist(plistFile, plist);
+
+    Information($"Changed app name to {buildVariant.AppName}");
+    Information($"Changed Bundle Version from {prevVersion} to {newVersion}");
+    Information($"Changed Bundle Short Version name to {versionName}");
+    Information($"Changed Bundle Identifier from {prevBundleId} to {newBundleId}");
+    Information($"{plistPath} updated with success!");
+}
+
+private void UpdateiOSEntitlementsPlist(string entitlementsPath, VariantConfig buildVariant)
+{
 		var EntitlementlistFile = File(entitlementsPath);
 		dynamic Entitlements = DeserializePlist(EntitlementlistFile);
 
@@ -114,43 +143,59 @@ Task("UpdateiOSEntitlements")
 
 		SerializePlist(EntitlementlistFile, Entitlements);
 
-        Information("iOS Entitlements.plist updated with success!");
+        Information($"{entitlementsPath} updated with success!");
+}
+
+Task("UpdateiOSIcon")
+	.Does(()=>{
+		//TODO
+		Information($"Updating IOS App Icon");
 	});
 
-
-Task("UpdateiOSInfoPlist")
+Task("UpdateiOSPlist")
 	.IsDependentOn("GetGitInfo")
 	.Does(()=> {
-		
         var buildVariant = GetVariant();
-        var infoPath = Path.Combine(_iosPath, "Info.plist");
-
-		var plistFile = File(infoPath);
-		dynamic plist = DeserializePlist(plistFile);
-
-
-		var prevVersionString = plist["CFBundleVersion"];
-		var prevVersion = int.Parse(plist["CFBundleVersion"]);
-		var newVersion = CreateBuildNumber(prevVersion).ToString();
-		var versionName = GetVersionName(prevVersionString, buildVariant, _gitVersion);
-		plist["CFBundleName"] = buildVariant.AppName;
-		plist["CFBundleDisplayName"] = buildVariant.AppName;
-
-		
-		plist["CFBundleVersion"] = newVersion;
-		plist["CFBundleShortVersionString"] = versionName;
-		plist["CFBundleIdentifier"] = buildVariant.iOSBundleId;
-
-		SerializePlist(plistFile, plist);
-
-		Information($"Changed app name to {buildVariant.AppName}");
-		Information($"Changed Bundle version to {versionName}");
-		Information($"Changed Bundle Identifier to {buildVariant.iOSBundleId}");
-		Information($"App Version Number updated from {prevVersion} to {newVersion}");
-        Information("iOS Info.plist updated with success!");
+        var infoPath = Path.Combine(_slnPath, "src", "iOS", "Info.plist");
+        var entitlementsPath = Path.Combine(_slnPath, "src", "iOS", "Entitlements.plist");
+		UpdateiOSInfoPlist(infoPath, buildVariant, _gitVersion, true);
+        UpdateiOSEntitlementsPlist(entitlementsPath, buildVariant);
 	});
 
+Task("UpdateiOSAutofillPlist")
+	.IsDependentOn("GetGitInfo")
+	.IsDependentOn("UpdateiOSPlist")
+	.Does(()=> {
+        var buildVariant = GetVariant();
+        var infoPath = Path.Combine(_slnPath, "src", "iOS.Autofill", "Info.plist");
+        var entitlementsPath = Path.Combine(_slnPath, "src", "iOS.Autofill", "Entitlements.plist");
+		UpdateiOSInfoPlist(infoPath, buildVariant, _gitVersion);
+        UpdateiOSEntitlementsPlist(entitlementsPath, buildVariant);
+	});
 
+Task("UpdateiOSExtensionPlist")
+	.IsDependentOn("GetGitInfo")
+	.IsDependentOn("UpdateiOSPlist")
+	.Does(()=> {
+        var buildVariant = GetVariant();
+        var infoPath = Path.Combine(_slnPath, "src", "iOS.Extension", "Info.plist");
+        var entitlementsPath = Path.Combine(_slnPath, "src", "iOS.Extension", "Entitlements.plist");
+		UpdateiOSInfoPlist(infoPath, buildVariant, _gitVersion);
+        UpdateiOSEntitlementsPlist(entitlementsPath, buildVariant);
+	});
+
+Task("UpdateiOSShareExtensionPlist")
+	.IsDependentOn("GetGitInfo")
+	.IsDependentOn("UpdateiOSPlist")
+	.Does(()=> {
+        var buildVariant = GetVariant();
+        var infoPath = Path.Combine(_slnPath, "src", "iOS.ShareExtension", "Info.plist");
+        var entitlementsPath = Path.Combine(_slnPath, "src", "iOS.ShareExtension", "Entitlements.plist");
+		UpdateiOSInfoPlist(infoPath, buildVariant, _gitVersion);
+        UpdateiOSEntitlementsPlist(entitlementsPath, buildVariant);
+	});
+
+/// Main Tasks
 Task("Android")
 	.IsDependentOn("UpdateAndroidAppIcon")
 	.IsDependentOn("UpdateAndroidGoogleServices")
@@ -162,8 +207,10 @@ Task("Android")
 
 Task("iOS")
 	.IsDependentOn("UpdateiOSIcon")
-    .IsDependentOn("UpdateiOSEntitlements")
-    .IsDependentOn("UpdateiOSInfoPlist")
+    .IsDependentOn("UpdateiOSPlist")
+    .IsDependentOn("UpdateiOSAutofillPlist")
+    .IsDependentOn("UpdateiOSExtensionPlist")
+    .IsDependentOn("UpdateiOSShareExtensionPlist")
     .Does(()=>
 	{
 		Information("iOS app updated");
