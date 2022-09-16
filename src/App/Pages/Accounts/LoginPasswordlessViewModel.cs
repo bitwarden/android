@@ -119,7 +119,7 @@ namespace Bit.App.Pages
 
         public DateTime RequestDate { get; set; }
 
-        public DeviceType DeviceType { get; set; }
+        public string DeviceType { get; set; }
 
         public string IpAddress { get; set; }
     }
