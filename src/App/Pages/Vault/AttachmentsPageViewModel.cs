@@ -140,7 +140,7 @@ namespace Bit.App.Pages
                         AppResources.AnErrorHasOccurred);
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 _logger.Exception(e);
                 await _deviceActionService.HideLoadingAsync();
