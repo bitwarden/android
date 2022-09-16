@@ -22,7 +22,7 @@ record QA(): VariantConfig("Bitwarden QA", "com.x8bit.bitwarden-qa", "com.8bit.b
 record Beta(): VariantConfig("Bitwarden Beta", "com.x8bit.bitwarden-beta", "com.8bit.bitwarden-beta", "production");
 record Prod(): VariantConfig("Bitwarden", "com.x8bit.bitwarden", "com.8bit.bitwarden", "production");
 
-VariantConfig GetVariant() => variant switch{
+VariantConfig GetVariant() => variant.ToLower() switch{
     "qa" => new QA(),
     "beta" => new Beta(),
     "prod" => new Prod(),
@@ -30,8 +30,7 @@ VariantConfig GetVariant() => variant switch{
 };
 
 GitVersion _gitVersion; //will be set by GetGitInfo task
-var _slnPath = Path.Combine(""); //base path used to access files
-string _iOSMainBundleId = string.Empty; //will be set by UpdateiOSPlist task
+var _slnPath = Path.Combine(""); //base path used to access files. If build.cake file is moved, just update this
 string _androidPackageName = string.Empty; //will be set by UpdateAndroidManifest task
 string CreateFeatureBranch(string prevVersionName, GitVersion git) => $"{prevVersionName}-{git.BranchName.Replace("/","-")}";
 string GetVersionName(string prevVersionName, VariantConfig buildVariant, GitVersion git) => buildVariant is Prod? prevVersionName : CreateFeatureBranch(prevVersionName, git); 
@@ -49,20 +48,14 @@ Task("GetGitInfo")
  		Information("Git data Load successfully.");
 	});
 
-//Android
+#region Android
 Task("UpdateAndroidAppIcon")
 	.Does(()=>{
 		//TODO
 		//manifest.ApplicationIcon = "@mipmap/ic_launcher";
 		Information($"Updated Androix App Icon with success");
 	});
-	
-Task("UpdateAndroidGoogleServices")
-	.Does(()=>{
-		//TODO
-		Information($"Updated Androix App Icon with success");
-	});
-	
+
 
 Task("UpdateAndroidManifest")
 	.IsDependentOn("GetGitInfo")
@@ -100,20 +93,47 @@ Task("UpdateAndroidCodeFiles")
 
         //We're not using _androidPackageName here because the codefile is currently slightly different string than the one in AndroidManifest.xml
         var keyName = "com.8bit.bitwarden";
+        var fixedPackageName = buildVariant.AndroidPackageName.Replace("x8bit", "8bit");
 
         if(string.IsNullOrEmpty(fileText) || !fileText.Contains(keyName))
         {
             throw new Exception($"Couldn't find {filePath} or it didn't contain: {keyName}");
         }
 
-        fileText = fileText.Replace(keyName, buildVariant.AndroidPackageName);
+        fileText = fileText.Replace(keyName, fixedPackageName);
 
         FileWriteText(filePath, fileText);
 		Information($"BiometricService.cs modified successfully.");		
 	});
+#endregion Android
 
-//iOS
-private void UpdateiOSInfoPlist(string plistPath, VariantConfig buildVariant, GitVersion git, bool mainApp = false)
+#region iOS
+enum iOSProjectType
+{
+    Null,
+    MainApp,
+    Autofill,
+    Extension,
+    ShareExtension
+}
+
+string GetiOSBundleId(VariantConfig buildVariant, iOSProjectType projectType) => projectType switch
+{
+    iOSProjectType.Autofill => $"{buildVariant.iOSBundleId}.autofill",
+    iOSProjectType.Extension => $"{buildVariant.iOSBundleId}.find-login-action-extension",
+    iOSProjectType.ShareExtension => $"{buildVariant.iOSBundleId}.share-extension",
+    _ => buildVariant.iOSBundleId
+};
+
+string GetiOSBundleName(VariantConfig buildVariant, iOSProjectType projectType) => projectType switch
+{
+    iOSProjectType.Autofill => $"{buildVariant.AppName} Autofill",
+    iOSProjectType.Extension => $"{buildVariant.AppName} Extension",
+    iOSProjectType.ShareExtension => $"{buildVariant.AppName} Share Extension",
+    _ => buildVariant.AppName
+};
+
+private void UpdateiOSInfoPlist(string plistPath, VariantConfig buildVariant, GitVersion git, iOSProjectType projectType = iOSProjectType.MainApp)
 {
     var plistFile = File(plistPath);
     dynamic plist = DeserializePlist(plistFile);
@@ -122,33 +142,23 @@ private void UpdateiOSInfoPlist(string plistPath, VariantConfig buildVariant, Gi
     var prevVersionString = plist["CFBundleVersion"];
     var prevVersion = int.Parse(plist["CFBundleVersion"]);
     var prevBundleId = plist["CFBundleIdentifier"];
+    var prevBundleName = plist["CFBundleName"];
     var newVersion = CreateBuildNumber(prevVersion).ToString();
-    var versionName = GetVersionName(prevVersionName, buildVariant, git);
+    var newVersionName = GetVersionName(prevVersionName, buildVariant, git);
+    var newBundleId = GetiOSBundleId(buildVariant, projectType);
+    var newBundleName = GetiOSBundleName(buildVariant, projectType);
 
-    if(mainApp)
-    {
-        _iOSMainBundleId = plist["CFBundleIdentifier"];
-    }
-
-    if(string.IsNullOrEmpty(_iOSMainBundleId))
-    {
-        throw new Exception("iOS Main Bundle ID wasn't set, UpdateiOSPlist task needs to run first");
-    }
-
-    var newBundleId = prevBundleId.Replace(_iOSMainBundleId, buildVariant.iOSBundleId);
-    plist["CFBundleName"] = buildVariant.AppName;
-    plist["CFBundleDisplayName"] = buildVariant.AppName;
-
-    
-    plist["CFBundleVersion"] = newVersion;
-    plist["CFBundleShortVersionString"] = versionName;
+    plist["CFBundleName"] = newBundleName;
+    plist["CFBundleDisplayName"] = newBundleName;
+    //plist["CFBundleVersion"] = newVersion;
+    plist["CFBundleShortVersionString"] = newVersionName;
     plist["CFBundleIdentifier"] = newBundleId;
 
     SerializePlist(plistFile, plist);
 
-    Information($"Changed app name to {buildVariant.AppName}");
-    Information($"Changed Bundle Version from {prevVersion} to {newVersion}");
-    Information($"Changed Bundle Short Version name to {versionName}");
+    Information($"Changed app name from {prevBundleName} to {newBundleName}");
+    //Information($"Changed Bundle Version from {prevVersion} to {newVersion}");
+    Information($"Changed Bundle Short Version name from {prevVersionName} to {newVersionName}");
     Information($"Changed Bundle Identifier from {prevBundleId} to {newBundleId}");
     Information($"{plistPath} updated with success!");
 }
@@ -181,7 +191,7 @@ Task("UpdateiOSPlist")
         var buildVariant = GetVariant();
         var infoPath = Path.Combine(_slnPath, "src", "iOS", "Info.plist");
         var entitlementsPath = Path.Combine(_slnPath, "src", "iOS", "Entitlements.plist");
-		UpdateiOSInfoPlist(infoPath, buildVariant, _gitVersion, true);
+		UpdateiOSInfoPlist(infoPath, buildVariant, _gitVersion, iOSProjectType.MainApp);
         UpdateiOSEntitlementsPlist(entitlementsPath, buildVariant);
 	});
 
@@ -192,7 +202,7 @@ Task("UpdateiOSAutofillPlist")
         var buildVariant = GetVariant();
         var infoPath = Path.Combine(_slnPath, "src", "iOS.Autofill", "Info.plist");
         var entitlementsPath = Path.Combine(_slnPath, "src", "iOS.Autofill", "Entitlements.plist");
-		UpdateiOSInfoPlist(infoPath, buildVariant, _gitVersion);
+		UpdateiOSInfoPlist(infoPath, buildVariant, _gitVersion, iOSProjectType.Autofill);
         UpdateiOSEntitlementsPlist(entitlementsPath, buildVariant);
 	});
 
@@ -203,7 +213,7 @@ Task("UpdateiOSExtensionPlist")
         var buildVariant = GetVariant();
         var infoPath = Path.Combine(_slnPath, "src", "iOS.Extension", "Info.plist");
         var entitlementsPath = Path.Combine(_slnPath, "src", "iOS.Extension", "Entitlements.plist");
-		UpdateiOSInfoPlist(infoPath, buildVariant, _gitVersion);
+		UpdateiOSInfoPlist(infoPath, buildVariant, _gitVersion, iOSProjectType.Extension);
         UpdateiOSEntitlementsPlist(entitlementsPath, buildVariant);
 	});
 
@@ -214,7 +224,7 @@ Task("UpdateiOSShareExtensionPlist")
         var buildVariant = GetVariant();
         var infoPath = Path.Combine(_slnPath, "src", "iOS.ShareExtension", "Info.plist");
         var entitlementsPath = Path.Combine(_slnPath, "src", "iOS.ShareExtension", "Entitlements.plist");
-		UpdateiOSInfoPlist(infoPath, buildVariant, _gitVersion);
+		UpdateiOSInfoPlist(infoPath, buildVariant, _gitVersion, iOSProjectType.ShareExtension);
         UpdateiOSEntitlementsPlist(entitlementsPath, buildVariant);
 	});
 
@@ -223,19 +233,24 @@ Task("UpdateiOSCodeFiles")
 	.Does(()=> {
         var buildVariant = GetVariant();
         var filePath = Path.Combine(_slnPath, "src", "iOS.Core", "Utilities", "iOSCoreHelpers.cs");
-
         var fileText = FileReadText(filePath);
 
-        fileText = fileText.Replace(_iOSMainBundleId, buildVariant.iOSBundleId);
+        var iOSBundleId = "com.8bit.bitwarden";
+        if(!fileText.Contains(iOSBundleId))
+        {
+            throw new Exception($"{filePath} doesn't contain {iOSBundleId}");
+        }
+
+        fileText = fileText.Replace(iOSBundleId, buildVariant.iOSBundleId);
 
         FileWriteText(filePath, fileText);
 		Information($"iOSCoreHelpers.cs modified successfully.");		
 	});
+#endregion iOS
 
-/// Main Tasks
+#region Main Tasks
 Task("Android")
-	.IsDependentOn("UpdateAndroidAppIcon")
-	.IsDependentOn("UpdateAndroidGoogleServices")
+	//.IsDependentOn("UpdateAndroidAppIcon")
 	.IsDependentOn("UpdateAndroidManifest")
 	.IsDependentOn("UpdateAndroidCodeFiles")
 	.Does(()=>
@@ -244,7 +259,7 @@ Task("Android")
 	});
 
 Task("iOS")
-	.IsDependentOn("UpdateiOSIcon")
+	//.IsDependentOn("UpdateiOSIcon")
     .IsDependentOn("UpdateiOSPlist")
     .IsDependentOn("UpdateiOSAutofillPlist")
     .IsDependentOn("UpdateiOSExtensionPlist")
@@ -267,5 +282,6 @@ Options:
 ";
 		Information(usage);
 	});
+#endregion Main Tasks
 
 RunTarget(target);
