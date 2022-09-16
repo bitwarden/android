@@ -37,55 +37,55 @@ string GetVersionName(string prevVersionName, VariantConfig buildVariant, GitVer
 int CreateBuildNumber(int previousNumber) => ++previousNumber; //TODO
 
 Task("GetGitInfo")
-	.Does(()=> {
-		_gitVersion = GitVersion(new GitVersionSettings());
+    .Does(()=> {
+        _gitVersion = GitVersion(new GitVersionSettings());
 
-		if(debugScript)
-		{
-			Information($"GitVersion Dump:\n{_gitVersion.Dump()}");
-		}
+        if(debugScript)
+        {
+            Information($"GitVersion Dump:\n{_gitVersion.Dump()}");
+        }
 
- 		Information("Git data Load successfully.");
-	});
+         Information("Git data Load successfully.");
+    });
 
 #region Android
 Task("UpdateAndroidAppIcon")
-	.Does(()=>{
-		//TODO
-		//manifest.ApplicationIcon = "@mipmap/ic_launcher";
-		Information($"Updated Androix App Icon with success");
-	});
+    .Does(()=>{
+        //TODO
+        //manifest.ApplicationIcon = "@mipmap/ic_launcher";
+        Information($"Updated Androix App Icon with success");
+    });
 
 
 Task("UpdateAndroidManifest")
-	.IsDependentOn("GetGitInfo")
-	.Does(()=> 
-	{
-		var buildVariant = GetVariant();
-		var manifestPath = Path.Combine(_slnPath, "src", "Android", "Properties", "AndroidManifest.xml");
- 		var manifest = DeserializeAppManifest(manifestPath);
+    .IsDependentOn("GetGitInfo")
+    .Does(()=> 
+    {
+        var buildVariant = GetVariant();
+        var manifestPath = Path.Combine(_slnPath, "src", "Android", "Properties", "AndroidManifest.xml");
+         var manifest = DeserializeAppManifest(manifestPath);
 
-		var prevVersionCode = manifest.VersionCode;
-		var prevVersionName = manifest.VersionName;
+        var prevVersionCode = manifest.VersionCode;
+        var prevVersionName = manifest.VersionName;
         _androidPackageName = manifest.PackageName;
 
-		manifest.VersionCode = CreateBuildNumber(prevVersionCode);
-		manifest.VersionName = GetVersionName(prevVersionName, buildVariant, _gitVersion);
-		manifest.PackageName = buildVariant.AndroidPackageName;
-		manifest.ApplicationLabel = buildVariant.AppName;
+        manifest.VersionCode = CreateBuildNumber(prevVersionCode);
+        manifest.VersionName = GetVersionName(prevVersionName, buildVariant, _gitVersion);
+        manifest.PackageName = buildVariant.AndroidPackageName;
+        manifest.ApplicationLabel = buildVariant.AppName;
 
-		Information($"AndroidManigest.xml VersionCode from {prevVersionCode} to {manifest.VersionCode}");
-		Information($"AndroidManigest.xml VersionName from {prevVersionName} to {manifest.VersionName}");
-		Information($"AndroidManigest.xml PackageName from {_androidPackageName} to {buildVariant.AndroidPackageName}");
-		Information($"AndroidManigest.xml ApplicationLabel to {buildVariant.AppName}");
-	
-    	SerializeAppManifest(manifestPath, manifest);
-		Information("AndroidManifest updated with success!");
-	});
+        Information($"AndroidManigest.xml VersionCode from {prevVersionCode} to {manifest.VersionCode}");
+        Information($"AndroidManigest.xml VersionName from {prevVersionName} to {manifest.VersionName}");
+        Information($"AndroidManigest.xml PackageName from {_androidPackageName} to {buildVariant.AndroidPackageName}");
+        Information($"AndroidManigest.xml ApplicationLabel to {buildVariant.AppName}");
+    
+        SerializeAppManifest(manifestPath, manifest);
+        Information("AndroidManifest updated with success!");
+    });
 
 Task("UpdateAndroidCodeFiles")
-	.IsDependentOn("UpdateAndroidManifest")
-	.Does(()=> {
+    .IsDependentOn("UpdateAndroidManifest")
+    .Does(()=> {
         var buildVariant = GetVariant();
         var filePath = Path.Combine(_slnPath, "src", "Android", "Services", "BiometricService.cs");
 
@@ -103,8 +103,8 @@ Task("UpdateAndroidCodeFiles")
         fileText = fileText.Replace(keyName, fixedPackageName);
 
         FileWriteText(filePath, fileText);
-		Information($"BiometricService.cs modified successfully.");		
-	});
+        Information($"BiometricService.cs modified successfully.");		
+    });
 #endregion Android
 
 #region iOS
@@ -165,72 +165,72 @@ private void UpdateiOSInfoPlist(string plistPath, VariantConfig buildVariant, Gi
 
 private void UpdateiOSEntitlementsPlist(string entitlementsPath, VariantConfig buildVariant)
 {
-		var EntitlementlistFile = File(entitlementsPath);
-		dynamic Entitlements = DeserializePlist(EntitlementlistFile);
+        var EntitlementlistFile = File(entitlementsPath);
+        dynamic Entitlements = DeserializePlist(EntitlementlistFile);
 
-		Entitlements["aps-environment"] = buildVariant.ApsEnvironment;
-		Entitlements["keychain-access-groups"] = new List<string>() { "$(AppIdentifierPrefix)" + buildVariant.iOSBundleId };
+        Entitlements["aps-environment"] = buildVariant.ApsEnvironment;
+        Entitlements["keychain-access-groups"] = new List<string>() { "$(AppIdentifierPrefix)" + buildVariant.iOSBundleId };
 
-		Information($"Changed ApsEnvironment name to {buildVariant.ApsEnvironment}");
-		Information($"Changed keychain-access-groups bundleID to {buildVariant.iOSBundleId}");
+        Information($"Changed ApsEnvironment name to {buildVariant.ApsEnvironment}");
+        Information($"Changed keychain-access-groups bundleID to {buildVariant.iOSBundleId}");
 
-		SerializePlist(EntitlementlistFile, Entitlements);
+        SerializePlist(EntitlementlistFile, Entitlements);
 
         Information($"{entitlementsPath} updated with success!");
 }
 
 Task("UpdateiOSIcon")
-	.Does(()=>{
-		//TODO
-		Information($"Updating IOS App Icon");
-	});
+    .Does(()=>{
+        //TODO
+        Information($"Updating IOS App Icon");
+    });
 
 Task("UpdateiOSPlist")
-	.IsDependentOn("GetGitInfo")
-	.Does(()=> {
+    .IsDependentOn("GetGitInfo")
+    .Does(()=> {
         var buildVariant = GetVariant();
         var infoPath = Path.Combine(_slnPath, "src", "iOS", "Info.plist");
         var entitlementsPath = Path.Combine(_slnPath, "src", "iOS", "Entitlements.plist");
-		UpdateiOSInfoPlist(infoPath, buildVariant, _gitVersion, iOSProjectType.MainApp);
+        UpdateiOSInfoPlist(infoPath, buildVariant, _gitVersion, iOSProjectType.MainApp);
         UpdateiOSEntitlementsPlist(entitlementsPath, buildVariant);
-	});
+    });
 
 Task("UpdateiOSAutofillPlist")
-	.IsDependentOn("GetGitInfo")
-	.IsDependentOn("UpdateiOSPlist")
-	.Does(()=> {
+    .IsDependentOn("GetGitInfo")
+    .IsDependentOn("UpdateiOSPlist")
+    .Does(()=> {
         var buildVariant = GetVariant();
         var infoPath = Path.Combine(_slnPath, "src", "iOS.Autofill", "Info.plist");
         var entitlementsPath = Path.Combine(_slnPath, "src", "iOS.Autofill", "Entitlements.plist");
-		UpdateiOSInfoPlist(infoPath, buildVariant, _gitVersion, iOSProjectType.Autofill);
+        UpdateiOSInfoPlist(infoPath, buildVariant, _gitVersion, iOSProjectType.Autofill);
         UpdateiOSEntitlementsPlist(entitlementsPath, buildVariant);
-	});
+    });
 
 Task("UpdateiOSExtensionPlist")
-	.IsDependentOn("GetGitInfo")
-	.IsDependentOn("UpdateiOSPlist")
-	.Does(()=> {
+    .IsDependentOn("GetGitInfo")
+    .IsDependentOn("UpdateiOSPlist")
+    .Does(()=> {
         var buildVariant = GetVariant();
         var infoPath = Path.Combine(_slnPath, "src", "iOS.Extension", "Info.plist");
         var entitlementsPath = Path.Combine(_slnPath, "src", "iOS.Extension", "Entitlements.plist");
-		UpdateiOSInfoPlist(infoPath, buildVariant, _gitVersion, iOSProjectType.Extension);
+        UpdateiOSInfoPlist(infoPath, buildVariant, _gitVersion, iOSProjectType.Extension);
         UpdateiOSEntitlementsPlist(entitlementsPath, buildVariant);
-	});
+    });
 
 Task("UpdateiOSShareExtensionPlist")
-	.IsDependentOn("GetGitInfo")
-	.IsDependentOn("UpdateiOSPlist")
-	.Does(()=> {
+    .IsDependentOn("GetGitInfo")
+    .IsDependentOn("UpdateiOSPlist")
+    .Does(()=> {
         var buildVariant = GetVariant();
         var infoPath = Path.Combine(_slnPath, "src", "iOS.ShareExtension", "Info.plist");
         var entitlementsPath = Path.Combine(_slnPath, "src", "iOS.ShareExtension", "Entitlements.plist");
-		UpdateiOSInfoPlist(infoPath, buildVariant, _gitVersion, iOSProjectType.ShareExtension);
+        UpdateiOSInfoPlist(infoPath, buildVariant, _gitVersion, iOSProjectType.ShareExtension);
         UpdateiOSEntitlementsPlist(entitlementsPath, buildVariant);
-	});
+    });
 
 Task("UpdateiOSCodeFiles")
-	.IsDependentOn("UpdateiOSPlist")
-	.Does(()=> {
+    .IsDependentOn("UpdateiOSPlist")
+    .Does(()=> {
         var buildVariant = GetVariant();
         var filePath = Path.Combine(_slnPath, "src", "iOS.Core", "Utilities", "iOSCoreHelpers.cs");
         var fileText = FileReadText(filePath);
@@ -244,35 +244,35 @@ Task("UpdateiOSCodeFiles")
         fileText = fileText.Replace(iOSBundleId, buildVariant.iOSBundleId);
 
         FileWriteText(filePath, fileText);
-		Information($"iOSCoreHelpers.cs modified successfully.");		
-	});
+        Information($"iOSCoreHelpers.cs modified successfully.");		
+    });
 #endregion iOS
 
 #region Main Tasks
 Task("Android")
-	//.IsDependentOn("UpdateAndroidAppIcon")
-	.IsDependentOn("UpdateAndroidManifest")
-	.IsDependentOn("UpdateAndroidCodeFiles")
-	.Does(()=>
-	{
-		Information("Android app updated");
-	});
+    //.IsDependentOn("UpdateAndroidAppIcon")
+    .IsDependentOn("UpdateAndroidManifest")
+    .IsDependentOn("UpdateAndroidCodeFiles")
+    .Does(()=>
+    {
+        Information("Android app updated");
+    });
 
 Task("iOS")
-	//.IsDependentOn("UpdateiOSIcon")
+    //.IsDependentOn("UpdateiOSIcon")
     .IsDependentOn("UpdateiOSPlist")
     .IsDependentOn("UpdateiOSAutofillPlist")
     .IsDependentOn("UpdateiOSExtensionPlist")
     .IsDependentOn("UpdateiOSShareExtensionPlist")
     .IsDependentOn("UpdateiOSCodeFiles")
     .Does(()=>
-	{
-		Information("iOS app updated");
-	});
+    {
+        Information("iOS app updated");
+    });
 
 Task("Default")
-	.Does(() => {
-		var usage = @"Missing target.
+    .Does(() => {
+        var usage = @"Missing target.
 
 Usage:
   dotnet cake build.cake --target (Android | iOS) --variant (dev | qa | beta | prod)
@@ -280,8 +280,8 @@ Usage:
 Options:
  --debugScript=<bool> Script debug mode.	
 ";
-		Information(usage);
-	});
+        Information(usage);
+    });
 #endregion Main Tasks
 
 RunTarget(target);
