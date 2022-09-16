@@ -29,7 +29,6 @@
         public static string EventCollectionKey = "eventCollection";
         public static string RememberedEmailKey = "rememberedEmail";
         public static string RememberedOrgIdentifierKey = "rememberedOrgIdentifier";
-        public const string FingerprintPhraseSeparator = "-";
         public const string PasswordlessNotificationId = "26072022";
         public const string AndroidNotificationChannelId = "general_notification_channel";
         public const int SelectFileRequestCode = 42;

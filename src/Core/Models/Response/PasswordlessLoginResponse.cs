@@ -14,5 +14,6 @@ namespace Bit.Core.Models.Response
         public string MasterPasswordHash { get; set; }
         public DateTime CreationDate { get; set; }
         public bool RequestApproved { get; set; }
+        public string Origin { get; set; }
     }
 }
