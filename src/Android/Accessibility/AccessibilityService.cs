@@ -15,7 +15,7 @@ using Bit.Core.Utilities;
 
 namespace Bit.Droid.Accessibility
 {
-    [Service(Permission = Android.Manifest.Permission.BindAccessibilityService, Label = "Bitwarden")]
+    [Service(Permission = Android.Manifest.Permission.BindAccessibilityService, Label = "Bitwarden", Exported = true)]
     [IntentFilter(new string[] { "android.accessibilityservice.AccessibilityService" })]
     [MetaData("android.accessibilityservice", Resource = "@xml/accessibilityservice")]
     [Register("com.x8bit.bitwarden.Accessibility.AccessibilityService")]

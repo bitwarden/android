@@ -14,7 +14,7 @@ using Java.Lang;
 
 namespace Bit.Droid.Tile
 {
-    [Service(Permission = Android.Manifest.Permission.BindQuickSettingsTile, Label = "@string/PasswordGenerator",
+    [Service(Permission = Android.Manifest.Permission.BindQuickSettingsTile, Exported = true, Label = "@string/PasswordGenerator",
         Icon = "@drawable/generate")]
     [IntentFilter(new string[] { ActionQsTile })]
     [Register("com.x8bit.bitwarden.GeneratorTileService")]

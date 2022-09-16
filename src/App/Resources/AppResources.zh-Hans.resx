@@ -222,7 +222,7 @@
     <value>文件夹已删除。</value>
   </data>
   <data name="FolderNone" xml:space="preserve">
-    <value>默认文件夹</value>
+    <value>无文件夹</value>
     <comment>Items that have no folder specified go in this special "catch-all" folder.</comment>
   </data>
   <data name="Folders" xml:space="preserve">

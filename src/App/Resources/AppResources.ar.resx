@@ -2315,44 +2315,44 @@
     <value>هل أنت متأكد من أنك تريد تمكين التقاط الشاشة؟</value>
   </data>
   <data name="PasswordType" xml:space="preserve">
-    <value>Password Type</value>
+    <value>نوع كلمة المرور</value>
   </data>
   <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
-    <value>What would you like to generate?</value>
+    <value>ما الذي ترغب في توليده؟</value>
   </data>
   <data name="UsernameType" xml:space="preserve">
-    <value>Username Type</value>
+    <value>نوع اسم المستخدم</value>
   </data>
   <data name="PlusAddressedEmail" xml:space="preserve">
-    <value>Plus Addressed Email</value>
+    <value>بريد إلكتروني موجه أكثر</value>
   </data>
   <data name="CatchAllEmail" xml:space="preserve">
-    <value>Catch-all Email</value>
+    <value>تجميع كل البريد</value>
   </data>
   <data name="ForwardedEmailAlias" xml:space="preserve">
-    <value>Forwarded Email Alias</value>
+    <value>إعادة توجيه الاسم المستعار للبريد الإلكتروني</value>
   </data>
   <data name="RandomWord" xml:space="preserve">
-    <value>Random Word</value>
+    <value>كلمة عشوائية</value>
   </data>
   <data name="EmailRequiredParenthesis" xml:space="preserve">
-    <value>Email (required)</value>
+    <value>البريد الإلكتروني (مطلوب)</value>
   </data>
   <data name="DomainNameRequiredParenthesis" xml:space="preserve">
-    <value>Domain Name (required)</value>
+    <value>اسم المجال (مطلوب)</value>
   </data>
   <data name="APIKeyRequiredParenthesis" xml:space="preserve">
-    <value>API Key (required)</value>
+    <value>مفتاح API (مطلوب)</value>
   </data>
   <data name="Service" xml:space="preserve">
-    <value>Service</value>
+    <value>الخدمة</value>
   </data>
   <data name="AnonAddy" xml:space="preserve">
     <value>AnonAddy</value>
     <comment>"AnonAddy" is the product name and should not be translated.</comment>
   </data>
   <data name="FirefoxRelay" xml:space="preserve">
-    <value>Firefox Relay</value>
+    <value>FirefoxRelay</value>
     <comment>"Firefox Relay" is the product name and should not be translated.</comment>
   </data>
   <data name="SimpleLogin" xml:space="preserve">
@@ -2360,33 +2360,33 @@
     <comment>"SimpleLogin" is the product name and should not be translated.</comment>
   </data>
   <data name="APIAccessToken" xml:space="preserve">
-    <value>API Access Token</value>
+    <value>رمز الوصول API</value>
   </data>
   <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
-    <value>Are you sure you want to overwrite the current username?</value>
+    <value>هل أنت متأكد من أنك تريد الكتابة فوق اسم المستخدم الحالي؟</value>
   </data>
   <data name="GenerateUsername" xml:space="preserve">
-    <value>Generate Username</value>
+    <value>إنشاء اسم المستخدم</value>
   </data>
   <data name="EmailType" xml:space="preserve">
-    <value>Email Type</value>
+    <value>نوع البريد الإلكتروني</value>
   </data>
   <data name="WebsiteRequired" xml:space="preserve">
-    <value>Website (required)</value>
+    <value>الموقع (مطلوب)</value>
   </data>
   <data name="UnknownXErrorMessage" xml:space="preserve">
-    <value>Unknown {0} error occurred.</value>
+    <value>حدث خطأ {0} غير معروف.</value>
   </data>
   <data name="PlusAddressedEmailDescription" xml:space="preserve">
-    <value>Use your email provider's subaddress capabilities</value>
+    <value>استخدم قدرات العنوان الفرعي لمقدم البريد الإلكتروني الخاص بك</value>
   </data>
   <data name="CatchAllEmailDescription" xml:space="preserve">
-    <value>Use your domain's configured catch-all inbox.</value>
+    <value>استخدم علبة البريد الإلكتروني الشاملة التي تم تكوينها في نطاقك.</value>
   </data>
   <data name="ForwardedEmailDescription" xml:space="preserve">
-    <value>Generate an email alias with an external forwarding service.</value>
+    <value>إنشاء بريد إلكتروني مستعار مع خدمة إعادة توجيه خارجية.</value>
   </data>
   <data name="Random" xml:space="preserve">
-    <value>Random</value>
+    <value>عشوائي</value>
   </data>
 </root>
