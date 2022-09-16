@@ -18,7 +18,7 @@ namespace Bit.App.Pages
     public class AttachmentsPageViewModel : BaseViewModel
     {
         private readonly IDeviceActionService _deviceActionService;
-        private readonly IFileService _fileService;        
+        private readonly IFileService _fileService;
         private readonly ICipherService _cipherService;
         private readonly ICryptoService _cryptoService;
         private readonly IStateService _stateService;

@@ -20,7 +20,7 @@ namespace Bit.App.Pages
         private readonly ICryptoService _cryptoService;
         private readonly IStateService _stateService;
         private readonly IDeviceActionService _deviceActionService;
-        private readonly IAutofillHandler _autofillHandler;        
+        private readonly IAutofillHandler _autofillHandler;
         private readonly IEnvironmentService _environmentService;
         private readonly IMessagingService _messagingService;
         private readonly IVaultTimeoutService _vaultTimeoutService;
@@ -74,7 +74,7 @@ namespace Bit.App.Pages
             _cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
-            _autofillHandler = ServiceContainer.Resolve<IAutofillHandler>();            
+            _autofillHandler = ServiceContainer.Resolve<IAutofillHandler>();
             _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _vaultTimeoutService = ServiceContainer.Resolve<IVaultTimeoutService>("vaultTimeoutService");

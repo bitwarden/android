@@ -29,7 +29,7 @@ namespace Bit.App
         private readonly IAuthService _authService;
         private readonly IStorageService _secureStorageService;
         private readonly IDeviceActionService _deviceActionService;
-        private readonly IFileService _fileService;        
+        private readonly IFileService _fileService;
         private readonly IAccountsManager _accountsManager;
 
         private static bool _isResumed;
