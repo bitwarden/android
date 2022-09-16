@@ -32,7 +32,7 @@ VariantConfig GetVariant() => variant switch{
 GitVersion _gitVersion; //will be set by GetGitInfo task
 var _slnPath = Path.Combine(""); //base path used to access files
 string _iOSMainBundleId = string.Empty; //will be set by UpdateiOSPlist task
-
+string _androidPackageName = string.Empty; //will be set by UpdateAndroidManifest task
 string CreateFeatureBranch(string prevVersionName, GitVersion git) => $"{prevVersionName}-{git.BranchName.Replace("/","-")}";
 string GetVersionName(string prevVersionName, VariantConfig buildVariant, GitVersion git) => buildVariant is Prod? prevVersionName : CreateFeatureBranch(prevVersionName, git); 
 int CreateBuildNumber(int previousNumber) => ++previousNumber; //TODO
@@ -74,6 +74,7 @@ Task("UpdateAndroidManifest")
 
 		var prevVersionCode = manifest.VersionCode;
 		var prevVersionName = manifest.VersionName;
+        _androidPackageName = manifest.PackageName;
 
 		manifest.VersionCode = CreateBuildNumber(prevVersionCode);
 		manifest.VersionName = GetVersionName(prevVersionName, buildVariant, _gitVersion);
@@ -82,11 +83,33 @@ Task("UpdateAndroidManifest")
 
 		Information($"AndroidManigest.xml VersionCode from {prevVersionCode} to {manifest.VersionCode}");
 		Information($"AndroidManigest.xml VersionName from {prevVersionName} to {manifest.VersionName}");
-		Information($"AndroidManigest.xml PackageName {buildVariant.AndroidPackageName}");
+		Information($"AndroidManigest.xml PackageName from {_androidPackageName} to {buildVariant.AndroidPackageName}");
 		Information($"AndroidManigest.xml ApplicationLabel to {buildVariant.AppName}");
 	
     	SerializeAppManifest(manifestPath, manifest);
 		Information("AndroidManifest updated with success!");
+	});
+
+Task("UpdateAndroidCodeFiles")
+	.IsDependentOn("UpdateAndroidManifest")
+	.Does(()=> {
+        var buildVariant = GetVariant();
+        var filePath = Path.Combine(_slnPath, "src", "Android", "Services", "BiometricService.cs");
+
+        var fileText = FileReadText(filePath);
+
+        //We're not using _androidPackageName here because the codefile is currently slightly different string than the one in AndroidManifest.xml
+        var keyName = "com.8bit.bitwarden";
+
+        if(string.IsNullOrEmpty(fileText) || !fileText.Contains(keyName))
+        {
+            throw new Exception($"Couldn't find {filePath} or it didn't contain: {keyName}");
+        }
+
+        fileText = fileText.Replace(keyName, buildVariant.AndroidPackageName);
+
+        FileWriteText(filePath, fileText);
+		Information($"BiometricService.cs modified successfully.");		
 	});
 
 //iOS
@@ -195,11 +218,26 @@ Task("UpdateiOSShareExtensionPlist")
         UpdateiOSEntitlementsPlist(entitlementsPath, buildVariant);
 	});
 
+Task("UpdateiOSCodeFiles")
+	.IsDependentOn("UpdateiOSPlist")
+	.Does(()=> {
+        var buildVariant = GetVariant();
+        var filePath = Path.Combine(_slnPath, "src", "iOS.Core", "Utilities", "iOSCoreHelpers.cs");
+
+        var fileText = FileReadText(filePath);
+
+        fileText = fileText.Replace(_iOSMainBundleId, buildVariant.iOSBundleId);
+
+        FileWriteText(filePath, fileText);
+		Information($"iOSCoreHelpers.cs modified successfully.");		
+	});
+
 /// Main Tasks
 Task("Android")
 	.IsDependentOn("UpdateAndroidAppIcon")
 	.IsDependentOn("UpdateAndroidGoogleServices")
 	.IsDependentOn("UpdateAndroidManifest")
+	.IsDependentOn("UpdateAndroidCodeFiles")
 	.Does(()=>
 	{
 		Information("Android app updated");
@@ -211,6 +249,7 @@ Task("iOS")
     .IsDependentOn("UpdateiOSAutofillPlist")
     .IsDependentOn("UpdateiOSExtensionPlist")
     .IsDependentOn("UpdateiOSShareExtensionPlist")
+    .IsDependentOn("UpdateiOSCodeFiles")
     .Does(()=>
 	{
 		Information("iOS app updated");
