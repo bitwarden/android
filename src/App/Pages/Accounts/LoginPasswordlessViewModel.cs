@@ -43,11 +43,13 @@ namespace Bit.App.Pages
 
         public ICommand RejectRequestCommand { get; }
 
-        public string LogInAttemptByLabel => string.Format(AppResources.LogInAttemptByXOnY, LoginRequest?.Email, LoginRequest?.Origin);
+        public string LogInAttemptByLabel => hasEmailAndOrigin ? string.Format(AppResources.LogInAttemptByXOnY, LoginRequest.Email, LoginRequest.Origin) : string.Empty;
 
         public string TimeOfRequestText => CreateRequestDate(LoginRequest?.RequestDate);
 
         public bool ShowIpAddress => !string.IsNullOrEmpty(LoginRequest?.IpAddress);
+
+        private bool hasEmailAndOrigin => LoginRequest != null && !string.IsNullOrEmpty(LoginRequest.Email) && !string.IsNullOrEmpty(LoginRequest.Origin);
 
         public LoginPasswordlessDetails LoginRequest
         {
@@ -76,7 +78,7 @@ namespace Bit.App.Pages
         {
             if (!requestDate.HasValue)
             {
-                return String.Empty;
+                return string.Empty;
             }
 
             var minutesSinceRequest = requestDate.Value.ToUniversalTime().Minute - DateTime.UtcNow.Minute;

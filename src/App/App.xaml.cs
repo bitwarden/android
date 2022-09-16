@@ -31,6 +31,7 @@ namespace Bit.App
         private readonly IAccountsManager _accountsManager;
         private readonly IPushNotificationService _pushNotificationService;
         private static bool _isResumed;
+        private static bool _pendingCheckPasswordlessLoginRequests;
 
         public App(AppOptions appOptions)
         {
@@ -152,16 +153,18 @@ namespace Bit.App
 
         private async Task CheckPasswordlessLoginRequestsAsync()
         {
+            if (!_isResumed)
+            {
+                _pendingCheckPasswordlessLoginRequests = true;
+                return;
+            }
+
+            _pendingCheckPasswordlessLoginRequests = false;
             if (await _vaultTimeoutService.IsLockedAsync())
             {
                 return;
             }
 
-            // Wait for the app to be in the foreground to show the pop up modal
-            while (!_isResumed)
-            {
-                await Task.Delay(500);
-            }
 
             var notification = await _stateService.GetPasswordlessLoginNotificationAsync();
             if (notification == null)
@@ -205,6 +208,10 @@ namespace Bit.App
                     SyncIfNeeded();
                 }
             }
+            if (_pendingCheckPasswordlessLoginRequests)
+            {
+                CheckPasswordlessLoginRequestsAsync().FireAndForget();
+            }
             if (Device.RuntimePlatform == Device.Android)
             {
                 await _vaultTimeoutService.CheckVaultTimeoutAsync();
@@ -237,6 +244,10 @@ namespace Bit.App
         {
             System.Diagnostics.Debug.WriteLine("XF App: OnResume");
             _isResumed = true;
+            if (_pendingCheckPasswordlessLoginRequests)
+            {
+                CheckPasswordlessLoginRequestsAsync().FireAndForget();
+            }
             if (Device.RuntimePlatform == Device.Android)
             {
                 ResumedAsync().FireAndForget();
