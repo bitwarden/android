@@ -43,13 +43,11 @@ namespace Bit.App.Pages
 
         public ICommand RejectRequestCommand { get; }
 
-        public string LogInAttemptByLabel => hasEmailAndOrigin ? string.Format(AppResources.LogInAttemptByXOnY, LoginRequest.Email, LoginRequest.Origin) : string.Empty;
+        public string LogInAttemptByLabel => LoginRequest != null ? string.Format(AppResources.LogInAttemptByXOnY, LoginRequest.Email, LoginRequest.Origin) : string.Empty;
 
         public string TimeOfRequestText => CreateRequestDate(LoginRequest?.RequestDate);
 
         public bool ShowIpAddress => !string.IsNullOrEmpty(LoginRequest?.IpAddress);
-
-        private bool hasEmailAndOrigin => LoginRequest != null && !string.IsNullOrEmpty(LoginRequest.Email) && !string.IsNullOrEmpty(LoginRequest.Origin);
 
         public LoginPasswordlessDetails LoginRequest
         {
