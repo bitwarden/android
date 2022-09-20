@@ -116,7 +116,7 @@ Task("UpdateAndroidCodeFiles")
         var filePath = Path.Combine(_slnPath, "src", "Android", "Services", "BiometricService.cs");
         ReplaceInFile(filePath, keyName, fixedPackageName);
 
-        var fileList = new string[] {
+        var packageFileList = new string[] {
             Path.Combine(_slnPath, "src", "Android", "MainActivity.cs"),
             Path.Combine(_slnPath, "src", "Android", "MainApplication.cs"),
             Path.Combine(_slnPath, "src", "Android", "Accessibility", "AccessibilityService.cs"),
@@ -133,9 +133,18 @@ Task("UpdateAndroidCodeFiles")
             Path.Combine(_slnPath, "store", "google", "Publisher", "Program.cs"),
         };
 
-        foreach(string path in fileList)
+        foreach(string path in packageFileList)
         {
             ReplaceInFile(path, "com.x8bit.bitwarden", buildVariant.AndroidPackageName);
+        }
+
+        var labelFileList = new string[] {
+            Path.Combine(_slnPath, "src", "Android", "Autofill", "AutofillService.cs"),
+        };
+
+        foreach(string path in labelFileList)
+        {
+            ReplaceInFile(path, "Bitwarden\"", $"{buildVariant.AppName}\"");
         }
     });
 #endregion Android
