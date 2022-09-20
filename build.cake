@@ -130,6 +130,7 @@ Task("UpdateAndroidCodeFiles")
             Path.Combine(_slnPath, "src", "Android", "Tiles", "AutofillTileService.cs"),
             Path.Combine(_slnPath, "src", "Android", "Tiles", "GeneratorTileService.cs"),
             Path.Combine(_slnPath, "src", "Android", "Tiles", "MyVaultTileService.cs"),
+            Path.Combine(_slnPath, "src", "Android", "google-services.json"),
             Path.Combine(_slnPath, "store", "google", "Publisher", "Program.cs"),
         };
 
