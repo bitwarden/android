@@ -17,9 +17,9 @@ abstract record VariantConfig(
     string ApsEnvironment
     );
 
-record Dev(): VariantConfig("Bitwarden Dev", "com.x8bit.bitwarden-dev", "com.8bit.bitwarden-dev", "development");
-record QA(): VariantConfig("Bitwarden QA", "com.x8bit.bitwarden-qa", "com.8bit.bitwarden-qa", "development");
-record Beta(): VariantConfig("Bitwarden Beta", "com.x8bit.bitwarden-beta", "com.8bit.bitwarden-beta", "production");
+record Dev(): VariantConfig("Bitwarden Dev", "com.x8bit.bitwarden.dev", "com.8bit.bitwarden.dev", "development");
+record QA(): VariantConfig("Bitwarden QA", "com.x8bit.bitwarden.qa", "com.8bit.bitwarden.qa", "development");
+record Beta(): VariantConfig("Bitwarden Beta", "com.x8bit.bitwarden.beta", "com.8bit.bitwarden.beta", "production");
 record Prod(): VariantConfig("Bitwarden", "com.x8bit.bitwarden", "com.8bit.bitwarden", "production");
 
 VariantConfig GetVariant() => variant.ToLower() switch{
