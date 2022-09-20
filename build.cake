@@ -63,47 +63,80 @@ Task("UpdateAndroidManifest")
     {
         var buildVariant = GetVariant();
         var manifestPath = Path.Combine(_slnPath, "src", "Android", "Properties", "AndroidManifest.xml");
-         var manifest = DeserializeAppManifest(manifestPath);
+        var manifest = DeserializeAppManifest(manifestPath);
 
         var prevVersionCode = manifest.VersionCode;
         var prevVersionName = manifest.VersionName;
         _androidPackageName = manifest.PackageName;
 
-        manifest.VersionCode = CreateBuildNumber(prevVersionCode);
+        //manifest.VersionCode = CreateBuildNumber(prevVersionCode);
         manifest.VersionName = GetVersionName(prevVersionName, buildVariant, _gitVersion);
         manifest.PackageName = buildVariant.AndroidPackageName;
         manifest.ApplicationLabel = buildVariant.AppName;
 
-        Information($"AndroidManigest.xml VersionCode from {prevVersionCode} to {manifest.VersionCode}");
+        //Information($"AndroidManigest.xml VersionCode from {prevVersionCode} to {manifest.VersionCode}");
         Information($"AndroidManigest.xml VersionName from {prevVersionName} to {manifest.VersionName}");
         Information($"AndroidManigest.xml PackageName from {_androidPackageName} to {buildVariant.AndroidPackageName}");
         Information($"AndroidManigest.xml ApplicationLabel to {buildVariant.AppName}");
     
         SerializeAppManifest(manifestPath, manifest);
+
+        // Cake.AndroidAppManifest doesn't currently enable us to access nested items so, quick (not ideal) fix:
+        var manifestText = FileReadText(manifestPath);
+        manifestText = manifestText.Replace("com.x8bit.bitwarden.", buildVariant.AndroidPackageName + ".");
+        manifestText = manifestText.Replace("android:label=\"Bitwarden\"", $"android:label=\"{buildVariant.AppName}\"");
+        FileWriteText(manifestPath, manifestText);
+        
         Information("AndroidManifest updated with success!");
     });
+
+void ReplaceInFile(string filePath, string oldtext, string newtext)
+{
+    var fileText = FileReadText(filePath);
+
+    if(string.IsNullOrEmpty(fileText) || !fileText.Contains(oldtext))
+    {
+        throw new Exception($"Couldn't find {filePath} or it didn't contain: {oldtext}");
+    }
+
+    fileText = fileText.Replace(oldtext, newtext);
+
+    FileWriteText(filePath, fileText);
+    Information($"{filePath} modified successfully.");		
+}
 
 Task("UpdateAndroidCodeFiles")
     .IsDependentOn("UpdateAndroidManifest")
     .Does(()=> {
         var buildVariant = GetVariant();
-        var filePath = Path.Combine(_slnPath, "src", "Android", "Services", "BiometricService.cs");
-
-        var fileText = FileReadText(filePath);
 
         //We're not using _androidPackageName here because the codefile is currently slightly different string than the one in AndroidManifest.xml
         var keyName = "com.8bit.bitwarden";
         var fixedPackageName = buildVariant.AndroidPackageName.Replace("x8bit", "8bit");
+        var filePath = Path.Combine(_slnPath, "src", "Android", "Services", "BiometricService.cs");
+        ReplaceInFile(filePath, keyName, fixedPackageName);
 
-        if(string.IsNullOrEmpty(fileText) || !fileText.Contains(keyName))
+        var fileList = new string[] {
+            Path.Combine(_slnPath, "src", "Android", "MainActivity.cs"),
+            Path.Combine(_slnPath, "src", "Android", "MainApplication.cs"),
+            Path.Combine(_slnPath, "src", "Android", "Accessibility", "AccessibilityService.cs"),
+            Path.Combine(_slnPath, "src", "Android", "Autofill", "AutofillHelpers.cs"),
+            Path.Combine(_slnPath, "src", "Android", "Autofill", "AutofillService.cs"),
+            Path.Combine(_slnPath, "src", "Android", "Receivers", "ClearClipboardAlarmReceiver.cs"),
+            Path.Combine(_slnPath, "src", "Android", "Receivers", "EventUploadReceiver.cs"),
+            Path.Combine(_slnPath, "src", "Android", "Receivers", "PackageReplacedReceiver.cs"),
+            Path.Combine(_slnPath, "src", "Android", "Receivers", "RestrictionsChangedReceiver.cs"),
+            Path.Combine(_slnPath, "src", "Android", "Services", "DeviceActionService.cs"),
+            Path.Combine(_slnPath, "src", "Android", "Tiles", "AutofillTileService.cs"),
+            Path.Combine(_slnPath, "src", "Android", "Tiles", "GeneratorTileService.cs"),
+            Path.Combine(_slnPath, "src", "Android", "Tiles", "MyVaultTileService.cs"),
+            Path.Combine(_slnPath, "store", "google", "Publisher", "Program.cs"),
+        };
+
+        foreach(string path in fileList)
         {
-            throw new Exception($"Couldn't find {filePath} or it didn't contain: {keyName}");
+            ReplaceInFile(path, "com.x8bit.bitwarden", buildVariant.AndroidPackageName);
         }
-
-        fileText = fileText.Replace(keyName, fixedPackageName);
-
-        FileWriteText(filePath, fileText);
-        Information($"BiometricService.cs modified successfully.");		
     });
 #endregion Android
 
@@ -165,18 +198,18 @@ private void UpdateiOSInfoPlist(string plistPath, VariantConfig buildVariant, Gi
 
 private void UpdateiOSEntitlementsPlist(string entitlementsPath, VariantConfig buildVariant)
 {
-        var EntitlementlistFile = File(entitlementsPath);
-        dynamic Entitlements = DeserializePlist(EntitlementlistFile);
+    var EntitlementlistFile = File(entitlementsPath);
+    dynamic Entitlements = DeserializePlist(EntitlementlistFile);
 
-        Entitlements["aps-environment"] = buildVariant.ApsEnvironment;
-        Entitlements["keychain-access-groups"] = new List<string>() { "$(AppIdentifierPrefix)" + buildVariant.iOSBundleId };
+    Entitlements["aps-environment"] = buildVariant.ApsEnvironment;
+    Entitlements["keychain-access-groups"] = new List<string>() { "$(AppIdentifierPrefix)" + buildVariant.iOSBundleId };
 
-        Information($"Changed ApsEnvironment name to {buildVariant.ApsEnvironment}");
-        Information($"Changed keychain-access-groups bundleID to {buildVariant.iOSBundleId}");
+    Information($"Changed ApsEnvironment name to {buildVariant.ApsEnvironment}");
+    Information($"Changed keychain-access-groups bundleID to {buildVariant.iOSBundleId}");
 
-        SerializePlist(EntitlementlistFile, Entitlements);
+    SerializePlist(EntitlementlistFile, Entitlements);
 
-        Information($"{entitlementsPath} updated with success!");
+    Information($"{entitlementsPath} updated with success!");
 }
 
 Task("UpdateiOSIcon")
