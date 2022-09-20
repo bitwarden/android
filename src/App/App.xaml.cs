@@ -31,6 +31,7 @@ namespace Bit.App
         private readonly IAccountsManager _accountsManager;
         private readonly IPushNotificationService _pushNotificationService;
         private static bool _isResumed;
+        // this variable is static because the app is launching new activities on notification click, creating new instances of App. 
         private static bool _pendingCheckPasswordlessLoginRequests;
 
         public App(AppOptions appOptions)
