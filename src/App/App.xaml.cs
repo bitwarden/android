@@ -7,6 +7,7 @@ using Bit.App.Resources;
 using Bit.App.Services;
 using Bit.App.Utilities;
 using Bit.App.Utilities.AccountManagement;
+using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Data;
@@ -28,8 +29,10 @@ namespace Bit.App
         private readonly IAuthService _authService;
         private readonly IDeviceActionService _deviceActionService;
         private readonly IAccountsManager _accountsManager;
-
+        private readonly IPushNotificationService _pushNotificationService;
         private static bool _isResumed;
+        // this variable is static because the app is launching new activities on notification click, creating new instances of App. 
+        private static bool _pendingCheckPasswordlessLoginRequests;
 
         public App(AppOptions appOptions)
         {
@@ -47,6 +50,7 @@ namespace Bit.App
             _authService = ServiceContainer.Resolve<IAuthService>("authService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _accountsManager = ServiceContainer.Resolve<IAccountsManager>("accountsManager");
+            _pushNotificationService = ServiceContainer.Resolve<IPushNotificationService>();
 
             _accountsManager.Init(() => Options, this);
 
@@ -150,10 +154,18 @@ namespace Bit.App
 
         private async Task CheckPasswordlessLoginRequestsAsync()
         {
+            if (!_isResumed)
+            {
+                _pendingCheckPasswordlessLoginRequests = true;
+                return;
+            }
+
+            _pendingCheckPasswordlessLoginRequests = false;
             if (await _vaultTimeoutService.IsLockedAsync())
             {
                 return;
             }
+
 
             var notification = await _stateService.GetPasswordlessLoginNotificationAsync();
             if (notification == null)
@@ -172,9 +184,11 @@ namespace Bit.App
                 Email = await _stateService.GetEmailAsync(),
                 FingerprintPhrase = loginRequestData.RequestFingerprint,
                 RequestDate = loginRequestData.CreationDate,
-                DeviceType = loginRequestData.RequestDeviceType
+                DeviceType = loginRequestData.RequestDeviceType,
+                Origin = loginRequestData.Origin,
             });
             await _stateService.SetPasswordlessLoginNotificationAsync(null);
+            _pushNotificationService.DismissLocalNotification(Constants.PasswordlessNotificationId);
             await Device.InvokeOnMainThreadAsync(async () => await Application.Current.MainPage.Navigation.PushModalAsync(new NavigationPage(page)));
         }
 
@@ -183,6 +197,7 @@ namespace Bit.App
         protected async override void OnStart()
         {
             System.Diagnostics.Debug.WriteLine("XF App: OnStart");
+            _isResumed = true;
             await ClearCacheIfNeededAsync();
             Prime();
             if (string.IsNullOrWhiteSpace(Options.Uri))
@@ -193,6 +208,10 @@ namespace Bit.App
                 {
                     SyncIfNeeded();
                 }
+            }
+            if (_pendingCheckPasswordlessLoginRequests)
+            {
+                CheckPasswordlessLoginRequestsAsync().FireAndForget();
             }
             if (Device.RuntimePlatform == Device.Android)
             {
@@ -226,6 +245,10 @@ namespace Bit.App
         {
             System.Diagnostics.Debug.WriteLine("XF App: OnResume");
             _isResumed = true;
+            if (_pendingCheckPasswordlessLoginRequests)
+            {
+                CheckPasswordlessLoginRequestsAsync().FireAndForget();
+            }
             if (Device.RuntimePlatform == Device.Android)
             {
                 ResumedAsync().FireAndForget();

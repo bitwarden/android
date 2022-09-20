@@ -18,7 +18,6 @@ namespace Bit.App.Pages
     {
         private IDeviceActionService _deviceActionService;
         private IAuthService _authService;
-        private IPushNotificationService _pushNotificationService;
         private IPlatformUtilsService _platformUtilsService;
         private ILogger _logger;
         private LoginPasswordlessDetails _resquest;
@@ -28,7 +27,6 @@ namespace Bit.App.Pages
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _authService = ServiceContainer.Resolve<IAuthService>("authService");
-            _pushNotificationService = ServiceContainer.Resolve<IPushNotificationService>();
             _logger = ServiceContainer.Resolve<ILogger>("logger");
 
             PageTitle = AppResources.LogInRequested;
@@ -45,11 +43,9 @@ namespace Bit.App.Pages
 
         public ICommand RejectRequestCommand { get; }
 
-        public FormattedString FingerprintPhraseFormatted => CreateFingerprintPhrase(LoginRequest.FingerprintPhrase);
+        public string LogInAttemptByLabel => LoginRequest != null ? string.Format(AppResources.LogInAttemptByXOnY, LoginRequest.Email, LoginRequest.Origin) : string.Empty;
 
-        public string LogInAttemptByLabel => string.Format(AppResources.LogInAttemptByXOnY, LoginRequest.Email, LoginRequest.Origin);
-
-        public string TimeOfRequestText => CreateRequestDate(LoginRequest.RequestDate);
+        public string TimeOfRequestText => CreateRequestDate(LoginRequest?.RequestDate);
 
         public bool ShowIpAddress => !string.IsNullOrEmpty(LoginRequest?.IpAddress);
 
@@ -60,40 +56,10 @@ namespace Bit.App.Pages
             {
                 SetProperty(ref _resquest, value, additionalPropertyNames: new string[]
                     {
-                        nameof(FingerprintPhraseFormatted),
                         nameof(LogInAttemptByLabel),
                         nameof(TimeOfRequestText),
+                        nameof(ShowIpAddress),
                     });
-            }
-        }
-
-        private FormattedString CreateFingerprintPhrase(string fingerprintPhrase)
-        {
-            try
-            {
-                return fingerprintPhrase?.Split(new[] { Constants.FingerprintPhraseSeparator }, StringSplitOptions.RemoveEmptyEntries).Aggregate(new FormattedString(), (fs, fingerprint) =>
-                {
-                    if (fs.Spans.Any())
-                    {
-                        fs.Spans.Add(new Span
-                        {
-                            Text = Constants.FingerprintPhraseSeparator,
-                            TextColor = ThemeManager.GetResourceColor("DangerColor")
-                        });
-                    }
-
-                    fs.Spans.Add(new Span
-                    {
-                        Text = fingerprint
-                    });
-
-                    return fs;
-                });
-            }
-            catch (Exception ex)
-            {
-                _logger.Exception(ex);
-                return null;
             }
         }
 
@@ -103,13 +69,17 @@ namespace Bit.App.Pages
             await _authService.PasswordlessLoginAsync(LoginRequest.Id, LoginRequest.PubKey, approveRequest);
             await _deviceActionService.HideLoadingAsync();
             await Page.Navigation.PopModalAsync();
-            _pushNotificationService.DismissLocalNotification(Constants.PasswordlessNotificationId);
             _platformUtilsService.ShowToast("info", null, approveRequest ? AppResources.LogInAccepted : AppResources.LogInDenied);
         }
 
-        private string CreateRequestDate(DateTime requestDate)
+        private string CreateRequestDate(DateTime? requestDate)
         {
-            var minutesSinceRequest = requestDate.ToUniversalTime().Minute - DateTime.UtcNow.Minute;
+            if (!requestDate.HasValue)
+            {
+                return string.Empty;
+            }
+
+            var minutesSinceRequest = requestDate.Value.ToUniversalTime().Minute - DateTime.UtcNow.Minute;
             if (minutesSinceRequest < 5)
             {
                 return AppResources.JustNow;
@@ -119,7 +89,7 @@ namespace Bit.App.Pages
                 return string.Format(AppResources.XMinutesAgo, minutesSinceRequest);
             }
 
-            return requestDate.ToShortTimeString();
+            return requestDate.Value.ToShortTimeString();
         }
 
         private void HandleException(Exception ex)
@@ -149,7 +119,7 @@ namespace Bit.App.Pages
 
         public DateTime RequestDate { get; set; }
 
-        public DeviceType DeviceType { get; set; }
+        public string DeviceType { get; set; }
 
         public string IpAddress { get; set; }
     }

@@ -2276,19 +2276,19 @@
     <value>Are you sure you want to enable Screen Capture?</value>
   </data>
   <data name="LogInRequested" xml:space="preserve">
-    <value>Log in requested</value>
+    <value>Login requested</value>
   </data>
   <data name="AreYouTryingToLogIn" xml:space="preserve">
     <value>Are you trying to log in?</value>
   </data>
   <data name="LogInAttemptByXOnY" xml:space="preserve">
-    <value>Log in attempt by {0} on {1}</value>
+    <value>Login attempt by {0} on {1}</value>
   </data>
   <data name="DeviceType" xml:space="preserve">
-    <value>Device Type</value>
+    <value>Device type</value>
   </data>
   <data name="IpAddress" xml:space="preserve">
-    <value>IP Address</value>
+    <value>IP address</value>
   </data>
   <data name="Time" xml:space="preserve">
     <value>Time</value>
@@ -2297,22 +2297,22 @@
     <value>Near</value>
   </data>
   <data name="ConfirmLogIn" xml:space="preserve">
-    <value>Confirm Log In</value>
+    <value>Confirm login</value>
   </data>
   <data name="DenyLogIn" xml:space="preserve">
-    <value>Deny Log In</value>
+    <value>Deny login</value>
   </data>
   <data name="JustNow" xml:space="preserve">
-    <value>Just Now</value>
+    <value>Just now</value>
   </data>
   <data name="XMinutesAgo" xml:space="preserve">
     <value>{0} minutes ago</value>
   </data>
   <data name="LogInAccepted" xml:space="preserve">
-    <value>Log in accepted</value>
+    <value>Login confirmed</value>
   </data>
   <data name="LogInDenied" xml:space="preserve">
-    <value>Log in denied</value>
+    <value>Login denied</value>
   </data>
   <data name="ApproveLoginRequests" xml:space="preserve">
     <value>Approve login requests</value>
@@ -2330,7 +2330,7 @@
     <value>No thanks</value>
   </data>
   <data name="ConfimLogInAttempForX" xml:space="preserve">
-    <value>Confirm log in attempt for {0}</value>
+    <value>Confirm login attempt for {0}</value>
   </data>
   <data name="AllNotifications" xml:space="preserve">
     <value>All notifications</value>

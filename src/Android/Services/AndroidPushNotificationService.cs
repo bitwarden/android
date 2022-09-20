@@ -74,7 +74,7 @@ namespace Bit.Droid.Services
             
             var context = Android.App.Application.Context;
             var intent = new Intent(context, typeof(MainActivity));
-            var pendingIntent = PendingIntent.GetActivity(context, 20220801, intent, PendingIntentFlags.OneShot);
+            var pendingIntent = PendingIntent.GetActivity(context, 20220801, intent, PendingIntentFlags.UpdateCurrent);
             var builder = new NotificationCompat.Builder(context, Constants.AndroidNotificationChannelId)
                .SetContentIntent(pendingIntent)
                .SetContentTitle(title)
