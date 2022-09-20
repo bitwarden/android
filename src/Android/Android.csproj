@@ -176,6 +176,7 @@
     <AndroidResource Include="Resources\drawable\cog_settings.xml" />
     <AndroidResource Include="Resources\drawable\icon.xml" />
     <AndroidResource Include="Resources\drawable\ic_launcher_foreground.xml" />
+    <AndroidResource Include="Resources\drawable\ic_launcher_monochrome.xml" />
     <AndroidResource Include="Resources\drawable\ic_warning.xml" />
     <AndroidResource Include="Resources\drawable\id.xml" />
     <AndroidResource Include="Resources\drawable\info.xml" />
