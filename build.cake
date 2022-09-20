@@ -198,7 +198,7 @@ private void UpdateiOSInfoPlist(string plistPath, VariantConfig buildVariant, Gi
 
     if(projectType == iOSProjectType.MainApp)
     {
-        plist["CFBundleURLName"] = $"{buildVariant.iOSBundleId}.url";
+        plist["CFBundleURLTypes"][0]["CFBundleURLName"] = $"{buildVariant.iOSBundleId}.url";
     }
 
     if(projectType == iOSProjectType.Extension)
