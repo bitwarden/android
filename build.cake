@@ -187,6 +187,17 @@ private void UpdateiOSInfoPlist(string plistPath, VariantConfig buildVariant, Gi
     plist["CFBundleShortVersionString"] = newVersionName;
     plist["CFBundleIdentifier"] = newBundleId;
 
+    if(projectType == iOSProjectType.MainApp)
+    {
+        plist["CFBundleURLName"] = $"{buildVariant.iOSBundleId}.url";
+    }
+
+    if(projectType == iOSProjectType.Extension)
+    {
+        var keyText = plist["NSExtension"]["NSExtensionAttributes"]["NSExtensionActivationRule"];
+        plist["NSExtension"]["NSExtensionAttributes"]["NSExtensionActivationRule"] = keyText.Replace("com.8bit.bitwarden", buildVariant.iOSBundleId);
+    }
+
     SerializePlist(plistFile, plist);
 
     Information($"Changed app name from {prevBundleName} to {newBundleName}");
@@ -203,6 +214,7 @@ private void UpdateiOSEntitlementsPlist(string entitlementsPath, VariantConfig b
 
     Entitlements["aps-environment"] = buildVariant.ApsEnvironment;
     Entitlements["keychain-access-groups"] = new List<string>() { "$(AppIdentifierPrefix)" + buildVariant.iOSBundleId };
+    Entitlements["com.apple.security.application-groups"] = new List<string>() { $"group.{buildVariant.iOSBundleId}" };;
 
     Information($"Changed ApsEnvironment name to {buildVariant.ApsEnvironment}");
     Information($"Changed keychain-access-groups bundleID to {buildVariant.iOSBundleId}");
@@ -265,19 +277,17 @@ Task("UpdateiOSCodeFiles")
     .IsDependentOn("UpdateiOSPlist")
     .Does(()=> {
         var buildVariant = GetVariant();
-        var filePath = Path.Combine(_slnPath, "src", "iOS.Core", "Utilities", "iOSCoreHelpers.cs");
-        var fileText = FileReadText(filePath);
+        var fileList = new string[] {
+            Path.Combine(_slnPath, "src", "iOS.Core", "Utilities", "iOSCoreHelpers.cs"),
+            Path.Combine(_slnPath, "src", "iOS.Core", "Constants.cs"),
+            Path.Combine(".github", "resources", "export-options-ad-hoc.plist"),
+            Path.Combine(".github", "resources", "export-options-app-store.plist"),
+        };
 
-        var iOSBundleId = "com.8bit.bitwarden";
-        if(!fileText.Contains(iOSBundleId))
+        foreach(string path in fileList)
         {
-            throw new Exception($"{filePath} doesn't contain {iOSBundleId}");
+            ReplaceInFile(path, "com.8bit.bitwarden", buildVariant.iOSBundleId);
         }
-
-        fileText = fileText.Replace(iOSBundleId, buildVariant.iOSBundleId);
-
-        FileWriteText(filePath, fileText);
-        Information($"iOSCoreHelpers.cs modified successfully.");		
     });
 #endregion iOS
 
