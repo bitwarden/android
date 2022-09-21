@@ -144,6 +144,18 @@ jobs:
       - name: Build Play Store publisher
         run: dotnet build ./store/google/Publisher/Publisher.csproj -p:Configuration=Release
 
+      - name: Setup Android build config (qa)
+        run: dotnet cake build.cake --target Android --variant qa
+
+      - name: Setup Android build config (prod)
+        if: |
+          (github.ref == 'refs/heads/master'
+            && needs.setup.outputs.rc_branch_exists == 0
+            && needs.setup.outputs.hotfix_branch_exists == 0)
+          || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
+          || github.ref == 'refs/heads/hotfix-rc'
+        run: dotnet cake build.cake --target Android --variant prod
+
       - name: Build for Play Store
         run: |
           $configuration = "Release";
@@ -151,7 +163,6 @@ jobs:
           Write-Output "########################################"
           Write-Output "##### Build $configuration Configuration"
           Write-Output "########################################"
-
           msbuild "$($env:GITHUB_WORKSPACE + "/src/Android/Android.csproj")" "/p:Configuration=$configuration"
         shell: pwsh
 
