@@ -126,15 +126,32 @@
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>Bitwarden је најједноставнији и најсигурнији начин за складиштење свих ваших података за пријављивање и лозинки, док их истовремено усклађујете на свим својим уређајима. Bitwarden додатак омогућава вам да се брзо пријавите на било коју веб локацију путем Safari-а или Chrome-а, а подржавају је стотине других популарних апликација.
+    <value>Bitwarden, Inc. is the parent company of 8bit Solutions LLC.
 
-Крађа лозинке је озбиљан проблем. Веб локације и апликације које користите свакодневно су на удару. Дошло је до нарушавања безбедности и крађе лозинки. Када поново користите исте лозинке у апликацијама и на веб локацијама, хакери могу лако да приступе вашој е-пошти, банци и другим важним рачунима.
+NAMED BEST PASSWORD MANAGER BY THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, AND MORE.
 
-Стручњаци за безбедност препоручују употребу различите, насумично генерисане лозинке за сваки налог који креирате. Али како управљате свим тим лозинкама? Bitwarden вам олакшава стварање, чување и приступ вашим лозинкама.
+Manage, store, secure, and share unlimited passwords across unlimited devices from anywhere. Bitwarden delivers open source password management solutions to everyone, whether at  home, at work, or on the go.
 
-Bitwarden чува све ваше пријаве у шифрованом сефу који се синхронизује на свим вашим уређајима. Пошто је потпуно шифровано пре него што напусти уређај, само ви имате приступ подацима. Чак ни тим у Bitwarden не може да прочита ваше податке, чак и да то желимо. Ваши подаци су запечаћени са AES-256  битном енкрипцијом, усољеним хеширањем и PBKDF2 SHA-256.
+Generate strong, unique, and random passwords based on security requirements for every website you frequent.
 
-Bitwardenје софтвер је фокусиран на отвореног кода. Изворни код  Bitwarden-а се налази на GitHub и сви могу слободно да прегледају, провере и дају свој допринос за Bitwarden.</value>
+Bitwarden Send quickly transmits encrypted information --- files and plaintext -- directly to anyone.
+
+Bitwarden offers Teams and Enterprise plans for companies so you can securely share passwords with colleagues.
+
+Why Choose Bitwarden:
+
+World-Class Encryption
+Passwords are protected with advanced end-to-end encryption (AES-256 bit, salted hashtag, and PBKDF2 SHA-256) so your data stays secure and private.
+
+Built-in Password Generator
+Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+
+Global Translations
+Bitwarden translations exist in 40 languages and are growing, thanks to our global community.
+
+Cross-Platform Applications
+Secure and share sensitive data within your Bitwarden Vault from any browser, mobile device, or desktop OS, and more.
+</value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">

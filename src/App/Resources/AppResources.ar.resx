@@ -2314,4 +2314,79 @@
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
     <value>هل أنت متأكد من أنك تريد تمكين التقاط الشاشة؟</value>
   </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>نوع كلمة المرور</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>ما الذي ترغب في توليده؟</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>نوع اسم المستخدم</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>بريد إلكتروني موجه أكثر</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>تجميع كل البريد</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>إعادة توجيه الاسم المستعار للبريد الإلكتروني</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>كلمة عشوائية</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>البريد الإلكتروني (مطلوب)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>اسم المجال (مطلوب)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>مفتاح API (مطلوب)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>الخدمة</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>FirefoxRelay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>رمز الوصول API</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>هل أنت متأكد من أنك تريد الكتابة فوق اسم المستخدم الحالي؟</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>إنشاء اسم المستخدم</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>نوع البريد الإلكتروني</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>الموقع (مطلوب)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>حدث خطأ {0} غير معروف.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>استخدم قدرات العنوان الفرعي لمقدم البريد الإلكتروني الخاص بك</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>استخدم علبة البريد الإلكتروني الشاملة التي تم تكوينها في نطاقك.</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>إنشاء بريد إلكتروني مستعار مع خدمة إعادة توجيه خارجية.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>عشوائي</value>
+  </data>
 </root>

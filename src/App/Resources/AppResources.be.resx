@@ -915,7 +915,7 @@
     <value>Капіяваць TOTP</value>
   </data>
   <data name="CopyTotpAutomaticallyDescription" xml:space="preserve">
-    <value>If a login has an authenticator key, copy the TOTP verification code to your clip-board when you auto-fill the login.</value>
+    <value>Калі падчас уваходу выкарыстоўваецца ключ аўтэнтыфікацыі, то неабходна скапіяваць код праверкі TOTP у буфер абмену пры аўтазапаўненні ўваходу.</value>
   </data>
   <data name="CopyTotpAutomatically" xml:space="preserve">
     <value>Капіяваць TOTP аўтаматычна</value>
@@ -1139,7 +1139,7 @@
     <value>Паказваць значкі вэб-сайтаў</value>
   </data>
   <data name="ShowWebsiteIconsDescription" xml:space="preserve">
-    <value>Show a recognizable image next to each login.</value>
+    <value>Паказваць распазнавальны відарыс побач з кожным з кожным лагінам.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>URL-адрас сервера значкоў</value>
@@ -1464,7 +1464,7 @@
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="LearnOrgConfirmation" xml:space="preserve">
-    <value>Bitwarden allows you to share your vault items with others by using an organization account. Would you like to visit the bitwarden.com website to learn more?</value>
+    <value>Bitwarden дазваляе абагуліць элементы вашага сховішча з іншымі карыстальнікамі, выкарыстоўваючы ўліковы запіс арганізацыі. Хочаце наведаць сайт bitwarden.com, каб даведацца больш?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
     <value>Экспарт сховішча</value>
@@ -1498,7 +1498,7 @@
     <value>Ваша сховішча заблакіравана. Каб працягнуць, увядзіце PIN-код.</value>
   </data>
   <data name="VaultLockedIdentity" xml:space="preserve">
-    <value>Your vault is locked. Verify your identity to continue.</value>
+    <value>Ваша сховішча заблакіравана. Пацвердзіце сваю асобу, каб працягнуць.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Цёмная</value>
@@ -1546,13 +1546,13 @@
     <value>Змена колеравай тэмы праграмы.</value>
   </data>
   <data name="ThemeDefault" xml:space="preserve">
-    <value>Default (System)</value>
+    <value>Прадвызначана (сістэмная)</value>
   </data>
   <data name="DefaultDarkTheme" xml:space="preserve">
-    <value>Default dark theme</value>
+    <value>Прадвызначана цёмная тэма</value>
   </data>
   <data name="DefaultDarkThemeDescription" xml:space="preserve">
-    <value>Choose the dark theme to use when using Default (System) theme while your device's dark mode is enabled.</value>
+    <value>Выбіраць цёмную тэму для яе выкарыстання ў выпадку, калі яна з'яўляецца прадвызначанай (сістэмнай) для вашай прылады.</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Капіяваць нататк</value>
@@ -1575,16 +1575,16 @@
     <comment>'Nord' is the name of a specific color scheme. It should not be translated.</comment>
   </data>
   <data name="AutofillBlockedUris" xml:space="preserve">
-    <value>Auto-fill blocked URIs</value>
+    <value>Аўтазапаўненне заблакіраваных URI</value>
   </data>
   <data name="AutofillBlockedUrisDescription" xml:space="preserve">
-    <value>Auto-fill will not be offered for blocked URIs. Separate multiple URIs with a comma. For example: "https://twitter.com, androidapp://com.twitter.android".</value>
+    <value>Аўтазапаўненне не будзе прапаноўвацца для заблакіраваных URI. Раздзяляйце некалькі URI з дапамогай коскі. Напрыклад: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
   <data name="AskToAddLogin" xml:space="preserve">
-    <value>Ask to add login</value>
+    <value>Пытацца пры дадаванні лагіна</value>
   </data>
   <data name="AskToAddLoginDescription" xml:space="preserve">
-    <value>Ask to add an item if one isn't found in your vault.</value>
+    <value>Запытаць дабаўленне элемента, калі яно адсутнічае ў вашым сховішчы.</value>
   </data>
   <data name="OnRestart" xml:space="preserve">
     <value>Пры перазапуску</value>
@@ -1651,13 +1651,13 @@
     <value>Увядзіце ваш асноўны пароль для экспарту даных са сховішча.</value>
   </data>
   <data name="SendVerificationCodeToEmail" xml:space="preserve">
-    <value>Send a verification code to your email</value>
+    <value>Адправіць праверачны код на ваш адрас электроннай пошты</value>
   </data>
   <data name="CodeSent" xml:space="preserve">
-    <value>Code Sent!</value>
+    <value>Код адпраўлены!</value>
   </data>
   <data name="ConfirmYourIdentity" xml:space="preserve">
-    <value>Confirm your identity to continue.</value>
+    <value>Пацвердзіце сваю асобу, каб працягнуць.</value>
   </data>
   <data name="ExportVaultWarning" xml:space="preserve">
     <value>Экспартуемы файл утрымлівае даныя вашага сховішча ў незашыфраваным фармаце. Яго не варта захоўваць ці адпраўляць па небяспечным каналам (напрыклад, па электроннай пошце). Выдаліце яго адразу пасля выкарыстання.</value>
@@ -1878,7 +1878,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="Text" xml:space="preserve">
-    <value>Text</value>
+    <value>Тэкст</value>
   </data>
   <data name="TypeText" xml:space="preserve">
     <value>Тэкст</value>
@@ -1897,16 +1897,16 @@
     <value>Файл, які вы хочаце адправіць.</value>
   </data>
   <data name="FileTypeIsSelected" xml:space="preserve">
-    <value>File type is selected.</value>
+    <value>Тып файла выбраны.</value>
   </data>
   <data name="FileTypeIsNotSelected" xml:space="preserve">
-    <value>File type is not selected, tap to select.</value>
+    <value>Тып файла не выбраны. Націсніце, каб выбраць.</value>
   </data>
   <data name="TextTypeIsSelected" xml:space="preserve">
-    <value>Text type is selected.</value>
+    <value>Тып тэксту выбраны.</value>
   </data>
   <data name="TextTypeIsNotSelected" xml:space="preserve">
-    <value>Text type is not selected, tap to select.</value>
+    <value>Тып тэксту не выбраны. Націсніце, каб выбраць.</value>
   </data>
   <data name="DeletionDate" xml:space="preserve">
     <value>Дата выдалення</value>
@@ -1935,23 +1935,23 @@
     <value>Тэрмін скончыўся</value>
   </data>
   <data name="MaximumAccessCount" xml:space="preserve">
-    <value>Maximum Access Count</value>
+    <value>Максімальная колькасць доступаў</value>
   </data>
   <data name="MaximumAccessCountInfo" xml:space="preserve">
-    <value>If set, users will no longer be able to access this Send once the maximum access count is reached.</value>
+    <value>Калі зададзена, то карыстальнікі больш не змогуць атрымаць доступ да гэтага Send пасля таго, як будзе дасягнута максімальная колькасць зваротаў.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="MaximumAccessCountReached" xml:space="preserve">
-    <value>Max access count reached</value>
+    <value>Дасягнута максімальная колькасць доступаў</value>
   </data>
   <data name="CurrentAccessCount" xml:space="preserve">
-    <value>Current Access Count</value>
+    <value>Бягучая колькасць доступаў</value>
   </data>
   <data name="NewPassword" xml:space="preserve">
     <value>Новы пароль</value>
   </data>
   <data name="PasswordInfo" xml:space="preserve">
-    <value>Optionally require a password for users to access this Send.</value>
+    <value>Па магчымасці запытваць у карыстальнікаў пароль для доступу да гэтага Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="RemovePassword" xml:space="preserve">
@@ -1967,15 +1967,15 @@
     <value>Пароль выдалены.</value>
   </data>
   <data name="NotesInfo" xml:space="preserve">
-    <value>Private notes about this Send.</value>
+    <value>Прыватныя нататкі пра гэты Send.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Disable this Send so that no one can access it</value>
+    <value>Адключыць гэты Send, каб ніхто не змог атрымаць да яго доступ</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
-    <value>There are no Sends in your account.</value>
+    <value>У вашым Send'e няма ўліковых запісаў.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="AddASend" xml:space="preserve">
@@ -2058,7 +2058,7 @@
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFilePremiumRequired" xml:space="preserve">
-    <value>Free accounts are restricted to sharing text only. A premium membership is required to use files with Send.</value>
+    <value>У бясплатных уліковых запісах можна адпраўляць толькі тэкст. Для адпраўкі файлаў праз Send, патрабуецца платная падпіска.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="SendFileEmailVerificationRequired" xml:space="preserve">
@@ -2075,241 +2075,316 @@
     <value>Гэтае дзеянне ахоўваецца, для працягу зноў увядзіце пароль для праверкі асобы.</value>
   </data>
   <data name="CaptchaRequired" xml:space="preserve">
-    <value>Captcha Required</value>
+    <value>Патрабуецца ўвод CAPTCHA</value>
   </data>
   <data name="CaptchaFailed" xml:space="preserve">
-    <value>Captcha Failed. Please try again.</value>
+    <value>Збой CAPTCHA. Паспрабуйце яшчэ раз.</value>
   </data>
   <data name="UpdatedMasterPassword" xml:space="preserve">
-    <value>Updated Master Password</value>
+    <value>Асноўны пароль абноўлены</value>
   </data>
   <data name="UpdateMasterPassword" xml:space="preserve">
-    <value>Update Master Password</value>
+    <value>Абнавіць асноўны пароль</value>
   </data>
   <data name="UpdateMasterPasswordWarning" xml:space="preserve">
-    <value>Your Master Password was recently changed by an administrator in your organization. In order to access the vault, you must update your Master Password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour.</value>
+    <value>Ваш галоўны пароль быў нядаўна зменены адміністратарам вашай арганізацыі. Для атрымання доступу да сховішча, вы павінны абнавіць галоўны пароль. Працягваючы, вы выйдзіце з бягучага сеанса і вам неабходна будзе ўвайсці паўторна. Сеансы на іншых прыладах могуць заставацца актыўнымі на працягу адной гадзіны.</value>
   </data>
   <data name="UpdatingPassword" xml:space="preserve">
-    <value>Updating Password</value>
+    <value>Абнаўленне пароля</value>
   </data>
   <data name="UpdatePasswordError" xml:space="preserve">
-    <value>Currently unable to update password</value>
+    <value>Часова немагчыма абнавіць пароль</value>
   </data>
   <data name="RemoveMasterPassword" xml:space="preserve">
-    <value>Remove Master Password</value>
+    <value>Выдаліць асноўны пароль</value>
   </data>
   <data name="RemoveMasterPasswordWarning" xml:space="preserve">
-    <value>{0} is using SSO with customer-managed encryption. Continuing will remove your Master Password from your account and require SSO to login.</value>
+    <value>{0} выкарыстоўвае SSO з шыфраваннем, якое кіруецца на баку кліента. Калі вы працягніце, то асноўны пароль будзе выдалены з вашага ўліковага запісу і для ўваходу спатрэбіцца SSO.</value>
   </data>
   <data name="RemoveMasterPasswordWarning2" xml:space="preserve">
-    <value>If you do not want to remove your Master Password, you may leave this organization.</value>
+    <value>Калі вы не хочаце выдаляць асноўны пароль, то можаце пакінуць гэту арганізацыю.</value>
   </data>
   <data name="LeaveOrganization" xml:space="preserve">
-    <value>Leave Organization</value>
+    <value>Пакінуць арганізацыю</value>
   </data>
   <data name="LeaveOrganizationName" xml:space="preserve">
-    <value>Leave {0}?</value>
+    <value>Пакінуць {0}?</value>
   </data>
   <data name="Fido2Title" xml:space="preserve">
     <value>FIDO2 WebAuthn</value>
   </data>
   <data name="Fido2Instruction" xml:space="preserve">
-    <value>To continue, have your FIDO2 WebAuthn enabled security key ready, then follow the instructions after clicking 'Authenticate WebAuthn' on the next screen.</value>
+    <value>Для працягу, падрыхтуйце свой ключ бяспекі з падтрымкай FIDO2 WebAuthn, а потым прытрымлівайцеся інструкцый пасля націску "Аўтэнтыфікацыя WebAuthn" на наступным экране.</value>
   </data>
   <data name="Fido2Desc" xml:space="preserve">
-    <value>Authentication using FIDO2 WebAuthn, you can authenticate using an external security key.</value>
+    <value>Аўтэнтыфікацыя з выкарыстаннем FIDO2 WebAuthn, вы можаце аўтэнтыфікавацца з дапамогай знешняга ключа бяспекі.</value>
   </data>
   <data name="Fido2AuthenticateWebAuthn" xml:space="preserve">
-    <value>Authenticate WebAuthn</value>
+    <value>Аўтэнтыфікацыя WebAuthn</value>
   </data>
   <data name="Fido2ReturnToApp" xml:space="preserve">
-    <value>Return to App</value>
+    <value>Вярнуцца ў праграму</value>
   </data>
   <data name="Fido2CheckBrowser" xml:space="preserve">
-    <value>Please make sure your default browser supports WebAuthn and try again.</value>
+    <value>Пераканайцеся, што ваш прадвызначаны браўзер падтрымлівае WebAuthn і паспрабуйце яшчэ раз.</value>
   </data>
   <data name="ResetPasswordAutoEnrollInviteWarning" xml:space="preserve">
-    <value>This organization has an enterprise policy that will automatically enroll you in password reset. Enrollment will allow organization administrators to change your master password.</value>
+    <value>Гэта арганізацыя мае карпаратыўную палітыку, якая будзе аўтаматычна зарэгіструе ваша скіданне пароля. Рэгістрацыя дазволіць адміністратарам арганізацыі змяняць ваш асноўны пароль.</value>
   </data>
   <data name="VaultTimeoutPolicyInEffect" xml:space="preserve">
-    <value>Your organization policies are affecting your vault timeout. Maximum allowed Vault Timeout is {0} hour(s) and {1} minute(s)</value>
+    <value>Палітыка вашай арганізацыі ўплывае на час чакання сховішча. Максімальны дазволены час чакання сховішча {0} гадз. і {1} хв.</value>
   </data>
   <data name="VaultTimeoutToLarge" xml:space="preserve">
-    <value>Your vault timeout exceeds the restrictions set by your organization.</value>
+    <value>Час чакання вашага сховішча перавышае дазволеныя абмежаванні, якія прызначыла ваша арганізацыя.</value>
   </data>
   <data name="DisablePersonalVaultExportPolicyInEffect">
-    <value>One or more organization policies prevents your from exporting your personal vault.</value>
+    <value>Адна або больш палітык арганізацыі не дазваляюць вам экспартаваць асабістае сховішча.</value>
   </data>
   <data name="AddAccount" xml:space="preserve">
-    <value>Add Account</value>
+    <value>Дадаць уліковы запіс</value>
   </data>
   <data name="AccountUnlocked" xml:space="preserve">
-    <value>Unlocked</value>
+    <value>Разблакіравана</value>
   </data>
   <data name="AccountLocked" xml:space="preserve">
-    <value>Locked</value>
+    <value>Заблакіравана</value>
   </data>
   <data name="AccountLoggedOut" xml:space="preserve">
-    <value>Logged Out</value>
+    <value>Вы выйшлі</value>
   </data>
   <data name="AccountSwitchedAutomatically" xml:space="preserve">
-    <value>Switched to next available account</value>
+    <value>Вы пераключыліся на іншы даступны ўліковы запіс</value>
   </data>
   <data name="AccountLockedSuccessfully" xml:space="preserve">
-    <value>Account Locked</value>
+    <value>Уліковы запіс заблакіраваны</value>
   </data>
   <data name="AccountLoggedOutSuccessfully" xml:space="preserve">
-    <value>Account logged out successfully</value>
+    <value>Вы паспяхова выйшлі з уліковага запісу</value>
   </data>
   <data name="AccountRemovedSuccessfully" xml:space="preserve">
-    <value>Account removed successfully</value>
+    <value>Уліковы запіс паспяхова выдалены</value>
   </data>
   <data name="DeleteAccount" xml:space="preserve">
-    <value>Delete account</value>
+    <value>Выдаліць уліковы запіс</value>
   </data>
   <data name="DeletingYourAccountIsPermanent" xml:space="preserve">
-    <value>Deleting your account is permanent</value>
+    <value>Выдаленне вашага ўліковага запісу з'яўляецца незваротным дзеяннем</value>
   </data>
   <data name="DeleteAccountExplanation" xml:space="preserve">
-    <value>Your account and all vault data will be erased and unrecoverable. Are you sure you want to continue?</value>
+    <value>Ваш уліковы запіс і ўсе даныя сховішча будуць выдалены без магчымасці аднаўлення. Вы ўпэўнены, што хочаце працягнуць?</value>
   </data>
   <data name="DeletingYourAccount" xml:space="preserve">
-    <value>Deleting your account</value>
+    <value>Выдаленне вашага ўліковага запісу</value>
   </data>
   <data name="YourAccountHasBeenPermanentlyDeleted" xml:space="preserve">
-    <value>Your account has been permanently deleted</value>
+    <value>Ваш уліковы запіс быў незваротна выдалены</value>
   </data>
   <data name="InvalidVerificationCode" xml:space="preserve">
-    <value>Invalid Verification Code.</value>
+    <value>Памылковы праверачны код.</value>
   </data>
   <data name="RequestOTP" xml:space="preserve">
-    <value>Request one-time password</value>
+    <value>Запытаць аднаразовы пароль</value>
   </data>
   <data name="SendCode" xml:space="preserve">
-    <value>Send Code</value>
+    <value>Адправіць код</value>
   </data>
   <data name="Sending" xml:space="preserve">
-    <value>Sending</value>
+    <value>Адпраўка</value>
   </data>
   <data name="CopySendLinkOnSave" xml:space="preserve">
-    <value>Copy Send link on save</value>
+    <value>Скапіяваць спасылку Send пры захаванні</value>
   </data>
   <data name="SendingCode" xml:space="preserve">
-    <value>Sending code</value>
+    <value>Адпраўка кода</value>
   </data>
   <data name="Verifying" xml:space="preserve">
-    <value>Verifying</value>
+    <value>Праверка</value>
   </data>
   <data name="ResendCode" xml:space="preserve">
-    <value>Resend Code</value>
+    <value>Адправіць код яшчэ раз</value>
   </data>
   <data name="AVerificationCodeWasSentToYourEmail" xml:space="preserve">
-    <value>A verification code was sent to your email</value>
+    <value>Праверачны код адпраўлены на ваш адрас электроннай пошты</value>
   </data>
   <data name="AnErrorOccurredWhileSendingAVerificationCodeToYourEmailPleaseTryAgain" xml:space="preserve">
-    <value>An error occurred while sending a verification code to your email. Please try again</value>
+    <value>Адбылася памылка пры адпраўцы праверачнага кода на ваш адрас электроннай пошты. Калі ласка, паспрабуйце яшчэ раз</value>
   </data>
   <data name="EnterTheVerificationCodeThatWasSentToYourEmail" xml:space="preserve">
-    <value>Enter the verification code that was sent to your email</value>
+    <value>Увядзіце праверачны код, які быў адпраўлены на вашу электронную пошту</value>
   </data>
   <data name="SubmitCrashLogs" xml:space="preserve">
-    <value>Submit crash logs</value>
+    <value>Адпраўляць справаздачы пра збоі</value>
   </data>
   <data name="SubmitCrashLogsDescription" xml:space="preserve">
-    <value>Help Bitwarden improve app stability by submitting crash reports.</value>
+    <value>Дапамажыце нам палепшыць стабільнасць праграмы, адпраўляючы справаздачы пра памылкі.</value>
   </data>
   <data name="OptionsExpanded" xml:space="preserve">
-    <value>Options are expanded, tap to collapse.</value>
+    <value>Налады разгорнуты. Націсніце, каб згарнуць.</value>
   </data>
   <data name="OptionsCollapsed" xml:space="preserve">
-    <value>Options are collapsed, tap to expand.</value>
+    <value>Налады згорнуты. Націсніце, каб разгарнуць.</value>
   </data>
   <data name="UppercaseAtoZ" xml:space="preserve">
-    <value>Uppercase (A to Z)</value>
+    <value>Вялікія літары (A-Z)</value>
   </data>
   <data name="LowercaseAtoZ" xml:space="preserve">
-    <value>Lowercase (A to Z)</value>
+    <value>Маленькія літары (a-z)</value>
   </data>
   <data name="NumbersZeroToNine" xml:space="preserve">
-    <value>Numbers (0 to 9)</value>
+    <value>Лічбы (0-9)</value>
   </data>
   <data name="SpecialCharacters" xml:space="preserve">
-    <value>Special Characters (!@#$%^&amp;*)</value>
+    <value>Спецыяльныя сімвалы (!@#$%^&amp;*)</value>
   </data>
   <data name="TapToGoBack" xml:space="preserve">
-    <value>Tap to go back</value>
+    <value>Націсніце, каб вярнуцца</value>
   </data>
   <data name="PasswordIsVisibleTapToHide" xml:space="preserve">
-    <value>Password is visible, tap to hide.</value>
+    <value>Пароль бачны. Націсніце, каб схаваць.</value>
   </data>
   <data name="PasswordIsNotVisibleTapToShow" xml:space="preserve">
-    <value>Password is not visible, tap to show.</value>
+    <value>Пароль схаваны. Націсніце, каб паказаць.</value>
   </data>
   <data name="FilterByVault" xml:space="preserve">
-    <value>Filter items by vault</value>
+    <value>Фільтр элементы па сховішчу</value>
   </data>
   <data name="AllVaults" xml:space="preserve">
-    <value>All Vaults</value>
+    <value>Усе сховішчы</value>
   </data>
   <data name="Vaults" xml:space="preserve">
-    <value>Vaults</value>
+    <value>Сховішчы</value>
   </data>
   <data name="VaultFilterDescription" xml:space="preserve">
-    <value>Vault: {0}</value>
+    <value>Сховішча: {0}</value>
   </data>
   <data name="All" xml:space="preserve">
-    <value>All</value>
+    <value>Усе</value>
   </data>
   <data name="Totp" xml:space="preserve">
     <value>TOTP</value>
   </data>
   <data name="VerificationCodes" xml:space="preserve">
-    <value>Verification Codes</value>
+    <value>Праверачныя коды</value>
   </data>
   <data name="PremiumSubscriptionRequired" xml:space="preserve">
-    <value>Premium subscription required</value>
+    <value>Патрабуецца прэміяльная падпіска</value>
   </data>
   <data name="CannotAddAuthenticatorKey" xml:space="preserve">
-    <value>Cannot add authenticator key? </value>
+    <value>Не можаце дадаць ключ аўтэнтыфікацыі? </value>
   </data>
   <data name="ScanQRCode" xml:space="preserve">
-    <value>Scan QR Code</value>
+    <value>Сканаваць QR -код</value>
   </data>
   <data name="CannotScanQRCode" xml:space="preserve">
-    <value>Cannot scan QR Code? </value>
+    <value>Не можаце адсканаваць QR-код? </value>
   </data>
   <data name="AuthenticatorKeyScanner" xml:space="preserve">
-    <value>Authenticator Key</value>
+    <value>Ключ аўтэнтыфікацыі</value>
   </data>
   <data name="EnterKeyManually" xml:space="preserve">
-    <value>Enter Key Manually</value>
+    <value>Увесці ключ уручную</value>
   </data>
   <data name="AddTotp" xml:space="preserve">
-    <value>Add TOTP</value>
+    <value>Дадаць TOTP</value>
   </data>
   <data name="SetupTotp" xml:space="preserve">
-    <value>Set up TOTP</value>
+    <value>Наладзіць TOTP</value>
   </data>
   <data name="OnceTheKeyIsSuccessfullyEntered" xml:space="preserve">
-    <value>Once the key is successfully entered,
-select Add TOTP to store the key safely</value>
+    <value>Пасля таго, як ваш ключ паспяхова ўведзены
+выберыце Дадаць TOTP для надзейнага захавання ключа</value>
   </data>
   <data name="SelectAddTotpToStoreTheKeySafely" xml:space="preserve">
     <value></value>
   </data>
   <data name="NeverLockWarning" xml:space="preserve">
-    <value>Setting your lock options to “Never” keeps your vault available to anyone with access to your device. If you use this option, you should ensure that you keep your device properly protected.</value>
+    <value>Прызначыўшы параметр блакіравання "Ніколі", ваша сховішча будзе даступна кожнаму, хто мае доступ да вашай прылады. Калі вы выкарыстоўваеце гэты параметр, вы павінны быць упэўнены ў тым, што ваша прылада надзейна абаронена.</value>
   </data>
   <data name="EnvironmentPageUrlsError" xml:space="preserve">
-    <value>One or more of the URLs entered are invalid. Please revise it and try to save again.</value>
+    <value>Адзін або больш URL-адрасоў уведзены памылкова. Калі ласка, праверце іх і паспрабуйце захаваць яшчэ раз.</value>
   </data>
   <data name="GenericErrorMessage" xml:space="preserve">
-    <value>We were unable to process your request. Please try again or contact us.</value>
+    <value>Мы не змаглі апрацаваць ваш запыт. Калі ласка, паспрабуйце яшчэ раз або звяжыцеся з намі.</value>
   </data>
   <data name="AllowScreenCapture" xml:space="preserve">
-    <value>Allow screen capture</value>
+    <value>Дазволіць здымкі экрана</value>
   </data>
   <data name="AreYouSureYouWantToEnableScreenCapture" xml:space="preserve">
-    <value>Are you sure you want to enable Screen Capture?</value>
+    <value>Вы ўпэўнены, што хочаце дазволіць здымкі экрана?</value>
+  </data>
+  <data name="PasswordType" xml:space="preserve">
+    <value>Тып пароля</value>
+  </data>
+  <data name="WhatWouldYouLikeToGenerate" xml:space="preserve">
+    <value>Што вы хочаце генерыраваць?</value>
+  </data>
+  <data name="UsernameType" xml:space="preserve">
+    <value>Тып імя карыстальніка</value>
+  </data>
+  <data name="PlusAddressedEmail" xml:space="preserve">
+    <value>Адрасы электроннай пошты з плюсам</value>
+  </data>
+  <data name="CatchAllEmail" xml:space="preserve">
+    <value>Адрас для ўсёй пошты дамена</value>
+  </data>
+  <data name="ForwardedEmailAlias" xml:space="preserve">
+    <value>Псеўданім электроннай пошты для перасылкі</value>
+  </data>
+  <data name="RandomWord" xml:space="preserve">
+    <value>Выпадковае слова</value>
+  </data>
+  <data name="EmailRequiredParenthesis" xml:space="preserve">
+    <value>Электронная пошта (абавязкова)</value>
+  </data>
+  <data name="DomainNameRequiredParenthesis" xml:space="preserve">
+    <value>Імя дамена (абавязкова)</value>
+  </data>
+  <data name="APIKeyRequiredParenthesis" xml:space="preserve">
+    <value>Ключ API (абавязкова)</value>
+  </data>
+  <data name="Service" xml:space="preserve">
+    <value>Сэрвіс</value>
+  </data>
+  <data name="AnonAddy" xml:space="preserve">
+    <value>AnonAddy</value>
+    <comment>"AnonAddy" is the product name and should not be translated.</comment>
+  </data>
+  <data name="FirefoxRelay" xml:space="preserve">
+    <value>Firefox Relay</value>
+    <comment>"Firefox Relay" is the product name and should not be translated.</comment>
+  </data>
+  <data name="SimpleLogin" xml:space="preserve">
+    <value>SimpleLogin</value>
+    <comment>"SimpleLogin" is the product name and should not be translated.</comment>
+  </data>
+  <data name="APIAccessToken" xml:space="preserve">
+    <value>Токен доступу да API</value>
+  </data>
+  <data name="AreYouSureYouWantToOverwriteTheCurrentUsername" xml:space="preserve">
+    <value>Вы ўпэўнены, што хочаце перазапісаць бягучае імя карыстальніка?</value>
+  </data>
+  <data name="GenerateUsername" xml:space="preserve">
+    <value>Генерыраваць імя карыстальніка</value>
+  </data>
+  <data name="EmailType" xml:space="preserve">
+    <value>Тып электроннай пошты</value>
+  </data>
+  <data name="WebsiteRequired" xml:space="preserve">
+    <value>Вэб-сайт (абавязкова)</value>
+  </data>
+  <data name="UnknownXErrorMessage" xml:space="preserve">
+    <value>Адбылася невядомая памылка {0}.</value>
+  </data>
+  <data name="PlusAddressedEmailDescription" xml:space="preserve">
+    <value>Выкарыстоўваць магчымасці пададрасацыі вашага пастаўшчыка паслуг электроннай пошты</value>
+  </data>
+  <data name="CatchAllEmailDescription" xml:space="preserve">
+    <value>Выкарыстоўвайце сваю сканфігураваную скрыню для ўсёй пошты дамена.</value>
+  </data>
+  <data name="ForwardedEmailDescription" xml:space="preserve">
+    <value>Генерыраваць псеўданім электроннай пошты са знешнім сэрвісам перасылкі.</value>
+  </data>
+  <data name="Random" xml:space="preserve">
+    <value>Выпадкова</value>
   </data>
 </root>

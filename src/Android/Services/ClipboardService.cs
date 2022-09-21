@@ -5,6 +5,7 @@ using Android.Content;
 using Android.OS;
 using Bit.Core.Abstractions;
 using Bit.Droid.Receivers;
+using Bit.Droid.Utilities;
 using Plugin.CurrentActivity;
 using Xamarin.Essentials;
 
@@ -23,7 +24,7 @@ namespace Bit.Droid.Services
                 PendingIntent.GetBroadcast(CrossCurrentActivity.Current.Activity,
                                            0,
                                            new Intent(CrossCurrentActivity.Current.Activity, typeof(ClearClipboardAlarmReceiver)),
-                                           PendingIntentFlags.UpdateCurrent));
+                                           AndroidHelpers.AddPendingIntentMutabilityFlag(PendingIntentFlags.UpdateCurrent, false)));
         }
 
         public async Task CopyTextAsync(string text, int expiresInMs = -1, bool isSensitive = true)

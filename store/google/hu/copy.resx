@@ -126,13 +126,32 @@
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>A Bitwarden a legegyszerűbb és legbiztonságosabb módja a bejelentkezések és jelszavak tárolására, miközben kényelmet nyújtva tartja szinkronizálva az adatokat az összes eszköz között.
+    <value>Bitwarden, Inc. is the parent company of 8bit Solutions LLC.
 
-Manapság a jelszó lopás a legnagyobb gond. A webhelyek és alkalmazások minden pillanatban támadások alatt állnak. Egy biztonsági rés és a jelszót máris ellopták. Ha ugyanazokat a belépési adatokat használjuk a böngészőben, vagy alkalmazásokban, a tolvajok dolgát megkönnyíted és könnyedén hozzáférhetnek az email fiókodhoz, az internetbankárhoz, a legfontosabb adatokhoz.
+NAMED BEST PASSWORD MANAGER BY THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, AND MORE.
 
-A biztonsági szakemberek azt javasolják, hogy mindig használjunk eltérő, véletlenszerűen generált jelszót minden fiókhoz. De hogyan kezelhetők ezek a jelszavak? A Bitwarden segítségével könnyedén lehet létrehozni, tárolni jelszavakat és könnyű hozzáférést biztosít a tárolt jelszavakhoz.
+Manage, store, secure, and share unlimited passwords across unlimited devices from anywhere. Bitwarden delivers open source password management solutions to everyone, whether at  home, at work, or on the go.
 
-A Bitwaren minden bejelentkezési adatot titkosított széfben tárolja és titkosítva szinkronizálja eszközök között. Mivel teljesen titkosított, csak a tulajdonos férhet hozzá az adatokhoz. Még a Bitwarden csapata sem tudja olvasni az adatolat. Az adatok AES 256 bites titkosítással és SHA-256 PBKDF2-vel zárjuk le.</value>
+Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+
+Bitwarden Send quickly transmits encrypted information --- files and plaintext -- directly to anyone.
+
+Bitwarden offers Teams and Enterprise plans for companies so you can securely share passwords with colleagues.
+
+Why Choose Bitwarden:
+
+World-Class Encryption
+Passwords are protected with advanced end-to-end encryption (AES-256 bit, salted hashtag, and PBKDF2 SHA-256) so your data stays secure and private.
+
+Built-in Password Generator
+Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+
+Global Translations
+Bitwarden translations exist in 40 languages and are growing, thanks to our global community.
+
+Cross-Platform Applications
+Secure and share sensitive data within your Bitwarden Vault from any browser, mobile device, or desktop OS, and more.
+</value>
   <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
