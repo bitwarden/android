@@ -145,7 +145,7 @@ jobs:
         run: dotnet build ./store/google/Publisher/Publisher.csproj -p:Configuration=Release
 
       - name: Setup Android build config (qa)
-        run: dotnet cake build.cake --target Android --variant qa
+        run: dotnet cake build.cake --target Android --variant qa --debugScript=true
 
       - name: Setup Android build config (prod)
         if: |
