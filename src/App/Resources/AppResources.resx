@@ -1119,7 +1119,7 @@ Scanning will happen automatically.</value>
     <value>September</value>
   </data>
   <data name="SSN" xml:space="preserve">
-    <value>Social security number</value>
+    <value>Social Security number</value>
   </data>
   <data name="StateProvince" xml:space="preserve">
     <value>State / Province</value>
@@ -1828,7 +1828,7 @@ Scanning will happen automatically.</value>
     <value>Use inline autofill</value>
   </data>
   <data name="InlineAutofillDescription" xml:space="preserve">
-    <value>Use inline autofill if your selected IME (keyboard) supports it. If your configuration is not supported (or this option is disabled), the default Autofill overlay will be used.</value>
+    <value>Use inline autofill if your selected IME (keyboard) supports it. If your configuration is not supported (or this option is turned off), the default Autofill overlay will be used.</value>
   </data>
   <data name="Accessibility" xml:space="preserve">
     <value>Use accessibility</value>
@@ -1973,7 +1973,7 @@ Scanning will happen automatically.</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="DisableSend" xml:space="preserve">
-    <value>Disable this Send so that no one can access it</value>
+    <value>Deactivate this Send so that no one can access it</value>
     <comment>'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.</comment>
   </data>
   <data name="NoSends" xml:space="preserve">
