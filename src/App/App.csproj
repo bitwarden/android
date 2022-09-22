@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <RootNamespace>Bit.App</RootNamespace>
     <AssemblyName>BitwardenApp</AssemblyName>
     <Configurations>Debug;Release;FDroid</Configurations>
@@ -14,11 +14,11 @@
 
   <ItemGroup>
     <PackageReference Include="Plugin.Fingerprint" Version="2.1.5" />
-    <PackageReference Include="SkiaSharp.Views.Forms" Version="2.80.3" />
-    <PackageReference Include="Xamarin.CommunityToolkit" Version="2.0.2" />
+    <PackageReference Include="SkiaSharp.Views.Forms" Version="2.88.2" />
+    <PackageReference Include="Xamarin.CommunityToolkit" Version="2.0.5" />
     <PackageReference Include="Xamarin.Essentials" Version="1.7.3" />
     <PackageReference Include="Xamarin.FFImageLoading.Forms" Version="2.4.11.982" />
-    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2478" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2515" />
     <PackageReference Include="ZXing.Net.Mobile" Version="2.4.1" />
     <PackageReference Include="ZXing.Net.Mobile.Forms" Version="2.4.1" />
     <PackageReference Include="Xamarin.CommunityToolkit" Version="1.3.0" />
