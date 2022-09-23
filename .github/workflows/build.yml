@@ -223,14 +223,6 @@ jobs:
           path: ./com.x8bit.bitwarden.apk
           if-no-files-found: error
 
-      - name: Upload QA .aab artifact
-        if: ${{ matrix.variant == 'qa' }}
-        uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
-        with:
-          name: com.x8bit.bitwarden.qa.aab
-          path: ./com.x8bit.bitwarden.qa.aab
-          if-no-files-found: error
-
       - name: Upload QA .apk artifact
         if: ${{ matrix.variant == 'qa' }}
         uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
