@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Bit.Core.Models.Domain;
+using Bit.Core.Services;
 using Newtonsoft.Json;
 
 namespace Bit.Core.Utilities
@@ -183,23 +184,30 @@ namespace Bit.Core.Utilities
         public static Dictionary<string, string> GetQueryParams(string urlString)
         {
             var dict = new Dictionary<string, string>();
-            if (!Uri.TryCreate(urlString, UriKind.Absolute, out var uri) || string.IsNullOrWhiteSpace(uri.Query))
+            try
             {
-                return dict;
+                if (!Uri.TryCreate(urlString, UriKind.Absolute, out var uri) || string.IsNullOrWhiteSpace(uri.Query))
+                {
+                    return dict;
+                }
+                var pairs = uri.Query.Substring(1).Split('&');
+                foreach (var pair in pairs)
+                {
+                    var parts = pair.Split('=');
+                    if (parts.Length < 1)
+                    {
+                        continue;
+                    }
+                    var key = System.Net.WebUtility.UrlDecode(parts[0]).ToLower();
+                    if (!dict.ContainsKey(key))
+                    {
+                        dict.Add(key, parts[1] == null ? string.Empty : System.Net.WebUtility.UrlDecode(parts[1]));
+                    }
+                }
             }
-            var pairs = uri.Query.Substring(1).Split('&');
-            foreach (var pair in pairs)
+            catch (Exception ex)
             {
-                var parts = pair.Split('=');
-                if (parts.Length < 1)
-                {
-                    continue;
-                }
-                var key = System.Net.WebUtility.UrlDecode(parts[0]).ToLower();
-                if (!dict.ContainsKey(key))
-                {
-                    dict.Add(key, parts[1] == null ? string.Empty : System.Net.WebUtility.UrlDecode(parts[1]));
-                }
+                Logger.Instance.Exception(ex);
             }
             return dict;
         }
