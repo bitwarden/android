@@ -2386,6 +2386,6 @@ wybierz Dodaj TOTP, aby bezpiecznie przechowywać klucz</value>
     <value>Wygeneruj alias adresu e-mail z zewnętrznej usługi przekazywania.</value>
   </data>
   <data name="Random" xml:space="preserve">
-    <value>Losowa</value>
+    <value>Losowy</value>
   </data>
 </root>
