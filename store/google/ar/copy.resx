@@ -126,31 +126,32 @@
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>Bitwarden, Inc. is the parent company of 8bit Solutions LLC.
+    <value>شركة Bitwarden, Inc هي الشركة الأم لشركة 8bit Solutions LLC.
 
-NAMED BEST PASSWORD MANAGER BY THE VERGE, U.S. NEWS &amp; WORLD REPORT, CNET, AND MORE.
+تم تصنيف Bitwarden كأفصل مدير كلمات مرور بواسطة كل من The Verge، U.S News &amp; World Report، CNET، وغيرهم.
 
-Manage, store, secure, and share unlimited passwords across unlimited devices from anywhere. Bitwarden delivers open source password management solutions to everyone, whether at  home, at work, or on the go.
+قم بإدارة وحفظ وتأمين كلمات المرور الخاصة بك، ومشاركتها بين أجهزتك من أي مكان.
+يوفر Bitwarden حل مفتوح المصدر لإدارة كلمات المرور للجميع، سواء في المنزل، في العمل أو في أي مكان.
 
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+قم بإنشاء كلمات مرور قوية وفريدة وعشوائية حسب متطلبات الأمان للصفحات التي تزورها.
 
-Bitwarden Send quickly transmits encrypted information --- files and plaintext -- directly to anyone.
+يوفر Bitwarden Send إمكانية إرسال البيانات --- النصوص والملفات --- بطريقة مشفرة وسريعة لأي شخص.
 
-Bitwarden offers Teams and Enterprise plans for companies so you can securely share passwords with colleagues.
+يوفر Bitwarden خطط خاصة للفرق والشركات والمؤسسات لتمكنك من مشاركة كلمات المرور مع زملائك في العمل.
 
-Why Choose Bitwarden:
+لماذا قد تختار Bitwarden:
 
-World-Class Encryption
-Passwords are protected with advanced end-to-end encryption (AES-256 bit, salted hashtag, and PBKDF2 SHA-256) so your data stays secure and private.
+تشفير على مستوى عالمي
+كلمات المرور محمية بتشفير متقدم تام (end-to-end encryption) من نوعية AES-256 bit، مع salted hashing، و PBKDF2 SHA-256. كل هذا لإبقاء بياناتك محمية وخاصة.
 
-Built-in Password Generator
-Generate strong, unique, and random passwords based on security requirements for every website you frequent.
+مولد كلمات المرور المدمج
+قم بإنشاء كلمات مرور قوية وفريدة وعشوائية حسب متطلبات الأمان للصفحات التي تزورها.
 
-Global Translations
-Bitwarden translations exist in 40 languages and are growing, thanks to our global community.
+الترجمات العالمية
+يتوفر Bitwarden بأكثر من 40 لغة، وتتنامى الترجمات بفضل مجتمعنا العالمي.
 
-Cross-Platform Applications
-Secure and share sensitive data within your Bitwarden Vault from any browser, mobile device, or desktop OS, and more.
+تطبيقات متعددة المنصات
+قم بحماية ومشاركة بياناتك الحساسة عبر خزنة Bitwarden من أي متصفح ويب، أو هاتف ذكي، أو جهاز كمبيوتر، وغيرها.
 </value>
   <comment>Max 4000 characters</comment>
   </data>

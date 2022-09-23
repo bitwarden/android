@@ -242,7 +242,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.AppCenter.Crashes">
-      <Version>4.4.0</Version>
+      <Version>4.5.3</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.AppExtension.CSharp.targets" />
