@@ -59,6 +59,9 @@ jobs:
     name: Android
     runs-on: windows-2022
     needs: setup
+    strategy:
+      matrix:
+        variant: ['prod', 'qa']
     steps:
       - name: Setup NuGet
         uses: nuget/setup-nuget@b2bc17b761a1d88cab755a776c7922eb26eefbfa  # v1.0.6
@@ -146,19 +149,10 @@ jobs:
       - name: Build Play Store publisher
         run: dotnet build ./store/google/Publisher/Publisher.csproj -p:Configuration=Release
 
-      - name: Setup Android build config (qa)
-        run: dotnet cake build.cake --target Android --variant qa --debugScript=true
+      - name: Setup Android build  (${{ matrix.variant }})
+        run: dotnet cake build.cake --target Android --variant ${{ matrix.variant }}
 
-      - name: Setup Android build config (prod)
-        if: |
-          (github.ref == 'refs/heads/master'
-            && needs.setup.outputs.rc_branch_exists == 0
-            && needs.setup.outputs.hotfix_branch_exists == 0)
-          || (github.ref == 'refs/heads/rc' && needs.setup.outputs.hotfix_branch_exists == 0)
-          || github.ref == 'refs/heads/hotfix-rc'
-        run: dotnet cake build.cake --target Android --variant prod
-
-      - name: Build for Play Store
+      - name: Build Android
         run: |
           $configuration = "Release";
 
@@ -166,12 +160,18 @@ jobs:
           Write-Output "##### Build $configuration Configuration"
           Write-Output "########################################"
           msbuild "$($env:GITHUB_WORKSPACE + "/src/Android/Android.csproj")" "/p:Configuration=$configuration"
+
+          $qaApkPath = $($env:GITHUB_WORKSPACE + "/src/Android/bin/Release/com.x8bit.bitwarden.qa.apk");
+          $qaApkPathDestPath = $($env:GITHUB_WORKSPACE + "/com.x8bit.bitwarden.qa.apk");
+
+          Copy-Item $qaApkPath $qaApkPathDestPath
         shell: pwsh
 
       - name: Sign for Play Store
         env:
           PLAY_KEYSTORE_PASSWORD: ${{ secrets.PLAY_KEYSTORE_PASSWORD }}
           UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}
+        if: ${{ matrix.variant == 'prod' }}
         run: |
           $androidPath = $($env:GITHUB_WORKSPACE + "/src/Android/Android.csproj");
 
@@ -213,6 +213,7 @@ jobs:
         shell: pwsh
 
       - name: Upload Play Store .aab artifact
+        if: ${{ matrix.variant == 'prod' }}
         uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
         with:
           name: com.x8bit.bitwarden.aab
@@ -220,14 +221,24 @@ jobs:
           if-no-files-found: error
 
       - name: Upload Play Store .apk artifact
+        if: ${{ matrix.variant == 'prod' }}
         uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
         with:
           name: com.x8bit.bitwarden.apk
           path: ./com.x8bit.bitwarden.apk
           if-no-files-found: error
 
+      - name: Upload QA .apk artifact
+        if: ${{ matrix.variant == 'qa' }}
+        uses: actions/upload-artifact@6673cd052c4cd6fcf4b4e6e60ea986c889389535
+        with:
+          name: com.x8bit.bitwarden.qa.apk
+          path: ./com.x8bit.bitwarden.qa.apk
+          if-no-files-found: error
+
       - name: Deploy to Play Store
         if: |
+            ${{ matrix.variant == 'prod' }} &&
             (github.ref == 'refs/heads/master'
               && needs.setup.outputs.rc_branch_exists == 0
               && needs.setup.outputs.hotfix_branch_exists == 0)
