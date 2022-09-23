@@ -207,7 +207,7 @@ namespace Bit.Core.Utilities
             }
             catch (Exception ex)
             {
-                Logger.Instance.Exception(ex);
+                LoggerHelper.LogEvenIfCantBeResolved(ex);
             }
             return dict;
         }
