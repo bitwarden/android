@@ -63,6 +63,13 @@ Task("UpdateAndroidManifest")
     {
         var buildVariant = GetVariant();
         var manifestPath = Path.Combine(_slnPath, "src", "Android", "Properties", "AndroidManifest.xml");
+
+        // Cake.AndroidAppManifest doesn't currently enable us to access nested items so, quick (not ideal) fix:
+        var manifestText = FileReadText(manifestPath);
+        manifestText = manifestText.Replace("com.x8bit.bitwarden.", buildVariant.AndroidPackageName + ".");
+        manifestText = manifestText.Replace("android:label=\"Bitwarden\"", $"android:label=\"{buildVariant.AppName}\"");
+        FileWriteText(manifestPath, manifestText);
+
         var manifest = DeserializeAppManifest(manifestPath);
 
         var prevVersionCode = manifest.VersionCode;
@@ -81,12 +88,6 @@ Task("UpdateAndroidManifest")
     
         SerializeAppManifest(manifestPath, manifest);
 
-        // Cake.AndroidAppManifest doesn't currently enable us to access nested items so, quick (not ideal) fix:
-        var manifestText = FileReadText(manifestPath);
-        manifestText = manifestText.Replace("com.x8bit.bitwarden.", buildVariant.AndroidPackageName + ".");
-        manifestText = manifestText.Replace("android:label=\"Bitwarden\"", $"android:label=\"{buildVariant.AppName}\"");
-        FileWriteText(manifestPath, manifestText);
-        
         Information("AndroidManifest updated with success!");
     });
 
