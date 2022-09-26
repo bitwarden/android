@@ -191,7 +191,7 @@ namespace Bit.Core.Utilities
                     return new Dictionary<string, string>();
                 }
                 var queryStringParams = urlString.Split('?').Last();
-                var queryStringNameValueCollection = HttpUtility.ParseQueryString(queryStringParams);
+                var queryStringNameValueCollection = HttpUtility.ParseQueryString(uri.Query);
                 return queryStringNameValueCollection.AllKeys.Where(k => k != null).ToDictionary(k => k, k => queryStringNameValueCollection[k]);
             }
             catch (Exception ex)
