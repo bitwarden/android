@@ -2256,7 +2256,7 @@ Scanarea se va face automat.</value>
     <value>Seifuri</value>
   </data>
   <data name="VaultFilterDescription" xml:space="preserve">
-    <value>Seif: (0}</value>
+    <value>Seif: {0}</value>
   </data>
   <data name="All" xml:space="preserve">
     <value>Toate</value>

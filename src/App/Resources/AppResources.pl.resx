@@ -300,7 +300,7 @@
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Authenticator" xml:space="preserve">
-    <value>Uwierzytelniacz</value>
+    <value>Authenticator</value>
     <comment>Authenticator TOTP feature</comment>
   </data>
   <data name="Name" xml:space="preserve">
@@ -1140,7 +1140,7 @@ Skanowanie nastąpi automatycznie.</value>
     <value>Pokaż ikony witryn</value>
   </data>
   <data name="ShowWebsiteIconsDescription" xml:space="preserve">
-    <value>Pokaż rozpoznawalny obraz obok każdych danych logowania.</value>
+    <value>Pokaż rozpoznawalny obraz obok danych logowania.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>Adres URL serwera ikon</value>
@@ -1898,16 +1898,16 @@ Skanowanie nastąpi automatycznie.</value>
     <value>Plik, który chcesz wysłać.</value>
   </data>
   <data name="FileTypeIsSelected" xml:space="preserve">
-    <value>Wybrano typ pliku.</value>
+    <value>Wybrano rodzaj pliku.</value>
   </data>
   <data name="FileTypeIsNotSelected" xml:space="preserve">
-    <value>Nie wybrano typu pliku, dotknij, aby go wybrać.</value>
+    <value>Nie wybrano rodzaju pliku. Kliknij, aby go wybrać.</value>
   </data>
   <data name="TextTypeIsSelected" xml:space="preserve">
-    <value>Wybrano typ tekstowy.</value>
+    <value>Wybrano rodzaj tekstu.</value>
   </data>
   <data name="TextTypeIsNotSelected" xml:space="preserve">
-    <value>Nie wybrano typu tekstowego, dotknij, aby go wybrać.</value>
+    <value>Nie wybrano rodzaju tekstu. Kliknij, aby go wybrać.</value>
   </data>
   <data name="DeletionDate" xml:space="preserve">
     <value>Data usunięcia</value>
@@ -2241,10 +2241,10 @@ Skanowanie nastąpi automatycznie.</value>
     <value>Dotknij, aby wrócić</value>
   </data>
   <data name="PasswordIsVisibleTapToHide" xml:space="preserve">
-    <value>Hasło jest widoczne, dotknij, aby je ukryć.</value>
+    <value>Hasło jest widoczne. Kliknij, aby je ukryć.</value>
   </data>
   <data name="PasswordIsNotVisibleTapToShow" xml:space="preserve">
-    <value>Hasło jest niewidoczne, dotknij, aby je pokazać.</value>
+    <value>Hasło nie jest widoczne. Kliknij, aby je pokazać.</value>
   </data>
   <data name="FilterByVault" xml:space="preserve">
     <value>Filtruj elementy według sejfu</value>
@@ -2283,7 +2283,7 @@ Skanowanie nastąpi automatycznie.</value>
     <value>Klucz uwierzytelniający</value>
   </data>
   <data name="EnterKeyManually" xml:space="preserve">
-    <value>Wprowadź klucz ręcznie</value>
+    <value>Wpisz klucz ręcznie</value>
   </data>
   <data name="AddTotp" xml:space="preserve">
     <value>Dodaj TOTP</value>
@@ -2368,7 +2368,7 @@ wybierz Dodaj TOTP, aby bezpiecznie przechowywać klucz</value>
     <value>Wygeneruj nazwę użytkownika</value>
   </data>
   <data name="EmailType" xml:space="preserve">
-    <value>Typ e-maila</value>
+    <value>Rodzaj adresu</value>
   </data>
   <data name="WebsiteRequired" xml:space="preserve">
     <value>Strona internetowa (wymagana)</value>
