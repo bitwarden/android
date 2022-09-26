@@ -40,7 +40,7 @@ namespace Bit.App.Pages
         private string _totpCode;
         private string _totpCodeFormatted;
         private string _totpSec;
-        private double _totpInterval = 30;
+        private double _totpInterval = Constants.TotpDefaultTimer;
         private bool _totpLow;
         private string _previousCipherId;
         private byte[] _attachmentData;

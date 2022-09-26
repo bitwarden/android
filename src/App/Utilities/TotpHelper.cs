@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
@@ -21,7 +22,7 @@ namespace Bit.App.Utilities
         public string TotpSec { get; private set; }
         public string TotpCodeFormatted { get; private set; }
         public double Progress { get; private set; }
-        public double Interval { get; private set; } = 30;
+        public double Interval { get; private set; } = Constants.TotpDefaultTimer;
 
         public async Task GenerateNewTotpValues()
         {

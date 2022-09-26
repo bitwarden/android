@@ -186,6 +186,10 @@ namespace Bit.Core.Utilities
         {
             try
             {
+                if (!Uri.TryCreate(urlString, UriKind.Absolute, out var uri) || string.IsNullOrWhiteSpace(uri.Query))
+                {
+                    return new Dictionary<string, string>();
+                }
                 var queryStringParams = urlString.Split('?').Last();
                 var queryStringNameValueCollection = HttpUtility.ParseQueryString(queryStringParams);
                 return queryStringNameValueCollection.AllKeys.Where(k => k != null).ToDictionary(k => k, k => queryStringNameValueCollection[k]);
