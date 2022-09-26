@@ -12,6 +12,7 @@ using Android.Runtime;
 using Android.Views;
 using Bit.App.Abstractions;
 using Bit.App.Models;
+using Bit.App.Resources;
 using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
@@ -86,6 +87,7 @@ namespace Bit.Droid
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             Xamarin.Forms.Forms.Init(this, savedInstanceState);
             _appOptions = GetOptions();
+            CreateNotificationChannel();
             LoadApplication(new App.App(_appOptions));
             DisableAndroidFontScale();
 
@@ -405,6 +407,25 @@ namespace Bit.Droid
             var alarmManager = GetSystemService(AlarmService) as AlarmManager;
             alarmManager.Cancel(_eventUploadPendingIntent);
             await _eventService.UploadEventsAsync();
+        }
+
+        private void CreateNotificationChannel()
+        {
+#if !FDROID
+            if (Build.VERSION.SdkInt < BuildVersionCodes.O)
+            {
+                // Notification channels are new in API 26 (and not a part of the
+                // support library). There is no need to create a notification
+                // channel on older versions of Android.
+                return;
+            }
+
+            var channel = new NotificationChannel(Constants.AndroidNotificationChannelId, AppResources.AllNotifications, NotificationImportance.Default);
+            if(GetSystemService(NotificationService) is NotificationManager notificationManager)
+            {
+                notificationManager.CreateNotificationChannel(channel);
+            }
+#endif
         }
 
         private void DisableAndroidFontScale()

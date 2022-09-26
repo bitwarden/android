@@ -71,6 +71,6 @@
     <Color x:Key="NavigationBarTextColor">#ffffff</Color>
     
     <Color x:Key="HyperlinkColor">#52bdfb</Color>
-
+    <Color x:Key="FingerprintPhrase">#F08DC7</Color>
     <Color x:Key="ScanningToggleModeTextColor">#80BDFF</Color>
 </ResourceDictionary>
