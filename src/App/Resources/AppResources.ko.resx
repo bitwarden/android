@@ -300,7 +300,7 @@
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Authenticator" xml:space="preserve">
-    <value>Authenticator</value>
+    <value>인증기</value>
     <comment>Authenticator TOTP feature</comment>
   </data>
   <data name="Name" xml:space="preserve">
@@ -775,10 +775,10 @@
     <value>켜짐</value>
   </data>
   <data name="Off" xml:space="preserve">
-    <value>Off</value>
+    <value>끄기</value>
   </data>
   <data name="On" xml:space="preserve">
-    <value>On</value>
+    <value>켜기</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>상태</value>

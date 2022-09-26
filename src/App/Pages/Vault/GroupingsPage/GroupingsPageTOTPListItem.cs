@@ -22,7 +22,6 @@ namespace Bit.App.Pages
         private bool _websiteIconsEnabled;
         private string _iconImageSource = string.Empty;
 
-        public int interval { get; set; }
         private double _progress;
         private string _totpSec;
         private string _totpCodeFormatted;
@@ -37,7 +36,6 @@ namespace Bit.App.Pages
 
             Cipher = cipherView;
             WebsiteIconsEnabled = websiteIconsEnabled;
-            interval = _totpService.GetTimeInterval(Cipher.Login.Totp);
             CopyCommand = new AsyncCommand(CopyToClipboardAsync,
                  onException: ex => _logger.Value.Exception(ex),
                  allowsMultipleExecutions: false);
