@@ -184,24 +184,17 @@ namespace Bit.Core.Utilities
 
         public static Dictionary<string, string> GetQueryParams(string urlString)
         {
-            var dict = new Dictionary<string, string>();
             try
             {
                 var queryStringParams = urlString.Split('?').Last();
                 var queryStringNameValueCollection = HttpUtility.ParseQueryString(queryStringParams);
-                foreach (var key in queryStringNameValueCollection.AllKeys)
-                {
-                    if (key != null && !dict.ContainsKey(key))
-                    {
-                        dict.Add(key, queryStringNameValueCollection[key]);
-                    }
-                }
+                return queryStringNameValueCollection.AllKeys.Where(k => k != null).ToDictionary(k => k, k => queryStringNameValueCollection[k]);
             }
             catch (Exception ex)
             {
                 LoggerHelper.LogEvenIfCantBeResolved(ex);
             }
-            return dict;
+            return new Dictionary<string, string>();
         }
 
         public static string SerializeJson(object obj, bool ignoreNulls = false)
