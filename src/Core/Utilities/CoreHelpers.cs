@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Web;
 using Bit.Core.Models.Domain;
 using Bit.Core.Services;
 using Newtonsoft.Json;
@@ -186,22 +187,13 @@ namespace Bit.Core.Utilities
             var dict = new Dictionary<string, string>();
             try
             {
-                if (!Uri.TryCreate(urlString, UriKind.Absolute, out var uri) || string.IsNullOrWhiteSpace(uri.Query))
+                var queryStringParams = urlString.Split('?').Last();
+                var queryStringNameValueCollection = HttpUtility.ParseQueryString(queryStringParams);
+                foreach(var key in queryStringNameValueCollection.AllKeys)
                 {
-                    return dict;
-                }
-                var pairs = uri.Query.Substring(1).Split('&');
-                foreach (var pair in pairs)
-                {
-                    var parts = pair.Split('=');
-                    if (parts.Length < 1)
-                    {
-                        continue;
-                    }
-                    var key = System.Net.WebUtility.UrlDecode(parts[0]).ToLower();
                     if (!dict.ContainsKey(key))
                     {
-                        dict.Add(key, parts[1] == null ? string.Empty : System.Net.WebUtility.UrlDecode(parts[1]));
+                        dict.Add(key, queryStringNameValueCollection[key] == null ? string.Empty : System.Net.WebUtility.UrlDecode(queryStringNameValueCollection[key]));
                     }
                 }
             }
